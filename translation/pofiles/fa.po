@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-20 17:02+0000\n"
+"PO-Revision-Date: 2025-07-21 13:20+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -360,19 +360,19 @@ msgstr "کپی کردن تصویر سه بعدی فعلی در کلیپ بورد
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
-msgstr "خروجی گرفتن از نمای فعلی با فرمت PNG ..."
+msgstr "در حال خروجی گرفتن از نمای فعلی با فرمت PNG ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
 msgid "Export the Current View as a PNG image"
-msgstr "خروجی تصویری از نمای فعلی با فرمت PNG ..."
+msgstr "خروجی تصویری از نمای فعلی با فرمت PNG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
-msgstr "خروجی گرفتن از نمای فعلی با فرمت JPEG ..."
+msgstr "در حال خروجی گرفتن از نمای فعلی با فرمت JPEG ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Export the Current View as a JPEG image"
-msgstr "خروجی تصویری از نمای فعلی با فرمت JPEG ..."
+msgstr "خروجی تصویری از نمای فعلی با فرمت JPEG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -937,6 +937,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"ذخیره و بازیابی ترکیب‌های رنگ و قابلیت مشاهده.\n"
+"برای فعال‌سازی انتخابگر از %s + تَب استفاده کنید.\n"
+"با نگه داشتن %s و فشار متوالی تَب (Tab) می توانید بین پیش تنظیم های پنجره "
+"بازشو حرکت کنید."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:208
 #, c-format
@@ -946,129 +950,135 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"ذخیره و بازیابی موقعیت و بزرگ نمایی دوربین.\n"
+"برای فعال سازی انتخابگر از %s + تَب استفاده کنید.\n"
+"با نگه داشتن %s و فشار متوالی کلید تَب (Tab) می توانید بین نما های مختلف در "
+"پنجره بازشو جابجا شوید."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:561
 msgid "Left double click or middle click to change color"
-msgstr ""
+msgstr "برای تغییر رنگ، دو بار کلیک چپ یا کلیک وسط ماوس را بزنید"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:571
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"برای فعال سازی ویرایش رنگ، گزینه 'استفاده از رنگ های لایه بندی برد (Stackup)"
+"' را غیرفعال کنید."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
 #: pcbnew/widgets/appearance_controls.cpp:2256
 #, c-format
 msgid "Show or hide %s"
-msgstr ""
+msgstr "نمایش یا پنهان کردن %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:702
 #: pcbnew/widgets/appearance_controls.cpp:2629
 #, c-format
 msgid "Presets (%s+Tab):"
-msgstr ""
+msgstr "پیش تنظیم ها (%s + تَب (Tab)):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:716
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1643
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2071
 #: pcbnew/widgets/appearance_controls.cpp:2654
 msgid "Save preset..."
-msgstr ""
+msgstr "در حال ذخیره پیش تنظیم ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:717
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1644
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2072
 #: pcbnew/widgets/appearance_controls.cpp:2655
 msgid "Delete preset..."
-msgstr ""
+msgstr "در حال حذف پیش تنظیم ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:814
 #: pcbnew/widgets/appearance_controls.cpp:2760
 msgid "Layer preset name:"
-msgstr ""
+msgstr "نام پیش تنظیم لایه:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:815
 #: pcbnew/widgets/appearance_controls.cpp:2761
 msgid "Save Layer Preset"
-msgstr ""
+msgstr "ذخیره پیش تنظیم لایه"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:830
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2212
 #: pcbnew/widgets/appearance_controls.cpp:2794
 msgid "Overwrite existing preset?"
-msgstr ""
+msgstr "آیا پیش تنظیم موجود بازنویسی شود؟"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:856
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1837
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: pcbnew/widgets/appearance_controls.cpp:2822
 msgid "Presets"
-msgstr ""
+msgstr "پیش تنظیم ها"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:865
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1849
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2249
 #: pcbnew/widgets/appearance_controls.cpp:2834
 msgid "Delete Preset"
-msgstr ""
+msgstr "حذف پیش تنظیم"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1850
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2250
 #: pcbnew/widgets/appearance_controls.cpp:2835
 msgid "Select preset:"
-msgstr ""
+msgstr "انتخاب پیش تنظیم:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:936
 #: pcbnew/widgets/appearance_controls.cpp:2935
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr ""
+msgstr "حوزه های دید (%s + تَپ (Tab)):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:945
 #: pcbnew/widgets/appearance_controls.cpp:2944
 msgid "Save viewport..."
-msgstr ""
+msgstr "در حال ذخیره حوزه دید ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2945
 msgid "Delete viewport..."
-msgstr ""
+msgstr "در حال حذف حوزه دید ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:977
 #: pcbnew/widgets/appearance_controls.cpp:2994
 msgid "Viewport name:"
-msgstr ""
+msgstr "نام حوزه دید:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:978
 #: pcbnew/widgets/appearance_controls.cpp:2994
 msgid "Save Viewport"
-msgstr ""
+msgstr "ذخیره حوزه دید"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1017
 #: pcbnew/widgets/appearance_controls.cpp:3033
 msgid "Viewports"
-msgstr ""
+msgstr "حوزه های دید (Viewports)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1026
 #: pcbnew/widgets/appearance_controls.cpp:3042
 msgid "Delete Viewport"
-msgstr ""
+msgstr "حذف حوزه دید"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1027
 #: pcbnew/widgets/appearance_controls.cpp:3043
 msgid "Select viewport:"
-msgstr ""
+msgstr "انتخاب حوزه دید:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr ""
+msgstr "پیش تنظیم ها (Ctrl+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr ""
+msgstr "حوزه دید (Alt+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:73
@@ -1076,77 +1086,77 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "(unsaved)"
-msgstr ""
+msgstr "(ذخیره نشده است)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "تمام فایل های پشتیبانی شده (%s)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:64
 msgid "Available paths:"
-msgstr ""
+msgstr "مسیر های در دسترس:"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:73
 #: common/dialogs/dialog_configure_paths_base.h:60
 msgid "Configure Paths"
-msgstr ""
+msgstr "پیکربندی مسیر ها"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
 msgid "Embed model"
-msgstr ""
+msgstr "مدل تعبیه شده"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
-msgstr ""
+msgstr "انتخاب مدل سه بعدی"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
-msgstr ""
+msgstr "تنظیمات پردازشگر (Render)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 msgid "Clip silkscreen at via annuli"
-msgstr ""
+msgstr "برش خطوط راهنما در حلقه وایا (Via Annuli)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Clip silkscreen at solder mask edges"
-msgstr ""
+msgstr "محدود کردن خطوط راهنما به لبه های لایه محافظ (چاپ سبز)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "نمایش نواحی پر شده در زون ها (Zones)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr ""
+msgstr "استفاده از رنگ مس خام برای مس بدون آبکاری (آهسته)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "استفاده از رنگ های متفاوت برای مس آبکاری شده و مس خام (آهسته)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
-msgstr ""
+msgstr "ویژگی های مواد:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Realistic"
-msgstr ""
+msgstr "واقع گرایانه"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
-msgstr ""
+msgstr "رنگ های یکنواخت"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "CAD colors"
-msgstr ""
+msgstr "رنگ های CAD"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
-msgstr ""
+msgstr "تنظیمات دوربین"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
 msgid "Rotation increment:"
-msgstr ""
+msgstr "افزایش چرخش:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:92
 #: pcb_calculator/widgets/unit_selector.cpp:130
@@ -1160,64 +1170,64 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:49
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:228
 msgid "deg"
-msgstr ""
+msgstr "درجه"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
 msgid "Redraw while moving"
-msgstr ""
+msgstr "بازنویسی در حین حرکت"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "سرعت بازنویسی:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
 msgid "Rendering Options"
-msgstr ""
+msgstr "تنظیمات پردازشگر (Rendering)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "نمایش مدل جعبه مکعب مرزی (Bounding Boxes)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (slow)"
-msgstr ""
+msgstr "نمایش ضخامت لایه های مسی و فنی (آهسته)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr ""
+msgstr "برجسته سازی اِلمان ها در زیر اشاره گر ماوس"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "ضد لغزش (Anti-aliasing):"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
-msgstr ""
+msgstr "غیر فعال شده است"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "2x"
-msgstr ""
+msgstr "2 برابر"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "4x"
-msgstr ""
+msgstr "4 برابر"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "8x"
-msgstr ""
+msgstr "8 برابر"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "برای اعمال این تنظیم، باید پنجره نمایشگر سه بعدی بسته و مجدداً باز شود"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
-msgstr ""
+msgstr "رنگ انتخابی:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr ""
+msgstr "در حین حرکت"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
@@ -1389,7 +1399,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:144
 #: pcbnew/tools/pcb_point_editor.cpp:2099
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:41
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
@@ -1413,7 +1423,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:153
 #: pcbnew/tools/pcb_point_editor.cpp:2099
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:51
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:96
@@ -1421,7 +1431,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:337
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:349
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1746
@@ -1464,11 +1474,11 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_frame.cpp:155
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
-msgstr ""
+msgstr "مبدل تصویر KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
 msgid "Image files"
-msgstr ""
+msgstr "فایل های تصویری"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:72
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
@@ -1492,7 +1502,7 @@ msgstr ""
 #: eeschema/tools/sch_drawing_tools.cpp:1104
 #: pagelayout_editor/pl_editor_frame.cpp:840 pcbnew/tools/drawing_tool.cpp:741
 msgid "Image Files"
-msgstr ""
+msgstr "فایل های تصویری"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:438
 msgid "Create Drawing Sheet File"
@@ -1679,20 +1689,20 @@ msgstr ""
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:250
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:300
 msgid "mm"
-msgstr ""
+msgstr "میلی متر"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:52
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr ""
+msgstr "اینچ"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:52
 msgid "DPI"
-msgstr ""
+msgstr "دقت تصویر"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:511
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "امکان خروجی گرفتن به کلیپ بورد (Clipboard) وجود ندارد"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:523
 msgid "Error allocating memory for potrace bitmap"
@@ -1708,11 +1718,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:184
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
-msgstr ""
+msgstr "خطا ها"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
 msgid "Replace Loaded File?"
-msgstr ""
+msgstr "فایل بارگذاری شده جایگزین شود؟"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
@@ -1736,7 +1746,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
 msgid "Image size:"
-msgstr ""
+msgstr "اندازه تصویر:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:49
 #: bitmap2component/bitmap2cmp_panel_base.cpp:53
@@ -1744,17 +1754,17 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_panel_base.cpp:69
 #: bitmap2component/bitmap2cmp_panel_base.cpp:81
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:57
 #: common/widgets/gal_options_panel_base.cpp:87
 #: common/widgets/gal_options_panel_base.cpp:98
 msgid "pixels"
-msgstr ""
+msgstr "پیکسل ها"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
-msgstr ""
+msgstr "تصویر PPI:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:186
 #: pcbnew/pcb_reference_image.cpp:217
