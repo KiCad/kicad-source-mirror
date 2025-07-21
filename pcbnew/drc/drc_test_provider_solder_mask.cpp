@@ -28,6 +28,7 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
+#include <thread_pool.h>
 #include <zone.h>
 #include <geometry/seg.h>
 #include <drc/drc_engine.h>
@@ -90,6 +91,7 @@ private:
     std::unique_ptr<DRC_RTREE> m_fullSolderMaskRTree;
     std::unique_ptr<DRC_RTREE> m_itemTree;
 
+    std::mutex                                  m_checkedPairsMutex;
     std::unordered_map<PTR_PTR_CACHE_KEY, LSET> m_checkedPairs;
 
     // Shapes used to define solder mask apertures don't have nets, so we assign them the
@@ -503,16 +505,19 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                 if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                     std::swap( a, b );
 
-                auto it = m_checkedPairs.find( { a, b } );
+                {
+                    std::lock_guard<std::mutex> lock( m_checkedPairsMutex );
+                    auto it = m_checkedPairs.find( { a, b } );
 
-                if( it != m_checkedPairs.end() && it->second.test( aTargetLayer ) )
-                {
-                    return false;
-                }
-                else
-                {
-                    m_checkedPairs[ { a, b } ].set( aTargetLayer );
-                    return true;
+                    if( it != m_checkedPairs.end() && it->second.test( aTargetLayer ) )
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        m_checkedPairs[{ a, b }].set( aTargetLayer );
+                        return true;
+                    }
                 }
             },
             // Visitor:
@@ -690,26 +695,26 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
 {
-    LSET copperAndMaskLayers( { F_Mask, B_Mask, F_Cu, B_Cu } );
-
-    const size_t progressDelta = 250;
-    int          count = 0;
-    int          ii = 0;
+    LSET                     copperAndMaskLayers( { F_Mask, B_Mask, F_Cu, B_Cu } );
+    std::atomic<int>         count = 0;
+    std::vector<BOARD_ITEM*> test_items;
 
     forEachGeometryItem( s_allBasicItemsButZones, copperAndMaskLayers,
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ++count;
+                test_items.push_back( item );
                 return true;
             } );
 
-    forEachGeometryItem( s_allBasicItemsButZones, copperAndMaskLayers,
-            [&]( BOARD_ITEM* item ) -> bool
-            {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
-                    return false;
+    thread_pool& tp = GetKiCadThreadPool();
 
-                if( !reportProgress( ii++, count, progressDelta ) )
+    auto returns = tp.parallelize_loop( test_items.size(), [&]( size_t a, size_t b ) -> bool
+        {
+            for( size_t i = a; i < b; ++i )
+            {
+                BOARD_ITEM* item = test_items[ i ];
+
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
                     return false;
 
                 BOX2I itemBBox = item->GetBoundingBox();
@@ -742,8 +747,24 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
                     testItemAgainstItems( item, itemBBox, B_Cu, B_Mask );
                 }
 
-                return true;
-            } );
+                ++count;
+            }
+
+            return true;
+        } );
+
+    for( size_t i = 0; i < returns.size(); ++i )
+    {
+        auto& ret = returns[ i ];
+
+        if( !ret.valid() )
+            continue;
+
+        while( ret.wait_for( std::chrono::milliseconds( 100 ) ) == std::future_status::timeout )
+        {
+            reportProgress( count, test_items.size() );
+        }
+    }
 }
 
 
