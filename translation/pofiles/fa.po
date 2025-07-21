@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 14:06+0000\n"
+"PO-Revision-Date: 2025-07-22 15:03+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -982,14 +982,14 @@ msgstr "پیش تنظیم ها (%s + تَب (Tab)):"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2071
 #: pcbnew/widgets/appearance_controls.cpp:2654
 msgid "Save preset..."
-msgstr "در حال ذخیره پیش تنظیم ..."
+msgstr "ذخیره پیش تنظیم ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:717
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1644
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2072
 #: pcbnew/widgets/appearance_controls.cpp:2655
 msgid "Delete preset..."
-msgstr "در حال حذف پیش تنظیم ..."
+msgstr "حذف پیش تنظیم ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:814
 #: pcbnew/widgets/appearance_controls.cpp:2760
@@ -1038,12 +1038,12 @@ msgstr "حوزه های دید (%s + تَپ (Tab)):"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:945
 #: pcbnew/widgets/appearance_controls.cpp:2944
 msgid "Save viewport..."
-msgstr "در حال ذخیره حوزه دید ..."
+msgstr "ذخیره حوزه دید ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
 #: pcbnew/widgets/appearance_controls.cpp:2945
 msgid "Delete viewport..."
-msgstr "در حال حذف حوزه دید ..."
+msgstr "حذف حوزه دید ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:977
 #: pcbnew/widgets/appearance_controls.cpp:2994
@@ -1443,35 +1443,37 @@ msgstr "چرخش"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:113
 msgid "Offset"
-msgstr ""
+msgstr "هم ترازی"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:158
 msgid "Opacity"
-msgstr ""
+msgstr "کِدری (میزان غیرشفافیت)"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:178
 #: common/dialogs/dialog_page_settings_base.cpp:123
 #: eeschema/printing/dialog_print.cpp:258
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:253
 msgid "Preview"
-msgstr ""
+msgstr "پیش نمایش"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:207
 msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"نمایش یا مخفی کردن بدنه برد\n"
+"اگر مخفی شود، فقط لایه های مس و خطوط راهنما (Silkscreen) نمایش داده می شوند."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "بارگذاری مجدد برد و مدل های سه بعدی"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:150
 #: bitmap2component/bitmap2cmp_frame.cpp:293
 #: bitmap2component/bitmap2cmp_frame.cpp:356
 #: kicad/tools/kicad_manager_actions.cpp:168
 msgid "Image Converter"
-msgstr ""
+msgstr "مبدل تصویر"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -1486,19 +1488,19 @@ msgstr "فایل های تصویری"
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
 msgid "Open Recent"
-msgstr ""
+msgstr "باز کردن فایل های اخیر"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:73
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr ""
+msgstr "پاک کردن فایل های اخیر"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
 #: eeschema/tools/sch_drawing_tools.cpp:1103
 #: pagelayout_editor/pl_editor_frame.cpp:839 pcbnew/tools/drawing_tool.cpp:740
 msgid "Choose Image"
-msgstr ""
+msgstr "انتخاب تصویر"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:397
 #: eeschema/tools/sch_drawing_tools.cpp:1104
@@ -1508,7 +1510,7 @@ msgstr "فایل های تصویری"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:438
 msgid "Create Drawing Sheet File"
-msgstr ""
+msgstr "ایجاد فایل صفحه طراحی"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:452
 #: bitmap2component/bitmap2cmp_frame.cpp:485
@@ -1516,19 +1518,19 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_frame.cpp:551
 #, c-format
 msgid "File '%s' could not be created."
-msgstr ""
+msgstr "فایل '%s' ایجاد نشد."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:471
 msgid "Create PostScript File"
-msgstr ""
+msgstr "ایجاد فایل PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:504
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "ایجاد کتابخانه نماد"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:537
 msgid "Create Footprint Library"
-msgstr ""
+msgstr "ایجاد کتابخانه فوت پرینت (Footprint)"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:52 common/eda_draw_frame.cpp:695
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
@@ -1700,7 +1702,7 @@ msgstr "اینچ"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:52
 msgid "DPI"
-msgstr "دقت تصویر"
+msgstr "دقت تصویر (DPI)"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:511
 msgid "Unable to export to the Clipboard"
@@ -1708,7 +1710,7 @@ msgstr "امکان خروجی گرفتن به کلیپ بورد (Clipboard) وج
 
 #: bitmap2component/bitmap2cmp_panel.cpp:523
 msgid "Error allocating memory for potrace bitmap"
-msgstr ""
+msgstr "خطا در تخصیص حافظه برای (Potrace Bitmap)"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:563
 #: common/dialogs/dialog_rc_job_base.cpp:50
@@ -1728,23 +1730,23 @@ msgstr "فایل بارگذاری شده جایگزین شود؟"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
+msgstr "قبلاً یک فایل بارگذاری شده است. آیا می خواهید آن را جایگزین کنید؟"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
-msgstr ""
+msgstr "تصویر اصلی"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:25
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "تصویر خاکستری"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 msgid "Black && White Picture"
-msgstr ""
+msgstr "تصویر سیاه و سفید"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
 msgid "Image Information"
-msgstr ""
+msgstr "اطلاعات تصویر"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
 msgid "Image size:"
@@ -1771,39 +1773,39 @@ msgstr "تصویر PPI:"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:186
 #: pcbnew/pcb_reference_image.cpp:217
 msgid "PPI"
-msgstr ""
+msgstr "تعداد پیکسل در اینچ (PPI)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:77
 msgid "BPP:"
-msgstr ""
+msgstr "بیت به ازای هر پیکسل (BPP):"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:85
 msgid "bits"
-msgstr ""
+msgstr "بیت ها"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 msgid "Load Source Image"
-msgstr ""
+msgstr "بارگذاری تصویر منبع"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
-msgstr ""
+msgstr "اندازه خروجی"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:110
 #: common/dialogs/dialog_page_settings_base.cpp:37
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "اندازه:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:114
 #: bitmap2component/bitmap2cmp_panel_base.cpp:119
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:134
 msgid "Lock height / width ratio"
-msgstr ""
+msgstr "قفل نسبت ارتفاع به عرض"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:141
 #: common/dialogs/dialog_print_generic_base.cpp:35
@@ -1821,35 +1823,35 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr ""
+msgstr "گزینه ها"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
-msgstr ""
+msgstr "آستانه سیاه/سفید:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:148
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr ""
+msgstr "سطح را تنظیم کنید تا تصویر خاکستری به تصویر سیاه و سفید تبدیل شود."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:370
 msgid "Negative"
-msgstr ""
+msgstr "منفی"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
 msgid "Output Format"
-msgstr ""
+msgstr "قالب فرمت خروجی"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
-msgstr ""
+msgstr "نماد (فایل .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr ""
+msgstr "فوت پرینت (فایل .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
@@ -1865,35 +1867,35 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:165
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:140
 msgid "Layer:"
-msgstr ""
+msgstr "لایه:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Cu"
-msgstr ""
+msgstr "لایه مسی روی برد"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr ""
+msgstr "لایه خطوط راهنما روی برد"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
-msgstr ""
+msgstr "لایه لحیم مجاز روی برد"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Drawings"
-msgstr ""
+msgstr "ترسیمات کاربر"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Comments"
-msgstr ""
+msgstr "یادداشت های کاربر"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Eco1"
-msgstr ""
+msgstr "کاربر ECO1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Eco2"
-msgstr ""
+msgstr "کاربر ECO2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
@@ -1974,7 +1976,7 @@ msgstr ""
 #: common/confirm.cpp:52 common/confirm.cpp:57 common/confirm.cpp:123
 #: common/confirm.cpp:150 common/dialog_shim.cpp:795
 msgid "&Cancel"
-msgstr ""
+msgstr "&لغو"
 
 #: common/confirm.cpp:52 common/confirm.cpp:57
 msgid "&Open Anyway"
@@ -1990,7 +1992,7 @@ msgstr ""
 
 #: common/confirm.cpp:73 common/confirm.cpp:110 common/dialog_shim.cpp:799
 msgid "&Save"
-msgstr ""
+msgstr "&ذخیره"
 
 #: common/confirm.cpp:73 common/confirm.cpp:110
 msgid "&Discard Changes"
@@ -2011,7 +2013,7 @@ msgstr ""
 #: common/confirm.cpp:149 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:794
 msgid "&OK"
-msgstr ""
+msgstr "&باشه"
 
 #: common/confirm.cpp:239
 msgid "Information"
@@ -2051,11 +2053,11 @@ msgstr ""
 
 #: common/confirm.cpp:275 common/dialog_shim.cpp:796
 msgid "&Yes"
-msgstr ""
+msgstr "&بله"
 
 #: common/confirm.cpp:275 common/dialog_shim.cpp:797
 msgid "&No"
-msgstr ""
+msgstr "&خیر"
 
 #: common/design_block_info_impl.cpp:130
 msgid "Loading design_blocks..."
@@ -2066,7 +2068,7 @@ msgstr ""
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
-msgstr ""
+msgstr "KiCad"
 
 #: common/design_block_io.cpp:48 pcbnew/pcb_io/pcb_io_mgr.cpp:89
 #, c-format
@@ -2294,7 +2296,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:907
 msgid "3D models"
-msgstr ""
+msgstr "مدل های سه بعدی"
 
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
@@ -2337,7 +2339,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
 msgid "Version"
-msgstr ""
+msgstr "نسخه"
 
 #: common/dialog_about/dialog_about.cpp:141
 msgid "Developers"
@@ -2365,7 +2367,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:156
 msgid "License"
-msgstr ""
+msgstr "مجوز"
 
 #: common/dialog_about/dialog_about.cpp:257
 msgid "Could not open clipboard to write version information."
@@ -2418,18 +2420,18 @@ msgstr ""
 
 #: common/dialog_shim.cpp:798
 msgid "&Apply"
-msgstr ""
+msgstr "&اعمال کن"
 
 #: common/dialog_shim.cpp:800 common/dialog_shim.cpp:801
 #: common/eda_base_frame.cpp:657
 msgid "&Help"
-msgstr ""
+msgstr "&کمک"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 #: common/dialogs/dialog_book_reporter_base.h:45
 #: common/dialogs/dialog_rc_job.cpp:27
 msgid "Report"
-msgstr ""
+msgstr "گزارش"
 
 #: common/dialogs/dialog_assign_netclass.cpp:95
 msgid "<b>Currently matching nets:</b>"
@@ -2459,19 +2461,19 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "رنگ های RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:49
 msgid "Red:"
-msgstr ""
+msgstr "قرمز:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:53
 msgid "Green:"
-msgstr ""
+msgstr "سبز:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:57
 msgid "Blue:"
-msgstr ""
+msgstr "آبی:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:77
 msgid "HSV"
@@ -2612,7 +2614,7 @@ msgstr ""
 #: pcbnew/zone.cpp:1871 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
 #: pcbnew/zone_manager/model_zones_overview_table.h:75
 msgid "Name"
-msgstr ""
+msgstr "نام"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 msgid "Path"
@@ -2681,7 +2683,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1057
 msgid "Name:"
-msgstr ""
+msgstr "نام:"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -5360,7 +5362,7 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:20
 msgid "KiCad API"
-msgstr ""
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:30
 msgid ""
@@ -5370,7 +5372,7 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:34 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "فعال کردن API در KiCad"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:35
 msgid ""
@@ -5392,7 +5394,7 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:59
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:62
 msgid "Detect Automatically"
@@ -5423,7 +5425,7 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses.cpp:100
 msgid "<Not defined>"
-msgstr ""
+msgstr "< تعریف نشده >"
 
 #: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2532
 #: common/eda_shape.cpp:2544 common/stroke_params.cpp:40
@@ -20524,7 +20526,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1991
 msgid "Unknown Enable: "
-msgstr ""
+msgstr "فعال سازی ناشناخته: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1998
 #: eeschema/sim/kibis/ibis_parser.cpp:2020
@@ -27116,49 +27118,51 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
 msgid "License: "
-msgstr ""
+msgstr "مجوز: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
-msgstr ""
+msgstr "برچسب‌ها (Tags): "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:277
 msgid "Author"
-msgstr ""
+msgstr "نویسنده"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:280
 msgid "Maintainer"
-msgstr ""
+msgstr "پشتیبان و نگهداری"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:284
 msgid "Resources"
-msgstr ""
+msgstr "منابع"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:518
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "نشانی دانلود بسته مشخص نشده است"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:519
 msgid "Error downloading package"
-msgstr ""
+msgstr "خطا در دانلود بسته"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:528
 msgid "Save Package"
-msgstr ""
+msgstr "ذخیره بسته"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:540
 msgid "Download Package"
-msgstr ""
+msgstr "دانلود بسته"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:558
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"امکان تأیید صحت و سلامت بستهٔ دانلود شده وجود ندارد؛ هَش (Hash) فایل مطابقت "
+"ندارد. آیا از نگهداری این فایل اطمینان دارید؟"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
 msgid "Keep downloaded file"
-msgstr ""
+msgstr "نگه داشتن فایل دانلود شده"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:610
 #: kicad/pcm/pcm_task_manager.cpp:383
@@ -27166,39 +27170,41 @@ msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"این نسخه از بسته با نسخه یا سیستم شما در برنامه KiCad سازگار نیست. آیا با "
+"این حال مایل به نصب آن هستید؟"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:612
 #: kicad/pcm/pcm_task_manager.cpp:385
 msgid "Install package"
-msgstr ""
+msgstr "نصب بسته"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:728
 msgid "Pending"
-msgstr ""
+msgstr "در حال انتظار و بررسی"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
 msgid "Update All"
-msgstr ""
+msgstr "به روز رسانی همه"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
-msgstr ""
+msgstr "حجم دانلود"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:92
 msgid "Install Size"
-msgstr ""
+msgstr "اندازه نصب"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:93
 msgid "Compatible"
-msgstr ""
+msgstr "سازگار"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:112
 msgid "Show all versions"
-msgstr ""
+msgstr "نمایش همه نسخه ها"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:118
 msgid "Download"
-msgstr ""
+msgstr "دانلود"
 
 #: kicad/pcm/pcm.cpp:114
 #, c-format
@@ -49608,256 +49614,256 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1595
 msgid "Show or hide this layer"
-msgstr ""
+msgstr "نمایش یا پنهان کردن این لایه"
 
 #: pcbnew/widgets/appearance_controls.cpp:1666
 msgid "Adhesive on board's front"
-msgstr ""
+msgstr "چسب در روی برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1667
 msgid "Adhesive on board's back"
-msgstr ""
+msgstr "چسب در پشت برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1668
 msgid "Solder paste on board's front"
-msgstr ""
+msgstr "خمیر لحیم (Solder Paste) در روی برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1669
 msgid "Solder paste on board's back"
-msgstr ""
+msgstr "خمیر لحیم (Solder Paste) در پشت برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1670
 msgid "Silkscreen on board's front"
-msgstr ""
+msgstr "خطوط راهنما در روی برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1671
 msgid "Silkscreen on board's back"
-msgstr ""
+msgstr "خطوط راهنما در پشت برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1672
 msgid "Solder mask on board's front"
-msgstr ""
+msgstr "لایه محافظ (چاپ سبز) در روی برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1673
 msgid "Solder mask on board's back"
-msgstr ""
+msgstr "لایه محافظ (چاپ سبز) در پشت برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1674
 msgid "Explanatory drawings"
-msgstr ""
+msgstr "ترسیمات توضیحی"
 
 #: pcbnew/widgets/appearance_controls.cpp:1675
 msgid "Explanatory comments"
-msgstr ""
+msgstr "یادداشت های توضیحی"
 
 #: pcbnew/widgets/appearance_controls.cpp:1676
 #: pcbnew/widgets/appearance_controls.cpp:1677
 msgid "User defined meaning"
-msgstr ""
+msgstr "معنا و مفهوم تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1678
 msgid "Board's perimeter definition"
-msgstr ""
+msgstr "تعریف محیط و پیرامون برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1679
 msgid "Board's edge setback outline"
-msgstr ""
+msgstr "خط محدوده فاصله گذاری از طرح کلی لبه"
 
 #: pcbnew/widgets/appearance_controls.cpp:1680
 msgid "Footprint courtyards on board's front"
-msgstr ""
+msgstr "محدوده های ایمنی فوت پرینت (Footprint) در روی برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1681
 msgid "Footprint courtyards on board's back"
-msgstr ""
+msgstr "محدوده های ایمنی فوت پرینت (Footprint) در پشت برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1682
 msgid "Footprint assembly on board's front"
-msgstr ""
+msgstr "نصب و مونتاژ فوت پرینت (Footprint) در روی برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1683
 msgid "Footprint assembly on board's back"
-msgstr ""
+msgstr "نصب و مونتاژ فوت پرینت (Footprint) در پشت برد"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
 msgid "User defined layer 1"
-msgstr ""
+msgstr "لایه شماره 1، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
 msgid "User defined layer 2"
-msgstr ""
+msgstr "لایه شماره 2، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
 msgid "User defined layer 3"
-msgstr ""
+msgstr "لایه شماره 3، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
 msgid "User defined layer 4"
-msgstr ""
+msgstr "لایه شماره 4، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
 msgid "User defined layer 5"
-msgstr ""
+msgstr "لایه شماره 5، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
 msgid "User defined layer 6"
-msgstr ""
+msgstr "لایه شماره 6، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
 msgid "User defined layer 7"
-msgstr ""
+msgstr "لایه شماره 7، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
 msgid "User defined layer 8"
-msgstr ""
+msgstr "لایه شماره 8، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
 msgid "User defined layer 9"
-msgstr ""
+msgstr "لایه شماره 9، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
 msgid "User defined layer 10"
-msgstr ""
+msgstr "لایه شماره 10، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
 msgid "User defined layer 11"
-msgstr ""
+msgstr "لایه شماره 11، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
 msgid "User defined layer 12"
-msgstr ""
+msgstr "لایه شماره 12، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
 msgid "User defined layer 13"
-msgstr ""
+msgstr "لایه شماره 13، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
 msgid "User defined layer 14"
-msgstr ""
+msgstr "لایه شماره 14، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
 msgid "User defined layer 15"
-msgstr ""
+msgstr "لایه شماره 15، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
 msgid "User defined layer 16"
-msgstr ""
+msgstr "لایه شماره 16، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
 msgid "User defined layer 17"
-msgstr ""
+msgstr "لایه شماره 17، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
 msgid "User defined layer 18"
-msgstr ""
+msgstr "لایه شماره 18، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
 msgid "User defined layer 19"
-msgstr ""
+msgstr "لایه شماره 19، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
 msgid "User defined layer 20"
-msgstr ""
+msgstr "لایه شماره 20، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
 msgid "User defined layer 21"
-msgstr ""
+msgstr "لایه شماره 21، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
 msgid "User defined layer 22"
-msgstr ""
+msgstr "لایه شماره 22، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
 msgid "User defined layer 23"
-msgstr ""
+msgstr "لایه شماره 23، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
 msgid "User defined layer 24"
-msgstr ""
+msgstr "لایه شماره 24، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
 msgid "User defined layer 25"
-msgstr ""
+msgstr "لایه شماره 25، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
 msgid "User defined layer 26"
-msgstr ""
+msgstr "لایه شماره 26، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
 msgid "User defined layer 27"
-msgstr ""
+msgstr "لایه شماره 27، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
 msgid "User defined layer 28"
-msgstr ""
+msgstr "لایه شماره 28، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
 msgid "User defined layer 29"
-msgstr ""
+msgstr "لایه شماره 29، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
 msgid "User defined layer 30"
-msgstr ""
+msgstr "لایه شماره 30، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
 msgid "User defined layer 31"
-msgstr ""
+msgstr "لایه شماره 31، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
 msgid "User defined layer 32"
-msgstr ""
+msgstr "لایه شماره 32، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
 msgid "User defined layer 33"
-msgstr ""
+msgstr "لایه شماره 33، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
 msgid "User defined layer 34"
-msgstr ""
+msgstr "لایه شماره 34، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
 msgid "User defined layer 35"
-msgstr ""
+msgstr "لایه شماره 35، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
 msgid "User defined layer 36"
-msgstr ""
+msgstr "لایه شماره 36، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1720
 msgid "User defined layer 37"
-msgstr ""
+msgstr "لایه شماره 37، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1721
 msgid "User defined layer 38"
-msgstr ""
+msgstr "لایه شماره 38، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1722
 msgid "User defined layer 39"
-msgstr ""
+msgstr "لایه شماره 39، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1723
 msgid "User defined layer 40"
-msgstr ""
+msgstr "لایه شماره 40، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1724
 msgid "User defined layer 41"
-msgstr ""
+msgstr "لایه شماره 41، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1725
 msgid "User defined layer 42"
-msgstr ""
+msgstr "لایه شماره 42، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1726
 msgid "User defined layer 43"
-msgstr ""
+msgstr "لایه شماره 43، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1727
 msgid "User defined layer 44"
-msgstr ""
+msgstr "لایه شماره 44، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1728
 msgid "User defined layer 45"
-msgstr ""
+msgstr "لایه شماره 45، تعریف شده توسط کاربر"
 
 #: pcbnew/widgets/appearance_controls.cpp:1775
 msgid "Front copper layer"
@@ -50301,7 +50307,7 @@ msgstr ""
 
 #: pcbnew/zone.cpp:1909
 msgid "Enable"
-msgstr ""
+msgstr "فعال کردن"
 
 #: pcbnew/zone.cpp:1915
 msgid "Source Type"
