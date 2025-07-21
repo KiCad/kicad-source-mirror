@@ -110,9 +110,8 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         aReporter->KeepRefreshing( false );
     }
 
-    for( auto net : m_nets )
-        if ( net )
-            delete net;
+    for( RN_NET* net : m_nets )
+        delete net;
 
     m_nets.clear();
 
@@ -258,9 +257,7 @@ void CONNECTIVITY_DATA::internalRecalculateRatsnest( BOARD_COMMIT* aCommit  )
     for( int net = 0; net < lastNet; net++ )
     {
         if( m_connAlgo->IsNetDirty( net ) )
-        {
             m_nets[net]->Clear();
-        }
     }
 
     for( const std::shared_ptr<CN_CLUSTER>& c : clusters )
@@ -353,8 +350,7 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
         /// We don't need to compute the dynamic ratsnest in two cases:
         /// 1) We are not moving any net elements
         /// 2) We are moving all net elements
-        if( dynamicNet->GetNodeCount() != 0
-                && dynamicNet->GetNodeCount() != staticNet->GetNodeCount() )
+        if( dynamicNet->GetNodeCount() != 0 && dynamicNet->GetNodeCount() != staticNet->GetNodeCount() )
         {
             VECTOR2I pos1, pos2;
 
@@ -468,8 +464,8 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     {
                         PCB_LAYER_ID pcbLayer = ToLAYER_ID( aLayer );
                         const SHAPE_POLY_SET*   zoneFill = zone->GetFill( pcbLayer );
-                        const SHAPE_LINE_CHAIN& padHull =
-                            pad->GetEffectivePolygon( pcbLayer, ERROR_INSIDE )->Outline( 0 );
+                        const SHAPE_LINE_CHAIN& padHull = pad->GetEffectivePolygon( pcbLayer,
+                                                                                    ERROR_INSIDE )->Outline( 0 );
 
                         for( const VECTOR2I& pt : zoneFill->COutline( islandIdx ).CPoints() )
                         {
@@ -492,9 +488,9 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
 
                     if( zone->IsFilled() )
                     {
-                        PCB_LAYER_ID lyr = ToLAYER_ID( aLayer );
-                        const SHAPE_POLY_SET* zoneFill = zone->GetFill( lyr );
-                        SHAPE_CIRCLE          viaHull( via->GetCenter(), via->GetWidth( lyr ) / 2 );
+                        PCB_LAYER_ID          layer = ToLAYER_ID( aLayer );
+                        const SHAPE_POLY_SET* zoneFill = zone->GetFill( layer );
+                        SHAPE_CIRCLE          viaHull( via->GetCenter(), via->GetWidth( layer ) / 2 );
 
                         for( const VECTOR2I& pt : zoneFill->COutline( islandIdx ).CPoints() )
                         {
@@ -554,11 +550,9 @@ CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem, int aFl
 
     std::vector<BOARD_CONNECTED_ITEM*> rv;
 
-    auto clusters = m_connAlgo->SearchClusters( ( aFlags & IGNORE_NETS ) ? CSM_PROPAGATE
-                                                                         : CSM_CONNECTIVITY_CHECK,
+    auto clusters = m_connAlgo->SearchClusters( ( aFlags & IGNORE_NETS ) ? CSM_PROPAGATE : CSM_CONNECTIVITY_CHECK,
                                                 ( aFlags & EXCLUDE_ZONES ),
-                                                ( aFlags & IGNORE_NETS ) ? -1
-                                                                         : aItem->GetNetCode() );
+                                                ( aFlags & IGNORE_NETS ) ? -1 : aItem->GetNetCode() );
 
     for( const std::shared_ptr<CN_CLUSTER>& cl : clusters )
     {
@@ -630,8 +624,7 @@ CONNECTIVITY_DATA::GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
-void CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem,
-                                          std::set<PAD*>* pads ) const
+void CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<PAD*>* pads ) const
 {
     for( CN_ITEM* citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
     {
@@ -657,8 +650,7 @@ const
 }
 
 
-void CONNECTIVITY_DATA::GetConnectedPadsAndVias( const BOARD_CONNECTED_ITEM* aItem,
-                                                 std::vector<PAD*>* pads,
+void CONNECTIVITY_DATA::GetConnectedPadsAndVias( const BOARD_CONNECTED_ITEM* aItem, std::vector<PAD*>* pads,
                                                  std::vector<PCB_VIA*>* vias )
 {
     for( CN_ITEM* citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
@@ -741,8 +733,7 @@ static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aPoint )
     {
         PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
 
-        return std::min( track->GetStart().Distance(aPoint ),
-                         track->GetEnd().Distance( aPoint ) );
+        return std::min( track->GetStart().Distance(aPoint ), track->GetEnd().Distance( aPoint ) );
     }
 
     default:
@@ -894,10 +885,8 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, bool aIgno
 
 
 const std::vector<BOARD_CONNECTED_ITEM*>
-CONNECTIVITY_DATA::GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
-                                              const VECTOR2I& aAnchor,
-                                              const std::vector<KICAD_T>& aTypes,
-                                              const int& aMaxError ) const
+CONNECTIVITY_DATA::GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor,
+                                              const std::vector<KICAD_T>& aTypes, const int& aMaxError ) const
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY& entry = m_connAlgo->ItemEntry( aItem );
     std::vector<BOARD_CONNECTED_ITEM*>    rv;
@@ -971,8 +960,8 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 const std::vector<CN_EDGE>
 CONNECTIVITY_DATA::GetRatsnestForItems( const std::vector<BOARD_ITEM*>& aItems )
 {
-    std::set<int> nets;
-    std::vector<CN_EDGE> edges;
+    std::set<int>                   nets;
+    std::vector<CN_EDGE>            edges;
     std::set<BOARD_CONNECTED_ITEM*> item_set;
 
     for( BOARD_ITEM* item : aItems )
