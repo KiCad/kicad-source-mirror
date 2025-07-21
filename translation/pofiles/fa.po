@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 14:04+0000\n"
+"PO-Revision-Date: 2025-07-21 14:06+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1376,14 +1376,14 @@ msgstr "تنظیمات پیش نمایش سه بعدی"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:407
 msgid "Board thickness:"
-msgstr ""
+msgstr "ضخامت برد:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:67 eeschema/sch_bitmap.cpp:188
 #: eeschema/sch_bitmap.cpp:310 pcbnew/pcb_reference_image.cpp:219
 #: pcbnew/pcb_reference_image.cpp:355
 msgid "Scale"
-msgstr ""
+msgstr "مقیاس"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:31
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
@@ -1439,7 +1439,7 @@ msgstr "Z:"
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1746
 #: pcbnew/pad.cpp:1412
 msgid "Rotation"
-msgstr ""
+msgstr "چرخش"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:113
 msgid "Offset"
