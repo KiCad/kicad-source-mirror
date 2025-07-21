@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 13:46+0000\n"
+"PO-Revision-Date: 2025-07-21 13:48+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1260,11 +1260,11 @@ msgstr "هموار کننده تصویر (Anti-aliasing) (آهسته)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:42
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
+msgstr "تاریکی محیطی فضای صفحه و بازتاب های نورپردازی سراسری (کند)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:57
 msgid "Number of Samples"
-msgstr ""
+msgstr "تعداد نمونه ها"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:61
 msgid "Spread Factor %"
