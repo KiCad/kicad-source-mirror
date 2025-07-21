@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 13:56+0000\n"
+"PO-Revision-Date: 2025-07-21 13:58+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1306,11 +1306,11 @@ msgstr "شکست نور ها (Refractions):"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:106
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "تعداد پرتوهای تابانده شده جهت ارزیابی شکست نور"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:114
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "تعداد بازتاب هایی که یک پرتو می تواند از اشیاء بازتاب دهنده دریافت کند"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:124
 msgid "Lights Configuration"
