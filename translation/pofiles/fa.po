@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 14:00+0000\n"
+"PO-Revision-Date: 2025-07-21 14:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1326,17 +1326,17 @@ msgstr "‬‬نور از بالا:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:161
 msgid "Bottom light:"
-msgstr ""
+msgstr "نور از پایین:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "ارتفاع (درجه)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:191
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:208
 msgid "Azimuth (deg)"
-msgstr ""
+msgstr "زاویه افقی (Azimuth) (درجه)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:212
 msgid "Light 1:"
