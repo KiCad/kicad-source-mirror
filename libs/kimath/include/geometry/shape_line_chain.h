@@ -489,6 +489,7 @@ public:
     void ReservePoints( size_t aSize )
     {
         m_points.reserve( aSize );
+        m_shapes.reserve( aSize );
     }
 
     /**

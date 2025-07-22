@@ -241,6 +241,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     VECTOR2I   prevPt;
 
     std::vector<SHAPE_LINE_CHAIN> contours;
+    contours.reserve( startCandidates.size() );
 
     for( PCB_SHAPE* shape : startCandidates )
         shape->ClearFlags( SKIP_STRUCT );
@@ -544,8 +545,15 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
             return false;
     }
 
-    // First, collect the parents of each contour
     std::map<int, std::vector<int>> contourToParentIndexesMap;
+
+    for( size_t ii = 0; ii < contours.size(); ++ii )
+    {
+        SHAPE_LINE_CHAIN& contour = contours[ii];
+
+        if( !contour.GetCachedBBox()->IsValid() )
+            contour.GenerateBBoxCache();
+    }
 
     for( size_t ii = 0; ii < contours.size(); ++ii )
     {
@@ -559,7 +567,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
 
             const SHAPE_LINE_CHAIN& parentCandidate = contours[jj];
 
-            if( parentCandidate.PointInside( firstPt ) )
+            if( parentCandidate.PointInside( firstPt, 0, true ) )
                 parents.push_back( jj );
         }
 
@@ -639,15 +647,15 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
 
     for( auto seg = aPolygons.IterateSegmentsWithHoles(); seg; seg++ )
     {
-        if( LexicographicalCompare( ( *seg ).A, ( *seg ).B ) > 0 )
+        SEG segment = *seg;
+
+        // Ensure segments are always ordered A < B
+        if( LexicographicalCompare( segment.A, segment.B ) > 0 )
         {
-            // Ensure segments are always ordered A < B
-            VECTOR2I tmp = ( *seg ).A;
-            ( *seg ).A = ( *seg ).B;
-            ( *seg ).B = tmp;
+            std::swap( segment.A, segment.B );
         }
 
-        segments.push_back( *seg );
+        segments.push_back( segment );
     }
 
     std::sort( segments.begin(), segments.end(),
@@ -659,37 +667,38 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                    return LexicographicalCompare( a.B, b.B ) < 0;
                } );
 
-    for( auto seg1 = segments.begin(); seg1 != segments.end(); seg1++ )
+    for( size_t i = 0; i < segments.size(); ++i )
     {
-        auto seg2 = seg1;
+        const SEG& seg1 = segments[i];
 
-        for( ++seg2; seg2 != segments.end(); seg2++ )
+        for( size_t j = i + 1; j < segments.size(); ++j )
         {
-            if( ( *seg2 ).A > ( *seg1 ).B )
+            const SEG& seg2 = segments[j];
+
+            if( seg2.A > seg1.B )
             {
                 // No more segments to check, as they are sorted by A and B.
                 break;
             }
 
             // Check for exact overlapping segments.
-            if( *seg1 == *seg2 || ( ( *seg1 ).A == ( *seg2 ).B && ( *seg1 ).B == ( *seg2 ).A ) )
+            if( seg1 == seg2 || ( seg1.A == seg2.B && seg1.B == seg2.A ) )
             {
                 if( aErrorHandler )
                 {
-                    BOARD_ITEM* a = fetchOwner( *seg1 );
-                    BOARD_ITEM* b = fetchOwner( *seg2 );
-                    (*aErrorHandler)( _( "(self-intersecting)" ), a, b, ( *seg1 ).A );
+                    BOARD_ITEM* a = fetchOwner( seg1 );
+                    BOARD_ITEM* b = fetchOwner( seg2 );
+                    (*aErrorHandler)( _( "(self-intersecting)" ), a, b, seg1.A );
                 }
 
                 selfIntersecting = true;
             }
-
-            if( OPT_VECTOR2I pt = seg1->Intersect( *seg2, true ) )
+            else if( OPT_VECTOR2I pt = seg1.Intersect( seg2, true ) )
             {
                 if( aErrorHandler )
                 {
-                    BOARD_ITEM* a = fetchOwner( *seg1 );
-                    BOARD_ITEM* b = fetchOwner( *seg2 );
+                    BOARD_ITEM* a = fetchOwner( seg1 );
+                    BOARD_ITEM* b = fetchOwner( seg2 );
                     (*aErrorHandler)( _( "(self-intersecting)" ), a, b, *pt );
                 }
 

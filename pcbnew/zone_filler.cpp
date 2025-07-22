@@ -1700,6 +1700,7 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
     for( auto& [outline, vertices] : insertion_points )
     {
         SHAPE_LINE_CHAIN& line = aPolys.Outline( outline );
+        line.ReservePoints( line.PointCount() + vertices.size() );
 
         // Stable sort here because we want to make sure that we are inserting pt1 first and
         // pt2 second but still sorting the rest of the indices from highest to lowest.
