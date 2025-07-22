@@ -1700,20 +1700,39 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
     for( auto& [outline, vertices] : insertion_points )
     {
         SHAPE_LINE_CHAIN& line = aPolys.Outline( outline );
-        line.ReservePoints( line.PointCount() + vertices.size() );
+
+        if( vertices.empty() )
+            continue;
 
         // Stable sort here because we want to make sure that we are inserting pt1 first and
-        // pt2 second but still sorting the rest of the indices from highest to lowest.
-        // This allows us to insert into the existing polygon without modifying the future
-        // insertion points.
+        // pt2 second but still sorting the rest of the indices
         std::stable_sort( vertices.begin(), vertices.end(),
                   []( const std::pair<int, VECTOR2I>& a, const std::pair<int, VECTOR2I>& b )
                   {
-                      return a.first > b.first;
+                      return a.first < b.first;
                   } );
 
-        for( const auto& [vertex, pt] : vertices )
-            line.Insert( vertex + 1, pt );  // +1 here because we want to insert after the existing point
+        std::vector<VECTOR2I> new_points;
+        new_points.reserve( line.PointCount() + vertices.size() );
+
+        size_t vertex_idx = 0;
+
+        for( int i = 0; i < line.PointCount(); ++i )
+        {
+            new_points.push_back( line.CPoint( i ) );
+
+            // Insert all points that should come after position i
+            while( vertex_idx < vertices.size() && vertices[vertex_idx].first == i )
+            {
+                new_points.push_back( vertices[vertex_idx].second );
+                vertex_idx++;
+            }
+        }
+
+        line.Clear();
+
+        for( const auto& pt : new_points )
+            line.Append( pt );
     }
 }
 
