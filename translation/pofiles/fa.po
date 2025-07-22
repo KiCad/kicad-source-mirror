@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-22 15:03+0000\n"
+"PO-Revision-Date: 2025-07-23 16:04+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -1911,67 +1911,71 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
-msgstr ""
+msgstr "خروجی به فایل ..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
 msgid "Export to Clipboard"
-msgstr ""
+msgstr "خروجی به کلیپ بورد (Clipboard)"
 
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"هیچ شکلی در تصویر سیاه و سفید برای تبدیل یافت نشد: هیچ طرح کلی ساخته نشد."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
-msgstr ""
+msgstr "تغییر از طریق API"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
-msgstr ""
+msgstr "فرآیند های پس زمینه"
 
 #: common/common.cpp:307
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
+"گسترش متغیر های محیطی ناموفق بود: نویسه '%c' در موقعیت %u از رشته '%s' یافت "
+"نشد."
 
 #: common/common.cpp:389
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
+msgstr "امکان تبدیل مسیر '%s' به مسیر مطلق نسبت به '%s' وجود ندارد."
 
 #: common/common.cpp:408
 #, c-format
 msgid "Output directory '%s' created."
-msgstr ""
+msgstr "پوشه خروجی '%s' ایجاد شد."
 
 #: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:313
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr ""
+msgstr "امکان ایجاد پوشه خروجی '%s' وجود ندارد."
 
 #: common/common.cpp:708
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "این سیستم عامل توسط KiCad و وابستگی های آن پشتیبانی نمی شود."
 
 #: common/common.cpp:710
 msgid "Unsupported Operating System"
-msgstr ""
+msgstr "سیستم عامل پشتیبانی نشده"
 
 #: common/common.cpp:713
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"مشکلات KiCad در این سیستم را نمی توان به سامانه رسمی گزارش خطا، ارسال کرد."
 
 #: common/confirm.cpp:48 common/confirm.cpp:54
 msgid "File Open Warning"
-msgstr ""
+msgstr "هشدار هنگام باز کردن فایل"
 
 #: common/confirm.cpp:50 common/confirm.cpp:56
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "ذخیره های متداخل ممکن است نتایج غیرمنتظره ای ایجاد کند."
 
 #: common/confirm.cpp:52 common/confirm.cpp:57 common/confirm.cpp:123
 #: common/confirm.cpp:150 common/dialog_shim.cpp:795
@@ -1980,15 +1984,15 @@ msgstr "&لغو"
 
 #: common/confirm.cpp:52 common/confirm.cpp:57
 msgid "&Open Anyway"
-msgstr ""
+msgstr "&در هر صورت باز شود"
 
 #: common/confirm.cpp:68 common/confirm.cpp:107
 msgid "Save Changes?"
-msgstr ""
+msgstr "تغییرات ذخیره شود؟"
 
 #: common/confirm.cpp:71 common/confirm.cpp:109
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "اگر ذخیره نکنید، تمام تغییرات شما به‌ طور دائمی از دست خواهد رفت."
 
 #: common/confirm.cpp:73 common/confirm.cpp:110 common/dialog_shim.cpp:799
 msgid "&Save"
@@ -1996,19 +2000,19 @@ msgstr "&ذخیره"
 
 #: common/confirm.cpp:73 common/confirm.cpp:110
 msgid "&Discard Changes"
-msgstr ""
+msgstr "صرف نظر از تغییرات"
 
 #: common/confirm.cpp:76 common/confirm.cpp:156
 msgid "&Apply to all"
-msgstr ""
+msgstr "&بر روی همه اعمال شود"
 
 #: common/confirm.cpp:122
 msgid "Your current changes will be permanently lost."
-msgstr ""
+msgstr "تغییرات فعلی شما به طور دائمی از دست خواهد رفت."
 
 #: common/confirm.cpp:123
 msgid "&Revert"
-msgstr ""
+msgstr "&برگرداندن"
 
 #: common/confirm.cpp:149 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:794
@@ -2017,7 +2021,7 @@ msgstr "&باشه"
 
 #: common/confirm.cpp:239
 msgid "Information"
-msgstr ""
+msgstr "اطلاعات"
 
 #: common/confirm.cpp:267 common/confirm.cpp:271
 #: common/dialogs/panel_embedded_files.cpp:288
@@ -2049,7 +2053,7 @@ msgstr ""
 #: pcbnew/tools/footprint_editor_control.cpp:471 pcbnew/zone_filler.cpp:894
 #: pcbnew/zone_filler.cpp:911
 msgid "Confirmation"
-msgstr ""
+msgstr "تأیید"
 
 #: common/confirm.cpp:275 common/dialog_shim.cpp:796
 msgid "&Yes"
@@ -2061,7 +2065,7 @@ msgstr "&خیر"
 
 #: common/design_block_info_impl.cpp:130
 msgid "Loading design_blocks..."
-msgstr ""
+msgstr "در حال بارگذاری بلوک های طراحی ..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -2073,17 +2077,17 @@ msgstr "KiCad"
 #: common/design_block_io.cpp:48 pcbnew/pcb_io/pcb_io_mgr.cpp:89
 #, c-format
 msgid "UNKNOWN (%d)"
-msgstr ""
+msgstr "ناشناخته (%d)"
 
 #: common/design_block_io.cpp:137
 msgid "KiCad Design Block folders"
-msgstr ""
+msgstr "پوشه های بلوک طراحی KiCad"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3106
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr ""
+msgstr "امکان بازنویسی مسیر کتابخانه '%s' وجود ندارد."
 
 #: common/design_block_io.cpp:184
 #, c-format
@@ -2092,17 +2096,21 @@ msgid ""
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
+"مسیر کتابخانه '%s' ایجاد نشد.\n"
+"\n"
+"اطمینان حاصل کنید که مجوز و دسترسی برای نوشتن در اینجا را دارید و دوباره "
+"تلاش کنید."
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:961
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3130
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
+msgstr "دسترسی کافی برای حذف پوشه '%s' وجود ندارد."
 
 #: common/design_block_io.cpp:212
 #, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr ""
+msgstr "فایل های غیرمنتظره در پوشه کتابخانه '%s' وجود دارد."
 
 #: common/design_block_io.cpp:230
 #, c-format
