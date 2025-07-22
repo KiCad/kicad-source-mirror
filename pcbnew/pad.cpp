@@ -2729,10 +2729,10 @@ static struct PAD_DESC
         if( zcMap.Choices().GetCount() == 0 )
         {
             zcMap.Undefined( ZONE_CONNECTION::INHERITED );
-            zcMap.Map( ZONE_CONNECTION::INHERITED, _HKI( "Inherited" ) )
-                 .Map( ZONE_CONNECTION::NONE, _HKI( "None" ) )
-                 .Map( ZONE_CONNECTION::THERMAL, _HKI( "Thermal reliefs" ) )
-                 .Map( ZONE_CONNECTION::FULL, _HKI( "Solid" ) )
+            zcMap.Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
+                 .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
+                 .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
+                 .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
                  .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
         }
 
@@ -2766,10 +2766,7 @@ static struct PAD_DESC
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                    {
-                        return pad->GetAttribute() == PAD_ATTRIB::PTH
-                               || pad->GetAttribute() == PAD_ATTRIB::NPTH;
-                    }
+                        return pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH;
 
                     return false;
                 };
@@ -2783,41 +2780,36 @@ static struct PAD_DESC
                     return true;
                 };
 
-        propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
-                                      _HKI( "Net" ), isCopperPad );
-        propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
-                                      _HKI( "Net Class" ), isCopperPad );
+        propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ),
+                                      isCopperPad );
+        propMgr.OverrideAvailability( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net Class" ),
+                                      isCopperPad );
 
         const wxString groupPad = _HKI( "Pad Properties" );
 
-        auto padType = new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
-                    &PAD::SetAttribute, &PAD::GetAttribute );
-        propMgr.AddProperty( padType, groupPad );
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
+                    &PAD::SetAttribute, &PAD::GetAttribute ), groupPad );
 
-        auto shape = new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Pad Shape" ),
-                    &PAD::SetFrontShape, &PAD::GetFrontShape );
-        propMgr.AddProperty( shape, groupPad )
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Pad Shape" ),
+                    &PAD::SetFrontShape, &PAD::GetFrontShape ), groupPad )
                 .SetAvailableFunc( hasNormalPadstack );
 
-        auto padNumber = new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
-                                                      &PAD::SetNumber, &PAD::GetNumber );
-        padNumber->SetAvailableFunc( isCopperPad );
-        propMgr.AddProperty( padNumber, groupPad );
+        propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
+                    &PAD::SetNumber, &PAD::GetNumber ), groupPad )
+                .SetAvailableFunc( isCopperPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
-                             NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad )
+                    NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad )
                 .SetIsHiddenFromLibraryEditors();
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
-                             NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad )
+                    NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad )
                 .SetIsHiddenFromLibraryEditors();
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
-                    &PAD::SetSizeX, &PAD::GetSizeX,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetSizeX, &PAD::GetSizeX, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetAvailableFunc( hasNormalPadstack );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size Y" ),
-                    &PAD::SetSizeY, &PAD::GetSizeY,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetSizeY, &PAD::GetSizeY, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetAvailableFunc(
                         [=]( INSPECTABLE* aItem ) -> bool
                         {
@@ -2848,30 +2840,26 @@ static struct PAD_DESC
             return false;
         };
 
-        auto roundRadiusRatio = new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
-                    &PAD::SetFrontRoundRectRadiusRatio, &PAD::GetFrontRoundRectRadiusRatio );
-        roundRadiusRatio->SetAvailableFunc( hasRoundRadius );
-        propMgr.AddProperty( roundRadiusRatio, groupPad );
+        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
+                    &PAD::SetFrontRoundRectRadiusRatio, &PAD::GetFrontRoundRectRadiusRatio ), groupPad )
+                .SetAvailableFunc( hasRoundRadius );
 
-        auto roundRadiusSize = new PROPERTY<PAD, int>( _HKI( "Corner Radius Size" ),
-                    &PAD::SetFrontRoundRectRadiusSize, &PAD::GetFrontRoundRectRadiusSize,
-                    PROPERTY_DISPLAY::PT_SIZE );
-        roundRadiusSize->SetAvailableFunc( hasRoundRadius );
-        propMgr.AddProperty( roundRadiusSize, groupPad );
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Corner Radius Size" ),
+                    &PAD::SetFrontRoundRectRadiusSize, &PAD::GetFrontRoundRectRadiusSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPad )
+                .SetAvailableFunc( hasRoundRadius );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_SHAPE>( _HKI( "Hole Shape" ),
                     &PAD::SetDrillShape, &PAD::GetDrillShape ), groupPad )
                 .SetWriteableFunc( padCanHaveHole );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size X" ),
-                    &PAD::SetDrillSizeX, &PAD::GetDrillSizeX,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetDrillSizeX, &PAD::GetDrillSizeX, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size Y" ),
-                    &PAD::SetDrillSizeY, &PAD::GetDrillSizeY,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetDrillSizeY, &PAD::GetDrillSizeY, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )
                 .SetAvailableFunc(
@@ -2887,64 +2875,49 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );
 
-        auto layerMode = new PROPERTY_ENUM<PAD, PADSTACK::UNCONNECTED_LAYER_MODE>(
-                _HKI( "Copper Layers" ),
-                &PAD::SetUnconnectedLayerMode, &PAD::GetUnconnectedLayerMode );
-        propMgr.AddProperty( layerMode, groupPad );
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PADSTACK::UNCONNECTED_LAYER_MODE>( _HKI( "Copper Layers" ),
+                    &PAD::SetUnconnectedLayerMode, &PAD::GetUnconnectedLayerMode ), groupPad );
 
-        auto padToDie = new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),
-                                                &PAD::SetPadToDieLength, &PAD::GetPadToDieLength,
-                                                PROPERTY_DISPLAY::PT_SIZE );
-        padToDie->SetAvailableFunc( isCopperPad );
-        propMgr.AddProperty( padToDie, groupPad );
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),
+                    &PAD::SetPadToDieLength, &PAD::GetPadToDieLength, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                .SetAvailableFunc( isCopperPad );
 
-        auto padToDieDelay = new PROPERTY<PAD, int>( _HKI( "Pad To Die Delay" ), &PAD::SetPadToDieDelay,
-                                                     &PAD::GetPadToDieDelay, PROPERTY_DISPLAY::PT_TIME );
-        padToDieDelay->SetAvailableFunc( isCopperPad );
-        propMgr.AddProperty( padToDieDelay, groupPad );
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Delay" ),
+                    &PAD::SetPadToDieDelay, &PAD::GetPadToDieDelay, PROPERTY_DISPLAY::PT_TIME ), groupPad )
+                .SetAvailableFunc( isCopperPad );
 
         const wxString groupOverrides = _HKI( "Overrides" );
 
-        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
-                    _HKI( "Clearance Override" ),
-                    &PAD::SetLocalClearance, &PAD::GetLocalClearance,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Clearance Override" ),
+                    &PAD::SetLocalClearance, &PAD::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
-                    _HKI( "Soldermask Margin Override" ),
-                    &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
-
-        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
-                    _HKI( "Solderpaste Margin Override" ),
-                    &PAD::SetLocalSolderPasteMargin, &PAD::GetLocalSolderPasteMargin,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
-
-        propMgr.AddProperty( new PROPERTY<PAD, std::optional<double>>(
-                    _HKI( "Solderpaste Margin Ratio Override" ),
-                    &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio,
-                    PROPERTY_DISPLAY::PT_RATIO ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
+                    &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin, PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>(
-                    _HKI( "Zone Connection Style" ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Solderpaste Margin Override" ),
+                    &PAD::SetLocalSolderPasteMargin, &PAD::GetLocalSolderPasteMargin, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides );
+
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<double>>( _HKI( "Solderpaste Margin Ratio Override" ),
+                    &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio,
+                    PROPERTY_DISPLAY::PT_RATIO ), groupOverrides );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),
                     &PAD::SetLocalZoneConnection, &PAD::GetLocalZoneConnection ), groupOverrides );
 
         constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
 
-        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
-                    _HKI( "Thermal Relief Spoke Width" ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Spoke Width" ),
                     &PAD::SetLocalThermalSpokeWidthOverride, &PAD::GetLocalThermalSpokeWidthOverride,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> );
 
-        propMgr.AddProperty( new PROPERTY<PAD, double>(
-                    _HKI( "Thermal Relief Spoke Angle" ),
+        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
                     &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ), groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
-                    _HKI( "Thermal Relief Gap" ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetLocalThermalGapOverride, &PAD::GetLocalThermalGapOverride,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
