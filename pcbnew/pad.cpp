@@ -2799,10 +2799,10 @@ static struct PAD_DESC
                 .SetAvailableFunc( isCopperPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
-                    NO_SETTER( PAD, wxString ), &PAD::GetPinFunction ), groupPad )
+                    &PAD::SetPinFunction, &PAD::GetPinFunction ), groupPad )
                 .SetIsHiddenFromLibraryEditors();
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
-                    NO_SETTER( PAD, wxString ), &PAD::GetPinType ), groupPad )
+                    &PAD::SetPinType, &PAD::GetPinType ), groupPad )
                 .SetIsHiddenFromLibraryEditors();
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
