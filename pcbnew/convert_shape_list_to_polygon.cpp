@@ -40,6 +40,8 @@
 #include <board.h>
 #include <collectors.h>
 
+#include <nanoflann.hpp>
+
 #include <wx/log.h>
 
 
@@ -96,61 +98,6 @@ static bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
 }
 
 
-/**
- * Search for a #PCB_SHAPE matching a given end point or start point in a list.
- *
- * @param aShape The starting shape.
- * @param aPoint The starting or ending point to search for.
- * @param aList The list to remove from.
- * @param aLimit is the distance from \a aPoint that still constitutes a valid find.
- * @return The first #PCB_SHAPE that has a start or end point matching aPoint, otherwise nullptr.
- */
-static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint,
-                            const std::vector<PCB_SHAPE*>& aList, unsigned aLimit )
-{
-    // Look for an unused, exact hit
-    for( PCB_SHAPE* graphic : aList )
-    {
-        if( graphic == aShape || ( graphic->GetFlags() & SKIP_STRUCT ) != 0 )
-            continue;
-
-        if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
-            return graphic;
-    }
-
-    // Search again for anything that's close, even something already used.  (The latter is
-    // important for error reporting.)
-    VECTOR2I    pt( aPoint );
-    SEG::ecoord closest_dist_sq = SEG::Square( aLimit );
-    PCB_SHAPE*  closest_graphic = nullptr;
-    SEG::ecoord d_sq;
-
-    for( PCB_SHAPE* graphic : aList )
-    {
-        if( graphic == aShape )
-            continue;
-
-        d_sq = ( pt - graphic->GetStart() ).SquaredEuclideanNorm();
-
-        if( d_sq < closest_dist_sq )
-        {
-            closest_dist_sq = d_sq;
-            closest_graphic = graphic;
-        }
-
-        d_sq = ( pt - graphic->GetEnd() ).SquaredEuclideanNorm();
-
-        if( d_sq < closest_dist_sq )
-        {
-            closest_dist_sq = d_sq;
-            closest_graphic = graphic;
-        }
-    }
-
-    return closest_graphic;     // Note: will be nullptr if nothing within aLimit
-}
-
-
 static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
 {
     bool padOutside = false;
@@ -187,6 +134,81 @@ static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape
 }
 
 
+struct PCB_SHAPE_ENDPOINTS_ADAPTOR
+{
+    std::vector<std::pair<VECTOR2I, PCB_SHAPE*>> endpoints;
+
+    PCB_SHAPE_ENDPOINTS_ADAPTOR( const std::vector<PCB_SHAPE*>& shapes )
+    {
+        endpoints.reserve( shapes.size() * 2 );
+
+        for( PCB_SHAPE* shape : shapes )
+        {
+            endpoints.emplace_back( shape->GetStart(), shape );
+            endpoints.emplace_back( shape->GetEnd(), shape );
+        }
+    }
+
+    // Required by nanoflann
+    size_t kdtree_get_point_count() const { return endpoints.size(); }
+
+    // Returns the dim'th component of the idx'th point
+    double kdtree_get_pt( const size_t idx, const size_t dim ) const
+    {
+        if( dim == 0 )
+            return static_cast<double>( endpoints[idx].first.x );
+        else
+            return static_cast<double>( endpoints[idx].first.y );
+    }
+
+    template <class BBOX>
+    bool kdtree_get_bbox( BBOX& ) const
+    {
+        return false;
+    }
+};
+
+using KDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<double, PCB_SHAPE_ENDPOINTS_ADAPTOR>,
+                                                   PCB_SHAPE_ENDPOINTS_ADAPTOR,
+                                                   2 /* dim */ >;
+
+// Helper function to find next shape using KD-tree
+static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint, const KDTree& kdTree,
+                            const PCB_SHAPE_ENDPOINTS_ADAPTOR& adaptor, unsigned aLimit )
+{
+    const double query_pt[2] = { static_cast<double>( aPoint.x ), static_cast<double>( aPoint.y ) };
+
+    // Search for points within a very small radius for exact matches
+    std::vector<nanoflann::ResultItem<size_t, double>> matches;
+    double                                             search_radius_sq = static_cast<double>( aLimit * aLimit );
+    nanoflann::RadiusResultSet<double, size_t>         radiusResultSet( search_radius_sq, matches );
+
+    kdTree.findNeighbors( radiusResultSet, query_pt );
+
+    if( matches.empty() )
+        return nullptr;
+
+    // Find the closest valid candidate
+    PCB_SHAPE* closest_graphic = nullptr;
+    double     closest_dist_sq = search_radius_sq;
+
+    for( const auto& match : matches )
+    {
+        PCB_SHAPE* candidate = adaptor.endpoints[match.first].second;
+
+        if( candidate == aShape )
+            continue;
+
+        if( match.second < closest_dist_sq && !candidate->HasFlag( SKIP_STRUCT ) )
+        {
+            closest_dist_sq = match.second;
+            closest_graphic = candidate;
+        }
+    }
+
+    return closest_graphic;
+}
+
 bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SET& aPolygons,
                                 int aErrorMax, int aChainingEpsilon, bool aAllowDisjoint,
                                 OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons,
@@ -199,6 +221,10 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     PCB_SHAPE* graphic = nullptr;
 
     std::set<PCB_SHAPE*> startCandidates( aShapeList.begin(), aShapeList.end() );
+
+    // Pre-build KD-tree
+    PCB_SHAPE_ENDPOINTS_ADAPTOR adaptor( aShapeList );
+    KDTree                      kdTree( 2, adaptor, nanoflann::KDTreeSingleIndexAdaptorParams( 10 ) );
 
     // Keep a list of where the various shapes came from so after doing our combined-polygon
     // tests we can still report errors against the individual graphic items.
@@ -434,8 +460,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     return false;
                 }
 
-                // Get next closest segment.
-                PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aShapeList, aChainingEpsilon );
+                PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, kdTree, adaptor, aChainingEpsilon );
 
                 if( nextGraphic && !( nextGraphic->GetFlags() & SKIP_STRUCT ) )
                 {

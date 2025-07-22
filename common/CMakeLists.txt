@@ -916,6 +916,7 @@ target_link_libraries( pcbcommon PUBLIC
     delaunator
     kimath
     kiplatform
+    nanoflann
 )
 
 message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )

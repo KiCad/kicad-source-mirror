@@ -736,6 +736,7 @@ target_link_libraries( pcbnew_kiface_objects
         nlohmann_json
         rectpack2d
         gzip-hpp
+        nanoflann
         Boost::boost
         ZLIB::ZLIB
         ${OCC_LIBRARIES}
