@@ -483,12 +483,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_symbol->SetUnit( m_symbol->GetUnitSelection( &GetParent()->GetCurrentSheet() ) );
 
         for( int ii = 1; ii <= m_symbol->GetUnitCount(); ii++ )
-        {
-            if( m_symbol->HasUnitDisplayName( ii ) )
-                m_unitChoice->Append( m_symbol->GetUnitDisplayName( ii ) );
-            else
-                m_unitChoice->Append( m_symbol->SubReference( ii, false ) );
-        }
+            m_unitChoice->Append( m_symbol->GetUnitDisplayName( ii, false ) );
 
         if( m_symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )
             m_unitChoice->SetSelection( m_symbol->GetUnit() - 1 );

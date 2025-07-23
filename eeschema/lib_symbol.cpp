@@ -286,24 +286,31 @@ LIB_SYMBOL_SPTR LIB_SYMBOL::GetRootSymbol() const
 }
 
 
-wxString LIB_SYMBOL::GetUnitReference( int aUnit )
-{
-    return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
-}
-
-
-bool LIB_SYMBOL::HasUnitDisplayName( int aUnit )
+bool LIB_SYMBOL::HasUnitDisplayName( int aUnit ) const
 {
     return ( m_unitDisplayNames.count( aUnit ) == 1 );
 }
 
 
-wxString LIB_SYMBOL::GetUnitDisplayName( int aUnit )
+wxString LIB_SYMBOL::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
-    if( HasUnitDisplayName( aUnit ) )
-        return m_unitDisplayNames[aUnit];
+    if( m_unitDisplayNames.contains( aUnit ) )
+        return m_unitDisplayNames.at( aUnit );
+    else if( aLabel )
+        return wxString::Format( _( "Unit %s" ), LIB_SYMBOL::LetterSubReference( aUnit, 'A' ) );
     else
-        return wxString::Format( _( "Unit %s" ), GetUnitReference( aUnit ) );
+        return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
+}
+
+
+wxString LIB_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
+{
+    if( aBodyStyle == BODY_STYLE::DEMORGAN )
+        return aLabel ? _( "Alternate" ) : _HKI( "Alternate" );
+    else if( aBodyStyle == BODY_STYLE::BASE )
+        return aLabel ? _( "Standard" ) : _HKI( "Standard" );
+    else
+        return wxT( "?" );
 }
 
 
@@ -515,7 +522,7 @@ void LIB_SYMBOL::SetNormal()
 }
 
 
-wxString LIB_SYMBOL::LetterSubReference( int aUnit, int aFirstId )
+wxString LIB_SYMBOL::LetterSubReference( int aUnit, wxChar aInitialLetter )
 {
     // use letters as notation. To allow more than 26 units, the sub ref
     // use one letter if letter = A .. Z or a ... z, and 2 letters otherwise
@@ -526,7 +533,7 @@ wxString LIB_SYMBOL::LetterSubReference( int aUnit, int aFirstId )
     do
     {
         u = ( aUnit - 1 ) % 26;
-        suffix = wxChar( aFirstId + u ) + suffix;
+        suffix = wxChar( aInitialLetter + u ) + suffix;
         aUnit = ( aUnit - u ) / 26;
     } while( aUnit > 0 );
 

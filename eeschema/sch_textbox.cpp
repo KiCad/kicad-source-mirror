@@ -455,6 +455,8 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
+    SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
+
     if( m_excludedFromSim )
         aList.emplace_back( _( "Exclude from" ), _( "Simulation" ) );
 

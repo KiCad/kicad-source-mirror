@@ -1736,20 +1736,6 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
         AppendMsgPanel( _( "Parent" ), UnescapeString( msg ), 8 );
     }
 
-    static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
-    msg = UnitLetter[m_unit];
-
-    AppendMsgPanel( _( "Unit" ), msg, 8 );
-
-    if( m_bodyStyle == BODY_STYLE::DEMORGAN )
-        msg = _( "Alternate" );
-    else if( m_bodyStyle == BODY_STYLE::BASE )
-        msg = _( "Standard" );
-    else
-        msg = wxT( "?" );
-
-    AppendMsgPanel( _( "Body" ), msg, 8 );
-
     if( m_symbol->IsGlobalPower() )
         msg = _( "Power Symbol" );
     else if( m_symbol->IsLocalPower() )

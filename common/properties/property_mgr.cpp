@@ -25,23 +25,21 @@
 #include <properties/property.h>
 
 #include <algorithm>
+#include <ranges>
 #include <utility>
 #include <wx/wx.h>
 
-static wxString EMPTY_STRING( wxEmptyString );
+
+// Global to prevent simultaneous multi-threaded static initialization
+static const std::vector<PROPERTY_BASE*>   EMPTY_PROP_LIST;
+static const std::map<PROPERTY_BASE*, int> EMPTY_PROP_DISPLAY_ORDER;
+std::vector<wxString>                      EMPTY_GROUP_DISPLAY_ORDER;
 
 
 void PROPERTY_MANAGER::RegisterType( TYPE_ID aType, const wxString& aName )
 {
     wxASSERT( m_classNames.count( aType ) == 0 );
     m_classNames.emplace( aType, aName );
-}
-
-
-const wxString& PROPERTY_MANAGER::ResolveType( TYPE_ID aType ) const
-{
-    auto it = m_classNames.find( aType );
-    return it != m_classNames.end() ? it->second : EMPTY_STRING;
 }
 
 
@@ -67,31 +65,29 @@ PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aPr
 }
 
 
-const PROPERTY_LIST& PROPERTY_MANAGER::GetProperties( TYPE_ID aType ) const
+const std::vector<PROPERTY_BASE*>& PROPERTY_MANAGER::GetProperties( TYPE_ID aType ) const
 {
     if( m_dirty )
         const_cast<PROPERTY_MANAGER*>( this )->Rebuild();
 
-    static const PROPERTY_LIST empty;
     auto it = m_classes.find( aType );
 
     if( it == m_classes.end() )
-        return empty;
+        return EMPTY_PROP_LIST;
 
     return it->second.m_allProperties;
 }
 
 
-const PROPERTY_DISPLAY_ORDER& PROPERTY_MANAGER::GetDisplayOrder( TYPE_ID aType ) const
+const std::map<PROPERTY_BASE*, int>& PROPERTY_MANAGER::GetDisplayOrder( TYPE_ID aType ) const
 {
     if( m_dirty )
         const_cast<PROPERTY_MANAGER*>( this )->Rebuild();
 
-    static const PROPERTY_DISPLAY_ORDER empty;
     auto it = m_classes.find( aType );
 
     if( it == m_classes.end() )
-        return empty;
+        return EMPTY_PROP_DISPLAY_ORDER;
 
     return it->second.m_displayOrder;
 }
@@ -102,11 +98,10 @@ const std::vector<wxString>& PROPERTY_MANAGER::GetGroupDisplayOrder( TYPE_ID aTy
     if( m_dirty )
         const_cast<PROPERTY_MANAGER*>( this )->Rebuild();
 
-    static const std::vector<wxString> empty;
     auto it = m_classes.find( aType );
 
     if( it == m_classes.end() )
-        return empty;
+        return EMPTY_GROUP_DISPLAY_ORDER;
 
     return it->second.m_groupDisplayOrder;
 }
@@ -122,7 +117,7 @@ const void* PROPERTY_MANAGER::TypeCast( const void* aSource, TYPE_ID aBase, TYPE
     if( classDesc == m_classes.end() )
         return aSource;
 
-    auto& converters = classDesc->second.m_typeCasts;
+    const std::map<TYPE_ID, std::unique_ptr<TYPE_CAST_BASE>>& converters = classDesc->second.m_typeCasts;
     auto converter = converters.find( aTarget );
 
     if( converter == converters.end() )     // explicit type cast not found
@@ -135,8 +130,9 @@ const void* PROPERTY_MANAGER::TypeCast( const void* aSource, TYPE_ID aBase, TYPE
 PROPERTY_BASE& PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup )
 {
     const wxString& name = aProperty->Name();
-    TYPE_ID hash = aProperty->OwnerHash();
-    CLASS_DESC& classDesc = getClass( hash );
+    TYPE_ID         hash = aProperty->OwnerHash();
+    CLASS_DESC&     classDesc = getClass( hash );
+
     classDesc.m_ownProperties.emplace( name, aProperty );
     classDesc.m_ownDisplayOrder.emplace_back( aProperty );
 
@@ -153,8 +149,8 @@ PROPERTY_BASE& PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wx
 }
 
 
-PROPERTY_BASE& PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName,
-                                                  PROPERTY_BASE* aNew, const wxString& aGroup )
+PROPERTY_BASE& PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew,
+                                                  const wxString& aGroup )
 {
     CLASS_DESC& classDesc = getClass( aNew->OwnerHash() );
     classDesc.m_replaced.insert( std::make_pair( aBase, aName ) );
@@ -164,31 +160,30 @@ PROPERTY_BASE& PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& 
 
 void PROPERTY_MANAGER::AddTypeCast( TYPE_CAST_BASE* aCast )
 {
-    TYPE_ID derivedHash = aCast->DerivedHash();
+    TYPE_ID     derivedHash = aCast->DerivedHash();
     CLASS_DESC& classDesc = getClass( aCast->BaseHash() );
-    auto& typeCasts = classDesc.m_typeCasts;
-    wxASSERT_MSG( typeCasts.count( derivedHash ) == 0, "Such converter already exists" );
-    typeCasts.emplace( derivedHash, aCast );
+
+    wxASSERT_MSG( classDesc.m_typeCasts.count( derivedHash ) == 0, wxT( "Such converter already exists" ) );
+    classDesc.m_typeCasts.emplace( derivedHash, aCast );
 }
 
 
 void PROPERTY_MANAGER::InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase )
 {
-    wxASSERT_MSG( aDerived != aBase, "Class cannot inherit from itself" );
+    wxASSERT_MSG( aDerived != aBase, wxT( "Class cannot inherit from itself" ) );
 
     CLASS_DESC& derived = getClass( aDerived );
-    CLASS_DESC& base = getClass( aBase );
-    derived.m_bases.push_back( base );
+    derived.m_bases.push_back( getClass( aBase ) );
     m_dirty = true;
 
     wxASSERT_MSG( derived.m_bases.size() == 1 || derived.m_typeCasts.count( aBase ) == 1,
-                  "You need to add a TYPE_CAST for classes inheriting from multiple bases" );
+                  wxT( "You need to add a TYPE_CAST for classes inheriting from multiple bases" ) );
 }
 
 
 void PROPERTY_MANAGER::Mask( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName )
 {
-    wxASSERT_MSG( aDerived != aBase, "Class cannot mask from itself" );
+    wxASSERT_MSG( aDerived != aBase, wxT( "Class cannot mask from itself" ) );
 
     CLASS_DESC& derived = getClass( aDerived );
     derived.m_maskedBaseProperties.insert( std::make_pair( aBase, aName ) );
@@ -196,11 +191,10 @@ void PROPERTY_MANAGER::Mask( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aN
 }
 
 
-void PROPERTY_MANAGER::OverrideAvailability( TYPE_ID aDerived, TYPE_ID aBase,
-                                             const wxString& aName,
+void PROPERTY_MANAGER::OverrideAvailability( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName,
                                              std::function<bool( INSPECTABLE* )> aFunc )
 {
-    wxASSERT_MSG( aDerived != aBase, "Class cannot override from itself" );
+    wxASSERT_MSG( aDerived != aBase, wxT( "Class cannot override from itself" ) );
 
     CLASS_DESC& derived = getClass( aDerived );
     derived.m_availabilityOverrides[std::make_pair( aBase, aName )] = std::move( aFunc );
@@ -208,11 +202,10 @@ void PROPERTY_MANAGER::OverrideAvailability( TYPE_ID aDerived, TYPE_ID aBase,
 }
 
 
-void PROPERTY_MANAGER::OverrideWriteability( TYPE_ID aDerived, TYPE_ID aBase,
-                                             const wxString& aName,
+void PROPERTY_MANAGER::OverrideWriteability( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName,
                                              std::function<bool( INSPECTABLE* )> aFunc )
 {
-    wxASSERT_MSG( aDerived != aBase, "Class cannot override from itself" );
+    wxASSERT_MSG( aDerived != aBase, wxT( "Class cannot override from itself" ) );
 
     CLASS_DESC& derived = getClass( aDerived );
     derived.m_writeabilityOverrides[std::make_pair( aBase, aName )] = std::move( aFunc );
@@ -220,16 +213,14 @@ void PROPERTY_MANAGER::OverrideWriteability( TYPE_ID aDerived, TYPE_ID aBase,
 }
 
 
-bool PROPERTY_MANAGER::IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp,
-                                       INSPECTABLE* aItem )
+bool PROPERTY_MANAGER::IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp, INSPECTABLE* aItem )
 {
     if( !aProp->Available( aItem ) )
         return false;
 
     CLASS_DESC& derived = getClass( aItemClass );
 
-    auto it = derived.m_availabilityOverrides.find( std::make_pair( aProp->BaseHash(),
-                                                                    aProp->Name() ) );
+    auto it = derived.m_availabilityOverrides.find( std::make_pair( aProp->BaseHash(), aProp->Name() ) );
 
     if( it != derived.m_availabilityOverrides.end() )
         return it->second( aItem );
@@ -238,16 +229,14 @@ bool PROPERTY_MANAGER::IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp,
 }
 
 
-bool PROPERTY_MANAGER::IsWriteableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp,
-                                       INSPECTABLE* aItem )
+bool PROPERTY_MANAGER::IsWriteableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp, INSPECTABLE* aItem )
 {
     if( !aProp->Writeable( aItem ) )
         return false;
 
     CLASS_DESC& derived = getClass( aItemClass );
 
-    auto it = derived.m_writeabilityOverrides.find( std::make_pair( aProp->BaseHash(),
-                                                                    aProp->Name() ) );
+    auto it = derived.m_writeabilityOverrides.find( std::make_pair( aProp->BaseHash(), aProp->Name() ) );
 
     if( it != derived.m_writeabilityOverrides.end() )
         return it->second( aItem );
@@ -265,7 +254,7 @@ bool PROPERTY_MANAGER::IsOfType( TYPE_ID aDerived, TYPE_ID aBase ) const
     wxCHECK( derived != m_classes.end(), false );   // missing class description
 
     // traverse the hierarchy seeking for the base class
-    for( auto& base : derived->second.m_bases )
+    for( const std::reference_wrapper<CLASS_DESC>& base : derived->second.m_bases )
     {
         if( IsOfType( base.get().m_id, aBase ) )
             return true;
@@ -297,8 +286,8 @@ PROPERTY_MANAGER::CLASS_DESC& PROPERTY_MANAGER::getClass( TYPE_ID aTypeId )
 
 void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 {
-    PROPERTY_SET replaced;
-    PROPERTY_SET masked;
+    std::set<std::pair<size_t, wxString>> replaced;
+    std::set<std::pair<size_t, wxString>> masked;
     m_allProperties.clear();
     collectPropsRecur( m_allProperties, replaced, m_displayOrder, masked );
 
@@ -338,10 +327,10 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 }
 
 
-void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
-                                                      PROPERTY_SET& aReplaced,
-                                                      PROPERTY_DISPLAY_ORDER& aDisplayOrder,
-                                                      PROPERTY_SET& aMasked ) const
+void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( std::vector<PROPERTY_BASE*>& aResult,
+                                                      std::set<std::pair<size_t, wxString>>& aReplaced,
+                                                      std::map<PROPERTY_BASE*, int>& aDisplayOrder,
+                                                      std::set<std::pair<size_t, wxString>>& aMasked ) const
 {
     for( const std::pair<size_t, wxString>& replacedEntry : m_replaced )
         aReplaced.emplace( replacedEntry );
@@ -371,8 +360,8 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
 
     for( PROPERTY_BASE* property : m_ownDisplayOrder )
     {
-        PROPERTY_SET::key_type propertyKey = std::make_pair( property->OwnerHash(),
-                                                             property->Name() );
+        std::set<std::pair<size_t, wxString>>::key_type propertyKey = std::make_pair( property->OwnerHash(),
+                                                                                      property->Name() );
         // Do not store replaced properties
         if( aReplaced.count( propertyKey ) )
             continue;
@@ -386,28 +375,8 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
     }
 
     // Iterate backwards so that replaced properties appear before base properties
-    for( auto it = m_bases.rbegin(); it != m_bases.rend(); ++it )
-        it->get().collectPropsRecur( aResult, aReplaced, aDisplayOrder, aMasked );
-}
-
-
-std::vector<TYPE_ID> PROPERTY_MANAGER::GetMatchingClasses( PROPERTY_BASE* aProperty )
-{
-    std::vector<TYPE_ID> ids;
-
-/*
-    for( auto& cls : m_classes )
-    {
-        CLASS_INFO info;
-
-        for( auto prop : cls.second.m_allProperties )
-            info.properties.push_back(prop);
-
-
-    }
- */
-
-    return ids;
+    for( std::reference_wrapper<CLASS_DESC> base : std::ranges::reverse_view( m_bases ) )
+        base.get().collectPropsRecur( aResult, aReplaced, aDisplayOrder, aMasked );
 }
 
 
@@ -458,7 +427,7 @@ void PROPERTY_MANAGER::PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aPr
 PROPERTY_COMMIT_HANDLER::PROPERTY_COMMIT_HANDLER( COMMIT* aCommit )
 {
     wxCHECK2_MSG( PROPERTY_MANAGER::Instance().m_managedCommit == nullptr,
-                  return, "Can't have more than one managed commit at a time!" );
+                  return, wxT( "Can't have more than one managed commit at a time!" ) );
 
     PROPERTY_MANAGER::Instance().m_managedCommit = aCommit;
 }
@@ -467,7 +436,7 @@ PROPERTY_COMMIT_HANDLER::PROPERTY_COMMIT_HANDLER( COMMIT* aCommit )
 PROPERTY_COMMIT_HANDLER::~PROPERTY_COMMIT_HANDLER()
 {
     wxASSERT_MSG( PROPERTY_MANAGER::Instance().m_managedCommit != nullptr,
-                  "Something went wrong: m_managedCommit already null!" );
+                  wxT( "Something went wrong: m_managedCommit already null!" ) );
 
     PROPERTY_MANAGER::Instance().m_managedCommit = nullptr;
 }

@@ -66,6 +66,7 @@
 
 #include <pcb_group.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pin_type.h>
 
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -2803,42 +2804,51 @@ static struct PAD_DESC
                 .SetIsHiddenFromLibraryEditors();
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
                     &PAD::SetPinType, &PAD::GetPinType ), groupPad )
-                .SetIsHiddenFromLibraryEditors();
+                .SetIsHiddenFromLibraryEditors()
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     wxPGChoices choices;
+
+                                     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+                                         choices.Add( GetCanonicalElectricalTypeName( (ELECTRICAL_PINTYPE) ii ) );
+
+                                     return choices;
+                                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
                     &PAD::SetSizeX, &PAD::GetSizeX, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetAvailableFunc( hasNormalPadstack );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size Y" ),
                     &PAD::SetSizeY, &PAD::GetSizeY, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
-                .SetAvailableFunc(
-                        [=]( INSPECTABLE* aItem ) -> bool
-                        {
-                            if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                            {
-                                // Custom padstacks can't have size modified through panel
-                                if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
-                                    return false;
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                       {
+                                           // Custom padstacks can't have size modified through panel
+                                           if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                                               return false;
 
-                                // Circle pads have no usable y-size
-                                return pad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CIRCLE;
-                            }
+                                           // Circle pads have no usable y-size
+                                           return pad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CIRCLE;
+                                       }
 
-                            return true;
-                        } );
+                                       return true;
+                                   } );
 
-        const auto hasRoundRadius = [=]( INSPECTABLE* aItem ) -> bool
-        {
-            if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-            {
-                // Custom padstacks can't have this property modified through panel
-                if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+        const auto hasRoundRadius =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        // Custom padstacks can't have this property modified through panel
+                        if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                            return false;
+
+                        return PAD_UTILS::PadHasMeaningfulRoundingRadius( *pad, F_Cu );
+                    }
+
                     return false;
-
-                return PAD_UTILS::PadHasMeaningfulRoundingRadius( *pad, F_Cu );
-            }
-
-            return false;
-        };
+                };
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
                     &PAD::SetFrontRoundRectRadiusRatio, &PAD::GetFrontRoundRectRadiusRatio ), groupPad )
@@ -2862,15 +2872,14 @@ static struct PAD_DESC
                     &PAD::SetDrillSizeY, &PAD::GetDrillSizeY, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )
-                .SetAvailableFunc(
-                        [=]( INSPECTABLE* aItem ) -> bool
-                        {
-                            // Circle holes have no usable y-size
-                            if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                return pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE;
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       // Circle holes have no usable y-size
+                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                           return pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE;
 
-                            return true;
-                        } );
+                                       return true;
+                                   } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );

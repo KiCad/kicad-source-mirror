@@ -260,7 +260,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
             // if the unit has a display name, write that
             if( aSymbol->HasUnitDisplayName( unit.m_unit ) )
             {
-                name = aSymbol->GetUnitDisplayName( unit.m_unit );
+                name = aSymbol->GetUnitDisplayName( unit.m_unit, false );
                 aFormatter.Print( "(unit_name %s)", aFormatter.Quotes( name ).c_str() );
             }
 

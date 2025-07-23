@@ -241,7 +241,7 @@ public:
      */
     virtual bool HasChoices() const
     {
-        return false;
+        return m_choicesFunc != nullptr;
     }
 
     /**
@@ -258,6 +258,20 @@ public:
     PROPERTY_BASE& SetAvailableFunc( std::function<bool(INSPECTABLE*)> aFunc )
     {
         m_availFunc = std::move( aFunc );
+        return *this;
+    }
+
+    wxPGChoices GetChoices( INSPECTABLE* aObject ) const
+    {
+        if( m_choicesFunc )
+            return m_choicesFunc( aObject );
+
+        return {};
+    }
+
+    PROPERTY_BASE& SetChoicesFunc( std::function<wxPGChoices(INSPECTABLE*)> aFunc )
+    {
+        m_choicesFunc = std::move( aFunc );
         return *this;
     }
 
@@ -433,6 +447,8 @@ private:
     std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
 
     std::function<bool(INSPECTABLE*)> m_writeableFunc;   ///< Eval to determine if prop is read-only
+
+    std::function<wxPGChoices(INSPECTABLE*)> m_choicesFunc;
 
     PROPERTY_VALIDATOR_FN m_validator;
 

@@ -543,19 +543,21 @@ public:
     int GetUnitCount() const override;
 
     /**
-     * Return an identifier for \a aUnit for symbols with units.
-     */
-    wxString GetUnitReference( int aUnit ) override;
-
-    /**
      * Return true if the given unit \a aUnit has a display name defined
      */
-    bool HasUnitDisplayName( int aUnit ) override;
+    bool HasUnitDisplayName( int aUnit ) const;
+
+    wxString GetUnitName( int aUnit ) const override
+    {
+        return GetUnitDisplayName( aUnit, true );
+    }
 
     /**
      * Return the user-defined display name for \a aUnit for symbols with units.
      */
-    wxString GetUnitDisplayName( int aUnit ) override;
+    wxString GetUnitDisplayName( int aUnit, bool aLabel ) const override;
+
+    wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const override;
 
     /**
      * Copy all unit display names into the given map \a aTarget
@@ -586,7 +588,7 @@ public:
      */
     bool IsMulti() const override { return m_unitCount > 1; }
 
-    static wxString LetterSubReference( int aUnit, int aFirstId );
+    static wxString LetterSubReference( int aUnit, wxChar aInitialLetter );
 
     /**
      * Set or clear the alternate body style (DeMorgan) for the symbol.

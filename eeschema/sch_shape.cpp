@@ -317,10 +317,7 @@ const BOX2I SCH_SHAPE::GetBoundingBox() const
 
 void SCH_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    if( m_layer == LAYER_DEVICE )
-        getSymbolEditorMsgPanelInfo( aFrame, aList );
-    else
-        SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
+    SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     ShapeGetMsgPanelInfo( aFrame, aList );
 }

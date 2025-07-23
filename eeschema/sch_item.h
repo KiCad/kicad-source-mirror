@@ -235,16 +235,20 @@ public:
      */
     SCH_ITEM* Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr, bool doClone = false ) const;
 
-    static wxString GetUnitDescription( int aUnit );
-    static wxString GetBodyStyleDescription( int aBodyStyle );
-
     virtual void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
-    void SetUnitProp( int aUnit );
+
+    virtual wxString GetUnitDisplayName( int aUnit, bool aLabel ) const;
+    virtual wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const;
+
+    virtual void SetUnitProp( const wxString& aUnit );
+    virtual wxString GetUnitProp() const;
 
     virtual void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
     int  GetBodyStyle() const { return m_bodyStyle; }
-    void SetBodyStyleProp( int aBodyStyle );
+
+    virtual void SetBodyStyleProp( const wxString& aBodyStyle );
+    virtual wxString GetBodyStyleProp() const;
 
     void SetPrivate( bool aPrivate ) { m_private = aPrivate; }
     bool IsPrivate() const { return m_private; }
@@ -612,6 +616,8 @@ public:
 
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) { wxCHECK( false, /* void */ ); }
 
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
     /**
      * Plot the item to \a aPlotter.
      *
@@ -691,8 +697,6 @@ protected:
     {
         bool operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const;
     };
-
-    void getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
     /**
      * Provide the draw object specific comparison called by the == and < operators.

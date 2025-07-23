@@ -81,17 +81,7 @@ public:
     /**
      * For items with units, return an identifier for unit x.
      */
-    virtual wxString GetUnitReference( int aUnit ) { return wxEmptyString; }
-
-    /**
-     * For items with units, return a display name for unit x.
-     */
-    virtual wxString GetUnitDisplayName( int aUnit ) { return wxEmptyString; }
-
-    /**
-     * For items with units, return true if a display name is set for x.
-     */
-    virtual bool HasUnitDisplayName( int aUnit ) { return false; }
+    virtual wxString GetUnitName( int aUnit ) const { return wxEmptyString; }
 };
 
 #endif //LIB_TREE_ITEM_H

@@ -447,6 +447,8 @@ void SCH_TABLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Table" ), wxString::Format( _( "%d Columns" ), m_colCount ) );
+
+    SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
 }
 
 

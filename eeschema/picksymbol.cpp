@@ -119,8 +119,8 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 
     if( otherSymbolRef )
     {
-        const wxString targetUnitName = symbol->GetUnitDisplayName( aUnit );
-        const wxString currUnitName = symbol->GetUnitDisplayName( currentUnit );
+        const wxString targetUnitName = symbol->GetUnitDisplayName( aUnit, false );
+        const wxString currUnitName = symbol->GetUnitDisplayName( currentUnit, false );
         wxString otherSheetName = otherSymbolRef->GetSheetPath().PathHumanReadable( true, true );
 
         if( otherSheetName.IsEmpty() )

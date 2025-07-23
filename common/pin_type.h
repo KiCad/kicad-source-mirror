@@ -55,6 +55,31 @@ enum class ELECTRICAL_PINTYPE
 
 #define ELECTRICAL_PINTYPES_TOTAL ( static_cast<int>( ELECTRICAL_PINTYPE::PT_LAST_OPTION ) + 1 )
 
+inline wxString GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
+{
+    // These strings are the canonical name of the electrictal type
+    // Not translated, no space in name, only ASCII chars.
+    // to use when the string name must be known and well defined
+    // must have same order than enum ELECTRICAL_PINTYPE (see sch_pin.h)
+    static const wxChar* msgPinElectricType[] =
+    {
+        wxT( "input" ),
+        wxT( "output" ),
+        wxT( "bidirectional" ),
+        wxT( "tri_state" ),
+        wxT( "passive" ),
+        wxT( "free" ),
+        wxT( "unspecified" ),
+        wxT( "power_in" ),
+        wxT( "power_out" ),
+        wxT( "open_collector" ),
+        wxT( "open_emitter" ),
+        wxT( "no_connect" )
+    };
+
+    return msgPinElectricType[static_cast<int>( aType )];
+}
+
 enum class GRAPHIC_PINSHAPE
 {
     LINE,

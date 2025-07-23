@@ -43,32 +43,6 @@
 // small margin in internal units between the pin text and the pin line
 #define PIN_TEXT_MARGIN 4
 
-wxString SCH_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
-{
-    // These strings are the canonical name of the electrictal type
-    // Not translated, no space in name, only ASCII chars.
-    // to use when the string name must be known and well defined
-    // must have same order than enum ELECTRICAL_PINTYPE (see sch_pin.h)
-    static const wxChar* msgPinElectricType[] =
-    {
-        wxT( "input" ),
-        wxT( "output" ),
-        wxT( "bidirectional" ),
-        wxT( "tri_state" ),
-        wxT( "passive" ),
-        wxT( "free" ),
-        wxT( "unspecified" ),
-        wxT( "power_in" ),
-        wxT( "power_out" ),
-        wxT( "open_collector" ),
-        wxT( "open_emitter" ),
-        wxT( "no_connect" )
-    };
-
-    return msgPinElectricType[static_cast<int>( aType )];
-}
-
-
 /// Utility for getting the size of the 'internal' pin decorators (as a radius)
 /// i.e. the clock symbols (falling clock is actually external but is of
 /// the same kind)
@@ -324,29 +298,25 @@ void SCH_PIN::SetType( ELECTRICAL_PINTYPE aType )
 
 wxString SCH_PIN::GetCanonicalElectricalTypeName() const
 {
-    if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
-    {
-        if( !m_libPin )
-            return GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
+    if( m_type != ELECTRICAL_PINTYPE::PT_INHERIT )
+        return ::GetCanonicalElectricalTypeName( m_type );
 
-        return m_libPin->GetCanonicalElectricalTypeName();
-    }
+    if( !m_libPin )
+        return ::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
 
-    return GetCanonicalElectricalTypeName( m_type );
+    return m_libPin->GetCanonicalElectricalTypeName();
 }
 
 
 wxString SCH_PIN::GetElectricalTypeName() const
 {
-    if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
-    {
-        if( !m_libPin )
-            return ElectricalPinTypeGetText( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
+    if( m_type != ELECTRICAL_PINTYPE::PT_INHERIT )
+        return ElectricalPinTypeGetText( m_type );
 
-        return m_libPin->GetElectricalTypeName();
-    }
+    if( !m_libPin )
+        return ElectricalPinTypeGetText( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
 
-    return ElectricalPinTypeGetText( m_type );
+    return m_libPin->GetElectricalTypeName();
 }
 
 
@@ -1156,28 +1126,9 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     wxString msg;
     SYMBOL*  symbol = GetParentSymbol();
 
-    if( dynamic_cast<LIB_SYMBOL*>( symbol ) )
-    {
-        getSymbolEditorMsgPanelInfo( aFrame, aList );
-    }
-    else
-    {
-        aList.emplace_back( _( "Type" ), _( "Pin" ) );
+    aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
-        if( symbol->GetUnitCount() )
-        {
-            msg = m_libPin ? GetUnitDescription( m_libPin->GetUnit() ) :
-                             wxString( "Undefined library pin." );
-            aList.emplace_back( _( "Unit" ), msg );
-        }
-
-        if( symbol->HasAlternateBodyStyle() )
-        {
-            msg = m_libPin ? GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
-                             wxString( "Undefined library pin." );
-            aList.emplace_back( _( "Body Style" ), msg );
-        }
-    }
+    SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
     aList.emplace_back( _( "Number" ), GetShownNumber() );

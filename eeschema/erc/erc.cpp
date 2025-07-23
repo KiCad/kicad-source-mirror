@@ -575,11 +575,11 @@ int ERC_TESTER::TestMissingUnits()
                     {
                         if( ii++ == 3 )
                         {
-                            missing_pin_units += wxS( "....." );
+                            missing_pin_units += wxS( "..." );
                             break;
                         }
 
-                        missing_pin_units += libSymbol->GetUnitDisplayName( missing_unit ) + ", " ;
+                        missing_pin_units += libSymbol->GetUnitDisplayName( missing_unit, false ) + ", " ;
                     }
 
                     missing_pin_units.Truncate( missing_pin_units.length() - 2 );
