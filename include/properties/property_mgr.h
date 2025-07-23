@@ -46,17 +46,6 @@ class COMMIT;
 ///< Unique type identifier
 using TYPE_ID = size_t;
 
-using PROPERTY_LIST = std::vector<PROPERTY_BASE*>;
-
-using PROPERTY_SET = std::set<std::pair<size_t, wxString>>;
-
-template<typename ValueType>
-using PROPERTY_MAP = std::map<std::pair<size_t, wxString>, ValueType>;
-
-using PROPERTY_FUNCTOR_MAP = PROPERTY_MAP<std::function<bool( INSPECTABLE* )>>;
-
-using PROPERTY_DISPLAY_ORDER = std::map<PROPERTY_BASE*, int>;
-
 using PROPERTY_LISTENER = std::function<void( INSPECTABLE*, PROPERTY_BASE*, COMMIT* )>;
 
 class PROPERTY_COMMIT_HANDLER
@@ -101,14 +90,6 @@ public:
     void RegisterType( TYPE_ID aType, const wxString& aName );
 
     /**
-     * Return name of a type.
-     *
-     * @param aType is the type identifier (obtained using TYPE_HASH()).
-     * @return Name of the type or empty string, if not available.
-     */
-    const wxString& ResolveType( TYPE_ID aType ) const;
-
-    /**
      * Return a property for a specific type.
      *
      * @param aType is the type identifier (obtained using TYPE_HASH()).
@@ -123,9 +104,9 @@ public:
      * @param aType is the type identifier (obtained using TYPE_HASH()).
      * @return Vector storing all properties of the requested type.
      */
-    const PROPERTY_LIST& GetProperties( TYPE_ID aType ) const;
+    const std::vector<PROPERTY_BASE*>& GetProperties( TYPE_ID aType ) const;
 
-    const PROPERTY_DISPLAY_ORDER& GetDisplayOrder( TYPE_ID aType ) const;
+    const std::map<PROPERTY_BASE*, int>& GetDisplayOrder( TYPE_ID aType ) const;
 
     const std::vector<wxString>& GetGroupDisplayOrder( TYPE_ID aType ) const;
 
@@ -258,8 +239,6 @@ public:
 
     CLASSES_INFO GetAllClasses();
 
-    std::vector<TYPE_ID> GetMatchingClasses( PROPERTY_BASE* aProperty );
-
     /**
      * Callback to alert the notification system that a property has changed
      * @param aObject is the object whose property just changed
@@ -314,19 +293,19 @@ private:
         std::map<TYPE_ID, std::unique_ptr<TYPE_CAST_BASE>> m_typeCasts;
 
         ///< Properties from bases that should be masked (hidden) on this subclass
-        PROPERTY_SET m_maskedBaseProperties;
+        std::set<std::pair<size_t, wxString>> m_maskedBaseProperties;
 
         ///< Overrides for base class property availabilities
-        PROPERTY_FUNCTOR_MAP m_availabilityOverrides;
+        std::map<std::pair<size_t, wxString>, std::function<bool( INSPECTABLE* )>> m_availabilityOverrides;
 
         ///< Overrides for base class property writeable status
-        PROPERTY_FUNCTOR_MAP m_writeabilityOverrides;
+        std::map<std::pair<size_t, wxString>, std::function<bool( INSPECTABLE* )>> m_writeabilityOverrides;
 
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
 
         ///< Compiled display order for all properties
-        PROPERTY_DISPLAY_ORDER m_displayOrder;
+        std::map<PROPERTY_BASE*, int> m_displayOrder;
 
         ///< List of property groups provided by this class in display order
         std::vector<wxString> m_groupDisplayOrder;
@@ -338,16 +317,17 @@ private:
         std::set<wxString> m_groups;
 
         ///< Replaced properties (TYPE_ID / name)
-        PROPERTY_SET m_replaced;
+        std::set<std::pair<size_t, wxString>> m_replaced;
 
         ///< Recreates the list of properties
         void rebuild();
 
         ///< Traverses the class inheritance hierarchy bottom-to-top, gathering
         ///< all properties available to a type
-        void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced,
-                                PROPERTY_DISPLAY_ORDER& aDisplayOrder,
-                                PROPERTY_SET& aMasked ) const;
+        void collectPropsRecur( std::vector<PROPERTY_BASE*>& aResult,
+                                std::set<std::pair<size_t, wxString>>& aReplaced,
+                                std::map<PROPERTY_BASE*, int>& aDisplayOrder,
+                                std::set<std::pair<size_t, wxString>>& aMasked ) const;
     };
 
     ///< Returns metadata for a specific type

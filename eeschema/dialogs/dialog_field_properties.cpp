@@ -463,12 +463,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
         const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_field->GetParentSymbol() );
 
         for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
-        {
-            if( symbol->HasUnitDisplayName( ii ) )
-                m_unitChoice->Append( symbol->GetUnitDisplayName( ii ) );
-            else
-                m_unitChoice->Append( symbol->SubReference( ii, false ) );
-        }
+            m_unitChoice->Append( symbol->GetUnitDisplayName( ii, false ) );
 
         if( symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )
             m_unitChoice->SetSelection( symbol->GetUnit() - 1 );

@@ -440,19 +440,27 @@ int SCH_SYMBOL::GetUnitCount() const
 }
 
 
-wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit ) const
+wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
-    wxCHECK( m_part, ( wxString::Format( _( "Unit %s" ), SubReference( aUnit ) ) ) );
-
-    return m_part->GetUnitDisplayName( aUnit );
+    if( m_part )
+        return m_part->GetUnitDisplayName( aUnit, aLabel );
+    else if( aLabel )
+        return wxString::Format( _( "Unit %s" ), SubReference( aUnit ) );
+    else
+        return SubReference( aUnit );
 }
 
 
-bool SCH_SYMBOL::HasUnitDisplayName( int aUnit ) const
+wxString SCH_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
 {
-    wxCHECK( m_part, false );
-
-    return m_part->HasUnitDisplayName( aUnit );
+    if( m_part )
+        return m_part->GetBodyStyleDescription( aBodyStyle, aLabel );
+    else if( aBodyStyle == BODY_STYLE::DEMORGAN )
+        return aLabel ? _( "Alternate" ) : _HKI( "Alternate" );
+    else if( aBodyStyle == BODY_STYLE::BASE )
+        return aLabel ? _( "Standard" ) : _HKI( "Standard" );
+    else
+        return wxT( "?" );
 }
 
 
@@ -550,8 +558,8 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
 }
 
 
-bool SCH_SYMBOL::GetInstance( SCH_SYMBOL_INSTANCE& aInstance,
-                              const KIID_PATH& aSheetPath, bool aTestFromEnd ) const
+bool SCH_SYMBOL::GetInstance( SCH_SYMBOL_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
+                              bool aTestFromEnd ) const
 {
     for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
@@ -2988,11 +2996,35 @@ static struct SCH_SYMBOL_DESC
 
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Unit" ),
                     &SCH_SYMBOL::SetUnitProp, &SCH_SYMBOL::GetUnitProp ) )
-                .SetAvailableFunc( multiUnit );
+                .SetAvailableFunc( multiUnit )
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     wxPGChoices choices;
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Body Style" ),
+                                     if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                                     {
+                                         for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
+                                             choices.Add( symbol->GetUnitDisplayName( ii, false ) );
+                                     }
+
+                                     return choices;
+                                 } );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Body Style" ),
                     &SCH_SYMBOL::SetBodyStyleProp, &SCH_SYMBOL::GetBodyStyleProp ) )
-                .SetAvailableFunc( multiBodyStyle );
+                .SetAvailableFunc( multiBodyStyle )
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     wxPGChoices choices;
+
+                                     if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                                     {
+                                         for( int ii : { BODY_STYLE::BASE, BODY_STYLE::DEMORGAN } )
+                                             choices.Add( symbol->GetBodyStyleDescription( ii, false ) );
+                                     }
+
+                                     return choices;
+                                 } );
 
         const wxString groupAttributes = _HKI( "Attributes" );
 

@@ -86,7 +86,7 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             pin->GetName(),
                             aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                             aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                            aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
             }
             else
             {
@@ -101,9 +101,9 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             pinName,
                             aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                             aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            aSymbol->GetUnitReference( next->GetUnit() ),
-                            aSymbol->GetUnitReference( pin->GetUnit() ),
-                            SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                            aSymbol->GetUnitDisplayName( next->GetUnit(), false ),
+                            aSymbol->GetUnitDisplayName( pin->GetUnit(), false ),
+                            aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
             }
         }
         else
@@ -134,8 +134,8 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             pinName,
                             aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                             aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            aSymbol->GetUnitReference( next->GetUnit() ),
-                            aSymbol->GetUnitReference( pin->GetUnit() ) );
+                            aSymbol->GetUnitDisplayName( next->GetUnit(), false ),
+                            aSymbol->GetUnitDisplayName( pin->GetUnit(), false ) );
             }
         }
 
@@ -272,7 +272,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 pinName,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
                 }
                 else
                 {
@@ -283,7 +283,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1,
-                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
                 }
             }
             else
@@ -331,7 +331,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 pinName,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
                 }
                 else
                 {
@@ -342,7 +342,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1,
-                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
                  }
             }
             else

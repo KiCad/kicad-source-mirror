@@ -827,7 +827,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_unitFilter->Append( UNITS_ALL );
 
         for( int ii = 0; ii < aSymbol->GetUnitCount(); ++ii )
-            m_unitFilter->Append( aSymbol->GetUnitReference( ii + 1 ) );
+            m_unitFilter->Append( LIB_SYMBOL::LetterSubReference( ii + 1, 'A' ) );
 
         m_unitFilter->SetSelection( -1 );
     }

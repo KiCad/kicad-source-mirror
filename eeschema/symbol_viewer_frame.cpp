@@ -502,7 +502,7 @@ void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 
             for( int ii = 0; ii < unit_count; ii++ )
             {
-                wxString unit = symbol->GetUnitDisplayName( ii + 1 );
+                wxString unit = symbol->GetUnitDisplayName( ii + 1, true );
                 m_unitChoice->Append( unit );
             }
 

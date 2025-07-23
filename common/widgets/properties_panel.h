@@ -102,7 +102,7 @@ protected:
      * @return true if the property is available for all the items in the selection
      */
     bool extractValueAndWritability( const SELECTION& aSelection, PROPERTY_BASE* aProperty,
-                                     wxVariant& aValue, bool& aWritable );
+                                     wxVariant& aValue, bool& aWritable, wxPGChoices& aChoices );
 
 public:
     int                         m_SuppressGridChangeEvents;

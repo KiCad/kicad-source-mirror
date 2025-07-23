@@ -715,7 +715,7 @@ void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
     {
         for( int i = 0; i < m_symbol->GetUnitCount(); i++ )
         {
-            wxString unitDisplayName = m_symbol->GetUnitDisplayName( i + 1 );
+            wxString unitDisplayName = m_symbol->GetUnitDisplayName( i + 1, true );
             m_unitSelectBox->Append( unitDisplayName );
         }
     }

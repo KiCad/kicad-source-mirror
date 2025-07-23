@@ -261,8 +261,7 @@ void SCH_PROPERTIES_PANEL::updateFontList()
 
     // Regnerate font names
     std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
-                             fontFiles );
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ), fontFiles );
 
     fonts.Add( _( "Default Font" ), -1 );
     fonts.Add( KICAD_FONT_NAME, -2 );

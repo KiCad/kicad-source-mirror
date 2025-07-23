@@ -60,11 +60,32 @@ public:
     bool Set( PROPERTY_BASE* aProperty, T aValue, bool aNotify = true )
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
+        void*             object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
 
         if( object )
         {
             aProperty->set<T>( object, aValue );
+
+            if( aNotify )
+                propMgr.PropertyChanged( this, aProperty );
+        }
+
+        return object != nullptr;
+    }
+
+    bool Set( PROPERTY_BASE* aProperty, wxVariant aValue, bool aNotify = true )
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        void*             object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
+
+        if( object )
+        {
+            wxPGChoices choices = aProperty->GetChoices( this );
+
+            if( choices.GetCount()  )
+                aProperty->set<wxString>( object, choices.GetLabel( aValue.GetInteger() ) );
+            else
+                aProperty->set<wxVariant>( object, aValue );
 
             if( aNotify )
                 propMgr.PropertyChanged( this, aProperty );

@@ -826,13 +826,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName( const TOOL_EVENT& aEvent )
     }
 
     wxString promptText = wxString::Format( _( "Enter display name for unit %s" ),
-                                            symbol->GetUnitReference( unitid ) );
+                                            LIB_SYMBOL::LetterSubReference( unitid, 'A' ) );
     wxString currentvalue;
 
     if( symbol->HasUnitDisplayName( unitid ) )
-    {
-        currentvalue = symbol->GetUnitDisplayName( unitid );
-    }
+        currentvalue = symbol->GetUnitDisplayName( unitid, false );
 
     wxTextEntryDialog dlg( m_frame, promptText, _( "Set Unit Display Name" ), currentvalue );
 

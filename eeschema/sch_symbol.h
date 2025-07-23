@@ -222,18 +222,13 @@ public:
     void UpdatePins();
 
     /**
-     * Return true if the given unit \a aUnit has a display name set.
-     *
-     * @return true if the display name of a unit is set, otherwise false.
-     */
-    bool HasUnitDisplayName( int aUnit ) const;
-
-    /**
      * Return the display name for a given unit \a aUnit.
      *
      * @return the display name of a unit if set, or the ordinal name of the unit otherwise.
      */
-    wxString GetUnitDisplayName( int aUnit ) const;
+    wxString GetUnitDisplayName( int aUnit, bool aLabel ) const override;
+
+    wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const override;
 
     void SetBodyStyle( int aBodyStyle ) override;
 
@@ -510,6 +505,7 @@ public:
     }
 
     void SetRefProp( const wxString& aRef );
+
     wxString GetValueProp() const
     {
         return GetValue( false, &Schematic()->CurrentSheet(), false );
@@ -520,31 +516,18 @@ public:
         SetValueFieldText( aRef );
     }
 
-    wxString GetUnitProp() const
+    wxString GetUnitProp() const override
     {
         int unit = GetUnitSelection( &Schematic()->CurrentSheet() );
 
-        if( HasUnitDisplayName( unit ) )
-            return GetUnitDisplayName( unit );
-        else
-            return SubReference( unit, false );
+        return GetUnitDisplayName( unit, false );
     }
 
-    void SetUnitProp( const wxString& aUnit )
+    void SetUnitProp( const wxString& aUnit ) override
     {
         for( int unit = 1; unit <= GetUnitCount(); unit++ )
         {
-            if( HasUnitDisplayName( unit ) && GetUnitDisplayName( unit ) == aUnit )
-            {
-                SetUnitSelection( &Schematic()->CurrentSheet(), unit );
-                SetUnit( unit );
-                return;
-            }
-        }
-
-        for( int unit = 1; unit <= GetUnitCount(); unit++ )
-        {
-            if( SubReference( unit, false ) == aUnit )
+            if( GetUnitDisplayName( unit, false ) == aUnit )
             {
                 SetUnitSelection( &Schematic()->CurrentSheet(), unit );
                 SetUnit( unit );
@@ -553,14 +536,21 @@ public:
         }
     }
 
-    int GetBodyStyleProp() const
+    wxString GetBodyStyleProp() const override
     {
-        return GetBodyStyle();
+        return GetBodyStyleDescription( GetBodyStyle(), false );
     }
 
-    void SetBodyStyleProp( int aBodyStyle )
+    void SetBodyStyleProp( const wxString& aBodyStyle ) override
     {
-        SetBodyStyle( aBodyStyle );
+        for( int bodyStyle : { BODY_STYLE::BASE, BODY_STYLE::DEMORGAN } )
+        {
+            if( GetBodyStyleDescription( bodyStyle, false ) == aBodyStyle )
+            {
+                SetBodyStyle( bodyStyle );
+                return;
+            }
+        }
     }
 
     /**

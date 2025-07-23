@@ -50,28 +50,6 @@
 #define BITMAP_FONT_SIZE_THRESHOLD 3
 
 
-wxString SCH_ITEM::GetUnitDescription( int aUnit )
-{
-    if( aUnit == 0 )
-        return _( "All" );
-    else
-        return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
-}
-
-
-wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle )
-{
-    if( aBodyStyle == 0 )
-        return _( "All" );
-    else if( aBodyStyle == BODY_STYLE::DEMORGAN )
-        return _( "Alternate" );
-    else if( aBodyStyle == BODY_STYLE::BASE )
-        return _( "Standard" );
-    else
-        return wxT( "?" );
-}
-
-
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time in debug mode */
 
@@ -148,25 +126,81 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 }
 
 
-void SCH_ITEM::SetUnitProp( int aUnit )
+void SCH_ITEM::SetUnitProp( const wxString& aUnit )
 {
-    if( GetParentSymbol() )
-        aUnit = std::min( aUnit, GetParentSymbol()->GetUnitCount() );
+    if( aUnit == _HKI( "All units" ) )
+    {
+        m_unit = 0;
+        return;
+    }
 
-    aUnit = std::max( aUnit, 0 );
-
-    m_unit = aUnit;
+    if( SYMBOL* symbol = GetParentSymbol() )
+    {
+        for( int unit = 1; unit <= symbol->GetUnitCount(); unit++ )
+        {
+            if( symbol->GetUnitDisplayName( unit, false ) == aUnit )
+            {
+                m_unit = unit;
+                return;
+            }
+        }
+    }
 }
 
 
-void SCH_ITEM::SetBodyStyleProp( int aBodyStyle )
+wxString SCH_ITEM::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
-    if( GetParentSymbol() && GetParentSymbol()->HasAlternateBodyStyle() )
-        aBodyStyle = std::min( aBodyStyle, (int) BODY_STYLE::DEMORGAN );
+    if( aUnit == 0 )
+        return aLabel ? _( "All units" ) : _HKI( "All units" );
+    else if( const SYMBOL* symbol = GetParentSymbol() )
+        return symbol->GetUnitDisplayName( aUnit, aLabel );
 
-    aBodyStyle = std::max( aBodyStyle, 0 );
+    return wxEmptyString;
+}
 
-    m_bodyStyle = aBodyStyle;
+
+wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
+{
+    if( aBodyStyle == 0 )
+        return aLabel ? _( "All body styles" ) : _HKI( "All body styles" );
+    else if( const SYMBOL* symbol = GetParentSymbol() )
+        return symbol->GetBodyStyleDescription( aBodyStyle, aLabel );
+
+    return wxEmptyString;
+}
+
+
+wxString SCH_ITEM::GetUnitProp() const
+{
+    return GetUnitDisplayName( m_unit, false );
+}
+
+
+void SCH_ITEM::SetBodyStyleProp( const wxString& aBodyStyle )
+{
+    if( aBodyStyle == _HKI( "All body styles" ) )
+    {
+        m_bodyStyle = 0;
+        return;
+    }
+
+    if( SYMBOL* symbol = GetParentSymbol() )
+    {
+        for( int bodyStyle : { BODY_STYLE::BASE, BODY_STYLE::DEMORGAN } )
+        {
+            if( symbol->GetBodyStyleDescription( bodyStyle, false ) == aBodyStyle )
+            {
+                m_bodyStyle = bodyStyle;
+                return;
+            }
+        }
+    }
+}
+
+
+wxString SCH_ITEM::GetBodyStyleProp() const
+{
+    return GetBodyStyleDescription( m_bodyStyle, false );
 }
 
 
@@ -535,23 +569,18 @@ bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 }
 
 
-void SCH_ITEM::getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
-                                            std::vector<MSG_PANEL_ITEM>& aList )
+void SCH_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
+    SYMBOL*  symbol = GetParentSymbol();
 
-    aList.emplace_back( _( "Type" ), GetFriendlyName() );
+    if( symbol->GetUnitCount() )
+        aList.emplace_back( _( "Unit" ), GetUnitDisplayName( GetUnit(), false ) );
 
-    if( const SYMBOL* parent = GetParentSymbol() )
-    {
-        if( parent->GetUnitCount() )
-            aList.emplace_back( _( "Unit" ), GetUnitDescription( m_unit ) );
+    if( symbol->HasAlternateBodyStyle() )
+        aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( GetBodyStyle(), true ) );
 
-        if( parent->HasAlternateBodyStyle() )
-            aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( m_bodyStyle ) );
-    }
-
-    if( IsPrivate() )
+    if( dynamic_cast<LIB_SYMBOL*>( symbol ) && IsPrivate() )
         aList.emplace_back( _( "Private" ), wxEmptyString );
 }
 
@@ -594,15 +623,48 @@ static struct SCH_ITEM_DESC
                     return false;
                 };
 
-        propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Unit" ),
-                    &SCH_ITEM::SetUnitProp, &SCH_ITEM::GetUnit ) )
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, wxString>( _HKI( "Unit" ),
+                    &SCH_ITEM::SetUnitProp, &SCH_ITEM::GetUnitProp ) )
                 .SetAvailableFunc( multiUnit )
-                .SetIsHiddenFromDesignEditors();
+                .SetIsHiddenFromDesignEditors()
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     wxPGChoices choices;
+                                     choices.Add( _HKI( "All units" ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Body Style" ),
-                    &SCH_ITEM::SetBodyStyle, &SCH_ITEM::GetBodyStyle ) )
+                                     if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
+                                     {
+                                         if( SYMBOL* symbol = item->GetParentSymbol() )
+                                         {
+                                             for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
+                                                 choices.Add( symbol->GetUnitDisplayName( ii, false ) );
+                                         }
+                                     }
+
+                                     return choices;
+                                 } );
+
+
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, wxString>( _HKI( "Body Style" ),
+                    &SCH_ITEM::SetBodyStyleProp, &SCH_ITEM::GetBodyStyleProp ) )
                 .SetAvailableFunc( multiBodyStyle )
-                .SetIsHiddenFromDesignEditors();
+                .SetIsHiddenFromDesignEditors()
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     wxPGChoices choices;
+                                     choices.Add( _HKI( "All body styles" ) );
+
+                                     if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
+                                     {
+                                         if( SYMBOL* symbol = item->GetParentSymbol() )
+                                         {
+                                             for( int ii : { BODY_STYLE::BASE, BODY_STYLE::DEMORGAN } )
+                                                 choices.Add( symbol->GetBodyStyleDescription( ii, false ) );
+                                         }
+                                     }
+
+                                     return choices;
+                                  } );
 
         propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Private" ),
                     &SCH_ITEM::SetPrivate, &SCH_ITEM::IsPrivate ) )

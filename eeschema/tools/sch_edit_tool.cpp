@@ -101,12 +101,7 @@ private:
 
         for( int ii = 0; ii < nUnits; ii++ )
         {
-            wxString unit_text;
-
-            if( symbol->GetLibSymbolRef()->HasUnitDisplayName( ii + 1 ) )
-                unit_text = symbol->GetLibSymbolRef()->GetUnitDisplayName( ii + 1 );
-            else
-                unit_text.Printf( _( "Unit %s" ), symbol->SubReference( ii + 1, false ) );
+            wxString unit_text = symbol->GetUnitDisplayName( ii + 1, false );
 
             if( missingUnits.count( ii + 1 ) == 0 )
                 unit_text += _( " (already placed)" );

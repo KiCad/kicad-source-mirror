@@ -523,10 +523,7 @@ void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
 
 void SCH_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    if( m_layer == LAYER_DEVICE )
-        getSymbolEditorMsgPanelInfo( aFrame, aList );
-    else
-        SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
+    SCH_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     ShapeGetMsgPanelInfo( aFrame, aList );
 }

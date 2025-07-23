@@ -533,7 +533,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
             for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
             {
-                const PROPERTY_LIST& props = propMgr.GetProperties( cls.type );
+                const std::vector<PROPERTY_BASE*>& props = propMgr.GetProperties( cls.type );
 
                 for( PROPERTY_BASE* prop : props )
                 {
