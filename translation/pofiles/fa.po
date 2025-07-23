@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-23 16:04+0000\n"
+"PO-Revision-Date: 2025-07-24 17:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -2115,66 +2115,70 @@ msgstr "فایل های غیرمنتظره در پوشه کتابخانه '%s' �
 #: common/design_block_io.cpp:230
 #, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr ""
+msgstr "پوشه غیرمنتظره '%s' در مسیر کتابخانه '%s' پیدا شد."
 
 #: common/design_block_io.cpp:247
 #, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr ""
+msgstr "کتابخانه بلوک طراحی (Design Block Library ) '%s' قابل حذف نیست."
 
 #: common/design_block_io.cpp:271 common/design_block_io.cpp:298
 #: common/design_block_io.cpp:492
 #, c-format
 msgid "Design block '%s' does not exist."
-msgstr ""
+msgstr "بلوک طراحی (Design Block) '%s' وجود ندارد."
 
 #: common/design_block_io.cpp:348
 #, c-format
 msgid "Design block metadata file '%s' could not be read."
 msgstr ""
+"فایل اطلاعات فراداده بلوک طراحی (Design Block Metadata) '%s' قابل خواندن "
+"نیست."
 
 #: common/design_block_io.cpp:374
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "شناسه کتابخانه این بلوک طراحی (Design Block) معتبر نیست."
 
 #: common/design_block_io.cpp:379
 msgid "Design block does not have a schematic or board file."
-msgstr ""
+msgstr "بلوک طراحی (Design Block) فاقد فایل شماتیک (Schematic) یا برد است."
 
 #: common/design_block_io.cpp:388
 #, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr ""
+msgstr "فایل شماتیک (Schematic) '%s' وجود ندارد."
 
 #: common/design_block_io.cpp:393
 #, c-format
 msgid "Board source file '%s' does not exist."
-msgstr ""
+msgstr "فایل منبع برد (Board Source) '%s' وجود ندارد."
 
 #: common/design_block_io.cpp:406
 #, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr ""
+msgstr "پوشه بلوک طراحی (Design Block) '%s' ایجاد نشد."
 
 #: common/design_block_io.cpp:425
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr ""
+"فایل شماتیک (Schematic) '%s' به عنوان بلوک طراحی (Design Block) در '%s' "
+"ذخیره نشد."
 
 #: common/design_block_io.cpp:444
 #, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr ""
+msgstr "فایل برد '%s' به عنوان بلوک طراحی (Design Block) در '%s' ذخیره نشد."
 
 #: common/design_block_io.cpp:478
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr ""
+msgstr "فایل فراداده بلوک طراحی (Design Block Metadata) '%s' ذخیره نشد."
 
 #: common/design_block_io.cpp:498
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr ""
+msgstr "پوشه بلوک طراحی (Design Block) '%s' حذف نشد."
 
 #: common/design_block_lib_table.cpp:250
 #, c-format
@@ -2182,22 +2186,26 @@ msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
+"نام مستعار کتابخانه '%s' به صورت تکراری در خط %d فایل جدول کتابخانه بلوک "
+"طراحی یافت شد."
 
 #: common/design_block_lib_table.cpp:354
 #, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
 msgstr ""
+"فایل های جدول کتابخانه بلوک طراحی (Design Block) حاوی کتابخانه ای با نام "
+"'%s' نیستند."
 
 #: common/design_block_lib_table.cpp:593 common/fp_lib_table.cpp:573
 #: eeschema/symbol_lib_table.cpp:605
 msgid "Added by Plugin and Content Manager"
-msgstr ""
+msgstr "افزوده شده توسط افزونه (Plugin) و مدیریت محتوا (Content Manager)"
 
 #: common/design_block_lib_table.cpp:619 common/fp_lib_table.cpp:599
 #: eeschema/symbol_lib_table.cpp:634
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr ""
+msgstr "نمی توان مسیر جدول کتابخانه سراسری '%s' را ایجاد کرد."
 
 #: common/design_block_tree_model_adapter.cpp:128 cvpcb/cvpcb_mainframe.cpp:788
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:1938
@@ -2206,14 +2214,14 @@ msgstr ""
 #: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4165
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
-msgstr ""
+msgstr "کلیدواژه ها"
 
 #: common/design_block_tree_model_adapter.cpp:148
 #: common/design_block_tree_model_adapter.cpp:199
 #: common/widgets/design_block_pane.cpp:125
 #, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr ""
+msgstr "خطا در بارگذاری بلوک طراحی %s از کتابخانه '%s'."
 
 #: common/dialog_about/AboutDialog_main.cpp:112
 #: common/dialogs/panel_design_block_lib_table_base.cpp:50
@@ -2234,73 +2242,75 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1023
 #: pcbnew/footprint_libraries_utils.cpp:1359
 msgid "Description"
-msgstr ""
+msgstr "توضیحات"
 
 #: common/dialog_about/AboutDialog_main.cpp:116
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
+"مجموعه KiCad EDA شامل تعدادی نرم‌افزار متن باز برای طراحی شماتیک های "
+"الکترونیکی و مدارهای چاپی است."
 
 #: common/dialog_about/AboutDialog_main.cpp:124
 msgid "KiCad on the web"
-msgstr ""
+msgstr "KiCad در وب"
 
 #: common/dialog_about/AboutDialog_main.cpp:130
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "وب سایت رسمی KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "Developer website - "
-msgstr ""
+msgstr "وب سایت توسعه دهنده - "
 
 #: common/dialog_about/AboutDialog_main.cpp:139
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "مخازن رسمی کتابخانه KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:146
 msgid "Bug tracker"
-msgstr ""
+msgstr "ردیاب اشکال"
 
 #: common/dialog_about/AboutDialog_main.cpp:152
 msgid "Report or examine bugs - "
-msgstr ""
+msgstr "گزارش یا بررسی اشکالات - "
 
 #: common/dialog_about/AboutDialog_main.cpp:158
 msgid "KiCad users group and community"
-msgstr ""
+msgstr "گروه کاربران و جامعه KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:163
 msgid "KiCad forum - "
-msgstr ""
+msgstr "انجمن KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:177
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr ""
+msgstr "کل مجموعه KiCad EDA تحت مجوز ... منتشر شده است"
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
+msgstr "مجوز عمومی همگانی GPL نسخه ۳ یا هر نسخه بعدی آن"
 
 #: common/dialog_about/AboutDialog_main.cpp:199
 msgid "Lead Development Team"
-msgstr ""
+msgstr "تیم اصلی توسعه"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "توسعه دهندگان سابق تیم اصلی"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "مشارکت های تکمیلی توسط"
 
 #: common/dialog_about/AboutDialog_main.cpp:628
 msgid "Documentation Team"
-msgstr ""
+msgstr "تیم مستند سازی"
 
 #: common/dialog_about/AboutDialog_main.cpp:854
 msgid "Librarian Team"
-msgstr ""
+msgstr "تیم توسعه کتابخانه"
 
 #: common/dialog_about/AboutDialog_main.cpp:907
 msgid "3D models"
@@ -2314,7 +2324,7 @@ msgstr "مدل های سه بعدی"
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
 msgid "Symbols"
-msgstr ""
+msgstr "نماد ها"
 
 #: common/dialog_about/AboutDialog_main.cpp:909
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
@@ -2323,25 +2333,25 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:117
 msgid "Footprints"
-msgstr ""
+msgstr "فوت پرینت ها (Footprints)"
 
 #: common/dialog_about/AboutDialog_main.cpp:929
 msgid "Icons"
-msgstr ""
+msgstr "آیکون ها"
 
 #: common/dialog_about/AboutDialog_main.cpp:936
 msgid "Package Developers"
-msgstr ""
+msgstr "توسعه‌دهندگان بسته (Package)"
 
 #: common/dialog_about/dialog_about.cpp:114
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "درباره %s"
 
 #: common/dialog_about/dialog_about.cpp:134
 #: common/dialog_about/dialog_about_base.h:57
 msgid "About"
-msgstr ""
+msgstr "درباره"
 
 #: common/dialog_about/dialog_about.cpp:139
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
@@ -2351,27 +2361,27 @@ msgstr "نسخه"
 
 #: common/dialog_about/dialog_about.cpp:141
 msgid "Developers"
-msgstr ""
+msgstr "توسعه دهندگان"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Doc Writers"
-msgstr ""
+msgstr "نویسندگان مستندات"
 
 #: common/dialog_about/dialog_about.cpp:146
 msgid "Librarians"
-msgstr ""
+msgstr "نگهدارندگان کتابخانه"
 
 #: common/dialog_about/dialog_about.cpp:149
 msgid "Artists"
-msgstr ""
+msgstr "تصویرگران"
 
 #: common/dialog_about/dialog_about.cpp:151
 msgid "Translators"
-msgstr ""
+msgstr "مترجمان"
 
 #: common/dialog_about/dialog_about.cpp:153
 msgid "Packagers"
-msgstr ""
+msgstr "بسته سازها"
 
 #: common/dialog_about/dialog_about.cpp:156
 msgid "License"
