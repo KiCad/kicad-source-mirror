@@ -236,7 +236,7 @@ void formatArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aArc, bool aIsPrivate,
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
 
     aFormatter->Print( ")" );
 }
@@ -255,7 +255,7 @@ void formatCircle( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aCircle, bool aIsPriv
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
 
     aFormatter->Print( ")" );
 }
@@ -273,7 +273,7 @@ void formatRect( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aRect, bool aIsPrivate,
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
 
     aFormatter->Print( ")" );
 }
@@ -298,7 +298,7 @@ void formatBezier( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aBezier, bool aIsPriv
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
 
     aFormatter->Print( ")" );
 }
@@ -331,7 +331,7 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool aIsPriv
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
-        aFormatter->Print( "(uuid %s)", TO_UTF8( aUuid.AsString() ) );
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
 
     aFormatter->Print( ")" );
 }
