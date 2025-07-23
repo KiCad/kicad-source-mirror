@@ -106,7 +106,17 @@ void PCB_CONTROL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH || aReason == REDRAW )
     {
         m_gridOrigin->SetPosition( board()->GetDesignSettings().GetGridOrigin() );
-        m_gridOrigin->SetColor( m_frame->GetGridColor() );
+
+        double  backgroundBrightness = m_frame->GetCanvas()->GetGAL()->GetClearColor().GetBrightness();
+        COLOR4D color = m_frame->GetGridColor();
+
+        if( backgroundBrightness > 0.5 )
+            color.Darken( 0.25 );
+        else
+            color.Brighten( 0.25 );
+
+        m_gridOrigin->SetColor( color );
+
         getView()->Remove( m_gridOrigin.get() );
         getView()->Add( m_gridOrigin.get() );
     }

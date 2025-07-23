@@ -83,7 +83,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
     VECTOR2D scaledSize = aView->ToWorld( VECTOR2D( m_size, m_size ), false );
 
     // Draw a circle around the marker's center point if the style demands it
-    if( ( m_style == CIRCLE_CROSS ) || ( m_style == CIRCLE_DOT ) || ( m_style == CIRCLE_X ) )
+    if( m_style == CIRCLE_CROSS || m_style == CIRCLE_X )
         gal->DrawCircle( m_position, fabs( scaledSize.x ) );
 
     switch( m_style )
@@ -99,49 +99,10 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
                             m_position + VECTOR2D( 0, scaledSize.y ) );
             break;
 
-        case DASH_LINE:
-        {
-            gal->DrawCircle( m_position, scaledSize.x / 4 );
-
-            VECTOR2D start( m_position );
-            VECTOR2D end( m_end );
-            BOX2I    clip( VECTOR2I( start ), VECTOR2I( end.x - start.x, end.y - start.y ) );
-            clip.Normalize();
-
-            double               theta = atan2( end.y - start.y, end.x - start.x );
-            std::array<double,2> strokes = { scaledSize.x, scaledSize.x / 2 };
-
-            for( size_t i = 0; i < 10000; ++i )
-            {
-                VECTOR2D next( start.x + strokes[ i % 2 ] * cos( theta ),
-                               start.y + strokes[ i % 2 ] * sin( theta ) );
-
-                // Drawing each segment can be done rounded to ints.
-                VECTOR2I segStart( KiROUND( start.x ), KiROUND( start.y ) );
-                VECTOR2I segEnd( KiROUND( next.x ), KiROUND( next.y ) );
-
-                if( ClipLine( &clip, segStart.x, segStart.y, segEnd.x, segEnd.y ) )
-                    break;
-                else if( i % 2 == 0 )
-                    gal->DrawLine( segStart, segEnd );
-
-                start = next;
-            }
-
-            gal->DrawCircle( m_end, scaledSize.x / 4 );
-            break;
-        }
-
-        case X:
         case CIRCLE_X:
             gal->DrawLine( m_position - scaledSize, m_position + scaledSize );
             scaledSize.y = -scaledSize.y;
             gal->DrawLine( m_position - scaledSize, m_position + scaledSize );
-            break;
-
-        case DOT:
-        case CIRCLE_DOT:
-            gal->DrawCircle( m_position, scaledSize.x / 4 );
             break;
     }
 }

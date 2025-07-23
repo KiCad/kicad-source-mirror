@@ -24,8 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __ORIGIN_VIEWITEM_H
-#define __ORIGIN_VIEWITEM_H
+#pragma once
 
 #include <math/box2.h>
 #include <view/view.h>
@@ -44,7 +43,7 @@ public:
     /// Marker symbol styles.
     enum MARKER_STYLE
     {
-        NO_GRAPHIC, CROSS, X, DOT, CIRCLE_CROSS, CIRCLE_X, CIRCLE_DOT, DASH_LINE
+        NO_GRAPHIC, CROSS, CIRCLE_CROSS, CIRCLE_X
     };
 
     ORIGIN_VIEWITEM( const COLOR4D& aColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 ),
@@ -103,16 +102,6 @@ public:
         return VECTOR2I( m_position.x, m_position.y );
     }
 
-    inline void SetEndPosition( const VECTOR2D& aPosition )
-    {
-        m_end = aPosition;
-    }
-
-    inline const VECTOR2I GetEndPosition() const
-    {
-        return VECTOR2I( m_end.x, m_end.y );
-    }
-
     inline void SetSize( int aSize )
     {
         m_size = aSize;
@@ -128,41 +117,17 @@ public:
         m_color = aColor;
     }
 
-    inline const KIGFX::COLOR4D& GetColor() const
-    {
-        return m_color;
-    }
-
     inline void SetStyle( MARKER_STYLE aStyle )
     {
         m_style = aStyle;
     }
 
-    inline MARKER_STYLE GetStyle() const
-    {
-        return m_style;
-    }
-
 protected:
-    /// Marker coordinates.
     VECTOR2D        m_position;
-
-    /// Marker end position for markers that stretch between points.
-    VECTOR2D        m_end;
-
-    /// Marker size (in pixels).
-    int             m_size;
-
-    /// Marker color.
+    int             m_size;           /// (in pixels)
     COLOR4D         m_color;
-
-    /// Marker symbol.
     MARKER_STYLE    m_style;
-
-    /// If set, the marker will be drawn even if its position is 0,0.
-    bool            m_drawAtZero;
+    bool            m_drawAtZero;     /// If set, the marker will be drawn even if its position is 0,0.
 };
 
 } // namespace KIGFX
-
-#endif
