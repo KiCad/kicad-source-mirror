@@ -1792,6 +1792,12 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
 
         break;
 
+    case SCH_JUNCTION_T:
+        if( !m_filter.wires )
+            return false;
+
+        break;
+
     case SCH_LINE_T:
     {
         switch( static_cast<SCH_LINE*>( aItem )->GetLayer() )
