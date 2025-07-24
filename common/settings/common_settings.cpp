@@ -142,6 +142,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
                     wxString value = var.GetValue();
 
+                    value.Trim( true ).Trim( false ); // Trim from both sides
+
                     // Vars that existed in JSON are persisted, but if they were overridden
                     // externally, we persist the old value (i.e. the one that was loaded from JSON)
                     if( var.GetDefinedExternally() )
@@ -168,7 +170,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                                 wxS( "COMMON_SETTINGS: Saving env var %s = %s" ),
                                 var.GetKey(), value);
 
-                    std::string key( var.GetKey().ToUTF8() );
+                    std::string key( var.GetKey().Trim( true ).Trim( false ).ToUTF8() );
                     ret[ std::move( key ) ] = value;
                 }
 
@@ -181,8 +183,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
                 for( const auto& entry : aJson.items() )
                 {
-                    wxString key = wxString( entry.key().c_str(), wxConvUTF8 );
-                    wxString val = entry.value().get<wxString>();
+                    wxString key = wxString( entry.key().c_str(), wxConvUTF8 ).Trim( true ).Trim( false );
+                    wxString val = entry.value().get<wxString>().Trim( true ).Trim( false );
 
                     if( m_Env.vars.count( key ) )
                     {

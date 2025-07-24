@@ -255,6 +255,9 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
     int      col = event.GetCol();
     wxString text = event.GetString();
 
+    text.Trim( true ).Trim( false ); // Trim from both sides
+    grid->SetCellValue( row, col, text ); // Update the grid with trimmed value
+
     if( text.IsEmpty() )
     {
         if( grid == m_EnvVars )
