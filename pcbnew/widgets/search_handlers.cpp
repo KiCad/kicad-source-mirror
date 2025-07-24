@@ -206,6 +206,7 @@ ZONE_SEARCH_HANDLER::ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
     m_columns.emplace_back( _HKI( "Priority" ), 2, wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( wxT( "X" ),         3, wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( wxT( "Y" ),         3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Area" ),     3, wxLIST_FORMAT_RIGHT );
 }
 
 
@@ -258,6 +259,11 @@ wxString ZONE_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
         return m_frame->MessageTextFromCoord( zone->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
     else if( aCol == 5 )
         return m_frame->MessageTextFromCoord( zone->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    else if( aCol == 6 )
+    {
+        return m_frame->MessageTextFromValue( zone->GetIsRuleArea() ? zone->GetOutlineArea() : zone->GetFilledArea(),
+                                              true, EDA_DATA_TYPE::AREA );
+    }
 
 
     return wxEmptyString;
