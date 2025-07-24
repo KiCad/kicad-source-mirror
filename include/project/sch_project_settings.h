@@ -31,6 +31,7 @@ struct SCH_SELECTION_FILTER_OPTIONS
     bool pins;          ///< Symbol and sheet pins
     bool graphics;      ///< Graphic lines, shapes, polygons
     bool images;        ///< Bitmap/vector images
+    bool ruleAreas;     ///< Rule areas
     bool otherItems;    ///< Anything not fitting one of the above categories
 
     SCH_SELECTION_FILTER_OPTIONS()
@@ -43,6 +44,7 @@ struct SCH_SELECTION_FILTER_OPTIONS
         pins        = true;
         graphics    = true;
         images      = true;
+        ruleAreas   = true;
         otherItems  = true;
     }
 
@@ -51,7 +53,7 @@ struct SCH_SELECTION_FILTER_OPTIONS
      */
     bool Any()
     {
-        return ( symbols || text || wires || labels || pins || graphics || images || otherItems );
+        return ( symbols || text || wires || labels || pins || graphics || images || ruleAreas || otherItems );
     }
 
     /**
@@ -59,7 +61,7 @@ struct SCH_SELECTION_FILTER_OPTIONS
      */
     bool All()
     {
-        return ( symbols && text && wires && labels && pins && graphics && images && otherItems );
+        return ( symbols && text && wires && labels && pins && graphics && images && ruleAreas && otherItems );
     }
 
     void SetDefaults()
@@ -72,6 +74,7 @@ struct SCH_SELECTION_FILTER_OPTIONS
         pins        = true;
         graphics    = true;
         images      = true;
+        ruleAreas   = true;
         otherItems  = true;
     }
 };

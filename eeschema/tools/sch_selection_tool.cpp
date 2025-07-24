@@ -2062,6 +2062,12 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
 
         break;
 
+    case SCH_RULE_AREA_T:
+        if( !m_filter.ruleAreas )
+            return false;
+
+        break;
+
     default:
         if( !m_filter.otherItems )
             return false;

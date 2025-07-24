@@ -41,6 +41,7 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbImages->SetFont( font );
     m_cbOtherItems->SetFont( font );
     m_cbAllItems->SetFont( font );
+    m_cbRuleAreas->SetFont( font );
 
     SetBorders( true, false, false, false );
 
@@ -59,6 +60,7 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbGraphics->Bind( wxEVT_RIGHT_DOWN, &PANEL_SCH_SELECTION_FILTER::onRightClick, this );
     m_cbImages->Bind( wxEVT_RIGHT_DOWN, &PANEL_SCH_SELECTION_FILTER::onRightClick, this );
     m_cbOtherItems->Bind( wxEVT_RIGHT_DOWN, &PANEL_SCH_SELECTION_FILTER::onRightClick, this );
+    m_cbRuleAreas->Bind( wxEVT_RIGHT_DOWN, &PANEL_SCH_SELECTION_FILTER::onRightClick, this );
 
     if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
     {
@@ -71,6 +73,7 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
         m_cbWires->Hide();
         m_cbLabels->Hide();
         m_cbImages->Hide();
+        m_cbRuleAreas->Hide();
 
         m_gridSizer->SetItemPosition( m_cbPins, wxGBPosition( 1, 0 ) );
         m_gridSizer->SetItemPosition( m_cbText, wxGBPosition( 1, 1 ) );
@@ -101,6 +104,7 @@ void PANEL_SCH_SELECTION_FILTER::SetCheckboxesFromFilter( SCH_SELECTION_FILTER_O
     m_cbPins->SetValue( aOptions.pins );
     m_cbGraphics->SetValue( aOptions.graphics );
     m_cbImages->SetValue( aOptions.images );
+    m_cbRuleAreas->SetValue( aOptions.ruleAreas );
     m_cbOtherItems->SetValue( aOptions.otherItems );
 
     m_cbAllItems->SetValue( aOptions.All() );
@@ -122,6 +126,7 @@ void PANEL_SCH_SELECTION_FILTER::OnFilterChanged( wxCommandEvent& aEvent )
         m_cbPins->SetValue( newState );
         m_cbGraphics->SetValue( newState );
         m_cbImages->SetValue( newState );
+        m_cbRuleAreas->SetValue( newState );
         m_cbOtherItems->SetValue( newState );
     }
 
@@ -143,6 +148,7 @@ bool PANEL_SCH_SELECTION_FILTER::setFilterFromCheckboxes( SCH_SELECTION_FILTER_O
     aOptions.pins        = m_cbPins->GetValue();
     aOptions.graphics    = m_cbGraphics->GetValue();
     aOptions.images      = m_cbImages->GetValue();
+    aOptions.ruleAreas   = m_cbRuleAreas->GetValue();
     aOptions.otherItems  = m_cbOtherItems->GetValue();
 
     return aOptions.All();
@@ -185,6 +191,7 @@ void PANEL_SCH_SELECTION_FILTER::onPopupSelection( wxCommandEvent& aEvent )
     m_cbGraphics->SetValue( false );
     m_cbImages->SetValue( false );
     m_cbOtherItems->SetValue( false );
+    m_cbRuleAreas->SetValue( false );
 
     m_onlyCheckbox->SetValue( true );
     m_onlyCheckbox = nullptr;
@@ -206,6 +213,7 @@ void PANEL_SCH_SELECTION_FILTER::OnLanguageChanged( wxCommandEvent& aEvent )
     m_cbPins->SetLabel( _( "Pins" ) );
     m_cbGraphics->SetLabel( _( "Graphics" ) );
     m_cbImages->SetLabel( _( "Images" ) );
+    m_cbRuleAreas->SetLabel( _( "Rule Areas" ) );
     m_cbOtherItems->SetLabel( _( "Other items" ) );
 
     m_cbAllItems->GetParent()->Layout();

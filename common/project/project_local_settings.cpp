@@ -320,6 +320,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 ret["pins"]        = m_SchSelectionFilter.pins;
                 ret["graphics"]    = m_SchSelectionFilter.graphics;
                 ret["images"]      = m_SchSelectionFilter.images;
+                ret["ruleAreas"]   = m_SchSelectionFilter.ruleAreas;
                 ret["otherItems"]  = m_SchSelectionFilter.otherItems;
 
                 return ret;
@@ -337,6 +338,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 SetIfPresent( aVal, "pins", m_SchSelectionFilter.pins );
                 SetIfPresent( aVal, "graphics", m_SchSelectionFilter.graphics );
                 SetIfPresent( aVal, "images", m_SchSelectionFilter.images );
+                SetIfPresent( aVal, "ruleAreas", m_SchSelectionFilter.ruleAreas );
                 SetIfPresent( aVal, "otherItems", m_SchSelectionFilter.otherItems );
             },
             {
@@ -348,6 +350,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 { "pins", true },
                 { "graphics", true },
                 { "images", true },
+                { "ruleAreas", true },
                 { "otherItems", true }
             } ) );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,6 +18,10 @@ PANEL_SCH_SELECTION_FILTER_BASE::PANEL_SCH_SELECTION_FILTER_BASE( wxWindow* pare
 	m_cbAllItems = new wxCheckBox( this, wxID_ANY, _("All items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAllItems->SetValue(true);
 	m_gridSizer->Add( m_cbAllItems, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxTOP, 5 );
+
+	m_cbRuleAreas = new wxCheckBox( this, wxID_ANY, _("Rule Areas"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRuleAreas->SetValue(true);
+	m_gridSizer->Add( m_cbRuleAreas, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_cbLockedItems = new wxCheckBox( this, wxID_ANY, _("Locked items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbLockedItems->SetValue(true);
