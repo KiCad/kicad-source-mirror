@@ -179,7 +179,7 @@
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Consult your PCB manufacturer&apos;s specifications for solder mask clearance and minimum bridge width recommendations.</property>
+                        <property name="label">Consult your PCB manufacturer&apos;s specifications for solder mask expansion, web width, and clearance settings.</property>
                         <property name="markup">0</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>

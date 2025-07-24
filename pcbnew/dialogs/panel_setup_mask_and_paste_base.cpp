@@ -26,7 +26,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Consult your PCB manufacturer's specifications for solder mask clearance and minimum bridge width recommendations."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Consult your PCB manufacturer's specifications for solder mask expansion, web width, and clearance settings."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxEXPAND, 5 );
 
