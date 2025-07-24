@@ -3511,7 +3511,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     {
                         wxString msg;
                         msg.Printf( _( "Error loading library '%s':\n"
-                                   "Footprint %s pad %s uses an unknown pad-shape." ),
+                                   "Footprint %s pad %s uses an unknown pad shape." ),
                                 m_library,
                                 m_footprintName,
                                 aElem.name );
@@ -3523,7 +3523,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     if( m_reporter )
                     {
                         wxString msg;
-                        msg.Printf( _( "Footprint %s pad %s uses an unknown pad-shape." ),
+                        msg.Printf( _( "Footprint %s pad %s uses an unknown pad shape." ),
                                 aFootprint->GetReference(),
                                 aElem.name );
                         m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
@@ -3861,7 +3861,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
         if( m_reporter )
         {
             wxString msg;
-            msg.Printf( _( "Non-copper pad %s uses an unknown pad-shape." ), aElem.name );
+            msg.Printf( _( "Non-copper pad %s uses an unknown pad shape." ), aElem.name );
             m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
         }
 

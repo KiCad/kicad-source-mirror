@@ -432,7 +432,7 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
             else if( layerGuiMasks.count( token ) )
                 pushLayers( layerGuiMasks.at( token ) );
             else
-                m_reporter->Report( wxString::Format( _( "Invalid layer name \"%s\"\n" ), token ) );
+                m_reporter->Report( wxString::Format( _( "Invalid layer name '%s'\n" ), token ) );
         }
     }
 

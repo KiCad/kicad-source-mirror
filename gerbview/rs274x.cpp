@@ -229,10 +229,10 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 break;
 
             case 'D':       // Non-standard option for all zeros (leading + tailing)
-                msg.Printf( _( "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\"" ),
+                msg.Printf( _( "RS274X: Invalid GERBER format command '%c' at line %d: '%s'" ),
                         'D', m_LineNum, aBuff );
                 AddMessageToList( msg );
-                msg.Printf( _("GERBER file \"%s\" may not display as intended." ),
+                msg.Printf( _("GERBER file '%s' may not display as intended." ),
                         m_FileName.ToAscii() );
                 AddMessageToList( msg );
                 KI_FALLTHROUGH;

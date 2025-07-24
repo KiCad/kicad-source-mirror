@@ -729,7 +729,7 @@ L_read:
             }   // while
 
             // L_unterminated:
-            wxString errtxt( _( "Un-terminated delimited string" ) );
+            wxString errtxt( _( "Unterminated delimited string" ) );
             THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(),
                                cur - start + curText.length() );
         }

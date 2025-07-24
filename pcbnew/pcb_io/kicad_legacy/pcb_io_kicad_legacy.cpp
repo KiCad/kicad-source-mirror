@@ -2485,7 +2485,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
 
             if( !hopt )
             {
-                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ),
+                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER '%s'" ),
                                 zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
@@ -2496,7 +2496,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
             case 'E': outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
             case 'F': outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
             default:
-                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ),
+                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER '%s'" ),
                                 zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
@@ -2511,7 +2511,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
 
             if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
             {
-                m_error.Printf( _( "Bad ZSmoothing for CZONE_CONTAINER \"%s\"" ),
+                m_error.Printf( _( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ),
                                 zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
@@ -2589,7 +2589,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
             case 'H': popt = ZONE_CONNECTION::THT_THERMAL; break;
             case 'X': popt = ZONE_CONNECTION::NONE;        break;
             default:
-                m_error.Printf( _( "Bad ZClearance padoption for CZONE_CONTAINER \"%s\"" ),
+                m_error.Printf( _( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
                                 zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }

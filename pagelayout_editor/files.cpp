@@ -78,7 +78,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
         if( LoadDrawingSheetFile( filename ) )
         {
             wxString msg;
-            msg.Printf( _( "File \"%s\" loaded"), filename );
+            msg.Printf( _( "File '%s' loaded"), filename );
             SetStatusText( msg );
         }
 
@@ -146,7 +146,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         {
             GetScreen()->SetContentModified();
             HardRedraw();
-            msg.Printf( _( "File \"%s\" inserted" ), filename );
+            msg.Printf( _( "File '%s' inserted" ), filename );
             SetStatusText( msg );
         }
     }
@@ -170,7 +170,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             OnNewDrawingSheet();
-            msg.Printf( _( "File \"%s\" saved." ), filename );
+            msg.Printf( _( "File '%s' saved." ), filename );
             SetStatusText( msg );
         }
     }

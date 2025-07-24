@@ -1030,7 +1030,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     auto testAssertion =
             [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
-                REPORT( wxString::Format( _( "Checking assertion \"%s\"." ),
+                REPORT( wxString::Format( _( "Checking assertion '%s'." ),
                                           EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
 
                 if( c->constraint.m_Test->EvaluateFor( a, b, c->constraint.m_Type, aLayer,
@@ -1427,7 +1427,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                     else
                     {
-                        REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                        REPORT( wxString::Format( _( "Checking rule condition '%s'." ),
                                                   EscapeHTML( c->condition->GetExpression() ) ) )
                     }
 
@@ -1710,7 +1710,7 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
     auto testAssertion =
             [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
-                REPORT( wxString::Format( _( "Checking rule assertion \"%s\"." ),
+                REPORT( wxString::Format( _( "Checking rule assertion '%s'." ),
                                           EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
 
                 if( c->constraint.m_Test->EvaluateFor( a, nullptr, c->constraint.m_Type,
@@ -1744,7 +1744,7 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
                 }
                 else
                 {
-                    REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                    REPORT( wxString::Format( _( "Checking rule condition '%s'." ),
                                               EscapeHTML( c->condition->GetExpression() ) ) )
 
                     if( c->condition->EvaluateFor( a, nullptr, c->constraint.m_Type,

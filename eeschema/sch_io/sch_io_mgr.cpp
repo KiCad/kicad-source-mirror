@@ -41,8 +41,8 @@
 #include <kiway_player.h>
 #include <string_utils.h>
 
-#define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
-#define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
+#define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
+#define FMT_NOTFOUND        _( "Plugin type '%s' is not found." )
 
 
 

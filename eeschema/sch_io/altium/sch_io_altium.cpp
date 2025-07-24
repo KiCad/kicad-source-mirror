@@ -1456,7 +1456,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     {
         const ASCH_SYMBOL& currentSymbol = m_altiumComponents.at( aIndex );
 
-        m_errorMessages.emplace( wxString::Format( _( "Symbol \"%s\" in sheet \"%s\" at index %d "
+        m_errorMessages.emplace( wxString::Format( _( "Symbol '%s' in sheet '%s' at index %d "
                                                       "replaced with symbol \"%s\"." ),
                                                    currentSymbol.libreference,
                                                    sheetName,

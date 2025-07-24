@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,11 +26,11 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board manufacturer's recommendations for solder mask expansion and minimum web width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Consult your PCB manufacturer's specifications for solder mask clearance and minimum bridge width recommendations."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxEXPAND, 5 );
 
-	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If none are provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If no specifications are provided, setting these values to zero is recommended."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth1->Wrap( -1 );
 	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxEXPAND, 5 );
 

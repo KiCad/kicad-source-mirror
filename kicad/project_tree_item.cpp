@@ -139,7 +139,7 @@ bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
 
     if( !wxRenameFile( GetFileName(), newFile, false ) )
     {
-        wxMessageDialog( m_parent, _( "Unable to rename file ... " ), _( "Permission error?" ),
+        wxMessageDialog( m_parent, _( "Unable to rename file ... " ), _( "Permission denied" ),
                          wxICON_ERROR | wxOK );
         return false;
     }

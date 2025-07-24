@@ -867,13 +867,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
     {
         if( m_isDryRun )
         {
-            msg.Printf( _( "Remove %s from group \"%s\"." ),
+            msg.Printf( _( "Remove %s from group '%s'." ),
                         aPcbFootprint->GetReference(),
                         EscapeHTML( existingGroup->GetName() ) );
         }
         else
         {
-            msg.Printf( _( "Removed %s from group \"%s\"." ),
+            msg.Printf( _( "Removed %s from group '%s'." ),
                         aPcbFootprint->GetReference(),
                         EscapeHTML( existingGroup->GetName() ) );
 
@@ -890,13 +890,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
     {
         if( m_isDryRun )
         {
-            msg.Printf( _( "Add %s to group \"%s\"." ),
+            msg.Printf( _( "Add %s to group '%s'." ),
                         aPcbFootprint->GetReference(),
                         EscapeHTML( aNetlistComponent->GetGroup()->name ) );
         }
         else
         {
-            msg.Printf( _( "Added %s group \"%s\"." ),
+            msg.Printf( _( "Added %s group '%s'." ),
                         aPcbFootprint->GetReference(),
                         EscapeHTML( aNetlistComponent->GetGroup()->name ) );
 

@@ -679,7 +679,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
         // Display Image Name and Layer Name (from the current gerber data):
         wxString status;
-        status.Printf( _( "Image name: \"%s\"  Layer name: \"%s\"" ),
+        status.Printf( _( "Image name: '%s'  Layer name: '%s'" ),
                        gerber->m_ImageName,
                        gerber->GetLayerParams().m_LayerName );
         SetStatusText( status, 0 );

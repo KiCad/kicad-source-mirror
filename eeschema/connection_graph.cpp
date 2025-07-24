@@ -4261,7 +4261,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                 wxCHECK2( label, continue );
 
                 msg.Printf(
-                        _( "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent parent sheet" ),
+                        _( "Hierarchical label '%s' in root sheet cannot be connected to non-existent parent sheet" ),
                         label->GetShownText( &sheet, true ) );
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                 ercItem->SetItems( item );
