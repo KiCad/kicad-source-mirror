@@ -151,6 +151,8 @@ void SEARCH_PANE_LISTVIEW::OnColClicked( wxListEvent& aEvent )
 
 void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
 {
+    bool handled = false;
+
     switch( aEvent.GetKeyCode() )
     {
         case WXK_CONTROL_A:
@@ -159,6 +161,7 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
             for( int row = 0; row < GetItemCount(); row++ )
                 SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
+            handled = true;
             break;
         }
 
@@ -192,6 +195,7 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
                 wxTheClipboard->Close();
             }
 
+            handled = true;
             break;
         }
 
@@ -217,6 +221,8 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
                 Focus( focused );
                 Select( focused );
             }
+
+            handled = true;
             break;
         }
         case WXK_UP:
@@ -243,9 +249,13 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
                 Select( focused );
             }
 
+            handled = true;
             break;
         }
     }
+
+    if( !handled )
+        aEvent.Skip();
 }
 
 

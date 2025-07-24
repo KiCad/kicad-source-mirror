@@ -21,6 +21,8 @@
 
 
 #include <tool/action_menu.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
 #include <bitmaps.h>
@@ -131,6 +133,7 @@ SEARCH_PANE::SEARCH_PANE( EDA_DRAW_FRAME* aFrame ) :
             } );
 
     m_frame->Bind( wxEVT_AUI_PANE_CLOSE, &SEARCH_PANE::OnClosed, this );
+    Bind( wxEVT_CHAR_HOOK, &SEARCH_PANE::OnCharHook, this );
 }
 
 
@@ -138,6 +141,7 @@ SEARCH_PANE::~SEARCH_PANE()
 {
     m_frame->Unbind( wxEVT_AUI_PANE_CLOSE, &SEARCH_PANE::OnClosed, this );
     m_frame->Unbind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
+    Unbind( wxEVT_CHAR_HOOK, &SEARCH_PANE::OnCharHook, this );
 
     delete m_menu;
 }
@@ -223,4 +227,26 @@ void SEARCH_PANE::OnClosed( wxAuiManagerEvent& aEvent )
 SEARCH_PANE_TAB* SEARCH_PANE::GetCurrentTab() const
 {
     return dynamic_cast<SEARCH_PANE_TAB*>( m_notebook->GetCurrentPage() );
+}
+
+
+void SEARCH_PANE::OnCharHook( wxKeyEvent& aEvent )
+{
+    // Check if the event is from a child window of the search pane
+    wxWindow* eventObject = dynamic_cast<wxWindow*>( aEvent.GetEventObject() );
+
+    if( !eventObject || !IsDescendant( eventObject ) )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // Try to let the tool framework handle the event
+    if( m_frame->GetToolDispatcher() )
+    {
+        m_frame->GetToolDispatcher()->DispatchWxEvent( aEvent );
+        return;
+    }
+
+    aEvent.Skip();
 }
