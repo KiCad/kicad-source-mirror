@@ -46,14 +46,8 @@ static const std::vector<wxString> predefinedEnvVars = {
 };
 
 
-const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
-
-
 bool ENV_VAR::IsEnvVarImmutable( const wxString& aEnvVar )
 {
-    if( versionedEnvVarRegex.Matches( aEnvVar ) )
-        return true;
-
     for( const wxString& s : predefinedEnvVars )
     {
         if( s == aEnvVar )
