@@ -233,6 +233,11 @@ public:
         int    origin_mode;
     };
 
+    struct DIALOG_EXPORT_D356
+    {
+        bool doNotExportUnconnectedPads;
+    };
+
     struct DIALOG_FOOTPRINT_WIZARD_LIST
     {
         int width;
@@ -395,6 +400,8 @@ public:
     DIALOG_EXPORT_ODBPP m_ExportODBPP;
 
     DIALOG_EXPORT_VRML m_ExportVrml;
+
+    DIALOG_EXPORT_D356 m_ExportD356;
 
     DIALOG_FOOTPRINT_WIZARD_LIST m_FootprintWizardList;
 

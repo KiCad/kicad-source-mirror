@@ -447,6 +447,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "export_vrml.origin_mode",
             &m_ExportVrml.origin_mode, 0 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "export_d356.doNotExportUnconnectedPads",
+            &m_ExportD356.doNotExportUnconnectedPads, false ) );
+
     m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
             &m_Zones.net_sort_mode, -1 ) );
 

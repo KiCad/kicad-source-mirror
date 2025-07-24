@@ -47,7 +47,10 @@
 #include <math/util.h>      // for KiROUND
 #include <export_d356.h>
 #include <tools/board_editor_control.h>
+
+#include <wx/checkbox.h>
 #include <wx/filedlg.h>
+#include <wx/filedlgcustomize.h>
 #include <wx/msgdlg.h>
 
 
@@ -95,7 +98,7 @@ static int iu_to_d356(int iu, int clamp)
 }
 
 /* Extract the D356 record from the footprints (pads) */
-static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
+void IPC356D_WRITER::build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
 {
     VECTOR2I origin = aPcb->GetDesignSettings().GetAuxOrigin();
 
@@ -107,46 +110,49 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             rk.access = compute_pad_access_code( aPcb, pad->GetLayerSet() );
 
             // It could be a mask only pad, we only handle pads with copper here
-            if( rk.access != -1 )
-            {
-                rk.netname = pad->GetNetname();
-                rk.pin = pad->GetNumber();
-                rk.refdes = footprint->GetReference();
-                rk.midpoint = false; // XXX MAYBE need to be computed (how?)
-                const VECTOR2I& drill = pad->GetDrillSize();
-                rk.drill = std::min( drill.x, drill.y );
-                rk.hole = (rk.drill != 0);
-                rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD
-                            || pad->GetAttribute() == PAD_ATTRIB::CONN;
-                rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
-                rk.x_location = pad->GetPosition().x - origin.x;
-                rk.y_location = origin.y - pad->GetPosition().y;
+            if( rk.access == -1 )
+                continue;
 
-                PCB_LAYER_ID accessLayer = footprint->IsFlipped() ? B_Cu : F_Cu;
-                rk.x_size = pad->GetSize( accessLayer ).x;
+            if( m_doNotExportUnconnectedPads && pad->GetNetCode() == NETINFO_LIST::UNCONNECTED )
+                continue;
 
-                // Rule: round pads have y = 0
-                if( pad->GetShape( accessLayer ) == PAD_SHAPE::CIRCLE )
-                    rk.y_size = 0;
-                else
-                    rk.y_size = pad->GetSize( accessLayer ).y;
+            rk.netname = pad->GetNetname();
+            rk.pin = pad->GetNumber();
+            rk.refdes = footprint->GetReference();
+            rk.midpoint = false; // XXX MAYBE need to be computed (how?)
+            const VECTOR2I& drill = pad->GetDrillSize();
+            rk.drill = std::min( drill.x, drill.y );
+            rk.hole = (rk.drill != 0);
+            rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD
+                        || pad->GetAttribute() == PAD_ATTRIB::CONN;
+            rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
+            rk.x_location = pad->GetPosition().x - origin.x;
+            rk.y_location = origin.y - pad->GetPosition().y;
 
-                rk.rotation = - pad->GetOrientation().AsDegrees();
+            PCB_LAYER_ID accessLayer = footprint->IsFlipped() ? B_Cu : F_Cu;
+            rk.x_size = pad->GetSize( accessLayer ).x;
 
-                if( rk.rotation < 0 )
-                    rk.rotation += 360;
+            // Rule: round pads have y = 0
+            if( pad->GetShape( accessLayer ) == PAD_SHAPE::CIRCLE )
+                rk.y_size = 0;
+            else
+                rk.y_size = pad->GetSize( accessLayer ).y;
 
-                // the value indicates which sides are *not* accessible
-                rk.soldermask = 3;
+            rk.rotation = - pad->GetOrientation().AsDegrees();
 
-                if( pad->GetLayerSet()[F_Mask] )
-                    rk.soldermask &= ~1;
+            if( rk.rotation < 0 )
+                rk.rotation += 360;
 
-                if( pad->GetLayerSet()[B_Mask] )
-                    rk.soldermask &= ~2;
+            // the value indicates which sides are *not* accessible
+            rk.soldermask = 3;
 
-                aRecords.push_back( rk );
-            }
+            if( pad->GetLayerSet()[F_Mask] )
+                rk.soldermask &= ~1;
+
+            if( pad->GetLayerSet()[B_Mask] )
+                rk.soldermask &= ~2;
+
+            aRecords.push_back( rk );
         }
     }
 }
@@ -382,6 +388,40 @@ bool IPC356D_WRITER::Write( const wxString& aFilename )
 }
 
 
+
+
+// Subclass for wxFileDialogCustomizeHook to add the checkbox
+class D365_CUSTOMIZE_HOOK : public wxFileDialogCustomizeHook
+{
+public:
+
+public:
+    D365_CUSTOMIZE_HOOK( bool aDoNotExportUnconnectedPads = false ) :
+            m_doNotExportUnconnectedPads( aDoNotExportUnconnectedPads ),
+            m_cb(nullptr)
+    {};
+
+    virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
+    {
+        m_cb = customizer.AddCheckBox( _( "Do not export unconnected pads" ) );
+        m_cb->SetValue( m_doNotExportUnconnectedPads );
+    }
+
+    virtual void TransferDataFromCustomControls() override
+    {
+        m_doNotExportUnconnectedPads = m_cb->GetValue();
+    }
+
+    bool GetDoNotExportUnconnectedPads() const { return m_doNotExportUnconnectedPads; }
+private:
+
+    bool m_doNotExportUnconnectedPads;
+    wxFileDialogCheckBox* m_cb;
+
+    wxDECLARE_NO_COPY_CLASS( D365_CUSTOMIZE_HOOK );
+};
+
+
 int BOARD_EDITOR_CONTROL::GenD356File( const TOOL_EVENT& aEvent )
 {
     wxFileName  fn = m_frame->GetBoard()->GetFileName();
@@ -395,17 +435,21 @@ int BOARD_EDITOR_CONTROL::GenD356File( const TOOL_EVENT& aEvent )
 
     wxFileDialog dlg( m_frame, _( "Generate IPC-D-356 netlist file" ), pro_dir, fn.GetFullName(),
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    D365_CUSTOMIZE_HOOK customizeHook( m_frame->GetPcbNewSettings()->m_ExportD356.doNotExportUnconnectedPads );
+    dlg.SetCustomizeHook( customizeHook );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;
 
     IPC356D_WRITER writer( m_frame->GetBoard() );
+    bool doNotExportUnconnectedPads = customizeHook.GetDoNotExportUnconnectedPads();
+    writer.SetDoNotExportUnconnectedPads( doNotExportUnconnectedPads );
+    m_frame->GetPcbNewSettings()->m_ExportD356.doNotExportUnconnectedPads = doNotExportUnconnectedPads;
 
     if( writer.Write( dlg.GetPath() ) )
     {
-        wxMessageBox( wxString::Format( _( "IPC-D-356 netlist file created:\n'%s'." ),
-                                        dlg.GetPath() ),
-                      _( "IPC-D-356 Netlist File" ), wxICON_INFORMATION );
+        DisplayInfoMessage( m_frame, wxString::Format( _( "IPC-D-356 netlist file created:\n'%s'." ),
+                                        dlg.GetPath() ) );
     }
     else
     {
