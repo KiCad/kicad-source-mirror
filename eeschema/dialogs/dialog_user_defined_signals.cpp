@@ -123,16 +123,11 @@ void DIALOG_USER_DEFINED_SIGNALS::onAddSignal( wxCommandEvent& event )
 
 void DIALOG_USER_DEFINED_SIGNALS::onDeleteSignal( wxCommandEvent& event )
 {
-    int curRow = m_grid->GetGridCursorRow();
-
-    if( curRow < 0 || m_grid->GetNumberRows() <= curRow )
-        return;
-
-    m_grid->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
-    m_grid->DeleteRows( curRow, 1 );
-
-    m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
-    m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_grid->DeleteRows( row, 1 );
+            } );
 }
 
 

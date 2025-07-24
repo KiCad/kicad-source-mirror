@@ -133,10 +133,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::NONE )
     {
-        if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS
-              && aLibEntry->IsRoot() )
-            || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT
-                 && aLibEntry->IsDerived() ) )
+        if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS && aLibEntry->IsRoot() )
+            || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT && aLibEntry->IsDerived() ) )
         {
             resetSize();
         }
@@ -676,44 +674,26 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < m_fields->GetMandatoryRowCount() )
+                {
+                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                          m_fields->GetMandatoryRowCount() ) );
+                    return false;
+                }
 
-    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_grid->GetGridCursorRow() );
+                return true;
+            },
+            [&]( int row )
+            {
+                m_fields->erase( m_fields->begin() + row );
 
-    if( selectedRows.empty() )
-        return;
-
-    for( int row : selectedRows )
-    {
-        if( row < m_fields->GetMandatoryRowCount() )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRowCount() ) );
-            return;
-        }
-    }
-
-    m_grid->CommitPendingChanges( true /* quiet mode */ );
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
-
-    for( int row : selectedRows )
-    {
-        m_grid->ClearSelection();
-        m_fields->erase( m_fields->begin() + row );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-        m_grid->ProcessTableMessage( msg );
-
-        if( m_grid->GetNumberRows() > 0 )
-        {
-            m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-            m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-        }
-    }
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_grid->ProcessTableMessage( msg );
+            } );
 
     OnModify();
 }

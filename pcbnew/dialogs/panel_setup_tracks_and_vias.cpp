@@ -437,22 +437,11 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( int aWidth, int aGap, int aVi
 
 void removeSelectedRows( WX_GRID* aGrid )
 {
-    wxArrayInt selectedRows = aGrid->GetSelectedRows();
-    int        curRow = aGrid->GetGridCursorRow();
-
-    if( selectedRows.empty() && curRow >= 0 && curRow < aGrid->GetNumberRows() )
-        selectedRows.Add( curRow );
-
-    for( int ii = (int) selectedRows.Count() - 1; ii >= 0; --ii )
-    {
-        int row = selectedRows.Item( ii );
-        aGrid->DeleteRows( row, 1 );
-        curRow = std::min( curRow, row );
-    }
-
-    curRow = std::max( 0, curRow - 1 );
-    aGrid->MakeCellVisible( curRow, aGrid->GetGridCursorCol() );
-    aGrid->SetGridCursor( curRow, aGrid->GetGridCursorCol() );
+    aGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                aGrid->DeleteRows( row, 1 );
+            } );
 }
 
 
@@ -477,13 +466,6 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& event )
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
-        return;
-    }
-
     removeSelectedRows( m_trackWidthsGrid );
 }
 
@@ -509,13 +491,6 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
-        return;
-    }
-
     removeSelectedRows( m_viaSizesGrid );
 }
 
@@ -541,13 +516,6 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event )
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
-        return;
-    }
-
     removeSelectedRows( m_diffPairsGrid );
 }
 

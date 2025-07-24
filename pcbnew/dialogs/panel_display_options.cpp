@@ -321,36 +321,11 @@ void PANEL_DISPLAY_OPTIONS::OnAddLayerItem( wxCommandEvent& event )
 
 void PANEL_DISPLAY_OPTIONS::OnDeleteLayerItem( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_layerNameitemsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_layerNameitemsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_layerNameitemsGrid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    if( !m_layerNameitemsGrid->CommitPendingChanges() )
-        return;
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort(
-            []( int* first, int* second )
+    m_layerNameitemsGrid->OnDeleteRows(
+            [&]( int row )
             {
-                return *second - *first;
+                m_layerNameitemsGrid->GetTable()->DeleteRows( row, 1 );
             } );
-
-    for( int row : selectedRows )
-    {
-        m_layerNameitemsGrid->GetTable()->DeleteRows( row, 1 );
-
-        if( m_layerNameitemsGrid->GetNumberRows() > 0 )
-        {
-            m_layerNameitemsGrid->MakeCellVisible( std::max( 0, row - 1 ),
-                                                   m_layerNameitemsGrid->GetGridCursorCol() );
-            m_layerNameitemsGrid->SetGridCursor( std::max( 0, row - 1 ),
-                                                 m_layerNameitemsGrid->GetGridCursorCol() );
-        }
-    }
 }
 
 

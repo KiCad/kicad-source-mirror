@@ -395,15 +395,14 @@ public:
 
     void OnDeleteSelectedLayerPairs()
     {
-        int row = m_grid.GetGridCursorRow();
+        m_grid.OnDeleteRows(
+                [&]( int row )
+                {
+                    const LAYER_PAIR_INFO& layerPairInfo = m_layerPairSettings.GetLayerPairs()[row];
 
-        const LAYER_PAIR_INFO& layerPairInfo = m_layerPairSettings.GetLayerPairs()[row];
-        const bool removed = m_layerPairSettings.RemoveLayerPair( layerPairInfo.GetLayerPair() );
-
-        if( removed )
-        {
-            m_grid.DeleteRows( row );
-        }
+                    if( m_layerPairSettings.RemoveLayerPair( layerPairInfo.GetLayerPair() ) )
+                        m_grid.DeleteRows( row );
+                } );
     }
 
 private:

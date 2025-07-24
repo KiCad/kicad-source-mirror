@@ -267,8 +267,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     }
 
     // notify the grid
-    wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
-                             m_fields->GetNumberRows() );
+    wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_itemsGrid->ProcessTableMessage( tmsg );
 
     // Footprint Properties
@@ -282,9 +281,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_orientation.SetAngleValue( orientation.Normalize180() );
 
     m_cbLocked->SetValue( m_footprint->IsLocked() );
-    m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved and oriented on the "
-                               "canvas and can only be selected when the 'Locked items' checkbox "
-                               "is checked in the selection filter." ) );
+    m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved or oriented on the canvas and can only be "
+                               "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
 
     if( m_footprint->GetAttributes() & FP_THROUGH_HOLE )
         m_componentType->SetSelection( 0 );
@@ -492,8 +490,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
             m_itemsGrid->SetCellValue( i, PFC_THICKNESS, clamped );
 
             m_delayedFocusGrid = m_itemsGrid;
-            m_delayedErrorMessage = wxString::Format( _( "Text thickness is too large for the "
-                                                         "text size.\n"
+            m_delayedErrorMessage = wxString::Format( _( "Text thickness is too large for the text size.\n"
                                                          "It will be clamped at %s." ),
                                                       clamped );
             m_delayedFocusColumn = PFC_THICKNESS;
@@ -652,19 +649,19 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     // Set component side, that also have effect on the fields positions on board
     bool change_layer = false;
+
     if( m_BoardSideCtrl->GetSelection() == 0 )     // layer req = COMPONENT
     {
         if( m_footprint->GetLayer() == B_Cu )
             change_layer = true;
     }
     else if( m_footprint->GetLayer() == F_Cu )
+    {
         change_layer = true;
+    }
 
     if( change_layer )
-    {
-        m_footprint->Flip( m_footprint->GetPosition(),
-                           m_frame->GetPcbNewSettings()->m_FlipDirection );
-    }
+        m_footprint->Flip( m_footprint->GetPosition(), m_frame->GetPcbNewSettings()->m_FlipDirection );
 
     // Copy the models from the panel to the footprint
     std::vector<FP_3DMODEL>& panelList = m_3dPanel->GetModelList();
@@ -686,8 +683,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    PCB_FIELD newField( m_footprint, FIELD_T::USER,
-                        GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
+    PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
 
     newField.SetVisible( false );
     newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
@@ -713,48 +709,26 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
 
 void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
 {
-    if( !m_itemsGrid->CommitPendingChanges() )
-        return;
+    m_itemsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < m_fields->GetMandatoryRowCount() )
+                {
+                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                          m_fields->GetMandatoryRowCount() ) );
+                    return false;
+                }
 
-    wxArrayInt selectedRows = m_itemsGrid->GetSelectedRows();
+                return true;
+            },
+            [&]( int row )
+            {
+                m_fields->erase( m_fields->begin() + row );
 
-    if( selectedRows.empty() && m_itemsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_itemsGrid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    for( int row : selectedRows )
-    {
-
-        if( row < m_fields->GetMandatoryRowCount() )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRowCount() ) );
-            return;
-        }
-    }
-
-    m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
-
-    for( int row : selectedRows )
-    {
-        m_itemsGrid->ClearSelection();
-        m_fields->erase( m_fields->begin() + row );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-        m_itemsGrid->ProcessTableMessage( msg );
-
-        if( m_itemsGrid->GetNumberRows() > 0 )
-        {
-            m_itemsGrid->MakeCellVisible( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
-            m_itemsGrid->SetGridCursor( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
-        }
-    }
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_itemsGrid->ProcessTableMessage( msg );
+            } );
 
     OnModify();
 }
@@ -775,8 +749,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns()
         itemsWidth -= m_itemsGrid->GetColSize( i );
     }
 
-    m_itemsGrid->SetColSize(
-            1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
+    m_itemsGrid->SetColSize( 1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
 
     // Update the width of the 3D panel
     m_3dPanel->AdjustGridColumnWidths();
@@ -828,9 +801,9 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 
             if( grid == m_itemsGrid && row == 0 && col == 0 )
             {
-                auto referenceEditor = grid->GetCellEditor( 0, 0 );
+                wxGridCellEditor* referenceEditor = grid->GetCellEditor( 0, 0 );
 
-                if( auto textEntry = dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) )
+                if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) )
                     KIUI::SelectReferenceNumber( textEntry );
 
                 referenceEditor->DecRef();

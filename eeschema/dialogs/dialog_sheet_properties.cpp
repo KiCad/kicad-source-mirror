@@ -105,8 +105,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_hierarchicalPath->SetFont( KIUI::GetSmallInfoFont( this ) );
 
     // wxFormBuilder doesn't include this event...
-    m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
+    m_grid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                      nullptr, this );
 }
 
@@ -123,8 +122,7 @@ DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
 
-    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
+    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                         nullptr, this );
 
     // Delete the GRID_TRICKS.
@@ -196,8 +194,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_SHEET_PROPERTIES::Validate()
 {
-    LIB_ID   id;
-
     if( !m_grid->CommitPendingChanges() || !m_grid->Validate() )
         return false;
 
@@ -244,17 +240,11 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 
 static bool positioningChanged( FIELDS_GRID_TABLE* a, SCH_SHEET* b )
 {
-    if( positioningChanged( a->GetField( FIELD_T::SHEET_NAME ),
-                            b->GetField( FIELD_T::SHEET_NAME ) ) )
-    {
+    if( positioningChanged( a->GetField( FIELD_T::SHEET_NAME ), b->GetField( FIELD_T::SHEET_NAME ) ) )
         return true;
-    }
 
-    if( positioningChanged( a->GetField( FIELD_T::SHEET_FILENAME ),
-                            b->GetField( FIELD_T::SHEET_FILENAME ) ) )
-    {
+    if( positioningChanged( a->GetField( FIELD_T::SHEET_FILENAME ), b->GetField( FIELD_T::SHEET_FILENAME ) ) )
         return true;
-    }
 
     return false;
 }
@@ -451,8 +441,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
 {
     wxString       msg;
-    wxFileName     sheetFileName( EnsureFileExtension( aNewFilename,
-                                                       FILEEXT::KiCadSchematicFileExtension ) );
+    wxFileName     sheetFileName( EnsureFileExtension( aNewFilename, FILEEXT::KiCadSchematicFileExtension ) );
 
     // Sheet file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.  Screen file names are always absolute.
@@ -467,8 +456,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     // SCH_SCREEN file names are always absolute.
     wxFileName currentScreenFileName = currentScreen->GetFileName();
 
-    if( !screenFileName.Normalize(  FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
-                                    currentScreenFileName.GetPath() ) )
+    if( !screenFileName.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS, currentScreenFileName.GetPath() ) )
     {
         msg = wxString::Format( _( "Cannot normalize new sheet schematic file path:\n"
                                    "'%s'\n"
@@ -505,19 +493,16 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
     if( m_sheet->GetScreen() == nullptr )      // New just created sheet.
     {
-        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(),
-                                                         newAbsoluteFilename ) )
+        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(), newAbsoluteFilename ) )
             return false;
 
         if( useScreen || loadFromFile )     // Load from existing file.
         {
             clearAnnotation = true;
 
-            if( !IsOK( this, wxString::Format( _( "'%s' already exists." ),
-                                               sheetFileName.GetFullName() )
+            if( !IsOK( this, wxString::Format( _( "'%s' already exists." ), sheetFileName.GetFullName() )
                              + wxT( "\n\n" )
-                             + wxString::Format( _( "Link '%s' to this file?" ),
-                                                 newAbsoluteFilename ) ) )
+                             + wxString::Format( _( "Link '%s' to this file?" ), newAbsoluteFilename ) ) )
             {
                 return false;
             }
@@ -547,8 +532,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     {
         isExistingSheet = true;
 
-        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(),
-                                                         newAbsoluteFilename ) )
+        if( !m_frame->AllowCaseSensitiveFileNameClashes( m_sheet->GetFileName(), newAbsoluteFilename ) )
             return false;
 
         // We are always using here a case insensitive comparison to avoid issues
@@ -623,12 +607,10 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             }
             catch( const IO_ERROR& ioe )
             {
-                msg = wxString::Format( _( "Error occurred saving schematic file '%s'." ),
-                                        newAbsoluteFilename );
+                msg = wxString::Format( _( "Error occurred saving schematic file '%s'." ), newAbsoluteFilename );
                 DisplayErrorMessage( this, msg, ioe.What() );
 
-                msg = wxString::Format( _( "Failed to save schematic '%s'" ),
-                                        newAbsoluteFilename );
+                msg = wxString::Format( _( "Failed to save schematic '%s'" ), newAbsoluteFilename );
                 m_frame->SetMsgPanel( wxEmptyString, msg );
                 return false;
             }
@@ -665,8 +647,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         SCH_SHEET_LIST sheetHierarchy( m_sheet );  // The hierarchy of the loaded file.
 
         sheetHierarchy.AddNewSymbolInstances( currentSheet, m_frame->Prj().GetProjectName() );
-        sheetHierarchy.AddNewSheetInstances( currentSheet,
-                                             fullHierarchy.GetLastVirtualPageNumber() );
+        sheetHierarchy.AddNewSheetInstances( currentSheet, fullHierarchy.GetLastVirtualPageNumber() );
     }
     else if( loadFromFile )
     {
@@ -754,44 +735,26 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < m_fields->GetMandatoryRowCount() )
+                {
+                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                          m_fields->GetMandatoryRowCount() ) );
+                    return false;
+                }
 
-    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_grid->GetGridCursorRow() );
+                return true;
+            },
+            [&]( int row )
+            {
+                m_fields->erase( m_fields->begin() + row );
 
-    if( selectedRows.empty() )
-        return;
-
-    for( int row : selectedRows )
-    {
-        if( row < m_fields->GetMandatoryRowCount() )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRowCount() ) );
-            return;
-        }
-    }
-
-    m_grid->CommitPendingChanges( true /* quiet mode */ );
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
-
-    for( int row : selectedRows )
-    {
-        m_grid->ClearSelection();
-        m_fields->erase( m_fields->begin() + row );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-        m_grid->ProcessTableMessage( msg );
-
-        if( m_grid->GetNumberRows() > 0 )
-        {
-            m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-            m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-        }
-    }
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_grid->ProcessTableMessage( msg );
+            } );
 }
 
 

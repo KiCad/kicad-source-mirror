@@ -128,16 +128,14 @@ public:
             m_typeAttr->DecRef();
 
         m_typeAttr = new wxGridCellAttr;
-        m_typeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(),
-                                                                   PinTypeNames() ) );
+        m_typeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(), PinTypeNames() ) );
         m_typeAttr->SetReadOnly( true );
 
         if( m_shapeAttr )
             m_shapeAttr->DecRef();
 
         m_shapeAttr = new wxGridCellAttr;
-        m_shapeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(),
-                                                                    PinShapeNames() ) );
+        m_shapeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(), PinShapeNames() ) );
         m_shapeAttr->SetReadOnly( true );
     }
 
@@ -307,8 +305,7 @@ protected:
 };
 
 
-DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                    SCH_SYMBOL* aSymbol ) :
+DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol ) :
         DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
         m_symbol( nullptr ),
         m_part( nullptr ),
@@ -351,8 +348,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         // free-form alternate assignments as well.  (We won't know how to map the alternates
         // back and forth when the conversion is changed.)
         m_pinTablePage->Disable();
-        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for De Morgan "
-                                       "symbols." ) );
+        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for De Morgan symbols." ) );
     }
     else
     {
@@ -751,8 +747,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given symbol, in a complex hierarchy, there are more than one
     // reference.
-    m_symbol->SetRef( &GetParent()->GetCurrentSheet(),
-                      m_fields->GetField( FIELD_T::REFERENCE )->GetText() );
+    m_symbol->SetRef( &GetParent()->GetCurrentSheet(), m_fields->GetField( FIELD_T::REFERENCE )->GetText() );
 
     // Similar for Value and Footprint, except that the GUI behavior is that they are kept
     // in sync between multiple instances.
@@ -876,44 +871,26 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_fieldsGrid->GetSelectedRows();
+    m_fieldsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < m_fields->GetMandatoryRowCount() )
+                {
+                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                          m_fields->GetMandatoryRowCount() ) );
+                    return false;
+                }
 
-    if( selectedRows.empty() && m_fieldsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_fieldsGrid->GetGridCursorRow() );
+                return true;
+            },
+            [&]( int row )
+            {
+                m_fields->erase( m_fields->begin() + row );
 
-    if( selectedRows.empty() )
-        return;
-
-    for( int row : selectedRows )
-    {
-        if( row < m_fields->GetMandatoryRowCount() )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRowCount() ) );
-            return;
-        }
-    }
-
-    m_fieldsGrid->CommitPendingChanges( true /* quiet mode */ );
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
-
-    for( int row : selectedRows )
-    {
-        m_fieldsGrid->ClearSelection();
-        m_fields->erase( m_fields->begin() + row );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-        m_fieldsGrid->ProcessTableMessage( msg );
-
-        if( m_fieldsGrid->GetNumberRows() > 0 )
-        {
-            m_fieldsGrid->MakeCellVisible( std::max( 0, row-1 ), m_fieldsGrid->GetGridCursorCol() );
-            m_fieldsGrid->SetGridCursor( std::max( 0, row-1 ), m_fieldsGrid->GetGridCursorCol() );
-        }
-    }
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_fieldsGrid->ProcessTableMessage( msg );
+            } );
 
     OnModify();
 }
@@ -934,8 +911,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
         m_fieldsGrid->ForceRefresh();
 
         m_fieldsGrid->SetGridCursor( i - 1, m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(),
-                                       m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
 
         OnModify();
     }
@@ -961,8 +937,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
         m_fieldsGrid->ForceRefresh();
 
         m_fieldsGrid->SetGridCursor( i + 1, m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(),
-                                       m_fieldsGrid->GetGridCursorCol() );
+        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
 
         OnModify();
     }
@@ -1005,11 +980,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableCellEdited( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
 
-    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME )
-            == m_dataModel->GetValue( row, COL_BASE_NAME ) )
-    {
+    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME ) == m_dataModel->GetValue( row, COL_BASE_NAME ) )
         m_dataModel->SetValue( row, COL_ALT_NAME, wxEmptyString );
-    }
 
     // These are just to get the cells refreshed
     m_dataModel->SetValue( row, COL_TYPE, m_dataModel->GetValue( row, COL_TYPE ) );

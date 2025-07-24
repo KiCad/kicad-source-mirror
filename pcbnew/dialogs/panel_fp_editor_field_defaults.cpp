@@ -340,36 +340,11 @@ void PANEL_FP_EDITOR_FIELD_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 
 void PANEL_FP_EDITOR_FIELD_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_textItemsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_textItemsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_textItemsGrid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    if( !m_textItemsGrid->CommitPendingChanges() )
-        return;
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort(
-            []( int* first, int* second )
+    m_textItemsGrid->OnDeleteRows(
+            [&]( int row )
             {
-                return *second - *first;
+                m_textItemsGrid->GetTable()->DeleteRows( row, 1 );
             } );
-
-    for( int row : selectedRows )
-    {
-        m_textItemsGrid->GetTable()->DeleteRows( row, 1 );
-
-        if( m_textItemsGrid->GetNumberRows() > 0 )
-        {
-            m_textItemsGrid->MakeCellVisible( std::max( 0, row - 1 ),
-                                              m_textItemsGrid->GetGridCursorCol() );
-            m_textItemsGrid->SetGridCursor( std::max( 0, row - 1 ),
-                                            m_textItemsGrid->GetGridCursorCol() );
-        }
-    }
 }
 
 

@@ -365,21 +365,14 @@ bool PANEL_EMBEDDED_FILES::RemoveEmbeddedFile( const wxString& aFileName )
 
 void PANEL_EMBEDDED_FILES::onDeleteEmbeddedFile( wxCommandEvent& event )
 {
-    int row = m_files_grid->GetGridCursorRow();
+    m_files_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                wxString name = m_files_grid->GetCellValue( row, 0 );
 
-    if( row < 0 )
-        return;
-
-    wxString name = m_files_grid->GetCellValue( row, 0 );
-
-    m_localFiles->RemoveFile( name );
-
-    m_files_grid->DeleteRows( row );
-
-    if( row < m_files_grid->GetNumberRows() )
-        m_files_grid->SetGridCursor( row, 0 );
-    else if( m_files_grid->GetNumberRows() > 0 )
-        m_files_grid->SetGridCursor( m_files_grid->GetNumberRows() - 1, 0 );
+                m_localFiles->RemoveFile( name );
+                m_files_grid->DeleteRows( row );
+            } );
 }
 
 

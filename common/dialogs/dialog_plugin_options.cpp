@@ -229,17 +229,12 @@ void DIALOG_PLUGIN_OPTIONS::onAppendRow( wxCommandEvent& )
 
 void DIALOG_PLUGIN_OPTIONS::onDeleteRow( wxCommandEvent& )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int curRow   = m_grid->GetGridCursorRow();
-
-    m_grid->DeleteRows( curRow );
-    m_grid_widths_dirty = true;
-
-    curRow = std::max( 0, curRow - 1 );
-    m_grid->MakeCellVisible( curRow, m_grid->GetGridCursorCol() );
-    m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_grid->DeleteRows( row );
+                m_grid_widths_dirty = true;
+            } );
 }
 
 

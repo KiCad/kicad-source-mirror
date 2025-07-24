@@ -138,27 +138,11 @@ void DIALOG_DESIGN_BLOCK_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_DESIGN_BLOCK_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
-
-    wxArrayInt selectedRows = m_fieldsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_fieldsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_fieldsGrid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
-
-    for( int row : selectedRows )
-    {
-        m_fieldsGrid->DeleteRows( row );
-
-        m_fieldsGrid->MakeCellVisible( std::max( 0, row - 1 ), m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->SetGridCursor( std::max( 0, row - 1 ), m_fieldsGrid->GetGridCursorCol() );
-    }
+    m_fieldsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_fieldsGrid->DeleteRows( row );
+            } );
 }
 
 

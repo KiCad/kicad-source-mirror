@@ -88,8 +88,7 @@ bool PRIVATE_LAYERS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxStrin
 }
 
 
-wxGridCellAttr* PRIVATE_LAYERS_GRID_TABLE::GetAttr( int aRow, int aCol,
-                                                    wxGridCellAttr::wxAttrKind aKind  )
+wxGridCellAttr* PRIVATE_LAYERS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind  )
 {
     m_layerColAttr->IncRef();
     return enhanceAttr( m_layerColAttr, aRow, aCol, aKind );
@@ -283,8 +282,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
         m_fields->push_back( *field );
 
     // Notify the grid
-    wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
-                             m_fields->GetNumberRows() );
+    wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_itemsGrid->ProcessTableMessage( tmsg );
 
     if( m_footprint->GetAttributes() & FP_THROUGH_HOLE )
@@ -513,8 +511,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
 
         if( field.GetTextThickness() > maxPenWidth )
         {
-            m_itemsGrid->SetCellValue( i, PFC_THICKNESS,
-                                       m_frame->StringFromValue( maxPenWidth, true ) );
+            m_itemsGrid->SetCellValue( i, PFC_THICKNESS, m_frame->StringFromValue( maxPenWidth, true ) );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = _( "The text thickness is too large for the text size.\n"
@@ -729,8 +726,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
 
-    PCB_FIELD newField( m_footprint, FIELD_T::USER,
-                        GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
+    PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
@@ -761,50 +757,26 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
 {
-    if( !m_itemsGrid->CommitPendingChanges() )
-        return;
+    m_itemsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < m_fields->GetMandatoryRowCount() )
+                {
+                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                          m_fields->GetMandatoryRowCount() ) );
+                    return false;
+                }
 
-    wxArrayInt selectedRows = m_itemsGrid->GetSelectedRows();
+                return true;
+            },
+            [&]( int row )
+            {
+                m_fields->erase( m_fields->begin() + row );
 
-    if( selectedRows.empty() && m_itemsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_itemsGrid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    for( int row : selectedRows )
-    {
-        if( row < m_fields->GetMandatoryRowCount() )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  m_fields->GetMandatoryRowCount() ) );
-            return;
-        }
-    }
-
-    m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second )
-                       {
-                           return *second - *first;
-                       } );
-
-    for( int row : selectedRows )
-    {
-        m_itemsGrid->ClearSelection();
-        m_fields->erase( m_fields->begin() + row );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-        m_itemsGrid->ProcessTableMessage( msg );
-
-        if( m_itemsGrid->GetNumberRows() > 0 )
-        {
-            m_itemsGrid->MakeCellVisible( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
-            m_itemsGrid->SetGridCursor( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
-        }
-    }
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_itemsGrid->ProcessTableMessage( msg );
+            } );
 
     OnModify();
 }
@@ -836,30 +808,17 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event )
 {
-    if( !m_privateLayersGrid->CommitPendingChanges() )
-        return;
+    m_privateLayersGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_privateLayers->erase( m_privateLayers->begin() + row );
 
-    int curRow = m_privateLayersGrid->GetGridCursorRow();
+                // notify the grid
+                wxGridTableMessage msg( m_privateLayers, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_privateLayersGrid->ProcessTableMessage( msg );
 
-    if( curRow < 0 )
-        return;
-
-    m_privateLayersGrid->ClearSelection();
-    m_privateLayers->erase( m_privateLayers->begin() + curRow );
-
-    // notify the grid
-    wxGridTableMessage msg( m_privateLayers, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
-    m_privateLayersGrid->ProcessTableMessage( msg );
-
-    if( m_privateLayersGrid->GetNumberRows() > 0 )
-    {
-        m_privateLayersGrid->MakeCellVisible( std::max( 0, curRow-1 ),
-                                              m_privateLayersGrid->GetGridCursorCol() );
-        m_privateLayersGrid->SetGridCursor( std::max( 0, curRow-1 ),
-                                            m_privateLayersGrid->GetGridCursorCol() );
-    }
-
-    OnModify();
+                OnModify();
+            } );
 }
 
 
@@ -907,25 +866,11 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onAddGroup( WX_GRID* aGrid )
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onRemoveGroup( WX_GRID* aGrid )
 {
-    if( !aGrid->CommitPendingChanges() )
-        return;
-
-    wxArrayInt selectedRows = aGrid->GetSelectedRows();
-    int        curRow = aGrid->GetGridCursorRow();
-
-    if( selectedRows.empty() && curRow >= 0 && curRow < aGrid->GetNumberRows() )
-        selectedRows.Add( curRow );
-
-    for( int ii = (int) selectedRows.Count() - 1; ii >= 0; --ii )
-    {
-        int row = selectedRows.Item( ii );
-        aGrid->DeleteRows( row, 1 );
-        curRow = std::min( curRow, row );
-    }
-
-    curRow = std::max( 0, curRow - 1 );
-    aGrid->MakeCellVisible( curRow, aGrid->GetGridCursorCol() );
-    aGrid->SetGridCursor( curRow, aGrid->GetGridCursorCol() );
+    aGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                aGrid->DeleteRows( row, 1 );
+            } );
 
     OnModify();
 }

@@ -42,8 +42,7 @@
 #include <sch_commit.h>
 
 
-DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                  SCH_LABEL_BASE* aLabel,
+DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel,
                                                   bool aNew ) :
         DIALOG_LABEL_PROPERTIES_BASE( aParent ),
         m_Parent( aParent ),
@@ -219,8 +218,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
         m_formattingGB->Detach( m_fontCtrl );
         m_formattingGB->Detach( m_iconBar );
-        m_formattingGB->Add( m_iconBar, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ),
-                             wxEXPAND | wxRIGHT, 5 );
+        m_formattingGB->Add( m_iconBar, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND | wxRIGHT, 5 );
     }
     else
     {
@@ -438,7 +436,9 @@ void DIALOG_LABEL_PROPERTIES::OnCBValueCharHook( wxKeyEvent& aEvent )
     // the key event because the default action is to show the m_valueCombo dropdown list,
     // and we only want to accept the entered string.
     if( aEvent.GetKeyCode() == WXK_RETURN )
+    {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+    }
     else if( aEvent.GetKeyCode() == WXK_SPACE )
     {
         // our FILTER_COMBOBOX uses the space as special command, not wanted here,
@@ -448,7 +448,9 @@ void DIALOG_LABEL_PROPERTIES::OnCBValueCharHook( wxKeyEvent& aEvent )
         m_activeTextEntry->WriteText( wxT(" " ) );
     }
     else
+    {
         aEvent.Skip();
+    }
 }
 
 
@@ -555,8 +557,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         {
             if( field.IsVisible() != m_Parent->Schematic().Settings().m_IntersheetRefsShow )
             {
-                DisplayInfoMessage( this, _( "Intersheet reference visibility is "
-                                             "controlled globally from "
+                DisplayInfoMessage( this, _( "Intersheet reference visibility is controlled globally from "
                                              "Schematic Setup > General > Formatting" ) );
             }
 
@@ -637,15 +638,13 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     if( m_fontCtrl->HaveFontSelection() )
     {
-        m_currentLabel->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                               m_italic->IsChecked() ) );
+        m_currentLabel->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
     }
 
     if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
         static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetIntValue() );
     else if( m_currentLabel->GetTextWidth() != m_textSize.GetIntValue() )
-        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetIntValue(),
-                                               m_textSize.GetIntValue() ) );
+        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
     // Must come after SetTextSize()
     m_currentLabel->SetBold( m_bold->IsChecked() );
@@ -671,11 +670,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         m_currentLabel->SetAutoRotateOnPlacement( false );
     }
 
-    if( !m_currentLabel->AutoRotateOnPlacement()
-        && m_currentLabel->GetSpinStyle() != selectedSpinStyle )
-    {
+    if( !m_currentLabel->AutoRotateOnPlacement() && m_currentLabel->GetSpinStyle() != selectedSpinStyle )
         m_currentLabel->SetSpinStyle( selectedSpinStyle );
-    }
 
     AUTOPLACE_ALGO fieldsAutoplaced = m_currentLabel->GetFieldsAutoplaced();
 
@@ -733,8 +729,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     }
     else if( m_labelList && m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
     {
-        SCH_DIRECTIVE_LABEL* label =
-                new SCH_DIRECTIVE_LABEL( *static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel ) );
+        SCH_DIRECTIVE_LABEL* label = new SCH_DIRECTIVE_LABEL( *static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel ) );
         m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
     }
 
@@ -806,47 +801,25 @@ void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_LABEL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < m_currentLabel->GetMandatoryFieldCount() )
+                {
+                    DisplayError( this, _( "The first field is mandatory." ) );
+                    return false;
+                }
 
-    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_grid->GetGridCursorRow() );
+                return true;
+            },
+            [&]( int row )
+            {
+                m_fields->erase( m_fields->begin() + row );
 
-    if( selectedRows.empty() )
-        return;
-
-    for( int row : selectedRows )
-    {
-        if( row < m_currentLabel->GetMandatoryFieldCount() )
-        {
-            DisplayError( this, _( "The first field is mandatory." ) );
-            return;
-        }
-    }
-
-    m_grid->CommitPendingChanges( true /* quiet mode */ );
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second )
-                       {
-                           return *second - *first;
-                       } );
-
-    for( int row : selectedRows )
-    {
-        //avoids an assert if we deselect early here
-        m_grid->ClearSelection();
-        m_fields->erase( m_fields->begin() + row );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-        m_grid->ProcessTableMessage( msg );
-
-        if( m_grid->GetNumberRows() > 0 )
-        {
-            m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-            m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-        }
-    }
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+                m_grid->ProcessTableMessage( msg );
+            } );
 }
 
 

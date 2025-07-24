@@ -759,35 +759,12 @@ void PANEL_JOBSET::OnAddJobClick( wxCommandEvent& aEvent )
 
 void PANEL_JOBSET::OnJobButtonDelete( wxCommandEvent& aEvent )
 {
-    if( !m_jobsGrid->CommitPendingChanges() )
-        return;
-
-    wxArrayInt selectedRows = m_jobsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() )
-        return;
-
-    m_jobsGrid->CommitPendingChanges( true /* quiet mode */ );
-    m_jobsGrid->ClearSelection();
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second )
-                       {
-                           return *second - *first;
-                       } );
-
-    int select = selectedRows[0];
-
-    for( int row : selectedRows )
-        m_jobsFile->RemoveJob( row );
-
-    rebuildJobList();
-
-    if( m_jobsGrid->GetNumberRows() )
-    {
-        m_jobsGrid->MakeCellVisible( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
-        m_jobsGrid->SetGridCursor( std::max( 0, select-1 ), m_jobsGrid->GetGridCursorCol() );
-    }
+    m_jobsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_jobsFile->RemoveJob( row );
+                m_jobsGrid->DeleteRows( row, 1 );
+            } );
 }
 
 

@@ -37,7 +37,7 @@
 #include <wx/hyperlink.h>
 #include <symbol_preview_widget.h>
 
-class ALT_PIN_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_PIN::ALT>
+class ALT_PIN_DATA_MODEL : public WX_GRID_TABLE_BASE, public std::vector<SCH_PIN::ALT>
 {
 public:
     ALT_PIN_DATA_MODEL( EDA_UNITS aUserUnits )
@@ -213,6 +213,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
                                                          {
                                                              OnAddAlternate( aEvent );
                                                          } ) );
+    m_alternatesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     if( aPin->GetParentSymbol()->HasAlternateBodyStyle() )
     {
@@ -452,24 +453,11 @@ void DIALOG_PIN_PROPERTIES::OnAddAlternate( wxCommandEvent& event )
 
 void DIALOG_PIN_PROPERTIES::OnDeleteAlternate( wxCommandEvent& event )
 {
-    if( !m_alternatesGrid->CommitPendingChanges() )
-        return;
-
-    if( m_alternatesDataModel->size() == 0 )   // empty table
-        return;
-
-    int curRow = m_alternatesGrid->GetGridCursorRow();
-
-    if( curRow < 0 )
-        return;
-
-    // move the selection first because wx internally will try to reselect the row we deleted in
-    // out of order events
-    int nextSelRow = std::max( curRow-1, 0 );
-    m_alternatesGrid->GoToCell( nextSelRow, m_alternatesGrid->GetGridCursorCol() );
-    m_alternatesGrid->SetGridCursor( nextSelRow, m_alternatesGrid->GetGridCursorCol() );
-
-    m_alternatesDataModel->RemoveRow( curRow );
+    m_alternatesGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_alternatesDataModel->RemoveRow( row );
+            } );
 }
 
 

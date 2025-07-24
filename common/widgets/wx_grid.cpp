@@ -694,6 +694,57 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
 }
 
 
+void WX_GRID::OnDeleteRows( const std::function<void( int row )>& aDeleter )
+{
+    OnDeleteRows(
+            []( int row )
+            {
+                return true;
+            },
+            aDeleter );
+}
+
+
+void WX_GRID::OnDeleteRows( const std::function<bool( int row )>& aFilter,
+                            const std::function<void( int row )>& aDeleter )
+{
+    wxArrayInt selectedRows = GetSelectedRows();
+
+    if( selectedRows.empty() && GetGridCursorRow() >= 0 )
+        selectedRows.push_back( GetGridCursorRow() );
+
+    if( selectedRows.empty() )
+        return;
+
+    for( int row : selectedRows )
+    {
+        if( !aFilter( row ) )
+            return;
+    }
+
+    if( !CommitPendingChanges() )
+        return;
+
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort(
+            []( int* first, int* second )
+            {
+                return *second - *first;
+            } );
+
+    int nextSelRow = selectedRows.back() - 1;
+
+    if( nextSelRow >= 0 )
+    {
+        GoToCell( nextSelRow, GetGridCursorCol() );
+        SetGridCursor( nextSelRow, GetGridCursorCol() );
+    }
+
+    for( int row : selectedRows )
+        aDeleter( row );
+}
+
+
 void WX_GRID::SetUnitsProvider( UNITS_PROVIDER* aProvider, int aCol )
 {
     m_unitsProviders[ aCol ] = aProvider;

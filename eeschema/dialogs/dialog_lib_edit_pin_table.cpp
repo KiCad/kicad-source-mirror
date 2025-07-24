@@ -367,7 +367,7 @@ void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
 }
 
 
-class PIN_TABLE_DATA_MODEL : public wxGridTableBase
+class PIN_TABLE_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
 public:
     PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame,
@@ -819,7 +819,7 @@ public:
 
         m_rows.erase( m_rows.begin() + aRow );
 
-        if ( GetView() )
+        if( GetView() )
         {
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow, 1 );
             GetView()->ProcessTableMessage( msg );
@@ -1056,6 +1056,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
                                                        {
                                                            OnAddRow( aEvent );
                                                        } ) );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to the user's preference
     if( SYMBOL_EDITOR_SETTINGS* cfg = parent->GetSettings() )
@@ -1180,8 +1181,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_modified = false;
 
     // Connect Events
-    m_grid->Connect( wxEVT_GRID_COL_SORT,
-                     wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr,
+                     this );
 }
 
 
@@ -1191,8 +1192,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
         cfg->m_PinTableVisibleColumns = m_grid->GetShownColumnsAsString();
 
     // Disconnect Events
-    m_grid->Disconnect( wxEVT_GRID_COL_SORT,
-                        wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
+    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr,
+                        this );
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_dataModel );
@@ -1334,29 +1335,14 @@ void DIALOG_LIB_EDIT_PIN_TABLE::AddPin( SCH_PIN* pin )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 {
-    // TODO: handle delete of multiple rows....
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                std::vector<SCH_PIN*> removedRow = m_dataModel->RemoveRow( row );
 
-    if( m_pins.size() == 0 )   // empty table
-        return;
-
-    int curRow = m_grid->GetGridCursorRow();
-
-    if( curRow < 0 )
-        return;
-
-    // move the selection first because wx internally will try to reselect the row we deleted in
-    // out of order events
-    int nextSelRow = std::max( curRow-1, 0 );
-    m_grid->GoToCell( nextSelRow, m_grid->GetGridCursorCol() );
-    m_grid->SetGridCursor( nextSelRow, m_grid->GetGridCursorCol() );
-    m_grid->SelectRow( nextSelRow );
-
-    std::vector<SCH_PIN*> removedRow = m_dataModel->RemoveRow( curRow );
-
-    for( SCH_PIN* pin : removedRow )
-        m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
+                for( SCH_PIN* pin : removedRow )
+                    m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
+            } );
 
     updateSummary();
 }
@@ -1446,9 +1432,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
         if( event.IsChecked() )
         {
             if( m_unitFilter->GetSelection() == -1 )
-            {
                 m_unitFilter->SetSelection( 0 );
-            }
 
             m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
         }
@@ -1463,9 +1447,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
         if( event.IsChecked() )
         {
             if( m_bodyStyleFilter->GetSelection() == -1 )
-            {
                 m_bodyStyleFilter->SetSelection( 0 );
-            }
 
             m_dataModel->SetBodyStyleFilter( m_bodyStyleFilter->GetSelection() );
         }
@@ -1521,22 +1503,19 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
     }
 
     if( !newPins.size() )
-    {
         return;
-    }
 
     if( replaceAll )
     {
         // This is quite a dance with a segfault without smart pointers
         for( SCH_PIN* pin : m_pins )
             delete pin;
+
         m_pins.clear();
     }
 
     for( auto& newPin : newPins )
-    {
         m_pins.push_back( newPin.release() );
-    }
 
     m_cbGroup->SetValue( false );
     m_dataModel->RebuildRows( m_pins, false, false );
@@ -1572,16 +1551,13 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnExportButtonClick( wxCommandEvent& event )
         for( int i = 0; i < m_dataModel->GetNumberRows(); ++i )
         {
             for( SCH_PIN* pin : m_dataModel->GetRowPins( i ) )
-            {
                 pinsToExport.push_back( pin );
-            }
         }
     }
     else
     {
         pinsToExport = m_pins;
     }
-
 
     PIN_TABLE_EXPORT exporter( *m_editFrame );
     exporter.ExportData( pinsToExport, filePath );
@@ -1704,8 +1680,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
         EndQuasiModal( retval );
     else
         EndDialog( retval );
-
-    return;
 }
 
 

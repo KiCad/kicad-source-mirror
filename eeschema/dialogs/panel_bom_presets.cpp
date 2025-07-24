@@ -82,27 +82,23 @@ void PANEL_BOM_PRESETS::BuildGrid()
 
 void PANEL_BOM_PRESETS::OnDeleteBomPreset( wxCommandEvent& event )
 {
-    int curRow = m_bomPresetsGrid->GetGridCursorRow();
-
-    if( curRow < 0 || m_bomPresetsGrid->GetNumberRows() <= curRow )
-        return;
-
-    m_bomPresetsGrid->DeleteRows( curRow, 1 );
-    m_bomPresets.erase( m_bomPresets.begin() + curRow );
+    m_bomPresetsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_bomPresetsGrid->DeleteRows( row, 1 );
+                m_bomPresets.erase( m_bomPresets.begin() + row );
+            } );
 }
 
 
 void PANEL_BOM_PRESETS::OnDeleteBomFmtPreset( wxCommandEvent& event )
 {
-    int curRow = m_bomFmtPresetsGrid->GetGridCursorRow();
-
-    if( curRow < 0 || m_bomFmtPresetsGrid->GetNumberRows() <= curRow )
-        return;
-
-    m_bomFmtPresetsGrid->DeleteRows( curRow, 1 );
-
-    // Erase the bom preset from the bom presets list.
-    m_bomFmtPresets.erase( m_bomFmtPresets.begin() + curRow );
+    m_bomFmtPresetsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_bomFmtPresetsGrid->DeleteRows( row, 1 );
+                m_bomFmtPresets.erase( m_bomFmtPresets.begin() + row );
+            } );
 }
 
 

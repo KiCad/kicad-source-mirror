@@ -119,6 +119,15 @@ public:
     bool CancelPendingChanges();
 
     /**
+     * Handles a row deletion event.  This is a bit tricky due to the potential for stale
+     * selections, so we code it only once here.
+     */
+    void OnDeleteRows( const std::function<void( int row )>& aDeleter );
+
+    void OnDeleteRows( const std::function<bool( int row )>& aFilter,
+                       const std::function<void( int row )>& aDeleter );
+
+    /**
      * Set a EUNITS_PROVIDER to enable use of unit- and eval-based Getters.
      *
      * @param aProvider

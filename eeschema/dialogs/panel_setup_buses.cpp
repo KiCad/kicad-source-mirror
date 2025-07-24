@@ -204,25 +204,18 @@ void PANEL_SETUP_BUSES::OnDeleteAlias( wxCommandEvent& aEvent )
     if( !m_aliasesGrid->CommitPendingChanges() || !m_membersGrid->CommitPendingChanges() )
         return;
 
-    int curRow = m_aliasesGrid->GetGridCursorRow();
+    m_aliasesGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                // Clear the members grid first so we don't try to write it back to a deleted alias
+               m_membersGrid->ClearRows();
+               m_lastAlias = -1;
+               m_lastAliasName = wxEmptyString;
 
-    if( curRow < 0 )
-        return;
+               m_aliases.erase( m_aliases.begin() + row );
 
-    // Clear the members grid first so we don't try to write it back to a deleted alias
-    m_membersGrid->ClearRows();
-    m_lastAlias = -1;
-    m_lastAliasName = wxEmptyString;
-
-    m_aliases.erase( m_aliases.begin() + curRow );
-
-    m_aliasesGrid->DeleteRows( curRow, 1 );
-
-    if( m_aliasesGrid->GetNumberRows() > 0 )
-    {
-        m_aliasesGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_aliasesGrid->SelectRow( std::max( 0, curRow-1 ) );
-    }
+               m_aliasesGrid->DeleteRows( row, 1 );
+            } );
 }
 
 

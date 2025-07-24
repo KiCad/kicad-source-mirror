@@ -115,32 +115,12 @@ void PANEL_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
 
 void PANEL_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_grid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort(
-            []( int* first, int* second )
+    m_grid->OnDeleteRows(
+            [&]( int row )
             {
-                return *second - *first;
+                m_fields.erase( m_fields.begin() + row );
+                m_grid->DeleteRows( row );
             } );
-
-    for( int row : selectedRows )
-    {
-        m_fields.erase( m_fields.begin() + row );
-        m_grid->DeleteRows( row );
-
-        m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-        m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
-    }
 }
 
 
