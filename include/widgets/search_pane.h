@@ -81,6 +81,8 @@ public:
     void FocusSearch();
     void ClearAllResults();
 
+    void OnCharHook( wxKeyEvent& aEvent );
+
 protected:
     void             OnLanguageChange( wxCommandEvent& aEvent );
     SEARCH_PANE_TAB* GetCurrentTab() const;

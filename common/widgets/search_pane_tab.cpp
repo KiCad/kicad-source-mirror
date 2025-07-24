@@ -150,42 +150,111 @@ void SEARCH_PANE_LISTVIEW::OnColClicked( wxListEvent& aEvent )
 
 void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
 {
-    if( aEvent.GetKeyCode() == WXK_CONTROL_A )
+    bool handled = false;
+
+    switch( aEvent.GetKeyCode() )
     {
-        // Select All
-        for( int row = 0; row < GetItemCount(); row++ )
-            SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-    }
-    else if( aEvent.GetKeyCode() == WXK_CONTROL_C )
-    {
-        // Copy to clipboard the selected rows
-        if( wxTheClipboard->Open() )
+        case WXK_CONTROL_A:
         {
-            wxString txt;
-
+            // Select All
             for( int row = 0; row < GetItemCount(); row++ )
+                SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+
+            handled = true;
+            break;
+        }
+
+        case WXK_CONTROL_C:
+        {
+            // Copy to clipboard the selected rows
+            if( wxTheClipboard->Open() )
             {
-                if( GetItemState( row, wxLIST_STATE_SELECTED ) == wxLIST_STATE_SELECTED )
+                wxString txt;
+
+                for( int row = 0; row < GetItemCount(); row++ )
                 {
-                    for( int col = 0; col < GetColumnCount(); col++ )
+                    if( GetItemState( row, wxLIST_STATE_SELECTED ) == wxLIST_STATE_SELECTED )
                     {
-                        if( GetColumnWidth( col ) > 0 )
+                        for( int col = 0; col < GetColumnCount(); col++ )
                         {
-                            txt += GetItemText( row, col );
+                            if( GetColumnWidth( col ) > 0 )
+                            {
+                                txt += GetItemText( row, col );
 
-                            if( row <= GetItemCount() - 1 )
-                                txt += wxT( "\t" );
+                                if( row <= GetItemCount() - 1 )
+                                    txt += wxT( "\t" );
+                            }
                         }
-                    }
 
-                    txt += wxT( "\n" );
+                        txt += wxT( "\n" );
+                    }
                 }
+
+                wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+                wxTheClipboard->Close();
             }
 
-            wxTheClipboard->SetData( new wxTextDataObject( txt ) );
-            wxTheClipboard->Close();
+            handled = true;
+            break;
+        }
+
+        case WXK_DOWN:
+        case WXK_NUMPAD_DOWN:
+        {
+            // Move selection down
+            long focused = GetFocusedItem();
+            if( focused < 0 )
+                focused = 0;
+
+            if( focused < GetItemCount() - 1 )
+            {
+                if( !(aEvent.GetModifiers() & wxMOD_SHIFT) )
+                {
+                    int next = -1;
+
+                    while( ( next = GetNextSelected( next ) ) != wxNOT_FOUND )
+                        Select( next, false );
+                }
+
+                ++focused;
+                Focus( focused );
+                Select( focused );
+            }
+
+            handled = true;
+            break;
+        }
+        case WXK_UP:
+        case WXK_NUMPAD_UP:
+        {
+            // Move selection up
+            long focused = GetFocusedItem();
+
+            if( focused < 0 )
+                focused = 0;
+
+            if( focused > 0 )
+            {
+                if( !(aEvent.GetModifiers() & wxMOD_SHIFT) )
+                {
+                    int next = -1;
+
+                    while( ( next = GetNextSelected( next ) ) != wxNOT_FOUND )
+                        Select( next, false );
+                }
+
+                --focused;
+                Focus( focused );
+                Select( focused );
+            }
+
+            handled = true;
+            break;
         }
     }
+
+    if( !handled )
+        aEvent.Skip();
 }
 
 
