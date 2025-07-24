@@ -313,6 +313,15 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     aItem->m_viewPrivData->m_cachedIndex = m_allItems->size();
 
     std::vector<int> layers = aItem->ViewGetLayers();
+
+    std::erase_if( layers, []( int layer )
+    {
+        return layer < 0 || layer >= VIEW_MAX_LAYERS;
+    } );
+
+    if( layers.empty() )
+        return;
+
     aItem->viewPrivData()->saveLayers( layers );
 
     m_allItems->push_back( aItem );
