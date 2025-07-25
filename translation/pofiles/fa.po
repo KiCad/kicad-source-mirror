@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-24 17:02+0000\n"
+"PO-Revision-Date: 2025-07-25 21:08+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -2390,51 +2390,52 @@ msgstr "مجوز"
 #: common/dialog_about/dialog_about.cpp:257
 msgid "Could not open clipboard to write version information."
 msgstr ""
+"امکان دسترسی به کلیپ بورد (Clipboard) برای نوشتن اطلاعات نسخه وجود ندارد."
 
 #: common/dialog_about/dialog_about.cpp:258
 msgid "Clipboard Error"
-msgstr ""
+msgstr "خطای کلیپ بورد (Clipboard)"
 
 #: common/dialog_about/dialog_about.cpp:267
 msgid "Copied..."
-msgstr ""
+msgstr "کپی شد ..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "عنوان برنامه"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Build Version Info"
-msgstr ""
+msgstr "اطلاعات نسخه ساخت"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Lib Version Info"
-msgstr ""
+msgstr "اطلاعات نسخه کتابخانه"
 
 #: common/dialog_about/dialog_about_base.cpp:54
 msgid "&Copy Version Info"
-msgstr ""
+msgstr "&کپی اطلاعات نسخه"
 
 #: common/dialog_about/dialog_about_base.cpp:55
 msgid "Copy KiCad version info to the clipboard"
-msgstr ""
+msgstr "کپی اطلاعات نسخه KiCad به کلیپ بورد (Clipboard)"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "&Report Bug"
-msgstr ""
+msgstr "&گزارش اشکال"
 
 #: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1396
 msgid "Report a problem with KiCad"
-msgstr ""
+msgstr "گزارش یک مشکل در KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1389
 msgid "Donate"
-msgstr ""
+msgstr "حمایت مالی"
 
 #: common/dialog_about/dialog_about_base.cpp:65
 #: common/tool/common_control.cpp:387
 msgid "Donate to KiCad"
-msgstr ""
+msgstr "حمایت مالی از KiCad"
 
 #: common/dialog_shim.cpp:798
 msgid "&Apply"
@@ -2453,29 +2454,31 @@ msgstr "گزارش"
 
 #: common/dialogs/dialog_assign_netclass.cpp:95
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>اتصالات مطابق فعلی:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
 msgid "Pattern:"
-msgstr ""
+msgstr "الگو:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 msgid "Net class:"
-msgstr ""
+msgstr "گروه اتصال (Net Class):"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"توجه: انتساب کامل گروه های اتصال (Net Class) را می توان در مسیر تنظیمات "
+"شماتیک (Schematic) > پروژه ویرایش کرد."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
-msgstr ""
+msgstr "افزودن گروه اتصال ‭(Net Class)"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
-msgstr ""
+msgstr "پاک کردن رنگ"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2495,60 +2498,60 @@ msgstr "آبی:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:77
 msgid "HSV"
-msgstr ""
+msgstr "رنگ، اشباع، روشنایی (HSV)"
 
 #: common/dialogs/dialog_color_picker_base.cpp:94
 msgid "Hue:"
-msgstr ""
+msgstr "تن رنگ (Hue):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:98
 msgid "Saturation:"
-msgstr ""
+msgstr "اشباع رنگ:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:117
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:113
 msgid "Value:"
-msgstr ""
+msgstr "مقدار:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:95
 msgid "Color Picker"
-msgstr ""
+msgstr "ابزار انتخاب رنگ"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr ""
+msgstr "رنگ های تعریف شده"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr ""
+msgstr "میزان شفافیت:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:179
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "پیش نمایش (قدیمی/جدید):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:201
 msgid "Reset to Default"
-msgstr ""
+msgstr "بازنشانی به حالت پیش فرض"
 
 #: common/dialogs/dialog_configure_paths.cpp:202
 #: common/dialogs/dialog_configure_paths.cpp:260
 msgid "Environment variable name cannot be empty."
-msgstr ""
+msgstr "نام متغیر محیطی نمی تواند خالی باشد."
 
 #: common/dialogs/dialog_configure_paths.cpp:210
 #: common/dialogs/dialog_configure_paths.cpp:262
 msgid "Environment variable path cannot be empty."
-msgstr ""
+msgstr "مسیر متغیر محیطی نمی تواند خالی باشد."
 
 #: common/dialogs/dialog_configure_paths.cpp:267
 msgid "3D search path alias cannot be empty."
-msgstr ""
+msgstr "شناسه مسیر جستجوی مدل سه بعدی نمی تواند خالی باشد."
 
 #: common/dialogs/dialog_configure_paths.cpp:269
 msgid "3D search path cannot be empty."
-msgstr ""
+msgstr "مسیر جستجوی مدل سه بعدی نباید خالی باشد."
 
 #: common/dialogs/dialog_configure_paths.cpp:284
 msgid ""
