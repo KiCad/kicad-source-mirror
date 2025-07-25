@@ -1788,6 +1788,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     {
         GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
         guide.SetIgnoreZoneFills( false );
+        guide.SetIgnoreNoNets( true );
 
         PCB_LAYER_ID activeLayer = static_cast<PCB_LAYER_ID>( view()->GetTopLayer() );
         guide.SetPreferredLayer( activeLayer );

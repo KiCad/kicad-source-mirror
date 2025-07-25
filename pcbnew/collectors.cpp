@@ -26,6 +26,7 @@
 #include <board_item.h>             // class BOARD_ITEM
 
 #include <footprint.h>
+#include <netinfo.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
@@ -156,6 +157,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     PCB_FIELD*          field       = nullptr;
     PCB_TEXT*           text        = nullptr;
     PCB_DIMENSION_BASE* dimension   = nullptr;
+    PCB_SHAPE*          shape       = nullptr;
 
     switch( aTestItem->Type() )
     {
@@ -194,13 +196,28 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
 
     case PCB_ZONE_T:
         zone = static_cast<ZONE*>( aTestItem );
+
+        if( m_Guide->IgnoreNoNets() && zone->GetNetCode() == NETINFO_LIST::UNCONNECTED )
+            return INSPECT_RESULT::CONTINUE;
+
         boardItem = zone;
         break;
 
-    case PCB_TEXTBOX_T:
     case PCB_SHAPE_T:
+        shape = static_cast<PCB_SHAPE*>( aTestItem );
+
+        if( m_Guide->IgnoreNoNets() && shape->GetNetCode() == NETINFO_LIST::UNCONNECTED )
+            return INSPECT_RESULT::CONTINUE;
+
+        boardItem = shape;
+        break;
+
+    case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TABLECELL_T:
+        if( m_Guide->IgnoreNoNets() )
+            return INSPECT_RESULT::CONTINUE;
+
         boardItem = static_cast<BOARD_ITEM*>( aTestItem );
         break;
 
@@ -209,15 +226,24 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
+        if( m_Guide->IgnoreNoNets() )
+            return INSPECT_RESULT::CONTINUE;
+
         dimension = static_cast<PCB_DIMENSION_BASE*>( aTestItem );
         boardItem = dimension;
         break;
 
     case PCB_TARGET_T:
+        if( m_Guide->IgnoreNoNets() )
+            return INSPECT_RESULT::CONTINUE;
+
         boardItem = static_cast<BOARD_ITEM*>( aTestItem );
         break;
 
     case PCB_FIELD_T:
+        if( m_Guide->IgnoreNoNets() )
+            return INSPECT_RESULT::CONTINUE;
+
         field = static_cast<PCB_FIELD*>( aTestItem );
 
         if( !field->IsVisible() )
@@ -232,6 +258,9 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         KI_FALLTHROUGH;
 
     case PCB_TEXT_T:
+        if( m_Guide->IgnoreNoNets() )
+            return INSPECT_RESULT::CONTINUE;
+
         text = static_cast<PCB_TEXT*>( aTestItem );
         boardItem = text;
 
