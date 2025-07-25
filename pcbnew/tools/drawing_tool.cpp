@@ -3844,6 +3844,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( ZONE* z : m_board->Zones() )
             {
+                if( z->GetIsRuleArea() )
+                    continue; // ignore rule areas
+
                 for( PCB_LAYER_ID layer : lset.Seq() )
                 {
                     if( z->IsOnLayer( layer ) )

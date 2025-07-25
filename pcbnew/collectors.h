@@ -155,6 +155,11 @@ public:
      */
     virtual bool IgnoreZoneFills() const = 0;
 
+    /**
+     * @return true if should ignore items with no net.
+     */
+    virtual bool IgnoreNoNets() const = 0;
+
     virtual int Accuracy() const = 0;
 
     virtual double OnePixelInIU() const = 0;
@@ -359,6 +364,7 @@ public:
         m_ignoreMicroVias           = false;
         m_ignoreTracks              = false;
         m_ignoreZoneFills           = true;
+        m_ignoreNoNets              = false;
 
         m_onePixelInIU = abs( aView->ToWorld( one, false ).x );
         m_accuracy = KiROUND( 5 * m_onePixelInIU );
@@ -466,6 +472,9 @@ public:
     bool IgnoreZoneFills() const override { return m_ignoreZoneFills; }
     void SetIgnoreZoneFills( bool ignore ) { m_ignoreZoneFills = ignore; }
 
+    bool IgnoreNoNets() const override { return m_ignoreNoNets; }
+    void SetIgnoreNoNets( bool ignore ) { m_ignoreNoNets = ignore; }
+
     int  Accuracy() const override { return m_accuracy; }
     void SetAccuracy( int aValue ) { m_accuracy = aValue; }
 
@@ -496,6 +505,7 @@ private:
     bool    m_ignoreMicroVias;
     bool    m_ignoreTracks;
     bool    m_ignoreZoneFills;
+    bool    m_ignoreNoNets;
 
     double m_onePixelInIU;
     int    m_accuracy;
