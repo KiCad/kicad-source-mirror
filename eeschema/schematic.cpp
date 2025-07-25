@@ -216,6 +216,25 @@ void SCHEMATIC::CacheExistingAnnotation()
 }
 
 
+bool SCHEMATIC::Contains( const SCH_REFERENCE& aRef ) const
+{
+    SCH_SHEET_LIST sheets = Hierarchy();
+    SCH_REFERENCE_LIST references;
+
+    /// TODO(snh): This is horribly inefficient, we should be using refdesTracker for this.
+    /// REFDES_TRACKER will need to be extended to track if a reference is currently present in the schematic
+    /// as well as the units.  For now, this is relatively fast for reasonably sized schematics
+    /// Famous last words...
+    sheets.GetSymbols( references );
+
+    return std::any_of( references.begin(), references.end(),
+                        [&]( const SCH_REFERENCE& ref )
+                        {
+                            return ref.GetFullRef( true ) == aRef.GetFullRef( true );
+                        } );
+}
+
+
 void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 {
     wxCHECK_RET( aRootSheet, wxS( "Call to SetRoot with null SCH_SHEET!" ) );

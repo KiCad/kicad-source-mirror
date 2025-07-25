@@ -39,6 +39,7 @@ class SCH_SCREEN;
 class SCH_SHEET;
 class SCH_SHEET_LIST;
 class SCH_GLOBALLABEL;
+class SCH_REFERENCE;
 class PROGRESS_REPORTER;
 class TOOL_MANAGER;
 class PICKED_ITEMS_LIST;
@@ -431,6 +432,14 @@ public:
      * to track the existing annotations and prevent duplicates.
      */
     void CacheExistingAnnotation();
+
+    /**
+     * Check if the schematic contains the specified reference.
+     *
+     * @param aRef is the reference to check for.
+     * @return true if the schematic contains the reference, false otherwise.
+     */
+    bool Contains( const SCH_REFERENCE& aRef ) const;
 
     /**
      * True if a SCHEMATIC exists, false if not
