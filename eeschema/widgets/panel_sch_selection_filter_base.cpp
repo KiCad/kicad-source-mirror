@@ -28,7 +28,7 @@ PANEL_SCH_SELECTION_FILTER_BASE::PANEL_SCH_SELECTION_FILTER_BASE( wxWindow* pare
 	m_cbLockedItems->Hide();
 	m_cbLockedItems->SetToolTip( _("Allow selection of locked items") );
 
-	m_gridSizer->Add( m_cbLockedItems, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_gridSizer->Add( m_cbLockedItems, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_cbSymbols = new wxCheckBox( this, wxID_ANY, _("Symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbSymbols->SetValue(true);
