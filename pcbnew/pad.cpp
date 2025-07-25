@@ -506,7 +506,7 @@ int PAD::GetFrontRoundRectRadiusSize() const
 
 void PAD::SetChamferRectRatio( PCB_LAYER_ID aLayer, double aChamferScale )
 {
-    m_padStack.SetChamferRatio( std::clamp( aChamferScale, 0.0, 0.5 ), aLayer );
+    m_padStack.SetChamferRatio( aChamferScale, aLayer );
 
     SetDirty();
 }

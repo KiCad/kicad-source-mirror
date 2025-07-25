@@ -468,6 +468,72 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
 }
 
 
+double DIALOG_PAD_PROPERTIES::getMaxChamferRatio() const
+{
+    // The maximum chamfer ratio is 50% of the smallest pad side if adjacent sides
+    // are selected, or 100% of the smallest pad side if only one side is selected.
+    double baseline = 1.0;
+
+    auto considerCheckboxes = [&]( const std::vector<wxCheckBox*>& checkBoxes )
+    {
+        for( size_t ii : { 0, 1, 2, 3 } )
+        {
+            if( !checkBoxes[ii]->IsChecked() )
+                continue;
+
+            if( checkBoxes[( ii + 1 ) % 4]->IsChecked() || checkBoxes[( ii - 1 ) % 4]->IsChecked() )
+            {
+                // If two adjacent corners are selected, the maximum chamfer ratio is 50%
+                baseline = std::max( baseline, 0.5 );
+                break;
+            }
+        }
+    };
+
+
+    baseline = 1.0 - m_previewPad->GetRoundRectRadiusRatio( m_editLayer );
+    considerCheckboxes( { m_cbTopLeft1, m_cbTopRight1, m_cbBottomRight1, m_cbBottomLeft1 } );
+    considerCheckboxes( { m_cbTopLeft, m_cbTopRight, m_cbBottomRight, m_cbBottomLeft } );
+
+    // If only one corner is selected, the maximum chamfer ratio is 100%
+    return baseline;
+}
+
+
+double DIALOG_PAD_PROPERTIES::getMaxCornerRadius() const
+{
+    return 1.0 - m_previewPad->GetChamferRectRatio( m_editLayer );
+}
+
+
+void DIALOG_PAD_PROPERTIES::updateAllowedPadChamferCorners()
+{
+    auto updateCheckBoxes = []( const std::vector<wxCheckBox*>& aCheckBoxes )
+    {
+        for( size_t ii : { 0, 1, 2, 3 } )
+        {
+            bool disable = aCheckBoxes[( ii + 1 ) % 4]->IsChecked()
+                        || aCheckBoxes[( ii + 3 ) % 4]->IsChecked();
+
+            aCheckBoxes[ii]->Enable( !disable );
+
+            if( disable )
+                aCheckBoxes[ii]->SetValue( false );
+        }
+    };
+
+    if( m_mixedChamferRatio.GetDoubleValue() > 50.0 )
+    {
+        updateCheckBoxes( { m_cbTopLeft1, m_cbTopRight1, m_cbBottomRight1, m_cbBottomLeft1 } );
+    }
+
+    if( m_chamferRatio.GetDoubleValue() > 50.0 )
+    {
+        updateCheckBoxes( { m_cbTopLeft, m_cbTopRight, m_cbBottomRight, m_cbBottomLeft } );
+    }
+}
+
+
 void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
 {
     if( m_previewPad->GetShape( m_editLayer ) != PAD_SHAPE::ROUNDRECT
@@ -487,15 +553,17 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         if( value.ToDouble( &ratioPercent ) )
         {
             // Clamp ratioPercent to acceptable value (0.0 to 50.0)
+            double maxRatio = getMaxCornerRadius();
+
             if( ratioPercent < 0.0 )
             {
                 m_cornerRatio.SetDoubleValue( 0.0 );
                 m_mixedCornerRatio.SetDoubleValue( 0.0 );
             }
-            else if( ratioPercent > 50.0 )
+            else if( ratioPercent > maxRatio * 100.0 )
             {
-                m_cornerRatio.SetDoubleValue( 50.0 );
-                m_mixedCornerRatio.SetDoubleValue( 50.0 );
+                m_cornerRatio.SetDoubleValue( maxRatio * 100.0 );
+                m_mixedCornerRatio.SetDoubleValue( maxRatio * 100.0 );
             }
 
             if( ctrl == m_cornerRatioCtrl )
@@ -512,22 +580,25 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
 
         if( value.ToDouble( &ratioPercent ) )
         {
-            // Clamp ratioPercent to acceptable value (0.0 to 50.0)
+            double maxRatio = getMaxChamferRatio();
+            // Clamp ratioPercent to acceptable value (0.0 to maxRatio)
             if( ratioPercent < 0.0 )
             {
                 m_chamferRatio.SetDoubleValue( 0.0 );
                 m_mixedChamferRatio.SetDoubleValue( 0.0 );
             }
-            else if( ratioPercent > 50.0 )
+            else if( ratioPercent > maxRatio * 100.0 )
             {
-                m_chamferRatio.SetDoubleValue( 50.0 );
-                m_mixedChamferRatio.SetDoubleValue( 50.0 );
+                m_chamferRatio.SetDoubleValue( maxRatio * 100.0 );
+                m_mixedChamferRatio.SetDoubleValue( maxRatio * 100.0 );
             }
 
             if( ctrl == m_chamferRatioCtrl )
                 m_mixedChamferRatioCtrl->ChangeValue( value );
             else
                 m_chamferRatioCtrl->ChangeValue( value );
+
+            updateAllowedPadChamferCorners();
 
             changed = true;
         }
@@ -2107,6 +2178,7 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
             return;
 
         // If the pad size has changed, update the displayed values for rounded rect pads.
+        updateAllowedPadChamferCorners();
         updateRoundRectCornerValues();
 
         redraw();

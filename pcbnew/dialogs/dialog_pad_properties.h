@@ -125,6 +125,14 @@ private:
     void onModify( wxCommandEvent& aEvent ) override;
     void onModify( wxSpinDoubleEvent& aEvent ) override;
 
+    // Return the largest chamfer ratio allowed by the current pad shape
+    double getMaxChamferRatio() const;
+
+    // Return the largest corner radius allowed by the current pad shape
+    double getMaxCornerRadius() const;
+
+    void updateAllowedPadChamferCorners();
+
 private:
     PCB_BASE_FRAME* m_parent;
     PAD*            m_currentPad;       // pad currently being edited
