@@ -46,6 +46,7 @@ class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbHaltOutput;
 		wxCheckBox* m_cbAllTrackViolations;
 		wxCheckBox* m_cbSchParity;
+		wxCheckBox* m_cbRefillZones;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -56,7 +57,7 @@ class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 443,239 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 443,255 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_RC_JOB_BASE();
 

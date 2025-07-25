@@ -81,6 +81,12 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizerBottom->Add( m_cbSchParity, 0, wxBOTTOM|wxLEFT, 5 );
 
 
+	bSizerBottom->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_cbRefillZones = new wxCheckBox( this, wxID_ANY, _("Refill all zones before performing DRC"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBottom->Add( m_cbRefillZones, 0, wxBOTTOM|wxLEFT, 5 );
+
+
 	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
@@ -95,7 +101,6 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

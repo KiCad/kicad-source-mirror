@@ -50,7 +50,7 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     void CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr );
-    void FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr );
+    void FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr, bool aHeadless = false );
 
     int ZoneFill( const TOOL_EVENT& aEvent );
     int ZoneFillAll( const TOOL_EVENT& aEvent );
@@ -73,7 +73,7 @@ private:
     ///< Refocus on an idle event (used after the Progress Reporter messes up the focus).
     void singleShotRefocus( wxIdleEvent& );
 
-    void rebuildConnectivity();
+    void rebuildConnectivity( bool aHeadless = false );
     void refresh();
 
     ///< Set up handlers for various events.

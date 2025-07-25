@@ -36,6 +36,7 @@ bool DIALOG_DRC_JOB_CONFIG::TransferDataToWindow()
 
     m_cbAllTrackViolations->SetValue( m_drcJob->m_reportAllTrackErrors );
     m_cbSchParity->SetValue( m_drcJob->m_parity );
+    m_cbRefillZones->SetValue( m_drcJob->m_refillZones );
     return true;
 }
 
@@ -47,5 +48,6 @@ bool DIALOG_DRC_JOB_CONFIG::TransferDataFromWindow()
 
     m_drcJob->m_reportAllTrackErrors = m_cbAllTrackViolations->GetValue();
     m_drcJob->m_parity = m_cbSchParity->GetValue();
+    m_drcJob->m_refillZones = m_cbRefillZones->GetValue();
     return true;
 }

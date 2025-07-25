@@ -31,4 +31,6 @@ public:
 
     bool m_reportAllTrackErrors;
     bool m_parity;
+
+    bool m_refillZones;
 };

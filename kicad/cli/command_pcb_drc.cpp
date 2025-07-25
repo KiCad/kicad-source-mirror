@@ -38,6 +38,7 @@
 #define ARG_SEVERITY_EXCLUSIONS "--severity-exclusions"
 #define ARG_EXIT_CODE_VIOLATIONS "--exit-code-violations"
 #define ARG_PARITY "--schematic-parity"
+#define ARG_ZONE_FILL "--refill-zones"
 
 CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 {
@@ -87,6 +88,10 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 
     m_argParser.add_argument( ARG_EXIT_CODE_VIOLATIONS )
             .help( UTF8STDSTR( _( "Return a nonzero exit code if DRC violations exist" ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_ZONE_FILL )
+            .help( UTF8STDSTR( _( "Refill zones before running DRC" ) ) )
             .flag();
 }
 
@@ -163,6 +168,7 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     drcJob->m_parity = m_argParser.get<bool>( ARG_PARITY );
+    drcJob->m_refillZones = m_argParser.get<bool>( ARG_ZONE_FILL );
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, drcJob.get() );
 

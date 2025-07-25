@@ -93,6 +93,7 @@
 #include <dialogs/dialog_render_job.h>
 #include <dialogs/dialog_gencad_export_options.h>
 #include <paths.h>
+#include <tools/zone_filler_tool.h>
 
 #include "pcbnew_scripting_helpers.h"
 #include <locale_io.h>
@@ -2132,6 +2133,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         }
 
         drcEngine->SetSchematicNetlist( netlist.get() );
+    }
+
+    if( drcJob->m_refillZones )
+    {
+        toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+        ZONE_FILLER_TOOL* zoneFiller = toolManager->GetTool<ZONE_FILLER_TOOL>();
+
+        zoneFiller->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     drcEngine->SetProgressReporter( m_progressReporter );

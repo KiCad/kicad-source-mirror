@@ -25,10 +25,13 @@
 JOB_PCB_DRC::JOB_PCB_DRC() :
     JOB_RC( "drc" ),
     m_reportAllTrackErrors( false ),
-    m_parity( true )
+    m_parity( true ),
+    m_refillZones( false )
 {
     m_params.emplace_back( new JOB_PARAM<bool>( "parity", &m_parity, m_parity ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "report_all_track_errors", &m_reportAllTrackErrors, m_reportAllTrackErrors ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "report_all_track_errors", &m_reportAllTrackErrors, m_reportAllTrackErrors ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "refill_zones", &m_refillZones, m_refillZones ) );
 }
 
 
