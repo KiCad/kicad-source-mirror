@@ -53,7 +53,6 @@ public:
     std::vector<std::pair<wxString, wxString>> GetData();
 
 private:
-    void swapRows( int aRowA, int aRowB );
     void selectRow( int aRow );
     void setColumnWidths();
     void addRepository( const wxString& aUrl );

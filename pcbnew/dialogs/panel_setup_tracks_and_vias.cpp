@@ -135,6 +135,9 @@ PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnSortTrackWidthsClick( wxCommandEvent& aEvent )
 {
+    if( m_trackWidthsGrid->GetNumberRows() < 2 )
+        return;
+
     std::vector<int> trackWidths;
     wxString         msg;
 
@@ -161,6 +164,9 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortTrackWidthsClick( wxCommandEvent& aEvent
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
 {
+    if( m_viaSizesGrid->GetNumberRows() < 2 )
+        return;
+
     std::vector<VIA_DIMENSION> vias;
     wxString                   msg;
 
@@ -197,6 +203,9 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnSortDiffPairsClick( wxCommandEvent& aEvent )
 {
+    if( m_diffPairsGrid->GetNumberRows() < 2 )
+        return;
+
     wxString                         msg;
     std::vector<DIFF_PAIR_DIMENSION> diffPairs;
 
@@ -283,12 +292,8 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataToWindow()
 
 bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-        || !m_viaSizesGrid->CommitPendingChanges()
-        || !m_diffPairsGrid->CommitPendingChanges() )
-    {
+    if( !commitPendingChanges() )
         return false;
-    }
 
     std::vector<int>                 trackWidths;
     std::vector<VIA_DIMENSION>       vias;
@@ -353,14 +358,18 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 }
 
 
+bool PANEL_SETUP_TRACKS_AND_VIAS::commitPendingChanges( bool aQuietMode )
+{
+    return m_trackWidthsGrid->CommitPendingChanges( aQuietMode )
+                && m_viaSizesGrid->CommitPendingChanges( aQuietMode )
+                && m_diffPairsGrid->CommitPendingChanges( aQuietMode );
+}
+
+
 bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
+    if( !commitPendingChanges() )
         return false;
-    }
 
     wxString msg;
 
@@ -447,12 +456,8 @@ void removeSelectedRows( WX_GRID* aGrid )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent )
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
+    if( !commitPendingChanges() )
         return;
-    }
 
     AppendTrackWidth( 0 );
 
@@ -472,12 +477,8 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& even
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
+    if( !commitPendingChanges() )
         return;
-    }
 
     AppendViaSize( 0, 0 );
 
@@ -497,12 +498,8 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
 {
-    if( !m_trackWidthsGrid->CommitPendingChanges()
-            || !m_viaSizesGrid->CommitPendingChanges()
-            || !m_diffPairsGrid->CommitPendingChanges() )
-    {
+    if( !commitPendingChanges() )
         return;
-    }
 
     AppendDiffPairs( 0, 0, 0 );
 
@@ -522,9 +519,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::ImportSettingsFrom( BOARD* aBoard )
 {
-    m_trackWidthsGrid->CommitPendingChanges( true );
-    m_viaSizesGrid->CommitPendingChanges( true );
-    m_diffPairsGrid->CommitPendingChanges( true );
+    commitPendingChanges( true );
 
     // Note: do not change the board, as we need to get the current nets from it for
     // netclass memberships.  All the netclass definitions and dimension lists are in

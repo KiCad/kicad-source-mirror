@@ -385,7 +385,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         if( parentName.IsEmpty() )
         {
             m_delayedErrorMessage = _( "Derived symbol must have a parent selected" );
-
             return false;
         }
     }
@@ -701,53 +700,33 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i > m_fields->GetMandatoryRowCount() )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i - 1, tmp );
-        m_grid->ForceRefresh();
-
-        m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-
-        OnModify();
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                return row > m_fields->GetMandatoryRowCount();
+            },
+            [&]( int row )
+            {
+                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row - 1 ) );
+                m_grid->ForceRefresh();
+                OnModify();
+            } );
 }
 
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i >= m_fields->GetMandatoryRowCount() && i + 1 < m_fields->GetNumberRows() )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i + 1, tmp );
-        m_grid->ForceRefresh();
-
-        m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-
-        OnModify();
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowDown(
+            [&]( int row )
+            {
+                return row >= m_fields->GetMandatoryRowCount();
+            },
+            [&]( int row )
+            {
+                    std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row + 1 ) );
+                    m_grid->ForceRefresh();
+                    OnModify();
+            } );
 }
 
 

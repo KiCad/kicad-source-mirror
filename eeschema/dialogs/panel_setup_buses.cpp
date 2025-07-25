@@ -265,28 +265,18 @@ void PANEL_SETUP_BUSES::OnAddMember( wxCommandEvent& aEvent )
 
 void PANEL_SETUP_BUSES::OnRemoveMember( wxCommandEvent& aEvent )
 {
-    if( !m_membersGrid->CommitPendingChanges() )
-        return;
+    m_membersGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_membersGrid->DeleteRows( row, 1 );
 
-    int curRow = m_membersGrid->GetGridCursorRow();
+                // Update the member list of the current bus alias from the members grid
+                const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
+                alias->Members().clear();
 
-    if( curRow < 0 )
-        return;
-
-    m_membersGrid->DeleteRows( curRow, 1 );
-
-    // Update the member list of the current bus alias from the members grid
-    const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
-    alias->Members().clear();
-
-    for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
-        alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
-
-    if( m_membersGrid->GetNumberRows() > 0 )
-    {
-        m_membersGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_membersGrid->SelectRow( std::max( 0, curRow-1 ) );
-    }
+                for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
+                    alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
+            } );
 }
 
 

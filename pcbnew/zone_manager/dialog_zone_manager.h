@@ -47,7 +47,7 @@
 
 class PANEL_ZONE_PROPERTIES;
 class MODEL_ZONES_PRIORITY_LIST;
-class MODEL_ZONES_OVERVIEW_TABLE;
+class MODEL_ZONES_OVERVIEW;
 class MODEL_ZONE_LAYERS_LIST;
 class ZONES_CONTAINER;
 class PANE_ZONE_VIEWER;
@@ -100,7 +100,7 @@ protected:
     void OnRepourCheck( wxCommandEvent& aEvent ) override;
     void OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent ) override;
 
-    void PostProcessZoneViewSelectionChange( wxDataViewItem const& item );
+    void PostProcessZoneViewSelChange( wxDataViewItem const& aItem );
 
     void OnTableChar( wxKeyEvent& event ) override;
     void OnTableCharHook( wxKeyEvent& event ) override;
@@ -113,17 +113,17 @@ private:
     void FitCanvasToScreen();
 
 private:
-    PCB_BASE_FRAME*                             m_pcbFrame;
-    ZONE_SETTINGS*                              m_zoneInfo;
-    std::unique_ptr<ZONES_CONTAINER>            m_zonesContainer;
-    PANEL_ZONE_PROPERTIES*                      m_panelZoneProperties;
-    wxObjectDataPtr<MODEL_ZONES_OVERVIEW_TABLE> m_modelZoneOverviewTable;
-    PANE_ZONE_VIEWER*                           m_zoneViewer;
-    std::optional<unsigned>                     m_priorityDragIndex;
-    std::unique_ptr<ZONE_FILLER>                m_filler;
-    bool                                        m_needZoomGAL;
-    bool                                        m_isFillingZones;
-    bool                                        m_zoneFillComplete;
+    PCB_BASE_FRAME*                       m_pcbFrame;
+    ZONE_SETTINGS*                        m_zoneInfo;
+    std::unique_ptr<ZONES_CONTAINER>      m_zonesContainer;
+    PANEL_ZONE_PROPERTIES*                m_panelZoneProperties;
+    wxObjectDataPtr<MODEL_ZONES_OVERVIEW> m_modelZonesOverview;
+    PANE_ZONE_VIEWER*                     m_zoneViewer;
+    std::optional<unsigned>               m_priorityDragIndex;
+    std::unique_ptr<ZONE_FILLER>          m_filler;
+    bool                                  m_needZoomGAL;
+    bool                                  m_isFillingZones;
+    bool                                  m_zoneFillComplete;
 };
 
 #endif

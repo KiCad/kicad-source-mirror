@@ -760,49 +760,31 @@ void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i > m_fields->GetMandatoryRowCount() )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i - 1, tmp );
-        m_grid->ForceRefresh();
-
-        m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                return row > m_fields->GetMandatoryRowCount();
+            },
+            [&]( int row )
+            {
+                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row - 1 ) );
+                m_grid->ForceRefresh();
+            } );
 }
 
 
 void DIALOG_SHEET_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i >= m_fields->GetMandatoryRowCount() && i < m_grid->GetNumberRows() - 1 )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i + 1, tmp );
-        m_grid->ForceRefresh();
-
-        m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                return row >= m_fields->GetMandatoryRowCount();
+            },
+            [&]( int row )
+            {
+                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row + 1 ) );
+                m_grid->ForceRefresh();
+            } );
 }
 
 

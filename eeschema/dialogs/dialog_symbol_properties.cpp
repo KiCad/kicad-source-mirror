@@ -898,53 +898,33 @@ void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
-
-    int i = m_fieldsGrid->GetGridCursorRow();
-
-    if( i > m_fields->GetMandatoryRowCount() )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i - 1, tmp );
-        m_fieldsGrid->ForceRefresh();
-
-        m_fieldsGrid->SetGridCursor( i - 1, m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
-
-        OnModify();
-    }
-    else
-    {
-        wxBell();
-    }
+    m_fieldsGrid->OnMoveRowUp(
+            [&]( int row )
+            {
+                return row > m_fields->GetMandatoryRowCount();
+            },
+            [&]( int row )
+            {
+                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row - 1 ) );
+                m_fieldsGrid->ForceRefresh();
+                OnModify();
+            } );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
-
-    int i = m_fieldsGrid->GetGridCursorRow();
-
-    if( i >= m_fields->GetMandatoryRowCount() && i < m_fieldsGrid->GetNumberRows() - 1 )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i + 1, tmp );
-        m_fieldsGrid->ForceRefresh();
-
-        m_fieldsGrid->SetGridCursor( i + 1, m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(), m_fieldsGrid->GetGridCursorCol() );
-
-        OnModify();
-    }
-    else
-    {
-        wxBell();
-    }
+    m_fieldsGrid->OnMoveRowDown(
+            [&]( int row )
+            {
+                return row >= m_fields->GetMandatoryRowCount();
+            },
+            [&]( int row )
+            {
+                    std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row + 1 ) );
+                    m_fieldsGrid->ForceRefresh();
+                    OnModify();
+            } );
 }
 
 

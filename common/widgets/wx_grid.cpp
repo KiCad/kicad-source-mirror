@@ -309,8 +309,7 @@ void WX_GRID::EnableAlternateRowColors( bool aEnable )
 {
     wxGridTableBase* table = wxGrid::GetTable();
 
-    wxCHECK_MSG( table, /* void */,
-                 "Tried to enable alternate row colors without a table assigned to the grid" );
+    wxCHECK_MSG( table, /* void */, "Tried to enable alternate row colors without a table assigned to the grid" );
 
     if( aEnable )
     {
@@ -506,18 +505,6 @@ void WX_GRID::ShowHideColumns( const wxString& shownColumns )
 
         if( colNumber >= 0 && colNumber < GetNumberCols() )
             ShowCol( (int) colNumber );
-    }
-}
-
-
-void WX_GRID::ShowHideColumns( const std::bitset<64>& aShownColumns )
-{
-    for( int ii = 0; ii < GetNumberCols(); ++ ii )
-    {
-        if( aShownColumns[ii] )
-            ShowCol( ii );
-        else
-            HideCol( ii );
     }
 }
 
@@ -742,6 +729,83 @@ void WX_GRID::OnDeleteRows( const std::function<bool( int row )>& aFilter,
 
     for( int row : selectedRows )
         aDeleter( row );
+}
+
+
+void WX_GRID::SwapRows( int aRowA, int aRowB )
+{
+    for( int col = 0; col < GetNumberCols(); ++col )
+    {
+        wxString temp = GetCellValue( aRowA, col );
+        SetCellValue( aRowA, col, GetCellValue( aRowB, col ) );
+        SetCellValue( aRowB, col, temp );
+    }
+}
+
+
+void WX_GRID::OnMoveRowUp( const std::function<void( int row )>& aMover )
+{
+    OnMoveRowUp(
+            []( int row )
+            {
+                return true;
+            },
+            aMover );
+}
+
+
+void WX_GRID::OnMoveRowUp( const std::function<bool( int row )>& aFilter,
+                           const std::function<void( int row )>& aMover )
+{
+    if( !CommitPendingChanges() )
+        return;
+
+    int i = GetGridCursorRow();
+
+    if( i > 0 && aFilter( i ) )
+    {
+        aMover( i );
+
+        SetGridCursor( i - 1, GetGridCursorCol() );
+        MakeCellVisible( GetGridCursorRow(), GetGridCursorCol() );
+    }
+    else
+    {
+        wxBell();
+    }
+}
+
+
+void WX_GRID::OnMoveRowDown( const std::function<void( int row )>& aMover )
+{
+    OnMoveRowDown(
+            []( int row )
+            {
+                return true;
+            },
+            aMover );
+}
+
+
+void WX_GRID::OnMoveRowDown( const std::function<bool( int row )>& aFilter,
+                             const std::function<void( int row )>& aMover )
+{
+    if( !CommitPendingChanges() )
+        return;
+
+    int i = GetGridCursorRow();
+
+    if( i + 1 < GetNumberRows() && aFilter( i ) )
+    {
+        aMover( i );
+
+        SetGridCursor( i + 1, GetGridCursorCol() );
+        MakeCellVisible( GetGridCursorRow(), GetGridCursorCol() );
+    }
+    else
+    {
+        wxBell();
+    }
 }
 
 

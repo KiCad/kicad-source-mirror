@@ -302,7 +302,7 @@ set( ZONE_MANAGER_SRCS
     zone_manager/board_edges_bounding_item.cpp
     zone_manager/dialog_zone_manager.cpp
     zone_manager/dialog_zone_manager_base.cpp
-    zone_manager/model_zones_overview_table.cpp
+    zone_manager/model_zones_overview.cpp
     zone_manager/pane_zone_viewer.cpp
     zone_manager/panel_zone_gal.cpp
     zone_manager/panel_zone_properties.cpp

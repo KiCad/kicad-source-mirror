@@ -23,8 +23,7 @@
  */
 
 
-#ifndef MODEL_ZONES_OVERVIEW_TABLE_H
-#define MODEL_ZONES_OVERVIEW_TABLE_H
+#pragma once
 
 #include <memory>
 #include <utility>
@@ -41,6 +40,8 @@ class MANAGED_ZONE;
 
 wxDECLARE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
 
+#define LAYER_BAR_WIDTH 16
+
 
 enum class ZONE_INDEX_MOVEMENT
 {
@@ -49,7 +50,7 @@ enum class ZONE_INDEX_MOVEMENT
 };
 
 
-class MODEL_ZONES_OVERVIEW_TABLE : public wxDataViewVirtualListModel
+class MODEL_ZONES_OVERVIEW : public wxDataViewVirtualListModel
 {
 public:
     enum
@@ -60,13 +61,6 @@ public:
 
         COL_COUNT
     };
-
-    enum WIDTH_SETTING
-    {
-        NAME_WIDTH = 128,
-        LAYER_BAR_WIDTH = 16
-    };
-
 
     static std::map<int, wxString> GetColumnNames()
     {
@@ -79,10 +73,10 @@ public:
         return ColNames;
     }
 
-    MODEL_ZONES_OVERVIEW_TABLE( std::vector<std::shared_ptr<MANAGED_ZONE>> aZones, BOARD* a_pcb,
+    MODEL_ZONES_OVERVIEW( std::vector<std::shared_ptr<MANAGED_ZONE>> aZones, BOARD* a_pcb,
                                 PCB_BASE_FRAME* aPCB_FRAME, wxWindow* a_dialog );
 
-    ~MODEL_ZONES_OVERVIEW_TABLE() override;
+    ~MODEL_ZONES_OVERVIEW() override = default;
 
     void EnableFitterByName( bool aEnable );
 
@@ -146,5 +140,3 @@ private:
     bool                                       m_sortByName;
     bool                                       m_sortByNet;
 };
-
-#endif

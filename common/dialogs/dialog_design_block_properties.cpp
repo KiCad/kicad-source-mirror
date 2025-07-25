@@ -148,47 +148,21 @@ void DIALOG_DESIGN_BLOCK_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
 void DIALOG_DESIGN_BLOCK_PROPERTIES::OnMoveFieldUp( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
-
-    int row = m_fieldsGrid->GetGridCursorRow();
-
-    if( m_fieldsGrid->GetNumberRows() < 2 || row == 0 )
-        return;
-
-    // Swap the grid at row with the grid at row - 1
-    wxString temp0 = m_fieldsGrid->GetCellValue( row, 0 );
-    m_fieldsGrid->SetCellValue( row, 0, m_fieldsGrid->GetCellValue( row - 1, 0 ) );
-    m_fieldsGrid->SetCellValue( row - 1, 0, temp0 );
-
-    wxString temp1 = m_fieldsGrid->GetCellValue( row, 1 );
-    m_fieldsGrid->SetCellValue( row, 1, m_fieldsGrid->GetCellValue( row - 1, 1 ) );
-    m_fieldsGrid->SetCellValue( row - 1, 1, temp1 );
-
-    m_fieldsGrid->SetGridCursor( row - 1, 0 );
+    m_fieldsGrid->OnMoveRowUp(
+            [&]( int row )
+            {
+                m_fieldsGrid->SwapRows( row, row - 1 );
+            } );
 }
 
 
 void DIALOG_DESIGN_BLOCK_PROPERTIES::OnMoveFieldDown( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
-
-    int row = m_fieldsGrid->GetGridCursorRow();
-
-    if( m_fieldsGrid->GetNumberRows() < 2 || row == ( (int) m_fieldsGrid->GetNumberRows() - 1 ) )
-        return;
-
-    // Swap the grid at row with the grid at row + 1
-    wxString temp0 = m_fieldsGrid->GetCellValue( row, 0 );
-    m_fieldsGrid->SetCellValue( row, 0, m_fieldsGrid->GetCellValue( row + 1, 0 ) );
-    m_fieldsGrid->SetCellValue( row + 1, 0, temp0 );
-
-    wxString temp1 = m_fieldsGrid->GetCellValue( row, 1 );
-    m_fieldsGrid->SetCellValue( row, 1, m_fieldsGrid->GetCellValue( row + 1, 1 ) );
-    m_fieldsGrid->SetCellValue( row + 1, 1, temp1 );
-
-    m_fieldsGrid->SetGridCursor( row + 1, 0 );
+    m_fieldsGrid->OnMoveRowUp(
+            [&]( int row )
+            {
+                m_fieldsGrid->SwapRows( row, row + 1 );
+            } );
 }
 
 

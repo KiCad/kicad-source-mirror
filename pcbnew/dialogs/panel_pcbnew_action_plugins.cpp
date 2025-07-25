@@ -67,8 +67,7 @@ void PLUGINS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id ) )
     {
-        menu.Append( MYID_RECREATE_ENV, _( "Recreate Plugin Environment" ),
-                     _( "Recreate Plugin Environment" ) );
+        menu.Append( MYID_RECREATE_ENV, _( "Recreate Plugin Environment" ), _( "Recreate Plugin Environment" ) );
         menu.AppendSeparator();
     }
 #endif
@@ -87,9 +86,7 @@ void PLUGINS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
                                             PANEL_PCBNEW_ACTION_PLUGINS::COLUMN_SETTINGS_IDENTIFIER );
 
         if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id ) )
-        {
             mgr.RecreatePluginEnvironment( ( *action )->plugin.Identifier() );
-        }
 #endif
     }
     else
@@ -135,45 +132,21 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SelectRow( int aRow )
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnMoveUpButtonClick( wxCommandEvent& event )
 {
-    auto selectedRows = m_grid->GetSelectedRows();
-
-    // If nothing is selected or multiple rows are selected don't do anything.
-    if( selectedRows.size() != 1 ) return;
-
-    int selectedRow = selectedRows[0];
-
-    // If first row is selected, then it can't go any further up.
-    if( selectedRow == 0 )
-    {
-        wxBell();
-        return;
-    }
-
-    SwapRows( selectedRow, selectedRow - 1 );
-
-    SelectRow( selectedRow - 1 );
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                SwapRows( row, row - 1 );
+            } );
 }
 
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnMoveDownButtonClick( wxCommandEvent& event )
 {
-    auto selectedRows = m_grid->GetSelectedRows();
-
-    // If nothing is selected or multiple rows are selected don't do anything.
-    if( selectedRows.size() != 1 ) return;
-
-    int selectedRow = selectedRows[0];
-
-    // If last row is selected, then it can't go any further down.
-    if( selectedRow + 1 == m_grid->GetNumberRows() )
-    {
-        wxBell();
-        return;
-    }
-
-    SwapRows( selectedRow, selectedRow + 1 );
-
-    SelectRow( selectedRow + 1 );
+    m_grid->OnMoveRowDown(
+            [&]( int row )
+            {
+                SwapRows( row, row + 1 );
+            } );
 }
 
 
@@ -181,19 +154,11 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SwapRows( int aRowA, int aRowB )
 {
     m_grid->Freeze();
 
-    wxString tempStr;
-
-    for( int column = 0; column < m_grid->GetNumberCols(); column++ )
-    {
-        tempStr = m_grid->GetCellValue( aRowA, column );
-        m_grid->SetCellValue( aRowA, column, m_grid->GetCellValue( aRowB, column ) );
-        m_grid->SetCellValue( aRowB, column, tempStr );
-    }
+    m_grid->SwapRows( aRowA, aRowB );
 
     // Swap icon column renderers
     auto cellRenderer = m_grid->GetCellRenderer( aRowA, COLUMN_ACTION_NAME );
-    m_grid->SetCellRenderer( aRowA, COLUMN_ACTION_NAME,
-                             m_grid->GetCellRenderer( aRowB, COLUMN_ACTION_NAME ) );
+    m_grid->SetCellRenderer( aRowA, COLUMN_ACTION_NAME, m_grid->GetCellRenderer( aRowB, COLUMN_ACTION_NAME ) );
     m_grid->SetCellRenderer( aRowB, COLUMN_ACTION_NAME, cellRenderer );
 
     m_grid->Thaw();
@@ -261,8 +226,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
     m_grid->ClearRows();
 
-    const std::vector<LEGACY_OR_API_PLUGIN>& orderedPlugins =
-            PCB_EDIT_FRAME::GetOrderedActionPlugins();
+    const std::vector<LEGACY_OR_API_PLUGIN>& orderedPlugins = PCB_EDIT_FRAME::GetOrderedActionPlugins();
     m_grid->AppendRows( orderedPlugins.size() );
 
     int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
@@ -276,9 +240,8 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
             // Icon
             m_grid->SetCellRenderer( row, COLUMN_ACTION_NAME,
-                    new GRID_CELL_ICON_TEXT_RENDERER( ap->iconBitmap.IsOk()
-                                                              ? wxBitmapBundle( ap->iconBitmap )
-                                                              : m_genericIcon,
+                    new GRID_CELL_ICON_TEXT_RENDERER( ap->iconBitmap.IsOk() ? wxBitmapBundle( ap->iconBitmap )
+                                                                            : m_genericIcon,
                                                       iconSize ) );
             m_grid->SetCellValue( row, COLUMN_ACTION_NAME, ap->GetName() );
             m_grid->SetCellValue( row, COLUMN_SETTINGS_IDENTIFIER, ap->GetPluginPath() );
@@ -300,9 +263,8 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 #ifdef KICAD_IPC_API
             auto action = std::get<const PLUGIN_ACTION*>( orderedPlugins[row] );
 
-            const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()
-                                             ? action->icon_dark
-                                             : action->icon_light;
+            const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk() ? action->icon_dark
+                                                                                                   : action->icon_light;
 
             // Icon
             m_grid->SetCellRenderer( row, COLUMN_ACTION_NAME, new GRID_CELL_ICON_TEXT_RENDERER(
@@ -314,8 +276,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
             m_grid->SetCellRenderer( row, COLUMN_VISIBLE, new wxGridCellBoolRenderer() );
             m_grid->SetCellAlignment( row, COLUMN_VISIBLE, wxALIGN_CENTER, wxALIGN_CENTER );
 
-            bool show = PCB_EDIT_FRAME::GetActionPluginButtonVisible( action->identifier,
-                                                                      action->show_button );
+            bool show = PCB_EDIT_FRAME::GetActionPluginButtonVisible( action->identifier, action->show_button );
 
             m_grid->SetCellValue( row, COLUMN_VISIBLE, show ? wxT( "1" ) : wxEmptyString );
 

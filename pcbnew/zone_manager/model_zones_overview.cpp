@@ -32,11 +32,11 @@
 #include <wx/variant.h>
 #include "zone_manager_preference.h"
 #include "managed_zone.h"
-#include "model_zones_overview_table.h"
+#include "model_zones_overview.h"
 
 wxDEFINE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
 
-void MODEL_ZONES_OVERVIEW_TABLE::SortZoneContainers()
+void MODEL_ZONES_OVERVIEW::SortZoneContainers()
 {
     std::sort( m_filteredZones.begin(), m_filteredZones.end(),
                []( std::shared_ptr<MANAGED_ZONE> const& l, std::shared_ptr<MANAGED_ZONE> const& r )
@@ -46,7 +46,7 @@ void MODEL_ZONES_OVERVIEW_TABLE::SortZoneContainers()
 }
 
 
-void MODEL_ZONES_OVERVIEW_TABLE::OnRowCountChange()
+void MODEL_ZONES_OVERVIEW::OnRowCountChange()
 {
     wxCommandEvent rowCountChange( EVT_ZONES_OVERVIEW_COUNT_CHANGE );
     rowCountChange.SetInt( GetCount() );
@@ -69,13 +69,8 @@ static wxBitmap MakeBitmapForLayers( LSEQ const& layers, COLOR_SETTINGS const& s
 
     if( layer_cout > 4 )
     {
-        for( const PCB_LAYER_ID& i : { layers[0],
-                                       layers[1],
-                                       layers[layer_cout - 1],
-                                       layers[layer_cout - 2] } )
-        {
+        for( const PCB_LAYER_ID& i : { layers[0], layers[1], layers[layer_cout - 1], layers[layer_cout - 2] } )
             layersToDraw.push_back( i );
-        }
     }
     else
     {
@@ -98,9 +93,8 @@ static wxBitmap MakeBitmapForLayers( LSEQ const& layers, COLOR_SETTINGS const& s
 }
 
 
-MODEL_ZONES_OVERVIEW_TABLE::MODEL_ZONES_OVERVIEW_TABLE( std::vector<std::shared_ptr<MANAGED_ZONE>> aZones,
-                                                        BOARD* a_pcb, PCB_BASE_FRAME* aPCB_FRAME,
-                                                        wxWindow* a_dialog ) :
+MODEL_ZONES_OVERVIEW::MODEL_ZONES_OVERVIEW( std::vector<std::shared_ptr<MANAGED_ZONE>> aZones,
+                                            BOARD* a_pcb, PCB_BASE_FRAME* aPCB_FRAME, wxWindow* a_dialog ) :
         m_allZones( aZones ),
         m_filteredZones( std::move( aZones ) ),
         m_pcb( a_pcb ),
@@ -113,11 +107,7 @@ MODEL_ZONES_OVERVIEW_TABLE::MODEL_ZONES_OVERVIEW_TABLE( std::vector<std::shared_
 }
 
 
-MODEL_ZONES_OVERVIEW_TABLE::~MODEL_ZONES_OVERVIEW_TABLE() = default;
-
-
-void MODEL_ZONES_OVERVIEW_TABLE::GetValueByRow( wxVariant& aVariant, unsigned aRow,
-                                                unsigned aCol ) const
+void MODEL_ZONES_OVERVIEW::GetValueByRow( wxVariant& aVariant, unsigned aRow, unsigned aCol ) const
 {
     if( static_cast<size_t>( aRow ) + 1 > m_filteredZones.size() )
         return;
@@ -142,10 +132,9 @@ void MODEL_ZONES_OVERVIEW_TABLE::GetValueByRow( wxVariant& aVariant, unsigned aR
         for( PCB_LAYER_ID layer : cur.GetLayerSet().Seq() )
             layers.Add( m_pcb->GetLayerName( layer ) );
 
-        aVariant << wxDataViewIconText( wxJoin( layers, ',' ),
-                                        MakeBitmapForLayers( cur.GetLayerSet().UIOrder(),
-                                                             *m_PCB_FRAME->GetColorSettings(),
-                                                             bmSize ) );
+        aVariant << wxDataViewIconText( wxJoin( layers, ',' ), MakeBitmapForLayers( cur.GetLayerSet().UIOrder(),
+                                                                                    *m_PCB_FRAME->GetColorSettings(),
+                                                                                    bmSize ) );
         break;
     }
 
@@ -155,32 +144,31 @@ void MODEL_ZONES_OVERVIEW_TABLE::GetValueByRow( wxVariant& aVariant, unsigned aR
 }
 
 
-void MODEL_ZONES_OVERVIEW_TABLE::EnableFitterByName( bool aEnable )
+void MODEL_ZONES_OVERVIEW::EnableFitterByName( bool aEnable )
 {
     m_sortByName = aEnable;
 }
 
 
-void MODEL_ZONES_OVERVIEW_TABLE::EnableFitterByNet( bool aEnable )
+void MODEL_ZONES_OVERVIEW::EnableFitterByNet( bool aEnable )
 {
     m_sortByNet = aEnable;
 }
 
 
-bool MODEL_ZONES_OVERVIEW_TABLE::SetValueByRow( const wxVariant& aVariant, unsigned aRow,
-                                                unsigned aCol )
+bool MODEL_ZONES_OVERVIEW::SetValueByRow( const wxVariant& aVariant, unsigned aRow, unsigned aCol )
 {
     return {};
 }
 
 
-unsigned int MODEL_ZONES_OVERVIEW_TABLE::GetCount() const
+unsigned int MODEL_ZONES_OVERVIEW::GetCount() const
 {
     return m_filteredZones.size();
 }
 
 
-ZONE* MODEL_ZONES_OVERVIEW_TABLE::GetZone( wxDataViewItem const& aItem ) const
+ZONE* MODEL_ZONES_OVERVIEW::GetZone( wxDataViewItem const& aItem ) const
 {
     if( !aItem.IsOk() )
         return nullptr;
@@ -194,7 +182,7 @@ ZONE* MODEL_ZONES_OVERVIEW_TABLE::GetZone( wxDataViewItem const& aItem ) const
 }
 
 
-wxDataViewItem MODEL_ZONES_OVERVIEW_TABLE::GetItemByZone( ZONE* aZone ) const
+wxDataViewItem MODEL_ZONES_OVERVIEW::GetItemByZone( ZONE* aZone ) const
 {
     if( !aZone )
         return {};
@@ -209,8 +197,7 @@ wxDataViewItem MODEL_ZONES_OVERVIEW_TABLE::GetItemByZone( ZONE* aZone ) const
 }
 
 
-std::optional<unsigned> MODEL_ZONES_OVERVIEW_TABLE::MoveZoneIndex( unsigned            aIndex,
-                                                                   ZONE_INDEX_MOVEMENT aMovement )
+std::optional<unsigned> MODEL_ZONES_OVERVIEW::MoveZoneIndex( unsigned aIndex, ZONE_INDEX_MOVEMENT aMovement )
 {
     switch( aMovement )
     {
@@ -231,8 +218,7 @@ std::optional<unsigned> MODEL_ZONES_OVERVIEW_TABLE::MoveZoneIndex( unsigned     
 }
 
 
-std::optional<unsigned> MODEL_ZONES_OVERVIEW_TABLE::SwapZonePriority( unsigned aDragIndex,
-                                                                      unsigned aDropIndex )
+std::optional<unsigned> MODEL_ZONES_OVERVIEW::SwapZonePriority( unsigned aDragIndex, unsigned aDropIndex )
 {
     for( const unsigned i : { aDragIndex, aDropIndex } )
     {
@@ -243,8 +229,7 @@ std::optional<unsigned> MODEL_ZONES_OVERVIEW_TABLE::SwapZonePriority( unsigned a
     if( aDragIndex == aDropIndex )
         return aDragIndex;
 
-    std::swap( m_filteredZones[aDragIndex]->m_currentPriority,
-               m_filteredZones[aDropIndex]->m_currentPriority );
+    std::swap( m_filteredZones[aDragIndex]->m_currentPriority, m_filteredZones[aDropIndex]->m_currentPriority );
     std::swap( m_filteredZones[aDragIndex], m_filteredZones[aDropIndex] );
 
     for( const unsigned int row : { aDragIndex, aDropIndex } )
@@ -254,8 +239,7 @@ std::optional<unsigned> MODEL_ZONES_OVERVIEW_TABLE::SwapZonePriority( unsigned a
 }
 
 
-wxDataViewItem MODEL_ZONES_OVERVIEW_TABLE::ApplyFilter( wxString const& aFilterText,
-                                                        wxDataViewItem  aSelection )
+wxDataViewItem MODEL_ZONES_OVERVIEW::ApplyFilter( wxString const& aFilterText, wxDataViewItem  aSelection )
 {
     if( !GetAllZonesCount() )
         return {};
@@ -286,7 +270,7 @@ wxDataViewItem MODEL_ZONES_OVERVIEW_TABLE::ApplyFilter( wxString const& aFilterT
 }
 
 
-wxDataViewItem MODEL_ZONES_OVERVIEW_TABLE::ClearFilter( wxDataViewItem aSelection )
+wxDataViewItem MODEL_ZONES_OVERVIEW::ClearFilter( wxDataViewItem aSelection )
 {
     if( !GetAllZonesCount() )
         return {};

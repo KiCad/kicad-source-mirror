@@ -42,8 +42,7 @@
 #include <sch_commit.h>
 
 
-DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel,
-                                                  bool aNew ) :
+DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel, bool aNew ) :
         DIALOG_LABEL_PROPERTIES_BASE( aParent ),
         m_Parent( aParent ),
         m_currentLabel( aLabel ),
@@ -616,30 +615,19 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     if( m_shapeSizer->AreAnyItemsShown() )
     {
-        if( m_bidirectional->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-        else if( m_input->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
-        else if( m_output->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
-        else if( m_triState->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
-        else if( m_passive->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-        else if( m_dot->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DOT );
-        else if( m_circle->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
-        else if( m_diamond->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
-        else if( m_rectangle->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
+        if(      m_bidirectional->GetValue() ) m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+        else if( m_input->GetValue() )         m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+        else if( m_output->GetValue() )        m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+        else if( m_triState->GetValue() )      m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
+        else if( m_passive->GetValue() )       m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+        else if( m_dot->GetValue() )           m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DOT );
+        else if( m_circle->GetValue() )        m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
+        else if( m_diamond->GetValue() )       m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
+        else if( m_rectangle->GetValue() )     m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
     }
 
     if( m_fontCtrl->HaveFontSelection() )
-    {
         m_currentLabel->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
-    }
 
     if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
         static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetIntValue() );
@@ -825,49 +813,31 @@ void DIALOG_LABEL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 
 void DIALOG_LABEL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i > m_currentLabel->GetMandatoryFieldCount() )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i - 1, tmp );
-        m_grid->ForceRefresh();
-
-        m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                return row > m_currentLabel->GetMandatoryFieldCount();
+            },
+            [&]( int row )
+            {
+                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row - 1 ) );
+                m_grid->ForceRefresh();
+            } );
 }
 
 
 void DIALOG_LABEL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i >= m_currentLabel->GetMandatoryFieldCount() && i < m_grid->GetNumberRows() - 1 )
-    {
-        SCH_FIELD tmp = m_fields->at( (unsigned) i );
-        m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
-        m_fields->insert( m_fields->begin() + i + 1, tmp );
-        m_grid->ForceRefresh();
-
-        m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                return row >= m_currentLabel->GetMandatoryFieldCount();
+            },
+            [&]( int row )
+            {
+                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row + 1 ) );
+                m_grid->ForceRefresh();
+            } );
 }
 
 

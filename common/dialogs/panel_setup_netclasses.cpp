@@ -79,8 +79,7 @@ wxArrayString        g_lineStyleNames;
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRAW_FRAME* aFrame,
                                                 std::shared_ptr<NET_SETTINGS> aNetSettings,
-                                                const std::set<wxString>& aNetNames,
-                                                bool aIsEEschema ) :
+                                                const std::set<wxString>& aNetNames, bool aIsEEschema ) :
         PANEL_SETUP_NETCLASSES_BASE( aParentWindow ),
         m_frame( aFrame ),
         m_isEEschema( aIsEEschema ),
@@ -197,7 +196,6 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
                                        GRID_uVIADRILL,
                                        GRID_DIFF_PAIR_WIDTH,
                                        GRID_DIFF_PAIR_GAP } );
-
 
     // Be sure the column labels are readable
     m_netclassGrid->EnsureColLabelsVisible();
@@ -378,19 +376,20 @@ void PANEL_SETUP_NETCLASSES::loadNetclasses()
 void PANEL_SETUP_NETCLASSES::setNetclassRowNullableEditors( int aRowId, bool aIsDefault )
 {
     // Set nullable editors
-    auto setCellEditor = [this, aRowId, aIsDefault]( int aCol )
-    {
-        GRID_CELL_MARK_AS_NULLABLE* cellEditor;
+    auto setCellEditor =
+            [this, aRowId, aIsDefault]( int aCol )
+            {
+                GRID_CELL_MARK_AS_NULLABLE* cellEditor;
 
-        if( aIsDefault )
-            cellEditor = new GRID_CELL_MARK_AS_NULLABLE( false );
-        else
-            cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
+                if( aIsDefault )
+                    cellEditor = new GRID_CELL_MARK_AS_NULLABLE( false );
+                else
+                    cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
 
-        wxGridCellAttr* attr = m_netclassGrid->GetOrCreateCellAttr( aRowId, aCol );
-        attr->SetEditor( cellEditor );
-        attr->DecRef();
-    };
+                wxGridCellAttr* attr = m_netclassGrid->GetOrCreateCellAttr( aRowId, aCol );
+                attr->SetEditor( cellEditor );
+                attr->DecRef();
+            };
 
     setCellEditor( GRID_WIREWIDTH );
     setCellEditor( GRID_BUSWIDTH );
@@ -557,8 +556,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 }
 
 
-bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aName,
-                                                   bool focusFirst )
+bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aName, bool focusFirst )
 {
     wxString tmp = aName;
 
@@ -577,8 +575,8 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
         if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( tmp ) == 0 )
         {
             wxString msg = _( "Netclass name already in use." );
-            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid,
-                                                       focusFirst ? aRow : ii, GRID_NAME );
+            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii,
+                                                       GRID_NAME );
             return false;
         }
     }
@@ -769,38 +767,31 @@ void PANEL_SETUP_NETCLASSES::OnAddNetclassClick( wxCommandEvent& event )
 
 void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
 {
-    if( !m_netclassGrid->CommitPendingChanges() )
-        return;
+    m_netclassGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row == m_netclassGrid->GetNumberRows() - 1 )
+                {
+                    DisplayErrorMessage( wxGetTopLevelParent( this ), _( "The default net class is required." ) );
+                    return false;
+                }
 
-    int curRow = m_netclassGrid->GetGridCursorRow();
+                return true;
+            },
+            [&]( int row )
+            {
+                // reset the net class to default for members of the removed class
+                wxString classname = m_netclassGrid->GetCellValue( row, GRID_NAME );
 
-    if( curRow < 0 )
-    {
-        return;
-    }
-    else if( curRow == m_netclassGrid->GetNumberRows() - 1 )
-    {
-        wxWindow* topLevelParent = wxGetTopLevelParent( this );
+                for( int assignment = 0; assignment < m_assignmentGrid->GetNumberRows(); ++assignment )
+                {
+                    if( m_assignmentGrid->GetCellValue( assignment, 1 ) == classname )
+                        m_assignmentGrid->SetCellValue( assignment, 1, NETCLASS::Default );
+                }
 
-        DisplayErrorMessage( topLevelParent, _( "The default net class is required." ) );
-        return;
-    }
-
-    // reset the net class to default for members of the removed class
-    wxString classname = m_netclassGrid->GetCellValue( curRow, GRID_NAME );
-
-    for( int row = 0; row < m_assignmentGrid->GetNumberRows(); ++row )
-    {
-        if( m_assignmentGrid->GetCellValue( row, 1 ) == classname )
-            m_assignmentGrid->SetCellValue( row, 1, NETCLASS::Default );
-    }
-
-    m_netclassGrid->DeleteRows( curRow, 1 );
-
-    m_netclassGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_netclassGrid->GetGridCursorCol() );
-    m_netclassGrid->SetGridCursor( std::max( 0, curRow-1 ), m_netclassGrid->GetGridCursorCol() );
-
-    m_netclassesDirty = true;
+                m_netclassGrid->DeleteRows( row, 1 );
+                m_netclassesDirty = true;
+            } );
 }
 
 
@@ -855,21 +846,11 @@ void PANEL_SETUP_NETCLASSES::OnAddAssignmentClick( wxCommandEvent& event )
 
 void PANEL_SETUP_NETCLASSES::OnRemoveAssignmentClick( wxCommandEvent& event )
 {
-    if( !m_assignmentGrid->CommitPendingChanges() )
-        return;
-
-    int curRow = m_assignmentGrid->GetGridCursorRow();
-
-    if( curRow < 0 )
-        return;
-
-    m_assignmentGrid->DeleteRows( curRow, 1 );
-
-    if( m_assignmentGrid->GetNumberRows() > 0 )
-    {
-        m_assignmentGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_assignmentGrid->SetGridCursor( std::max( 0, curRow-1 ), 0 );
-    }
+    m_assignmentGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_assignmentGrid->DeleteRows( row, 1 );
+            } );
 }
 
 
@@ -1008,79 +989,33 @@ void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( const std::shared_ptr<NET_SETTI
 
 void PANEL_SETUP_NETCLASSES::OnMoveNetclassUpClick( wxCommandEvent& event )
 {
-    if( !m_netclassGrid->CommitPendingChanges() )
-        return;
-
-    // Work out which rows are selected
-    std::vector<int> selectedRows;
-
-    for( int i = 0; i < m_netclassGrid->GetNumberRows(); ++i )
-    {
-        if( m_netclassGrid->IsInSelection( i, 0 ) )
-            selectedRows.push_back( i );
-    }
-
-    // Only move one row at a time
-    if( selectedRows.size() != 1 )
-        return;
-
-    // Can't move the first netclass, nor move the Default netclass
-    if( selectedRows[0] == 0 || selectedRows[0] == ( m_netclassGrid->GetNumberRows() - 1 ) )
-        return;
-
-    int newRowId = selectedRows[0] - 1;
-    m_netclassGrid->InsertRows( newRowId );
-
-    for( int col = 0; col < m_netclassGrid->GetNumberCols(); col++ )
-        m_netclassGrid->SetCellValue( newRowId, col, m_netclassGrid->GetCellValue( newRowId + 2, col ) );
-
-    // Set the row nullable editors
-    setNetclassRowNullableEditors( newRowId, false );
-
-    m_netclassGrid->DeleteRows( newRowId + 2, 1 );
-    m_netclassGrid->MakeCellVisible( newRowId, 0 );
-    m_netclassGrid->SetGridCursor( newRowId, 0 );
-
-    m_netclassesDirty = true;
+    m_netclassGrid->OnMoveRowUp(
+            [&]( int row )
+            {
+                // Can't move the Default netclass
+                return row != m_netclassGrid->GetNumberRows() - 1;
+            },
+            [&]( int row )
+            {
+                m_netclassGrid->SwapRows( row, row - 1 );
+                m_netclassesDirty = true;
+            } );
 }
 
 
 void PANEL_SETUP_NETCLASSES::OnMoveNetclassDownClick( wxCommandEvent& event )
 {
-    if( !m_netclassGrid->CommitPendingChanges() )
-        return;
-
-    // Work out which rows are selected
-    std::vector<int> selectedRows;
-
-    for( int i = 0; i < m_netclassGrid->GetNumberRows(); ++i )
-    {
-        if( m_netclassGrid->IsInSelection( i, 0 ) )
-            selectedRows.push_back( i );
-    }
-
-    // Only move one row at a time
-    if( selectedRows.size() != 1 )
-        return;
-
-    // Can't move the last row down, nor move the Default netclass
-    if( selectedRows[0] == ( m_netclassGrid->GetNumberRows() - 2 )
-        || selectedRows[0] == ( m_netclassGrid->GetNumberRows() - 1 ) )
-    {
-        return;
-    }
-
-    int newRowId = selectedRows[0] + 2;
-    m_netclassGrid->InsertRows( newRowId );
-
-    for( int col = 0; col < m_netclassGrid->GetNumberCols(); col++ )
-        m_netclassGrid->SetCellValue( newRowId, col, m_netclassGrid->GetCellValue( newRowId - 2, col ) );
-
-    m_netclassGrid->DeleteRows( newRowId - 2, 1 );
-    m_netclassGrid->MakeCellVisible( newRowId - 1, 0 );
-    m_netclassGrid->SetGridCursor( newRowId - 1, 0 );
-
-    m_netclassesDirty = true;
+    m_netclassGrid->OnMoveRowDown(
+            [&]( int row )
+            {
+                // Can't move the Default netclass
+                return row + 1 != m_netclassGrid->GetNumberRows() - 1;
+            },
+            [&]( int row )
+            {
+                m_netclassGrid->SwapRows( row, row + 1 );
+                m_netclassesDirty = true;
+            } );
 }
 
 

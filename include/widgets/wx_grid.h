@@ -93,11 +93,6 @@ public:
     void ShowHideColumns( const wxString& shownColumns );
 
     /**
-     * A more performant version of ShowHideColumns (primarily for OnUpdateUI handlers).
-     */
-    void ShowHideColumns( const std::bitset<64>& aShownColumns );
-
-    /**
      * Hide wxGrid's SetTable() method with one which doesn't mess up the grid column
      * widths when setting the table.
      */
@@ -126,6 +121,17 @@ public:
 
     void OnDeleteRows( const std::function<bool( int row )>& aFilter,
                        const std::function<void( int row )>& aDeleter );
+
+    /**
+     * These aren't that tricky, but might as well share code.
+     */
+    void SwapRows( int aRowA, int aRowB );
+    void OnMoveRowUp( const std::function<void( int row )>& aMover );
+    void OnMoveRowDown( const std::function<void( int row )>& aMover );
+    void OnMoveRowUp( const std::function<bool( int row )>& aFilter,
+                      const std::function<void( int row )>& aMover );
+    void OnMoveRowDown( const std::function<bool( int row )>& aFilter,
+                        const std::function<void( int row )>& aMover );
 
     /**
      * Set a EUNITS_PROVIDER to enable use of unit- and eval-based Getters.

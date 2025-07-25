@@ -66,6 +66,8 @@ protected:
     void AppendViaSize( int aSize, int aDrill );
     void AppendDiffPairs( int aWidth, int aGap, int aViaGap );
 
+    bool commitPendingChanges( bool aQuietMode = false );
+
 private:
     PCB_EDIT_FRAME*          m_Frame;
     BOARD*                   m_Pcb;

@@ -124,56 +124,23 @@ void PANEL_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
 }
 
 
-void swapRows( WX_GRID* aGrid, int aRowA, int aRowB )
-{
-    for( int col = 0; col < aGrid->GetNumberCols(); ++col )
-    {
-        wxString temp = aGrid->GetCellValue( aRowA, col );
-        aGrid->SetCellValue( aRowA, col, aGrid->GetCellValue( aRowB, col ) );
-        aGrid->SetCellValue( aRowB, col, temp );
-    }
-}
-
-
 void PANEL_TEMPLATE_FIELDNAMES::OnMoveUp( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i > 0 )
-    {
-        swapRows( m_grid, i, i - 1 );
-
-        m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                m_grid->SwapRows( row, row - 1 );
+            } );
 }
 
 
 void PANEL_TEMPLATE_FIELDNAMES::OnMoveDown( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    int i = m_grid->GetGridCursorRow();
-
-    if( i >= 0 && i + 1 < m_grid->GetNumberRows() )
-    {
-        swapRows( m_grid, i, i + 1 );
-
-        m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
-        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
-    }
-    else
-    {
-        wxBell();
-    }
+    m_grid->OnMoveRowDown(
+            [&]( int row )
+            {
+                m_grid->SwapRows( row, row + 1 );
+            } );
 }
 
 

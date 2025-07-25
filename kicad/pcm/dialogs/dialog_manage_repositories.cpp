@@ -93,8 +93,8 @@ void DIALOG_MANAGE_REPOSITORIES::setColumnWidths()
 
 void DIALOG_MANAGE_REPOSITORIES::OnAdd( wxCommandEvent& event )
 {
-    wxTextEntryDialog entry_dialog( this, _( "Please enter fully qualified repository url" ),
-                                    _( "Add repository" ) );
+    wxTextEntryDialog entry_dialog( this, _( "Fully qualified repository url:" ),
+                                    _( "Add Repository" ) );
 
     if( entry_dialog.ShowModal() == wxID_OK )
     {
@@ -161,84 +161,32 @@ void DIALOG_MANAGE_REPOSITORIES::OnAddDefault( wxCommandEvent& event )
 
 void DIALOG_MANAGE_REPOSITORIES::OnRemoveButtonClicked( wxCommandEvent& event )
 {
-    auto selectedRows = m_grid->GetSelectedRows();
-
-    // If nothing is selected or multiple rows are selected don't do anything.
-    if( selectedRows.size() != 1 )
-    {
-        wxBell();
-        return;
-    }
-
-    int selectedRow = selectedRows[0];
-    m_grid->DeleteRows( selectedRow );
-    setColumnWidths();
-
-    if( m_grid->GetNumberRows() > 0 )
-        m_grid->SelectRow( selectedRow == m_grid->GetNumberRows() ? selectedRow - 1 : selectedRow );
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_grid->DeleteRows( row );
+                setColumnWidths();
+            } );
 }
 
 
 void DIALOG_MANAGE_REPOSITORIES::OnMoveUpButtonClicked( wxCommandEvent& event )
 {
-    auto selectedRows = m_grid->GetSelectedRows();
-
-    // If nothing is selected or multiple rows are selected don't do anything.
-    if( selectedRows.size() != 1 )
-        return;
-
-    int selectedRow = selectedRows[0];
-
-    // If first row is selected, then it can't go any further up.
-    if( selectedRow == 0 )
-    {
-        wxBell();
-        return;
-    }
-
-    swapRows( selectedRow, selectedRow - 1 );
-
-    selectRow( selectedRow - 1 );
+    m_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                m_grid->SwapRows( row, row - 1 );
+            } );
 }
 
 
 void DIALOG_MANAGE_REPOSITORIES::OnMoveDownButtonClicked( wxCommandEvent& event )
 {
-    auto selectedRows = m_grid->GetSelectedRows();
-
-    // If nothing is selected or multiple rows are selected don't do anything.
-    if( selectedRows.size() != 1 )
-        return;
-
-    int selectedRow = selectedRows[0];
-
-    // If last row is selected, then it can't go any further down.
-    if( selectedRow + 1 == m_grid->GetNumberRows() )
-    {
-        wxBell();
-        return;
-    }
-
-    swapRows( selectedRow, selectedRow + 1 );
-
-    selectRow( selectedRow + 1 );
-}
-
-
-void DIALOG_MANAGE_REPOSITORIES::swapRows( int aRowA, int aRowB )
-{
-    m_grid->Freeze();
-
-    wxString tempStr;
-
-    for( int column = 0; column < m_grid->GetNumberCols(); column++ )
-    {
-        tempStr = m_grid->GetCellValue( aRowA, column );
-        m_grid->SetCellValue( aRowA, column, m_grid->GetCellValue( aRowB, column ) );
-        m_grid->SetCellValue( aRowB, column, tempStr );
-    }
-
-    m_grid->Thaw();
+    m_grid->OnMoveRowDown(
+            [&]( int row )
+            {
+                m_grid->SwapRows( row, row + 1 );
+            } );
 }
 
 

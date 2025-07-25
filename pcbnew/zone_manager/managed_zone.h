@@ -36,7 +36,7 @@
  */
 class MANAGED_ZONE : public ZONE_MANAGEMENT_BASE
 {
-    friend class MODEL_ZONES_OVERVIEW_TABLE;
+    friend class MODEL_ZONES_OVERVIEW;
 
 public:
     MANAGED_ZONE( std::shared_ptr<ZONE> aZone, unsigned aInitialIndex ) :
