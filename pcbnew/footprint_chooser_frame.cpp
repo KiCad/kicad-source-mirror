@@ -147,6 +147,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     m_toggleDescription = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     m_toggleDescription->SetIsRadioButton();
     m_toggleDescription->SetBitmap( KiBitmapBundle( BITMAPS::text_visibility_off ) );
+    m_toggleDescription->SetToolTip( _( "Show/hide description panel" ) );
     m_toggleDescription->Check( m_showDescription );
     buttonsSizer->Add( m_toggleDescription, 0, wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 1 );
 
@@ -157,12 +158,14 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     m_grButton3DView = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     m_grButton3DView->SetIsRadioButton();
     m_grButton3DView->SetBitmap( KiBitmapBundle( BITMAPS::shape_3d ) );
+    m_grButton3DView->SetToolTip( _( "Show/hide 3D view panel" ) );
     m_grButton3DView->Check( m_show3DMode );
     buttonsSizer->Add( m_grButton3DView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
     m_grButtonFpView = new BITMAP_BUTTON( m_bottomPanel, wxID_ANY, wxNullBitmap );
     m_grButtonFpView->SetIsRadioButton();
     m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
+    m_grButtonFpView->SetToolTip( _( "Show/hide footprint view panel" ) );
     m_grButtonFpView->Check( m_showFpMode );
     buttonsSizer->Add( m_grButtonFpView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 

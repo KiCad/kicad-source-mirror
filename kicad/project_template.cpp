@@ -49,18 +49,17 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
     if( !wxFileName::DirExists( m_basePath.GetPath() ) )
     {
         // Error, the path doesn't exist!
-        m_title = _( "Could not open the template path" ) + wxS( " " ) + aPath;
+        m_title.Printf( _( "Could not open the template path '%s'" ), aPath );
     }
     else if( !wxFileName::DirExists( m_metaPath.GetPath() ) )
     {
         // Error, the meta information directory doesn't exist!
-        m_title = _( "Could not find the expected 'meta' directory at" ) +
-                  wxS( " " ) + m_metaPath.GetPath();
+        m_title.Printf( _( "Could not find the expected 'meta' directory at '%s'" ), m_metaPath.GetPath() );
     }
     else if( !wxFileName::FileExists( m_metaHtmlFile.GetFullPath() ) )
     {
         // Error, the meta information directory doesn't contain the informational html file!
-        m_title = _( "Could not find the expected meta HTML file at" ) + wxS( " " ) + m_metaHtmlFile.GetFullPath();
+        m_title.Printf( _( "Could not find the expected meta HTML file at '%s'" ), m_metaHtmlFile.GetFullPath() );
     }
 
     // Try to load an icon
