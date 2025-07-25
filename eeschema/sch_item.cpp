@@ -662,16 +662,18 @@ bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 void SCH_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
-    SYMBOL*  symbol = GetParentSymbol();
 
-    if( symbol->GetUnitCount() )
-        aList.emplace_back( _( "Unit" ), GetUnitDisplayName( GetUnit(), false ) );
+    if( SYMBOL* symbol = GetParentSymbol() )
+    {
+        if( symbol->GetUnitCount() )
+            aList.emplace_back( _( "Unit" ), GetUnitDisplayName( GetUnit(), false ) );
 
-    if( symbol->HasAlternateBodyStyle() )
-        aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( GetBodyStyle(), true ) );
+        if( symbol->HasAlternateBodyStyle() )
+            aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( GetBodyStyle(), true ) );
 
-    if( dynamic_cast<LIB_SYMBOL*>( symbol ) && IsPrivate() )
-        aList.emplace_back( _( "Private" ), wxEmptyString );
+        if( dynamic_cast<LIB_SYMBOL*>( symbol ) && IsPrivate() )
+            aList.emplace_back( _( "Private" ), wxEmptyString );
+    }
 }
 
 
