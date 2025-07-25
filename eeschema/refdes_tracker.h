@@ -27,9 +27,27 @@
 #include <sstream>
 #include <map>
 #include <vector>
+#include <functional>
+#include <algorithm>
 
 // Forward declaration
 class SCH_REFERENCE;
+
+/**
+ * Function type for external units availability checking.
+ *
+ * This allows the REFDES_TRACKER to work with mock objects or custom logic
+ * without requiring actual SCH_REFERENCE dependencies.
+ *
+ * @param aTestRef Reference object being tested for compatibility
+ * @param aExistingRefs Vector of existing references for the same reference number
+ * @param aRequiredUnits Vector of unit numbers needed
+ * @return true if all required units are available (no conflicts)
+ */
+template<typename T>
+using UNITS_CHECKER_FUNC = std::function<bool(const T& aTestRef,
+                                              const std::vector<T>& aExistingRefs,
+                                              const std::vector<int>& aRequiredUnits)>;
 
 /**
  * Class to efficiently track reference designators and provide next available designators.
@@ -93,6 +111,21 @@ public:
                                int aMinValue );
 
     /**
+     * Set an external units checker function for SCH_REFERENCE objects.
+     *
+     * This allows overriding the default units availability logic without
+     * requiring LIB_SYMBOL dependencies.
+     *
+     * @param aChecker function to use for checking unit availability
+     */
+    void SetUnitsChecker( const UNITS_CHECKER_FUNC<SCH_REFERENCE>& aChecker );
+
+    /**
+     * Clear the external units checker, reverting to default behavior.
+     */
+    void ClearUnitsChecker();
+
+    /**
      * Serialize the tracker data to a compact string representation.
      *
      * Uses range notation for consecutive numbers (e.g., "R1-3,R5-7,R10").
@@ -121,16 +154,19 @@ public:
      */
     size_t Size() const;
 
+    bool GetReuseRefDes() const { return m_reuseRefDes; }
+    void SetReuseRefDes( bool aReuse ) { m_reuseRefDes = aReuse; }
+
 private:
     /**
      * Data structure for tracking used numbers and caching next available values.
      */
     struct PREFIX_DATA
     {
-        std::set<int>           m_usedNumbers;      ///< Sorted set of used numbers for this prefix
-        mutable std::map<int, int> m_nextCache;    ///< Cache of next available number for given min values
-        mutable int             m_baseNext;        ///< Next available from 1 (cached)
-        mutable bool            m_cacheValid;      ///< True if m_baseNext cache is valid
+        std::set<int>              m_usedNumbers; ///< Sorted set of used numbers for this prefix
+        mutable std::map<int, int> m_nextCache;   ///< Cache of next available number for given min values
+        mutable int                m_baseNext;    ///< Next available from 1 (cached)
+        mutable bool               m_cacheValid;  ///< True if m_baseNext cache is valid
 
         PREFIX_DATA() : m_baseNext( 1 ), m_cacheValid( false ) {}
     };
@@ -140,9 +176,12 @@ private:
 
     /// Map from prefix to its tracking data
     std::unordered_map<std::string, PREFIX_DATA> m_prefixData;
-
-    /// Set of all reference designators for O(1) lookup
     std::unordered_set<std::string>              m_allRefDes;
+
+    bool m_reuseRefDes; ///< If true, allows reusing existing reference designators
+
+    /// External units checker function (optional)
+    UNITS_CHECKER_FUNC<SCH_REFERENCE> m_externalUnitsChecker;
 
     /**
      * Internal implementation of Insert without locking.
@@ -158,6 +197,14 @@ private:
      * This is used internally to reset the tracker state.
      */
     void clearImpl();
+
+    /**
+     * Check if a reference designator exists in the tracker without locking.
+     *
+     * @param aRefDes reference designator to check
+     * @return true if the reference designator exists
+     */
+    bool containsImpl( const std::string& aRefDes ) const;
 
     /**
      * Parse a reference designator into prefix and numerical suffix.

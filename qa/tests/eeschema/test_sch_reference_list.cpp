@@ -248,7 +248,6 @@ BOOST_AUTO_TEST_CASE( Reannotate )
 
         loadTestCase( c.m_SchematicRelativePath, c.m_ExpectedReannotations );
         m_refsToReannotate.SetRefDesTracker( m_schematic->Settings().m_refDesTracker );
-        m_refsToReannotate.SetReuseRefDes( m_schematic->Settings().m_reuseRefDes );
         m_refsToReannotate.RemoveAnnotation();
         m_refsToReannotate.SplitReferences();
         m_refsToReannotate.Annotate( false, 0, c.m_StartNumber, m_lockedRefs, getAdditionalRefs() );
@@ -290,7 +289,6 @@ BOOST_AUTO_TEST_CASE( ReannotateDuplicates )
         loadTestCase( c.m_SchematicRelativePath, c.m_ExpectedReannotations );
 
         m_refsToReannotate.SetRefDesTracker( m_schematic->Settings().m_refDesTracker );
-        m_refsToReannotate.SetReuseRefDes( m_schematic->Settings().m_reuseRefDes );
         m_refsToReannotate.ReannotateDuplicates( getAdditionalRefs() );
         m_refsToReannotate.UpdateAnnotation();
 

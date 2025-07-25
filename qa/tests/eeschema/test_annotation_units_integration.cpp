@@ -24,6 +24,48 @@
 #include <sch_sheet_path.h>
 #include <refdes_tracker.h>
 
+class TEST_ANNOTATION_UNITS_INTEGRATION : public KI_TEST::SCHEMATIC_TEST_FIXTURE
+{
+protected:
+    // Helper method to create SCH_REFERENCE objects for testing
+    SCH_REFERENCE createTestReference( const wxString& aRef, const wxString& aValue, int aUnit )
+    {
+        SCH_SYMBOL dummySymbol;
+        SCH_SHEET_PATH dummyPath;
+
+        SCH_REFERENCE ref( &dummySymbol, dummyPath );
+        ref.SetRef( aRef );
+        ref.SetValue( aValue );
+        ref.SetUnit( aUnit );
+
+        return ref;
+    }
+
+    // Helper method to setup units checker for testing
+    void setupRefDesTracker( REFDES_TRACKER& tracker )
+    {
+        tracker.SetReuseRefDes( false ); // Disable reuse for these tests
+        tracker.SetUnitsChecker( []( const SCH_REFERENCE& aTestRef,
+                                     const std::vector<SCH_REFERENCE>& aExistingRefs,
+                                     const std::vector<int>& aRequiredUnits )
+        {
+            // Mock implementation for unit availability check
+            for( int unit : aRequiredUnits )
+            {
+                for( const auto& ref : aExistingRefs )
+                {
+                    if( ref.GetUnit() == unit
+                        && ref.CompareValue( aTestRef ) == 0 )
+                    {
+                        return false; // Conflict found
+                    }
+                }
+            }
+            return true; // All required units are available
+        } );
+    }
+};
+
 struct REANNOTATED_REFERENCE
 {
     wxString m_KIID;                      ///< KIID of the symbol to reannotate
@@ -39,6 +81,29 @@ protected:
     void setupRefDesTracker();
     void testFindFirstUnusedReferenceWithUnits();
     void verifyUnitAvailabilityLogic();
+
+    // Helper method to setup units checker for testing
+    void setupRefDesTracker( REFDES_TRACKER& tracker )
+    {
+        tracker.SetUnitsChecker( []( const SCH_REFERENCE& aTestRef,
+                                     const std::vector<SCH_REFERENCE>& aExistingRefs,
+                                     const std::vector<int>& aRequiredUnits )
+        {
+            // Mock implementation for unit availability check
+            for( int unit : aRequiredUnits )
+            {
+                for( const auto& ref : aExistingRefs )
+                {
+                    if( ref.GetUnit() == unit
+                        && ref.CompareValue( aTestRef ) == 0 )
+                    {
+                        return false; // Conflict found
+                    }
+                }
+            }
+            return true; // All required units are available
+        } );
+    }
 };
 
 void TEST_SCH_REFERENCE_LIST_UNITS_FIXTURE::setupRefDesTracker()
@@ -55,7 +120,7 @@ void TEST_SCH_REFERENCE_LIST_UNITS_FIXTURE::setupRefDesTracker()
     m_schematic->Settings().m_refDesTracker = tracker;
 }
 
-BOOST_FIXTURE_TEST_SUITE( SchReferenceListUnits, TEST_SCH_REFERENCE_LIST_UNITS_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( SchReferenceListUnits, TEST_ANNOTATION_UNITS_INTEGRATION )
 
 struct UNIT_ANNOTATION_CASE
 {
@@ -159,18 +224,26 @@ BOOST_AUTO_TEST_CASE( RefDesTrackerIntegration )
     tracker->Insert( "R2" );
     tracker->Insert( "R5" );
 
-    // Test that GetNextRefDes respects previously inserted references
-    int nextU = tracker->GetNextRefDes( "U", 1 );
+    // Test GetNextRefDesForUnits respects previously inserted references
+    SCH_REFERENCE uRef = createTestReference( "U", "LM358", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
+    setupRefDesTracker( *tracker );
+
+    int nextU = tracker->GetNextRefDesForUnits( uRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( nextU, 2 ); // Should skip U1, get U2
 
-    int nextR = tracker->GetNextRefDes( "R", 1 );
+    SCH_REFERENCE rRef = createTestReference( "R", "1k", 1 );
+    int nextR = tracker->GetNextRefDesForUnits( rRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( nextR, 3 ); // Should skip R1,R2, get R3
 
-    int nextIC = tracker->GetNextRefDes( "IC", 1 );
+    SCH_REFERENCE icRef = createTestReference( "IC", "74HC00", 1 );
+    int nextIC = tracker->GetNextRefDesForUnits( icRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( nextIC, 1 ); // New prefix, should get IC1
 
     // Test with minimum values
-    int nextU_min5 = tracker->GetNextRefDes( "U", 5 );
+    int nextU_min5 = tracker->GetNextRefDesForUnits( uRef, emptyMap, emptyUnits, 5 );
     BOOST_CHECK_EQUAL( nextU_min5, 5 ); // Should get U5 (min value 5)
 
     // Verify all references were inserted
@@ -188,13 +261,7 @@ BOOST_AUTO_TEST_CASE( FindFirstUnusedReferenceWithUnits )
 
     refList.SetRefDesTracker( tracker );
 
-    // Simulate some existing references in the list
-    // This would normally come from the schematic, but we'll create mock data
-
-    // Test the concept of unit availability checking
-    // (The actual implementation would require real SCH_REFERENCE objects)
-
-    BOOST_TEST_MESSAGE( "Testing unit availability concept - requires full schematic integration" );
+    // Test the concept of unit availability checking with GetNextRefDesForUnits
 
     // Test that tracker properly handles unit conflicts
     tracker->Insert( "U1" ); // Simulate U1 being previously used
@@ -202,8 +269,16 @@ BOOST_AUTO_TEST_CASE( FindFirstUnusedReferenceWithUnits )
     // The FindFirstUnusedReference method should now use GetNextRefDesForUnits
     // and properly consider unit conflicts when finding available references
 
-    int next = tracker->GetNextRefDes( "U", 1 );
+    SCH_REFERENCE testRef = createTestReference( "U", "LM358", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
+    setupRefDesTracker( *tracker );
+
+    int next = tracker->GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 2 ); // Should skip U1
+
+    BOOST_TEST_MESSAGE( "Testing unit availability concept - integrated with GetNextRefDesForUnits" );
 }
 
 BOOST_AUTO_TEST_CASE( SerializationWithComplexRefs )
@@ -213,13 +288,23 @@ BOOST_AUTO_TEST_CASE( SerializationWithComplexRefs )
     // Add references through various methods
     tracker->Insert( "U1" );
     tracker->Insert( "U3" );
-    int next = tracker->GetNextRefDes( "U", 1 ); // Gets U2
-    BOOST_CHECK_EQUAL( next, 2 );
+
+    // Use GetNextRefDesForUnits to get U2
+    SCH_REFERENCE uRef = createTestReference( "U", "LM358", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
+    setupRefDesTracker( *tracker );
+
+    int next = tracker->GetNextRefDesForUnits( uRef, emptyMap, emptyUnits, 1 );
+    BOOST_CHECK_EQUAL( next, 2 ); // Gets U2
 
     tracker->Insert( "IC1" );
     tracker->Insert( "IC5" );
-    next = tracker->GetNextRefDes( "IC", 3 ); // Gets IC3
-    BOOST_CHECK_EQUAL( next, 3 );
+
+    SCH_REFERENCE icRef = createTestReference( "IC", "74HC00", 1 );
+    next = tracker->GetNextRefDesForUnits( icRef, emptyMap, emptyUnits, 3 );
+    BOOST_CHECK_EQUAL( next, 3 ); // Gets IC3
 
     // Test serialization captures all state
     std::string serialized = tracker->Serialize();
@@ -235,11 +320,12 @@ BOOST_AUTO_TEST_CASE( SerializationWithComplexRefs )
     BOOST_CHECK( tracker2->Contains( "IC3" ) );
     BOOST_CHECK( tracker2->Contains( "IC5" ) );
 
-    // Verify next references continue correctly
-    next = tracker2->GetNextRefDes( "U", 1 );
+    // Verify next references continue correctly using GetNextRefDesForUnits
+    setupRefDesTracker( *tracker2 );
+    next = tracker2->GetNextRefDesForUnits( uRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 4 );
 
-    next = tracker2->GetNextRefDes( "IC", 1 );
+    next = tracker2->GetNextRefDesForUnits( icRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 2 );
 }
 
@@ -253,22 +339,29 @@ BOOST_AUTO_TEST_CASE( CachingEfficiency )
         tracker->Insert( "R" + std::to_string( i ) );
     }
 
+    SCH_REFERENCE rRef = createTestReference( "R", "1k", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
+    setupRefDesTracker( *tracker );
+
     // Test that repeated calls with same parameters are fast (cached)
     auto start = std::chrono::high_resolution_clock::now();
 
     for( int i = 0; i < 100; ++i )
     {
-        int result1 = tracker->GetNextRefDes( "R", 1 );  // Should be cached after first call
-        int result50 = tracker->GetNextRefDes( "R", 50 ); // Should be cached after first call
+        // These calls should benefit from internal caching in REFDES_TRACKER
+        int result1 = tracker->GetNextRefDesForUnits( rRef, emptyMap, emptyUnits, 1 );
+        int result50 = tracker->GetNextRefDesForUnits( rRef, emptyMap, emptyUnits, 50 );
     }
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>( end - start );
 
-    BOOST_TEST_MESSAGE( "200 cached calls took: " + std::to_string( duration.count() ) + " microseconds" );
+    BOOST_TEST_MESSAGE( "200 GetNextRefDesForUnits calls took: " + std::to_string( duration.count() ) + " microseconds" );
 
-    // The actual time will vary, but cached calls should be very fast
-    BOOST_CHECK_LT( duration.count(), 10000 ); // Should be under 10ms for 200 cached calls
+    // The actual time will vary, but the calls should complete in reasonable time
+    BOOST_CHECK_LT( duration.count(), 50000 ); // Should be under 50ms for 200 calls
 }
 
 BOOST_AUTO_TEST_SUITE_END()

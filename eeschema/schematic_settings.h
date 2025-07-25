@@ -127,12 +127,6 @@ public:
     std::shared_ptr<NGSPICE_SETTINGS> m_NgspiceSettings;
 
     /**
-     * True if we want allow deleted schematic reference designators to be reused
-     * in the same project.
-     */
-    bool m_reuseRefDes;
-
-    /**
      * A list of previously used schematic reference designators.
      * This is used to avoid reusing designators in the same project.
      */

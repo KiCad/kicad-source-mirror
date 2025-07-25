@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <refdes_tracker.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <schematic_settings.h>
@@ -52,7 +53,7 @@ bool PANEL_SETUP_ANNOTATION::TransferDataToWindow()
     m_choiceSeparatorRefId->SetSelection( getRefStyleMenuIndex( settings.m_SubpartIdSeparator,
                                                                 settings.m_SubpartFirstId ) );
 
-    m_checkReuseRefdes->SetValue( settings.m_reuseRefDes );
+    m_checkReuseRefdes->SetValue( settings.m_refDesTracker->GetReuseRefDes() );
 
     return true;
 }
@@ -75,7 +76,7 @@ bool PANEL_SETUP_ANNOTATION::TransferDataFromWindow()
     case 6: settings.m_SubpartFirstId = '1'; settings.m_SubpartIdSeparator = '_'; break;
     }
 
-    settings.m_reuseRefDes = m_checkReuseRefdes->GetValue();
+    settings.m_refDesTracker->SetReuseRefDes( m_checkReuseRefdes->GetValue() );
     return true;
 }
 
@@ -85,7 +86,7 @@ void PANEL_SETUP_ANNOTATION::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_choiceSeparatorRefId->SetSelection( getRefStyleMenuIndex( aSettings.m_SubpartIdSeparator,
                                                                 aSettings.m_SubpartFirstId ) );
 
-    m_checkReuseRefdes->SetValue( aSettings.m_reuseRefDes );
+    m_checkReuseRefdes->SetValue( aSettings.m_refDesTracker->GetReuseRefDes() );
 }
 
 

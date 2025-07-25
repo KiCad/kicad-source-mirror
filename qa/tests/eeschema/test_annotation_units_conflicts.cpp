@@ -23,6 +23,48 @@
 #include <sch_reference_list.h>
 #include <refdes_tracker.h>
 
+class TEST_ANNOTATION_UNITS_CONFLICTS : public KI_TEST::SCHEMATIC_TEST_FIXTURE
+{
+protected:
+    // Helper method to create SCH_REFERENCE objects for testing
+    SCH_REFERENCE createTestReference( const wxString& aRef, const wxString& aValue, int aUnit )
+    {
+        SCH_SYMBOL dummySymbol;
+        SCH_SHEET_PATH dummyPath;
+
+        SCH_REFERENCE ref( &dummySymbol, dummyPath );
+        ref.SetRef( aRef );
+        ref.SetValue( aValue );
+        ref.SetUnit( aUnit );
+
+        return ref;
+    }
+
+    // Helper method to setup units checker for testing
+    void setupRefDesTracker( REFDES_TRACKER& tracker )
+    {
+        tracker.SetReuseRefDes( false ); // Disable reuse for these tests
+        tracker.SetUnitsChecker( []( const SCH_REFERENCE& aTestRef,
+                                     const std::vector<SCH_REFERENCE>& aExistingRefs,
+                                     const std::vector<int>& aRequiredUnits )
+        {
+            // Mock implementation for unit availability check
+            for( int unit : aRequiredUnits )
+            {
+                for( const auto& ref : aExistingRefs )
+                {
+                    if( ref.GetUnit() == unit
+                        && ref.CompareValue( aTestRef ) == 0 )
+                    {
+                        return false; // Conflict found
+                    }
+                }
+            }
+            return true; // All required units are available
+        } );
+    }
+};
+
 // Test cases that specifically validate the unit conflict detection logic
 // These tests focus on the areUnitsAvailable method and related functionality
 
@@ -39,17 +81,6 @@ struct UNIT_CONFLICT_TEST_CASE
     bool m_expectedAvailable;                   // Whether units should be available
     std::string m_reason;                       // Reason for expected result
 };
-
-class TEST_UNIT_CONFLICTS_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
-{
-protected:
-    // Helper to create mock SCH_REFERENCE objects for testing
-    SCH_REFERENCE createMockReference( const std::string& prefix, int number, int unit,
-                                      const std::string& value, const std::string& libName );
-};
-
-// Note: In a real implementation, this would need actual SCH_SYMBOL and SCH_SHEET_PATH objects
-// For testing purposes, we'll focus on the logical validation
 
 static const std::vector<UNIT_CONFLICT_TEST_CASE> unitConflictCases = {
     {
@@ -135,7 +166,7 @@ static const std::vector<UNIT_CONFLICT_TEST_CASE> unitConflictCases = {
     }
 };
 
-BOOST_FIXTURE_TEST_SUITE( UnitConflicts, TEST_UNIT_CONFLICTS_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( UnitConflicts, TEST_ANNOTATION_UNITS_CONFLICTS )
 
 BOOST_AUTO_TEST_CASE( ValidateUnitConflictDetection )
 {
@@ -201,6 +232,7 @@ BOOST_AUTO_TEST_CASE( ValidateUnitConflictDetection )
 BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_Integration )
 {
     REFDES_TRACKER tracker;
+    setupRefDesTracker( tracker );
 
     // Test the overall GetNextRefDesForUnits logic using the tracker
 
@@ -210,13 +242,15 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_Integration )
 
     // Test case 1: Completely unused reference with empty units
     // Should get U2 (first unused after U1)
-    // Note: This test is conceptual since we need real SCH_REFERENCE objects
+    SCH_REFERENCE testRef = createTestReference( "U", "LM358", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
 
-    int nextRef = tracker.GetNextRefDes( "U", 1 );
+    int nextRef = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( nextRef, 2 ); // Should skip U1, get U2
 
     // Test case 2: Min value higher than next available
-    nextRef = tracker.GetNextRefDes( "U", 10 );
+    nextRef = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 10 );
     BOOST_CHECK_EQUAL( nextRef, 10 ); // Should start from min value
 
     // Verify references were inserted
@@ -224,7 +258,8 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_Integration )
     BOOST_CHECK( tracker.Contains( "U10" ) );
 
     // Test case 3: New prefix
-    nextRef = tracker.GetNextRefDes( "IC", 1 );
+    SCH_REFERENCE icRef = createTestReference( "IC", "74HC00", 1 );
+    nextRef = tracker.GetNextRefDesForUnits( icRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( nextRef, 1 ); // New prefix should start at 1
     BOOST_CHECK( tracker.Contains( "IC1" ) );
 }
@@ -232,6 +267,7 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_Integration )
 BOOST_AUTO_TEST_CASE( RefDesTracker_StateConsistency )
 {
     REFDES_TRACKER tracker;
+    setupRefDesTracker( tracker );
 
     // Test that the tracker maintains consistent state across operations
 
@@ -247,18 +283,22 @@ BOOST_AUTO_TEST_CASE( RefDesTracker_StateConsistency )
     BOOST_CHECK( !tracker.Contains( "R2" ) );
     BOOST_CHECK( !tracker.Contains( "R4" ) );
 
-    // Get next reference - should fill gap at R2
-    int next = tracker.GetNextRefDes( "R", 1 );
+    // Test GetNextRefDesForUnits with empty units - should fill gap at R2
+    SCH_REFERENCE testRef = createTestReference( "R", "1k", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
+    int next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 2 );
     BOOST_CHECK( tracker.Contains( "R2" ) );
 
     // Get next reference - should fill gap at R4
-    next = tracker.GetNextRefDes( "R", 1 );
+    next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 4 );
     BOOST_CHECK( tracker.Contains( "R4" ) );
 
     // Get next reference - should go to R6
-    next = tracker.GetNextRefDes( "R", 1 );
+    next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 6 );
     BOOST_CHECK( tracker.Contains( "R6" ) );
 
@@ -269,27 +309,32 @@ BOOST_AUTO_TEST_CASE( RefDesTracker_StateConsistency )
 BOOST_AUTO_TEST_CASE( CacheConsistency_AfterInserts )
 {
     REFDES_TRACKER tracker;
+    setupRefDesTracker( tracker );
 
-    // Test that cache remains consistent after mixed Insert/GetNextRefDes operations
+    // Test that cache remains consistent after mixed Insert/GetNextRefDesForUnits operations
 
     // Start with some manual inserts
     tracker.Insert( "C1" );
     tracker.Insert( "C5" );
     tracker.Insert( "C10" );
 
+    SCH_REFERENCE testRef = createTestReference( "C", "100nF", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
     // Get next ref - should use cached logic to find C2
-    int next = tracker.GetNextRefDes( "C", 1 );
+    int next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 2 );
 
     // Insert C3 manually
     tracker.Insert( "C3" );
 
     // Get next ref - cache should be updated, should get C4
-    next = tracker.GetNextRefDes( "C", 1 );
+    next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 4 );
 
     // Test with minimum value - should respect cache
-    next = tracker.GetNextRefDes( "C", 7 );
+    next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 7 );
     BOOST_CHECK_EQUAL( next, 7 ); // C6 available but min is 7
 
     // Verify all references exist
@@ -306,12 +351,18 @@ BOOST_AUTO_TEST_CASE( CacheConsistency_AfterInserts )
 BOOST_AUTO_TEST_CASE( ThreadSafety_BasicValidation )
 {
     REFDES_TRACKER tracker( true ); // Enable thread safety
+    setupRefDesTracker( tracker );
 
     // Basic validation that thread-safe operations work
     BOOST_CHECK( tracker.Insert( "U1" ) );
     BOOST_CHECK( tracker.Contains( "U1" ) );
 
-    int next = tracker.GetNextRefDes( "U", 1 );
+    // Test GetNextRefDesForUnits with thread safety
+    SCH_REFERENCE testRef = createTestReference( "U", "LM358", 1 );
+    std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
+    std::vector<int> emptyUnits;
+
+    int next = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( next, 2 );
 
     // Test serialization with thread safety

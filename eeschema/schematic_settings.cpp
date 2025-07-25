@@ -255,8 +255,18 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_NgspiceSettings = std::make_shared<NGSPICE_SETTINGS>( this, "ngspice" );
 
-    m_params.emplace_back( new PARAM<bool>( "reuse_designators",
-            &m_reuseRefDes, true ) );
+    m_params.emplace_back( new PARAM_LAMBDA<bool>( "reuse_designators",
+            [&]() -> bool
+            {
+                return m_refDesTracker ? m_refDesTracker->GetReuseRefDes() : false;
+            },
+            [&]( bool aReuse )
+            {
+                if( !m_refDesTracker )
+                    m_refDesTracker = std::make_shared<REFDES_TRACKER>();
+
+                m_refDesTracker->SetReuseRefDes( aReuse );
+            }, true ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<std::string>( "used_designators",
             [&]() -> std::string
@@ -269,7 +279,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             [&]( const std::string& aData )
             {
                 if( !m_refDesTracker )
-                    m_refDesTracker = std::make_unique<REFDES_TRACKER>();
+                    m_refDesTracker = std::make_shared<REFDES_TRACKER>();
 
                 m_refDesTracker->Deserialize( aData );
             }, {} ) );

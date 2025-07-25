@@ -233,7 +233,6 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     SCH_REFERENCE_LIST refs;
                     refs.AddItem( newReference );
                     refs.SetRefDesTracker( schSettings.m_refDesTracker );
-                    refs.SetReuseRefDes( schSettings.m_reuseRefDes );
 
                     if( cfg->m_AnnotatePanel.automatic || newReference.AlwaysAnnotate() )
                     {
@@ -473,32 +472,36 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
                         || m_frame->eeconfig()->m_SymChooserPanel.keep_symbol )
                 {
-                    int new_unit = symbol->GetUnit();
+                    SCH_REFERENCE currentReference( symbol, m_frame->GetCurrentSheet() );
+                    SCHEMATIC& schematic = m_frame->Schematic();
 
-                    if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
-                        && symbol->GetUnit() < symbol->GetUnitCount() )
+                    if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units )
                     {
-                        new_unit++;
-                    }
-                    else
-                    {
-                        new_unit = 1;
+                        while( currentReference.GetUnit() <= symbol->GetUnitCount()
+                               && schematic.Contains( currentReference ) )
+                        {
+                            currentReference.SetUnit( currentReference.GetUnit() + 1 );
+                        }
+
+                        if( currentReference.GetUnit() > symbol->GetUnitCount() )
+                        {
+                            currentReference.SetUnit( 1 );
+                        }
                     }
 
                     // We are either stepping to the next unit or next symbol
-                    if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
+                    if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol ||
+                        currentReference.GetUnit() > 1 )
                     {
                         nextSymbol = static_cast<SCH_SYMBOL*>( symbol->Duplicate( IGNORE_PARENT_GROUP ) );
-                        nextSymbol->SetUnit( new_unit );
-                        nextSymbol->SetUnitSelection( new_unit );
-
-                        // Start new annotation sequence at first unit
-                        if( new_unit == 1 )
-                            nextSymbol->ClearAnnotation( nullptr, false );
+                        nextSymbol->SetUnit( currentReference.GetUnit() );
+                        nextSymbol->SetUnitSelection( currentReference.GetUnit() );
 
                         addSymbol( nextSymbol );
                         symbol = nextSymbol;
-                        annotate();
+
+                        if( currentReference.GetUnit() == 1 )
+                            annotate();
 
                         // Update the list of references for the next symbol placement.
                         SCH_REFERENCE placedSymbolReference( symbol, m_frame->GetCurrentSheet() );

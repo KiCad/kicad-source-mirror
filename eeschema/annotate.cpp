@@ -360,11 +360,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
         }
     }
 
-    std::shared_ptr<REFDES_TRACKER> refdes = Schematic().Settings().m_refDesTracker;
-    bool reuseRefDes = Schematic().Settings().m_reuseRefDes;
-
-    references.SetReuseRefDes( reuseRefDes );
-    references.SetRefDesTracker( refdes );
+    references.SetRefDesTracker( Schematic().Settings().m_refDesTracker );
 
     // Break full symbol reference into name (prefix) and number:
     // example: IC1 become IC, and 1

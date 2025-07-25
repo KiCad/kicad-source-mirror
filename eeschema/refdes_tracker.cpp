@@ -26,7 +26,7 @@
 #include "refdes_tracker.h"
 
 REFDES_TRACKER::REFDES_TRACKER( bool aThreadSafe ) :
-    m_threadSafe( aThreadSafe )
+    m_threadSafe( aThreadSafe ), m_reuseRefDes( true )
 {
 }
 
@@ -68,6 +68,12 @@ bool REFDES_TRACKER::insertNumber( const std::string& aPrefix, int aNumber )
     return true;
 }
 
+
+bool REFDES_TRACKER::containsImpl( const std::string& aRefDes ) const
+{
+    return m_allRefDes.contains( aRefDes );
+}
+
 bool REFDES_TRACKER::Contains( const std::string& aRefDes ) const
 {
     std::unique_lock<std::mutex> lock;
@@ -75,41 +81,7 @@ bool REFDES_TRACKER::Contains( const std::string& aRefDes ) const
     if( m_threadSafe )
         lock = std::unique_lock<std::mutex>( m_mutex );
 
-    return m_allRefDes.find( aRefDes ) != m_allRefDes.end();
-}
-
-int REFDES_TRACKER::GetNextRefDes( const std::string& aPrefix, int aMinValue )
-{
-    std::unique_lock<std::mutex> lock;
-
-    if( m_threadSafe )
-        lock = std::unique_lock<std::mutex>( m_mutex );
-
-    auto it = m_prefixData.find( aPrefix );
-
-    if( it == m_prefixData.end() )
-    {
-        // No data for this prefix yet
-        int nextNum = std::max( 1, aMinValue );
-        std::string result = aPrefix + std::to_string( nextNum );
-
-        // Insert this designator since we're reserving it
-        insertNumber( aPrefix, nextNum );
-        m_allRefDes.insert( result );
-
-        return aMinValue;
-    }
-
-    PREFIX_DATA& data = it->second;
-    int nextAvailable = findNextAvailable( data, aMinValue );
-
-    std::string result = aPrefix + std::to_string( nextAvailable );
-
-    // Insert this designator since we're reserving it
-    insertNumber( aPrefix, nextAvailable );
-    m_allRefDes.insert( result );
-
-    return nextAvailable;
+    return containsImpl( aRefDes );
 }
 
 
@@ -141,7 +113,7 @@ int REFDES_TRACKER::GetNextRefDesForUnits( const SCH_REFERENCE& aRef,
             // Not currently in use - check if it was previously used
             std::string candidateRefDes = aRef.GetRef().ToStdString() + std::to_string( candidate );
 
-            if( !Contains( candidateRefDes ) )
+            if( m_reuseRefDes || !containsImpl( candidateRefDes ) )
             {
                 // Completely unused - this is our answer
                 insertNumber( aRef.GetRefStr(), candidate );
@@ -165,7 +137,20 @@ int REFDES_TRACKER::GetNextRefDesForUnits( const SCH_REFERENCE& aRef,
                 continue;
             }
 
-            if( areUnitsAvailable( aRef, mapIt->second, validUnits ) )
+            // Check if required units are available
+            bool unitsAvailable;
+            if( m_externalUnitsChecker )
+            {
+                // Use external units checker if available
+                unitsAvailable = m_externalUnitsChecker( aRef, mapIt->second, validUnits );
+            }
+            else
+            {
+                // Use default implementation
+                unitsAvailable = areUnitsAvailable( aRef, mapIt->second, validUnits );
+            }
+
+            if( unitsAvailable )
             {
                 // All required units are available - this is our answer
                 // Note: Don't insert into tracker since reference is already in use
@@ -298,7 +283,6 @@ int REFDES_TRACKER::findNextAvailable( const PREFIX_DATA& aData, int aMinValue )
 {
     if( auto cacheIt = aData.m_nextCache.find( aMinValue ); cacheIt != aData.m_nextCache.end() )
         return cacheIt->second;
-
 
     updateBaseNext( const_cast<PREFIX_DATA&>( aData ) );
 
@@ -565,4 +549,26 @@ std::vector<std::string> REFDES_TRACKER::splitString( const std::string& aStr, c
         result.push_back( current );
 
     return result;
+}
+
+
+void REFDES_TRACKER::SetUnitsChecker( const UNITS_CHECKER_FUNC<SCH_REFERENCE>& aChecker )
+{
+    std::unique_lock<std::mutex> lock;
+
+    if( m_threadSafe )
+        lock = std::unique_lock<std::mutex>( m_mutex );
+
+    m_externalUnitsChecker = aChecker;
+}
+
+
+void REFDES_TRACKER::ClearUnitsChecker()
+{
+    std::unique_lock<std::mutex> lock;
+
+    if( m_threadSafe )
+        lock = std::unique_lock<std::mutex>( m_mutex );
+
+    m_externalUnitsChecker = nullptr;
 }

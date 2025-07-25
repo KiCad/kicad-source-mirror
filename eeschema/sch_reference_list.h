@@ -275,9 +275,7 @@ class SCH_REFERENCE_LIST
 {
 public:
     SCH_REFERENCE_LIST()
-    {
-        m_reuseRefDes = true;  // Default to reusing reference designators after deletion
-    }
+    {}
 
     SCH_REFERENCE& operator[]( int aIndex )
     {
@@ -594,16 +592,6 @@ public:
         m_refDesTracker = aTracker;
     }
 
-    bool ReuseRefDes() const
-    {
-        return m_reuseRefDes;
-    }
-
-    void SetReuseRefDes( bool aReuse )
-    {
-        m_reuseRefDes = aReuse;
-    }
-
     friend class BACK_ANNOTATION;
 
     typedef std::vector<SCH_REFERENCE>::iterator       iterator;
@@ -637,7 +625,6 @@ private:
 
     std::vector<SCH_REFERENCE> m_flatList;
 
-    bool  m_reuseRefDes;  // True if the reference designators should be reused after being deleted
     std::shared_ptr<REFDES_TRACKER> m_refDesTracker; ///< A list of previously used reference designators.
 };
 
