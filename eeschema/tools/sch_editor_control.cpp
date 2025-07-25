@@ -2131,8 +2131,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( const SCH_SHEET_PATH& pastedSheetPath : pastedSheets[path] )
             {
                 annotatedSymbols[pastedSheetPath].SortByReferenceOnly();
-                annotatedSymbols[path].SetRefDesTracker( schematicSettings.m_refDesTracker );
-                annotatedSymbols[path].SetReuseRefDes( schematicSettings.m_reuseRefDes );
+                annotatedSymbols[pastedSheetPath].SetRefDesTracker( schematicSettings.m_refDesTracker );
+                annotatedSymbols[pastedSheetPath].SetReuseRefDes( schematicSettings.m_reuseRefDes );
 
                 if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
                 {
