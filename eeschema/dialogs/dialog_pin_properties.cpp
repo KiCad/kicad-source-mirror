@@ -436,18 +436,17 @@ void DIALOG_PIN_PROPERTIES::OnAddAlternate( wxCommandEvent& event )
     if( !m_alternatesGrid->CommitPendingChanges() )
         return;
 
-    SCH_PIN::ALT newAlt;
-    newAlt.m_Name = wxEmptyString;
-    newAlt.m_Type = m_pin->GetType();
-    newAlt.m_Shape = m_pin->GetShape();
+    m_alternatesGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                SCH_PIN::ALT newAlt;
+                newAlt.m_Name = wxEmptyString;
+                newAlt.m_Type = m_pin->GetType();
+                newAlt.m_Shape = m_pin->GetShape();
 
-    m_alternatesDataModel->AppendRow( newAlt );
-
-    m_alternatesGrid->MakeCellVisible( m_alternatesGrid->GetNumberRows() - 1, 0 );
-    m_alternatesGrid->SetGridCursor( m_alternatesGrid->GetNumberRows() - 1, 0 );
-
-    m_alternatesGrid->EnableCellEditControl( true );
-    m_alternatesGrid->ShowCellEditControl();
+                m_alternatesDataModel->AppendRow( newAlt );
+                return { m_alternatesGrid->GetNumberRows() - 1, COL_NAME };
+            } );
 }
 
 

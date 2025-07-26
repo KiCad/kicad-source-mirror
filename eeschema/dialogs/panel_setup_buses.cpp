@@ -176,26 +176,25 @@ void PANEL_SETUP_BUSES::OnAddAlias( wxCommandEvent& aEvent )
     if( !m_aliasesGrid->CommitPendingChanges() || !m_membersGrid->CommitPendingChanges() )
         return;
 
-    // New aliases get stored on the currently visible sheet
-    m_aliases.push_back( std::make_shared<BUS_ALIAS>( m_frame->GetScreen() ) );
+    m_aliasesGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                // New aliases get stored on the currently visible sheet
+                m_aliases.push_back( std::make_shared<BUS_ALIAS>( m_frame->GetScreen() ) );
 
-    int row = m_aliasesGrid->GetNumberRows();
+                int row = m_aliasesGrid->GetNumberRows();
 
-    // Associate the respective members with the previous alias. This ensures that the association
-    // starts correctly when adding more than one row.
-    // But in order to avoid overwriting the members of the last (row - 1) alias with
-    // those of the selected alias (since the user may choose a different alias),
-    // the alias member update here should only happen if the current alias (m_lastAlias) is the last one (row - 1).
-    if( ( row > 0 ) && ( m_lastAlias == ( row - 1 ) ) )
-        updateAliasMembers( row - 1 );
+                // Associate the respective members with the previous alias. This ensures that the association
+                // starts correctly when adding more than one row.
+                // But in order to avoid overwriting the members of the last (row - 1) alias with those of the
+                // selected alias (since the user may choose a different alias), the alias member update here
+                // should only happen if the current alias (m_lastAlias) is the last one (row - 1).
+                if( ( row > 0 ) && ( m_lastAlias == ( row - 1 ) ) )
+                    updateAliasMembers( row - 1 );
 
-    m_aliasesGrid->AppendRows();
-
-    m_aliasesGrid->MakeCellVisible( row, 0 );
-    m_aliasesGrid->SetGridCursor( row, 0 );
-
-    m_aliasesGrid->EnableCellEditControl( true );
-    m_aliasesGrid->ShowCellEditControl();
+                m_aliasesGrid->AppendRows();
+                return { row, 0 };
+            } );
 }
 
 
@@ -221,45 +220,38 @@ void PANEL_SETUP_BUSES::OnDeleteAlias( wxCommandEvent& aEvent )
 
 void PANEL_SETUP_BUSES::OnAddMember( wxCommandEvent& aEvent )
 {
-    if( !m_membersGrid->CommitPendingChanges() )
-        return;
+    m_membersGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                int row = m_membersGrid->GetNumberRows();
+                m_membersGrid->AppendRows();
 
-    int row = m_membersGrid->GetNumberRows();
-    m_membersGrid->AppendRows();
+                /*
+                 * Check if the clipboard contains text data.
+                 *
+                 * - If `clipboardHasText` is true, select the specified row in the members grid to allow
+                 *   our custom context menu to paste the clipboard .
+                 * - Otherwise, enable and display the cell edit control, allowing the user to manually edit
+                 *   the cell.
+                 */
+                bool clipboardHasText = false;
 
-    m_membersGrid->MakeCellVisible( row, 0 );
-    m_membersGrid->SetGridCursor( row, 0 );
+                if( wxTheClipboard->Open() )
+                {
+                    if( wxTheClipboard->IsSupported( wxDF_TEXT )
+                        || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
+                    {
+                        clipboardHasText = true;
+                    }
 
-    /*
-     * Check if the clipboard contains text data.
-     *
-     * - If `clipboardHasText` is true, select the specified row in the members grid to allow
-     *   our custom context menu to paste the clipboard .
-     * - Otherwise, enable and display the cell edit control, allowing the user to manually edit
-     *   the cell.
-     */
-    bool clipboardHasText = false;
+                    wxTheClipboard->Close();
+                }
 
-    if( wxTheClipboard->Open() )
-    {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT )
-            || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
-        {
-            clipboardHasText = true;
-        }
-
-        wxTheClipboard->Close();
-    }
-
-    if( clipboardHasText )
-    {
-        m_membersGrid->SelectRow( row );
-    }
-    else
-    {
-        m_membersGrid->EnableCellEditControl( true );
-        m_membersGrid->ShowCellEditControl();
-    }
+                if( clipboardHasText )
+                    return { row, -1 };
+                else
+                    return { row, 0 };
+            } );
 }
 
 

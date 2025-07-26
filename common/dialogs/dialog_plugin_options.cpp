@@ -151,25 +151,19 @@ int DIALOG_PLUGIN_OPTIONS::appendRow()
 
     m_grid->AppendRows( 1 );
 
-    // wx documentation is wrong, SetGridCursor does not make visible.
-    m_grid->MakeCellVisible( row, 0 );
-    m_grid->SetGridCursor( row, 0 );
-
     return row;
 }
 
 
-void DIALOG_PLUGIN_OPTIONS::appendOption()
+int DIALOG_PLUGIN_OPTIONS::appendOption()
 {
-    int selected_row = m_listbox->GetSelection();
-    if( selected_row != wxNOT_FOUND )
+    int row = m_listbox->GetSelection();
+
+    if( row != wxNOT_FOUND )
     {
-        wxString    option = m_listbox->GetString( selected_row );
+        wxString option = m_listbox->GetString( row );
 
-        int row_count = m_grid->GetNumberRows();
-        int row;
-
-        for( row=0;  row<row_count;  ++row )
+        for( row = 0; row < m_grid->GetNumberRows(); ++row )
         {
             wxString col0 = m_grid->GetCellValue( row, 0 );
 
@@ -177,12 +171,14 @@ void DIALOG_PLUGIN_OPTIONS::appendOption()
                 break;
         }
 
-        if( row == row_count )
+        if( row == m_grid->GetNumberRows() )
             row = appendRow();
 
         m_grid->SetCellValue( row, 0, option );
         m_grid_widths_dirty = true;
     }
+
+    return row;
 }
 
 
@@ -211,19 +207,21 @@ void DIALOG_PLUGIN_OPTIONS::onListBoxItemDoubleClicked( wxCommandEvent& event )
 
 void DIALOG_PLUGIN_OPTIONS::onAppendOption( wxCommandEvent& )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    appendOption();
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                return { appendOption(), -1 };
+            } );
 }
 
 
 void DIALOG_PLUGIN_OPTIONS::onAppendRow( wxCommandEvent& )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    appendRow();
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                return { appendRow(), 0 };
+            } );
 }
 
 

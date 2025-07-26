@@ -680,30 +680,25 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
 {
-    if( !m_itemsGrid->CommitPendingChanges() )
-        return;
+    m_itemsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
-    PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
+                newField.SetVisible( false );
+                newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+                newField.SetFPRelativePosition( { 0, 0 } );
+                newField.StyleFromSettings( m_frame->GetDesignSettings() );
 
-    newField.SetVisible( false );
-    newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
-    newField.SetFPRelativePosition( { 0, 0 } );
-    newField.StyleFromSettings( m_frame->GetDesignSettings() );
+                m_fields->push_back( newField );
 
-    m_fields->push_back( newField );
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_itemsGrid->ProcessTableMessage( msg );
+                OnModify();
 
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_itemsGrid->ProcessTableMessage( msg );
-
-    m_itemsGrid->SetFocus();
-    m_itemsGrid->MakeCellVisible( m_fields->size() - 1, 0 );
-    m_itemsGrid->SetGridCursor( m_fields->size() - 1, 0 );
-
-    m_itemsGrid->EnableCellEditControl( true );
-    m_itemsGrid->ShowCellEditControl();
-
-    OnModify();
+                return { m_fields->size() - 1, PFC_NAME };
+            } );
 }
 
 

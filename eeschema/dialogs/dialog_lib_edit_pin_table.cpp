@@ -1280,49 +1280,45 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnColSort( wxGridEvent& aEvent )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                SCH_PIN* newPin = new SCH_PIN( this->m_symbol );
 
-    SCH_PIN* newPin = new SCH_PIN( this->m_symbol );
+                // Copy the settings of the last pin onto the new pin.
+                if( m_pins.size() > 0 )
+                {
+                    SCH_PIN* last = m_pins.back();
 
-    // Copy the settings of the last pin onto the new pin.
-    if( m_pins.size() > 0 )
-    {
-        SCH_PIN* last = m_pins.back();
+                    newPin->SetOrientation( last->GetOrientation() );
+                    newPin->SetType( last->GetType() );
+                    newPin->SetShape( last->GetShape() );
+                    newPin->SetUnit( last->GetUnit() );
 
-        newPin->SetOrientation( last->GetOrientation() );
-        newPin->SetType( last->GetType() );
-        newPin->SetShape( last->GetShape() );
-        newPin->SetUnit( last->GetUnit() );
+                    VECTOR2I pos = last->GetPosition();
 
-        VECTOR2I pos = last->GetPosition();
+                    SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
 
-        SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
+                    if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
+                        || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+                    {
+                        pos.y -= schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                    }
+                    else
+                    {
+                        pos.x += schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                    }
 
-        if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
-            || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
-        {
-            pos.y -= schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
-        }
-        else
-        {
-            pos.x += schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
-        }
+                    newPin->SetPosition( pos );
+                }
 
-        newPin->SetPosition( pos );
-    }
+                m_pins.push_back( newPin );
 
-    m_pins.push_back( newPin );
+                m_dataModel->AppendRow( m_pins[ m_pins.size() - 1 ] );
+                updateSummary();
 
-    m_dataModel->AppendRow( m_pins[ m_pins.size() - 1 ] );
-
-    m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 1 );
-    m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 1 );
-
-    m_grid->EnableCellEditControl( true );
-    m_grid->ShowCellEditControl();
-
-    updateSummary();
+                return { m_dataModel->GetNumberRows() - 1, COL_NUMBER };
+            } );
 }
 
 

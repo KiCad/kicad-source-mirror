@@ -97,27 +97,23 @@ void DIALOG_USER_DEFINED_SIGNALS::addGridRow( const wxString& aText, int aId )
 
 void DIALOG_USER_DEFINED_SIGNALS::onAddSignal( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                long newId = 0;
 
-    long newId = 0;
+                for( int ii = 0; ii < m_grid->GetNumberRows(); ++ii )
+                {
+                    long usedId;
+                    m_grid->GetCellValue( ii, 1 ).ToLong( &usedId );
 
-    for( int ii = 0; ii < m_grid->GetNumberRows(); ++ii )
-    {
-        long usedId;
-        m_grid->GetCellValue( ii, 1 ).ToLong( &usedId );
+                    if( usedId >= newId )
+                        newId = usedId + 1;
+                }
 
-        if( usedId >= newId )
-            newId = usedId + 1;
-    }
-
-    addGridRow( wxEmptyString, (int) newId );
-
-    m_grid->MakeCellVisible( m_grid->GetNumberRows() - 1, 0 );
-    m_grid->SetGridCursor( m_grid->GetNumberRows() - 1, 0 );
-
-    m_grid->EnableCellEditControl( true );
-    m_grid->ShowCellEditControl();
+                addGridRow( wxEmptyString, (int) newId );
+                return { m_grid->GetNumberRows() - 1, 0 };
+            } );
 }
 
 

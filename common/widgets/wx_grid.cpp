@@ -681,6 +681,26 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
 }
 
 
+void WX_GRID::OnAddRow( const std::function<std::pair<int, int>()>& aAdder )
+{
+    if( !CommitPendingChanges() )
+        return;
+
+    auto [row, editCol] = aAdder();
+
+    // wx documentation is wrong, SetGridCursor does not make visible.
+    SetFocus();
+    MakeCellVisible( row, std::max( editCol, 0 ) );
+    SetGridCursor( row, std::max( editCol, 0 ) );
+
+    if( editCol >= 0 )
+    {
+        EnableCellEditControl( true );
+        ShowCellEditControl();
+    }
+}
+
+
 void WX_GRID::OnDeleteRows( const std::function<void( int row )>& aDeleter )
 {
     OnDeleteRows(

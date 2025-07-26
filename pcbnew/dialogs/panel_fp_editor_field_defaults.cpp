@@ -315,26 +315,23 @@ bool PANEL_FP_EDITOR_FIELD_DEFAULTS::TransferDataFromWindow()
 
 void PANEL_FP_EDITOR_FIELD_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 {
-    if( !m_textItemsGrid->CommitPendingChanges() )
-        return;
+    m_textItemsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                wxGridTableBase* table = m_textItemsGrid->GetTable();
 
-    wxGridTableBase* table = m_textItemsGrid->GetTable();
+                int newRow = m_textItemsGrid->GetNumberRows();
+                table->AppendRows( 1 );
 
-    int newRow = m_textItemsGrid->GetNumberRows();
-    table->AppendRows( 1 );
+                long defaultBoardLayer = F_SilkS;
 
-    long defaultBoardLayer = F_SilkS;
+                if( newRow > 0 )
+                     defaultBoardLayer = table->GetValueAsLong( newRow - 1, 1 );
 
-    if( newRow > 0 )
-         defaultBoardLayer = table->GetValueAsLong( newRow - 1, 1 );
+                table->SetValueAsLong( newRow, 1, defaultBoardLayer );
 
-    table->SetValueAsLong( newRow, 1, defaultBoardLayer );
-
-    m_textItemsGrid->MakeCellVisible( newRow, 0 );
-    m_textItemsGrid->SetGridCursor( newRow, 0 );
-
-    m_textItemsGrid->EnableCellEditControl( true );
-    m_textItemsGrid->ShowCellEditControl();
+                return { newRow, 0 };
+            } );
 }
 
 

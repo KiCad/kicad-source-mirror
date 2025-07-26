@@ -93,23 +93,19 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 
 void PANEL_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                int row = m_grid->GetNumberRows();
+                TransferDataFromGrid();
 
-    int row = m_grid->GetNumberRows();
-    TransferDataFromGrid();
+                TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( _( "Untitled Field" ) );
+                newFieldname.m_Visible = false;
+                m_fields.insert( m_fields.end(), newFieldname );
 
-    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( _( "Untitled Field" ) );
-    newFieldname.m_Visible = false;
-    m_fields.insert( m_fields.end(), newFieldname );
-    TransferDataToGrid();
-
-    // wx documentation is wrong, SetGridCursor does not make visible.
-    m_grid->MakeCellVisible( row, 0 );
-    m_grid->SetGridCursor( row, 0 );
-
-    m_grid->EnableCellEditControl( true );
-    m_grid->ShowCellEditControl();
+                TransferDataToGrid();
+                return { row, 0 };
+            } );
 }
 
 

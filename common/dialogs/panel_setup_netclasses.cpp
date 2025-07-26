@@ -741,27 +741,23 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridMouseEvent( wxMouseEvent& aEvent )
 
 void PANEL_SETUP_NETCLASSES::OnAddNetclassClick( wxCommandEvent& event )
 {
-    if( !m_netclassGrid->CommitPendingChanges() )
-        return;
+    m_netclassGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_netclassGrid->InsertRows();
 
-    m_netclassGrid->InsertRows();
+                // Set defaults where required
+                wxString colorAsString = KIGFX::COLOR4D::UNSPECIFIED.ToCSSString();
+                m_netclassGrid->SetCellValue( 0, GRID_PCB_COLOR, colorAsString );
+                m_netclassGrid->SetCellValue( 0, GRID_SCHEMATIC_COLOR, colorAsString );
+                m_netclassGrid->SetCellValue( 0, GRID_LINESTYLE, g_lineStyleNames[0] );
 
-    // Set defaults where required
-    wxString colorAsString = KIGFX::COLOR4D::UNSPECIFIED.ToCSSString();
-    m_netclassGrid->SetCellValue( 0, GRID_PCB_COLOR, colorAsString );
-    m_netclassGrid->SetCellValue( 0, GRID_SCHEMATIC_COLOR, colorAsString );
-    m_netclassGrid->SetCellValue( 0, GRID_LINESTYLE, g_lineStyleNames[0] );
+                // Set the row nullable editors
+                setNetclassRowNullableEditors( 0, false );
 
-    // Set the row nullable editors
-    setNetclassRowNullableEditors( 0, false );
-
-    m_netclassGrid->MakeCellVisible( 0, 0 );
-    m_netclassGrid->SetGridCursor( 0, 0 );
-
-    m_netclassGrid->EnableCellEditControl( true );
-    m_netclassGrid->ShowCellEditControl();
-
-    m_netclassesDirty = true;
+                m_netclassesDirty = true;
+                return { 0, GRID_NAME };
+            } );
 }
 
 
@@ -828,19 +824,14 @@ void PANEL_SETUP_NETCLASSES::OnSizeNetclassGrid( wxSizeEvent& event )
 
 void PANEL_SETUP_NETCLASSES::OnAddAssignmentClick( wxCommandEvent& event )
 {
-    if( !m_assignmentGrid->CommitPendingChanges() )
-        return;
-
-    int row = m_assignmentGrid->GetNumberRows();
-    m_assignmentGrid->AppendRows();
-
-    m_assignmentGrid->SetCellValue( row, 1, m_netSettings->GetDefaultNetclass()->GetName() );
-
-    m_assignmentGrid->MakeCellVisible( row, 0 );
-    m_assignmentGrid->SetGridCursor( row, 0 );
-
-    m_assignmentGrid->EnableCellEditControl( true );
-    m_assignmentGrid->ShowCellEditControl();
+    m_assignmentGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                int row = m_assignmentGrid->GetNumberRows();
+                m_assignmentGrid->AppendRows();
+                m_assignmentGrid->SetCellValue( row, 1, m_netSettings->GetDefaultNetclass()->GetName() );
+                return { row, 0 };
+            } );
 }
 
 

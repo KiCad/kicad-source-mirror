@@ -712,24 +712,20 @@ void DIALOG_SHEET_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                SCH_FIELD newField( m_sheet, FIELD_T::SHEET_USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
-    SCH_FIELD newField( m_sheet, FIELD_T::SHEET_USER, GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
+                newField.SetTextAngle( m_fields->GetField( FIELD_T::SHEET_NAME )->GetTextAngle() );
+                newField.SetVisible( false );
+                m_fields->push_back( newField );
 
-    newField.SetTextAngle( m_fields->GetField( FIELD_T::SHEET_NAME )->GetTextAngle() );
-    newField.SetVisible( false );
-    m_fields->push_back( newField );
-
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
-
-    m_grid->MakeCellVisible( m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( m_fields->size() - 1, 0 );
-
-    m_grid->EnableCellEditControl();
-    m_grid->ShowCellEditControl();
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_grid->ProcessTableMessage( msg );
+                return { m_fields->size() - 1, FDC_NAME };
+            } );
 }
 
 
@@ -793,10 +789,10 @@ void DIALOG_SHEET_PROPERTIES::AdjustGridColumns()
     // Account for scroll bars
     int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
-    m_grid->AutoSizeColumn( 0 );
-    m_grid->SetColSize( 0, std::max( 72, m_grid->GetColSize( 0 ) ) );
+    m_grid->AutoSizeColumn( FDC_NAME );
+    m_grid->SetColSize( FDC_NAME, std::max( 72, m_grid->GetColSize( FDC_NAME ) ) );
 
-    int fixedColsWidth = m_grid->GetColSize( 0 );
+    int fixedColsWidth = m_grid->GetColSize( FDC_NAME );
 
     for( int i = 2; i < m_grid->GetNumberCols(); i++ )
         fixedColsWidth += m_grid->GetColSize( i );

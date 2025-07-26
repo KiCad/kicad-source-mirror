@@ -49,7 +49,7 @@ private:
 
     int appendRow();
 
-    void appendOption();
+    int appendOption();
 
     //-----<event handlers>------------------------------------------------------
     void onListBoxItemSelected( wxCommandEvent& event ) override;

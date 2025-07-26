@@ -306,16 +306,12 @@ void PANEL_DISPLAY_OPTIONS::onLayerChange( wxGridEvent& event )
 
 void PANEL_DISPLAY_OPTIONS::OnAddLayerItem( wxCommandEvent& event )
 {
-    if( !m_layerNameitemsGrid->CommitPendingChanges() )
-        return;
-
-    wxGridTableBase* table = m_layerNameitemsGrid->GetTable();
-
-    int newRow = m_layerNameitemsGrid->GetNumberRows();
-    table->AppendRows( 1 );
-
-    m_layerNameitemsGrid->MakeCellVisible( newRow, 0 );
-    m_layerNameitemsGrid->SetGridCursor( newRow, 0 );
+    m_layerNameitemsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_layerNameitemsGrid->GetTable()->AppendRows( 1 );
+                return { m_layerNameitemsGrid->GetNumberRows() - 1, -1 };
+            } );
 }
 
 

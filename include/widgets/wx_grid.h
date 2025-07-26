@@ -113,6 +113,8 @@ public:
     bool CommitPendingChanges( bool aQuietMode = false );
     bool CancelPendingChanges();
 
+    void OnAddRow( const std::function<std::pair<int, int>()>& aAdder );
+
     /**
      * Handles a row deletion event.  This is a bit tricky due to the potential for stale
      * selections, so we code it only once here.

@@ -845,27 +845,23 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridEditorHidden( wxGridEvent& aEvent )
 
 void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
+    m_fieldsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                SCH_FIELD newField( m_symbol, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
-    SCH_FIELD newField( m_symbol, FIELD_T::USER, GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
+                newField.SetTextAngle( m_fields->GetField( FIELD_T::REFERENCE )->GetTextAngle() );
+                newField.SetVisible( false );
 
-    newField.SetTextAngle( m_fields->GetField( FIELD_T::REFERENCE )->GetTextAngle() );
-    newField.SetVisible( false );
+                m_fields->push_back( newField );
 
-    m_fields->push_back( newField );
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_fieldsGrid->ProcessTableMessage( msg );
+                OnModify();
 
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_fieldsGrid->ProcessTableMessage( msg );
-
-    m_fieldsGrid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
-    m_fieldsGrid->SetGridCursor( (int) m_fields->size() - 1, 0 );
-
-    m_fieldsGrid->EnableCellEditControl();
-    m_fieldsGrid->ShowCellEditControl();
-
-    OnModify();
+                return { m_fields->size() - 1, FDC_NAME };
+            } );
 }
 
 

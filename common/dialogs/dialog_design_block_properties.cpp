@@ -98,8 +98,8 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromWindow()
     if( illegalCh )
     {
         wxString msg = wxString::Format( _( "Illegal character '%c' in name '%s'." ),
-                                illegalCh,
-                                m_textName->GetValue() );
+                                         illegalCh,
+                                         m_textName->GetValue() );
 
         wxMessageDialog errdlg( this, msg, _( "Error" ) );
         errdlg.ShowModal();
@@ -116,23 +116,21 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_DESIGN_BLOCK_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
-    if( !m_fieldsGrid->CommitPendingChanges() )
-        return;
+    m_fieldsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                int row = m_fieldsGrid->GetNumberRows();
+                m_fieldsGrid->AppendRows( 1 );
 
-    int row = m_fieldsGrid->GetNumberRows();
+                m_fieldsGrid->SetCellValue( row, 0, _( "Untitled Field" ) );
+                //m_fieldsGrid->SetCellValue( row, 1, wxEmptyString );
 
-    m_fieldsGrid->AppendRows( 1 );
+                // Set cell properties
+                m_fieldsGrid->SetCellAlignment( row, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+                m_fieldsGrid->SetCellAlignment( row, 1, wxALIGN_LEFT, wxALIGN_CENTRE );
 
-    m_fieldsGrid->SetCellValue( row, 0, _( "Untitled Field" ) );
-    //m_fieldsGrid->SetCellValue( row, 1, wxEmptyString );
-
-    // Set cell properties
-    m_fieldsGrid->SetCellAlignment( row, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_fieldsGrid->SetCellAlignment( row, 1, wxALIGN_LEFT, wxALIGN_CENTRE );
-
-    // wx documentation is wrong, SetGridCursor does not make visible.
-    m_fieldsGrid->MakeCellVisible( row, 0 );
-    m_fieldsGrid->SetGridCursor( row, 0 );
+                return { row, 0 };
+            } );
 }
 
 

@@ -744,47 +744,43 @@ void DIALOG_LABEL_PROPERTIES::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 
 void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                wxString fieldName = wxT( "Netclass" );
 
-    wxString fieldName = wxT( "Netclass" );
+                for( SCH_FIELD& field : *m_fields )
+                {
+                    if( field.GetId() != FIELD_T::INTERSHEET_REFS && field.GetName() != wxT( "Netclass" ) )
+                    {
+                        fieldName = wxEmptyString;
+                        break;
+                    }
+                }
 
-    for( SCH_FIELD& field : *m_fields )
-    {
-        if( field.GetId() != FIELD_T::INTERSHEET_REFS && field.GetName() != wxT( "Netclass" ) )
-        {
-            fieldName = wxEmptyString;
-            break;
-        }
-    }
+                fieldName = SCH_LABEL_BASE::GetDefaultFieldName( fieldName, true );
 
-    fieldName = SCH_LABEL_BASE::GetDefaultFieldName( fieldName, true );
+                SCH_FIELD newField( m_currentLabel, FIELD_T::USER, fieldName );
 
-    SCH_FIELD newField( m_currentLabel, FIELD_T::USER, fieldName );
+                if( m_fields->size() > 0 )
+                {
+                    // SetAttributes() also covers text angle, size, italic and bold
+                    newField.SetAttributes( m_fields->at( m_fields->size() - 1 ) );
+                    newField.SetVisible( m_fields->at( m_fields->size() - 1 ).IsVisible() );
+                }
+                else
+                {
+                    newField.SetVisible( true );
+                    newField.SetItalic( true );
+                }
 
-    if( m_fields->size() > 0 )
-    {
-        // SetAttributes() also covers text angle, size, italic and bold
-        newField.SetAttributes( m_fields->at( m_fields->size() - 1 ) );
-        newField.SetVisible( m_fields->at( m_fields->size() - 1 ).IsVisible() );
-    }
-    else
-    {
-        newField.SetVisible( true );
-        newField.SetItalic( true );
-    }
+                m_fields->push_back( newField );
 
-    m_fields->push_back( newField );
-
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
-
-    m_grid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( (int) m_fields->size() - 1, 0 );
-
-    m_grid->EnableCellEditControl();
-    m_grid->ShowCellEditControl();
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_grid->ProcessTableMessage( msg );
+                return { m_fields->size() - 1, FDC_NAME };
+            } );
 }
 
 

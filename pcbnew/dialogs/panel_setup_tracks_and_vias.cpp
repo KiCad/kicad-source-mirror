@@ -444,76 +444,66 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( int aWidth, int aGap, int aVi
 }
 
 
-void removeSelectedRows( WX_GRID* aGrid )
-{
-    aGrid->OnDeleteRows(
-            [&]( int row )
-            {
-                aGrid->DeleteRows( row, 1 );
-            } );
-}
-
-
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent )
 {
-    if( !commitPendingChanges() )
-        return;
-
-    AppendTrackWidth( 0 );
-
-    m_trackWidthsGrid->MakeCellVisible( m_trackWidthsGrid->GetNumberRows() - 1, TR_WIDTH_COL );
-    m_trackWidthsGrid->SetGridCursor( m_trackWidthsGrid->GetNumberRows() - 1, TR_WIDTH_COL );
-
-    m_trackWidthsGrid->EnableCellEditControl( true );
-    m_trackWidthsGrid->ShowCellEditControl();
+    m_trackWidthsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                AppendTrackWidth( 0 );
+                return { m_trackWidthsGrid->GetNumberRows() - 1, TR_WIDTH_COL };
+            } );
 }
 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& event )
 {
-    removeSelectedRows( m_trackWidthsGrid );
+    m_trackWidthsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_trackWidthsGrid->DeleteRows( row, 1 );
+            } );
 }
 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
 {
-    if( !commitPendingChanges() )
-        return;
-
-    AppendViaSize( 0, 0 );
-
-    m_viaSizesGrid->MakeCellVisible( m_viaSizesGrid->GetNumberRows() - 1, VIA_SIZE_COL );
-    m_viaSizesGrid->SetGridCursor( m_viaSizesGrid->GetNumberRows() - 1, VIA_SIZE_COL );
-
-    m_viaSizesGrid->EnableCellEditControl( true );
-    m_viaSizesGrid->ShowCellEditControl();
+    m_viaSizesGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                AppendViaSize( 0, 0 );
+                return { m_viaSizesGrid->GetNumberRows() - 1, VIA_SIZE_COL };
+            } );
 }
 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
 {
-    removeSelectedRows( m_viaSizesGrid );
+    m_viaSizesGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_viaSizesGrid->DeleteRows( row, 1 );
+            } );
 }
 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
 {
-    if( !commitPendingChanges() )
-        return;
-
-    AppendDiffPairs( 0, 0, 0 );
-
-    m_diffPairsGrid->MakeCellVisible( m_diffPairsGrid->GetNumberRows() - 1, DP_WIDTH_COL );
-    m_diffPairsGrid->SetGridCursor( m_diffPairsGrid->GetNumberRows() - 1, DP_WIDTH_COL );
-
-    m_diffPairsGrid->EnableCellEditControl( true );
-    m_diffPairsGrid->ShowCellEditControl();
+    m_diffPairsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                AppendDiffPairs( 0, 0, 0 );
+                return { m_diffPairsGrid->GetNumberRows() - 1, DP_WIDTH_COL };
+            } );
 }
 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event )
 {
-    removeSelectedRows( m_diffPairsGrid );
+    m_diffPairsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_diffPairsGrid->DeleteRows( row, 1 );
+            } );
 }
 
 

@@ -721,37 +721,32 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
-    if( !m_itemsGrid->CommitPendingChanges() )
-        return;
+    m_itemsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
 
-    const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+                PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
-    PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
+                // Set active layer if legal; otherwise copy layer from previous text item
+                if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
+                    newField.SetLayer( m_frame->GetActiveLayer() );
+                else
+                    newField.SetLayer( m_fields->at( m_fields->size() - 1 ).GetLayer() );
 
-    // Set active layer if legal; otherwise copy layer from previous text item
-    if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
-        newField.SetLayer( m_frame->GetActiveLayer() );
-    else
-        newField.SetLayer( m_fields->at( m_fields->size() - 1 ).GetLayer() );
+                newField.SetTextSize( dsnSettings.GetTextSize( newField.GetLayer() ) );
+                newField.SetTextThickness( dsnSettings.GetTextThickness( newField.GetLayer() ) );
+                newField.SetItalic( dsnSettings.GetTextItalic( newField.GetLayer() ) );
 
-    newField.SetTextSize( dsnSettings.GetTextSize( newField.GetLayer() ) );
-    newField.SetTextThickness( dsnSettings.GetTextThickness( newField.GetLayer() ) );
-    newField.SetItalic( dsnSettings.GetTextItalic( newField.GetLayer() ) );
+                m_fields->push_back( newField );
 
-    m_fields->push_back( newField );
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_itemsGrid->ProcessTableMessage( msg );
+                OnModify();
 
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_itemsGrid->ProcessTableMessage( msg );
-
-    m_itemsGrid->SetFocus();
-    m_itemsGrid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
-    m_itemsGrid->SetGridCursor( (int) m_fields->size() - 1, 0 );
-
-    m_itemsGrid->EnableCellEditControl( true );
-    m_itemsGrid->ShowCellEditControl();
-
-    OnModify();
+                return { m_fields->size() - 1, PFC_NAME };
+            } );
 }
 
 
@@ -784,25 +779,23 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
 {
-    if( !m_privateLayersGrid->CommitPendingChanges() )
-        return;
+    m_privateLayersGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                PCB_LAYER_ID nextLayer = User_1;
 
-    PCB_LAYER_ID nextLayer = User_1;
+                while( alg::contains( *m_privateLayers, nextLayer ) && nextLayer < User_45 )
+                    nextLayer = ToLAYER_ID( nextLayer + 1 );
 
-    while( alg::contains( *m_privateLayers, nextLayer ) && nextLayer < User_45 )
-        nextLayer = ToLAYER_ID( nextLayer + 1 );
+                m_privateLayers->push_back( nextLayer );
 
-    m_privateLayers->push_back( nextLayer );
+                // notify the grid
+                wxGridTableMessage msg( m_privateLayers, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_privateLayersGrid->ProcessTableMessage( msg );
+                OnModify();
 
-    // notify the grid
-    wxGridTableMessage msg( m_privateLayers, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_privateLayersGrid->ProcessTableMessage( msg );
-
-    m_privateLayersGrid->SetFocus();
-    m_privateLayersGrid->MakeCellVisible( (int) m_privateLayers->size() - 1, 0 );
-    m_privateLayersGrid->SetGridCursor( (int) m_privateLayers->size() - 1, 0 );
-
-    OnModify();
+                return { m_privateLayers->size() - 1, 0 };
+            } );
 }
 
 
@@ -848,19 +841,14 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemoveJumperGroup( wxCommandEvent&
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onAddGroup( WX_GRID* aGrid )
 {
-    if( !aGrid->CommitPendingChanges() )
-        return;
+    aGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                aGrid->AppendRows( 1 );
+                OnModify();
 
-    aGrid->AppendRows( 1 );
-
-    aGrid->SetFocus();
-    aGrid->MakeCellVisible( aGrid->GetNumberRows() - 1, 0 );
-    aGrid->SetGridCursor( aGrid->GetNumberRows() - 1, 0 );
-
-    aGrid->EnableCellEditControl( true );
-    aGrid->ShowCellEditControl();
-
-    OnModify();
+                return { aGrid->GetNumberRows() - 1, 0 };
+            } );
 }
 
 

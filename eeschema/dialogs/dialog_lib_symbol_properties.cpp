@@ -645,29 +645,25 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameKillFocus( wxFocusEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
+                SCH_FIELD newField( m_libEntry, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
-    SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
-    SCH_FIELD newField( m_libEntry, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+                newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
+                                                schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
+                newField.SetVisible( false );
 
-    newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
-                                    schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
-    newField.SetVisible( false );
+                m_fields->push_back( newField );
 
-    m_fields->push_back( newField );
+                // notify the grid
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+                m_grid->ProcessTableMessage( msg );
+                OnModify();
 
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
-
-    m_grid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( (int) m_fields->size() - 1, 0 );
-
-    m_grid->EnableCellEditControl();
-    m_grid->ShowCellEditControl();
-
-    OnModify();
+                return { m_fields->size() - 1, FDC_NAME };
+            } );
 }
 
 
