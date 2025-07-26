@@ -84,6 +84,9 @@
     "units": 0,
     "version": 1
   },
+  "export_d356": {
+    "doNotExportUnconnectedPads": false
+  },
   "export_idf": {
     "auto_adjust": false,
     "ref_units": 0,
@@ -299,7 +302,26 @@
     "size_x": 0,
     "size_y": 0,
     "zoom": 1.0,
-    "zoom_factors": []
+    "zoom_factors": [
+      0.13,
+      0.22,
+      0.35,
+      0.6,
+      1.0,
+      1.5,
+      2.2,
+      3.5,
+      5.0,
+      8.0,
+      13.0,
+      20.0,
+      35.0,
+      50.0,
+      80.0,
+      130.0,
+      220.0,
+      300.0
+    ]
   },
   "footprint_wizard": {
     "cursor": {
@@ -450,7 +472,26 @@
     "pos_y": 0,
     "size_x": 0,
     "size_y": 0,
-    "zoom_factors": []
+    "zoom_factors": [
+      0.13,
+      0.22,
+      0.35,
+      0.6,
+      1.0,
+      1.5,
+      2.2,
+      3.5,
+      5.0,
+      8.0,
+      13.0,
+      20.0,
+      35.0,
+      50.0,
+      80.0,
+      130.0,
+      220.0,
+      300.0
+    ]
   },
   "footprint_wizard_list": {
     "height": -1,
@@ -500,6 +541,7 @@
     "delete_extra_footprints": false,
     "delete_shorting_tracks": false,
     "report_filter": -1,
+    "transfer_groups": true,
     "update_footprints": true
   },
   "pcb_display": {
@@ -740,7 +782,26 @@
     "pos_y": 0,
     "size_x": 0,
     "size_y": 0,
-    "zoom_factors": []
+    "zoom_factors": [
+      0.13,
+      0.22,
+      0.35,
+      0.6,
+      1.0,
+      1.5,
+      2.2,
+      3.5,
+      5.0,
+      8.0,
+      13.0,
+      20.0,
+      35.0,
+      50.0,
+      80.0,
+      130.0,
+      220.0,
+      300.0
+    ]
   },
   "zones": {
     "net_sort_mode": -1

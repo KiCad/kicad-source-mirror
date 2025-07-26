@@ -131,6 +131,7 @@
     "default_text_size": 50,
     "default_wire_thickness": 6,
     "field_names": "",
+    "hop_over_size_choice": 0,
     "junction_size_choice": 3,
     "junction_size_mult_list": [
       0.0,
@@ -145,6 +146,9 @@
     "pin_symbol_size": 25,
     "repeat_label_increment": 1,
     "text_offset_ratio": 0.08
+  },
+  "editing": {
+    "arc_edit_mode": 0
   },
   "field_editor": {
     "export_filename": "",
@@ -196,13 +200,87 @@
     "lib_list_width": 150,
     "show_pin_electrical_type": true,
     "window": {
+      "cursor": {
+        "always_show_cursor": true,
+        "fullscreen_cursor": false
+      },
       "display": 0,
+      "grid": {
+        "axes_enabled": false,
+        "fast_grid_1": 1,
+        "fast_grid_2": 2,
+        "last_size": 1,
+        "line_width": 1.0,
+        "min_spacing": 10.0,
+        "override_connected": true,
+        "override_connected_idx": 1,
+        "override_graphics": false,
+        "override_graphics_idx": 2,
+        "override_text": true,
+        "override_text_idx": 3,
+        "override_vias": false,
+        "override_vias_idx": 0,
+        "override_wires": true,
+        "override_wires_idx": 1,
+        "overrides_enabled": true,
+        "show": true,
+        "sizes": [
+          {
+            "name": "",
+            "x": "100 mil",
+            "y": "100 mil"
+          },
+          {
+            "name": "",
+            "x": "50 mil",
+            "y": "50 mil"
+          },
+          {
+            "name": "",
+            "x": "25 mil",
+            "y": "25 mil"
+          },
+          {
+            "name": "",
+            "x": "10 mil",
+            "y": "10 mil"
+          }
+        ],
+        "snap": 0,
+        "style": 0,
+        "user_grid_x": "",
+        "user_grid_y": ""
+      },
       "maximized": false,
+      "mru_path": "",
       "perspective": "",
       "pos_x": 0,
       "pos_y": 0,
       "size_x": 500,
-      "size_y": 400
+      "size_y": 400,
+      "zoom_factors": [
+        0.05,
+        0.07,
+        0.1,
+        0.15,
+        0.2,
+        0.3,
+        0.5,
+        0.7,
+        1.0,
+        1.5,
+        2.0,
+        3.0,
+        4.5,
+        6.5,
+        10.0,
+        15.0,
+        20.0,
+        30.0,
+        45.0,
+        65.0,
+        100.0
+      ]
     }
   },
   "meta": {
@@ -282,13 +360,87 @@
     "signal_panel_height": 0,
     "white_background": false,
     "window": {
+      "cursor": {
+        "always_show_cursor": true,
+        "fullscreen_cursor": false
+      },
       "display": 0,
+      "grid": {
+        "axes_enabled": false,
+        "fast_grid_1": 1,
+        "fast_grid_2": 2,
+        "last_size": 1,
+        "line_width": 1.0,
+        "min_spacing": 10.0,
+        "override_connected": true,
+        "override_connected_idx": 1,
+        "override_graphics": false,
+        "override_graphics_idx": 2,
+        "override_text": true,
+        "override_text_idx": 3,
+        "override_vias": false,
+        "override_vias_idx": 0,
+        "override_wires": true,
+        "override_wires_idx": 1,
+        "overrides_enabled": true,
+        "show": true,
+        "sizes": [
+          {
+            "name": "",
+            "x": "100 mil",
+            "y": "100 mil"
+          },
+          {
+            "name": "",
+            "x": "50 mil",
+            "y": "50 mil"
+          },
+          {
+            "name": "",
+            "x": "25 mil",
+            "y": "25 mil"
+          },
+          {
+            "name": "",
+            "x": "10 mil",
+            "y": "10 mil"
+          }
+        ],
+        "snap": 0,
+        "style": 0,
+        "user_grid_x": "",
+        "user_grid_y": ""
+      },
       "maximized": false,
+      "mru_path": "",
       "perspective": "",
       "pos_x": 0,
       "pos_y": 0,
       "size_x": 500,
-      "size_y": 400
+      "size_y": 400,
+      "zoom_factors": [
+        0.05,
+        0.07,
+        0.1,
+        0.15,
+        0.2,
+        0.3,
+        0.5,
+        0.7,
+        1.0,
+        1.5,
+        2.0,
+        3.0,
+        4.5,
+        6.5,
+        10.0,
+        15.0,
+        20.0,
+        30.0,
+        45.0,
+        65.0,
+        100.0
+      ]
     }
   },
   "symbol_chooser": {
@@ -370,6 +522,28 @@
     "pos_y": 0,
     "size_x": 0,
     "size_y": 0,
-    "zoom_factors": []
+    "zoom_factors": [
+      0.05,
+      0.07,
+      0.1,
+      0.15,
+      0.2,
+      0.3,
+      0.5,
+      0.7,
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      4.5,
+      6.5,
+      10.0,
+      15.0,
+      20.0,
+      30.0,
+      45.0,
+      65.0,
+      100.0
+    ]
   }
 }
