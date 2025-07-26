@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-06-22 14:33+0000\n"
+"PO-Revision-Date: 2025-07-26 18:52+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -32037,50 +32037,38 @@ msgstr ""
 "nástroje \"Aktualizovat schéma z DPS\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"Existují %i typy referenčních označení\n"
-"**********************************************************\n"
+"<br/>Používají se %i referenční prefixy<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"Vyloučeno: %s z přečíslování\n"
-"\n"
+msgstr "Vyloučeno: %s z přečíslování<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Změna pole\n"
-"***********************\n"
+"<br/>Změna pole\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " bude ignorován"
+msgstr "(bude ignorováno)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "Žádné pouzdra"
+msgstr "<br/>Žádné pouzdra"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"*********** Seřadit na %s ***********"
+msgstr "<br/>*********** Seřadit podle souřadnic pouzdra ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
 #, fuzzy
