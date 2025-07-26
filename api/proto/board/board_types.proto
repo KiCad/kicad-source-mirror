@@ -520,6 +520,9 @@ message Pad
 
   // Since: 9.0.4
   kiapi.common.types.Distance pad_to_die_length = 9;
+
+  // Since: 10.0.0
+  kiapi.common.types.Time pad_to_die_delay = 10;
 }
 
 enum ZoneType
