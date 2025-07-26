@@ -239,6 +239,19 @@ add_library( kicommon SHARED
     ${KICOMMON_SRCS}
     )
 
+target_precompile_headers( kicommon
+    PRIVATE
+        <kicommon.h>
+        <algorithm>
+        <map>
+        <memory>
+        <optional>
+        <set>
+        <string>
+        <vector>
+        <wx/wx.h>
+         )
+
 set_target_properties(kicommon PROPERTIES CXX_VISIBILITY_PRESET hidden)
 
 target_link_libraries( kicommon
@@ -736,6 +749,11 @@ add_library( common STATIC
     ${COMMON_SRCS}
     )
 
+target_precompile_headers( common
+    PRIVATE
+        $<TARGET_PROPERTY:kicommon,PRECOMPILE_HEADERS>
+         )
+
 add_dependencies( common version_header )
 add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 
@@ -906,6 +924,18 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     )
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
+
+target_precompile_headers( pcbcommon
+    PRIVATE
+        <vector>
+        <map>
+        <memory>
+        <unordered_map>
+        <board.h>
+        <footprint.h>
+        <zone.h>
+        <connectivity/connectivity_data.h>
+        <drc/drc_engine.h> )
 
 target_include_directories( pcbcommon PRIVATE
     )

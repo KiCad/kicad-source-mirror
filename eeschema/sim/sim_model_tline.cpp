@@ -26,7 +26,7 @@
 
 #include <fmt/core.h>
 
-using PARAM = SIM_MODEL::PARAM;
+using SIMPARAM = SIM_MODEL::PARAM;
 
 
 std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
@@ -74,18 +74,18 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
 SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType ) :
         SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_TLINE>( *this ) )
 {
-    static std::vector<PARAM::INFO> z0 = makeZ0ParamInfos();
-    static std::vector<PARAM::INFO> rlgc = makeRlgcParamInfos();
+    static std::vector<SIMPARAM::INFO> z0 = makeZ0ParamInfos();
+    static std::vector<SIMPARAM::INFO> rlgc = makeRlgcParamInfos();
 
     switch( aType )
     {
     case TYPE::TLINE_Z0:
-        for( const PARAM::INFO& paramInfo : z0 )
+        for( const SIMPARAM::INFO& paramInfo : z0 )
             AddParam( paramInfo );
         break;
 
     case TYPE::TLINE_RLGC:
-        for( const PARAM::INFO& paramInfo : rlgc )
+        for( const SIMPARAM::INFO& paramInfo : rlgc )
             AddParam( paramInfo );
         break;
 
@@ -96,15 +96,15 @@ SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType ) :
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
+std::vector<SIMPARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
 {
-    std::vector<PARAM::INFO> paramInfos;
-    PARAM::INFO paramInfo = {};
+    std::vector<SIMPARAM::INFO> paramInfos;
+    SIMPARAM::INFO paramInfo = {};
 
     paramInfo.name = "z0";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Ω";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Characteristic impedance";
     paramInfo.isSpiceInstanceParam = false;
@@ -114,7 +114,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
     paramInfo.name = "td";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "s";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Transmission delay";
     paramInfo.isSpiceInstanceParam = false;
@@ -125,15 +125,15 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
+std::vector<SIMPARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
 {
-    std::vector<PARAM::INFO> paramInfos;
-    PARAM::INFO paramInfo = {};
+    std::vector<SIMPARAM::INFO> paramInfos;
+    SIMPARAM::INFO paramInfo = {};
 
     paramInfo.name = "len";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "m";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Length";
     paramInfo.isSpiceInstanceParam = false;
@@ -143,7 +143,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
     paramInfo.name = "r";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Ω/m";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Resistance per length";
     paramInfo.isSpiceInstanceParam = false;
@@ -153,7 +153,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
     paramInfo.name = "l";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "H/m";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Inductance per length";
     paramInfo.isSpiceInstanceParam = false;
@@ -163,7 +163,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
     paramInfo.name = "g";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "1/(Ω m)";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Conductance per length";
     paramInfo.isSpiceInstanceParam = false;
@@ -173,7 +173,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
     paramInfo.name = "c";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "F/m";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIMPARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Capacitance per length";
     paramInfo.isSpiceInstanceParam = false;

@@ -720,6 +720,16 @@ add_library( pcbnew_kiface_objects OBJECT
     ${PCBNEW_SCRIPTING_SRCS}
     )
 
+target_precompile_headers( pcbnew_kiface_objects
+    PRIVATE
+        <vector>
+        <map>
+        <memory>
+        <unordered_map>
+        "board.h"
+        "footprint.h"
+        <macros.h> )
+
 # auto-generate specctra_lexer.h and specctra_keywords.cpp
 make_lexer(
     pcbnew_kiface_objects
