@@ -164,6 +164,7 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KIC
         m_shape( L_UNSPECIFIED ),
         m_connectionType( CONNECTION_TYPE::NONE ),
         m_isDangling( true ),
+        m_autoRotateOnPlacement( false ),
         m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
     SetMultilineAllowed( false );
@@ -178,6 +179,7 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
         m_shape( aLabel.m_shape ),
         m_connectionType( aLabel.m_connectionType ),
         m_isDangling( aLabel.m_isDangling ),
+        m_autoRotateOnPlacement( aLabel.m_autoRotateOnPlacement ),
         m_lastResolvedColor( aLabel.m_lastResolvedColor ),
         m_cached_driver_name( aLabel.m_cached_driver_name )
 {
@@ -194,6 +196,16 @@ SCH_LABEL_BASE& SCH_LABEL_BASE::operator=( const SCH_LABEL_BASE& aLabel )
 {
     SCH_TEXT::operator=( aLabel );
 
+    m_fields = aLabel.m_fields;
+
+    for( SCH_FIELD& field : m_fields )
+        field.SetParent( this );
+
+    m_shape = aLabel.m_shape;
+    m_connectionType = aLabel.m_connectionType;
+    m_isDangling = aLabel.m_isDangling;
+    m_autoRotateOnPlacement = aLabel.m_autoRotateOnPlacement;
+    m_lastResolvedColor = aLabel.m_lastResolvedColor;
     m_cached_driver_name = aLabel.m_cached_driver_name;
 
     return *this;
