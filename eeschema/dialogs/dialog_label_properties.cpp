@@ -657,8 +657,9 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         m_currentLabel->AutoplaceFields( m_Parent->GetScreen(), fieldsAutoplaced );
 
     if( !commit.Empty() )
+    {
         commit.Push( _( "Edit Label Properties" ) );
-
+    }
     else if( m_activeTextEntry && m_labelList )
     {
         text = m_activeTextEntry->GetValue();
