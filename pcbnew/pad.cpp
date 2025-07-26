@@ -810,12 +810,13 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
     const BOARD* board = GetBoard();
     int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
 
+    m_effectiveBoundingRadius = 0;
+
     Padstack().ForEachUniqueLayer(
         [&]( PCB_LAYER_ID aLayer )
         {
             // Polygon
-            std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
-                    m_effectivePolygons[ aLayer ][ aErrorLoc ];
+            std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon = m_effectivePolygons[ aLayer ][ aErrorLoc ];
 
             effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
             TransformShapeToPolygon( *effectivePolygon, aLayer, 0, maxError, aErrorLoc );
@@ -824,8 +825,6 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 
             if( aErrorLoc == ERROR_OUTSIDE )
             {
-                m_effectiveBoundingRadius = 0;
-
                 for( int cnt = 0; cnt < effectivePolygon->OutlineCount(); ++cnt )
                 {
                     const SHAPE_LINE_CHAIN& poly = effectivePolygon->COutline( cnt );
@@ -837,8 +836,10 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
                     }
                 }
             }
-
         } );
+
+    m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeX() / 2.0 ) );
+    m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeY() / 2.0 ) );
 
     // All done
     m_polyDirty[ aErrorLoc ] = false;
@@ -1455,6 +1456,8 @@ bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
                     contains = true;
             } );
 
+    contains |= GetEffectiveHoleShape()->Collide( aPosition, aAccuracy );
+
     return contains;
 }
 
@@ -1486,8 +1489,7 @@ bool PAD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
                     if( hit )
                         return;
 
-                    const std::shared_ptr<SHAPE_POLY_SET>& poly =
-                            GetEffectivePolygon( aLayer, ERROR_INSIDE );
+                    const std::shared_ptr<SHAPE_POLY_SET>& poly = GetEffectivePolygon( aLayer, ERROR_INSIDE );
 
                     int count = poly->TotalVertices();
 
@@ -1512,6 +1514,12 @@ bool PAD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
                     }
                 } );
 
+        if( !hit )
+        {
+            SHAPE_RECT rect( arect );
+            hit |= GetEffectiveHoleShape()->Collide( &rect );
+        }
+
         return hit;
     }
 }
@@ -1521,12 +1529,8 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
 {
     int diff;
 
-    if( ( diff = static_cast<int>( aPadRef->m_attribute ) -
-          static_cast<int>( aPadCmp->m_attribute ) ) != 0 )
+    if( ( diff = static_cast<int>( aPadRef->m_attribute ) - static_cast<int>( aPadCmp->m_attribute ) ) != 0 )
         return diff;
-
-    // Dick: specctra_export needs this
-    // Lorenzo: gencad also needs it to implement padstacks!
 
     return PADSTACK::Compare( &aPadRef->Padstack(), &aPadCmp->Padstack() );
 }
@@ -1581,14 +1585,9 @@ wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) c
     if( GetAttribute() == PAD_ATTRIB::NPTH )
     {
         if( parentFP )
-        {
-            return wxString::Format( _( "NPTH pad of %s" ),
-                                     parentFP->GetReference() );
-        }
+            return wxString::Format( _( "NPTH pad of %s" ), parentFP->GetReference() );
         else
-        {
             return _( "NPTH pad" );
-        }
     }
     else if( GetNumber().IsEmpty() )
     {
@@ -1671,13 +1670,11 @@ EDA_ITEM* PAD::Clone() const
 
     // Ensure the cloned primitives of the pad stack have the right parent
     cloned->Padstack().ForEachUniqueLayer(
-    [&]( PCB_LAYER_ID aLayer )
-    {
-        for( std::shared_ptr<PCB_SHAPE>& primitive : cloned->m_padStack.Primitives( aLayer ) )
-        {
-            primitive->SetParent( cloned );
-        }
-    } );
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                for( std::shared_ptr<PCB_SHAPE>& primitive : cloned->m_padStack.Primitives( aLayer ) )
+                    primitive->SetParent( cloned );
+            } );
 
     return cloned;
 }
@@ -1837,8 +1834,7 @@ const BOX2I PAD::ViewBBox() const
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
-                solderMaskMargin = std::max( solderMaskMargin,
-                                             std::max( GetSolderMaskExpansion( aLayer ), 0 ) );
+                solderMaskMargin = std::max( solderMaskMargin, std::max( GetSolderMaskExpansion( aLayer ), 0 ) );
                 VECTOR2I layerMargin = GetSolderPasteMargin( aLayer );
                 solderPasteMargin.x = std::max( solderPasteMargin.x, layerMargin.x );
                 solderPasteMargin.y = std::max( solderPasteMargin.y, layerMargin.y );
@@ -1952,8 +1948,8 @@ bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int a
 
     std::shared_ptr<SHAPE_SEGMENT> slot = GetEffectiveHoleShape();
 
-    TransformOvalToPolygon( aBuffer, slot->GetSeg().A, slot->GetSeg().B,
-                            slot->GetWidth() + aClearance * 2, aError, aErrorLoc );
+    TransformOvalToPolygon( aBuffer, slot->GetSeg().A, slot->GetSeg().B, slot->GetWidth() + aClearance * 2,
+                            aError, aErrorLoc );
 
     return true;
 }
@@ -2008,8 +2004,8 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         int  ddy = shape == PAD_SHAPE::TRAPEZOID ? trapDelta.y / 2 : 0;
 
         SHAPE_POLY_SET outline;
-        TransformTrapezoidToPolygon( outline, padShapePos, m_padStack.Size( aLayer ),
-                                     GetOrientation(), ddx, ddy, aClearance, aMaxError, aErrorLoc );
+        TransformTrapezoidToPolygon( outline, padShapePos, m_padStack.Size( aLayer ), GetOrientation(),
+                                     ddx, ddy, aClearance, aMaxError, aErrorLoc );
         aBuffer.Append( outline );
         break;
     }
@@ -2115,11 +2111,8 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                     if( !other || ( other->GetFlags() & SKIP_STRUCT ) )
                         continue;
 
-                    if( GetLayerSet().test( other->GetLayer() )
-                            && aShape->Compare( other ) == 0 )
-                    {
+                    if( GetLayerSet().test( other->GetLayer() ) && aShape->Compare( other ) == 0 )
                         matching.push_back( other );
-                    }
                 }
 
                 return matching;
@@ -2211,8 +2204,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 
 
 void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
-                    const std::function<void( int aErrorCode,
-                                              const wxString& aMsg )>& aErrorHandler ) const
+                    const std::function<void( int aErrorCode, const wxString& aMsg )>& aErrorHandler ) const
 {
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
@@ -2321,8 +2313,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
 
 
 void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
-                      const std::function<void( int aErrorCode,
-                                                const wxString& aMsg )>& aErrorHandler ) const
+                      const std::function<void( int aErrorCode, const wxString& aMsg )>& aErrorHandler ) const
 {
     wxString msg;
 
@@ -2607,10 +2598,10 @@ void PAD::DeletePrimitivesList( PCB_LAYER_ID aLayer )
     if( aLayer == UNDEFINED_LAYER )
     {
         m_padStack.ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID l )
-            {
-                m_padStack.ClearPrimitives( l );
-            } );
+                [&]( PCB_LAYER_ID l )
+                {
+                    m_padStack.ClearPrimitives( l );
+                } );
     }
     else
     {
