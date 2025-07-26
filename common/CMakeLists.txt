@@ -926,11 +926,6 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/api/api_pcb_utils.cpp
 )
 
-# add -DPCBNEW to compilation of these PCBNEW sources
-set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
-    COMPILE_DEFINITIONS "PCBNEW"
-    )
-
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
 target_precompile_headers( pcbcommon
@@ -944,6 +939,8 @@ target_precompile_headers( pcbcommon
         <zone.h>
         <connectivity/connectivity_data.h>
         <drc/drc_engine.h> )
+
+target_compile_definitions(pcbcommon PRIVATE PCBNEW)
 
 target_include_directories( pcbcommon PRIVATE
     )
