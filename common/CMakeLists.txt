@@ -749,9 +749,17 @@ add_library( common STATIC
     ${COMMON_SRCS}
     )
 
-target_precompile_headers( common
+target_precompile_headers( kicommon
     PRIVATE
-        $<TARGET_PROPERTY:kicommon,PRECOMPILE_HEADERS>
+        <kicommon.h>
+        <algorithm>
+        <map>
+        <memory>
+        <optional>
+        <set>
+        <string>
+        <vector>
+        <wx/wx.h>
          )
 
 add_dependencies( common version_header )
