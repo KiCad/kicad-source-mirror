@@ -720,15 +720,7 @@ add_library( pcbnew_kiface_objects OBJECT
     ${PCBNEW_SCRIPTING_SRCS}
     )
 
-if( MSVC )
-    target_precompile_headers( pcbnew_kiface_objects
-        PRIVATE
-            <vector>
-            <map>
-            <memory>
-            <unordered_map>
-            <macros.h> )
-else()
+if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     target_precompile_headers( pcbnew_kiface_objects
         PRIVATE
             <vector>
