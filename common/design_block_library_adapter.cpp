@@ -34,6 +34,11 @@
 #include <wx/log.h>
 
 
+std::map<wxString, LIB_DATA> DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalLibraries;
+
+std::mutex DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalLibraryMutex;
+
+
 DESIGN_BLOCK_LIBRARY_ADAPTER::DESIGN_BLOCK_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
         LIBRARY_MANAGER_ADAPTER( aManager )
 {

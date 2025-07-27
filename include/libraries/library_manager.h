@@ -62,7 +62,8 @@ public:
 
     static bool CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulateDefaultLibraries );
 
-    void LoadGlobalTables();
+    /// (Re)loads the global library tables in the given list, or all tables if no list is given
+    void LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
     /// Notify all adapters that the project has changed
     void ProjectChanged();
@@ -134,7 +135,8 @@ public:
     static bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 );
 
 private:
-    void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope );
+    void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
+                     std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
     void loadNestedTables( LIBRARY_TABLE& aTable );
 
@@ -248,6 +250,9 @@ public:
     /// Notify the adapter that the active project has changed
     virtual void ProjectChanged();
 
+    /// Notify the adapter that the global library tables have changed
+    void GlobalTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables = {} );
+
     /// Loads all available libraries for this adapter type in the background
     virtual void AsyncLoad() = 0;
 
@@ -262,6 +267,10 @@ public:
     virtual bool IsWritable( const wxString& aNickname ) const { return false; }
 
 protected:
+    virtual std::map<wxString, LIB_DATA>& globalLibs() = 0;
+    virtual std::map<wxString, LIB_DATA>& globalLibs() const = 0;
+    virtual std::mutex& globalLibsMutex() = 0;
+
     static wxString getUri( const LIBRARY_TABLE_ROW* aRow );
 
     std::optional<const LIB_DATA*> fetchIfLoaded( const wxString& aNickname ) const;
@@ -292,12 +301,6 @@ protected:
 
     std::atomic<size_t> m_loadCount;
     size_t m_loadTotal;
-
-    // The global libraries, potentially shared between multiple different open
-    // projects, each of which has their own instance of this adapter class
-    static std::map<wxString, LIB_DATA> GlobalLibraries;
-
-    static std::mutex GlobalLibraryMutex;
 };
 
 

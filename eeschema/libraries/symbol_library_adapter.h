@@ -168,12 +168,21 @@ public:
     bool IsWritable( const wxString& aNickname ) const override;
 
 protected:
+    std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries; }
+    std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries; }
+    std::mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
 
     LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) override;
 
 private:
     /// Helper to cast the ABC plugin in the LIB_DATA* to a concrete plugin
     static SCH_IO* plugin( const LIB_DATA* aRow );
+
+    // The global libraries, potentially shared between multiple different open
+    // projects, each of which has their own instance of this adapter class
+    static std::map<wxString, LIB_DATA> GlobalLibraries;
+
+    static std::mutex GlobalLibraryMutex;
 };
 
 #endif //SYMBOL_LIBRARY_MANAGER_ADAPTER_H

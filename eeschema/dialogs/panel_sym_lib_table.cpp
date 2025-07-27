@@ -900,30 +900,30 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
-    // TODO(JE) library tables
-#if 0
-    DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG dlg( m_parent );
+    LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE::SYMBOL, true );
 
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        m_global_grid->Freeze();
+    // Go ahead and reload here because this action takes place even if the dialog is canceled
+    Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
 
-        wxGridTableBase* table = m_global_grid->GetTable();
-        m_global_grid->DestroyTable( table );
+    if( KIFACE *schface = m_parent->Kiway().KiFACE( KIWAY::FACE_SCH ) )
+        schface->PreloadLibraries( &m_parent->Kiway().Prj() );
 
-        std::optional<LIBRARY_TABLE*> newTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                 LIBRARY_TABLE_SCOPE::GLOBAL );
-        wxASSERT( newTable );
+    m_global_grid->Freeze();
 
-        m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *newTable.value() ) );
-        m_global_grid->PopEventHandler( true );
-        setupGrid( m_global_grid );
-        m_parent->m_GlobalTableChanged = true;
+    wxGridTableBase* table = m_global_grid->GetTable();
+    m_global_grid->DestroyTable( table );
 
-        m_global_grid->Thaw();
-    }
-#endif
+    std::optional<LIBRARY_TABLE*> newTable =
+            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                             LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxASSERT( newTable );
+
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *newTable.value() ) );
+    m_global_grid->PopEventHandler( true );
+    setupGrid( m_global_grid );
+    m_parent->m_GlobalTableChanged = true;
+
+    m_global_grid->Thaw();
 }
 
 
@@ -1245,7 +1245,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
                               _( "File Save Error" ), wxOK | wxICON_ERROR );
             } );
 
-        Pgm().GetLibraryManager().LoadGlobalTables();
+        Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
     }
 
     std::optional<LIBRARY_TABLE*> projectTable =
