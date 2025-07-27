@@ -48,6 +48,9 @@ public:
 
     wxString GetResultCell( int aRow, int aCol ) override
     {
+        if( m_frame->IsClosing() )
+            return wxEmptyString;
+
         if( aRow >= static_cast<int>( m_hitlist.size() ) )
             return wxEmptyString;
 
