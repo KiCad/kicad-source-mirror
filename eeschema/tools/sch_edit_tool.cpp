@@ -2431,7 +2431,11 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     SCH_SELECTION selection = m_selectionTool->RequestSelection( { SCH_LABEL_LOCATE_ANY_T,
                                                                    SCH_TEXT_T,
                                                                    SCH_TEXTBOX_T } );
-    SCH_COMMIT    commit( m_toolMgr );
+    SCH_COMMIT    localCommit( m_toolMgr );
+    SCH_COMMIT*   commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
@@ -2773,14 +2777,15 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             if( selected )
                 m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::removeItemFromSel, item );
 
-            if( !item->IsNew() )
-            {
-                m_frame->RemoveFromScreen( item, m_frame->GetScreen() );
-                commit.Removed( item, m_frame->GetScreen() );
+            m_frame->RemoveFromScreen( item, m_frame->GetScreen() );
 
-                m_frame->AddToScreen( newtext, m_frame->GetScreen() );
-                commit.Added( newtext, m_frame->GetScreen() );
-            }
+            if( item->IsNew() )
+                commit->Unstage( item, m_frame->GetScreen() );
+            else
+                commit->Removed( item, m_frame->GetScreen() );
+
+            m_frame->AddToScreen( newtext, m_frame->GetScreen() );
+            commit->Added( newtext, m_frame->GetScreen() );
 
             if( selected )
                 m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newtext );
@@ -2791,8 +2796,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( !commit.Empty() )
-        commit.Push( _( "Change To" ) );
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Change To" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );

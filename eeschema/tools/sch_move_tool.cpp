@@ -867,8 +867,31 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit,
-                                             evt->Parameter<ACTIONS::INCREMENT>() );
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, evt->Parameter<ACTIONS::INCREMENT>() );
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::toCLabel ) )
+        {
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toCLabel, aCommit );
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::toGLabel ) )
+        {
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toGLabel, aCommit );
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::toHLabel ) )
+        {
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toHLabel, aCommit );
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::toLabel ) )
+        {
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toLabel, aCommit );
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::toText ) )
+        {
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toText, aCommit );
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::toTextBox ) )
+        {
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toTextBox, aCommit );
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {

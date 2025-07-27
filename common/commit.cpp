@@ -127,6 +127,26 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag, BASE
 }
 
 
+void COMMIT::Unstage( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
+{
+    std::erase_if( m_changes,
+                   [&]( COMMIT_LINE& line )
+                   {
+                       if( line.m_item == aItem && line.m_screen == aScreen )
+                       {
+                           // Only new items which have never been committed can be unstaged
+                           wxASSERT( line.m_item->IsNew() );
+
+                           delete line.m_item;
+                           delete line.m_copy;
+                           return true;
+                       }
+
+                       return false;
+                   } );
+}
+
+
 int COMMIT::GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 {
     COMMIT_LINE* entry = findEntry( parentObject( aItem ), aScreen );
