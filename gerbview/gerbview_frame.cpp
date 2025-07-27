@@ -653,8 +653,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
         SetStatusText( wxEmptyString, 0 );
 
-        wxString info;
-        info.Printf( _( "Drawing layer not in use" ) );
+        wxString info = _( "Drawing layer not in use" );
         m_TextInfo->SetValue( info );
 
         if( KIUI::EnsureTextCtrlWidth( m_TextInfo, &info ) ) // Resized
