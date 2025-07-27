@@ -388,19 +388,28 @@ void SCH_PIN::SetName( const wxString& aName )
 
 void SCH_PIN::SetAlt( const wxString& aAlt )
 {
-    wxString alt = aAlt;
-
     // Do not set the alternate pin definition to the default pin name.  This breaks the library
     // symbol comparison for the ERC and the library diff tool.  It also incorrectly causes the
     // schematic symbol pin alternate to be set.
-    if( aAlt.IsEmpty() || ( alt == GetBaseName() ) )
+    if( aAlt.IsEmpty() || aAlt == GetBaseName() )
     {
         m_alt = wxEmptyString;
         return;
     }
 
-    wxCHECK2_MSG( m_libPin && m_libPin->GetAlternates().count( aAlt ), alt = wxEmptyString,
-                  wxString::Format( wxS( "Pin '%s' does not have an alterate '%s'" ), m_number, aAlt ) );
+    if( !m_libPin )
+    {
+        wxFAIL_MSG( wxString::Format( wxS( "Pin '%s' has no corresponding lib_pin" ), m_number ) );
+        m_alt = wxEmptyString;
+        return;
+    }
+
+    if( !m_libPin->GetAlternates().contains( aAlt ) )
+    {
+        wxFAIL_MSG( wxString::Format( wxS( "Pin '%s' has no alterate '%s'" ), m_number, aAlt ) );
+        m_alt = wxEmptyString;
+        return;
+    }
 
     m_alt = aAlt;
 }
