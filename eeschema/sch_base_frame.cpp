@@ -760,12 +760,8 @@ wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxSt
                 break;
             }
 
-            // TODO(JE) library tables
-#if 0
-
             if( !mgr.CreateLibrary( fn.GetFullPath(), scope ) )
                 DisplayError( this, wxString::Format( _( "Could not add library '%s'." ), libraryName ) );
-#endif
 
             break;
         }

@@ -196,15 +196,14 @@ LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const
 }
 
 
-SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol(
-    const wxString& aNickname, const LIB_SYMBOL* aSymbol, bool aOverwrite )
+SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxString& aNickname,
+        const LIB_SYMBOL* aSymbol, bool aOverwrite )
 {
     wxCHECK_MSG( false, SAVE_SKIPPED, "Unimplemented!" );
 }
 
 
-void SYMBOL_LIBRARY_ADAPTER::DeleteSymbol( const wxString& aNickname,
-                                                   const wxString& aSymbolName )
+void SYMBOL_LIBRARY_ADAPTER::DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
     wxCHECK_MSG( false, /* void */, "Unimplemented!" );
 }

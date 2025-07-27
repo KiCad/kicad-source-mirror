@@ -221,7 +221,7 @@ public:
         if( file.GetExt() == wxT( "kicad_sym" ) && file.GetDirCount() >= m_prefix_dir_count + 2
             && file.GetDirs()[m_prefix_dir_count] == wxT( "symbols" ) )
         {
-            addRowIfNecessary( m_symbolTable, file, ADD_MODE::FILE, 10 );
+            addRowIfNecessary( m_symbolTable, file, ADD_MODE::AM_FILE, 10 );
         }
 
         return wxDIR_CONTINUE;
@@ -239,13 +239,13 @@ public:
         if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3
             && dir.GetDirs()[m_prefix_dir_count] == wxT( "footprints" ) )
         {
-            addRowIfNecessary( m_fpTable, dir, ADD_MODE::DIRECTORY, 7 );
+            addRowIfNecessary( m_fpTable, dir, ADD_MODE::AM_DIRECTORY, 7 );
         }
         else if( dirPath.EndsWith( designBlockExt )
                  && dir.GetDirCount() >= m_prefix_dir_count + 3
                  && dir.GetDirs()[m_prefix_dir_count] == wxT( "design_blocks" ) )
         {
-            addRowIfNecessary( m_designBlockTable, dir, ADD_MODE::DIRECTORY, designBlockExt.Len() );
+            addRowIfNecessary( m_designBlockTable, dir, ADD_MODE::AM_DIRECTORY, designBlockExt.Len() );
         }
 
         return wxDIR_CONTINUE;
@@ -270,8 +270,8 @@ private:
 
     enum class ADD_MODE
     {
-        FILE,
-        DIRECTORY
+        AM_FILE,
+        AM_DIRECTORY
     };
 
     void addRowIfNecessary( LIBRARY_TABLE* aTable, const wxFileName& aSource, ADD_MODE aMode,
@@ -284,7 +284,7 @@ private:
         parts.RemoveAt( 0, m_prefix_dir_count );
         parts.Insert( versionedPath, 0 );
 
-        if( aMode == ADD_MODE::FILE )
+        if( aMode == ADD_MODE::AM_FILE )
             parts.Add( aSource.GetFullName() );
 
         wxString libPath = wxJoin( parts, '/' );
@@ -830,7 +830,7 @@ std::vector<wxString> LIBRARY_MANAGER_ADAPTER::GetLibraryNames() const
 
 
 bool LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
-                                         bool aCheckEnabled ) const
+                                          bool aCheckEnabled ) const
 {
     if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); r.has_value() )
         return !aCheckEnabled || !( *r )->row->Disabled();

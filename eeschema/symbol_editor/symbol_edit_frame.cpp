@@ -1123,17 +1123,20 @@ bool SYMBOL_EDIT_FRAME::SynchronizePins()
 wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
     wxFileName               fn = m_libMgr->GetUniqueLibraryName();
-    bool                     useGlobalTable = false;
+    bool                     useGlobalTable = true;
     FILEDLG_HOOK_NEW_LIBRARY tableChooser( useGlobalTable );
 
     if( !LibraryFileBrowser( aCreateNew ? _( "New Symbol Library" ) : _( "Add Symbol Library" ),
                              !aCreateNew, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
-                             FILEEXT::KiCadSymbolLibFileExtension, false, &tableChooser ) )
+                             FILEEXT::KiCadSymbolLibFileExtension, false,
+                             Pgm().GetSettingsManager().IsProjectOpenNotDummy() ? &tableChooser : nullptr ) )
     {
         return wxEmptyString;
     }
 
-    LIBRARY_TABLE_SCOPE scope = useGlobalTable ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
+    LIBRARY_TABLE_SCOPE scope = tableChooser.GetUseGlobalTable()
+                                    ? LIBRARY_TABLE_SCOPE::GLOBAL
+                                    : LIBRARY_TABLE_SCOPE::PROJECT;
 
     std::optional<LIBRARY_TABLE*> table =
             Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
@@ -1154,11 +1157,9 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         return wxEmptyString;
     }
 
-    // TODO(JE) library tables
-#if 0
     if( aCreateNew )
     {
-        if( !adapter->CreateLibrary( fn.GetFullPath(), scope ) )
+        if( !m_libMgr->CreateLibrary( fn.GetFullPath(), scope ) )
         {
             DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
                                                      "Make sure you have write permissions and "
@@ -1169,13 +1170,12 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     }
     else
     {
-        if( !adapter->AddLibrary( fn.GetFullPath(), scope ) )
+        if( !m_libMgr->AddLibrary( fn.GetFullPath(), scope ) )
         {
             DisplayError( this, _( "Could not open the library file." ) );
             return wxEmptyString;
         }
     }
-#endif
 
     Pgm().GetLibraryManager().Save( *table ).map_error(
             []( const LIBRARY_ERROR& aError )
@@ -1184,6 +1184,8 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
                                                 aError.message ),
                               _( "File Save Error" ), wxOK | wxICON_ERROR );
             } );
+
+    adapter->LoadOne( fn.GetName() );
 
     std::string packet = fn.GetFullPath().ToStdString();
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
@@ -1208,15 +1210,12 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
         return;
     }
 
-    // TODO(JE) library tables
-#if 0
     // TODO(JE) after Jeff's commit removing the select dialog; this is always project? is that correct?
-    if( !adapter->AddLibrary( fn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT );
+    if( !m_libMgr->AddLibrary( fn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT ) )
     {
         DisplayError( this, _( "Could not open the library file." ) );
         return;
     }
-#endif
 
     std::optional<LIBRARY_TABLE*> table =
             Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
