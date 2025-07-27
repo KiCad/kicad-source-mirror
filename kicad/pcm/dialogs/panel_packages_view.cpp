@@ -322,12 +322,9 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         m_gridVersions->InsertRows( row );
 
         m_gridVersions->SetCellValue( row, COL_VERSION, version.version );
-        m_gridVersions->SetCellValue( row, COL_DOWNLOAD_SIZE,
-                                      toHumanReadableSize( version.download_size ) );
-        m_gridVersions->SetCellValue( row, COL_INSTALL_SIZE,
-                                      toHumanReadableSize( version.install_size ) );
-        m_gridVersions->SetCellValue( row, COL_COMPATIBILITY,
-                                      version.compatible ? wxT( "\u2714" ) : wxEmptyString );
+        m_gridVersions->SetCellValue( row, COL_DOWNLOAD_SIZE, toHumanReadableSize( version.download_size ) );
+        m_gridVersions->SetCellValue( row, COL_INSTALL_SIZE, toHumanReadableSize( version.install_size ) );
+        m_gridVersions->SetCellValue( row, COL_COMPATIBILITY, version.compatible ? wxT( "\u2714" ) : wxEmptyString );
         m_gridVersions->SetCellValue( row, COL_STATUS, STATUS_ENUM_TO_STR.at( version.status ) );
 
         m_gridVersions->SetCellAlignment( row, COL_COMPATIBILITY, wxALIGN_CENTER, wxALIGN_CENTER );
@@ -451,8 +448,8 @@ bool PANEL_PACKAGES_VIEW::canRunAction() const
 }
 
 
-void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
-                                           const PCM_PACKAGE_STATE aState, const bool aPinned )
+void PANEL_PACKAGES_VIEW::SetPackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState,
+                                           const bool aPinned )
 {
     auto it = m_packagePanels.find( aPackageId );
 
@@ -467,13 +464,9 @@ void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
         }
 
         if( aState == PPS_UPDATE_AVAILABLE && !aPinned )
-        {
             m_updateablePackages.insert( aPackageId );
-        }
         else
-        {
             m_updateablePackages.erase( aPackageId );
-        }
 
         updateCommonState();
     }
@@ -515,9 +508,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
     if( !ver_it->download_url )
     {
-        wxMessageBox( _( "Package download url is not specified" ),
-                      _( "Error downloading package" ), wxICON_INFORMATION | wxOK,
-                      wxGetTopLevelParent( this ) );
+        wxMessageBox( _( "Package download url is not specified" ), _( "Error downloading package" ),
+                      wxICON_INFORMATION | wxOK, wxGetTopLevelParent( this ) );
         return;
     }
 
@@ -553,13 +545,11 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
             stream.close();
 
-            if( !matches
-                && wxMessageBox(
-                           _( "Integrity of the downloaded package could not be verified, hash "
-                              "does not match. Are you sure you want to keep this file?" ),
-                           _( "Keep downloaded file" ), wxICON_EXCLAMATION | wxYES_NO,
-                           wxGetTopLevelParent( this ) )
-                           == wxNO )
+            if( !matches && wxMessageBox( _( "Integrity of the downloaded package could not be verified, hash "
+                                             "does not match. Are you sure you want to keep this file?" ),
+                                          _( "Keep downloaded file" ), wxICON_EXCLAMATION | wxYES_NO,
+                                          wxGetTopLevelParent( this ) )
+                                == wxNO )
             {
                 wxRemoveFile( path );
             }
@@ -606,12 +596,11 @@ void PANEL_PACKAGES_VIEW::OnVersionActionClicked( wxCommandEvent& event )
 
     wxCHECK_RET( ver_it != package.versions.end(), "Could not find package version" );
 
-    if( !ver_it->compatible
-        && wxMessageBox( _( "This package version is incompatible with your KiCad version or "
-                            "platform. Are you sure you want to install it anyway?" ),
-                         _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO,
-                         wxGetTopLevelParent( this ) )
-                   == wxNO )
+    if( !ver_it->compatible && wxMessageBox( _( "This package version is incompatible with your KiCad version or "
+                                                "platform. Are you sure you want to install it anyway?" ),
+                                             _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO,
+                                             wxGetTopLevelParent( this ) )
+                                   == wxNO )
     {
         return;
     }
@@ -655,8 +644,7 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
     for( size_t index = 0; index < m_packageInitialOrder.size(); index++ )
     {
         int                rank = 1;
-        const PCM_PACKAGE& pkg =
-                m_packagePanels[m_packageInitialOrder[index]]->GetPackageData().package;
+        const PCM_PACKAGE& pkg = m_packagePanels[m_packageInitialOrder[index]]->GetPackageData().package;
 
         if( search_term.size() > 2 )
             rank = m_pcm->GetPackageSearchRank( pkg, search_term );
@@ -717,9 +705,9 @@ void PANEL_PACKAGES_VIEW::updateDetailsButtons()
 
         switch( action )
         {
-        case PPA_INSTALL: m_buttonAction->SetLabel( _( "Install" ) ); break;
+        case PPA_INSTALL:   m_buttonAction->SetLabel( _( "Install" ) );   break;
         case PPA_UNINSTALL: m_buttonAction->SetLabel( _( "Uninstall" ) ); break;
-        case PPA_UPDATE: m_buttonAction->SetLabel( _( "Update" ) ); break;
+        case PPA_UPDATE:    m_buttonAction->SetLabel( _( "Update" ) );    break;
         }
     }
     else
@@ -732,8 +720,7 @@ void PANEL_PACKAGES_VIEW::updateDetailsButtons()
 
 PCM_PACKAGE_ACTION PANEL_PACKAGES_VIEW::getAction() const
 {
-    wxASSERT_MSG( m_gridVersions->GetNumberRows() == 1
-                          || m_gridVersions->GetSelectedRows().size() == 1,
+    wxASSERT_MSG( m_gridVersions->GetNumberRows() == 1 || m_gridVersions->GetSelectedRows().size() == 1,
                   wxT( "getAction() called with ambiguous version selection" ) );
 
     int selected_row = 0;
@@ -801,8 +788,7 @@ void PANEL_PACKAGES_VIEW::SetSashOnIdle( wxIdleEvent& aEvent )
 
     m_packageListWindow->FitInside();
 
-    m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
-                             NULL, this );
+    m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ), nullptr, this );
 }
 
 
@@ -817,8 +803,7 @@ void PANEL_PACKAGES_VIEW::OnUpdateAllClicked( wxCommandEvent& event )
     // The map will be modified by the callback so we copy the list here
     std::vector<wxString> packages;
 
-    std::copy( m_updateablePackages.begin(), m_updateablePackages.end(),
-               std::back_inserter( packages ) );
+    std::copy( m_updateablePackages.begin(), m_updateablePackages.end(), std::back_inserter( packages ) );
 
     for( const wxString& pkg_id : packages )
     {

@@ -711,19 +711,12 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
-    if( !m_cur_grid->CommitPendingChanges() )
-        return;
-
-    if( m_cur_grid->AppendRows( 1 ) )
-    {
-        int row = m_cur_grid->GetNumberRows() - 1;
-
-        // wx documentation is wrong, SetGridCursor does not make visible.
-        m_cur_grid->MakeCellVisible( row, COL_ENABLED );
-        m_cur_grid->SetGridCursor( row, COL_NICKNAME );
-        m_cur_grid->EnableCellEditControl( true );
-        m_cur_grid->ShowCellEditControl();
-    }
+    m_cur_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_cur_grid->AppendRows( 1 );
+                return { m_cur_grid->GetNumberRows() - 1, COL_NICKNAME };
+            } );
 }
 
 
@@ -795,53 +788,29 @@ void PANEL_SYM_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
-    if( !m_cur_grid->CommitPendingChanges() )
-        return;
+    m_cur_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                cur_model()->ChangeRowOrder( row, -1 );
 
-    SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
-    int curRow = m_cur_grid->GetGridCursorRow();
-
-    // @todo: add multiple selection moves.
-    if( curRow >= 1 )
-    {
-        tbl->ChangeRowOrder( curRow--, -1 );
-
-        if( tbl->GetView() )
-        {
-            // Update the wxGrid
-            wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, curRow, 0 );
-            tbl->GetView()->ProcessTableMessage( msg );
-        }
-
-        m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
-        m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
-    }
+                // Update the wxGrid
+                wxGridTableMessage msg( cur_model(), wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
+                cur_model()->GetView()->ProcessTableMessage( msg );
+            } );
 }
 
 
 void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
-    if( !m_cur_grid->CommitPendingChanges() )
-        return;
+    m_cur_grid->OnMoveRowDown(
+            [&]( int row )
+            {
+                cur_model()->ChangeRowOrder( row, 1 );
 
-    SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
-    int curRow = m_cur_grid->GetGridCursorRow();
-
-    // @todo: add multiple selection moves.
-    if( unsigned( curRow + 1 ) < tbl->m_rows.size() )
-    {
-        tbl->ChangeRowOrder( curRow++, 1 );
-
-        if( tbl->GetView() )
-        {
-            // Update the wxGrid
-            wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, curRow - 1, 0 );
-            tbl->GetView()->ProcessTableMessage( msg );
-        }
-
-        m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
-        m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
-    }
+                // Update the wxGrid
+                wxGridTableMessage msg( cur_model(), wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
+                cur_model()->GetView()->ProcessTableMessage( msg );
+            } );
 }
 
 

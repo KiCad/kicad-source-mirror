@@ -343,7 +343,6 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
             filter = (int) tmp;
     }
 
-
     DIALOG_SELECT_3DMODEL dm( m_parentDialog, cache, &model, initialpath, filter );
 
     // Use QuasiModal so that Configure3DPaths (and its help window) will work
@@ -399,7 +398,6 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
         model.m_Filename = result->GetLink();
     }
 
-
     prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
     sidx = wxString::Format( wxT( "%i" ), filter );
     prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
@@ -434,30 +432,25 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
 
 void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DRow( wxCommandEvent&  )
 {
-    if( !m_modelsGrid->CommitPendingChanges() )
-        return;
+    m_modelsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                FP_3DMODEL model;
 
-    FP_3DMODEL model;
+                model.m_Show = true;
+                m_shapes3D_list.push_back( model );
 
-    model.m_Show = true;
-    m_shapes3D_list.push_back( model );
+                int row = m_modelsGrid->GetNumberRows();
+                m_modelsGrid->AppendRows( 1 );
+                m_modelsGrid->SetCellValue( row, COL_SHOWN, wxT( "1" ) );
+                m_modelsGrid->SetCellValue( row, COL_PROBLEM, "" );
 
-    int row = m_modelsGrid->GetNumberRows();
-    m_modelsGrid->AppendRows( 1 );
-    m_modelsGrid->SetCellValue( row, COL_SHOWN, wxT( "1" ) );
-    m_modelsGrid->SetCellValue( row, COL_PROBLEM, "" );
+                select3DModel( row );
+                updateValidateStatus( row );
+                onModify();
 
-    select3DModel( row );
-
-    m_modelsGrid->SetFocus();
-    m_modelsGrid->MakeCellVisible( row, COL_FILENAME );
-    m_modelsGrid->SetGridCursor( row, COL_FILENAME );
-
-    m_modelsGrid->EnableCellEditControl( true );
-    m_modelsGrid->ShowCellEditControl();
-
-    updateValidateStatus( row );
-    onModify();
+                return { row, COL_FILENAME };
+            } );
 }
 
 

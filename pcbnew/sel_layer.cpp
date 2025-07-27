@@ -520,9 +520,7 @@ public:
         for( const PCB_LAYER_ID& layerId : m_layerPresentation.getOrderedEnabledLayers() )
         {
             if( IsCopperLayer( layerId ) )
-            {
                 m_layersId.push_back( layerId );
-            }
         }
 
         fillLayerGrid( m_leftGrid );
@@ -543,8 +541,7 @@ public:
         m_layerPairSettings.Bind( PCB_CURRENT_LAYER_PAIR_CHANGED,
                                   [this]( wxCommandEvent& aEvent )
                                   {
-                                      const LAYER_PAIR& newPair =
-                                              m_layerPairSettings.GetCurrentLayerPair();
+                                      const LAYER_PAIR& newPair = m_layerPairSettings.GetCurrentLayerPair();
                                       setCurrentSelection( rowForLayer( newPair.GetLayerA() ),
                                                            rowForLayer( newPair.GetLayerB() ) );
                                   } );
@@ -567,10 +564,9 @@ private:
         for( const PCB_LAYER_ID& layerId : m_layersId )
         {
             const wxColour fg = m_layerPresentation.getLayerColor( layerId ).ToColour();
-            const wxColour color(
-                    wxColour::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() / 255.0 ),
-                    wxColour::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() / 255.0 ),
-                    wxColour::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() / 255.0 ) );
+            const wxColour color( wxColour::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() / 255.0 ),
+                                  wxColour::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() / 255.0 ),
+                                  wxColour::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() / 255.0 ) );
 
             const wxString layerName = wxT( " " ) + m_layerPresentation.getLayerName( layerId );
 
@@ -591,9 +587,7 @@ private:
         for( unsigned i = 0; i < m_layersId.size(); ++i )
         {
             if( m_layersId[i] == aLayerId )
-            {
                 return i;
-            }
         }
 
         wxASSERT_MSG( false, wxString::Format( "Unknown layer in grid: %d", aLayerId ) );
@@ -632,9 +626,8 @@ private:
         {
             // At start, there is no old row
             if( aRow < 0 )
-            {
                 return;
-            }
+
             const wxString val = aSelect ? wxT( "1" ) : wxEmptyString;
             aGrid.SetCellValue( aRow, (int) CU_LAYER_COLNUMS::SELECT, val );
             aGrid.SetGridCursor( aRow, (int) CU_LAYER_COLNUMS::COLOR );
@@ -690,8 +683,7 @@ public:
         m_addToPresetsButton->Bind( wxEVT_BUTTON,
                                     [this]( wxCommandEvent& aEvent )
                                     {
-                                        const LAYER_PAIR newPair =
-                                                m_dialogPairSettings.GetCurrentLayerPair();
+                                        const LAYER_PAIR newPair = m_dialogPairSettings.GetCurrentLayerPair();
                                         m_presetsGridController.OnLayerPairAdded( newPair );
                                     } );
 

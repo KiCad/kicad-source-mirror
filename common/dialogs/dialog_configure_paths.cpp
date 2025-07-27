@@ -319,38 +319,32 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnAddEnvVar( wxCommandEvent& event )
 {
-    if( !m_EnvVars->CommitPendingChanges() )
-        return;
-
-    AppendEnvVar( wxEmptyString, wxEmptyString, false );
-
-    m_EnvVars->MakeCellVisible( m_EnvVars->GetNumberRows() - 1, TV_NAME_COL );
-    m_EnvVars->SetGridCursor( m_EnvVars->GetNumberRows() - 1, TV_NAME_COL );
-
-    m_EnvVars->EnableCellEditControl( true );
-    m_EnvVars->ShowCellEditControl();
+    m_EnvVars->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                AppendEnvVar( wxEmptyString, wxEmptyString, false );
+                return { m_EnvVars->GetNumberRows() - 1, TV_NAME_COL };
+            } );
 }
 
 
 void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 {
-    int curRow = m_EnvVars->GetGridCursorRow();
+    m_EnvVars->OnDeleteRows(
+            [&]( int row )
+            {
+                if( ENV_VAR::IsEnvVarImmutable( m_EnvVars->GetCellValue( row, TV_NAME_COL ) ) )
+                {
+                    wxBell();
+                    return false;
+                }
 
-    if( curRow < 0 || m_EnvVars->GetNumberRows() <= curRow )
-    {
-        return;
-    }
-    else if( ENV_VAR::IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, TV_NAME_COL ) ) )
-    {
-        wxBell();
-        return;
-    }
-
-    m_EnvVars->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
-    m_EnvVars->DeleteRows( curRow, 1 );
-
-    m_EnvVars->MakeCellVisible( std::max( 0, curRow-1 ), m_EnvVars->GetGridCursorCol() );
-    m_EnvVars->SetGridCursor( std::max( 0, curRow-1 ), m_EnvVars->GetGridCursorCol() );
+                return true;
+            },
+            [&]( int row )
+            {
+                m_EnvVars->DeleteRows( row, 1 );
+            } );
 }
 
 

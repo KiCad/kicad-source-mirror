@@ -147,11 +147,8 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataFromWindow()
 
 int DIALOG_PLUGIN_OPTIONS::appendRow()
 {
-    int row = m_grid->GetNumberRows();
-
     m_grid->AppendRows( 1 );
-
-    return row;
+    return m_grid->GetNumberRows() - 1;
 }
 
 

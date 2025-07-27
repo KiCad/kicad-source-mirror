@@ -403,93 +403,77 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::updateViaGridColumns()
 
 void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnAddDelayProfileClick( wxCommandEvent& event )
 {
-    if( !m_tracePropagationGrid->CommitPendingChanges() )
-        return;
+    m_tracePropagationGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                const int row = m_tracePropagationGrid->GetNumberRows();
+                m_tracePropagationGrid->AppendRows();
+                m_tracePropagationGrid->SetCellValue( row, PROFILE_GRID_PROFILE_NAME, "" );
 
-    const int rowId = m_tracePropagationGrid->GetNumberRows();
-    m_tracePropagationGrid->AppendRows();
-    m_tracePropagationGrid->SetCellValue( rowId, PROFILE_GRID_PROFILE_NAME, "" );
+                for( int i = PROFILE_GRID_VIA_PROP_DELAY; i < m_tracePropagationGrid->GetNumberCols(); ++i )
+                    m_tracePropagationGrid->SetUnitValue( row, i, 0 );
 
-    for( int i = PROFILE_GRID_VIA_PROP_DELAY; i < m_tracePropagationGrid->GetNumberCols(); ++i )
-        m_tracePropagationGrid->SetUnitValue( rowId, i, 0 );
-
-    const int newRow = m_tracePropagationGrid->GetNumberRows() - 1;
-    m_tracePropagationGrid->MakeCellVisible( newRow, PROFILE_GRID_PROFILE_NAME );
-    m_tracePropagationGrid->SetGridCursor( newRow, PROFILE_GRID_PROFILE_NAME );
-    m_tracePropagationGrid->EnableCellEditControl( true );
-    m_tracePropagationGrid->ShowCellEditControl();
+                return { row, PROFILE_GRID_PROFILE_NAME };
+            } );
 }
 
 
 void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnRemoveDelayProfileClick( wxCommandEvent& event )
 {
-    if( !m_tracePropagationGrid->CommitPendingChanges() )
-        return;
+    m_tracePropagationGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                wxString profileName = getProfileNameForProfileGridRow( row );
 
-    const int curRow = m_tracePropagationGrid->GetGridCursorRow();
+                // Delete associated via overrides
+                for( int viaRow = m_viaPropagationGrid->GetNumberRows() - 1; viaRow >= 0; --viaRow )
+                {
+                    if( m_viaPropagationGrid->GetCellValue( viaRow, VIA_GRID_PROFILE_NAME ) == profileName )
+                        m_viaPropagationGrid->DeleteRows( viaRow, 1 );
+                }
 
-    if( curRow < 0 )
-        return;
+                // Delete tuning profile
+                m_tracePropagationGrid->DeleteRows( row, 1 );
 
-    wxString profileName = getProfileNameForProfileGridRow( curRow );
-
-    // Delete associated via overrides
-    for( int viaRow = m_viaPropagationGrid->GetNumberRows() - 1; viaRow >= 0; --viaRow )
-    {
-        if( m_viaPropagationGrid->GetCellValue( viaRow, VIA_GRID_PROFILE_NAME ) == profileName )
-            m_viaPropagationGrid->DeleteRows( viaRow, 1 );
-    }
-
-    // Delete tuning profile
-    m_tracePropagationGrid->DeleteRows( curRow, 1 );
-
-    m_tracePropagationGrid->MakeCellVisible( std::max( 0, curRow - 1 ),
-                                             m_tracePropagationGrid->GetGridCursorCol() );
-    m_tracePropagationGrid->SetGridCursor( std::max( 0, curRow - 1 ),
-                                           m_tracePropagationGrid->GetGridCursorCol() );
-
-    updateViaProfileNamesEditor();
+                updateViaProfileNamesEditor();
+            } );
 }
 
 
 void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnAddViaOverrideClick( wxCommandEvent& event )
 {
-    if( !m_viaPropagationGrid->CommitPendingChanges() )
-        return;
+    m_viaPropagationGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                const int row = m_viaPropagationGrid->GetNumberRows();
 
-    // Check we have delay profiles to override
-    if( m_tracePropagationGrid->GetNumberRows() == 0 )
-    {
-        const wxString msg = _( "No delay profiles to override" );
-        PAGED_DIALOG::GetDialog( this )->SetError( msg, this, nullptr );
-        return;
-    }
+                // Check we have delay profiles to override
+                if( m_tracePropagationGrid->GetNumberRows() == 0 )
+                {
+                    PAGED_DIALOG::GetDialog( this )->SetError( _( "No delay profiles to override" ), this, nullptr );
+                    return { row, -1 };
+                }
 
-    const int rowId = m_viaPropagationGrid->GetNumberRows();
-    m_viaPropagationGrid->AppendRows();
-    m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_PROFILE_NAME, getProfileNameForProfileGridRow( 0 ) );
-    m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_SIGNAL_LAYER_FROM, m_layerNames.front() );
-    m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_SIGNAL_LAYER_TO, m_layerNames.back() );
-    m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_VIA_LAYER_FROM, m_layerNames.front() );
-    m_viaPropagationGrid->SetCellValue( rowId, VIA_GRID_VIA_LAYER_TO, m_layerNames.back() );
-    m_viaPropagationGrid->SetUnitValue( rowId, VIA_GRID_DELAY, 0 );
+                m_viaPropagationGrid->AppendRows();
+                m_viaPropagationGrid->SetCellValue( row, VIA_GRID_PROFILE_NAME, getProfileNameForProfileGridRow( 0 ) );
+                m_viaPropagationGrid->SetCellValue( row, VIA_GRID_SIGNAL_LAYER_FROM, m_layerNames.front() );
+                m_viaPropagationGrid->SetCellValue( row, VIA_GRID_SIGNAL_LAYER_TO, m_layerNames.back() );
+                m_viaPropagationGrid->SetCellValue( row, VIA_GRID_VIA_LAYER_FROM, m_layerNames.front() );
+                m_viaPropagationGrid->SetCellValue( row, VIA_GRID_VIA_LAYER_TO, m_layerNames.back() );
+                m_viaPropagationGrid->SetUnitValue( row, VIA_GRID_DELAY, 0 );
+
+                return { row, VIA_GRID_DELAY };
+            } );
 }
 
 
 void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnRemoveViaOverrideClick( wxCommandEvent& event )
 {
-    if( !m_viaPropagationGrid->CommitPendingChanges() )
-        return;
-
-    int curRow = m_viaPropagationGrid->GetGridCursorRow();
-
-    if( curRow < 0 )
-        return;
-
-    m_viaPropagationGrid->DeleteRows( curRow, 1 );
-
-    m_viaPropagationGrid->MakeCellVisible( std::max( 0, curRow - 1 ), m_viaPropagationGrid->GetGridCursorCol() );
-    m_viaPropagationGrid->SetGridCursor( std::max( 0, curRow - 1 ), m_viaPropagationGrid->GetGridCursorCol() );
+    m_viaPropagationGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_viaPropagationGrid->DeleteRows( row, 1 );
+            } );
 }
 
 

@@ -607,19 +607,12 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 
 void PANEL_DESIGN_BLOCK_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
-    if( !m_cur_grid->CommitPendingChanges() )
-        return;
-
-    if( m_cur_grid->AppendRows( 1 ) )
-    {
-        int last_row = m_cur_grid->GetNumberRows() - 1;
-
-        // wx documentation is wrong, SetGridCursor does not make visible.
-        m_cur_grid->MakeCellVisible( last_row, COL_ENABLED );
-        m_cur_grid->SetGridCursor( last_row, COL_NICKNAME );
-        m_cur_grid->EnableCellEditControl( true );
-        m_cur_grid->ShowCellEditControl();
-    }
+    m_cur_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_cur_grid->AppendRows( 1 );
+                return { m_cur_grid->GetNumberRows() - 1, COL_NICKNAME };
+            } );
 }
 
 
@@ -691,61 +684,35 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 
 void PANEL_DESIGN_BLOCK_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
 {
-    if( !m_cur_grid->CommitPendingChanges() )
-        return;
+    m_cur_grid->OnMoveRowUp(
+            [&]( int row )
+            {
+                DESIGN_BLOCK_LIB_TABLE_GRID*                tbl = cur_model();
+                boost::ptr_vector<LIB_TABLE_ROW>::auto_type move_me = tbl->m_rows.release( tbl->m_rows.begin() + row );
 
-    DESIGN_BLOCK_LIB_TABLE_GRID* tbl = cur_model();
-    int                          curRow = m_cur_grid->GetGridCursorRow();
+                tbl->m_rows.insert( tbl->m_rows.begin() + row - 1, move_me.release() );
 
-    // @todo: add multiple selection moves.
-    if( curRow >= 1 )
-    {
-        boost::ptr_vector<LIB_TABLE_ROW>::auto_type move_me =
-                tbl->m_rows.release( tbl->m_rows.begin() + curRow );
-
-        --curRow;
-        tbl->m_rows.insert( tbl->m_rows.begin() + curRow, move_me.release() );
-
-        if( tbl->GetView() )
-        {
-            // Update the wxGrid
-            wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, curRow, 0 );
-            tbl->GetView()->ProcessTableMessage( msg );
-        }
-
-        m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
-        m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
-    }
+                // Update the wxGrid
+                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
+                tbl->GetView()->ProcessTableMessage( msg );
+            } );
 }
 
 
 void PANEL_DESIGN_BLOCK_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 {
-    if( !m_cur_grid->CommitPendingChanges() )
-        return;
+    m_cur_grid->OnMoveRowDown(
+            [&]( int row )
+            {
+                DESIGN_BLOCK_LIB_TABLE_GRID*                tbl = cur_model();
+                boost::ptr_vector<LIB_TABLE_ROW>::auto_type move_me = tbl->m_rows.release( tbl->m_rows.begin() + row );
 
-    DESIGN_BLOCK_LIB_TABLE_GRID* tbl = cur_model();
-    int                          curRow = m_cur_grid->GetGridCursorRow();
+                tbl->m_rows.insert( tbl->m_rows.begin() + row + 1, move_me.release() );
 
-    // @todo: add multiple selection moves.
-    if( unsigned( curRow + 1 ) < tbl->m_rows.size() )
-    {
-        boost::ptr_vector<LIB_TABLE_ROW>::auto_type move_me =
-                tbl->m_rows.release( tbl->m_rows.begin() + curRow );
-
-        ++curRow;
-        tbl->m_rows.insert( tbl->m_rows.begin() + curRow, move_me.release() );
-
-        if( tbl->GetView() )
-        {
-            // Update the wxGrid
-            wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, curRow - 1, 0 );
-            tbl->GetView()->ProcessTableMessage( msg );
-        }
-
-        m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
-        m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
-    }
+                // Update the wxGrid
+                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
+                tbl->GetView()->ProcessTableMessage( msg );
+            } );
 }
 
 
