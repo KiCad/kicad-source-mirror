@@ -589,6 +589,8 @@ public:
      */
     virtual void OnModify();
 
+    bool IsClosing() const { return m_isClosing; }
+
     bool NonUserClose( bool aForce )
     {
         m_isNonUserClose = true;
