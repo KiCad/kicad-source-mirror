@@ -2270,7 +2270,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
         aErrorHandler( DRCE_PADSTACK, _( "('testpoint' property makes no sense on NPTH pads)" ) );
 
     if( GetProperty() == PAD_PROP::HEATSINK && GetAttribute() == PAD_ATTRIB::NPTH )
-        aErrorHandler( DRCE_PADSTACK, _( "('heatsink' property makes no sense of NPTH pads)" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('heatsink' property makes no sense on NPTH pads)" ) );
 
     if( GetProperty() == PAD_PROP::CASTELLATED && GetAttribute() != PAD_ATTRIB::PTH )
         aErrorHandler( DRCE_PADSTACK, _( "('castellated' property is for PTH pads)" ) );
