@@ -204,31 +204,22 @@ void PANEL_TEXT_VARIABLES::OnGridCellChanging( wxGridEvent& event )
 
 void PANEL_TEXT_VARIABLES::OnAddTextVar( wxCommandEvent& event )
 {
-    if( !m_TextVars->CommitPendingChanges() )
-        return;
-
-    AppendTextVar( wxEmptyString, wxEmptyString );
-
-    m_TextVars->MakeCellVisible( m_TextVars->GetNumberRows() - 1, TV_NAME_COL );
-    m_TextVars->SetGridCursor( m_TextVars->GetNumberRows() - 1, TV_NAME_COL );
-
-    m_TextVars->EnableCellEditControl( true );
-    m_TextVars->ShowCellEditControl();
+    m_TextVars->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                AppendTextVar( wxEmptyString, wxEmptyString );
+                return { m_TextVars->GetNumberRows() - 1, TV_NAME_COL };
+            } );
 }
 
 
 void PANEL_TEXT_VARIABLES::OnRemoveTextVar( wxCommandEvent& event )
 {
-    int curRow = m_TextVars->GetGridCursorRow();
-
-    if( curRow < 0 || m_TextVars->GetNumberRows() <= curRow )
-        return;
-
-    m_TextVars->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
-    m_TextVars->DeleteRows( curRow, 1 );
-
-    m_TextVars->MakeCellVisible( std::max( 0, curRow-1 ), m_TextVars->GetGridCursorCol() );
-    m_TextVars->SetGridCursor( std::max( 0, curRow-1 ), m_TextVars->GetGridCursorCol() );
+    m_TextVars->OnDeleteRows(
+            [&]( int row )
+            {
+                m_TextVars->DeleteRows( row, 1 );
+            } );
 }
 
 

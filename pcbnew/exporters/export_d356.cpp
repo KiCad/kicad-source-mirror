@@ -152,7 +152,7 @@ void IPC356D_WRITER::build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD
             if( pad->GetLayerSet()[B_Mask] )
                 rk.soldermask &= ~2;
 
-            aRecords.push_back( rk );
+            aRecords.push_back( std::move( rk ) );
         }
     }
 }
