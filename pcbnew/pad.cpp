@@ -802,6 +802,9 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 {
     std::lock_guard<std::mutex> RAII_lock( m_polyBuildingLock );
 
+    // Only calculate this once, not for both ERROR_INSIDE and ERROR_OUTSIDE
+    bool doBoundingRadius = aErrorLoc == ERROR_OUTSIDE;
+
     // If we had to wait for the lock then we were probably waiting for someone else to
     // finish rebuilding the shapes.  So check to see if they're clean now.
     if( !m_polyDirty[ aErrorLoc ] )
@@ -809,8 +812,6 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 
     const BOARD* board = GetBoard();
     int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
-
-    m_effectiveBoundingRadius = 0;
 
     Padstack().ForEachUniqueLayer(
         [&]( PCB_LAYER_ID aLayer )
@@ -820,11 +821,17 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 
             effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
             TransformShapeToPolygon( *effectivePolygon, aLayer, 0, maxError, aErrorLoc );
+        } );
 
-            // Bounding radius
+    if( doBoundingRadius )
+    {
+        m_effectiveBoundingRadius = 0;
 
-            if( aErrorLoc == ERROR_OUTSIDE )
+        Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
             {
+                std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon = m_effectivePolygons[ aLayer ][ aErrorLoc ];
+
                 for( int cnt = 0; cnt < effectivePolygon->OutlineCount(); ++cnt )
                 {
                     const SHAPE_LINE_CHAIN& poly = effectivePolygon->COutline( cnt );
@@ -835,11 +842,11 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
                         m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
                     }
                 }
-            }
-        } );
+            } );
 
-    m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeX() / 2.0 ) );
-    m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeY() / 2.0 ) );
+        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeX() / 2.0 ) );
+        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeY() / 2.0 ) );
+    }
 
     // All done
     m_polyDirty[ aErrorLoc ] = false;
