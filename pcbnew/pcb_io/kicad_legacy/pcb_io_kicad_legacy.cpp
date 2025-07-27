@@ -793,7 +793,7 @@ void PCB_IO_KICAD_LEGACY::loadSHEET()
                 {
                     m_error.Printf( _( "Unknown sheet type '%s' on line: %d." ),
                                     wname.GetData(),
-                                    m_reader->LineNumber() );
+                                    (int) m_reader->LineNumber() );
                     THROW_IO_ERROR( m_error );
                 }
 
@@ -1422,7 +1422,9 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             case 'T':   padshape = static_cast<int>( PAD_SHAPE::TRAPEZOID );   break;
             default:
                 m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'." ),
-                                padchar, padchar, m_reader->LineNumber(),
+                                padchar,
+                                padchar,
+                                (int) m_reader->LineNumber(),
                                 aFootprint->GetFPID().GetLibItemName().wx_str() );
                 THROW_IO_ERROR( m_error );
             }
@@ -1611,7 +1613,9 @@ void PCB_IO_KICAD_LEGACY::loadFP_SHAPE( FOOTPRINT* aFootprint )
     case 'P': shape = SHAPE_T::POLY;    break;
     default:
         m_error.Printf( _( "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'." ),
-                        (unsigned char) line[1], (unsigned char) line[1], m_reader->LineNumber(),
+                        (unsigned char) line[1],
+                        (unsigned char) line[1],
+                        (int) m_reader->LineNumber(),
                         aFootprint->GetFPID().GetLibItemName().wx_str() );
         THROW_IO_ERROR( m_error );
     }
@@ -2887,8 +2891,8 @@ BIU PCB_IO_KICAD_LEGACY::biuParse( const char* aValue, const char** nptrptr )
     {
         m_error.Printf( _( "Invalid floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
-                        m_reader->LineNumber(),
-                        aValue - m_reader->Line() + 1 );
+                        (int) m_reader->LineNumber(),
+                        (int)( aValue - m_reader->Line() + 1 ) );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2897,8 +2901,8 @@ BIU PCB_IO_KICAD_LEGACY::biuParse( const char* aValue, const char** nptrptr )
     {
         m_error.Printf( _( "Missing floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
-                        m_reader->LineNumber(),
-                        aValue - m_reader->Line() + 1 );
+                        (int) m_reader->LineNumber(),
+                        (int)( aValue - m_reader->Line() + 1 ) );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2926,8 +2930,8 @@ EDA_ANGLE PCB_IO_KICAD_LEGACY::degParse( const char* aValue, const char** nptrpt
     {
         m_error.Printf( _( "Invalid floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
-                        m_reader->LineNumber(),
-                        aValue - m_reader->Line() + 1 );
+                        (int) m_reader->LineNumber(),
+                        (int)( aValue - m_reader->Line() + 1 ) );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2936,8 +2940,8 @@ EDA_ANGLE PCB_IO_KICAD_LEGACY::degParse( const char* aValue, const char** nptrpt
     {
         m_error.Printf( _( "Missing floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
-                        m_reader->LineNumber(),
-                        aValue - m_reader->Line() + 1 );
+                        (int) m_reader->LineNumber(),
+                        (int)( aValue - m_reader->Line() + 1 ) );
 
         THROW_IO_ERROR( m_error );
     }
