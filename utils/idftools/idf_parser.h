@@ -424,19 +424,19 @@ public:
     IDF3_BOARD( IDF3::CAD_TYPE aCadType );
     virtual ~IDF3_BOARD();
 
-    IDF3::CAD_TYPE GetCadType( void );
+    IDF3::CAD_TYPE GetCadType( void ) { return m_cadType; }
 
     // retrieve the nominal unit used in reading/writing
     // data. This is primarily for use by owned objects
     // and is only of informational use for the end user.
     // Internally all data is represented in mm and the
     // end user must use only mm in the API.
-    IDF3::IDF_UNIT GetUnit( void );
+    IDF3::IDF_UNIT GetUnit( void ) const { return m_unit; }
 
     const std::string& GetNewRefDes( void );
 
-    void SetBoardName( const std::string& aBoardName );
-    const std::string& GetBoardName( void );
+    void SetBoardName( const std::string& aBoardName ) { m_boardName = aBoardName; }
+    const std::string& GetBoardName( void ) const { return m_boardName; }
 
     bool SetBoardThickness( double aBoardThickness );
     double GetBoardThickness( void );
@@ -445,21 +445,23 @@ public:
     bool WriteFile( const wxString& aFullFileName, bool aUnitMM = true,
                     bool aForceUnitFlag = false );
 
-    const std::string& GetIDFSource( void );
-    void  SetIDFSource( const std::string& aIDFSource);
-    const std::string& GetBoardSource( void );
-    const std::string& GetLibrarySource( void );
-    const std::string& GetBoardDate( void );
-    const std::string& GetLibraryDate( void );
-    int   GetBoardVersion( void );
+    const std::string& GetIDFSource( void ) const { return m_idfSource; }
+    void  SetIDFSource( const std::string& aIDFSource) { m_idfSource = aIDFSource; }
+
+    const std::string& GetBoardSource( void ) const { return m_brdSource; }
+    const std::string& GetLibrarySource( void ) const { return m_libSource; }
+    const std::string& GetBoardDate( void ) const { return m_brdDate; }
+    const std::string& GetLibraryDate( void ) const { return m_libDate; }
+
+    int   GetBoardVersion( void ) const { return m_brdFileVersion; }
     bool  SetBoardVersion( int aVersion );
-    int   GetLibraryVersion( void );
+    int   GetLibraryVersion( void ) const { return m_libFileVersion; }
     bool  SetLibraryVersion( int aVersion );
 
-    double GetUserScale( void );
+    double GetUserScale( void ) const { return m_userScale; }
     bool SetUserScale( double aScaleFactor );
 
-    int GetUserPrecision( void );
+    int GetUserPrecision( void ) const { return m_userPrec; }
     bool SetUserPrecision( int aPrecision );
 
     void GetUserOffset( double& aXoff, double& aYoff );
@@ -469,11 +471,10 @@ public:
     bool DelBoardOutline( IDF_OUTLINE* aOutline );
     bool DelBoardOutline( size_t aIndex );
     size_t GetBoardOutlinesSize( void );
-    BOARD_OUTLINE* GetBoardOutline( void );
-    const std::list< IDF_OUTLINE* >* GetBoardOutlines( void );
+    BOARD_OUTLINE* GetBoardOutline( void ) { return &m_boardOutline; }
 
     // Operations for OTHER OUTLINES
-    const std::map<std::string, OTHER_OUTLINE*>* GetOtherOutlines( void );
+    const std::map<std::string, OTHER_OUTLINE*>* GetOtherOutlines( void ) const { return &m_otherOutlines; }
 
     /// XXX - TO BE IMPLEMENTED
     //
@@ -533,7 +534,7 @@ public:
 
     std::list<IDF_DRILL_DATA*>& GetBoardDrills( void )
     {
-        return board_drills;
+        return m_drills;
     }
 
     IDF_DRILL_DATA* AddBoardDrill( double aDia, double aXpos, double aYpos,
@@ -575,7 +576,7 @@ public:
     // return error string
     const std::string& GetError( void )
     {
-        return errormsg;
+        return m_errormsg;
     }
 
 private:
@@ -629,69 +630,52 @@ private:
     bool writeLibFile( const std::string& aFileName );
 
 #ifndef DISABLE_IDF_OWNERSHIP
-    bool checkComponentOwnership( int aSourceLine, const char* aSourceFunc,
-                                  IDF3_COMPONENT* aComponent );
+    bool checkComponentOwnership( int aSourceLine, const char* aSourceFunc, IDF3_COMPONENT* aComponent );
 #endif
 
-    std::map< std::string, std::string > uidFileList;     // map of files opened and UIDs
-    std::list< std::string > uidLibList;                  // list of UIDs read from a library file
+    std::map<std::string, std::string>         m_uidFileList;        // map of files opened and UIDs
+    std::list<std::string>                     m_uidLibList;         // list of UIDs read from a library file
 
     // string for passing error messages to user
-    std::string errormsg;
-    std::list< IDF_NOTE* >     notes;                     // IDF notes
-    std::list< std::string >   noteComments;              // comment list for NOTES section
-    std::list< std::string >   drillComments;             // comment list for DRILL section
-    std::list< std::string >   placeComments;             // comment list for PLACEMENT section
-    std::list<IDF_DRILL_DATA*> board_drills;
-    std::map< std::string, IDF3_COMPONENT*> components;   // drill and placement data for components
+    std::string                                m_errormsg;
+    std::list< IDF_NOTE*>                      m_notes;              // IDF notes
+    std::list<std::string>                     m_noteComments;       // comment list for NOTES section
+    std::list<std::string>                     m_drillComments;      // comment list for DRILL section
+    std::list<std::string>                     m_placeComments;      // comment list for PLACEMENT section
+    std::list<IDF_DRILL_DATA*>                 m_drills;
+    std::map<std::string, IDF3_COMPONENT*>     m_components;         // drill and placement data for components
+    std::map<std::string, IDF3_COMP_OUTLINE*>  m_componentOutlines;  // component outlines (data for library file).
 
-    // component outlines (data for library file).
-    std::map< std::string, IDF3_COMP_OUTLINE*> compOutlines;
-    std::string boardName;
-    IDF3::CAD_TYPE   cadType;
-    IDF3::IDF_UNIT   unit;
-    IDF3::IDF_VERSION   idfVer;                           // IDF version of Board or Library
+    std::string          m_boardName;
+    IDF3::CAD_TYPE       m_cadType;
+    IDF3::IDF_UNIT       m_unit;
+    IDF3::IDF_VERSION    m_idfVer;             // IDF version of Board or Library
 
-    // counter for automatically numbered NOREFDES items
-    int iRefDes;
-    std::string sRefDes;
+    int                  m_refDesCounter;      // counter for automatically numbered NOREFDES items
+    std::string          m_refDesString;
 
-    std::string idfSource;  // SOURCE string to use when writing BOARD and LIBRARY headers
-    std::string brdSource;  // SOURCE string as retrieved from a BOARD file
-    std::string libSource;  // SOURCE string as retrieved from a LIBRARY file
-    std::string brdDate;    // DATE string from BOARD file
-    std::string libDate;    // DATE string from LIBRARY file
-    int brdFileVersion;     // File Version from BOARD file
-    int libFileVersion;     // File Version from LIBRARY file
+    std::string          m_idfSource;          // SOURCE string to use when writing BOARD and LIBRARY headers
+    std::string          m_brdSource;          // SOURCE string as retrieved from a BOARD file
+    std::string          m_libSource;          // SOURCE string as retrieved from a LIBRARY file
+    std::string          m_brdDate;            // DATE string from BOARD file
+    std::string          m_libDate;            // DATE string from LIBRARY file
+    int                  m_brdFileVersion;     // File Version from BOARD file
+    int                  m_libFileVersion;     // File Version from LIBRARY file
 
-    int    userPrec;        // user may store any integer here
-    double userScale;       // user may store a scale for translating to arbitrary units
-    double userXoff;        // user may specify an arbitrary X/Y offset
-    double userYoff;
+    int                  m_userPrec;           // user may store any integer here
+    double               m_userScale;          // user may store a scale for translating to arbitrary units
+    double               m_userXoff;           // user may specify an arbitrary X/Y offset
+    double               m_userYoff;
 
-    // main board outline and cutouts
-    BOARD_OUTLINE olnBoard;
+    BOARD_OUTLINE                              m_boardOutline;          // main board outline and cutouts
+    std::map<std::string, OTHER_OUTLINE*>      m_otherOutlines;         // OTHER outlines
+    std::list<ROUTE_OUTLINE*>                  m_routeOutlines;         // ROUTE outlines
+    std::list<PLACE_OUTLINE*>                  m_placeOutlines;         // PLACEMENT outlines
+    std::multimap<std::string, GROUP_OUTLINE*> m_groupOutlines;         // PLACEMENT GROUP outlines
 
-    // OTHER outlines
-    std::map<std::string, OTHER_OUTLINE*> olnOther;
-
-    // ROUTE outlines
-    std::list<ROUTE_OUTLINE*> olnRoute;
-
-    // PLACEMENT outlines
-    std::list<PLACE_OUTLINE*> olnPlace;
-
-    // ROUTE KEEPOUT outlines
-    std::list<ROUTE_KO_OUTLINE*> olnRouteKeepout;
-
-    // VIA KEEPOUT outlines
-    std::list<VIA_KO_OUTLINE*> olnViaKeepout;
-
-    // PLACE KEEPOUT outlines
-    std::list<PLACE_KO_OUTLINE*> olnPlaceKeepout;
-
-    // PLACEMENT GROUP outlines
-    std::multimap<std::string, GROUP_OUTLINE*> olnGroup;
+    std::list<ROUTE_KO_OUTLINE*>               m_routeKeepoutOutlines;  // ROUTE KEEPOUT outlines
+    std::list<VIA_KO_OUTLINE*>                 m_viaKeepoutOutlines;    // VIA KEEPOUT outlines
+    std::list<PLACE_KO_OUTLINE*>               m_placeKeepoutOutlines;  // PLACE KEEPOUT outlines
 };
 
 #endif // IDF_PARSER_H

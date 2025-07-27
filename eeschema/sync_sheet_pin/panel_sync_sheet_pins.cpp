@@ -44,13 +44,16 @@
 // sch_label.cpp
 extern wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType );
 
-PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aSheet,
-                                              wxNotebook* aNoteBook, int aIndex,
-                                              SHEET_SYNCHRONIZATION_AGENT& aAgent,
-                                              const SCH_SHEET_PATH&        aPath ) :
-        PANEL_SYNC_SHEET_PINS_BASE( aParent ), m_sheet( aSheet ), m_noteBook( aNoteBook ),
-        m_index( aIndex ), m_sheetFileName( aSheet->GetFileName() ), m_agent( aAgent ),
-        m_path( std::move( aPath ) ),
+PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aSheet, wxNotebook* aNoteBook,
+                                              int aIndex, SHEET_SYNCHRONIZATION_AGENT& aAgent,
+                                              const SCH_SHEET_PATH& aPath ) :
+        PANEL_SYNC_SHEET_PINS_BASE( aParent ),
+        m_sheet( aSheet ),
+        m_noteBook( aNoteBook ),
+        m_index( aIndex ),
+        m_sheetFileName( aSheet->GetFileName() ),
+        m_agent( aAgent ),
+        m_path( aPath ),
         m_views( {
                 { SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL, m_viewSheetLabels },
                 { SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN, m_viewSheetPins },

@@ -125,9 +125,9 @@ std::optional<int64_t> FindSquareDistanceToItem( const BOARD_ITEM& item, const V
     {
         // Exploit the intersectable as a nearable
         std::visit(
-                [&]( auto& geom )
+                [&]( const auto& geom )
                 {
-                    nearable = NEARABLE_GEOM( std::move( geom ) );
+                    nearable = NEARABLE_GEOM( geom );
                 },
                 *intersectable );
     }
