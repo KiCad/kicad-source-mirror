@@ -134,8 +134,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     case PLOT_FORMAT::POST:
     case PLOT_FORMAT::SVG:
     {
-        PAGE_INFO pageA4( wxT( "A4" ) );
-        VECTOR2I  pageSizeIU = pageA4.GetSizeIU( pcbIUScale.IU_PER_MILS );
+        VECTOR2I  pageSizeIU = page_info.GetSizeIU( pcbIUScale.IU_PER_MILS );
 
         // Reserve a 10 mm margin around the page.
         int margin = pcbIUScale.mmToIU( 10 );
@@ -170,7 +169,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         else
             plotter = new PS_PLOTTER;
 
-        plotter->SetPageSettings( pageA4 );
+        plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, pcbIUScale.IU_PER_MILS / 10, scale, false );
         break;
     }
