@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-25 21:08+0000\n"
+"PO-Revision-Date: 2025-07-28 20:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -2558,6 +2558,8 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"این مسیر به صورت خارجی و خارج از فرآیند جاری تعریف شده و تنها به صورت موقت "
+"بازنویسی خواهد شد."
 
 #: common/dialogs/dialog_configure_paths.cpp:286
 msgid ""
@@ -2567,11 +2569,16 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
+"وقتی KiCad را دوباره اجرا کنید، فقط مسیرهایی که قبلاً تعریف شده اند استفاده "
+"می شوند و تنظیماتی که در بخش پیکربندی مسیر وارد کرده اید نادیده گرفته می "
+"شوند ...\n"
+"اگر این چیزی نیست که انتظار دارید، نام مسیرهای تکراری را تغییر دهید یا "
+"متغیرهای محیطی خارجی را از سیستم پاک کنید."
 
 #: common/dialogs/dialog_configure_paths.cpp:304
 #, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr ""
+msgstr "نام %s قبلاً رزرو شده و قابل استفاده نیست."
 
 #: common/dialogs/dialog_configure_paths.cpp:386
 msgid ""
@@ -2581,6 +2588,12 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
+"نام و مقدار هر متغیر محیطی را وارد کنید.\n"
+"ورودی های خاکستری رنگ نشان دهنده‌ی متغیر هایی هستند که به صورت خارجی (در سطح "
+"سیستم یا کاربر) تعریف شده اند.\n"
+"متغیر های محیطی تعریف شده در سطح سیستم یا کاربر برموارد تعریف شده در این "
+"جدول اولویت دارند،\n"
+"به این معنی که مقادیر این جدول نادیده گرفته می شوند."
 
 #: common/dialogs/dialog_configure_paths.cpp:392
 msgid ""
@@ -2588,10 +2601,12 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
+"برای اینکه نام متغیر محیطی روی همه سیستم ها معتبر باشد، فقط حروف بزرگ، عدد و "
+"علامت زیرخط (_) در قسمت نام قابل استفاده است."
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
-msgstr ""
+msgstr "متغیر های محیطی"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/dialog_design_block_properties_base.cpp:42
@@ -2639,25 +2654,25 @@ msgstr "نام"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 msgid "Path"
-msgstr ""
+msgstr "مسیر"
 
 #: common/dialogs/dialog_design_block_properties.cpp:100
 #, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr ""
+msgstr "نام '%s' شامل کاراکتر نامعتبر '%c' است."
 
 #: common/dialogs/dialog_design_block_properties.cpp:126
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
 msgid "Untitled Field"
-msgstr ""
+msgstr "فیلد بدون عنوان"
 
 #: common/dialogs/dialog_design_block_properties.cpp:251
 msgid "Duplicate fields are not allowed."
-msgstr ""
+msgstr "وجود فیلد های تکراری مجاز نیست."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
 msgid "Default Fields"
-msgstr ""
+msgstr "فیلد های پیش فرض"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
@@ -2692,7 +2707,7 @@ msgstr ""
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:120
 msgid "Value"
-msgstr ""
+msgstr "مقدار"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:97
 #: common/dialogs/dialog_grid_settings_base.cpp:25
@@ -2710,21 +2725,21 @@ msgstr "نام:"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
 msgid "Keywords:"
-msgstr ""
+msgstr "کلید واژه ها:"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:111
 #: kicad/dialogs/dialog_destination_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
 msgid "Description:"
-msgstr ""
+msgstr "توضیحات:"
 
 #: common/dialogs/dialog_design_block_properties_base.h:70
 msgid "Design Block Properties"
-msgstr ""
+msgstr "ویژگی های بلوک طراحی"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
-msgstr ""
+msgstr "بلوک طراحی (Design Block)"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
 #, c-format
@@ -2732,10 +2747,12 @@ msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
+"خطا در ایجاد جدول کتابخانه بلوک طراحی '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
 msgid "Please select a design block library table file."
-msgstr ""
+msgstr "لطفاً یک فایل جدول کتابخانه بلوک طراحی را انتخاب کنید."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2743,7 +2760,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:146
 #, c-format
 msgid "File '%s' not found."
-msgstr ""
+msgstr "فایل '%s' یافت نشد."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
 #, c-format
@@ -2751,22 +2768,24 @@ msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
+"خطا در خواندن جدول کتابخانه بلوک طراحی '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #, c-format
 msgid "Cannot create global library table '%s'."
-msgstr ""
+msgstr "امکان ایجاد جدول کتابخانه سراسری (Global Library) '%s' وجود ندارد."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
 #, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr ""
+msgstr "خطا در کپی کردن جدول کتابخانه بلوک طراحی سراسری '%s' به '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr ""
+msgstr "پیکربندی جدول کتابخانه سراسری %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
@@ -2777,11 +2796,17 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
+"KiCad برای اولین بار با استفاده از جدول کتابخانه جدید %s برای دسترسی به "
+"کتابخانه ها اجرا شده است.\n"
+"برای اینکه KiCad بتواند به کتابخانه های %s دسترسی پیدا کند، باید جدول "
+"کتابخانه سراسری %s خود را پیکربندی کنید.\n"
+"لطفاً یکی از گزینه های زیر را انتخاب کنید. اگر مطمئن نیستید کدام گزینه را "
+"انتخاب کنید، لطفاً گزینه پیش فرض را استفاده نمایید."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr ""
+msgstr "کپی جدول کتابخانه جهانی پیش فرض %s (توصیه شده)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
@@ -2789,33 +2814,39 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
+"اگر درباره پیکربندی جدول کتابخانه جهانی %s مطمئن نیستید، این گزینه را انتخاب "
+"کنید"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr ""
+msgstr "کپی جدول کتابخانه سراسری سفارشی %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
+"برای کپی کردن یک فایل جدول کتابخانه %s غیر از پیش فرض، این گزینه را انتخاب "
+"کنید"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr ""
+msgstr "ایجاد جدول کتابخانه سراسری خالی %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
+"برای تعریف کتابخانه های %s در جدول های کتابخانه مخصوص پروژه، این گزینه را "
+"انتخاب کنید"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
-msgstr ""
+msgstr "فایل جدول کتابخانه سراسری %s را انتخاب کنید:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2873,27 +2904,27 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:340
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:196
 msgid "dummy"
-msgstr ""
+msgstr "ساختگی (Dummy)"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr ""
+msgstr "یک فایل را انتخاب کنید"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
 msgid "Configure Global Library Table"
-msgstr ""
+msgstr "پیکربندی جدول کتابخانه سراسری"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
 msgid "Grid size X out of range."
-msgstr ""
+msgstr "اندازه گرید (Grid) X خارج از محدوده است."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
 msgid "Grid size Y out of range."
-msgstr ""
+msgstr "اندازه گرید (Grid) Y خارج از محدوده است."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
-msgstr ""
+msgstr "(اختیاری)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2971,34 +3002,34 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:320
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:336
 msgid "unit"
-msgstr ""
+msgstr "واحد"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
 msgid "Linked"
-msgstr ""
+msgstr "متصل"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr ""
+msgstr "تنظیمات گرید (Grid)"
 
 #: common/dialogs/dialog_group_properties.cpp:112
 #, c-format
 msgid "Invalid library link: '%s'"
-msgstr ""
+msgstr "مسیر کتابخانه نامعتبر است: ‏'%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:135
 msgid "Edit Group Properties"
-msgstr ""
+msgstr "ویرایش ویژگی های گروه"
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
-msgstr ""
+msgstr "نام گروه:"
 
 #: common/dialogs/dialog_group_properties_base.cpp:37
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:394
 msgid "Library link:"
-msgstr ""
+msgstr "مسیر کتابخانه:"
 
 #: common/dialogs/dialog_group_properties_base.cpp:47 eeschema/sch_item.cpp:657
 #: pcbnew/board_item.cpp:432 pcbnew/dialogs/dialog_copper_zones_base.cpp:127
@@ -3019,240 +3050,252 @@ msgstr ""
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:861
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
 msgid "Locked"
-msgstr ""
+msgstr "قفل شد"
 
 #: common/dialogs/dialog_group_properties_base.cpp:48
 msgid "Prevents group from being moved on canvas"
-msgstr ""
+msgstr "مانع از حرکت گروه در صفحه طراحی می شود"
 
 #: common/dialogs/dialog_group_properties_base.cpp:52
 msgid "Group members:"
-msgstr ""
+msgstr "محتوای گروه:"
 
 #: common/dialogs/dialog_group_properties_base.h:65 eeschema/sch_group.cpp:433
 #: pcbnew/pcb_group.cpp:492
 msgid "Group Properties"
-msgstr ""
+msgstr "مشخصات گروه"
 
 #: common/dialogs/dialog_hotkey_list.cpp:36
 msgid "Hotkey List"
-msgstr ""
+msgstr "لیست کلید های میانبر"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
 msgid "Project Name"
-msgstr ""
+msgstr "نام پروژه"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1491
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
-msgstr ""
+msgstr "مدارچاپی (PCB)"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1364 eeschema/sch_plotter.cpp:852
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
-msgstr ""
+msgstr "شماتیک (Schematic)"
 
 #: common/dialogs/dialog_import_choose_project_base.cpp:18
 msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"این پروژه شامل چند ترکیب مدار چاپی (PCB) و شماتیک (Schematic) است.\n"
+"لطفاً انتخاب کنید کدام ترکیب در KiCad وارد شود."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
-msgstr ""
+msgstr "انتخاب پروژه برای وارد کردن"
 
 #: common/dialogs/dialog_locked_items_query.cpp:38
 msgid "Skip Locked Items"
-msgstr ""
+msgstr "صرف نظر از موارد قفل شده"
 
 #: common/dialogs/dialog_locked_items_query.cpp:39
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"موارد قفل شده را از انتخاب خارج کرده و عملیات را فقط روی موارد باز (در صورت "
+"وجود) اعمال کنید."
 
 #: common/dialogs/dialog_locked_items_query.cpp:42
 msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"این پنجره گفتگو تا زمان راه اندازی مجدد KiCad دوباره نمایش داده نشود. می "
+"توانید این پنجره را در تنظیمات Pcbnew دوباره فعال کنید."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %zu locked items."
-msgstr ""
+msgstr "در انتخاب شده ها، %z مواردی که شما قفل کردید وجود دارد."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "این موارد صرف نظر خواهند شد مگر اینکه قفل‌ها را لغو کنید."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "این تصمیم را برای این جلسه به خاطر بسپار."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"گزینه انتخاب شده را برای باقی مانده این جلسه به خاطر بسپار.\n"
+"این پنجره گفتگو تا زمان راه اندازی مجدد KiCad دوباره نمایش داده نخواهد شد."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr ""
+msgstr "لغو و نادیده گرفتن قفل ها"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"قفل ها را نادیده بگیرید و عملیات را روی همه موارد انتخاب شده اعمال کنید.\n"
+"هر مورد قفل شده پس از اتمام عملیات همچنان قفل باقی خواهد ماند."
 
 #: common/dialogs/dialog_locked_items_query_base.h:55
 msgid "Locked Items"
-msgstr ""
+msgstr "موارد قفل شده"
 
 #: common/dialogs/dialog_migrate_settings.cpp:33
 msgid "Quit KiCad"
-msgstr ""
+msgstr "خروج از KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:59
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "به KiCad %s خوش آمدید!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:68
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "تنظیمات را از نسخه قبلی وارد کنید (هیچ تنظیماتی یافت نشد)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:139
 msgid "Select Settings Path"
-msgstr ""
+msgstr "انتخاب مسیر تنظیمات"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "چگونه مایلید KiCad را تنظیم کنید؟"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
-msgstr ""
+msgstr "وارد کردن تنظیمات از نسخه قبلی در مسیر:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr ""
+msgstr "یک مسیر متفاوت را انتخاب کنید"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "مسیر انتخاب شده شامل تنظیمات معتبر KiCad نیست!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr ""
+msgstr "وارد کردن پیکربندی کتابخانه از نسخه قبلی"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"در صورت انتخاب، جداول کتابخانه نماد ها (Symbol) و قطعات و فوتپرینت "
+"(Footprint) از نسخه قبلی به این نسخه وارد می شوند"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr ""
+msgstr "شروع با تنظیمات پیش فرض"
 
 #: common/dialogs/dialog_migrate_settings_base.h:68
 msgid "Configure KiCad Settings Path"
-msgstr ""
+msgstr "پیکربندی مسیر تنظیمات KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210 میلی متر"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "A4 210x297mm"
-msgstr ""
+msgstr "A4 210x297 میلی متر"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "A3 297x420mm"
-msgstr ""
+msgstr "A3 297x420 میلی متر"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "A2 420x594mm"
-msgstr ""
+msgstr "A2 420x594 میلی متر"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "A1 594x841mm"
-msgstr ""
+msgstr "A1 594x841 میلی متر"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "A0 841x1189mm"
-msgstr ""
+msgstr "A0 841x1189 میلی متر"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "A 8.5x11in"
-msgstr ""
+msgstr "A 8.5x11 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "B 11x17in"
-msgstr ""
+msgstr "B 11x17 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "C 17x22in"
-msgstr ""
+msgstr "C 17x22 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "D 22x34in"
-msgstr ""
+msgstr "D 22x34 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "E 34x44in"
-msgstr ""
+msgstr "E 34x44 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:74
 msgid "USLetter 8.5x11in"
-msgstr ""
+msgstr "USLetter 8.5x11 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:75
 msgid "USLegal 8.5x14in"
-msgstr ""
+msgstr "USLegal 8.5x14 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:76
 msgid "USLedger 11x17in"
-msgstr ""
+msgstr "USLedger 11x17 اینچ"
 
 #: common/dialogs/dialog_page_settings.cpp:77
 msgid "User (Custom)"
-msgstr ""
+msgstr "کاربر (سفارشی)"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Preview Settings"
-msgstr ""
+msgstr "تنظیمات پیش نمایش"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Preview Paper"
-msgstr ""
+msgstr "پیش نمایش کاغذ"
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Preview Title Block Data"
-msgstr ""
+msgstr "پیش نمایش داده های بلوک عنوان"
 
 #: common/dialogs/dialog_page_settings.cpp:117
 #: common/dialogs/dialog_page_settings_base.h:146
 #: eeschema/tools/sch_editor_control.cpp:194
 #: pcbnew/tools/board_editor_control.cpp:299
 msgid "Page Settings"
-msgstr ""
+msgstr "تنظیمات صفحه"
 
 #: common/dialogs/dialog_page_settings.cpp:118
 #: common/dialogs/dialog_page_settings_base.cpp:27
 msgid "Paper"
-msgstr ""
+msgstr "کاغذ"
 
 #: common/dialogs/dialog_page_settings.cpp:119
 msgid "Title Block"
-msgstr ""
+msgstr "بلوک عنوان"
 
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:238 pagelayout_editor/files.cpp:243
@@ -3260,21 +3303,21 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:2446
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr ""
+msgstr "خطا در بارگذاری صفحه طراحی '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:713
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Portrait"
-msgstr ""
+msgstr "حالت عمودی"
 
 #: common/dialogs/dialog_page_settings.cpp:715
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Landscape"
-msgstr ""
+msgstr "حالت افقی"
 
 #: common/dialogs/dialog_page_settings.cpp:803 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
-msgstr ""
+msgstr "فایل صفحه طراحی"
 
 #: common/dialogs/dialog_page_settings.cpp:841
 #, c-format
@@ -3282,10 +3325,12 @@ msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
 msgstr ""
+"خطا در بارگذاری صفحه طراحی '%s'\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
-msgstr ""
+msgstr "متن ساختگی"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:234
@@ -3299,21 +3344,21 @@ msgstr ""
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:221
 msgid "Orientation:"
-msgstr ""
+msgstr "چیدمان:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:60
 msgid "Custom paper size:"
-msgstr ""
+msgstr "اندازه کاغذ سفارشی:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:72
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:299
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:187
 msgid "Height:"
-msgstr ""
+msgstr "ارتفاع:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:85
 msgid "Custom paper height."
-msgstr ""
+msgstr "ارتفاع کاغذ سفارشی."
 
 #: common/dialogs/dialog_page_settings_base.cpp:93
 #: eeschema/dialogs/dialog_line_properties_base.cpp:30
@@ -3328,11 +3373,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:174
 msgid "Width:"
-msgstr ""
+msgstr "عرض:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:106
 msgid "Custom paper width."
-msgstr ""
+msgstr "عرض کاغذ سفارشی."
 
 #: common/dialogs/dialog_page_settings_base.cpp:117
 #: common/dialogs/dialog_page_settings_base.cpp:237
@@ -3349,7 +3394,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr ""
+msgstr "صادر کردن به صفحه های طراحی دیگر"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:443
 #: eeschema/erc/erc_item.cpp:425 eeschema/sch_marker.cpp:380
@@ -3357,7 +3402,7 @@ msgstr ""
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:244
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Drawing Sheet"
-msgstr ""
+msgstr "صفحه طراحی"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:49
@@ -3366,152 +3411,156 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:25
 msgid "File:"
-msgstr ""
+msgstr "فایل:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:183
 msgid "Title Block Parameters"
-msgstr ""
+msgstr "مشخصات بلوک عنوان"
 
 #: common/dialogs/dialog_page_settings_base.cpp:196
 #, c-format
 msgid "Number of sheets: %d"
-msgstr ""
+msgstr "تعداد برگه ها: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:203
 #, c-format
 msgid "Sheet number: %d"
-msgstr ""
+msgstr "شماره برگه: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "Issue Date:"
-msgstr ""
+msgstr "تاریخ انتشار:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "<<<"
-msgstr ""
+msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 msgid "Revision:"
-msgstr ""
+msgstr "بازنگری:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:252
 #: eeschema/dialogs/dialog_export_netlist.cpp:403
 msgid "Title:"
-msgstr ""
+msgstr "عنوان:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:264
 msgid "Company:"
-msgstr ""
+msgstr "شرکت:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
 msgid "Comment1:"
-msgstr ""
+msgstr "یادداشت شماره 1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
 msgid "Comment2:"
-msgstr ""
+msgstr "یادداشت شماره 2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
 msgid "Comment3:"
-msgstr ""
+msgstr "یادداشت شماره 3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
 msgid "Comment4:"
-msgstr ""
+msgstr "یادداشت شماره 4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
 msgid "Comment5:"
-msgstr ""
+msgstr "یادداشت شماره 5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
 msgid "Comment6:"
-msgstr ""
+msgstr "یادداشت شماره 6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Comment7:"
-msgstr ""
+msgstr "یادداشت شماره 7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:360
 msgid "Comment8:"
-msgstr ""
+msgstr "یادداشت شماره 8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:372
 msgid "Comment9:"
-msgstr ""
+msgstr "یادداشت شماره 9:"
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"نزدیک ترین شماره قابل استفاده (قبلاً استفاده نشده) برای شناسه های مرجع موجود "
+"در طراحی را پیدا می کند."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr ""
+msgstr "شناسه های مرجع را با '%s' جایگزین می کند."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr ""
+msgstr "اختصاص شناسه‌ مرجع منحصر به فرد به نماد های جای گذاری شده"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr ""
+msgstr "نگه داشتن شناسه های مرجع فعلی، حتی اگر تکراری باشند"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr ""
+msgstr "پاک کردن شناسه های مرجع برای همه نماد های چسبانده شده"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:213
 msgid "Reference Designators"
-msgstr ""
+msgstr "شناسه های مرجع"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
 msgid "Clear net assignments"
-msgstr ""
+msgstr "حذف تخصیص های اتصال (Net Assignments)"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
-msgstr ""
+msgstr "قبل از چسباندن، مشخصات شبکه را از تمام اجزای متصل حذف کنید"
 
 #: common/dialogs/dialog_paste_special_base.h:47
 msgid "Paste Special"
-msgstr ""
+msgstr "چسباندن ویژه"
 
 #: common/dialogs/dialog_plugin_options.cpp:37
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"یک <b> گزینه </b> از لیست بالا انتخاب کنید، سپس روی دکمه <b> افزودن گزینه "
+"انتخاب شده </b> کلیک کنید."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
 msgid "Options for Library '%s'"
-msgstr ""
+msgstr "گزینه ها برای کتابخانه '%s'"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
 msgid "Plugin Options"
-msgstr ""
+msgstr "گزینه های افزونه (Plugin)"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:43
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:245
 #: eeschema/dialogs/panel_simulator_preferences.cpp:33
 msgid "Option"
-msgstr ""
+msgstr "گزینه"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
 msgid "Option Choices"
-msgstr ""
+msgstr "گزینه های انتخابی"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "گزینه های پشتیبانی شده توسط افزونه (Plugin) فعلی"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr ""
+msgstr "<< افزودن گزینه انتخاب شده"
 
 #: common/dialogs/dialog_print_generic.cpp:101
 #: common/dialogs/dialog_print_generic.cpp:322
@@ -3519,7 +3568,7 @@ msgstr ""
 #: eeschema/printing/dialog_print.cpp:102
 #: eeschema/printing/dialog_print_base.h:65
 msgid "Print"
-msgstr ""
+msgstr "چاپ (Print)"
 
 #: common/dialogs/dialog_print_generic.cpp:102
 #: common/dialogs/dialog_print_generic.cpp:261
@@ -3642,7 +3691,7 @@ msgstr ""
 #: common/dialogs/dialog_print_generic_base.cpp:69
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
 msgid "1:1"
-msgstr ""
+msgstr "1:1"
 
 #: common/dialogs/dialog_print_generic_base.cpp:75
 msgid "Fit to page"
