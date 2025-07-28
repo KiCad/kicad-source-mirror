@@ -104,6 +104,10 @@ bool PGM_KICAD::OnPgmInit()
         { wxCMD_LINE_OPTION, "f", "frame", "Frame to load", wxCMD_LINE_VAL_STRING, 0 },
         { wxCMD_LINE_SWITCH, "n", "new", "New instance of KiCad, does not attempt to load previously open files",
           wxCMD_LINE_VAL_NONE, 0 },
+#ifndef __WXOSX__
+        { wxCMD_LINE_SWITCH, nullptr, "software-rendering", "Use software rendering instead of OpenGL",
+          wxCMD_LINE_VAL_NONE, 0 },
+#endif
         { wxCMD_LINE_PARAM, nullptr, nullptr, "File to load", wxCMD_LINE_VAL_STRING,
           wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0 }
@@ -156,6 +160,11 @@ bool PGM_KICAD::OnPgmInit()
     else
     {
         Kiway.SetCtlBits( KFCTL_STANDALONE );
+    }
+
+    if( parser.Found( "software-rendering" ) )
+    {
+        wxSetEnv( "KICAD_SOFTWARE_RENDERING", "1" );
     }
 
     bool skipPythonInit = false;

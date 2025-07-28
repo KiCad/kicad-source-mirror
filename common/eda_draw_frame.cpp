@@ -944,6 +944,19 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting(  APP_SETTING
     if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
+    wxString envCanvasType;
+
+    if( wxGetEnv( "KICAD_SOFTWARE_RENDERING", &envCanvasType ) )
+    {
+        if( envCanvasType.CmpNoCase( "1" ) == 0
+            || envCanvasType.CmpNoCase( "true" ) == 0
+            || envCanvasType.CmpNoCase( "yes" ) == 0 )
+        {
+            // Force software rendering if the environment variable is set
+            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+        }
+    }
+
     return canvasType;
 }
 
@@ -963,6 +976,12 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
     if( !alg::contains( s_allowedFrames, m_ident ) )
         return false;
+
+    if( wxGetEnv( "KICAD_SOFTWARE_RENDERING", nullptr ) )
+    {
+        // If the environment variable is set, don't save the canvas type.
+        return false;
+    }
 
     if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
