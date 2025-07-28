@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-24 17:02+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-07-28 20:01+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -9451,9 +9451,8 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "孤の半径と中心を維持、角度を調整"
 
 #: common/tool/actions.cpp:579
-#, fuzzy
 msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
-msgstr "中心を保持して、半径と角度を調整する円弧編集モードに切り替えます"
+msgstr "端点を移動しても半径を維持するように、円弧編集モードを切り替えます"
 
 #: common/tool/actions.cpp:586
 msgid "Cycle Arc Editing Mode"
@@ -26154,9 +26153,8 @@ msgid "DCode:"
 msgstr "Dコード:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
-#, fuzzy
 msgid "Text info entry"
-msgstr "表面テキスト"
+msgstr "テキスト情報の入力"
 
 #: gerbview/toolbars_gerber.cpp:271
 msgid "Component highlight"
@@ -26926,9 +26924,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "マップ ファイルとドリル穴の概要を生成する"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "部品表 (BOM) 生成ジョブ設定"
+msgstr "テンティング処理専用のファイルを生成"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -30562,7 +30559,7 @@ msgstr "計算"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "ロジウム"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -30570,24 +30567,23 @@ msgstr "白金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "パラジウム"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
 msgstr "金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "18-9ステンレス"
+msgstr "ステンレス 316L"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "インコネル"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "インジウム"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
 #, fuzzy
@@ -30608,20 +30604,19 @@ msgstr "水銀"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "ENEPIG (ニッケル/パラジウム/金)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "ENIG (ニッケル/金)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
 msgstr "ニッケル"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "グラフィックスをクリーンアップ"
+msgstr "黒鉛状炭素"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
@@ -30639,16 +30634,15 @@ msgstr "真鍮"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "ベリリウム銅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
-#, fuzzy
 msgid "Lead-free Solder"
-msgstr "HAL 鉛フリー"
+msgstr "鉛フリーハンダ"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "リン青銅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -36285,9 +36279,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "部品配置ファイルを生成"
+msgstr "テンティングレイヤーを生成"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
