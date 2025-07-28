@@ -48,14 +48,6 @@
 PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
         : PANEL_COMMON_SETTINGS_BASE( aParent )
 {
-    /*
-     * Cairo canvas doesn't work on Mac, so no need for fallback anti-aliasing options
-     */
-#ifdef __WXMAC__
-    m_antialiasingFallback->Show( false );
-    m_antialiasingFallbackLabel->Show( false );
-#endif
-
     ShowFileManagerWidgets( ADVANCED_CFG::GetCfg().m_EnableLibDir );
 
     m_textEditorBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
