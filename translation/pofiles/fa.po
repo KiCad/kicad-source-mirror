@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-28 20:02+0000\n"
+"PO-Revision-Date: 2025-07-29 20:09+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
 "master-source/fa/>\n"
@@ -3574,7 +3574,7 @@ msgstr "چاپ (Print)"
 #: common/dialogs/dialog_print_generic.cpp:261
 #: eeschema/printing/dialog_print.cpp:103
 msgid "Print Preview"
-msgstr ""
+msgstr "پیش نمایش چاپ"
 
 #: common/dialogs/dialog_print_generic.cpp:103 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
@@ -3607,11 +3607,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_import_netlist.cpp:86
 #: pcbnew/dialogs/dialog_plot.cpp:244 pcbnew/dialogs/dialog_update_pcb.cpp:62
 msgid "Close"
-msgstr ""
+msgstr "بستن"
 
 #: common/dialogs/dialog_print_generic.cpp:161
 msgid "Warning: scale is not a number."
-msgstr ""
+msgstr "هشدار: مقیاس عددی نیست."
 
 #: common/dialogs/dialog_print_generic.cpp:169
 #, c-format
@@ -3619,6 +3619,8 @@ msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
+"هشدار: مقدار مقیاس بسیار بزرگ تنظیم شده است.\n"
+"مقدار آن به %f محدود خواهد شد."
 
 #: common/dialogs/dialog_print_generic.cpp:177
 #, c-format
@@ -3626,24 +3628,26 @@ msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
+"هشدار: مقدار مقیاس بسیار کوچک تنظیم شده است.\n"
+"مقدار آن به %f محدود خواهد شد."
 
 #: common/dialogs/dialog_print_generic.cpp:249
 #: common/dialogs/dialog_print_generic.cpp:307
 msgid "Nothing to print"
-msgstr ""
+msgstr "چیزی برای چاپ وجود ندارد"
 
 #: common/dialogs/dialog_print_generic.cpp:298
 #: eeschema/printing/dialog_print.cpp:295
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "کار چاپ قبلی هنوز کامل نشده است."
 
 #: common/dialogs/dialog_print_generic.cpp:330
 msgid "There was a problem printing."
-msgstr ""
+msgstr "مشکلی در چاپ به وجود آمد."
 
 #: common/dialogs/dialog_print_generic.cpp:372
 msgid "An error occurred initializing the printer information."
-msgstr ""
+msgstr "در تنظیم اولیه اطلاعات چاپگر خطایی روی داد."
 
 #: common/dialogs/dialog_print_generic_base.cpp:42
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:74
@@ -3651,7 +3655,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:348
 #: pcbnew/dialogs/dialog_plot_base.cpp:374
 msgid "Output mode:"
-msgstr ""
+msgstr "حالت خروجی:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:46
 #: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_text.cpp:1412
@@ -3671,22 +3675,22 @@ msgstr ""
 #: pcbnew/pcb_tablecell.cpp:251 pcbnew/pcb_text.cpp:667
 #: pcbnew/pcb_textbox.cpp:831 pcbnew/tools/pcb_control.cpp:2453
 msgid "Color"
-msgstr ""
+msgstr "رنگ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:46
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Black and white"
-msgstr ""
+msgstr "سیاه و سفید"
 
 #: common/dialogs/dialog_print_generic_base.cpp:52
 #: eeschema/printing/dialog_print_base.cpp:33
 msgid "Print drawing sheet"
-msgstr ""
+msgstr "چاپ صفحه طراحی"
 
 #: common/dialogs/dialog_print_generic_base.cpp:54
 msgid "Print Frame references."
-msgstr ""
+msgstr "چاپ قاب مرجع (Frame References)."
 
 #: common/dialogs/dialog_print_generic_base.cpp:69
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
@@ -3695,29 +3699,29 @@ msgstr "1:1"
 
 #: common/dialogs/dialog_print_generic_base.cpp:75
 msgid "Fit to page"
-msgstr ""
+msgstr "متناسب با صفحه"
 
 #: common/dialogs/dialog_print_generic_base.cpp:84
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:419
 msgid "Custom:"
-msgstr ""
+msgstr "سفارشی:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:88
 msgid "Set X scale adjust for exact scale plotting"
-msgstr ""
+msgstr "تنظیم مقیاس X برای رسم دقیق مقیاس"
 
 #: common/dialogs/dialog_print_generic_base.cpp:107
 msgid "Info text"
-msgstr ""
+msgstr "متن اطلاعات"
 
 #: common/dialogs/dialog_print_generic_base.cpp:119
 #: eeschema/printing/dialog_print_base.cpp:84
 msgid "Page Setup..."
-msgstr ""
+msgstr "تنظیمات صفحه ..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:283
@@ -3725,7 +3729,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:119
 #: pcbnew/dialogs/dialog_render_job_base.cpp:25
 msgid "Output file:"
-msgstr ""
+msgstr "فایل خروجی:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
 #: kicad/dialogs/dialog_destination_base.cpp:35
@@ -3733,11 +3737,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_render_job_base.cpp:34
 msgid "Format:"
-msgstr ""
+msgstr "قالب فرمت:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
 msgid "Include:"
-msgstr ""
+msgstr "شامل:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -3745,36 +3749,38 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:190
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
 msgid "Warnings"
-msgstr ""
+msgstr "هشدارها"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
 msgstr ""
+"اگر در هنگام اجرای یک کار خطا یا نقض قوانینی وجود داشته باشد، آن کار به "
+"عنوان شکست خورده گزارش شود"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr ""
+msgstr "گزارش تمام خطا ها برای هر مسیر (Track)"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "بررسی تطابق و یکسان بودن بین شماتیک (Schematic) و برد مدار چاپی (PCB)"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
 #: common/dialogs/dialog_unit_entry_base.cpp:21
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:63
 msgid "MyLabel"
-msgstr ""
+msgstr "برچسب من"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
 msgid "X label:"
-msgstr ""
+msgstr "برچسب X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
 msgid "Y label:"
-msgstr ""
+msgstr "برچسب Y:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:105
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:109
@@ -3787,15 +3793,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:43
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:60
 msgid "Reset"
-msgstr ""
+msgstr "تنظیم مجدد"
 
 #: common/dialogs/dialog_unit_entry_base.h:48
 msgid "Title"
-msgstr ""
+msgstr "عنوان"
 
 #: common/dialogs/dialog_unit_entry_base.h:80
 msgid "Move Point to Location"
-msgstr ""
+msgstr "انتقال نقطه به موقعیت مکانی"
 
 #: common/dialogs/eda_list_dialog.cpp:49 common/dialogs/eda_list_dialog.cpp:77
 #: common/widgets/lib_tree.cpp:222 common/widgets/lib_tree.cpp:306
@@ -3810,29 +3816,29 @@ msgstr ""
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:98
 msgid "Filter"
-msgstr ""
+msgstr "فیلتر"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr ""
+msgstr "موارد (Items):"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:32
 msgid "Available:"
-msgstr ""
+msgstr "در دسترس:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:39
 msgid "Enabled:"
-msgstr ""
+msgstr "فعال شده:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:54
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:64
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:75
 #: common/dialogs/panel_design_block_lib_table_base.cpp:136
@@ -3846,7 +3852,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:64
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:136
 msgid "Move up"
-msgstr ""
+msgstr "حرکت به سمت بالا"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:80
 #: common/dialogs/panel_design_block_lib_table_base.cpp:141
@@ -3860,33 +3866,33 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:69
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:141
 msgid "Move down"
-msgstr ""
+msgstr "حرکت به سمت پایین"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "تغییر نمای ذخیره شده"
 
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:18
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
 msgid "Connection"
-msgstr ""
+msgstr "اتصال"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "پایه"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "آزمایش"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:151
@@ -3895,7 +3901,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:84
 #: pcbnew/tools/multichannel_tool.cpp:1026
 msgid "OK"
-msgstr ""
+msgstr "باشه"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
@@ -3910,33 +3916,33 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:339
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
-msgstr ""
+msgstr "لغو"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "آدرس اینترنتی (URL)"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
 msgid "Authentication"
-msgstr ""
+msgstr "احراز هویت"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
 msgid "User Name"
-msgstr ""
+msgstr "نام کاربری"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 msgid "Password"
-msgstr ""
+msgstr "رمز عبور"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 msgid "Commit Changes"
-msgstr ""
+msgstr "ثبت تغییرات"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #: common/dialogs/panel_embedded_files_base.cpp:37
 msgid "Filename"
-msgstr ""
+msgstr "نام فایل"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
@@ -3947,168 +3953,168 @@ msgstr ""
 #: pcbnew/pcb_text.cpp:284 pcbnew/pcb_textbox.cpp:474 pcbnew/pcb_track.cpp:1951
 #: pcbnew/zone.cpp:861
 msgid "Status"
-msgstr ""
+msgstr "وضعیت"
 
 #: common/dialogs/git/dialog_git_commit.cpp:99
 msgid "New"
-msgstr ""
+msgstr "جدید"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Modified"
-msgstr ""
+msgstr "اصلاح شد"
 
 #: common/dialogs/git/dialog_git_commit.cpp:117
 msgid "Deleted"
-msgstr ""
+msgstr "حذف شد"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "Commit Message:"
-msgstr ""
+msgstr "شرح تغییرات:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:140
 msgid "Author:"
-msgstr ""
+msgstr "نویسنده:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:161
 msgid "C&ommit"
-msgstr ""
+msgstr "ثبت تغییرات (Commit Message)"
 
 #: common/dialogs/git/dialog_git_commit.cpp:178
 msgid "Commit message cannot be empty"
-msgstr ""
+msgstr "پیام ثبت تغییرات (Commit Message) باید پر شود، نمی تواند خالی باشد"
 
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
 msgid "Test Connection"
-msgstr ""
+msgstr "آزمایش اتصال"
 
 #: common/dialogs/git/dialog_git_repository.cpp:166
 #: common/dialogs/git/dialog_git_repository.cpp:361
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "رمز عبور کلید SSH را وارد کنید"
 
 #: common/dialogs/git/dialog_git_repository.cpp:315
 msgid "Connection successful"
-msgstr ""
+msgstr "اتصال موفقیت آمیز بود"
 
 #: common/dialogs/git/dialog_git_repository.cpp:319
 #, c-format
 msgid "Could not connect to '%s' "
-msgstr ""
+msgstr "نتوانست به '%s' متصل شود "
 
 #: common/dialogs/git/dialog_git_repository.cpp:339
 #, c-format
 msgid "Could not open private key '%s'"
-msgstr ""
+msgstr "کلید خصوصی '%s' باز نشد"
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
 msgid "Invalid SSH Key"
-msgstr ""
+msgstr "کلید SSH نامعتبر است"
 
 #: common/dialogs/git/dialog_git_repository.cpp:353
 msgid "The selected file is not a valid SSH private key"
-msgstr ""
+msgstr "فایل انتخاب شده یک کلید خصوصی SSH معتبر نیست"
 
 #: common/dialogs/git/dialog_git_repository.cpp:377
 #, c-format
 msgid "Could not open public key '%s'"
-msgstr ""
+msgstr "کلید عمومی '%s' باز نشد"
 
 #: common/dialogs/git/dialog_git_repository.cpp:396
 msgid "Missing information"
-msgstr ""
+msgstr "اطلاعات ناقص یا گم شده"
 
 #: common/dialogs/git/dialog_git_repository.cpp:397
 msgid "Please enter a URL for the repository"
-msgstr ""
+msgstr "لطفاً یک آدرس URL برای مخزن (Repository) وارد کنید"
 
 #: common/dialogs/git/dialog_git_repository.cpp:421
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 msgid "SSH key password:"
-msgstr ""
+msgstr "رمز عبور کلید SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "رمز عبور:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
 msgid "Location:"
-msgstr ""
+msgstr "مکان:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
 msgid "Connection type:"
-msgstr ""
+msgstr "نوع اتصال:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:111
 #: eeschema/widgets/search_handlers.cpp:474
 msgid "Local"
-msgstr ""
+msgstr "محلی"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
 msgid "SSH private key:     "
-msgstr ""
+msgstr "کلید خصوصی SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
-msgstr ""
+msgstr "فایل کلید خصوصی SSH را انتخاب کنید"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
 msgid "User name:"
-msgstr ""
+msgstr "نام کاربری:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
-msgstr ""
+msgstr "مخزن گیت (Git Repository)"
 
 #: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "سوئیچ شاخه گیت"
 
 #: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "نام یک شعبه را انتخاب یا وارد کنید:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
-msgstr ""
+msgstr "شعبه یا شاخه (Branch)"
 
 #: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
-msgstr ""
+msgstr "آخرین ثبت تغییرات (Commit)"
 
 #: common/dialogs/git/dialog_git_switch.cpp:60
 msgid "Last Updated"
-msgstr ""
+msgstr "آخرین به روزرسانی"
 
 #: common/dialogs/git/dialog_git_switch.cpp:70
 #: common/dialogs/git/dialog_git_switch.cpp:151
 #: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
-msgstr ""
+msgstr "سوئیچ"
 
 #: common/dialogs/git/dialog_git_switch.cpp:223
 #: common/widgets/design_block_pane.cpp:502 eeschema/sch_base_frame.cpp:309
 #: pcbnew/footprint_libraries_utils.cpp:439
 msgid "Add"
-msgstr ""
+msgstr "اضافه کنید"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
 msgid "Enable Git tracking"
-msgstr ""
+msgstr "فعال کردن ردیابی گیت (Git)"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
-msgstr ""
+msgstr "ردیابی از راه دور"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
