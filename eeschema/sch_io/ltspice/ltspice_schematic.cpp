@@ -439,10 +439,10 @@ LTSPICE_SCHEMATIC::POLARITY LTSPICE_SCHEMATIC::getPolarity( const wxString& aVal
 {
     std::map<wxString, POLARITY> polarityMap;
 
-    polarityMap["I"] = POLARITY::INPUT;
+    polarityMap["I"] = POLARITY::PIN_INPUT;
     polarityMap["O"] = POLARITY::OUTPUT;
     polarityMap["B"] = POLARITY::BIDIR;
-    polarityMap["IN"] = POLARITY::INPUT;
+    polarityMap["IN"] = POLARITY::PIN_INPUT;
     polarityMap["OUT"] = POLARITY::OUTPUT;
     polarityMap["BIDIR"] = POLARITY::BIDIR;
 

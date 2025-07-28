@@ -1639,7 +1639,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
 
     switch( elem.electrical )
     {
-    case ASCH_PIN_ELECTRICAL::INPUT:
+    case ASCH_PIN_ELECTRICAL::PIN_INPUT:
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         break;
 
@@ -3376,7 +3376,7 @@ void SCH_IO_ALTIUM::ParseSheetEntry( const std::map<wxString, wxString>& aProper
         sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
         break;
 
-    case ASCH_PORT_IOTYPE::INPUT:
+    case ASCH_PORT_IOTYPE::IO_INPUT:
         sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
         break;
 
@@ -3807,7 +3807,7 @@ void SCH_IO_ALTIUM::ParsePortHelper( const ASCH_PORT& aElem )
     default:
     case ASCH_PORT_IOTYPE::UNSPECIFIED: label->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED ); break;
     case ASCH_PORT_IOTYPE::OUTPUT:      label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );      break;
-    case ASCH_PORT_IOTYPE::INPUT:       label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );       break;
+    case ASCH_PORT_IOTYPE::IO_INPUT:    label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );       break;
     case ASCH_PORT_IOTYPE::BIDI:        label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );        break;
     }
 

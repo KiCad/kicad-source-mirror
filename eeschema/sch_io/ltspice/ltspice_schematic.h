@@ -78,7 +78,7 @@ public:
      */
     enum class POLARITY
     {
-        INPUT,  // IN POLARITY
+        PIN_INPUT,  // IN POLARITY
         OUTPUT, // OUT POLARITY
         BIDIR   // BI-DIRECTIONAL POLARITY
     };

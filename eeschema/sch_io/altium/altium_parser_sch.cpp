@@ -219,7 +219,7 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps ) :
     symbolInnerEdge        = ASCH_PIN_SYMBOL::FromInt( symbolInnerEdgeInt );
 
     electrical = ReadEnum<ASCH_PIN_ELECTRICAL>( aProps, "ELECTRICAL", 0, 7,
-                                                ASCH_PIN_ELECTRICAL::INPUT );
+                                                ASCH_PIN_ELECTRICAL::PIN_INPUT );
 
     int pinconglomerate = ALTIUM_PROPS_UTILS::ReadInt( aProps, "PINCONGLOMERATE", 0 );
 
