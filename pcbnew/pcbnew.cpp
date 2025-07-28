@@ -204,7 +204,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             if( frame )
                 SetUserUnits( frame->GetUserUnits() );
 
-            return new PANEL_FP_EDITOR_FIELD_DEFAULTS( aParent, this );
+            return new PANEL_FP_EDITOR_FIELD_DEFAULTS( aParent );
         }
 
         case PANEL_FP_DEFAULT_GRAPHICS_VALUES:

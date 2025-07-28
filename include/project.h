@@ -302,7 +302,7 @@ public:
     void SetProjectLock( LOCKFILE* aLockFile );
 
     LOCKFILE* GetProjectLock() const;
- 
+
 private:
     friend class SETTINGS_MANAGER; // so that SM can set project path
     friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required
@@ -353,7 +353,6 @@ private:
 
 private:
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
-    wxString        m_pro_date_and_time;
 
     bool            m_readOnly;             ///< No project files will be written to disk
     int             m_textVarsTicker;       ///< Update counter on text vars

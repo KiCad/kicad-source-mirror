@@ -45,7 +45,6 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
                                               ZONES_CONTAINER& aZoneContainer ) :
         PANEL_ZONE_PROPERTIES_BASE( aParent ),
         m_ZoneContainer( aZoneContainer ),
-        m_PCB_Frame( aPCB_FRAME ),
         m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
         m_outlineHatchPitch( aPCB_FRAME, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl,
                              m_outlineHatchUnits ),

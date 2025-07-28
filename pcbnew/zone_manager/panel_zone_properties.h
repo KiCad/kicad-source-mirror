@@ -82,9 +82,7 @@ private:
 
 
 private:
-    ZONES_CONTAINER& m_ZoneContainer;
-    PCB_BASE_FRAME*  m_PCB_Frame;
-
+    ZONES_CONTAINER&               m_ZoneContainer;
     std::shared_ptr<ZONE_SETTINGS> m_settings;
 
     int         m_cornerSmoothingType;

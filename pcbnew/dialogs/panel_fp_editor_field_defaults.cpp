@@ -173,10 +173,8 @@ static FOOTPRINT_EDITOR_SETTINGS& GetPgmSettings()
 }
 
 
-PANEL_FP_EDITOR_FIELD_DEFAULTS::PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow*       aParent,
-                                                                UNITS_PROVIDER* aUnitsProvider ) :
+PANEL_FP_EDITOR_FIELD_DEFAULTS::PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow* aParent ) :
         PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( aParent ),
-        m_unitProvider( aUnitsProvider ),
         m_designSettings( GetPgmSettings().m_DesignSettings )
 {
     m_fieldPropsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( true ), true );
