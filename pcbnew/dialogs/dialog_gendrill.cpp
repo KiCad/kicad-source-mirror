@@ -459,6 +459,7 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
         excellonWriter.SetOptions( g_mirror, g_minimalHeader, g_drillFileOffset, g_merge_PTH_NPTH );
         excellonWriter.SetRouteModeForOvalHoles( g_useRouteModeForOvalHoles );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
+        excellonWriter.SetPageInfo( &m_board->GetPageSettings() );
 
         excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
                                                   &reporter );
@@ -472,6 +473,7 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
         gerberWriter.SetFormat( m_plotOpts.GetGerberPrecision() );
         gerberWriter.SetOptions( g_drillFileOffset );
         gerberWriter.SetMapFileFormat( filefmt[choice] );
+        gerberWriter.SetPageInfo( &m_board->GetPageSettings() );
 
         gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
                                                 aGenTenting, &reporter );
