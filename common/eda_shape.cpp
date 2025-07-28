@@ -856,11 +856,20 @@ int EDA_SHAPE::GetRadius() const
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 
-    // don't allow degenerate circles/arcs
-    if( radius > (double) INT_MAX / 2.0 )
-        radius = (double) INT_MAX / 2.0;
+    // Calculate maximum safe radius to prevent overflow in coordinate operations
+    // We need to ensure that any coordinate ± radius doesn't exceed INT_MAX
+    int max_coord = std::max( { std::abs( m_start.x ), std::abs( m_start.y ),
+                                std::abs( m_end.x ), std::abs( m_end.y ) } );
 
-    return std::max( 1, KiROUND( radius ) );
+    // Calculate maximum safe radius (with some margin)
+    double max_safe_radius = static_cast<double>( INT_MAX ) - max_coord - 1000;
+
+    if( radius > max_safe_radius )
+        radius = max_safe_radius;
+
+    int final_radius = KiROUND( radius );
+
+    return std::max( 1, final_radius );
 }
 
 
