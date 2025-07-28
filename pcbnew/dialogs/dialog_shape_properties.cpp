@@ -755,8 +755,7 @@ private:
 
 
 static void AddXYPointToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, int row, int col,
-                               const wxString aName, bool aRelative,
-                               std::vector<BOUND_CONTROL>& aBoundCtrls )
+                               const wxString& aName, bool aRelative, std::vector<BOUND_CONTROL>& aBoundCtrls )
 {
     //    Name
     // X [Ctrl] mm
@@ -770,14 +769,13 @@ static void AddXYPointToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, i
 
     for( size_t coord = 0; coord < 2; ++coord )
     {
-        wxStaticText* label =
-                new wxStaticText( parent, wxID_ANY, coord == 0 ? _( "X" ) : _( "Y" ) );
+        wxStaticText* label = new wxStaticText( parent, wxID_ANY, coord == 0 ? _( "X:" ) : _( "Y:" ) );
         aSizer.Add( label, wxGBPosition( row, col ), wxDefaultSpan,
-                    wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+                    wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, col > 0 ? 20 : 5 );
 
         wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, "" );
         aSizer.Add( ctrl, wxGBPosition( row, col + 1 ), wxDefaultSpan,
-                    wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
+                    wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
 
         wxStaticText* units = new wxStaticText( parent, wxID_ANY, _( "mm" ) );
         aSizer.Add( units, wxGBPosition( row, col + 2 ), wxDefaultSpan,
@@ -786,11 +784,9 @@ static void AddXYPointToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, i
         auto binder = std::make_unique<UNIT_BINDER>( &aFrame, label, ctrl, units );
 
         if( aRelative )
-            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::REL_X_COORD
-                                             : ORIGIN_TRANSFORMS::REL_Y_COORD );
+            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::REL_X_COORD : ORIGIN_TRANSFORMS::REL_Y_COORD );
         else
-            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::ABS_X_COORD
-                                             : ORIGIN_TRANSFORMS::ABS_Y_COORD );
+            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::ABS_X_COORD : ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
         aBoundCtrls.push_back( BOUND_CONTROL{ std::move( binder ), ctrl } );
         row++;
@@ -802,19 +798,19 @@ static void AddXYPointToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, i
 
 
 void AddFieldToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, int row, int col,
-                      const wxString aName, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType,
+                      const wxString& aName, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType,
                       bool aIsAngle, std::vector<BOUND_CONTROL>& aBoundCtrls )
 {
-    // Name [Ctrl] mm
+    // Name: [Ctrl] mm
     wxWindow* parent = aSizer.GetContainingWindow();
 
-    wxStaticText* label = new wxStaticText( parent, wxID_ANY, aName );
+    wxStaticText* label = new wxStaticText( parent, wxID_ANY, aName + wxS( ":" ) );
     aSizer.Add( label, wxGBPosition( row, col ), wxDefaultSpan,
-                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, col > 0 ? 20 : 5 );
 
     wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY );
     aSizer.Add( ctrl, wxGBPosition( row, col + 1 ), wxDefaultSpan,
-                wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
+                wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
 
     wxStaticText* units = new wxStaticText( parent, wxID_ANY, _( "mm" ) );
     aSizer.Add( units, wxGBPosition( row, col + 2 ), wxDefaultSpan,
@@ -840,12 +836,12 @@ static std::map<SHAPE_T, int> s_lastTabForShape;
 
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape ):
-    DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
-    m_parent( aParent ),
-    m_item( aShape ),
-    m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
-    m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
-    m_workingCopy( *m_item )
+        DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
+        m_parent( aParent ),
+        m_item( aShape ),
+        m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
+        m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
+        m_workingCopy( *m_item )
 {
     SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
     m_hash_key = TO_UTF8( GetTitle() );
@@ -857,19 +853,20 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     // use. Constructing on-demand would work fine too.
     std::set<int> shownPages;
 
-    const auto showPage = [&]( wxSizer& aMainSizer, bool aSelect = false )
-    {
-        // Get the parent of the sizer, which is the panel
-        wxWindow* page = aMainSizer.GetContainingWindow();
-        wxCHECK( page, /* void */ );
-        page->Layout();
+    const auto showPage =
+            [&]( wxSizer& aMainSizer, bool aSelect = false )
+            {
+                // Get the parent of the sizer, which is the panel
+                wxWindow* page = aMainSizer.GetContainingWindow();
+                wxCHECK( page, /* void */ );
+                page->Layout();
 
-        const int pageIdx = m_notebookShapeDefs->FindPage( page );
-        shownPages.insert( pageIdx );
+                const int pageIdx = m_notebookShapeDefs->FindPage( page );
+                shownPages.insert( pageIdx );
 
-        if( aSelect )
-            m_notebookShapeDefs->SetSelection( pageIdx );
-    };
+                if( aSelect )
+                    m_notebookShapeDefs->SetSelection( pageIdx );
+            };
 
     switch( m_item->GetShape() )
     {

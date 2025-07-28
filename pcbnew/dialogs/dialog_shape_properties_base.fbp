@@ -122,11 +122,11 @@
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap">Load From File; </property>
               <property name="label">By Corners</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -178,7 +178,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer18</property>
                   <property name="orient">wxVERTICAL</property>
@@ -192,22 +192,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsRectangleByCorners</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Corner and Size</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -259,7 +259,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer19</property>
                   <property name="orient">wxVERTICAL</property>
@@ -273,22 +273,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsRectangleByCornerSize</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Center and Size</property>
               <property name="select">1</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -340,7 +340,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer20</property>
                   <property name="orient">wxVERTICAL</property>
@@ -354,12 +354,12 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsRectangleByCenterSize</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
@@ -435,22 +435,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsLineByEnds</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Length and Angle</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -502,7 +502,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer7</property>
                   <property name="orient">wxVERTICAL</property>
@@ -516,12 +516,12 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsLineByLengthAngle</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
@@ -597,22 +597,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsLineByStartMid</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Center/Start/Angle</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -664,7 +664,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer8</property>
                   <property name="orient">wxVERTICAL</property>
@@ -678,22 +678,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsArcByCSA</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Start/Mid/End</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -745,7 +745,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer9</property>
                   <property name="orient">wxVERTICAL</property>
@@ -759,22 +759,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsArcBySME</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Center/Radius</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -826,7 +826,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer10</property>
                   <property name="orient">wxVERTICAL</property>
@@ -840,22 +840,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsCircleCenterRadius</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">By Center/Point</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -907,7 +907,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer11</property>
                   <property name="orient">wxVERTICAL</property>
@@ -921,22 +921,22 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsCircleCenterPoint</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
               </object>
             </object>
-            <object class="notebookpage" expanded="false">
+            <object class="notebookpage" expanded="true">
               <property name="bitmap"></property>
               <property name="label">Bezier Control Points</property>
               <property name="select">0</property>
-              <object class="wxPanel" expanded="false">
+              <object class="wxPanel" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -988,7 +988,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer4</property>
                   <property name="orient">wxVERTICAL</property>
@@ -1002,12 +1002,12 @@
                       <property name="flexible_direction">wxBOTH</property>
                       <property name="growablecols"></property>
                       <property name="growablerows"></property>
-                      <property name="hgap">0</property>
+                      <property name="hgap">5</property>
                       <property name="minimum_size"></property>
                       <property name="name">m_gbsBezier</property>
                       <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                       <property name="permission">protected</property>
-                      <property name="vgap">0</property>
+                      <property name="vgap">4</property>
                     </object>
                   </object>
                 </object>
@@ -1977,9 +1977,9 @@
               <property name="flag">wxEXPAND</property>
               <property name="proportion">1</property>
               <object class="wxFlexGridSizer" expanded="true">
-                <property name="cols">4</property>
+                <property name="cols">5</property>
                 <property name="flexible_direction">wxBOTH</property>
-                <property name="growablecols">2</property>
+                <property name="growablecols">1,3</property>
                 <property name="growablerows"></property>
                 <property name="hgap">0</property>
                 <property name="minimum_size"></property>
@@ -2052,6 +2052,16 @@
                     <property name="window_name"></property>
                     <property name="window_style"></property>
                     <event name="OnCheckBox">onTechLayersChanged</event>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxEXPAND</property>
+                  <property name="proportion">1</property>
+                  <object class="spacer" expanded="true">
+                    <property name="height">0</property>
+                    <property name="permission">protected</property>
+                    <property name="width">10</property>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="false">

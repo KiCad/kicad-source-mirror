@@ -23,7 +23,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer18;
 	bSizer18 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsRectangleByCorners = new wxGridBagSizer( 0, 0 );
+	m_gbsRectangleByCorners = new wxGridBagSizer( 4, 5 );
 	m_gbsRectangleByCorners->SetFlexibleDirection( wxBOTH );
 	m_gbsRectangleByCorners->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -39,7 +39,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer19;
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsRectangleByCornerSize = new wxGridBagSizer( 0, 0 );
+	m_gbsRectangleByCornerSize = new wxGridBagSizer( 4, 5 );
 	m_gbsRectangleByCornerSize->SetFlexibleDirection( wxBOTH );
 	m_gbsRectangleByCornerSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -55,7 +55,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsRectangleByCenterSize = new wxGridBagSizer( 0, 0 );
+	m_gbsRectangleByCenterSize = new wxGridBagSizer( 4, 5 );
 	m_gbsRectangleByCenterSize->SetFlexibleDirection( wxBOTH );
 	m_gbsRectangleByCenterSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -71,7 +71,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsLineByEnds = new wxGridBagSizer( 0, 0 );
+	m_gbsLineByEnds = new wxGridBagSizer( 4, 5 );
 	m_gbsLineByEnds->SetFlexibleDirection( wxBOTH );
 	m_gbsLineByEnds->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -87,7 +87,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsLineByLengthAngle = new wxGridBagSizer( 0, 0 );
+	m_gbsLineByLengthAngle = new wxGridBagSizer( 4, 5 );
 	m_gbsLineByLengthAngle->SetFlexibleDirection( wxBOTH );
 	m_gbsLineByLengthAngle->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -103,7 +103,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer71;
 	bSizer71 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsLineByStartMid = new wxGridBagSizer( 0, 0 );
+	m_gbsLineByStartMid = new wxGridBagSizer( 4, 5 );
 	m_gbsLineByStartMid->SetFlexibleDirection( wxBOTH );
 	m_gbsLineByStartMid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -119,7 +119,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsArcByCSA = new wxGridBagSizer( 0, 0 );
+	m_gbsArcByCSA = new wxGridBagSizer( 4, 5 );
 	m_gbsArcByCSA->SetFlexibleDirection( wxBOTH );
 	m_gbsArcByCSA->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -135,7 +135,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsArcBySME = new wxGridBagSizer( 0, 0 );
+	m_gbsArcBySME = new wxGridBagSizer( 4, 5 );
 	m_gbsArcBySME->SetFlexibleDirection( wxBOTH );
 	m_gbsArcBySME->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -151,7 +151,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsCircleCenterRadius = new wxGridBagSizer( 0, 0 );
+	m_gbsCircleCenterRadius = new wxGridBagSizer( 4, 5 );
 	m_gbsCircleCenterRadius->SetFlexibleDirection( wxBOTH );
 	m_gbsCircleCenterRadius->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -167,7 +167,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsCircleCenterPoint = new wxGridBagSizer( 0, 0 );
+	m_gbsCircleCenterPoint = new wxGridBagSizer( 4, 5 );
 	m_gbsCircleCenterPoint->SetFlexibleDirection( wxBOTH );
 	m_gbsCircleCenterPoint->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -183,7 +183,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_gbsBezier = new wxGridBagSizer( 0, 0 );
+	m_gbsBezier = new wxGridBagSizer( 4, 5 );
 	m_gbsBezier->SetFlexibleDirection( wxBOTH );
 	m_gbsBezier->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -274,13 +274,17 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_upperSizer->Add( bSizer14, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgSizer2->AddGrowableCol( 2 );
+	fgSizer2 = new wxFlexGridSizer( 0, 5, 0, 0 );
+	fgSizer2->AddGrowableCol( 1 );
+	fgSizer2->AddGrowableCol( 3 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_hasSolderMask = new wxCheckBox( this, wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_hasSolderMask, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizer2->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_solderMaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMarginLabel->Wrap( -1 );
