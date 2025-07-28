@@ -60,11 +60,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
     GAL_OPTIONS_PANEL_BASE( aParent ),
     m_cfg( aAppSettings )
 {
-    // Rendering engine
-#ifdef __WXMAC__
-    // On MAC, Cairo render does not work.
-    m_renderingSizer->Show( false );
-#endif
     // Grid settings subpanel
     int selection = 0;  // default selection
 
