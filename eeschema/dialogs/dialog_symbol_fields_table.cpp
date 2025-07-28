@@ -1819,7 +1819,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
             preset->name = name;
 
             index = m_cbBomPresets->FindString( name );
-            m_bomPresetMRU.Remove( name );
+
+            if( m_bomPresetMRU.Index( name ) != wxNOT_FOUND )
+                m_bomPresetMRU.Remove( name );
         }
 
         m_currentBomPreset = preset;
@@ -1860,9 +1862,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
                 m_cbBomPresets->Delete( idx );
                 m_currentBomPreset = nullptr;
-
-                m_bomPresetMRU.Remove( presetName );
             }
+
+            if( m_bomPresetMRU.Index( presetName ) != wxNOT_FOUND )
+                m_bomPresetMRU.Remove( presetName );
         }
 
         resetSelection();
@@ -1882,7 +1885,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
         if( !m_currentBomPreset->name.IsEmpty() )
         {
-            m_bomPresetMRU.Remove( preset->name );
+            if( m_bomPresetMRU.Index( preset->name ) != wxNOT_FOUND )
+                m_bomPresetMRU.Remove( preset->name );
+
             m_bomPresetMRU.Insert( preset->name, 0 );
         }
     }
@@ -2219,7 +2224,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
             preset->name = name;
 
             index = m_cbBomFmtPresets->FindString( name );
-            m_bomFmtPresetMRU.Remove( name );
+
+            if( m_bomFmtPresetMRU.Index( name ) != wxNOT_FOUND )
+                m_bomFmtPresetMRU.Remove( name );
         }
 
         m_currentBomFmtPreset = preset;
@@ -2260,9 +2267,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
                 m_cbBomFmtPresets->Delete( idx );
                 m_currentBomFmtPreset = nullptr;
-
-                m_bomFmtPresetMRU.Remove( presetName );
             }
+
+            if( m_bomFmtPresetMRU.Index( presetName ) != wxNOT_FOUND )
+                m_bomFmtPresetMRU.Remove( presetName );
         }
 
         resetSelection();
@@ -2282,7 +2290,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
         if( !m_currentBomFmtPreset->name.IsEmpty() )
         {
-            m_bomFmtPresetMRU.Remove( preset->name );
+            if( m_bomFmtPresetMRU.Index( preset->name ) != wxNOT_FOUND )
+                m_bomFmtPresetMRU.Remove( preset->name );
+
             m_bomFmtPresetMRU.Insert( preset->name, 0 );
         }
     }
