@@ -45,9 +45,15 @@
  * Ugly as it all is, it does improve our usability on various platforms.
  */
 
-PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
-        : PANEL_COMMON_SETTINGS_BASE( aParent )
+PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent ) :
+        PANEL_COMMON_SETTINGS_BASE( aParent )
 {
+    // Rendering engine
+#ifdef __WXMAC__
+    // On MAC, Cairo render does not work.
+    m_renderingSizer->Show( false );
+#endif
+
     ShowFileManagerWidgets( ADVANCED_CFG::GetCfg().m_EnableLibDir );
 
     m_textEditorBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );

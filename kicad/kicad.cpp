@@ -162,10 +162,12 @@ bool PGM_KICAD::OnPgmInit()
         Kiway.SetCtlBits( KFCTL_STANDALONE );
     }
 
+#ifndef __WXMAC__
     if( parser.Found( "software-rendering" ) )
     {
         wxSetEnv( "KICAD_SOFTWARE_RENDERING", "1" );
     }
+#endif
 
     bool skipPythonInit = false;
 

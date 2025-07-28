@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,8 +26,31 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bLeftSizer->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
+
+	bLeftSizer->Add( 0, 3, 0, 0, 5 );
+
+	m_renderingSizer = new wxFlexGridSizer( 0, 1, 4, 0 );
+	m_renderingSizer->SetFlexibleDirection( wxBOTH );
+	m_renderingSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_rbAccelerated = new wxRadioButton( this, wxID_ANY, _("Accelerated Graphics"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAccelerated->SetToolTip( _("Hardware-accelerated graphics (recommended)") );
+
+	m_renderingSizer->Add( m_rbAccelerated, 0, wxLEFT, 5 );
+
+	m_rbFallback = new wxRadioButton( this, wxID_ANY, _("Fallback Graphics"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbFallback->SetToolTip( _("Software graphics (for computers which do not support KiCad's hardware acceleration requirements)") );
+
+	m_renderingSizer->Add( m_rbFallback, 0, wxLEFT, 5 );
+
+
+	bLeftSizer->Add( m_renderingSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bLeftSizer->Add( 0, 3, 0, 0, 5 );
+
 	wxGridBagSizer* gbSizer11;
-	gbSizer11 = new wxGridBagSizer( 2, 4 );
+	gbSizer11 = new wxGridBagSizer( 0, 6 );
 	gbSizer11->SetFlexibleDirection( wxBOTH );
 	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer11->SetEmptyCellSize( wxSize( -1,2 ) );
@@ -41,25 +64,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	int m_antialiasingNChoices = sizeof( m_antialiasingChoices ) / sizeof( wxString );
 	m_antialiasing = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingNChoices, m_antialiasingChoices, 0 );
 	m_antialiasing->SetSelection( 0 );
-	gbSizer11->Add( m_antialiasing, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 1, 4, 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_rbAccelerated = new wxRadioButton( this, wxID_ANY, _("Accelerated Graphics"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_rbAccelerated->SetToolTip( _("Hardware-accelerated graphics (recommended)") );
-
-	fgSizer1->Add( m_rbAccelerated, 0, wxLEFT, 5 );
-
-	m_rbFallback = new wxRadioButton( this, wxID_ANY, _("Fallback Graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbFallback->SetToolTip( _("Software graphics (for computers which do not support KiCad's hardware acceleration requirements)") );
-
-	fgSizer1->Add( m_rbFallback, 0, wxLEFT|wxTOP, 5 );
-
-
-	gbSizer11->Add( fgSizer1, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 0 );
+	gbSizer11->Add( m_antialiasing, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	gbSizer11->AddGrowableCol( 1 );
@@ -102,6 +107,9 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bHelperAppsSizer->Add( bSizer61, 0, wxTOP|wxRIGHT|wxEXPAND, 5 );
 
+
+	bHelperAppsSizer->Add( 0, 4, 0, wxEXPAND, 5 );
+
 	bSizerFileManager = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticTextFileManager = new wxStaticText( this, wxID_ANY, _("File manager:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -115,7 +123,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bHelperAppsSizer->Add( bSizerFileManager, 0, wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
-	bHelperAppsSizer->Add( 0, 12, 0, wxEXPAND, 5 );
+	bHelperAppsSizer->Add( 0, 12, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -124,7 +132,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer8->Add( m_defaultPDFViewer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bHelperAppsSizer->Add( bSizer8, 0, wxBOTTOM|wxEXPAND, 3 );
+	bHelperAppsSizer->Add( bSizer8, 0, wxBOTTOM|wxEXPAND, 2 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );

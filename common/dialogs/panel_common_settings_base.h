@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,9 @@ class STD_BITMAP_BUTTON;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
-#include <wx/choice.h>
 #include <wx/radiobut.h>
 #include <wx/sizer.h>
+#include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
@@ -46,9 +46,10 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 	protected:
 		wxStaticText* m_staticText20;
 		wxStaticLine* m_staticline3;
-		wxChoice* m_antialiasing;
+		wxFlexGridSizer* m_renderingSizer;
 		wxRadioButton* m_rbAccelerated;
 		wxRadioButton* m_rbFallback;
+		wxChoice* m_antialiasing;
 		wxStaticText* m_staticText21;
 		wxStaticLine* m_staticline2;
 		wxTextCtrl* m_textEditorPath;

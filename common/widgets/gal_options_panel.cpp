@@ -57,8 +57,8 @@ static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
 
 
 GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
-    GAL_OPTIONS_PANEL_BASE( aParent ),
-    m_cfg( aAppSettings )
+        GAL_OPTIONS_PANEL_BASE( aParent ),
+        m_cfg( aAppSettings )
 {
     // Grid settings subpanel
     int selection = 0;  // default selection
