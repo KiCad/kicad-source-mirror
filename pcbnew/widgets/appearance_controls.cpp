@@ -2784,7 +2784,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
             index = m_cbLayerPresets->FindString( name );
 
-            if( index != wxNOT_FOUND )
+            if( m_presetMRU.Index( name ) != wxNOT_FOUND )
                 m_presetMRU.Remove( name );
         }
 
@@ -2826,9 +2826,10 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
                 m_cbLayerPresets->Delete( idx );
                 m_currentPreset = nullptr;
-
-                m_presetMRU.Remove( presetName );
             }
+
+            if( m_presetMRU.Index( presetName ) != wxNOT_FOUND )
+                m_presetMRU.Remove( presetName );
         }
 
         resetSelection();
@@ -2865,7 +2866,9 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     {
         const wxString translatedName = wxGetTranslation( m_currentPreset->name );
 
-        m_presetMRU.Remove( translatedName );
+        if( m_presetMRU.Index( translatedName ) != wxNOT_FOUND )
+            m_presetMRU.Remove( translatedName );
+
         m_presetMRU.Insert( translatedName, 0 );
     }
 
@@ -2962,7 +2965,9 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
 
         if( !viewport->name.IsEmpty() )
         {
-            m_viewportMRU.Remove( viewport->name );
+            if( m_viewportMRU.Index( viewport->name ) != wxNOT_FOUND )
+                m_viewportMRU.Remove( viewport->name );
+
             m_viewportMRU.Insert( viewport->name, 0 );
         }
     }
@@ -2997,7 +3002,9 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
         {
             m_viewports[name].rect = m_frame->GetCanvas()->GetView()->GetViewport();
             index = m_cbViewports->FindString( name );
-            m_viewportMRU.Remove( name );
+
+            if( m_viewportMRU.Index( name ) != wxNOT_FOUND )
+                m_viewportMRU.Remove( name );
         }
 
         m_cbViewports->SetSelection( index );
@@ -3032,8 +3039,10 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
             {
                 m_viewports.erase( viewportName );
                 m_cbViewports->Delete( idx );
-                m_viewportMRU.Remove( viewportName );
             }
+
+            if( m_viewportMRU.Index( viewportName ) != wxNOT_FOUND )
+                m_viewportMRU.Remove( viewportName );
         }
 
         if( m_lastSelectedViewport )
