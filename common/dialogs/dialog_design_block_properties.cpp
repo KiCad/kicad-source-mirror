@@ -194,7 +194,7 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromGrid()
     if( !m_fieldsGrid->CommitPendingChanges() )
         return false;
 
-    nlohmann::ordered_map<wxString, wxString> newFields;
+    m_designBlock->GetFields().clear();
 
     for( int row = 0; row < m_fieldsGrid->GetNumberRows(); row++ )
     {
@@ -202,16 +202,14 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromGrid()
         fieldName.Replace( wxT( "\n" ), wxT( "" ), true );  // strip all newlines
         fieldName.Replace( wxT( "  " ), wxT( " " ), true ); // double space to single
 
-        if( newFields.count( fieldName ) )
+        if( m_designBlock->GetFields().count( fieldName ) )
         {
             wxMessageBox( _( "Duplicate fields are not allowed." ) );
             return false;
         }
 
-        newFields[fieldName] = m_fieldsGrid->GetCellValue( row, 1 );
+        m_designBlock->GetFields()[fieldName] = m_fieldsGrid->GetCellValue( row, 1 );
     }
-
-    m_designBlock->SetFields( newFields );
 
     return true;
 }

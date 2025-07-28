@@ -194,10 +194,13 @@ void DIALOG_CONFIG_EQUFILES::OnRemoveFiles( wxCommandEvent& event )
     wxArrayInt selections;
     m_filesListBox->GetSelections( selections );
 
-    std::sort( selections.begin(), selections.end() );
+    if( !selections.empty() )
+    {
+        std::sort( selections.begin(), selections.end() );
 
-    for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
-        m_filesListBox->Delete( selections[ii] );
+        for( int ii = (int) selections.GetCount() - 1; ii >= 0; ii-- )
+            m_filesListBox->Delete( selections[ii] );
+    }
 }
 
 

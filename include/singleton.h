@@ -31,14 +31,18 @@ class thread_pool;
 class KICAD_SINGLETON
 {
 public:
-    KICAD_SINGLETON(){};
+    KICAD_SINGLETON() :
+            m_ThreadPool( nullptr ),
+            m_GLContextManager( nullptr )
+    {};
 
     ~KICAD_SINGLETON();
 
 
     void Init();
 
-    BS::thread_pool* m_ThreadPool;
+public:
+    BS::thread_pool*    m_ThreadPool;
     GL_CONTEXT_MANAGER* m_GLContextManager;
 };
 

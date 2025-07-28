@@ -98,18 +98,13 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
     blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
 
     // Copy all fields from the sheet to the design block
-    std::vector<SCH_FIELD>&                   shFields = aSheetPath.Last()->GetFields();
-    nlohmann::ordered_map<wxString, wxString> dbFields;
-
-    for( SCH_FIELD& f : shFields )
+    for( SCH_FIELD& field : aSheetPath.Last()->GetFields() )
     {
-        if( f.GetId() == FIELD_T::SHEET_NAME || f.GetId() == FIELD_T::SHEET_FILENAME )
+        if( field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME )
             continue;
 
-        dbFields[f.GetCanonicalName()] = f.GetText();
+        blk.GetFields()[field.GetCanonicalName()] = field.GetText();
     }
-
-    blk.SetFields( dbFields );
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
@@ -191,18 +186,13 @@ bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PAT
     // Copy all fields from the sheet to the design block.
     // Note: this will overwrite any existing fields in the design block, but
     // will leave extra fields not in this source sheet alone.
-    std::vector<SCH_FIELD>&                   shFields = aSheetPath.Last()->GetFields();
-    nlohmann::ordered_map<wxString, wxString> dbFields = blk->GetFields();
-
-    for( SCH_FIELD& f : shFields )
+    for( SCH_FIELD& field : aSheetPath.Last()->GetFields() )
     {
-        if( f.GetId() == FIELD_T::SHEET_NAME || f.GetId() == FIELD_T::SHEET_FILENAME )
+        if( field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME )
             continue;
 
-        dbFields[f.GetCanonicalName()] = f.GetText();
+        blk->GetFields()[field.GetCanonicalName()] = field.GetText();
     }
-
-    blk->SetFields( dbFields );
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, blk.get(), true );
 

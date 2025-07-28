@@ -39,11 +39,11 @@ extern wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType );
 
 SHEET_SYNCHRONIZATION_MODEL::SHEET_SYNCHRONIZATION_MODEL( SHEET_SYNCHRONIZATION_AGENT& aAgent,
                                                           SCH_SHEET*                   aSheet,
-                                                          SCH_SHEET_PATH&              aPath ) :
+                                                          const SCH_SHEET_PATH&        aPath ) :
         m_selectedIndex( std::optional<unsigned>() ),
         m_agent( aAgent ),
         m_sheet( aSheet ),
-        m_path( std::move( aPath ) )
+        m_path( aPath )
 {
 }
 

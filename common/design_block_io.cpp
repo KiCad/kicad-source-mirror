@@ -325,8 +325,6 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
             if( dbMetadata.contains( "keywords" ) )
                 newDB->SetKeywords( dbMetadata["keywords"] );
 
-            nlohmann::ordered_map<wxString, wxString> fields;
-
             // Read the "fields" object from the JSON
             if( dbMetadata.contains( "fields" ) )
             {
@@ -335,10 +333,8 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                     wxString name = wxString::FromUTF8( item.key() );
                     wxString value = wxString::FromUTF8( item.value().get<std::string>() );
 
-                    fields[name] = value;
+                    newDB->GetFields()[name] = value;
                 }
-
-                newDB->SetFields( fields );
             }
         }
         catch( ... )

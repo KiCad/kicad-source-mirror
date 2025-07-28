@@ -1041,59 +1041,62 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnPageChanging( wxBookCtrlEvent& aEvent )
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnCreateJumperPinGroup( wxCommandEvent& aEvent )
 {
     wxArrayInt selections;
-    int n = m_listAvailablePins->GetSelections( selections );
-    wxCHECK( n > 0, /* void */ );
+    m_listAvailablePins->GetSelections( selections );
 
-    m_listJumperPinGroups->Freeze();
-    m_listAvailablePins->Freeze();
-
-    wxString group;
-    int i = 0;
-
-    for( int idx : selections )
+    if( !selections.empty() )
     {
-        group << m_listAvailablePins->GetString( idx );
+        m_listJumperPinGroups->Freeze();
+        m_listAvailablePins->Freeze();
 
-        if( ++i < n )
-            group << ", ";
+        wxString group;
+        int i = 0;
+
+        for( int idx : selections )
+        {
+            group << m_listAvailablePins->GetString( idx );
+
+            if( ++i < selections.Count() )
+                group << ", ";
+        }
+
+        for( int idx = (int) selections.size() - 1; idx >= 0; --idx )
+            m_listAvailablePins->Delete( selections[idx] );
+
+        m_listJumperPinGroups->AppendString( group );
+
+        m_listJumperPinGroups->Thaw();
+        m_listAvailablePins->Thaw();
     }
-
-    for( int idx = selections.size() - 1; idx >= 0; --idx )
-        m_listAvailablePins->Delete( selections[idx] );
-
-    m_listJumperPinGroups->AppendString( group );
-
-    m_listJumperPinGroups->Thaw();
-    m_listAvailablePins->Thaw();
 }
 
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnRemoveJumperPinGroup( wxCommandEvent& aEvent )
 {
     wxArrayInt selections;
+    m_listJumperPinGroups->GetSelections( selections );
 
-    if( m_listJumperPinGroups->GetSelections( selections ) <= 0 )
-        return;
-
-    m_listJumperPinGroups->Freeze();
-    m_listAvailablePins->Freeze();
-
-    for( int idx : selections )
+    if( !selections.empty() )
     {
-        wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( idx ), ", " );
+        m_listJumperPinGroups->Freeze();
+        m_listAvailablePins->Freeze();
 
-        while( tokenizer.HasMoreTokens() )
+        for( int idx : selections )
         {
-            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
-                m_listAvailablePins->AppendString( token );
+            wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( idx ), ", " );
+
+            while( tokenizer.HasMoreTokens() )
+            {
+                if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
+                    m_listAvailablePins->AppendString( token );
+            }
         }
+
+        for( int idx = (int) selections.size() - 1; idx >= 0; --idx )
+            m_listJumperPinGroups->Delete( selections[idx] );
+
+        m_listJumperPinGroups->Thaw();
+        m_listAvailablePins->Thaw();
     }
-
-    for( int idx = selections.size() - 1; idx >= 0; --idx )
-        m_listJumperPinGroups->Delete( selections[idx] );
-
-    m_listJumperPinGroups->Thaw();
-    m_listAvailablePins->Thaw();
 }
 
 

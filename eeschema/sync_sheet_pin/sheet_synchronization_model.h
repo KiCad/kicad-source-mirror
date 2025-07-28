@@ -71,7 +71,7 @@ public:
 
 
     SHEET_SYNCHRONIZATION_MODEL( SHEET_SYNCHRONIZATION_AGENT& aAgent, SCH_SHEET* aSheet,
-                                 SCH_SHEET_PATH& aPath );
+                                 const SCH_SHEET_PATH& aPath );
     ~SHEET_SYNCHRONIZATION_MODEL() override;
 
     void GetValueByRow( wxVariant& variant, unsigned row, unsigned col ) const override;
