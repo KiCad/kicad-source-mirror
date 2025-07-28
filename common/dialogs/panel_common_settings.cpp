@@ -25,6 +25,7 @@
 
 #include <advanced_config.h>
 #include <bitmaps.h>
+#include <class_draw_panel_gal.h>
 #include <dialog_shim.h>
 #include <dpi_scaling_common.h>
 #include <kiface_base.h>
@@ -168,8 +169,12 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_System.file_history_size = m_fileHistorySize->GetValue();
     commonSettings->m_System.clear_3d_cache_interval = m_Clear3DCacheFilesOlder->GetValue();
 
-    commonSettings->m_Graphics.opengl_aa_mode = m_antialiasing->GetSelection();
-    commonSettings->m_Graphics.cairo_aa_mode = m_antialiasingFallback->GetSelection();
+    commonSettings->m_Graphics.aa_mode = m_antialiasing->GetSelection();
+
+    if( m_rbAccelerated->GetValue() )
+        commonSettings->m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    else
+        commonSettings->m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
 
     if( m_canvasScaleCtrl )
     {
@@ -255,8 +260,12 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_fileHistorySize->SetValue( aSettings.m_System.file_history_size );
 
-    m_antialiasing->SetSelection( aSettings.m_Graphics.opengl_aa_mode );
-    m_antialiasingFallback->SetSelection( aSettings.m_Graphics.cairo_aa_mode );
+    m_antialiasing->SetSelection( aSettings.m_Graphics.aa_mode );
+
+    if( aSettings.m_Graphics.canvas_type == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+        m_rbAccelerated->SetValue( true );
+    else
+        m_rbFallback->SetValue( true );
 
     m_Clear3DCacheFilesOlder->SetValue( aSettings.m_System.clear_3d_cache_interval );
 

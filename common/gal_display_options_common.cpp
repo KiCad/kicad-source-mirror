@@ -82,11 +82,8 @@ void GAL_DISPLAY_OPTIONS_IMPL::ReadCommonConfig( COMMON_SETTINGS& aSettings, wxW
 {
     wxLogTrace( traceGalDispOpts, wxS( "Reading common config" ) );
 
-    gl_antialiasing_mode =
-            static_cast<KIGFX::OPENGL_ANTIALIASING_MODE>( aSettings.m_Graphics.opengl_aa_mode );
-
-    cairo_antialiasing_mode =
-            static_cast<KIGFX::CAIRO_ANTIALIASING_MODE>( aSettings.m_Graphics.cairo_aa_mode );
+    antialiasing_mode =
+            static_cast<KIGFX::GAL_ANTIALIASING_MODE>( aSettings.m_Graphics.aa_mode );
 
     m_dpi = DPI_SCALING_COMMON( &aSettings, aWindow );
     UpdateScaleFactor();

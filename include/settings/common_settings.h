@@ -106,8 +106,8 @@ public:
 
     struct GRAPHICS
     {
-        int cairo_aa_mode;
-        int opengl_aa_mode;
+        int canvas_type; ///< EDA_DRAW_PANEL_GAL::GAL_TYPE_* value, see gal_options_panel.cpp
+        int aa_mode;
     };
 
     struct SESSION

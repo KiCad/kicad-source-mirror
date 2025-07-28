@@ -22,6 +22,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <class_draw_panel_gal.h>
 #include <env_vars.h>
 #include <paths.h>
 #include <search_stack.h>
@@ -286,11 +287,11 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             &m_Input.drag_right, MOUSE_DRAG_ACTION::PAN, MOUSE_DRAG_ACTION::SELECT,
             MOUSE_DRAG_ACTION::NONE ) );
 
-    m_params.emplace_back( new PARAM<int>( "graphics.opengl_antialiasing_mode",
-            &m_Graphics.opengl_aa_mode, 2, 0, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
+            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
 
-    m_params.emplace_back( new PARAM<int>( "graphics.cairo_antialiasing_mode",
-            &m_Graphics.cairo_aa_mode, 0, 0, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "graphics.antialiasing_mode",
+            &m_Graphics.aa_mode, 2, 0, 2 ) );
 
     m_params.emplace_back( new PARAM<int>( "system.autosave_interval",
             &m_System.autosave_interval, 600 ) );

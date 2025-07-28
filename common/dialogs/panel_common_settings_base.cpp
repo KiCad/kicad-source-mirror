@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,47 +19,55 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText20 = new wxStaticText( this, wxID_ANY, _("Antialiasing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20 = new wxStaticText( this, wxID_ANY, _("Rendering Engine"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
 	bLeftSizer->Add( m_staticText20, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bLeftSizer->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
-	wxBoxSizer* bAntialiasingSizer;
-	bAntialiasingSizer = new wxBoxSizer( wxVERTICAL );
-
 	wxGridBagSizer* gbSizer11;
-	gbSizer11 = new wxGridBagSizer( 6, 4 );
+	gbSizer11 = new wxGridBagSizer( 2, 4 );
 	gbSizer11->SetFlexibleDirection( wxBOTH );
 	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer11->SetEmptyCellSize( wxSize( -1,2 ) );
 
 	wxStaticText* antialiasingLabel;
-	antialiasingLabel = new wxStaticText( this, wxID_ANY, _("Accelerated graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
+	antialiasingLabel = new wxStaticText( this, wxID_ANY, _("Antialiasing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	antialiasingLabel->Wrap( -1 );
-	gbSizer11->Add( antialiasingLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer11->Add( antialiasingLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_antialiasingChoices[] = { _("No Antialiasing"), _("Fast Antialiasing"), _("High Quality Antialiasing") };
 	int m_antialiasingNChoices = sizeof( m_antialiasingChoices ) / sizeof( wxString );
 	m_antialiasing = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingNChoices, m_antialiasingChoices, 0 );
 	m_antialiasing->SetSelection( 0 );
-	gbSizer11->Add( m_antialiasing, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer11->Add( m_antialiasing, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	m_antialiasingFallbackLabel = new wxStaticText( this, wxID_ANY, _("Fallback graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_antialiasingFallbackLabel->Wrap( -1 );
-	gbSizer11->Add( m_antialiasingFallbackLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 1, 4, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_antialiasingFallbackChoices[] = { _("No Antialiasing"), _("Fast Antialiasing"), _("High Quality Antialiasing") };
-	int m_antialiasingFallbackNChoices = sizeof( m_antialiasingFallbackChoices ) / sizeof( wxString );
-	m_antialiasingFallback = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingFallbackNChoices, m_antialiasingFallbackChoices, 0 );
-	m_antialiasingFallback->SetSelection( 0 );
-	gbSizer11->Add( m_antialiasingFallback, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	m_rbAccelerated = new wxRadioButton( this, wxID_ANY, _("Accelerated Graphics"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAccelerated->SetToolTip( _("Hardware-accelerated graphics (recommended)") );
+
+	fgSizer1->Add( m_rbAccelerated, 0, wxLEFT, 5 );
+
+	m_rbFallback = new wxRadioButton( this, wxID_ANY, _("Fallback Graphics"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbFallback->SetToolTip( _("Software graphics (for computers which do not support KiCad's hardware acceleration requirements)") );
+
+	fgSizer1->Add( m_rbFallback, 0, wxLEFT|wxTOP, 5 );
+
+
+	gbSizer11->Add( fgSizer1, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 0 );
 
 
 	gbSizer11->AddGrowableCol( 1 );
 
-	bAntialiasingSizer->Add( gbSizer11, 0, wxTOP|wxBOTTOM, 5 );
+	bLeftSizer->Add( gbSizer11, 0, wxLEFT, 5 );
+
+	wxBoxSizer* bAntialiasingSizer;
+	bAntialiasingSizer = new wxBoxSizer( wxVERTICAL );
 
 
 	bLeftSizer->Add( bAntialiasingSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
@@ -112,7 +120,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
-	m_defaultPDFViewer = new wxRadioButton( this, wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_defaultPDFViewer = new wxRadioButton( this, wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizer8->Add( m_defaultPDFViewer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 

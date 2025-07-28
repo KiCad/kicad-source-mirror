@@ -94,7 +94,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( wxWindow* aParent 
     m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
     m_galDisplayOptions.m_forceDisplayCursor = false;
 
-    m_galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( app_settings->m_Graphics.canvas_type );
+    m_galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( common_settings->m_Graphics.canvas_type );
 }
 
 

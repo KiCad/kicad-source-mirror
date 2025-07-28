@@ -400,8 +400,8 @@ wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
 
     if( m_frame->GetCanvas() )
         backend = m_frame->GetCanvas()->GetBackend();
-    else if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        backend = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->m_Graphics.canvas_type;
+    else if( COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
+        backend = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
 
     wxPanel*    panel = new wxPanel( aParent );
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );

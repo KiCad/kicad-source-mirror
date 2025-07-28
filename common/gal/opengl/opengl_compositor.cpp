@@ -49,7 +49,7 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
         m_mainFbo( 0 ),
         m_depthBuffer( 0 ),
         m_curFbo( DIRECT_RENDERING ),
-        m_currentAntialiasingMode( OPENGL_ANTIALIASING_MODE::NONE )
+        m_currentAntialiasingMode( GAL_ANTIALIASING_MODE::AA_NONE )
 {
     m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
 }
@@ -72,7 +72,7 @@ OPENGL_COMPOSITOR::~OPENGL_COMPOSITOR()
 }
 
 
-void OPENGL_COMPOSITOR::SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode )
+void OPENGL_COMPOSITOR::SetAntialiasingMode( GAL_ANTIALIASING_MODE aMode )
 {
     m_currentAntialiasingMode = aMode;
 
@@ -81,7 +81,7 @@ void OPENGL_COMPOSITOR::SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode )
 }
 
 
-OPENGL_ANTIALIASING_MODE OPENGL_COMPOSITOR::GetAntialiasingMode() const
+GAL_ANTIALIASING_MODE OPENGL_COMPOSITOR::GetAntialiasingMode() const
 {
     return m_currentAntialiasingMode;
 }
@@ -94,10 +94,10 @@ void OPENGL_COMPOSITOR::Initialize()
 
     switch( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::SMAA:
+    case GAL_ANTIALIASING_MODE::AA_FAST:
         m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this );
         break;
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING:
+    case GAL_ANTIALIASING_MODE::AA_HIGHQUALITY:
         m_antialiasing = std::make_unique<ANTIALIASING_SUPERSAMPLING>( this );
         break;
     default:
@@ -406,7 +406,7 @@ int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
 {
     switch ( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING: return 2;
+    case GAL_ANTIALIASING_MODE::AA_HIGHQUALITY: return 2;
     default:                                      return 1;
     }
 }
@@ -415,7 +415,7 @@ VECTOR2D OPENGL_COMPOSITOR::GetAntialiasRenderingOffset() const
 {
     switch( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING: return VECTOR2D( 0.5, -0.5 );
+    case GAL_ANTIALIASING_MODE::AA_HIGHQUALITY: return VECTOR2D( 0.5, -0.5 );
     default:                                      return VECTOR2D( 0, 0 );
     }
 }

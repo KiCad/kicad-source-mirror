@@ -90,8 +90,8 @@ public:
     void     DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle );
     unsigned int CreateBuffer( VECTOR2I aDimensions );
 
-    void SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode ); // clears all buffers
-    OPENGL_ANTIALIASING_MODE GetAntialiasingMode() const;
+    void SetAntialiasingMode( GAL_ANTIALIASING_MODE aMode ); // clears all buffers
+    GAL_ANTIALIASING_MODE GetAntialiasingMode() const;
 
     int GetAntialiasSupersamplingFactor() const;
     VECTOR2D GetAntialiasRenderingOffset() const;
@@ -131,7 +131,7 @@ protected:
     /// Store the used FBO name in case there was more than one compositor used
     GLuint          m_curFbo;
 
-    OPENGL_ANTIALIASING_MODE m_currentAntialiasingMode;
+    GAL_ANTIALIASING_MODE m_currentAntialiasingMode;
     std::unique_ptr<OPENGL_PRESENTOR> m_antialiasing;
 };
 } // namespace KIGFX

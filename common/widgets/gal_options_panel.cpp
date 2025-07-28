@@ -86,15 +86,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
 
 bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 {
-#ifndef __WXMAC__
-    auto canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( m_cfg->m_Graphics.canvas_type );
-
-    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
-        m_rbAccelerated->SetValue( true );
-    else
-        m_rbFallback->SetValue( true );
-#endif
-
     m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );
 
     if( m_cfg->m_Window.grid.style == 0 )
@@ -135,12 +126,6 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 
     m_cfg->m_Window.cursor.fullscreen_cursor = m_rbFullWindowCrosshairs->GetValue();
     m_cfg->m_Window.cursor.always_show_cursor = m_forceCursorDisplay->GetValue();
-
-#ifndef __WXMAC__
-    m_cfg->m_Graphics.canvas_type = m_rbAccelerated->GetValue() ?
-                                                    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL :
-                                                    EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-#endif
 
     return true;
 }

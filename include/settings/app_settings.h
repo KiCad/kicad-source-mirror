@@ -136,7 +136,6 @@ public:
 
     struct GRAPHICS
     {
-        int   canvas_type;
         float highlight_factor;         ///< How much to brighten highlighted objects by.
         float select_factor;            ///< How much to brighten selected objects by.
     };

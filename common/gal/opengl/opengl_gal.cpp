@@ -348,7 +348,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     m_bitmapCache = std::make_unique<GL_BITMAP_CACHE>();
 
     m_compositor = new OPENGL_COMPOSITOR;
-    m_compositor->SetAntialiasingMode( m_options.gl_antialiasing_mode );
+    m_compositor->SetAntialiasingMode( m_options.antialiasing_mode );
 
     // Initialize the flags
     m_isFramebufferInitialized = false;
@@ -510,9 +510,9 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     bool refresh = false;
 
-    if( m_options.gl_antialiasing_mode != m_compositor->GetAntialiasingMode() )
+    if( m_options.antialiasing_mode != m_compositor->GetAntialiasingMode() )
     {
-        m_compositor->SetAntialiasingMode( m_options.gl_antialiasing_mode );
+        m_compositor->SetAntialiasingMode( m_options.antialiasing_mode );
         m_isFramebufferInitialized = false;
         refresh = true;
     }

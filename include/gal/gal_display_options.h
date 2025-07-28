@@ -50,18 +50,11 @@ namespace KIGFX
         SMALL_CROSS ///< Use small cross instead of dots for the grid
     };
 
-    enum class OPENGL_ANTIALIASING_MODE
+    enum class GAL_ANTIALIASING_MODE
     {
-        NONE,
-        SMAA,
-        SUPERSAMPLING,
-    };
-
-    enum class CAIRO_ANTIALIASING_MODE
-    {
-        NONE,
-        FAST,
-        GOOD,
+        AA_NONE,
+        AA_FAST,
+        AA_HIGHQUALITY,
     };
 
     enum class GRID_SNAPPING
@@ -91,9 +84,7 @@ namespace KIGFX
         virtual ~GAL_DISPLAY_OPTIONS()
         {}
 
-        OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
-
-        CAIRO_ANTIALIASING_MODE cairo_antialiasing_mode;
+        GAL_ANTIALIASING_MODE antialiasing_mode;
 
         ///< The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;

@@ -557,7 +557,7 @@ protected:
      * @param aCfg is the APP_SETTINGS_BASE config storing the canvas type.
      * If nullptr (default) the KifaceSettings() will be used
      */
-    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting( APP_SETTINGS_BASE* aCfg = nullptr );
+    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting();
 
     /**
      * Store the canvas type in the application settings.

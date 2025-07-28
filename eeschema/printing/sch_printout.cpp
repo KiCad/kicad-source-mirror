@@ -130,7 +130,7 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
     wxDC* dc = aDC;
     m_view = m_parent->GetCanvas()->GetView();
     KIGFX::GAL_DISPLAY_OPTIONS options;
-    options.cairo_antialiasing_mode = KIGFX::CAIRO_ANTIALIASING_MODE::GOOD;
+    options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
     std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, dc );
     KIGFX::GAL* gal = galPrint->GetGAL();
     KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();

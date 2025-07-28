@@ -241,13 +241,13 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
                                                        UNITS_PROVIDER* aUnitsProvider )
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
-
+    COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
     std::unique_ptr<GAL_DISPLAY_OPTIONS_IMPL> gal_opts;
 
     gal_opts = std::make_unique<GAL_DISPLAY_OPTIONS_IMPL>();
-    gal_opts->ReadConfig( *Pgm().GetCommonSettings(), cfg->m_Window, aParent );
+    gal_opts->ReadConfig( *commonSettings, cfg->m_Window, aParent );
 
-    auto galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
+    auto galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( commonSettings->m_Graphics.canvas_type );
     FOOTPRINT_PREVIEW_PANEL* panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, aUnitsProvider,
                                                                   std::move( gal_opts ), galType );
 

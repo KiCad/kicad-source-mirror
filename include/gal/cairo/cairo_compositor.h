@@ -86,17 +86,17 @@ public:
     /// @copydoc COMPOSITOR::Present()
     virtual void Present() override;
 
-    void SetAntialiasingMode( CAIRO_ANTIALIASING_MODE aMode ); // clears all buffers
-    CAIRO_ANTIALIASING_MODE GetAntialiasingMode() const
+    void SetAntialiasingMode( GAL_ANTIALIASING_MODE aMode ); // clears all buffers
+    GAL_ANTIALIASING_MODE GetAntialiasingMode() const
     {
         switch( m_currentAntialiasingMode )
         {
         case CAIRO_ANTIALIAS_FAST:
-            return CAIRO_ANTIALIASING_MODE::FAST;
+            return GAL_ANTIALIASING_MODE::AA_FAST;
         case CAIRO_ANTIALIAS_GOOD:
-            return CAIRO_ANTIALIASING_MODE::GOOD;
+            return GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
         default:
-            return CAIRO_ANTIALIASING_MODE::NONE;
+            return GAL_ANTIALIASING_MODE::AA_NONE;
         }
     }
 

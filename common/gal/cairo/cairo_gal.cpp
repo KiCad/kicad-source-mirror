@@ -1631,7 +1631,7 @@ void CAIRO_GAL::setCompositor()
     // Recreate the compositor with the new Cairo context
     m_compositor.reset( new CAIRO_COMPOSITOR( &m_currentContext ) );
     m_compositor->Resize( m_screenSize.x, m_screenSize.y );
-    m_compositor->SetAntialiasingMode( m_options.cairo_antialiasing_mode );
+    m_compositor->SetAntialiasingMode( m_options.antialiasing_mode );
 
     // Prepare buffers
     m_mainBuffer = m_compositor->CreateBuffer();
@@ -1669,9 +1669,9 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
     bool refresh = false;
 
     if( m_validCompositor &&
-        aOptions.cairo_antialiasing_mode != m_compositor->GetAntialiasingMode() )
+        aOptions.antialiasing_mode != m_compositor->GetAntialiasingMode() )
     {
-        m_compositor->SetAntialiasingMode( m_options.cairo_antialiasing_mode );
+        m_compositor->SetAntialiasingMode( m_options.antialiasing_mode );
         m_validCompositor = false;
         deinitSurface();
 

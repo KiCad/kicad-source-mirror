@@ -47,9 +47,6 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_CustomToolbars( false ),
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
-    // Make Coverity happy:
-    m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-
     // Build parameters list:
     m_params.emplace_back(
             new PARAM<int>( "find_replace.match_mode", &m_FindReplace.match_mode, 0 ) );
@@ -123,10 +120,6 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
                 }
             },
             {} ) );
-
-
-    m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
-            &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
 
     m_params.emplace_back( new PARAM<float>( "graphics.highlight_factor",
             &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );
@@ -295,8 +288,6 @@ bool APP_SETTINGS_BASE::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacyString(   aCfg, "LastReplaceString",   "find_replace.replace_string" );
 
     migrateFindReplace( aCfg );
-
-    ret &= fromLegacy<int>(    aCfg, "canvas_type",         "graphics.canvas_type" );
 
     ret &= fromLegacy<int>(    aCfg, "P22LIB_TREE_MODEL_ADAPTERSelectorColumnWidth",
                                                             "lib_tree.column_width" );

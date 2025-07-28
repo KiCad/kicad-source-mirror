@@ -60,12 +60,12 @@ void CAIRO_COMPOSITOR::Initialize()
 }
 
 
-void CAIRO_COMPOSITOR::SetAntialiasingMode( CAIRO_ANTIALIASING_MODE aMode )
+void CAIRO_COMPOSITOR::SetAntialiasingMode( GAL_ANTIALIASING_MODE aMode )
 {
     switch( aMode )
     {
-    case CAIRO_ANTIALIASING_MODE::FAST: m_currentAntialiasingMode = CAIRO_ANTIALIAS_FAST; break;
-    case CAIRO_ANTIALIASING_MODE::GOOD: m_currentAntialiasingMode = CAIRO_ANTIALIAS_GOOD; break;
+    case GAL_ANTIALIASING_MODE::AA_FAST: m_currentAntialiasingMode = CAIRO_ANTIALIAS_FAST; break;
+    case GAL_ANTIALIASING_MODE::AA_HIGHQUALITY: m_currentAntialiasingMode = CAIRO_ANTIALIAS_GOOD; break;
     default: m_currentAntialiasingMode = CAIRO_ANTIALIAS_NONE;
     }
 
