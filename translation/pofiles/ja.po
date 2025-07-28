@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-25 01:03+0000\n"
+"PO-Revision-Date: 2025-07-29 14:08+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -916,7 +916,7 @@ msgstr "基板スタックアップの色を使用"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
 msgid "Use PCB editor copper colors"
-msgstr "基板エディタの銅色を使用する"
+msgstr "PCBエディターの銅色を使用する"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
 msgid ""
@@ -28273,7 +28273,7 @@ msgstr "回路図エディターで回路図を編集する"
 
 #: kicad/tools/kicad_manager_actions.cpp:137
 msgid "Edit PCB in PCB editor"
-msgstr "PCBエディタでPCBを編集する"
+msgstr "PCBエディタでプリント基板を編集する"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
 msgid "Create, delete and edit PCB footprints"
@@ -29798,7 +29798,7 @@ msgstr "ニッケル"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 msgid "Copper"
-msgstr "銅"
+msgstr "銅または導体"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
 msgid "Copper-Aluminium"
@@ -38142,7 +38142,7 @@ msgstr "テンティングした"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2106
 msgid "Not tented"
-msgstr "テンティングしていない"
+msgstr "テンティングしない"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:402
 msgid "Whether to tent (cover with soldermask) this via on the front side"
@@ -43190,7 +43190,7 @@ msgstr "調整パターンを編集"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2071
 msgid "current skew"
-msgstr "現在の遅延"
+msgstr "現在の遅延差（スキュー）"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2073
 msgid "current length"
@@ -43226,7 +43226,7 @@ msgstr "(調整パターンのプロパティより)"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2196
 #, c-format
 msgid "Skew Constraints: %s"
-msgstr "遅延の制約: %s"
+msgstr "遅延差（スキュー）の制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2209
 #, c-format
@@ -43236,7 +43236,7 @@ msgstr "目標の長さ: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2218
 #, c-format
 msgid "Length Constraints: %s"
-msgstr "長さの制約: %s"
+msgstr "長さ制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2239
 msgid "Tune Skew"
@@ -43833,12 +43833,12 @@ msgstr "%s のフットプリント フィルター を '%s' に更新します�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:678
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定します。"
+msgstr "%s に '部品表から除外 'の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:683
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s の '部品表から除外 'の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:694
 #, c-format
@@ -43853,12 +43853,12 @@ msgstr "%s の製造属性 '部品表から除外' を削除しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:718
 #, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定します。"
+msgstr "%s に '部品表から除外' の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:723
 #, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s の '部品表から除外' の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:734
 #, c-format
