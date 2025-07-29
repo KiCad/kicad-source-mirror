@@ -95,7 +95,8 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC ) :
     m_hdc = g->GetHDC();
     m_surface = cairo_win32_printing_surface_create( static_cast<HDC>( m_hdc ) );
     m_ctx = cairo_create( m_surface );
-    m_dpi = GetDeviceCaps( static_cast<HDC>( m_hdc ), LOGPIXELSX );
+    wxASSERT( aDC->GetPPI().x == aDC->GetPPI().y );
+    m_dpi = aDC->GetPPI().x;
 #endif /* __WXMSW__ */
 
 #ifdef __WXMAC__
