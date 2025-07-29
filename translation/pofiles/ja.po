@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-28 20:01+0000\n"
+"PO-Revision-Date: 2025-07-29 20:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -932,7 +932,7 @@ msgstr "基板スタックアップの色を使用"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:182
 msgid "Use PCB editor copper colors"
-msgstr "基板エディタの銅色を使用する"
+msgstr "PCBエディターの銅色を使用する"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
 msgid ""
@@ -1199,7 +1199,7 @@ msgstr "モデルのバウンディング ボックスを表示"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "各レイヤーの厚みを表示（遅い）"
+msgstr "導体レイヤーとテクニカルレイヤーの厚みを表示（遅い）"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -29018,7 +29018,7 @@ msgstr "回路図エディターで回路図を編集する"
 
 #: kicad/tools/kicad_manager_actions.cpp:137
 msgid "Edit PCB in PCB editor"
-msgstr "PCBエディタでPCBを編集する"
+msgstr "PCBエディタでプリント基板を編集する"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
 msgid "Create, delete and edit PCB footprints"
@@ -30620,7 +30620,7 @@ msgstr "黒鉛状炭素"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:31
 msgid "Copper"
-msgstr "銅"
+msgstr "銅または導体"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:149
 msgid "Copper-Aluminium"
@@ -44558,18 +44558,16 @@ msgid "Routed Lengths"
 msgstr "配線長"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2347
-#, fuzzy
 msgid "Routed Delays"
-msgstr "配線長"
+msgstr "配線遅延"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2356 pcbnew/pcb_track.cpp:1845
 msgid "Routed Length"
 msgstr "配線長"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360 pcbnew/pcb_track.cpp:1858
-#, fuzzy
 msgid "Routed Delay"
-msgstr "配線長"
+msgstr "配線遅延"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368 pcbnew/pad.cpp:2895
 #: pcbnew/pcb_track.cpp:1850
@@ -44582,14 +44580,12 @@ msgstr "全長"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2376 pcbnew/pad.cpp:2901
 #: pcbnew/pcb_track.cpp:1864
-#, fuzzy
 msgid "Pad To Die Delay"
-msgstr "パッドからダイまでの長さ"
+msgstr "パッドからダイまでの遅延"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2379 pcbnew/pcb_track.cpp:1867
-#, fuzzy
 msgid "Full Delay"
-msgstr "遅延"
+msgstr "パッドからダイまでの遅延と配線遅延の合計"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2391
 #, c-format
@@ -44607,7 +44603,7 @@ msgid "Skew Constraints: %s"
 msgstr "遅延差（スキュー）の制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Target Delay: %s"
 msgstr "目標の遅延: %s"
 
@@ -44617,14 +44613,14 @@ msgid "Target Length: %s"
 msgstr "目標の長さ: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2432
-#, fuzzy, c-format
+#, c-format
 msgid "Delay Constraints: %s"
-msgstr "差動ペアのギャップの制約: %s"
+msgstr "遅延制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2432
 #, c-format
 msgid "Length Constraints: %s"
-msgstr "長さの制約: %s"
+msgstr "長さ制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2457
 msgid "Tune Skew"
@@ -44688,18 +44684,16 @@ msgid "Target Length"
 msgstr "目標の長さ"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2932
-#, fuzzy
 msgid "Target Delay"
-msgstr "対象領域:"
+msgstr "目標遅延:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2939
 msgid "Target Skew"
 msgstr "目標の遅延"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2946
-#, fuzzy
 msgid "Target Skew Delay"
-msgstr "目標の遅延"
+msgstr "目標の遅延差（スキュー）"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2953
 msgid "Override Custom Rules"
@@ -44840,7 +44834,6 @@ msgid "IDFv3..."
 msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:128
-#, fuzzy
 msgid "STEP/GLB/BREP/XAO/PLY/STL..."
 msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
@@ -44982,9 +44975,8 @@ msgid "In Package"
 msgstr "パッケージ内"
 
 #: pcbnew/netinfo_item.cpp:148 pcbnew/widgets/pcb_net_inspector_panel.cpp:113
-#, fuzzy
 msgid "Net Delay"
-msgstr "遅延"
+msgstr "ネット遅延"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:146
 #, c-format
@@ -45153,12 +45145,12 @@ msgstr "%s のフットプリント フィルター を '%s' に更新します�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:687
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定します。"
+msgstr "%s に '部品表から除外 'の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:692
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s の '部品表から除外 'の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:703
 #, c-format
@@ -45173,12 +45165,12 @@ msgstr "%s の製造属性 '部品表から除外' を削除しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:727
 #, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定します。"
+msgstr "%s に '部品表から除外' の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:732
 #, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s の '部品表から除外' の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:743
 #, c-format
@@ -45193,22 +45185,22 @@ msgstr "%s の製造属性 '部品表から除外' を削除しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:772
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "%s に '重複パッド番号はジャンパーです' の属性 を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "%s の製造属性 '部品表から除外' を削除しました。"
+msgstr "%s の '重複パッド番号はジャンパーです' の属性 を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "%s に '重複パッド番号はジャンパーです' の属性 を追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s の '重複パッド番号はジャンパーです' の属性 を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:804
 #, c-format
@@ -45236,9 +45228,9 @@ msgid "Add %s to group \"%s\"."
 msgstr "%s をグループ \"%s\" に追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group \"%s\"."
-msgstr "%s (フットプリント '%s')を追加します。"
+msgstr "%s をグループ \"%s\" に追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
@@ -45423,14 +45415,14 @@ msgstr ""
 "オフセット: %d"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"不正なフットプリント ID \n"
+"不正な lib_id（デザインブロックライブラリリンクID） \n"
 "ファイル: '%s'\n"
 "行: %d\n"
 "オフセット: %d"
@@ -45868,17 +45860,14 @@ msgid "Design block '%s' already has a layout."
 msgstr "デザイン ブロック '%s' には既にレイアウトがあります。"
 
 #: pcbnew/pcb_design_block_utils.cpp:71
-#, fuzzy
 msgid "Overwrite existing layout?"
-msgstr "既存のプリセットを上書きしますか?"
+msgstr "既存のレイアウトを上書きしますか?"
 
 #: pcbnew/pcb_design_block_utils.cpp:154 pcbnew/pcb_design_block_utils.cpp:211
 #: pcbnew/pcb_design_block_utils.cpp:305
-#, fuzzy
 msgid "Error saving temporary board file to create design block."
-msgstr ""
-"設計ブロックを作成するための一時的な回路図ファイル保存中にエラーが発生しまし"
-"た。"
+msgstr "デザインブロックを作成するための一時的な基板ファイル保存中にエラーが発生しま"
+"した。"
 
 #: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1834
 msgid "Prefix"
@@ -47791,11 +47780,10 @@ msgid "No layers selected for plotting."
 msgstr "プロット用のレイヤーが未選択です。"
 
 #: pcbnew/pcb_plotter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
-msgstr ""
-"カラー テーマ '%s' が見つからないため、PCBエディターのデフォルト設定を使いま"
-"す。\n"
+msgstr "カラー テーマ '%s' "
+"が見つからないため、PCBエディターのデフォルト設定を使います。\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
 msgid "Associated Layer"
@@ -47893,14 +47881,12 @@ msgid "Segment Length"
 msgstr "セグメント長"
 
 #: pcbnew/pcb_track.cpp:1828
-#, fuzzy
 msgid "Segment Delay"
-msgstr "セグメント"
+msgstr "セグメント遅延"
 
 #: pcbnew/pcb_track.cpp:1874
-#, fuzzy
 msgid "Copper Area"
-msgstr "導体ゾーン"
+msgstr "導体エリア"
 
 #: pcbnew/pcb_track.cpp:1889
 #, c-format
@@ -47950,41 +47936,35 @@ msgstr "テンティングした"
 
 #: pcbnew/pcb_track.cpp:2319
 msgid "Not tented"
-msgstr "テンティングしていない"
+msgstr "テンティングしない"
 
 #: pcbnew/pcb_track.cpp:2324
-#, fuzzy
 msgid "Covered"
-msgstr "移動中のアイテム"
+msgstr "覆う"
 
 #: pcbnew/pcb_track.cpp:2325
-#, fuzzy
 msgid "Not covered"
-msgstr "反転しない"
+msgstr "覆わない"
 
 #: pcbnew/pcb_track.cpp:2330
-#, fuzzy
 msgid "Plugged"
-msgstr "プラグイン"
+msgstr "非導電性材料で封止"
 
 #: pcbnew/pcb_track.cpp:2331
-#, fuzzy
 msgid "Not plugged"
-msgstr "見つかりませんでした"
+msgstr "非導電性材料で封止しない"
 
 #: pcbnew/pcb_track.cpp:2336
 msgid "Capped"
-msgstr ""
+msgstr "オーバーメッキでキャップ"
 
 #: pcbnew/pcb_track.cpp:2337
-#, fuzzy
 msgid "Not capped"
-msgstr "未接続"
+msgstr "オーバーメッキでキャップしない"
 
 #: pcbnew/pcb_track.cpp:2343
-#, fuzzy
 msgid "Not filled"
-msgstr "<未定義>"
+msgstr "非導電性ペーストを充填しない"
 
 #: pcbnew/pcb_track.cpp:2407
 msgid "Via Properties"
@@ -48011,38 +47991,32 @@ msgid "Back tenting"
 msgstr "裏面のテンティング"
 
 #: pcbnew/pcb_track.cpp:2426
-#, fuzzy
 msgid "Front covering"
-msgstr "表面のテンティング"
+msgstr "表面のカバー"
 
 #: pcbnew/pcb_track.cpp:2428
-#, fuzzy
 msgid "Back covering"
-msgstr "裏面のテンティング"
+msgstr "裏面のカバー"
 
 #: pcbnew/pcb_track.cpp:2430
-#, fuzzy
 msgid "Front plugging"
-msgstr "表面のテンティング"
+msgstr "表面の封止"
 
 #: pcbnew/pcb_track.cpp:2432
-#, fuzzy
 msgid "Back plugging"
-msgstr "裏面のテンティング"
+msgstr "裏面の封止"
 
 #: pcbnew/pcb_track.cpp:2434
 msgid "Capping"
-msgstr ""
+msgstr "キャップ"
 
 #: pcbnew/pcb_track.cpp:2436
-#, fuzzy
 msgid "Filling"
-msgstr "塗りつぶし"
+msgstr "充填"
 
 #: pcbnew/pcbexpr_evaluator.cpp:681
-#, fuzzy
 msgid "must be mm, in, mil, deg, fs, or ps"
-msgstr "mm、in、または mil でなければなりません"
+msgstr "mm、in、mil、deg、fs、または ps でなければなりません"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -48263,7 +48237,7 @@ msgstr "複数のレイヤー"
 
 #: pcbnew/plot_board_layers.cpp:1246
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
-msgstr ""
+msgstr "HPGLプロットはKiCad 10.0以降サポートされなくなりました"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
@@ -48758,43 +48732,36 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via が失われたパッドスタック '%s' を参照しています。"
 
 #: pcbnew/toolbars_footprint_editor.cpp:103 pcbnew/toolbars_pcb_editor.cpp:217
-#, fuzzy
 msgid "Dimension objects"
-msgstr "寸法線テキスト"
+msgstr "寸法線"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
-#, fuzzy
 msgid "Track width selector"
-msgstr "配線幅の補正:"
+msgstr "配線幅選択"
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Control to select the track width"
-msgstr "配線の幅が細過ぎます"
+msgstr "配線幅を選択するためのコントロール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
-#, fuzzy
 msgid "Via diameter selector"
-msgstr "ビアの直径の解決:"
+msgstr "ビア直径の選択"
 
 #: pcbnew/toolbars_pcb_editor.cpp:127
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "ビア直径を選択するためのコントロール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
-#, fuzzy
 msgid "Track routing tools"
-msgstr "近過ぎる配線端です"
+msgstr "配線経路ツール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:198
-#, fuzzy
 msgid "Track tuning tools"
-msgstr "近過ぎる配線端です"
+msgstr "配線調整ツール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:226
-#, fuzzy
 msgid "PCB origins"
-msgstr "ページの原点"
+msgstr "プリント基板の原点"
 
 #: pcbnew/toolbars_pcb_editor.cpp:376
 msgid ""
@@ -49332,14 +49299,12 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "解決済みの穴のサイズの制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1432
-#, fuzzy
 msgid "Solder Mask"
 msgstr "ハンダマスク"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1433
-#, fuzzy
 msgid "Solder mask expansion resolution for:"
-msgstr "ハンダマスクの拡張:"
+msgstr "ハンダマスクの拡張の結果:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
 #, c-format
@@ -49347,9 +49312,8 @@ msgid "Resolved solder mask expansion: %s."
 msgstr "ハンダマスクの拡張を解決しました: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1450
-#, fuzzy
 msgid "Solder paste absolute clearance resolution for:"
-msgstr "穴から穴のクリアランスの解決:"
+msgstr "ハンダペーストの絶対クリアランスの結果:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1458
 #, c-format
@@ -49357,9 +49321,8 @@ msgid "Resolved solder paste absolute clearance: %s."
 msgstr "ハンダペーストの絶対クリアランスを解決しました: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1461
-#, fuzzy
 msgid "Solder paste relative clearance resolution for:"
-msgstr "ハンダペーストの相対クリアランス:"
+msgstr "ハンダペーストの相対クリアランスの結果:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1471
 #, c-format
@@ -49531,9 +49494,8 @@ msgid "Edit Track Width/Via Size"
 msgstr "配線幅/ビアのサイズを編集"
 
 #: pcbnew/tools/edit_tool.cpp:1116
-#, fuzzy
 msgid "Edit Track Layer"
-msgstr "裏面レイヤー"
+msgstr "配線レイヤーを編集"
 
 #: pcbnew/tools/edit_tool.cpp:1151
 msgid "At least two straight track segments must be selected."
@@ -50124,29 +50086,24 @@ msgid "Show the design rules checker window"
 msgstr "デザインルール チェッカーのウィンドウを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:453
-#, fuzzy
 msgid "Add selected design block to current board"
-msgstr "選択したデザインブロックを現在のシートに追加"
+msgstr "選択されたデザインブロックを現在の基板に追加"
 
 #: pcbnew/tools/pcb_actions.cpp:484
-#, fuzzy
 msgid "Save Current Board as Design Block..."
-msgstr "現在のシートをデザイン ブロックとして保存..."
+msgstr "現在の基板をデザイン ブロックとして保存..."
 
 #: pcbnew/tools/pcb_actions.cpp:485
-#, fuzzy
 msgid "Create a new design block from the current board"
-msgstr "現在のシートから新しいデザインブロックを作成する"
+msgstr "現在の基板から新しいデザインブロックを作成する"
 
 #: pcbnew/tools/pcb_actions.cpp:498
-#, fuzzy
 msgid "Save Current Board to Design Block..."
-msgstr "現在のシートをデザイン ブロックとして保存..."
+msgstr "現在の基板をデザイン ブロックとして保存..."
 
 #: pcbnew/tools/pcb_actions.cpp:499
-#, fuzzy
 msgid "Add current board to design block"
-msgstr "デザインブロックを追加"
+msgstr "現在の基板をデザインブロックに追加"
 
 #: pcbnew/tools/pcb_actions.cpp:530
 msgid "Open in Footprint Editor"
@@ -50249,14 +50206,12 @@ msgid "Updates selected track & via sizes"
 msgstr "選択した配線とビアのサイズを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "無効な導体レイヤー上のアイテム"
+msgstr "配線を次の有効な導体レイヤーに切り替える"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Switch track to previous enabled copper layer"
-msgstr "前のレイヤーへ切り替え"
+msgstr "配線を前の有効な導体レイヤーに切り替える"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -51987,9 +51942,8 @@ msgid "Edge card connectors: "
 msgstr "エッジ カード コネクタ: "
 
 #: pcbnew/tools/pcb_control.cpp:2402
-#, fuzzy
 msgid "Place Board Characteristics"
-msgstr "基板の特性"
+msgstr "基板の特性を置く"
 
 #: pcbnew/tools/pcb_control.cpp:2455
 msgid "Loss Tangent"
@@ -52000,9 +51954,8 @@ msgid "Dielectric"
 msgstr "誘電体"
 
 #: pcbnew/tools/pcb_control.cpp:2501
-#, fuzzy
 msgid "Place Board Stackup Table"
-msgstr "基板スタックアップの表を挿入します"
+msgstr "基板スタックアップの表をを置く"
 
 #: pcbnew/tools/pcb_point_editor.cpp:1987
 msgid "Resize Table Cells"
@@ -52298,14 +52251,12 @@ msgid "Show colliding footprint courtyards"
 msgstr "衝突しているフットプリントのコートヤードを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Board Area Shadow"
-msgstr "基板の範囲のみ"
+msgstr "基板のエリア"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show board area shadow"
-msgstr "基板のラッツネストを表示"
+msgstr "基板のエリアに影を表示する"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
@@ -52922,12 +52873,9 @@ msgid "Rule Areas"
 msgstr "ルールエリア"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:113
-#, fuzzy
 msgid ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
-msgstr ""
-"ソース回路図の参照指定子を保持します。それ以外の場合は、クリアしてから設定に"
-"従って再アノテーションします。"
+msgstr "ソースレイアウトの参照指定子を保持します。それ以外の場合はクリアします。"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:109
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:842
@@ -52947,14 +52895,12 @@ msgid "Via Count"
 msgstr "ビア カウント"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:126
-#, fuzzy
 msgid "Via Delay"
-msgstr "ビア直径"
+msgstr "ビア遅延"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:128
-#, fuzzy
 msgid "Track Delay"
-msgstr "配線の間隔:"
+msgstr "配線遅延"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:130
 msgid "Die Delay"
