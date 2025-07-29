@@ -1025,6 +1025,8 @@ void APPEARANCE_CONTROLS::OnLanguageChanged( wxCommandEvent& aEvent )
     if( m_notebook->GetPageCount() >= 3 )
         m_notebook->SetPageText( 2, _( "Nets" ) );
 
+    m_netsGrid->ClearSelection();
+
     Freeze();
     rebuildLayers();
     rebuildLayerContextMenu();
@@ -1048,6 +1050,8 @@ void APPEARANCE_CONTROLS::OnLanguageChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::OnBoardChanged()
 {
+    m_netsGrid->ClearSelection();
+
     Freeze();
     rebuildLayers();
     rebuildLayerContextMenu();
@@ -1166,6 +1170,8 @@ void APPEARANCE_CONTROLS::OnBoardCompositeUpdate( BOARD&                    aBoa
 
 void APPEARANCE_CONTROLS::handleBoardItemsChanged()
 {
+    m_netsGrid->ClearSelection();
+
     Freeze();
     rebuildNets();
     Thaw();
