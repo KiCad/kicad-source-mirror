@@ -253,28 +253,27 @@ void DIALOG_CREATE_ARRAY::OnSelectCenterButton( wxCommandEvent& event )
 {
     event.Skip();
 
-    PCB_PICKER_TOOL* pickerTool = m_frame->GetToolManager()->GetTool<PCB_PICKER_TOOL>();
+    TOOL_MANAGER*    toolMgr = m_frame->GetToolManager();
+    PCB_PICKER_TOOL* pickerTool = toolMgr->GetTool<PCB_PICKER_TOOL>();
     wxCHECK( pickerTool, /* void */ );
+
+    // Hide, but do not close, the dialog
+    Hide();
 
     if( event.GetEventObject() == m_btnSelectCenterItem )
     {
-        m_frame->GetToolManager()->RunAction(
-                PCB_ACTIONS::selectItemInteractively,
-                PCB_PICKER_TOOL::INTERACTIVE_PARAMS{ this, _( "Select center item..." ) } );
+        toolMgr->RunAction( PCB_ACTIONS::selectItemInteractively,
+                            PCB_PICKER_TOOL::INTERACTIVE_PARAMS { this, _( "Select center item..." ) } );
     }
     else if( event.GetEventObject() == m_btnSelectCenterPoint )
     {
-        m_frame->GetToolManager()->RunAction(
-                PCB_ACTIONS::selectPointInteractively,
-                PCB_PICKER_TOOL::INTERACTIVE_PARAMS{ this, _( "Select center point..." ) } );
+        toolMgr->RunAction( PCB_ACTIONS::selectPointInteractively,
+                            PCB_PICKER_TOOL::INTERACTIVE_PARAMS { this, _( "Select center point..." ) } );
     }
     else
     {
         wxFAIL_MSG( "Unknown event source" );
     }
-
-    // Hide, but do not close, the dialog
-    Hide();
 }
 
 

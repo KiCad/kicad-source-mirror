@@ -231,10 +231,11 @@ void DIALOG_POSITION_RELATIVE::OnSelectPointClick( wxCommandEvent& event )
     PCB_PICKER_TOOL* pickerTool = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     wxCHECK( pickerTool, /* void */ );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectPointInteractively,
-                          PCB_PICKER_TOOL::INTERACTIVE_PARAMS{ this, _( "Select reference point..." ) } );
-
+    // Hide, but do not close, the dialog
     Hide();
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectPointInteractively,
+                          PCB_PICKER_TOOL::INTERACTIVE_PARAMS { this, _( "Select reference point..." ) } );
 }
 
 
