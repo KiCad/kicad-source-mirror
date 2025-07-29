@@ -65,10 +65,10 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
     if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
     {
         Freeze();
-        m_gridSizer->SetItemPosition( m_cbSymbols, wxGBPosition( 5, 0 ) );
-        m_gridSizer->SetItemPosition( m_cbWires, wxGBPosition( 5, 1 ) );
-        m_gridSizer->SetItemPosition( m_cbLabels, wxGBPosition( 6, 0 ) );
-        m_gridSizer->SetItemPosition( m_cbImages, wxGBPosition( 6, 1 ) );
+        m_gridSizer->SetItemPosition( m_cbSymbols, wxGBPosition( 6, 0 ) );
+        m_gridSizer->SetItemPosition( m_cbWires, wxGBPosition( 6, 1 ) );
+        m_gridSizer->SetItemPosition( m_cbLabels, wxGBPosition( 7, 0 ) );
+        m_gridSizer->SetItemPosition( m_cbImages, wxGBPosition( 7, 1 ) );
         m_cbSymbols->Hide();
         m_cbWires->Hide();
         m_cbLabels->Hide();
