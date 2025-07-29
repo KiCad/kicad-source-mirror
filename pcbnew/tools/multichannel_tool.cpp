@@ -81,10 +81,11 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
     PCBEXPR_UCODE    ucode;
     PCBEXPR_CONTEXT  ctx, preflightCtx;
 
-    auto reportError = [&]( const wxString& aMessage, int aOffset )
-    {
-        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
-    };
+    auto reportError =
+            [&]( const wxString& aMessage, int aOffset )
+            {
+                wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
+            };
 
     ctx.SetErrorCallback( reportError );
     preflightCtx.SetErrorCallback( reportError );
@@ -111,18 +112,18 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
     auto ok = compiler.Compile( ruleText, &ucode, &preflightCtx );
 
     if( !ok )
-    {
         return false;
-    }
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
         ctx.SetItems( fp, fp );
-        auto val = ucode.Run( &ctx );
+        LIBEVAL::VALUE* val = ucode.Run( &ctx );
+
         if( val->AsDouble() != 0.0 )
         {
-            wxLogTrace( traceMultichannelTool, wxT( " - %s [sheet %s]" ), fp->GetReference(),
-                                                  fp->GetSheetname() );
+            wxLogTrace( traceMultichannelTool, wxT( " - %s [sheet %s]" ),
+                        fp->GetReference(),
+                        fp->GetSheetname() );
 
             aComponents.insert( fp );
         }
@@ -140,10 +141,11 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
     PCBEXPR_UCODE    ucode;
     PCBEXPR_CONTEXT  ctx, preflightCtx;
 
-    auto reportError = [&]( const wxString& aMessage, int aOffset )
-    {
-        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
-    };
+    auto reportError =
+            [&]( const wxString& aMessage, int aOffset )
+            {
+                wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
+            };
 
     ctx.SetErrorCallback( reportError );
     preflightCtx.SetErrorCallback( reportError );
@@ -168,14 +170,14 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
     }
 
     auto testAndAdd =
-        [&]( BOARD_ITEM* aItem )
-        {
-            ctx.SetItems( aItem, aItem );
-            auto val = ucode.Run( &ctx );
+            [&]( BOARD_ITEM* aItem )
+            {
+                ctx.SetItems( aItem, aItem );
+                auto val = ucode.Run( &ctx );
 
-            if( val->AsDouble() != 0.0 )
-                aItems.insert( aItem );
-        };
+                if( val->AsDouble() != 0.0 )
+                    aItems.insert( aItem );
+            };
 
     for( ZONE* zone : board()->Zones() )
     {
@@ -199,7 +201,7 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
                     if( aItem->IsType( { PCB_ZONE_T, PCB_SHAPE_T, PCB_DIMENSION_T } ) )
                     {
                         ctx.SetItems( aItem, aItem );
-                        auto val = ucode.Run( &ctx );
+                        LIBEVAL::VALUE* val = ucode.Run( &ctx );
 
                         if( val->AsDouble() == 0.0 )
                             addGroup = false;
@@ -221,19 +223,18 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
 std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInSheet( wxString aSheetName ) const
 {
     std::set<FOOTPRINT*> rv;
+
     if( aSheetName.EndsWith( wxT( "/" ) ) )
         aSheetName.RemoveLast();
 
-    for( auto& fp : board()->Footprints() )
+    for( FOOTPRINT* fp : board()->Footprints() )
     {
         auto sn = fp->GetSheetname();
         if( sn.EndsWith( wxT( "/" ) ) )
             sn.RemoveLast();
 
         if( sn == aSheetName )
-        {
             rv.insert( fp );
-        }
     }
 
     return rv;
@@ -245,7 +246,7 @@ MULTICHANNEL_TOOL::queryComponentsInComponentClass( const wxString& aComponentCl
 {
     std::set<FOOTPRINT*> rv;
 
-    for( auto& fp : board()->Footprints() )
+    for( FOOTPRINT* fp : board()->Footprints() )
     {
         if( fp->GetComponentClass()->ContainsClassName( aComponentClassName ) )
             rv.insert( fp );
@@ -255,12 +256,11 @@ MULTICHANNEL_TOOL::queryComponentsInComponentClass( const wxString& aComponentCl
 }
 
 
-std::set<FOOTPRINT*>
-MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& aGroupName ) const
+std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& aGroupName ) const
 {
     std::set<FOOTPRINT*> rv;
 
-    for( auto& group : board()->Groups() )
+    for( PCB_GROUP* group : board()->Groups() )
     {
         if( group->GetName() == aGroupName )
         {
@@ -282,7 +282,7 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
     std::vector<VECTOR2I> bbCorners;
     bbCorners.reserve( aFootprints.size() * 4 );
 
-    for( auto fp : aFootprints )
+    for( FOOTPRINT* fp : aFootprints )
     {
         const BOX2I bb = fp->GetBoundingBox( false ).GetInflated( aMargin );
         KIGEOM::CollectBoxCorners( bb, bbCorners );
@@ -332,7 +332,9 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
         m_areas.m_areas.push_back( ent );
 
         wxLogTrace( traceMultichannelTool, wxT("found sheet '%s' @ '%s' s %d\n"),
-            ent.m_sheetName, ent.m_sheetPath, (int)m_areas.m_areas.size() );
+                    ent.m_sheetName,
+                    ent.m_sheetPath,
+                    (int) m_areas.m_areas.size() );
     }
 
     for( const wxString& compClass : uniqueComponentClasses )
@@ -346,7 +348,8 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
         m_areas.m_areas.push_back( ent );
 
         wxLogTrace( traceMultichannelTool, wxT( "found component class '%s' s %d\n" ),
-                    ent.m_componentClass, static_cast<int>( m_areas.m_areas.size() ) );
+                    ent.m_componentClass,
+                    static_cast<int>( m_areas.m_areas.size() ) );
     }
 
     for( const wxString& groupName : uniqueGroups )
@@ -360,7 +363,8 @@ void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
         m_areas.m_areas.push_back( ent );
 
         wxLogTrace( traceMultichannelTool, wxT( "found group '%s' s %d\n" ),
-                    ent.m_componentClass, static_cast<int>( m_areas.m_areas.size() ) );
+                    ent.m_componentClass,
+                    static_cast<int>( m_areas.m_areas.size() ) );
     }
 }
 
@@ -373,6 +377,7 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
     {
         if( !zone->GetIsRuleArea() )
             continue;
+
         if( !zone->GetPlacementAreaEnabled() )
             continue;
 
@@ -387,7 +392,9 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
         area.m_center = zone->Outline()->COutline( 0 ).Centre();
         m_areas.m_areas.push_back( area );
 
-        wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"), area.m_ruleName, (int) area.m_raFootprints.size() );
+        wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"),
+                    area.m_ruleName,
+                    (int) area.m_raFootprints.size() );
     }
 
     wxLogTrace( traceMultichannelTool, wxT("Total RAs found: %d\n"), (int) m_areas.m_areas.size() );
@@ -416,21 +423,22 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 {
     std::vector<ZONE*> refRAs;
 
-    auto isSelectedItemAnRA = []( EDA_ITEM* aItem ) -> ZONE*
-        {
-            if( !aItem || aItem->Type() != PCB_ZONE_T )
-                return nullptr;
+    auto isSelectedItemAnRA =
+            []( EDA_ITEM* aItem ) -> ZONE*
+            {
+                if( !aItem || aItem->Type() != PCB_ZONE_T )
+                    return nullptr;
 
-            ZONE* zone = static_cast<ZONE*>( aItem );
+                ZONE* zone = static_cast<ZONE*>( aItem );
 
-            if( !zone->GetIsRuleArea() )
-                return nullptr;
+                if( !zone->GetIsRuleArea() )
+                    return nullptr;
 
-            if( !zone->GetPlacementAreaEnabled() )
-                return nullptr;
+                if( !zone->GetPlacementAreaEnabled() )
+                    return nullptr;
 
-            return zone;
-        };
+                return zone;
+            };
 
     for( EDA_ITEM* item : selection() )
     {
@@ -445,9 +453,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
             for( EDA_ITEM* grpItem : group->GetItems() )
             {
                 if( auto grpZone = isSelectedItemAnRA( grpItem ) )
-                {
                     refRAs.push_back( grpZone );
-                }
             }
         }
     }
@@ -476,8 +482,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
     if( m_areas.m_areas.size() <= 1 )
     {
-        frame()->ShowInfoBarError( _( "No Rule Areas to repeat layout to have been found." ),
-                                    true );
+        frame()->ShowInfoBarError( _( "No Rule Areas to repeat layout to have been found." ), true );
         return 0;
     }
 
@@ -583,10 +588,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
     commit.Push( _( "Repeat layout" ) );
 
     if( Pgm().IsGUI() )
-    {
-        frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ),
-                                 true );
-    }
+        frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ), true );
 
     return 0;
 }
@@ -602,6 +604,7 @@ wxString MULTICHANNEL_TOOL::stripComponentIndex( const wxString& aRef ) const
     {
         if( !k.IsAscii() )
             break;
+
         char c;
         k.GetAsChar( &c );
 
@@ -647,24 +650,23 @@ int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&            
         aRA->m_area->SetZoneName( aRA->m_area->m_Uuid.AsString() );
     }
 
-    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ),
-                                          aRA->m_area->GetZoneName() );
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRA->m_area->GetZoneName() );
 
     auto testAndAdd =
-        [&]( BOARD_CONNECTED_ITEM* aItem )
-        {
-            if( aOutput.contains( aItem ) )
-                return;
-
-            ctx.SetItems( aItem, aItem );
-            auto val = ucode.Run( &ctx );
-
-            if( val->AsDouble() != 0.0 )
+            [&]( BOARD_CONNECTED_ITEM* aItem )
             {
-                aOutput.insert( aItem );
-                count++;
-            }
-        };
+                if( aOutput.contains( aItem ) )
+                    return;
+
+                ctx.SetItems( aItem, aItem );
+                LIBEVAL::VALUE* val = ucode.Run( &ctx );
+
+                if( val->AsDouble() != 0.0 )
+                {
+                    aOutput.insert( aItem );
+                    count++;
+                }
+            };
 
     if( compiler.Compile( ruleText, &ucode, &preflightCtx ) )
     {
@@ -691,6 +693,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     FOOTPRINT* targetAnchorFp = nullptr;
     VECTOR2I disp = aTargetArea->m_center - aRefArea->m_center;
     EDA_ANGLE rot = EDA_ANGLE( 0 );
+
     if( aOpts.m_anchorFp )
     {
         for( auto& fpPair : aMatches )
@@ -804,8 +807,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
         for( BOARD_ITEM* item : targetItems )
         {
-            if( item->Type() == PCB_TEXT_T && item->GetParent()
-                && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+            if( item->Type() == PCB_TEXT_T && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
                 continue;
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
@@ -847,8 +849,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
         for( BOARD_ITEM* item : sourceItems )
         {
-            if( item->Type() == PCB_TEXT_T && item->GetParent()
-                && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+            if( item->Type() == PCB_TEXT_T && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
                 continue;
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
@@ -860,17 +861,14 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             {
                 if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
+
                 if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
 
                 if( item->Type() == PCB_GROUP_T )
-                {
                     copied = static_cast<PCB_GROUP*>( item )->DeepClone();
-                }
                 else
-                {
                     copied = static_cast<BOARD_ITEM*>( item->Clone() );
-                }
             }
             else
             {
@@ -981,8 +979,8 @@ void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_IT
                                   TMATCH::COMPONENT_MATCHES& aComponentMatches )
 {
     auto                                     connectivity = board()->GetConnectivity();
-    const std::vector<BOARD_CONNECTED_ITEM*> refConnectedPads =
-            connectivity->GetNetItems( aRef->GetNetCode(), { PCB_PAD_T } );
+    const std::vector<BOARD_CONNECTED_ITEM*> refConnectedPads = connectivity->GetNetItems( aRef->GetNetCode(),
+                                                                                           { PCB_PAD_T } );
 
     for( const BOARD_CONNECTED_ITEM* refConItem : refConnectedPads )
     {
@@ -1014,8 +1012,8 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 {
     using namespace TMATCH;
 
-    std::unique_ptr<CONNECTION_GRAPH> cgRef ( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_raFootprints ) );
-    std::unique_ptr<CONNECTION_GRAPH> cgTarget ( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_raFootprints ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_raFootprints ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgTarget( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_raFootprints ) );
 
     auto status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents );
 
@@ -1109,6 +1107,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     {
         if( !zone->GetIsRuleArea() )
             continue;
+
         if( !zone->GetPlacementAreaEnabled() )
             continue;
 
@@ -1174,7 +1173,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_groupName ) );
 
         wxLogTrace( traceMultichannelTool, wxT( "Generated rule area '%s' (%d components)\n" ),
-                    newZone->GetZoneName(), (int) ra.m_components.size() );
+                    newZone->GetZoneName(),
+                    (int) ra.m_components.size() );
 
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
@@ -1205,9 +1205,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
 
         if( ra.m_existsAlready )
-        {
             commit.Remove( ra.m_oldArea );
-        }
 
         ra.m_area = newZone.release();
         commit.Add( ra.m_area );
@@ -1228,8 +1226,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
             std::unordered_set<BOARD_ITEM*> toPrune;
 
-            std::copy( ra.m_components.begin(), ra.m_components.end(),
-                       std::inserter( toPrune, toPrune.begin() ) );
+            std::copy( ra.m_components.begin(), ra.m_components.end(), std::inserter( toPrune, toPrune.begin() ) );
 
             if( ra.m_existsAlready )
                 toPrune.insert( ra.m_area );

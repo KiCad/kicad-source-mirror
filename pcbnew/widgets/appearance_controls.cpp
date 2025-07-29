@@ -402,8 +402,7 @@ LAYER_PRESET APPEARANCE_CONTROLS::presetBackAssembly( _HKI( "Back Assembly View"
 LAYER_PRESET APPEARANCE_CONTROLS::m_lastBuiltinPreset;
 
 
-APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner,
-                                          bool aFpEditorMode ) :
+APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, bool aFpEditorMode ) :
         APPEARANCE_CONTROLS_BASE( aParent ),
         m_frame( aParent ),
         m_focusOwner( aFocusOwner ),
@@ -417,10 +416,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     // Correct the min size from wxformbuilder not using fromdip
     SetMinSize( FromDIP( GetMinSize() ) );
 
-    int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
-    m_iconProvider    = new ROW_ICON_PROVIDER( KIUI::c_IndicatorSizeDIP, this );
-    m_pointSize       = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
-
+    int screenHeight   = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+    m_iconProvider     = new ROW_ICON_PROVIDER( KIUI::c_IndicatorSizeDIP, this );
+    m_pointSize        = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
     m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
     SetBorders( true, false, false, false );
 
@@ -531,8 +529,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 syncLayerPresetSelection();
             } );
 
-    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER(
-            KiBitmapBundle( BITMAPS::visibility ), KiBitmapBundle( BITMAPS::visibility_off ) );
+    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmapBundle( BITMAPS::visibility ),
+                                                            KiBitmapBundle( BITMAPS::visibility_off ) );
 
     m_netsGrid->RegisterDataType( wxT( "bool" ), m_toggleGridRenderer, new wxGridCellBoolEditor );
 
@@ -564,12 +562,10 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_netsGrid->SetDefaultCellFont( font );
     m_netsGrid->SetDefaultRowSize( font.GetPixelSize().y + rowHeightPadding );
 
-    m_netsGrid->GetGridWindow()->Bind( wxEVT_MOTION, &APPEARANCE_CONTROLS::OnNetGridMouseEvent,
-                                       this );
+    m_netsGrid->GetGridWindow()->Bind( wxEVT_MOTION, &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
 
     // To handle middle click on color swatches
-    m_netsGrid->GetGridWindow()->Bind( wxEVT_MIDDLE_UP, &APPEARANCE_CONTROLS::OnNetGridMouseEvent,
-                                       this );
+    m_netsGrid->GetGridWindow()->Bind( wxEVT_MIDDLE_UP, &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
 
     m_netsGrid->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
     m_netclassScrolledWindow->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
@@ -986,14 +982,9 @@ void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
         wxString tip;
 
         if( cell.GetCol() == NET_GRID_TABLE::COL_VISIBILITY )
-        {
             tip.Printf( showOrHide, name );
-        }
         else if( cell.GetCol() == NET_GRID_TABLE::COL_COLOR )
-        {
-            tip = _( "Double click (or middle click) to change color; "
-                     "right click for more actions" );
-        }
+            tip = _( "Double click (or middle click) to change color; right click for more actions" );
 
         m_netsGrid->GetGridWindow()->SetToolTip( tip );
     }
@@ -1468,9 +1459,14 @@ void APPEARANCE_CONTROLS::loadDefaultLayerPresets()
     m_layerPresets.clear();
 
     // Load the read-only defaults
-    for( const LAYER_PRESET& preset :
-         { presetAllLayers, presetNoLayers, presetAllCopper, presetInnerCopper, presetFront,
-           presetFrontAssembly, presetBack, presetBackAssembly } )
+    for( const LAYER_PRESET& preset : { presetAllLayers,
+                                        presetNoLayers,
+                                        presetAllCopper,
+                                        presetInnerCopper,
+                                        presetFront,
+                                        presetFrontAssembly,
+                                        presetBack,
+                                        presetBackAssembly } )
     {
         m_layerPresets[preset.name]          = preset;
         m_layerPresets[preset.name].readOnly = true;
@@ -1579,14 +1575,11 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
                 // TODO(JE) consider restyling this indicator
                 INDICATOR_ICON* indicator = new INDICATOR_ICON( panel, *m_iconProvider,
-                                                                ROW_ICON_PROVIDER::STATE::OFF,
-                                                                layer );
+                                                                ROW_ICON_PROVIDER::STATE::OFF, layer );
 
-                COLOR_SWATCH* swatch = new COLOR_SWATCH( panel, COLOR4D::UNSPECIFIED, layer,
-                                                         bgColor, theme->GetColor( layer ),
-                                                         SWATCH_SMALL );
-                swatch->SetToolTip( _( "Double click or middle click for color change, "
-                                       "right click for menu" ) );
+                COLOR_SWATCH* swatch = new COLOR_SWATCH( panel, COLOR4D::UNSPECIFIED, layer, bgColor,
+                                                         theme->GetColor( layer ), SWATCH_SMALL );
+                swatch->SetToolTip( _( "Double click or middle click for color change, right click for menu" ) );
 
                 BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( panel, layer,
                                                                 KiBitmapBundle( BITMAPS::visibility ),
@@ -1884,17 +1877,15 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 
     m_layerContextMenu->AppendSeparator();
 
-    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE,
-                       _( "Hide All Layers But Active" ), KiBitmap( BITMAPS::select_w_layer ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE, _( "Hide All Layers But Active" ),
+                       KiBitmap( BITMAPS::select_w_layer ) );
 
     m_layerContextMenu->AppendSeparator();
 
-    KIUI::AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_NON_COPPER,
-                       _( "Show All Non Copper Layers" ),
+    KIUI::AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_NON_COPPER, _( "Show All Non Copper Layers" ),
                        KiBitmap( BITMAPS::show_no_copper_layers ) );
 
-    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_NON_COPPER,
-                       _( "Hide All Non Copper Layers" ),
+    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_NON_COPPER, _( "Hide All Non Copper Layers" ),
                        KiBitmap( BITMAPS::show_all_copper_layers ) );
 
     m_layerContextMenu->AppendSeparator();
@@ -1907,8 +1898,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 
     m_layerContextMenu->AppendSeparator();
 
-    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY,
-                       _( "Show Only Front Assembly Layers" ),
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY, _( "Show Only Front Assembly Layers" ),
                        KiBitmap( BITMAPS::show_front_assembly_layers ) );
 
     KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
@@ -1917,16 +1907,14 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
     // Only show the internal layer option if internal layers are enabled
     if( m_frame->GetBoard()->GetCopperLayerCount() > 2 )
     {
-        KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_INNER_COPPER,
-                           _( "Show Only Inner Layers" ),
-                     KiBitmap( BITMAPS::show_all_copper_layers ) );
+        KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_INNER_COPPER, _( "Show Only Inner Layers" ),
+                           KiBitmap( BITMAPS::show_all_copper_layers ) );
     }
 
     KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_BACK, _( "Show Only Back Layers" ),
                        KiBitmap( BITMAPS::show_all_back_layers ) );
 
-    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_BACK_ASSEMBLY,
-                       _( "Show Only Back Assembly Layers" ),
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_BACK_ASSEMBLY, _( "Show Only Back Assembly Layers" ),
                        KiBitmap( BITMAPS::show_back_assembly_layers ) );
 }
 
@@ -2122,8 +2110,7 @@ void APPEARANCE_CONTROLS::onLayerVisibilityToggled( PCB_LAYER_ID aLayer )
 }
 
 
-void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool isVisible,
-                                                     bool isFinal )
+void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool isVisible, bool isFinal )
 {
     // Special-case controls
     switch( aLayer )
@@ -2206,8 +2193,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     int             swatchWidth = m_windowObjects->ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
     int             labelWidth = 0;
 
-    int btnWidth =
-            KiBitmapBundle( BITMAPS::visibility ).GetPreferredLogicalSizeFor( m_windowObjects ).x;
+    int btnWidth = KiBitmapBundle( BITMAPS::visibility ).GetPreferredLogicalSizeFor( m_windowObjects ).x;
 
     m_objectSettings.clear();
     m_objectsOuterSizer->Clear( true );
@@ -2233,11 +2219,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     sizer->Add( swatch, 0,  wxALIGN_CENTER_VERTICAL, 0 );
                     aSetting->ctl_color = swatch;
 
-                    swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged,
-                                  this );
+                    swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged, this );
 
-                    swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
-                                                            this ) );
+                    swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch, this ) );
                 }
                 else
                 {
@@ -2249,9 +2233,10 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
                 if( aSetting->can_control_visibility )
                 {
-                    btn_visible = new BITMAP_TOGGLE(
-                            m_windowObjects, layer, KiBitmapBundle( BITMAPS::visibility ),
-                            KiBitmapBundle( BITMAPS::visibility_off ), aSetting->visible );
+                    btn_visible = new BITMAP_TOGGLE( m_windowObjects, layer,
+                                                     KiBitmapBundle( BITMAPS::visibility ),
+                                                     KiBitmapBundle( BITMAPS::visibility_off ),
+                                                     aSetting->visible );
 
                     tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
                     btn_visible->SetToolTip( tip );
@@ -2295,8 +2280,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 #endif
 
                     wxSlider* slider = new wxSlider( m_windowObjects, wxID_ANY, 100, 0, 100,
-                                                     wxDefaultPosition, wxDefaultSize,
-                                                     wxSL_HORIZONTAL );
+                                                     wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 #ifdef __WXMAC__
                     slider->SetMinSize( wxSize( 80, 16 ) );
 #else
@@ -2425,9 +2409,9 @@ void APPEARANCE_CONTROLS::buildNetClassMenu( wxMenu& aMenu, bool isDefaultClass,
         aMenu.Append( new wxMenuItem( &aMenu, ID_SET_NET_COLOR, _( "Set Netclass Color" ),
                                       wxEmptyString, wxITEM_NORMAL ) );
 
-        wxMenuItem* schematicColor =
-                new wxMenuItem( &aMenu, ID_USE_SCHEMATIC_NET_COLOR, _( "Use Color from Schematic" ),
-                                wxEmptyString, wxITEM_NORMAL );
+        wxMenuItem* schematicColor = new wxMenuItem( &aMenu, ID_USE_SCHEMATIC_NET_COLOR,
+                                                     _( "Use Color from Schematic" ),
+                                                     wxEmptyString, wxITEM_NORMAL );
         std::shared_ptr<NETCLASS> nc = netSettings->GetNetClassByName( aName );
         const KIGFX::COLOR4D      ncColor = nc->GetSchematicColor();
         aMenu.Append( schematicColor );
@@ -2501,7 +2485,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                         : COLOR4D::UNSPECIFIED;
 
                 setting->ctl_color = new COLOR_SWATCH( setting->ctl_panel, color, aId, bgColor,
-                                                        COLOR4D::UNSPECIFIED, SWATCH_SMALL );
+                                                       COLOR4D::UNSPECIFIED, SWATCH_SMALL );
                 setting->ctl_color->SetToolTip( _( "Left double click or middle click for color "
                                                    "change, right click for menu" ) );
 
@@ -2512,9 +2496,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 if( isDefaultClass )
                     setting->ctl_color->Hide();
 
-                setting->ctl_visibility = new BITMAP_TOGGLE(
-                        setting->ctl_panel, aId, KiBitmapBundle( BITMAPS::visibility ),
-                        KiBitmapBundle( BITMAPS::visibility_off ), !hiddenClasses.count( name ) );
+                setting->ctl_visibility = new BITMAP_TOGGLE( setting->ctl_panel, aId,
+                                                             KiBitmapBundle( BITMAPS::visibility ),
+                                                             KiBitmapBundle( BITMAPS::visibility_off ),
+                                                             !hiddenClasses.count( name ) );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide ratsnest for nets in %s" ), name );
@@ -2525,11 +2510,11 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
                 int flags = wxALIGN_CENTER_VERTICAL;
 
-                sizer->Add( setting->ctl_color,      0, flags | wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+                sizer->Add( setting->ctl_color, 0, flags | wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
                 sizer->AddSpacer( 7 );
-                sizer->Add( setting->ctl_visibility, 0, flags,                                  5 );
+                sizer->Add( setting->ctl_visibility, 0, flags, 5 );
                 sizer->AddSpacer( 3 );
-                sizer->Add( setting->ctl_text,       1, flags,                                  5 );
+                sizer->Add( setting->ctl_text, 1, flags, 5 );
 
                 m_netclassOuterSizer->Add( setting->ctl_panel, 0, wxEXPAND, 5 );
                 m_netclassOuterSizer->AddSpacer( 2 );
@@ -2691,8 +2676,7 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
         m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
     }
 
-    m_currentPreset = static_cast<LAYER_PRESET*>(
-            m_cbLayerPresets->GetClientData( m_cbLayerPresets->GetSelection() ) );
+    m_currentPreset = static_cast<LAYER_PRESET*>( m_cbLayerPresets->GetClientData( m_cbLayerPresets->GetSelection() ) );
 }
 
 
@@ -2995,8 +2979,7 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
         // Save current state to new preset
         wxString name;
 
-        wxTextEntryDialog dlg( wxGetTopLevelParent( this ),
-                               _( "Viewport name:" ), _( "Save Viewport" ), name );
+        wxTextEntryDialog dlg( wxGetTopLevelParent( this ), _( "Viewport name:" ), _( "Save Viewport" ), name );
 
         if( dlg.ShowModal() != wxID_OK )
         {
@@ -3368,8 +3351,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             {
                 setting->ctl_color->SetSwatchColor( COLOR4D( 0, 0, 0, 0 ), true );
 
-                netSettings->GetNetClassByName( m_contextMenuNetclass )
-                        ->SetPcbColor( COLOR4D::UNSPECIFIED );
+                netSettings->GetNetClassByName( m_contextMenuNetclass )->SetPcbColor( COLOR4D::UNSPECIFIED );
                 netSettings->RecomputeEffectiveNetclasses();
 
                 view->UpdateAllLayersColor();
@@ -3382,8 +3364,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
         {
             if( setting )
             {
-                std::shared_ptr<NETCLASS> nc =
-                        netSettings->GetNetClassByName( m_contextMenuNetclass );
+                std::shared_ptr<NETCLASS> nc = netSettings->GetNetClassByName( m_contextMenuNetclass );
                 const KIGFX::COLOR4D ncColor = nc->GetSchematicColor();
 
                 setting->ctl_color->SetSwatchColor( ncColor, true );
@@ -3504,8 +3485,7 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
 {
     WX_INFOBAR* infobar = m_frame->GetInfoBar();
 
-    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ),
-                                                   wxEmptyString );
+    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ), wxEmptyString );
 
     button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
             [&]( wxHyperlinkEvent& aEvent )
@@ -3517,8 +3497,8 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
     infobar->AddButton( button );
     infobar->AddCloseButton();
 
-    infobar->ShowMessageFor( _( "The current color theme is read-only.  Create a new theme in "
-                                "Preferences to enable color editing." ),
+    infobar->ShowMessageFor( _( "The current color theme is read-only.  Create a new theme in Preferences to "
+                                "enable color editing." ),
                              10000, wxICON_INFORMATION );
 }
 

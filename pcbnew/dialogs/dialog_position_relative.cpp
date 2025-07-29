@@ -263,10 +263,9 @@ void DIALOG_POSITION_RELATIVE::updateAnchorInfo( const BOARD_ITEM* aItem )
     }
 
     case ANCHOR_POINT:
-        m_referenceInfo->SetLabel( wxString::Format(
-            _( "Reference location: selected point (%s, %s)" ),
-            m_parentFrame->MessageTextFromValue( m_anchorItemPosition.x ),
-            m_parentFrame->MessageTextFromValue( m_anchorItemPosition.y ) ) );
+        m_referenceInfo->SetLabel( wxString::Format( _( "Reference location: selected point (%s, %s)" ),
+                                                     m_parentFrame->MessageTextFromValue( m_anchorItemPosition.x ),
+                                                     m_parentFrame->MessageTextFromValue( m_anchorItemPosition.y ) ) );
         break;
     }
 }
