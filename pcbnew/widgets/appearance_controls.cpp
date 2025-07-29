@@ -219,16 +219,15 @@ int NET_GRID_TABLE::GetRowByNetcode( int aCode ) const
 
 void NET_GRID_TABLE::Rebuild()
 {
-    BOARD*              board = m_frame->GetBoard();
-    const NETNAMES_MAP& nets  = board->GetNetInfo().NetsByName();
-
-    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-            m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
+    BOARD*                      board = m_frame->GetBoard();
+    const NETNAMES_MAP&         nets  = board->GetNetInfo().NetsByName();
+    KIGFX::RENDER_SETTINGS*     renderSettings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
 
     std::set<int>&                 hiddenNets = rs->GetHiddenNets();
     std::map<int, KIGFX::COLOR4D>& netColors  = rs->GetNetColorMap();
 
-    int deleted = m_nets.size();
+    int deleted = (int) m_nets.size();
     m_nets.clear();
 
     if( GetView() )
@@ -243,8 +242,8 @@ void NET_GRID_TABLE::Rebuild()
 
         if( netCode > 0 && !pair.first.StartsWith( wxT( "unconnected-(" ) ) )
         {
-            COLOR4D color = netColors.count( netCode ) ? netColors.at( netCode ) :
-                            COLOR4D::UNSPECIFIED;
+            COLOR4D color = netColors.count( netCode ) ? netColors.at( netCode )
+                                                       : COLOR4D::UNSPECIFIED;
 
             bool visible = hiddenNets.count( netCode ) == 0;
 
@@ -261,7 +260,7 @@ void NET_GRID_TABLE::Rebuild()
 
     if( GetView() )
     {
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_nets.size() );
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, (int) m_nets.size() );
         GetView()->ProcessTableMessage( msg );
     }
 }
