@@ -39,6 +39,7 @@
 #define ARG_EXIT_CODE_VIOLATIONS "--exit-code-violations"
 #define ARG_PARITY "--schematic-parity"
 #define ARG_ZONE_FILL "--refill-zones"
+#define ARG_SAVE_BOARD "--save-board"
 
 CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 {
@@ -92,6 +93,10 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 
     m_argParser.add_argument( ARG_ZONE_FILL )
             .help( UTF8STDSTR( _( "Refill zones before running DRC" ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_SAVE_BOARD )
+            .help( UTF8STDSTR( _( "Save the board after DRC, must be used with --refill-zones" ) ) )
             .flag();
 }
 
@@ -169,6 +174,7 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
 
     drcJob->m_parity = m_argParser.get<bool>( ARG_PARITY );
     drcJob->m_refillZones = m_argParser.get<bool>( ARG_ZONE_FILL );
+    drcJob->m_saveBoard = m_argParser.get<bool>( ARG_SAVE_BOARD );
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, drcJob.get() );
 

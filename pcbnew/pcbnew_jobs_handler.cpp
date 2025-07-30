@@ -2208,6 +2208,20 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outPath ),
                         RPT_SEVERITY_ACTION );
 
+    if( drcJob->m_refillZones && drcJob->m_saveBoard )
+    {
+        if( SaveBoard( drcJob->m_filename, brd, true ) )
+        {
+            m_reporter->Report( _( "Saved board\n" ), RPT_SEVERITY_ACTION );
+        }
+        else
+        {
+            m_reporter->Report( _( "Failed to save board.\n" ), RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+    }
+
     if( drcJob->m_exitCodeViolations )
     {
         if( markersProvider->GetCount() > 0 || ratsnestProvider->GetCount() > 0

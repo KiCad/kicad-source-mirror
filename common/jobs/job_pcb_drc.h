@@ -33,4 +33,5 @@ public:
     bool m_parity;
 
     bool m_refillZones;
+    bool m_saveBoard;
 };
