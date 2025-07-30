@@ -1291,36 +1291,37 @@ int ERC_TESTER::TestSimilarLabels()
     int errors = 0;
     std::unordered_map<wxString, std::vector<std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>>> generalMap;
 
-    auto logError = [&]( const wxString& normalized, SCH_ITEM* item, const SCH_SHEET_PATH& sheet,
-                         const std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>& other )
-    {
-        auto& [otherText, otherItem, otherSheet] = other;
-        ERCE_T typeOfWarning = ERCE_SIMILAR_LABELS;
+    auto logError =
+            [&]( const wxString& normalized, SCH_ITEM* item, const SCH_SHEET_PATH& sheet,
+                 const std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>& other )
+            {
+                auto& [otherText, otherItem, otherSheet] = other;
+                ERCE_T typeOfWarning = ERCE_SIMILAR_LABELS;
 
-        if( item->Type() == SCH_PIN_T && otherItem->Type() == SCH_PIN_T )
-        {
-            //Two Pins
-            typeOfWarning = ERCE_SIMILAR_POWER;
-        }
-        else if( item->Type() == SCH_PIN_T || otherItem->Type() == SCH_PIN_T )
-        {
-            //Pin and Label
-            typeOfWarning = ERCE_SIMILAR_LABEL_AND_POWER;
-        }
-        else
-        {
-            //Two Labels
-            typeOfWarning = ERCE_SIMILAR_LABELS;
-        }
+                if( item->Type() == SCH_PIN_T && otherItem->Type() == SCH_PIN_T )
+                {
+                    //Two Pins
+                    typeOfWarning = ERCE_SIMILAR_POWER;
+                }
+                else if( item->Type() == SCH_PIN_T || otherItem->Type() == SCH_PIN_T )
+                {
+                    //Pin and Label
+                    typeOfWarning = ERCE_SIMILAR_LABEL_AND_POWER;
+                }
+                else
+                {
+                    //Two Labels
+                    typeOfWarning = ERCE_SIMILAR_LABELS;
+                }
 
-        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( typeOfWarning );
-        ercItem->SetItems( item, otherItem );
-        ercItem->SetSheetSpecificPath( sheet );
-        ercItem->SetItemsSheetPaths( sheet, otherSheet );
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( typeOfWarning );
+                ercItem->SetItems( item, otherItem );
+                ercItem->SetSheetSpecificPath( sheet );
+                ercItem->SetItemsSheetPaths( sheet, otherSheet );
 
-        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), item->GetPosition() );
-        sheet.LastScreen()->Append( marker );
-    };
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), item->GetPosition() );
+                sheet.LastScreen()->Append( marker );
+            };
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
@@ -1360,9 +1361,7 @@ int ERC_TESTER::TestSimilarLabels()
                     SCH_PIN* pin = static_cast<SCH_PIN*>( item );
 
                     if( !pin->IsPower() )
-                    {
                         continue;
-                    }
 
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
                     wxString    unnormalized = symbol->GetValue( true, &sheet, false );
@@ -1390,6 +1389,7 @@ int ERC_TESTER::TestSimilarLabels()
             }
         }
     }
+
     return errors;
 }
 
