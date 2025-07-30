@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:09-0700\n"
-"PO-Revision-Date: 2025-07-21 13:20+0000\n"
+"PO-Revision-Date: 2025-07-31 03:06+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -5775,7 +5775,7 @@ msgstr "网络类分配"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:147
 msgid "Pattern"
-msgstr "匹配规则"
+msgstr "匹配规则 (支持正则表达式)"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:148
 #: eeschema/sch_field.cpp:1122 eeschema/sch_label.cpp:208
@@ -18493,9 +18493,8 @@ msgid "&Duplicate '%s'"
 msgstr "创建 '%s' 的副本 (&D)"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "切换单位"
+msgstr "交换单位"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20309,24 +20308,21 @@ msgstr "单元格高度"
 
 #: eeschema/sch_tablecell.cpp:238 pcbnew/pcb_tablecell.cpp:255
 msgid "Column Width"
-msgstr "列宽度"
+msgstr "单元格宽度"
 
 #: eeschema/sch_tablecell.cpp:243 pcbnew/pcb_tablecell.cpp:260
 msgid "Row Height"
-msgstr "行高度"
+msgstr "单元格高度"
 
 #: eeschema/sch_tablecell.cpp:248
-#, fuzzy
 msgid "Cell Properties"
-msgstr "使用所有属性"
+msgstr "单元格属性"
 
 #: eeschema/sch_tablecell.cpp:250
-#, fuzzy
 msgid "Background Fill"
 msgstr "背景填充"
 
 #: eeschema/sch_tablecell.cpp:254
-#, fuzzy
 msgid "Background Fill Color"
 msgstr "背景颜色"
 
@@ -24130,14 +24126,12 @@ msgid "All units of this symbol are already placed."
 msgstr "该符号的所有单元均已放置。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:821
-#, fuzzy
 msgid "Add Design Block"
 msgstr "添加设计图块"
 
 #: eeschema/tools/sch_drawing_tools.cpp:822
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "导入原理图图纸内容..."
+msgstr "导入原理图图纸内容"
 
 #: eeschema/tools/sch_drawing_tools.cpp:856
 msgid "Choose Schematic"
@@ -24389,7 +24383,7 @@ msgstr "网络必须标记才能分配网络类。"
 #: eeschema/tools/sch_editor_control.cpp:1718 pcbnew/tools/pcb_control.cpp:1099
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr "粘贴长文本字符串可能会非常慢。是否继续?"
+msgstr "粘贴长文本字符串可能会引起卡顿。是否继续?"
 
 #: eeschema/tools/sch_editor_control.cpp:1838
 #, c-format
@@ -24398,12 +24392,12 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"粘贴的图纸 \"%s\"\n"
-"被丢弃, 因为目标已有该图纸或其子图纸之一作为父级。"
+"已放弃粘贴图纸 '%s'\n"
+"因为目标位置已将该图纸或其子图纸作为父图纸。"
 
 #: eeschema/tools/sch_editor_control.cpp:2412
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "无法编辑有损坏的库符号链接的符号。"
+msgstr "无法编辑包含损坏的库符号链接的符号。"
 
 #: eeschema/tools/sch_editor_control.cpp:2501
 msgid "Increment Annotations"
@@ -24619,7 +24613,7 @@ msgstr "未选中符号库。"
 #: eeschema/tools/symbol_editor_control.cpp:457
 #, c-format
 msgid "Symbol library '%s' not found."
-msgstr "找不到符号库 '%s'。"
+msgstr "符号库 '%s' 未找到。"
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -26958,7 +26952,7 @@ msgstr "侧光仰角, 单位为度, 取值范围: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
 msgid "Invalid preset\n"
-msgstr "无效预设\n"
+msgstr "无效的预设\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -27213,7 +27207,7 @@ msgstr "忽略非零退出代码"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 msgid "Available text variables:"
-msgstr "可用文本变量："
+msgstr "可用文本变量:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -34294,7 +34288,6 @@ msgid "New footprint library id:"
 msgstr "新封装的库标识:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr "移除在来源库封装中不存在的文本项目"
 
@@ -38152,7 +38145,7 @@ msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
 msgid "Lights Intensity"
-msgstr "光强"
+msgstr "光源强度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:285
 msgid "Camera:"
