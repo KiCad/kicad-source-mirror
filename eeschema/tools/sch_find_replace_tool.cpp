@@ -41,7 +41,11 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     SCH_SEARCH_DATA* schSearchData = dynamic_cast<SCH_SEARCH_DATA*>( &data );
+    SCH_SHEET_PATH*  sheetPath = nullptr;
     bool             selectedOnly = schSearchData ? schSearchData->searchSelectedOnly : false;
+
+    if( m_frame->GetFrameType() == FRAME_SCH )
+        sheetPath = &static_cast<SCH_EDIT_FRAME*>( m_frame )->GetCurrentSheet();
 
     auto visit =
             [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
@@ -49,10 +53,10 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                 // We may get triggered when the dialog is not opened due to binding
                 // SelectedItemsModified we also get triggered when the find dialog is
                 // closed....so we need to double check the dialog is open.
-                if( m_frame->m_findReplaceDialog != nullptr
-                    && !data.findString.IsEmpty()
-                    && aItem->Matches( data, aSheet )
-                    && ( !selectedOnly || aItem->IsSelected() ) )
+                if( m_frame->GetFindReplaceDialog() != nullptr
+                        && !data.findString.IsEmpty()
+                        && aItem->Matches( data, aSheet )
+                        && ( !selectedOnly || aItem->IsSelected() ) )
                 {
                     aItem->SetForceVisible( true );
                     m_selectionTool->BrightenItem( aItem );
@@ -68,8 +72,19 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
     auto visitAll =
             [&]()
             {
-                for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
-                    visit( item, &m_frame->GetCurrentSheet() );
+                if( SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) )
+                {
+                    if( LIB_SYMBOL* symbol = symbolEditor->GetCurSymbol() )
+                    {
+                        for( SCH_ITEM& item : symbol->GetDrawItems() )
+                            visit( &item, nullptr );
+                    }
+                }
+                else
+                {
+                    for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
+                        visit( item, sheetPath );
+                }
             };
 
     if( aEvent.IsAction( &ACTIONS::find ) || aEvent.IsAction( &ACTIONS::findAndReplace )
@@ -81,14 +96,14 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
     else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
     {
         for( EDA_ITEM* item : m_selectionTool->GetSelection() )
-            visit( item, &m_frame->GetCurrentSheet() );
+            visit( item, sheetPath );
     }
     else if( aEvent.Matches( EVENTS::PointSelectedEvent )
              || aEvent.Matches( EVENTS::SelectedEvent )
              || aEvent.Matches( EVENTS::UnselectedEvent )
              || aEvent.Matches( EVENTS::ClearedEvent ) )
     {
-        if( !m_frame->m_findReplaceDialog )
+        if( !m_frame->GetFindReplaceDialog() )
         {
             if( m_foundItemHighlighted )
             {
@@ -112,15 +127,13 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
 
     getView()->UpdateItems();
     m_frame->GetCanvas()->Refresh();
-    m_frame->updateTitle();
 
     return 0;
 }
 
 
-SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet,
-                                            SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData,
-                                            bool reversed )
+SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, SCH_ITEM* aAfter,
+                                            EDA_SEARCH_DATA& aData, bool reversed )
 {
     SCH_SEARCH_DATA*       schSearchData = dynamic_cast<SCH_SEARCH_DATA*>( &aData );
     bool                   selectedOnly = schSearchData ? schSearchData->searchSelectedOnly : false;
@@ -165,6 +178,14 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
     {
         for( EDA_ITEM* item : m_selectionTool->GetSelection() )
             addItem( static_cast<SCH_ITEM*>( item ) );
+    }
+    else if( SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) )
+    {
+        if( LIB_SYMBOL* symbol = symbolEditor->GetCurSymbol() )
+        {
+            for( SCH_ITEM& item : symbol->GetDrawItems() )
+                addItem( &item );
+        }
     }
     else
     {
@@ -217,12 +238,19 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     bool             selectedOnly    = false;
     bool             isReversed      = aEvent.IsAction( &ACTIONS::findPrevious );
     SCH_ITEM*        item            = nullptr;
-    SCH_SHEET_PATH*  afterSheet      = &m_frame->GetCurrentSheet();
+    SCH_SHEET_PATH*  currentSheet    = nullptr;
+    SCH_SHEET_PATH*  afterSheet      = nullptr;
 
     try
     {
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
-        searchAllSheets = !( schSearchData.searchCurrentSheetOnly );
+
+        if( m_frame->GetFrameType() == FRAME_SCH )
+        {
+            currentSheet = afterSheet = &static_cast<SCH_EDIT_FRAME*>( m_frame )->GetCurrentSheet();
+            searchAllSheets = !schSearchData.searchCurrentSheetOnly;
+        }
+
         selectedOnly = schSearchData.searchSelectedOnly;
     }
     catch( const std::bad_cast& )
@@ -243,47 +271,47 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     }
 
     if( afterSheet || !searchAllSheets )
-    {
-        item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), m_afterItem, data,
-                          isReversed );
-    }
+        item = nextMatch( m_frame->GetScreen(), currentSheet, m_afterItem, data, isReversed );
 
     if( !item && searchAllSheets )
     {
-        SCH_SCREENS    screens( m_frame->Schematic().Root() );
-        SCH_SHEET_LIST paths;
-
-        screens.BuildClientSheetPathList();
-
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
         {
-            for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
-                paths.push_back( sheet );
-        }
+            SCH_SCREENS    screens( editFrame->Schematic().Root() );
+            SCH_SHEET_LIST paths;
 
-        paths.SortByPageNumbers( false );
+            screens.BuildClientSheetPathList();
 
-        if( isReversed )
-            std::reverse( paths.begin(), paths.end() );
-
-        for( SCH_SHEET_PATH& sheet : paths )
-        {
-            if( afterSheet )
+            for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
             {
-                if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
-                    afterSheet = nullptr;
-
-                continue;
+                for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
+                    paths.push_back( sheet );
             }
 
-            item = nextMatch( sheet.LastScreen(), &sheet, nullptr, data, isReversed );
+            paths.SortByPageNumbers( false );
 
-            if( item )
+            if( isReversed )
+                std::reverse( paths.begin(), paths.end() );
+
+            for( SCH_SHEET_PATH& sheet : paths )
             {
-                if( m_frame->Schematic().CurrentSheet() != sheet )
-                    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheet );
+                if( afterSheet )
+                {
+                    if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
+                        afterSheet = nullptr;
 
-                break;
+                    continue;
+                }
+
+                item = nextMatch( sheet.LastScreen(), &sheet, nullptr, data, isReversed );
+
+                if( item )
+                {
+                    if( editFrame->Schematic().CurrentSheet() != sheet )
+                        editFrame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheet );
+
+                    break;
+                }
             }
         }
     }
@@ -314,12 +342,17 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxString msg = searchAllSheets ? _( "Reached end of schematic." )
-                                       : _( "Reached end of sheet." );
+        wxString msg;
+
+        if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+            msg = _( "Reached end of symbol." );
+        else if( searchAllSheets )
+            msg = _( "Reached end of schematic." );
+        else
+            msg = _( "Reached end of sheet." );
 
        // Show the popup during the time period the user can wrap the search
-        m_frame->ShowFindReplaceStatus( msg + wxS( " " ) +
-                                        _( "Find again to wrap around to the start." ), 4000 );
+        m_frame->ShowFindReplaceStatus( msg + wxS( " " ) + _( "Find again to wrap around to the start." ), 4000 );
         m_wrapAroundTimer.StartOnce( 4000 );
     }
 
@@ -339,8 +372,12 @@ bool SCH_FIND_REPLACE_TOOL::HasMatch()
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     EDA_ITEM*        match = getCurrentMatch();
+    SCH_SHEET_PATH*  sheetPath = nullptr;
 
-    return match && match->Matches( data, &m_frame->GetCurrentSheet() );
+    if( m_frame->GetFrameType() == FRAME_SCH )
+        sheetPath = &static_cast<SCH_EDIT_FRAME*>( m_frame )->GetCurrentSheet();
+
+    return match && match->Matches( data, sheetPath );
 }
 
 
@@ -348,7 +385,10 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     EDA_ITEM*        item = getCurrentMatch();
-    SCH_SHEET_PATH*  sheet = &m_frame->GetCurrentSheet();
+    SCH_SHEET_PATH*  currentSheet = nullptr;
+
+    if( m_frame->GetFrameType() == FRAME_SCH )
+        currentSheet = &static_cast<SCH_EDIT_FRAME*>( m_frame )->GetCurrentSheet();
 
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
@@ -358,11 +398,13 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
         SCH_COMMIT commit( m_frame );
         SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
 
-        commit.Modify( sch_item, sheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
+        commit.Modify( sch_item, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
 
-        if( item->Replace( data, sheet ) )
+        if( item->Replace( data, currentSheet ) )
         {
-            m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+            if( currentSheet )
+                currentSheet->UpdateAllScreenReferences();
+
             commit.Push( wxS( "Find and Replace" ) );
         }
 
@@ -376,14 +418,21 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 {
     EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
-    bool             currentSheetOnly = false;
+    SCH_SHEET_PATH*  currentSheet = nullptr;
+    bool             currentSheetOnly = true;
     bool             selectedOnly = false;
 
     try
     {
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
-        currentSheetOnly = schSearchData.searchCurrentSheetOnly;
-        selectedOnly     = schSearchData.searchSelectedOnly;
+
+        if( m_frame->GetFrameType() == FRAME_SCH )
+        {
+            currentSheet = &static_cast<SCH_EDIT_FRAME*>( m_frame )->GetCurrentSheet();
+            currentSheetOnly = schSearchData.searchCurrentSheetOnly;
+        }
+
+        selectedOnly = schSearchData.searchSelectedOnly;
     }
     catch( const std::bad_cast& )
     {
@@ -398,7 +447,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     auto doReplace =
             [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, EDA_SEARCH_DATA& aData )
             {
-                commit.Modify( aItem, aSheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
+                commit.Modify( aItem, aSheet ? aSheet->LastScreen() : nullptr, RECURSE_MODE::NO_RECURSE );
 
                 if( aItem->Replace( aData, aSheet ) )
                 {
@@ -409,8 +458,6 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 
     if( currentSheetOnly || selectedOnly )
     {
-        SCH_SHEET_PATH* currentSheet = &m_frame->GetCurrentSheet();
-
         SCH_ITEM* item = nextMatch( m_frame->GetScreen(), currentSheet, nullptr, data, false );
 
         while( item )
@@ -421,10 +468,10 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
             item = nextMatch( m_frame->GetScreen(), currentSheet, item, data, false );
         }
     }
-    else
+    else if( SCH_EDIT_FRAME* schematicFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
     {
-        SCH_SHEET_LIST allSheets = m_frame->Schematic().Hierarchy();
-        SCH_SCREENS    screens( m_frame->Schematic().Root() );
+        SCH_SHEET_LIST allSheets = schematicFrame->Schematic().Hierarchy();
+        SCH_SCREENS    screens( schematicFrame->Schematic().Root() );
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         {
@@ -458,7 +505,9 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     if( modified )
     {
         commit.Push( wxS( "Find and Replace All" ) );
-        m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+
+        if( currentSheet )
+            currentSheet->UpdateAllScreenReferences();
     }
 
     return 0;

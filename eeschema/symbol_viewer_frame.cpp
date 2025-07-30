@@ -469,8 +469,11 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 
 void SYMBOL_VIEWER_FRAME::doCloseWindow()
 {
-    GetCanvas()->SetEvtHandlerEnabled( false );
-    GetCanvas()->StopDrawing();
+    SCH_BASE_FRAME::doCloseWindow();
+
+    delete m_toolManager;
+    m_toolManager = nullptr;
+
     Destroy();
 }
 

@@ -28,7 +28,6 @@
 
 #include <lib_symbol.h>
 #include <collector.h>
-#include <dialogs/dialog_schematic_find.h>
 #include <sch_item.h>
 
 

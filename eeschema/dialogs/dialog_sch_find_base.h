@@ -50,12 +50,12 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkMatchCase;
 		wxCheckBox* m_checkWholeWord;
 		wxCheckBox* m_checkRegexMatch;
-		wxCheckBox* m_checkAllPins;
-		wxCheckBox* m_checkAllFields;
-		wxCheckBox* m_checkCurrentSheetOnly;
-		wxCheckBox* m_checkSelectedOnly;
-		wxCheckBox* m_checkReplaceReferences;
-		wxCheckBox* m_checkConnections;
+		wxCheckBox* m_cbSearchPins;
+		wxCheckBox* m_cbSearchHiddenFields;
+		wxCheckBox* m_cbCurrentSheetOnly;
+		wxCheckBox* m_cbSelectedOnly;
+		wxCheckBox* m_cbReplaceReferences;
+		wxCheckBox* m_cbSearchNetNames;
 		wxButton* m_buttonFind;
 		wxButton* m_buttonReplace;
 		wxButton* m_buttonReplaceAll;

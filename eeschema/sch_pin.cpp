@@ -474,10 +474,18 @@ bool SCH_PIN::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 {
     bool isReplaced = false;
 
-    /* TODO: waiting on a way to override pins in the schematic...
-    isReplaced |= EDA_ITEM::Replace( aSearchData, m_name );
-    isReplaced |= EDA_ITEM::Replace( aSearchData, m_number );
-     */
+    if( dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() ) )
+    {
+        isReplaced |= EDA_ITEM::Replace( aSearchData, m_name );
+        isReplaced |= EDA_ITEM::Replace( aSearchData, m_number );
+    }
+    else
+    {
+        /* TODO: waiting on a way to override pins in the schematic...
+        isReplaced |= EDA_ITEM::Replace( aSearchData, m_name );
+        isReplaced |= EDA_ITEM::Replace( aSearchData, m_number );
+         */
+    }
 
     return isReplaced;
 }

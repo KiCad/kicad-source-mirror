@@ -60,7 +60,6 @@ class SCH_DESIGN_BLOCK_PANE;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
 class DIALOG_SYMBOL_FIELDS_TABLE;
-class DIALOG_SCH_FIND;
 class RESCUER;
 class HIERARCHY_PANE;
 class API_HANDLER_SCH;
@@ -226,11 +225,6 @@ public:
     void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
 
     /**
-     * Run the Find or Find & Replace dialog.
-     */
-    void ShowFindReplaceDialog( bool aReplace );
-
-    /**
      * Update the hierarchy navigation tree and history
      */
     void UpdateHierarchyNavigator( bool aRefreshNetNavigator = true, bool aClear = false );
@@ -248,14 +242,6 @@ public:
      * pane).
      */
     void UpdateHierarchySelection();
-
-    void ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime );
-    void ClearFindReplaceStatus();
-
-    /**
-     * Notification that the Find dialog has closed.
-     */
-    void OnFindDialogClose();
 
     /**
      * Design block panel options have changed and the panel needs to be refreshed.
@@ -1007,7 +993,6 @@ private:
     // The schematic editor control class should be able to access some internal
     // functions of the editor frame.
     friend class SCH_EDITOR_CONTROL;
-    friend class SCH_FIND_REPLACE_TOOL;
 
     SCHEMATIC*                  m_schematic;          ///< The currently loaded schematic
     wxString                    m_highlightedConn;    ///< The highlighted net or bus or empty string.
@@ -1020,7 +1005,6 @@ private:
     int                         m_exec_flags;         ///< Flags of the wxExecute() function
                                                       ///< to call a custom net list generator.
 
-    DIALOG_SCH_FIND*            m_findReplaceDialog;
     DIALOG_ERC*                 m_ercDialog;
     DIALOG_BOOK_REPORTER*       m_diffSymbolDialog;
     HIERARCHY_PANE*             m_hierarchy;

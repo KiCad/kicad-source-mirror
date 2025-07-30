@@ -139,8 +139,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_rescue_each_base.cpp
     dialogs/dialog_sch_import_settings.cpp
     dialogs/dialog_sch_import_settings_base.cpp
-    dialogs/dialog_schematic_find.cpp
-    dialogs/dialog_schematic_find_base.cpp
+    dialogs/dialog_sch_find.cpp
+    dialogs/dialog_sch_find_base.cpp
     dialogs/dialog_schematic_setup.cpp
     dialogs/dialog_shape_properties.cpp
     dialogs/dialog_shape_properties_base.cpp

@@ -66,6 +66,7 @@
 #include <tools/sch_point_editor.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_selection_tool.h>
+#include <tools/sch_find_replace_tool.h>
 #include <tools/symbol_editor_control.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_edit_tool.h>
@@ -388,6 +389,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_PIN_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new SCH_POINT_EDITOR );
+    m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_MOVE_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_EDIT_TOOL );
     m_toolManager->RegisterTool( new LIBRARY_EDITOR_CONTROL );
@@ -688,11 +690,13 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SYMBOL_EDIT_FRAME::doCloseWindow()
 {
-    GetCanvas()->SetEvtHandlerEnabled( false );
-    GetCanvas()->StopDrawing();
+    SCH_BASE_FRAME::doCloseWindow();
 
     if( GetLibTree() )
         GetLibTree()->ShutdownPreviews();
+
+    delete m_toolManager;
+    m_toolManager = nullptr;
 
     Destroy();
 }

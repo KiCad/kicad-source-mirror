@@ -25,11 +25,11 @@
 #ifndef DIALOG_SCH_FIND_H
 #define DIALOG_SCH_FIND_H
 
-#include "dialog_schematic_find_base.h"
+#include "dialog_sch_find_base.h"
 
 #include <wx/fdrepdlg.h>          // Use the wxFindReplaceDialog events, data, and enums.
 
-class SCH_EDIT_FRAME;
+class SCH_BASE_FRAME;
 class SCH_FIND_REPLACE_TOOL;
 struct SCH_SEARCH_DATA;
 
@@ -37,10 +37,10 @@ struct SCH_SEARCH_DATA;
 class DIALOG_SCH_FIND : public DIALOG_SCH_FIND_BASE
 {
 public:
-    DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aData,
+    DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aData,
                      const wxPoint& aPosition = wxDefaultPosition,
                      const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
-    ~DIALOG_SCH_FIND();
+    ~DIALOG_SCH_FIND() override = default;
 
     void SetFindEntries( const wxArrayString& aEntries, const wxString& aFindString );
     wxArrayString GetFindEntries() const;
@@ -70,7 +70,7 @@ protected:
     void updateFlags();
 
 protected:
-    SCH_EDIT_FRAME*        m_frame;
+    SCH_BASE_FRAME*        m_frame;
     SCH_FIND_REPLACE_TOOL* m_findReplaceTool;
     SCH_SEARCH_DATA*       m_findReplaceData;
     bool                   m_findDirty;

@@ -29,16 +29,15 @@
 #include <sch_base_frame.h>
 #include <tools/sch_tool_base.h>
 
-class SCH_EDIT_FRAME;
 
 /**
  * Handle actions specific to the schematic editor.
  */
-class SCH_FIND_REPLACE_TOOL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_FIND_REPLACE_TOOL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     SCH_FIND_REPLACE_TOOL()  :
-            SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.FindReplace" ),
+            SCH_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.FindReplace" ),
             m_foundItemHighlighted( false )
     { }
 
@@ -52,21 +51,6 @@ public:
     int ReplaceAll( const TOOL_EVENT& aEvent );
 
     int UpdateFind( const TOOL_EVENT& aEvent );
-
-    /**
-     * Find a symbol in the schematic and an item in this symbol and select it.
-     *
-     * @param aPath The symbol path to find. Pass nullptr to search by aReference.
-     * @param aReference The symbol reference designator to find, or to display in
-     *                   status bar if aPath is specified
-     * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
-     *                         the entire hierarchy
-     * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
-     * @param aSearchText The text to search for, either in value, reference or elsewhere.
-     */
-    SCH_ITEM* FindSymbolAndItem( const wxString* aPath, const wxString* aReference,
-                                 bool aSearchHierarchy, SCH_SEARCH_T aSearchType,
-                                 const wxString& aSearchText );
 
 private:
     ///< Set up handlers for various events.

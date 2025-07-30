@@ -22,20 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_schematic_find.h>
+#include <dialog_sch_find.h>
 #include <tool/actions.h>
 #include <sch_edit_frame.h>
 #include <tools/sch_find_replace_tool.h>
 
 
-DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aData,
+DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aData,
                                   const wxPoint& aPosition, const wxSize& aSize, int aStyle ) :
-    DIALOG_SCH_FIND_BASE( aParent, wxID_ANY, _( "Find" ), aPosition, aSize,
-                          wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
-    m_frame( aParent ),
-    m_findReplaceTool( m_frame->GetToolManager()->GetTool<SCH_FIND_REPLACE_TOOL>() ),
-    m_findReplaceData( aData ),
-    m_findDirty( true )
+        DIALOG_SCH_FIND_BASE( aParent, wxID_ANY, _( "Find" ), aPosition, aSize,
+                              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
+        m_frame( aParent ),
+        m_findReplaceTool( m_frame->GetToolManager()->GetTool<SCH_FIND_REPLACE_TOOL>() ),
+        m_findReplaceData( aData ),
+        m_findDirty( true )
 {
     wxASSERT_MSG( m_findReplaceData, wxT( "can't create find dialog without data" ) );
 
@@ -46,22 +46,35 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
         m_buttonReplaceAll->Show( true );
         m_staticReplace->Show( true );
         m_comboReplace->Show( true );
-        m_checkSelectedOnly->Show( true );
-        m_checkReplaceReferences->Show( true );
+        m_cbSelectedOnly->Show( true );
+        m_cbReplaceReferences->Show( true );
         m_checkRegexMatch->Show( true );
+    }
+
+    if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+    {
+        m_findReplaceData->searchAllPins = true;
+
+        m_cbCurrentSheetOnly->Hide();
+        m_cbSearchPins->Hide();
+        m_cbSearchNetNames->Hide();
+        m_cbReplaceReferences->Hide();
+
+        m_staticline1->Hide();
+        m_searchPanelLink->Hide();
     }
 
     m_checkMatchCase->SetValue( m_findReplaceData->matchCase );
     m_checkWholeWord->SetValue( m_findReplaceData->matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD );
     m_checkRegexMatch->SetValue( m_findReplaceData->matchMode == EDA_SEARCH_MATCH_MODE::REGEX );
 
-    m_checkAllFields->SetValue( m_findReplaceData->searchAllFields );
-    m_checkReplaceReferences->SetValue( m_findReplaceData->replaceReferences );
-    m_checkAllPins->SetValue( m_findReplaceData->searchAllPins );
-    m_checkCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
-    m_checkCurrentSheetOnly->Enable( !m_findReplaceData->searchSelectedOnly );
-    m_checkSelectedOnly->SetValue( m_findReplaceData->searchSelectedOnly );
-    m_checkConnections->SetValue( m_findReplaceData->searchNetNames );
+    m_cbSearchHiddenFields->SetValue( m_findReplaceData->searchAllFields );
+    m_cbReplaceReferences->SetValue( m_findReplaceData->replaceReferences );
+    m_cbSearchPins->SetValue( m_findReplaceData->searchAllPins );
+    m_cbCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
+    m_cbCurrentSheetOnly->Enable( !m_findReplaceData->searchSelectedOnly );
+    m_cbSelectedOnly->SetValue( m_findReplaceData->searchSelectedOnly );
+    m_cbSearchNetNames->SetValue( m_findReplaceData->searchNetNames );
 
     if( int hotkey = ACTIONS::showSearch.GetHotKey() )
     {
@@ -92,14 +105,9 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
 }
 
 
-DIALOG_SCH_FIND::~DIALOG_SCH_FIND()
-{
-}
-
-
 void DIALOG_SCH_FIND::OnClose( wxCloseEvent& aEvent )
 {
-    // Notify the SCH_EDIT_FRAME
+    // Notify the SCH_BASE_FRAME
     m_frame->OnFindDialogClose();
 }
 
@@ -123,7 +131,9 @@ void DIALOG_SCH_FIND::OnCancel( wxCommandEvent& aEvent )
 
 void DIALOG_SCH_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
 {
-    if( m_frame->IsSearchPaneShown() )
+    wxCHECK2( m_frame->GetFrameType() == FRAME_SCH, /* void */ );
+
+    if( static_cast<SCH_EDIT_FRAME*>( m_frame )->IsSearchPaneShown() )
     {
         EndModal( wxID_CANCEL );
 
@@ -221,11 +231,11 @@ void DIALOG_SCH_FIND::updateFlags()
 {
     // Rebuild the search flags in m_findReplaceData from dialog settings
     m_findReplaceData->matchCase                = m_checkMatchCase->GetValue();
-    m_findReplaceData->searchAllFields          = m_checkAllFields->GetValue();
-    m_findReplaceData->searchAllPins            = m_checkAllPins->GetValue();
-    m_findReplaceData->searchCurrentSheetOnly   = m_checkCurrentSheetOnly->GetValue();
-    m_findReplaceData->replaceReferences        = m_checkReplaceReferences->GetValue();
-    m_findReplaceData->searchNetNames           = m_checkConnections->GetValue();
+    m_findReplaceData->searchAllFields          = m_cbSearchHiddenFields->GetValue();
+    m_findReplaceData->searchAllPins            = m_cbSearchPins->GetValue();
+    m_findReplaceData->searchCurrentSheetOnly   = m_cbCurrentSheetOnly->GetValue();
+    m_findReplaceData->replaceReferences        = m_cbReplaceReferences->GetValue();
+    m_findReplaceData->searchNetNames           = m_cbSearchNetNames->GetValue();
 
     if( m_checkWholeWord->GetValue() )
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
@@ -234,15 +244,15 @@ void DIALOG_SCH_FIND::updateFlags()
     else
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 
-    if( m_checkSelectedOnly->GetValue() )
+    if( m_cbSelectedOnly->GetValue() )
     {
-        m_checkCurrentSheetOnly->SetValue( true );
-        m_checkCurrentSheetOnly->Enable( false );
+        m_cbCurrentSheetOnly->SetValue( true );
+        m_cbCurrentSheetOnly->Enable( false );
         m_findReplaceData->searchSelectedOnly = true;
     }
     else
     {
-        m_checkCurrentSheetOnly->Enable( true );
+        m_cbCurrentSheetOnly->Enable( true );
         m_findReplaceData->searchSelectedOnly = false;
     }
 }

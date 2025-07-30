@@ -31,7 +31,6 @@
 #include <confirm.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_erc.h>
-#include <dialogs/dialog_schematic_find.h>
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <widgets/sch_design_block_pane.h>
@@ -41,7 +40,6 @@
 #include <geometry/shape_segment.h>
 #include <gestfich.h>
 #include <dialogs/html_message_box.h>
-#include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
@@ -158,10 +156,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_syncingPcbToSchSelection = false;
     m_aboutTitle = _HKI( "KiCad Schematic Editor" );
     m_show_search = false;
-
-    m_findReplaceDialog = nullptr;
-
-    m_findReplaceData = std::make_unique<SCH_SEARCH_DATA>();
 
     // Give an icon
     wxIcon icon;
@@ -1062,8 +1056,7 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
-    GetCanvas()->SetEvtHandlerEnabled( false );
-    GetCanvas()->StopDrawing();
+    SCH_BASE_FRAME::doCloseWindow();
 
     SCH_SHEET_LIST sheetlist = Schematic().Hierarchy();
 
@@ -1072,26 +1065,12 @@ void SCH_EDIT_FRAME::doCloseWindow()
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
-    // Shutdown all running tools
-    if( m_toolManager )
-        m_toolManager->ShutdownAllTools();
-
     // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
     Unbind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
     Unbind( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, &SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog, this );
     m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging, this );
     m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection, this );
-
-    // Close the find dialog and preserve its setting if it is displayed.
-    if( m_findReplaceDialog )
-    {
-        m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
-        m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
-
-        m_findReplaceDialog->Destroy();
-        m_findReplaceDialog = nullptr;
-    }
 
     if( m_diffSymbolDialog )
     {
@@ -1115,16 +1094,8 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( Prj().GetLocalSettings().ShouldAutoSave() )
         SaveProjectLocalSettings();
 
-    // Shutdown all running tools
-    if( m_toolManager )
-    {
-        m_toolManager->ShutdownAllTools();
-
-        // prevent the canvas from trying to dispatch events during close
-        GetCanvas()->SetEventDispatcher( nullptr );
-        delete m_toolManager;
-        m_toolManager = nullptr;
-    }
+    delete m_toolManager;
+    m_toolManager = nullptr;
 
     wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
 
@@ -1271,91 +1242,6 @@ void SCH_EDIT_FRAME::UpdateLabelsHierarchyNavigator()
 void SCH_EDIT_FRAME::UpdateHierarchySelection()
 {
     m_hierarchy->UpdateHierarchySelection();
-}
-
-
-void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
-{
-    wxString findString;
-
-    SCH_SELECTION& selection = m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
-
-    if( selection.Size() == 1 )
-    {
-        EDA_ITEM* front = selection.Front();
-
-        switch( front->Type() )
-        {
-        case SCH_SYMBOL_T:
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( front );
-            findString = UnescapeString( symbol->GetField( FIELD_T::VALUE )->GetText() );
-            break;
-        }
-
-        case SCH_FIELD_T:
-            findString = UnescapeString( static_cast<SCH_FIELD*>( front )->GetText() );
-            break;
-
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_SHEET_PIN_T:
-            findString = UnescapeString( static_cast<SCH_LABEL_BASE*>( front )->GetText() );
-            break;
-
-        case SCH_TEXT_T:
-            findString = UnescapeString( static_cast<SCH_TEXT*>( front )->GetText() );
-
-            if( findString.Contains( wxT( "\n" ) ) )
-                findString = findString.Before( '\n' );
-
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    if( m_findReplaceDialog )
-        m_findReplaceDialog->Destroy();
-
-    m_findReplaceDialog = new DIALOG_SCH_FIND( this,
-                                               static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ),
-                                               wxDefaultPosition, wxDefaultSize,
-                                               aReplace ? wxFR_REPLACEDIALOG : 0 );
-
-    m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
-    m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
-    m_findReplaceDialog->Show( true );
-}
-
-
-void SCH_EDIT_FRAME::ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime )
-{
-    // Prepare the infobar, since we don't know its state
-    m_infoBar->RemoveAllButtons();
-    m_infoBar->AddCloseButton();
-
-    m_infoBar->ShowMessageFor( aMsg, aStatusTime, wxICON_INFORMATION );
-}
-
-
-void SCH_EDIT_FRAME::ClearFindReplaceStatus()
-{
-    m_infoBar->Dismiss();
-}
-
-
-void SCH_EDIT_FRAME::OnFindDialogClose()
-{
-    m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
-    m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
-
-    m_findReplaceDialog->Destroy();
-    m_findReplaceDialog = nullptr;
-
-    m_toolManager->RunAction( ACTIONS::updateFind );
 }
 
 

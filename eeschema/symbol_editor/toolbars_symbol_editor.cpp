@@ -116,6 +116,10 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
               .AppendAction( ACTIONS::redo );
 
         config.AppendSeparator()
+              .AppendAction( ACTIONS::find )
+              .AppendAction( ACTIONS::findAndReplace );
+
+        config.AppendSeparator()
               .AppendAction( ACTIONS::zoomRedraw )
               .AppendAction( ACTIONS::zoomInCenter )
               .AppendAction( ACTIONS::zoomOutCenter )

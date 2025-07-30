@@ -46,8 +46,10 @@
 #include <symbol_library.h>
 #include <symbol_lib_table.h>
 #include <sch_base_frame.h>
+#include <dialogs/dialog_sch_find.h>
 #include <design_block.h>
 #include <design_block_lib_table.h>
+#include <tool/actions.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -59,6 +61,7 @@
 #include <wx/msgdlg.h>
 
 #include <navlib/nl_schematic_plugin.h>
+#include <wx/fdrepdlg.h>
 
 
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
@@ -101,10 +104,13 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
         EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
                         aFrameName, schIUScale ),
-        m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
         m_selectionFilterPanel( nullptr ),
+        m_findReplaceDialog( nullptr ),
+        m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
         m_inSymChangeTimerEvent( false )
 {
+    m_findReplaceData = std::make_unique<SCH_SEARCH_DATA>();
+
     if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
         createCanvas();
 
@@ -129,6 +135,29 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
 /// Needs to be in the cpp file to encode the sizeof() for std::unique_ptr
 SCH_BASE_FRAME::~SCH_BASE_FRAME()
 {}
+
+
+void SCH_BASE_FRAME::doCloseWindow()
+{
+    GetCanvas()->SetEvtHandlerEnabled( false );
+    GetCanvas()->StopDrawing();
+
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
+    // Close the find dialog and preserve its setting if it is displayed.
+    if( m_findReplaceDialog )
+    {
+        m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
+        m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
+
+        m_findReplaceDialog->Destroy();
+        m_findReplaceDialog = nullptr;
+    }
+
+    // This class is pure virtual.  Derived class will finish shutdown and Destroy().
+}
 
 
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
@@ -493,6 +522,89 @@ void SCH_BASE_FRAME::SyncView()
 COLOR4D SCH_BASE_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
 {
     return GetColorSettings()->GetColor( aLayer );
+}
+
+
+void SCH_BASE_FRAME::ShowFindReplaceDialog( bool aReplace )
+{
+    wxString findString;
+
+    SCH_SELECTION& selection = m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() == 1 )
+    {
+        EDA_ITEM* front = selection.Front();
+
+        switch( front->Type() )
+        {
+        case SCH_SYMBOL_T:
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( front );
+            findString = UnescapeString( symbol->GetField( FIELD_T::VALUE )->GetText() );
+            break;
+        }
+
+        case SCH_FIELD_T:
+            findString = UnescapeString( static_cast<SCH_FIELD*>( front )->GetText() );
+            break;
+
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_SHEET_PIN_T:
+            findString = UnescapeString( static_cast<SCH_LABEL_BASE*>( front )->GetText() );
+            break;
+
+        case SCH_TEXT_T:
+            findString = UnescapeString( static_cast<SCH_TEXT*>( front )->GetText() );
+
+            if( findString.Contains( wxT( "\n" ) ) )
+                findString = findString.Before( '\n' );
+
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if( m_findReplaceDialog )
+        m_findReplaceDialog->Destroy();
+
+    m_findReplaceDialog = new DIALOG_SCH_FIND( this, static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ),
+                                               wxDefaultPosition, wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
+
+    m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
+    m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
+    m_findReplaceDialog->Show( true );
+}
+
+
+void SCH_BASE_FRAME::ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime )
+{
+    // Prepare the infobar, since we don't know its state
+    m_infoBar->RemoveAllButtons();
+    m_infoBar->AddCloseButton();
+
+    m_infoBar->ShowMessageFor( aMsg, aStatusTime, wxICON_INFORMATION );
+}
+
+
+void SCH_BASE_FRAME::ClearFindReplaceStatus()
+{
+    m_infoBar->Dismiss();
+}
+
+
+void SCH_BASE_FRAME::OnFindDialogClose()
+{
+    m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
+    m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
+
+    m_findReplaceDialog->Destroy();
+    m_findReplaceDialog = nullptr;
+
+    m_toolManager->RunAction( ACTIONS::updateFind );
 }
 
 

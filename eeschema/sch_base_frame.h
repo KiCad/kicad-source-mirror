@@ -57,6 +57,7 @@ class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 class NL_SCHEMATIC_PLUGIN;
 class PANEL_SCH_SELECTION_FILTER;
+class DIALOG_SCH_FIND;
 
 #ifdef wxHAS_INOTIFY
 #define wxFileSystemWatcher wxInotifyFileSystemWatcher
@@ -230,6 +231,21 @@ public:
      */
     void SyncView();
 
+    /**
+     * Run the Find or Find & Replace dialog.
+     */
+    void ShowFindReplaceDialog( bool aReplace );
+
+    DIALOG_SCH_FIND* GetFindReplaceDialog() const { return m_findReplaceDialog; }
+
+    void ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime );
+    void ClearFindReplaceStatus();
+
+    /**
+     * Notification that the Find dialog has closed.
+     */
+    void OnFindDialogClose();
+
     void CommonSettingsChanged( int aFlags ) override;
 
     /**
@@ -272,6 +288,8 @@ protected:
 
     void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
 
+    void doCloseWindow() override;
+
     /**
      * Save Symbol Library Tables to disk.
      *
@@ -293,11 +311,12 @@ protected:
      */
     virtual void updateSelectionFilterVisbility() {}
 
-    /// These are only used by symbol_editor.  Eeschema should be using the one inside
-    /// the SCHEMATIC.
-    SCHEMATIC_SETTINGS  m_base_frame_defaults;
-
+protected:
     PANEL_SCH_SELECTION_FILTER* m_selectionFilterPanel;
+    DIALOG_SCH_FIND*            m_findReplaceDialog;
+
+    /// Only used by symbol_editor.  Eeschema should be using the one inside the SCHEMATIC.
+    SCHEMATIC_SETTINGS          m_base_frame_defaults;
 
 private:
 
