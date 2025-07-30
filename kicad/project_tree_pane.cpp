@@ -1777,6 +1777,8 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
                                               fullURL.ToStdString().c_str(),
                                               "+refs/heads/*:refs/remotes/origin/*" );
 
+    KIGIT::GitRemotePtr remotePtr( remote );
+
     if( error != GIT_OK )
     {
         if( m_gitLastError != git_error_last()->klass )
