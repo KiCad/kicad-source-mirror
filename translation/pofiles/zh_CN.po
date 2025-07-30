@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-18 08:10-0700\n"
-"PO-Revision-Date: 2025-07-15 11:02+0000\n"
+"PO-Revision-Date: 2025-07-31 03:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -3971,7 +3971,6 @@ msgid "Add"
 msgstr "添加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
 msgstr "启用 Git 跟踪"
 
@@ -5602,7 +5601,7 @@ msgstr "网络类分配"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
-msgstr "匹配规则"
+msgstr "匹配规则 (支持正则表达式)"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1371 eeschema/sch_label.cpp:207
@@ -11536,9 +11535,8 @@ msgstr "更新/重置字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "更新选项"
+msgstr "选中所有更新选项"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -11549,9 +11547,8 @@ msgid "Update keywords and footprint filters"
 msgstr "更新关键字和封装筛选规则"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
-msgstr "更新/重置字段可见性设置"
+msgstr "更新/重置 引脚名称/编号的可见性设置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Reset alternate pin to default"
@@ -11567,9 +11564,8 @@ msgstr "重置自定义电源符号"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "更新选项"
+msgstr "取消选中所有更新选项"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -16442,24 +16438,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "拖动边缘时保持引脚附着"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "引脚名不能为空。"
+msgstr "名称或路径不能为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "引脚名不能为空。"
+msgstr "名称不能为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "文本不能为空。"
+msgstr "路径不能为空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
-#, fuzzy
 msgid "Library Table Error"
-msgstr "库名称错误"
+msgstr "库表错误"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:478
 #, c-format
@@ -16685,9 +16677,9 @@ msgstr "没有选择元件保存。"
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1141
 #: pcbnew/pcbnew_jobs_handler.cpp:1815
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "应为 %s"
+msgstr "正在导出 %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1695
 msgid "Output path must not conflict with existing path\n"
@@ -17952,9 +17944,8 @@ msgid "&Duplicate '%s'"
 msgstr "创建 '%s' 的副本 (&D)"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "切换单位"
+msgstr "交换单位"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -19691,27 +19682,22 @@ msgid "Cell Height"
 msgstr "单元格高度"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
 msgstr "单元格宽度"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
-#, fuzzy
 msgid "Row Height"
-msgstr "框高度"
+msgstr "单元格高度"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "使用所有属性"
+msgstr "单元格属性"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
 msgstr "背景填充"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
 msgstr "背景颜色"
 
@@ -23435,14 +23421,12 @@ msgid "All units of this symbol are already placed."
 msgstr "该符号的所有单元均已放置。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:757
-#, fuzzy
 msgid "Add Design Block"
 msgstr "添加设计图块"
 
 #: eeschema/tools/sch_drawing_tools.cpp:758
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "导入原理图图纸内容..."
+msgstr "导入原理图图纸内容"
 
 #: eeschema/tools/sch_drawing_tools.cpp:792
 msgid "Choose Schematic"
@@ -23690,12 +23674,9 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "网络必须标记才能分配网络类。"
 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"修改文件扩展名将更改文件类型。\n"
-"是否继续?"
+msgstr "粘贴长文本字符串可能会引起卡顿。是否继续?"
 
 #: eeschema/tools/sch_editor_control.cpp:1836
 #, c-format
@@ -23704,12 +23685,12 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"粘贴的图纸 \"%s\"\n"
-"被丢弃, 因为目标已有该图纸或其子图纸之一作为父级。"
+"已放弃粘贴图纸 '%s'\n"
+"因为目标位置已将该图纸或其子图纸作为父图纸。"
 
 #: eeschema/tools/sch_editor_control.cpp:2366
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "无法编辑有损坏的库符号链接的符号。"
+msgstr "无法编辑包含损坏的库符号链接的符号。"
 
 #: eeschema/tools/sch_editor_control.cpp:2455
 msgid "Increment Annotations"
@@ -23907,9 +23888,9 @@ msgstr "未选中符号库。"
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "符号库未找到。"
+msgstr "符号库 '%s' 未找到。"
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -26179,9 +26160,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "侧光仰角, 单位为度, 取值范围: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "无效的格式\n"
+msgstr "无效的预设\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -26438,9 +26418,8 @@ msgid "Ignore non-zero exit code"
 msgstr "忽略非零退出代码"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "可用材料："
+msgstr "可用文本变量:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -26551,7 +26530,6 @@ msgid "Last run failed"
 msgstr "作业运行失败"
 
 #: kicad/dialogs/panel_jobset.cpp:264 kicad/dialogs/panel_jobset.cpp:976
-#, fuzzy
 msgid "Running Jobs"
 msgstr "运行中的作业"
 
@@ -26752,9 +26730,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "导入 EasyEDA Pro 工程"
 
 #: kicad/jobs_runner.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "运行中的作业"
+msgstr "运行中的作业 %d: %s"
 
 #: kicad/jobs_runner.cpp:301
 msgid "Job successful"
@@ -31472,24 +31450,20 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    变更阵列\n"
-"***********************\n"
+"<br/>变更阵列\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " 将被忽略"
+msgstr "(将被忽略)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "没有封装"
+msgstr "<br/>没有封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 #, fuzzy
@@ -31506,11 +31480,9 @@ msgstr ""
 "*********** 对 %s 排序 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s UUID: [%s], X, Y: %s, X, Y(四舍五入), %s"
+msgstr "<br/>%d %s X, Y: %s; X, Y(四舍五入): %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 msgid "Selected options resulted in errors! Change them and try again."
@@ -31551,20 +31523,12 @@ msgid "Aborted: too many errors"
 msgstr "已中止: 错误太多"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:749
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"顶层封装"
+msgstr "<br/><br/>顶层封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:750
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"底层封装"
+msgstr "<br/><br/>底层封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:814
 msgid "Footprint not found in changelist"
@@ -33355,7 +33319,6 @@ msgid "New footprint library id:"
 msgstr "新封装的库标识:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr "移除在来源库封装中不存在的文本项目"
 
@@ -37057,9 +37020,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "外观"
+msgstr "外观预设:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37114,16 +37076,14 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
-#, fuzzy
 msgid "Lights Intensity"
-msgstr "光强"
+msgstr "光源强度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:285
 msgid "Camera:"
 msgstr "相机:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
-#, fuzzy
 msgid "Lights Position"
 msgstr "光源位置"
 
@@ -49580,34 +49540,28 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP 间隙约束: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1774
-#, fuzzy
 msgid "Resolved Clearance"
-msgstr "已解析的间距"
+msgstr "已解析间距"
 
 #: pcbnew/tools/pcb_control.cpp:1785
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "实际间距"
 
 #: pcbnew/tools/pcb_control.cpp:1828
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "已解析的孔间距"
+msgstr "已解析孔间距"
 
 #: pcbnew/tools/pcb_control.cpp:1833
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "实际孔间距"
 
 #: pcbnew/tools/pcb_control.cpp:1868
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "已解析的边缘间距"
+msgstr "已解析边缘间距"
 
 #: pcbnew/tools/pcb_control.cpp:1873
-#, fuzzy
 msgid "Resolved Margin Clearance"
-msgstr "已解析的边界层间距"
+msgstr "已解析边界层间距"
 
 #: pcbnew/tools/pcb_control.cpp:1885
 msgid "Selected Items"
