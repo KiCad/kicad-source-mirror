@@ -1349,6 +1349,13 @@ int ERC_TESTER::TestSimilarLabels()
 
                         if( unnormalized != otherText )
                         {
+                            // Similar local labels on different sheets are fine
+                            if( item->Type() == SCH_LABEL_T && otherItem->Type() == SCH_LABEL_T
+                                    && sheet != otherSheet )
+                            {
+                                continue;
+                            }
+
                             logError( normalized, label, sheet, otherTuple );
                             errors += 1;
                         }
