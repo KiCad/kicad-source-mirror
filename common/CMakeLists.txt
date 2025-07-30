@@ -607,6 +607,7 @@ set( COMMON_GIT_SRCS
     git/git_resolve_conflict_handler.cpp
     git/git_revert_handler.cpp
     git/git_sync_handler.cpp
+    git/project_git_utils.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
     )

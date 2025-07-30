@@ -31,6 +31,7 @@
 
 #include <string>
 #include <vector>
+#include <wx/string.h>
 
 class GIT_COMMIT_HANDLER : public KIGIT_COMMON
 {
@@ -45,14 +46,17 @@ public:
         Cancelled
     };
 
-    CommitResult PerformCommit( const std::vector<std::string>& aFilesToCommit );
+    CommitResult PerformCommit( const std::vector<wxString>& aFiles,
+                               const wxString&               aMessage,
+                               const wxString&               aAuthorName,
+                               const wxString&               aAuthorEmail );
 
-    std::string GetErrorString() const;
+    wxString GetErrorString() const;
 
 private:
-    void AddErrorString( const std::string& aErrorString );
+    void AddErrorString( const wxString& aErrorString );
 
-    std::string m_errorString;
+    wxString m_errorString;
 };
 
 #endif // GIT_COMMIT_HANDLER_H

@@ -66,6 +66,7 @@
 #include <git/git_clone_handler.h>
 #include <git/kicad_git_compat.h>
 #include <git/kicad_git_memory.h>
+#include <git/project_git_utils.h>
 
 #include <dialogs/git/dialog_git_repository.h>
 
@@ -414,28 +415,7 @@ std::vector<wxString> getProjects( const wxDir& dir )
 }
 
 
-static git_repository* get_git_repository_for_file( const char* filename )
-{
-    git_repository* repo = nullptr;
-    git_buf         repo_path = GIT_BUF_INIT;
 
-    // Find the repository path for the given file
-    if( git_repository_discover( &repo_path, filename, 0, NULL ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Can't repo discover %s: %s", filename, KIGIT_COMMON::GetLastGitError() );
-        return nullptr;
-    }
-
-    KIGIT::GitBufPtr repo_path_ptr( &repo_path );
-
-    if( git_repository_open( &repo, repo_path.ptr ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Can't open repo for %s: %s", repo_path.ptr, KIGIT_COMMON::GetLastGitError() );
-        return nullptr;
-    }
-
-    return repo;
-}
 
 
 wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
@@ -692,7 +672,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     // Bind the git repository to the project tree (if it exists)
     if( Pgm().GetCommonSettings()->m_Git.enableGit )
     {
-        m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
+        m_TreeProject->SetGitRepo( KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( fn.GetPath().c_str() ) );
 
         if( m_TreeProject->GetGitRepo() )
         {
@@ -1864,38 +1844,7 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
 }
 
 
-static int git_create_branch( git_repository* aRepo, wxString& aBranchName )
-{
-    git_oid        head_oid;
 
-    if( int error = git_reference_name_to_id( &head_oid, aRepo, "HEAD" ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to lookup HEAD reference: %s", KIGIT_COMMON::GetLastGitError() );
-        return error;
-    }
-
-    // Lookup the current commit object
-    git_commit* commit = nullptr;
-
-    if( int error = git_commit_lookup( &commit, aRepo, &head_oid ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to lookup commit: %s", KIGIT_COMMON::GetLastGitError() );
-        return error;
-    }
-
-    KIGIT::GitCommitPtr commitPtr( commit );
-    git_reference* branchRef = nullptr;
-
-    if( int error = git_branch_create( &branchRef, aRepo, aBranchName.mb_str(), commit, 0 ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to create branch: %s", KIGIT_COMMON::GetLastGitError() );
-        return error;
-    }
-
-    git_reference_free( branchRef );
-
-    return 0;
-}
 
 
 void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
@@ -1915,7 +1864,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
         branchName = dlg.GetBranchName();
 
         if( retval == wxID_ADD )
-            git_create_branch( repo, branchName );
+            KIGIT::PROJECT_GIT_UTILS::CreateBranch( repo, branchName );
         else if( retval != wxID_OK )
             return;
     }
@@ -2502,11 +2451,6 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     if( ret != wxID_OK )
         return;
 
-    // Commit the changes
-    git_oid     tree_id;
-    git_tree*   tree = nullptr;
-    git_commit* parent = nullptr;
-    git_index*  index = nullptr;
 
     std::vector<wxString> files = dlg.GetSelectedFiles();
 
@@ -2522,122 +2466,18 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         return;
     }
 
-    if( git_repository_index( &index, repo ) != 0 )
-    {
-        wxLogTrace( traceGit, wxString::Format( _( "Failed to get repository index: %s" ),
-                                        KIGIT_COMMON::GetLastGitError() ) );
-        return;
-    }
+    GIT_COMMIT_HANDLER commitHandler( repo );
+    auto result = commitHandler.PerformCommit( files, dlg.GetCommitMessage(),
+                                              dlg.GetAuthorName(), dlg.GetAuthorEmail() );
 
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    for( wxString& file : files )
-    {
-        if( git_index_add_bypath( index, file.mb_str() ) != 0 )
-        {
-            wxMessageBox( wxString::Format( _( "Failed to add file to index: %s" ),
-                                            KIGIT_COMMON::GetLastGitError() ) );
-            return;
-        }
-    }
-
-    if( git_index_write( index ) != 0 )
-    {
-        wxLogTrace( traceGit, wxString::Format( _( "Failed to write index: %s" ),
-                                        KIGIT_COMMON::GetLastGitError() ) );
-        return;
-    }
-
-    if( git_index_write_tree( &tree_id, index ) != 0)
-    {
-        wxLogTrace( traceGit, wxString::Format( _( "Failed to write tree: %s" ),
-                                        KIGIT_COMMON::GetLastGitError() ) );
-        return;
-    }
-
-    if( git_tree_lookup( &tree, repo, &tree_id ) != 0 )
-    {
-        wxLogTrace( traceGit, wxString::Format( _( "Failed to lookup tree: %s" ),
-                                        KIGIT_COMMON::GetLastGitError() ) );
-        return;
-    }
-
-    KIGIT::GitTreePtr treePtr( tree );
-    git_reference* headRef = nullptr;
-
-    if( git_repository_head_unborn( repo ) == 0 )
-    {
-        if( git_repository_head( &headRef, repo ) != 0 )
-        {
-            wxLogTrace( traceGit, wxString::Format( _( "Failed to get HEAD reference: %s" ),
-                                            KIGIT_COMMON::GetLastGitError() ) );
-            return;
-        }
-
-        KIGIT::GitReferencePtr headRefPtr( headRef );
-
-        if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
-        {
-            wxLogTrace( traceGit, wxString::Format( _( "Failed to get commit: %s" ),
-                                            KIGIT_COMMON::GetLastGitError() ) );
-            return;
-        }
-    }
-
-    KIGIT::GitCommitPtr parentPtr( parent );
-    const wxString&     commit_msg = dlg.GetCommitMessage();
-    const wxString&     author_name = dlg.GetAuthorName();
-    const wxString&     author_email = dlg.GetAuthorEmail();
-
-    git_signature* author = nullptr;
-
-    if( git_signature_now( &author, author_name.mb_str(), author_email.mb_str() ) != 0 )
-    {
-        wxLogTrace( traceGit, wxString::Format( _( "Failed to create author signature: %s" ),
-                                        KIGIT_COMMON::GetLastGitError() ) );
-        return;
-    }
-
-    KIGIT::GitSignaturePtr authorPtr( author );
-    git_oid                oid;
-
-#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8                                              \
-    && ( LIBGIT2_VER_REVISION < 2 || LIBGIT2_VER_REVISION == 3 ) )
-    /*
-        * For libgit2 versions 1.8.0, 1.8.1.               (cf19ddc52)
-        * This change was reverted for 1.8.2               (49d3fadfc, main branch)
-        * The revert for 1.8.2 was not included for 1.8.3  (which is on the maint/v1.8 branch, not main)
-        * This change was also reverted for 1.8.4          (94ba816f6, also maint/v1.8 branch)
-        *
-        * As of 1.8.4, the history is like this:
-        *
-        *  * 3f4182d15 (tag: v1.8.4, maint/v1.8)
-        *  * 94ba816f6 Revert "commit: fix const declaration"      [puts const back]
-        *  * 3353f78e8 (tag: v1.8.3)
-        *  | * 4ce872a0f (tag: v1.8.2-rc1, tag: v1.8.2)
-        *  | * 49d3fadfc Revert "commit: fix const declaration"    [puts const back]
-        *  |/
-        *  * 36f7e21ad (tag: v1.8.1)
-        *  * d74d49148 (tag: v1.8.0)
-        *  * cf19ddc52 commit: fix const declaration               [removes const]
-        */
-    git_commit* const parents[1] = { parent };
-#else
-    // For libgit2 versions older than 1.8.0, or equal to 1.8.2, or 1.8.4+
-    const git_commit* parents[1] = { parent };
-#endif
-
-    if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr, commit_msg.mb_str(), tree,
-                        1, parents ) != 0 )
+    if( result != GIT_COMMIT_HANDLER::CommitResult::Success )
     {
         wxMessageBox( wxString::Format( _( "Failed to create commit: %s" ),
-                                        KIGIT_COMMON::GetLastGitError() ) );
+                                        commitHandler.GetErrorString() ) );
         return;
     }
 
-    wxLogTrace( traceGit, wxString::Format( _( "Created commit with id: %s" ),
-                                    git_oid_tostr_s( &oid ) ) );
-
+    wxLogTrace( traceGit, wxS( "Created commit" ) );
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
 }
 
