@@ -1708,7 +1708,6 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         return;
     }
 
-    KIGIT::GitRepositoryPtr repoPtr( repo );
     DIALOG_GIT_REPOSITORY dlg( wxGetTopLevelParent( this ), nullptr );
 
     dlg.SetTitle( _( "Set default remote" ) );
@@ -1719,6 +1718,9 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
    // Directory is not a git repository
     if( git_repository_init( &repo, dir.mb_str(), 0 ) != GIT_OK )
     {
+        if( repo )
+            git_repository_free( repo );
+
         if( m_gitLastError != git_error_last()->klass )
         {
             m_gitLastError = git_error_last()->klass;
@@ -1730,7 +1732,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     }
     else
     {
-        m_TreeProject->SetGitRepo( repoPtr.release() );
+        m_TreeProject->SetGitRepo( repo );
         m_gitLastError = GIT_ERROR_NONE;
     }
 
