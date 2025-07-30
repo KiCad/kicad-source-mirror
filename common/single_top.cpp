@@ -326,7 +326,19 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 #endif
 
     // Initialize the git library before trying to initialize individual programs
-    git_libgit2_init();
+    int gitInit = git_libgit2_init();
+
+    if( gitInit < 0 )
+    {
+        const git_error* err = git_error_last();
+        wxString         msg = wxS( "Failed to initialize git library" );
+
+        if( err && err->message )
+            msg += wxS( ": " ) + wxString::FromUTF8( err->message );
+
+        wxLogError( msg );
+        return false;
+    }
 
     // Not all KiCad applications use the python stuff. skip python init
     // for these apps.
