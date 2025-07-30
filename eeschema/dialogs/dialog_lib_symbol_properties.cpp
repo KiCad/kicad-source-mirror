@@ -1122,7 +1122,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnCreateJumperPinGroup( wxCommandEvent& aE
         m_listAvailablePins->Freeze();
 
         wxString group;
-        int i = 0;
+        unsigned i = 0;
 
         for( int idx : selections )
         {
