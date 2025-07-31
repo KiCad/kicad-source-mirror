@@ -306,7 +306,14 @@ void DIALOG_PLOT::init_Dialog()
         m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
     }
 
-    m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
+    if( m_job )
+    {
+        m_zoneFillCheck->SetValue( m_job->m_checkZonesBeforePlot );
+    }
+    else
+    {
+        m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
+    }
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
@@ -547,6 +554,9 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     }
 
     m_job->SetConfiguredOutputPath( m_plotOpts.GetOutputDirectory() );
+
+    // this exists outside plot opts because its usually globally saved
+    m_job->m_checkZonesBeforePlot = m_zoneFillCheck->GetValue();
 }
 
 

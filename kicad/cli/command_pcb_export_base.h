@@ -71,6 +71,9 @@ namespace CLI
 #define ARG_BACKGROUND_COLOR "--bg-color"
 #define ARG_BACKGROUND_COLOR_DESC "Background color, can be in hex #rrggbb, #rrggbbaa; or css rgb(r,g,b), rgba(r,g,b,a) format"
 
+#define ARG_CHECK_ZONES "--check-zones"
+#define ARG_CHECK_ZONES_DESC "Check and refill zones if required"
+
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
     PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputCanBeDir = false,

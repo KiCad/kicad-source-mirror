@@ -124,6 +124,10 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
             .default_value( std::string() )
             .help( UTF8STDSTR( _( ARG_BACKGROUND_COLOR_DESC ) ) )
             .metavar( "COLOR" );
+
+    m_argParser.add_argument( ARG_CHECK_ZONES )
+            .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
+            .flag();
 }
 
 
@@ -156,6 +160,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
     pdfJob->m_scale = m_argParser.get<double>( ARG_SCALE );
+    pdfJob->m_checkZonesBeforePlot = m_argParser.get<bool>( ARG_CHECK_ZONES );
 
     pdfJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     pdfJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );

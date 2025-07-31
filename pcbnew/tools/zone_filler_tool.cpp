@@ -47,7 +47,7 @@
 #include <core/profile.h>
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
-    PCB_TOOL_BASE( "pcbnew.ZoneFiller" ),
+    PCB_TOOL_BASE( ZONE_FILLER_TOOL_NAME ),
     m_fillInProgress( false )
 {
 }

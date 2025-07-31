@@ -109,7 +109,8 @@
 
 PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
         JOB_DISPATCHER( aKiway ),
-        m_cliBoard( nullptr )
+        m_cliBoard( nullptr ),
+        m_toolManager( nullptr )
 {
     Register( "3d", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -330,6 +331,37 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   DIALOG_EXPORT_ODBPP dlg( odbJob, editFrame, aParent );
                   return dlg.ShowModal() == wxID_OK;
               } );
+}
+
+
+PCBNEW_JOBS_HANDLER::~PCBNEW_JOBS_HANDLER()
+{
+}
+
+
+TOOL_MANAGER* PCBNEW_JOBS_HANDLER::getToolManager( BOARD* aBrd )
+{
+    TOOL_MANAGER* toolManager = nullptr;
+    if( Pgm().IsGUI() )
+    {
+        // we assume the PCB we are working on here is the one in the frame
+        // so use the frame's tool manager
+        PCB_EDIT_FRAME* editFrame = (PCB_EDIT_FRAME*) m_kiway->Player( FRAME_PCB_EDITOR, false );
+        if( editFrame )
+            toolManager = editFrame->GetToolManager();
+    }
+    else
+    {
+        if( m_toolManager == nullptr )
+        {
+            m_toolManager = std::make_unique<TOOL_MANAGER>();
+        }
+
+        toolManager = m_toolManager.get();
+
+        toolManager->SetEnvironment( aBrd, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
+    }
+    return toolManager;
 }
 
 
@@ -826,7 +858,8 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( aSvgJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = getBoard( aSvgJob->m_filename );
+    BOARD*        brd = getBoard( aSvgJob->m_filename );
+    TOOL_MANAGER* toolManager = getToolManager( brd );
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -856,6 +889,14 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+
+    if( aSvgJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
 
     if( aSvgJob->m_argLayers )
         aSvgJob->m_plotLayerSequence = convertLayerArg( aSvgJob->m_argLayers.value(), brd );
@@ -913,10 +954,20 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    TOOL_MANAGER* toolManager = getToolManager( brd );
+
     aJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+
+    if( aDxfJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
 
     if( aDxfJob->m_argLayers )
         aDxfJob->m_plotLayerSequence = convertLayerArg( aDxfJob->m_argLayers.value(), brd );
@@ -995,10 +1046,20 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    TOOL_MANAGER* toolManager = getToolManager( brd );
+
     pdfJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, pdfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( pdfJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+
+    if( pdfJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
 
     if( pdfJob->m_argLayers )
         pdfJob->m_plotLayerSequence = convertLayerArg( pdfJob->m_argLayers.value(), brd );
@@ -1082,6 +1143,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    TOOL_MANAGER* toolManager = getToolManager( brd );
 
     psJob->SetTitleBlock( brd->GetTitleBlock() );
     loadOverrideDrawingSheet( brd, psJob->m_drawingSheet );
@@ -1168,6 +1231,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    TOOL_MANAGER* toolManager = getToolManager( brd );
+
     wxString outPath = aGerberJob->GetFullOutputPath( brd->GetProject() );
 
     if( !PATHS::EnsurePathExists( outPath, false ) )
@@ -1180,6 +1245,14 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+
+    if( aGerberJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
 
     bool hasLayerListSpecified = false; // will be true if the user layer list is not empty
 
@@ -1388,9 +1461,19 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    TOOL_MANAGER* toolManager = getToolManager( brd );
+
     aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+
+    if( aGerberJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
 
     if( aGerberJob->m_argLayers )
         aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), brd );
@@ -2064,8 +2147,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     drcEngine->SetDrawingSheet( getDrawingSheetProxyView( brd ) );
 
     // BOARD_COMMIT uses TOOL_MANAGER to grab the board internally so we must give it one
-    TOOL_MANAGER* toolManager = new TOOL_MANAGER;
-    toolManager->SetEnvironment( brd, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
+    TOOL_MANAGER* toolManager = getToolManager( brd );
 
     BOARD_COMMIT commit( toolManager );
     bool         checkParity = drcJob->m_parity;
@@ -2137,10 +2219,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     if( drcJob->m_refillZones )
     {
-        toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-        ZONE_FILLER_TOOL* zoneFiller = toolManager->GetTool<ZONE_FILLER_TOOL>();
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        zoneFiller->FillAllZones( nullptr, m_progressReporter, true );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     drcEngine->SetProgressReporter( m_progressReporter );

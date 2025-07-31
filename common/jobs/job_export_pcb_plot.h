@@ -79,4 +79,6 @@ public:
 
     ///< Used by SVG/DXF/PDF/Gerbers
     bool m_useDrillOrigin;
+
+    bool m_checkZonesBeforePlot;
 };

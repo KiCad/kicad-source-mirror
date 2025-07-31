@@ -116,6 +116,10 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
             .scan<'g', double>()
             .default_value( 1.0 )
             .metavar( "SCALE" );
+
+    m_argParser.add_argument( ARG_CHECK_ZONES )
+            .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
+            .flag();
 }
 
 
@@ -146,6 +150,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_plotDrawingSheet = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
     dxfJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
     dxfJob->m_scale = m_argParser.get<double>( ARG_SCALE );
+    dxfJob->m_checkZonesBeforePlot = m_argParser.get<bool>( ARG_CHECK_ZONES );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
         wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );

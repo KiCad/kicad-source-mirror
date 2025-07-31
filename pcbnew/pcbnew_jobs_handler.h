@@ -31,11 +31,14 @@ class FOOTPRINT;
 class JOB_EXPORT_PCB_GERBER;
 class JOB_EXPORT_PCB_GERBERS;
 class JOB_FP_EXPORT_SVG;
+class TOOL_MANAGER;
 
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
     PCBNEW_JOBS_HANDLER( KIWAY* aKiway );
+    virtual ~PCBNEW_JOBS_HANDLER();
+
     int JobExportStep( JOB* aJob );
     int JobExportRender( JOB* aJob );
     int JobExportSvg( JOB* aJob );
@@ -67,7 +70,10 @@ private:
 
     DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( BOARD* aBrd );
 
+    TOOL_MANAGER* getToolManager( BOARD* aBrd );
+
     BOARD* m_cliBoard;
+    std::unique_ptr<TOOL_MANAGER> m_toolManager;
 };
 
 #endif

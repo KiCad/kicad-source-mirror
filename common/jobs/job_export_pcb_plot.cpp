@@ -49,7 +49,8 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
         m_plotLayerSequence(),
         m_plotOnAllLayersSequence(),
         m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE ),
-        m_useDrillOrigin( false )
+        m_useDrillOrigin( false ),
+        m_checkZonesBeforePlot( false )
 {
     m_params.emplace_back( new JOB_PARAM_LSEQ( "layers",
                                                &m_plotLayerSequence, m_plotLayerSequence ) );
@@ -101,4 +102,6 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet",
                                                     &m_drawingSheet, m_drawingSheet ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "check_zones", &m_checkZonesBeforePlot, m_checkZonesBeforePlot ) );
 }

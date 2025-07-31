@@ -36,6 +36,7 @@ class PROGRESS_REPORTER;
 class WX_PROGRESS_REPORTER;
 class ZONE_FILLER;
 
+#define ZONE_FILLER_TOOL_NAME "pcbnew.ZoneFiller"
 
 /**
  * Handle actions specific to filling copper zones.

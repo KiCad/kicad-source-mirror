@@ -102,6 +102,10 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
     m_argParser.add_argument( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT )
             .help( UTF8STDSTR( _( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_CHECK_ZONES )
+            .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
+            .flag();
 }
 
 
@@ -132,6 +136,7 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_useDrillOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
     aJob->m_useProtelFileExtension = !m_argParser.get<bool>( ARG_NO_PROTEL_EXTENSION );
     aJob->m_precision = m_argParser.get<int>( ARG_PRECISION );
+    aJob->m_checkZonesBeforePlot = m_argParser.get<bool>( ARG_CHECK_ZONES );
 
     aJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
     aJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
