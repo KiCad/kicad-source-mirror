@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 08:10-0700\n"
+"POT-Creation-Date: 2025-07-31 19:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -365,7 +365,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_design_block_properties.cpp:103
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1828
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2230
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2235
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:901
 #: eeschema/files-io.cpp:969 eeschema/sch_marker.cpp:379
 #: kicad/import_proj.cpp:88 kicad/import_project.cpp:123 kicad/kicad.cpp:323
@@ -1089,14 +1089,14 @@ msgstr "(„Ctrl“ + tabuliavimo klavišas)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:723
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1660
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2094
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2099
 #: pcbnew/widgets/appearance_controls.cpp:2635
 msgid "Save preset..."
 msgstr "Išsaugoti iš anksto nustatytą ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:724
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1661
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2095
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2100
 #: pcbnew/widgets/appearance_controls.cpp:2636
 msgid "Delete preset..."
 msgstr "Ištrinti iš anksto nustatytą ..."
@@ -1113,77 +1113,77 @@ msgstr "Išsaugoti sluoksnio išankstinį nustatymą"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:840
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1835
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2242
 #: pcbnew/widgets/appearance_controls.cpp:2775
 #, fuzzy
 msgid "Overwrite existing preset?"
 msgstr "Atidarykite esamą projektą"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1860
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2262
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1862
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2269
 #: pcbnew/widgets/appearance_controls.cpp:2803
 msgid "Presets"
 msgstr "Parinktys"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:875
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1872
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2274
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1874
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2281
 #: pcbnew/widgets/appearance_controls.cpp:2815
 msgid "Delete Preset"
 msgstr "Ištrinti iš anksto nustatytą"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:876
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1873
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2275
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1875
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2282
 #: pcbnew/widgets/appearance_controls.cpp:2816
 msgid "Select preset:"
 msgstr "Pasirinkite išankstinį nustatymą:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
-#: pcbnew/widgets/appearance_controls.cpp:2916
+#: pcbnew/widgets/appearance_controls.cpp:2919
 #, fuzzy, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "(„Ctrl“ + tabuliavimo klavišas)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
-#: pcbnew/widgets/appearance_controls.cpp:2925
+#: pcbnew/widgets/appearance_controls.cpp:2928
 #, fuzzy
 msgid "Save viewport..."
 msgstr "Išsaugoti iš anksto nustatytą ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
-#: pcbnew/widgets/appearance_controls.cpp:2926
+#: pcbnew/widgets/appearance_controls.cpp:2929
 #, fuzzy
 msgid "Delete viewport..."
 msgstr "Ištrinti iš anksto nustatytą ..."
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:987
-#: pcbnew/widgets/appearance_controls.cpp:2975
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:989
+#: pcbnew/widgets/appearance_controls.cpp:2980
 #, fuzzy
 msgid "Viewport name:"
 msgstr "Grandinės pavadinimas:"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:988
-#: pcbnew/widgets/appearance_controls.cpp:2975
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:990
+#: pcbnew/widgets/appearance_controls.cpp:2980
 #, fuzzy
 msgid "Save Viewport"
 msgstr "Išsaugoti ataskaitos failą"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:1028
-#: pcbnew/widgets/appearance_controls.cpp:3014
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:1032
+#: pcbnew/widgets/appearance_controls.cpp:3021
 #, fuzzy
 msgid "Viewports"
 msgstr "Ataskaita"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:1037
-#: pcbnew/widgets/appearance_controls.cpp:3023
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:1041
+#: pcbnew/widgets/appearance_controls.cpp:3030
 #, fuzzy
 msgid "Delete Viewport"
 msgstr "Pašalinti  perėjimą"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:1038
-#: pcbnew/widgets/appearance_controls.cpp:3024
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:1042
+#: pcbnew/widgets/appearance_controls.cpp:3031
 #, fuzzy
 msgid "Select viewport:"
 msgstr "Pasirinkite išankstinį nustatymą:"
@@ -1598,7 +1598,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1778
-#: pcbnew/pad.cpp:1394
+#: pcbnew/pad.cpp:1402
 msgid "Rotation"
 msgstr "Pasukimas"
 
@@ -1638,7 +1638,7 @@ msgid "Image Converter"
 msgstr "Konvertuotas"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 #, fuzzy
 msgid "KiCad Image Converter"
 msgstr "Konvertuotas"
@@ -2155,7 +2155,7 @@ msgid "Interleaved saves may produce very unexpected results."
 msgstr ""
 
 #: common/confirm.cpp:54 common/confirm.cpp:59 common/confirm.cpp:124
-#: common/confirm.cpp:151 common/dialog_shim.cpp:788
+#: common/confirm.cpp:151 common/dialog_shim.cpp:822
 msgid "&Cancel"
 msgstr "Atšaukti"
 
@@ -2173,7 +2173,7 @@ msgstr "Įrašyti pakeitimus?"
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "Jei neišsaugosite, visi pakeitimai bus visam laikui prarasti."
 
-#: common/confirm.cpp:74 common/confirm.cpp:111 common/dialog_shim.cpp:792
+#: common/confirm.cpp:74 common/confirm.cpp:111 common/dialog_shim.cpp:826
 msgid "&Save"
 msgstr "Išsaugoti"
 
@@ -2197,7 +2197,7 @@ msgid "&Revert"
 msgstr "Niekada"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:90
-#: common/dialog_shim.cpp:787
+#: common/dialog_shim.cpp:821
 msgid "&OK"
 msgstr "Gerai"
 
@@ -2253,11 +2253,11 @@ msgstr "Patvirtinimas"
 msgid "Confirmation"
 msgstr "Patvirtinimas"
 
-#: common/confirm.cpp:273 common/dialog_shim.cpp:789
+#: common/confirm.cpp:273 common/dialog_shim.cpp:823
 msgid "&Yes"
 msgstr "&Taip"
 
-#: common/confirm.cpp:273 common/dialog_shim.cpp:790
+#: common/confirm.cpp:273 common/dialog_shim.cpp:824
 #, fuzzy
 msgid "&No"
 msgstr "Ne"
@@ -2269,7 +2269,7 @@ msgstr "Įkeliami „Gerber“ failai ..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 #, fuzzy
 msgid "KiCad"
@@ -2611,12 +2611,12 @@ msgstr "Aukoti"
 msgid "Donate to KiCad"
 msgstr "Sveiki atvykę į „KiCad“ %s!"
 
-#: common/dialog_shim.cpp:791
+#: common/dialog_shim.cpp:825
 #, fuzzy
 msgid "&Apply"
 msgstr "Taikyti"
 
-#: common/dialog_shim.cpp:793 common/dialog_shim.cpp:794
+#: common/dialog_shim.cpp:827 common/dialog_shim.cpp:828
 #: common/eda_base_frame.cpp:521
 msgid "&Help"
 msgstr "Žinynas"
@@ -2712,24 +2712,24 @@ msgid "Reset to Default"
 msgstr "Grąžinti numatytąsias"
 
 #: common/dialogs/dialog_configure_paths.cpp:205
-#: common/dialogs/dialog_configure_paths.cpp:263
+#: common/dialogs/dialog_configure_paths.cpp:266
 msgid "Environment variable name cannot be empty."
 msgstr "Aplinkos kintamojo pavadinimas negali būti tuščias."
 
 #: common/dialogs/dialog_configure_paths.cpp:213
-#: common/dialogs/dialog_configure_paths.cpp:265
+#: common/dialogs/dialog_configure_paths.cpp:268
 msgid "Environment variable path cannot be empty."
 msgstr "Aplinkos kintamojo kelias negali būti tuščias."
 
-#: common/dialogs/dialog_configure_paths.cpp:270
+#: common/dialogs/dialog_configure_paths.cpp:273
 msgid "3D search path alias cannot be empty."
 msgstr "3D paieškos kelio pseudonimas negali būti tuščias."
 
-#: common/dialogs/dialog_configure_paths.cpp:272
+#: common/dialogs/dialog_configure_paths.cpp:275
 msgid "3D search path cannot be empty."
 msgstr "3D paieškos kelias negali būti tuščias."
 
-#: common/dialogs/dialog_configure_paths.cpp:287
+#: common/dialogs/dialog_configure_paths.cpp:290
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
@@ -2737,7 +2737,7 @@ msgstr ""
 "Šis kelias buvo apibrėžtas išoriškai bėgimo procesui ir\n"
 "bus tik laikinai perrašyta."
 
-#: common/dialogs/dialog_configure_paths.cpp:289
+#: common/dialogs/dialog_configure_paths.cpp:292
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2751,12 +2751,12 @@ msgstr ""
 "pervardykite visus prieštaraujančius įrašus arba pašalinkite\n"
 "išorinės aplinkos kintamąjį (-ius) iš jūsų sistemos."
 
-#: common/dialogs/dialog_configure_paths.cpp:307
+#: common/dialogs/dialog_configure_paths.cpp:310
 #, fuzzy, c-format
 msgid "The name %s is reserved, and cannot be used."
 msgstr "Pavadinimas %s yra rezervuotas ir jo čia naudoti negalima"
 
-#: common/dialogs/dialog_configure_paths.cpp:389
+#: common/dialogs/dialog_configure_paths.cpp:392
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -2770,7 +2770,7 @@ msgstr ""
 "prieš šioje lentelėje apibrėžtus kintamuosius. Tai reiškia, kad šios "
 "lentelės reikšmės nepaisomos."
 
-#: common/dialogs/dialog_configure_paths.cpp:395
+#: common/dialogs/dialog_configure_paths.cpp:398
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -2801,7 +2801,7 @@ msgstr "aplinkos įvairovė"
 #: eeschema/dialogs/panel_bom_presets_base.cpp:80
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
-#: eeschema/fields_grid_table.cpp:478 eeschema/sch_pin.cpp:1611
+#: eeschema/fields_grid_table.cpp:478 eeschema/sch_pin.cpp:1620
 #: eeschema/sch_symbol.cpp:2011 eeschema/sch_symbol.cpp:2064
 #: eeschema/symbol_editor/symbol_editor.cpp:1741
 #: eeschema/symbol_viewer_frame.cpp:457
@@ -3134,14 +3134,12 @@ msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1487
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1336 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Schema"
 
@@ -3683,7 +3681,7 @@ msgstr "Spaudinio peržiūra"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:68
 #: eeschema/printing/dialog_print.cpp:96
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.cpp:32
-#: kicad/dialogs/panel_jobset.cpp:112 kicad/pcm/dialogs/dialog_pcm.cpp:167
+#: kicad/dialogs/panel_jobset.cpp:112 kicad/pcm/dialogs/dialog_pcm.cpp:166
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:125
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
@@ -4050,7 +4048,7 @@ msgstr "Failo pavadinimas:"
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
-#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1332
+#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1340
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:618 pcbnew/pcb_tablecell.cpp:139
 #: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:474 pcbnew/pcb_track.cpp:1739
@@ -4541,7 +4539,7 @@ msgid "Use compact icons in the toolbars"
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:976
-#: eeschema/sch_label.cpp:1235 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:1247 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:539
 #: gerbview/gerber_file_image.cpp:371 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
@@ -5007,8 +5005,8 @@ msgstr "Aktyvus"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:45
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
-#: eeschema/sch_field.cpp:1216 eeschema/sch_pin.cpp:1616
-#: eeschema/sch_pin.cpp:2215 eeschema/sch_tablecell.cpp:241
+#: eeschema/sch_field.cpp:1216 eeschema/sch_pin.cpp:1625
+#: eeschema/sch_pin.cpp:2224 eeschema/sch_tablecell.cpp:241
 #: include/lib_table_grid.h:218 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Visible"
@@ -5480,7 +5478,7 @@ msgstr "Mastelis"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4143
-#: pcbnew/pad.cpp:2691 pcbnew/pad.cpp:2710 pcbnew/pcb_dimension.cpp:2012
+#: pcbnew/pad.cpp:2689 pcbnew/pad.cpp:2708 pcbnew/pcb_dimension.cpp:2012
 #: pcbnew/widgets/appearance_controls.cpp:732
 #: pcbnew/widgets/appearance_controls.cpp:774
 #: pcbnew/widgets/appearance_controls.cpp:2579
@@ -5604,7 +5602,7 @@ msgstr "Patikrinti korpusą"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
-#: kicad/pcm/dialogs/dialog_pcm.cpp:216
+#: kicad/pcm/dialogs/dialog_pcm.cpp:215
 #: kicad/tools/kicad_manager_actions.cpp:196
 msgid "Plugin and Content Manager"
 msgstr ""
@@ -5719,7 +5717,7 @@ msgstr ""
 msgid "<Not defined>"
 msgstr "Neprijungta"
 
-#: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2333
+#: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2342
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1047
@@ -5728,13 +5726,13 @@ msgstr "Neprijungta"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4145
-#: pcbnew/pad.cpp:2712 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:789
+#: pcbnew/pad.cpp:2710 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:862 pcbnew/zone.cpp:1880
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "Solidus"
 
-#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2334
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2343
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1048
@@ -5743,7 +5741,7 @@ msgstr "Solidus"
 msgid "Dashed"
 msgstr "Punktyrinis"
 
-#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2335
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2344
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1049
@@ -5752,7 +5750,7 @@ msgstr "Punktyrinis"
 msgid "Dotted"
 msgstr "Punktyras"
 
-#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2336
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2345
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1050
@@ -5761,7 +5759,7 @@ msgstr "Punktyras"
 msgid "Dash-Dot"
 msgstr "Brūkšnys-Taškas"
 
-#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2337
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2346
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1051
@@ -5922,7 +5920,7 @@ msgstr "Vielos storis"
 msgid "Bus Thickness"
 msgstr "Autobuso storis"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_shape.cpp:2436
+#: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_shape.cpp:2445
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:669
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1088
 #: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:233
@@ -5940,7 +5938,7 @@ msgstr "Linijos stilius"
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 #: eeschema/sch_bus_entry.cpp:660 eeschema/sch_field.cpp:1218
-#: eeschema/sch_label.cpp:1233 eeschema/sch_line.cpp:1058
+#: eeschema/sch_label.cpp:1245 eeschema/sch_line.cpp:1058
 #: eeschema/sch_tablecell.cpp:157 eeschema/sch_text.cpp:642
 #: eeschema/sch_textbox.cpp:537 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:31
@@ -5972,8 +5970,8 @@ msgid "Pattern"
 msgstr "Liuko modelis"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
-#: eeschema/sch_field.cpp:1371 eeschema/sch_label.cpp:207
-#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1980
+#: eeschema/sch_field.cpp:1371 eeschema/sch_label.cpp:219
+#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1980
 msgid "Net Class"
 msgstr "Grynoji klasė"
 
@@ -6062,7 +6060,7 @@ msgstr ""
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/sch_field.cpp:1214 eeschema/sch_field.cpp:1900
-#: eeschema/sch_label.cpp:2309 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_label.cpp:2321 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:637 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -6086,7 +6084,7 @@ msgstr "Tekstas"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:416
-#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2135
+#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2144
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -6096,11 +6094,11 @@ msgid "Line"
 msgstr "Atkarpa"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:978
-#: common/eda_shape.cpp:2323
+#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
+#: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2290
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
+#: eeschema/sch_label.cpp:2302
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2681
 #: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "Stačiakampis"
@@ -6393,7 +6391,7 @@ msgstr "\"Raytracing\" Renderinimo Nustatymai"
 
 #: common/eda_base_frame.cpp:1209 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:616 gerbview/gerbview_frame.cpp:652
-#: gerbview/gerbview_frame.cpp:676 gerbview/menubar.cpp:159
+#: gerbview/gerbview_frame.cpp:675 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 #, fuzzy
 msgid "Gerber Viewer"
@@ -6571,14 +6569,14 @@ msgstr "Ekraninis"
 #: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2047
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
-#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1313
+#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1321
 #: pcbnew/pcb_shape.cpp:612 pcbnew/pcb_text.cpp:274
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Korpusas"
 
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pad.cpp:1316
+#: pcbnew/pad.cpp:1324
 msgid "Pad"
 msgstr "Aikštelė"
 
@@ -6696,24 +6694,24 @@ msgstr "Taisyklės sritis"
 msgid "Net Label"
 msgstr "„Net Label“"
 
-#: common/eda_item.cpp:425 eeschema/sch_label.cpp:1219
-#: eeschema/sch_label.cpp:1798
+#: common/eda_item.cpp:425 eeschema/sch_label.cpp:1231
+#: eeschema/sch_label.cpp:1810
 #, fuzzy
 msgid "Directive Label"
 msgstr "„Net Label“"
 
-#: common/eda_item.cpp:426 eeschema/sch_label.cpp:1220
+#: common/eda_item.cpp:426 eeschema/sch_label.cpp:1232
 #: eeschema/tools/sch_edit_tool.cpp:258
 msgid "Global Label"
 msgstr "Globali žyma"
 
-#: common/eda_item.cpp:427 eeschema/sch_label.cpp:1221
+#: common/eda_item.cpp:427 eeschema/sch_label.cpp:1233
 #: eeschema/tools/sch_edit_tool.cpp:257
 msgid "Hierarchical Label"
 msgstr "Hierarchinė žyma"
 
 #: common/eda_item.cpp:428 eeschema/dialogs/dialog_symbol_fields_table.cpp:199
-#: eeschema/sch_field.h:102 eeschema/sch_label.cpp:209
+#: eeschema/sch_field.h:102 eeschema/sch_label.cpp:221
 msgid "Field"
 msgstr "Laukas"
 
@@ -6722,7 +6720,7 @@ msgstr "Laukas"
 msgid "Symbol"
 msgstr "Simbolis"
 
-#: common/eda_item.cpp:430 eeschema/sch_pin.cpp:1594 eeschema/sch_pin.h:85
+#: common/eda_item.cpp:430 eeschema/sch_pin.cpp:1603 eeschema/sch_pin.h:85
 msgid "Pin"
 msgstr "Išvadas"
 
@@ -6757,20 +6755,20 @@ msgstr "Terminio stipino plotis"
 msgid "Number Box"
 msgstr "Numeris"
 
-#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1550
+#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1561
 msgid "Rect"
 msgstr "Stačiakampis"
 
-#: common/eda_shape.cpp:330 common/eda_shape.cpp:975 common/eda_shape.cpp:2324
+#: common/eda_shape.cpp:330 common/eda_shape.cpp:984 common/eda_shape.cpp:2333
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "Lankas"
 
-#: common/eda_shape.cpp:331 common/eda_shape.cpp:974 common/eda_shape.cpp:2325
+#: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2288 gerbview/gerber_draw_item.cpp:231
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1548
-#: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
+#: eeschema/sch_label.cpp:2300 gerbview/gerber_draw_item.cpp:231
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1559
+#: pcbnew/pad.cpp:2680 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "Apskritimas"
 
@@ -6778,36 +6776,36 @@ msgstr "Apskritimas"
 msgid "Bezier Curve"
 msgstr "Bezje krevė"
 
-#: common/eda_shape.cpp:333 common/eda_shape.cpp:977 common/eda_shape.cpp:2326
+#: common/eda_shape.cpp:333 common/eda_shape.cpp:986 common/eda_shape.cpp:2335
 msgid "Polygon"
 msgstr "Daugiakampis"
 
-#: common/eda_shape.cpp:965
+#: common/eda_shape.cpp:974
 #, fuzzy
 msgid "Pad Number Box"
 msgstr "Trinkelių skaičius"
 
-#: common/eda_shape.cpp:966 pcbnew/pcb_shape.cpp:959
+#: common/eda_shape.cpp:975 pcbnew/pcb_shape.cpp:959
 #, fuzzy
 msgid "Thermal Spoke Template"
 msgstr "Terminio stipino plotis"
 
-#: common/eda_shape.cpp:967 common/eda_shape.cpp:980
+#: common/eda_shape.cpp:976 common/eda_shape.cpp:989
 msgid "Unrecognized"
 msgstr "Neatpažintas"
 
-#: common/eda_shape.cpp:976
+#: common/eda_shape.cpp:985
 msgid "Curve"
 msgstr "Kreivė"
 
-#: common/eda_shape.cpp:979 common/eda_shape.cpp:2322
+#: common/eda_shape.cpp:988 common/eda_shape.cpp:2331
 msgid "Segment"
 msgstr "Segmentas"
 
-#: common/eda_shape.cpp:990 common/eda_shape.cpp:2375
+#: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2270 eeschema/sch_label.cpp:2302
+#: eeschema/sch_label.cpp:2282 eeschema/sch_label.cpp:2314
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:679
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6820,30 +6818,31 @@ msgstr "Segmentas"
 msgid "Shape"
 msgstr "Forma"
 
-#: common/eda_shape.cpp:996 common/eda_shape.cpp:1005 common/eda_shape.cpp:2402
-#: pcbnew/dialogs/dialog_shape_properties.cpp:932 pcbnew/pcb_track.cpp:1635
+#: common/eda_shape.cpp:1005 common/eda_shape.cpp:1014
+#: common/eda_shape.cpp:2411 pcbnew/dialogs/dialog_shape_properties.cpp:932
+#: pcbnew/pcb_track.cpp:1635
 msgid "Radius"
 msgstr "Spindulys"
 
-#: common/eda_shape.cpp:1000 common/eda_shape.cpp:1009
-#: common/eda_shape.cpp:1027 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
+#: common/eda_shape.cpp:1009 common/eda_shape.cpp:1018
+#: common/eda_shape.cpp:1036 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/sch_pin.cpp:1619 eeschema/sch_pin.cpp:2200
+#: eeschema/sch_pin.cpp:1628 eeschema/sch_pin.cpp:2209
 #: pcbnew/dialogs/dialog_shape_properties.cpp:902
 msgid "Length"
 msgstr "Ilgis"
 
-#: common/eda_shape.cpp:1003 common/eda_shape.cpp:1033
-#: common/eda_shape.cpp:2445 pcbnew/dialogs/dialog_shape_properties.cpp:903
+#: common/eda_shape.cpp:1012 common/eda_shape.cpp:1042
+#: common/eda_shape.cpp:2454 pcbnew/dialogs/dialog_shape_properties.cpp:903
 #: pcbnew/pcb_text.cpp:292 pcbnew/pcb_textbox.cpp:478
 msgid "Angle"
 msgstr "Kampas"
 
-#: common/eda_shape.cpp:1014 eeschema/sch_rule_area.cpp:384
+#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:384
 msgid "Points"
 msgstr "Taškai"
 
-#: common/eda_shape.cpp:1018 common/eda_shape.cpp:2420 common/eda_text.cpp:1389
+#: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
 #: eeschema/sch_field.cpp:1881 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:781
@@ -6853,7 +6852,7 @@ msgstr "Taškai"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1381
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1389
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -6862,7 +6861,7 @@ msgstr "Taškai"
 msgid "Width"
 msgstr "Plotis"
 
-#: common/eda_shape.cpp:1021 common/eda_shape.cpp:2426 common/eda_text.cpp:1394
+#: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
 #: eeschema/sch_field.cpp:1882 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:782
@@ -6870,7 +6869,7 @@ msgstr "Plotis"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1382 pcbnew/pcb_dimension.cpp:1033
+#: pcbnew/pad.cpp:1390 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:224
 #: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:233
 #: pcbnew/pcb_tablecell.cpp:239 pcbnew/pcb_text.cpp:297
@@ -6878,16 +6877,16 @@ msgstr "Plotis"
 msgid "Height"
 msgstr "Aukštis"
 
-#: common/eda_shape.cpp:2327
+#: common/eda_shape.cpp:2336
 msgid "Bezier"
 msgstr "Bezje"
 
-#: common/eda_shape.cpp:2373 eeschema/sch_shape.cpp:772
+#: common/eda_shape.cpp:2382 eeschema/sch_shape.cpp:772
 #, fuzzy
 msgid "Shape Properties"
 msgstr "Lapo ypatybės"
 
-#: common/eda_shape.cpp:2379 eeschema/sch_table.cpp:660
+#: common/eda_shape.cpp:2388 eeschema/sch_table.cpp:660
 #: eeschema/sch_tablecell.cpp:222 pcbnew/pcb_table.cpp:616
 #: pcbnew/pcb_tablecell.cpp:227 pcbnew/pcb_textbox.cpp:804
 #: pcbnew/pcb_track.cpp:2127
@@ -6895,7 +6894,7 @@ msgstr "Lapo ypatybės"
 msgid "Start X"
 msgstr "Начальная точка по X:"
 
-#: common/eda_shape.cpp:2384 eeschema/sch_table.cpp:663
+#: common/eda_shape.cpp:2393 eeschema/sch_table.cpp:663
 #: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_table.cpp:619
 #: pcbnew/pcb_tablecell.cpp:228 pcbnew/pcb_textbox.cpp:805
 #: pcbnew/pcb_track.cpp:2131
@@ -6903,47 +6902,47 @@ msgstr "Начальная точка по X:"
 msgid "Start Y"
 msgstr "Начальная точка по Y:"
 
-#: common/eda_shape.cpp:2390
+#: common/eda_shape.cpp:2399
 #, fuzzy
 msgid "Center X"
 msgstr "Centras"
 
-#: common/eda_shape.cpp:2396
+#: common/eda_shape.cpp:2405
 #, fuzzy
 msgid "Center Y"
 msgstr "Centras"
 
-#: common/eda_shape.cpp:2408 eeschema/sch_tablecell.cpp:224
+#: common/eda_shape.cpp:2417 eeschema/sch_tablecell.cpp:224
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2619 pcbnew/pcb_tablecell.cpp:229
 #: pcbnew/pcb_textbox.cpp:806 pcbnew/pcb_track.cpp:2134
 msgid "End X"
 msgstr "X pabaiga"
 
-#: common/eda_shape.cpp:2414 eeschema/sch_tablecell.cpp:225
+#: common/eda_shape.cpp:2423 eeschema/sch_tablecell.cpp:225
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2625 pcbnew/pcb_tablecell.cpp:230
 #: pcbnew/pcb_textbox.cpp:807 pcbnew/pcb_track.cpp:2137
 msgid "End Y"
 msgstr "Pabaiga Y"
 
-#: common/eda_shape.cpp:2432 common/stroke_params.cpp:276
+#: common/eda_shape.cpp:2441 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:673 eeschema/sch_line.cpp:1096
 #: eeschema/sch_tablecell.cpp:232 pcbnew/pcb_tablecell.cpp:234
 #: pcbnew/pcb_textbox.cpp:810
 msgid "Line Width"
 msgstr "Linijos storis"
 
-#: common/eda_shape.cpp:2440 eeschema/sch_tablecell.cpp:234
+#: common/eda_shape.cpp:2449 eeschema/sch_tablecell.cpp:234
 #: pcbnew/pcb_shape.cpp:893 pcbnew/pcb_tablecell.cpp:236
 #, fuzzy
 msgid "Line Color"
 msgstr "Linijos spalva:"
 
-#: common/eda_shape.cpp:2487 eeschema/sch_shape.cpp:762
+#: common/eda_shape.cpp:2496 eeschema/sch_shape.cpp:762
 #: pcbnew/dialogs/dialog_plot_base.cpp:138 pcbnew/pcb_textbox.cpp:812
 msgid "Filled"
 msgstr "Užpildytas"
 
-#: common/eda_shape.cpp:2492 eeschema/sch_shape.cpp:765
+#: common/eda_shape.cpp:2501 eeschema/sch_shape.cpp:765
 #: eeschema/sch_tablecell.cpp:231 pcbnew/pcb_shape.cpp:894
 #, fuzzy
 msgid "Fill Color"
@@ -6960,8 +6959,8 @@ msgstr "Linijos spalva:"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
-#: eeschema/fields_grid_table.cpp:484 eeschema/sch_label.cpp:1235
-#: eeschema/sch_label.cpp:2311 eeschema/sch_tablecell.cpp:159
+#: eeschema/fields_grid_table.cpp:484 eeschema/sch_label.cpp:1247
+#: eeschema/sch_label.cpp:2323 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:539
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6986,8 +6985,8 @@ msgstr "Kursyvas"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
-#: eeschema/fields_grid_table.cpp:485 eeschema/sch_label.cpp:1235
-#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:159
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_label.cpp:1247
+#: eeschema/sch_label.cpp:2324 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:539
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -7006,7 +7005,7 @@ msgstr "Pusjuodis kursyvas"
 #: eeschema/fields_grid_table.cpp:310 eeschema/fields_grid_table.cpp:725
 #: eeschema/fields_grid_table.cpp:869 eeschema/pin_type.cpp:118
 #: eeschema/sch_field.cpp:1226 eeschema/sch_field.cpp:1835
-#: eeschema/sch_pin.cpp:2151 pcbnew/dialogs/dialog_render_job.cpp:40
+#: eeschema/sch_pin.cpp:2160 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2605
 msgid "Left"
 msgstr "Kairėn"
@@ -7034,7 +7033,7 @@ msgstr "Centras"
 #: eeschema/fields_grid_table.cpp:312 eeschema/fields_grid_table.cpp:727
 #: eeschema/fields_grid_table.cpp:873 eeschema/pin_type.cpp:117
 #: eeschema/sch_field.cpp:1228 eeschema/sch_field.cpp:1837
-#: eeschema/sch_pin.cpp:2150 pcbnew/dialogs/dialog_render_job.cpp:41
+#: eeschema/sch_pin.cpp:2159 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2606
 msgid "Right"
 msgstr "Dešinėje"
@@ -7065,12 +7064,12 @@ msgstr "Apačia"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:487 eeschema/sch_field.cpp:1889
-#: eeschema/sch_pin.cpp:1621 eeschema/sch_pin.cpp:2196
+#: eeschema/sch_pin.cpp:1630 eeschema/sch_pin.cpp:2205
 #: eeschema/sch_symbol.cpp:2924 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:790 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4175 pcbnew/pad.cpp:2729 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/footprint.cpp:4175 pcbnew/pad.cpp:2727 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
@@ -7092,7 +7091,7 @@ msgstr "Teksto savybės"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
 #: eeschema/fields_grid_table.cpp:490 eeschema/sch_field.cpp:1218
-#: eeschema/sch_label.cpp:1233 eeschema/sch_tablecell.cpp:157
+#: eeschema/sch_label.cpp:1245 eeschema/sch_tablecell.cpp:157
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 #: eeschema/widgets/sch_properties_panel.cpp:273 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
@@ -7102,7 +7101,7 @@ msgid "Font"
 msgstr "Šrifto dydis:"
 
 #: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1879
-#: eeschema/sch_label.cpp:2310 eeschema/sch_tablecell.cpp:238
+#: eeschema/sch_label.cpp:2322 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:783 eeschema/sch_textbox.cpp:683
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -7120,12 +7119,12 @@ msgid "Mirrored"
 msgstr "Veidrodinis"
 
 #: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1859
-#: eeschema/sch_field.cpp:1862 eeschema/sch_label.cpp:2314
+#: eeschema/sch_field.cpp:1862 eeschema/sch_label.cpp:2326
 msgid "Horizontal Justification"
 msgstr "Horizontalusis pagrindimas"
 
 #: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1866
-#: eeschema/sch_field.cpp:1869 eeschema/sch_label.cpp:2316
+#: eeschema/sch_field.cpp:1869 eeschema/sch_label.cpp:2328
 #: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
 #: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
 #: pcbnew/pcb_dimension.cpp:2071
@@ -7133,7 +7132,7 @@ msgid "Vertical Justification"
 msgstr "Vertikalus pagrindimas"
 
 #: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1878
-#: eeschema/sch_label.cpp:2274 eeschema/sch_tablecell.cpp:242
+#: eeschema/sch_label.cpp:2286 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
 #: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
 #: pcbnew/pcb_dimension.cpp:2074 pcbnew/pcb_field.cpp:303
@@ -7161,7 +7160,7 @@ msgstr "Viršus"
 msgid "max"
 msgstr ""
 
-#: common/env_vars.cpp:108
+#: common/env_vars.cpp:102
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
@@ -7169,19 +7168,19 @@ msgstr ""
 "Pagrindinis lokaliai įdiegtų sistemos pėdsakų bibliotekų (.pretty aplankų) "
 "kelias."
 
-#: common/env_vars.cpp:111
+#: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr "Pagrindinis sistemos pėdsako 3D formų kelias (.3Dshapes aplankai)."
 
-#: common/env_vars.cpp:113
+#: common/env_vars.cpp:107
 msgid "The base path of the locally installed symbol libraries."
 msgstr "Vietoje įdiegtų simbolių bibliotekų pagrindinis kelias."
 
-#: common/env_vars.cpp:115
+#: common/env_vars.cpp:109
 msgid "A directory containing project templates installed with KiCad."
 msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“."
 
-#: common/env_vars.cpp:117
+#: common/env_vars.cpp:111
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
@@ -7189,13 +7188,13 @@ msgstr ""
 "Neprivaloma. Galima apibrėžti, jei norite sukurti savo projekto šablonų "
 "aplanką."
 
-#: common/env_vars.cpp:120
+#: common/env_vars.cpp:114
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
 
-#: common/env_vars.cpp:123
+#: common/env_vars.cpp:117
 msgid ""
 "Internally defined by KiCad (cannot be edited) and is set to the absolute "
 "path of the currently loaded project file.  This environment variable can be "
@@ -7210,15 +7209,15 @@ msgstr ""
 "aplanką, kuriame yra konkrečiam projektui skirta pėdsakų biblioteka, "
 "pavadinta footprints.pretty."
 
-#: common/env_vars.cpp:129
+#: common/env_vars.cpp:123
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“"
 
-#: common/env_vars.cpp:131
+#: common/env_vars.cpp:125
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“"
 
-#: common/env_vars.cpp:134
+#: common/env_vars.cpp:128
 #, fuzzy, c-format
 msgid "Deprecated version of %s."
 msgstr "Nebenaudojama „KICAD_TEMPLATE_DIR“ versija."
@@ -8822,7 +8821,7 @@ msgstr "Редактировать установки для новых конт
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:625 eeschema/sch_item.cpp:548
-#: eeschema/sch_item.cpp:597 eeschema/sch_pin.cpp:1600
+#: eeschema/sch_item.cpp:597 eeschema/sch_pin.cpp:1609
 #: eeschema/sch_symbol.cpp:2984 eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "Vienetas"
@@ -8889,12 +8888,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Trūksta „%s“ vienetų | (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1172
-#, fuzzy
+#, fuzzy, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Spindulys turi būti didesnis už 0."
 
 #: common/libeval_compiler/libeval_compiler.cpp:1178
-#, fuzzy
+#, fuzzy, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Spindulys turi būti didesnis už 0."
 
@@ -9061,7 +9060,7 @@ msgstr "Gaunant failą įvyko klaida!\n"
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:473
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:516
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:614
-#: pcbnew/dialogs/dialog_gendrill.cpp:510 pcbnew/exporters/export_d356.cpp:412
+#: pcbnew/dialogs/dialog_gendrill.cpp:512 pcbnew/exporters/export_d356.cpp:412
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:89
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
@@ -9112,7 +9111,7 @@ msgstr "Įspėjimas: "
 msgid "Error: "
 msgstr "Klaida: "
 
-#: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:2922
+#: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:2925
 #, fuzzy, c-format
 msgid "File '%s' does not exist."
 msgstr "Katalogas „%s“ nėra rašomas."
@@ -9421,7 +9420,7 @@ msgstr "Interaktyvus ištrynimo įrankis"
 msgid "Delete clicked items"
 msgstr "Ištrinkite spustelėtus elementus"
 
-#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2888
+#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2893
 #: pcbnew/tools/edit_tool.cpp:2373
 #, fuzzy
 msgid "Left Justify"
@@ -9431,7 +9430,7 @@ msgstr "Išlyginti vertikaliai"
 msgid "Left-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2890
+#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2895
 #: pcbnew/tools/edit_tool.cpp:2375
 #, fuzzy
 msgid "Center Justify"
@@ -9441,7 +9440,7 @@ msgstr "Išlyginti vertikaliai"
 msgid "Center-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2892
+#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2897
 #: pcbnew/tools/edit_tool.cpp:2377
 #, fuzzy
 msgid "Right Justify"
@@ -9461,7 +9460,7 @@ msgstr "Atnaujinti"
 msgid "Collapse All"
 msgstr "Pakeisti &visus"
 
-#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3144
+#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3149
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1218
 #: pcbnew/tools/edit_tool.cpp:3157
 #, fuzzy
@@ -10418,7 +10417,7 @@ msgstr "Nuorodos turi prasidėti raide."
 msgid "Field Validation Error"
 msgstr "Klaida tikrinant lauko reikšmę"
 
-#: common/view/view.cpp:549
+#: common/view/view.cpp:558
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Y ašies atspindėjimas kol kas nepalaikomas"
 
@@ -12079,8 +12078,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -12685,7 +12684,7 @@ msgstr "Pažeidimo sunkumas"
 msgid "Formatting"
 msgstr "Formatavimas"
 
-#: eeschema/dialogs/dialog_erc.cpp:1064 pcbnew/dialogs/dialog_gendrill.cpp:515
+#: eeschema/dialogs/dialog_erc.cpp:1064 pcbnew/dialogs/dialog_gendrill.cpp:517
 #, fuzzy, c-format
 msgid "Report file '%s' created."
 msgstr "Ataskaitos failas „%s“ sukurtas\n"
@@ -13052,7 +13051,7 @@ msgstr "Išeikite iš „KiCad“"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:53
 #: eeschema/dialogs/dialog_text_properties_base.cpp:123
-#: eeschema/sch_label.cpp:1245 eeschema/sch_text.cpp:652
+#: eeschema/sch_label.cpp:1257 eeschema/sch_text.cpp:652
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:49
 msgid "Align left"
 msgstr "Sulyginti kairėn"
@@ -13068,7 +13067,7 @@ msgstr "Lygiuoti į horizontalųjį centrą"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:182
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:63
 #: eeschema/dialogs/dialog_text_properties_base.cpp:133
-#: eeschema/sch_label.cpp:1243 eeschema/sch_text.cpp:654
+#: eeschema/sch_label.cpp:1255 eeschema/sch_text.cpp:654
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:59
 msgid "Align right"
 msgstr "Sulyginti dešinėn"
@@ -13076,7 +13075,7 @@ msgstr "Sulyginti dešinėn"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:192
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:80
 #: eeschema/dialogs/dialog_text_properties_base.cpp:143
-#: eeschema/sch_label.cpp:1246
+#: eeschema/sch_label.cpp:1258
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:76
 msgid "Align top"
 msgstr "Sulyginti viršų"
@@ -13092,7 +13091,7 @@ msgstr "Lygiuoti į vertikalų centrą"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:202
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:90
 #: eeschema/dialogs/dialog_text_properties_base.cpp:153
-#: eeschema/sch_label.cpp:1244
+#: eeschema/sch_label.cpp:1256
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:86
 msgid "Align bottom"
 msgstr "Sulyginti apačias"
@@ -13254,12 +13253,12 @@ msgid "Text color:"
 msgstr "Tinklo spalvos:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:119 eeschema/sch_pin.cpp:2152
+#: eeschema/pin_type.cpp:119 eeschema/sch_pin.cpp:2161
 msgid "Up"
 msgstr "Aukštyn"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:120 eeschema/sch_pin.cpp:2153
+#: eeschema/pin_type.cpp:120 eeschema/sch_pin.cpp:2162
 msgid "Down"
 msgstr "Žemyn"
 
@@ -13485,12 +13484,12 @@ msgstr "Grynasis vardas negali būti tuščias."
 msgid "untitled"
 msgstr "Kiekis"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:660
+#: eeschema/dialogs/dialog_label_properties.cpp:661
 #, fuzzy
 msgid "Edit Label Properties"
 msgstr "Žymos savybės"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:803
+#: eeschema/dialogs/dialog_label_properties.cpp:804
 #, fuzzy
 msgid "The first field is mandatory."
 msgstr "Pirmieji %d laukai yra privalomi."
@@ -13583,7 +13582,7 @@ msgstr "V Sulygiuokite"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:486 eeschema/sch_field.cpp:1222
-#: eeschema/sch_field.cpp:1885 eeschema/sch_label.cpp:1239
+#: eeschema/sch_field.cpp:1885 eeschema/sch_label.cpp:1251
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:648
 #: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:543
 #: eeschema/sch_textbox.cpp:704 pcbnew/tools/board_inspection_tool.cpp:1433
@@ -13629,46 +13628,46 @@ msgstr "Ištrinti lauką"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
-#: eeschema/sch_label.cpp:2232 eeschema/sch_pin.cpp:2117
+#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2126
 msgid "Input"
 msgstr "Įėjimas"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2233 eeschema/sch_pin.cpp:2118
+#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2127
 msgid "Output"
 msgstr "Išėjimas"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2234 eeschema/sch_pin.cpp:2119
+#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2128
 msgid "Bidirectional"
 msgstr "Dvikryptis"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2235
-#: eeschema/sch_pin.cpp:2120
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2247
+#: eeschema/sch_pin.cpp:2129
 msgid "Tri-state"
 msgstr "3 lygių"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
-#: eeschema/sch_label.cpp:2236 eeschema/sch_pin.cpp:2121
+#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2130
 msgid "Passive"
 msgstr "Pasyvus"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2287
+#: eeschema/sch_label.cpp:2299
 #, fuzzy
 msgid "Dot"
 msgstr "Taškais"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2289
+#: eeschema/sch_label.cpp:2301
 msgid "Diamond"
 msgstr ""
 
@@ -13700,7 +13699,7 @@ msgstr "Kiekis"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
-#: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/sch_pin.cpp:1612
+#: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/sch_pin.cpp:1621
 msgid "Number"
 msgstr "Numeris"
 
@@ -13710,7 +13709,7 @@ msgstr "Numeris"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
-#: eeschema/sch_pin.cpp:2179
+#: eeschema/sch_pin.cpp:2188
 msgid "Electrical Type"
 msgstr "Elektros tipas"
 
@@ -13720,19 +13719,19 @@ msgstr "Elektros tipas"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
-#: eeschema/sch_pin.cpp:2184
+#: eeschema/sch_pin.cpp:2193
 msgid "Graphic Style"
 msgstr "Grafinis stilius"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
-#: eeschema/sch_pin.cpp:2210
+#: eeschema/sch_pin.cpp:2219
 msgid "Number Text Size"
 msgstr "Skaičiaus teksto dydis"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
-#: eeschema/sch_pin.cpp:2205
+#: eeschema/sch_pin.cpp:2214
 msgid "Name Text Size"
 msgstr "Pavadinimas Teksto dydis"
 
@@ -15162,8 +15161,8 @@ msgid "Do not populate"
 msgstr "Neeksportuoti"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
-#: eeschema/sch_field.cpp:1220 eeschema/sch_label.cpp:1237
-#: eeschema/sch_pin.cpp:1614 eeschema/sch_tablecell.cpp:161
+#: eeschema/sch_field.cpp:1220 eeschema/sch_label.cpp:1249
+#: eeschema/sch_pin.cpp:1623 eeschema/sch_tablecell.cpp:161
 #: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:541
 msgid "Style"
 msgstr "Stilius"
@@ -15247,7 +15246,7 @@ msgstr "OSP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2688
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2686
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
 msgid "Custom"
 msgstr "Pasirinktinis"
@@ -15775,8 +15774,8 @@ msgid "Parameter"
 msgstr "Parametras"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:627 eeschema/sch_item.cpp:543
-#: eeschema/sch_label.cpp:1231 eeschema/sch_marker.cpp:367
-#: eeschema/sch_pin.cpp:1594 eeschema/sch_pin.cpp:1613
+#: eeschema/sch_label.cpp:1243 eeschema/sch_marker.cpp:367
+#: eeschema/sch_pin.cpp:1603 eeschema/sch_pin.cpp:1622
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 #: eeschema/widgets/search_handlers.cpp:323
 #: eeschema/widgets/search_handlers.cpp:410 gerbview/gerber_draw_item.cpp:668
@@ -15875,7 +15874,6 @@ msgid "Code"
 msgstr "D kodas:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr ""
 
@@ -16086,19 +16084,19 @@ msgid "Wrote BOM output to '%s'"
 msgstr "Negalima sukurti išvesties katalogo „%s“.\n"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1801
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2203
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2208
 #, fuzzy
 msgid "BOM preset name:"
 msgstr "Iš anksto nustatytas sluoksnio pavadinimas:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1801
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2203
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2208
 #, fuzzy
 msgid "Save BOM Preset"
 msgstr "Išsaugoti sluoksnio išankstinį nustatymą"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1827
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2229
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2234
 #: pcbnew/widgets/appearance_controls.cpp:2767
 msgid ""
 "Default presets cannot be modified.\n"
@@ -16320,7 +16318,7 @@ msgid "Edit Library Symbol..."
 msgstr "Redaguoti bibliotekos simbolį ..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/sch_pin.cpp:2174
+#: eeschema/sch_pin.cpp:2183
 msgid "Pin Number"
 msgstr "PIN kodas"
 
@@ -16720,7 +16718,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Atnaujinti / iš naujo nustatyti laukų dydžius ir stilius"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2209 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2221 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Sintaksės pagalba"
 
@@ -19239,65 +19237,65 @@ msgstr "Pasirinkite Ryšys"
 msgid "none"
 msgstr "нет имени"
 
-#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2122
+#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2131
 msgid "Free"
 msgstr "Laisvai"
 
-#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2123
+#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2132
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Unspecified"
 msgstr "Nenurodyta"
 
-#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2124
+#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2133
 msgid "Power input"
 msgstr "Elektros įvestis"
 
-#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2125
+#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2134
 msgid "Power output"
 msgstr "Galia"
 
-#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2126
+#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2135
 msgid "Open collector"
 msgstr "Atviras kolektorius"
 
-#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2127
+#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2136
 msgid "Open emitter"
 msgstr "Atviras emiteris"
 
-#: eeschema/pin_type.cpp:97 eeschema/sch_pin.cpp:2128
+#: eeschema/pin_type.cpp:97 eeschema/sch_pin.cpp:2137
 msgid "Unconnected"
 msgstr "Nesujungta"
 
-#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2136
+#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2145
 msgid "Inverted"
 msgstr "Invertuotas"
 
-#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2137
+#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2146
 msgid "Clock"
 msgstr "Laikrodis"
 
-#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2138
+#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2147
 msgid "Inverted clock"
 msgstr "Apverstas laikrodis"
 
-#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2139
+#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2148
 msgid "Input low"
 msgstr "Įvestis maža"
 
-#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2140
+#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2149
 msgid "Clock low"
 msgstr "Laikrodis žemas"
 
-#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2141
+#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2150
 msgid "Output low"
 msgstr "Mažas išėjimas"
 
-#: eeschema/pin_type.cpp:110 eeschema/sch_pin.cpp:2142
+#: eeschema/pin_type.cpp:110 eeschema/sch_pin.cpp:2151
 msgid "Falling edge clock"
 msgstr "Krintantis krašto laikrodis"
 
-#: eeschema/pin_type.cpp:112 eeschema/sch_pin.cpp:2143
+#: eeschema/pin_type.cpp:112 eeschema/sch_pin.cpp:2152
 msgid "NonLogic"
 msgstr "NonLogic"
 
@@ -19420,7 +19418,7 @@ msgid ""
 "Do you want to reload the library?"
 msgstr "Конфигурация проекта изменена. Сохранить ее?"
 
-#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2188
+#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2197
 #: eeschema/sch_shape.cpp:757 eeschema/sch_symbol.cpp:2916
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:501 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126 pcbnew/zone.cpp:1918
@@ -19428,7 +19426,7 @@ msgstr "Конфигурация проекта изменена. Сохрани
 msgid "Position X"
 msgstr "Pozicijos X"
 
-#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2192
+#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2201
 #: eeschema/sch_shape.cpp:759 eeschema/sch_symbol.cpp:2919
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:502 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130 pcbnew/zone.cpp:1924
@@ -19469,8 +19467,8 @@ msgid "Bus Entry Type"
 msgstr "Autobuso įvažiavimo tipas"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
-#: eeschema/sch_label.cpp:1263 eeschema/sch_line.cpp:951
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1328
+#: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:951
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1336
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:812
 #, fuzzy
@@ -19589,7 +19587,7 @@ msgstr "Поле %s %s"
 msgid "Symbol Field"
 msgstr "Simbolio laukas"
 
-#: eeschema/sch_field.cpp:1216 eeschema/sch_pin.cpp:1616
+#: eeschema/sch_field.cpp:1216 eeschema/sch_pin.cpp:1625
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_tablecell.cpp:142 pcbnew/pcb_text.cpp:290
@@ -19600,7 +19598,7 @@ msgstr "Simbolio laukas"
 msgid "Yes"
 msgstr "Gerai"
 
-#: eeschema/sch_field.cpp:1216 eeschema/sch_pin.cpp:1616
+#: eeschema/sch_field.cpp:1216 eeschema/sch_pin.cpp:1625
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_tablecell.cpp:142 pcbnew/pcb_text.cpp:290
 #: pcbnew/pcb_textbox.cpp:477 pcbnew/tools/drawing_stackup_table_tool.cpp:458
@@ -19630,7 +19628,7 @@ msgstr "Eiti į %s (%s) puslapį"
 msgid "Back to Previous Selected Sheet"
 msgstr "Ankstesnis sluoksnis"
 
-#: eeschema/sch_field.cpp:1375 eeschema/sch_label.cpp:205
+#: eeschema/sch_field.cpp:1375 eeschema/sch_label.cpp:217
 #, fuzzy
 msgid "Sheet References"
 msgstr "Tarplapių nuorodos"
@@ -20507,7 +20505,7 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Nežinoma SCH_FILE_T vertė: %d"
 
 #: eeschema/sch_item.cpp:551 eeschema/sch_item.cpp:602
-#: eeschema/sch_pin.cpp:1607 eeschema/sch_symbol.cpp:2988
+#: eeschema/sch_pin.cpp:1616 eeschema/sch_symbol.cpp:2988
 #: eeschema/tools/sch_edit_tool.cpp:143
 #, fuzzy
 msgid "Body Style"
@@ -20525,7 +20523,7 @@ msgstr "Suapvalinimo tipas:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1759 pcbnew/pad.cpp:1332 pcbnew/pad.cpp:2727
+#: pcbnew/footprint.cpp:1759 pcbnew/pad.cpp:1340 pcbnew/pad.cpp:2725
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:403 pcbnew/pcb_shape.cpp:618
 #: pcbnew/pcb_tablecell.cpp:139 pcbnew/pcb_text.cpp:286
@@ -20543,7 +20541,7 @@ msgid "Size"
 msgstr "Dydis"
 
 #: eeschema/sch_junction.cpp:379
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1377
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1385
 #: pcbnew/pcb_track.cpp:1697 pcbnew/pcb_track.cpp:2173
 msgid "Diameter"
 msgstr "Diametras"
@@ -20552,31 +20550,31 @@ msgstr "Diametras"
 msgid "Tri-State"
 msgstr "3 lygių"
 
-#: eeschema/sch_label.cpp:1218
+#: eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
 msgid "Label"
 msgstr "Žyma"
 
-#: eeschema/sch_label.cpp:1222
+#: eeschema/sch_label.cpp:1234
 msgid "Hierarchical Sheet Pin"
 msgstr "Hierarchinis lapo kaištis"
 
-#: eeschema/sch_label.cpp:1235 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:1247 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:539
 msgid "Bold Italic"
 msgstr "Pusjuodis kursyvas"
 
-#: eeschema/sch_label.cpp:1250 eeschema/sch_text.cpp:674
+#: eeschema/sch_label.cpp:1262 eeschema/sch_text.cpp:674
 #, fuzzy
 msgid "Justification"
 msgstr "Lygiavimas:"
 
-#: eeschema/sch_label.cpp:1373 eeschema/sch_line.cpp:890
+#: eeschema/sch_label.cpp:1385 eeschema/sch_line.cpp:890
 #: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1326
-#: pcbnew/pad.cpp:2764 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1334
+#: pcbnew/pad.cpp:2762 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1719 pcbnew/tools/pcb_control.cpp:1907
 #: pcbnew/widgets/pcb_properties_panel.cpp:294
 #: pcbnew/widgets/search_handlers.cpp:188 pcbnew/zone.cpp:810
@@ -20585,38 +20583,38 @@ msgstr "Lygiavimas:"
 msgid "Net"
 msgstr "Grandinė"
 
-#: eeschema/sch_label.cpp:1377 eeschema/sch_line.cpp:894
+#: eeschema/sch_label.cpp:1389 eeschema/sch_line.cpp:894
 #: eeschema/sch_rule_area.cpp:395
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "Priskirtas „Netclass“"
 
-#: eeschema/sch_label.cpp:1393
+#: eeschema/sch_label.cpp:1405
 #, fuzzy
 msgid "Hierarchical Labels"
 msgstr "Hierarchinė žyma"
 
-#: eeschema/sch_label.cpp:1524
+#: eeschema/sch_label.cpp:1536
 #, c-format
 msgid "Label '%s'"
 msgstr "Etiketė „%s“"
 
-#: eeschema/sch_label.cpp:1802
+#: eeschema/sch_label.cpp:1814
 #, fuzzy, c-format
 msgid "Directive Label [%s %s]"
 msgstr "„Net Label“"
 
-#: eeschema/sch_label.cpp:2045
+#: eeschema/sch_label.cpp:2057
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Visuotinė etiketė „%s“"
 
-#: eeschema/sch_label.cpp:2192
+#: eeschema/sch_label.cpp:2204
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarchinė etiketė „%s“"
 
-#: eeschema/sch_label.cpp:2305
+#: eeschema/sch_label.cpp:2317
 #, fuzzy
 msgid "Pin length"
 msgstr "& Kaiščio ilgis:"
@@ -20706,35 +20704,35 @@ msgstr "ER žymą"
 msgid "No Connect"
 msgstr "Neprijungta"
 
-#: eeschema/sch_pin.cpp:1625
+#: eeschema/sch_pin.cpp:1634
 msgid "Pos X"
 msgstr "X pozicija"
 
-#: eeschema/sch_pin.cpp:1626
+#: eeschema/sch_pin.cpp:1635
 msgid "Pos Y"
 msgstr "Poz. Y"
 
-#: eeschema/sch_pin.cpp:1887
+#: eeschema/sch_pin.cpp:1896
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Kaištis %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1895
+#: eeschema/sch_pin.cpp:1904
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Kaištis %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:1905
+#: eeschema/sch_pin.cpp:1914
 #, fuzzy, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr "Kaištis %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1913
+#: eeschema/sch_pin.cpp:1922
 #, fuzzy, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Kaištis %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2170 pcbnew/pad.cpp:1319 pcbnew/pad.cpp:2784
+#: eeschema/sch_pin.cpp:2179 pcbnew/pad.cpp:1327 pcbnew/pad.cpp:2782
 msgid "Pin Name"
 msgstr "PIN vardas"
 
@@ -21182,8 +21180,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -21234,9 +21232,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -22101,8 +22099,8 @@ msgstr "Nepavyko sukurti laikino failo „%s“"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:854
@@ -24445,7 +24443,7 @@ msgstr "Pakeisti tekstą"
 msgid "Change existing item to a text box"
 msgstr "Pakeiskite esamą elementą į teksto komentarą"
 
-#: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2985
+#: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2990
 msgid "Cleanup Sheet Pins"
 msgstr "Išvalyti lapo jungtis"
 
@@ -25063,7 +25061,7 @@ msgstr "Tempti"
 msgid "Move items while keeping their connections"
 msgstr "Выбирает все медное соединение."
 
-#: eeschema/tools/sch_actions.cpp:1443 eeschema/tools/sch_move_tool.cpp:1821
+#: eeschema/tools/sch_actions.cpp:1443 eeschema/tools/sch_move_tool.cpp:1844
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
 #, fuzzy
 msgid "Align Items to Grid"
@@ -25295,75 +25293,75 @@ msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 "Выделенный фрагмент содержит заблокированные элементы. Хотите продолжить?"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1931
+#: eeschema/tools/sch_drawing_tools.cpp:1934
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:186
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1962
+#: eeschema/tools/sch_drawing_tools.cpp:1965
 msgid "Add Text"
 msgstr "Tekstas"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1988
+#: eeschema/tools/sch_drawing_tools.cpp:1991
 msgid "Add Hierarchical Label"
 msgstr "Hierarchinė žyma"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1993
-#: eeschema/tools/sch_drawing_tools.cpp:1998
-#: eeschema/tools/sch_drawing_tools.cpp:2003
+#: eeschema/tools/sch_drawing_tools.cpp:1996
+#: eeschema/tools/sch_drawing_tools.cpp:2001
+#: eeschema/tools/sch_drawing_tools.cpp:2006
 msgid "Add Label"
 msgstr "Etiketė"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2016
+#: eeschema/tools/sch_drawing_tools.cpp:2019
 msgid "Click over a sheet."
 msgstr "Spustelėkite virš lapo."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2039
-#: eeschema/tools/sch_drawing_tools.cpp:2133
+#: eeschema/tools/sch_drawing_tools.cpp:2042
+#: eeschema/tools/sch_drawing_tools.cpp:2136
 msgid "No new hierarchical labels found."
 msgstr "Nerasta naujų hierarchinių etikečių."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2053
+#: eeschema/tools/sch_drawing_tools.cpp:2056
 msgid "Add Sheet Pin"
 msgstr "Pridėti lapo kaištį"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2366
+#: eeschema/tools/sch_drawing_tools.cpp:2369
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:491
 #, fuzzy
 msgid "Add Text Box"
 msgstr "Tekstas"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2375
+#: eeschema/tools/sch_drawing_tools.cpp:2378
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:497
 #, fuzzy, c-format
 msgid "Add %s"
 msgstr "Pridėti autobusą"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2430
+#: eeschema/tools/sch_drawing_tools.cpp:2433
 #, fuzzy, c-format
 msgid "Draw %s"
 msgstr "Brėžiniai"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2807 pcbnew/tools/drawing_tool.cpp:1255
+#: eeschema/tools/sch_drawing_tools.cpp:2810 pcbnew/tools/drawing_tool.cpp:1255
 #, fuzzy
 msgid "Draw Table"
 msgstr "Brėžti liniją"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3006
+#: eeschema/tools/sch_drawing_tools.cpp:3009
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:3246
+#: eeschema/tools/sch_drawing_tools.cpp:3249
 #, fuzzy
 msgid "Modify sheet pin"
 msgstr "Pridėkite lapo kaištį"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3252
+#: eeschema/tools/sch_drawing_tools.cpp:3255
 #, fuzzy
 msgid "Modify schematic item"
 msgstr "Linija (grafinė)"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3358
+#: eeschema/tools/sch_drawing_tools.cpp:3361
 #, fuzzy
 msgid "No sub schematic found in the current project"
 msgstr "Uždarykite dabartinį projektą"
@@ -25397,7 +25395,7 @@ msgstr "Pašalinti iš pasirinkimo"
 msgid "Edit Main Fields"
 msgstr "Redaguoti %s lauką"
 
-#: eeschema/tools/sch_edit_tool.cpp:628 eeschema/tools/sch_edit_tool.cpp:2795
+#: eeschema/tools/sch_edit_tool.cpp:628 eeschema/tools/sch_edit_tool.cpp:2800
 #, fuzzy
 msgid "Change To"
 msgstr "Keisti"
@@ -25445,36 +25443,36 @@ msgstr "Lapo išvado savbės"
 msgid "Rule Area Properties"
 msgstr "Taisyklės srities ypatybės"
 
-#: eeschema/tools/sch_edit_tool.cpp:2473 eeschema/tools/sch_edit_tool.cpp:2564
+#: eeschema/tools/sch_edit_tool.cpp:2477 eeschema/tools/sch_edit_tool.cpp:2568
 #, fuzzy
 msgid "<empty>"
 msgstr "Išvalyti"
 
-#: eeschema/tools/sch_edit_tool.cpp:2955
+#: eeschema/tools/sch_edit_tool.cpp:2960
 #, fuzzy
 msgid "Slice Wire"
 msgstr "Pašalinti laidininką"
 
-#: eeschema/tools/sch_edit_tool.cpp:2955
+#: eeschema/tools/sch_edit_tool.cpp:2960
 msgid "Break Wire"
 msgstr "Pertraukti laidininką"
 
-#: eeschema/tools/sch_edit_tool.cpp:2976
+#: eeschema/tools/sch_edit_tool.cpp:2981
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Ar norite ištrinti nerašomus kaiščius iš šio lapo?"
 
-#: eeschema/tools/sch_edit_tool.cpp:3037
+#: eeschema/tools/sch_edit_tool.cpp:3042
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Įveskite lapo kelio puslapio numerį %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:3040
+#: eeschema/tools/sch_edit_tool.cpp:3045
 #: eeschema/widgets/hierarchy_pane.cpp:410
 #, fuzzy
 msgid "Edit Sheet Page Number"
 msgstr "Redaguoti puslapio numerį"
 
-#: eeschema/tools/sch_edit_tool.cpp:3234
+#: eeschema/tools/sch_edit_tool.cpp:3239
 #, fuzzy
 msgid "Toggle Attribute"
 msgstr "Požymis"
@@ -26306,8 +26304,8 @@ msgstr "Pasirinkite sluoksnį: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4170 pcbnew/footprint.cpp:4173
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1336
-#: pcbnew/pad.cpp:2726 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1344
+#: pcbnew/pad.cpp:2724 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:400
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
@@ -26869,26 +26867,26 @@ msgid "Clear Recent Job Files"
 msgstr "Išvalyti naujausius darbo failus"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 #, fuzzy
 msgid "KiCad Gerber Viewer"
 msgstr "Gerber failai"
 
-#: gerbview/gerbview_frame.cpp:657
+#: gerbview/gerbview_frame.cpp:656
 #, fuzzy
 msgid "Drawing layer not in use"
 msgstr "Brėžinio sluoksnis %d nenaudojamas"
 
-#: gerbview/gerbview_frame.cpp:674
+#: gerbview/gerbview_frame.cpp:673
 msgid "(with X2 attributes)"
 msgstr "(su X2 atributais)"
 
-#: gerbview/gerbview_frame.cpp:683
+#: gerbview/gerbview_frame.cpp:682
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Vaizdo pavadinimas: \"%s\" Sluoksnio pavadinimas: \"%s\""
 
-#: gerbview/gerbview_frame.cpp:699
+#: gerbview/gerbview_frame.cpp:698
 msgid "X2 attr"
 msgstr "X2 atributai"
 
@@ -29112,7 +29110,7 @@ msgstr "Patvirtinti pakeitimą"
 msgid "Install"
 msgstr "Установить размер"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:121 kicad/pcm/dialogs/panel_package.cpp:78
+#: kicad/pcm/dialogs/dialog_pcm.cpp:122 kicad/pcm/dialogs/panel_package.cpp:78
 #: kicad/pcm/dialogs/panel_package.cpp:124
 #: kicad/pcm/dialogs/panel_package.cpp:149
 #: kicad/pcm/dialogs/panel_package.cpp:163
@@ -29121,41 +29119,41 @@ msgstr "Установить размер"
 msgid "Uninstall"
 msgstr "Renderinimo Parametrai"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:160 kicad/pcm/dialogs/dialog_pcm.cpp:394
+#: kicad/pcm/dialogs/dialog_pcm.cpp:159 kicad/pcm/dialogs/dialog_pcm.cpp:389
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, fuzzy, c-format
 msgid "Repository (%d)"
 msgstr "Github repo"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:168
+#: kicad/pcm/dialogs/dialog_pcm.cpp:167
 #, fuzzy
 msgid "Apply Pending Changes"
 msgstr "Импорт установок конт.пл."
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:169
+#: kicad/pcm/dialogs/dialog_pcm.cpp:168
 #, fuzzy
 msgid "Discard Pending Changes"
 msgstr "Atmesti pakeitimus"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:214
+#: kicad/pcm/dialogs/dialog_pcm.cpp:213
 #, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
 msgstr "Ar tikrai norite pašalinti parinktus elementus?"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:295
+#: kicad/pcm/dialogs/dialog_pcm.cpp:291
 #, fuzzy
 msgid "Install Package"
 msgstr "Korpuse"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:411
+#: kicad/pcm/dialogs/dialog_pcm.cpp:406
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, fuzzy, c-format
 msgid "Pending (%d)"
 msgstr "Установить размер"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:451
+#: kicad/pcm/dialogs/dialog_pcm.cpp:446
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, fuzzy, c-format
 msgid "Installed (%d)"
@@ -33760,8 +33758,8 @@ msgstr "Atnaujinti grandinių sąrašą"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:317
 #: pcbnew/convert_shape_list_to_polygon.cpp:502
-#: pcbnew/convert_shape_list_to_polygon.cpp:613
-#: pcbnew/convert_shape_list_to_polygon.cpp:625
+#: pcbnew/convert_shape_list_to_polygon.cpp:658
+#: pcbnew/convert_shape_list_to_polygon.cpp:670
 msgid "(self-intersecting)"
 msgstr "(susikerta)"
 
@@ -33774,22 +33772,22 @@ msgstr "(ne uždara forma)"
 msgid "(multiple board outlines not supported)"
 msgstr "Plokštės perimetras neuždaras:"
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:685
+#: pcbnew/convert_shape_list_to_polygon.cpp:730
 #, c-format
 msgid "(rectangle has null or very small size: %d nm)"
 msgstr ""
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:703
+#: pcbnew/convert_shape_list_to_polygon.cpp:748
 #, c-format
 msgid "(circle has null or very small radius: %d nm)"
 msgstr ""
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:722
+#: pcbnew/convert_shape_list_to_polygon.cpp:767
 #, c-format
 msgid "(segment has null or very small length: %d nm)"
 msgstr ""
 
-#: pcbnew/convert_shape_list_to_polygon.cpp:745
+#: pcbnew/convert_shape_list_to_polygon.cpp:790
 #, c-format
 msgid "(arc has null or very small size: %d nm)"
 msgstr ""
@@ -34287,7 +34285,7 @@ msgid "Total:"
 msgstr "Iš viso:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:491
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2701
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2699
 msgid "Round"
 msgstr "Apskritimas"
 
@@ -34310,11 +34308,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1564
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1575
 msgid "PTH"
 msgstr "PTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1567
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1578
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -34335,7 +34333,7 @@ msgid "Board name"
 msgstr "Valdybos pavadinimas"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
-#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1346
+#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1354
 msgid "Area"
 msgstr "Plotas"
 
@@ -34791,7 +34789,7 @@ msgstr ""
 "Šį nustatymą gali pakeisti vietiniai trinkelių nustatymai"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4144
-#: pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1879
+#: pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1879
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
 msgstr "Terminiai reljefai"
@@ -36790,7 +36788,7 @@ msgstr "Kiaurai"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1383
-#: pcbnew/pad.cpp:1565 pcbnew/pad.cpp:2677
+#: pcbnew/pad.cpp:1576 pcbnew/pad.cpp:2675
 msgid "SMD"
 msgstr "SMD"
 
@@ -37272,7 +37270,7 @@ msgstr "Pasirinkite „GenCAD“ eksporto failo pavadinimą"
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr "Nepavyko parašyti gręžimo ir (arba) susieti failų į aplanką „%s“."
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:484
+#: pcbnew/dialogs/dialog_gendrill.cpp:486
 msgid "Save Drill Report File"
 msgstr "Išsaugoti gręžimo ataskaitos failą"
 
@@ -37776,7 +37774,7 @@ msgstr "Šilko sluoksniai"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2868
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2866
 msgid "Copper Layers"
 msgstr "Vario sluoksniai"
 
@@ -37954,7 +37952,7 @@ msgstr "Žiedinis plotis"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1074
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2715
 msgid "All copper layers"
 msgstr "Visi vario sluoksniai"
 
@@ -37966,7 +37964,7 @@ msgstr "%s, %s ir sujungtus sluoksnius"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1078
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2716
 msgid "Connected layers only"
 msgstr "Tik prijungti sluoksniai"
 
@@ -38498,7 +38496,7 @@ msgid "Outset Items"
 msgstr "Teksto elementai"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:178
-#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
+#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2766
 msgid "Pad Properties"
 msgstr "Aikštelės savybės"
 
@@ -38580,7 +38578,7 @@ msgstr ""
 msgid "Pad type:"
 msgstr "Aikštelės tipas:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2676
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2674
 msgid "Through-hole"
 msgstr "Kiaurai"
 
@@ -38630,8 +38628,8 @@ msgstr "Trinkelės forma:"
 msgid "Circular"
 msgstr "Apvali"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1549
-#: pcbnew/pad.cpp:2684
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1560
+#: pcbnew/pad.cpp:2682
 msgid "Oval"
 msgstr "Ovalus"
 
@@ -38643,11 +38641,11 @@ msgstr "Stačiakampis"
 msgid "Trapezoidal"
 msgstr "Trapecija"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2686
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2684
 msgid "Rounded rectangle"
 msgstr "Suapvalintas stačiakampis"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2687
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2685
 msgid "Chamfered rectangle"
 msgstr "Apkaltas stačiakampis"
 
@@ -38758,7 +38756,7 @@ msgstr "Poslinkio forma iš skylės"
 msgid "Hole shape:"
 msgstr "Skylės forma:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2702
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2700
 msgid "Oblong"
 msgstr ""
 
@@ -38851,23 +38849,23 @@ msgstr ""
 "Castellated nurodykite castellated per skylių pagalvėles ant lentos krašto\n"
 "Šios savybės nurodytos „Gerber X2“ failuose."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2690
 msgid "BGA pad"
 msgstr "BGA padas"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
 msgid "Fiducial, local to footprint"
 msgstr "Svarbus, vietinis pėdsakas"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2691
 msgid "Fiducial, global to board"
 msgstr "Svarbus, pasaulinis valdybos narys"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2695
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
 msgid "Test point pad"
 msgstr "Bandymo taško padėklas"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2696
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
 msgid "Heatsink pad"
 msgstr "Radiatoriaus įklotas"
 
@@ -38875,7 +38873,7 @@ msgstr "Radiatoriaus įklotas"
 msgid "Castellated pad (through hole only)"
 msgstr "Castellated padėklas (tik per skylę)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1365
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1373
 #, fuzzy
 msgid "Mechanical"
 msgstr "NPTH, mechaninis"
@@ -40512,7 +40510,7 @@ msgstr "Tikslinis iškreipimas:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1428
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1436
 #: pcbnew/pcb_track.cpp:1666 pcbnew/pcb_track.cpp:1674
 #: pcbnew/pcb_track.cpp:1706 pcbnew/pcb_track.cpp:1712
 #: pcbnew/router/router_tool.cpp:2785 pcbnew/router/router_tool.cpp:2790
@@ -41914,8 +41912,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -42167,8 +42165,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -42323,13 +42321,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -42501,7 +42499,7 @@ msgstr "Diferencinis porų skirtumas nėra apibrėžtas."
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1408
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1416
 #: pcbnew/pcb_track.cpp:1699 pcbnew/pcb_track.cpp:2175
 #: pcbnew/tools/board_inspection_tool.cpp:1123
 #: pcbnew/tools/board_inspection_tool.cpp:1145
@@ -44782,11 +44780,11 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4142 pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1877
+#: pcbnew/footprint.cpp:4142 pcbnew/pad.cpp:2707 pcbnew/zone.cpp:1877
 msgid "Inherited"
 msgstr "Paveldėtas"
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2713 pcbnew/zone.cpp:1881
+#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1881
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Terminiai reljefai"
@@ -44801,27 +44799,27 @@ msgstr "Ne schematiškai"
 msgid "Exclude From Position Files"
 msgstr "Išskirti iš padėties failų"
 
-#: pcbnew/footprint.cpp:4218 pcbnew/pad.cpp:2878
+#: pcbnew/footprint.cpp:4218 pcbnew/pad.cpp:2876
 #, fuzzy
 msgid "Overrides"
 msgstr "Perrašyti"
 
-#: pcbnew/footprint.cpp:4225 pcbnew/pad.cpp:2881
+#: pcbnew/footprint.cpp:4225 pcbnew/pad.cpp:2879
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Klirenso kontūrai"
 
-#: pcbnew/footprint.cpp:4230 pcbnew/pad.cpp:2891
+#: pcbnew/footprint.cpp:4230 pcbnew/pad.cpp:2889
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Vietinė litavimo pastos marža"
 
-#: pcbnew/footprint.cpp:4235 pcbnew/pad.cpp:2896
+#: pcbnew/footprint.cpp:4235 pcbnew/pad.cpp:2894
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Vietinis litavimo pastos maržos santykis"
 
-#: pcbnew/footprint.cpp:4241 pcbnew/pad.cpp:2902
+#: pcbnew/footprint.cpp:4241 pcbnew/pad.cpp:2900
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Nėra ryšio"
@@ -45173,7 +45171,7 @@ msgstr "Lentos ilgis"
 msgid "Routed Length"
 msgstr "Lentos ilgis"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2872
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2870
 #: pcbnew/pcb_track.cpp:1654
 msgid "Pad To Die Length"
 msgstr "Pad to Die ilgis"
@@ -46111,127 +46109,127 @@ msgstr ""
 "byla: \"%s\"\n"
 "eilutė: %d"
 
-#: pcbnew/pad.cpp:1114 pcbnew/pad.cpp:1274 pcbnew/pad.cpp:1290
-#: pcbnew/pad.cpp:1299
+#: pcbnew/pad.cpp:1122 pcbnew/pad.cpp:1282 pcbnew/pad.cpp:1298
+#: pcbnew/pad.cpp:1307
 msgid "pad"
 msgstr "padas"
 
-#: pcbnew/pad.cpp:1322 pcbnew/pad.cpp:2787
+#: pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2785
 #, fuzzy
 msgid "Pin Type"
 msgstr "Įskiepio tipas"
 
-#: pcbnew/pad.cpp:1359
+#: pcbnew/pad.cpp:1367
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:1360
+#: pcbnew/pad.cpp:1368
 msgid "Fiducial global"
 msgstr "Fiducial globalus"
 
-#: pcbnew/pad.cpp:1361
+#: pcbnew/pad.cpp:1369
 msgid "Fiducial local"
 msgstr "Atsisakantis vietos"
 
-#: pcbnew/pad.cpp:1362
+#: pcbnew/pad.cpp:1370
 msgid "Test point"
 msgstr "Bandymo taškas"
 
-#: pcbnew/pad.cpp:1363
+#: pcbnew/pad.cpp:1371
 msgid "Heat sink"
 msgstr "Radiatorius"
 
-#: pcbnew/pad.cpp:1364
+#: pcbnew/pad.cpp:1372
 msgid "Castellated"
 msgstr "Castellated"
 
-#: pcbnew/pad.cpp:1398
+#: pcbnew/pad.cpp:1406
 msgid "Length in Package"
 msgstr "Ilgis pakuotėje"
 
-#: pcbnew/pad.cpp:1414
+#: pcbnew/pad.cpp:1422
 #, fuzzy
 msgid "Hole X / Y"
 msgstr "Gręžkite X / Y"
 
-#: pcbnew/pad.cpp:1426 pcbnew/pcb_track.cpp:1664 pcbnew/pcb_track.cpp:1704
+#: pcbnew/pad.cpp:1434 pcbnew/pcb_track.cpp:1664 pcbnew/pcb_track.cpp:1704
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2817
 #: pcbnew/zone.cpp:877
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Minimalus atstumas: %s"
 
-#: pcbnew/pad.cpp:1551
+#: pcbnew/pad.cpp:1562
 msgid "Trap"
 msgstr "Trapecija"
 
-#: pcbnew/pad.cpp:1552
+#: pcbnew/pad.cpp:1563
 msgid "Roundrect"
 msgstr "Užapvalintas stačiakampis"
 
-#: pcbnew/pad.cpp:1553
+#: pcbnew/pad.cpp:1564
 msgid "Chamferedrect"
 msgstr "Chamferedrect"
 
-#: pcbnew/pad.cpp:1554
+#: pcbnew/pad.cpp:1565
 msgid "CustomShape"
 msgstr "„CustomShape“"
 
-#: pcbnew/pad.cpp:1566
+#: pcbnew/pad.cpp:1577
 msgid "Conn"
 msgstr "Sujungimas"
 
-#: pcbnew/pad.cpp:1585
+#: pcbnew/pad.cpp:1595
 #, fuzzy, c-format
 msgid "NPTH pad of %s"
 msgstr "%s padas %s"
 
-#: pcbnew/pad.cpp:1590
+#: pcbnew/pad.cpp:1597
 #, fuzzy
 msgid "NPTH pad"
 msgstr "%s padas %s"
 
-#: pcbnew/pad.cpp:1599
+#: pcbnew/pad.cpp:1605
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Padėk %s iš %s ant %s"
 
-#: pcbnew/pad.cpp:1606
+#: pcbnew/pad.cpp:1612
 #, fuzzy, c-format
 msgid "Pad on %s"
 msgstr "%s ir %s"
 
-#: pcbnew/pad.cpp:1614
+#: pcbnew/pad.cpp:1620
 #, fuzzy, c-format
 msgid "PTH pad %s of %s"
 msgstr "%s padas %s"
 
-#: pcbnew/pad.cpp:1620
+#: pcbnew/pad.cpp:1626
 #, fuzzy
 msgid "PTH pad"
 msgstr "%s padas %s"
 
-#: pcbnew/pad.cpp:1630
+#: pcbnew/pad.cpp:1636
 #, fuzzy, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Padėk %s iš %s ant %s"
 
-#: pcbnew/pad.cpp:1638
+#: pcbnew/pad.cpp:1644
 #, fuzzy, c-format
 msgid "Pad %s on %s"
 msgstr "Per %s, %s"
 
-#: pcbnew/pad.cpp:1647
+#: pcbnew/pad.cpp:1653
 #, fuzzy, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "Padėk %s iš %s ant %s"
 
-#: pcbnew/pad.cpp:1654
+#: pcbnew/pad.cpp:1660
 #, fuzzy, c-format
 msgid "PTH pad %s"
 msgstr "%s padas %s"
 
-#: pcbnew/pad.cpp:2230
+#: pcbnew/pad.cpp:2229
 #, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
@@ -46239,98 +46237,98 @@ msgstr ""
 "Įspėjimas: dengtose kiaurymėse bent jau ant vieno sluoksnio turėtų būti "
 "vario padėklas."
 
-#: pcbnew/pad.cpp:2238
+#: pcbnew/pad.cpp:2237
 #, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr "Nuosavybės negalima nustatyti NPTH"
 
-#: pcbnew/pad.cpp:2242
+#: pcbnew/pad.cpp:2241
 #, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr "Nuosavybės negalima nustatyti NPTH"
 
-#: pcbnew/pad.cpp:2245
+#: pcbnew/pad.cpp:2244
 #, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr "Nuosavybės negalima nustatyti NPTH"
 
-#: pcbnew/pad.cpp:2248
+#: pcbnew/pad.cpp:2247
 #, fuzzy
 msgid "('castellated' property is for PTH pads)"
 msgstr "Castellated nuosavybė gali būti nustatyta tik PTH"
 
-#: pcbnew/pad.cpp:2251
+#: pcbnew/pad.cpp:2250
 #, fuzzy
 msgid "('BGA' property is for SMD pads)"
 msgstr "BGA ypatybę galima nustatyti tik SMD trinkelėms"
 
-#: pcbnew/pad.cpp:2254
+#: pcbnew/pad.cpp:2253
 #, fuzzy
 msgid "('mechanical' property is for PTH pads)"
 msgstr "Castellated nuosavybė gali būti nustatyta tik PTH"
 
-#: pcbnew/pad.cpp:2270
+#: pcbnew/pad.cpp:2269
 #, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
 "Klaida: jungčių pagalvėlės nėra ant litavimo pastos sluoksnio\n"
 "Vietoj to naudokite SMD pagalvėles"
 
-#: pcbnew/pad.cpp:2278
+#: pcbnew/pad.cpp:2277
 #, fuzzy
 msgid "(SMD pad has a hole)"
 msgstr "Klaida: trinkelėje nėra sluoksnio."
 
-#: pcbnew/pad.cpp:2284
+#: pcbnew/pad.cpp:2283
 #, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr "Jei norite, kad lentos priekinė pusė būtų lydmetalio sluoksnis"
 
-#: pcbnew/pad.cpp:2290 pcbnew/pad.cpp:2303
+#: pcbnew/pad.cpp:2289 pcbnew/pad.cpp:2302
 #, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr "Jei norite, kad lentos priekinė pusė būtų lydmetalio sluoksnis"
 
-#: pcbnew/pad.cpp:2295 pcbnew/pad.cpp:2308
+#: pcbnew/pad.cpp:2294 pcbnew/pad.cpp:2307
 #, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "Jei norite, kad lentos priekinė pusė būtų lydmetalio sluoksnis"
 
-#: pcbnew/pad.cpp:2314
+#: pcbnew/pad.cpp:2313
 #, fuzzy
 msgid "(SMD pad has no outer layers)"
 msgstr "Klaida: trinkelėje nėra sluoksnio"
 
-#: pcbnew/pad.cpp:2334
+#: pcbnew/pad.cpp:2332
 #, fuzzy
 msgid "(Pad must have a positive size)"
 msgstr "Neteisingas (neigiamas) kampo dydis"
 
-#: pcbnew/pad.cpp:2345
+#: pcbnew/pad.cpp:2343
 #, fuzzy, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr "Perėjimo grąžtas turi būti mažesnis nei perėjimo diametras"
 
-#: pcbnew/pad.cpp:2369
+#: pcbnew/pad.cpp:2367
 #, fuzzy
 msgid "(PTH pad hole leaves no copper)"
 msgstr "Klaida: trinkelėje nėra sluoksnio"
 
-#: pcbnew/pad.cpp:2379
+#: pcbnew/pad.cpp:2377
 #, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "Klaida: trinkelėje nėra sluoksnio"
 
-#: pcbnew/pad.cpp:2386
+#: pcbnew/pad.cpp:2384
 #, fuzzy
 msgid "(pad hole not inside pad shape)"
 msgstr "Įspėjimas: Trinkelės dydis turi būti didesnis nei nulis."
 
-#: pcbnew/pad.cpp:2391
+#: pcbnew/pad.cpp:2389
 msgid "(negative local clearance values have no effect)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2410
+#: pcbnew/pad.cpp:2408
 #, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
@@ -46339,7 +46337,7 @@ msgstr ""
 "Neigiamas klirensas reiškia mažesnį plotą nei trinkelė (įprasta litavimo "
 "pastos klirensui)."
 
-#: pcbnew/pad.cpp:2420
+#: pcbnew/pad.cpp:2418
 #, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
@@ -46348,7 +46346,7 @@ msgstr ""
 "Neigiamas klirensas reiškia mažesnį plotą nei trinkelė (įprasta litavimo "
 "pastos klirensui)."
 
-#: pcbnew/pad.cpp:2439
+#: pcbnew/pad.cpp:2437
 #, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
@@ -46357,125 +46355,125 @@ msgstr ""
 "Neigiamas klirensas reiškia mažesnį plotą nei trinkelė (įprasta litavimo "
 "pastos klirensui)."
 
-#: pcbnew/pad.cpp:2446
+#: pcbnew/pad.cpp:2444
 msgid "(negative corner radius is not allowed)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2448
+#: pcbnew/pad.cpp:2446
 msgid "(corner size will make pad circular)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2453
+#: pcbnew/pad.cpp:2451
 #, fuzzy
 msgid "(negative corner chamfer is not allowed)"
 msgstr "Загрузка 3D библиотек"
 
-#: pcbnew/pad.cpp:2455
+#: pcbnew/pad.cpp:2453
 #, fuzzy
 msgid "(corner chamfer is too large)"
 msgstr "Загрузка 3D библиотек"
 
-#: pcbnew/pad.cpp:2464
+#: pcbnew/pad.cpp:2462
 #, fuzzy
 msgid "(trapezoid delta is too large)"
 msgstr "Klaida: trinkelėje nėra sluoksnio."
 
-#: pcbnew/pad.cpp:2474
+#: pcbnew/pad.cpp:2472
 #, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "Netinkama trinkelės forma: forma turi atitikti tik vieną daugiakampį"
 
-#: pcbnew/pad.cpp:2678
+#: pcbnew/pad.cpp:2676
 msgid "Edge connector"
 msgstr "Krašto jungtis"
 
-#: pcbnew/pad.cpp:2679
+#: pcbnew/pad.cpp:2677
 msgid "NPTH, mechanical"
 msgstr "NPTH, mechaninis"
 
-#: pcbnew/pad.cpp:2685
+#: pcbnew/pad.cpp:2683
 msgid "Trapezoid"
 msgstr "Trapecija"
 
-#: pcbnew/pad.cpp:2697
+#: pcbnew/pad.cpp:2695
 msgid "Castellated pad"
 msgstr "Castellated padėklas"
 
-#: pcbnew/pad.cpp:2698
+#: pcbnew/pad.cpp:2696
 #, fuzzy
 msgid "Mechanical pad"
 msgstr "NPTH, mechaninis"
 
-#: pcbnew/pad.cpp:2720
+#: pcbnew/pad.cpp:2718
 #, fuzzy
 msgid "Front, back and connected layers"
 msgstr "%s, %s ir sujungtus sluoksnius"
 
-#: pcbnew/pad.cpp:2770
+#: pcbnew/pad.cpp:2768
 msgid "Pad Type"
 msgstr "Trinkelių tipas"
 
-#: pcbnew/pad.cpp:2774
+#: pcbnew/pad.cpp:2772
 #, fuzzy
 msgid "Pad Shape"
 msgstr "Trinkelės forma:"
 
-#: pcbnew/pad.cpp:2779
+#: pcbnew/pad.cpp:2777
 msgid "Pad Number"
 msgstr "Trinkelių skaičius"
 
-#: pcbnew/pad.cpp:2791
+#: pcbnew/pad.cpp:2789
 msgid "Size X"
 msgstr "X dydis"
 
-#: pcbnew/pad.cpp:2795
+#: pcbnew/pad.cpp:2793
 msgid "Size Y"
 msgstr "Y dydis"
 
-#: pcbnew/pad.cpp:2828
+#: pcbnew/pad.cpp:2826
 #, fuzzy
 msgid "Corner Radius Ratio"
 msgstr "Apvalaus spindulio santykis"
 
-#: pcbnew/pad.cpp:2833
+#: pcbnew/pad.cpp:2831
 #, fuzzy
 msgid "Corner Radius Size"
 msgstr "Kampo spindulys:"
 
-#: pcbnew/pad.cpp:2839
+#: pcbnew/pad.cpp:2837
 #, fuzzy
 msgid "Hole Shape"
 msgstr "Skylės forma:"
 
-#: pcbnew/pad.cpp:2843
+#: pcbnew/pad.cpp:2841
 msgid "Hole Size X"
 msgstr "Skylės dydis X"
 
-#: pcbnew/pad.cpp:2849
+#: pcbnew/pad.cpp:2847
 msgid "Hole Size Y"
 msgstr "Skylės dydis Y"
 
-#: pcbnew/pad.cpp:2864
+#: pcbnew/pad.cpp:2862
 msgid "Fabrication Property"
 msgstr "Gamybos savybė"
 
-#: pcbnew/pad.cpp:2886 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
+#: pcbnew/pad.cpp:2884 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
 #: pcbnew/pcb_textbox.cpp:816 pcbnew/pcb_track.cpp:2155
 #, fuzzy
 msgid "Soldermask Margin Override"
 msgstr "Vietinė „Soldermask“ marža"
 
-#: pcbnew/pad.cpp:2908 pcbnew/zone.cpp:2145
+#: pcbnew/pad.cpp:2906 pcbnew/zone.cpp:2145
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
 msgstr "Terminio reljefo stipinų plotis"
 
-#: pcbnew/pad.cpp:2914
+#: pcbnew/pad.cpp:2912
 #, fuzzy
 msgid "Thermal Relief Spoke Angle"
 msgstr "Terminis reljefas"
 
-#: pcbnew/pad.cpp:2919 pcbnew/zone.cpp:2139
+#: pcbnew/pad.cpp:2917 pcbnew/zone.cpp:2139
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Terminis reljefas"
@@ -47602,8 +47600,8 @@ msgid ""
 msgstr ""
 "CADSTAR dizaine yra tinklai, kuriems priskirta „Net Class“. „KiCad“ neturi "
 "atitikmens CADSTAR tinklo klasei, todėl šie elementai nebuvo importuoti. "
-"Pastaba: „KiCad“ „Net Class“ versija yra artimesnė CADSTAR „Net Route Code“ "
-"(kuri buvo importuota visiems tinklams)."
+"Pastaba: „KiCad“ „Net Class“ versija yra artimesnė CADSTAR „Net Route "
+"Code“ (kuri buvo importuota visiems tinklams)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4014
 msgid ""
@@ -49492,6 +49490,36 @@ msgstr "Per: naudokite tinklo klasės dydžius"
 msgid "Via: %s (%s)"
 msgstr "Via: %s (%s)"
 
+#: pcbnew/tools/align_distribute_tool.cpp:64
+msgid "Align/Distribute"
+msgstr "Lygiuoti/Išdėstyti"
+
+#: pcbnew/tools/align_distribute_tool.cpp:254 pcbnew/tools/pcb_actions.cpp:1897
+msgid "Align to Top"
+msgstr "Sulyginti viršų"
+
+#: pcbnew/tools/align_distribute_tool.cpp:293 pcbnew/tools/pcb_actions.cpp:1904
+msgid "Align to Bottom"
+msgstr "Sulyginti apačias"
+
+#: pcbnew/tools/align_distribute_tool.cpp:343 pcbnew/tools/pcb_actions.cpp:1911
+msgid "Align to Left"
+msgstr "Sulyginti kairėn"
+
+#: pcbnew/tools/align_distribute_tool.cpp:393 pcbnew/tools/pcb_actions.cpp:1918
+msgid "Align to Right"
+msgstr "Sulyginti dešinėn"
+
+#: pcbnew/tools/align_distribute_tool.cpp:432
+#, fuzzy
+msgid "Align to Middle"
+msgstr "Sulyginti kairėn"
+
+#: pcbnew/tools/align_distribute_tool.cpp:471
+#, fuzzy
+msgid "Align to Center"
+msgstr "Lygiuoti į centrą"
+
 #: pcbnew/tools/board_editor_control.cpp:125
 msgid "Locking"
 msgstr "Užrakinu"
@@ -50287,12 +50315,12 @@ msgstr "Padėkite pėdsako inkarą"
 msgid "Select Net:"
 msgstr "Pasirinktas tinklas:"
 
-#: pcbnew/tools/drawing_tool.cpp:4015
+#: pcbnew/tools/drawing_tool.cpp:4018
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Maršruto pradžios taškas pažeidžia KDR."
 
-#: pcbnew/tools/drawing_tool.cpp:4105
+#: pcbnew/tools/drawing_tool.cpp:4108
 msgid "Place via"
 msgstr "Naujas perėjimas"
 
@@ -52212,36 +52240,20 @@ msgstr "Naujas korpusas"
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr "Vykdykite įvairią diagnostiką ir bandykite suremontuoti lentą"
 
-#: pcbnew/tools/pcb_actions.cpp:1897 pcbnew/tools/placement_tool.cpp:254
-msgid "Align to Top"
-msgstr "Sulyginti viršų"
-
 #: pcbnew/tools/pcb_actions.cpp:1898
 #, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
 msgstr "Sulygina elementus pagal jų viršų"
-
-#: pcbnew/tools/pcb_actions.cpp:1904 pcbnew/tools/placement_tool.cpp:293
-msgid "Align to Bottom"
-msgstr "Sulyginti apačias"
 
 #: pcbnew/tools/pcb_actions.cpp:1905
 #, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
 msgstr "Sulygina elementus pagal jų apačias"
 
-#: pcbnew/tools/pcb_actions.cpp:1911 pcbnew/tools/placement_tool.cpp:343
-msgid "Align to Left"
-msgstr "Sulyginti kairėn"
-
 #: pcbnew/tools/pcb_actions.cpp:1912
 #, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
 msgstr "Sulygina elementus pagal jų kairįjį kraštą"
-
-#: pcbnew/tools/pcb_actions.cpp:1918 pcbnew/tools/placement_tool.cpp:393
-msgid "Align to Right"
-msgstr "Sulyginti dešinėn"
 
 #: pcbnew/tools/pcb_actions.cpp:1919
 #, fuzzy
@@ -52937,20 +52949,6 @@ msgstr "Pašalinkite zonos / daugiakampio kampą"
 msgid "Select/Expand Connection..."
 msgstr "Pasirinkite / išplėskite ryšį"
 
-#: pcbnew/tools/placement_tool.cpp:64
-msgid "Align/Distribute"
-msgstr "Lygiuoti/Išdėstyti"
-
-#: pcbnew/tools/placement_tool.cpp:432
-#, fuzzy
-msgid "Align to Middle"
-msgstr "Sulyginti kairėn"
-
-#: pcbnew/tools/placement_tool.cpp:471
-#, fuzzy
-msgid "Align to Center"
-msgstr "Lygiuoti į centrą"
-
 #: pcbnew/tools/position_relative_tool.cpp:220
 #, fuzzy
 msgid "Select the reference point on the item to move."
@@ -52966,7 +52964,7 @@ msgstr "Pasirinkite kampą, po kurio norite pridėti naują kampą."
 msgid "Set Relative Position Interactively"
 msgstr "Pakartokite padėties padidėjimą"
 
-#: pcbnew/tools/position_relative_tool.cpp:435
+#: pcbnew/tools/position_relative_tool.cpp:428
 msgid "Position Relative"
 msgstr "Santykinė pozicija"
 
@@ -53017,7 +53015,7 @@ msgid "Auto-fill Zone(s)"
 msgstr "Užpildyti zoną (-as)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:275
-#: pcbnew/widgets/appearance_controls.cpp:3475
+#: pcbnew/widgets/appearance_controls.cpp:3484
 msgid "Open Preferences"
 msgstr "Atidarykite „Preferences“"
 
@@ -53821,7 +53819,7 @@ msgstr "Slėpti visas kitas tinklo klases"
 msgid "Show or hide ratsnest for nets in %s"
 msgstr "Rodyti arba slėpti tinklų žiurkes %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:3488
+#: pcbnew/widgets/appearance_controls.cpp:3497
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
@@ -54361,115 +54359,106 @@ msgstr "Terminiai reljefai"
 msgid "[INFO] load failed: %s"
 msgstr "Nepavyko įkelti [INFO]: įvesties eilutė per ilga\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 #, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "Bitų žemėlapis į komponentų keitiklį"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Bitų žemėlapis į komponentų keitiklį"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 #, fuzzy
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Создать файл библиотеки компонентов для Eeschema"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Schemų redaktoriaus savybės"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 #, fuzzy
 msgid "Schematic Capture Tool"
 msgstr "Scheminis laukas"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 #, fuzzy
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Naudokite „Eeschema“ spalvų temą"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 #, fuzzy
 msgid "eeschema"
 msgstr "Eezema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 #, fuzzy
 msgid "Gerber File Viewer"
 msgstr "Gerber failai"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 #, fuzzy
 msgid "View Gerber files"
 msgstr "Peržiūrėti „Gerber“ failus"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #, fuzzy
 msgid "Projectmanager;"
 msgstr "Projekto vadovas"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 #, fuzzy
 msgid "KiCad PCB Calculator"
 msgstr "PCB Skaičiuoklė"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 #, fuzzy
 msgid "PCB;Calculator;"
 msgstr "PCB Skaičiuoklė"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB Skaičiuoklė"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 #, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Page Layout Editor"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 #, fuzzy
 msgid "PCB layout editor"
 msgstr "Page Layout Editor"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-#, fuzzy
-msgid "Circuit board"
-msgstr "Spausdinti plokštę"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -54530,6 +54519,10 @@ msgstr "Redaguoti scheminius simbolius"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Lapo formatų redaktorius"
+
+#, fuzzy
+#~ msgid "Circuit board"
+#~ msgstr "Spausdinti plokštę"
 
 #, fuzzy
 #~ msgid "Update/reset visibility of pin names/numbers"
@@ -58873,8 +58866,8 @@ msgstr "Lapo formatų redaktorius"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -58983,15 +58976,15 @@ msgstr "Lapo formatų redaktorius"
 #~ "„Windows“ komandų eilutė yra tokia.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "f: /kicad/bin/xsltproc.exe -o \"%O\" f: /kicad/bin/plugins/"
-#~ "myconverter.xsl \"%I\"\n"
+#~ "f: /kicad/bin/xsltproc.exe -o \"%O\" f: /kicad/bin/plugins/myconverter."
+#~ "xsl \"%I\"\n"
 #~ "\"\n"
 #~ "\n"
 #~ "„Linux“ komanda tampa tokia.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "xsltproc -o \"%O\" / usr / local / kicad / bin / plugins / "
-#~ "myconverter .xsl \"%I\"\n"
+#~ "xsltproc -o \"%O\" / usr / local / kicad / bin / plugins / myconverter ."
+#~ "xsl \"%I\"\n"
 #~ "\"\n"
 #~ "kur `myconverter.xsl` yra stiliaus lapas, kurį taikote.\n"
 #~ "\n"
@@ -59062,8 +59055,8 @@ msgstr "Lapo formatų redaktorius"
 #~ "\n"
 #~ "„Linux“:\n"
 #~ "\"\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "\"\n"
 #~ "\n"
 #~ "Ankstesniuose pavyzdžiuose daroma prielaida, kad „xsltproc“ yra įdiegtas "
@@ -65514,8 +65507,8 @@ msgstr "Lapo formatų redaktorius"
 #~ "file"
 #~ msgstr ""
 #~ "Используйте этот атрибут для SMD компонентов.\n"
-#~ "Компоненты только с таким атрибутом попадут в файл списка позиций "
-#~ "посад.мест"
+#~ "Компоненты только с таким атрибутом попадут в файл списка позиций посад."
+#~ "мест"
 
 #, fuzzy
 #~ msgid ""
@@ -67939,8 +67932,8 @@ msgstr "Lapo formatų redaktorius"
 #, fuzzy
 #~ msgid "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 #~ msgstr ""
-#~ "Не удалось добавить новый компонент \"%s:%s\" из-за отсутствия "
-#~ "посад.места \"%s\".\n"
+#~ "Не удалось добавить новый компонент \"%s:%s\" из-за отсутствия посад."
+#~ "места \"%s\".\n"
 
 #, fuzzy
 #~ msgid "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
@@ -68137,8 +68130,8 @@ msgstr "Lapo formatų redaktorius"
 #~ " - <b>MicroVia Diameter</b> (%f %s) &lt; <b>MicroVia Min Diameter</b> (%f "
 #~ "%s)<br>"
 #~ msgstr ""
-#~ "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра "
-#~ "перех.микроотв.</b><br>"
+#~ "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра перех."
+#~ "микроотв.</b><br>"
 
 #, fuzzy
 #~ msgid ""
@@ -68151,8 +68144,8 @@ msgstr "Lapo formatų redaktorius"
 #~ " - <b>MicroVia Drill</b> (%f %s) &lt; <b>MicroVia Min Drill</b> (%f "
 #~ "%s)<br>"
 #~ msgstr ""
-#~ "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла "
-#~ "перех.микроотв.</b><br>"
+#~ "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла перех."
+#~ "микроотв.</b><br>"
 
 #~ msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 #~ msgstr ""
@@ -68164,8 +68157,8 @@ msgstr "Lapo formatų redaktorius"
 #, fuzzy
 #~ msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 #~ msgstr ""
-#~ "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера "
-#~ "перех.отв.</b><br>"
+#~ "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера перех."
+#~ "отв.</b><br>"
 
 #~ msgid "<b>No via drill size define in row %d</b><br>"
 #~ msgstr "<b>Grąžtas  perėjimui nenurodytas %d eilutėje</b><br>"
