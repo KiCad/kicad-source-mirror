@@ -256,8 +256,10 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
 
     git_oid     updatedRefOid;
     const char* currentBranchName = git_reference_name( rawRef );
-    wxString    remoteBranchName = wxString::Format( "refs/remotes/origin/%s",
-                                    currentBranchName + strlen( "refs/heads/" ) );
+    const char* branch_shorthand = git_reference_shorthand( rawRef );
+    wxString remote_name = GetRemotename();
+    wxString    remoteBranchName = wxString::Format( "refs/remotes/%s/%s",
+                                    remote_name, branch_shorthand );
 
     // Get the OID of the updated reference (remote-tracking branch)
     if( git_reference_name_to_id( &updatedRefOid, GetRepo(), remoteBranchName.c_str() ) != GIT_OK )
