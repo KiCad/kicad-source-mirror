@@ -1128,7 +1128,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnCreateJumperPinGroup( wxCommandEvent& aE
         {
             group << m_listAvailablePins->GetString( idx );
 
-            if( ++i < selections.Count() )
+            if( ++i < (int) selections.Count() )
                 group << ", ";
         }
 
