@@ -401,6 +401,15 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 
     text.Printf( format, value );
 
+    // Trim to 2-1/2 digits after the decimal place for short-form mm
+    if( is_eeschema && aUnits == EDA_UNITS::MM )
+    {
+        struct lconv* lc = localeconv();
+
+        if( text.Contains( *lc->decimal_point ) && text.EndsWith( '0' ) )
+            text = text.Left( text.size() - 1 );
+    }
+
     if( aAddUnitsText )
         text += EDA_UNIT_UTILS::GetText( aUnits, aType );
 
