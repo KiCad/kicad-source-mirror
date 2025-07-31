@@ -132,6 +132,7 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
     rect.Offset( -1, 3 );
 #else
     rect.Offset( 1, 3 );
+    rect.SetWidth( rect.GetWidth() - 1 );
     rect.SetHeight( rect.GetHeight() - 4 );
 #endif
     wxGridCellEditor::SetSize( rect );
