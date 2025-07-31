@@ -37,6 +37,7 @@
 #include <widgets/sch_properties_panel.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/wx_aui_utils.h>
+#include <wx/combobox.h>
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140

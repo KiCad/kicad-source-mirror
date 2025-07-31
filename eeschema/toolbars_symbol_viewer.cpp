@@ -32,6 +32,7 @@
 #include <tools/symbol_editor_control.h>
 #include <widgets/wx_menubar.h>
 #include <toolbars_symbol_viewer.h>
+#include <wx/choice.h>
 
 std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {

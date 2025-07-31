@@ -62,6 +62,7 @@
 #include <view/view_controls.h>
 #include <wx/srchctrl.h>
 #include <wx/log.h>
+#include <wx/choice.h>
 #include <toolbars_symbol_viewer.h>
 
 #include <default_values.h>
