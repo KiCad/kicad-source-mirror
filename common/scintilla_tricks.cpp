@@ -33,6 +33,7 @@
 #include <wx/log.h>
 #include <wx/settings.h>
 #include <confirm.h>
+#include <grid_tricks.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
                                     bool aSingleLine,
@@ -216,6 +217,28 @@ void SCINTILLA_TRICKS::onModified( wxStyledTextEvent& aEvent )
 
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
+    auto findGridTricks =
+            [&]() -> GRID_TRICKS*
+            {
+                wxWindow* parent = m_te->GetParent();
+
+                while( parent && !dynamic_cast<WX_GRID*>( parent ) )
+                    parent = parent->GetParent();
+
+                if( WX_GRID* grid = dynamic_cast<WX_GRID*>( parent ) )
+                {
+                    wxEvtHandler* handler = grid->GetEventHandler();
+
+                    while( handler && !dynamic_cast<GRID_TRICKS*>( handler ) )
+                        handler = handler->GetNextHandler();
+
+                    if( GRID_TRICKS* gridTricks = dynamic_cast<GRID_TRICKS*>( handler ) )
+                        return gridTricks;
+                }
+
+                return nullptr;
+            };
+
     wxString c = aEvent.GetUnicodeKey();
 
     if( m_te->AutoCompActive() )
@@ -373,7 +396,8 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
             m_te->DeleteBack();
 
-        wxLogNull doNotLog; // disable logging of failed clipboard actions
+        GRID_TRICKS* gridTricks = nullptr;
+        wxLogNull    doNotLog; // disable logging of failed clipboard actions
 
         if( wxTheClipboard->Open() )
         {
@@ -386,21 +410,30 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
                 wxTheClipboard->GetData( data );
                 str = data.GetText();
 
-                ConvertSmartQuotesAndDashes( &str );
+                if( str.Contains( '\t' ) )
+                    gridTricks = findGridTricks();
 
-                if( m_singleLine )
+                if( !gridTricks )
                 {
-                    str.Replace( wxS( "\n" ), wxEmptyString );
-                    str.Replace( wxS( "\r" ), wxEmptyString );
-                }
+                    ConvertSmartQuotesAndDashes( &str );
 
-                m_te->BeginUndoAction();
-                m_te->AddText( str );
-                m_te->EndUndoAction();
+                    if( m_singleLine )
+                    {
+                        str.Replace( wxS( "\n" ), wxEmptyString );
+                        str.Replace( wxS( "\r" ), wxEmptyString );
+                    }
+
+                    m_te->BeginUndoAction();
+                    m_te->AddText( str );
+                    m_te->EndUndoAction();
+                }
             }
 
             wxTheClipboard->Close();
         }
+
+        if( gridTricks )
+            gridTricks->onKeyDown( aEvent );
     }
     else if( aEvent.GetKeyCode() == WXK_BACK )
     {

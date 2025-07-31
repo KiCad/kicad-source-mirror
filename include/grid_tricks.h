@@ -89,6 +89,9 @@ public:
     }
 
 protected:
+    /// Allow various conspiracies between the two tricks handlers
+    friend class SCINTILLA_TRICKS;
+
     /// Shared initialization for various ctors.
     void init();
 

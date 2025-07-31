@@ -714,7 +714,7 @@ void GRID_TRICKS::paste_clipboard()
             // Some editors use windows linefeeds (\r\n), which wx re-writes to \n\n
             text.Replace( "\n\n", "\n" );
 #endif
-
+            m_grid->CommitPendingChanges( true );
             paste_text( text );
         }
 
