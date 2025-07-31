@@ -128,16 +128,20 @@ GIT_COMMIT_HANDLER::PerformCommit( const std::vector<wxString>& aFiles,
 
     KIGIT::GitSignaturePtr authorPtr( author );
     git_oid                oid;
-
+    size_t                 parentsCount = parent ? 1 : 0;
 #if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8 \
     && ( LIBGIT2_VER_REVISION < 2 || LIBGIT2_VER_REVISION == 3 ) )
     git_commit* const parents[1] = { parent };
+    git_commit** const parentsPtr = parent ? parents : nullptr;
 #else
     const git_commit* parents[1] = { parent };
+    const git_commit** parentsPtr = parent ? parents : nullptr;
 #endif
 
+
+
     if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr,
-                           aMessage.mb_str(), tree, 1, parents ) != 0 )
+                           aMessage.mb_str(), tree, parentsCount, parentsPtr ) != 0 )
     {
         AddErrorString( wxString::Format( _( "Failed to create commit: %s" ),
                                           KIGIT_COMMON::GetLastGitError() ) );
