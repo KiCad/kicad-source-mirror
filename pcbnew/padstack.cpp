@@ -1358,7 +1358,7 @@ std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
     if( IsBackLayer( aSide ) )
         return m_backMaskProps.has_solder_mask;
 
-    wxCHECK_MSG( false, std::nullopt, "IsTented expects a front or back layer" );
+    return false;
 }
 
 std::optional<bool> PADSTACK::IsCovered( PCB_LAYER_ID aSide ) const
@@ -1369,7 +1369,7 @@ std::optional<bool> PADSTACK::IsCovered( PCB_LAYER_ID aSide ) const
     if( IsBackLayer( aSide ) )
         return m_backMaskProps.has_covering;
 
-    wxCHECK_MSG( false, std::nullopt, "IsCovered expects a front or back layer" );
+    return false;
 }
 
 std::optional<bool> PADSTACK::IsPlugged( PCB_LAYER_ID aSide ) const
@@ -1380,7 +1380,7 @@ std::optional<bool> PADSTACK::IsPlugged( PCB_LAYER_ID aSide ) const
     if( IsBackLayer( aSide ) )
         return m_backMaskProps.has_plugging;
 
-    wxCHECK_MSG( false, std::nullopt, "IsPlugged expects a front or back layer" );
+    return false;
 }
 
 std::optional<bool> PADSTACK::IsCapped() const

@@ -1766,37 +1766,25 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
         std::vector<std::tuple<auxLayerType, PCB_LAYER_ID, PCB_LAYER_ID>> new_layers;
 
         if( via->Padstack().IsFilled().value_or( false ) )
-        {
             new_layers.emplace_back( auxLayerType::FILLING, via->TopLayer(), via->BottomLayer() );
-        }
 
         if( via->Padstack().IsCapped().value_or( false ) )
-        {
             new_layers.emplace_back( auxLayerType::CAPPING, via->TopLayer(), via->BottomLayer() );
-        }
 
         for( PCB_LAYER_ID layer : { via->TopLayer(), via->BottomLayer() } )
         {
             if( via->Padstack().IsPlugged( layer ).value_or( false ) )
-            {
                 new_layers.emplace_back( auxLayerType::PLUGGING, layer, UNDEFINED_LAYER );
-            }
 
             if( via->Padstack().IsCovered( layer ).value_or( false ) )
-            {
                 new_layers.emplace_back( auxLayerType::COVERING, layer, UNDEFINED_LAYER );
-            }
 
             if( via->Padstack().IsTented( layer ).value_or( false ) )
-            {
                 new_layers.emplace_back( auxLayerType::TENTING, layer, UNDEFINED_LAYER );
-            }
         }
 
         for( auto& tuple : new_layers )
-        {
             m_auxilliary_Layers[tuple].push_back( via );
-        }
     }
 
     for( const auto& [layers, vec] : m_auxilliary_Layers )
@@ -1844,19 +1832,15 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
             if( std::get<2>( layers ) == UNDEFINED_LAYER )
             {
                 addAttribute( node, "name", genLayerString( std::get<1>( layers ), TO_UTF8( name ) ) );
-                addAttribute( node, "side",
-                              IsFrontLayer( std::get<1>( layers ) ) ? "TOP" : "BOTTOM" );
+                addAttribute( node, "side", IsFrontLayer( std::get<1>( layers ) ) ? "TOP" : "BOTTOM" );
             }
             else
             {
-                addAttribute(
-                        node, "name",
-                        genLayersString( std::get<1>( layers ), std::get<2>( layers ), TO_UTF8( name ) ) );
+                addAttribute( node, "name",
+                              genLayersString( std::get<1>( layers ), std::get<2>( layers ), TO_UTF8( name ) ) );
 
-                const bool first_external =
-                        std::get<1>( layers ) == F_Cu || std::get<1>( layers ) == B_Cu;
-                const bool second_external =
-                        std::get<2>( layers ) == F_Cu || std::get<2>( layers ) == B_Cu;
+                const bool first_external = std::get<1>( layers ) == F_Cu || std::get<1>( layers ) == B_Cu;
+                const bool second_external = std::get<2>( layers ) == F_Cu || std::get<2>( layers ) == B_Cu;
 
                 if( first_external )
                 {
@@ -1874,10 +1858,8 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
                 }
 
                 wxXmlNode* spanNode = appendNode( node, "SPAN" );
-                addAttribute( spanNode, "fromLayer",
-                              genLayerString( std::get<1>( layers ), "LAYER" ) );
-                addAttribute( spanNode, "toLayer",
-                              genLayerString( std::get<2>( layers ), "LAYER" ) );
+                addAttribute( spanNode, "fromLayer", genLayerString( std::get<1>( layers ), "LAYER" ) );
+                addAttribute( spanNode, "toLayer", genLayerString( std::get<2>( layers ), "LAYER" ) );
             }
         }
     }
@@ -1903,8 +1885,7 @@ void PCB_IO_IPC2581::generateStepSection( wxXmlNode* aCadNode )
     m_last_padstack = insertNode( stepNode, "NonstandardAttribute" );
     addAttribute( m_last_padstack,  "name", "FOOTPRINT_COUNT" );
     addAttribute( m_last_padstack,  "type", "INTEGER" );
-    addAttribute( m_last_padstack,  "value",
-                  wxString::Format( "%zu", m_board->Footprints().size() ) );
+    addAttribute( m_last_padstack,  "value", wxString::Format( "%zu", m_board->Footprints().size() ) );
 
     generateLayerFeatures( stepNode );
     generateLayerSetDrill( stepNode );
@@ -2087,12 +2068,10 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
     }
 
     if( aVia->Padstack().IsFilled().value_or( false ) )
-        addPadShape( UNDEFINED_LAYER, aVia,
-                     genLayersString( aVia->TopLayer(), aVia->BottomLayer(), "FILLING" ), true );
+        addPadShape( UNDEFINED_LAYER, aVia, genLayersString( aVia->TopLayer(), aVia->BottomLayer(), "FILLING" ), true );
 
     if( aVia->Padstack().IsCapped().value_or( false ) )
-        addPadShape( UNDEFINED_LAYER, aVia,
-                     genLayersString( aVia->TopLayer(), aVia->BottomLayer(), "CAPPING" ), true );
+        addPadShape( UNDEFINED_LAYER, aVia, genLayersString( aVia->TopLayer(), aVia->BottomLayer(), "CAPPING" ), true );
 
     for( PCB_LAYER_ID layer : { aVia->TopLayer(), aVia->BottomLayer() } )
     {
@@ -2232,8 +2211,7 @@ bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
 
 
 bool PCB_IO_IPC2581::addContourNode( wxXmlNode* aParentNode, const SHAPE_POLY_SET& aPolySet,
-                                     int aOutline, FILL_T aFillType, int aWidth,
-                                     LINE_STYLE aDashType )
+                                     int aOutline, FILL_T aFillType, int aWidth, LINE_STYLE aDashType )
 {
     if( aPolySet.OutlineCount() < ( aOutline + 1 ) )
         return false;
