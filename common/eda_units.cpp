@@ -443,7 +443,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     {
     default:
     case EDA_UNITS::UM:          format = short_form ? wxT( "%.0f" ) : wxT( "%.1f" ); break;
-    case EDA_UNITS::MM:          format = short_form ? wxT( "%.2f" ) : wxT( "%.4f" ); break;
+    case EDA_UNITS::MM:          format = short_form ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
     case EDA_UNITS::CM:          format = short_form ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
     case EDA_UNITS::MILS:        format = short_form ? wxT( "%.0f" ) : wxT( "%.2f" ); break;
     case EDA_UNITS::INCH:        format = short_form ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
@@ -457,6 +457,15 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     }
 
     text.Printf( format, value );
+
+    // Trim to 2-1/2 digits after the decimal place for short-form mm
+    if( short_form && aUnits == EDA_UNITS::MM )
+    {
+        struct lconv* lc = localeconv();
+
+        if( text.Contains( *lc->decimal_point ) && text.EndsWith( '0' ) )
+            text = text.Left( text.size() - 1 );
+    }
 
     if( aAddUnitsText )
         text += EDA_UNIT_UTILS::GetText( aUnits, aType );
