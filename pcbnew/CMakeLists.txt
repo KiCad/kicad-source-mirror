@@ -720,7 +720,7 @@ add_library( pcbnew_kiface_objects OBJECT
     ${PCBNEW_SCRIPTING_SRCS}
     )
 
-if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+if( KICAD_USE_PCH AND CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     target_precompile_headers( pcbnew_kiface_objects
         PRIVATE
             <vector>

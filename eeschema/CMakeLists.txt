@@ -576,17 +576,19 @@ add_library( eeschema_kiface_objects OBJECT
     ${EESCHEMA_COMMON_SRCS}
     )
 
-target_precompile_headers( eeschema_kiface_objects
-    PRIVATE
-        <vector>
-        <map>
-        <memory>
-        <unordered_map>
-        <sch_edit_frame.h>
-        <string_utils.h>
-        <schematic.h>
-        <pgm_base.h>
-        <wx/wx.h> )
+if( KICAD_USE_PCH )
+    target_precompile_headers( eeschema_kiface_objects
+        PRIVATE
+            <vector>
+            <map>
+            <memory>
+            <unordered_map>
+            <sch_edit_frame.h>
+            <string_utils.h>
+            <schematic.h>
+            <pgm_base.h>
+            <wx/wx.h> )
+endif()
 
 target_include_directories( eeschema_kiface_objects
     PUBLIC

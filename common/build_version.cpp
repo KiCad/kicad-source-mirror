@@ -317,6 +317,13 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << indent4 << "KICAD_IPC_API=" << OFF;
 #endif
 
+    aMsg << indent4 << "KICAD_USE_PCH=";
+#ifdef KICAD_USE_PCH
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
 #ifndef NDEBUG
     aMsg << indent4 << "KICAD_STDLIB_DEBUG=";
 #ifdef KICAD_STDLIB_DEBUG

@@ -233,6 +233,10 @@ cmake_dependent_option( KICAD_WIN32_LTCG
     OFF "WIN32"
     OFF )
 
+option( KICAD_USE_PCH
+    "Enable precompiled header support"
+    ON )
+
 # Advanced option to make link maps (only available on linux)
 cmake_dependent_option( KICAD_MAKE_LINK_MAPS
     "Create link maps for artifacts"

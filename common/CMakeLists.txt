@@ -239,18 +239,20 @@ add_library( kicommon SHARED
     ${KICOMMON_SRCS}
     )
 
-target_precompile_headers( kicommon
-    PRIVATE
-        <kicommon.h>
-        <algorithm>
-        <map>
-        <memory>
-        <optional>
-        <set>
-        <string>
-        <vector>
-        <wx/wx.h>
-         )
+if( KICAD_USE_PCH )
+    target_precompile_headers( kicommon
+        PRIVATE
+            <kicommon.h>
+            <algorithm>
+            <map>
+            <memory>
+            <optional>
+            <set>
+            <string>
+            <vector>
+            <wx/wx.h>
+             )
+endif()
 
 set_target_properties(kicommon PROPERTIES CXX_VISIBILITY_PRESET hidden)
 
@@ -750,18 +752,20 @@ add_library( common STATIC
     ${COMMON_SRCS}
     )
 
-target_precompile_headers( kicommon
-    PRIVATE
-        <kicommon.h>
-        <algorithm>
-        <map>
-        <memory>
-        <optional>
-        <set>
-        <string>
-        <vector>
-        <wx/wx.h>
-         )
+if( KICAD_USE_PCH )
+    target_precompile_headers( kicommon
+        PRIVATE
+            <kicommon.h>
+            <algorithm>
+            <map>
+            <memory>
+            <optional>
+            <set>
+            <string>
+            <vector>
+            <wx/wx.h>
+             )
+endif()
 
 add_dependencies( common version_header )
 add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
@@ -929,17 +933,19 @@ set( PCB_COMMON_SRCS
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
-target_precompile_headers( pcbcommon
-    PRIVATE
-        <vector>
-        <map>
-        <memory>
-        <unordered_map>
-        <board.h>
-        <footprint.h>
-        <zone.h>
-        <connectivity/connectivity_data.h>
-        <drc/drc_engine.h> )
+if( KICAD_USE_PCH )
+    target_precompile_headers( pcbcommon
+        PRIVATE
+            <vector>
+            <map>
+            <memory>
+            <unordered_map>
+            <board.h>
+            <footprint.h>
+            <zone.h>
+            <connectivity/connectivity_data.h>
+            <drc/drc_engine.h> )
+endif()
 
 target_compile_definitions(pcbcommon PRIVATE PCBNEW)
 
