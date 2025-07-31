@@ -1334,6 +1334,11 @@ public:
 
     PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::BOARD; }
 
+    const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const
+    {
+        return m_itemByIdCache;
+    }
+
     // --------- Item order comparators ---------
 
     struct cmp_items

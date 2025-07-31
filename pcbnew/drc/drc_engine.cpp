@@ -2033,3 +2033,38 @@ DRC_TEST_PROVIDER* DRC_ENGINE::GetTestProvider( const wxString& name ) const
 
     return nullptr;
 }
+
+
+std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& aExpression,
+                                                                DRC_CONSTRAINT_T aConstraint,
+                                                                REPORTER* aReporter )
+{
+    std::vector<BOARD_ITEM*> matches;
+
+    if( !m_board )
+        return matches;
+
+    DRC_RULE_CONDITION condition( aExpression );
+
+    if( !condition.Compile( aReporter ? aReporter : m_logReporter ) )
+        return matches;
+
+    BOARD_ITEM_SET items = m_board->GetItemSet();
+
+    for( auto& [kiid, item] : m_board->GetItemByIdCache() )
+    {
+        LSET itemLayers = item->GetLayerSet();
+
+        for( PCB_LAYER_ID layer : itemLayers )
+        {
+            if( condition.EvaluateFor( item, nullptr, static_cast<int>( aConstraint ), layer,
+                                    aReporter ? aReporter : m_logReporter ) )
+            {
+                matches.push_back( item );
+                break; // No need to check other layers
+            }
+        }
+    }
+
+    return matches;
+}

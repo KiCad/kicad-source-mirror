@@ -190,6 +190,17 @@ public:
 
     DRC_TEST_PROVIDER* GetTestProvider( const wxString& name ) const;
 
+    /**
+     * Evaluate a DRC condition against all board items and return matches.
+     *
+     * @param aExpression Expression to evaluate
+     * @param aConstraint Constraint context for expression evaluation
+     * @param aReporter Reporter for compile or evaluation errors
+     */
+    std::vector<BOARD_ITEM*> GetItemsMatchingCondition( const wxString& aExpression,
+                                                        DRC_CONSTRAINT_T aConstraint = ASSERTION_CONSTRAINT,
+                                                        REPORTER* aReporter = nullptr );
+
     static bool IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
 
     /**
