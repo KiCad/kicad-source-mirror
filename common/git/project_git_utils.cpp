@@ -26,6 +26,8 @@
 #include "kicad_git_memory.h"
 #include <trace_helpers.h>
 #include <wx/log.h>
+#include <wx/filename.h>
+#include <gestfich.h>
 
 namespace KIGIT
 {
@@ -88,5 +90,36 @@ int PROJECT_GIT_UTILS::CreateBranch( git_repository* aRepo, const wxString& aBra
     return 0;
 }
 
-} // namespace KIGIT
+bool PROJECT_GIT_UTILS::RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
+                                  bool aRemoveGitDir, wxString* aErrors )
+{
+    if( aRepo )
+    {
+        git_repository_free( aRepo );
+        aRepo = nullptr;
+    }
 
+    if( aRemoveGitDir )
+    {
+        wxFileName gitDir( aProjectPath, wxEmptyString );
+        gitDir.AppendDir( ".git" );
+
+        if( gitDir.DirExists() )
+        {
+            wxString errors;
+            if( !RmDirRecursive( gitDir.GetPath(), &errors ) )
+            {
+                if( aErrors )
+                    *aErrors = errors;
+
+                wxLogTrace( traceGit, "Failed to remove .git directory: %s", errors );
+                return false;
+            }
+        }
+    }
+
+    wxLogTrace( traceGit, "Successfully removed VCS from project" );
+    return true;
+}
+
+} // namespace KIGIT

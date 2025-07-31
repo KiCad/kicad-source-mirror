@@ -50,6 +50,19 @@ public:
      * @return 0 on success, libgit2 error code on failure.
      */
     static int CreateBranch( git_repository* aRepo, const wxString& aBranchName );
+
+    /**
+     * Remove version control from a directory by freeing the repository and
+     * optionally removing the .git directory.
+     *
+     * @param aRepo Repository to free (will be set to nullptr)
+     * @param aProjectPath Path to the project directory
+     * @param aRemoveGitDir If true, also remove the .git directory from disk
+     * @param aErrors Output parameter for any error messages
+     * @return True on success, false on failure
+     */
+static bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath = wxEmptyString,
+                      bool aRemoveGitDir = false, wxString* aErrors = nullptr );
 };
 
 } // namespace KIGIT

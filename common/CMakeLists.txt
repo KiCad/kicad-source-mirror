@@ -601,17 +601,22 @@ set( COMMON_IMPORT_GFX_SRCS
 
 set( COMMON_GIT_SRCS
     git/git_add_to_index_handler.cpp
+    git/git_branch_handler.cpp
     git/git_clone_handler.cpp
     git/git_commit_handler.cpp
+    git/git_config_handler.cpp
+    git/git_init_handler.cpp
     git/git_pull_handler.cpp
     git/git_push_handler.cpp
     git/git_remove_from_index_handler.cpp
     git/git_resolve_conflict_handler.cpp
     git/git_revert_handler.cpp
+    git/git_status_handler.cpp
     git/git_sync_handler.cpp
     git/project_git_utils.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
+    git/project_git_utils.cpp
     )
 
 set( COMMON_SRCS
