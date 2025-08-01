@@ -1141,7 +1141,7 @@ void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
         FileWatcherReset();
     }
 
-    if( m_selectedItem != nullptr )
+    if( m_selectedItem != nullptr && m_TreeProject->GetRootItem().IsOk() )
     {
         // Make sure m_selectedItem still exists in the tree before activating it.
         std::vector<wxTreeItemId> validItemIds;
