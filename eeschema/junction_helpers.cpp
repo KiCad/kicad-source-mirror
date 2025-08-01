@@ -20,6 +20,10 @@
 #include "junction_helpers.h"
 
 #include <sch_line.h>
+#include <sch_screen.h>
+#include <sch_junction.h>
+#include <sch_item.h>
+#include <trigo.h>
 
 using namespace JUNCTION_HELPERS;
 
@@ -42,10 +46,68 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
     std::unordered_set<int>      exitAngles[2];
     std::vector<const SCH_LINE*> midPointLines[2];
 
+    EE_RTREE filtered;
+    std::list<std::unique_ptr<SCH_LINE>> mergedLines;
+
+    // Ignore items that are currently being moved or flagged to skip
+    // and temporarily merge collinear wires before analyzing the point.
+    for( SCH_ITEM* item : aItems.Overlapping( aPosition ) )
+    {
+        if( item->GetEditFlags() & ( SKIP_STRUCT | STRUCT_DELETED ) )
+            continue;
+
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( line->IsConnectable() )
+            {
+                mergedLines.emplace_back( new SCH_LINE( *line ) );
+                continue;
+            }
+        }
+        else if( item->Type() == SCH_JUNCTION_T
+                 || item->Type() == SCH_BUS_WIRE_ENTRY_T
+                 || item->Type() == SCH_SHEET_T
+                 || item->Type() == SCH_SYMBOL_T )
+        {
+            filtered.insert( item );
+        }
+    }
+
+    if( mergedLines.size() + filtered.size() < 2 )
+        return info;
+
+    // Merge collinear wire segments
+    bool merged = false;
+
+    do
+    {
+        merged = false;
+
+        for( auto it_i = mergedLines.begin(); it_i != mergedLines.end() && !merged; ++it_i )
+        {
+            for( auto it_j = std::next( it_i ); it_j != mergedLines.end(); ++it_j )
+            {
+                if( auto* line = ( *it_i )->MergeOverlap( nullptr, it_j->get(), false ) )
+                {
+                    it_i->reset( line );
+                    mergedLines.erase( it_j );
+                    merged = true;
+                    break;
+                }
+            }
+        }
+    } while( merged );
+
+    for( const auto& line : mergedLines )
+        filtered.insert( line.get() );
+
+
     // A pin at 90° still shouldn't match a line at 90° so just give pins unique numbers
     int uniqueAngle = 10000;
 
-    for( const SCH_ITEM* item : aItems.Overlapping( aPosition ) )
+    for( const SCH_ITEM* item : filtered )
     {
         if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
@@ -139,4 +201,73 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
     info.isJunction = exitAngles[WIRES].size() >= 3 || exitAngles[BUSES].size() >= 3;
 
     return info;
+}
+
+
+std::vector<SCH_JUNCTION*> JUNCTION_HELPERS::PreviewJunctions( const SCH_SCREEN* aScreen,
+                                                               const std::vector<SCH_ITEM*>& aItems )
+{
+    EE_RTREE combined;
+
+    // Existing items
+    for( const SCH_ITEM* item : aScreen->Items() )
+    {
+        if( !item->IsConnectable() )
+            continue;
+
+        combined.insert( const_cast<SCH_ITEM*>( item ) );
+    }
+
+    // Temporary items
+    for( SCH_ITEM* item : aItems )
+    {
+        if( !item || !item->IsConnectable() )
+            continue;
+        combined.insert( item );
+    }
+
+    std::vector<VECTOR2I> connections = aScreen->GetConnections();
+    std::vector<VECTOR2I> pts;
+
+    for( SCH_ITEM* item : aItems )
+    {
+        if( !item || !item->IsConnectable() )
+            continue;
+
+        std::vector<VECTOR2I> new_pts = item->GetConnectionPoints();
+        pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
+
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            for( const VECTOR2I& pt : connections )
+            {
+                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
+                    pts.push_back( pt );
+            }
+        }
+    }
+
+    std::sort( pts.begin(), pts.end(),
+               []( const VECTOR2I& a, const VECTOR2I& b )
+               {
+                   return a.x < b.x || ( a.x == b.x && a.y < b.y );
+               } );
+
+    pts.erase( std::unique( pts.begin(), pts.end() ), pts.end() );
+
+    std::vector<SCH_JUNCTION*> jcts;
+
+    for( const VECTOR2I& pt : pts )
+    {
+        POINT_INFO info = AnalyzePoint( combined, pt, false );
+
+        if( info.isJunction && ( !info.hasBusEntry || info.hasBusEntryToMultipleWires ) )
+        {
+            jcts.push_back( new SCH_JUNCTION( pt ) );
+        }
+    }
+
+    return jcts;
 }

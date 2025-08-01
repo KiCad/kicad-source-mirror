@@ -31,6 +31,10 @@
 
 class SCH_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
+class SCH_LINE;
+class SCH_LABEL_BASE;
+class SCH_SHEET_PIN;
+class SCH_JUNCTION;
 
 
 struct SPECIAL_CASE_LABEL_INFO
@@ -102,6 +106,8 @@ private:
     std::unordered_set<SCH_LINE*>       m_newDragLines;
     ///< Lines changed by drag algorithm that weren't selected
     std::unordered_set<SCH_LINE*>       m_changedDragLines;
+    ///< Junctions that were hidden during the move
+    std::vector<SCH_JUNCTION*>           m_hiddenJunctions;
 
     VECTOR2I              m_moveOffset;
 

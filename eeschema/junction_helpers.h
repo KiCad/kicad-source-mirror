@@ -48,4 +48,15 @@ struct POINT_INFO
  */
 POINT_INFO AnalyzePoint( const EE_RTREE& aItem, const VECTOR2I& aPosition, bool aBreakCrossings );
 
+/**
+ * Determine the points where explicit junctions would be required if the given
+ * temporary items were committed to the schematic.
+ *
+ * @param aScreen  The schematic screen containing the existing items.
+ * @param aItems   Temporary items not yet added to the screen.
+ * @return Locations of needed junctions represented as new SCH_JUNCTION items.
+ */
+std::vector<class SCH_JUNCTION*> PreviewJunctions( const class SCH_SCREEN* aScreen,
+                                                   const std::vector<class SCH_ITEM*>& aItems );
+
 } // namespace JUNCTION_HELPERS

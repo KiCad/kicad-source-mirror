@@ -50,6 +50,7 @@
 #include <sch_bus_entry.h>
 #include <sch_connection.h>
 #include <sch_edit_frame.h>
+#include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -58,6 +59,7 @@
 #include <schematic.h>
 #include <sch_commit.h>
 #include <sch_actions.h>
+#include <junction_helpers.h>
 #include <ee_grid_helper.h>
 #include <sch_selection.h>
 #include <sch_selection_tool.h>
@@ -938,6 +940,23 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
             {
                 if( !wire->IsNull() )
                     m_view->AddToPreview( wire->Clone() );
+            }
+
+            std::vector<SCH_ITEM*> previewItems;
+
+            for( SCH_LINE* wire : m_wires )
+            {
+                if( !wire->IsNull() )
+                    previewItems.push_back( wire );
+            }
+
+            if( m_busUnfold.entry )
+                previewItems.push_back( m_busUnfold.entry );
+
+            for( SCH_JUNCTION* jct : JUNCTION_HELPERS::PreviewJunctions( m_frame->GetScreen(),
+                                                                          previewItems ) )
+            {
+                m_view->AddToPreview( jct, true );
             }
         }
         else if( evt->IsAction( &SCH_ACTIONS::undoLastSegment )

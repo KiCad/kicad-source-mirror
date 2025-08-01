@@ -40,6 +40,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_line.h>
 #include <sch_junction.h>
+#include <junction_helpers.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <pgm_base.h>
@@ -621,6 +622,28 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         static_cast<SCH_ITEM*>( item )->UpdateDanglingState( endPointsByType, endPointsByPos );
                 }
 
+                // Hide junctions connected to line endpoints that are not selected
+                m_hiddenJunctions.clear();
+
+                for( EDA_ITEM* edaItem : selection )
+                {
+                    if( edaItem->Type() != SCH_LINE_T )
+                        continue;
+
+                    SCH_LINE* line = static_cast<SCH_LINE*>( edaItem );
+
+                    for( const VECTOR2I& pt : line->GetConnectionPoints() )
+                    {
+                        SCH_JUNCTION* jct = static_cast<SCH_JUNCTION*>( m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
+
+                        if( jct && !jct->IsSelected()
+                            && std::find( m_hiddenJunctions.begin(), m_hiddenJunctions.end(), jct ) == m_hiddenJunctions.end() )
+                        {
+                            m_view->Hide( jct, true );
+                            m_hiddenJunctions.push_back( jct );
+                        }
+                    }
+                }
 
                 // Generic setup
                 snapLayer = grid.GetSelectionGrid( selection );
@@ -743,8 +766,10 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             //------------------------------------------------------------------------
             // Follow the mouse
             //
+            m_view->ClearPreview();
+
             m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
-                                            snapLayer, selection );
+                                        snapLayer, selection );
 
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
@@ -829,6 +854,23 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             if( selection.HasReferencePoint() )
                 selection.SetReferencePoint( selection.GetReferencePoint() + delta );
 
+            std::vector<SCH_ITEM*> previewItems;
+
+            for( EDA_ITEM* it : selection )
+                previewItems.push_back( static_cast<SCH_ITEM*>( it ) );
+
+            for( SCH_LINE* line : m_newDragLines )
+                previewItems.push_back( line );
+
+            for( SCH_LINE* line : m_changedDragLines )
+                previewItems.push_back( line );
+
+            for( SCH_JUNCTION* jct : JUNCTION_HELPERS::PreviewJunctions( m_frame->GetScreen(),
+                                                                          previewItems ) )
+            {
+                m_view->AddToPreview( jct, true );
+            }
+
             m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
         }
 
@@ -863,6 +905,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             }
 
             clearNewDragLines();
+
+            m_view->ClearPreview();
 
             break;
         }
@@ -1067,6 +1111,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     m_dragAdditions.clear();
     m_lineConnectionCache.clear();
     m_moveInProgress = false;
+
+    for( SCH_JUNCTION* jct : m_hiddenJunctions )
+        m_view->Hide( jct, false );
+
+    m_hiddenJunctions.clear();
+    m_view->ClearPreview();
     m_frame->PopTool( aEvent );
 
     return !restore_state;

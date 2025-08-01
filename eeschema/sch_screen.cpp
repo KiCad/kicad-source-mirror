@@ -62,6 +62,7 @@
 
 #include <algorithm>
 #include <math/vector3.h>
+#include <memory>
 
 // TODO(JE) Debugging only
 #include <core/profile.h>
