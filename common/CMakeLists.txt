@@ -514,6 +514,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_progress_reporters.cpp
     widgets/wx_splitter_window.cpp
     widgets/wx_treebook.cpp
+    widgets/webview_panel.cpp
     )
 
 set( COMMON_DRAWING_SHEET_SRCS
