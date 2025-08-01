@@ -21,15 +21,52 @@
 #ifndef JOBS_FILE_H
 #define JOBS_FILE_H
 
+#include <reporter.h>
 #include <bitmaps/bitmaps_list.h>
 #include <jobs/job.h>
 #include <jobs/jobs_output.h>
 #include <settings/json_settings.h>
 #include <settings/parameters.h>
+#include <widgets/wx_progress_reporters.h>
 #include <ctime>
 #include <memory>
 
-class REPORTER;
+
+class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
+{
+public:
+    JOBSET_OUTPUT_REPORTER( const wxString& aTempDirPath, PROGRESS_REPORTER* aProgressReporter ) :
+            m_tempDirPath( aTempDirPath ),
+            m_progressReporter( aProgressReporter )
+    {
+    }
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity ) override
+    {
+        wxString text( aText );
+
+        if( aSeverity == RPT_SEVERITY_DEBUG && !m_includeDebug )
+            return *this;
+
+        if( aSeverity == RPT_SEVERITY_ACTION )
+            text.Replace( m_tempDirPath, wxEmptyString );
+
+        if( m_progressReporter )
+        {
+            m_progressReporter->Report( text );
+            m_progressReporter->KeepRefreshing();
+        }
+
+        return WX_STRING_REPORTER::Report( text, aSeverity );
+    }
+
+private:
+    wxString           m_tempDirPath;
+    bool               m_includeDebug;
+    PROGRESS_REPORTER* m_progressReporter;
+};
+
+
 
 struct KICOMMON_API JOBSET_JOB
 {
@@ -79,26 +116,24 @@ struct KICOMMON_API JOBSET_DESTINATION
 
     JOBSET_DESTINATION( const wxString& id, JOBSET_DESTINATION_T type );
 
-    ~JOBSET_DESTINATION();
+    void InitOutputHandler();
 
-    void                  InitOutputHandler();
+    wxString GetDescription() const;
+    void SetDescription( const wxString& aDescription );
 
+    bool operator==( const JOBSET_DESTINATION& rhs ) const;
+
+public:
     wxString              m_id;
     JOBSET_DESTINATION_T  m_type;
     wxString              m_description;
     std::shared_ptr<JOBS_OUTPUT_HANDLER>  m_outputHandler;
     std::vector<wxString> m_only;
 
-    wxString GetDescription() const;
-    void SetDescription( const wxString& aDescription );
-
     ///< Transient property, not stored for now
-    std::optional<bool>   m_lastRunSuccess;
-    std::unordered_map<wxString, std::optional<bool>> m_lastRunSuccessMap;
-    std::unordered_map<wxString, REPORTER*>           m_lastRunReporters;
-
-    bool operator==( const JOBSET_DESTINATION& rhs ) const;
-
+    std::optional<bool>                                                   m_lastRunSuccess;
+    std::unordered_map<wxString, std::optional<bool>>                     m_lastRunSuccessMap;
+    std::unordered_map<wxString, std::shared_ptr<JOBSET_OUTPUT_REPORTER>> m_lastRunReporters;
 };
 
 
