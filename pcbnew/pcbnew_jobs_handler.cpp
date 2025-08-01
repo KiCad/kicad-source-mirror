@@ -1151,6 +1151,14 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
     brd->GetProject()->ApplyTextVars( psJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
+    if( psJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
+
     if( psJob->m_argLayers )
         psJob->m_plotLayerSequence = convertLayerArg( psJob->m_argLayers.value(), brd );
 
