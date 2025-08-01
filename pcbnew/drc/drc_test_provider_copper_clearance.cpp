@@ -247,7 +247,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
         if( itemShape->Collide( otherShape, clearance - m_drcEpsilon, &actual, &pos ) )
         {
-            if( m_drcEngine->IsNetTieExclusion( trackNet->GetNetCode(), layer, pos, other ) )
+            if( trackNet && m_drcEngine->IsNetTieExclusion( trackNet->GetNetCode(), layer, pos, other ) )
             {
                 // Collision occurred as track was entering a pad marked as a net-tie.  We
                 // allow these.
