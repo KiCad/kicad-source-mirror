@@ -442,7 +442,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
 
     if( m_suppressZeroes )
     {
-        while( text.Last() == '0' )
+        while( text.EndsWith( '0' ) )
         {
             text.RemoveLast();
 

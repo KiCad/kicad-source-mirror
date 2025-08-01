@@ -172,16 +172,24 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     // if the symbol is saved in a library, the prefix should not ends by a digit or a '?'
     // but it is acceptable if the symbol is saved to a schematic.
     wxString reference_base = aSymbol->GetReferenceField().GetText();
-    wxString illegal_end( wxT( "0123456789?" ) );
-    wxUniChar last_char = reference_base.Last();
 
-    if( illegal_end.Find( last_char ) != wxNOT_FOUND )
+    if( reference_base.IsEmpty() )
     {
-        msg.Printf( _( "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create"
-                       " issues if saved in a symbol library" ),
-                    illegal_end );
-        msg += wxT( "<br><br>" );
-        aMessages.push_back( msg );
+        aMessages.push_back( _( "<b>Warning: reference is empty</b><br><br>" ) );
+    }
+    else
+    {
+        wxString illegal_end( wxT( "0123456789?" ) );
+        wxUniChar last_char = reference_base.Last();
+
+        if( illegal_end.Find( last_char ) != wxNOT_FOUND )
+        {
+            msg.Printf( _( "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create"
+                           " issues if saved in a symbol library" ),
+                        illegal_end );
+            msg += wxT( "<br><br>" );
+            aMessages.push_back( msg );
+        }
     }
 
     CheckDuplicatePins( aSymbol, aMessages, aUnitsProvider );
