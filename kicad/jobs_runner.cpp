@@ -134,42 +134,6 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
 }
 
 
-class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
-{
-public:
-    JOBSET_OUTPUT_REPORTER( const wxString& aTempDirPath, PROGRESS_REPORTER* aProgressReporter ) :
-            m_tempDirPath( aTempDirPath ),
-            m_includeDebug( false ),
-            m_progressReporter( aProgressReporter )
-    {
-    }
-
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity ) override
-    {
-        wxString text( aText );
-
-        if( aSeverity == RPT_SEVERITY_DEBUG && !m_includeDebug )
-            return *this;
-
-        if( aSeverity == RPT_SEVERITY_ACTION )
-            text.Replace( m_tempDirPath, wxEmptyString );
-
-        if( m_progressReporter )
-        {
-            m_progressReporter->Report( text );
-            m_progressReporter->KeepRefreshing();
-        }
-
-        return WX_STRING_REPORTER::Report( text, aSeverity );
-    }
-
-private:
-    wxString           m_tempDirPath;
-    bool               m_includeDebug;
-    PROGRESS_REPORTER* m_progressReporter;
-};
-
-
 bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool aBail )
 {
     bool                    genOutputs = true;
@@ -182,10 +146,6 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     tmp.AppendDir( KIID().AsString() );
 
     aDestination->m_lastRunSuccessMap.clear();
-
-    for( auto& [name, reporter] : aDestination->m_lastRunReporters )
-        delete reporter;
-
     aDestination->m_lastRunReporters.clear();
 
     wxString tempDirPath = tmp.GetFullPath();
@@ -270,8 +230,9 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
         if( reporterToUse == &NULL_REPORTER::GetInstance() )
         {
-            reporterToUse = new JOBSET_OUTPUT_REPORTER( tempDirPath, m_progressReporter );
-            aDestination->m_lastRunReporters[job.m_id] = reporterToUse;
+            aDestination->m_lastRunReporters[job.m_id] = std::make_shared<JOBSET_OUTPUT_REPORTER>( tempDirPath,
+                                                                                                   m_progressReporter );
+            reporterToUse = aDestination->m_lastRunReporters[job.m_id].get();
         }
 
         int result = CLI::EXIT_CODES::SUCCESS;

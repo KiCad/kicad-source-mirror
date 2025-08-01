@@ -148,14 +148,9 @@ public:
             wxString jobId = jobs[itemIndex].m_id;
 
             if( m_destination->m_lastRunReporters.contains( jobId ) )
-            {
-                if( auto* reporter = static_cast<WX_STRING_REPORTER*>( m_destination->m_lastRunReporters[jobId] ) )
-                    m_textCtrlOutput->SetValue( reporter->GetMessages() );
-            }
+                m_textCtrlOutput->SetValue( m_destination->m_lastRunReporters.at( jobId )->GetMessages() );
             else
-            {
                 m_textCtrlOutput->SetValue( _( "No output messages" ) );
-            }
         }
     }
 

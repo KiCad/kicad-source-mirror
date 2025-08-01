@@ -135,15 +135,6 @@ JOBSET_DESTINATION::JOBSET_DESTINATION( const wxString& id, JOBSET_DESTINATION_T
 }
 
 
-JOBSET_DESTINATION::~JOBSET_DESTINATION()
-{
-    for( auto& [name, reporter] : m_lastRunReporters )
-        delete reporter;
-
-    m_lastRunReporters.clear();
-}
-
-
 void JOBSET_DESTINATION::InitOutputHandler()
 {
     if( m_type == JOBSET_DESTINATION_T::FOLDER )
