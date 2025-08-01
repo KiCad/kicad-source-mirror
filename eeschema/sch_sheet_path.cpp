@@ -1070,6 +1070,9 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     {
         wxString curr_ref = references[ii].GetRef();
 
+        if( curr_ref.IsEmpty() )
+            continue;
+
         if( ref_list.find( curr_ref ) == ref_list.end() )
         {
             ref_list[curr_ref] = ii;
@@ -1081,7 +1084,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
             continue;   // not annotated
 
         // Duplicate: clear annotation by removing the number ending the ref
-        while( curr_ref.Last() >= '0' && curr_ref.Last() <= '9' )
+        while( !curr_ref.IsEmpty() && curr_ref.Last() >= '0' && curr_ref.Last() <= '9' )
             curr_ref.RemoveLast();
 
         references[ii].SetRef( curr_ref );
