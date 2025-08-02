@@ -41,12 +41,12 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     SetFont( infoFont );
     m_notebook->SetFont( infoFont );
 
-    AddSearcher( new FOOTPRINT_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new ZONE_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new NETS_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new RATSNEST_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new TEXT_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new GROUP_SEARCH_HANDLER( aFrame ) );
+    AddSearcher( std::make_shared<FOOTPRINT_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<ZONE_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<NETS_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<RATSNEST_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<TEXT_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<GROUP_SEARCH_HANDLER>( aFrame ) );
 }
 
 

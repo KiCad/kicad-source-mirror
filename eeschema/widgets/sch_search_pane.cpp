@@ -46,11 +46,11 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
     SetFont( infoFont );
     m_notebook->SetFont( infoFont );
 
-    AddSearcher( new SYMBOL_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new POWER_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new TEXT_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new LABEL_SEARCH_HANDLER( aFrame ) );
-    AddSearcher( new GROUP_SEARCH_HANDLER( aFrame ) );
+    AddSearcher( std::make_shared<SYMBOL_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<POWER_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<TEXT_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<LABEL_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<GROUP_SEARCH_HANDLER>( aFrame ) );
 }
 
 

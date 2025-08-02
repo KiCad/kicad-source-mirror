@@ -143,9 +143,6 @@ SEARCH_PANE::~SEARCH_PANE()
     m_frame->Unbind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
     Unbind( wxEVT_CHAR_HOOK, &SEARCH_PANE::OnCharHook, this );
 
-    for( SEARCH_HANDLER* handler : m_handlers )
-        delete handler;
-
     m_handlers.clear();
 
     delete m_menu;
@@ -171,7 +168,7 @@ void SEARCH_PANE::OnLanguageChange( wxCommandEvent& aEvent )
 }
 
 
-void SEARCH_PANE::AddSearcher( SEARCH_HANDLER* aHandler )
+void SEARCH_PANE::AddSearcher( const std::shared_ptr<SEARCH_HANDLER>& aHandler )
 {
     SEARCH_PANE_TAB* tab = new SEARCH_PANE_TAB( aHandler, m_notebook );
 
