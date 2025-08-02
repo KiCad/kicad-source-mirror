@@ -4051,15 +4051,13 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
                 netClassName += wxT( " | Spacing class: " ) + sp.Name;
             }
 
-            netclass.reset( new NETCLASS( *netSettings->GetDefaultNetclass() ) );
-            netclass->SetName( netClassName );
+            netclass.reset( new NETCLASS( netClassName ) );
             netSettings->SetNetclass( netClassName, netclass );
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
             m_netClassMap.insert( { key, netclass } );
         }
 
-        m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
-                newName, netclass->GetName() );
+        m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment( newName, netclass->GetName() );
 
         netInfo->SetNetClass( netclass );
         m_board->Add( netInfo, ADD_MODE::APPEND );
