@@ -75,12 +75,16 @@ std::map<wxString, FileStatus> GIT_STATUS_HANDLER::GetFileStatus( const wxString
     status_options.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
 
     // Set up pathspec if provided
-    const char* pathspec_cstr = nullptr;
+    std::string pathspec_str;
+    std::vector<const char*> pathspec_ptrs;
+
     if( !aPathspec.IsEmpty() )
     {
-        pathspec_cstr = aPathspec.c_str().AsChar();
-        const char* pathspec[] = { pathspec_cstr };
-        status_options.pathspec = { (char**) pathspec, 1 };
+        pathspec_str = aPathspec.ToStdString();
+        pathspec_ptrs.push_back( pathspec_str.c_str() );
+
+        status_options.pathspec.strings = const_cast<char**>( pathspec_ptrs.data() );
+        status_options.pathspec.count = pathspec_ptrs.size();
     }
 
     git_status_list* status_list = nullptr;
