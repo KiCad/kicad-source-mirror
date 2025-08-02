@@ -56,6 +56,9 @@ public:
 
     ~NETCLASS(){};
 
+    NETCLASS( const NETCLASS& ) = delete;
+    NETCLASS& operator=( const NETCLASS& ) = delete;
+
     bool operator==( const NETCLASS& other ) const;
 
     wxString GetClass() const
