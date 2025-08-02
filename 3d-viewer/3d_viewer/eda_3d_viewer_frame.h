@@ -60,6 +60,7 @@ enum EDA_3D_VIEWER_STATUSBAR
 enum class EDA_3D_VIEWER_EXPORT_FORMAT
 {
     CLIPBOARD,
+    IMAGE,
     PNG,
     JPEG
 };
@@ -136,6 +137,13 @@ public:
      */
     void TakeScreenshot( EDA_3D_VIEWER_EXPORT_FORMAT aFormat );
 
+    /**
+     * Export 3D viewer image to file or clipboard
+     * @param aFormat - Export format (JPEG, PNG, or CLIPBOARD)
+     * @param aSize - Size of the exported image
+     */
+    void ExportImage( EDA_3D_VIEWER_EXPORT_FORMAT aFormat, const wxSize& aSize );
+
 protected:
     void setupUIConditions() override;
 
@@ -173,6 +181,90 @@ private:
     void loadCommonSettings();
 
     void applySettings( EDA_3D_VIEWER_SETTINGS* aSettings );
+
+        /**
+     * Get export filename through file dialog
+     * @param aFormat - [in/out] Export format to determine default file extension and wildcard.
+     *                  Will be updated to the selected format.
+     * @param fullFileName - [out] Full path of selected file
+     * @return true if filename was successfully obtained, false if cancelled
+     */
+    bool getExportFileName( EDA_3D_VIEWER_EXPORT_FORMAT& aFormat, wxString& fullFileName );
+
+    /**
+     * Capture screenshot using appropriate rendering method
+     * @param aSize - Size of the screenshot
+     * @return wxImage containing the screenshot
+     */
+    wxImage captureScreenshot( const wxSize& aSize );
+
+    /**
+     * Setup rendering configuration for screenshot capture
+     * @param adapter - Board adapter to configure
+     */
+    void setupRenderingConfig( BOARD_ADAPTER& adapter );
+
+    /**
+     * Capture screenshot of the current view using the configured renderer.
+     * This function handles both ray tracing and OpenGL rendering methods.
+     * @return wxImage containing the screenshot of the current view.
+     */
+    wxImage captureCurrentViewScreenshot();
+
+    /**
+     * Capture screenshot using raytracing renderer
+     * @param adapter - Configured board adapter
+     * @param camera - Camera settings
+     * @param aSize - Size of the screenshot
+     * @return wxImage containing the screenshot
+     */
+    wxImage captureRaytracingScreenshot( BOARD_ADAPTER& adapter, TRACK_BALL& camera, const wxSize& aSize );
+
+    /**
+     * Convert RGBA buffer to wxImage format
+     * @param rgbaBuffer - Source RGBA buffer
+     * @param realSize - Size of the buffer
+     * @return wxImage with RGB data and alpha channel
+     */
+    wxImage convertRGBAToImage( uint8_t* rgbaBuffer, const wxSize& realSize );
+
+    /**
+     * Capture screenshot using OpenGL renderer
+     * @param adapter - Configured board adapter
+     * @param camera - Camera settings
+     * @param aSize - Size of the screenshot
+     * @return wxImage containing the screenshot
+     */
+    wxImage captureOpenGLScreenshot( BOARD_ADAPTER& adapter, TRACK_BALL& camera, const wxSize& aSize );
+
+    /**
+     * Configure canvas settings for screenshot capture
+     * @param canvas - Canvas to configure
+     * @param cfg - Configuration settings (can be nullptr)
+     */
+    void configureCanvas( std::unique_ptr<EDA_3D_CANVAS>& canvas, EDA_3D_VIEWER_SETTINGS* cfg );
+
+    /**
+     * Save image to file or copy to clipboard based on format
+     * @param screenshotImage - Image to save/copy
+     * @param aFormat - Export format
+     * @param fullFileName - Full path for file save (ignored for clipboard)
+     */
+    void saveOrCopyImage( const wxImage& screenshotImage, EDA_3D_VIEWER_EXPORT_FORMAT aFormat, const wxString& fullFileName );
+
+    /**
+     * Copy image to system clipboard
+     * @param screenshotImage - Image to copy
+     */
+    void copyImageToClipboard( const wxImage& screenshotImage );
+
+    /**
+     * Save image to file
+     * @param screenshotImage - Image to save
+     * @param aFormat - Export format (JPEG or PNG)
+     * @param fullFileName - Full path of target file
+     */
+    void saveImageToFile( const wxImage& screenshotImage, EDA_3D_VIEWER_EXPORT_FORMAT aFormat, const wxString& fullFileName );
 
 private:
     wxFileName                     m_defaultSaveScreenshotFileName;

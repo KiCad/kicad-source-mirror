@@ -218,6 +218,8 @@ public:
      */
     void DoRePaint();
 
+    void RenderToFrameBuffer( unsigned char* aBuffer, int aWidth, int aHeight );
+
     void OnCloseWindow( wxCloseEvent& event );
 
 private:

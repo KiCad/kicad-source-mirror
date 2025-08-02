@@ -600,6 +600,215 @@ void EDA_3D_CANVAS::DoRePaint()
 }
 
 
+void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int height )
+{
+    if( m_is_currently_painting.test_and_set() )
+        return;
+
+    // Validate input parameters
+    if( !buffer || width <= 0 || height <= 0 )
+    {
+        m_is_currently_painting.clear();
+        return;
+    }
+
+    // Because the board to draw is handled by the parent viewer frame,
+    // ensure this parent is still alive
+    if( !GetParent() || !GetParent()->GetParent() || !GetParent()->GetParent()->IsShownOnScreen() )
+    {
+        m_is_currently_painting.clear();
+        return;
+    }
+
+    wxString            err_messages;
+    int64_t             start_time = GetRunningMicroSecs();
+    GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
+
+    // Create OpenGL context if needed
+    if( m_glRC == nullptr )
+        m_glRC = gl_mgr->CreateCtx( this );
+
+    if( m_glRC == nullptr )
+    {
+        wxLogError( _( "OpenGL context creation error" ) );
+        m_is_currently_painting.clear();
+        return;
+    }
+
+    gl_mgr->LockCtx( m_glRC, this );
+
+    // Set up framebuffer objects for off-screen rendering
+    GLuint framebuffer = 0;
+    GLuint colorTexture = 0;
+    GLuint depthBuffer = 0;
+    GLint  oldFramebuffer = 0;
+    GLint  oldViewport[4];
+
+    // Save current state
+    glGetIntegerv( GL_FRAMEBUFFER_BINDING, &oldFramebuffer );
+    glGetIntegerv( GL_VIEWPORT, oldViewport );
+
+    // Create and bind framebuffer
+    glGenFramebuffers( 1, &framebuffer );
+    glBindFramebuffer( GL_FRAMEBUFFER, framebuffer );
+
+    // Create color texture attachment
+    glGenTextures( 1, &colorTexture );
+    glBindTexture( GL_TEXTURE_2D, colorTexture );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0 );
+
+    // Create depth renderbuffer attachment
+    glGenRenderbuffers( 1, &depthBuffer );
+    glBindRenderbuffer( GL_RENDERBUFFER, depthBuffer );
+    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height );
+    glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer );
+
+    auto resetState = std::unique_ptr<void, std::function<void(void*)>>(
+        reinterpret_cast<void*>(1),
+        [&](void*) {
+            glBindFramebuffer( GL_FRAMEBUFFER, oldFramebuffer );
+            glViewport( oldViewport[0], oldViewport[1], oldViewport[2], oldViewport[3] );
+            glDeleteFramebuffers( 1, &framebuffer );
+            glDeleteTextures( 1, &colorTexture );
+            glDeleteRenderbuffers( 1, &depthBuffer );
+            gl_mgr->UnlockCtx( m_glRC );
+            m_is_currently_painting.clear();
+        }
+    );
+
+    // Check framebuffer completeness
+    GLenum framebufferStatus = glCheckFramebufferStatus( GL_FRAMEBUFFER );
+
+    if( framebufferStatus != GL_FRAMEBUFFER_COMPLETE )
+    {
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::RenderToFrameBuffer Framebuffer incomplete: 0x%04X" ),
+                    framebufferStatus );
+
+        return;
+    }
+
+    // Set viewport for off-screen rendering
+    glViewport( 0, 0, width, height );
+
+    // Set window size for camera and rendering
+    wxSize     clientSize( width, height );
+    const bool windows_size_changed = m_camera.SetCurWindowSize( clientSize );
+
+    // Initialize OpenGL if needed
+    if( !m_is_opengl_initialized )
+    {
+        if( !initializeOpenGL() )
+        {
+            wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::RenderToFrameBuffer OpenGL initialization failed." ) );
+            return;
+        }
+
+        if( !m_is_opengl_version_supported )
+        {
+            wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::RenderToFrameBuffer OpenGL version not supported." ) );
+        }
+    }
+
+    if( !m_is_opengl_version_supported )
+    {
+        glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+        glClear( GL_COLOR_BUFFER_BIT );
+
+        // Read black screen to buffer
+        glReadPixels( 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+        return;
+    }
+
+    // Handle raytracing/OpenGL renderer selection
+    if( !m_opengl_supports_raytracing )
+    {
+        m_3d_render = m_3d_render_opengl;
+        m_render_raytracing_was_requested = false;
+        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
+    }
+
+    if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
+    {
+        const bool was_camera_changed = m_camera.ParametersChanged();
+
+        if( ( m_mouse_is_moving || m_camera_is_moving || was_camera_changed || windows_size_changed )
+            && m_render_raytracing_was_requested )
+        {
+            m_render_raytracing_was_requested = false;
+            m_3d_render = m_3d_render_opengl;
+        }
+    }
+
+    // Handle camera animation (simplified for off-screen rendering)
+    float curtime_delta_s = 0.0f;
+    if( m_camera_is_moving )
+    {
+        const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
+        curtime_delta_s = ( curtime_delta / 1e6 ) * m_camera_moving_speed;
+        m_camera.Interpolate( curtime_delta_s );
+
+        if( curtime_delta_s > 1.0f )
+        {
+            m_render_pivot = false;
+            m_camera_is_moving = false;
+            m_mouse_was_moved = true;
+        }
+    }
+
+    // Perform the actual rendering
+    bool requested_redraw = false;
+    if( m_3d_render )
+    {
+        try
+        {
+            m_3d_render->SetCurWindowSize( clientSize );
+
+            bool reloadRaytracingForCalculations = false;
+            if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
+                && m_3d_render_opengl->IsReloadRequestPending() )
+            {
+                reloadRaytracingForCalculations = true;
+            }
+
+            requested_redraw = m_3d_render->Redraw( false, nullptr, nullptr );
+
+            if( reloadRaytracingForCalculations )
+                m_3d_render_raytracing->Reload( nullptr, nullptr, true );
+        }
+        catch( std::runtime_error& )
+        {
+            m_is_opengl_version_supported = false;
+            m_opengl_supports_raytracing = false;
+            m_is_opengl_initialized = false;
+            return;
+        }
+    }
+
+    // Read pixels from framebuffer to the provided buffer
+    // Note: This reads RGB format. Adjust format as needed.
+    glReadPixels( 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
+
+    // Check for OpenGL errors
+    GLenum error = glGetError();
+    if( error != GL_NO_ERROR )
+    {
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::RenderToFrameBuffer OpenGL error: 0x%04X" ), error );
+        err_messages += wxString::Format( _( "OpenGL error during off-screen rendering: 0x%04X\n" ), error );
+    }
+
+    // Reset camera parameters changed flag
+    m_camera.ParametersChanged();
+
+    if( !err_messages.IsEmpty() )
+        wxLogMessage( err_messages );
+}
+
+
 void EDA_3D_CANVAS::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 {
     m_eventDispatcher = aEventDispatcher;

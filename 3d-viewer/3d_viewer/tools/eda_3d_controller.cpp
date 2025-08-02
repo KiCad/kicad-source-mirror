@@ -30,6 +30,7 @@
 #include <kiface_base.h>
 #include <tools/eda_3d_controller.h>
 #include <tools/eda_3d_actions.h>
+#include <dialogs/dialog_export_3d_image.h>
 #include <dialogs/panel_preview_3d_model.h>
 #include <dialogs/appearance_controls_3D.h>
 #include <3d_rendering/opengl/render_3d_opengl.h>
@@ -374,8 +375,26 @@ int EDA_3D_CONTROLLER::ExportImage( const TOOL_EVENT& aEvent )
 {
     EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
 
-    if( frame && frame->GetFrameType() == FRAME_PCB_DISPLAY3D )
-        static_cast<EDA_3D_VIEWER_FRAME*>( frame )->TakeScreenshot( aEvent.Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>() );
+    if( !frame || frame->GetFrameType() != FRAME_PCB_DISPLAY3D )
+        return 0;
+
+    EDA_3D_VIEWER_FRAME* viewer = static_cast<EDA_3D_VIEWER_FRAME*>( frame );
+    EDA_3D_VIEWER_EXPORT_FORMAT fmt = aEvent.Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>();
+
+    wxSize currentSize = viewer->GetCanvas()->GetClientSize();
+
+    if( fmt == EDA_3D_VIEWER_EXPORT_FORMAT::CLIPBOARD )
+    {
+        viewer->ExportImage( fmt, currentSize );
+        return 0;
+    }
+
+    static wxSize lastSize( viewer->GetCanvas()->GetClientSize() );
+    static EDA_3D_VIEWER_EXPORT_FORMAT lastFormat = EDA_3D_VIEWER_EXPORT_FORMAT::PNG;
+    DIALOG_EXPORT_3D_IMAGE dlg( viewer, currentSize );
+
+    if( dlg.ShowModal() == wxID_OK )
+        viewer->ExportImage( lastFormat, dlg.GetSize() );
 
     return 0;
 }
@@ -390,8 +409,7 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::ReloadBoard,        EDA_3D_ACTIONS::reloadBoard.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleRaytracing,   EDA_3D_ACTIONS::toggleRaytacing.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::copyToClipboard.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::exportAsPNG.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::exportAsJPEG.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::exportImage.MakeEvent() );
 
     // Pan control
     Go( &EDA_3D_CONTROLLER::PanControl,         ACTIONS::panUp.MakeEvent() );

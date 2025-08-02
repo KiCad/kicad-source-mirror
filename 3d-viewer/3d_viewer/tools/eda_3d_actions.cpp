@@ -65,21 +65,13 @@ TOOL_ACTION EDA_3D_ACTIONS::copyToClipboard( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::copy )
         .Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>( EDA_3D_VIEWER_EXPORT_FORMAT::CLIPBOARD ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::exportAsPNG( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.exportAsPNG" )
+TOOL_ACTION EDA_3D_ACTIONS::exportImage( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.exportImage" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Export Current View as PNG..." ) )
-        .Tooltip( _( "Export the Current View as a PNG image" ) )
-        .Icon( BITMAPS::export_png )
-        .Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>( EDA_3D_VIEWER_EXPORT_FORMAT::PNG ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::exportAsJPEG( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.exportAsJPEG" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Export Current View as JPEG..." ) )
-        .Tooltip( _( "Export the Current View as a JPEG image" ) )
+        .FriendlyName( _( "Export Image..." ) )
+        .Tooltip( _( "Export the Current View as an image file" ) )
         .Icon( BITMAPS::export_file )
-        .Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>( EDA_3D_VIEWER_EXPORT_FORMAT::JPEG ) );
+        .Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>( EDA_3D_VIEWER_EXPORT_FORMAT::IMAGE ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.pivotCenter" )

@@ -48,8 +48,7 @@ void EDA_3D_VIEWER_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
-    fileMenu->Add( EDA_3D_ACTIONS::exportAsPNG );
-    fileMenu->Add( EDA_3D_ACTIONS::exportAsJPEG );
+    fileMenu->Add( EDA_3D_ACTIONS::exportImage );
 
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "3D Viewer" ) );
