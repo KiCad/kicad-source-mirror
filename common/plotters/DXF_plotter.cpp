@@ -111,6 +111,8 @@ static const char* getDXFLineType( LINE_STYLE aType )
         return "DOTTED";
     case LINE_STYLE::DASHDOT:
         return "DASHDOT";
+    case LINE_STYLE::DASHDOTDOT:
+        return "DIVIDE";
     default:
         wxFAIL_MSG( "Unhandled LINE_STYLE" );
         return "CONTINUOUS";
