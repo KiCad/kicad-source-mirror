@@ -128,6 +128,11 @@ SEARCH_PANE::~SEARCH_PANE()
     m_frame->Unbind( wxEVT_AUI_PANE_CLOSE, &SEARCH_PANE::OnClosed, this );
     m_frame->Unbind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
 
+    for( SEARCH_HANDLER* handler : m_handlers )
+        delete handler;
+
+    m_handlers.clear();
+
     delete m_menu;
 }
 

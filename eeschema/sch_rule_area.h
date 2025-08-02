@@ -116,10 +116,10 @@ protected:
     /// Clear the list of items which this rule area affects.
     void clearContainedItems();
 
-    /// All #SCH_ITEM objects currently contained or intersecting the rule area.
+    /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;
 
-    /// All #SCH_DIRECTIVE_LABEL objectss attached to the rule area border.
+    /// All #SCH_DIRECTIVE_LABEL objects attached to the rule area border.  No ownership.
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_directives;
 
     /// All #SCH_ITEM objectss contained or intersecting the rule area in the previous update.

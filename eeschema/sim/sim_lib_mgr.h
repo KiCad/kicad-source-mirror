@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_LIB_MGR_H
-#define SIM_LIB_MGR_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -82,12 +81,10 @@ public:
                                          REPORTER& aReporter );
 
 private:
-    std::vector<EMBEDDED_FILES*>                     m_embeddedFilesStack;
-    const PROJECT*                                   m_project;
+    std::vector<EMBEDDED_FILES*>                     m_embeddedFilesStack;  // no ownership
+    const PROJECT*                                   m_project;             // no ownership
     bool                                             m_forceFullParse;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
     std::vector<std::unique_ptr<SIM_MODEL>>          m_models;
 };
 
-
-#endif // SIM_LIB_MGR_H

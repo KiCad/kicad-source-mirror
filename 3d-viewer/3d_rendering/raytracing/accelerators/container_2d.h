@@ -22,12 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  container_2d.h
- */
-
-#ifndef _CONTAINER_2D_H_
-#define _CONTAINER_2D_H_
+#pragma once
 
 #include "../shapes2D/object_2d.h"
 #include <list>
@@ -71,8 +66,7 @@ public:
      * @param aBBox The bounding box to test.
      * @param aOutList The list of objects that intersects the bounding box.
      */
-    virtual void GetIntersectingObjects( const BBOX_2D& aBBox,
-                                         CONST_LIST_OBJECT2D& aOutList ) const = 0;
+    virtual void GetIntersectingObjects( const BBOX_2D& aBBox, CONST_LIST_OBJECT2D& aOutList ) const = 0;
 
     /**
      * Intersect and check if a segment ray hits a object or is inside it.
@@ -83,11 +77,11 @@ public:
     virtual bool IntersectAny( const RAYSEG2D& aSegRay ) const = 0;
 
 protected:
-    BBOX_2D m_bbox;
+    BBOX_2D       m_bbox;
     LIST_OBJECT2D m_objects;
 
 private:
-    std::mutex m_lock;
+    std::mutex    m_lock;
 };
 
 
@@ -96,8 +90,7 @@ class CONTAINER_2D : public CONTAINER_2D_BASE
 public:
     CONTAINER_2D();
 
-    void GetIntersectingObjects( const BBOX_2D& aBBox,
-                                 CONST_LIST_OBJECT2D& aOutList ) const override;
+    void GetIntersectingObjects( const BBOX_2D& aBBox, CONST_LIST_OBJECT2D& aOutList ) const override;
 
     bool IntersectAny( const RAYSEG2D& aSegRay ) const override;
 };
@@ -119,28 +112,30 @@ public:
     BVH_CONTAINER_2D();
     ~BVH_CONTAINER_2D();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    BVH_CONTAINER_2D( const BVH_CONTAINER_2D& ) = delete;
+    BVH_CONTAINER_2D& operator=( const BVH_CONTAINER_2D& ) = delete;
+
     void BuildBVH();
 
     void Clear() override;
 
-    void GetIntersectingObjects( const BBOX_2D& aBBox,
-                                 CONST_LIST_OBJECT2D& aOutList ) const override;
+    void GetIntersectingObjects( const BBOX_2D& aBBox, CONST_LIST_OBJECT2D& aOutList ) const override;
 
     bool IntersectAny( const RAYSEG2D& aSegRay ) const override;
 
 private:
     void destroy();
     void recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNodeParent );
-    void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D* aNode,
-                                            const BBOX_2D& aBBox,
+    void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D* aNode, const BBOX_2D& aBBox,
                                             CONST_LIST_OBJECT2D& aOutList ) const;
-    bool recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode,
-                                const RAYSEG2D& aSegRay ) const;
+    bool recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode, const RAYSEG2D& aSegRay ) const;
 
-    bool m_isInitialized;
+private:
+    bool                              m_isInitialized;
     std::list<BVH_CONTAINER_NODE_2D*> m_elementsToDelete;
-    BVH_CONTAINER_NODE_2D* m_tree;
+    BVH_CONTAINER_NODE_2D*            m_tree;
 
 };
 
-#endif // _CONTAINER_2D_H_

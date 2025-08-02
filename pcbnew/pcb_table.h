@@ -39,6 +39,9 @@ public:
 
     ~PCB_TABLE();
 
+    // If implemented, would need to copy m_cells list.
+    PCB_TABLE& operator=( const PCB_TABLE& ) = delete;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_TABLE_T == aItem->Type();

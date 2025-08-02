@@ -24,8 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __VIEW_H
-#define __VIEW_H
+#pragma once
 
 #include <gal/gal.h>
 #include <vector>
@@ -72,6 +71,11 @@ public:
 
     VIEW();
     virtual ~VIEW();
+
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    VIEW( const VIEW& ) = delete;
+    VIEW& operator=( const VIEW& ) = delete;
 
     /**
      * Nasty hack, invoked by the destructor of VIEW_ITEM to auto-remove the item
@@ -768,10 +772,6 @@ protected:
         }
     };
 
-
-
-    VIEW( const VIEW& ) = delete;
-
     /// Redraw contents within rectangle \a aRect.
     void redrawRect( const BOX2I& aRect );
 
@@ -856,7 +856,7 @@ protected:
     struct UPDATE_DEPTH_VISITOR;
 
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
-    std::vector<VIEW_ITEM *>            m_ownedItems;
+    std::vector<VIEW_ITEM*>            m_ownedItems;
 
     /// Whether to use rendering order modifier or not.
     bool                               m_enableOrderModifier;
@@ -904,4 +904,3 @@ protected:
 };
 } // namespace KIGFX
 
-#endif

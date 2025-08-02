@@ -23,12 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file layer_item_2d.h
- */
-
-#ifndef _LAYER_ITEM_2D_H_
-#define _LAYER_ITEM_2D_H_
+#pragma once
 
 #include "object_2d.h"
 #include <vector>
@@ -84,6 +79,11 @@ public:
 
     ~LAYER_ITEM_2D();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    LAYER_ITEM_2D( const LAYER_ITEM_2D& ) = delete;
+    LAYER_ITEM_2D& operator=( const LAYER_ITEM_2D& ) = delete;
+
     // Imported from OBJECT_2D
     bool Overlaps( const BBOX_2D& aBBox ) const override;
     bool Intersects( const BBOX_2D& aBBox ) const override;
@@ -97,4 +97,3 @@ private:
     const OBJECT_2D*                m_objectC;
 };
 
-#endif // _LAYER_ITEM_2D_H_

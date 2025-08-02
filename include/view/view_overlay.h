@@ -24,12 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __VIEW_OVERLAY_H
-#define __VIEW_OVERLAY_H
+#pragma once
 
 #include <gal/gal.h>
 #include <view/view_item.h>
-
 #include <vector>
 #include <deque>
 
@@ -47,6 +45,11 @@ public:
 
     VIEW_OVERLAY();
     virtual ~VIEW_OVERLAY();
+
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    VIEW_OVERLAY( const VIEW_OVERLAY& ) = delete;
+    VIEW_OVERLAY& operator=( const VIEW_OVERLAY& ) = delete;
 
     wxString GetClass() const override;
 
@@ -109,13 +112,11 @@ public:
 private:
     void releaseCommands();
 
-    COLOR4D m_strokeColor;
-    COLOR4D m_fillColor;
-
+private:
+    COLOR4D               m_strokeColor;
+    COLOR4D               m_fillColor;
     std::vector<COMMAND*> m_commands;
 };
 
 } // namespace KIGFX
 
-
-#endif

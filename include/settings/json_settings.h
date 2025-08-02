@@ -77,6 +77,11 @@ public:
 
     virtual ~JSON_SETTINGS();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    JSON_SETTINGS( const JSON_SETTINGS& ) = delete;
+    JSON_SETTINGS& operator=( const JSON_SETTINGS& ) = delete;
+
     wxString GetFilename() const { return m_filename; }
 
     wxString GetFullFilename() const;

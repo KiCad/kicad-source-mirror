@@ -161,7 +161,7 @@ void PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
         m_grid->CommitChangesFromEditor();
 
     m_grid->Clear();
-    m_displayed.clear();
+    m_displayed.clear();    // no ownership of pointers
 
     UpdateData();
 

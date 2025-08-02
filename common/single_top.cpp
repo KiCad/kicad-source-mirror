@@ -260,8 +260,7 @@ struct APP_SINGLE_TOP : public wxApp
                     if( dlgs.back() == dialog )
                         dlgs.pop_back();
                     // If an out-of-order, remove all dialogs added after the closed one
-                    else if( auto it = std::find( dlgs.begin(), dlgs.end(), dialog );
-                             it != dlgs.end() )
+                    else if( auto it = std::find( dlgs.begin(), dlgs.end(), dialog ); it != dlgs.end() )
                         dlgs.erase( it, dlgs.end() );
                 }
             }

@@ -19,8 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _ERC_SETTINGS_H
-#define _ERC_SETTINGS_H
+#pragma once
 
 #include <erc/erc_item.h>
 #include <pin_type.h>
@@ -250,6 +249,11 @@ public:
             m_severities( 0 )
     { }
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    SHEETLIST_ERC_ITEMS_PROVIDER( const SHEETLIST_ERC_ITEMS_PROVIDER& ) = delete;
+    SHEETLIST_ERC_ITEMS_PROVIDER& operator=( const SHEETLIST_ERC_ITEMS_PROVIDER& ) = delete;
+
     void SetSeverities( int aSeverities ) override;
 
     int GetCount( int aSeverity = -1 ) const override;
@@ -265,5 +269,3 @@ private:
     void visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const;
 };
 
-
-#endif // _ERC_SETTINGS_H
