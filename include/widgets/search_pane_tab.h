@@ -21,6 +21,7 @@
 #define SEARCH_PANE_TAB_H
 
 #include <vector>
+#include <memory>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>

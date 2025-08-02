@@ -19,7 +19,7 @@
 
 #include "widgets/search_pane.h"
 
-
+#include <memory>
 #include <tool/action_menu.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
