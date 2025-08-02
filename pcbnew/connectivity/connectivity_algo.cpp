@@ -883,43 +883,42 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
     LSET commonLayers = parentA->GetLayerSet() & parentB->GetLayerSet();
 
-    for( size_t ii = 0; ii < commonLayers.size(); ++ii )
+    if( const BOARD* board = parentA->GetBoard() )
+        commonLayers &= board->GetEnabledLayers();
+
+    for( PCB_LAYER_ID layer : commonLayers )
     {
-        if( commonLayers.test( ii ) )
+        FLASHING flashingA = FLASHING::NEVER_FLASHED;
+        FLASHING flashingB = FLASHING::NEVER_FLASHED;
+
+        if( parentA->Type() == PCB_PAD_T )
         {
-            PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
-            FLASHING     flashingA = FLASHING::NEVER_FLASHED;
-            FLASHING     flashingB = FLASHING::NEVER_FLASHED;
+            if( !static_cast<const PAD*>( parentA )->ConditionallyFlashed( layer ) )
+                flashingA = FLASHING::ALWAYS_FLASHED;
+        }
+        else if( parentA->Type() == PCB_VIA_T )
+        {
+            if( !static_cast<const PCB_VIA*>( parentA )->ConditionallyFlashed( layer ) )
+                flashingA = FLASHING::ALWAYS_FLASHED;
+        }
 
-            if( parentA->Type() == PCB_PAD_T )
-            {
-                if( !static_cast<const PAD*>( parentA )->ConditionallyFlashed( layer ) )
-                    flashingA = FLASHING::ALWAYS_FLASHED;
-            }
-            else if( parentA->Type() == PCB_VIA_T )
-            {
-                if( !static_cast<const PCB_VIA*>( parentA )->ConditionallyFlashed( layer ) )
-                    flashingA = FLASHING::ALWAYS_FLASHED;
-            }
+        if( parentB->Type() == PCB_PAD_T )
+        {
+            if( !static_cast<const PAD*>( parentB )->ConditionallyFlashed( layer ) )
+                flashingB = FLASHING::ALWAYS_FLASHED;
+        }
+        else if( parentB->Type() == PCB_VIA_T )
+        {
+            if( !static_cast<const PCB_VIA*>( parentB )->ConditionallyFlashed( layer ) )
+                flashingB = FLASHING::ALWAYS_FLASHED;
+        }
 
-            if( parentB->Type() == PCB_PAD_T )
-            {
-                if( !static_cast<const PAD*>( parentB )->ConditionallyFlashed( layer ) )
-                    flashingB = FLASHING::ALWAYS_FLASHED;
-            }
-            else if( parentB->Type() == PCB_VIA_T )
-            {
-                if( !static_cast<const PCB_VIA*>( parentB )->ConditionallyFlashed( layer ) )
-                    flashingB = FLASHING::ALWAYS_FLASHED;
-            }
-
-            if( parentA->GetEffectiveShape( layer, flashingA )->Collide(
+        if( parentA->GetEffectiveShape( layer, flashingA )->Collide(
                     parentB->GetEffectiveShape( layer, flashingB ).get() ) )
-            {
-                m_item->Connect( aCandidate );
-                aCandidate->Connect( m_item );
-                return true;
-            }
+        {
+            m_item->Connect( aCandidate );
+            aCandidate->Connect( m_item );
+            return true;
         }
     }
 
