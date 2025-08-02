@@ -85,6 +85,15 @@ public:
 
     void     SetEncrypted( bool aEncrypted = true );
 
+    void     SetSkipButtonLabel( const wxString& aLabel )
+    {
+        if( m_sdbSizerCancel )
+        {
+            m_sdbSizerCancel->SetLabel( aLabel );
+            m_sdbSizerCancel->Layout();
+        }
+    }
+
 private:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnLocationExit( wxFocusEvent& event ) override;

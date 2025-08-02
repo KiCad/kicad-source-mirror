@@ -1663,20 +1663,14 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     }
 
     GIT_INIT_HANDLER initHandler( m_TreeProject->GitCommon() );
+    wxWindow*        topLevelParent = wxGetTopLevelParent( this );
 
     if( initHandler.IsRepository( dir ) )
     {
-        wxWindow* topLevelParent = wxGetTopLevelParent( this );
         DisplayInfoMessage( topLevelParent,
                             _( "The selected directory is already a Git project." ) );
         return;
     }
-
-    DIALOG_GIT_REPOSITORY dlg( wxGetTopLevelParent( this ), nullptr );
-    dlg.SetTitle( _( "Set default remote" ) );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
 
     InitResult result = initHandler.InitializeRepository( dir );
     if( result != InitResult::Success )
@@ -1687,6 +1681,13 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     }
 
     m_gitLastError = GIT_ERROR_NONE;
+
+    DIALOG_GIT_REPOSITORY dlg( topLevelParent, initHandler.GetRepo() );
+    dlg.SetTitle( _( "Set default remote" ) );
+    dlg.SetSkipButtonLabel( _( "Skip" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
 
     // Set up the remote
     RemoteConfig remoteConfig;

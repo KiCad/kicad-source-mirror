@@ -76,6 +76,10 @@ InitResult GIT_INIT_HANDLER::InitializeRepository( const wxString& aPath )
 
 bool GIT_INIT_HANDLER::SetupRemote( const RemoteConfig& aConfig )
 {
+    // This is an optional step
+    if( aConfig.url.IsEmpty() )
+        return true;
+
     git_repository* repo = GetRepo();
 
     if( !repo )
