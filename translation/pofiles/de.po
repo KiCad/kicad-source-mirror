@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-31 19:36+0300\n"
-"PO-Revision-Date: 2025-07-19 14:45+0000\n"
+"PO-Revision-Date: 2025-08-03 09:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7416,19 +7416,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Konnte Branch \"%s\": %s nicht auflösen"
 
 #: common/git/git_branch_handler.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Konnte Branch-Head für \"%s\" nicht finden"
+msgstr "Konnte Branch-Head für \"%s\" nicht finden: %s"
 
 #: common/git/git_branch_handler.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Fehler beim Wechsel zu Branch \"%s\""
+msgstr "Fehler beim Wechsel zu Branch \"%s\": %s"
 
 #: common/git/git_branch_handler.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren"
+msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7486,13 +7486,13 @@ msgid "Failed to create commit: %s"
 msgstr "Konnte Commit nicht erstellen: %s"
 
 #: common/git/git_init_handler.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
+msgstr "Initialisieren des Git-Repositorys fehlgeschlagen: %s"
 
 #: common/git/git_init_handler.cpp:83
 msgid "No repository available to set up remote"
-msgstr ""
+msgstr "Kein Repository verfügbar, um Remote einzurichten"
 
 #: common/git/git_init_handler.cpp:139
 #, fuzzy, c-format
@@ -13957,9 +13957,9 @@ msgid "Edit Symbol Properties"
 msgstr "Symboleigenschaften bearbeiten"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Diese Datei ist bereits geöffnet."
+msgstr "Dieses Feld ist von \"%s\" geerbt."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:669
 #, c-format
@@ -22986,9 +22986,8 @@ msgid "Select Symbol Library"
 msgstr "Symbolbibliothek wählen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:93
-#, fuzzy
 msgid "Library:"
-msgstr "Bibliothek: "
+msgstr "Bibliothek:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:112
 #: eeschema/tools/symbol_editor_control.cpp:840
@@ -23017,9 +23016,8 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Das aktuelle Symbol wurde geändert.  Änderungen speichern?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:350
-#, fuzzy
 msgid "Create symbol in library:"
-msgstr "Symbolbibliothek erstellen"
+msgstr "Symbol in Bibliothek erstellen:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
@@ -23232,9 +23230,8 @@ msgid "Import Symbol"
 msgstr "Symbol importieren"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:46
-#, fuzzy
 msgid "Import symbol to library:"
-msgstr "Ein Symbol in die aktive Bibliothek importieren"
+msgstr "Symbol in Bibliothek importieren:"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:93
 #: pcbnew/load_select_footprint.cpp:352
@@ -25140,18 +25137,17 @@ msgid "Export Symbols"
 msgstr "Symbol exportieren"
 
 #: eeschema/tools/sch_editor_control.cpp:358
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr "Symbole in die Bibliothek exportieren..."
+msgstr "Symbole in die Bibliothek exportieren:"
 
 #: eeschema/tools/sch_editor_control.cpp:359
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Versorgungssymbole aus Schaltplan in die Bibliothek einbeziehen?"
+msgstr "Versorgungssymbole in Export einbeziehen"
 
 #: eeschema/tools/sch_editor_control.cpp:360
 msgid "Update schematic symbols to link to exported symbols"
 msgstr ""
+"Aktualisiere Schaltplansymbole so, dass sie auf exportierte Symbole verweisen"
 
 #: eeschema/tools/sch_editor_control.cpp:789
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -27006,9 +27002,8 @@ msgid "Embed file"
 msgstr "Datei einbetten"
 
 #: include/widgets/filedlg_hook_new_library.h:35
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "Die Bibliothek in die globale Bibliothekstabelle aufnehmen?"
+msgstr "Neue Bibliothek in globale Bibliothekstabelle aufnehmen"
 
 #: include/widgets/filedlg_hook_new_library.h:37
 #, fuzzy
@@ -27190,7 +27185,7 @@ msgstr "Alle Zonen ausfüllen vor dem DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
-msgstr ""
+msgstr "Platine nach dem DRC speichern; --refill-zones muss verwendet werden"
 
 #: kicad/cli/command_pcb_drc.cpp:156 kicad/cli/command_pcb_export_3d.cpp:294
 #: kicad/cli/command_pcb_export_drill.cpp:155
@@ -28642,9 +28637,8 @@ msgid "Add Default Repository"
 msgstr "Standard-Repository hinzufügen"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
-#, fuzzy
 msgid "Fully qualified repository url:"
-msgstr "Bitte geben Sie eine vollständige Repository-URL ein"
+msgstr "Vollständige Repository-URL:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 #, fuzzy
@@ -29144,9 +29138,9 @@ msgstr ""
 "%d von %d Operationen wurden initialisiert, waren jedoch nicht erfolgreich."
 
 #: kicad/project_template.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "Konnte den Vorlagenordner nicht öffnen!"
+msgstr "Konnte den Vorlagenpfad \"%s\" nicht öffnen"
 
 #: kicad/project_template.cpp:57
 #, fuzzy, c-format
@@ -45061,14 +45055,14 @@ msgid "Export Footprints"
 msgstr "Footprint exportieren"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export footprints to library:"
-msgstr "Footprint an den Editor exportieren"
+msgstr "Exportiere Footprints in Bibliothek:"
 
 #: pcbnew/footprint_libraries_utils.cpp:639
-#, fuzzy
 msgid "Update board footprints to link to exported footprints"
-msgstr "Footprints auf Platine aktualisieren, um auf %s zu verweisen?"
+msgstr ""
+"Aktualisiere Footprints auf Platine so, dass sie auf exportierte Footprints "
+"verweisen"
 
 #: pcbnew/footprint_libraries_utils.cpp:830
 #: pcbnew/footprint_viewer_frame.cpp:737
@@ -48928,9 +48922,8 @@ msgid "Saved DRC Report to %s\n"
 msgstr "DRC-Bericht wurde gespeichert in %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2297
-#, fuzzy
 msgid "Saved board\n"
-msgstr "Auf die Platine speichern"
+msgstr "Platine speichern\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2301
 #, fuzzy
@@ -51414,9 +51407,8 @@ msgid "Import board file from other applications"
 msgstr "Importieren einer Platinendatei aus einer anderen Applikation"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
-#, fuzzy
 msgid "Export Footprints..."
-msgstr "Footprint exportieren"
+msgstr "Footprints exportieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:1158
 #, fuzzy
