@@ -25,11 +25,10 @@
 #include <wx/wupdlock.h>
 #include <core/kicad_algo.h>
 
-SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* parent,
-                                            wxWindowID winid, const wxPoint& pos,
-                                            const wxSize& size ) :
+SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( const std::shared_ptr<SEARCH_HANDLER>& aHandler, wxWindow* parent,
+                                            wxWindowID winid, const wxPoint& pos, const wxSize& size ) :
         wxListView( parent, winid, pos, size, wxLC_REPORT | wxLC_VIRTUAL ),
-        m_handler( handler ),
+        m_handler( aHandler ),
         m_sortCol( -1 ),
         m_sortAscending( true ),
         m_selectionDirty( false )
@@ -225,14 +224,14 @@ wxString SEARCH_PANE_LISTVIEW::OnGetItemText( long item, long column ) const
 }
 
 
-SEARCH_PANE_TAB::SEARCH_PANE_TAB( SEARCH_HANDLER* handler, wxWindow* parent, wxWindowID aId,
+SEARCH_PANE_TAB::SEARCH_PANE_TAB( const std::shared_ptr<SEARCH_HANDLER>& aHandler, wxWindow* parent, wxWindowID aId,
                                   const wxPoint& aLocation, const wxSize& aSize ) :
         wxPanel( parent, aId, aLocation, aSize ),
-        m_handler( handler )
+        m_handler( aHandler )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_listView = new SEARCH_PANE_LISTVIEW( handler, this );
+    m_listView = new SEARCH_PANE_LISTVIEW( aHandler, this );
     sizer->Add( m_listView, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 1 );
 
     SetSizer( sizer );

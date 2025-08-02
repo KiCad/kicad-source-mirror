@@ -73,7 +73,7 @@ public:
     SEARCH_PANE( const SEARCH_PANE& ) = delete;
     SEARCH_PANE& operator=( const SEARCH_PANE& ) = delete;
 
-    void AddSearcher( SEARCH_HANDLER* aHandler );
+    void AddSearcher( const std::shared_ptr<SEARCH_HANDLER>& aHandler );
     void OnSearchTextEntry( wxCommandEvent& aEvent ) override;
     void OnNotebookPageChanged( wxBookCtrlEvent& aEvent ) override;
 
@@ -87,11 +87,11 @@ protected:
     void             OnClosed( wxAuiManagerEvent& aEvent );
 
 private:
-    std::vector<SEARCH_HANDLER*>  m_handlers;       // We own these.
-    std::vector<SEARCH_PANE_TAB*> m_tabs;           // No ownership.
-    wxString                      m_lastQuery;
-    EDA_DRAW_FRAME*               m_frame;
-    ACTION_MENU*                  m_menu;
+    std::vector<std::shared_ptr<SEARCH_HANDLER>> m_handlers;
+    std::vector<SEARCH_PANE_TAB*>                m_tabs;
+    wxString                                     m_lastQuery;
+    EDA_DRAW_FRAME*                              m_frame;
+    ACTION_MENU*                                 m_menu;
 };
 
 #endif
