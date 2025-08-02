@@ -186,6 +186,11 @@ public:
 
     virtual ~JOB();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    JOB( const JOB& ) = delete;
+    JOB& operator=( const JOB& ) = delete;
+
     const std::string& GetType() const { return m_type; };
 
     const std::map<wxString, wxString>& GetVarOverrides() const { return m_varOverrides; }

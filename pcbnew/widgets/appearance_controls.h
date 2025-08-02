@@ -202,6 +202,11 @@ public:
     APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner, bool aFpEditor = false );
     ~APPEARANCE_CONTROLS();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    APPEARANCE_CONTROLS( const APPEARANCE_CONTROLS& ) = delete;
+    APPEARANCE_CONTROLS& operator=( const APPEARANCE_CONTROLS& ) = delete;
+
     wxSize GetBestSize() const;
 
     ///< Update the panel contents from the application and board models.

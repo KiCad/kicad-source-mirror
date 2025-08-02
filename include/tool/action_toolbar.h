@@ -103,7 +103,7 @@ protected:
     ///< The default action to display on the toolbar item
     const TOOL_ACTION* m_defaultAction;
 
-    ///< The actions that compose the group
+    ///< The actions that compose the group.  Non-owning.
     std::vector<const TOOL_ACTION*> m_actions;
 };
 

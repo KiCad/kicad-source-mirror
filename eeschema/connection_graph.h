@@ -370,6 +370,11 @@ public:
         Reset();
     }
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    CONNECTION_GRAPH( const CONNECTION_GRAPH& ) = delete;
+    CONNECTION_GRAPH& operator=( const CONNECTION_GRAPH& ) = delete;
+
     void Reset();
 
     void SetSchematic( SCHEMATIC* aSchematic )

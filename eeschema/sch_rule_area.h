@@ -137,11 +137,11 @@ protected:
     bool          m_excludedFromBoard;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
 
-    /// All #SCH_ITEM objects currently contained or intersecting the rule area.
+    /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;
     std::unordered_set<KIID>                 m_itemIDs;
 
-    /// All #SCH_DIRECTIVE_LABEL objectss attached to the rule area border.
+    /// All #SCH_DIRECTIVE_LABEL objects attached to the rule area border.  No ownership.
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_directives;
     std::unordered_set<KIID>                 m_directiveIDs;
 

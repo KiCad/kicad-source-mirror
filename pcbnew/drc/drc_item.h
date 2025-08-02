@@ -278,6 +278,11 @@ public:
             m_markerTypes.push_back( otherMarkerType );
     }
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    DRC_ITEMS_PROVIDER( const DRC_ITEMS_PROVIDER& ) = delete;
+    DRC_ITEMS_PROVIDER& operator=( const DRC_ITEMS_PROVIDER& ) = delete;
+
     void SetSeverities( int aSeverities ) override;
 
     int GetCount( int aSeverity = -1 ) const override;

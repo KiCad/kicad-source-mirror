@@ -73,7 +73,7 @@ public:
     const LIB_ID& GetDesignBlockLibId() const { return m_designBlockLibId; }
 
 protected:
-    std::unordered_set<EDA_ITEM*> m_items;             // Members of the group
+    std::unordered_set<EDA_ITEM*> m_items;             // Members of the group (no ownership)
     wxString                      m_name;              // Optional group name
     LIB_ID                        m_designBlockLibId;  // Optional link to a design block
 };

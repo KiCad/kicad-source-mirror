@@ -25,12 +25,7 @@
  *
  */
 
-/**
- * @file view_group.h
- */
-
-#ifndef VIEW_GROUP_H_
-#define VIEW_GROUP_H_
+#pragma once
 
 #include <gal/gal.h>
 #include <view/view_item.h>
@@ -49,6 +44,11 @@ class GAL_API VIEW_GROUP : public VIEW_ITEM
 public:
     VIEW_GROUP( VIEW* aView = nullptr );
     virtual ~VIEW_GROUP();
+
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    VIEW_GROUP( const VIEW_GROUP& ) = delete;
+    VIEW_GROUP& operator=( const VIEW_GROUP& ) = delete;
 
     wxString GetClass() const override;
 
@@ -108,9 +108,7 @@ protected:
 
 protected:
     int                     m_layer;
-    std::vector<VIEW_ITEM*> m_groupItems;
+    std::vector<VIEW_ITEM*> m_groupItems;       // No ownership.
 };
 
 } // namespace KIGFX
-
-#endif // VIEW_GROUP_H_

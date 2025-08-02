@@ -108,7 +108,7 @@ public:
     int                         m_SuppressGridChangeEvents;
 
 protected:
-    std::vector<PROPERTY_BASE*> m_displayed;
+    std::vector<PROPERTY_BASE*> m_displayed;    // no ownership of pointers
     wxPropertyGrid*             m_grid;
     EDA_BASE_FRAME*             m_frame;
     wxStaticText*               m_caption;

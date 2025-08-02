@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef APPEARANCE_CONTROLS_3D_H
-#define APPEARANCE_CONTROLS_3D_H
+#pragma once
 
 #include <vector>
 
@@ -113,6 +112,11 @@ public:
     APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent, wxWindow* aFocusOwner );
     ~APPEARANCE_CONTROLS_3D();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    APPEARANCE_CONTROLS_3D( const APPEARANCE_CONTROLS_3D& ) = delete;
+    APPEARANCE_CONTROLS_3D& operator=( const APPEARANCE_CONTROLS_3D& ) = delete;
+
     wxSize GetBestSize() const;
     void OnDarkModeToggle();
     void OnLayerVisibilityChanged( int aLayer, bool isVisible );
@@ -189,5 +193,3 @@ private:
     wxCheckBox*                    m_cbUseBoardStackupColors;
     wxCheckBox*                    m_cbUseBoardEditorCopperColors;
 };
-
-#endif

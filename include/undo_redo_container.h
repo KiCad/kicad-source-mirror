@@ -292,6 +292,11 @@ public:
     UNDO_REDO_CONTAINER();
     ~UNDO_REDO_CONTAINER();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    UNDO_REDO_CONTAINER( const UNDO_REDO_CONTAINER& ) = delete;
+    UNDO_REDO_CONTAINER& operator=( const UNDO_REDO_CONTAINER& ) = delete;
+
     void PushCommand( PICKED_ITEMS_LIST* aCommand );
 
     PICKED_ITEMS_LIST* PopCommand();

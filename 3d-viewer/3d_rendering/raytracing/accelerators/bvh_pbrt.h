@@ -115,6 +115,11 @@ public:
 
     ~BVH_PBRT();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    BVH_PBRT( const BVH_PBRT& ) = delete;
+    BVH_PBRT& operator=( const BVH_PBRT& ) = delete;
+
     bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
     bool Intersect( const RAY& aRay, HITINFO& aHitInfo, unsigned int aAccNodeInfo ) const override;
     bool Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoPacket ) const override;

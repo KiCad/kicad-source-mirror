@@ -68,6 +68,11 @@ public:
     SEARCH_PANE( EDA_DRAW_FRAME* aFrame );
     virtual ~SEARCH_PANE();
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    SEARCH_PANE( const SEARCH_PANE& ) = delete;
+    SEARCH_PANE& operator=( const SEARCH_PANE& ) = delete;
+
     void AddSearcher( SEARCH_HANDLER* aHandler );
     void OnSearchTextEntry( wxCommandEvent& aEvent ) override;
     void OnNotebookPageChanged( wxBookCtrlEvent& aEvent ) override;
@@ -84,8 +89,8 @@ protected:
     void             OnClosed( wxAuiManagerEvent& aEvent );
 
 private:
-    std::vector<SEARCH_HANDLER*>  m_handlers;
-    std::vector<SEARCH_PANE_TAB*> m_tabs;
+    std::vector<SEARCH_HANDLER*>  m_handlers;       // We own these.
+    std::vector<SEARCH_PANE_TAB*> m_tabs;           // No ownership.
     wxString                      m_lastQuery;
     EDA_DRAW_FRAME*               m_frame;
     ACTION_MENU*                  m_menu;

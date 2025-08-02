@@ -350,7 +350,11 @@ public:
     ~TEXT_BUTTON_URL()
     {
         Unbind( wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this );
+
+        m_filesStack.clear();   // we don't own pointers
     }
+
+    // We don't own any of our raw pointers, so compiler's copy c'tor an operator= are OK.
 
 protected:
     void DoSetPopupControl( wxComboPopup* popup ) override
@@ -368,8 +372,7 @@ protected:
         {
             FILEDLG_HOOK_EMBED_FILE customize;
 
-            wxFileDialog openFileDialog( this, _( "Open file" ), "", "",
-                                         _( "All Files" ) + wxT( " (*.*)|*.*" ),
+            wxFileDialog openFileDialog( this, _( "Open file" ), "", "", _( "All Files" ) + wxT( " (*.*)|*.*" ),
                                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
             openFileDialog.SetCustomizeHook( customize );
@@ -414,8 +417,8 @@ protected:
 
 protected:
     DIALOG_SHIM*                 m_dlg;
-    SEARCH_STACK*                m_searchStack;
-    std::vector<EMBEDDED_FILES*> m_filesStack;
+    SEARCH_STACK*                m_searchStack;     // No ownership of pointer
+    std::vector<EMBEDDED_FILES*> m_filesStack;      // No ownership of pointers
 };
 
 

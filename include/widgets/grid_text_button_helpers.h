@@ -135,8 +135,8 @@ public:
 
 protected:
     DIALOG_SHIM*                 m_dlg;
-    SEARCH_STACK*                m_searchStack;
-    std::vector<EMBEDDED_FILES*> m_filesStack;
+    SEARCH_STACK*                m_searchStack;     // No ownership.
+    std::vector<EMBEDDED_FILES*> m_filesStack;      // No ownership.
 };
 
 

@@ -91,6 +91,11 @@ public:
     DRC_ENGINE( BOARD* aBoard = nullptr, BOARD_DESIGN_SETTINGS* aSettings = nullptr );
     virtual ~DRC_ENGINE();
 
+    // We own several lists of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    DRC_ENGINE( const DRC_ENGINE& ) = delete;
+    DRC_ENGINE& operator=( const DRC_ENGINE& ) = delete;
+
     void SetBoard( BOARD* aBoard ) { m_board = aBoard; }
     BOARD* GetBoard() const { return m_board; }
 

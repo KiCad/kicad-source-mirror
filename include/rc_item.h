@@ -219,6 +219,11 @@ public:
             delete child;
     }
 
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    RC_TREE_NODE( const RC_TREE_NODE& ) = delete;
+    RC_TREE_NODE& operator=( const RC_TREE_NODE& ) = delete;
+
     NODE_TYPE                  m_Type;
     std::shared_ptr<RC_ITEM>   m_RcItem;
 
@@ -247,6 +252,11 @@ public:
     RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aView );
 
     ~RC_TREE_MODEL();
+
+    // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
+    // will only land us in trouble.
+    RC_TREE_MODEL( const RC_TREE_MODEL& ) = delete;
+    RC_TREE_MODEL& operator=( const RC_TREE_MODEL& ) = delete;
 
     void Update( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
 
