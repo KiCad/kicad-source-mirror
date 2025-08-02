@@ -19,7 +19,7 @@
 
 #include "widgets/search_pane.h"
 
-
+#include <memory>
 #include <tool/action_menu.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
