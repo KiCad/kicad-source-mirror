@@ -494,10 +494,15 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
         }
     }
 
-    if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+    if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER
+        || aEvent.GetKeyCode() == WXK_DOWN || aEvent.GetKeyCode() == WXK_UP )
     {
         m_grid->CommitChangesFromEditor();
-        /* don't skip this one; if we're not the last property we'll also go to the next row */
+
+        CallAfter( [this]()
+                   {
+                       m_grid->SelectProperty( m_grid->GetSelectedProperty(), true );
+                   } );
     }
 
     aEvent.Skip();
