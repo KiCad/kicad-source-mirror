@@ -108,7 +108,8 @@ enum TEXTBOX_POINT_COUNT
 class RECTANGLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    RECTANGLE_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aRectangle ) : m_rectangle( aRectangle )
+    RECTANGLE_POINT_EDIT_BEHAVIOR( PCB_SHAPE& aRectangle ) :
+            m_rectangle( aRectangle )
     {
         wxASSERT( m_rectangle.GetShape() == SHAPE_T::RECTANGLE );
     }
@@ -390,7 +391,8 @@ class ZONE_POINT_EDIT_BEHAVIOR : public POLYGON_POINT_EDIT_BEHAVIOR
 {
 public:
     ZONE_POINT_EDIT_BEHAVIOR( ZONE& aZone ) :
-            POLYGON_POINT_EDIT_BEHAVIOR( *aZone.Outline() ), m_zone( aZone )
+            POLYGON_POINT_EDIT_BEHAVIOR( *aZone.Outline() ),
+            m_zone( aZone )
     {
     }
 
@@ -420,7 +422,8 @@ class REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
     };
 
 public:
-    REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR( PCB_REFERENCE_IMAGE& aRefImage ) : m_refImage( aRefImage )
+    REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR( PCB_REFERENCE_IMAGE& aRefImage ) :
+            m_refImage( aRefImage )
     {
     }
 
@@ -453,8 +456,7 @@ public:
         aPoints.Point( RECT_BOT_RIGHT ).SetPosition( botRight );
         aPoints.Point( RECT_BOT_LEFT ).SetPosition( topLeft.x, botRight.y );
 
-        aPoints.Point( REFIMG_ORIGIN )
-                .SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+        aPoints.Point( REFIMG_ORIGIN ).SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -479,13 +481,13 @@ public:
         }
         else
         {
-            const VECTOR2I oldOrigin =
-                    m_refImage.GetPosition() + refImage.GetTransformOriginOffset();
+            const VECTOR2I oldOrigin = m_refImage.GetPosition() + refImage.GetTransformOriginOffset();
             const VECTOR2I oldSize = refImage.GetSize();
             const VECTOR2I pos = refImage.GetPosition();
 
             OPT_VECTOR2I newCorner;
             VECTOR2I     oldCorner = pos;
+
             if( isModified( aEditedPoint, aPoints.Point( RECT_TOP_LEFT ) ) )
             {
                 newCorner = topLeft;
@@ -630,8 +632,7 @@ public:
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
         VECTOR2I shapePos = m_pad.ShapePos( m_layer );
-        VECTOR2I halfSize( m_pad.GetSize( m_layer ).x / 2,
-                           m_pad.GetSize( m_layer ).y / 2 );
+        VECTOR2I halfSize( m_pad.GetSize( m_layer ).x / 2, m_pad.GetSize( m_layer ).y / 2 );
 
         if( m_pad.IsLocked() )
             return;
@@ -671,8 +672,7 @@ public:
     {
         bool     locked = m_pad.GetParent() && m_pad.IsLocked();
         VECTOR2I shapePos = m_pad.ShapePos( m_layer );
-        VECTOR2I halfSize( m_pad.GetSize( m_layer ).x / 2,
-                           m_pad.GetSize( m_layer ).y / 2 );
+        VECTOR2I halfSize( m_pad.GetSize( m_layer ).x / 2, m_pad.GetSize( m_layer ).y / 2 );
 
         switch( m_pad.GetShape( m_layer ) )
         {
@@ -714,13 +714,11 @@ public:
                     std::swap( halfSize.x, halfSize.y );
 
                 aPoints.Point( RECT_TOP_LEFT ).SetPosition( shapePos - halfSize );
-                aPoints.Point( RECT_TOP_RIGHT )
-                        .SetPosition(
-                                VECTOR2I( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
+                aPoints.Point( RECT_TOP_RIGHT ).SetPosition( VECTOR2I( shapePos.x + halfSize.x,
+                                                                       shapePos.y - halfSize.y ) );
                 aPoints.Point( RECT_BOT_RIGHT ).SetPosition( shapePos + halfSize );
-                aPoints.Point( RECT_BOT_LEFT )
-                        .SetPosition(
-                                VECTOR2I( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
+                aPoints.Point( RECT_BOT_LEFT ).SetPosition( VECTOR2I( shapePos.x - halfSize.x,
+                                                                      shapePos.y + halfSize.y ) );
             }
 
             break;
@@ -758,12 +756,10 @@ public:
             VECTOR2I holeCenter = m_pad.GetPosition();
             VECTOR2I holeSize = m_pad.GetDrillSize();
 
-            RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( aEditedPoint, aPoints, topLeft,
-                                                            topRight, botLeft, botRight, holeCenter,
-                                                            holeSize );
+            RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( aEditedPoint, aPoints, topLeft, topRight,
+                                                            botLeft, botRight, holeCenter, holeSize );
 
-            if( ( m_pad.GetOffset( m_layer ).x
-                  || m_pad.GetOffset( m_layer ).y )
+            if( ( m_pad.GetOffset( m_layer ).x || m_pad.GetOffset( m_layer ).y )
                 || ( m_pad.GetDrillSize().x && m_pad.GetDrillSize().y ) )
             {
                 // Keep hole pinned at the current location; adjust the pad around the hole
@@ -926,10 +922,9 @@ public:
             if( textWasLeftOf != textIsLeftOf )
             {
                 // Flip whatever the user had set
-                m_dimension.SetHorizJustify(
-                        ( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT )
-                                ? GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT
-                                : GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT );
+                m_dimension.SetHorizJustify( ( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT )
+                                                                    ? GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT
+                                                                    : GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT );
             }
         }
 
@@ -949,18 +944,16 @@ private:
         // There are two modes - when the text is between the crossbar points, and when it's not.
         if( !KIGEOM::PointProjectsOntoSegment( m_originalTextPos, m_oldCrossBar ) )
         {
-            const VECTOR2I cbNearestEndToText =
-                    KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
-            const VECTOR2I rotTextOffsetFromCbCenter =
-                    GetRotated( m_originalTextPos - m_oldCrossBar.Center(), rotation );
-            const VECTOR2I rotTextOffsetFromCbEnd =
-                    GetRotated( m_originalTextPos - cbNearestEndToText, rotation );
+            const VECTOR2I cbNearestEndToText = KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
+            const VECTOR2I rotTextOffsetFromCbCenter = GetRotated( m_originalTextPos - m_oldCrossBar.Center(),
+                                                                   rotation );
+            const VECTOR2I rotTextOffsetFromCbEnd = GetRotated( m_originalTextPos - cbNearestEndToText, rotation );
 
             // Which of the two crossbar points is now in the right direction? They could be swapped over now.
             // If zero-length, doesn't matter, they're the same thing
-            const bool startIsInOffsetDirection =
-                    KIGEOM::PointIsInDirection( m_dimension.GetCrossbarStart(),
-                                                rotTextOffsetFromCbCenter, newCrossBar.Center() );
+            const bool startIsInOffsetDirection = KIGEOM::PointIsInDirection( m_dimension.GetCrossbarStart(),
+                                                                              rotTextOffsetFromCbCenter,
+                                                                              newCrossBar.Center() );
 
             const VECTOR2I& newCbRefPt = startIsInOffsetDirection ? m_dimension.GetCrossbarStart()
                                                                   : m_dimension.GetCrossbarEnd();
@@ -973,13 +966,11 @@ private:
         // good place for it. Keep it the same distance from the crossbar line, but rotated as needed.
 
         const VECTOR2I origTextPointProjected = m_oldCrossBar.NearestPoint( m_originalTextPos );
-        const double   oldRatio =
-                KIGEOM::GetLengthRatioFromStart( origTextPointProjected, m_oldCrossBar );
+        const double   oldRatio = KIGEOM::GetLengthRatioFromStart( origTextPointProjected, m_oldCrossBar );
 
         // Perpendicular from the crossbar line to the text position
         // We need to keep this length constant
-        const VECTOR2I rotCbNormalToText =
-                GetRotated( m_originalTextPos - origTextPointProjected, rotation );
+        const VECTOR2I rotCbNormalToText = GetRotated( m_originalTextPos - origTextPointProjected, rotation );
 
         const VECTOR2I newProjected = newCrossBar.A + ( newCrossBar.B - newCrossBar.A ) * oldRatio;
         return newProjected + rotCbNormalToText;
@@ -1016,10 +1007,10 @@ public:
         if( m_dimension.Type() == PCB_DIM_ALIGNED_T )
         {
             // Dimension height setting - edit points should move only along the feature lines
-            aPoints.Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
-            aPoints.Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
+                                                                           aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
+                                                                         aPoints.Point( DIM_END ) ) );
         }
     }
 
@@ -1045,8 +1036,7 @@ public:
             updateOrthogonalDimension( aEditedPoint, aPoints );
     }
 
-    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                         EDIT_POINTS&      aPoints ) const override
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) const override
     {
         // Constraint for crossbar
         if( isModified( aEditedPoint, aPoints.Point( DIM_START ) ) )
@@ -1097,20 +1087,20 @@ private:
             m_dimension.SetStart( aEditedPoint.GetPosition() );
             m_dimension.Update();
 
-            aPoints.Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
-            aPoints.Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
+                                                                           aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
+                                                                         aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
         {
             m_dimension.SetEnd( aEditedPoint.GetPosition() );
             m_dimension.Update();
 
-            aPoints.Point( DIM_CROSSBARSTART )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
-            aPoints.Point( DIM_CROSSBAREND )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
+                                                                           aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
+                                                                         aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
         {
@@ -1211,8 +1201,8 @@ public:
 
         aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
 
-        aPoints.Point( DIM_END ).SetConstraint(
-                new EC_45DEGREE( aPoints.Point( DIM_END ), aPoints.Point( DIM_START ) ) );
+        aPoints.Point( DIM_END ).SetConstraint(new EC_45DEGREE( aPoints.Point( DIM_END ),
+                                                                 aPoints.Point( DIM_START ) ) );
         aPoints.Point( DIM_END ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1237,8 +1227,7 @@ public:
         m_dimension.Update();
     }
 
-    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                         EDIT_POINTS&      aPoints ) const override
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) const override
     {
         if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
             return aPoints.Point( DIM_START ).GetPosition();
@@ -1268,12 +1257,12 @@ public:
         aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
         aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
 
-        aPoints.Point( DIM_KNEE )
-                .SetConstraint( new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+        aPoints.Point( DIM_KNEE ).SetConstraint( new EC_LINE( aPoints.Point( DIM_START ),
+                                                              aPoints.Point( DIM_END ) ) );
         aPoints.Point( DIM_KNEE ).SetSnapConstraint( IGNORE_SNAPS );
 
-        aPoints.Point( DIM_TEXT )
-                .SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_KNEE ) ) );
+        aPoints.Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ),
+                                                                  aPoints.Point( DIM_KNEE ) ) );
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1297,8 +1286,8 @@ public:
             m_dimension.SetStart( aEditedPoint.GetPosition() );
             m_dimension.Update();
 
-            aPoints.Point( DIM_KNEE )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_KNEE ).SetConstraint( new EC_LINE( aPoints.Point( DIM_START ),
+                                                                  aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
         {
@@ -1311,8 +1300,8 @@ public:
             m_dimension.SetTextPos( m_dimension.GetTextPos() + kneeDelta );
             m_dimension.Update();
 
-            aPoints.Point( DIM_KNEE )
-                    .SetConstraint( new EC_LINE( aPoints.Point( DIM_START ), aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_KNEE ).SetConstraint( new EC_LINE( aPoints.Point( DIM_START ),
+                                                                  aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_KNEE ) ) )
         {
@@ -1333,8 +1322,7 @@ public:
         }
     }
 
-    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                         EDIT_POINTS&      aPoints ) const override
+    OPT_VECTOR2I Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints ) const override
     {
         if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
             return aPoints.Point( DIM_KNEE ).GetPosition();
@@ -1363,8 +1351,8 @@ public:
         aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
         aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
 
-        aPoints.Point( DIM_TEXT )
-                .SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ), aPoints.Point( DIM_END ) ) );
+        aPoints.Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ),
+                                                                  aPoints.Point( DIM_END ) ) );
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1505,8 +1493,7 @@ static bool canAddCorner( const EDA_ITEM& aItem )
     {
         const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
         const SHAPE_T    shapeType = shape.GetShape();
-        return shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::POLY
-               || shapeType == SHAPE_T::ARC;
+        return shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::POLY || shapeType == SHAPE_T::ARC;
     }
 
     return false;
@@ -1822,16 +1809,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( editFrame->IsType( FRAME_PCB_EDITOR ) )
-        {
             m_arcEditMode = editFrame->GetPcbNewSettings()->m_ArcEditMode;
-        }
         else
-        {
             m_arcEditMode = editFrame->GetFootprintEditorSettings()->m_ArcEditMode;
-        }
 
-        if( !m_editPoints || evt->IsSelectionEvent() ||
-                evt->Matches( EVENTS::InhibitSelectionEditing ) )
+        if( !m_editPoints || evt->IsSelectionEvent() || evt->Matches( EVENTS::InhibitSelectionEditing ) )
         {
             break;
         }
@@ -1907,13 +1889,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ),
-                                                           { item } );
+                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ), { item } );
 
                     VECTOR2I last = m_editedPoint->GetPosition();
                     VECTOR2I delta = pos - last;
-                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {},
-                                                                       grid.GetItemGrid( item ),
+                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, grid.GetItemGrid( item ),
                                                                        { item } );
 
                     if( abs( delta.x ) > grid.GetGrid().x / 2 )
@@ -1941,10 +1921,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
             else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
-                                                                 snapLayers,
-                                                                 grid.GetItemGrid( item ),
-                                                                 { item } ) );
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers,
+                                                                 grid.GetItemGrid( item ), { item } ) );
             }
 
             updateItem( commit );
@@ -2163,11 +2141,8 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
 
         m_preview.FreeItems();
 
-        for( EDA_ITEM* previewItem : generatorItem->GetPreviewItems( generatorTool, frame(),
-                                                                     STATUS_ITEMS_ONLY ) )
-        {
+        for( EDA_ITEM* previewItem : generatorItem->GetPreviewItems( generatorTool, frame(), STATUS_ITEMS_ONLY ) )
             m_preview.Add( previewItem );
-        }
 
         getView()->Update( &m_preview );
         break;
@@ -2273,8 +2248,8 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     // If there's a behaviour and it provides a constrainer, use that
     if( m_editorBehavior )
     {
-        const OPT_VECTOR2I constrainer =
-                m_editorBehavior->Get45DegreeConstrainer( *m_editedPoint, *m_editPoints );
+        const OPT_VECTOR2I constrainer = m_editorBehavior->Get45DegreeConstrainer( *m_editedPoint, *m_editPoints );
+
         if( constrainer )
             return EDIT_POINT( *constrainer );
     }
@@ -2340,8 +2315,8 @@ bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
     // degenerating the polygon.
     // The first condition allows one to remove all corners from holes (when
     // there are only 2 vertices left, a hole is removed).
-    if( vertexIdx.m_contour == 0 &&
-        polyset->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
+    if( vertexIdx.m_contour == 0
+            && polyset->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
     {
         return false;
     }
@@ -2468,8 +2443,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         {
             commit.Modify( graphicItem );
 
-            const SHAPE_ARC arc( graphicItem->GetStart(), graphicItem->GetArcMid(),
-                                 graphicItem->GetEnd(), 0 );
+            const SHAPE_ARC arc( graphicItem->GetStart(), graphicItem->GetArcMid(), graphicItem->GetEnd(), 0 );
             const VECTOR2I  nearestPoint = arc.NearestPoint( cursorPos );
 
             // Move the end of the arc to the break point..
@@ -2642,8 +2616,7 @@ int PCB_POINT_EDITOR::chamferCorner( const TOOL_EVENT& aEvent )
 
         CHAMFER_PARAMS chamferParams{ setback, setback };
 
-        std::optional<CHAMFER_RESULT> chamferResult =
-                ComputeChamferPoints( segA, segB, chamferParams );
+        std::optional<CHAMFER_RESULT> chamferResult = ComputeChamferPoints( segA, segB, chamferParams );
 
         if( chamferResult && chamferResult->m_updated_seg_a && chamferResult->m_updated_seg_b )
         {

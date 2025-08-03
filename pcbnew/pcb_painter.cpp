@@ -912,8 +912,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         // Ummm, yeah.  Anyone fancy implementing text on a path?
         return;
     }
-    else if( IsCopperLayer( aLayer ) || IsSolderMaskLayer( aLayer )
-                 || aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    else if( IsCopperLayer( aLayer ) || IsSolderMaskLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Draw a regular track
         bool outline_mode = pcbconfig()
@@ -935,9 +934,9 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     }
 
     // Clearance lines
-    if( IsClearanceLayer( aLayer ) && pcbconfig()
-        && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-        && !m_pcbSettings.m_isPrinting )
+    if( IsClearanceLayer( aLayer )
+            && pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+            && !m_pcbSettings.m_isPrinting )
     {
         /*
          * Showing the clearance area is not obvious for optionally-flashed pads and vias, so we
@@ -956,15 +955,14 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
 
-            m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2,
-                                   m_maxError );
+            m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2, m_maxError );
         }
     }
 
-// Debug only: enable this code only to test the TransformArcToPolygon function
-// and display the polygon outline created by it.
-// arcs on F_Cu are approximated with ERROR_INSIDE, others with ERROR_OUTSIDE
 #if 0
+    // Debug only: enable this code only to test the TransformArcToPolygon function and display the polygon
+    // outline created by it.
+    // arcs on F_Cu are approximated with ERROR_INSIDE, others with ERROR_OUTSIDE
     SHAPE_POLY_SET cornerBuffer;
     ERROR_LOC errorloc = aLayer == F_Cu ? ERROR_LOC::ERROR_INSIDE : ERROR_LOC::ERROR_OUTSIDE;
     TransformArcToPolygon( cornerBuffer, aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(), width,
@@ -976,9 +974,9 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     m_gal->DrawPolygon( cornerBuffer );
 #endif
 
-// Debug only: enable this code only to test the SHAPE_ARC::ConvertToPolyline function
-// and display the polyline created by it.
 #if 0
+    // Debug only: enable this code only to test the SHAPE_ARC::ConvertToPolyline function and display the
+    // polyline created by it.
     SHAPE_ARC arc( aArc->GetCenter(), aArc->GetStart(), aArc->GetAngle(), aArc->GetWidth() );
     SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( m_maxError );
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
