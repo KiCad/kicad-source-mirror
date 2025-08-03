@@ -55,13 +55,13 @@ static const std::vector<VERTEX_APPEND_CASE> appendToChainCases
 {
     {
         "Append a point on x",
-        { vt::POINT, { 500000, 0 } },
+        { vt::VT_POINT, { 500000, 0 } },
         { /* BBOX Position: */ { 0, 0 }, /* Size:*/ { 500000, 0 } },
         0
     },
     {
         "Append a point on y",
-        { vt::POINT, { 0, 500000 } },
+        { vt::VT_POINT, { 0, 500000 } },
         { /* BBOX Position: */ { 0, 0 }, /* Size:*/ { 0, 500000 } },
         0
     },

@@ -437,7 +437,7 @@ BOOST_AUTO_TEST_CASE( ReadContent )
             {
                 { 4, CADSTAR_PIN_POSITION::BOTTOM_LEFT,  CADSTAR_PIN_TYPE::UNCOMMITTED,
                     1000 },
-                { 5, CADSTAR_PIN_POSITION::TOP_LEFT,     CADSTAR_PIN_TYPE::INPUT,
+                { 5, CADSTAR_PIN_POSITION::TOP_LEFT,     CADSTAR_PIN_TYPE::PIN_INPUT,
                     std::nullopt },
                 { 6, CADSTAR_PIN_POSITION::BOTTOM_RIGHT, CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR,
                     std::nullopt }
