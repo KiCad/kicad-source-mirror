@@ -1232,28 +1232,69 @@ void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet,
 }
 
 
+void CONNECTION_GRAPH::updatePinConnectivity( const SCH_SHEET_PATH& aSheet, SCH_PIN* aPin, SCH_CONNECTION* aConn )
+{
+    aConn->SetType( CONNECTION_TYPE::NET );
+
+    // because calling the first time is not thread-safe
+    wxString name = aPin->GetDefaultNetName( aSheet );
+    aPin->ClearConnectedItems( aSheet );
+
+    if( aPin->IsGlobalPower() )
+    {
+        aConn->SetName( name );
+        m_global_power_pins.emplace_back( std::make_pair( aSheet, aPin ) );
+    }
+}
+
+
+void CONNECTION_GRAPH::updateGenericItemConnectivity( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem,
+                                                      std::map<VECTOR2I, std::vector<SCH_ITEM*>>& aConnectionMap )
+{
+    std::vector<VECTOR2I> points = aItem->GetConnectionPoints();
+    aItem->ClearConnectedItems( aSheet );
+
+    m_items.emplace_back( aItem );
+    SCH_CONNECTION* conn = aItem->InitializeConnection( aSheet, this );
+
+    switch( aItem->Type() )
+    {
+    case SCH_LINE_T:
+        conn->SetType( aItem->GetLayer() == LAYER_BUS ? CONNECTION_TYPE::BUS : CONNECTION_TYPE::NET );
+        break;
+
+    case SCH_BUS_BUS_ENTRY_T:
+        conn->SetType( CONNECTION_TYPE::BUS );
+        static_cast<SCH_BUS_BUS_ENTRY*>( aItem )->m_connected_bus_items[0] = nullptr;
+        static_cast<SCH_BUS_BUS_ENTRY*>( aItem )->m_connected_bus_items[1] = nullptr;
+        break;
+
+    case SCH_PIN_T:
+        if( points.empty() )
+            points = { static_cast<SCH_PIN*>( aItem )->GetPosition() };
+
+        updatePinConnectivity( aSheet, static_cast<SCH_PIN*>( aItem ), conn );
+        break;
+
+    case SCH_BUS_WIRE_ENTRY_T:
+        conn->SetType( CONNECTION_TYPE::NET );
+        static_cast<SCH_BUS_WIRE_ENTRY*>( aItem )->m_connected_bus_item = nullptr;
+        break;
+
+    default: break;
+    }
+
+    for( const VECTOR2I& point : points )
+        aConnectionMap[point].push_back( aItem );
+}
+
+
 void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                                                const std::vector<SCH_ITEM*>& aItemList )
 {
     wxLogTrace( wxT( "Updating connectivity for sheet %s with %zu items" ),
                 aSheet.Last()->GetFileName(), aItemList.size() );
     std::map<VECTOR2I, std::vector<SCH_ITEM*>> connection_map;
-
-    auto updatePin = [&]( SCH_PIN* aPin, SCH_CONNECTION* aConn )
-    {
-        aConn->SetType( CONNECTION_TYPE::NET );
-
-        // because calling the first time is not thread-safe
-        wxString name = aPin->GetDefaultNetName( aSheet );
-        aPin->ClearConnectedItems( aSheet );
-
-        // power symbol pins need to be post-processed later
-        if( aPin->IsGlobalPower() )
-        {
-            aConn->SetName( name );
-            m_global_power_pins.emplace_back( std::make_pair( aSheet, aPin ) );
-        }
-    };
 
     for( SCH_ITEM* item : aItemList )
     {
@@ -1278,45 +1319,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         }
         else
         {
-            m_items.emplace_back( item );
-            SCH_CONNECTION* conn = item->InitializeConnection( aSheet, this );
-
-            // Set bus/net property here so that the propagation code uses it
-            switch( item->Type() )
-            {
-            case SCH_LINE_T:
-                conn->SetType( item->GetLayer() == LAYER_BUS ? CONNECTION_TYPE::BUS :
-                                                               CONNECTION_TYPE::NET );
-                break;
-
-            case SCH_BUS_BUS_ENTRY_T:
-                conn->SetType( CONNECTION_TYPE::BUS );
-
-                // clean previous (old) links:
-                static_cast<SCH_BUS_BUS_ENTRY*>( item )->m_connected_bus_items[0] = nullptr;
-                static_cast<SCH_BUS_BUS_ENTRY*>( item )->m_connected_bus_items[1] = nullptr;
-                break;
-
-            case SCH_PIN_T:
-                if( points.empty() )
-                    points = { static_cast<SCH_PIN*>( item )->GetPosition() };
-
-                updatePin( static_cast<SCH_PIN*>( item ), conn );
-                break;
-
-            case SCH_BUS_WIRE_ENTRY_T:
-                conn->SetType( CONNECTION_TYPE::NET );
-
-                // clean previous (old) link:
-                static_cast<SCH_BUS_WIRE_ENTRY*>( item )->m_connected_bus_item = nullptr;
-                break;
-
-            default:
-                break;
-            }
-
-            for( const VECTOR2I& point : points )
-                connection_map[ point ].push_back( item );
+            updateGenericItemConnectivity( aSheet, item, connection_map );
         }
     }
 

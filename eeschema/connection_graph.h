@@ -377,6 +377,7 @@ public:
 
     // Define QA friend functions to allow testing of private methods
     friend void boost_test_update_symbol_connectivity();
+    friend void boost_test_update_generic_connectivity();
 
     void Reset();
 
@@ -512,6 +513,24 @@ private:
     void updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet,
                                    SCH_SYMBOL* aSymbol,
                                    std::map<VECTOR2I, std::vector<SCH_ITEM*>>& aConnectionMap );
+
+    /**
+     * Update the connectivity of a pin and its connections.
+     * This is called by updateItemConnectivity() for each pin
+     * in the schematic.
+     */
+    void updatePinConnectivity( const SCH_SHEET_PATH& aSheet,
+                                SCH_PIN* aPin,
+                                SCH_CONNECTION* aConnection );
+
+    /**
+     * Update the connectivity of items that are not pins or symbols.
+     * This is called by updateItemConnectivity() for each item
+     * in the schematic that is not a symbol or pin.
+     */
+    void updateGenericItemConnectivity( const SCH_SHEET_PATH& aSheet,
+                                        SCH_ITEM* aItem,
+                                        std::map<VECTOR2I, std::vector<SCH_ITEM*>>& aConnectionMap );
 
     /**
      * Update the graphical connectivity between items (i.e. where they touch)

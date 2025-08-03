@@ -22,14 +22,18 @@
 #include <connection_graph.h>
 #include <lib_symbol.h>
 #include <pin_type.h>
+
+#include <sch_bus_entry.h>
+#include <sch_line.h>
 #include <sch_pin.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_screen.h>
 
 #include <algorithm>
+#include <map>
 #include <set>
-
 
 void boost_test_update_symbol_connectivity()
 {
@@ -131,9 +135,109 @@ void boost_test_update_symbol_connectivity()
     delete sheet; // deletes screen
 }
 
-BOOST_AUTO_TEST_SUITE( UpdateSymbolConnectivity )
+
+void boost_test_update_generic_connectivity()
+{
+    std::map<VECTOR2I, std::vector<SCH_ITEM*>> cmap;
+
+    // Create root sheet and screen
+    SCH_SCREEN* screen = new SCH_SCREEN( nullptr );
+    SCH_SHEET*  sheet = new SCH_SHEET( nullptr, VECTOR2I( 0, 0 ), VECTOR2I( 1000, 1000 ) );
+    sheet->SetScreen( screen );
+
+    SCH_SHEET_PATH sheetPath;
+    sheetPath.push_back( sheet );
+
+    CONNECTION_GRAPH graph;
+
+    // Wire line
+    SCH_LINE wire( VECTOR2I( 0, 0 ), LAYER_WIRE );
+    wire.SetEndPoint( VECTOR2I( 100, 0 ) );
+
+    graph.updateGenericItemConnectivity( sheetPath, &wire, cmap );
+    SCH_CONNECTION* wireConn = wire.Connection( &sheetPath );
+    BOOST_REQUIRE( wireConn );
+    BOOST_CHECK( wireConn->Type() == CONNECTION_TYPE::NET );
+    BOOST_CHECK( cmap.count( wire.GetStartPoint() ) );
+    BOOST_CHECK( cmap.count( wire.GetEndPoint() ) );
+
+    // Bus line
+    cmap.clear();
+    SCH_LINE bus( VECTOR2I( 0, 0 ), LAYER_BUS );
+    bus.SetEndPoint( VECTOR2I( 0, 100 ) );
+
+    graph.updateGenericItemConnectivity( sheetPath, &bus, cmap );
+    SCH_CONNECTION* busConn = bus.Connection( &sheetPath );
+    BOOST_REQUIRE( busConn );
+    BOOST_CHECK( busConn->Type() == CONNECTION_TYPE::BUS );
+    BOOST_CHECK( cmap.count( bus.GetStartPoint() ) );
+    BOOST_CHECK( cmap.count( bus.GetEndPoint() ) );
+
+    // Bus-to-bus entry
+    cmap.clear();
+    SCH_BUS_BUS_ENTRY busEntry( VECTOR2I( 0, 0 ), false );
+    SCH_LINE          dummy1( VECTOR2I( 0, 0 ), LAYER_BUS );
+    SCH_LINE          dummy2( VECTOR2I( 0, 0 ), LAYER_BUS );
+    busEntry.m_connected_bus_items[0] = &dummy1;
+    busEntry.m_connected_bus_items[1] = &dummy2;
+
+    graph.updateGenericItemConnectivity( sheetPath, &busEntry, cmap );
+    SCH_CONNECTION* bbConn = busEntry.Connection( &sheetPath );
+    BOOST_REQUIRE( bbConn );
+    BOOST_CHECK( bbConn->Type() == CONNECTION_TYPE::BUS );
+    BOOST_CHECK( busEntry.m_connected_bus_items[0] == nullptr );
+    BOOST_CHECK( busEntry.m_connected_bus_items[1] == nullptr );
+    auto ptsBB = busEntry.GetConnectionPoints();
+    BOOST_CHECK( cmap.count( ptsBB[0] ) );
+    BOOST_CHECK( cmap.count( ptsBB[1] ) );
+
+    // Bus-wire entry
+    cmap.clear();
+    SCH_BUS_WIRE_ENTRY bwEntry( VECTOR2I( 0, 0 ), false );
+    SCH_LINE           dummyBus( VECTOR2I( 0, 0 ), LAYER_BUS );
+    bwEntry.m_connected_bus_item = &dummyBus;
+
+    graph.updateGenericItemConnectivity( sheetPath, &bwEntry, cmap );
+    SCH_CONNECTION* bwConn = bwEntry.Connection( &sheetPath );
+    BOOST_REQUIRE( bwConn );
+    BOOST_CHECK( bwConn->Type() == CONNECTION_TYPE::NET );
+    BOOST_CHECK( bwEntry.m_connected_bus_item == nullptr );
+    auto ptsBW = bwEntry.GetConnectionPoints();
+    BOOST_CHECK( cmap.count( ptsBW[0] ) );
+    BOOST_CHECK( cmap.count( ptsBW[1] ) );
+
+    // Pin
+    cmap.clear();
+    LIB_SYMBOL libSymbol( "PWR", nullptr );
+    SCH_PIN*   libPin = new SCH_PIN( &libSymbol );
+    libPin->SetNumber( "1" );
+    libPin->SetName( "P" );
+    libPin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    libPin->SetPosition( VECTOR2I( 10, 10 ) );
+    libSymbol.AddDrawItem( libPin );
+    libSymbol.SetGlobalPower();
+
+    SCH_SYMBOL symbol( libSymbol, libSymbol.GetLibId(), &sheetPath, 0, 0, VECTOR2I( 0, 0 ) );
+    symbol.SetRef( &sheetPath, "U1" );
+    symbol.UpdatePins();
+    SCH_PIN* pin = symbol.GetPins( &sheetPath )[0];
+
+    graph.updateGenericItemConnectivity( sheetPath, pin, cmap );
+    SCH_CONNECTION* pinConn = pin->Connection( &sheetPath );
+    BOOST_REQUIRE( pinConn );
+    BOOST_CHECK( pinConn->Type() == CONNECTION_TYPE::NET );
+    BOOST_CHECK( graph.m_global_power_pins.size() == 1 );
+    BOOST_CHECK( cmap.count( pin->GetPosition() ) );
+}
+
+BOOST_AUTO_TEST_SUITE( UpdateItemsConnectivity )
 BOOST_AUTO_TEST_CASE( SymbolConnectivityLinksPins )
 {
     boost_test_update_symbol_connectivity();
 }
+BOOST_AUTO_TEST_CASE( GenericItemConnectivity )
+{
+    boost_test_update_generic_connectivity();
+}
+
 BOOST_AUTO_TEST_SUITE_END()
