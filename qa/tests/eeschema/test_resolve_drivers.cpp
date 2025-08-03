@@ -136,6 +136,22 @@ BOOST_FIXTURE_TEST_CASE( BusSupersetPreference, RESOLVE_DRIVERS_FIXTURE )
 
     subgraph.ResolveDrivers( false );
     BOOST_CHECK_EQUAL( subgraph.GetDriver(), superset );
+    subgraph.RemoveItem( subset );
+
+    // Check that the superset is still the driver after removing the subset
+    subgraph.ResolveDrivers( false );
+    BOOST_CHECK_EQUAL( subgraph.GetDriver(), superset );
+    subgraph.RemoveItem( superset );
+
+    // Check group labels as well
+    subset = MakeLabel( wxS( "BUS{ ONE TWO THREE }" ) );
+    superset = MakeLabel( wxS( "BUS{ ONE TWO THREE FOUR }" ) );
+
+    subgraph.AddItem( subset );
+    subgraph.AddItem( superset );
+
+    subgraph.ResolveDrivers( false );
+    BOOST_CHECK_EQUAL( subgraph.GetDriver(), superset );
 }
 
 BOOST_FIXTURE_TEST_CASE( PowerSymbolPinPrecedence, RESOLVE_DRIVERS_FIXTURE )

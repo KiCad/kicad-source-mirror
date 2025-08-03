@@ -583,13 +583,37 @@ bool SCH_CONNECTION::IsSubsetOf( SCH_CONNECTION* aOther ) const
     if( !aOther->IsBus() )
         return false;
 
-    for( const std::shared_ptr<SCH_CONNECTION>& member : aOther->Members() )
+    if( !IsBus() )
     {
-        if( member->FullLocalName() == FullLocalName() )
-            return true;
+        for( const std::shared_ptr<SCH_CONNECTION>& otherMember : aOther->Members() )
+        {
+            if( FullLocalName() == otherMember->FullLocalName() )
+                return true;
+        }
+
+        return false;
     }
 
-    return false;
+    // If both connections are buses, check if all members of this bus are in the other bus
+    for( const std::shared_ptr<SCH_CONNECTION>& member : m_members )
+    {
+        bool found = false;
+
+        for( const std::shared_ptr<SCH_CONNECTION>& otherMember : aOther->Members() )
+        {
+            if( member->FullLocalName() == otherMember->FullLocalName() )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        // If one of the members is not found in the other connection, this is not a subset
+        if( !found )
+            return false;
+    }
+
+    return true;
 }
 
 

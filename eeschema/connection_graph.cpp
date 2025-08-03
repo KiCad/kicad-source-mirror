@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <list>
 #include <future>
 #include <vector>
@@ -132,60 +133,12 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 {
     std::lock_guard lock( m_driver_mutex );
 
-    auto candidate_cmp = [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
-        {
-            // meet irreflexive requirements of std::sort
-            if( a == b )
-                return false;
-
-            SCH_CONNECTION* ac = a->Connection( &m_sheet );
-            SCH_CONNECTION* bc = b->Connection( &m_sheet );
-
-            // Ensure we don't pick the subset over the superset
-            if( ac->IsBus() && bc->IsBus() )
-                return bc->IsSubsetOf( ac );
-
-            // Ensure we don't pick a hidden power pin on a regular symbol over
-            // one on a power symbol
-            if( a->Type() == SCH_PIN_T && b->Type() == SCH_PIN_T )
-            {
-                SCH_PIN* pa = static_cast<SCH_PIN*>( a );
-                SCH_PIN* pb = static_cast<SCH_PIN*>( b );
-
-                bool aPower = pa->GetLibPin()->GetParentSymbol()->IsGlobalPower();
-                bool bPower = pb->GetLibPin()->GetParentSymbol()->IsGlobalPower();
-
-                if( aPower && !bPower )
-                    return true;
-                else if( bPower && !aPower )
-                    return false;
-
-                // Secondary check for local power pin
-                aPower = pa->GetLibPin()->GetParentSymbol()->IsLocalPower();
-                bPower = pb->GetLibPin()->GetParentSymbol()->IsLocalPower();
-
-                if( aPower && !bPower )
-                    return true;
-                else if( bPower && !aPower )
-                    return false;
-            }
-
-            const wxString& a_name = GetNameForDriver( a );
-            const wxString& b_name = GetNameForDriver( b );
-            bool     a_lowQualityName = a_name.Contains( "-Pad" );
-            bool     b_lowQualityName = b_name.Contains( "-Pad" );
-
-            if( a_lowQualityName && !b_lowQualityName )
-                return false;
-            else if( b_lowQualityName && !a_lowQualityName )
-                return true;
-            else
-                return a_name < b_name;
-        };
-
-    PRIORITY            highest_priority = PRIORITY::INVALID;
-    std::set<SCH_ITEM*, decltype( candidate_cmp )> candidates( candidate_cmp );
-    std::set<SCH_ITEM*> strong_drivers;
+    // Collect candidate drivers of highest priority in a simple vector which will be
+    // sorted later.  Using a vector makes the ranking logic explicit and easier to
+    // maintain than relying on the ordering semantics of std::set.
+    PRIORITY               highest_priority = PRIORITY::INVALID;
+    std::vector<SCH_ITEM*> candidates;
+    std::set<SCH_ITEM*>    strong_drivers;
 
     m_driver = nullptr;
 
@@ -214,12 +167,12 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
         if( item_priority > highest_priority )
         {
             candidates.clear();
-            candidates.insert( item );
+            candidates.push_back( item );
             highest_priority = item_priority;
         }
         else if( !candidates.empty() && ( item_priority == highest_priority ) )
         {
-            candidates.insert( item );
+            candidates.push_back( item );
         }
     }
 
@@ -231,28 +184,72 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 
     if( !candidates.empty() )
     {
-        if( candidates.size() > 1 )
+        // Candidates are ranked using the following rules (in order):
+        // 1. Prefer bus supersets over subsets to keep the widest connection.
+        // 2. Prefer pins on power symbols (global first, then local) over regular pins.
+        // 3. Prefer output sheet pins over input sheet pins.
+        // 4. Prefer names that do not look auto-generated (avoid "-Pad" suffixes).
+        // 5. Fall back to alphabetical comparison for deterministic ordering.
+        auto candidate_cmp = [&]( SCH_ITEM* a, SCH_ITEM* b )
         {
-            if( highest_priority == PRIORITY::SHEET_PIN )
+            SCH_CONNECTION* ac = a->Connection( &m_sheet );
+            SCH_CONNECTION* bc = b->Connection( &m_sheet );
+
+            if( ac->IsBus() && bc->IsBus() )
             {
-                // We have multiple options, and they are all hierarchical
-                // sheet pins.  Let's prefer outputs over inputs.
+                if( bc->IsSubsetOf( ac ) )
+                    return true;
+                if( ac->IsSubsetOf( bc ) )
+                    return false;
+            }
 
-                for( SCH_ITEM* c : candidates )
+            if( a->Type() == SCH_PIN_T && b->Type() == SCH_PIN_T )
+            {
+                SCH_PIN* pa = static_cast<SCH_PIN*>( a );
+                SCH_PIN* pb = static_cast<SCH_PIN*>( b );
+
+                bool aGlobal = pa->GetLibPin()->GetParentSymbol()->IsGlobalPower();
+                bool bGlobal = pb->GetLibPin()->GetParentSymbol()->IsGlobalPower();
+
+                if( aGlobal != bGlobal )
+                    return aGlobal;
+
+                bool aLocal = pa->GetLibPin()->GetParentSymbol()->IsLocalPower();
+                bool bLocal = pb->GetLibPin()->GetParentSymbol()->IsLocalPower();
+
+                if( aLocal != bLocal )
+                    return aLocal;
+            }
+
+            if( a->Type() == SCH_SHEET_PIN_T && b->Type() == SCH_SHEET_PIN_T )
+            {
+                SCH_SHEET_PIN* sa = static_cast<SCH_SHEET_PIN*>( a );
+                SCH_SHEET_PIN* sb = static_cast<SCH_SHEET_PIN*>( b );
+
+                if( sa->GetShape() != sb->GetShape() )
                 {
-                    SCH_SHEET_PIN* p = static_cast<SCH_SHEET_PIN*>( c );
-
-                    if( p->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT )
-                    {
-                        m_driver = c;
-                        break;
-                    }
+                    if( sa->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT )
+                        return true;
+                    if( sb->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT )
+                        return false;
                 }
             }
-        }
 
-        if( !m_driver )
-            m_driver = *candidates.begin();
+            const wxString& a_name = GetNameForDriver( a );
+            const wxString& b_name = GetNameForDriver( b );
+
+            bool a_lowQualityName = a_name.Contains( "-Pad" );
+            bool b_lowQualityName = b_name.Contains( "-Pad" );
+
+            if( a_lowQualityName != b_lowQualityName )
+                return !a_lowQualityName;
+
+            return a_name < b_name;
+        };
+
+        std::sort( candidates.begin(), candidates.end(), candidate_cmp );
+
+        m_driver = candidates.front();
     }
 
     if( strong_drivers.size() > 1 )
