@@ -391,7 +391,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     {
     default:
     case EDA_UNITS::UM:       format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.1f" ); break;
-    case EDA_UNITS::MM:       format = is_eeschema ? wxT( "%.2f" ) : wxT( "%.4f" ); break;
+    case EDA_UNITS::MM:       format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
     case EDA_UNITS::CM:       format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
     case EDA_UNITS::MILS:     format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.2f" ); break;
     case EDA_UNITS::INCH:     format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
@@ -405,9 +405,10 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     if( is_eeschema && aUnits == EDA_UNITS::MM )
     {
         struct lconv* lc = localeconv();
+        int           length = (int) text.Length();
 
-        if( text.Contains( *lc->decimal_point ) && text.EndsWith( '0' ) )
-            text = text.Left( text.size() - 1 );
+        if( length > 4 && text[length - 4] == *lc->decimal_point && text[length - 1] == '0' )
+            text = text.Left( length - 1 );
     }
 
     if( aAddUnitsText )
