@@ -911,7 +911,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     case SHAPE_T::ARC:
         AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 0, _( "Center" ), false, m_boundCtrls);
         AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 3, _( "Start Point" ), false, m_boundCtrls);
-        AddFieldToSizer( *aParent, *m_gbsArcByCSA, 3, 0, _( "Start Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsArcByCSA, 3, 0, _( "Included Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
 
         AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 0, _( "Start Point" ), false, m_boundCtrls );
         AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 3, _( "Mid Point" ), false, m_boundCtrls );
