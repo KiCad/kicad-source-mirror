@@ -71,7 +71,7 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
     }
 
-    m_tree.AssignIntrinsicRanks();
+    m_tree.AssignIntrinsicRanks( m_shownColumns );
 }
 
 

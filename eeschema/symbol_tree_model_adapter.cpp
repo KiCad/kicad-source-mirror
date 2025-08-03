@@ -189,7 +189,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     KIID::CreateNilUuids( false );
 
-    m_tree.AssignIntrinsicRanks();
+    m_tree.AssignIntrinsicRanks( m_shownColumns );
 
     if( progressReporter )
     {

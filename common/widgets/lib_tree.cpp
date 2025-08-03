@@ -1012,7 +1012,10 @@ void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
                                          m_adapter->GetShownColumns() );
 
         if( dlg.ShowModal() == wxID_OK )
+        {
             m_adapter->SetShownColumns( dlg.EnabledList() );
+            Regenerate( true );
+        }
     }
 
     m_previewDisabled = false;

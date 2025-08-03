@@ -136,7 +136,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
         }
     }
 
-    m_tree.AssignIntrinsicRanks();
+    m_tree.AssignIntrinsicRanks( m_shownColumns );
 }
 
 
@@ -198,7 +198,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
             aLibNode.AddItem( symbol );
     }
 
-    aLibNode.AssignIntrinsicRanks();
+    aLibNode.AssignIntrinsicRanks( m_shownColumns );
     m_libHashes[aLibNode.m_Name] = m_libMgr->GetLibraryHash( aLibNode.m_Name );
 }
 

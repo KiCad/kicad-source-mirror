@@ -128,7 +128,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
     }
 
     if( m_libMap.size() > count )
-        m_tree.AssignIntrinsicRanks();
+        m_tree.AssignIntrinsicRanks( m_shownColumns );
 }
 
 
@@ -173,7 +173,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNo
     for( LIB_TREE_ITEM* footprint : footprints )
         aLibNode.AddItem( footprint );
 
-    aLibNode.AssignIntrinsicRanks();
+    aLibNode.AssignIntrinsicRanks( m_shownColumns );
     m_libMap.insert( aLibNode.m_Name );
 }
 

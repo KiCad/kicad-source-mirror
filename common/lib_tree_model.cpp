@@ -23,6 +23,7 @@
 #include <lib_tree_model.h>
 
 #include <algorithm>
+#include <core/kicad_algo.h>
 #include <eda_pattern_match.h>
 #include <lib_tree_item.h>
 #include <pgm_base.h>
@@ -30,8 +31,23 @@
 
 
 
-void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
+void LIB_TREE_NODE::RebuildSearchTerms( const std::vector<wxString>& aShownColumns )
 {
+    m_SearchTerms = m_sourceSearchTerms;
+
+    for( const auto& [name, value] : m_Fields )
+    {
+        if( alg::contains( aShownColumns, name ) )
+            m_SearchTerms.push_back( SEARCH_TERM( value, 4 ) );
+    }
+}
+
+
+void LIB_TREE_NODE::AssignIntrinsicRanks( const std::vector<wxString>& aShownColumns, bool presorted )
+{
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+        child->RebuildSearchTerms( aShownColumns );
+
     std::vector<LIB_TREE_NODE*> sort_buf;
 
     if( presorted )
@@ -174,7 +190,7 @@ LIB_TREE_NODE_ITEM::LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
 
     aItem->GetChooserFields( m_Fields );
 
-    m_SearchTerms = aItem->GetSearchTerms();
+    m_sourceSearchTerms = aItem->GetSearchTerms();
 
     m_IsRoot = aItem->IsRoot();
 
@@ -204,7 +220,7 @@ void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
 
     aItem->GetChooserFields( m_Fields );
 
-    m_SearchTerms = aItem->GetSearchTerms();
+    m_sourceSearchTerms = aItem->GetSearchTerms();
 
     m_IsRoot = aItem->IsRoot();
     m_Children.clear();

@@ -204,7 +204,13 @@ public:
     /**
      * Sort the tree and assign ranks after adding libraries.
      */
-    void AssignIntrinsicRanks() { m_tree.AssignIntrinsicRanks(); }
+    void AssignIntrinsicRanks()
+    {
+        m_tree.AssignIntrinsicRanks( m_shownColumns );
+
+        for( const std::unique_ptr<LIB_TREE_NODE>& child : m_tree.m_Children )
+            child->AssignIntrinsicRanks( m_shownColumns );
+    }
 
     /**
      * Set the search string provided by the user.
@@ -418,6 +424,7 @@ protected:
     std::vector<wxString>        m_availableColumns;
 
     wxDataViewCtrl*              m_widget;
+    std::vector<wxString>        m_shownColumns;   // Stored in display order
 
 private:
     EDA_BASE_FRAME*              m_parent;
@@ -434,7 +441,6 @@ private:
     std::vector<wxDataViewColumn*>               m_columns;
     std::map<wxString, wxDataViewColumn*>        m_colNameMap;
     std::map<wxString, int>                      m_colWidths;
-    std::vector<wxString>                        m_shownColumns;   // Stored in display order
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

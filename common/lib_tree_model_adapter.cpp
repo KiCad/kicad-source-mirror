@@ -242,7 +242,7 @@ LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNo
     for( LIB_TREE_ITEM* item: aItemList )
         lib_node.AddItem( item );
 
-    lib_node.AssignIntrinsicRanks( presorted );
+    lib_node.AssignIntrinsicRanks( m_shownColumns, presorted );
 
     return lib_node;
 }
@@ -453,6 +453,9 @@ void LIB_TREE_MODEL_ADAPTER::SetShownColumns( const std::vector<wxString>& aColu
 
     if( recreate && m_widget )
         recreateColumns();
+
+    for( std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.m_Children )
+        lib->AssignIntrinsicRanks( m_shownColumns );
 }
 
 

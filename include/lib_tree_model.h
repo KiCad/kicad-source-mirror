@@ -84,10 +84,15 @@ public:
                               std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) = 0;
 
     /**
+     * Rebuild search terms from source search terms and shown fields.
+     */
+    void RebuildSearchTerms( const std::vector<wxString>& aShownColumns );
+
+    /**
      * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
      * member doc for more information.
      */
-    void AssignIntrinsicRanks( bool presorted = false );
+    void AssignIntrinsicRanks( const std::vector<wxString>& aShownColumns, bool presorted = false );
 
     /**
      * Sort child nodes quickly and recursively (IntrinsicRanks must have been set).
@@ -142,6 +147,9 @@ public:
 
     bool        m_IsRecentlyUsedGroup;
     bool        m_IsAlreadyPlacedGroup;
+
+protected:
+    std::vector<SEARCH_TERM> m_sourceSearchTerms;
 };
 
 

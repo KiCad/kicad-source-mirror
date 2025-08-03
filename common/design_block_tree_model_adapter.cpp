@@ -79,7 +79,7 @@ void DESIGN_BLOCK_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         DoAddLibrary( libName, library->GetDescr(), getDesignBlocks( aParent, libName ), pinned, true );
     }
 
-    m_tree.AssignIntrinsicRanks();
+    m_tree.AssignIntrinsicRanks( m_shownColumns );
 }
 
 

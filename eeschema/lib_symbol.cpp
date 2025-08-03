@@ -50,13 +50,6 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
     while( keywordTokenizer.HasMoreTokens() )
         terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
 
-    // TODO(JE) rework this later so we can highlight matches in their column
-    std::map<wxString, wxString> fields;
-    GetChooserFields( fields );
-
-    for( const auto& [ name, text ] : fields )
-        terms.emplace_back( SEARCH_TERM( text, 4 ) );
-
     // Also include keywords as one long string, just in case
     terms.emplace_back( SEARCH_TERM( GetKeyWords(), 1 ) );
     terms.emplace_back( SEARCH_TERM( GetDescription(), 1 ) );
@@ -113,7 +106,6 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
             {
                 SCH_FIELD* field = new SCH_FIELD( this, id );
                 field->SetVisible( visible );
-                field->SetShowInChooser( false );
                 m_drawings[SCH_FIELD_T].push_back( field );
             };
 
