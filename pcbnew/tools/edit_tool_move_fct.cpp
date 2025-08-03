@@ -301,6 +301,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     BOARD*                             board = editFrame->GetBoard();
     KIGFX::VIEW_CONTROLS*              controls = getViewControls();
     VECTOR2I                           originalCursorPos = controls->GetCursorPosition();
+    VECTOR2I                           originalMousePos = controls->GetMousePosition();
     std::unique_ptr<STATUS_TEXT_POPUP> statusPopup;
     wxString                           status;
     size_t                             itemIdx = 0;
@@ -656,7 +657,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         }
                     }
 
-                    m_cursor = grid.BestDragOrigin( originalCursorPos, sel_items,
+                    // Use the mouse position over cursor, as otherwise large grids will allow only
+                    // snapping to items that are closest to grid points
+                    m_cursor = grid.BestDragOrigin( originalMousePos, sel_items,
                                                     grid.GetSelectionGrid( selection ),
                                                     &m_selectionTool->GetFilter() );
 
