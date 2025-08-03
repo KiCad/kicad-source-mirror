@@ -67,6 +67,7 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     remoteCallbacks.push_transfer_progress = push_transfer_progress_cb;
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = this;
+    GetCommon()->SetCancelled( false );
 
     TestedTypes() = 0;
     ResetNextKey();

@@ -1593,6 +1593,8 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
     // Remove the git repository when the project is unloaded
     if( m_TreeProject->GetGitRepo() )
     {
+        m_TreeProject->GitCommon()->SetCancelled( true );
+
         // We need to lock the mutex to ensure that no other thread is using the git repository
         std::unique_lock<std::mutex> lock( m_TreeProject->GitCommon()->m_gitActionMutex, std::try_to_lock );
 

@@ -830,6 +830,12 @@ extern "C" int progress_cb( const char* str, int len, void* aPayload )
 {
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
+    if( parent->GetCommon()->IsCancelled() )
+    {
+        wxLogTrace( traceGit, "Progress CB cancelled" );
+        return GIT_EUSER;
+    }
+
     wxString progressMessage( str, len );
     parent->UpdateProgress( 0, 0, progressMessage );
 
@@ -844,6 +850,11 @@ extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* 
     wxString progressMessage = wxString::Format( _( "Received %u of %u objects" ),
                                                  aStats->received_objects,
                                                  aStats->total_objects );
+    if( parent->GetCommon()->IsCancelled() )
+    {
+        wxLogTrace( traceGit, "Transfer progress cancelled" );
+        return GIT_EUSER;
+    }
 
     parent->UpdateProgress( aStats->received_objects, aStats->total_objects, progressMessage );
 

@@ -27,6 +27,7 @@
 #include <git/kicad_git_errors.h>
 
 #include <git2.h>
+#include <atomic>
 #include <mutex>
 #include <set>
 
@@ -146,6 +147,16 @@ public:
         return wxString( error->message );
     }
 
+    bool IsCancelled() const
+    {
+        return m_cancel.load();
+    }
+
+    void SetCancelled( bool aCancel )
+    {
+        m_cancel.store( aCancel );
+    }
+
 protected:
     git_repository* m_repo;
 
@@ -171,6 +182,8 @@ private:
 
     std::vector<wxString> m_publicKeys;
     int m_nextPublicKey;
+
+    std::atomic<bool> m_cancel;  // Set to true when the user cancels an operation
 
     // Create a dummy flag to tell if we have tested ssh agent credentials separately
     // from the ssh key credentials

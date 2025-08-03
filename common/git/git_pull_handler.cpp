@@ -76,6 +76,7 @@ bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = this;
+    GetCommon()->SetCancelled( false );
 
     TestedTypes() = 0;
     ResetNextKey();
