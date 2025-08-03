@@ -462,9 +462,10 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     if( short_form && aUnits == EDA_UNITS::MM )
     {
         struct lconv* lc = localeconv();
+        int           length = (int) text.Length();
 
-        if( text.Contains( *lc->decimal_point ) && text.EndsWith( '0' ) )
-            text = text.Left( text.size() - 1 );
+        if( length > 4 && text[length - 4] == *lc->decimal_point && text[length - 1] == '0' )
+            text = text.Left( length - 1 );
     }
 
     if( aAddUnitsText )
