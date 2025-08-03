@@ -1908,26 +1908,35 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
-            m_editedPoint->SetPosition( pos );
+            // Act on a copy until we are sure there will be a change worth drawing
+            // This avoids flickering when moving points around
+            EDIT_POINT pointAfterEdit( *m_editedPoint );
+
+            pointAfterEdit.SetPosition( pos );
 
             // Constrain edited line midpoints to move normal to themselves
             if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
             {
                 m_altConstraint->Apply( grid );
             }
-            else if( m_editedPoint->IsConstrained() )
+            else if( pointAfterEdit.IsConstrained() )
             {
-                m_editedPoint->ApplyConstraint( grid );
+                pointAfterEdit.ApplyConstraint( grid );
             }
-            else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
+            else if( pointAfterEdit.GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers,
+                pointAfterEdit.SetPosition( grid.BestSnapAnchor( pointAfterEdit.GetPosition(), snapLayers,
                                                                  grid.GetItemGrid( item ), { item } ) );
             }
 
-            updateItem( commit );
-            getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
-            updatePoints();
+            // If after grid snaps and adjustments, the position has still changed, apply
+            if( m_original.GetPosition() != pointAfterEdit.GetPosition() )
+            {
+                *m_editedPoint = pointAfterEdit;
+                updateItem( commit );
+                getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
+                updatePoints();
+            }
         }
         else if( m_editedPoint && evt->Action() == TA_MOUSE_DOWN && evt->Buttons() == BUT_LEFT )
         {
