@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-31 19:36+0300\n"
 "PO-Revision-Date: 2025-08-03 09:02+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -26204,9 +26204,9 @@ msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
 msgstr "RS274X: 不正な GERBER フォーマット コマンド '%c' - 行 %d: '%s'"
 
 #: gerbview/rs274x.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "GERBER file '%s' may not display as intended."
-msgstr "GERBER ファイル \"%s\" は意図したように表示されないかも知れません。"
+msgstr "GERBER ファイル '%s' は意図したように表示されないかも知れません。"
 
 #: gerbview/rs274x.cpp:539
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -26810,9 +26810,8 @@ msgid "Return a nonzero exit code if DRC violations exist"
 msgstr "DRC違反があった場合にゼロ以外の値を返します"
 
 #: kicad/cli/command_pcb_drc.cpp:95
-#, fuzzy
 msgid "Refill zones before running DRC"
-msgstr "DRC 実行前にすべてのゾーンを塗り直す"
+msgstr "DRC 実行前にゾーンを塗り直す"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
@@ -28230,7 +28229,6 @@ msgid "Fully qualified repository url:"
 msgstr "完全修飾されたリポジトリ URL:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
 msgstr "リポジトリを追加"
 
@@ -28760,7 +28758,6 @@ msgid "Unable to rename file ... "
 msgstr "ファイル名を変更できません... "
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Permission denied"
 msgstr "権限がありません"
 
@@ -28990,9 +28987,8 @@ msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "プロジェクトから gitのトラッキングを解除しますか?"
 
 #: kicad/project_tree_pane.cpp:1833
-#, fuzzy
 msgid "Failed to remove VCS"
-msgstr "ディレクトリ '%s' の削除に失敗しました"
+msgstr "VCSの削除に失敗しました"
 
 #: kicad/project_tree_pane.cpp:2074
 msgid "The selected directory is not a Git project."
@@ -29510,9 +29506,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "現在の図面シートは変更されています。 保存しますか?"
 
 #: pagelayout_editor/files.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "ファイル \"%s\" を読み込みました"
+msgstr "ファイル '%s' を読み込みました"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
@@ -29524,9 +29520,9 @@ msgid "Unable to load %s file"
 msgstr "ファイル %s をロードできません"
 
 #: pagelayout_editor/files.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "ファイル \"%s\" を挿入しました"
+msgstr "ファイル '%s' を挿入しました"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
@@ -42108,9 +42104,9 @@ msgid "Local override on %s; solder paste relative clearance: %s."
 msgstr "%s のローカルで上書き; ハンダペーストの相対的クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion '%s'."
-msgstr "アサーション \"%s\" をチェックしています。"
+msgstr "アサーション '%s' をチェックしています。"
 
 #: pcbnew/drc/drc_engine.cpp:1039 pcbnew/drc/drc_engine.cpp:1719
 msgid "Assertion passed."
@@ -42294,9 +42290,9 @@ msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "条件なしのルールを適用します; 以前の制約を上書きします。"
 
 #: pcbnew/drc/drc_engine.cpp:1430 pcbnew/drc/drc_engine.cpp:1747
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "ルールの条件 \"%s\" をチェックしています。"
+msgstr "ルールの条件 '%s' をチェックしています。"
 
 #: pcbnew/drc/drc_engine.cpp:1440
 msgid "Constraint applied."
@@ -42359,9 +42355,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s のサーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1713
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "ルールのアサーション \"%s\" をチェックしています。"
+msgstr "ルールのアサーション '%s' をチェックしています。"
 
 #: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2000
 msgid "Electrical"
@@ -44018,9 +44014,8 @@ msgstr "コンポーネントクラスの割り当てルールを読み込めま
 
 #: pcbnew/files.cpp:835 pcbnew/footprint_libraries_utils.cpp:463
 #: pcbnew/footprint_libraries_utils.cpp:1110 pcbnew/tools/pcb_control.cpp:131
-#, fuzzy
 msgid "New Footprint Library"
-msgstr "フットプリント ライブラリを生成"
+msgstr "新規フットプリント ライブラリ"
 
 #: pcbnew/files.cpp:858
 #, c-format
@@ -44239,14 +44234,12 @@ msgid "Show/hide description panel"
 msgstr "説明パネルの表示/非表示"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
-#, fuzzy
 msgid "Show/hide 3D view panel"
-msgstr "検索パネルの表示/非表示"
+msgstr "3Dピューパネルの表示/非表示"
 
 #: pcbnew/footprint_chooser_frame.cpp:168
-#, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "フットプリント定数を表示"
+msgstr "フットプリントビューパネルの表示/非表示"
 
 #: pcbnew/footprint_chooser_frame.cpp:176
 msgid "Show 3D viewer in own window"
@@ -44392,7 +44385,6 @@ msgid "No footprints to export!"
 msgstr "エクスポートするフットプリントがありません！"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export Footprints"
 msgstr "フットプリントをエクスポート"
 
@@ -44832,7 +44824,6 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Footprints..."
 msgstr "フットプリント..."
 
@@ -45204,24 +45195,24 @@ msgid "Update %s jumper pad groups"
 msgstr "%s ジャンパーパッドグループを更新"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "%s をグループ \"%s\"から削除。"
+msgstr "%s をグループ '%s'から削除。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:876
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "アイテム%sをグループ\"%s\"から削除しました。"
+msgstr "アイテム%sをグループ'%s'から削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "%s をグループ \"%s\" に追加します。"
+msgstr "%s をグループ '%s' に追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group '%s'."
-msgstr "%s をグループ \"%s\" に追加しました。"
+msgstr "%s をグループ '%s' に追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
@@ -46338,7 +46329,7 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "フットプリント %s のパッド %s は未知の穴の種別 %dを使用しています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3513
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad shape."
@@ -46347,7 +46338,7 @@ msgstr ""
 "フットプリント %s のパッド%sは不明なパッド形状を使用しています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3526
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
 msgstr "フットプリント %s のパッド%sは不明なパッド形状を使用しています。"
 
@@ -46398,7 +46389,7 @@ msgstr ""
 "非銅箔パッド '%s' は複合パッドスタックを使用しています。(未サポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3864
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "非導体のパッド %s は、不明なパッド形状を使用しています。"
 
@@ -47374,14 +47365,14 @@ msgstr "ネットクラス名 '%s' が重複しています。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2492
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2503
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZAux for CZONE_CONTAINER '%s'"
-msgstr "CZONE_CONTAINER \"%s\" に対する不正な ZAux"
+msgstr "CZONE_CONTAINER '%s' に対する不正な ZAux"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER '%s'"
-msgstr "CZONE_CONTAINER \"%s\" に対する不正な ZSmoothing"
+msgstr "CZONE_CONTAINER '%s' に対する不正な ZSmoothing"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2570
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7575
@@ -47393,9 +47384,9 @@ msgstr ""
 "ゾーンの塗りつぶしを可能な限り忠実に変換します。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2596
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER '%s'"
-msgstr "CZONE_CONTAINER \"%s\" に対する不正な ZClearance パッド オプション"
+msgstr "CZONE_CONTAINER '%s' に対する不正な ZClearance パッド オプション"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2892
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2931
@@ -48100,9 +48091,9 @@ msgid "Failed to load board\n"
 msgstr "基板の読み取りに失敗しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "\"%s\" は不正なレイヤー名です\n"
+msgstr "'%s' は不正なレイヤー名です\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:507 pcbnew/pcbnew_jobs_handler.cpp:585
 #: pcbnew/pcbnew_jobs_handler.cpp:633
@@ -48222,9 +48213,8 @@ msgid "Saved board\n"
 msgstr "基板の保存\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2301
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "基板の読み取りに失敗しました\n"
+msgstr "基板の保存に失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2451
 msgid "Successfully created IPC-D-356 file\n"
@@ -50630,9 +50620,8 @@ msgid "Import board file from other applications"
 msgstr "別のアプリケーションから基板ファイルをインポートします"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
-#, fuzzy
 msgid "Export Footprints..."
-msgstr "フットプリントをエクスポート(&E)..."
+msgstr "フットプリントをエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1158
 msgid ""
@@ -51781,9 +51770,8 @@ msgid "Export footprint to editor"
 msgstr "エディターへフットプリントをエクスポート"
 
 #: pcbnew/tools/pcb_control.cpp:133 pcbnew/tools/pcb_control.cpp:163
-#, fuzzy
 msgid "Add Footprint Library"
-msgstr "フットプリント ライブラリを生成"
+msgstr "フットプリント ライブラリを追加"
 
 #: pcbnew/tools/pcb_control.cpp:287
 msgid "Don't show again"
