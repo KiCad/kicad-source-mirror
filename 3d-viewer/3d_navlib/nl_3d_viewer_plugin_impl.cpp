@@ -544,9 +544,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetHitSelectionOnly( bool onlySelection )
 long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 {
     if( commandId.empty() )
-    {
         return 0;
-    }
 
     std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList();
     TOOL_ACTION*            context = nullptr;
@@ -557,9 +555,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
         std::string  nm = action->GetName();
 
         if( commandId == nm )
-        {
             context = action;
-        }
     }
 
     if( context != nullptr )
@@ -568,27 +564,21 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
         // currently active.
-        TOOLS_HOLDER* tools_holder = nullptr;
-
-        if( parent->IsEnabled() && ( tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent ) ) )
+        if( parent && parent->IsEnabled() )
         {
-            TOOL_MANAGER* tool_manager = tools_holder->GetToolManager();
+            TOOLS_HOLDER* tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent );
+            TOOL_MANAGER* tool_manager = tools_holder ? tools_holder->GetToolManager() : nullptr;
 
-            if( tool_manager == nullptr )
-            {
+            if( !tool_manager )
                 return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-            }
 
             // Get the selection to use to test if the action is enabled
             SELECTION& sel = tool_manager->GetToolHolder()->GetCurrentSelection();
 
             bool runAction = true;
 
-            if( const ACTION_CONDITIONS* aCond =
-                        tool_manager->GetActionManager()->GetCondition( *context ) )
-            {
+            if( const ACTION_CONDITIONS* aCond = tool_manager->GetActionManager()->GetCondition( *context ) )
                 runAction = aCond->enableCondition( sel );
-            }
 
             if( runAction )
             {

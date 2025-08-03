@@ -434,14 +434,14 @@ long NL_PL_EDITOR_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
     // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
     // currently active.
-    if( parent == nullptr || !parent->IsEnabled() )
+    if( !parent || !parent->IsEnabled() )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 
     TOOLS_HOLDER* tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent );
     TOOL_MANAGER* tool_manager = tools_holder ? tools_holder->GetToolManager() : nullptr;
 
     // Only allow for command execution if the tool manager is accessible.
-    if( tool_manager == nullptr )
+    if( !tool_manager )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 
     for( std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList(); const auto action : actions )

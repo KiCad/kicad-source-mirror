@@ -440,7 +440,8 @@ long NL_GERBVIEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
     }
 
-    TOOL_MANAGER* tool_manager = dynamic_cast<TOOLS_HOLDER*>( parent )->GetToolManager();
+    TOOLS_HOLDER* tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent );
+    TOOL_MANAGER* tool_manager = tools_holder ? tools_holder->GetToolManager() : nullptr;
 
     // Only allow for command execution if the tool manager is accessible.
     if( tool_manager == nullptr )
@@ -461,8 +462,7 @@ long NL_GERBVIEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
             // Get the selection to use to test if the action is enabled
             const SELECTION& sel = tool_manager->GetToolHolder()->GetCurrentSelection();
 
-            const ACTION_CONDITIONS* aCond =
-                    tool_manager->GetActionManager()->GetCondition( *action );
+            const ACTION_CONDITIONS* aCond = tool_manager->GetActionManager()->GetCondition( *action );
 
             if( aCond == nullptr )
             {

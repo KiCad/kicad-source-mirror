@@ -415,21 +415,22 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
         // currently active.
-
-        if( parent->IsEnabled() )
+        if( parent && parent->IsEnabled() )
         {
-            TOOL_MANAGER* tool_manager = static_cast<PCB_BASE_FRAME*>( parent )->GetToolManager();
+            TOOLS_HOLDER* tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent );
+            TOOL_MANAGER* tool_manager = tools_holder ? tools_holder->GetToolManager() : nullptr;
+
+            // Only allow for command execution if the tool manager is accessible.
+            if( !tool_manager )
+                return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 
             // Get the selection to use to test if the action is enabled
             SELECTION& sel = tool_manager->GetToolHolder()->GetCurrentSelection();
 
             bool runAction = true;
 
-            if( const ACTION_CONDITIONS* aCond =
-                        tool_manager->GetActionManager()->GetCondition( *context ) )
-            {
+            if( const ACTION_CONDITIONS* aCond = tool_manager->GetActionManager()->GetCondition( *context ) )
                 runAction = aCond->enableCondition( sel );
-            }
 
             if( runAction )
                 tool_manager->RunAction( *context );
