@@ -1332,9 +1332,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         // Pre-scan to see if we have a bus at this location
         SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
 
-        std::mutex update_mutex;
-
-        auto update_lambda = [&]( SCH_ITEM* connected_item ) -> size_t
+        for( SCH_ITEM* connected_item : connection_vec )
         {
             // Bus entries are special: they can have connection points in the
             // middle of a wire segment, because the junction algo doesn't split
@@ -1361,21 +1359,18 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
             // Bus-to-bus entries are treated just like bus wires
             else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
             {
-                if( connection_vec.size() < 2 )
+                if( busLine )
                 {
-                    if( busLine )
-                    {
-                        auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
+                    auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
 
-                        if( it.first == bus_entry->GetPosition() )
-                            bus_entry->m_connected_bus_items[0] = busLine;
-                        else
-                            bus_entry->m_connected_bus_items[1] = busLine;
+                    if( it.first == bus_entry->GetPosition() )
+                        bus_entry->m_connected_bus_items[0] = busLine;
+                    else
+                        bus_entry->m_connected_bus_items[1] = busLine;
 
-                        std::lock_guard<std::mutex> lock( update_mutex );
-                        bus_entry->AddConnectionTo( aSheet, busLine );
-                        busLine->AddConnectionTo( aSheet, bus_entry );
-                    }
+                    bus_entry->AddConnectionTo( aSheet, busLine );
+                    busLine->AddConnectionTo( aSheet, bus_entry );
+                    continue;
                 }
             }
 
@@ -1438,19 +1433,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                         bus_entry->m_connected_bus_item = bus;
                 }
             }
-
-            return 1;
-        };
-
-        thread_pool& tp = GetKiCadThreadPool();
-
-        auto results = tp.parallelize_loop( connection_vec.size(),
-                                [&]( const int a, const int b)
-                                {
-                                    for( int ii = a; ii < b; ++ii )
-                                        update_lambda( connection_vec[ii] );
-                                });
-        results.wait();
+        }
     }
 }
 
