@@ -87,6 +87,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_symbol.cpp
     test_schematic.cpp
     test_symbol_library_manager.cpp
+    test_resolve_drivers.cpp
 )
 
 if( WIN32 )
