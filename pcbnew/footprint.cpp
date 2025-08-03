@@ -521,8 +521,10 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     for( int layerMsg : footprint.definition().private_layers() )
     {
-        auto layer = static_cast<types::BoardLayer>( layerMsg );
-        privateLayers.set( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
+        auto layer = FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( static_cast<types::BoardLayer>( layerMsg ) );
+
+        if( layer > UNDEFINED_LAYER )
+            privateLayers.set( layer );
     }
 
     SetPrivateLayers( privateLayers );

@@ -1046,14 +1046,14 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     pad->SetLocalSolderPasteMarginRatio( 0.0 );
     bool complexPadErrorLogged = false;
 
-    for( auto& reassign : csPadcode.Reassigns )
+    for( auto& [layer, shape] : csPadcode.Reassigns )
     {
-        PCB_LAYER_ID kiLayer = getKiCadLayer( reassign.first );
-        CADSTAR_PAD_SHAPE shape = reassign.second;
+        PCB_LAYER_ID kiLayer = getKiCadLayer( layer );
 
         if( shape.Size == 0 )
         {
-            padLayerSet.reset( kiLayer );
+            if( kiLayer > UNDEFINED_LAYER )
+                padLayerSet.reset( kiLayer );
         }
         else
         {
