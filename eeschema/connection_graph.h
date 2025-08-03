@@ -375,6 +375,9 @@ public:
     CONNECTION_GRAPH( const CONNECTION_GRAPH& ) = delete;
     CONNECTION_GRAPH& operator=( const CONNECTION_GRAPH& ) = delete;
 
+    // Define QA friend functions to allow testing of private methods
+    friend void boost_test_update_symbol_connectivity();
+
     void Reset();
 
     void SetSchematic( SCHEMATIC* aSchematic )
@@ -500,6 +503,16 @@ public:
     }
 
 private:
+
+    /**
+     * Update the connectivity of a symbol and its pins.
+     * This is called by updateItemConnectivity() for each symbol
+     * in the schematic.
+     */
+    void updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet,
+                                   SCH_SYMBOL* aSymbol,
+                                   std::map<VECTOR2I, std::vector<SCH_ITEM*>>& aConnectionMap );
+
     /**
      * Update the graphical connectivity between items (i.e. where they touch)
      * The items passed in must be on the same sheet.
