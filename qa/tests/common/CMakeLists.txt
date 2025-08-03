@@ -49,6 +49,7 @@ set( QA_COMMON_SRCS
     test_layer_range.cpp
     test_lset.cpp
     test_property.cpp
+    test_property_holder.cpp
     test_refdes_utils.cpp
     test_richio.cpp
     test_text_attributes.cpp
