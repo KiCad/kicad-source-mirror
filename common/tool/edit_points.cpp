@@ -323,7 +323,7 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( line.DrawLine() )
         {
-            gal->SetLineWidth( borderSize );
+            gal->SetLineWidth( borderSize / 4 );
             gal->SetStrokeColor( borderColor );
             gal->DrawLine( line.GetOrigin().GetPosition(), line.GetEnd().GetPosition() );
         }
