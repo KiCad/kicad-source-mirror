@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-31 19:36+0300\n"
-"PO-Revision-Date: 2025-07-31 03:06+0000\n"
+"PO-Revision-Date: 2025-08-03 09:02+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4302,7 +4302,6 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "ハードウェアによるグラフィックス描画の高速化を有効にします (推奨)"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
-#, fuzzy
 msgid "Fallback Graphics"
 msgstr "代替グラフィックス"
 
@@ -19307,11 +19306,10 @@ msgid "Unknown or unexpected record id %d found in %s."
 msgstr "不明または予期しないレコード ID %dが %s で見つかりました。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1459
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr ""
-"シンボル \"%s\" (シート \"%s\" 中のインデックス %dの) はシンボル \"%s\" に"
-"よって置き換えられました。"
+msgstr "シンボル '%s' (シート '%s' 中のインデックス %d 内) はシンボル \"%s\" "
+"によって置き換えられました。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1629
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3690
@@ -20125,14 +20123,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice 回路図ファイル"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr "プラグイン \"%s\" は \"%s\" 機能を実装していません。"
+msgstr "プラグイン '%s' は '%s' 機能を実装していません。"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:45 pcbnew/pcb_io/pcb_io_mgr.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "プラグイン タイプ \"%s\" が見つかりません。"
+msgstr "プラグイン タイプ '%s' が見つかりません。"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:101
 #, c-format
@@ -20141,15 +20139,13 @@ msgstr "未知の SCH_FILE_T 値: %d"
 
 #: eeschema/sch_item.cpp:170 eeschema/sch_item.cpp:193
 #: eeschema/sch_item.cpp:725
-#, fuzzy
 msgid "All units"
-msgstr "すべてのアイテム"
+msgstr "すべてのユニット"
 
 #: eeschema/sch_item.cpp:204 eeschema/sch_item.cpp:220
 #: eeschema/sch_item.cpp:747
-#, fuzzy
 msgid "All body styles"
-msgstr "すべてのボディスタイルで統一化"
+msgstr "すべてのボディスタイル"
 
 #: eeschema/sch_item.cpp:672 eeschema/sch_item.cpp:740
 #: eeschema/sch_symbol.cpp:2943 eeschema/tools/sch_edit_tool.cpp:139
@@ -22605,14 +22601,12 @@ msgid "Copy library"
 msgstr "ライブラリーをコピー"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "New Symbol Library"
-msgstr "シンボル ライブラリを作成"
+msgstr "新規シンボル ライブラリ"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "Add Symbol Library"
-msgstr "シンボル ライブラリを作成"
+msgstr "シンボル ライブラリを追加"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1115
 #, c-format
@@ -24159,7 +24153,6 @@ msgid ""
 msgstr "外部のジェネレーターを使って現在の回路図から部品表を作成"
 
 #: eeschema/tools/sch_actions.cpp:1186
-#, fuzzy
 msgid "Export Symbols..."
 msgstr "シンボルをエクスポート..."
 
@@ -26154,9 +26147,9 @@ msgid "(with X2 attributes)"
 msgstr "(X2属性)"
 
 #: gerbview/gerbview_frame.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
-msgstr "イメージ名: \"%s\", レイヤー: \"%s\""
+msgstr "イメージ名: '%s', レイヤー名: '%s'"
 
 #: gerbview/gerbview_frame.cpp:697
 msgid "X2 attr"
@@ -26225,9 +26218,9 @@ msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "不正なガーバー ファイル: G74 あるいは G75 円弧コマンドの欠落"
 
 #: gerbview/rs274x.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr "RS274X: 不正な GERBER フォーマット コマンド \"%c\" - 行 %d: \"%s\""
+msgstr "RS274X: 不正な GERBER フォーマット コマンド '%c' - 行 %d: '%s'"
 
 #: gerbview/rs274x.cpp:235
 #, fuzzy, c-format
