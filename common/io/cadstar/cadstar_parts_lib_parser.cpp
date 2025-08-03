@@ -499,7 +499,7 @@ struct CADSTAR_LIB_PARSER_ACTION<PIN_TYPE>
         // with special meaning
         static const std::map<std::string, CADSTAR_PIN_TYPE> tokenToPinType = {
             { "U", CADSTAR_PIN_TYPE::UNCOMMITTED },
-            { "I", CADSTAR_PIN_TYPE::INPUT },
+            { "I", CADSTAR_PIN_TYPE::PIN_INPUT },
             { "N", CADSTAR_PIN_TYPE::OUTPUT_NOT_OR },
             { "Y", CADSTAR_PIN_TYPE::OUTPUT_OR },
             { "Q", CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR },

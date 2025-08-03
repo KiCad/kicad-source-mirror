@@ -1990,7 +1990,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
-    wxASSERT_MSG( prev->Type == VERTEX_TYPE::POINT, "First vertex should always be a point." );
+    wxASSERT_MSG( prev->Type == VERTEX_TYPE::VT_POINT, "First vertex should always be a point." );
 
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
@@ -2015,7 +2015,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
 
         switch( cur->Type )
         {
-        case VERTEX_TYPE::POINT:
+        case VERTEX_TYPE::VT_POINT:
             shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             shape->AddPoint( startPoint );
             shape->AddPoint( endPoint );
@@ -2378,7 +2378,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
-    wxASSERT_MSG( prev->Type == VERTEX_TYPE::POINT,
+    wxASSERT_MSG( prev->Type == VERTEX_TYPE::VT_POINT,
                   "First vertex should always be a point vertex" );
 
     auto pointTransform =
@@ -2411,7 +2411,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
             break;
         }
 
-        case VERTEX_TYPE::POINT:
+        case VERTEX_TYPE::VT_POINT:
         {
             SCH_LINE* segment = new SCH_LINE();
 
@@ -2842,7 +2842,7 @@ ELECTRICAL_PINTYPE CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPinType( const CADSTAR_PI
     switch( aPinType )
     {
     case CADSTAR_PIN_TYPE::UNCOMMITTED:        return ELECTRICAL_PINTYPE::PT_PASSIVE;
-    case CADSTAR_PIN_TYPE::INPUT:              return ELECTRICAL_PINTYPE::PT_INPUT;
+    case CADSTAR_PIN_TYPE::PIN_INPUT:              return ELECTRICAL_PINTYPE::PT_INPUT;
     case CADSTAR_PIN_TYPE::OUTPUT_OR:          return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
     case CADSTAR_PIN_TYPE::OUTPUT_NOT_OR:      return ELECTRICAL_PINTYPE::PT_OUTPUT;
     case CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR: return ELECTRICAL_PINTYPE::PT_OUTPUT;

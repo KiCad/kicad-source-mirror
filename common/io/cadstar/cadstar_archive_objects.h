@@ -30,7 +30,7 @@
 enum class CADSTAR_PIN_TYPE
 {
     UNCOMMITTED,        ///< Uncommitted pin (default)
-    INPUT,              ///< Input pin
+    PIN_INPUT,              ///< Input pin
     OUTPUT_OR,          ///< Output pin OR tieable
     OUTPUT_NOT_OR,      ///< Output pin not OR tieable
     OUTPUT_NOT_NORM_OR, ///< Output pin not normally OR tieable

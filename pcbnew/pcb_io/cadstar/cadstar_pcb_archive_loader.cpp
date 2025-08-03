@@ -2945,7 +2945,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
     switch( aCadstarVertex.Type )
     {
 
-    case VERTEX_TYPE::POINT:
+    case VERTEX_TYPE::VT_POINT:
         shape = new PCB_SHAPE( aContainer, SHAPE_T::SEGMENT );
 
         shape->SetStart( startPoint );

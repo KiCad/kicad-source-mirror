@@ -429,7 +429,7 @@ public:
 
     enum class VERTEX_TYPE
     {
-        POINT,
+        VT_POINT,
         CLOCKWISE_ARC,
         CLOCKWISE_SEMICIRCLE,
         ANTICLOCKWISE_ARC,
@@ -442,7 +442,7 @@ public:
      */
     struct VERTEX : PARSER
     {
-        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::POINT, POINT aEnd = POINT(), POINT aCenter = POINT() ) :
+        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::VT_POINT, POINT aEnd = POINT(), POINT aCenter = POINT() ) :
                 Type( aType ),
                 End( aEnd ),
                 Center( aCenter )

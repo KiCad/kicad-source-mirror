@@ -444,7 +444,7 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::Parse( XNODE* aNode, PARSER_CONTEXT* aConte
 
     if( aNodeName == wxT( "PT" ) )
     {
-        Type     = VERTEX_TYPE::POINT;
+        Type     = VERTEX_TYPE::VT_POINT;
         Center.x = UNDEFINED_VALUE;
         Center.y = UNDEFINED_VALUE;
         End.Parse( aNode, aContext );
@@ -486,7 +486,7 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAp
         const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback,
         int aAccuracy ) const
 {
-    if( Type == VERTEX_TYPE::POINT )
+    if( Type == VERTEX_TYPE::VT_POINT )
     {
         aChainToAppendTo->Append( aCadstarToKicadPointCallback( End ) );
         return;
@@ -504,7 +504,7 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAp
 SHAPE_ARC CADSTAR_ARCHIVE_PARSER::VERTEX::BuildArc( const VECTOR2I& aPrevPoint,
         const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
 {
-    wxCHECK_MSG( Type != VERTEX_TYPE::POINT, SHAPE_ARC(),
+    wxCHECK_MSG( Type != VERTEX_TYPE::VT_POINT, SHAPE_ARC(),
                  "Can't build an arc for a straight segment!" );
 
     VECTOR2I startPoint = aPrevPoint;
@@ -1791,7 +1791,7 @@ CADSTAR_PIN_TYPE CADSTAR_ARCHIVE_PARSER::PART::GetPinType( XNODE* aNode )
     wxString pinTypeStr = GetXmlAttributeIDString( aNode, 0 );
 
     std::map<wxString, CADSTAR_PIN_TYPE> pinTypeMap = {
-        { wxT( "INPUT" ),               CADSTAR_PIN_TYPE::INPUT },
+        { wxT( "INPUT" ),               CADSTAR_PIN_TYPE::PIN_INPUT },
         { wxT( "OUTPUT_OR" ),           CADSTAR_PIN_TYPE::OUTPUT_OR },
         { wxT( "OUTPUT_NOT_OR" ),       CADSTAR_PIN_TYPE::OUTPUT_NOT_OR },
         { wxT( "OUTPUT_NOT_NORM_OR" ),  CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR },
