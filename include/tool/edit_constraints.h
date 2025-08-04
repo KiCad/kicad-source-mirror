@@ -222,10 +222,10 @@ public:
 
 private:
     /// Constraint for origin side segment.
-    EDIT_CONSTRAINT<EDIT_POINT>* m_originSideConstraint;
+    std::unique_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_originSideConstraint;
 
     /// Constraint for end side segment.
-    EDIT_CONSTRAINT<EDIT_POINT>* m_endSideConstraint;
+    std::unique_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_endSideConstraint;
 
     /// Additional constraint, applied when at least two points are collinear. It is a pointer to
     /// m_[origin/end]SideConstraint, so it should not be freed.

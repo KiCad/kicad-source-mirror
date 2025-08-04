@@ -137,8 +137,8 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     EDIT_POINT& nextEnd = *aPoints.Next( end, false );
 
     // Constraints for segments adjacent to the dragged one
-    m_originSideConstraint = new EC_LINE( origin, prevOrigin );
-    m_endSideConstraint = new EC_LINE( end, nextEnd );
+    m_originSideConstraint = std::make_unique<EC_LINE>( origin, prevOrigin );
+    m_endSideConstraint = std::make_unique<EC_LINE>( end, nextEnd );
 
     // Store the current vector of the line
     m_draggedVector = end.GetPosition() - origin.GetPosition();
@@ -155,16 +155,14 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     m_endCollinear = dragged.Angle( endSide ).AsDegrees() < alignAngle;
 
     if( m_originCollinear )
-        m_colinearConstraint = m_originSideConstraint;
+        m_colinearConstraint = m_originSideConstraint.get();
     else if( m_endCollinear )
-        m_colinearConstraint = m_endSideConstraint;
+        m_colinearConstraint = m_endSideConstraint.get();
 }
 
 
 EC_CONVERGING::~EC_CONVERGING()
 {
-    delete m_originSideConstraint;
-    delete m_endSideConstraint;
     // m_colinearConstraint should not be freed, it is a pointer to one of the above
 }
 
