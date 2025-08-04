@@ -94,7 +94,7 @@ inline void InferBold( TEXT_ATTRIBUTES* aAttrs )
  */
 inline int GetKnockoutTextMargin( const VECTOR2I& aSize, int aThickness )
 {
-    return std::max( KiROUND( aThickness / 2 ), KiROUND( aSize.y / 9.0 ) );
+    return std::max( KiROUND( aThickness / 2.0 ), KiROUND( aSize.y / 9.0 ) );
 }
 
 

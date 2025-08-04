@@ -174,11 +174,11 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
             if( ( ii == jj ) && !m_initialized )
             {
-                wxPoint textPos( x + KiROUND( bitmapSize.x / 2 ),
+                wxPoint textPos( x + KiROUND( bitmapSize.x / 2.0 ),
                                  y - charSize.y * 2 );
                 new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[ii], textPos );
 
-                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2 ),
+                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2.0 ),
                                     y - charSize.y );
                 new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
             }

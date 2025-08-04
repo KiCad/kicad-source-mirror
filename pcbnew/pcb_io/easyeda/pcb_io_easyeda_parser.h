@@ -53,7 +53,7 @@ public:
 
     double ScaleSize( double aValue ) override
     { //
-        return KiROUND( ( aValue * 254000 ) / 100 ) * 100;
+        return KiROUND( ( aValue * 254000.0 ) / 100.0 ) * 100;
     }
 
     void ParseBoard( BOARD* aBoard, const VECTOR2D& aOrigin,

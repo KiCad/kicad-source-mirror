@@ -55,7 +55,7 @@ public:
     template <typename T>
     static T ScaleSize( T aValue )
     {
-        return KiROUND( aValue * 25400 / 500 ) * 500;
+        return KiROUND( aValue * 25400.0 / 500.0 ) * 500;
     }
 
     template <typename T>

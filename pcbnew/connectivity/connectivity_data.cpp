@@ -767,7 +767,7 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, bool aIgno
         // each end.  If that's their only connection then they're still dangling.
 
         PCB_LAYER_ID layer = aTrack->GetLayer();
-        int          accuracy = KiROUND( aTrack->GetWidth() / 2 );
+        int          accuracy = KiROUND( aTrack->GetWidth() / 2.0 );
         int          start_count = 0;
         int          end_count = 0;
 

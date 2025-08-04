@@ -445,7 +445,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         if( resolvedSettings.m_Strategy == BOUNDING_HULL )
         {
             if( resolvedSettings.m_Gap > 0 )
-                resolvedSettings.m_Gap += KiROUND( (double) resolvedSettings.m_LineWidth / 2 );
+                resolvedSettings.m_Gap += KiROUND( (double) resolvedSettings.m_LineWidth / 2.0 );
         }
 
         if( !getPolys( resolvedSettings ) )

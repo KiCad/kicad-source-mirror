@@ -1653,7 +1653,7 @@ SCH_TEXT* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
 
     if( aLabel->rot )
     {
-        for( int i = 0; i < KiROUND( aLabel->rot->degrees / 90 ) %4; ++i )
+        for( int i = 0; i < KiROUND( aLabel->rot->degrees / 90.0 ) %4; ++i )
             label->Rotate90( false );
 
         if( aLabel->rot->mirror )

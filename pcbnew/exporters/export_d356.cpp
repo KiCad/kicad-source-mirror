@@ -91,7 +91,7 @@ static int compute_pad_access_code( BOARD *aPcb, LSET aLayerMask )
 /* Convert and clamp a size from IU to decimils */
 static int iu_to_d356(int iu, int clamp)
 {
-    int val = KiROUND( iu / ( pcbIUScale.IU_PER_MILS / 10 ) );
+    int val = KiROUND( static_cast<double>( iu ) / ( pcbIUScale.IU_PER_MILS / 10.0 ) );
     if( val > clamp ) return clamp;
     if( val < -clamp ) return -clamp;
     return val;

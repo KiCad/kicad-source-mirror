@@ -40,6 +40,7 @@
 #include <limits>
 #include <typeinfo>
 #include <type_traits>
+#include <algorithm>
 
 /**
  * Helper to avoid directly including wx/log.h for the templated functions in kimath
@@ -92,53 +93,38 @@ inline constexpr ret_type KiCheckedCast( in_type v )
 
 
 /**
- * Round a floating point number to an integer using "round halfway cases away from zero".
+ * Round a numeric value to an integer using "round halfway cases away from zero" and
+ * clamp the result to the limits of the return type.
  *
  * In Debug build an assert fires if will not fit into the return type.
  */
 template <typename fp_type, typename ret_type = int>
 constexpr ret_type KiROUND( fp_type v, bool aQuiet = false )
 {
-    using max_ret = long long int;
-    fp_type ret = v < 0 ? v - 0.5 : v + 0.5;
+    using limits = std::numeric_limits<ret_type>;
 
-    if( ret > std::numeric_limits<ret_type>::max() )
-    {
-        if( !aQuiet )
-        {
-            kimathLogOverflow( double( v ), typeid( ret_type ).name() );
-        }
-
-        return std::numeric_limits<ret_type>::max() - 1;
-    }
-    else if( ret < std::numeric_limits<ret_type>::lowest() )
-    {
-        if( !aQuiet )
-        {
-            kimathLogOverflow( double( v ), typeid( ret_type ).name() );
-        }
-
-        if( std::numeric_limits<ret_type>::is_signed )
-            return std::numeric_limits<ret_type>::lowest() + 1;
-        else
-            return 0;
-    }
 #if __cplusplus >= 202302L // isnan is not constexpr until C++23
-    else if constexpr( std::is_floating_point_v<fp_type> )
+    if constexpr( std::is_floating_point_v<fp_type> )
     {
         if( std::isnan( v ) )
         {
             if( !aQuiet )
-            {
                 kimathLogOverflow( double( v ), typeid( ret_type ).name() );
-            }
 
             return 0;
         }
     }
 #endif
 
-    return ret_type( max_ret( ret ) );
+    long long rounded = std::llround( v );
+    long long clamped = std::clamp<long long>( rounded,
+                                              static_cast<long long>( limits::lowest() ),
+                                              static_cast<long long>( limits::max() ) );
+
+    if( !aQuiet && clamped != rounded )
+        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+
+    return static_cast<ret_type>( clamped );
 }
 
 #ifdef HAVE_WIMPLICIT_FLOAT_CONVERSION

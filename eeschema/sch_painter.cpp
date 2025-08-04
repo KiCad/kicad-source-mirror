@@ -558,7 +558,7 @@ int SCH_PAINTER::getOperatingPointTextSize() const
     int screenTextSize = std::abs( (int) m_gal->GetScreenWorldMatrix().GetScale().y * 7 );
 
     // 66% zoom-relative
-    return KiROUND( ( docTextSize + screenTextSize * 2 ) / 3 );
+    return KiROUND( ( docTextSize + screenTextSize * 2 ) / 3.0 );
 }
 
 
@@ -1272,7 +1272,7 @@ void SCH_PAINTER::drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows )
     // In order for the anchors to be visible but unobtrusive, their size must factor in the
     // current zoom level.
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
-    int radius = KiROUND( std::fabs( matrix.GetScale().x * TEXT_ANCHOR_SIZE ) / 25 )
+    int radius = KiROUND( std::fabs( matrix.GetScale().x * TEXT_ANCHOR_SIZE ) / 25.0 )
                      + schIUScale.MilsToIU( TEXT_ANCHOR_SIZE );
 
     COLOR4D color = aDrawingShadows ? m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS )

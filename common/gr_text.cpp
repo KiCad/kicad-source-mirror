@@ -41,7 +41,7 @@ int GetPenSizeForBold( int aTextSize )
 
 int GetPenSizeForDemiBold( int aTextSize )
 {
-    return KiROUND( aTextSize / 6 );
+    return KiROUND( aTextSize / 6.0 );
 }
 
 

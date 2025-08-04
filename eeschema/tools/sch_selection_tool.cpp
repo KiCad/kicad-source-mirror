@@ -1317,7 +1317,7 @@ bool SCH_SELECTION_TOOL::CollectHits( SCH_COLLECTOR& aCollector, const VECTOR2I&
                                       const std::vector<KICAD_T>& aScanTypes )
 {
     int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-    int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() / 2 );
+    int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() / 2.0 );
     aCollector.m_Threshold = std::max( pixelThreshold, gridThreshold );
     aCollector.m_ShowPinElectricalTypes = m_frame->GetRenderSettings()->m_ShowPinsElectricalType;
 

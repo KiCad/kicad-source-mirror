@@ -739,7 +739,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 pcbtxt->SetText( kicadText );
 
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
-                int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
+                int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100.0 );
                 pcbtxt->SetTextThickness( textThickness );
                 pcbtxt->SetTextSize( kicad_fontsize( t.size, textThickness ) );
                 pcbtxt->SetKeepUpright( false );
@@ -1033,7 +1033,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
             if( d.textsize )
             {
                 double ratio = 8;     // DTD says 8 is default
-                textThickness = KiROUND( d.textsize->ToPcbUnits() * ratio / 100 );
+                textThickness = KiROUND( d.textsize->ToPcbUnits() * ratio / 100.0 );
                 textSize = kicad_fontsize( *d.textsize, textThickness );
             }
 
@@ -1710,7 +1710,7 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
             ratio = *a.ratio;
 
         VECTOR2I fontz = aFPText->GetTextSize();
-        int      textThickness = KiROUND( fontz.y * ratio / 100 );
+        int      textThickness = KiROUND( fontz.y * ratio / 100.0 );
 
         aFPText->SetTextThickness( textThickness );
 
@@ -2123,7 +2123,7 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     textItem->SetLayer( layer );
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
-    int    textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
+    int    textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100.0 );
 
     textItem->SetTextThickness( textThickness );
     textItem->SetTextSize( kicad_fontsize( t.size, textThickness ) );

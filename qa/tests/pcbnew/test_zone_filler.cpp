@@ -46,7 +46,7 @@ struct ZONE_FILL_TEST_FIXTURE
 };
 
 
-constexpr int delta = KiROUND( 0.006 * pcbIUScale.IU_PER_MM );
+int delta = KiROUND( 0.006 * pcbIUScale.IU_PER_MM );
 
 
 BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
