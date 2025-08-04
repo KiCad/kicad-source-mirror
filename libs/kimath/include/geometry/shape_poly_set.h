@@ -535,6 +535,24 @@ public:
 
     SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& aOther );
 
+    // Move assignment operator
+    SHAPE_POLY_SET& operator=( SHAPE_POLY_SET&& aOther ) noexcept
+    {
+        if (this != &aOther)
+        {
+            SHAPE::operator=( aOther );
+
+            m_polys = std::move( aOther.m_polys );
+            m_triangulatedPolys = std::move( aOther.m_triangulatedPolys );
+
+            m_hash = aOther.m_hash;
+            m_hashValid = aOther.m_hashValid;
+            m_triangulationValid.store( aOther.m_triangulationValid );
+        }
+
+        return *this;
+    }
+
     /**
      * Build a polygon triangulation, needed to draw a polygon on OpenGL and in some
      * other calculations

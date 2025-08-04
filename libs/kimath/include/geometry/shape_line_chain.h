@@ -250,6 +250,26 @@ public:
 
     SHAPE_LINE_CHAIN& operator=( const SHAPE_LINE_CHAIN& ) = default;
 
+    // Move assignment operator
+    SHAPE_LINE_CHAIN& operator=( SHAPE_LINE_CHAIN&& aOther ) noexcept
+    {
+        if (this != &aOther)
+        {
+            SHAPE_LINE_CHAIN_BASE::operator=( aOther );
+
+            m_points = std::move( aOther.m_points );
+            m_shapes = std::move( aOther.m_shapes );
+            m_arcs = std::move( aOther.m_arcs );
+
+            m_accuracy = aOther.m_accuracy;
+            m_closed = aOther.m_closed;
+            m_width = aOther.m_width;
+            m_bbox = aOther.m_bbox;
+        }
+
+        return *this;
+    }
+
     SHAPE* Clone() const override;
 
     /**
