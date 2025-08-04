@@ -379,6 +379,8 @@ public:
      */
     void RemoveAllListeners();
 
+    void RunOnNestedEmbeddedFiles( const std::function<void( EMBEDDED_FILES* )>& aFunction ) override;
+
     /**
      * Embed fonts in the schematic.
      */

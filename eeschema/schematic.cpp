@@ -936,6 +936,18 @@ const EMBEDDED_FILES* SCHEMATIC::GetEmbeddedFiles() const
 }
 
 
+void SCHEMATIC::RunOnNestedEmbeddedFiles( const std::function<void( EMBEDDED_FILES* )>& aFunction )
+{
+    SCH_SCREENS screens( Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( auto& [name, libSym] : screen->GetLibSymbols() )
+            aFunction( libSym->GetEmbeddedFiles() );
+    }
+}
+
+
 std::set<KIFONT::OUTLINE_FONT*> SCHEMATIC::GetFonts() const
 {
     std::set<KIFONT::OUTLINE_FONT*> fonts;

@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_item.h>
+#include <confirm.h>
 #include <bitmaps.h>
 #include <dialogs/panel_embedded_files.h>
 #include <embedded_files.h>
@@ -192,6 +194,51 @@ bool PANEL_EMBEDDED_FILES::TransferDataToWindow()
 
 bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
 {
+    std::optional<bool> deleteReferences;
+
+    auto confirmDelete =
+            [&]() -> bool
+            {
+                if( EDA_ITEM* parent = dynamic_cast<EDA_ITEM*>( m_files ) )
+                {
+                    if( parent->Type() == PCB_T )
+                    {
+                        return IsOK( m_parent, _( "Deleted embedded files are also referenced in some footprints.\n"
+                                                  "Delete from footprints as well?" ) );
+                    }
+                    else if( parent->Type() == SCHEMATIC_T )
+                    {
+                        return IsOK( m_parent, _( "Deleted embedded files are also referenced in some symbols.\n"
+                                                  "Delete from symbols as well?" ) );
+                    }
+                }
+
+                wxFAIL_MSG( wxT( "Unexpected embedded files owner" ) );
+                return false;
+            };
+
+    for( const auto& [name, file] : m_files->EmbeddedFileMap() )
+    {
+        if( !m_localFiles->HasFile( name ) )
+        {
+            m_files->RunOnNestedEmbeddedFiles(
+                    [&]( EMBEDDED_FILES* nested_files )
+                    {
+                        if( nested_files->HasFile( name ) )
+                        {
+                            if( !deleteReferences.has_value() )
+                                deleteReferences = confirmDelete();
+
+                            if( deleteReferences.value() )
+                                nested_files->RemoveFile( name, true );
+                        }
+                    } );
+        }
+
+        if( deleteReferences.has_value() && deleteReferences.value() == false )
+            break;
+    }
+
     m_files->ClearEmbeddedFiles();
 
     std::vector<EMBEDDED_FILES::EMBEDDED_FILE*> files;

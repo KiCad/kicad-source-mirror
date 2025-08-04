@@ -474,6 +474,8 @@ public:
     */
     void FixupEmbeddedData();
 
+    void RunOnNestedEmbeddedFiles( const std::function<void( EMBEDDED_FILES* )>& aFunction ) override;
+
     void CacheTriangulation( PROGRESS_REPORTER* aReporter = nullptr,
                              const std::vector<ZONE*>& aZones = {} );
 

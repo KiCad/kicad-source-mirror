@@ -176,6 +176,14 @@ public:
     }
 
     /**
+     * Provide access to nested embedded files, such as symbols in schematics and footprints in
+     * boards.
+     */
+    virtual void RunOnNestedEmbeddedFiles( const std::function<void( EMBEDDED_FILES* )>& aFunction )
+    {
+    }
+
+    /**
      * Helper function to get a list of fonts for fontconfig to add to the library.
      *
      * This is necessary because EMBEDDED_FILES lives in common at the moment and
