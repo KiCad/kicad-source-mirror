@@ -96,7 +96,7 @@
 typedef PCB_IO_KICAD_LEGACY::BIU      BIU;
 
 
-typedef unsigned                LEG_MASK;
+typedef uint32_t                LEG_MASK;
 
 #define FIRST_LAYER             0
 #define FIRST_COPPER_LAYER      0
@@ -403,10 +403,9 @@ static inline int intParse( const char* next, const char** out = nullptr )
  * like "man strtol".  I can use this without casting, and its name says
  * what I am doing.
  */
-static inline long hexParse( const char* next, const char** out = nullptr )
+static inline uint32_t hexParse( const char* next, const char** out = nullptr )
 {
-    // please just compile this and be quiet, hide casting ugliness:
-    return strtol( next, (char**) out, 16 );
+    return (uint32_t) strtoul( next, (char**) out, 16 );
 }
 
 
@@ -1137,7 +1136,7 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
             // the old visibility control does not make sense in current Pcbnew version,
             // and this code does not work.
 #if 0
-            int visibleElements = hexParse( line + SZ( "VisibleElements" ) );
+            uint32_t visibleElements = hexParse( line + SZ( "VisibleElements" ) );
 
             // Does not work: each old item should be tested one by one to set
             // visibility of new item list
@@ -1254,7 +1253,7 @@ void PCB_IO_KICAD_LEGACY::loadFOOTPRINT( FOOTPRINT* aFootprint )
             int          layer_num = intParse( data, &data );
             PCB_LAYER_ID layer_id  = leg_layer2new( m_cu_count,  layer_num );
 
-            [[maybe_unused]] long edittime  = hexParse( data, &data );
+            [[maybe_unused]] uint32_t edittime = hexParse( data, &data );
 
             char*        uuid      = strtok_r( (char*) data, delims, (char**) &data );
 
