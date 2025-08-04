@@ -29,6 +29,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <hierarchy_pane.h>
+#include <project/project_local_settings.h>
 #include <kiface_base.h>
 #include <wx/object.h>
 #include <wx/generic/textdlgg.h>
@@ -94,6 +95,11 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     sizer->Add( m_tree, 1, wxEXPAND, wxBORDER_NONE );
 
     m_events_bound = false;
+
+    PROJECT_LOCAL_SETTINGS& localSettings = m_frame->Prj().GetLocalSettings();
+
+    for( const wxString& path : localSettings.m_SchHierarchyCollapsed )
+        m_collapsedPaths.insert( path );
 
     UpdateHierarchyTree();
 
@@ -220,32 +226,39 @@ void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
     }
 
     SCH_SHEET_LIST hierarchy = m_frame->Schematic().Hierarchy();
-    std::set<SCH_SHEET_PATH> expandedNodes;
+    std::set<wxString> collapsedNodes = m_collapsedPaths;
 
-    std::function<void( const wxTreeItemId& )> getExpandedNodes =
+    std::function<void( const wxTreeItemId& )> getCollapsedNodes =
             [&]( const wxTreeItemId& id )
             {
                 wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
 
                 TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
 
-                if( m_tree->IsExpanded( id ) && hierarchy.HasPath( itemData->m_SheetPath.Path() ) )
-                    expandedNodes.emplace( itemData->m_SheetPath );
+                if( m_tree->ItemHasChildren( id ) && !m_tree->IsExpanded( id )
+                    && hierarchy.HasPath( itemData->m_SheetPath.Path() ) )
+                {
+                    collapsedNodes.emplace( itemData->m_SheetPath.PathAsString() );
+                    return;
+                }
 
                 wxTreeItemIdValue cookie;
                 wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
 
                 while( child.IsOk() )
                 {
-                    getExpandedNodes( child );
+                    getCollapsedNodes( child );
                     child = m_tree->GetNextChild( id, cookie );
                 }
             };
 
-    // If we are clearing the tree, don't try to get expanded nodes as they
+    // If we are clearing the tree, don't try to get collapsed nodes as they
     // might be deleted
     if( !aClear && !m_tree->IsEmpty() )
-        getExpandedNodes( m_tree->GetRootItem() );
+    {
+        collapsedNodes.clear();
+        getCollapsedNodes( m_tree->GetRootItem() );
+    }
 
     m_list.clear();
     m_list.push_back( &m_frame->Schematic().Root() );
@@ -258,35 +271,35 @@ void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
     buildHierarchyTree( &m_list, root );
     UpdateHierarchySelection();
 
-    if( !expandedNodes.empty() )
-    {
-        std::function<void( const wxTreeItemId& )> expandNodes =
-                [&]( const wxTreeItemId& id )
+    m_tree->ExpandAll();
+
+    std::function<void( const wxTreeItemId& )> collapseNodes =
+            [&]( const wxTreeItemId& id )
+            {
+                wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+                TREE_ITEM_DATA* itemData =
+                        static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+                if( id != root &&
+                    collapsedNodes.find( itemData->m_SheetPath.PathAsString() ) != collapsedNodes.end() )
                 {
-                    wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+                    m_tree->Collapse( id );
+                    return;
+                }
 
-                    TREE_ITEM_DATA* itemData =
-                            static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+                wxTreeItemIdValue cookie;
+                wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
 
-                    if( expandedNodes.find( itemData->m_SheetPath ) != expandedNodes.end() )
-                        m_tree->Expand( id );
+                while( child.IsOk() )
+                {
+                    collapseNodes( child );
+                    child = m_tree->GetNextChild( id, cookie );
+                }
+            };
 
-                    wxTreeItemIdValue cookie;
-                    wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
-
-                    while( child.IsOk() )
-                    {
-                        expandNodes( child );
-                        child = m_tree->GetNextChild( id, cookie );
-                    }
-                };
-
-        expandNodes( m_tree->GetRootItem() );
-    }
-    else if( m_tree->ItemHasChildren( root ) )
-    {
-        m_tree->Expand( root );
-    }
+    collapseNodes( root );
+    m_collapsedPaths = std::move( collapsedNodes );
 
     if( eventsWereBound )
     {
@@ -356,6 +369,42 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
             };
 
     recursiveDescent( rootId );
+}
+
+
+std::vector<wxString> HIERARCHY_PANE::GetCollapsedPaths() const
+{
+    std::vector<wxString> collapsed;
+
+    if( m_tree->IsEmpty() )
+        return collapsed;
+
+    std::function<void( const wxTreeItemId& )> collect =
+            [&]( const wxTreeItemId& id )
+            {
+                wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+                TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+                if( id != m_tree->GetRootItem() && m_tree->ItemHasChildren( id )
+                    && !m_tree->IsExpanded( id ) )
+                {
+                    collapsed.push_back( itemData->m_SheetPath.PathAsString() );
+                    return;
+                }
+
+                wxTreeItemIdValue cookie;
+                wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+                while( child.IsOk() )
+                {
+                    collect( child );
+                    child = m_tree->GetNextChild( id, cookie );
+                }
+            };
+
+    collect( m_tree->GetRootItem() );
+    return collapsed;
 }
 
 

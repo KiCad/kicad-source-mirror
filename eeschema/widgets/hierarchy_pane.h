@@ -31,6 +31,8 @@
 #include <wx/imaglist.h>
 #include <wx/object.h> // wxRTTI macros
 #include <wx/treectrl.h>
+#include <set>
+#include <vector>
 #include "widgets/wx_panel.h"
 
 
@@ -98,6 +100,11 @@ public:
      */
     void UpdateLabelsHierarchyTree();
 
+    /**
+     * Returns a list of sheet paths for nodes that are currently collapsed.
+     */
+    std::vector<wxString> GetCollapsedPaths() const;
+
 private:
     /**
      * Create the hierarchical tree of the schematic.
@@ -149,6 +156,7 @@ private:
     HIERARCHY_TREE* m_tree;
 
     bool            m_events_bound;
+    std::set<wxString> m_collapsedPaths;
 };
 
 #endif // HIERARCHY_PANE_H

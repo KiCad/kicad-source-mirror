@@ -246,6 +246,7 @@ void SCH_EDIT_FRAME::SaveProjectLocalSettings()
     SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
     localSettings.m_SchSelectionFilter = selTool->GetFilter();
+    localSettings.m_SchHierarchyCollapsed = m_hierarchy->GetCollapsedPaths();
 }
 
 

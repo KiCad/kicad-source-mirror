@@ -354,6 +354,9 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 { "otherItems", true }
             } ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "schematic.hierarchy_collapsed",
+                                                    &m_SchHierarchyCollapsed, {} ) );
+
     registerMigration( 1, 2,
             [&]()
             {

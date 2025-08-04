@@ -151,6 +151,9 @@ public:
     PCB_SELECTION_FILTER_OPTIONS m_PcbSelectionFilter;
     SCH_SELECTION_FILTER_OPTIONS m_SchSelectionFilter;
 
+    /// Collapsed nodes in the schematic hierarchy navigator
+    std::vector<wxString> m_SchHierarchyCollapsed;
+
     // Upstream git repo info
     wxString m_GitRepoUsername;
     wxString m_GitRepoType;

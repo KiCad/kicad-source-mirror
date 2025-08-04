@@ -156,9 +156,10 @@ void SETTINGS_MANAGER::Save()
         if( dynamic_cast<COLOR_SETTINGS*>( settings.get() ) )
             continue;
 
-        // Never automatically save project settings, caller should use SaveProject or UnloadProject
-        if( dynamic_cast<PROJECT_FILE*>( settings.get() )
-            || dynamic_cast<PROJECT_LOCAL_SETTINGS*>( settings.get() ) )
+        // Never automatically save project file, caller should use SaveProject or UnloadProject
+        // We do want to save the project local settings, though because they are generally view
+        // settings that should persist even if the project is not saved
+        if( dynamic_cast<PROJECT_FILE*>( settings.get() ) )
         {
             continue;
         }
