@@ -491,7 +491,7 @@ public:
     {
         const VECTOR2I  center{ GetIntValue( CSA_CENTER_X ), GetIntValue( CSA_CENTER_Y ) };
         const VECTOR2I  start{ GetIntValue( CSA_START_X ), GetIntValue( CSA_START_Y ) };
-        const EDA_ANGLE angle( GetIntValue( CSA_ANGLE ), DEGREES_T );
+        const EDA_ANGLE angle{ GetAngleValue( CSA_ANGLE ) };
 
         GetShape().SetCenter( center );
         GetShape().SetStart( start );
