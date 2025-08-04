@@ -1346,6 +1346,7 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
             aLayers.set( LAYER_RATSNEST, m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
+        m_frame->SetGridVisibility( aLayers.test( LAYER_GRID - GAL_LAYER_ID_START ) );
         m_frame->GetBoard()->SetVisibleElements( aLayers );
 
         m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
