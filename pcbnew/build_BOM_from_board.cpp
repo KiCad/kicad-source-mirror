@@ -34,8 +34,8 @@
 #include <wildcards_and_files_ext.h>
 #include <footprint.h>
 #include <tools/board_editor_control.h>
-#include <wx/listimpl.cpp>
 #include <wx/filedlg.h>
+#include <vector>
 
 
 /* creates a BOM list from board
@@ -65,9 +65,7 @@ public:
     int      m_Count;
 };
 
-WX_DECLARE_LIST( BOM_ENTRY, BOM_ENTRY_LIST );
-
-WX_DEFINE_LIST( BOM_ENTRY_LIST )
+using BOM_ENTRY_LIST = std::vector<BOM_ENTRY>;
 
 
 int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
@@ -126,15 +124,13 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         bool valExist = false;
 
         // try to find component in existing list
-        for( auto iter = list.begin(); iter != list.end(); ++iter )
+        for( BOM_ENTRY& curEntry : list )
         {
-            BOM_ENTRY* curEntry = *iter;
-
-            if( curEntry->m_Val == footprint->GetValue() && curEntry->m_FPID == footprint->GetFPID() )
+            if( curEntry.m_Val == footprint->GetValue() && curEntry.m_FPID == footprint->GetFPID() )
             {
-                curEntry->m_Ref.Append( wxT( ", " ), 1 );
-                curEntry->m_Ref.Append( footprint->Reference().GetShownText( false ) );
-                curEntry->m_Count++;
+                curEntry.m_Ref.Append( wxT( ", " ), 1 );
+                curEntry.m_Ref.Append( footprint->Reference().GetShownText( false ) );
+                curEntry.m_Count++;
 
                 valExist = true;
                 break;
@@ -142,35 +138,29 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         }
 
         // If component does not exist yet, create new one and append it to the list.
-        if( valExist == false )
+        if( !valExist )
         {
-            BOM_ENTRY* newEntry = new BOM_ENTRY();
-            newEntry->m_Id  = i++;
-            newEntry->m_Val = footprint->Value().GetShownText( false );
-            newEntry->m_Ref = footprint->Reference().GetShownText( false );
-            newEntry->m_FPID = footprint->GetFPID();
-            newEntry->m_Count = 1;
-            list.Append( newEntry );
+            list.emplace_back();
+            BOM_ENTRY& newEntry = list.back();
+            newEntry.m_Id = i++;
+            newEntry.m_Val = footprint->Value().GetShownText( false );
+            newEntry.m_Ref = footprint->Reference().GetShownText( false );
+            newEntry.m_FPID = footprint->GetFPID();
+            newEntry.m_Count = 1;
         }
     }
 
-    // Print list. Also delete temporary created objects.
-    for( size_t ii = list.GetCount(); ii > 0; ii-- )
+    // Print list.
+    for( const BOM_ENTRY& curEntry : list )
     {
-        BOM_ENTRY* curEntry = *list.begin();   // Because the first object will be removed
-                                               // from list, all objects will be get here
         msg.Empty();
 
-        msg << curEntry->m_Id << wxT( ";\"" );
-        msg << curEntry->m_Ref << wxT( "\";\"" );
-        msg << From_UTF8( curEntry->m_FPID.GetLibItemName().c_str() ) << wxT( "\";" );
-        msg << curEntry->m_Count << wxT( ";\"" );
-        msg << curEntry->m_Val << wxT( "\";;;\n" );
+        msg << curEntry.m_Id << wxT( ";\"" );
+        msg << curEntry.m_Ref << wxT( "\";\"" );
+        msg << From_UTF8( curEntry.m_FPID.GetLibItemName().c_str() ) << wxT( "\";" );
+        msg << curEntry.m_Count << wxT( ";\"" );
+        msg << curEntry.m_Val << wxT( "\";;;\n" );
         fprintf( fp_bom, "%s", TO_UTF8( msg ) );
-
-        // We do not need this object, now: remove it from list and delete it
-        list.DeleteObject( curEntry );
-        delete curEntry;
     }
 
     fclose( fp_bom );
