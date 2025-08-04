@@ -50,12 +50,17 @@ SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 
 
 SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs",
-                                aParent->GetViewerSettingsBase()->m_LibTree ),
+        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs", aParent->GetViewerSettingsBase()->m_LibTree ),
         m_libs( (SYMBOL_LIB_TABLE*) aLibs )
 {
-    // Symbols may have different value from name
-    m_availableColumns.emplace_back( wxT( "Value" ) );
+    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::VALUE, false ) );
+    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) );
+
+    // Description is always shown
+    //m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::DESCRIPTION, false ) );
+
+    // Datasheet probably isn't useful, but better to leave that decision to the user:
+    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::DATASHEET, false ) );
 }
 
 
