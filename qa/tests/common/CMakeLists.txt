@@ -33,6 +33,7 @@ set( QA_COMMON_SRCS
     test_array_axis.cpp
     test_base_set.cpp
     test_bitmap_base.cpp
+    test_collector.cpp
     test_color4d.cpp
     test_coroutine.cpp
     test_eda_shape.cpp
@@ -40,18 +41,21 @@ set( QA_COMMON_SRCS
     test_embedded_file_compress.cpp
     test_file_history.cpp
     test_filename_resolver.cpp
+    test_hotkey_store.cpp
     test_increment.cpp
     test_ki_any.cpp
-    test_lib_table.cpp
-    test_markup_parser.cpp
     test_kicad_string.cpp
     test_kicad_stroke_font.cpp
     test_kiid.cpp
     test_layer_ids.cpp
     test_layer_range.cpp
+    test_lib_table.cpp
     test_lset.cpp
+    test_markup_parser.cpp
+    test_notifications_manager.cpp
     test_property.cpp
     test_property_holder.cpp
+    test_reporting.cpp
     test_refdes_utils.cpp
     test_richio.cpp
     test_text_attributes.cpp

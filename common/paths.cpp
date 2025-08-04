@@ -30,13 +30,6 @@
 #include <macros.h>
 #include <wx_filename.h>
 
-// lowercase or pretty case depending on platform
-#if defined( __WXMAC__ ) || defined( __WXMSW__ )
-#define KICAD_PATH_STR wxT( "KiCad" )
-#else
-#define KICAD_PATH_STR  wxT( "kicad" )
-#endif
-
 
 void PATHS::getUserDocumentPath( wxFileName& aPath )
 {

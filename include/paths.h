@@ -30,6 +30,14 @@
 #define UNIX_STRING_DIR_SEP wxT( "/" )
 #define WIN_STRING_DIR_SEP wxT( "\\" )
 
+
+// lowercase or pretty case depending on platform
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
+#define KICAD_PATH_STR wxT( "KiCad" )
+#else
+#define KICAD_PATH_STR  wxT( "kicad" )
+#endif
+
 /**
  * Helper class to centralize the paths used throughout kicad
  */
