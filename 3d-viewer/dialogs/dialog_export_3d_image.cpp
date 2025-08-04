@@ -34,6 +34,7 @@
 DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aSize ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Export 3D View" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE ),
+        m_format( EDA_3D_VIEWER_EXPORT_FORMAT::PNG ),
         m_originalSize( aSize ),
         m_width( aSize.GetWidth() ),
         m_height( aSize.GetHeight() ),

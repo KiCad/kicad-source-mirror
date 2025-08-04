@@ -71,6 +71,7 @@ private:
     void ConvertSizeUnits( SIZE_UNITS aFromUnit, SIZE_UNITS aToUnit );
     void ConvertResolutionUnits( RESOLUTION_UNITS aFromUnit, RESOLUTION_UNITS aToUnit );
 
+private:
     EDA_3D_VIEWER_EXPORT_FORMAT m_format;
     wxSize m_originalSize;
     int m_width;
