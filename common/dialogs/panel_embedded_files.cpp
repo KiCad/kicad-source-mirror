@@ -247,11 +247,6 @@ void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
                                                                     font->GetFileName() ) );
                 continue;
             }
-
-            m_files_grid->AppendRows( 1 );
-            int ii = m_files_grid->GetNumberRows() - 1;
-            m_files_grid->SetCellValue( ii, 0, result->name );
-            m_files_grid->SetCellValue( ii, 1, result->GetLink() );
         }
     }
 
