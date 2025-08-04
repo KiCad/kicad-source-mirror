@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,8 +11,8 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
+class WEBVIEW_PANEL;
 
-#include "widgets/html_window.h"
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -28,10 +28,9 @@ class STD_BITMAP_BUTTON;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/notebook.h>
-#include <wx/html/htmlwin.h>
+#include <wx/panel.h>
 #include <wx/dialog.h>
 #include <wx/scrolwin.h>
-#include <wx/panel.h>
 #include <wx/statbmp.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,6 +48,7 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_browseButton;
 		STD_BITMAP_BUTTON* m_reloadButton;
 		wxNotebook* m_notebook;
+		WEBVIEW_PANEL* m_webviewPanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -57,11 +57,9 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		virtual void onDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onReload( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }
-		virtual void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) { event.Skip(); }
 
 
 	public:
-		HTML_WINDOW* m_htmlWin;
 
 		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 

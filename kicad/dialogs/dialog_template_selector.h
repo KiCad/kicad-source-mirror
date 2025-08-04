@@ -26,6 +26,7 @@
 #define PROJECT_TEMPLATE_SELECTOR_H
 
 #include <dialogs/dialog_template_selector_base.h>
+#include <widgets/webview_panel.h>
 #include "project_template.h"
 
 #include <map>
@@ -104,7 +105,7 @@ protected:
 private:
     void SetHtml( const wxFileName& aFilename )
     {
-        m_htmlWin->LoadPage( aFilename.GetFullPath() );
+        m_webviewPanel->LoadURL( aFilename.GetFullPath() );
     }
 
 private:
@@ -114,7 +115,6 @@ private:
     void OnPageChange( wxNotebookEvent& event ) override;
     void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
 	void onReload( wxCommandEvent& event ) override;
-	void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) override;
 
 protected:
     std::vector<TEMPLATE_SELECTION_PANEL*> m_panels;

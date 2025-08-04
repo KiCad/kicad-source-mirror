@@ -6,11 +6,18 @@
 #include <wx/utils.h>
 #include <wx/log.h>
 
-WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* parent ) :
-        wxPanel( parent ),
-        m_browser( wxWebView::New() )
+WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
+                             const wxSize& aSize, const int aStyle )
+    : wxPanel( aParent, aId, aPos, aSize, aStyle ),
+      m_initialized( false ),
+      m_browser( wxWebView::New() )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    if( !wxGetEnv( wxT( "WEBKIT_DISABLE_COMPOSITING_MODE" ), nullptr ) )
+    {
+        wxSetEnv( wxT( "WEBKIT_DISABLE_COMPOSITING_MODE" ), wxT( "1" ) );
+    }
 
 #ifdef __WXMAC__
     m_browser->RegisterHandler( wxSharedPtr<wxWebViewHandler>( new wxWebViewArchiveHandler( "wxfs" ) ) );
@@ -38,14 +45,32 @@ WEBVIEW_PANEL::~WEBVIEW_PANEL()
 {
 }
 
-void WEBVIEW_PANEL::LoadURL( const wxString& url )
+void WEBVIEW_PANEL::LoadURL( const wxString& aURL )
 {
-    m_browser->LoadURL( url );
+    if( aURL.starts_with( "file:/" ) && !aURL.starts_with( "file:///" ) )
+    {
+        wxString new_url = wxString( "file:///" ) + aURL.AfterFirst( '/' );
+        m_browser->LoadURL( new_url );
+        return;
+    }
+
+    if( !aURL.StartsWith( "http://" ) && !aURL.StartsWith( "https://" ) && !aURL.StartsWith( "file://" ) )
+    {
+        wxLogError( "Invalid URL: %s", aURL );
+        return;
+    }
+
+    m_browser->LoadURL( aURL );
 }
 
-bool WEBVIEW_PANEL::AddMessageHandler( const wxString& name, MESSAGE_HANDLER handler )
+void WEBVIEW_PANEL::SetPage( const wxString& aHtmlContent )
 {
-    m_msgHandlers.emplace( name, std::move(handler) );
+    m_browser->SetPage( aHtmlContent, "file://" );
+}
+
+bool WEBVIEW_PANEL::AddMessageHandler( const wxString& aName, MESSAGE_HANDLER aHandler )
+{
+    m_msgHandlers.emplace( aName, std::move(aHandler) );
     return true;
 }
 
@@ -54,18 +79,18 @@ void WEBVIEW_PANEL::ClearMessageHandlers()
     m_msgHandlers.clear();
 }
 
-void WEBVIEW_PANEL::OnNavigationRequest( wxWebViewEvent& evt )
+void WEBVIEW_PANEL::OnNavigationRequest( wxWebViewEvent& aEvt )
 {
     // Default behavior: open external links in the system browser
-    if( !evt.GetURL().StartsWith( "file:" ) && !evt.GetURL().StartsWith( "wxfs:" )
-        && !evt.GetURL().StartsWith( "memory:" ) )
+    bool isExternal = aEvt.GetURL().StartsWith( "http://" ) || aEvt.GetURL().StartsWith( "https://" );
+    if( isExternal )
     {
-        wxLaunchDefaultBrowser( evt.GetURL() );
-        evt.Veto();
+        wxLaunchDefaultBrowser( aEvt.GetURL() );
+        aEvt.Veto();
     }
 }
 
-void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& evt )
+void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& aEvt )
 {
     if( !m_initialized )
     {
@@ -116,45 +141,45 @@ void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& evt )
     }
 }
 
-void WEBVIEW_PANEL::OnNewWindow( wxWebViewEvent& evt )
+void WEBVIEW_PANEL::OnNewWindow( wxWebViewEvent& aEvt )
 {
-    m_browser->LoadURL( evt.GetURL() );
-    evt.Veto(); // Prevent default behavior of opening a new window
-    wxLogTrace( "webview", "New window requested for URL: %s", evt.GetURL() );
-    wxLogTrace( "webview", "Target: %s", evt.GetTarget() );
-    wxLogTrace( "webview", "Action flags: %d", static_cast<int>(evt.GetNavigationAction()) );
-    wxLogTrace( "webview", "Message handler: %s", evt.GetMessageHandler() );
+    m_browser->LoadURL( aEvt.GetURL() );
+    aEvt.Veto(); // Prevent default behavior of opening a new window
+    wxLogTrace( "webview", "New window requested for URL: %s", aEvt.GetURL() );
+    wxLogTrace( "webview", "Target: %s", aEvt.GetTarget() );
+    wxLogTrace( "webview", "Action flags: %d", static_cast<int>(aEvt.GetNavigationAction()) );
+    wxLogTrace( "webview", "Message handler: %s", aEvt.GetMessageHandler() );
 }
 
-void WEBVIEW_PANEL::OnScriptMessage( wxWebViewEvent& evt )
+void WEBVIEW_PANEL::OnScriptMessage( wxWebViewEvent& aEvt )
 {
-    wxLogTrace( "webview", "Script message received: %s for handler %s", evt.GetString(), evt.GetMessageHandler() );
+    wxLogTrace( "webview", "Script message received: %s for handler %s", aEvt.GetString(), aEvt.GetMessageHandler() );
 
-    if( evt.GetMessageHandler().IsEmpty() )
+    if( aEvt.GetMessageHandler().IsEmpty() )
     {
-        wxLogDebug( "No message handler specified for script message: %s", evt.GetString() );
+        wxLogDebug( "No message handler specified for script message: %s", aEvt.GetString() );
         return;
     }
 
-    auto it = m_msgHandlers.find( evt.GetMessageHandler() );
+    auto it = m_msgHandlers.find( aEvt.GetMessageHandler() );
     if( it == m_msgHandlers.end() )
     {
-        wxLogDebug( "No handler registered for message: %s", evt.GetMessageHandler() );
+        wxLogDebug( "No handler registered for message: %s", aEvt.GetMessageHandler() );
         return;
     }
 
     // Call the registered handler with the message
-    wxLogTrace( "webview", "Calling handler for message: %s", evt.GetMessageHandler() );
-    it->second( evt.GetString() );
+    wxLogTrace( "webview", "Calling handler for message: %s", aEvt.GetMessageHandler() );
+    it->second( aEvt.GetString() );
 }
 
-void WEBVIEW_PANEL::OnScriptResult( wxWebViewEvent& evt )
+void WEBVIEW_PANEL::OnScriptResult( wxWebViewEvent& aEvt )
 {
-    if( evt.IsError() )
-        wxLogDebug( "Async script execution failed: %s", evt.GetString() );
+    if( aEvt.IsError() )
+        wxLogDebug( "Async script execution failed: %s", aEvt.GetString() );
 }
 
-void WEBVIEW_PANEL::OnError( wxWebViewEvent& evt )
+void WEBVIEW_PANEL::OnError( wxWebViewEvent& aEvt )
 {
-    wxLogDebug( "WebView error: %s", evt.GetString() );
+    wxLogDebug( "WebView error: %s", aEvt.GetString() );
 }
