@@ -38,6 +38,7 @@
 #include <symbol_editor_settings.h>
 #include <symbol_library.h>         // For SYMBOL_LIBRARY_FILTER
 #include <symbol_lib_table.h>
+#include <algorithm>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
 #include <wx/panel.h>
@@ -667,7 +668,7 @@ void PANEL_SYMBOL_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
-    alg::delete_if( m_field_edits, []( std::pair<FIELD_T, wxString> const& i )
+    std::erase_if( m_field_edits, []( std::pair<FIELD_T, wxString> const& i )
                                    {
                                        return i.first == FIELD_T::FOOTPRINT;
                                    } );

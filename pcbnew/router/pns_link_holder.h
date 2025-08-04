@@ -25,6 +25,7 @@
 #define PCBNEW_ROUTER_PNS_LINK_HOLDER_H_
 
 #include <core/kicad_algo.h>
+#include <algorithm>
 #include "pns_item.h"
 #include "pns_linked_item.h"
 
@@ -49,7 +50,7 @@ public:
     {
         wxCHECK_MSG( alg::contains( m_links, aLink ), /* void */,
                      "Trying to unlink an item that is not linked" );
-        alg::delete_matching( m_links, aLink );
+        std::erase( m_links, aLink );
     }
 
     ///< Return the list of links from the owning node that constitute this

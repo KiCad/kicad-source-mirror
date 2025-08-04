@@ -27,6 +27,7 @@
 
 #include <sch_tablecell.h>
 #include <sch_item.h>
+#include <algorithm>
 
 
 class SCH_TABLE : public SCH_ITEM
@@ -180,7 +181,7 @@ public:
 
     void DeleteMarkedCells()
     {
-        alg::delete_if( m_cells,
+        std::erase_if( m_cells,
                 []( SCH_TABLECELL* cell )
                 {
                     return ( cell->GetFlags() & STRUCT_DELETED ) > 0;

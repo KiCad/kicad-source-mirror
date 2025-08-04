@@ -26,6 +26,7 @@
  */
 
 #include <iterator>
+#include <algorithm>
 
 #include <wx/log.h>
 
@@ -1323,24 +1324,24 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     }
 
     case PCB_MARKER_T:
-        alg::delete_matching( m_markers, aBoardItem );
+        std::erase( m_markers, aBoardItem );
         break;
 
     case PCB_GROUP_T:
-        alg::delete_matching( m_groups, aBoardItem );
+        std::erase( m_groups, aBoardItem );
         break;
 
     case PCB_ZONE_T:
-        alg::delete_matching( m_zones, aBoardItem );
+        std::erase( m_zones, aBoardItem );
         break;
 
     case PCB_GENERATOR_T:
-        alg::delete_matching( m_generators, aBoardItem );
+        std::erase( m_generators, aBoardItem );
         break;
 
     case PCB_FOOTPRINT_T:
     {
-        alg::delete_matching( m_footprints, aBoardItem );
+        std::erase( m_footprints, aBoardItem );
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aBoardItem );
 
         footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
@@ -1355,7 +1356,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_TRACE_T:
     case PCB_ARC_T:
     case PCB_VIA_T:
-        alg::delete_matching( m_tracks, aBoardItem );
+        std::erase( m_tracks, aBoardItem );
         break;
 
     case PCB_DIM_ALIGNED_T:
@@ -1371,7 +1372,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_TABLE_T:
     case PCB_TARGET_T:
     {
-        alg::delete_matching( m_drawings, aBoardItem );
+        std::erase( m_drawings, aBoardItem );
 
         if( aBoardItem->Type() == PCB_TABLE_T )
         {

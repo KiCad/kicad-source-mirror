@@ -38,6 +38,7 @@
 #include <gal/definitions.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
+#include <algorithm>
 
 #include <core/profile.h>
 
@@ -369,7 +370,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
             if( s_gcCounter > 4096 )
             {
                 // Perform defragmentation
-                alg::delete_if( *m_allItems,
+                std::erase_if( *m_allItems,
                                 []( VIEW_ITEM* it )
                                 {
                                     return it == nullptr;

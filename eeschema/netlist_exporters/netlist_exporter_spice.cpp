@@ -38,6 +38,7 @@
 #include <sch_screen.h>
 #include <sch_textbox.h>
 #include <string_utils.h>
+#include <algorithm>
 #include <ki_exception.h>
 
 #include <dialogs/html_message_box.h>
@@ -709,7 +710,7 @@ SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::BuildSheetList( unsigned aNetlistOptions 
     else
         sheets = m_schematic->Hierarchy();
 
-    alg::delete_if( sheets,
+    std::erase_if( sheets,
                     [&]( const SCH_SHEET_PATH& sheet )
                     {
                         return sheet.GetExcludedFromSim();

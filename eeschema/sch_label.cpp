@@ -43,6 +43,7 @@
 #include <project/net_settings.h>
 #include <core/kicad_algo.h>
 #include <core/mirror.h>
+#include <algorithm>
 #include <trigo.h>
 #include <sch_label.h>
 #include <sch_rule_area.h>
@@ -667,7 +668,7 @@ void SCH_LABEL_BASE::GetIntersheetRefs( const SCH_SHEET_PATH* aPath,
             if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
             {
                 int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
-                alg::delete_matching( pageListCopy, currentPage );
+                std::erase( pageListCopy, currentPage );
 
                 if( pageListCopy.empty() )
                     return;
@@ -1983,7 +1984,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
             if( !settings.m_IntersheetRefsListOwnPage )
             {
                 int currentPage = schematic->CurrentSheet().GetVirtualPageNumber();
-                alg::delete_matching( pageListCopy, currentPage );
+                std::erase( pageListCopy, currentPage );
             }
 
             std::map<int, wxString> sheetPages = schematic->GetVirtualPageToSheetPagesMap();

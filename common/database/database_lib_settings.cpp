@@ -24,6 +24,7 @@
 
 #include <core/kicad_algo.h>
 #include <json_common.h>
+#include <algorithm>
 
 #include <database/database_lib_settings.h>
 #include <settings/parameters.h>
@@ -91,7 +92,7 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
 
                     // Sanitize library display names; currently only `/` is removed because we
                     // use it as a separator and allow it in symbol names.
-                    alg::delete_matching( table.name, '/' );
+                    std::erase( table.name, '/' );
 
                     if( entry.contains( "properties" ) && entry["properties"].is_object() )
                     {

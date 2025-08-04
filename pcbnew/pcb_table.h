@@ -28,6 +28,7 @@
 #include <pcb_tablecell.h>
 #include <board_item.h>
 #include <board_item_container.h>
+#include <algorithm>
 
 
 class PCB_TABLE : public BOARD_ITEM_CONTAINER
@@ -179,7 +180,7 @@ public:
 
     void DeleteMarkedCells()
     {
-        alg::delete_if( m_cells,
+        std::erase_if( m_cells,
                 []( PCB_TABLECELL* cell )
                 {
                     return ( cell->GetFlags() & STRUCT_DELETED ) > 0;

@@ -43,6 +43,7 @@
 #include <wx/checkbox.h>
 
 #include <../3d_rendering/opengl/render_3d_opengl.h>
+#include <algorithm>
 
 /// Render Row abbreviation to reduce source width.
 #define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D
@@ -872,7 +873,7 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
             if( m_cbLayerPresets->FindString( name ) != wxNOT_FOUND )
                 m_cbLayerPresets->Delete( m_cbLayerPresets->FindString( name ) );
 
-            alg::delete_if( cfg->m_LayerPresets,
+            std::erase_if( cfg->m_LayerPresets,
                     [name]( const LAYER_PRESET_3D& preset )
                     {
                         return preset.name == name;

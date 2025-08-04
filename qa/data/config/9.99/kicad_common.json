@@ -20,6 +20,9 @@
     "limit_total_size": 104857600,
     "min_interval": 300
   },
+  "dialog": {
+    "controls": {}
+  },
   "do_not_show_again": {
     "data_collection_prompt": false,
     "env_var_overwrite_warning": false,
@@ -39,7 +42,9 @@
     "useDefaultAuthor": true
   },
   "graphics": {
+    "antialiasing_mode": 2,
     "cairo_antialiasing_mode": 0,
+    "canvas_type": 1,
     "opengl_antialiasing_mode": 1
   },
   "input": {

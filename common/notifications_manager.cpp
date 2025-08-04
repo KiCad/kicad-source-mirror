@@ -38,6 +38,8 @@
 #include <notifications_manager.h>
 #include <widgets/kistatusbar.h>
 #include <widgets/ui_common.h>
+
+#include <algorithm>
 #include <json_common.h>
 #include <kiplatform/ui.h>
 
@@ -377,7 +379,7 @@ void NOTIFICATIONS_MANAGER::onListWindowClosed( wxCloseEvent& aEvent )
 {
     NOTIFICATIONS_LIST* evtWindow = dynamic_cast<NOTIFICATIONS_LIST*>( aEvent.GetEventObject() );
 
-    alg::delete_if( m_shownDialogs, [&]( NOTIFICATIONS_LIST* dialog )
+    std::erase_if( m_shownDialogs, [&]( NOTIFICATIONS_LIST* dialog )
                                     {
                                         return dialog == evtWindow;
                                     } );
@@ -426,7 +428,7 @@ void NOTIFICATIONS_MANAGER::RegisterStatusBar( KISTATUSBAR* aStatusBar )
 
 void NOTIFICATIONS_MANAGER::UnregisterStatusBar( KISTATUSBAR* aStatusBar )
 {
-    alg::delete_if( m_statusBars, [&]( KISTATUSBAR* statusBar )
+    std::erase_if( m_statusBars, [&]( KISTATUSBAR* statusBar )
                                   {
                                       return statusBar == aStatusBar;
                                   } );

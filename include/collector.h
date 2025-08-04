@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <core/kicad_algo.h>
+#include <algorithm>
 #include <eda_item.h>    // SEARCH_RESULT
 
 
@@ -119,7 +120,7 @@ public:
      */
     void Remove( const EDA_ITEM* aItem )
     {
-        alg::delete_if( m_list, [&aItem]( const EDA_ITEM* aCandidate )
+        std::erase_if( m_list, [&aItem]( const EDA_ITEM* aCandidate )
                                 {
                                     return aCandidate == aItem;
                                 } );

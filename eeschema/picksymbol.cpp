@@ -27,7 +27,6 @@
 #include <symbol_library.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
-#include <core/kicad_algo.h>
 #include <symbol_library_common.h>
 #include <confirm.h>
 #include <sch_tool_utils.h>
@@ -38,6 +37,7 @@
 #include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
 #include <symbol_editor/symbol_editor_settings.h>
+#include <algorithm>
 #include <sch_symbol.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
@@ -82,7 +82,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
 
     if( sel.LibId.IsValid() )
     {
-        alg::delete_if( aHistoryList, [&sel]( PICKED_SYMBOL const& i )
+        std::erase_if( aHistoryList, [&sel]( PICKED_SYMBOL const& i )
                                       {
                                           return i.LibId == sel.LibId;
                                       } );

@@ -25,6 +25,7 @@
 #include <widgets/lib_tree.h>
 #include <widgets/bitmap_button.h>
 #include <core/kicad_algo.h>
+#include <algorithm>
 #include <macros.h>
 #include <bitmaps.h>
 #include <dialogs/eda_reorderable_list_dialog.h>
@@ -430,7 +431,7 @@ void LIB_TREE::updateRecentSearchMenu()
     if( !newEntry.IsEmpty() )
     {
         if( alg::contains( recents, newEntry ) )
-            alg::delete_matching( recents, newEntry );
+            std::erase( recents, newEntry );
 
         if( recents.size() >= RECENT_SEARCHES_MAX )
             recents.pop_back();

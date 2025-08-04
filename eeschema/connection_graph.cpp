@@ -959,7 +959,7 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
             }
         }
 
-        alg::delete_matching( m_items, aItem );
+        std::erase( m_items, aItem );
     };
 
     for( SCH_ITEM* item : aItems )
@@ -987,7 +987,7 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
     removeSubgraphs( subgraphs );
 
     for( const auto& [path, item] : retvals )
-        alg::delete_matching( m_items, item );
+        std::erase( m_items, item );
 
     return retvals;
 }
@@ -1006,7 +1006,7 @@ void CONNECTION_GRAPH::RemoveItem( SCH_ITEM* aItem )
         subgraph = subgraph->m_absorbed_by;
 
     subgraph->RemoveItem( aItem );
-    alg::delete_matching( m_items, aItem );
+    std::erase( m_items, aItem );
     m_item_to_subgraph_map.erase( it );
 }
 
@@ -1892,7 +1892,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                             wxS( "%ld (%s) is weakly driven and not unique. Changing to %s." ),
                             subgraph->m_code, name, new_name );
 
-                alg::delete_matching( *vec, subgraph );
+                std::erase( *vec, subgraph );
 
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
@@ -2216,7 +2216,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         proc_sub_graph.Show();
 
     // Absorbed subgraphs should no longer be considered
-    alg::delete_if( m_driver_subgraphs, [&]( const CONNECTION_SUBGRAPH* candidate ) -> bool
+    std::erase_if( m_driver_subgraphs, [&]( const CONNECTION_SUBGRAPH* candidate ) -> bool
                                         {
                                             return candidate->m_absorbed;
                                         } );
@@ -3083,7 +3083,7 @@ void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
     if( it != m_net_name_to_subgraphs_map.end() )
     {
         std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
-        alg::delete_matching( vec, aSubgraph );
+        std::erase( vec, aSubgraph );
     }
 
     wxLogTrace( ConnTrace, wxS( "recacheSubgraphName: %s => %s" ), aOldName,

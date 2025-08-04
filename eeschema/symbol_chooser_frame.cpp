@@ -28,6 +28,7 @@
 #include <eeschema_settings.h>
 #include <widgets/panel_symbol_chooser.h>
 #include <symbol_chooser_frame.h>
+#include <algorithm>
 
 
 static std::vector<PICKED_SYMBOL> s_SymbolHistoryList;
@@ -36,7 +37,7 @@ static unsigned                   s_SymbolHistoryMaxCount = 8;
 static void AddSymbolToHistory( const PICKED_SYMBOL& aSymbol )
 {
     // Remove duplicates
-    alg::delete_if( s_SymbolHistoryList,
+    std::erase_if( s_SymbolHistoryList,
                     [&]( const PICKED_SYMBOL& candidate ) -> bool
                     {
                         return candidate.LibId == aSymbol.LibId

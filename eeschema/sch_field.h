@@ -33,6 +33,7 @@
 #include <general.h>
 #include <string_utils.h>
 #include "scintilla_tricks.h"
+#include <algorithm>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -424,7 +425,7 @@ inline void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFie
 {
     if( aValue == "" )
     {
-        alg::delete_if( aFields, [&]( const SCH_FIELD& field )
+        std::erase_if( aFields, [&]( const SCH_FIELD& field )
                                  {
                                      return field.GetName() == aFieldName;
                                  } );

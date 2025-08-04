@@ -223,13 +223,13 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
 
     /// We strip the underscores from all column names as some export variants use them and
     // some do not
-    alg::delete_if( row1, []( char c ){ return c == '_'; } );
-    alg::delete_if( row2, []( char c ){ return c == '_'; } );
+    std::erase_if( row1, []( char c ){ return c == '_'; } );
+    std::erase_if( row2, []( char c ){ return c == '_'; } );
 
     if( row.size() > 3 )
     {
         row3 = row[3];
-        alg::delete_if( row3, []( char c ){ return c == '_'; } );
+        std::erase_if( row3, []( char c ){ return c == '_'; } );
     }
 
     if( row1 == "REFDES" && row2 == "COMPCLASS" )
@@ -325,7 +325,7 @@ int FABMASTER::getColFromName( size_t aRow, const std::string& aStr )
     {
         /// Some Fabmaster headers include the underscores while others do not
         /// so we strip them uniformly before comparing
-        alg::delete_if( header[i], []( const char c ) { return c == '_'; } );
+        std::erase_if( header[i], []( const char c ) { return c == '_'; } );
 
         if( header[i] == aStr )
             return i;

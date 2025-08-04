@@ -34,6 +34,7 @@
 #include <sch_actions.h>
 #include <sch_tool_utils.h>
 #include <increment.h>
+#include <algorithm>
 #include <string_utils.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -2799,7 +2800,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
                 // A SCH_GLOBALLABEL has a specific field for intersheet references that has
                 // no meaning for other labels
-                alg::delete_if( new_label->GetFields(),
+                std::erase_if( new_label->GetFields(),
                                 [&]( SCH_FIELD& field )
                                 {
                                     return field.GetId() == FIELD_T::INTERSHEET_REFS

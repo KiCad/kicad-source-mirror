@@ -38,6 +38,8 @@
 #include <macros.h>
 #include <pgm_base.h>
 #include <paths.h>
+
+#include <algorithm>
 #include <project.h>
 #include <project/project_archiver.h>
 #include <project/project_file.h>
@@ -745,7 +747,7 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         }
     }
 
-    alg::delete_if( *aPaths, []( const wxString& aPath ) -> bool
+    std::erase_if( *aPaths, []( const wxString& aPath ) -> bool
     {
         wxFileName fulldir = wxFileName::DirName( aPath );
         const wxArrayString& dirs = fulldir.GetDirs();

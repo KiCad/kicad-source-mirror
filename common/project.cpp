@@ -25,6 +25,7 @@
 #include <wx/stdpaths.h>                // required on Mac
 #include <kiplatform/environment.h>
 
+#include <algorithm>
 #include <pgm_base.h>
 #include <confirm.h>
 #include <core/kicad_algo.h>
@@ -249,10 +250,10 @@ void PROJECT::UnpinLibrary( const wxString& aLibrary, enum LIB_TYPE_T aLibType )
         return;
     }
 
-    alg::delete_matching( *pinnedLibsFile, aLibrary );
+    std::erase( *pinnedLibsFile, aLibrary );
     Pgm().GetSettingsManager().SaveProject();
 
-    alg::delete_matching( *pinnedLibsCfg, aLibrary );
+    std::erase( *pinnedLibsCfg, aLibrary );
     cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
 }
 

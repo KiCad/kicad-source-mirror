@@ -34,6 +34,7 @@
 #include <schematic.h>
 #include <project.h>
 #include <richio.h>
+#include <algorithm>
 
 
 void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
@@ -81,7 +82,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
         std::vector<LTSPICE_FILE> newSubSchematicElements = GetSchematicElements( buffer );
 
-        alg::delete_if( newSubSchematicElements,
+        std::erase_if( newSubSchematicElements,
                         [&mapOfAscFiles]( const LTSPICE_FILE& ii )
                         {
                             return mapOfAscFiles[ii.ElementName].IsEmpty();
