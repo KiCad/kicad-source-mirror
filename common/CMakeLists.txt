@@ -759,7 +759,7 @@ add_library( common STATIC
     )
 
 if( KICAD_USE_PCH )
-    target_precompile_headers( common
+    target_precompile_headers( kicommon
         PRIVATE
             <kicommon.h>
             <algorithm>
