@@ -449,7 +449,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Martin McNamara" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Cameron McQuinn" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV );
-    ADD_DEV( wxT( "Mojca Miklavec" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mojca Miklavec Groenhuis" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ashley Mills" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Peter Montgomery" ), CONTRIB_DEV );
@@ -873,7 +873,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_LIBRARIAN( wxT( "Uli Köhler" ) );
     ADD_LIBRARIAN( wxT( "Graham Keeth" ) );
     ADD_LIBRARIAN( wxT( "Andrew Lutsenko" ) );
-    ADD_LIBRARIAN( wxT( "Mojca Miklavec" ) );
+    ADD_LIBRARIAN( wxT( "Mojca Miklavec Groenhuis" ) );
     ADD_LIBRARIAN( wxT( "Jorge Neiva" ) );
     ADD_LIBRARIAN( wxT( "Carlos Nieves Ónega" ) );
     ADD_LIBRARIAN( wxT( "Lynn Ochs" ) );
