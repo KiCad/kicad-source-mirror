@@ -109,7 +109,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
 
 
 FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
-        BOARD_ITEM_CONTAINER( aFootprint ), EMBEDDED_FILES( aFootprint ),
+        BOARD_ITEM_CONTAINER( aFootprint ),
+        EMBEDDED_FILES( aFootprint ),
         m_componentClassCacheProxy( std::make_unique<COMPONENT_CLASS_CACHE_PROXY>( this ) )
 {
     m_orient                  = aFootprint.m_orient;

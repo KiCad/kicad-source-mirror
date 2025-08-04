@@ -110,14 +110,14 @@ public:
             delete file.second;
     }
 
-    using FileAddedCallback = std::function<void(EMBEDDED_FILE*)>;
+    using FILE_ADDED_CALLBACK = std::function<void( EMBEDDED_FILE* )>;
 
-    void SetFileAddedCallback(FileAddedCallback callback)
+    void SetFileAddedCallback( FILE_ADDED_CALLBACK callback )
     {
         m_fileAddedCallback = callback;
     }
 
-    FileAddedCallback GetFileAddedCallback() const
+    FILE_ADDED_CALLBACK GetFileAddedCallback() const
     {
         return m_fileAddedCallback;
     }
@@ -264,13 +264,13 @@ public:
         return 0xABBA2345;
     }
 
-    EMBEDDED_FILES& operator=(EMBEDDED_FILES&& other) noexcept;
+    EMBEDDED_FILES& operator=( EMBEDDED_FILES&& other ) noexcept;
     EMBEDDED_FILES& operator=( const EMBEDDED_FILES& other );
 
 private:
     std::map<wxString, EMBEDDED_FILE*> m_files;
     std::vector<wxString>              m_fontFiles;
-    FileAddedCallback                  m_fileAddedCallback;
+    FILE_ADDED_CALLBACK                m_fileAddedCallback;
 
 protected:
     bool m_embedFonts = false; ///< If set, fonts will be embedded in the element on save.
