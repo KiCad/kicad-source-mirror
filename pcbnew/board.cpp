@@ -1110,23 +1110,31 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
 }
 
 
-void BOARD::FixupEmbeddedData()
+void BOARD::RunOnNestedEmbeddedFiles( const std::function<void( EMBEDDED_FILES* )>& aFunction )
 {
     for( FOOTPRINT* footprint : m_footprints )
-    {
-        for( auto& [filename, embeddedFile] : footprint->EmbeddedFileMap() )
-        {
-            EMBEDDED_FILES::EMBEDDED_FILE* file = GetEmbeddedFile( filename );
+        aFunction( footprint->GetEmbeddedFiles() );
+}
 
-            if( file )
+
+void BOARD::FixupEmbeddedData()
+{
+    RunOnNestedEmbeddedFiles(
+            [&]( EMBEDDED_FILES* nested )
             {
-                embeddedFile->compressedEncodedData = file->compressedEncodedData;
-                embeddedFile->decompressedData = file->decompressedData;
-                embeddedFile->data_hash = file->data_hash;
-                embeddedFile->is_valid = file->is_valid;
-            }
-        }
-    }
+                for( auto& [filename, embeddedFile] : nested->EmbeddedFileMap() )
+                {
+                    EMBEDDED_FILES::EMBEDDED_FILE* file = GetEmbeddedFile( filename );
+
+                    if( file )
+                    {
+                        embeddedFile->compressedEncodedData = file->compressedEncodedData;
+                        embeddedFile->decompressedData = file->decompressedData;
+                        embeddedFile->data_hash = file->data_hash;
+                        embeddedFile->is_valid = file->is_valid;
+                    }
+                }
+            } );
 }
 
 
