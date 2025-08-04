@@ -200,9 +200,9 @@ BOOST_AUTO_TEST_CASE( ExistenceChecking )
     BOOST_CHECK_EQUAL( false, m_emptyHolder.HasProperty( "any_key" ) );
 
     // Populated holder
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasProperty( "bool_prop" ) );
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasProperty( "int_prop" ) );
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasProperty( "string_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasProperty( "bool_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasProperty( "int_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasProperty( "string_prop" ) );
     BOOST_CHECK_EQUAL( false, m_populatedHolder.HasProperty( "missing_prop" ) );
 }
 
@@ -212,10 +212,10 @@ BOOST_AUTO_TEST_CASE( ExistenceChecking )
 BOOST_AUTO_TEST_CASE( TypeSpecificExistence )
 {
     // Check correct type detection
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasPropertyOfType<bool>( "bool_prop" ) );
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasPropertyOfType<int>( "int_prop" ) );
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasPropertyOfType<double>( "double_prop" ) );
-    BOOST_CHECK_EQUAL( true, m_populatedHolder.HasPropertyOfType<std::string>( "string_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasPropertyOfType<bool>( "bool_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasPropertyOfType<int>( "int_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasPropertyOfType<double>( "double_prop" ) );
+    BOOST_CHECK( m_populatedHolder.HasPropertyOfType<std::string>( "string_prop" ) );
 
     // Check wrong type detection
     BOOST_CHECK_EQUAL( false, m_populatedHolder.HasPropertyOfType<int>( "bool_prop" ) );
@@ -235,12 +235,12 @@ BOOST_AUTO_TEST_CASE( PropertyRemoval )
     holder.SetProperty( "temp_prop", 42 );
 
     // Property should exist
-    BOOST_CHECK_EQUAL( true, holder.HasProperty( "temp_prop" ) );
+    BOOST_CHECK( holder.HasProperty( "temp_prop" ) );
     BOOST_CHECK_EQUAL( 1, holder.Size() );
 
     // Remove existing property
     bool removed = holder.RemoveProperty( "temp_prop" );
-    BOOST_CHECK_EQUAL( true, removed );
+    BOOST_CHECK( removed );
     BOOST_CHECK_EQUAL( false, holder.HasProperty( "temp_prop" ) );
     BOOST_CHECK_EQUAL( 0, holder.Size() );
 
@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE( ClearProperties )
     holder.Clear();
 
     BOOST_CHECK_EQUAL( 0, holder.Size() );
-    BOOST_CHECK_EQUAL( true, holder.Empty() );
+    BOOST_CHECK( holder.Empty() );
     BOOST_CHECK_EQUAL( false, holder.HasProperty( "prop1" ) );
     BOOST_CHECK_EQUAL( false, holder.HasProperty( "prop2" ) );
     BOOST_CHECK_EQUAL( false, holder.HasProperty( "prop3" ) );
@@ -278,7 +278,7 @@ BOOST_AUTO_TEST_CASE( SizeAndEmpty )
 {
     // Empty holder
     BOOST_CHECK_EQUAL( 0, m_emptyHolder.Size() );
-    BOOST_CHECK_EQUAL( true, m_emptyHolder.Empty() );
+    BOOST_CHECK( m_emptyHolder.Empty() );
 
     // Populated holder (from fixture: 6 properties)
     BOOST_CHECK_EQUAL( 7, m_populatedHolder.Size() );
@@ -426,9 +426,9 @@ BOOST_AUTO_TEST_CASE( BasicMixin )
     BOOST_CHECK_EQUAL( widget.GetPropertyOr( "runtime_prop", 0 ), 42 );
 
     // Should be able to check existence
-    BOOST_CHECK_EQUAL( true, widget.HasProperty( "widget_name" ) );
-    BOOST_CHECK_EQUAL( true, widget.HasProperty( "default_enabled" ) );
-    BOOST_CHECK_EQUAL( true, widget.HasProperty( "runtime_prop" ) );
+    BOOST_CHECK( widget.HasProperty( "widget_name" ) );
+    BOOST_CHECK( widget.HasProperty( "default_enabled" ) );
+    BOOST_CHECK( widget.HasProperty( "runtime_prop" ) );
     BOOST_CHECK_EQUAL( false, widget.HasProperty( "missing_prop" ) );
 }
 
@@ -471,7 +471,7 @@ BOOST_AUTO_TEST_CASE( PropertyHolderAccess )
     BOOST_CHECK_EQUAL( widget.GetPropertyOr( "direct_access", 0 ), 999 );
 
     // Should be able to use holder methods
-    BOOST_CHECK_EQUAL( true, constHolder.HasProperty( "widget_name" ) );
+    BOOST_CHECK( constHolder.HasProperty( "widget_name" ) );
     auto keys = constHolder.GetKeys();
     BOOST_CHECK( keys.size() >= 2 ); // At least widget_name and default_enabled
 }
@@ -492,13 +492,13 @@ BOOST_AUTO_TEST_CASE( EmptyKeys )
 
     // Empty key should work (though not recommended)
     holder.SetProperty( "", 42 );
-    BOOST_CHECK_EQUAL( true, holder.HasProperty( "" ) );
+    BOOST_CHECK( holder.HasProperty( "" ) );
     BOOST_CHECK_EQUAL( holder.GetPropertyOr( "", 0 ), 42 );
 
     // Very long key should work
     std::string longKey( 1000, 'x' );
     holder.SetProperty( longKey, "long key value" );
-    BOOST_CHECK_EQUAL( true, holder.HasProperty( longKey ) );
+    BOOST_CHECK( holder.HasProperty( longKey ) );
 }
 
 /**
@@ -540,6 +540,218 @@ BOOST_AUTO_TEST_CASE( NullScenarios )
 
     // Removing non-existing property
     BOOST_CHECK_EQUAL( false, holder.RemoveProperty( "non_existing" ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+/**
+ * Test suite for magic value validation and memory safety
+ */
+BOOST_AUTO_TEST_SUITE( PropertyHolderMagicValue )
+
+/**
+ * Test magic value validation
+ */
+BOOST_AUTO_TEST_CASE( MagicValueValidation )
+{
+    PROPERTY_HOLDER holder;
+
+    // New holder should be valid
+    BOOST_CHECK( holder.IsValid() );
+    BOOST_CHECK_EQUAL( PROPERTY_HOLDER::MAGIC_VALUE, 0x50524F5048444C52ULL );
+
+    // Should be able to use all functions when valid
+    BOOST_CHECK( holder.SetProperty( "test", 42 ) );
+    BOOST_CHECK( holder.HasProperty( "test" ) );
+    BOOST_CHECK_EQUAL( holder.GetPropertyOr( "test", 0 ), 42 );
+}
+
+/**
+ * Test safe casting functionality
+ */
+BOOST_AUTO_TEST_CASE( SafeCasting )
+{
+    // Create a PROPERTY_HOLDER
+    PROPERTY_HOLDER* original = new PROPERTY_HOLDER();
+    original->SetProperty( "test_prop", 123 );
+
+    // Cast to void* (simulating client data storage)
+    void* clientData = static_cast<void*>( original );
+
+    // Safe cast should succeed
+    PROPERTY_HOLDER* casted = PROPERTY_HOLDER::SafeCast( clientData );
+    BOOST_CHECK_NE( nullptr, casted );
+    BOOST_CHECK( casted->IsValid() );
+    BOOST_CHECK_EQUAL( casted->GetPropertyOr( "test_prop", 0 ), 123 );
+
+    // Should be the same object
+    BOOST_CHECK_EQUAL( original, casted );
+
+    // Const version should also work
+    const void* constClientData = static_cast<const void*>( original );
+    const PROPERTY_HOLDER* constCasted = PROPERTY_HOLDER::SafeCast( constClientData );
+    BOOST_CHECK_NE( nullptr, constCasted );
+    BOOST_CHECK( constCasted->IsValid() );
+
+    delete original;
+}
+
+/**
+ * Test safe casting with invalid pointers
+ */
+BOOST_AUTO_TEST_CASE( SafeCastingInvalid )
+{
+    // Null pointer should return null
+    BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( static_cast<void*>( nullptr ) ) );
+    BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( static_cast<const void*>( nullptr ) ) );
+
+    // Random memory should return null
+    int randomInt = 12345;
+    void* randomPtr = &randomInt;
+    BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( randomPtr ) );
+
+    // Memory with wrong magic value should return null
+    struct FakeHolder {
+        uint64_t wrong_magic = 0x1234567890ABCDEFULL;
+        int some_data = 42;
+    };
+
+    FakeHolder fake;
+    void* fakePtr = &fake;
+    BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( fakePtr ) );
+}
+
+/**
+ * Test use-after-free detection
+ */
+BOOST_AUTO_TEST_CASE( UseAfterFreeDetection )
+{
+    PROPERTY_HOLDER* holder = new PROPERTY_HOLDER();
+    holder->SetProperty( "test", 42 );
+
+    // Should be valid before deletion
+    BOOST_CHECK( holder->IsValid() );
+
+    void* ptr = static_cast<void*>( holder );
+    BOOST_CHECK_NE( nullptr, PROPERTY_HOLDER::SafeCast( ptr ) );
+
+    // Delete the holder
+    delete holder;
+
+    // Now safe cast should fail (magic value was cleared in destructor)
+    BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( ptr ) );
+}
+
+/**
+ * Test client data creation and deletion helpers
+ */
+BOOST_AUTO_TEST_CASE( ClientDataHelpers )
+{
+    PROPERTY_HOLDER* holder = new PROPERTY_HOLDER();
+    BOOST_CHECK_NE( nullptr, holder );
+    BOOST_CHECK( holder->IsValid() );
+
+    // Should be able to use it
+    BOOST_CHECK( holder->SetProperty( "client_test", 999 ) );
+    BOOST_CHECK_EQUAL( holder->GetPropertyOr( "client_test", 0 ), 999 );
+
+    // Safe delete should succeed
+    BOOST_CHECK( PROPERTY_HOLDER::SafeDelete( reinterpret_cast<void*>( holder ) ) );
+
+    // Safe delete of invalid pointer should fail
+    int randomData = 42;
+    BOOST_CHECK_EQUAL( false, PROPERTY_HOLDER::SafeDelete( &randomData ) );
+    BOOST_CHECK_EQUAL( false, PROPERTY_HOLDER::SafeDelete( static_cast<void*>( nullptr ) ) );
+}
+
+/**
+ * Test copy and move constructors preserve magic value
+ */
+BOOST_AUTO_TEST_CASE( CopyMoveConstructors )
+{
+    PROPERTY_HOLDER original;
+    original.SetProperty( "test", 42 );
+    BOOST_CHECK( original.IsValid() );
+
+    // Copy constructor
+    PROPERTY_HOLDER copied( original );
+    BOOST_CHECK( copied.IsValid() );
+    BOOST_CHECK_EQUAL( copied.GetPropertyOr( "test", 0 ), 42 );
+
+    // Move constructor
+    PROPERTY_HOLDER moved( std::move( original ) );
+    BOOST_CHECK( moved.IsValid() );
+    BOOST_CHECK_EQUAL( moved.GetPropertyOr( "test", 0 ), 42 );
+
+    // Original should still be valid (magic value preserved)
+    BOOST_CHECK( original.IsValid() );
+}
+
+/**
+ * Test assignment operators preserve magic value
+ */
+BOOST_AUTO_TEST_CASE( AssignmentOperators )
+{
+    PROPERTY_HOLDER source;
+    source.SetProperty( "source_prop", 123 );
+
+    PROPERTY_HOLDER target;
+    target.SetProperty( "target_prop", 456 );
+
+    BOOST_CHECK( source.IsValid() );
+    BOOST_CHECK( target.IsValid() );
+
+    // Copy assignment
+    target = source;
+    BOOST_CHECK( target.IsValid() );
+    BOOST_CHECK_EQUAL( target.GetPropertyOr( "source_prop", 0 ), 123 );
+    BOOST_CHECK_EQUAL( false, target.HasProperty( "target_prop" ) ); // Should be overwritten
+
+    // Move assignment
+    PROPERTY_HOLDER another;
+    another.SetProperty( "another_prop", 789 );
+
+    target = std::move( another );
+    BOOST_CHECK( target.IsValid() );
+    BOOST_CHECK_EQUAL( target.GetPropertyOr( "another_prop", 0 ), 789 );
+    BOOST_CHECK( another.IsValid() ); // Magic value preserved
+}
+
+/**
+ * Test behavior of methods when object is invalid
+ */
+BOOST_AUTO_TEST_CASE( InvalidObjectBehavior )
+{
+    // Create a fake PROPERTY_HOLDER with wrong magic value
+    struct FakePropertyHolder {
+        uint64_t wrong_magic = 0xDEADBEEF;
+        std::unordered_map<std::string, std::any> fake_properties;
+    };
+
+    FakePropertyHolder fake;
+    PROPERTY_HOLDER* fakeHolder = reinterpret_cast<PROPERTY_HOLDER*>( &fake );
+
+    // All methods should fail gracefully
+    BOOST_CHECK_EQUAL( false, fakeHolder->IsValid() );
+    BOOST_CHECK_EQUAL( false, fakeHolder->SetProperty( "test", 42 ) );
+    BOOST_CHECK_EQUAL( false, fakeHolder->HasProperty( "anything" ) );
+    BOOST_CHECK_EQUAL( false, fakeHolder->RemoveProperty( "anything" ) );
+    BOOST_CHECK_EQUAL( false, fakeHolder->Clear() );
+    BOOST_CHECK_EQUAL( 0, fakeHolder->Size() );
+    BOOST_CHECK( fakeHolder->Empty() ); // Returns true for invalid objects
+    BOOST_CHECK_EQUAL( 0, fakeHolder->GetKeys().size() );
+    BOOST_CHECK_EQUAL( false, fakeHolder->HasPropertyOfType<int>( "anything" ) );
+
+    // GetProperty should return nullopt
+    auto result = fakeHolder->GetProperty<int>( "anything" );
+    BOOST_CHECK( !result.has_value() );
+
+    // GetPropertyOr should return default
+    BOOST_CHECK_EQUAL( fakeHolder->GetPropertyOr( "anything", 999 ), 999 );
+
+    // GetPropertyType should return nullopt
+    auto typeInfo = fakeHolder->GetPropertyType( "anything" );
+    BOOST_CHECK( !typeInfo.has_value() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

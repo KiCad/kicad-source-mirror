@@ -233,6 +233,9 @@ public:
     GIT m_Git;
 
     API m_Api;
+
+    /// Persistent dialog control values
+    std::map<std::string, std::map<std::string, nlohmann::json>> m_dialogControlValues;
 };
 
 #endif

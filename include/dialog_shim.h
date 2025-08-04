@@ -36,13 +36,21 @@ class EDA_BASE_FRAME;
 
 class wxGridEvent;
 class wxGUIEventLoop;
+class wxInitDialogEvent;
 
 
 /**
  * Dialog helper object to sit in the inheritance tree between wxDialog and any class written
  * by wxFormBuilder.
  *
- * To put it there, use wxFormBuilder tool and set:
+ * In addition to common dialog utilities, DIALOG_SHIM will persist the state of
+ * all child controls and the dialog geometry in the current project's local
+ * settings.  The dialog's type name is used as the default key, but dialogs may
+ * override @ref m_hash_key to store settings under a custom name.  Any control
+ * can opt out of persistence by setting the boolean window property "persist" to
+ * false.  Geometry is stored under the special key "__geometry".
+ *
+ * To use it in wxFormBuilder set:
  * <br> subclass name = DIALOG_SHIM
  * <br> subclass header = dialog_shim.h
  * <br>
@@ -120,6 +128,18 @@ public:
                 e.ShiftDown() && !e.MetaDown();
     }
 
+    /**
+     * Load persisted control values from the current project's local settings.
+     * Controls may opt out by setting the boolean window property "persist" to
+     * false.  Dialog geometry is stored under the special key "__geometry".
+     */
+    void LoadControlState();
+
+    /**
+     * Save control values and geometry to the current project's local settings.
+     */
+    void SaveControlState();
+
 protected:
     /**
      * In all dialogs, we must call the same functions to fix minimal dlg size, the default
@@ -190,11 +210,15 @@ private:
 
     void onChildSetFocus( wxFocusEvent& aEvent );
 
+    void onInitDialog( wxInitDialogEvent& aEvent );
+
+    std::string generateKey( const wxWindow* aWin ) const;
+
     DECLARE_EVENT_TABLE();
 
 protected:
     EDA_UNITS              m_units;    // userUnits for display and parsing
-    std::string            m_hash_key; // alternate for class_map when classname re-used
+    std::string            m_hash_key; // optional custom key for persistence
 
     // The following disables the storing of a user size.  It is used primarily for dialogs
     // with conditional content which don't need user sizing.

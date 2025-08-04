@@ -29,6 +29,9 @@
 #include <kiway_player.h>
 #include <kiway.h>
 #include <pgm_base.h>
+#include <project/project_local_settings.h>
+#include <property_holder.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <kiplatform/ui.h>
 
@@ -40,8 +43,19 @@
 #include <wx/bmpbuttn.h>
 #include <wx/textctrl.h>
 #include <wx/stc/stc.h>
+#include <wx/combobox.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
+#include <wx/spinctrl.h>
+#include <wx/splitter.h>
+#include <wx/radiobox.h>
+#include <wx/radiobut.h>
+#include <wx/variant.h>
 
 #include <algorithm>
+#include <functional>
+#include <nlohmann/json.hpp>
+#include <typeinfo>
 
 BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
     EVT_CHAR_HOOK( DIALOG_SHIM::OnCharHook )
@@ -106,6 +120,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
     Bind( wxEVT_SIZE, &DIALOG_SHIM::OnSize, this );
     Bind( wxEVT_MOVE, &DIALOG_SHIM::OnMove, this );
+    Bind( wxEVT_INIT_DIALOG, &DIALOG_SHIM::onInitDialog, this );
 
 #ifdef __WINDOWS__
     // On Windows, the app top windows can be brought to the foreground (at least temporarily)
@@ -126,11 +141,14 @@ DIALOG_SHIM::~DIALOG_SHIM()
 {
     m_isClosing = true;
 
+    SaveControlState();
+
     Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Unbind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
     Unbind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
     Unbind( wxEVT_SIZE, &DIALOG_SHIM::OnSize, this );
     Unbind( wxEVT_MOVE, &DIALOG_SHIM::OnMove, this );
+    Unbind( wxEVT_INIT_DIALOG, &DIALOG_SHIM::onInitDialog, this );
 
     std::function<void( wxWindowList& )> disconnectFocusHandlers =
             [&]( wxWindowList& children )
@@ -166,6 +184,13 @@ DIALOG_SHIM::~DIALOG_SHIM()
         Kiway().SetBlockingDialog( nullptr );
 
     delete m_qmodal_parent_disabler;
+}
+
+
+void DIALOG_SHIM::onInitDialog( wxInitDialogEvent& aEvent )
+{
+    LoadControlState();
+    aEvent.Skip();
 }
 
 
@@ -205,55 +230,18 @@ int DIALOG_SHIM::vertPixelsFromDU( int y ) const
 #include <hashtables.h>
 #include <typeinfo>
 
-static std::unordered_map<std::string, wxRect> class_map;
 
 
 void DIALOG_SHIM::SetPosition( const wxPoint& aNewPosition )
 {
     wxDialog::SetPosition( aNewPosition );
-
-    // Now update the stored position:
-    const char* hash_key;
-
-    if( m_hash_key.size() )
-    {
-        // a special case like EDA_LIST_DIALOG, which has multiple uses.
-        hash_key = m_hash_key.c_str();
-    }
-    else
-    {
-        hash_key = typeid(*this).name();
-    }
-
-    std::unordered_map<std::string, wxRect>::iterator it = class_map.find( hash_key );
-
-    if( it == class_map.end() )
-        return;
-
-    wxRect rect = it->second;
-    rect.SetPosition( aNewPosition );
-
-    class_map[ hash_key ] = rect;
 }
 
 
 bool DIALOG_SHIM::Show( bool show )
 {
-    bool        ret;
-    const char* hash_key;
+    bool ret;
 
-    if( m_hash_key.size() )
-    {
-        // a special case like EDA_LIST_DIALOG, which has multiple uses.
-        hash_key = m_hash_key.c_str();
-    }
-    else
-    {
-        hash_key = typeid(*this).name();
-    }
-
-    // Show or hide the window.  If hiding, save current position and size.
-    // If showing, use previous position and size.
     if( show )
     {
 #ifndef __WINDOWS__
@@ -261,8 +249,23 @@ bool DIALOG_SHIM::Show( bool show )
 #endif
         ret = wxDialog::Show( show );
 
-        // classname is key, returns a zeroed-out default wxRect if none existed before.
-        wxRect savedDialogRect = class_map[ hash_key ];
+        wxRect           savedDialogRect;
+        COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+        std::string      key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+
+        auto dlgIt = settings->m_dialogControlValues.find( key );
+
+        if( dlgIt != settings->m_dialogControlValues.end() )
+        {
+            auto geoIt = dlgIt->second.find( "__geometry" );
+
+            if( geoIt != dlgIt->second.end() && geoIt->second.is_object() )
+            {
+                const nlohmann::json& g = geoIt->second;
+                savedDialogRect.SetPosition( wxPoint( g.value( "x", 0 ), g.value( "y", 0 ) ) );
+                savedDialogRect.SetSize( wxSize( g.value( "w", 500 ), g.value( "h", 300 ) ) );
+            }
+        }
 
         if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
         {
@@ -294,9 +297,6 @@ bool DIALOG_SHIM::Show( bool show )
             Centre();
         }
 
-        // Be sure that the dialog appears in a visible area
-        // (the dialog position might have been stored at the time when it was
-        // shown on another display)
         if( wxDisplay::GetFromWindow( this ) == wxNOT_FOUND )
             Centre();
 
@@ -305,18 +305,6 @@ bool DIALOG_SHIM::Show( bool show )
     }
     else
     {
-        // Save the dialog's position & size before hiding, using classname as key.
-        // Be careful of rounding errors: only re-save if the user modified the value or
-        // it has not yet been saved.
-        wxRect rect = class_map[ hash_key ];
-
-        if( m_userPositioned || rect.GetPosition() == wxPoint() )
-            rect.SetPosition( wxDialog::GetPosition() );
-
-        if( m_userResized || rect.GetSize() == wxSize() )
-            rect.SetSize( wxDialog::GetSize() );
-
-        class_map[ hash_key ] = rect;
 
 #ifdef __WXMAC__
         if ( m_eventLoop )
@@ -335,26 +323,15 @@ bool DIALOG_SHIM::Show( bool show )
 
 void DIALOG_SHIM::resetSize()
 {
-    const char* hash_key;
+    COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+    std::string key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
 
-    if( m_hash_key.size() )
-    {
-        // a special case like EDA_LIST_DIALOG, which has multiple uses.
-        hash_key = m_hash_key.c_str();
-    }
-    else
-    {
-        hash_key = typeid(*this).name();
-    }
+    auto dlgIt = settings->m_dialogControlValues.find( key );
 
-    std::unordered_map<std::string, wxRect>::iterator it = class_map.find( hash_key );
-
-    if( it == class_map.end() )
+    if( dlgIt == settings->m_dialogControlValues.end() )
         return;
 
-    wxRect rect = it->second;
-    rect.SetSize( wxSize( 0, 0 ) );
-    class_map[ hash_key ] = rect;
+    dlgIt->second.erase( "__geometry" );
 }
 
 
@@ -376,6 +353,196 @@ bool DIALOG_SHIM::Enable( bool enable )
 {
     // so we can do logging of this state change:
     return wxDialog::Enable( enable );
+}
+
+
+std::string DIALOG_SHIM::generateKey( const wxWindow* aWin ) const
+{
+    wxString className = aWin->GetClassInfo()->GetClassName();
+    int      siblingIndex = 0;
+
+    for( const wxWindow* parent = aWin->GetParent(); parent && parent != this; parent = parent->GetParent() )
+    {
+        wxString parentClassName = parent->GetClassInfo()->GetClassName();
+
+        if( !parent->GetParent() )
+            break;
+
+        for( auto& sibling : parent->GetParent()->GetChildren() )
+        {
+            if( sibling->GetClassInfo()->GetClassName() != parentClassName )
+                continue;
+
+
+            if( sibling == parent )
+                break;
+
+            siblingIndex++;
+        }
+
+        className = parentClassName + "_" + std::to_string( siblingIndex ) + ":" + className;
+    }
+
+    siblingIndex = 0;
+
+    if( aWin->GetParent() )
+    {
+        for( auto& sibling : aWin->GetParent()->GetChildren() )
+        {
+            if( sibling->GetClassInfo()->GetClassName() != className )
+                continue;
+
+            if( sibling == aWin )
+                break;
+
+            siblingIndex++;
+        }
+    }
+
+    std::string key = className.ToStdString() + "_" + std::to_string( siblingIndex );
+
+    return key;
+}
+
+
+void DIALOG_SHIM::SaveControlState()
+{
+    COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+    std::string dialogKey = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+    auto& dlgMap = settings->m_dialogControlValues[ dialogKey ];
+
+    wxRect rect( GetPosition(), GetSize() );
+    nlohmann::json geom;
+    geom[ "x" ] = rect.GetX();
+    geom[ "y" ] = rect.GetY();
+    geom[ "w" ] = rect.GetWidth();
+    geom[ "h" ] = rect.GetHeight();
+    dlgMap[ "__geometry" ] = geom;
+
+    std::function<void( wxWindow* )> saveFn = [&]( wxWindow* win )
+    {
+        if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
+        {
+            if( !props->GetPropertyOr( "persist", false ) )
+                return;
+        }
+
+        std::string key = generateKey( win );
+
+        if( !key.empty() )
+        {
+            if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                dlgMap[ key ] = combo->GetSelection();
+            else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
+                dlgMap[ key ] = choice->GetSelection();
+            else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
+                dlgMap[ key ] = check->GetValue();
+            else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                dlgMap[ key ] = spin->GetValue();
+            else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
+                dlgMap[ key ] = radio->GetValue();
+            else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
+                dlgMap[ key ] = radioBox->GetSelection();
+            else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
+                dlgMap[ key ] = splitter->GetSashPosition();
+            else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
+                dlgMap[ key ] = scrolled->GetScrollPos( wxVERTICAL );
+            else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
+                dlgMap[ key ] = notebook->GetSelection();
+        }
+
+        for( wxWindow* child : win->GetChildren() )
+            saveFn( child );
+    };
+
+    for( wxWindow* child : GetChildren() )
+        saveFn( child );
+}
+
+
+void DIALOG_SHIM::LoadControlState()
+{
+    COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+    std::string dialogKey = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+    auto dlgIt = settings->m_dialogControlValues.find( dialogKey );
+
+    if( dlgIt == settings->m_dialogControlValues.end() )
+        return;
+
+    const auto& dlgMap = dlgIt->second;
+
+    std::function<void( wxWindow* )> loadFn = [&]( wxWindow* win )
+    {
+        if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
+        {
+            if( !props->GetPropertyOr( "persist", false ) )
+                return;
+        }
+
+        std::string key = generateKey( win );
+
+        if( !key.empty() )
+        {
+            auto it = dlgMap.find( key );
+
+            if( it != dlgMap.end() )
+            {
+                const nlohmann::json& j = it->second;
+
+                if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                {
+                    if( j.is_string() )
+                        combo->SetValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
+                }
+                else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
+                {
+                    if( j.is_number_integer() )
+                        choice->SetSelection( j.get<int>() );
+                }
+                else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
+                {
+                    if( j.is_boolean() )
+                        check->SetValue( j.get<bool>() );
+                }
+                else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                {
+                    if( j.is_number_integer() )
+                        spin->SetValue( j.get<int>() );
+                }
+                else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
+                {
+                    if( j.is_boolean() )
+                        radio->SetValue( j.get<bool>() );
+                }
+                else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
+                {
+                    if( j.is_number_integer() )
+                        radioBox->SetSelection( j.get<int>() );
+                }
+                else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
+                {
+                    if( j.is_number_integer() )
+                        splitter->SetSashPosition( j.get<int>() );
+                }
+                else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
+                {
+                    if( j.is_number_integer() )
+                        scrolled->SetScrollPos( wxVERTICAL, j.get<int>() );
+                }
+                else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
+                {
+                    if( j.is_number_integer() )
+                        notebook->SetSelection( j.get<int>() );
+                }
+            }
+        }
+
+        for( wxWindow* child : win->GetChildren() )
+            loadFn( child );
+    };
+
+    for( wxWindow* child : GetChildren() )
+        loadFn( child );
 }
 
 

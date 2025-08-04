@@ -435,6 +435,35 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "api.enable_server",
             &m_Api.enable_server, false ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "dialog.controls",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::object();
+
+                for( const auto& dlg : m_dialogControlValues )
+                    ret[ dlg.first ] = dlg.second;
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aVal )
+            {
+                m_dialogControlValues.clear();
+
+                if( !aVal.is_object() )
+                    return;
+
+                for( auto& [dlgKey, dlgVal] : aVal.items() )
+                {
+                    if( !dlgVal.is_object() )
+                        continue;
+
+                    for( auto& [ctrlKey, ctrlVal] : dlgVal.items() )
+                        m_dialogControlValues[ dlgKey ][ ctrlKey ] = ctrlVal;
+                }
+            },
+            nlohmann::json::object() ) );
+
+
     registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
     registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &COMMON_SETTINGS::migrateSchema2to3, this ) );
