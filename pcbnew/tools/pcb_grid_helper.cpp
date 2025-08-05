@@ -142,10 +142,20 @@ std::optional<int64_t> FindSquareDistanceToItem( const BOARD_ITEM& item, const V
 
 } // namespace
 
+PCB_GRID_HELPER::PCB_GRID_HELPER() :
+        GRID_HELPER(),
+        m_magneticSettings( nullptr )
+{
+}
+
+
 PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings ) :
         GRID_HELPER( aToolMgr, LAYER_ANCHOR ),
         m_magneticSettings( aMagneticSettings )
 {
+    if( !m_toolMgr )
+        return;
+
     KIGFX::VIEW*            view = m_toolMgr->GetView();
     KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
     KIGFX::COLOR4D          auxItemsColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
@@ -168,6 +178,9 @@ PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMa
 
 PCB_GRID_HELPER::~PCB_GRID_HELPER()
 {
+    if( !m_toolMgr )
+        return;
+
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
     view->Remove( &m_viewAxis );

@@ -68,6 +68,7 @@ set( QA_EESCHEMA_SRCS
     test_eagle_plugin.cpp
     test_junction_helpers.cpp
     test_lib_part.cpp
+    test_ee_grid_helper.cpp
     test_netlist_exporter_kicad.cpp
     test_ee_item.cpp
     test_incremental_netlister.cpp

@@ -37,14 +37,29 @@
 #include <settings/app_settings.h>
 
 
-GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
-        m_toolMgr( aToolMgr ), m_snapManager( m_constructionGeomPreview )
+GRID_HELPER::GRID_HELPER() :
+        m_toolMgr( nullptr ), m_snapManager( m_constructionGeomPreview )
 {
     m_maskTypes = ALL;
     m_enableSnap = true;
     m_enableSnapLine = true;
     m_enableGrid = true;
     m_snapItem = std::nullopt;
+
+    m_manualGrid = VECTOR2D( 1, 1 );
+    m_manualVisibleGrid = VECTOR2D( 1, 1 );
+    m_manualOrigin = VECTOR2I( 0, 0 );
+    m_manualGridSnapping = true;
+}
+
+
+GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
+        GRID_HELPER()
+{
+    m_toolMgr = aToolMgr;
+
+    if( !m_toolMgr )
+        return;
 
     KIGFX::VIEW*            view = m_toolMgr->GetView();
     KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
@@ -72,11 +87,20 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
 
                 m_toolMgr->GetToolHolder()->RefreshCanvas();
             } );
+
+    // Initialise manual values from view for compatibility
+    m_manualGrid = view->GetGAL()->GetGridSize();
+    m_manualVisibleGrid = view->GetGAL()->GetVisibleGridSize();
+    m_manualOrigin = VECTOR2I( view->GetGAL()->GetGridOrigin() );
+    m_manualGridSnapping = view->GetGAL()->GetGridSnapping();
 }
 
 
 GRID_HELPER::~GRID_HELPER()
 {
+    if( !m_toolMgr )
+        return;
+
     KIGFX::VIEW& view = *m_toolMgr->GetView();
     view.Remove( &m_constructionGeomPreview );
 
@@ -88,6 +112,9 @@ GRID_HELPER::~GRID_HELPER()
 KIGFX::ANCHOR_DEBUG* GRID_HELPER::enableAndGetAnchorDebug()
 {
     static bool permitted = ADVANCED_CFG::GetCfg().m_EnableSnapAnchorsDebug;
+
+    if( !m_toolMgr )
+        return nullptr;
 
     if( permitted && !m_anchorDebug )
     {
@@ -103,12 +130,16 @@ KIGFX::ANCHOR_DEBUG* GRID_HELPER::enableAndGetAnchorDebug()
 
 void GRID_HELPER::showConstructionGeometry( bool aShow )
 {
-    m_toolMgr->GetView()->SetVisible( &m_constructionGeomPreview, aShow );
+    if( m_toolMgr )
+        m_toolMgr->GetView()->SetVisible( &m_constructionGeomPreview, aShow );
 }
 
 
 void GRID_HELPER::updateSnapPoint( const TYPED_POINT2I& aPoint )
 {
+    if( !m_toolMgr )
+        return;
+
     m_viewSnapPoint.SetPosition( aPoint.m_point );
     m_viewSnapPoint.SetSnapTypes( aPoint.m_types );
 
@@ -121,23 +152,26 @@ void GRID_HELPER::updateSnapPoint( const TYPED_POINT2I& aPoint )
 
 VECTOR2I GRID_HELPER::GetGrid() const
 {
-    VECTOR2D size = m_toolMgr->GetView()->GetGAL()->GetGridSize();
-
+    VECTOR2D size = m_toolMgr ? m_toolMgr->GetView()->GetGAL()->GetGridSize() : m_manualGrid;
     return VECTOR2I( KiROUND( size.x ), KiROUND( size.y ) );
 }
 
 
 VECTOR2D GRID_HELPER::GetVisibleGrid() const
 {
-    return m_toolMgr->GetView()->GetGAL()->GetVisibleGridSize();
+    return m_toolMgr ? m_toolMgr->GetView()->GetGAL()->GetVisibleGridSize() : m_manualVisibleGrid;
 }
 
 
 VECTOR2I GRID_HELPER::GetOrigin() const
 {
-    VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();
+    if( m_toolMgr )
+    {
+        VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();
+        return VECTOR2I( origin );
+    }
 
-    return VECTOR2I( origin );
+    return m_manualOrigin;
 }
 
 
@@ -160,7 +194,7 @@ GRID_HELPER_GRIDS GRID_HELPER::GetSelectionGrid( const SELECTION& aSelection ) c
 
 VECTOR2D GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
 {
-    return m_toolMgr->GetView()->GetGAL()->GetGridSize();
+    return m_toolMgr ? m_toolMgr->GetView()->GetGAL()->GetGridSize() : m_manualGrid;
 }
 
 
@@ -170,12 +204,14 @@ void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
     {
         m_auxAxis = aOrigin;
         m_viewAxis.SetPosition( aOrigin );
-        m_toolMgr->GetView()->SetVisible( &m_viewAxis, true );
+        if( m_toolMgr )
+            m_toolMgr->GetView()->SetVisible( &m_viewAxis, true );
     }
     else
     {
         m_auxAxis = std::optional<VECTOR2I>();
-        m_toolMgr->GetView()->SetVisible( &m_viewAxis, false );
+        if( m_toolMgr )
+            m_toolMgr->GetView()->SetVisible( &m_viewAxis, false );
     }
 }
 
@@ -230,7 +266,8 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
 
 bool GRID_HELPER::canUseGrid() const
 {
-    return m_enableGrid && m_toolMgr->GetView()->GetGAL()->GetGridSnapping();
+    return m_enableGrid && ( m_toolMgr ? m_toolMgr->GetView()->GetGAL()->GetGridSnapping()
+                                       : m_manualGridSnapping );
 }
 
 

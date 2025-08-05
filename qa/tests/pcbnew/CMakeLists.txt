@@ -46,6 +46,7 @@ set( QA_PCBNEW_SRCS
     test_prettifier.cpp
     test_libeval_compiler.cpp
     test_reference_image_load.cpp
+    test_pcb_grid_helper.cpp
     test_save_load.cpp
     test_tracks_cleaner.cpp
     test_triangulation.cpp

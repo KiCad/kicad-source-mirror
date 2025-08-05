@@ -45,6 +45,7 @@
 #include <pcb_group.h>
 
 #include <tool/edit_points.h>
+#include <tool/tool_manager.h>
 #include <tools/drawing_tool.h>
 #include <tools/generator_tool.h>
 #include <tools/pcb_picker_tool.h>

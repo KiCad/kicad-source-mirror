@@ -43,8 +43,10 @@ struct PCB_SELECTION_FILTER_OPTIONS;
 
 class PCB_GRID_HELPER : public GRID_HELPER, public BOARD_LISTENER
 {
+    friend class PCBGridHelperTestFixture;
 public:
 
+    PCB_GRID_HELPER();
     PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings );
     ~PCB_GRID_HELPER() override;
 
