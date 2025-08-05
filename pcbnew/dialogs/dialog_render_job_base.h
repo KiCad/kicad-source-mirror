@@ -52,6 +52,7 @@ class DIALOG_RENDER_JOB_BASE : public DIALOG_SHIM
 		wxChoice* m_presetCtrl;
 		wxStaticText* m_backgroundStyleLabel;
 		wxChoice* m_choiceBgStyle;
+		wxCheckBox* m_cbUseBoardStackupColors;
 		wxCheckBox* m_cbRaytracing_proceduralTextures;
 		wxCheckBox* m_cbRaytracing_addFloor;
 		wxCheckBox* m_cbRaytracing_antiAliasing;

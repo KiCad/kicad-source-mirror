@@ -139,8 +139,14 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
 
     if( m_presetCtrl->GetSelection() == 0 )
         m_job->m_appearancePreset = "";
+    else if( m_presetCtrl->GetSelection() == 1 )
+        m_job->m_appearancePreset = wxString( FOLLOW_PCB ).ToStdString();
+    else if( m_presetCtrl->GetSelection() == 2 )
+        m_job->m_appearancePreset = wxString( FOLLOW_PLOT_SETTINGS ).ToStdString();
     else
         m_job->m_appearancePreset = m_presetCtrl->GetStringSelection();
+
+    m_job->m_useBoardStackupColors = m_cbUseBoardStackupColors->GetValue();
 
     m_job->m_bgStyle = getSelectedBgStyle();
     m_job->m_side = getSelectedSide();
@@ -185,8 +191,14 @@ bool DIALOG_RENDER_JOB::TransferDataToWindow()
 
     setSelectedFormat( m_job->m_format );
 
-    if( !m_presetCtrl->SetStringSelection( m_job->m_appearancePreset ) )
+    if( m_job->m_appearancePreset == wxString( FOLLOW_PCB ).ToStdString() )
+        m_presetCtrl->SetSelection( 1 );
+    else if( m_job->m_appearancePreset == wxString( FOLLOW_PLOT_SETTINGS ).ToStdString() )
+        m_presetCtrl->SetSelection( 2 );
+    else if( !m_presetCtrl->SetStringSelection( m_job->m_appearancePreset ) )
         m_presetCtrl->SetSelection( 0 );
+
+    m_cbUseBoardStackupColors->SetValue( m_job->m_useBoardStackupColors );
 
     setSelectedBgStyle( m_job->m_bgStyle );
     setSelectedSide( m_job->m_side );

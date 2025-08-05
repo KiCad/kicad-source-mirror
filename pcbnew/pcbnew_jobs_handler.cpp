@@ -738,6 +738,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     };
 
     cfg.m_CurrentPreset = aRenderJob->m_appearancePreset;
+    cfg.m_UseStackupColors = aRenderJob->m_useBoardStackupColors;
     boardAdapter.m_Cfg = &cfg;
 
     if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT

@@ -44,6 +44,7 @@
 
 #define ARG_SIDE "--side"
 #define ARG_PRESET "--preset"
+#define ARG_USE_BOARD_STACKUP_COLORS "--use-board-stackup-colors"
 #define ARG_PAN "--pan"
 #define ARG_PIVOT "--pivot"
 #define ARG_ROTATE "--rotate"
@@ -259,10 +260,15 @@ CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
                                                  FOLLOW_PCB,
                                                  FOLLOW_PLOT_SETTINGS ) ) );
 
+    m_argParser.add_argument( ARG_USE_BOARD_STACKUP_COLORS )
+            .default_value( true )
+            .implicit_value( true )
+            .help( UTF8STDSTR( _( "Colors defined in board stackup override those in preset" ) ) );
+
     m_argParser.add_argument( ARG_FLOOR )
             .flag()
             .help( UTF8STDSTR( _( "Enables floor, shadows and post-processing, even if disabled in "
-                                  "quality preset" ) ) );
+                                  "quality setting" ) ) );
 
     m_argParser.add_argument( ARG_PERSPECTIVE )
             .flag()
@@ -334,6 +340,8 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
         wxFprintf( stderr, _( "Invalid preset\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
+
+    renderJob->m_useBoardStackupColors = m_argParser.get<bool>( ARG_USE_BOARD_STACKUP_COLORS );
 
     renderJob->m_width = m_argParser.get<int>( ARG_WIDTH );
     renderJob->m_height = m_argParser.get<int>( ARG_HEIGHT );
