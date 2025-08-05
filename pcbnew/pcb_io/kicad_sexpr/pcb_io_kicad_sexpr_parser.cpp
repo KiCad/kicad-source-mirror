@@ -7405,8 +7405,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                 if( token == T_island )
                 {
-                    island = true;
-                    NeedRIGHT();
+                    island = parseMaybeAbsentBool( true );
                     NeedLEFT();
                     token = NextTok();
                 }

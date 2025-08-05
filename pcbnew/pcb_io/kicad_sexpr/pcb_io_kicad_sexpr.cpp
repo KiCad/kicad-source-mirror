@@ -2711,7 +2711,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
             m_out->Print( "(layer %s)", m_out->Quotew( LSET::Name( layer ) ).c_str() );
 
             if( aZone->IsIsland( layer, ii ) )
-                m_out->Print( "(island)" );
+                KICAD_FORMAT::FormatBool( m_out, "island", true );
 
             const SHAPE_LINE_CHAIN& chain = fv->COutline( ii );
 
