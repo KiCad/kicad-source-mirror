@@ -823,6 +823,8 @@ public:
     inline VECTOR2D GetVisibleGridSize() const
     {
         VECTOR2D gridScreenSize( m_gridSize );
+        gridScreenSize.x = std::max( 100.0, gridScreenSize.x );
+        gridScreenSize.y = std::max( 100.0, gridScreenSize.y );
 
         double gridThreshold = computeMinGridSpacing() / m_worldScale;
 
