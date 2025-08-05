@@ -29,6 +29,7 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <view/view_controls.h>
 
+#include <tool/tool_manager.h>
 #include <tools/pcb_grid_helper.h>
 #include <wx/log.h>
 

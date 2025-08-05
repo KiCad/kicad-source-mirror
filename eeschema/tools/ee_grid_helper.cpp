@@ -39,10 +39,18 @@
 #include <view/view.h>
 #include "ee_grid_helper.h"
 
+EE_GRID_HELPER::EE_GRID_HELPER() :
+        GRID_HELPER()
+{
+}
+
 
 EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
         GRID_HELPER( aToolMgr, LAYER_SCHEMATIC_ANCHOR )
 {
+    if( !m_toolMgr )
+        return;
+
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
     m_viewAxis.SetSize( 20000 );
@@ -62,6 +70,9 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 
 EE_GRID_HELPER::~EE_GRID_HELPER()
 {
+    if( !m_toolMgr )
+        return;
+
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
     view->Remove( &m_viewAxis );

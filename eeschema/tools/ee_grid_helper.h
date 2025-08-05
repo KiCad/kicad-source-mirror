@@ -29,7 +29,7 @@
 #include <math/vector2d.h>
 #include <origin_viewitem.h>
 #include <tool/grid_helper.h>
-#include <sch_selection.h>
+#include "sch_selection.h"
 
 class SCH_ITEM;
 
@@ -38,6 +38,7 @@ class EE_GRID_HELPER : public GRID_HELPER
 {
 public:
 
+    EE_GRID_HELPER();
     EE_GRID_HELPER( TOOL_MANAGER* aToolMgr );
     ~EE_GRID_HELPER() override;
 

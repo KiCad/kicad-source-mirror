@@ -32,9 +32,10 @@
 #include <preview_items/snap_indicator.h>
 #include <preview_items/construction_geom.h>
 #include <tool/construction_manager.h>
-#include <tool/tool_manager.h>
 #include <tool/selection.h>
 #include <origin_viewitem.h>
+
+class TOOL_MANAGER; // Forward declaration to avoid hard dependency in tests
 
 class EDA_ITEM;
 
@@ -52,13 +53,21 @@ enum GRID_HELPER_GRIDS : int
 
 class GRID_HELPER
 {
+    friend void TEST_CLEAR_ANCHORS( GRID_HELPER& helper );
 public:
+    GRID_HELPER();
     GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer );
     virtual ~GRID_HELPER();
 
     VECTOR2I GetGrid() const;
     VECTOR2D GetVisibleGrid() const;
     VECTOR2I GetOrigin() const;
+
+    // Manual setters used when no TOOL_MANAGER/View is available (e.g. in tests)
+    void SetGridSize( const VECTOR2D& aGrid ) { m_manualGrid = aGrid; }
+    void SetVisibleGridSize( const VECTOR2D& aGrid ) { m_manualVisibleGrid = aGrid; }
+    void SetOrigin( const VECTOR2I& aOrigin ) { m_manualOrigin = aOrigin; }
+    void SetGridSnapping( bool aEnable ) { m_manualGridSnapping = aEnable; }
 
     void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ) );
 
@@ -229,6 +238,12 @@ protected:
                                               //   source point
     KIGFX::SNAP_INDICATOR   m_viewSnapPoint;
     KIGFX::ORIGIN_VIEWITEM  m_viewAxis;
+
+    // Manual grid parameters used when no TOOL_MANAGER is provided
+    VECTOR2D                m_manualGrid;
+    VECTOR2D                m_manualVisibleGrid;
+    VECTOR2I                m_manualOrigin;
+    bool                    m_manualGridSnapping;
 
 private:
     /// Show construction geometry (if any) on the canvas.

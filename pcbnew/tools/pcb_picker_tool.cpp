@@ -30,6 +30,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <kiplatform/ui.h>
 #include <status_popup.h>
+#include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <view/view_controls.h>
