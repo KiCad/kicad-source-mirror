@@ -37,6 +37,7 @@ set( QA_KIMATH_SRCS
     geometry/test_fillet.cpp
     geometry/test_half_line.cpp
     geometry/test_oval.cpp
+    geometry/test_poly_triangulation.cpp
     geometry/test_segment.cpp
     geometry/test_shape_compound_collision.cpp
     geometry/test_shape_arc.cpp
