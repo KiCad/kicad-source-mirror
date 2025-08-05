@@ -771,8 +771,11 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
                 wxASSERT( zbot < ztop );
 
-                generateCylinder( via_center, hole_inner_radius, hole_inner_radius + platingThickness3d,
-                                  ztop, zbot, nrSegments, layerTriangleVIA );
+                if( m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
+                {
+                    generateCylinder( via_center, hole_inner_radius, hole_inner_radius + platingThickness3d,
+                                      ztop, zbot, nrSegments, layerTriangleVIA );
+                }
             }
         }
 
@@ -842,7 +845,7 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
         const LIST_OBJECT2D& holes2D = holesContainer.GetList();
 
-        if( holes2D.size() > 0 )
+        if( holes2D.size() > 0 && m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
         {
             float layer_z_top, layer_z_bot, dummy;
 

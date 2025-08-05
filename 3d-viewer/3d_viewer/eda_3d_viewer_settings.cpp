@@ -38,6 +38,7 @@ LAYER_PRESET_3D::LAYER_PRESET_3D( const wxString& aName ) :
         name( aName )
 {
     layers.set( LAYER_3D_BOARD );
+    layers.set( LAYER_3D_PLATED_BARRELS );
     layers.set( LAYER_3D_COPPER_TOP );
     layers.set( LAYER_3D_COPPER_BOTTOM );
     layers.set( LAYER_3D_SILKSCREEN_TOP );
@@ -59,6 +60,7 @@ LAYER_PRESET_3D::LAYER_PRESET_3D( const wxString& aName ) :
     colors[ LAYER_3D_BACKGROUND_TOP ]    = BOARD_ADAPTER::g_DefaultBackgroundTop;
     colors[ LAYER_3D_BACKGROUND_BOTTOM ] = BOARD_ADAPTER::g_DefaultBackgroundBot;
     colors[ LAYER_3D_BOARD ]             = BOARD_ADAPTER::g_DefaultBoardBody;
+    colors[ LAYER_3D_PLATED_BARRELS ]    = BOARD_ADAPTER::g_DefaultSurfaceFinish;
     colors[ LAYER_3D_COPPER_TOP ]        = BOARD_ADAPTER::g_DefaultSurfaceFinish;
     colors[ LAYER_3D_COPPER_BOTTOM ]     = BOARD_ADAPTER::g_DefaultSurfaceFinish;
     colors[ LAYER_3D_SILKSCREEN_TOP ]    = BOARD_ADAPTER::g_DefaultSilkscreen;
@@ -91,6 +93,7 @@ PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
     LAYER( "background_bottom",   LAYER_3D_BACKGROUND_BOTTOM );
     LAYER( "background_top",      LAYER_3D_BACKGROUND_TOP    );
     LAYER( "board",               LAYER_3D_BOARD             );
+    LAYER( "plated_barrels",      LAYER_3D_PLATED_BARRELS    );
     LAYER( "copper",              LAYER_3D_COPPER_TOP        );
     LAYER( "copper_bottom",       LAYER_3D_COPPER_BOTTOM     );
     LAYER( "silkscreen_bottom",   LAYER_3D_SILKSCREEN_BOTTOM );
@@ -346,6 +349,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                             &m_Render.show_navigator, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_board_body",
                                             &m_Render.show_board_body, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_plated_barrels",
+                                            &m_Render.show_plated_barrels, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_comments",
                                             &m_Render.show_comments, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_drawings",

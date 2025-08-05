@@ -128,6 +128,7 @@ public:
         bool show_adhesive;
         bool show_navigator;
         bool show_board_body;
+        bool show_plated_barrels;
         bool show_comments;
         bool show_drawings;
         bool show_eco1;

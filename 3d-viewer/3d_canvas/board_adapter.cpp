@@ -759,6 +759,7 @@ void BOARD_ADAPTER::SetLayerColors( const std::map<int, COLOR4D>& aColors )
 void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
 {
     m_Cfg->m_Render.show_board_body                = aLayers.test( LAYER_3D_BOARD );
+    m_Cfg->m_Render.show_plated_barrels            = aLayers.test( LAYER_3D_PLATED_BARRELS );
     m_Cfg->m_Render.show_copper_top                = aLayers.test( LAYER_3D_COPPER_TOP );
     m_Cfg->m_Render.show_copper_bottom             = aLayers.test( LAYER_3D_COPPER_BOTTOM );
     m_Cfg->m_Render.show_silkscreen_top            = aLayers.test( LAYER_3D_SILKSCREEN_TOP );
@@ -806,6 +807,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
             ret.set( LAYER_3D_ADHESIVE,          m_Cfg->m_Render.show_adhesive );
         }
 
+        ret.set( LAYER_3D_PLATED_BARRELS,    true );
         ret.set( LAYER_3D_COPPER_TOP,        true );
         ret.set( LAYER_3D_COPPER_BOTTOM,     true );
         ret.set( LAYER_3D_SILKSCREEN_TOP,    true );
@@ -836,6 +838,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
     }
 
     ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
+    ret.set( LAYER_3D_PLATED_BARRELS,    m_Cfg->m_Render.show_plated_barrels );
     ret.set( LAYER_3D_COPPER_TOP,        m_Cfg->m_Render.show_copper_top );
     ret.set( LAYER_3D_COPPER_BOTTOM,     m_Cfg->m_Render.show_copper_bottom );
     ret.set( LAYER_3D_SILKSCREEN_TOP,    m_Cfg->m_Render.show_silkscreen_top );
@@ -934,6 +937,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetDefaultVisibleLayers() const
     std::bitset<LAYER_3D_END> ret;
 
     ret.set( LAYER_3D_BOARD,             true );
+    ret.set( LAYER_3D_PLATED_BARRELS,    true );
     ret.set( LAYER_3D_COPPER_TOP,        true );
     ret.set( LAYER_3D_COPPER_BOTTOM,     true );
     ret.set( LAYER_3D_SILKSCREEN_TOP,    true );

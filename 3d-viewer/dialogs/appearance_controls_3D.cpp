@@ -53,6 +53,7 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
 
     //        text                           id                        tooltip
     RR( _HKI( "Board Body" ),    LAYER_3D_BOARD,             _HKI( "Show board body" ) ),
+    RR( _HKI( "Plated Barrels" ),LAYER_3D_PLATED_BARRELS,    _HKI( "Show barrels of plated through-holes and vias" ) ),
     RR(  wxS( "F.Cu" ),          LAYER_3D_COPPER_TOP,        _HKI( "Show front copper / surface finish color" ) ),
     RR(  wxS( "B.Cu" ),          LAYER_3D_COPPER_BOTTOM,     _HKI( "Show back copper / surface finish color" ) ),
     RR( _HKI( "Adhesive" ),      LAYER_3D_ADHESIVE,          _HKI( "Show adhesive" ) ),
@@ -429,6 +430,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
     case LAYER_3D_BOARD:
     case LAYER_3D_COPPER_TOP:
     case LAYER_3D_COPPER_BOTTOM:
+    case LAYER_3D_PLATED_BARRELS:
     case LAYER_3D_SILKSCREEN_BOTTOM:
     case LAYER_3D_SILKSCREEN_TOP:
     case LAYER_3D_SOLDERMASK_BOTTOM:
@@ -500,15 +502,23 @@ void APPEARANCE_CONTROLS_3D::onColorSwatchChanged( COLOR_SWATCH* aSwatch )
     // be applied to all copper layers.
     COLOR_SWATCH* otherSwatch = nullptr;
 
-    if( layer == LAYER_3D_COPPER_TOP )
+    const std::vector<int> copperIndices{
+        LAYER_3D_COPPER_TOP,
+        LAYER_3D_COPPER_BOTTOM,
+        LAYER_3D_PLATED_BARRELS,
+    };
+
+    // If the changed swatch is one of the copper layers, we need to update the other copper layers
+    if( std::find( copperIndices.begin(), copperIndices.end(), layer ) != copperIndices.end() )
     {
-        colors[ LAYER_3D_COPPER_BOTTOM ] = newColor;
-        otherSwatch = m_layerSettingsMap[LAYER_3D_COPPER_BOTTOM]->m_Ctl_color;
-    }
-    else if( layer == LAYER_3D_COPPER_BOTTOM )
-    {
-        colors[ LAYER_3D_COPPER_TOP ] = newColor;
-        otherSwatch = m_layerSettingsMap[LAYER_3D_COPPER_TOP]->m_Ctl_color;
+        for( int index : copperIndices )
+        {
+            if( layer != index && colors.count( index ) )
+            {
+                colors[index] = newColor;
+                otherSwatch = m_layerSettingsMap[index]->m_Ctl_color;
+            }
+        }
     }
 
     if( otherSwatch )
@@ -1090,5 +1100,3 @@ void APPEARANCE_CONTROLS_3D::passOnFocus()
 {
     m_focusOwner->SetFocus();
 }
-
-
