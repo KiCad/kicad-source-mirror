@@ -2432,16 +2432,18 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
         case T_tenting:
         {
+            bds.m_TentViasFront = false;
+            bds.m_TentViasBack = false;
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                if( token == T_front )
-                    bds.m_TentViasFront = true;
-                else if( token == T_back )
-                    bds.m_TentViasBack = true;
-                else if( token == T_none )
-                    bds.m_TentViasFront = bds.m_TentViasBack = false;
-                else
-                    Expecting( "front, back, or none" );
+                switch( token )
+                {
+                case T_front: bds.m_TentViasFront = true; break;
+                case T_back:  bds.m_TentViasBack = true;  break;
+                case T_none:                              break;
+                default: Expecting( "front, back, or none" ); break;
+                }
             }
             break;
         }
