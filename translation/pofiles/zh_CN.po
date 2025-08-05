@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-31 19:36+0300\n"
-"PO-Revision-Date: 2025-07-31 03:06+0000\n"
+"PO-Revision-Date: 2025-08-05 12:13+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -26642,7 +26642,7 @@ msgstr "最少钻头种类"
 
 #: kicad/cli/command_pcb_export_drill.cpp:86
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "为非金属化孔 (NPTH) 和金属化孔 (PTH) 生成独立文件"
+msgstr "为非电镀孔 (NPTH) 和电镀孔 (PTH) 生成独立文件"
 
 #: kicad/cli/command_pcb_export_drill.cpp:90
 msgid "Generate map / summary of drill hits"
@@ -32446,7 +32446,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:495
 #, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr "<br/>参考位号: %s 封装: %s: %s, 位于 PCB 上的 %s。"
+msgstr "<br/>参考位号: %s 封装: %s:%s, 位于 PCB 上的 %s。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
 msgid "Reannotate anyway?"
@@ -32788,7 +32788,7 @@ msgstr "连接器:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:169
 msgid "NPTH:"
-msgstr "非金属化 (NPTH):"
+msgstr "非电镀孔 (NPTH):"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:172
 msgid "Through vias:"
@@ -32834,11 +32834,11 @@ msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:585 pcbnew/pad.cpp:1598
 msgid "PTH"
-msgstr "金属化 (PTH)"
+msgstr "电镀孔 (PTH)"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:585 pcbnew/pad.cpp:1601
 msgid "NPTH"
-msgstr "非金属化 (NPTH)"
+msgstr "非电镀孔 (NPTH)"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:746
 msgid ""
@@ -33311,7 +33311,7 @@ msgstr "缓释热焊盘 (花焊盘)"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Reliefs for PTH"
-msgstr "仅金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
+msgstr "在电镀孔上 (PTH) 使用缓释热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
@@ -35770,7 +35770,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:70
 msgid "PTH and NPTH in single file"
-msgstr "合并金属化孔 (PTH) 和非金属化 (NPTH) 到单个文件中"
+msgstr "将电镀孔 (PTH) 和非电镀孔 (NPTH) 到合并单个文件中"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:71
 msgid ""
@@ -35779,7 +35779,7 @@ msgid ""
 "file."
 msgstr ""
 "不推荐。\n"
-"仅用于要求将金属化孔 (PTH) 和非金属化孔 (NPTH) 合并到单个文件的电路板厂。"
+"仅用于明确要求将电镀孔 (PTH) 和非电镀孔 (NPTH) 合并到单个文件中的电路板厂。"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
 msgid "Use alternate drill mode for oval holes"
@@ -36956,11 +36956,11 @@ msgstr "板边连接器"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "NPTH, Mechanical"
-msgstr "NPTH 非金属化孔, 机械的"
+msgstr "非电镀孔 (NPTH), 机械"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "SMD Aperture"
-msgstr "贴片 Aperture"
+msgstr "SMD Aperture"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
 msgid "Pad number:"
@@ -43611,7 +43611,7 @@ msgstr "继承"
 
 #: pcbnew/footprint.cpp:4117 pcbnew/pad.cpp:2739 pcbnew/zone.cpp:1766
 msgid "Thermal reliefs for PTH"
-msgstr "对金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
+msgstr "在电镀孔 (PTH) 上使用缓释热焊盘 (花焊盘)"
 
 #: pcbnew/footprint.cpp:4177
 msgid "Not in Schematic"
@@ -44979,7 +44979,7 @@ msgstr "连接器"
 #: pcbnew/pad.cpp:1618
 #, c-format
 msgid "NPTH pad of %s"
-msgstr "%s 的非金属化焊盘"
+msgstr "%s 的 NPTH 焊盘"
 
 #: pcbnew/pad.cpp:1620
 msgid "NPTH pad"
@@ -44998,7 +44998,7 @@ msgstr "%s 上的焊盘"
 #: pcbnew/pad.cpp:1643
 #, c-format
 msgid "PTH pad %s of %s"
-msgstr "%2$s 的金属化焊盘 %1$s"
+msgstr "%2$s 的 PTH 焊盘 %1$s"
 
 #: pcbnew/pad.cpp:1649
 msgid "PTH pad"
@@ -45017,7 +45017,7 @@ msgstr "%2$s 上的焊盘 %1$s"
 #: pcbnew/pad.cpp:1676
 #, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "%3$s 的金属化焊盘 %1$s %2$s"
+msgstr "%3$s 的PTH 焊盘 %1$s %2$s"
 
 #: pcbnew/pad.cpp:1683
 #, c-format
@@ -45027,7 +45027,7 @@ msgstr "PTH 焊盘 %s"
 #: pcbnew/pad.cpp:2262
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
-msgstr "(PTH 焊盘通常应至少在一个外层上存在焊盘)"
+msgstr "(电镀孔 (PTH) 通常应至少在一个外层上存在焊盘)"
 
 #: pcbnew/pad.cpp:2270
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -45035,10 +45035,9 @@ msgstr "('基准点' (Fiducial) 属性对于 NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2274
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "('测试点' (Testpoint) 属性对于NPTH 焊盘毫无意义)"
+msgstr "('测试点' (Testpoint) 属性对于 NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2277
-#, fuzzy
 msgid "('heatsink' property makes no sense on NPTH pads)"
 msgstr "('散热焊盘' (Heatsink) 属性对于 NPTH 焊盘毫无意义)"
 
@@ -45085,7 +45084,7 @@ msgstr "(焊盘大小必须为正)"
 #: pcbnew/pad.cpp:2376
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "PTH 焊盘的孔径尺寸必须大于 %s"
+msgstr "(PTH 焊盘孔的孔径必须大于 %s)"
 
 #: pcbnew/pad.cpp:2399
 msgid "(PTH pad hole leaves no copper)"
@@ -45151,7 +45150,7 @@ msgstr "板边连接器"
 
 #: pcbnew/pad.cpp:2705
 msgid "NPTH, mechanical"
-msgstr "非金属化孔, 机械的"
+msgstr "非电镀孔 (NPTH), 机械"
 
 #: pcbnew/pad.cpp:2711
 msgid "Trapezoid"
@@ -52572,7 +52571,7 @@ msgstr "实心"
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs for PTH"
-msgstr "用于金属化孔 (PTH) 的缓释热焊盘 (花焊盘)"
+msgstr "用于电镀孔 (PTH) 的缓释热焊盘 (花焊盘)"
 
 #: plugins/3d/vrml/vrml.cpp:239
 #, c-format
