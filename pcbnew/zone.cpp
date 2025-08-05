@@ -1331,7 +1331,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     if( GetIsRuleArea() )
     {
         // We like keepouts just the way they are....
-        aSmoothedPoly = flattened;
+        aSmoothedPoly = std::move( flattened );
         return true;
     }
 

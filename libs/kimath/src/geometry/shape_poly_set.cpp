@@ -743,7 +743,7 @@ void SHAPE_POLY_SET::RebuildHolesFromContours()
         process( topParentId, -1, std::move( path ) );
     }
 
-    *this = result;
+    *this = std::move( result );
 }
 
 

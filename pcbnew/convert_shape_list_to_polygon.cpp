@@ -1158,7 +1158,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         else
         {
             wxLogTrace( traceBoardOutline, wxT( "Treating outline as board edge" ) );
-            aOutlines = outlines;
+            aOutlines = std::move( outlines );
         }
 
         return true;
@@ -1222,7 +1222,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         {
             // Something is wrong, bail out with the overall footprint bounding box
             wxLogTrace( traceBoardOutline, wxT( "No line segments in provided outline" ) );
-            aOutlines = bbox;
+            aOutlines = std::move( bbox );
             return true;
         }
         else if( chain.SegmentCount() == 1 )
@@ -1242,8 +1242,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
             if( inter0 && inter2 && !inter1 && !inter3 )
             {
                 // Intersects the vertical rectangle sides only
-                wxLogTrace( traceBoardOutline, wxT( "Segment intersects only vertical bbox "
-                                                    "sides" ) );
+                wxLogTrace( traceBoardOutline, wxT( "Segment intersects only vertical bbox sides" ) );
 
                 // The upper half
                 upper.Append( *inter0 );
@@ -1262,8 +1261,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
             else if( inter1 && inter3 && !inter0 && !inter2 )
             {
                 // Intersects the horizontal rectangle sides only
-                wxLogTrace( traceBoardOutline, wxT( "Segment intersects only horizontal bbox "
-                                                    "sides" ) );
+                wxLogTrace( traceBoardOutline, wxT( "Segment intersects only horizontal bbox sides" ) );
 
                 // The left half
                 upper.Append( *inter1 );
@@ -1282,8 +1280,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
             else
             {
                 // Angled line segment that cuts across a corner
-                wxLogTrace( traceBoardOutline, wxT( "Segment intersects two perpendicular bbox "
-                                                    "sides" ) );
+                wxLogTrace( traceBoardOutline, wxT( "Segment intersects two perpendicular bbox sides" ) );
 
                 // Figure out which actual lines are intersected, since IntersectLines assumes
                 // an infinite line
@@ -1376,7 +1373,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
             wxLogTrace( traceBoardOutline, wxT( "Multiple segments in outline" ) );
 
             // Just a temporary thing
-            aOutlines = bbox;
+            aOutlines = std::move( bbox );
             return true;
         }
 
@@ -1393,12 +1390,12 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         if( isCopperOutside( footprint, poly1 ) )
         {
             wxLogTrace( traceBoardOutline, wxT( "Using lower shape" ) );
-            aOutlines = poly2;
+            aOutlines = std::move( poly2 );
         }
         else
         {
             wxLogTrace( traceBoardOutline, wxT( "Using upper shape" ) );
-            aOutlines = poly1;
+            aOutlines = std::move( poly1 );
         }
 
         // Add all closed polys as holes to the main outline

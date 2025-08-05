@@ -1675,10 +1675,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             SHAPE_POLY_SET::POLYGON& polygon = approximated.Polygon( polyId );
 
             for( size_t contId = 0; contId < polygon.size(); contId++ )
-            {
-                SHAPE_LINE_CHAIN approxChain = approximateLineChainWithArcs( polygon[contId] );
-                polygon[contId] = approxChain;
-            }
+                polygon[contId] = approximateLineChainWithArcs( polygon[contId] );
         }
 
         fallbackPoly = workingPoly;
