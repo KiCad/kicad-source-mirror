@@ -278,16 +278,22 @@ void PCB_MARKER::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    // Markers do not participate in the board geometry space, and therefore have no
-    // effectiven shape.
+    // Markers do not participate in the board geometry space, and therefore have no effective shape.
     return std::make_shared<SHAPE_NULL>();
 }
 
 
+void PCB_MARKER::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                          int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
+{
+    // Markers do not participate in the board geometry space, and therefore have no shape.
+};
+
+
 wxString PCB_MARKER::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Marker (%s)" ),
-                             aFull ? m_rcItem->GetErrorMessage() : m_rcItem->GetErrorText() );
+    return wxString::Format( _( "Marker (%s)" ), aFull ? m_rcItem->GetErrorMessage()
+                                                       : m_rcItem->GetErrorText() );
 }
 
 
