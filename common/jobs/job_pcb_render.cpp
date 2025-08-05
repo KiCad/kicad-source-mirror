@@ -85,6 +85,7 @@ JOB_PCB_RENDER::JOB_PCB_RENDER() :
 {
     m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &m_format, m_format ) );
     m_params.emplace_back( new JOB_PARAM<std::string>( "preset", &m_appearancePreset, m_appearancePreset ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_board_stackup_colors", &m_useBoardStackupColors, m_useBoardStackupColors ) );
     m_params.emplace_back( new JOB_PARAM<QUALITY>( "quality", &m_quality, m_quality ) );
     m_params.emplace_back( new JOB_PARAM<BG_STYLE>( "bg_style", &m_bgStyle, m_bgStyle ) );
     m_params.emplace_back( new JOB_PARAM<SIDE>( "side", &m_side, m_side ) );

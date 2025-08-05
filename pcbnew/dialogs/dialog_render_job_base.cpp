@@ -72,7 +72,7 @@ DIALOG_RENDER_JOB_BASE::DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id,
 	m_presetLabel->Wrap( -1 );
 	fgSizerTop->Add( m_presetLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxString m_presetCtrlChoices[] = { _("Default") };
+	wxString m_presetCtrlChoices[] = { _("Default"), _("Follow PCB Editor"), _("Follow PCB Plot Settings") };
 	int m_presetCtrlNChoices = sizeof( m_presetCtrlChoices ) / sizeof( wxString );
 	m_presetCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_presetCtrlNChoices, m_presetCtrlChoices, 0 );
 	m_presetCtrl->SetSelection( 0 );
@@ -92,6 +92,10 @@ DIALOG_RENDER_JOB_BASE::DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id,
 
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 0, 1, 5, 0 );
+
+	m_cbUseBoardStackupColors = new wxCheckBox( this, wxID_ANY, _("Use board stackup colors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUseBoardStackupColors->SetValue(true);
+	gSizer1->Add( m_cbUseBoardStackupColors, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_cbRaytracing_proceduralTextures = new wxCheckBox( this, wxID_ANY, _("Procedural textures (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_proceduralTextures->SetValue(true);
