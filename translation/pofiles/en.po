@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-31 19:38+0300\n"
+"POT-Creation-Date: 2025-08-05 15:14+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1004,6 +1004,12 @@ msgstr "Error allocating memory for potrace bitmap"
 
 msgid "Errors"
 msgstr "Errors"
+
+msgid "Replace Loaded File?"
+msgstr "Replace Loaded File?"
+
+msgid "There is already a file loaded. Do you want to replace it?"
+msgstr "There is already a file loaded. Do you want to replace it?"
 
 msgid "Original Picture"
 msgstr "Original Picture"
@@ -12089,9 +12095,6 @@ msgstr "[Unsaved]"
 msgid "[no schematic loaded]"
 msgstr "[no schematic loaded]"
 
-msgid "Schematic Cleanup"
-msgstr "Schematic Cleanup"
-
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Highlighted net: %s"
@@ -13471,6 +13474,9 @@ msgstr "Signal name contains '{' and '}' but is not a valid bus name"
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr "Signal name contains '[' or ']' but is not a valid bus name."
 
+msgid "Schematic Cleanup"
+msgstr "Schematic Cleanup"
+
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -14494,6 +14500,9 @@ msgid ""
 msgstr ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
+
+msgid "<b>Warning: reference is empty</b><br><br>"
+msgstr "<b>Warning: reference is empty</b><br><br>"
 
 #, c-format
 msgid ""

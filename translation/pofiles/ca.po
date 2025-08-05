@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-31 19:38+0300\n"
+"POT-Creation-Date: 2025-08-05 15:14+0300\n"
 "PO-Revision-Date: 2025-05-11 14:03+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:320
-#: common/widgets/grid_text_button_helpers.cpp:372
+#: common/widgets/grid_text_button_helpers.cpp:375
 msgid "All Files"
 msgstr "Tots els Fitxers"
 
@@ -360,7 +360,7 @@ msgstr "No teniu permisos d'escriptura per a desar el fitxer «%s»."
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:233
-#: pcbnew/widgets/appearance_controls.cpp:2768
+#: pcbnew/widgets/appearance_controls.cpp:2773
 msgid "Error"
 msgstr "Error"
 
@@ -927,34 +927,34 @@ msgstr "Mostra les capses delimitadores dels models"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
-#: pcbnew/widgets/appearance_controls.cpp:340
+#: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Values"
 msgstr "Valors"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
-#: pcbnew/widgets/appearance_controls.cpp:340
+#: pcbnew/widgets/appearance_controls.cpp:339
 #, fuzzy
 msgid "Show footprint values"
 msgstr "Mostra els valors de l'empremta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
-#: pcbnew/widgets/appearance_controls.cpp:341
+#: pcbnew/widgets/appearance_controls.cpp:340
 msgid "References"
 msgstr "Referències"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
-#: pcbnew/widgets/appearance_controls.cpp:341
+#: pcbnew/widgets/appearance_controls.cpp:340
 #, fuzzy
 msgid "Show footprint references"
 msgstr "Mostra les referències de l'empremta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#: pcbnew/widgets/appearance_controls.cpp:342
+#: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprint Text"
 msgstr "Text de l'empremta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#: pcbnew/widgets/appearance_controls.cpp:342
+#: pcbnew/widgets/appearance_controls.cpp:341
 #, fuzzy
 msgid "Show all footprint text"
 msgstr "Mostra tots els camps de l'empremta"
@@ -1041,13 +1041,13 @@ msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:630
-#: pcbnew/widgets/appearance_controls.cpp:2237
+#: pcbnew/widgets/appearance_controls.cpp:2242
 #, c-format
 msgid "Show or hide %s"
 msgstr "Mostra o amaga %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:709
-#: pcbnew/widgets/appearance_controls.cpp:2610
+#: pcbnew/widgets/appearance_controls.cpp:2615
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr "Ajustaments per defecte (%s+Tab):"
@@ -1055,25 +1055,25 @@ msgstr "Ajustaments per defecte (%s+Tab):"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:723
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1660
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2099
-#: pcbnew/widgets/appearance_controls.cpp:2635
+#: pcbnew/widgets/appearance_controls.cpp:2640
 msgid "Save preset..."
 msgstr "Desa pre-ajustament..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:724
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1661
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2100
-#: pcbnew/widgets/appearance_controls.cpp:2636
+#: pcbnew/widgets/appearance_controls.cpp:2641
 msgid "Delete preset..."
 msgstr "Elimina pre-ajustament..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:824
-#: pcbnew/widgets/appearance_controls.cpp:2741
+#: pcbnew/widgets/appearance_controls.cpp:2746
 #, fuzzy
 msgid "Layer preset name:"
 msgstr "Selecció de la capa:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:825
-#: pcbnew/widgets/appearance_controls.cpp:2742
+#: pcbnew/widgets/appearance_controls.cpp:2747
 #, fuzzy
 msgid "Save Layer Preset"
 msgstr "Selecció del parell de capes"
@@ -1081,14 +1081,14 @@ msgstr "Selecció del parell de capes"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:840
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1835
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2242
-#: pcbnew/widgets/appearance_controls.cpp:2775
+#: pcbnew/widgets/appearance_controls.cpp:2780
 msgid "Overwrite existing preset?"
 msgstr "Sobreescriu el valor existent?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1862
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2269
-#: pcbnew/widgets/appearance_controls.cpp:2803
+#: pcbnew/widgets/appearance_controls.cpp:2808
 #, fuzzy
 msgid "Presets"
 msgstr "Restableix"
@@ -1096,7 +1096,7 @@ msgstr "Restableix"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:875
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1874
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2281
-#: pcbnew/widgets/appearance_controls.cpp:2815
+#: pcbnew/widgets/appearance_controls.cpp:2820
 #, fuzzy
 msgid "Delete Preset"
 msgstr "Elimina la xarxa"
@@ -1104,48 +1104,48 @@ msgstr "Elimina la xarxa"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:876
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1875
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2282
-#: pcbnew/widgets/appearance_controls.cpp:2816
+#: pcbnew/widgets/appearance_controls.cpp:2821
 msgid "Select preset:"
 msgstr "Selecciona predefinició:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
-#: pcbnew/widgets/appearance_controls.cpp:2919
+#: pcbnew/widgets/appearance_controls.cpp:2924
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "Vistes (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
-#: pcbnew/widgets/appearance_controls.cpp:2928
+#: pcbnew/widgets/appearance_controls.cpp:2933
 msgid "Save viewport..."
 msgstr "Desa punt de vista..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
-#: pcbnew/widgets/appearance_controls.cpp:2929
+#: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Delete viewport..."
 msgstr "Elimina punt de vista..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:989
-#: pcbnew/widgets/appearance_controls.cpp:2980
+#: pcbnew/widgets/appearance_controls.cpp:2985
 msgid "Viewport name:"
 msgstr "Nom de la vista:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:990
-#: pcbnew/widgets/appearance_controls.cpp:2980
+#: pcbnew/widgets/appearance_controls.cpp:2985
 msgid "Save Viewport"
 msgstr "Desa la vista"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1032
-#: pcbnew/widgets/appearance_controls.cpp:3021
+#: pcbnew/widgets/appearance_controls.cpp:3026
 msgid "Viewports"
 msgstr "Vistes"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1041
-#: pcbnew/widgets/appearance_controls.cpp:3030
+#: pcbnew/widgets/appearance_controls.cpp:3035
 msgid "Delete Viewport"
 msgstr "Esborra vista"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1042
-#: pcbnew/widgets/appearance_controls.cpp:3031
+#: pcbnew/widgets/appearance_controls.cpp:3036
 msgid "Select viewport:"
 msgstr "Selecciona vista:"
 
@@ -1536,7 +1536,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1778
-#: pcbnew/pad.cpp:1402
+#: pcbnew/pad.cpp:1404
 msgid "Rotation"
 msgstr "Gir"
 
@@ -1632,7 +1632,7 @@ msgstr "Crea una biblioteca de símbols"
 msgid "Create Footprint Library"
 msgstr "Crea una biblioteca d'empremtes"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:48 common/eda_draw_frame.cpp:666
+#: bitmap2component/bitmap2cmp_panel.cpp:52 common/eda_draw_frame.cpp:666
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
 #: eeschema/dialogs/dialog_field_properties_base.cpp:273
 #: eeschema/dialogs/dialog_field_properties_base.cpp:284
@@ -1797,24 +1797,24 @@ msgstr "Crea una biblioteca d'empremtes"
 msgid "mm"
 msgstr "mm"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:48
+#: bitmap2component/bitmap2cmp_panel.cpp:52
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
 msgstr "Polzada"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:48
+#: bitmap2component/bitmap2cmp_panel.cpp:52
 msgid "DPI"
 msgstr "PPP"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:504
+#: bitmap2component/bitmap2cmp_panel.cpp:511
 msgid "Unable to export to the Clipboard"
 msgstr "No s'ha pogut exportar al Portaretalls"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:516
+#: bitmap2component/bitmap2cmp_panel.cpp:523
 msgid "Error allocating memory for potrace bitmap"
 msgstr "Error al assignar memòria pel mapa de bits potrace"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:556
+#: bitmap2component/bitmap2cmp_panel.cpp:563
 #: common/dialogs/dialog_rc_job_base.cpp:50
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:135 gerbview/files.cpp:404
@@ -1824,6 +1824,16 @@ msgstr "Error al assignar memòria pel mapa de bits potrace"
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
 msgstr "Errors"
+
+#: bitmap2component/bitmap2cmp_panel.cpp:587
+#, fuzzy
+msgid "Replace Loaded File?"
+msgstr "Substitueix i cerca el següent"
+
+#: bitmap2component/bitmap2cmp_panel.cpp:588
+#, fuzzy
+msgid "There is already a file loaded. Do you want to replace it?"
+msgstr "El fitxer '%s' ja existeix. Vols sobreescriure'l?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -3059,7 +3069,7 @@ msgid "PCB"
 msgstr "PCI"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1336 eeschema/sch_plotter.cpp:1060
+#: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
 msgstr "Esquemàtic"
@@ -3278,7 +3288,7 @@ msgstr "Bloc del títol"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2337
+#: pcbnew/pcbnew_jobs_handler.cpp:2305
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Error en carregar la fulla de dibuix '%s'."
@@ -3381,7 +3391,7 @@ msgstr "Exporta-ho als altres fulls"
 #: eeschema/erc/erc_item.cpp:425 eeschema/sch_marker.cpp:387
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:241
-#: pcbnew/widgets/appearance_controls.cpp:352
+#: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Drawing Sheet"
 msgstr "Fulla de dibuix"
 
@@ -3969,7 +3979,7 @@ msgstr "Nom del fitxer"
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
-#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1340
+#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1342
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:618 pcbnew/pcb_tablecell.cpp:139
 #: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:474 pcbnew/pcb_track.cpp:1739
@@ -4459,8 +4469,8 @@ msgstr "Utilitza icons compactes en les barres d'eines"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 #: pcbnew/microwave/microwave_polygon.cpp:127 pcbnew/tools/pcb_control.cpp:349
-#: pcbnew/widgets/appearance_controls.cpp:640
-#: pcbnew/widgets/appearance_controls.cpp:1843
+#: pcbnew/widgets/appearance_controls.cpp:639
+#: pcbnew/widgets/appearance_controls.cpp:1848
 msgid "Normal"
 msgstr "Normal"
 
@@ -5413,11 +5423,11 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4143
-#: pcbnew/pad.cpp:2689 pcbnew/pad.cpp:2708 pcbnew/pcb_dimension.cpp:2012
-#: pcbnew/widgets/appearance_controls.cpp:732
-#: pcbnew/widgets/appearance_controls.cpp:774
-#: pcbnew/widgets/appearance_controls.cpp:2579
-#: pcbnew/widgets/appearance_controls.cpp:2598 pcbnew/zone.cpp:1878
+#: pcbnew/pad.cpp:2691 pcbnew/pad.cpp:2710 pcbnew/pcb_dimension.cpp:2012
+#: pcbnew/widgets/appearance_controls.cpp:731
+#: pcbnew/widgets/appearance_controls.cpp:773
+#: pcbnew/widgets/appearance_controls.cpp:2584
+#: pcbnew/widgets/appearance_controls.cpp:2603 pcbnew/zone.cpp:1878
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
@@ -5651,7 +5661,7 @@ msgstr "No connexió"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4145
-#: pcbnew/pad.cpp:2710 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:789
+#: pcbnew/pad.cpp:2712 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:862 pcbnew/zone.cpp:1880
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5884,7 +5894,7 @@ msgstr "Ombrejat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1371 eeschema/sch_label.cpp:219
-#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1980
+#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1980
 msgid "Net Class"
 msgstr "Classe de xarxa"
 
@@ -5972,7 +5982,7 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/sch_field.cpp:1214 eeschema/sch_field.cpp:1900
 #: eeschema/sch_label.cpp:2321 eeschema/sch_tablecell.cpp:150
-#: eeschema/sch_text.cpp:637 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
+#: eeschema/sch_text.cpp:637 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
 #: eeschema/widgets/search_handlers.cpp:321
@@ -6009,7 +6019,7 @@ msgstr "Línia"
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2302
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2681
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
 #: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "Rectangle"
@@ -6228,7 +6238,7 @@ msgstr "Colors"
 
 #: common/eda_base_frame.cpp:1138 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:611 eeschema/menubar.cpp:133
-#: eeschema/sch_edit_frame.cpp:1753 kicad/tools/kicad_manager_actions.cpp:114
+#: eeschema/sch_edit_frame.cpp:1754 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Editor d'esquemes"
 
@@ -6421,7 +6431,7 @@ msgid "Inches"
 msgstr "Polzades"
 
 #: common/eda_draw_frame.cpp:715 pagelayout_editor/pl_editor_frame.cpp:170
-#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:335
+#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:336
 #: pcbnew/tools/pcb_actions.cpp:1174
 msgid "Constrain to H, V, 45"
 msgstr "Restringeix a H, V, 45"
@@ -6435,14 +6445,14 @@ msgid "New Library"
 msgstr "Nova biblioteca"
 
 #: common/eda_draw_frame.cpp:1235 common/tool/actions.cpp:473
-#: common/widgets/search_pane.cpp:137 eeschema/sch_edit_frame.cpp:265
+#: common/widgets/search_pane.cpp:143 eeschema/sch_edit_frame.cpp:266
 #: pcbnew/pcb_edit_frame.cpp:371
 #, fuzzy
 msgid "Search"
 msgstr "Cerca un text"
 
 #: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1115
-#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2210
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1955
 #: pagelayout_editor/pl_editor_frame.cpp:194
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:349
 #: pcbnew/pcb_edit_frame.cpp:1717
@@ -6462,14 +6472,14 @@ msgstr "Pantalla"
 #: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2047
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
-#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1321
+#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1323
 #: pcbnew/pcb_shape.cpp:612 pcbnew/pcb_text.cpp:274
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Empremta"
 
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pad.cpp:1324
+#: pcbnew/pad.cpp:1326
 msgid "Pad"
 msgstr "Pad"
 
@@ -6644,7 +6654,7 @@ msgstr "Amplada de l'alleujament tèrmic:"
 msgid "Number Box"
 msgstr "Número"
 
-#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1561
+#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1563
 msgid "Rect"
 msgstr "Recta"
 
@@ -6656,8 +6666,8 @@ msgstr "Arc"
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2300 gerbview/gerber_draw_item.cpp:231
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1559
-#: pcbnew/pad.cpp:2680 pcbnew/pcb_dimension.cpp:2014
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1561
+#: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "Cercle"
 
@@ -6741,7 +6751,7 @@ msgstr "Punts"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1389
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1391
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -6758,7 +6768,7 @@ msgstr "Amplada"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1390 pcbnew/pcb_dimension.cpp:1033
+#: pcbnew/pad.cpp:1392 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:224
 #: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:233
 #: pcbnew/pcb_tablecell.cpp:239 pcbnew/pcb_text.cpp:297
@@ -6954,7 +6964,7 @@ msgstr "Inferior"
 #: eeschema/sch_text.cpp:790 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4175 pcbnew/pad.cpp:2727 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/footprint.cpp:4175 pcbnew/pad.cpp:2729 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
@@ -7025,19 +7035,19 @@ msgstr "Justificat vertical"
 msgid "Hyperlink"
 msgstr "Hiperenllaç"
 
-#: common/eda_units.cpp:419
+#: common/eda_units.cpp:429
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
 #: pcbnew/generators/pcb_tuning_pattern.cpp:207
 #, fuzzy
 msgid "min"
 msgstr "in"
 
-#: common/eda_units.cpp:427
+#: common/eda_units.cpp:437
 #, fuzzy
 msgid "opt"
 msgstr "Superior"
 
-#: common/eda_units.cpp:435
+#: common/eda_units.cpp:445
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
 #: pcbnew/generators/pcb_tuning_pattern.cpp:210
 msgid "max"
@@ -7581,11 +7591,11 @@ msgstr ""
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:225
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
-#: kicad/dialogs/panel_jobset.cpp:391 pcbnew/dialogs/panel_setup_rules.cpp:131
+#: kicad/dialogs/panel_jobset.cpp:383 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
 msgstr "Copia"
 
-#: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:392
+#: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:384
 msgid "Copy selected cells to clipboard"
 msgstr "Copia les cel·les seleccionades al porta-retalls"
 
@@ -7604,7 +7614,7 @@ msgstr "Enganxa les cel·les del porta-retalls a la matriu en la cel·la actual"
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1719
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:393 kicad/project_tree_pane.cpp:983
+#: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:983
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2719
 msgid "Delete"
 msgstr "Elimina"
@@ -7618,7 +7628,7 @@ msgstr "Esborra les cel·les seleccionades"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:80
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:47
-#: kicad/dialogs/panel_jobset.cpp:395
+#: kicad/dialogs/panel_jobset.cpp:387
 #: pcbnew/dialogs/dialog_import_settings.cpp:49
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:92
@@ -8437,7 +8447,7 @@ msgid "ERC exclusions"
 msgstr "Exclusions ERC"
 
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
-#: pcbnew/widgets/appearance_controls.cpp:349
+#: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Anchors"
 msgstr "Àncores"
 
@@ -8449,7 +8459,7 @@ msgstr "Elements d'ajuda"
 #: eeschema/tools/sch_editor_control.cpp:2918
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
-#: pcbnew/widgets/appearance_controls.cpp:353
+#: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Grid"
 msgstr "Quadrícula"
 
@@ -8534,7 +8544,7 @@ msgstr "Text de l'empremta"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:64
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:24
-#: pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
 msgid "Tracks"
@@ -8573,9 +8583,9 @@ msgid "Non-plated holes"
 msgstr "Forats no-banyats"
 
 #: common/layer_id.cpp:137 pcbnew/dialogs/panel_edit_options_base.cpp:371
-#: pcbnew/widgets/appearance_controls.cpp:345
-#: pcbnew/widgets/appearance_controls.cpp:724
-#: pcbnew/widgets/appearance_controls.cpp:2576
+#: pcbnew/widgets/appearance_controls.cpp:344
+#: pcbnew/widgets/appearance_controls.cpp:723
+#: pcbnew/widgets/appearance_controls.cpp:2581
 #: pcbnew/widgets/search_handlers.cpp:405
 msgid "Ratsnest"
 msgstr "Embolic"
@@ -9625,7 +9635,7 @@ msgstr "Distribueix verticalment"
 msgid "Center on Cursor"
 msgstr "Centra la cota"
 
-#: common/tool/actions.cpp:668 common/widgets/search_pane.cpp:45
+#: common/tool/actions.cpp:668 common/widgets/search_pane.cpp:47
 msgid "Zoom to Selection"
 msgstr "Amplia a la selecció"
 
@@ -10424,16 +10434,16 @@ msgstr "Retícula en finestra sencera"
 msgid "Always show crosshairs"
 msgstr "Mostra sempre la retícula"
 
-#: common/widgets/grid_text_button_helpers.cpp:371
+#: common/widgets/grid_text_button_helpers.cpp:375
 #, fuzzy
 msgid "Open file"
 msgstr "Obre un fitxer"
 
-#: common/widgets/grid_text_button_helpers.cpp:502
+#: common/widgets/grid_text_button_helpers.cpp:505
 msgid "Select a File"
 msgstr "Selecciona un Fitxer"
 
-#: common/widgets/grid_text_button_helpers.cpp:534
+#: common/widgets/grid_text_button_helpers.cpp:537
 msgid "Select Path"
 msgstr "Selecciona Camí"
 
@@ -10528,20 +10538,20 @@ msgstr "Cap bus seleccionat"
 msgid "Basic Properties"
 msgstr "%s Propietats"
 
-#: common/widgets/search_pane.cpp:45
+#: common/widgets/search_pane.cpp:47
 msgid "Toggle zooming to selections in the search pane"
 msgstr ""
 
-#: common/widgets/search_pane.cpp:47
+#: common/widgets/search_pane.cpp:49
 #, fuzzy
 msgid "Pan to Selection"
 msgstr "Afegeix a la selecció"
 
-#: common/widgets/search_pane.cpp:47
+#: common/widgets/search_pane.cpp:49
 msgid "Toggle panning to selections in the search pane"
 msgstr ""
 
-#: common/widgets/search_pane.cpp:51
+#: common/widgets/search_pane.cpp:53
 #, fuzzy
 msgid "Search Hidden Fields"
 msgstr "Cerca en camps amagats"
@@ -10692,10 +10702,10 @@ msgstr "Mostra:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:177
 #: pcbnew/dialogs/dialog_drc_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
-#: pcbnew/widgets/appearance_controls.cpp:716
-#: pcbnew/widgets/appearance_controls.cpp:758
-#: pcbnew/widgets/appearance_controls.cpp:2573
-#: pcbnew/widgets/appearance_controls.cpp:2592
+#: pcbnew/widgets/appearance_controls.cpp:715
+#: pcbnew/widgets/appearance_controls.cpp:757
+#: pcbnew/widgets/appearance_controls.cpp:2578
+#: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "All"
 msgstr "Tot"
 
@@ -14715,8 +14725,8 @@ msgstr "Normes elèctriques"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:112
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
-#: pcbnew/widgets/appearance_controls.cpp:518
-#: pcbnew/widgets/appearance_controls.cpp:2459
+#: pcbnew/widgets/appearance_controls.cpp:517
+#: pcbnew/widgets/appearance_controls.cpp:2464
 #: pcbnew/widgets/appearance_controls_base.cpp:118
 #: pcbnew/widgets/search_handlers.cpp:400
 #: pcbnew/widgets/search_handlers.cpp:487
@@ -15079,7 +15089,7 @@ msgstr "Pin"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2686
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2688
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
 msgid "Custom"
 msgstr "Personalitzat"
@@ -15916,7 +15926,7 @@ msgstr "Selecció del parell de capes"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1827
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2234
-#: pcbnew/widgets/appearance_controls.cpp:2767
+#: pcbnew/widgets/appearance_controls.cpp:2772
 msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
@@ -16398,7 +16408,7 @@ msgstr "Propietats de l'etiqueta"
 msgid "Text Box Properties"
 msgstr "Propietats de la Caixa text"
 
-#: eeschema/dialogs/dialog_text_properties.cpp:175 eeschema/schematic.cpp:501
+#: eeschema/dialogs/dialog_text_properties.cpp:175 eeschema/schematic.cpp:512
 msgid "<root sheet>"
 msgstr "<fulla principal>"
 
@@ -17588,9 +17598,9 @@ msgstr "No s'ha pogut carregar el fitxer de l'esquemàtic\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:807
 #: pcbnew/pcbnew_jobs_handler.cpp:906 pcbnew/pcbnew_jobs_handler.cpp:997
 #: pcbnew/pcbnew_jobs_handler.cpp:1048 pcbnew/pcbnew_jobs_handler.cpp:1232
-#: pcbnew/pcbnew_jobs_handler.cpp:1392 pcbnew/pcbnew_jobs_handler.cpp:1526
-#: pcbnew/pcbnew_jobs_handler.cpp:1937 pcbnew/pcbnew_jobs_handler.cpp:2133
-#: pcbnew/pcbnew_jobs_handler.cpp:2227
+#: pcbnew/pcbnew_jobs_handler.cpp:1360 pcbnew/pcbnew_jobs_handler.cpp:1494
+#: pcbnew/pcbnew_jobs_handler.cpp:1905 pcbnew/pcbnew_jobs_handler.cpp:2101
+#: pcbnew/pcbnew_jobs_handler.cpp:2195
 #, fuzzy
 msgid "Failed to create output directory\n"
 msgstr "Impossible de crear fitxer <%s>"
@@ -17643,8 +17653,8 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Canvia el símbol %s de '%s' a '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:980
-#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1726
-#: pcbnew/pcbnew_jobs_handler.cpp:1799
+#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1694
+#: pcbnew/pcbnew_jobs_handler.cpp:1767
 msgid "Unable to load library\n"
 msgstr "No s'ha pogut carregar la biblioteca\n"
 
@@ -17654,16 +17664,16 @@ msgid "There is no symbol selected to save."
 msgstr "No hi ha cap símbol seleccionat per desar."
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1141
-#: pcbnew/pcbnew_jobs_handler.cpp:1815
+#: pcbnew/pcbnew_jobs_handler.cpp:1783
 #, fuzzy, c-format
 msgid "Exporting %s"
 msgstr "S'està esperant %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1695
+#: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1663
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1702
+#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1670
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -17678,7 +17688,7 @@ msgstr "Identificador de biblioteca de símbols invàlid"
 msgid "Symbol library was not updated\n"
 msgstr "Biblioteca de símbols no habilitada."
 
-#: eeschema/eeschema_jobs_handler.cpp:1188 pcbnew/pcbnew_jobs_handler.cpp:2060
+#: eeschema/eeschema_jobs_handler.cpp:1188 pcbnew/pcbnew_jobs_handler.cpp:2028
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Permet la violació del DRC"
@@ -17701,14 +17711,14 @@ msgstr "Desa el fitxer de l'informe DRC"
 msgid "Net Navigator"
 msgstr "Mostra el navegador &jeràrquic"
 
-#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2209
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:1954
 #: pcbnew/footprint_edit_frame.cpp:256 pcbnew/footprint_edit_frame.cpp:1030
 #: pcbnew/pcb_edit_frame.cpp:341 pcbnew/pcb_edit_frame.cpp:1716
 msgid "Selection Filter"
 msgstr "Filtre de selecció"
 
 #: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
-#: eeschema/sch_edit_frame.cpp:2205 eeschema/sch_edit_frame.cpp:2211
+#: eeschema/sch_edit_frame.cpp:1950 eeschema/sch_edit_frame.cpp:1956
 #: eeschema/tools/sch_actions.cpp:149
 #, fuzzy
 msgid "Design Blocks"
@@ -17833,145 +17843,145 @@ msgstr "Els pins del tipus %s i %s estan connectats"
 msgid "Pin %s is connected to both %s and %s"
 msgstr "El pin %s està connectat tant a %s com a %s"
 
-#: eeschema/erc/erc.cpp:1425
+#: eeschema/erc/erc.cpp:1432
 #, fuzzy, c-format
 msgid "The current configuration does not include the symbol library '%s'"
 msgstr "La configuració actual no inclou la biblioteca '%s'."
 
-#: eeschema/erc/erc.cpp:1440
+#: eeschema/erc/erc.cpp:1447
 #, fuzzy, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "La biblioteca '%s' no està habilitada en la configuració actual."
 
-#: eeschema/erc/erc.cpp:1455
+#: eeschema/erc/erc.cpp:1462
 #, fuzzy, c-format
 msgid "The symbol library '%s' was not found at '%s'."
 msgstr "No s'ha trobat la biblioteca d'empremtes '%s'."
 
-#: eeschema/erc/erc.cpp:1475
+#: eeschema/erc/erc.cpp:1482
 #, fuzzy, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "No s'ha trobat el símbol '%s' a la biblioteca '%s'."
 
-#: eeschema/erc/erc.cpp:1500
+#: eeschema/erc/erc.cpp:1507
 #, fuzzy, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
 msgstr "El símbol té més unitats que les definides"
 
-#: eeschema/erc/erc.cpp:1510
+#: eeschema/erc/erc.cpp:1517
 #, fuzzy, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "L'empremta '%s' no coincideix amb la còpia a la biblioteca '%s'."
 
-#: eeschema/erc/erc.cpp:1559
+#: eeschema/erc/erc.cpp:1566
 #, fuzzy, c-format
 msgid "'%s' is not a valid footprint identifier."
 msgstr "'%s' no és una empremta vàlida."
 
-#: eeschema/erc/erc.cpp:1573
+#: eeschema/erc/erc.cpp:1580
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:880
 #: pcbnew/footprint_editor_utils.cpp:363
 #, fuzzy, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "La configuració actual no inclou la biblioteca '%s'."
 
-#: eeschema/erc/erc.cpp:1582
+#: eeschema/erc/erc.cpp:1589
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:894
 #: pcbnew/footprint_editor_utils.cpp:375
 #, fuzzy, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "La biblioteca '%s' no està habilitada en la configuració actual."
 
-#: eeschema/erc/erc.cpp:1591
+#: eeschema/erc/erc.cpp:1598
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:945
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "No s'ha trobat l'empremta '%s' a la biblioteca '%s'."
 
-#: eeschema/erc/erc.cpp:1661
+#: eeschema/erc/erc.cpp:1668
 #, fuzzy, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr "Carrega les directives de l'esquemàtic"
 
-#: eeschema/erc/erc.cpp:1823
+#: eeschema/erc/erc.cpp:1830
 msgid "Checking sheet names..."
 msgstr "S'estan verificant els noms de les fulles..."
 
-#: eeschema/erc/erc.cpp:1831
+#: eeschema/erc/erc.cpp:1838
 msgid "Checking bus conflicts..."
 msgstr "S'estan verificant els conflictes de bus..."
 
-#: eeschema/erc/erc.cpp:1838
+#: eeschema/erc/erc.cpp:1845
 msgid "Checking conflicts..."
 msgstr "S'estan verificant els conflictes..."
 
-#: eeschema/erc/erc.cpp:1852
+#: eeschema/erc/erc.cpp:1859
 #, fuzzy
 msgid "Checking units..."
 msgstr "S'estan verificant els pins..."
 
-#: eeschema/erc/erc.cpp:1858
+#: eeschema/erc/erc.cpp:1865
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
 msgstr "S'estan verificant les empremtes..."
 
-#: eeschema/erc/erc.cpp:1872
+#: eeschema/erc/erc.cpp:1879
 msgid "Checking pins..."
 msgstr "S'estan verificant els pins..."
 
-#: eeschema/erc/erc.cpp:1892
+#: eeschema/erc/erc.cpp:1899
 #, fuzzy
 msgid "Checking similar labels..."
 msgstr "S'estan verificant les etiquetes..."
 
-#: eeschema/erc/erc.cpp:1900
+#: eeschema/erc/erc.cpp:1907
 #, fuzzy
 msgid "Checking local and global labels..."
 msgstr "S'estan verificant les etiquetes..."
 
-#: eeschema/erc/erc.cpp:1908
+#: eeschema/erc/erc.cpp:1915
 msgid "Checking for unresolved variables..."
 msgstr "S'estan comprovant variables no resoltes..."
 
-#: eeschema/erc/erc.cpp:1916
+#: eeschema/erc/erc.cpp:1923
 #, fuzzy
 msgid "Checking SPICE models..."
 msgstr "S'estan verificant les zones..."
 
-#: eeschema/erc/erc.cpp:1924
+#: eeschema/erc/erc.cpp:1931
 msgid "Checking no connect pins for connections..."
 msgstr "S'estan verificant les connexions dels pins sense connexió..."
 
-#: eeschema/erc/erc.cpp:1933
+#: eeschema/erc/erc.cpp:1940
 msgid "Checking for library symbol issues..."
 msgstr "S'estan verificant problemes amb els símbols de la biblioteca..."
 
-#: eeschema/erc/erc.cpp:1941
+#: eeschema/erc/erc.cpp:1948
 #, fuzzy
 msgid "Checking for footprint link issues..."
 msgstr "S'estan verificant les empremtes..."
 
-#: eeschema/erc/erc.cpp:1949
+#: eeschema/erc/erc.cpp:1956
 #, fuzzy
 msgid "Checking footprint assignments against footprint filters..."
 msgstr "S'estan verificant les empremtes..."
 
-#: eeschema/erc/erc.cpp:1957
+#: eeschema/erc/erc.cpp:1964
 #, fuzzy
 msgid "Checking for off grid pins and wires..."
 msgstr "S'estan verificant les empremtes..."
 
-#: eeschema/erc/erc.cpp:1965
+#: eeschema/erc/erc.cpp:1972
 #, fuzzy
 msgid "Checking for four way junctions..."
 msgstr "S'estan verificant les definicions dels patis d'empremtes..."
 
-#: eeschema/erc/erc.cpp:1973
+#: eeschema/erc/erc.cpp:1980
 #, fuzzy
 msgid "Checking for labels on more than one wire..."
 msgstr "S'estan verificant les empremtes..."
 
-#: eeschema/erc/erc.cpp:1981
+#: eeschema/erc/erc.cpp:1988
 #, fuzzy
 msgid "Checking for undefined netclasses..."
 msgstr "S'estan comprovant variables no resoltes..."
@@ -18926,8 +18936,8 @@ msgstr "No es pot crear el camí a la biblioteca d'empremtes «%s»"
 #: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:1930
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
 #: pcbnew/pcb_draw_panel_gal.cpp:718
-#: pcbnew/widgets/appearance_controls.cpp:1032
-#: pcbnew/widgets/appearance_controls.cpp:2458
+#: pcbnew/widgets/appearance_controls.cpp:1031
+#: pcbnew/widgets/appearance_controls.cpp:2463
 #: pcbnew/widgets/appearance_controls_base.cpp:61
 #: pcbnew/widgets/appearance_controls_base.cpp:151
 #: pcbnew/widgets/search_handlers.cpp:323
@@ -19279,7 +19289,7 @@ msgstr "Tipus d'entrada de bus"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:951
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1336
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1338
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:812
 #, fuzzy
@@ -19295,31 +19305,31 @@ msgstr "Nom de connexió"
 msgid "Bus Alias %s Members"
 msgstr "Membres d'àlies %s de bus"
 
-#: eeschema/sch_edit_frame.cpp:156
+#: eeschema/sch_edit_frame.cpp:157
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Schematic Editor"
 msgstr "Editor d'esquemàtics KiCad"
 
-#: eeschema/sch_edit_frame.cpp:234 eeschema/sch_edit_frame.cpp:2208
+#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:1953
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Mida de l'esquemàtic"
 
-#: eeschema/sch_edit_frame.cpp:419
+#: eeschema/sch_edit_frame.cpp:420
 msgid "New schematic file is unsaved"
 msgstr "El nou fitxer d'esquemàtic no s'ha desat"
 
-#: eeschema/sch_edit_frame.cpp:1022
+#: eeschema/sch_edit_frame.cpp:1023
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:637
 #: eeschema/symbol_editor/symbol_editor.cpp:1675
-#: kicad/dialogs/panel_jobset.cpp:829 pagelayout_editor/pl_editor_frame.cpp:413
+#: kicad/dialogs/panel_jobset.cpp:821 pagelayout_editor/pl_editor_frame.cpp:413
 #: pcbnew/footprint_edit_frame.cpp:875 pcbnew/footprint_edit_frame.cpp:915
 #: pcbnew/pcb_edit_frame.cpp:1186
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Vols desar els canvis a '%s' abans de tancar?"
 
-#: eeschema/sch_edit_frame.cpp:1188
+#: eeschema/sch_edit_frame.cpp:1189
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -19329,58 +19339,53 @@ msgstr ""
 "mode independent. Per crear/actualitzar PCBs des de l'esquemàtic, executa el "
 "shell de KiCad i crea un projecte."
 
-#: eeschema/sch_edit_frame.cpp:1357
+#: eeschema/sch_edit_frame.cpp:1358
 msgid "New Schematic"
 msgstr "Nou esquemàtic"
 
-#: eeschema/sch_edit_frame.cpp:1369
+#: eeschema/sch_edit_frame.cpp:1370
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Ja existeix el fitxer de esquemàtic '%s'."
 
-#: eeschema/sch_edit_frame.cpp:1394
+#: eeschema/sch_edit_frame.cpp:1395
 msgid "Open Schematic"
 msgstr "Obre un esquemàtic"
 
-#: eeschema/sch_edit_frame.cpp:1462
+#: eeschema/sch_edit_frame.cpp:1463
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Per assignar empremtes es necessita un esquemàtic completament anotat."
 
-#: eeschema/sch_edit_frame.cpp:1489
+#: eeschema/sch_edit_frame.cpp:1490
 msgid "Could not open CvPcb"
 msgstr "No s'ha pogut obrir el CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1743 eeschema/sim/simulator_frame.cpp:327
+#: eeschema/sch_edit_frame.cpp:1744 eeschema/sim/simulator_frame.cpp:327
 #: kicad/kicad_manager_frame.cpp:1061 pcbnew/footprint_edit_frame.cpp:1096
 #: pcbnew/pcb_edit_frame.cpp:1806
 msgid "[Read Only]"
 msgstr "[Només lectura]"
 
-#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:330
+#: eeschema/sch_edit_frame.cpp:1747 eeschema/sim/simulator_frame.cpp:330
 #: pcbnew/footprint_edit_frame.cpp:1105 pcbnew/pcb_edit_frame.cpp:1809
 msgid "[Unsaved]"
 msgstr "[No desat]"
 
-#: eeschema/sch_edit_frame.cpp:1750
+#: eeschema/sch_edit_frame.cpp:1751
 msgid "[no schematic loaded]"
 msgstr "[no hi ha un esquemàtic carregat]"
 
-#: eeschema/sch_edit_frame.cpp:2106
-#, fuzzy
-msgid "Schematic Cleanup"
-msgstr "Configuració de l'esquemàtic"
-
-#: eeschema/sch_edit_frame.cpp:2234
+#: eeschema/sch_edit_frame.cpp:1979
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Xarxa realçada: %s"
 
-#: eeschema/sch_edit_frame.cpp:2424
+#: eeschema/sch_edit_frame.cpp:2169
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Importa un esquemàtic"
 
-#: eeschema/sch_edit_frame.cpp:2530 eeschema/tools/sch_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2275 eeschema/tools/sch_actions.cpp:61
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Actualitza Símbols des de la biblioteca..."
@@ -20287,7 +20292,7 @@ msgstr "Estil de la vora:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1759 pcbnew/pad.cpp:1340 pcbnew/pad.cpp:2725
+#: pcbnew/footprint.cpp:1759 pcbnew/pad.cpp:1342 pcbnew/pad.cpp:2727
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:403 pcbnew/pcb_shape.cpp:618
 #: pcbnew/pcb_tablecell.cpp:139 pcbnew/pcb_text.cpp:286
@@ -20305,7 +20310,7 @@ msgid "Size"
 msgstr "Mida"
 
 #: eeschema/sch_junction.cpp:379
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1385
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1387
 #: pcbnew/pcb_track.cpp:1697 pcbnew/pcb_track.cpp:2173
 msgid "Diameter"
 msgstr "Diàmetre"
@@ -20336,8 +20341,8 @@ msgstr "Justificació"
 #: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1334
-#: pcbnew/pad.cpp:2762 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1336
+#: pcbnew/pad.cpp:2764 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1719 pcbnew/tools/pcb_control.cpp:1907
 #: pcbnew/widgets/pcb_properties_panel.cpp:294
 #: pcbnew/widgets/search_handlers.cpp:188 pcbnew/zone.cpp:810
@@ -20496,7 +20501,7 @@ msgstr "Pin %s [%s, %s, %s]"
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2179 pcbnew/pad.cpp:1327 pcbnew/pad.cpp:2782
+#: eeschema/sch_pin.cpp:2179 pcbnew/pad.cpp:1329 pcbnew/pad.cpp:2784
 #, fuzzy
 msgid "Pin Name"
 msgstr "Nom del pin"
@@ -21193,6 +21198,11 @@ msgstr ""
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
+
+#: eeschema/schematic.cpp:1531
+#, fuzzy
+msgid "Schematic Cleanup"
+msgstr "Configuració de l'esquemàtic"
 
 #: eeschema/sheet.cpp:76
 #, c-format
@@ -22571,95 +22581,99 @@ msgid ""
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:180
+#: eeschema/symbol_checker.cpp:178
+msgid "<b>Warning: reference is empty</b><br><br>"
+msgstr ""
+
+#: eeschema/symbol_checker.cpp:187
 #, c-format
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:208
+#: eeschema/symbol_checker.cpp:216
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:214
+#: eeschema/symbol_checker.cpp:222
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:220
+#: eeschema/symbol_checker.cpp:228
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:229
+#: eeschema/symbol_checker.cpp:237
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:236
+#: eeschema/symbol_checker.cpp:244
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:261
+#: eeschema/symbol_checker.cpp:269
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:271
+#: eeschema/symbol_checker.cpp:279
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:285
+#: eeschema/symbol_checker.cpp:293
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:294
+#: eeschema/symbol_checker.cpp:302
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:305
+#: eeschema/symbol_checker.cpp:313
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:320
+#: eeschema/symbol_checker.cpp:328
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:330
+#: eeschema/symbol_checker.cpp:338
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:344
+#: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:352
+#: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:394
+#: eeschema/symbol_checker.cpp:402
 #, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:406
+#: eeschema/symbol_checker.cpp:414
 #, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
@@ -25638,7 +25652,7 @@ msgstr "Importa formes"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:208
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:51
-#: pcbnew/widgets/appearance_controls.cpp:336
+#: pcbnew/widgets/appearance_controls.cpp:335
 #, fuzzy
 msgid "Images"
 msgstr "Imatge"
@@ -25966,8 +25980,8 @@ msgstr "Selecciona capa: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4170 pcbnew/footprint.cpp:4173
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1344
-#: pcbnew/pad.cpp:2724 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1346
+#: pcbnew/pad.cpp:2726 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:400
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
@@ -26907,7 +26921,7 @@ msgstr "Realça DCode D%d"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:352
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:231
 #: pcbnew/dialogs/panel_setup_layers.cpp:1149
-#: pcbnew/widgets/appearance_controls.cpp:1028
+#: pcbnew/widgets/appearance_controls.cpp:1027
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 #: pcbnew/zone_manager/model_zones_overview_table.h:77
 msgid "Layers"
@@ -26927,7 +26941,7 @@ msgid "Show negative objects in this color"
 msgstr ""
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:136
-#: pcbnew/widgets/appearance_controls.cpp:353
+#: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show the (x,y) grid dots"
 msgstr "Mostra els punts de la quadrícula (x,y)"
 
@@ -26946,12 +26960,12 @@ msgid "PCB Background"
 msgstr "Fons del PCB"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:161
-#: pcbnew/widgets/appearance_controls.cpp:1883
+#: pcbnew/widgets/appearance_controls.cpp:1888
 msgid "Show All Layers"
 msgstr "Mostra totes les capes"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:164
-#: pcbnew/widgets/appearance_controls.cpp:1869
+#: pcbnew/widgets/appearance_controls.cpp:1874
 msgid "Hide All Layers But Active"
 msgstr "Oculta totes les capes menys l'activa"
 
@@ -26960,7 +26974,7 @@ msgid "Always Hide All Layers But Active"
 msgstr "Oculta sempre totes les capes menys l'activa"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:171
-#: pcbnew/widgets/appearance_controls.cpp:1886
+#: pcbnew/widgets/appearance_controls.cpp:1891
 msgid "Hide All Layers"
 msgstr "Oculta totes les capes"
 
@@ -26997,8 +27011,8 @@ msgid "Change Render Color for"
 msgstr "Color del coure"
 
 #: gerbview/widgets/layer_widget.cpp:341
-#: pcbnew/widgets/appearance_controls.cpp:2211
-#: pcbnew/widgets/appearance_controls.cpp:2486
+#: pcbnew/widgets/appearance_controls.cpp:2216
+#: pcbnew/widgets/appearance_controls.cpp:2491
 msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr ""
@@ -27022,7 +27036,7 @@ msgstr ""
 msgid "This file is already open."
 msgstr "Aquest fitxer ja està obert."
 
-#: include/libeval_compiler/libeval_compiler.h:354
+#: include/libeval_compiler/libeval_compiler.h:357
 msgid "Malformed expression"
 msgstr ""
 
@@ -28256,91 +28270,91 @@ msgstr "Descripció"
 msgid "Source"
 msgstr "Font"
 
-#: kicad/dialogs/panel_jobset.cpp:159
+#: kicad/dialogs/panel_jobset.cpp:152
 #, fuzzy
 msgid "No output messages"
 msgstr "Missatges de sortida"
 
-#: kicad/dialogs/panel_jobset.cpp:232
+#: kicad/dialogs/panel_jobset.cpp:224
 #, fuzzy
 msgid "Last run successful"
 msgstr "Fitxer creat satisfactòriament."
 
-#: kicad/dialogs/panel_jobset.cpp:238
+#: kicad/dialogs/panel_jobset.cpp:230
 msgid "Last run failed"
 msgstr ""
 
-#: kicad/dialogs/panel_jobset.cpp:264 kicad/dialogs/panel_jobset.cpp:976
+#: kicad/dialogs/panel_jobset.cpp:256 kicad/dialogs/panel_jobset.cpp:968
 #, fuzzy
 msgid "Running Jobs"
 msgstr "Model de línia"
 
-#: kicad/dialogs/panel_jobset.cpp:294
+#: kicad/dialogs/panel_jobset.cpp:286
 #, fuzzy
 msgid "Edit Destination Options..."
 msgstr "Edita les opcions del rectangle"
 
-#: kicad/dialogs/panel_jobset.cpp:295
+#: kicad/dialogs/panel_jobset.cpp:287
 #, fuzzy
 msgid "Delete Destination"
 msgstr "Esborra associació"
 
-#: kicad/dialogs/panel_jobset.cpp:298
+#: kicad/dialogs/panel_jobset.cpp:290
 #, fuzzy
 msgid "View Last Run Log..."
 msgstr "Veure com a PNG..."
 
-#: kicad/dialogs/panel_jobset.cpp:388
+#: kicad/dialogs/panel_jobset.cpp:380
 #, fuzzy
 msgid "Edit Job Description"
 msgstr "Descripció"
 
-#: kicad/dialogs/panel_jobset.cpp:389
+#: kicad/dialogs/panel_jobset.cpp:381
 #, fuzzy
 msgid "Edit Job Settings..."
 msgstr "Edita les opcions de la línia"
 
-#: kicad/dialogs/panel_jobset.cpp:394
+#: kicad/dialogs/panel_jobset.cpp:386
 #, fuzzy
 msgid "Delete selected jobs"
 msgstr "Elimina els elements seleccionats"
 
-#: kicad/dialogs/panel_jobset.cpp:396
+#: kicad/dialogs/panel_jobset.cpp:388
 #, fuzzy
 msgid "Select all jobs"
 msgstr "Selecciona-ho tot"
 
-#: kicad/dialogs/panel_jobset.cpp:689
+#: kicad/dialogs/panel_jobset.cpp:681
 #, fuzzy
 msgid "Job Types"
 msgstr "Fitxers de treballs"
 
-#: kicad/dialogs/panel_jobset.cpp:700
+#: kicad/dialogs/panel_jobset.cpp:692
 #, fuzzy
 msgid "Add New Job"
 msgstr "Afegeix una nova pista"
 
-#: kicad/dialogs/panel_jobset.cpp:701
+#: kicad/dialogs/panel_jobset.cpp:693
 #, fuzzy
 msgid "Select job type:"
 msgstr "Selecciona predefinició:"
 
-#: kicad/dialogs/panel_jobset.cpp:782
+#: kicad/dialogs/panel_jobset.cpp:774
 #, fuzzy
 msgid "Destination Types"
 msgstr "Designació"
 
-#: kicad/dialogs/panel_jobset.cpp:791
+#: kicad/dialogs/panel_jobset.cpp:783
 #, fuzzy
 msgid "Add New Destination"
 msgstr "Designació"
 
-#: kicad/dialogs/panel_jobset.cpp:792
+#: kicad/dialogs/panel_jobset.cpp:784
 #, fuzzy
 msgid "Select destination type:"
 msgstr "Selecciona predefinició:"
 
-#: kicad/dialogs/panel_jobset.cpp:957
+#: kicad/dialogs/panel_jobset.cpp:949
 #, fuzzy
 msgid "No destinations defined"
 msgstr "No connexió"
@@ -28496,17 +28510,17 @@ msgstr ""
 msgid "Import EasyEDA Pro Project"
 msgstr "Desa el fitxer del projecte"
 
-#: kicad/jobs_runner.cpp:257
+#: kicad/jobs_runner.cpp:218
 #, fuzzy, c-format
 msgid "Running job %d: %s"
 msgstr "Model de línia"
 
-#: kicad/jobs_runner.cpp:301
+#: kicad/jobs_runner.cpp:263
 #, fuzzy
 msgid "Job successful"
 msgstr "Fitxer creat satisfactòriament."
 
-#: kicad/jobs_runner.cpp:308
+#: kicad/jobs_runner.cpp:270
 #, fuzzy
 msgid "Job failed"
 msgstr "Fitxers de treballs"
@@ -32739,7 +32753,7 @@ msgstr "Tesselant les zones de coure..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1730 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:333
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:332
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -32754,7 +32768,7 @@ msgstr "Pads"
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
 #: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
-#: pcbnew/widgets/appearance_controls.cpp:332
+#: pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
@@ -33852,7 +33866,7 @@ msgid "Total:"
 msgstr "Total:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:491
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2699
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2701
 msgid "Round"
 msgstr "Rodó"
 
@@ -33875,11 +33889,11 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1575
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1577
 msgid "PTH"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1578
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1580
 msgid "NPTH"
 msgstr ""
 
@@ -33899,7 +33913,7 @@ msgid "Board name"
 msgstr "Classes de plaques"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
-#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1354
+#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1356
 msgid "Area"
 msgstr "Àrea"
 
@@ -34355,7 +34369,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4144
-#: pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1879
+#: pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1879
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 #, fuzzy
 msgid "Thermal reliefs"
@@ -36364,7 +36378,7 @@ msgstr "A través de forat"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1383
-#: pcbnew/pad.cpp:1576 pcbnew/pad.cpp:2675
+#: pcbnew/pad.cpp:1578 pcbnew/pad.cpp:2677
 msgid "SMD"
 msgstr "SMD"
 
@@ -37010,7 +37024,7 @@ msgstr "Elements a eliminar"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 #: pcbnew/tools/board_editor_control.cpp:91
-#: pcbnew/widgets/appearance_controls.cpp:334
+#: pcbnew/widgets/appearance_controls.cpp:333
 #: pcbnew/widgets/panel_selection_filter.cpp:202
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
 #: pcbnew/widgets/search_handlers.cpp:185
@@ -37366,7 +37380,7 @@ msgstr "2 capes"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2866
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2868
 msgid "Copper Layers"
 msgstr "Capes de coure"
 
@@ -37551,7 +37565,7 @@ msgstr "Anells anulars:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1074
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2715
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
 msgid "All copper layers"
 msgstr "Totes les capes de coure"
 
@@ -37562,7 +37576,7 @@ msgstr "Inici, final, i capes connectades"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1078
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2716
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
 #, fuzzy
 msgid "Connected layers only"
 msgstr "Únicament la capa actual"
@@ -38100,7 +38114,7 @@ msgid "Outset Items"
 msgstr "Selecciona els elements"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:178
-#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2766
+#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
 msgid "Pad Properties"
 msgstr "Propietats del pad"
 
@@ -38185,7 +38199,7 @@ msgstr ""
 msgid "Pad type:"
 msgstr "Tipus de pad:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2674
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2676
 msgid "Through-hole"
 msgstr "A través de forat"
 
@@ -38237,8 +38251,8 @@ msgstr "Tipus de pad:"
 msgid "Circular"
 msgstr "Circular"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1560
-#: pcbnew/pad.cpp:2682
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1562
+#: pcbnew/pad.cpp:2684
 msgid "Oval"
 msgstr "Ovalat"
 
@@ -38250,12 +38264,12 @@ msgstr "Rectangular"
 msgid "Trapezoidal"
 msgstr "Trapezoïdal"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2684
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2686
 #, fuzzy
 msgid "Rounded rectangle"
 msgstr "Rectangle arrodonit"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2685
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2687
 #, fuzzy
 msgid "Chamfered rectangle"
 msgstr "Afegeix un rectangle"
@@ -38373,7 +38387,7 @@ msgstr ""
 msgid "Hole shape:"
 msgstr "Forma del forat:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2700
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2702
 msgid "Oblong"
 msgstr ""
 
@@ -38454,27 +38468,27 @@ msgid ""
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2690
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
 #, fuzzy
 msgid "BGA pad"
 msgstr "Afegeix un pad"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
 #, fuzzy
 msgid "Fiducial, local to footprint"
 msgstr "Afegeix una empremta"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2691
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
 #, fuzzy
 msgid "Fiducial, global to board"
 msgstr "Afegeix una empremta"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2695
 #, fuzzy
 msgid "Test point pad"
 msgstr "Prova les empremtes"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2696
 #, fuzzy
 msgid "Heatsink pad"
 msgstr "Repeteix el pin"
@@ -38483,7 +38497,7 @@ msgstr "Repeteix el pin"
 msgid "Castellated pad (through hole only)"
 msgstr "Pad castellat (només forats passants)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1373
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1375
 #, fuzzy
 msgid "Mechanical"
 msgstr "NPTH, mecànic"
@@ -38761,8 +38775,8 @@ msgid "Hide or cross-out DNP footprints on fabrication layers"
 msgstr "Polígons"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
-#: pcbnew/widgets/appearance_controls.cpp:656
-#: pcbnew/widgets/appearance_controls.cpp:1849
+#: pcbnew/widgets/appearance_controls.cpp:655
+#: pcbnew/widgets/appearance_controls.cpp:1854
 #, fuzzy
 msgid "Hide"
 msgstr "Oculta la quadrícula"
@@ -40082,7 +40096,7 @@ msgstr "Objectiu"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1436
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1438
 #: pcbnew/pcb_track.cpp:1666 pcbnew/pcb_track.cpp:1674
 #: pcbnew/pcb_track.cpp:1706 pcbnew/pcb_track.cpp:1712
 #: pcbnew/router/router_tool.cpp:2785 pcbnew/router/router_tool.cpp:2790
@@ -42074,7 +42088,7 @@ msgstr "Dimensions del parell diferencial..."
 msgid "7"
 msgstr "A7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1416
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1418
 #: pcbnew/pcb_track.cpp:1699 pcbnew/pcb_track.cpp:2175
 #: pcbnew/tools/board_inspection_tool.cpp:1123
 #: pcbnew/tools/board_inspection_tool.cpp:1145
@@ -43053,7 +43067,7 @@ msgstr "Rescata %s com a %s"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:975
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1440
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1258
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -43074,7 +43088,7 @@ msgstr "(%s marge %s; actual %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s marge %s; actual %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1432
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1250
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
@@ -44255,7 +44269,7 @@ msgstr ""
 msgid "Generating IPC-2581 file"
 msgstr "Genera el fitxer netlist IPC-D-356"
 
-#: pcbnew/files.cpp:1322 pcbnew/pcbnew_jobs_handler.cpp:2156
+#: pcbnew/files.cpp:1322 pcbnew/pcbnew_jobs_handler.cpp:2124
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -44269,7 +44283,7 @@ msgstr ""
 msgid "Failed to create temporary file '%s'."
 msgstr "No s'ha pogut crear el fitxer temporal '%s'."
 
-#: pcbnew/files.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:2189
+#: pcbnew/files.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:2157
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -44377,11 +44391,11 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4142 pcbnew/pad.cpp:2707 pcbnew/zone.cpp:1877
+#: pcbnew/footprint.cpp:4142 pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1877
 msgid "Inherited"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1881
+#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2713 pcbnew/zone.cpp:1881
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Alleujament tèrmic"
@@ -44396,24 +44410,24 @@ msgstr "Ploteja l'esquemàtic"
 msgid "Exclude From Position Files"
 msgstr "Ploteja els pads en la serigrafia"
 
-#: pcbnew/footprint.cpp:4218 pcbnew/pad.cpp:2876
+#: pcbnew/footprint.cpp:4218 pcbnew/pad.cpp:2878
 #, fuzzy
 msgid "Overrides"
 msgstr "Sobreescriu"
 
-#: pcbnew/footprint.cpp:4225 pcbnew/pad.cpp:2879
+#: pcbnew/footprint.cpp:4225 pcbnew/pad.cpp:2881
 msgid "Clearance Override"
 msgstr "Anul·lació del marge"
 
-#: pcbnew/footprint.cpp:4230 pcbnew/pad.cpp:2889
+#: pcbnew/footprint.cpp:4230 pcbnew/pad.cpp:2891
 msgid "Solderpaste Margin Override"
 msgstr "Anul·lació del marge de la pasta de soldadura"
 
-#: pcbnew/footprint.cpp:4235 pcbnew/pad.cpp:2894
+#: pcbnew/footprint.cpp:4235 pcbnew/pad.cpp:2896
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Anul·lació del rati de marge de la pasta de soldadura"
 
-#: pcbnew/footprint.cpp:4241 pcbnew/pad.cpp:2900
+#: pcbnew/footprint.cpp:4241 pcbnew/pad.cpp:2902
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Sense connectar"
@@ -44745,7 +44759,7 @@ msgstr "Cara de la placa"
 msgid "Routed Length"
 msgstr "Cara de la placa"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2870
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2872
 #: pcbnew/pcb_track.cpp:1654
 msgid "Pad To Die Length"
 msgstr "Pad a la llargada del dau"
@@ -45725,370 +45739,370 @@ msgstr ""
 "fitxer: '%s'\n"
 "línia: %d"
 
-#: pcbnew/pad.cpp:1122 pcbnew/pad.cpp:1282 pcbnew/pad.cpp:1298
-#: pcbnew/pad.cpp:1307
+#: pcbnew/pad.cpp:1124 pcbnew/pad.cpp:1284 pcbnew/pad.cpp:1300
+#: pcbnew/pad.cpp:1309
 #, fuzzy
 msgid "pad"
 msgstr "Pad"
 
-#: pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2785
+#: pcbnew/pad.cpp:1332 pcbnew/pad.cpp:2787
 #, fuzzy
 msgid "Pin Type"
 msgstr "Tipus de connector"
 
-#: pcbnew/pad.cpp:1367
+#: pcbnew/pad.cpp:1369
 #, fuzzy
 msgid "BGA"
 msgstr "Afegeix un pad"
 
-#: pcbnew/pad.cpp:1368
+#: pcbnew/pad.cpp:1370
 #, fuzzy
 msgid "Fiducial global"
 msgstr "Afegeix una empremta"
 
-#: pcbnew/pad.cpp:1369
+#: pcbnew/pad.cpp:1371
 #, fuzzy
 msgid "Fiducial local"
 msgstr "Afegeix una empremta"
 
-#: pcbnew/pad.cpp:1370
+#: pcbnew/pad.cpp:1372
 #, fuzzy
 msgid "Test point"
 msgstr "Prova les empremtes"
 
-#: pcbnew/pad.cpp:1371
+#: pcbnew/pad.cpp:1373
 #, fuzzy
 msgid "Heat sink"
 msgstr "Repeteix el pin"
 
-#: pcbnew/pad.cpp:1372
+#: pcbnew/pad.cpp:1374
 #, fuzzy
 msgid "Castellated"
 msgstr "Calcula"
 
-#: pcbnew/pad.cpp:1406
+#: pcbnew/pad.cpp:1408
 #, fuzzy
 msgid "Length in Package"
 msgstr "Longitud al paquet"
 
-#: pcbnew/pad.cpp:1422
+#: pcbnew/pad.cpp:1424
 #, fuzzy
 msgid "Hole X / Y"
 msgstr "Perforació X / Y"
 
-#: pcbnew/pad.cpp:1434 pcbnew/pcb_track.cpp:1664 pcbnew/pcb_track.cpp:1704
+#: pcbnew/pad.cpp:1436 pcbnew/pcb_track.cpp:1664 pcbnew/pcb_track.cpp:1704
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2817
 #: pcbnew/zone.cpp:877
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Marge mínim: %s"
 
-#: pcbnew/pad.cpp:1562
+#: pcbnew/pad.cpp:1564
 #, fuzzy
 msgid "Trap"
 msgstr "Trapezoïdal"
 
-#: pcbnew/pad.cpp:1563
+#: pcbnew/pad.cpp:1565
 #, fuzzy
 msgid "Roundrect"
 msgstr "%s trobat"
 
-#: pcbnew/pad.cpp:1564
+#: pcbnew/pad.cpp:1566
 #, fuzzy
 msgid "Chamferedrect"
 msgstr "Xamfrà"
 
-#: pcbnew/pad.cpp:1565
+#: pcbnew/pad.cpp:1567
 #, fuzzy
 msgid "CustomShape"
 msgstr "Forma del cursor"
 
-#: pcbnew/pad.cpp:1577
+#: pcbnew/pad.cpp:1579
 msgid "Conn"
 msgstr "Conn"
 
-#: pcbnew/pad.cpp:1595
+#: pcbnew/pad.cpp:1597
 #, fuzzy, c-format
 msgid "NPTH pad of %s"
 msgstr "Pad en %s de %s"
 
-#: pcbnew/pad.cpp:1597
+#: pcbnew/pad.cpp:1599
 #, fuzzy
 msgid "NPTH pad"
 msgstr "Pad en %s de %s"
 
-#: pcbnew/pad.cpp:1605
+#: pcbnew/pad.cpp:1607
 #, fuzzy, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Pad %s en %s de %s"
 
-#: pcbnew/pad.cpp:1612
+#: pcbnew/pad.cpp:1614
 #, fuzzy, c-format
 msgid "Pad on %s"
 msgstr "Pad %s\t"
 
-#: pcbnew/pad.cpp:1620
+#: pcbnew/pad.cpp:1622
 #, fuzzy, c-format
 msgid "PTH pad %s of %s"
 msgstr "Pad en %s de %s"
 
-#: pcbnew/pad.cpp:1626
+#: pcbnew/pad.cpp:1628
 #, fuzzy
 msgid "PTH pad"
 msgstr "Pad en %s de %s"
 
-#: pcbnew/pad.cpp:1636
+#: pcbnew/pad.cpp:1638
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s %s de %s sobre %s"
 
-#: pcbnew/pad.cpp:1644
+#: pcbnew/pad.cpp:1646
 #, fuzzy, c-format
 msgid "Pad %s on %s"
 msgstr "Valor %s de %s"
 
-#: pcbnew/pad.cpp:1653
+#: pcbnew/pad.cpp:1655
 #, fuzzy, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "Pad %s en %s de %s"
 
-#: pcbnew/pad.cpp:1660
+#: pcbnew/pad.cpp:1662
 #, fuzzy, c-format
 msgid "PTH pad %s"
 msgstr "Pad en %s de %s"
 
-#: pcbnew/pad.cpp:2229
+#: pcbnew/pad.cpp:2231
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2237
+#: pcbnew/pad.cpp:2239
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2241
+#: pcbnew/pad.cpp:2243
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2244
+#: pcbnew/pad.cpp:2246
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2247
+#: pcbnew/pad.cpp:2249
 #, fuzzy
 msgid "('castellated' property is for PTH pads)"
 msgstr "Propietats per %s"
 
-#: pcbnew/pad.cpp:2250
+#: pcbnew/pad.cpp:2252
 #, fuzzy
 msgid "('BGA' property is for SMD pads)"
 msgstr "Propietats per %s"
 
-#: pcbnew/pad.cpp:2253
+#: pcbnew/pad.cpp:2255
 #, fuzzy
 msgid "('mechanical' property is for PTH pads)"
 msgstr "Propietats per %s"
 
-#: pcbnew/pad.cpp:2269
+#: pcbnew/pad.cpp:2271
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2277
+#: pcbnew/pad.cpp:2279
 #, fuzzy
 msgid "(SMD pad has a hole)"
 msgstr "Error: el pad no té cap capa."
 
-#: pcbnew/pad.cpp:2283
+#: pcbnew/pad.cpp:2285
 #, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr ""
 "Si voleu una capa de pasta de soldadura per a la cara frontal de la placa"
 
-#: pcbnew/pad.cpp:2289 pcbnew/pad.cpp:2302
+#: pcbnew/pad.cpp:2291 pcbnew/pad.cpp:2304
 #, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
 "Si voleu una capa de pasta de soldadura per a la cara frontal de la placa"
 
-#: pcbnew/pad.cpp:2294 pcbnew/pad.cpp:2307
+#: pcbnew/pad.cpp:2296 pcbnew/pad.cpp:2309
 #, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
 "Si voleu una capa de pasta de soldadura per a la cara frontal de la placa"
 
-#: pcbnew/pad.cpp:2313
+#: pcbnew/pad.cpp:2315
 #, fuzzy
 msgid "(SMD pad has no outer layers)"
 msgstr "Alerta: un pad SMD no té cap capes externes."
 
-#: pcbnew/pad.cpp:2332
+#: pcbnew/pad.cpp:2334
 #, fuzzy
 msgid "(Pad must have a positive size)"
 msgstr "Error: la mida de la cantonada és negativa."
 
-#: pcbnew/pad.cpp:2343
+#: pcbnew/pad.cpp:2345
 #, fuzzy, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr ""
 "La mida de perforació de la via és més petita que el diàmetre de la via"
 
-#: pcbnew/pad.cpp:2367
+#: pcbnew/pad.cpp:2369
 #, fuzzy
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(El forat del pad PTH no deixa coure)"
 
-#: pcbnew/pad.cpp:2377
+#: pcbnew/pad.cpp:2379
 #, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "(El forat del pad PTH no deixa coure)"
 
-#: pcbnew/pad.cpp:2384
+#: pcbnew/pad.cpp:2386
 #, fuzzy
 msgid "(pad hole not inside pad shape)"
 msgstr "Alerta: La mida del pad és menys que zero."
 
-#: pcbnew/pad.cpp:2389
+#: pcbnew/pad.cpp:2391
 msgid "(negative local clearance values have no effect)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2408
+#: pcbnew/pad.cpp:2410
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2418
+#: pcbnew/pad.cpp:2420
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2437
+#: pcbnew/pad.cpp:2439
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2444
+#: pcbnew/pad.cpp:2446
 msgid "(negative corner radius is not allowed)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2446
+#: pcbnew/pad.cpp:2448
 msgid "(corner size will make pad circular)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2451
+#: pcbnew/pad.cpp:2453
 #, fuzzy
 msgid "(negative corner chamfer is not allowed)"
 msgstr "La baixada es massa grossa."
 
-#: pcbnew/pad.cpp:2453
+#: pcbnew/pad.cpp:2455
 #, fuzzy
 msgid "(corner chamfer is too large)"
 msgstr "La baixada es massa grossa."
 
-#: pcbnew/pad.cpp:2462
+#: pcbnew/pad.cpp:2464
 #, fuzzy
 msgid "(trapezoid delta is too large)"
 msgstr "Error: el pad no té cap capa."
 
-#: pcbnew/pad.cpp:2472
+#: pcbnew/pad.cpp:2474
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr ""
 
-#: pcbnew/pad.cpp:2676
+#: pcbnew/pad.cpp:2678
 #, fuzzy
 msgid "Edge connector"
 msgstr "Connector"
 
-#: pcbnew/pad.cpp:2677
+#: pcbnew/pad.cpp:2679
 #, fuzzy
 msgid "NPTH, mechanical"
 msgstr "NPTH, mecànic"
 
-#: pcbnew/pad.cpp:2683
+#: pcbnew/pad.cpp:2685
 #, fuzzy
 msgid "Trapezoid"
 msgstr "Trapezoïdal"
 
-#: pcbnew/pad.cpp:2695
+#: pcbnew/pad.cpp:2697
 msgid "Castellated pad"
 msgstr "Pads castellats"
 
-#: pcbnew/pad.cpp:2696
+#: pcbnew/pad.cpp:2698
 #, fuzzy
 msgid "Mechanical pad"
 msgstr "NPTH, mecànic"
 
-#: pcbnew/pad.cpp:2718
+#: pcbnew/pad.cpp:2720
 #, fuzzy
 msgid "Front, back and connected layers"
 msgstr "Inici, final, i capes connectades"
 
-#: pcbnew/pad.cpp:2768
+#: pcbnew/pad.cpp:2770
 msgid "Pad Type"
 msgstr "Tipus de pad"
 
-#: pcbnew/pad.cpp:2772
+#: pcbnew/pad.cpp:2774
 #, fuzzy
 msgid "Pad Shape"
 msgstr "Forma del pad"
 
-#: pcbnew/pad.cpp:2777
+#: pcbnew/pad.cpp:2779
 msgid "Pad Number"
 msgstr "Número de pad"
 
-#: pcbnew/pad.cpp:2789
+#: pcbnew/pad.cpp:2791
 msgid "Size X"
 msgstr "Mida X"
 
-#: pcbnew/pad.cpp:2793
+#: pcbnew/pad.cpp:2795
 msgid "Size Y"
 msgstr "Mida Y"
 
-#: pcbnew/pad.cpp:2826
+#: pcbnew/pad.cpp:2828
 #, fuzzy
 msgid "Corner Radius Ratio"
 msgstr "Executa la simulació"
 
-#: pcbnew/pad.cpp:2831
+#: pcbnew/pad.cpp:2833
 #, fuzzy
 msgid "Corner Radius Size"
 msgstr "Radi de la cantonada:"
 
-#: pcbnew/pad.cpp:2837
+#: pcbnew/pad.cpp:2839
 #, fuzzy
 msgid "Hole Shape"
 msgstr "Forma del forat:"
 
-#: pcbnew/pad.cpp:2841
+#: pcbnew/pad.cpp:2843
 msgid "Hole Size X"
 msgstr "Mida del forat X"
 
-#: pcbnew/pad.cpp:2847
+#: pcbnew/pad.cpp:2849
 msgid "Hole Size Y"
 msgstr "Mida del forat Y"
 
-#: pcbnew/pad.cpp:2862
+#: pcbnew/pad.cpp:2864
 #, fuzzy
 msgid "Fabrication Property"
 msgstr "Sortides de &fabricació"
 
-#: pcbnew/pad.cpp:2884 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
+#: pcbnew/pad.cpp:2886 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
 #: pcbnew/pcb_textbox.cpp:816 pcbnew/pcb_track.cpp:2155
 msgid "Soldermask Margin Override"
 msgstr "Anul·lació del marge de la màscara de soldadura"
 
-#: pcbnew/pad.cpp:2906 pcbnew/zone.cpp:2145
+#: pcbnew/pad.cpp:2908 pcbnew/zone.cpp:2145
 msgid "Thermal Relief Spoke Width"
 msgstr "Amplada del radi de l'alleujament tèrmic"
 
-#: pcbnew/pad.cpp:2912
+#: pcbnew/pad.cpp:2914
 #, fuzzy
 msgid "Thermal Relief Spoke Angle"
 msgstr "Alleujaments tèrmics"
 
-#: pcbnew/pad.cpp:2917 pcbnew/zone.cpp:2139
+#: pcbnew/pad.cpp:2919 pcbnew/zone.cpp:2139
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Alleujaments tèrmics"
@@ -46213,7 +46227,7 @@ msgstr ""
 "mode independent. Per crear/actualitzar PCBs des de l'esquemàtic, executa el "
 "shell de KiCad i crea un projecte."
 
-#: pcbnew/pcb_edit_frame.cpp:2036 pcbnew/pcbnew_jobs_handler.cpp:2013
+#: pcbnew/pcb_edit_frame.cpp:2036 pcbnew/pcbnew_jobs_handler.cpp:1981
 #, fuzzy
 msgid "Eeschema netlist"
 msgstr "Netlist d'EEschema"
@@ -47969,7 +47983,7 @@ msgstr "Marcador (%s)"
 msgid "No layers selected for plotting."
 msgstr "Cap capa seleccionada."
 
-#: pcbnew/pcb_plotter.cpp:442
+#: pcbnew/pcb_plotter.cpp:447
 #, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
@@ -48280,12 +48294,12 @@ msgid "Error creating 3D render image"
 msgstr "Error mentre es llegia el fitxer."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:823 pcbnew/pcbnew_jobs_handler.cpp:886
-#: pcbnew/pcbnew_jobs_handler.cpp:971 pcbnew/pcbnew_jobs_handler.cpp:1307
+#: pcbnew/pcbnew_jobs_handler.cpp:971 pcbnew/pcbnew_jobs_handler.cpp:1275
 #, fuzzy
 msgid "At least one layer must be specified\n"
 msgstr "No s'ha especificat cap biblioteca."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1174 pcbnew/pcbnew_jobs_handler.cpp:1360
+#: pcbnew/pcbnew_jobs_handler.cpp:1174 pcbnew/pcbnew_jobs_handler.cpp:1328
 #, fuzzy, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "No s'ha pogut carregar '%s'."
@@ -48294,80 +48308,80 @@ msgstr "No s'ha pogut carregar '%s'."
 msgid "Successfully created genCAD file\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1569 pcbnew/pcbnew_jobs_handler.cpp:1642
+#: pcbnew/pcbnew_jobs_handler.cpp:1537 pcbnew/pcbnew_jobs_handler.cpp:1610
 #, fuzzy, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "Exporta l'empremta"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1587 pcbnew/pcbnew_jobs_handler.cpp:1665
+#: pcbnew/pcbnew_jobs_handler.cpp:1555 pcbnew/pcbnew_jobs_handler.cpp:1633
 #, fuzzy, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr "No es pot crear el directori de sortida '%s'."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1616
+#: pcbnew/pcbnew_jobs_handler.cpp:1584
 #, fuzzy, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "Exporta l'empremta"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1712
+#: pcbnew/pcbnew_jobs_handler.cpp:1680
 #, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "no es pot eliminar la biblioteca d'empremtes «%s»"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1720
 #, fuzzy
 msgid "Unable to save library\n"
 msgstr "no hi ha cap biblioteca activa"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1758
+#: pcbnew/pcbnew_jobs_handler.cpp:1726
 #, fuzzy
 msgid "Footprint library was not updated\n"
 msgstr "Biblioteca d'empremtes no habilitada."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1836
+#: pcbnew/pcbnew_jobs_handler.cpp:1804
 #, fuzzy
 msgid "The given footprint could not be found to export."
 msgstr ""
 "No s'ha pogut trobar el fitxer d'equivalències «%s» als camins "
 "predeterminats de cerca."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1878
+#: pcbnew/pcbnew_jobs_handler.cpp:1846
 #, fuzzy, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Canvia l'empremta %s de '%s' a '%s'"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1898
+#: pcbnew/pcbnew_jobs_handler.cpp:1866
 #, fuzzy
 msgid "Error creating svg file"
 msgstr "Error mentre es llegia el fitxer."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1966 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1934 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 "Les proves de paritat de l'esquemàtic requereixen un esquemàtic completament "
 "anotat."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1987 pcbnew/pcbnew_jobs_handler.cpp:2020
+#: pcbnew/pcbnew_jobs_handler.cpp:1955 pcbnew/pcbnew_jobs_handler.cpp:1988
 #, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "No s'ha pogut carregar el fitxer de l'esquemàtic\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2042 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:2010 pcbnew/tools/drc_tool.cpp:200
 #, fuzzy
 msgid "DRC"
 msgstr "ERC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2063
+#: pcbnew/pcbnew_jobs_handler.cpp:2031
 #, fuzzy, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Elements no connectats (%s)"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2069
+#: pcbnew/pcbnew_jobs_handler.cpp:2037
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2085
+#: pcbnew/pcbnew_jobs_handler.cpp:2053
 #, fuzzy, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr ""
@@ -48375,17 +48389,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2090
+#: pcbnew/pcbnew_jobs_handler.cpp:2058
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Desa el fitxer de l'informe DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2237
+#: pcbnew/pcbnew_jobs_handler.cpp:2205
 #, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Error mentre es llegia el fitxer."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2242
+#: pcbnew/pcbnew_jobs_handler.cpp:2210
 #, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "No s'ha pogut crear del fitxer '%s'."
@@ -49950,19 +49964,19 @@ msgstr "Cancel·la"
 msgid "Pack Footprints"
 msgstr "Bloqueja l'empremta"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:342
+#: pcbnew/tools/edit_tool_move_fct.cpp:343
 #, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:355
+#: pcbnew/tools/edit_tool_move_fct.cpp:356
 #, fuzzy, c-format
 msgid "%s pad %s"
 msgstr "Rescata %s com a %s"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:398
+#: pcbnew/tools/edit_tool_move_fct.cpp:399
 msgid "Select reference point for move..."
 msgstr "Selecciona el punt de referència a moure..."
 
@@ -52399,7 +52413,7 @@ msgstr "Annexa la placa..."
 msgid "Active Layer"
 msgstr "Capes de coure:"
 
-#: pcbnew/tools/pcb_control.cpp:1638 pcbnew/widgets/appearance_controls.cpp:376
+#: pcbnew/tools/pcb_control.cpp:1638 pcbnew/widgets/appearance_controls.cpp:375
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #, fuzzy
 msgid "All Layers"
@@ -52587,7 +52601,7 @@ msgid "Auto-fill Zone(s)"
 msgstr "Omple les zones"
 
 #: pcbnew/tools/zone_filler_tool.cpp:275
-#: pcbnew/widgets/appearance_controls.cpp:3484
+#: pcbnew/widgets/appearance_controls.cpp:3489
 #, fuzzy
 msgid "Open Preferences"
 msgstr "&Preferències"
@@ -52676,152 +52690,152 @@ msgstr "Via a prop d'una pista"
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/widgets/appearance_controls.cpp:330
 #, fuzzy
 msgid "Show tracks"
 msgstr "Sense pistes"
 
-#: pcbnew/widgets/appearance_controls.cpp:332
+#: pcbnew/widgets/appearance_controls.cpp:331
 #, fuzzy
 msgid "Show all vias"
 msgstr "Mostra totes les capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:333
+#: pcbnew/widgets/appearance_controls.cpp:332
 #, fuzzy
 msgid "Show all pads"
 msgstr "Mostra les xarxes amb zero pads"
 
-#: pcbnew/widgets/appearance_controls.cpp:334
+#: pcbnew/widgets/appearance_controls.cpp:333
 #, fuzzy
 msgid "Show copper zones"
 msgstr "Mostra el gruix del coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:335
+#: pcbnew/widgets/appearance_controls.cpp:334
 #, fuzzy
 msgid "Filled Shapes"
 msgstr "Forma omplerta"
 
-#: pcbnew/widgets/appearance_controls.cpp:335
+#: pcbnew/widgets/appearance_controls.cpp:334
 #, fuzzy
 msgid "Opacity of filled shapes"
 msgstr "Forma omplerta"
 
-#: pcbnew/widgets/appearance_controls.cpp:336
+#: pcbnew/widgets/appearance_controls.cpp:335
 #, fuzzy
 msgid "Show user images"
 msgstr "Mostra les microvies"
 
-#: pcbnew/widgets/appearance_controls.cpp:338
+#: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Footprints Front"
 msgstr "Empremtes frontals"
 
-#: pcbnew/widgets/appearance_controls.cpp:338
+#: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show footprints that are on board's front"
 msgstr "Mostra les empremtes que estiguin en la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:339
+#: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprints Back"
 msgstr "Empremtes posteriors"
 
-#: pcbnew/widgets/appearance_controls.cpp:339
+#: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprints that are on board's back"
 msgstr "Mostra les empremtes que estiguin en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:345
+#: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show unconnected nets as a ratsnest"
 msgstr "Mostra les xarxes no connectades com un embolic"
 
-#: pcbnew/widgets/appearance_controls.cpp:346
+#: pcbnew/widgets/appearance_controls.cpp:345
 msgid "DRC Warnings"
 msgstr "Advertiments de DRC"
 
-#: pcbnew/widgets/appearance_controls.cpp:346
+#: pcbnew/widgets/appearance_controls.cpp:345
 msgid "DRC violations with a Warning severity"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:347
+#: pcbnew/widgets/appearance_controls.cpp:346
 #, fuzzy
 msgid "DRC Errors"
 msgstr "Errors"
 
-#: pcbnew/widgets/appearance_controls.cpp:347
+#: pcbnew/widgets/appearance_controls.cpp:346
 msgid "DRC violations with an Error severity"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:348
+#: pcbnew/widgets/appearance_controls.cpp:347
 #, fuzzy
 msgid "DRC Exclusions"
 msgstr "Exclusions DRC"
 
-#: pcbnew/widgets/appearance_controls.cpp:348
+#: pcbnew/widgets/appearance_controls.cpp:347
 msgid "DRC violations which have been individually excluded"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:349
+#: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show footprint and text origins as a cross"
 msgstr "Mostra els orígens del text i l'empremta com a una creu"
 
-#: pcbnew/widgets/appearance_controls.cpp:350
+#: pcbnew/widgets/appearance_controls.cpp:349
 #, fuzzy
 msgid "Locked Item Shadow"
 msgstr "Ombra de l'element bloquejat"
 
-#: pcbnew/widgets/appearance_controls.cpp:350
+#: pcbnew/widgets/appearance_controls.cpp:349
 #, fuzzy
 msgid "Show a shadow on locked items"
 msgstr "Omet els elements bloquejats"
 
-#: pcbnew/widgets/appearance_controls.cpp:351
+#: pcbnew/widgets/appearance_controls.cpp:350
 #, fuzzy
 msgid "Colliding Courtyards"
 msgstr "Courtyard.F"
 
-#: pcbnew/widgets/appearance_controls.cpp:351
+#: pcbnew/widgets/appearance_controls.cpp:350
 #, fuzzy
 msgid "Show colliding footprint courtyards"
 msgstr "S'estan reunint els patis d'empremtes..."
 
-#: pcbnew/widgets/appearance_controls.cpp:352
+#: pcbnew/widgets/appearance_controls.cpp:351
 #, fuzzy
 msgid "Show drawing sheet borders and title block"
 msgstr "Ploteja la vora i el títol del bloc"
 
-#: pcbnew/widgets/appearance_controls.cpp:374
+#: pcbnew/widgets/appearance_controls.cpp:373
 #, fuzzy
 msgid "No Layers"
 msgstr "2 capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:379
+#: pcbnew/widgets/appearance_controls.cpp:378
 #, fuzzy
 msgid "All Copper Layers"
 msgstr "Totes les capes de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:382
+#: pcbnew/widgets/appearance_controls.cpp:381
 #, fuzzy
 msgid "Inner Copper Layers"
 msgstr "Capa de coure interna"
 
-#: pcbnew/widgets/appearance_controls.cpp:385
+#: pcbnew/widgets/appearance_controls.cpp:384
 #, fuzzy
 msgid "Front Layers"
 msgstr "Capa frontal"
 
-#: pcbnew/widgets/appearance_controls.cpp:388
+#: pcbnew/widgets/appearance_controls.cpp:387
 #, fuzzy
 msgid "Front Assembly View"
 msgstr "Vista frontal"
 
-#: pcbnew/widgets/appearance_controls.cpp:391
+#: pcbnew/widgets/appearance_controls.cpp:390
 #, fuzzy
 msgid "Back Layers"
 msgstr "Capa posterior"
 
-#: pcbnew/widgets/appearance_controls.cpp:394
+#: pcbnew/widgets/appearance_controls.cpp:393
 #, fuzzy
 msgid "Back Assembly View"
 msgstr "Vista posterior"
 
-#: pcbnew/widgets/appearance_controls.cpp:443
+#: pcbnew/widgets/appearance_controls.cpp:442
 #, c-format
 msgid ""
 "Save and restore layer visibility combinations.\n"
@@ -52830,7 +52844,7 @@ msgid ""
 "popup."
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:450
+#: pcbnew/widgets/appearance_controls.cpp:449
 #, c-format
 msgid ""
 "Save and restore view location and zoom.\n"
@@ -52839,584 +52853,584 @@ msgid ""
 "popup."
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:465
+#: pcbnew/widgets/appearance_controls.cpp:464
 #, fuzzy
 msgid "Filter nets"
 msgstr "Ajusts del filtre"
 
-#: pcbnew/widgets/appearance_controls.cpp:616
-#: pcbnew/widgets/appearance_controls.cpp:1831
+#: pcbnew/widgets/appearance_controls.cpp:615
+#: pcbnew/widgets/appearance_controls.cpp:1836
 #, fuzzy
 msgid "Layer Display Options"
 msgstr "Opcions de la pantalla"
 
-#: pcbnew/widgets/appearance_controls.cpp:628
-#: pcbnew/widgets/appearance_controls.cpp:1837
+#: pcbnew/widgets/appearance_controls.cpp:627
+#: pcbnew/widgets/appearance_controls.cpp:1842
 #, c-format
 msgid "Inactive layers (%s):"
 msgstr "Capes inactives (%s):"
 
-#: pcbnew/widgets/appearance_controls.cpp:630
-#: pcbnew/widgets/appearance_controls.cpp:1839
+#: pcbnew/widgets/appearance_controls.cpp:629
+#: pcbnew/widgets/appearance_controls.cpp:1844
 #, fuzzy
 msgid "Inactive layers:"
 msgstr "Capes de coure:"
 
-#: pcbnew/widgets/appearance_controls.cpp:644
-#: pcbnew/widgets/appearance_controls.cpp:1844
+#: pcbnew/widgets/appearance_controls.cpp:643
+#: pcbnew/widgets/appearance_controls.cpp:1849
 msgid "Inactive layers will be shown in full color"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:649
-#: pcbnew/widgets/appearance_controls.cpp:1846
+#: pcbnew/widgets/appearance_controls.cpp:648
+#: pcbnew/widgets/appearance_controls.cpp:1851
 #, fuzzy
 msgid "Dim"
 msgstr "Din"
 
-#: pcbnew/widgets/appearance_controls.cpp:651
-#: pcbnew/widgets/appearance_controls.cpp:1847
+#: pcbnew/widgets/appearance_controls.cpp:650
+#: pcbnew/widgets/appearance_controls.cpp:1852
 #, fuzzy
 msgid "Inactive layers will be dimmed"
 msgstr "Mode de vista de capa inactiva"
 
-#: pcbnew/widgets/appearance_controls.cpp:658
-#: pcbnew/widgets/appearance_controls.cpp:1850
+#: pcbnew/widgets/appearance_controls.cpp:657
+#: pcbnew/widgets/appearance_controls.cpp:1855
 #, fuzzy
 msgid "Inactive layers will be hidden"
 msgstr "Mode de vista de capa inactiva"
 
-#: pcbnew/widgets/appearance_controls.cpp:669
-#: pcbnew/widgets/appearance_controls.cpp:1852
+#: pcbnew/widgets/appearance_controls.cpp:668
+#: pcbnew/widgets/appearance_controls.cpp:1857
 #, fuzzy
 msgid "Flip board view"
 msgstr "Cap&gira la vista de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:691
-#: pcbnew/widgets/appearance_controls.cpp:2561
+#: pcbnew/widgets/appearance_controls.cpp:690
+#: pcbnew/widgets/appearance_controls.cpp:2566
 #, fuzzy
 msgid "Net Display Options"
 msgstr "Opcions de la pantalla"
 
-#: pcbnew/widgets/appearance_controls.cpp:703
-#: pcbnew/widgets/appearance_controls.cpp:2566
+#: pcbnew/widgets/appearance_controls.cpp:702
+#: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Net colors (%s):"
 msgstr "Colors de les xarxes (%s):"
 
-#: pcbnew/widgets/appearance_controls.cpp:705
-#: pcbnew/widgets/appearance_controls.cpp:2568
+#: pcbnew/widgets/appearance_controls.cpp:704
+#: pcbnew/widgets/appearance_controls.cpp:2573
 #, fuzzy
 msgid "Net colors:"
 msgstr "Nom de la nova classe de xarxa:"
 
-#: pcbnew/widgets/appearance_controls.cpp:710
-#: pcbnew/widgets/appearance_controls.cpp:2571
+#: pcbnew/widgets/appearance_controls.cpp:709
+#: pcbnew/widgets/appearance_controls.cpp:2576
 msgid "Choose when to show net and netclass colors"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:719
-#: pcbnew/widgets/appearance_controls.cpp:2574
+#: pcbnew/widgets/appearance_controls.cpp:718
+#: pcbnew/widgets/appearance_controls.cpp:2579
 msgid "Net and netclass colors are shown on all copper items"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:727
-#: pcbnew/widgets/appearance_controls.cpp:2577
+#: pcbnew/widgets/appearance_controls.cpp:726
+#: pcbnew/widgets/appearance_controls.cpp:2582
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:734
-#: pcbnew/widgets/appearance_controls.cpp:2580
+#: pcbnew/widgets/appearance_controls.cpp:733
+#: pcbnew/widgets/appearance_controls.cpp:2585
 msgid "Net and netclass colors are not shown"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:745
-#: pcbnew/widgets/appearance_controls.cpp:2585
+#: pcbnew/widgets/appearance_controls.cpp:744
+#: pcbnew/widgets/appearance_controls.cpp:2590
 #, c-format
 msgid "Ratsnest display (%s):"
 msgstr "Visualització de línies aèries (%s):"
 
-#: pcbnew/widgets/appearance_controls.cpp:747
-#: pcbnew/widgets/appearance_controls.cpp:2587
+#: pcbnew/widgets/appearance_controls.cpp:746
+#: pcbnew/widgets/appearance_controls.cpp:2592
 #, fuzzy
 msgid "Ratsnest display:"
 msgstr "Inclinació de la delimitació:"
 
-#: pcbnew/widgets/appearance_controls.cpp:752
-#: pcbnew/widgets/appearance_controls.cpp:2590
+#: pcbnew/widgets/appearance_controls.cpp:751
+#: pcbnew/widgets/appearance_controls.cpp:2595
 #, fuzzy
 msgid "Choose which ratsnest lines to display"
 msgstr "Inclou els elements en les capes &invisibles"
 
-#: pcbnew/widgets/appearance_controls.cpp:762
-#: pcbnew/widgets/appearance_controls.cpp:2593
+#: pcbnew/widgets/appearance_controls.cpp:761
+#: pcbnew/widgets/appearance_controls.cpp:2598
 #, fuzzy
 msgid "Show ratsnest lines to items on all layers"
 msgstr "Inclou els elements en les capes &invisibles"
 
-#: pcbnew/widgets/appearance_controls.cpp:767
-#: pcbnew/widgets/appearance_controls.cpp:2595
+#: pcbnew/widgets/appearance_controls.cpp:766
+#: pcbnew/widgets/appearance_controls.cpp:2600
 #, fuzzy
 msgid "Visible layers"
 msgstr "Visibles"
 
-#: pcbnew/widgets/appearance_controls.cpp:769
-#: pcbnew/widgets/appearance_controls.cpp:2596
+#: pcbnew/widgets/appearance_controls.cpp:768
+#: pcbnew/widgets/appearance_controls.cpp:2601
 #, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
 msgstr "Inclou els elements en les capes &invisibles"
 
-#: pcbnew/widgets/appearance_controls.cpp:776
-#: pcbnew/widgets/appearance_controls.cpp:2599
+#: pcbnew/widgets/appearance_controls.cpp:775
+#: pcbnew/widgets/appearance_controls.cpp:2604
 #, fuzzy
 msgid "Hide all ratsnest lines"
 msgstr "Oculta l'embolic de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:927
+#: pcbnew/widgets/appearance_controls.cpp:926
 #, fuzzy
 msgid "Set Net Color"
 msgstr "Utilitza els valors de la classe de xarxa"
 
-#: pcbnew/widgets/appearance_controls.cpp:929
+#: pcbnew/widgets/appearance_controls.cpp:928
 #, fuzzy
 msgid "Clear Net Color"
 msgstr "Neteja Color"
 
-#: pcbnew/widgets/appearance_controls.cpp:935
+#: pcbnew/widgets/appearance_controls.cpp:934
 #, c-format
 msgid "Highlight %s"
 msgstr "Realça %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:938
-#: pcbnew/widgets/appearance_controls.cpp:2430
+#: pcbnew/widgets/appearance_controls.cpp:937
+#: pcbnew/widgets/appearance_controls.cpp:2435
 #, c-format
 msgid "Select Tracks and Vias in %s"
 msgstr "Selecciona pistes i vies a %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:941
-#: pcbnew/widgets/appearance_controls.cpp:2433
+#: pcbnew/widgets/appearance_controls.cpp:940
+#: pcbnew/widgets/appearance_controls.cpp:2438
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "Desselecciona pistes i vies a %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:946
+#: pcbnew/widgets/appearance_controls.cpp:945
 msgid "Show All Nets"
 msgstr "Mostra totes les xarxes"
 
-#: pcbnew/widgets/appearance_controls.cpp:948
+#: pcbnew/widgets/appearance_controls.cpp:947
 #, fuzzy
 msgid "Hide All Other Nets"
 msgstr "Oculta totes les capes de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:980
+#: pcbnew/widgets/appearance_controls.cpp:979
 #, fuzzy, c-format
 msgid "Click to hide ratsnest for %s"
 msgstr "Mostra o amaga les línies aèries per xarxes a %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:981
+#: pcbnew/widgets/appearance_controls.cpp:980
 #, fuzzy, c-format
 msgid "Click to show ratsnest for %s"
 msgstr "Mostra o amaga les línies aèries per xarxes a %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:990
+#: pcbnew/widgets/appearance_controls.cpp:989
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:1029
+#: pcbnew/widgets/appearance_controls.cpp:1028
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 #, fuzzy
 msgid "Objects"
 msgstr "Sense objectes"
 
-#: pcbnew/widgets/appearance_controls.cpp:1581
+#: pcbnew/widgets/appearance_controls.cpp:1586
 msgid "Double click or middle click for color change, right click for menu"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:1587
+#: pcbnew/widgets/appearance_controls.cpp:1592
 #, fuzzy
 msgid "Show or hide this layer"
 msgstr "Mostra o oculta la barra d'eines del gestor de capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:1660
+#: pcbnew/widgets/appearance_controls.cpp:1665
 msgid "Adhesive on board's front"
 msgstr "Adhesiu en la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1661
+#: pcbnew/widgets/appearance_controls.cpp:1666
 msgid "Adhesive on board's back"
 msgstr "Adhesiu en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1662
+#: pcbnew/widgets/appearance_controls.cpp:1667
 msgid "Solder paste on board's front"
 msgstr "Pasta de soldadura en la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1663
+#: pcbnew/widgets/appearance_controls.cpp:1668
 msgid "Solder paste on board's back"
 msgstr "Pasta de soldadura en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1664
+#: pcbnew/widgets/appearance_controls.cpp:1669
 msgid "Silkscreen on board's front"
 msgstr "Serigrafia en la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1665
+#: pcbnew/widgets/appearance_controls.cpp:1670
 msgid "Silkscreen on board's back"
 msgstr "Serigrafia en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1666
+#: pcbnew/widgets/appearance_controls.cpp:1671
 msgid "Solder mask on board's front"
 msgstr "Màscara de soldadura a la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1667
+#: pcbnew/widgets/appearance_controls.cpp:1672
 msgid "Solder mask on board's back"
 msgstr "Màscara de soldadura en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1668
+#: pcbnew/widgets/appearance_controls.cpp:1673
 msgid "Explanatory drawings"
 msgstr "Dibuixos explicatius"
 
-#: pcbnew/widgets/appearance_controls.cpp:1669
+#: pcbnew/widgets/appearance_controls.cpp:1674
 msgid "Explanatory comments"
 msgstr "Comentaris explicatius"
 
-#: pcbnew/widgets/appearance_controls.cpp:1670
-#: pcbnew/widgets/appearance_controls.cpp:1671
+#: pcbnew/widgets/appearance_controls.cpp:1675
+#: pcbnew/widgets/appearance_controls.cpp:1676
 msgid "User defined meaning"
 msgstr "Significat definit per l'usuari"
 
-#: pcbnew/widgets/appearance_controls.cpp:1672
+#: pcbnew/widgets/appearance_controls.cpp:1677
 msgid "Board's perimeter definition"
 msgstr "Definició del perímetre de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1673
+#: pcbnew/widgets/appearance_controls.cpp:1678
 #, fuzzy
 msgid "Board's edge setback outline"
 msgstr "Delimitacions de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1674
+#: pcbnew/widgets/appearance_controls.cpp:1679
 msgid "Footprint courtyards on board's front"
 msgstr "Patis de les empremtes en la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1675
+#: pcbnew/widgets/appearance_controls.cpp:1680
 msgid "Footprint courtyards on board's back"
 msgstr "Patis de les empremtes en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1676
+#: pcbnew/widgets/appearance_controls.cpp:1681
 msgid "Footprint assembly on board's front"
 msgstr "Empremta de muntatge en la part frontal de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1677
+#: pcbnew/widgets/appearance_controls.cpp:1682
 msgid "Footprint assembly on board's back"
 msgstr "Empremta de muntatge en la part posterior de la placa"
 
-#: pcbnew/widgets/appearance_controls.cpp:1678
+#: pcbnew/widgets/appearance_controls.cpp:1683
 msgid "User defined layer 1"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1679
+#: pcbnew/widgets/appearance_controls.cpp:1684
 msgid "User defined layer 2"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1680
+#: pcbnew/widgets/appearance_controls.cpp:1685
 msgid "User defined layer 3"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1681
+#: pcbnew/widgets/appearance_controls.cpp:1686
 msgid "User defined layer 4"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1682
+#: pcbnew/widgets/appearance_controls.cpp:1687
 msgid "User defined layer 5"
 msgstr "Capa definida per l'usuari 5"
 
-#: pcbnew/widgets/appearance_controls.cpp:1683
+#: pcbnew/widgets/appearance_controls.cpp:1688
 msgid "User defined layer 6"
 msgstr "Capa definida per l'usuari 6"
 
-#: pcbnew/widgets/appearance_controls.cpp:1684
+#: pcbnew/widgets/appearance_controls.cpp:1689
 msgid "User defined layer 7"
 msgstr "Capa definida per l'usuari 7"
 
-#: pcbnew/widgets/appearance_controls.cpp:1685
+#: pcbnew/widgets/appearance_controls.cpp:1690
 msgid "User defined layer 8"
 msgstr "Capa definida per l'usuari 8"
 
-#: pcbnew/widgets/appearance_controls.cpp:1686
+#: pcbnew/widgets/appearance_controls.cpp:1691
 msgid "User defined layer 9"
 msgstr "Capa definida per l'usuari 9"
 
-#: pcbnew/widgets/appearance_controls.cpp:1687
+#: pcbnew/widgets/appearance_controls.cpp:1692
 #, fuzzy
 msgid "User defined layer 10"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1688
+#: pcbnew/widgets/appearance_controls.cpp:1693
 #, fuzzy
 msgid "User defined layer 11"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1689
+#: pcbnew/widgets/appearance_controls.cpp:1694
 #, fuzzy
 msgid "User defined layer 12"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1690
+#: pcbnew/widgets/appearance_controls.cpp:1695
 #, fuzzy
 msgid "User defined layer 13"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1691
+#: pcbnew/widgets/appearance_controls.cpp:1696
 #, fuzzy
 msgid "User defined layer 14"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1692
+#: pcbnew/widgets/appearance_controls.cpp:1697
 #, fuzzy
 msgid "User defined layer 15"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1693
+#: pcbnew/widgets/appearance_controls.cpp:1698
 #, fuzzy
 msgid "User defined layer 16"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1694
+#: pcbnew/widgets/appearance_controls.cpp:1699
 #, fuzzy
 msgid "User defined layer 17"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1695
+#: pcbnew/widgets/appearance_controls.cpp:1700
 #, fuzzy
 msgid "User defined layer 18"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1696
+#: pcbnew/widgets/appearance_controls.cpp:1701
 #, fuzzy
 msgid "User defined layer 19"
 msgstr "Capa definida per l'usuari 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1697
+#: pcbnew/widgets/appearance_controls.cpp:1702
 #, fuzzy
 msgid "User defined layer 20"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1698
+#: pcbnew/widgets/appearance_controls.cpp:1703
 #, fuzzy
 msgid "User defined layer 21"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1699
+#: pcbnew/widgets/appearance_controls.cpp:1704
 #, fuzzy
 msgid "User defined layer 22"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1700
+#: pcbnew/widgets/appearance_controls.cpp:1705
 #, fuzzy
 msgid "User defined layer 23"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1701
+#: pcbnew/widgets/appearance_controls.cpp:1706
 #, fuzzy
 msgid "User defined layer 24"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1702
+#: pcbnew/widgets/appearance_controls.cpp:1707
 #, fuzzy
 msgid "User defined layer 25"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1703
+#: pcbnew/widgets/appearance_controls.cpp:1708
 #, fuzzy
 msgid "User defined layer 26"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1704
+#: pcbnew/widgets/appearance_controls.cpp:1709
 #, fuzzy
 msgid "User defined layer 27"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1705
+#: pcbnew/widgets/appearance_controls.cpp:1710
 #, fuzzy
 msgid "User defined layer 28"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1706
+#: pcbnew/widgets/appearance_controls.cpp:1711
 #, fuzzy
 msgid "User defined layer 29"
 msgstr "Capa definida per l'usuari 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1707
+#: pcbnew/widgets/appearance_controls.cpp:1712
 #, fuzzy
 msgid "User defined layer 30"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1708
+#: pcbnew/widgets/appearance_controls.cpp:1713
 #, fuzzy
 msgid "User defined layer 31"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1709
+#: pcbnew/widgets/appearance_controls.cpp:1714
 #, fuzzy
 msgid "User defined layer 32"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1710
+#: pcbnew/widgets/appearance_controls.cpp:1715
 #, fuzzy
 msgid "User defined layer 33"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1711
+#: pcbnew/widgets/appearance_controls.cpp:1716
 #, fuzzy
 msgid "User defined layer 34"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1712
+#: pcbnew/widgets/appearance_controls.cpp:1717
 #, fuzzy
 msgid "User defined layer 35"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1713
+#: pcbnew/widgets/appearance_controls.cpp:1718
 #, fuzzy
 msgid "User defined layer 36"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1714
+#: pcbnew/widgets/appearance_controls.cpp:1719
 #, fuzzy
 msgid "User defined layer 37"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1715
+#: pcbnew/widgets/appearance_controls.cpp:1720
 #, fuzzy
 msgid "User defined layer 38"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1716
+#: pcbnew/widgets/appearance_controls.cpp:1721
 #, fuzzy
 msgid "User defined layer 39"
 msgstr "Capa definida per l'usuari 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1717
+#: pcbnew/widgets/appearance_controls.cpp:1722
 #, fuzzy
 msgid "User defined layer 40"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1718
+#: pcbnew/widgets/appearance_controls.cpp:1723
 #, fuzzy
 msgid "User defined layer 41"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1719
+#: pcbnew/widgets/appearance_controls.cpp:1724
 #, fuzzy
 msgid "User defined layer 42"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1720
+#: pcbnew/widgets/appearance_controls.cpp:1725
 #, fuzzy
 msgid "User defined layer 43"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1721
+#: pcbnew/widgets/appearance_controls.cpp:1726
 #, fuzzy
 msgid "User defined layer 44"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1722
+#: pcbnew/widgets/appearance_controls.cpp:1727
 #, fuzzy
 msgid "User defined layer 45"
 msgstr "Capa definida per l'usuari 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1769
+#: pcbnew/widgets/appearance_controls.cpp:1774
 msgid "Front copper layer"
 msgstr "Capa de coure frontal"
 
-#: pcbnew/widgets/appearance_controls.cpp:1770
+#: pcbnew/widgets/appearance_controls.cpp:1775
 msgid "Back copper layer"
 msgstr "Capa de coure posterior"
 
-#: pcbnew/widgets/appearance_controls.cpp:1771
+#: pcbnew/widgets/appearance_controls.cpp:1776
 msgid "Inner copper layer"
 msgstr "Capa de coure interna"
 
-#: pcbnew/widgets/appearance_controls.cpp:1861
+#: pcbnew/widgets/appearance_controls.cpp:1866
 msgid "Show All Copper Layers"
 msgstr "Mostra totes les capes de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:1863
+#: pcbnew/widgets/appearance_controls.cpp:1868
 msgid "Hide All Copper Layers"
 msgstr "Oculta totes les capes de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:1874
+#: pcbnew/widgets/appearance_controls.cpp:1879
 msgid "Show All Non Copper Layers"
 msgstr "Mostra totes les capes que no són de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:1878
+#: pcbnew/widgets/appearance_controls.cpp:1883
 msgid "Hide All Non Copper Layers"
 msgstr "Oculta totes les capes que no són de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:1892
+#: pcbnew/widgets/appearance_controls.cpp:1897
 #, fuzzy
 msgid "Show Only Front Assembly Layers"
 msgstr "Mostra totes les capes que no són de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:1895
+#: pcbnew/widgets/appearance_controls.cpp:1900
 #, fuzzy
 msgid "Show Only Front Layers"
 msgstr "Mostra totes les capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:1902
+#: pcbnew/widgets/appearance_controls.cpp:1907
 #, fuzzy
 msgid "Show Only Inner Layers"
 msgstr "Mostra totes les capes de coure"
 
-#: pcbnew/widgets/appearance_controls.cpp:1906
+#: pcbnew/widgets/appearance_controls.cpp:1911
 #, fuzzy
 msgid "Show Only Back Layers"
 msgstr "Mostra totes les capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:1910
+#: pcbnew/widgets/appearance_controls.cpp:1915
 #, fuzzy
 msgid "Show Only Back Assembly Layers"
 msgstr "Mostra totes les capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:2287
+#: pcbnew/widgets/appearance_controls.cpp:2292
 #, c-format
 msgid "Set opacity of %s"
 msgstr ""
 
-#: pcbnew/widgets/appearance_controls.cpp:2406
+#: pcbnew/widgets/appearance_controls.cpp:2411
 #, fuzzy
 msgid "Set Netclass Color"
 msgstr "Utilitza els valors de la classe de xarxa"
 
-#: pcbnew/widgets/appearance_controls.cpp:2410
+#: pcbnew/widgets/appearance_controls.cpp:2415
 #, fuzzy
 msgid "Use Color from Schematic"
 msgstr "Actualitza el PCB a partir de l'esquemàtic"
 
-#: pcbnew/widgets/appearance_controls.cpp:2419
+#: pcbnew/widgets/appearance_controls.cpp:2424
 #, fuzzy
 msgid "Clear Netclass Color"
 msgstr "Neteja Color"
 
-#: pcbnew/widgets/appearance_controls.cpp:2427
+#: pcbnew/widgets/appearance_controls.cpp:2432
 #, c-format
 msgid "Highlight Nets in %s"
 msgstr "Realça xarxes a %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:2438
+#: pcbnew/widgets/appearance_controls.cpp:2443
 #, fuzzy
 msgid "Show All Netclasses"
 msgstr "Mostra totes les capes"
 
-#: pcbnew/widgets/appearance_controls.cpp:2440
+#: pcbnew/widgets/appearance_controls.cpp:2445
 #, fuzzy
 msgid "Hide All Other Netclasses"
 msgstr "Afegeix una altra classe de xarxa"
 
-#: pcbnew/widgets/appearance_controls.cpp:2501
+#: pcbnew/widgets/appearance_controls.cpp:2506
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
 msgstr "Mostra o amaga les línies aèries per xarxes a %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:3497
+#: pcbnew/widgets/appearance_controls.cpp:3502
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."

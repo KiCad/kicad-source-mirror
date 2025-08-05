@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-31 19:38+0300\n"
+"POT-Creation-Date: 2025-08-05 15:14+0300\n"
 "PO-Revision-Date: 2025-08-05 12:13+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:320
-#: common/widgets/grid_text_button_helpers.cpp:372
+#: common/widgets/grid_text_button_helpers.cpp:375
 msgid "All Files"
 msgstr "Все файлы"
 
@@ -383,7 +383,7 @@ msgstr "Недостаточно прав для сохранения файла
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:233
-#: pcbnew/widgets/appearance_controls.cpp:2768
+#: pcbnew/widgets/appearance_controls.cpp:2773
 msgid "Error"
 msgstr "Ошибка"
 
@@ -873,32 +873,32 @@ msgstr "Габариты моделей"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
-#: pcbnew/widgets/appearance_controls.cpp:340
+#: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Values"
 msgstr "Значения"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
-#: pcbnew/widgets/appearance_controls.cpp:340
+#: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint values"
 msgstr "Показать значения посад. мест"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
-#: pcbnew/widgets/appearance_controls.cpp:341
+#: pcbnew/widgets/appearance_controls.cpp:340
 msgid "References"
 msgstr "Обозначения"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:122
-#: pcbnew/widgets/appearance_controls.cpp:341
+#: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show footprint references"
 msgstr "Показать обозначения посад. мест"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#: pcbnew/widgets/appearance_controls.cpp:342
+#: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprint Text"
 msgstr "Текст посад. места"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#: pcbnew/widgets/appearance_controls.cpp:342
+#: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show all footprint text"
 msgstr "Показать все надписи посад. места"
 
@@ -985,13 +985,13 @@ msgstr ""
 "цвета."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:630
-#: pcbnew/widgets/appearance_controls.cpp:2237
+#: pcbnew/widgets/appearance_controls.cpp:2242
 #, c-format
 msgid "Show or hide %s"
 msgstr "Показать или скрыть %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:709
-#: pcbnew/widgets/appearance_controls.cpp:2610
+#: pcbnew/widgets/appearance_controls.cpp:2615
 #, c-format
 msgid "Presets (%s+Tab):"
 msgstr "Наборы слоёв (%s+Tab):"
@@ -999,93 +999,93 @@ msgstr "Наборы слоёв (%s+Tab):"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:723
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1660
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2099
-#: pcbnew/widgets/appearance_controls.cpp:2635
+#: pcbnew/widgets/appearance_controls.cpp:2640
 msgid "Save preset..."
 msgstr "Сохранить набор слоёв..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:724
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1661
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2100
-#: pcbnew/widgets/appearance_controls.cpp:2636
+#: pcbnew/widgets/appearance_controls.cpp:2641
 msgid "Delete preset..."
 msgstr "Удалить набор слоёв..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:824
-#: pcbnew/widgets/appearance_controls.cpp:2741
+#: pcbnew/widgets/appearance_controls.cpp:2746
 msgid "Layer preset name:"
 msgstr "Имя нового набора слоёв:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:825
-#: pcbnew/widgets/appearance_controls.cpp:2742
+#: pcbnew/widgets/appearance_controls.cpp:2747
 msgid "Save Layer Preset"
 msgstr "Сохранить набор слоёв"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:840
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1835
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2242
-#: pcbnew/widgets/appearance_controls.cpp:2775
+#: pcbnew/widgets/appearance_controls.cpp:2780
 msgid "Overwrite existing preset?"
 msgstr "Перезаписать пресет?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1862
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2269
-#: pcbnew/widgets/appearance_controls.cpp:2803
+#: pcbnew/widgets/appearance_controls.cpp:2808
 msgid "Presets"
 msgstr "Наборы слоёв"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:875
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1874
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2281
-#: pcbnew/widgets/appearance_controls.cpp:2815
+#: pcbnew/widgets/appearance_controls.cpp:2820
 msgid "Delete Preset"
 msgstr "Удалить набор"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:876
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1875
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2282
-#: pcbnew/widgets/appearance_controls.cpp:2816
+#: pcbnew/widgets/appearance_controls.cpp:2821
 msgid "Select preset:"
 msgstr "Выбор набора:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:946
-#: pcbnew/widgets/appearance_controls.cpp:2919
+#: pcbnew/widgets/appearance_controls.cpp:2924
 #, c-format
 msgid "Viewports (%s+Tab):"
 msgstr "Виды (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
-#: pcbnew/widgets/appearance_controls.cpp:2928
+#: pcbnew/widgets/appearance_controls.cpp:2933
 msgid "Save viewport..."
 msgstr "Сохранить вид..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
-#: pcbnew/widgets/appearance_controls.cpp:2929
+#: pcbnew/widgets/appearance_controls.cpp:2934
 msgid "Delete viewport..."
 msgstr "Удалить вид..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:989
-#: pcbnew/widgets/appearance_controls.cpp:2980
+#: pcbnew/widgets/appearance_controls.cpp:2985
 msgid "Viewport name:"
 msgstr "Имя вида:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:990
-#: pcbnew/widgets/appearance_controls.cpp:2980
+#: pcbnew/widgets/appearance_controls.cpp:2985
 msgid "Save Viewport"
 msgstr "Сохранить вид"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1032
-#: pcbnew/widgets/appearance_controls.cpp:3021
+#: pcbnew/widgets/appearance_controls.cpp:3026
 msgid "Viewports"
 msgstr "Виды"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1041
-#: pcbnew/widgets/appearance_controls.cpp:3030
+#: pcbnew/widgets/appearance_controls.cpp:3035
 msgid "Delete Viewport"
 msgstr "Удалить вид"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1042
-#: pcbnew/widgets/appearance_controls.cpp:3031
+#: pcbnew/widgets/appearance_controls.cpp:3036
 msgid "Select viewport:"
 msgstr "Выбор вида:"
 
@@ -1467,7 +1467,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1778
-#: pcbnew/pad.cpp:1402
+#: pcbnew/pad.cpp:1404
 msgid "Rotation"
 msgstr "Поворот"
 
@@ -1562,7 +1562,7 @@ msgstr "Создать библиотеку символов"
 msgid "Create Footprint Library"
 msgstr "Создать библиотеку посад. мест"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:48 common/eda_draw_frame.cpp:666
+#: bitmap2component/bitmap2cmp_panel.cpp:52 common/eda_draw_frame.cpp:666
 #: eeschema/dialogs/dialog_field_properties_base.cpp:239
 #: eeschema/dialogs/dialog_field_properties_base.cpp:273
 #: eeschema/dialogs/dialog_field_properties_base.cpp:284
@@ -1727,24 +1727,24 @@ msgstr "Создать библиотеку посад. мест"
 msgid "mm"
 msgstr "мм"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:48
+#: bitmap2component/bitmap2cmp_panel.cpp:52
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
 msgstr "дюйм"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:48
+#: bitmap2component/bitmap2cmp_panel.cpp:52
 msgid "DPI"
 msgstr "DPI"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:504
+#: bitmap2component/bitmap2cmp_panel.cpp:511
 msgid "Unable to export to the Clipboard"
 msgstr "Не удалось экспортировать в буфер обмена"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:516
+#: bitmap2component/bitmap2cmp_panel.cpp:523
 msgid "Error allocating memory for potrace bitmap"
 msgstr "Возникла ошибка при выделении памяти для растрового изображения"
 
-#: bitmap2component/bitmap2cmp_panel.cpp:556
+#: bitmap2component/bitmap2cmp_panel.cpp:563
 #: common/dialogs/dialog_rc_job_base.cpp:50
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:135 gerbview/files.cpp:404
@@ -1754,6 +1754,16 @@ msgstr "Возникла ошибка при выделении памяти д�
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
 msgstr "Ошибки"
+
+#: bitmap2component/bitmap2cmp_panel.cpp:587
+#, fuzzy
+msgid "Replace Loaded File?"
+msgstr "Заменить и найти далее"
+
+#: bitmap2component/bitmap2cmp_panel.cpp:588
+#, fuzzy
+msgid "There is already a file loaded. Do you want to replace it?"
+msgstr "Выходные файлы '%s' уже существуют. Хотите ли вы перезаписать его?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2956,7 +2966,7 @@ msgid "PCB"
 msgstr "Печатная плата"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1336 eeschema/sch_plotter.cpp:1060
+#: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
 msgstr "Схема"
@@ -3176,7 +3186,7 @@ msgstr "Основная надпись"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2337
+#: pcbnew/pcbnew_jobs_handler.cpp:2305
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Ошибка загрузки форматной рамки '%s'."
@@ -3278,7 +3288,7 @@ msgstr "Для всех листов"
 #: eeschema/erc/erc_item.cpp:425 eeschema/sch_marker.cpp:387
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:241
-#: pcbnew/widgets/appearance_controls.cpp:352
+#: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Drawing Sheet"
 msgstr "Форматная рамка"
 
@@ -3866,7 +3876,7 @@ msgstr "Имя файла"
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
-#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1340
+#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1342
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:618 pcbnew/pcb_tablecell.cpp:139
 #: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:474 pcbnew/pcb_track.cpp:1739
@@ -4349,8 +4359,8 @@ msgstr "Компактные иконки в панели инструменто
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 #: pcbnew/microwave/microwave_polygon.cpp:127 pcbnew/tools/pcb_control.cpp:349
-#: pcbnew/widgets/appearance_controls.cpp:640
-#: pcbnew/widgets/appearance_controls.cpp:1843
+#: pcbnew/widgets/appearance_controls.cpp:639
+#: pcbnew/widgets/appearance_controls.cpp:1848
 msgid "Normal"
 msgstr "Нормально"
 
@@ -5259,11 +5269,11 @@ msgstr "Масштаб"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4143
-#: pcbnew/pad.cpp:2689 pcbnew/pad.cpp:2708 pcbnew/pcb_dimension.cpp:2012
-#: pcbnew/widgets/appearance_controls.cpp:732
-#: pcbnew/widgets/appearance_controls.cpp:774
-#: pcbnew/widgets/appearance_controls.cpp:2579
-#: pcbnew/widgets/appearance_controls.cpp:2598 pcbnew/zone.cpp:1878
+#: pcbnew/pad.cpp:2691 pcbnew/pad.cpp:2710 pcbnew/pcb_dimension.cpp:2012
+#: pcbnew/widgets/appearance_controls.cpp:731
+#: pcbnew/widgets/appearance_controls.cpp:773
+#: pcbnew/widgets/appearance_controls.cpp:2584
+#: pcbnew/widgets/appearance_controls.cpp:2603 pcbnew/zone.cpp:1878
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
@@ -5494,7 +5504,7 @@ msgstr "<Не определено>"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4145
-#: pcbnew/pad.cpp:2710 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:789
+#: pcbnew/pad.cpp:2712 pcbnew/pcb_table.cpp:601 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:862 pcbnew/zone.cpp:1880
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5718,7 +5728,7 @@ msgstr "Шаблон"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1371 eeschema/sch_label.cpp:219
-#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1980
+#: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1980
 msgid "Net Class"
 msgstr "Класс цепей"
 
@@ -5810,7 +5820,7 @@ msgstr "Недостаточно памяти."
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/sch_field.cpp:1214 eeschema/sch_field.cpp:1900
 #: eeschema/sch_label.cpp:2321 eeschema/sch_tablecell.cpp:150
-#: eeschema/sch_text.cpp:637 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
+#: eeschema/sch_text.cpp:637 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
 #: eeschema/widgets/search_handlers.cpp:321
@@ -5847,7 +5857,7 @@ msgstr "Линия"
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2302
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2681
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2683
 #: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "Прямоугольник"
@@ -6067,7 +6077,7 @@ msgstr "Цвета"
 
 #: common/eda_base_frame.cpp:1138 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:611 eeschema/menubar.cpp:133
-#: eeschema/sch_edit_frame.cpp:1753 kicad/tools/kicad_manager_actions.cpp:114
+#: eeschema/sch_edit_frame.cpp:1754 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Редактор схем"
 
@@ -6254,7 +6264,7 @@ msgid "Inches"
 msgstr "Дюймы"
 
 #: common/eda_draw_frame.cpp:715 pagelayout_editor/pl_editor_frame.cpp:170
-#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:335
+#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:336
 #: pcbnew/tools/pcb_actions.cpp:1174
 msgid "Constrain to H, V, 45"
 msgstr "Ограничить ортогонально и под углом 45°"
@@ -6268,13 +6278,13 @@ msgid "New Library"
 msgstr "Новая библиотека"
 
 #: common/eda_draw_frame.cpp:1235 common/tool/actions.cpp:473
-#: common/widgets/search_pane.cpp:137 eeschema/sch_edit_frame.cpp:265
+#: common/widgets/search_pane.cpp:143 eeschema/sch_edit_frame.cpp:266
 #: pcbnew/pcb_edit_frame.cpp:371
 msgid "Search"
 msgstr "Поиск"
 
 #: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1115
-#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2210
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1955
 #: pagelayout_editor/pl_editor_frame.cpp:194
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:349
 #: pcbnew/pcb_edit_frame.cpp:1717
@@ -6293,14 +6303,14 @@ msgstr "Экран"
 #: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2047
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
-#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1321
+#: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1323
 #: pcbnew/pcb_shape.cpp:612 pcbnew/pcb_text.cpp:274
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Посад. место"
 
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pad.cpp:1324
+#: pcbnew/pad.cpp:1326
 msgid "Pad"
 msgstr "Конт. пл."
 
@@ -6468,7 +6478,7 @@ msgstr "Мостик терморазгр."
 msgid "Number Box"
 msgstr "Блок номера"
 
-#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1561
+#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1563
 msgid "Rect"
 msgstr "Прямоуг."
 
@@ -6480,8 +6490,8 @@ msgstr "Дуга"
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2300 gerbview/gerber_draw_item.cpp:231
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1559
-#: pcbnew/pad.cpp:2680 pcbnew/pcb_dimension.cpp:2014
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1561
+#: pcbnew/pad.cpp:2682 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "Окружность"
 
@@ -6563,7 +6573,7 @@ msgstr "Точки"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1389
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1391
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -6580,7 +6590,7 @@ msgstr "Ширина"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1390 pcbnew/pcb_dimension.cpp:1033
+#: pcbnew/pad.cpp:1392 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:224
 #: pcbnew/pcb_reference_image.cpp:382 pcbnew/pcb_tablecell.cpp:233
 #: pcbnew/pcb_tablecell.cpp:239 pcbnew/pcb_text.cpp:297
@@ -6773,7 +6783,7 @@ msgstr "Снизу"
 #: eeschema/sch_text.cpp:790 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4175 pcbnew/pad.cpp:2727 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/footprint.cpp:4175 pcbnew/pad.cpp:2729 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
@@ -6844,17 +6854,17 @@ msgstr "Выравнивание по верт."
 msgid "Hyperlink"
 msgstr "Гиперссылка"
 
-#: common/eda_units.cpp:419
+#: common/eda_units.cpp:429
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
 #: pcbnew/generators/pcb_tuning_pattern.cpp:207
 msgid "min"
 msgstr "min"
 
-#: common/eda_units.cpp:427
+#: common/eda_units.cpp:437
 msgid "opt"
 msgstr "opt"
 
-#: common/eda_units.cpp:435
+#: common/eda_units.cpp:445
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
 #: pcbnew/generators/pcb_tuning_pattern.cpp:210
 msgid "max"
@@ -7357,11 +7367,11 @@ msgstr ""
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:225
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
-#: kicad/dialogs/panel_jobset.cpp:391 pcbnew/dialogs/panel_setup_rules.cpp:131
+#: kicad/dialogs/panel_jobset.cpp:383 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
 msgstr "Копировать"
 
-#: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:392
+#: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:384
 msgid "Copy selected cells to clipboard"
 msgstr "Копировать содержимое выбранных ячеек в буфер обмена"
 
@@ -7380,7 +7390,7 @@ msgstr "Вставить элементы из буфера обмена в те
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1719
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:393 kicad/project_tree_pane.cpp:983
+#: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:983
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2719
 msgid "Delete"
 msgstr "Удалить"
@@ -7393,7 +7403,7 @@ msgstr "Удалить содержимое выбранных ячеек"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:80
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:47
-#: kicad/dialogs/panel_jobset.cpp:395
+#: kicad/dialogs/panel_jobset.cpp:387
 #: pcbnew/dialogs/dialog_import_settings.cpp:49
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:92
@@ -8137,7 +8147,7 @@ msgid "ERC exclusions"
 msgstr "Исключения ERC"
 
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
-#: pcbnew/widgets/appearance_controls.cpp:349
+#: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Anchors"
 msgstr "Привязки"
 
@@ -8149,7 +8159,7 @@ msgstr "Вспомогательные элементы"
 #: eeschema/tools/sch_editor_control.cpp:2918
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
-#: pcbnew/widgets/appearance_controls.cpp:353
+#: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Grid"
 msgstr "Сетка"
 
@@ -8230,7 +8240,7 @@ msgstr "Текст посад. места"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:64
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:24
-#: pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
 msgid "Tracks"
@@ -8269,9 +8279,9 @@ msgid "Non-plated holes"
 msgstr "Неметал. отв."
 
 #: common/layer_id.cpp:137 pcbnew/dialogs/panel_edit_options_base.cpp:371
-#: pcbnew/widgets/appearance_controls.cpp:345
-#: pcbnew/widgets/appearance_controls.cpp:724
-#: pcbnew/widgets/appearance_controls.cpp:2576
+#: pcbnew/widgets/appearance_controls.cpp:344
+#: pcbnew/widgets/appearance_controls.cpp:723
+#: pcbnew/widgets/appearance_controls.cpp:2581
 #: pcbnew/widgets/search_handlers.cpp:405
 msgid "Ratsnest"
 msgstr "Связи"
@@ -9243,7 +9253,7 @@ msgstr "Уменьшение области графика по вертикал
 msgid "Center on Cursor"
 msgstr "Центрировать на курсоре"
 
-#: common/tool/actions.cpp:668 common/widgets/search_pane.cpp:45
+#: common/tool/actions.cpp:668 common/widgets/search_pane.cpp:47
 msgid "Zoom to Selection"
 msgstr "Масштаб по выделению"
 
@@ -10014,15 +10024,15 @@ msgstr "Полноэкранное перекрестие"
 msgid "Always show crosshairs"
 msgstr "Всегда отображать перекрестие"
 
-#: common/widgets/grid_text_button_helpers.cpp:371
+#: common/widgets/grid_text_button_helpers.cpp:375
 msgid "Open file"
 msgstr "Открыть файл"
 
-#: common/widgets/grid_text_button_helpers.cpp:502
+#: common/widgets/grid_text_button_helpers.cpp:505
 msgid "Select a File"
 msgstr "Выбор файла"
 
-#: common/widgets/grid_text_button_helpers.cpp:534
+#: common/widgets/grid_text_button_helpers.cpp:537
 msgid "Select Path"
 msgstr "Выбор каталога"
 
@@ -10110,19 +10120,19 @@ msgstr "%d объектов выбрано"
 msgid "Basic Properties"
 msgstr "Основные свойства"
 
-#: common/widgets/search_pane.cpp:45
+#: common/widgets/search_pane.cpp:47
 msgid "Toggle zooming to selections in the search pane"
 msgstr "Переключение масштабирования на выделения в панели поиска"
 
-#: common/widgets/search_pane.cpp:47
+#: common/widgets/search_pane.cpp:49
 msgid "Pan to Selection"
 msgstr "Панорамирование на выбор"
 
-#: common/widgets/search_pane.cpp:47
+#: common/widgets/search_pane.cpp:49
 msgid "Toggle panning to selections in the search pane"
 msgstr "Переключение панорамирования на выделения в панели поиска"
 
-#: common/widgets/search_pane.cpp:51
+#: common/widgets/search_pane.cpp:53
 msgid "Search Hidden Fields"
 msgstr "Искать в скрытых полях"
 
@@ -10266,10 +10276,10 @@ msgstr "Показать:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:177
 #: pcbnew/dialogs/dialog_drc_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
-#: pcbnew/widgets/appearance_controls.cpp:716
-#: pcbnew/widgets/appearance_controls.cpp:758
-#: pcbnew/widgets/appearance_controls.cpp:2573
-#: pcbnew/widgets/appearance_controls.cpp:2592
+#: pcbnew/widgets/appearance_controls.cpp:715
+#: pcbnew/widgets/appearance_controls.cpp:757
+#: pcbnew/widgets/appearance_controls.cpp:2578
+#: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "All"
 msgstr "Все"
 
@@ -14214,8 +14224,8 @@ msgstr "Электрические правила"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:112
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
-#: pcbnew/widgets/appearance_controls.cpp:518
-#: pcbnew/widgets/appearance_controls.cpp:2459
+#: pcbnew/widgets/appearance_controls.cpp:517
+#: pcbnew/widgets/appearance_controls.cpp:2464
 #: pcbnew/widgets/appearance_controls_base.cpp:118
 #: pcbnew/widgets/search_handlers.cpp:400
 #: pcbnew/widgets/search_handlers.cpp:487
@@ -14560,7 +14570,7 @@ msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2686
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2688
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
 msgid "Custom"
 msgstr "Пользовательская"
@@ -15347,7 +15357,7 @@ msgstr "Сохранить пресет BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1827
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2234
-#: pcbnew/widgets/appearance_controls.cpp:2767
+#: pcbnew/widgets/appearance_controls.cpp:2772
 msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
@@ -15791,7 +15801,7 @@ msgstr "Свойства ячейки таблицы"
 msgid "Text Box Properties"
 msgstr "Свойства надписи"
 
-#: eeschema/dialogs/dialog_text_properties.cpp:175 eeschema/schematic.cpp:501
+#: eeschema/dialogs/dialog_text_properties.cpp:175 eeschema/schematic.cpp:512
 msgid "<root sheet>"
 msgstr "<корневой лист>"
 
@@ -16891,9 +16901,9 @@ msgstr "Не удалось загрузить схему\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:807
 #: pcbnew/pcbnew_jobs_handler.cpp:906 pcbnew/pcbnew_jobs_handler.cpp:997
 #: pcbnew/pcbnew_jobs_handler.cpp:1048 pcbnew/pcbnew_jobs_handler.cpp:1232
-#: pcbnew/pcbnew_jobs_handler.cpp:1392 pcbnew/pcbnew_jobs_handler.cpp:1526
-#: pcbnew/pcbnew_jobs_handler.cpp:1937 pcbnew/pcbnew_jobs_handler.cpp:2133
-#: pcbnew/pcbnew_jobs_handler.cpp:2227
+#: pcbnew/pcbnew_jobs_handler.cpp:1360 pcbnew/pcbnew_jobs_handler.cpp:1494
+#: pcbnew/pcbnew_jobs_handler.cpp:1905 pcbnew/pcbnew_jobs_handler.cpp:2101
+#: pcbnew/pcbnew_jobs_handler.cpp:2195
 msgid "Failed to create output directory\n"
 msgstr "Не удалось создать выходной каталог\n"
 
@@ -16945,8 +16955,8 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Черчение символа '%s' часть %d в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:980
-#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1726
-#: pcbnew/pcbnew_jobs_handler.cpp:1799
+#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1694
+#: pcbnew/pcbnew_jobs_handler.cpp:1767
 msgid "Unable to load library\n"
 msgstr "Не удалось загрузить библиотеку\n"
 
@@ -16956,16 +16966,16 @@ msgid "There is no symbol selected to save."
 msgstr "Не выбраны символы для сохранения."
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1141
-#: pcbnew/pcbnew_jobs_handler.cpp:1815
+#: pcbnew/pcbnew_jobs_handler.cpp:1783
 #, c-format
 msgid "Exporting %s"
 msgstr "Экспорт %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1695
+#: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1663
 msgid "Output path must not conflict with existing path\n"
 msgstr "Выходной путь не должен конфликтовать с существующим\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1702
+#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1670
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -16980,7 +16990,7 @@ msgstr "Сохранение библиотеки символов в обнов
 msgid "Symbol library was not updated\n"
 msgstr "Библиотека символов не была обновлена\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1188 pcbnew/pcbnew_jobs_handler.cpp:2060
+#: eeschema/eeschema_jobs_handler.cpp:1188 pcbnew/pcbnew_jobs_handler.cpp:2028
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Найдено %d нарушений\n"
@@ -16999,14 +17009,14 @@ msgstr "Отчёт ERC сохранен в %s\n"
 msgid "Net Navigator"
 msgstr "Навигатор по цепям"
 
-#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2209
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:1954
 #: pcbnew/footprint_edit_frame.cpp:256 pcbnew/footprint_edit_frame.cpp:1030
 #: pcbnew/pcb_edit_frame.cpp:341 pcbnew/pcb_edit_frame.cpp:1716
 msgid "Selection Filter"
 msgstr "Фильтр выделения"
 
 #: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
-#: eeschema/sch_edit_frame.cpp:2205 eeschema/sch_edit_frame.cpp:2211
+#: eeschema/sch_edit_frame.cpp:1950 eeschema/sch_edit_frame.cpp:1956
 #: eeschema/tools/sch_actions.cpp:149
 msgid "Design Blocks"
 msgstr "Дизайн-блоки"
@@ -17128,49 +17138,49 @@ msgstr "Вывод типа %s соединён с выводом типа %s"
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Вывод %s соединён как с %s, так и с %s"
 
-#: eeschema/erc/erc.cpp:1425
+#: eeschema/erc/erc.cpp:1432
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Текущая конфигурация не содержит библиотеку символов '%s'"
 
-#: eeschema/erc/erc.cpp:1440
+#: eeschema/erc/erc.cpp:1447
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "Библиотека символов '%s' не включена в текущей конфигурации"
 
-#: eeschema/erc/erc.cpp:1455
+#: eeschema/erc/erc.cpp:1462
 #, c-format
 msgid "The symbol library '%s' was not found at '%s'."
 msgstr "Библиотека символов '%s' не найдена в %s."
 
-#: eeschema/erc/erc.cpp:1475
+#: eeschema/erc/erc.cpp:1482
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Символ '%s' не найден в библиотеке символов '%s'"
 
-#: eeschema/erc/erc.cpp:1500
+#: eeschema/erc/erc.cpp:1507
 #, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
 msgstr "Символ '%s' имеет несколько выводов с одинаковым номером"
 
-#: eeschema/erc/erc.cpp:1510
+#: eeschema/erc/erc.cpp:1517
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Символ '%s' не совпадает с копией в библиотеке '%s'"
 
-#: eeschema/erc/erc.cpp:1559
+#: eeschema/erc/erc.cpp:1566
 #, c-format
 msgid "'%s' is not a valid footprint identifier."
 msgstr "«%s» — неверный идентификатор посадочного места."
 
-#: eeschema/erc/erc.cpp:1573
+#: eeschema/erc/erc.cpp:1580
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:880
 #: pcbnew/footprint_editor_utils.cpp:363
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "Текущая конфигурация не содержит библиотеку посадочных мест «%s»."
 
-#: eeschema/erc/erc.cpp:1582
+#: eeschema/erc/erc.cpp:1589
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:894
 #: pcbnew/footprint_editor_utils.cpp:375
 #, c-format
@@ -17178,88 +17188,88 @@ msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr ""
 "Библиотека посадочных мест «%s» не задействована в текущей конфигурации."
 
-#: eeschema/erc/erc.cpp:1591
+#: eeschema/erc/erc.cpp:1598
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:945
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Посад. место '%s' не найдено в библиотеке '%s'."
 
-#: eeschema/erc/erc.cpp:1661
+#: eeschema/erc/erc.cpp:1668
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr ""
 "Назначенное посад. место (%s) не соответствует фильтрам посад. мест (%s)."
 
-#: eeschema/erc/erc.cpp:1823
+#: eeschema/erc/erc.cpp:1830
 msgid "Checking sheet names..."
 msgstr "Проверка имён листов..."
 
-#: eeschema/erc/erc.cpp:1831
+#: eeschema/erc/erc.cpp:1838
 msgid "Checking bus conflicts..."
 msgstr "Проверка конфликтов зон..."
 
-#: eeschema/erc/erc.cpp:1838
+#: eeschema/erc/erc.cpp:1845
 msgid "Checking conflicts..."
 msgstr "Проверка конфликтов..."
 
-#: eeschema/erc/erc.cpp:1852
+#: eeschema/erc/erc.cpp:1859
 msgid "Checking units..."
 msgstr "Проверка частей..."
 
-#: eeschema/erc/erc.cpp:1858
+#: eeschema/erc/erc.cpp:1865
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
 msgstr "Проверка посад. мест..."
 
-#: eeschema/erc/erc.cpp:1872
+#: eeschema/erc/erc.cpp:1879
 msgid "Checking pins..."
 msgstr "Проверка выводов..."
 
-#: eeschema/erc/erc.cpp:1892
+#: eeschema/erc/erc.cpp:1899
 msgid "Checking similar labels..."
 msgstr "Проверка похожих меток..."
 
-#: eeschema/erc/erc.cpp:1900
+#: eeschema/erc/erc.cpp:1907
 msgid "Checking local and global labels..."
 msgstr "Проверка локальных и глобальных меток..."
 
-#: eeschema/erc/erc.cpp:1908
+#: eeschema/erc/erc.cpp:1915
 msgid "Checking for unresolved variables..."
 msgstr "Проверка текстовых переменных..."
 
-#: eeschema/erc/erc.cpp:1916
+#: eeschema/erc/erc.cpp:1923
 msgid "Checking SPICE models..."
 msgstr "Проверка моделей SPICE..."
 
-#: eeschema/erc/erc.cpp:1924
+#: eeschema/erc/erc.cpp:1931
 msgid "Checking no connect pins for connections..."
 msgstr "Проверка соединений..."
 
-#: eeschema/erc/erc.cpp:1933
+#: eeschema/erc/erc.cpp:1940
 msgid "Checking for library symbol issues..."
 msgstr "Проверка на наличие проблем с библиотеками..."
 
-#: eeschema/erc/erc.cpp:1941
+#: eeschema/erc/erc.cpp:1948
 msgid "Checking for footprint link issues..."
 msgstr "Проверка правильности связи с посадочным местом..."
 
-#: eeschema/erc/erc.cpp:1949
+#: eeschema/erc/erc.cpp:1956
 msgid "Checking footprint assignments against footprint filters..."
 msgstr "Проверка назначений отпечатков по фильтрам отпечатков..."
 
-#: eeschema/erc/erc.cpp:1957
+#: eeschema/erc/erc.cpp:1964
 msgid "Checking for off grid pins and wires..."
 msgstr "Проверка выводов и связей вне сетки..."
 
-#: eeschema/erc/erc.cpp:1965
+#: eeschema/erc/erc.cpp:1972
 msgid "Checking for four way junctions..."
 msgstr "Проверка наличия четырёхсторонних соединений..."
 
-#: eeschema/erc/erc.cpp:1973
+#: eeschema/erc/erc.cpp:1980
 msgid "Checking for labels on more than one wire..."
 msgstr "Проверка наличия меток более чем на одном проводе..."
 
-#: eeschema/erc/erc.cpp:1981
+#: eeschema/erc/erc.cpp:1988
 msgid "Checking for undefined netclasses..."
 msgstr "Проверка неопределенных классов цепей..."
 
@@ -18160,8 +18170,8 @@ msgstr "Необработанный тип элемента %d"
 #: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:1930
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
 #: pcbnew/pcb_draw_panel_gal.cpp:718
-#: pcbnew/widgets/appearance_controls.cpp:1032
-#: pcbnew/widgets/appearance_controls.cpp:2458
+#: pcbnew/widgets/appearance_controls.cpp:1031
+#: pcbnew/widgets/appearance_controls.cpp:2463
 #: pcbnew/widgets/appearance_controls_base.cpp:61
 #: pcbnew/widgets/appearance_controls_base.cpp:151
 #: pcbnew/widgets/search_handlers.cpp:323
@@ -18498,7 +18508,7 @@ msgstr "Тип элемента шины"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:951
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1336
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1338
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:812
 msgid "Resolved Netclass"
@@ -18513,30 +18523,30 @@ msgstr "Имя соединения"
 msgid "Bus Alias %s Members"
 msgstr "Сигналы псевдонима шины %s"
 
-#: eeschema/sch_edit_frame.cpp:156
+#: eeschema/sch_edit_frame.cpp:157
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Schematic Editor"
 msgstr "Редактор схем KiCad"
 
-#: eeschema/sch_edit_frame.cpp:234 eeschema/sch_edit_frame.cpp:2208
+#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:1953
 msgid "Schematic Hierarchy"
 msgstr "Иерархия схемы"
 
-#: eeschema/sch_edit_frame.cpp:419
+#: eeschema/sch_edit_frame.cpp:420
 msgid "New schematic file is unsaved"
 msgstr "Новый файл схемы не сохранён"
 
-#: eeschema/sch_edit_frame.cpp:1022
+#: eeschema/sch_edit_frame.cpp:1023
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:637
 #: eeschema/symbol_editor/symbol_editor.cpp:1675
-#: kicad/dialogs/panel_jobset.cpp:829 pagelayout_editor/pl_editor_frame.cpp:413
+#: kicad/dialogs/panel_jobset.cpp:821 pagelayout_editor/pl_editor_frame.cpp:413
 #: pcbnew/footprint_edit_frame.cpp:875 pcbnew/footprint_edit_frame.cpp:915
 #: pcbnew/pcb_edit_frame.cpp:1186
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Сохранить изменения в '%s' перед закрытием?"
 
-#: eeschema/sch_edit_frame.cpp:1188
+#: eeschema/sch_edit_frame.cpp:1189
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -18546,56 +18556,52 @@ msgstr ""
 "менеджера проектов. Для того чтобы создать или обновить плату из редактора "
 "схем, запустите менеджер проектов KiCad и создайте проект."
 
-#: eeschema/sch_edit_frame.cpp:1357
+#: eeschema/sch_edit_frame.cpp:1358
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/sch_edit_frame.cpp:1369
+#: eeschema/sch_edit_frame.cpp:1370
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Файл схемы '%s' уже существует."
 
-#: eeschema/sch_edit_frame.cpp:1394
+#: eeschema/sch_edit_frame.cpp:1395
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/sch_edit_frame.cpp:1462
+#: eeschema/sch_edit_frame.cpp:1463
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Для назначения посад. мест требуется полностью обозначенная схема."
 
-#: eeschema/sch_edit_frame.cpp:1489
+#: eeschema/sch_edit_frame.cpp:1490
 msgid "Could not open CvPcb"
 msgstr "Не удалось открыть CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1743 eeschema/sim/simulator_frame.cpp:327
+#: eeschema/sch_edit_frame.cpp:1744 eeschema/sim/simulator_frame.cpp:327
 #: kicad/kicad_manager_frame.cpp:1061 pcbnew/footprint_edit_frame.cpp:1096
 #: pcbnew/pcb_edit_frame.cpp:1806
 msgid "[Read Only]"
 msgstr "[Только чтение]"
 
-#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:330
+#: eeschema/sch_edit_frame.cpp:1747 eeschema/sim/simulator_frame.cpp:330
 #: pcbnew/footprint_edit_frame.cpp:1105 pcbnew/pcb_edit_frame.cpp:1809
 msgid "[Unsaved]"
 msgstr "[Изменено]"
 
-#: eeschema/sch_edit_frame.cpp:1750
+#: eeschema/sch_edit_frame.cpp:1751
 msgid "[no schematic loaded]"
 msgstr "[схема не загружена]"
 
-#: eeschema/sch_edit_frame.cpp:2106
-msgid "Schematic Cleanup"
-msgstr "Очистка схемы"
-
-#: eeschema/sch_edit_frame.cpp:2234
+#: eeschema/sch_edit_frame.cpp:1979
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Подсвечена цепь: %s"
 
-#: eeschema/sch_edit_frame.cpp:2424
+#: eeschema/sch_edit_frame.cpp:2169
 msgid "Save Symbol to Schematic"
 msgstr "Сохранить символ в схему"
 
-#: eeschema/sch_edit_frame.cpp:2530 eeschema/tools/sch_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2275 eeschema/tools/sch_actions.cpp:61
 msgid "Compare Symbol with Library"
 msgstr "Сравнить символ с библиотекой"
 
@@ -19518,7 +19524,7 @@ msgstr "Стиль корпуса"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1759 pcbnew/pad.cpp:1340 pcbnew/pad.cpp:2725
+#: pcbnew/footprint.cpp:1759 pcbnew/pad.cpp:1342 pcbnew/pad.cpp:2727
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:403 pcbnew/pcb_shape.cpp:618
 #: pcbnew/pcb_tablecell.cpp:139 pcbnew/pcb_text.cpp:286
@@ -19536,7 +19542,7 @@ msgid "Size"
 msgstr "Размер"
 
 #: eeschema/sch_junction.cpp:379
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1385
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1387
 #: pcbnew/pcb_track.cpp:1697 pcbnew/pcb_track.cpp:2173
 msgid "Diameter"
 msgstr "Диаметр"
@@ -19567,8 +19573,8 @@ msgstr "Выравнивание"
 #: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1334
-#: pcbnew/pad.cpp:2762 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1336
+#: pcbnew/pad.cpp:2764 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1719 pcbnew/tools/pcb_control.cpp:1907
 #: pcbnew/widgets/pcb_properties_panel.cpp:294
 #: pcbnew/widgets/search_handlers.cpp:188 pcbnew/zone.cpp:810
@@ -19722,7 +19728,7 @@ msgstr "Скрытый вывод %s [%s, %s, %s]"
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Скрытый вывод %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2179 pcbnew/pad.cpp:1327 pcbnew/pad.cpp:2782
+#: eeschema/sch_pin.cpp:2179 pcbnew/pad.cpp:1329 pcbnew/pad.cpp:2784
 msgid "Pin Name"
 msgstr "Имя вывода"
 
@@ -20377,6 +20383,10 @@ msgstr "Имя сигнала содержит '{' и '}', но имя шины 
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr "Имя сигнала содержит '[' или ']', но имя шины неверно."
+
+#: eeschema/schematic.cpp:1531
+msgid "Schematic Cleanup"
+msgstr "Очистка схемы"
 
 #: eeschema/sheet.cpp:76
 #, c-format
@@ -21715,7 +21725,11 @@ msgstr ""
 "<b>Вывод-дубликат %s</b> %s с координатами <b>(%s, %s)</b>, конфликтует с "
 "выводом %s%s, координаты <b>(%s, %s)</b> в частях %s и %s."
 
-#: eeschema/symbol_checker.cpp:180
+#: eeschema/symbol_checker.cpp:178
+msgid "<b>Warning: reference is empty</b><br><br>"
+msgstr ""
+
+#: eeschema/symbol_checker.cpp:187
 #, c-format
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
@@ -21724,19 +21738,19 @@ msgstr ""
 "<b>Предупреждение: префикс обозначения</b><br> префикс, заканчивающийся на "
 "'%s' может создать проблемы при сохранении в библиотеке символов"
 
-#: eeschema/symbol_checker.cpp:208
+#: eeschema/symbol_checker.cpp:216
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Символ питания должен иметь только одну часть</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:214
+#: eeschema/symbol_checker.cpp:222
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 msgstr "<b>Символ питания не должен иметь варианты DeMorgan</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:220
+#: eeschema/symbol_checker.cpp:228
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Символ питания должен иметь только один вывод</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:229
+#: eeschema/symbol_checker.cpp:237
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
@@ -21744,7 +21758,7 @@ msgstr ""
 "<b>Подозрительный символ питания</b><br>Только выводы с типами вход питания "
 "или выход питания имеют значение<br><br>"
 
-#: eeschema/symbol_checker.cpp:236
+#: eeschema/symbol_checker.cpp:244
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
@@ -21752,7 +21766,7 @@ msgstr ""
 "<b>Подозрительный символ питания</b><br>Невидимые выводы типа вход питания "
 "больше не требуются<br><br>"
 
-#: eeschema/symbol_checker.cpp:261
+#: eeschema/symbol_checker.cpp:269
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
@@ -21761,7 +21775,7 @@ msgstr ""
 "Примечание: <b>Скрытый вывод питания %s</b> %s с координатами <b>(%s, %s)</"
 "b> в стиле корпуса %s."
 
-#: eeschema/symbol_checker.cpp:271
+#: eeschema/symbol_checker.cpp:279
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -21770,14 +21784,14 @@ msgstr ""
 "Примечание: <b>Скрытый вывод питания %s</b> %s с координатами <b>(%s, %s)</"
 "b> в части %c стиля корпуса %s."
 
-#: eeschema/symbol_checker.cpp:285
+#: eeschema/symbol_checker.cpp:293
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "Примечание: <b>Скрытый вывод питания %s</b> %s с координатами <b>(%s, %s)</"
 "b>."
 
-#: eeschema/symbol_checker.cpp:294
+#: eeschema/symbol_checker.cpp:302
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -21785,20 +21799,20 @@ msgstr ""
 "Примечание: <b>Скрытый вывод питания %s</b> %s с координатами <b>(%s, %s)</"
 "b> в части %c."
 
-#: eeschema/symbol_checker.cpp:305
+#: eeschema/symbol_checker.cpp:313
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Имена скрытых выводов питания будут указаны на любых подключенных цепях.)"
 
-#: eeschema/symbol_checker.cpp:320
+#: eeschema/symbol_checker.cpp:328
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
 "<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в стиле "
 "корпуса %s."
 
-#: eeschema/symbol_checker.cpp:330
+#: eeschema/symbol_checker.cpp:338
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
@@ -21807,23 +21821,23 @@ msgstr ""
 "<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в части %c "
 "стиля корпуса %s."
 
-#: eeschema/symbol_checker.cpp:344
+#: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b>."
 
-#: eeschema/symbol_checker.cpp:352
+#: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в части %c."
 
-#: eeschema/symbol_checker.cpp:394
+#: eeschema/symbol_checker.cpp:402
 #, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
 msgstr "<b>Графический круг с радиусом = 0</b> в координатах <b>(%s, %s)</b>."
 
-#: eeschema/symbol_checker.cpp:406
+#: eeschema/symbol_checker.cpp:414
 #, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
@@ -24120,7 +24134,8 @@ msgstr "Цепь должна иметь метку для присвоения 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr "Вставка большого объема текста может быть очень медленным.  Продолжить?"
+msgstr ""
+"Вставка большого объема текста может быть очень медленным.  Продолжить?"
 
 #: eeschema/tools/sch_editor_control.cpp:1836
 #, c-format
@@ -24541,7 +24556,7 @@ msgstr "Графика"
 # в этом переводе последняя буква указана латиницей.
 #: eeschema/widgets/panel_sch_selection_filter.cpp:208
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:51
-#: pcbnew/widgets/appearance_controls.cpp:336
+#: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Images"
 msgstr "Изображения"
 
@@ -24850,8 +24865,8 @@ msgstr "Выбор слоя: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4170 pcbnew/footprint.cpp:4173
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1344
-#: pcbnew/pad.cpp:2724 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1346
+#: pcbnew/pad.cpp:2726 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:400
 #: pcbnew/pcb_reference_image.cpp:226 pcbnew/pcb_reference_image.cpp:349
@@ -25739,7 +25754,7 @@ msgstr "Подсветить D-код D%d"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:352
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:231
 #: pcbnew/dialogs/panel_setup_layers.cpp:1149
-#: pcbnew/widgets/appearance_controls.cpp:1028
+#: pcbnew/widgets/appearance_controls.cpp:1027
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 #: pcbnew/zone_manager/model_zones_overview_table.h:77
 msgid "Layers"
@@ -25759,7 +25774,7 @@ msgid "Show negative objects in this color"
 msgstr "Показать негативные объекты этим цветом"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:136
-#: pcbnew/widgets/appearance_controls.cpp:353
+#: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show the (x,y) grid dots"
 msgstr "Показать точки сетки"
 
@@ -25776,12 +25791,12 @@ msgid "PCB Background"
 msgstr "Фон печатной платы"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:161
-#: pcbnew/widgets/appearance_controls.cpp:1883
+#: pcbnew/widgets/appearance_controls.cpp:1888
 msgid "Show All Layers"
 msgstr "Показать все слои"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:164
-#: pcbnew/widgets/appearance_controls.cpp:1869
+#: pcbnew/widgets/appearance_controls.cpp:1874
 msgid "Hide All Layers But Active"
 msgstr "Скрыть все слои кроме активного"
 
@@ -25790,7 +25805,7 @@ msgid "Always Hide All Layers But Active"
 msgstr "Всегда скрывать все слои кроме активного"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:171
-#: pcbnew/widgets/appearance_controls.cpp:1886
+#: pcbnew/widgets/appearance_controls.cpp:1891
 msgid "Hide All Layers"
 msgstr "Скрыть все слои"
 
@@ -25823,8 +25838,8 @@ msgid "Change Render Color for"
 msgstr "Изменить цвет отображения для"
 
 #: gerbview/widgets/layer_widget.cpp:341
-#: pcbnew/widgets/appearance_controls.cpp:2211
-#: pcbnew/widgets/appearance_controls.cpp:2486
+#: pcbnew/widgets/appearance_controls.cpp:2216
+#: pcbnew/widgets/appearance_controls.cpp:2491
 msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr ""
@@ -25847,7 +25862,7 @@ msgstr "Сбросить все цвета этой темы к стандарт
 msgid "This file is already open."
 msgstr "Этот файл уже открыт."
 
-#: include/libeval_compiler/libeval_compiler.h:354
+#: include/libeval_compiler/libeval_compiler.h:357
 msgid "Malformed expression"
 msgstr "Неудачное выражение"
 
@@ -27059,75 +27074,75 @@ msgstr "Описание задания"
 msgid "Source"
 msgstr "Источник"
 
-#: kicad/dialogs/panel_jobset.cpp:159
+#: kicad/dialogs/panel_jobset.cpp:152
 msgid "No output messages"
 msgstr "Нет выходных сообщений"
 
-#: kicad/dialogs/panel_jobset.cpp:232
+#: kicad/dialogs/panel_jobset.cpp:224
 msgid "Last run successful"
 msgstr "Последнее выполнение прошло успешно"
 
-#: kicad/dialogs/panel_jobset.cpp:238
+#: kicad/dialogs/panel_jobset.cpp:230
 msgid "Last run failed"
 msgstr "Последнее выполнение завершилось неудачей"
 
-#: kicad/dialogs/panel_jobset.cpp:264 kicad/dialogs/panel_jobset.cpp:976
+#: kicad/dialogs/panel_jobset.cpp:256 kicad/dialogs/panel_jobset.cpp:968
 msgid "Running Jobs"
 msgstr "Выполнение заданий"
 
-#: kicad/dialogs/panel_jobset.cpp:294
+#: kicad/dialogs/panel_jobset.cpp:286
 msgid "Edit Destination Options..."
 msgstr "Править параметры места назначения..."
 
-#: kicad/dialogs/panel_jobset.cpp:295
+#: kicad/dialogs/panel_jobset.cpp:287
 msgid "Delete Destination"
 msgstr "Удалить место назначения"
 
-#: kicad/dialogs/panel_jobset.cpp:298
+#: kicad/dialogs/panel_jobset.cpp:290
 msgid "View Last Run Log..."
 msgstr "Просмотр результатов последнего запуска..."
 
-#: kicad/dialogs/panel_jobset.cpp:388
+#: kicad/dialogs/panel_jobset.cpp:380
 msgid "Edit Job Description"
 msgstr "Править описание задания"
 
-#: kicad/dialogs/panel_jobset.cpp:389
+#: kicad/dialogs/panel_jobset.cpp:381
 msgid "Edit Job Settings..."
 msgstr "Править параметры задания..."
 
-#: kicad/dialogs/panel_jobset.cpp:394
+#: kicad/dialogs/panel_jobset.cpp:386
 msgid "Delete selected jobs"
 msgstr "Удалить выбранные задания"
 
-#: kicad/dialogs/panel_jobset.cpp:396
+#: kicad/dialogs/panel_jobset.cpp:388
 msgid "Select all jobs"
 msgstr "Выбрать все задания"
 
-#: kicad/dialogs/panel_jobset.cpp:689
+#: kicad/dialogs/panel_jobset.cpp:681
 msgid "Job Types"
 msgstr "Типы заданий"
 
-#: kicad/dialogs/panel_jobset.cpp:700
+#: kicad/dialogs/panel_jobset.cpp:692
 msgid "Add New Job"
 msgstr "Добавить новое задание"
 
-#: kicad/dialogs/panel_jobset.cpp:701
+#: kicad/dialogs/panel_jobset.cpp:693
 msgid "Select job type:"
 msgstr "Выберите тип задания:"
 
-#: kicad/dialogs/panel_jobset.cpp:782
+#: kicad/dialogs/panel_jobset.cpp:774
 msgid "Destination Types"
 msgstr "Типы места назначения"
 
-#: kicad/dialogs/panel_jobset.cpp:791
+#: kicad/dialogs/panel_jobset.cpp:783
 msgid "Add New Destination"
 msgstr "Добавить новое место назначения"
 
-#: kicad/dialogs/panel_jobset.cpp:792
+#: kicad/dialogs/panel_jobset.cpp:784
 msgid "Select destination type:"
 msgstr "Выберите тип места назначения:"
 
-#: kicad/dialogs/panel_jobset.cpp:957
+#: kicad/dialogs/panel_jobset.cpp:949
 msgid "No destinations defined"
 msgstr "Места назначения не определены"
 
@@ -27276,16 +27291,16 @@ msgstr "Импорт проекта EasyEDA Std (бэкап)"
 msgid "Import EasyEDA Pro Project"
 msgstr "Импорт проекта EasyEDA Pro"
 
-#: kicad/jobs_runner.cpp:257
+#: kicad/jobs_runner.cpp:218
 #, c-format
 msgid "Running job %d: %s"
 msgstr "Выполнение задания %d: %s"
 
-#: kicad/jobs_runner.cpp:301
+#: kicad/jobs_runner.cpp:263
 msgid "Job successful"
 msgstr "Работа успешная"
 
-#: kicad/jobs_runner.cpp:308
+#: kicad/jobs_runner.cpp:270
 msgid "Job failed"
 msgstr "Работа не удалась"
 
@@ -31407,7 +31422,7 @@ msgstr "Тесселяция зон меди..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1730 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:333
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:332
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -31422,7 +31437,7 @@ msgstr "Конт. пл."
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
 #: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
-#: pcbnew/widgets/appearance_controls.cpp:332
+#: pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
@@ -32468,7 +32483,7 @@ msgid "Total:"
 msgstr "Всего:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:491
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2699
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2701
 msgid "Round"
 msgstr "Круг"
 
@@ -32491,11 +32506,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "Не доступно"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1575
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1577
 msgid "PTH"
 msgstr "PTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1578
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1580
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -32516,7 +32531,7 @@ msgid "Board name"
 msgstr "Название платы"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
-#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1354
+#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1356
 msgid "Area"
 msgstr "Площадь"
 
@@ -32955,7 +32970,7 @@ msgstr ""
 "Эта настройка может быть переопределена локальной настройкой конт. пл."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4144
-#: pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1879
+#: pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1879
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
 msgstr "Терморазгрузка"
@@ -34853,7 +34868,7 @@ msgstr "Выводного монтажа"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1383
-#: pcbnew/pad.cpp:1576 pcbnew/pad.cpp:2675
+#: pcbnew/pad.cpp:1578 pcbnew/pad.cpp:2677
 msgid "SMD"
 msgstr "SMD"
 
@@ -35483,7 +35498,7 @@ msgstr "Удаляемые элементы"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 #: pcbnew/tools/board_editor_control.cpp:91
-#: pcbnew/widgets/appearance_controls.cpp:334
+#: pcbnew/widgets/appearance_controls.cpp:333
 #: pcbnew/widgets/panel_selection_filter.cpp:202
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
 #: pcbnew/widgets/search_handlers.cpp:185
@@ -35812,7 +35827,7 @@ msgstr "Слои шелкографии"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2866
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2868
 msgid "Copper Layers"
 msgstr "Слои меди"
 
@@ -35972,7 +35987,7 @@ msgstr "Пояски:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1074
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2715
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2717
 msgid "All copper layers"
 msgstr "Все слои меди"
 
@@ -35983,7 +35998,7 @@ msgstr "Начало, конец и подключенные слои"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1078
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2716
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2718
 msgid "Connected layers only"
 msgstr "Только соединённые слои"
 
@@ -36475,7 +36490,7 @@ msgid "Outset Items"
 msgstr "Предметы на выходе"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:178
-#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2766
+#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2768
 msgid "Pad Properties"
 msgstr "Свойства контактной площадки"
 
@@ -36551,7 +36566,7 @@ msgstr "w"
 msgid "Pad type:"
 msgstr "Тип конт. пл.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2674
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2676
 msgid "Through-hole"
 msgstr "Сквозной"
 
@@ -36599,8 +36614,8 @@ msgstr "Форма конт. пл.:"
 msgid "Circular"
 msgstr "Круглая"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1560
-#: pcbnew/pad.cpp:2682
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1562
+#: pcbnew/pad.cpp:2684
 msgid "Oval"
 msgstr "Овальная"
 
@@ -36612,11 +36627,11 @@ msgstr "Прямоугольная"
 msgid "Trapezoidal"
 msgstr "Трапециевидная"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2684
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2686
 msgid "Rounded rectangle"
 msgstr "Скруглённый прямоугольник"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2685
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2687
 msgid "Chamfered rectangle"
 msgstr "Прямоугольник с фаской"
 
@@ -36728,7 +36743,7 @@ msgstr "Смещение относительно отв."
 msgid "Hole shape:"
 msgstr "Форма отв.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2700
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2702
 msgid "Oblong"
 msgstr "Продолговатая"
 
@@ -36820,23 +36835,23 @@ msgstr ""
 "Механическая — конт. пл. со сквозным отверстием, которая используется для "
 "механической поддержки"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2690
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
 msgid "BGA pad"
 msgstr "Конт. пл. BGA"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
 msgid "Fiducial, local to footprint"
 msgstr "Локальная реперная метка (для посад. места)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2691
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
 msgid "Fiducial, global to board"
 msgstr "Глобальная реперная метка (для платы)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2693
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2695
 msgid "Test point pad"
 msgstr "Тестовая конт. пл."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2694
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2696
 msgid "Heatsink pad"
 msgstr "Конт. пл. для отвода тепла"
 
@@ -36844,7 +36859,7 @@ msgstr "Конт. пл. для отвода тепла"
 msgid "Castellated pad (through hole only)"
 msgstr "Периферийное полу-отверстие (только сквозное)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1373
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1375
 msgid "Mechanical"
 msgstr "Механический"
 
@@ -37104,8 +37119,8 @@ msgid "Hide or cross-out DNP footprints on fabrication layers"
 msgstr "Скрытие или перечеркивание отпечатков DNP на слоях изготовления"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
-#: pcbnew/widgets/appearance_controls.cpp:656
-#: pcbnew/widgets/appearance_controls.cpp:1849
+#: pcbnew/widgets/appearance_controls.cpp:655
+#: pcbnew/widgets/appearance_controls.cpp:1854
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -38372,7 +38387,7 @@ msgstr "Целевой перекос: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1436
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1438
 #: pcbnew/pcb_track.cpp:1666 pcbnew/pcb_track.cpp:1674
 #: pcbnew/pcb_track.cpp:1706 pcbnew/pcb_track.cpp:1712
 #: pcbnew/router/router_tool.cpp:2785 pcbnew/router/router_tool.cpp:2790
@@ -39956,101 +39971,100 @@ msgstr ""
 "| "
 "Описание                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
-"\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                            "
-"| Проверяет ширину поясков "
-"перех.отв.<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"| Проверяет ширину поясков перех.отв."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;expression>\""
-"                                                                                                      "
-"| Проверяет заданное "
-"выражение.<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                      "
+"| Проверяет заданное выражение."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                    "
-"| Определяет **электрический** зазор между медными объектами разных цепей. ("
-"См. `physical_clearance`, если хотите указать зазор между объектами "
+"| Определяет **электрический** зазор между медными объектами разных цепей. "
+"(См. `physical_clearance`, если хотите указать зазор между объектами "
 "независимо от цепи.)<br><br> Чтобы разрешить медным объектам пересекаться "
 "(сталкиваться), создайте ограничение `clearance` со значением `min` меньше "
-"нуля (например, `-1`)"
-".<br>                                                                                                                      "
+"нуля (например, `-1`)."
+"<br>                                                                                                                      "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                    "
 "| Проверяет расстояние между областями установки посад.мест и генерирует "
 "ошибку, если любые две области находятся ближе, чем `min` расстояние.  Если "
-"посад.место не имеет области установки, это ограничение не создает "
-"ошибок.<br>                                                                                                                                                                                                               "
+"посад.место не имеет области установки, это ограничение не создает ошибок."
+"<br>                                                                                                                                                                                                               "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                    "
-"| Определяет длину пути утечки между медными объектами разных "
-"цепей.<br>                                                                                                                                                                                                                                                                                                                                                                    "
+"| Определяет длину пути утечки между медными объектами разных цепей."
+"<br>                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                            "
 "| Проверяет зазор между связанными дорожками в дифференциальной паре.  "
 "Связанные дорожки - это сегменты, параллельные друг другу.  Зазор между "
 "дифференциальными парами не проверяется на несвязанных участках "
-"дифференциальной пары (например, на выходе из компонента)"
-".<br>                                                                                                                                                                                           "
+"дифференциальной пары (например, на выходе из компонента)."
+"<br>                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                    "
 "| Проверяет расстояние, на которое дорожка дифференциальной пары проходит "
 "без связи с дорожкой другой полярности в паре (например, когда пара выходит "
 "из компонента или становится без связи, чтобы обойти другой объект, "
-"например, перех.отв.)"
-".<br>                                                                                                                                                                                                         "
+"например, перех.отв.)."
+"<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
-"<br> | Укажите один или несколько типов объектов для запрета, разделенных "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Укажите один или несколько типов объектов для запрета, разделенных "
 "пробелами.  Например, `(constraint disallow track)` или `(constraint "
 "disallow track via pad)`. Если объект этого типа соответствует условию "
 "правила, будет создана ошибка DRC.<br><br>Это ограничение, по сути, "
 "аналогично области правил запрета, но может быть использовано для создания "
-"более конкретных ограничений "
-"запрета.<br>                                                                   "
-"|\n"
+"более конкретных ограничений запрета."
+"<br>                                                                   |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                            "
 "| Проверяет зазор между объектами и краем платы.<br><br>Это также можно "
 "считать \"допуском на фрезеровку\", поскольку край платы будет включать все "
 "графические элементы на слое `Edge.Cuts`, а также любые *овальные* отверстия "
-"в конт.пл. (См. `physical_hole_clearance` для допуска на сверление)"
-"<br>                                                                                                                                                    "
+"в конт.пл. (См. `physical_hole_clearance` для допуска на "
+"сверление)<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                                "
 "| Проверяет общую проложенную длину для цепей, соответствующих условию "
-"правила, и выдает ошибку для каждой цепи, длина которой меньше значения `min`"
-" (если указано) или больше значения `max` (если указано), заданного "
-"ограничением.<br>                                                                                                                                                                                                                               "
+"правила, и выдает ошибку для каждой цепи, длина которой меньше значения "
+"`min` (если указано) или больше значения `max` (если указано), заданного "
+"ограничением."
+"<br>                                                                                                                                                                                                                               "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                                "
-"| Проверяет размер (диаметр) сверленного отверстия в конт.пл. или "
-"перех.отв.  Для овальных отверстий меньший (минорный) диаметр проверяется "
+"| Проверяет размер (диаметр) сверленного отверстия в конт.пл. или перех."
+"отв.  Для овальных отверстий меньший (минорный) диаметр проверяется "
 "относительно значения `min` (если указано), а больший (основной) диаметр "
-"проверяется относительно значения `max` (если указано)"
-".<br>                                                                                                                                                                                            "
+"проверяется относительно значения `max` (если указано)."
+"<br>                                                                                                                                                                                            "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                    "
 "| Проверяет зазор между просверленным отверстием в конт.пл. или перех.отв. и "
 "медными объектами другой цепи.  Зазор измеряется от диаметра отверстия, а не "
-"от "
-"центра.<br>                                                                                                                                                                                                                                                                        "
+"от центра."
+"<br>                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                    "
 "| Проверяет зазор между механически сверленными отверстиями в конт.пл. и "
-"перех.отв.  Зазор измеряется между диаметрами отверстий, а не между "
-"центрами.<br><br>Это ограничение служит только для защиты сверл.  Зазор "
-"между **просверленными лазером** (микроотверстиями) и другими отверстиями, "
+"перех.отв.  Зазор измеряется между диаметрами отверстий, а не между центрами."
+"<br><br>Это ограничение служит только для защиты сверл.  Зазор между "
+"**просверленными лазером** (микроотверстиями) и другими отверстиями, "
 "просверленными не механически, не проверяется, также как и зазор между "
 "**фрезерованными** (овальной формы) и другими отверстиями, сделанными не "
 "механически.<br> |\n"
@@ -40058,22 +40072,22 @@ msgstr ""
 "min                                                                                                                    "
 "| Проверяет зазор между двумя объектами на заданном слое (включая немедные "
 "слои).<br><br>Хотя эта функция может выполнять более широкие проверки, чем "
-"`clearance`, она намного медленнее.  По возможности используйте `clearance`"
-".<br>                                                                                                                                                                                                                            "
+"`clearance`, она намного медленнее.  По возможности используйте `clearance`."
+"<br>                                                                                                                                                                                                                            "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                    "
 "| Проверяет зазор между сверленным отверстием в конт.пл. или перех.отв. и "
 "другим объектом, независимо от цепи. Зазор измеряется от диаметра отверстия, "
-"а не от центра.<br><br>Это также можно рассматривать как \"допуск сверления\""
-", поскольку он учитывает только **круглые** отверстия (см. `edge_clearance` "
-"для допуска фрезеровки)"
-".<br>                                                                                                                    "
+"а не от центра.<br><br>Это также можно рассматривать как \"допуск "
+"сверления\", поскольку он учитывает только **круглые** отверстия (см. "
+"`edge_clearance` для допуска фрезеровки)."
+"<br>                                                                                                                    "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                            "
-"| Проверяет зазор между объектами на слоях шелкографии и другими "
-"объектами.<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"| Проверяет зазор между объектами на слоях шелкографии и другими объектами."
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                    "
@@ -40081,51 +40095,51 @@ msgstr ""
 "есть разницу между длиной каждой цепи и средним значением всех длин цепей, "
 "соответствующих правилу.  Если абсолютное значение разницы между средним "
 "значением и длиной какой-либо цепи превышает значение ограничения `max`, "
-"будет сгенерирована "
-"ошибка.<br>                                                                                   "
+"будет сгенерирована ошибка."
+"<br>                                                                                   "
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                    "
-"| Задает зазор терморазгрузки в соединении конт.пл. с "
-"зоной.<br>                                                                                                                                                                                                                                                                                                                                                           "
+"| Задает зазор терморазгрузки в соединении конт.пл. с зоной."
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                    "
-"| Задает ширину мостиков терморазгрузки в соединении конт.пл. с "
-"зоной.<br>                                                                                                                                                                                                                                                                                                                                                      "
+"| Задает ширину мостиков терморазгрузки в соединении конт.пл. с зоной."
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                            "
 "| Проверяет ширину сегментов дорожек и дуг.  Для каждого сегмента, ширина "
 "которого меньше `min` (если указано) или больше `max` (если указано), будет "
-"выдана "
-"ошибка.<br>                                                                                                                                                                                                                                                             "
+"выдана ошибка."
+"<br>                                                                                                                                                                                                                                                             "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                            "
 "| Проверяет угол между двумя соединенными сегментами дорожки.  Для каждой "
 "пары соединенных сегментов с углом ниже значения `min` (если указано) или "
-"выше значения `max` (если указано) будет сгенерирована "
-"ошибка.<br>                                                                                                                                                                                                                                             "
+"выше значения `max` (если указано) будет сгенерирована ошибка."
+"<br>                                                                                                                                                                                                                                             "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                                "
 "| Проверяет длину сегментов дорожек и дуг.  Для каждого сегмента, длина "
 "которого меньше `min` (если указано) или больше `max` (если указано), будет "
-"выдана "
-"ошибка.<br>                                                                                                                                                                                                                                                            "
+"выдана ошибка."
+"<br>                                                                                                                                                                                                                                                            "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                    "
 "| Считает количество перех.отв. в каждой цеп   и, соответствующей условию "
 "правила.  Если это число превышает значение `max` в любой совпадающей цепи, "
-"для этой цепи будет сгенерирована "
-"ошибка.<br>                                                                                                                                                                                                                                                               "
+"для этой цепи будет сгенерирована ошибка."
+"<br>                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
-"                                                                                 "
-"| Задает соединение, выполняемое между зоной и конт. "
-"площадкой.<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Задает соединение, выполняемое между зоной и конт. площадкой."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -40698,13 +40712,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40741,8 +40755,8 @@ msgstr ""
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Не использовать терморазгрузку на конт.пл. с параметром "
-"\"для отвода тепла\"\n"
+"    # Не использовать терморазгрузку на конт.пл. с параметром \"для отвода "
+"тепла\"\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
@@ -40818,8 +40832,8 @@ msgstr ""
 "    # глухих/внутренних перех. отв. перед лазерным сверлением перех. "
 "микроотв.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -40875,7 +40889,7 @@ msgstr "Не указан зазор для диф.пары."
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1416
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1418
 #: pcbnew/pcb_track.cpp:1699 pcbnew/pcb_track.cpp:2175
 #: pcbnew/tools/board_inspection_tool.cpp:1123
 #: pcbnew/tools/board_inspection_tool.cpp:1145
@@ -41752,7 +41766,7 @@ msgstr "(цепи %s и %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:975
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1440
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1258
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -41773,7 +41787,7 @@ msgstr "(%s зазор %s; текущий %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s зазор %s; текущий < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1432
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1250
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "(пересекающиеся зоны должны иметь разные приоритеты)"
 
@@ -42929,7 +42943,7 @@ msgstr "Перед генерацией файла IPC-2581 необходимо
 msgid "Generating IPC-2581 file"
 msgstr "Генерация файла IPC-2581"
 
-#: pcbnew/files.cpp:1322 pcbnew/pcbnew_jobs_handler.cpp:2156
+#: pcbnew/files.cpp:1322 pcbnew/pcbnew_jobs_handler.cpp:2124
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -42943,7 +42957,7 @@ msgstr ""
 msgid "Failed to create temporary file '%s'."
 msgstr "Не удалось создать временный файл '%s'."
 
-#: pcbnew/files.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:2189
+#: pcbnew/files.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:2157
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -43051,11 +43065,11 @@ msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 "(конт. пл. %s присутствует более чем в одной группе связки цепей конт. пл.)"
 
-#: pcbnew/footprint.cpp:4142 pcbnew/pad.cpp:2707 pcbnew/zone.cpp:1877
+#: pcbnew/footprint.cpp:4142 pcbnew/pad.cpp:2709 pcbnew/zone.cpp:1877
 msgid "Inherited"
 msgstr "Унаследовано"
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2711 pcbnew/zone.cpp:1881
+#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2713 pcbnew/zone.cpp:1881
 msgid "Thermal reliefs for PTH"
 msgstr "Терморазгрузка для выводных конт. пл."
 
@@ -43067,23 +43081,23 @@ msgstr "Нет на схеме"
 msgid "Exclude From Position Files"
 msgstr "Исключить из файлов размещения"
 
-#: pcbnew/footprint.cpp:4218 pcbnew/pad.cpp:2876
+#: pcbnew/footprint.cpp:4218 pcbnew/pad.cpp:2878
 msgid "Overrides"
 msgstr "Переопределения"
 
-#: pcbnew/footprint.cpp:4225 pcbnew/pad.cpp:2879
+#: pcbnew/footprint.cpp:4225 pcbnew/pad.cpp:2881
 msgid "Clearance Override"
 msgstr "Установка зазора"
 
-#: pcbnew/footprint.cpp:4230 pcbnew/pad.cpp:2889
+#: pcbnew/footprint.cpp:4230 pcbnew/pad.cpp:2891
 msgid "Solderpaste Margin Override"
 msgstr "Установка отступов паяльной пасты"
 
-#: pcbnew/footprint.cpp:4235 pcbnew/pad.cpp:2894
+#: pcbnew/footprint.cpp:4235 pcbnew/pad.cpp:2896
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Установка относительных отступов паяльной пасты"
 
-#: pcbnew/footprint.cpp:4241 pcbnew/pad.cpp:2900
+#: pcbnew/footprint.cpp:4241 pcbnew/pad.cpp:2902
 msgid "Zone Connection Style"
 msgstr "Стиль соединения с зоной"
 
@@ -43406,7 +43420,7 @@ msgstr "Длины на плате"
 msgid "Routed Length"
 msgstr "Длина на плате"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2870
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2872
 #: pcbnew/pcb_track.cpp:1654
 msgid "Pad To Die Length"
 msgstr "Длина от конт. пл. до чипа"
@@ -44315,213 +44329,213 @@ msgstr ""
 "файле: '%s'\n"
 "строке: %d"
 
-#: pcbnew/pad.cpp:1122 pcbnew/pad.cpp:1282 pcbnew/pad.cpp:1298
-#: pcbnew/pad.cpp:1307
+#: pcbnew/pad.cpp:1124 pcbnew/pad.cpp:1284 pcbnew/pad.cpp:1300
+#: pcbnew/pad.cpp:1309
 msgid "pad"
 msgstr "конт. пл."
 
-#: pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2785
+#: pcbnew/pad.cpp:1332 pcbnew/pad.cpp:2787
 msgid "Pin Type"
 msgstr "Тип вывода"
 
-#: pcbnew/pad.cpp:1367
+#: pcbnew/pad.cpp:1369
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:1368
+#: pcbnew/pad.cpp:1370
 msgid "Fiducial global"
 msgstr "Глобальная реперная метка"
 
-#: pcbnew/pad.cpp:1369
+#: pcbnew/pad.cpp:1371
 msgid "Fiducial local"
 msgstr "Локальная реперная метка"
 
-#: pcbnew/pad.cpp:1370
+#: pcbnew/pad.cpp:1372
 msgid "Test point"
 msgstr "Тестовая площадка"
 
-#: pcbnew/pad.cpp:1371
+#: pcbnew/pad.cpp:1373
 msgid "Heat sink"
 msgstr "Для отвода тепла"
 
-#: pcbnew/pad.cpp:1372
+#: pcbnew/pad.cpp:1374
 msgid "Castellated"
 msgstr "Периферийное полу-отверстие"
 
-#: pcbnew/pad.cpp:1406
+#: pcbnew/pad.cpp:1408
 msgid "Length in Package"
 msgstr "Длина в корпусе"
 
-#: pcbnew/pad.cpp:1422
+#: pcbnew/pad.cpp:1424
 msgid "Hole X / Y"
 msgstr "Сверло X / Y"
 
-#: pcbnew/pad.cpp:1434 pcbnew/pcb_track.cpp:1664 pcbnew/pcb_track.cpp:1704
+#: pcbnew/pad.cpp:1436 pcbnew/pcb_track.cpp:1664 pcbnew/pcb_track.cpp:1704
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2817
 #: pcbnew/zone.cpp:877
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Мин. зазор: %s"
 
-#: pcbnew/pad.cpp:1562
+#: pcbnew/pad.cpp:1564
 msgid "Trap"
 msgstr "Трапеция"
 
-#: pcbnew/pad.cpp:1563
+#: pcbnew/pad.cpp:1565
 msgid "Roundrect"
 msgstr "Скруглённый прямоугольник"
 
-#: pcbnew/pad.cpp:1564
+#: pcbnew/pad.cpp:1566
 msgid "Chamferedrect"
 msgstr "Прямоугольник с фаской"
 
-#: pcbnew/pad.cpp:1565
+#: pcbnew/pad.cpp:1567
 msgid "CustomShape"
 msgstr "Произвольная форма"
 
-#: pcbnew/pad.cpp:1577
+#: pcbnew/pad.cpp:1579
 msgid "Conn"
 msgstr "Соединение"
 
-#: pcbnew/pad.cpp:1595
+#: pcbnew/pad.cpp:1597
 #, c-format
 msgid "NPTH pad of %s"
 msgstr "NPTH конт. пл. у %s"
 
-#: pcbnew/pad.cpp:1597
+#: pcbnew/pad.cpp:1599
 msgid "NPTH pad"
 msgstr "Конт. пл. без металлизации (NPTH)"
 
-#: pcbnew/pad.cpp:1605
+#: pcbnew/pad.cpp:1607
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Конт. пл. %s от %s на %s"
 
-#: pcbnew/pad.cpp:1612
+#: pcbnew/pad.cpp:1614
 #, c-format
 msgid "Pad on %s"
 msgstr "Конт. пл. на %s"
 
-#: pcbnew/pad.cpp:1620
+#: pcbnew/pad.cpp:1622
 #, c-format
 msgid "PTH pad %s of %s"
 msgstr "PTH конт. пл. %s у %s"
 
-#: pcbnew/pad.cpp:1626
+#: pcbnew/pad.cpp:1628
 msgid "PTH pad"
 msgstr "Конт. пл. с металлизацией (PTH)"
 
-#: pcbnew/pad.cpp:1636
+#: pcbnew/pad.cpp:1638
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Конт. пл. %s %s от %s на %s"
 
-#: pcbnew/pad.cpp:1644
+#: pcbnew/pad.cpp:1646
 #, c-format
 msgid "Pad %s on %s"
 msgstr "Перех. отв. %s на %s"
 
-#: pcbnew/pad.cpp:1653
+#: pcbnew/pad.cpp:1655
 #, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "PTH конт. пл. %s %s у %s"
 
-#: pcbnew/pad.cpp:1660
+#: pcbnew/pad.cpp:1662
 #, c-format
 msgid "PTH pad %s"
 msgstr "Конт. пл. с металлизацией %s"
 
-#: pcbnew/pad.cpp:2229
+#: pcbnew/pad.cpp:2231
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 "(метал. отверстия (PTH) обычно имеют медную конт. пл. хотя бы на одном "
 "внешнем слое)"
 
-#: pcbnew/pad.cpp:2237
+#: pcbnew/pad.cpp:2239
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr ""
 "(не имеет смысла обозначать площадку неметаллизированного отверстия реперной)"
 
-#: pcbnew/pad.cpp:2241
+#: pcbnew/pad.cpp:2243
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr ""
 "(не имеет смысла обозначать площадку неметаллизированного отверстия тестовой)"
 
-#: pcbnew/pad.cpp:2244
+#: pcbnew/pad.cpp:2246
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr ""
 "(не имеет смысла обозначать площадку неметаллизированного отверстия "
 "теплоотводной)"
 
-#: pcbnew/pad.cpp:2247
+#: pcbnew/pad.cpp:2249
 msgid "('castellated' property is for PTH pads)"
 msgstr ""
 "(только PTH конт. пл. могут иметь свойство 'периферийное полуотверстие')"
 
-#: pcbnew/pad.cpp:2250
+#: pcbnew/pad.cpp:2252
 msgid "('BGA' property is for SMD pads)"
 msgstr "(только контактные площадки SMD могут быть обозначены как BGA)"
 
-#: pcbnew/pad.cpp:2253
+#: pcbnew/pad.cpp:2255
 msgid "('mechanical' property is for PTH pads)"
 msgstr "(механическое свойство предназначено только для PTH конт. пл.)"
 
-#: pcbnew/pad.cpp:2269
+#: pcbnew/pad.cpp:2271
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
 "(контактные площадки разъемов обычно не имеют паяльной пасты; используйте "
 "контактную площадку SMD)"
 
-#: pcbnew/pad.cpp:2277
+#: pcbnew/pad.cpp:2279
 msgid "(SMD pad has a hole)"
 msgstr "(контактная площадка SMD имеет отверстие)"
 
-#: pcbnew/pad.cpp:2283
+#: pcbnew/pad.cpp:2285
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr "(контактная площадка SMD имеет медь на обеих сторонах платы)"
 
-#: pcbnew/pad.cpp:2289 pcbnew/pad.cpp:2302
+#: pcbnew/pad.cpp:2291 pcbnew/pad.cpp:2304
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
 "(контактная площадка SMD имеет слои меди и маски на разных сторонах платы)"
 
-#: pcbnew/pad.cpp:2294 pcbnew/pad.cpp:2307
+#: pcbnew/pad.cpp:2296 pcbnew/pad.cpp:2309
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
 "(контактная площадка SMD имеет слои меди и пасты на разных сторонах платы)"
 
-#: pcbnew/pad.cpp:2313
+#: pcbnew/pad.cpp:2315
 msgid "(SMD pad has no outer layers)"
 msgstr "(контактная площадка SMD не имеет наружных слоёв)"
 
-#: pcbnew/pad.cpp:2332
+#: pcbnew/pad.cpp:2334
 msgid "(Pad must have a positive size)"
 msgstr "(Конт.пл. должна иметь положительный размер)"
 
-#: pcbnew/pad.cpp:2343
+#: pcbnew/pad.cpp:2345
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr ""
 "(размер контактной площадки переходного отверстия должен быть больше чем %s)"
 
-#: pcbnew/pad.cpp:2367
+#: pcbnew/pad.cpp:2369
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(переходное отверстие не оставляет меди)"
 
-#: pcbnew/pad.cpp:2377
+#: pcbnew/pad.cpp:2379
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "(отверстие PTH конт.пл. не полностью находится внутри меди)"
 
-#: pcbnew/pad.cpp:2384
+#: pcbnew/pad.cpp:2386
 msgid "(pad hole not inside pad shape)"
 msgstr "(отверстие конт. пл. находится вне её границ)"
 
-#: pcbnew/pad.cpp:2389
+#: pcbnew/pad.cpp:2391
 msgid "(negative local clearance values have no effect)"
 msgstr "(отрицательные значения локального зазора ни на что не влияют)"
 
-#: pcbnew/pad.cpp:2408
+#: pcbnew/pad.cpp:2410
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
@@ -44529,7 +44543,7 @@ msgstr ""
 "(отрицательные зазоры паяльной маски больше некоторых примитивов; результат "
 "может быть неожиданным)"
 
-#: pcbnew/pad.cpp:2418
+#: pcbnew/pad.cpp:2420
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
@@ -44537,7 +44551,7 @@ msgstr ""
 "(отрицательный зазор паяльной маски больше контактной площадки; паяльная "
 "маска не будет сформирована)"
 
-#: pcbnew/pad.cpp:2437
+#: pcbnew/pad.cpp:2439
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
@@ -44545,112 +44559,112 @@ msgstr ""
 "(отрицательные отступы паяльной пасты больше контактной площадки; маска "
 "паяльной пасты не будет сформирована)"
 
-#: pcbnew/pad.cpp:2444
+#: pcbnew/pad.cpp:2446
 msgid "(negative corner radius is not allowed)"
 msgstr "(отрицательный радиус скругления не допускается)"
 
-#: pcbnew/pad.cpp:2446
+#: pcbnew/pad.cpp:2448
 msgid "(corner size will make pad circular)"
 msgstr "(скругление углов сделает контактную площадку круглой)"
 
-#: pcbnew/pad.cpp:2451
+#: pcbnew/pad.cpp:2453
 msgid "(negative corner chamfer is not allowed)"
 msgstr "(отрицательное значение фаски не допускается)"
 
-#: pcbnew/pad.cpp:2453
+#: pcbnew/pad.cpp:2455
 msgid "(corner chamfer is too large)"
 msgstr "(слишком большая фаска угла)"
 
-#: pcbnew/pad.cpp:2462
+#: pcbnew/pad.cpp:2464
 msgid "(trapezoid delta is too large)"
 msgstr "(дельта трапеции слишком велика)"
 
-#: pcbnew/pad.cpp:2472
+#: pcbnew/pad.cpp:2474
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "(контактная площадка сложной формы должна образовать единый полигон)"
 
-#: pcbnew/pad.cpp:2676
+#: pcbnew/pad.cpp:2678
 msgid "Edge connector"
 msgstr "Краевой соединитель"
 
-#: pcbnew/pad.cpp:2677
+#: pcbnew/pad.cpp:2679
 msgid "NPTH, mechanical"
 msgstr "Неметал. сквозной, механический"
 
-#: pcbnew/pad.cpp:2683
+#: pcbnew/pad.cpp:2685
 msgid "Trapezoid"
 msgstr "Трапециевидная"
 
-#: pcbnew/pad.cpp:2695
+#: pcbnew/pad.cpp:2697
 msgid "Castellated pad"
 msgstr "Зубчатая конактная площадка"
 
-#: pcbnew/pad.cpp:2696
+#: pcbnew/pad.cpp:2698
 msgid "Mechanical pad"
 msgstr "Механическая контактная площадка"
 
-#: pcbnew/pad.cpp:2718
+#: pcbnew/pad.cpp:2720
 msgid "Front, back and connected layers"
 msgstr "Верхний, нижний и подключённые слои"
 
-#: pcbnew/pad.cpp:2768
+#: pcbnew/pad.cpp:2770
 msgid "Pad Type"
 msgstr "Тип конт. пл."
 
-#: pcbnew/pad.cpp:2772
+#: pcbnew/pad.cpp:2774
 msgid "Pad Shape"
 msgstr "Форма конт. пл."
 
-#: pcbnew/pad.cpp:2777
+#: pcbnew/pad.cpp:2779
 msgid "Pad Number"
 msgstr "Номер конт. пл."
 
-#: pcbnew/pad.cpp:2789
+#: pcbnew/pad.cpp:2791
 msgid "Size X"
 msgstr "Размер X"
 
-#: pcbnew/pad.cpp:2793
+#: pcbnew/pad.cpp:2795
 msgid "Size Y"
 msgstr "Размер Y"
 
-#: pcbnew/pad.cpp:2826
+#: pcbnew/pad.cpp:2828
 msgid "Corner Radius Ratio"
 msgstr "Относительный радиус скругления"
 
-#: pcbnew/pad.cpp:2831
+#: pcbnew/pad.cpp:2833
 msgid "Corner Radius Size"
 msgstr "Размер радиуса скругления"
 
-#: pcbnew/pad.cpp:2837
+#: pcbnew/pad.cpp:2839
 msgid "Hole Shape"
 msgstr "Форма отв."
 
-#: pcbnew/pad.cpp:2841
+#: pcbnew/pad.cpp:2843
 msgid "Hole Size X"
 msgstr "Размер X отв."
 
-#: pcbnew/pad.cpp:2847
+#: pcbnew/pad.cpp:2849
 msgid "Hole Size Y"
 msgstr "Размер Y отв."
 
-#: pcbnew/pad.cpp:2862
+#: pcbnew/pad.cpp:2864
 msgid "Fabrication Property"
 msgstr "Параметр производства"
 
-#: pcbnew/pad.cpp:2884 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
+#: pcbnew/pad.cpp:2886 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
 #: pcbnew/pcb_textbox.cpp:816 pcbnew/pcb_track.cpp:2155
 msgid "Soldermask Margin Override"
 msgstr "Расширение паяльной маски"
 
-#: pcbnew/pad.cpp:2906 pcbnew/zone.cpp:2145
+#: pcbnew/pad.cpp:2908 pcbnew/zone.cpp:2145
 msgid "Thermal Relief Spoke Width"
 msgstr "Ширина мостика терморазгрузки"
 
-#: pcbnew/pad.cpp:2912
+#: pcbnew/pad.cpp:2914
 msgid "Thermal Relief Spoke Angle"
 msgstr "Угол мостиков терморазгрузки"
 
-#: pcbnew/pad.cpp:2917 pcbnew/zone.cpp:2139
+#: pcbnew/pad.cpp:2919 pcbnew/zone.cpp:2139
 msgid "Thermal Relief Gap"
 msgstr "Зазор мостика терморазгрузки"
 
@@ -44757,7 +44771,7 @@ msgstr ""
 "проектов. Для того чтобы создать или обновить плату из редактора схем, нужно "
 "запустить менеджер проектов KiCad и создать проект."
 
-#: pcbnew/pcb_edit_frame.cpp:2036 pcbnew/pcbnew_jobs_handler.cpp:2013
+#: pcbnew/pcb_edit_frame.cpp:2036 pcbnew/pcbnew_jobs_handler.cpp:1981
 msgid "Eeschema netlist"
 msgstr "Список цепей Eeschema"
 
@@ -46628,7 +46642,7 @@ msgstr "Маркер (%s)"
 msgid "No layers selected for plotting."
 msgstr "Не выбраны слои для черчения."
 
-#: pcbnew/pcb_plotter.cpp:442
+#: pcbnew/pcb_plotter.cpp:447
 #, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
@@ -46914,11 +46928,11 @@ msgid "Error creating 3D render image"
 msgstr "Ошибка создания 3D-изображения"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:823 pcbnew/pcbnew_jobs_handler.cpp:886
-#: pcbnew/pcbnew_jobs_handler.cpp:971 pcbnew/pcbnew_jobs_handler.cpp:1307
+#: pcbnew/pcbnew_jobs_handler.cpp:971 pcbnew/pcbnew_jobs_handler.cpp:1275
 msgid "At least one layer must be specified\n"
 msgstr "Необходимо указать хотя бы один слой.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1174 pcbnew/pcbnew_jobs_handler.cpp:1360
+#: pcbnew/pcbnew_jobs_handler.cpp:1174 pcbnew/pcbnew_jobs_handler.cpp:1328
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Не удалось начертить в '%s'.\n"
@@ -46927,84 +46941,84 @@ msgstr "Не удалось начертить в '%s'.\n"
 msgid "Successfully created genCAD file\n"
 msgstr "Успешно создан файл genCAD\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1569 pcbnew/pcbnew_jobs_handler.cpp:1642
+#: pcbnew/pcbnew_jobs_handler.cpp:1537 pcbnew/pcbnew_jobs_handler.cpp:1610
 #, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "Данные о размещении сверху записаны в %s.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1587 pcbnew/pcbnew_jobs_handler.cpp:1665
+#: pcbnew/pcbnew_jobs_handler.cpp:1555 pcbnew/pcbnew_jobs_handler.cpp:1633
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr "Данные о размещении снизу записаны в %s.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1616
+#: pcbnew/pcbnew_jobs_handler.cpp:1584
 #, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "Данные о размещении записаны в %s.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1712
+#: pcbnew/pcbnew_jobs_handler.cpp:1680
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "Путь к библиотеке посадочных мест не существует или недоступен\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1720
 msgid "Unable to save library\n"
 msgstr "Не удалось сохранить библиотеку\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1758
+#: pcbnew/pcbnew_jobs_handler.cpp:1726
 msgid "Footprint library was not updated\n"
 msgstr "Библиотека посад. мест не была обновлена\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1836
+#: pcbnew/pcbnew_jobs_handler.cpp:1804
 msgid "The given footprint could not be found to export."
 msgstr "Не удалось найти данное посад. место для экспорта."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1878
+#: pcbnew/pcbnew_jobs_handler.cpp:1846
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Черчение посад. места '%s' в '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1898
+#: pcbnew/pcbnew_jobs_handler.cpp:1866
 msgid "Error creating svg file"
 msgstr "Ошибка создания файла svg"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1966 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1934 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 "Для проверки на соответствие схеме требуется полностью обозначенная схема."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1987 pcbnew/pcbnew_jobs_handler.cpp:2020
+#: pcbnew/pcbnew_jobs_handler.cpp:1955 pcbnew/pcbnew_jobs_handler.cpp:1988
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Не удалось получить схему для проверок на соответствие.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2042 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:2010 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2063
+#: pcbnew/pcbnew_jobs_handler.cpp:2031
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Найдено %d неподключенных элементов\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2069
+#: pcbnew/pcbnew_jobs_handler.cpp:2037
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "Найдено %d проблем с соответствием схеме\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2085
+#: pcbnew/pcbnew_jobs_handler.cpp:2053
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Не удалось сохранить отчет DRC в %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2090
+#: pcbnew/pcbnew_jobs_handler.cpp:2058
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Отчет DRC сохранен в %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2237
+#: pcbnew/pcbnew_jobs_handler.cpp:2205
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Успешно создан файл IPC-D-356\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2242
+#: pcbnew/pcbnew_jobs_handler.cpp:2210
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "Не удалось создать файл IPC-D-356.\n"
 
@@ -48454,7 +48468,7 @@ msgstr "Копирование отменено"
 msgid "Pack Footprints"
 msgstr "Упаковка посад. мест"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:342
+#: pcbnew/tools/edit_tool_move_fct.cpp:343
 #, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
@@ -48463,12 +48477,12 @@ msgstr ""
 "Размещение %s (элемент %zu из %zu)\n"
 "Нажмите <ESC> для отмены или щёлкните дважды для завершения"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:355
+#: pcbnew/tools/edit_tool_move_fct.cpp:356
 #, c-format
 msgid "%s pad %s"
 msgstr "%s конт. пл. %s"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:398
+#: pcbnew/tools/edit_tool_move_fct.cpp:399
 msgid "Select reference point for move..."
 msgstr "Выбор опорной точку для перемещения..."
 
@@ -50616,7 +50630,7 @@ msgstr "Добавить плату"
 msgid "Active Layer"
 msgstr "Активный слой"
 
-#: pcbnew/tools/pcb_control.cpp:1638 pcbnew/widgets/appearance_controls.cpp:376
+#: pcbnew/tools/pcb_control.cpp:1638 pcbnew/widgets/appearance_controls.cpp:375
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "Все слои"
@@ -50773,7 +50787,7 @@ msgid "Auto-fill Zone(s)"
 msgstr "Автозаливка зон"
 
 #: pcbnew/tools/zone_filler_tool.cpp:275
-#: pcbnew/widgets/appearance_controls.cpp:3484
+#: pcbnew/widgets/appearance_controls.cpp:3489
 msgid "Open Preferences"
 msgstr "Открыть настройки"
 
@@ -50849,131 +50863,131 @@ msgstr "Объединение коллинеарных дорожек..."
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Незавершённая операция отмены/повтора: некоторые элементы не найдены"
 
-#: pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/widgets/appearance_controls.cpp:330
 msgid "Show tracks"
 msgstr "Показать дорожки"
 
-#: pcbnew/widgets/appearance_controls.cpp:332
+#: pcbnew/widgets/appearance_controls.cpp:331
 msgid "Show all vias"
 msgstr "Показать все перех. отв."
 
-#: pcbnew/widgets/appearance_controls.cpp:333
+#: pcbnew/widgets/appearance_controls.cpp:332
 msgid "Show all pads"
 msgstr "Показать все конт. пл."
 
-#: pcbnew/widgets/appearance_controls.cpp:334
+#: pcbnew/widgets/appearance_controls.cpp:333
 msgid "Show copper zones"
 msgstr "Показать зоны меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:335
+#: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Filled Shapes"
 msgstr "Заполн. фигуры"
 
-#: pcbnew/widgets/appearance_controls.cpp:335
+#: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Opacity of filled shapes"
 msgstr "Непрозрачность заполненных фигур"
 
-#: pcbnew/widgets/appearance_controls.cpp:336
+#: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show user images"
 msgstr "Показать пользовательские изображения"
 
-#: pcbnew/widgets/appearance_controls.cpp:338
+#: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Footprints Front"
 msgstr "Посад. места сверху"
 
-#: pcbnew/widgets/appearance_controls.cpp:338
+#: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show footprints that are on board's front"
 msgstr "Показать посад. места расположенные сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:339
+#: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprints Back"
 msgstr "Посад. места снизу"
 
-#: pcbnew/widgets/appearance_controls.cpp:339
+#: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprints that are on board's back"
 msgstr "Показать посад. места расположенные снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:345
+#: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show unconnected nets as a ratsnest"
 msgstr "Показать не соединённые цепи в виде связей"
 
-#: pcbnew/widgets/appearance_controls.cpp:346
+#: pcbnew/widgets/appearance_controls.cpp:345
 msgid "DRC Warnings"
 msgstr "Предупреждения"
 
-#: pcbnew/widgets/appearance_controls.cpp:346
+#: pcbnew/widgets/appearance_controls.cpp:345
 msgid "DRC violations with a Warning severity"
 msgstr "Нарушение DRC уровня Предупреждение"
 
-#: pcbnew/widgets/appearance_controls.cpp:347
+#: pcbnew/widgets/appearance_controls.cpp:346
 msgid "DRC Errors"
 msgstr "Ошибки"
 
-#: pcbnew/widgets/appearance_controls.cpp:347
+#: pcbnew/widgets/appearance_controls.cpp:346
 msgid "DRC violations with an Error severity"
 msgstr "Нарушение DRC уровня Ошибка"
 
-#: pcbnew/widgets/appearance_controls.cpp:348
+#: pcbnew/widgets/appearance_controls.cpp:347
 msgid "DRC Exclusions"
 msgstr "Исключения"
 
-#: pcbnew/widgets/appearance_controls.cpp:348
+#: pcbnew/widgets/appearance_controls.cpp:347
 msgid "DRC violations which have been individually excluded"
 msgstr "Нарушения DRC, которые будут исключены индивидуально"
 
-#: pcbnew/widgets/appearance_controls.cpp:349
+#: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show footprint and text origins as a cross"
 msgstr "Показать точку привязки посад. мест и текста крестиком"
 
-#: pcbnew/widgets/appearance_controls.cpp:350
+#: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Locked Item Shadow"
 msgstr "Тень заблок. элемента"
 
-#: pcbnew/widgets/appearance_controls.cpp:350
+#: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show a shadow on locked items"
 msgstr "Подсвечивать заблокированные элементы"
 
-#: pcbnew/widgets/appearance_controls.cpp:351
+#: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Colliding Courtyards"
 msgstr "Перес.обл.установки"
 
-#: pcbnew/widgets/appearance_controls.cpp:351
+#: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show colliding footprint courtyards"
 msgstr "Показать пересечения областей установки посад. мест"
 
-#: pcbnew/widgets/appearance_controls.cpp:352
+#: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show drawing sheet borders and title block"
 msgstr "Показать форматную рамку и осн.надпись"
 
-#: pcbnew/widgets/appearance_controls.cpp:374
+#: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
 msgstr "Ни одного слоя"
 
-#: pcbnew/widgets/appearance_controls.cpp:379
+#: pcbnew/widgets/appearance_controls.cpp:378
 msgid "All Copper Layers"
 msgstr "Все слои меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:382
+#: pcbnew/widgets/appearance_controls.cpp:381
 msgid "Inner Copper Layers"
 msgstr "Внутренние слои меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:385
+#: pcbnew/widgets/appearance_controls.cpp:384
 msgid "Front Layers"
 msgstr "Верхние слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:388
+#: pcbnew/widgets/appearance_controls.cpp:387
 msgid "Front Assembly View"
 msgstr "Вид для сборки сверху"
 
-#: pcbnew/widgets/appearance_controls.cpp:391
+#: pcbnew/widgets/appearance_controls.cpp:390
 msgid "Back Layers"
 msgstr "Нижние слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:394
+#: pcbnew/widgets/appearance_controls.cpp:393
 msgid "Back Assembly View"
 msgstr "Вид для сборки снизу"
 
-#: pcbnew/widgets/appearance_controls.cpp:443
+#: pcbnew/widgets/appearance_controls.cpp:442
 #, c-format
 msgid ""
 "Save and restore layer visibility combinations.\n"
@@ -50986,7 +51000,7 @@ msgstr ""
 "Последующие нажатия Tab при удержании %s приводят к циклическому переходу по "
 "наборам во всплывающем окне."
 
-#: pcbnew/widgets/appearance_controls.cpp:450
+#: pcbnew/widgets/appearance_controls.cpp:449
 #, c-format
 msgid ""
 "Save and restore view location and zoom.\n"
@@ -50999,521 +51013,521 @@ msgstr ""
 "Последующие нажатия Tab при зажатой кнопке %s будут переключать виды во "
 "всплывающем окне."
 
-#: pcbnew/widgets/appearance_controls.cpp:465
+#: pcbnew/widgets/appearance_controls.cpp:464
 msgid "Filter nets"
 msgstr "Фильтр цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:616
-#: pcbnew/widgets/appearance_controls.cpp:1831
+#: pcbnew/widgets/appearance_controls.cpp:615
+#: pcbnew/widgets/appearance_controls.cpp:1836
 msgid "Layer Display Options"
 msgstr "Отображение слоёв"
 
-#: pcbnew/widgets/appearance_controls.cpp:628
-#: pcbnew/widgets/appearance_controls.cpp:1837
+#: pcbnew/widgets/appearance_controls.cpp:627
+#: pcbnew/widgets/appearance_controls.cpp:1842
 #, c-format
 msgid "Inactive layers (%s):"
 msgstr "Неактивные слои (%s):"
 
-#: pcbnew/widgets/appearance_controls.cpp:630
-#: pcbnew/widgets/appearance_controls.cpp:1839
+#: pcbnew/widgets/appearance_controls.cpp:629
+#: pcbnew/widgets/appearance_controls.cpp:1844
 msgid "Inactive layers:"
 msgstr "Неактивные слои:"
 
-#: pcbnew/widgets/appearance_controls.cpp:644
-#: pcbnew/widgets/appearance_controls.cpp:1844
+#: pcbnew/widgets/appearance_controls.cpp:643
+#: pcbnew/widgets/appearance_controls.cpp:1849
 msgid "Inactive layers will be shown in full color"
 msgstr "Неактивные слои будут показаны в обычном цвете"
 
-#: pcbnew/widgets/appearance_controls.cpp:649
-#: pcbnew/widgets/appearance_controls.cpp:1846
+#: pcbnew/widgets/appearance_controls.cpp:648
+#: pcbnew/widgets/appearance_controls.cpp:1851
 msgid "Dim"
 msgstr "Тускло"
 
-#: pcbnew/widgets/appearance_controls.cpp:651
-#: pcbnew/widgets/appearance_controls.cpp:1847
+#: pcbnew/widgets/appearance_controls.cpp:650
+#: pcbnew/widgets/appearance_controls.cpp:1852
 msgid "Inactive layers will be dimmed"
 msgstr "Неактивные слои будут показаны в затемнённом виде"
 
-#: pcbnew/widgets/appearance_controls.cpp:658
-#: pcbnew/widgets/appearance_controls.cpp:1850
+#: pcbnew/widgets/appearance_controls.cpp:657
+#: pcbnew/widgets/appearance_controls.cpp:1855
 msgid "Inactive layers will be hidden"
 msgstr "Неактивные слои будут скрыты"
 
-#: pcbnew/widgets/appearance_controls.cpp:669
-#: pcbnew/widgets/appearance_controls.cpp:1852
+#: pcbnew/widgets/appearance_controls.cpp:668
+#: pcbnew/widgets/appearance_controls.cpp:1857
 msgid "Flip board view"
 msgstr "Перевернуть (отразить) вид на плату"
 
-#: pcbnew/widgets/appearance_controls.cpp:691
-#: pcbnew/widgets/appearance_controls.cpp:2561
+#: pcbnew/widgets/appearance_controls.cpp:690
+#: pcbnew/widgets/appearance_controls.cpp:2566
 msgid "Net Display Options"
 msgstr "Отображение цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:703
-#: pcbnew/widgets/appearance_controls.cpp:2566
+#: pcbnew/widgets/appearance_controls.cpp:702
+#: pcbnew/widgets/appearance_controls.cpp:2571
 #, c-format
 msgid "Net colors (%s):"
 msgstr "Цвета цепей (%s):"
 
-#: pcbnew/widgets/appearance_controls.cpp:705
-#: pcbnew/widgets/appearance_controls.cpp:2568
+#: pcbnew/widgets/appearance_controls.cpp:704
+#: pcbnew/widgets/appearance_controls.cpp:2573
 msgid "Net colors:"
 msgstr "Цвет цепей:"
 
-#: pcbnew/widgets/appearance_controls.cpp:710
-#: pcbnew/widgets/appearance_controls.cpp:2571
+#: pcbnew/widgets/appearance_controls.cpp:709
+#: pcbnew/widgets/appearance_controls.cpp:2576
 msgid "Choose when to show net and netclass colors"
 msgstr "Выберите как показывать цвета цепей и классов цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:719
-#: pcbnew/widgets/appearance_controls.cpp:2574
+#: pcbnew/widgets/appearance_controls.cpp:718
+#: pcbnew/widgets/appearance_controls.cpp:2579
 msgid "Net and netclass colors are shown on all copper items"
 msgstr "Цвета цепей и классов цепей отображаются для всех элементов меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:727
-#: pcbnew/widgets/appearance_controls.cpp:2577
+#: pcbnew/widgets/appearance_controls.cpp:726
+#: pcbnew/widgets/appearance_controls.cpp:2582
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr "Цвета цепей и классов цепей отображаются только для линий связи"
 
-#: pcbnew/widgets/appearance_controls.cpp:734
-#: pcbnew/widgets/appearance_controls.cpp:2580
+#: pcbnew/widgets/appearance_controls.cpp:733
+#: pcbnew/widgets/appearance_controls.cpp:2585
 msgid "Net and netclass colors are not shown"
 msgstr "Цвета цепи и класса цепей не отображаются"
 
-#: pcbnew/widgets/appearance_controls.cpp:745
-#: pcbnew/widgets/appearance_controls.cpp:2585
+#: pcbnew/widgets/appearance_controls.cpp:744
+#: pcbnew/widgets/appearance_controls.cpp:2590
 #, c-format
 msgid "Ratsnest display (%s):"
 msgstr "Отображение линий связи (%s):"
 
-#: pcbnew/widgets/appearance_controls.cpp:747
-#: pcbnew/widgets/appearance_controls.cpp:2587
+#: pcbnew/widgets/appearance_controls.cpp:746
+#: pcbnew/widgets/appearance_controls.cpp:2592
 msgid "Ratsnest display:"
 msgstr "Отображение линий связи:"
 
-#: pcbnew/widgets/appearance_controls.cpp:752
-#: pcbnew/widgets/appearance_controls.cpp:2590
+#: pcbnew/widgets/appearance_controls.cpp:751
+#: pcbnew/widgets/appearance_controls.cpp:2595
 msgid "Choose which ratsnest lines to display"
 msgstr "Выберите какие линии связей отображать"
 
-#: pcbnew/widgets/appearance_controls.cpp:762
-#: pcbnew/widgets/appearance_controls.cpp:2593
+#: pcbnew/widgets/appearance_controls.cpp:761
+#: pcbnew/widgets/appearance_controls.cpp:2598
 msgid "Show ratsnest lines to items on all layers"
 msgstr "Отображать линии связей для элементов на всех слоях"
 
-#: pcbnew/widgets/appearance_controls.cpp:767
-#: pcbnew/widgets/appearance_controls.cpp:2595
+#: pcbnew/widgets/appearance_controls.cpp:766
+#: pcbnew/widgets/appearance_controls.cpp:2600
 msgid "Visible layers"
 msgstr "Видимые слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:769
-#: pcbnew/widgets/appearance_controls.cpp:2596
+#: pcbnew/widgets/appearance_controls.cpp:768
+#: pcbnew/widgets/appearance_controls.cpp:2601
 msgid "Show ratsnest lines to items on visible layers"
 msgstr "Отображать линии связей для элементов на видимых слоях"
 
-#: pcbnew/widgets/appearance_controls.cpp:776
-#: pcbnew/widgets/appearance_controls.cpp:2599
+#: pcbnew/widgets/appearance_controls.cpp:775
+#: pcbnew/widgets/appearance_controls.cpp:2604
 msgid "Hide all ratsnest lines"
 msgstr "Скрыть все линии связей"
 
-#: pcbnew/widgets/appearance_controls.cpp:927
+#: pcbnew/widgets/appearance_controls.cpp:926
 msgid "Set Net Color"
 msgstr "Установить цвет для цепи"
 
-#: pcbnew/widgets/appearance_controls.cpp:929
+#: pcbnew/widgets/appearance_controls.cpp:928
 msgid "Clear Net Color"
 msgstr "Сбросить цвет цепи"
 
-#: pcbnew/widgets/appearance_controls.cpp:935
+#: pcbnew/widgets/appearance_controls.cpp:934
 #, c-format
 msgid "Highlight %s"
 msgstr "Подсветить %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:938
-#: pcbnew/widgets/appearance_controls.cpp:2430
+#: pcbnew/widgets/appearance_controls.cpp:937
+#: pcbnew/widgets/appearance_controls.cpp:2435
 #, c-format
 msgid "Select Tracks and Vias in %s"
 msgstr "Выбрать дорожки и перех. отв. в %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:941
-#: pcbnew/widgets/appearance_controls.cpp:2433
+#: pcbnew/widgets/appearance_controls.cpp:940
+#: pcbnew/widgets/appearance_controls.cpp:2438
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "Отменить выделение дорожек и перех. отв. в %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:946
+#: pcbnew/widgets/appearance_controls.cpp:945
 msgid "Show All Nets"
 msgstr "Показать все цепи"
 
-#: pcbnew/widgets/appearance_controls.cpp:948
+#: pcbnew/widgets/appearance_controls.cpp:947
 msgid "Hide All Other Nets"
 msgstr "Скрыть все остальные цепи"
 
-#: pcbnew/widgets/appearance_controls.cpp:980
+#: pcbnew/widgets/appearance_controls.cpp:979
 #, c-format
 msgid "Click to hide ratsnest for %s"
 msgstr "Щёлкните чтобы скрыть связи для %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:981
+#: pcbnew/widgets/appearance_controls.cpp:980
 #, c-format
 msgid "Click to show ratsnest for %s"
 msgstr "Щёлкните чтобы показать связи для %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:990
+#: pcbnew/widgets/appearance_controls.cpp:989
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
 "Двойной щелчок или средняя кнопка мыши для изменения цвета, правая кнопка - "
 "контекстное меню"
 
-#: pcbnew/widgets/appearance_controls.cpp:1029
+#: pcbnew/widgets/appearance_controls.cpp:1028
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
 msgstr "Объекты"
 
-#: pcbnew/widgets/appearance_controls.cpp:1581
+#: pcbnew/widgets/appearance_controls.cpp:1586
 msgid "Double click or middle click for color change, right click for menu"
 msgstr ""
 "Двойной щелчок или средняя кнопка мыши для изменения цвета, правая кнопка - "
 "контекстное меню"
 
-#: pcbnew/widgets/appearance_controls.cpp:1587
+#: pcbnew/widgets/appearance_controls.cpp:1592
 msgid "Show or hide this layer"
 msgstr "Показать или скрыть этот слой"
 
-#: pcbnew/widgets/appearance_controls.cpp:1660
+#: pcbnew/widgets/appearance_controls.cpp:1665
 msgid "Adhesive on board's front"
 msgstr "Клей сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1661
+#: pcbnew/widgets/appearance_controls.cpp:1666
 msgid "Adhesive on board's back"
 msgstr "Клей снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1662
+#: pcbnew/widgets/appearance_controls.cpp:1667
 msgid "Solder paste on board's front"
 msgstr "Паяльная паста сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1663
+#: pcbnew/widgets/appearance_controls.cpp:1668
 msgid "Solder paste on board's back"
 msgstr "Паяльная паста снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1664
+#: pcbnew/widgets/appearance_controls.cpp:1669
 msgid "Silkscreen on board's front"
 msgstr "Шелкография сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1665
+#: pcbnew/widgets/appearance_controls.cpp:1670
 msgid "Silkscreen on board's back"
 msgstr "Шёлкография снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1666
+#: pcbnew/widgets/appearance_controls.cpp:1671
 msgid "Solder mask on board's front"
 msgstr "Паяльная маска сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1667
+#: pcbnew/widgets/appearance_controls.cpp:1672
 msgid "Solder mask on board's back"
 msgstr "Паяльная маска снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1668
+#: pcbnew/widgets/appearance_controls.cpp:1673
 msgid "Explanatory drawings"
 msgstr "Пояснительные рисунки"
 
-#: pcbnew/widgets/appearance_controls.cpp:1669
+#: pcbnew/widgets/appearance_controls.cpp:1674
 msgid "Explanatory comments"
 msgstr "Пояснительные комментарии"
 
-#: pcbnew/widgets/appearance_controls.cpp:1670
-#: pcbnew/widgets/appearance_controls.cpp:1671
+#: pcbnew/widgets/appearance_controls.cpp:1675
+#: pcbnew/widgets/appearance_controls.cpp:1676
 msgid "User defined meaning"
 msgstr "Пользовательского назначения"
 
-#: pcbnew/widgets/appearance_controls.cpp:1672
+#: pcbnew/widgets/appearance_controls.cpp:1677
 msgid "Board's perimeter definition"
 msgstr "Контур платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1673
+#: pcbnew/widgets/appearance_controls.cpp:1678
 msgid "Board's edge setback outline"
 msgstr "Отступ от контура платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1674
+#: pcbnew/widgets/appearance_controls.cpp:1679
 msgid "Footprint courtyards on board's front"
 msgstr "Области установки посад. мест сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1675
+#: pcbnew/widgets/appearance_controls.cpp:1680
 msgid "Footprint courtyards on board's back"
 msgstr "Области установки посад. мест снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1676
+#: pcbnew/widgets/appearance_controls.cpp:1681
 msgid "Footprint assembly on board's front"
 msgstr "Монтаж посад. мест сверху платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1677
+#: pcbnew/widgets/appearance_controls.cpp:1682
 msgid "Footprint assembly on board's back"
 msgstr "Монтаж посад. мест снизу платы"
 
-#: pcbnew/widgets/appearance_controls.cpp:1678
+#: pcbnew/widgets/appearance_controls.cpp:1683
 msgid "User defined layer 1"
 msgstr "Пользовательский слой 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1679
+#: pcbnew/widgets/appearance_controls.cpp:1684
 msgid "User defined layer 2"
 msgstr "Пользовательский слой 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1680
+#: pcbnew/widgets/appearance_controls.cpp:1685
 msgid "User defined layer 3"
 msgstr "Пользовательский слой 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1681
+#: pcbnew/widgets/appearance_controls.cpp:1686
 msgid "User defined layer 4"
 msgstr "Пользовательский слой 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1682
+#: pcbnew/widgets/appearance_controls.cpp:1687
 msgid "User defined layer 5"
 msgstr "Пользовательский слой 5"
 
-#: pcbnew/widgets/appearance_controls.cpp:1683
+#: pcbnew/widgets/appearance_controls.cpp:1688
 msgid "User defined layer 6"
 msgstr "Пользовательский слой 6"
 
-#: pcbnew/widgets/appearance_controls.cpp:1684
+#: pcbnew/widgets/appearance_controls.cpp:1689
 msgid "User defined layer 7"
 msgstr "Пользовательский слой 7"
 
-#: pcbnew/widgets/appearance_controls.cpp:1685
+#: pcbnew/widgets/appearance_controls.cpp:1690
 msgid "User defined layer 8"
 msgstr "Пользовательский слой 8"
 
-#: pcbnew/widgets/appearance_controls.cpp:1686
+#: pcbnew/widgets/appearance_controls.cpp:1691
 msgid "User defined layer 9"
 msgstr "Пользовательский слой 9"
 
-#: pcbnew/widgets/appearance_controls.cpp:1687
+#: pcbnew/widgets/appearance_controls.cpp:1692
 msgid "User defined layer 10"
 msgstr "Пользовательский слой 10"
 
-#: pcbnew/widgets/appearance_controls.cpp:1688
+#: pcbnew/widgets/appearance_controls.cpp:1693
 msgid "User defined layer 11"
 msgstr "Пользовательский слой 11"
 
-#: pcbnew/widgets/appearance_controls.cpp:1689
+#: pcbnew/widgets/appearance_controls.cpp:1694
 msgid "User defined layer 12"
 msgstr "Пользовательский слой 12"
 
-#: pcbnew/widgets/appearance_controls.cpp:1690
+#: pcbnew/widgets/appearance_controls.cpp:1695
 msgid "User defined layer 13"
 msgstr "Пользовательский слой 13"
 
-#: pcbnew/widgets/appearance_controls.cpp:1691
+#: pcbnew/widgets/appearance_controls.cpp:1696
 msgid "User defined layer 14"
 msgstr "Пользовательский слой 14"
 
-#: pcbnew/widgets/appearance_controls.cpp:1692
+#: pcbnew/widgets/appearance_controls.cpp:1697
 msgid "User defined layer 15"
 msgstr "Пользовательский слой 15"
 
-#: pcbnew/widgets/appearance_controls.cpp:1693
+#: pcbnew/widgets/appearance_controls.cpp:1698
 msgid "User defined layer 16"
 msgstr "Пользовательский слой 16"
 
-#: pcbnew/widgets/appearance_controls.cpp:1694
+#: pcbnew/widgets/appearance_controls.cpp:1699
 msgid "User defined layer 17"
 msgstr "Пользовательский слой 17"
 
-#: pcbnew/widgets/appearance_controls.cpp:1695
+#: pcbnew/widgets/appearance_controls.cpp:1700
 msgid "User defined layer 18"
 msgstr "Пользовательский слой 18"
 
-#: pcbnew/widgets/appearance_controls.cpp:1696
+#: pcbnew/widgets/appearance_controls.cpp:1701
 msgid "User defined layer 19"
 msgstr "Пользовательский слой 19"
 
-#: pcbnew/widgets/appearance_controls.cpp:1697
+#: pcbnew/widgets/appearance_controls.cpp:1702
 msgid "User defined layer 20"
 msgstr "Пользовательский слой 20"
 
-#: pcbnew/widgets/appearance_controls.cpp:1698
+#: pcbnew/widgets/appearance_controls.cpp:1703
 msgid "User defined layer 21"
 msgstr "Пользовательский слой 21"
 
-#: pcbnew/widgets/appearance_controls.cpp:1699
+#: pcbnew/widgets/appearance_controls.cpp:1704
 msgid "User defined layer 22"
 msgstr "Пользовательский слой 22"
 
-#: pcbnew/widgets/appearance_controls.cpp:1700
+#: pcbnew/widgets/appearance_controls.cpp:1705
 msgid "User defined layer 23"
 msgstr "Пользовательский слой 23"
 
-#: pcbnew/widgets/appearance_controls.cpp:1701
+#: pcbnew/widgets/appearance_controls.cpp:1706
 msgid "User defined layer 24"
 msgstr "Пользовательский слой 24"
 
-#: pcbnew/widgets/appearance_controls.cpp:1702
+#: pcbnew/widgets/appearance_controls.cpp:1707
 msgid "User defined layer 25"
 msgstr "Пользовательский слой 25"
 
-#: pcbnew/widgets/appearance_controls.cpp:1703
+#: pcbnew/widgets/appearance_controls.cpp:1708
 msgid "User defined layer 26"
 msgstr "Пользовательский слой 26"
 
-#: pcbnew/widgets/appearance_controls.cpp:1704
+#: pcbnew/widgets/appearance_controls.cpp:1709
 msgid "User defined layer 27"
 msgstr "Пользовательский слой 27"
 
-#: pcbnew/widgets/appearance_controls.cpp:1705
+#: pcbnew/widgets/appearance_controls.cpp:1710
 msgid "User defined layer 28"
 msgstr "Пользовательский слой 28"
 
-#: pcbnew/widgets/appearance_controls.cpp:1706
+#: pcbnew/widgets/appearance_controls.cpp:1711
 msgid "User defined layer 29"
 msgstr "Пользовательский слой 29"
 
-#: pcbnew/widgets/appearance_controls.cpp:1707
+#: pcbnew/widgets/appearance_controls.cpp:1712
 msgid "User defined layer 30"
 msgstr "Пользовательский слой 30"
 
-#: pcbnew/widgets/appearance_controls.cpp:1708
+#: pcbnew/widgets/appearance_controls.cpp:1713
 msgid "User defined layer 31"
 msgstr "Пользовательский слой 31"
 
-#: pcbnew/widgets/appearance_controls.cpp:1709
+#: pcbnew/widgets/appearance_controls.cpp:1714
 msgid "User defined layer 32"
 msgstr "Пользовательский слой 32"
 
-#: pcbnew/widgets/appearance_controls.cpp:1710
+#: pcbnew/widgets/appearance_controls.cpp:1715
 msgid "User defined layer 33"
 msgstr "Пользовательский слой 33"
 
-#: pcbnew/widgets/appearance_controls.cpp:1711
+#: pcbnew/widgets/appearance_controls.cpp:1716
 msgid "User defined layer 34"
 msgstr "Пользовательский слой 34"
 
-#: pcbnew/widgets/appearance_controls.cpp:1712
+#: pcbnew/widgets/appearance_controls.cpp:1717
 msgid "User defined layer 35"
 msgstr "Пользовательский слой 35"
 
-#: pcbnew/widgets/appearance_controls.cpp:1713
+#: pcbnew/widgets/appearance_controls.cpp:1718
 msgid "User defined layer 36"
 msgstr "Пользовательский слой 36"
 
-#: pcbnew/widgets/appearance_controls.cpp:1714
+#: pcbnew/widgets/appearance_controls.cpp:1719
 msgid "User defined layer 37"
 msgstr "Пользовательский слой 37"
 
-#: pcbnew/widgets/appearance_controls.cpp:1715
+#: pcbnew/widgets/appearance_controls.cpp:1720
 msgid "User defined layer 38"
 msgstr "Пользовательский слой 38"
 
-#: pcbnew/widgets/appearance_controls.cpp:1716
+#: pcbnew/widgets/appearance_controls.cpp:1721
 msgid "User defined layer 39"
 msgstr "Пользовательский слой 39"
 
-#: pcbnew/widgets/appearance_controls.cpp:1717
+#: pcbnew/widgets/appearance_controls.cpp:1722
 msgid "User defined layer 40"
 msgstr "Пользовательский слой 40"
 
-#: pcbnew/widgets/appearance_controls.cpp:1718
+#: pcbnew/widgets/appearance_controls.cpp:1723
 msgid "User defined layer 41"
 msgstr "Пользовательский слой 41"
 
-#: pcbnew/widgets/appearance_controls.cpp:1719
+#: pcbnew/widgets/appearance_controls.cpp:1724
 msgid "User defined layer 42"
 msgstr "Пользовательский слой 42"
 
-#: pcbnew/widgets/appearance_controls.cpp:1720
+#: pcbnew/widgets/appearance_controls.cpp:1725
 msgid "User defined layer 43"
 msgstr "Пользовательский слой 43"
 
-#: pcbnew/widgets/appearance_controls.cpp:1721
+#: pcbnew/widgets/appearance_controls.cpp:1726
 msgid "User defined layer 44"
 msgstr "Пользовательский слой 44"
 
-#: pcbnew/widgets/appearance_controls.cpp:1722
+#: pcbnew/widgets/appearance_controls.cpp:1727
 msgid "User defined layer 45"
 msgstr "Пользовательский слой 45"
 
-#: pcbnew/widgets/appearance_controls.cpp:1769
+#: pcbnew/widgets/appearance_controls.cpp:1774
 msgid "Front copper layer"
 msgstr "Верхний слой меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:1770
+#: pcbnew/widgets/appearance_controls.cpp:1775
 msgid "Back copper layer"
 msgstr "Нижний слой меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:1771
+#: pcbnew/widgets/appearance_controls.cpp:1776
 msgid "Inner copper layer"
 msgstr "Внутренний слой меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:1861
+#: pcbnew/widgets/appearance_controls.cpp:1866
 msgid "Show All Copper Layers"
 msgstr "Показать все слои меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:1863
+#: pcbnew/widgets/appearance_controls.cpp:1868
 msgid "Hide All Copper Layers"
 msgstr "Скрыть все слои меди"
 
-#: pcbnew/widgets/appearance_controls.cpp:1874
+#: pcbnew/widgets/appearance_controls.cpp:1879
 msgid "Show All Non Copper Layers"
 msgstr "Показать все не медные слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:1878
+#: pcbnew/widgets/appearance_controls.cpp:1883
 msgid "Hide All Non Copper Layers"
 msgstr "Скрыть все не медные слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:1892
+#: pcbnew/widgets/appearance_controls.cpp:1897
 msgid "Show Only Front Assembly Layers"
 msgstr "Показать только верхние слои сборки"
 
-#: pcbnew/widgets/appearance_controls.cpp:1895
+#: pcbnew/widgets/appearance_controls.cpp:1900
 msgid "Show Only Front Layers"
 msgstr "Показать только верхние слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:1902
+#: pcbnew/widgets/appearance_controls.cpp:1907
 msgid "Show Only Inner Layers"
 msgstr "Показать только внутренние слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:1906
+#: pcbnew/widgets/appearance_controls.cpp:1911
 msgid "Show Only Back Layers"
 msgstr "Показать только нижние слои"
 
-#: pcbnew/widgets/appearance_controls.cpp:1910
+#: pcbnew/widgets/appearance_controls.cpp:1915
 msgid "Show Only Back Assembly Layers"
 msgstr "Показать только нижние слои сборки"
 
-#: pcbnew/widgets/appearance_controls.cpp:2287
+#: pcbnew/widgets/appearance_controls.cpp:2292
 #, c-format
 msgid "Set opacity of %s"
 msgstr "Установить прозрачность %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:2406
+#: pcbnew/widgets/appearance_controls.cpp:2411
 msgid "Set Netclass Color"
 msgstr "Установить цвет для класса цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:2410
+#: pcbnew/widgets/appearance_controls.cpp:2415
 msgid "Use Color from Schematic"
 msgstr "Использовать цвет из схемы"
 
-#: pcbnew/widgets/appearance_controls.cpp:2419
+#: pcbnew/widgets/appearance_controls.cpp:2424
 msgid "Clear Netclass Color"
 msgstr "Сбросить цвет класса цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:2427
+#: pcbnew/widgets/appearance_controls.cpp:2432
 #, c-format
 msgid "Highlight Nets in %s"
 msgstr "Подсветить цепи для %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:2438
+#: pcbnew/widgets/appearance_controls.cpp:2443
 msgid "Show All Netclasses"
 msgstr "Показать все классы цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:2440
+#: pcbnew/widgets/appearance_controls.cpp:2445
 msgid "Hide All Other Netclasses"
 msgstr "Скрыть остальные классы цепей"
 
-#: pcbnew/widgets/appearance_controls.cpp:2501
+#: pcbnew/widgets/appearance_controls.cpp:2506
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
 msgstr "Показать или скрыть линии связей для %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:3497
+#: pcbnew/widgets/appearance_controls.cpp:3502
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
