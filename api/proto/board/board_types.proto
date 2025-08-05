@@ -478,6 +478,9 @@ message Pad
 
   // Copper-to-copper clearance override
   kiapi.common.types.Distance copper_clearance_override = 8;
+
+  // Since: 9.0.4
+  kiapi.common.types.Distance pad_to_die_length = 9;
 }
 
 enum ZoneType
