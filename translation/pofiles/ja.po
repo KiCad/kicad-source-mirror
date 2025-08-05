@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-04 02:01+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-08-06 13:01+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1722,14 +1722,12 @@ msgid "Errors"
 msgstr "エラー"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "置換して次を検索"
+msgstr "ロードしたファイルを置換しますか?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "アイテムはロックされています。続けますか？"
+msgstr "既にロード済みのファイルがあります。置換しますか？"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -21686,7 +21684,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>警告: リファレンスが空です</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
