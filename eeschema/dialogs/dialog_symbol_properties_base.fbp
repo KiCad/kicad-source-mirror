@@ -2082,7 +2082,7 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">
               <property name="border">2</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxStaticText" expanded="true">
                 <property name="BottomDockable">1</property>
