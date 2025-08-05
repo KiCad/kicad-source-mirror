@@ -967,9 +967,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
-    auto fp_check = [&]( size_t a, size_t b )
+    const auto fp_check = [&]( size_t aFromIdx, size_t aToIdx )
     {
-        for( size_t ii = a; ii < b; ++ii )
+        for( size_t ii = aFromIdx; ii < aToIdx; ++ii )
         {
             FOOTPRINT* footprint = m_board->Footprints()[ ii ];
 
