@@ -275,9 +275,6 @@ public:
     /**
      * Set the layer this item is on.
      *
-     * This method is virtual because some items (in fact: class DIMENSION)
-     * have a slightly different initialization.
-     *
      * @param aLayer The layer number.
      */
     virtual void SetLayer( PCB_LAYER_ID aLayer )
