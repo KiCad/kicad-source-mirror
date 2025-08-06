@@ -677,6 +677,17 @@ void SCH_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 }
 
 
+const std::vector<wxString>* SCH_ITEM::GetEmbeddedFonts()
+{
+    if( SCHEMATIC* schematic = Schematic() )
+        return schematic->GetEmbeddedFiles()->GetFontFiles();
+    else if( SYMBOL* symbol = GetParentSymbol() )
+        return symbol->GetEmbeddedFiles()->UpdateFontFiles();
+
+    return nullptr;
+}
+
+
 static struct SCH_ITEM_DESC
 {
     SCH_ITEM_DESC()

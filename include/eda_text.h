@@ -248,8 +248,8 @@ public:
 
     wxString GetFontName() const;
 
-    void SetFontIndex( int aIdx );
-    int GetFontIndex() const;
+    void SetFontProp( const wxString& aFontName );
+    wxString GetFontProp() const;
 
     void SetLineSpacing( double aLineSpacing );
     double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }

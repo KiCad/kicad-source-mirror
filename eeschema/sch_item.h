@@ -652,6 +652,8 @@ public:
         return m_rule_areas_cache;
     }
 
+    const std::vector<wxString>* GetEmbeddedFonts() override;
+
     /**
      * The list of flags used by the #compare function.
      *

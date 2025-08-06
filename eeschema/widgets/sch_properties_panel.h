@@ -53,9 +53,6 @@ protected:
 
     void OnLanguageChanged( wxCommandEvent& aEvent ) override;
 
-    ///< Regenerates caches of font list property
-    void updateFontList();
-
     SCH_BASE_FRAME* m_frame;
     PROPERTY_MANAGER& m_propMgr;
     PG_UNIT_EDITOR* m_unitEditorInstance;

@@ -993,46 +993,33 @@ wxString EDA_TEXT::GetFontName() const
 }
 
 
-int EDA_TEXT::GetFontIndex() const
+wxString EDA_TEXT::GetFontProp() const
 {
-    if( !GetFont() )
-        return -1;
+    if( KIFONT::FONT* font = GetFont() )
+        return font->GetName();
 
-    if( GetFont()->GetName() == KICAD_FONT_NAME )
-        return -2;
-
-    std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
-
-    for( int ii = 0; ii < (int) fontNames.size(); ++ii )
-    {
-        if( fontNames[ii] == GetFont()->GetName() )
-            return ii;
-    }
-
-    return 0;
+    if( IsEeschemaType( dynamic_cast<const EDA_ITEM*>( this )->Type() ) )
+        return _( "Default Font" );
+    else
+        return KICAD_FONT_NAME;
 }
 
 
-void EDA_TEXT::SetFontIndex( int aIdx )
+void EDA_TEXT::SetFontProp( const wxString& aFontName )
 {
-    if( aIdx == -1 )
+    if( IsEeschemaType( dynamic_cast<const EDA_ITEM*>( this )->Type() ) )
     {
-        SetFont( nullptr );
-    }
-    else if( aIdx == -2 )
-    {
-        SetFont( KIFONT::FONT::GetFont( wxEmptyString, IsBold(), IsItalic() ) );
+        if( aFontName == _( "Default Font" ) )
+            SetFont( nullptr );
+        else
+            SetFont( KIFONT::FONT::GetFont( aFontName, IsBold(), IsItalic() ) );
     }
     else
     {
-        std::vector<std::string> fontNames;
-        Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
-
-        if( aIdx >= 0 && aIdx < static_cast<int>( fontNames.size() ) )
-            SetFont( KIFONT::FONT::GetFont( fontNames[ aIdx ], IsBold(), IsItalic() ) );
-        else
+        if( aFontName == KICAD_FONT_NAME )
             SetFont( nullptr );
+        else
+            SetFont( KIFONT::FONT::GetFont( aFontName, IsBold(), IsItalic() ) );
     }
 }
 
@@ -1351,12 +1338,30 @@ static struct EDA_TEXT_DESC
                 &EDA_TEXT::SetText, &EDA_TEXT::GetText ),
                 textProps );
 
-        // This must be a PROPERTY_ENUM to get a choice list.
-        // SCH_ and PCB_PROPERTIES_PANEL::updateFontList() fill in the enum values.
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, int>( _HKI( "Font" ),
-                &EDA_TEXT::SetFontIndex, &EDA_TEXT::GetFontIndex ),
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Font" ),
+                &EDA_TEXT::SetFontProp, &EDA_TEXT::GetFontProp ),
                 textProps )
-            .SetIsHiddenFromRulesEditor();
+            .SetIsHiddenFromRulesEditor()
+            .SetChoicesFunc( []( INSPECTABLE* aItem )
+                             {
+                                 EDA_ITEM*                eda_item = static_cast<EDA_ITEM*>( aItem );
+                                 wxPGChoices              fonts;
+                                 std::vector<std::string> fontNames;
+
+                                 Fontconfig()->ListFonts( fontNames,
+                                                          std::string( Pgm().GetLanguageTag().utf8_str() ),
+                                                          eda_item->GetEmbeddedFonts() );
+
+                                 if( IsEeschemaType( eda_item->Type() ) )
+                                     fonts.Add( _( "Default Font" ) );
+
+                                 fonts.Add( KICAD_FONT_NAME );
+
+                                 for( const std::string& fontName : fontNames )
+                                     fonts.Add( wxString( fontName ) );
+
+                                 return fonts;
+                             } );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Auto Thickness" ),
                 &EDA_TEXT::SetAutoThickness, &EDA_TEXT::GetAutoThickness ),

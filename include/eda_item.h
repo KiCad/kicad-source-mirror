@@ -466,6 +466,7 @@ public:
     virtual std::vector<int> ViewGetLayers() const override;
 
     virtual EMBEDDED_FILES* GetEmbeddedFiles() { return nullptr; }
+    virtual const std::vector<wxString>* GetEmbeddedFonts() { return nullptr; }
 
 #if defined(DEBUG)
 

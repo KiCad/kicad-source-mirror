@@ -398,6 +398,15 @@ wxString BOARD_ITEM::GetParentAsString() const
 }
 
 
+const std::vector<wxString>* BOARD_ITEM::GetEmbeddedFonts()
+{
+    if( BOARD* board = GetBoard() )
+        return board->GetFontFiles();
+
+    return nullptr;
+}
+
+
 static struct BOARD_ITEM_DESC
 {
     BOARD_ITEM_DESC()

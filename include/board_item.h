@@ -431,6 +431,8 @@ public:
         TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc );
     }
 
+    const std::vector<wxString>* GetEmbeddedFonts() override;
+
     enum COMPARE_FLAGS : int
     {
         DRC                  = 0x01,

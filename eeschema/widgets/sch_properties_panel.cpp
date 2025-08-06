@@ -22,7 +22,6 @@
 #include "sch_properties_panel.h"
 
 #include <font/fontconfig.h>
-#include <font/kicad_font_name.h>
 #include <pgm_base.h>
 #include <connection_graph.h>
 #include <properties/pg_editors.h>
@@ -89,8 +88,6 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     {
         m_colorEditorInstance = static_cast<PG_COLOR_EDITOR*>( it->second );
     }
-
-    updateFontList();
 }
 
 
@@ -229,46 +226,8 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 void SCH_PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 {
     PROPERTIES_PANEL::OnLanguageChanged( aEvent );
-    updateFontList();
 
     aEvent.Skip();
 }
 
 
-void SCH_PROPERTIES_PANEL::updateFontList()
-{
-    wxPGChoices fonts;
-    const std::vector<wxString>* fontFiles = nullptr;
-
-    if( m_frame->GetFrameType() == FRAME_SCH && m_frame->GetScreen() && m_frame->GetScreen()->Schematic() )
-    {
-        fontFiles = m_frame->GetScreen()->Schematic()->GetEmbeddedFiles()->GetFontFiles();
-    }
-    else if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
-    {
-        SYMBOL_EDIT_FRAME* symbolFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-
-        if( symbolFrame->GetCurSymbol() )
-            fontFiles = symbolFrame->GetCurSymbol()->GetEmbeddedFiles()->UpdateFontFiles();
-    }
-    else if( m_frame->GetFrameType() == FRAME_SCH_VIEWER )
-    {
-        SYMBOL_VIEWER_FRAME* symbolFrame = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
-
-        if( symbolFrame->GetSelectedSymbol() )
-            fontFiles = symbolFrame->GetSelectedSymbol()->GetEmbeddedFiles()->UpdateFontFiles();
-    }
-
-    // Regnerate font names
-    std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ), fontFiles );
-
-    fonts.Add( _( "Default Font" ), -1 );
-    fonts.Add( KICAD_FONT_NAME, -2 );
-
-    for( int ii = 0; ii < (int) fontNames.size(); ++ii )
-        fonts.Add( wxString( fontNames[ii] ), ii );
-
-    auto fontProperty = m_propMgr.GetProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Font" ) );
-    fontProperty->SetChoices( fonts );
-}

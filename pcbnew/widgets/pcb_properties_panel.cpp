@@ -293,17 +293,4 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
-
-    // Regenerate font names
-    std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
-                             aBoard->GetFontFiles() );
-
-    fonts.Add( KICAD_FONT_NAME, -1 );
-
-    for( int ii = 0; ii < (int) fontNames.size(); ++ii )
-        fonts.Add( wxString( fontNames[ii] ), ii );
-
-    auto fontProperty = m_propMgr.GetProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Font" ) );
-    fontProperty->SetChoices( fonts );
 }
