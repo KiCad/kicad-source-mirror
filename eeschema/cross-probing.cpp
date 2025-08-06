@@ -233,7 +233,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
         RefreshNetNavigator();
 
-        SetStatusText( _( "Selected net:" ) + wxS( " " ) + UnescapeString( netName ) );
+        SetStatusText( _( "Highlighted net:" ) + wxS( " " ) + UnescapeString( netName ) );
         return;
     }
     else if( strcmp( idcmd, "$CLEAR:" ) == 0 )
