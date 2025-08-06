@@ -14,7 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
 "PO-Revision-Date: 2025-08-06 13:02+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Stefan Bjornelund the Gnome "
+"<stefan.bjornelund.gnome@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -4002,14 +4003,12 @@ msgid "Add"
 msgstr "Lägg till"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Aktivera Git-övervakning"
+msgstr "Aktivera Git-synkronisering"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Fjärrspårning"
+msgstr "Fjärrsynkronisering"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
