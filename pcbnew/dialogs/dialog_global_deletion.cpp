@@ -24,6 +24,7 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <property_holder.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <ratsnest/ratsnest_data.h>
@@ -38,17 +39,23 @@ using namespace std::placeholders;
 
 
 DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
-    DIALOG_GLOBAL_DELETION_BASE( parent )
+        DIALOG_GLOBAL_DELETION_BASE( parent )
 {
     m_Parent = parent;
     m_currentLayer = F_Cu;
     m_trackFilterLocked->Enable( m_delTracks->GetValue() );
     m_trackFilterUnlocked->Enable( m_delTracks->GetValue() );
-    m_trackFilterVias->Enable( m_delTracks->GetValue() );
+    m_viaFilterLocked->Enable( m_delTracks->GetValue() );
+    m_viaFilterUnlocked->Enable( m_delTracks->GetValue() );
     m_footprintFilterLocked->Enable( m_delFootprints->GetValue() );
     m_footprintFilterUnlocked->Enable( m_delFootprints->GetValue() );
     m_drawingFilterLocked->Enable( m_delDrawings->GetValue() );
     m_drawingFilterUnlocked->Enable( m_delDrawings->GetValue() );
+
+    // This is a destructive dialog.  Don't save control state; we always want to come up in a benign state.
+    PROPERTY_HOLDER* props = new PROPERTY_HOLDER();
+    props->SetProperty( "persist", false );
+    SetClientData( props );
 
     SetupStandardButtons();
 
@@ -75,7 +82,9 @@ int GLOBAL_EDIT_TOOL::GlobalDeletions( const TOOL_EVENT& aEvent )
 void DIALOG_GLOBAL_DELETION::SetCurrentLayer( int aLayer )
 {
     m_currentLayer = aLayer;
-    m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) ) );
+    m_rbLayersOption->SetString( 1, wxString::Format( m_rbLayersOption->GetString( 1 ),
+                                                      m_Parent->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) ) ) );
+    m_rbLayersOption->SetSelection( 0 );
 }
 
 
@@ -83,7 +92,8 @@ void DIALOG_GLOBAL_DELETION::onCheckDeleteTracks( wxCommandEvent& event )
 {
     m_trackFilterLocked->Enable( m_delTracks->GetValue() );
     m_trackFilterUnlocked->Enable( m_delTracks->GetValue() );
-    m_trackFilterVias->Enable( m_delTracks->GetValue() );
+    m_viaFilterLocked->Enable( m_delTracks->GetValue() );
+    m_viaFilterUnlocked->Enable( m_delTracks->GetValue() );
 }
 
 
@@ -239,18 +249,29 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
             }
             else if( track->Type() == PCB_VIA_T )
             {
-                if( m_trackFilterVias->GetValue() )
-                    processConnectedItem( track, layers_filter );
-            }
-            else if( track->IsLocked() )
-            {
-                if( m_trackFilterLocked->GetValue() )
-                    processConnectedItem( track, layers_filter );
+                if( track->IsLocked() )
+                {
+                    if( m_viaFilterLocked->GetValue() )
+                        processConnectedItem( track, layers_filter );
+                }
+                else
+                {
+                    if( m_viaFilterUnlocked->GetValue() )
+                        processConnectedItem( track, layers_filter );
+                }
             }
             else
             {
-                if( m_trackFilterUnlocked->GetValue() )
-                    processConnectedItem( track, layers_filter );
+                if( track->IsLocked() )
+                {
+                    if( m_trackFilterLocked->GetValue() )
+                        processConnectedItem( track, layers_filter );
+                }
+                else
+                {
+                    if( m_trackFilterUnlocked->GetValue() )
+                        processConnectedItem( track, layers_filter );
+                }
             }
         }
     }

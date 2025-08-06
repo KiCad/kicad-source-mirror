@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,60 +57,56 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 
 	sbFilter = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Settings") ), wxVERTICAL );
 
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 1, 3, 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	m_drawingFilterLocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Locked graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFilter->Add( m_drawingFilterLocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_drawingFilterLocked, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_drawingFilterUnlocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Unlocked graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFilter->Add( m_drawingFilterUnlocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_drawingFilterUnlocked->SetValue(true);
+	fgSizer2->Add( m_drawingFilterUnlocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_footprintFilterLocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFilter->Add( m_footprintFilterLocked, 0, wxALL, 5 );
+	fgSizer2->Add( m_footprintFilterLocked, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_footprintFilterUnlocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Unlocked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_footprintFilterUnlocked->SetValue(true);
-	sbFilter->Add( m_footprintFilterUnlocked, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_footprintFilterUnlocked, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_trackFilterLocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Locked tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFilter->Add( m_trackFilterLocked, 0, wxALL, 5 );
+	fgSizer2->Add( m_trackFilterLocked, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_trackFilterUnlocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Unlocked tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trackFilterUnlocked->SetValue(true);
-	sbFilter->Add( m_trackFilterUnlocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_trackFilterUnlocked, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_trackFilterVias = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_trackFilterVias->SetValue(true);
-	sbFilter->Add( m_trackFilterVias, 0, wxRIGHT|wxLEFT, 5 );
+	m_viaFilterLocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Locked vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_viaFilterLocked, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_viaFilterUnlocked = new wxCheckBox( sbFilter->GetStaticBox(), wxID_ANY, _("Unlocked vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaFilterUnlocked->SetValue(true);
+	fgSizer2->Add( m_viaFilterUnlocked, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerRight->Add( sbFilter, 0, wxALL|wxEXPAND, 5 );
+	sbFilter->Add( fgSizer2, 1, wxEXPAND, 5 );
 
-	wxString m_rbLayersOptionChoices[] = { _("All layers"), _("Current layer only") };
+
+	bSizerRight->Add( sbFilter, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+
+	bSizerUpper->Add( bSizerRight, 0, wxEXPAND|wxLEFT, 5 );
+
+
+	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxALL, 5 );
+
+	wxString m_rbLayersOptionChoices[] = { _("All layers"), _("Current layer (%s) only") };
 	int m_rbLayersOptionNChoices = sizeof( m_rbLayersOptionChoices ) / sizeof( wxString );
 	m_rbLayersOption = new wxRadioBox( this, wxID_ANY, _("Layer Filter"), wxDefaultPosition, wxDefaultSize, m_rbLayersOptionNChoices, m_rbLayersOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbLayersOption->SetSelection( 0 );
-	bSizerRight->Add( m_rbLayersOption, 0, wxALL|wxEXPAND, 5 );
-
-
-	bSizerUpper->Add( bSizerRight, 0, wxEXPAND, 5 );
-
-
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Current layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	fgSizer1->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_textCtrlCurrLayer = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_textCtrlCurrLayer, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizerMain->Add( fgSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_rbLayersOption->SetSelection( 1 );
+	bSizerMain->Add( m_rbLayersOption, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

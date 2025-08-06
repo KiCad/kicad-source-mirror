@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,13 +20,10 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_DELETION_BASE
@@ -52,10 +49,9 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 		wxCheckBox* m_footprintFilterUnlocked;
 		wxCheckBox* m_trackFilterLocked;
 		wxCheckBox* m_trackFilterUnlocked;
-		wxCheckBox* m_trackFilterVias;
+		wxCheckBox* m_viaFilterLocked;
+		wxCheckBox* m_viaFilterUnlocked;
 		wxRadioBox* m_rbLayersOption;
-		wxStaticText* m_staticText1;
-		wxTextCtrl* m_textCtrlCurrLayer;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

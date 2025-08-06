@@ -421,41 +421,48 @@ void DIALOG_SHIM::SaveControlState()
     geom[ "h" ] = rect.GetHeight();
     dlgMap[ "__geometry" ] = geom;
 
-    std::function<void( wxWindow* )> saveFn = [&]( wxWindow* win )
+    std::function<void( wxWindow* )> saveFn =
+            [&]( wxWindow* win )
+            {
+                if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
+                {
+                    if( !props->GetPropertyOr( "persist", false ) )
+                        return;
+                }
+
+                std::string key = generateKey( win );
+
+                if( !key.empty() )
+                {
+                    if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                        dlgMap[ key ] = combo->GetSelection();
+                    else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
+                        dlgMap[ key ] = choice->GetSelection();
+                    else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
+                        dlgMap[ key ] = check->GetValue();
+                    else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                        dlgMap[ key ] = spin->GetValue();
+                    else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
+                        dlgMap[ key ] = radio->GetValue();
+                    else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
+                        dlgMap[ key ] = radioBox->GetSelection();
+                    else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
+                        dlgMap[ key ] = splitter->GetSashPosition();
+                    else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
+                        dlgMap[ key ] = scrolled->GetScrollPos( wxVERTICAL );
+                    else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
+                        dlgMap[ key ] = notebook->GetSelection();
+                }
+
+                for( wxWindow* child : win->GetChildren() )
+                    saveFn( child );
+            };
+
+    if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( GetClientData() ) )
     {
-        if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
-        {
-            if( !props->GetPropertyOr( "persist", false ) )
-                return;
-        }
-
-        std::string key = generateKey( win );
-
-        if( !key.empty() )
-        {
-            if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
-                dlgMap[ key ] = combo->GetSelection();
-            else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
-                dlgMap[ key ] = choice->GetSelection();
-            else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
-                dlgMap[ key ] = check->GetValue();
-            else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
-                dlgMap[ key ] = spin->GetValue();
-            else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
-                dlgMap[ key ] = radio->GetValue();
-            else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
-                dlgMap[ key ] = radioBox->GetSelection();
-            else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
-                dlgMap[ key ] = splitter->GetSashPosition();
-            else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
-                dlgMap[ key ] = scrolled->GetScrollPos( wxVERTICAL );
-            else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
-                dlgMap[ key ] = notebook->GetSelection();
-        }
-
-        for( wxWindow* child : win->GetChildren() )
-            saveFn( child );
-    };
+        if( !props->GetPropertyOr( "persist", false ) )
+            return;
+    }
 
     for( wxWindow* child : GetChildren() )
         saveFn( child );
@@ -473,75 +480,82 @@ void DIALOG_SHIM::LoadControlState()
 
     const auto& dlgMap = dlgIt->second;
 
-    std::function<void( wxWindow* )> loadFn = [&]( wxWindow* win )
-    {
-        if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
-        {
-            if( !props->GetPropertyOr( "persist", false ) )
-                return;
-        }
-
-        std::string key = generateKey( win );
-
-        if( !key.empty() )
-        {
-            auto it = dlgMap.find( key );
-
-            if( it != dlgMap.end() )
+    std::function<void( wxWindow* )> loadFn =
+            [&]( wxWindow* win )
             {
-                const nlohmann::json& j = it->second;
+                if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
+                {
+                    if( !props->GetPropertyOr( "persist", false ) )
+                        return;
+                }
 
-                if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
-                {
-                    if( j.is_string() )
-                        combo->SetValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
-                }
-                else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
-                {
-                    if( j.is_number_integer() )
-                        choice->SetSelection( j.get<int>() );
-                }
-                else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
-                {
-                    if( j.is_boolean() )
-                        check->SetValue( j.get<bool>() );
-                }
-                else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
-                {
-                    if( j.is_number_integer() )
-                        spin->SetValue( j.get<int>() );
-                }
-                else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
-                {
-                    if( j.is_boolean() )
-                        radio->SetValue( j.get<bool>() );
-                }
-                else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
-                {
-                    if( j.is_number_integer() )
-                        radioBox->SetSelection( j.get<int>() );
-                }
-                else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
-                {
-                    if( j.is_number_integer() )
-                        splitter->SetSashPosition( j.get<int>() );
-                }
-                else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
-                {
-                    if( j.is_number_integer() )
-                        scrolled->SetScrollPos( wxVERTICAL, j.get<int>() );
-                }
-                else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
-                {
-                    if( j.is_number_integer() )
-                        notebook->SetSelection( j.get<int>() );
-                }
-            }
-        }
+                std::string key = generateKey( win );
 
-        for( wxWindow* child : win->GetChildren() )
-            loadFn( child );
-    };
+                if( !key.empty() )
+                {
+                    auto it = dlgMap.find( key );
+
+                    if( it != dlgMap.end() )
+                    {
+                        const nlohmann::json& j = it->second;
+
+                        if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                        {
+                            if( j.is_string() )
+                                combo->SetValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
+                        }
+                        else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                choice->SetSelection( j.get<int>() );
+                        }
+                        else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
+                        {
+                            if( j.is_boolean() )
+                                check->SetValue( j.get<bool>() );
+                        }
+                        else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                spin->SetValue( j.get<int>() );
+                        }
+                        else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
+                        {
+                            if( j.is_boolean() )
+                                radio->SetValue( j.get<bool>() );
+                        }
+                        else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                radioBox->SetSelection( j.get<int>() );
+                        }
+                        else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                splitter->SetSashPosition( j.get<int>() );
+                        }
+                        else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                scrolled->SetScrollPos( wxVERTICAL, j.get<int>() );
+                        }
+                        else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                notebook->SetSelection( j.get<int>() );
+                        }
+                    }
+                }
+
+                for( wxWindow* child : win->GetChildren() )
+                    loadFn( child );
+            };
+
+    if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( GetClientData() ) )
+    {
+        if( !props->GetPropertyOr( "persist", false ) )
+            return;
+    }
 
     for( wxWindow* child : GetChildren() )
         loadFn( child );
