@@ -90,7 +90,7 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 
 void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
 {
-    NSView* view = (NSView*)aDialog->GetHandle();
+    NSView* view = (NSView*)aWindow->GetHandle();
     if( view )
     {
         NSWindow* nsWindow = [view window];
