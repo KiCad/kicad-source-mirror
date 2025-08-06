@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( CreateAndPersist )
     wxString envPath = tmpDir.GetFullPath();
 
     wxSetEnv( wxS("KICAD_CACHE_HOME"), envPath );
-    wxFileName::Mkdir( tmpDir.GetFullPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    wxFileName::Mkdir( PATHS::GetUserCachePath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
     NOTIFICATIONS_MANAGER mgr;
     mgr.CreateOrUpdate( wxS("key"), wxS("Title"), wxS("Desc") );
