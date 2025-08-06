@@ -5,7 +5,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_textbox.svg"
-   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1331"
-     inkscape:window-height="702"
+     inkscape:window-width="2560"
+     inkscape:window-height="1357"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="29.462761"
-     inkscape:cx="10.708433"
-     inkscape:cy="17.632428"
-     inkscape:window-x="568"
-     inkscape:window-y="126"
-     inkscape:window-maximized="0"
+     inkscape:zoom="58.925522"
+     inkscape:cx="10.581154"
+     inkscape:cy="13.194622"
+     inkscape:window-x="1440"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1"
      inkscape:showpageshadow="2"
@@ -44,7 +44,10 @@
        spacingy="0.5"
        color="#9999ff"
        opacity="0.13"
-       empspacing="2" />
+       empspacing="2"
+       originx="0"
+       originy="0"
+       units="px" />
   </sodipodi:namedview>
   <metadata
      id="metadata43">
@@ -91,15 +94,15 @@
      id="rect115739"
      style="fill:#8f8f8f;fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke:#ded3dd;stroke-opacity:1" />
   <path
-     style="fill:none;stroke:#ded3dd;stroke-width:1.25858;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 6.3333333,8.32929 H 17.433333 v 0"
+     style="fill:none;stroke:#ded3dd;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 6,8.5 h 11 v 0"
      id="path841" />
   <path
-     style="fill:none;stroke:#ded3dd;stroke-width:1.17167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 6.3333333,11.599835 H 15"
+     style="fill:none;stroke:#ded3dd;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 6,11.5 h 9"
      id="path843" />
   <path
-     style="fill:none;stroke:#ded3dd;stroke-width:1.25858;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 6.3333333,14.60029 H 17"
+     style="fill:none;stroke:#ded3dd;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6.0000002,14.5 H 17.000001"
      id="path845" />
 </svg>
