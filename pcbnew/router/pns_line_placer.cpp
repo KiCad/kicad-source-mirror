@@ -426,7 +426,7 @@ bool LINE_PLACER::clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_LINE_C
 
     if( rv )
     {
-        aOut = l2;
+        aOut = std::move( l2 );
         thresholdDist = dist;
     }
 

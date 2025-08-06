@@ -564,8 +564,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     if( appendV )
         out.Append( v->pos );
 
-    aPath = out;
-
+    aPath = std::move( out );
     return true;
 }
 
@@ -755,7 +754,7 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex, DIRECTION_45 aPreferred
 
     path.Simplify();
     path.SetWidth( width );
-    m_line = path;
+    m_line = std::move( path );
 }
 
 
@@ -1051,7 +1050,7 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex )
             if( np.Length() < best_len )
             {
                 best_len = np.Length();
-                best = np;
+                best = std::move( np );
             }
         }
     }

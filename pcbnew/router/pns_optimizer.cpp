@@ -1256,7 +1256,7 @@ bool coupledBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LIN
                 if( coupledLength > bestLength && verifyDpBypass( aNode, aPair, aRefIsP, aRef,
                                                                   newCoupled) )
                 {
-                    bestBypass = newCoupled;
+                    bestBypass = std::move( newCoupled );
                     bestLength = coupledLength;
                     found = true;
                 }
@@ -1265,7 +1265,7 @@ bool coupledBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LIN
     }
 
     if( found )
-        aNewCoupled = bestBypass;
+        aNewCoupled = std::move( bestBypass );
 
     return found;
 }
@@ -1500,14 +1500,11 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur, const SHAPE_LINE_CH
 
         if ( current == initial )
             break;
-
-
     }
-
-    out = snew;
 
     //dbg->AddLine ( snew, 3, 100000 );
 
+    out = std::move( snew );
     return true;
 }
 
@@ -1538,11 +1535,11 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
                 {
                     SHAPE_LINE_CHAIN opt = current;
                     opt.Replace( i, i + 3, l_out );
-                    auto optArea = std::abs( shovedArea( aOldLine, opt ) );
-                    auto prevArea = std::abs( shovedArea( aOldLine, current ) );
+                    long long int optArea = std::abs( shovedArea( aOldLine, opt ) );
+                    long long int prevArea = std::abs( shovedArea( aOldLine, current ) );
 
                     if( optArea < prevArea )
-                        current = opt;
+                        current = std::move( opt );
 
                     break;
                 }

@@ -76,7 +76,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             l.originalLine = m_world->AssembleLine( litem );
             l.originalLeaders.push_back( litem );
             l.isDraggable = true;
-            m_mdragLines.push_back( l );
+            m_mdragLines.push_back( std::move( l ) );
         }
     }
 
