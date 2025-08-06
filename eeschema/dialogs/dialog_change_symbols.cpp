@@ -828,8 +828,8 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                     // name which causes library symbol comparison errors.  Clear the alternate pin
                     // name in this case even if the reset option is not checked.  Also clear the
                     // alternate pin name if it no longer exists in the alternate pin map.
-                    if( m_resetAlternatePin->IsChecked() || ( pin->GetAlt() == pin->GetName() )
-                      || ( pin->GetAlternates().count( pin->GetAlt() ) == 0 ) )
+                    if( m_resetAlternatePin->IsChecked() || ( pin->GetAlt() == pin->GetBaseName() )
+                        || ( pin->GetAlternates().count( pin->GetAlt() ) == 0 ) )
                         pin->SetAlt( wxEmptyString );
                 }
             }
