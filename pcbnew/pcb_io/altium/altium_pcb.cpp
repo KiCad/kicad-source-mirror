@@ -2780,14 +2780,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
 
             if( info.pastemaskexpansionmode == ALTIUM_MODE::MANUAL )
             {
-                pad->SetLocalSolderPasteMargin(
-                        info.pastemaskexpansionmanual ? info.pastemaskexpansionmanual : 1 );
+                pad->SetLocalSolderPasteMargin( info.pastemaskexpansionmanual );
             }
 
             if( info.soldermaskexpansionmode == ALTIUM_MODE::MANUAL )
             {
-                pad->SetLocalSolderMaskMargin(
-                        info.soldermaskexpansionmanual ? info.soldermaskexpansionmanual : 1 );
+                pad->SetLocalSolderMaskMargin( info.soldermaskexpansionmanual );
             }
 
             if( info.pastemaskexpansionmode != ALTIUM_MODE::NONE )
