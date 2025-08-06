@@ -84,13 +84,13 @@ DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAP
     }
 
     return [shortestPathShapes1, shortestPathShapes2]( PCB_MARKER* aMarker )
-    {
-        if( !aMarker )
-            return;
+           {
+               if( !aMarker )
+                   return;
 
-        aMarker->SetShapes1( std::move( shortestPathShapes1 ) );
-        aMarker->SetShapes2( std::move( shortestPathShapes2 ) );
-    };
+               aMarker->SetShapes1( std::move( shortestPathShapes1 ) );
+               aMarker->SetShapes2( std::move( shortestPathShapes2 ) );
+           };
 }
 
 
