@@ -302,6 +302,8 @@ bool DIALOG_SHIM::Show( bool show )
 
         m_userPositioned = false;
         m_userResized = false;
+
+        KIPLATFORM::UI::EnsureVisible( this );
     }
     else
     {

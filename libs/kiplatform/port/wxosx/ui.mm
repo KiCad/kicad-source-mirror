@@ -88,6 +88,21 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 }
 
 
+void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
+{
+    NSView* view = (NSView*)aDialog->GetHandle();
+    if( view )
+    {
+        NSWindow* nsWindow = [view window];
+        if( nsWindow )
+        {
+            [nsWindow setCollectionBehavior:
+                NSWindowCollectionBehaviorCanJoinAllSpaces];
+        }
+    }
+}
+
+
 void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 {
     wxTopLevelWindow* parent =

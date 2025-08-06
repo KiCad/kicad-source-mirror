@@ -184,6 +184,14 @@ namespace KIPLATFORM
         void InfiniteDragReleaseWindow();
 
         /**
+         * Ensure that a window is visible on the screen.  On MacOS, this will make it visible
+         * in all Spaces.  Other platforms are nops.
+         *
+         * @param aWindow window to make visible
+         */
+        void EnsureVisible( wxWindow* aWindow );
+
+        /**
          * Intended to set the floating window level in macOS on a window
          */
         void SetFloatLevel( wxWindow* aWindow );
