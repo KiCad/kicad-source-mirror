@@ -40,6 +40,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 #include <clipboard.h>
 #include <design_block.h>
 #include <dialogs/dialog_paste_special.h>
@@ -2434,7 +2435,7 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
     table->SetLayer( m_frame->GetActiveLayer() );
     table->SetColCount( 7 );
 
-    auto addHeaderCell =
+    const auto addHeaderCell =
             [&]( const wxString& text )
             {
                 PCB_TABLECELL* c = new PCB_TABLECELL( table );
@@ -2444,7 +2445,7 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
                 table->AddCell( c );
             };
 
-    auto addDataCell =
+    const auto addDataCell =
             [&]( const wxString& text, const char align = 'L' )
             {
                 PCB_TABLECELL* c = new PCB_TABLECELL( table );
@@ -2456,6 +2457,19 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
 
                 c->SetText( text );
                 table->AddCell( c );
+            };
+
+    const auto layerThicknessString =
+            [&]( const BOARD_STACKUP_ITEM& aStackupItem, int aSublayerId )
+            {
+                const int layerThickness = aStackupItem.GetThickness( aSublayerId );
+
+                // Layers like silkscreen, paste, etc. have no defined thickness, but that
+                // does not mean that they are specified as exactly 0mm
+                if( !aStackupItem.IsThicknessEditable() )
+                    return NotSpecifiedPrm();
+
+                return m_frame->StringFromValue( layerThickness, true );
             };
 
     addHeaderCell( _( "Layer Name" ) );
@@ -2495,7 +2509,7 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
 
             addDataCell( InitialCaps( stackup_item->GetTypeName() ) );
             addDataCell( stackup_item->GetMaterial( sublayer_id ) );
-            addDataCell( m_frame->StringFromValue( stackup_item->GetThickness( sublayer_id ), true ), 'R' );
+            addDataCell( layerThicknessString( *stackup_item, sublayer_id ), 'R' );
             addDataCell( stackup_item->GetColor( sublayer_id ) );
             addDataCell( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
                                                               stackup_item->GetEpsilonR( sublayer_id ) ), 'R' );
