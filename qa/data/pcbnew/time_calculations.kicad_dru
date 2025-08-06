@@ -17,7 +17,7 @@
 
 (rule CLASS4
    (condition "A.hasNetclass('CLASS4')")
-   (constraint length (min 31.38ps) (opt 31.39ps) (max 31.40ps))
+   (constraint length (min 31.42ps) (opt 31.43ps) (max 31.44ps))
 )
 
 (rule CLASS5

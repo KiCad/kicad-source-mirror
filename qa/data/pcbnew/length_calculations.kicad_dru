@@ -7,17 +7,17 @@
 
 (rule "CASE_2"
    (condition "A.hasNetclass('CASE_2')")
-   (constraint length (min 14.8795mm) (max 14.8805mm))
+   (constraint length (min 14.9145mm) (max 14.9155mm))
 )
 
 (rule "CASE_3"
    (condition "A.hasNetclass('CASE_3')")
-   (constraint length (min 14.8795mm) (max 14.8805mm))
+   (constraint length (min 14.9145mm) (max 14.9155mm))
 )
 
 (rule "CASE_4"
    (condition "A.hasNetclass('CASE_4')")
-   (constraint length (min 16.4245mm) (max 16.4250mm))
+   (constraint length (min 16.4945mm) (max 16.4955mm))
 )
 
 (rule "CASE_5"

@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20250401)
+	(version 20250801)
 	(generator "pcbnew")
 	(generator_version "9.99")
 	(general
@@ -121,15 +121,12 @@
 			(usegerberattributes yes)
 			(usegerberadvancedattributes yes)
 			(creategerberjobfile yes)
-			(dashed_line_dash_ratio 12.000000)
-			(dashed_line_gap_ratio 3.000000)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
 			(svgprecision 4)
 			(plotframeref no)
 			(mode 1)
 			(useauxorigin no)
-			(hpglpennumber 1)
-			(hpglpenspeed 20)
-			(hpglpendiameter 15.000000)
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
@@ -3552,7 +3549,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "Two layer track + via\nT = 31.39ps"
+	(gr_text "Two layer track + via\nT = 31.43ps"
 		(at 128.905 71.12 0)
 		(layer "User.1")
 		(uuid "2942d426-2cfc-4054-86e6-b3cc0ace1bbc")

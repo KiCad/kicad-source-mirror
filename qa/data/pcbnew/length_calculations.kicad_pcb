@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20250324)
+	(version 20250801)
 	(generator "pcbnew")
 	(generator_version "9.99")
 	(general
@@ -97,15 +97,12 @@
 			(usegerberattributes yes)
 			(usegerberadvancedattributes yes)
 			(creategerberjobfile yes)
-			(dashed_line_dash_ratio 12.000000)
-			(dashed_line_gap_ratio 3.000000)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
 			(svgprecision 4)
 			(plotframeref no)
 			(mode 1)
 			(useauxorigin no)
-			(hpglpennumber 1)
-			(hpglpenspeed 20)
-			(hpglpendiameter 15.000000)
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
@@ -2725,7 +2722,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "Single track from pad to pad, with pad in via.\nLength 14.880mm (13.3350mm track, 1.545mm via)"
+	(gr_text "Single track from pad to pad, with pad in via.\nLength 14.9150mm (13.3350mm track, 1.5800mm via)"
 		(at 140.335 55.118 0)
 		(layer "User.1")
 		(uuid "7f83c8bc-048a-4517-931d-402bdaf6d0dd")
@@ -2737,7 +2734,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "Track from pad to pad with two vias in track.\nLength 16.4250mm (13.3350mm track, 3.0900mm via)"
+	(gr_text "Track from pad to pad with two vias in track.\nLength 16.4950mm (13.3350mm track, 3.1600mm via)"
 		(at 140.335 66.04 0)
 		(layer "User.1")
 		(uuid "f5fbb9e1-572a-4383-ab51-2db44f23ce1d")
@@ -2749,7 +2746,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "Track from pad to pad with via in track.\nLength 14.880mm (13.3350mm track, 1.545mm via)"
+	(gr_text "Track from pad to pad with via in track.\nLength 14.9150mm (13.3350mm track, 1.5800mm via)"
 		(at 140.335 60.706 0)
 		(layer "User.1")
 		(uuid "f95e887a-6964-4b75-a74b-933d6fa74a59")
