@@ -91,6 +91,13 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
     m_hitList.clear();
     m_it = m_hitList.begin();
 
+    m_board = m_frame->GetBoard();
+
+    if( m_board )
+        m_board->AddListener( this );
+
+    m_frame->Bind( EDA_EVT_BOARD_CHANGED, &DIALOG_FIND::OnBoardChanged, this );
+
     if( int hotkey = ACTIONS::showSearch.GetHotKey() )
     {
         wxString hotkeyHint = wxString::Format( wxT( " (%s)" ), KeyNameFromKeyCode( hotkey ) );
@@ -101,6 +108,15 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
     SetInitialFocus( m_searchCombo );
 
     Center();
+}
+
+
+DIALOG_FIND::~DIALOG_FIND()
+{
+    if( m_board )
+        m_board->RemoveListener( this );
+
+    m_frame->Unbind( EDA_EVT_BOARD_CHANGED, &DIALOG_FIND::OnBoardChanged, this );
 }
 
 
@@ -494,4 +510,17 @@ void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
     g_FindIncludeNets = m_includeNets->GetValue();
 
     aEvent.Skip();
+}
+
+
+void DIALOG_FIND::OnBoardChanged( wxCommandEvent& event )
+{
+    m_board = m_frame->GetBoard();
+
+    if( m_board )
+        m_board->AddListener( this );
+
+    m_upToDate = false;
+
+    event.Skip();
 }

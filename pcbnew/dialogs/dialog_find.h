@@ -30,17 +30,20 @@
 #include <sys/types.h>
 #include <wx/event.h>
 #include <deque>
+#include <vector>
 
+#include <board.h>
 #include <board_item.h>
 
 #include <dialog_find_base.h>
 
 using namespace std;
 
-class DIALOG_FIND : public DIALOG_FIND_BASE
+class DIALOG_FIND : public DIALOG_FIND_BASE, public BOARD_LISTENER
 {
 public:
     DIALOG_FIND( PCB_EDIT_FRAME* aParent );
+    ~DIALOG_FIND() override;
 
     void Preload( const wxString& aFindString );
 
@@ -81,6 +84,7 @@ public:
 protected:
     void OnClose( wxCloseEvent& event ) override;
     void OnCloseButtonClick( wxCommandEvent& aEvent ) override;
+    void OnBoardChanged( wxCommandEvent& event );
 
 private:
     void onTextEnter( wxCommandEvent& event ) override;
@@ -91,8 +95,22 @@ private:
 
     void search( bool direction );
 
+    // BOARD_LISTENER implementation
+    void OnBoardItemAdded( BOARD&, BOARD_ITEM* ) override { m_upToDate = false; }
+    void OnBoardItemsAdded( BOARD&, std::vector<BOARD_ITEM*>& ) override { m_upToDate = false; }
+    void OnBoardItemRemoved( BOARD&, BOARD_ITEM* ) override { m_upToDate = false; }
+    void OnBoardItemsRemoved( BOARD&, std::vector<BOARD_ITEM*>& ) override { m_upToDate = false; }
+    void OnBoardItemChanged( BOARD&, BOARD_ITEM* ) override { m_upToDate = false; }
+    void OnBoardItemsChanged( BOARD&, std::vector<BOARD_ITEM*>& ) override { m_upToDate = false; }
+    void OnBoardCompositeUpdate( BOARD&, std::vector<BOARD_ITEM*>&,
+                                 std::vector<BOARD_ITEM*>&, std::vector<BOARD_ITEM*>& ) override
+    {
+        m_upToDate = false;
+    }
+
 private:
     PCB_EDIT_FRAME*                     m_frame;
+    BOARD*                              m_board;
     std::deque<BOARD_ITEM*>             m_hitList;
     std::deque<BOARD_ITEM*>::iterator   m_it;
     bool                                m_upToDate;
