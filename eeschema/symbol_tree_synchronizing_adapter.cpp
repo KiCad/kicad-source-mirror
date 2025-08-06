@@ -23,9 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "symbol_tree_synchronizing_adapter.h"
+
+#include <wx/settings.h>
+
 #include <pgm_base.h>
 #include <project/project_file.h>
-#include <symbol_tree_synchronizing_adapter.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
