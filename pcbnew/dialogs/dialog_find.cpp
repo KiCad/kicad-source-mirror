@@ -51,7 +51,7 @@ bool g_FindIncludeMarkers = true;
 bool g_FindIncludeNets = true;
 
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME *aFrame ) :
+DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
         DIALOG_FIND_BASE( aFrame, wxID_ANY, _( "Find" ) )
 {
     m_frame = aFrame;
@@ -88,10 +88,26 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME *aFrame ) :
     m_hitList.clear();
     m_it = m_hitList.begin();
 
+    m_board = m_frame->GetBoard();
+
+    if( m_board )
+        m_board->AddListener( this );
+
+    m_frame->Bind( EDA_EVT_BOARD_CHANGED, &DIALOG_FIND::OnBoardChanged, this );
+
     m_findNext->SetDefault();
     SetInitialFocus( m_searchCombo );
 
     Center();
+}
+
+
+DIALOG_FIND::~DIALOG_FIND()
+{
+    if( m_board )
+        m_board->RemoveListener( this );
+
+    m_frame->Unbind( EDA_EVT_BOARD_CHANGED, &DIALOG_FIND::OnBoardChanged, this );
 }
 
 
@@ -228,8 +244,8 @@ void DIALOG_FIND::search( bool aDirection )
 
     EDA_SEARCH_DATA& frd = m_frame->GetFindReplaceData();
 
-    if( g_FindOptionCase )
-        frd.matchCase = true;
+    // Always update matchCase (previous logic only set true, never cleared)
+    frd.matchCase = g_FindOptionCase;
 
     if( g_FindOptionWords )
         frd.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
@@ -240,6 +256,9 @@ void DIALOG_FIND::search( bool aDirection )
 
     // Search parameters
     frd.findString = searchString;
+    // If we're searching any footprint fields (refs/values/text fields), allow matching hidden
+    // fields so that hidden reference designators and values are still discoverable.
+    frd.searchAllFields = ( g_FindIncludeReferences || g_FindIncludeValues || g_FindIncludeTexts );
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
@@ -264,7 +283,7 @@ void DIALOG_FIND::search( bool aDirection )
                 if( !found && g_FindIncludeValues && fp->Value().Matches( frd, nullptr ) )
                     found = true;
 
-                if( !found && m_includeTexts->GetValue() )
+                if( !found && g_FindIncludeTexts )
                 {
                     for( BOARD_ITEM* item : fp->GraphicalItems() )
                     {
@@ -281,7 +300,7 @@ void DIALOG_FIND::search( bool aDirection )
                     }
                 }
 
-                if( !found && m_includeTexts->GetValue() )
+                if( !found && g_FindIncludeTexts )
                 {
                     for( PCB_FIELD* field : fp->GetFields() )
                     {
@@ -457,4 +476,17 @@ void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
     g_FindIncludeNets = m_includeNets->GetValue();
 
     aEvent.Skip();
+}
+
+
+void DIALOG_FIND::OnBoardChanged( wxCommandEvent& event )
+{
+    m_board = m_frame->GetBoard();
+
+    if( m_board )
+        m_board->AddListener( this );
+
+    m_upToDate = false;
+
+    event.Skip();
 }

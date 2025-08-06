@@ -50,7 +50,12 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) :
     m_hitList.clear();
     m_it = m_hitList.begin();
     m_upToDate = false;
+    m_board = nullptr;
 }
+
+DIALOG_FIND::~DIALOG_FIND() {}
+
+void DIALOG_FIND::OnBoardChanged( wxCommandEvent& event ) {}
 
 void DIALOG_FIND::onFindNextClick( wxCommandEvent& aEvent )
 {
