@@ -83,12 +83,9 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
         break;
 
     case TOOLBAR_LOC::RIGHT:
-        config.AppendAction( ACTIONS::selectionTool )
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Lasso selection tools" ) )
-                            .AddAction( ACTIONS::selectAutoLasso )
-                            .AddAction( ACTIONS::selectInsideLasso )
-                            .AddAction( ACTIONS::selectTouchingLasso )
-                            .AddAction( ACTIONS::selectTouchingPath ) );
+        config.AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Selection modes" ) )
+              .AddAction( ACTIONS::selectSetRect )
+              .AddAction( ACTIONS::selectSetLasso ) );
 
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::placePad )

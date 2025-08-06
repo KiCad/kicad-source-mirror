@@ -120,12 +120,24 @@ public:
     ///< Unselect all items on the board
     int UnselectAll( const TOOL_EVENT& aEvent );
 
+    ///< Change the selection mode
+    int SetSelectRect( const TOOL_EVENT& aEvent );
+    int SetSelectPoly( const TOOL_EVENT& aEvent );
+
     /**
      * Handles drawing a selection box that allows multiple items to be selected simultaneously.
      *
      * @return true if the operation was canceled (i.e. a CancelEvent was received).
      */
     int SelectRectArea( const TOOL_EVENT& aEvent );
+
+    /**
+     * Handles drawing a lasso selection area that allows multiple items to be selected
+     * simultaneously.
+     *
+     * @return true if the operation was canceled (i.e. a CancelEvent was received).
+     */
+    int SelectPolyArea( const TOOL_EVENT& aEvent );
 
     /**
      * Selects multiple PCB items within a specified area.
@@ -477,53 +489,11 @@ private:
                                                      // members of this group
     KIGFX::VIEW_GROUP        m_enteredGroupOverlay;  // Overlay for the entered group's frame.
 
+    SELECTION_MODE           m_selectionMode;        // Current selection mode
+
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;
     std::unique_ptr<PRIV>    m_priv;
-};
-
-/**
- * The PCB_LASSO_SELECTION_TOOL is a tool that allows the user to select multiple items
- * by drawing a polygon, lasso or polyline on the PCB.
- * It is used for selecting items in a more flexible way than the standard rectangle selection.
- */
-class PCB_LASSO_SELECTION_TOOL : public PCB_TOOL_BASE
-{
-public:
-    PCB_LASSO_SELECTION_TOOL();
-    ~PCB_LASSO_SELECTION_TOOL();
-
-    /// @copydoc TOOL_BASE::Init()
-    bool Init() override;
-
-    /// @copydoc TOOL_BASE::Reset()
-    void Reset( RESET_REASON aReason ) override;
-
-    ///< Set up handlers for various events.
-    void setTransitions() override;
-
-    /**
-     * Handles drawing a selection polygon (lasso) or polyline (path) that allows multiple items
-     * to be selectedsimultaneously.
-     * @return true if the operation was canceled (i.e. a CancelEvent was received).
-     */
-    int SelectPolyArea( const TOOL_EVENT& aEvent );
-
-protected:
-    KIGFX::PCB_VIEW* view() const
-    {
-        return static_cast<KIGFX::PCB_VIEW*>( getView() );
-    }
-
-    KIGFX::VIEW_CONTROLS* controls() const
-    {
-        return getViewControls();
-    }
-
-    PCB_BASE_FRAME* frame() const
-    {
-        return getEditFrame<PCB_BASE_FRAME>();
-    }
 };
 
 #endif /* PCB_SELECTION_TOOL_H */

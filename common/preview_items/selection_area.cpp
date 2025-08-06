@@ -87,7 +87,6 @@ const BOX2I SELECTION_AREA::ViewBBox() const
         break;
     case SELECTION_MODE::INSIDE_LASSO:
     case SELECTION_MODE::TOUCHING_LASSO:
-    case SELECTION_MODE::TOUCHING_PATH:
         tmp = m_shape_poly.BBox();
         break;
     }
@@ -136,10 +135,6 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                     if( m_shape_poly.PointCount() > 1 )
                         gal.DrawPolygon( m_shape_poly );
                     break;
-                case SELECTION_MODE::TOUCHING_PATH:
-                    if( m_shape_poly.PointCount() > 0 )
-                        gal.DrawPolyline( m_shape_poly );
-                    break;
                 }
             };
 
@@ -151,9 +146,6 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     // draw the fill as the second object so that Z test will not clamp
     // the single-pixel-wide rectangle sides
-    if( m_mode != SELECTION_MODE::TOUCHING_PATH )
-    {
-        gal.SetIsFill( true );
-        drawSelectionShape();
-    }
+    gal.SetIsFill( true );
+    drawSelectionShape();
 }

@@ -132,6 +132,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_isFootprintEditor( false ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_enteredGroup( nullptr ),
+        m_selectionMode( SELECTION_MODE::INSIDE_RECTANGLE ),
         m_priv( std::make_unique<PRIV>() )
 {
     m_filter.lockedItems = false;
@@ -450,13 +451,18 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     m_toolMgr->RunAction( PCB_ACTIONS::move );
                 }
             }
-            else if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
+            else if( ( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
+                     || ( m_selection.Empty() && dragAction != MOUSE_DRAG_ACTION::DRAG_ANY ) )
             {
-                SelectRectArea( aEvent );
-            }
-            else if( m_selection.Empty() && dragAction != MOUSE_DRAG_ACTION::DRAG_ANY )
-            {
-                SelectRectArea( aEvent );
+                if( m_selectionMode == SELECTION_MODE::INSIDE_RECTANGLE || m_selectionMode == SELECTION_MODE::TOUCHING_RECTANGLE )
+                    SelectRectArea( aEvent );
+                else if( m_selectionMode == SELECTION_MODE::INSIDE_LASSO || m_selectionMode == SELECTION_MODE::TOUCHING_LASSO )
+                    SelectPolyArea( aEvent );
+                else
+                {
+                    wxASSERT_MSG( false, wxT( "Unknown selection mode" ) );
+                    SelectRectArea( aEvent );
+                }
             }
             else
             {
@@ -1063,41 +1069,23 @@ int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
     bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW*   view = getView();
-    bool           fixedMode = false;
-    SELECTION_MODE selectionMode = SELECTION_MODE::INSIDE_RECTANGLE;
-
-    if( aEvent.HasParameter() )
-    {
-        fixedMode = true;
-        selectionMode = aEvent.Parameter<SELECTION_MODE>();
-    }
 
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( !fixedMode )
-        {
-            int width = area.GetEnd().x - area.GetOrigin().x;
+        /* Selection mode depends on direction of drag-selection:
+        * Left > Right : Select objects that are fully enclosed by selection
+        * Right > Left : Select objects that are crossed by selection
+        */
+        bool greedySelection = area.GetEnd().x < area.GetOrigin().x;
 
-            /* Selection mode depends on direction of drag-selection:
-            * Left > Right : Select objects that are fully enclosed by selection
-            * Right > Left : Select objects that are crossed by selection
-            */
-            bool touchingSelection = width >= 0 ? false : true;
+        if( view->IsMirroredX() )
+            greedySelection = !greedySelection;
 
-            if( view->IsMirroredX() )
-                touchingSelection = !touchingSelection;
-
-            selectionMode = touchingSelection ? SELECTION_MODE::TOUCHING_RECTANGLE
-                                              : SELECTION_MODE::INSIDE_RECTANGLE;
-        }
-
-        if( selectionMode == SELECTION_MODE::INSIDE_RECTANGLE )
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_WINDOW );
-        else
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
+        m_frame->GetCanvas()->SetCurrentCursor( !greedySelection ? KICURSOR::SELECT_WINDOW
+                                                                : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1122,7 +1110,9 @@ int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
             area.SetAdditive( m_drag_additive );
             area.SetSubtractive( m_drag_subtractive );
             area.SetExclusiveOr( false );
-            area.SetMode( selectionMode );
+            area.SetMode( greedySelection
+                          ? SELECTION_MODE::TOUCHING_RECTANGLE
+                          : SELECTION_MODE::INSIDE_RECTANGLE );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -1153,6 +1143,122 @@ int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
+
+    m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
+
+    return cancelled;
+}
+
+
+int PCB_SELECTION_TOOL::SetSelectPoly( const TOOL_EVENT& aEvent )
+{
+    m_selectionMode = SELECTION_MODE::INSIDE_LASSO;
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
+    m_toolMgr->PostAction( ACTIONS::selectionTool );
+    return 0; // No need to wait for an event, just set the mode
+}
+
+
+int PCB_SELECTION_TOOL::SetSelectRect( const TOOL_EVENT& aEvent )
+{
+    m_selectionMode = SELECTION_MODE::INSIDE_RECTANGLE;
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_toolMgr->PostAction( ACTIONS::selectionTool );
+    return 0; // No need to wait for an event, just set the mode
+}
+
+
+int PCB_SELECTION_TOOL::SelectPolyArea( const TOOL_EVENT& aEvent )
+{
+    bool cancelled = false;    // Was the tool canceled while it was running?
+
+    SELECTION_MODE selectionMode = SELECTION_MODE::TOUCHING_LASSO;
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
+
+
+    SHAPE_LINE_CHAIN points;
+    points.SetClosed( true );
+
+    KIGFX::PREVIEW::SELECTION_AREA area;
+    getView()->Add( &area );
+    getView()->SetVisible( &area, true );
+    getViewControls()->SetAutoPan( true );
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        // Auto mode: clockwise = inside, counterclockwise = touching
+        double shapeArea = area.GetPoly().Area( false );
+        bool   isClockwise = shapeArea > 0 ? true : false;
+
+        if( getView()->IsMirroredX() && shapeArea != 0 )
+            isClockwise = !isClockwise;
+
+        selectionMode = isClockwise ? SELECTION_MODE::INSIDE_LASSO
+                                    : SELECTION_MODE::TOUCHING_LASSO;
+
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            cancelled = true;
+            evt->SetPassEvent( false );
+            break;
+        }
+        else if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT )
+                 || evt->IsAction( &ACTIONS::cursorClick ) )
+        {
+            points.Append( evt->Position() );
+        }
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorDblClick )
+                 || evt->IsAction( &ACTIONS::finishInteractive ) )
+        {
+            area.GetPoly().GenerateBBoxCache();
+            SelectMultiple( area, m_subtractive, m_exclusive_or );
+            evt->SetPassEvent( false );
+            break;
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
+                 || evt->IsAction( &ACTIONS::doDelete )
+                 || evt->IsAction( &ACTIONS::undo ) )
+        {
+            if( points.GetPointCount() > 0 )
+            {
+                getViewControls()->SetCursorPosition( points.CLastPoint() );
+                points.Remove( points.GetPointCount() - 1 );
+            }
+        }
+        else
+        {
+            // Allow navigation actions
+            passEvent( evt, allowedActions );
+        }
+
+        if( points.PointCount() > 0 )
+        {
+            if( !m_drag_additive && !m_drag_subtractive )
+            {
+                if( m_selection.GetSize() > 0 )
+                {
+                    ClearSelection( true /*quiet mode*/ );
+                    m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+                }
+            }
+        }
+
+        area.SetPoly( points );
+        area.GetPoly().Append( m_toolMgr->GetMousePosition() );
+        area.SetAdditive( m_additive );
+        area.SetSubtractive( m_subtractive );
+        area.SetExclusiveOr( false );
+        area.SetMode( selectionMode );
+        getView()->Update( &area );
+    }
+
+    getViewControls()->SetAutoPan( false );
+    getView()->SetVisible( &area, false );
+    getView()->Remove( &area );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    if( !cancelled )
+        GetSelection().ClearReferencePoint();
 
     m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
 
@@ -4249,205 +4355,10 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::SelectRows,          ACTIONS::selectRows.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::SelectTable,         ACTIONS::selectTable.MakeEvent() );
 
-    Go( &PCB_SELECTION_TOOL::SelectRectArea,      ACTIONS::selectInsideRectangle.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::SelectRectArea,      ACTIONS::selectTouchingRectangle.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SetSelectPoly,       ACTIONS::selectSetLasso.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SetSelectRect,       ACTIONS::selectSetRect.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::UnselectAll,         ACTIONS::unselectAll.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
-}
-
-
-PCB_LASSO_SELECTION_TOOL::PCB_LASSO_SELECTION_TOOL() :
-        PCB_TOOL_BASE( "common.InteractiveLassoSelection" )
-{
-}
-
-
-PCB_LASSO_SELECTION_TOOL::~PCB_LASSO_SELECTION_TOOL()
-{
-}
-
-
-bool PCB_LASSO_SELECTION_TOOL::Init()
-{
-    return true;
-}
-
-
-void PCB_LASSO_SELECTION_TOOL::Reset( RESET_REASON aReason )
-{
-}
-
-
-int PCB_LASSO_SELECTION_TOOL::SelectPolyArea( const TOOL_EVENT& aEvent )
-{
-    bool cancelled = false; // Was the tool canceled while it was running?
-    bool fixedMode = false;
-    bool additive = false;
-    bool subtractive = false;
-    bool exclusiveOr = false;
-    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    SELECTION_MODE      selectionMode = SELECTION_MODE::TOUCHING_LASSO;
-
-    auto updateModifiersAndCursor =
-            [&]( wxTimerEvent& aEvent )
-            {
-                KICURSOR     cursor;
-                wxMouseState keyboardState = wxGetMouseState();
-
-                subtractive = keyboardState.ControlDown() && keyboardState.ShiftDown();
-                additive    = !keyboardState.ControlDown() && keyboardState.ShiftDown();
-                exclusiveOr = keyboardState.ControlDown() && !keyboardState.ShiftDown();
-
-                if( additive )
-                    cursor = KICURSOR::ADD;
-                else if( subtractive )
-                    cursor = KICURSOR::SUBTRACT;
-                else if( exclusiveOr )
-                    cursor = KICURSOR::XOR ;
-                else if( selectionMode == SELECTION_MODE::INSIDE_LASSO )
-                    cursor = KICURSOR::SELECT_WINDOW;
-                else
-                    cursor = KICURSOR::SELECT_LASSO;
-
-                frame()->GetCanvas()->SetCurrentCursor( cursor );
-            };
-
-    // No events are sent for modifier keys, so we need to poll them using a timer.
-    wxTimer timer;
-    timer.Bind( wxEVT_TIMER, updateModifiersAndCursor );
-    timer.Start( 100 );
-
-    if( aEvent.HasParameter() )
-    {
-        fixedMode = true;
-        selectionMode = aEvent.Parameter<SELECTION_MODE>();
-    }
-
-    SHAPE_LINE_CHAIN points;
-
-    if( selectionMode != SELECTION_MODE::TOUCHING_PATH )
-        points.SetClosed( true );
-
-    KIGFX::PREVIEW::SELECTION_AREA area;
-    view()->Add( &area );
-    view()->SetVisible( &area, true );
-
-    controls()->SetAutoPan( true );
-
-    frame()->PushTool( aEvent );
-    Activate();
-
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        if( !fixedMode )
-        {
-            // Auto Mode: The selection mode depends on the drawing direction of the selection shape:
-            // - Clockwise: Contained selection
-            // - Counterclockwise: Touching selection
-            double shapeArea = area.GetPoly().Area( false );
-            bool isClockwise = shapeArea > 0 ? true : false;
-
-            // Flip the selection mode if the view is mirrored, but only if the area is non-zero.
-            // A zero area means the selection shape is a line, so the mode should always be "touching".
-            if( view()->IsMirroredX() && shapeArea != 0 )
-                isClockwise = !isClockwise;
-
-            selectionMode = isClockwise ? SELECTION_MODE::INSIDE_LASSO
-                                        : SELECTION_MODE::TOUCHING_LASSO;
-        }
-
-        if( evt->IsCancelInteractive() || evt->IsActivate() )
-        {
-            // Cancel the selection
-            cancelled = true;
-            evt->SetPassEvent( false );
-
-            break;
-        }
-        else if( evt->IsDrag( BUT_LEFT )                     // Lasso selection
-                 || evt->IsClick( BUT_LEFT )                 // Polygon selection
-                 || evt->IsAction( &ACTIONS::cursorClick ) ) // Return key
-        {
-            // Add a point to the selection shape
-            points.Append( evt->Position() );
-        }
-        else if( evt->IsDblClick( BUT_LEFT )
-                 || evt->IsAction( &ACTIONS::cursorDblClick ) // End key
-                 || evt->IsAction( &ACTIONS::finishInteractive ) )
-        {
-            // Finish the selection
-            area.GetPoly().GenerateBBoxCache();
-
-            selectionTool->SelectMultiple( area, subtractive, exclusiveOr );
-
-            evt->SetPassEvent( false );
-
-            break;
-        }
-        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
-                 || evt->IsAction( &ACTIONS::doDelete )
-                 || evt->IsAction( &ACTIONS::undo ) )
-        {
-            // Delete the last point in the selection shape
-            if( points.GetPointCount() > 0 )
-            {
-                controls()->SetCursorPosition( points.CLastPoint() );
-                points.Remove( points.GetPointCount() - 1 );
-            }
-        }
-        else
-        {
-            // Allow some actions for navigation
-            passEvent( evt, allowedActions );
-        }
-
-        if( points.PointCount() > 0 )
-        {
-            // Clear existing selection if not in add/sub/xor mode
-            if( !additive && !subtractive && !exclusiveOr )
-            {
-                if( !selectionTool->GetSelection().Empty() )
-                {
-                   selectionTool->ClearSelection( true /*quiet mode*/ );
-                   m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-                }
-            }
-        }
-
-        // Draw selection shape
-        area.SetPoly( points );
-        area.GetPoly().Append( m_toolMgr->GetMousePosition() );
-
-        area.SetAdditive( additive );
-        area.SetSubtractive( subtractive );
-        area.SetExclusiveOr( exclusiveOr );
-        area.SetMode( selectionMode );
-
-        view()->Update( &area );
-    }
-
-    frame()->PopTool( aEvent );
-
-    controls()->SetAutoPan( false );
-    view()->SetVisible( &area, false );
-    view()->Remove( &area ); // Stop drawing the selection shape
-    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW ); // Reset cursor to default
-
-    if( !cancelled )
-        selectionTool->GetSelection().ClearReferencePoint();
-
-    m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
-
-    return cancelled;
-}
-
-
-void PCB_LASSO_SELECTION_TOOL::setTransitions()
-{
-    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectInsideLasso.MakeEvent() );
-    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectTouchingLasso.MakeEvent() );
-    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectAutoLasso.MakeEvent() );
-    Go( &PCB_LASSO_SELECTION_TOOL::SelectPolyArea, ACTIONS::selectTouchingPath.MakeEvent() );
 }

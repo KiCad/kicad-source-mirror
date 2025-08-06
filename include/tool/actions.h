@@ -213,15 +213,9 @@ public:
     /// Select a single item under the cursor position
     static TOOL_ACTION selectionCursor;
 
-    /// Run a box selection tool in a fixed mode
-    static TOOL_ACTION selectInsideRectangle;
-    static TOOL_ACTION selectTouchingRectangle;
-
-    /// Run a lasso selection tool
-    static TOOL_ACTION selectInsideLasso;
-    static TOOL_ACTION selectTouchingLasso;
-    static TOOL_ACTION selectAutoLasso;
-    static TOOL_ACTION selectTouchingPath;
+    /// Set lasso selection mode
+    static TOOL_ACTION selectSetRect;
+    static TOOL_ACTION selectSetLasso;
 
     /// Clear the current selection
     static TOOL_ACTION selectionClear;

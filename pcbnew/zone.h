@@ -455,7 +455,7 @@ public:
     /**
      * @copydoc EDA_ITEM::HitTest(const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
      */
-    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const;
+    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
 
     /**
      * Removes the zone filling.

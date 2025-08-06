@@ -422,7 +422,7 @@ TOOL_ACTION PCB_ACTIONS::magneticSnapToggle( TOOL_ACTION_ARGS()
 
 TOOL_ACTION PCB_ACTIONS::deleteLastPoint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.deleteLastPoint" )
-        .Scope( AS_GLOBAL )
+        .Scope( AS_CONTEXT )
         .DefaultHotkey( WXK_BACK )
         .FriendlyName( _( "Delete Last Point" ) )
         .Tooltip( _( "Delete the last point added to the current item" ) )

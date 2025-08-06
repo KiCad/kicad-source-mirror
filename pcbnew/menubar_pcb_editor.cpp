@@ -184,12 +184,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* selectSubMenu = new ACTION_MENU( false, selTool );
     selectSubMenu->SetTitle( _( "&Select" ) );
 
-    selectSubMenu->Add( ACTIONS::selectInsideRectangle );
-    selectSubMenu->Add( ACTIONS::selectTouchingRectangle );
-    selectSubMenu->Add( ACTIONS::selectInsideLasso );
-    selectSubMenu->Add( ACTIONS::selectTouchingLasso );
-    selectSubMenu->Add( ACTIONS::selectTouchingPath );
-    selectSubMenu->AppendSeparator();
     selectSubMenu->Add( ACTIONS::selectAll );
     selectSubMenu->Add( ACTIONS::unselectAll );
 
