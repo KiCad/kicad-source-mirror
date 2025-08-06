@@ -655,9 +655,6 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     boardAdapter.SetBoard( brd );
     boardAdapter.m_IsBoardView = false;
 
-    if( aRenderJob->m_appearancePreset.empty() )
-        boardAdapter.m_IsPreviewer = true; // Force display 3D models, regardless of 3D viewer options
-
     EDA_3D_VIEWER_SETTINGS cfg;
 
     if( EDA_3D_VIEWER_SETTINGS* userCfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
@@ -665,6 +662,16 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         cfg.m_Render = userCfg->m_Render;
         cfg.m_Camera = userCfg->m_Camera;
         cfg.m_LayerPresets = userCfg->m_LayerPresets;
+    }
+
+    if( aRenderJob->m_appearancePreset.empty() )
+    {
+        // Force display 3D models
+        cfg.m_Render.show_footprints_not_in_posfile = true;
+        cfg.m_Render.show_footprints_dnp = true;
+        cfg.m_Render.show_footprints_insert = true;
+        cfg.m_Render.show_footprints_normal = true;
+        cfg.m_Render.show_footprints_virtual = true;
     }
 
     if( aRenderJob->m_quality == JOB_PCB_RENDER::QUALITY::BASIC )
