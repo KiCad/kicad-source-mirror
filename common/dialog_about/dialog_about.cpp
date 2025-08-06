@@ -22,6 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#if defined( _WIN32 )
+#include <windows.h>
+#endif
 
 #include <build_version.h>
 #include <eda_base_frame.h>
@@ -108,8 +111,20 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) 
     m_titleName = aParent->GetAboutTitle();
     m_untranslatedTitleName = aParent->GetUntranslatedAboutTitle();
     m_staticTextAppTitle->SetLabel( m_titleName );
+
+    // On windows, display the number of GDI objects in use. Can be useful when some GDI objects
+    // are not displayed because the max count of GDI objects (usually 10000) is reached
+    // So displaying this number can help to diagnose strange display issues
+    wxString extraInfo;
+
+    #if defined( _WIN32 )
+    uint32_t gdi_count = GetGuiResources( GetCurrentProcess(), GR_GDIOBJECTS );
+    extraInfo.Printf( _( "GDI objects in use %u" ), gdi_count );
+    extraInfo.Prepend( wxT( "\n" ) );
+    #endif
+
     m_staticTextBuildVersion->SetLabel( wxS( "Version: " ) + m_info.GetBuildVersion() );
-    m_staticTextLibVersion->SetLabel( m_info.GetLibVersion() );
+    m_staticTextLibVersion->SetLabel( m_info.GetLibVersion() + extraInfo );
 
     SetTitle( wxString::Format( _( "About %s" ), m_titleName ) );
     createNotebooks();
