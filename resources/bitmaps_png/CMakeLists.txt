@@ -361,6 +361,7 @@ set( BMAPS_MID
     jobset
     jobset_open
     language
+    lasso
     layers_manager
     leave_sheet
     left

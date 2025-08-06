@@ -326,6 +326,7 @@ enum class BITMAPS : unsigned int
     label_align_top,
     label_align_bottom,
     language,
+    lasso,
     layers_manager,
     leave_sheet,
     left,

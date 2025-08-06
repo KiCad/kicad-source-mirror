@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="lasso.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+     id="metadata1696">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>cursor</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1963"
+     inkscape:window-height="1528"
+     id="namedview1694"
+     showgrid="true"
+     inkscape:zoom="16"
+     inkscape:cx="14.0625"
+     inkscape:cy="11.53125"
+     inkscape:window-x="1287"
+     inkscape:window-y="350"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2259"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1687">
+    <inkscape:path-effect
+       effect="powerclip"
+       message=""
+       id="path-effect5"
+       is_visible="true"
+       lpeversion="1"
+       inverse="true"
+       flatten="false"
+       hide_clip="false" />
+    <style
+       id="style1685">.cls-1{fill:#545454;}</style>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5">
+      <path
+         style="display:none;fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
+         id="path5"
+         sodipodi:type="arc"
+         sodipodi:cx="31"
+         sodipodi:cy="17"
+         sodipodi:rx="2.328125"
+         sodipodi:ry="2"
+         sodipodi:start="0"
+         sodipodi:end="6.2830277"
+         sodipodi:open="true"
+         sodipodi:arc-type="arc"
+         d="M 33.328125,17 A 2.328125,2 0 0 1 31.000092,19 2.328125,2 0 0 1 28.671875,17.000158 2.328125,2 0 0 1 30.999725,15 a 2.328125,2 0 0 1 2.3284,1.999685" />
+      <path
+         id="lpe_path-effect5"
+         style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
+         class="powerclip"
+         d="M 24.322456,4.8117856 H 47.177544 V 23.188214 H 24.322456 Z M 33.328125,16.999685 A 2.328125,2 0 0 0 30.999725,15 2.328125,2 0 0 0 28.671875,17.000158 2.328125,2 0 0 0 31.000092,19 2.328125,2 0 0 0 33.328125,17" />
+    </clipPath>
+  </defs>
+  <title
+     id="title1689">cursor</title>
+  <g
+     id="g6"
+     transform="matrix(1.3846372,0,0,1.4452918,-36.44151,-12.203298)"
+     style="stroke-width:0.706894;stroke:#ded3dd;stroke-opacity:1">
+    <path
+       style="fill:none;stroke:#ded3dd;stroke-width:1.41379;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
+       id="path2"
+       sodipodi:type="arc"
+       sodipodi:cx="35.75"
+       sodipodi:cy="14"
+       sodipodi:rx="5.7206492"
+       sodipodi:ry="3.4813194"
+       sodipodi:start="0"
+       sodipodi:end="6.2830277"
+       sodipodi:open="true"
+       sodipodi:arc-type="arc"
+       d="m 41.470649,14 a 5.7206492,3.4813194 0 0 1 -5.720424,3.481319 5.7206492,3.4813194 0 0 1 -5.720874,-3.481045 5.7206492,3.4813194 0 0 1 5.719973,-3.481593 5.7206492,3.4813194 0 0 1 5.721325,3.48077"
+       clip-path="url(#clipPath5)"
+       inkscape:path-effect="#path-effect5" />
+    <path
+       style="fill:none;stroke:#ded3dd;stroke-width:1.06046;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
+       id="path3"
+       sodipodi:type="arc"
+       sodipodi:cx="35.714287"
+       sodipodi:cy="-1.8724005"
+       sodipodi:rx="2.1723323"
+       sodipodi:ry="1.4687246"
+       sodipodi:start="0"
+       sodipodi:end="6.2830277"
+       sodipodi:open="true"
+       sodipodi:arc-type="arc"
+       d="m 37.886619,-1.8724005 a 2.1723323,1.4687246 0 0 1 -2.172247,1.46872459 2.1723323,1.4687246 0 0 1 -2.172417,-1.46860889 2.1723323,1.4687246 0 0 1 2.172075,-1.4688403 2.1723323,1.4687246 0 0 1 2.172589,1.4684931"
+       transform="matrix(0.85952663,0.51109096,-0.52928766,0.84844244,0,0)" />
+    <path
+       style="fill:none;stroke:#ded3dd;stroke-width:1.41379;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       d="M 30,17.545087 C 27.333333,18.428971 28,22 33.447146,23"
+       id="path6"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>
