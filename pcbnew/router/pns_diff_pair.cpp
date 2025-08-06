@@ -215,7 +215,6 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
 
     int mask = aEntry.AllowedAngles() | DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE;
 
-    SHAPE_LINE_CHAIN sum_n, sum_p;
     m_p = p;
     m_n = n;
 
@@ -224,21 +223,18 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
         if( !aEntry.Entry().CheckConnectionAngle( *this, mask ) )
             return false;
 
-        sum_p = aEntry.Entry().CP();
-        sum_n = aEntry.Entry().CN();
-        sum_p.Append( p );
-        sum_n.Append( n );
+        m_p = aEntry.Entry().CP();
+        m_n = aEntry.Entry().CN();
+        m_p.Append( p );
+        m_n.Append( n );
     }
     else
     {
-        sum_p = p;
-        sum_n = n;
+        m_p = p;
+        m_n = n;
     }
 
     mask = aTarget.AllowedAngles() | DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE;
-
-    m_p = sum_p;
-    m_n = sum_n;
 
     if( aTarget.HasEntryLines() )
     {
@@ -248,12 +244,9 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
         if( !CheckConnectionAngle( t.Entry(), mask ) )
             return false;
 
-        sum_p.Append( t.Entry().CP() );
-        sum_n.Append( t.Entry().CN() );
+        m_p.Append( t.Entry().CP() );
+        m_n.Append( t.Entry().CN() );
     }
-
-    m_p = sum_p;
-    m_n = sum_n;
 
     if( !checkGap( p, n, m_gapConstraint ) )
         return false;
