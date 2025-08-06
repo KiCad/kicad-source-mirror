@@ -1,67 +1,67 @@
 ### Expression functions
 
 All function parameters support simple wildcards (`*` and `?`).
-<br><br>
+
 
     A.enclosedByArea('<zone_name>')
-True if all of `A` lies within the given zone's outline.
+        True if all of `A` lies within the given zone's outline.
 
-NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()`
-where possible.
-<br><br>
+        NB: this is potentially a more expensive call than `intersectsArea()`.
+        Use `intersectsArea()` where possible.
+
 
     A.existsOnLayer('<layer_name>')
-True if `A` exists on the given layer.  The layer name can be
-either the name assigned in Board Setup > Board Editor Layers or
-the canonical name (ie: `F.Cu`).
+        True if `A` exists on the given layer.  The layer name can be
+        either the name assigned in Board Setup > Board Editor Layers or
+        the canonical name (ie: `F.Cu`).
 
-NB: this returns true if `A` is on the given layer, independently
-of whether or not the rule is being evaluated for that layer.
-For the latter use a `(layer "layer_name")` clause in the rule.
-<br><br>
+        NB: this returns true if `A` is on the given layer, independently
+        of whether or not the rule is being evaluated for that layer.
+        For the latter use a `(layer "layer_name")` clause in the rule.
+
 
     A.fromTo('x', 'y')
-True if the object exists on the copper path between the given 
-pads. `x` and `y` are the full names of pads in the design, such as 
-`R1-Pad1`.
-<br><br>
+        True if the object exists on the copper path between the given
+        pads. `x` and `y` are the full names of pads in the design, such as
+        `R1-Pad1`.
+
 
     A.getField('<field_name>')
-The value of the given field. Only footprints have fields, so a field is only returned if
-`A` is a footprint.
-<br><br>
+        The value of the given field. Only footprints have fields, so a field is only returned if
+        `A` is a footprint.
+
 
     A.hasComponentClass('<component_class_name>')
-True if the set of component classes assigned to `A` contains the named 
-component class.
-<br><br>
+        True if the set of component classes assigned to `A` contains the named
+        component class.
+
 
     A.hasNetclass('<netclass_name>')
-True if `A` has had the given netclass assigned to it, either by an explicit netclass label
-or through a pattern match assignment.
-<br><br>
+        True if `A` has had the given netclass assigned to it, either by an explicit netclass label
+        or through a pattern match assignment.
+
 
     A.inDiffPair('<net_name>')
-True if `A` has a net that is part of the specified differential pair.
-`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`
-matches items in the `/CLK_P` and `/CLK_N` nets.
-<br><br>
+        True if `A` has a net that is part of the specified differential pair.
+        `<net_name>` is the base name of the differential pair.
+        For example, `inDiffPair('/CLK')` matches items in the `/CLK_P` and `/CLK_N` nets.
+
 
     A.intersectsArea('<zone_name>')
-True if any part of `A` lies within the given zone's outline.
-<br><br>
+        True if any part of `A` lies within the given zone's outline.
+
 
     A.intersectsCourtyard('<footprint_identifier>')
-True if any part of `A` lies within the given footprint's principal courtyard.
-<br><br>
+        True if any part of `A` lies within the given footprint's principal courtyard.
+
 
     A.intersectsFrontCourtyard('<footprint_identifier>')
-True if any part of `A` lies within the given footprint's front courtyard.
-<br><br>
+        True if any part of `A` lies within the given footprint's front courtyard.
+
 
     A.intersectsBackCourtyard('<footprint_identifier>')
-True if any part of `A` lies within the given footprint's back courtyard.
-<br><br>
+        True if any part of `A` lies within the given footprint's back courtyard.
+
 
 The `footprint_identifier` listed above can be one of the following:
 
@@ -72,40 +72,43 @@ The `footprint_identifier` listed above can be one of the following:
 3. A component class, in the form `${Class:ClassName}`.  The keyword `Class` is not
    case-sensitive, but component class names are case-sensitive.
 
-<br>
+
 
     A.isBlindBuriedVia()
-True if `A` is a blind/buried via.
-<br><br>
+        True if `A` is a blind/buried via.
+
 
     AB.isCoupledDiffPair()
-True if `A` and `B` are members of the same diff pair.
-<br><br>
+        True if `A` and `B` are members of the same diff pair.
+
 
     A.isMicroVia()
-True if `A` is a microvia.
-<br><br>
+        True if `A` is a microvia.
+
 
     A.isPlated()
-True if `A` has a hole which is plated.
-<br><br>
+        True if `A` has a hole which is plated.
+
 
     A.memberOfGroup('<group_name>')
-True if `A` is a member of the given group. The name can contain wildcards.
-Includes nested membership.
-<br><br>
+        True if `A` is a member of the given group
+        The name can contain wildcards.
+        Includes nested membership.
+
 
     A.memberOfFootprint('<footprint_identifier>')
-True if `A` is a member of a given footprint (for example, a pad or graphic shape defined
-inside that footprint).  The various ways of specifying `footprint_identifier` are described above.
-<br><br>
+        True if `A` is a member of a given footprint
+        (for example, a pad or graphic shape defined inside that footprint).
+        The various ways of specifying `footprint_identifier` are described above.
+
 
     A.memberOfSheet('<sheet_path>')
-True if `A` is a member of the given schematic sheet. The sheet path can contain wildcards.
-<br><br>
+        True if `A` is a member of the given schematic sheet.
+        The sheet path can contain wildcards.
+
 
     A.memberOfSheetOrChildren('<sheet_path>')
-True if `A` is a member of the given schematic sheet, or any of its child hierarchical sheets. The sheet path can 
-contain wildcards.
-<br><br>
+        True if `A` is a member of the given schematic sheet, or any of its child hierarchical sheets.
+        The sheet path can contain wildcards.
+
 
