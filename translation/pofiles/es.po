@@ -21,15 +21,15 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-04-04 12:49+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2025-08-08 10:02+0000\n"
+"Last-Translator: Francisco Jose Rey <fcojreyg@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1987,6 +1987,8 @@ msgstr "Exportar al portapapeles"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"No hay ninguna forma en la imagen en blanco y negro que convertir: no se ha "
+"creado ningún contorno."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -3034,6 +3036,9 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"No volver a mostrar este cuadro de diálogo hasta que se reinicie KiCad. "
+"Puede volver a habilitar este cuadro de diálogo en las preferencias de "
+"Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, fuzzy, c-format
@@ -3443,6 +3448,8 @@ msgstr "Alternar asignación"
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Elimine la información de red de todos los elementos conectados antes de "
+"pegar"
 
 #: common/dialogs/dialog_paste_special_base.h:47
 msgid "Paste Special"
@@ -4315,7 +4322,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Utilizar colores alternos para las filas de las tablas"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "When enabled, use a different color for every other table row"
@@ -5451,7 +5458,7 @@ msgstr "Ruta existente:"
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Esta instalación de KiCad no tiene habilitado el soporte para API."
 
 #: common/dialogs/panel_plugin_settings.cpp:121
 msgid "KiCad API is not enabled; external Python plugins will not be available"
@@ -5485,6 +5492,8 @@ msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Cuando la API de KiCad está habilitada, los plugins y otros programas que se "
+"ejecutan en este ordenador pueden conectarse a KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
@@ -7808,7 +7817,7 @@ msgstr "Opciones de exportación a GenCAD"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: Exportar archivos Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -9233,11 +9242,11 @@ msgstr "Fusiona los polígonos seleccionados a un solo polígono"
 
 #: common/tool/actions.cpp:446 include/tool/edit_table_tool_base.h:585
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Desunir celdas"
 
 #: common/tool/actions.cpp:447
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Convierta las celdas fusionadas de la tabla en celdas separadas."
 
 #: common/tool/actions.cpp:454
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
@@ -11155,7 +11164,7 @@ msgstr "Anotación completada."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
-msgstr ""
+msgstr "Elementos añadidos a través de la API"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:506
 #, fuzzy
@@ -49620,7 +49629,7 @@ msgstr "Convertir a área de reglas"
 
 #: pcbnew/tools/multichannel_tool.cpp:988
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "Una o ambas áreas no tienen componentes asignados."
 
 #: pcbnew/tools/multichannel_tool.cpp:992
 #, fuzzy
@@ -50064,6 +50073,7 @@ msgstr "Cortar esquinas entre líneas seleccionadas"
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Simplify polygon outlines, removing superfluous points"
 msgstr ""
+"Simplifica los contornos de los polígonos, eliminando los puntos superfluos"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid ""
@@ -50705,7 +50715,7 @@ msgstr "Mostrar líneas aéreas"
 
 #: pcbnew/tools/pcb_actions.cpp:1361
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "Mostrar líneas/arcos que representan conexiones faltantes en la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Curved Ratsnest Lines"
@@ -52717,7 +52727,7 @@ msgstr "Grupo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1293
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "(Utilice /.../ para indicar una expresión regular.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1367
 #, fuzzy
@@ -53092,6 +53102,8 @@ msgstr "Opciones de visualización de capas"
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
+"Actualizar las áreas rellenadas que se muestran en el cuadro de diálogo, de "
+"acuerdo con la nueva configuración actual"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
