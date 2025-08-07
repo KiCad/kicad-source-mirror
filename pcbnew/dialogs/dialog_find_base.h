@@ -60,7 +60,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOptions( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOptionChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindPreviousClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSearchAgainClick( wxCommandEvent& event ) { event.Skip(); }

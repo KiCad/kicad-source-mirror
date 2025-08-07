@@ -40,6 +40,10 @@ protected:
     {
         m_netclassFilterOpt->SetValue( true );
     }
+    void OnNetFilterSelect( wxCommandEvent& event )
+    {
+        m_netFilterOpt->SetValue( true );
+    }
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
         m_layerFilterOpt->SetValue( true );
@@ -61,11 +65,6 @@ private:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
-
-    void OnNetFilterSelect( wxCommandEvent& event )
-    {
-        m_netFilterOpt->SetValue( true );
-    }
 
     void buildFilterLists();
 

@@ -295,6 +295,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -370,6 +371,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -445,6 +447,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -613,6 +616,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -678,6 +682,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -743,6 +748,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -808,6 +814,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -873,7 +880,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnCheckBox">OnOptions</event>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -949,6 +956,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnCheckBox">onOptionChanged</event>
                       </object>
                     </object>
                   </object>

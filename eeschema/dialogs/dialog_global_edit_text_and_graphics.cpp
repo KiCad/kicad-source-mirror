@@ -39,42 +39,14 @@
 #include <widgets/unit_binder.h>
 #include <widgets/font_choice.h>
 
-static bool       g_modifyReferences;
-static bool       g_modifyValues;
-static bool       g_modifyOtherFields;
-static bool       g_modifyWires;
-static bool       g_modifyBuses;
-static bool       g_modifyGlobalLabels;
-static bool       g_modifyHierLabels;
-static bool       g_modifyLabelFields;
-static bool       g_modifySheetTitles;
-static bool       g_modifyOtherSheetFields;
-static bool       g_modifySheetPins;
-static bool       g_modifySheetBorders;
-static bool       g_modifySchTextAndGraphics;
-
-static bool       g_filterByFieldname;
 static wxString   g_fieldnameFilter;
-static bool       g_filterByReference;
 static wxString   g_referenceFilter;
-static bool       g_filterBySymbol;
 static wxString   g_symbolFilter;
-static bool       g_filterByType;
-static bool       g_typeFilterIsPower;
-static bool       g_filterByNet;
 static wxString   g_netFilter;
-static bool       g_filterSelected;
 
 
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
 {
-    SCH_EDIT_FRAME*        m_parent;
-    SCH_SELECTION          m_selection;
-
-    UNIT_BINDER            m_textSize;
-    UNIT_BINDER            m_lineWidth;
-    UNIT_BINDER            m_junctionSize;
-
 public:
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_EDIT_FRAME* parent );
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
@@ -102,6 +74,14 @@ protected:
 
     void visitItem( SCH_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
     void processItem( SCH_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
+
+private:
+    SCH_EDIT_FRAME*        m_parent;
+    SCH_SELECTION          m_selection;
+
+    UNIT_BINDER            m_textSize;
+    UNIT_BINDER            m_lineWidth;
+    UNIT_BINDER            m_junctionSize;
 };
 
 
@@ -138,31 +118,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
 
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
 {
-    g_modifyReferences = m_references->GetValue();
-    g_modifyValues = m_values->GetValue();
-    g_modifyOtherFields = m_otherFields->GetValue();
-    g_modifyWires = m_wires->GetValue();
-    g_modifyBuses = m_buses->GetValue();
-    g_modifyGlobalLabels = m_globalLabels->GetValue();
-    g_modifyHierLabels = m_hierLabels->GetValue();
-    g_modifyLabelFields = m_labelFields->GetValue();
-    g_modifySheetTitles = m_sheetTitles->GetValue();
-    g_modifyOtherSheetFields = m_sheetFields->GetValue();
-    g_modifySheetPins = m_sheetPins->GetValue();
-    g_modifySheetBorders = m_sheetBorders->GetValue();
-    g_modifySchTextAndGraphics = m_schTextAndGraphics->GetValue();
-
-    g_filterByFieldname = m_fieldnameFilterOpt->GetValue();
     g_fieldnameFilter = m_fieldnameFilter->GetValue();
-    g_filterByReference = m_referenceFilterOpt->GetValue();
     g_referenceFilter = m_referenceFilter->GetValue();
-    g_filterBySymbol = m_symbolFilterOpt->GetValue();
     g_symbolFilter = m_symbolFilter->GetValue();
-    g_filterByType = m_typeFilterOpt->GetValue();
-    g_typeFilterIsPower = m_typeFilter->GetSelection() == 1;
-    g_filterByNet = m_netFilterOpt->GetValue();
     g_netFilter = m_netFilter->GetValue();
-    g_filterSelected = m_selectedFilterOpt->GetValue();
 }
 
 
@@ -171,50 +130,14 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     SCH_SELECTION_TOOL* selectionTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     m_selection = selectionTool->GetSelection();
 
-    m_references->SetValue( g_modifyReferences );
-    m_values->SetValue( g_modifyValues );
-    m_otherFields->SetValue( g_modifyOtherFields );
-    m_wires->SetValue( g_modifyWires );
-    m_buses->SetValue( g_modifyBuses );
-    m_globalLabels->SetValue( g_modifyGlobalLabels );
-    m_hierLabels->SetValue( g_modifyHierLabels );
-    m_labelFields->SetValue( g_modifyLabelFields );
-    m_sheetTitles->SetValue( g_modifySheetTitles );
-    m_sheetFields->SetValue( g_modifyOtherSheetFields );
-    m_sheetPins->SetValue( g_modifySheetPins );
-    m_sheetBorders->SetValue( g_modifySheetBorders );
-    m_schTextAndGraphics->SetValue( g_modifySchTextAndGraphics );
-
     // SetValue() generates events, ChangeValue() does not
     m_fieldnameFilter->ChangeValue( g_fieldnameFilter );
-    m_fieldnameFilterOpt->SetValue( g_filterByFieldname );
     m_referenceFilter->ChangeValue( g_referenceFilter );
-    m_referenceFilterOpt->SetValue( g_filterByReference );
     m_symbolFilter->ChangeValue( g_symbolFilter );
-    m_symbolFilterOpt->SetValue( g_filterBySymbol );
-    m_typeFilter->SetSelection( g_typeFilterIsPower ? 1 : 0 );
-    m_typeFilterOpt->SetValue( g_filterByType );
-    m_selectedFilterOpt->SetValue( g_filterSelected );
+    m_netFilter->ChangeValue( g_netFilter );
 
-    if( g_filterByNet && !g_netFilter.IsEmpty() )
-    {
-        m_netFilter->SetValue( g_netFilter );
-        m_netFilterOpt->SetValue( true );
-    }
-    else if( !m_parent->GetHighlightedConnection().IsEmpty() )
-    {
+    if( g_netFilter.IsEmpty() && !m_parent->GetHighlightedConnection().IsEmpty() )
         m_netFilter->SetValue( m_parent->GetHighlightedConnection() );
-    }
-    else if( m_selection.GetSize() )
-    {
-        SCH_ITEM* sch_item = (SCH_ITEM*) m_selection.Front();
-        SCH_CONNECTION* connection = sch_item->Connection();
-
-        if( connection )
-            m_netFilter->SetValue( connection->Name() );
-    }
-
-    m_netFilterOpt->SetValue( g_filterByNet );
 
     m_fontCtrl->Append( INDETERMINATE_ACTION );
     m_fontCtrl->SetStringSelection( INDETERMINATE_ACTION );
@@ -253,7 +176,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
     if( EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem ) )
     {
         if( !m_textSize.IsIndeterminate() )
-            eda_text->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
+            eda_text->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
         if( m_setTextColor->GetValue() )
             eda_text->SetTextColor( m_textColorSwatch->GetSwatchColor() );
@@ -335,7 +258,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
         STROKE_PARAMS stroke = aItem->GetStroke();
 
         if( !m_lineWidth.IsIndeterminate() )
-            stroke.SetWidth( m_lineWidth.GetValue() );
+            stroke.SetWidth( m_lineWidth.GetIntValue() );
 
         if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
             stroke.SetLineStyle( (LINE_STYLE) m_lineStyle->GetSelection() );
@@ -362,7 +285,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
     if( SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem ) )
     {
         if( !m_junctionSize.IsIndeterminate() )
-            junction->SetDiameter( m_junctionSize.GetValue() );
+            junction->SetDiameter( m_junctionSize.GetIntValue() );
 
         if( m_setDotColor->GetValue() )
             junction->SetColor( m_dotColorSwatch->GetSwatchColor() );
@@ -479,7 +402,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
         if( m_sheetBorders->GetValue() )
         {
             if( !m_lineWidth.IsIndeterminate() )
-                sheet->SetBorderWidth( m_lineWidth.GetValue() );
+                sheet->SetBorderWidth( m_lineWidth.GetIntValue() );
 
             if( m_setColor->GetValue() )
                 sheet->SetBorderColor( m_colorSwatch->GetSwatchColor() );

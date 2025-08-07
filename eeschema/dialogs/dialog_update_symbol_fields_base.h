@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,16 +20,15 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checklst.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_UPDATE_SYMBOL_FIELDS_BASE
@@ -57,7 +56,7 @@ class DIALOG_UPDATE_SYMBOL_FIELDS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onSelectAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectNone( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOkButtonClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -66,6 +65,7 @@ class DIALOG_UPDATE_SYMBOL_FIELDS_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_UPDATE_SYMBOL_FIELDS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update Symbol Fields"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_UPDATE_SYMBOL_FIELDS_BASE();
 
 };

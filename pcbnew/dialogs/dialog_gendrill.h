@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_GENDRILL_H_
-#define DIALOG_GENDRILL_H_
+#pragma once
 
 #include <gendrill_file_writer_base.h>      // for DRILL_PRECISION definition
 #include <dialog_gendrill_base.h>
@@ -39,12 +38,7 @@ public:
      */
     DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent );
     DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_DRILL* aJob, wxWindow* aParent );
-    ~DIALOG_GENDRILL();
-
-    /**
-     * Update board drill/plot parameters
-     */
-    void             UpdateDrillParams();
+    ~DIALOG_GENDRILL() = default;
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -75,9 +69,8 @@ private:
 
     void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
-    // Specific functions:
     /**
-     * Call the functions to create EXCELLON drill files and/or drill map files.
+     * Call to create EXCELLON drill files and/or drill map files.
      *
      * When all holes are through holes, only one excellon file is created.  When there are
      * some partial holes (some blind or buried vias), one excellon file is created, for all
@@ -90,31 +83,8 @@ private:
     void updateConfig();
 
 private:
-    static int              g_unitDrillIsInch;
-    static int              g_zerosFormat;
-    static bool             g_minimalHeader;
-    static bool             g_mirror;
-    static bool             g_merge_PTH_NPTH;
-    static bool             g_generateMap;
-    static bool             g_generateTenting;
-    static DRILL_PRECISION  g_precision;                // Precision for drill files in non-decimal
-                                                        //   format
-    static VECTOR2I         g_drillFileOffset;          // Drill offset: 0,0 for absolute
-                                                        //   coordinates, or aux origin
-    static bool             g_useRouteModeForOvalHoles; // True to use a G00 route command for
-                                                        //   oval holes; false to use a G85 canned
-                                                        //   mode for oval holes
-
-private:
     PCB_EDIT_FRAME*       m_pcbEditFrame;
     BOARD*                m_board;
     PCB_PLOT_PARAMS       m_plotOpts;
     JOB_EXPORT_PCB_DRILL* m_job;
-
-    bool                  m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
-                                                      //   for drill origin coordinates
-    static int            g_mapFileType;              // format of map file: PS, PDF ...
-    static int            g_drillFileType;            // for Excellon, Gerber
 };
-
-#endif      // DIALOG_GENDRILL_H_

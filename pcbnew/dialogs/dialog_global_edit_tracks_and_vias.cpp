@@ -53,20 +53,8 @@ enum {
 
 
 // Globals to remember control settings during a session
-static bool         g_modifyTracks = true;
-static bool         g_modifyVias = true;
-static bool         g_filterByNetclass;
 static wxString     g_netclassFilter;
-static bool         g_filterByNet;
 static wxString     g_netFilter;
-static bool         g_filterByLayer;
-static int          g_layerFilter;
-static bool         g_filterByTrackWidth = false;
-static int          g_trackWidthFilter = 0;
-static bool         g_filterByViaSize = false;
-static int          g_viaSizeFilter = 0;
-static bool         g_filterSelected = false;
-static bool         g_setToSpecifiedValues = true;
 
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent ) :
@@ -91,11 +79,6 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_layerCtrl->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerCtrl->Resync();
 
-    if( g_setToSpecifiedValues == true )
-        m_setToSpecifiedValues->SetValue( true );
-    else
-        m_setToDesignRuleValues->SetValue( true );
-
     SetupStandardButtons( { { wxID_OK, _( "Apply and Close" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
 
@@ -103,8 +86,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
                           wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
                           nullptr, this );
 
-    m_parent->Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged,
-                    this );
+    m_parent->Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged, this );
 
     finishDialogSettings();
 }
@@ -112,27 +94,14 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
 {
-    g_modifyTracks = m_tracks->GetValue();
-    g_modifyVias = m_vias->GetValue();
-    g_filterByNetclass = m_netclassFilterOpt->GetValue();
     g_netclassFilter = m_netclassFilter->GetStringSelection();
-    g_filterByNet = m_netFilterOpt->GetValue();
     g_netFilter = m_netFilter->GetSelectedNetname();
-    g_filterByLayer = m_layerFilterOpt->GetValue();
-    g_layerFilter = m_layerFilter->GetLayerSelection();
-    g_filterByTrackWidth = m_filterByTrackWidth->GetValue();
-    g_trackWidthFilter = m_trackWidthFilter.GetIntValue();
-    g_filterByViaSize = m_filterByViaSize->GetValue();
-    g_viaSizeFilter = m_viaSizeFilter.GetIntValue();
-    g_filterSelected = m_selectedItemsFilter->GetValue();
-    g_setToSpecifiedValues = m_setToSpecifiedValues->GetValue();
 
     m_netFilter->Disconnect( FILTERED_ITEM_SELECTED,
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
                              nullptr, this );
 
-    m_parent->Unbind( EDA_EVT_UNITS_CHANGED,
-                      &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged, this );
+    m_parent->Unbind( EDA_EVT_UNITS_CHANGED, &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged, this );
 }
 
 
@@ -184,62 +153,15 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 
 bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    m_selection                 = selTool->GetSelection();
-    BOARD_CONNECTED_ITEM* item  = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_selection.Front() );
+    m_netclassFilter->SetStringSelection( g_netclassFilter );
 
-    m_tracks->SetValue( g_modifyTracks );
-    m_vias->SetValue( g_modifyVias );
-
-    if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
-    {
-        m_netclassFilterOpt->SetValue( true );
-    }
-    else if( item )
-    {
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
-    }
-
-    if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
-    {
+    if( m_brd->FindNet( g_netFilter ) != nullptr )
         m_netFilter->SetSelectedNet( g_netFilter );
-        m_netFilterOpt->SetValue( true );
-    }
-    else if( item )
-    {
-        m_netFilter->SetSelectedNetcode( item->GetNetCode() );
-    }
-
-    if( g_filterByLayer && m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
-    {
-        m_layerFilterOpt->SetValue( true );
-    }
-    else if( item )
-    {
-        if( item->Type() == PCB_ZONE_T ) // a zone can be on more than one layer
-            m_layerFilter->SetLayerSelection( static_cast<ZONE*>(item)->GetFirstLayer() );
-        else
-            m_layerFilter->SetLayerSelection( item->GetLayer() );
-    }
-
-    if( g_filterByTrackWidth )
-    {
-        m_filterByTrackWidth->SetValue( true );
-        m_trackWidthFilter.SetValue( g_trackWidthFilter );
-    }
-
-    if( g_filterByViaSize )
-    {
-        m_filterByViaSize->SetValue( true );
-        m_viaSizeFilter.SetValue( g_viaSizeFilter );
-    }
 
     m_trackWidthCtrl->SetSelection( (int) m_trackWidthCtrl->GetCount() - 1 );
     m_viaSizesCtrl->SetSelection( (int) m_viaSizesCtrl->GetCount() - 1 );
     m_annularRingsCtrl->SetSelection( (int) m_annularRingsCtrl->GetCount() - 1 );
     m_layerCtrl->SetStringSelection( INDETERMINATE_ACTION );
-
-    m_selectedItemsFilter->SetValue( g_filterSelected );
 
     wxCommandEvent dummy;
     onActionButtonChange( dummy );
@@ -264,8 +186,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onActionButtonChange( wxCommandEvent& e
 }
 
 
-void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoList,
-                                                      PCB_TRACK* aItem )
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem )
 {
     BOARD_DESIGN_SETTINGS& brdSettings = m_brd->GetDesignSettings();
     bool                   isTrack = aItem->Type() == PCB_TRACE_T;

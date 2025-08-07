@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,11 +57,13 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	fgSizer2->Add( m_cbUpdateReferences, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUpdateFootprints = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Footprint assignments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateFootprints->SetValue(true);
 	m_cbUpdateFootprints->SetToolTip( _("Update footprint associations of symbols whose footprints have been replaced with different footprints in PCB.") );
 
 	fgSizer2->Add( m_cbUpdateFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUpdateValues = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateValues->SetValue(true);
 	m_cbUpdateValues->SetToolTip( _("Update symbols values that have been replaced in the PCB editor.") );
 
 	fgSizer2->Add( m_cbUpdateValues, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -70,9 +72,11 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	fgSizer2->Add( m_cbUpdateNetNames, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUpdateAttributes = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateAttributes->SetValue(true);
 	fgSizer2->Add( m_cbUpdateAttributes, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_cbUpdateOtherFields = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Other fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateOtherFields->SetValue(true);
 	m_cbUpdateOtherFields->SetToolTip( _("Update all other fields in the symbol from the footprint") );
 
 	fgSizer2->Add( m_cbUpdateOtherFields, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );

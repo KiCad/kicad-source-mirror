@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,15 +70,19 @@ DIALOG_UPDATE_SYMBOL_FIELDS_BASE::DIALOG_UPDATE_SYMBOL_FIELDS_BASE( wxWindow* pa
 	m_updateOptionsSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_resetFieldText = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldText->SetValue(true);
 	m_updateOptionsSizer->Add( m_resetFieldText, 0, wxBOTTOM|wxRIGHT, 4 );
 
 	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldVisibilities->SetValue(true);
 	m_updateOptionsSizer->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
 
 	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldEffects->SetValue(true);
 	m_updateOptionsSizer->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
 
 	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldPositions->SetValue(true);
 	m_updateOptionsSizer->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
 
 

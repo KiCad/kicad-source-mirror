@@ -29,23 +29,14 @@
 #include "widgets/wx_html_report_panel.h"
 
 
-// Saved dialog settings
-DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ false, true, true, true, false, true, true };
-
-
-DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
-        : DIALOG_UPDATE_FROM_PCB_BASE( aParent ),
-          m_frame( aParent ),
-          m_editorControl( m_frame->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>() )
-
+DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent ) :
+        DIALOG_UPDATE_FROM_PCB_BASE( aParent ),
+        m_frame( aParent )
 {
     m_messagePanel->SetLabel( _( "Changes to Be Applied" ) );
     m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     m_messagePanel->SetLazyUpdate( true );
     m_messagePanel->GetSizer()->SetSizeHints( this );
-
-    m_cbRelinkFootprints->SetValue( s_savedDialogState.MatchByReference );
 
     if( m_cbRelinkFootprints->GetValue() )
     {
@@ -54,15 +45,8 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     }
     else
     {
-        m_cbUpdateReferences->SetValue( s_savedDialogState.UpdateReferences );
         m_cbUpdateReferences->Enable( true );
     }
-
-    m_cbUpdateFootprints->SetValue( s_savedDialogState.UpdateFootprints );
-    m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
-    m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
-    m_cbUpdateAttributes->SetValue( s_savedDialogState.UpdateAttributes );
-    m_cbUpdateOtherFields->SetValue( s_savedDialogState.UpdateOtherFields );
 
     SetupStandardButtons( { { wxID_OK,     _( "Update Schematic" ) },
                             { wxID_CANCEL, _( "Close" )            } } );
@@ -102,11 +86,6 @@ bool DIALOG_UPDATE_FROM_PCB::TransferDataToWindow()
 }
 
 
-DIALOG_UPDATE_FROM_PCB::~DIALOG_UPDATE_FROM_PCB()
-{
-}
-
-
 void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
 {
     if( event.GetEventObject() == m_cbRelinkFootprints )
@@ -118,27 +97,11 @@ void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
         }
         else
         {
-            m_cbUpdateReferences->SetValue( s_savedDialogState.UpdateReferences );
             m_cbUpdateReferences->Enable( true );
         }
     }
 
     updateData();
-
-    if( event.GetEventObject() == m_cbRelinkFootprints )
-        s_savedDialogState.MatchByReference = m_cbRelinkFootprints->GetValue();
-    else if( event.GetEventObject() == m_cbUpdateReferences )
-        s_savedDialogState.UpdateReferences = m_cbUpdateReferences->GetValue();
-    else if( event.GetEventObject() == m_cbUpdateFootprints )
-        s_savedDialogState.UpdateFootprints = m_cbUpdateFootprints->GetValue();
-    else if( event.GetEventObject() == m_cbUpdateValues )
-        s_savedDialogState.UpdateValues = m_cbUpdateValues->GetValue();
-    else if( event.GetEventObject() == m_cbUpdateNetNames )
-        s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
-    else if( event.GetEventObject() == m_cbUpdateAttributes )
-        s_savedDialogState.UpdateAttributes = m_cbUpdateAttributes->GetValue();
-    else if( event.GetEventObject() == m_cbUpdateOtherFields )
-        s_savedDialogState.UpdateOtherFields = m_cbUpdateOtherFields->GetValue();
 }
 
 

@@ -65,36 +65,12 @@ enum
 };
 
 
-static bool       g_modifyReferences;
-static bool       g_modifyValues;
-static bool       g_modifyOtherFootprintFields;
-static bool       g_modifyFootprintGraphics;
-static bool       g_modifyFootprintDimensions;
-static bool       g_modifyFootprintTexts;
-static bool       g_modifyBoardText;
-static bool       g_modifyBoardGraphics;
-static bool       g_filterByLayer;
-static int        g_layerFilter;
-static bool       g_filterByReference;
 static wxString   g_referenceFilter;
-static bool       g_filterByFootprint;
 static wxString   g_footprintFilter;
-static bool       g_filterSelected = false;
-static bool       g_setToSpecifiedValues = true;
 
 
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
 {
-    PCB_BASE_EDIT_FRAME*   m_parent;
-    BOARD_DESIGN_SETTINGS* m_brdSettings;
-    PCB_SELECTION          m_selection;
-    bool                   m_isBoardEditor;
-
-    UNIT_BINDER            m_lineWidth;
-    UNIT_BINDER            m_textWidth;
-    UNIT_BINDER            m_textHeight;
-    UNIT_BINDER            m_thickness;
-
 public:
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_BASE_EDIT_FRAME* parent );
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
@@ -122,6 +98,17 @@ protected:
 
     void visitItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem );
     void processItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem );
+
+private:
+    PCB_BASE_EDIT_FRAME*   m_parent;
+    BOARD_DESIGN_SETTINGS* m_brdSettings;
+    PCB_SELECTION          m_selection;
+    bool                   m_isBoardEditor;
+
+    UNIT_BINDER            m_lineWidth;
+    UNIT_BINDER            m_textWidth;
+    UNIT_BINDER            m_textHeight;
+    UNIT_BINDER            m_thickness;
 };
 
 
@@ -165,11 +152,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     m_grid->SetDefaultCellFont( KIUI::GetInfoFont( this ) );
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() - FromDIP( 2 ) );
 
-    if( g_setToSpecifiedValues == true )
-        m_setToSpecifiedValues->SetValue( true );
-    else
-        m_setToLayerDefaults->SetValue( true );
-
     SetupStandardButtons( { { wxID_OK, _( "Apply and Close" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
 
@@ -179,32 +161,11 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
 
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
 {
-    g_modifyReferences = m_references->GetValue();
-    g_modifyValues = m_values->GetValue();
-    g_modifyOtherFootprintFields = m_otherFootprintFields->GetValue();
-    g_modifyFootprintGraphics = m_footprintGraphics->GetValue();
-    g_modifyFootprintDimensions = m_footprintDimensions->GetValue();
-    g_modifyFootprintTexts = m_footprintTexts->GetValue();
-
     if( m_isBoardEditor )
     {
-        g_modifyBoardText = m_boardText->GetValue();
-        g_modifyBoardGraphics = m_boardGraphics->GetValue();
-    }
-
-    g_filterByLayer = m_layerFilterOpt->GetValue();
-    g_layerFilter = m_layerFilter->GetLayerSelection();
-
-    if( m_isBoardEditor )
-    {
-        g_filterByReference = m_referenceFilterOpt->GetValue();
         g_referenceFilter = m_referenceFilter->GetValue();
-        g_filterByFootprint = m_footprintFilterOpt->GetValue();
         g_footprintFilter = m_footprintFilter->GetValue();
     }
-
-    g_filterSelected = m_selectedItemsFilter->GetValue();
-    g_setToSpecifiedValues = m_setToSpecifiedValues->GetValue();
 }
 
 
@@ -213,32 +174,12 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     m_selection                 = selTool->GetSelection();
 
-    m_references->SetValue( g_modifyReferences );
-    m_values->SetValue( g_modifyValues );
-    m_otherFootprintFields->SetValue( g_modifyOtherFootprintFields );
-    m_footprintGraphics->SetValue( g_modifyFootprintGraphics );
-    m_footprintDimensions->SetValue( g_modifyFootprintDimensions );
-    m_footprintTexts->SetValue( g_modifyFootprintTexts );
-
-    if( m_isBoardEditor )
-    {
-        m_boardText->SetValue( g_modifyBoardText );
-        m_boardGraphics->SetValue( g_modifyBoardGraphics );
-    }
-
-    if( m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
-        m_layerFilterOpt->SetValue( g_filterByLayer );
-
     if( m_isBoardEditor )
     {
         // SetValue() generates events, ChangeValue() does not
         m_referenceFilter->ChangeValue( g_referenceFilter );
-        m_referenceFilterOpt->SetValue( g_filterByReference );
         m_footprintFilter->ChangeValue( g_footprintFilter );
-        m_footprintFilterOpt->SetValue( g_filterByFootprint );
     }
-
-    m_selectedItemsFilter->SetValue( g_filterSelected );
 
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
 
@@ -380,13 +321,13 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( text )
         {
             if( !m_textWidth.IsIndeterminate() )
-                text->SetTextSize( VECTOR2I( m_textWidth.GetValue(), text->GetTextSize().y ) );
+                text->SetTextSize( VECTOR2I( m_textWidth.GetIntValue(), text->GetTextSize().y ) );
 
             if( !m_textHeight.IsIndeterminate() )
-                text->SetTextSize( VECTOR2I( text->GetTextSize().x, m_textHeight.GetValue() ) );
+                text->SetTextSize( VECTOR2I( text->GetTextSize().x, m_textHeight.GetIntValue() ) );
 
             if( !m_thickness.IsIndeterminate() )
-                text->SetTextThickness( m_thickness.GetValue() );
+                text->SetTextThickness( m_thickness.GetIntValue() );
 
             // Must be after SetTextSize()
             if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
@@ -432,12 +373,12 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             if( shape )
             {
                 STROKE_PARAMS stroke = shape->GetStroke();
-                stroke.SetWidth( m_lineWidth.GetValue() );
+                stroke.SetWidth( m_lineWidth.GetIntValue() );
                 shape->SetStroke( stroke );
             }
 
             if( dimension )
-                dimension->SetLineThickness( m_lineWidth.GetValue() );
+                dimension->SetLineThickness( m_lineWidth.GetIntValue() );
         }
     }
     else

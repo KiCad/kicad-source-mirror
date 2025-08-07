@@ -52,23 +52,6 @@ static DRILL_PRECISION precisionListForInches( 2, 4 );
 static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
 
-// Static members of DIALOG_GENDRILL
-int  DIALOG_GENDRILL::g_unitDrillIsInch  = false;     // Only for Excellon format
-int  DIALOG_GENDRILL::g_zerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
-bool DIALOG_GENDRILL::g_minimalHeader    = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::g_mirror           = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::g_merge_PTH_NPTH   = false;    // Only for Excellon format
-bool DIALOG_GENDRILL::g_generateMap      = false;
-bool DIALOG_GENDRILL::g_generateTenting  = false;
-int  DIALOG_GENDRILL::g_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
-int  DIALOG_GENDRILL::g_drillFileType    = 0;
-
-bool DIALOG_GENDRILL::g_useRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval
-                                                            // holes
-DRILL_PRECISION  DIALOG_GENDRILL::g_precision;
-VECTOR2I         DIALOG_GENDRILL::g_drillFileOffset;
-
-
 /* This function displays the dialog frame for drill tools
  */
 int BOARD_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
@@ -121,17 +104,11 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
 }
 
 
-DIALOG_GENDRILL::~DIALOG_GENDRILL()
-{
-}
-
-
 bool DIALOG_GENDRILL::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue(),
-                             m_generateTentingLayers->GetValue() );
+        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue(), m_generateTentingLayers->GetValue() );
         // Keep the window open so that the user can see the result
         return false;
     }
@@ -161,21 +138,32 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
 {
     if( !m_job )
     {
-        m_rbExcellon->SetValue( g_drillFileType == 0 );
-        m_rbGerberX2->SetValue( g_drillFileType == 1 );
-        m_units->SetSelection( g_unitDrillIsInch ? 1 : 0 );
-        m_zeros->SetSelection( g_zerosFormat );
+        if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
+        {
+            m_Check_Merge_PTH_NPTH->SetValue( cfg->m_GenDrill.merge_pth_npth );
+            m_Check_Minimal->SetValue( cfg->m_GenDrill.minimal_header );
+            m_Check_Mirror->SetValue( cfg->m_GenDrill.mirror );
+            m_units->SetSelection( cfg->m_GenDrill.unit_drill_is_inch ? 1 : 0 );
+            m_altDrillMode->SetValue( !cfg->m_GenDrill.use_route_for_oval_holes );
+            m_rbExcellon->SetValue( cfg->m_GenDrill.drill_file_type == 0 );
+            m_rbGerberX2->SetValue( cfg->m_GenDrill.drill_file_type == 1 );
+            m_cbGenerateMap->SetValue( cfg->m_GenDrill.generate_map );
+            m_generateTentingLayers->SetValue( cfg->m_GenDrill.generate_tenting );
+
+            int zerosFormat = cfg->m_GenDrill.zeros_format;
+
+            if( zerosFormat >= 0 && zerosFormat < (int) m_zeros->GetCount() )
+                m_zeros->SetSelection( zerosFormat );
+
+            int mapFileType = cfg->m_GenDrill.map_file_type;
+
+            if( mapFileType >= 0 && mapFileType < (int) m_choiceDrillMap->GetCount() )
+                m_choiceDrillMap->SetSelection( mapFileType );
+        }
+
         updatePrecisionOptions();
-        m_Check_Minimal->SetValue( g_minimalHeader );
 
-        m_origin->SetSelection( m_drillOriginIsAuxAxis ? 1 : 0 );
-
-        m_Check_Mirror->SetValue( g_mirror );
-        m_Check_Merge_PTH_NPTH->SetValue( g_merge_PTH_NPTH );
-        m_choiceDrillMap->SetSelection( g_mapFileType );
-        m_altDrillMode->SetValue( !g_useRouteModeForOvalHoles );
-        m_cbGenerateMap->SetValue( g_generateMap );
-        m_generateTentingLayers->SetValue( g_generateTenting );
+        m_origin->SetSelection( m_plotOpts.GetUseAuxOrigin() ? 1 : 0 );
 
         // Output directory
         m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -211,43 +199,17 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
 void DIALOG_GENDRILL::initDialog()
 {
     if( m_job )
-    {
         SetTitle( m_job->GetSettingsDialogTitle() );
-    }
-    else
-    {
-        if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
-        {
-            g_merge_PTH_NPTH = cfg->m_GenDrill.merge_pth_npth;
-            g_minimalHeader = cfg->m_GenDrill.minimal_header;
-            g_mirror = cfg->m_GenDrill.mirror;
-            g_unitDrillIsInch = cfg->m_GenDrill.unit_drill_is_inch;
-            g_useRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
-            g_drillFileType = cfg->m_GenDrill.drill_file_type;
-            g_mapFileType = cfg->m_GenDrill.map_file_type;
-            g_zerosFormat = cfg->m_GenDrill.zeros_format;
-            g_generateMap = cfg->m_GenDrill.generate_map;
-            g_generateTenting = cfg->m_GenDrill.generate_tenting;
-        }
-
-        // Ensure validity of g_mapFileType
-        if( g_mapFileType < 0 || g_mapFileType >= (int) m_choiceDrillMap->GetCount() )
-            g_mapFileType = m_choiceDrillMap->GetCount() - 1; // last item in list = default = PDF
-	}
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
     m_hash_key = TO_UTF8( GetTitle() );
-
-    m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
 }
 
 
 void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
 {
     bool enbl_Excellon = m_rbExcellon->GetValue();
-
-    g_drillFileType = enbl_Excellon ? 0 : 1;
 
     m_unitsLabel->Enable( enbl_Excellon );
     m_units->Enable( enbl_Excellon );
@@ -275,20 +237,30 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::updateConfig()
 {
-    UpdateDrillParams();
+    // Set output directory and replace backslashes with forward ones
+    wxString dirStr = m_outputDirectoryName->GetValue();
+    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+    m_plotOpts.SetOutputDirectory( dirStr );
+    m_plotOpts.SetUseAuxOrigin( m_origin->GetSelection() == 1 );
+
+    if( !m_plotOpts.IsSameAs( m_board->GetPlotOptions() ) )
+    {
+        m_board->SetPlotOptions( m_plotOpts );
+        m_pcbEditFrame->OnModify();
+    }
 
     if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
     {
-        cfg->m_GenDrill.merge_pth_npth           = g_merge_PTH_NPTH;
-        cfg->m_GenDrill.minimal_header           = g_minimalHeader;
-        cfg->m_GenDrill.mirror                   = g_mirror;
-        cfg->m_GenDrill.unit_drill_is_inch       = g_unitDrillIsInch;
-        cfg->m_GenDrill.use_route_for_oval_holes = g_useRouteModeForOvalHoles;
-        cfg->m_GenDrill.drill_file_type          = g_drillFileType;
-        cfg->m_GenDrill.map_file_type            = g_mapFileType;
-        cfg->m_GenDrill.zeros_format             = g_zerosFormat;
-        cfg->m_GenDrill.generate_map             = g_generateMap;
-        cfg->m_GenDrill.generate_tenting         = g_generateTenting;
+        cfg->m_GenDrill.merge_pth_npth           = m_Check_Merge_PTH_NPTH->IsChecked();
+        cfg->m_GenDrill.minimal_header           = m_Check_Minimal->IsChecked();
+        cfg->m_GenDrill.mirror                   = m_Check_Mirror->IsChecked();
+        cfg->m_GenDrill.unit_drill_is_inch       = ( m_units->GetSelection() == 0 ) ? false : true;
+        cfg->m_GenDrill.use_route_for_oval_holes = !m_altDrillMode->GetValue();
+        cfg->m_GenDrill.drill_file_type          = m_rbExcellon->GetValue() ? 0 : 1;
+        cfg->m_GenDrill.map_file_type            = m_choiceDrillMap->GetSelection();
+        cfg->m_GenDrill.zeros_format             = m_zeros->GetSelection();
+        cfg->m_GenDrill.generate_map             = m_cbGenerateMap->IsChecked();
+        cfg->m_GenDrill.generate_tenting         = m_generateTentingLayers->IsChecked();
     }
 }
 
@@ -355,52 +327,12 @@ void DIALOG_GENDRILL::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
     {
         if( !dirName.MakeRelativeTo( defaultPath ) )
         {
-            wxMessageBox( _( "Cannot make path relative (target volume different from board "
-                             "file volume)!" ),
+            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
         }
     }
 
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
-}
-
-
-void DIALOG_GENDRILL::UpdateDrillParams()
-{
-    // Set output directory and replace backslashes with forward ones
-    wxString dirStr;
-    dirStr = m_outputDirectoryName->GetValue();
-    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
-    m_plotOpts.SetOutputDirectory( dirStr );
-    m_drillOriginIsAuxAxis = m_origin->GetSelection() == 1;
-    m_plotOpts.SetUseAuxOrigin( m_drillOriginIsAuxAxis );
-
-    g_mapFileType = m_choiceDrillMap->GetSelection();
-
-    g_unitDrillIsInch = ( m_units->GetSelection() == 0 ) ? false : true;
-    g_minimalHeader = m_Check_Minimal->IsChecked();
-    g_mirror = m_Check_Mirror->IsChecked();
-    g_merge_PTH_NPTH = m_Check_Merge_PTH_NPTH->IsChecked();
-    g_zerosFormat = m_zeros->GetSelection();
-    g_useRouteModeForOvalHoles = !m_altDrillMode->GetValue();
-    g_generateMap = m_cbGenerateMap->IsChecked();
-    g_generateTenting = m_generateTentingLayers->IsChecked();
-
-    if( m_origin->GetSelection() == 0 )
-        g_drillFileOffset = VECTOR2I( 0, 0 );
-    else
-        g_drillFileOffset = m_board->GetDesignSettings().GetAuxOrigin();
-
-    if( g_unitDrillIsInch )
-        g_precision = precisionListForInches;
-    else
-        g_precision = precisionListForMetric;
-
-    if( !m_plotOpts.IsSameAs( m_board->GetPlotOptions() ) )
-    {
-        m_board->SetPlotOptions( m_plotOpts );
-        m_pcbEditFrame->OnModify();
-    }
 }
 
 
@@ -444,25 +376,36 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
-        wxString msg;
-        msg.Printf( _( "Could not write drill and/or map files to folder '%s'." ),
-                    outputDir.GetPath() );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "Could not write drill and/or map files to folder '%s'." ),
+                                              outputDir.GetPath() ) );
         return;
     }
 
-    if( g_drillFileType == 0 )
+    VECTOR2I        drillFileOffset;
+    DRILL_PRECISION precision;
+
+    if( m_origin->GetSelection() == 0 )
+        drillFileOffset = VECTOR2I( 0, 0 );
+    else
+        drillFileOffset = m_board->GetDesignSettings().GetAuxOrigin();
+
+    if( m_units->GetSelection() == 0 )
+        precision = precisionListForMetric;
+    else
+        precision = precisionListForInches;
+
+    if( m_rbExcellon->GetValue() )
     {
         EXCELLON_WRITER excellonWriter( m_board );
-        excellonWriter.SetFormat( !g_unitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) g_zerosFormat,
-                                  g_precision.m_Lhs, g_precision.m_Rhs );
-        excellonWriter.SetOptions( g_mirror, g_minimalHeader, g_drillFileOffset, g_merge_PTH_NPTH );
-        excellonWriter.SetRouteModeForOvalHoles( g_useRouteModeForOvalHoles );
+        excellonWriter.SetFormat( m_units->GetSelection() == 0, (EXCELLON_WRITER::ZEROS_FMT) m_zeros->GetSelection(),
+                                  precision.m_Lhs, precision.m_Rhs );
+        excellonWriter.SetOptions( m_Check_Mirror->IsChecked(), m_Check_Minimal->IsChecked(), drillFileOffset,
+                                   m_Check_Merge_PTH_NPTH->IsChecked() );
+        excellonWriter.SetRouteModeForOvalHoles( !m_altDrillMode->GetValue() );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
         excellonWriter.SetPageInfo( &m_board->GetPageSettings() );
 
-        excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
-                                                  &reporter );
+        excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap, &reporter );
     }
     else
     {
@@ -471,12 +414,11 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
         // (SetFormat() accept 5 or 6, and any other value set the precision to 5)
         // the integer part precision is always 4, and units always mm
         gerberWriter.SetFormat( m_plotOpts.GetGerberPrecision() );
-        gerberWriter.SetOptions( g_drillFileOffset );
+        gerberWriter.SetOptions( drillFileOffset );
         gerberWriter.SetMapFileFormat( filefmt[choice] );
         gerberWriter.SetPageInfo( &m_board->GetPageSettings() );
 
-        gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
-                                                aGenTenting, &reporter );
+        gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap, aGenTenting, &reporter );
     }
 }
 
@@ -506,10 +448,10 @@ void DIALOG_GENDRILL::onGenReportFile( wxCommandEvent& event )
 
     // Info is slightly different between Excellon and Gerber
     // (file ext, Merge PTH/NPTH option)
-    if( g_drillFileType == 0 )
+    if( m_rbExcellon->GetValue() == 0 )
     {
         EXCELLON_WRITER excellonWriter( m_board );
-        excellonWriter.SetMergeOption( g_merge_PTH_NPTH );
+        excellonWriter.SetMergeOption( m_Check_Merge_PTH_NPTH->IsChecked() );
         success = excellonWriter.GenDrillReportFile( dlg.GetPath() );
     }
     else

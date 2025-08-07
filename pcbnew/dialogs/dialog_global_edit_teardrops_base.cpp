@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -114,21 +114,22 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	m_removeTeardrops = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Remove teardrops"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_removeTeardrops->SetToolTip( _("Remove teardrops according to filtering options") );
 
-	sbAction->Add( m_removeTeardrops, 0, wxBOTTOM|wxRIGHT, 5 );
+	sbAction->Add( m_removeTeardrops, 0, wxBOTTOM|wxRIGHT, 10 );
 
 	m_removeAllTeardrops = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Remove all teardrops"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeAllTeardrops->SetToolTip( _("Remove all teardrops, regardless of filtering options") );
 
-	sbAction->Add( m_removeAllTeardrops, 0, wxBOTTOM|wxRIGHT, 5 );
+	sbAction->Add( m_removeAllTeardrops, 0, wxBOTTOM|wxRIGHT, 10 );
 
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addTeardrops = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Add teardrops with default values for shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_addTeardrops, 1, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	m_addTeardrops->SetValue( true );
+	bSizer12->Add( m_addTeardrops, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_boardSetupLink = new wxHyperlinkCtrl( sbAction->GetStaticBox(), wxID_ANY, _("Edit default values in Board Setup"), wxT("#teardrops"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
-	bSizer12->Add( m_boardSetupLink, 1, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	bSizer12->Add( m_boardSetupLink, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
 	sbAction->Add( bSizer12, 0, wxEXPAND|wxBOTTOM, 15 );

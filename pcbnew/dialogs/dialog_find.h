@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_FIND_BASE_H
-#define DIALOG_FIND_BASE_H
+#pragma once
 
 #include <functional>
 #include <sys/types.h>
@@ -82,7 +81,6 @@ public:
     bool Show( bool show = true ) override;
 
 protected:
-    void OnClose( wxCloseEvent& event ) override;
     void OnCloseButtonClick( wxCommandEvent& aEvent ) override;
     void OnBoardChanged( wxCommandEvent& event );
 
@@ -93,15 +91,39 @@ private:
     void onSearchAgainClick( wxCommandEvent& event ) override;
     void onShowSearchPanel( wxHyperlinkEvent& event ) override;
 
+    void onOptionChanged( wxCommandEvent& aEvent ) override
+    {
+        m_upToDate = false;
+        aEvent.Skip();
+    }
+
     void search( bool direction );
 
     // BOARD_LISTENER implementation
-    void OnBoardItemAdded( BOARD&, BOARD_ITEM* ) override { m_upToDate = false; }
-    void OnBoardItemsAdded( BOARD&, std::vector<BOARD_ITEM*>& ) override { m_upToDate = false; }
-    void OnBoardItemRemoved( BOARD&, BOARD_ITEM* ) override { m_upToDate = false; }
-    void OnBoardItemsRemoved( BOARD&, std::vector<BOARD_ITEM*>& ) override { m_upToDate = false; }
-    void OnBoardItemChanged( BOARD&, BOARD_ITEM* ) override { m_upToDate = false; }
-    void OnBoardItemsChanged( BOARD&, std::vector<BOARD_ITEM*>& ) override { m_upToDate = false; }
+    void OnBoardItemAdded( BOARD&, BOARD_ITEM* ) override
+    {
+        m_upToDate = false;
+    }
+    void OnBoardItemsAdded( BOARD&, std::vector<BOARD_ITEM*>& ) override
+    {
+        m_upToDate = false;
+    }
+    void OnBoardItemRemoved( BOARD&, BOARD_ITEM* ) override
+    {
+        m_upToDate = false;
+    }
+    void OnBoardItemsRemoved( BOARD&, std::vector<BOARD_ITEM*>& ) override
+    {
+        m_upToDate = false;
+    }
+    void OnBoardItemChanged( BOARD&, BOARD_ITEM* ) override
+    {
+        m_upToDate = false;
+    }
+    void OnBoardItemsChanged( BOARD&, std::vector<BOARD_ITEM*>& ) override
+    {
+        m_upToDate = false;
+    }
     void OnBoardCompositeUpdate( BOARD&, std::vector<BOARD_ITEM*>&,
                                  std::vector<BOARD_ITEM*>&, std::vector<BOARD_ITEM*>& ) override
     {
@@ -109,13 +131,11 @@ private:
     }
 
 private:
-    PCB_EDIT_FRAME*                     m_frame;
-    BOARD*                              m_board;
-    std::deque<BOARD_ITEM*>             m_hitList;
-    std::deque<BOARD_ITEM*>::iterator   m_it;
-    bool                                m_upToDate;
+    PCB_EDIT_FRAME*                    m_frame;
+    BOARD*                             m_board;
+    std::deque<BOARD_ITEM*>            m_hitList;
+    std::deque<BOARD_ITEM*>::iterator  m_it;
+    bool                               m_upToDate;
 
     std::function<void( BOARD_ITEM* )> m_highlightCallback;
 };
-
-#endif /* DIALOG_FIND_BASE_H */

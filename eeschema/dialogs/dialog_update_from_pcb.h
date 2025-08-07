@@ -22,20 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_UPDATE_FROM_PCB_H_
-#define _DIALOG_UPDATE_FROM_PCB_H_
+#pragma once
 
 #include <backannotate.h>
 #include <dialog_update_from_pcb_base.h>
 
 class SCH_EDIT_FRAME;
-class SCH_EDITOR_CONTROL;
+
 
 class DIALOG_UPDATE_FROM_PCB : public DIALOG_UPDATE_FROM_PCB_BASE
 {
 public:
     DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent );
-    ~DIALOG_UPDATE_FROM_PCB();
+    ~DIALOG_UPDATE_FROM_PCB() = default;
 
 private:
     void updateData();
@@ -44,25 +43,6 @@ private:
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnUpdateClick( wxCommandEvent& event ) override;
 
-    /**
-     * Container for the dialog last saved state.
-     */
-    struct DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-    {
-        // Flags to remember last checkboxes state.
-        bool MatchByReference;
-        bool UpdateReferences;
-        bool UpdateFootprints;
-        bool UpdateValues;
-        bool UpdateNetNames;
-        bool UpdateAttributes;
-        bool UpdateOtherFields;
-    };
-
-    static DIALOG_UPDATE_FROM_PCB_SAVED_STATE s_savedDialogState;
-
+private:
     SCH_EDIT_FRAME*     m_frame;
-    SCH_EDITOR_CONTROL* m_editorControl;
 };
-
-#endif

@@ -38,21 +38,6 @@
 #include <wx/fdrepdlg.h>
 
 
-//Defined as global because these values have to survive the destructor
-
-bool g_FindOptionCase = false;
-bool g_FindOptionWords = false;
-bool g_FindOptionWildcards = false;
-bool g_FindOptionWrap = true;
-
-bool g_FindIncludeTexts = true;
-bool g_FindIncludeValues = true;
-bool g_FindIncludeReferences = true;
-bool g_FindIncludeHiddenFields = false;
-bool g_FindIncludeMarkers = true;
-bool g_FindIncludeNets = true;
-
-
 DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
         DIALOG_FIND_BASE( aFrame, wxID_ANY, _( "Find" ) ),
         m_frame( aFrame )
@@ -72,18 +57,6 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
         m_searchCombo->SetSelection( 0 );
         m_searchCombo->SelectAll();
     }
-
-    m_matchCase->SetValue( g_FindOptionCase );
-    m_matchWords->SetValue( g_FindOptionWords );
-    m_wildcards->SetValue( g_FindOptionWildcards );
-    m_wrap->SetValue( g_FindOptionWrap );
-
-    m_includeTexts->SetValue( g_FindIncludeTexts );
-    m_includeValues->SetValue( g_FindIncludeValues );
-    m_includeReferences->SetValue( g_FindIncludeReferences );
-    m_checkAllFields->SetValue( g_FindIncludeHiddenFields );
-    m_includeMarkers->SetValue( g_FindIncludeMarkers );
-    m_includeNets->SetValue( g_FindIncludeNets );
 
     m_status->SetLabel( wxEmptyString);
     m_upToDate = false;
@@ -221,75 +194,19 @@ void DIALOG_FIND::search( bool aDirection )
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
     }
 
-    if( g_FindOptionCase != m_matchCase->GetValue() )
-    {
-        g_FindOptionCase = m_matchCase->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindOptionWords != m_matchWords->GetValue() )
-    {
-        g_FindOptionWords = m_matchWords->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindOptionWildcards != m_wildcards->GetValue() )
-    {
-        g_FindOptionWildcards = m_wildcards->GetValue();
-        m_upToDate = false;
-    }
-
-    g_FindOptionWrap = m_wrap->GetValue();
-
-    if( g_FindIncludeTexts != m_includeTexts->GetValue() )
-    {
-        g_FindIncludeTexts = m_includeTexts->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindIncludeValues != m_includeValues->GetValue() )
-    {
-        g_FindIncludeValues = m_includeValues->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindIncludeReferences != m_includeReferences->GetValue() )
-    {
-        g_FindIncludeReferences = m_includeReferences->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindIncludeHiddenFields != m_checkAllFields->GetValue() )
-    {
-        g_FindIncludeHiddenFields = m_checkAllFields->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindIncludeMarkers != m_includeMarkers->GetValue() )
-    {
-        g_FindIncludeMarkers = m_includeMarkers->GetValue();
-        m_upToDate = false;
-    }
-
-    if( g_FindIncludeNets != m_includeNets->GetValue() )
-    {
-        g_FindIncludeNets = m_includeNets->GetValue();
-        m_upToDate = false;
-    }
-
     EDA_SEARCH_DATA& frd = m_frame->GetFindReplaceData();
 
-    if( g_FindOptionCase )
+    if( m_matchCase->GetValue() )
         frd.matchCase = true;
 
-    if( g_FindOptionWords )
+    if( m_matchWords->GetValue() )
         frd.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
-    else if( g_FindOptionWildcards )
+    else if( m_wildcards->GetValue() )
         frd.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
     else
         frd.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 
-    frd.searchAllFields = g_FindIncludeHiddenFields;
+    frd.searchAllFields = m_checkAllFields->GetValue();
 
     // Search parameters
     frd.findString = searchString;
@@ -305,16 +222,16 @@ void DIALOG_FIND::search( bool aDirection )
         m_status->SetLabel( _( "Searching..." ) );
         m_hitList.clear();
 
-        if( g_FindIncludeTexts || g_FindIncludeValues || g_FindIncludeReferences )
+        if( m_includeTexts->GetValue() || m_includeValues->GetValue() || m_includeReferences->GetValue() )
         {
             for( FOOTPRINT* fp : board->Footprints() )
             {
                 bool found = false;
 
-                if( g_FindIncludeReferences && fp->Reference().Matches( frd, nullptr ) )
+                if( m_includeReferences->GetValue() && fp->Reference().Matches( frd, nullptr ) )
                     found = true;
 
-                if( !found && g_FindIncludeValues && fp->Value().Matches( frd, nullptr ) )
+                if( !found && m_includeValues->GetValue() && fp->Value().Matches( frd, nullptr ) )
                     found = true;
 
                 if( !found && m_includeTexts->GetValue() )
@@ -350,7 +267,7 @@ void DIALOG_FIND::search( bool aDirection )
                     m_hitList.push_back( fp );
             }
 
-            if( g_FindIncludeTexts )
+            if( m_includeTexts->GetValue() )
             {
                 for( BOARD_ITEM* item : board->Drawings() )
                 {
@@ -373,7 +290,7 @@ void DIALOG_FIND::search( bool aDirection )
             }
         }
 
-        if( g_FindIncludeMarkers )
+        if( m_includeMarkers->GetValue() )
         {
             for( PCB_MARKER* marker : board->Markers() )
             {
@@ -382,7 +299,7 @@ void DIALOG_FIND::search( bool aDirection )
             }
         }
 
-        if( g_FindIncludeNets )
+        if( m_includeNets->GetValue() )
         {
             for( NETINFO_ITEM* net : board->GetNetInfo() )
             {
@@ -493,23 +410,6 @@ bool DIALOG_FIND::Show( bool show )
         m_searchCombo->SetFocus();
 
     return ret;
-}
-
-
-void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
-{
-    g_FindOptionCase = m_matchCase->GetValue();
-    g_FindOptionWords = m_matchWords->GetValue();
-    g_FindOptionWildcards = m_wildcards->GetValue();
-    g_FindOptionWrap = m_wrap->GetValue();
-
-    g_FindIncludeTexts = m_includeTexts->GetValue();
-    g_FindIncludeValues = m_includeValues->GetValue();
-    g_FindIncludeMarkers = m_includeMarkers->GetValue();
-    g_FindIncludeReferences = m_includeReferences->GetValue();
-    g_FindIncludeNets = m_includeNets->GetValue();
-
-    aEvent.Skip();
 }
 
 

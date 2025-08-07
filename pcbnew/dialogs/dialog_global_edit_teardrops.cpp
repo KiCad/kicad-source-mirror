@@ -38,28 +38,9 @@
 #include <tools/global_edit_tool.h>
 #include "dialog_global_edit_teardrops_base.h"
 
-enum TEARDROP_ACTION
-{
-    REMOVE_TEARDROP_IN_SCOPE,
-    REMOVE_ALL_TEARDROPS,
-    ADD_TEARDROPS_DEFAULT,
-    ADD_TEARDROPS_WITH_SPEC_VALUES
-};
-
-// Globals to remember control settings during a session
-static bool         g_vias = true;
-static bool         g_pthPads = true;
-static bool         g_smdPads = true;
-static bool         g_trackToTrack = false;
-static bool         g_filterByNetclass;
+// Globals to remember filters during a session
 static wxString     g_netclassFilter;
-static bool         g_filterByNet;
 static wxString     g_netFilter;
-static bool         g_filterByLayer;
-static int          g_layerFilter;
-static bool         g_filterRoundPads = false;
-static bool         g_filterSelected = false;
-static int          g_action = ADD_TEARDROPS_DEFAULT;
 
 
 class DIALOG_GLOBAL_EDIT_TEARDROPS : public DIALOG_GLOBAL_EDIT_TEARDROPS_BASE
@@ -181,27 +162,8 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
 
 DIALOG_GLOBAL_EDIT_TEARDROPS::~DIALOG_GLOBAL_EDIT_TEARDROPS()
 {
-    g_vias = m_vias->GetValue();
-    g_pthPads = m_pthPads->GetValue();
-    g_smdPads = m_smdPads->GetValue();
-    g_trackToTrack = m_trackToTrack->GetValue();
-    g_filterByNetclass = m_netclassFilterOpt->GetValue();
     g_netclassFilter = m_netclassFilter->GetStringSelection();
-    g_filterByNet = m_netFilterOpt->GetValue();
     g_netFilter = m_netFilter->GetSelectedNetname();
-    g_filterByLayer = m_layerFilterOpt->GetValue();
-    g_layerFilter = m_layerFilter->GetLayerSelection();
-    g_filterRoundPads = m_roundPadsFilter->GetValue();
-    g_filterSelected = m_selectedItemsFilter->GetValue();
-
-    if( m_removeTeardrops->GetValue() )
-        g_action = REMOVE_TEARDROP_IN_SCOPE;
-    else if( m_removeAllTeardrops->GetValue() )
-        g_action = REMOVE_ALL_TEARDROPS;
-    else if( m_specifiedValues->GetValue() )
-        g_action = ADD_TEARDROPS_WITH_SPEC_VALUES;
-    else
-        g_action = ADD_TEARDROPS_DEFAULT;
 
     m_netFilter->Disconnect( FILTERED_ITEM_SELECTED,
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS::OnNetFilterSelect ),
@@ -242,62 +204,13 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataToWindow()
 {
     BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
 
-    g_vias = bds.m_TeardropParamsList.m_TargetVias;
-    g_pthPads = bds.m_TeardropParamsList.m_TargetPTHPads;
-    g_smdPads = bds.m_TeardropParamsList.m_TargetSMDPads;
-    g_trackToTrack = bds.m_TeardropParamsList.m_TargetTrack2Track;
+    m_vias->SetValue( bds.m_TeardropParamsList.m_TargetVias );
+    m_pthPads->SetValue( bds.m_TeardropParamsList.m_TargetPTHPads );
+    m_smdPads->SetValue( bds.m_TeardropParamsList.m_TargetSMDPads );
+    m_trackToTrack->SetValue( bds.m_TeardropParamsList.m_TargetTrack2Track );
 
-    #if 0   // I am not sure this is useful
-    g_filterRoundPads = bds.m_TeardropParamsList.m_UseRoundShapesOnly;
-    #endif
-
-    PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    m_selection                 = selTool->GetSelection();
-    BOARD_CONNECTED_ITEM* item  = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_selection.Front() );
-
-    m_vias->SetValue( g_vias );
-    m_pthPads->SetValue( g_pthPads );
-    m_smdPads->SetValue( g_smdPads );
-    m_trackToTrack->SetValue( g_trackToTrack );
-
-    if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
-        m_netclassFilterOpt->SetValue( true );
-    else if( item )
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
-
-    if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
-    {
-        m_netFilter->SetSelectedNet( g_netFilter );
-        m_netFilterOpt->SetValue( true );
-    }
-    else if( item )
-    {
-        m_netFilter->SetSelectedNetcode( item->GetNetCode() );
-    }
-
-    if( g_filterByLayer && m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
-    {
-        m_layerFilterOpt->SetValue( true );
-    }
-    else if( item )
-    {
-        if( item->Type() == PCB_ZONE_T ) // a zone can be on more than one layer
-            m_layerFilter->SetLayerSelection( static_cast<ZONE*>(item)->GetFirstLayer() );
-        else
-            m_layerFilter->SetLayerSelection( item->GetLayer() );
-    }
-
-    m_roundPadsFilter->SetValue( g_filterRoundPads );
-    m_selectedItemsFilter->SetValue( g_filterSelected );
-
-    if( g_action == REMOVE_TEARDROP_IN_SCOPE )
-        m_removeTeardrops->SetValue( true );
-    else if( g_action == REMOVE_ALL_TEARDROPS )
-        m_removeAllTeardrops->SetValue( true );
-    else if( g_action == ADD_TEARDROPS_DEFAULT )
-        m_addTeardrops->SetValue( true );
-    else    //ADD_TEARDROPS_WITH_SPEC_VALUES
-        m_specifiedValues->SetValue( true );
+    m_netclassFilter->SetStringSelection( g_netclassFilter );
+    m_netFilter->SetSelectedNet( g_netFilter );
 
     m_cbPreferZoneConnection->Set3StateValue( wxCHK_UNDETERMINED );
     m_cbTeardropsUseNextTrack->Set3StateValue( wxCHK_UNDETERMINED );
@@ -378,8 +291,7 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::processItem( BOARD_COMMIT* aCommit, BOARD_CON
 }
 
 
-void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit,
-                                              BOARD_CONNECTED_ITEM* aItem,
+void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit, BOARD_CONNECTED_ITEM* aItem,
                                               bool aSelectAlways )
 {
     if( m_selectedItemsFilter->GetValue() )

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,6 +50,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_rbExcellon = new wxRadioButton( this, wxID_ANY, _("Excellon"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbExcellon->SetValue( true );
 	bSizerMargins->Add( m_rbExcellon, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizerExcellonOptions;
@@ -109,7 +110,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxString m_choiceDrillMapChoices[] = { _("Postscript"), _("Gerber X2"), _("DXF"), _("SVG"), _("PDF") };
 	int m_choiceDrillMapNChoices = sizeof( m_choiceDrillMapChoices ) / sizeof( wxString );
 	m_choiceDrillMap = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceDrillMapNChoices, m_choiceDrillMapChoices, 0 );
-	m_choiceDrillMap->SetSelection( 0 );
+	m_choiceDrillMap->SetSelection( 4 );
 	bSizer9->Add( m_choiceDrillMap, 1, wxALL, 5 );
 
 

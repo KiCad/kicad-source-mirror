@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_UPDATE_SYMBOL_FIELDS_H
-#define DIALOG_UPDATE_SYMBOL_FIELDS_H
+#pragma once
 
 #include <dialog_update_symbol_fields_base.h>
 #include <set>
@@ -36,7 +35,7 @@ class DIALOG_UPDATE_SYMBOL_FIELDS : public DIALOG_UPDATE_SYMBOL_FIELDS_BASE
 {
 public:
     DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aParent, LIB_SYMBOL* aSymbol );
-    ~DIALOG_UPDATE_SYMBOL_FIELDS() override;
+    ~DIALOG_UPDATE_SYMBOL_FIELDS() = default;
 
 protected:
     void onOkButtonClicked( wxCommandEvent& aEvent ) override;
@@ -68,4 +67,3 @@ private:
     std::map<FIELD_T, int> m_mandatoryFieldListIndexes;
 };
 
-#endif // DIALOG_UPDATE_SYMBOL_FIELDS_H
