@@ -421,6 +421,8 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
     if( (unsigned)page < m_panels.size() )
     {
         m_panels[page]->m_SizerBase->Detach( m_webviewPanel );
+        m_webviewPanel->Reparent( this ); // Reparent to dialog
+        m_webviewPanel->Hide(); // Hide webview panel temporarily
     }
 
     m_notebook->DeletePage( page );
@@ -431,6 +433,7 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
 
     // Reparent and add webview back to the new panel
     m_webviewPanel->Reparent( tpanel );
+    m_webviewPanel->Show();
     tpanel->m_SizerBase->Add( m_webviewPanel, 1, wxEXPAND | wxALL, 5 );
 
     buildPageContent( m_tcTemplatePath->GetValue(), page );
