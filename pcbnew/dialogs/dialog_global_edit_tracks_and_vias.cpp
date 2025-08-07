@@ -318,6 +318,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
                 v->Padstack().SetUnconnectedLayerMode(
                         PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
                 break;
+            case 3:
+                v->Padstack().SetUnconnectedLayerMode(
+                        PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
+                break;
             default:
                 break;
             }

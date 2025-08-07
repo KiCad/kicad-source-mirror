@@ -6661,6 +6661,14 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
         }
 
+        case T_start_end_only:
+        {
+            if( parseMaybeAbsentBool( true ) )
+                via->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
+
+            break;
+        }
+
         case T_zone_layer_connections:
         {
             // Ensure only copper layers are stored int ZoneLayerOverride array

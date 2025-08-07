@@ -406,6 +406,11 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
         // Plated through hole pads need copper on the top/bottom layers for proper soldering
         // Unless the user has removed them in the pad dialog
+        if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY )
+        {
+            return aLayer == m_padStack.Drill().start || aLayer == m_padStack.Drill().end;
+        }
+
         if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
             && IsExternalCopperLayer( aLayer ) )
         {
@@ -2762,7 +2767,9 @@ static struct PAD_DESC
                 .Map( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL,   _HKI( "All copper layers" ) )
                 .Map( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL, _HKI( "Connected layers only" ) )
                 .Map( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END,
-                      _HKI( "Front, back and connected layers" ) );
+                      _HKI( "Front, back and connected layers" ) )
+                .Map( PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY,
+                      _HKI( "Start and end layers only" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PAD );

@@ -172,7 +172,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_annularRingsLabel->Wrap( -1 );
 	fgSizerTrackViaPopups->Add( m_annularRingsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
-	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
+        wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only"), _("Start and end layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
 	m_annularRingsCtrl->SetSelection( 1 );

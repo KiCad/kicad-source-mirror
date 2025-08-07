@@ -150,6 +150,7 @@ public:
     enum class UNCONNECTED_LAYER_MODE
     {
         KEEP_ALL,
+        START_END_ONLY,
         REMOVE_ALL,
         REMOVE_EXCEPT_START_AND_END
     };

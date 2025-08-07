@@ -774,10 +774,8 @@ public:
             return true;
 
         case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
-        {
-            if( aLayer == m_padStack.Drill().start || aLayer == m_padStack.Drill().end )
-                return false;
-        }
+        case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+            return aLayer != m_padStack.Drill().start && aLayer != m_padStack.Drill().end;
         }
 
         return true;

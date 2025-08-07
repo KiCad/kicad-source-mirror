@@ -136,6 +136,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL: return 0;
         case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
         case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL: return 2;
+        case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY: return 3;
         }
     };
 
@@ -510,6 +511,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
+        m_annularRingsCtrl->Enable( true );
 
         afterPadstackModeChanged();
     }
@@ -856,6 +858,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 case 2:
                     via->Padstack().SetUnconnectedLayerMode(
                             PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+                    break;
+                case 3:
+                    via->Padstack().SetUnconnectedLayerMode(
+                            PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
                     break;
                 default:
                     break;
@@ -1252,6 +1258,7 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
 
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
+        m_annularRingsCtrl->Enable( true );
     }
 }
 

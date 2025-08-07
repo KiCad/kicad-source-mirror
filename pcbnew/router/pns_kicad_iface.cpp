@@ -1325,6 +1325,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
                                    aVia->GetDrillValue(),
                                    aVia->GetNet(),
                                    aVia->GetViaType() );
+    via->SetUnconnectedLayerMode( aVia->Padstack().UnconnectedLayerMode() );
 
     auto syncDiameter =
         [&]( PCB_LAYER_ID aLayer )
@@ -1591,6 +1592,9 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer 
         }
     }
 
+    if( aItem->OfKind( PNS::ITEM::VIA_T ) )
+        return static_cast<const PNS::VIA*>( aItem )->ConnectsLayer( aLayer );
+
     return aItem->Layers().Overlaps( aLayer );
 }
 
@@ -1633,6 +1637,19 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem,
         default:
             break;
         }
+    }
+
+    if( aItem->OfKind( PNS::ITEM::VIA_T ) )
+    {
+        const PNS::VIA* via = static_cast<const PNS::VIA*>( aItem );
+
+        for( int layer = test.Start(); layer <= test.End(); ++layer )
+        {
+            if( via->ConnectsLayer( layer ) )
+                return true;
+        }
+
+        return false;
     }
 
     return test.Start() <= test.End();
@@ -2029,6 +2046,7 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
+        via_board->Padstack().SetUnconnectedLayerMode( via->UnconnectedLayerMode() );
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );
@@ -2128,6 +2146,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( net );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
+        via_board->Padstack().SetUnconnectedLayerMode( via->UnconnectedLayerMode() );
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );

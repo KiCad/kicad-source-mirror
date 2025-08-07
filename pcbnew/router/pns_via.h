@@ -84,6 +84,7 @@ public:
         m_diameters[0] = 2; // Dummy value
         m_drill = 1;        // Dummy value
         m_viaType = VIATYPE::THROUGH;
+        m_unconnectedLayerMode = PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
         m_isFree = false;
         m_isVirtual = false;
         SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
@@ -103,6 +104,7 @@ public:
         m_shapes[0] = SHAPE_CIRCLE( aPos, aDiameter / 2 );
         SetHole( HOLE::MakeCircularHole( m_pos, aDrill / 2, PNS_LAYER_RANGE() ) );
         m_viaType = aViaType;
+        m_unconnectedLayerMode = PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
         m_isFree = false;
         m_isVirtual = false;
     }
@@ -125,6 +127,7 @@ public:
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_viaType = aB.m_viaType;
+        m_unconnectedLayerMode = aB.m_unconnectedLayerMode;
         m_isFree = aB.m_isFree;
         m_isVirtual = aB.m_isVirtual;
     }
@@ -156,6 +159,7 @@ public:
         m_rank = aB.m_rank;
         m_routable = aB.m_routable;
         m_viaType = aB.m_viaType;
+        m_unconnectedLayerMode = aB.m_unconnectedLayerMode;
         m_isFree = aB.m_isFree;
         m_isVirtual = aB.m_isVirtual;
         m_uid = aB.m_uid;
@@ -192,6 +196,14 @@ public:
 
     VIATYPE ViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
+
+    PADSTACK::UNCONNECTED_LAYER_MODE UnconnectedLayerMode() const { return m_unconnectedLayerMode; }
+    void SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE aMode )
+    {
+        m_unconnectedLayerMode = aMode;
+    }
+
+    bool ConnectsLayer( int aLayer ) const;
 
     int Diameter( int aLayer ) const
     {
@@ -284,6 +296,7 @@ private:
     int          m_drill;
     VECTOR2I     m_pos;
     VIATYPE      m_viaType;
+    PADSTACK::UNCONNECTED_LAYER_MODE m_unconnectedLayerMode;
     bool         m_isFree;
     HOLE*        m_hole;
 };

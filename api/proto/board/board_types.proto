@@ -196,6 +196,10 @@ enum UnconnectedLayerRemoval
 
   // Remove annular rings on unconnected layers, but preserve start and end layers even if unconnected.
   ULR_REMOVE_EXCEPT_START_AND_END = 3;
+
+  // Keep annular rings only on the start and end layers regardless of connections.
+  // Since: 10.0.0
+  ULR_START_END_ONLY = 4;
 }
 
 // The shape of a pad on a given layer

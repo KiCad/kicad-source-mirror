@@ -257,6 +257,9 @@ types::UnconnectedLayerRemoval ToProtoEnum( PADSTACK::UNCONNECTED_LAYER_MODE aVa
     case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
         return types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END;
 
+    case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+        return types::UnconnectedLayerRemoval::ULR_START_END_ONLY;
+
     default:
         wxCHECK_MSG( false, types::UnconnectedLayerRemoval::ULR_UNKNOWN,
                      "Unhandled case in ToProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE>");
@@ -278,6 +281,9 @@ PADSTACK::UNCONNECTED_LAYER_MODE FromProtoEnum( types::UnconnectedLayerRemoval a
 
     case types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END:
         return PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
+
+    case types::UnconnectedLayerRemoval::ULR_START_END_ONLY:
+        return PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY;
 
     default:
         wxCHECK_MSG( false, PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL,

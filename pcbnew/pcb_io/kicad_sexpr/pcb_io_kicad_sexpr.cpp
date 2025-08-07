@@ -2368,6 +2368,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
             KICAD_FORMAT::FormatBool( m_out, "keep_end_layers", true );
             break;
 
+        case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+            KICAD_FORMAT::FormatBool( m_out, "start_end_only", true );
+            break;
+
         case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
             break;
         }

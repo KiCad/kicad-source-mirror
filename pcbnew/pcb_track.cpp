@@ -1458,6 +1458,9 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
         // Check for removal below
         break;
+
+    case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+        return layer == Padstack().Drill().start || layer == Padstack().Drill().end;
     }
 
     if( GetZoneLayerOverride( layer ) == ZLO_FORCE_FLASHED )

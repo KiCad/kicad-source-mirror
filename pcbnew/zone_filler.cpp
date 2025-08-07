@@ -403,7 +403,11 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 {
                     ZONE* zone = findHighestPriorityZone( bbox, layer, netcode, viaTestFn );
 
-                    if( zone && zone->GetNetCode() == via->GetNetCode() )
+                    if( zone && zone->GetNetCode() == via->GetNetCode()
+                            && ( via->Padstack().UnconnectedLayerMode()
+                                     != PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY
+                                 || layer == via->Padstack().Drill().start
+                                 || layer == via->Padstack().Drill().end ) )
                         via->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
                     else
                         via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
@@ -1204,7 +1208,11 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 if( !viaBBox.Intersects( aZone->GetBoundingBox() ) )
                     continue;
 
-                bool noConnection = via->GetNetCode() != aZone->GetNetCode();
+                bool noConnection = via->GetNetCode() != aZone->GetNetCode()
+                        || ( via->Padstack().UnconnectedLayerMode()
+                                 == PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY
+                             && aLayer != via->Padstack().Drill().start
+                             && aLayer != via->Padstack().Drill().end );
 
                 if( noConnection )
                     continue;
