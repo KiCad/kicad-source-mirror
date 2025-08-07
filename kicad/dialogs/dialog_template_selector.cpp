@@ -417,6 +417,9 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
     wxString title = m_notebook->GetPageText( page );
     wxString currPath = m_tcTemplatePath->GetValue();
 
+    // Block all events to the notebook and its children
+    wxEventBlocker blocker( m_notebook );
+
     // Detach webview from current panel before deleting it
     if( (unsigned)page < m_panels.size() )
     {
@@ -439,7 +442,6 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
     buildPageContent( m_tcTemplatePath->GetValue(), page );
 
     m_selectedWidget = nullptr;
-
     // Reset to welcome page after rebuilding
     m_webviewPanel->SetPage( GetWelcomeHtml() );
 
