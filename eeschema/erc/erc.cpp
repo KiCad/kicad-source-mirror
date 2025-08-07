@@ -1231,6 +1231,73 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 }
 
 
+int ERC_TESTER::TestGroundPins()
+{
+    int errors = 0;
+
+    auto isGround = []( const wxString& txt )
+            {
+                wxString upper = txt.Upper();
+                return upper.Contains( wxT( "GND" ) );
+            };
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            bool        hasGroundNet = false;
+            std::vector<SCH_PIN*> mismatched;
+
+            for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
+            {
+                SCH_CONNECTION* conn = pin->Connection( &sheet );
+                wxString        net = conn ? conn->GetNetName() : wxString();
+                bool            netIsGround = isGround( net );
+
+                // We are only interested in power pins
+                if( pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_OUT
+                    && pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_IN )
+                {
+                    continue;
+                }
+
+                if( netIsGround )
+                    hasGroundNet = true;
+
+                if( isGround( pin->GetShownName() ) && !netIsGround )
+                    mismatched.push_back( pin );
+            }
+
+            if( hasGroundNet )
+            {
+                for( SCH_PIN* pin : mismatched )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem =
+                            ERC_ITEM::Create( ERCE_GROUND_PIN_NOT_GROUND );
+
+                    ercItem->SetErrorMessage(
+                            wxString::Format( _( "Pin %s not connected to ground net" ),
+                                              pin->GetShownName() ) );
+                    ercItem->SetItems( pin );
+                    ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetItemsSheetPaths( sheet );
+
+                    SCH_MARKER* marker =
+                            new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
+                    screen->Append( marker );
+                    errors++;
+                }
+            }
+        }
+    }
+
+    return errors;
+}
+
+
 int ERC_TESTER::TestSameLocalGlobalLabel()
 {
     int errCount = 0;
@@ -1893,6 +1960,9 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         TestPinToPin();
     }
+
+    if( m_settings.IsTestEnabled( ERCE_GROUND_PIN_NOT_GROUND ) )
+        TestGroundPins();
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)

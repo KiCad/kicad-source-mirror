@@ -113,6 +113,12 @@ public:
     int TestMultUnitPinConflicts();
 
     /**
+     * Checks for ground-labeled pins not on a ground net while another pin is.
+     * @return warning count
+     */
+    int TestGroundPins();
+
+    /**
      * Checks for global and local labels with the same name
      * @return the error count
      */

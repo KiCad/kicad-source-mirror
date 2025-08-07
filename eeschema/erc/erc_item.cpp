@@ -157,6 +157,10 @@ ERC_ITEM ERC_ITEM::busToNetConflict( ERCE_BUS_TO_NET_CONFLICT,
         _HKI( "Invalid connection between bus and net items" ),
         wxT( "bus_to_net_conflict" ) );
 
+ERC_ITEM ERC_ITEM::groundPinNotGround( ERCE_GROUND_PIN_NOT_GROUND,
+        _HKI( "Ground pin not connected to ground net" ),
+        wxT( "ground_pin_not_ground" ) );
+
 ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _HKI( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
@@ -261,6 +265,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::busToBusConflict,
             ERC_ITEM::busToNetConflict,
             ERC_ITEM::netNotBusMember,
+            ERC_ITEM::groundPinNotGround,
 
             ERC_ITEM::heading_misc,
             ERC_ITEM::unannotated,
@@ -326,6 +331,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_BUS_ENTRY_CONFLICT:      return std::make_shared<ERC_ITEM>( netNotBusMember );
     case ERCE_BUS_TO_BUS_CONFLICT:     return std::make_shared<ERC_ITEM>( busToBusConflict );
     case ERCE_BUS_TO_NET_CONFLICT:     return std::make_shared<ERC_ITEM>( busToNetConflict );
+    case ERCE_GROUND_PIN_NOT_GROUND:   return std::make_shared<ERC_ITEM>( groundPinNotGround );
     case ERCE_LABEL_SINGLE_PIN:        return std::make_shared<ERC_ITEM>( isolatedPinLabel );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
     case ERCE_UNDEFINED_NETCLASS:      return std::make_shared<ERC_ITEM>( undefinedNetclass );

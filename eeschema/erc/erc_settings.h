@@ -68,6 +68,7 @@ enum ERCE_T
                                   ///<   one net.
     ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
                                   ///<   (or vice versa).
+    ERCE_GROUND_PIN_NOT_GROUND,   ///< A ground-labeled pin is not on a ground net while another pin is.
     ERCE_LABEL_SINGLE_PIN,        ///< A label is connected only to a single pin
     ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
     ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced but not defined.
