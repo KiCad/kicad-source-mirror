@@ -493,15 +493,12 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
                 {
-                    long action = controls->GetSettings().m_lastKeyboardCursorCommand;
-
-                    // The arrow keys are by definition SINGLE AXIS.  Do not allow the other
-                    // axis to be snapped to the grid.
-                    if( action == ACTIONS::CURSOR_LEFT || action == ACTIONS::CURSOR_RIGHT )
-                        m_cursor.y = prevPos.y;
-                    else if( action == ACTIONS::CURSOR_UP || action == ACTIONS::CURSOR_DOWN )
-                        m_cursor.x = prevPos.x;
+                    grid.SetSnap( false );
+                    grid.SetUseGrid( false );
                 }
+
+                m_cursor = grid.BestSnapAnchor( mousePos, layers,
+                                                grid.GetSelectionGrid( selection ), sel_items );
 
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
