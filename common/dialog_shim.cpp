@@ -360,48 +360,41 @@ bool DIALOG_SHIM::Enable( bool enable )
 
 std::string DIALOG_SHIM::generateKey( const wxWindow* aWin ) const
 {
-    wxString className = aWin->GetClassInfo()->GetClassName();
-    int      siblingIndex = 0;
+    auto getSiblingIndex =
+            []( const wxWindow* parent, const wxWindow* child )
+            {
+                wxString childClass = child->GetClassInfo()->GetClassName();
+                int      index = 0;
+
+                for( const wxWindow* sibling : parent->GetChildren() )
+                {
+                    if( sibling->GetClassInfo()->GetClassName() != childClass )
+                        continue;
+
+                    if( sibling == child )
+                        break;
+
+                    index++;
+                }
+
+                return index;
+            };
+
+    auto makeKey =
+            [&]( const wxWindow* window )
+            {
+                std::string key = wxString( window->GetClassInfo()->GetClassName() ).ToStdString();
+
+                if( window->GetParent() )
+                    key += "_" + std::to_string( getSiblingIndex( window->GetParent(), window ) );
+
+                return key;
+            };
+
+    std::string key = makeKey( aWin );
 
     for( const wxWindow* parent = aWin->GetParent(); parent && parent != this; parent = parent->GetParent() )
-    {
-        wxString parentClassName = parent->GetClassInfo()->GetClassName();
-
-        if( !parent->GetParent() )
-            break;
-
-        for( auto& sibling : parent->GetParent()->GetChildren() )
-        {
-            if( sibling->GetClassInfo()->GetClassName() != parentClassName )
-                continue;
-
-
-            if( sibling == parent )
-                break;
-
-            siblingIndex++;
-        }
-
-        className = parentClassName + "_" + std::to_string( siblingIndex ) + ":" + className;
-    }
-
-    siblingIndex = 0;
-
-    if( aWin->GetParent() )
-    {
-        for( auto& sibling : aWin->GetParent()->GetChildren() )
-        {
-            if( sibling->GetClassInfo()->GetClassName() != className )
-                continue;
-
-            if( sibling == aWin )
-                break;
-
-            siblingIndex++;
-        }
-    }
-
-    std::string key = className.ToStdString() + "_" + std::to_string( siblingIndex );
+        key = makeKey( parent ) + key;
 
     return key;
 }
