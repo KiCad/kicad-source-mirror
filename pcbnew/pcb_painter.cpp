@@ -1495,7 +1495,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         outline_mode = false;
     }
 
-    if( outline_mode )
+    // Plated holes are always filled as they use a solid BG fill to
+    // draw the "hole" over the hole-wall segment/circle.
+    if( outline_mode && aLayer != LAYER_PAD_PLATEDHOLES )
     {
         // Outline mode
         m_gal->SetIsFill( false );
