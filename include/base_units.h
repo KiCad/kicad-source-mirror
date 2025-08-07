@@ -76,7 +76,7 @@ struct EDA_IU_SCALE
     const double IU_PER_MM;
     const double IU_PER_MILS;
     const double IU_PER_PS{ 1e6 };        ///< Internal time units are attoseconds
-    const double IU_PER_PS_PER_MM{ 1e6 }; ///< Internal velocity units are attoseconds/mm
+    const double IU_PER_PS_PER_MM{ 1e6 }; ///< Internal delay units are attoseconds/mm
     const double MM_PER_IU;
 
 
