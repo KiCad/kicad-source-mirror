@@ -18,7 +18,10 @@
     "boost-test",
     "boost-uuid",
     "cairo",
-    "wxwidgets-33",
+    {
+      "name": "wxwidgets-33",
+      "features": [ "webview" ]
+    },
     "glew",
     "curl",
     {
