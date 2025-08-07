@@ -165,7 +165,7 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     pad.set_number( GetNumber().ToUTF8() );
     pad.set_type( ToProtoEnum<PAD_ATTRIB, PadType>( GetAttribute() ) );
     pad.mutable_pad_to_die_length()->set_value_nm( GetPadToDieLength() );
-    pad.mutable_pad_to_die_delay()->set_value_ps( GetPadToDieDelay() );
+    pad.mutable_pad_to_die_delay()->set_value_as( GetPadToDieDelay() );
 
     google::protobuf::Any padStackMsg;
     m_padStack.Serialize( padStackMsg );
@@ -192,7 +192,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetAttribute( FromProtoEnum<PAD_ATTRIB>( pad.type() ) );
     SetNumber( wxString::FromUTF8( pad.number() ) );
     SetPadToDieLength( pad.pad_to_die_length().value_nm() );
-    SetPadToDieDelay( pad.pad_to_die_delay().value_ps() );
+    SetPadToDieDelay( pad.pad_to_die_delay().value_as() );
 
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( pad.pad_stack() );
