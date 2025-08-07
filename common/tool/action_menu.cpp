@@ -130,7 +130,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
             Insert( 0, new wxMenuItem( this, wxID_NONE, m_title, wxEmptyString, wxITEM_NORMAL ) );
 
             if( !!m_icon )
-                KIUI::AddBitmapToMenuItem( FindItemByPosition( 0 ), KiBitmap( m_icon ) );
+                KIUI::AddBitmapToMenuItem( FindItemByPosition( 0 ), KiBitmapBundle( m_icon, 24 ) );
 
             m_titleDisplayed = true;
         }
@@ -145,7 +145,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, BITMAPS aIcon )
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
 
     if( !!aIcon )
-        KIUI::AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
+        KIUI::AddBitmapToMenuItem( item, KiBitmapBundle( aIcon, 24 ) );
 
     return Append( item );
 }
@@ -160,7 +160,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     if( !!aIcon )
-        KIUI::AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
+        KIUI::AddBitmapToMenuItem( item, KiBitmapBundle( aIcon, 24 ) );
 
     return Append( item );
 }
@@ -179,7 +179,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
                                        aAction.GetTooltip(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
     if( !!icon )
-        KIUI::AddBitmapToMenuItem( item, KiBitmap( icon ) );
+        KIUI::AddBitmapToMenuItem( item, KiBitmapBundle( icon, 24 ) );
 
     m_toolActions[aAction.GetUIId()] = &aAction;
 
@@ -197,7 +197,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
     if( !!aMenu->m_icon )
     {
         wxMenuItem* newItem = new wxMenuItem( this, -1, aMenu->m_title );
-        KIUI::AddBitmapToMenuItem( newItem, KiBitmap( aMenu->m_icon ) );
+        KIUI::AddBitmapToMenuItem( newItem, KiBitmapBundle( aMenu->m_icon, 24 ) );
         newItem->SetSubMenu( aMenu );
         return Append( newItem );
     }
