@@ -30,6 +30,7 @@
 #include <type_traits>
 #include <optional>
 #include <concepts>
+#include <cstdint>
 
 
 /**
