@@ -44,6 +44,7 @@
 #include <wx/textctrl.h>
 #include <wx/stc/stc.h>
 #include <wx/combobox.h>
+#include <wx/odcombo.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
@@ -428,7 +429,9 @@ void DIALOG_SHIM::SaveControlState()
                 if( !key.empty() )
                 {
                     if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
-                        dlgMap[ key ] = combo->GetSelection();
+                        dlgMap[ key ] = combo->GetValue();
+                    else if( wxOwnerDrawnComboBox* od_combo = dynamic_cast<wxOwnerDrawnComboBox*>( win ) )
+                        dlgMap[ key ] = od_combo->GetSelection();
                     else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
                         dlgMap[ key ] = choice->GetSelection();
                     else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
@@ -496,6 +499,11 @@ void DIALOG_SHIM::LoadControlState()
                         {
                             if( j.is_string() )
                                 combo->SetValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
+                        }
+                        else if( wxOwnerDrawnComboBox* od_combo = dynamic_cast<wxOwnerDrawnComboBox*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                od_combo->SetSelection( j.get<int>() );
                         }
                         else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
                         {
