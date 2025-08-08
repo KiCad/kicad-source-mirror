@@ -81,7 +81,6 @@ public:
     bool Show( bool show = true ) override;
 
 protected:
-    void OnCloseButtonClick( wxCommandEvent& aEvent ) override;
     void OnBoardChanged( wxCommandEvent& event );
 
 private:

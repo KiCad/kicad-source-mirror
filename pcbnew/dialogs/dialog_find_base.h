@@ -58,7 +58,6 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxHyperlinkCtrl* m_searchPanelLink;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOptionChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }

@@ -393,15 +393,6 @@ void DIALOG_FIND::search( bool aDirection )
 }
 
 
-void DIALOG_FIND::OnCloseButtonClick( wxCommandEvent& aEvent )
-{
-    wxCloseEvent tmp;
-
-    OnClose( tmp );
-
-    aEvent.Skip();
-}
-
 bool DIALOG_FIND::Show( bool show )
 {
     bool ret = DIALOG_FIND_BASE::Show( show );

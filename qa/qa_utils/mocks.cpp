@@ -78,10 +78,6 @@ void DIALOG_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
 {
 }
 
-void DIALOG_FIND::OnCloseButtonClick( wxCommandEvent& aEvent )
-{
-}
-
 bool DIALOG_FIND::Show( bool show )
 {
     return true;
