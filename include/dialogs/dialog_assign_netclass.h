@@ -34,7 +34,7 @@ class EDA_BASE_FRAME;
 class DIALOG_ASSIGN_NETCLASS : public DIALOG_ASSIGN_NETCLASS_BASE
 {
 public:
-    DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const wxString aNetName,
+    DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const std::set<wxString>& aNetNames,
                             const std::set<wxString> aCandidateNetNames,
                             const std::function<void( const std::vector<wxString>& )>& aPreviewer );
     ~DIALOG_ASSIGN_NETCLASS() override {}

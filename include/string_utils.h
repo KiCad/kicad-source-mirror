@@ -24,8 +24,10 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
+#include <algorithm>
 #include <string>
 #include <vector>
+
 #include <wx/string.h>
 #include <wx/filename.h>
 
@@ -197,7 +199,29 @@ KICOMMON_API wxString GetISO8601CurrentDateTime();
  *         than \a aString2.
  */
 KICOMMON_API int StrNumCmp( const wxString& aString1, const wxString& aString2,
-                           bool aIgnoreCase = false );
+                            bool aIgnoreCase = false );
+
+
+enum class CASE_SENSITIVITY
+{
+    SENSITIVE,
+    INSENSITIVE
+};
+
+
+/**
+ * Sort a container of wxString objects, in place, using the StrNumCmp() function.
+ */
+template <typename T>
+inline void StrNumSort( T& aList, CASE_SENSITIVITY aCaseSensitivity )
+{
+    std::sort( aList.begin(), aList.end(),
+               [aCaseSensitivity]( const wxString& lhs, const wxString& rhs )
+               {
+                   return StrNumCmp( lhs, rhs, aCaseSensitivity == CASE_SENSITIVITY::INSENSITIVE ) < 0;
+               } );
+}
+
 
 /**
  * Compare a string against wild card (* and ?) pattern using the usual rules.

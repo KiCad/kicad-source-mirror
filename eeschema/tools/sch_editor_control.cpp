@@ -875,52 +875,71 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     SCHEMATIC&          schematic = m_frame->Schematic();
     SCH_SCREEN*         screen = m_frame->GetCurrentSheet().LastScreen();
 
-    const SCH_CONNECTION* conn = nullptr;
-    VECTOR2D connPos;
+    std::vector<std::pair<SCH_CONNECTION*, VECTOR2D>> selectedConns;
 
     for( EDA_ITEM* item : selectionTool->GetSelection() )
     {
-        conn    = static_cast<SCH_ITEM*>( item )->Connection();
-        connPos = item->GetPosition();
+        SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection();
 
-        if( conn )
-            break;
+        if( !conn )
+            continue;
+
+        selectedConns.emplace_back( conn, item->GetPosition() );
     }
 
-    if( !conn )
+    if( selectedConns.empty() )
     {
-        m_frame->ShowInfoBarError( _( "No net selected." ) );
+        m_frame->ShowInfoBarError( _( "No nets selected." ) );
         return 0;
     }
 
     // Remove selection in favor of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
-    highlightNet( m_toolMgr, connPos );
 
-    wxString netName = conn->Name();
-
-    if( conn->IsBus() )
+    const auto getNetNamePattern = []( const SCH_CONNECTION& aConn ) -> std::optional<wxString>
     {
-        wxString prefix;
+        wxString netName = aConn.Name();
 
-        if( NET_SETTINGS::ParseBusVector( netName, &prefix, nullptr ) )
+        if( aConn.IsBus() )
         {
-            netName = prefix + wxT( "*" );
+            wxString prefix;
+
+            if( NET_SETTINGS::ParseBusVector( netName, &prefix, nullptr ) )
+            {
+                return prefix + wxT( "*" );
+            }
+            else if( NET_SETTINGS::ParseBusGroup( netName, &prefix, nullptr ) )
+            {
+                return prefix + wxT( ".*" );
+            }
         }
-        else if( NET_SETTINGS::ParseBusGroup( netName, &prefix, nullptr ) )
+        else if( !aConn.Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( aConn.Driver() )
+                      < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
         {
-            netName = prefix + wxT( ".*" );
+            return std::nullopt;
         }
-    }
-    else if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
-                                                < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
+
+        return netName;
+    };
+
+    std::set<wxString> netNames;
+    for( const auto& [conn, pos] : selectedConns )
     {
-        m_frame->ShowInfoBarError( _( "Net must be labeled to assign a netclass." ) );
-        highlightNet( m_toolMgr, CLEAR );
-        return 0;
+        std::optional<wxString> netNamePattern = getNetNamePattern( *conn );
+
+        if( !netNamePattern )
+        {
+            // This is a choice, we can also allow some un-labeled nets as long as some are labeled.
+            m_frame->ShowInfoBarError( _( "All selected nets must be labeled to assign a netclass." ) );
+            return 0;
+        }
+
+        netNames.insert( *netNamePattern );
     }
 
-    DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, schematic.GetNetClassAssignmentCandidates(),
+    wxCHECK( !netNames.empty(), 0 );
+
+    DIALOG_ASSIGN_NETCLASS dlg( m_frame, netNames, schematic.GetNetClassAssignmentCandidates(),
             [&]( const std::vector<wxString>& aNetNames )
             {
                 for( SCH_ITEM* item : screen->Items() )
