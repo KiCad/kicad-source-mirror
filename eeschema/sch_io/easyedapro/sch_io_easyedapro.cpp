@@ -456,12 +456,12 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
         screen->SetFileName( aFileName );
         rootSheet->SetScreen( screen );
-        
+
         // Virtual root sheet UUID must be the same as the schematic file UUID.
         const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
     wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
 
     SCH_EASYEDAPRO_PARSER parser( nullptr, nullptr );
@@ -616,7 +616,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, libTableUri, wxS( "KiCad" ) ) );
 
         // Save project symbol library table.
-        wxFileName fn( aSchematic->Prj().GetProjectPath(),
+        wxFileName fn( aSchematic->Project().GetProjectPath(),
                        SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
@@ -626,8 +626,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         }
 
         // Relaod the symbol library table.
-        aSchematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
-        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
+        aSchematic->Project().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
+        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
     }
 
     // set properties to prevent save file on every symbol save

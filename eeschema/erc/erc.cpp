@@ -188,7 +188,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
     auto unresolved =
             [this]( wxString str )
             {
-                str = ExpandEnvVarSubstitutions( str, &m_schematic->Prj() );
+                str = ExpandEnvVarSubstitutions( str, &m_schematic->Project() );
                 return str.Matches( wxS( "*${*}*" ) );
             };
 
@@ -247,7 +247,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         wsItems.SetFileName( wxS( "dummyFilename" ) );
         wsItems.SetSheetName( wxS( "dummySheet" ) );
         wsItems.SetSheetLayer( wxS( "dummyLayer" ) );
-        wsItems.SetProject( &m_schematic->Prj() );
+        wsItems.SetProject( &m_schematic->Project() );
         wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock() );
     }
 
@@ -682,7 +682,7 @@ int ERC_TESTER::TestMissingUnits()
 int ERC_TESTER::TestMissingNetclasses()
 {
     int                            err_count = 0;
-    std::shared_ptr<NET_SETTINGS>& settings = m_schematic->Prj().GetProjectFile().NetSettings();
+    std::shared_ptr<NET_SETTINGS>& settings = m_schematic->Project().GetProjectFile().NetSettings();
     wxString                       defaultNetclass = settings->GetDefaultNetclass()->GetName();
 
     auto logError =
@@ -1472,7 +1472,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
     wxString          msg;
     int               err_count = 0;
 
@@ -1840,7 +1840,7 @@ int ERC_TESTER::TestSimModelIssues()
 {
     WX_STRING_REPORTER reporter;
     int                err_count = 0;
-    SIM_LIB_MGR        libMgr( &m_schematic->Prj() );
+    SIM_LIB_MGR        libMgr( &m_schematic->Project() );
 
     for( SCH_SHEET_PATH& sheet : m_sheetList )
     {

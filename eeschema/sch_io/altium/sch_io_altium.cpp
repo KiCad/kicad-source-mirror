@@ -349,7 +349,7 @@ wxString SCH_IO_ALTIUM::getLibName()
     if( m_libName.IsEmpty() )
     {
         // Try to come up with a meaningful name
-        m_libName = m_schematic->Prj().GetProjectName();
+        m_libName = m_schematic->Project().GetProjectName();
 
         if( m_libName.IsEmpty() )
         {
@@ -370,7 +370,7 @@ wxString SCH_IO_ALTIUM::getLibName()
 
 wxFileName SCH_IO_ALTIUM::getLibFileName()
 {
-    wxFileName fn( m_schematic->Prj().GetProjectPath(), getLibName(),
+    wxFileName fn( m_schematic->Project().GetProjectPath(), getLibName(),
                    FILEEXT::KiCadSymbolLibFileExtension );
 
     return fn;
@@ -401,7 +401,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
         sheet->SetScreen( screen );
 
         kicad_fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
-        kicad_fn.SetPath( aSchematic->Prj().GetProjectPath() );
+        kicad_fn.SetPath( aSchematic->Project().GetProjectPath() );
         sheet->SetFileName( fn.GetFullPath() );
         screen->SetFileName( sheet->GetFileName() );
 
@@ -501,7 +501,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
     rootScreen->m_sheetInstances.emplace_back( sheetInstance );
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
@@ -544,7 +544,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         }
     }
 
-    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().NetSettings();
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Project().GetProjectFile().NetSettings();
 
     if( minWireWidth < std::numeric_limits<int>::max() )
         netSettings->GetDefaultNetclass()->SetWireWidth( minWireWidth );
@@ -904,7 +904,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 
             // Map the loaded Altium file to the project file.
             wxFileName projectFileName = loadAltiumFileName;
-            projectFileName.SetPath( m_schematic->Prj().GetProjectPath() );
+            projectFileName.SetPath( m_schematic->Project().GetProjectPath() );
             projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
             sheet->SetFileName( projectFileName.GetFullName() );
             screen->SetFileName( projectFileName.GetFullPath() );
@@ -4266,7 +4266,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         }
         else
         {
-            m_schematic->Prj().GetTextVars()[ paramName ] = elem.text;
+            m_schematic->Project().GetTextVars()[ paramName ] = elem.text;
         }
     }
     else

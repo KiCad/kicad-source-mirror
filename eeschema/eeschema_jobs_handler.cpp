@@ -227,7 +227,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
             {
                 wxString msg;
                 FILENAME_RESOLVER resolve;
-                resolve.SetProject( &aSch->Prj() );
+                resolve.SetProject( &aSch->Project() );
                 resolve.SetProgramBase( &Pgm() );
 
                 wxString absolutePath = resolve.ResolvePath( path, wxGetCwd(),
@@ -272,7 +272,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
+    sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
     std::unique_ptr<SCH_RENDER_SETTINGS> renderSettings = std::make_unique<SCH_RENDER_SETTINGS>();
     InitRenderSettings( renderSettings.get(), aPlotJob->m_theme, sch, aPlotJob->m_drawingSheet );
@@ -310,7 +310,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
-    wxString outPath = aPlotJob->GetFullOutputPath( &sch->Prj() );
+    wxString outPath = aPlotJob->GetFullOutputPath( &sch->Project() );
 
     if( !PATHS::EnsurePathExists( outPath, !aPlotJob->GetOutputPathIsDirectory() ) )
     {
@@ -364,7 +364,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
+    sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -453,7 +453,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         aNetJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
+    wxString outPath = aNetJob->GetFullOutputPath( &sch->Project() );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -482,7 +482,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
+    sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -672,7 +672,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         aBomJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aBomJob->GetFullOutputPath( &sch->Prj() );
+    wxString outPath = aBomJob->GetFullOutputPath( &sch->Project() );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -761,7 +761,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
+    sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -800,7 +800,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
         aNetJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aNetJob->GetFullOutputPath( &sch->Prj() );
+    wxString outPath = aNetJob->GetFullOutputPath( &sch->Project() );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -1114,7 +1114,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
+    sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( ercJob->GetConfiguredOutputPath().IsEmpty() )
     {
@@ -1129,7 +1129,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         ercJob->SetConfiguredOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = ercJob->GetFullOutputPath( &sch->Prj() );
+    wxString outPath = ercJob->GetFullOutputPath( &sch->Project() );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -1154,7 +1154,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet( getDrawingSheetProxyView( sch ) );
     ercTester.RunTests( drawingSheet.get(), nullptr, m_kiway->KiFACE( KIWAY::FACE_CVPCB ),
-                        &sch->Prj(), m_progressReporter );
+                        &sch->Project(), m_progressReporter );
 
     markersProvider->SetSeverities( ercJob->m_severity );
 
@@ -1194,7 +1194,7 @@ DS_PROXY_VIEW_ITEM* EESCHEMA_JOBS_HANDLER::getDrawingSheetProxyView( SCHEMATIC* 
 {
     DS_PROXY_VIEW_ITEM* drawingSheet =
             new DS_PROXY_VIEW_ITEM( schIUScale, &aSch->RootScreen()->GetPageSettings(),
-                                    &aSch->Prj(), &aSch->RootScreen()->GetTitleBlock(),
+                                    &aSch->Project(), &aSch->RootScreen()->GetTitleBlock(),
                                     aSch->GetProperties() );
 
     drawingSheet->SetPageNumber( TO_UTF8( aSch->RootScreen()->GetPageNumber() ) );

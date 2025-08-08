@@ -64,7 +64,7 @@ std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
 
 NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC* aSchematic ) :
     NETLIST_EXPORTER_BASE( aSchematic ),
-    m_libMgr( &aSchematic->Prj() )
+    m_libMgr( &aSchematic->Project() )
 {
     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
     embeddedFilesStack.push_back( aSchematic->GetEmbeddedFiles() );
@@ -562,7 +562,7 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
                                            const wxString& aPath )
 {
     // First, expand env vars, if any.
-    wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Prj() );
+    wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Project() );
 
     // Path may have been authored by someone on a Windows box; convert it to UNIX format
     expandedPath.Replace( '\\', '/' );
@@ -572,7 +572,7 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
     if( aNetlistOptions & OPTION_ADJUST_INCLUDE_PATHS )
     {
         // Look for the library in known search locations.
-        fullPath = ResolveFile( expandedPath, &Pgm().GetLocalEnvVariables(), &m_schematic->Prj() );
+        fullPath = ResolveFile( expandedPath, &Pgm().GetLocalEnvVariables(), &m_schematic->Project() );
 
         if( fullPath.IsEmpty() )
         {

@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE( TestInProjectPath )
     // File is in a completely different path with the same folder depth.
     testFn.SetPath( "/home/foo/kicad" );
 
-    wxFileName projectFn( m_schematic->Prj().GetProjectFullName() );
+    wxFileName projectFn( m_schematic->Project().GetProjectFullName() );
 
     // Just in case someone has a build path with no subfolders.
     BOOST_CHECK( testFn.GetDirCount() < projectFn.GetDirCount() );

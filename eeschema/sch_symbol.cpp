@@ -1252,7 +1252,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         int      precision = precisionStr.IsEmpty() ? 3 : precisionStr[0] - '0';
         wxString range = rangeStr.IsEmpty() ? wxString( wxS( "~A" ) ) : rangeStr;
 
-        SIM_LIB_MGR simLibMgr( &schematic->Prj() );
+        SIM_LIB_MGR simLibMgr( &schematic->Project() );
 
         std::vector<EMBEDDED_FILES*> embeddedFilesStack;
         embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );

@@ -600,7 +600,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
 
-    const std::map<wxString, wxString>& properties = m_schematic->Prj().GetTextVars();
+    const std::map<wxString, wxString>& properties = m_schematic->Project().GetTextVars();
 
     for( const std::pair<const wxString, wxString>& prop : properties )
     {
@@ -626,7 +626,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
         xsheet->AddAttribute( wxT( "tstamps" ), sheet.PathAsString() );
 
         TITLE_BLOCK tb = screen->GetTitleBlock();
-        PROJECT*    prj = &m_schematic->Prj();
+        PROJECT*    prj = &m_schematic->Project();
 
         xsheet->AddChild( xtitleBlock = node( wxT( "title_block" ) ) );
 
@@ -683,7 +683,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
 XNODE* NETLIST_EXPORTER_XML::makeLibraries()
 {
     XNODE*            xlibs = node( wxT( "libraries" ) );     // auto_ptr
-    SYMBOL_LIB_TABLE* symbolLibTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
+    SYMBOL_LIB_TABLE* symbolLibTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
 
     for( std::set<wxString>::iterator it = m_libraries.begin(); it!=m_libraries.end();  ++it )
     {

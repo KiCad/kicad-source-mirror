@@ -432,7 +432,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             // Ensure there is only one legacy library loaded and that it is the cache library.
-            SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic().Prj() );
+            SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic().Project() );
 
             if( legacyLibs->GetLibraryCount() == 0 )
             {

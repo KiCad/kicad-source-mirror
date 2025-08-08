@@ -2466,7 +2466,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         m_net_name_to_subgraphs_map[subgraph->m_driver_connection->Name()].push_back( subgraph );
     }
 
-    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().m_NetSettings;
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Project().GetProjectFile().m_NetSettings;
     std::map<wxString, std::set<wxString>> oldAssignments =
             netSettings->GetNetclassLabelAssignments();
     std::set<wxString>             affectedNetclassNetAssignments;

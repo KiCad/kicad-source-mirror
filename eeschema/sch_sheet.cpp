@@ -244,7 +244,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
         }
     }
 
-    PROJECT* project = &schematic->Prj();
+    PROJECT* project = &schematic->Project();
 
     // We cannot resolve text variables initially on load as we need to first load the screen and
     // then parse the hierarchy.  So skip the resolution if the screen isn't set yet

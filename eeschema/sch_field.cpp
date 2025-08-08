@@ -266,7 +266,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &labelResolver );
             else if( Schematic() )
             {
-                text = ExpandTextVars( text, &Schematic()->Prj() );
+                text = ExpandTextVars( text, &Schematic()->Project() );
                 text = ExpandTextVars( text, &schematicResolver );
             }
         }
@@ -739,7 +739,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                 {
                     NULL_REPORTER   devnull;
                     SCH_SHEET_PATH& sheet = schematic->CurrentSheet();
-                    SIM_LIB_MGR     mgr( &schematic->Prj() );
+                    SIM_LIB_MGR     mgr( &schematic->Project() );
 
                     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
                     embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
@@ -804,7 +804,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
         if( label )
             label->GetContextualTextVars( &autocompleteTokens );
 
-        for( std::pair<wxString, wxString> entry : schematic->Prj().GetTextVars() )
+        for( std::pair<wxString, wxString> entry : schematic->Project().GetTextVars() )
             autocompleteTokens.push_back( entry.first );
     }
 

@@ -127,13 +127,13 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
         }
 
         if( m_path.IsEmpty() )
-            m_path = aSchematic->Prj().GetProjectPath();
+            m_path = aSchematic->Project().GetProjectPath();
 
         wxLogTrace( traceSchPlugin, "Normalized append path \"%s\".", m_path );
     }
     else
     {
-        m_path = aSchematic->Prj().GetProjectPath();
+        m_path = aSchematic->Project().GetProjectPath();
     }
 
     m_currentPath.push( m_path );
@@ -148,7 +148,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
 
         // Do not use wxPATH_UNIX as option in MakeRelativeTo(). It can create incorrect
         // relative paths on Windows, because paths have a disk identifier (C:, D: ...)
-        relPath.MakeRelativeTo( aSchematic->Prj().GetProjectPath() );
+        relPath.MakeRelativeTo( aSchematic->Project().GetProjectPath() );
 
         newSheet->SetFileName( relPath.GetFullPath() );
         m_rootSheet = newSheet.get();
@@ -1064,7 +1064,7 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
                 wxString projectName;
 
                 if( sheetInstances[i].m_Path[0] == rootSheetUuid )
-                    projectName = m_schematic->Prj().GetProjectName();
+                    projectName = m_schematic->Project().GetProjectName();
                 else
                     projectName = sheetInstances[i].m_ProjectName;
 

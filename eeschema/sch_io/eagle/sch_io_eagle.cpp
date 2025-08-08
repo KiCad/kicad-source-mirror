@@ -118,7 +118,7 @@ wxString SCH_IO_EAGLE::getLibName()
     if( m_libName.IsEmpty() )
     {
         // Try to come up with a meaningful name
-        m_libName = m_schematic->Prj().GetProjectName();
+        m_libName = m_schematic->Project().GetProjectName();
 
         if( m_libName.IsEmpty() )
         {
@@ -143,7 +143,7 @@ wxFileName SCH_IO_EAGLE::getLibFileName()
 
     wxCHECK( m_schematic, fn );
 
-    fn.Assign( m_schematic->Prj().GetProjectPath(), getLibName(),
+    fn.Assign( m_schematic->Project().GetProjectPath(), getLibName(),
                FILEEXT::KiCadSymbolLibFileExtension );
 
     return fn;
@@ -421,7 +421,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         m_sheetPath.SetPageNumber( wxT( "1" ) );
     }
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
 
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
@@ -440,7 +440,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                                                        wxT( "KiCad" ) ) );
 
         // Save project symbol library table.
-        wxFileName fn( m_schematic->Prj().GetProjectPath(),
+        wxFileName fn( m_schematic->Project().GetProjectPath(),
                        SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
@@ -450,8 +450,8 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         }
 
         // Reload the symbol library table.
-        m_schematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-        PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
+        m_schematic->Project().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
+        PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
     }
 
     m_eagleDoc = std::make_unique<EAGLE_DOC>( currentNode, this );
@@ -1815,7 +1815,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     // assume that footprint library is identical to project name
     if( !package.IsEmpty() )
     {
-        wxString footprint = m_schematic->Prj().GetProjectName() + wxT( ":" ) + package;
+        wxString footprint = m_schematic->Project().GetProjectName() + wxT( ":" ) + package;
         symbol->GetField( FIELD_T::FOOTPRINT )->SetText( footprint );
     }
 
@@ -1988,7 +1988,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     symbol->AddHierarchicalReference( m_sheetPath.Path(), refPrefix + reference, unit );
 
     // Save the pin positions
-    SYMBOL_LIB_TABLE& schLibTable = *PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
+    SYMBOL_LIB_TABLE& schLibTable = *PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
     LIB_SYMBOL* libSymbol = schLibTable.LoadSymbol( symbol->GetLibId() );
 
     wxCHECK( libSymbol, /*void*/ );
@@ -2091,7 +2091,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 if( m_schematic )
                 {
                     // assume that footprint library is identical to project name
-                    libName = m_schematic->Prj().GetProjectName();
+                    libName = m_schematic->Project().GetProjectName();
                 }
                 else
                 {

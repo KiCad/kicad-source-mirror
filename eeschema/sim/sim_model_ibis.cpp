@@ -62,7 +62,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
     bool        diffMode        = GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::DIFF_FIELD, true, 0 ) == "1";
 
     WX_STRING_REPORTER reporter;
-    SIM_LIB_MGR        mgr( &aSchematic->Prj() );
+    SIM_LIB_MGR        mgr( &aSchematic->Project() );
 
     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
     embeddedFilesStack.push_back( aSchematic->GetEmbeddedFiles() );

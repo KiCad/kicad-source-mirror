@@ -132,7 +132,7 @@ wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::GetSchematicPath( const wxString& aB
 template <typename Exporter>
 wxString TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::GetNetlistPath( bool aTest )
 {
-    wxFileName netFile = m_schematic->Prj().GetProjectFullName();
+    wxFileName netFile = m_schematic->Project().GetProjectFullName();
 
     if( aTest )
         netFile.SetName( netFile.GetName() + "_test" );

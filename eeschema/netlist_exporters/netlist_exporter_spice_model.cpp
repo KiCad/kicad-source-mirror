@@ -35,7 +35,7 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,
 {
     aFormatter.Print( 0, "*\n" );
     aFormatter.Print( 0, "\n" );
-    aFormatter.Print( 0, ".subckt %s\n", TO_UTF8( m_schematic->Prj().GetProjectName() ) );
+    aFormatter.Print( 0, ".subckt %s\n", TO_UTF8( m_schematic->Project().GetProjectName() ) );
 
     for( auto const& [key, port] : m_ports )
     {

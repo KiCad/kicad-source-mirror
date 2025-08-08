@@ -386,8 +386,7 @@ std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* 
 
     if( schematic )
     {
-        std::shared_ptr<NET_SETTINGS>& netSettings =
-                schematic->Prj().GetProjectFile().m_NetSettings;
+        std::shared_ptr<NET_SETTINGS>& netSettings = schematic->Project().GetProjectFile().m_NetSettings;
         SCH_CONNECTION* connection = Connection( aSheet );
 
         if( connection )

@@ -151,13 +151,13 @@ SCH_SHEET* SCH_IO_KICAD_LEGACY::LoadSchematicFile( const wxString& aFileName, SC
         }
 
         if( m_path.IsEmpty() )
-            m_path = aSchematic->Prj().GetProjectPath();
+            m_path = aSchematic->Project().GetProjectPath();
 
         wxLogTrace( traceSchLegacyPlugin, "Normalized append path \"%s\".", m_path );
     }
     else
     {
-        m_path = aSchematic->Prj().GetProjectPath();
+        m_path = aSchematic->Project().GetProjectPath();
     }
 
     m_currentPath.push( m_path );

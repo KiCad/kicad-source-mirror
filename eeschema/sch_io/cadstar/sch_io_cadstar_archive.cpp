@@ -101,14 +101,14 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     csaLoader.Load( aSchematic, rootSheet );
 
     // SAVE SYMBOLS TO PROJECT LIBRARY:
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
-    wxFileName prj_fn = aSchematic->Prj().GetProjectFullName();
+    wxFileName prj_fn = aSchematic->Project().GetProjectFullName();
     wxString libName = CADSTAR_SCH_ARCHIVE_LOADER::CreateLibName( prj_fn, nullptr );
 
-    wxFileName libFileName( aSchematic->Prj().GetProjectPath(), libName,
+    wxFileName libFileName( aSchematic->Project().GetProjectPath(), libName,
                             FILEEXT::KiCadSymbolLibFileExtension );
 
     IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
@@ -124,7 +124,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
                 new SYMBOL_LIB_TABLE_ROW( libName, libTableUri, wxString( "KiCad" ) ) );
 
         // Save project symbol library table.
-        wxFileName libtab_fn( aSchematic->Prj().GetProjectPath(),
+        wxFileName libtab_fn( aSchematic->Project().GetProjectPath(),
                        SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
@@ -134,8 +134,8 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
         }
 
         // Relaod the symbol library table.
-        aSchematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
-        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
+        aSchematic->Project().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
+        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
     }
 
     // set properties to prevent save file on every symbol save

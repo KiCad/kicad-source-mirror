@@ -667,10 +667,10 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
     wxString msg;
     std::vector<SCH_SYMBOL*> symbols;
-    SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Schematic()->Prj() );
+    SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Schematic()->Project() );
 
     // This will be a nullptr if an s-expression schematic is loaded.
-    SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic()->Prj() );
+    SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic()->Project() );
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
@@ -1739,7 +1739,7 @@ bool SCH_SCREEN::InProjectPath() const
     wxCHECK( Schematic() && !m_fileName.IsEmpty(), false );
 
     wxFileName thisScreenFn( m_fileName );
-    wxFileName thisProjectFn( Schematic()->Prj().GetProjectFullName() );
+    wxFileName thisProjectFn( Schematic()->Project().GetProjectFullName() );
 
     wxCHECK( thisProjectFn.IsAbsolute(), false );
 
@@ -2146,7 +2146,7 @@ void SCH_SCREEN::MigrateSimModels()
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        SIM_MODEL::MigrateSimModel<SCH_SYMBOL>( *symbol, &Schematic()->Prj() );
+        SIM_MODEL::MigrateSimModel<SCH_SYMBOL>( *symbol, &Schematic()->Project() );
     }
 }
 

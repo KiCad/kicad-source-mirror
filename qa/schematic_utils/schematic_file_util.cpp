@@ -121,7 +121,7 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
 {
     if( aSchematic )
     {
-        PROJECT* prj = &aSchematic->Prj();
+        PROJECT* prj = &aSchematic->Project();
 
         aSchematic->SetProject( nullptr );
         aSettingsManager.UnloadProject( prj, false );

@@ -171,7 +171,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
             ascFiles[ascFiles[i].ParentIndex].Sheet->GetScreen()->Append( curSheet );
 
-            curSheet->GetScreen()->SetFileName( m_schematic->Prj().GetProjectPath() + sheetName + ".kicad_sch" );
+            curSheet->GetScreen()->SetFileName( m_schematic->Project().GetProjectPath() + sheetName + ".kicad_sch" );
         }
         else
         {
