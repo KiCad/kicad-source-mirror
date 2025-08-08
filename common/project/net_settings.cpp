@@ -578,15 +578,12 @@ bool NET_SETTINGS::HasNetclassLabelAssignment( const wxString& netName ) const
 
 void NET_SETTINGS::SetNetclassPatternAssignment( const wxString& pattern, const wxString& netclass )
 {
-    // Replace existing assignment if we have one
+    // Avoid exact duplicates - these shouldn't cause problems, due to later de-duplication
+    // but they are unnecessary.
     for( auto& assignment : m_netClassPatternAssignments )
     {
-        if( assignment.first->GetPattern() == pattern )
-        {
-            assignment.second = netclass;
-            ClearAllCaches();
+        if( assignment.first->GetPattern() == pattern && assignment.second == netclass )
             return;
-        }
     }
 
     // No assignment, add a new one
