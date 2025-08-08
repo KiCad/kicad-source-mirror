@@ -25,22 +25,24 @@
 /*
  * Edit properties of Lines, Circles, Arcs and Polygons for PCBNew and Footprint Editor
  */
+#include "dialog_shape_properties_base.h"
+
+#include <wx/valnum.h>
 
 #include <pcb_base_edit_frame.h>
 #include <pcb_edit_frame.h>
-#include <wx/valnum.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <pcb_layer_box_selector.h>
 #include <dialogs/html_message_box.h>
 #include <length_delay_calculation/length_delay_calculation.h>
+#include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <pcb_shape.h>
 #include <macros.h>
 #include <widgets/unit_binder.h>
 
-#include <dialog_shape_properties_base.h>
 #include <tools/drawing_tool.h>
 
 

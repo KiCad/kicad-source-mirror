@@ -46,6 +46,7 @@
 #include <settings/settings_manager.h>
 #include <confirm.h>
 #include <progress_reporter.h>
+#include <string_utils.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <zoom_defines.h>

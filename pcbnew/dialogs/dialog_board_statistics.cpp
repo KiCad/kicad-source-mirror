@@ -24,14 +24,18 @@
 
 
 #include "dialog_board_statistics.h"
+
+#include <wx/filedlg.h>
+
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <pad.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_grid.h>
-#include <wx/filedlg.h>
 #include <convert_basic_shapes_to_polygon.h>
+
 
 #define COL_LABEL 0
 #define COL_AMOUNT 1

@@ -21,17 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcbexpr_evaluator.h"
 
 #include <cstdio>
 #include <memory>
 #include <mutex>
+
 #include <board.h>
 #include <footprint.h>
 #include <lset.h>
 #include <board_connected_item.h>
-#include <pcbexpr_evaluator.h>
 #include <drc/drc_engine.h>
 #include <component_classes/component_class.h>
+#include <string_utils.h>
+
 
 /* --------------------------------------------------------------------------------------------
  * Specialized Expression References
@@ -774,4 +777,3 @@ bool PCBEXPR_EVALUATOR::Evaluate( const wxString& aExpr )
 
     return true;
 }
-

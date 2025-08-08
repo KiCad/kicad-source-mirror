@@ -17,19 +17,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "drc_report.h"
+
+#include <fstream>
+
 #include <wx/string.h>
 
 #include <board.h>
 #include <board_design_settings.h>
 #include <build_version.h>
-#include "drc_report.h"
 #include <drc/drc_item.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <json_common.h>
 #include <rc_json_schema.h>
+#include <string_utils.h>
 
-#include <fstream>
 
 DRC_REPORT::DRC_REPORT( BOARD* aBoard, EDA_UNITS aReportUnits,
                         std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider,

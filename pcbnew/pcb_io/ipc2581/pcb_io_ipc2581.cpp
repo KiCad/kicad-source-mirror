@@ -36,6 +36,7 @@
 #include <pgm_base.h>
 #include <progress_reporter.h>
 #include <settings/settings_manager.h>
+#include <string_utils.h>
 #include <wx_fstream_progress.h>
 
 #include <geometry/shape_line_chain.h>

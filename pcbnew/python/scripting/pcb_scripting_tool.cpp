@@ -23,18 +23,20 @@
 
 #include "pcb_scripting_tool.h"
 
+#include <Python.h>
+
+#include <wx/string.h>
+
+#include <pybind11/eval.h>
+
 #include <action_plugin.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <macros.h>
 #include <pgm_base.h>
 #include <python_scripting.h>
+#include <string_utils.h>
 #include <tools/pcb_actions.h>
-
-#include <pybind11/eval.h>
-
-#include <Python.h>
-#include <wx/string.h>
 #include <launch_ext.h>
 
 #ifdef KICAD_IPC_API

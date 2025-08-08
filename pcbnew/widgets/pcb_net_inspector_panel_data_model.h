@@ -21,6 +21,7 @@
 #define PCB_NET_INSPECTOR_PANEL_DATA_MODEL
 
 #include <eda_pattern_match.h>
+#include <string_utils.h>
 
 
 /**

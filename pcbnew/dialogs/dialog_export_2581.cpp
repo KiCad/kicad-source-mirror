@@ -17,7 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_export_2581.h>
+#include "dialogs/dialog_export_2581.h"
+
+#include <set>
+#include <vector>
+
+#include <wx/filedlg.h>
 
 #include <board.h>
 #include <footprint.h>
@@ -28,12 +33,10 @@
 #include <project.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
+#include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <jobs/job_export_pcb_ipc2581.h>
 
-#include <set>
-#include <vector>
-#include <wx/filedlg.h>
 
 
 DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :

@@ -26,7 +26,11 @@
  *  2 - create a footprint report (pos and footprint descr) (ascii file)
  */
 
-#include <dialog_gen_footprint_position.h>
+#include "dialog_gen_footprint_position.h"
+
+#include <wx/dirdlg.h>
+#include <wx/msgdlg.h>
+
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <project/project_file.h>
@@ -35,14 +39,12 @@
 #include <tools/board_editor_control.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_base.h>
+#include <string_utils.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <exporters/place_file_exporter.h>
 #include "gerber_placefile_writer.h"
 #include <jobs/job_export_pcb_pos.h>
-
-#include <wx/dirdlg.h>
-#include <wx/msgdlg.h>
 
 
 DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aEditFrame ) :
@@ -556,5 +558,3 @@ int BOARD_EDITOR_CONTROL::GenFootprintsReport( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
-

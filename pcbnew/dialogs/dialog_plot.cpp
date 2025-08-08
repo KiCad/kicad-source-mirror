@@ -21,8 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_plot.h"
+
 #include <wx/bmpbuttn.h>
 #include <wx/clntdata.h>
+#include <wx/dirdlg.h>
+#include <wx/msgdlg.h>
 #include <wx/rearrangectrl.h>
 
 #include <plotters/plotter.h>
@@ -37,8 +41,8 @@
 #include <layer_ids.h>
 #include <locale_io.h>
 #include <bitmaps.h>
-#include <dialog_plot.h>
 #include <dialog_gendrill.h>
+#include <string_utils.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/color_swatch.h>
@@ -55,9 +59,6 @@
 #include <jobs/job_export_pcb_svg.h>
 #include <plotters/plotters_pslike.h>
 #include <pcb_plotter.h>
-
-#include <wx/dirdlg.h>
-#include <wx/msgdlg.h>
 
 
 LSEQ DIALOG_PLOT::s_lastAllLayersOrder;

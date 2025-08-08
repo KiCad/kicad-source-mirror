@@ -19,7 +19,12 @@
  */
 
 #include "odb_feature.h"
+
 #include <sstream>
+#include <map>
+
+#include <wx/log.h>
+
 #include "pcb_shape.h"
 #include "odb_defines.h"
 #include "pcb_track.h"
@@ -30,9 +35,8 @@
 #include "geometry/eda_angle.h"
 #include "odb_eda_data.h"
 #include "pcb_io_odbpp.h"
-#include <map>
-#include "wx/log.h"
 #include <callback_gal.h>
+#include <string_utils.h>
 
 
 void FEATURES_MANAGER::AddFeatureLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,

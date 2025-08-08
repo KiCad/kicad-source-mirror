@@ -34,11 +34,16 @@
 
 #include <specctra_import_export/specctra_lexer.h>
 
+#include <map>
 #include <memory>
+
+#include <core/typeinfo.h>
 #include <geometry/shape_poly_set.h>
+#include <layer_ids.h>
 
 // all outside the DSN namespace:
 class BOARD;
+class PAD;
 class PCB_TRACK;
 class PCB_ARC;
 class PCB_VIA;

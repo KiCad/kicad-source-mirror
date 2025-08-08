@@ -26,11 +26,6 @@
 
 #include "dialog_gencad_export_options.h"
 
-#include <jobs/job_export_pcb_gencad.h>
-
-#include <pcb_edit_frame.h>
-#include <kidialog.h>
-#include <wildcards_and_files_ext.h>
 #include <wx/anybutton.h>
 #include <wx/filedlg.h>
 #include <wx/checkbox.h>
@@ -38,7 +33,14 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include "widgets/std_bitmap_button.h"
+
+#include <jobs/job_export_pcb_gencad.h>
+
+#include <pcb_edit_frame.h>
+#include <kidialog.h>
+#include <wildcards_and_files_ext.h>
+#include <widgets/std_bitmap_button.h>
+#include <string_utils.h>
 #include <board.h>
 
 
@@ -222,4 +224,3 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
         m_optsSizer->Add( chkbox );
     }
 }
-

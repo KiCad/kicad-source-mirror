@@ -22,9 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_text_properties.h"
+
+#include <wx/valnum.h>
+
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
-#include <dialog_text_properties.h>
 #include <confirm.h>
 #include <board_commit.h>
 #include <board.h>
@@ -33,8 +36,8 @@
 #include <project.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <wx/valnum.h>
 #include <scintilla_tricks.h>
+#include <string_utils.h>
 
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_TEXT* aText ) :

@@ -27,6 +27,8 @@
 
 #include <unordered_map>
 
+#include <layer_ids.h>
+
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 

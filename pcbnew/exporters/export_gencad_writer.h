@@ -17,9 +17,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h> // for FILE
+
+#include <wx/string.h>
+
+#include <math/vector2d.h>
+
 class BOARD;
-class wxString;
-struct aFile;
+class FOOTPRINT;
 
 /**
  * Export board to GenCAD file format.

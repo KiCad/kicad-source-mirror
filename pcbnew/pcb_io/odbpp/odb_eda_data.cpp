@@ -18,14 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <build_version.h>
-
 #include "odb_eda_data.h"
-#include "hash_eda.h"
-#include "netinfo.h"
-#include "odb_feature.h"
-#include "base_units.h"
-#include "pcb_io_odbpp.h"
+
+#include <base_units.h>
+#include <build_version.h>
+#include <hash_eda.h>
+#include <string_utils.h>
+
+#include <netinfo.h>
+#include <odb_feature.h>
+#include <pcb_io_odbpp.h>
 
 
 EDA_DATA::EDA_DATA()
@@ -212,7 +214,7 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     size_t   pkg_index = packages_map.size();
     wxString fp_name = fp->GetFPID().GetLibItemName().wx_str();
     ODB::RemoveWhitespace( fp_name );
-    
+
     if( fp_name.IsEmpty() )
         fp_name = wxS( "__" );
 

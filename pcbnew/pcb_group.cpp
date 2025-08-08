@@ -21,15 +21,17 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include "pcb_group.h"
+
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 #include <geometry/shape_compound.h>
 #include <board.h>
 #include <board_item.h>
+#include <confirm.h>
 #include <footprint.h>
 #include <pcb_generator.h>
-#include <pcb_group.h>
-#include <confirm.h>
+#include <string_utils.h>
 #include <widgets/msgpanel.h>
 #include <view/view.h>
 #include <api/api_enums.h>

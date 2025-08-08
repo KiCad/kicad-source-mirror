@@ -17,7 +17,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_export_odbpp.h>
+#include "dialogs/dialog_export_odbpp.h"
+
+#include <set>
+#include <vector>
+#include <thread_pool.h>
+
+#include <wx/dir.h>
+#include <wx/filedlg.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
+#include <wx/tarstrm.h>
+#include <wx/zstream.h>
 
 #include <board.h>
 #include <confirm.h>
@@ -32,21 +43,12 @@
 #include <project.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
+#include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
-#include <jobs/job_export_pcb_odb.h>
-
-#include <set>
-#include <vector>
-#include <thread_pool.h>
 #include <io/io_mgr.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <pcb_io/pcb_io_mgr.h>
-#include <wx/dir.h>
-#include <wx/filedlg.h>
-#include <wx/wfstream.h>
-#include <wx/zipstrm.h>
-#include <wx/tarstrm.h>
-#include <wx/zstream.h>
+
 
 
 DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent ) :

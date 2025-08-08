@@ -24,10 +24,16 @@
 
 #pragma once
 
+#include <math/vector2d.h>
+
 #include <gendrill_file_writer_base.h>      // for DRILL_PRECISION definition
 #include <dialog_gendrill_base.h>
+#include <pcb_plot_params.h>
+
 
 class JOB_EXPORT_PCB_DRILL;
+class PCB_EDIT_FRAME;
+
 
 class DIALOG_GENDRILL : public DIALOG_GENDRILL_BASE
 {

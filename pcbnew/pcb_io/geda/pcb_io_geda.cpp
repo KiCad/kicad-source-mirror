@@ -26,8 +26,10 @@
  * @file pcb_io_geda.cpp
  * @brief Geda PCB file plugin implementation file.
  */
+#include "pcb_io/geda/pcb_io_geda.h"
 
 #include <wildcards_and_files_ext.h>
+#include <string_utils.h>
 #include <trace_helpers.h>
 #include <math/util.h>      // for KiROUND
 
@@ -38,7 +40,6 @@
 #include <macros.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
-#include <pcb_io/geda/pcb_io_geda.h>
 #include <reporter.h>
 #include <wx_filename.h>
 

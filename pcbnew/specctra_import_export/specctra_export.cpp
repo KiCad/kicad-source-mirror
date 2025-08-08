@@ -31,15 +31,20 @@
     Also see the comments at the top of the specctra.cpp file itself.
 */
 
+#include "specctra.h"
+
+#include <set>
+#include <map>
+
+#include <wx/log.h>
+
 #include <pcb_edit_frame.h>
 #include <confirm.h>            // DisplayErrorMessage()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <locale_io.h>
 #include <macros.h>
 #include <math/util.h>          // for KiROUND
-
-#include <set>                  // std::set
-#include <map>                  // std::map
+#include <string_utils.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -55,9 +60,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
 #include <pcbnew_settings.h>
-#include <wx/log.h>
 
-#include "specctra.h"
 
 using namespace DSN;
 

@@ -21,13 +21,17 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include "convert_tool.h"
 
-#include <bitmaps.h>
-#include <dialog_shim.h>
+#include <ranges>
+
 #include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/radiobut.h>
+
+#include <bitmaps.h>
+#include <dialog_shim.h>
 #include <widgets/unit_binder.h>
 #include <board.h>
 #include <board_commit.h>
@@ -43,6 +47,7 @@
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <pad.h>
+#include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <tools/edit_tool.h>
 #include <tools/pcb_actions.h>
@@ -51,10 +56,6 @@
 #include <trigo.h>
 #include <macros.h>
 #include <zone.h>
-
-#include <ranges>
-
-#include "convert_tool.h"
 
 
 class CONVERT_SETTINGS_DIALOG : public DIALOG_SHIM

@@ -22,6 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_export_step.h"
+#include "dialog_export_step_process.h"
+
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 #include <wx/process.h>
@@ -33,8 +36,6 @@
 #include <confirm.h>
 #include <kidialog.h>
 #include <widgets/std_bitmap_button.h>
-#include "dialog_export_step.h"
-#include "dialog_export_step_process.h"
 #include <footprint.h>
 #include <kiface_base.h>
 #include <locale_io.h>
@@ -43,6 +44,7 @@
 #include <tools/board_editor_control.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <reporter.h>
+#include <string_utils.h>
 #include <trace_helpers.h>
 #include <widgets/text_ctrl_eval.h>
 #include <wildcards_and_files_ext.h>

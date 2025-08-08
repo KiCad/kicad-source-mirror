@@ -33,6 +33,7 @@
 #include <pcb_painter.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <string_utils.h>
 #include <validators.h>
 #include <wildcards_and_files_ext.h>
 #include <eda_pattern_match.h>

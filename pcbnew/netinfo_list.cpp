@@ -21,6 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "netinfo.h"
+
+#include <wx/log.h>
+
 #include <board.h>
 #include <board_commit.h>
 #include <footprint.h>
@@ -28,9 +32,8 @@
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
+#include <string_utils.h>
 #include <zone.h>
-#include <netinfo.h>
-#include <wx/log.h>
 
 
 // Constructor and destructor
@@ -344,4 +347,3 @@ NETINFO_ITEM* NETINFO_MAPPING::iterator::operator->() const
 
 const int NETINFO_LIST::UNCONNECTED = 0;
 const int NETINFO_LIST::ORPHANED = -1;
-

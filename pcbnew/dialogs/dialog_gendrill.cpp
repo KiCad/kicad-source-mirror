@@ -22,6 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_gendrill.h"
+
+#include <wx/msgdlg.h>
+#include <wx/dirdlg.h>
+#include <wx/filedlg.h>
+
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <widgets/std_bitmap_button.h>
@@ -35,12 +41,9 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <paths.h>
-#include <dialog_gendrill.h>
+#include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
-#include <wx/msgdlg.h>
-#include <wx/dirdlg.h>
-#include <wx/filedlg.h>
 #include <jobs/job_export_pcb_drill.h>
 
 // List of allowed precision for EXCELLON files, for integer format.  Due to difference between inches and mm,

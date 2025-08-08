@@ -35,6 +35,8 @@
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <project_pcb.h>
+#include <string_utils.h>
+
 
 /*
     Library parity test.

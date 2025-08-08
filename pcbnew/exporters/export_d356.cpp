@@ -26,6 +26,15 @@
  * @file export_d356.cpp
  * @brief Export IPC-D-356 test format
  */
+#include "export_d356.h"
+
+#include <vector>
+#include <cctype>
+
+#include <wx/checkbox.h>
+#include <wx/filedlg.h>
+#include <wx/filedlgcustomize.h>
+#include <wx/msgdlg.h>
 
 #include <confirm.h>
 #include <gestfich.h>
@@ -42,16 +51,10 @@
 #include <layer_range.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <vector>
-#include <cctype>
-#include <math/util.h>      // for KiROUND
-#include <export_d356.h>
-#include <tools/board_editor_control.h>
+#include <string_utils.h>
 
-#include <wx/checkbox.h>
-#include <wx/filedlg.h>
-#include <wx/filedlgcustomize.h>
-#include <wx/msgdlg.h>
+#include <math/util.h>      // for KiROUND
+#include <tools/board_editor_control.h>
 
 
 // Compute the access code for a pad. Returns -1 if there is no copper

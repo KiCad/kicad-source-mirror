@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "export_gencad_writer.h"
 
 #include <build_version.h>
 #include <board.h>
@@ -26,11 +27,10 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <richio.h>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <hash_eda.h>
-
-#include <export_gencad_writer.h>
 
 
 /// Layer names for GenCAD export.

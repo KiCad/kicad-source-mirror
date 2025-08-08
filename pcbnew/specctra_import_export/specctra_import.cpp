@@ -31,6 +31,7 @@
     Also see the comments at the top of the specctra.cpp file itself.
 */
 
+#include "specctra.h"
 
 #include <confirm.h>            // DisplayErrorMessage()
 #include <gestfich.h>           // EDA_FileSelector()
@@ -44,9 +45,9 @@
 #include <pcb_track.h>
 #include <connectivity/connectivity_data.h>
 #include <view/view.h>
-#include "specctra.h"
 #include <math/util.h>      // for KiROUND
 #include <pcbnew_settings.h>
+#include <string_utils.h>
 
 using namespace DSN;
 

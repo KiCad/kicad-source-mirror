@@ -29,6 +29,8 @@
 #include <magic_enum.hpp>
 
 #include <wx/debug.h>
+#include <wx/log.h>
+
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_circle.h>
 #include <geometry/geometry_utils.h>
@@ -37,6 +39,7 @@
 #include <collectors.h>
 #include <scoped_set_reset.h>
 #include <core/mirror.h>
+#include <string_utils.h>
 
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
@@ -68,8 +71,6 @@
 #include <router/router_preview_item.h>
 
 #include <dialogs/dialog_tuning_pattern_properties.h>
-
-#include <wx/log.h>
 
 
 enum LENGTH_TUNING_MODE

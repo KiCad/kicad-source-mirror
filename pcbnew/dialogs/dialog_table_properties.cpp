@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_table_properties.h"
+
 #include <kiplatform/ui.h>
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>
@@ -29,6 +31,7 @@
 #include <widgets/grid_color_swatch_helpers.h>
 #include <grid_tricks.h>
 #include <scintilla_tricks.h>
+#include <string_utils.h>
 #include <confirm.h>
 #include <board.h>
 #include <board_commit.h>
@@ -42,7 +45,6 @@
 #include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <dialog_table_properties.h>
 
 
 DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, PCB_TABLE* aTable ) :
@@ -441,5 +443,3 @@ void DIALOG_TABLE_PROPERTIES::onSize( wxSizeEvent& aEvent )
 
     aEvent.Skip();
 }
-
-

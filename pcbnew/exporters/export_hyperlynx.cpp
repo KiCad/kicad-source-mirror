@@ -22,6 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cstdio>
+#include <vector>
+
+#include <wx/log.h>
+#include <wx/filedlg.h>
+
 #include <kiface_base.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
@@ -32,16 +38,14 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>
-#include <cstdio>
-#include <vector>
 #include <ki_exception.h>
 #include <locale_io.h>
 #include <reporter.h>
 #include <richio.h>
+#include <string_utils.h>
 #include <tools/board_editor_control.h>
 #include <exporters/board_exporter_base.h>
-#include <wx/log.h>
-#include <wx/filedlg.h>
+
 
 static double iu2hyp( double iu )
 {
@@ -688,4 +692,3 @@ int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-

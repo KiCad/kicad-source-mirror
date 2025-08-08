@@ -36,8 +36,17 @@
 #define USE_ATTRIB_FOR_HOLES 1
 
 #include <vector>
+#include <string>
 
+#include <layer_ids.h>
+#include <plotters/plotter.h>
+
+
+class BOARD;
 class BOARD_ITEM;
+class OUTPUTFORMATTER;
+class PAGE_INFO;
+class REPORTER;
 
 // hole attribute, mainly to identify vias and pads and add this info as comment
 // in NC drill files

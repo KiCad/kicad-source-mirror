@@ -21,9 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_textbox_properties.h"
+
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
-#include <dialog_textbox_properties.h>
 #include <confirm.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -34,6 +35,8 @@
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <scintilla_tricks.h>
+#include <string_utils.h>
+
 
 DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
                                                       PCB_TEXTBOX* aTextBox ) :
