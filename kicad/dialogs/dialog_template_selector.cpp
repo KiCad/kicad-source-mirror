@@ -46,7 +46,13 @@ static const wxString GetWelcomeHtml()
     ".header { text-align: center; margin-bottom: 30px; }"
     ".logo { font-size: 2.5rem; font-weight: bold; color: #4a5568; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }"
     ".subtitle { font-size: 1.2rem; color: #666; margin-bottom: 20px; }"
-    ".welcome-card { background: linear-gradient(135deg, #4299e1, #3182ce); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3); }"
+    ".welcome-card { "
+#if defined( __MINGW32__ )
+    "background: #4299e1;"  // linear-gradient does not work with webview used on MSYS2
+#else
+    "background: linear-gradient(135deg, #4299e1, #3182ce);"
+#endif
+    "color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3); }"
     ".welcome-card h2 { margin-top: 0; font-size: 1.8rem; margin-bottom: 15px; }"
     ".instructions { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px; }"
     ".instruction-card { background: #f7fafc; border: 2px solid #e2e8f0; border-radius: 8px; padding: 20px; transition: all 0.3s ease; position: relative; overflow: hidden; }"
@@ -253,6 +259,7 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     {
         // Find the sizer containing the webview and detach it
         wxSizer* parentSizer = m_webviewPanel->GetContainingSizer();
+
         if( parentSizer )
         {
             parentSizer->Detach( m_webviewPanel );
@@ -267,7 +274,15 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     }
 
     // Set welcome HTML after dialog is fully constructed
-    CallAfter( [this]() {
+    CallAfter( [this]()
+    {
+        #if defined (_WIN32)
+        // For some reason the next calls need it to work fine on Windows, especially with MSYS2
+        wxSafeYield();
+        // Deselect the m_tcTemplatePath string (selected for some strange reason)
+        m_tcTemplatePath->SelectNone();
+        #endif
+
         m_webviewPanel->SetPage( GetWelcomeHtml() );
     });
 
