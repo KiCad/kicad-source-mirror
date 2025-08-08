@@ -368,6 +368,9 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     settings->SetHighContrast( false );
     settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
+    // don't show the locked item shadow in pad preview
+    view->SetLayerVisible( LAYER_LOCKED_ITEM_SHADOW, false );
+
     // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
     double gridsize = 0.001 * pcbIUScale.IU_PER_MM;
     view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
