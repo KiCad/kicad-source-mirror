@@ -406,7 +406,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                         {
                             const VECTOR2I& pt = graphic->GetBezierPoints()[jj];
 
-                            if( prevPt == pt )
+                            if( close_enough( prevPt, pt, aChainingEpsilon ) )
                                 continue;
 
                             currContour.Append( pt );
@@ -418,7 +418,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     {
                         for( const VECTOR2I& pt : graphic->GetBezierPoints() )
                         {
-                            if( prevPt == pt )
+                            if( close_enough( prevPt, pt, aChainingEpsilon ) )
                                 continue;
 
                             currContour.Append( pt );
