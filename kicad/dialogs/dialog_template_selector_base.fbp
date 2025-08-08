@@ -50,7 +50,7 @@
       <property name="minimum_size">-1,-1</property>
       <property name="name">DIALOG_TEMPLATE_SELECTOR_BASE</property>
       <property name="pos"></property>
-      <property name="size">-1,-1</property>
+      <property name="size">513,523</property>
       <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
       <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
       <property name="title">Project Template Selector</property>
@@ -357,8 +357,8 @@
           <property name="flag">wxEXPAND</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
-            <property name="minimum_size"></property>
-            <property name="name">bSizer6</property>
+            <property name="minimum_size">700,400</property>
+            <property name="name">bSizerNotebook</property>
             <property name="orient">wxVERTICAL</property>
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">

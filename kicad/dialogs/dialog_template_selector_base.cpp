@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,20 +38,21 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	bmainSizer->Add( bsizerTemplateSelector, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerNotebook;
+	bSizerNotebook = new wxBoxSizer( wxVERTICAL );
 
+	bSizerNotebook->SetMinSize( wxSize( 700,400 ) );
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	bSizer6->Add( m_notebook, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerNotebook->Add( m_notebook, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_webviewPanel = new WEBVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_webviewPanel->SetMinSize( wxSize( 700,300 ) );
 
-	bSizer6->Add( m_webviewPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizerNotebook->Add( m_webviewPanel, 1, wxEXPAND | wxALL, 5 );
 
 
-	bmainSizer->Add( bSizer6, 1, wxEXPAND, 5 );
+	bmainSizer->Add( bSizerNotebook, 1, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -65,7 +66,6 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	this->SetSizer( bmainSizer );
 	this->Layout();
-	bmainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
