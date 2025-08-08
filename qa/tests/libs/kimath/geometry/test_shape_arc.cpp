@@ -1172,7 +1172,7 @@ BOOST_DATA_TEST_CASE( ArcToPolyline, boost::unit_test::data::make( ArcToPolyline
     BOOST_CHECK_EQUAL( chain.CPoint( 0 ), c.m_geom.m_start_point );
 
     // End point (exactly) where expected
-    BOOST_CHECK_EQUAL( chain.CPoint( -1 ), this_arc.GetP1() );
+    BOOST_CHECK_EQUAL( chain.CLastPoint(), this_arc.GetP1() );
 
     int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
 

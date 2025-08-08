@@ -351,17 +351,17 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         {
             ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
 
-            m_result.AddPtAndArc( tunedP.CPoint( -1 ), tunedN.Arc( arcIndex ) );
+            m_result.AddPtAndArc( tunedP.CLastPoint(), tunedN.Arc( arcIndex ) );
         }
         else
         {
-            m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( curIndexN ) );
+            m_result.AddCorner( tunedP.CLastPoint(), tunedN.CPoint( curIndexN ) );
         }
 
         curIndexN = tunedN.NextShape( curIndexN );
     }
 
-    m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( -1 ) );
+    m_result.AddCorner( tunedP.CLastPoint(), tunedN.CLastPoint() );
 
     long long int dpLen = origPathLength();
     int64_t       dpDelay = origPathDelay();

@@ -510,8 +510,8 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                             // Snap the segment endpoint
                             currContour.SetPoint( -1, startPt );
 
-                            shapeOwners[std::make_pair( currContour.CPoint( -2 ),
-                                                        currContour.CPoint( -1 ) )] = owner;
+                            shapeOwners[std::make_pair( currContour.CPoints()[currContour.PointCount() - 2 ],
+                                                        currContour.CLastPoint() )] = owner;
                         }
 
                         prevPt = startPt;

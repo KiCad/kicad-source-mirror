@@ -557,7 +557,7 @@ protected:
         {
             m_baseLine->Mirror( aCentre, aFlipDirection );
             m_origin = m_baseLine->CPoint( 0 );
-            m_end = m_baseLine->CPoint( -1 );
+            m_end = m_baseLine->CLastPoint();
         }
 
         if( m_baseLineCoupled )
@@ -858,7 +858,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
             && m_baseLineCoupled->SegmentCount() > 0 )
         {
             centerlineOffsetEnd =
-                    ( m_baseLineCoupled->CPoint( -1 ) - m_baseLine->CPoint( -1 ) ) / 2;
+                    ( m_baseLineCoupled->CLastPoint() - m_baseLine->CLastPoint() ) / 2;
         }
 
         SEG baseEnd = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( -1 )
@@ -1191,7 +1191,7 @@ bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer,
 {
     VECTOR2I startSnapPoint, endSnapPoint;
 
-    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CLastPoint(),
                                                    aRouter, aPNSLayer, startSnapPoint, endSnapPoint );
 
     wxCHECK( pnsLine, false );
@@ -1359,7 +1359,7 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer,
     PNS::NODE*       world = router->GetWorld();
     VECTOR2I         startSnapPoint, endSnapPoint;
 
-    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CLastPoint(),
                                                    router, aPNSLayer, startSnapPoint, endSnapPoint );
 
     if( !pnsLine )
@@ -1483,7 +1483,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         if( resetToBaseline( aTool, pnslayer, *m_baseLine, true ) )
         {
             m_origin = m_baseLine->CPoint( 0 );
-            m_end = m_baseLine->CPoint( -1 );
+            m_end = m_baseLine->CLastPoint();
         }
         else
         {
@@ -1680,7 +1680,7 @@ bool PCB_TUNING_PATTERN::MakeEditPoints( EDIT_POINTS& aPoints ) const
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
     {
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
-        centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
+        centerlineOffsetEnd = ( m_baseLineCoupled->CLastPoint() - m_end ) / 2;
     }
 
     aPoints.AddPoint( m_origin + centerlineOffset );
@@ -1723,7 +1723,7 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( EDIT_POINTS& aEditPoints )
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
     {
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
-        centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
+        centerlineOffsetEnd = ( m_baseLineCoupled->CLastPoint() - m_end ) / 2;
     }
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
@@ -1778,7 +1778,7 @@ bool PCB_TUNING_PATTERN::UpdateEditPoints( EDIT_POINTS& aEditPoints )
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
     {
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
-        centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
+        centerlineOffsetEnd = ( m_baseLineCoupled->CLastPoint() - m_end ) / 2;
     }
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )

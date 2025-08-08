@@ -87,7 +87,7 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
     Polyline( aL );
 
     if( name.length() > 0  && aL.PointCount() > 0 )
-        m_labelMgr->Add( aL.CPoint( -1 ), name, GetStrokeColor() );
+        m_labelMgr->Add( aL.CLastPoint(), name, GetStrokeColor() );
 
     if( aShowVertexNumbers )
     {

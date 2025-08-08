@@ -996,7 +996,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
             {
                 SHAPE_LINE_CHAIN v;
                 SHAPE_LINE_CHAIN connect = dir.BuildInitialTrace(
-                        breakout.CPoint( -1 ), line.CPoint( p ), diag == 0 );
+                        breakout.CLastPoint(), line.CPoint( p ), diag == 0 );
 
                 DIRECTION_45 dir_bkout( breakout.CSegment( -1 ) );
 
@@ -1083,7 +1083,7 @@ bool OPTIMIZER::runSmartPads( LINE* aLine )
     if( line.PointCount() < 3 )
         return false;
 
-    VECTOR2I p_start = line.CPoint( 0 ), p_end = line.CPoint( -1 );
+    VECTOR2I p_start = line.CPoint( 0 ), p_end = line.CLastPoint();
 
     ITEM* startPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_start );
     ITEM* endPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_end );
@@ -1125,7 +1125,7 @@ bool OPTIMIZER::fanoutCleanup( LINE* aLine )
 
     DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
 
-    VECTOR2I p_start = aLine->CPoint( 0 ), p_end = aLine->CPoint( -1 );
+    VECTOR2I p_start = aLine->CPoint( 0 ), p_end = aLine->CLastPoint();
 
     ITEM* startPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_start );
     ITEM* endPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_end );

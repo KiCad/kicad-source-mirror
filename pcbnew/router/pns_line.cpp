@@ -269,7 +269,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     // corner case for loopy tracks: insert the end loop point back into the hull
     if( const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> isect = pnew.SelfIntersecting() )
     {
-        if( isect->p != pnew.CPoint( -1 ) )
+        if( isect->p != pnew.CLastPoint() )
             pnew.Split( isect->p );
     }
 
@@ -385,7 +385,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     // In the case that the initial path ends *inside* the current obstacle (i.e. the mouse cursor
     // is somewhere inside the hull for the current obstacle) we want to end the walkaround at the
     // point closest to the cursor
-    bool inLast  = aObstacle.PointInside( CPoint( -1 ) ) && !aObstacle.PointOnEdge( CPoint( -1 ) );
+    bool inLast  = aObstacle.PointInside( CLastPoint() ) && !aObstacle.PointOnEdge( CLastPoint() );
     bool appendV = true;
     int  lastDst = INT_MAX;
 
@@ -536,7 +536,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
                 // just project the normal of the endpoint onto this next segment and call it quits.
                 if( inLast && v_next )
                 {
-                    int d = ( v_next->pos - CPoint( -1 ) ).SquaredEuclideanNorm();
+                    int d = ( v_next->pos - CLastPoint() ).SquaredEuclideanNorm();
 
                     if( d < lastDst )
                     {
@@ -544,7 +544,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
                     }
                     else
                     {
-                        VECTOR2I proj = SEG( v->pos, v_next->pos ).NearestPoint( CPoint( -1 ) );
+                        VECTOR2I proj = SEG( v->pos, v_next->pos ).NearestPoint( CLastPoint() );
                         out.Append( proj );
                         appendV = false;
                         break;
@@ -718,7 +718,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         return path;
     }
 
-    DIRECTION_45 dir( aOrigin.CPoint( -1 ) - aOrigin.CPoint( -2 ) );
+    DIRECTION_45 dir( aOrigin.CLastPoint() - aOrigin.CPoints()[ aOrigin.PointCount() - 2 ] );
 
     return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, dir.IsDiagonal() );
 }
@@ -923,7 +923,7 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex )
 
     if( index == path.SegmentCount() - 1 )
     {
-        path.Insert( path.PointCount() - 1, path.CPoint( -1 ) );
+        path.Insert( path.PointCount() - 1, path.CLastPoint() );
     }
     else if( path.IsPtOnArc( index + 1 ) )
     {

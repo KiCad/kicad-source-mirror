@@ -144,6 +144,7 @@ public:
 
     ///< Return the \a aIdx-th point of the line.
     const VECTOR2I& CPoint( int aIdx ) const { return m_line.CPoint( aIdx ); }
+    const VECTOR2I& CLastPoint() const { return m_line.CLastPoint(); }
     const SEG CSegment( int aIdx ) const { return m_line.CSegment( aIdx ); }
 
     ///< Set line width.

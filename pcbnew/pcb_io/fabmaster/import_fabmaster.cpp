@@ -3465,7 +3465,7 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
             }
             else
             {
-                const VECTOR2I& last = active_chain->CPoint( -1 );
+                const VECTOR2I& last = active_chain->CLastPoint();
 
                 // Not if this can ever happen, or what do if it does (add both points?).
                 if( last != start )

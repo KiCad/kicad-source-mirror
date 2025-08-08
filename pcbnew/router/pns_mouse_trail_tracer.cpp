@@ -52,7 +52,7 @@ void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
     }
     else
     {
-        SEG s_new( m_trail.CPoint( -1 ), aP );
+        SEG s_new( m_trail.CLastPoint(), aP );
 
         if( m_trail.SegmentCount() > 2 )
         {
@@ -284,7 +284,7 @@ VECTOR2I MOUSE_TRAIL_TRACER::GetTrailLeadVector() const
     }
     else
     {
-        return m_trail.CPoint( -1 ) - m_trail.CPoint( 0 );
+        return m_trail.CLastPoint() - m_trail.CPoint( 0 );
     }
 }
 

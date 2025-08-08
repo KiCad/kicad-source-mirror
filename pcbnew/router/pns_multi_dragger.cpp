@@ -92,7 +92,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         const VECTOR2I& origFirst = l.originalLine.CLine().CPoint( 0 );
         const int       distFirst = ( origFirst - aP ).EuclideanNorm();
 
-        const VECTOR2I& origLast = l.originalLine.CLine().CPoint( -1 );
+        const VECTOR2I& origLast = l.originalLine.CLine().CLastPoint();
         const int       distLast = ( origLast - aP ).EuclideanNorm();
 
         l.cornerDistance = std::min( distFirst, distLast );
@@ -223,7 +223,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             }
             // and if it's connected (non-trivial fanout), disregard it
 
-            const JOINT* jt = m_world->FindJoint( l.originalLine.CPoint( -1 ), &l.originalLine );
+            const JOINT* jt = m_world->FindJoint( l.originalLine.CLastPoint(), &l.originalLine );
 
             assert (jt != nullptr);
 
@@ -707,7 +707,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
         if( m_dragMode == DM_CORNER )
         {
             // first, drag only the primary line
-        //    PNS_DBG( Dbg(), AddPoint, primaryDragged->CPoint( -1 ), YELLOW, 600000, wxT("mdrag-sec"));
+        //    PNS_DBG( Dbg(), AddPoint, primaryDragged->CLastPoint(), YELLOW, 600000, wxT("mdrag-sec"));
 
 	        lastPreDrag =  primaryPreDrag->CSegment( -1 );
             primaryDir = DIRECTION_45( lastPreDrag );
@@ -787,7 +787,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         {
                             // compute the distance between the primary line and the last point of
                             // the currently processed line
-                            int dist = lastPreDrag.LineDistance( l.preDragLine.CPoint( -1 ), true );
+                            int dist = lastPreDrag.LineDistance( l.preDragLine.CLastPoint(), true );
 
                             // now project it on the perpendicular line we computed before
                             auto projected = aP + perp.Resize( dist );

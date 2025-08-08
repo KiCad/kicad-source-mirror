@@ -1562,7 +1562,7 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
                 return retval;
             };
 
-    if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
+    if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CLastPoint() )
     {
         const VECTOR2I p = aOtherLine.CPoint( 0 );
         m_points.push_back( p );
@@ -2485,7 +2485,7 @@ const VECTOR2I SHAPE_LINE_CHAIN::PointAlong( int aPathLength ) const
         total += l;
     }
 
-    return CPoint( -1 );
+    return CLastPoint();
 }
 
 
@@ -2824,7 +2824,7 @@ bool SHAPE_LINE_CHAIN::OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy,
     wxASSERT( outline.IsClosed() );
 
     const VECTOR2I& start = CPoint( 0 );
-    const VECTOR2I& end = CPoint( -1 );
+    const VECTOR2I& end = CLastPoint();
 
     outline.Split( start, true );
     outline.Split( end, true );

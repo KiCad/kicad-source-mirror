@@ -369,7 +369,7 @@ SHAPE_LINE_CHAIN KIGEOM::RectifyPolygon( const SHAPE_LINE_CHAIN& aPoly )
     // Manually handle the last segment if not closed
     if( !aPoly.IsClosed() && aPoly.PointCount() >= 2 )
     {
-        handleSegment( SEG( aPoly.CPoint( -1 ), aPoly.CPoint( 0 ) ) );
+        handleSegment( SEG( aPoly.CLastPoint(), aPoly.CPoint( 0 ) ) );
     }
 
     raOutline.SetClosed( true );

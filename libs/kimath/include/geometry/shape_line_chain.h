@@ -540,7 +540,7 @@ public:
         if( m_points.size() == 0 )
             m_bbox = BOX2I( aP, VECTOR2I( 0, 0 ) );
 
-        if( m_points.size() == 0 || aAllowDuplication || CPoint( -1 ) != aP )
+        if( m_points.size() == 0 || aAllowDuplication || CLastPoint() != aP )
         {
             m_points.push_back( aP );
             m_shapes.push_back( SHAPES_ARE_PT );

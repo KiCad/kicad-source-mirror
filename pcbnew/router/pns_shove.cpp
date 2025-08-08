@@ -186,7 +186,7 @@ int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
 void SHOVE::sanityCheck( LINE* aOld, LINE* aNew )
 {
     assert( aOld->CPoint( 0 ) == aNew->CPoint( 0 ) );
-    assert( aOld->CPoint( -1 ) == aNew->CPoint( -1 ) );
+    assert( aOld->CLastPoint() == aNew->CLastPoint() );
 }
 
 
@@ -288,7 +288,7 @@ bool SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLin
     if( shortest.PointCount() < 2 )
         return false;
 
-    if( aObstacleLine.CPoint( -1 ) != shortest.CPoint( -1 ) )
+    if( aObstacleLine.CLastPoint() != shortest.CLastPoint() )
         return false;
 
     if( aObstacleLine.CPoint( 0 ) != shortest.CPoint( 0 ) )
@@ -362,7 +362,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
             int      minDist0, minDist1, minhull0, minhull1 ;
             VECTOR2I p0 = minDistP( l.CPoint( 0 ), minDist0, minhull0 );
-            VECTOR2I p1 = minDistP( l.CPoint( -1 ), minDist1, minhull1 );
+            VECTOR2I p1 = minDistP( l.CLastPoint(), minDist1, minhull1 );
 
             PNS_DBG( Dbg(), Message, wxString::Format( "mindists : %d %d hulls %d %d\n", minDist0, minDist1, minhull0, minhull1 ) );
 
@@ -437,7 +437,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
             continue;
         }
 
-        if( path.CPoint( -1 ) != obs.CPoint( -1 ) || path.CPoint( 0 ) != obs.CPoint( 0 ) )
+        if( path.CLastPoint() != obs.CLastPoint() || path.CPoint( 0 ) != obs.CPoint( 0 ) )
         {
             PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail vend-start\n" ),
                                                        attempt ) );
@@ -511,7 +511,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
     if( aObstacleLine.PointCount() >= 2 )
     {
         jtStart = m_currentNode->FindJoint( aObstacleLine.CPoint( 0 ), &aObstacleLine );
-        jtEnd = m_currentNode->FindJoint( aObstacleLine.CPoint( -1 ), &aObstacleLine );
+        jtEnd = m_currentNode->FindJoint( aObstacleLine.CLastPoint(), &aObstacleLine );
     }
 
     if( jtStart )
@@ -667,7 +667,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
 
         if( !pushLineStack( shovedLine ) )
             return SH_INCOMPLETE;
-        
+
         return SH_OK;
     }
 
@@ -1469,7 +1469,7 @@ bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
         m_lineStack.push_back( aL );
     }
 
-    
+
     pruneLineFromOptimizerQueue( aL );
     m_optimizerQueue.push_back( aL );
 
@@ -1600,9 +1600,9 @@ bool SHOVE::patchTadpoleVia( ITEM* nearest, LINE& current )
     if (current.CLine().PointCount() < 1 )
         return false;
 
-//    PNS_DBG(Dbg(), Message, wxString::Format( "cp %d %d", current.CLine().CPoint(-1).x, current.CLine().CPoint(-1).y ) );
+//    PNS_DBG(Dbg(), Message, wxString::Format( "cp %d %d", current.CLine().CLastPoint().x, current.CLine().CLastPoint().y ) );
 
-    auto jtViaEnd = m_currentNode->FindJoint( current.CLine().CPoint(-1), &current );
+    auto jtViaEnd = m_currentNode->FindJoint( current.CLine().CLastPoint(), &current );
 
 //    PNS_DBG(Dbg(), Message, wxString::Format( "jt %p",  jtViaEnd ) );
 
@@ -2501,7 +2501,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 		        m_currentNode->LockJoint( head.CPoint( 0 ), &head, true );
 
 		    if( !head.EndsWithVia() )
-		        m_currentNode->LockJoint( head.CPoint( -1 ), &head, true );
+		        m_currentNode->LockJoint( head.CLastPoint(), &head, true );
             }
 
             SetShovePolicy( head, headLineEntry.policy );

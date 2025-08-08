@@ -350,7 +350,7 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         // Simplify doesn't handle that currently.
         if( chain.PointCount() >= 3 )
         {
-            SEG seg( chain.CPoint( -1 ), chain.CPoint( 1 ) );
+            SEG seg( chain.CLastPoint(), chain.CPoint( 1 ) );
 
             if( seg.LineDistance( chain.CPoint( 0 ) ) <= 1 )
                 chain.Remove( 0 );

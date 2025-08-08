@@ -375,7 +375,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
             st = ST_STUCK;
         }
 
-        if( ln.PointCount() > 0 && ln.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
+        if( ln.PointCount() > 0 && ln.CLastPoint() != aInitialPath.CLastPoint() )
         {
             st = ST_ALMOST_DONE;
 

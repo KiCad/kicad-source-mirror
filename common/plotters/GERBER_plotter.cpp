@@ -1090,7 +1090,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
         }
 
         // If the polygon is not closed, close it:
-        if( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) )
+        if( aPoly.CPoint( 0 ) != aPoly.CLastPoint() )
             FinishTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         fmt::println( m_outputFile, "G37*" );
@@ -1124,7 +1124,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
 
         // Ensure the thick outline is closed for filled polygons
         // (if not filled, could be only a polyline)
-        if( ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) ) && ( aPoly.IsClosed() || aFill != FILL_T::NO_FILL ) )
+        if( ( aPoly.CPoint( 0 ) != aPoly.CLastPoint() ) && ( aPoly.IsClosed() || aFill != FILL_T::NO_FILL ) )
             LineTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         PenFinish();

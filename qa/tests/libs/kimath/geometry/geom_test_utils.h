@@ -281,7 +281,7 @@ inline bool IsOutlineValid( const SHAPE_LINE_CHAIN& aChain )
         }
         else
         {
-            if( aChain.Arc( prevArcIdx ).GetP1() != aChain.CPoint( -1 ) )
+            if( aChain.Arc( prevArcIdx ).GetP1() != aChain.CLastPoint() )
                 return false;
         }
     }

@@ -109,7 +109,7 @@ bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoi
     track.ClearLinks();
     tmpNode->Add( track );
 
-    const JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
+    const JOINT* jt = tmpNode->FindJoint( track.CLastPoint(), &track );
 
     if( !jt || m_world->GetRuleResolver()->NetCode( jt->Net() ) <= 0 )
        return false;
@@ -152,7 +152,7 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
         return false;
 
     aRatLine.Clear();
-    aRatLine.Append( aTrack->CPoint( -1 ) );
+    aRatLine.Append( aTrack->CLastPoint() );
     aRatLine.Append( end );
     return true;
 }
@@ -210,7 +210,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine2, bool aLeft, ITEM_SET& aSet,
 
     while( true )
     {
-        VECTOR2I     anchor = aLeft ? curr_line->CPoint( 0 ) : curr_line->CPoint( -1 );
+        VECTOR2I     anchor = aLeft ? curr_line->CPoint( 0 ) : curr_line->CLastPoint();
         LINKED_ITEM* last = aLeft ? curr_line->Links().front() : curr_line->Links().back();
         const JOINT* jt = m_world->FindJoint( anchor, curr_line );
 
@@ -247,7 +247,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine2, bool aLeft, ITEM_SET& aSet,
         }
 
         LINE     l = m_world->AssembleLine( next_seg, nullptr, false, aFollowLockedSegments );
-        VECTOR2I nextAnchor = ( aLeft ? l.CLine().CPoint( -1 ) : l.CLine().CPoint( 0 ) );
+        VECTOR2I nextAnchor = ( aLeft ? l.CLine().CLastPoint() : l.CLine().CPoint( 0 ) );
 
         if( nextAnchor != anchor )
         {

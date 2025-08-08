@@ -740,8 +740,8 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
         if( m_placingVia )
         {
-            m_currentTrace.AppendVias ( makeVia( m_currentTrace.CP().CPoint( -1 ), m_netP ),
-                                        makeVia( m_currentTrace.CN().CPoint( -1 ), m_netN ) );
+            m_currentTrace.AppendVias ( makeVia( m_currentTrace.CP().CLastPoint(), m_netP ),
+                                        makeVia( m_currentTrace.CN().CLastPoint(), m_netN ) );
         }
         else
         {

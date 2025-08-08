@@ -504,7 +504,7 @@ void MEANDER_SHAPE::miter( int aRadius, bool aSide )
     VECTOR2D dir = m_currentDir.Resize( (double) aRadius );
     SHAPE_LINE_CHAIN lc = makeMiterShape( m_currentPos, dir, aSide );
 
-    m_currentPos = lc.CPoint( -1 );
+    m_currentPos = lc.CLastPoint();
     turn( aSide ? ANGLE_90 : -ANGLE_90 );
 
     m_currentTarget->Append( lc );
@@ -900,7 +900,7 @@ void MEANDER_SHAPE::updateBaseSegment( )
     if( m_dual )
     {
         VECTOR2I midpA = ( CLine( 0 ).CPoint( 0 )  + CLine( 1 ).CPoint( 0  ) ) / 2;
-        VECTOR2I midpB = ( CLine( 0 ).CPoint( -1 ) + CLine( 1 ).CPoint( -1 ) ) / 2;
+        VECTOR2I midpB = ( CLine( 0 ).CLastPoint() + CLine( 1 ).CLastPoint() ) / 2;
 
         m_clippedBaseSeg.A = m_baseSeg.LineProject( midpA );
         m_clippedBaseSeg.B = m_baseSeg.LineProject( midpB );
@@ -908,7 +908,7 @@ void MEANDER_SHAPE::updateBaseSegment( )
     else
     {
         m_clippedBaseSeg.A = m_baseSeg.LineProject( CLine( 0 ).CPoint( 0 ) );
-        m_clippedBaseSeg.B = m_baseSeg.LineProject( CLine( 0 ).CPoint( -1 ) );
+        m_clippedBaseSeg.B = m_baseSeg.LineProject( CLine( 0 ).CLastPoint() );
     }
 }
 

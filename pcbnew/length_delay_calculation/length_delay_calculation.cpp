@@ -508,7 +508,7 @@ void LENGTH_DELAY_CALCULATION::OptimiseTraceInPad( SHAPE_LINE_CHAIN& aLine, cons
 
     if( shape->Contains( aLine.CPoint( 0 ) ) )
         clipLineToPad( aLine, aPad, aPcbLayer, true );
-    else if( shape->Contains( aLine.CPoint( -1 ) ) )
+    else if( shape->Contains( aLine.CLastPoint() ) )
         clipLineToPad( aLine, aPad, aPcbLayer, false );
 }
 

@@ -1101,7 +1101,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) );
 
                 int      nSegs     = line.PointCount();
-                VECTOR2I last      = nSegs ? line.CPoint( -1 ) : VECTOR2I();
+                VECTOR2I last      = nSegs ? line.CLastPoint() : VECTOR2I();
                 ssize_t lastShape = nSegs ? line.ArcIndex( static_cast<ssize_t>( nSegs ) - 1 ) : -1;
 
                 line.Append( arcReversed[i] ? sa->Reversed() : *sa );
@@ -1138,7 +1138,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
 void NODE::FindLineEnds( const LINE& aLine, JOINT& aA, JOINT& aB )
 {
     aA = *FindJoint( aLine.CPoint( 0 ), &aLine );
-    aB = *FindJoint( aLine.CPoint( -1 ), &aLine );
+    aB = *FindJoint( aLine.CLastPoint(), &aLine );
 }
 
 
