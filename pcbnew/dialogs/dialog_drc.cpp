@@ -35,7 +35,6 @@
 #include <connectivity/connectivity_algo.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
@@ -78,7 +77,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_markersTreeModel( nullptr ),
         m_unconnectedTreeModel( nullptr ),
         m_fpWarningsTreeModel( nullptr ),
-        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
         m_lastUpdateUi( std::chrono::steady_clock::now() )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
@@ -88,17 +86,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_currentBoard = m_frame->GetBoard();
 
     m_messages->SetImmediateMode();
-
-    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
-    {
-        m_severities = cfg->m_DrcDialog.severities;
-
-        m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
-        m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
-
-        if( !Kiface().IsSingle() )
-            m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
-    }
 
     m_markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_currentBoard,
                                                               MARKER_BASE::MARKER_DRC,
@@ -112,15 +99,12 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markerDataView );
     m_markerDataView->AssociateModel( m_markersTreeModel );
-    m_markersTreeModel->Update( m_markersProvider, m_severities );
 
     m_unconnectedTreeModel = new RC_TREE_MODEL( m_frame, m_unconnectedDataView );
     m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
-    m_unconnectedTreeModel->Update( m_ratsnestProvider, m_severities );
 
     m_fpWarningsTreeModel = new RC_TREE_MODEL( m_frame, m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_fpWarningsTreeModel );
-    m_fpWarningsTreeModel->Update( m_fpWarningsProvider, m_severities );
 
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
 
@@ -157,8 +141,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     SetFocus();
 
-    syncCheckboxes();
-
     finishDialogSettings();
 }
 
@@ -179,20 +161,16 @@ DIALOG_DRC::~DIALOG_DRC()
                                    m_ignoredList->GetItemData( ii ) } );
     }
 
-    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
-    {
-        cfg->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
-        cfg->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
-
-        if( !Kiface().IsSingle() )
-            cfg->m_DrcDialog.test_footprints   = m_cbTestFootprints->GetValue();
-
-        cfg->m_DrcDialog.severities            = m_severities;
-    }
-
     m_markersTreeModel->DecRef();
     m_unconnectedTreeModel->DecRef();
     m_fpWarningsTreeModel->DecRef();
+}
+
+
+bool DIALOG_DRC::TransferDataToWindow()
+{
+    UpdateData();
+    return true;
 }
 
 
@@ -245,16 +223,20 @@ void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
 }
 
 
-// Don't globally define this; different facilities use different definitions of "ALL"
-static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
-
-
-void DIALOG_DRC::syncCheckboxes()
+int DIALOG_DRC::getSeverities()
 {
-    m_showAll->SetValue( ( m_severities & RPT_SEVERITY_ALL ) == RPT_SEVERITY_ALL );
-    m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
-    m_showWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
-    m_showExclusions->SetValue( m_severities & RPT_SEVERITY_EXCLUSION );
+    int severities = 0;
+
+    if( m_showErrors->GetValue() )
+        severities |= RPT_SEVERITY_ERROR;
+
+    if( m_showWarnings->GetValue() )
+        severities |= RPT_SEVERITY_WARNING;
+
+    if( m_showExclusions->GetValue() )
+        severities |= RPT_SEVERITY_EXCLUSION;
+
+    return severities;
 }
 
 
@@ -384,9 +366,11 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::UpdateData()
 {
-    m_markersTreeModel->Update( m_markersProvider, m_severities );
-    m_unconnectedTreeModel->Update( m_ratsnestProvider, m_severities );
-    m_fpWarningsTreeModel->Update( m_fpWarningsProvider, m_severities );
+    int severities = getSeverities();
+
+    m_markersTreeModel->Update( m_markersProvider, severities );
+    m_unconnectedTreeModel->Update( m_ratsnestProvider, severities );
+    m_fpWarningsTreeModel->Update( m_fpWarningsProvider, severities );
 
     updateDisplayedCounts();
 }
@@ -548,15 +532,13 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
                             if( item == a && item == b )
                             {
-                                focusPos = ( node->m_Type == RC_TREE_NODE::MAIN_ITEM )
-                                                   ? edge.GetSourcePos()
-                                                   : edge.GetTargetPos();
+                                focusPos = ( node->m_Type == RC_TREE_NODE::MAIN_ITEM ) ? edge.GetSourcePos()
+                                                                                       : edge.GetTargetPos();
                             }
                             else
                             {
-                                focusPos = ( item == edge.GetSourceNode()->Parent() )
-                                                   ? edge.GetSourcePos()
-                                                   : edge.GetTargetPos();
+                                focusPos = ( item == edge.GetSourceNode()->Parent() ) ? edge.GetSourcePos()
+                                                                                      : edge.GetTargetPos();
                             }
 
                             m_frame->FocusOnLocation( focusPos );
@@ -608,9 +590,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             for( BOARD_ITEM* boardMarkerItem : board->Markers() )
             {
                 if( item->m_Uuid != boardMarkerItem->m_Uuid && isOverlapping( item, boardMarkerItem ) )
-                {
                     items.push_back( boardMarkerItem );
-                }
             }
 
             items.push_back( item );
@@ -754,8 +734,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     case ID_EDIT_EXCLUSION_COMMENT:
         if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() ) )
         {
-            WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
-                                      marker->GetComment(), true );
+            WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ), marker->GetComment(), true );
 
             if( dlg.ShowModal() == wxID_CANCEL )
                 break;
@@ -807,8 +786,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
             if( command == ID_ADD_EXCLUSION_WITH_COMMENT )
             {
-                WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
-                                          wxEmptyString, true );
+                WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ), wxEmptyString, true );
 
                 if( dlg.ShowModal() == wxID_CANCEL )
                     break;
@@ -833,7 +811,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             }
 
             // Update view
-            if( m_severities & RPT_SEVERITY_EXCLUSION )
+            if( m_showExclusions->GetValue() )
                 static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
             else
                 static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
@@ -859,7 +837,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, getSeverities() );
         modified = true;
         break;
 
@@ -878,7 +856,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, getSeverities() );
         modified = true;
         break;
 
@@ -896,7 +874,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, getSeverities() );
         modified = true;
         break;
 
@@ -910,7 +888,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, getSeverities() );
         modified = true;
         break;
 
@@ -947,7 +925,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             m_frame->GetCanvas()->RedrawRatsnest();
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, getSeverities() );
         modified = true;
         break;
     }
@@ -1001,25 +979,13 @@ void DIALOG_DRC::OnEditViolationSeverities( wxHyperlinkEvent& aEvent )
 
 void DIALOG_DRC::OnSeverity( wxCommandEvent& aEvent )
 {
-    int flag = 0;
-
     if( aEvent.GetEventObject() == m_showAll )
-        flag = RPT_SEVERITY_ALL;
-    else if( aEvent.GetEventObject() == m_showErrors )
-        flag = RPT_SEVERITY_ERROR;
-    else if( aEvent.GetEventObject() == m_showWarnings )
-        flag = RPT_SEVERITY_WARNING;
-    else if( aEvent.GetEventObject() == m_showExclusions )
-        flag = RPT_SEVERITY_EXCLUSION;
+    {
+        m_showErrors->SetValue( true );
+        m_showWarnings->SetValue( aEvent.IsChecked() );
+        m_showExclusions->SetValue( aEvent.IsChecked() );
+    }
 
-    if( aEvent.IsChecked() )
-        m_severities |= flag;
-    else if( aEvent.GetEventObject() == m_showAll )
-        m_severities = RPT_SEVERITY_ERROR;
-    else
-        m_severities &= ~flag;
-
-    syncCheckboxes();
     UpdateData();
 }
 
@@ -1056,15 +1022,9 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
         success = reportWriter.WriteTextReport( fn.GetFullPath() );
 
     if( success )
-    {
-        m_messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
-                                              fn.GetFullPath() ) );
-    }
+        m_messages->Report( wxString::Format( _( "Report file '%s' created<br>" ), fn.GetFullPath() ) );
     else
-    {
-        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ),
-                                              fn.GetFullPath() ) );
-    }
+        DisplayError( this, wxString::Format( _( "Failed to create file '%s'." ), fn.GetFullPath() ) );
 }
 
 
@@ -1074,7 +1034,6 @@ void DIALOG_DRC::OnClose( wxCloseEvent& aEvent )
         aEvent.Veto();
 
     wxCommandEvent dummy;
-
     OnCancelClick( dummy );
 }
 
@@ -1183,7 +1142,7 @@ void DIALOG_DRC::ExcludeMarker()
         m_frame->GetCanvas()->GetView()->Update( marker );
 
         // Update view
-        if( m_severities & RPT_SEVERITY_EXCLUSION )
+        if( m_showExclusions->GetValue() )
             m_markersTreeModel->ValueChanged( node );
         else
             m_markersTreeModel->DeleteCurrentItem( false );
@@ -1275,8 +1234,8 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::updateDisplayedCounts()
 {
-    DRC_TOOL*              drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
-    DRC_ENGINE*            drcEngine = drcTool->GetDRCEngine().get();
+    DRC_TOOL*   drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
+    DRC_ENGINE* drcEngine = drcTool->GetDRCEngine().get();
 
     // Collect counts:
 
@@ -1431,12 +1390,10 @@ void DIALOG_DRC::updateDisplayedCounts()
         numWarnings = -1;
 
     m_errorsBadge->SetMaximumNumber( numErrors );
-    m_errorsBadge->UpdateNumber( errorsOverflowed ? numErrors + 1 : numErrors,
-                                 RPT_SEVERITY_ERROR );
+    m_errorsBadge->UpdateNumber( errorsOverflowed ? numErrors + 1 : numErrors, RPT_SEVERITY_ERROR );
 
     m_warningsBadge->SetMaximumNumber( numWarnings );
-    m_warningsBadge->UpdateNumber( warningsOverflowed ? numWarnings + 1 : numWarnings,
-                                   RPT_SEVERITY_WARNING );
+    m_warningsBadge->UpdateNumber( warningsOverflowed ? numWarnings + 1 : numWarnings, RPT_SEVERITY_WARNING );
 
     m_exclusionsBadge->SetMaximumNumber( numExcluded );
     m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );

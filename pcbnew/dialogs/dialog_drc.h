@@ -24,8 +24,7 @@
  */
 
 
-#ifndef _DIALOG_DRC_H_
-#define _DIALOG_DRC_H_
+#pragma once
 
 #include <chrono>
 #include <wx/htmllbox.h>
@@ -73,8 +72,10 @@ public:
     void ExcludeMarker();
 
 private:
-    void syncCheckboxes();
+    int getSeverities();
     void updateDisplayedCounts();
+
+    bool TransferDataToWindow() override;
 
     void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
@@ -109,6 +110,7 @@ private:
 
     BOARD_DESIGN_SETTINGS& bds() { return m_currentBoard->GetDesignSettings(); }
 
+private:
     BOARD*             m_currentBoard;     // the board currently on test
     PCB_EDIT_FRAME*    m_frame;
     bool               m_running;
@@ -128,11 +130,7 @@ private:
     RC_TREE_MODEL*                     m_unconnectedTreeModel;  // wx reference-counted ptr
     RC_TREE_MODEL*                     m_fpWarningsTreeModel;   // wx reference-counted ptr
 
-    int                                m_severities;            // A mask of SEVERITY flags
-
     /// Used to slow down the rate of yields in updateUi()
     std::chrono::steady_clock::time_point m_lastUpdateUi;
 };
-
-#endif  // _DIALOG_DRC_H_
 

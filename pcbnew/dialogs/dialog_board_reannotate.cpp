@@ -97,8 +97,6 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
         m_frame( aParentFrame ),
         m_footprints( aParentFrame->GetBoard()->Footprints() )
 {
-    InitValues();
-
     // Init bitmaps associated to some wxRadioButton
     reannotate_down_right_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_right_down ) );
     reannotate_right_down_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_left_down ) );
@@ -118,36 +116,10 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     wxArrayString gridslist;
     GRID_MENU::BuildChoiceList( &gridslist, m_frame->config(), aParentFrame );
 
-    if( -1 == m_gridIndex ) // If no default loaded
-        m_gridIndex = m_frame->config()->m_Window.grid.last_size_idx;     // Get the current grid size
-
-    m_sortGridx = m_frame->GetCanvas()->GetGAL()->GetGridSize().x;
-    m_sortGridy = m_frame->GetCanvas()->GetGAL()->GetGridSize().y;
-
     m_GridChoice->Set( gridslist );
-    m_GridChoice->SetSelection( m_gridIndex );
-
-    // Ensure m_sortCode is a valid value (0 .. m_sortButtons.size()-1)
-    m_sortCode = std::max( 0, m_sortCode );
-    m_sortCode = std::min( m_sortCode, (int)m_sortButtons.size()-1 );
-
-    for( wxRadioButton* button : m_sortButtons )
-        button->SetValue( false );
-
-    m_selection = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
-
-    if( !m_selection.Empty() )
-        m_annotationScope = ANNOTATE_SELECTED;
-
-    // Ensure m_annotationScope is a valid value (0 .. m_scopeRadioButtons.size()-1)
-    m_annotationScope = std::max( 0, m_annotationScope );
-    m_annotationScope = std::min( m_annotationScope, (int)m_scopeRadioButtons.size()-1 );
 
     for( wxRadioButton* button : m_scopeRadioButtons )
         button->SetValue( false );
-
-    m_scopeRadioButtons.at( m_annotationScope )->SetValue( true );
-    m_sortButtons.at( m_sortCode )->SetValue( true );
 
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );
@@ -158,57 +130,20 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 }
 
 
-DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
-{
-    GetParameters(); // Get the current menu settings
-
-    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
-    {
-        cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
-        cfg->m_Reannotate.remove_front_prefix = m_RemoveFrontPrefix->GetValue();
-        cfg->m_Reannotate.remove_back_prefix  = m_RemoveBackPrefix->GetValue();
-        cfg->m_Reannotate.exclude_locked      = m_ExcludeLocked->GetValue();
-
-        cfg->m_Reannotate.grid_index          = m_gridIndex;
-        cfg->m_Reannotate.sort_code           = m_sortCode;
-        cfg->m_Reannotate.annotation_choice   = m_annotationScope;
-
-        cfg->m_Reannotate.front_refdes_start  = m_FrontRefDesStart->GetValue();
-        cfg->m_Reannotate.back_refdes_start   = m_BackRefDesStart->GetValue();
-        cfg->m_Reannotate.front_prefix        = m_FrontPrefix->GetValue();
-        cfg->m_Reannotate.back_prefix         = m_BackPrefix->GetValue();
-        cfg->m_Reannotate.exclude_list        = m_ExcludeList->GetValue();
-        cfg->m_Reannotate.report_file_name    = m_MessageWindow->GetFileName();
-    }
-}
-
-
-void DIALOG_BOARD_REANNOTATE::InitValues( void )
-{
-    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
-    {
-        m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_fp_location ? 0 : 1 );
-        m_RemoveFrontPrefix->SetValue( cfg->m_Reannotate.remove_front_prefix );
-        m_RemoveBackPrefix->SetValue( cfg->m_Reannotate.remove_back_prefix );
-        m_ExcludeLocked->SetValue( cfg->m_Reannotate.exclude_locked );
-
-        m_gridIndex         = cfg->m_Reannotate.grid_index ;
-        m_sortCode          = cfg->m_Reannotate.sort_code ;
-        m_annotationScope   = cfg->m_Reannotate.annotation_choice ;
-
-        m_FrontRefDesStart->SetValue( cfg->m_Reannotate.front_refdes_start );
-        m_BackRefDesStart->SetValue( cfg->m_Reannotate.back_refdes_start );
-        m_FrontPrefix->SetValue( cfg->m_Reannotate.front_prefix );
-        m_BackPrefix->SetValue( cfg->m_Reannotate.back_prefix );
-        m_ExcludeList->SetValue( cfg->m_Reannotate.exclude_list );
-        m_MessageWindow->SetFileName( cfg->m_Reannotate.report_file_name );
-    }
-}
-
-
 void DIALOG_BOARD_REANNOTATE::OnCloseClick( wxCommandEvent& event )
 {
     EndDialog( wxID_OK );
+}
+
+
+bool DIALOG_BOARD_REANNOTATE::TransferDataToWindow()
+{
+    PCB_SELECTION selection = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( !selection.Empty() )
+        m_AnnotateSelection->SetValue( true );
+
+    return true;
 }
 
 
@@ -267,7 +202,7 @@ void DIALOG_BOARD_REANNOTATE::FilterBackPrefix( wxCommandEvent& event )
 
 void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
-    GetParameters(); // Figure out how this is to be done
+    m_MessageWindow->SetLazyUpdate( true );
 
     if( ReannotateBoard() )
     {
@@ -280,50 +215,6 @@ void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_MessageWindow->Flush( false );
     m_frame->GetCanvas()->Refresh(); // Redraw
     m_frame->OnModify();             // Need to save file on exit.
-}
-
-
-void DIALOG_BOARD_REANNOTATE::GetParameters()
-{
-    m_sortCode = 0; // Convert radio button to sort direction code
-
-    for( wxRadioButton* sortbuttons : m_sortButtons )
-    {
-        if( sortbuttons->GetValue() )
-            break;
-
-        m_sortCode++;
-    }
-
-    if( m_sortCode >= (int) m_sortButtons.size() )
-        m_sortCode = 0;
-
-    m_frontPrefixString = m_FrontPrefix->GetValue();
-    m_backPrefixString  = m_BackPrefix->GetValue();
-
-    // Get the chosen sort grid for rounding
-    m_gridIndex = m_GridChoice->GetSelection();
-
-    m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
-                                                             m_frame->config()->m_Window.grid.grids[m_gridIndex].x );
-    m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
-                                                             m_frame->config()->m_Window.grid.grids[m_gridIndex].y );
-
-    m_annotationScope = ANNOTATE_ALL;
-
-    for( wxRadioButton* button : m_scopeRadioButtons )
-    {
-        if( button->GetValue() )
-            break;
-        else
-            m_annotationScope++;
-    }
-
-    // Ensure m_annotationScope value is valid
-    if( m_annotationScope >= (int)m_scopeRadioButtons.size() )
-        m_annotationScope = ANNOTATE_ALL;
-
-    m_MessageWindow->SetLazyUpdate( true );
 }
 
 
@@ -371,15 +262,13 @@ static bool FootprintCompare( const REFDES_INFO& aA, const REFDES_INFO& aB )
         std::swap( Y0, Y1 );
 
     if( X0 < X1 )
-        return ( true );  // yes, its smaller
-
-    if( X0 > X1 )
-        return ( false ); // No its not
-
-    if( Y0 < Y1 )
-        return ( true );  // same but equal
-
-    return ( false );
+        return true;    // yes, it's smaller
+    else if( X0 > X1 )
+        return false;   // no, it's not
+    else if( Y0 < Y1 )
+        return true;
+    else
+        return false;
 }
 
 
@@ -479,8 +368,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
     if( !BuildFootprintList( BadRefDes ) )
     {
-        ShowReport( _( "Selected options resulted in errors! Change them and try again." ),
-                    RPT_SEVERITY_ERROR );
+        ShowReport( _( "Selected options resulted in errors! Change them and try again." ), RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -532,6 +420,10 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     bool annotateBack     = m_AnnotateBack->GetValue();
     bool skipLocked       = m_ExcludeLocked->GetValue();
 
+    GRID sortGridMils = m_frame->config()->m_Window.grid.grids[ m_GridChoice->GetSelection() ];
+    int  sortGridx = (int) EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, EDA_UNITS::MILS, sortGridMils.x );
+    int  sortGridy = (int) EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, EDA_UNITS::MILS, sortGridMils.y );
+
     int    errorcount = 0;
     size_t firstnum   = 0;
 
@@ -557,8 +449,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
                                             : footprint->Reference().GetPosition().x;
         fpData.y            = useFPLocation ? footprint->GetPosition().y
                                             : footprint->Reference().GetPosition().y;
-        fpData.roundedx     = RoundToGrid( fpData.x, m_sortGridx ); // Round to sort
-        fpData.roundedy     = RoundToGrid( fpData.y, m_sortGridy );
+        fpData.roundedx     = RoundToGrid( fpData.x, sortGridx ); // Round to sort
+        fpData.roundedy     = RoundToGrid( fpData.y, sortGridy );
         fpData.Front        = footprint->GetLayer() == F_Cu;
         fpData.Action       = UPDATE_REFDES; // Usually good
 
@@ -601,14 +493,27 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
             m_backFootprints.push_back( fpData );
     }
 
+    int sortCode = 0; // Convert radio button to sort direction code
+
+    for( wxRadioButton* sortbuttons : m_sortButtons )
+    {
+        if( sortbuttons->GetValue() )
+            break;
+
+        sortCode++;
+    }
+
+    if( sortCode >= (int) m_sortButtons.size() )
+        sortCode = 0;
+
     // Determine the sort order for the front.
-    SetSortCodes( FrontDirectionsArray, m_sortCode );
+    SetSortCodes( FrontDirectionsArray, sortCode );
 
     // Sort the front footprints.
     sort( m_frontFootprints.begin(), m_frontFootprints.end(), FootprintCompare );
 
     // Determine the sort order for the back.
-    SetSortCodes( BackDirectionsArray, m_sortCode );
+    SetSortCodes( BackDirectionsArray, sortCode );
 
     // Sort the back footprints.
     sort( m_backFootprints.begin(), m_backFootprints.end(), FootprintCompare );

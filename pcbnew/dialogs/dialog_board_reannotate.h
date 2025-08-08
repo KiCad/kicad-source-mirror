@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_BOARD_REANNOTATE_H
-#define DIALOG_BOARD_REANNOTATE_H
+#pragma once
 
 #include <board.h>
 #include <footprint.h>
@@ -56,14 +55,6 @@ enum ACTION_CODE
     EMPTY_REFDES,
     INVALID_REFDES,
     EXCLUDE_REFDES
-};
-
-enum ANNOTATION_SCOPE
-{
-    ANNOTATE_ALL = 0,
-    ANNOTATE_FRONT,
-    ANNOTATE_BACK,
-    ANNOTATE_SELECTED
 };
 
 struct REFDES_CHANGE
@@ -99,7 +90,7 @@ class DIALOG_BOARD_REANNOTATE : public DIALOG_BOARD_REANNOTATE_BASE
 {
 public:
     DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame );
-    ~DIALOG_BOARD_REANNOTATE();
+    ~DIALOG_BOARD_REANNOTATE() = default;
 
 private:
     std::vector<wxRadioButton*> m_sortButtons = {
@@ -131,10 +122,7 @@ private:
             reannotate_left_up_bitmap
     };
 
-    void GetParameters( void );
-
-    /// Copy saved app settings to the dialog.
-    void InitValues( void );
+    bool TransferDataToWindow() override;
 
     void OnApplyClick( wxCommandEvent& event ) override;
     void OnCloseClick( wxCommandEvent& event ) override;
@@ -183,26 +171,14 @@ private:
     /// if it doesn't exist
     REFDES_PREFIX_INFO* GetOrBuildRefDesInfo( const wxString& aRefDesPrefix, int aStartRefDes = 1 );
 
+private:
     PCB_EDIT_FRAME*  m_frame;
     FOOTPRINTS       m_footprints;
-    PCB_SELECTION    m_selection;
 
     std::vector<REFDES_CHANGE>      m_changeArray;
     std::vector<REFDES_INFO>        m_frontFootprints;
     std::vector<REFDES_INFO>        m_backFootprints;
     std::vector<REFDES_PREFIX_INFO> m_refDesPrefixInfos;
     std::vector<wxString>           m_excludeArray;
-
-    int      m_sortCode;
-    int      m_gridIndex;
-    int      m_annotationScope;
-
-    double   m_sortGridx;
-    double   m_sortGridy;
-
-    wxString m_frontPrefixString;
-    wxString m_backPrefixString;
-    wxString m_validPrefixes;
 };
 
-#endif /* DIALOG_BOARD_REANNOTATE_H */

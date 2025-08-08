@@ -24,18 +24,7 @@
 #include "dialog_set_offset.h"
 
 
-struct SET_OFFSET_OPTIONS
-{
-    bool   polarCoords = false;
-    double entry1 = 0.0;
-    double entry2 = 0.0;
-};
-
-static SET_OFFSET_OPTIONS s_savedOptions;
-
-
-DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset,
-                                      bool aClearToZero ) :
+DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset, bool aClearToZero ) :
         DIALOG_SET_OFFSET_BASE( &aParent ), m_clearToZero( aClearToZero ),
         m_originalOffset( aOffset ), m_updatedOffset( aOffset ),
         m_xOffset( &aParent, m_xLabel, m_xEntry, m_xUnit ),
@@ -50,12 +39,7 @@ DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset
 
     SetInitialFocus( m_xEntry );
 
-    // and set up the entries according to the saved options
-    m_polarCoords->SetValue( s_savedOptions.polarCoords );
     updateDialogControls( m_polarCoords->IsChecked() );
-
-    m_xOffset.SetDoubleValue( s_savedOptions.entry1 );
-    m_yOffset.SetDoubleValue( s_savedOptions.entry2 );
 
     if( m_clearToZero )
     {

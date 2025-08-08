@@ -174,14 +174,6 @@ public:
         bool merge_segments;
     };
 
-    struct DIALOG_DRC
-    {
-        bool refill_zones;
-        bool test_all_track_errors;
-        bool test_footprints;
-        int  severities;
-    };
-
     struct DIALOG_EXPORT_IDF
     {
         bool   auto_adjust;
@@ -311,23 +303,6 @@ public:
         bool   as_item_checkboxes;
     };
 
-    struct DIALOG_REANNOTATE
-    {
-        bool     sort_on_fp_location;
-        bool     remove_front_prefix;
-        bool     remove_back_prefix;
-        bool     exclude_locked;
-        int      grid_index;
-        int      sort_code;
-        int      annotation_choice;
-        wxString front_refdes_start;
-        wxString back_refdes_start;
-        wxString front_prefix;
-        wxString back_prefix;
-        wxString exclude_list;
-        wxString report_file_name;
-    };
-
     struct FOOTPRINT_CHOOSER
     {
         int  width;
@@ -389,8 +364,6 @@ public:
 
     DIALOG_CLEANUP m_Cleanup;
 
-    DIALOG_DRC m_DrcDialog;
-
     DIALOG_EXPORT_IDF m_ExportIdf;
 
     DIALOG_EXPORT_STEP m_ExportStep;
@@ -414,8 +387,6 @@ public:
     DIALOG_PLACE_FILE m_PlaceFile;
 
     DIALOG_PLOT m_Plot;
-
-    DIALOG_REANNOTATE m_Reannotate;
 
     FOOTPRINT_CHOOSER m_FootprintChooser;
 

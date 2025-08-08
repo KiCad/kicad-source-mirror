@@ -51,7 +51,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
         : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
           m_Cleanup(),
-          m_DrcDialog(),
           m_ExportIdf(),
           m_ExportStep(),
           m_ExportODBPP(),
@@ -318,18 +317,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_tracks_in_pad",
             &m_Cleanup.cleanup_tracks_in_pad, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "drc_dialog.refill_zones",
-            &m_DrcDialog.refill_zones, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_all_track_errors",
-            &m_DrcDialog.test_all_track_errors, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_footprints",
-            &m_DrcDialog.test_footprints, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "drc_dialog.severities",
-            &m_DrcDialog.severities, RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) );
-
     m_params.emplace_back( new PARAM<bool>( "gen_drill.merge_pth_npth",
             &m_GenDrill.merge_pth_npth, false ) );
 
@@ -573,35 +560,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.height",
             &m_FootprintWizardList.height, -1 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_sort_on_modules",
-            &m_Reannotate.sort_on_fp_location, true ) );
-    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_remove_front_prefix",
-            &m_Reannotate.remove_front_prefix, false ) );
-    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_remove_back_prefix",
-            &m_Reannotate.remove_back_prefix, false ) );
-    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_exclude_locked",
-            &m_Reannotate.exclude_locked, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_grid_index",
-            &m_Reannotate.grid_index, 0 ) );
-    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_sort_code",
-            &m_Reannotate.sort_code, 0 ) );
-    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_choice",
-            &m_Reannotate.annotation_choice, 0 ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_front_refdes_start",
-            &m_Reannotate.front_refdes_start, "1" ) );
-    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_back_refdes_start",
-            &m_Reannotate.back_refdes_start, "" ) );
-    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_front_prefix",
-            &m_Reannotate.front_prefix, "" ) );
-    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_back_prefix",
-            &m_Reannotate.back_prefix, "" ) );
-    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_exclude_list",
-            &m_Reannotate.exclude_list, "" ) );
-    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_report_file_name",
-            &m_Reannotate.report_file_name, "" ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json

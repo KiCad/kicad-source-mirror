@@ -30,13 +30,16 @@ DIALOG_TUNING_PATTERN_PROPERTIES::DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDI
                                                                     PNS::MEANDER_SETTINGS& aSettings,
                                                                     PNS::ROUTER_MODE       aMeanderType,
                                                                     const DRC_CONSTRAINT&  aConstraint ) :
-        DIALOG_TUNING_PATTERN_PROPERTIES_BASE( aFrame ), m_constraint( aConstraint ),
+        DIALOG_TUNING_PATTERN_PROPERTIES_BASE( aFrame ),
+        m_constraint( aConstraint ),
         m_targetLength( aFrame, m_targetLengthLabel, m_targetLengthCtrl, m_targetLengthUnits ),
         m_targetDelay( aFrame, m_targetDelayLabel, m_targetDelayCtrl, m_targetDelayUnits ),
         m_minA( aFrame, m_track_minALabel, m_minACtrl, m_minAUnits ),
         m_maxA( aFrame, m_maxALabel, m_maxACtrl, m_maxAUnits ),
-        m_spacing( aFrame, m_spacingLabel, m_spacingCtrl, m_spacingUnits ), m_r( aFrame, m_rLabel, m_rCtrl, m_rUnits ),
-        m_settings( aSettings ), m_mode( aMeanderType )
+        m_spacing( aFrame, m_spacingLabel, m_spacingCtrl, m_spacingUnits ),
+        m_r( aFrame, m_rLabel, m_rCtrl, m_rUnits ),
+        m_settings( aSettings ),
+        m_mode( aMeanderType )
 {
     m_targetDelay.SetUnits( EDA_UNITS::PS );
     m_r.SetUnits( EDA_UNITS::PERCENT );
