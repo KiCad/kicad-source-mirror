@@ -56,10 +56,6 @@ PAD_TOOL::PAD_TOOL() :
 {}
 
 
-PAD_TOOL::~PAD_TOOL()
-{}
-
-
 void PAD_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason == MODEL_RELOAD )
@@ -210,7 +206,7 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
         for( PAD* pad : footprint->Pads() )
         {
             // TODO(JE) padstacks
-            if( aPadShapeFilter && ( pad->GetShape( PADSTACK::ALL_LAYERS ) != aSrcPad.GetShape( PADSTACK::ALL_LAYERS ) ) )
+            if( aPadShapeFilter && pad->GetShape( PADSTACK::ALL_LAYERS ) != aSrcPad.GetShape( PADSTACK::ALL_LAYERS ) )
                 continue;
 
             EDA_ANGLE padAngle = pad->GetOrientation() - footprint->GetOrientation();
@@ -263,9 +259,8 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
             BOARD_COMMIT commit( frame() );
 
-            doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
-                                 dlg.GetPadShapeFilter(), dlg.GetPadOrientFilter(),
-                                 dlg.GetPadLayerFilter(), dlg.GetPadTypeFilter() );
+            doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules, dlg.GetPadShapeFilter(),
+                                 dlg.GetPadOrientFilter(), dlg.GetPadLayerFilter(), dlg.GetPadTypeFilter() );
 
             commit.Push( _( "Push Pad Settings" ) );
 
@@ -284,8 +279,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
  * @param aFrame The parent window for the dialog
  * @return The parameters, or nullopt if no parameters, e.g. user cancelled the dialog
 */
-static std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS>
-GetSequentialPadNumberingParams( wxWindow* aFrame )
+static std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS> GetSequentialPadNumberingParams( wxWindow* aFrame )
 {
     // Persistent settings for the pad enumeration dialog.
     static SEQUENTIAL_PAD_ENUMERATION_PARAMS s_lastUsedParams;
@@ -582,16 +576,14 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
         PAD_PLACER( PAD_TOOL* aPadTool, PCB_BASE_EDIT_FRAME* aFrame ) :
-            m_padTool( aPadTool ),
-            m_frame( aFrame ),
-            m_gridHelper( aPadTool->GetManager(), aFrame->GetMagneticItemsSettings() )
+                m_padTool( aPadTool ),
+                m_frame( aFrame ),
+                m_gridHelper( aPadTool->GetManager(), aFrame->GetMagneticItemsSettings() )
         {
             neednewPadNumber = true;    // Use a new pad number when creatin a pad by default
         }
 
-        virtual ~PAD_PLACER()
-        {
-        }
+        virtual ~PAD_PLACER() = default;
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {

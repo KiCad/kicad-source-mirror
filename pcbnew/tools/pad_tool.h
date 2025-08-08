@@ -21,23 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __PAD_TOOL_H
-#define __PAD_TOOL_H
-
+#pragma once
 
 #include <tools/pcb_tool_base.h>
 
 class ACTION_MENU;
 class PCB_SHAPE;
 
-/**
- * Tool relating to pads and pad settings.
- */
+
 class PAD_TOOL : public PCB_TOOL_BASE
 {
 public:
     PAD_TOOL();
-    ~PAD_TOOL();
+    ~PAD_TOOL() = default;
 
     ///< React to model/view changes
     void Reset( RESET_REASON aReason ) override;
@@ -89,7 +85,7 @@ private:
     ///< Push pad settings from a pad to other pads on board or footprint.
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
-   void explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommit );
+    void explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommit );
 
     void enterPadEditMode();
 
@@ -99,5 +95,3 @@ private:
     HIGH_CONTRAST_MODE m_previousHighContrastMode;
     KIID               m_editPad;
 };
-
-#endif // __PAD_TOOL_H
