@@ -44,18 +44,25 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 {
     m_reporter = new WX_TEXT_CTRL_REPORTER( m_tcReport );
 
-    if( PCBNEW_SETTINGS* cfg = m_parentFrame->GetPcbNewSettings() )
-    {
-        m_cbRefillZones->SetValue( cfg->m_Cleanup.cleanup_refill_zones );
-        m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
-        m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
-        m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
-        m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
-        m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
-        m_deleteDanglingViasOpt->SetValue( cfg->m_Cleanup.delete_dangling_vias );
-    }
+    // Populate the net filter list with net names
+    m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
 
-    buildFilterLists();
+    // Populate the netclass filter list with netclass names
+    wxArrayString                  netclassNames;
+    std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
+
+    netclassNames.push_back( settings->GetDefaultNetclass()->GetName() );
+
+    for( const auto& [name, netclass] : settings->GetNetclasses() )
+        netclassNames.push_back( name );
+
+    m_netclassFilter->Set( netclassNames );
+
+    // Populate the layer filter list
+    m_layerFilter->SetBoardFrame( m_parentFrame );
+    m_layerFilter->SetLayersHotkeys( false );
+    m_layerFilter->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_layerFilter->Resync();
 
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
@@ -74,47 +81,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 {
-    if( PCBNEW_SETTINGS* cfg = m_parentFrame->GetPcbNewSettings() )
-    {
-        cfg->m_Cleanup.cleanup_refill_zones   = m_cbRefillZones->GetValue();
-        cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();
-        cfg->m_Cleanup.merge_segments         = m_mergeSegmOpt->GetValue();
-        cfg->m_Cleanup.cleanup_unconnected    = m_deleteUnconnectedOpt->GetValue();
-        cfg->m_Cleanup.cleanup_short_circuits = m_cleanShortCircuitOpt->GetValue();
-        cfg->m_Cleanup.cleanup_tracks_in_pad  = m_deleteTracksInPadsOpt->GetValue();
-        cfg->m_Cleanup.delete_dangling_vias   = m_deleteDanglingViasOpt->GetValue();
-    }
-
     m_changesTreeModel->DecRef();
-}
-
-
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::buildFilterLists()
-{
-    // Populate the net filter list with net names
-    m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
-
-    if( !m_brd->GetHighLightNetCodes().empty() )
-        m_netFilter->SetSelectedNetcode( *m_brd->GetHighLightNetCodes().begin() );
-
-    // Populate the netclass filter list with netclass names
-    wxArrayString                  netclassNames;
-    std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
-
-    netclassNames.push_back( settings->GetDefaultNetclass()->GetName() );
-
-    for( const auto& [name, netclass] : settings->GetNetclasses() )
-        netclassNames.push_back( name );
-
-    m_netclassFilter->Set( netclassNames );
-    m_netclassFilter->SetStringSelection( m_brd->GetDesignSettings().GetCurrentNetClassName() );
-
-    // Populate the layer filter list
-    m_layerFilter->SetBoardFrame( m_parentFrame );
-    m_layerFilter->SetLayersHotkeys( false );
-    m_layerFilter->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
-    m_layerFilter->Resync();
-    m_layerFilter->SetLayerSelection( m_parentFrame->GetActiveLayer() );
 }
 
 
@@ -155,6 +122,11 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLayerFilterSelect( wxCommandEvent& aEvent
 
 bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataToWindow()
 {
+    if( !m_brd->GetHighLightNetCodes().empty() )
+        m_netFilter->SetSelectedNetcode( *m_brd->GetHighLightNetCodes().begin() );
+
+    m_netclassFilter->SetStringSelection( m_brd->GetDesignSettings().GetCurrentNetClassName() );
+    m_layerFilter->SetLayerSelection( m_parentFrame->GetActiveLayer() );
     return true;
 }
 
@@ -178,29 +150,10 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     BOARD_COMMIT commit( m_parentFrame );
     TRACKS_CLEANER cleaner( m_brd, commit );
 
-    struct FILTER_STATE
-    {
-        bool selectedOnly;
-        int netCodeOnly;
-        wxString netClassOnly;
-        int layerOnly;
-    };
-
-    FILTER_STATE filter_state = {
-            .selectedOnly = m_selectedItemsFilter->GetValue(),
-            .netCodeOnly = m_netFilterOpt->GetValue() ? m_netFilter->GetSelectedNetcode() : -1,
-            .netClassOnly = m_netclassFilterOpt->GetValue()
-                                ? m_netclassFilter->GetStringSelection()
-                                : wxString(),
-            .layerOnly = m_layerFilterOpt->GetValue()
-                             ? m_layerFilter->GetLayerSelection()
-                             : UNDEFINED_LAYER
-            };
-
     cleaner.SetFilter(
-            [&, filter_state]( BOARD_CONNECTED_ITEM* aItem ) -> bool
+            [&]( BOARD_CONNECTED_ITEM* aItem ) -> bool
             {
-                if( filter_state.selectedOnly )
+                if( m_selectedItemsFilter->GetValue() )
                 {
                     if( !aItem->IsSelected() )
                     {
@@ -214,23 +167,23 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                     }
                 }
 
-                if( filter_state.netCodeOnly >= 0 )
+                if( m_netFilterOpt->GetValue() )
                 {
-                    if( aItem->GetNetCode() != filter_state.netCodeOnly )
+                    if( aItem->GetNetCode() != m_netFilter->GetSelectedNetcode() )
                         return true;
                 }
 
-                if( !filter_state.netClassOnly.IsEmpty() )
+                if( m_netclassFilterOpt->GetValue() )
                 {
                     NETCLASS* netclass = aItem->GetEffectiveNetClass();
 
-                    if( !netclass->ContainsNetclassWithName( filter_state.netClassOnly ) )
+                    if( !netclass->ContainsNetclassWithName( m_netclassFilter->GetStringSelection() ) )
                         return true;
                 }
 
-                if( filter_state.layerOnly != UNDEFINED_LAYER )
+                if( m_layerFilterOpt->GetValue() )
                 {
-                    if( aItem->GetLayer() != filter_state.layerOnly )
+                    if( aItem->GetLayer() != m_layerFilter->GetLayerSelection() )
                         return true;
                 }
 

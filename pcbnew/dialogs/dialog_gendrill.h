@@ -44,8 +44,6 @@ public:
     bool TransferDataToWindow() override;
 
 private:
-    void initDialog();
-
     // event functions
     void onSelDrillUnitsSelected( wxCommandEvent& event ) override;
     void onSelZerosFmtSelected( wxCommandEvent& event ) override;

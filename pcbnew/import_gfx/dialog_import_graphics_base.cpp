@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,7 +50,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	m_importScaleLabel->Wrap( -1 );
 	fgSizer3->Add( m_importScaleLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_importScaleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_importScaleCtrl = new wxTextCtrl( this, wxID_ANY, _("1.0"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
 	fgSizer3->Add( m_importScaleCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
@@ -62,7 +62,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	fgSizer3->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_lineWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthCtrl = new wxTextCtrl( this, wxID_ANY, _("0.2"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_lineWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_lineWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -171,6 +171,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_rbFixDiscontinuities = new wxCheckBox( this, wxID_ANY, _("Fix discontinuities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbFixDiscontinuities->SetValue(true);
 	m_rbFixDiscontinuities->SetToolTip( _("Trim/extend open shapes or add segments to make vertices of shapes coincide") );
 
 	bSizer11->Add( m_rbFixDiscontinuities, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -179,7 +180,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	m_toleranceLabel->Wrap( -1 );
 	bSizer11->Add( m_toleranceLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
 
-	m_toleranceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_toleranceCtrl = new wxTextCtrl( this, wxID_ANY, _("1"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	bSizer11->Add( m_toleranceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_toleranceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );

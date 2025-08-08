@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
-#define DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
+#pragma once
 
 #include <dialog_cleanup_tracks_and_vias_base.h>
 #include <cleanup_item.h>
@@ -41,7 +40,6 @@ public:
 
 private:
     void doCleanup( bool aDryRun );
-    void buildFilterLists();
     void setupOKButtonLabel();
 
     void OnCheckBox( wxCommandEvent& aEvent ) override;
@@ -54,13 +52,12 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+private:
     PCB_EDIT_FRAME*  m_parentFrame;
     BOARD*           m_brd;
     RC_TREE_MODEL*   m_changesTreeModel;
     bool             m_firstRun;
 
-    std::vector<std::shared_ptr<CLEANUP_ITEM> > m_items;
-    WX_TEXT_CTRL_REPORTER* m_reporter;
+    std::vector<std::shared_ptr<CLEANUP_ITEM>> m_items;
+    WX_TEXT_CTRL_REPORTER*                     m_reporter;
 };
-
-#endif // DIALOG_CLEANUP_TRACKS_AND_VIAS_H_

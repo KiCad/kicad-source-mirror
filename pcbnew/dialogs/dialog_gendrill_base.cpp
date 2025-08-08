@@ -110,7 +110,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxString m_choiceDrillMapChoices[] = { _("Postscript"), _("Gerber X2"), _("DXF"), _("SVG"), _("PDF") };
 	int m_choiceDrillMapNChoices = sizeof( m_choiceDrillMapChoices ) / sizeof( wxString );
 	m_choiceDrillMap = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceDrillMapNChoices, m_choiceDrillMapChoices, 0 );
-	m_choiceDrillMap->SetSelection( 4 );
+	m_choiceDrillMap->SetSelection( 1 );
 	bSizer9->Add( m_choiceDrillMap, 1, wxALL, 5 );
 
 

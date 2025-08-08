@@ -69,7 +69,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	wxString m_unitsCtrlChoices[] = { _("Inches"), _("Millimeters") };
 	int m_unitsCtrlNChoices = sizeof( m_unitsCtrlChoices ) / sizeof( wxString );
 	m_unitsCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitsCtrlNChoices, m_unitsCtrlChoices, 0 );
-	m_unitsCtrl->SetSelection( 0 );
+	m_unitsCtrl->SetSelection( 1 );
 	fgSizer1->Add( m_unitsCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
@@ -103,12 +103,14 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerLower->Add( m_cbIncludeBoardEdge, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_useDrillPlaceOrigin = new wxCheckBox( this, wxID_ANY, _("Use drill/place file origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useDrillPlaceOrigin->SetValue(true);
 	bSizerLower->Add( m_useDrillPlaceOrigin, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_negateXcb = new wxCheckBox( this, wxID_ANY, _("Use negative X coordinates for footprints on bottom layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_negateXcb, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_singleFile = new wxCheckBox( this, wxID_ANY, _("Generate single file with both front and back positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_singleFile->SetValue(true);
 	bSizerLower->Add( m_singleFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 

@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_IMPORT_NETLIST_H
-#define DIALOG_IMPORT_NETLIST_H
+#pragma once
 
 #include <dialog_import_netlist_base.h>
 
@@ -50,15 +49,10 @@ private:
     void OnMatchChanged( wxCommandEvent& event ) override;
     void OnOptionChanged( wxCommandEvent& event ) override;
 
+private:
     PCB_EDIT_FRAME* m_parent;
     wxString&       m_netlistPath;
     bool            m_initialized;
     bool            m_runDragCommand;
-    static bool     m_matchByUUID;      // True to use UUID as link between symbol and footprint
-                                        // False to use reference designator as link
-                                        // between symbol and footprint
-
 };
 
-
-#endif      // DIALOG_IMPORT_NETLIST_H

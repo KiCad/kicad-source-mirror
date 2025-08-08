@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_UPDATE_PCB_H_
-#define _DIALOG_UPDATE_PCB_H_
+#pragma once
 
 #include <dialog_update_pcb_base.h>
 
@@ -41,10 +40,9 @@ private:
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnUpdateClick( wxCommandEvent& event ) override;
 
+private:
     PCB_EDIT_FRAME* m_frame;
     NETLIST*        m_netlist;
     bool            m_initialized;
     bool            m_runDragCommand;
 };
-
-#endif

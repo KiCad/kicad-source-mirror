@@ -163,17 +163,6 @@ public:
         int   design_blocks_panel_float_height;
     };
 
-    struct DIALOG_CLEANUP
-    {
-        bool cleanup_refill_zones;
-        bool cleanup_vias;
-        bool delete_dangling_vias;
-        bool cleanup_tracks_in_pad;
-        bool cleanup_unconnected;
-        bool cleanup_short_circuits;
-        bool merge_segments;
-    };
-
     struct DIALOG_EXPORT_IDF
     {
         bool   auto_adjust;
@@ -234,60 +223,6 @@ public:
     {
         int width;
         int height;
-    };
-
-    struct DIALOG_GENERATE_DRILL
-    {
-        bool merge_pth_npth;
-        bool minimal_header;
-        bool mirror;
-        bool unit_drill_is_inch;
-        bool use_route_for_oval_holes;
-        int  drill_file_type;
-        int  map_file_type;
-        int  zeros_format;
-        bool generate_map;
-        bool generate_tenting;
-    };
-
-    struct DIALOG_IMPORT_GRAPHICS
-    {
-        int         layer;
-        bool        use_dlg_layer_selection;
-        bool        interactive_placement;
-        bool        group_items;
-        bool        fix_discontinuities;
-        double      tolerance;
-        wxString    last_file;
-        double      dxf_line_width;
-        int         dxf_line_width_units;
-        int         origin_units;
-        double      origin_x;
-        double      origin_y;
-        int         dxf_units;
-    };
-
-    struct DIALOG_NETLIST
-    {
-        int  report_filter;
-        bool update_footprints;
-        bool transfer_groups;
-        bool delete_shorting_tracks;
-        bool delete_extra_footprints;
-        bool associate_by_ref_sch;
-    };
-
-    struct DIALOG_PLACE_FILE
-    {
-        wxString output_directory;  // only used at run-time; actual data in project settings
-        int      units;
-        int      file_options;
-        int      file_format;
-        bool     include_board_edge;
-        bool     exclude_TH;
-        bool     only_SMD;
-        bool     use_aux_origin;
-        bool     negate_xcoord;
     };
 
     struct DIALOG_PLOT
@@ -362,8 +297,6 @@ public:
 
     AUI_PANELS m_AuiPanels;
 
-    DIALOG_CLEANUP m_Cleanup;
-
     DIALOG_EXPORT_IDF m_ExportIdf;
 
     DIALOG_EXPORT_STEP m_ExportStep;
@@ -377,14 +310,6 @@ public:
     DIALOG_EXPORT_D356 m_ExportD356;
 
     DIALOG_FOOTPRINT_WIZARD_LIST m_FootprintWizardList;
-
-    DIALOG_GENERATE_DRILL m_GenDrill;
-
-    DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
-
-    DIALOG_NETLIST m_NetlistDialog;
-
-    DIALOG_PLACE_FILE m_PlaceFile;
 
     DIALOG_PLOT m_Plot;
 

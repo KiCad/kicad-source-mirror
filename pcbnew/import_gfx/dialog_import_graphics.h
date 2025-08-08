@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_IMPORT_GRAPHICS_H
-#define DIALOG_IMPORT_GRAPHICS_H
+#pragma once
 
 #include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
@@ -43,10 +42,7 @@ public:
     /**
      * @return a list of items imported from a vector graphics file.
      */
-    std::list<std::unique_ptr<EDA_ITEM>>& GetImportedItems()
-    {
-        return m_importer->GetItems();
-    }
+    std::list<std::unique_ptr<EDA_ITEM>>& GetImportedItems() { return m_importer->GetItems(); }
 
     /**
      * @return true if the placement is interactive, i.e. all imported
@@ -63,7 +59,7 @@ public:
     /**
      * @return tolerance to connect the shapes.
      */
-    int GetTolerance() { return m_tolerance.GetValue(); }
+    int GetTolerance() { return m_tolerance.GetIntValue(); }
 
     /**
      * @return true if imported items must be placed in a new PCB_GROUP.
@@ -87,14 +83,4 @@ private:
     UNIT_BINDER          m_yOrigin;
     UNIT_BINDER          m_defaultLineWidth;
     UNIT_BINDER          m_tolerance;
-
-    static bool          s_useDlgLayerSelection;
-    static bool          s_shouldGroupItems;
-    static bool          s_placementInteractive;
-    static bool          s_fixDiscontinuities;
-    static int           s_toleranceValue;
-    static double        s_importScale;         // a scale factor to change the size of imported
-                                                // items m_importScale =1.0 means keep original size
 };
-
-#endif    //  DIALOG_IMPORT_GRAPHICS_H

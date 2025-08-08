@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,9 +54,11 @@ DIALOG_IMPORT_NETLIST_BASE::DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	sbSizer1->Add( m_cbDeleteExtraFootprints, 0, wxBOTTOM, 5 );
 
 	m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Replace footprints with those specified in netlist"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateFootprints->SetValue(true);
 	sbSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM, 5 );
 
 	m_cbTransferGroups = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Group footprints based on symbol group"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTransferGroups->SetValue(true);
 	sbSizer1->Add( m_cbTransferGroups, 0, wxBOTTOM, 5 );
 
 	m_cbOverrideLocks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete/replace footprints even if locked"), wxDefaultPosition, wxDefaultSize, 0 );

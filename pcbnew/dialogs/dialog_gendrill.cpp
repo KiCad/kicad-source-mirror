@@ -26,7 +26,6 @@
 #include <core/arraydim.h>
 #include <widgets/std_bitmap_button.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
@@ -44,10 +43,9 @@
 #include <wx/filedlg.h>
 #include <jobs/job_export_pcb_drill.h>
 
-// list of allowed precision for EXCELLON files, for integer format:
-// Due to difference between inches and mm,
-// there are 2 precision values, one for inches and one for metric
-// Note: for decimla format, the precision is not used
+// List of allowed precision for EXCELLON files, for integer format.  Due to difference between inches and mm,
+// there are 2 precision values, one for inches and one for metric.
+// Note: for decimal format, the precision is not used.
 static DRILL_PRECISION precisionListForInches( 2, 4 );
 static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
@@ -65,31 +63,32 @@ int BOARD_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 
 
 DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent  ) :
-        DIALOG_GENDRILL_BASE( aParent )
+        DIALOG_GENDRILL_BASE( aParent ),
+        m_pcbEditFrame( aPcbEditFrame ),
+        m_board( aPcbEditFrame->GetBoard() ),
+        m_plotOpts( aPcbEditFrame->GetPlotSettings() ),
+        m_job( nullptr )
 {
-    m_pcbEditFrame = aPcbEditFrame;
-    m_board  = m_pcbEditFrame->GetBoard();
-    m_job = nullptr;
-    m_plotOpts = m_pcbEditFrame->GetPlotSettings();
-
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     SetupStandardButtons( { { wxID_OK,     _( "Generate" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
 
-    initDialog();
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
+
     finishDialogSettings();
 }
 
 
 DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_DRILL* aJob,
                                   wxWindow* aParent ) :
-        DIALOG_GENDRILL_BASE( aParent )
+        DIALOG_GENDRILL_BASE( aParent ),
+        m_pcbEditFrame( aPcbEditFrame ),
+        m_board( m_pcbEditFrame->GetBoard() ),
+        m_job( aJob )
 {
-    m_pcbEditFrame = aPcbEditFrame;
-    m_board = m_pcbEditFrame->GetBoard();
-    m_job = aJob;
-
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     // hide ui elements that dont belong for job config
@@ -99,7 +98,12 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
 
     SetupStandardButtons();
 
-    initDialog();
+    SetTitle( m_job->GetSettingsDialogTitle() );
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
+
     finishDialogSettings();
 }
 
@@ -138,29 +142,6 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
 {
     if( !m_job )
     {
-        if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
-        {
-            m_Check_Merge_PTH_NPTH->SetValue( cfg->m_GenDrill.merge_pth_npth );
-            m_Check_Minimal->SetValue( cfg->m_GenDrill.minimal_header );
-            m_Check_Mirror->SetValue( cfg->m_GenDrill.mirror );
-            m_units->SetSelection( cfg->m_GenDrill.unit_drill_is_inch ? 1 : 0 );
-            m_altDrillMode->SetValue( !cfg->m_GenDrill.use_route_for_oval_holes );
-            m_rbExcellon->SetValue( cfg->m_GenDrill.drill_file_type == 0 );
-            m_rbGerberX2->SetValue( cfg->m_GenDrill.drill_file_type == 1 );
-            m_cbGenerateMap->SetValue( cfg->m_GenDrill.generate_map );
-            m_generateTentingLayers->SetValue( cfg->m_GenDrill.generate_tenting );
-
-            int zerosFormat = cfg->m_GenDrill.zeros_format;
-
-            if( zerosFormat >= 0 && zerosFormat < (int) m_zeros->GetCount() )
-                m_zeros->SetSelection( zerosFormat );
-
-            int mapFileType = cfg->m_GenDrill.map_file_type;
-
-            if( mapFileType >= 0 && mapFileType < (int) m_choiceDrillMap->GetCount() )
-                m_choiceDrillMap->SetSelection( mapFileType );
-        }
-
         updatePrecisionOptions();
 
         m_origin->SetSelection( m_plotOpts.GetUseAuxOrigin() ? 1 : 0 );
@@ -193,17 +174,6 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
     wxCommandEvent dummy;
     onFileFormatSelection( dummy );
 	return true;
-}
-
-
-void DIALOG_GENDRILL::initDialog()
-{
-    if( m_job )
-        SetTitle( m_job->GetSettingsDialogTitle() );
-
-    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
-    m_hash_key = TO_UTF8( GetTitle() );
 }
 
 
@@ -247,20 +217,6 @@ void DIALOG_GENDRILL::updateConfig()
     {
         m_board->SetPlotOptions( m_plotOpts );
         m_pcbEditFrame->OnModify();
-    }
-
-    if( PCBNEW_SETTINGS* cfg = m_pcbEditFrame->GetPcbNewSettings() )
-    {
-        cfg->m_GenDrill.merge_pth_npth           = m_Check_Merge_PTH_NPTH->IsChecked();
-        cfg->m_GenDrill.minimal_header           = m_Check_Minimal->IsChecked();
-        cfg->m_GenDrill.mirror                   = m_Check_Mirror->IsChecked();
-        cfg->m_GenDrill.unit_drill_is_inch       = ( m_units->GetSelection() == 0 ) ? false : true;
-        cfg->m_GenDrill.use_route_for_oval_holes = !m_altDrillMode->GetValue();
-        cfg->m_GenDrill.drill_file_type          = m_rbExcellon->GetValue() ? 0 : 1;
-        cfg->m_GenDrill.map_file_type            = m_choiceDrillMap->GetSelection();
-        cfg->m_GenDrill.zeros_format             = m_zeros->GetSelection();
-        cfg->m_GenDrill.generate_map             = m_cbGenerateMap->IsChecked();
-        cfg->m_GenDrill.generate_tenting         = m_generateTentingLayers->IsChecked();
     }
 }
 
@@ -320,8 +276,7 @@ void DIALOG_GENDRILL::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
     wxString   msg;
     msg.Printf( _( "Do you want to use a path relative to\n'%s'?" ), defaultPath );
 
-    wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
-                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+    wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ), wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
 
     if( dialog.ShowModal() == wxID_YES )
     {
@@ -460,16 +415,8 @@ void DIALOG_GENDRILL::onGenReportFile( wxCommandEvent& event )
         success = gerberWriter.GenDrillReportFile( dlg.GetPath() );
     }
 
-    wxString   msg;
-
-    if( ! success )
-    {
-        msg.Printf(  _( "Failed to create file '%s'." ), dlg.GetPath() );
-        m_messagesBox->AppendText( msg );
-    }
+    if( !success )
+        m_messagesBox->AppendText( wxString::Format( _( "Failed to create file '%s'." ), dlg.GetPath() ) );
     else
-    {
-        msg.Printf( _( "Report file '%s' created." ), dlg.GetPath() );
-        m_messagesBox->AppendText( msg );
-    }
+        m_messagesBox->AppendText( wxString::Format( _( "Report file '%s' created." ), dlg.GetPath() ) );
 }

@@ -41,20 +41,14 @@ public:
                                    wxWindow* aParent );
 
 private:
-    void initDialog();
     void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void onGenerate( wxCommandEvent& event ) override;
 
     void onUpdateUIUnits( wxUpdateUIEvent& event ) override;
-
     void onUpdateUIFileOpt( wxUpdateUIEvent& event ) override;
-
     void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) override;
-
     void onUpdateUInegXcoord( wxUpdateUIEvent& event ) override;
-
     void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override;
-
     void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override;
 
     /**
@@ -68,18 +62,15 @@ private:
     bool CreateGerberFiles();
 
     // accessors to options:
-    bool UnitsMM();
-
-    bool OneFileOnly();
-
-    bool OnlySMD();
-
-    bool ExcludeAllTH();
-
-    bool ExcludeDNP();
+    bool UnitsMM()      { return m_unitsCtrl->GetSelection() == 1; }
+    bool OneFileOnly()  { return m_singleFile->GetValue(); }
+    bool OnlySMD()      { return m_onlySMD->GetValue(); }
+    bool ExcludeAllTH() { return m_excludeTH->GetValue(); }
+    bool ExcludeDNP()   { return m_excludeDNP->GetValue(); }
 
 private:
-    PCB_EDIT_FRAME* m_editFrame;
-    REPORTER*       m_reporter;
+    PCB_EDIT_FRAME*     m_editFrame;
+    REPORTER*           m_reporter;
     JOB_EXPORT_PCB_POS* m_job;
+    wxString            m_outputDirectory;
 };

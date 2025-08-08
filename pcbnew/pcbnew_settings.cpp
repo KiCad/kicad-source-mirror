@@ -50,16 +50,11 @@ const int pcbnewSchemaVersion = 5;
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
         : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
-          m_Cleanup(),
           m_ExportIdf(),
           m_ExportStep(),
           m_ExportODBPP(),
           m_ExportVrml(),
           m_FootprintWizardList(),
-          m_GenDrill(),
-          m_ImportGraphics(),
-          m_NetlistDialog(),
-          m_PlaceFile(),
           m_Plot(),
           m_FootprintChooser(),
           m_Zones(),
@@ -296,57 +291,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.show_page_borders",
             &m_ShowPageLimits, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_refill_zones",
-            &m_Cleanup.cleanup_refill_zones, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
-            &m_Cleanup.cleanup_vias, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "cleanup.delete_dangling_vias",
-            &m_Cleanup.delete_dangling_vias, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "cleanup.merge_segments",
-            &m_Cleanup.merge_segments, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_unconnected",
-            &m_Cleanup.cleanup_unconnected, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_short_circuits",
-            &m_Cleanup.cleanup_short_circuits, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_tracks_in_pad",
-            &m_Cleanup.cleanup_tracks_in_pad, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.merge_pth_npth",
-            &m_GenDrill.merge_pth_npth, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.minimal_header",
-            &m_GenDrill.minimal_header, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.mirror",
-            &m_GenDrill.mirror, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.unit_drill_is_inch",
-            &m_GenDrill.unit_drill_is_inch, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.use_route_for_oval_holes",
-            &m_GenDrill.use_route_for_oval_holes, true ) );
-
-    m_params.emplace_back( new PARAM<int>( "gen_drill.drill_file_type",
-            &m_GenDrill.drill_file_type, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "gen_drill.map_file_type",
-            &m_GenDrill.map_file_type, 1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "gen_drill.zeros_format",
-            &m_GenDrill.zeros_format, 0, 0, 3 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.generate_map",
-            &m_GenDrill.generate_map, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "gen_drill.generate_tenting",
-            &m_GenDrill.generate_tenting, false ) );
-
     m_params.emplace_back( new PARAM<int>( "export_2581.units",
             &m_Export2581.units, 0 ) );
 
@@ -439,94 +383,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
             &m_Zones.net_sort_mode, -1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.layer",
-            &m_ImportGraphics.layer, Dwgs_User ) );
-
-    m_params.emplace_back( new PARAM<bool>( "import_graphics.use_dlg_layer_selection",
-            &m_ImportGraphics.use_dlg_layer_selection, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
-            &m_ImportGraphics.interactive_placement, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "import_graphics.group_items",
-            &m_ImportGraphics.group_items, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "import_graphics.fix_discontinuities",
-            &m_ImportGraphics.fix_discontinuities, true ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.tolerance",
-            &m_ImportGraphics.tolerance, 1.0, 0.0, 10.0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
-            &m_ImportGraphics.dxf_line_width_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.line_width",
-            &m_ImportGraphics.dxf_line_width, 0.2 ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.origin_units",
-            &m_ImportGraphics.origin_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_x",
-            &m_ImportGraphics.origin_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_y",
-            &m_ImportGraphics.origin_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.dxf_units",
-            &m_ImportGraphics.dxf_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "netlist.report_filter",
-            &m_NetlistDialog.report_filter, -1 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "netlist.update_footprints",
-            &m_NetlistDialog.update_footprints, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "netlist.transfer_groups",
-            &m_NetlistDialog.transfer_groups, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "netlist.delete_shorting_tracks",
-            &m_NetlistDialog.delete_shorting_tracks, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "netlist.delete_extra_footprints",
-            &m_NetlistDialog.delete_extra_footprints, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "netlist.associate_by_ref_sch",
-            &m_NetlistDialog.associate_by_ref_sch, false ) );
-
-    /*
-     * place_file.output_directory is only used at run-time; actual data is in project file
-     *
-     * m_params.emplace_back( new PARAM<wxString>( "place_file.output_directory",
-     *                        &m_PlaceFile.output_directory, wxEmptyString ) );
-     */
-
-    m_params.emplace_back( new PARAM<int>( "place_file.units",
-            &m_PlaceFile.units, 1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "place_file.file_options",
-            &m_PlaceFile.file_options, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "place_file.file_format",
-            &m_PlaceFile.file_format, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "place_file.excludeTH",
-            &m_PlaceFile.exclude_TH, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "place_file.onlySMD",
-            &m_PlaceFile.only_SMD, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "place_file.include_board_edge",
-            &m_PlaceFile.include_board_edge, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "place_file.use_place_file_origin",
-            &m_PlaceFile.use_aux_origin, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "place_file.negate_xcoord",
-            &m_PlaceFile.negate_xcoord, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "plot.all_layers_on_one_page",
-            &m_Plot.all_layers_on_one_page, 1 ) );
 
     m_params.emplace_back( new PARAM<bool>( "plot.edgecut_on_all_layers",
             &m_Plot.edgecut_on_all_layers, true ) );

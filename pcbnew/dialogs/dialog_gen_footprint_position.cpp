@@ -29,7 +29,6 @@
 #include <dialog_gen_footprint_position.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <project/project_file.h>
 #include <bitmaps.h>
 #include <reporter.h>
@@ -52,11 +51,19 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
         m_job( nullptr )
 {
     m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+    m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
     m_reporter = &m_messagesPanel->Reporter();
-    initDialog();
+
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+
+    m_outputDirectoryName->SetValue( m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] );
 
     SetupStandardButtons( { { wxID_OK, _( "Generate Position File" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
+
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions (which have different sizes).
+    m_hash_key = TO_UTF8( GetTitle() );
 
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -71,72 +78,33 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS
         m_editFrame( aEditFrame ),
         m_job( aJob )
 {
+    SetTitle( m_job->GetSettingsDialogTitle() );
+
+    m_browseButton->Hide();
+    m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCH ? EDA_UNITS::INCH : EDA_UNITS::MM;
+    m_staticTextDir->SetLabel( _( "Output file:" ) );
+    m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
+
+    m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
+    m_singleFile->SetValue( m_job->m_singleFile );
+    m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
+    m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
+    m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
+    m_onlySMD->SetValue( m_job->m_smdOnly );
+    m_negateXcb->SetValue( m_job->m_negateBottomX );
+    m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
+    m_excludeDNP->SetValue( m_job->m_excludeDNP );
+
     m_messagesPanel->Hide();
-    initDialog();
 
     SetupStandardButtons();
-
-    GetSizer()->SetSizeHints( this );
-    Centre();
-}
-
-
-void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
-{
-    if( !m_job )
-    {
-        m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-
-        PROJECT_FILE& projectFile = m_editFrame->Prj().GetProjectFile();
-
-        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-        {
-            m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
-
-            // Output directory
-            m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
-
-            // Update Options
-            m_unitsCtrl->SetSelection( cfg->m_PlaceFile.units );
-            m_singleFile->SetValue( cfg->m_PlaceFile.file_options == 1 );
-            m_formatCtrl->SetSelection( cfg->m_PlaceFile.file_format );
-            m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
-            m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
-            m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
-            m_negateXcb->SetValue( cfg->m_PlaceFile.negate_xcoord );
-            m_excludeTH->SetValue( cfg->m_PlaceFile.exclude_TH );
-        }
-
-        // Update sizes and sizers:
-        m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
-    }
-    else
-    {
-        SetTitle( m_job->GetSettingsDialogTitle() );
-
-        m_browseButton->Hide();
-        m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCH ? EDA_UNITS::INCH : EDA_UNITS::MM;
-        m_staticTextDir->SetLabel( _( "Output file:" ) );
-        m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
-
-        m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
-        m_singleFile->SetValue( m_job->m_singleFile );
-        m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
-        m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
-		m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
-        m_onlySMD->SetValue( m_job->m_smdOnly );
-        m_negateXcb->SetValue( m_job->m_negateBottomX );
-        m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
-        m_excludeDNP->SetValue( m_job->m_excludeDNP );
-
-        m_messagesPanel->Hide();
-    }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
     m_hash_key = TO_UTF8( GetTitle() );
 
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
@@ -194,36 +162,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIExcludeTH( wxUpdateUIEvent& event 
 }
 
 
-bool DIALOG_GEN_FOOTPRINT_POSITION::UnitsMM()
-{
-    return m_unitsCtrl->GetSelection() == 1;
-}
-
-
-bool DIALOG_GEN_FOOTPRINT_POSITION::OneFileOnly()
-{
-    return m_singleFile->GetValue();
-}
-
-
-bool DIALOG_GEN_FOOTPRINT_POSITION::OnlySMD()
-{
-    return m_onlySMD->GetValue();
-}
-
-
-bool DIALOG_GEN_FOOTPRINT_POSITION::ExcludeAllTH()
-{
-    return m_excludeTH->GetValue();
-}
-
-
-bool DIALOG_GEN_FOOTPRINT_POSITION::ExcludeDNP()
-{
-    return m_excludeDNP->GetValue();
-}
-
-
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event )
 {
     m_cbIncludeBoardEdge->Enable( m_formatCtrl->GetSelection() == 2 );
@@ -252,8 +190,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onOutputDirectoryBrowseClicked( wxCommandEve
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
         {
-            wxMessageBox( _( "Cannot make path relative (target volume different from board "
-                             "file volume)!" ),
+            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
         }
     }
@@ -268,24 +205,11 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
     {
         m_units  = m_unitsCtrl->GetSelection() == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
 
-        wxString dirStr = m_outputDirectoryName->GetValue();
+        m_outputDirectory = m_outputDirectoryName->GetValue();
         // Keep unix directory format convention in cfg files
-        dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+        m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
-        m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
-
-        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-        {
-            cfg->m_PlaceFile.output_directory   = dirStr;
-            cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCH ? 0 : 1;
-            cfg->m_PlaceFile.file_options       = m_singleFile->GetValue() ? 1 : 0;
-            cfg->m_PlaceFile.file_format        = m_formatCtrl->GetSelection();
-            cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
-            cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
-            cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
-            cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
-            cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
-        }
+        m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = m_outputDirectory;
 
         if( m_formatCtrl->GetSelection() == 2 )
             CreateGerberFiles();
@@ -328,7 +252,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
                 return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_editFrame->GetPcbNewSettings()->m_PlaceFile.output_directory;
+    wxString path = m_outputDirectory;
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
@@ -437,7 +361,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
                 return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_editFrame->GetPcbNewSettings()->m_PlaceFile.output_directory;
+    wxString path = m_outputDirectory;
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
