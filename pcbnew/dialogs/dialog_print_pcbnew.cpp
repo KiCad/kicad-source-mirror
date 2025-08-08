@@ -126,23 +126,19 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
 
     finishDialogSettings();
 
-    m_popMenu->Bind( wxEVT_COMMAND_MENU_SELECTED,
-                     wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onPopUpLayers ), this,
-                     ID_SELECT_FIRST, ID_SELECT_LAST );
+    m_popMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onPopUpLayers ),
+                     this, ID_SELECT_FIRST, ID_SELECT_LAST );
 
-    m_outputMode->Bind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeClicked,
-                        this );
+    m_outputMode->Bind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeClicked, this );
 }
 
 
 DIALOG_PRINT_PCBNEW::~DIALOG_PRINT_PCBNEW()
 {
-    m_popMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED,
-                       wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onPopUpLayers ), this,
-                       ID_SELECT_FIRST, ID_SELECT_LAST );
+    m_popMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onPopUpLayers ),
+                       this, ID_SELECT_FIRST, ID_SELECT_LAST );
 
-    m_outputMode->Unbind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeClicked,
-                          this );
+    m_outputMode->Unbind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeClicked, this );
 }
 
 

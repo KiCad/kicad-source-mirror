@@ -35,7 +35,7 @@ public:
     void                   setSelectedFormat( JOB_PCB_RENDER::FORMAT aFormat );
 
     JOB_PCB_RENDER::SIDE getSelectedSide();
-    void                   setSelectedSide( JOB_PCB_RENDER::SIDE aSide );
+    void                 setSelectedSide( JOB_PCB_RENDER::SIDE aSide );
 
     JOB_PCB_RENDER::BG_STYLE getSelectedBgStyle();
     void                     setSelectedBgStyle( JOB_PCB_RENDER::BG_STYLE aBgStyle );

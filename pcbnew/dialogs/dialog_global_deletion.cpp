@@ -53,9 +53,7 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
     m_drawingFilterUnlocked->Enable( m_delDrawings->GetValue() );
 
     // This is a destructive dialog.  Don't save control state; we always want to come up in a benign state.
-    PROPERTY_HOLDER* props = new PROPERTY_HOLDER();
-    props->SetProperty( "persist", false );
-    SetClientData( props );
+    OptOut( this );
 
     SetupStandardButtons();
 

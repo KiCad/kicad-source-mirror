@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PUSH_PAD_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,13 +41,14 @@ class DIALOG_PUSH_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void PadPropertiesAccept( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		DIALOG_PUSH_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Push Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_PUSH_PAD_PROPERTIES_BASE();
 
 };

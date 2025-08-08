@@ -33,6 +33,7 @@
 #include <core/raii.h>
 
 class EDA_BASE_FRAME;
+class UNIT_BINDER;
 
 class wxGridEvent;
 class wxGUIEventLoop;
@@ -140,6 +141,20 @@ public:
      */
     void SaveControlState();
 
+    /**
+     * Opt out of control state saving.
+     * @param aWindow can be either a specific control, or the whole dialog
+     */
+    void OptOut( wxWindow* aWindow );
+
+    /**
+     * Register a UNIT_BINDER so that it can handle units in control-state save/restore
+     *
+     * @param aUnitBinder
+     * @param aWindow the control window
+     */
+    void RegisterUnitBinder( UNIT_BINDER* aUnitBinder, wxWindow* aWindow );
+
 protected:
     /**
      * In all dialogs, we must call the same functions to fix minimal dlg size, the default
@@ -245,9 +260,9 @@ protected:
     bool                   m_userPositioned;
     bool                   m_userResized;
 
-
     // Used to support first-esc-cancels-edit logic
-    std::map<wxWindow*, wxString> m_beforeEditValues;
+    std::map<wxWindow*, wxString>     m_beforeEditValues;
+    std::map<wxWindow*, UNIT_BINDER*> m_unitBinders;
 };
 
 #endif  // DIALOG_SHIM_

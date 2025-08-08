@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_MOVE_EXACT__
-#define __DIALOG_MOVE_EXACT__
+#pragma once
 
 #include <vector>
 #include <math/box2.h>
@@ -63,7 +62,7 @@ private:
     void OnClear( wxCommandEvent& event ) override;
     void OnTextChanged( wxCommandEvent& event ) override;
 
-    // Automatically called when clicking on the OK button
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     /**
@@ -87,30 +86,6 @@ private:
     // Update controls and their labels after changing the coordinates type (polar/cartesian)
     void updateDialogControls( bool aPolar );
 
-    /**
-     * Persistent dialog options
-     */
-    struct MOVE_EXACT_OPTIONS
-    {
-        bool     polarCoords;
-        wxString entry1;
-        wxString entry2;
-        wxString entryRotation;
-        size_t   entryAnchorSelection;
-
-        MOVE_EXACT_OPTIONS():
-            polarCoords( false ),
-            entry1( wxT( "0" ) ),
-            entry2( wxT( "0" ) ),
-            entryRotation( wxT( "0" ) ),
-            entryAnchorSelection( 0 )
-        {
-        }
-    };
-
-    // persistent settings
-    static MOVE_EXACT_OPTIONS m_options;
-
 private:
     VECTOR2I&        m_translation;
     EDA_ANGLE&       m_rotation;
@@ -128,5 +103,3 @@ private:
     double           m_stateRadius;
     EDA_ANGLE        m_stateTheta;
 };
-
-#endif      //  __DIALOG_MOVE_EXACT__

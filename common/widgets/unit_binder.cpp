@@ -30,6 +30,7 @@
 #include <eda_units.h>
 #include <eda_draw_frame.h>
 #include <confirm.h>
+#include <dialog_shim.h>
 
 #include "widgets/unit_binder.h"
 #include "wx/dcclient.h"
@@ -55,16 +56,31 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
         m_eventSource( aEventSource ),
         m_unitLabel( aUnitLabel ),
         m_iuScale( &aUnitsProvider->GetIuScale() ),
+        m_units( aUnitsProvider->GetUserUnits() ),
         m_negativeZero( false ),
         m_dataType( EDA_DATA_TYPE::DISTANCE ),
         m_precision( 0 ),
         m_eval( aUnitsProvider->GetUserUnits() ),
+        m_allowEval( aAllowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) ) ),
+        m_needsEval( false ),
+        m_selStart( 0 ),
+        m_selEnd( 0 ),
         m_unitsInValue( false ),
         m_originTransforms( aUnitsProvider->GetOriginTransforms() ),
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
-    init( aUnitsProvider );
-    m_allowEval = aAllowEval && ( !m_valueCtrl || dynamic_cast<wxTextEntry*>( m_valueCtrl ) );
+    if( m_valueCtrl )
+    {
+        // Register the UNIT_BINDER for control state save/restore
+        wxWindow* parent = m_valueCtrl->GetParent();
+
+        while( parent && !dynamic_cast<DIALOG_SHIM*>( parent ) )
+            parent = parent->GetParent();
+
+        if( parent )
+            static_cast<DIALOG_SHIM*>( parent )->RegisterUnitBinder( this, m_valueCtrl );
+    }
+
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( textEntry )
@@ -129,15 +145,6 @@ UNIT_BINDER::~UNIT_BINDER()
 }
 
 
-void UNIT_BINDER::init( UNITS_PROVIDER* aProvider )
-{
-    m_units     = aProvider->GetUserUnits();
-    m_needsEval = false;
-    m_selStart  = 0;
-    m_selEnd    = 0;
-}
-
-
 void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
 {
     m_units = aUnits;
@@ -169,9 +176,7 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 {
     EDA_BASE_FRAME* provider = static_cast<EDA_BASE_FRAME*>( aEvent.GetClientData() );
 
-    if( m_units != EDA_UNITS::UNSCALED
-            && m_units != EDA_UNITS::DEGREES
-            && m_units != EDA_UNITS::PERCENT )
+    if( !UnitsInvariant() )
     {
         int temp = GetIntValue();
 

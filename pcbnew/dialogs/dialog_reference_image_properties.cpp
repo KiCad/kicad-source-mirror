@@ -41,8 +41,7 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
 {
     // Create the image editor page
-    m_imageEditor =
-            new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap.GetReferenceImage().MutableImage() );
+    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap.GetReferenceImage().MutableImage() );
     m_Notebook->AddPage( m_imageEditor, _( "Image" ), false );
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -85,9 +84,8 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataToWindow()
     m_LayerSelectionCtrl->SetLayerSelection( m_bitmap.GetLayer() );
 
     m_cbLocked->SetValue( m_bitmap.IsLocked() );
-    m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas "
-                               "and can only be selected when the 'Locked items' checkbox is "
-                               "checked in the selection filter." ) );
+    m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas and can only be "
+                               "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
 
     return true;
 }

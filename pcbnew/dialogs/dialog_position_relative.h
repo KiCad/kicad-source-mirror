@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_POSITION_RELATIVE__
-#define __DIALOG_POSITION_RELATIVE__
+#pragma once
 
 // Include the wxFormBuider header base:
 #include <vector>
@@ -38,7 +37,7 @@ class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE,
 public:
     // Constructor and destructor
     DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent );
-    ~DIALOG_POSITION_RELATIVE() { };
+    ~DIALOG_POSITION_RELATIVE() = default;
 
     // Implement the RECEIVER interface for the callback from the TOOL
     void UpdatePickedItem( const EDA_ITEM* aItem ) override;
@@ -84,6 +83,7 @@ private:
     // Get the current anchor position.
     VECTOR2I getAnchorPos();
 
+private:
     /**
      * Persistent dialog options.
      */
@@ -95,25 +95,9 @@ private:
         ANCHOR_POINT
     };
 
-    struct POSITION_RELATIVE_OPTIONS
-    {
-        ANCHOR_TYPE anchorType;
-        bool        polarCoords;
-        double      entry1;
-        double      entry2;
+    static ANCHOR_TYPE s_anchorType;
 
-        POSITION_RELATIVE_OPTIONS() :
-            anchorType( ANCHOR_ITEM ),
-            polarCoords( false ),
-            entry1( 0 ),
-            entry2( 0 )
-        {
-        }
-    };
-
-    // persistent settings
-    static POSITION_RELATIVE_OPTIONS m_options;
-
+private:
     TOOL_MANAGER* m_toolMgr;
     VECTOR2I      m_anchorItemPosition;
 
@@ -125,5 +109,3 @@ private:
     double        m_stateRadius;
     EDA_ANGLE     m_stateTheta;
 };
-
-#endif      // __DIALOG_POSITION_RELATIVE__

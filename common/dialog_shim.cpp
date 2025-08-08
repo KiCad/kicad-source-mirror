@@ -34,6 +34,7 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <kiplatform/ui.h>
+#include <widgets/unit_binder.h>
 
 #include <wx/display.h>
 #include <wx/evtloop.h>
@@ -142,8 +143,6 @@ DIALOG_SHIM::~DIALOG_SHIM()
 {
     m_isClosing = true;
 
-    SaveControlState();
-
     Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Unbind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
     Unbind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
@@ -158,14 +157,12 @@ DIALOG_SHIM::~DIALOG_SHIM()
                 {
                     if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
                     {
-                        textCtrl->Disconnect( wxEVT_SET_FOCUS,
-                                              wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                        textCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
                                               nullptr, this );
                     }
                     else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
                     {
-                        scintilla->Disconnect( wxEVT_SET_FOCUS,
-                                               wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                        scintilla->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
                                                nullptr, this );
                     }
                     else
@@ -316,6 +313,8 @@ bool DIALOG_SHIM::Show( bool show )
 
         ret = wxDialog::Show( show );
 
+        SaveControlState();
+
         if( m_parent )
             m_parent->SetFocus();
     }
@@ -428,10 +427,14 @@ void DIALOG_SHIM::SaveControlState()
 
                 if( !key.empty() )
                 {
-                    if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                    if( m_unitBinders.contains( win ) && !m_unitBinders[ win ]->UnitsInvariant() )
+                        dlgMap[ key ] = m_unitBinders[ win ]->GetValue();
+                    else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
                         dlgMap[ key ] = combo->GetValue();
                     else if( wxOwnerDrawnComboBox* od_combo = dynamic_cast<wxOwnerDrawnComboBox*>( win ) )
                         dlgMap[ key ] = od_combo->GetSelection();
+                    else if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
+                        dlgMap[ key ] = textEntry->GetValue();
                     else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
                         dlgMap[ key ] = choice->GetSelection();
                     else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
@@ -495,7 +498,12 @@ void DIALOG_SHIM::LoadControlState()
                     {
                         const nlohmann::json& j = it->second;
 
-                        if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                        if( m_unitBinders.contains( win ) && !m_unitBinders[ win ]->UnitsInvariant() )
+                        {
+                            if( j.is_number_integer() )
+                                m_unitBinders[ win ]->SetValue( j.get<int>() );
+                        }
+                        else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
                         {
                             if( j.is_string() )
                                 combo->SetValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
@@ -504,6 +512,11 @@ void DIALOG_SHIM::LoadControlState()
                         {
                             if( j.is_number_integer() )
                                 od_combo->SetSelection( j.get<int>() );
+                        }
+                        else if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
+                        {
+                            if( j.is_string() )
+                                textEntry->ChangeValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
                         }
                         else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
                         {
@@ -560,6 +573,20 @@ void DIALOG_SHIM::LoadControlState()
 
     for( wxWindow* child : GetChildren() )
         loadFn( child );
+}
+
+
+void DIALOG_SHIM::OptOut( wxWindow* aWindow )
+{
+    PROPERTY_HOLDER* props = new PROPERTY_HOLDER();
+    props->SetProperty( "persist", false );
+    aWindow->SetClientData( props );
+}
+
+
+void DIALOG_SHIM::RegisterUnitBinder( UNIT_BINDER* aUnitBinder, wxWindow* aWindow )
+{
+    m_unitBinders[ aWindow ] = aUnitBinder;
 }
 
 
@@ -719,8 +746,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     // Get the optimal parent
     wxWindow* parent = GetParentForModalDialog( GetParent(), GetWindowStyle() );
 
-    wxASSERT_MSG( !m_qmodal_parent_disabler, wxT( "Caller using ShowQuasiModal() twice on same "
-                                                  "window?" ) );
+    wxASSERT_MSG( !m_qmodal_parent_disabler, wxT( "Caller using ShowQuasiModal() twice on same window?" ) );
 
     // quasi-modal: disable only my "optimal" parent
     m_qmodal_parent_disabler = new WINDOW_DISABLER( parent );

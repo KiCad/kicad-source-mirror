@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <dialog_push_pad_properties.h>
 
 #include <pad.h>
@@ -29,23 +28,10 @@
 #include <pcb_edit_frame.h>
 
 
-// Class DIALOG_PUSH_PAD_PROPERTIES static variables
-bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter  = true;
-bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter  = true;
-bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter = true;
-bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Type_Filter   = true;
-
-
 DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent ) :
-    DIALOG_PUSH_PAD_PROPERTIES_BASE( aParent ),
-    m_parent( aParent )
+        DIALOG_PUSH_PAD_PROPERTIES_BASE( aParent ),
+        m_parent( aParent )
 {
-    // Pad filter selection.
-    m_Pad_Shape_Filter_CB->SetValue( m_Pad_Shape_Filter );
-    m_Pad_Layer_Filter_CB->SetValue( m_Pad_Layer_Filter );
-    m_Pad_Orient_Filter_CB->SetValue( m_Pad_Orient_Filter );
-    m_Pad_Type_Filter_CB->SetValue( m_Pad_Type_Filter );
-
     SetupStandardButtons( { { wxID_OK,     _( "Change Pads on Current Footprint" )    },
                             { wxID_APPLY,  _( "Change Pads on Identical Footprints" ) } } );
 
@@ -69,11 +55,6 @@ void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         KI_FALLTHROUGH;
 
     case wxID_OK:
-        m_Pad_Shape_Filter  = m_Pad_Shape_Filter_CB->GetValue();
-        m_Pad_Layer_Filter  = m_Pad_Layer_Filter_CB->GetValue();
-        m_Pad_Orient_Filter = m_Pad_Orient_Filter_CB->GetValue();
-        m_Pad_Type_Filter   = m_Pad_Type_Filter_CB->GetValue();
-
         if( IsQuasiModal() )
             EndQuasiModal( returncode );
         else

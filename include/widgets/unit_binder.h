@@ -70,6 +70,11 @@ public:
      */
     virtual void SetUnits( EDA_UNITS aUnits );
 
+    bool UnitsInvariant() const
+    {
+        return m_units == EDA_UNITS::UNSCALED || m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT;
+    }
+
     virtual void SetNegativeZero() { m_negativeZero = true; }
 
     /**
@@ -211,7 +216,6 @@ public:
     }
 
 protected:
-    void init( UNITS_PROVIDER* aProvider );
     void onClick( wxMouseEvent& aEvent );
     void onComboBox( wxCommandEvent& aEvent );
 

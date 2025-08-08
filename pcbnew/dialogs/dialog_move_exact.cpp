@@ -29,13 +29,10 @@
 #include <pcb_edit_frame.h>
 #include <trigo.h>
 
-// initialise statics
-DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
 
 
-DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTranslate,
-                                      EDA_ANGLE& aRotate, ROTATION_ANCHOR& aAnchor,
-                                      const BOX2I& aBbox ) :
+DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTranslate, EDA_ANGLE& aRotate,
+                                      ROTATION_ANCHOR& aAnchor, const BOX2I& aBbox ) :
     DIALOG_MOVE_EXACT_BASE( aParent ),
     m_translation( aTranslate ),
     m_rotation( aRotate ),
@@ -63,8 +60,6 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTransl
     m_moveX.SetCoordType( ORIGIN_TRANSFORMS::REL_X_COORD );
     m_moveY.SetCoordType( ORIGIN_TRANSFORMS::REL_Y_COORD );
 
-    updateDialogControls( m_options.polarCoords );
-
     m_menuIDs.push_back( aAnchor );
     m_menuIDs.push_back( ROTATE_AROUND_USER_ORIGIN );
 
@@ -72,20 +67,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTransl
         m_menuIDs.push_back( ROTATE_AROUND_AUX_ORIGIN );
 
     buildRotationAnchorMenu();
-
-    // and set up the entries according to the saved options
-    m_polarCoords->SetValue( m_options.polarCoords );
-    m_xEntry->ChangeValue( m_options.entry1 );
-    m_yEntry->ChangeValue( m_options.entry2 );
-
-    // Force the evaluation when setting previous values
-    m_moveX.RequireEval();
-    m_moveY.RequireEval();
-    m_rotate.RequireEval();
-
     m_rotate.SetUnits( EDA_UNITS::DEGREES );
-    m_rotate.SetValue( m_options.entryRotation );
-    m_anchorOptions->SetSelection( std::min( m_options.entryAnchorSelection, m_menuIDs.size() ) );
 
     SetupStandardButtons();
 
@@ -97,22 +79,14 @@ void DIALOG_MOVE_EXACT::buildRotationAnchorMenu()
 {
     wxArrayString menuItems;
 
-    for( auto anchorID : m_menuIDs )
+    for( const ROTATION_ANCHOR& anchorID : m_menuIDs )
     {
         switch( anchorID )
         {
-        case ROTATE_AROUND_ITEM_ANCHOR:
-            menuItems.push_back( _( "Rotate around item anchor" ) );
-            break;
-        case ROTATE_AROUND_SEL_CENTER:
-            menuItems.push_back( _( "Rotate around selection center" ) );
-            break;
-        case ROTATE_AROUND_USER_ORIGIN:
-            menuItems.push_back( _( "Rotate around local coordinates origin" ) );
-            break;
-        case ROTATE_AROUND_AUX_ORIGIN:
-            menuItems.push_back( _( "Rotate around drill/place origin" ) );
-            break;
+        case ROTATE_AROUND_ITEM_ANCHOR: menuItems.push_back( _( "Rotate around item anchor" ) );              break;
+        case ROTATE_AROUND_SEL_CENTER:  menuItems.push_back( _( "Rotate around selection center" ) );         break;
+        case ROTATE_AROUND_USER_ORIGIN: menuItems.push_back( _( "Rotate around local coordinates origin" ) ); break;
+        case ROTATE_AROUND_AUX_ORIGIN:  menuItems.push_back( _( "Rotate around drill/place origin" ) );       break;
         }
     }
 
@@ -241,6 +215,19 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
 }
 
 
+bool DIALOG_MOVE_EXACT::TransferDataToWindow()
+{
+    updateDialogControls( m_polarCoords->GetValue() );
+
+    // Force the evaluation when setting previous values
+    m_moveX.RequireEval();
+    m_moveY.RequireEval();
+    m_rotate.RequireEval();
+
+    return true;
+}
+
+
 bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
 {
     // for the output, we only deliver a Cartesian vector
@@ -250,13 +237,6 @@ bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
     m_translation.y = KiROUND(translation.y);
     m_rotation = m_rotate.GetAngleValue();
     m_rotationAnchor = m_menuIDs[ m_anchorOptions->GetSelection() ];
-
-    // save the settings
-    m_options.polarCoords = m_polarCoords->GetValue();
-    m_options.entry1 = m_xEntry->GetValue();
-    m_options.entry2 = m_yEntry->GetValue();
-    m_options.entryRotation = m_rotEntry->GetValue();
-    m_options.entryAnchorSelection = (size_t) std::max( m_anchorOptions->GetSelection(), 0 );
 
     return ok;
 }
@@ -302,5 +282,4 @@ void DIALOG_MOVE_EXACT::OnTextChanged( wxCommandEvent& event )
         m_stdButtons->GetAffirmativeButton()->Enable();
         event.Skip();
     }
-
 }
