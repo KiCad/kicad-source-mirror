@@ -264,10 +264,8 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
             BOARD_COMMIT commit( frame() );
 
             doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
-                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter,
-                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter,
-                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter,
-                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Type_Filter );
+                                 dlg.GetPadShapeFilter(), dlg.GetPadOrientFilter(),
+                                 dlg.GetPadLayerFilter(), dlg.GetPadTypeFilter() );
 
             commit.Push( _( "Push Pad Settings" ) );
 
