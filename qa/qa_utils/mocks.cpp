@@ -87,10 +87,6 @@ bool DIALOG_FIND::Show( bool show )
     return true;
 }
 
-void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
-{
-}
-
 
 DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxString& title,
                                     const wxPoint& pos, const wxSize& size, long style ) :
