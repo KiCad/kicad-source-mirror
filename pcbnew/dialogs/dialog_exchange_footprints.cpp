@@ -34,7 +34,6 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <tool/tool_manager.h>
@@ -49,24 +48,13 @@
 #define ID_MATCH_FP_VAL      4203
 #define ID_MATCH_FP_ID       4204
 
-
 int g_matchModeForUpdate           = ID_MATCH_FP_ALL;
 int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
 int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 
-                                 // { update, change }
-bool g_removeExtraTextItems[2]    = { false,  false  };
-bool g_resetTextItemLayers[2]     = { false,  true   };
-bool g_resetTextItemEffects[2]    = { false,  true   };
-bool g_resetTextItemContent[2]    = { false,  true   };
-bool g_resetFabricationAttrs[2]   = { false,  true   };
-bool g_resetClearanceOverrides[2] = { true,   true   };
-bool g_reset3DModels[2]           = { true,   true   };
 
-
-DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
-                                                        FOOTPRINT* aFootprint,
+DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint,
                                                         bool updateMode, bool selectedMode ) :
         DIALOG_EXCHANGE_FOOTPRINTS_BASE( aParent ),
         m_commit( aParent ),
@@ -98,62 +86,34 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 #endif
 
     if( m_updateMode )
-    {
         m_changeSizer->Show( false );
-    }
     else
-    {
         m_upperSizer->FindItem( m_matchAll )->Show( false );
-        m_newIDBrowseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_library ) );
-    }
 
-    if( m_currentFootprint )
-        m_newID->AppendText( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
-    else
+    if( !m_currentFootprint )
         m_upperSizer->FindItem( m_matchSelected )->Show( false );
 
-    // Use ChangeValue() instead of SetValue() so we don't generate events.
-    if( m_currentFootprint )
-        m_specifiedRef->ChangeValue( m_currentFootprint->GetReference() );
-
-    if( m_currentFootprint )
-        m_specifiedValue->ChangeValue( m_currentFootprint->GetValue() );
-
-    if( m_currentFootprint )
-        m_specifiedID->ChangeValue( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
-
+    m_newIDBrowseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_library ) );
     m_specifiedIDBrowseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_library ) );
 
     m_upperSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     // The upper sizer has its content modified: re-layout it:
     m_upperSizer->Layout();
 
+    // initialize controls based on update mode in case there is no saved state yet
+    m_removeExtraBox->SetValue(          m_updateMode ? false : false );
+    m_resetTextItemLayers->SetValue(     m_updateMode ? false : true  );
+    m_resetTextItemEffects->SetValue(    m_updateMode ? false : true  );
+    m_resetTextItemContent->SetValue(    m_updateMode ? false : true  );
+    m_resetFabricationAttrs->SetValue(   m_updateMode ? false : true  );
+    m_resetClearanceOverrides->SetValue( m_updateMode ? true  : true  );
+    m_reset3DModels->SetValue(           m_updateMode ? true  : true  );
+
     // initialize match-mode
     if( m_updateMode )
         m_matchMode = selectedMode ? &g_matchModeForUpdateSelected : &g_matchModeForUpdate;
     else
         m_matchMode = selectedMode ? &g_matchModeForExchangeSelected : &g_matchModeForExchange;
-
-    wxCommandEvent event;
-    event.SetEventObject( this );
-
-    switch( *m_matchMode )
-    {
-    case ID_MATCH_FP_ALL:      OnMatchAllClicked( event );      break;
-    case ID_MATCH_FP_SELECTED: OnMatchSelectedClicked( event ); break;
-    case ID_MATCH_FP_REF:      OnMatchRefClicked( event );      break;
-    case ID_MATCH_FP_VAL:      OnMatchValueClicked( event );    break;
-    case ID_MATCH_FP_ID:       OnMatchIDClicked( event );       break;
-    default:                                                    break;
-    }
-
-    m_removeExtraBox->SetValue( g_removeExtraTextItems[ m_updateMode ? 0 : 1 ] );
-    m_resetTextItemLayers->SetValue( g_resetTextItemLayers[ m_updateMode ? 0 : 1 ] );
-    m_resetTextItemEffects->SetValue( g_resetTextItemEffects[ m_updateMode ? 0 : 1 ] );
-    m_resetTextItemContent->SetValue( g_resetTextItemContent[ m_updateMode ? 0 : 1 ] );
-    m_resetFabricationAttrs->SetValue( g_resetFabricationAttrs[ m_updateMode ? 0 : 1 ] );
-    m_resetClearanceOverrides->SetValue( g_resetClearanceOverrides[ m_updateMode ? 0 : 1 ] );
-    m_reset3DModels->SetValue( g_reset3DModels[ m_updateMode ? 0 : 1 ] );
 
     m_MessageWindow->SetLazyUpdate( true );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
@@ -172,15 +132,32 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 }
 
 
-DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
+bool DIALOG_EXCHANGE_FOOTPRINTS::TransferDataToWindow()
 {
-    g_removeExtraTextItems[ m_updateMode ? 0 : 1 ]    = m_removeExtraBox->GetValue();
-    g_resetTextItemLayers[ m_updateMode ? 0 : 1 ]     = m_resetTextItemLayers->GetValue();
-    g_resetTextItemEffects[ m_updateMode ? 0 : 1 ]    = m_resetTextItemEffects->GetValue();
-    g_resetTextItemContent[ m_updateMode ? 0 : 1 ]    = m_resetTextItemContent->GetValue();
-    g_resetFabricationAttrs[ m_updateMode ? 0 : 1 ]   = m_resetFabricationAttrs->GetValue();
-    g_resetClearanceOverrides[ m_updateMode ? 0 : 1 ] = m_resetClearanceOverrides->GetValue();
-    g_reset3DModels[ m_updateMode ? 0 : 1 ]           = m_reset3DModels->GetValue();
+    if( m_currentFootprint )
+    {
+        m_newID->AppendText( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
+
+        // Use ChangeValue() instead of SetValue() so we don't generate events.
+        m_specifiedRef->ChangeValue( m_currentFootprint->GetReference() );
+        m_specifiedValue->ChangeValue( m_currentFootprint->GetValue() );
+        m_specifiedID->ChangeValue( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
+    }
+
+    wxCommandEvent event;
+    event.SetEventObject( this );
+
+    switch( *m_matchMode )
+    {
+    case ID_MATCH_FP_ALL:      OnMatchAllClicked( event );      break;
+    case ID_MATCH_FP_SELECTED: OnMatchSelectedClicked( event ); break;
+    case ID_MATCH_FP_REF:      OnMatchRefClicked( event );      break;
+    case ID_MATCH_FP_VAL:      OnMatchValueClicked( event );    break;
+    case ID_MATCH_FP_ID:       OnMatchIDClicked( event );       break;
+    default:                                                    break;
+    }
+
+    return true;
 }
 
 

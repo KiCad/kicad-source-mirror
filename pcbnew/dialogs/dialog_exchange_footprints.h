@@ -38,7 +38,9 @@ class DIALOG_EXCHANGE_FOOTPRINTS : public DIALOG_EXCHANGE_FOOTPRINTS_BASE
 public:
     DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint, bool updateMode,
                                 bool selectedMode );
-    ~DIALOG_EXCHANGE_FOOTPRINTS() override;
+    ~DIALOG_EXCHANGE_FOOTPRINTS() = default;
+
+    bool TransferDataToWindow() override;
 
 private:
     void updateMatchModeRadioButtons( wxUpdateUIEvent& aEvent ) override;

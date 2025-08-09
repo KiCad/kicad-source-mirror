@@ -39,6 +39,7 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	bSizerBottom->Add( 30, 0, 0, wxEXPAND, 5 );
 
 	m_checkBoxShowErrors = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowErrors->SetValue(true);
 	bSizerBottom->Add( m_checkBoxShowErrors, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_errorsBadge = new NUMBER_BADGE( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
@@ -50,6 +51,7 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	bSizerBottom->Add( 25, 0, 0, wxEXPAND, 5 );
 
 	m_checkBoxShowWarnings = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowWarnings->SetValue(true);
 	bSizerBottom->Add( m_checkBoxShowWarnings, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_warningsBadge = new NUMBER_BADGE( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
@@ -61,12 +63,14 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	bSizerBottom->Add( 25, 0, 0, wxEXPAND, 5 );
 
 	m_checkBoxShowActions = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Actions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowActions->SetValue(true);
 	bSizerBottom->Add( m_checkBoxShowActions, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerBottom->Add( 30, 0, 0, wxEXPAND, 5 );
 
 	m_checkBoxShowInfos = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Infos"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowInfos->SetValue(true);
 	bSizerBottom->Add( m_checkBoxShowInfos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 

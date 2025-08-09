@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_EESCHEMA_PAGE_SETTINGS_H
-#define DIALOG_EESCHEMA_PAGE_SETTINGS_H
+#pragma once
 
 #include <dialogs/dialog_page_settings.h>
 
@@ -36,5 +35,3 @@ private:
     void onTransferDataToWindow() override;
     bool onSavePageSettings() override;
 };
-
-#endif // DIALOG_PCBNEW_PAGE_SETTINGS

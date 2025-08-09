@@ -20,8 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DIALOG_CHANGE_SYMBOLS_H_
-#define _DIALOG_CHANGE_SYMBOLS_H_
+#pragma once
 
 #include <dialog_change_symbols_base.h>
 
@@ -51,9 +50,10 @@ class DIALOG_CHANGE_SYMBOLS : public DIALOG_CHANGE_SYMBOLS_BASE
 public:
     enum class MODE { CHANGE = 0, UPDATE };
 
-    DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol,
-                           MODE aMode = MODE::UPDATE );
+    DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol, MODE aMode = MODE::UPDATE );
     ~DIALOG_CHANGE_SYMBOLS() override;
+
+    bool TransferDataToWindow() override;
 
 protected:
     void launchMatchIdSymbolBrowser( wxCommandEvent& aEvent ) override;
@@ -92,13 +92,11 @@ protected:
     void selectAll( bool aSelect );
     void checkAll( bool aCheck );
 
-private:
     void updateFieldsList();
 
     bool isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInstance );
     int processMatchingSymbols( SCH_COMMIT* aCommit );
-    int processSymbols( SCH_COMMIT* aCommit,
-                        const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols );
+    int processSymbols( SCH_COMMIT* aCommit, const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols );
     wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId,
                                   const wxString* aOldLibLinkName = nullptr );
 
@@ -112,5 +110,3 @@ private:
     /// Index in the list control for each mandatory FIELD_T type
     std::map<FIELD_T, int>   m_mandatoryFieldListIndexes;
 };
-
-#endif // _DIALOG_CHANGE_SYMBOLS_H_
