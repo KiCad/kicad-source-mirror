@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-07-19 14:45+0000\n"
+"PO-Revision-Date: 2025-08-09 07:44+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7499,9 +7499,9 @@ msgid "Failed to create commit: %s"
 msgstr "Nie można było utworzyć bloku zmian: %s"
 
 #: common/git/git_init_handler.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Nie udało się zainicjować projektu Git."
+msgstr "Nie udało się zainicjować projektu Git: %s"
 
 #: common/git/git_init_handler.cpp:87
 msgid "No repository available to set up remote"
@@ -22934,9 +22934,8 @@ msgid "Select Symbol Library"
 msgstr "Wybierz bibliotekę symboli"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:93
-#, fuzzy
 msgid "Library:"
-msgstr "Biblioteka: "
+msgstr "Biblioteka:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:112
 #: eeschema/tools/symbol_editor_control.cpp:840
@@ -25073,14 +25072,12 @@ msgid "Export Symbols"
 msgstr "Eksportuj symbol"
 
 #: eeschema/tools/sch_editor_control.cpp:358
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr "Eksportuj symbole do biblioteki..."
+msgstr "Eksportuj symbole do biblioteki:"
 
 #: eeschema/tools/sch_editor_control.cpp:359
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Dołączyć porty zasilania znajdujące się na schemacie do biblioteki?"
+msgstr "Uwzględnij porty zasilania przy eksporcie"
 
 #: eeschema/tools/sch_editor_control.cpp:360
 msgid "Update schematic symbols to link to exported symbols"
@@ -26932,9 +26929,8 @@ msgid "Embed file"
 msgstr "Osadzony plik"
 
 #: include/widgets/filedlg_hook_new_library.h:35
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "Dodać bibliotekę do globalnej tabeli bibliotek?"
+msgstr "Dodaj bibliotekę do globalnej tabeli bibliotek"
 
 #: include/widgets/filedlg_hook_new_library.h:37
 #, fuzzy
@@ -28078,9 +28074,8 @@ msgid "Project Template Selector"
 msgstr "Wybór szablonu projektu"
 
 #: kicad/dialogs/dialog_template_selector.cpp:74
-#, fuzzy
 msgid "Welcome to Template Selection!"
-msgstr "Wybór szablonu projektu"
+msgstr "Witamy w narzędziu do wyboru szablonu!"
 
 #: kicad/dialogs/dialog_template_selector.cpp:75
 msgid ""
@@ -28107,9 +28102,8 @@ msgid "Select a Template"
 msgstr "Wybierz plik"
 
 #: kicad/dialogs/dialog_template_selector.cpp:84
-#, fuzzy
 msgid "Click on any template in the list to "
-msgstr "Kliknięcie na pin wybiera symbol"
+msgstr "Kliknij na dowolny szablon na liście by "
 
 #: kicad/dialogs/dialog_template_selector.cpp:84
 #, fuzzy
@@ -28128,9 +28122,8 @@ msgid "Customize Path"
 msgstr "Personalizuj paski narzędzi"
 
 #: kicad/dialogs/dialog_template_selector.cpp:88
-#, fuzzy
 msgid "Use the "
-msgstr "Użyj motywu:"
+msgstr "Użyj "
 
 #: kicad/dialogs/dialog_template_selector.cpp:88
 #, fuzzy
@@ -29229,9 +29222,9 @@ msgid "%d out of %d operations were initialized but not successful."
 msgstr "%d z %d operacji zostało zainicjowanych, ale nie powiodły się."
 
 #: kicad/project_template.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "Nie można otworzyć ścieżki z szablonami!"
+msgstr "Nie można otworzyć ścieżki z szablonami! '%s'"
 
 #: kicad/project_template.cpp:57
 #, fuzzy, c-format
@@ -45130,9 +45123,10 @@ msgid "Export footprints to library:"
 msgstr "Eksportuj footprint do edytora"
 
 #: pcbnew/footprint_libraries_utils.cpp:639
-#, fuzzy
 msgid "Update board footprints to link to exported footprints"
-msgstr "Uaktualnić footprinty na płytce odnoszące się do %s?"
+msgstr ""
+"Zaktualizuj footprinty płytki, aby połączyć je z wyeksportowanymi "
+"footprintami"
 
 #: pcbnew/footprint_libraries_utils.cpp:830
 #: pcbnew/footprint_viewer_frame.cpp:737
@@ -48975,9 +48969,8 @@ msgid "Saved DRC Report to %s\n"
 msgstr "Zapisano plik raportu DRC do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2305
-#, fuzzy
 msgid "Saved board\n"
-msgstr "Zapisz na płytce"
+msgstr "Zapisana płytka\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2309
 #, fuzzy
@@ -51429,9 +51422,8 @@ msgid "Import board file from other applications"
 msgstr "Importuje plik z obwodem drukowanym z innych aplikacji"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
-#, fuzzy
 msgid "Export Footprints..."
-msgstr "Eksportuj footprint"
+msgstr "Eksport footprintów..."
 
 #: pcbnew/tools/pcb_actions.cpp:1158
 #, fuzzy
