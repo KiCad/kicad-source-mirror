@@ -450,7 +450,7 @@ void DIALOG_SHIM::SaveControlState()
                     else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
                         dlgMap[ key ] = scrolled->GetScrollPos( wxVERTICAL );
                     else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
-                        dlgMap[ key ] = notebook->GetSelection();
+                        dlgMap[ key ] = notebook->GetPageText( notebook->GetSelection() );
                 }
 
                 for( wxWindow* child : win->GetChildren() )
@@ -555,8 +555,16 @@ void DIALOG_SHIM::LoadControlState()
                         }
                         else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
                         {
-                            if( j.is_number_integer() )
-                                notebook->SetSelection( j.get<int>() );
+                            if( j.is_string() )
+                            {
+                                wxString pageTitle = wxString::FromUTF8( j.get<std::string>().c_str() );
+
+                                for( int page = 0; page < (int) notebook->GetPageCount(); ++page )
+                                {
+                                    if( notebook->GetPageText( page ) == pageTitle )
+                                        notebook->SetSelection( page );
+                                }
+                            }
                         }
                     }
                 }
