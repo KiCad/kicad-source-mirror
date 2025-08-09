@@ -62,13 +62,12 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
                             { wxID_CANCEL, _( "Close" ) } } );
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
+    // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
     GetSizer()->SetSizeHints( this );
     Centre();
 }
-
 
 
 DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS* aJob,
@@ -83,28 +82,38 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS
     m_browseButton->Hide();
     m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCH ? EDA_UNITS::INCH : EDA_UNITS::MM;
     m_staticTextDir->SetLabel( _( "Output file:" ) );
-    m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
-
-    m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
-    m_singleFile->SetValue( m_job->m_singleFile );
-    m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
-    m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
-    m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
-    m_onlySMD->SetValue( m_job->m_smdOnly );
-    m_negateXcb->SetValue( m_job->m_negateBottomX );
-    m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
-    m_excludeDNP->SetValue( m_job->m_excludeDNP );
 
     m_messagesPanel->Hide();
 
     SetupStandardButtons();
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
+    // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
     GetSizer()->SetSizeHints( this );
     Centre();
+}
+
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::TransferDataToWindow()
+{
+    if( m_job )
+    {
+        m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
+
+        m_unitsCtrl->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_singleFile->SetValue( m_job->m_singleFile );
+        m_formatCtrl->SetSelection( static_cast<int>( m_job->m_format ) );
+        m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
+        m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
+        m_onlySMD->SetValue( m_job->m_smdOnly );
+        m_negateXcb->SetValue( m_job->m_negateBottomX );
+        m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
+        m_excludeDNP->SetValue( m_job->m_excludeDNP );
+    }
+
+    return true;
 }
 
 

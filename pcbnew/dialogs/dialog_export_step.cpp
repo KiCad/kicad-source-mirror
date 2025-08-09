@@ -40,7 +40,6 @@
 #include <locale_io.h>
 #include <math/vector3.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <tools/board_editor_control.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <reporter.h>
@@ -73,24 +72,6 @@ static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFile
                                                              { FILEEXT::StepZFileAbrvExtension, 6 }};
 
 
-int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;    // Use default
-int  DIALOG_EXPORT_STEP::m_formatLastChoice = -1;       // Use default
-bool DIALOG_EXPORT_STEP::m_optimizeStep = true;
-bool DIALOG_EXPORT_STEP::m_exportBoardBody = true;
-bool DIALOG_EXPORT_STEP::m_exportComponents = true;
-bool DIALOG_EXPORT_STEP::m_exportTracks = false;
-bool DIALOG_EXPORT_STEP::m_exportPads = false;
-bool DIALOG_EXPORT_STEP::m_exportZones = false;
-bool DIALOG_EXPORT_STEP::m_exportInnerCopper = false;
-bool DIALOG_EXPORT_STEP::m_exportSilkscreen = false;
-bool DIALOG_EXPORT_STEP::m_exportSoldermask = false;
-bool DIALOG_EXPORT_STEP::m_fuseShapes = false;
-bool DIALOG_EXPORT_STEP::m_fillAllVias = false;
-bool DIALOG_EXPORT_STEP::m_cutViasInBody = false;
-DIALOG_EXPORT_STEP::COMPONENT_MODE DIALOG_EXPORT_STEP::m_componentMode = COMPONENT_MODE::EXPORT_ALL;
-wxString DIALOG_EXPORT_STEP::m_componentFilter;
-
-
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, const wxString& aBoardPath ) :
         DIALOG_EXPORT_STEP( aEditFrame, aEditFrame, aBoardPath )
 {
@@ -103,9 +84,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         DIALOG_EXPORT_STEP_BASE( aEditFrame ),
         m_editFrame( aEditFrame ),
         m_job( aJob ),
-        m_userOriginX( 0.0 ),
-        m_userOriginY( 0.0 ),
-        m_originUnits( 0 /* mm */ ),
+        m_originX( aEditFrame, m_originXLabel, m_originXCtrl, m_originXUnits ),
+        m_originY( aEditFrame, m_originYLabel, m_originYCtrl, m_originYUnits ),
         m_boardPath( aBoardPath )
 {
     if( !m_job )
@@ -113,7 +93,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                                 { wxID_CANCEL, _( "Close" )  } } );
-
 
         // Build default output file name
         // (last saved filename in project or built from board filename)
@@ -137,134 +116,13 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
+    // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
     Layout();
     bSizerSTEPFile->Fit( this );
 
     SetFocus();
-
-    if( !m_job )
-    {
-        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-        {
-            m_origin = static_cast<STEP_ORIGIN_OPTION>( cfg->m_ExportStep.origin_mode );
-
-            switch( m_origin )
-            {
-            default:
-            case STEP_ORIGIN_PLOT_AXIS:    m_rbDrillAndPlotOrigin->SetValue( true ); break;
-            case STEP_ORIGIN_GRID_AXIS:    m_rbGridOrigin->SetValue( true );         break;
-            case STEP_ORIGIN_USER:         m_rbUserDefinedOrigin->SetValue( true );  break;
-            case STEP_ORIGIN_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true );  break;
-            }
-
-            m_originUnits = cfg->m_ExportStep.origin_units;
-            m_userOriginX = cfg->m_ExportStep.origin_x;
-            m_userOriginY = cfg->m_ExportStep.origin_y;
-            m_noUnspecified = cfg->m_ExportStep.no_unspecified;
-            m_noDNP = cfg->m_ExportStep.no_dnp;
-
-            m_txtNetFilter->SetValue( m_netFilter );
-            m_cbOptimizeStep->SetValue( m_optimizeStep );
-            m_cbExportBody->SetValue( m_exportBoardBody );
-            m_cbExportComponents->SetValue( m_exportComponents );
-            m_cbExportTracks->SetValue( m_exportTracks );
-            m_cbExportPads->SetValue( m_exportPads );
-            m_cbExportZones->SetValue( m_exportZones );
-            m_cbExportInnerCopper->SetValue( m_exportInnerCopper );
-            m_cbExportSilkscreen->SetValue( m_exportSilkscreen );
-            m_cbExportSoldermask->SetValue( m_exportSoldermask );
-            m_cbFuseShapes->SetValue( m_fuseShapes );
-            m_cbCutViasInBody->SetValue( m_cutViasInBody );
-            m_cbFillAllVias->SetValue( m_fillAllVias );
-            m_cbRemoveUnspecified->SetValue( m_noUnspecified );
-            m_cbRemoveDNP->SetValue( m_noDNP );
-            m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
-            m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
-        }
-
-        m_txtComponentFilter->SetValue( m_componentFilter );
-
-        switch( m_componentMode )
-        {
-        case COMPONENT_MODE::EXPORT_ALL:      m_rbAllComponents->SetValue( true );      break;
-        case COMPONENT_MODE::EXPORT_SELECTED: m_rbOnlySelected->SetValue( true );       break;
-        case COMPONENT_MODE::CUSTOM_FILTER:   m_rbFilteredComponents->SetValue( true ); break;
-        }
-
-        // Sync the enabled states
-        wxCommandEvent dummy;
-        DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
-
-        m_STEP_OrgUnitChoice->SetSelection( m_originUnits );
-        wxString tmpStr;
-        tmpStr << m_userOriginX;
-        m_STEP_Xorg->SetValue( tmpStr );
-        tmpStr = wxEmptyString;
-        tmpStr << m_userOriginY;
-        m_STEP_Yorg->SetValue( tmpStr );
-    }
-    else
-    {
-        m_rbBoardCenterOrigin->SetValue( true );    // Default
-
-        if( m_job->m_3dparams.m_UseDrillOrigin )
-            m_rbDrillAndPlotOrigin->SetValue( true );
-        else if( m_job->m_3dparams.m_UseGridOrigin )
-            m_rbGridOrigin->SetValue( true );
-        else if( m_job->m_3dparams.m_UseDefinedOrigin )
-            m_rbUserDefinedOrigin->SetValue( true );
-        else if( m_job->m_3dparams.m_UsePcbCenterOrigin )
-            m_rbBoardCenterOrigin->SetValue( true );
-
-        m_userOriginX = m_job->m_3dparams.m_Origin.x;
-        m_userOriginY = m_job->m_3dparams.m_Origin.y;
-
-        m_noUnspecified = m_job->m_3dparams.m_IncludeUnspecified;
-        m_noDNP = m_job->m_3dparams.m_IncludeDNP;
-
-        m_txtNetFilter->SetValue( m_job->m_3dparams.m_NetFilter );
-        m_cbOptimizeStep->SetValue( m_job->m_3dparams.m_OptimizeStep );
-        m_cbExportBody->SetValue( m_job->m_3dparams.m_ExportBoardBody );
-        m_cbExportComponents->SetValue( m_job->m_3dparams.m_ExportComponents );
-        m_cbExportTracks->SetValue( m_job->m_3dparams.m_ExportTracksVias );
-        m_cbExportPads->SetValue( m_job->m_3dparams.m_ExportPads );
-        m_cbExportZones->SetValue( m_job->m_3dparams.m_ExportZones );
-        m_cbExportInnerCopper->SetValue( m_job->m_3dparams.m_ExportInnerCopper );
-        m_cbExportSilkscreen->SetValue( m_job->m_3dparams.m_ExportSilkscreen );
-        m_cbExportSoldermask->SetValue( m_job->m_3dparams.m_ExportSoldermask );
-        m_cbFuseShapes->SetValue( m_job->m_3dparams.m_FuseShapes );
-        m_cbCutViasInBody->SetValue( m_job->m_3dparams.m_CutViasInBody );
-        m_cbFillAllVias->SetValue( m_job->m_3dparams.m_FillAllVias );
-        m_cbRemoveUnspecified->SetValue( !m_job->m_3dparams.m_IncludeUnspecified );
-        m_cbRemoveDNP->SetValue( !m_job->m_3dparams.m_IncludeDNP );
-        m_cbSubstModels->SetValue( m_job->m_3dparams.m_SubstModels );
-        m_cbOverwriteFile->SetValue( m_job->m_3dparams.m_Overwrite );
-
-        if( m_job->m_3dparams.m_BoardOutlinesChainingEpsilon > 0.05 )
-            m_choiceTolerance->SetSelection( 2 );
-        else if( m_job->m_3dparams.m_BoardOutlinesChainingEpsilon < 0.005 )
-            m_choiceTolerance->SetSelection( 0 );
-        else
-            m_choiceTolerance->SetSelection( 1 );
-
-        m_txtComponentFilter->SetValue( m_job->m_3dparams.m_ComponentFilter );
-        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
-
-        wxCommandEvent dummy;
-        DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
-
-        m_STEP_OrgUnitChoice->SetSelection( m_originUnits );
-
-        wxString tmpStr;
-        tmpStr << m_userOriginX;
-        m_STEP_Xorg->SetValue( tmpStr );
-        tmpStr = wxEmptyString;
-        tmpStr << m_userOriginY;
-        m_STEP_Yorg->SetValue( tmpStr );
-    }
 
     wxString bad_scales;
     size_t   bad_count = 0;
@@ -302,87 +160,65 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
             Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning = true;
     }
 
-    if( m_toleranceLastChoice >= 0 )
-        m_choiceTolerance->SetSelection( m_toleranceLastChoice );
-
-    if( m_formatLastChoice >= 0 )
-        m_choiceFormat->SetSelection( m_formatLastChoice );
-    else
-        // ensure the selected fmt and the output file ext are synchronized the first time
-        // the dialog is opened
-        OnFmtChoiceOptionChanged();
+    OnFmtChoiceOptionChanged();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
 
 
-DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
+bool DIALOG_EXPORT_STEP::TransferDataToWindow()
 {
-    GetOriginOption(); // Update m_origin member.
-
-    if( !m_job ) // dont save mru if its a job dialog
+    if( m_job )
     {
-        if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-        {
-            cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
-            cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
-            cfg->m_ExportStep.replace_models = m_cbSubstModels->GetValue();
-            cfg->m_ExportStep.overwrite_file = m_cbOverwriteFile->GetValue();
+        m_rbBoardCenterOrigin->SetValue( true );    // Default
 
-            double val = 0.0;
+        if( m_job->m_3dparams.m_UseDrillOrigin )
+            m_rbDrillAndPlotOrigin->SetValue( true );
+        else if( m_job->m_3dparams.m_UseGridOrigin )
+            m_rbGridOrigin->SetValue( true );
+        else if( m_job->m_3dparams.m_UseDefinedOrigin )
+            m_rbUserDefinedOrigin->SetValue( true );
+        else if( m_job->m_3dparams.m_UsePcbCenterOrigin )
+            m_rbBoardCenterOrigin->SetValue( true );
 
-            m_STEP_Xorg->GetValue().ToDouble( &val );
-            cfg->m_ExportStep.origin_x = val;
+        m_originX.SetValue( pcbIUScale.mmToIU( m_job->m_3dparams.m_Origin.x ) );
+        m_originY.SetValue( pcbIUScale.mmToIU( m_job->m_3dparams.m_Origin.y ) );
 
-            m_STEP_Yorg->GetValue().ToDouble( &val );
-            cfg->m_ExportStep.origin_y = val;
+        m_txtNetFilter->SetValue( m_job->m_3dparams.m_NetFilter );
+        m_cbOptimizeStep->SetValue( m_job->m_3dparams.m_OptimizeStep );
+        m_cbExportBody->SetValue( m_job->m_3dparams.m_ExportBoardBody );
+        m_cbExportComponents->SetValue( m_job->m_3dparams.m_ExportComponents );
+        m_cbExportTracks->SetValue( m_job->m_3dparams.m_ExportTracksVias );
+        m_cbExportPads->SetValue( m_job->m_3dparams.m_ExportPads );
+        m_cbExportZones->SetValue( m_job->m_3dparams.m_ExportZones );
+        m_cbExportInnerCopper->SetValue( m_job->m_3dparams.m_ExportInnerCopper );
+        m_cbExportSilkscreen->SetValue( m_job->m_3dparams.m_ExportSilkscreen );
+        m_cbExportSoldermask->SetValue( m_job->m_3dparams.m_ExportSoldermask );
+        m_cbFuseShapes->SetValue( m_job->m_3dparams.m_FuseShapes );
+        m_cbCutViasInBody->SetValue( m_job->m_3dparams.m_CutViasInBody );
+        m_cbFillAllVias->SetValue( m_job->m_3dparams.m_FillAllVias );
+        m_cbRemoveUnspecified->SetValue( !m_job->m_3dparams.m_IncludeUnspecified );
+        m_cbRemoveDNP->SetValue( !m_job->m_3dparams.m_IncludeDNP );
+        m_cbSubstModels->SetValue( m_job->m_3dparams.m_SubstModels );
+        m_cbOverwriteFile->SetValue( m_job->m_3dparams.m_Overwrite );
 
-            cfg->m_ExportStep.no_unspecified = m_cbRemoveUnspecified->GetValue();
-            cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
-        }
-
-        m_netFilter = m_txtNetFilter->GetValue();
-        m_toleranceLastChoice = m_choiceTolerance->GetSelection();
-        m_formatLastChoice = m_choiceFormat->GetSelection();
-        m_optimizeStep = m_cbOptimizeStep->GetValue();
-        m_exportBoardBody = m_cbExportBody->GetValue();
-        m_exportComponents = m_cbExportComponents->GetValue();
-        m_exportTracks = m_cbExportTracks->GetValue();
-        m_exportPads = m_cbExportPads->GetValue();
-        m_exportZones = m_cbExportZones->GetValue();
-        m_exportInnerCopper = m_cbExportInnerCopper->GetValue();
-        m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
-        m_exportSoldermask = m_cbExportSoldermask->GetValue();
-        m_fuseShapes = m_cbFuseShapes->GetValue();
-        m_cutViasInBody = m_cbCutViasInBody->GetValue();
-        m_fillAllVias = m_cbFillAllVias->GetValue();
-        m_componentFilter = m_txtComponentFilter->GetValue();
-
-        if( m_rbAllComponents->GetValue() )
-            m_componentMode = COMPONENT_MODE::EXPORT_ALL;
-        else if( m_rbOnlySelected->GetValue() )
-            m_componentMode = COMPONENT_MODE::EXPORT_SELECTED;
+        if( m_job->m_3dparams.m_BoardOutlinesChainingEpsilon > 0.05 )
+            m_choiceTolerance->SetSelection( 2 );
+        else if( m_job->m_3dparams.m_BoardOutlinesChainingEpsilon < 0.005 )
+            m_choiceTolerance->SetSelection( 0 );
         else
-            m_componentMode = COMPONENT_MODE::CUSTOM_FILTER;
+            m_choiceTolerance->SetSelection( 1 );
+
+        m_txtComponentFilter->SetValue( m_job->m_3dparams.m_ComponentFilter );
+        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
     }
-}
 
+    // Sync the enabled states
+    wxCommandEvent dummy;
+    DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
 
-DIALOG_EXPORT_STEP::STEP_ORIGIN_OPTION DIALOG_EXPORT_STEP::GetOriginOption()
-{
-    m_origin = STEP_ORIGIN_0;
-
-    if( m_rbDrillAndPlotOrigin->GetValue() )
-        m_origin = STEP_ORIGIN_PLOT_AXIS;
-    else if( m_rbGridOrigin->GetValue() )
-        m_origin = STEP_ORIGIN_GRID_AXIS;
-    else if( m_rbUserDefinedOrigin->GetValue() )
-        m_origin = STEP_ORIGIN_USER;
-    else if( m_rbBoardCenterOrigin->GetValue() )
-        m_origin = STEP_ORIGIN_BOARD_CENTER;
-
-    return m_origin;
+    return true;
 }
 
 
@@ -427,12 +263,6 @@ int BOARD_EDITOR_CONTROL::ExportSTEP( const TOOL_EVENT& aEvent )
 }
 
 
-void DIALOG_EXPORT_STEP::onUpdateUnits( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
-}
-
-
 void DIALOG_EXPORT_STEP::onUpdateXPos( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
@@ -466,8 +296,7 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
     wxString   path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
     wxFileName fn( Prj().AbsolutePath( path ) );
 
-    wxFileDialog dlg( this, _( "3D Model Output File" ), fn.GetPath(), fn.GetFullName(), filter,
-                      wxFD_SAVE );
+    wxFileDialog dlg( this, _( "3D Model Output File" ), fn.GetPath(), fn.GetFullName(), filter, wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -557,31 +386,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             return;
         }
 
-        m_netFilter = m_txtNetFilter->GetValue();
-        m_componentFilter = m_txtComponentFilter->GetValue();
-
-        if( m_rbAllComponents->GetValue() )
-            m_componentMode = COMPONENT_MODE::EXPORT_ALL;
-        else if( m_rbOnlySelected->GetValue() )
-            m_componentMode = COMPONENT_MODE::EXPORT_SELECTED;
-        else
-            m_componentMode = COMPONENT_MODE::CUSTOM_FILTER;
-
-        m_toleranceLastChoice = m_choiceTolerance->GetSelection();
-        m_formatLastChoice = m_choiceFormat->GetSelection();
-        m_optimizeStep = m_cbOptimizeStep->GetValue();
-        m_exportBoardBody = m_cbExportBody->GetValue();
-        m_exportComponents = m_cbExportComponents->GetValue();
-        m_exportTracks = m_cbExportTracks->GetValue();
-        m_exportPads = m_cbExportPads->GetValue();
-        m_exportZones = m_cbExportZones->GetValue();
-        m_exportInnerCopper = m_cbExportInnerCopper->GetValue();
-        m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
-        m_exportSoldermask = m_cbExportSoldermask->GetValue();
-        m_fuseShapes = m_cbFuseShapes->GetValue();
-        m_cutViasInBody = m_cbCutViasInBody->GetValue();
-        m_fillAllVias = m_cbFillAllVias->GetValue();
-
         SHAPE_POLY_SET outline;
         wxString msg;
 
@@ -603,7 +407,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
         wxFileName fn( Prj().AbsolutePath( path ) );
 
-        if( fn.FileExists() && !GetOverwriteFile() )
+        if( fn.FileExists() && !m_cbOverwriteFile->GetValue() )
         {
             msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
                         fn.GetFullPath() );
@@ -644,49 +448,49 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         cmdK2S.Append( wxT( " " ) );
         cmdK2S.Append( c_formatCommand[m_choiceFormat->GetSelection()] );
 
-        if( GetNoUnspecifiedOption() )
+        if( m_cbRemoveUnspecified->GetValue() )
             cmdK2S.Append( wxT( " --no-unspecified" ) );
 
-        if( GetNoDNPOption() )
+        if( m_cbRemoveDNP->GetValue() )
             cmdK2S.Append( wxT( " --no-dnp" ) );
 
-        if( GetSubstOption() )
+        if( m_cbSubstModels->GetValue() )
             cmdK2S.Append( wxT( " --subst-models" ) );
 
-        if( !m_optimizeStep )
+        if( !m_cbOptimizeStep->GetValue() )
             cmdK2S.Append( wxT( " --no-optimize-step" ) );
 
-        if( !m_exportBoardBody )
+        if( !m_cbExportBody->GetValue() )
             cmdK2S.Append( wxT( " --no-board-body" ) );
 
-        if( !m_exportComponents )
+        if( !m_cbExportComponents->GetValue() )
             cmdK2S.Append( wxT( " --no-components" ) );
 
-        if( m_exportTracks )
+        if( m_cbExportTracks->GetValue() )
             cmdK2S.Append( wxT( " --include-tracks" ) );
 
-        if( m_exportPads )
+        if( m_cbExportPads->GetValue() )
             cmdK2S.Append( wxT( " --include-pads" ) );
 
-        if( m_exportZones )
+        if( m_cbExportZones->GetValue() )
             cmdK2S.Append( wxT( " --include-zones" ) );
 
-        if( m_exportInnerCopper )
+        if( m_cbExportInnerCopper->GetValue() )
             cmdK2S.Append( wxT( " --include-inner-copper" ) );
 
-        if( m_exportSilkscreen )
+        if( m_cbExportSilkscreen->GetValue() )
             cmdK2S.Append( wxT( " --include-silkscreen" ) );
 
-        if( m_exportSoldermask )
+        if( m_cbExportSoldermask->GetValue() )
             cmdK2S.Append( wxT( " --include-soldermask" ) );
 
-        if( m_fuseShapes )
+        if( m_cbFuseShapes->GetValue() )
             cmdK2S.Append( wxT( " --fuse-shapes" ) );
 
-        if( m_cutViasInBody )
+        if( m_cbCutViasInBody->GetValue() )
             cmdK2S.Append( wxT( " --cut-vias-in-body" ) );
 
-        if( m_fillAllVias )
+        if( m_cbFillAllVias->GetValue() )
             cmdK2S.Append( wxT( " --fill-all-vias" ) );
 
         // Note: for some reason, using \" to insert a quote in a format string, under MacOS
@@ -694,15 +498,13 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         int quote = '\'';
         int dblquote = '"';
 
-        if( !m_netFilter.empty() )
+        if( !m_txtNetFilter->GetValue().empty() )
         {
             cmdK2S.Append( wxString::Format( wxT( " --net-filter %c%s%c" ),
-                                             dblquote, m_netFilter, dblquote ) );
+                                             dblquote, m_txtNetFilter->GetValue(), dblquote ) );
         }
 
-        switch( m_componentMode )
-        {
-        case COMPONENT_MODE::EXPORT_SELECTED:
+        if( m_rbOnlySelected->GetValue() )
         {
             wxArrayString components;
             SELECTION& selection = m_editFrame->GetCurrentSelection();
@@ -716,51 +518,31 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
             cmdK2S.Append( wxString::Format( wxT( " --component-filter %c%s%c" ),
                                              dblquote, wxJoin( components, ',' ), dblquote ) );
-            break;
         }
-
-        case COMPONENT_MODE::CUSTOM_FILTER:
+        else if( m_rbFilteredComponents->GetValue() )
+        {
             cmdK2S.Append( wxString::Format( wxT( " --component-filter %c%s%c" ),
-                                             dblquote, m_componentFilter, dblquote ) );
-            break;
-
-        default:
-            break;
+                                             dblquote, m_txtComponentFilter->GetValue(), dblquote ) );
         }
 
-        switch( GetOriginOption() )
+        if( m_rbDrillAndPlotOrigin->GetValue() )
         {
-        case STEP_ORIGIN_0:
-            wxFAIL_MSG( wxT( "Unsupported origin option: how did we get here?" ) );
-            break;
-
-        case STEP_ORIGIN_PLOT_AXIS:
             cmdK2S.Append( wxT( " --drill-origin" ) );
-            break;
-
-        case STEP_ORIGIN_GRID_AXIS:
-            cmdK2S.Append( wxT( " --grid-origin" ) );
-            break;
-
-        case STEP_ORIGIN_USER:
+        }
+        else if( m_rbGridOrigin->GetValue() )
         {
-            double xOrg = GetXOrg();
-            double yOrg = GetYOrg();
-
-            if( GetOrgUnitsChoice() == 1 )
-            {
-                // selected reference unit is in inches, and STEP units are mm
-                xOrg *= 25.4;
-                yOrg *= 25.4;
-            }
+            cmdK2S.Append( wxT( " --grid-origin" ) );
+        }
+        else if( m_rbUserDefinedOrigin->GetValue() )
+        {
+            double xOrg = pcbIUScale.IUTomm( m_originX.GetIntValue() );
+            double yOrg = pcbIUScale.IUTomm( m_originY.GetIntValue() );
 
             LOCALE_IO dummy;
             cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
                                              quote, xOrg, yOrg, quote ) );
-            break;
         }
-
-        case STEP_ORIGIN_BOARD_CENTER:
+        else if( m_rbBoardCenterOrigin->GetValue() )
         {
             BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
             double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
@@ -769,8 +551,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
             cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
                                              quote, xOrg, yOrg, quote ) );
-            break;
         }
+        else
+        {
+            wxFAIL_MSG( wxT( "Unsupported origin option: how did we get here?" ) );
         }
 
         {
@@ -820,13 +604,13 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         // ensure the main format on the job is populated
         switch( m_job->m_3dparams.m_Format )
         {
-        case EXPORTER_STEP_PARAMS::FORMAT::STEP: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP; break;
+        case EXPORTER_STEP_PARAMS::FORMAT::STEP:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;  break;
         case EXPORTER_STEP_PARAMS::FORMAT::STEPZ: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEPZ; break;
-        case EXPORTER_STEP_PARAMS::FORMAT::GLB:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;  break;
-        case EXPORTER_STEP_PARAMS::FORMAT::XAO:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;  break;
-        case EXPORTER_STEP_PARAMS::FORMAT::BREP: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP; break;
-        case EXPORTER_STEP_PARAMS::FORMAT::PLY:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;  break;
-        case EXPORTER_STEP_PARAMS::FORMAT::STL:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::GLB:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;   break;
+        case EXPORTER_STEP_PARAMS::FORMAT::XAO:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;   break;
+        case EXPORTER_STEP_PARAMS::FORMAT::BREP:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::PLY:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;   break;
+        case EXPORTER_STEP_PARAMS::FORMAT::STL:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;   break;
         }
 
         m_job->m_3dparams.m_UseDrillOrigin = false;
@@ -834,58 +618,33 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_job->m_3dparams.m_UseDefinedOrigin = false;
         m_job->m_3dparams.m_UsePcbCenterOrigin = false;
 
-        switch( GetOriginOption() )
+        if( m_rbDrillAndPlotOrigin->GetValue() )
         {
-            case STEP_ORIGIN_0:
-                break;
-            case STEP_ORIGIN_PLOT_AXIS:
-                m_job->m_3dparams.m_UseDrillOrigin = true;
-                break;
-            case STEP_ORIGIN_GRID_AXIS:
-                m_job->m_3dparams.m_UseGridOrigin = true;
-                break;
-            case STEP_ORIGIN_USER:
-            {
-                double xOrg = GetXOrg();
-                double yOrg = GetYOrg();
+            m_job->m_3dparams.m_UseDrillOrigin = true;
+        }
+        else if( m_rbGridOrigin->GetValue() )
+        {
+            m_job->m_3dparams.m_UseGridOrigin = true;
+        }
+        else if( m_rbUserDefinedOrigin->GetValue() )
+        {
+            double xOrg = pcbIUScale.IUTomm( m_originX.GetIntValue() );
+            double yOrg = pcbIUScale.IUTomm( m_originY.GetIntValue() );
 
-                if( GetOrgUnitsChoice() == 1 )
-                {
-                    // selected reference unit is in inches, and STEP units are mm
-                    xOrg *= 25.4;
-                    yOrg *= 25.4;
-                }
+            m_job->m_3dparams.m_UseDefinedOrigin = true;
+            m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
+        }
+        else if( m_rbBoardCenterOrigin->GetValue() )
+        {
+            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
+            double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
+            double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
+            LOCALE_IO dummy;
 
-                m_job->m_3dparams.m_UseDefinedOrigin = true;
-                m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
-                break;
-            }
-
-            case STEP_ORIGIN_BOARD_CENTER:
-            {
-                BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
-                double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
-                double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
-                LOCALE_IO dummy;
-
-                m_job->m_3dparams.m_UsePcbCenterOrigin = true;
-                m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
-                break;
-            }
+            m_job->m_3dparams.m_UsePcbCenterOrigin = true;
+            m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
         }
 
         EndModal( wxID_OK );
     }
-}
-
-
-double DIALOG_EXPORT_STEP::GetXOrg() const
-{
-    return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_STEP_Xorg->GetValue() );
-}
-
-
-double DIALOG_EXPORT_STEP::GetYOrg()
-{
-    return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_STEP_Yorg->GetValue() );
 }

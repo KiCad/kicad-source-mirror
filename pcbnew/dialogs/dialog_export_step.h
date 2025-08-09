@@ -25,6 +25,7 @@
 #pragma once
 
 #include "dialog_export_step_base.h"
+#include <widgets/unit_binder.h>
 
 class PCB_EDIT_FRAME;
 class JOB_EXPORT_PCB_3D;
@@ -32,23 +33,15 @@ class JOB_EXPORT_PCB_3D;
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
 {
 public:
-    enum STEP_ORIGIN_OPTION
-    {
-        STEP_ORIGIN_0,             // absolute coordinates
-        STEP_ORIGIN_PLOT_AXIS,     // origin is plot/drill axis origin
-        STEP_ORIGIN_GRID_AXIS,     // origin is grid origin
-        STEP_ORIGIN_BOARD_CENTER,  // origin is board center
-        STEP_ORIGIN_USER,          // origin is entered by user
-    };
-
     DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, const wxString& aBoardPath );
     DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, const wxString& aBoardPath,
                         JOB_EXPORT_PCB_3D* aJob = nullptr );
-    ~DIALOG_EXPORT_STEP();
+    ~DIALOG_EXPORT_STEP() = default;
+
+    bool TransferDataToWindow() override;
 
 protected:
     void onBrowseClicked( wxCommandEvent& aEvent ) override;
-    void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
     void onUpdateXPos( wxUpdateUIEvent& aEvent ) override;
     void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
     void onExportButton( wxCommandEvent& aEvent ) override;
@@ -56,72 +49,13 @@ protected:
     void onCbExportComponents( wxCommandEvent& event ) override;
     void OnComponentModeChange( wxCommandEvent& event ) override;
 
-    int GetOrgUnitsChoice() const
-    {
-        return m_STEP_OrgUnitChoice->GetSelection();
-    }
-
-    double GetXOrg() const;
-
-    double GetYOrg();
-
-    STEP_ORIGIN_OPTION GetOriginOption();
-
-    bool GetNoUnspecifiedOption()
-    {
-        return m_cbRemoveUnspecified->GetValue();
-    }
-
-    bool GetNoDNPOption()
-    {
-        return m_cbRemoveDNP->GetValue();
-    }
-
-    bool GetSubstOption()
-    {
-        return m_cbSubstModels->GetValue();
-    }
-
-    bool GetOverwriteFile()
-    {
-        return m_cbOverwriteFile->GetValue();
-    }
-
     // Called to update filename extension after the output file format is changed
     void OnFmtChoiceOptionChanged();
 
 private:
-    enum class COMPONENT_MODE
-    {
-        EXPORT_ALL,
-        EXPORT_SELECTED,
-        CUSTOM_FILTER
-    };
-
     PCB_EDIT_FRAME*    m_editFrame;
     JOB_EXPORT_PCB_3D* m_job;
-    STEP_ORIGIN_OPTION m_origin;         // The last preference for STEP origin option
-    double             m_userOriginX;    // remember last User Origin X value
-    double             m_userOriginY;    // remember last User Origin Y value
-    int                m_originUnits;    // remember last units for User Origin
-    bool               m_noUnspecified;  // remember last preference for No Unspecified Component
-    bool               m_noDNP;          // remember last preference for No DNP Component
-    static bool        m_optimizeStep;   // remember last preference for Optimize STEP file (stored only for the session)
-    static bool        m_exportBoardBody;  // remember last preference to export board body (stored only for the session)
-    static bool        m_exportComponents; // remember last preference to export components (stored only for the session)
-    static bool        m_exportTracks;   // remember last preference to export tracks and vias (stored only for the session)
-    static bool        m_exportPads;     // remember last preference to export pads (stored only for the session)
-    static bool        m_exportZones;    // remember last preference to export zones (stored only for the session)
-    static bool        m_exportInnerCopper; // remember last preference to export inner layers (stored only for the session)
-    static bool        m_exportSilkscreen;  // remember last preference to export silkscreen (stored only for the session)
-    static bool        m_exportSoldermask;  // remember last preference to export soldermask (stored only for the session)
-    static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
-    static bool        m_fillAllVias;    // remember last preference to fill all vias (stored only for the session)
-    static bool        m_cutViasInBody;  // remember last preference to cut via holes in body (stored only for the session)
-    wxString           m_netFilter;      // filter copper nets
-    static wxString    m_componentFilter; // filter component reference designators
-    static COMPONENT_MODE m_componentMode;
+    UNIT_BINDER        m_originX;
+    UNIT_BINDER        m_originY;
     wxString           m_boardPath;      // path to the exported board file
-    static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
-    static int         m_formatLastChoice; // Store format option during a session
 };

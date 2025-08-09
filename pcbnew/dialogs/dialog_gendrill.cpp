@@ -75,7 +75,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPare
                             { wxID_CANCEL, _( "Close" ) } } );
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
+    // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
     finishDialogSettings();
@@ -101,40 +101,10 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
     SetTitle( m_job->GetSettingsDialogTitle() );
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
+    // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
     finishDialogSettings();
-}
-
-
-bool DIALOG_GENDRILL::TransferDataFromWindow()
-{
-    if( !m_job )
-    {
-        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue(), m_generateTentingLayers->GetValue() );
-        // Keep the window open so that the user can see the result
-        return false;
-    }
-    else
-    {
-        m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
-        m_job->m_format = m_rbExcellon->GetValue() ? JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON
-												   : JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
-        m_job->m_drillUnits = m_units->GetSelection() == 0 ? JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM
-                                                           : JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCH;
-        m_job->m_drillOrigin = static_cast<JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN>( m_origin->GetSelection() );
-        m_job->m_excellonCombinePTHNPTH = m_Check_Merge_PTH_NPTH->IsChecked();
-        m_job->m_excellonMinimalHeader = m_Check_Minimal->IsChecked();
-        m_job->m_excellonMirrorY = m_Check_Mirror->IsChecked();
-        m_job->m_excellonOvalDrillRoute = !m_altDrillMode->GetValue();
-        m_job->m_mapFormat = static_cast<JOB_EXPORT_PCB_DRILL::MAP_FORMAT>( m_choiceDrillMap->GetSelection() );
-        m_job->m_zeroFormat = static_cast<JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT>( m_zeros->GetSelection() );
-        m_job->m_generateMap = m_cbGenerateMap->IsChecked();
-        m_job->m_generateTenting = m_generateTentingLayers->IsChecked();
-    }
-
-    return true;
 }
 
 
@@ -174,6 +144,36 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
     wxCommandEvent dummy;
     onFileFormatSelection( dummy );
 	return true;
+}
+
+
+bool DIALOG_GENDRILL::TransferDataFromWindow()
+{
+    if( !m_job )
+    {
+        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue(), m_generateTentingLayers->GetValue() );
+        // Keep the window open so that the user can see the result
+        return false;
+    }
+    else
+    {
+        m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->m_format = m_rbExcellon->GetValue() ? JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON
+												   : JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
+        m_job->m_drillUnits = m_units->GetSelection() == 0 ? JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM
+                                                           : JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCH;
+        m_job->m_drillOrigin = static_cast<JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN>( m_origin->GetSelection() );
+        m_job->m_excellonCombinePTHNPTH = m_Check_Merge_PTH_NPTH->IsChecked();
+        m_job->m_excellonMinimalHeader = m_Check_Minimal->IsChecked();
+        m_job->m_excellonMirrorY = m_Check_Mirror->IsChecked();
+        m_job->m_excellonOvalDrillRoute = !m_altDrillMode->GetValue();
+        m_job->m_mapFormat = static_cast<JOB_EXPORT_PCB_DRILL::MAP_FORMAT>( m_choiceDrillMap->GetSelection() );
+        m_job->m_zeroFormat = static_cast<JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT>( m_zeros->GetSelection() );
+        m_job->m_generateMap = m_cbGenerateMap->IsChecked();
+        m_job->m_generateTenting = m_generateTentingLayers->IsChecked();
+    }
+
+    return true;
 }
 
 

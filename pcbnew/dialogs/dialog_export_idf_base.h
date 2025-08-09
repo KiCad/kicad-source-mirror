@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,12 +21,11 @@ class TEXT_CTRL_EVAL;
 #include <wx/settings.h>
 #include <wx/filepicker.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/radiobox.h>
-#include <wx/statbox.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -42,15 +41,15 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_txtBrdFile;
 		wxFilePickerCtrl* m_filePickerIDF;
-		wxStaticText* m_staticText2;
-		wxCheckBox* m_cbAutoAdjustOffset;
-		wxStaticText* m_staticText5;
-		wxChoice* m_IDF_RefUnitChoice;
-		wxStaticText* m_staticText3;
+		wxCheckBox* m_cbSetBoardReferencePoint;
+		wxStaticText* m_xLabel;
 		TEXT_CTRL_EVAL* m_IDF_Xref;
-		wxStaticText* m_staticText4;
+		wxStaticText* m_xUnits;
+		wxStaticText* m_yLabel;
 		TEXT_CTRL_EVAL* m_IDF_Yref;
-		wxRadioBox* m_rbUnitSelection;
+		wxStaticText* m_yUnits;
+		wxStaticText* m_outputUnitsLabel;
+		wxChoice* m_outputUnitsChoice;
 		wxCheckBox* m_cbRemoveDNP;
 		wxCheckBox* m_cbRemoveUnspecified;
 		wxStdDialogButtonSizer* m_sdbSizer;

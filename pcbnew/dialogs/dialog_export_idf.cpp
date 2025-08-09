@@ -34,51 +34,12 @@
 
 DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
         DIALOG_EXPORT_IDF3_BASE( aEditFrame ),
-        m_idfThouOpt( false ),
-        m_AutoAdjust( false ),
-        m_RefUnits( 0 ),
-        m_XRef( 0.0 ),
-        m_YRef( 0.0 ),
-        m_editFrame( aEditFrame )
+        m_xPos( aEditFrame, m_xLabel, m_IDF_Xref, m_xUnits ),
+        m_yPos( aEditFrame, m_yLabel, m_IDF_Yref, m_yUnits )
 {
     SetFocus();
 
-    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-    {
-        m_idfThouOpt = cfg->m_ExportIdf.units_mils;
-        m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
-        m_AutoAdjust = cfg->m_ExportIdf.auto_adjust;
-        m_RefUnits = cfg->m_ExportIdf.ref_units;
-        m_XRef = cfg->m_ExportIdf.ref_x;
-        m_YRef = cfg->m_ExportIdf.ref_y;
-
-        m_cbRemoveUnspecified->SetValue( cfg->m_ExportIdf.no_unspecified );
-        m_cbRemoveDNP->SetValue( cfg->m_ExportIdf.no_dnp );
-    }
-
-    m_cbAutoAdjustOffset->SetValue( m_AutoAdjust );
-    m_cbAutoAdjustOffset->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_IDF3::OnAutoAdjustOffset, this );
-
-    m_IDF_RefUnitChoice->SetSelection( m_RefUnits );
-    wxString tmpStr;
-    tmpStr << m_XRef;
-    m_IDF_Xref->SetValue( tmpStr );
-    tmpStr = wxT( "" );
-    tmpStr << m_YRef;
-    m_IDF_Yref->SetValue( tmpStr );
-
-    if( m_AutoAdjust )
-    {
-        m_IDF_RefUnitChoice->Enable( false );
-        m_IDF_Xref->Enable( false );
-        m_IDF_Yref->Enable( false );
-    }
-    else
-    {
-        m_IDF_RefUnitChoice->Enable( true );
-        m_IDF_Xref->Enable( true );
-        m_IDF_Yref->Enable( true );
-    }
+    m_cbSetBoardReferencePoint->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_IDF3::OnBoardReferencePointChecked, this );
 
     SetupStandardButtons();
 
@@ -87,40 +48,21 @@ DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
 }
 
 
-DIALOG_EXPORT_IDF3::~DIALOG_EXPORT_IDF3()
+void DIALOG_EXPORT_IDF3::OnBoardReferencePointChecked( wxCommandEvent& event )
 {
-    m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
+    m_xPos.Enable( m_cbSetBoardReferencePoint->GetValue() );
+    m_yPos.Enable( m_cbSetBoardReferencePoint->GetValue() );
 
-    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-    {
-        cfg->m_ExportIdf.units_mils = m_idfThouOpt;
-        cfg->m_ExportIdf.auto_adjust = m_AutoAdjust;
-        cfg->m_ExportIdf.ref_units = m_RefUnits;
-        cfg->m_ExportIdf.ref_x = m_XRef;
-        cfg->m_ExportIdf.ref_y = m_YRef;
-
-        cfg->m_ExportIdf.no_unspecified = m_cbRemoveUnspecified->GetValue();
-        cfg->m_ExportIdf.no_dnp = m_cbRemoveDNP->GetValue();
-    }
+    event.Skip();
 }
 
 
-void DIALOG_EXPORT_IDF3::OnAutoAdjustOffset( wxCommandEvent& event )
+bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 {
-    if( GetAutoAdjustOffset() )
-    {
-        m_IDF_RefUnitChoice->Enable( false );
-        m_IDF_Xref->Enable( false );
-        m_IDF_Yref->Enable( false );
-    }
-    else
-    {
-        m_IDF_RefUnitChoice->Enable( true );
-        m_IDF_Xref->Enable( true );
-        m_IDF_Yref->Enable( true );
-    }
+    wxCommandEvent dummy;
+    OnBoardReferencePointChecked( dummy );
 
-    event.Skip();
+    return true;
 }
 
 
@@ -130,8 +72,8 @@ bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
 
     if( fn.FileExists() )
     {
-        wxString msg = wxString::Format( _( "File %s already exists." ), fn.GetPath() );
-        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        KIDIALOG dlg( this, wxString::Format( _( "File %s already exists." ), fn.GetPath() ),
+                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Overwrite" ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
@@ -162,11 +104,10 @@ int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
     if ( dlg.ShowModal() != wxID_OK )
         return 0;
 
-    bool thou = dlg.GetThouOption();
     double aXRef;
     double aYRef;
 
-    if( dlg.GetAutoAdjustOffset() )
+    if( dlg.GetSetBoardReferencePoint() )
     {
         BOX2I bbox = board->GetBoardEdgesBoundingBox();
         aXRef = bbox.Centre().x * pcbIUScale.MM_PER_IU;
@@ -174,24 +115,17 @@ int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
     }
     else
     {
-        aXRef = dlg.GetXRef();
-        aYRef = dlg.GetYRef();
-
-        if( dlg.GetRefUnitsChoice() == 1 )
-        {
-            // selected reference unit is in inches
-            aXRef *= 25.4;
-            aYRef *= 25.4;
-        }
+        aXRef = dlg.GetXRefMM();
+        aYRef = dlg.GetYRefMM();
     }
-
-    wxBusyCursor dummy;
 
     wxString fullFilename = dlg.FilePicker()->GetPath();
     m_frame->SetLastPath( LAST_PATH_IDF, fullFilename );
 
-    if( !m_frame->Export_IDF3( board, fullFilename, thou, aXRef, aYRef, !dlg.GetNoUnspecifiedOption(),
-                               !dlg.GetNoDNPOption() ) )
+    wxBusyCursor dummy;
+
+    if( !m_frame->Export_IDF3( board, fullFilename, dlg.GetThouOption(), aXRef, aYRef,
+                               !dlg.GetNoUnspecifiedOption(), !dlg.GetNoDNPOption() ) )
     {
         wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), fullFilename ) );
     }

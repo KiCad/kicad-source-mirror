@@ -62,6 +62,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	sbBoardOptions->Add( m_cbExportCompound_hidden, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbExportBody = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export board body"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportBody->SetValue(true);
 	sbBoardOptions->Add( m_cbExportBody, 0, wxALL, 5 );
 
 	m_cbCutViasInBody = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Cut vias in board body"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -86,6 +87,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	sbBoardOptions->Add( m_cbExportSolderpaste_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbExportComponents = new wxCheckBox( sbBoardOptions->GetStaticBox(), wxID_ANY, _("Export components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportComponents->SetValue(true);
 	sbBoardOptions->Add( m_cbExportComponents, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer51;
@@ -166,6 +168,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	sbCoordinates = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Coordinates") ), wxVERTICAL );
 
 	m_rbDrillAndPlotOrigin = new wxRadioButton( sbCoordinates->GetStaticBox(), wxID_ANY, _("Drill/place file origin"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbDrillAndPlotOrigin->SetValue( true );
 	sbCoordinates->Add( m_rbDrillAndPlotOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_rbGridOrigin = new wxRadioButton( sbCoordinates->GetStaticBox(), wxID_ANY, _("Grid origin"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -184,49 +187,47 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	sbUserDefinedOrigin = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Defined Origin") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 0 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextUnits = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUnits->Wrap( -1 );
-	fgSizer1->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_originXLabel = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("X position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originXLabel->Wrap( -1 );
+	fgSizer1->Add( m_originXLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	wxString m_STEP_OrgUnitChoiceChoices[] = { _("mm"), _("inch") };
-	int m_STEP_OrgUnitChoiceNChoices = sizeof( m_STEP_OrgUnitChoiceChoices ) / sizeof( wxString );
-	m_STEP_OrgUnitChoice = new wxChoice( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_STEP_OrgUnitChoiceNChoices, m_STEP_OrgUnitChoiceChoices, 0 );
-	m_STEP_OrgUnitChoice->SetSelection( 0 );
-	fgSizer1->Add( m_STEP_OrgUnitChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-	m_staticTextXpos = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("X position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextXpos->Wrap( -1 );
-	fgSizer1->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_STEP_Xorg = new TEXT_CTRL_EVAL( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originXCtrl = new TEXT_CTRL_EVAL( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
-	if ( !m_STEP_Xorg->HasFlag( wxTE_MULTILINE ) )
+	if ( !m_originXCtrl->HasFlag( wxTE_MULTILINE ) )
 	{
-	m_STEP_Xorg->SetMaxLength( 8 );
+	m_originXCtrl->SetMaxLength( 8 );
 	}
 	#else
-	m_STEP_Xorg->SetMaxLength( 8 );
+	m_originXCtrl->SetMaxLength( 8 );
 	#endif
-	fgSizer1->Add( m_STEP_Xorg, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_originXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticTextYpos = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("Y position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextYpos->Wrap( -1 );
-	fgSizer1->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_originXUnits = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originXUnits->Wrap( -1 );
+	fgSizer1->Add( m_originXUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_STEP_Yorg = new TEXT_CTRL_EVAL( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originYLabel = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("Y position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originYLabel->Wrap( -1 );
+	fgSizer1->Add( m_originYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_originYCtrl = new TEXT_CTRL_EVAL( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
-	if ( !m_STEP_Yorg->HasFlag( wxTE_MULTILINE ) )
+	if ( !m_originYCtrl->HasFlag( wxTE_MULTILINE ) )
 	{
-	m_STEP_Yorg->SetMaxLength( 8 );
+	m_originYCtrl->SetMaxLength( 8 );
 	}
 	#else
-	m_STEP_Yorg->SetMaxLength( 8 );
+	m_originYCtrl->SetMaxLength( 8 );
 	#endif
-	fgSizer1->Add( m_STEP_Yorg, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_originYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_originYUnits = new wxStaticText( sbUserDefinedOrigin->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originYUnits->Wrap( -1 );
+	fgSizer1->Add( m_originYUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbUserDefinedOrigin->Add( fgSizer1, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -248,14 +249,17 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	sbOtherOptions->Add( m_cbRemoveUnspecified, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbSubstModels = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Substitute similarly named models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbSubstModels->SetValue(true);
 	m_cbSubstModels->SetToolTip( _("Replace VRML models with STEP models of the same name") );
 
 	sbOtherOptions->Add( m_cbSubstModels, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbOverwriteFile = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOverwriteFile->SetValue(true);
 	sbOtherOptions->Add( m_cbOverwriteFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbOptimizeStep = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Don't write P-curves to STEP file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOptimizeStep->SetValue(true);
 	m_cbOptimizeStep->SetToolTip( _("Disables writing parametric curves. Optimizes file size and write/read times, but may reduce compatibility with other software.") );
 
 	sbOtherOptions->Add( m_cbOptimizeStep, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -304,9 +308,8 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_rbAllComponents->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbOnlySelected->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbFilteredComponents->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
-	m_STEP_OrgUnitChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
-	m_STEP_Xorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
-	m_STEP_Yorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
+	m_originXCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
+	m_originYCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onExportButton ), NULL, this );
 }
 
@@ -319,9 +322,8 @@ DIALOG_EXPORT_STEP_BASE::~DIALOG_EXPORT_STEP_BASE()
 	m_rbAllComponents->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbOnlySelected->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbFilteredComponents->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
-	m_STEP_OrgUnitChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
-	m_STEP_Xorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
-	m_STEP_Yorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
+	m_originXCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
+	m_originYCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onExportButton ), NULL, this );
 
 }

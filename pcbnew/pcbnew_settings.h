@@ -163,29 +163,6 @@ public:
         int   design_blocks_panel_float_height;
     };
 
-    struct DIALOG_EXPORT_IDF
-    {
-        bool   auto_adjust;
-        int    ref_units;
-        double ref_x;
-        double ref_y;
-        bool   units_mils;
-        bool   no_unspecified;
-        bool   no_dnp;
-    };
-
-    struct DIALOG_EXPORT_STEP
-    {
-        int    origin_mode;
-        int    origin_units;
-        double origin_x;
-        double origin_y;
-        bool   no_unspecified;
-        bool   no_dnp;
-        bool   replace_models;
-        bool   overwrite_file;
-    };
-
     struct DIALOG_EXPORT_2581
     {
         int    precision;
@@ -223,19 +200,6 @@ public:
     {
         int width;
         int height;
-    };
-
-    struct DIALOG_PLOT
-    {
-        int    all_layers_on_one_page;
-        bool   edgecut_on_all_layers;
-        int    pads_drill_mode;
-        double fine_scale_x;
-        double fine_scale_y;
-        double ps_fine_width_adjust;
-        bool   check_zones_before_plotting;
-        bool   mirror;
-        bool   as_item_checkboxes;
     };
 
     struct FOOTPRINT_CHOOSER
@@ -297,10 +261,6 @@ public:
 
     AUI_PANELS m_AuiPanels;
 
-    DIALOG_EXPORT_IDF m_ExportIdf;
-
-    DIALOG_EXPORT_STEP m_ExportStep;
-
     DIALOG_EXPORT_2581 m_Export2581;
 
     DIALOG_EXPORT_ODBPP m_ExportODBPP;
@@ -310,8 +270,6 @@ public:
     DIALOG_EXPORT_D356 m_ExportD356;
 
     DIALOG_FOOTPRINT_WIZARD_LIST m_FootprintWizardList;
-
-    DIALOG_PLOT m_Plot;
 
     FOOTPRINT_CHOOSER m_FootprintChooser;
 

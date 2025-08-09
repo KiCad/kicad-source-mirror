@@ -41,13 +41,13 @@ class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
 public:
     DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame );
-    DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
-                 JOB_EXPORT_PCB_PLOT* aJob = nullptr );
+    DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_PCB_PLOT* aJob = nullptr );
 
     virtual ~DIALOG_PLOT();
 
-private:
+    bool TransferDataToWindow() override;
 
+private:
     // Event called functions
     void Plot( wxCommandEvent& event ) override;
     void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -69,13 +69,11 @@ private:
     void onPDFColorChoice( wxCommandEvent& event ) override;
 
     // other functions
-    void init_Dialog();      // main initialization
     void reInitDialog();     // initialization after calling drill dialog
     void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
     void arrangeAllLayersList( const LSEQ& aSeq );
-    void loadPlotParamsFromJob();
     void transferPlotParamsToJob();
     void updatePdfColorOptions();
 

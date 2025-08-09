@@ -25,42 +25,32 @@
 #pragma once
 
 #include <dialog_export_idf_base.h>
+#include <widgets/unit_binder.h>
 
 class PCB_EDIT_FRAME;
 
 class DIALOG_EXPORT_IDF3 : public DIALOG_EXPORT_IDF3_BASE
 {
-private:
-    bool   m_idfThouOpt; // remember last preference for units in THOU
-    bool   m_AutoAdjust; // remember last Reference Point AutoAdjust setting
-    int    m_RefUnits;   // remember last units for Reference Point
-    double m_XRef;       // remember last X Reference Point
-    double m_YRef;       // remember last Y Reference Point
-
-    PCB_EDIT_FRAME* m_editFrame;
-
 public:
     DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame );
-
-    ~DIALOG_EXPORT_IDF3();
-
-    bool GetThouOption() { return m_rbUnitSelection->GetSelection() == 1; }
+    ~DIALOG_EXPORT_IDF3() = default;
 
     wxFilePickerCtrl* FilePicker() { return m_filePickerIDF; }
 
-    int GetRefUnitsChoice() { return m_IDF_RefUnitChoice->GetSelection(); }
+    bool GetSetBoardReferencePoint() { return m_cbSetBoardReferencePoint->GetValue(); }
+    double GetXRefMM() { return pcbIUScale.IUTomm( m_xPos.GetIntValue() ); }
+    double GetYRefMM() { return pcbIUScale.IUTomm( m_yPos.GetIntValue() ); }
 
-    double GetXRef() { return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_IDF_Xref->GetValue() ); }
-
-    double GetYRef() { return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_IDF_Yref->GetValue() ); }
-
+    bool GetThouOption() { return m_outputUnitsChoice->GetSelection() == 1; }
     bool GetNoUnspecifiedOption() { return m_cbRemoveUnspecified->GetValue(); }
-
     bool GetNoDNPOption() { return m_cbRemoveDNP->GetValue(); }
 
-    bool GetAutoAdjustOffset() { return m_cbAutoAdjustOffset->GetValue(); }
+    void OnBoardReferencePointChecked( wxCommandEvent& event );
 
-    void OnAutoAdjustOffset( wxCommandEvent& event );
-
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+private:
+    UNIT_BINDER     m_xPos;
+    UNIT_BINDER     m_yPos;
 };

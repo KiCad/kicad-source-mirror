@@ -40,6 +40,8 @@ public:
     DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS* aJob, PCB_EDIT_FRAME* aEditFrame,
                                    wxWindow* aParent );
 
+    bool TransferDataToWindow() override;
+
 private:
     void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void onGenerate( wxCommandEvent& event ) override;

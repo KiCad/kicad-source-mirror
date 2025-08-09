@@ -50,12 +50,9 @@ const int pcbnewSchemaVersion = 5;
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
         : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
-          m_ExportIdf(),
-          m_ExportStep(),
           m_ExportODBPP(),
           m_ExportVrml(),
           m_FootprintWizardList(),
-          m_Plot(),
           m_FootprintChooser(),
           m_Zones(),
           m_FootprintViewer(),
@@ -312,45 +309,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "export_odb.compress_format",
             &m_ExportODBPP.compressFormat, 1 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "export_idf.auto_adjust",
-            &m_ExportIdf.auto_adjust, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_idf.ref_units",
-            &m_ExportIdf.ref_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "export_idf.ref_x",
-            &m_ExportIdf.ref_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "export_idf.ref_y",
-            &m_ExportIdf.ref_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_idf.units_mils",
-            &m_ExportIdf.units_mils, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_step.origin_mode",
-            &m_ExportStep.origin_mode, 1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_step.origin_units",
-            &m_ExportStep.origin_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "export_step.origin_x",
-            &m_ExportStep.origin_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "export_step.origin_y",
-            &m_ExportStep.origin_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_step.no_unspecified",
-            &m_ExportStep.no_unspecified, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_step.no_dnp",
-            &m_ExportStep.no_dnp, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_step.replace_models",
-            &m_ExportStep.replace_models, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_step.overwrite_file",
-            &m_ExportStep.overwrite_file, true ) );
-
     m_params.emplace_back( new PARAM<int>( "export_vrml.units",
             &m_ExportVrml.units, 1 ) );
 
@@ -383,30 +341,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
             &m_Zones.net_sort_mode, -1 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.edgecut_on_all_layers",
-            &m_Plot.edgecut_on_all_layers, true ) );
-
-    m_params.emplace_back( new PARAM<int>( "plot.pads_drill_mode",
-            &m_Plot.pads_drill_mode, 2 ) );
-
-    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_x",
-            &m_Plot.fine_scale_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_y",
-            &m_Plot.fine_scale_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "plot.ps_fine_width_adjust",
-            &m_Plot.ps_fine_width_adjust, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.check_zones_before_plotting",
-            &m_Plot.check_zones_before_plotting, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.mirror",
-            &m_Plot.mirror, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.as_item_checkboxes",
-            &m_Plot.as_item_checkboxes, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 7" ) );
@@ -578,45 +512,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     ret &= fromLegacy<double>( aCfg, "PlotLineWidth_mm",            "plot.line_width" );
 
-    aCfg->SetPath( "/dialogs/cleanup_tracks" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupVias",            "cleanup.cleanup_vias" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupMergeSegments",   "cleanup.merge_segments" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupUnconnected",     "cleanup.cleanup_unconnected" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupShortCircuit",    "cleanup.cleanup_short_circuits" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupTracksInPads",    "cleanup.cleanup_tracks_in_pad" );
-    aCfg->SetPath( "../.." );
-
-    ret &= fromLegacy<bool>(   aCfg, "RefillZonesBeforeDrc",  "drc_dialog.refill_zones" );
-    ret &= fromLegacy<bool>(   aCfg, "DrcTestFootprints",     "drc_dialog.test_footprints" );
-
-    ret &= fromLegacy<bool>(   aCfg, "DrillMergePTHNPTH",    "gen_drill.merge_pth_npth" );
-    ret &= fromLegacy<bool>(   aCfg, "DrillMinHeader",       "gen_drill.minimal_header" );
-    ret &= fromLegacy<bool>(   aCfg, "DrillMirrorYOpt",      "gen_drill.mirror" );
-    ret &= fromLegacy<bool>(   aCfg, "DrillUnit",            "gen_drill.unit_drill_is_inch" );
-    ret &= fromLegacy<bool>(   aCfg, "OvalHolesRouteMode",   "gen_drill.use_route_for_oval_holes" );
-    ret &= fromLegacy<int>(    aCfg, "DrillFileType",        "gen_drill.drill_file_type" );
-    ret &= fromLegacy<int>(    aCfg, "DrillMapFileType",     "gen_drill.map_file_type" );
-    ret &= fromLegacy<int>(    aCfg, "DrillZerosFormat",     "gen_drill.zeros_format" );
-
-    ret &= fromLegacy<bool>(   aCfg, "IDFRefAutoAdj",        "export_idf.auto_adjust" );
-    ret &= fromLegacy<int>(    aCfg, "IDFRefUnits",          "export_idf.ref_units" );
-    ret &= fromLegacy<double>( aCfg, "IDFRefX",              "export_idf.ref_x" );
-    ret &= fromLegacy<double>( aCfg, "IDFRefY",              "export_idf.ref_y" );
-    ret &= fromLegacy<bool>(   aCfg, "IDFExportThou",        "export_idf.units_mils" );
-
-    ret &= fromLegacy<int>(    aCfg, "STEP_Origin_Opt",      "export_step.origin_mode" );
-    ret &= fromLegacy<int>(    aCfg, "STEP_UserOriginUnits", "export_step.origin_units" );
-    ret &= fromLegacy<double>( aCfg, "STEP_UserOriginX",     "export_step.origin_x" );
-    ret &= fromLegacy<double>( aCfg, "STEP_UserOriginY",     "export_step.origin_y" );
-    ret &= fromLegacy<bool>(   aCfg, "STEP_NoVirtual",       "export_step.no_virtual" );
-
-    ret &= fromLegacy<bool>(   aCfg, "PlotSVGModeColor",     "export_svg.black_and_white" );
-    ret &= fromLegacy<bool>(   aCfg, "PlotSVGModeMirror",    "export_svg.mirror" );
-    ret &= fromLegacy<bool>(   aCfg, "PlotSVGModeOneFile",   "export_svg.one_file" );
-    ret &= fromLegacy<bool>(   aCfg, "PlotSVGBrdEdge",       "export_svg.plot_board_edges" );
-    ret &= fromLegacy<int>(    aCfg, "PlotSVGPageOpt",       "export_svg.page_size" );
-    ret &= fromLegacyString(   aCfg, "PlotSVGDirectory",     "export_svg.output_dir" );
-
     {
         nlohmann::json js = nlohmann::json::array();
         wxString       key;
@@ -667,41 +562,12 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     //
     // NOTE: there's no value in line-wrapping these; it just makes the table unreadable.
     //
-    ret &= fromLegacy<int>(    aCfg, "VrmlExportUnit",       "export_vrml.units" );
-    ret &= fromLegacy<bool>(   aCfg, "VrmlExportCopyFiles",  "export_vrml.copy_3d_models" );
-    ret &= fromLegacy<bool>(   aCfg, "VrmlUseRelativePaths", "export_vrml.use_relative_paths" );
-    ret &= fromLegacy<int>(    aCfg, "VrmlRefUnits",         "export_vrml.ref_units" );
-    ret &= fromLegacy<double>( aCfg, "VrmlRefX",             "export_vrml.ref_x" );
-    ret &= fromLegacy<double>( aCfg, "VrmlRefY",             "export_vrml.ref_y" );
-    ret &= fromLegacy<int>   ( aCfg, "VrmlOriginMode",       "export_vrml.origin_mode" );
-
     ret &= fromLegacy<int>(    aCfg, "Zone_Ouline_Hatch_Opt", "zones.hatching_style" );
     ret &= fromLegacy<int>(    aCfg, "Zone_NetSort_Opt",      "zones.net_sort_mode" );
     ret &= fromLegacy<double>( aCfg, "Zone_Clearance",        "zones.clearance" );
     ret &= fromLegacy<double>( aCfg, "Zone_Thickness",        "zones.min_thickness" );
     ret &= fromLegacy<double>( aCfg, "Zone_TH_Gap",           "zones.thermal_relief_gap" );
     ret &= fromLegacy<double>( aCfg, "Zone_TH_Copper_Width",  "zones.thermal_relief_copper_width" );
-
-    aCfg->SetPath( "ImportGraphics" );
-    ret &= fromLegacy<int>(    aCfg, "BoardLayer",           "import_graphics.layer" );
-    ret &= fromLegacy<bool>(   aCfg, "InteractivePlacement", "import_graphics.interactive_placement" );
-    ret &= fromLegacyString(   aCfg, "LastFile",             "import_graphics.last_file" );
-    ret &= fromLegacy<double>( aCfg, "LineWidth",            "import_graphics.line_width" );
-    ret &= fromLegacy<int>(    aCfg, "LineWidthUnits",       "import_graphics.line_width_units" );
-    ret &= fromLegacy<int>(    aCfg, "PositionUnits",        "import_graphics.origin_units" );
-    ret &= fromLegacy<double>( aCfg, "PositionX",            "import_graphics.origin_x" );
-    ret &= fromLegacy<double>( aCfg, "PositionY",            "import_graphics.origin_y" );
-    aCfg->SetPath( ".." );
-
-    ret &= fromLegacy<int>(  aCfg, "NetlistReportFilterMsg",       "netlist.report_filter" );
-    ret &= fromLegacy<bool>( aCfg, "NetlistUpdateFootprints",      "netlist.update_footprints" );
-    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteShortingTracks",  "netlist.delete_shorting_tracks" );
-    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteExtraFootprints", "netlist.delete_extra_footprints" );
-
-    ret &= fromLegacy<int>(    aCfg, "PlaceFileUnits",          "place_file.units" );
-    ret &= fromLegacy<int>(    aCfg, "PlaceFileOpts",           "place_file.file_options" );
-    ret &= fromLegacy<int>(    aCfg, "PlaceFileFormat",         "place_file.file_format" );
-    ret &= fromLegacy<bool>(   aCfg, "PlaceFileIncludeBrdEdge", "place_file.include_board_edge" );
 
     ret &= fromLegacy<int>(    aCfg, "PrintSinglePage",          "plot.all_layers_on_one_page" );
     ret &= fromLegacy<int>(    aCfg, "PrintPadsDrillOpt",        "plot.pads_drill_mode" );

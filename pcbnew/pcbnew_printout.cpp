@@ -53,30 +53,12 @@ PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
 void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Load( aConfig );
-
-    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-    {
-        m_DrillMarks = static_cast<DRILL_MARKS>( cfg->m_Plot.pads_drill_mode );
-        m_Pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
-        m_PrintEdgeCutsOnAllPages = cfg->m_Plot.edgecut_on_all_layers;
-        m_Mirror                  = cfg->m_Plot.mirror;
-        m_AsItemCheckboxes        = cfg->m_Plot.as_item_checkboxes;
-    }
 }
 
 
 void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Save( aConfig );
-
-    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-    {
-        cfg->m_Plot.pads_drill_mode        = (int)m_DrillMarks;
-        cfg->m_Plot.all_layers_on_one_page = m_Pagination;
-        cfg->m_Plot.edgecut_on_all_layers  = m_PrintEdgeCutsOnAllPages;
-        cfg->m_Plot.mirror                 = m_Mirror;
-        cfg->m_Plot.as_item_checkboxes     = m_AsItemCheckboxes;
-    }
 }
 
 

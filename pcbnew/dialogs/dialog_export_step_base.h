@@ -74,12 +74,12 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbGridOrigin;
 		wxRadioButton* m_rbUserDefinedOrigin;
 		wxRadioButton* m_rbBoardCenterOrigin;
-		wxStaticText* m_staticTextUnits;
-		wxChoice* m_STEP_OrgUnitChoice;
-		wxStaticText* m_staticTextXpos;
-		TEXT_CTRL_EVAL* m_STEP_Xorg;
-		wxStaticText* m_staticTextYpos;
-		TEXT_CTRL_EVAL* m_STEP_Yorg;
+		wxStaticText* m_originXLabel;
+		TEXT_CTRL_EVAL* m_originXCtrl;
+		wxStaticText* m_originXUnits;
+		wxStaticText* m_originYLabel;
+		TEXT_CTRL_EVAL* m_originYCtrl;
+		wxStaticText* m_originYUnits;
 		wxCheckBox* m_cbRemoveDNP;
 		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbSubstModels;
@@ -96,7 +96,6 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCbExportComponents( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComponentModeChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onExportButton( wxCommandEvent& event ) { event.Skip(); }

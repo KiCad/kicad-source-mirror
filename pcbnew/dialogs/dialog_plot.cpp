@@ -110,12 +110,11 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame )
 }
 
 
-DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
-                          JOB_EXPORT_PCB_PLOT* aJob ) :
-    DIALOG_PLOT_BASE( aParent ),
-    m_editFrame( aEditFrame ),
-    m_trackWidthCorrection( m_editFrame, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits ),
-    m_job( aJob )
+DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_PCB_PLOT* aJob ) :
+        DIALOG_PLOT_BASE( aParent ),
+        m_editFrame( aEditFrame ),
+        m_trackWidthCorrection( m_editFrame, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits ),
+        m_job( aJob )
 {
     BOARD* board = m_editFrame->GetBoard();
 
@@ -146,7 +145,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
+    // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
     int                       order = 0;
@@ -231,7 +230,8 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
 
 	bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 5 );
 
-    init_Dialog();
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
 
     if( m_job )
     {
@@ -250,13 +250,11 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     m_bpMoveUp->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
     m_bpMoveDown->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
 
-    m_layerCheckListBox->Connect( wxEVT_RIGHT_DOWN,
-                                  wxMouseEventHandler( DIALOG_PLOT::OnRightClickLayers ), nullptr,
-                                  this );
+    m_layerCheckListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT::OnRightClickLayers ),
+                                  nullptr, this );
 
-    m_plotAllLayersList->Connect( wxEVT_RIGHT_DOWN,
-                                  wxMouseEventHandler( DIALOG_PLOT::OnRightClickAllLayers ), nullptr,
-                                  this );
+    m_plotAllLayersList->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT::OnRightClickAllLayers ),
+                                  nullptr, this );
 }
 
 
@@ -272,7 +270,7 @@ DIALOG_PLOT::~DIALOG_PLOT()
 }
 
 
-void DIALOG_PLOT::init_Dialog()
+bool DIALOG_PLOT::TransferDataToWindow()
 {
     BOARD*      board = m_editFrame->GetBoard();
     wxFileName  fileName;
@@ -281,8 +279,6 @@ void DIALOG_PLOT::init_Dialog()
 
     // Could devote a PlotOrder() function in place of UIOrder().
     m_layerList = board->GetEnabledLayers().UIOrder();
-
-    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
     if( !m_job && !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
         m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
@@ -293,31 +289,14 @@ void DIALOG_PLOT::init_Dialog()
     {
         // When we are using a job we get the PS adjust values from the plot options
         // The exception is when this is a fresh job and we want to get the global values as defaults
-        m_XScaleAdjust = m_plotOpts.GetFineScaleAdjustX();
-        m_YScaleAdjust = m_plotOpts.GetFineScaleAdjustY();
-        m_PSWidthAdjust = m_plotOpts.GetWidthAdjust();
-    }
-    else
-    {
-        // The default is to use the global adjusts from the pcbnew settings
-        m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
-        m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
-        // m_PSWidthAdjust is stored in mm in user config
-        m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );
-    }
+        m_fineAdjustXCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
+                                                                          m_plotOpts.GetFineScaleAdjustX() ) );
 
-    if( m_job )
-    {
+        m_fineAdjustYCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
+                                                                          m_plotOpts.GetFineScaleAdjustY() ) );
+        m_trackWidthCorrection.SetValue( m_plotOpts.GetWidthAdjust() );
         m_zoneFillCheck->SetValue( m_job->m_checkZonesBeforePlot );
     }
-    else
-    {
-        m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
-    }
-
-    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-    m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
-
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
@@ -334,25 +313,6 @@ void DIALOG_PLOT::init_Dialog()
     case PLOT_FORMAT::HPGL:   /* no longer supported */           break;
     case PLOT_FORMAT::PDF:    m_plotFormatOpt->SetSelection( 4 ); break;
     }
-
-    // Test for a reasonable scale value. Set to 1 if problem
-    if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
-        || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
-    {
-        m_XScaleAdjust = m_YScaleAdjust = 1.0;
-    }
-
-    m_fineAdjustXCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
-            unityScale, EDA_UNITS::UNSCALED, m_XScaleAdjust ) );
-
-    m_fineAdjustYCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
-            unityScale, EDA_UNITS::UNSCALED, m_YScaleAdjust ) );
-
-    // Test for a reasonable PS width correction value. Set to 0 if problem.
-    if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
-        m_PSWidthAdjust = 0.;
-
-    m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
 
     m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
     m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
@@ -427,8 +387,7 @@ void DIALOG_PLOT::init_Dialog()
     m_DXF_plotModeOpt->SetValue( m_plotOpts.GetDXFPlotPolygonMode() );
 
     // DXF text mode
-    m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode()
-                                            == PLOT_TEXT_MODE::DEFAULT );
+    m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode() == PLOT_TEXT_MODE::DEFAULT );
 
     // DXF units selection
     m_DXF_plotUnits->SetSelection( m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCH ? 0 : 1 );
@@ -453,6 +412,8 @@ void DIALOG_PLOT::init_Dialog()
     // Update options values:
     wxCommandEvent cmd_event;
     SetPlotFormat( cmd_event );
+
+    return true;
 }
 
 
@@ -1095,25 +1056,8 @@ void DIALOG_PLOT::applyPlotSettings()
         reporter.Report( msg, RPT_SEVERITY_INFO );
     }
 
-    auto cfg = m_editFrame->GetPcbNewSettings();
-
-    if( m_job )
-    {
-        // When using a job we store the adjusts in the plot options
-        tempOptions.SetFineScaleAdjustX( m_XScaleAdjust );
-        tempOptions.SetFineScaleAdjustY( m_YScaleAdjust );
-    }
-    else
-    {
-        // The default is to use the pcbnew settings, so here we modify them
-        cfg->m_Plot.fine_scale_x = m_XScaleAdjust;
-        cfg->m_Plot.fine_scale_y = m_YScaleAdjust;
-    }
-
-    cfg->m_Plot.check_zones_before_plotting = m_zoneFillCheck->GetValue();
-
     // PS Width correction
-    if( !setInt( &m_PSWidthAdjust, m_trackWidthCorrection.GetValue(), m_widthAdjustMinValue,
+    if( !setInt( &m_PSWidthAdjust, m_trackWidthCorrection.GetIntValue(), m_widthAdjustMinValue,
                  m_widthAdjustMaxValue ) )
     {
         m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
@@ -1127,13 +1071,9 @@ void DIALOG_PLOT::applyPlotSettings()
     if( m_job )
     {
         // When using a job we store the adjusts in the plot options
+        tempOptions.SetFineScaleAdjustX( m_XScaleAdjust );
+        tempOptions.SetFineScaleAdjustY( m_YScaleAdjust );
         tempOptions.SetWidthAdjust( m_PSWidthAdjust );
-    }
-    else
-    {
-        // The default is to use the pcbnew settings, so here we modify them
-        // Store m_PSWidthAdjust in mm in user config
-        cfg->m_Plot.ps_fine_width_adjust = pcbIUScale.IUTomm( m_PSWidthAdjust );
     }
 
     tempOptions.SetFormat( getPlotFormat() );
@@ -1329,8 +1269,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             }
         }
 
-        pcbPlotter.Plot( outputDir.GetPath(), layersToPlot, commonLayers,
-                         m_useGerberExtensions->GetValue() );
+        pcbPlotter.Plot( outputDir.GetPath(), layersToPlot, commonLayers, m_useGerberExtensions->GetValue() );
     }
 }
 
