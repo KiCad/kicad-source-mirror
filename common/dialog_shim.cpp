@@ -511,7 +511,12 @@ void DIALOG_SHIM::LoadControlState()
                         else if( wxOwnerDrawnComboBox* od_combo = dynamic_cast<wxOwnerDrawnComboBox*>( win ) )
                         {
                             if( j.is_number_integer() )
-                                od_combo->SetSelection( j.get<int>() );
+                            {
+                                int index = j.get<int>();
+
+                                if( index >= 0 && index < (int) od_combo->GetCount() )
+                                    od_combo->SetSelection( index );
+                            }
                         }
                         else if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
                         {
@@ -521,7 +526,12 @@ void DIALOG_SHIM::LoadControlState()
                         else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
                         {
                             if( j.is_number_integer() )
-                                choice->SetSelection( j.get<int>() );
+                            {
+                                int index = j.get<int>();
+
+                                if( index >= 0 && index < (int) choice->GetCount() )
+                                    choice->SetSelection( index );
+                            }
                         }
                         else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
                         {
@@ -541,7 +551,12 @@ void DIALOG_SHIM::LoadControlState()
                         else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
                         {
                             if( j.is_number_integer() )
-                                radioBox->SetSelection( j.get<int>() );
+                            {
+                                int index = j.get<int>();
+
+                                if( index >= 0 && index < (int) radioBox->GetCount() )
+                                    radioBox->SetSelection( index );
+                            }
                         }
                         else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
                         {
