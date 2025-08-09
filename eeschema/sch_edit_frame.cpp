@@ -148,8 +148,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_designBlocksPane( nullptr )
 {
     m_maximizeByDefault = true;
-    m_schematic = new SCHEMATIC( nullptr );
+    m_schematic = new SCHEMATIC( &Prj() );
     m_schematic->SetSchematicHolder( this );
+    CreateDefaultScreens();
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_supportsAutoSave = true;
@@ -175,9 +176,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcons( icon_bundle );
 
     LoadSettings( eeconfig() );
-
-    // NB: also links the schematic to the loaded project
-    CreateScreens();
 
     SCH_SHEET_PATH root;
     root.push_back( &Schematic().Root() );
@@ -897,31 +895,10 @@ wxString SCH_EDIT_FRAME::GetFullScreenDesc() const
 }
 
 
-void SCH_EDIT_FRAME::CreateScreens()
+void SCH_EDIT_FRAME::CreateDefaultScreens()
 {
-    m_schematic->Reset();
-    m_schematic->SetProject( &Prj() );
-
-    SCH_SHEET* rootSheet = new SCH_SHEET( m_schematic );
-    m_schematic->SetRoot( rootSheet );
-
-    SCH_SCREEN* rootScreen = new SCH_SCREEN( m_schematic );
-    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
-    m_schematic->Root().SetScreen( rootScreen );
+    m_schematic->CreateDefaultScreens();
     SetScreen( Schematic().RootScreen() );
-
-
-    m_schematic->RootScreen()->SetFileName( wxEmptyString );
-
-    // Don't leave root page number empty
-    SCH_SHEET_PATH rootSheetPath;
-
-    rootSheetPath.push_back( rootSheet );
-    m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
-    rootSheetPath.SetPageNumber( wxT( "1" ) );
-
-    // Rehash sheetpaths in hierarchy since we changed the uuid.
-    m_schematic->RefreshHierarchy();
 
     if( GetScreen() == nullptr )
     {
@@ -2489,4 +2466,22 @@ void SCH_EDIT_FRAME::ToggleLibraryTree()
 
         m_auimgr.Update();
     }
+}
+
+void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
+{
+    wxCHECK( aSchematic, /* void */ );
+
+    if( m_schematic )
+        m_schematic->SetProject( nullptr );
+
+    aSchematic->SetProject( &Prj() );
+    delete m_schematic;
+
+    m_schematic = aSchematic;
+
+    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
+    static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
+    m_toolManager->SetEnvironment( m_schematic, GetCanvas()->GetView(), GetCanvas()->GetViewControls(), config(),
+                                   this );
 }

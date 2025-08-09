@@ -143,21 +143,6 @@ SCHEMATIC::~SCHEMATIC()
 
 void SCHEMATIC::Reset()
 {
-    if( m_project && !m_project->IsNullProject() )
-    {
-        PROJECT_FILE& project = m_project->GetProjectFile();
-
-        // d'tor will save settings to file
-        delete project.m_ErcSettings;
-        project.m_ErcSettings = nullptr;
-
-        // d'tor will save settings to file
-        delete project.m_SchematicSettings;
-        project.m_SchematicSettings = nullptr;
-
-        m_project = nullptr; // clear the project, so we don't do this again when setting a new one
-    }
-
     delete m_rootSheet;
 
     m_rootSheet = nullptr;
@@ -1571,4 +1556,30 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
     if( !localCommit.Empty() )
         localCommit.Push( _( "Schematic Cleanup" ) );
+}
+
+
+void SCHEMATIC::CreateDefaultScreens()
+{
+    Reset();
+
+    SCH_SHEET* rootSheet = new SCH_SHEET( this );
+    SetRoot( rootSheet );
+
+    SCH_SCREEN* rootScreen = new SCH_SCREEN( this );
+    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
+    Root().SetScreen( rootScreen );
+
+
+    RootScreen()->SetFileName( wxEmptyString );
+
+    // Don't leave root page number empty
+    SCH_SHEET_PATH rootSheetPath;
+
+    rootSheetPath.push_back( rootSheet );
+    RootScreen()->SetPageNumber( wxT( "1" ) );
+    rootSheetPath.SetPageNumber( wxT( "1" ) );
+
+    // Rehash sheetpaths in hierarchy since we changed the uuid.
+    RefreshHierarchy();
 }

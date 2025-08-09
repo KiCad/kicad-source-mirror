@@ -443,6 +443,8 @@ public:
      */
     bool Contains( const SCH_REFERENCE& aRef ) const;
 
+    void CreateDefaultScreens();
+
     /**
      * True if a SCHEMATIC exists, false if not
      */

@@ -149,7 +149,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         ClearRepeatItemsList();
         SetScreen( nullptr );
         m_toolManager->GetTool<SCH_INSPECTION_TOOL>()->Reset( TOOL_BASE::SUPERMODEL_RELOAD );
-        CreateScreens();
     }
 
     SetStatusText( wxEmptyString );
@@ -161,6 +160,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     bool differentProject = pro.GetFullPath() != Prj().GetProjectFullName();
 
+    // This is for handling standalone mode schematic changes
     if( differentProject )
     {
         if( !Prj().IsNullProject() )
@@ -169,6 +169,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             GetSettingsManager()->SaveProject();
         }
 
+        // disconnect existing project from schematic before we unload the project
         Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj(), false );
 
@@ -181,9 +182,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // standalone and opening a schematic that has been moved from its project folder.
         if( !pro.Exists() && !legacyPro.Exists() && !( aCtl & KICTL_CREATE ) )
             Prj().SetReadOnly();
-
-        CreateScreens();
     }
+
+    // Start a new schematic object now that we sorted out our project
+    std::unique_ptr<SCHEMATIC> newSchematic = std::make_unique<SCHEMATIC>( &Prj() );
 
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName,
                                                                                  KICTL_KICAD_ONLY );
@@ -213,10 +215,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
     PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
-    // Load project settings after schematic has been set up with the project link, since this will
-    // update some of the needed schematic settings such as drawing defaults
-    LoadProjectSettings();
-
     wxFileName rfn( GetCurrentFileName() );
     rfn.MakeRelativeTo( Prj().GetProjectPath() );
     LoadWindowState( rfn.GetFullPath() );
@@ -230,6 +228,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( is_new || schFileType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
     {
+        newSchematic->CreateDefaultScreens();
+        SetSchematic( newSchematic.release() );
+
         // mark new, unsaved file as modified.
         GetScreen()->SetContentModified();
         GetScreen()->SetFileName( fullFileName );
@@ -275,13 +276,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 wxBusyCursor    busy;
                 WINDOW_DISABLER raii( this );
 
-                Schematic().SetRoot( pi->LoadSchematicFile( fullFileName, &Schematic() ) );
+                newSchematic->SetRoot( pi->LoadSchematicFile( fullFileName, newSchematic.get() ) );
 
                 // Make ${SHEETNAME} work on the root sheet until we properly support
                 // naming the root sheet
-                Schematic().Root().SetName( _( "Root" ) );
+                newSchematic->Root().SetName( _( "Root" ) );
                 wxLogTrace( tracePathsAndFiles, wxS( "Loaded schematic with root sheet UUID %s" ),
-                            Schematic().Root().m_Uuid.AsString() );
+                            newSchematic->Root().m_Uuid.AsString() );
             }
 
             if( !pi->GetError().IsEmpty() )
@@ -293,6 +294,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const FUTURE_FORMAT_ERROR& ffe )
         {
+            newSchematic->CreateDefaultScreens();
             msg.Printf( _( "Error loading schematic '%s'." ), fullFileName );
             progressReporter.Hide();
             DisplayErrorMessage( this, msg, ffe.Problem() );
@@ -301,6 +303,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const IO_ERROR& ioe )
         {
+            newSchematic->CreateDefaultScreens();
             msg.Printf( _( "Error loading schematic '%s'." ), fullFileName );
             progressReporter.Hide();
             DisplayErrorMessage( this, msg, ioe.What() );
@@ -309,12 +312,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const std::bad_alloc& )
         {
+            newSchematic->CreateDefaultScreens();
             msg.Printf( _( "Memory exhausted loading schematic '%s'." ), fullFileName );
             progressReporter.Hide();
             DisplayErrorMessage( this, msg, wxEmptyString );
 
             failedLoad = true;
         }
+
+        SetSchematic( newSchematic.release() );
 
         // This fixes a focus issue after the progress reporter is done on GTK.  It shouldn't
         // cause any issues on macOS and Windows.  If it does, it will have to be conditionally
@@ -325,7 +331,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
-            CreateScreens();
+            CreateDefaultScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
             msg.Printf( _( "Failed to load '%s'." ), fullFileName );
@@ -333,6 +339,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             return false;
         }
+
+        // Load project settings after schematic has been set up with the project link, since this will
+        // update some of the needed schematic settings such as drawing defaults
+        LoadProjectSettings();
 
         // It's possible the schematic parser fixed errors due to bugs so warn the user
         // that the schematic has been fixed (modified).
@@ -461,7 +471,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 if( dlgMissingCache.ShowModal() == wxID_CANCEL )
                 {
                     Schematic().Reset();
-                    CreateScreens();
+                    CreateDefaultScreens();
                     return false;
                 }
             }
@@ -695,8 +705,6 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         wxFileName projectFn( dlg.GetPath() );
         projectFn.SetExt( FILEEXT::ProjectFileExtension );
         GetSettingsManager()->LoadProject( projectFn.GetFullPath() );
-
-        Schematic().SetProject( &Prj() );
     }
 
     wxFileName fn = dlg.GetPath();
@@ -726,7 +734,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( pluginType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
     {
         wxLogError( _( "No loader can read the specified file: '%s'." ), fn.GetFullPath() );
-        CreateScreens();
+        CreateDefaultScreens();
         SetScreen( Schematic().RootScreen() );
         return;
     }
@@ -1315,6 +1323,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     wxCommandEvent changingEvt( EDA_EVT_SCHEMATIC_CHANGING );
     ProcessEventLocally( changingEvt );
 
+    std::unique_ptr<SCHEMATIC> newSchematic = std::make_unique<SCHEMATIC>( &Prj() );
+
     switch( fileType )
     {
     case SCH_IO_MGR::SCH_ALTIUM:
@@ -1348,8 +1358,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             pi->SetProgressReporter( &progressReporter );
 
-            SCH_SHEET* loadedSheet = pi->LoadSchematicFile( aFileName, &Schematic(), nullptr,
+            SCH_SHEET* loadedSheet = pi->LoadSchematicFile( aFileName, newSchematic.get(), nullptr,
                                                             aProperties );
+
+            SetSchematic( newSchematic.release() );
 
             if( loadedSheet )
             {
@@ -1389,14 +1401,14 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
             }
             else
             {
-                CreateScreens();
+                CreateDefaultScreens();
             }
         }
         catch( const IO_ERROR& ioe )
         {
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
-            CreateScreens();
+            CreateDefaultScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
             wxString msg = wxString::Format( _( "Error loading schematic '%s'." ), aFileName );
@@ -1407,7 +1419,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         }
         catch( const std::exception& exc )
         {
-            CreateScreens();
+            CreateDefaultScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
             wxString msg = wxString::Format( _( "Unhandled exception occurred loading schematic "

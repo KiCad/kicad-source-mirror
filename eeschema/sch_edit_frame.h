@@ -165,7 +165,7 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void CreateScreens();
+    void CreateDefaultScreens();
 
     void setupUIConditions() override;
 
@@ -443,6 +443,8 @@ public:
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
+    void SetSchematic( SCHEMATIC* aSchematic );
+
     wxString GetCurrentFileName() const override;
 
     /**
@@ -595,7 +597,7 @@ public:
      * @param aItem The junction to delete
      */
     void DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aItem );
-    
+
     void UpdateHopOveredWires( SCH_ITEM* aItem );
 
     void FlipBodyStyle( SCH_SYMBOL* aSymbol );
