@@ -2969,7 +2969,7 @@
             <property name="orient">wxVERTICAL</property>
             <property name="permission">none</property>
             <object class="sizeritem" expanded="false">
-              <property name="border">5</property>
+              <property name="border">10</property>
               <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
               <property name="proportion">1</property>
               <object class="wxPanel" expanded="false">

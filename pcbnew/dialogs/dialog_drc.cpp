@@ -1271,8 +1271,6 @@ void DIALOG_DRC::updateDisplayedCounts()
         numExcluded += m_fpWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    bool showErrors = m_showErrors->GetValue();
-    bool showWarnings = m_showWarnings->GetValue();
     bool errorsOverflowed = false;
     bool warningsOverflowed = false;
     bool markersOverflowed = false;
@@ -1292,9 +1290,9 @@ void DIALOG_DRC::updateDisplayedCounts()
 
             if( ii == DRCE_UNCONNECTED_ITEMS )
             {
-                if( showWarnings && severity == RPT_SEVERITY_WARNING )
+                if( m_showWarnings->GetValue() && severity == RPT_SEVERITY_WARNING )
                     unconnectedOverflowed = true;
-                else if( showErrors && severity == RPT_SEVERITY_ERROR )
+                else if( m_showErrors->GetValue() && severity == RPT_SEVERITY_ERROR )
                     unconnectedOverflowed = true;
             }
             else if(    ii == DRCE_MISSING_FOOTPRINT
@@ -1304,16 +1302,16 @@ void DIALOG_DRC::updateDisplayedCounts()
                      || ii == DRCE_SCHEMATIC_PARITY
                      || ii == DRCE_FOOTPRINT_FILTERS )
             {
-                if( showWarnings && severity == RPT_SEVERITY_WARNING )
+                if( m_showWarnings->GetValue() && severity == RPT_SEVERITY_WARNING )
                     footprintsOverflowed = true;
-                else if( showErrors && severity == RPT_SEVERITY_ERROR )
+                else if( m_showErrors->GetValue() && severity == RPT_SEVERITY_ERROR )
                     footprintsOverflowed = true;
             }
             else
             {
-                if( showWarnings && severity == RPT_SEVERITY_WARNING )
+                if( m_showWarnings->GetValue() && severity == RPT_SEVERITY_WARNING )
                     markersOverflowed = true;
-                else if( showErrors && severity == RPT_SEVERITY_ERROR )
+                else if( m_showErrors->GetValue() && severity == RPT_SEVERITY_ERROR )
                     markersOverflowed = true;
             }
         }

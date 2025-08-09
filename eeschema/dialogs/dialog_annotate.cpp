@@ -193,8 +193,6 @@ void DIALOG_ANNOTATE::InitValues()
     annotate_down_right_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::annotate_down_right ) );
     annotate_right_down_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::annotate_right_down ) );
 
-    m_MessageWindow->SetVisibleSeverities( cfg->m_AnnotatePanel.messages_filter );
-
     m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 160 ) );
 }
 

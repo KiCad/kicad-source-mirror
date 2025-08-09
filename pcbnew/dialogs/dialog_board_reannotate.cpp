@@ -118,9 +118,6 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_GridChoice->Set( gridslist );
 
-    for( wxRadioButton* button : m_scopeRadioButtons )
-        button->SetValue( false );
-
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );
 

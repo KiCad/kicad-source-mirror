@@ -294,7 +294,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,300 ) );
 
-	bSizerMessages->Add( m_MessageWindow, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerMessages->Add( m_MessageWindow, 1, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 
 	bmainSizer->Add( bSizerMessages, 1, wxEXPAND|wxTOP, 15 );

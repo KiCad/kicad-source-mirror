@@ -273,7 +273,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnCheckBox">onCheckBoxShowAll</event>
+                    <event name="OnCheckBox">onCheckBox</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
@@ -349,7 +349,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnCheckBox">onCheckBoxShowErrors</event>
+                    <event name="OnCheckBox">onCheckBox</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
@@ -488,7 +488,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnCheckBox">onCheckBoxShowWarnings</event>
+                    <event name="OnCheckBox">onCheckBox</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
@@ -627,7 +627,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnCheckBox">onCheckBoxShowActions</event>
+                    <event name="OnCheckBox">onCheckBox</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
@@ -703,7 +703,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnCheckBox">onCheckBoxShowInfos</event>
+                    <event name="OnCheckBox">onCheckBox</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">

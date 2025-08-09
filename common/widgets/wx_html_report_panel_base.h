@@ -55,11 +55,7 @@ class KICOMMON_API WX_HTML_REPORT_PANEL_BASE : public wxPanel
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onRightClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowErrors( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowWarnings( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowActions( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCheckBoxShowInfos( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnSaveToFile( wxCommandEvent& event ) { event.Skip(); }
 
 
