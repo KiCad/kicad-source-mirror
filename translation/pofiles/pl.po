@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-07-19 14:45+0000\n"
+"PO-Revision-Date: 2025-08-09 07:44+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -1736,9 +1736,8 @@ msgid "Errors"
 msgstr "Błędy"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Zamień i wyszukaj następny"
+msgstr "Zastąpić wczytany plik?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
@@ -20138,9 +20137,8 @@ msgid "Cell Height"
 msgstr "Wysokość komórki"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
-msgstr "Szerokość komórki"
+msgstr "Szerokość kolumny"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
 #, fuzzy
