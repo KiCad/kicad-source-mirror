@@ -1,7 +1,7 @@
-/*  bmp.h - header structure for Windows bitmap files
-
+/*  bmp.h - header structure for Windows bitmap files */
+/*
     libzint - the open source barcode library
-    Copyright (C) 2009-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2009-2024 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -28,29 +28,25 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
+/* SPDX-License-Identifier: BSD-3-Clause */
 
-#ifndef BMP_H
-#define BMP_H
+#ifndef Z_BMP_H
+#define Z_BMP_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
-#ifdef _MSC_VER
-#include <windows.h>
-#include "stdint_msvc.h"
-#else
-#include <stdint.h>
+#ifdef OUT_USE_PRAGMA_PACK
+#pragma pack(1)
 #endif
-
-#pragma pack (1)
 
     typedef struct bitmap_file_header {
         uint16_t header_field;
         uint32_t file_size;
         uint32_t reserved;
         uint32_t data_offset;
-    } bitmap_file_header_t;
+    } OUT_PACK bitmap_file_header_t;
 
     typedef struct bitmap_info_header {
         uint32_t header_size;
@@ -64,14 +60,22 @@ extern "C" {
         int32_t vert_res;
         uint32_t colours;
         uint32_t important_colours;
-    } bitmap_info_header_t;
+    } OUT_PACK bitmap_info_header_t;
 
-#pragma pack ()
+    typedef struct color_ref {
+        uint8_t blue;
+        uint8_t green;
+        uint8_t red;
+        uint8_t reserved;
+    } OUT_PACK color_ref_t;
+
+#ifdef OUT_USE_PRAGMA_PACK
+#pragma pack()
+#endif
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif /* BMP_H */
-
-
+/* vim: set ts=4 sw=4 et : */
+#endif /* Z_BMP_H */

@@ -1057,9 +1057,31 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
 
     if( remaining >= 103 )
     {
-        aReader.Skip( 24 ); // Unknown data
-        aReader.Skip( 64 ); // 2nd font name
-        aReader.Skip( 5 );  // Unknown flags
+        VECTOR2I unk_vec = aReader.ReadVector2ISize();
+        printf(" Unk vec: %d, %d\n", unk_vec.x, unk_vec.y);
+
+        barcode_margin = aReader.ReadVector2ISize();
+
+        int32_t unk32 = aReader.ReadKicadUnit();
+        printf(" Unk32: %d\n", unk32);
+
+        barcode_type = static_cast<ALTIUM_BARCODE_TYPE>( aReader.Read<uint8_t>() );
+        uint8_t unk8 = aReader.Read<uint8_t>();
+        printf(" Unk8: %u\n", unk8);
+
+        barcode_inverted = aReader.Read<uint8_t>() != 0;
+        fonttype = static_cast<ALTIUM_TEXT_TYPE>( aReader.Read<uint8_t>() );
+
+        aReader.ReadBytes( fontData, sizeof( fontData ) );
+        barcode_fontname = wxString( fontData, wxMBConvUTF16LE(), sizeof( fontData ) ).BeforeFirst( '\0' );
+
+        for( size_t ii = 0; ii < 5; ++ii )
+        {
+            uint8_t temp = aReader.Peek<uint8_t>();
+            uint32_t temp32 = ii < 1 ? ALTIUM_PROPS_UTILS::ConvertToKicadUnit( aReader.Peek<uint32_t>() ) : 0;
+            printf( "2ATEXT6 %zu:\t Byte:%u, Kicad:%u\n", ii, temp, temp32 );
+            aReader.Skip( 1 );
+        }
 
         // "Frame" text type flag
         isFrame = aReader.Read<uint8_t>() != 0;
@@ -1067,7 +1089,13 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
         // Use "Offset" border value instead of "Margin"
         isOffsetBorder = aReader.Read<uint8_t>() != 0;
 
-        aReader.Skip( 8 ); // Unknown data
+        for( size_t ii = 0; ii < 8; ++ii )
+        {
+            uint8_t temp = aReader.Peek<uint8_t>();
+            uint32_t temp32 = ii < 3 ? ALTIUM_PROPS_UTILS::ConvertToKicadUnit( aReader.Peek<uint32_t>() ) : 0;
+            printf( "3ATEXT6 %zu:\t Byte:%u, Kicad:%u\n", ii, temp, temp32 );
+            aReader.Skip( 1 );
+        }
     }
     else
     {
@@ -1080,9 +1108,6 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
         // textbox_rect_justification will be wrong (5) when this flag is unset,
         // in that case, we should always use the left bottom justification.
         isJustificationValid = aReader.Read<uint8_t>() != 0;
-
-        aReader.Skip( 3 ); // Unknown data
-        aReader.Skip( 8 ); // Unknown data
     }
     else
     {
@@ -1107,7 +1132,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     aReader.SkipSubrecord();
 
     // Altium only supports inverting truetype fonts
-    if( fonttype != ALTIUM_TEXT_TYPE::TRUETYPE )
+    if( fonttype != ALTIUM_TEXT_TYPE::STROKE )
     {
         isInverted = false;
         isInvertedRect = false;

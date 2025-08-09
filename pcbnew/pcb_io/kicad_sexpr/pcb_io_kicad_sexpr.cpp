@@ -48,6 +48,7 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <pcb_point.h>
 #include <pcb_reference_image.h>
+#include <pcb_barcode.h>
 #include <pcb_shape.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
@@ -400,6 +401,10 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
 
     case PCB_TEXTBOX_T:
         format( static_cast<const PCB_TEXTBOX*>( aItem ) );
+        break;
+
+    case PCB_BARCODE_T:
+        format( static_cast<const PCB_BARCODE*>( aItem ) );
         break;
 
     case PCB_TABLE_T:
@@ -2063,6 +2068,64 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 }
 
 
+void PCB_IO_KICAD_SEXPR::format( const PCB_BARCODE* aBarcode ) const
+{
+    wxCHECK_RET( aBarcode != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( "(barcode" );
+
+    if( aBarcode->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
+
+    m_out->Print( "(at %s %s)",
+                  formatInternalUnits( aBarcode->GetPosition() ).c_str(),
+                  EDA_UNIT_UTILS::FormatAngle( aBarcode->Text().GetTextAngle() ).c_str() );
+
+    formatLayer( aBarcode->GetLayer() );
+
+    m_out->Print( "(size %s %s)",
+                  formatInternalUnits( aBarcode->GetWidth() ).c_str(),
+                  formatInternalUnits( aBarcode->GetHeight() ).c_str() );
+
+    m_out->Print( "(text %s)", m_out->Quotew( aBarcode->GetText() ).c_str() );
+
+    m_out->Print( "(text_height %s)",
+                  formatInternalUnits( aBarcode->GetTextHeight() ).c_str() );
+
+    const char* typeStr = "code39";
+
+    switch( aBarcode->GetKind() )
+    {
+    case BARCODE_T::CODE_39:      typeStr = "code39"; break;
+    case BARCODE_T::CODE_128:     typeStr = "code128"; break;
+    case BARCODE_T::DATA_MATRIX:  typeStr = "datamatrix"; break;
+    case BARCODE_T::QR_CODE:      typeStr = "qr"; break;
+    case BARCODE_T::MICRO_QR_CODE: typeStr = "microqr"; break;
+    }
+
+    m_out->Print( "(type %s)", typeStr );
+
+    if( aBarcode->GetKind() == BARCODE_T::QR_CODE
+        || aBarcode->GetKind() == BARCODE_T::MICRO_QR_CODE )
+    {
+        const char* eccStr = "L";
+        switch( aBarcode->GetErrorCorrection() )
+        {
+        case BARCODE_ECC_T::L: eccStr = "L"; break;
+        case BARCODE_ECC_T::M: eccStr = "M"; break;
+        case BARCODE_ECC_T::Q: eccStr = "Q"; break;
+        case BARCODE_ECC_T::H: eccStr = "H"; break;
+        }
+
+        m_out->Print( "(ecc_level %s)", eccStr );
+    }
+
+    KICAD_FORMAT::FormatUuid( m_out, aBarcode->m_Uuid );
+
+    m_out->Print( ")" );
+}
+
+
 void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
 {
     FOOTPRINT*       parentFP = aText->GetParentFootprint();
@@ -3074,7 +3137,24 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
     // called for saving into a library path.
     m_ctl = CTL_FOR_LIBRARY;
 
-    validateCache( aLibraryPath, !aProperties || !aProperties->contains( "skip_cache_validation" ) );
+    // Support saving to a single-file path like "/tmp/foo.kicad_mod" by treating the directory
+    // as the library path and the file base-name as the footprint name.
+    wxString  libPath = aLibraryPath;
+    wxString  singleFileBaseName;    // without extension
+    bool      saveSingleFile = false;
+
+    {
+        wxFileName asFile( aLibraryPath );
+
+        if( asFile.GetExt() == FILEEXT::KiCadFootprintFileExtension )
+        {
+            saveSingleFile = true;
+            libPath = asFile.GetPath();
+            singleFileBaseName = asFile.GetName();
+        }
+    }
+
+    validateCache( libPath, !aProperties || !aProperties->contains( "skip_cache_validation" ) );
 
     if( !m_cache->IsWritable() )
     {
@@ -3082,7 +3162,7 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
         {
             const wxString msg = wxString::Format( _( "Library '%s' does not exist.\n"
                                                       "Would you like to create it?"),
-                                                      aLibraryPath );
+                                                      libPath );
 
             if( !Pgm().IsGUI() || wxMessageBox( msg, _( "Library Not Found" ), wxYES_NO | wxICON_QUESTION ) != wxYES )
                 return;
@@ -3092,26 +3172,28 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
         }
         else
         {
-            wxString msg = wxString::Format( _( "Library '%s' is read only." ), aLibraryPath );
+            wxString msg = wxString::Format( _( "Library '%s' is read only." ), libPath );
             THROW_IO_ERROR( msg );
         }
     }
 
-    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
+    // The map key used by the cache and the on-disk filename base.
+    wxString footprintName = saveSingleFile ? wxString( singleFileBaseName )
+                                            : wxString( aFootprint->GetFPID().GetLibItemName() );
 
-    wxString fpName = aFootprint->GetFPID().GetLibItemName().wx_str();
+    wxString fpName = saveSingleFile ? wxString( singleFileBaseName )
+                                     : wxString( aFootprint->GetFPID().GetLibItemName() );
     ReplaceIllegalFileNameChars( fpName, '_' );
 
     // Quietly overwrite footprint and delete footprint file from path for any by same name.
-    wxFileName fn( aLibraryPath, fpName, FILEEXT::KiCadFootprintFileExtension );
+    wxFileName fn( libPath, fpName, FILEEXT::KiCadFootprintFileExtension );
 
     // Write through symlinks, don't replace them
     WX_FILENAME::ResolvePossibleSymlinks( fn );
 
     if( !fn.IsOk() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
-                                          fn.GetFullPath() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ), fn.GetFullPath() ) );
     }
 
     if( fn.FileExists() && !fn.IsFileWritable() )

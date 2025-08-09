@@ -61,7 +61,8 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_GROUP_T,            // in m_groups
     PCB_ZONE_T,             // in m_zones
     PCB_POINT_T,            // in m_points
-    PCB_GENERATOR_T         // in m_generators
+    PCB_GENERATOR_T,        // in m_generators
+    PCB_BARCODE_T,          // in m_drawings
 };
 
 
@@ -85,7 +86,8 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
     PCB_FOOTPRINT_T,
     PCB_GROUP_T,
     PCB_ZONE_T,
-    PCB_GENERATOR_T
+    PCB_GENERATOR_T,
+    PCB_BARCODE_T
 };
 
 
@@ -119,7 +121,8 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_ZONE_T,
     PCB_GROUP_T,
     PCB_POINT_T,
-    PCB_REFERENCE_IMAGE_T
+    PCB_REFERENCE_IMAGE_T,
+    PCB_BARCODE_T
 };
 
 
@@ -282,6 +285,13 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
                 return INSPECT_RESULT::CONTINUE;
         }
 
+        break;
+
+    case PCB_BARCODE_T:
+        if( m_Guide->IgnoreNoNets() )
+            return INSPECT_RESULT::CONTINUE;
+
+        boardItem = static_cast<BOARD_ITEM*>( aTestItem );
         break;
 
     case PCB_FOOTPRINT_T:

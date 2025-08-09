@@ -880,7 +880,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_cache_proxy.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_manager.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_item.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_barcode.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_barcode.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_dimension.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_shape.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_group.cpp

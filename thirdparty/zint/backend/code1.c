@@ -1,8 +1,7 @@
 /* code1.c - USS Code One */
-
 /*
     libzint - the open source barcode library
-    Copyright (C) 2009-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2009-2025 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -29,16 +28,29 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
+/* SPDX-License-Identifier: BSD-3-Clause */
 
+#include <assert.h>
+#include <math.h>
+#include <stdio.h>
 #include "common.h"
 #include "code1.h"
 #include "reedsol.h"
 #include "large.h"
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
 
-void horiz(struct zint_symbol *symbol, int row_no, int full) {
+#define C1_MAX_CWS      1480 /* Max data codewords for Version H */
+#define C1_MAX_CWS_S    "1480" /* String version of above */
+#define C1_MAX_ECCS     560 /* Max ECC codewords for Version H */
+
+#define C1_ASCII    1
+#define C1_C40      2
+#define C1_DECIMAL  3
+#define C1_TEXT     4
+#define C1_EDI      5
+#define C1_BYTE     6
+
+/* Add solid bar */
+static void c1_horiz(struct zint_symbol *symbol, const int row_no, const int full) {
     int i;
 
     if (full) {
@@ -52,14 +64,16 @@ void horiz(struct zint_symbol *symbol, int row_no, int full) {
     }
 }
 
-void central_finder(struct zint_symbol *symbol, int start_row, int row_count, int full_rows) {
+/* Central recognition pattern for Versions A-H */
+static void c1_central_finder(struct zint_symbol *symbol, const int start_row, const int row_count,
+            const int full_rows) {
     int i;
 
     for (i = 0; i < row_count; i++) {
         if (i < full_rows) {
-            horiz(symbol, start_row + (i * 2), 1);
+            c1_horiz(symbol, start_row + (i * 2), 1);
         } else {
-            horiz(symbol, start_row + (i * 2), 0);
+            c1_horiz(symbol, start_row + (i * 2), 0);
             if (i != row_count - 1) {
                 set_module(symbol, start_row + (i * 2) + 1, 1);
                 set_module(symbol, start_row + (i * 2) + 1, symbol->width - 2);
@@ -68,7 +82,8 @@ void central_finder(struct zint_symbol *symbol, int start_row, int row_count, in
     }
 }
 
-void vert(struct zint_symbol *symbol, int column, int height, int top) {
+/* Add solid column */
+static void c1_vert(struct zint_symbol *symbol, const int column, const int height, const int top) {
     int i;
 
     if (top) {
@@ -82,7 +97,8 @@ void vert(struct zint_symbol *symbol, int column, int height, int top) {
     }
 }
 
-void spigot(struct zint_symbol *symbol, int row_no) {
+/* Add bump to the right of the vertical recognition pattern column (Versions A-H) */
+static void c1_spigot(struct zint_symbol *symbol, const int row_no) {
     int i;
 
     for (i = symbol->width - 1; i > 0; i--) {
@@ -92,416 +108,529 @@ void spigot(struct zint_symbol *symbol, int row_no) {
     }
 }
 
-int isedi(unsigned char input) {
-    int result = 0;
-
-    if (input == 13) {
-        result = 1;
+/* Is basic (non-shifted) C40? */
+static int c1_isc40(const unsigned char input) {
+    if (z_isdigit(input) || z_isupper(input) || input == ' ') {
+        return 1;
     }
-    if (input == '*') {
-        result = 1;
-    }
-    if (input == '>') {
-        result = 1;
-    }
-    if (input == ' ') {
-        result = 1;
-    }
-    if ((input >= '0') && (input <= '9')) {
-        result = 1;
-    }
-    if ((input >= 'A') && (input <= 'Z')) {
-        result = 1;
-    }
-
-    return result;
+    return 0;
 }
 
-int dq4bi(unsigned char source[], int sourcelen, int position) {
-    int i;
-
-    for (i = position; isedi(source[position + i]) && ((position + i) < sourcelen); i++);
-
-    if ((position + i) == sourcelen) {
-        /* Reached end of input */
-        return 0;
-    }
-
-    if (source[position + i - 1] == 13) {
+/* Is basic (non-shifted) TEXT? */
+static int c1_istext(const unsigned char input) {
+    if (z_isdigit(input) || z_islower(input) || input == ' ') {
         return 1;
     }
-    if (source[position + i - 1] == '*') {
+    return 0;
+}
+
+/* Is basic (non-shifted) C40/TEXT? */
+static int c1_isc40text(const int current_mode, const unsigned char input) {
+    return current_mode == C1_C40 ? c1_isc40(input) : c1_istext(input);
+}
+
+/* EDI characters are uppercase alphanumerics plus space plus EDI terminator (CR) plus 2 EDI separator chars */
+static int c1_isedi(const unsigned char input) {
+
+    if (c1_isc40(input)) {
         return 1;
     }
-    if (source[position + i - 1] == '>') {
+    if (input == 13 || input == '*' || input == '>') {
         return 1;
     }
 
     return 0;
 }
 
-static int c1_look_ahead_test(unsigned char source[], int sourcelen, int position, int current_mode, int gs1) {
-    float ascii_count, c40_count, text_count, edi_count, byte_count;
-    char reduced_char;
-    int done, best_scheme, sp;
+/* Whether Step Q4bi applies, i.e. if one of the 3 EDI terminator/separator chars appears before a non-EDI char */
+static int c1_is_step_Q4bi_applicable(const unsigned char source[], const int length, const int position) {
+    int i;
 
-    /* Step J */
+    for (i = position; i < length && c1_isedi(source[i]); i++) {
+        if (source[i] == 13 || source[i] == '*' || source[i] == '>') {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/* Character counts are multiplied by this, so as to be whole integer divisible by 2 and 3 */
+#define C1_MULT             6
+
+#define C1_MULT_1_DIV_2     3
+#define C1_MULT_2_DIV_3     4
+#define C1_MULT_1           6
+#define C1_MULT_4_DIV_3     8
+#define C1_MULT_2           12
+#define C1_MULT_8_DIV_3     16
+#define C1_MULT_3           18
+#define C1_MULT_10_DIV_3    20
+#define C1_MULT_13_DIV_3    26
+
+#define C1_MULT_MINUS_1     5
+#define C1_MULT_CEIL(n)     ((((n) + C1_MULT_MINUS_1) / C1_MULT) * C1_MULT)
+
+/* AIM USS Code One Annex D Steps J-R */
+static int c1_look_ahead_test(const unsigned char source[], const int length, const int position,
+            const int current_mode, const int gs1) {
+    int ascii_count, c40_count, text_count, edi_count, byte_count;
+    int ascii_rnded, c40_rnded, text_rnded, edi_rnded, byte_rnded;
+    int cnt_1;
+    int sp;
+
+    /* Step J1 */
     if (current_mode == C1_ASCII) {
-        ascii_count = 0.0;
-        c40_count = 1.0;
-        text_count = 1.0;
-        edi_count = 1.0;
-        byte_count = 2.0;
+        ascii_count = 0;
+        c40_count = C1_MULT_1;
+        text_count = C1_MULT_1;
+        edi_count = C1_MULT_1;
+        byte_count = C1_MULT_2;
     } else {
-        ascii_count = 1.0;
-        c40_count = 2.0;
-        text_count = 2.0;
-        edi_count = 2.0;
-        byte_count = 3.0;
+        ascii_count = C1_MULT_1;
+        c40_count = C1_MULT_2;
+        text_count = C1_MULT_2;
+        edi_count = C1_MULT_2;
+        byte_count = C1_MULT_3;
     }
 
     switch (current_mode) {
-        case C1_C40: c40_count = 0.0;
-            break;
-        case C1_TEXT: text_count = 0.0;
-            break;
-        case C1_BYTE: byte_count = 0.0;
-            break;
-        case C1_EDI: edi_count = 0.0;
-            break;
+        case C1_C40: c40_count = 0; break; /* Step J2 */
+        case C1_TEXT: text_count = 0; break; /* Step J3 */
+        case C1_EDI: edi_count = 0; break; /* Missing in spec */
+        case C1_BYTE: byte_count = 0; break; /* Step J4 */
     }
 
-    for (sp = position; (sp < sourcelen) && (sp <= (position + 8)); sp++) {
-
-        if (source[sp] <= 127) {
-            reduced_char = source[sp];
-        } else {
-            reduced_char = source[sp] - 127;
-        }
+    for (sp = position; sp < length; sp++) {
+        const unsigned char c = source[sp];
+        const int is_extended = c & 0x80;
 
         /* Step L */
-        if ((source[sp] >= '0') && (source[sp] <= '9')) {
-            ascii_count += 0.5;
+        if (z_isdigit(c)) {
+            ascii_count += C1_MULT_1_DIV_2; /* Step L1 */
         } else {
-            ascii_count = ceil(ascii_count);
-            if (source[sp] > 127) {
-                ascii_count += 2.0;
+            if (is_extended) {
+                ascii_count = ceilf(ascii_count) + C1_MULT_2; /* Step L2 */
             } else {
-                ascii_count += 1.0;
+                ascii_count = ceilf(ascii_count) + C1_MULT_1; /* Step L3 */
             }
         }
 
         /* Step M */
-        done = 0;
-        if (reduced_char == ' ') {
-            c40_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if ((reduced_char >= '0') && (reduced_char <= '9')) {
-            c40_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if ((reduced_char >= 'A') && (reduced_char <= 'Z')) {
-            c40_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if (source[sp] > 127) {
-            c40_count += (4.0 / 3.0);
-        }
-        if (done == 0) {
-            c40_count += (4.0 / 3.0);
+        if (c1_isc40(c)) {
+            c40_count += C1_MULT_2_DIV_3; /* Step M1 */
+        } else if (is_extended) {
+            c40_count += C1_MULT_8_DIV_3; /* Step M2 */
+        } else {
+            c40_count += C1_MULT_4_DIV_3; /* Step M3 */
         }
 
         /* Step N */
-        done = 0;
-        if (reduced_char == ' ') {
-            text_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if ((reduced_char >= '0') && (reduced_char <= '9')) {
-            text_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if ((reduced_char >= 'a') && (reduced_char <= 'z')) {
-            text_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if (source[sp] > 127) {
-            text_count += (4.0 / 3.0);
-        }
-        if (done == 0) {
-            text_count += (4.0 / 3.0);
+        if (c1_istext(c)) {
+            text_count += C1_MULT_2_DIV_3; /* Step N1 */
+        } else if (is_extended) {
+            text_count += C1_MULT_8_DIV_3; /* Step N2 */
+        } else {
+            text_count += C1_MULT_4_DIV_3; /* Step N3 */
         }
 
         /* Step O */
-        done = 0;
-        if (source[sp] == 13) {
-            edi_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if (source[sp] == '*') {
-            edi_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if (source[sp] == '>') {
-            edi_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if (source[sp] == ' ') {
-            edi_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if ((source[sp] >= '0') && (source[sp] <= '9')) {
-            edi_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if ((source[sp] >= 'A') && (source[sp] <= 'Z')) {
-            edi_count += (2.0 / 3.0);
-            done = 1;
-        }
-        if (source[sp] > 127) {
-            edi_count += (13.0 / 3.0);
+        if (c1_isedi(c)) {
+            edi_count += C1_MULT_2_DIV_3; /* Step O1 */
+        } else if (is_extended) {
+            edi_count += C1_MULT_13_DIV_3; /* Step O2 */
         } else {
-            if (done == 0) {
-                edi_count += (10.0 / 3.0);
-            }
+            edi_count += C1_MULT_10_DIV_3; /* Step O3 */
         }
 
         /* Step P */
-        if (gs1 && (source[sp] == '[')) {
-            byte_count += 3.0;
+        if (gs1 && c == '\x1D') {
+            byte_count += C1_MULT_3; /* Step P1 */
         } else {
-            byte_count += 1.0;
+            byte_count += C1_MULT_1; /* Step P2 */
         }
 
-    }
+        /* If at least 4 characters processed */
+        /* NOTE: different than spec, where it's at least 3, but that ends up suppressing C40/TEXT/EDI.
+           BWIPP also uses 4 (cf very similar Data Matrix ISO/IEC 16022:2006 Annex P algorithm) */
+        if (sp >= position + 3) {
+            /* Step Q */
+            ascii_rnded = C1_MULT_CEIL(ascii_count);
+            c40_rnded = C1_MULT_CEIL(c40_count);
+            text_rnded = C1_MULT_CEIL(text_count);
+            edi_rnded = C1_MULT_CEIL(edi_count);
+            byte_rnded = C1_MULT_CEIL(byte_count);
 
-    ascii_count = ceil(ascii_count);
-    c40_count = ceil(c40_count);
-    text_count = ceil(text_count);
-    edi_count = ceil(edi_count);
-    byte_count = ceil(byte_count);
-    best_scheme = C1_ASCII;
-
-    if (sp == sourcelen) {
-        /* Step K */
-        int best_count = (int) edi_count;
-
-        if (text_count <= best_count) {
-            best_count = (int) text_count;
-            best_scheme = C1_TEXT;
-        }
-
-        if (c40_count <= best_count) {
-            best_count = (int) c40_count;
-            best_scheme = C1_C40;
-        }
-
-        if (ascii_count <= best_count) {
-            best_count = (int) ascii_count;
-            best_scheme = C1_ASCII;
-        }
-
-        if (byte_count <= best_count) {
-            //            best_count = (int) byte_count;
-            best_scheme = C1_BYTE;
-        }
-    } else {
-        /* Step Q */
-
-        if (((edi_count + 1.0 <= ascii_count) && (edi_count + 1.0 <= c40_count)) &&
-                ((edi_count + 1.0 <= byte_count) && (edi_count + 1.0 <= text_count))) {
-            best_scheme = C1_EDI;
-        }
-
-        if ((c40_count + 1.0 <= ascii_count) && (c40_count + 1.0 <= text_count)) {
-
-            if (c40_count < edi_count) {
-                best_scheme = C1_C40;
-            } else {
-                done = 0;
-                if (c40_count == edi_count) {
-                    if (dq4bi(source, sourcelen, position)) {
-                        best_scheme = C1_EDI;
-                    } else {
-                        best_scheme = C1_C40;
+            cnt_1 = byte_count + C1_MULT_1;
+            if (cnt_1 <= ascii_rnded && cnt_1 <= c40_rnded && cnt_1 <= text_rnded && cnt_1 <= edi_rnded) {
+                return C1_BYTE; /* Step Q1 */
+            }
+            cnt_1 = ascii_count + C1_MULT_1;
+            if (cnt_1 <= c40_rnded && cnt_1 <= text_rnded && cnt_1 <= edi_rnded && cnt_1 <= byte_rnded) {
+                return C1_ASCII; /* Step Q2 */
+            }
+            cnt_1 = text_rnded + C1_MULT_1;
+            if (cnt_1 <= ascii_rnded && cnt_1 <= c40_rnded && cnt_1 <= edi_rnded && cnt_1 <= byte_rnded) {
+                return C1_TEXT; /* Step Q3 */
+            }
+            cnt_1 = c40_rnded + C1_MULT_1;
+            if (cnt_1 <= ascii_rnded && cnt_1 <= text_rnded) {
+                /* Step Q4 */
+                if (c40_rnded < edi_rnded) {
+                    return C1_C40; /* Step Q4a */
+                }
+                if (c40_rnded == edi_rnded) {
+                    /* Step Q4b */
+                    if (c1_is_step_Q4bi_applicable(source, length, sp + 1)) {
+                        return C1_EDI; /* Step Q4bi */
                     }
+                    return C1_C40; /* Step Q4bii */
                 }
             }
-        }
-
-        if (((text_count + 1.0 <= ascii_count) && (text_count + 1.0 <= c40_count)) &&
-                ((text_count + 1.0 <= byte_count) && (text_count + 1.0 <= edi_count))) {
-            best_scheme = C1_TEXT;
-        }
-
-        if (((ascii_count + 1.0 <= byte_count) && (ascii_count + 1.0 <= c40_count)) &&
-                ((ascii_count + 1.0 <= text_count) && (ascii_count + 1.0 <= edi_count))) {
-            best_scheme = C1_ASCII;
-        }
-
-        if (((byte_count + 1.0 <= ascii_count) && (byte_count + 1.0 <= c40_count)) &&
-                ((byte_count + 1.0 <= text_count) && (byte_count + 1.0 <= edi_count))) {
-            best_scheme = C1_BYTE;
+            cnt_1 = edi_rnded + C1_MULT_1;
+            if (cnt_1 <= ascii_rnded && cnt_1 <= c40_rnded && cnt_1 <= text_rnded && cnt_1 <= byte_rnded) {
+                return C1_EDI; /* Step Q5 */
+            }
         }
     }
 
-    return best_scheme;
+    /* Step K */
+    ascii_rnded = C1_MULT_CEIL(ascii_count);
+    c40_rnded = C1_MULT_CEIL(c40_count);
+    text_rnded = C1_MULT_CEIL(text_count);
+    edi_rnded = C1_MULT_CEIL(edi_count);
+    byte_rnded = C1_MULT_CEIL(byte_count);
+
+    if (byte_count <= ascii_rnded && byte_count <= c40_rnded && byte_count <= text_rnded && byte_count <= edi_rnded) {
+        return C1_BYTE; /* Step K1 */
+    }
+    if (ascii_count <= c40_rnded && ascii_count <= text_rnded && ascii_count <= edi_rnded
+            && ascii_count <= byte_rnded) {
+        return C1_ASCII; /* Step K2 */
+    }
+    if (c40_rnded <= text_rnded && c40_rnded <= edi_rnded) {
+        return C1_C40; /* Step K3 */
+    }
+    if (text_rnded <= edi_rnded) {
+        return C1_TEXT; /* Step K4 */
+    }
+
+    return C1_EDI; /* Step K5 */
 }
 
-int c1_encode(struct zint_symbol *symbol, unsigned char source[], unsigned int target[], int length) {
-    int current_mode, next_mode;
-    int sp, tp, gs1, i, j, p, latch;
-    int c40_buffer[6], c40_p;
-    int text_buffer[6], text_p;
-    int edi_buffer[6], edi_p;
-    char decimal_binary[40];
+/* Whether can fit last character or characters in a single ASCII codeword */
+static int c1_is_last_single_ascii(const unsigned char source[], const int length, const int sp) {
+    if (length - sp == 1 && source[sp] <= 127) {
+        return 1;
+    }
+    if (length - sp == 2 && is_twodigits(source, length, sp)) {
+        return 1;
+    }
+    return 0;
+}
+
+/* Initialize number of digits array (taken from BWIPP) */
+static void c1_set_num_digits(const unsigned char source[], const int length, int num_digits[]) {
+    int i;
+    for (i = length - 1; i >= 0; i--) {
+        if (z_isdigit(source[i])) {
+            num_digits[i] = num_digits[i + 1] + 1;
+        }
+    }
+}
+
+/* Copy C40/TEXT/EDI triplets from buffer to `target`. Returns elements left in buffer (< 3) */
+static int c1_cte_buffer_transfer(int cte_buffer[6], int cte_p, unsigned target[], int *p_tp) {
+    int cte_i, cte_e;
+    int tp = *p_tp;
+
+    cte_e = (cte_p / 3) * 3;
+
+    for (cte_i = 0; cte_i < cte_e; cte_i += 3) {
+        int iv = (1600 * cte_buffer[cte_i]) + (40 * cte_buffer[cte_i + 1]) + (cte_buffer[cte_i + 2]) + 1;
+        target[tp++] = iv >> 8;
+        target[tp++] = iv & 0xFF;
+    }
+
+    cte_p -= cte_e;
+
+    if (cte_p) {
+        memmove(cte_buffer, cte_buffer + cte_e, sizeof(int) * cte_p);
+    }
+
+    *p_tp = tp;
+
+    return cte_p;
+}
+
+/* Copy DECIMAL bytes to `target`. Returns bits left in buffer (< 8) */
+static int c1_decimal_binary_transfer(char decimal_binary[24], int db_p, unsigned int target[], int *p_tp) {
+    int b_i, b_e, p;
+    int tp = *p_tp;
+
+    /* Transfer full bytes to target */
+    b_e = db_p & 0xF8;
+
+    for (b_i = 0; b_i < b_e; b_i += 8) {
+        int value = 0;
+        for (p = 0; p < 8; p++) {
+            value <<= 1;
+            value += decimal_binary[b_i + p] == '1';
+        }
+        target[tp++] = value;
+    }
+
+    db_p &= 0x07; /* Bits remaining */
+
+    if (db_p) {
+        memmove(decimal_binary, decimal_binary + b_e, db_p);
+    }
+
+    *p_tp = tp;
+
+    return db_p;
+}
+
+/* Unlatch to ASCII from DECIMAL mode using 6 ones flag. DECIMAL binary buffer will be empty */
+static int c1_decimal_unlatch(char decimal_binary[24], int db_p, unsigned int target[], int *p_tp,
+            const int decimal_count, const unsigned char source[], int *p_sp) {
+    int sp = *p_sp;
+    int bits_left;
+
+    db_p = bin_append_posn(63, 6, decimal_binary, db_p); /* Unlatch */
+    if (db_p >= 8) {
+        db_p = c1_decimal_binary_transfer(decimal_binary, db_p, target, p_tp);
+    }
+    bits_left = (8 - db_p) & 0x07;
+    if (decimal_count >= 1 && bits_left >= 4) {
+        db_p = bin_append_posn(ctoi(source[sp]) + 1, 4, decimal_binary, db_p);
+        sp++;
+        if (bits_left == 6) {
+            db_p = bin_append_posn(1, 2, decimal_binary, db_p);
+        }
+        (void) c1_decimal_binary_transfer(decimal_binary, db_p, target, p_tp);
+
+    } else if (bits_left) {
+        if (bits_left >= 4) {
+            db_p = bin_append_posn(15, 4, decimal_binary, db_p);
+        }
+        if (bits_left == 2 || bits_left == 6) {
+            db_p = bin_append_posn(1, 2, decimal_binary, db_p);
+        }
+        (void) c1_decimal_binary_transfer(decimal_binary, db_p, target, p_tp);
+    }
+
+    *p_sp = sp;
+
+    return 0;
+}
+
+/* Number of codewords remaining in a particular version (may be negative) */
+static int c1_codewords_remaining(struct zint_symbol *symbol, const int tp) {
+    int i;
+
+    if (symbol->option_2 == 10) { /* Version T */
+        if (tp > 24) {
+            return 38 - tp;
+        }
+        if (tp > 10) {
+            return 24 - tp;
+        }
+        return 10 - tp;
+    }
+    /* Versions A to H */
+    for (i = 6; i >= 0; i--) {
+        if (tp > c1_data_length[i]) {
+            return c1_data_length[i + 1] - tp;
+        }
+    }
+    return c1_data_length[0] - tp;
+}
+
+/* Number of C40/TEXT elements needed to encode `input` */
+static int c1_c40text_cnt(const int current_mode, const int gs1, unsigned char input) {
+    int cnt;
+
+    if (gs1 && input == '\x1D') {
+        return 2;
+    }
+    cnt = 1;
+    if (input & 0x80) {
+        cnt += 2;
+        input -= 128;
+    }
+    if ((current_mode == C1_C40 && c1_c40_shift[input]) || (current_mode == C1_TEXT && c1_text_shift[input])) {
+        cnt += 1;
+    }
+
+    return cnt;
+}
+
+/* Copy `source` to `eci_buf` with "\NNNNNN" ECI indicator at start and backslashes escaped */
+static void c1_eci_escape(const int eci, unsigned char source[], const int length, unsigned char eci_buf[],
+            const int eci_length) {
+    int i, j;
+
+    j = sprintf((char *) eci_buf, "\\%06d", eci);
+
+    for (i = 0; i < length && j < eci_length; i++) {
+        if (source[i] == '\\') {
+            eci_buf[j++] = '\\';
+        }
+        eci_buf[j++] = source[i];
+    }
+    eci_buf[j] = '\0';
+}
+
+/* Convert to codewords */
+static int c1_encode(struct zint_symbol *symbol, unsigned char source[], int length, const int eci,
+            const int seg_count, const int gs1, unsigned int target[], int *p_tp, int *p_last_mode) {
+    int current_mode, next_mode, last_mode;
+    int sp = 0;
+    int tp = *p_tp;
+    int i;
+    int cte_buffer[6], cte_p = 0; /* C1_C40/TEXT/EDI buffer and index */
+    char decimal_binary[24]; /* C1_DECIMAL buffer */
+    int db_p = 0;
     int byte_start = 0;
+    const int debug_print = symbol->debug & ZINT_DEBUG_PRINT;
+    const int eci_length = length + 7 + chr_cnt(source, length, '\\');
+    unsigned char *eci_buf = (unsigned char *) z_alloca(eci_length + 1);
+    int *num_digits = (int *) z_alloca(sizeof(int) * (eci_length + 1));
 
-    sp = 0;
-    tp = 0;
-    latch = 0;
-    memset(c40_buffer, 0, sizeof(*c40_buffer));
-    c40_p = 0;
-    memset(text_buffer, 0, sizeof(*text_buffer));
-    text_p = 0;
-    memset(edi_buffer, 0, sizeof(*edi_buffer));
-    edi_p = 0;
-    strcpy(decimal_binary, "");
-
-    if (symbol->input_mode == GS1_MODE) {
-        gs1 = 1;
-    } else {
-        gs1 = 0;
-    }
-    if (gs1) {
-        /* FNC1 */
-        target[tp] = 232;
-        tp++;
-    }
+    memset(num_digits, 0, sizeof(int) * (eci_length + 1));
 
     /* Step A */
     current_mode = C1_ASCII;
     next_mode = C1_ASCII;
 
+    if (gs1 && tp == 0) {
+        c1_set_num_digits(source, length, num_digits);
+        if (length >= 15 && num_digits[0] >= 15) {
+            target[tp++] = 236; /* FNC1 and change to Decimal */
+            next_mode = C1_DECIMAL;
+            if (debug_print) fputs("FNC1Dec ", stdout);
+        } else if (length >= 7 && num_digits[0] == length) {
+            target[tp++] = 236; /* FNC1 and change to Decimal */
+            next_mode = C1_DECIMAL;
+            if (debug_print) fputs("FNC1Dec ", stdout);
+        } else {
+            target[tp++] = 232; /* FNC1 */
+            if (debug_print) fputs("FNC1 ", stdout);
+        }
+        /* Note ignoring Structured Append and ECI if GS1 mode (up to caller to warn/error) */
+    } else {
+        if (symbol->structapp.count && tp == 0) {
+            if (symbol->structapp.count < 16) { /* Group mode */
+                if ((eci || seg_count > 1) && symbol->structapp.index == 1) {
+                    /* Initial pad indicator for 1st symbol only */
+                    target[tp++] = 129; /* Pad */
+                    target[tp++] = 233; /* FNC2 */
+                    target[tp++] = (symbol->structapp.index - 1) * 15 + (symbol->structapp.count - 1);
+                    target[tp++] = '\\' + 1; /* Escape char */
+                    if (debug_print) fputs("SAGrp ", stdout);
+                } else {
+                    target[tp++] = (symbol->structapp.index - 1) * 15 + (symbol->structapp.count - 1);
+                    target[tp++] = 233; /* FNC2 */
+                    if (debug_print) fputs("FNC2 ", stdout);
+                }
+            } else { /* Extended Group mode */
+                if ((eci || seg_count > 1) && symbol->structapp.index == 1) {
+                    /* Initial pad indicator for 1st symbol only */
+                    target[tp++] = 129; /* Pad */
+                    target[tp++] = '\\' + 1; /* Escape char */
+                    target[tp++] = 233; /* FNC2 */
+                    target[tp++] = symbol->structapp.index;
+                    target[tp++] = symbol->structapp.count;
+                    if (debug_print) fputs("SAExGrp ", stdout);
+                } else {
+                    target[tp++] = symbol->structapp.index;
+                    target[tp++] = symbol->structapp.count;
+                    target[tp++] = 233; /* FNC2 */
+                    if (debug_print) fputs("FNC2 ", stdout);
+                }
+            }
+            if (eci) {
+                c1_eci_escape(eci, source, length, eci_buf, eci_length);
+                source = eci_buf;
+                length = eci_length;
+            }
+        } else if (eci || seg_count > 1) {
+            if (tp == 0) {
+                target[tp++] = 129; /* Pad */
+                target[tp++] = '\\' + 1; /* Escape char */
+                if (debug_print) fputs("PADEsc ", stdout);
+            }
+            if (eci) {
+                c1_eci_escape(eci, source, length, eci_buf, eci_length);
+                source = eci_buf;
+                length = eci_length;
+            }
+        }
+        c1_set_num_digits(source, length, num_digits);
+    }
+
     do {
+        last_mode = current_mode;
         if (current_mode != next_mode) {
             /* Change mode */
             switch (next_mode) {
-                case C1_C40: target[tp] = 230;
-                    tp++;
+                case C1_C40:
+                    target[tp++] = 230;
+                    if (debug_print) fputs("->C40 ", stdout);
                     break;
-                case C1_TEXT: target[tp] = 239;
-                    tp++;
+                case C1_TEXT:
+                    target[tp++] = 239;
+                    if (debug_print) fputs("->Text ", stdout);
                     break;
-                case C1_EDI: target[tp] = 238;
-                    tp++;
+                case C1_EDI:
+                    target[tp++] = 238;
+                    if (debug_print) fputs("->EDI ", stdout);
                     break;
-                case C1_BYTE: target[tp] = 231;
-                    tp++;
+                case C1_BYTE:
+                    target[tp++] = 231;
+                    if (debug_print) fputs("->Byte ", stdout);
+                    byte_start = tp;
+                    target[tp++] = 0; /* Byte count holder (may be expanded to 2 codewords) */
                     break;
             }
+            current_mode = next_mode;
         }
-
-        if ((current_mode != C1_BYTE) && (next_mode == C1_BYTE)) {
-            byte_start = tp;
-        }
-        current_mode = next_mode;
 
         if (current_mode == C1_ASCII) {
             /* Step B - ASCII encodation */
             next_mode = C1_ASCII;
 
-            if ((length - sp) >= 21) {
+            if ((length - sp) >= 21 && num_digits[sp] >= 21) {
                 /* Step B1 */
-                j = 0;
-
-                for (i = 0; i < 21; i++) {
-                    if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                        j++;
-                    }
-                }
-
-                if (j == 21) {
-                    next_mode = C1_DECIMAL;
-                    bin_append(15, 4, decimal_binary);
-                }
-            }
-
-            if ((next_mode == C1_ASCII) && ((length - sp) >= 13)) {
+                next_mode = C1_DECIMAL;
+                db_p = bin_append_posn(15, 4, decimal_binary, db_p);
+            } else if ((length - sp) >= 13 && num_digits[sp] == (length - sp)) {
                 /* Step B2 */
-                j = 0;
-
-                for (i = 0; i < 13; i++) {
-                    if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                        j++;
-                    }
-                }
-
-                if (j == 13) {
-                    latch = 0;
-                    for (i = sp + 13; i < length; i++) {
-                        if (!((source[sp + i] >= '0') && (source[sp + i] <= '9'))) {
-                            latch = 1;
-                        }
-                    }
-
-                    if (!(latch)) {
-                        next_mode = C1_DECIMAL;
-                        bin_append(15, 4, decimal_binary);
-                    }
-                }
+                next_mode = C1_DECIMAL;
+                db_p = bin_append_posn(15, 4, decimal_binary, db_p);
             }
 
-            if (next_mode == C1_ASCII) { /* Step B3 */
-                if (istwodigits(source, sp) && ((sp + 1) != length)) {
-                    target[tp] = (10 * ctoi(source[sp])) + ctoi(source[sp + 1]) + 130;
-                    tp++;
+            if (next_mode == C1_ASCII) {
+                if (is_twodigits(source, length, sp)) {
+                    /* Step B3 */
+                    target[tp++] = (10 * ctoi(source[sp])) + ctoi(source[sp + 1]) + 130;
+                    if (debug_print) printf("ASCDD(%.2s) ", source + sp);
                     sp += 2;
                 } else {
-                    if ((gs1) && (source[sp] == '[')) {
-                        if ((length - sp) >= 15) {
+                    if (gs1 && source[sp] == '\x1D') {
+                        if (length - (sp + 1) >= 15 && num_digits[sp + 1] >= 15) {
                             /* Step B4 */
-                            j = 0;
-
-                            for (i = 0; i < 15; i++) {
-                                if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                                    j++;
-                                }
-                            }
-
-                            if (j == 15) {
-                                target[tp] = 236; /* FNC1 and change to Decimal */
-                                tp++;
-                                sp++;
-                                next_mode = C1_DECIMAL;
-                            }
-                        }
-
-                        if ((length - sp) >= 7) { /* Step B5 */
-                            j = 0;
-
-                            for (i = 0; i < 7; i++) {
-                                if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                                    j++;
-                                }
-                            }
-
-                            if (j == 7) {
-                                latch = 0;
-                                for (i = sp + 7; i < length; i++) {
-                                    if (!((source[sp + i] >= '0') && (source[sp + i] <= '9'))) {
-                                        latch = 1;
-                                    }
-                                }
-
-                                if (!(latch)) {
-                                    target[tp] = 236; /* FNC1 and change to Decimal */
-                                    tp++;
-                                    sp++;
-                                    next_mode = C1_DECIMAL;
-                                }
-                            }
+                            target[tp++] = 236; /* FNC1 and change to Decimal */
+                            if (debug_print) fputs("FNC1 ", stdout);
+                            sp++;
+                            next_mode = C1_DECIMAL;
+                        } else if (length - (sp + 1) >= 7 && num_digits[sp + 1] == length - (sp + 1)) {
+                            /* Step B5 */
+                            target[tp++] = 236; /* FNC1 and change to Decimal */
+                            if (debug_print) fputs("FNC1 ", stdout);
+                            sp++;
+                            next_mode = C1_DECIMAL;
                         }
                     }
 
@@ -509,478 +638,197 @@ int c1_encode(struct zint_symbol *symbol, unsigned char source[], unsigned int t
 
                         /* Step B6 */
                         next_mode = c1_look_ahead_test(source, length, sp, current_mode, gs1);
+                        if (next_mode == last_mode) { /* Avoid looping on latch (ticket #300 (#8) Andre Maute) */
+                            next_mode = C1_ASCII;
+                        }
 
                         if (next_mode == C1_ASCII) {
-                            if (source[sp] > 127) {
+                            if (debug_print) printf("ASC(%d) ", source[sp]);
+
+                            if (source[sp] & 0x80) {
                                 /* Step B7 */
-                                target[tp] = 235; /* FNC4 */
-                                tp++;
-                                target[tp] = (source[sp] - 128) + 1;
-                                tp++;
-                                sp++;
+                                target[tp++] = 235; /* FNC4 (Upper Shift) */
+                                target[tp++] = (source[sp] - 128) + 1;
+                                if (debug_print) printf("UpSh(%d) ", source[sp]);
+                            } else if (gs1 && source[sp] == '\x1D') {
+                                /* Step B8 */
+                                target[tp++] = 232; /* FNC1 */
+                                if (debug_print) fputs("FNC1 ", stdout);
                             } else {
                                 /* Step B8 */
-                                if ((gs1) && (source[sp] == '[')) {
-                                    target[tp] = 232; /* FNC1 */
-                                    tp++;
-                                    sp++;
-                                } else {
-                                    target[tp] = source[sp] + 1;
-                                    tp++;
-                                    sp++;
-                                }
+                                target[tp++] = source[sp] + 1;
+                                if (debug_print) printf("ASC(%d) ", source[sp]);
                             }
+                            sp++;
                         }
                     }
                 }
             }
-        }
 
-        if (current_mode == C1_C40) {
-            /* Step C - C40 encodation */
+        } else if (current_mode == C1_C40 || current_mode == C1_TEXT) {
+            /* Step C/D - C40/TEXT encodation */
 
-            next_mode = C1_C40;
-            if (c40_p == 0) {
-                int done = 0;
-                if ((length - sp) >= 12) {
-                    j = 0;
-
-                    for (i = 0; i < 12; i++) {
-                        if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                            j++;
-                        }
-                    }
-
-                    if (j == 12) {
-                        next_mode = C1_ASCII;
-                        done = 1;
-                    }
-                }
-
-                if ((length - sp) >= 8) {
-                    int latch = 0;
-                    j = 0;
-
-                    for (i = 0; i < 8; i++) {
-                        if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                            j++;
-                        }
-                    }
-
-                    if ((length - sp) == 8) {
-                        latch = 1;
-                    } else {
-                        latch = 1;
-                        for (j = sp + 8; j < length; j++) {
-                            if ((source[j] <= '0') || (source[j] >= '9')) {
-                                latch = 0;
-                            }
-                        }
-                    }
-
-                    if ((j == 8) && latch) {
-                        next_mode = C1_ASCII;
-                        done = 1;
-                    }
-                }
-
-                if (!(done)) {
+            next_mode = current_mode;
+            if (cte_p == 0) {
+                /* Step C/D1 */
+                if ((length - sp) >= 12 && num_digits[sp] >= 12) {
+                    /* Step C/D1a */
+                    next_mode = C1_ASCII;
+                } else if ((length - sp) >= 8 && num_digits[sp] == (length - sp)) {
+                    /* Step C/D1b */
+                    next_mode = C1_ASCII;
+                } else {
                     next_mode = c1_look_ahead_test(source, length, sp, current_mode, gs1);
                 }
             }
 
-            if (next_mode != C1_C40) {
-                target[tp] = 255; /* Unlatch */
-                tp++;
+            if (next_mode != current_mode) {
+                /* Step C/D1c */
+                target[tp++] = 255; /* Unlatch */
+                if (debug_print) fputs("Unlatch ", stdout);
             } else {
-                int shift_set, value;
-                if (source[sp] > 127) {
-                    c40_buffer[c40_p] = 1;
-                    c40_p++;
-                    c40_buffer[c40_p] = 30; /* Upper Shift */
-                    c40_p++;
-                    shift_set = c40_shift[source[sp] - 128];
-                    value = c40_value[source[sp] - 128];
+                /* Step C/D2 */
+                const char *ct_shift, *ct_value;
+
+                if (current_mode == C1_C40) {
+                    ct_shift = c1_c40_shift;
+                    ct_value = c1_c40_value;
                 } else {
-                    shift_set = c40_shift[source[sp]];
-                    value = c40_value[source[sp]];
+                    ct_shift = c1_text_shift;
+                    ct_value = c1_text_value;
+                }
+                if (debug_print) fputs(current_mode == C1_C40 ? "C40 " : "TEXT ", stdout);
+
+                if (source[sp] & 0x80) {
+                    cte_buffer[cte_p++] = 1; /* Shift 2 */
+                    cte_buffer[cte_p++] = 30; /* FNC4 (Upper Shift) */
+                    if (ct_shift[source[sp] - 128]) {
+                        cte_buffer[cte_p++] = ct_shift[source[sp] - 128] - 1;
+                    }
+                    cte_buffer[cte_p++] = ct_value[source[sp] - 128];
+                } else if (gs1 && source[sp] == '\x1D') {
+                    cte_buffer[cte_p++] = 1; /* Shift 2 */
+                    cte_buffer[cte_p++] = 27; /* FNC1 */
+                } else {
+                    if (ct_shift[source[sp]]) {
+                        cte_buffer[cte_p++] = ct_shift[source[sp]] - 1;
+                    }
+                    cte_buffer[cte_p++] = ct_value[source[sp]];
                 }
 
-                if (gs1 && (source[sp] == '[')) {
-                    shift_set = 2;
-                    value = 27; /* FNC1 */
-                }
-
-                if (shift_set != 0) {
-                    c40_buffer[c40_p] = shift_set - 1;
-                    c40_p++;
-                }
-                c40_buffer[c40_p] = value;
-                c40_p++;
-
-                if (c40_p >= 3) {
-                    int iv;
-
-                    iv = (1600 * c40_buffer[0]) + (40 * c40_buffer[1]) + (c40_buffer[2]) + 1;
-                    target[tp] = iv / 256;
-                    tp++;
-                    target[tp] = iv % 256;
-                    tp++;
-
-                    c40_buffer[0] = c40_buffer[3];
-                    c40_buffer[1] = c40_buffer[4];
-                    c40_buffer[2] = c40_buffer[5];
-                    c40_buffer[3] = 0;
-                    c40_buffer[4] = 0;
-                    c40_buffer[5] = 0;
-                    c40_p -= 3;
+                if (cte_p >= 3) {
+                    cte_p = c1_cte_buffer_transfer(cte_buffer, cte_p, target, &tp);
                 }
                 sp++;
             }
-        }
 
-        if (current_mode == C1_TEXT) {
-            /* Step D - Text encodation */
-
-            next_mode = C1_TEXT;
-            if (text_p == 0) {
-                int done = 0;
-                if ((length - sp) >= 12) {
-                    j = 0;
-
-                    for (i = 0; i < 12; i++) {
-                        if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                            j++;
-                        }
-                    }
-
-                    if (j == 12) {
-                        next_mode = C1_ASCII;
-                        done = 1;
-                    }
-                }
-
-                if ((length - sp) >= 8) {
-                    int latch = 0;
-                    j = 0;
-
-                    for (i = 0; i < 8; i++) {
-                        if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                            j++;
-                        }
-                    }
-
-                    if ((length - sp) == 8) {
-                        latch = 1;
-                    } else {
-                        latch = 1;
-                        for (j = sp + 8; j < length; j++) {
-                            if ((source[j] <= '0') || (source[j] >= '9')) {
-                                latch = 0;
-                            }
-                        }
-                    }
-
-                    if ((j == 8) && latch) {
-                        next_mode = C1_ASCII;
-                        done = 1;
-                    }
-                }
-
-                if (!(done)) {
-                    next_mode = c1_look_ahead_test(source, length, sp, current_mode, gs1);
-                }
-            }
-
-            if (next_mode != C1_TEXT) {
-                target[tp] = 255;
-                tp++; /* Unlatch */
-            } else {
-                int shift_set, value;
-                if (source[sp] > 127) {
-                    text_buffer[text_p] = 1;
-                    text_p++;
-                    text_buffer[text_p] = 30;
-                    text_p++; /* Upper Shift */
-                    shift_set = text_shift[source[sp] - 128];
-                    value = text_value[source[sp] - 128];
-                } else {
-                    shift_set = text_shift[source[sp]];
-                    value = text_value[source[sp]];
-                }
-
-                if (gs1 && (source[sp] == '[')) {
-                    shift_set = 2;
-                    value = 27; /* FNC1 */
-                }
-
-                if (shift_set != 0) {
-                    text_buffer[text_p] = shift_set - 1;
-                    text_p++;
-                }
-                text_buffer[text_p] = value;
-                text_p++;
-
-                if (text_p >= 3) {
-                    int iv;
-
-                    iv = (1600 * text_buffer[0]) + (40 * text_buffer[1]) + (text_buffer[2]) + 1;
-                    target[tp] = iv / 256;
-                    tp++;
-                    target[tp] = iv % 256;
-                    tp++;
-
-                    text_buffer[0] = text_buffer[3];
-                    text_buffer[1] = text_buffer[4];
-                    text_buffer[2] = text_buffer[5];
-                    text_buffer[3] = 0;
-                    text_buffer[4] = 0;
-                    text_buffer[5] = 0;
-                    text_p -= 3;
-                }
-                sp++;
-            }
-        }
-
-        if (current_mode == C1_EDI) {
+        } else if (current_mode == C1_EDI) {
             /* Step E - EDI Encodation */
 
             next_mode = C1_EDI;
-            if (edi_p == 0) {
-                if ((length - sp) >= 12) {
-                    j = 0;
-
-                    for (i = 0; i < 12; i++) {
-                        if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                            j++;
-                        }
-                    }
-
-                    if (j == 12) {
-                        next_mode = C1_ASCII;
-                    }
-                }
-
-                if ((length - sp) >= 8) {
-                    int latch = 0;
-                    j = 0;
-
-                    for (i = 0; i < 8; i++) {
-                        if ((source[sp + i] >= '0') && (source[sp + i] <= '9')) {
-                            j++;
-                        }
-                    }
-
-                    if ((length - sp) == 8) {
-                        latch = 1;
-                    } else {
-                        latch = 1;
-                        for (j = sp + 8; j < length; j++) {
-                            if ((source[j] <= '0') || (source[j] >= '9')) {
-                                latch = 0;
-                            }
-                        }
-                    }
-
-                    if ((j == 8) && latch) {
-                        next_mode = C1_ASCII;
-                    }
-                }
-
-                if (!((isedi(source[sp]) && isedi(source[sp + 1])) && isedi(source[sp + 2]))) {
+            if (cte_p == 0) {
+                /* Step E1 */
+                if ((length - sp) >= 12 && num_digits[sp] >= 12) {
+                    /* Step E1a */
+                    next_mode = C1_ASCII;
+                } else if ((length - sp) >= 8 && num_digits[sp] == (length - sp)) {
+                    /* Step E1b */
+                    next_mode = C1_ASCII;
+                } else if ((length - sp) < 3 || !c1_isedi(source[sp]) || !c1_isedi(source[sp + 1])
+                        || !c1_isedi(source[sp + 2])) {
+                    /* Step E1c */
+                    /* This ensures ASCII switch if don't have EDI triplet, so cte_p will be zero on loop exit */
                     next_mode = C1_ASCII;
                 }
             }
 
             if (next_mode != C1_EDI) {
-                target[tp] = 255; /* Unlatch */
-                tp++;
+                if (c1_is_last_single_ascii(source, length, sp) && c1_codewords_remaining(symbol, tp) == 1) {
+                    /* No unlatch needed if data fits as ASCII in last data codeword */
+                } else {
+                    target[tp++] = 255; /* Unlatch */
+                    if (debug_print) fputs("Unlatch ", stdout);
+                }
             } else {
-                int value = 0;
-                if (source[sp] == 13) {
-                    value = 0;
-                }
-                if (source[sp] == '*') {
-                    value = 1;
-                }
-                if (source[sp] == '>') {
-                    value = 2;
-                }
-                if (source[sp] == ' ') {
-                    value = 3;
-                }
-                if ((source[sp] >= '0') && (source[sp] <= '9')) {
-                    value = source[sp] - '0' + 4;
-                }
-                if ((source[sp] >= 'A') && (source[sp] <= 'Z')) {
-                    value = source[sp] - 'A' + 14;
+                /* Step E2 */
+                static const char edi_nonalphanum_chars[] = "\015*> ";
+
+                if (debug_print) fputs("EDI ", stdout);
+
+                if (z_isdigit(source[sp])) {
+                    cte_buffer[cte_p++] = source[sp] - '0' + 4;
+                } else if (z_isupper(source[sp])) {
+                    cte_buffer[cte_p++] = source[sp] - 'A' + 14;
+                } else {
+                    cte_buffer[cte_p++] = posn(edi_nonalphanum_chars, source[sp]);
                 }
 
-                edi_buffer[edi_p] = value;
-                edi_p++;
-
-                if (edi_p >= 3) {
-                    int iv;
-
-                    iv = (1600 * edi_buffer[0]) + (40 * edi_buffer[1]) + (edi_buffer[2]) + 1;
-                    target[tp] = iv / 256;
-                    tp++;
-                    target[tp] = iv % 256;
-                    tp++;
-
-                    edi_buffer[0] = edi_buffer[3];
-                    edi_buffer[1] = edi_buffer[4];
-                    edi_buffer[2] = edi_buffer[5];
-                    edi_buffer[3] = 0;
-                    edi_buffer[4] = 0;
-                    edi_buffer[5] = 0;
-                    edi_p -= 3;
+                if (cte_p >= 3) {
+                    cte_p = c1_cte_buffer_transfer(cte_buffer, cte_p, target, &tp);
                 }
                 sp++;
             }
-        }
 
-        if (current_mode == C1_DECIMAL) {
+        } else if (current_mode == C1_DECIMAL) {
             /* Step F - Decimal encodation */
-            int decimal_count, data_left;
+
+            if (debug_print) fputs("DEC ", stdout);
 
             next_mode = C1_DECIMAL;
 
-            data_left = length - sp;
-            decimal_count = 0;
-
-            if (data_left >= 1) {
-                if ((source[sp] >= '0') && (source[sp] <= '9')) {
-                    decimal_count = 1;
-                }
-            }
-            if (data_left >= 2) {
-                if ((decimal_count == 1) && ((source[sp + 1] >= '0') && (source[sp + 1] <= '9'))) {
-                    decimal_count = 2;
-                }
-            }
-            if (data_left >= 3) {
-                if ((decimal_count == 2) && ((source[sp + 2] >= '0') && (source[sp + 2] <= '9'))) {
-                    decimal_count = 3;
-                }
-            }
-
-            if (decimal_count != 3) {
-                size_t bits_left_in_byte, target_count;
-                int sub_target;
-                /* Finish Decimal mode and go back to ASCII */
-
-                bin_append(63, 6, decimal_binary); /* Unlatch */
-
-                target_count = 3;
-                if (strlen(decimal_binary) <= 16) {
-                    target_count = 2;
-                }
-                if (strlen(decimal_binary) <= 8) {
-                    target_count = 1;
-                }
-                bits_left_in_byte = (8 * target_count) - strlen(decimal_binary);
-                if (bits_left_in_byte == 8) {
-                    bits_left_in_byte = 0;
-                }
-
-                if (bits_left_in_byte == 2) {
-                    bin_append(1, 2, decimal_binary);
-                }
-
-                if ((bits_left_in_byte == 4) || (bits_left_in_byte == 6)) {
-                    if (decimal_count >= 1) {
-                        bin_append(ctoi(source[sp]) + 1, 4, decimal_binary);
-                        sp++;
+            if (length - sp < 3) {
+                /* Step F1 */
+                const int bits_left = 8 - db_p;
+                const int can_ascii = bits_left == 8 && c1_is_last_single_ascii(source, length, sp);
+                if (c1_codewords_remaining(symbol, tp) == 1
+                        && (can_ascii || (num_digits[sp] == 1 && bits_left >= 4))) {
+                    if (can_ascii) {
+                        /* Encode last character or last 2 digits as ASCII */
+                        if (is_twodigits(source, length, sp)) {
+                            target[tp++] = (10 * ctoi(source[sp])) + ctoi(source[sp + 1]) + 130;
+                            if (debug_print) printf("ASCDD(%.2s) ", source + sp);
+                            sp += 2;
+                        } else {
+                            target[tp++] = source[sp] + 1;
+                            if (debug_print) printf("ASC(%d) ", source[sp]);
+                            sp++;
+                        }
                     } else {
-                        bin_append(15, 4, decimal_binary);
-                    }
-                }
-
-                if (bits_left_in_byte == 6) {
-                    bin_append(1, 2, decimal_binary);
-                }
-
-                /* Binary buffer is full - transfer to target */
-                if (target_count >= 1) {
-                    sub_target = 0;
-
-                    for (i = 0; i < 8; i++) {
-                        if (decimal_binary[i] == '1') {
-                            sub_target += 128 >> i;
+                        /* Encode last digit in 4 bits */
+                        db_p = bin_append_posn(ctoi(source[sp]) + 1, 4, decimal_binary, db_p);
+                        sp++;
+                        if (bits_left == 6) {
+                            db_p = bin_append_posn(1, 2, decimal_binary, db_p);
                         }
+                        db_p = c1_decimal_binary_transfer(decimal_binary, db_p, target, &tp);
                     }
-                    target[tp] = sub_target;
-                    tp++;
+                } else {
+                    db_p = c1_decimal_unlatch(decimal_binary, db_p, target, &tp, num_digits[sp], source, &sp);
+                    current_mode = C1_ASCII; /* Note need to set current_mode also in case exit loop */
                 }
-                if (target_count >= 2) {
-                    sub_target = 0;
-
-                    for (i = 0; i < 8; i++) {
-                        if (decimal_binary[i + 8] == '1') {
-                            sub_target += 128 >> i;
-                        }
-                    }
-                    target[tp] = sub_target;
-                    tp++;
-                }
-                if (target_count == 3) {
-                    sub_target = 0;
-
-                    for (i = 0; i < 8; i++) {
-                        if (decimal_binary[i + 16] == '1') {
-                            sub_target += 128 >> i;
-                        }
-                    }
-                    target[tp] = sub_target;
-                    tp++;
-                }
-
                 next_mode = C1_ASCII;
+
             } else {
-                /* There are three digits - convert the value to binary */
-                bin_append((100 * ctoi(source[sp])) + (10 * ctoi(source[sp + 1])) + ctoi(source[sp + 2]) + 1, 10, decimal_binary);
-                sp += 3;
-            }
-
-            if (strlen(decimal_binary) >= 24) {
-                int target1 = 0, target2 = 0, target3 = 0;
-                char temp_binary[40];
-
-                /* Binary buffer is full - transfer to target */
-
-                for (p = 0; p < 8; p++) {
-                    if (decimal_binary[p] == '1') {
-                        target1 += (0x80 >> p);
+                if (num_digits[sp] < 3) {
+                    /* Step F2 */
+                    db_p = c1_decimal_unlatch(decimal_binary, db_p, target, &tp, num_digits[sp], source, &sp);
+                    current_mode = next_mode = C1_ASCII; /* Note need to set current_mode also in case exit loop */
+                } else {
+                    /* Step F3 */
+                    /* There are three digits - convert the value to binary */
+                    int value = (100 * ctoi(source[sp])) + (10 * ctoi(source[sp + 1])) + ctoi(source[sp + 2]) + 1;
+                    db_p = bin_append_posn(value, 10, decimal_binary, db_p);
+                    if (db_p >= 8) {
+                        db_p = c1_decimal_binary_transfer(decimal_binary, db_p, target, &tp);
                     }
-                    if (decimal_binary[p + 8] == '1') {
-                        target2 += (0x80 >> p);
-                    }
-                    if (decimal_binary[p + 16] == '1') {
-                        target3 += (0x80 >> p);
-                    }
-                }
-                target[tp] = target1;
-                tp++;
-                target[tp] = target2;
-                tp++;
-                target[tp] = target3;
-                tp++;
-
-                strcpy(temp_binary, "");
-                if (strlen(decimal_binary) > 24) {
-                    for (i = 0; i <= (int) (strlen(decimal_binary) - 24); i++) {
-                        temp_binary[i] = decimal_binary[i + 24];
-                    }
-                    strcpy(decimal_binary, temp_binary);
+                    sp += 3;
                 }
             }
-        }
 
-        if (current_mode == C1_BYTE) {
+        } else if (current_mode == C1_BYTE) {
             next_mode = C1_BYTE;
 
-            if (gs1 && (source[sp] == '[')) {
+            if (gs1 && source[sp] == '\x1D') {
                 next_mode = C1_ASCII;
             } else {
                 if (source[sp] <= 127) {
@@ -989,432 +837,425 @@ int c1_encode(struct zint_symbol *symbol, unsigned char source[], unsigned int t
             }
 
             if (next_mode != C1_BYTE) {
-                /* Insert byte field length */
-                if ((tp - byte_start) <= 249) {
-                    for (i = tp; i >= byte_start; i--) {
-                        target[i + 1] = target[i];
-                    }
-                    target[byte_start] = (tp - byte_start);
-                    tp++;
+                /* Update byte field length */
+                int byte_count = tp - (byte_start + 1);
+                if (byte_count <= 249) {
+                    target[byte_start] = byte_count;
                 } else {
-                    for (i = tp; i >= byte_start; i--) {
-                        target[i + 2] = target[i];
-                    }
-                    target[byte_start] = 249 + ((tp - byte_start) / 250);
-                    target[byte_start + 1] = ((tp - byte_start) % 250);
-                    tp += 2;
+                    /* Insert extra codeword */
+                    memmove(target + byte_start + 2, target + byte_start + 1, sizeof(unsigned int) * byte_count);
+                    target[byte_start] = 249 + (byte_count / 250);
+                    target[byte_start + 1] = (byte_count % 250);
+                    tp++;
                 }
             } else {
-                target[tp] = source[sp];
-                tp++;
+                if (debug_print) printf("BYTE(%d) ", source[sp]);
+
+                target[tp++] = source[sp];
                 sp++;
             }
         }
 
-        if (tp > 1480) {
+        if (tp > C1_MAX_CWS) {
+            if (debug_print) fputc('\n', stdout);
             /* Data is too large for symbol */
-            strcpy(symbol->errtxt, "511: Input data too long");
             return 0;
         }
     } while (sp < length);
 
-    /* Empty buffers */
-    if (c40_p == 2) {
-        int iv;
-
-        c40_buffer[2] = 1;
-        iv = (1600 * c40_buffer[0]) + (40 * c40_buffer[1]) + (c40_buffer[2]) + 1;
-        target[tp] = iv / 256;
-        tp++;
-        target[tp] = iv % 256;
-        tp++;
-        target[tp] = 255;
-        tp++; /* Unlatch */
-    }
-    if (c40_p == 1) {
-        int iv;
-
-        c40_buffer[1] = 1;
-        c40_buffer[2] = 31; /* Pad */
-        iv = (1600 * c40_buffer[0]) + (40 * c40_buffer[1]) + (c40_buffer[2]) + 1;
-        target[tp] = iv / 256;
-        tp++;
-        target[tp] = iv % 256;
-        tp++;
-        target[tp] = 255;
-        tp++; /* Unlatch */
-    }
-    if (text_p == 2) {
-        int iv;
-
-        text_buffer[2] = 1;
-        iv = (1600 * text_buffer[0]) + (40 * text_buffer[1]) + (text_buffer[2]) + 1;
-        target[tp] = iv / 256;
-        tp++;
-        target[tp] = iv % 256;
-        tp++;
-        target[tp] = 255;
-        tp++; /* Unlatch */
-    }
-    if (text_p == 1) {
-        int iv;
-
-        text_buffer[1] = 1;
-        text_buffer[2] = 31; /* Pad */
-        iv = (1600 * text_buffer[0]) + (40 * text_buffer[1]) + (text_buffer[2]) + 1;
-        target[tp] = iv / 256;
-        tp++;
-        target[tp] = iv % 256;
-        tp++;
-        target[tp] = 255;
-        tp++; /* Unlatch */
+    if (debug_print) {
+        printf("\nEnd Current Mode: %d, tp %d, cte_p %d, db_p %d\n", current_mode, tp, cte_p, db_p);
     }
 
-    if (current_mode == C1_DECIMAL) {
-        size_t bits_left_in_byte, target_count;
-        int sub_target;
-        /* Finish Decimal mode and go back to ASCII */
+    /* Empty buffers (note cte_buffer will be empty if current_mode C1_EDI) */
+    if (current_mode == C1_C40 || current_mode == C1_TEXT) {
+        if (cte_p >= 1) {
+            const int cws_remaining = c1_codewords_remaining(symbol, tp);
 
-        bin_append(63, 6, decimal_binary); /* Unlatch */
-
-        target_count = 3;
-        if (strlen(decimal_binary) <= 16) {
-            target_count = 2;
-        }
-        if (strlen(decimal_binary) <= 8) {
-            target_count = 1;
-        }
-        bits_left_in_byte = (8 * target_count) - strlen(decimal_binary);
-        if (bits_left_in_byte == 8) {
-            bits_left_in_byte = 0;
-        }
-
-        if (bits_left_in_byte == 2) {
-            bin_append(1, 2, decimal_binary);
-        }
-
-        if ((bits_left_in_byte == 4) || (bits_left_in_byte == 6)) {
-            bin_append(15, 4, decimal_binary);
-        }
-
-        if (bits_left_in_byte == 6) {
-            bin_append(1, 2, decimal_binary);
-        }
-
-        /* Binary buffer is full - transfer to target */
-        if (target_count >= 1) {
-            sub_target = 0;
-
-            for (i = 0; i < 8; i++) {
-                if (decimal_binary[i] == '1') {
-                    sub_target += 128 >> i;
+            /* Note doing strict interpretation of spec here (same as BWIPP), as now also done in Data Matrix case */
+            if (cws_remaining == 1 && cte_p == 1 && c1_isc40text(current_mode, source[sp - 1])) {
+                /* 2.2.2.2 "...except when a single symbol character is left at the end before the first
+                   error correction character. This single character is encoded in the ASCII code set." */
+                target[tp++] = source[sp - 1] + 1; /* As ASCII */
+                cte_p = 0;
+            } else if (cws_remaining == 2 && cte_p == 2) {
+                /* 2.2.2.2 "Two characters may be encoded in C40 mode in the last two data symbol characters of the
+                   symbol as two C40 values followed by one of the C40 shift characters." */
+                cte_buffer[cte_p++] = 0; /* Shift 0 */
+                cte_p = c1_cte_buffer_transfer(cte_buffer, cte_p, target, &tp);
+            }
+            if (cte_p >= 1) {
+                int cnt, total_cnt = 0;
+                /* Backtrack to last complete triplet (same technique as BWIPP) */
+                while (sp > 0 && cte_p % 3) {
+                    sp--;
+                    cnt = c1_c40text_cnt(current_mode, gs1, source[sp]);
+                    total_cnt += cnt;
+                    cte_p -= cnt;
                 }
-            }
-            target[tp] = sub_target;
-            tp++;
-        }
-        if (target_count >= 2) {
-            sub_target = 0;
+                tp -= (total_cnt / 3) * 2;
 
-            for (i = 0; i < 8; i++) {
-                if (decimal_binary[i + 8] == '1') {
-                    sub_target += 128 >> i;
+                target[tp++] = 255; /* Unlatch */
+                for (; sp < length; sp++) {
+                    if (is_twodigits(source, length, sp)) {
+                        target[tp++] = (10 * ctoi(source[sp])) + ctoi(source[sp + 1]) + 130;
+                        sp++;
+                    } else if (source[sp] & 0x80) {
+                        target[tp++] = 235; /* FNC4 (Upper Shift) */
+                        target[tp++] = (source[sp] - 128) + 1;
+                    } else if (gs1 && source[sp] == '\x1D') {
+                        target[tp++] = 232; /* FNC1 */
+                    } else {
+                        target[tp++] = source[sp] + 1;
+                    }
                 }
+                current_mode = C1_ASCII;
             }
-            target[tp] = sub_target;
-            tp++;
         }
-        if (target_count == 3) {
-            sub_target = 0;
 
-            for (i = 0; i < 8; i++) {
-                if (decimal_binary[i + 16] == '1') {
-                    sub_target += 128 >> i;
-                }
-            }
-            target[tp] = sub_target;
-            tp++;
+    } else if (current_mode == C1_DECIMAL) {
+        int bits_left;
+
+        /* Finish Decimal mode and go back to ASCII unless only one codeword remaining */
+        if (c1_codewords_remaining(symbol, tp) > 1) {
+            db_p = bin_append_posn(63, 6, decimal_binary, db_p); /* Unlatch */
         }
-    }
 
-    if (current_mode == C1_BYTE) {
-        /* Insert byte field length */
-        if ((tp - byte_start) <= 249) {
-            for (i = tp; i >= byte_start; i--) {
-                target[i + 1] = target[i];
+        if (db_p >= 8) {
+            db_p = c1_decimal_binary_transfer(decimal_binary, db_p, target, &tp);
+        }
+
+        bits_left = (8 - db_p) & 0x07;
+
+        if (bits_left) {
+
+            if ((bits_left == 4) || (bits_left == 6)) {
+                db_p = bin_append_posn(15, 4, decimal_binary, db_p);
             }
-            target[byte_start] = (tp - byte_start);
-            tp++;
-        } else {
-            for (i = tp; i >= byte_start; i--) {
-                target[i + 2] = target[i];
+
+            if (bits_left == 2 || bits_left == 6) {
+                db_p = bin_append_posn(1, 2, decimal_binary, db_p);
             }
-            target[byte_start] = 249 + ((tp - byte_start) / 250);
-            target[byte_start + 1] = ((tp - byte_start) % 250);
-            tp += 2;
+
+            (void) c1_decimal_binary_transfer(decimal_binary, db_p, target, &tp);
+        }
+        current_mode = C1_ASCII;
+
+    } else if (current_mode == C1_BYTE) {
+        /* Update byte field length unless no codewords remaining */
+        if (c1_codewords_remaining(symbol, tp) > 0) {
+            int byte_count = tp - (byte_start + 1);
+            if (byte_count <= 249) {
+                target[byte_start] = byte_count;
+            } else {
+                /* Insert extra byte field byte */
+                memmove(target + byte_start + 2, target + byte_start + 1, sizeof(unsigned int) * byte_count);
+                target[byte_start] = 249 + (byte_count / 250);
+                target[byte_start + 1] = (byte_count % 250);
+                tp++;
+            }
         }
     }
 
     /* Re-check length of data */
-    if (tp > 1480) {
+    if (tp > C1_MAX_CWS) {
         /* Data is too large for symbol */
-        strcpy(symbol->errtxt, "512: Input data too long");
         return 0;
     }
-    /*
-    printf("targets:\n");
-    for(i = 0; i < tp; i++) {
-            printf("[%d]", target[i]);
+
+    *p_last_mode = current_mode;
+
+    if (debug_print) {
+        printf("Target (%d):", tp);
+        for (i = 0; i < tp; i++) {
+            printf(" [%d]", (int) target[i]);
+        }
+        printf("\nLast Mode: %d\n", *p_last_mode);
     }
-    printf("\n");
-     */
+
     return tp;
 }
 
-void block_copy(struct zint_symbol *symbol, char grid[][120], int start_row, int start_col, int height, int width, int row_offset, int col_offset) {
+/* Call `c1_encode()` for each segment */
+static int c1_encode_segs(struct zint_symbol *symbol, struct zint_seg segs[], const int seg_count, const int gs1,
+            unsigned int target[], int *p_data_length, int *p_last_mode) {
+    int i;
+    int tp = 0;
+    /* GS1 raw text dealt with by `ZBarcode_Encode_Segs()` */
+    const int raw_text = !gs1 && (symbol->output_options & BARCODE_RAW_TEXT);
+
+    if (raw_text && rt_init_segs(symbol, seg_count)) {
+        return ZINT_ERROR_MEMORY; /* `rt_init_segs()` only fails with OOM */
+    }
+
+    for (i = 0; i < seg_count; i++) {
+        tp = c1_encode(symbol, segs[i].source, segs[i].length, segs[i].eci, seg_count, gs1, target, &tp, p_last_mode);
+        if (raw_text && rt_cpy_seg(symbol, i, &segs[i])) {
+            return ZINT_ERROR_MEMORY; /* `rt_cpy_seg()` only fails with OOM */
+        }
+    }
+
+    *p_data_length = tp;
+
+    return 0;
+}
+
+/* Set symbol from datagrid */
+static void c1_block_copy(struct zint_symbol *symbol, char datagrid[136][120], const int start_row,
+            const int start_col, const int height, const int width, const int row_offset, const int col_offset) {
     int i, j;
 
     for (i = start_row; i < (start_row + height); i++) {
         for (j = start_col; j < (start_col + width); j++) {
-            if (grid[i][j] == '1') {
+            if (datagrid[i][j]) {
                 set_module(symbol, i + row_offset, j + col_offset);
             }
         }
     }
 }
 
-int code_one(struct zint_symbol *symbol, unsigned char source[], int length) {
-    int size = 1, i, j;
+/* Get total length allowing for ECIs and escaping backslashes */
+static int c1_total_length_segs(struct zint_seg segs[], const int seg_count) {
+    int total_len = 0;
+    int i;
 
+    if (segs[0].eci || seg_count > 1) {
+        for (i = 0; i < seg_count; i++) {
+            total_len += segs[i].length + 7 + chr_cnt(segs[i].source, segs[i].length, '\\');
+        }
+    } else {
+        total_len = segs[0].length;
+    }
+
+    return total_len;
+}
+
+INTERNAL int codeone(struct zint_symbol *symbol, struct zint_seg segs[], const int seg_count) {
+    int size = 1, i, j;
     char datagrid[136][120];
     int row, col;
     int sub_version = 0;
+    rs_t rs;
+    const int gs1 = (symbol->input_mode & 0x07) == GS1_MODE;
+    const int debug_print = symbol->debug & ZINT_DEBUG_PRINT;
 
     if ((symbol->option_2 < 0) || (symbol->option_2 > 10)) {
-        strcpy(symbol->errtxt, "513: Invalid symbol size");
-        return ZINT_ERROR_INVALID_OPTION;
+        return errtxtf(ZINT_ERROR_INVALID_OPTION, symbol, 513, "Version '%d' out of range (1 to 10)",
+                        symbol->option_2);
+    }
+
+    if (symbol->structapp.count) {
+        if (symbol->option_2 == 9) { /* Version S */
+            return errtxt(ZINT_ERROR_INVALID_OPTION, symbol, 714, "Structured Append not available for Version S");
+        }
+        if (gs1) {
+            return errtxt(ZINT_ERROR_INVALID_OPTION, symbol, 710,
+                            "Cannot have Structured Append and GS1 mode at the same time");
+        }
+        if (symbol->structapp.count < 2 || symbol->structapp.count > 128) {
+            return errtxtf(ZINT_ERROR_INVALID_OPTION, symbol, 711,
+                            "Structured Append count '%d' out of range (2 to 128)", symbol->structapp.count);
+        }
+        if (symbol->structapp.index < 1 || symbol->structapp.index > symbol->structapp.count) {
+            return ZEXT errtxtf(ZINT_ERROR_INVALID_OPTION, symbol, 712,
+                                "Structured Append index '%1$d' out of range (1 to count %2$d)",
+                                symbol->structapp.index, symbol->structapp.count);
+        }
+        if (symbol->structapp.id[0]) {
+            return errtxt(ZINT_ERROR_INVALID_OPTION, symbol, 713, "Structured Append ID not available for Code One");
+        }
     }
 
     if (symbol->option_2 == 9) {
         /* Version S */
         int codewords;
-        short int elreg[112];
-        unsigned int data[15], ecc[15];
-        int stream[30];
+        large_uint elreg;
+        unsigned int target[30], ecc[15];
         int block_width;
+        const int raw_text = symbol->output_options & BARCODE_RAW_TEXT; /* GS1 mode ignored for Version S */
 
-        if (length > 18) {
-            strcpy(symbol->errtxt, "514: Input data too long");
-            return ZINT_ERROR_TOO_LONG;
+        if (seg_count > 1) {
+            return errtxt(ZINT_ERROR_INVALID_OPTION, symbol, 715, "Multiple segments not supported for Version S");
         }
-        if (is_sane(NEON, source, length) == ZINT_ERROR_INVALID_DATA) {
-            strcpy(symbol->errtxt, "515: Invalid input data (Version S encodes numeric input only)");
-            return ZINT_ERROR_INVALID_DATA;
+        if (segs[0].length > 18) {
+            return errtxtf(ZINT_ERROR_TOO_LONG, symbol, 514, "Input length %d too long for Version S (maximum 18)",
+                            segs[0].length);
+        }
+        if ((i = not_sane(NEON_F, segs[0].source, segs[0].length))) {
+            return errtxtf(ZINT_ERROR_INVALID_DATA, symbol, 515,
+                            "Invalid character at position %d in input (Version S encodes digits only)", i);
         }
 
-        sub_version = 3;
-        codewords = 12;
-        block_width = 6; /* Version S-30 */
-        if (length <= 12) {
-            /* Version S-20 */
-            sub_version = 2;
-            codewords = 8;
-            block_width = 4;
-        }
-        if (length <= 6) {
+        size = 9;
+        if (segs[0].length <= 6) {
             /* Version S-10 */
             sub_version = 1;
             codewords = 4;
             block_width = 2;
+        } else if (segs[0].length <= 12) {
+            /* Version S-20 */
+            sub_version = 2;
+            codewords = 8;
+            block_width = 4;
+        } else {
+            /* Version S-30 */
+            sub_version = 3;
+            codewords = 12;
+            block_width = 6;
         }
 
-        binary_load(elreg, (char *) source, length);
-
-        for (i = 0; i < 15; i++) {
-            data[i] = 0;
-            ecc[i] = 0;
+        if (debug_print) {
+            printf("Subversion: %d\n", sub_version);
         }
+
+        if (raw_text && rt_cpy(symbol, segs[0].source, segs[0].length)) {
+            return ZINT_ERROR_MEMORY; /* `rt_cpy()` only fails with OOM */
+        }
+
+        /* Convert value plus one to binary */
+        large_load_str_u64(&elreg, segs[0].source, segs[0].length);
+        large_add_u64(&elreg, 1);
+        large_uint_array(&elreg, target, codewords, 5 /*bits*/);
+
+        rs_init_gf(&rs, 0x25);
+        rs_init_code(&rs, codewords, 0);
+        rs_encode_uint(&rs, codewords, target, ecc);
 
         for (i = 0; i < codewords; i++) {
-            data[codewords - i - 1] += 1 * elreg[(i * 5)];
-            data[codewords - i - 1] += 2 * elreg[(i * 5) + 1];
-            data[codewords - i - 1] += 4 * elreg[(i * 5) + 2];
-            data[codewords - i - 1] += 8 * elreg[(i * 5) + 3];
-            data[codewords - i - 1] += 16 * elreg[(i * 5) + 4];
+            target[i + codewords] = ecc[i];
         }
 
-        rs_init_gf(0x25);
-        rs_init_code(codewords, 1);
-        rs_encode_long(codewords, data, ecc);
-        rs_free();
-
-        for (i = 0; i < codewords; i++) {
-            stream[i] = data[i];
-            stream[i + codewords] = ecc[codewords - i - 1];
-        }
-
-        for (i = 0; i < 136; i++) {
-            for (j = 0; j < 120; j++) {
-                datagrid[i][j] = '0';
-            }
+        if (debug_print) {
+            printf("Codewords (%d): ", codewords);
+            for (i = 0; i < codewords * 2; i++) printf(" %d", (int) target[i]);
+            fputc('\n', stdout);
         }
 
         i = 0;
         for (row = 0; row < 2; row++) {
             for (col = 0; col < block_width; col++) {
-                if (stream[i] & 0x10) {
-                    datagrid[row * 2][col * 5] = '1';
-                }
-                if (stream[i] & 0x08) {
-                    datagrid[row * 2][(col * 5) + 1] = '1';
-                }
-                if (stream[i] & 0x04) {
-                    datagrid[row * 2][(col * 5) + 2] = '1';
-                }
-                if (stream[i] & 0x02) {
-                    datagrid[(row * 2) + 1][col * 5] = '1';
-                }
-                if (stream[i] & 0x01) {
-                    datagrid[(row * 2) + 1][(col * 5) + 1] = '1';
-                }
-                if (stream[i + 1] & 0x10) {
-                    datagrid[row * 2][(col * 5) + 3] = '1';
-                }
-                if (stream[i + 1] & 0x08) {
-                    datagrid[row * 2][(col * 5) + 4] = '1';
-                }
-                if (stream[i + 1] & 0x04) {
-                    datagrid[(row * 2) + 1][(col * 5) + 2] = '1';
-                }
-                if (stream[i + 1] & 0x02) {
-                    datagrid[(row * 2) + 1][(col * 5) + 3] = '1';
-                }
-                if (stream[i + 1] & 0x01) {
-                    datagrid[(row * 2) + 1][(col * 5) + 4] = '1';
-                }
+                datagrid[row * 2][col * 5] = target[i] & 0x10;
+                datagrid[row * 2][(col * 5) + 1] = target[i] & 0x08;
+                datagrid[row * 2][(col * 5) + 2] = target[i] & 0x04;
+                datagrid[(row * 2) + 1][col * 5] = target[i] & 0x02;
+                datagrid[(row * 2) + 1][(col * 5) + 1] = target[i] & 0x01;
+                datagrid[row * 2][(col * 5) + 3] = target[i + 1] & 0x10;
+                datagrid[row * 2][(col * 5) + 4] = target[i + 1] & 0x08;
+                datagrid[(row * 2) + 1][(col * 5) + 2] = target[i + 1] & 0x04;
+                datagrid[(row * 2) + 1][(col * 5) + 3] = target[i + 1] & 0x02;
+                datagrid[(row * 2) + 1][(col * 5) + 4] = target[i + 1] & 0x01;
                 i += 2;
             }
         }
 
-        size = 9;
         symbol->rows = 8;
         symbol->width = 10 * sub_version + 1;
-    }
 
-    if (symbol->option_2 == 10) {
+    } else if (symbol->option_2 == 10) {
         /* Version T */
-        unsigned int data[40], ecc[25];
-        unsigned int stream[65];
+        unsigned int target[C1_MAX_CWS + C1_MAX_ECCS]; /* Use same buffer size as A to H to avail of loop checks */
+        unsigned int ecc[22];
         int data_length;
         int data_cw, ecc_cw, block_width;
+        int last_mode = 0; /* Suppress gcc 14 "-Wmaybe-uninitialized" false positive */
 
-        for (i = 0; i < 40; i++) {
-            data[i] = 0;
-        }
-        data_length = c1_encode(symbol, source, data, length);
-
-        if (data_length == 0) {
-            return ZINT_ERROR_TOO_LONG;
+        if ((i = c1_total_length_segs(segs, seg_count)) > 90) {
+            return errtxtf(ZINT_ERROR_TOO_LONG, symbol, 519, "Input length %d too long for Version T (maximum 90)",
+                            i);
         }
 
+        if (c1_encode_segs(symbol, segs, seg_count, gs1, target, &data_length, &last_mode)) {
+            return ZINT_ERROR_MEMORY; /* `c1_encode_segs()` only returns non-zero with OOM */
+        }
+
+        assert(data_length); /* Can't exceed C1_MAX_CWS as input <= 90 */
         if (data_length > 38) {
-            strcpy(symbol->errtxt, "516: Input data too long");
-            return ZINT_ERROR_TOO_LONG;
+            return errtxtf(ZINT_ERROR_TOO_LONG, symbol, 516,
+                            "Input too long for Version T, requires %d codewords (maximum 38)", data_length);
         }
 
         size = 10;
-        sub_version = 3;
-        data_cw = 38;
-        ecc_cw = 22;
-        block_width = 12;
-        if (data_length <= 24) {
-            sub_version = 2;
-            data_cw = 24;
-            ecc_cw = 16;
-            block_width = 8;
-        }
         if (data_length <= 10) {
             sub_version = 1;
             data_cw = 10;
             ecc_cw = 10;
             block_width = 4;
+        } else if (data_length <= 24) {
+            sub_version = 2;
+            data_cw = 24;
+            ecc_cw = 16;
+            block_width = 8;
+        } else {
+            sub_version = 3;
+            data_cw = 38;
+            ecc_cw = 22;
+            block_width = 12;
         }
 
-        for (i = data_length; i < data_cw; i++) {
-            data[i] = 129; /* Pad */
+        if (debug_print) {
+            printf("Padding: %d, Subversion: %d\n", data_cw - data_length, sub_version);
+        }
+
+        /* If require padding */
+        if (data_cw > data_length) {
+            /* If did not finish in ASCII or BYTE mode, switch to ASCII */
+            if (last_mode != C1_ASCII && last_mode != C1_BYTE) {
+                target[data_length++] = 255; /* Unlatch */
+            }
+            for (i = data_length; i < data_cw; i++) {
+                target[i] = 129; /* Pad */
+            }
         }
 
         /* Calculate error correction data */
-        rs_init_gf(0x12d);
-        rs_init_code(ecc_cw, 1);
-        rs_encode_long(data_cw, data, ecc);
-        rs_free();
+        rs_init_gf(&rs, 0x12d);
+        rs_init_code(&rs, ecc_cw, 0);
+        rs_encode_uint(&rs, data_cw, target, ecc);
 
-        /* "Stream" combines data and error correction data */
-        for (i = 0; i < data_cw; i++) {
-            stream[i] = data[i];
-        }
         for (i = 0; i < ecc_cw; i++) {
-            stream[data_cw + i] = ecc[ecc_cw - i - 1];
+            target[data_cw + i] = ecc[i];
         }
 
-        for (i = 0; i < 136; i++) {
-            for (j = 0; j < 120; j++) {
-                datagrid[i][j] = '0';
-            }
+        if (debug_print) {
+            printf("Codewords (%d):", data_cw + ecc_cw);
+            for (i = 0; i < data_cw + ecc_cw; i++) printf(" %d", (int) target[i]);
+            fputc('\n', stdout);
         }
 
         i = 0;
         for (row = 0; row < 5; row++) {
             for (col = 0; col < block_width; col++) {
-                if (stream[i] & 0x80) {
-                    datagrid[row * 2][col * 4] = '1';
-                }
-                if (stream[i] & 0x40) {
-                    datagrid[row * 2][(col * 4) + 1] = '1';
-                }
-                if (stream[i] & 0x20) {
-                    datagrid[row * 2][(col * 4) + 2] = '1';
-                }
-                if (stream[i] & 0x10) {
-                    datagrid[row * 2][(col * 4) + 3] = '1';
-                }
-                if (stream[i] & 0x08) {
-                    datagrid[(row * 2) + 1][col * 4] = '1';
-                }
-                if (stream[i] & 0x04) {
-                    datagrid[(row * 2) + 1][(col * 4) + 1] = '1';
-                }
-                if (stream[i] & 0x02) {
-                    datagrid[(row * 2) + 1][(col * 4) + 2] = '1';
-                }
-                if (stream[i] & 0x01) {
-                    datagrid[(row * 2) + 1][(col * 4) + 3] = '1';
-                }
+                datagrid[row * 2][col * 4] = target[i] & 0x80;
+                datagrid[row * 2][(col * 4) + 1] = target[i] & 0x40;
+                datagrid[row * 2][(col * 4) + 2] = target[i] & 0x20;
+                datagrid[row * 2][(col * 4) + 3] = target[i] & 0x10;
+                datagrid[(row * 2) + 1][col * 4] = target[i] & 0x08;
+                datagrid[(row * 2) + 1][(col * 4) + 1] = target[i] & 0x04;
+                datagrid[(row * 2) + 1][(col * 4) + 2] = target[i] & 0x02;
+                datagrid[(row * 2) + 1][(col * 4) + 3] = target[i] & 0x01;
                 i++;
             }
         }
 
         symbol->rows = 16;
         symbol->width = (sub_version * 16) + 1;
-    }
 
-    if ((symbol->option_2 != 9) && (symbol->option_2 != 10)) {
-        /* Version A to H */
-        unsigned int data[1500], ecc[600];
-        unsigned int sub_data[190], sub_ecc[75];
-        unsigned int stream[2100];
+    } else {
+        /* Versions A to H */
+        unsigned int target[C1_MAX_CWS + C1_MAX_ECCS];
+        unsigned int sub_data[185], sub_ecc[70];
         int data_length;
-        int data_blocks;
+        int data_cw;
+        int blocks, data_blocks, ecc_blocks, ecc_length;
+        int last_mode;
 
-        for (i = 0; i < 1500; i++) {
-            data[i] = 0;
+        if (c1_encode_segs(symbol, segs, seg_count, gs1, target, &data_length, &last_mode)) {
+            return ZINT_ERROR_MEMORY; /* `c1_encode_segs()` only returns non-zero with OOM */
         }
-        data_length = c1_encode(symbol, source, data, length);
 
         if (data_length == 0) {
-            strcpy(symbol->errtxt, "517: Input data is too long");
-            return ZINT_ERROR_TOO_LONG;
+            return errtxt(ZINT_ERROR_TOO_LONG, symbol, 517,
+                            "Input too long, requires too many codewords (maximum " C1_MAX_CWS_S ")");
         }
 
         for (i = 7; i >= 0; i--) {
@@ -1427,81 +1268,68 @@ int code_one(struct zint_symbol *symbol, unsigned char source[], int length) {
             size = symbol->option_2;
         }
 
-        if ((symbol-> option_2 != 0) && (symbol->option_2 < size)) {
-            strcpy(symbol->errtxt, "518: Input too long for selected symbol size");
-            return ZINT_ERROR_TOO_LONG;
+        if ((symbol->option_2 != 0) && (symbol->option_2 < size)) {
+            return ZEXT errtxtf(ZINT_ERROR_TOO_LONG, symbol, 518,
+                                "Input too long for Version %1$c, requires %2$d codewords (maximum %3$d)",
+                                'A' + symbol->option_2 - 1, data_length, c1_data_length[symbol->option_2 - 1]);
         }
 
-        for (i = data_length; i < c1_data_length[size - 1]; i++) {
-            data[i] = 129; /* Pad */
+        /* Feedback options */
+        symbol->option_2 = size;
+
+        data_cw = c1_data_length[size - 1];
+
+        /* If require padding */
+        if (data_cw > data_length) {
+            /* If did not finish in ASCII or BYTE mode, switch to ASCII */
+            if (last_mode != C1_ASCII && last_mode != C1_BYTE) {
+                target[data_length++] = 255; /* Unlatch */
+            }
+            if (debug_print) {
+                printf("Padding: %d\n", data_cw - data_length);
+            }
+            for (i = data_length; i < data_cw; i++) {
+                target[i] = 129; /* Pad */
+            }
+        } else if (debug_print) {
+            fputs("No padding\n", stdout);
         }
 
         /* Calculate error correction data */
-        data_length = c1_data_length[size - 1];
-        for (i = 0; i < 190; i++) {
-            sub_data[i] = 0;
-        }
-        for (i = 0; i < 75; i++) {
-            sub_ecc[i] = 0;
-        }
+        blocks = c1_blocks[size - 1];
+        data_blocks = c1_data_blocks[size - 1];
+        ecc_blocks = c1_ecc_blocks[size - 1];
+        ecc_length = c1_ecc_length[size - 1];
 
-        data_blocks = c1_blocks[size - 1];
-
-        rs_init_gf(0x12d);
-        rs_init_code(c1_ecc_blocks[size - 1], 0);
-        for (i = 0; i < data_blocks; i++) {
-            for (j = 0; j < c1_data_blocks[size - 1]; j++) {
-
-                sub_data[j] = data[j * data_blocks + i];
+        rs_init_gf(&rs, 0x12d);
+        rs_init_code(&rs, ecc_blocks, 0);
+        for (i = 0; i < blocks; i++) {
+            for (j = 0; j < data_blocks; j++) {
+                sub_data[j] = target[j * blocks + i];
             }
-            rs_encode_long(c1_data_blocks[size - 1], sub_data, sub_ecc);
-            for (j = 0; j < c1_ecc_blocks[size - 1]; j++) {
-                ecc[c1_ecc_length[size - 1] - (j * data_blocks + i) - 1] = sub_ecc[j];
+            rs_encode_uint(&rs, data_blocks, sub_data, sub_ecc);
+            for (j = 0; j < ecc_blocks; j++) {
+                target[data_cw + j * blocks + i] = sub_ecc[j];
             }
         }
-        rs_free();
 
-        /* "Stream" combines data and error correction data */
-        for (i = 0; i < data_length; i++) {
-            stream[i] = data[i];
-        }
-        for (i = 0; i < c1_ecc_length[size - 1]; i++) {
-            stream[data_length + i] = ecc[i];
-        }
-
-        for (i = 0; i < 136; i++) {
-            for (j = 0; j < 120; j++) {
-                datagrid[i][j] = '0';
-            }
+        if (debug_print) {
+            printf("Codewords (%d):", data_cw + ecc_length);
+            for (i = 0; i < data_cw + ecc_length; i++) printf(" %d", (int) target[i]);
+            fputc('\n', stdout);
         }
 
         i = 0;
         for (row = 0; row < c1_grid_height[size - 1]; row++) {
             for (col = 0; col < c1_grid_width[size - 1]; col++) {
-                if (stream[i] & 0x80) {
-                    datagrid[row * 2][col * 4] = '1';
-                }
-                if (stream[i] & 0x40) {
-                    datagrid[row * 2][(col * 4) + 1] = '1';
-                }
-                if (stream[i] & 0x20) {
-                    datagrid[row * 2][(col * 4) + 2] = '1';
-                }
-                if (stream[i] & 0x10) {
-                    datagrid[row * 2][(col * 4) + 3] = '1';
-                }
-                if (stream[i] & 0x08) {
-                    datagrid[(row * 2) + 1][col * 4] = '1';
-                }
-                if (stream[i] & 0x04) {
-                    datagrid[(row * 2) + 1][(col * 4) + 1] = '1';
-                }
-                if (stream[i] & 0x02) {
-                    datagrid[(row * 2) + 1][(col * 4) + 2] = '1';
-                }
-                if (stream[i] & 0x01) {
-                    datagrid[(row * 2) + 1][(col * 4) + 3] = '1';
-                }
+                datagrid[row * 2][col * 4] = target[i] & 0x80;
+                datagrid[row * 2][(col * 4) + 1] = target[i] & 0x40;
+                datagrid[row * 2][(col * 4) + 2] = target[i] & 0x20;
+                datagrid[row * 2][(col * 4) + 3] = target[i] & 0x10;
+                datagrid[(row * 2) + 1][col * 4] = target[i] & 0x08;
+                datagrid[(row * 2) + 1][(col * 4) + 1] = target[i] & 0x04;
+                datagrid[(row * 2) + 1][(col * 4) + 2] = target[i] & 0x02;
+                datagrid[(row * 2) + 1][(col * 4) + 3] = target[i] & 0x01;
                 i++;
             }
         }
@@ -1510,196 +1338,200 @@ int code_one(struct zint_symbol *symbol, unsigned char source[], int length) {
         symbol->width = c1_width[size - 1];
     }
 
+    if (debug_print) {
+        printf("Version: %d\n", size);
+    }
+
     switch (size) {
         case 1: /* Version A */
-            central_finder(symbol, 6, 3, 1);
-            vert(symbol, 4, 6, 1);
-            vert(symbol, 12, 5, 0);
+            c1_central_finder(symbol, 6, 3, 1);
+            c1_vert(symbol, 4, 6, 1);
+            c1_vert(symbol, 12, 5, 0);
             set_module(symbol, 5, 12);
-            spigot(symbol, 0);
-            spigot(symbol, 15);
-            block_copy(symbol, datagrid, 0, 0, 5, 4, 0, 0);
-            block_copy(symbol, datagrid, 0, 4, 5, 12, 0, 2);
-            block_copy(symbol, datagrid, 5, 0, 5, 12, 6, 0);
-            block_copy(symbol, datagrid, 5, 12, 5, 4, 6, 2);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 15);
+            c1_block_copy(symbol, datagrid, 0, 0, 5, 4, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 4, 5, 12, 0, 2);
+            c1_block_copy(symbol, datagrid, 5, 0, 5, 12, 6, 0);
+            c1_block_copy(symbol, datagrid, 5, 12, 5, 4, 6, 2);
             break;
         case 2: /* Version B */
-            central_finder(symbol, 8, 4, 1);
-            vert(symbol, 4, 8, 1);
-            vert(symbol, 16, 7, 0);
+            c1_central_finder(symbol, 8, 4, 1);
+            c1_vert(symbol, 4, 8, 1);
+            c1_vert(symbol, 16, 7, 0);
             set_module(symbol, 7, 16);
-            spigot(symbol, 0);
-            spigot(symbol, 21);
-            block_copy(symbol, datagrid, 0, 0, 7, 4, 0, 0);
-            block_copy(symbol, datagrid, 0, 4, 7, 16, 0, 2);
-            block_copy(symbol, datagrid, 7, 0, 7, 16, 8, 0);
-            block_copy(symbol, datagrid, 7, 16, 7, 4, 8, 2);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 21);
+            c1_block_copy(symbol, datagrid, 0, 0, 7, 4, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 4, 7, 16, 0, 2);
+            c1_block_copy(symbol, datagrid, 7, 0, 7, 16, 8, 0);
+            c1_block_copy(symbol, datagrid, 7, 16, 7, 4, 8, 2);
             break;
         case 3: /* Version C */
-            central_finder(symbol, 11, 4, 2);
-            vert(symbol, 4, 11, 1);
-            vert(symbol, 26, 13, 1);
-            vert(symbol, 4, 10, 0);
-            vert(symbol, 26, 10, 0);
-            spigot(symbol, 0);
-            spigot(symbol, 27);
-            block_copy(symbol, datagrid, 0, 0, 10, 4, 0, 0);
-            block_copy(symbol, datagrid, 0, 4, 10, 20, 0, 2);
-            block_copy(symbol, datagrid, 0, 24, 10, 4, 0, 4);
-            block_copy(symbol, datagrid, 10, 0, 10, 4, 8, 0);
-            block_copy(symbol, datagrid, 10, 4, 10, 20, 8, 2);
-            block_copy(symbol, datagrid, 10, 24, 10, 4, 8, 4);
+            c1_central_finder(symbol, 11, 4, 2);
+            c1_vert(symbol, 4, 11, 1);
+            c1_vert(symbol, 26, 13, 1);
+            c1_vert(symbol, 4, 10, 0);
+            c1_vert(symbol, 26, 10, 0);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 27);
+            c1_block_copy(symbol, datagrid, 0, 0, 10, 4, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 4, 10, 20, 0, 2);
+            c1_block_copy(symbol, datagrid, 0, 24, 10, 4, 0, 4);
+            c1_block_copy(symbol, datagrid, 10, 0, 10, 4, 8, 0);
+            c1_block_copy(symbol, datagrid, 10, 4, 10, 20, 8, 2);
+            c1_block_copy(symbol, datagrid, 10, 24, 10, 4, 8, 4);
             break;
         case 4: /* Version D */
-            central_finder(symbol, 16, 5, 1);
-            vert(symbol, 4, 16, 1);
-            vert(symbol, 20, 16, 1);
-            vert(symbol, 36, 16, 1);
-            vert(symbol, 4, 15, 0);
-            vert(symbol, 20, 15, 0);
-            vert(symbol, 36, 15, 0);
-            spigot(symbol, 0);
-            spigot(symbol, 12);
-            spigot(symbol, 27);
-            spigot(symbol, 39);
-            block_copy(symbol, datagrid, 0, 0, 15, 4, 0, 0);
-            block_copy(symbol, datagrid, 0, 4, 15, 14, 0, 2);
-            block_copy(symbol, datagrid, 0, 18, 15, 14, 0, 4);
-            block_copy(symbol, datagrid, 0, 32, 15, 4, 0, 6);
-            block_copy(symbol, datagrid, 15, 0, 15, 4, 10, 0);
-            block_copy(symbol, datagrid, 15, 4, 15, 14, 10, 2);
-            block_copy(symbol, datagrid, 15, 18, 15, 14, 10, 4);
-            block_copy(symbol, datagrid, 15, 32, 15, 4, 10, 6);
+            c1_central_finder(symbol, 16, 5, 1);
+            c1_vert(symbol, 4, 16, 1);
+            c1_vert(symbol, 20, 16, 1);
+            c1_vert(symbol, 36, 16, 1);
+            c1_vert(symbol, 4, 15, 0);
+            c1_vert(symbol, 20, 15, 0);
+            c1_vert(symbol, 36, 15, 0);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 12);
+            c1_spigot(symbol, 27);
+            c1_spigot(symbol, 39);
+            c1_block_copy(symbol, datagrid, 0, 0, 15, 4, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 4, 15, 14, 0, 2);
+            c1_block_copy(symbol, datagrid, 0, 18, 15, 14, 0, 4);
+            c1_block_copy(symbol, datagrid, 0, 32, 15, 4, 0, 6);
+            c1_block_copy(symbol, datagrid, 15, 0, 15, 4, 10, 0);
+            c1_block_copy(symbol, datagrid, 15, 4, 15, 14, 10, 2);
+            c1_block_copy(symbol, datagrid, 15, 18, 15, 14, 10, 4);
+            c1_block_copy(symbol, datagrid, 15, 32, 15, 4, 10, 6);
             break;
         case 5: /* Version E */
-            central_finder(symbol, 22, 5, 2);
-            vert(symbol, 4, 22, 1);
-            vert(symbol, 26, 24, 1);
-            vert(symbol, 48, 22, 1);
-            vert(symbol, 4, 21, 0);
-            vert(symbol, 26, 21, 0);
-            vert(symbol, 48, 21, 0);
-            spigot(symbol, 0);
-            spigot(symbol, 12);
-            spigot(symbol, 39);
-            spigot(symbol, 51);
-            block_copy(symbol, datagrid, 0, 0, 21, 4, 0, 0);
-            block_copy(symbol, datagrid, 0, 4, 21, 20, 0, 2);
-            block_copy(symbol, datagrid, 0, 24, 21, 20, 0, 4);
-            block_copy(symbol, datagrid, 0, 44, 21, 4, 0, 6);
-            block_copy(symbol, datagrid, 21, 0, 21, 4, 10, 0);
-            block_copy(symbol, datagrid, 21, 4, 21, 20, 10, 2);
-            block_copy(symbol, datagrid, 21, 24, 21, 20, 10, 4);
-            block_copy(symbol, datagrid, 21, 44, 21, 4, 10, 6);
+            c1_central_finder(symbol, 22, 5, 2);
+            c1_vert(symbol, 4, 22, 1);
+            c1_vert(symbol, 26, 24, 1);
+            c1_vert(symbol, 48, 22, 1);
+            c1_vert(symbol, 4, 21, 0);
+            c1_vert(symbol, 26, 21, 0);
+            c1_vert(symbol, 48, 21, 0);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 12);
+            c1_spigot(symbol, 39);
+            c1_spigot(symbol, 51);
+            c1_block_copy(symbol, datagrid, 0, 0, 21, 4, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 4, 21, 20, 0, 2);
+            c1_block_copy(symbol, datagrid, 0, 24, 21, 20, 0, 4);
+            c1_block_copy(symbol, datagrid, 0, 44, 21, 4, 0, 6);
+            c1_block_copy(symbol, datagrid, 21, 0, 21, 4, 10, 0);
+            c1_block_copy(symbol, datagrid, 21, 4, 21, 20, 10, 2);
+            c1_block_copy(symbol, datagrid, 21, 24, 21, 20, 10, 4);
+            c1_block_copy(symbol, datagrid, 21, 44, 21, 4, 10, 6);
             break;
         case 6: /* Version F */
-            central_finder(symbol, 31, 5, 3);
-            vert(symbol, 4, 31, 1);
-            vert(symbol, 26, 35, 1);
-            vert(symbol, 48, 31, 1);
-            vert(symbol, 70, 35, 1);
-            vert(symbol, 4, 30, 0);
-            vert(symbol, 26, 30, 0);
-            vert(symbol, 48, 30, 0);
-            vert(symbol, 70, 30, 0);
-            spigot(symbol, 0);
-            spigot(symbol, 12);
-            spigot(symbol, 24);
-            spigot(symbol, 45);
-            spigot(symbol, 57);
-            spigot(symbol, 69);
-            block_copy(symbol, datagrid, 0, 0, 30, 4, 0, 0);
-            block_copy(symbol, datagrid, 0, 4, 30, 20, 0, 2);
-            block_copy(symbol, datagrid, 0, 24, 30, 20, 0, 4);
-            block_copy(symbol, datagrid, 0, 44, 30, 20, 0, 6);
-            block_copy(symbol, datagrid, 0, 64, 30, 4, 0, 8);
-            block_copy(symbol, datagrid, 30, 0, 30, 4, 10, 0);
-            block_copy(symbol, datagrid, 30, 4, 30, 20, 10, 2);
-            block_copy(symbol, datagrid, 30, 24, 30, 20, 10, 4);
-            block_copy(symbol, datagrid, 30, 44, 30, 20, 10, 6);
-            block_copy(symbol, datagrid, 30, 64, 30, 4, 10, 8);
+            c1_central_finder(symbol, 31, 5, 3);
+            c1_vert(symbol, 4, 31, 1);
+            c1_vert(symbol, 26, 35, 1);
+            c1_vert(symbol, 48, 31, 1);
+            c1_vert(symbol, 70, 35, 1);
+            c1_vert(symbol, 4, 30, 0);
+            c1_vert(symbol, 26, 30, 0);
+            c1_vert(symbol, 48, 30, 0);
+            c1_vert(symbol, 70, 30, 0);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 12);
+            c1_spigot(symbol, 24);
+            c1_spigot(symbol, 45);
+            c1_spigot(symbol, 57);
+            c1_spigot(symbol, 69);
+            c1_block_copy(symbol, datagrid, 0, 0, 30, 4, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 4, 30, 20, 0, 2);
+            c1_block_copy(symbol, datagrid, 0, 24, 30, 20, 0, 4);
+            c1_block_copy(symbol, datagrid, 0, 44, 30, 20, 0, 6);
+            c1_block_copy(symbol, datagrid, 0, 64, 30, 4, 0, 8);
+            c1_block_copy(symbol, datagrid, 30, 0, 30, 4, 10, 0);
+            c1_block_copy(symbol, datagrid, 30, 4, 30, 20, 10, 2);
+            c1_block_copy(symbol, datagrid, 30, 24, 30, 20, 10, 4);
+            c1_block_copy(symbol, datagrid, 30, 44, 30, 20, 10, 6);
+            c1_block_copy(symbol, datagrid, 30, 64, 30, 4, 10, 8);
             break;
         case 7: /* Version G */
-            central_finder(symbol, 47, 6, 2);
-            vert(symbol, 6, 47, 1);
-            vert(symbol, 27, 49, 1);
-            vert(symbol, 48, 47, 1);
-            vert(symbol, 69, 49, 1);
-            vert(symbol, 90, 47, 1);
-            vert(symbol, 6, 46, 0);
-            vert(symbol, 27, 46, 0);
-            vert(symbol, 48, 46, 0);
-            vert(symbol, 69, 46, 0);
-            vert(symbol, 90, 46, 0);
-            spigot(symbol, 0);
-            spigot(symbol, 12);
-            spigot(symbol, 24);
-            spigot(symbol, 36);
-            spigot(symbol, 67);
-            spigot(symbol, 79);
-            spigot(symbol, 91);
-            spigot(symbol, 103);
-            block_copy(symbol, datagrid, 0, 0, 46, 6, 0, 0);
-            block_copy(symbol, datagrid, 0, 6, 46, 19, 0, 2);
-            block_copy(symbol, datagrid, 0, 25, 46, 19, 0, 4);
-            block_copy(symbol, datagrid, 0, 44, 46, 19, 0, 6);
-            block_copy(symbol, datagrid, 0, 63, 46, 19, 0, 8);
-            block_copy(symbol, datagrid, 0, 82, 46, 6, 0, 10);
-            block_copy(symbol, datagrid, 46, 0, 46, 6, 12, 0);
-            block_copy(symbol, datagrid, 46, 6, 46, 19, 12, 2);
-            block_copy(symbol, datagrid, 46, 25, 46, 19, 12, 4);
-            block_copy(symbol, datagrid, 46, 44, 46, 19, 12, 6);
-            block_copy(symbol, datagrid, 46, 63, 46, 19, 12, 8);
-            block_copy(symbol, datagrid, 46, 82, 46, 6, 12, 10);
+            c1_central_finder(symbol, 47, 6, 2);
+            c1_vert(symbol, 6, 47, 1);
+            c1_vert(symbol, 27, 49, 1);
+            c1_vert(symbol, 48, 47, 1);
+            c1_vert(symbol, 69, 49, 1);
+            c1_vert(symbol, 90, 47, 1);
+            c1_vert(symbol, 6, 46, 0);
+            c1_vert(symbol, 27, 46, 0);
+            c1_vert(symbol, 48, 46, 0);
+            c1_vert(symbol, 69, 46, 0);
+            c1_vert(symbol, 90, 46, 0);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 12);
+            c1_spigot(symbol, 24);
+            c1_spigot(symbol, 36);
+            c1_spigot(symbol, 67);
+            c1_spigot(symbol, 79);
+            c1_spigot(symbol, 91);
+            c1_spigot(symbol, 103);
+            c1_block_copy(symbol, datagrid, 0, 0, 46, 6, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 6, 46, 19, 0, 2);
+            c1_block_copy(symbol, datagrid, 0, 25, 46, 19, 0, 4);
+            c1_block_copy(symbol, datagrid, 0, 44, 46, 19, 0, 6);
+            c1_block_copy(symbol, datagrid, 0, 63, 46, 19, 0, 8);
+            c1_block_copy(symbol, datagrid, 0, 82, 46, 6, 0, 10);
+            c1_block_copy(symbol, datagrid, 46, 0, 46, 6, 12, 0);
+            c1_block_copy(symbol, datagrid, 46, 6, 46, 19, 12, 2);
+            c1_block_copy(symbol, datagrid, 46, 25, 46, 19, 12, 4);
+            c1_block_copy(symbol, datagrid, 46, 44, 46, 19, 12, 6);
+            c1_block_copy(symbol, datagrid, 46, 63, 46, 19, 12, 8);
+            c1_block_copy(symbol, datagrid, 46, 82, 46, 6, 12, 10);
             break;
         case 8: /* Version H */
-            central_finder(symbol, 69, 6, 3);
-            vert(symbol, 6, 69, 1);
-            vert(symbol, 26, 73, 1);
-            vert(symbol, 46, 69, 1);
-            vert(symbol, 66, 73, 1);
-            vert(symbol, 86, 69, 1);
-            vert(symbol, 106, 73, 1);
-            vert(symbol, 126, 69, 1);
-            vert(symbol, 6, 68, 0);
-            vert(symbol, 26, 68, 0);
-            vert(symbol, 46, 68, 0);
-            vert(symbol, 66, 68, 0);
-            vert(symbol, 86, 68, 0);
-            vert(symbol, 106, 68, 0);
-            vert(symbol, 126, 68, 0);
-            spigot(symbol, 0);
-            spigot(symbol, 12);
-            spigot(symbol, 24);
-            spigot(symbol, 36);
-            spigot(symbol, 48);
-            spigot(symbol, 60);
-            spigot(symbol, 87);
-            spigot(symbol, 99);
-            spigot(symbol, 111);
-            spigot(symbol, 123);
-            spigot(symbol, 135);
-            spigot(symbol, 147);
-            block_copy(symbol, datagrid, 0, 0, 68, 6, 0, 0);
-            block_copy(symbol, datagrid, 0, 6, 68, 18, 0, 2);
-            block_copy(symbol, datagrid, 0, 24, 68, 18, 0, 4);
-            block_copy(symbol, datagrid, 0, 42, 68, 18, 0, 6);
-            block_copy(symbol, datagrid, 0, 60, 68, 18, 0, 8);
-            block_copy(symbol, datagrid, 0, 78, 68, 18, 0, 10);
-            block_copy(symbol, datagrid, 0, 96, 68, 18, 0, 12);
-            block_copy(symbol, datagrid, 0, 114, 68, 6, 0, 14);
-            block_copy(symbol, datagrid, 68, 0, 68, 6, 12, 0);
-            block_copy(symbol, datagrid, 68, 6, 68, 18, 12, 2);
-            block_copy(symbol, datagrid, 68, 24, 68, 18, 12, 4);
-            block_copy(symbol, datagrid, 68, 42, 68, 18, 12, 6);
-            block_copy(symbol, datagrid, 68, 60, 68, 18, 12, 8);
-            block_copy(symbol, datagrid, 68, 78, 68, 18, 12, 10);
-            block_copy(symbol, datagrid, 68, 96, 68, 18, 12, 12);
-            block_copy(symbol, datagrid, 68, 114, 68, 6, 12, 14);
+            c1_central_finder(symbol, 69, 6, 3);
+            c1_vert(symbol, 6, 69, 1);
+            c1_vert(symbol, 26, 73, 1);
+            c1_vert(symbol, 46, 69, 1);
+            c1_vert(symbol, 66, 73, 1);
+            c1_vert(symbol, 86, 69, 1);
+            c1_vert(symbol, 106, 73, 1);
+            c1_vert(symbol, 126, 69, 1);
+            c1_vert(symbol, 6, 68, 0);
+            c1_vert(symbol, 26, 68, 0);
+            c1_vert(symbol, 46, 68, 0);
+            c1_vert(symbol, 66, 68, 0);
+            c1_vert(symbol, 86, 68, 0);
+            c1_vert(symbol, 106, 68, 0);
+            c1_vert(symbol, 126, 68, 0);
+            c1_spigot(symbol, 0);
+            c1_spigot(symbol, 12);
+            c1_spigot(symbol, 24);
+            c1_spigot(symbol, 36);
+            c1_spigot(symbol, 48);
+            c1_spigot(symbol, 60);
+            c1_spigot(symbol, 87);
+            c1_spigot(symbol, 99);
+            c1_spigot(symbol, 111);
+            c1_spigot(symbol, 123);
+            c1_spigot(symbol, 135);
+            c1_spigot(symbol, 147);
+            c1_block_copy(symbol, datagrid, 0, 0, 68, 6, 0, 0);
+            c1_block_copy(symbol, datagrid, 0, 6, 68, 18, 0, 2);
+            c1_block_copy(symbol, datagrid, 0, 24, 68, 18, 0, 4);
+            c1_block_copy(symbol, datagrid, 0, 42, 68, 18, 0, 6);
+            c1_block_copy(symbol, datagrid, 0, 60, 68, 18, 0, 8);
+            c1_block_copy(symbol, datagrid, 0, 78, 68, 18, 0, 10);
+            c1_block_copy(symbol, datagrid, 0, 96, 68, 18, 0, 12);
+            c1_block_copy(symbol, datagrid, 0, 114, 68, 6, 0, 14);
+            c1_block_copy(symbol, datagrid, 68, 0, 68, 6, 12, 0);
+            c1_block_copy(symbol, datagrid, 68, 6, 68, 18, 12, 2);
+            c1_block_copy(symbol, datagrid, 68, 24, 68, 18, 12, 4);
+            c1_block_copy(symbol, datagrid, 68, 42, 68, 18, 12, 6);
+            c1_block_copy(symbol, datagrid, 68, 60, 68, 18, 12, 8);
+            c1_block_copy(symbol, datagrid, 68, 78, 68, 18, 12, 10);
+            c1_block_copy(symbol, datagrid, 68, 96, 68, 18, 12, 12);
+            c1_block_copy(symbol, datagrid, 68, 114, 68, 6, 12, 14);
             break;
         case 9: /* Version S */
-            horiz(symbol, 5, 1);
-            horiz(symbol, 7, 1);
+            c1_horiz(symbol, 5, 1);
+            c1_horiz(symbol, 7, 1);
             set_module(symbol, 6, 0);
             set_module(symbol, 6, symbol->width - 1);
             unset_module(symbol, 7, 1);
@@ -1707,28 +1539,28 @@ int code_one(struct zint_symbol *symbol, unsigned char source[], int length) {
             switch (sub_version) {
                 case 1: /* Version S-10 */
                     set_module(symbol, 0, 5);
-                    block_copy(symbol, datagrid, 0, 0, 4, 5, 0, 0);
-                    block_copy(symbol, datagrid, 0, 5, 4, 5, 0, 1);
+                    c1_block_copy(symbol, datagrid, 0, 0, 4, 5, 0, 0);
+                    c1_block_copy(symbol, datagrid, 0, 5, 4, 5, 0, 1);
                     break;
                 case 2: /* Version S-20 */
                     set_module(symbol, 0, 10);
                     set_module(symbol, 4, 10);
-                    block_copy(symbol, datagrid, 0, 0, 4, 10, 0, 0);
-                    block_copy(symbol, datagrid, 0, 10, 4, 10, 0, 1);
+                    c1_block_copy(symbol, datagrid, 0, 0, 4, 10, 0, 0);
+                    c1_block_copy(symbol, datagrid, 0, 10, 4, 10, 0, 1);
                     break;
                 case 3: /* Version S-30 */
                     set_module(symbol, 0, 15);
                     set_module(symbol, 4, 15);
                     set_module(symbol, 6, 15);
-                    block_copy(symbol, datagrid, 0, 0, 4, 15, 0, 0);
-                    block_copy(symbol, datagrid, 0, 15, 4, 15, 0, 1);
+                    c1_block_copy(symbol, datagrid, 0, 0, 4, 15, 0, 0);
+                    c1_block_copy(symbol, datagrid, 0, 15, 4, 15, 0, 1);
                     break;
             }
             break;
         case 10: /* Version T */
-            horiz(symbol, 11, 1);
-            horiz(symbol, 13, 1);
-            horiz(symbol, 15, 1);
+            c1_horiz(symbol, 11, 1);
+            c1_horiz(symbol, 13, 1);
+            c1_horiz(symbol, 15, 1);
             set_module(symbol, 12, 0);
             set_module(symbol, 12, symbol->width - 1);
             set_module(symbol, 14, 0);
@@ -1741,23 +1573,23 @@ int code_one(struct zint_symbol *symbol, unsigned char source[], int length) {
                 case 1: /* Version T-16 */
                     set_module(symbol, 0, 8);
                     set_module(symbol, 10, 8);
-                    block_copy(symbol, datagrid, 0, 0, 10, 8, 0, 0);
-                    block_copy(symbol, datagrid, 0, 8, 10, 8, 0, 1);
+                    c1_block_copy(symbol, datagrid, 0, 0, 10, 8, 0, 0);
+                    c1_block_copy(symbol, datagrid, 0, 8, 10, 8, 0, 1);
                     break;
                 case 2: /* Version T-32 */
                     set_module(symbol, 0, 16);
                     set_module(symbol, 10, 16);
                     set_module(symbol, 12, 16);
-                    block_copy(symbol, datagrid, 0, 0, 10, 16, 0, 0);
-                    block_copy(symbol, datagrid, 0, 16, 10, 16, 0, 1);
+                    c1_block_copy(symbol, datagrid, 0, 0, 10, 16, 0, 0);
+                    c1_block_copy(symbol, datagrid, 0, 16, 10, 16, 0, 1);
                     break;
                 case 3: /* Verion T-48 */
                     set_module(symbol, 0, 24);
                     set_module(symbol, 10, 24);
                     set_module(symbol, 12, 24);
                     set_module(symbol, 14, 24);
-                    block_copy(symbol, datagrid, 0, 0, 10, 24, 0, 0);
-                    block_copy(symbol, datagrid, 0, 24, 10, 24, 0, 1);
+                    c1_block_copy(symbol, datagrid, 0, 0, 10, 24, 0, 0);
+                    c1_block_copy(symbol, datagrid, 0, 24, 10, 24, 0, 1);
                     break;
             }
             break;
@@ -1766,8 +1598,18 @@ int code_one(struct zint_symbol *symbol, unsigned char source[], int length) {
     for (i = 0; i < symbol->rows; i++) {
         symbol->row_height[i] = 1;
     }
+    symbol->height = symbol->rows;
+
+    if (symbol->option_2 == 9) { /* Version S */
+        if (symbol->eci || gs1) {
+            return errtxtf(ZINT_WARN_INVALID_OPTION, symbol, 511, "%s ignored for Version S",
+                            symbol->eci && gs1 ? "ECI and GS1 mode" : symbol->eci ? "ECI" : "GS1 mode");
+        }
+    } else if (symbol->eci && gs1) {
+        return errtxt(ZINT_WARN_INVALID_OPTION, symbol, 512, "ECI ignored for GS1 mode");
+    }
 
     return 0;
 }
 
-
+/* vim: set ts=4 sw=4 et : */

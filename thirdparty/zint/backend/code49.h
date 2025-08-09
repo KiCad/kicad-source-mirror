@@ -1,8 +1,7 @@
 /* code49.h - Code 49 Tables */
-
 /*
     libzint - the open source barcode library
-    Copyright (C) 2009-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2009-2022 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -29,21 +28,28 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
+/* SPDX-License-Identifier: BSD-3-Clause */
+
+#ifndef Z_CODE49_H
+#define Z_CODE49_H
 
 /* This data set taken from ANSI/AIM-BC6-2000, 4th April 2000 */
 
-static const char *c49_table7[128] = {
+static const char c49_table7[128][2] = {
     /* Table 7: Code 49 ASCII Chart */
-    "! ", "!A", "!B", "!C", "!D", "!E", "!F", "!G", "!H", "!I", "!J", "!K", "!L",
-    "!M", "!N", "!O", "!P", "!Q", "!R", "!S", "!T", "!U", "!V", "!W", "!X", "!Y",
-    "!Z", "!1", "!2", "!3", "!4", "!5", " ", "!6", "!7", "!8", "$", "%", "!9", "!0",
-    "!-", "!.", "!$", "+", "!/", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6",
-    "7", "8", "9", "!+", "&1", "&2", "&3", "&4", "&5", "&6", "A", "B", "C", "D", "E",
-    "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-    "V", "W", "X", "Y", "Z", "&7", "&8", "&9", "&0", "&-", "&.", "&A", "&B", "&C",
-    "&D", "&E", "&F", "&G", "&H", "&I", "&J", "&K", "&L", "&M", "&N", "&O", "&P",
-    "&Q", "&R", "&S", "&T", "&U", "&V", "&W", "&X", "&Y", "&Z", "&$", "&/", "&+",
-    "&%", "& "
+    {'!',' '}, {'!','A'}, {'!','B'}, {'!','C'}, {'!','D'}, {'!','E'}, {'!','F'}, {'!','G'}, {'!','H'}, {'!','I'},
+    {'!','J'}, {'!','K'}, {'!','L'}, {'!','M'}, {'!','N'}, {'!','O'}, {'!','P'}, {'!','Q'}, {'!','R'}, {'!','S'},
+    {'!','T'}, {'!','U'}, {'!','V'}, {'!','W'}, {'!','X'}, {'!','Y'}, {'!','Z'}, {'!','1'}, {'!','2'}, {'!','3'},
+    {'!','4'}, {'!','5'}, {  " "  }, {'!','6'}, {'!','7'}, {'!','8'}, {  "$"  }, {  "%"  }, {'!','9'}, {'!','0'},
+    {'!','-'}, {'!','.'}, {'!','$'}, {  "+"  }, {'!','/'}, {  "-"  }, {  "."  }, {  "/"  }, {  "0"  }, {  "1"  },
+    {  "2"  }, {  "3"  }, {  "4"  }, {  "5"  }, {  "6"  }, {  "7"  }, {  "8"  }, {  "9"  }, {'!','+'}, {'&','1'},
+    {'&','2'}, {'&','3'}, {'&','4'}, {'&','5'}, {'&','6'}, {  "A"  }, {  "B"  }, {  "C"  }, {  "D"  }, {  "E"  },
+    {  "F"  }, {  "G"  }, {  "H"  }, {  "I"  }, {  "J"  }, {  "K"  }, {  "L"  }, {  "M"  }, {  "N"  }, {  "O"  },
+    {  "P"  }, {  "Q"  }, {  "R"  }, {  "S"  }, {  "T"  }, {  "U"  }, {  "V"  }, {  "W"  }, {  "X"  }, {  "Y"  },
+    {  "Z"  }, {'&','7'}, {'&','8'}, {'&','9'}, {'&','0'}, {'&','-'}, {'&','.'}, {'&','A'}, {'&','B'}, {'&','C'},
+    {'&','D'}, {'&','E'}, {'&','F'}, {'&','G'}, {'&','H'}, {'&','I'}, {'&','J'}, {'&','K'}, {'&','L'}, {'&','M'},
+    {'&','N'}, {'&','O'}, {'&','P'}, {'&','Q'}, {'&','R'}, {'&','S'}, {'&','T'}, {'&','U'}, {'&','V'}, {'&','W'},
+    {'&','X'}, {'&','Y'}, {'&','Z'}, {'&','$'}, {'&','/'}, {'&','+'}, {'&','%'}, {'&',' '}
 };
 
 /* Table 5: Check Character Weighting Values */
@@ -62,12 +68,13 @@ static const char c49_z_weight[] = {
     13, 5, 41, 33, 36, 8, 4, 32, 3, 19, 40, 25, 29, 10, 24, 30
 };
 
-static const char *c49_table4[8] = {
+static const char c49_table4[8][4] = {
     /* Table 4: Row Parity Pattern for Code 49 Symbols */
-    "OEEO", "EOEO", "OOEE", "EEOO", "OEOE", "EOOE", "OOOO", "EEEE"
+    {'O','E','E','O'}, {'E','O','E','O'}, {'O','O','E','E'}, {'E','E','O','O'},
+    {'O','E','O','E'}, {'E','O','O','E'}, {'O','O','O','O'}, {'E','E','E','E'}
 };
 
-static const unsigned short int c49_even_bitpattern[] = {
+static const unsigned short c49_even_bitpattern[] = {
     /* Appendix E - Code 49 Encodation Patterns (Even Symbol Character Parity) */
     0xBE5C, 0xC16E, 0x86DC, 0xC126, 0x864C, 0x9EDC, 0xC726, 0x9E4C, 0xDF26, 0x82CC,
     0x8244, 0x8ECC, 0xC322, 0x8E44, 0xBECC, 0xCF22, 0xBE44, 0xC162, 0x86C4, 0xC762,
@@ -312,7 +319,7 @@ static const unsigned short int c49_even_bitpattern[] = {
     0xCF2E
 };
 
-static const unsigned short int c49_odd_bitpattern[] = {
+static const unsigned short c49_odd_bitpattern[] = {
     /* Appendix E - Code 49 Encodation Patterns (Odd Symbol Character Parity) */
     0xC940, 0xF250, 0xECA0, 0xFB28, 0xE5A0, 0xF968, 0xDB40, 0xF6D0, 0xFDB4, 0xC4A0,
     0xF128, 0x9940, 0xE650, 0xF994, 0xDCA0, 0xF728, 0xFDCA, 0x8B40, 0xE2D0, 0xCDA0,
@@ -556,3 +563,6 @@ static const unsigned short int c49_odd_bitpattern[] = {
     0x990E, 0x8B0E, 0x8906, 0xBB0E, 0xB906, 0x9B06, 0x9902, 0xA2FC, 0xD37E, 0xD13E,
     0xAEFC
 };
+
+/* vim: set ts=4 sw=4 et : */
+#endif /* Z_CODE49_H */

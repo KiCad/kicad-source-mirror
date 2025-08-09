@@ -28,12 +28,11 @@
 #define _DIALOG_BARCODE_PROPERTIES_H_
 
 #include <base_units.h>
-#include <class_board.h>
+#include <board.h>
 #include <dialog_barcode_properties_base.h>
 #include <origin_viewitem.h>
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
-#include <pcbnew.h>
 #include <widgets/text_ctrl_eval.h>
 #include <widgets/unit_binder.h>
 #include <wx/valnum.h>
@@ -69,14 +68,11 @@ private:
     void OnInitDialog( wxInitDialogEvent& event ) override;
     void OnResize( wxSizeEvent& event );
     void OnCancel( wxCommandEvent& event ) override;
-    void OnUpdateUI( wxUpdateUIEvent& event ) /*override*/;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    /// Called when a dimension has changed.
     /// Update the graphical barcode shown in the panel.
     void OnValuesChanged( wxCommandEvent& event ) override;
 
-    /// Updates the different parameters for the component being edited.
-    /// Automatically fired from the OK button click.
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;

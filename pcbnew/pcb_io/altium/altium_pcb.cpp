@@ -37,6 +37,7 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
+#include <pcb_barcode.h>
 #include <core/profile.h>
 #include <string_utils.h>
 #include <tools/pad_tool.h>
@@ -4249,14 +4250,8 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItem( const ATEXT6& aElem )
 {
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
     {
-        if( m_reporter )
-        {
-            wxString msg;
-            msg.Printf( _( "Ignored barcode on Altium layer %d (not yet supported)." ),
-                        aElem.layer );
-            m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-        }
-
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            ConvertBarcodes6ToBoardItemOnLayer( aElem, klayer );
         return;
     }
 
@@ -4269,31 +4264,8 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItem( FOOTPRINT* aFootprint, const ATEX
 {
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
     {
-        if( !m_footprintName.IsEmpty() )
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Error loading library '%s':\n"
-                           "Footprint %s contains barcode on Altium layer %d (not yet supported)." ),
-                        m_library,
-                        m_footprintName,
-                        aElem.layer );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-        }
-        else
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Footprint %s contains barcode on Altium layer %d (not yet supported)." ),
-                        aFootprint->GetReference(),
-                        aElem.layer );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-        }
-
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            ConvertBarcodes6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
         return;
     }
 
@@ -4412,6 +4384,57 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         else
             aFootprint->Add( fpText.release(), ADD_MODE::APPEND );
     }
+}
+
+
+void ALTIUM_PCB::ConvertBarcodes6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer )
+{
+    std::unique_ptr<PCB_BARCODE> pcbBarcode = std::make_unique<PCB_BARCODE>( m_board );
+
+    pcbBarcode->SetLayer( aLayer );
+    pcbBarcode->SetPosition( aElem.position );
+    pcbBarcode->SetWidth( aElem.textbox_rect_width );
+    pcbBarcode->SetHeight( aElem.textbox_rect_height );
+    pcbBarcode->SetMargin( aElem.barcode_margin );
+    pcbBarcode->SetText( aElem.text );
+
+    switch( aElem.barcode_type )
+    {
+    case ALTIUM_BARCODE_TYPE::CODE39: pcbBarcode->SetKind( BARCODE_T::CODE_39 ); break;
+    case ALTIUM_BARCODE_TYPE::CODE128: pcbBarcode->SetKind( BARCODE_T::CODE_128 ); break;
+    default: pcbBarcode->SetKind( BARCODE_T::CODE_39 ); break;
+    }
+
+    pcbBarcode->SetIsKnockout( aElem.barcode_inverted );
+    pcbBarcode->AssembleBarcode( true, true );
+
+    m_board->Add( pcbBarcode.release(), ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::ConvertBarcodes6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
+                                                         PCB_LAYER_ID aLayer )
+{
+    std::unique_ptr<PCB_BARCODE> fpBarcode = std::make_unique<PCB_BARCODE>( aFootprint );
+
+    fpBarcode->SetLayer( aLayer );
+    fpBarcode->SetPosition( aElem.position );
+    fpBarcode->SetWidth( aElem.textbox_rect_width );
+    fpBarcode->SetHeight( aElem.textbox_rect_height );
+    fpBarcode->SetMargin( aElem.barcode_margin );
+    fpBarcode->SetText( aElem.text );
+
+    switch( aElem.barcode_type )
+    {
+    case ALTIUM_BARCODE_TYPE::CODE39: fpBarcode->SetKind( BARCODE_T::CODE_39 ); break;
+    case ALTIUM_BARCODE_TYPE::CODE128: fpBarcode->SetKind( BARCODE_T::CODE_128 ); break;
+    default: fpBarcode->SetKind( BARCODE_T::CODE_39 ); break;
+    }
+
+    fpBarcode->SetIsKnockout( aElem.barcode_inverted );
+    fpBarcode->AssembleBarcode( true, true );
+
+    aFootprint->Add( fpBarcode.release(), ADD_MODE::APPEND );
 }
 
 

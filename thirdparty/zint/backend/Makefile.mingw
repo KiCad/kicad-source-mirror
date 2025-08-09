@@ -6,7 +6,7 @@
 # make clean		cleans up a previous compilation and any object or editor files
 #
 
-ZINT_VERSION:=-DZINT_VERSION=\"2.3.2\"
+ZINT_VERSION:=-DZINT_VERSION=\"2.15.0.9\"
 
 
 CC:= gcc
@@ -24,19 +24,18 @@ APP:=zint
 DLL:=$(APP).dll
 STATLIB:=lib$(APP).a
 
-COMMON_OBJ:= common.o render.o png.o library.o ps.o large.o reedsol.o gs1.o svg.o \
-	hanxin.o mailmark.o dotcode.o codablock.o emf.o eci.o \
-	raster.o tif.o gif.o pcx.o bmp.o
+COMMON_OBJ:= common.o library.o large.o reedsol.o gs1.o eci.o filemem.o general_field.o sjis.o gb2312.o gb18030.o
 ONEDIM_OBJ:= code.o code128.o 2of5.o upcean.o telepen.o medical.o plessey.o rss.o
-POSTAL_OBJ:= postal.o auspost.o imail.o
-TWODIM_OBJ:= code16k.o dmatrix.o pdf417.o qr.o maxicode.o composite.o aztec.o code49.o code1.o gridmtx.o
+POSTAL_OBJ:= postal.o auspost.o imail.o mailmark.o
+TWODIM_OBJ:= code16k.o codablock.o dmatrix.o pdf417.o qr.o maxicode.o composite.o aztec.o code49.o code1.o gridmtx.o hanxin.o dotcode.o ultra.o
+OUTPUT_OBJ:= vector.o ps.o svg.o emf.o bmp.o pcx.o gif.o png.o tif.o raster.o output.o
 
-LIB_OBJ:= $(COMMON_OBJ) $(ONEDIM_OBJ) $(TWODIM_OBJ) $(POSTAL_OBJ)
+LIB_OBJ:= $(COMMON_OBJ) $(ONEDIM_OBJ) $(TWODIM_OBJ) $(POSTAL_OBJ) $(OUTPUT_OBJ)
 DLL_OBJ:= $(LIB_OBJ:.o=.lo) dllversion.lo
 
 
-ifeq ($(NO_PNG),true)
-DEFINES+= -DNO_PNG
+ifeq ($(ZINT_NO_PNG),true)
+DEFINES+= -DZINT_NO_PNG
 else
 DEFINES_DLL+= -DPNG_DLL -DZLIB_DLL
 LIBS+= -lpng -lz
@@ -53,7 +52,7 @@ all: $(DLL) $(STATLIB)
 %.o:%.c
 	@echo Compiling $< ...
 	$(CC) $(CFLAGS) $(DEFINES) $(ZINT_VERSION) -c -o $@ $<
-	 
+
 $(DLL):$(DLL_OBJ)
 	@echo Linking $@...
 	o2dll.sh -o $@ $(DLL_OBJ) $(LIBS)

@@ -3265,6 +3265,30 @@ SHAPE_POLY_SET::TRIANGULATED_POLYGON::~TRIANGULATED_POLYGON()
 }
 
 
+void SHAPE_POLY_SET::Scale( double aScaleFactorX, double aScaleFactorY, const VECTOR2I& aCenter )
+{
+    for( POLYGON& poly : m_polys )
+    {
+        for( SHAPE_LINE_CHAIN& path : poly )
+        {
+            for( int i = 0; i < path.PointCount(); i++ )
+            {
+                VECTOR2I pt = path.CPoint( i );
+                VECTOR2D vec;
+                vec.x = ( pt.x - aCenter.x ) * aScaleFactorX;
+                vec.y = ( pt.y - aCenter.y ) * aScaleFactorY;
+                pt.x = KiROUND<double, int>( aCenter.x + vec.x );
+                pt.y = KiROUND<double, int>( aCenter.y + vec.y );
+                path.SetPoint( i, pt );
+            }
+        }
+    }
+
+    if( m_triangulationValid )
+        CacheTriangulation();
+}
+
+
 void
 SHAPE_POLY_SET::BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths,
                                                bool                                 aEvenOdd )

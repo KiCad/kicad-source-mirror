@@ -31,6 +31,7 @@
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
+#include <dialogs/dialog_barcode_properties.h>
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -48,7 +49,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
-#include <class_barcode.h>
+#include <pcb_barcode.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
 #include <tools/zone_filler_tool.h>
@@ -1399,56 +1400,71 @@ void DRAWING_TOOL::constrainDimension( PCB_DIMENSION_BASE* aDim )
 
 int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_inDrawingTool )
         return 0;
 
-    PCB_BARCODE*                 barcode     = NULL;
-    const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    BOARD_COMMIT                 commit( m_frame );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
-    // do not capture or auto-pan until we start placing some text
+    PCB_BARCODE*   barcode = nullptr;
+    BOARD_COMMIT   commit( m_frame );
+    PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
-    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
+    auto setCursor =
+            [&]()
+            {
+                if( barcode )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
 
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
+    auto cleanup =
+            [&]()
+            {
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
+                m_controls->ForceCursorPosition( false );
+                m_controls->ShowCursor( true );
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
+                delete barcode;
+                barcode = nullptr;
+            };
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    m_frame->PushTool( aEvent );
+
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
+    setCursor();
 
-    bool reselect = false;
-
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
-    // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( barcode ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+        setCursor();
 
-        if( reselect && barcode )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, barcode );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        VECTOR2I cursorPos =
+                GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(),
+                                                       { m_frame->GetActiveLayer() }, GRID_TEXT ),
+                                  COORDS_PADDING );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
-        auto cleanup = [&]() {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            m_controls->ForceCursorPosition( false );
-            m_controls->ShowCursor( true );
-            m_controls->SetAutoPan( false );
-            m_controls->CaptureCursor( false );
-            delete barcode;
-            barcode = NULL;
-        };
-
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsDrag()
+            || ( barcode && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( barcode )
+            {
                 cleanup();
+            }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -1464,81 +1480,66 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            if( !barcode )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            bool placing = barcode != nullptr;
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-            if( !barcode )
+            PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+            barcode = new PCB_BARCODE( m_frame->GetModel() );
+            barcode->SetFlags( IS_NEW );
+            barcode->SetLayer( layer );
+            barcode->SetPosition( cursorPos );
+
+            DIALOG_BARCODE_PROPERTIES dlg( m_frame, barcode );
+            bool                   cancelled;
+
+            RunMainStack( [&]() { cancelled = dlg.ShowModal() != wxID_OK; } );
+
+            if( cancelled )
             {
-                m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
-                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+                delete barcode;
+            }
+            else
+            {
+                if( !m_view->IsLayerVisible( layer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
 
-                barcode = new PCB_BARCODE( m_frame->GetModel() );
-                // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an undo entry :| LEGACY_CLEANUP
-                barcode->SetFlags( IS_NEW );
+                commit.Add( barcode );
+                commit.Push( _( "Draw Barcode" ) );
 
-                barcode->SetLayer( layer );
-
-                // Set the mirrored option for layers on the BACK side of the board
-                //if( IsBackLayer( layer ) )
-                //    barcodePcb->SetMirrored( true );
-
-                barcode->SetTextSize( dsnSettings.GetTextSize( layer ) );
-
-                RunMainStack( [&]() { m_frame->InstallBarcodeOptionsFrame( barcode ); } );
-
-                barcode->ComputeBarcode(); // compute content of barcode
-
-                m_controls->WarpCursor( barcode->GetPosition(), true );
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, barcode );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, barcode );
                 m_view->Update( &selection() );
             }
 
-            if( placing )
-            {
-                barcode->ClearFlags();
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-                commit.Add( barcode );
-                commit.Push( _( "Place a barcode" ) );
-
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, barcode );
-
-                barcode = nullptr;
-            }
-
-            m_controls->ForceCursorPosition( false );
-            m_controls->ShowCursor( true );
-            m_controls->CaptureCursor( barcode != nullptr );
-            m_controls->SetAutoPan( barcode != nullptr );
+            barcode = nullptr;
         }
-        else if( barcode && evt->IsMotion() )
-        {
-            barcode->SetPosition( (wxPoint) cursorPos );
-            selection().SetReferencePoint( cursorPos );
-            m_view->Update( &selection() );
-            frame()->SetMsgPanel( barcode );
-        }
-
-        else if( barcode && evt->IsAction( &PCB_ACTIONS::properties ) )
-        {
-            // Calling 'Properties' action clears the selection, so we need to restore it
-            reselect = true;
-        }
-
         else
+        {
             evt->SetPassEvent();
+        }
+
+        getViewControls()->SetAutoPan( false );
+        getViewControls()->CaptureCursor( false );
     }
 
-    frame()->SetMsgPanel( board() );
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -4356,7 +4357,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawCenterDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawRadialDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawBarcode,           PCB_ACTIONS::drawBarcode.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawBarcode,           PCB_ACTIONS::placeBarcode.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawRuleArea.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );

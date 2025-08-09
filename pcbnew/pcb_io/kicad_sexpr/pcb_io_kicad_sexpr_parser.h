@@ -64,6 +64,7 @@ class PCB_POINT;
 class PCB_TARGET;
 class PCB_VIA;
 class ZONE;
+class PCB_BARCODE;
 class FP_3DMODEL;
 class SHAPE_LINE_CHAIN;
 struct LAYER;
@@ -224,6 +225,7 @@ private:
     void                 parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT* aBaseText = nullptr );
     PCB_REFERENCE_IMAGE* parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent );
     PCB_TEXTBOX*         parsePCB_TEXTBOX( BOARD_ITEM* aParent );
+    PCB_BARCODE*         parsePCB_BARCODE( BOARD_ITEM* aParent );
     PCB_TABLECELL*       parsePCB_TABLECELL( BOARD_ITEM* aParent );
     PCB_TABLE*           parsePCB_TABLE( BOARD_ITEM* aParent );
     PCB_DIMENSION_BASE*  parseDIMENSION( BOARD_ITEM* aParent );

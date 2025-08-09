@@ -160,7 +160,7 @@ TOOL_ACTION PCB_ACTIONS::drawBezier( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_bezier )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PCB_ACTIONS::drawBarcode( TOOL_ACTION_ARGS()
+TOOL_ACTION PCB_ACTIONS::placeBarcode( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.barcode" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_SHIFT + MD_CTRL + 'B' )

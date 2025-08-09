@@ -193,7 +193,7 @@ public:
      */
     //void SetRotationAngle( EDA_ANGLE aRotationAngle );
     void InstallTextOptionsFrame( BOARD_ITEM* aText );
-    void InstallBarcodeOptionsFrame( PCB_BARCODE* aText );
+    void ShowBarcodePropertiesDialog( PCB_BARCODE* aText );
     void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
 
     void ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitmap );

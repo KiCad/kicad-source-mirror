@@ -205,6 +205,9 @@ private:
     void ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer );
     void ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
                                               PCB_LAYER_ID aLayer );
+    void ConvertBarcodes6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer );
+    void ConvertBarcodes6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
+                                                 PCB_LAYER_ID aLayer );
     void ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT& aEdaText );
     void ParseFills6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );

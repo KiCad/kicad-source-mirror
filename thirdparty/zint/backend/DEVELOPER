@@ -1,52 +1,70 @@
 Contents
 --------
 
+2025-01-21
+
 Here is a guide to which bit of source code does what.
 
 2of5.c:
-	Matrix 2 of 5
-	Industrial 2 of 5
-	IATA 2 of 5
-	Data Logic
-	Interleaved 2 of 5
+	Code 2 of 5 Standard (Matrix)
+	Code 2 of 5 Industrial
+	Code 2 of 5 IATA
+	Code 2 of 5 Data Logic
+
+2of5inter.c:
+	Code 2 of 5 Interleaved
+
+2of5inter_based.c:
 	ITF-14
-	Deutche Post Leitcode
-	Deutche Post Identcode
+	Deutsche Post Leitcode
+	Deutsche Post Identcode
 
 auspost.c:
-	Australia Post Standard Customer Barcode
-	Australia Post Customer Barcode 2
-	Australia Post Customer Barcode 3
-	Australia Post Reply Paid Barcode
-	Australia Post Routing Barcode
-	Australia Post Redirect Barcode
+	Australia Post Standard Customer
+	Australia Post Reply Paid
+	Australia Post Routing
+	Australia Post Redirection
 
 aztec.c:
 	Aztec Code
 	Compact Aztec Code
 	Aztec Runes
 
-blockf.c:
+bc412.c:
+	IBM BC412 (SEMI T1-95)
+
+channel.c:
+	Channel Code
+
+codabar.c:
+	Codabar
+
+codablock.c:
 	Codablock-F
+
+code11.c:
+	Code 11
 
 code128.c:
 	Code 128
-	Code 128 Subset B
-	NVE-18
+	Code 128 (Suppress Code Set C)
 	GS1-128 (UCC/EAN-128)
+
+code128_based.c:
+	NVE-18
 	EAN-14
+	DPD Code
+	Universal Postal Union S10
 
 code16k.c:
 	Code 16k
 
 code.c:
-	Code 11
 	Code 39
-	Pharmazentral Nummer (PZN)
+	LOGMARS
 	Extended Code 39 (Code 39+)
 	Code 93
-	LOGMARS
-	Channel Code
+	VIN
 
 code1.c:
 	Code One
@@ -60,32 +78,36 @@ composite.c:
 	CC-C Composite Symbology
 
 dotcode.c:
-        Dot Code
+    Dot Code
 
-dm200.c:
-	Data Matrix ECC 200
+dmatrix.c:
+	Data Matrix (ECC 200)
+	Royal Mail 2D Mailmark (CMDM)
+
+dxfilmedge.c:
+	DX Film Edge Barcode
 
 gridmtx.c:
 	Grid Matrix
 
 hanxin.c:
-        Han Xin Code
+	Han Xin Code
 
 imail.c:
-	USPS OneCode (Intelligent Mail)
+	USPS Intelligent Mail (OneCode)
 
 maxicode.c:
-	UPS Maxicode
+	UPS MaxiCode
 
 medical.c:
-	Pharma Code
-	Two Track Pharma Code
-	Codabar
-	Code 32
+	Pharmacode One-Track
+	Pharmacode Two-Track
+	Code 32 (Italian Pharmacode)
+	Pharmazentral Nummer (PZN)
 
 pdf417.c:
 	PDF417
-	Truncated PDF417
+	Compact PDF417
 	MicroPDF417
 
 plessey.c:
@@ -93,23 +115,26 @@ plessey.c:
 	MSI Plessey
 
 postal.c:
-	PostNet
+	POSTNET
 	PLANET
+	Brazilian CEPNet
 	Facing Identification Mark (FIM)
 	Royal Mail 4-State Country Code (RM4SCC)
-	KIX Code
+	Dutch Post KIX Code
 	DAFT Code
 	Flattermarken
-	Korean Postal Code
+	Korean Post Barcode
 	Japanese Postal Code
 
 qr.c:
 	QR Code
 	Micro QR Code
-        UPNQR
+	UPNQR
+	Rectangular Micro QR Code (rMQR)
 
 rss.c:
-	GS1 DataBar (DataBar-14) (RSS-14)
+	GS1 DataBar Omnidirectional (RSS-14)
+	GS1 DataBar Truncated
 	GS1 DataBar Stacked (RSS-14 Stacked)
 	GS1 DataBar Stacked Omnidirectional (DataBar-14 Stacked Omnidirectional)
 		(RSS-14 Stacked Omnidirectional)

@@ -24,24 +24,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/type_helpers.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_barcode.h>
+#include <pcb_barcode.h>
+#include <pcb_text.h>
+#include <layer_ids.h>
+#include <math/util.h>
 #include <confirm.h>
 #include <dialog_barcode_properties.h>
 #include <pcb_base_frame.h>
+#include <pcb_base_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
-#include <tools/footprint_editor_tools.h>
 #include <view/view_controls.h>
+#include <gal/graphics_abstraction_layer.h>
+// For BOX2D viewport checks
+#include <math/box2.h>
 
 
-DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES(
-        PCB_BASE_FRAME* aParent, PCB_BARCODE* aBarcode )
-        : DIALOG_BARCODE_PROPERTIES_BASE( aParent ), m_parent( aParent )
+DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_BARCODE* aBarcode ) :
+        DIALOG_BARCODE_PROPERTIES_BASE( aParent ),
+        m_parent( aParent )
 {
     m_currentBarcode = aBarcode; // aBarcode can not be NULL (no FOOTPRINT editor?)
 
@@ -49,19 +56,11 @@ DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES(
 
     m_dummyBarcode = new PCB_BARCODE( nullptr );
 
-    initValues();
-
-    // Usually, TransferDataToWindow is called by OnInitDialog
-    // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes
-    TransferDataToWindow();
-
-    // Initialize canvas to be able to display the dummy pad:
+    // Initialize canvas to be able to display the dummy barcode:
     prepareCanvas();
 
     m_sdbSizerOK->SetDefault();
 
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
 }
 
 
@@ -74,9 +73,9 @@ DIALOG_BARCODE_PROPERTIES::~DIALOG_BARCODE_PROPERTIES()
 
 void DIALOG_BARCODE_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
 {
-    // Needed on some WM to be sure the pad is redrawn according to the final size
+    // Needed on some WM to be sure the barcode is redrawn according to the final size
     // of the canvas, with the right zoom factor
-    // TODO redraw();
+    event.Skip();
 }
 
 
@@ -99,27 +98,20 @@ void DIALOG_BARCODE_PROPERTIES::prepareCanvas()
     // or be a complex shape.
     KIGFX::COLOR4D axis_color = LIGHTBLUE;
 
-    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( axis_color, KIGFX::ORIGIN_VIEWITEM::CROSS,
-            Millimeter2iu( 0.2 ), VECTOR2D( m_dummyBarcode->GetPosition() ) );
+    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( axis_color, KIGFX::ORIGIN_VIEWITEM::CROSS, pcbIUScale.mmToIU( 0.2 ),
+                                               VECTOR2D( m_dummyBarcode->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
     m_panelShowBarcodeGal->UpdateColors();
     m_panelShowBarcodeGal->SwitchBackend( m_parent->GetCanvas()->GetBackend() );
     m_panelShowBarcodeGal->SetStealsFocus( false );
 
-    bool mousewheelPan = m_parent->GetCanvas()->GetViewControls()->IsMousewheelPanEnabled();
-    m_panelShowBarcodeGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
-
     m_panelShowBarcodeGal->Show();
 
     KIGFX::VIEW* view = m_panelShowBarcodeGal->GetView();
 
-    // fix the pad render mode (filled/not filled)
-    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-    settings->SetSketchModeGraphicItems( false );
-
     // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
-    double gridsize = 0.001 * IU_PER_MM;
+    double gridsize = pcbIUScale.mmToIU( 0.001 );
     view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
     // And do not show the grid:
     view->GetGAL()->SetGridVisibility( false );
@@ -133,32 +125,141 @@ void DIALOG_BARCODE_PROPERTIES::prepareCanvas()
 
 void DIALOG_BARCODE_PROPERTIES::initValues()
 {
-    // TODO
-}
+    // Copy current barcode into our working copy
+    if( m_currentBarcode )
+        *m_dummyBarcode = *m_currentBarcode;
 
-// A small helper function, to display coordinates:
-static wxString formatCoord( EDA_UNITS aUnits, wxPoint aCoord )
-{
-    return wxString::Format( "(X:%s Y:%s)", MessageTextFromValue( aUnits, aCoord.x, true ),
-            MessageTextFromValue( aUnits, aCoord.y, true ) );
+    m_dummyBarcode->AssembleBarcode( true, true );
+
+    // Set units labels to current user units
+    wxString unitsLabel = EDA_UNIT_UTILS::GetText( GetUserUnits(), EDA_DATA_TYPE::DISTANCE );
+    m_posXUnits->SetLabel( unitsLabel );
+    m_posYUnits->SetLabel( unitsLabel );
+    m_sizeXUnits->SetLabel( unitsLabel );
+    m_sizeYUnits->SetLabel( unitsLabel );
+    m_staticText18->SetLabel( unitsLabel );
+    m_offsetXUnits->SetLabel( unitsLabel );
+    m_offsetYUnits->SetLabel( unitsLabel );
+
+    // Populate layer list
+    m_Layer->Clear();
+
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    {
+        wxString name = m_board->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
+        if( name.IsEmpty() )
+            continue;
+
+        m_Layer->Append( name );
+    }
 }
 
 
 void DIALOG_BARCODE_PROPERTIES::OnResize( wxSizeEvent& event )
 {
-    // TODO
+    m_panelShowBarcodeGal->Refresh();
+    event.Skip();
 }
 
 
 void DIALOG_BARCODE_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    // TODO
+    // Error correction options are only meaningful for QR codes
+    bool enableEC = m_barcode->GetSelection() >= to_underlying( BARCODE_T::QR_CODE );
+    m_errorCorrection->Enable( enableEC );
+
+    bool showText = m_cbShowText->GetValue();
+    m_staticText17->Enable( showText );
+    m_textCtrl8->Enable( showText );
+    m_staticText18->Enable( showText );
+
+    if( enableEC )
+    {
+        // Micro QR codes do not support High (H) error correction level
+        bool isMicroQR = ( m_barcode->GetSelection() == to_underlying( BARCODE_T::MICRO_QR_CODE ) );
+
+        // Enable/disable the High option (index 3)
+        m_errorCorrection->Enable( 3, !isMicroQR );
+
+        // If currently High is selected and we switched to Micro QR, change to a valid option
+        if( isMicroQR && m_errorCorrection->GetSelection() == 3 )
+        {
+            m_errorCorrection->SetSelection( 2 ); // Default to Q (Quartile), consistent with SetErrorCorrection
+        }
+    }
 }
 
 
 bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
 {
-    // TODO
+    initValues();
+
+    if( m_currentBarcode )
+        *m_dummyBarcode = *m_currentBarcode;
+
+    // Set text
+    m_textInput->ChangeValue( m_dummyBarcode->GetText() );
+
+    // Set layer selection
+    wxString layerName = m_board->GetLayerName( m_dummyBarcode->GetLayer() );
+    int      idx = m_Layer->FindString( layerName );
+    if( idx != wxNOT_FOUND )
+        m_Layer->SetSelection( idx );
+
+    // Position
+    VECTOR2I pos = m_dummyBarcode->GetPosition();
+    m_posXCtrl->ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), pos.x ) );
+    m_posYCtrl->ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), pos.y ) );
+
+    // Size
+    m_sizeXCtrl->ChangeValue(
+            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetWidth() ) );
+    m_sizeYCtrl->ChangeValue(
+            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetHeight() ) );
+
+    m_textCtrl8->ChangeValue(
+            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(),
+                                                 m_dummyBarcode->GetTextHeight() ) );
+
+    // Orientation
+    m_orientation->ChangeValue( wxString::Format( wxT( "%g" ), m_dummyBarcode->Text().GetTextAngle().AsDegrees() ) );
+
+    // Show text option
+    m_cbShowText->SetValue( m_dummyBarcode->Text().IsVisible() );
+
+    m_inverted->SetValue( m_dummyBarcode->IsKnockout() );
+
+    m_marginXCtrl->ChangeValue(
+            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetMargin().x ) );
+    m_marginYCtrl->ChangeValue(
+            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetMargin().y ) );
+
+    // Barcode type
+    switch( m_dummyBarcode->GetKind() )
+    {
+    case BARCODE_T::CODE_39: m_barcode->SetSelection( 0 ); break;
+    case BARCODE_T::CODE_128: m_barcode->SetSelection( 1 ); break;
+    case BARCODE_T::DATA_MATRIX: m_barcode->SetSelection( 2 ); break;
+    case BARCODE_T::QR_CODE: m_barcode->SetSelection( 3 ); break;
+    case BARCODE_T::MICRO_QR_CODE: m_barcode->SetSelection( 4 ); break;
+    default: m_barcode->SetSelection( 0 ); break;
+    }
+
+    // Error correction level
+    switch( m_dummyBarcode->GetErrorCorrection() )
+    {
+    case BARCODE_ECC_T::L: m_errorCorrection->SetSelection( 0 ); break;
+    case BARCODE_ECC_T::M: m_errorCorrection->SetSelection( 1 ); break;
+    case BARCODE_ECC_T::Q: m_errorCorrection->SetSelection( 2 ); break;
+    case BARCODE_ECC_T::H: m_errorCorrection->SetSelection( 3 ); break;
+    default: m_errorCorrection->SetSelection( 0 ); break;
+    }
+
+    // Now all widgets have the size fixed, call finishDialogSettings
+    finishDialogSettings();
+
+    wxUpdateUIEvent dummy;
+    OnUpdateUI( dummy );
 
     return true;
 }
@@ -168,8 +269,10 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataFromWindow()
 {
     BOARD_COMMIT commit( m_parent );
 
-    //if( !wxDialog::TransferDataFromWindow() )
-    //    return false;
+    if( !transferDataToBarcode( m_currentBarcode ) )
+        return false;
+
+    commit.Modify( m_currentBarcode );
 
     // redraw the area where the pad was
     m_parent->GetCanvas()->Refresh();
@@ -180,20 +283,116 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataFromWindow()
 }
 
 
-bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aPad )
+bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
 {
-    wxString msg;
+    if( !aBarcode )
+        return false;
 
-    //if( !Validate() )
-    //    return true;
+    aBarcode->SetText( m_textInput->GetValue() );
 
-    // TODO
+    // Layer
+    wxString     layerName = m_Layer->GetStringSelection();
+    PCB_LAYER_ID layer = m_board->GetLayerID( layerName );
+    aBarcode->SetLayer( layer );
 
-    return false;
+    // Position
+    int posX = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, GetUserUnits(), m_posXCtrl->GetValue(),
+                                                                   EDA_DATA_TYPE::DISTANCE ) );
+    int posY = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, GetUserUnits(), m_posYCtrl->GetValue(),
+                                                                   EDA_DATA_TYPE::DISTANCE ) );
+    aBarcode->SetPosition( VECTOR2I( posX, posY ) );
+
+    // Size
+    int width = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, GetUserUnits(), m_sizeXCtrl->GetValue(),
+                                                                    EDA_DATA_TYPE::DISTANCE ) );
+    int height = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            pcbIUScale, GetUserUnits(), m_sizeYCtrl->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    aBarcode->SetWidth( width );
+    aBarcode->SetHeight( height );
+
+    int textHeight = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
+        pcbIUScale, GetUserUnits(), m_textCtrl8->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    aBarcode->SetTextHeight( textHeight );
+
+    // Orientation
+    double angleDeg = 0.0;
+    m_orientation->GetValue().ToDouble( &angleDeg );
+    EDA_ANGLE newAngle( angleDeg, DEGREES_T );
+    EDA_ANGLE oldAngle = aBarcode->Text().GetTextAngle();
+    if( newAngle != oldAngle )
+    {
+        aBarcode->Rotate( aBarcode->GetPosition(), newAngle - oldAngle );
+        aBarcode->Text().SetTextAngle( newAngle );
+    }
+
+    aBarcode->SetIsKnockout( m_inverted->GetValue() );
+
+    // Margins
+    int marginX = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            pcbIUScale, GetUserUnits(), m_marginXCtrl->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    int marginY = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            pcbIUScale, GetUserUnits(), m_marginYCtrl->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    aBarcode->SetMargin( VECTOR2I( marginX, marginY ) );
+
+    // Show text
+    aBarcode->Text().SetVisible( m_cbShowText->GetValue() );
+
+    // Barcode kind
+    switch( m_barcode->GetSelection() )
+    {
+    case 0: aBarcode->SetKind( BARCODE_T::CODE_39 ); break;
+    case 1: aBarcode->SetKind( BARCODE_T::CODE_128 ); break;
+    case 2: aBarcode->SetKind( BARCODE_T::DATA_MATRIX ); break;
+    case 3: aBarcode->SetKind( BARCODE_T::QR_CODE ); break;
+    case 4: aBarcode->SetKind( BARCODE_T::MICRO_QR_CODE ); break;
+    default: aBarcode->SetKind( BARCODE_T::QR_CODE ); break;
+    }
+
+    switch( m_errorCorrection->GetSelection() )
+    {
+    case 0: aBarcode->SetErrorCorrection( BARCODE_ECC_T::L ); break;
+    case 1: aBarcode->SetErrorCorrection( BARCODE_ECC_T::M ); break;
+    case 2: aBarcode->SetErrorCorrection( BARCODE_ECC_T::Q ); break;
+    case 3: aBarcode->SetErrorCorrection( BARCODE_ECC_T::H ); break;
+    default: aBarcode->SetErrorCorrection( BARCODE_ECC_T::L ); break;
+    }
+
+    aBarcode->AssembleBarcode( true, true );
+
+    return true;
 }
 
 
 void DIALOG_BARCODE_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 {
-    // TODO
+    if( transferDataToBarcode( m_dummyBarcode ) )
+    {
+        KIGFX::VIEW* view = m_panelShowBarcodeGal->GetView();
+
+        // Compute the polygon bbox for the current dummy barcode (symbol + text/knockout as applicable)
+        const SHAPE_POLY_SET& poly = m_dummyBarcode->GetPolyShape();
+
+        if( poly.OutlineCount() > 0 )
+        {
+            BOX2I bbI = poly.BBox();
+
+            // Autozoom
+            view->SetViewport( BOX2D( bbI.GetOrigin(), bbI.GetSize() ) );
+
+            // Add a margin
+            view->SetScale( view->GetScale() * 0.7 );
+        }
+
+        view->SetCenter( VECTOR2D( m_dummyBarcode->GetPosition() ) );
+        view->Update( m_dummyBarcode );
+        m_panelShowBarcodeGal->Refresh();
+        OnModify();
+    }
+}
+
+
+void PCB_BASE_EDIT_FRAME::ShowBarcodePropertiesDialog( PCB_BARCODE* aBarcode )
+{
+    DIALOG_BARCODE_PROPERTIES dlg( this, aBarcode );
+    dlg.ShowModal();
 }

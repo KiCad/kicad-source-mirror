@@ -2,7 +2,7 @@
 
 /*
     libzint - the open source barcode library
-    Copyright (C) 2008-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2008-2023 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -29,24 +29,59 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
 */
-#ifndef __LARGE_H
-#define __LARGE_H
+/* SPDX-License-Identifier: BSD-3-Clause */
+
+#ifndef Z_LARGE_H
+#define Z_LARGE_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-extern void binary_load(short int reg[], char data[], const size_t src_len);
-extern void binary_add(short int accumulator[], short int input_buffer[]);
-extern void binary_subtract(short int accumulator[], short int input_buffer[]);
-extern void shiftdown(short int buffer[]);
-extern void shiftup(short int buffer[]);
-extern short int islarger(short int accum[], short int reg[]);
-extern void binary_multiply(short int reg[], char data[]);
+typedef struct { uint64_t lo; uint64_t hi; } large_uint;
+
+#define large_lo(s) ((s)->lo)
+#define large_hi(s) ((s)->hi)
+
+/* Set 128-bit `t` from 128-bit `s` */
+#define large_load(t, s) do { *(t) = *(s); } while (0)
+
+/* Set 128-bit `t` from 64-bit `s` */
+#define large_load_u64(t, s) do { (t)->lo = (s); (t)->hi = 0; } while (0)
+
+/* Convert decimal string `s` of (at most) length `length` to 64-bit and place in 128-bit `t` */
+INTERNAL void large_load_str_u64(large_uint *t, const unsigned char *s, const int length);
+
+/* Add 128-bit `s` to 128-bit `t` */
+INTERNAL void large_add(large_uint *t, const large_uint *s);
+/* Add 64-bit `s` to 128-bit `t` */
+INTERNAL void large_add_u64(large_uint *t, const uint64_t s);
+
+/* Subtract 64-bit `s` from 128-bit `t` */
+INTERNAL void large_sub_u64(large_uint *t, const uint64_t s);
+
+/* Multiply 128-bit `t` by 64-bit `s` */
+INTERNAL void large_mul_u64(large_uint *t, const uint64_t s);
+
+/* Divide 128-bit dividend `t` by 64-bit divisor `v`, returning 64-bit remainder */
+INTERNAL uint64_t large_div_u64(large_uint *t, uint64_t v);
+
+/* Unset a bit (zero-based) */
+INTERNAL void large_unset_bit(large_uint *t, const int bit);
+
+/* Output large_uint into an unsigned int array of size `size`, each element containing `bits` bits */
+INTERNAL void large_uint_array(const large_uint *t, unsigned int *uint_array, const int size, int bits);
+/* As `large_uint_array()` above, except output to unsigned char array */
+INTERNAL void large_uchar_array(const large_uint *t, unsigned char *uchar_array, const int size, int bits);
+
+/* Format large_uint into buffer, which should be at least 35 chars in size */
+INTERNAL char *large_dump(const large_uint *t, char *buf);
+/* Output formatted large_uint to stdout */
+INTERNAL void large_print(const large_uint *t);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* __LARGE_H */
-
+/* vim: set ts=4 sw=4 et : */
+#endif /* Z_LARGE_H */

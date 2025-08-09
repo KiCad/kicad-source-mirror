@@ -57,6 +57,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <wildcards_and_files_ext.h>
 #include <functional>
+#include <pcb_barcode.h>
 #include <pcb_painter.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -3155,6 +3156,10 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     {
     case PCB_REFERENCE_IMAGE_T:
         ShowReferenceImagePropertiesDialog( aItem );
+        break;
+
+    case PCB_BARCODE_T:
+        ShowBarcodePropertiesDialog( static_cast<PCB_BARCODE*>( aItem ) );
         break;
 
     case PCB_FIELD_T:

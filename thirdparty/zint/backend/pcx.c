@@ -1,8 +1,7 @@
 /* pcx.c - Handles output to ZSoft PCX file */
-
 /*
     libzint - the open source barcode library
-    Copyright (C) 2009-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2009-2025 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -29,145 +28,140 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
+/* SPDX-License-Identifier: BSD-3-Clause */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "common.h"
-#include "pcx.h"        /* PCX header structure */
+#include <errno.h>
 #include <math.h>
-#ifdef _MSC_VER
-#include <io.h>
-#include <fcntl.h>
-#include <malloc.h>
-#endif
+#include <stdio.h>
+#include "common.h"
+#include "filemem.h"
+#include "output.h"
+#include "pcx.h"        /* PCX header structure */
 
-#define SSET	"0123456789ABCDEF"
-
-int pcx_pixel_plot(struct zint_symbol *symbol, char *pixelbuf) {
-    int fgred, fggrn, fgblu, bgred, bggrn, bgblu;
+/* ZSoft PCX File Format Technical Reference Manual http://bespin.org/~qz/pc-gpe/pcx.txt */
+INTERNAL int pcx_pixel_plot(struct zint_symbol *symbol, const unsigned char *pixelbuf) {
+    unsigned char fgred, fggrn, fgblu, fgalpha, bgred, bggrn, bgblu, bgalpha;
     int row, column, i, colour;
     int run_count;
-    FILE *pcx_file;
+    struct filemem fm;
+    struct filemem *const fmp = &fm;
     pcx_header_t header;
-#ifdef _MSC_VER
-    unsigned char* rle_row;
-#endif
+    unsigned char previous;
+    const unsigned char *pb;
+    const int bytes_per_line = symbol->bitmap_width + (symbol->bitmap_width & 1); /* Must be even */
+    unsigned char *rle_row = (unsigned char *) z_alloca(bytes_per_line);
 
-#ifndef _MSC_VER
-    unsigned char rle_row[symbol->bitmap_width];
-#else
-    rle_row = (unsigned char *) _alloca((symbol->bitmap_width * 6) * sizeof (unsigned char));
-#endif /* _MSC_VER */
+    rle_row[bytes_per_line - 1] = 0; /* Will remain zero if bitmap_width odd */
 
-    fgred = (16 * ctoi(symbol->fgcolour[0])) + ctoi(symbol->fgcolour[1]);
-    fggrn = (16 * ctoi(symbol->fgcolour[2])) + ctoi(symbol->fgcolour[3]);
-    fgblu = (16 * ctoi(symbol->fgcolour[4])) + ctoi(symbol->fgcolour[5]);
-    bgred = (16 * ctoi(symbol->bgcolour[0])) + ctoi(symbol->bgcolour[1]);
-    bggrn = (16 * ctoi(symbol->bgcolour[2])) + ctoi(symbol->bgcolour[3]);
-    bgblu = (16 * ctoi(symbol->bgcolour[4])) + ctoi(symbol->bgcolour[5]);
+    (void) out_colour_get_rgb(symbol->fgcolour, &fgred, &fggrn, &fgblu, &fgalpha);
+    (void) out_colour_get_rgb(symbol->bgcolour, &bgred, &bggrn, &bgblu, &bgalpha);
 
-
-    header.manufacturer = 10; // ZSoft
-    header.version = 5; // Version 3.0
-    header.encoding = 1; // Run length encoding
-    header.bits_per_pixel = 8;
-    header.window_xmin = 0;
-    header.window_ymin = 0;
-    header.window_xmax = symbol->bitmap_width - 1;
-    header.window_ymax = symbol->bitmap_height - 1;
-    header.horiz_dpi = 300;
-    header.vert_dpi = 300;
+    header.manufacturer = 10; /* ZSoft */
+    header.version = 5; /* Version 3.0 */
+    header.encoding = 1; /* Run length encoding */
+    header.bits_per_pixel = 8; /* TODO: 1-bit monochrome black/white */
+    out_le_u16(header.window_xmin, 0);
+    out_le_u16(header.window_ymin, 0);
+    out_le_u16(header.window_xmax, symbol->bitmap_width - 1);
+    out_le_u16(header.window_ymax, symbol->bitmap_height - 1);
+    out_le_u16(header.horiz_dpi, symbol->dpmm ? roundf(stripf(symbol->dpmm * 25.4f)) : 300);
+    header.vert_dpi = header.horiz_dpi;
 
     for (i = 0; i < 48; i++) {
         header.colourmap[i] = 0x00;
     }
 
     header.reserved = 0;
-    header.number_of_planes = 3;
+    header.number_of_planes = 3 + (fgalpha != 0xFF || bgalpha != 0xFF); /* TODO: 1-bit monochrome black/white */
 
-    if (symbol->bitmap_width % 2) {
-        header.bytes_per_line = symbol->bitmap_width + 1;
-    } else {
-        header.bytes_per_line = symbol->bitmap_width;
-    }
+    out_le_u16(header.bytes_per_line, bytes_per_line);
 
-    header.palette_info = 1; // Colour
-    header.horiz_screen_size = 0;
-    header.vert_screen_size = 0;
+    out_le_u16(header.palette_info, 1); /* Colour */
+    out_le_u16(header.horiz_screen_size, 0);
+    out_le_u16(header.vert_screen_size, 0);
 
     for (i = 0; i < 54; i++) {
         header.filler[i] = 0x00;
     }
 
     /* Open output file in binary mode */
-    if (symbol->output_options & BARCODE_STDOUT) {
-#ifdef _MSC_VER
-        if (-1 == _setmode(_fileno(stdout), _O_BINARY)) {
-            strcpy(symbol->errtxt, "620: Can't open output file");
-            return ZINT_ERROR_FILE_ACCESS;
-        }
-#endif
-        pcx_file = stdout;
-    } else {
-        if (!(pcx_file = fopen(symbol->outfile, "wb"))) {
-            strcpy(symbol->errtxt, "621: Can't open output file");
-            return ZINT_ERROR_FILE_ACCESS;
-        }
+    if (!fm_open(fmp, symbol, "wb")) {
+        return ZEXT errtxtf(ZINT_ERROR_FILE_ACCESS, symbol, 621, "Could not open PCX output file (%1$d: %2$s)",
+                            fmp->err, strerror(fmp->err));
     }
 
-    fwrite(&header, sizeof (pcx_header_t), 1, pcx_file);
+    fm_write(&header, sizeof(pcx_header_t), 1, fmp);
 
-    for (row = 0; row < symbol->bitmap_height; row++) {
-        for (colour = 0; colour < 3; colour++) {
+    for (row = 0, pb = pixelbuf; row < symbol->bitmap_height; row++, pb += symbol->bitmap_width) {
+        for (colour = 0; colour < header.number_of_planes; colour++) {
             for (column = 0; column < symbol->bitmap_width; column++) {
+                const unsigned char ch = pb[column];
                 switch (colour) {
                     case 0:
-                        if (pixelbuf[(row * symbol->bitmap_width) + column] == '1') {
-                            rle_row[column] = fgred;
+                        if (ch == '0' || ch == '1') {
+                            rle_row[column] = ch != '0' ? fgred : bgred;
                         } else {
-                            rle_row[column] = bgred;
+                            out_colour_char_to_rgb(ch, &rle_row[column], NULL, NULL);
                         }
                         break;
                     case 1:
-                        if (pixelbuf[(row * symbol->bitmap_width) + column] == '1') {
-                            rle_row[column] = fggrn;
+                        if (ch == '0' || ch == '1') {
+                            rle_row[column] = ch != '0' ? fggrn : bggrn;
                         } else {
-                            rle_row[column] = bggrn;
+                            out_colour_char_to_rgb(ch, NULL, &rle_row[column], NULL);
                         }
                         break;
                     case 2:
-                        if (pixelbuf[(row * symbol->bitmap_width) + column] == '1') {
-                            rle_row[column] = fgblu;
+                        if (ch == '0' || ch == '1') {
+                            rle_row[column] = ch != '0' ? fgblu : bgblu;
                         } else {
-                            rle_row[column] = bgblu;
+                            out_colour_char_to_rgb(ch, NULL, NULL, &rle_row[column]);
                         }
+                        break;
+                    case 3:
+                        rle_row[column] = ch != '0' ? fgalpha : bgalpha;
                         break;
                 }
             }
 
+            /* Based on ImageMagick/coders/pcx.c PCXWritePixels()
+             * Copyright 1999-2020 ImageMagick Studio LLC */
+            previous = rle_row[0];
             run_count = 1;
-            for (column = 1; column < symbol->bitmap_width; column++) {
-                if ((rle_row[column - 1] == rle_row[column]) && (run_count < 63)) {
+            for (column = 1; column < bytes_per_line; column++) { /* Note going up to bytes_per_line */
+                if ((previous == rle_row[column]) && (run_count < 63)) {
                     run_count++;
                 } else {
-                    run_count += 0xc0;
-                    fputc(run_count, pcx_file);
-                    fputc(rle_row[column - 1], pcx_file);
+                    if (run_count > 1 || (previous & 0xc0) == 0xc0) {
+                        run_count += 0xc0;
+                        fm_putc(run_count, fmp);
+                    }
+                    fm_putc(previous, fmp);
+                    previous = rle_row[column];
                     run_count = 1;
                 }
             }
 
-            if (run_count > 1) {
+            if (run_count > 1 || (previous & 0xc0) == 0xc0) {
                 run_count += 0xc0;
-                fputc(run_count, pcx_file);
-                fputc(rle_row[column - 1], pcx_file);
+                fm_putc(run_count, fmp);
             }
+            fm_putc(previous, fmp);
         }
     }
 
-    fclose(pcx_file);
+    if (fm_error(fmp)) {
+        ZEXT errtxtf(0, symbol, 622, "Incomplete write of PCX output (%1$d: %2$s)", fmp->err, strerror(fmp->err));
+        (void) fm_close(fmp, symbol);
+        return ZINT_ERROR_FILE_WRITE;
+    }
+
+    if (!fm_close(fmp, symbol)) {
+        return ZEXT errtxtf(ZINT_ERROR_FILE_WRITE, symbol, 624, "Failure on closing PCX output file (%1$d: %2$s)",
+                            fmp->err, strerror(fmp->err));
+    }
 
     return 0;
 }
 
+/* vim: set ts=4 sw=4 et : */

@@ -1,4 +1,4 @@
-This directory contains a fork of the zint library. A version of this library can be found at https://github.com/VarLog/zint.
+This directory contains a fork of the zint library. A version of this library can be found at https://github.com/zint/zint.
 
 They are licensed under GPLv3, with the license text in this directory.
 

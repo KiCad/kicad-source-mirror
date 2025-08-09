@@ -1480,6 +1480,8 @@ public:
     const std::vector<SEG> GenerateHatchLines( const std::vector<double>& aSlopes, int aSpacing,
                                                int aLineLength ) const;
 
+    void Scale( double aScaleFactorX, double aScaleFactorY, const VECTOR2I& aCenter );
+
 protected:
     void cacheTriangulation( bool aPartition, bool aSimplify,
                              std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData );

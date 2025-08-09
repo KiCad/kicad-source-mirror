@@ -1,0 +1,761 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <core/type_helpers.h>
+#include <bitmaps.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <pcb_edit_frame.h>
+#include <richio.h>
+#include <trigo.h>
+
+#include <base_units.h>
+#include <pcb_barcode.h>
+#include <board.h>
+#include <geometry/shape_poly_set.h>
+#include <pcb_text.h>
+#include <math/util.h> // for KiROUND
+#include <convert_basic_shapes_to_polygon.h>
+#include <wx/log.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
+#include <scoped_set_reset.h>
+#include <stdexcept>
+#include <utility>
+#include <algorithm>
+
+#include <backend/zint.h>
+#include <board_design_settings.h>
+
+PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
+        BOARD_ITEM( aParent, PCB_BARCODE_T ),
+        m_width( pcbIUScale.mmToIU( 40 ) ),
+        m_height( pcbIUScale.mmToIU( 40 ) ),
+        m_poly_width( pcbIUScale.mmToIU( 40 ) ),
+        m_poly_height( pcbIUScale.mmToIU( 40 ) ),
+        m_pos( 0, 0 ),
+        m_text( this ),
+        m_kind( BARCODE_T::QR_CODE ),
+        m_angle( 0 )
+{
+    m_layer = Dwgs_User;
+}
+
+
+PCB_BARCODE::~PCB_BARCODE()
+{
+}
+
+
+void PCB_BARCODE::SetPosition( const VECTOR2I& aPos )
+{
+    VECTOR2I delta = aPos - m_pos;
+    m_text.Offset( delta );
+    m_pos = aPos;
+}
+
+
+VECTOR2I PCB_BARCODE::GetPosition() const
+{
+    return m_pos;
+}
+
+
+void PCB_BARCODE::SetText( const wxString& aNewText )
+{
+    m_text.SetText( aNewText );
+}
+
+
+wxString PCB_BARCODE::GetText() const
+{
+    return m_text.GetText();
+}
+
+
+wxString PCB_BARCODE::GetShownText() const
+{
+    return m_text.GetShownText( true );
+}
+
+
+void PCB_BARCODE::SetLayer( PCB_LAYER_ID aLayer )
+{
+    m_layer = aLayer;
+    m_text.SetLayer( aLayer );
+
+    if( !m_textHeightIsCustom )
+    {
+        if( BOARD* board = GetBoard() )
+        {
+            const BOARD_DESIGN_SETTINGS& settings = board->GetDesignSettings();
+            VECTOR2I size = settings.GetTextSize( aLayer );
+            if( size.y <= 0 )
+                size.y = pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE );
+            if( size.x <= 0 )
+                size.x = size.y;
+
+            m_text.SetTextSize( size );
+        }
+        else
+        {
+            int defaultSize = pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE );
+            m_text.SetTextSize( VECTOR2I( defaultSize, defaultSize ) );
+        }
+    }
+
+    int thickness = GetPenSizeForNormal( m_text.GetTextHeight() );
+
+    if( thickness > 0 )
+        m_text.SetTextThickness( thickness );
+}
+
+
+void PCB_BARCODE::SetTextSize( const VECTOR2I& aTextSize )
+{
+    VECTOR2I size = aTextSize;
+    size.x = std::max( 1, size.x );
+    size.y = std::max( 1, size.y );
+
+    m_text.SetTextSize( size );
+}
+
+
+void PCB_BARCODE::SetTextHeight( int aHeight )
+{
+    int height = std::max( 1, aHeight );
+    VECTOR2I current = m_text.GetTextSize();
+
+    int currentHeight = std::max( 1, current.y );
+    int referenceWidth = current.x;
+
+    if( referenceWidth <= 0 )
+        referenceWidth = currentHeight;
+
+    // Maintain the existing aspect ratio when scaling the height.
+    double ratio = static_cast<double>( referenceWidth ) / static_cast<double>( currentHeight );
+    int newWidth = KiROUND( ratio * height );
+
+    if( newWidth <= 0 )
+        newWidth = height;
+
+    if( height == currentHeight && newWidth == current.x )
+        return;
+
+    m_text.SetTextSize( VECTOR2I( newWidth, height ) );
+    m_textHeightIsCustom = true;
+}
+
+
+int PCB_BARCODE::GetTextHeight() const
+{
+    return m_text.GetTextHeight();
+}
+
+
+void PCB_BARCODE::SetBarcodeTextHeight( int aHeight )
+{
+    int before = GetTextHeight();
+    SetTextHeight( aHeight );
+
+    if( GetTextHeight() != before )
+        AssembleBarcode( false, true );
+}
+
+
+void PCB_BARCODE::Move( const VECTOR2I& offset )
+{
+    m_pos += offset;
+    m_text.Move( offset );
+}
+
+
+void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
+{
+    m_poly.Rotate( aAngle, m_poly.BBox().GetCenter() );
+    RotatePoint( m_pos, aRotCentre, aAngle );
+    BOX2I bbox = m_poly.BBox();
+    m_poly_width = bbox.GetWidth();
+    m_poly_height = bbox.GetHeight();
+
+    m_angle += aAngle;
+}
+
+
+void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipLeftRight )
+{
+    BOARD* board = GetBoard();
+    SetLayer( FlipLayer( GetLayer(), board ? board->GetCopperLayerCount() : 0 ) );
+}
+
+
+void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
+{
+    if( aRebuildBarcode )
+        ComputeBarcode();
+
+    if( aRebuildText )
+        ComputeTextPoly();
+
+   // Build full m_poly from symbol + optional text, then apply knockout if requested
+    m_poly.RemoveAllContours();
+    m_poly.Append( m_symbolPoly );
+
+    if( m_text.IsVisible() && m_textPoly.OutlineCount() )
+        m_poly.Append( m_textPoly );
+
+    m_poly.Fracture();
+
+    if( IsKnockout() )
+    {
+        // Build inversion rectangle based on the local bbox of the current combined geometry
+        BOX2I bbox = m_poly.BBox();
+
+        // Enforce minimum margin: at least 10% of the smallest side of the barcode, rounded up
+        // to the nearest 0.1 mm. Use this as a lower bound for both axes.
+        int minSide = std::min( m_width, m_height );
+        int tenPercent = ( minSide + 9 ) / 10; // ceil(minSide * 0.1)
+        int step01mm = std::max( 1, pcbIUScale.mmToIU( 0.1 ) );
+        int tenPercentRounded = ( ( tenPercent + step01mm - 1 ) / step01mm ) * step01mm;
+
+        m_margin.x = std::max( m_margin.x, tenPercentRounded );
+        m_margin.y = std::max( m_margin.y, tenPercentRounded );
+
+        VECTOR2I tl( bbox.GetLeft() - m_margin.x, bbox.GetTop() - m_margin.y );
+        VECTOR2I br( bbox.GetRight() + m_margin.x, bbox.GetBottom() + m_margin.y );
+
+        // Base knockout rectangle for full geometry
+        SHAPE_LINE_CHAIN rect;
+        rect.Append( tl );
+        rect.Append( VECTOR2I( br.x, tl.y ) );
+        rect.Append( br );
+        rect.Append( VECTOR2I( tl.x, br.y ) );
+        rect.SetClosed( true );
+
+        SHAPE_POLY_SET ko;
+        ko.AddOutline( rect );
+        ko.BooleanSubtract( m_poly );
+        ko.Fracture();
+        m_poly = ko;
+    }
+
+    if( !m_angle.IsZero() )
+        m_poly.Rotate( m_angle, m_poly.BBox().GetCenter() );
+
+    // Ensure the combined polygon is centered at the barcode position so that
+    // m_poly.BBox().Centre() == GetPosition() holds for tests and downstream logic.
+    if( !m_poly.IsEmpty() )
+    {
+        VECTOR2I center = m_poly.BBox().GetCenter();
+        VECTOR2I delta = m_pos - center;
+        if( delta != VECTOR2I( 0, 0 ) )
+            m_poly.Move( delta );
+    }
+
+    m_poly.CacheTriangulation( false );
+
+    // Update full polygon extents after all geometry operations (in world position)
+    {
+        BOX2I bbox = m_poly.BBox();
+        m_poly_width = bbox.GetWidth();
+        m_poly_height = bbox.GetHeight();
+    }
+}
+
+
+void PCB_BARCODE::ComputeTextPoly()
+{
+    m_textPoly.RemoveAllContours();
+
+    if( !m_text.IsVisible() )
+        return;
+
+    SHAPE_POLY_SET textPoly;
+    m_text.TransformTextToPolySet( textPoly, 0, GetMaxError(), ERROR_INSIDE );
+
+    if( textPoly.OutlineCount() == 0 )
+        return;
+
+    if( m_symbolPoly.OutlineCount() == 0 )
+        return;
+
+    BOX2I textBBox = textPoly.BBox();
+    BOX2I symbolBBox = m_symbolPoly.BBox();
+    VECTOR2I textPos;
+    int textOffset = pcbIUScale.mmToIU( 1 );
+    textPos.x = symbolBBox.GetCenter().x - textBBox.GetCenter().x;
+    textPos.y = symbolBBox.GetBottom() - textBBox.GetTop() + textOffset;
+
+    textPoly.Move( textPos );
+
+    m_textPoly = std::move( textPoly );
+    m_textPoly.CacheTriangulation();
+}
+
+
+void PCB_BARCODE::ComputeBarcode()
+{
+    m_symbolPoly.RemoveAllContours();
+
+    std::unique_ptr<zint_symbol, decltype( &ZBarcode_Delete )> symbol( ZBarcode_Create(), &ZBarcode_Delete );
+
+    if( !symbol )
+    {
+        wxLogError( wxT( "Zint: failed to allocate symbol" ) );
+        return;
+    }
+
+    symbol->input_mode = UNICODE_MODE;
+    symbol->show_hrt = 0; // do not show HRT
+    switch( m_kind )
+    {
+    case BARCODE_T::CODE_39: symbol->symbology = BARCODE_CODE39; break;
+    case BARCODE_T::CODE_128: symbol->symbology = BARCODE_CODE128; break;
+    case BARCODE_T::QR_CODE:
+        symbol->symbology = BARCODE_QRCODE;
+        symbol->option_1 = to_underlying( m_errorCorrection );
+        break;
+    case BARCODE_T::MICRO_QR_CODE:
+        symbol->symbology = BARCODE_MICROQR;
+        symbol->option_1 = to_underlying( m_errorCorrection );
+        break;
+    case BARCODE_T::DATA_MATRIX: symbol->symbology = BARCODE_DATAMATRIX; break;
+    default: wxLogError( wxT( "Zint: invalid barcode type" ) ); return;
+    }
+
+    wxString text = GetText();
+    wxScopedCharBuffer utf8Text = text.ToUTF8();
+    size_t length = utf8Text.length();
+    unsigned char* dataPtr = reinterpret_cast<unsigned char*>( utf8Text.data() );
+
+    if( text.empty() )
+        return;
+
+    if( ZBarcode_Encode( symbol.get(), dataPtr, length ) )
+    {
+        wxLogDebug( wxT( "Zint encode error: %s" ), wxString::FromUTF8( symbol->errtxt ) );
+        return;
+    }
+
+    if( ZBarcode_Buffer_Vector( symbol.get(), 0 ) ) // 0 means success
+    {
+        wxLogDebug( wxT( "Zint render error: %s" ), wxString::FromUTF8( symbol->errtxt ) );
+        return;
+    }
+
+    for( zint_vector_rect* rect = symbol->vector->rectangles; rect != nullptr; rect = rect->next )
+    {
+        // Round using absolute edges to avoid cumulative rounding drift across modules.
+        int x1 = KiROUND( rect->x * symbol->scale );
+        int x2 = KiROUND( ( rect->x + rect->width ) * symbol->scale );
+        int y1 = KiROUND( rect->y * symbol->scale );
+        int y2 = KiROUND( ( rect->y + rect->height ) * symbol->scale );
+
+        SHAPE_LINE_CHAIN shapeline;
+        shapeline.Append( x1, y1 );
+        shapeline.Append( x2, y1 );
+        shapeline.Append( x2, y2 );
+        shapeline.Append( x1, y2 );
+        shapeline.SetClosed( true );
+
+        m_symbolPoly.AddOutline( shapeline );
+    }
+
+    for( zint_vector_hexagon* hex = symbol->vector->hexagons; hex != nullptr; hex = hex->next )
+    {
+        // Compute vertices from center using minimal-diameter (inscribed circle) radius.
+        double r  = hex->diameter / 2.0; // minimal radius
+        double cx = hex->x;
+        double cy = hex->y;
+
+        // Base orientation has apex at top; hex->rotation rotates by 0/90/180/270 degrees.
+        double baseAngles[6] = { 90.0, 30.0, -30.0, -90.0, -150.0, 150.0 };
+        double rot = static_cast<double>( hex->rotation );
+
+        SHAPE_LINE_CHAIN poly;
+        for( int k = 0; k < 6; ++k )
+        {
+            double ang = ( baseAngles[k] + rot ) * M_PI / 180.0;
+            int vx = KiROUND( cx + r * cos( ang ) );
+            int vy = KiROUND( cy + r * sin( ang ) );
+            poly.Append( vx, vy );
+        }
+        poly.SetClosed( true );
+
+        m_symbolPoly.AddOutline( poly );
+    }
+
+    // Set the position of the barcode to the center of the symbol polygon
+    if( m_symbolPoly.OutlineCount() > 0 )
+    {
+        VECTOR2I pos = m_symbolPoly.BBox().GetCenter();
+        m_symbolPoly.Move( -pos );
+    }
+
+    m_symbolPoly.CacheTriangulation();
+
+    // Scale the symbol polygon to the desired barcode width/height (property values) and center it at m_pos
+    // Note: SetRect will rescale the symbol-only polygon and then rebuild m_poly
+    SetRect( m_pos - VECTOR2I( m_width / 2, m_height / 2 ),
+             m_pos + VECTOR2I( m_width / 2, m_height / 2 ) );
+}
+
+
+// see class_cotation.h
+void PCB_BARCODE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    // for now, display only the text within the BARCODE using class TEXTE_PCB.
+    m_text.GetMsgPanelInfo( aFrame, aList );
+}
+
+
+bool PCB_BARCODE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
+{
+    if( m_text.TextHitTest( aPosition ) )
+        return true;
+
+    return GetBoundingBox().Contains( aPosition );
+}
+
+
+bool PCB_BARCODE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
+{
+    BOX2I arect = aRect;
+    arect.Inflate( aAccuracy );
+
+    BOX2I rect = GetBoundingBox();
+
+    if( aAccuracy )
+        rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return arect.Contains( rect );
+
+    return arect.Intersects( rect );
+}
+
+
+VECTOR2I PCB_BARCODE::GetTopLeft() const
+{
+    return GetPosition() - VECTOR2I( m_poly_width / 2, m_poly_height / 2 );
+}
+
+
+VECTOR2I PCB_BARCODE::GetBotRight() const
+{
+    return GetPosition() + VECTOR2I( m_poly_width / 2, m_poly_height / 2 );
+}
+
+
+void PCB_BARCODE::SetRect( const VECTOR2I& aTopLeft, const VECTOR2I& aBotRight )
+{
+    // Rescale only the symbol polygon to the requested rectangle; text is rebuilt below
+    BOX2I bbox = m_symbolPoly.BBox();
+    int oldW = bbox.GetWidth();
+    int oldH = bbox.GetHeight();
+
+    SetPosition( ( aTopLeft + aBotRight ) / 2 );
+    int newW = aBotRight.x - aTopLeft.x;
+    int newH = aBotRight.y - aTopLeft.y;
+    // Guard against zero/negative sizes from interactive edits; enforce a tiny minimum
+    int minIU = std::max( 1, pcbIUScale.mmToIU( 0.01 ) );
+    newW = std::max( newW, minIU );
+    newH = std::max( newH, minIU );
+
+    double scaleX = oldW ? static_cast<double>( newW ) / oldW : 1.0;
+    double scaleY = oldH ? static_cast<double>( newH ) / oldH : 1.0;
+
+    m_symbolPoly.Scale( scaleX, scaleY, bbox.GetCenter() );
+
+    // Update intended barcode symbol size (without text/margins)
+    m_width = newW;
+    m_height = newH;
+}
+
+
+const BOX2I PCB_BARCODE::GetBoundingBox() const
+{
+    BOX2I bBox = m_text.GetBoundingBox();
+    bBox.Merge( BOX2I::ByCenter( GetPosition(), VECTOR2I( m_poly_width, m_poly_height ) ) );
+
+    return bBox;
+}
+
+
+wxString PCB_BARCODE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
+{
+    return wxString::Format( _( "BARCODE \"%s\" on %s" ), GetText(), GetLayerName() );
+}
+
+
+BITMAPS PCB_BARCODE::GetMenuImage() const
+{
+    return BITMAPS::add_barcode;
+}
+
+
+const BOX2I PCB_BARCODE::ViewBBox() const
+{
+    BOX2I dimBBox = BOX2I::ByCenter( GetPosition(), VECTOR2I( m_poly_width, m_poly_height ) );
+    dimBBox.Merge( m_text.ViewBBox() );
+
+    return dimBBox;
+}
+
+
+void PCB_BARCODE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance, int aMaxError,
+                                           ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
+{
+    if( aLayer != m_layer )
+        return;
+
+    if( aClearance == 0 )
+    {
+        aBuffer.Append( m_poly );
+    }
+    else
+    {
+        SHAPE_POLY_SET poly = m_poly;
+        poly.Inflate( aClearance, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, aMaxError, aErrorLoc );
+        aBuffer.Append( poly );
+    }
+
+}
+
+void PCB_BARCODE::SetErrorCorrection( BARCODE_ECC_T aErrorCorrection )
+{
+    // Micro QR codes do not support High (H) error correction level
+    if( m_kind == BARCODE_T::MICRO_QR_CODE && aErrorCorrection == BARCODE_ECC_T::H )
+        m_errorCorrection = BARCODE_ECC_T::Q;
+    else
+        m_errorCorrection = aErrorCorrection;
+    // Don't auto-compute here as it may be called during loading
+}
+
+
+void PCB_BARCODE::SetKind( BARCODE_T aKind )
+{
+    m_kind = aKind;
+
+    // When switching to Micro QR, validate and adjust ECC if needed
+    if( m_kind == BARCODE_T::MICRO_QR_CODE && m_errorCorrection == BARCODE_ECC_T::H )
+        m_errorCorrection = BARCODE_ECC_T::Q;
+
+    // Don't auto-compute here as it may be called during loading
+}
+
+
+void PCB_BARCODE::SetBarcodeErrorCorrection( BARCODE_ECC_T aErrorCorrection )
+{
+    SetErrorCorrection( aErrorCorrection );
+    AssembleBarcode( true, true );
+}
+
+
+void PCB_BARCODE::SetBarcodeKind( BARCODE_T aKind )
+{
+    SetKind( aKind );
+    AssembleBarcode( true, true );
+}
+
+
+EDA_ITEM* PCB_BARCODE::Clone() const
+{
+    PCB_BARCODE* item = new PCB_BARCODE( *this );
+    item->CopyFrom( this );
+    item->m_text.SetParent( item );
+    return item;
+}
+
+
+void PCB_BARCODE::swapData( BOARD_ITEM* aImage )
+{
+    wxCHECK_RET( aImage && aImage->Type() == PCB_BARCODE_T,
+                 wxT( "Cannot swap data with non-barcode item." ) );
+
+    PCB_BARCODE* other = static_cast<PCB_BARCODE*>( aImage );
+
+    std::swap( *this, *other );
+
+    m_text.SetParent( this );
+    other->m_text.SetParent( other );
+}
+
+double PCB_BARCODE::Similarity( const BOARD_ITEM& aItem ) const
+{
+    if( !ClassOf( &aItem ) )
+        return 0.0;
+
+    const PCB_BARCODE* other = static_cast<const PCB_BARCODE*>( &aItem );
+
+    // Compare text, width, height, text height, position, and kind
+    double similarity = 0.0;
+    const double weight = 1.0 / 6.0;
+
+    if( GetText() == other->GetText() )
+        similarity += weight;
+    if( m_width == other->m_width )
+        similarity += weight;
+    if( m_height == other->m_height )
+        similarity += weight;
+    if( GetTextHeight() == other->GetTextHeight() )
+        similarity += weight;
+    if( GetPosition() == other->GetPosition() )
+        similarity += weight;
+    if( m_kind == other->m_kind )
+        similarity += weight;
+
+    return similarity;
+}
+
+bool PCB_BARCODE::operator==( const BOARD_ITEM& aItem ) const
+{
+    if( !ClassOf( &aItem ) )
+        return false;
+
+    const PCB_BARCODE* other = static_cast<const PCB_BARCODE*>( &aItem );
+
+    // Compare text, width, height, text height, position, and kind
+    return ( GetText() == other->GetText() ) && ( m_width == other->m_width ) && ( m_height == other->m_height )
+           && ( GetTextHeight() == other->GetTextHeight() )
+           && ( GetPosition() == other->GetPosition() ) && ( m_kind == other->m_kind );
+}
+
+// ---- Property registration ----
+static struct PCB_BARCODE_DESC
+{
+    PCB_BARCODE_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_BARCODE );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_BARCODE ), TYPE_HASH( BOARD_ITEM ) );
+
+        const wxString groupBarcode = _HKI( "Barcode Properties" );
+
+        ENUM_MAP<BARCODE_T>& kindMap = ENUM_MAP<BARCODE_T>::Instance();
+        if( kindMap.Choices().GetCount() == 0 )
+        {
+            kindMap.Undefined( BARCODE_T::QR_CODE );
+            kindMap.Map( BARCODE_T::CODE_39,       _HKI( "CODE_39" ) )
+                   .Map( BARCODE_T::CODE_128,      _HKI( "CODE_128" ) )
+                   .Map( BARCODE_T::DATA_MATRIX,   _HKI( "DATA_MATRIX" ) )
+                   .Map( BARCODE_T::QR_CODE,       _HKI( "QR_CODE" ) )
+                   .Map( BARCODE_T::MICRO_QR_CODE, _HKI( "MICRO_QR_CODE" ) );
+        }
+
+        ENUM_MAP<BARCODE_ECC_T>& eccMap = ENUM_MAP<BARCODE_ECC_T>::Instance();
+        if( eccMap.Choices().GetCount() == 0 )
+        {
+            eccMap.Undefined( BARCODE_ECC_T::L );
+            eccMap.Map( BARCODE_ECC_T::L, _HKI( "L (Low)" ) )
+                 .Map( BARCODE_ECC_T::M, _HKI( "M (Medium)" ) )
+                 .Map( BARCODE_ECC_T::Q, _HKI( "Q (Quartile)" ) )
+                 .Map( BARCODE_ECC_T::H, _HKI( "H (High)" ) );
+        }
+
+        auto hasKnockout = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                return bc->IsKnockout();
+            return false;
+        };
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, wxString>( _HKI( "Text" ),
+                                    &PCB_BARCODE::SetBarcodeText, &PCB_BARCODE::GetText ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, bool>( _HKI( "Show Text" ),
+                                    &PCB_BARCODE::SetShowText, &PCB_BARCODE::GetShowText ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Text Height" ),
+                                    &PCB_BARCODE::SetBarcodeTextHeight, &PCB_BARCODE::GetTextHeight,
+                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Width" ),
+                                    &PCB_BARCODE::SetBarcodeWidth, &PCB_BARCODE::GetWidth,
+                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Height" ),
+                                    &PCB_BARCODE::SetBarcodeHeight, &PCB_BARCODE::GetHeight,
+                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, double>( _HKI( "Orientation" ),
+                                    &PCB_BARCODE::SetOrientation, &PCB_BARCODE::GetOrientation ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_T>( _HKI( "Kind" ),
+                                    &PCB_BARCODE::SetBarcodeKind, &PCB_BARCODE::GetKind ), groupBarcode );
+
+        auto isQRCode = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                return bc->GetKind() == BARCODE_T::QR_CODE;
+            return false;
+        };
+
+        auto isMicroQR = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                return bc->GetKind() == BARCODE_T::MICRO_QR_CODE;
+            return false;
+        };
+
+        // QR Code Error Correction (all levels including High)
+        auto qrEccProp = new PROPERTY_ENUM<PCB_BARCODE, BARCODE_ECC_T>( _HKI( "Error Correction" ),
+                                    &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection );
+        qrEccProp->SetAvailableFunc( isQRCode );
+        propMgr.AddProperty( qrEccProp, groupBarcode );
+
+        // Micro QR Code Error Correction (limited levels - no High)
+        // We need a unique name for the properties panel so that we can conditionally display the dropdown
+        // I've been unable to figure out how to conditionally limit which drop down choices are available
+        // So I'll just create a separate property for Micro QR
+        auto microQrEccProp = new PROPERTY_ENUM<PCB_BARCODE, BARCODE_ECC_T>( _HKI( "MicroQR Error Correction" ),
+                                    &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection );
+        microQrEccProp->SetAvailableFunc( isMicroQR );
+
+        // Create custom choices for Micro QR (excluding High)
+        wxPGChoices microQrChoices;
+        microQrChoices.Add( _( "L (Low)" ), static_cast<int>( BARCODE_ECC_T::L ) );
+        microQrChoices.Add( _( "M (Medium)" ), static_cast<int>( BARCODE_ECC_T::M ) );
+        microQrChoices.Add( _( "Q (Quartile)" ), static_cast<int>( BARCODE_ECC_T::Q ) );
+        microQrEccProp->SetChoices( microQrChoices );
+
+        propMgr.AddProperty( microQrEccProp, groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, bool>( _HKI( "Knockout" ),
+                                    &PCB_BARCODE::SetIsKnockout, &PCB_BARCODE::IsKnockout ), groupBarcode );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Margin X" ),
+                                    &PCB_BARCODE::SetMarginX, &PCB_BARCODE::GetMarginX,
+                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode ).SetAvailableFunc( hasKnockout );
+
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Margin Y" ),
+                                    &PCB_BARCODE::SetMarginY, &PCB_BARCODE::GetMarginY,
+                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode ).SetAvailableFunc( hasKnockout );
+    }
+} _PCB_BARCODE_DESC;
+
+// wxAny conversion implementations for enum properties (declarations in header)
+IMPLEMENT_ENUM_TO_WXANY( BARCODE_T );
+IMPLEMENT_ENUM_TO_WXANY( BARCODE_ECC_T );

@@ -1,7 +1,7 @@
-/*  pcx.h - header structure for ZSoft PCX files
-
+/*  pcx.h - header structure for ZSoft PCX files */
+/*
     libzint - the open source barcode library
-    Copyright (C) 2016-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2016-2024 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -28,22 +28,18 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
+/* SPDX-License-Identifier: BSD-3-Clause */
 
-#ifndef PCX_H
-#define PCX_H
+#ifndef Z_PCX_H
+#define Z_PCX_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
-#ifdef _MSC_VER
-#include <windows.h>
-#include "stdint_msvc.h"
-#else
-#include <stdint.h>
+#ifdef OUT_USE_PRAGMA_PACK
+#pragma pack(1)
 #endif
-
-#pragma pack (1)
 
     typedef struct pcx_header {
         uint8_t manufacturer;
@@ -64,14 +60,15 @@ extern "C" {
         uint16_t horiz_screen_size;
         uint16_t vert_screen_size;
         uint8_t filler[54];
-    } pcx_header_t;
+    } OUT_PACK pcx_header_t;
 
-#pragma pack ()
+#ifdef OUT_USE_PRAGMA_PACK
+#pragma pack()
+#endif
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif /* PCX_H */
-
-
+/* vim: set ts=4 sw=4 et : */
+#endif /* Z_PCX_H */

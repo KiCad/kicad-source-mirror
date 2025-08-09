@@ -212,6 +212,12 @@ enum class ALTIUM_TEXT_TYPE
     BARCODE  = 2
 };
 
+enum class ALTIUM_BARCODE_TYPE
+{
+    CODE39  = 0,
+    CODE128 = 1
+};
+
 struct ALTIUM_VERTICE
 {
     const bool    isRound;
@@ -785,10 +791,18 @@ struct ATEXT6
     bool isComment    = false;
     bool isDesignator = false;
 
-    ALTIUM_TEXT_TYPE fonttype;
-    wxString         fontname;
+    ALTIUM_TEXT_TYPE    fonttype;
+    wxString            fontname;
+    wxString            barcode_fontname;
 
-    wxString text;
+    // Barcode specific parameters
+    VECTOR2I            barcode_margin     = VECTOR2I( 0, 0 );
+    ALTIUM_BARCODE_TYPE barcode_type       = ALTIUM_BARCODE_TYPE::CODE39;
+    bool                barcode_inverted   = false;
+    wxString            barcode_name;
+    bool                barcode_show_text  = false;
+
+    wxString            text;
 
     explicit ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aStringTable );
 };

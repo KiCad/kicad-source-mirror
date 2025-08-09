@@ -296,6 +296,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         wxPGProperty* pgProp = it.GetProperty();
         wxString      name   = pgProp->GetName();
 
+        // Store the existing name before checking available properties so we can
+        // remove the properties when they are no longer available
+        existingProps.insert( name );
+
         if( !availableProps.count( name ) )
             continue;
 
@@ -305,8 +309,6 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         extractValueAndWritability( aSelection, name, commonVal, writeable, choices );
         pgProp->SetValue( commonVal );
         pgProp->Enable( writeable );
-
-        existingProps.insert( name );
     }
 
     if( !existingProps.empty() && existingProps == availableProps )

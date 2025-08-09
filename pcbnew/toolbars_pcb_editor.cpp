@@ -228,7 +228,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AddAction( PCB_ACTIONS::drawCenterDimension )
                             .AddAction( PCB_ACTIONS::drawRadialDimension )
                             .AddAction( PCB_ACTIONS::drawLeader ) )
-              .AppendAction( PCB_ACTIONS::drawBarcode );
+              .AppendAction( PCB_ACTIONS::placeBarcode )
               .AppendAction( ACTIONS::deleteTool );
 
         config.AppendSeparator()

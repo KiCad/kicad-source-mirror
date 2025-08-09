@@ -312,7 +312,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawTextBox );
     placeMenu->Add( PCB_ACTIONS::drawTable );
     placeMenu->Add( PCB_ACTIONS::placePoint );
-    placeMenu->Add( PCB_ACTIONS::drawBarcode );
+    placeMenu->Add( PCB_ACTIONS::placeBarcode );
 
     placeMenu->AppendSeparator();
     ACTION_MENU* dimensionSubmenu = new ACTION_MENU( false, selTool );

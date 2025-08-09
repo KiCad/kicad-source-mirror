@@ -32,6 +32,7 @@ set( QA_PCBNEW_SRCS
 
     # test compilation units (start test_)
     test_array_pad_name_provider.cpp
+    test_barcode_load_save.cpp
     test_board_item.cpp
     test_board_commit.cpp
     test_component_classes.cpp

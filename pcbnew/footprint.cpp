@@ -1131,6 +1131,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
         m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
         break;
 
+    case PCB_BARCODE_T:
     case PCB_TEXT_T:
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_LEADER_T:
@@ -1216,6 +1217,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
         break;
 
+    case PCB_BARCODE_T:
     case PCB_TEXT_T:
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:

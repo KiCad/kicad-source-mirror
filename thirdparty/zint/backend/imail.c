@@ -1,8 +1,7 @@
 /* imail.c - Handles Intelligent Mail (aka OneCode) for USPS */
-
 /*
     libzint - the open source barcode library
-    Copyright (C) 2008-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2008-2025 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -29,22 +28,24 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
+/* SPDX-License-Identifier: BSD-3-Clause */
+
+/* USPS-B-3200 - Intelligent Mail Barcode 4-State 2015-04-20 Rev H
+   https://postalpro.usps.com/storages/2017-08/2190_USPSB3200IntelligentMailBarcode4State_0.pdf
+*/
 
 /*  The function "USPS_MSB_Math_CRC11GenerateFrameCheckSequence"
     is Copyright (C) 2006 United States Postal Service */
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "common.h"
 #include "large.h"
 
-#define SODIUM	"0123456789-"
+#define SODIUM_MNS_F (IS_NUM_F | IS_MNS_F) /* SODIUM "0123456789-" */
 
-/* The following lookup tables were generated using the code in Appendix C */
+/* The following lookup tables were generated using the code in USPS-B-3200 Appendix C */
 
+/* USPS-B-3200 Appendix D Table 1 - 5 of 13 characters */
 static const unsigned short AppxD_I[1287] = {
-    /* Appendix D Table 1 - 5 of 13 characters */
     0x001F, 0x1F00, 0x002F, 0x1E80, 0x0037, 0x1D80, 0x003B, 0x1B80, 0x003D, 0x1780,
     0x003E, 0x0F80, 0x004F, 0x1E40, 0x0057, 0x1D40, 0x005B, 0x1B40, 0x005D, 0x1740,
     0x005E, 0x0F40, 0x0067, 0x1CC0, 0x006B, 0x1AC0, 0x006D, 0x16C0, 0x006E, 0x0EC0,
@@ -176,8 +177,8 @@ static const unsigned short AppxD_I[1287] = {
     0x08E2, 0x064C, 0x0554, 0x04E4, 0x0358, 0x02E8, 0x01F0
 };
 
+/* USPS-B-3200 Appendix D Table II - 2 of 13 characters */
 static const unsigned short AppxD_II[78] = {
-    /* Appendix D Table II - 2 of 13 characters */
     0x0003, 0x1800, 0x0005, 0x1400, 0x0006, 0x0C00, 0x0009, 0x1200, 0x000A, 0x0A00,
     0x000C, 0x0600, 0x0011, 0x1100, 0x0012, 0x0900, 0x0014, 0x0500, 0x0018, 0x0300,
     0x0021, 0x1080, 0x0022, 0x0880, 0x0024, 0x0480, 0x0028, 0x0280, 0x0030, 0x0180,
@@ -188,28 +189,29 @@ static const unsigned short AppxD_II[78] = {
     0x0801, 0x1002, 0x1001, 0x0802, 0x0404, 0x0208, 0x0110, 0x00A0
 };
 
-static const unsigned short int AppxD_IV[130] = {
-    /* Appendix D Table IV - Bar-to-Character Mapping (reverse lookup) */
-    67, 6, 78, 16, 86, 95, 34, 40, 45, 113, 117, 121, 62, 87, 18, 104, 41, 76, 57, 119, 115, 72, 97,
-    2, 127, 26, 105, 35, 122, 52, 114, 7, 24, 82, 68, 63, 94, 44, 77, 112, 70, 100, 39, 30, 107,
-    15, 125, 85, 10, 65, 54, 88, 20, 106, 46, 66, 8, 116, 29, 61, 99, 80, 90, 37, 123, 51, 25, 84,
-    129, 56, 4, 109, 96, 28, 36, 47, 11, 71, 33, 102, 21, 9, 17, 49, 124, 79, 64, 91, 42, 69, 53,
-    60, 14, 1, 27, 103, 126, 75, 89, 50, 120, 19, 32, 110, 92, 111, 130, 59, 31, 12, 81, 43, 55,
-    5, 74, 22, 101, 128, 58, 118, 48, 108, 38, 98, 93, 23, 83, 13, 73, 3
+/* USPS-B-3200 Appendix D Table IV - Bar-to-Character Mapping (reverse lookup) */
+static const unsigned char AppxD_IV[130] = {
+     67,   6, 78,  16,  86,  95,  34, 40,  45, 113, 117, 121, 62,  87, 18, 104,  41,  76, 57, 119,
+    115,  72, 97,   2, 127,  26, 105, 35, 122,  52, 114,   7, 24,  82, 68,  63,  94,  44, 77, 112,
+     70, 100, 39,  30, 107,  15, 125, 85,  10,  65,  54,  88, 20, 106, 46,  66,   8, 116, 29,  61,
+     99,  80, 90,  37, 123,  51,  25, 84, 129,  56,   4, 109, 96,  28, 36,  47,  11,  71, 33, 102,
+     21,   9, 17,  49, 124,  79,  64, 91,  42,  69,  53,  60, 14,   1, 27, 103, 126,  75, 89,  50,
+    120,  19, 32, 110,  92, 111, 130, 59,  31,  12,  81,  43, 55,   5, 74,  22, 101, 128, 58, 118,
+     48, 108, 38,  98,  93,  23,  83, 13,  73,   3
 };
 
 /***************************************************************************
  ** USPS_MSB_Math_CRC11GenerateFrameCheckSequence
  **
  ** Inputs:
- **   ByteAttayPtr is the address of a 13 byte array holding 102 bytes which
+ **   ByteAttayPtr is the address of a 13 byte array holding 102 bits which
  **   are right justified - ie: the leftmost 2 bits of the first byte do not
  **   hold data and must be set to zero.
  **
  ** Outputs:
  **   return unsigned short - 11 bit Frame Check Sequence (right justified)
  ***************************************************************************/
-extern unsigned short USPS_MSB_Math_CRC11GenerateFrameCheckSequence(unsigned char *ByteArrayPtr) {
+static unsigned short USPS_MSB_Math_CRC11GenerateFrameCheckSequence(unsigned char *ByteArrayPtr) {
     unsigned short GeneratorPolynomial = 0x0F35;
     unsigned short FrameCheckSequence = 0x07FF;
     unsigned short Data;
@@ -243,35 +245,35 @@ extern unsigned short USPS_MSB_Math_CRC11GenerateFrameCheckSequence(unsigned cha
     return FrameCheckSequence;
 }
 
-int imail(struct zint_symbol *symbol, unsigned char source[], int length) {
+INTERNAL int daft_set_height(struct zint_symbol *symbol, const float min_height, const float max_height);
+
+INTERNAL int usps_imail(struct zint_symbol *symbol, unsigned char source[], int length) {
     char data_pattern[200];
-    int error_number;
+    int error_number = 0;
     int i, j, read;
-    char zip[35], tracker[35], zip_adder[11], temp[2];
-    short int accum[112], x_reg[112], y_reg[112];
+    char tracker[33] = {0}; /* Zero to prevent false warning from clang-tidy */
+    char zip[33];
+    large_uint accum;
+    large_uint byte_array_reg;
     unsigned char byte_array[13];
     unsigned short usps_crc;
-    int codeword[10];
+    unsigned int codeword[10];
     unsigned short characters[10];
-    short int bar_map[130];
-
-    error_number = 0;
+    short bar_map[130];
+    int zip_len;
+    const int raw_text = symbol->output_options & BARCODE_RAW_TEXT;
 
     if (length > 32) {
-        strcpy(symbol->errtxt, "450: Input too long");
-        return ZINT_ERROR_TOO_LONG;
+        return errtxtf(ZINT_ERROR_TOO_LONG, symbol, 450, "Input length %d too long (maximum 32)", length);
     }
-    error_number = is_sane(SODIUM, source, length);
-    if (error_number == ZINT_ERROR_INVALID_DATA) {
-        strcpy(symbol->errtxt, "451: Invalid characters in data");
-        return error_number;
+    if ((i = not_sane(SODIUM_MNS_F, source, length))) {
+        return errtxtf(ZINT_ERROR_INVALID_DATA, symbol, 451,
+                        "Invalid character at position %d in input (digits and \"-\" only)", i);
     }
-
-    strcpy(zip, "");
-    strcpy(tracker, "");
 
     /* separate the tracking code from the routing code */
 
+    zip[0] = '\0';
     read = 0;
     j = 0;
     for (i = 0; i < length; i++) {
@@ -298,197 +300,80 @@ int imail(struct zint_symbol *symbol, unsigned char source[], int length) {
     }
 
     if (strlen(tracker) != 20) {
-        strcpy(symbol->errtxt, "452: Invalid length tracking code");
-        return ZINT_ERROR_INVALID_DATA;
+        return errtxt(ZINT_ERROR_INVALID_DATA, symbol, 452,
+                        "Invalid length for tracking code (20 characters required)");
     }
-    if (strlen(zip) > 11) {
-        strcpy(symbol->errtxt, "453: Invalid ZIP code");
-        return ZINT_ERROR_INVALID_DATA;
+    if (tracker[1] > '4') {
+        return errtxt(ZINT_ERROR_INVALID_DATA, symbol, 454,
+                        "Barcode Identifier (second character) out of range (0 to 4)");
+    }
+
+    zip_len = (int) strlen(zip);
+    if (zip_len != 0 && zip_len != 5 && zip_len != 9 && zip_len != 11) {
+        return errtxt(ZINT_ERROR_INVALID_DATA, symbol, 453,
+                        "Invalid length for ZIP code (5, 9 or 11 characters required)");
     }
 
     /* *** Step 1 - Conversion of Data Fields into Binary Data *** */
 
     /* Routing code first */
 
-    for (i = 0; i < 112; i++) {
-        accum[i] = 0;
-    }
-
-    for (read = 0; read < strlen(zip); read++) {
-
-        binary_multiply(accum, "10");
-        binary_load(x_reg, "0", 1);
-
-        for (i = 0; i < 4; i++) {
-            if (ctoi(zip[read]) & (0x01 << i)) x_reg[i] = 1;
-        }
-
-        binary_add(accum, x_reg);
-    }
+    large_load_str_u64(&accum, (const unsigned char *) zip, zip_len);
 
     /* add weight to routing code */
-
-    for (i = 0; i < 112; i++) {
-        x_reg[i] = accum[i];
+    if (zip_len > 9) {
+        large_add_u64(&accum, 1000100001);
+    } else if (zip_len > 5) {
+        large_add_u64(&accum, 100001);
+    } else if (zip_len > 0) {
+        large_add_u64(&accum, 1);
     }
-
-    if (strlen(zip) > 9) {
-        strcpy(zip_adder, "1000100001");
-    } else {
-        if (strlen(zip) > 5) {
-            strcpy(zip_adder, "100001");
-        } else {
-            if (strlen(zip) > 0) {
-                strcpy(zip_adder, "1");
-            } else {
-                strcpy(zip_adder, "0");
-            }
-        }
-    }
-
-    for (i = 0; i < 112; i++) {
-        accum[i] = 0;
-    }
-
-    for (read = 0; read < strlen(zip_adder); read++) {
-
-        binary_multiply(accum, "10");
-        binary_load(y_reg, "0", 1);
-
-        for (i = 0; i < 4; i++) {
-            if (ctoi(zip_adder[read]) & (0x01 << i)) y_reg[i] = 1;
-        }
-
-        binary_add(accum, y_reg);
-    }
-
-    binary_add(accum, x_reg);
 
     /* tracking code */
 
     /* multiply by 10 */
-    binary_multiply(accum, "10");
-    binary_load(y_reg, "0", 1);
+    large_mul_u64(&accum, 10);
 
     /* add first digit of tracker */
-    for (i = 0; i < 4; i++) {
-        if (ctoi(tracker[0]) & (0x01 << i)) y_reg[i] = 1;
-    }
-
-    binary_add(accum, y_reg);
+    large_add_u64(&accum, ctoi(tracker[0]));
 
     /* multiply by 5 */
-    binary_multiply(accum, "5");
-    binary_load(y_reg, "0", 1);
+    large_mul_u64(&accum, 5);
 
     /* add second digit */
-    for (i = 0; i < 4; i++) {
-        if (ctoi(tracker[1]) & (0x01 << i)) y_reg[i] = 1;
-    }
-
-    binary_add(accum, y_reg);
+    large_add_u64(&accum, ctoi(tracker[1]));
 
     /* and then the rest */
 
-    for (read = 2; read < strlen(tracker); read++) {
+    for (read = 2; read < 20; read++) {
 
-        binary_multiply(accum, "10");
-        binary_load(y_reg, "0", 1);
-
-        for (i = 0; i < 4; i++) {
-            if (ctoi(tracker[read]) & (0x01 << i)) y_reg[i] = 1;
-        }
-
-        binary_add(accum, y_reg);
+        large_mul_u64(&accum, 10);
+        large_add_u64(&accum, ctoi(tracker[read]));
     }
 
     /* *** Step 2 - Generation of 11-bit CRC on Binary Data *** */
 
-    accum[103] = 0;
-    accum[102] = 0;
+    large_load(&byte_array_reg, &accum);
 
-    memset(byte_array, 0, 13);
-    for (j = 0; j < 13; j++) {
-        i = 96 - (8 * j);
-        byte_array[j] = 0;
-        byte_array[j] += accum[i];
-        byte_array[j] += 2 * accum[i + 1];
-        byte_array[j] += 4 * accum[i + 2];
-        byte_array[j] += 8 * accum[i + 3];
-        byte_array[j] += 16 * accum[i + 4];
-        byte_array[j] += 32 * accum[i + 5];
-        byte_array[j] += 64 * accum[i + 6];
-        byte_array[j] += 128 * accum[i + 7];
-    }
+    large_unset_bit(&byte_array_reg, 102);
+    large_unset_bit(&byte_array_reg, 103);
+
+    large_uchar_array(&byte_array_reg, byte_array, 13, 8 /*bits*/);
 
     usps_crc = USPS_MSB_Math_CRC11GenerateFrameCheckSequence(byte_array);
 
     /* *** Step 3 - Conversion from Binary Data to Codewords *** */
 
     /* start with codeword J which is base 636 */
-    for (i = 0; i < 112; i++) {
-        x_reg[i] = 0;
-        y_reg[i] = 0;
-    }
-
-    x_reg[101] = 1;
-    x_reg[98] = 1;
-    x_reg[97] = 1;
-    x_reg[96] = 1;
-    x_reg[95] = 1;
-    x_reg[94] = 1;
-
-    for (i = 92; i >= 0; i--) {
-        y_reg[i] = islarger(accum, x_reg);
-        if (y_reg[i] == 1) {
-            binary_subtract(accum, x_reg);
-        }
-        shiftdown(x_reg);
-    }
-
-    codeword[9] = (accum[9] * 512) + (accum[8] * 256) + (accum[7] * 128) + (accum[6] * 64) +
-            (accum[5] * 32) + (accum[4] * 16) + (accum[3] * 8) + (accum[2] * 4) +
-            (accum[1] * 2) + accum[0];
+    codeword[9] = (unsigned int) large_div_u64(&accum, 636);
 
     /* then codewords I to B with base 1365 */
 
     for (j = 8; j > 0; j--) {
-        for (i = 0; i < 112; i++) {
-            accum[i] = y_reg[i];
-            y_reg[i] = 0;
-            x_reg[i] = 0;
-        }
-        x_reg[101] = 1;
-        x_reg[99] = 1;
-        x_reg[97] = 1;
-        x_reg[95] = 1;
-        x_reg[93] = 1;
-        x_reg[91] = 1;
-        for (i = 91; i >= 0; i--) {
-            y_reg[i] = islarger(accum, x_reg);
-            if (y_reg[i] == 1) {
-                binary_subtract(accum, x_reg);
-            }
-            shiftdown(x_reg);
-        }
-
-        codeword[j] = (accum[10] * 1024) + (accum[9] * 512) + (accum[8] * 256) +
-                (accum[7] * 128) + (accum[6] * 64) + (accum[5] * 32) +
-                (accum[4] * 16) + (accum[3] * 8) + (accum[2] * 4) +
-                (accum[1] * 2) + accum[0];
+        codeword[j] = (unsigned int) large_div_u64(&accum, 1365);
     }
 
-    codeword[0] = (y_reg[10] * 1024) + (y_reg[9] * 512) + (y_reg[8] * 256) +
-            (y_reg[7] * 128) + (y_reg[6] * 64) + (y_reg[5] * 32) +
-            (y_reg[4] * 16) + (y_reg[3] * 8) + (y_reg[2] * 4) +
-            (y_reg[1] * 2) + y_reg[0];
-
-    for (i = 0; i < 8; i++) {
-        if (codeword[i] == 1365) {
-            codeword[i] = 0;
-            codeword[i + 1]++;
-        }
-    }
+    codeword[0] = (unsigned int) large_lo(&accum);
 
     /* *** Step 4 - Inserting Additional Information into Codewords *** */
 
@@ -517,29 +402,22 @@ int imail(struct zint_symbol *symbol, unsigned char source[], int length) {
     /* *** Step 6 - Conversion from Characters to the Intelligent Mail Barcode *** */
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 13; j++) {
-            if (characters[i] & (1 << j)) {
-                bar_map[AppxD_IV[(13 * i) + j] - 1] = 1;
-            } else {
-                bar_map[AppxD_IV[(13 * i) + j] - 1] = 0;
-            }
+            bar_map[AppxD_IV[(13 * i) + j] - 1] = (characters[i] >> j) & 1;
         }
     }
 
-    strcpy(data_pattern, "");
-    temp[1] = '\0';
     for (i = 0; i < 65; i++) {
         j = 0;
         if (bar_map[i] == 0)
             j += 1;
         if (bar_map[i + 65] == 0)
             j += 2;
-        temp[0] = itoc(j);
-        strcat(data_pattern, temp);
+        data_pattern[i] = itoc(j);
     }
 
     /* Translate 4-state data pattern to symbol */
     read = 0;
-    for (i = 0; i < strlen(data_pattern); i++) {
+    for (i = 0; i < 65; i++) {
         if ((data_pattern[i] == '1') || (data_pattern[i] == '0')) {
             set_module(symbol, 0, read);
         }
@@ -550,12 +428,32 @@ int imail(struct zint_symbol *symbol, unsigned char source[], int length) {
         read += 2;
     }
 
-    symbol->row_height[0] = 3;
-    symbol->row_height[1] = 2;
-    symbol->row_height[2] = 3;
-
+    if (symbol->output_options & COMPLIANT_HEIGHT) {
+        /* USPS-B-3200 Section 2.3.1
+           Using bar pitch as X (1" / 43) ~ 0.023" based on 22 bars + 21 spaces per inch (bar width 0.015" - 0.025"),
+           height 0.125" - 0.165"
+           Tracker 0.048" (average of 0.039" - 0.057")
+           Ascender/descender 0.0965" (average of 0.082" - 0.111") less T = 0.0485"
+         */
+        const float min_height = 4.875f; /* 0.125 * 39 */
+        const float max_height = 7.75500011f; /* 0.165 * 47 */
+        symbol->row_height[0] = 2.0855f; /* 0.0485 * 43 */
+        symbol->row_height[1] = 2.06399989f; /* 0.048 * 43 */
+        /* Note using max X for minimum and min X for maximum */
+        error_number = daft_set_height(symbol, min_height, max_height);
+    } else {
+        symbol->row_height[0] = 3.0f;
+        symbol->row_height[1] = 2.0f;
+        (void) daft_set_height(symbol, 0.0f, 0.0f);
+    }
     symbol->rows = 3;
     symbol->width = read - 1;
+
+    if (raw_text && rt_cpy(symbol, source, length)) {
+        return ZINT_ERROR_MEMORY; /* `rt_cpy()` only fails with OOM */
+    }
+
     return error_number;
 }
 
+/* vim: set ts=4 sw=4 et : */

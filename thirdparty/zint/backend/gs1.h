@@ -1,8 +1,7 @@
 /* gs1.h - Verifies GS1 data */
-
 /*
     libzint - the open source barcode library
-    Copyright (C) 2009-2017 Robin Stuart <rstuart114@gmail.com>
+    Copyright (C) 2009-2025 Robin Stuart <rstuart114@gmail.com>
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
@@ -29,18 +28,23 @@
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
  */
-#ifndef __GS1_H
-#define __GS1_H
+/* SPDX-License-Identifier: BSD-3-Clause */
+
+#ifndef Z_GS1_H
+#define Z_GS1_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-    extern int gs1_verify(struct zint_symbol *symbol, const unsigned char source[], const size_t src_len, char reduced[]);
-    extern int ugs1_verify(struct zint_symbol *symbol, const unsigned char source[], const unsigned int src_len, unsigned char reduced[]);
+INTERNAL int gs1_verify(struct zint_symbol *symbol, unsigned char source[], int *p_length, unsigned char reduced[],
+                int *p_reduced_length);
+INTERNAL char gs1_check_digit(const unsigned char source[], const int length);
+INTERNAL int gs1_iso3166_alpha2(const unsigned char *cc);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* __GS1_H */
+/* vim: set ts=4 sw=4 et : */
+#endif /* Z_GS1_H */

@@ -41,6 +41,7 @@ enum class BITMAPS : unsigned int
     about,
     add_aligned_dimension,
     add_arc,
+    add_barcode,
     add_bezier,
     add_board,
     add_bus,

@@ -44,6 +44,7 @@
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_reference_image.h>
+#include <pcb_barcode.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
 #include <pcb_point.h>
@@ -1013,6 +1014,12 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_image:
             item = parsePCB_REFERENCE_IMAGE( m_board );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
+        case T_barcode:
+            item = parsePCB_BARCODE( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -3627,6 +3634,131 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
 }
 
 
+PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_barcode, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_BARCODE." ) );
+
+    std::unique_ptr<PCB_BARCODE> barcode = std::make_unique<PCB_BARCODE>( aParent );
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+        {
+            VECTOR2I pos;
+            pos.x = parseBoardUnits( "X coordinate" );
+            pos.y = parseBoardUnits( "Y coordinate" );
+            barcode->SetPosition( pos );
+            token = NextTok();
+
+            if( CurTok() == T_NUMBER )
+                barcode->Text().SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_layer:
+            barcode->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+
+        case T_size:
+        {
+            int w = parseBoardUnits( "barcode width" );
+            int h = parseBoardUnits( "barcode height" );
+            barcode->SetWidth( w );
+            barcode->SetHeight( h );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_text:
+
+            if( NextTok() != T_STRING )
+                Expecting( T_STRING );
+
+            barcode->SetText( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_text_height:
+        {
+            int h = parseBoardUnits( "barcode text height" );
+            barcode->SetTextHeight( h );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_type:
+            NeedSYMBOL();
+            {
+                std::string kind = CurText();
+                if( kind == "code39" )
+                    barcode->SetKind( BARCODE_T::CODE_39 );
+                else if( kind == "code128" )
+                    barcode->SetKind( BARCODE_T::CODE_128 );
+                else if( kind == "datamatrix" || kind == "data_matrix" )
+                    barcode->SetKind( BARCODE_T::DATA_MATRIX );
+                else if( kind == "qr" || kind == "qrcode" )
+                    barcode->SetKind( BARCODE_T::QR_CODE );
+                else if( kind == "microqr" || kind == "micro_qr" )
+                    barcode->SetKind( BARCODE_T::MICRO_QR_CODE );
+                else
+                    Expecting( "barcode type" );
+            }
+            NeedRIGHT();
+            break;
+
+        case T_ecc_level:
+            NeedSYMBOL();
+            {
+                std::string ecc = CurText();
+                if( ecc == "L" || ecc == "l" )
+                    barcode->SetErrorCorrection( BARCODE_ECC_T::L );
+                else if( ecc == "M" || ecc == "m" )
+                    barcode->SetErrorCorrection( BARCODE_ECC_T::M );
+                else if( ecc == "Q" || ecc == "q" )
+                    barcode->SetErrorCorrection( BARCODE_ECC_T::Q );
+                else if( ecc == "H" || ecc == "h" )
+                    barcode->SetErrorCorrection( BARCODE_ECC_T::H );
+                else
+                    Expecting( "ecc level" );
+            }
+            NeedRIGHT();
+            break;
+
+
+        case T_locked:
+            barcode->SetLocked( true );
+            NeedRIGHT();
+            break;
+
+        case T_tstamp:
+        case T_uuid:
+            NextTok();
+            const_cast<KIID&>( barcode->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "at, layer, size, text, text_height, type, ecc_level, locked or uuid" );
+        }
+    }
+
+    barcode->AssembleBarcode( true, true );
+
+    return barcode.release();
+}
+
+
 PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 {
     wxCHECK_MSG( CurTok() == T_gr_text_box || CurTok() == T_fp_text_box, nullptr,
@@ -5061,6 +5193,13 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         {
             PCB_REFERENCE_IMAGE* image = parsePCB_REFERENCE_IMAGE( footprint.get() );
             footprint->Add( image, ADD_MODE::APPEND, true );
+            break;
+        }
+
+        case T_barcode:
+        {
+            PCB_BARCODE* barcode = parsePCB_BARCODE( footprint.get() );
+            footprint->Add( barcode, ADD_MODE::APPEND, true );
             break;
         }
 
