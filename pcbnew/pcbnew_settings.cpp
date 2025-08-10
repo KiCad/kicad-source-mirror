@@ -50,7 +50,6 @@ const int pcbnewSchemaVersion = 5;
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
         : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
-          m_FootprintWizardList(),
           m_FootprintChooser(),
           m_Zones(),
           m_FootprintViewer(),
@@ -295,12 +294,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 7" ) );
 
-    m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.width",
-            &m_FootprintWizardList.width, -1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.height",
-            &m_FootprintWizardList.height, -1 ) );
-
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json
             {
@@ -351,10 +344,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     addParamsForWindow( &m_FootprintWizard, "footprint_wizard" );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint_lib_dir",
-            &m_lastFootprintLibDir, "" ) );
+            &m_LastFootprintLibDir, "" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint3d_dir",
-            &m_lastFootprint3dDir, "" ) );
+            &m_LastFootprint3dDir, "" ) );
 
     registerMigration( 0, 1,
             [&]()

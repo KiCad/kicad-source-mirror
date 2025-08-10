@@ -24,9 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef __DIALOG_PLOT_SCHEMATIC__
-#define __DIALOG_PLOT_SCHEMATIC__
+#pragma once
 
 #include <plotters/plotter.h>
 #include <dialog_plot_schematic_base.h>
@@ -37,50 +35,32 @@ class PDF_PLOTTER;
 class SCH_EDIT_FRAME;
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
-
 class JOB_EXPORT_SCH_PLOT;
+
 
 class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 {
 public:
     DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame );
-    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
-                           JOB_EXPORT_SCH_PLOT* aJob = nullptr );
-
-    /**
-     * Return true if the project configuration was modified.
-     */
-    bool PrjConfigChanged() { return m_configChanged; }
+    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_SCH_PLOT* aJob );
 
 private:
-    void OnPageSizeSelected( wxCommandEvent& event ) override;
+    void onColorMode( wxCommandEvent& aEvent ) override;
+    void onPlotFormatSelection( wxCommandEvent& event ) override;
+    void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+
     void OnPlotCurrent( wxCommandEvent& event ) override;
     void OnPlotAll( wxCommandEvent& event ) override;
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    void initDlg();
+    bool TransferDataToWindow() override;
 
-    // common
     void getPlotOptions( RENDER_SETTINGS* aSettings );
 
     bool getModeColor() { return m_ModeColorOption->GetSelection() == 0; }
 
-    void setModeColor( bool aColor ) { m_ModeColorOption->SetSelection( aColor ? 0 : 1 ); }
-
     COLOR_SETTINGS* getColorSettings();
 
-    /**
-     * Set the m_outputDirectoryName variable to the selected directory from directory dialog.
-     */
-    void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-
-    PLOT_FORMAT GetPlotFileFormat();
-
-    bool getPlotDrawingSheet() { return m_plotDrawingSheet->GetValue(); }
-    void setPlotDrawingSheet( bool aPlot) { m_plotDrawingSheet->SetValue( aPlot ); }
-
-    bool getOpenFileAfterPlot() { return m_openFileAfterPlot->GetValue(); }
-    void setOpenFileAfterPlot( bool aOpen ) { m_openFileAfterPlot->SetValue( aOpen ); }
+    PLOT_FORMAT getPlotFileFormat();
 
     void plotSchematic( bool aPlotAll );
 
@@ -104,11 +84,6 @@ private:
 
 private:
     SCH_EDIT_FRAME*       m_editFrame;
-    bool                  m_configChanged;        // true if a project config param has changed
-    PLOT_FORMAT           m_plotFormat;
-    static int            m_pageSizeSelect;       // Static to keep last option for some format
     UNIT_BINDER           m_defaultLineWidth;
     JOB_EXPORT_SCH_PLOT*  m_job;
 };
-
-#endif    // __DIALOG_PLOT_SCHEMATIC__

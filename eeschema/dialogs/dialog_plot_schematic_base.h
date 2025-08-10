@@ -54,7 +54,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxChoice* m_paperSizeOption;
 		wxCheckBox* m_plotDrawingSheet;
 		wxChoice* m_ModeColorOption;
-		wxStaticText* m_staticText9;
+		wxStaticText* m_colorThemeLabel;
 		wxChoice* m_colorTheme;
 		wxCheckBox* m_plotBackgroundColor;
 		wxStaticText* m_lineWidthLabel;
@@ -73,10 +73,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPageSizeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onColorMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotCurrent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotAll( wxCommandEvent& event ) { event.Skip(); }
 

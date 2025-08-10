@@ -260,19 +260,6 @@ public:
         std::vector<NETLIST_PLUGIN_SETTINGS> plugins;
     };
 
-    struct PANEL_PLOT
-    {
-        bool     background_color;
-        bool     color;
-        wxString color_theme;
-        int      format;
-        bool     frame_reference;
-        bool     pdf_property_popups;
-        bool     pdf_hierarchical_links;
-        bool     pdf_metadata;
-        bool     open_file_after_plot;
-    };
-
     struct PANEL_SYM_CHOOSER
     {
         int  sash_pos_h;
@@ -370,8 +357,6 @@ public:
     PANEL_LIB_VIEW m_LibViewPanel;
 
     PANEL_NETLIST m_NetlistPanel;
-
-    PANEL_PLOT m_PlotPanel;
 
     PANEL_SYM_CHOOSER m_SymChooserPanel;
 

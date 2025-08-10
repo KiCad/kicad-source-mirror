@@ -60,7 +60,6 @@
       <property name="window_name"></property>
       <property name="window_style"></property>
       <event name="OnClose">OnCloseWindow</event>
-      <event name="OnUpdateUI">OnUpdateUI</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
         <property name="name">bMainSizer</property>
@@ -353,7 +352,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
-                <event name="OnRadioBox">OnPlotFormatSelection</event>
+                <event name="OnRadioBox">onPlotFormatSelection</event>
               </object>
             </object>
             <object class="sizeritem" expanded="true">
@@ -514,7 +513,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnChoice">OnPageSizeSelected</event>
                       </object>
                     </object>
                     <object class="gbsizeritem" expanded="false">
@@ -716,6 +714,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnChoice">onColorMode</event>
                       </object>
                     </object>
                     <object class="gbsizeritem" expanded="true">
@@ -763,7 +762,7 @@
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
                         <property name="moveable">1</property>
-                        <property name="name">m_staticText9</property>
+                        <property name="name">m_colorThemeLabel</property>
                         <property name="pane_border">1</property>
                         <property name="pane_position"></property>
                         <property name="pane_size"></property>
@@ -1290,7 +1289,7 @@
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
-                        <property name="checked">0</property>
+                        <property name="checked">1</property>
                         <property name="close_button">1</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>

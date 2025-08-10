@@ -265,7 +265,7 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
         attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-                m_parent, aGrid, &cfg->m_lastFootprintLibDir, true, m_projectBasePath,
+                m_parent, aGrid, &cfg->m_LastFootprintLibDir, true, m_projectBasePath,
                 [this]( WX_GRID* grid, int row ) -> wxString
                 {
                     auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
@@ -336,8 +336,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
-        if( cfg->m_lastFootprintLibDir.IsEmpty() )
-            cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
+        if( cfg->m_LastFootprintLibDir.IsEmpty() )
+            cfg->m_LastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
     }
 
     m_lastProjectLibDir = m_projectBasePath;
@@ -838,7 +838,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( m_cur_grid == m_project_grid )
         lastDir = &m_lastProjectLibDir;
     else
-        lastDir = cfg ? &cfg->m_lastFootprintLibDir : &dummy;
+        lastDir = cfg ? &cfg->m_LastFootprintLibDir : &dummy;
 
     wxArrayString files;
 
@@ -873,8 +873,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
 
     // Drop the last directory if the path is a .pretty folder
-    if( cfg && cfg->m_lastFootprintLibDir.EndsWith( FILEEXT::KiCadFootprintLibPathExtension ) )
-        cfg->m_lastFootprintLibDir = cfg->m_lastFootprintLibDir.BeforeLast( wxFileName::GetPathSeparator() );
+    if( cfg && cfg->m_LastFootprintLibDir.EndsWith( FILEEXT::KiCadFootprintLibPathExtension ) )
+        cfg->m_LastFootprintLibDir = cfg->m_LastFootprintLibDir.BeforeLast( wxFileName::GetPathSeparator() );
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;

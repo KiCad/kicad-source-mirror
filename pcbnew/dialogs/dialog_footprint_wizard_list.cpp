@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_footprint_wizard_list.cpp
- */
-
 #include <wx/grid.h>
 
 #include <pcbnew_settings.h>
@@ -50,28 +46,13 @@ enum FPGeneratorRowNames
 DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent ) :
         DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
 {
+    OptOut( this );
     initLists();
-
-    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-        SetSize( wxSize( cfg->m_FootprintWizardList.width, cfg->m_FootprintWizardList.height ) );
 
     SetupStandardButtons();
     finishDialogSettings();
 
     Center();
-}
-
-
-DIALOG_FOOTPRINT_WIZARD_LIST::~DIALOG_FOOTPRINT_WIZARD_LIST()
-{
-    if( !IsIconized() )
-    {
-        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-        {
-            cfg->m_FootprintWizardList.width  = GetSize().x;
-            cfg->m_FootprintWizardList.height = GetSize().y;
-        }
-    }
 }
 
 
@@ -108,15 +89,14 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_NUMBER, num );
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_NAME, name );
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_DESCR, description );
-
     }
 
     m_footprintGeneratorsGrid->AutoSizeColumns();
 
     // Auto-expand the description column
-    int width = m_footprintGeneratorsGrid->GetClientSize().GetWidth() -
-                m_footprintGeneratorsGrid->GetRowLabelSize() -
-                m_footprintGeneratorsGrid->GetColSize( FP_GEN_ROW_NAME );
+    int width = m_footprintGeneratorsGrid->GetClientSize().GetWidth()
+                    - m_footprintGeneratorsGrid->GetRowLabelSize()
+                    - m_footprintGeneratorsGrid->GetColSize( FP_GEN_ROW_NAME );
 
     if ( width > m_footprintGeneratorsGrid->GetColMinimalAcceptableWidth() )
         m_footprintGeneratorsGrid->SetColSize( FP_GEN_ROW_DESCR, width );

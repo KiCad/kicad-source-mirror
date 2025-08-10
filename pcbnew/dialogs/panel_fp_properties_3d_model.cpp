@@ -90,10 +90,10 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     // Get the last 3D directory
     PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-    if( cfg && cfg->m_lastFootprint3dDir.IsEmpty() )
+    if( cfg && cfg->m_LastFootprint3dDir.IsEmpty() )
     {
         wxGetEnv( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ),
-                  &cfg->m_lastFootprint3dDir );
+                  &cfg->m_LastFootprint3dDir );
     }
 
     // Icon showing warning/error information
@@ -107,7 +107,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     if( cfg )
     {
         attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid,
-                                                    &cfg->m_lastFootprint3dDir, wxT( "*.*" ), true,
+                                                    &cfg->m_LastFootprint3dDir, wxT( "*.*" ), true,
                                                     m_frame->Prj().GetProjectPath() ) );
     }
 

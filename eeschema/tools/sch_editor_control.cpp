@@ -306,10 +306,6 @@ int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 
     dlg.ShowModal();
 
-    // save project config if the prj config has changed:
-    if( dlg.PrjConfigChanged() )
-        m_frame->OnModify();
-
     return 0;
 }
 

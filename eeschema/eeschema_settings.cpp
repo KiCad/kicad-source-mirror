@@ -162,7 +162,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         m_FieldEditorPanel(),
         m_LibViewPanel(),
         m_NetlistPanel(),
-        m_PlotPanel(),
         m_SymChooserPanel(),
         m_ImportGraphics(),
         m_Selection(),
@@ -540,33 +539,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "field_editor.scope",
             &m_FieldEditorPanel.scope, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.background_color",
-            &m_PlotPanel.background_color, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.color",
-            &m_PlotPanel.color, true ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "plot.color_theme",
-            &m_PlotPanel.color_theme, DEFAULT_THEME ) );
-
-    m_params.emplace_back( new PARAM<int>( "plot.format",
-            &m_PlotPanel.format, 0 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.frame_reference",
-            &m_PlotPanel.frame_reference, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.pdf_property_popups",
-            &m_PlotPanel.pdf_property_popups, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.pdf_hierarchical_links",
-            &m_PlotPanel.pdf_hierarchical_links, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.pdf_metadata",
-            &m_PlotPanel.pdf_metadata, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "plot.other_open_file_after_plot",
-            &m_PlotPanel.open_file_after_plot, false ) );
 
     addParamsForWindow( &m_Simulator.window, "simulator.window", 500, 400 );
 

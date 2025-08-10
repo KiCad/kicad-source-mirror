@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCBNEW_SETTINGS_H_
-#define PCBNEW_SETTINGS_H_
+#pragma once
 
 #include <core/mirror.h> // for FLIP_DIRECTION
 #include <geometry/eda_angle.h>
@@ -48,7 +47,6 @@ struct CONVERT_SETTINGS
     int              m_LineWidth;
     bool             m_DeleteOriginals;
 };
-
 
 
 enum class MAGNETIC_OPTIONS
@@ -169,14 +167,9 @@ public:
         bool doNotExportUnconnectedPads;
     };
 
-    struct DIALOG_FOOTPRINT_WIZARD_LIST
-    {
-        int width;
-        int height;
-    };
-
     struct FOOTPRINT_CHOOSER
     {
+        // Footprint chooser is a FRAME, so there's no DIALOG_SHIM to save/restore control state
         int  width;
         int  height;
         int  sash_h;
@@ -227,75 +220,63 @@ public:
     };
 
     PCBNEW_SETTINGS();
-
     virtual ~PCBNEW_SETTINGS();
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
-    AUI_PANELS m_AuiPanels;
+protected:
+    virtual std::string getLegacyFrameName() const override { return "PcbFrame"; }
+
+public:
+    AUI_PANELS         m_AuiPanels;
 
     DIALOG_EXPORT_D356 m_ExportD356;
+    FOOTPRINT_CHOOSER  m_FootprintChooser;
 
-    DIALOG_FOOTPRINT_WIZARD_LIST m_FootprintWizardList;
+    ZONES              m_Zones;
 
-    FOOTPRINT_CHOOSER m_FootprintChooser;
+    WINDOW_SETTINGS    m_FootprintViewer;
+    WINDOW_SETTINGS    m_FootprintWizard;
 
-    ZONES m_Zones;
+    DISPLAY_OPTIONS    m_Display;
 
-    WINDOW_SETTINGS m_FootprintViewer;
+    MAGNETIC_SETTINGS  m_MagneticItems;
+    TRACK_DRAG_ACTION  m_TrackDragAction;
+    ARC_EDIT_MODE      m_ArcEditMode;
 
-    WINDOW_SETTINGS m_FootprintWizard;
+    bool               m_CtrlClickHighlight;
 
-    DISPLAY_OPTIONS m_Display;
+    bool               m_Use45DegreeLimit;    // Constrain tool actions to horizontal, vertical and 45deg
+    FLIP_DIRECTION     m_FlipDirection;
 
-    MAGNETIC_SETTINGS m_MagneticItems;
+    bool      m_ESCClearsNetHighlight;
 
-    TRACK_DRAG_ACTION m_TrackDragAction;
-
-    ARC_EDIT_MODE m_ArcEditMode;
-
-    bool m_CtrlClickHighlight;
-
-    bool m_Use45DegreeLimit;            // True to constrain tool actions to horizontal,
-                                        // vertical and 45deg
-    FLIP_DIRECTION m_FlipDirection;
-
-    bool m_ESCClearsNetHighlight;
-
-    bool m_PolarCoords;
+    bool      m_PolarCoords;
 
     EDA_ANGLE m_RotationAngle;
 
-    bool m_ShowPageLimits;
-
-    bool m_ShowCourtyardCollisions;
+    bool      m_ShowPageLimits;
+    bool      m_ShowCourtyardCollisions;
 
     ///<@todo Implement real auto zone filling (not just after zone properties are edited)
-    bool m_AutoRefillZones; // Fill zones after editing the zone using the Zone Properties dialog
+    bool      m_AutoRefillZones; // Fill zones after editing the zone using the Zone Properties dialog
 
-    bool m_AllowFreePads; // True: unlocked pads can be moved freely with respect to the footprint.
-                          // False (default): all pads are treated as locked for the purposes of
-                          // movement and any attempt to move them will move the footprint instead.
+    bool      m_AllowFreePads;  // True: unlocked pads can be moved freely with respect to the footprint.
+                                // False (default): all pads are treated as locked for the purposes of
+                                // movement and any attempt to move them will move the footprint instead.
 
-    wxString m_FootprintTextShownColumns;
+    wxString  m_FootprintTextShownColumns;
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
-    int    m_FootprintViewerLibListWidth;
-    int    m_FootprintViewerFPListWidth;
+    int       m_FootprintViewerLibListWidth;
+    int       m_FootprintViewerFPListWidth;
 
-    wxString m_lastFootprintLibDir;
-
-    wxString m_lastFootprint3dDir;
+    wxString  m_LastFootprintLibDir;
+    wxString  m_LastFootprint3dDir;
 
     LOCKING_OPTIONS m_LockingOptions;
 
     ACTION_PLUGIN_SETTINGS_LIST m_VisibleActionPlugins;
-
-protected:
-
-    virtual std::string getLegacyFrameName() const override { return "PcbFrame"; }
-
 };
 
-#endif
