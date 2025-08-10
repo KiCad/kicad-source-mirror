@@ -160,6 +160,12 @@ void DIALOG_FILTER_SELECTION::allItemsClicked( wxCommandEvent& aEvent )
 }
 
 
+bool DIALOG_FILTER_SELECTION::TransferDataToWindow()
+{
+    return true;
+}
+
+
 bool DIALOG_FILTER_SELECTION::TransferDataFromWindow()
 {
     return true;
