@@ -52,7 +52,6 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
 {
     m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
-    m_reporter = &m_messagesPanel->Reporter();
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -265,12 +264,11 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
-    wxFileName  outputDir = wxFileName::DirName( path );
+    wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
+    REPORTER*  reporter = &m_messagesPanel->Reporter();
 
-    m_reporter = &m_messagesPanel->Reporter();
-
-    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, m_reporter ) )
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, reporter ) )
     {
         msg.Printf( _( "Could not write plot files to folder '%s'." ), outputDir.GetPath() );
         DisplayError( this, msg );
@@ -292,15 +290,15 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         wxMessageBox( msg );
-        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        reporter->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 
     msg.Printf( _( "Front (top side) placement file: '%s'." ), filename );
-    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    reporter->Report( msg, RPT_SEVERITY_ACTION );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    reporter->Report( msg, RPT_SEVERITY_INFO );
 
     // Create the Back or Bottom side placement file
     fullcount = fpcount;
@@ -313,23 +311,23 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     if( fpcount < 0 )
     {
         msg.Printf( _( "Failed to create file '%s'." ), filename );
-        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        reporter->Report( msg, RPT_SEVERITY_ERROR );
         wxMessageBox( msg );
         return false;
     }
 
     // Display results
     msg.Printf( _( "Back (bottom side) placement file: '%s'." ), filename );
-    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    reporter->Report( msg, RPT_SEVERITY_ACTION );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    reporter->Report( msg, RPT_SEVERITY_INFO );
 
     fullcount += fpcount;
     msg.Printf( _( "Full component count: %d." ), fullcount );
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    reporter->Report( msg, RPT_SEVERITY_INFO );
 
-    m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
+    reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
 
     return true;
 }
@@ -376,10 +374,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
+    REPORTER*  reporter = &m_messagesPanel->Reporter();
 
-    m_reporter = &m_messagesPanel->Reporter();
-
-    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, m_reporter ) )
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, reporter ) )
     {
         msg.Printf( _( "Could not write plot files to folder '%s'." ), outputDir.GetPath() );
         DisplayError( this, msg );
@@ -409,7 +406,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         wxMessageBox( msg );
-        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        reporter->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -418,14 +415,14 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     else
         msg.Printf( _( "Front (top side) placement file: '%s'." ), fn.GetFullPath() );
 
-    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    reporter->Report( msg, RPT_SEVERITY_ACTION );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
-    m_reporter->Report( msg, RPT_SEVERITY_INFO );
+    reporter->Report( msg, RPT_SEVERITY_INFO );
 
     if( singleFile  )
     {
-        m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
+        reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
         return true;
     }
 
@@ -451,7 +448,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( fpcount < 0 )
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
-        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        reporter->Report( msg, RPT_SEVERITY_ERROR );
         wxMessageBox( msg );
         return false;
     }
@@ -460,20 +457,20 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( !singleFile )
     {
         msg.Printf( _( "Back (bottom side) placement file: '%s'." ), fn.GetFullPath() );
-        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+        reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         msg.Printf( _( "Component count: %d." ), fpcount );
-        m_reporter->Report( msg, RPT_SEVERITY_INFO );
+        reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
     if( !singleFile )
     {
         fullcount += fpcount;
         msg.Printf( _( "Full component count: %d." ), fullcount );
-        m_reporter->Report( msg, RPT_SEVERITY_INFO );
+        reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
-    m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
+    reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
     return true;
 }
 

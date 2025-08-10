@@ -26,7 +26,6 @@
 #include <dialog_gen_footprint_position_file_base.h>
 
 class PCB_EDIT_FRAME;
-class REPORTER;
 class JOB_EXPORT_PCB_POS;
 
 /**
@@ -72,7 +71,6 @@ private:
 
 private:
     PCB_EDIT_FRAME*     m_editFrame;
-    REPORTER*           m_reporter;
     JOB_EXPORT_PCB_POS* m_job;
     wxString            m_outputDirectory;
 };
