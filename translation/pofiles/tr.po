@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-07-23 16:04+0000\n"
-"Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
+"PO-Revision-Date: 2025-08-11 14:02+0000\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1732,14 +1732,12 @@ msgid "Errors"
 msgstr "Hatalar"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Değiştir ve Sonrakini Bul"
+msgstr "Yüklenen Dosya Değiştirilsin mi?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Çıktı dosyaları '%s' zaten mevcut. Üzerine yazmak ister misiniz?"
+msgstr "Zaten yüklenmiş bir dosya var. Değiştirmek istiyor musunuz?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -4003,9 +4001,8 @@ msgid "Add"
 msgstr "Ekle"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Git takibini etkinleştir"
+msgstr "Git izlemeyi etkinleştir"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -11693,9 +11690,8 @@ msgstr "Alan konumlarını güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Güncelleme Seçenekleri"
+msgstr "Tüm Güncelleme Seçeneklerini Kontrol Edin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -11706,9 +11702,8 @@ msgid "Update keywords and footprint filters"
 msgstr "Anahtar kelimeleri ve ayak izi filtrelerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
-msgstr "Alan görünürlüklerini güncelle/sıfırla"
+msgstr "Pin adını/numarası görünürlüğünü güncelleme/sıfırlama"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 msgid "Reset alternate pin to default"
@@ -11724,9 +11719,8 @@ msgstr "Özelleştirilmiş güç sembollerini sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Güncelleme Seçenekleri"
+msgstr "Tüm Güncelleme Seçeneklerinin İşaretini Kaldırın"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -16671,24 +16665,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Kenarları sürüklerken pinleri bağlı tut"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Pin adı boş olamaz."
+msgstr "Takma ad ve yol boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Pin adı boş olamaz."
+msgstr "Takma ad boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Metin boş olamaz."
+msgstr "Yol boş olamaz."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Kütüphane Takma Adı Hatası"
+msgstr "Kütüphane Tablosu Hatası"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:478
 #, c-format
@@ -16929,9 +16919,9 @@ msgstr "Kaydedilecek bir sembol seçilmedi."
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1141
 #: pcbnew/pcbnew_jobs_handler.cpp:1783
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "%s Bekleniyor"
+msgstr "%s Dışa Aktarılıyor"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1663
 msgid "Output path must not conflict with existing path\n"
@@ -18218,9 +18208,8 @@ msgid "&Duplicate '%s'"
 msgstr "&'%s' kopyası"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Birim"
+msgstr "Birimleri Yer Değiştir"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -19998,29 +19987,24 @@ msgid "Cell Height"
 msgstr "Hücre Yüksekliği"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
-msgstr "Hücre Genişliği"
+msgstr "Sütun Genişliği"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
-#, fuzzy
 msgid "Row Height"
-msgstr "Kutu Yüksekliği"
+msgstr "Satır Yüksekliği"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Etiket Özellikleri"
+msgstr "Hücre Özellikleri"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
-msgstr "Arka plan dolgusu"
+msgstr "Arka plan kapla"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Arkaplan Rengi"
+msgstr "Arkaplan Renk Kapla"
 
 #: eeschema/sch_text.cpp:467
 #, c-format
@@ -21691,7 +21675,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Uyarı: referans boş</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -23837,14 +23821,12 @@ msgid "All units of this symbol are already placed."
 msgstr "Bu sembolün tüm birimleri zaten yerleştirildi."
 
 #: eeschema/tools/sch_drawing_tools.cpp:757
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Tasarım bloğu ekle"
+msgstr "Tasarım Bloğu Ekle"
 
 #: eeschema/tools/sch_drawing_tools.cpp:758
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Şematik Sayfa İçeriğini İçe Aktar..."
+msgstr "Şematik Sayfa İçeriğini İçe Aktar"
 
 #: eeschema/tools/sch_drawing_tools.cpp:792
 msgid "Choose Schematic"
@@ -24095,12 +24077,11 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Bir ağ sınıfı atamak için ağın etiketlenmesi gerekir.."
 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Dosya uzantısını değiştirmek dosya türünü değiştirecektir.\n"
-"Devam etmek istiyor musun?"
+"Uzun bir metin metin dizesini yapıştırmak çok yavaş olabilir.  Devam etmek "
+"istiyor musunuz?"
 
 #: eeschema/tools/sch_editor_control.cpp:1836
 #, c-format
@@ -24313,9 +24294,9 @@ msgstr "Sembol kütüphanesi seçilmedi."
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:413
 #: eeschema/tools/symbol_editor_control.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Kütüphane '%s' bulunamadı."
+msgstr "Sembol Kütüphanesi '%s' bulunamadı."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -24404,6 +24385,8 @@ msgstr ""
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Bu mesajı önlemek için 'Senkronize Pinler Modu' seçeneğini devre dışı "
+"bırakın."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:244
 msgid "Place Pin Anyway"
@@ -26607,6 +26590,7 @@ msgstr "Render kalitesi. Seçenekler: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Görünüm ön ayarı. Seçenekler: %s, %s veya kullanıcı tanımlı hazır ayar adı"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -26663,9 +26647,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Yan ışıkların yükselme açısı (derece cinsinden), aralık: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:334
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "Geçersiz biçim\n"
+msgstr "Geçersiz ön ayar\n"
 
 #: kicad/cli/command_pcb_render.cpp:350
 msgid "Invalid background\n"
@@ -26933,7 +26916,7 @@ msgstr "Katmanları Dahil Et:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:150
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<çalışırken ayarlanan değer>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -26944,9 +26927,8 @@ msgid "Ignore non-zero exit code"
 msgstr "Sıfır olmayan çıkış kodunu yok say"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "Kullanılabilir Değerler"
+msgstr "Kullanılabilir metin değişkenleri:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -27064,9 +27046,8 @@ msgid "Last run failed"
 msgstr "Son çalıştırma başarısız oldu"
 
 #: kicad/dialogs/panel_jobset.cpp:256 kicad/dialogs/panel_jobset.cpp:968
-#, fuzzy
 msgid "Running Jobs"
-msgstr "Çalışan işler"
+msgstr "Çalışan İşler"
 
 #: kicad/dialogs/panel_jobset.cpp:286
 msgid "Edit Destination Options..."
@@ -27272,9 +27253,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro Projeyi İçe Aktar"
 
 #: kicad/jobs_runner.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Çalışan işler"
+msgstr "Çalışan işler %d: %s"
 
 #: kicad/jobs_runner.cpp:263
 msgid "Job successful"
@@ -32039,64 +32020,47 @@ msgstr ""
 "Güncelle\" aracı kullanılarak şematik ile senkronize edilmelidir."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"%i tür referans tanımlamaları vardır\n"
-"**********************************************************\n"
+"<br/>Kullanımda olan %i başvuru göstergesi önekleri var<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"Hariç: %s yeniden onaylamadan\n"
-"\n"
+msgstr "Hariç tutma: %s yeniden notlandırmadan<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Diziyi Değiştir\n"
-"***********************\n"
+"<br/>Diziyi Değiştir\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " göz ardı edilecek"
+msgstr "(göz ardı edilecek)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "Ayak izi yok"
+msgstr "<br/>Ayak izleri yok"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"*********** %s'ye göre sırala ***********"
+msgstr "<br/>*********** Ayak İzi Koordinatlarına Göre Sırala ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"*********** %s'ye göre sırala ***********"
+msgstr "<br/>*********** Referans Koordinatlarına Göre Sırala ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s KULLANICI kimliği: [%s], X, Y: %s, Yuvarlatılmış X, Y, %s"
+msgstr "<br/>%d %s X, Y: %s; yuvarlanmış X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 msgid "Selected options resulted in errors! Change them and try again."
@@ -32104,22 +32068,19 @@ msgstr ""
 "Seçilen seçenekler hatalarla sonuçlandı! Onları değiştir ve tekrar dene."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"\n"
-"Kartta %d boş veya geçersiz referans tanımlayıcı var.\n"
-"Baskı Devre ve şema arasında eşitliği test et seçeneği işaretliyken DRC "
-"(Tasarım Kuralı Kontrolü) uygulamanız önerilir.\n"
+"<br/>PCB'de %d boş veya geçersiz referans atamaları var.<br/>'Baskı Devre "
+"ile şematik arasındaki pariteyi test et' seçeneği işaretli olarak DRC "
+"çalıştırmanız önerilir.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"RefDes:%s Ayak İzi:%s: PCB'de%s'de%s."
+msgstr "<br/>RefDes: %s Ayak izi: %s:%s, Baskı Devre üzerinde %s konumunda."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:531
 msgid "Reannotate anyway?"
@@ -32139,20 +32100,12 @@ msgid "Aborted: too many errors"
 msgstr "İptal edildi: çok fazla hata"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:749
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"Ön Ayak izi"
+msgstr "<br/><br/>Ön Ayak İzleri"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:750
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"Arka Ayak İzleri"
+msgstr "<br/><br/>Arka Ayak İzleri"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:814
 msgid "Footprint not found in changelist"
@@ -33984,9 +33937,8 @@ msgid "New footprint library id:"
 msgstr "Yeni ayak izi kütüphane kimliği:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
-msgstr "Kütüphane ayak izinde bulunmayan metin ögelerini kaldır"
+msgstr "Kütüphane ayak izinde değilse metin öğelerini kaldır"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
@@ -37781,9 +37733,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "Görselleştirme"
+msgstr "Görünüm ön ayarı:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37838,18 +37789,16 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
-#, fuzzy
 msgid "Lights Intensity"
-msgstr "Işık yoğunluğu"
+msgstr "Işık Yoğunluğu"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:285
 msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
-#, fuzzy
 msgid "Lights Position"
-msgstr "Işık konumu"
+msgstr "Işık Konumu"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:311
 msgid "Side lights elevation:"
@@ -50574,34 +50523,28 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP Boşluk Kısıtlamaları: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1774
-#, fuzzy
 msgid "Resolved Clearance"
-msgstr "Çözülen boşluk"
+msgstr "Çözülmüş Boşluk"
 
 #: pcbnew/tools/pcb_control.cpp:1785
-#, fuzzy
 msgid "Actual Clearance"
-msgstr "Gerçek boşluk"
+msgstr "Geçerli Boşluk"
 
 #: pcbnew/tools/pcb_control.cpp:1828
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "Çözülen delik boşluğu"
+msgstr "Çözülmüş Delik Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:1833
-#, fuzzy
 msgid "Actual Hole Clearance"
-msgstr "Gerçek delik boşluğu"
+msgstr "Geçerli Delik Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:1868
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "Çözülen kenar boşluğu"
+msgstr "Çözülmüş Kenar Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:1873
-#, fuzzy
 msgid "Resolved Margin Clearance"
-msgstr "Çözülen marj boşluğu"
+msgstr "Çözülmüş Marjin Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:1885
 msgid "Selected Items"
