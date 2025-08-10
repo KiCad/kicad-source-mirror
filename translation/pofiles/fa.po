@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-01 21:02+0000\n"
+"PO-Revision-Date: 2025-08-11 14:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
-"Language-Team: Persian <https://hosted.weblate.org/projects/kicad/master-"
-"source/fa/>\n"
+"Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
+"master-source/fa/>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -103,7 +103,7 @@ msgstr "آخرین زمان پردازش، %.0f میلی ثانیه"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "خطای OpenGL هنگام پردازش خارج از صفحه (Off-Screen): ‎0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:965
 #, c-format
@@ -3842,7 +3842,7 @@ msgstr "بررسی تطابق و یکسان بودن بین شماتیک (Schema
 #: common/dialogs/dialog_rc_job_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "پر کردن مجدد تمام ناحیه ها قبل از اجرای DRC"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -4315,58 +4315,66 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
+"از مقدار خودکار برای مقیاس نمای بوم (Canvas Scale) استفاده کنید.\n"
+"\n"
+"در بعضی سیستم ها، این مقدار خودکار نادرست است و باید به صورت دستی تنظیم شود."
 
 #: common/dialogs/panel_common_settings.cpp:359
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "پیکربندی پیش فرض 'explorer.exe /n,/select,%F' برای این سیستم عامل."
 
 #: common/dialogs/panel_common_settings.cpp:363
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"فرمان مرورگر فایل.\n"
+"مثال:"
 
 #: common/dialogs/panel_common_settings.cpp:367
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"فرمان اکسپلورر با پسوند اجباری '%s' که باید بعد از آخرین نویسه وارد شده "
+"بیاید."
 
 #: common/dialogs/panel_common_settings.cpp:381
 msgid "Executable files ("
-msgstr ""
+msgstr "فایل های اجرایی ("
 
 #: common/dialogs/panel_common_settings.cpp:388
 msgid "Select Preferred PDF Viewer"
-msgstr ""
+msgstr "نمایشگر PDF مورد نظر خود را انتخاب کنید"
 
 #: common/dialogs/panel_common_settings_base.cpp:22
 msgid "Rendering Engine"
-msgstr ""
+msgstr "موتور پردازشگر"
 
 #: common/dialogs/panel_common_settings_base.cpp:36
 msgid "Accelerated Graphics"
-msgstr ""
+msgstr "گرافیک شتاب یافته"
 
 #: common/dialogs/panel_common_settings_base.cpp:37
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "گرافیک سخت افزاری شتاب دهی شده (توصیه شده)"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
 msgid "Fallback Graphics"
-msgstr ""
+msgstr "گرافیک جایگزین"
 
 #: common/dialogs/panel_common_settings_base.cpp:42
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"گرافیک نرم‌افزاری (برای کامپیوترهایی که از نیاز های شتاب دهی سخت‌افزاری KiCad "
+"پشتیبانی نمی کنند)"
 
 #: common/dialogs/panel_common_settings_base.cpp:59
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "هموار کننده تصویر (Anti-aliasing):"
+msgstr "هموار کننده تصویر (Anti-Aliasing):"
 
 #: common/dialogs/panel_common_settings_base.cpp:63
 msgid "No Antialiasing"
@@ -4386,35 +4394,35 @@ msgstr "برنامه های کمکی"
 
 #: common/dialogs/panel_common_settings_base.cpp:97
 msgid "Text editor:"
-msgstr ""
+msgstr "ویرایشگر متن:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "File manager:"
-msgstr ""
+msgstr "مدیریت فایل:"
 
 #: common/dialogs/panel_common_settings_base.cpp:131
 msgid "System default PDF viewer"
-msgstr ""
+msgstr "نمایشگر پیش فرض PDF سیستم"
 
 #: common/dialogs/panel_common_settings_base.cpp:140
 msgid "Other:"
-msgstr ""
+msgstr "دیگر:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid "User Interface"
-msgstr ""
+msgstr "رابط کاربری"
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "Show icons in menus"
-msgstr ""
+msgstr "نمایش نماد ها در منو ها"
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Show scrollbars in editors"
-msgstr ""
+msgstr "نمایش نوار های پیمایش در ویرایشگر ها"
 
 #: common/dialogs/panel_common_settings_base.cpp:176
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "این تغییر پس از راه اندازی مجدد ویرایشگر اعمال می شود."
 
 #: common/dialogs/panel_common_settings_base.cpp:180
 msgid "Focus follows mouse between schematic and PCB editors"
@@ -4481,18 +4489,18 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:227
 msgid "Toolbar icon size:"
-msgstr ""
+msgstr "اندازه آیکن نوار ابزار:"
 
 #: common/dialogs/panel_common_settings_base.cpp:231
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:140
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:150
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "Small"
-msgstr ""
+msgstr "کوچک"
 
 #: common/dialogs/panel_common_settings_base.cpp:232
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "استفاده از آیکون های فشرده در نوار ابزار"
 
 #: common/dialogs/panel_common_settings_base.cpp:236 common/eda_text.cpp:977
 #: eeschema/sch_label.cpp:1306 eeschema/sch_tablecell.cpp:151
