@@ -100,13 +100,13 @@ public:
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;
-    void onOKClick( wxCommandEvent& event ) override;
     void onCompressCheck( wxCommandEvent& event ) override;
     void onMfgPNChange( wxCommandEvent& event ) override;
     void onDistPNChange( wxCommandEvent& event ) override;
 
+    void init();
 
-    bool Init();
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     PCB_EDIT_FRAME* m_parent;

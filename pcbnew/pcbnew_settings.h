@@ -163,14 +163,6 @@ public:
         int   design_blocks_panel_float_height;
     };
 
-    struct DIALOG_EXPORT_2581
-    {
-        int    precision;
-        int    units;
-        int    version;
-        bool   compress;
-    };
-
     struct DIALOG_EXPORT_D356
     {
         // Export D356 uses wxFileDialog, so there's no DIALOG_SHIM to save/restore control state
@@ -241,8 +233,6 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
     AUI_PANELS m_AuiPanels;
-
-    DIALOG_EXPORT_2581 m_Export2581;
 
     DIALOG_EXPORT_D356 m_ExportD356;
 

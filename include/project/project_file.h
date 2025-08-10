@@ -54,7 +54,6 @@ enum LAST_PATH_TYPE : unsigned int
     LAST_PATH_VRML,
     LAST_PATH_SPECCTRADSN,
     LAST_PATH_PLOT,
-    LAST_PATH_2581,
 
     LAST_PATH_SIZE
 };

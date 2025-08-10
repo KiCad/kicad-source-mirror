@@ -36,7 +36,6 @@
 #include <vector>
 #include <wx/filedlg.h>
 
-static wxString s_oemColumn = wxEmptyString;
 
 DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
         DIALOG_EXPORT_2581_BASE( aParent ),
@@ -48,22 +47,11 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
     SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                             { wxID_CANCEL, _( "Close" )  } } );
 
-    wxString path = m_parent->GetLastPath( LAST_PATH_2581 );
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions.
+    m_hash_key = TO_UTF8( GetTitle() );
 
-    if( path.IsEmpty() )
-    {
-        wxFileName brdFile( m_parent->GetBoard()->GetFileName() );
-        brdFile.SetExt( wxT( "xml" ) );
-        path = brdFile.GetFullPath();
-    }
-
-    m_outputFileName->SetValue( path );
-
-    m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
-
-    // Fill wxChoice (and others) items with data before calling finishDialogSettings()
-    // to calculate suitable widgets sizes
-    Init();
+    init();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -80,13 +68,13 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_F
 
     SetupStandardButtons();
 
-    m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
+    SetTitle( m_job->GetSettingsDialogTitle() );
 
-    m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions.
+    m_hash_key = TO_UTF8( GetTitle() );
 
-    // Fill wxChoice (and others) items with data before calling finishDialogSettings()
-    // to calculate suitable widgets sizes
-    Init();
+    init();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -111,17 +99,6 @@ void DIALOG_EXPORT_2581::onBrowseClicked( wxCommandEvent& event )
     m_outputFileName->SetValue( dlg.GetPath() );
 
 }
-
-void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
-{
-    if( !m_job )
-    {
-        m_parent->SetLastPath( LAST_PATH_2581, m_outputFileName->GetValue() );
-    }
-
-    event.Skip();
-}
-
 
 void DIALOG_EXPORT_2581::onCompressCheck( wxCommandEvent& event )
 {
@@ -159,21 +136,13 @@ void DIALOG_EXPORT_2581::onMfgPNChange( wxCommandEvent& event )
         int it = 0;
 
         if( it = m_choiceMfg->FindString( wxT( "manufacturer" ) ); it != wxNOT_FOUND )
-        {
             m_choiceMfg->Select( it );
-        }
         else if( it = m_choiceMfg->FindString( _( "manufacturer" ) ); it != wxNOT_FOUND )
-        {
             m_choiceMfg->Select( it );
-        }
         else if( it = m_choiceMfg->FindString( wxT( "mfg" ) ); it != wxNOT_FOUND )
-        {
             m_choiceMfg->Select( it );
-        }
         else if( it = m_choiceMfg->FindString( _( "mfg" ) ); it != wxNOT_FOUND )
-        {
             m_choiceMfg->Select( it );
-        }
     }
 }
 
@@ -242,8 +211,10 @@ void DIALOG_EXPORT_2581::onDistPNChange( wxCommandEvent& event )
 }
 
 
-bool DIALOG_EXPORT_2581::Init()
+void DIALOG_EXPORT_2581::init()
 {
+    m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
+
     std::set<wxString> options;
 
     for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
@@ -252,40 +223,39 @@ bool DIALOG_EXPORT_2581::Init()
             options.insert( field->GetName() );
     }
 
-    if( !m_job )
-    {
-        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-        {
-            m_choiceUnits->SetSelection( cfg->m_Export2581.units );
-            m_precision->SetValue( cfg->m_Export2581.precision );
-            m_versionChoice->SetSelection( cfg->m_Export2581.version );
-            m_cbCompress->SetValue( cfg->m_Export2581.compress );
-        }
-    }
-    else
-    {
-        SetTitle( m_job->GetSettingsDialogTitle() );
-
-        m_choiceUnits->SetSelection( m_job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? 0 : 1 );
-        m_precision->SetValue( static_cast<int>( m_job->m_precision ) );
-        m_versionChoice->SetSelection( m_job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B ? 0 : 1 );
-        m_cbCompress->SetValue( m_job->m_compress );
-    }
-
-    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
-    m_hash_key = TO_UTF8( GetTitle() );
-
-    wxCommandEvent dummy;
-    onCompressCheck( dummy );
-
     std::vector<wxString> items( options.begin(), options.end() );
     m_oemRef->Append( items );
     m_choiceMPN->Append( items );
     m_choiceMfg->Append( items );
     m_choiceDistPN->Append( items );
+}
 
-    m_oemRef->SetStringSelection( s_oemColumn );
+
+bool DIALOG_EXPORT_2581::TransferDataToWindow()
+{
+    if( !m_job )
+    {
+        wxString path = m_outputFileName->GetValue();
+
+        if( path.IsEmpty() )
+        {
+            wxFileName brdFile( m_parent->GetBoard()->GetFileName() );
+            brdFile.SetExt( wxT( "xml" ) );
+            path = brdFile.GetFullPath();
+            m_outputFileName->SetValue( path );
+        }
+    }
+    else
+    {
+        m_choiceUnits->SetSelection( m_job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? 0 : 1 );
+        m_precision->SetValue( static_cast<int>( m_job->m_precision ) );
+        m_versionChoice->SetSelection( m_job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B ? 0 : 1 );
+        m_cbCompress->SetValue( m_job->m_compress );
+        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
+    }
+
+    wxCommandEvent dummy;
+    onCompressCheck( dummy );
 
     PROJECT_FILE& prj = Prj().GetProjectFile();
 
@@ -354,18 +324,11 @@ bool DIALOG_EXPORT_2581::Init()
     return true;
 }
 
+
 bool DIALOG_EXPORT_2581::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-        {
-            cfg->m_Export2581.units = m_choiceUnits->GetSelection();
-            cfg->m_Export2581.precision = m_precision->GetValue();
-            cfg->m_Export2581.version = m_versionChoice->GetSelection();
-            cfg->m_Export2581.compress = m_cbCompress->GetValue();
-        }
-
         PROJECT_FILE& prj = Prj().GetProjectFile();
 
         prj.m_IP2581Bom.id = GetOEM();
@@ -373,8 +336,6 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
         prj.m_IP2581Bom.MPN = GetMPN();
         prj.m_IP2581Bom.distPN = GetDistPN();
         prj.m_IP2581Bom.dist = GetDist();
-
-        s_oemColumn = m_oemRef->GetStringSelection();
     }
     else
     {
