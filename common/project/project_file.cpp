@@ -72,9 +72,6 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.netlist",
             &m_PcbLastPath[LAST_PATH_NETLIST], "" ) );
 
-    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.step",
-            &m_PcbLastPath[LAST_PATH_STEP], "" ) );
-
     m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.idf",
             &m_PcbLastPath[LAST_PATH_IDF], "" ) );
 
@@ -83,15 +80,6 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.specctra_dsn",
             &m_PcbLastPath[LAST_PATH_SPECCTRADSN], "" ) );
-
-    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.gencad",
-            &m_PcbLastPath[LAST_PATH_GENCAD], "" ) );
-
-    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.pos_files",
-            &m_PcbLastPath[LAST_PATH_POS_FILES], "" ) );
-
-    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.svg",
-            &m_PcbLastPath[LAST_PATH_SVG], "" ) );
 
     m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.plot",
             &m_PcbLastPath[LAST_PATH_PLOT], "" ) );

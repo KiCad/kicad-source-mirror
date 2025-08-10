@@ -55,8 +55,6 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    m_outputDirectoryName->SetValue( m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] );
-
     SetupStandardButtons( { { wxID_OK, _( "Generate Position File" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
 
@@ -216,8 +214,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_outputDirectory = m_outputDirectoryName->GetValue();
         // Keep unix directory format convention in cfg files
         m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
-
-        m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = m_outputDirectory;
 
         if( m_formatCtrl->GetSelection() == 2 )
             CreateGerberFiles();

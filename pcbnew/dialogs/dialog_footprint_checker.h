@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_FOOTPRINT_CHECKER_H
-#define DIALOG_FOOTPRINT_CHECKER_H
+#pragma once
 
 #include <dialog_footprint_checker_base.h>
 #include <rc_item.h>
@@ -41,10 +40,12 @@ public:
     void SelectMarker( const PCB_MARKER* aMarker );
 
 private:
-    void syncCheckboxes();
-    void updateDisplayedCounts();
+    int getSeverities() const;
 
     void runChecks();
+
+    void updateDisplayedCounts();
+    void updateData();
 
     void centerMarkerIdleHandler( wxIdleEvent& aEvent );
 
@@ -63,17 +64,13 @@ private:
     void OnDeleteAllClick( wxCommandEvent& event ) override;
 
     bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
 
 private:
     FOOTPRINT_EDIT_FRAME*              m_frame;
     bool                               m_checksRun;
 
-    int                                m_severities;
     std::shared_ptr<RC_ITEMS_PROVIDER> m_markersProvider;
     RC_TREE_MODEL*                     m_markersTreeModel;
 
     const PCB_MARKER*                  m_centerMarkerOnIdle;
 };
-
-#endif // DIALOG_FOOTPRINT_CHECKER_H

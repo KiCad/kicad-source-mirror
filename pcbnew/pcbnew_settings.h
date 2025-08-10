@@ -171,28 +171,9 @@ public:
         bool   compress;
     };
 
-    struct DIALOG_EXPORT_ODBPP
-    {
-        int    precision;
-        int    units;
-        int    compressFormat;
-    };
-
-    struct DIALOG_EXPORT_VRML
-    {
-        int    units;
-        bool   no_unspecified;
-        bool   no_dnp;
-        bool   copy_3d_models;
-        bool   use_relative_paths;
-        int    ref_units;
-        double ref_x;
-        double ref_y;
-        int    origin_mode;
-    };
-
     struct DIALOG_EXPORT_D356
     {
+        // Export D356 uses wxFileDialog, so there's no DIALOG_SHIM to save/restore control state
         bool doNotExportUnconnectedPads;
     };
 
@@ -262,10 +243,6 @@ public:
     AUI_PANELS m_AuiPanels;
 
     DIALOG_EXPORT_2581 m_Export2581;
-
-    DIALOG_EXPORT_ODBPP m_ExportODBPP;
-
-    DIALOG_EXPORT_VRML m_ExportVrml;
 
     DIALOG_EXPORT_D356 m_ExportD356;
 

@@ -160,7 +160,7 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   wxCHECK( gencadJob && editFrame, false );
 
-                  DIALOG_GENCAD_EXPORT_OPTIONS dlg( editFrame, gencadJob );
+                  DIALOG_GENCAD_EXPORT_OPTIONS dlg( editFrame, gencadJob->GetSettingsDialogTitle(), gencadJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ),

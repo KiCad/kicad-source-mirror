@@ -17,8 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ODBPP_EXPORT_DIALOG_H
-#define ODBPP_EXPORT_DIALOG_H
+#pragma once
+
 #include "dialog_export_odbpp_base.h"
 
 class PCB_EDIT_FRAME;
@@ -60,12 +60,10 @@ private:
 
     void OnFmtChoiceOptionChanged();
 
-
-    bool Init();
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    PCB_EDIT_FRAME* m_parent;
+private:
+    PCB_EDIT_FRAME*     m_parent;
     JOB_EXPORT_PCB_ODB* m_job;
 };
-
-#endif // ODBPP_EXPORT_DIALOG_H

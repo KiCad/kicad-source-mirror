@@ -22,9 +22,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-/**
- * @file dialog_export_vrml.cpp
- */
 
 #include <wx/dir.h>
 
@@ -43,77 +40,15 @@
 
 DIALOG_EXPORT_VRML::DIALOG_EXPORT_VRML( PCB_EDIT_FRAME* aEditFrame ) :
         DIALOG_EXPORT_VRML_BASE( aEditFrame ),
-        m_editFrame( aEditFrame ),
-        m_unitsOpt( 1 ),
-        m_noUnspecified( false ),
-        m_noDNP( false ),
-        m_copy3DFilesOpt( false ),
-        m_useRelativePathsOpt( false ),
-        m_RefUnits( 0 ),
-        m_XRef( 0.0 ),
-        m_YRef( 0.0 ),
-        m_originMode( 0 )
+        m_xOrigin( aEditFrame, m_xLabel, m_VRML_Xref, m_xUnits ),
+        m_yOrigin( aEditFrame, m_yLabel, m_VRML_Yref, m_yUnits )
 {
     m_filePicker->SetFocus();
-
-    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-    {
-        m_unitsOpt = cfg->m_ExportVrml.units;
-        m_noUnspecified = cfg->m_ExportVrml.no_unspecified;
-        m_noDNP = cfg->m_ExportVrml.no_dnp;
-        m_copy3DFilesOpt = cfg->m_ExportVrml.copy_3d_models;
-        m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
-        m_RefUnits = cfg->m_ExportVrml.ref_units;
-        m_XRef = cfg->m_ExportVrml.ref_x;
-        m_YRef = cfg->m_ExportVrml.ref_y;
-        m_originMode = cfg->m_ExportVrml.origin_mode;
-    }
-
-    m_rbCoordOrigin->SetSelection( m_originMode );
-    m_rbSelectUnits->SetSelection( m_unitsOpt );
-    m_cbRemoveUnspecified->SetValue( m_noUnspecified );
-    m_cbRemoveDNP->SetValue( m_noDNP );
-    m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
-    m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
-    m_VRML_RefUnitChoice->SetSelection( m_RefUnits );
-    wxString tmpStr;
-    tmpStr << m_XRef;
-    m_VRML_Xref->SetValue( tmpStr );
-    tmpStr = wxT( "" );
-    tmpStr << m_YRef;
-    m_VRML_Yref->SetValue( tmpStr );
 
     SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-}
-
-
-DIALOG_EXPORT_VRML::~DIALOG_EXPORT_VRML()
-{
-    m_unitsOpt = GetUnits();
-    m_noUnspecified = GetNoUnspecifiedOption();
-    m_noDNP = GetNoDNPOption();
-    m_copy3DFilesOpt = GetCopyFilesOption();
-
-    if( PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings() )
-    {
-        cfg->m_ExportVrml.units = m_unitsOpt;
-        cfg->m_ExportVrml.no_unspecified = m_noUnspecified;
-        cfg->m_ExportVrml.no_dnp = m_noDNP;
-        cfg->m_ExportVrml.copy_3d_models = m_copy3DFilesOpt;
-        cfg->m_ExportVrml.use_relative_paths = m_useRelativePathsOpt;
-        cfg->m_ExportVrml.ref_units = m_VRML_RefUnitChoice->GetSelection();
-        cfg->m_ExportVrml.origin_mode = m_rbCoordOrigin->GetSelection();
-
-        double val = 0.0;
-        m_VRML_Xref->GetValue().ToDouble( &val );
-        cfg->m_ExportVrml.ref_x = val;
-
-        m_VRML_Yref->GetValue().ToDouble( &val );
-        cfg->m_ExportVrml.ref_y = val;
-    }
 }
 
 
@@ -123,32 +58,20 @@ bool DIALOG_EXPORT_VRML::TransferDataFromWindow()
 
     if( fn.Exists() )
     {
-        if( wxMessageBox( _( "Are you sure you want to overwrite the existing file?" ),
-                          _( "Warning" ), wxYES_NO | wxCENTER | wxICON_QUESTION, this ) == wxNO )
+        if( wxMessageBox( _( "Are you sure you want to overwrite the existing file?" ), _( "Warning" ),
+                          wxYES_NO | wxCENTER | wxICON_QUESTION, this )
+            == wxNO )
+        {
             return false;
+        }
     }
 
     return true;
 }
 
 
-double DIALOG_EXPORT_VRML::GetXRef()
-{
-    return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Xref->GetValue() );
-}
-
-
-double DIALOG_EXPORT_VRML::GetYRef()
-{
-    return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Yref->GetValue() );
-}
-
-
 int BOARD_EDITOR_CONTROL::ExportVRML( const TOOL_EVENT& aEvent )
 {
-    // These variables are static to keep info during the session.
-    static wxString subDirFor3Dshapes;
-
     BOARD* board = m_frame->GetBoard();
 
     // Build default output file name
@@ -161,32 +84,21 @@ int BOARD_EDITOR_CONTROL::ExportVRML( const TOOL_EVENT& aEvent )
         path = brdFile.GetFullPath();
     }
 
-    if( subDirFor3Dshapes.IsEmpty() )
-        subDirFor3Dshapes = wxT( "shapes3D" );
-
-    // The general VRML scale factor
-    // Assuming the VRML default unit is the mm
-    // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
-    double scaleList[4] = { 1.0, 0.001, 10.0/25.4, 1.0/25.4 };
-
     DIALOG_EXPORT_VRML dlg( m_frame );
     dlg.FilePicker()->SetPath( path );
-    dlg.SetSubdir( subDirFor3Dshapes );
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;
 
-    double aXRef = dlg.GetXRef();
-    double aYRef = dlg.GetYRef();
+    double aXRef;
+    double aYRef;
 
-    if( dlg.GetRefUnitsChoice() == 1 )
+    if( dlg.GetSetUserDefinedOrigin() )
     {
-        // selected reference unit is in inches
-        aXRef *= 25.4;
-        aYRef *= 25.4;
+        aXRef = dlg.GetXRefMM();
+        aYRef = dlg.GetYRefMM();
     }
-
-    if( dlg.GetOriginChoice() == 1 )
+    else
     {
         // Origin = board center:
         BOX2I  bbox = board->ComputeBoundingBox( true );
@@ -194,22 +106,15 @@ int BOARD_EDITOR_CONTROL::ExportVRML( const TOOL_EVENT& aEvent )
         aYRef = pcbIUScale.IUTomm( bbox.GetCenter().y );
     }
 
-    double scale = scaleList[dlg.GetUnits()];     // final scale export
-    bool includeUnspecified = !dlg.GetNoUnspecifiedOption();
-    bool includeDNP = !dlg.GetNoDNPOption();
-    bool export3DFiles = dlg.GetCopyFilesOption();
-    bool useRelativePaths = dlg.GetUseRelativePathsOption();
-
     path = dlg.FilePicker()->GetPath();
     m_frame->SetLastPath( LAST_PATH_VRML, path );
     wxFileName modelPath = path;
 
     wxBusyCursor dummy;
 
-    subDirFor3Dshapes = dlg.GetSubdir3Dshapes();
-    modelPath.AppendDir( subDirFor3Dshapes );
+    modelPath.AppendDir( dlg.GetSubdir3Dshapes() );
 
-    if( export3DFiles && !modelPath.DirExists() )
+    if( dlg.GetCopyFilesOption() && !modelPath.DirExists() )
     {
         if( !modelPath.Mkdir() )
         {
@@ -219,11 +124,16 @@ int BOARD_EDITOR_CONTROL::ExportVRML( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( !m_frame->ExportVRML_File( path, scale, includeUnspecified, includeDNP, export3DFiles,
-                                   useRelativePaths, modelPath.GetPath(), aXRef, aYRef ) )
+    if( !m_frame->ExportVRML_File( path,
+                                   dlg.GetScale(),
+                                   !dlg.GetNoUnspecifiedOption(),
+                                   !dlg.GetNoDNPOption(),
+                                   dlg.GetCopyFilesOption(),
+                                   dlg.GetUseRelativePathsOption(),
+                                   modelPath.GetPath(),
+                                   aXRef, aYRef ) )
     {
-        DisplayErrorMessage( m_frame, wxString::Format( _( "Failed to create file '%s'." ),
-                                                        path ) );
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Failed to create file '%s'." ), path ) );
     }
 
     return 0;

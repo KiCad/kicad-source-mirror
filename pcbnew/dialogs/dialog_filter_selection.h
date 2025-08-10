@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_FILTER_SELECTION_H
-#define DIALOG_FILTER_SELECTION_H
+#pragma once
 
 #include <dialogs/dialog_filter_selection_base.h>
 
@@ -31,13 +30,11 @@ class PCB_BASE_FRAME;
 class DIALOG_FILTER_SELECTION : public DIALOG_FILTER_SELECTION_BASE
 {
 public:
-
     /**
      * Struct that will be set with the result of the user choices in the dialog
      */
     struct OPTIONS
     {
-        wxCheckBoxState allItems      = wxCHK_UNDETERMINED;
         bool includeModules           = true;
         bool includeLockedModules     = true;
         bool includeTracks            = true;
@@ -56,24 +53,19 @@ public:
      *                         changes made by the dialog on exit.
      */
     DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions );
-
-    ~DIALOG_FILTER_SELECTION()
-    {
-    }
+    ~DIALOG_FILTER_SELECTION() = default;
 
 protected:
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
     void checkBoxClicked( wxCommandEvent& aEvent ) override;
     void allItemsClicked( wxCommandEvent& aEvent ) override;
 
-    void setCheckboxStatesFromOptions( OPTIONS& aOptions );
     void forceCheckboxStates( bool aNewState );
     wxCheckBoxState GetSuggestedAllItemsState( void );
 
     ///< Reference to the options struct to fill.
     OPTIONS& m_options;
 };
-
-#endif // DIALOG_FILTER_SELECTION_H

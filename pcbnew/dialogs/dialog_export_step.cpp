@@ -93,19 +93,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                                 { wxID_CANCEL, _( "Close" )  } } );
-
-        // Build default output file name
-        // (last saved filename in project or built from board filename)
-        wxString path = m_editFrame->GetLastPath( LAST_PATH_STEP );
-
-        if( path.IsEmpty() )
-        {
-            wxFileName brdFile( m_editFrame->GetBoard()->GetFileName() );
-            brdFile.SetExt( wxT( "step" ) );
-            path = brdFile.GetFullPath();
-        }
-
-        m_outputFileName->SetValue( path );
     }
     else
     {
@@ -169,7 +156,16 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
 
 bool DIALOG_EXPORT_STEP::TransferDataToWindow()
 {
-    if( m_job )
+    if( !m_job )
+    {
+        if( m_outputFileName->GetValue().IsEmpty() )
+        {
+            wxFileName brdFile( m_editFrame->GetBoard()->GetFileName() );
+            brdFile.SetExt( wxT( "step" ) );
+            m_outputFileName->SetValue( brdFile.GetFullPath() );
+        }
+    }
+    else
     {
         m_rbBoardCenterOrigin->SetValue( true );    // Default
 
@@ -331,7 +327,6 @@ void DIALOG_EXPORT_STEP::OnFmtChoiceOptionChanged()
         path = path.Mid( 0, dotIdx ) << '.' << newExt;
 
     m_outputFileName->SetValue( path );
-    m_editFrame->SetLastPath( LAST_PATH_STEP, path );
 }
 
 
@@ -367,8 +362,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( !m_job )
     {
-        m_editFrame->SetLastPath( LAST_PATH_STEP, path );
-
         // Build the absolute path of current output directory to preselect it in the file browser.
         std::function<bool( wxString* )> textResolver =
                 [&]( wxString* token ) -> bool

@@ -42,23 +42,12 @@
 /* Driver function: processing starts here */
 int BOARD_EDITOR_CONTROL::ExportGenCAD( const TOOL_EVENT& aEvent )
 {
-    // Build default output file name
-    wxString path = m_frame->GetLastPath( LAST_PATH_GENCAD );
-
-    if( path.IsEmpty() )
-    {
-        wxFileName brdFile = m_frame->GetBoard()->GetFileName();
-        brdFile.SetExt( wxT( "cad" ) );
-        path = brdFile.GetFullPath();
-    }
-
-    DIALOG_GENCAD_EXPORT_OPTIONS optionsDialog( m_frame, path );
+    DIALOG_GENCAD_EXPORT_OPTIONS optionsDialog( m_frame, _( "Export to GenCAD" ), nullptr );
 
     if( optionsDialog.ShowModal() == wxID_CANCEL )
         return 0;
 
-    path = optionsDialog.GetFileName();
-    m_frame->SetLastPath( LAST_PATH_GENCAD, path );
+    wxString path = optionsDialog.GetFileName();
 
     // Get options
     bool flipBottomPads = optionsDialog.GetOption( FLIP_BOTTOM_PADS );

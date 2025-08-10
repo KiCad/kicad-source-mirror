@@ -24,8 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_GENCAD_EXPORT_OPTIONS_H__
-#define __DIALOG_GENCAD_EXPORT_OPTIONS_H__
+#pragma once
 
 #include <dialog_shim.h>
 
@@ -55,15 +54,11 @@ class JOB_EXPORT_PCB_GENCAD;
 class DIALOG_GENCAD_EXPORT_OPTIONS : public DIALOG_SHIM
 {
 public:
-    DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, const wxString& aPath );
-    DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, JOB_EXPORT_PCB_GENCAD* aJob );
+    DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, const wxString& aTitle, JOB_EXPORT_PCB_GENCAD* aJob );
     ~DIALOG_GENCAD_EXPORT_OPTIONS();
 
     ///< Check whether an option has been selected.
     bool GetOption( GENCAD_EXPORT_OPT aOption ) const;
-
-    ///< Return all export settings.
-    std::map<GENCAD_EXPORT_OPT, bool> GetAllOptions() const;
 
     ///< Return the selected file path.
     wxString GetFileName() const;
@@ -77,6 +72,7 @@ protected:
     ///< Create checkboxes for GenCAD export options.
     void createOptCheckboxes();
 
+protected:
     std::map<GENCAD_EXPORT_OPT, wxCheckBox*> m_options;
 
     PCB_EDIT_FRAME* m_frame;
@@ -89,5 +85,3 @@ protected:
     STD_BITMAP_BUTTON*     m_browseButton;
     JOB_EXPORT_PCB_GENCAD* m_job;
 };
-
-#endif //__DIALOG_GENCAD_EXPORT_OPTIONS_H__

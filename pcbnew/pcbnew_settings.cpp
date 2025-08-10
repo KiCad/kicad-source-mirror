@@ -50,8 +50,6 @@ const int pcbnewSchemaVersion = 5;
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
         : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
-          m_ExportODBPP(),
-          m_ExportVrml(),
           m_FootprintWizardList(),
           m_FootprintChooser(),
           m_Zones(),
@@ -299,42 +297,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "export_2581.compress",
             &m_Export2581.compress, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_odb.units",
-            &m_ExportODBPP.units, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_odb.precision",
-            &m_ExportODBPP.precision, 6 ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_odb.compress_format",
-            &m_ExportODBPP.compressFormat, 1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_vrml.units",
-            &m_ExportVrml.units, 1 ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_vrml.no_unspecified",
-            &m_ExportVrml.no_unspecified, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_vrml.no_dnp",
-            &m_ExportVrml.no_dnp, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_vrml.copy_3d_models",
-            &m_ExportVrml.copy_3d_models, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_vrml.use_relative_paths",
-            &m_ExportVrml.use_relative_paths, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_vrml.ref_units",
-            &m_ExportVrml.ref_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_x",
-            &m_ExportVrml.ref_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_y",
-            &m_ExportVrml.ref_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_vrml.origin_mode",
-            &m_ExportVrml.origin_mode, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "export_d356.doNotExportUnconnectedPads",
             &m_ExportD356.doNotExportUnconnectedPads, false ) );

@@ -26,14 +26,9 @@
 
 
 DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions ) :
-    DIALOG_FILTER_SELECTION_BASE( aParent ),
-    m_options( aOptions )
+        DIALOG_FILTER_SELECTION_BASE( aParent ),
+        m_options( aOptions )
 {
-    setCheckboxStatesFromOptions( aOptions );
-
-    // Update "All Items" checkbox based on how many items are currently checked
-    m_All_Items->Set3StateValue( GetSuggestedAllItemsState() );
-
     SetupStandardButtons();
 
     SetFocus();
@@ -54,7 +49,7 @@ void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_FILTER_SELECTION::setCheckboxStatesFromOptions( OPTIONS& aOptions )
+bool DIALOG_FILTER_SELECTION::TransferDataToWindow()
 {
     m_Include_Modules->SetValue( m_options.includeModules );
     m_IncludeLockedModules->SetValue( m_options.includeLockedModules );
@@ -70,6 +65,11 @@ void DIALOG_FILTER_SELECTION::setCheckboxStatesFromOptions( OPTIONS& aOptions )
     m_Include_Draw_Items->SetValue( m_options.includeItemsOnTechLayers );
     m_Include_Edges_Items->SetValue( m_options.includeBoardOutlineLayer );
     m_Include_PcbTexts->SetValue( m_options.includePcbTexts );
+
+    // Update "All Items" checkbox based on how many items are currently checked
+    m_All_Items->Set3StateValue( GetSuggestedAllItemsState() );
+
+    return true;
 }
 
 
@@ -93,28 +93,27 @@ void DIALOG_FILTER_SELECTION::forceCheckboxStates( bool aNewState )
 
 wxCheckBoxState DIALOG_FILTER_SELECTION::GetSuggestedAllItemsState( void )
 {
-    int             NumChecked = 0;
-    int             NumCheckboxesOnDlg = 0;
-    wxCheckBoxState SuggestedState = wxCHK_UNDETERMINED; // Assume some but not all are checked
+    int             numChecked = 0;
+    int             numCheckboxesOnDlg = 0;
+    wxCheckBoxState suggestedState = wxCHK_UNDETERMINED; // Assume some but not all are checked
 
     // Find out how many checkboxes are on this dialog.  We do this at runtime so future
     // changes to the dialog are easier to handle or automatic, depending on the change.
     const wxWindowList& list = this->GetChildren();
+
     for( wxWindowList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow* current = node->GetData();
 
         // If casting the child window to a checkbox isn't NULL, then the child is a checkbox
-        wxCheckBox* CurrCB = dynamic_cast<wxCheckBox*>( current );
-
-        if( CurrCB )
+        if( wxCheckBox* currCB = dynamic_cast<wxCheckBox*>( current ) )
         {
             // Need to get count of checkboxes, but not include the "All Items" checkbox (the only
             // one that allows the 3rd state) or the hidden one (the only one with an empty label)
             // that keeps the dialog formatted properly
 
-            if( !( "" == CurrCB->GetLabelText() || CurrCB->Is3State() ) )
-                NumCheckboxesOnDlg++;
+            if( !( currCB->GetLabelText().IsEmpty() || currCB->Is3State() ) )
+                numCheckboxesOnDlg++;
         }
     }
 
@@ -122,49 +121,38 @@ wxCheckBoxState DIALOG_FILTER_SELECTION::GetSuggestedAllItemsState( void )
     // if "footprints" is checked.
     if( m_Include_Modules->GetValue() )
     {
-        NumChecked++;
+        numChecked++;
 
         if( m_IncludeLockedModules->GetValue() )
-            NumChecked++;
+            numChecked++;
     }
     else
     {
         // If include modules isn't checked then ignore the "Locked Footprints" checkbox in tally
-        NumCheckboxesOnDlg--;
+        numCheckboxesOnDlg--;
     }
 
-    if( m_Include_Tracks->GetValue() )
-        NumChecked++;
-
-    if( m_Include_Vias->GetValue() )
-        NumChecked++;
-
-    if( m_Include_Zones->GetValue() )
-        NumChecked++;
-
-    if( m_Include_Draw_Items->GetValue() )
-        NumChecked++;
-
-    if( m_Include_Edges_Items->GetValue() )
-        NumChecked++;
-
-    if( m_Include_PcbTexts->GetValue() )
-        NumChecked++;
+    for( wxCheckBox* cb : { m_Include_Tracks, m_Include_Vias, m_Include_Zones, m_Include_Draw_Items,
+                            m_Include_Edges_Items, m_Include_PcbTexts } )
+    {
+        if( cb->GetValue() )
+            numChecked++;
+    }
 
     // Change suggestion if all or none are checked
 
-    if( !NumChecked )
-        SuggestedState = wxCHK_UNCHECKED;
-    else if( NumChecked == NumCheckboxesOnDlg )
-        SuggestedState = wxCHK_CHECKED;
+    if( !numChecked )
+        suggestedState = wxCHK_UNCHECKED;
+    else if( numChecked == numCheckboxesOnDlg )
+        suggestedState = wxCHK_CHECKED;
 
-    return SuggestedState;
+    return suggestedState;
 }
 
 
 void DIALOG_FILTER_SELECTION::allItemsClicked( wxCommandEvent& aEvent )
 {
-    if( wxCHK_CHECKED == m_All_Items->Get3StateValue() )
+    if( m_All_Items->Get3StateValue() == wxCHK_CHECKED )
         forceCheckboxStates( true ); // Select all items
     else
         forceCheckboxStates( false ); // Clear all items
@@ -176,7 +164,6 @@ bool DIALOG_FILTER_SELECTION::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    m_options.allItems                 = m_All_Items->Get3StateValue();
     m_options.includeModules           = m_Include_Modules->GetValue();
     m_options.includeLockedModules     = m_IncludeLockedModules->GetValue();
     m_options.includeTracks            = m_Include_Tracks->GetValue();

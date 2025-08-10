@@ -109,14 +109,14 @@ int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
 
     if( dlg.GetSetBoardReferencePoint() )
     {
-        BOX2I bbox = board->GetBoardEdgesBoundingBox();
-        aXRef = bbox.Centre().x * pcbIUScale.MM_PER_IU;
-        aYRef = bbox.Centre().y * pcbIUScale.MM_PER_IU;
+        aXRef = dlg.GetXRefMM();
+        aYRef = dlg.GetYRefMM();
     }
     else
     {
-        aXRef = dlg.GetXRefMM();
-        aYRef = dlg.GetYRefMM();
+        BOX2I bbox = board->GetBoardEdgesBoundingBox();
+        aXRef = bbox.Centre().x * pcbIUScale.MM_PER_IU;
+        aYRef = bbox.Centre().y * pcbIUScale.MM_PER_IU;
     }
 
     wxString fullFilename = dlg.FilePicker()->GetPath();

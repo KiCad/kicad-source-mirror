@@ -20,9 +20,8 @@
 #include <wx/filepicker.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
-#include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,15 +39,15 @@ class DIALOG_EXPORT_VRML_BASE : public DIALOG_SHIM
 		wxFilePickerCtrl* m_filePicker;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_SubdirNameCtrl;
-		wxRadioBox* m_rbCoordOrigin;
-		wxStaticText* m_staticText6;
-		wxStaticText* m_staticText61;
-		wxChoice* m_VRML_RefUnitChoice;
-		wxStaticText* m_staticText4;
+		wxCheckBox* m_cbUserDefinedOrigin;
+		wxStaticText* m_xLabel;
 		wxTextCtrl* m_VRML_Xref;
-		wxStaticText* m_staticText5;
+		wxStaticText* m_xUnits;
+		wxStaticText* m_yLabel;
 		wxTextCtrl* m_VRML_Yref;
-		wxRadioBox* m_rbSelectUnits;
+		wxStaticText* m_yUnits;
+		wxStaticText* m_unitsLabel;
+		wxChoice* m_unitsChoice;
 		wxCheckBox* m_cbRemoveDNP;
 		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbCopyFiles;

@@ -156,10 +156,7 @@ DIALOG_DRC::~DIALOG_DRC()
     g_lastIgnored.clear();
 
     for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
-    {
-        g_lastIgnored.push_back( { m_ignoredList->GetItemText( ii ),
-                                   m_ignoredList->GetItemData( ii ) } );
-    }
+        g_lastIgnored.push_back( { m_ignoredList->GetItemText( ii ), m_ignoredList->GetItemData( ii ) } );
 
     m_markersTreeModel->DecRef();
     m_unconnectedTreeModel->DecRef();
@@ -178,8 +175,8 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 {
     if( m_currentBoard != m_frame->GetBoard() )
     {
-        // If m_currentBoard is not the current board, (for instance because a new board
-        // was loaded), close the dialog, because many pointers are now invalid in lists
+        // If m_currentBoard is not the current board, (for instance because a new board was loaded),
+        // close the dialog, because many pointers are now invalid in lists
         SetReturnCode( wxID_CANCEL );
         Close();
 
@@ -616,8 +613,7 @@ void DIALOG_DRC::OnDRCItemDClick( wxDataViewEvent& aEvent )
             Show( false );
     }
 
-    // Do not skip aEvent here: this is not useful, and Pcbnew crashes
-    // if skipped (at least on Windows)
+    // Do not skip aEvent here: this is not useful, and Pcbnew crashes if skipped (at least on MSW)
 }
 
 

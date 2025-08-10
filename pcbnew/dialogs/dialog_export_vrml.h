@@ -26,6 +26,7 @@
 #pragma once
 
 #include <dialog_export_vrml_base.h> // the wxFormBuilder header file
+#include <widgets/unit_binder.h>
 
 class PCB_EDIT_FRAME;
 
@@ -33,35 +34,28 @@ class DIALOG_EXPORT_VRML : public DIALOG_EXPORT_VRML_BASE
 {
 public:
     DIALOG_EXPORT_VRML( PCB_EDIT_FRAME* aEditFrame );
-
-    ~DIALOG_EXPORT_VRML();
-
-    void SetSubdir( const wxString& aDir ) { m_SubdirNameCtrl->SetValue( aDir ); }
-
-    wxString GetSubdir3Dshapes() { return m_SubdirNameCtrl->GetValue(); }
+    ~DIALOG_EXPORT_VRML() = default;
 
     wxFilePickerCtrl* FilePicker() { return m_filePicker; }
 
-    int GetRefUnitsChoice() { return m_VRML_RefUnitChoice->GetSelection(); }
+    wxString GetSubdir3Dshapes() { return m_SubdirNameCtrl->GetValue(); }
+    int GetSetUserDefinedOrigin() { return m_cbUserDefinedOrigin->GetValue(); }
 
-    int GetOriginChoice() { return m_rbCoordOrigin->GetSelection(); }
+    double GetXRefMM() { return pcbIUScale.IUTomm( m_xOrigin.GetIntValue() ); }
+    double GetYRefMM() { return pcbIUScale.IUTomm( m_yOrigin.GetIntValue() ); }
 
-    double GetXRef();
-
-    double GetYRef();
-
-    int GetUnits() { return m_unitsOpt = m_rbSelectUnits->GetSelection(); }
+    double GetScale()
+    {
+        // Assuming the VRML default unit is the mm
+        // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
+        double scaleList[4] = { 1.0, 0.001, 10.0/25.4, 1.0/25.4 };
+        return scaleList[ m_unitsChoice->GetSelection() ];
+    }
 
     bool GetNoUnspecifiedOption() { return m_cbRemoveUnspecified->GetValue(); }
-
     bool GetNoDNPOption() { return m_cbRemoveDNP->GetValue(); }
-
-    bool GetCopyFilesOption() { return m_copy3DFilesOpt = m_cbCopyFiles->GetValue(); }
-
-    bool GetUseRelativePathsOption()
-    {
-        return m_useRelativePathsOpt = m_cbUseRelativePaths->GetValue();
-    }
+    bool GetCopyFilesOption() { return m_cbCopyFiles->GetValue(); }
+    bool GetUseRelativePathsOption() { return m_cbUseRelativePaths->GetValue(); }
 
     void OnUpdateUseRelativePath( wxUpdateUIEvent& event ) override
     {
@@ -72,15 +66,6 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    PCB_EDIT_FRAME* m_editFrame;
-    int             m_unitsOpt;            // Remember last units option
-    bool            m_noUnspecified;       // Remember last No Unspecified Component option
-    bool            m_noDNP;               // Remember last No DNP Component option
-    bool            m_copy3DFilesOpt;      // Remember last copy model files option
-    bool            m_useRelativePathsOpt; // Remember last use absolute paths option
-    int             m_RefUnits;            // Remember last units for Reference Point
-    double          m_XRef;                // Remember last X Reference Point
-    double          m_YRef;                // Remember last Y Reference Point
-    int             m_originMode;          // Origin selection option
-                                           // (0 = user, 1 = board center)
+    UNIT_BINDER     m_xOrigin;
+    UNIT_BINDER     m_yOrigin;
 };

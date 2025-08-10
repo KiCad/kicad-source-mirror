@@ -30,7 +30,6 @@
 #include <pgm_base.h>
 #include <progress_reporter.h>
 #include <project.h>
-#include <project/board_project_settings.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <widgets/std_bitmap_button.h>
@@ -49,7 +48,6 @@
 #include <wx/tarstrm.h>
 #include <wx/zstream.h>
 
-static wxString s_oemColumn = wxEmptyString;
 
 DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent ) :
         DIALOG_EXPORT_ODBPP_BASE( aParent ),
@@ -60,22 +58,9 @@ DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent ) :
 
     SetupStandardButtons();
 
-    wxString path = m_parent->GetLastPath( LAST_PATH_ODBPP );
-
-    if( path.IsEmpty() )
-    {
-        wxFileName brdFile( m_parent->GetBoard()->GetFileName() );
-        wxFileName odbFile( brdFile.GetPath(),
-                            wxString::Format( wxS( "%s-odb" ), brdFile.GetName() ),
-                            FILEEXT::ArchiveFileExtension );
-        path = odbFile.GetFullPath();
-    }
-
-    m_outputFileName->SetValue( path );
-
-    // Fill wxChoice (and others) items with data before calling finishDialogSettings()
-    // to calculate suitable widgets sizes
-    Init();
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions.
+    m_hash_key = TO_UTF8( GetTitle() );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -92,14 +77,40 @@ DIALOG_EXPORT_ODBPP::DIALOG_EXPORT_ODBPP( JOB_EXPORT_PCB_ODB* aJob, PCB_EDIT_FRA
 
     SetupStandardButtons();
 
-    m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
-
-    // Fill wxChoice (and others) items with data before calling finishDialogSettings()
-    // to calculate suitable widgets sizes
-    Init();
+    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
+    // non-job versions.
+    m_hash_key = TO_UTF8( GetTitle() );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+}
+
+
+bool DIALOG_EXPORT_ODBPP::TransferDataToWindow()
+{
+    if( !m_job )
+    {
+        if( m_outputFileName->GetValue().IsEmpty() )
+        {
+            wxFileName brdFile( m_parent->GetBoard()->GetFileName() );
+            wxFileName odbFile( brdFile.GetPath(), wxString::Format( wxS( "%s-odb" ), brdFile.GetName() ),
+                                FILEEXT::ArchiveFileExtension );
+
+            m_outputFileName->SetValue( odbFile.GetFullPath() );
+            OnFmtChoiceOptionChanged();
+        }
+    }
+    else
+    {
+        SetTitle( m_job->GetSettingsDialogTitle() );
+
+        m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_precision->SetValue( m_job->m_precision );
+        m_choiceCompress->SetSelection( static_cast<int>( m_job->m_compressionMode ) );
+        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
+    }
+
+    return true;
 }
 
 
@@ -120,8 +131,7 @@ void DIALOG_EXPORT_ODBPP::onBrowseClicked( wxCommandEvent& event )
 
     wxString fileDialogName( wxString::Format( wxS( "%s-odb" ), brdFile.GetName() ) );
 
-    wxFileDialog dlg( this, _( "Export ODB++ File" ), fn.GetPath(), fileDialogName, filter,
-                      wxFD_SAVE );
+    wxFileDialog dlg( this, _( "Export ODB++ File" ), fn.GetPath(), fileDialogName, filter, wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -132,29 +142,25 @@ void DIALOG_EXPORT_ODBPP::onBrowseClicked( wxCommandEvent& event )
 
     if( fn.GetExt().Lower() == "zip" )
     {
-        m_choiceCompress->SetSelection(
-                static_cast<int>( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP ) );
+        m_choiceCompress->SetSelection( static_cast<int>( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP ) );
     }
     else if( fn.GetExt().Lower() == "tgz" )
     {
-        m_choiceCompress->SetSelection(
-                static_cast<int>( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ ) );
+        m_choiceCompress->SetSelection( static_cast<int>( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ ) );
     }
     else if( path.EndsWith( "/" ) || path.EndsWith( "\\" ) )
     {
-        m_choiceCompress->SetSelection(
-                static_cast<int>( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE ) );
+        m_choiceCompress->SetSelection( static_cast<int>( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE ) );
     }
     else
     {
-        wxString msg;
-        msg.Printf( _( "The selected output file name is not a supported archive format." ) );
-        DisplayErrorMessage( this, msg );
+        DisplayErrorMessage( this, _( "The selected output file name is not a supported archive format." ) );
         return;
     }
 
     m_outputFileName->SetValue( path );
 }
+
 
 void DIALOG_EXPORT_ODBPP::onFormatChoice( wxCommandEvent& event )
 {
@@ -168,8 +174,7 @@ void DIALOG_EXPORT_ODBPP::OnFmtChoiceOptionChanged()
 
     wxFileName fileName( fn );
 
-    auto compressionMode =
-            static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( m_choiceCompress->GetSelection() );
+    auto compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( m_choiceCompress->GetSelection() );
 
     int sepIdx = std::max( fn.Find( '/', true ), fn.Find( '\\', true ) );
     int dotIdx = fn.Find( '.', true );
@@ -184,9 +189,14 @@ void DIALOG_EXPORT_ODBPP::OnFmtChoiceOptionChanged()
     case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP:
         fn = fn + '.' + FILEEXT::ArchiveFileExtension;
         break;
-    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ: fn += ".tgz"; break;
-    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE: fn = wxFileName( fn, "" ).GetFullPath(); break;
-    default: break;
+    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ:
+        fn += ".tgz";
+        break;
+    case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE:
+        fn = wxFileName( fn, "" ).GetFullPath();
+        break;
+    default:
+        break;
     };
 
     m_outputFileName->SetValue( fn );
@@ -200,14 +210,11 @@ void DIALOG_EXPORT_ODBPP::onOKClick( wxCommandEvent& event )
 
         if( fn.IsEmpty() )
         {
-            wxString msg;
-            msg.Printf( _( "Output file name cannot be empty." ) );
-            DisplayErrorMessage( this, msg );
+            DisplayErrorMessage( this, _( "Output file name cannot be empty." ) );
             return;
         }
 
-        auto compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>(
-                m_choiceCompress->GetSelection() );
+        auto compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( m_choiceCompress->GetSelection() );
 
         wxFileName fileName( fn );
         bool       isDirectory = fileName.IsDir();
@@ -215,65 +222,20 @@ void DIALOG_EXPORT_ODBPP::onOKClick( wxCommandEvent& event )
 
         if( ( compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE && !isDirectory )
             || ( compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP && extension != "zip" )
-            || ( compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ
-                 && extension != "tgz" ) )
+            || ( compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ && extension != "tgz" ) )
         {
-            wxString msg;
-            msg.Printf(
-                    _( "The output file name conflicts with the selected compression format." ) );
-            DisplayErrorMessage( this, msg );
+            DisplayErrorMessage( this, _( "The output file name conflicts with the selected compression format." ) );
             return;
         }
-
-        m_parent->SetLastPath( LAST_PATH_ODBPP, m_outputFileName->GetValue() );
     }
 
     event.Skip();
 }
 
 
-bool DIALOG_EXPORT_ODBPP::Init()
-{
-    if( !m_job )
-    {
-        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-        {
-            m_choiceUnits->SetSelection( cfg->m_ExportODBPP.units );
-            m_precision->SetValue( cfg->m_ExportODBPP.precision );
-            m_choiceCompress->SetSelection( cfg->m_ExportODBPP.compressFormat );
-            OnFmtChoiceOptionChanged();
-        }
-    }
-    else
-    {
-        SetTitle( m_job->GetSettingsDialogTitle() );
-
-        m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
-        m_precision->SetValue( m_job->m_precision );
-        m_choiceCompress->SetSelection( static_cast<int>( m_job->m_compressionMode ) );
-        m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
-    }
-
-    // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
-    // non-job versions (which have different sizes).
-    m_hash_key = TO_UTF8( GetTitle() );
-
-    return true;
-}
-
-
 bool DIALOG_EXPORT_ODBPP::TransferDataFromWindow()
 {
-    if( !m_job )
-    {
-        if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-        {
-            cfg->m_ExportODBPP.units = m_choiceUnits->GetSelection();
-            cfg->m_ExportODBPP.precision = m_precision->GetValue();
-            cfg->m_ExportODBPP.compressFormat = m_choiceCompress->GetSelection();
-        }
-    }
-    else
+    if( m_job )
     {
         m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
@@ -287,9 +249,8 @@ bool DIALOG_EXPORT_ODBPP::TransferDataFromWindow()
 
 
 void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard,
-                                              PCB_EDIT_FRAME*    aParentFrame,
-                                              PROGRESS_REPORTER* aProgressReporter,
-                                              REPORTER*          aReporter )
+                                              PCB_EDIT_FRAME* aParentFrame, PROGRESS_REPORTER* aProgressReporter,
+                                              REPORTER* aReporter )
 {
     wxCHECK( aBoard, /* void */ );
     wxString outputPath = aJob.GetFullOutputPath( aBoard->GetProject() );
@@ -351,12 +312,10 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
         {
             if( aParentFrame )
             {
-                msg = wxString::Format( _( "Output files '%s' already exists. "
-                                           "Do you want to overwrite it?" ),
+                msg = wxString::Format( _( "Output files '%s' already exists. Do you want to overwrite it?" ),
                                         outputFn.GetFullPath() );
 
-                KIDIALOG errorDlg( aParentFrame, msg, _( "Confirmation" ),
-                                   wxOK | wxCANCEL | wxICON_WARNING );
+                KIDIALOG errorDlg( aParentFrame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
                 errorDlg.SetOKLabel( _( "Overwrite" ) );
 
                 if( errorDlg.ShowModal() != wxID_OK )
@@ -364,16 +323,14 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
 
                 if( !wxRemoveFile( outputFn.GetFullPath() ) )
                 {
-                    msg.Printf( _( "Cannot remove existing output file '%s'." ),
-                                outputFn.GetFullPath() );
+                    msg.Printf( _( "Cannot remove existing output file '%s'." ), outputFn.GetFullPath() );
                     DisplayErrorMessage( aParentFrame, msg );
                     return;
                 }
             }
             else
             {
-                msg = wxString::Format( _( "Output file '%s' already exists." ),
-                                        outputFn.GetFullPath() );
+                msg = wxString::Format( _( "Output file '%s' already exists." ), outputFn.GetFullPath() );
 
                 if( aReporter )
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
@@ -409,8 +366,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
                                            "Do you want to overwrite it?" ),
                                         tempFile.GetFullPath() );
 
-                KIDIALOG errorDlg( aParentFrame, msg, _( "Confirmation" ),
-                                   wxOK | wxCANCEL | wxICON_WARNING );
+                KIDIALOG errorDlg( aParentFrame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
                 errorDlg.SetOKLabel( _( "Overwrite" ) );
 
                 if( errorDlg.ShowModal() != wxID_OK )
@@ -418,16 +374,14 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
 
                 if( !tempFile.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
                 {
-                    msg.Printf( _( "Cannot remove existing output directory '%s'." ),
-                                tempFile.GetFullPath() );
+                    msg.Printf( _( "Cannot remove existing output directory '%s'." ), tempFile.GetFullPath() );
                     DisplayErrorMessage( aParentFrame, msg );
                     return;
                 }
             }
             else
             {
-                msg = wxString::Format( _( "Output directory '%s' already exists." ),
-                                        tempFile.GetFullPath() );
+                msg = wxString::Format( _( "Output directory '%s' already exists." ), tempFile.GetFullPath() );
 
                 if( aReporter )
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
@@ -442,30 +396,31 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
     props["units"] = aJob.m_units == JOB_EXPORT_PCB_ODB::ODB_UNITS::MM ? "mm" : "inch";
     props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
 
-    auto saveFile = [&]() -> bool
-    {
-        try
-        {
-            IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::ODBPP ) );
-            pi->SetReporter( aReporter );
-            pi->SetProgressReporter( aProgressReporter );
-            pi->SaveBoard( tempFile.GetFullPath(), aBoard, &props );
-            return true;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            if( aReporter )
+    auto saveFile =
+            [&]() -> bool
             {
-                msg = wxString::Format( _( "Error generating ODBPP files '%s'.\n%s" ),
-                                        tempFile.GetFullPath(), ioe.What() );
-                aReporter->Report( msg, RPT_SEVERITY_ERROR );
-            }
+                try
+                {
+                    IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::ODBPP ) );
+                    pi->SetReporter( aReporter );
+                    pi->SetProgressReporter( aProgressReporter );
+                    pi->SaveBoard( tempFile.GetFullPath(), aBoard, &props );
+                    return true;
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    if( aReporter )
+                    {
+                        msg = wxString::Format( _( "Error generating ODBPP files '%s'.\n%s" ),
+                                                tempFile.GetFullPath(), ioe.What() );
+                        aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                    }
 
-            // In case we started a file but didn't fully write it, clean up
-            wxFileName::Rmdir( tempFile.GetFullPath() );
-            return false;
-        }
-    };
+                    // In case we started a file but didn't fully write it, clean up
+                    wxFileName::Rmdir( tempFile.GetFullPath() );
+                    return false;
+                }
+            };
 
     thread_pool& tp = GetKiCadThreadPool();
     auto         ret = tp.submit( saveFile );
@@ -506,35 +461,34 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
 
         std::function<void( const wxString&, const wxString& )> addDirToZip =
                 [&]( const wxString& dirPath, const wxString& parentPath )
-        {
-            wxDir    dir( dirPath );
-            wxString fileName;
-
-            bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
-
-            while( cont )
-            {
-                wxFileName fileInZip( dirPath, fileName );
-                wxString   relativePath =
-                        parentPath.IsEmpty()
-                                  ? fileName
-                                  : parentPath + wxString( wxFileName::GetPathSeparator() )
-                                          + fileName;
-
-                if( wxFileName::DirExists( fileInZip.GetFullPath() ) )
                 {
-                    zipStream.PutNextDirEntry( relativePath );
-                    addDirToZip( fileInZip.GetFullPath(), relativePath );
-                }
-                else
-                {
-                    wxFFileInputStream fileStream( fileInZip.GetFullPath() );
-                    zipStream.PutNextEntry( relativePath );
-                    fileStream.Read( zipStream );
-                }
-                cont = dir.GetNext( &fileName );
-            }
-        };
+                    wxDir    dir( dirPath );
+                    wxString fileName;
+
+                    bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
+
+                    while( cont )
+                    {
+                        wxFileName fileInZip( dirPath, fileName );
+                        wxString   relativePath = fileName;
+
+                        if( !parentPath.IsEmpty() )
+                            relativePath = parentPath + wxString( wxFileName::GetPathSeparator() ) + fileName;
+
+                        if( wxFileName::DirExists( fileInZip.GetFullPath() ) )
+                        {
+                            zipStream.PutNextDirEntry( relativePath );
+                            addDirToZip( fileInZip.GetFullPath(), relativePath );
+                        }
+                        else
+                        {
+                            wxFFileInputStream fileStream( fileInZip.GetFullPath() );
+                            zipStream.PutNextEntry( relativePath );
+                            fileStream.Read( zipStream );
+                        }
+                        cont = dir.GetNext( &fileName );
+                    }
+                };
 
         addDirToZip( tempFile.GetFullPath(), wxEmptyString );
 
@@ -551,39 +505,36 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
 
         std::function<void( const wxString&, const wxString& )> addDirToTar =
                 [&]( const wxString& dirPath, const wxString& parentPath )
-        {
-            wxDir    dir( dirPath );
-            wxString fileName;
-
-            bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
-            while( cont )
-            {
-                wxFileName fileInTar( dirPath, fileName );
-                wxString   relativePath =
-                        parentPath.IsEmpty()
-                                  ? fileName
-                                  : parentPath + wxString( wxFileName::GetPathSeparator() )
-                                          + fileName;
-
-                if( wxFileName::DirExists( fileInTar.GetFullPath() ) )
                 {
-                    tarStream.PutNextDirEntry( relativePath );
-                    addDirToTar( fileInTar.GetFullPath(), relativePath );
-                }
-                else
-                {
-                    wxFFileInputStream fileStream( fileInTar.GetFullPath() );
-                    tarStream.PutNextEntry( relativePath, wxDateTime::Now(),
-                                            fileStream.GetLength() );
-                    fileStream.Read( tarStream );
-                }
-                cont = dir.GetNext( &fileName );
-            }
-        };
+                    wxDir    dir( dirPath );
+                    wxString fileName;
 
-        addDirToTar(
-                tempFile.GetFullPath(),
-                tempFile.GetPath( wxPATH_NO_SEPARATOR ).AfterLast( tempFile.GetPathSeparator() ) );
+                    bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
+                    while( cont )
+                    {
+                        wxFileName fileInTar( dirPath, fileName );
+                        wxString   relativePath = fileName;
+
+                        if( !parentPath.IsEmpty() )
+                            relativePath = parentPath + wxString( wxFileName::GetPathSeparator() ) + fileName;
+
+                        if( wxFileName::DirExists( fileInTar.GetFullPath() ) )
+                        {
+                            tarStream.PutNextDirEntry( relativePath );
+                            addDirToTar( fileInTar.GetFullPath(), relativePath );
+                        }
+                        else
+                        {
+                            wxFFileInputStream fileStream( fileInTar.GetFullPath() );
+                            tarStream.PutNextEntry( relativePath, wxDateTime::Now(), fileStream.GetLength() );
+                            fileStream.Read( tarStream );
+                        }
+                        cont = dir.GetNext( &fileName );
+                    }
+                };
+
+        addDirToTar( tempFile.GetFullPath(),
+                     tempFile.GetPath( wxPATH_NO_SEPARATOR ).AfterLast( tempFile.GetPathSeparator() ) );
 
         tarStream.Close();
         zlibStream.Close();

@@ -32,47 +32,28 @@ DIALOG_EXPORT_VRML_BASE::DIALOG_EXPORT_VRML_BASE( wxWindow* parent, wxWindowID i
 	m_staticText3->Wrap( -1 );
 	bUpperSizer->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_SubdirNameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SubdirNameCtrl = new wxTextCtrl( this, wxID_ANY, _("shapes3D"), wxDefaultPosition, wxDefaultSize, 0 );
 	bUpperSizer->Add( m_SubdirNameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer1->Add( bUpperSizer, 0, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerOptions;
-	bSizerOptions = new wxBoxSizer( wxHORIZONTAL );
+	bSizerOptions = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_rbCoordOriginChoices[] = { _("User defined origin"), _("Board center origin") };
-	int m_rbCoordOriginNChoices = sizeof( m_rbCoordOriginChoices ) / sizeof( wxString );
-	m_rbCoordOrigin = new wxRadioBox( this, wxID_ANY, _("Coordinate Origin Options"), wxDefaultPosition, wxDefaultSize, m_rbCoordOriginNChoices, m_rbCoordOriginChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbCoordOrigin->SetSelection( 0 );
-	bSizerOptions->Add( m_rbCoordOrigin, 1, wxALL|wxEXPAND, 5 );
-
-	wxBoxSizer* bSizerVrmlUnits;
-	bSizerVrmlUnits = new wxBoxSizer( wxVERTICAL );
-
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("User defined origin:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	bSizerVrmlUnits->Add( m_staticText6, 0, wxALL, 5 );
+	m_cbUserDefinedOrigin = new wxCheckBox( this, wxID_ANY, _("User defined origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUserDefinedOrigin->SetValue(true);
+	bSizerOptions->Add( m_cbUserDefinedOrigin, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizerOptions;
-	fgSizerOptions = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerOptions = new wxFlexGridSizer( 0, 3, 3, 0 );
 	fgSizerOptions->AddGrowableCol( 1 );
 	fgSizerOptions->SetFlexibleDirection( wxBOTH );
 	fgSizerOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText61 = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText61->Wrap( -1 );
-	fgSizerOptions->Add( m_staticText61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxString m_VRML_RefUnitChoiceChoices[] = { _("mm"), _("inch") };
-	int m_VRML_RefUnitChoiceNChoices = sizeof( m_VRML_RefUnitChoiceChoices ) / sizeof( wxString );
-	m_VRML_RefUnitChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_VRML_RefUnitChoiceNChoices, m_VRML_RefUnitChoiceChoices, 0 );
-	m_VRML_RefUnitChoice->SetSelection( 0 );
-	fgSizerOptions->Add( m_VRML_RefUnitChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizerOptions->Add( m_staticText4, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_xLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_xLabel->Wrap( -1 );
+	fgSizerOptions->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_VRML_Xref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -83,11 +64,15 @@ DIALOG_EXPORT_VRML_BASE::DIALOG_EXPORT_VRML_BASE( wxWindow* parent, wxWindowID i
 	#else
 	m_VRML_Xref->SetMaxLength( 8 );
 	#endif
-	fgSizerOptions->Add( m_VRML_Xref, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerOptions->Add( m_VRML_Xref, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizerOptions->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_xUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_xUnits->Wrap( -1 );
+	fgSizerOptions->Add( m_xUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_yLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_yLabel->Wrap( -1 );
+	fgSizerOptions->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_VRML_Yref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -98,22 +83,33 @@ DIALOG_EXPORT_VRML_BASE::DIALOG_EXPORT_VRML_BASE( wxWindow* parent, wxWindowID i
 	#else
 	m_VRML_Yref->SetMaxLength( 8 );
 	#endif
-	fgSizerOptions->Add( m_VRML_Yref, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerOptions->Add( m_VRML_Yref, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_yUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_yUnits->Wrap( -1 );
+	fgSizerOptions->Add( m_yUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerVrmlUnits->Add( fgSizerOptions, 1, wxEXPAND, 5 );
+	bSizerOptions->Add( fgSizerOptions, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_unitsLabel = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsLabel->Wrap( -1 );
+	bSizer7->Add( m_unitsLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_unitsChoiceChoices[] = { _("mm"), _("meter"), _("0.1 inch"), _("inch") };
+	int m_unitsChoiceNChoices = sizeof( m_unitsChoiceChoices ) / sizeof( wxString );
+	m_unitsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitsChoiceNChoices, m_unitsChoiceChoices, 0 );
+	m_unitsChoice->SetSelection( 1 );
+	bSizer7->Add( m_unitsChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerOptions->Add( bSizerVrmlUnits, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	wxString m_rbSelectUnitsChoices[] = { _("mm"), _("meter"), _("0.1 Inch"), _("Inch") };
-	int m_rbSelectUnitsNChoices = sizeof( m_rbSelectUnitsChoices ) / sizeof( wxString );
-	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbSelectUnits->SetSelection( 0 );
-	bSizerOptions->Add( m_rbSelectUnits, 1, wxALL|wxEXPAND, 5 );
+	bSizerOptions->Add( bSizer7, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bSizer1->Add( bSizerOptions, 0, wxEXPAND, 5 );
+	bSizer1->Add( bSizerOptions, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -122,15 +118,15 @@ DIALOG_EXPORT_VRML_BASE::DIALOG_EXPORT_VRML_BASE( wxWindow* parent, wxWindowID i
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	m_cbRemoveDNP = new wxCheckBox( this, wxID_ANY, _("Ignore 'Do not populate' components"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_cbRemoveDNP, 0, wxALL, 5 );
+	bSizer4->Add( m_cbRemoveDNP, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_cbRemoveUnspecified = new wxCheckBox( this, wxID_ANY, _("Ignore 'Unspecified' components"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_cbRemoveUnspecified, 0, wxALL, 5 );
+	bSizer4->Add( m_cbRemoveUnspecified, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_cbCopyFiles = new wxCheckBox( this, wxID_ANY, _("Copy 3D model files to 3D model path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCopyFiles->SetToolTip( _("If checked: copy 3D models to the destination folder\nIf not checked: Embed 3D models in the VRML board file") );
 
-	bSizer4->Add( m_cbCopyFiles, 0, wxALL, 5 );
+	bSizer4->Add( m_cbCopyFiles, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUseRelativePaths = new wxCheckBox( this, wxID_ANY, _("Use relative paths to model files in board VRML file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbUseRelativePaths->SetToolTip( _("Use paths for model files in board VRML file relative to the VRML file") );
