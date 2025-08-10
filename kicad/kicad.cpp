@@ -324,15 +324,11 @@ bool PGM_KICAD::OnPgmInit()
         {
             wxFileName tmp = parser.GetParam( 0 );
 
-            if( tmp.GetExt() != FILEEXT::ProjectFileExtension
-                && tmp.GetExt() != FILEEXT::LegacyProjectFileExtension )
+            if( tmp.GetExt() != FILEEXT::ProjectFileExtension && tmp.GetExt() != FILEEXT::LegacyProjectFileExtension )
             {
-                wxString msg;
-
-                msg.Printf( _( "File '%s'\ndoes not appear to be a valid KiCad project file." ),
-                            tmp.GetFullPath() );
-                wxMessageDialog dlg( nullptr, msg, _( "Error" ), wxOK | wxICON_EXCLAMATION );
-                dlg.ShowModal();
+                DisplayErrorMessage( nullptr, wxString::Format( _( "File '%s'\n"
+                                                                   "does not appear to be a KiCad project file." ),
+                                                                tmp.GetFullPath() ) );
             }
             else
             {

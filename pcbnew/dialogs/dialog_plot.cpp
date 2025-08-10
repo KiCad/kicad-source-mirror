@@ -785,12 +785,7 @@ void DIALOG_PLOT::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
     // Test if making the path relative is possible before asking the user if they want to do it
     if( relPathTest.MakeRelativeTo( defaultPath ) )
     {
-        msg.Printf( _( "Do you want to use a path relative to\n'%s'?" ), defaultPath );
-
-        wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
-                                wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
-
-        if( dialog.ShowModal() == wxID_YES )
+        if( IsOK( this, wxString::Format( _( "Do you want to use a path relative to\n'%s'?" ), defaultPath ) ) )
             dirName.MakeRelativeTo( defaultPath );
     }
 

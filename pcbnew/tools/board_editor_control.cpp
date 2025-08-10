@@ -441,10 +441,8 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 
     if( !fn.IsDirWritable() )
     {
-        wxString msg;
-
-        msg.Printf( _( "Path `%s` is read only." ), fn.GetPath() );
-        wxMessageDialog( m_frame, msg, _( "I/O Error" ), wxOK | wxCENTER | wxICON_EXCLAMATION );
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Insufficient permissions to folder '%s'." ),
+                                                        fn.GetPath() ) );
         return 0;
     }
 
@@ -465,10 +463,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
             const wxString& netname = pad->GetShortNetname();
 
             if( !netname.IsEmpty() )
-            {
-                component->AddNet( pad->GetNumber(), netname, pad->GetPinFunction(),
-                                   pad->GetPinType() );
-            }
+                component->AddNet( pad->GetNumber(), netname, pad->GetPinFunction(), pad->GetPinType() );
         }
 
         nlohmann::ordered_map<wxString, wxString> fields;

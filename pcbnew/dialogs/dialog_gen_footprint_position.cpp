@@ -187,17 +187,14 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onOutputDirectoryBrowseClicked( wxCommandEve
 
     wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxMessageDialog dialog( this, _( "Use a relative path?"), _( "Plot Output Directory" ),
-                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
-
-    if( dialog.ShowModal() == wxID_YES )
+    if( IsOK( this, _( "Use a relative path?" ) ) )
     {
         wxString boardFilePath = ( (wxFileName) m_editFrame->GetBoard()->GetFileName() ).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
         {
-            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
-                          _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+            DisplayErrorMessage( this, _( "Cannot make path relative (target volume different from board "
+                                          "file volume)!" ) );
         }
     }
 

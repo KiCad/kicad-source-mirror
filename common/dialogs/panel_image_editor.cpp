@@ -68,6 +68,8 @@ void PANEL_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
  */
 bool PANEL_IMAGE_EDITOR::CheckValues()
 {
+    wxWindow* host = wxGetTopLevelParent( this );
+
 #define MIN_SIZE 15   // Min size in pixels after scaling (50 mils)
 #define MAX_SIZE 6000 // Max size in pixels after scaling (20 inches)
     double   tmp;
@@ -76,7 +78,7 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
     // Test number correctness
     if( !msg.ToDouble( &tmp ) || tmp < 0.0 )
     {
-        wxMessageBox( _( "Incorrect scale number" ) );
+        DisplayErrorMessage( host, _( "Scale must be a positive number." ) );
         return false;
     }
 
@@ -86,10 +88,10 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
 
     if( size_min < MIN_SIZE ) // if the size is too small, the image will be hard to locate
     {
-        wxMessageDialog( wxGetTopLevelParent( this ),
-                         wxString::Format( _( "This scale results in an image which is too "
-                                              "small (%.2f mm or %.1f mil)." ),
-                                           25.4 / 300 * size_min, 1000.0 / 300.0 * size_min ) );
+        DisplayErrorMessage( host, wxString::Format( _( "This scale results in an image which is too small "
+                                                        "(%.2f mm or %.1f mil)." ),
+                                                     25.4 / 300 * size_min,
+                                                     1000.0 / 300.0 * size_min ) );
         return false;
     }
 
@@ -98,10 +100,10 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
     if( size_max > MAX_SIZE )
     {
         // the actual size is 25.4/300 * size_max in mm
-        if( !IsOK( wxGetTopLevelParent( this ),
-                   wxString::Format( _( "This scale results in an image which is very large "
-                                        "(%.1f mm or %.2f in). Are you sure?" ),
-                                     25.4 / 300 * size_max, size_max / 300.0 ) ) )
+        if( !IsOK( host, wxString::Format( _( "This scale results in an image which is very large "
+                                              "(%.1f mm or %.2f in). Are you sure?" ),
+                                           25.4 / 300 * size_max,
+                                           size_max / 300.0 ) ) )
         {
             return false;
         }

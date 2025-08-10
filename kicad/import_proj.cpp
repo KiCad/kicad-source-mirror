@@ -77,19 +77,6 @@ void IMPORT_PROJ_HELPER::FindEmptyTargetDir()
 }
 
 
-void IMPORT_PROJ_HELPER::OutputCopyError( const wxFileName& aSrc, const wxFileName& aFileCopy )
-{
-    wxString msg;
-    msg.Printf( _( "Cannot copy file '%s'\n"
-                   "to '%s'\n"
-                   "The project cannot be imported." ),
-                aSrc.GetFullPath(), aFileCopy.GetFullPath() );
-
-    wxMessageDialog fileCopyErrorDlg( m_frame, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-    fileCopyErrorDlg.ShowModal();
-}
-
-
 class SCOPED_FILE_REMOVER
 {
     wxString m_file;

@@ -28,6 +28,7 @@
 #include <board_design_settings.h>
 #include <pcb_layer_box_selector.h>
 #include <wx/msgdlg.h>
+#include <confirm.h>
 
 /**
  * Some handy preset values for common outset distances.
@@ -171,19 +172,13 @@ bool DIALOG_OUTSET_ITEMS::TransferDataFromWindow()
 {
     if( m_outset.GetIntValue() <= 0 )
     {
-        wxString msg = _( "Outset must be a positive value." );
-
-        wxMessageDialog errdlg( this, msg, _( "Error" ) );
-        errdlg.ShowModal();
+        DisplayErrorMessage( this, _( "Outset must be a positive value." ) );
         return false;
     }
 
     if( m_lineWidth.GetIntValue() <= 0 )
     {
-        wxString msg = _( "Line width must be a positive value." );
-
-        wxMessageDialog errdlg( this, msg, _( "Error" ) );
-        errdlg.ShowModal();
+        DisplayErrorMessage( this, _( "Line width must be a positive value." ) );
         return false;
     }
 

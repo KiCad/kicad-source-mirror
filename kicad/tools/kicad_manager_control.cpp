@@ -314,27 +314,18 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         fn.AppendDir( fn.GetName() );
 
     // Check if the project directory is empty if it already exists.
-
-    if( !fn.DirExists() )
+    if( !fn.DirExists() && !fn.Mkdir() )
     {
-        if( !fn.Mkdir() )
-        {
-            wxString msg;
-            msg.Printf( _( "Folder '%s' could not be created.\n\n"
-                           "Make sure you have write permissions and try again." ),
-                        fn.GetPath() );
-            DisplayErrorMessage( m_frame, msg );
-            return -1;
-        }
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Folder '%s' could not be created.\n\n"
+                                                           "Make sure you have write permissions and try again." ),
+                                                        fn.GetPath() ) );
+        return -1;
     }
 
     if( !fn.IsDirWritable() )
     {
-        wxString msg;
-
-        msg.Printf( _( "Insufficient permissions to write to folder '%s'." ), fn.GetPath() );
-        wxMessageDialog msgDlg( m_frame, msg, _( "Error" ), wxICON_ERROR | wxOK | wxCENTER );
-        msgDlg.ShowModal();
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Insufficient permissions to write to folder '%s'." ),
+                                                        fn.GetPath() ) );
         return -1;
     }
 
@@ -375,13 +366,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // create a project
     if( !ps.GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
     {
-        wxMessageDialog createDlg( m_frame, _( "A problem occurred creating new project from template." ),
-                                   _( "Error" ), wxOK | wxICON_ERROR );
-
-        if( !errorMsg.empty() )
-            createDlg.SetExtendedMessage( errorMsg );
-
-        createDlg.ShowModal();
+        DisplayErrorMessage( m_frame, _( "A problem occurred creating new project from template." ), errorMsg );
         return -1;
     }
 
@@ -757,19 +742,16 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
 
     if( !wxMkdir( newProjectDir.GetFullPath() ) )
     {
-        msg.Printf( _( "Folder '%s' could not be created.\n\n"
-                       "Please make sure you have write permissions and try again." ),
-                    newProjectDir.GetPath() );
-        DisplayErrorMessage( m_frame, msg );
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Folder '%s' could not be created.\n\n"
+                                                           "Please make sure you have sufficient permissions." ),
+                                                        newProjectDir.GetPath() ) );
         return -1;
     }
 
     if( !newProjectDir.IsDirWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to write to folder '%s'." ),
-                    newProjectDir.GetFullPath() );
-        wxMessageDialog msgDlg( m_frame, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
-        msgDlg.ShowModal();
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Insufficient permissions to write to folder '%s'." ),
+                                                        newProjectDir.GetFullPath() ) );
         return -1;
     }
 
