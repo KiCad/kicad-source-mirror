@@ -26,7 +26,6 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <project.h>
-#include <project/board_project_settings.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <widgets/std_bitmap_button.h>
