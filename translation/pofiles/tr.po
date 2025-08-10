@@ -33,10 +33,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-07-23 16:03+0000\n"
-"Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-08-11 14:01+0000\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1860,11 +1860,11 @@ msgstr "Hatalar"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
 msgid "Replace Loaded File?"
-msgstr "Yüklü Dosya Değiştirilsin mi?"
+msgstr "Yüklenen Dosya Değiştirilsin mi?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Zaten yüklü bir dosya var. Değiştirmek ister misiniz?"
+msgstr "Zaten yüklenmiş bir dosya var. Değiştirmek istiyor musunuz?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -12249,7 +12249,7 @@ msgstr "Alan konumlarını güncelle/sıfırla"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
 msgid "Check All Update Options"
-msgstr "Tüm Güncelleme Seçeneklerini İşaretle"
+msgstr "Tüm Güncelleme Seçeneklerini Kontrol Edin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -12270,7 +12270,7 @@ msgstr "Sembol özniteliklerini güncelle/sıfırla"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:145
 msgid "Uncheck All Update Options"
-msgstr "Tüm Güncelleme Seçeneklerinin İşaretini Kaldır"
+msgstr "Tüm Güncelleme Seçeneklerinin İşaretini Kaldırın"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -17601,7 +17601,7 @@ msgstr "Çıktı dizini '%s' oluşturulamadı."
 #: pcbnew/pcbnew_jobs_handler.cpp:2005
 #, c-format
 msgid "Exporting %s"
-msgstr "%s dışa aktarılıyor"
+msgstr "%s Dışa Aktarılıyor"
 
 #: eeschema/eeschema_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1882
 msgid "Output path must not conflict with existing path\n"
@@ -18882,9 +18882,8 @@ msgid "&Duplicate '%s'"
 msgstr "&'%s' kopyası"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Birim"
+msgstr "Birimleri Yer Değiştir"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20770,19 +20769,16 @@ msgid "Row Height"
 msgstr "Satır Yüksekliği"
 
 #: eeschema/sch_tablecell.cpp:248
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Etiket Özellikleri"
+msgstr "Hücre Özellikleri"
 
 #: eeschema/sch_tablecell.cpp:250
-#, fuzzy
 msgid "Background Fill"
-msgstr "Arka plan dolgusu"
+msgstr "Arka plan kapla"
 
 #: eeschema/sch_tablecell.cpp:254
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Arkaplan Rengi"
+msgstr "Arkaplan Renk Kapla"
 
 #: eeschema/sch_text.cpp:375
 #, c-format
@@ -22480,7 +22476,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Uyarı: referans boş</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -24681,14 +24677,12 @@ msgid "All units of this symbol are already placed."
 msgstr "Bu sembolün tüm birimleri zaten yerleştirildi."
 
 #: eeschema/tools/sch_drawing_tools.cpp:827
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Tasarım bloğu ekle"
+msgstr "Tasarım Bloğu Ekle"
 
 #: eeschema/tools/sch_drawing_tools.cpp:828
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Şematik Sayfa İçeriğini İçe Aktar..."
+msgstr "Şematik Sayfa İçeriğini İçe Aktar"
 
 #: eeschema/tools/sch_drawing_tools.cpp:862
 msgid "Choose Schematic"
@@ -24948,8 +24942,8 @@ msgstr "Bir ağ sınıfı atamak için ağın etiketlenmesi gerekir.."
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Uzun bir metin dizisini yapıştırmak çok yavaş olabilir. Devam etmek istiyor "
-"musunuz?"
+"Uzun bir metin metin dizesini yapıştırmak çok yavaş olabilir.  Devam etmek "
+"istiyor musunuz?"
 
 #: eeschema/tools/sch_editor_control.cpp:1796
 #, c-format
@@ -25185,7 +25179,7 @@ msgstr "Sembol kütüphanesi seçilmedi."
 #: eeschema/tools/symbol_editor_control.cpp:457
 #, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Sembol kütüphanesi '%s' bulunamadı."
+msgstr "Sembol Kütüphanesi '%s' bulunamadı."
 
 #: eeschema/tools/symbol_editor_control.cpp:349
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -25274,6 +25268,8 @@ msgstr ""
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Bu mesajı önlemek için 'Senkronize Pinler Modu' seçeneğini devre dışı "
+"bırakın."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 msgid "Place Pin Anyway"
@@ -27574,7 +27570,7 @@ msgstr "Render kalitesi. Seçenekler: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
-"Görünüm ön ayarı. Seçenekler: %s, %s veya kullanıcı tanımlı ön ayar adı"
+"Görünüm ön ayarı. Seçenekler: %s, %s veya kullanıcı tanımlı hazır ayar adı"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -27895,7 +27891,7 @@ msgstr "Katmanları Dahil Et:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
-msgstr "<Çalışma anında ayarlanır>"
+msgstr "<çalışırken ayarlanan değer>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -28402,7 +28398,7 @@ msgstr "EasyEDA Pro Projeyi İçe Aktar"
 #: kicad/jobs_runner.cpp:218
 #, c-format
 msgid "Running job %d: %s"
-msgstr "Çalışan iş %d: %s"
+msgstr "Çalışan işler %d: %s"
 
 #: kicad/jobs_runner.cpp:263
 msgid "Job successful"
@@ -33199,13 +33195,13 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>Kullanımda %i referans tanımlayıcı öneki var<br/"
+"<br/>Kullanımda olan %i başvuru göstergesi önekleri var<br/"
 ">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:424
 #, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr "Hariç tutulan: %s yeniden adlandırmadan<br/>"
+msgstr "Hariç tutma: %s yeniden notlandırmadan<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:427
 msgid ""
@@ -33217,11 +33213,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:435
 msgid "(will be ignored)"
-msgstr "(yok sayılacak)"
+msgstr "(göz ardı edilecek)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:448
 msgid "<br/>No footprints"
-msgstr "<br/>Ayak izi yok"
+msgstr "<br/>Ayak izleri yok"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:454
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
@@ -33234,7 +33230,7 @@ msgstr "<br/>*********** Referans Koordinatlarına Göre Sırala ***********"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:460
 #, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr "<br/>%d %s X, Y: %s; yuvarlak X, Y: %s"
+msgstr "<br/>%d %s X, Y: %s; yuvarlanmış X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 msgid "Selected options resulted in errors! Change them and try again."
@@ -33247,16 +33243,14 @@ msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"<br/>Baskı Devrede %d boş veya geçersiz referans tanımlayıcı var.<br/>R "
-"'Baskı Devre ile şema arasında eşitliği test et' seçeneği işaretli olarak "
-"DRC (Tasarım Kuralı Kontrolü) çalıştırmanız önerilir..\n"
+"<br/>PCB'de %d boş veya geçersiz referans atamaları var.<br/>'Baskı Devre "
+"ile şematik arasındaki pariteyi test et' seçeneği işaretli olarak DRC "
+"çalıştırmanız önerilir.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:495
 #, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"<br/>Referans Tanımlayıcı: %s Ayak İzi: %s:%s Baskı Devre üzerinde %s "
-"konumunda."
+msgstr "<br/>RefDes: %s Ayak izi: %s:%s, Baskı Devre üzerinde %s konumunda."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:503
 msgid "Reannotate anyway?"
@@ -35187,7 +35181,7 @@ msgstr "Yeni ayak izi kütüphane kimliği:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 msgid "Remove text items if not in library footprint"
-msgstr "Metin ögelerini kütüphane ayak izinde değilse kaldır"
+msgstr "Kütüphane ayak izinde değilse metin öğelerini kaldır"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
@@ -39135,7 +39129,7 @@ msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:254
 msgid "Lights Intensity"
-msgstr "Işık yoğunluğu"
+msgstr "Işık Yoğunluğu"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:285
 msgid "Camera:"
@@ -39143,7 +39137,7 @@ msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:303
 msgid "Lights Position"
-msgstr "Işık Konumları"
+msgstr "Işık Konumu"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:311
 msgid "Side lights elevation:"
@@ -52331,27 +52325,27 @@ msgstr "DP Boşluk Kısıtlamaları: %s"
 
 #: pcbnew/tools/pcb_control.cpp:2007
 msgid "Resolved Clearance"
-msgstr "Çözümlenmiş Boşluk"
+msgstr "Çözülmüş Boşluk"
 
 #: pcbnew/tools/pcb_control.cpp:2018
 msgid "Actual Clearance"
-msgstr "Gerçek Boşluk"
+msgstr "Geçerli Boşluk"
 
 #: pcbnew/tools/pcb_control.cpp:2061
 msgid "Resolved Hole Clearance"
-msgstr "Çözümlenmiş Delik Boşluğu"
+msgstr "Çözülmüş Delik Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:2066
 msgid "Actual Hole Clearance"
-msgstr "Gerçek Delik Boşluğu"
+msgstr "Geçerli Delik Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:2101
 msgid "Resolved Edge Clearance"
-msgstr "Çözümlenmiş Kenar Boşluğu"
+msgstr "Çözülmüş Kenar Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:2106
 msgid "Resolved Margin Clearance"
-msgstr "Çözümlenmiş Kenar Payı Boşluğu"
+msgstr "Çözülmüş Marjin Boşluğu"
 
 #: pcbnew/tools/pcb_control.cpp:2118
 msgid "Selected Items"
