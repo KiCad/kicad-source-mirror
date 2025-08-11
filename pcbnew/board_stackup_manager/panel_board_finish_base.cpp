@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,9 +16,6 @@ PANEL_SETUP_BOARD_FINISH_BASE::PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, 
 
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
-
-	m_cbCastellatedPads = new wxCheckBox( this, wxID_ANY, _("Has castellated pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	bMargins->Add( m_cbCastellatedPads, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_cbEgdesPlated = new wxCheckBox( this, wxID_ANY, _("Plated board edge"), wxDefaultPosition, wxDefaultSize, 0 );
 	bMargins->Add( m_cbEgdesPlated, 0, wxBOTTOM|wxLEFT, 5 );

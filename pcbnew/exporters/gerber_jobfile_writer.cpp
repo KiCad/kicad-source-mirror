@@ -268,8 +268,15 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     if( brd_stackup.m_HasDielectricConstrains )
         m_json["GeneralSpecs"]["ImpedanceControlled"] = true;
 
+    #if 0   // Old way to set property
     if( brd_stackup.m_CastellatedPads )
         m_json["GeneralSpecs"]["Castellated"] = true;
+    #endif
+    if( m_pcb->GetPadWithCastellatedAttrCount() )
+        m_json["GeneralSpecs"]["Castellated"] = true;
+
+    if( m_pcb->GetPadWithPressFitAttrCount() )
+        m_json["GeneralSpecs"]["Press-fit"] = true;
 
     if( brd_stackup.m_EdgePlating )
         m_json["GeneralSpecs"]["EdgePlating"] = true;

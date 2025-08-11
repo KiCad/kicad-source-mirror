@@ -55,7 +55,6 @@ void PANEL_SETUP_BOARD_FINISH::synchronizeWithBoard()
     const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
     m_choiceEdgeConn->SetSelection( brd_stackup.m_EdgeConnectorConstraints );
-    m_cbCastellatedPads->SetValue( brd_stackup.m_CastellatedPads );
     m_cbEgdesPlated->SetValue( brd_stackup.m_EdgePlating );
 
     // find the choice depending on the initial finish setting
@@ -97,9 +96,6 @@ bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow( BOARD_STACKUP& aStackup )
     int edge = m_choiceEdgeConn->GetSelection();
     modified |= aStackup.m_EdgeConnectorConstraints != (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
     aStackup.m_EdgeConnectorConstraints = (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
-
-    modified |= aStackup.m_CastellatedPads != m_cbCastellatedPads->GetValue();
-    aStackup.m_CastellatedPads = m_cbCastellatedPads->GetValue();
 
     modified |= aStackup.m_EdgePlating != m_cbEgdesPlated->GetValue();
     aStackup.m_EdgePlating = m_cbEgdesPlated->GetValue();

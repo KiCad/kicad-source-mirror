@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_BOARD_FINISH_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,6 @@ class PANEL_SETUP_BOARD_FINISH_BASE : public wxPanel
 	private:
 
 	protected:
-		wxCheckBox* m_cbCastellatedPads;
 		wxCheckBox* m_cbEgdesPlated;
 		wxStaticText* m_staticTextFinish;
 		wxChoice* m_choiceFinish;
@@ -42,6 +40,7 @@ class PANEL_SETUP_BOARD_FINISH_BASE : public wxPanel
 	public:
 
 		PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SETUP_BOARD_FINISH_BASE();
 
 };

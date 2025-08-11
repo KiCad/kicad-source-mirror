@@ -1688,16 +1688,16 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
                 NeedRIGHT();
                 break;
 
-            case T_castellated_pads:
+            case T_castellated_pads:    // Legacy compatibility. just skip it
                 token = NextTok();
-                stackup.m_CastellatedPads = token == T_yes;
                 NeedRIGHT();
                 break;
 
             default:
                 // Currently, skip this item if not defined, because the stackup def
                 // is a moving target
-                //Expecting( "copper_finish, edge_plating, dielectric_constrains, edge_connector, castellated_pads" );
+                //Expecting( "copper_finish, edge_plating, dielectric_constrains,
+                // edge_connector, castellated_pads" );
                 skipCurrent();
                 break;
             }

@@ -133,9 +133,6 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
     if( aStackup.m_EdgePlating )
         report << wxT( " Option \"Plated edges\"" );
 
-    if( aStackup.m_CastellatedPads )
-        report << wxT( " Option \"Castellated Pads\"" );
-
     if( aStackup.m_EdgeConnectorConstraints != BS_EDGE_CONNECTOR_NONE )
     {
         wxString conn_txt = wxT( "yes" );

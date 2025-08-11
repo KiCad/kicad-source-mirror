@@ -353,7 +353,6 @@ BOARD_STACKUP::BOARD_STACKUP()
                                         // (Loss tg and Epison R)
     m_HasThicknessConstrains = false;   // True if some dielectric or copper layers have constrains
     m_EdgeConnectorConstraints = BS_EDGE_CONNECTOR_NONE;
-    m_CastellatedPads = false;          // True if some castellated pads exist
     m_EdgePlating = false;              // True if edge board is plated
     m_FinishType = wxT( "None" );       // undefined finish type
 }
@@ -364,7 +363,6 @@ BOARD_STACKUP::BOARD_STACKUP( const BOARD_STACKUP& aOther )
     m_HasDielectricConstrains  = aOther.m_HasDielectricConstrains;
     m_HasThicknessConstrains   = aOther.m_HasThicknessConstrains;
     m_EdgeConnectorConstraints = aOther.m_EdgeConnectorConstraints;
-    m_CastellatedPads          = aOther.m_CastellatedPads;
     m_EdgePlating              = aOther.m_EdgePlating;
     m_FinishType               = aOther.m_FinishType;
 
@@ -383,7 +381,6 @@ BOARD_STACKUP& BOARD_STACKUP::operator=( const BOARD_STACKUP& aOther )
     m_HasDielectricConstrains  = aOther.m_HasDielectricConstrains;
     m_HasThicknessConstrains   = aOther.m_HasThicknessConstrains;
     m_EdgeConnectorConstraints = aOther.m_EdgeConnectorConstraints;
-    m_CastellatedPads          = aOther.m_CastellatedPads;
     m_EdgePlating              = aOther.m_EdgePlating;
     m_FinishType               = aOther.m_FinishType;
 
@@ -406,7 +403,6 @@ bool BOARD_STACKUP::operator==( const BOARD_STACKUP& aOther ) const
     if( m_HasDielectricConstrains  != aOther.m_HasDielectricConstrains ) return false;
     if( m_HasThicknessConstrains   != aOther.m_HasThicknessConstrains ) return false;
     if( m_EdgeConnectorConstraints != aOther.m_EdgeConnectorConstraints ) return false;
-    if( m_CastellatedPads          != aOther.m_CastellatedPads ) return false;
     if( m_EdgePlating              != aOther.m_EdgePlating ) return false;
     if( m_FinishType               != aOther.m_FinishType ) return false;
 
@@ -606,7 +602,6 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
     const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
     m_HasDielectricConstrains  = source_stackup.m_HasDielectricConstrains;
     m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
-    m_CastellatedPads = source_stackup.m_CastellatedPads;
     m_EdgePlating     = source_stackup.m_EdgePlating;
     m_FinishType      = source_stackup.m_FinishType;
 
@@ -732,7 +727,6 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
         const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
         m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
         m_HasDielectricConstrains = source_stackup.m_HasDielectricConstrains;
-        m_CastellatedPads = source_stackup.m_CastellatedPads;
         m_EdgePlating     = source_stackup.m_EdgePlating;
         m_FinishType      = source_stackup.m_FinishType;
     }
@@ -816,9 +810,6 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter, const BOARD
         aFormatter->Print( "(edge_connector %s)",
                            m_EdgeConnectorConstraints > 1 ? "bevelled": "yes" );
     }
-
-    if( m_CastellatedPads )
-        KICAD_FORMAT::FormatBool( aFormatter, "castellated_pads", true );
 
     if( m_EdgePlating )
         KICAD_FORMAT::FormatBool( aFormatter, "edge_plating", true );

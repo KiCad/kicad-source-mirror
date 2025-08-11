@@ -3200,3 +3200,38 @@ void BOARD::UpdateBoardOutline()
 }
 
 
+int BOARD::GetPadWithPressFitAttrCount()
+{
+    // return the number of PTH with Press-Fit fabr attribute
+    int count = 0;
+
+    for( FOOTPRINT* footprint : Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetProperty() == PAD_PROP::PRESSFIT )
+                count++;
+        }
+    }
+
+    return count;
+}
+
+
+int BOARD::GetPadWithCastellatedAttrCount()
+{
+    // @return the number of PTH with Castellated fabr attribute
+    int count = 0;
+
+    for( FOOTPRINT* footprint : Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetProperty() == PAD_PROP::CASTELLATED )
+                count++;
+        }
+    }
+
+    return count;
+}
+

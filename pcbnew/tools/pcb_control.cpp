@@ -2386,7 +2386,12 @@ int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     addDataCell( stackup.m_HasDielectricConstrains ? _( "Yes" ) : _( "No" ) );
 
     addDataCell( _( "Castellated pads: " ) );
-    addDataCell( stackup.m_CastellatedPads ? _( "Yes" ) : _( "No" ) );
+    int castellated_pad_count = m_frame->GetBoard()->GetPadWithCastellatedAttrCount();
+    addDataCell( castellated_pad_count ? _( "Yes" ) : _( "No" ) );
+
+    addDataCell( _( "Press-fit pads: " ) );
+    int pressfit_pad_count = m_frame->GetBoard()->GetPadWithPressFitAttrCount();
+    addDataCell( pressfit_pad_count ? _( "Yes" ) : _( "No" ) );
 
     addDataCell( _( "Plated board edge: " ) );
     addDataCell( stackup.m_EdgePlating ? _( "Yes" ) : _( "No" ) );
@@ -2403,8 +2408,14 @@ int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     addDataCell( _( "Edge card connectors: " ) );
     addDataCell( msg );
 
-    addDataCell( wxEmptyString );
-    addDataCell( wxEmptyString );
+    // We are building a table having 4 columns.
+    // So we must have a cell count multible of 4, to have fully build row.
+    // Othewise the table is really badly drawn.
+    std::vector<PCB_TABLECELL*> cells_list = table->GetCells();
+    int cell_to_add_cnt = cells_list.size() % table->GetColCount();
+
+    for( int ii = 0; ii < cell_to_add_cnt; ii++ )
+        addDataCell( wxEmptyString );
 
     table->SetStrokeExternal( false );
     table->SetStrokeHeaderSeparator( false );

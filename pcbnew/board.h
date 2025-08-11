@@ -968,6 +968,16 @@ public:
     }
 
     /**
+     * @return the number of PTH with Press-Fit fabr attribute
+     */
+    int GetPadWithPressFitAttrCount();
+
+    /**
+     * @return the number of PTH with Castellated fabr attribute
+     */
+    int GetPadWithCastellatedAttrCount();
+
+    /**
      * Calculate the bounding box containing all board items (or board edge segments).
      *
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.

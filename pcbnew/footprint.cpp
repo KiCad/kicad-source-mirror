@@ -1263,6 +1263,7 @@ int FOOTPRINT::GetLikelyAttribute() const
         case PAD_PROP::NONE:
         case PAD_PROP::BGA:
         case PAD_PROP::TESTPOINT:
+        case PAD_PROP::PRESSFIT:
             break;
         }
 
