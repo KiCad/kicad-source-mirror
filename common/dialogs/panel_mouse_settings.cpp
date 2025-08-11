@@ -211,6 +211,84 @@ void PANEL_MOUSE_SETTINGS::OnScrollRadioButton( wxCommandEvent& event )
     if( !btn )
         return;
 
+    bool isZoom = ( btn == m_rbZoomCtrl || btn == m_rbZoomShift || btn == m_rbZoomAlt );
+    bool isPanH = ( btn == m_rbPanHCtrl || btn == m_rbPanHShift || btn == m_rbPanHAlt );
+    bool isPanV = ( btn == m_rbPanVCtrl || btn == m_rbPanVShift || btn == m_rbPanVAlt );
+
+    int modifier = 0;
+
+    if( btn == m_rbZoomCtrl || btn == m_rbPanHCtrl || btn == m_rbPanVCtrl )
+        modifier = WXK_CONTROL;
+    else if( btn == m_rbZoomShift || btn == m_rbPanHShift || btn == m_rbPanVShift )
+        modifier = WXK_SHIFT;
+    else if( btn == m_rbZoomAlt || btn == m_rbPanHAlt || btn == m_rbPanVAlt )
+        modifier = WXK_ALT;
+
+    auto column_taken = [this]( int mod )
+    {
+        switch( mod )
+        {
+        case 0: return m_rbZoomNone->GetValue() || m_rbPanHNone->GetValue() || m_rbPanVNone->GetValue();
+        case WXK_CONTROL: return m_rbZoomCtrl->GetValue() || m_rbPanHCtrl->GetValue() || m_rbPanVCtrl->GetValue();
+        case WXK_SHIFT: return m_rbZoomShift->GetValue() || m_rbPanHShift->GetValue() || m_rbPanVShift->GetValue();
+        case WXK_ALT: return m_rbZoomAlt->GetValue() || m_rbPanHAlt->GetValue() || m_rbPanVAlt->GetValue();
+        default: return false;
+        }
+    };
+
+    auto assign_first_available =
+            [&]( wxRadioButton* noneBtn, wxRadioButton* ctrlBtn, wxRadioButton* shiftBtn, wxRadioButton* altBtn )
+    {
+        int candidates[] = { 0, WXK_CONTROL, WXK_SHIFT, WXK_ALT };
+
+        for( int candidate : candidates )
+        {
+            if( candidate == modifier )
+                continue;
+
+            if( !column_taken( candidate ) )
+            {
+                switch( candidate )
+                {
+                case 0: noneBtn->SetValue( true ); break;
+                case WXK_CONTROL: ctrlBtn->SetValue( true ); break;
+                case WXK_SHIFT: shiftBtn->SetValue( true ); break;
+                case WXK_ALT: altBtn->SetValue( true ); break;
+                }
+
+                break;
+            }
+        }
+    };
+
+    if( modifier == WXK_CONTROL )
+    {
+        if( !isZoom && m_rbZoomCtrl->GetValue() )
+            assign_first_available( m_rbZoomNone, m_rbZoomCtrl, m_rbZoomShift, m_rbZoomAlt );
+        if( !isPanH && m_rbPanHCtrl->GetValue() )
+            assign_first_available( m_rbPanHNone, m_rbPanHCtrl, m_rbPanHShift, m_rbPanHAlt );
+        if( !isPanV && m_rbPanVCtrl->GetValue() )
+            assign_first_available( m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift, m_rbPanVAlt );
+    }
+    else if( modifier == WXK_SHIFT )
+    {
+        if( !isZoom && m_rbZoomShift->GetValue() )
+            assign_first_available( m_rbZoomNone, m_rbZoomCtrl, m_rbZoomShift, m_rbZoomAlt );
+        if( !isPanH && m_rbPanHShift->GetValue() )
+            assign_first_available( m_rbPanHNone, m_rbPanHCtrl, m_rbPanHShift, m_rbPanHAlt );
+        if( !isPanV && m_rbPanVShift->GetValue() )
+            assign_first_available( m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift, m_rbPanVAlt );
+    }
+    else if( modifier == WXK_ALT )
+    {
+        if( !isZoom && m_rbZoomAlt->GetValue() )
+            assign_first_available( m_rbZoomNone, m_rbZoomCtrl, m_rbZoomShift, m_rbZoomAlt );
+        if( !isPanH && m_rbPanHAlt->GetValue() )
+            assign_first_available( m_rbPanHNone, m_rbPanHCtrl, m_rbPanHShift, m_rbPanHAlt );
+        if( !isPanV && m_rbPanVAlt->GetValue() )
+            assign_first_available( m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift, m_rbPanVAlt );
+    }
+
     SCROLL_MOD_SET newSet = getScrollModSet();
 
     m_scrollWarning->Show( !isScrollModSetValid( newSet ) );
