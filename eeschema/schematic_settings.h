@@ -92,18 +92,6 @@ public:
     wxString  m_SchDrawingSheetFileName;
     wxString  m_PlotDirectoryName;
 
-    wxString  m_NetFormatName;
-
-    ///< @todo These should probably be moved to the "schematic.simulator" path.
-    bool      m_SpiceCurSheetAsRoot;
-    bool      m_SpiceSaveAllVoltages;
-    bool      m_SpiceSaveAllCurrents;
-    bool      m_SpiceSaveAllDissipations;
-    bool      m_SpiceSaveAllEvents;
-    wxString  m_SpiceCommandString;      // A command string to run external spice
-
-    bool      m_SpiceModelCurSheetAsRoot;
-
     TEMPLATES m_TemplateFieldNames;
 
     wxString  m_BomExportFileName;

@@ -128,6 +128,9 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
 
 DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 {
+    // We still save/restore to config (instead of letting DIALOG_SHIM do it) because we also
+    // allow editing of these settings in preferences.
+
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     cfg->m_AnnotatePanel.sort_order = GetSortOrder();
@@ -164,6 +167,9 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 
 bool DIALOG_ANNOTATE::TransferDataToWindow()
 {
+    // We still save/restore to config (instead of letting DIALOG_SHIM do it) because we also
+    // allow editing of these settings in preferences.
+
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( m_rbScope_Schematic->IsEnabled() )

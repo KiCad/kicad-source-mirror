@@ -37,8 +37,7 @@ class DIALOG_EXPORT_NETLIST : public DIALOG_EXPORT_NETLIST_BASE
 {
 public:
     DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame );
-    DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
-                           JOB_EXPORT_SCH_NETLIST* aJob = nullptr );
+    DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_SCH_NETLIST* aJob = nullptr );
     ~DIALOG_EXPORT_NETLIST(){};
 
 private:
@@ -49,7 +48,6 @@ private:
     void                 InstallPageSpiceModel();
 
     bool TransferDataFromWindow() override;
-    bool NetlistUpdateOpt();
 
     void updateGeneratorButtons();
 
@@ -83,7 +81,7 @@ private:
     bool FilenamePrms( NETLIST_TYPE_ID aType, wxString* aExt, wxString* aWildCard );
 
 private:
-    SCH_EDIT_FRAME*      m_editFrame;
+    SCH_EDIT_FRAME*                   m_editFrame;
     JOB_EXPORT_SCH_NETLIST*           m_job;
     std::vector<EXPORT_NETLIST_PAGE*> m_PanelNetType;
 };

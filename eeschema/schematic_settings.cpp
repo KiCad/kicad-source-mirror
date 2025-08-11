@@ -61,12 +61,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_OPO_VRange( wxS( "~V" ) ),
         m_OPO_IPrecision( 3 ),
         m_OPO_IRange( wxS( "~A" ) ),
-        m_SpiceCurSheetAsRoot( false ),
-        m_SpiceSaveAllVoltages( false ),
-        m_SpiceSaveAllCurrents( false ),
-        m_SpiceSaveAllDissipations( false ),
-        m_SpiceSaveAllEvents( true ),
-        m_SpiceModelCurSheetAsRoot( true ),
         m_MaxError( ARC_LOW_DEF_MM * schIUScale.IU_PER_MM ),
         m_NgspiceSettings( nullptr ),
         m_refDesTracker( nullptr )
@@ -218,30 +212,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<wxString>( "plot_directory",
             &m_PlotDirectoryName, "" ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "net_format_name",
-            &m_NetFormatName, "" ) );
-
-    m_params.emplace_back( new PARAM<bool>( "spice_current_sheet_as_root",
-            &m_SpiceCurSheetAsRoot, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "spice_save_all_voltages",
-            &m_SpiceSaveAllVoltages, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "spice_save_all_currents",
-            &m_SpiceSaveAllCurrents, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "spice_save_all_dissipations",
-            &m_SpiceSaveAllDissipations, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "space_save_all_events",
-            &m_SpiceSaveAllEvents, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "spice_model_current_sheet_as_root",
-            &m_SpiceModelCurSheetAsRoot, true ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "spice_external_command",
-            &m_SpiceCommandString, "spice \"%I\"" ) );
 
     // TODO(JE) should we keep these LIB_SYMBOL:: things around?
     m_params.emplace_back( new PARAM<int>( "subpart_id_separator",
