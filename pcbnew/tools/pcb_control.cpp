@@ -2608,7 +2608,6 @@ int PCB_CONTROL::CollectAndEmbed3DModels( const TOOL_EVENT& aEvent )
                 {
                     model.m_Filename = file->GetLink();
                     fpModified = true;
-                    boardModified = true;
                     embeddedCount++;
                 }
             }
