@@ -109,6 +109,9 @@ struct GAL_API VC_SETTINGS
     /// What modifier key to enable vertical with the (vertical) scroll wheel.
     int m_scrollModifierPanV;
 
+    /// What modifier key pans the view when the mouse moves with it held.
+    int m_motionPanModifier;
+
     MOUSE_DRAG_ACTION m_dragLeft;
     MOUSE_DRAG_ACTION m_dragMiddle;
     MOUSE_DRAG_ACTION m_dragRight;

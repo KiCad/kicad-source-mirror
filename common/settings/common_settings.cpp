@@ -269,6 +269,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "input.scroll_modifier_pan_v",
             &m_Input.scroll_modifier_pan_v, WXK_SHIFT ) );
 
+    m_params.emplace_back( new PARAM<int>( "input.motion_pan_modifier",
+            &m_Input.motion_pan_modifier, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "input.reverse_scroll_zoom",
             &m_Input.reverse_scroll_zoom, false ) );
 

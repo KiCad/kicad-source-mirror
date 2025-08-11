@@ -96,6 +96,8 @@ public:
         int scroll_modifier_pan_h;
         int scroll_modifier_pan_v;
 
+        int motion_pan_modifier;
+
         MOUSE_DRAG_ACTION drag_left;
         MOUSE_DRAG_ACTION drag_middle;
         MOUSE_DRAG_ACTION drag_right;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -154,6 +154,19 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_choiceRightButtonDrag = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRightButtonDragNChoices, m_choiceRightButtonDragChoices, 0 );
 	m_choiceRightButtonDrag->SetSelection( 0 );
 	fgSizer1->Add( m_choiceRightButtonDrag, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_panMoveKeyLabel = new wxStaticText( this, wxID_ANY, _("Pan on mouse movement with key:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_panMoveKeyLabel->Wrap( -1 );
+	fgSizer1->Add( m_panMoveKeyLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
+	wxString m_choicePanMoveKeyChoices[] = { _("None"), _("Alt"), _("Ctrl"), _("Shift") };
+	int m_choicePanMoveKeyNChoices = sizeof( m_choicePanMoveKeyChoices ) / sizeof( wxString );
+	m_choicePanMoveKey = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePanMoveKeyNChoices, m_choicePanMoveKeyChoices, 0 );
+	m_choicePanMoveKey->SetSelection( 0 );
+	fgSizer1->Add( m_choicePanMoveKey, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );

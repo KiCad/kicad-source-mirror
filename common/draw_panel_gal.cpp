@@ -716,6 +716,7 @@ KIGFX::VC_SETTINGS EDA_DRAW_PANEL_GAL::GetVcSettings()
     vcSettings.m_scrollModifierZoom = cfg->m_Input.scroll_modifier_zoom;
     vcSettings.m_scrollModifierPanH = cfg->m_Input.scroll_modifier_pan_h;
     vcSettings.m_scrollModifierPanV = cfg->m_Input.scroll_modifier_pan_v;
+    vcSettings.m_motionPanModifier = cfg->m_Input.motion_pan_modifier;
     vcSettings.m_dragLeft = cfg->m_Input.drag_left;
     vcSettings.m_dragMiddle = cfg->m_Input.drag_middle;
     vcSettings.m_dragRight = cfg->m_Input.drag_right;

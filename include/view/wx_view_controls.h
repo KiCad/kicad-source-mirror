@@ -89,15 +89,14 @@ public:
     /// @copydoc VIEW_CONTROLS::GetRawCursorPosition()
     VECTOR2D GetRawCursorPosition( bool aSnappingEnabled = true ) const override;
 
-    void SetCursorPosition( const VECTOR2D& aPosition, bool warpView,
-                            bool aTriggeredByArrows, long aArrowCommand ) override;
+    void SetCursorPosition( const VECTOR2D& aPosition, bool warpView, bool aTriggeredByArrows,
+                            long aArrowCommand ) override;
 
     /// @copydoc VIEW_CONTROLS::SetCrossHairCursorPosition()
     void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView ) override;
 
     /// @copydoc VIEW_CONTROLS::CursorWarp()
-    void WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
-                          bool aWarpView = false ) override;
+    void WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false, bool aWarpView = false ) override;
 
     /// @copydoc VIEW_CONTROLS::CenterOnCursor()
     void CenterOnCursor() override;
@@ -108,8 +107,7 @@ public:
     /// End any mouse drag action still in progress.
     void CancelDrag();
 
-    void ForceCursorPosition( bool aEnabled,
-                              const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) ) override;
+    void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) ) override;
 
     /// Applies VIEW_CONTROLS settings from the program #COMMON_SETTINGS.
     void LoadSettings() override;
@@ -124,10 +122,10 @@ private:
     /// Possible states for WX_VIEW_CONTROLS.
     enum STATE
     {
-        IDLE = 1,           ///< Nothing is happening.
-        DRAG_PANNING,       ///< Panning with mouse button pressed.
-        AUTO_PANNING,       ///< Panning on approaching borders of the frame.
-        DRAG_ZOOMING,       ///< Zooming with mouse button pressed.
+        IDLE = 1,     ///< Nothing is happening.
+        DRAG_PANNING, ///< Panning with mouse button pressed.
+        AUTO_PANNING, ///< Panning on approaching borders of the frame.
+        DRAG_ZOOMING, ///< Zooming with mouse button pressed.
     };
 
     /**
@@ -162,7 +160,7 @@ private:
      * @param aSetModifiers If false, don't change the modifiers (they were set using the
      *                      keyboard motion).
      */
-    void refreshMouse( bool aSetModifiers);
+    void refreshMouse( bool aSetModifiers );
 
     /**
      * Get the cursor position in the screen coordinates.
@@ -170,34 +168,40 @@ private:
     wxPoint getMouseScreenPosition() const;
 
     /// Current state of VIEW_CONTROLS.
-    STATE       m_state;
+    STATE m_state;
 
     /// Panel that is affected by VIEW_CONTROLS.
     EDA_DRAW_PANEL_GAL* m_parentPanel;
 
     /// Store information about point where dragging has started.
-    VECTOR2D    m_dragStartPoint;
+    VECTOR2D m_dragStartPoint;
 
     /// Current direction of panning (only autopanning mode).
-    VECTOR2D    m_panDirection;
+    VECTOR2D m_panDirection;
 
     /// Timer responsible for handling autopanning.
-    wxTimer     m_panTimer;
+    wxTimer m_panTimer;
 
     /// Ratio used for scaling world coordinates to scrollbar position.
-    VECTOR2D    m_scrollScale;
+    VECTOR2D m_scrollScale;
 
     /// Current scrollbar position.
-    VECTOR2I    m_scrollPos;
+    VECTOR2I m_scrollPos;
 
     /// The mouse position when a drag zoom started.
-    VECTOR2D      m_zoomStartPoint;
+    VECTOR2D m_zoomStartPoint;
 
     /// Current cursor position (world coordinates).
-    VECTOR2D    m_cursorPos;
+    VECTOR2D m_cursorPos;
 
     /// Flag deciding whether the cursor position should be calculated using the mouse position.
-    bool        m_updateCursor;
+    bool m_updateCursor;
+
+    /// True if we are panning via the meta key.
+    bool m_metaPanning;
+
+    /// Last mouse position when panning via the meta key.
+    VECTOR2D m_metaPanStart;
 
     /// Flag to indicate if infinite panning works on this platform.
     bool m_infinitePanWorks;

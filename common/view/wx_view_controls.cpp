@@ -35,7 +35,7 @@
 #include <tool/tool_dispatcher.h>
 #include <trace_helpers.h>
 #include <settings/common_settings.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h> // for KiROUND
 #include <geometry/geometry_utils.h>
 #include <widgets/ui_common.h>
 #include <class_draw_panel_gal.h>
@@ -45,7 +45,7 @@
 #include <wx/log.h>
 
 #ifdef __WXMSW__
-   #define USE_MOUSE_CAPTURE
+#define USE_MOUSE_CAPTURE
 #endif
 
 using namespace KIGFX;
@@ -73,9 +73,16 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform( bool aAcce
 
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPanel ) :
-        VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ),
-        m_scrollScale( 1.0, 1.0 ), m_cursorPos( 0, 0 ), m_updateCursor( true ),
-        m_infinitePanWorks( false ), m_gestureLastZoomFactor( 1.0 )
+        VIEW_CONTROLS( aView ),
+        m_state( IDLE ),
+        m_parentPanel( aParentPanel ),
+        m_scrollScale( 1.0, 1.0 ),
+        m_cursorPos( 0, 0 ),
+        m_updateCursor( true ),
+        m_metaPanning( false ),
+        m_metaPanStart( 0, 0 ),
+        m_infinitePanWorks( false ),
+        m_gestureLastZoomFactor( 1.0 )
 {
     LoadSettings();
 
@@ -178,6 +185,7 @@ void WX_VIEW_CONTROLS::LoadSettings()
     m_settings.m_dragRight             = cfg->m_Input.drag_right;
     m_settings.m_scrollReverseZoom     = cfg->m_Input.reverse_scroll_zoom;
     m_settings.m_scrollReversePanH     = cfg->m_Input.reverse_scroll_pan_h;
+    m_settings.m_motionPanModifier     = cfg->m_Input.motion_pan_modifier;
 
     m_zoomController.reset();
 
@@ -238,6 +246,37 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
         }
     }
 
+    if( m_settings.m_motionPanModifier != WXK_NONE
+        && wxGetKeyState( static_cast<wxKeyCode>( m_settings.m_motionPanModifier ) ) )
+    {
+        if( !m_metaPanning )
+        {
+            m_metaPanning = true;
+            m_metaPanStart = mousePos;
+            aEvent.StopPropagation();
+        }
+        else
+        {
+            VECTOR2D d = m_metaPanStart - mousePos;
+            m_metaPanStart = mousePos;
+            VECTOR2D delta = m_view->ToWorld( d, false );
+            m_view->SetCenter( m_view->GetCenter() + delta );
+            aEvent.StopPropagation();
+        }
+
+        if( m_updateCursor )
+            m_cursorPos = GetClampedCoords( m_view->ToWorld( mousePos ) );
+        else
+            m_updateCursor = true;
+
+        aEvent.Skip();
+        return;
+    }
+    else
+    {
+        m_metaPanning = false;
+    }
+
     if( m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
         handleCursorCapture( x, y );
 
@@ -249,15 +288,15 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
         if( m_state == DRAG_PANNING )
         {
             static bool justWarped = false;
-            int warpX = 0;
-            int warpY = 0;
-            wxSize parentSize = m_parentPanel->GetClientSize();
+            int         warpX = 0;
+            int         warpY = 0;
+            wxSize      parentSize = m_parentPanel->GetClientSize();
 
             if( x < 0 )
             {
                 warpX = parentSize.x;
             }
-            else if(x >= parentSize.x )
+            else if( x >= parentSize.x )
             {
                 warpX = -parentSize.x;
             }
@@ -284,8 +323,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             {
                 if( !justWarped )
                 {
-                    if( m_infinitePanWorks
-                        && KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY ) )
+                    if( m_infinitePanWorks && KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY ) )
                     {
                         m_dragStartPoint += VECTOR2D( warpX, warpY );
                         justWarped = true;
@@ -304,8 +342,8 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
         else if( m_state == DRAG_ZOOMING )
         {
             static bool justWarped = false;
-            int warpY = 0;
-            wxSize parentSize = m_parentPanel->GetClientSize();
+            int         warpY = 0;
+            wxSize      parentSize = m_parentPanel->GetClientSize();
 
             if( y < 0 )
             {
@@ -394,8 +432,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         // as vertical scroll events and confuse the user.
         if( modifiers == m_settings.m_scrollModifierZoom && axis == wxMOUSE_WHEEL_VERTICAL )
         {
-            const int rotation =
-                    aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
+            const int    rotation = aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
             const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
             if( IsCursorWarpingEnabled() )
@@ -477,8 +514,8 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
     {
     case IDLE:
     case AUTO_PANNING:
-        if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::PAN ) ||
-            ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::PAN ) )
+        if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::PAN )
+            || ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::PAN ) )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             setState( DRAG_PANNING );
@@ -489,10 +526,10 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
                 m_parentPanel->CaptureMouse();
 #endif
         }
-        else if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::ZOOM ) ||
-                 ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::ZOOM ) )
+        else if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::ZOOM )
+                 || ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::ZOOM ) )
         {
-            m_dragStartPoint   = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+            m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_zoomStartPoint = m_dragStartPoint;
             setState( DRAG_ZOOMING );
 
@@ -503,7 +540,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         }
 
         if( aEvent.LeftUp() )
-            setState( IDLE );     // Stop autopanning when user release left mouse button
+            setState( IDLE ); // Stop autopanning when user release left mouse button
 
         break;
 
@@ -619,7 +656,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         // For a small mouse cursor dist to area, just use the distance.
         // But for a dist > borderSize / 2, use an accelerated pan value
 
-        if( dir.EuclideanNorm() >= borderSize )         // far from area limits
+        if( dir.EuclideanNorm() >= borderSize ) // far from area limits
             dir = dir.Resize( borderSize * accel );
         else if( dir.EuclideanNorm() > borderSize / 2 ) // Near from area limits
             dir = dir.Resize( borderSize );
@@ -633,10 +670,9 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     }
     break;
 
-    case IDLE:    // Just remove unnecessary warnings
+    case IDLE: // Just remove unnecessary warnings
     case DRAG_PANNING:
-    case DRAG_ZOOMING:
-        break;
+    case DRAG_ZOOMING: break;
     }
 }
 
@@ -685,12 +721,11 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
     if( type == wxEVT_SCROLLWIN_THUMBTRACK )
     {
-        auto center = m_view->GetCenter();
+        auto        center = m_view->GetCenter();
         const auto& boundary = m_view->GetBoundary();
 
         // Flip scroll direction in flipped view
-        const double xstart = ( m_view->IsMirroredX() ?
-                                boundary.GetRight() : boundary.GetLeft() );
+        const double xstart = ( m_view->IsMirroredX() ? boundary.GetRight() : boundary.GetLeft() );
         const double xdelta = ( m_view->IsMirroredX() ? -1 : 1 );
 
         if( dir == wxHORIZONTAL )
@@ -700,9 +735,7 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
         m_view->SetCenter( center );
     }
-    else if( type == wxEVT_SCROLLWIN_THUMBRELEASE ||
-             type == wxEVT_SCROLLWIN_TOP ||
-             type == wxEVT_SCROLLWIN_BOTTOM )
+    else if( type == wxEVT_SCROLLWIN_THUMBRELEASE || type == wxEVT_SCROLLWIN_TOP || type == wxEVT_SCROLLWIN_BOTTOM )
     {
         // Do nothing on thumb release, we don't care about it.
         // We don't have a concept of top or bottom in our viewport, so ignore those events.
@@ -737,7 +770,7 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
         double scrollX = 0.0;
         double scrollY = 0.0;
 
-        if ( dir == wxHORIZONTAL )
+        if( dir == wxHORIZONTAL )
             scrollX = -scroll.x;
         else
             scrollY = -scroll.y;
@@ -769,8 +802,7 @@ void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
         // Calling it without calling ReleaseMouse() is not accepted by wxWidgets (MSW specific)
         m_parentPanel->m_MouseCapturedLost = false;
     }
-    else if( !aEnabled && m_parentPanel->HasCapture()
-             && m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
+    else if( !aEnabled && m_parentPanel->HasCapture() && m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
     {
         m_parentPanel->ReleaseMouse();
 
@@ -793,12 +825,14 @@ void WX_VIEW_CONTROLS::CancelDrag()
             m_parentPanel->ReleaseMouse();
 #endif
     }
+
+    m_metaPanning = false;
 }
 
 
 VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 {
-    wxPoint msp = getMouseScreenPosition();
+    wxPoint  msp = getMouseScreenPosition();
     VECTOR2D screenPos( msp.x, msp.y );
 
     return aWorldCoordinates ? GetClampedCoords( m_view->ToWorld( screenPos ) ) : screenPos;
@@ -833,8 +867,8 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 }
 
 
-void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView,
-                                          bool aTriggeredByArrows, long aArrowCommand )
+void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView, bool aTriggeredByArrows,
+                                          long aArrowCommand )
 {
     m_updateCursor = false;
 
@@ -860,8 +894,7 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
 }
 
 
-void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition,
-                                                   bool aWarpView = true )
+void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true )
 {
     m_updateCursor = false;
 
@@ -878,8 +911,7 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition,
 }
 
 
-void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
-                                        bool aWarpView )
+void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates, bool aWarpView )
 {
     if( aWorldCoordinates )
     {
@@ -915,7 +947,7 @@ void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCo
 void WX_VIEW_CONTROLS::CenterOnCursor()
 {
     const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
-    VECTOR2D screenCenter( screenSize / 2 );
+    VECTOR2D        screenCenter( screenSize / 2 );
 
     if( GetMousePosition( false ) != screenCenter )
     {
@@ -937,8 +969,7 @@ void WX_VIEW_CONTROLS::PinCursorInsideNonAutoscrollArea( bool aWarpMouseCursor )
     border += 2;
 
     VECTOR2D topLeft( border, border );
-    VECTOR2D botRight( m_view->GetScreenPixelSize().x - border,
-                       m_view->GetScreenPixelSize().y - border );
+    VECTOR2D botRight( m_view->GetScreenPixelSize().x - border, m_view->GetScreenPixelSize().y - border );
 
     topLeft = m_view->ToWorld( topLeft );
     botRight = m_view->ToWorld( botRight );
@@ -965,7 +996,7 @@ void WX_VIEW_CONTROLS::PinCursorInsideNonAutoscrollArea( bool aWarpMouseCursor )
 bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 {
     VECTOR2I p( aEvent.GetX(), aEvent.GetY() );
-    VECTOR2I pKey( m_view->ToScreen(m_settings.m_lastKeyboardCursorPosition ) );
+    VECTOR2I pKey( m_view->ToScreen( m_settings.m_lastKeyboardCursorPosition ) );
 
     if( m_cursorWarped || ( m_settings.m_lastKeyboardCursorPositionValid && p == pKey ) )
     {
@@ -1028,8 +1059,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         return false;
 
     case DRAG_PANNING:
-    case DRAG_ZOOMING:
-        return false;
+    case DRAG_ZOOMING: return false;
     }
 
     wxCHECK_MSG( false, false, wxT( "This line should never be reached" ) );
@@ -1042,7 +1072,7 @@ void WX_VIEW_CONTROLS::handleCursorCapture( int x, int y )
 {
     if( m_settings.m_cursorCaptured )
     {
-        bool warp = false;
+        bool   warp = false;
         wxSize parentSize = m_parentPanel->GetClientSize();
 
         if( x < 0 )
@@ -1077,7 +1107,7 @@ void WX_VIEW_CONTROLS::refreshMouse( bool aSetModifiers )
 {
     // Notify tools that the cursor position has changed in the world coordinates
     wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
-    wxPoint msp = getMouseScreenPosition();
+    wxPoint      msp = getMouseScreenPosition();
     moveEvent.SetX( msp.x );
     moveEvent.SetY( msp.y );
 
@@ -1104,20 +1134,18 @@ wxPoint WX_VIEW_CONTROLS::getMouseScreenPosition() const
 
 void WX_VIEW_CONTROLS::UpdateScrollbars()
 {
-    const BOX2D viewport = m_view->GetViewport();
+    const BOX2D  viewport = m_view->GetViewport();
     const BOX2D& boundary = m_view->GetBoundary();
 
-    m_scrollScale.x = 2e3 / viewport.GetWidth();    // TODO it does not have to be updated so often
+    m_scrollScale.x = 2e3 / viewport.GetWidth(); // TODO it does not have to be updated so often
     m_scrollScale.y = 2e3 / viewport.GetHeight();
     VECTOR2I newScroll( ( viewport.Centre().x - boundary.GetLeft() ) * m_scrollScale.x,
                         ( viewport.Centre().y - boundary.GetTop() ) * m_scrollScale.y );
 
     // We add the width of the scroll bar thumb to the range because the scroll range is given by
     // the full bar while the position is given by the left/top position of the thumb
-    VECTOR2I newRange( m_scrollScale.x * boundary.GetWidth() +
-                       m_parentPanel->GetScrollThumb( wxSB_HORIZONTAL ),
-                       m_scrollScale.y * boundary.GetHeight() +
-                       m_parentPanel->GetScrollThumb( wxSB_VERTICAL ) );
+    VECTOR2I newRange( m_scrollScale.x * boundary.GetWidth() + m_parentPanel->GetScrollThumb( wxSB_HORIZONTAL ),
+                       m_scrollScale.y * boundary.GetHeight() + m_parentPanel->GetScrollThumb( wxSB_VERTICAL ) );
 
     // Flip scroll direction in flipped view
     if( m_view->IsMirroredX() )
@@ -1126,10 +1154,9 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
     // Adjust scrollbars only if it is needed. Otherwise there are cases when canvas is continuously
     // refreshed (Windows)
     if( m_scrollPos != newScroll || newRange.x != m_parentPanel->GetScrollRange( wxSB_HORIZONTAL )
-            || newRange.y != m_parentPanel->GetScrollRange( wxSB_VERTICAL ) )
+        || newRange.y != m_parentPanel->GetScrollRange( wxSB_VERTICAL ) )
     {
-        m_parentPanel->SetScrollbars( 1, 1, newRange.x, newRange.y, newScroll.x, newScroll.y,
-                                      true );
+        m_parentPanel->SetScrollbars( 1, 1, newRange.x, newRange.y, newScroll.x, newScroll.y, true );
         m_scrollPos = newScroll;
 
 #if !defined( __APPLE__ ) && !defined( WIN32 )

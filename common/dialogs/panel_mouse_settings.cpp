@@ -111,6 +111,14 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     default:                                                   break;
     }
 
+    switch( m_choicePanMoveKey->GetSelection() )
+    {
+    case 1: cfg->m_Input.motion_pan_modifier = WXK_ALT;     break;
+    case 2: cfg->m_Input.motion_pan_modifier = WXK_CONTROL; break;
+    case 3: cfg->m_Input.motion_pan_modifier = WXK_SHIFT;   break;
+    default: cfg->m_Input.motion_pan_modifier = 0;          break;
+    }
+
     cfg->m_Input.center_on_zoom        = m_checkZoomCenter->GetValue();
     cfg->m_Input.auto_pan              = m_checkAutoPan->GetValue();
     cfg->m_Input.auto_pan_acceleration = m_autoPanSpeed->GetValue();
@@ -176,6 +184,14 @@ void PANEL_MOUSE_SETTINGS::applySettingsToPanel( const COMMON_SETTINGS& aSetting
     case MOUSE_DRAG_ACTION::NONE:   m_choiceRightButtonDrag->SetSelection( 2 ); break;
     case MOUSE_DRAG_ACTION::SELECT:                                             break;
     default:                                                                    break;
+    }
+
+    switch( aSettings.m_Input.motion_pan_modifier )
+    {
+    case WXK_ALT:     m_choicePanMoveKey->SetSelection( 1 ); break;
+    case WXK_CONTROL: m_choicePanMoveKey->SetSelection( 2 ); break;
+    case WXK_SHIFT:   m_choicePanMoveKey->SetSelection( 3 ); break;
+    default:          m_choicePanMoveKey->SetSelection( 0 ); break;
     }
 
     m_currentScrollMod.zoom        = aSettings.m_Input.scroll_modifier_zoom;
