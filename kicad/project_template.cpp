@@ -108,21 +108,15 @@ public:
 
         EnsureGitFiles( parent );
 
-        if( dir.GetFullName() == wxT( ".git" ) || IsIgnored( parent, dir.GetFullName(), true ) )
-            return wxDIR_IGNORE;
-
-        wxDirTraverseResult result = wxDIR_IGNORE;
-
-        bool exclude = dirname.StartsWith( m_exclude ) || dirname.EndsWith( "-backups" );
-
-        if( !exclude )
+        if( dir.GetFullName() == wxT( ".git" ) || IsIgnored( parent, dir.GetFullName(), true )
+            || dirname.StartsWith( m_exclude ) || dirname.EndsWith( "-backups" ) )
         {
-            m_files.emplace_back( wxFileName::DirName( dirname ) );
-            EnsureGitFiles( dirname + wxFileName::GetPathSeparator() );
-            result = wxDIR_CONTINUE;
+            return wxDIR_IGNORE;
         }
 
-        return result;
+        m_files.emplace_back( wxFileName::DirName( dirname ) );
+        EnsureGitFiles( dirname + wxFileName::GetPathSeparator() );
+        return wxDIR_CONTINUE;
     }
 
 private:
