@@ -1901,6 +1901,8 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     view->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
     view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
 
+    GetRenderSettings()->m_ShowPinAltIcons = cfg->m_Appearance.show_pin_alt_icons;
+
     RefreshOperatingPointDisplay();
 
     settings.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
