@@ -249,10 +249,6 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
             };
 
-    // Give a bit more room for combobox editors
-    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
-        aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
-
     // add Cut, Copy, and Paste to wxGrids
     aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid ) );
 
