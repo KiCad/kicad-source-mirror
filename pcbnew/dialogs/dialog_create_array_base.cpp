@@ -82,7 +82,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	fgSizerItemSpacing->Add( m_labelDx, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_entryDx = new wxTextCtrl( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryDx = new wxTextCtrl( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("2.54"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerItemSpacing->Add( m_entryDx, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_unitLabelDx = new wxStaticText( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -95,7 +95,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	fgSizerItemSpacing->Add( m_labelDy, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_entryDy = new wxTextCtrl( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryDy = new wxTextCtrl( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("2.54"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerItemSpacing->Add( m_entryDy, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_unitLabelDy = new wxStaticText( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -195,6 +195,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_gridPadNumberingSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_cbRenumberPads = new wxCheckBox( m_gridPadNumberingPanel, wxID_ANY, _("Renumber pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRenumberPads->SetValue(true);
 	m_gridPadNumberingSizer->Add( m_cbRenumberPads, 0, wxALL, 5 );
 
 	wxString m_radioBoxGridNumberingAxisChoices[] = { _("Horizontal, then vertical"), _("Vertical, then horizontal") };
@@ -363,12 +364,6 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_rbCircDirection->SetSelection( 0 );
 	sbSizerDupPrms->Add( m_rbCircDirection, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_entryRotateItemsCb1 = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Rotate items"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_entryRotateItemsCb1->SetValue(true);
-	m_entryRotateItemsCb1->SetToolTip( _("Rotate the item as well as move it - multi-selections will be rotated together") );
-
-	sbSizerDupPrms->Add( m_entryRotateItemsCb1, 0, wxALL, 5 );
-
 	wxFlexGridSizer* fgSizerDupPrms;
 	fgSizerDupPrms = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizerDupPrms->AddGrowableCol( 1 );
@@ -417,7 +412,6 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	sbSizerDupPrms->Add( fgSizerDupPrms, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	m_entryRotateItemsCb = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Rotate items"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_entryRotateItemsCb->SetValue(true);
 	m_entryRotateItemsCb->SetToolTip( _("Rotate the item as well as move it - multi-selections will be rotated together") );
 
 	sbSizerDupPrms->Add( m_entryRotateItemsCb, 0, wxALL, 5 );
