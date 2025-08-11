@@ -153,23 +153,24 @@ wxXmlNode* PCB_IO_IPC2581::appendNode( wxXmlNode* aParent, const wxString& aName
 
 wxString PCB_IO_IPC2581::genString( const wxString& aStr, const char* aPrefix ) const
 {
+    // Build a key using the prefix and original string so that repeated calls for the same
+    // element return the same generated name.
+    wxString key = aPrefix ? wxString( aPrefix ) + wxT( ":" ) + aStr : aStr;
+
+    auto it = m_generated_names.find( key );
+
+    if( it != m_generated_names.end() )
+        return it->second;
+
     wxString str;
 
     if( m_version == 'C' )
     {
         str = aStr;
         str.Replace( wxT( ":" ), wxT( "_" ) );
-
-        if( aPrefix )
-            str.Prepend( wxString( aPrefix ) + wxT( ":" ) );
-        else
-            str.Prepend( wxT( "KI:" ) );
     }
     else
     {
-        if( aPrefix )
-            str = wxString::Format( "%s_", aPrefix );
-
         for( wxString::const_iterator iter = aStr.begin(); iter != aStr.end(); ++iter )
         {
             if( !m_acceptable_chars.count( *iter ) )
@@ -179,7 +180,17 @@ wxString PCB_IO_IPC2581::genString( const wxString& aStr, const char* aPrefix ) 
         }
     }
 
-    return str;
+    wxString base = str;
+    wxString name = base;
+    int      suffix = 1;
+
+    while( m_element_names.count( name ) )
+        name = wxString::Format( "%s_%d", base, suffix++ );
+
+    m_element_names.insert( name );
+    m_generated_names[key] = name;
+
+    return name;
 }
 
 

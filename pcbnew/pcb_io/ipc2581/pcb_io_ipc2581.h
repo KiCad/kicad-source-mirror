@@ -32,6 +32,8 @@
 
 #include <wx/xml/xml.h>
 #include <memory>
+#include <map>
+#include <set>
 
 class BOARD;
 class BOARD_ITEM;
@@ -327,6 +329,9 @@ private:
             m_slot_holes; //<! Storage vector of slotted holes that need to be output as cutouts
 
     PROGRESS_REPORTER*      m_progress_reporter;
+
+    mutable std::set<wxString>           m_element_names;   //<! Track generated element names
+    mutable std::map<wxString, wxString> m_generated_names; //<! Map input keys to unique names
 
     std::set<wxUniChar>     m_acceptable_chars;     //<! IPC2581B and C have differing sets of allowed characters in names
 
