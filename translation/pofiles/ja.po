@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-06 13:01+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-08-13 00:02+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -7636,11 +7636,11 @@ msgstr "3Dモデルとしてエクスポート"
 
 #: common/jobs/job_export_pcb_3d.cpp:151
 msgid "Export 3D Model Job Settings"
-msgstr "3D モデルのエクスポートジョブ設定"
+msgstr "3Dモデルのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_3d.cpp:170
 msgid "PCB: Export 3D Model"
-msgstr "PCB: 3D モデルとしてエクスポート"
+msgstr "PCB: 3Dモデル としてエクスポート"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 msgid "Export drill data"
@@ -7652,7 +7652,7 @@ msgstr "ドリルデータのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export Drill Data"
-msgstr "PCB: ドリルデータとしてエクスポート"
+msgstr "PCB: ドリルデータ としてエクスポート"
 
 #: common/jobs/job_export_pcb_dxf.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:143
@@ -7666,7 +7666,7 @@ msgstr "DXFのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_dxf.cpp:67
 msgid "PCB: Export DXF"
-msgstr "PCB: DXFとしてエクスポート"
+msgstr "PCB: DXF としてエクスポート"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
 msgid "Export GenCAD Job Settings"
@@ -7690,7 +7690,7 @@ msgstr "ガーバーのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr "PCB: ガーバーとしてエクスポート"
+msgstr "PCB: ガーバー としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -7728,7 +7728,7 @@ msgstr "ODB++のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
-msgstr "PCB:ODB++ としてエクスポート"
+msgstr "PCB: ODB++ としてエクスポート"
 
 #: common/jobs/job_export_pcb_pdf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:141 kicad/kicad_cli.cpp:145
@@ -7742,7 +7742,7 @@ msgstr "PDFのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_pdf.cpp:68
 msgid "PCB: Export PDF"
-msgstr "PCB: PDFとしてエクスポート"
+msgstr "PCB: PDF としてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
 msgid "Export position data"
@@ -7754,7 +7754,7 @@ msgstr "位置データのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr "PCB: 位置データとしてエクスポート"
+msgstr "PCB: 位置データ としてエクスポート"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:147
@@ -7768,7 +7768,7 @@ msgstr "SVGのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
 msgid "PCB: Export SVG"
-msgstr "PCB: SVGとしてエクスポート"
+msgstr "PCB: SVG としてエクスポート"
 
 #: common/jobs/job_export_sch_bom.cpp:92
 msgid "Generate bill of materials"
@@ -7780,7 +7780,7 @@ msgstr "部品表 (BOM) 生成ジョブ設定"
 
 #: common/jobs/job_export_sch_bom.cpp:102
 msgid "Schematic: Generate Bill of Materials"
-msgstr "回路図:部品表 (BOM) を生成"
+msgstr "回路図: 部品表 (BOM) を生成"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
@@ -7793,7 +7793,7 @@ msgstr "ネットリストのエクスポートジョブ設定"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
-msgstr "回路図: ネットリストとしてエクスポート"
+msgstr "回路図: ネットリスト としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:198
 msgid "Export Postscript"
@@ -7821,7 +7821,7 @@ msgstr "回路図: HPGL としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:231
 msgid "Schematic: Export Postscript"
-msgstr "回路図: PostScriptとしてエクスポート"
+msgstr "回路図: PostScript としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:233
 msgid "Schematic: Export DXF"
@@ -7858,7 +7858,7 @@ msgstr "レンダリング PCB ジョブ設定"
 
 #: common/jobs/job_pcb_render.cpp:141
 msgid "PCB: Render"
-msgstr "PCB:描画"
+msgstr "PCB: レンダリング（PNG または JPEG） としてエクスポート"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
@@ -7874,11 +7874,11 @@ msgstr "回路図: ERC を実行"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
-msgstr "特別:ファイルのコピー"
+msgstr "特別: ファイルのコピー"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr "特別:コマンドを実行"
+msgstr "特別: コマンドを実行"
 
 #: common/jobs/jobs_output_archive.cpp:93 common/jobs/jobset.cpp:45
 msgid "Archive"
