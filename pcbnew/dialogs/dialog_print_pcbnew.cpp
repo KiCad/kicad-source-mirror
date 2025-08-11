@@ -98,13 +98,10 @@ private:
 };
 
 
-DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
-                                          PCBNEW_PRINTOUT_SETTINGS* aSettings ) :
-    DIALOG_PRINT_GENERIC( aParent, aSettings ),
-    m_parent( aParent )
+DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_PRINTOUT_SETTINGS* aSettings ) :
+        DIALOG_PRINT_GENERIC( aParent, aSettings ),
+        m_parent( aParent )
 {
-    m_config = Kiface().KifaceSettings();
-
     createExtraOptions();
     createLeftPanel();
 
@@ -198,8 +195,7 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     m_drillMarksChoice->SetSelection( (int)settings()->m_DrillMarks );
 
     // Print all layers one one page or separately
-    m_checkboxPagePerLayer->SetValue( settings()->m_Pagination
-                                            == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
+    m_checkboxPagePerLayer->SetValue( settings()->m_Pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
     onPagePerLayerClicked( dummy );
 
     // Update the dialog layout when layers are added
@@ -215,22 +211,16 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     wxStaticBox*    box = getOptionsBox();
     int             rows = optionsSizer->GetEffectiveRowsCount();
 
-    m_checkAsItems = new wxCheckBox( box, wxID_ANY, _( "Print according to objects tab of "
-                                                       "appearance manager" ) );
-    optionsSizer->Add( m_checkAsItems, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
-                       wxLEFT|wxRIGHT|wxBOTTOM, 5 );
+    m_checkAsItems = new wxCheckBox( box, wxID_ANY, _( "Print according to objects tab of appearance manager" ) );
+    optionsSizer->Add( m_checkAsItems, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
     m_checkBackground = new wxCheckBox( box, wxID_ANY, _( "Print background color" ) );
-    optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
-                       wxLEFT|wxRIGHT|wxBOTTOM, 5 );
+    optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
-    m_checkUseTheme = new wxCheckBox( box, wxID_ANY, _( "Use a different color theme for "
-                                                        "printing:" ) );
-    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
-                       wxLEFT|wxRIGHT, 5 );
+    m_checkUseTheme = new wxCheckBox( box, wxID_ANY, _( "Use a different color theme for printing:" ) );
+    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT, 5 );
 
-    m_checkUseTheme->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
-                           &DIALOG_PRINT_PCBNEW::onUseThemeClicked, this );
+    m_checkUseTheme->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onUseThemeClicked, this );
 
     wxArrayString choices;
     m_colorTheme = new wxChoice( box, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices, 0 );
@@ -263,16 +253,12 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     // Pagination
     m_checkboxPagePerLayer = new wxCheckBox( box, wxID_ANY, _( "Print one page per layer" ) );
 
-    m_checkboxPagePerLayer->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
-                                  &DIALOG_PRINT_PCBNEW::onPagePerLayerClicked, this );
+    m_checkboxPagePerLayer->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onPagePerLayerClicked, this );
 
-    m_checkboxEdgesOnAllPages = new wxCheckBox( box, wxID_ANY,
-                                                _( "Print board edges on all pages" ) );
+    m_checkboxEdgesOnAllPages = new wxCheckBox( box, wxID_ANY, _( "Print board edges on all pages" ) );
 
-    optionsSizer->Add( m_checkboxPagePerLayer, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
-                       wxLEFT|wxRIGHT, 5 );
-    optionsSizer->Add( m_checkboxEdgesOnAllPages, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
-                       wxLEFT, 28 );
+    optionsSizer->Add( m_checkboxPagePerLayer, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT, 5 );
+    optionsSizer->Add( m_checkboxEdgesOnAllPages, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ), wxLEFT, 28 );
 }
 
 
@@ -289,20 +275,11 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
     getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND | wxALL, 5 );
 
     m_popMenu = new wxMenu();
-   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_FAB_LAYERS,
-   	                                   _( "Select Fab Layers" ), wxEmptyString ) );
-
-   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_COPPER_LAYERS,
-   	                                   _( "Select all Copper Layers" ), wxEmptyString ) );
-
-   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_DESELECT_COPPER_LAYERS,
-   	                                   _( "Deselect all Copper Layers" ), wxEmptyString ) );
-
-   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_ALL_LAYERS,
-   	                                   _( "Select all Layers" ), wxEmptyString ) );
-
-   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_DESELECT_ALL_LAYERS,
-   	                                   _( "Deselect all Layers" ), wxEmptyString ) );
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_FAB_LAYERS,      _( "Select Fab Layers" ) ) );
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_COPPER_LAYERS,   _( "Select all Copper Layers" ) ) );
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_DESELECT_COPPER_LAYERS, _( "Deselect all Copper Layers" ) ) );
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_ALL_LAYERS,      _( "Select all Layers" ) ) );
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_DESELECT_ALL_LAYERS,    _( "Deselect all Layers" ) ) );
 
     this->Bind( wxEVT_RIGHT_DOWN,
                 [&]( wxMouseEvent& aEvent )

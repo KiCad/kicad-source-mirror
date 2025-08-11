@@ -140,7 +140,7 @@ void DIALOG_MAP_GERBER_LAYERS_TO_PCB::initDialog()
             flexColumnBoxSizer = m_flexRightColumnBoxSizer;
 
         // Provide a text string to identify the Gerber layer
-        msg.Printf( _( "Layer %d" ), m_buttonTable[ii] + 1 );
+        msg.Printf( _( "Layer %d:" ), m_buttonTable[ii] + 1 );
 
         label = new wxStaticText( this, wxID_STATIC, msg );
         flexColumnBoxSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
@@ -151,9 +151,9 @@ void DIALOG_MAP_GERBER_LAYERS_TO_PCB::initDialog()
         flexColumnBoxSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         // Provide a button for this layer (which will invoke a child dialog box)
-        item_ID          = ID_BUTTON_0 + ii;
-        wxButton * Button = new wxButton( this, item_ID, wxT( "..." ), wxDefaultPosition,
-                                          wxDefaultSize, wxBU_EXACTFIT );
+        item_ID = ID_BUTTON_0 + ii;
+        wxButton * Button = new wxButton( this, item_ID, wxT( "..." ), wxDefaultPosition, wxDefaultSize,
+                                          wxBU_EXACTFIT );
 
         flexColumnBoxSizer->Add( Button, 0, wxALIGN_CENTER_VERTICAL | wxALL );
 

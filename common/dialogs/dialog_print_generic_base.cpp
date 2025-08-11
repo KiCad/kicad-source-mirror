@@ -85,8 +85,6 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 	bSizerScaleCustom->Add( m_scaleCustom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_scaleCustomText = new wxTextCtrl( bScaleSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_scaleCustomText->SetToolTip( _("Set X scale adjust for exact scale plotting") );
-
 	bSizerScaleCustom->Add( m_scaleCustomText, 1, wxEXPAND|wxRIGHT, 5 );
 
 

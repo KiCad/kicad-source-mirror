@@ -35,7 +35,7 @@ class DIALOG_PRINT_GENERIC : public DIALOG_PRINT_GENERIC_BASE
 {
 public:
     DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings );
-    virtual ~DIALOG_PRINT_GENERIC();
+    virtual ~DIALOG_PRINT_GENERIC() = default;
 
     /**
      * Set 'print border and title block' to a requested value and hides the
@@ -99,14 +99,10 @@ private:
     void initPrintData();
 
 protected:
-    APP_SETTINGS_BASE* m_config;
-
     PRINTOUT_SETTINGS* m_settings;
 
 private:
-    wxFloatingPointValidator<double> m_scaleValidator;
-
-    static wxPrintData* s_PrintData;
+    static wxPrintData*           s_printData;
     static wxPageSetupDialogData* s_pageSetupData;
 };
 

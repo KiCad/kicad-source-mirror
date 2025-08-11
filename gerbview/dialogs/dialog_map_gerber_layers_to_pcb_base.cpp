@@ -31,11 +31,8 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 
 	m_bSizerLayerList->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_flexLeftColumnBoxSizer = new wxFlexGridSizer( 4, 0, 0 );
-	m_flexLeftColumnBoxSizer->AddGrowableCol( 0 );
+	m_flexLeftColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
 	m_flexLeftColumnBoxSizer->AddGrowableCol( 1 );
-	m_flexLeftColumnBoxSizer->AddGrowableCol( 2 );
-	m_flexLeftColumnBoxSizer->AddGrowableCol( 3 );
 	m_flexLeftColumnBoxSizer->SetFlexibleDirection( wxBOTH );
 	m_flexLeftColumnBoxSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -45,11 +42,8 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 	m_staticlineSep = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	m_bSizerLayerList->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
 
-	m_flexRightColumnBoxSizer = new wxFlexGridSizer( 4, 0, 0 );
-	m_flexRightColumnBoxSizer->AddGrowableCol( 0 );
+	m_flexRightColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
 	m_flexRightColumnBoxSizer->AddGrowableCol( 1 );
-	m_flexRightColumnBoxSizer->AddGrowableCol( 2 );
-	m_flexRightColumnBoxSizer->AddGrowableCol( 3 );
 	m_flexRightColumnBoxSizer->SetFlexibleDirection( wxBOTH );
 	m_flexRightColumnBoxSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -60,7 +54,7 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 	bSizerLayerSelection->Add( m_bSizerLayerList, 1, wxEXPAND, 5 );
 
 
-	sbUpperSizer->Add( bSizerLayerSelection, 1, wxEXPAND, 5 );
+	sbUpperSizer->Add( bSizerLayerSelection, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -113,7 +107,7 @@ DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE::DIALOG_MAP_GERBER_LAYERS_TO_PCB_BASE( wxWi
 	bRightSizer->Add( bSizerButtons, 0, wxEXPAND, 5 );
 
 
-	sbUpperSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	sbUpperSizer->Add( bRightSizer, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	bSizerMain->Add( sbUpperSizer, 1, wxEXPAND|wxALL, 5 );

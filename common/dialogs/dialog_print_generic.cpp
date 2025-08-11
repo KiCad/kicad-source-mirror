@@ -33,6 +33,8 @@
 static constexpr double MIN_SCALE = 0.01;
 static constexpr double MAX_SCALE = 100.0;
 
+wxPrintData*           DIALOG_PRINT_GENERIC::s_printData = nullptr;
+wxPageSetupDialogData* DIALOG_PRINT_GENERIC::s_pageSetupData = nullptr;
 
 
 /**
@@ -43,16 +45,15 @@ static constexpr double MAX_SCALE = 100.0;
 class KI_PREVIEW_FRAME : public wxPreviewFrame
 {
 public:
-    KI_PREVIEW_FRAME( wxPrintPreview* aPreview, wxWindow* aParent,
-                      const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
-                      const wxSize& aSize = wxDefaultSize ) :
-        wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
+    KI_PREVIEW_FRAME( wxPrintPreview* aPreview, wxWindow* aParent, const wxString& aTitle,
+                      const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize ) :
+            wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
     }
 
     bool Show( bool show ) override
     {
-        bool        ret;
+        bool ret;
 
         // Show or hide the window.  If hiding, save current position and size.
         // If showing, use previous position and size.
@@ -85,16 +86,10 @@ wxPoint KI_PREVIEW_FRAME::s_pos;
 wxSize  KI_PREVIEW_FRAME::s_size;
 
 
-DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings )
-    : DIALOG_PRINT_GENERIC_BASE( aParent ),
-      m_config( nullptr ),
-      m_settings( aSettings )
+DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings ) :
+        DIALOG_PRINT_GENERIC_BASE( aParent ),
+        m_settings( aSettings )
 {
-    // Note: for the validator, min value is 0.0, to allow typing values like 0.5
-    // that start by 0
-    m_scaleValidator.SetRange( 0.0, MAX_SCALE );
-    m_scaleCustomText->SetValidator( m_scaleValidator );
-
     // Show m_panelPrinters only if there are printers to list:
     m_panelPrinters->Show( m_panelPrinters->AsPrintersAvailable() );
 
@@ -114,22 +109,10 @@ DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SE
 }
 
 
-DIALOG_PRINT_GENERIC::~DIALOG_PRINT_GENERIC()
-{
-}
-
-
 void DIALOG_PRINT_GENERIC::ForcePrintBorder( bool aValue )
 {
     m_titleBlock->SetValue( aValue );
     m_titleBlock->Hide();
-
-    if( m_config )
-    {
-        m_settings->Load( m_config );
-        m_settings->m_titleBlock = aValue;
-        m_settings->Save( m_config );
-    }
 }
 
 
@@ -138,27 +121,27 @@ void DIALOG_PRINT_GENERIC::saveSettings()
     m_settings->m_scale = getScaleValue();
     m_settings->m_titleBlock = m_titleBlock->GetValue();
     m_settings->m_blackWhite = m_outputMode->GetSelection();
-
-    if( m_config )
-        m_settings->Save( m_config );
 }
 
 
 double DIALOG_PRINT_GENERIC::getScaleValue()
 {
     if( m_scale1->GetValue() )
+    {
         return 1.0;
-
-    if( m_scaleFit->GetValue() )
+    }
+    else if( m_scaleFit->GetValue() )
+    {
         return 0.0;
-
-    if( m_scaleCustom->GetValue() )
+    }
+    else if( m_scaleCustom->GetValue() )
     {
         double scale = 1.0;;
 
         if( !m_scaleCustomText->GetValue().ToDouble( &scale ) )
         {
-            DisplayInfoMessage( nullptr, _( "Warning: scale is not a number." ) );
+            DisplayInfoMessage( nullptr, _( "Warning: custom scale is not a number." ) );
+            setScaleValue( 1.0 );
             scale = 1.0;
         }
 
@@ -166,17 +149,15 @@ double DIALOG_PRINT_GENERIC::getScaleValue()
         {
             scale = MAX_SCALE;
             setScaleValue( scale );
-            DisplayInfoMessage( nullptr, wxString::Format( _( "Warning: scale set to a very large "
-                                                              "value.\nIt will be clamped to %f." ),
-                                                           scale ) );
+            DisplayInfoMessage( nullptr, wxString::Format( _( "Warning: custom scale is too large.\n"
+                                                              "It will be clamped to %f." ), scale ) );
         }
         else if( scale < MIN_SCALE )
         {
             scale = MIN_SCALE;
             setScaleValue( scale );
-            DisplayInfoMessage( nullptr, wxString::Format( _( "Warning: scale set to a very small "
-                                                              "value.\nIt will be clamped to %f." ),
-                                                           scale ) );
+            DisplayInfoMessage( nullptr, wxString::Format( _( "Warning: custom scale is too small.\n"
+                                                              "It will be clamped to %f." ), scale ) );
         }
 
         return scale;
@@ -218,9 +199,6 @@ bool DIALOG_PRINT_GENERIC::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    if( m_config )
-        m_settings->Load( m_config );
-
     setScaleValue( m_settings->m_scale );
     m_titleBlock->SetValue( m_settings->m_titleBlock );
     m_outputMode->SetSelection( m_settings->m_blackWhite ? 1 : 0 );
@@ -234,7 +212,7 @@ void DIALOG_PRINT_GENERIC::onPageSetup( wxCommandEvent& event )
     wxPageSetupDialog pageSetupDialog( this, s_pageSetupData );
     pageSetupDialog.ShowModal();
 
-    (*s_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*s_printData ) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
     (*s_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
@@ -255,12 +233,11 @@ void DIALOG_PRINT_GENERIC::onPrintPreview( wxCommandEvent& event )
     if( m_panelPrinters )
         selectedPrinterName = m_panelPrinters->GetSelectedPrinterName();
 
-    s_PrintData->SetPrinterName( selectedPrinterName );
+    s_printData->SetPrinterName( selectedPrinterName );
 
     // Pass two printout objects: for preview, and possible printing.
     wxString title = _( "Print Preview" );
-    wxPrintPreview* preview =
-            new wxPrintPreview( createPrintout( title ), createPrintout( title ), s_PrintData );
+    wxPrintPreview* preview = new wxPrintPreview( createPrintout( title ), createPrintout( title ), s_printData );
 
     preview->SetZoom( 100 );
 
@@ -313,9 +290,9 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
     if( m_panelPrinters )
         selectedPrinterName = m_panelPrinters->GetSelectedPrinterName();
 
-    s_PrintData->SetPrinterName( selectedPrinterName );
+    s_printData->SetPrinterName( selectedPrinterName );
 
-    wxPrintDialogData printDialogData( *s_PrintData );
+    wxPrintDialogData printDialogData( *s_printData );
     printDialogData.SetMaxPage( m_settings->m_pageCount );
 
     wxPrinter printer( &printDialogData );
@@ -331,7 +308,7 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
         }
         else
         {
-            *s_PrintData = printer.GetPrintDialogData().GetPrintData();
+            *s_printData = printer.GetPrintDialogData().GetPrintData();
         }
     }
 
@@ -364,38 +341,39 @@ void DIALOG_PRINT_GENERIC::onSetCustomScale( wxCommandEvent& event )
 
 void DIALOG_PRINT_GENERIC::initPrintData()
 {
-    if( !s_PrintData )  // First print
+    if( !s_printData )  // First print
     {
-        s_PrintData = new wxPrintData();
+        s_printData = new wxPrintData();
 
-        if( !s_PrintData->Ok() )
+        if( !s_printData->Ok() )
             DisplayError( this, _( "An error occurred initializing the printer information." ) );
 
-        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGH;
+        s_printData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGH;
     }
 
     if( !s_pageSetupData )
     {
         const PAGE_INFO& pageInfo = m_settings->m_pageInfo;
 
-        s_pageSetupData = new wxPageSetupDialogData( *s_PrintData );
+        s_pageSetupData = new wxPageSetupDialogData( *s_printData );
         s_pageSetupData->SetPaperId( pageInfo.GetPaperId() );
         s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
 
         if( pageInfo.IsCustom() )
         {
             if( pageInfo.IsPortrait() )
+            {
                 s_pageSetupData->SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ),
                                                        EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ) ) );
+            }
             else
+            {
                 s_pageSetupData->SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ),
                                                        EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ) ) );
+            }
         }
 
-        *s_PrintData = s_pageSetupData->GetPrintData();
+        *s_printData = s_pageSetupData->GetPrintData();
     }
 }
 
-
-wxPrintData* DIALOG_PRINT_GENERIC::s_PrintData = nullptr;
-wxPageSetupDialogData* DIALOG_PRINT_GENERIC::s_pageSetupData = nullptr;

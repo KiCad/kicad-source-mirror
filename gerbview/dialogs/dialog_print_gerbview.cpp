@@ -45,7 +45,7 @@ class DIALOG_PRINT_GERBVIEW : public DIALOG_PRINT_GENERIC
 {
 public:
     DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent, BOARD_PRINTOUT_SETTINGS* aSettings );
-    ~DIALOG_PRINT_GERBVIEW() {};
+    ~DIALOG_PRINT_GERBVIEW() = default;
 
 private:
     BOARD_PRINTOUT_SETTINGS* settings() const
@@ -68,9 +68,6 @@ private:
     ///< Check whether a layer is enabled in a listbox
     bool isLayerEnabled( unsigned int aLayer ) const;
 
-    ///< Enable/disable layer in a listbox
-    void enableLayer( unsigned int aLayer, bool aValue );
-
     ///< Update layerset basing on the selected layers
     int setLayerSetFromList();
 
@@ -78,8 +75,8 @@ private:
 
     wxPrintout* createPrintout( const wxString& aTitle ) override
     {
-        return new GERBVIEW_PRINTOUT( m_parent->GetGerberLayout(), *settings(),
-                                      m_parent->GetCanvas()->GetView(), aTitle );
+        return new GERBVIEW_PRINTOUT( m_parent->GetGerberLayout(), *settings(), m_parent->GetCanvas()->GetView(),
+                                      aTitle );
     }
 
     GERBVIEW_FRAME* m_parent;
@@ -101,13 +98,10 @@ private:
 };
 
 
-DIALOG_PRINT_GERBVIEW::DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent,
-                                              BOARD_PRINTOUT_SETTINGS* aSettings ) :
-    DIALOG_PRINT_GENERIC( aParent, aSettings ),
-    m_parent( aParent )
+DIALOG_PRINT_GERBVIEW::DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent, BOARD_PRINTOUT_SETTINGS* aSettings ) :
+        DIALOG_PRINT_GENERIC( aParent, aSettings ),
+        m_parent( aParent )
 {
-    m_config = Kiface().KifaceSettings();
-
     createExtraOptions();
     createLeftPanel();
 }
@@ -168,8 +162,7 @@ void DIALOG_PRINT_GERBVIEW::createExtraOptions()
 
     // Print mirrored
     m_checkboxMirror = new wxCheckBox( box, wxID_ANY, _( "Print mirrored" ) );
-    optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows, 0 ), wxGBSpan( 1, cols ),
-                       wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+    optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows, 0 ), wxGBSpan( 1, cols ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 }
 
 
@@ -188,17 +181,13 @@ void DIALOG_PRINT_GERBVIEW::createLeftPanel()
     }
 
     // Select/Unselect all buttons
-    m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
-                                      _( "Select all" ) );
-    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
-                                        _( "Deselect all" ) );
+    m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
+    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Deselect all" ) );
 
     m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onSelectAllClick ),
-                                nullptr, this );
+                                wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onSelectAllClick ), nullptr, this );
     m_buttonDeselectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                  wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onDeselectAllClick ),
-                                  nullptr, this );
+                                  wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onDeselectAllClick ), nullptr, this );
 
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
     buttonSizer->Add( m_buttonSelectAll, 1, wxALL, 5 );
@@ -214,15 +203,15 @@ void DIALOG_PRINT_GERBVIEW::createLeftPanel()
 
 void DIALOG_PRINT_GERBVIEW::onSelectAllClick( wxCommandEvent& event )
 {
-    for( unsigned int i = 0; i < LAYER_LIST_COUNT; ++i )
-        setListBoxValue( m_layerLists[i], true );
+    for( wxCheckListBox* checkbox : m_layerLists )
+        setListBoxValue( checkbox, true );
 }
 
 
 void DIALOG_PRINT_GERBVIEW::onDeselectAllClick( wxCommandEvent& event )
 {
-    for( unsigned int i = 0; i < LAYER_LIST_COUNT; ++i )
-        setListBoxValue( m_layerLists[i], false );
+    for( wxCheckListBox* checkbox : m_layerLists )
+        setListBoxValue( checkbox, false );
 }
 
 
@@ -247,24 +236,6 @@ bool DIALOG_PRINT_GERBVIEW::isLayerEnabled( unsigned int aLayer ) const
     wxCheckListBox* listBox = m_layerLists[listIdx];
 
     return itemIdx < listBox->GetCount() && listBox->IsChecked( itemIdx );
-}
-
-
-void DIALOG_PRINT_GERBVIEW::enableLayer( unsigned int aLayer, bool aValue )
-{
-    auto layerMapIt = m_layerToItemMap.find( aLayer );
-
-    if( layerMapIt == m_layerToItemMap.end() )
-        return;
-
-    unsigned int itemNr = layerMapIt->second;
-    unsigned int listIdx = itemNr / LAYER_PER_LIST;
-    unsigned int itemIdx = itemNr % LAYER_PER_LIST;
-    wxCHECK( listIdx < LAYER_LIST_COUNT, /* void */ );
-    wxCheckListBox* listBox = m_layerLists[listIdx];
-
-    if( itemIdx < listBox->GetCount() )
-        listBox->Check( itemIdx, aValue );
 }
 
 

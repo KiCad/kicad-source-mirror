@@ -78,9 +78,8 @@ static const wxString pageFmts[] =
                                     // to be recognized in code
 };
 
-DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent,
-                                              EMBEDDED_FILES* aEmbeddedFiles, double aIuPerMils,
-                                              const VECTOR2D& aMaxUserSizeMils ) :
+DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, EMBEDDED_FILES* aEmbeddedFiles,
+                                              double aIuPerMils, const VECTOR2D& aMaxUserSizeMils ) :
         DIALOG_PAGES_SETTINGS_BASE( aParent ),
         m_parent( aParent ),
         m_screen( m_parent->GetScreen() ),
@@ -479,9 +478,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
     BASE_SCREEN::m_DrawingSheetFileName = fileName;
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( fullFileName, &msg ) )
-    {
         DisplayErrorMessage( this, wxString::Format( _( "Error loading drawing sheet '%s'." ), fullFileName ), msg );
-    }
 
     m_localPrjConfigChanged = true;
 
@@ -506,36 +503,21 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
     else
     {
         // search for longest common string first, e.g. A4 before A
-        if( paperType.Contains( PAGE_INFO::USLetter ) )
-            success = m_pageInfo.SetType( PAGE_INFO::USLetter );
-        else if( paperType.Contains( PAGE_INFO::USLegal ) )
-            success = m_pageInfo.SetType( PAGE_INFO::USLegal );
-        else if( paperType.Contains( PAGE_INFO::USLedger ) )
-            success = m_pageInfo.SetType( PAGE_INFO::USLedger );
-        else if( paperType.Contains( PAGE_INFO::GERBER ) )
-            success = m_pageInfo.SetType( PAGE_INFO::GERBER );
-        else if( paperType.Contains( PAGE_INFO::A5 ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A5 );
-        else if( paperType.Contains( PAGE_INFO::A4 ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A4 );
-        else if( paperType.Contains( PAGE_INFO::A3 ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A3 );
-        else if( paperType.Contains( PAGE_INFO::A2 ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A2 );
-        else if( paperType.Contains( PAGE_INFO::A1 ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A1 );
-        else if( paperType.Contains( PAGE_INFO::A0 ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A0 );
-        else if( paperType.Contains( PAGE_INFO::A ) )
-            success = m_pageInfo.SetType( PAGE_INFO::A );
-        else if( paperType.Contains( PAGE_INFO::B ) )
-            success = m_pageInfo.SetType( PAGE_INFO::B );
-        else if( paperType.Contains( PAGE_INFO::C ) )
-            success = m_pageInfo.SetType( PAGE_INFO::C );
-        else if( paperType.Contains( PAGE_INFO::D ) )
-            success = m_pageInfo.SetType( PAGE_INFO::D );
-        else if( paperType.Contains( PAGE_INFO::E ) )
-            success = m_pageInfo.SetType( PAGE_INFO::E );
+        if(      paperType.Contains( PAGE_INFO::USLetter ) ) success = m_pageInfo.SetType( PAGE_INFO::USLetter );
+        else if( paperType.Contains( PAGE_INFO::USLegal ) )  success = m_pageInfo.SetType( PAGE_INFO::USLegal );
+        else if( paperType.Contains( PAGE_INFO::USLedger ) ) success = m_pageInfo.SetType( PAGE_INFO::USLedger );
+        else if( paperType.Contains( PAGE_INFO::GERBER ) )   success = m_pageInfo.SetType( PAGE_INFO::GERBER );
+        else if( paperType.Contains( PAGE_INFO::A5 ) )       success = m_pageInfo.SetType( PAGE_INFO::A5 );
+        else if( paperType.Contains( PAGE_INFO::A4 ) )       success = m_pageInfo.SetType( PAGE_INFO::A4 );
+        else if( paperType.Contains( PAGE_INFO::A3 ) )       success = m_pageInfo.SetType( PAGE_INFO::A3 );
+        else if( paperType.Contains( PAGE_INFO::A2 ) )       success = m_pageInfo.SetType( PAGE_INFO::A2 );
+        else if( paperType.Contains( PAGE_INFO::A1 ) )       success = m_pageInfo.SetType( PAGE_INFO::A1 );
+        else if( paperType.Contains( PAGE_INFO::A0 ) )       success = m_pageInfo.SetType( PAGE_INFO::A0 );
+        else if( paperType.Contains( PAGE_INFO::A ) )        success = m_pageInfo.SetType( PAGE_INFO::A );
+        else if( paperType.Contains( PAGE_INFO::B ) )        success = m_pageInfo.SetType( PAGE_INFO::B );
+        else if( paperType.Contains( PAGE_INFO::C ) )        success = m_pageInfo.SetType( PAGE_INFO::C );
+        else if( paperType.Contains( PAGE_INFO::D ) )        success = m_pageInfo.SetType( PAGE_INFO::D );
+        else if( paperType.Contains( PAGE_INFO::E ) )        success = m_pageInfo.SetType( PAGE_INFO::E );
 
         if( success )
         {
@@ -800,8 +782,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 
     // Display a file picker dialog
     FILEDLG_HOOK_EMBED_FILE customize;
-    wxFileDialog fileDialog( this, _( "Drawing Sheet File" ), path, name,
-                             FILEEXT::DrawingSheetFileWildcard(),
+    wxFileDialog fileDialog( this, _( "Drawing Sheet File" ), path, name, FILEEXT::DrawingSheetFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( m_embeddedFiles )
