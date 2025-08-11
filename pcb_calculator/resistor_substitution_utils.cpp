@@ -23,6 +23,7 @@
 #include <cmath>
 #include <functional>
 #include <stdexcept>
+#include <optional>
 
 // If BENCHMARK is defined, calculations will print their execution time to the STDERR
 // #define BENCHMARK
@@ -50,7 +51,10 @@ class SolutionCollector
  */
 {
 public:
-    SolutionCollector( double aTarget ) : m_target( aTarget ) {}
+    SolutionCollector( double aTarget ) :
+            m_target( aTarget )
+    {
+    }
 
     /**
      * Add two solutions, based on single 2R buffer lookup, to the collector.
@@ -59,50 +63,82 @@ public:
      * @param aValueFunc transforms value from aResults into final value of the combination
      * @param aResultFunc transforms RESISTANCE instance from aResults into final instance
      */
-    void Add2RLookupResults( std::pair<RESISTANCE&, RESISTANCE&>      aResults,
-                             std::function<double( double )>          aValueFunc,
+    void Add2RLookupResults( std::pair<RESISTANCE&, RESISTANCE&> aResults, std::function<double( double )> aValueFunc,
                              std::function<RESISTANCE( RESISTANCE& )> aResultFunc )
     {
-        addSolution( aValueFunc( aResults.first.value ), &aResults.first, aResultFunc );
-        addSolution( aValueFunc( aResults.second.value ), &aResults.second, aResultFunc );
+        considerSolution( aValueFunc( aResults.first.value ), aResults.first, aResultFunc );
+        considerSolution( aValueFunc( aResults.second.value ), aResults.second, aResultFunc );
     }
 
     /**
-     * Return the best collected combination, running the corresponding result_func.
+     * Return the best collected combination.
      */
     RESISTANCE GetBest()
     {
-        if( !m_best_found_resistance )
+        if( !m_best_solution )
             throw std::logic_error( "Empty solution collector" );
 
-        return m_best_result_func( *m_best_found_resistance );
+        return *m_best_solution;
     }
 
 private:
-    /**
-     * Add single solution to the collector.
-     *
-     * @param aValue is a value of the combination in Ohms
-     * @param aFound is the corresponding RESISTANCE found in 2R buffer
-     * @param aResultFunc is a function calculating final result (RESISTANCE instance)
-     * for this combination
-     */
-    void addSolution( double aValue, RESISTANCE* aFound,
-                      std::function<RESISTANCE( RESISTANCE& )>& aResultFunc )
+    void considerSolution( double aValue, RESISTANCE& aFound, std::function<RESISTANCE( RESISTANCE& )>& aResultFunc )
     {
         double deviation = std::abs( aValue - m_target );
-        if( deviation < m_best_deviation )
+
+        if( deviation + epsilon < m_best_deviation )
         {
             m_best_deviation = deviation;
-            m_best_found_resistance = aFound;
-            m_best_result_func = aResultFunc;
+            m_best_solution = aResultFunc( aFound );
+        }
+        else if( std::abs( deviation - m_best_deviation ) < epsilon )
+        {
+            RESISTANCE candidate = aResultFunc( aFound );
+
+            if( !m_best_solution || betterCandidate( candidate, *m_best_solution ) )
+                m_best_solution = std::move( candidate );
         }
     }
 
-    double                                   m_target;
-    double                                   m_best_deviation = INFINITY;
-    RESISTANCE*                              m_best_found_resistance = nullptr;
-    std::function<RESISTANCE( RESISTANCE& )> m_best_result_func;
+    static int uniqueCount( const RESISTANCE& aRes )
+    {
+        std::vector<double> parts = aRes.parts;
+        std::sort( parts.begin(), parts.end() );
+
+        int    count = 0;
+        double last = 0.0;
+        bool   first = true;
+
+        for( double v : parts )
+        {
+            if( first || std::abs( v - last ) > epsilon )
+            {
+                count++;
+                last = v;
+                first = false;
+            }
+        }
+
+        return count;
+    }
+
+    static bool betterCandidate( const RESISTANCE& aCand, const RESISTANCE& aBest )
+    {
+        int candUnique = uniqueCount( aCand );
+        int bestUnique = uniqueCount( aBest );
+
+        if( candUnique != bestUnique )
+            return candUnique < bestUnique;
+
+        if( aCand.parts.size() != aBest.parts.size() )
+            return aCand.parts.size() < aBest.parts.size();
+
+        return aCand.name < aBest.name;
+    }
+
+    double                    m_target;
+    double                    m_best_deviation = INFINITY;
+    std::optional<RESISTANCE> m_best_solution;
 };
 
 /**
@@ -151,26 +187,34 @@ static inline double parallelValue( double aR1, double aR2 )
 
 static inline RESISTANCE serialResistance( const RESISTANCE& aR1, const RESISTANCE& aR2 )
 {
-    std::string name = maybeEmbrace( aR1.name, '|' ) + " + " + maybeEmbrace( aR2.name, '|' );
-    return RESISTANCE( serialValue( aR1.value, aR2.value ), name );
+    std::string         name = maybeEmbrace( aR1.name, '|' ) + " + " + maybeEmbrace( aR2.name, '|' );
+    std::vector<double> parts = aR1.parts;
+    parts.insert( parts.end(), aR2.parts.begin(), aR2.parts.end() );
+    return RESISTANCE( serialValue( aR1.value, aR2.value ), name, parts );
 }
 
 static inline RESISTANCE parallelResistance( const RESISTANCE& aR1, const RESISTANCE& aR2 )
 {
-    std::string name = maybeEmbrace( aR1.name, '+' ) + " | " + maybeEmbrace( aR2.name, '+' );
-    return RESISTANCE( parallelValue( aR1.value, aR2.value ), name );
+    std::string         name = maybeEmbrace( aR1.name, '+' ) + " | " + maybeEmbrace( aR2.name, '+' );
+    std::vector<double> parts = aR1.parts;
+    parts.insert( parts.end(), aR2.parts.begin(), aR2.parts.end() );
+    return RESISTANCE( parallelValue( aR1.value, aR2.value ), name, parts );
 }
 
 static inline RESISTANCE serialResistanceSimple( const RESISTANCE& aR1, const RESISTANCE& aR2 )
 {
-    std::string name = aR1.name + " + " + aR2.name;
-    return RESISTANCE( serialValue( aR1.value, aR2.value ), name );
+    std::string         name = aR1.name + " + " + aR2.name;
+    std::vector<double> parts = aR1.parts;
+    parts.insert( parts.end(), aR2.parts.begin(), aR2.parts.end() );
+    return RESISTANCE( serialValue( aR1.value, aR2.value ), name, parts );
 }
 
 static inline RESISTANCE parallelResistanceSimple( const RESISTANCE& aR1, const RESISTANCE& aR2 )
 {
-    std::string name = aR1.name + " | " + aR2.name;
-    return RESISTANCE( parallelValue( aR1.value, aR2.value ), name );
+    std::string         name = aR1.name + " | " + aR2.name;
+    std::vector<double> parts = aR1.parts;
+    parts.insert( parts.end(), aR2.parts.begin(), aR2.parts.end() );
+    return RESISTANCE( parallelValue( aR1.value, aR2.value ), name, parts );
 }
 
 // Return a string from aValue (aValue is expected in ohms).
@@ -247,7 +291,7 @@ void RES_EQUIV_CALC::Exclude( double aValue )
         return;
 
     std::vector<RESISTANCE>& series = m_e_series[m_series];
-    auto it = std::lower_bound( series.begin(), series.end(), aValue - epsilon );
+    auto                     it = std::lower_bound( series.begin(), series.end(), aValue - epsilon );
 
     if( it != series.end() && std::abs( it->value - aValue ) < epsilon )
         m_exclude_mask[it - series.begin()] = true;
@@ -336,8 +380,7 @@ std::pair<RESISTANCE&, RESISTANCE&> RES_EQUIV_CALC::findIn2RBuffer( double aTarg
     if( aTarget <= m_buffer_2R.front().value || aTarget >= m_buffer_2R.back().value )
         return { m_buffer_2R.front(), m_buffer_2R.back() };
 
-    auto it = std::lower_bound( m_buffer_2R.begin(), m_buffer_2R.end(), aTarget )
-              - m_buffer_2R.begin();
+    auto it = std::lower_bound( m_buffer_2R.begin(), m_buffer_2R.end(), aTarget ) - m_buffer_2R.begin();
 
     if( it == 0 )
         return { m_buffer_2R[0], m_buffer_2R[0] };
@@ -380,8 +423,7 @@ RESISTANCE RES_EQUIV_CALC::calculate3RSolution()
             {
                 return serialResistance( aFoundRes, r );
             };
-            solution.Add2RLookupResults( findIn2RBuffer( m_target - r.value ), valueFunc,
-                                         resultFunc );
+            solution.Add2RLookupResults( findIn2RBuffer( m_target - r.value ), valueFunc, resultFunc );
         }
 
         // try r | 2R combination
@@ -394,9 +436,8 @@ RESISTANCE RES_EQUIV_CALC::calculate3RSolution()
             {
                 return parallelResistance( aFoundRes, r );
             };
-            solution.Add2RLookupResults(
-                    findIn2RBuffer( m_target * r.value / ( r.value - m_target ) ), valueFunc,
-                    resultFunc );
+            solution.Add2RLookupResults( findIn2RBuffer( m_target * r.value / ( r.value - m_target ) ), valueFunc,
+                                         resultFunc );
         }
     }
 
@@ -419,8 +460,7 @@ RESISTANCE RES_EQUIV_CALC::calculate4RSolution()
             {
                 return serialResistance( aFoundRes, rr );
             };
-            solution.Add2RLookupResults( findIn2RBuffer( m_target - rr.value ), valueFunc,
-                                         resultFunc );
+            solution.Add2RLookupResults( findIn2RBuffer( m_target - rr.value ), valueFunc, resultFunc );
         }
 
         // try 2R | 2R combination
@@ -433,9 +473,8 @@ RESISTANCE RES_EQUIV_CALC::calculate4RSolution()
             {
                 return parallelResistance( aFoundRes, rr );
             };
-            solution.Add2RLookupResults(
-                    findIn2RBuffer( m_target * rr.value / ( rr.value - m_target ) ), valueFunc,
-                    resultFunc );
+            solution.Add2RLookupResults( findIn2RBuffer( m_target * rr.value / ( rr.value - m_target ) ), valueFunc,
+                                         resultFunc );
         }
     }
 
@@ -453,9 +492,9 @@ RESISTANCE RES_EQUIV_CALC::calculate4RSolution()
                 {
                     return serialResistance( r1, parallelResistance( r2, aFoundRes ) );
                 };
-                solution.Add2RLookupResults( findIn2RBuffer( ( m_target - r1.value ) * r2.value
-                                                             / ( r1.value + r2.value - m_target ) ),
-                                             valueFunc, resultFunc );
+                solution.Add2RLookupResults(
+                        findIn2RBuffer( ( m_target - r1.value ) * r2.value / ( r1.value + r2.value - m_target ) ),
+                        valueFunc, resultFunc );
             }
 
             // try r1 | (r2 + 2R)
@@ -468,9 +507,8 @@ RESISTANCE RES_EQUIV_CALC::calculate4RSolution()
                 {
                     return parallelResistance( r1, serialResistance( r2, aFoundRes ) );
                 };
-                solution.Add2RLookupResults(
-                        findIn2RBuffer( m_target * r1.value / ( r1.value - m_target ) - r2.value ),
-                        valueFunc, resultFunc );
+                solution.Add2RLookupResults( findIn2RBuffer( m_target * r1.value / ( r1.value - m_target ) - r2.value ),
+                                             valueFunc, resultFunc );
             }
         }
     }

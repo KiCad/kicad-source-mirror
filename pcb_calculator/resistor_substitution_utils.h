@@ -44,10 +44,18 @@ const double epsilon = 1e-12; // machine epsilon for floating-point equality tes
 // Struct representing resistance value together with its composition, e.g. {20.0, "10R + 10R"}
 struct RESISTANCE
 {
-    double      value;
-    std::string name;
+    double              value;
+    std::string         name;
+    std::vector<double> parts;
 
-    RESISTANCE( double aValue, const std::string& aName ) : value( aValue ), name( aName ) {}
+    RESISTANCE( double aValue, const std::string& aName, std::vector<double> aParts = {} ) :
+            value( aValue ),
+            name( aName ),
+            parts( std::move( aParts ) )
+    {
+        if( parts.empty() )
+            parts.push_back( aValue );
+    }
 };
 
 
@@ -109,10 +117,7 @@ public:
      * Accessor to calculation results.
      * Empty std::optional means that the exact value can be achieved using fewer resistors.
      */
-    const std::array<std::optional<RESISTANCE>, NUMBER_OF_LEVELS>& GetResults()
-    {
-        return m_results;
-    }
+    const std::array<std::optional<RESISTANCE>, NUMBER_OF_LEVELS>& GetResults() { return m_results; }
 
 private:
     /**
