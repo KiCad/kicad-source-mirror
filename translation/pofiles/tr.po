@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-11 14:01+0000\n"
+"PO-Revision-Date: 2025-08-12 16:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -132,7 +132,7 @@ msgstr "Son oluşturma süresi %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:801
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "OpenGL hatası ekran dışı işleme sırasında: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:965
 #, c-format
@@ -394,14 +394,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Geçerli 3B görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Dışa Aktar..."
+msgstr "Görüntüyü Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar"
+msgstr "Geçerli Görünümü bir görüntü dosyası olarak dışa aktar"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -1115,14 +1113,12 @@ msgid "(unsaved)"
 msgstr "(kaydedilmemiş)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "3B Modeli Dışa Aktar"
+msgstr "3B Görünümü Dışa Aktar"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Resim boyutu:"
+msgstr "Görüntü Boyutu"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1339,9 +1335,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Pin"
+msgstr "giriş"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1351,34 +1346,29 @@ msgid "Height:"
 msgstr "Yükseklik:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "3R çözümü:"
+msgstr "Çözünürlük"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "3R çözümü:"
+msgstr "X çözünürlüğü:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "piksel"
+msgstr "piksel/in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "piksel"
+msgstr "piksel/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "3R çözümü:"
+msgstr "Y çözünürlüğü:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d piksel"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -4379,18 +4369,16 @@ msgid "Rendering Engine"
 msgstr "Oluşturma Motoru"
 
 #: common/dialogs/panel_common_settings_base.cpp:36
-#, fuzzy
 msgid "Accelerated Graphics"
-msgstr "Hızlandırılmış grafikler"
+msgstr "Hızlandırılmış Grafikler"
 
 #: common/dialogs/panel_common_settings_base.cpp:37
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Donanım hızlandırmalı grafikler (önerilen)"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
-#, fuzzy
 msgid "Fallback Graphics"
-msgstr "Hızlandırılmamış grafikleri"
+msgstr "Yedek Grafikler"
 
 #: common/dialogs/panel_common_settings_base.cpp:42
 msgid ""
@@ -4401,9 +4389,8 @@ msgstr ""
 "desteklemeyen bilgisayarlar için)"
 
 #: common/dialogs/panel_common_settings_base.cpp:59
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "Kenar yumuşatma:"
+msgstr "Kenar Yumuşatma:"
 
 #: common/dialogs/panel_common_settings_base.cpp:63
 msgid "No Antialiasing"
@@ -5104,12 +5091,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Silinmiş gömülü dosyalar bazı ayak izlerinde de referans alınıyor.\n"
+"Ayak izlerinden de silinsin mi?"
 
 #: common/dialogs/panel_embedded_files.cpp:211
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Silinmiş gömülü dosyalar bazı sembollerde de referans alınıyor.\n"
+"Sembollerden de silinsin mi?"
 
 #: common/dialogs/panel_embedded_files.cpp:328
 #: common/dialogs/panel_embedded_files.cpp:436
@@ -6258,9 +6249,8 @@ msgid "need a number for '%s'"
 msgstr "'%s' için bir sayı gerekli"
 
 #: common/dsnlexer.cpp:732
-#, fuzzy
 msgid "Unterminated delimited string"
-msgstr "Sonlandırılmamış sınırlı dize"
+msgstr "Tamamlanmamış sınırlı dize"
 
 #: common/dsnlexer.cpp:754
 msgid "String delimiter must be a single character of ', \", or $"
@@ -7388,9 +7378,8 @@ msgid "Could not read file: %s"
 msgstr "Dosya okunamadı: %s"
 
 #: common/git/git_branch_handler.cpp:76
-#, fuzzy
 msgid "No repository available"
-msgstr "Paket güncellemesi mevcut değil"
+msgstr "Depo mevcut değil"
 
 #: common/git/git_branch_handler.cpp:85
 #, c-format
@@ -7398,19 +7387,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "'%s' dalı aranamadı: %s"
 
 #: common/git/git_branch_handler.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "'%s' için şube başlığı bulunamadı"
+msgstr "'%s' için dal başı bulunamadı: %s"
 
 #: common/git/git_branch_handler.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "'%s' dalına geçiş başarısız oldu"
+msgstr "'%s' dalına geçiş yapılamadı: %s"
 
 #: common/git/git_branch_handler.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "'%s' dalı için HEAD referansı güncellenemedi"
+msgstr "'%s' dalı için HEAD referansını güncelleme başarısız oldu: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7468,18 +7457,18 @@ msgid "Failed to create commit: %s"
 msgstr "Taahhüt oluşturulamadı: %s"
 
 #: common/git/git_init_handler.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "(Git) projesi başlatılamadı."
+msgstr "Git deposunu başlatma başarısız oldu: %s"
 
 #: common/git/git_init_handler.cpp:87
 msgid "No repository available to set up remote"
-msgstr ""
+msgstr "Uzak bağlantı kurmak için depo mevcut değil"
 
 #: common/git/git_init_handler.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "Taahhüt oluşturulamadı: %s"
+msgstr "Uzak bağlantı oluşturma başarısız oldu: %s"
 
 #: common/git/git_pull_handler.cpp:67
 #, c-format
@@ -8003,9 +7992,9 @@ msgid "Invalid size %lld: too large"
 msgstr "Geçersiz boyut %lld: çok büyük"
 
 #: common/io/eagle/eagle_parser.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "%f Yarıçaplı geçersiz Yay ve %f açı"
+msgstr "Geçersiz yay, yarıçap %0.2f ve açı %0.2f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -10291,9 +10280,8 @@ msgstr ""
 "KiCad projesine bağış yapmak için %s adresini ziyaret edin"
 
 #: common/tool/design_block_control.cpp:121
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "Tasarım Bloğu Kütüphaneleri"
+msgstr "Yeni Tasarım Bloğu Kütüphanesi"
 
 #: common/tool/group_tool.cpp:43
 msgid "Grouping"
@@ -11640,13 +11628,12 @@ msgid "Unconnected wire to bus entry"
 msgstr "Veriyoluna bağlanmamış yol"
 
 #: eeschema/connection_graph.cpp:4264
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Kök sayfadaki \"%s\" hiyerarşik etiketi, var olmayan bir üst sayfaya "
-"bağlanamaz"
+"Sıralamalı etiket '%s' kök şemada, mevcut olmayan bir üst şemaya bağlanamaz"
 
 #: eeschema/connection_graph.cpp:4329
 #, c-format
@@ -13884,9 +13871,9 @@ msgid "Edit Symbol Properties"
 msgstr "Sembol Özelliklerini Düzenle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Bu dosya zaten açık."
+msgstr "Bu alan '%s' üzerinden devralınmıştır."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:669
 #, c-format
@@ -16892,14 +16879,12 @@ msgid "Never show Rescue Symbols tool"
 msgstr "Kurtarma Sembolleri aracını asla gösterme"
 
 #: eeschema/dialogs/panel_setup_annotation_base.cpp:20
-#, fuzzy
 msgid "Allow reference reuse"
-msgstr "İletişim Kutusu Tercihleri"
+msgstr "Referans tekrar kullanımına izin ver"
 
 #: eeschema/dialogs/panel_setup_annotation_base.cpp:22
-#, fuzzy
 msgid "Allow reusing references from removed components"
-msgstr "Seçimden referansları içe aktar"
+msgstr "Kaldırılan bileşenlerden referansların tekrar kullanımına izin ver"
 
 #: eeschema/dialogs/panel_setup_annotation_base.cpp:39
 msgid "Symbol unit notation:"
@@ -17964,14 +17949,12 @@ msgid "Unconnected \"no connection\" flag"
 msgstr "Bağlantısız \"bağlantı yok\" bayrağı"
 
 #: eeschema/erc/erc_item.cpp:105
-#, fuzzy
 msgid "Label not connected"
-msgstr "Pin bağlı değil"
+msgstr "Etiket bağlı değil"
 
 #: eeschema/erc/erc_item.cpp:109
-#, fuzzy
 msgid "Label connected to only one pin"
-msgstr "Etiket hiçbir şeye bağlı değil"
+msgstr "Etiket yalnızca bir pine bağlı"
 
 #: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
@@ -18692,9 +18675,8 @@ msgid "Netlist..."
 msgstr "Ağ listesi..."
 
 #: eeschema/menubar.cpp:120
-#, fuzzy
 msgid "Symbols..."
-msgstr "Sembol..."
+msgstr "Semboller..."
 
 #: eeschema/menubar.cpp:180
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:125
@@ -19075,9 +19057,8 @@ msgstr ""
 "%s"
 
 #: eeschema/sch_base_frame.cpp:763
-#, fuzzy
 msgid "Create New Library"
-msgstr "Yeni Dizin Oluştur"
+msgstr "Yeni Kütüphane Oluştur"
 
 #: eeschema/sch_base_frame.cpp:779
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1104
@@ -19402,11 +19383,10 @@ msgid "Unknown or unexpected record id %d found in %s."
 msgstr "Bilinmeyen veya beklenmedik kayıt kimliği %d bulundu %s içinde."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1459
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
 msgstr ""
-"Sembol \"%s\", \"%s\" sayfasında %d dizininde \"%s\" sembolü ile "
-"değiştirildi."
+"Sembol '%s', '%s' şemasında %d indeksinde \"%s\" sembolü ile değiştirildi."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1629
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3690
@@ -20213,14 +20193,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice şematik dosyaları"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr "\"%s\" eklentisi \"%s\" işlevini uygulamaz."
+msgstr "Eklenti '%s', '%s' işlevini uygulamıyor."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:45 pcbnew/pcb_io/pcb_io_mgr.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "Eklenti türü \"%s\" bulunamadı."
+msgstr "Eklenti türü '%s' bulunamadı."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:101
 #, c-format
@@ -20229,15 +20209,13 @@ msgstr "Bilinmeyen SCH_FILE_T değeri: %d"
 
 #: eeschema/sch_item.cpp:170 eeschema/sch_item.cpp:193
 #: eeschema/sch_item.cpp:725
-#, fuzzy
 msgid "All units"
-msgstr "Tüm ögeler"
+msgstr "Tüm birimler"
 
 #: eeschema/sch_item.cpp:204 eeschema/sch_item.cpp:220
 #: eeschema/sch_item.cpp:747
-#, fuzzy
 msgid "All body styles"
-msgstr "Tüm gövde stillerine ortak"
+msgstr "Tüm gövde stilleri"
 
 #: eeschema/sch_item.cpp:672 eeschema/sch_item.cpp:740
 #: eeschema/sch_symbol.cpp:2943 eeschema/tools/sch_edit_tool.cpp:140
@@ -22693,14 +22671,12 @@ msgid "Copy library"
 msgstr "Kütüphaneyi kopyala"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "New Symbol Library"
-msgstr "Sembol Kütüphanesi Oluştur"
+msgstr "Yeni Sembol Kütüphanesi"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "Add Symbol Library"
-msgstr "Sembol Kütüphanesi Oluştur"
+msgstr "Sembol Kütüphanesi Ekle"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1115
 #, c-format
@@ -22782,9 +22758,8 @@ msgid "Select Symbol Library"
 msgstr "Sembol Kütüphanesi Seç"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:93
-#, fuzzy
 msgid "Library:"
-msgstr "Kütüphane: "
+msgstr "Kütüphane:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:112
 #: eeschema/tools/symbol_editor_control.cpp:840
@@ -22813,9 +22788,8 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Mevcut sembol değiştirildi. Değişiklikler kaydedilsin mi?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:350
-#, fuzzy
 msgid "Create symbol in library:"
-msgstr "Sembol Kütüphanesi Oluştur"
+msgstr "Kütüphanede sembol oluştur:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
@@ -23026,9 +23000,8 @@ msgid "Import Symbol"
 msgstr "Dışarıdan Simge Al"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:46
-#, fuzzy
 msgid "Import symbol to library:"
-msgstr "Mevcut kütüphaneye bir sembol aktarın"
+msgstr "Kütüphaneye sembol aktar:"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:93
 #: pcbnew/load_select_footprint.cpp:352
@@ -24258,18 +24231,16 @@ msgstr ""
 "Geçerli şematik için harici jeneratör kullanarak bir malzeme listesi oluştur"
 
 #: eeschema/tools/sch_actions.cpp:1186
-#, fuzzy
 msgid "Export Symbols..."
-msgstr "Simgeyi Dışarı Aktar"
+msgstr "Simgeleri Dışarı Aktar..."
 
 #: eeschema/tools/sch_actions.cpp:1187
-#, fuzzy
 msgid ""
 "Add symbols from schematic to a new or an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Şematikte kullanılan sembolleri mevcut bir sembol kütüphaneye ekleyin\n"
-"(bu kütüphaneden diğer sembolleri kaldırmaz)"
+"Şemadan sembolleri yeni veya mevcut bir sembol kütüphanesine ekle\n"
+"(bu kütüphanedeki diğer sembolleri kaldırmaz)"
 
 #: eeschema/tools/sch_actions.cpp:1194
 msgid "Select on PCB"
@@ -24908,23 +24879,20 @@ msgstr ""
 "'%s' (ve tüm alt sayfaları) en son kaydedilen sürüme geri döndürüyor musunuz?"
 
 #: eeschema/tools/sch_editor_control.cpp:358
-#, fuzzy
 msgid "Export Symbols"
-msgstr "Simgeyi Dışarı Aktar"
+msgstr "Sembolleri Dışa Aktar"
 
 #: eeschema/tools/sch_editor_control.cpp:358
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr "Sembolleri Kütüphaneye Aktar..."
+msgstr "Sembolleri Kütüphaneye Aktar:"
 
 #: eeschema/tools/sch_editor_control.cpp:359
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Şematikteki güç sembolleri kütüphaneye dahil edilsin mi?"
+msgstr "Güç sembollerini dışa aktarmaya dahil et"
 
 #: eeschema/tools/sch_editor_control.cpp:360
 msgid "Update schematic symbols to link to exported symbols"
-msgstr ""
+msgstr "Şematik sembollerini dışa aktarılmış sembollere bağlamak için güncelle"
 
 #: eeschema/tools/sch_editor_control.cpp:789
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -24996,9 +24964,8 @@ msgid "Design block %s does not have a schematic file."
 msgstr "Tasarım bloğu %s bir şematik dosyasına sahip değil."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:348
-#, fuzzy
 msgid "Reached end of symbol."
-msgstr "Sayfanın sonuna ulaştı."
+msgstr "Sembolün sonuna ulaşıldı."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:350
 msgid "Reached end of schematic."
@@ -26251,9 +26218,9 @@ msgid "(with X2 attributes)"
 msgstr "(X2 öznitelikleriyle)"
 
 #: gerbview/gerbview_frame.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
-msgstr "Resim adı: \"%s\"  Katman adı: \"%s\""
+msgstr "Görüntü adı: '%s' Katman adı: '%s'"
 
 #: gerbview/gerbview_frame.cpp:697
 msgid "X2 attr"
@@ -26321,14 +26288,14 @@ msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "Geçersiz Gerber dosyası: eksik G74 veya G75 arc komutu"
 
 #: gerbview/rs274x.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr "RS274X: Geçersiz GERBER format komutu '%c' %d. satırda: \"%s\""
+msgstr "RS274X: Geçersiz GERBER format komutu '%c', %d satırında: '%s'"
 
 #: gerbview/rs274x.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "GERBER file '%s' may not display as intended."
-msgstr "GERBER dosyası \"%s\" amaçlandığı gibi görüntülenmeyebilir."
+msgstr "GERBER dosyası '%s' beklendiği gibi görüntülenmeyebilir."
 
 #: gerbview/rs274x.cpp:539
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -26758,19 +26725,16 @@ msgid "Delete Column"
 msgstr "Sütunu Sil"
 
 #: include/widgets/filedlg_hook_embed_file.h:35
-#, fuzzy
 msgid "Embed file"
-msgstr "Dosya Göm"
+msgstr "Gömülü dosya"
 
 #: include/widgets/filedlg_hook_new_library.h:35
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "Kitaplığı genel kütüphane tablosuna eklemek ister misiniz?"
+msgstr "Yeni kütüphaneyi küresel kütüphane tablosuna ekle"
 
 #: include/widgets/filedlg_hook_new_library.h:37
-#, fuzzy
 msgid "Add new library to project library table"
-msgstr "Yeni proje kütüphane tablosu girdisi ekle"
+msgstr "Yeni kütüphaneyi proje kütüphane tablosuna ekle"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
 msgid "Show import issues"
@@ -26941,14 +26905,12 @@ msgstr ""
 "döndür"
 
 #: kicad/cli/command_pcb_drc.cpp:95
-#, fuzzy
 msgid "Refill zones before running DRC"
-msgstr ""
-"DRC (Tasarım Kuralı Kontrolü) uygulamadan önce tüm bölgeleri yeniden doldur"
+msgstr "DRC çalıştırmadan önce bölgeleri yeniden doldur"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
-msgstr ""
+msgstr "DRC'den sonra kartı kaydet, birlikte kullanılmalıdır --doldur-bölgeler"
 
 #: kicad/cli/command_pcb_drc.cpp:156 kicad/cli/command_pcb_export_3d.cpp:294
 #: kicad/cli/command_pcb_export_drill.cpp:155
@@ -27916,9 +27878,8 @@ msgid "Project Template Selector"
 msgstr "Proje Şablonu Seçici"
 
 #: kicad/dialogs/dialog_template_selector.cpp:74
-#, fuzzy
 msgid "Welcome to Template Selection!"
-msgstr "Proje Şablonu Seçici"
+msgstr "Şablon Seçimine Hoş Geldiniz!"
 
 #: kicad/dialogs/dialog_template_selector.cpp:75
 msgid ""
@@ -27926,11 +27887,14 @@ msgid ""
 "PCB design. Templates provide ready-to-use project structures with common "
 "components, libraries, and design rules."
 msgstr ""
+"Çeşitli önceden yapılandırılmış proje şablonlarından birini seçerek baskı "
+"devre tasarımınızı hızlıca başlatın. Şablonlar, yaygın bileşenler, "
+"kütüphaneler ve tasarım kurallarıyla birlikte kullanıma hazır proje yapıları "
+"sağlar."
 
 #: kicad/dialogs/dialog_template_selector.cpp:79
-#, fuzzy
 msgid "Browse Templates"
-msgstr "Kullanıcı Şablonları"
+msgstr "Şablonlara Göz At"
 
 #: kicad/dialogs/dialog_template_selector.cpp:80
 msgid ""
@@ -27938,104 +27902,102 @@ msgid ""
 "project templates. Each tab contains templates organized by type or "
 "complexity."
 msgstr ""
+"Yukarıdaki şablon sekmelerinde gezinin ve farklı proje şablon kategorilerini "
+"keşfedin. Her sekme, türe veya karmaşıklığa göre düzenlenmiş şablonlar "
+"içerir."
 
 #: kicad/dialogs/dialog_template_selector.cpp:83
-#, fuzzy
 msgid "Select a Template"
-msgstr "Bir dosya seç"
+msgstr "Bir Şablon Seç"
 
 #: kicad/dialogs/dialog_template_selector.cpp:84
-#, fuzzy
 msgid "Click on any template in the list to "
-msgstr "Seçili sembollere ayak izi atama"
+msgstr "Listede herhangi bir şablona tıklayın "
 
 #: kicad/dialogs/dialog_template_selector.cpp:84
-#, fuzzy
 msgid "preview its details"
-msgstr "Detayları Görüntüle"
+msgstr "detaylarını önizle"
 
 #: kicad/dialogs/dialog_template_selector.cpp:84
 msgid ""
 "The template information will appear in this panel, showing descriptions, "
 "included components, and project structure."
 msgstr ""
+"Şablon bilgileri bu panelde görünecek; açıklamalar, dahil edilen bileşenler "
+"ve proje yapısını gösterecek."
 
 #: kicad/dialogs/dialog_template_selector.cpp:87
-#, fuzzy
 msgid "Customize Path"
-msgstr "Araç çubuklarını özelleştir"
+msgstr "Yolu Özelleştir"
 
 #: kicad/dialogs/dialog_template_selector.cpp:88
-#, fuzzy
 msgid "Use the "
-msgstr "Temayı kullan:"
+msgstr "Kullanın "
 
 #: kicad/dialogs/dialog_template_selector.cpp:88
-#, fuzzy
 msgid "folder path field"
-msgstr "%s dosyaları içeren klasör"
+msgstr "klasör yolu alanı"
 
 #: kicad/dialogs/dialog_template_selector.cpp:88
 msgid ""
 "above to browse custom template directories. Click the folder icon to "
 "browse, or the refresh icon to reload templates."
 msgstr ""
+"özel şablon dizinlerini taramak için yukarıyı kullanın. Taramak için klasör "
+"simgesine tıklayın veya şablonları yeniden yüklemek için yenile simgesine "
+"tıklayın."
 
 #: kicad/dialogs/dialog_template_selector.cpp:91
-#, fuzzy
 msgid "Create Project"
-msgstr "Yeni Proje Oluştur"
+msgstr "Proje Oluştur"
 
 #: kicad/dialogs/dialog_template_selector.cpp:92
 msgid "Once you've found the right template, click "
-msgstr ""
+msgstr "Uygun şablonu bulduktan sonra tıklayın "
 
 #: kicad/dialogs/dialog_template_selector.cpp:92
 msgid ""
 "to create a new project based on the selected template. Your project will "
 "inherit all template settings and files."
 msgstr ""
+"seçilen şablona dayalı yeni bir proje oluşturmak için. Projeniz tüm şablon "
+"ayarlarını ve dosyalarını devralacaktır."
 
 #: kicad/dialogs/dialog_template_selector.cpp:96
 msgid "What You Get with Templates"
-msgstr ""
+msgstr "Şablonlarla Neler Elde Edersiniz"
 
 #: kicad/dialogs/dialog_template_selector.cpp:98
-#, fuzzy
 msgid "Pre-configured libraries"
-msgstr "Kütüphaneleri Taşı"
+msgstr "Önceden yapılandırılmış kütüphaneler"
 
 #: kicad/dialogs/dialog_template_selector.cpp:98
-#, fuzzy
 msgid "- Common components and footprints already linked"
-msgstr "Üst ayak izi kütüphane bağlantısına göre:"
+msgstr "- Ortak bileşenler ve ayak izleri zaten bağlanmış"
 
 #: kicad/dialogs/dialog_template_selector.cpp:99
-#, fuzzy
 msgid "Design rules"
-msgstr "Tasarım Kuralları"
+msgstr "Tasarım kuralları"
 
 #: kicad/dialogs/dialog_template_selector.cpp:99
 msgid "- Appropriate electrical and mechanical constraints"
-msgstr ""
+msgstr "- Uygun elektriksel ve mekanik kısıtlamalar"
 
 #: kicad/dialogs/dialog_template_selector.cpp:100
-#, fuzzy
 msgid "Layer stackups"
-msgstr "Kart Katman Yapısı"
+msgstr "Katman yığınları"
 
 #: kicad/dialogs/dialog_template_selector.cpp:100
 msgid "- Optimized for the intended application"
-msgstr ""
+msgstr "- Hedeflenen uygulama için optimize edilmiş"
 
 #: kicad/dialogs/dialog_template_selector.cpp:101
-#, fuzzy
 msgid "Component placement"
-msgstr "Bileşen yerleştirme dosyaları"
+msgstr "Bileşen yerleştirme"
 
 #: kicad/dialogs/dialog_template_selector.cpp:101
 msgid "- Basic layout and routing guidelines"
-msgstr ""
+msgstr "- Temel yerleşim ve yönlendirme yönergeleri"
 
 #: kicad/dialogs/dialog_template_selector.cpp:102
 #: pcbnew/generate_footprint_info.cpp:43
@@ -28044,51 +28006,51 @@ msgstr "Belgeler"
 
 #: kicad/dialogs/dialog_template_selector.cpp:102
 msgid "- README files and design notes"
-msgstr ""
+msgstr "- OKUBENİ dosyaları ve tasarım notları"
 
 #: kicad/dialogs/dialog_template_selector.cpp:103
-#, fuzzy
 msgid "Manufacturing files"
-msgstr "Üretici:"
+msgstr "Üretim dosyaları"
 
 #: kicad/dialogs/dialog_template_selector.cpp:103
 msgid "- Gerber and drill file configurations"
-msgstr ""
+msgstr "- Gerber ve delik dosyası yapılandırmaları"
 
 #: kicad/dialogs/dialog_template_selector.cpp:107
 msgid "Pro Tips"
-msgstr ""
+msgstr "Profesyonel İpuçları"
 
 #: kicad/dialogs/dialog_template_selector.cpp:108
-#, fuzzy
 msgid "Start Simple:"
-msgstr "Başlangıç katmanı:"
+msgstr "Basit Başla:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:108
 msgid "Begin with basic templates and add more elements as you go."
-msgstr ""
+msgstr "Temel şablonlarla başlayın ve ilerledikçe daha fazla öğe ekleyin."
 
 #: kicad/dialogs/dialog_template_selector.cpp:109
-#, fuzzy
 msgid "Customize Later:"
-msgstr "Araç çubuklarını özelleştir"
+msgstr "Sonradan Özelleştir:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:109
 msgid ""
 "Templates are starting points - you can modify libraries, rules, and layouts "
 "after project creation."
 msgstr ""
+"Şablonlar başlangıç noktalarıdır - proje oluşturulduktan sonra "
+"kütüphaneleri, kuralları ve yerleşimleri değiştirebilirsiniz."
 
 #: kicad/dialogs/dialog_template_selector.cpp:110
-#, fuzzy
 msgid "Save Your Own:"
-msgstr "Yönlendirici kaydını kaydet"
+msgstr "Kendi Şablonunu Kaydet:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:110
 msgid ""
 "Once you develop preferred settings, create a custom template for future "
 "projects."
 msgstr ""
+"Tercih ettiğiniz ayarları geliştirdikten sonra, gelecekteki projeler için "
+"özel bir şablon oluşturun."
 
 #: kicad/dialogs/dialog_template_selector.cpp:375
 msgid "Select Templates Directory"
@@ -28566,14 +28528,12 @@ msgid "Add Default Repository"
 msgstr "Varsayılan Depo Ekle"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
-#, fuzzy
 msgid "Fully qualified repository url:"
-msgstr "Lütfen tam nitelikli depo url'sini girin"
+msgstr "Tam nitelikli depo URL'si:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
-msgstr "Depo ekle"
+msgstr "Depo Ekle"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
@@ -29064,19 +29024,19 @@ msgid "%d out of %d operations were initialized but not successful."
 msgstr "%d işlemlerinden %d'si başlatıldı ancak başarılı olamadı."
 
 #: kicad/project_template.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "Şablon yolunu açabilir!"
+msgstr "Şablon yolu '%s' açılamadı"
 
 #: kicad/project_template.cpp:57
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected 'meta' directory at '%s'"
-msgstr "'%s' klasörü oluşturulamıyor"
+msgstr "Beklenen 'meta' dizini '%s' konumunda bulunamadı"
 
 #: kicad/project_template.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected meta HTML file at '%s'"
-msgstr "'%s' kütüphane dosyası bulunamadı"
+msgstr "Beklenen meta HTML dosyası '%s' konumunda bulunamadı"
 
 #: kicad/project_template.cpp:289
 #, c-format
@@ -29100,9 +29060,8 @@ msgid "Unable to rename file ... "
 msgstr "Dosya yeniden adlandırılamıyor ... "
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Permission denied"
-msgstr "i̇zi̇n reddedi̇ldi̇"
+msgstr "İzin reddedildi"
 
 #: kicad/project_tree_item.cpp:161
 #, c-format
@@ -29329,9 +29288,8 @@ msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Bu projeden Git takibini kaldırmak istediğinizden emin misiniz?"
 
 #: kicad/project_tree_pane.cpp:1836
-#, fuzzy
 msgid "Failed to remove VCS"
-msgstr "Dizin kaldırılamadı %s"
+msgstr "VCS kaldırma başarısız oldu"
 
 #: kicad/project_tree_pane.cpp:2077
 msgid "The selected directory is not a Git project."
@@ -29849,9 +29807,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "Mevcut çizim sayfası değiştirildi. Değişiklikler kaydedilsin mi?"
 
 #: pagelayout_editor/files.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "\"%s\" dosyası yüklendi"
+msgstr "Dosya '%s' yüklendi"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
@@ -29863,9 +29821,9 @@ msgid "Unable to load %s file"
 msgstr "%s dosyası yüklenemiyor"
 
 #: pagelayout_editor/files.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "\"%s\" dosyası eklendi"
+msgstr "Dosya '%s' eklendi"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
@@ -35987,15 +35945,14 @@ msgid "3D Models"
 msgstr "3B Modeller"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:284
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved or oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
 msgstr ""
-"Kilitli ayak izleri tuval üzerinde serbestçe taşınamaz ve yönlendirilemez; "
-"yalnızca seçim filtresindeki 'Kilitli ögeler' kutusu işaretlendiğinde "
-"seçilebilirler."
+"Kilitli ayak izleri, tuval üzerinde serbestçe hareket ettirilemez veya "
+"yönlendirilemez ve yalnızca seçim filtresinde 'Kilitli öğeler' onay kutusu "
+"işaretliyken seçilebilir."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:335
 msgid "all pads with duplicate numbers"
@@ -37520,14 +37477,13 @@ msgid "KiCad Layer"
 msgstr "KiCad Katmanı"
 
 #: pcbnew/dialogs/dialog_map_layers.cpp:332
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Gerekli tüm katmanlar ('*' ile işaretlenmiş) eşleştirilmelidir. Kalan "
+"Tüm gerekli katmanlar ('*' ile işaretlenmiş) eşleştirilmelidir. Kalan "
 "katmanları otomatik olarak eşleştirmek için lütfen 'Katmanları Otomatik "
-"Eşleştir' seçeneğine tıkla"
+"Eşleştir' seçeneğine tıklayın"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:105
 msgid "Rotate around item anchor"
@@ -39244,9 +39200,8 @@ msgid "Mid Point"
 msgstr "Orta Nokta"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:914
-#, fuzzy
 msgid "Included Angle"
-msgstr "&Bölgeleri dahil et"
+msgstr "Dahil Edilen Açı"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:931
 msgid "Point on Circle"
@@ -40957,20 +40912,19 @@ msgid "Add User Defined Layer..."
 msgstr "Kullanıcı Tanımlı Katman Ekle..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Consult your PCB manufacturer's specifications for solder mask expansion, "
 "web width, and clearance settings."
 msgstr ""
-"Lehim maskesi genişlemesi ve minimum ağ genişliği için kart üreticinizin "
-"önerilerini kullanın."
+"Baskı Devre üreticinizin lehim maskesi genişlemesi, ağ genişliği ve boşluk "
+"ayarları için teknik özelliklerine danışın."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
-#, fuzzy
 msgid ""
 "If no specifications are provided, setting these values to zero is "
 "recommended."
-msgstr "Hiçbiri sağlanmazsa, değerleri sıfıra ayarlamanız önerilir."
+msgstr ""
+"Eğer teknik özellikler sağlanmazsa, bu değerleri sıfıra ayarlamak önerilir."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:46
 msgid "Solder Mask Settings"
@@ -42555,9 +42509,9 @@ msgid "Local override on %s; solder paste relative clearance: %s."
 msgstr "%s üzerinde yerel geçersiz kılma; lehim pastası göreceli boşluğu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion '%s'."
-msgstr "\"%s\" onayları denetleniyor."
+msgstr "'%s' tez kontrol ediliyor."
 
 #: pcbnew/drc/drc_engine.cpp:1039 pcbnew/drc/drc_engine.cpp:1719
 msgid "Assertion passed."
@@ -42741,9 +42695,9 @@ msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Koşulsuz kural uygulanır; önceki kısıtlamaları geçersiz kılar."
 
 #: pcbnew/drc/drc_engine.cpp:1430 pcbnew/drc/drc_engine.cpp:1747
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "\"%s\" kural koşulu kontrol ediliyor."
+msgstr "'%s' kural koşulu kontrol ediliyor."
 
 #: pcbnew/drc/drc_engine.cpp:1440
 msgid "Constraint applied."
@@ -42806,9 +42760,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s termal bağlantı kolu genişliği: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1713
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "\"%s\" kural onaylama işlemi denetleniyor."
+msgstr "'%s' kural tezi kontrol ediliyor."
 
 #: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2000
 msgid "Electrical"
@@ -44026,9 +43980,8 @@ msgid "Edit Zone Properties"
 msgstr "Bölge Özelliklerini Düzenle"
 
 #: pcbnew/exporters/export_d356.cpp:406
-#, fuzzy
 msgid "Do not export unconnected pads"
-msgstr "Bağlantısız bölümlere ayırın"
+msgstr "Bağlantısız pedleri dışa aktarma"
 
 #: pcbnew/exporters/export_d356.cpp:436 pcbnew/tools/pcb_actions.cpp:1236
 msgid "Generate IPC-D-356 netlist file"
@@ -44468,9 +44421,8 @@ msgstr "Bileşen sınıfı atama kuralları yüklenemedi"
 
 #: pcbnew/files.cpp:835 pcbnew/footprint_libraries_utils.cpp:463
 #: pcbnew/footprint_libraries_utils.cpp:1110 pcbnew/tools/pcb_control.cpp:131
-#, fuzzy
 msgid "New Footprint Library"
-msgstr "Ayak İzi Kütüphanesi Oluştur"
+msgstr "Yeni Ayak İzi Kütüphanesi"
 
 #: pcbnew/files.cpp:858
 #, c-format
@@ -44681,19 +44633,16 @@ msgid "Footprint Chooser"
 msgstr "Ayak İzi Seçici"
 
 #: pcbnew/footprint_chooser_frame.cpp:150
-#, fuzzy
 msgid "Show/hide description panel"
-msgstr "Arama panelini göster / gizle"
+msgstr "Açıklama panelini göster/gizle"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
-#, fuzzy
 msgid "Show/hide 3D view panel"
-msgstr "Arama panelini göster / gizle"
+msgstr "3B görünüm panelini göster/gizle"
 
 #: pcbnew/footprint_chooser_frame.cpp:168
-#, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "Ayak izi değerlerini göster"
+msgstr "Ayak izi görünüm panelini göster/gizle"
 
 #: pcbnew/footprint_chooser_frame.cpp:176
 msgid "Show 3D viewer in own window"
@@ -44840,19 +44789,16 @@ msgid "No footprints to export!"
 msgstr "İhraç edilecek ayak izi yok!"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export Footprints"
-msgstr "Ayak İzini Dışa Aktar"
+msgstr "Ayak İzlerini Dışa Aktar"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export footprints to library:"
-msgstr "Ayak izini düzenleyiciye aktar"
+msgstr "Ayak izlerini kütüphaneye aktar:"
 
 #: pcbnew/footprint_libraries_utils.cpp:639
-#, fuzzy
 msgid "Update board footprints to link to exported footprints"
-msgstr "Karttaki ayak izleri %s'e referans verecek şekilde güncellensin mi?"
+msgstr "Kart ayak izlerini dışa aktarılmış ayak izlerine bağlamak için güncelle"
 
 #: pcbnew/footprint_libraries_utils.cpp:830
 #: pcbnew/footprint_viewer_frame.cpp:737
@@ -45208,9 +45154,8 @@ msgid "Footprints [%u items]"
 msgstr "Ayak İzleri [%u öge]"
 
 #: pcbnew/load_select_footprint.cpp:330
-#, fuzzy
 msgid "Save Footprint Library As"
-msgstr "Ayak İzi Kütüphanesi Oluştur"
+msgstr "Ayak İzi Kütüphanesini Farklı Kaydet"
 
 #: pcbnew/load_select_footprint.cpp:359
 #, c-format
@@ -45280,9 +45225,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx Analiz..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Footprints..."
-msgstr "Ayak izi..."
+msgstr "Ayak İzleri..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Fabrication Outputs"
@@ -45648,24 +45592,24 @@ msgid "Update %s jumper pad groups"
 msgstr "%s atlama pedi gruplarını güncelle"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "%s ögesini \"%s\" grubundan kaldır."
+msgstr "%s öğesini '%s' grubundan kaldır."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:876
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "%s ögesi \"%s\" grubundan kaldırıldı."
+msgstr "%s, '%s' grubundan kaldırıldı."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "%s ögesini \"%s\" grubuna ekle."
+msgstr "%s öğesini '%s' grubuna ekle."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group '%s'."
-msgstr "%s \"%s\" grubu eklendi."
+msgstr "%s, '%s' grubuna eklendi."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
@@ -46069,9 +46013,8 @@ msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr "('testpoint' özelliği NPTH pad'lerde bir anlam ifade etmiyor)"
 
 #: pcbnew/pad.cpp:2277
-#, fuzzy
 msgid "('heatsink' property makes no sense on NPTH pads)"
-msgstr "('heatsink' özelliği NPTH pad'leri için bir anlam ifade etmiyor)"
+msgstr "('ısı emici' özelliği NPTH pedlerde anlamsız)"
 
 #: pcbnew/pad.cpp:2280
 msgid "('castellated' property is for PTH pads)"
@@ -46735,23 +46678,23 @@ msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Ayak izi %s ped %s kare bir deliğe sahip (henüz desteklenmiyor)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3399
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"'%s' kütüphanesi yükleniyor:\n"
-"Footprint %s pad %s'in delik dönüşü %f derecedir. KiCad yalnızca 90 derece "
+"Kütüphane '%s' yükleniyor:\n"
+"Ayak izi %s ped %s, %d derece delik dönüşüne sahip. KiCad yalnızca 90 derece "
 "dönüşleri destekler."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3414
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Ayak izi %s pedi %s'nin delik dönüşü %f derecedir. KiCad yalnızca 90 derece "
+"Ayak izi %s ped %s, %d derece delik dönüşüne sahip. KiCad yalnızca 90 derece "
 "dönüşleri destekler."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3434
@@ -46769,16 +46712,16 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Ayak izi %s ped %s bilinmeyen türde bir %d delik kullanıyor."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3513
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad shape."
 msgstr ""
-"'%s' kütüphanesi yüklenirken hata oluştu:\n"
-"Ayak izi %s pedi %s bilinmeyen bir ped şekli kullanıyor."
+"Kütüphane '%s' yüklenirken hata oluştu:\n"
+"Ayak izi %s ped %s bilinmeyen bir ped şekli kullanıyor."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3526
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
 msgstr "Ayak izi %s ped %s bilinmeyen bir ped şekli kullanıyor."
 
@@ -46828,7 +46771,7 @@ msgstr ""
 "Bakır olmayan ped %s'nin karmaşık bir ped yığını var (henüz desteklenmiyor)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3864
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "Bakır olmayan ped %s bilinmeyen bir ped şekli kullanıyor."
 
@@ -47791,14 +47734,14 @@ msgstr "%s' NETCLASS adını yinele."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2491
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2502
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZAux for CZONE_CONTAINER '%s'"
-msgstr "CZONE_CONTAINER \"%s\" için hatalı Zaux"
+msgstr "CZONE_CONTAINER '%s' için hatalı ZAux"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2517
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER '%s'"
-msgstr "CZONE_CONTAINER \"%s\" için Kötü Z Düzgünleştirme"
+msgstr "CZONE_CONTAINER '%s' için hatalı ZSmoothing"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2569
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7575
@@ -47810,9 +47753,9 @@ msgstr ""
 "Bölge doldurmaları en iyi çaba temelinde dönüştürülecek."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2595
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER '%s'"
-msgstr "CZONE_CONTAINER \"%s\" için hatalı Z Boşluğu padoption'ı"
+msgstr "CZONE_CONTAINER '%s' için hatalı ZClearance ped seçeneği"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2891
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2930
@@ -48509,9 +48452,9 @@ msgid "Failed to load board\n"
 msgstr "'%s' yüklenemedi\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "Geçersiz katman adı \"%s\"\n"
+msgstr "Geçersiz katman adı '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:507 pcbnew/pcbnew_jobs_handler.cpp:585
 #: pcbnew/pcbnew_jobs_handler.cpp:633
@@ -48627,14 +48570,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "DRC (Tasarım Kuralı Kontrolü) Raporu %s olarak kaydedildi\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2305
-#, fuzzy
 msgid "Saved board\n"
-msgstr "Kart Yükleniyor\n"
+msgstr "Kart kaydedildi\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2309
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "'%s' yüklenemedi\n"
+msgstr "Kart kaydedilemedi.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2459
 msgid "Successfully created IPC-D-356 file\n"
@@ -51063,18 +51004,15 @@ msgid "Import board file from other applications"
 msgstr "Diğer uygulamalardan kart dosyası içe aktar"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
-#, fuzzy
 msgid "Export Footprints..."
-msgstr "Ayak İzini Dışa Aktar"
+msgstr "Ayak İzlerini Dışa Aktar..."
 
 #: pcbnew/tools/pcb_actions.cpp:1158
-#, fuzzy
 msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Mevcut bir ayak izi kütüphanesini pano üzerinde kullanılan ayak izlerini "
-"ekle\n"
+"Karttan ayak izlerini yeni veya mevcut bir ayak izi kütüphanesine ekle\n"
 "(bu kütüphanedeki diğer ayak izlerini kaldırmaz)"
 
 #: pcbnew/tools/pcb_actions.cpp:1165
@@ -52238,9 +52176,8 @@ msgid "Export footprint to editor"
 msgstr "Ayak izini düzenleyiciye aktar"
 
 #: pcbnew/tools/pcb_control.cpp:133 pcbnew/tools/pcb_control.cpp:163
-#, fuzzy
 msgid "Add Footprint Library"
-msgstr "Ayak İzi Kütüphanesi Oluştur"
+msgstr "Ayak İzi Kütüphanesi Ekle"
 
 #: pcbnew/tools/pcb_control.cpp:287
 msgid "Don't show again"
