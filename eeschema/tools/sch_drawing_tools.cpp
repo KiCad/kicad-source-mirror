@@ -135,9 +135,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     const SCH_ACTIONS::PLACE_SYMBOL_PARAMS& toolParams = aEvent.Parameter<SCH_ACTIONS::PLACE_SYMBOL_PARAMS>();
 
     SCH_SYMBOL* symbol = toolParams.m_Symbol;
-    // If we get an parameterised symbol, we probably just want to place
-    // that and get out of the placmeent tool, rather than popping the
-    // chooser afterwards
+
+    // If we get a parameterised symbol, we probably just want to place that and get out of the placmeent tool,
+    // rather than popping up the chooser afterwards
     bool placeOneOnly = symbol != nullptr;
 
     SYMBOL_LIBRARY_FILTER       filter;
@@ -146,6 +146,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
     SCHEMATIC_SETTINGS&         schSettings = m_frame->Schematic().Settings();
     SCH_SCREEN*                 screen = m_frame->GetScreen();
+    bool                        keepSymbol = false;
+    bool                        placeAllUnits = false;
 
     if( m_inDrawingTool )
         return 0;
@@ -156,15 +158,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
 
-    // First we need to get all instances of this sheet so we can annotate
-    // whatever symbols we place on all copies
+    // First we need to get all instances of this sheet so we can annotate whatever symbols we place on all copies
     SCH_SHEET_LIST hierarchy = m_frame->Schematic().Hierarchy();
-    SCH_SHEET_LIST newInstances =
-            hierarchy.FindAllSheetsForScreen( m_frame->GetCurrentSheet().LastScreen() );
+    SCH_SHEET_LIST newInstances = hierarchy.FindAllSheetsForScreen( m_frame->GetCurrentSheet().LastScreen() );
     newInstances.SortByPageNumbers();
 
-    // Get a list of all references in the schematic to avoid duplicates wherever
-    // they're placed
+    // Get a list of all references in the schematic to avoid duplicates wherever they're placed
     SCH_REFERENCE_LIST existingRefs;
     hierarchy.GetSymbols( existingRefs );
     existingRefs.SortByReferenceOnly();
@@ -204,8 +203,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     auto setCursor =
             [&]()
             {
-                m_frame->GetCanvas()->SetCurrentCursor( symbol ? KICURSOR::MOVING
-                                                               : KICURSOR::COMPONENT );
+                m_frame->GetCanvas()->SetCurrentCursor( symbol ? KICURSOR::MOVING : KICURSOR::COMPONENT );
             };
 
     auto cleanup =
@@ -238,8 +236,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     {
                         refs.ReannotateByOptions( (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
                                                   (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
-                                                  schSettings.m_AnnotateStartNum,
-                                                  existingRefs, false, &hierarchy );
+                                                  schSettings.m_AnnotateStartNum, existingRefs, false,
+                                                  &hierarchy );
 
                         refs.UpdateAnnotation();
 
@@ -368,12 +366,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 // Pick the symbol to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
-                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibrary( &filter, *historyList,
-                                                                    alreadyPlaced,
+                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibrary( &filter, *historyList, alreadyPlaced,
                                                                     footprintPreviews );
 
-                LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ? m_frame->GetLibSymbol( sel.LibId )
-                                                            : nullptr;
+                keepSymbol = sel.KeepSymbol;
+                placeAllUnits = sel.PlaceAllUnits;
+
+                LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ? m_frame->GetLibSymbol( sel.LibId ) : nullptr;
 
                 if( !libSymbol )
                     continue;
@@ -469,13 +468,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 SCH_SYMBOL* nextSymbol = nullptr;
 
-                if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
-                        || m_frame->eeconfig()->m_SymChooserPanel.keep_symbol )
+                if( keepSymbol || placeAllUnits )
                 {
                     SCH_REFERENCE currentReference( symbol, m_frame->GetCurrentSheet() );
                     SCHEMATIC& schematic = m_frame->Schematic();
 
-                    if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units )
+                    if( placeAllUnits )
                     {
                         while( currentReference.GetUnit() <= symbol->GetUnitCount()
                                && schematic.Contains( currentReference ) )
@@ -490,8 +488,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     }
 
                     // We are either stepping to the next unit or next symbol
-                    if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol ||
-                        currentReference.GetUnit() > 1 )
+                    if( keepSymbol || currentReference.GetUnit() > 1 )
                     {
                         nextSymbol = static_cast<SCH_SYMBOL*>( symbol->Duplicate( IGNORE_PARENT_GROUP ) );
                         nextSymbol->SetUnit( currentReference.GetUnit() );

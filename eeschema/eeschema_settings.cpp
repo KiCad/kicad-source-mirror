@@ -180,12 +180,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_sheet_visible_columns",
             &m_Appearance.edit_sheet_visible_columns, "0 1 2 3 4 5 6 7" ) );
 
-    m_params.emplace_back( new PARAM<int>( "appearance.edit_sheet_width",
-            &m_Appearance.edit_sheet_width, -1 ) );
-
-    m_params.emplace_back( new PARAM<int>( "appearance.edit_sheet_height",
-            &m_Appearance.edit_sheet_height, -1 ) );
-
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_label_visible_columns",
             &m_Appearance.edit_label_visible_columns, "0 1 2 3 4 5 6 7" ) );
 
@@ -599,12 +593,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "symbol_chooser.sort_mode",
             &m_SymChooserPanel.sort_mode, 0 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "symbol_chooser.keep_symbol",
-            &m_SymChooserPanel.keep_symbol, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "symbol_chooser.place_all_units",
-            &m_SymChooserPanel.place_all_units, true ) );
-
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );
 
@@ -855,8 +843,6 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(  aCfg, "SymbolChooserVSashPosition", "symbol_chooser.sash_pos_v" );
     ret &= fromLegacy<int>(  aCfg, "SymbolChooserWidth",         "symbol_chooser.width" );
     ret &= fromLegacy<int>(  aCfg, "SymbolChooserHeight",        "symbol_chooser.height" );
-    ret &= fromLegacy<bool>( aCfg, "SymbolChooserKeepSymbol",    "symbol_chooser.keep_symbol" );
-    ret &= fromLegacy<bool>( aCfg, "SymbolChooserUseUnits",      "symbol_chooser.place_all_units" );
 
     const std::string vlf = "ViewlibFrame";
     ret &= fromLegacy<bool>( aCfg, vlf + "Maximized",            "lib_view.window.maximized" );

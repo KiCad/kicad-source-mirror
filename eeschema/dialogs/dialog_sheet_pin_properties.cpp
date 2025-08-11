@@ -37,8 +37,7 @@
 #include <gr_text.h>
 
 
-DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent,
-                                                          SCH_SHEET_PIN* aPin ) :
+DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
         DIALOG_SHEET_PIN_PROPERTIES_BASE( parent ),
         m_frame( parent ),
         m_sheetPin( aPin ),
@@ -70,18 +69,7 @@ DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 
-    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
-     * the flex grid sizer in wxGTK that prevents the last column from being sized
-     * correctly.  It doesn't cause any problems on win32 so it doesn't need to wrapped
-     * in ugly #ifdef __WXGTK__ #endif.
-     */
-    Layout();
-    Fit();
-    SetMinSize( GetSize() );
-
-    // On some windows manager (Unity, XFCE), this dialog is
-    // not always raised, depending on this dialog is run.
-    // Force it to be raised
+    // On some windows manager (Unity, XFCE), this dialog is not always raised, depending on how it is run.
     Raise();
 }
 
@@ -143,8 +131,7 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 
     if( m_fontCtrl->HaveFontSelection() )
     {
-        m_sheetPin->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                           m_italic->IsChecked() ) );
+        m_sheetPin->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
     }
 
     // Currently, eeschema uses only the text width as text size,

@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_USER_DEFINED_SIGNALS_H
-#define DIALOG_USER_DEFINED_SIGNALS_H
+#pragma once
 
 #include <dialog_user_defined_signals_base.h>
 
@@ -46,7 +45,6 @@ private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent, SCINTILLA_TRICKS* aTricks );
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
 
-    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
@@ -55,7 +53,3 @@ private:
 
     HTML_MESSAGE_BOX*        m_helpWindow;
 };
-
-
-
-#endif // DIALOG_USER_DEFINED_SIGNALS_H

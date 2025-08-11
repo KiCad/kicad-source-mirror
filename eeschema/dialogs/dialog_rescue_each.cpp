@@ -53,16 +53,9 @@ public:
      */
     DIALOG_RESCUE_EACH( wxWindow* aParent, RESCUER& aRescuer, SCH_SHEET_PATH* aCurrentSheet,
                         EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType, bool aAskShowAgain );
-
-    ~DIALOG_RESCUE_EACH();
+    ~DIALOG_RESCUE_EACH() = default;
 
 private:
-    SYMBOL_PREVIEW_WIDGET* m_previewNewWidget;
-    SYMBOL_PREVIEW_WIDGET* m_previewOldWidget;
-    RESCUER*        m_Rescuer;
-    SCH_SHEET_PATH* m_currentSheet;
-    bool            m_AskShowAgain;
-
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void PopulateConflictList();
@@ -74,35 +67,36 @@ private:
     // Display the 2 items (old in cache and new in library) corresponding to the
     // selected conflict in m_ListOfConflicts
     void displayItemsInConflict();
+
+private:
+    SYMBOL_PREVIEW_WIDGET* m_previewNewWidget;
+    SYMBOL_PREVIEW_WIDGET* m_previewOldWidget;
+    RESCUER*               m_rescuer;
+    SCH_SHEET_PATH*        m_currentSheet;
+    bool                   m_askShowAgain;
 };
 
 
-DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
-                                        RESCUER& aRescuer,
-                                        SCH_SHEET_PATH* aCurrentSheet,
-                                        EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType,
-                                        bool aAskShowAgain )
-    : DIALOG_RESCUE_EACH_BASE( aParent ),
-      m_Rescuer( &aRescuer ),
-      m_currentSheet( aCurrentSheet ),
-      m_AskShowAgain( aAskShowAgain )
+DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent, RESCUER& aRescuer, SCH_SHEET_PATH* aCurrentSheet,
+                                        EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType, bool aAskShowAgain ) :
+        DIALOG_RESCUE_EACH_BASE( aParent ),
+        m_rescuer( &aRescuer ),
+        m_currentSheet( aCurrentSheet ),
+        m_askShowAgain( aAskShowAgain )
 {
     wxASSERT( aCurrentSheet );
 
-    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel, &Kiway(), false,
-                                                    aGalBackEndType );
+    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel, &Kiway(), false, aGalBackEndType );
 	m_SizerOldPanel->Add( m_previewOldWidget, 1, wxEXPAND | wxALL, 5 );
 
-    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  &Kiway(), false,
-                                                    aGalBackEndType );
+    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  &Kiway(), false, aGalBackEndType );
 	m_SizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND | wxALL, 5 );
 
     // Set the info message, customized to include the proper suffix.
-    wxString info =
-        _( "This schematic was made using older symbol libraries which may break the "
-           "schematic.  Some symbols may need to be linked to a different symbol name.  "
-           "Some symbols may need to be \"rescued\" (copied and renamed) into a new library.\n\n"
-           "The following changes are recommended to update the project." );
+    wxString info = _( "This schematic was made using older symbol libraries which may break the "
+                       "schematic.  Some symbols may need to be linked to a different symbol name.  "
+                       "Some symbols may need to be \"rescued\" (copied and renamed) into a new library.\n\n"
+                       "The following changes are recommended to update the project." );
     m_htmlPrompt->AppendToPage( info );
 
     // wxDataViewListCtrl seems to do a poor job of laying itself out so help it along here.
@@ -117,8 +111,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
 
     int width = dc.GetTextExtent( header ).GetWidth() * 1.25;
 
-    m_ListOfConflicts->AppendToggleColumn( header, wxDATAVIEW_CELL_ACTIVATABLE, width,
-                                           wxALIGN_CENTER );
+    m_ListOfConflicts->AppendToggleColumn( header, wxDATAVIEW_CELL_ACTIVATABLE, width, wxALIGN_CENTER );
 
     header = _( "Symbol Name" );
     width = dc.GetTextExtent( header ).GetWidth() * 2;
@@ -158,11 +151,6 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
 }
 
 
-DIALOG_RESCUE_EACH::~DIALOG_RESCUE_EACH()
-{
-}
-
-
 bool DIALOG_RESCUE_EACH::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
@@ -171,7 +159,7 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
     PopulateConflictList();
     PopulateInstanceList();
 
-    if( !m_AskShowAgain )
+    if( !m_askShowAgain )
         m_btnNeverShowAgain->Hide();
 
     return true;
@@ -182,7 +170,7 @@ void DIALOG_RESCUE_EACH::PopulateConflictList()
 {
     wxVector<wxVariant> data;
 
-    for( RESCUE_CANDIDATE& each_candidate : m_Rescuer->m_all_candidates )
+    for( RESCUE_CANDIDATE& each_candidate : m_rescuer->m_all_candidates )
     {
         data.clear();
         data.push_back( wxVariant( true ) );
@@ -192,7 +180,7 @@ void DIALOG_RESCUE_EACH::PopulateConflictList()
         m_ListOfConflicts->AppendItem( data );
     }
 
-    if( !m_Rescuer->m_all_candidates.empty() )
+    if( !m_rescuer->m_all_candidates.empty() )
     {
         // Select the first choice
         m_ListOfConflicts->SelectRow( 0 );
@@ -212,12 +200,12 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     if( row == wxNOT_FOUND )
         row = 0;
 
-    RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
+    RESCUE_CANDIDATE& selected_part = m_rescuer->m_all_candidates[row];
 
     wxVector<wxVariant> data;
     int count = 0;
 
-    for( SCH_SYMBOL* eachSymbol : *m_Rescuer->GetSymbols() )
+    for( SCH_SYMBOL* eachSymbol : *m_rescuer->GetSymbols() )
     {
         if( eachSymbol->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
             continue;
@@ -247,13 +235,11 @@ void DIALOG_RESCUE_EACH::displayItemsInConflict()
     }
     else
     {
-        RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
+        RESCUE_CANDIDATE& selected_part = m_rescuer->m_all_candidates[row];
 
-        m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(),
-                                         selected_part.GetUnit(),
+        m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(), selected_part.GetUnit(),
                                          selected_part.GetConvert() );
-        m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(),
-                                         selected_part.GetUnit(),
+        m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(), selected_part.GetUnit(),
                                          selected_part.GetConvert() );
     }
 }
@@ -277,14 +263,14 @@ bool DIALOG_RESCUE_EACH::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    for( size_t index = 0; index < m_Rescuer->GetCandidateCount(); ++index )
+    for( size_t index = 0; index < m_rescuer->GetCandidateCount(); ++index )
     {
         wxVariant val;
         m_ListOfConflicts->GetValue( val, index, 0 );
         bool rescue_part = val.GetBool();
 
         if( rescue_part )
-            m_Rescuer->m_chosen_candidates.push_back( &m_Rescuer->m_all_candidates[index] );
+            m_rescuer->m_chosen_candidates.push_back( &m_rescuer->m_all_candidates[index] );
     }
 
     return true;
@@ -308,7 +294,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
         if( cfg )
             cfg->m_RescueNeverShow = true;
 
-        m_Rescuer->m_chosen_candidates.clear();
+        m_rescuer->m_chosen_candidates.clear();
         Close();
     }
 }
@@ -316,7 +302,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 
 void DIALOG_RESCUE_EACH::OnCancelClick( wxCommandEvent& aEvent )
 {
-    m_Rescuer->m_chosen_candidates.clear();
+    m_rescuer->m_chosen_candidates.clear();
     DIALOG_RESCUE_EACH_BASE::OnCancelClick( aEvent );
 }
 

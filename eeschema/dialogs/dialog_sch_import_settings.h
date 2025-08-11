@@ -21,12 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef KICAD_DIALOG_SCH_IMPORT_SETTINGS_H
-#define KICAD_DIALOG_SCH_IMPORT_SETTINGS_H
+#pragma once
 
 #include "dialog_sch_import_settings_base.h"
-
 
 class SCH_EDIT_FRAME;
 
@@ -39,14 +36,11 @@ public:
     void OnBrowseClicked( wxCommandEvent& event ) override;
     void OnSelectAll( wxCommandEvent& event ) override;
 
-    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    wxString GetFilePath() { return m_filePath; }
+    wxString GetFilePath() { return m_filePathCtrl->GetValue(); }
 
 protected:
     SCH_EDIT_FRAME*  m_frame;
-    static wxString  m_filePath;
 };
 
-#endif //KICAD_DIALOG_SCH_IMPORT_SETTINGS_H

@@ -30,6 +30,8 @@ DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE
         DIALOG_SIM_FORMAT_VALUE_BASE( aParent ),
         m_format( aFormat )
 {
+    OptOut( this );
+
     if( aFormat->Range.EndsWith( wxS( "V" ) ) )
     {
         m_units = aFormat->Range.Right( 1 );

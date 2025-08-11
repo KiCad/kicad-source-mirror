@@ -44,7 +44,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
     // different shapes (and even whether or not we're within the symbol editor) cause different
-    // dialog layouts).
+    // dialog layouts.
     m_hash_key = TO_UTF8( GetTitle() + aParent->GetName() );
 
     m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );

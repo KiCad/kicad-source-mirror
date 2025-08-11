@@ -60,11 +60,10 @@
 DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
         : DIALOG_MIGRATE_BUSES_BASE( aParent ), m_frame( aParent ), m_selected_index( 0 )
 {
-    m_migration_list->Bind( wxEVT_LIST_ITEM_SELECTED,
-                            &DIALOG_MIGRATE_BUSES::onItemSelected, this );
+    OptOut( this );     // No control state save/restore
 
-    m_btn_accept->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
-                        &DIALOG_MIGRATE_BUSES::onAcceptClicked, this );
+    m_migration_list->Bind( wxEVT_LIST_ITEM_SELECTED, &DIALOG_MIGRATE_BUSES::onItemSelected, this );
+    m_btn_accept->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MIGRATE_BUSES::onAcceptClicked, this );
 
     loadGraphData();
     updateUi();
@@ -75,11 +74,8 @@ DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
 
 DIALOG_MIGRATE_BUSES::~DIALOG_MIGRATE_BUSES()
 {
-    m_migration_list->Unbind( wxEVT_LIST_ITEM_SELECTED, &DIALOG_MIGRATE_BUSES::onItemSelected,
-                              this );
-
-    m_btn_accept->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MIGRATE_BUSES::onAcceptClicked,
-                          this );
+    m_migration_list->Unbind( wxEVT_LIST_ITEM_SELECTED, &DIALOG_MIGRATE_BUSES::onItemSelected, this );
+    m_btn_accept->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MIGRATE_BUSES::onAcceptClicked, this );
 }
 
 
@@ -119,6 +115,7 @@ void DIALOG_MIGRATE_BUSES::updateUi()
     for( auto& item : m_items )
     {
         wxString old = item.labels[0];
+
         for( unsigned j = 1; j < item.labels.size(); j++ )
             old << ", " << item.labels[j];
 
@@ -135,8 +132,7 @@ void DIALOG_MIGRATE_BUSES::updateUi()
 }
 
 
-std::vector<wxString> DIALOG_MIGRATE_BUSES::getProposedLabels(
-        const std::vector<wxString>& aLabelList )
+std::vector<wxString> DIALOG_MIGRATE_BUSES::getProposedLabels( const std::vector<wxString>& aLabelList )
 {
     int lowest_start = INT_MAX;
     int highest_end = -1;

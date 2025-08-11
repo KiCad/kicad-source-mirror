@@ -22,9 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_SHEET_PIN_PROPERTIES_H
-#define DIALOG_SHEET_PIN_PROPERTIES_H
-
+#pragma once
 
 #include <dialog_sheet_pin_properties_base.h>
 #include <widgets/unit_binder.h>
@@ -55,5 +53,3 @@ private:
 
     HTML_MESSAGE_BOX* m_helpWindow;
 };
-
-#endif // DIALOG_SHEET_PIN_PROPERTIES_H

@@ -50,13 +50,3 @@ bool DIALOG_UPDATE_CHECK_PROMPT::TransferDataFromWindow()
 
     return true;
 }
-
-
-bool DIALOG_UPDATE_CHECK_PROMPT::TransferDataToWindow()
-{
-    // Since this is a first time start dialog, just default to both checks true
-    m_cbPCMUpdates->SetValue( true );
-    m_cbKiCadUpdates->SetValue( true );
-
-    return true;
-}

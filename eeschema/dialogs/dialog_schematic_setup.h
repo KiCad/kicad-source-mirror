@@ -17,9 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef KICAD_DIALOG_SCHEMATIC_SETUP_H
-#define KICAD_DIALOG_SCHEMATIC_SETUP_H
+#pragma once
 
 #include <widgets/paged_dialog.h>
 
@@ -38,13 +36,14 @@ class DIALOG_SCHEMATIC_SETUP : public PAGED_DIALOG
 {
 public:
     DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame );
-    ~DIALOG_SCHEMATIC_SETUP();
+    ~DIALOG_SCHEMATIC_SETUP() = default;
 
 protected:
     // event handlers
     void onPageChanged( wxBookCtrlEvent& aEvent ) override;
     void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
+protected:
     SCH_EDIT_FRAME*           m_frame;
 
     std::shared_ptr<ERC_ITEM> m_pinToPinError;
@@ -60,6 +59,3 @@ protected:
     size_t                    m_netclassesPage;
     size_t                    m_embeddedFilesPage;
 };
-
-
-#endif //KICAD_DIALOG_SCHEMATIC_SETUP_H

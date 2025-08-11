@@ -25,31 +25,22 @@
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
-#include <schematic.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/filedlg.h>
 
 #include <dialog_sch_import_settings.h>
 
 
-wxString DIALOG_SCH_IMPORT_SETTINGS::m_filePath;     // remember for session
 
-
-DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent,
-                                                        SCH_EDIT_FRAME* aFrame ) :
+DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent, SCH_EDIT_FRAME* aFrame ) :
         DIALOG_SCH_IMPORT_SETTINGS_BASE( aParent ),
         m_frame( aFrame )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     SetupStandardButtons( { { wxID_OK, _( "Import Settings" ) } } );
-}
 
-
-bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataToWindow()
-{
-    m_filePathCtrl->SetValue( m_filePath );
-    return true;
+    finishDialogSettings();
 }
 
 
@@ -59,8 +50,7 @@ void DIALOG_SCH_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
     fn.SetExt( FILEEXT::ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
-                      FILEEXT::ProjectFileWildcard(),
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+                      FILEEXT::ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
     if( dlg.ShowModal() == wxID_OK )
         m_filePathCtrl->SetValue( dlg.GetPath() );
@@ -76,7 +66,6 @@ bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataFromWindow()
         return false;
     }
 
-    m_filePath = m_filePathCtrl->GetValue();
     return true;
 }
 

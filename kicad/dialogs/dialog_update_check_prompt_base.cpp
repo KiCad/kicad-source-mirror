@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,9 +29,11 @@ DIALOG_UPDATE_CHECK_PROMPT_BASE::DIALOG_UPDATE_CHECK_PROMPT_BASE( wxWindow* pare
 	bSizer4->Add( m_messageLine1, 0, wxALL, 5 );
 
 	m_cbKiCadUpdates = new wxCheckBox( this, wxID_ANY, _("KiCad"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbKiCadUpdates->SetValue(true);
 	bSizer4->Add( m_cbKiCadUpdates, 0, wxALL, 5 );
 
 	m_cbPCMUpdates = new wxCheckBox( this, wxID_ANY, _("Plugin and Content Manager"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPCMUpdates->SetValue(true);
 	bSizer4->Add( m_cbPCMUpdates, 0, wxALL, 5 );
 
 

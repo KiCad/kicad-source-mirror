@@ -95,8 +95,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
             {
                 ERC_SETTINGS& ercSettings = m_frame->Schematic().ErcSettings();
                 return new PANEL_SETUP_SEVERITIES( aParent, ERC_ITEM::GetItemsWithSeverities(),
-                                                   ercSettings.m_ERCSeverities,
-                                                   m_pinToPinError.get() );
+                                                   ercSettings.m_ERCSeverities, m_pinToPinError.get() );
             }, _( "Violation Severity" ) );
 
     m_pinMapPage = m_treebook->GetPageCount();
@@ -115,8 +114,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
                 SCHEMATIC& schematic = m_frame->Schematic();
                 return new PANEL_SETUP_NETCLASSES( aParent, m_frame,
                                                    m_frame->Prj().GetProjectFile().NetSettings(),
-                                                   schematic.GetNetClassAssignmentCandidates(),
-                                                   true );
+                                                   schematic.GetNetClassAssignmentCandidates(), true );
             }, _( "Net Classes" ) );
 
     m_busesPage = m_treebook->GetPageCount();
@@ -152,18 +150,13 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     if( Prj().IsReadOnly() )
     {
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. Settings will not be "
-                                   "editable." ), wxICON_WARNING );
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. Settings will not be editable." ),
+                                wxICON_WARNING );
     }
 
     wxBookCtrlEvent evt( wxEVT_TREEBOOK_PAGE_CHANGED, wxID_ANY, 0 );
 
     wxQueueEvent( m_treebook, evt.Clone() );
-}
-
-
-DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
-{
 }
 
 

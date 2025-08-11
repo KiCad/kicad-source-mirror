@@ -21,8 +21,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef _EESCHEMA_SETTINGS_H
-#define _EESCHEMA_SETTINGS_H
+#pragma once
 
 #include <wx/aui/framemanager.h>
 
@@ -65,8 +64,6 @@ public:
         int edit_symbol_width;
         int edit_symbol_height;
         wxString edit_sheet_visible_columns;
-        int edit_sheet_width;
-        int edit_sheet_height;
         wxString edit_label_visible_columns;
         int edit_label_width;
         int edit_label_height;
@@ -267,8 +264,6 @@ public:
         int  width;
         int  height;
         int  sort_mode;
-        bool keep_symbol;
-        bool place_all_units;
     };
 
     struct DIALOG_IMPORT_GRAPHICS
@@ -371,5 +366,3 @@ public:
     wxString m_lastSymbolLibDir;
 };
 
-
-#endif

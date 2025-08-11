@@ -19,13 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DIALOG_MIGRATE_BUSES_H
-#define _DIALOG_MIGRATE_BUSES_H
+#pragma once
 
 #include <vector>
-
 #include <sch_edit_frame.h>
-
 #include <dialog_migrate_buses_base.h>
 
 class CONNECTION_SUBGRAPH;
@@ -34,25 +31,19 @@ class CONNECTION_SUBGRAPH;
 struct BUS_MIGRATION_STATUS
 {
     const CONNECTION_SUBGRAPH* subgraph;
-
-    std::vector<wxString> labels;
-
-    std::vector<wxString> possible_labels;
-
-    wxString approved_label;
-
-    bool approved;
+    std::vector<wxString>      labels;
+    std::vector<wxString>      possible_labels;
+    wxString                   approved_label;
+    bool                       approved;
 };
 
 class DIALOG_MIGRATE_BUSES : public DIALOG_MIGRATE_BUSES_BASE
 {
 public:
-
     DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent );
     ~DIALOG_MIGRATE_BUSES();
 
 private:
-
     void loadGraphData();
 
     void updateUi();
@@ -63,12 +54,9 @@ private:
 
     void onAcceptClicked( wxCommandEvent& aEvent );
 
-
+private:
     SCH_EDIT_FRAME* m_frame;
-
-    unsigned m_selected_index;
+    unsigned        m_selected_index;
 
     std::vector<BUS_MIGRATION_STATUS> m_items;
 };
-
-#endif

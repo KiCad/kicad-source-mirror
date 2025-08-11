@@ -107,17 +107,15 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                      nullptr, this );
+
+    finishDialogSettings();
 }
 
 
 DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
 {
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
         cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumnsAsString();
-        cfg->m_Appearance.edit_sheet_width = GetSize().x;
-        cfg->m_Appearance.edit_sheet_height = GetSize().y;
-    }
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
@@ -314,14 +312,12 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
         if( fn.IsAbsolute() && fn.MakeRelativeTo( screenFileName.GetPath() ) )
         {
-            wxMessageDialog makeRelDlg( this, _( "Use relative path for sheet file?" ),
-                                        _( "Sheet File Path" ),
+            wxMessageDialog makeRelDlg( this, _( "Use relative path for sheet file?" ), _( "Sheet File Path" ),
                                         wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
 
-            makeRelDlg.SetExtendedMessage( _( "Using relative hierarchical sheet file name paths "
-                                              "improves schematic portability across systems and "
-                                              "platforms.  Using absolute paths can result in "
-                                              "portability issues." ) );
+            makeRelDlg.SetExtendedMessage( _( "Using relative hierarchical sheet file name paths improves "
+                                              "schematic portability across systems and platforms.  Using "
+                                              "absolute paths can result in portability issues." ) );
             makeRelDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Use Relative Path" ) ),
                                        wxMessageDialog::ButtonLabel( _( "Use Absolute Path" ) ) );
 
@@ -516,7 +512,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             if( !wxCopyFile( *m_sourceSheetFilename, newAbsoluteFilename, false ) )
             {
                 msg.Printf( _( "Failed to copy schematic file '%s' to destination '%s'." ),
-                            currentScreenFileName.GetFullPath(), newAbsoluteFilename );
+                            currentScreenFileName.GetFullPath(),
+                            newAbsoluteFilename );
 
                 DisplayError( m_frame, msg );
 
@@ -575,8 +572,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             {
                 if( m_sheet->GetScreenCount() > 1 )
                 {
-                    if( !IsOK( this, wxString::Format( _( "Create new file '%s' with contents "
-                                                          "of '%s'?" ),
+                    if( !IsOK( this, wxString::Format( _( "Create new file '%s' with contents of '%s'?" ),
                                                        sheetFileName.GetFullName(),
                                                        m_sheet->GetFileName() )
                                      + wxT( "\n\n" )
@@ -869,7 +865,6 @@ void DIALOG_SHEET_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
     if( m_size != new_size )
     {
         m_size = new_size;
-
         AdjustGridColumns();
     }
 
@@ -877,17 +872,3 @@ void DIALOG_SHEET_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
     event.Skip();
 }
 
-
-void DIALOG_SHEET_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
-{
-    TransferDataToWindow();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    finishDialogSettings();
-
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    if( cfg && cfg->m_Appearance.edit_sheet_width > 0 && cfg->m_Appearance.edit_sheet_height > 0 )
-        SetSize( cfg->m_Appearance.edit_sheet_width, cfg->m_Appearance.edit_sheet_height );
-
-}

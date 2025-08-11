@@ -81,11 +81,16 @@ struct PICKED_SYMBOL
     int    Unit;
     int    Convert;
 
+    bool   KeepSymbol;
+    bool   PlaceAllUnits;
+
     std::vector<std::pair<FIELD_T, wxString>> Fields;
 
     PICKED_SYMBOL() :
             Unit( 1 ),
-            Convert( 1 )
+            Convert( 1 ),
+            KeepSymbol( false ),
+            PlaceAllUnits( false )
     {
     }
 };

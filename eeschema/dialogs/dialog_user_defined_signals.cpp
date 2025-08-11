@@ -68,15 +68,6 @@ DIALOG_USER_DEFINED_SIGNALS::~DIALOG_USER_DEFINED_SIGNALS()
 }
 
 
-bool DIALOG_USER_DEFINED_SIGNALS::TransferDataToWindow()
-{
-    if( !wxDialog::TransferDataToWindow() )
-        return false;
-
-    return true;
-}
-
-
 void DIALOG_USER_DEFINED_SIGNALS::addGridRow( const wxString& aText, int aId )
 {
     int row = m_grid->GetNumberRows();
@@ -127,8 +118,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onDeleteSignal( wxCommandEvent& event )
 }
 
 
-void DIALOG_USER_DEFINED_SIGNALS::onScintillaCharAdded( wxStyledTextEvent &aEvent,
-                                                        SCINTILLA_TRICKS* aTricks )
+void DIALOG_USER_DEFINED_SIGNALS::onScintillaCharAdded( wxStyledTextEvent &aEvent, SCINTILLA_TRICKS* aTricks )
 {
     wxStyledTextCtrl* textCtrl = aTricks->Scintilla();
     wxArrayString     tokens;

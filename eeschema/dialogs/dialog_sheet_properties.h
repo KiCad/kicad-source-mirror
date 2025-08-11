@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_SHEET_PROPERTIES_H
-#define DIALOG_SHEET_PROPERTIES_H
+#pragma once
 
 #include <fields_grid_table.h>
 #include <widgets/unit_binder.h>
@@ -59,7 +58,6 @@ private:
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
-    void OnInitDlg( wxInitDialogEvent& event ) override;
 
     void AdjustGridColumns();
 
@@ -82,5 +80,3 @@ private:
     SCH_SHEET          m_dummySheet;
     SCH_FIELD          m_dummySheetNameField;
 };
-
-#endif // DIALOG_SHEET_PROPERTIES_H

@@ -80,12 +80,6 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
     m_useUnits = new wxCheckBox( this, wxID_ANY, _( "Place all units" ) );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_keepSymbol->SetValue( cfg->m_SymChooserPanel.keep_symbol );
-        m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
-    }
-
     buttonsSizer->Add( m_keepSymbol, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
     buttonsSizer->Add( m_useUnits, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 30 );
 
@@ -114,12 +108,6 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
 
 DIALOG_SYMBOL_CHOOSER::~DIALOG_SYMBOL_CHOOSER()
 {
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        cfg->m_SymChooserPanel.keep_symbol = m_keepSymbol->GetValue();
-        cfg->m_SymChooserPanel.place_all_units = m_useUnits->GetValue();
-    }
-
     Unbind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
 }
 

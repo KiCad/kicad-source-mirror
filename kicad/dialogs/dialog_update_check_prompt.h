@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_UPDATE_CHECK_PROMPT_H
-#define DIALOG_UPDATE_CHECK_PROMPT_H
+#pragma once
 
 #include <dialogs/dialog_update_check_prompt_base.h>
 
@@ -34,7 +33,4 @@ public:
 
 protected:
     bool TransferDataFromWindow() override;
-    bool TransferDataToWindow() override;
 };
-
-#endif

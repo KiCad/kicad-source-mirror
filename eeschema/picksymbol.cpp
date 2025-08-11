@@ -90,6 +90,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
         aHistoryList.insert( aHistoryList.begin(), sel );
     }
 
+    sel.KeepSymbol = dlg.GetKeepSymbol();
+    sel.PlaceAllUnits = dlg.GetPlaceAllUnits();
     return sel;
 }
 
