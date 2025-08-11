@@ -41,6 +41,9 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_G
         m_group( aGroup ),
         m_commit( aCommit )
 {
+    // Properties dialogs don't really want state-saving/restoring
+    OptOut( this );
+
     m_bpAddMember->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpRemoveMember->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 

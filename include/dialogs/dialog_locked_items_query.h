@@ -39,5 +39,6 @@ public:
 private:
     void onOverrideLocks( wxCommandEvent& event ) override;
 
+private:
     PCBNEW_SETTINGS::LOCKING_OPTIONS& m_lockingOptions;
 };

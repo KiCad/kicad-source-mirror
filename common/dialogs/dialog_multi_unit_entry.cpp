@@ -26,7 +26,7 @@
 #include <eda_draw_frame.h>
 #include <widgets/unit_binder.h>
 #include <core/type_helpers.h>
-
+#include <string_utils.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
@@ -35,7 +35,8 @@
 
 WX_MULTI_ENTRY_DIALOG::WX_MULTI_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
                                               std::vector<ENTRY> aEntries ) :
-        DIALOG_SHIM( aParent, wxID_ANY, aCaption ), m_entries( std::move( aEntries ) )
+        DIALOG_SHIM( aParent, wxID_ANY, aCaption ),
+        m_entries( std::move( aEntries ) )
 {
     SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -57,51 +58,40 @@ WX_MULTI_ENTRY_DIALOG::WX_MULTI_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxS
                 [&]( const auto& aValue )
                 {
                     using EntryType = std::decay_t<decltype( aValue )>;
+
                     if constexpr( std::is_same_v<EntryType, UNIT_BOUND> )
                     {
                         // Label / Entry / Unit
                         // and a binder
-                        wxStaticText* label =
-                                new wxStaticText( this, wxID_ANY, entry.m_label, wxDefaultPosition,
-                                                  wxDefaultSize, 0 );
+                        wxStaticText* label = new wxStaticText( this, wxID_ANY, entry.m_label );
                         label->Wrap( -1 );
                         bSizerContent->Add( label, wxGBPosition( gbRow, 0 ), wxGBSpan( 1, 1 ),
-                                            wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM | wxLEFT,
-                                            5 );
+                                            wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM | wxLEFT, 5 );
 
-                        wxTextCtrl* textCtrl =
-                                new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                                wxDefaultSize, 0 );
+                        wxTextCtrl* textCtrl = new wxTextCtrl( this, wxID_ANY );
                         bSizerContent->Add( textCtrl, wxGBPosition( gbRow, 1 ), wxGBSpan( 1, 1 ),
                                             wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 5 );
 
-                        wxStaticText* unit_label = new wxStaticText(
-                                this, wxID_ANY, _( "unit" ), wxDefaultPosition, wxDefaultSize, 0 );
-                        unit_label->Wrap( -1 );
-                        bSizerContent->Add( unit_label, wxGBPosition( gbRow, 2 ), wxGBSpan( 1, 1 ),
-                                            wxTOP | wxBOTTOM | wxRIGHT | wxALIGN_CENTER_VERTICAL,
-                                            5 );
+                        wxStaticText* units = new wxStaticText( this, wxID_ANY, _( "unit" ) );
+                        units->Wrap( -1 );
+                        bSizerContent->Add( units, wxGBPosition( gbRow, 2 ), wxGBSpan( 1, 1 ),
+                                            wxTOP | wxBOTTOM | wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
 
                         if( !entry.m_tooltip.IsEmpty() )
                             textCtrl->SetToolTip( entry.m_tooltip );
 
                         m_controls.push_back( textCtrl );
-                        m_unit_binders.push_back( std::make_unique<UNIT_BINDER>(
-                                aParent, label, textCtrl, unit_label ) );
+                        m_unit_binders.push_back( std::make_unique<UNIT_BINDER>( aParent, label, textCtrl, units ) );
 
                         m_unit_binders.back()->SetValue( aValue.m_default );
                     }
                     else if constexpr( std::is_same_v<EntryType, CHECKBOX> )
                     {
                         // Checkbox across all 3 cols
-                        wxCheckBox* checkBox =
-                                new wxCheckBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                                wxDefaultSize, 0 );
+                        wxCheckBox* checkBox = new wxCheckBox( this, wxID_ANY, entry.m_label );
+                        checkBox->SetValue( aValue.m_default );
                         bSizerContent->Add( checkBox, wxGBPosition( gbRow, 0 ), wxGBSpan( 1, 3 ),
                                             wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-                        checkBox->SetLabel( entry.m_label );
-                        checkBox->SetValue( aValue.m_default );
 
                         if( !entry.m_tooltip.IsEmpty() )
                             checkBox->SetToolTip( entry.m_tooltip );
@@ -130,6 +120,10 @@ WX_MULTI_ENTRY_DIALOG::WX_MULTI_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxS
     sdbSizer1->Realize();
 
     bSizerMain->Add( sdbSizer1, 0, wxALL | wxEXPAND, 5 );
+
+    // DIALOG_SHIM needs a title--specific hash_key so we don't save/restore state between
+    // usage cases.
+    m_hash_key = TO_UTF8( GetTitle() );
 
     SetSizer( bSizerMain );
     SetupStandardButtons();

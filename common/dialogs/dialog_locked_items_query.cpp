@@ -25,11 +25,10 @@
 #include <bitmaps.h>
 
 
-DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent,
-                                                      std::size_t aLockedItemCount,
+DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, std::size_t aLockedItemCount,
                                                       PCBNEW_SETTINGS::LOCKING_OPTIONS& aLockingOptions ) :
-    DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent ),
-    m_lockingOptions( aLockingOptions )
+        DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent ),
+        m_lockingOptions( aLockingOptions )
 {
     m_icon->SetBitmap( KiBitmapBundle( BITMAPS::locked ) );
 
@@ -41,6 +40,10 @@ DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent,
 
     m_doNotShowBtn->SetToolTip( _( "Do not show this dialog again until KiCad restarts. "
                                    "You can re-enable this dialog in Pcbnew preferences." ) );
+
+    // While this dialog can get called for a lot of different use-cases, we'll assume that it
+    // does make sense to store state *between* the use-cases.  So we don't assign a separate
+    // hash key for each use case.
 
     SetInitialFocus( m_sdbSizerOK );
 

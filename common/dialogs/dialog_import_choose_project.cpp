@@ -101,8 +101,7 @@ std::vector<IMPORT_PROJECT_DESC> DIALOG_IMPORT_CHOOSE_PROJECT::GetProjects()
 
 
 std::vector<IMPORT_PROJECT_DESC>
-DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( wxWindow* aParent,
-                                        const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc )
+DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( wxWindow* aParent, const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc )
 {
     DIALOG_IMPORT_CHOOSE_PROJECT dlg( aParent, aProjectDesc );
 

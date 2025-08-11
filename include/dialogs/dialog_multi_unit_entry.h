@@ -77,8 +77,7 @@ public:
      * @param aCaption The dialog caption (title)
      * @param aEntries The list of entries
      */
-    WX_MULTI_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
-                           std::vector<ENTRY> aEntries );
+    WX_MULTI_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption, std::vector<ENTRY> aEntries );
 
     /**
      * Returns the values in the order they were added.

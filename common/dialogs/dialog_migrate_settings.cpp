@@ -27,7 +27,8 @@
 
 
 DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
-        DIALOG_MIGRATE_SETTINGS_BASE( nullptr ), m_manager( aManager )
+        DIALOG_MIGRATE_SETTINGS_BASE( nullptr ),
+        m_manager( aManager )
 {
     SetMinSize( FromDIP( GetMinSize() ) );
     m_standardButtonsCancel->SetLabel( _( "Quit KiCad" ) );
@@ -42,11 +43,6 @@ DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
     Layout();
     m_sizer->Fit( this );
     Centre();
-}
-
-
-DIALOG_MIGRATE_SETTINGS::~DIALOG_MIGRATE_SETTINGS()
-{
 }
 
 
@@ -106,8 +102,6 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataFromWindow()
         m_manager->SetMigrationSource( wxEmptyString );
     }
 
-
-
     return true;
 }
 
@@ -137,7 +131,7 @@ void DIALOG_MIGRATE_SETTINGS::OnPathDefocused( wxFocusEvent& event )
 void DIALOG_MIGRATE_SETTINGS::OnChoosePath( wxCommandEvent& event )
 {
     wxDirDialog dlg( nullptr, _( "Select Settings Path" ), m_cbPath->GetValue(),
-            wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+                     wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -160,7 +154,7 @@ void DIALOG_MIGRATE_SETTINGS::OnDefaultSelected( wxCommandEvent& event )
 bool DIALOG_MIGRATE_SETTINGS::validatePath()
 {
     wxString path = m_cbPath->GetValue();
-    bool valid = m_manager->IsSettingsPathValid( path );
+    bool valid = SETTINGS_MANAGER::IsSettingsPathValid( path );
 
     showPathError( !valid );
     m_standardButtons->GetAffirmativeButton()->Enable( valid && !path.IsEmpty() );

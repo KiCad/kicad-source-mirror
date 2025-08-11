@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DIALOG_MIGRATE_SETTINGS_H
-#define _DIALOG_MIGRATE_SETTINGS_H
+#pragma once
 
 #include "dialog_migrate_settings_base.h"
 
@@ -31,32 +30,24 @@ class KICOMMON_API DIALOG_MIGRATE_SETTINGS : public DIALOG_MIGRATE_SETTINGS_BASE
 {
 public:
     DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager );
-
-    ~DIALOG_MIGRATE_SETTINGS() override;
+    ~DIALOG_MIGRATE_SETTINGS() = default;
 
     bool TransferDataToWindow() override;
-
     bool TransferDataFromWindow() override;
 
 protected:
 
     void OnPrevVerSelected( wxCommandEvent& event ) override;
-
     void OnPathChanged( wxCommandEvent& event ) override;
-
     void OnPathDefocused( wxFocusEvent& event ) override;
-
     void OnChoosePath( wxCommandEvent& event ) override;
-
     void OnDefaultSelected( wxCommandEvent& event ) override;
 
 private:
-
     bool validatePath();
 
     void showPathError( bool aShow = true );
 
+private:
     SETTINGS_MANAGER* m_manager;
 };
-
-#endif

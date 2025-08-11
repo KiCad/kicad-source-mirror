@@ -42,6 +42,9 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( wxWindow* aParent, wxWindow* aEventS
         m_gridSizeX( aProvider, aEventSource, m_staticTextX, m_textX, m_staticTextXUnits, true ),
         m_gridSizeY( aProvider, aEventSource, m_staticTextY, m_textY, m_staticTextYUnits, true )
 {
+    // Properties dialogs don't really want state-saving/restoring
+    OptOut( this );
+
     SetupStandardButtons();
     SetInitialFocus( m_textName );
 
@@ -83,8 +86,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
         return false;
     }
 
-    if( !m_checkLinked->IsChecked()
-        && !m_gridSizeY.Validate( 0.001, 1000.0, EDA_UNITS::MM ) )
+    if( !m_checkLinked->IsChecked() && !m_gridSizeY.Validate( 0.001, 1000.0, EDA_UNITS::MM ) )
     {
         wxMessageBox( _( "Grid size Y out of range." ), _( "Error" ), wxOK | wxICON_ERROR );
         return false;
@@ -94,10 +96,8 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
     m_grid.name = m_textName->GetValue();
     // Grid X/Y are always stored in millimeters so we can compare them easily
-    m_grid.x = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(), EDA_UNITS::MM,
-                                                    gridX );
-    m_grid.y = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(), EDA_UNITS::MM,
-                                                    gridY );
+    m_grid.x = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(), EDA_UNITS::MM, gridX );
+    m_grid.y = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(), EDA_UNITS::MM, gridY );
 
     return true;
 }

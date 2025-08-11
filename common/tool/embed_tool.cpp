@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_embed_files.h>
 #include <dialogs/panel_embedded_files.h>
 #include <eda_draw_frame.h>
 #include <eda_item.h>
@@ -80,9 +79,7 @@ std::vector<wxString> EMBED_TOOL::GetFileList()
     std::vector<wxString> list;
 
     for( auto& [name, file] : m_files->EmbeddedFileMap() )
-    {
         list.push_back( name );
-    }
 
     return list;
 }
