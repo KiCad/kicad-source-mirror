@@ -44,6 +44,7 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
         m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                            m_staticPinTextPositionUnits, true ),
         m_validator( std::move( aValidator ) ),
+        m_inheritFromSymbolName( aInheritFromSymbolName ),
         m_nameIsDefaulted( true )
 {
     if( aSymbolNames.GetCount() )
@@ -54,19 +55,10 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
             unescapedNames.Add( UnescapeString( name ) );
 
         m_comboInheritanceSelect->SetStringList( unescapedNames );
-
-        if( !aInheritFromSymbolName.IsEmpty() )
-            m_comboInheritanceSelect->SetSelectedString( UnescapeString( aInheritFromSymbolName ) );
     }
 
     m_textName->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
     m_textReference->SetValidator( FIELD_VALIDATOR( FIELD_T::REFERENCE ) );
-
-    if( !aInheritFromSymbolName.IsEmpty() )
-    {
-        m_textName->ChangeValue( UnescapeString( getDerivativeName( aInheritFromSymbolName ) ) );
-        m_nameIsDefaulted = true;
-    }
 
     m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 
@@ -111,6 +103,19 @@ DIALOG_LIB_NEW_SYMBOL::~DIALOG_LIB_NEW_SYMBOL()
                                            wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ),
                                            nullptr, this );
 }
+
+
+bool DIALOG_LIB_NEW_SYMBOL::TransferDataToWindow()
+{
+    if( !m_inheritFromSymbolName.IsEmpty() )
+    {
+        m_comboInheritanceSelect->SetSelectedString( UnescapeString( m_inheritFromSymbolName ) );
+        m_textName->ChangeValue( UnescapeString( getDerivativeName( m_inheritFromSymbolName ) ) );
+    }
+
+    return true;
+}
+
 
 bool DIALOG_LIB_NEW_SYMBOL::TransferDataFromWindow()
 {

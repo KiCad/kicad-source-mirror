@@ -106,6 +106,7 @@ public:
     bool GetPinNameInside() { return m_checkShowPinNameInside->GetValue(); }
 
 protected:
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
@@ -119,5 +120,6 @@ private:
 private:
     UNIT_BINDER                             m_pinTextPosition;
     std::function<bool( wxString newName )> m_validator;
+    wxString                                m_inheritFromSymbolName;
     bool                                    m_nameIsDefaulted;
 };
