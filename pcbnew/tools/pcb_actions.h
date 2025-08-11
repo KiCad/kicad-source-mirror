@@ -552,6 +552,7 @@ public:
     static TOOL_ACTION inspectConstraints;
     static TOOL_ACTION diffFootprint;
     static TOOL_ACTION showFootprintAssociations;
+    static TOOL_ACTION collect3DModels;
 
     // Appearance controls
     static TOOL_ACTION clearHighlight;          // Turns off highlight and resets previous highlight

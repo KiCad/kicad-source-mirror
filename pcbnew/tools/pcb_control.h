@@ -103,6 +103,7 @@ public:
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PCB_IO& pi, wxString& fileName );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
+    int CollectAndEmbed3DModels( const TOOL_EVENT& aEvent );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
 
