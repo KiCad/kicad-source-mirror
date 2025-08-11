@@ -25,6 +25,8 @@
 #define DIALOG_ASSIGN_NETCLASS_H
 
 #include <dialogs/dialog_assign_netclass_base.h>
+
+#include <functional>
 #include <set>
 
 
@@ -41,11 +43,15 @@ public:
 
 private:
     void onPatternText( wxCommandEvent& aEvent ) override;
+
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
     EDA_BASE_FRAME*    m_frame;
-    std::set<wxString> m_netCandidates;
+
+    const std::set<wxString> m_selectedNetNames;
+    std::set<wxString>       m_netCandidates;
 
     std::function<void( const std::vector<wxString>& )> m_previewer;
 
