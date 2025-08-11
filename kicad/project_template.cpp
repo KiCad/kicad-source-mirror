@@ -28,12 +28,14 @@
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 #include <wx/log.h>
+#include <wx/textfile.h>
+#include <unordered_map>
 
 #include <wildcards_and_files_ext.h>
 #include "project_template.h"
 
 
-#define SEP   wxFileName::GetPathSeparator()
+#define SEP wxFileName::GetPathSeparator()
 
 
 PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
@@ -74,14 +76,20 @@ class FILE_TRAVERSER : public wxDirTraverser
 {
 public:
     FILE_TRAVERSER( std::vector<wxFileName>& files, const wxString& exclude ) :
-        m_files( files ),
-        m_exclude( exclude )
-    { }
+            m_files( files ),
+            m_exclude( exclude )
+    {
+    }
 
     virtual wxDirTraverseResult OnFile( const wxString& filename ) override
     {
         wxFileName fn( filename );
         wxString   path( fn.GetPathWithSep() );
+
+        EnsureGitFiles( path );
+
+        if( IsIgnored( path, fn.GetFullName(), false ) )
+            return wxDIR_CONTINUE;
 
         bool exclude = fn.GetName().Contains( "fp-info-cache" )
                        || fn.GetName().StartsWith( FILEEXT::AutoSaveFilePrefix )
@@ -90,24 +98,19 @@ public:
         if( !exclude )
             m_files.emplace_back( wxFileName( filename ) );
 
-        if( path != m_oldPath )
-        {
-            const wxString gitfiles[] = { wxT( ".gitignore" ), wxT( ".gitattributes" ) };
-
-            for( const wxString& file : gitfiles )
-            {
-                if( wxFileExists( path + file ) )
-                    m_files.emplace_back( wxFileName( path + file ) );
-            }
-
-            m_oldPath = path;
-        }
-
         return wxDIR_CONTINUE;
     }
 
     virtual wxDirTraverseResult OnDir( const wxString& dirname ) override
     {
+        wxFileName dir( dirname );
+        wxString   parent = dir.GetPathWithSep();
+
+        EnsureGitFiles( parent );
+
+        if( dir.GetFullName() == wxT( ".git" ) || IsIgnored( parent, dir.GetFullName(), true ) )
+            return wxDIR_IGNORE;
+
         wxDirTraverseResult result = wxDIR_IGNORE;
 
         bool exclude = dirname.StartsWith( m_exclude ) || dirname.EndsWith( "-backups" );
@@ -115,6 +118,7 @@ public:
         if( !exclude )
         {
             m_files.emplace_back( wxFileName::DirName( dirname ) );
+            EnsureGitFiles( dirname + wxFileName::GetPathSeparator() );
             result = wxDIR_CONTINUE;
         }
 
@@ -122,9 +126,68 @@ public:
     }
 
 private:
-    std::vector<wxFileName>& m_files;
-    wxString                 m_exclude;
-    wxString                 m_oldPath;
+    void EnsureGitFiles( const wxString& path )
+    {
+        if( m_gitIgnores.find( path ) != m_gitIgnores.end() )
+            return;
+
+        wxString gitignore = path + wxT( ".gitignore" );
+
+        if( wxFileExists( gitignore ) )
+        {
+            wxFileInputStream input( gitignore );
+            wxTextInputStream text( input, wxT( "\x9" ), wxConvUTF8 );
+
+            while( input.IsOk() && !input.Eof() )
+            {
+                wxString line = text.ReadLine();
+
+                line.Trim().Trim( false );
+
+                if( line.IsEmpty() || line.StartsWith( wxT( "#" ) ) )
+                    continue;
+
+                m_gitIgnores[path].push_back( line );
+            }
+
+            m_files.emplace_back( wxFileName( gitignore ) );
+        }
+        else
+        {
+            m_gitIgnores[path] = {};
+        }
+
+        wxString gitattributes = path + wxT( ".gitattributes" );
+
+        if( wxFileExists( gitattributes ) )
+            m_files.emplace_back( wxFileName( gitattributes ) );
+    }
+
+    bool IsIgnored( const wxString& path, const wxString& name, bool isDir )
+    {
+        auto it = m_gitIgnores.find( path );
+
+        if( it == m_gitIgnores.end() )
+            return false;
+
+        for( const wxString& pattern : it->second )
+        {
+            bool     dirOnly = pattern.EndsWith( wxT( "/" ) );
+            wxString pat = dirOnly ? pattern.substr( 0, pattern.length() - 1 ) : pattern;
+
+            if( dirOnly && !isDir )
+                continue;
+
+            if( wxMatchWild( pat, name ) )
+                return true;
+        }
+
+        return false;
+    }
+
+    std::vector<wxFileName>&                            m_files;
+    wxString                                            m_exclude;
+    std::unordered_map<wxString, std::vector<wxString>> m_gitIgnores;
 };
 
 
@@ -141,13 +204,12 @@ std::vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
 
 wxString PROJECT_TEMPLATE::GetPrjDirName()
 {
-    return m_basePath.GetDirs()[ m_basePath.GetDirCount() - 1 ];
+    return m_basePath.GetDirs()[m_basePath.GetDirCount() - 1];
 }
 
 
 PROJECT_TEMPLATE::~PROJECT_TEMPLATE()
 {
-
 }
 
 
@@ -163,10 +225,9 @@ wxBitmap* PROJECT_TEMPLATE::GetIcon()
 }
 
 
-size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
-                                              std::vector< wxFileName >& aDestFiles )
+size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath, std::vector<wxFileName>& aDestFiles )
 {
-    std::vector< wxFileName > srcFiles = GetFileList();
+    std::vector<wxFileName> srcFiles = GetFileList();
 
     // Find the template file name base. this is the name of the .pro template file
     wxString basename;
@@ -174,8 +235,7 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
 
     for( wxFileName& file : srcFiles )
     {
-        if( file.GetExt() == FILEEXT::ProjectFileExtension
-            || file.GetExt() == FILEEXT::LegacyProjectFileExtension )
+        if( file.GetExt() == FILEEXT::ProjectFileExtension || file.GetExt() == FILEEXT::LegacyProjectFileExtension )
         {
             if( !basename.IsEmpty() && basename != file.GetName() )
                 multipleProjectFilesFound = true;
@@ -224,8 +284,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
     for( wxFileName& file : srcFiles )
     {
-        if( file.GetExt() == FILEEXT::ProjectFileExtension
-            || file.GetExt() == FILEEXT::LegacyProjectFileExtension )
+        if( file.GetExt() == FILEEXT::ProjectFileExtension || file.GetExt() == FILEEXT::LegacyProjectFileExtension )
         {
             if( !basename.IsEmpty() && basename != file.GetName() )
                 multipleProjectFilesFound = true;
@@ -249,8 +308,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
         {
             // Don't rename drawing sheet definitions; they're often shared
         }
-        else if( destFile.GetName().EndsWith( "-cache" )
-                    || destFile.GetName().EndsWith( "-rescue" ) )
+        else if( destFile.GetName().EndsWith( "-cache" ) || destFile.GetName().EndsWith( "-rescue" ) )
         {
             currname.Replace( basename, aNewProjectPath.GetName() );
         }
@@ -320,14 +378,14 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 wxString* PROJECT_TEMPLATE::GetTitle()
 {
     wxFFileInputStream input( GetHtmlFile().GetFullPath() );
-    wxString separator( wxT( "\x9" ) );
-    wxTextInputStream text( input, separator, wxConvUTF8 );
+    wxString           separator( wxT( "\x9" ) );
+    wxTextInputStream  text( input, separator, wxConvUTF8 );
 
     /* Open HTML file and get the text between the title tags */
     if( m_title == wxEmptyString )
     {
-        int start = 0;
-        int finish = 0;
+        int  start = 0;
+        int  finish = 0;
         bool done = false;
         bool hasStart = false;
 
