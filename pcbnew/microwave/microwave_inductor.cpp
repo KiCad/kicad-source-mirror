@@ -47,8 +47,8 @@
  * @param  aCenter = arc centre.
  * @param  a_ArcAngle = arc length in 0.1 degrees.
  */
-static void gen_arc( std::vector<VECTOR2I>& aBuffer, const VECTOR2I& aStartPoint,
-                     const VECTOR2I& aCenter, const EDA_ANGLE& a_ArcAngle )
+static void gen_arc( std::vector<VECTOR2I>& aBuffer, const VECTOR2I& aStartPoint, const VECTOR2I& aCenter,
+                     const EDA_ANGLE& a_ArcAngle )
 {
     VECTOR2D first_point = VECTOR2D( aStartPoint ) - aCenter;
     double   radius = first_point.EuclideanNorm();
@@ -93,39 +93,39 @@ enum class INDUCTOR_S_SHAPE_RESULT
  * @param  aWidth = segment width
  */
 static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& aBuffer,
-                                                         const VECTOR2I&        aStartPoint,
-                                                         const VECTOR2I& aEndPoint, int aLength,
-                                                         int aWidth )
+                                                         const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
+                                                         int aLength, int aWidth )
 {
-/* We must determine:
- * segm_count = number of segments perpendicular to the direction
- * segm_len = length of a strand
- * radius = radius of rounded parts of the coil
- * stubs_len = length of the 2 stubs( segments parallel to the direction)
- *         connecting the start point to the start point of the S shape
- *         and the ending point to the end point of the S shape
- * The equations are (assuming the area size of the entire shape is Size:
- * Size.x = 2 * radius + segm_len
- * Size.y = (segm_count + 2 ) * 2 * radius + 2 * stubs_len
- * aInductorPattern.m_length = 2 * delta // connections to the coil
- *             + (segm_count-2) * segm_len      // length of the strands except 1st and last
- *             + (segm_count) * (PI * radius)   // length of rounded
- * segm_len + / 2 - radius * 2)                 // length of 1st and last bit
- *
- * The constraints are:
- * segm_count >= 2
- * radius < m_Size.x
- * Size.y = (radius * 4) + (2 * stubs_len)
- * segm_len > radius * 2
- *
- * The calculation is conducted in the following way:
- * first:
- * segm_count = 2
- * radius = 4 * Size.x (arbitrarily fixed value)
- * Then:
- * Increasing the number of segments to the desired length
- * (radius decreases if necessary)
- */
+    /*
+     * We must determine:
+     * segm_count = number of segments perpendicular to the direction
+     * segm_len = length of a strand
+     * radius = radius of rounded parts of the coil
+     * stubs_len = length of the 2 stubs( segments parallel to the direction)
+     *         connecting the start point to the start point of the S shape
+     *         and the ending point to the end point of the S shape
+     * The equations are (assuming the area size of the entire shape is Size:
+     * Size.x = 2 * radius + segm_len
+     * Size.y = (segm_count + 2 ) * 2 * radius + 2 * stubs_len
+     * aInductorPattern.m_length = 2 * delta // connections to the coil
+     *             + (segm_count-2) * segm_len      // length of the strands except 1st and last
+     *             + (segm_count) * (PI * radius)   // length of rounded
+     * segm_len + / 2 - radius * 2)                 // length of 1st and last bit
+     *
+     * The constraints are:
+     * segm_count >= 2
+     * radius < m_Size.x
+     * Size.y = (radius * 4) + (2 * stubs_len)
+     * segm_len > radius * 2
+     *
+     * The calculation is conducted in the following way:
+     * first:
+     * segm_count = 2
+     * radius = 4 * Size.x (arbitrarily fixed value)
+     * Then:
+     * Increasing the number of segments to the desired length
+     * (radius decreases if necessary)
+     */
     wxPoint size;
 
     // This scale factor adjusts the arc length to handle
@@ -146,7 +146,8 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& 
 
     angle = -angle;
 
-    /* Note: calculations are made for a vertical coil (more easy calculations)
+    /*
+     * Note: calculations are made for a vertical coil (more easy calculations)
      * and after points are rotated to their actual position
      * So the main direction is the Y axis.
      * the 2 stubs are on the Y axis
@@ -363,7 +364,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     // Enter the desired length.
     wxString             msg = editFrame->StringFromValue( aInductorPattern.m_Length );
-    WX_TEXT_ENTRY_DIALOG dlg( editFrame, _( "Length of Track:" ), wxEmptyString, msg );
+    WX_TEXT_ENTRY_DIALOG dlg( editFrame, _( "Length of track:" ), _( "Create Microwave Footprint" ), msg );
 
     // TODO: why is this QuasiModal?
     if( dlg.ShowQuasiModal() != wxID_OK )
@@ -402,7 +403,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     // Generate footprint. the value is also used as footprint name.
     msg = wxT( "L" );
-    WX_TEXT_ENTRY_DIALOG cmpdlg( editFrame, _( "Component Value:" ), wxEmptyString, msg );
+    WX_TEXT_ENTRY_DIALOG cmpdlg( editFrame, _( "Component value:" ), _( "Create Microwave Footprint" ), msg );
     cmpdlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &msg ) );
 
     // TODO: why is this QuasiModal?
@@ -435,8 +436,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     pad->SetNumber( wxT( "1" ) );
     pad->SetPosition( aInductorPattern.m_End );
 
-    pad->SetSize( PADSTACK::ALL_LAYERS,
-                  VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
     pad->SetLayerSet( LSET( { footprint->GetLayer() } ) );
     pad->SetAttribute( PAD_ATTRIB::SMD );

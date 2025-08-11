@@ -27,14 +27,13 @@
  * from DIALOG_SHIM.
  */
 
-
-#ifndef _DIALOG_TEXT_ENTRY_H_
-#define _DIALOG_TEXT_ENTRY_H_
+#pragma once
 
 #include <vector>
 
 #include <dialog_text_entry_base.h>
 #include <wx/valtext.h>
+
 
 class WX_TEXT_ENTRY_DIALOG : public WX_TEXT_ENTRY_DIALOG_BASE
 {
@@ -42,16 +41,8 @@ public:
     WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,
                           const wxString& aDefaultValue = wxEmptyString, bool aExtraWidth = false );
 
-
-    WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,
-                          const wxString& aDefaultValue, const wxString& aChoiceCaption,
-                          const std::vector<wxString>& aChoices, int aDefaultChoice = 0 );
-
-    void SetTextValidator( wxTextValidatorStyle style );
     void SetTextValidator( const wxTextValidator& validator );
 
     wxString GetValue() const;
-    int GetChoice() const;
 };
 
-#endif      // _DIALOG_TEXT_ENTRY_H_

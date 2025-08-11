@@ -24,6 +24,7 @@
 
 #include <eda_draw_frame.h>
 #include <dialogs/dialog_unit_entry.h>
+#include <string_utils.h>
 
 
 WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
@@ -33,6 +34,10 @@ WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxStr
 {
     m_label->SetLabel( aLabel );
     m_unit_binder.SetValue( aDefaultValue );
+
+    // DIALOG_SHIM needs a title- and label-specific hash_key so we don't save/restore state between
+    // usage cases.
+    m_hash_key = TO_UTF8( aCaption + aLabel );
 
     SetInitialFocus( m_textCtrl );
     SetupStandardButtons();
@@ -65,6 +70,10 @@ WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString&
 
     m_unit_binder_x.SetValue( aDefaultValue.x );
     m_unit_binder_y.SetValue( aDefaultValue.y );
+
+    // DIALOG_SHIM needs a title- and label-specific hash_key so we don't save/restore state between
+    // usage cases.
+    m_hash_key = TO_UTF8( aCaption + aLabelX + aLabelY );
 
     SetInitialFocus( m_textCtrlX );
     SetupStandardButtons();

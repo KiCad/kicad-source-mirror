@@ -79,8 +79,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, const wxStri
 
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
-                                        const wxString&    aBoardPath,
-                                        JOB_EXPORT_PCB_3D* aJob ) :
+                                        const wxString& aBoardPath, JOB_EXPORT_PCB_3D* aJob ) :
         DIALOG_EXPORT_STEP_BASE( aEditFrame ),
         m_editFrame( aEditFrame ),
         m_job( aJob ),
@@ -130,13 +129,12 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
             break;
     }
 
-    if( !bad_scales.empty()
-            && !Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning )
+    if( !bad_scales.empty() && !Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning )
     {
         wxString extendedMsg = _( "Non-unity scaled models:" ) + wxT( "\n" ) + bad_scales;
 
-        KIDIALOG msgDlg( m_editFrame, _( "Scaled models detected.  "
-                                         "Model scaling is not reliable for mechanical export." ),
+        KIDIALOG msgDlg( m_editFrame, _( "Scaled models detected.  Model scaling is not reliable for "
+                                         "mechanical export." ),
                          _( "Model Scale Warning" ), wxOK | wxICON_WARNING );
         msgDlg.SetExtendedMessage( extendedMsg );
         msgDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
@@ -315,8 +313,8 @@ void DIALOG_EXPORT_STEP::onFormatChoice( wxCommandEvent& event )
 
 void DIALOG_EXPORT_STEP::OnFmtChoiceOptionChanged()
 {
-    wxString newExt = c_formatCommand[m_choiceFormat->GetSelection()];
-    wxString path = m_outputFileName->GetValue();
+    const wxString& newExt = c_formatCommand[m_choiceFormat->GetSelection()];
+    wxString        path = m_outputFileName->GetValue();
 
     int sepIdx = std::max( path.Find( '/', true ), path.Find( '\\', true ) );
     int dotIdx = path.Find( '.', true );
@@ -402,8 +400,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
         if( fn.FileExists() && !m_cbOverwriteFile->GetValue() )
         {
-            msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
-                        fn.GetFullPath() );
+            msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ), fn.GetFullPath() );
 
             if( wxMessageBox( msg, _( "STEP/GLTF Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
                 return;

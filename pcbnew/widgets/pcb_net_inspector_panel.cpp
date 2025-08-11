@@ -145,66 +145,51 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
     const std::vector<std::function<void( void )>> add_col{
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_NAME].display_name,
-                                          m_columns[COLUMN_NAME], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_LEFT,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_NAME].display_name, m_columns[COLUMN_NAME],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_LEFT,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_NETCLASS].display_name,
-                                          m_columns[COLUMN_NETCLASS], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_LEFT,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_NETCLASS].display_name, m_columns[COLUMN_NETCLASS],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_LEFT,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_TOTAL_LENGTH].display_name,
-                                          m_columns[COLUMN_TOTAL_LENGTH], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_TOTAL_LENGTH].display_name, m_columns[COLUMN_TOTAL_LENGTH],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_COUNT].display_name,
-                                          m_columns[COLUMN_VIA_COUNT], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_COUNT].display_name, m_columns[COLUMN_VIA_COUNT],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_LENGTH].display_name,
-                                          m_columns[COLUMN_VIA_LENGTH], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_LENGTH].display_name, m_columns[COLUMN_VIA_LENGTH],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_BOARD_LENGTH].display_name,
-                                          m_columns[COLUMN_BOARD_LENGTH], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_BOARD_LENGTH].display_name, m_columns[COLUMN_BOARD_LENGTH],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
             m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_DIE_LENGTH].display_name,
-                                          m_columns[COLUMN_PAD_DIE_LENGTH], wxDATAVIEW_CELL_INERT,
-                                          -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+                                          m_columns[COLUMN_PAD_DIE_LENGTH], wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_COUNT].display_name,
-                                          m_columns[COLUMN_PAD_COUNT], wxDATAVIEW_CELL_INERT, -1,
-                                          wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+            m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_COUNT].display_name, m_columns[COLUMN_PAD_COUNT],
+                                          wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         }
     };
 
@@ -224,7 +209,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
     }
 
     // Reset the column display settings if column count doesn't match
-    const int totalNumColumns = add_col.size() + m_board->GetCopperLayerCount();
+    const int totalNumColumns = (int) add_col.size() + m_board->GetCopperLayerCount();
 
     if( (int) cfg->col_order.size() != totalNumColumns
         || (int) cfg->col_hidden.size() != totalNumColumns )
@@ -266,8 +251,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
         {
             m_netsList->AppendTextColumn( m_board->GetLayerName( m_columns[addModelColumn].layer ),
                                           m_columns[addModelColumn], wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
-                                                  | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         }
         else
         {
@@ -285,9 +269,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
 
     // Delete the temporary config if used
     if( !m_boardLoaded )
-    {
         delete cfg;
-    }
 }
 
 
@@ -373,9 +355,7 @@ wxDataViewColumn* PCB_NET_INSPECTOR_PANEL::getDisplayedColumnForModelField( cons
         wxDataViewColumn* col = m_netsList->GetColumn( i );
 
         if( static_cast<int>( col->GetModelColumn() ) == columnId )
-        {
             return col;
-        }
     }
 
     return nullptr;
@@ -602,11 +582,10 @@ std::vector<CN_ITEM*> PCB_NET_INSPECTOR_PANEL::relevantConnectivityItems() const
 {
     // Pre-filter the connectivity items and sort them by netcode. This avoids quadratic runtime when building the whole
     // net list.
-    const auto type_bits = std::bitset<MAX_STRUCT_TYPE_ID>()
-                                   .set( PCB_TRACE_T )
-                                   .set( PCB_ARC_T )
-                                   .set( PCB_VIA_T )
-                                   .set( PCB_PAD_T );
+    const auto type_bits = std::bitset<MAX_STRUCT_TYPE_ID>().set( PCB_TRACE_T )
+                                                            .set( PCB_ARC_T )
+                                                            .set( PCB_VIA_T )
+                                                            .set( PCB_PAD_T );
 
     std::vector<CN_ITEM*> cn_items;
     cn_items.reserve( 1024 );
@@ -635,7 +614,7 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
     // Precondition: conItems and aNetCodes are sorted in increasing netcode value
     // Functionality: This extracts any items from conItems which have a netcode which is present in aNetCodes
     std::unordered_map<int, std::vector<LENGTH_DELAY_CALCULATION_ITEM>> netItemsMap;
-    std::vector<NETINFO_ITEM*>                                    foundNets;
+    std::vector<NETINFO_ITEM*>                                          foundNets;
 
     auto itemItr = conItems.begin();
     auto netCodeItr = aNetCodes.begin();
@@ -680,16 +659,21 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
             {
                 for( int i = start; i < end; ++i )
                 {
-                    int            netCode = foundNets[i]->GetNetCode();
+                    int netCode = foundNets[i]->GetNetCode();
 
                     constexpr PATH_OPTIMISATIONS opts = { .OptimiseViaLayers = true,
                                                           .MergeTracks = true,
                                                           .OptimiseTracesInPads = true,
                                                           .InferViaInPad = false };
-                    LENGTH_DELAY_STATS           lengthDetails = calc->CalculateLengthDetails(
-                            netItemsMap[netCode], opts, nullptr, nullptr, LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
-                            m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
-                                                              : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
+
+                    LENGTH_DELAY_STATS lengthDetails = calc->CalculateLengthDetails(
+                                            netItemsMap[netCode],
+                                            opts,
+                                            nullptr,
+                                            nullptr,
+                                            LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
+                                            m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
+                                                                    : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
 
                     if( aIncludeZeroPadNets || lengthDetails.NumPads > 0 )
                     {
@@ -965,8 +949,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBo
 }
 
 
-void PCB_NET_INSPECTOR_PANEL::OnBoardItemsChanged( BOARD&                    aBoard,
-                                                   std::vector<BOARD_ITEM*>& aBoardItems )
+void PCB_NET_INSPECTOR_PANEL::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
     updateBoardItems( aBoardItems );
 }
@@ -1048,13 +1031,11 @@ void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
     wxMenu menu;
 
     // Net edit menu items
-    wxMenuItem* highlightNet = new wxMenuItem( &menu, ID_HIGHLIGHT_SELECTED_NETS,
-                                               _( "Highlight Selected Net" ),
+    wxMenuItem* highlightNet = new wxMenuItem( &menu, ID_HIGHLIGHT_SELECTED_NETS, _( "Highlight Selected Net" ),
                                                wxEmptyString, wxITEM_NORMAL );
     menu.Append( highlightNet );
 
-    wxMenuItem* clearHighlighting = new wxMenuItem( &menu, ID_CLEAR_HIGHLIGHTING,
-                                                    _( "Clear Net Highlighting" ),
+    wxMenuItem* clearHighlighting = new wxMenuItem( &menu, ID_CLEAR_HIGHLIGHTING, _( "Clear Net Highlighting" ),
                                                     wxEmptyString, wxITEM_NORMAL );
     menu.Append( clearHighlighting );
 
@@ -1066,18 +1047,17 @@ void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
 
     menu.AppendSeparator();
 
-    wxMenuItem* renameNet = new wxMenuItem( &menu, ID_RENAME_NET, _( "Rename Selected Net..." ),
-                                            wxEmptyString, wxITEM_NORMAL );
+    wxMenuItem* renameNet = new wxMenuItem( &menu, ID_RENAME_NET, _( "Rename Selected Net..." ), wxEmptyString,
+                                            wxITEM_NORMAL );
     menu.Append( renameNet );
 
-    wxMenuItem* deleteNet = new wxMenuItem( &menu, ID_DELETE_NET, _( "Delete Selected Net" ),
-                                            wxEmptyString, wxITEM_NORMAL );
+    wxMenuItem* deleteNet = new wxMenuItem( &menu, ID_DELETE_NET, _( "Delete Selected Net" ), wxEmptyString,
+                                            wxITEM_NORMAL );
     menu.Append( deleteNet );
 
     menu.AppendSeparator();
 
-    wxMenuItem* addNet = new wxMenuItem( &menu, ID_ADD_NET, _( "Add Net..." ),
-                                         wxEmptyString, wxITEM_NORMAL );
+    wxMenuItem* addNet = new wxMenuItem( &menu, ID_ADD_NET, _( "Add Net..." ), wxEmptyString, wxITEM_NORMAL );
     menu.Append( addNet );
 
     if( !selItem && !multipleSelections )
@@ -1125,8 +1105,7 @@ void PCB_NET_INSPECTOR_PANEL::onAddGroup()
     NETNAME_VALIDATOR validator( &newGroupName );
 
     WX_TEXT_ENTRY_DIALOG dlg( this, _( "Group name / pattern:" ), _( "New Group" ), newGroupName );
-    wxStaticText* help = new wxStaticText( &dlg, wxID_ANY,
-                                           _( "(Use /.../ to indicate a regular expression.)" ) );
+    wxStaticText* help = new wxStaticText( &dlg, wxID_ANY, _( "(Use /.../ to indicate a regular expression.)" ) );
     help->SetFont( KIUI::GetInfoFont( this ).Italic() );
    	dlg.m_ContentSizer->Add( help, 0, wxALL|wxEXPAND, 5 );
     dlg.SetTextValidator( validator );
@@ -1147,8 +1126,7 @@ void PCB_NET_INSPECTOR_PANEL::onAddGroup()
                               } )
         == m_custom_group_rules.end() )
     {
-        m_custom_group_rules.push_back( std::make_unique<EDA_COMBINED_MATCHER>( newGroupName,
-                                                                                CTX_NET ) );
+        m_custom_group_rules.push_back( std::make_unique<EDA_COMBINED_MATCHER>( newGroupName, CTX_NET ) );
         SaveSettings();
     }
 

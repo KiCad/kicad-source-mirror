@@ -22,14 +22,13 @@
  */
 
 #include <dialogs/dialog_text_entry.h>
+#include <string_utils.h>
 
 
-WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent,
-                                            const wxString& aFieldLabel,
-                                            const wxString& aCaption,
-                                            const wxString& aDefaultValue,
+WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aFieldLabel,
+                                            const wxString& aCaption, const wxString& aDefaultValue,
                                             bool aExtraWidth ) :
-    WX_TEXT_ENTRY_DIALOG_BASE( aParent, wxID_ANY, aCaption, wxDefaultPosition, wxDefaultSize )
+        WX_TEXT_ENTRY_DIALOG_BASE( aParent, wxID_ANY, aCaption, wxDefaultPosition, wxDefaultSize )
 {
     if( aFieldLabel.IsEmpty() )
         m_label->Hide();
@@ -39,40 +38,16 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent,
     m_textCtrl->SetValue( aDefaultValue );
     m_textCtrl->SetMinSize( FromDIP( aExtraWidth ? wxSize( 700, -1 ) : wxSize( 300, -1 ) ) );
 
+    // DIALOG_SHIM needs a title- and label-specific hash_key so we don't save/restore state between
+    // usage cases.
+    m_hash_key = TO_UTF8( aCaption + aFieldLabel );
+
     SetupStandardButtons();
 
     SetInitialFocus( m_textCtrl );
 
     this->Layout();
     m_mainSizer->Fit( this );
-}
-
-
-WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel,
-                                            const wxString& aCaption,
-                                            const wxString& aDefaultValue,
-                                            const wxString& aChoiceCaption,
-                                            const std::vector<wxString>& aChoices,
-                                            int aDefaultChoice ) :
-              WX_TEXT_ENTRY_DIALOG( aParent, aLabel, aCaption, aDefaultValue )
-{
-    m_choiceLabel->SetLabel( aChoiceCaption );
-    m_choiceLabel->Show( true );
-
-    for( const wxString& choice : aChoices )
-        m_choice->Append( choice );
-
-    m_choice->SetSelection( aDefaultChoice );
-    m_choice->Show( true );
-
-    this->Layout();
-    m_mainSizer->Fit( this );
-}
-
-
-void WX_TEXT_ENTRY_DIALOG::SetTextValidator( wxTextValidatorStyle style )
-{
-    SetTextValidator( wxTextValidator(style) );
 }
 
 
@@ -87,9 +62,4 @@ wxString WX_TEXT_ENTRY_DIALOG::GetValue() const
     return m_textCtrl->GetValue();
 }
 
-
-int WX_TEXT_ENTRY_DIALOG::GetChoice() const
-{
-    return m_choice->GetCurrentSelection();
-}
 
