@@ -116,6 +116,12 @@ int EDA_3D_CONTROLLER::UpdateMenu( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
 {
+    // Track right mouse button state and movement
+    VECTOR2D rightButtonDownPos;
+
+    const int DRAG_THRESHOLD = 4; // pixels
+    bool rightButtonDragged = false;
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -138,9 +144,14 @@ int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
                 evt->SetPassEvent();
             }
         }
-        else if( evt->IsClick( BUT_RIGHT ) )
+        else if( evt->IsMouseDown() )
         {
-            m_menu->ShowContextMenu();
+        }
+        else if( evt->IsClick() && ( evt->Buttons() & BUT_RIGHT ) )
+        {
+
+            if( !m_canvas->m_mouse_was_moved )
+                m_menu->ShowContextMenu();
         }
         else
         {

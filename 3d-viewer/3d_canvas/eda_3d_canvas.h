@@ -238,6 +238,9 @@ private:
     void OnLeftUp( wxMouseEvent& event );
     void OnMiddleUp( wxMouseEvent& event );
     void OnMiddleDown( wxMouseEvent& event );
+    void OnRightUp( wxMouseEvent& event );
+    void OnRightDown( wxMouseEvent& event );
+
     void OnTimerTimeout_Editing( wxTimerEvent& event );
     void OnResize( wxSizeEvent& event );
     void OnTimerTimeout_Redraw( wxTimerEvent& event );

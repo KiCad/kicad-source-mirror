@@ -24,16 +24,15 @@
  */
 
 #include <gal/hidpi_gl_3D_canvas.h>
+#include <settings/common_settings.h>
 
 const float HIDPI_GL_3D_CANVAS::m_delta_move_step_factor = 0.7f;
 
-HIDPI_GL_3D_CANVAS::HIDPI_GL_3D_CANVAS( const KIGFX::VC_SETTINGS& aVcSettings, CAMERA& aCamera,
-                                        wxWindow* aParent, const wxGLAttributes& aGLAttribs,
-                                        wxWindowID aId, const wxPoint& aPos,
+HIDPI_GL_3D_CANVAS::HIDPI_GL_3D_CANVAS( const KIGFX::VC_SETTINGS& aVcSettings, CAMERA& aCamera, wxWindow* aParent,
+                                        const wxGLAttributes& aGLAttribs, wxWindowID aId, const wxPoint& aPos,
                                         const wxSize& aSize, long aStyle, const wxString& aName,
                                         const wxPalette& aPalette ) :
-        HIDPI_GL_CANVAS( aVcSettings, aParent, aGLAttribs, aId, aPos, aSize, aStyle, aName,
-                         aPalette ),
+        HIDPI_GL_CANVAS( aVcSettings, aParent, aGLAttribs, aId, aPos, aSize, aStyle, aName, aPalette ),
         m_mouse_is_moving( false ),
         m_mouse_was_moved( false ),
         m_camera_is_moving( false ),
@@ -54,13 +53,25 @@ void HIDPI_GL_3D_CANVAS::OnMouseMoveCamera( wxMouseEvent& event )
 
     if( event.Dragging() )
     {
-        if( event.LeftIsDown() ) // Drag
-            m_camera.Drag( nativePosition );
-        else if( event.MiddleIsDown() ) // Pan
-            m_camera.Pan( nativePosition );
+        bool handled = false;
 
-        m_mouse_is_moving = true;
-        m_mouse_was_moved = true;
+        if( event.LeftIsDown() )
+        {
+            m_camera.Drag( nativePosition );
+            handled = true;
+        }
+        else if( ( event.MiddleIsDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::PAN )
+                 || ( event.RightIsDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::PAN ) )
+        {
+            m_camera.Pan( nativePosition );
+            handled = true;
+        }
+
+        if( handled )
+        {
+            m_mouse_is_moving = true;
+            m_mouse_was_moved = true;
+        }
     }
 
     m_camera.SetCurMousePosition( nativePosition );
@@ -74,13 +85,12 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
         return;
 
     // Pick the modifier, if any.  Shift beats control beats alt, we don't support more than one.
-    int modifiers = event.ShiftDown() ? WXK_SHIFT
-                                      : ( event.ControlDown() ? WXK_CONTROL
-                                                              : ( event.AltDown() ? WXK_ALT : 0 ) );
+    int modifiers =
+            event.ShiftDown() ? WXK_SHIFT : ( event.ControlDown() ? WXK_CONTROL : ( event.AltDown() ? WXK_ALT : 0 ) );
 
-    float delta_move     = m_delta_move_step_factor * m_camera.GetZoom();
+    float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
     float horizontalSign = m_settings.m_scrollReversePanH ? -1 : 1;
-    float zoomSign       = m_settings.m_scrollReverseZoom ? -1 : 1;
+    float zoomSign = m_settings.m_scrollReverseZoom ? -1 : 1;
 
     if( aPan )
         delta_move *= 0.01f * event.GetWheelRotation();
@@ -98,8 +108,7 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
 
     if( aPan && modifiers != m_settings.m_scrollModifierZoom )
     {
-        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL
-            || modifiers == m_settings.m_scrollModifierPanH )
+        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL || modifiers == m_settings.m_scrollModifierPanH )
             m_camera.Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         else
             m_camera.Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
@@ -118,8 +127,7 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
     }
     else
     {
-        mouseActivity =
-                m_camera.Zoom( ( event.GetWheelRotation() * zoomSign ) > 0 ? 1.1f : 1 / 1.1f );
+        mouseActivity = m_camera.Zoom( ( event.GetWheelRotation() * zoomSign ) > 0 ? 1.1f : 1 / 1.1f );
     }
 
     // If it results on a camera movement

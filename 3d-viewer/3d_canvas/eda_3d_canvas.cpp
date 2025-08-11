@@ -69,6 +69,8 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, HIDPI_GL_3D_CANVAS )
     EVT_LEFT_UP( EDA_3D_CANVAS::OnLeftUp )
     EVT_MIDDLE_UP( EDA_3D_CANVAS::OnMiddleUp )
     EVT_MIDDLE_DOWN( EDA_3D_CANVAS::OnMiddleDown)
+    EVT_RIGHT_DOWN( EDA_3D_CANVAS::OnRightDown )
+    EVT_RIGHT_UP( EDA_3D_CANVAS::OnRightUp )
     EVT_MOUSEWHEEL( EDA_3D_CANVAS::OnMouseWheel )
     EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
     EVT_MAGNIFY( EDA_3D_CANVAS::OnMagnify )
@@ -1097,6 +1099,29 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
 
     m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
     Refresh();
+}
+
+
+void EDA_3D_CANVAS::OnRightDown( wxMouseEvent& event )
+{
+    SetFocus();
+    stop_editingTimeOut_Timer();
+
+    // Ensure m_camera.m_lastPosition is up to date for future drag events.
+    OnMouseMoveCamera( event );
+}
+
+
+void EDA_3D_CANVAS::OnRightUp( wxMouseEvent& event )
+{
+    if( m_camera_is_moving )
+        return;
+
+    if( m_mouse_is_moving )
+    {
+        m_mouse_is_moving = false;
+        restart_editingTimeOut_Timer();
+    }
 }
 
 
