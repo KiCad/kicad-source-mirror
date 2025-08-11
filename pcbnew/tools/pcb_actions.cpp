@@ -1284,6 +1284,12 @@ TOOL_ACTION PCB_ACTIONS::exportHyperlynx( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Hyperlynx..." ) )
         .Icon( BITMAPS::export_step ) );
 
+TOOL_ACTION PCB_ACTIONS::collect3DModels( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.collect3DModels" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Collect And Embed 3D Models" ) )
+        .Tooltip( _( "Collect footprint 3D models and embed them into the board" ) ) );
+
 
 // Track & via size control
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( TOOL_ACTION_ARGS()

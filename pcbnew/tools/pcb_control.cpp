@@ -56,6 +56,10 @@
 #include <pcb_generator.h>
 #include <project_pcb.h>
 #include <wildcards_and_files_ext.h>
+#include <filename_resolver.h>
+#include <3d_cache/3d_cache.h>
+#include <embedded_files.h>
+#include <wx/filename.h>
 #include <zone.h>
 #include <confirm.h>
 #include <kidialog.h>
@@ -2567,6 +2571,64 @@ int PCB_CONTROL::RehatchShapes( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::CollectAndEmbed3DModels( const TOOL_EVENT& aEvent )
+{
+    BOARD* brd = board();
+
+    if( !brd )
+        return 0;
+
+    PROJECT&           prj = m_frame->Prj();
+    S3D_CACHE*         cache = PROJECT_PCB::Get3DCacheManager( &prj );
+    FILENAME_RESOLVER* resolver = cache ? cache->GetResolver() : nullptr;
+
+    wxString                           workingPath = prj.GetProjectPath();
+    std::vector<const EMBEDDED_FILES*> stack;
+    stack.push_back( brd->GetEmbeddedFiles() );
+
+    BOARD_COMMIT commit( m_frame );
+    int          embeddedCount = 0;
+
+    for( FOOTPRINT* fp : brd->Footprints() )
+    {
+        bool fpModified = false;
+
+        for( FP_3DMODEL& model : fp->Models() )
+        {
+            if( model.m_Filename.StartsWith( FILEEXT::KiCadUriPrefix ) )
+                continue;
+
+            wxString fullPath =
+                    resolver ? resolver->ResolvePath( model.m_Filename, workingPath, stack ) : model.m_Filename;
+            wxFileName fname( fullPath );
+
+            if( fname.Exists() )
+            {
+                if( EMBEDDED_FILES::EMBEDDED_FILE* file = brd->GetEmbeddedFiles()->AddFile( fname, false ) )
+                {
+                    model.m_Filename = file->GetLink();
+                    fpModified = true;
+                    boardModified = true;
+                    embeddedCount++;
+                }
+            }
+        }
+
+        if( fpModified )
+            commit.Modify( fp );
+    }
+
+    if( embeddedCount > 0 )
+    {
+        commit.Push( _( "Embed 3D Models" ) );
+        wxString msg = wxString::Format( _( "%d 3D model(s) successfully embedded." ), embeddedCount );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000 );
+    }
+
+    return 0;
+}
+
+
 // clang-format off
 void PCB_CONTROL::setTransitions()
 {
@@ -2655,7 +2717,8 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::SnapModeFeedback,     PCB_EVENTS::SnappingModeChangedByKeyEvent() );
 
     // Miscellaneous
-    Go( &PCB_CONTROL::InteractiveDelete,    ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCB_CONTROL::InteractiveDelete,       ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCB_CONTROL::CollectAndEmbed3DModels, PCB_ACTIONS::collect3DModels.MakeEvent() );
 
     // Append control
     Go( &PCB_CONTROL::AppendDesignBlock,    PCB_ACTIONS::placeDesignBlock.MakeEvent() );
