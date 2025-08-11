@@ -52,6 +52,8 @@ private:
     void onCharHook( wxKeyEvent& aEvent );
     void OnContextMenu( wxMouseEvent& event ) override;
 
+    void checkPlausibility( const std::vector<std::shared_ptr<DRC_RULE>>& aRules );
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 

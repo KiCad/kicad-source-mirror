@@ -36,10 +36,13 @@
 #include <widgets/wx_html_report_box.h>
 #include <dialogs/html_message_box.h>
 #include <scintilla_tricks.h>
+#include <drc/drc_rule_condition.h>
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
 #include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
+#include <regex>
+#include <unordered_map>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParentWindow ),
@@ -721,6 +724,7 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
         DRC_RULES_PARSER parser( rulesText, _( "DRC rules" ) );
 
         parser.Parse( dummyRules, m_errorsReport );
+        checkPlausibility( dummyRules );
     }
     catch( PARSE_ERROR& pe )
     {
@@ -735,6 +739,76 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     }
 
     m_errorsReport->Flush();
+}
+
+
+void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC_RULE>>& aRules )
+{
+    BOARD*                 board = m_frame->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    LSET                   enabledLayers = board->GetEnabledLayers();
+
+    std::unordered_map<wxString, wxString> seenConditions;
+    std::regex                             netclassPattern( "NetClass\\s*[!=]=\\s*\"?([^\"\\s]+)\"?" );
+
+    for( const auto& rule : aRules )
+    {
+        wxString condition;
+
+        if( rule->m_Condition )
+            condition = rule->m_Condition->GetExpression();
+
+        condition.Trim( true ).Trim( false );
+
+        if( seenConditions.count( condition ) )
+        {
+            wxString msg = wxString::Format( _( "Rules '%s' and '%s' share the same condition." ), rule->m_Name,
+                                             seenConditions[condition] );
+            m_errorsReport->Report( msg, RPT_SEVERITY_WARNING );
+        }
+        else
+        {
+            seenConditions[condition] = rule->m_Name;
+        }
+
+        std::string          condUtf8 = condition.ToStdString();
+        std::sregex_iterator it( condUtf8.begin(), condUtf8.end(), netclassPattern );
+        std::sregex_iterator end;
+
+        for( ; it != end; ++it )
+        {
+            wxString ncName = wxString::FromUTF8( ( *it )[1].str() );
+
+            if( !bds.m_NetSettings->HasNetclass( ncName ) )
+            {
+                wxString msg =
+                        wxString::Format( _( "Rule '%s' references undefined netclass '%s'." ), rule->m_Name, ncName );
+                m_errorsReport->Report( msg, RPT_SEVERITY_WARNING );
+            }
+        }
+
+        if( !rule->m_LayerSource.IsEmpty() )
+        {
+            LSET invalid = rule->m_LayerCondition & ~enabledLayers;
+
+            if( invalid.any() )
+            {
+                wxString badLayers;
+
+                for( PCB_LAYER_ID layer : invalid.Seq() )
+                {
+                    if( !badLayers.IsEmpty() )
+                        badLayers += ", ";
+
+                    badLayers += board->GetLayerName( layer );
+                }
+
+                wxString msg = wxString::Format( _( "Rule '%s' references undefined layer(s): %s." ), rule->m_Name,
+                                                 badLayers );
+                m_errorsReport->Report( msg, RPT_SEVERITY_WARNING );
+            }
+        }
+    }
 }
 
 
