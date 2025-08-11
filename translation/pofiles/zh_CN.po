@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-05 12:13+0000\n"
+"PO-Revision-Date: 2025-08-11 14:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -1741,14 +1741,12 @@ msgid "Errors"
 msgstr "错误"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "替换并查找下一项"
+msgstr "替换已加载的文件?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "输出文件 '%s' 已存在, 是否覆盖?"
+msgstr "已有加载文件, 是否替换?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
