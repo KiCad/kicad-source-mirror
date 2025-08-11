@@ -276,7 +276,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
 
         TOOLBAR_TREE_ITEM_DATA* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( treeData );
 
-        wxASSERT( tbData );
+        wxCHECK2( tbData, continue );
 
         switch( tbData->GetType() )
         {
@@ -310,7 +310,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
 
                     TOOLBAR_TREE_ITEM_DATA* childTbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( childTreeData );
 
-                    wxASSERT( childTbData );
+                    wxCHECK2( childTbData, break );
 
                     switch( childTbData->GetType() )
                     {
