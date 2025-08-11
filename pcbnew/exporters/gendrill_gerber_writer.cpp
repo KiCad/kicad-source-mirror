@@ -390,6 +390,11 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
                 gbr_metadata.SetApertureAttrib(
                         GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDDRILL );
             }
+            else if( pad->GetProperty() == PAD_PROP::PRESSFIT )
+            {
+                gbr_metadata.SetApertureAttrib(
+                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PRESSFITDRILL );
+            }
             else
             {
                 // Good practice of oblong pad holes (slots) is to use a specific aperture for

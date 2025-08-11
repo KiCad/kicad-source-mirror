@@ -362,19 +362,29 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
                  diameter_in_inches( tool.m_Diameter ) );
 
         msg = From_UTF8( line );
+        const char* extra_info;
+
+        // Add more info for holes with specific constraints (castelleted, pressfit)
+        // note: only PTH pads have this option
+        if( tool.m_HoleAttribute == HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED )
+            extra_info = ", castellated";
+        else if( tool.m_HoleAttribute == HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT )
+            extra_info = ", press-fit";
+        else
+            extra_info = "";
 
         // Now list how many holes and ovals are associated with each drill.
         if( ( tool.m_TotalCount == 1 ) && ( tool.m_OvalCount == 0 ) )
-            snprintf( line, sizeof(line), "(1 hole)" );
+            snprintf( line, sizeof(line), "(1 hole%s)", extra_info );
         else if( tool.m_TotalCount == 1 ) // && ( toolm_OvalCount == 1 )
-            snprintf( line, sizeof(line), "(1 slot)" );
+            snprintf( line, sizeof(line), "(1 slot%s)", extra_info );
         else if( tool.m_OvalCount == 0 )
-            snprintf( line, sizeof(line), "(%d holes)", tool.m_TotalCount );
+            snprintf( line, sizeof(line), "(%d holes%s)", tool.m_TotalCount, extra_info );
         else if( tool.m_OvalCount == 1 )
-            snprintf( line, sizeof(line), "(%d holes + 1 slot)", tool.m_TotalCount - 1 );
+            snprintf( line, sizeof(line), "(%d holes + 1 slot%s)", tool.m_TotalCount - 1, extra_info );
         else // if ( toolm_OvalCount > 1 )
-            snprintf( line, sizeof(line), "(%d holes + %d slots)", tool.m_TotalCount - tool.m_OvalCount,
-                     tool.m_OvalCount );
+            snprintf( line, sizeof(line), "(%d holes + %d slots%s)", tool.m_TotalCount - tool.m_OvalCount,
+                     tool.m_OvalCount, extra_info );
 
         msg += From_UTF8( line );
 
@@ -550,15 +560,23 @@ unsigned GENDRILL_WRITER_BASE::printToolSummary( OUTPUTFORMATTER& out, bool aSum
 
         // Now list how many holes and ovals are associated with each drill.
         if( ( tool.m_TotalCount == 1 ) && ( tool.m_OvalCount == 0 ) )
-            out.Print( 0, "(1 hole)\n" );
+            out.Print( 0, "(1 hole" );
         else if( tool.m_TotalCount == 1 )
-            out.Print( 0, "(1 hole)  (with 1 slot)\n" );
+            out.Print( 0, "(1 hole)  (with 1 slot" );
         else if( tool.m_OvalCount == 0 )
-            out.Print( 0, "(%d holes)\n", tool.m_TotalCount );
+            out.Print( 0, "(%d holes)", tool.m_TotalCount );
         else if( tool.m_OvalCount == 1 )
-            out.Print( 0, "(%d holes)  (with 1 slot)\n", tool.m_TotalCount );
+            out.Print( 0, "(%d holes)  (with 1 slot", tool.m_TotalCount );
         else // tool.m_OvalCount > 1
-            out.Print( 0, "(%d holes)  (with %d slots)\n", tool.m_TotalCount, tool.m_OvalCount );
+            out.Print( 0, "(%d holes)  (with %d slots", tool.m_TotalCount, tool.m_OvalCount );
+
+        if( tool.m_HoleAttribute == HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED )
+            out.Print( 0, ", castellated" );
+
+        if( tool.m_HoleAttribute == HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT )
+            out.Print( 0, ", press-fit" );
+
+        out.Print( 0, ")\n");
 
         totalHoleCount += tool.m_TotalCount;
     }

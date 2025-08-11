@@ -1400,6 +1400,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     case PAD_PROP::HEATSINK:       props += _( "Heat sink" );       break;
     case PAD_PROP::CASTELLATED:    props += _( "Castellated" );     break;
     case PAD_PROP::MECHANICAL:     props += _( "Mechanical" );      break;
+    case PAD_PROP::PRESSFIT:       props += _( "Press-fit" );       break;
     }
 
     // TODO(JE) How to show complex padstack info in the message panel
@@ -2309,6 +2310,10 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
     if( GetProperty() == PAD_PROP::MECHANICAL && GetAttribute() != PAD_ATTRIB::PTH )
         aErrorHandler( DRCE_PADSTACK, _( "('mechanical' property is for PTH pads)" ) );
 
+    if( GetProperty() == PAD_PROP::PRESSFIT
+            && ( GetAttribute() != PAD_ATTRIB::PTH || !HasDrilledHole() ) )
+        aErrorHandler( DRCE_PADSTACK, _( "('press-fit' property is for PTH pads with round holes)" ) );
+
     switch( GetAttribute() )
     {
     case PAD_ATTRIB::NPTH:   // Not plated, but through hole, a hole is expected
@@ -2745,7 +2750,8 @@ static struct PAD_DESC
                 .Map( PAD_PROP::TESTPOINT,         _HKI( "Test point pad" ) )
                 .Map( PAD_PROP::HEATSINK,          _HKI( "Heatsink pad" ) )
                 .Map( PAD_PROP::CASTELLATED,       _HKI( "Castellated pad" ) )
-                .Map( PAD_PROP::MECHANICAL,        _HKI( "Mechanical pad" ) );
+                .Map( PAD_PROP::MECHANICAL,        _HKI( "Mechanical pad" ) )
+                .Map( PAD_PROP::PRESSFIT,          _HKI( "Press-fit pad" ) );
 
         ENUM_MAP<PAD_DRILL_SHAPE>::Instance()
                 .Map( PAD_DRILL_SHAPE::CIRCLE,     _HKI( "Round" ) )

@@ -263,6 +263,7 @@ pad_prop_castellated
 pad_prop_testpoint
 pad_prop_heatsink
 pad_prop_mechanical
+pad_prop_pressfit
 padstack
 padvia
 prefer_zone_connections

@@ -805,6 +805,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     case PAD_PROP::HEATSINK:         m_choiceFabProperty->SetSelection( 5 ); break;
     case PAD_PROP::CASTELLATED:      m_choiceFabProperty->SetSelection( 6 ); break;
     case PAD_PROP::MECHANICAL:       m_choiceFabProperty->SetSelection( 7 ); break;
+    case PAD_PROP::PRESSFIT:         m_choiceFabProperty->SetSelection( 8 ); break;
     }
 
     // Ensure the pad property is compatible with the pad type
@@ -1700,6 +1701,7 @@ PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
     case 5:  prop = PAD_PROP::HEATSINK;       break;
     case 6:  prop = PAD_PROP::CASTELLATED;    break;
     case 7:  prop = PAD_PROP::MECHANICAL;     break;
+    case 8:  prop = PAD_PROP::PRESSFIT;       break;
     }
 
     return prop;

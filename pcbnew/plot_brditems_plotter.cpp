@@ -258,6 +258,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
             metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDPAD );
             break;
 
+        case PAD_PROP::PRESSFIT:    // used only in drill files
         case PAD_PROP::NONE:
         case PAD_PROP::MECHANICAL:
             break;

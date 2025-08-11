@@ -43,11 +43,13 @@ class BOARD_ITEM;
 // in NC drill files
 enum class HOLE_ATTRIBUTE
 {
-    HOLE_UNKNOWN,       // uninitialized type
-    HOLE_VIA_THROUGH,   // a via hole (always plated) from top to bottom
-    HOLE_VIA_BURIED,    // a via hole (always plated) not through hole
-    HOLE_PAD,           // a plated or not plated pad hole
-    HOLE_MECHANICAL     // a mechanical pad (provided, not used)
+    HOLE_UNKNOWN,           // uninitialized type
+    HOLE_VIA_THROUGH,       // a via hole (always plated) from top to bottom
+    HOLE_VIA_BURIED,        // a via hole (always plated) not through hole
+    HOLE_PAD,               // a plated or not plated pad hole
+    HOLE_PAD_CASTELLATED,   // a plated castelleted pad hole
+    HOLE_PAD_PRESSFIT,      // a plated press-fit pad hole
+    HOLE_MECHANICAL         // a mechanical pad (provided, not used)
 };
 
 // Via Protection features according to IPC-4761.

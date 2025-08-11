@@ -104,6 +104,7 @@ enum class PAD_PROP
     HEATSINK,              ///< a pad used as heat sink, usually in SMD footprints
     CASTELLATED,           ///< a pad with a castellated through hole
     MECHANICAL,            ///< a pad used for mechanical support
+    PRESSFIT               ///< a PTH with a hole diameter with tight tolerances for press fit pin
 };
 
 

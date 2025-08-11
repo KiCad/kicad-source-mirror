@@ -147,9 +147,20 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair, bool aGe
                     continue;
 
                 new_hole.m_ItemParent     = pad;
-                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_ATTRIB::NPTH);
-                new_hole.m_HoleAttribute  = new_hole.m_Hole_NotPlated ? HOLE_ATTRIBUTE::HOLE_MECHANICAL
-                                                                      : HOLE_ATTRIBUTE::HOLE_PAD;
+                new_hole.m_Hole_NotPlated = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
+
+                if( new_hole.m_Hole_NotPlated )
+                    new_hole.m_HoleAttribute  = HOLE_ATTRIBUTE::HOLE_MECHANICAL;
+                else
+                {
+                    if( pad->GetProperty() == PAD_PROP::CASTELLATED )
+                        new_hole.m_HoleAttribute  = HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED;
+                    else if( pad->GetProperty() == PAD_PROP::PRESSFIT )
+                        new_hole.m_HoleAttribute  = HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT;
+                    else
+                        new_hole.m_HoleAttribute  = HOLE_ATTRIBUTE::HOLE_PAD;
+                }
+
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape     = 0;           // hole shape: round

@@ -176,7 +176,16 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute )
             break;
 
         case HOLE_ATTRIBUTE::HOLE_PAD:
+        //case HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED:
             fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ComponentDrill\n" );
+            break;
+
+        case HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED:
+            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,CastelletedDrill\n" );
+            break;
+
+        case HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT:
+            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ComponentDrill,PressFit\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_MECHANICAL:

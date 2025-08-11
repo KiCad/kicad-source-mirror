@@ -110,6 +110,8 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_
 
 bool DIALOG_GENDRILL::TransferDataToWindow()
 {
+    m_messagesBox->Clear();
+
     if( !m_job )
     {
         updatePrecisionOptions();
@@ -292,6 +294,7 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
     updateConfig();     // set params and Save drill options
 
     m_pcbEditFrame->ClearMsgPanel();
+    m_messagesBox->Clear();
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
     const PLOT_FORMAT filefmt[] = {
@@ -395,6 +398,7 @@ void DIALOG_GENDRILL::onGenReportFile( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    m_messagesBox->Clear();
     bool success;
 
     // Info is slightly different between Excellon and Gerber

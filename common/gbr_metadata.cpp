@@ -269,6 +269,11 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,ComponentDrill";
         break;
 
+    case GBR_APERTURE_ATTRIB_PRESSFITDRILL:
+        // print info associated to a flashed component pad with pressfit option in drill files
+        attribute_string = "TA.AperFunction,ComponentDrill,PressFit";
+        break;
+
     // print info associated to a component oblong pad hole in drill files
     // Same as a round pad hole, but is a specific aperture in drill file and
     // a G04 comment is added to the aperture function
