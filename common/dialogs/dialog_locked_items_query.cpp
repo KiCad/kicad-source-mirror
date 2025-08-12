@@ -30,6 +30,9 @@ DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, std::si
         DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent ),
         m_lockingOptions( aLockingOptions )
 {
+    // Potentially dangerous to save the state of the Do Not Show Again button between sessions.
+    OptOut( m_doNotShowBtn );
+
     m_icon->SetBitmap( KiBitmapBundle( BITMAPS::locked ) );
 
     m_messageLine1->SetLabel( wxString::Format( m_messageLine1->GetLabel(), aLockedItemCount ) );
