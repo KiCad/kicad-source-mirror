@@ -93,7 +93,7 @@ bool RULE_AREA_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
         m_parentView.SetVisible( &m_previewItem, true );
 
-        aMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
+        aMgr.SetLeaderMode( LEADER_MODE::DEG45 );
     }
 
     return m_rule_area != nullptr;
@@ -138,7 +138,7 @@ void RULE_AREA_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
 
         // In DEG45 mode, we may have intermediate points in the leader that should be included
         // as they are shown in the preview.  These typically maintain the 45 constraint
-        if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
+        if( aMgr.GetLeaderMode() == LEADER_MODE::DEG45 || aMgr.GetLeaderMode() == LEADER_MODE::DEG90 )
         {
             const SHAPE_LINE_CHAIN leaderPts = aMgr.GetLeaderLinePoints();
             for( int i = 1; i < leaderPts.PointCount(); i++ )

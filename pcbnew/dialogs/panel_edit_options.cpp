@@ -28,6 +28,7 @@
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
 #include <panel_edit_options.h>
+#include <geometry/geometry_utils.h>
 
 
 PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider,
@@ -104,7 +105,7 @@ static ARC_EDIT_MODE arcEditModeToEnum( int aIndex )
 
 void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
-    m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45DegreeLimit );
+    m_cbConstrainHV45Mode->SetValue( aCfg->m_AngleSnapMode != LEADER_MODE::DIRECT );
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_arcEditMode->SetSelection( arcEditModeToComboIndex( aCfg->m_ArcEditMode ) );
     m_trackMouseDragCtrl->SetSelection( (int) aCfg->m_TrackDragAction );
@@ -150,7 +151,7 @@ void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
     m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
-    m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45Limit );
+    m_cbConstrainHV45Mode->SetValue( aCfg->m_AngleSnapMode != LEADER_MODE::DIRECT );
     m_arcEditMode->SetSelection( arcEditModeToComboIndex( aCfg->m_ArcEditMode ) );
 }
 
@@ -178,7 +179,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
                                                                    : MAGNETIC_OPTIONS::NO_EFFECT;
             cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
-            cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
+            cfg->m_AngleSnapMode = m_cbConstrainHV45Mode->GetValue() ? LEADER_MODE::DEG45
+                                                                    : LEADER_MODE::DIRECT;
             cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
         }
     }
@@ -190,7 +192,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
             cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
             cfg->m_Display.m_RatsnestThickness = m_ratsnestThickness->GetValue();
 
-            cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
+            cfg->m_AngleSnapMode = m_cbConstrainHV45Mode->GetValue() ? LEADER_MODE::DEG45
+                                                                     : LEADER_MODE::DIRECT;
             cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
             cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
             cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();

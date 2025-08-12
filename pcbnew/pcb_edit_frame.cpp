@@ -30,6 +30,7 @@
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <api/api_plugin_manager.h>
 #include <fp_lib_table.h>
+#include <geometry/geometry_utils.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <lset.h>
@@ -888,7 +889,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto constrainedDrawingModeCond =
             [this]( const SELECTION& )
             {
-                return GetPcbNewSettings()->m_Use45DegreeLimit;
+                return GetPcbNewSettings()->m_AngleSnapMode != LEADER_MODE::DIRECT;
             };
 
     auto boardFlippedCond =

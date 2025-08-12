@@ -22,6 +22,7 @@
 
 #include <core/mirror.h> // for FLIP_DIRECTION
 #include <geometry/eda_angle.h>
+#include <geometry/geometry_utils.h>
 #include <settings/app_settings.h>
 #include <pcb_display_options.h>
 
@@ -108,7 +109,7 @@ class PCB_VIEWERS_SETTINGS_BASE : public APP_SETTINGS_BASE
 public:
     struct VIEWERS_DISPLAY_OPTIONS
     {
-        bool    m_Use45Limit;
+        LEADER_MODE m_AngleSnapMode;
         bool    m_DisplayGraphicsFill;
         bool    m_DisplayTextFill;
         bool    m_DisplayPadNumbers;
@@ -125,7 +126,7 @@ public:
         m_FootprintViewerZoom( 1.0 ),
         m_FootprintViewerAutoZoomOnSelect( true )
     {
-        m_ViewersDisplay.m_Use45Limit = false;
+        m_ViewersDisplay.m_AngleSnapMode = LEADER_MODE::DIRECT;
         m_ViewersDisplay.m_DisplayGraphicsFill = true;
         m_ViewersDisplay.m_DisplayTextFill = true;
         m_ViewersDisplay.m_DisplayPadNumbers = true;
@@ -246,7 +247,7 @@ public:
 
     bool               m_CtrlClickHighlight;
 
-    bool               m_Use45DegreeLimit;    // Constrain tool actions to horizontal, vertical and 45deg
+    LEADER_MODE        m_AngleSnapMode;        // Constrain tool actions to horizontal/vertical or 45°/90°
     FLIP_DIRECTION     m_FlipDirection;
 
     bool      m_ESCClearsNetHighlight;

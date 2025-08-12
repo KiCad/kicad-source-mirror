@@ -103,9 +103,9 @@ public:
     SELECTION_CONDITION ZoneDisplayMode( ZONE_DISPLAY_MODE aMode );
 
     /**
-     * Create a functor that tests whether only 45 degree lines should be allowed
+     * Create a functor that tests whether angle constraints are enabled
      *
-     * @return Functor returning true if only 45 degree lines should be allowed
+     * @return Functor returning true if angle constraints are enabled
      */
     SELECTION_CONDITION Get45degMode();
 
@@ -142,7 +142,7 @@ protected:
     static bool zoneDisplayModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame,
                                      ZONE_DISPLAY_MODE aMode );
 
-    ///< Helper function used by Line45degMode()
+    ///< Helper function used by Get45degMode()
     static bool get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
 
     /// Helper function used by FootprintViewerAutoZoom()

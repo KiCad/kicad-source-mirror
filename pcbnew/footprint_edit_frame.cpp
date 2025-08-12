@@ -30,6 +30,7 @@
 #include "tools/pcb_actions.h"
 #include "tools/pcb_control.h"
 #include "tools/pcb_picker_tool.h"
+#include <geometry/geometry_utils.h>
 #include "tools/align_distribute_tool.h"
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
@@ -1337,7 +1338,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     auto constrainedDrawingModeCond =
             [this]( const SELECTION& )
             {
-                return GetSettings()->m_Use45Limit;
+                return GetSettings()->m_AngleSnapMode != LEADER_MODE::DIRECT;
             };
 
     auto highContrastCond =

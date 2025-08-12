@@ -40,7 +40,6 @@ namespace PREVIEW
 class TWO_POINT_GEOMETRY_MANAGER
 {
 public:
-
     ///< Set the origin of the ruler (the fixed end)
     void SetOrigin( const VECTOR2I& aOrigin )
     {
@@ -58,10 +57,12 @@ public:
      */
     void SetEnd( const VECTOR2I& aEnd )
     {
-        if( m_angleSnap )
-            m_end = GetVectorSnapped45( aEnd - m_origin ) + m_origin;
-        else
-            m_end = aEnd;
+        switch( m_angleSnap )
+        {
+        case LEADER_MODE::DEG45: m_end = GetVectorSnapped45( aEnd - m_origin ) + m_origin; break;
+        case LEADER_MODE::DEG90: m_end = GetVectorSnapped90( aEnd - m_origin ) + m_origin; break;
+        default: m_end = aEnd; break;
+        }
     }
 
     VECTOR2I GetEnd() const
@@ -69,15 +70,9 @@ public:
         return m_end;
     }
 
-    void SetAngleSnap( bool aSnap )
-    {
-        m_angleSnap = aSnap;
-    }
+    void SetAngleSnap( LEADER_MODE aSnap ) { m_angleSnap = aSnap; }
 
-    bool GetAngleSnap() const
-    {
-        return m_angleSnap;
-    }
+    LEADER_MODE GetAngleSnap() const { return m_angleSnap; }
 
     /**
      * @return true if the manager is in the initial state
@@ -101,11 +96,10 @@ public:
     }
 
 private:
-
-    VECTOR2I m_origin;
-    VECTOR2I m_end;
-    bool     m_angleSnap = false;
-    bool     m_originSet = false;
+    VECTOR2I        m_origin;
+    VECTOR2I        m_end;
+    LEADER_MODE m_angleSnap = LEADER_MODE::DIRECT;
+    bool            m_originSet = false;
 };
 
 } // PREVIEW

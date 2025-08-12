@@ -228,6 +228,20 @@ static SHAPE_LINE_CHAIN build45DegLeader( const VECTOR2I& aEndPoint, const SHAPE
     return SHAPE_LINE_CHAIN( std::vector<VECTOR2I>{ lastPt, midInt, aEndPoint } );
 }
 
+static SHAPE_LINE_CHAIN build90DegLeader( const VECTOR2I& aEndPoint, const SHAPE_LINE_CHAIN& aLastPoints )
+{
+    if( aLastPoints.PointCount() < 1 )
+        return SHAPE_LINE_CHAIN();
+
+    const VECTOR2I lastPt = aLastPoints.CLastPoint();
+
+    if( lastPt.x == aEndPoint.x || lastPt.y == aEndPoint.y )
+        return SHAPE_LINE_CHAIN( std::vector<VECTOR2I>{ lastPt, aEndPoint } );
+
+    VECTOR2I mid( aEndPoint.x, lastPt.y );
+    return SHAPE_LINE_CHAIN( std::vector<VECTOR2I>{ lastPt, mid, aEndPoint } );
+}
+
 
 void POLYGON_GEOM_MANAGER::updateTemporaryLines( const VECTOR2I& aEndPoint, LEADER_MODE aModifier )
 {
@@ -240,6 +254,14 @@ void POLYGON_GEOM_MANAGER::updateTemporaryLines( const VECTOR2I& aEndPoint, LEAD
         {
             m_leaderPts = build45DegLeader( aEndPoint, m_lockedPoints );
             m_loopPts = build45DegLeader( aEndPoint, m_lockedPoints.Reverse() ).Reverse();
+        }
+    }
+    else if( m_leaderMode == LEADER_MODE::DEG90 || aModifier == LEADER_MODE::DEG90 )
+    {
+        if( m_lockedPoints.PointCount() > 0 )
+        {
+            m_leaderPts = build90DegLeader( aEndPoint, m_lockedPoints );
+            m_loopPts = build90DegLeader( aEndPoint, m_lockedPoints.Reverse() ).Reverse();
         }
     }
     else

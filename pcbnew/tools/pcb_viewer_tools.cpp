@@ -31,6 +31,7 @@
 #include <kiplatform/ui.h>
 #include <pcb_base_frame.h>
 #include <preview_items/ruler_item.h>
+#include <preview_items/two_point_geom_manager.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <tool/actions.h>
@@ -108,11 +109,38 @@ template<class T> void Flip( T& aValue )
 int PCB_VIEWER_TOOLS::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
 {
     if( frame()->IsType( FRAME_PCB_EDITOR ) )
-        Flip( GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit );
+    {
+        PCBNEW_SETTINGS* settings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+        switch( settings->m_AngleSnapMode )
+        {
+        case LEADER_MODE::DIRECT: settings->m_AngleSnapMode = LEADER_MODE::DEG45; break;
+        case LEADER_MODE::DEG45:  settings->m_AngleSnapMode = LEADER_MODE::DEG90; break;
+        default:                  settings->m_AngleSnapMode = LEADER_MODE::DIRECT; break;
+        }
+    }
     else if( frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
-        Flip( GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit );
+    {
+        FOOTPRINT_EDITOR_SETTINGS* settings = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+
+        switch( settings->m_AngleSnapMode )
+        {
+        case LEADER_MODE::DIRECT: settings->m_AngleSnapMode = LEADER_MODE::DEG45; break;
+        case LEADER_MODE::DEG45:  settings->m_AngleSnapMode = LEADER_MODE::DEG90; break;
+        default:                  settings->m_AngleSnapMode = LEADER_MODE::DIRECT; break;
+        }
+    }
     else
-        Flip( frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_Use45Limit );
+    {
+        LEADER_MODE& mode = frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_AngleSnapMode;
+
+        switch( mode )
+        {
+        case LEADER_MODE::DIRECT: mode = LEADER_MODE::DEG45; break;
+        case LEADER_MODE::DEG45:  mode = LEADER_MODE::DEG90; break;
+        default:                  mode = LEADER_MODE::DIRECT; break;
+        }
+    }
 
     frame()->UpdateStatusBar();
 
@@ -340,16 +368,22 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            bool force45Deg;
+            auto snap = LEADER_MODE::DIRECT;
 
             if( frame()->IsType( FRAME_PCB_EDITOR ) )
-                force45Deg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
+            {
+                snap = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode;
+            }
             else if( frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
-                force45Deg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
+            {
+                snap = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
+            }
             else
-                force45Deg = frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_Use45Limit;
+            {
+                snap = frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_AngleSnapMode;
+            }
 
-            twoPtMgr.SetAngleSnap( force45Deg );
+            twoPtMgr.SetAngleSnap( snap );
             twoPtMgr.SetEnd( cursorPos );
 
             view.SetVisible( &ruler, true );

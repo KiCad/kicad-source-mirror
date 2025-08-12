@@ -50,7 +50,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_DisplayInvertXAxis( false ),
         m_DisplayInvertYAxis( false ),
         m_RotationAngle( ANGLE_90 ),
-        m_Use45Limit( true ),
+        m_AngleSnapMode( LEADER_MODE::DEG45 ),
         m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_LibWidth( 250 ),
         m_LastExportPath(),
@@ -138,8 +138,9 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
             },
             900 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.fp_use_45_degree_limit",
-            &m_Use45Limit, false ) );
+    m_params.emplace_back( new PARAM<int>( "editing.fp_angle_snap_mode",
+            reinterpret_cast<int*>( &m_AngleSnapMode ),
+            static_cast<int>( LEADER_MODE::DEG45 ) ) );
 
     m_params.emplace_back( new PARAM_LAYER_PRESET( "pcb_display.layer_presets", &m_LayerPresets ) );
 

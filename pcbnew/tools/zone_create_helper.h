@@ -60,7 +60,7 @@ public:
         ZONE* m_sourceZone;
 
         ///< Zone leader mode
-        POLYGON_GEOM_MANAGER::LEADER_MODE m_leaderMode;
+        LEADER_MODE m_leaderMode;
     };
 
     /**

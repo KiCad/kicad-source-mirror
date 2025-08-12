@@ -25,6 +25,7 @@
 #define PREVIEW_POLYGON_GEOM_MANAGER__H_
 
 #include <geometry/shape_line_chain.h>
+#include <geometry/geometry_utils.h>
 
 /**
  * Class that handles the drawing of a polygon, including management of last corner deletion
@@ -61,15 +62,6 @@ public:
         virtual ~CLIENT()
         {
         }
-    };
-
-    /**
-     * The kind of the leader line
-     */
-    enum class LEADER_MODE
-    {
-        DIRECT,     ///< Unconstrained point-to-point
-        DEG45,      ///< 45 Degree only
     };
 
     /**

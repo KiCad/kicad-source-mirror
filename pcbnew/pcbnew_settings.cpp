@@ -58,7 +58,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
           m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
           m_CtrlClickHighlight( false ),
-          m_Use45DegreeLimit( false ),
+          m_AngleSnapMode( LEADER_MODE::DIRECT ),
           m_FlipDirection( FLIP_DIRECTION::TOP_BOTTOM ),
           m_ESCClearsNetHighlight( true ),
           m_PolarCoords( false ),
@@ -190,8 +190,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "editing.ctrl_click_highlight",
             &m_CtrlClickHighlight, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.pcb_use_45_degree_limit",
-            &m_Use45DegreeLimit, false ) );
+    m_params.emplace_back( new PARAM<int>( "editing.pcb_angle_snap_mode",
+            reinterpret_cast<int*>( &m_AngleSnapMode ),
+            static_cast<int>( LEADER_MODE::DIRECT ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
             &m_AutoRefillZones, false ) );

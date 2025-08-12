@@ -31,6 +31,7 @@
 #include <pcb_base_frame.h>
 #include <tool/selection.h>
 #include <tools/pcb_editor_conditions.h>
+#include <geometry/geometry_utils.h>
 
 #include <functional>
 #include <wx/debug.h>
@@ -200,11 +201,11 @@ bool PCB_EDITOR_CONDITIONS::zoneDisplayModeFunc( const SELECTION& aSelection, PC
 bool PCB_EDITOR_CONDITIONS::get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
     if( aFrame->IsType( FRAME_PCB_EDITOR ) )
-        return GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
+        return GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode != LEADER_MODE::DIRECT;
     else if( aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
-        return GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
+        return GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode != LEADER_MODE::DIRECT;
     else
-        return aFrame->GetViewerSettingsBase()->m_ViewersDisplay.m_Use45Limit;
+        return aFrame->GetViewerSettingsBase()->m_ViewersDisplay.m_AngleSnapMode != LEADER_MODE::DIRECT;
 }
 
 

@@ -1399,8 +1399,8 @@ TOOL_ACTION PCB_ACTIONS::toggleHV45Mode( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.toggle45" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_SHIFT + ' ' )
-        .FriendlyName( _( "Constrain to H, V, 45" ) )
-        .Tooltip( _( "Limit actions to horizontal, vertical, or 45 degrees from the starting point" ) )
+        .FriendlyName( _( "Cycle H/V/45 constraint" ) )
+        .Tooltip( _( "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::hv45mode ) );
 

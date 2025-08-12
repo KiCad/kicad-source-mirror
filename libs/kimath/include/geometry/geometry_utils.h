@@ -40,6 +40,16 @@
 #include <geometry/shape_compound.h>
 
 /**
+ * The kind of the leader line
+ */
+enum class LEADER_MODE
+{
+    DIRECT, ///< Unconstrained point-to-point
+    DEG45,  ///< 45 Degree only
+    DEG90   ///< 90 Degree only
+};
+
+/**
  * @return the number of segments to approximate a arc by segments
  * with a given max error (this number is >= 1)
  * @param aRadius is the radius od the circle or arc
@@ -130,6 +140,30 @@ VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec, bool only45 = false )
     return newVec;
 }
 
+
+/**
+ * Snap a vector onto the nearest horizontal or vertical line.
+ *
+ * The magnitude of the vector is NOT kept; instead one of the coordinates is
+ * set to zero as needed.  If the starting vector is on a square grid, the
+ * resulting snapped vector will remain on the same grid.
+ *
+ * @param aVec vector to be snapped
+ * @return the snapped vector
+ */
+template <typename T>
+VECTOR2<T> GetVectorSnapped90( const VECTOR2<T>& aVec )
+{
+    auto             newVec = aVec;
+    const VECTOR2<T> absVec{ std::abs( aVec.x ), std::abs( aVec.y ) };
+
+    if( absVec.x >= absVec.y )
+        newVec.y = 0;
+    else
+        newVec.x = 0;
+
+    return newVec;
+}
 
 /**
  * Clamps a vector to values that can be negated, respecting numeric limits

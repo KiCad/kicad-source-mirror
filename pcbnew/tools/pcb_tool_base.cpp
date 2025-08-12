@@ -330,10 +330,20 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
 
 bool PCB_TOOL_BASE::Is45Limited() const
 {
+    return GetAngleSnapMode() != LEADER_MODE::DIRECT;
+}
+
+bool PCB_TOOL_BASE::Is90Limited() const
+{
+    return GetAngleSnapMode() == LEADER_MODE::DEG90;
+}
+
+LEADER_MODE PCB_TOOL_BASE::GetAngleSnapMode() const
+{
     if( frame<PCB_BASE_FRAME>()->IsType( FRAME_PCB_EDITOR ) )
-        return GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_Use45DegreeLimit;
+        return GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode;
     else
-        return GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
+        return GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
 }
 
 

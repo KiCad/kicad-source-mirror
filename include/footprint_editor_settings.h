@@ -74,7 +74,7 @@ public:
 
     EDA_ANGLE m_RotationAngle;
 
-    bool m_Use45Limit;
+    LEADER_MODE m_AngleSnapMode;
 
     ARC_EDIT_MODE m_ArcEditMode;
 

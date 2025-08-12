@@ -35,6 +35,7 @@
 #include <pcb_view.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcbnew_settings.h>
+#include <preview_items/two_point_geom_manager.h>
 #include <functional>
 #include <tool/tool_menu.h>
 
@@ -113,6 +114,16 @@ public:
      * @return True if set to use 45°
      */
     virtual bool Is45Limited() const;
+
+    /**
+     * Should the tool limit drawing to horizontal and vertical only?
+     */
+    virtual bool Is90Limited() const;
+
+    /**
+     * Get the current angle snapping mode.
+     */
+    LEADER_MODE GetAngleSnapMode() const;
 
 protected:
     /**

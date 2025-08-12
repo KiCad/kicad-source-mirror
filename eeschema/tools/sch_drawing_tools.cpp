@@ -2617,8 +2617,8 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         polyGeomMgr.SetLeaderMode( m_frame->eeconfig()->m_Drawing.line_mode == LINE_MODE_FREE
-                                           ? POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT
-                                           : POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
+                                           ? LEADER_MODE::DIRECT
+                                           : LEADER_MODE::DEG45 );
 
         if( evt->IsCancelInteractive() )
         {

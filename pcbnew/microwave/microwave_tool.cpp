@@ -209,7 +209,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
         // the end point
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            tpGeomMgr.SetAngleSnap( Is45Limited() );
+            tpGeomMgr.SetAngleSnap( GetAngleSnapMode() );
             tpGeomMgr.SetEnd( cursorPos );
 
             view.SetVisible( &previewRect, true );

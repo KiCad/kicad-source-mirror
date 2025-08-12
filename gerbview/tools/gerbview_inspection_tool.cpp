@@ -286,7 +286,8 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
             // move or drag when origin set updates rules
-            twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
+            twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) ? LEADER_MODE::DEG45
+                                                             : LEADER_MODE::DIRECT );
             twoPtMgr.SetEnd( cursorPos );
 
             getView()->SetVisible( &ruler, true );
