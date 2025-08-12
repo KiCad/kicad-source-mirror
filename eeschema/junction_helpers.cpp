@@ -72,6 +72,11 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
                  || item->Type() == SCH_SYMBOL_T )
         {
             filtered.insert( item );
+
+            if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
+            {
+                info.hasBusEntry = true;
+            }
         }
     }
 
