@@ -86,7 +86,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridPads = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
-	m_gridPads->CreateGrid( 5, 2 );
+	m_gridPads->CreateGrid( 7, 2 );
 	m_gridPads->EnableEditing( false );
 	m_gridPads->EnableGridLines( false );
 	m_gridPads->EnableDragGridSize( false );

@@ -167,15 +167,19 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     m_fpTypes.push_back( FP_LINE_ITEM( FP_THROUGH_HOLE|FP_SMD, 0,               _( "Unspecified:" ) ) );
 
     m_padTypes.clear();
-    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::PTH,  _( "Through hole:" ) ) );
-    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::SMD,  _( "SMD:" ) ) );
-    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ) ) );
-    m_padTypes.push_back( LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ) ) );
+    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::PTH,  _( "Through hole:" ) ) );
+    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::SMD,  _( "SMD:" ) ) );
+    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ) ) );
+    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ) ) );
+
+    m_padFabProps.clear();
+    m_padFabProps.push_back( INFO_LINE_ITEM<PAD_PROP>( PAD_PROP::CASTELLATED, _( "Castellated pad:" ) ) );
+    m_padFabProps.push_back( INFO_LINE_ITEM<PAD_PROP>( PAD_PROP::PRESSFIT,    _( "Press-fit pad:" ) ) );
 
     m_viaTypes.clear();
-    m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::THROUGH,      _( "Through vias:" ) ) );
-    m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::BLIND_BURIED, _( "Blind/buried:" ) ) );
-    m_viaTypes.push_back( LINE_ITEM<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
+    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::THROUGH,      _( "Through vias:" ) ) );
+    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::BLIND_BURIED, _( "Blind/buried:" ) ) );
+    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
 
     // If there not enough rows in grids, append some
     int appendRows = (int) m_fpTypes.size() + 2 - m_gridComponents->GetNumberRows();
@@ -183,7 +187,7 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     if( appendRows > 0 )
         m_gridComponents->AppendRows( appendRows );
 
-    appendRows = (int) m_padTypes.size() + 1 - m_gridPads->GetNumberRows();
+    appendRows = (int) m_padTypes.size() + 1 + (int)m_padFabProps.size() - m_gridPads->GetNumberRows();
 
     if( appendRows > 0 )
         m_gridPads->AppendRows( appendRows );
@@ -241,12 +245,12 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         // Go through components types list
         for( FP_LINE_ITEM& line : m_fpTypes )
         {
-            if( ( footprint->GetAttributes() & line.attribute_mask ) == line.attribute_value )
+            if( ( footprint->GetAttributes() & line.m_Attribute_mask ) == line.m_Attribute_value )
             {
                 switch( footprint->GetSide() )
                 {
-                case F_Cu: line.frontSideQty++;                  break;
-                case B_Cu: line.backSideQty++;                   break;
+                case F_Cu: line.m_FrontSideQty++;                  break;
+                case B_Cu: line.m_BackSideQty++;                   break;
                 default:   /* unsided: user-layers only, etc. */ break;
                 }
 
@@ -257,11 +261,21 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         for( PAD* pad : footprint->Pads() )
         {
             // Go through pads types list
-            for( LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
+            for( INFO_LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
             {
-                if( pad->GetAttribute() == line.attribute )
+                if( pad->GetAttribute() == line.m_Attribute )
                 {
-                    line.qty++;
+                    line.m_Qty++;
+                    break;
+                }
+            }
+
+            // Go through pads prop list
+            for( INFO_LINE_ITEM<PAD_PROP>& line : m_padFabProps )
+            {
+                if( pad->GetProperty() == line.m_Attribute )
+                {
+                    line.m_Qty++;
                     break;
                 }
             }
@@ -293,14 +307,14 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 {
                     if( *it == drill )
                     {
-                        it->qty++;
+                        it->m_Qty++;
                         break;
                     }
                 }
 
                 if( it == m_drillTypes.end() )
                 {
-                    drill.qty = 1;
+                    drill.m_Qty = 1;
                     m_drillTypes.push_back( drill );
                     m_gridDrills->InsertRows();
                 }
@@ -315,11 +329,11 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         {
             PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
-            for( LINE_ITEM<VIATYPE>& line : m_viaTypes )
+            for( INFO_LINE_ITEM<VIATYPE>& line : m_viaTypes )
             {
-                if( via->GetViaType() == line.attribute )
+                if( via->GetViaType() == line.m_Attribute )
                 {
-                    line.qty++;
+                    line.m_Qty++;
                     break;
                 }
             }
@@ -334,14 +348,14 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             {
                 if( *it == drill )
                 {
-                    it->qty++;
+                    it->m_Qty++;
                     break;
                 }
             }
 
             if( it == m_drillTypes.end() )
             {
-                drill.qty = 1;
+                drill.m_Qty = 1;
                 m_drillTypes.push_back( drill );
                 m_gridDrills->InsertRows();
             }
@@ -475,25 +489,33 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     int totalPads  = 0;
     int row = 0;
 
-    for( const LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
+    for( const INFO_LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
     {
-        m_gridPads->SetCellValue( row, COL_LABEL, line.title );
-        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.qty ) );
-        totalPads += line.qty;
+        m_gridPads->SetCellValue( row, COL_LABEL, line.m_Title );
+        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.m_Qty ) );
+        totalPads += line.m_Qty;
         row++;
     }
 
     m_gridPads->SetCellValue( row, COL_LABEL, _( "Total:" ) );
     m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( totalPads ) );
+    row++;
+
+    for( const INFO_LINE_ITEM<PAD_PROP>& line : m_padFabProps )
+    {
+        m_gridPads->SetCellValue( row, COL_LABEL, line.m_Title );
+        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.m_Qty ) );
+        row++;
+    }
 
     int totalVias = 0;
     row = 0;
 
-    for( const LINE_ITEM<VIATYPE>& line : m_viaTypes )
+    for( const INFO_LINE_ITEM<VIATYPE>& line : m_viaTypes )
     {
-        m_gridVias->SetCellValue( row, COL_LABEL, line.title );
-        m_gridVias->SetCellValue( row, COL_AMOUNT, formatCount( line.qty ) );
-        totalVias += line.qty;
+        m_gridVias->SetCellValue( row, COL_LABEL, line.m_Title );
+        m_gridVias->SetCellValue( row, COL_AMOUNT, formatCount( line.m_Qty ) );
+        totalVias += line.m_Qty;
         row++;
     }
 
@@ -509,12 +531,12 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
     for( const FP_LINE_ITEM& line : m_fpTypes )
     {
-        m_gridComponents->SetCellValue( row, COL_LABEL, line.title );
-        m_gridComponents->SetCellValue( row, COL_FRONT_SIDE, formatCount( line.frontSideQty ) );
-        m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( line.backSideQty ) );
-        m_gridComponents->SetCellValue( row, 3, formatCount( line.frontSideQty + line.backSideQty ) );
-        totalFront += line.frontSideQty;
-        totalBack  += line.backSideQty;
+        m_gridComponents->SetCellValue( row, COL_LABEL, line.m_Title );
+        m_gridComponents->SetCellValue( row, COL_FRONT_SIDE, formatCount( line.m_FrontSideQty ) );
+        m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( line.m_BackSideQty ) );
+        m_gridComponents->SetCellValue( row, 3, formatCount( line.m_FrontSideQty + line.m_BackSideQty ) );
+        totalFront += line.m_FrontSideQty;
+        totalBack  += line.m_BackSideQty;
         row++;
     }
 
@@ -582,7 +604,7 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
         else
             stopLayerStr = board->GetLayerName( line.stopLayer );
 
-        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_COUNT, formatCount( line.qty ) );
+        m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_COUNT, formatCount( line.m_Qty ) );
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_SHAPE, shapeStr );
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_X_SIZE, m_frame->MessageTextFromValue( line.xSize ) );
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_Y_SIZE, m_frame->MessageTextFromValue( line.ySize ) );
@@ -779,13 +801,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     msg << _( "Pads" ) << wxT( "\n----\n" );
 
     for( auto& type : m_padTypes )
-        msg << wxT( "- " ) << type.title << wxS( " " ) << type.qty << wxT( "\n" );
+        msg << wxT( "- " ) << type.m_Title << wxS( " " ) << type.m_Qty << wxT( "\n" );
 
     msg << wxT( "\n" );
     msg << _( "Vias" ) << wxT( "\n----\n" );
 
     for( auto& type : m_viaTypes )
-        msg << wxT( "- " ) << type.title << wxS( " " ) << type.qty << wxT( "\n" );
+        msg << wxT( "- " ) << type.m_Title << wxS( " " ) << type.m_Qty << wxT( "\n" );
 
     // We will save data about components in the table.
     // We have to calculate column widths
@@ -804,9 +826,9 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     for( const FP_LINE_ITEM& line : m_fpTypes )
     {
         // Get maximum width for left label column
-        widths[0] = std::max( (int) line.title.size(), widths[0] );
-        frontTotal += line.frontSideQty;
-        backTotal += line.backSideQty;
+        widths[0] = std::max( (int) line.m_Title.size(), widths[0] );
+        frontTotal += line.m_FrontSideQty;
+        backTotal += line.m_BackSideQty;
     }
 
     // Get maximum width for other columns

@@ -47,18 +47,18 @@ public:
      * Type information, which will be shown in dialog.
      */
     template <typename T>
-    struct LINE_ITEM
+    struct INFO_LINE_ITEM
     {
-        LINE_ITEM( T aAttribute, const wxString& aTitle ) :
-                attribute( aAttribute ),
-                title( aTitle ),
-                qty( 0 )
+        INFO_LINE_ITEM( T aAttribute, const wxString& aTitle ) :
+                m_Attribute( aAttribute ),
+                m_Title( aTitle ),
+                m_Qty( 0 )
         {
         }
 
-        T          attribute;
-        wxString   title;
-        int        qty;
+        T          m_Attribute;
+        wxString   m_Title;
+        int        m_Qty;
     };
 
     /**
@@ -68,19 +68,19 @@ public:
     struct FP_LINE_ITEM
     {
         FP_LINE_ITEM( int aAttributeMask, int aAttributeValue, wxString aTitle ) :
-                attribute_mask( aAttributeMask ),
-                attribute_value( aAttributeValue ),
-                title( aTitle ),
-                frontSideQty( 0 ),
-                backSideQty( 0 )
+                m_Attribute_mask( aAttributeMask ),
+                m_Attribute_value( aAttributeValue ),
+                m_Title( aTitle ),
+                m_FrontSideQty( 0 ),
+                m_BackSideQty( 0 )
         {
         }
 
-        int      attribute_mask;
-        int      attribute_value;
-        wxString title;
-        int      frontSideQty;
-        int      backSideQty;
+        int      m_Attribute_mask;
+        int      m_Attribute_value;
+        wxString m_Title;
+        int      m_FrontSideQty;
+        int      m_BackSideQty;
     };
 
     struct DRILL_LINE_ITEM
@@ -106,7 +106,7 @@ public:
                 isPad( aIsPad ),
                 startLayer( aStartLayer ),
                 stopLayer( aStopLayer ),
-                qty( 0 )
+                m_Qty( 0 )
         {
         }
 
@@ -127,7 +127,7 @@ public:
                 switch( colId )
                 {
                 case COL_COUNT:
-                    return compareDrillParameters( aLeft.qty, aRight.qty );
+                    return compareDrillParameters( aLeft.m_Qty, aRight.m_Qty );
                 case COL_SHAPE:
                     return compareDrillParameters( static_cast<int>( aLeft.shape ),
                                                    static_cast<int>( aRight.shape ) );
@@ -159,12 +159,12 @@ public:
 
         int               xSize;
         int               ySize;
-        PAD_DRILL_SHAPE shape;
+        PAD_DRILL_SHAPE   shape;
         bool              isPlated;
         bool              isPad;
         PCB_LAYER_ID      startLayer;
         PCB_LAYER_ID      stopLayer;
-        int               qty;
+        int               m_Qty;
     };
 
     DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame );
@@ -212,10 +212,11 @@ private:
 
     bool            m_hasOutline;          ///< Show if board outline properly defined.
 
-    std::deque<FP_LINE_ITEM>          m_fpTypes;
-    std::deque<LINE_ITEM<PAD_ATTRIB>> m_padTypes;
-    std::deque<LINE_ITEM<VIATYPE>>    m_viaTypes;
-    std::deque<DRILL_LINE_ITEM>       m_drillTypes;
+    std::deque<FP_LINE_ITEM>                m_fpTypes;
+    std::deque<INFO_LINE_ITEM<PAD_ATTRIB>>  m_padTypes;
+    std::deque<INFO_LINE_ITEM<PAD_PROP>>    m_padFabProps;
+    std::deque<INFO_LINE_ITEM<VIATYPE>>     m_viaTypes;
+    std::deque<DRILL_LINE_ITEM>             m_drillTypes;
 
     int m_startLayerColInitialSize;        ///< Width of the start layer column as calculated by
                                            ///<    the wxWidgets autosizing algorithm.
