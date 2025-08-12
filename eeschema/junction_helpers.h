@@ -17,8 +17,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+
 #include <math/vector2d.h>
 #include <sch_rtree.h>
+
+
+class SCH_JUNCTION;
 
 namespace JUNCTION_HELPERS
 {
@@ -56,7 +61,7 @@ POINT_INFO AnalyzePoint( const EE_RTREE& aItem, const VECTOR2I& aPosition, bool 
  * @param aItems   Temporary items not yet added to the screen.
  * @return Locations of needed junctions represented as new SCH_JUNCTION items.
  */
-std::vector<class SCH_JUNCTION*> PreviewJunctions( const class SCH_SCREEN* aScreen,
-                                                   const std::vector<class SCH_ITEM*>& aItems );
+std::vector<SCH_JUNCTION*> PreviewJunctions( const class SCH_SCREEN* aScreen,
+                                             const std::vector<class SCH_ITEM*>& aItems );
 
 } // namespace JUNCTION_HELPERS
