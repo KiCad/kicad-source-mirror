@@ -182,7 +182,7 @@ private:
     void getDataFromPCB();
 
     ///< Apply data to dialog widgets.
-    void updateWidets();
+    void updateWidgets();
 
     ///< Update drills grid.
     void updateDrillGrid();
@@ -209,6 +209,10 @@ private:
     double          m_boardArea;
     double          m_frontCopperArea;
     double          m_backCopperArea;
+    int             m_minClearanceTrackToTrack;
+    int             m_minTrackWidth;
+    int             m_minDrillSize;
+    int             m_boardThickness;
 
     bool            m_hasOutline;          ///< Show if board outline properly defined.
 

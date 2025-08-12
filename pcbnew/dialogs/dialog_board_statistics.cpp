@@ -51,6 +51,10 @@
 #define ROW_BOARD_AREA 1
 #define ROW_FRONT_COPPER_AREA 2
 #define ROW_BACK_COPPER_AREA 3
+#define ROW_MIN_CLEARANCE 4
+#define ROW_MIN_TRACK_WIDTH 5
+#define ROW_MIN_DRILL_DIAMETER 6
+#define ROW_BOARD_THICKNESS 7
 
 
 /**
@@ -90,6 +94,10 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
         m_boardArea( 0.0 ),
         m_frontCopperArea( 0.0 ),
         m_backCopperArea( 0.0 ),
+        m_minClearanceTrackToTrack( std::numeric_limits<int>::max() ),
+        m_minTrackWidth( std::numeric_limits<int>::max() ),
+        m_minDrillSize( std::numeric_limits<int>::max() ),
+        m_boardThickness( 0 ),
         m_hasOutline( false ),
         m_startLayerColInitialSize( 1 ),
         m_stopLayerColInitialSize( 1 )
@@ -122,6 +130,10 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetCellValue( ROW_BOARD_AREA,        COL_LABEL, _( "Area:" ) );
     m_gridBoard->SetCellValue( ROW_FRONT_COPPER_AREA, COL_LABEL, _( "Front copper area:" ) );
     m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA,  COL_LABEL, _( "Back copper area:" ) );
+    m_gridBoard->SetCellValue( ROW_MIN_CLEARANCE,     COL_LABEL, _( "Min track clearance:" ) );
+    m_gridBoard->SetCellValue( ROW_MIN_TRACK_WIDTH,   COL_LABEL, _( "Min track width:" ) );
+    m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER,COL_LABEL, _( "Min drill diameter:" ) );
+    m_gridBoard->SetCellValue( ROW_BOARD_THICKNESS,   COL_LABEL, _( "Board stackup thickness:" ) );
 
     for( wxGrid* grid : { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard } )
     {
@@ -203,7 +215,7 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
 {
     refreshItemsTypes();
     getDataFromPCB();
-    updateWidets();
+    updateWidgets();
 
     Layout();
     m_drillsPanel->Layout();
@@ -325,6 +337,36 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     // Get via counts
     for( PCB_TRACK* track : board->Tracks() )
     {
+        // Get min track width
+        if( track->Type() == PCB_TRACE_T )
+            m_minTrackWidth = std::min( m_minTrackWidth, track->GetWidth() );
+
+        if( !track->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+            continue;
+
+        // Get min clearance between tracks
+        auto layer = track->GetLayer();
+        auto trackShapeA = track->GetEffectiveShape( layer );
+
+        for( PCB_TRACK* otherTrack : board->Tracks() )
+        {
+            if( layer != otherTrack->GetLayer() )
+                continue;
+
+            if( track->GetNetCode() == otherTrack->GetNetCode() )
+                continue;
+
+            if( !otherTrack->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+                continue;
+
+            int  actual = 0;
+            auto trackShapeB = otherTrack->GetEffectiveShape( layer );
+            bool collide = trackShapeA->Collide( trackShapeB.get(), m_minClearanceTrackToTrack, &actual );
+
+            if( collide )
+                m_minClearanceTrackToTrack = std::min( m_minClearanceTrackToTrack, actual );
+        }
+
         if( track->Type() == PCB_VIA_T )
         {
             PCB_VIA* via = static_cast<PCB_VIA*>( track );
@@ -475,6 +517,8 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 
     m_frontCopperArea = frontCopper.Area();
     m_backCopperArea = backCopper.Area();
+
+    m_boardThickness = board->GetStackupOrDefault().BuildBoardThicknessFromStackup();
 }
 
 
@@ -484,7 +528,7 @@ static wxString formatCount( int aCount )
 };
 
 
-void DIALOG_BOARD_STATISTICS::updateWidets()
+void DIALOG_BOARD_STATISTICS::updateWidgets()
 {
     int totalPads  = 0;
     int row = 0;
@@ -565,7 +609,19 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA, COL_AMOUNT,
                                m_frame->MessageTextFromValue( m_backCopperArea, true, EDA_DATA_TYPE::AREA ) );
 
+    m_gridBoard->SetCellValue( ROW_MIN_CLEARANCE, COL_AMOUNT,
+                               m_frame->MessageTextFromValue( m_minClearanceTrackToTrack, true, EDA_DATA_TYPE::DISTANCE ) );
+
+    m_gridBoard->SetCellValue( ROW_MIN_TRACK_WIDTH, COL_AMOUNT,
+                               m_frame->MessageTextFromValue( m_minTrackWidth, true, EDA_DATA_TYPE::DISTANCE ) );
+
+    m_gridBoard->SetCellValue( ROW_BOARD_THICKNESS, COL_AMOUNT,
+                               m_frame->MessageTextFromValue( m_boardThickness, true, EDA_DATA_TYPE::DISTANCE ) );
+
     updateDrillGrid();
+
+    m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER, COL_AMOUNT,
+                               m_frame->MessageTextFromValue( m_minDrillSize, true, EDA_DATA_TYPE::DISTANCE ) );
 
     m_gridComponents->AutoSize();
     m_gridPads->AutoSize();
@@ -593,6 +649,9 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
         case PAD_DRILL_SHAPE::OBLONG: shapeStr = _( "Slot" );  break;
         default:                      shapeStr = _( "???" );   break;
         }
+
+        if( line.shape == PAD_DRILL_SHAPE::CIRCLE )
+            m_minDrillSize = std::min( m_minDrillSize, line.xSize );
 
         if( line.startLayer == UNDEFINED_LAYER )
             startLayerStr = _( "N/A" );
@@ -736,7 +795,7 @@ void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& aEvent )
     s_savedDialogState.subtractHolesFromCopper = m_checkBoxSubtractHolesFromCopper->GetValue();
     refreshItemsTypes();
     getDataFromPCB();
-    updateWidets();
+    updateWidgets();
     Layout();
     m_drillsPanel->Layout();
 }
@@ -796,6 +855,18 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
             << m_frame->MessageTextFromValue( m_frontCopperArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
     msg << wxS( "- " ) << _( "Back copper area" ) + wxS( ": " )
             << m_frame->MessageTextFromValue( m_backCopperArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
+
+    msg << wxS( "- " ) << _( "Min track clearance" ) + wxS( ": " )
+        << m_frame->MessageTextFromValue( m_minClearanceTrackToTrack, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
+
+    msg << wxS( "- " ) << _( "Min track width" ) + wxS( ": " )
+        << m_frame->MessageTextFromValue( m_minTrackWidth, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
+
+    msg << wxS( "- " ) << _( "Min drill diameter" ) + wxS( ": " )
+        << m_frame->MessageTextFromValue( m_minDrillSize, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
+
+    msg << wxS( "- " ) << _( "Board stackup thickness" ) + wxS( ": " )
+        << m_frame->MessageTextFromValue( m_boardThickness, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
 
     msg << wxT( "\n" );
     msg << _( "Pads" ) << wxT( "\n----\n" );
