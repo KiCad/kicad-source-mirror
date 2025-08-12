@@ -71,7 +71,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     m_changesCount = 0;
 
     if( !m_matchByReference && !m_processValues && !m_processFootprints && !m_processReferences
-        && !m_processNetNames && !m_processAttributes )
+        && !m_processNetNames && !m_processAttributes && !m_processOtherFields )
     {
         m_reporter.ReportTail( _( "Select at least one property to back annotate." ),
                                RPT_SEVERITY_ERROR );
