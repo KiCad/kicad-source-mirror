@@ -247,6 +247,9 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     m_drillTypes.clear();
     m_gridDrills->ClearRows();
 
+    // Type list for track-related statistics gathering
+    static const std::vector<KICAD_T> trackTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T };
+
     // Get footprints and pads count
     for( FOOTPRINT* footprint : board->Footprints() )
     {
@@ -341,7 +344,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         if( track->Type() == PCB_TRACE_T )
             m_minTrackWidth = std::min( m_minTrackWidth, track->GetWidth() );
 
-        if( !track->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+        if( !track->IsType( trackTypes ) )
             continue;
 
         // Get min clearance between tracks
@@ -356,7 +359,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             if( track->GetNetCode() == otherTrack->GetNetCode() )
                 continue;
 
-            if( !otherTrack->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+            if( !otherTrack->IsType( trackTypes ) )
                 continue;
 
             int  actual = 0;
