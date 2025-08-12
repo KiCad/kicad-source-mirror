@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,9 +17,28 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	wxBoxSizer* bLeftColumn;
 	bLeftColumn = new wxBoxSizer( wxVERTICAL );
 
-	m_checkAutoAnnotate = new wxCheckBox( this, wxID_ANY, _("Automatically annotate symbols"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkAutoAnnotate->SetValue(true);
-	bLeftColumn->Add( m_checkAutoAnnotate, 0, wxTOP|wxLEFT, 12 );
+	m_orderLabel1 = new wxStaticText( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_orderLabel1->Wrap( -1 );
+	bLeftColumn->Add( m_orderLabel1, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
+
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Symbol unit notation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	bSizer5->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxString m_choiceSeparatorRefIdChoices[] = { _("A"), _(".A"), _("-A"), _("_A"), _(".1"), _("-1"), _("_1") };
+	int m_choiceSeparatorRefIdNChoices = sizeof( m_choiceSeparatorRefIdChoices ) / sizeof( wxString );
+	m_choiceSeparatorRefId = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceSeparatorRefIdNChoices, m_choiceSeparatorRefIdChoices, 0 );
+	m_choiceSeparatorRefId->SetSelection( 0 );
+	bSizer5->Add( m_choiceSeparatorRefId, 1, wxLEFT|wxRIGHT, 5 );
+
+
+	bLeftColumn->Add( bSizer5, 0, wxEXPAND, 0 );
 
 
 	bLeftColumn->Add( 0, 15, 0, wxEXPAND, 5 );
@@ -87,6 +106,9 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 
 	m_rbSheetX1000 = new wxRadioButton( this, wxID_SHEET_X_1000, _("First free after sheet number X 1000"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizerNumbering->Add( m_rbSheetX1000, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxTOP|wxBOTTOM|wxLEFT, 2 );
+
+	m_checkReuseRefdes = new wxCheckBox( this, wxID_ANY, _("Allow reference reuse"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerNumbering->Add( m_checkReuseRefdes, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL, 2 );
 
 
 	bLeftColumn->Add( gbSizerNumbering, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );

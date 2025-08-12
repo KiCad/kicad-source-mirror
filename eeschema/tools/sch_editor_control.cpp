@@ -1706,11 +1706,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     tempScreen->MigrateSimModels();
 
-    EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
+    bool annotateAutomatic = m_frame->eeconfig()->m_AnnotatePanel.automatic;
     SCHEMATIC_SETTINGS& schematicSettings = m_frame->Schematic().Settings();
     int annotateStartNum = schematicSettings.m_AnnotateStartNum;
 
-    PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
+    PASTE_MODE pasteMode = annotateAutomatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
     bool       forceRemoveAnnotations = false;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
@@ -1998,7 +1998,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
             {
                 SCH_SHEET_PATH subPath = updatePastedSheet( sheet, sheetPath, clipPath,
-                                                            ( forceKeepAnnotations && annotate.automatic ),
+                                                            ( forceKeepAnnotations && annotateAutomatic ),
                                                             &pastedSheets[sheetPath],
                                                             pastedSymbols );
             }
@@ -2119,6 +2119,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( !annotatedSymbols.empty() )
     {
+        ANNOTATE_ORDER_T annotateOrder = static_cast<ANNOTATE_ORDER_T>( schematicSettings.m_AnnotateSortOrder );
+        ANNOTATE_ALGO_T  annotateAlgo  = static_cast<ANNOTATE_ALGO_T>( schematicSettings.m_AnnotateMethod );
+
         for( SCH_SHEET_PATH& path : sheetPathsForScreen )
         {
             annotatedSymbols[path].SortByReferenceOnly();
@@ -2130,8 +2133,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
-                annotatedSymbols[path].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
-                                                            (ANNOTATE_ALGO_T) annotate.method,
+                annotatedSymbols[path].ReannotateByOptions( annotateOrder,
+                                                            annotateAlgo,
                                                             annotateStartNum, existingRefs, false,
                                                             &hierarchy );
             }
@@ -2153,8 +2156,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    annotatedSymbols[pastedSheetPath].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
-                                                                           (ANNOTATE_ALGO_T) annotate.method,
+                    annotatedSymbols[pastedSheetPath].ReannotateByOptions( annotateOrder,
+                                                                           annotateAlgo,
                                                                            annotateStartNum, existingRefs,
                                                                            false,
                                                                            &hierarchy );
@@ -2795,14 +2798,6 @@ int SCH_EDITOR_CONTROL::ToggleAnnotateAuto( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
     cfg->m_AnnotatePanel.automatic = !cfg->m_AnnotatePanel.automatic;
-    return 0;
-}
-
-
-int SCH_EDITOR_CONTROL::ToggleAnnotateRecursive( const TOOL_EVENT& aEvent )
-{
-    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
-    cfg->m_AnnotatePanel.recursive = !cfg->m_AnnotatePanel.recursive;
     return 0;
 }
 

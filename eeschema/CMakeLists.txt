@@ -176,8 +176,6 @@ set( EESCHEMA_DLGS
     dialogs/panel_eeschema_annotation_options_base.cpp
     dialogs/panel_eeschema_editing_options.cpp
     dialogs/panel_eeschema_editing_options_base.cpp
-    dialogs/panel_setup_annotation.cpp
-    dialogs/panel_setup_annotation_base.cpp
     dialogs/panel_setup_buses.cpp
     dialogs/panel_setup_buses_base.cpp
     dialogs/panel_setup_formatting.cpp

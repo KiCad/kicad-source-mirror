@@ -319,9 +319,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, this, frame );
         }
 
-        case PANEL_SCH_ANNO_OPTIONS:
-            return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, aKiway->Player( FRAME_SCH, false ) );
-
         case PANEL_SCH_TOOLBARS:
         {
             APP_SETTINGS_BASE* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );

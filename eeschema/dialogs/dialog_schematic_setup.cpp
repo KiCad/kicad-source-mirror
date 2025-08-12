@@ -22,10 +22,10 @@
 #include <schematic.h>
 #include <kiface_base.h>
 #include <dialog_sch_import_settings.h>
-#include <dialogs/panel_setup_annotation.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_buses.h>
+#include <panel_eeschema_annotation_options.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
 #include <erc/erc_item.h>
@@ -67,7 +67,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_SETUP_ANNOTATION( aParent, m_frame );
+                return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, m_frame );
             }, _( "Annotation" ) );
 
     m_fieldNameTemplatesPage = m_treebook->GetPageCount();
@@ -243,6 +243,12 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     {
         static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
                 ->ImportBomFmtPresetsFrom( *file.m_SchematicSettings );
+    }
+
+    if( importDlg.m_annotationOpt->GetValue() )
+    {
+        static_cast<PANEL_EESCHEMA_ANNOTATION_OPTIONS*>( m_treebook->ResolvePage( m_annotationPage ) )
+                ->ImportSettingsFrom( *file.m_SchematicSettings );
     }
 
     if( importDlg.m_BusAliasesOpt->GetValue() )

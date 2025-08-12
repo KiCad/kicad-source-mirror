@@ -809,7 +809,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( head && head->IsMoving() )
         moving = true;
-        
+
     if( principalItemCount == 1 )
     {
         if( moving && selection.HasReferencePoint() )
@@ -989,7 +989,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_LINE_T )
         {
-            SCH_LINE* line = (SCH_LINE*) item;          
+            SCH_LINE* line = (SCH_LINE*) item;
 
             line->Rotate( rotPoint, !clockwise );
         }
@@ -1582,17 +1582,18 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
         if( newItem->Type() == SCH_SYMBOL_T )
         {
-            EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
             SCHEMATIC_SETTINGS&                projSettings = m_frame->Schematic().Settings();
             int                                annotateStartNum = projSettings.m_AnnotateStartNum;
+            ANNOTATE_ORDER_T                   annotateOrder = static_cast<ANNOTATE_ORDER_T>( projSettings.m_AnnotateSortOrder );
+            ANNOTATE_ALGO_T                    annotateAlgo = static_cast<ANNOTATE_ALGO_T>( projSettings.m_AnnotateMethod );
 
-            if( annotate.automatic )
+            if( m_frame->eeconfig()->m_AnnotatePanel.automatic )
             {
                 static_cast<SCH_SYMBOL*>( newItem )->ClearAnnotation( nullptr, false );
                 NULL_REPORTER reporter;
                 m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION,
-                                          (ANNOTATE_ORDER_T) annotate.sort_order,
-                                          (ANNOTATE_ALGO_T) annotate.method, true /* recursive */,
+                                          annotateOrder,
+                                          annotateAlgo, true /* recursive */,
                                           annotateStartNum, false, false, reporter );
             }
 

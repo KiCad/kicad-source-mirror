@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,20 +12,21 @@
 #include <wx/intl.h>
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
 
@@ -45,7 +46,9 @@ class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
-		wxCheckBox* m_checkAutoAnnotate;
+		wxStaticText* m_orderLabel1;
+		wxStaticText* m_staticText6;
+		wxChoice* m_choiceSeparatorRefId;
 		wxStaticText* m_orderLabel;
 		wxStaticLine* m_staticline2;
 		wxRadioButton* m_rbSortBy_X_Position;
@@ -58,6 +61,7 @@ class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxTextCtrl* m_textNumberAfter;
 		wxRadioButton* m_rbSheetX100;
 		wxRadioButton* m_rbSheetX1000;
+		wxCheckBox* m_checkReuseRefdes;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }

@@ -743,8 +743,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     auto showAnnotateAutomaticallyCond =
             [this]( const SELECTION& )
             {
-                EESCHEMA_SETTINGS* cfg = eeconfig();
-                return cfg && cfg->m_AnnotatePanel.automatic;
+                return eeconfig()->m_AnnotatePanel.automatic;
             };
 
     auto remapSymbolsCondition =

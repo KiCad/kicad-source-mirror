@@ -50,6 +50,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_HopOverScale( 0.0 ),
         m_ConnectionGridSize( DEFAULT_CONNECTION_GRID_MILS * schIUScale.IU_PER_MILS ),
         m_AnnotateStartNum( 0 ),
+        m_AnnotateSortOrder( 0 ),
+        m_AnnotateMethod( 0 ),
         m_IntersheetRefsShow( false ),
         m_IntersheetRefsListOwnPage( true ),
         m_IntersheetRefsFormatShort( false ),
@@ -222,6 +224,12 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<int>( "annotate_start_num",
             &m_AnnotateStartNum, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "annotation.sort_order",
+            &m_AnnotateSortOrder, 0, 0, 1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "annotation.method",
+            &m_AnnotateMethod, 0, 0, 2 ) );
 
     m_NgspiceSettings = std::make_shared<NGSPICE_SETTINGS>( this, "ngspice" );
 

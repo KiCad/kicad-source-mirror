@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,6 +47,9 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 
 	m_FormattingOpt = new wxCheckBox( this, wxID_ANY, _("Formatting preferences"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_FormattingOpt, 0, wxALL, 5 );
+
+	m_annotationOpt = new wxCheckBox( this, wxID_ANY, _("Annotation preferences"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_annotationOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_FieldNameTemplatesOpt = new wxCheckBox( this, wxID_ANY, _("Field name templates"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_FieldNameTemplatesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );

@@ -25,7 +25,7 @@
 #include "panel_eeschema_annotation_options_base.h"
 
 class EDA_BASE_FRAME;
-class EESCHEMA_SETTINGS;
+class SCHEMATIC_SETTINGS;
 
 
 class PANEL_EESCHEMA_ANNOTATION_OPTIONS : public PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE
@@ -38,8 +38,10 @@ public:
 
     void ResetPanel() override;
 
+    void ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings );
+
 private:
-    void loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg );
+    void loadEEschemaSettings( SCHEMATIC_SETTINGS* aCfg );
 
     EDA_BASE_FRAME* m_schSettingsProvider;
 };

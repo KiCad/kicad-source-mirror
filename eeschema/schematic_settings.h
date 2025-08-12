@@ -69,6 +69,9 @@ public:
     int       m_ConnectionGridSize;     // usually 50mils (IU internally; mils in the JSON file)
 
     int       m_AnnotateStartNum;       // Starting value for annotation
+    int       m_AnnotateSortOrder;      // Annotation sort order
+    int       m_AnnotateMethod;         // Annotation numbering method (linear, sheet * 100, etc)
+
     int       m_SubpartIdSeparator;     // the separator char between the subpart id and the
                                         //   reference like U1A, U1.A or U1-A
     int       m_SubpartFirstId;         // the ASCII char value to calculate the subpart symbol

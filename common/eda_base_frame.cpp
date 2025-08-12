@@ -1288,7 +1288,6 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
 
             if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )

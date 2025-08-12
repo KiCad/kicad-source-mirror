@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,7 +66,10 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_escClearsNetHighlight = new wxCheckBox( this, wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_escClearsNetHighlight->SetToolTip( _("First <ESC> in selection tool clears selection, next clears net highlighting") );
 
-	bSizer5->Add( m_escClearsNetHighlight, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer5->Add( m_escClearsNetHighlight, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_checkAutoAnnotate = new wxCheckBox( this, wxID_ANY, _("Automatically annotate symbols"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_checkAutoAnnotate, 0, wxALL, 5 );
 
 
 	bLeftColumn->Add( bSizer5, 0, wxEXPAND|wxTOP|wxLEFT, 5 );

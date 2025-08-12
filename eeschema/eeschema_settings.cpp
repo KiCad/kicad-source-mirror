@@ -424,9 +424,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "annotation.recursive",
             &m_AnnotatePanel.recursive, true ) );
 
-    m_params.emplace_back( new PARAM<int>( "annotation.method",
-            &m_AnnotatePanel.method, 0, 0, 2 ) );
-
     m_params.emplace_back( new PARAM<int>( "annotation.scope",
             &m_AnnotatePanel.scope, 0, 0, 2 ) );
 
@@ -436,8 +433,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "annotation.messages_filter",
             &m_AnnotatePanel.messages_filter, -1 ) );
 
-    m_params.emplace_back( new PARAM<int>( "annotation.sort_order",
-            &m_AnnotatePanel.sort_order, 0, 0, 1 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "bom.selected_plugin",
             &m_BomPanel.selected_plugin, "" ) );
@@ -715,9 +710,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "SelectPinSelectSymbolOpt",
             "selection.select_pin_selects_symbol" );
 
-    ret &= fromLegacy<int>(  aCfg, "AnnotateAlgoOption",      "annotation.method" );
     ret &= fromLegacy<int>(  aCfg, "AnnotateFilterMsg",       "annotation.messages_filter" );
-    ret &= fromLegacy<int>(  aCfg, "AnnotateSortOption",      "annotation.sort_order" );
 
     ret &= fromLegacyString( aCfg, "bom_plugin_selected",     "bom.selected_plugin" );
     ret &= fromLegacyString( aCfg, "bom_plugins",             "bom.plugins" );

@@ -221,9 +221,7 @@ public:
         bool recursive;
         int scope;
         int options;
-        int method;
         int messages_filter;
-        int sort_order;
     };
 
     struct PANEL_BOM

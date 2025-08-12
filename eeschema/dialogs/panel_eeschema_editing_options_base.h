@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,6 +47,7 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_mouseDragIsDrag;
 		wxCheckBox* m_cbAutoStartWires;
 		wxCheckBox* m_escClearsNetHighlight;
+		wxCheckBox* m_checkAutoAnnotate;
 		wxStaticText* m_staticText26;
 		wxStaticLine* m_staticline4;
 		wxStaticText* m_borderColorLabel;
