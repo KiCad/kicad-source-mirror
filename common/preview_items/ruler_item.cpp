@@ -399,7 +399,6 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     VECTOR2I  chosen = candidates[0];
     double    bestDot = -1.0;
-    bool      found = false;
 
     for( const VECTOR2I& c : candidates )
     {
@@ -411,7 +410,6 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             {
                 bestDot = dot;
                 chosen = c;
-                found = true;
             }
         }
     }
