@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-08 10:02+0000\n"
-"Last-Translator: Francisco Jose Rey <fcojreyg@gmail.com>\n"
+"PO-Revision-Date: 2025-08-13 00:02+0000\n"
+"Last-Translator: Gaston Schelotto <gschelotto@puredsp.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -668,9 +668,8 @@ msgid "Show user defined layer 3"
 msgstr "Capa definida por el usuario 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Capa definida por el usuario 4"
+msgstr "Mostrar capa 4 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 #, fuzzy
@@ -723,9 +722,8 @@ msgid "Show user defined layer 14"
 msgstr "Capa definida por el usuario 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Capa definida por el usuario 1"
+msgstr "Mostrar capa 15 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 #, fuzzy
@@ -738,9 +736,8 @@ msgid "Show user defined layer 17"
 msgstr "Capa definida por el usuario 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Capa definida por el usuario 1"
+msgstr "Mostrar capa 18 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
 #, fuzzy
@@ -763,9 +760,8 @@ msgid "Show user defined layer 22"
 msgstr "Capa definida por el usuario 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Capa definida por el usuario 2"
+msgstr "Mostrar capa 23 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 #, fuzzy
@@ -778,9 +774,8 @@ msgid "Show user defined layer 25"
 msgstr "Capa definida por el usuario 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Capa definida por el usuario 2"
+msgstr "Mostrar capa 26 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 #, fuzzy
@@ -803,14 +798,12 @@ msgid "Show user defined layer 30"
 msgstr "Capa definida por el usuario 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Capa definida por el usuario 3"
+msgstr "Mostrar capa 31 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Capa definida por el usuario 3"
+msgstr "Mostrar capa 32 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 #, fuzzy
@@ -828,19 +821,16 @@ msgid "Show user defined layer 35"
 msgstr "Capa definida por el usuario 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Capa definida por el usuario 3"
+msgstr "Mostrar capa 36 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Capa definida por el usuario 3"
+msgstr "Mostrar capa 37 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Capa definida por el usuario 3"
+msgstr "Mostrar capa 38 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 #, fuzzy
@@ -863,9 +853,8 @@ msgid "Show user defined layer 42"
 msgstr "Capa definida por el usuario 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Capa definida por el usuario 4"
+msgstr "Mostrar capa 43 definida por el usuario"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 #, fuzzy
@@ -2511,19 +2500,19 @@ msgstr "Patrón:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 msgid "Net class:"
-msgstr "Clases de red:"
+msgstr "Clase de nodo:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
-"Nota: las asignaciones completas de clase de red se pueden editar en "
+"Nota: las asignaciones completas de clase de nodo se pueden editar en "
 "Configuración del esquema > Proyecto."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
-msgstr "Asignaciones de clases de red"
+msgstr "Añadir asignación de clase de nodo"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -5051,9 +5040,8 @@ msgid "&Export..."
 msgstr "&Exportar..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Huellas/islas"
+msgstr "Huellas/almohadillas:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -5602,16 +5590,16 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"Las clases de red han cambiado por fuera del diálogo de configuración.\n"
+"Las clases de nodos han cambiado desde fuera del diálogo de configuración.\n"
 "¿Desea recargarlas?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:584
 msgid "Netclass must have a name."
-msgstr "La clase de red ha de tener un nombre."
+msgstr "La clase de nodo tiene que tener un nombre."
 
 #: common/dialogs/panel_setup_netclasses.cpp:593
 msgid "Netclass name already in use."
-msgstr "Nombre de clase de red en uso."
+msgstr "Nombre de clase de nodo en uso."
 
 #: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Minimum copper clearance"
@@ -5662,9 +5650,8 @@ msgid "Schematic wire line style"
 msgstr "Estilo línea de conexión"
 
 #: common/dialogs/panel_setup_netclasses.cpp:718
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Fijar color de clase de red"
+msgstr "Seleccionar color de clase de nodo del PCB"
 
 #: common/dialogs/panel_setup_netclasses.cpp:775
 msgid "The default net class is required."
@@ -5676,9 +5663,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Redes que coinciden con «%s»:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Clases de redes:"
+msgstr "Clases de nodos:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
@@ -5772,9 +5758,8 @@ msgid "Import colors from schematic"
 msgstr "Probar desde el esquema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Asignaciones de clases de red:"
+msgstr "Asignaciones de clases de nodos:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -14364,7 +14349,7 @@ msgstr "Mapa de conflicto de pines"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
 msgid "Net classes"
-msgstr "Clases de red"
+msgstr "Clases de nodos"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
 #, fuzzy
@@ -14472,7 +14457,7 @@ msgstr "Reglas eléctricas"
 #: pcbnew/widgets/search_handlers.cpp:400
 #: pcbnew/widgets/search_handlers.cpp:487
 msgid "Net Classes"
-msgstr "Clases de red"
+msgstr "Clases de nodos"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:119
 msgid "Bus Alias Definitions"
@@ -16229,7 +16214,7 @@ msgstr "Ancho de cable/bus:"
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr ""
 "Establezca el ancho a 0 para utilizar la anchura de los cables/buses de la "
-"clase de red."
+"clase de nodo."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
 msgid "Wire & Bus Properties"
@@ -16382,9 +16367,8 @@ msgid "Highlight thickness:"
 msgstr "Grosor de resaltado:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:186
-#, fuzzy
 msgid "Highlight netclass colors"
-msgstr "Fijar color de clase de red"
+msgstr "Resaltar colores de las clases de nodos"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:194
 #, fuzzy
@@ -17377,9 +17361,8 @@ msgstr "Sin conectar"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:319
 #: pcbnew/drc/drc_test_provider_misc.cpp:339
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "Imprimir la hoja de dibujo"
+msgstr " (en hoja de dibujo)"
 
 #: eeschema/erc/erc.cpp:426
 msgid "Unresolved text variable in drawing sheet"
@@ -17424,7 +17407,7 @@ msgstr ""
 #: eeschema/erc/erc.cpp:695
 #, c-format
 msgid "Netclass %s is not defined"
-msgstr "No se ha definido la clase de red %s"
+msgstr "No se ha definido la clase de nodo %s"
 
 #: eeschema/erc/erc.cpp:772
 #, c-format
@@ -17432,9 +17415,9 @@ msgid "Label connects more than one wire at %d, %d"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:852
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "No se pudo conectar a '%s "
+msgstr "Cuatro ítems conectados a %d, %d"
 
 #: eeschema/erc/erc.cpp:924
 msgid "Pin with 'no connection' type is connected"
@@ -17590,7 +17573,7 @@ msgstr "Comprobando pines y cables fuera de cuadrícula..."
 
 #: eeschema/erc/erc.cpp:1988
 msgid "Checking for undefined netclasses..."
-msgstr "Comprobando clases de red indefinidas..."
+msgstr "Comprobando clases de nodos indefinidas..."
 
 #: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
@@ -17722,7 +17705,7 @@ msgstr "Variable de texto sin resolver"
 # Pendiente
 #: eeschema/erc/erc_item.cpp:165
 msgid "Undefined netclass"
-msgstr "Clase de red indefinida"
+msgstr "Clase de nodo indefinida"
 
 #: eeschema/erc/erc_item.cpp:169
 msgid "SPICE model issue"
@@ -18500,9 +18483,9 @@ msgid "Bus to bus entry from %s, %s to %s, %s"
 msgstr "Entrada de bus a bus de %s, %s a %s, %s"
 
 #: eeschema/net_navigator.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Etiqueta global '%s' en %s, %s"
+msgstr "Etiqueta para la clase de nodo '%s' en %s, %s"
 
 # Pendiente de contexto
 #: eeschema/net_navigator.cpp:190
@@ -18864,7 +18847,7 @@ msgstr "Tipo entrada de bus"
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:812
 msgid "Resolved Netclass"
-msgstr "Clase de red resuelta"
+msgstr "Clase de nodo resuelta"
 
 #: eeschema/sch_connection.cpp:445
 msgid "Connection Name"
@@ -19960,7 +19943,7 @@ msgstr "Red"
 #: eeschema/sch_label.cpp:1389 eeschema/sch_line.cpp:894
 #: eeschema/sch_rule_area.cpp:395
 msgid "Resolved netclass"
-msgstr "Clase de red resuelta"
+msgstr "Clase de nodo resuelta"
 
 #: eeschema/sch_label.cpp:1405
 msgid "Hierarchical Labels"
@@ -20049,7 +20032,7 @@ msgstr "Tipo de línea"
 
 #: eeschema/sch_line.cpp:936
 msgid "from netclass"
-msgstr "por tipo de red"
+msgstr "por tipo de nodo"
 
 #: eeschema/sch_marker.cpp:368 pcbnew/pcb_marker.cpp:224
 msgid "Violation"
@@ -23562,11 +23545,11 @@ msgstr "Actualizar símbolos para incluir cualquier cambio desde la biblioteca"
 # Pendiente
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
 msgid "Assign Netclass..."
-msgstr "Asignar clase de red..."
+msgstr "Asignar clase de nodo"
 
 #: eeschema/tools/sch_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Asignar una clase de red a las redes que coincidan con un patrón"
+msgstr "Asignar una clase de nodo a los nodos que coincidan con un patrón"
 
 #: eeschema/tools/sch_actions.cpp:810
 msgid "De Morgan Conversion"
@@ -24506,9 +24489,8 @@ msgid "Symbol Unit"
 msgstr "Unidad de símbolo"
 
 #: eeschema/tools/sch_edit_tool.cpp:112
-#, fuzzy
 msgid " (already placed)"
-msgstr "Ya colocado"
+msgstr " (ya colocado)"
 
 #: eeschema/tools/sch_edit_tool.cpp:180
 msgid "Pin Function"
@@ -24631,7 +24613,7 @@ msgstr "No se ha seleccionado ninguna red."
 
 #: eeschema/tools/sch_editor_control.cpp:966
 msgid "Net must be labeled to assign a netclass."
-msgstr "La red debe ser etiquetada para asignar una clase de red."
+msgstr "El nodo debe ser etiquetado para asignar una clase de nodo."
 
 #: eeschema/tools/sch_editor_control.cpp:1714 pcbnew/tools/pcb_control.cpp:1067
 #, fuzzy
@@ -25236,9 +25218,9 @@ msgid "Do not export"
 msgstr "No exportar"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Gerbers con capas conocidas: "
+msgstr "Gerbers con capas conocidas: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 #, fuzzy
@@ -27703,9 +27685,8 @@ msgid "Add New Job"
 msgstr "Añadir pista nueva"
 
 #: kicad/dialogs/panel_jobset.cpp:693
-#, fuzzy
 msgid "Select job type:"
-msgstr " Seleccionar tipo de forma"
+msgstr "Seleccionar tipo de trabajo:"
 
 #: kicad/dialogs/panel_jobset.cpp:774
 #, fuzzy
@@ -27718,9 +27699,8 @@ msgid "Add New Destination"
 msgstr "Identificación"
 
 #: kicad/dialogs/panel_jobset.cpp:784
-#, fuzzy
 msgid "Select destination type:"
-msgstr " Seleccionar tipo de forma"
+msgstr "Seleccionar tipo de destino:"
 
 #: kicad/dialogs/panel_jobset.cpp:949
 #, fuzzy
@@ -28957,9 +28937,8 @@ msgid "Clone Project from Repository..."
 msgstr "Clonar proyecto desde repositorio..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "Nuevo Archivo de Texto: "
+msgstr "Nuevo archivo trabajo..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -28970,9 +28949,8 @@ msgid "Open Project..."
 msgstr "Abrir proyecto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Nuevo Archivo de Texto: "
+msgstr "Abrir archivo de trabajo..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -32116,7 +32094,7 @@ msgstr "Sin enrutar"
 
 #: pcbnew/board_connected_item.cpp:235
 msgid "NetClass"
-msgstr "Clase de red"
+msgstr "Clase de nodo"
 
 #: pcbnew/board_connected_item.cpp:242
 msgid "NetName"
@@ -32746,19 +32724,16 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Cambiar arreglo\n"
-"***********************\n"
+"<br/>Cambiar arreglo\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " será ignorado"
+msgstr "(será ignorado)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
 #, fuzzy
@@ -33627,8 +33602,8 @@ msgstr "Propiedades eléctricas"
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:124
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
-"Margen del cobre para esta zona (fijar a 0 para usar el margen de la clase "
-"de red)"
+"Margen de separación del cobre para esta zona (fijar a 0 para usar el margen "
+"de la clase de nodo)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
@@ -35665,8 +35640,9 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Este es el margen de la red local para todos los pads de esta huella.\n"
-"Si es 0, se utilizan los valores de la clase de red.\n"
+"Este es el margen de separación del nodo local para todos los pads de esta "
+"huella.\n"
+"Si es 0, se utilizan los valores de la clase de nodo.\n"
 "Este valor puede ser sustituido por el valor local del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
@@ -35861,9 +35837,8 @@ msgid "Component type:"
 msgstr "Tipo de componente:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:237
-#, fuzzy
 msgid "Leave values blank to use netclass values."
-msgstr "Ajustar márgenes a 0 para utilizar valores de clase de red."
+msgstr "Dejar a 0 para utilizar valores de clase de nodo."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:249
 msgid ""
@@ -35872,10 +35847,12 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este es el margen de la red local para todos los pads de esta huella.\n"
-"Si es 0, se utilizan los valores de la clase de red.\n"
+"Este es el margen de separación del nodo local para todos los pads de esta "
+"huella.\n"
+"Si es 0, se utilizan los valores de la clase de nodo.\n"
 "Este valor puede ser sustituido individualmente por cada pad en\n"
-"la pestaña de márgenes y ajustes locales de las propiedades del pad."
+"la pestaña de márgenes de separación y ajustes locales de las propiedades "
+"del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid ""
@@ -36725,9 +36702,8 @@ msgid "Filter vias by size:"
 msgstr "Filtrar vías por tamaño:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "- dejar sin cambios -"
+msgstr "-- dejar sin cambios --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
 msgid "Via size:"
@@ -37717,11 +37693,10 @@ msgid "Clearance Overrides"
 msgstr "Reemplazos de margenes"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
-#, fuzzy
 msgid "Leave values blank to use parent footprint or netclass values."
 msgstr ""
-"Ajustar valores a 0 para utilizar los valores heredados de la huella o la "
-"clase de red."
+"Dejar a 0 para utilizar los valores heredados de la huella o la clase de "
+"nodo."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:954
 msgid ""
@@ -37743,8 +37718,8 @@ msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Este es el margen de red local para este pad.\n"
-"Si es 0, se utiliza el valor local de la huella o de la clase de red."
+"Este es el margen de separación del nodo local para este pad.\n"
+"Si es 0, se utiliza el valor local de la huella o de la clase de nodo."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:983
 msgid ""
@@ -38696,10 +38671,8 @@ msgid "Convert to Rule Area"
 msgstr "Convertir a área de reglas"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
-#, fuzzy
 msgid "Not found on board: "
-msgstr ""
-"No se han encontrado el contorno de la placa, ¡tamaño de placa desconocido!"
+msgstr "No se ha encontrado en la placa: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 msgid "No layers selected."
@@ -39903,10 +39876,10 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"El margen mínimo entre dos elementos de cobre que no pertenecen a la misma "
-"red. Si está habilitado, este es un mínimo absoluto que no puede ser "
-"reducido por las clases de red, reglas personalizadas, u otras "
-"configuraciones."
+"El margen de separación mínimo entre dos elementos de cobre que no "
+"pertenecen al mismo nodo. Si está habilitado, este es un mínimo absoluto que "
+"no puede ser reducido por las clases de nodos, reglas personalizadas, u "
+"otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -39918,8 +39891,8 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "El ancho mínimo de pista. Si está habilitado, este es un mínimo absoluto que "
-"no puede ser reducido por las clases de red, reglas personalizadas, u otras "
-"configuraciones."
+"no puede ser reducido por las clases de nodos, reglas personalizadas, u "
+"otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 msgid "Minimum connection width:"
@@ -39938,9 +39911,9 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"El ancho mínimo del anillo anular. Si está habilitado, este es un mínimo "
-"absoluto que no puede ser reducido por las clases de red, reglas "
-"personalizadas, u otras configuraciones."
+"El ancho mínimo de la corona. Si está habilitado, este es un mínimo absoluto "
+"que no puede ser reducido por las clases de nodos, reglas personalizadas, u "
+"otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -39952,7 +39925,7 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "El diámetro mínimo de vía. Si está habilitado, este es un mínimo absoluto "
-"que no puede ser reducido por las clases de red, reglas personalizadas, u "
+"que no puede ser reducido por las clases de nodos, reglas personalizadas, u "
 "otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
@@ -40007,7 +39980,7 @@ msgid ""
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
 "El tamaño mínimo de orificio pasante. Si está habilitado, este es un mínimo "
-"absoluto que no puede ser reducido por las clases de red, reglas "
+"absoluto que no puede ser reducido por las clases de nodos, reglas "
 "personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:217
@@ -40038,7 +40011,7 @@ msgid ""
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "El diámetro mínimo para micro-vías. Si está habilitado, este es un mínimo "
-"absoluto que no puede ser reducido por las clases de red, reglas "
+"absoluto que no puede ser reducido por las clases de nodos, reglas "
 "personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:274
@@ -40051,7 +40024,7 @@ msgid ""
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "El tamaño mínimo de orificio de micro-vía. Si está habilitado, este es un "
-"mínimo absoluto que no puede ser reducido por las clases de red, reglas "
+"mínimo absoluto que no puede ser reducido por las clases de nodos, reglas "
 "personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
@@ -41760,18 +41733,18 @@ msgstr "restricciones de configuración de placa para micro-vías"
 #: pcbnew/drc/drc_engine.cpp:340 pcbnew/drc/drc_engine.cpp:357
 #, c-format
 msgid "netclass '%s'"
-msgstr "clase de red '%s'"
+msgstr "clase de nodo '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:288 pcbnew/drc/drc_engine.cpp:305
 #: pcbnew/drc/drc_engine.cpp:322
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "clase de red '%s' (par diferencial)"
+msgstr "clase de nodo '%s' (par diferencial)"
 
 #: pcbnew/drc/drc_engine.cpp:374 pcbnew/drc/drc_engine.cpp:391
 #, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "clase de red '%s' (uvia)"
+msgstr "clase de nodo '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:457
 msgid "keepout area"
@@ -41968,7 +41941,9 @@ msgstr "Comprobando %s: mín %s; opc %s; máx %s."
 
 #: pcbnew/drc/drc_engine.cpp:1153
 msgid "Netclass clearances apply only between copper items."
-msgstr "Los márgenes de clase de red solo aplican entre elementos de cobre."
+msgstr ""
+"Los márgenes de separación de la clase de nodo solo aplican entre elementos "
+"de cobre."
 
 #: pcbnew/drc/drc_engine.cpp:1157 pcbnew/drc/drc_engine.cpp:1162
 #, c-format
@@ -44272,9 +44247,8 @@ msgid "Length Constraints: %s"
 msgstr "Restricciones de longitud: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2239
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Afinado: desvío "
+msgstr "Afinado: desvío"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2452
 msgid "Unable to tune segments inside other tuning patterns."
@@ -45840,7 +45814,7 @@ msgstr "Cargando datos de placa..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1251
 msgid "Loading netclasses..."
-msgstr "Cargando clases de redes..."
+msgstr "Cargando clases de nodos..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1277
 #, c-format
@@ -45848,8 +45822,8 @@ msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr ""
-"Se encontraron más de una clase de red de Altium con el nombre '%s'. Solo se "
-"importará la primera."
+"Se encontraron más de una clase de nodos de Altium con el nombre '%s'. Solo "
+"se importará la primera."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1300
 msgid "Loading components..."
@@ -46642,11 +46616,11 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"El diseño de CADSTAR contiene redes con una 'Clase de red' asignada. KiCad "
-"no tiene un equivalente a las clases de red de CADSTAR, por lo que estos "
-"elementos no fueron importados. Nota: La versión de 'Clase de red' de KiCad "
-"es más cercana a los 'Códigos de enrutado de redes' de CADSTAR (que han sido "
-"importados para todas las redes)."
+"El diseño de CADSTAR contiene nodos con una 'Clase de nodo' asignada. KiCad "
+"no tiene un equivalente a la clase de nodo de CADSTAR, por lo que estos "
+"elementos no fueron importados. Nota: La versión de 'Clase de nodo' de KiCad "
+"se aproxima mejor a los 'Códigos de enrutado de nodos' de CADSTAR (que han "
+"sido importados para todos los nodos)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4014
 msgid ""
@@ -46655,8 +46629,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"El diseño de CADSTAR contiene redes con un 'Clase de espaciado' asignado. "
-"KiCad no tiene un equivalente a las clases de espaciado de CADSTAR, por lo "
+"El diseño de CADSTAR contiene nodos con un 'Clase de separación' asignado. "
+"KiCad no tiene un equivalente a las clases de separación de CADSTAR, por lo "
 "que estos elementos no se importaron. Por favor revise las reglas de diseño "
 "ya que los rellenos de cobre serán afectados por esto."
 
@@ -47288,7 +47262,7 @@ msgstr "%d no es un número de capas válido"
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr ""
-"Nombre de clase de red '%s' duplicado en el archivo '%s' en la línea %d, "
+"Nombre de clase de nodo '%s' duplicado en el archivo '%s' en la línea %d, "
 "posición %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3177
@@ -47763,14 +47737,12 @@ msgid "Missing field name argument to %s."
 msgstr "Argumento de nombre de campo faltante a %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1268
-#, fuzzy
 msgid "Missing netclass name argument to hasNetclass()"
-msgstr "Argumento de nombre de capa faltante a %s."
+msgstr "Falta argumento de la clase de nodo hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1307
-#, fuzzy
 msgid "Missing netclass name argument to hasExactNetclass()"
-msgstr "Argumento de nombre de capa faltante a %s."
+msgstr "Falta argumento de la clase de nodo hasExactNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1347
 #, fuzzy
@@ -48016,7 +47988,7 @@ msgstr "pista existente"
 
 #: pcbnew/router/pns_kicad_iface.cpp:740
 msgid "netclass 'Default'"
-msgstr "clase de red «Predeterminado»"
+msgstr "clase de nodo «Predeterminado»"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1392
 #, c-format
@@ -48195,7 +48167,7 @@ msgstr "Especificar valores de pistas y vías personalizados"
 
 #: pcbnew/router/router_tool.cpp:264
 msgid "Track netclass width"
-msgstr "Ancho de pista de clase de red"
+msgstr "Ancho de pista de clase de nodo"
 
 #: pcbnew/router/router_tool.cpp:266
 #, c-format
@@ -48204,7 +48176,7 @@ msgstr "La pista %s"
 
 #: pcbnew/router/router_tool.cpp:280
 msgid "Via netclass values"
-msgstr "Valores de vía de clase de red"
+msgstr "Valores de vía de clase de nodo"
 
 #: pcbnew/router/router_tool.cpp:285 pcbnew/tools/drawing_tool.cpp:126
 #, c-format
@@ -48294,7 +48266,7 @@ msgstr "Enrutando par diferencial: %s"
 #: pcbnew/router/router_tool.cpp:2727 pcbnew/router/router_tool.cpp:2738
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Clase de red resuelta: %s"
+msgstr "Clase de nodo resuelta: %s"
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/router/router_tool.cpp:2734
@@ -48479,7 +48451,7 @@ msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:610
 msgid "Track: use netclass width"
-msgstr "Pista: usar el ancho de clase de red"
+msgstr "Pista: usar el ancho de clase de nodo"
 
 #: pcbnew/toolbars_pcb_editor.cpp:616
 #, c-format
@@ -48492,7 +48464,7 @@ msgstr "Editar tamaños predefinidos..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:653
 msgid "Via: use netclass sizes"
-msgstr "Vía: utilizar los tamaños de las clases de red"
+msgstr "Vía: utilizar los tamaños de las clases de nodos"
 
 #: pcbnew/toolbars_pcb_editor.cpp:676
 #, c-format
@@ -48649,7 +48621,7 @@ msgstr "Herramientas de inspección de red"
 #: pcbnew/tools/board_inspection_tool.cpp:201
 #, c-format
 msgid "[netclass %s]"
-msgstr "[clase de red %s]"
+msgstr "[clase de nodo %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:212
 msgid "Report incomplete: could not compile custom design rules."
@@ -50741,8 +50713,8 @@ msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
-"Alternar entre usar los colores de red y clases de redes para todas las "
-"redes, solo las líneas aéreas, o ninguna"
+"Alternar entre usar los colores de nodo y clases de nodos para todos los "
+"nodos, solo las conexiones lógicas, o ninguna"
 
 #: pcbnew/tools/pcb_actions.cpp:1388
 msgid "Sketch Tracks"
@@ -51594,9 +51566,8 @@ msgid "Inactive Layer Display"
 msgstr "Visualización de capa inactiva"
 
 #: pcbnew/tools/pcb_control.cpp:690
-#, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "Selección de par de capas: "
+msgstr "Preselección de pareja de capas"
 
 #: pcbnew/tools/pcb_control.cpp:786
 msgid "Item locked."
@@ -52105,25 +52076,26 @@ msgstr "Colores de redes:"
 #: pcbnew/widgets/appearance_controls.cpp:709
 #: pcbnew/widgets/appearance_controls.cpp:2576
 msgid "Choose when to show net and netclass colors"
-msgstr "Elegir cuando mostrar los colores de red y clase de red"
+msgstr "Elegir cuando mostrar los colores de los nodos y clases de nodos"
 
 #: pcbnew/widgets/appearance_controls.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:2579
 msgid "Net and netclass colors are shown on all copper items"
 msgstr ""
-"Los colores de red y clases de red se muestran en todos los elementos de "
-"cobre"
+"Los colores de los nodos y clases de nodos se muestran en todos los "
+"elementos de cobre"
 
 #: pcbnew/widgets/appearance_controls.cpp:726
 #: pcbnew/widgets/appearance_controls.cpp:2582
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr ""
-"Los colores de red y clases de red se muestran solo en las líneas aéreas"
+"Los colores de los nodos y clases de nodos se muestran solo en las "
+"conexiones lógicas"
 
 #: pcbnew/widgets/appearance_controls.cpp:733
 #: pcbnew/widgets/appearance_controls.cpp:2585
 msgid "Net and netclass colors are not shown"
-msgstr "Los colores de red y clases de red no se muestran"
+msgstr "Los colores de los nodos y clases de nodos no se muestran"
 
 #: pcbnew/widgets/appearance_controls.cpp:744
 #: pcbnew/widgets/appearance_controls.cpp:2590
@@ -52567,7 +52539,7 @@ msgstr "Fijar opacidad de %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2411
 msgid "Set Netclass Color"
-msgstr "Fijar color de clase de red"
+msgstr "Seleccionar color de la clase de nodo"
 
 #: pcbnew/widgets/appearance_controls.cpp:2415
 #, fuzzy
@@ -52575,9 +52547,8 @@ msgid "Use Color from Schematic"
 msgstr "Actualizar placa desde esquema"
 
 #: pcbnew/widgets/appearance_controls.cpp:2424
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Limpiar color de red"
+msgstr "Borrar color de la clase de nodo"
 
 #: pcbnew/widgets/appearance_controls.cpp:2432
 #, c-format
@@ -52586,11 +52557,11 @@ msgstr "Resaltar redes en %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2443
 msgid "Show All Netclasses"
-msgstr "Mostrar todas las clases de redes"
+msgstr "Mostrar todas las clases de nodos"
 
 #: pcbnew/widgets/appearance_controls.cpp:2445
 msgid "Hide All Other Netclasses"
-msgstr "Ocultar todas las otras clases de redes"
+msgstr "Ocultar todas las otras clases de nodos"
 
 #: pcbnew/widgets/appearance_controls.cpp:2506
 #, c-format
@@ -52651,9 +52622,8 @@ msgstr "Cotas"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
-#, fuzzy
 msgid "Netclass"
-msgstr "Clase de red:"
+msgstr "Clase de nodo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -52735,14 +52705,12 @@ msgid "Filter by Net Name"
 msgstr "Filtrar redes"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1373
-#, fuzzy
 msgid "Filter by Netclass"
-msgstr "Filtrar por clase de red:"
+msgstr "Filtrar por clase de nodo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1388
-#, fuzzy
 msgid "Group by Netclass"
-msgstr "Agrupar por nombre"
+msgstr "Agrupar por clase de nodo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
 #, fuzzy
