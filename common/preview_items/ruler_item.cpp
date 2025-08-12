@@ -335,7 +335,89 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     VECTOR2D rulerVec( end - origin );
 
     wxArrayString cursorStrings = GetDimensionStrings();
-    DrawTextNextToCursor( aView, end, -rulerVec, cursorStrings, drawingDropShadows );
+
+    // Choose a text quadrant that keeps the measurement text on-screen while avoiding
+    // overlapping the ruler geometry.  Start with the preferred direction (away from the
+    // origin) and fall back to other quadrants as needed to keep the label visible.
+    int      prefX = rulerVec.y < 0.0 ? 1 : -1;
+    int      prefY = rulerVec.x < 0.0 ? -1 : 1;
+
+    double      scale = gal->GetWorldScale();
+
+    TEXT_DIMS     dims = GetConstantGlyphHeight( gal );
+    KIFONT::FONT* font = KIFONT::FONT::GetFont();
+    double        width = 0.0;
+
+    for( const wxString& s : cursorStrings )
+    {
+        VECTOR2I extents = font->StringBoundaryLimits( s, dims.GlyphSize, dims.StrokeWidth, false, false,
+                                                       KIFONT::METRICS::Default() );
+        width = std::max( width, (double) extents.x );
+    }
+
+    double height = dims.LinePitch * cursorStrings.size();
+
+    // Convert to screen coordinates for visibility checks
+    VECTOR2D cursorScreen = gal->ToScreen( end );
+    VECTOR2I screenSize = gal->GetScreenPixelSize();
+    double   offsetX = 15.0;                   // same as DrawTextNextToCursor()
+    double   offsetY = dims.LinePitch * scale; // vertical spacing from cursor
+
+    auto fits = [&]( int sx, int sy )
+    {
+        double left, right, top, bottom;
+
+        double xStart = cursorScreen.x + ( sx < 0 ? offsetX : -offsetX );
+
+        if( sx < 0 )
+        {
+            left = xStart;
+            right = left + width * scale;
+        }
+        else
+        {
+            right = xStart;
+            left = right - width * scale;
+        }
+
+        if( sy > 0 ) // above cursor
+        {
+            bottom = cursorScreen.y - offsetY;
+            top = bottom - height * scale;
+        }
+        else // below cursor
+        {
+            top = cursorScreen.y + offsetY;
+            bottom = top + height * scale;
+        }
+
+        return left >= 0 && right <= screenSize.x && top >= 0 && bottom <= screenSize.y;
+    };
+
+    std::vector<VECTOR2I> candidates = { { prefX, prefY }, { -prefX, prefY },
+                                         { prefX, -prefY }, { -prefX, -prefY } };
+
+    VECTOR2I  chosen = candidates[0];
+    double    bestDot = -1.0;
+    bool      found = false;
+
+    for( const VECTOR2I& c : candidates )
+    {
+        double dot = c.x * prefX + c.y * prefY;
+
+        if( dot >= 0 && fits( c.x, c.y ) )
+        {
+            if( dot > bestDot )
+            {
+                bestDot = dot;
+                chosen = c;
+                found = true;
+            }
+        }
+    }
+
+    VECTOR2D quadrant( chosen.x, chosen.y );
+    DrawTextNextToCursor( aView, end, quadrant, cursorStrings, drawingDropShadows );
 
     // basic tick size
     double minorTickLen = 5.0 / gal->GetWorldScale();
