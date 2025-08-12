@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-07-20 17:02+0000\n"
+"PO-Revision-Date: 2025-08-13 23:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10150,9 +10150,8 @@ msgid "Zoom out horizontally the plot area"
 msgstr "Tükrözés Visszintesen"
 
 #: common/tool/actions.cpp:770
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Tükrözés Függőlegesen"
+msgstr "Nagyítás függőlegesen"
 
 #: common/tool/actions.cpp:771
 #, fuzzy
@@ -10160,9 +10159,8 @@ msgid "Zoom in vertically the plot area"
 msgstr "Tükrözés Függőlegesen"
 
 #: common/tool/actions.cpp:777
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Tükrözés Függőlegesen"
+msgstr "Kicsinyítés függőlegesen"
 
 #: common/tool/actions.cpp:778
 #, fuzzy
@@ -10345,9 +10343,8 @@ msgid "Switch to Previous Grid"
 msgstr "Előző Rács"
 
 #: common/tool/actions.cpp:1033 common/tool/common_tools.cpp:627
-#, fuzzy
 msgid "Grid Origin"
-msgstr "Rács Origó"
+msgstr "Rács origó"
 
 #: common/tool/actions.cpp:1034
 #, fuzzy
@@ -25829,19 +25826,16 @@ msgstr "Kijelöli az azonos rézvezetőhöz csatlakozott elemeket."
 
 #: eeschema/tools/sch_actions.cpp:1497 eeschema/tools/sch_move_tool.cpp:1868
 #: eeschema/tools/symbol_editor_move_tool.cpp:436
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "Elemek rácsra igazítása"
 
 #: eeschema/tools/sch_actions.cpp:1505
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
 msgstr "Aktuális lap mentése más néven..."
 
 #: eeschema/tools/sch_actions.cpp:1506
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Dokumentum másolatának mentése egy másik helyre vagy más néven"
+msgstr "Aktuális lap másolatának mentése másik helyre vagy más néven"
 
 #: eeschema/tools/sch_actions.cpp:1520
 msgid "New Analysis Tab..."
@@ -25852,16 +25846,14 @@ msgid "Create a new tab containing a simulation analysis"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1529
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Munkafüzet megnyitása"
+msgstr "Munkafüzet megnyitása..."
 
 #: eeschema/tools/sch_actions.cpp:1530
 msgid "Open a saved set of analysis tabs and settings"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1538
-#, fuzzy
 msgid "Save Workbook"
 msgstr "Munkafüzet mentése"
 
@@ -25873,9 +25865,8 @@ msgstr ""
 "a hiányzó / extra alkatrészrajzolatok listázása."
 
 #: eeschema/tools/sch_actions.cpp:1547
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Munkafüzet mentése"
+msgstr "Munkafüzet mentése más néven..."
 
 #: eeschema/tools/sch_actions.cpp:1548
 #, fuzzy
@@ -25883,24 +25874,20 @@ msgid "Save the current set of analysis tabs and settings to another location"
 msgstr "Dokumentum mentése egy másik helyre"
 
 #: eeschema/tools/sch_actions.cpp:1554
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Aktuális nézet exportálása PNG-ként..."
+msgstr "Aktuális ábra exportálása PNG-ként..."
 
 #: eeschema/tools/sch_actions.cpp:1560
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Aktuális nézet exportálása PNG-ként..."
+msgstr "Aktuális ábra exportálása CSV-ként..."
 
 #: eeschema/tools/sch_actions.cpp:1566
-#, fuzzy
 msgid "Export Current Plot to Clipboard"
-msgstr "Kapcsolási rajz másolása a vágólapra"
+msgstr "Aktuális ábra másolása a vágólapra"
 
 #: eeschema/tools/sch_actions.cpp:1572
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "Aktuális nézet exportálása PNG-ként..."
+msgstr "Aktuális ábra exportálása kapcsolási rajzba"
 
 #: eeschema/tools/sch_actions.cpp:1578
 #, fuzzy
@@ -25913,9 +25900,8 @@ msgid "Show Simulation Console Panel"
 msgstr "Konzolablak megjelenítése / elrejtése"
 
 #: eeschema/tools/sch_actions.cpp:1588
-#, fuzzy
 msgid "Show Legend"
-msgstr "Jelmagyarázatok megjelenítése"
+msgstr "Jelmagyarázat megjelenítése"
 
 #: eeschema/tools/sch_actions.cpp:1594
 #, fuzzy
