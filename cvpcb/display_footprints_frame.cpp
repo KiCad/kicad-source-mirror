@@ -49,6 +49,7 @@
 #include <tool/zoom_tool.h>
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
+#include <string_utils.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_editor_conditions.h>  // Shared conditions with other Pcbnew frames
