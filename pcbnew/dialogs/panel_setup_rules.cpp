@@ -229,12 +229,14 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     auto isDisallowToken =
             []( const wxString& token ) -> bool
             {
-                return token == wxT( "buried_via" )
+                return token == wxT( "blind_via" )
+                    || token == wxT( "buried_via" )
                     || token == wxT( "graphic" )
                     || token == wxT( "hole" )
                     || token == wxT( "micro_via" )
                     || token == wxT( "pad" )
                     || token == wxT( "text" )
+                    || token == wxT( "through_via" )
                     || token == wxT( "track" )
                     || token == wxT( "via" )
                     || token == wxT( "zone" );
@@ -605,7 +607,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             else if( m_viaTypeRegex.Matches( last ) )
             {
                 tokens = wxT( "Through|"
-                              "Blind/buried|"
+                              "Blind|"
+                              "Buried|"
                               "Micro" );
             }
             else if( m_padTypeRegex.Matches( last ) )

@@ -231,12 +231,13 @@ enum GAL_LAYER_ID: int
      /// Meta control for all vias opacity/visibility.
     LAYER_VIAS               = GAL_LAYER_ID_START +  0,
     LAYER_VIA_MICROVIA       = GAL_LAYER_ID_START +  1, /// Draw micro vias.
-    LAYER_VIA_BBLIND         = GAL_LAYER_ID_START +  2, /// Draw blind/buried vias.
-    LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  3, /// Draw usual through hole vias.
+    LAYER_VIA_BLIND          = GAL_LAYER_ID_START +  2, /// Draw blind vias.
+    LAYER_VIA_BURIED         = GAL_LAYER_ID_START +  3, /// Draw buried vias.
+    LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  4, /// Draw usual through hole vias.
 
     /// Handle color for not plated holes (holes, not pads).
-    LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4,
-    LAYER_FP_TEXT            = GAL_LAYER_ID_START +  5,
+    LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  5,
+    LAYER_FP_TEXT            = GAL_LAYER_ID_START +  6,
 
 //  LAYER_MOD_TEXT_BK deprecated                  +  6,
 
@@ -729,7 +730,8 @@ inline bool IsViaPadLayer( int aLayer )
 {
     return aLayer == LAYER_VIA_THROUGH
             || aLayer == LAYER_VIA_MICROVIA
-            || aLayer == LAYER_VIA_BBLIND;
+            || aLayer == LAYER_VIA_BLIND
+            || aLayer == LAYER_VIA_BURIED;
 }
 
 inline bool IsHoleLayer( int aLayer )

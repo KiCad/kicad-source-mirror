@@ -36,6 +36,7 @@
 #include <layer_range.h>
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
+#include <cstdlib>
 #include <string_utils.h>
 #include <view/view.h>
 #include <settings/color_settings.h>
@@ -1408,6 +1409,29 @@ void PCB_VIA::SanitizeLayers()
 
     if( !IsCopperLayerLowerThan( Padstack().Drill().end, Padstack().Drill().start) )
         std::swap( Padstack().Drill().end, Padstack().Drill().start );
+}
+
+bool PCB_VIA::IsMicroVia() const
+{
+    return std::abs( static_cast<int>( Padstack().Drill().start )
+                     - static_cast<int>( Padstack().Drill().end ) ) == 2;
+}
+
+bool PCB_VIA::IsBlindVia() const
+{
+    if( IsMicroVia() )
+        return false;
+
+    bool startOuter = Padstack().Drill().start == F_Cu || Padstack().Drill().start == B_Cu;
+    bool endOuter = Padstack().Drill().end == F_Cu || Padstack().Drill().end == B_Cu;
+
+    return startOuter ^ endOuter;
+}
+
+bool PCB_VIA::IsBuriedVia() const
+{
+    return Padstack().Drill().start != F_Cu && Padstack().Drill().start != B_Cu
+            && Padstack().Drill().end != F_Cu && Padstack().Drill().end != B_Cu;
 }
 
 

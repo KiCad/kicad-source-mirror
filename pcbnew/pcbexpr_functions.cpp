@@ -1094,12 +1094,43 @@ static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
     aCtx->Push( result );
 
     if( item && item->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( item )->GetViaType() == VIATYPE::MICROVIA )
+            && static_cast<PCB_VIA*>( item )->IsMicroVia() )
     {
-        result->Set ( 1.0 );
+        result->Set( 1.0 );
     }
 }
 
+static void isBlindVia( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*  result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( item && item->Type() == PCB_VIA_T
+            && static_cast<PCB_VIA*>( item )->IsBlindVia() )
+    {
+        result->Set( 1.0 );
+    }
+}
+
+static void isBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*  result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( item && item->Type() == PCB_VIA_T
+            && static_cast<PCB_VIA*>( item )->IsBuriedVia() )
+    {
+        result->Set( 1.0 );
+    }
+}
 
 static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
@@ -1110,10 +1141,12 @@ static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( item && item->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( item )->GetViaType() == VIATYPE::BLIND_BURIED )
+    if( item && item->Type() == PCB_VIA_T )
     {
-        result->Set ( 1.0 );
+        PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+        if( via->IsBlindVia() || via->IsBuriedVia() )
+            result->Set( 1.0 );
     }
 }
 
@@ -1409,6 +1442,8 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "enclosedByArea('x')" ), enclosedByAreaFunc );
 
     RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );
+    RegisterFunc( wxT( "isBlindVia()" ), isBlindVia );
+    RegisterFunc( wxT( "isBuriedVia()" ), isBuriedVia );
     RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedViaFunc );
 
     RegisterFunc( wxT( "memberOf('x') DEPRECATED" ), memberOfGroupFunc );

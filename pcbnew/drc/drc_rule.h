@@ -86,17 +86,21 @@ enum DRC_CONSTRAINT_T
 
 enum DRC_DISALLOW_T
 {
-    DRC_DISALLOW_VIAS        = (1 << 0),
-    DRC_DISALLOW_MICRO_VIAS  = (1 << 1),
-    DRC_DISALLOW_BB_VIAS     = (1 << 2),
-    DRC_DISALLOW_TRACKS      = (1 << 3),
-    DRC_DISALLOW_PADS        = (1 << 4),
-    DRC_DISALLOW_ZONES       = (1 << 5),
-    DRC_DISALLOW_TEXTS       = (1 << 6),
-    DRC_DISALLOW_GRAPHICS    = (1 << 7),
-    DRC_DISALLOW_HOLES       = (1 << 8),
-    DRC_DISALLOW_FOOTPRINTS  = (1 << 9)
+    DRC_DISALLOW_THROUGH_VIAS = (1 << 0),
+    DRC_DISALLOW_MICRO_VIAS   = (1 << 1),
+    DRC_DISALLOW_BLIND_VIAS   = (1 << 2),
+    DRC_DISALLOW_BURIED_VIAS  = (1 << 3),
+    DRC_DISALLOW_TRACKS       = (1 << 4),
+    DRC_DISALLOW_PADS         = (1 << 5),
+    DRC_DISALLOW_ZONES        = (1 << 6),
+    DRC_DISALLOW_TEXTS        = (1 << 7),
+    DRC_DISALLOW_GRAPHICS     = (1 << 8),
+    DRC_DISALLOW_HOLES        = (1 << 9),
+    DRC_DISALLOW_FOOTPRINTS   = (1 << 10)
 };
+
+constexpr int DRC_DISALLOW_VIAS = DRC_DISALLOW_THROUGH_VIAS;
+constexpr int DRC_DISALLOW_BB_VIAS = DRC_DISALLOW_BLIND_VIAS | DRC_DISALLOW_BURIED_VIAS;
 
 
 class DRC_RULE

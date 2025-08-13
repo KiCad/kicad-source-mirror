@@ -771,7 +771,8 @@ GAL_SET GAL_SET::DefaultVisible()
     static const GAL_LAYER_ID visible[] = {
         LAYER_VIAS,
         LAYER_VIA_MICROVIA,
-        LAYER_VIA_BBLIND,
+        LAYER_VIA_BLIND,
+        LAYER_VIA_BURIED,
         LAYER_VIA_THROUGH,
         // LAYER_HIDDEN_TEXT,    // DEPCREATED SINCE 9.0. Invisible text hidden by default
         LAYER_ANCHOR,

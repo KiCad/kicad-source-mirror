@@ -1299,14 +1299,16 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                     else if( a->Type() == PCB_VIA_T )
                     {
-                        mask = DRC_DISALLOW_VIAS;
+                        const PCB_VIA* via = static_cast<const PCB_VIA*>( a );
 
-                        switch( static_cast<const PCB_VIA*>( a )->GetViaType() )
-                        {
-                        case VIATYPE::BLIND_BURIED: mask |= DRC_DISALLOW_BB_VIAS;    break;
-                        case VIATYPE::MICROVIA:     mask |= DRC_DISALLOW_MICRO_VIAS; break;
-                        default:                                                     break;
-                        }
+                        if( via->IsMicroVia() )
+                            mask = DRC_DISALLOW_MICRO_VIAS;
+                        else if( via->IsBlindVia() )
+                            mask = DRC_DISALLOW_BLIND_VIAS;
+                        else if( via->IsBuriedVia() )
+                            mask = DRC_DISALLOW_BURIED_VIAS;
+                        else
+                            mask = DRC_DISALLOW_THROUGH_VIAS;
                     }
                     else
                     {

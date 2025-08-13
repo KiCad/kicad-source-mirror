@@ -64,8 +64,9 @@ enum ENDPOINT_T : int
 // Note that this enum must be synchronized to GAL_LAYER_ID
 enum class VIATYPE : int
 {
-    THROUGH      = 3, /* Always a through hole via */
-    BLIND_BURIED = 2, /* this via can be on internal layers */
+    THROUGH      = 4, /* Always a through hole via */
+    BURIED       = 3, /* this via can be on internal layers */
+    BLIND        = 2, /* this via can be on internal layers */
     MICROVIA     = 1, /* this via which connect from an external layer
                        * to the near neighbor internal layer */
     NOT_DEFINED  = 0  /* not yet used */
@@ -459,6 +460,10 @@ public:
     const PADSTACK& Padstack() const              { return m_padStack; }
     PADSTACK& Padstack()                          { return m_padStack; }
     void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
+
+    bool IsMicroVia() const;
+    bool IsBlindVia() const;
+    bool IsBuriedVia() const;
 
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( PCB_LAYER_ID aLayer ) const;

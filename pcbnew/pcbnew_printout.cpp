@@ -160,7 +160,8 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_TRACKS );
         setVisibility( LAYER_VIAS );
         setVisibility( LAYER_VIA_MICROVIA );
-        setVisibility( LAYER_VIA_BBLIND );
+        setVisibility( LAYER_VIA_BLIND );
+        setVisibility( LAYER_VIA_BURIED );
         setVisibility( LAYER_VIA_THROUGH );
         setVisibility( LAYER_ZONES );
         setVisibility( LAYER_FILLED_SHAPES );
@@ -176,7 +177,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     else
     {
         // Enable items on copper layers, but do not draw holes
-        for( GAL_LAYER_ID layer : { LAYER_VIA_THROUGH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND } )
+        for( GAL_LAYER_ID layer : { LAYER_VIA_THROUGH, LAYER_VIA_MICROVIA, LAYER_VIA_BLIND, LAYER_VIA_BURIED } )
         {
             if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
                 aView.SetLayerVisible( layer, true );

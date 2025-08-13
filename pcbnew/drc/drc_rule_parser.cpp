@@ -573,10 +573,15 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             switch( token )
             {
-            case T_track:      c.m_DisallowFlags |= DRC_DISALLOW_TRACKS;     break;
-            case T_via:        c.m_DisallowFlags |= DRC_DISALLOW_VIAS;       break;
-            case T_micro_via:  c.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS; break;
-            case T_buried_via: c.m_DisallowFlags |= DRC_DISALLOW_BB_VIAS;    break;
+            case T_track:       c.m_DisallowFlags |= DRC_DISALLOW_TRACKS;        break;
+            case T_via:         c.m_DisallowFlags |= DRC_DISALLOW_THROUGH_VIAS
+                                              | DRC_DISALLOW_BLIND_VIAS
+                                              | DRC_DISALLOW_BURIED_VIAS
+                                              | DRC_DISALLOW_MICRO_VIAS;       break;
+            case T_through_via: c.m_DisallowFlags |= DRC_DISALLOW_THROUGH_VIAS; break;
+            case T_blind_via:   c.m_DisallowFlags |= DRC_DISALLOW_BLIND_VIAS;   break;
+            case T_buried_via:  c.m_DisallowFlags |= DRC_DISALLOW_BURIED_VIAS;  break;
+            case T_micro_via:   c.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS;  break;
             case T_pad:        c.m_DisallowFlags |= DRC_DISALLOW_PADS;       break;
             case T_zone:       c.m_DisallowFlags |= DRC_DISALLOW_ZONES;      break;
             case T_text:       c.m_DisallowFlags |= DRC_DISALLOW_TEXTS;      break;
@@ -590,7 +595,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             default:
                 msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                            wxT( "track, via, micro_via, buried_via, pad, zone, text, graphic, "
+                            wxT( "track, via, through_via, blind_via, micro_via, buried_via, pad, zone, text, graphic, "
                                  "hole, or footprint." ) );
                 reportError( msg );
                 break;

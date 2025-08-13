@@ -73,17 +73,20 @@ The `footprint_identifier` listed above can be one of the following:
    case-sensitive, but component class names are case-sensitive.
 
 
-
-    A.isBlindBuriedVia()
-        True if `A` is a blind/buried via.
-
-
     AB.isCoupledDiffPair()
         True if `A` and `B` are members of the same diff pair.
 
 
     A.isMicroVia()
         True if `A` is a microvia.
+
+
+    A.isBlindVia()
+        True if `A` is a blind via.
+
+
+    A.isBuriedVia()
+        True if `A` is a buried via.
 
 
     A.isPlated()
