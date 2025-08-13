@@ -484,8 +484,17 @@ bool PLOT_CONTROLLER::PlotLayer()
         return false;
 
     // Fully delegated to the parent
-    PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions(), true );
-    PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
+    // Note : PlotOneBoardLayer() do not plot drill marks
+    if( GetPlotOptions().GetDrillMarksType() == DRILL_MARKS::NO_DRILL_SHAPE )
+        PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions(), true );
+    else
+    {
+        LSEQ layerSequence( { ToLAYER_ID( GetLayer() ) } );
+
+        PlotBoardLayers( m_board, m_plotter, layerSequence, GetPlotOptions() );
+        PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
+    }
+
     return true;
 }
 
