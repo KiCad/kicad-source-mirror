@@ -197,10 +197,15 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 
             if( ac->IsBus() && bc->IsBus() )
             {
-                if( bc->IsSubsetOf( ac ) )
+                if( bc->IsSubsetOf( ac ) && !ac->IsSubsetOf( bc ) )
+                {
                     return true;
-                if( ac->IsSubsetOf( bc ) )
+                }
+
+                if( !bc->IsSubsetOf( ac ) && ac->IsSubsetOf( bc ) )
+                {
                     return false;
+                }
             }
 
             if( a->Type() == SCH_PIN_T && b->Type() == SCH_PIN_T )
