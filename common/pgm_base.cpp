@@ -75,6 +75,9 @@
 #include <python_manager.h>
 #endif
 
+#ifdef _MSC_VER
+#include <winrt/base.h>
+#endif
 /**
  * Current list of languages supported by KiCad.
  *
@@ -177,6 +180,10 @@ void PGM_BASE::Destroy()
     APP_MONITOR::SENTRY::Instance()->Cleanup();
 
     m_pgm_checker.reset();
+
+#ifdef _MSC_VER
+    winrt::uninit_apartment();
+#endif
 }
 
 
@@ -439,6 +446,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
         // Also don't set it because we need it in QA cli tests to be set by ctest
         wxSetEnv( "FONTCONFIG_PATH", PATHS::GetWindowsFontConfigDir() );
     }
+#endif
+
+#ifdef _MSC_VER
+    winrt::init_apartment(winrt::apartment_type::single_threaded);
 #endif
 
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );

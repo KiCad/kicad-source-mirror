@@ -783,6 +783,9 @@ find_package( CURL REQUIRED )
 if( UNIX AND NOT APPLE )
     find_package( SPNAV REQUIRED )
     include_directories( SYSTEM ${SPNAV_INCLUDE_DIR} )
+
+    find_package( Poppler REQUIRED )
+    include_directories( SYSTEM ${POPPLER_INCLUDE_DIRS} )
 endif()
 
 #

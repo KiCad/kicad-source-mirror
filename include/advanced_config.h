@@ -323,6 +323,15 @@ public:
     bool m_DebugPDFWriter;
 
     /**
+     * Use legacy wxWidgets-based printing.
+     *
+     * Setting name: "UsePdfPrint"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_UsePdfPrint;
+
+    /**
      * The diameter of the drill marks on print and plot outputs (in mm) when the "Drill marks"
      * option is set to "Small mark".
      *

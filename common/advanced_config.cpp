@@ -84,6 +84,7 @@ static const wxChar ExtraZoneDisplayModes[] = wxT( "ExtraZoneDisplayModes" );
 static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
 static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
 static const wxChar DebugPDFWriter[] = wxT( "DebugPDFWriter" );
+static const wxChar UsePdfPrint[] = wxT( "UsePdfPrint" );
 static const wxChar SmallDrillMarkSize[] = wxT( "SmallDrillMarkSize" );
 static const wxChar HotkeysDumper[] = wxT( "HotkeysDumper" );
 static const wxChar DrawBoundingBoxes[] = wxT( "DrawBoundingBoxes" );
@@ -245,6 +246,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_DebugZoneFiller           = false;
     m_DebugPDFWriter            = false;
+    m_UsePdfPrint               = false;
     m_SmallDrillMarkSize        = 0.35;
     m_HotkeysDumper             = false;
     m_DrawBoundingBoxes         = false;
@@ -455,6 +457,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::DebugPDFWriter,
                                                 &m_DebugPDFWriter, m_DebugPDFWriter ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::UsePdfPrint,
+                                                &m_UsePdfPrint, m_UsePdfPrint ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::SmallDrillMarkSize,
                                                   &m_SmallDrillMarkSize, m_SmallDrillMarkSize,
