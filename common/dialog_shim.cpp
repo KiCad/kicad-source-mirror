@@ -471,8 +471,12 @@ void DIALOG_SHIM::SaveControlState()
 void DIALOG_SHIM::LoadControlState()
 {
     COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+
+    if( !settings )
+        return;
+
     std::string dialogKey = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
-    auto dlgIt = settings->m_dialogControlValues.find( dialogKey );
+    auto        dlgIt = settings->m_dialogControlValues.find( dialogKey );
 
     if( dlgIt == settings->m_dialogControlValues.end() )
         return;
