@@ -105,8 +105,7 @@ protected:
     {
         PCB_EDIT_FRAME*        frame = (PCB_EDIT_FRAME*) getToolManager()->GetToolHolder();
         BOARD_DESIGN_SETTINGS& bds = frame->GetBoard()->GetDesignSettings();
-        bool                   useIndex = !bds.m_UseConnectedTrackWidth
-                                                && !bds.UseCustomTrackViaSize();
+        bool                   useIndex = !bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize();
         wxString               msg;
 
         Clear();
@@ -117,7 +116,7 @@ protected:
 
         AppendSeparator();
 
-        for( unsigned i = 1; i < bds.m_ViasDimensionsList.size(); i++ )
+        for( int i = 1; i < (int) bds.m_ViasDimensionsList.size(); i++ )
         {
             VIA_DIMENSION via = bds.m_ViasDimensionsList[i];
 
