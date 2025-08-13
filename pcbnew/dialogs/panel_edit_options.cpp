@@ -80,10 +80,7 @@ static int arcEditModeToComboIndex( ARC_EDIT_MODE aMode )
         case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:   return 0;
         case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION: return 1;
         case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:     return 2;
-
-        default:
-            wxFAIL_MSG( "Invalid ARC_EDIT_MODE" );
-            return 0;
+        default:    wxFAIL_MSG( "Invalid ARC_EDIT_MODE" );     return 0;
     }
 };
 
@@ -116,7 +113,6 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
         m_rbFlipTopBottom->SetValue( true );
 
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
-    m_overrideLocks->SetValue( aCfg->m_LockingOptions.m_sessionSkipPrompts );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
 
     m_magneticPadChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.pads ) );
@@ -202,7 +198,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
                                                                  : FLIP_DIRECTION::TOP_BOTTOM;
 
             cfg->m_AllowFreePads = m_allowFreePads->GetValue();
-            cfg->m_LockingOptions.m_sessionSkipPrompts = m_overrideLocks->GetValue();
             cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
 
             cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );

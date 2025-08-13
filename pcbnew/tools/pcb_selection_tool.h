@@ -97,8 +97,8 @@ public:
      * If the set is empty, performs the legacy-style hover selection.
      *
      * @param aClientFilter A callback to allow tool- or action-specific filtering.
-     * @param aConfirmLockedItems [optional] Signals that the user shall be asked if they want
-     *                            to drop locked items from the selection or override the locks.
+     * @param aConfirmLockedItems [optional] Signals that locked items should be skipped/included
+     *                            according PCB_EDIT_FRAME::GetOverrideLocks().
      */
     PCB_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
                                      bool aConfirmLockedItems = false );

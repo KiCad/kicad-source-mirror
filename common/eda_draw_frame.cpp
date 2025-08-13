@@ -95,15 +95,14 @@ bool EDA_DRAW_FRAME::m_openGLFailureOccured = false;
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                                long aStyle, const wxString& aFrameName,
-                                const EDA_IU_SCALE& aIuScale ) :
-        KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName,
-                      aIuScale ),
+                                long aStyle, const wxString& aFrameName, const EDA_IU_SCALE& aIuScale ) :
+        KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, aIuScale ),
         m_socketServer( nullptr ),
         m_lastToolbarIconSize( 0 )
 {
     m_gridSelectBox       = nullptr;
     m_zoomSelectBox       = nullptr;
+    m_overrideLocksCb     = nullptr;
     m_searchPane          = nullptr;
     m_undoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
 
@@ -197,65 +196,70 @@ void EDA_DRAW_FRAME::configureToolbars()
 
     // Grid selection
     auto gridSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_gridSelectBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_gridSelectBox = new wxChoice( aToolbar, ID_ON_GRID_SELECT, wxDefaultPosition,
-                                                wxDefaultSize, 0, nullptr );
-            }
+                if( !m_gridSelectBox )
+                    m_gridSelectBox = new wxChoice( aToolbar, ID_ON_GRID_SELECT );
 
-            UpdateGridSelectBox();
+                UpdateGridSelectBox();
 
-            aToolbar->Add( m_gridSelectBox );
-        };
+                aToolbar->Add( m_gridSelectBox );
+            };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::gridSelect, gridSelectorFactory );
 
     // Zoom selection
     auto zoomSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_zoomSelectBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_zoomSelectBox = new wxChoice( aToolbar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
-                                                wxDefaultSize, 0, nullptr );
-            }
+                if( !m_zoomSelectBox )
+                    m_zoomSelectBox = new wxChoice( aToolbar, ID_ON_ZOOM_SELECT );
 
-            UpdateZoomSelectBox();
-            aToolbar->Add( m_zoomSelectBox );
-        };
+                UpdateZoomSelectBox();
+                aToolbar->Add( m_zoomSelectBox );
+            };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::zoomSelect, zoomSelectorFactory );
+
+    auto overrideLocksFactory =
+            [this]( ACTION_TOOLBAR* aToolbar )
+            {
+                if( !m_overrideLocksCb )
+                    m_overrideLocksCb = new wxCheckBox( aToolbar, wxID_ANY, _( "Override locks" ) );
+
+                aToolbar->Add( m_overrideLocksCb );
+            };
+
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::overrideLocks, overrideLocksFactory );
 }
 
 
 void EDA_DRAW_FRAME::ReleaseFile()
 {
-    if( m_file_checker.get() != nullptr )
+    if( m_file_checker )
         m_file_checker->UnlockFile();
 }
 
 
 bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 {
-    // We need to explicitly reset here to get the deletion before
-    // we create a new unique_ptr that may be for the same file
+    // We need to explicitly reset here to get the deletion before we create a new unique_ptr that
+    // may be for the same file.
     m_file_checker.reset();
 
     m_file_checker = std::make_unique<LOCKFILE>( aFileName );
 
     if( !m_file_checker->Valid() && m_file_checker->IsLockedByMe() )
     {
-        // If we cannot acquire the lock but we appear to be the one who
-        // locked it, check to see if there is another KiCad instance running.
-        // If there is not, then we can override the lock.  This could happen if
-        // KiCad crashed or was interrupted
+        // If we cannot acquire the lock but we appear to be the one who locked it, check to see if
+        // there is another KiCad instance running.  If there is not, then we can override the lock.
+        // This could happen if KiCad crashed or was interrupted.
         if( !Pgm().SingleInstance()->IsAnotherRunning() )
             m_file_checker->OverrideLock();
     }
-    // If the file is valid, return true.  This could mean that the file is
-    // locked or it could mean that the file is read-only
+
+    // If the file is valid, return true.  This could mean that the file is locked or it could mean
+    // that the file is read-only.
     return m_file_checker->Valid();
 }
 
@@ -451,9 +455,9 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     wxCHECK( config(), /* void */ );
 
     const std::vector<double>& zoomList = config()->m_Window.zoom_factors;
-    int curr_selection = m_zoomSelectBox->GetSelection();
-    int new_selection = 0;      // select zoom auto
-    double last_approx = 1e9;   // large value to start calculation
+    int                        curr_selection = m_zoomSelectBox->GetSelection();
+    int                        new_selection = 0;      // select zoom auto
+    double                     last_approx = 1e9;      // large value to start calculation
 
     // Search for the nearest available value to the current zoom setting, and select it
     for( size_t jj = 0; jj < zoomList.size(); ++jj )
@@ -465,7 +469,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
             last_approx = rel_error;
 
             // zoom IDs in m_zoomSelectBox start with 1 (leaving 0 for auto-zoom choice)
-            new_selection = jj + 1;
+            new_selection = (int) jj + 1;
         }
     }
 
@@ -511,6 +515,15 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     // Needed on Windows because clicking on m_gridSelectBox remove the focus from m_canvas
     // (Windows specific
     m_canvas->SetFocus();
+}
+
+
+bool EDA_DRAW_FRAME::GetOverrideLocks() const
+{
+    if( m_overrideLocksCb )
+        return m_overrideLocksCb->GetValue();
+
+    return false;
 }
 
 
@@ -579,14 +592,14 @@ void EDA_DRAW_FRAME::UpdateZoomSelectBox()
 
     wxCHECK( config(), /* void */ );
 
-    for( unsigned i = 0;  i < config()->m_Window.zoom_factors.size();  ++i )
+    for( unsigned ii = 0;  ii < config()->m_Window.zoom_factors.size();  ++ii )
     {
-        double current = config()->m_Window.zoom_factors[i];
+        double current = config()->m_Window.zoom_factors[ii];
 
         m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
 
         if( zoom == current )
-            m_zoomSelectBox->SetSelection( i + 1 );
+            m_zoomSelectBox->SetSelection( (int) ii + 1 );
     }
 }
 
@@ -604,8 +617,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     UpdateStatusBar();
     m_canvas->Refresh();
 
-    // Needed on Windows because clicking on m_zoomSelectBox remove the focus from m_canvas
-    // (Windows specific
+    // Needed on Windows (only) because clicking on m_zoomSelectBox removes the focus from m_canvas
     m_canvas->SetFocus();
 }
 
@@ -675,8 +687,7 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
     GRID_SETTINGS& gridSettings = m_toolManager->GetSettings()->m_Window.grid;
     int            currentIdx = m_toolManager->GetSettings()->m_Window.grid.last_size_idx;
 
-    msg.Printf( _( "grid %s" ),
-                gridSettings.grids[currentIdx].UserUnitsMessageText( this, false ) );
+    msg.Printf( _( "grid %s" ), gridSettings.grids[currentIdx].UserUnitsMessageText( this, false ) );
 
     SetStatusText( msg, 4 );
 }
@@ -792,8 +803,7 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_findReplaceData->findString = aCfg->m_FindReplace.find_string;
     m_findReplaceData->replaceString = aCfg->m_FindReplace.replace_string;
-    m_findReplaceData->matchMode =
-            static_cast<EDA_SEARCH_MATCH_MODE>( aCfg->m_FindReplace.match_mode );
+    m_findReplaceData->matchMode = static_cast<EDA_SEARCH_MATCH_MODE>( aCfg->m_FindReplace.match_mode );
     m_findReplaceData->matchCase = aCfg->m_FindReplace.match_case;
     m_findReplaceData->searchAndReplace = aCfg->m_FindReplace.search_and_replace;
 
@@ -827,23 +837,17 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     aCfg->m_FindReplace.replace_history.clear();
 
     for( size_t i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
-    {
         aCfg->m_FindReplace.find_history.push_back( m_findStringHistoryList[ i ].ToStdString() );
-    }
 
     for( size_t i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
-    {
-        aCfg->m_FindReplace.replace_history.push_back(
-                m_replaceStringHistoryList[ i ].ToStdString() );
-    }
+        aCfg->m_FindReplace.replace_history.push_back( m_replaceStringHistoryList[ i ].ToStdString() );
 
     // Save the units used in this frame
     if( m_toolManager )
     {
         if( COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>() )
         {
-            aCfg->m_System.last_imperial_units =
-                    static_cast<int>( cmnTool->GetLastImperialUnits() );
+            aCfg->m_System.last_imperial_units = static_cast<int>( cmnTool->GetLastImperialUnits() );
             aCfg->m_System.last_metric_units = static_cast<int>( cmnTool->GetLastMetricUnits() );
         }
     }
@@ -966,13 +970,12 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     // Not all classes derived from EDA_DRAW_FRAME can save the canvas type, because some
     // have a fixed type, or do not have a option to set the canvas type (they inherit from
     // a parent frame)
-    static std::vector<FRAME_T> s_allowedFrames =
-            {
-                FRAME_SCH, FRAME_SCH_SYMBOL_EDITOR,
-                FRAME_PCB_EDITOR, FRAME_FOOTPRINT_EDITOR,
-                FRAME_GERBER,
-                FRAME_PL_EDITOR
-            };
+    static std::vector<FRAME_T> s_allowedFrames = { FRAME_SCH,
+                                                    FRAME_SCH_SYMBOL_EDITOR,
+                                                    FRAME_PCB_EDITOR,
+                                                    FRAME_FOOTPRINT_EDITOR,
+                                                    FRAME_GERBER,
+                                                    FRAME_PL_EDITOR };
 
     if( !alg::contains( s_allowedFrames, m_ident ) )
         return false;
@@ -983,8 +986,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
         return false;
     }
 
-    if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
+    if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
     {
         wxASSERT( false );
         return false;
@@ -1063,7 +1065,7 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
     BOX2D r = GetCanvas()->GetView()->GetViewport();
 
     // Center if we're off the current view, or within 10% of its edge
-    r.Inflate( - (int) r.GetWidth() / 10 );
+    r.Inflate( - r.GetWidth() / 10.0 );
 
     if( !r.Contains( aPos ) )
         centerView = true;
@@ -1072,9 +1074,8 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
 
     for( wxWindow* dialog : findDialogs() )
     {
-        dialogScreenRects.emplace_back(
-                ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
-                ToVECTOR2D( dialog->GetSize() ) );
+        dialogScreenRects.emplace_back( ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
+                                        ToVECTOR2D( dialog->GetSize() ) );
     }
 
     // Center if we're behind an obscuring dialog, or within 10% of its edge
@@ -1094,16 +1095,12 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
         }
         catch( const Clipper2Lib::Clipper2Exception& e )
         {
-            wxFAIL_MSG( wxString::Format( wxT( "Clipper2 exception occurred centering object: %s" ),
-                                          e.what() ) );
+            wxFAIL_MSG( wxString::Format( wxT( "Clipper2 exception occurred centering object: %s" ), e.what() ) );
         }
     }
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
 }
-
-
-static const wxString productName = wxT( "KiCad E.D.A.  " );
 
 
 void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,

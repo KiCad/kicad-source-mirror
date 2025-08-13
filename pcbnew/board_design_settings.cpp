@@ -1339,9 +1339,9 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
+void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( int aIndex )
 {
-    m_viaSizeIndex = std::min( aIndex, (unsigned) m_ViasDimensionsList.size() );
+    m_viaSizeIndex = std::min( aIndex, (int) m_ViasDimensionsList.size() );
     m_useCustomTrackVia = false;
 }
 
@@ -1372,9 +1372,9 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
+void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( int aIndex )
 {
-    m_trackWidthIndex = std::min( aIndex, (unsigned) m_TrackWidthList.size() );
+    m_trackWidthIndex = std::min( aIndex, (int) m_TrackWidthList.size() );
     m_useCustomTrackVia = false;
 }
 
@@ -1390,13 +1390,10 @@ int BOARD_DESIGN_SETTINGS::GetCurrentTrackWidth() const
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetDiffPairIndex( unsigned aIndex )
+void BOARD_DESIGN_SETTINGS::SetDiffPairIndex( int aIndex )
 {
     if( !m_DiffPairDimensionsList.empty() )
-    {
-        m_diffPairIndex = std::min( aIndex,
-                static_cast<unsigned>( m_DiffPairDimensionsList.size() ) - 1 );
-    }
+        m_diffPairIndex = std::min( aIndex, (int) m_DiffPairDimensionsList.size() - 1 );
 
     m_useCustomDiffPair = false;
 }

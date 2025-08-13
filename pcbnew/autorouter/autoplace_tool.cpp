@@ -23,11 +23,8 @@
 
 
 #include <board_commit.h>
-#include <dialogs/dialog_locked_items_query.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_selection_tool.h>
-#include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 
 #include "ar_autoplacer.h"
@@ -76,38 +73,14 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints )
         return 0;
     }
 
-    int locked_count = std::count_if( aFootprints.begin(), aFootprints.end(),
-                                      [](FOOTPRINT* fp)
-                                      {
-                                          return fp->IsLocked();
-                                      } );
-
-    PCBNEW_SETTINGS* settings = frame()->GetPcbNewSettings();
-
-    if( locked_count > 0  && !settings->m_LockingOptions.m_sessionSkipPrompts )
+    if( !frame()->GetOverrideLocks() )
     {
-        DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), locked_count, settings->m_LockingOptions );
-
-        switch( dlg.ShowModal() )
-        {
-        case wxID_OK:
-            // Remove locked items from aFootprints
-            aFootprints.erase( std::remove_if( aFootprints.begin(), aFootprints.end(),
-                                               []( FOOTPRINT* fp )
-                                               {
-                                                   return fp->IsLocked();
-                                               } ),
-                               aFootprints.end() );
-            break;
-
-        case wxID_CANCEL:
-            // cancel operation
-            return 0;
-
-        case wxID_APPLY:
-            // Proceed with all items (do nothing)
-            break;
-        }
+        aFootprints.erase( std::remove_if( aFootprints.begin(), aFootprints.end(),
+                                           []( FOOTPRINT* fp )
+                                           {
+                                               return fp->IsLocked();
+                                           } ),
+                           aFootprints.end() );
     }
 
     Activate();

@@ -197,11 +197,11 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
     {
         if( ( isArc || isTrack ) && m_trackWidthCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
-            unsigned int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
+            int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
             int trackWidthIndex = m_trackWidthCtrl->GetSelection();
 
             if( trackWidthIndex >= 0 )
-                brdSettings.SetTrackWidthIndex( static_cast<unsigned>( trackWidthIndex + 1 ) );
+                brdSettings.SetTrackWidthIndex( trackWidthIndex + 1 );
 
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
@@ -210,11 +210,11 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
         if( isVia && m_viaSizesCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
-            unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
-            int          viaSizeIndex = m_viaSizesCtrl->GetSelection();
+            int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
+            int viaSizeIndex = m_viaSizesCtrl->GetSelection();
 
             if( viaSizeIndex >= 0 )
-                brdSettings.SetViaSizeIndex( static_cast<unsigned>( viaSizeIndex + 1 ) );
+                brdSettings.SetViaSizeIndex( viaSizeIndex + 1 );
 
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
@@ -228,20 +228,16 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             switch( m_annularRingsCtrl->GetSelection() )
             {
             case 0:
-                v->Padstack().SetUnconnectedLayerMode(
-                        PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+                v->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
                 break;
             case 1:
-                v->Padstack().SetUnconnectedLayerMode(
-                        PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+                v->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
                 break;
             case 2:
-                v->Padstack().SetUnconnectedLayerMode(
-                        PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+                v->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
                 break;
             case 3:
-                v->Padstack().SetUnconnectedLayerMode(
-                        PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
+                v->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
                 break;
             default:
                 break;

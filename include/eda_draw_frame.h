@@ -368,6 +368,8 @@ public:
      */
     virtual void DisplayGridMsg();
 
+    bool GetOverrideLocks() const;
+
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
@@ -587,6 +589,7 @@ protected:
 
     wxChoice*            m_gridSelectBox;
     wxChoice*            m_zoomSelectBox;
+    wxCheckBox*          m_overrideLocksCb;
 
     std::unique_ptr<EDA_SEARCH_DATA> m_findReplaceData;
     wxArrayString        m_findStringHistoryList;

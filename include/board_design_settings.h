@@ -335,14 +335,14 @@ public:
     /**
      * @return the current track width list index.
      */
-    inline unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
+    inline int GetTrackWidthIndex() const { return m_trackWidthIndex; }
 
     /**
      * Set the current track width list index to \a aIndex.
      *
      * @param aIndex is the track width list index.
      */
-    void SetTrackWidthIndex( unsigned aIndex );
+    void SetTrackWidthIndex( int aIndex );
 
     /**
      * @return the current track width according to the selected options
@@ -359,33 +359,20 @@ public:
      *
      * @param aWidth is the new track width.
      */
-    inline void SetCustomTrackWidth( int aWidth )
-    {
-        m_customTrackWidth = aWidth;
-    }
-
-    /**
-     * @return Current custom width for a track.
-     */
-    inline int GetCustomTrackWidth() const
-    {
-        return m_customTrackWidth;
-    }
+    inline void SetCustomTrackWidth( int aWidth ) { m_customTrackWidth = aWidth; }
+    inline int GetCustomTrackWidth() const { return m_customTrackWidth; }
 
     /**
      * @return the current via size list index.
      */
-    inline unsigned GetViaSizeIndex() const
-    {
-        return m_viaSizeIndex;
-    }
+    inline int GetViaSizeIndex() const { return m_viaSizeIndex; }
 
     /**
      * Set the current via size list index to \a aIndex.
      *
      * @param aIndex is the via size list index.
      */
-    void SetViaSizeIndex( unsigned aIndex );
+    void SetViaSizeIndex( int aIndex );
 
     /**
      * @return the current via size, according to the selected options
@@ -467,12 +454,12 @@ public:
     /**
      * @return the current diff pair dimension list index.
      */
-    inline unsigned GetDiffPairIndex() const { return m_diffPairIndex; }
+    inline int GetDiffPairIndex() const { return m_diffPairIndex; }
 
     /**
      * @param aIndex is the diff pair dimensions list index to set.
      */
-    void SetDiffPairIndex( unsigned aIndex );
+    void SetDiffPairIndex( int aIndex );
 
     /**
      * Sets custom track width for differential pairs (i.e. not available in netclasses or
@@ -806,14 +793,14 @@ public:
     bool       m_UseHeightForLengthCalcs;
 
 private:
-    VECTOR2I m_auxOrigin;  ///< origin for plot exports
-    VECTOR2I m_gridOrigin; ///< origin for grid offsets
+    VECTOR2I   m_auxOrigin;  ///< origin for plot exports
+    VECTOR2I   m_gridOrigin; ///< origin for grid offsets
 
     // Indices into the trackWidth, viaSizes and diffPairDimensions lists.
     // The 0 index is always the current netclass value(s)
-    unsigned   m_trackWidthIndex;
-    unsigned   m_viaSizeIndex;
-    unsigned   m_diffPairIndex;
+    int        m_trackWidthIndex;
+    int        m_viaSizeIndex;
+    int        m_diffPairIndex;
 
     // Custom values for track/via sizes (specified via dialog instead of netclass or lists)
     bool       m_useCustomTrackVia;

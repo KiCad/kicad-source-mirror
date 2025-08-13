@@ -214,12 +214,6 @@ public:
         bool                 m_Live3DRefresh;
     };
 
-    struct LOCKING_OPTIONS
-    {
-        // Skip lock prompts for the current session
-        bool m_sessionSkipPrompts;
-    };
-
     PCBNEW_SETTINGS();
     virtual ~PCBNEW_SETTINGS();
 
@@ -275,8 +269,6 @@ public:
 
     wxString  m_LastFootprintLibDir;
     wxString  m_LastFootprint3dDir;
-
-    LOCKING_OPTIONS m_LockingOptions;
 
     ACTION_PLUGIN_SETTINGS_LIST m_VisibleActionPlugins;
 };

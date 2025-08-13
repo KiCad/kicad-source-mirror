@@ -36,8 +36,6 @@
 #include <settings/settings_manager.h>
 #include <wx/config.h>
 #include <wx/tokenzr.h>
-#include <zones.h>
-#include <widgets/ui_common.h>
 #include <base_units.h>
 
 #include "../3d-viewer/3d_viewer/eda_3d_viewer_settings.h"
@@ -75,8 +73,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_MagneticItems.tracks    = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
     m_MagneticItems.graphics  = false;
     m_MagneticItems.allLayers = false;
-
-    m_LockingOptions.m_sessionSkipPrompts = false;
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
             &m_AuiPanels.show_layer_manager, true ) );

@@ -831,7 +831,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->IsToolActive()
         && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        int widthIndex = (int) bds.GetDiffPairIndex() + 1;
+        int widthIndex = bds.GetDiffPairIndex() + 1;
 
         // If we go past the last track width entry in the list, start over at the beginning
         if( widthIndex >= (int) bds.m_DiffPairDimensionsList.size() )
@@ -844,7 +844,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int widthIndex = (int) bds.GetTrackWidthIndex();
+        int widthIndex = bds.GetTrackWidthIndex();
 
         if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
@@ -913,11 +913,11 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        int widthIndex = (int) bds.GetDiffPairIndex() - 1;
+        int widthIndex = bds.GetDiffPairIndex() - 1;
 
         // If we get to the lowest entry start over at the highest
         if( widthIndex < 0 )
-            widthIndex = (int) bds.m_DiffPairDimensionsList.size() - 1;
+            widthIndex = bds.m_DiffPairDimensionsList.size() - 1;
 
         bds.SetDiffPairIndex( widthIndex );
         bds.UseCustomDiffPairDimensions( false );
@@ -926,7 +926,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int widthIndex = (int) bds.GetTrackWidthIndex();
+        int widthIndex = bds.GetTrackWidthIndex();
 
         if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
@@ -993,7 +993,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int sizeIndex = (int) bds.GetViaSizeIndex() + 1;
+        int sizeIndex = bds.GetViaSizeIndex() + 1;
 
         // If we go past the last via entry in the list, start over at the beginning
         if( sizeIndex >= (int) bds.m_ViasDimensionsList.size() )
@@ -1054,11 +1054,11 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
         // If there are more, cycle through them backwards
         if( bds.m_ViasDimensionsList.size() > 0 )
         {
-            sizeIndex = (int) bds.GetViaSizeIndex() - 1;
+            sizeIndex = bds.GetViaSizeIndex() - 1;
 
             // If we get to the lowest entry start over at the highest
             if( sizeIndex < 0 )
-                sizeIndex = (int) bds.m_ViasDimensionsList.size() - 1;
+                sizeIndex = bds.m_ViasDimensionsList.size() - 1;
         }
 
         bds.SetViaSizeIndex( sizeIndex );

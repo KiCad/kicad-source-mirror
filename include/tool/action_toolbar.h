@@ -378,7 +378,7 @@ protected:
     void onToolEvent( wxAuiToolBarEvent& aEvent );
 
     ///< Handle a right-click on a menu item
-    void onToolRightClick( wxAuiToolBarEvent& aEvent );
+    void onRightClick( wxAuiToolBarEvent& aEvent );
 
     ///< Handle the button select inside the palette
     void onPaletteEvent( wxCommandEvent& aEvent );
@@ -468,6 +468,7 @@ public:
     static ACTION_TOOLBAR_CONTROL ipcScripting;
     static ACTION_TOOLBAR_CONTROL unitSelector;
     static ACTION_TOOLBAR_CONTROL layerSelector;
+    static ACTION_TOOLBAR_CONTROL overrideLocks;
 };
 
 #endif

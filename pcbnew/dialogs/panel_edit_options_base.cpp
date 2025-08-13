@@ -111,11 +111,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_sizerBoardEdit->Add( m_allowFreePads, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_overrideLocks = new wxCheckBox( this, wxID_ANY, _("Do not prompt for lock overrides for this session"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_overrideLocks->SetToolTip( _("If checked, no prompt will be shown when attempting to edit locked items.  This setting is reset when KiCad restarts.") );
-
-	m_sizerBoardEdit->Add( m_overrideLocks, 0, wxBOTTOM|wxLEFT, 5 );
-
 
 	bMiddleLeftSizer->Add( m_sizerBoardEdit, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 

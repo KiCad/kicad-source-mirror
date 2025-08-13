@@ -48,7 +48,6 @@
 #include <tool/common_tools.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <widgets/layer_box_selector.h>
@@ -353,6 +352,9 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         config.AppendSeparator()
               .AppendControl( ACTION_TOOLBAR_CONTROLS::zoomSelect );
 
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::overrideLocks );
+
         break;
     }
 
@@ -616,8 +618,7 @@ void PCB_EDIT_FRAME::ToggleNetInspector()
 
     if( m_show_net_inspector )
     {
-        SetAuiPaneSize( m_auimgr, netInspectorPanel, settings->m_AuiPanels.net_inspector_width,
-                        -1 );
+        SetAuiPaneSize( m_auimgr, netInspectorPanel, settings->m_AuiPanels.net_inspector_width, -1 );
         m_netInspectorPanel->OnShowPanel();
     }
     else
