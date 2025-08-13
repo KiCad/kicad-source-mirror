@@ -546,7 +546,13 @@ void DIALOG_SHIM::LoadControlState()
                         else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
                         {
                             if( j.is_boolean() )
-                                radio->SetValue( j.get<bool>() );
+                            {
+                                // Only set active radio buttons.  Let wxWidgets handle unsetting the inactive
+                                // ones.  This prevents all from being unset, which trips up wxWidgets in some
+                                // cases.
+                                if( j.get<bool>() )
+                                    radio->SetValue( true );
+                            }
                         }
                         else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
                         {
