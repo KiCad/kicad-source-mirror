@@ -490,10 +490,10 @@ bool PLOT_CONTROLLER::PlotLayer()
     else
     {
         LSEQ layerSequence( { ToLAYER_ID( GetLayer() ) } );
-
         PlotBoardLayers( m_board, m_plotter, layerSequence, GetPlotOptions() );
-        PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
     }
+
+    PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
 
     return true;
 }
