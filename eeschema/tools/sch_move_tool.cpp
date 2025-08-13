@@ -639,8 +639,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         if( jct && !jct->IsSelected()
                             && std::find( m_hiddenJunctions.begin(), m_hiddenJunctions.end(), jct ) == m_hiddenJunctions.end() )
                         {
-                            m_view->Hide( jct, true );
-                            m_hiddenJunctions.push_back( jct );
+                            jct->SetFlags( STRUCT_DELETED );
+                            m_frame->RemoveFromScreen( jct, m_frame->GetScreen() );
+                            aCommit->Removed( jct, m_frame->GetScreen() );
                         }
                     }
                 }
@@ -1111,9 +1112,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     m_dragAdditions.clear();
     m_lineConnectionCache.clear();
     m_moveInProgress = false;
-
-    for( SCH_JUNCTION* jct : m_hiddenJunctions )
-        m_view->Hide( jct, false );
 
     m_hiddenJunctions.clear();
     m_view->ClearPreview();

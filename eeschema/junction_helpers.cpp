@@ -66,17 +66,21 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
                 continue;
             }
         }
-        else if( item->Type() == SCH_JUNCTION_T
-                 || item->Type() == SCH_BUS_WIRE_ENTRY_T
-                 || item->Type() == SCH_SHEET_T
-                 || item->Type() == SCH_SYMBOL_T )
+        else if( item->Type() == SCH_JUNCTION_T )
+        {
+            if( item->HitTest( aPosition, -1 ) )
+                info.hasExplicitJunctionDot = true;
+
+            filtered.insert( item );
+        }
+        else if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
+        {
+            info.hasBusEntry = true;
+            filtered.insert( item );
+        }
+        else if( item->Type() == SCH_SHEET_T || item->Type() == SCH_SYMBOL_T )
         {
             filtered.insert( item );
-
-            if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
-            {
-                info.hasBusEntry = true;
-            }
         }
     }
 
@@ -88,6 +92,9 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
 
     do
     {
+        if( info.hasExplicitJunctionDot )
+            break;
+
         merged = false;
 
         for( auto it_i = mergedLines.begin(); it_i != mergedLines.end() && !merged; ++it_i )
