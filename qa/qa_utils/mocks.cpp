@@ -460,6 +460,12 @@ bool PCB_TOOL_BASE::Is45Limited() const
 }
 
 
+bool PCB_TOOL_BASE::Is90Limited() const
+{
+    return false;
+}
+
+
 ZONE_FILLER::~ZONE_FILLER()
 {
 }
