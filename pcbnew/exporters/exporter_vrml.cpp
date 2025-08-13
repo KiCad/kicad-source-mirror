@@ -1051,12 +1051,6 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
         SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename, footprintBasePath, embeddedFilesStack );
 
-        if( nullptr == mod3d )
-        {
-            ++sM;
-            continue;
-        }
-
         /* Calculate 3D shape rotation:
          * this is the rotation parameters, with an additional 180 deg rotation
          * for footprints that are flipped
@@ -1120,6 +1114,12 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
             wxFileName srcFile = m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename, footprintBasePath,
                                                                               embeddedFilesStack );
+            if( !srcFile.FileExists() ) {
+		// skip model where the file cannot be resolved
+                ++sM;
+                continue;
+            }
+
             wxFileName dstFile;
             dstFile.SetPath( m_Subdir3DFpModels );
             dstFile.SetName( srcFile.GetName() );
@@ -1170,8 +1170,10 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
                 }
                 else
                 {
-                    if( !S3D::WriteVRML( dstFile.GetFullPath().ToUTF8(), true, mod3d, m_ReuseDef,
-                                         true ) )
+
+                    if( ( nullptr == mod3d) ||
+                        ( !S3D::WriteVRML( dstFile.GetFullPath().ToUTF8(), true, mod3d, m_ReuseDef,
+                                         true ) ) )
                     {
                         ++sM;
                         continue;
@@ -1218,6 +1220,12 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
         }
         else
         {
+	    if( nullptr == mod3d )
+	    {
+		++sM;
+		continue;
+	    }
+
             IFSG_TRANSFORM* modelShape = new IFSG_TRANSFORM( m_OutputPCB.GetRawPtr() );
 
             // only write a rotation if it is >= 0.1 deg
