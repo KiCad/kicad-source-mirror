@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-07-19 14:45+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-08-14 12:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -36329,7 +36329,7 @@ msgstr "Nur verbundene Lagen"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:184
 msgid "Set to net class / custom rule values"
-msgstr "Benutze Werte der Netzklasse/enutzerdefinierten Regel"
+msgstr "Benutze Werte der Netzklasse/benutzerdefinierten Regel"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:86
 msgid "Set Track and Via Properties"
@@ -38528,12 +38528,12 @@ msgstr "Umrandungsstil:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:547
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr "Diese Änderungen werden die Netze %s und %s verbinden."
+msgstr "Diese Änderungen werden das Netz %s mit %s verbinden."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:553
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr "Diese Änderungen würden das Netz %s mit andere Netze verbinden."
+msgstr "Diese Änderungen werden das Netz %s mit anderen Netzen verbinden."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:558
 msgid "Apply Anyway"
@@ -38552,14 +38552,14 @@ msgstr "Durch Ändern des Netzes wird auch das %s Pad %s auf %s aktualisiert."
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
-"Änderungen des Netz wird auch das %s Pad %s und das %s sowie das Pad %s auf "
-"%s ändern."
+"Durch Ändern des Netzes wird auch das %s Pad %s und das %s Pad %s auf %s "
+"aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:590
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
-"Durch Ändern des Netz werden auch %lu verbundene Pads auf %s aktualisiert."
+"Durch Ändern des Netzes werden auch %lu verbundene Pads auf %s aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:596
 msgid "Change Nets"
