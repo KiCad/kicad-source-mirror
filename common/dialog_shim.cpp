@@ -739,14 +739,17 @@ int DIALOG_SHIM::ShowModal()
 }
 
 /*
-    Quasi-Modal Mode Explained:
+    QuasiModal Mode Explained:
 
     The gtk calls in wxDialog::ShowModal() cause event routing problems if that
     modal dialog then tries to use KIWAY_PLAYER::ShowModal().  The latter shows up
     and mostly works but does not respond to the window decoration close button.
     There is no way to get around this without reversing the gtk calls temporarily.
 
-    Quasi-Modal mode is our own almost modal mode which disables only the parent
+    There are also issues with the Scintilla text editor putting up autocomplete
+    popups, which appear behind the dialog window if QuasiModal is not used.
+
+    QuasiModal mode is our own almost modal mode which disables only the parent
     of the DIALOG_SHIM, leaving other frames operable and while staying captured in the
     nested event loop.  This avoids the gtk calls and leaves event routing pure
     and sufficient to operate the KIWAY_PLAYER::ShowModal() properly.  When using
