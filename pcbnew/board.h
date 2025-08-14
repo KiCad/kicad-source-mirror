@@ -1083,21 +1083,6 @@ public:
     /* Functions used in test, merge and cut outlines */
 
     /**
-     * Add an empty copper area to board areas list.
-     *
-     * @param aNewZonesList is a PICKED_ITEMS_LIST * where to store new areas  pickers (useful
-     *                      in undo commands) can be NULL.
-     * @param aNetcode is the netcode of the copper area (0 = no net).
-     * @param aLayer is the layer of area.
-     * @param aStartPointPosition is position of the first point of the polygon outline of this
-     *        area.
-     * @param aHatch is the hatch option.
-     * @return a reference to the new area.
-     */
-    ZONE* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-                   VECTOR2I aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
-
-    /**
      * Test for intersection of 2 copper areas.
      *
      * @param aZone1 is the area reference.

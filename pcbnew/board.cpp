@@ -2608,31 +2608,6 @@ std::list<ZONE*> BOARD::GetZoneList( bool aIncludeZonesInFootprints ) const
 }
 
 
-ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-                      VECTOR2I aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch )
-{
-    ZONE* new_area = new ZONE( this );
-
-    new_area->SetNetCode( aNetcode );
-    new_area->SetLayer( aLayer );
-
-    m_zones.push_back( new_area );
-
-    new_area->SetHatchStyle( (ZONE_BORDER_DISPLAY_STYLE) aHatch );
-
-    // Add the first corner to the new zone
-    new_area->AppendCorner( aStartPointPosition, -1 );
-
-    if( aNewZonesList )
-    {
-        ITEM_PICKER picker( nullptr, new_area, UNDO_REDO::NEWITEM );
-        aNewZonesList->PushItem( picker );
-    }
-
-    return new_area;
-}
-
-
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      OUTLINE_ERROR_HANDLER* aErrorHandler,
                                      bool aAllowUseArcsInPolygons,
