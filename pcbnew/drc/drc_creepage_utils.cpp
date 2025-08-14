@@ -1987,11 +1987,11 @@ std::vector<PATH_CONNECTION> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
 
 
     if( cuarc2 && bearc1 )
-        return bearc1->Paths( *bearc2, maxWeight, maxWeightSquared );
+        return bearc1->Paths( *cuarc2, maxWeight, maxWeightSquared );
     if( cuarc2 && becircle1 )
-        return becircle1->Paths( *bearc2, maxWeight, maxWeightSquared );
+        return becircle1->Paths( *cuarc2, maxWeight, maxWeightSquared );
     if( cuarc2 && bepoint1 )
-        return bepoint1->Paths( *bearc2, maxWeight, maxWeightSquared );
+        return bepoint1->Paths( *cuarc2, maxWeight, maxWeightSquared );
     if( cucircle2 && bearc1 )
         return bearc1->Paths( *cucircle2, maxWeight, maxWeightSquared );
     if( cucircle2 && becircle1 )
