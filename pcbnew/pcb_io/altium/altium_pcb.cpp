@@ -1453,10 +1453,12 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
 
     VECTOR3D modelRotation( aElem.modelRotation );
 
-    if( aElem.body_projection == 1 )
+    if( ( aElem.body_projection == 1 ) != aFootprint->IsFlipped() )
     {
         modelRotation.x += 180;
-        modelRotation.z += 180;
+        modelRotation.z = -modelRotation.z;
+
+        modelSettings.m_Offset.z = -DEFAULT_BOARD_THICKNESS_MM - modelSettings.m_Offset.z;
     }
 
     RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
@@ -1550,12 +1552,14 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
             orientation              = -orientation;
         }
 
-        if( elem.body_projection == 1 )
+        if( ( elem.body_projection == 1 ) != footprint->IsFlipped() )
         {
             elem.modelRotation.x += 180;
-            elem.modelRotation.z += 180;
-            modelSettings.m_Offset.z =  pcbIUScale.IUTomm( m_board->GetDesignSettings().GetBoardThickness() )
-                                       + modelSettings.m_Offset.z;
+            elem.modelRotation.z = -elem.modelRotation.z;
+
+            modelSettings.m_Offset.z =
+                    -pcbIUScale.IUTomm( m_board->GetDesignSettings().GetBoardThickness() )
+                    - modelSettings.m_Offset.z;
         }
 
         RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
