@@ -899,8 +899,7 @@ protected:
     ZONE_CONNECTION       m_PadConnection;
     int                   m_ZoneClearance;           // Clearance value in internal units.
     int                   m_ZoneMinThickness;        // Minimum thickness value in filled areas.
-    int                   m_fillVersion;             // See BOARD_DESIGN_SETTINGS for version
-                                                     // differences.
+
     ISLAND_REMOVAL_MODE   m_islandRemovalMode;
 
     /**

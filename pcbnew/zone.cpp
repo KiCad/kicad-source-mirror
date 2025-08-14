@@ -79,7 +79,6 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
 {
     m_Poly = new SHAPE_POLY_SET();    // Outlines
     SetLocalFlags( 0 );               // flags temporary used in zone calculations
-    m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
 
     if( GetParentFootprint() )
         SetIsRuleArea( true );        // Zones living in footprints have the rule area option
@@ -161,7 +160,6 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_PadConnection           = aZone.m_PadConnection;
     m_ZoneClearance           = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness        = aZone.m_ZoneMinThickness;
-    m_fillVersion             = aZone.m_fillVersion;
     m_islandRemovalMode       = aZone.m_islandRemovalMode;
     m_minIslandArea           = aZone.m_minIslandArea;
 
