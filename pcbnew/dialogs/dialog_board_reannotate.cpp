@@ -118,6 +118,13 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_GridChoice->Set( gridslist );
 
+    int gridIndex = m_frame->config()->m_Window.grid.last_size_idx;
+
+    if( gridIndex >= 0 && gridIndex < (int) m_GridChoice->GetCount() )
+        m_GridChoice->SetSelection( gridIndex );
+    else
+        m_GridChoice->SetSelection( 0 );
+
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );
 
