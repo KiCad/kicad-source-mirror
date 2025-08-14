@@ -77,8 +77,9 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         m_area( 0.0 ),
         m_outlinearea( 0.0 )
 {
-    m_Poly = new SHAPE_POLY_SET();    // Outlines
-    SetLocalFlags( 0 );               // flags temporary used in zone calculations
+    m_Poly = new SHAPE_POLY_SET(); // Outlines
+    SetLocalFlags( 0 );            // flags temporary used in zone calculations
+    SetLayerSet( { F_Cu } );       // Place on a copper layer by default so setting a net is allowed
 
     if( GetParentFootprint() )
         SetIsRuleArea( true );        // Zones living in footprints have the rule area option
