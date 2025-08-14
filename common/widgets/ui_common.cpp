@@ -112,7 +112,7 @@ wxFont getGUIFont( wxWindow* aWindow, int aRelativeSize )
 
     font.SetPointSize( font.GetPointSize() + aRelativeSize );
 
-    if( Pgm().GetCommonSettings()->m_Appearance.apply_icon_scale_to_fonts )
+    if( Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Appearance.apply_icon_scale_to_fonts )
         font.SetPointSize( KiROUND( KiIconScale( aWindow ) * font.GetPointSize() / 4.0 ) );
 
 #ifdef __WXMAC__
@@ -368,14 +368,12 @@ void KIUI::Disable( wxWindow* aWindow )
 void KIUI::AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmapBundle& aImage )
 {
     // Retrieve the global application show icon option:
-    bool useImagesInMenus = Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus;
+    bool useImagesInMenus = Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus;
 
     wxItemKind menu_type = aMenu->GetKind();
 
     if( useImagesInMenus && menu_type != wxITEM_CHECK && menu_type != wxITEM_RADIO )
-    {
         aMenu->SetBitmap( aImage );
-    }
 }
 
 

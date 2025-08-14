@@ -296,7 +296,7 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 
     delete[] formBuilderColWidths;
 
-    EnableAlternateRowColors( Pgm().GetCommonSettings()->m_Appearance.grid_striping );
+    EnableAlternateRowColors( Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Appearance.grid_striping );
 
     Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
     Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );

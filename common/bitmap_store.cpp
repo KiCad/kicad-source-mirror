@@ -207,18 +207,15 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 
 void BITMAP_STORE::ThemeChanged()
 {
-    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
-    wxString         oldTheme = m_theme;
+    wxString oldTheme = m_theme;
 
-    if( settings )
+    if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
     {
         switch( settings->m_Appearance.icon_theme )
         {
-        case ICON_THEME::LIGHT: m_theme = wxT( "light" ); break;
-        case ICON_THEME::DARK: m_theme = wxT( "dark" ); break;
-        case ICON_THEME::AUTO:
-            m_theme = KIPLATFORM::UI::IsDarkTheme() ? wxT( "dark" ) : wxT( "light" );
-            break;
+        case ICON_THEME::LIGHT: m_theme = wxT( "light" );                                                 break;
+        case ICON_THEME::DARK:  m_theme = wxT( "dark" );                                                  break;
+        case ICON_THEME::AUTO:  m_theme = KIPLATFORM::UI::IsDarkTheme() ? wxT( "dark" ) : wxT( "light" ); break;
         }
     }
     else

@@ -330,21 +330,22 @@ int SYMBOL_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
     wxFileName fileName( libItemName );
 
     wxString filePath = wxEmptyString;
+    wxString explorerCommand;
 
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    if( COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
+        explorerCommand = cfg->m_System.file_explorer;
 
-    wxString explCommand = cfg->m_System.file_explorer;
-
-    if( explCommand.IsEmpty() )
+    if( explorerCommand.IsEmpty() )
     {
         filePath = fileName.GetFullPath().BeforeLast( wxFileName::GetPathSeparator() );
 
         if( !filePath.IsEmpty() && wxDirExists( filePath ) )
             LaunchExternal( filePath );
+
         return 0;
     }
 
-    if( !explCommand.EndsWith( "%F" ) )
+    if( !explorerCommand.EndsWith( "%F" ) )
     {
         wxMessageBox( _( "Missing/malformed file explorer argument '%F' in common settings." ) );
         return 0;
@@ -355,10 +356,10 @@ int SYMBOL_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
 
     wxString fileArg = '"' + filePath + '"';
 
-    explCommand.Replace( wxT( "%F" ), fileArg );
+    explorerCommand.Replace( wxT( "%F" ), fileArg );
 
-    if( !explCommand.IsEmpty() )
-        wxExecute( explCommand );
+    if( !explorerCommand.IsEmpty() )
+        wxExecute( explorerCommand );
 
     return 0;
 }

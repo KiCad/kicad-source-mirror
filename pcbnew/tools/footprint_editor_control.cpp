@@ -630,12 +630,12 @@ int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
         fileExt = FILEEXT::KiCadFootprintFileExtension;
 
     wxFileName fileName( path, libItemName, fileExt );
+    wxString   explorerCommand;
 
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    if( COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
+        explorerCommand = cfg->m_System.file_explorer;
 
-    wxString explCommand = cfg->m_System.file_explorer;
-
-    if( explCommand.IsEmpty() )
+    if( explorerCommand.IsEmpty() )
     {
         path = fileName.GetFullPath().BeforeLast( wxFileName::GetPathSeparator() );
 
@@ -645,7 +645,7 @@ int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( !explCommand.EndsWith( "%F" ) )
+    if( !explorerCommand.EndsWith( "%F" ) )
     {
         wxMessageBox( _( "Missing/malformed file explorer argument '%F' in common settings." ) );
         return 0;
@@ -657,10 +657,10 @@ int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
     wxString fileArg = wxEmptyString;
     fileArg << '"' << escapedFilePath << '"';
 
-    explCommand.Replace( wxT( "%F" ), fileArg );
+    explorerCommand.Replace( wxT( "%F" ), fileArg );
 
-    if( !explCommand.IsEmpty() )
-        wxExecute( explCommand );
+    if( !explorerCommand.IsEmpty() )
+        wxExecute( explorerCommand );
 
     return 0;
 }

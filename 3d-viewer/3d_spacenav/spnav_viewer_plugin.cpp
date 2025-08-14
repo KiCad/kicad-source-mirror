@@ -63,33 +63,43 @@ void SPNAV_VIEWER_PLUGIN::onPollTimer( wxTimerEvent& )
 
 void SPNAV_VIEWER_PLUGIN::OnPan( double x, double y, double z )
 {
-    const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
-    float scale = 0.0005f * ( cfg->m_SpaceMouse.pan_speed / 5.0f );
-    if( cfg->m_SpaceMouse.reverse_pan_x )
-        x = -x;
-    if( cfg->m_SpaceMouse.reverse_pan_y )
-        y = -y;
-    if( cfg->m_SpaceMouse.reverse_zoom )
-        z = -z;
-    if( m_camera )
+    if( const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
     {
-        m_camera->Pan( SFVEC3F( x * scale, -y * scale, z * scale ) );
-        m_canvas->Request_refresh();
+        float scale = 0.0005f * ( cfg->m_SpaceMouse.pan_speed / 5.0f );
+
+        if( cfg->m_SpaceMouse.reverse_pan_x )
+            x = -x;
+
+        if( cfg->m_SpaceMouse.reverse_pan_y )
+            y = -y;
+
+        if( cfg->m_SpaceMouse.reverse_zoom )
+            z = -z;
+
+        if( m_camera )
+        {
+            m_camera->Pan( SFVEC3F( x * scale, -y * scale, z * scale ) );
+            m_canvas->Request_refresh();
+        }
     }
 }
 
 void SPNAV_VIEWER_PLUGIN::OnRotate( double rx, double ry, double rz )
 {
-    const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
-    float scale = 0.001f * ( cfg->m_SpaceMouse.rotate_speed / 5.0f );
-    if( cfg->m_SpaceMouse.reverse_rotate )
-        scale = -scale;
-    if( m_camera )
+    if( const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
     {
-        m_camera->RotateX( ry * scale );
-        m_camera->RotateY( rx * scale );
-        m_camera->RotateZ( rz * scale );
-        m_canvas->Request_refresh();
+        float scale = 0.001f * ( cfg->m_SpaceMouse.rotate_speed / 5.0f );
+
+        if( cfg->m_SpaceMouse.reverse_rotate )
+            scale = -scale;
+
+        if( m_camera )
+        {
+            m_camera->RotateX( ry * scale );
+            m_camera->RotateY( rx * scale );
+            m_camera->RotateZ( rz * scale );
+            m_canvas->Request_refresh();
+        }
     }
 }
 

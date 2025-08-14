@@ -76,15 +76,11 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
 
-    if( Pgm().GetCommonSettings()->m_Git.enableGit )
-    {
+    if( Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Git.enableGit )
         fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
-    }
 
     if( wxDir::Exists( PATHS::GetStockDemosPath() ) )
-    {
         fileMenu->Add( KICAD_MANAGER_ACTIONS::openDemoProject );
-    }
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::openProject );
 

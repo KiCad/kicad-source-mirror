@@ -247,21 +247,23 @@ bool DIALOG_SHIM::Show( bool show )
 #endif
         ret = wxDialog::Show( show );
 
-        wxRect           savedDialogRect;
-        COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
-        std::string      key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+        wxRect      savedDialogRect;
+        std::string key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
 
-        auto dlgIt = settings->m_dialogControlValues.find( key );
-
-        if( dlgIt != settings->m_dialogControlValues.end() )
+        if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
         {
-            auto geoIt = dlgIt->second.find( "__geometry" );
+            auto dlgIt = settings->m_dialogControlValues.find( key );
 
-            if( geoIt != dlgIt->second.end() && geoIt->second.is_object() )
+            if( dlgIt != settings->m_dialogControlValues.end() )
             {
-                const nlohmann::json& g = geoIt->second;
-                savedDialogRect.SetPosition( wxPoint( g.value( "x", 0 ), g.value( "y", 0 ) ) );
-                savedDialogRect.SetSize( wxSize( g.value( "w", 500 ), g.value( "h", 300 ) ) );
+                auto geoIt = dlgIt->second.find( "__geometry" );
+
+                if( geoIt != dlgIt->second.end() && geoIt->second.is_object() )
+                {
+                    const nlohmann::json& g = geoIt->second;
+                    savedDialogRect.SetPosition( wxPoint( g.value( "x", 0 ), g.value( "y", 0 ) ) );
+                    savedDialogRect.SetSize( wxSize( g.value( "w", 500 ), g.value( "h", 300 ) ) );
+                }
             }
         }
 
@@ -325,15 +327,17 @@ bool DIALOG_SHIM::Show( bool show )
 
 void DIALOG_SHIM::resetSize()
 {
-    COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
-    std::string key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+    if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
+    {
+        std::string key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
 
-    auto dlgIt = settings->m_dialogControlValues.find( key );
+        auto dlgIt = settings->m_dialogControlValues.find( key );
 
-    if( dlgIt == settings->m_dialogControlValues.end() )
-        return;
+        if( dlgIt == settings->m_dialogControlValues.end() )
+            return;
 
-    dlgIt->second.erase( "__geometry" );
+        dlgIt->second.erase( "__geometry" );
+    }
 }
 
 
@@ -402,9 +406,13 @@ std::string DIALOG_SHIM::generateKey( const wxWindow* aWin ) const
 
 void DIALOG_SHIM::SaveControlState()
 {
-    COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( !settings )
+        return;
+
     std::string dialogKey = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
-    auto& dlgMap = settings->m_dialogControlValues[ dialogKey ];
+    std::map<std::string, nlohmann::json>& dlgMap = settings->m_dialogControlValues[ dialogKey ];
 
     wxRect rect( GetPosition(), GetSize() );
     nlohmann::json geom;
@@ -470,7 +478,7 @@ void DIALOG_SHIM::SaveControlState()
 
 void DIALOG_SHIM::LoadControlState()
 {
-    COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings();
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
     if( !settings )
         return;
@@ -481,7 +489,7 @@ void DIALOG_SHIM::LoadControlState()
     if( dlgIt == settings->m_dialogControlValues.end() )
         return;
 
-    const auto& dlgMap = dlgIt->second;
+    const std::map<std::string, nlohmann::json>& dlgMap = dlgIt->second;
 
     std::function<void( wxWindow* )> loadFn =
             [&]( wxWindow* win )
