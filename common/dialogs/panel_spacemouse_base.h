@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,16 +36,15 @@ class PANEL_SPACEMOUSE_BASE : public RESETTABLE_PANEL
 	protected:
 		wxStaticText* m_panRotateLabel;
 		wxStaticLine* m_staticline1;
-		wxStaticText* m_staticText1;
-		wxSlider* m_zoomSpeed;
-		wxStaticText* m_staticText22;
-		wxSlider* m_autoPanSpeed;
+		wxGridBagSizer* m_gbSizer;
+		wxStaticText* m_rotationSpeedLabel;
+		wxSlider* m_rotationSpeed;
 		wxCheckBox* m_checkEnablePanH;
+		wxStaticText* m_panSpeedLabel;
+		wxSlider* m_autoPanSpeed;
 		wxCheckBox* m_reverseY;
 		wxCheckBox* m_reverseX;
-		wxSlider* m_dummy1;
 		wxCheckBox* m_reverseZ;
-		wxSlider* m_dummy2;
 
 	public:
 

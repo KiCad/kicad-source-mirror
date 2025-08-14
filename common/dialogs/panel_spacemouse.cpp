@@ -24,10 +24,15 @@
 PANEL_SPACEMOUSE::PANEL_SPACEMOUSE( wxWindow* aParent ) :
         PANEL_SPACEMOUSE_BASE( aParent )
 {
-}
+#ifdef __WXMAC__
+    wxSizerItem* sizerItem = m_gbSizer->FindItemAtPosition( wxGBPosition( 0, 0 ) );
+    sizerItem->SetBorder( 6 );
+    sizerItem->SetFlag( wxBOTTOM );
 
-PANEL_SPACEMOUSE::~PANEL_SPACEMOUSE()
-{
+    sizerItem = m_gbSizer->FindItemAtPosition( wxGBPosition( 3, 0 ) );
+    sizerItem->SetBorder( 6 );
+    sizerItem->SetFlag( wxBOTTOM );
+#endif
 }
 
 bool PANEL_SPACEMOUSE::TransferDataToWindow()
@@ -43,7 +48,7 @@ bool PANEL_SPACEMOUSE::TransferDataFromWindow()
 {
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
 
-    cfg->m_SpaceMouse.rotate_speed = m_zoomSpeed->GetValue();
+    cfg->m_SpaceMouse.rotate_speed = m_rotationSpeed->GetValue();
     cfg->m_SpaceMouse.pan_speed = m_autoPanSpeed->GetValue();
     cfg->m_SpaceMouse.reverse_rotate = m_checkEnablePanH->GetValue();
     cfg->m_SpaceMouse.reverse_pan_y = m_reverseY->GetValue();
@@ -64,7 +69,7 @@ void PANEL_SPACEMOUSE::ResetPanel()
 
 void PANEL_SPACEMOUSE::applySettingsToPanel( const COMMON_SETTINGS& aSettings )
 {
-    m_zoomSpeed->SetValue( aSettings.m_SpaceMouse.rotate_speed );
+    m_rotationSpeed->SetValue( aSettings.m_SpaceMouse.rotate_speed );
     m_autoPanSpeed->SetValue( aSettings.m_SpaceMouse.pan_speed );
     m_checkEnablePanH->SetValue( aSettings.m_SpaceMouse.reverse_rotate );
     m_reverseY->SetValue( aSettings.m_SpaceMouse.reverse_pan_y );

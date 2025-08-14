@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PANEL_SPACEMOUSE_H
-#define KICAD_PANEL_SPACEMOUSE_H
+#pragma once
 
 #include <dialogs/panel_spacemouse_base.h>
 
@@ -28,18 +27,14 @@ class PANEL_SPACEMOUSE : public PANEL_SPACEMOUSE_BASE
 {
 public:
     PANEL_SPACEMOUSE( wxWindow* aParent );
-
-    ~PANEL_SPACEMOUSE();
+    ~PANEL_SPACEMOUSE() = default;
 
     void ResetPanel() override;
 
 protected:
     bool TransferDataFromWindow() override;
-
     bool TransferDataToWindow() override;
 
 private:
     void applySettingsToPanel( const COMMON_SETTINGS& aSettings );
 };
-
-#endif
