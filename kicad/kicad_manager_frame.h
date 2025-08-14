@@ -57,6 +57,7 @@ public:
     void UnarchiveFiles();
 
     void OnOpenFileInTextEditor( wxCommandEvent& event );
+    void OnEditAdvancedCfg( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );

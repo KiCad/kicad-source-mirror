@@ -186,13 +186,13 @@ wxString dumpParamCfg( const PARAM_CFG& aParam )
 /**
  * Dump the configs in the given array to trace.
  */
-static void dumpCfg( const std::vector<PARAM_CFG*>& aArray )
+static void dumpCfg( const std::vector<std::unique_ptr<PARAM_CFG>>& aArray )
 {
     // only dump if we need to
     if( !wxLog::IsAllowedTraceMask( AdvancedConfigMask ) )
         return;
 
-    for( const PARAM_CFG* param : aArray )
+    for( const auto& param : aArray )
     {
         wxLogTrace( AdvancedConfigMask, dumpParamCfg( *param ) );
     }
@@ -326,6 +326,21 @@ const ADVANCED_CFG& ADVANCED_CFG::GetCfg()
 }
 
 
+void ADVANCED_CFG::Reload()
+{
+    loadFromConfigFile();
+}
+
+
+void ADVANCED_CFG::Save()
+{
+    wxFileName k_advanced = getAdvancedCfgFilename();
+    wxFileConfig file_cfg( wxS( "" ), wxS( "" ), k_advanced.GetFullPath() );
+
+    wxConfigSaveSetups( &file_cfg, m_entries );
+}
+
+
 void ADVANCED_CFG::loadFromConfigFile()
 {
     const wxFileName k_advanced = getAdvancedCfgFilename();
@@ -355,270 +370,268 @@ void ADVANCED_CFG::loadFromConfigFile()
 
 void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
-    std::vector<PARAM_CFG*> configParams;
+    m_entries.clear();
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::ExtraFillMargin,
                                                   &m_ExtraClearance,
                                                   m_ExtraClearance, 0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableCreepageSlot,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableCreepageSlot,
                                                 &m_EnableCreepageSlot, m_EnableCreepageSlot ) );
 
-
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCEpsilon,
                                                   &m_DRCEpsilon, m_DRCEpsilon, 0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverWidthTolerance,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCSliverWidthTolerance,
                                                   &m_SliverWidthTolerance, m_SliverWidthTolerance,
                                                   0.01, 0.25 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverMinimumLength,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCSliverMinimumLength,
                                                   &m_SliverMinimumLength, m_SliverMinimumLength,
                                                   1e-9, 10 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverAngleTolerance,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCSliverAngleTolerance,
                                                   &m_SliverAngleTolerance, m_SliverAngleTolerance,
                                                   1.0, 90.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallThickness,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::HoleWallThickness,
                                                   &m_HoleWallThickness, m_HoleWallThickness,
                                                   0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::CoroutineStackSize,
                                                &m_CoroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::UpdateUIEventInterval,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::UpdateUIEventInterval,
                                                &m_UpdateUIEventInterval, m_UpdateUIEventInterval,
                                                -1, 100000 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ShowRouterDebugGraphics,
                                                 &m_ShowRouterDebugGraphics,
                                                 m_ShowRouterDebugGraphics ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableRouterDump,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableRouterDump,
                                                 &m_EnableRouterDump, m_EnableRouterDump ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HyperZoom,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::HyperZoom,
                                                 &m_HyperZoom, m_HyperZoom ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::CompactFileSave,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::CompactFileSave,
                                                 &m_CompactSave, m_CompactSave ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcAccuracy,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DrawArcAccuracy,
                                                   &m_DrawArcAccuracy, m_DrawArcAccuracy,
                                                   0.0, 100000.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
                                                   &m_DrawArcCenterMaxAngle,
                                                   m_DrawArcCenterMaxAngle, 0.0, 100000.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTangentTrackAngleDeviation,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::MaxTangentTrackAngleDeviation,
                                                   &m_MaxTangentAngleDeviation,
                                                   m_MaxTangentAngleDeviation, 0.0, 90.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTrackLengthToKeep,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::MaxTrackLengthToKeep,
                                                   &m_MaxTrackLengthToKeep, m_MaxTrackLengthToKeep,
                                                   0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ExtraZoneDisplayModes,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ExtraZoneDisplayModes,
                                                 &m_ExtraZoneDisplayModes,
                                                 m_ExtraZoneDisplayModes ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::StrokeTriangulation,
                                                 &m_DrawTriangulationOutlines,
                                                 m_DrawTriangulationOutlines ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinPlotPenWidth,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::MinPlotPenWidth,
                                                   &m_MinPlotPenWidth, m_MinPlotPenWidth,
                                                   0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::DebugZoneFiller,
                                                 &m_DebugZoneFiller, m_DebugZoneFiller ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugPDFWriter,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::DebugPDFWriter,
                                                 &m_DebugPDFWriter, m_DebugPDFWriter ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SmallDrillMarkSize,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::SmallDrillMarkSize,
                                                   &m_SmallDrillMarkSize, m_SmallDrillMarkSize,
                                                   0.0, 3.0 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HotkeysDumper,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::HotkeysDumper,
                                                 &m_HotkeysDumper, m_HotkeysDumper ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DrawBoundingBoxes,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::DrawBoundingBoxes,
                                                 &m_DrawBoundingBoxes, m_DrawBoundingBoxes ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPcbnewExportNetlist,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ShowPcbnewExportNetlist,
                                                 &m_ShowPcbnewExportNetlist,
                                                 m_ShowPcbnewExportNetlist ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DModelFileCache,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::Skip3DModelFileCache,
                                                 &m_Skip3DModelFileCache, m_Skip3DModelFileCache ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DModelMemoryCache,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::Skip3DModelMemoryCache,
                                                 &m_Skip3DModelMemoryCache,
                                                 m_Skip3DModelMemoryCache ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HideVersionFromTitle,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::HideVersionFromTitle,
                                                 &m_HideVersionFromTitle, m_HideVersionFromTitle ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRepairSchematic,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ShowRepairSchematic,
                                                 &m_ShowRepairSchematic, m_ShowRepairSchematic ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowEventCounters,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ShowEventCounters,
                                                 &m_ShowEventCounters, m_ShowEventCounters ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowManualCanvasScale,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::AllowManualCanvasScale,
                                                 &m_AllowManualCanvasScale,
                                                 m_AllowManualCanvasScale ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::V3DRT_BevelHeight_um,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::V3DRT_BevelHeight_um,
                                                &m_3DRT_BevelHeight_um, m_3DRT_BevelHeight_um,
                                                0, std::numeric_limits<int>::max(),
                                                AC_GROUPS::V3D_RayTracing ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::V3DRT_BevelExtentFactor,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::V3DRT_BevelExtentFactor,
                                                   &m_3DRT_BevelExtentFactor,
                                                   m_3DRT_BevelExtentFactor, 0.0, 100.0,
                                                   AC_GROUPS::V3D_RayTracing ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Use3DConnexionDriver,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::Use3DConnexionDriver,
                                                 &m_Use3DConnexionDriver, m_Use3DConnexionDriver ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::IncrementalConnectivity,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::IncrementalConnectivity,
                                                 &m_IncrementalConnectivity,
                                                 m_IncrementalConnectivity ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::DisambiguationTime,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::DisambiguationTime,
                                                &m_DisambiguationMenuDelay,
                                                m_DisambiguationMenuDelay,
                                                50, 10000 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnablePcbDesignBlocks, &m_EnablePcbDesignBlocks,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnablePcbDesignBlocks, &m_EnablePcbDesignBlocks,
                                                 m_EnablePcbDesignBlocks ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableGenerators,
                                                 &m_EnableGenerators, m_EnableGenerators ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableAPILogging,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableAPILogging,
                                                 &m_EnableAPILogging, m_EnableAPILogging ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibWithText,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableLibWithText,
                                                 &m_EnableLibWithText, m_EnableLibWithText ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibDir,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableLibDir,
                                                 &m_EnableLibDir, m_EnableLibDir ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::PcbSelectionVisibilityRatio,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PcbSelectionVisibilityRatio,
                                                   &m_PcbSelectionVisibilityRatio,
                                                   m_PcbSelectionVisibilityRatio, 0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::FontErrorSize,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::FontErrorSize,
                                                   &m_FontErrorSize,
                                                   m_FontErrorSize, 0.01, 100 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::OcePluginLinearDeflection,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::OcePluginLinearDeflection,
                                                     &m_OcePluginLinearDeflection,
                                                     m_OcePluginLinearDeflection, 0.01, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::OcePluginAngularDeflection,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::OcePluginAngularDeflection,
                                                     &m_OcePluginAngularDeflection,
                                                     m_OcePluginAngularDeflection, 0.01, 360.0 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::TriangulateSimplificationLevel,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::TriangulateSimplificationLevel,
                                                     &m_TriangulateSimplificationLevel,
                                                     m_TriangulateSimplificationLevel, 5, 1000 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::TriangulateMinimumArea,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::TriangulateMinimumArea,
                                                     &m_TriangulateMinimumArea,
                                                     m_TriangulateMinimumArea, 25, 100000 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableCacheFriendlyFracture,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableCacheFriendlyFracture,
                                                 &m_EnableCacheFriendlyFracture,
                                                 m_EnableCacheFriendlyFracture ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MaxFileSystemWatchers,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MaxFileSystemWatchers,
                                                   &m_MaxFilesystemWatchers, m_MaxFilesystemWatchers,
                                                   0, 2147483647 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MinorSchematicGraphSize,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MinorSchematicGraphSize,
                                                &m_MinorSchematicGraphSize,
                                                m_MinorSchematicGraphSize,
                                                0, 2147483647 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ResolveTextRecursionDepth,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ResolveTextRecursionDepth,
                                                &m_ResolveTextRecursionDepth,
                                                m_ResolveTextRecursionDepth, 0, 10 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableExtensionSnaps,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableExtensionSnaps,
                                                 &m_EnableExtensionSnaps,
                                                 m_EnableExtensionSnaps ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ExtensionSnapTimeoutMs,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ExtensionSnapTimeoutMs,
                                                &m_ExtensionSnapTimeoutMs,
                                                m_ExtensionSnapTimeoutMs, 0 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ExtensionSnapActivateOnHover,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ExtensionSnapActivateOnHover,
                                                 &m_ExtensionSnapActivateOnHover,
                                                 m_ExtensionSnapActivateOnHover ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableSnapAnchorsDebug,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableSnapAnchorsDebug,
                                                 &m_EnableSnapAnchorsDebug,
                                                 m_EnableSnapAnchorsDebug ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinParallelAngle,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::MinParallelAngle,
                                                   &m_MinParallelAngle, m_MinParallelAngle,
                                                   0.0, 45.0 ) );
 
-    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallPaintingMultiplier,
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::HoleWallPaintingMultiplier,
                                                   &m_HoleWallPaintingMultiplier,
                                                   m_HoleWallPaintingMultiplier,
                                                   0.1, 100.0 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MsgPanelShowUuids,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MsgPanelShowUuids,
                                                &m_MsgPanelShowUuids,
                                                m_MsgPanelShowUuids ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MaximumThreads,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MaximumThreads,
                                                   &m_MaximumThreads, m_MaximumThreads,
                                                   0, 500 ) );
 
-    configParams.push_back(
-            new PARAM_CFG_INT( true, AC_KEYS::NetInspectorBulkUpdateOptimisationThreshold,
+    m_entries.push_back(
+            std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::NetInspectorBulkUpdateOptimisationThreshold,
                                &m_NetInspectorBulkUpdateOptimisationThreshold,
                                m_NetInspectorBulkUpdateOptimisationThreshold, 0, 1000 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ExcludeFromSimulationLineWidth,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ExcludeFromSimulationLineWidth,
                                                &m_ExcludeFromSimulationLineWidth,
                                                m_ExcludeFromSimulationLineWidth, 1, 100 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::GitIconRefreshInterval,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::GitIconRefreshInterval,
                                                &m_GitIconRefreshInterval,
                                                m_GitIconRefreshInterval, 0, 100000 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ConfigurableToolbars,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ConfigurableToolbars,
                                                    &m_ConfigurableToolbars,
                                                    m_ConfigurableToolbars ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MaxPastedTextLength,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MaxPastedTextLength,
                                                   &m_MaxPastedTextLength,
                                                   m_MaxPastedTextLength, 0, 100000 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::PNSProcessClusterTimeout,
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PNSProcessClusterTimeout,
                                                &m_PNSProcessClusterTimeout, 100, 10, 10000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
-    wxString traceMasks;
-    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks,
+    m_entries.push_back( std::make_unique<PARAM_CFG_WXSTRING>( true, AC_KEYS::TraceMasks, &m_traceMasks,
                                                     wxS( "" ) ) );
 
     // Load the config from file
-    wxConfigLoadSetups( &aCfg, configParams );
+    wxConfigLoadSetups( &aCfg, m_entries );
 
     // Now actually set the trace masks
-    wxStringTokenizer traceMaskTokenizer( traceMasks, wxS( "," ) );
+    wxStringTokenizer traceMaskTokenizer( m_traceMasks, wxS( "," ) );
 
     while( traceMaskTokenizer.HasMoreTokens() )
     {
@@ -626,10 +639,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
         wxLog::AddTraceMask( mask );
     }
 
-    dumpCfg( configParams );
-
-    for( PARAM_CFG* param : configParams )
-        delete param;
+    dumpCfg( m_entries );
 
     wxLogTrace( kicadTraceCoroutineStack, wxT( "Using coroutine stack size %d" ),
                 m_CoroutineStackSize );

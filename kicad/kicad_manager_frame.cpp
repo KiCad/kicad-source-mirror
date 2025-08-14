@@ -37,6 +37,7 @@
 #include <dialogs/panel_kicad_launcher.h>
 #include <dialogs/dialog_update_check_prompt.h>
 #include <dialogs/panel_jobset.h>
+#include <dialogs/dialog_edit_cfg.h>
 #include <eda_base_frame.h>
 #include <executable_names.h>
 #include <file_history.h>
@@ -106,6 +107,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     // Menu events
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
     EVT_MENU( ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
+    EVT_MENU( ID_EDIT_ADVANCED_CFG, KICAD_MANAGER_FRAME::OnEditAdvancedCfg )
     EVT_MENU( ID_IMPORT_CADSTAR_ARCHIVE_PROJECT, KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles )
     EVT_MENU( ID_IMPORT_EAGLE_PROJECT, KICAD_MANAGER_FRAME::OnImportEagleFiles )
     EVT_MENU( ID_IMPORT_EASYEDA_PROJECT, KICAD_MANAGER_FRAME::OnImportEasyEdaFiles )
@@ -968,6 +970,13 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 
     if( !dlg.GetPath().IsEmpty() && !Pgm().GetTextEditor().IsEmpty() )
         m_toolManager->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, &filename );
+}
+
+
+void KICAD_MANAGER_FRAME::OnEditAdvancedCfg( wxCommandEvent& WXUNUSED( event ) )
+{
+    DIALOG_EDIT_CFG dlg( this );
+    dlg.ShowModal();
 }
 
 

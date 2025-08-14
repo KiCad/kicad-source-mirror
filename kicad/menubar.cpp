@@ -40,6 +40,7 @@
 #include "kicad_id.h"
 #include <widgets/wx_menubar.h>
 #include <wx/dir.h>
+#include <wx/utils.h>
 
 
 void KICAD_MANAGER_FRAME::doReCreateMenuBar()
@@ -152,6 +153,15 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     editMenu->Add( ACTIONS::cut );
     editMenu->Add( ACTIONS::copy );
     editMenu->Add( ACTIONS::paste );
+
+    wxString editCfgEnv;
+    if( wxGetEnv( wxS( "KICAD_EDIT_ADVANCED_CFG" ), &editCfgEnv ); editCfgEnv == wxS( "1" ) )
+    {
+        editMenu->Add( _( "Edit Advanced Config..." ),
+                        _( "Edit advanced settings" ),
+                        ID_EDIT_ADVANCED_CFG,
+                        BITMAPS::editor );
+    }
 
     //-- View menu -----------------------------------------------------------
     //

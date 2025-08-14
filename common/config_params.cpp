@@ -30,12 +30,12 @@
 #include <wx/config.h>           // for wxConfigBase
 #include <wx/debug.h>            // for wxASSERT
 
-void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList,
                          const wxString& aGroup )
 {
     wxASSERT( aCfg );
 
-    for( PARAM_CFG* param : aList )
+    for( const auto& param : aList )
     {
         if( !!param->m_Group )
             aCfg->SetPath( param->m_Group );
@@ -50,11 +50,11 @@ void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
 }
 
 
-void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList )
+void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList )
 {
     wxASSERT( aCfg );
 
-    for( PARAM_CFG* param : aList )
+    for( const auto& param : aList )
     {
         if( !param->m_Setup )
             continue;
@@ -64,12 +64,12 @@ void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
 }
 
 
-void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList,
                          const wxString& aGroup )
 {
     wxASSERT( aCfg );
 
-    for( PARAM_CFG* param : aList )
+    for( const auto& param : aList )
     {
         if( !!param->m_Group )
             aCfg->SetPath( param->m_Group );
@@ -92,11 +92,11 @@ void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
 }
 
 
-void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList )
+void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList )
 {
     wxASSERT( aCfg );
 
-    for( PARAM_CFG* param : aList )
+    for( const auto& param : aList )
     {
         if( !param->m_Setup )
             continue;

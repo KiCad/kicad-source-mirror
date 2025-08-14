@@ -29,6 +29,7 @@ set( KICAD_SRCS
     dialogs/dialog_update_notice.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
+    dialogs/dialog_edit_cfg.cpp
     dialogs/panel_kicad_launcher_base.cpp
     dialogs/panel_kicad_launcher.cpp
     dialogs/panel_jobset_base.cpp

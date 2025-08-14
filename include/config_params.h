@@ -288,7 +288,7 @@ public:
  * @param aCfg where to save.
  * @param aList holds some configuration parameters, not all of which will necessarily be saved.
  */
-KICOMMON_API void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
+KICOMMON_API void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList );
 
 /**
  * Write @a aList of #PARAM_CFG objects @a aCfg.
@@ -300,7 +300,7 @@ KICOMMON_API void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARA
  * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
  *               its own group, in which case it will take precedence.  aGroup may be empty.
  */
-KICOMMON_API void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+KICOMMON_API void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList,
                                       const wxString& aGroup );
 
 /**
@@ -311,7 +311,7 @@ KICOMMON_API void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARA
  * @param aCfg where to load from.
  * @param aList holds some configuration parameters, not all of which will necessarily be loaded.
  */
-KICOMMON_API void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
+KICOMMON_API void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList );
 
 /**
  * Use @a aList of #PARAM_CFG objects to load configuration values from @a aCfg.
@@ -322,7 +322,7 @@ KICOMMON_API void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARA
  * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
  *               its own group, in which case it will take precedence.  aGroup may be empty.
  */
-KICOMMON_API void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+KICOMMON_API void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList,
                                       const wxString& aGroup );
 
 

@@ -24,8 +24,11 @@
 #pragma once
 
 #include <kicommon.h>
+#include <memory>
+#include <vector>
 
 class wxConfigBase;
+class PARAM_CFG;
 
 /**
  * @defgroup advanced_config Advanced Configuration Variables
@@ -58,7 +61,7 @@ class wxConfigBase;
  * config files, and why you might want to set them, see #AC_KEYS
  *
  */
-
+#include <wx/string.h>
 class KICOMMON_API ADVANCED_CFG
 {
 public:
@@ -69,6 +72,18 @@ public:
      * their config files at ~/.config/kicad/advanced, or the platform equivalent.
      */
     static const ADVANCED_CFG& GetCfg();
+
+    /**
+     * Reload the configuration from the configuration file.
+     */
+    void Reload();
+
+    /**
+     * Save the configuration to the configuration file.
+     */
+    void Save();
+
+    const std::vector<std::unique_ptr<PARAM_CFG>>& GetEntries() const { return m_entries; }
 
     ///@{
     /// \ingroup advanced_config
@@ -766,6 +781,7 @@ public:
      */
     int m_PNSProcessClusterTimeout;
 
+    wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 
 private:
@@ -780,4 +796,6 @@ private:
      * Load config from the given configuration base.
      */
     void loadSettings( wxConfigBase& aCfg );
+
+    std::vector<std::unique_ptr<PARAM_CFG>> m_entries;
 };
