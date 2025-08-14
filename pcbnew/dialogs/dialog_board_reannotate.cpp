@@ -140,6 +140,11 @@ bool DIALOG_BOARD_REANNOTATE::TransferDataToWindow()
     if( !selection.Empty() )
         m_AnnotateSelection->SetValue( true );
 
+    // Ensure m_GridChoice selection validity
+    // If not, the choice 0 is arbitrary
+    if( m_GridChoice->GetSelection() < 0 || m_GridChoice->GetSelection() >= (int)m_GridChoice->GetCount() )
+        m_GridChoice->SetSelection( 0 );
+
     return true;
 }
 
