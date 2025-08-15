@@ -24,6 +24,7 @@
 #include <wx/zipstrm.h>
 #include <gestfich.h>
 #include <common.h>
+#include <wildcards_and_files_ext.h>
 
 JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() :
     JOBS_OUTPUT_HANDLER(),
@@ -51,6 +52,8 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* 
 
     if( outputPath.StartsWith( "~" ) )
         outputPath.Replace( "~", wxGetHomeDir(), false );
+
+    outputPath = EnsureFileExtension( outputPath, FILEEXT::ArchiveFileExtension );
 
     wxFFileOutputStream ostream( outputPath );
 

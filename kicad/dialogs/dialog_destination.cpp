@@ -104,7 +104,19 @@ void DIALOG_DESTINATION::onOutputPathBrowseClicked(wxCommandEvent& event)
         if( dlg.ShowModal() != wxID_OK )
             return;
 
-        m_textCtrlOutputPath->SetValue( dlg.GetPath() );
+        wxString path = dlg.GetPath();
+
+        if( m_destination->m_type == JOBSET_DESTINATION_T::ARCHIVE )
+        {
+            wxFileName fn( path );
+
+            if( fn.GetExt().IsEmpty() )
+                fn.SetExt( FILEEXT::ArchiveFileExtension );
+
+            path = fn.GetFullPath();
+        }
+
+        m_textCtrlOutputPath->SetValue( path );
     }
 
 }
