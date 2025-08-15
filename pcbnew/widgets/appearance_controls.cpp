@@ -415,6 +415,11 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     // Correct the min size from wxformbuilder not using fromdip
     SetMinSize( FromDIP( GetMinSize() ) );
 
+    // We pregenerate the visibility bundles to reuse to reduce gdi exhaustion on windows
+    // We can get a crazy amount of nets and netclasses
+    m_visibleBitmapBundle = KiBitmapBundle( BITMAPS::visibility );
+    m_notVisibileBitmapBundle = KiBitmapBundle( BITMAPS::visibility_off );
+
     int screenHeight   = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
     m_iconProvider     = new ROW_ICON_PROVIDER( KIUI::c_IndicatorSizeDIP, this );
     m_pointSize        = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
@@ -528,8 +533,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 syncLayerPresetSelection();
             } );
 
-    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmapBundle( BITMAPS::visibility ),
-                                                            KiBitmapBundle( BITMAPS::visibility_off ) );
+    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( m_visibleBitmapBundle,
+                                                            m_notVisibileBitmapBundle );
 
     m_netsGrid->RegisterDataType( wxT( "bool" ), m_toggleGridRenderer, new wxGridCellBoolEditor );
 
@@ -555,7 +560,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     wxSize size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_COLOR, size.x + cellPadding );
 
-    size = KiBitmapBundle( BITMAPS::visibility ).GetPreferredBitmapSizeFor( this );
+    size = m_visibleBitmapBundle.GetPreferredBitmapSizeFor( this );
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_VISIBILITY, size.x + cellPadding );
 
     m_netsGrid->SetDefaultCellFont( font );
@@ -1588,8 +1593,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 swatch->SetToolTip( _( "Double click or middle click for color change, right click for menu" ) );
 
                 BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( panel, layer,
-                                                                KiBitmapBundle( BITMAPS::visibility ),
-                                                                KiBitmapBundle( BITMAPS::visibility_off ),
+                                                                m_visibleBitmapBundle,
+                                                                m_notVisibileBitmapBundle,
                                                                 aSetting->visible );
                 btn_visible->SetToolTip( _( "Show or hide this layer" ) );
 
@@ -2199,7 +2204,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     int             swatchWidth = m_windowObjects->ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
     int             labelWidth = 0;
 
-    int btnWidth = KiBitmapBundle( BITMAPS::visibility ).GetPreferredLogicalSizeFor( m_windowObjects ).x;
+    int btnWidth = m_visibleBitmapBundle.GetPreferredLogicalSizeFor( m_windowObjects ).x;
 
     m_objectSettings.clear();
     m_objectsOuterSizer->Clear( true );
@@ -2240,8 +2245,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 if( aSetting->can_control_visibility )
                 {
                     btn_visible = new BITMAP_TOGGLE( m_windowObjects, layer,
-                                                     KiBitmapBundle( BITMAPS::visibility ),
-                                                     KiBitmapBundle( BITMAPS::visibility_off ),
+                                                     m_visibleBitmapBundle,
+                                                     m_notVisibileBitmapBundle,
                                                      aSetting->visible );
 
                     tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
@@ -2503,8 +2508,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
                     setting->ctl_color->Hide();
 
                 setting->ctl_visibility = new BITMAP_TOGGLE( setting->ctl_panel, aId,
-                                                             KiBitmapBundle( BITMAPS::visibility ),
-                                                             KiBitmapBundle( BITMAPS::visibility_off ),
+                                                             m_visibleBitmapBundle,
+                                                             m_notVisibileBitmapBundle,
                                                              !hiddenClasses.count( name ) );
 
                 wxString tip;

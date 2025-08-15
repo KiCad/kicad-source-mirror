@@ -476,6 +476,10 @@ private:
     wxRadioButton*       m_rbRatsnestVisLayers;
     wxRadioButton*       m_rbRatsnestNone;
 
+    // Bitmap caches
+    wxBitmapBundle      m_visibleBitmapBundle;
+    wxBitmapBundle      m_notVisibileBitmapBundle;
+
     enum POPUP_ID
     {
         ID_CHANGE_COLOR = wxID_HIGHEST,
