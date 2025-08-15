@@ -1230,8 +1230,18 @@ bool SCH_EDIT_FRAME::doAutoSave()
     if( !tmp.IsOk() )
         return false;
 
-    if( !IsWritable( tmp ) )
+    if( !IsWritable( tmp, false ) )
+    {
+        if( !m_autoSavePermissionError )
+        {
+            DisplayError( this, wxString::Format(
+                                   _( "Could not autosave files to read-only folder:  '%s'" ),
+                                   tmp.GetPath() ) );
+            m_autoSavePermissionError = true;
+        }
+
         return false;
+    }
 
     wxString title = GetTitle();    // Save frame title, that can be modified by the save process
 
@@ -1245,6 +1255,20 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
         // Auto save file name is the normal file name prefixed with GetAutoSavePrefix().
         fn.SetName( FILEEXT::AutoSaveFilePrefix + fn.GetName() );
+
+        if( !IsWritable( fn, false ) )
+        {
+            if( !m_autoSavePermissionError )
+            {
+                DisplayError( this, wxString::Format(
+                                       _( "Could not autosave files to read-only folder:  '%s'" ),
+                                       fn.GetPath() ) );
+                m_autoSavePermissionError = true;
+            }
+
+            autoSaveOk = false;
+            continue;
+        }
 
         if( saveSchematicFile( screens.GetSheet( i ), fn.GetFullPath() ) )
         {
