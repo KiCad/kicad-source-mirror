@@ -24,6 +24,7 @@
 #include <zone_manager/dialog_zone_manager.h>
 #include <footprint.h>
 #include <pcb_track.h>
+#include <pcb_generator.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/edit_tool.h>
@@ -170,6 +171,9 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
             hasChanges |= swapBoardItem( segm, layerMap );
         }
     }
+
+    for( PCB_GENERATOR* generator : frame()->GetBoard()->Generators() )
+        hasChanges |= swapBoardItem( generator, layerMap );
 
     for( BOARD_ITEM* zone : frame()->GetBoard()->Zones() )
         hasChanges |= swapBoardItem( zone, layerMap );

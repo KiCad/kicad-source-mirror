@@ -25,6 +25,7 @@
 #include <pcb_generator.h>
 #include <generators_mgr.h>
 
+#include <functional>
 #include <optional>
 #include <magic_enum.hpp>
 
@@ -353,6 +354,13 @@ public:
 
             baseMirror( aCentre, aFlipDirection );
         }
+    }
+
+    void SetLayer( PCB_LAYER_ID aLayer ) override
+    {
+        PCB_GENERATOR::SetLayer( aLayer );
+
+        RunOnChildren( [aLayer]( BOARD_ITEM* item ) { item->SetLayer( aLayer ); } );
     }
 
     const BOX2I GetBoundingBox() const override
