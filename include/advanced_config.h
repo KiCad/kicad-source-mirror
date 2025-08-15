@@ -26,6 +26,7 @@
 #include <kicommon.h>
 #include <memory>
 #include <vector>
+#include <config_params.h>
 
 class wxConfigBase;
 class PARAM_CFG;
@@ -786,6 +787,8 @@ public:
 
 private:
     ADVANCED_CFG();
+
+    ADVANCED_CFG( ADVANCED_CFG&& other ) = default;
 
     /**
      * Load the config from the normal configuration file.
