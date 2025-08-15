@@ -2204,9 +2204,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         if( evt->Modifier( MD_CTRL ) )
             angleSnap = LEADER_MODE::DIRECT;
 
-        // Rectangular shapes never get diagonal snapping
-        if( shape == SHAPE_T::RECTANGLE )
-            angleSnap = LEADER_MODE::DIRECT;
+        // Rectangular shapes never get zero-size snapping
+        if( shape == SHAPE_T::RECTANGLE && angleSnap == LEADER_MODE::DEG90 )
+            angleSnap = LEADER_MODE::DEG45;
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         cursorPos = GetClampedCoords(

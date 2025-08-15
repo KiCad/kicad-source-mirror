@@ -1846,7 +1846,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 if( m_editedPoint->GetGridConstraint() != SNAP_BY_GRID )
                     grid.SetAuxAxes( true, m_original.GetPosition() );
 
-                setAltConstraint( true );
                 m_editedPoint->SetActive();
 
                 for( size_t ii = 0; ii < m_editPoints->PointsSize(); ++ii )
@@ -1873,6 +1872,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 clones.emplace_back( clone );
                 grid.AddConstructionItems( { clone }, false, true );
             }
+
+            setAltConstraint( Is45Limited() || Is90Limited() );
 
             // Keep point inside of limits with some padding
             VECTOR2I pos = GetClampedCoords<double, int>( evt->Position(), COORDS_PADDING );
@@ -1910,8 +1911,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             m_editedPoint->SetPosition( pos );
 
-            // Constrain edited line midpoints to move normal to themselves
-            if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
+            // Apply 45 degree or other constraints
+            if( m_altConstraint )
             {
                 m_altConstraint->Apply( grid );
             }
@@ -2231,9 +2232,13 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
         }
         else
         {
-            // Find a proper constraining point for 45 degrees mode
+            // Find a proper constraining point for angle snapping mode
             m_altConstrainer = get45DegConstrainer();
-            m_altConstraint.reset( new EC_45DEGREE( *m_editedPoint, m_altConstrainer ) );
+
+            if( Is90Limited() )
+                m_altConstraint.reset( new EC_90DEGREE( *m_editedPoint, m_altConstrainer ) );
+            else
+                m_altConstraint.reset( new EC_45DEGREE( *m_editedPoint, m_altConstrainer ) );
         }
     }
     else

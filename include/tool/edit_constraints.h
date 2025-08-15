@@ -160,6 +160,29 @@ private:
 
 
 /**
+ * #EDIT_CONSTRAINT that imposes a constraint that a point has to be located at angle of 90
+ * degree multiplicity (i.e. horizontal or vertical).
+ */
+class EC_90DEGREE : public EDIT_CONSTRAINT<EDIT_POINT>
+{
+public:
+    /**
+     * @param aConstrained is the point that is put under constrain.
+     * @param aConstrainer is the point that is the source of the constrain.
+     */
+    EC_90DEGREE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
+            EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
+            m_constrainer( aConstrainer )
+    {};
+
+    /// @copydoc EDIT_CONSTRAINT::Apply()
+    virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
+
+private:
+    const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
+};
+
+/**
  * #EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
  * by 2 points).
  */

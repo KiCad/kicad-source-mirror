@@ -78,6 +78,26 @@ void EC_45DEGREE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 }
 
 
+void EC_90DEGREE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
+{
+    VECTOR2I lineVector( aHandle.GetPosition() - m_constrainer.GetPosition() );
+    VECTOR2I newLineVector = GetVectorSnapped90( lineVector );
+
+    if( aHandle.GetGridConstraint() == SNAP_TO_GRID )
+    {
+        VECTOR2I snap = aGrid.AlignGrid( m_constrainer.GetPosition() + newLineVector );
+
+        if( newLineVector.x == 0 )
+            aHandle.SetPosition( VECTOR2I( m_constrainer.GetPosition().x, snap.y ) );
+        else
+            aHandle.SetPosition( VECTOR2I( snap.x, m_constrainer.GetPosition().y ) );
+    }
+    else
+    {
+        aHandle.SetPosition( m_constrainer.GetPosition() + newLineVector );
+    }
+}
+
 EC_LINE::EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
         EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
         m_constrainer( aConstrainer )
