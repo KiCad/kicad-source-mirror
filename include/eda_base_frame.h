@@ -802,6 +802,7 @@ private:
     bool                    m_autoSavePending;
     bool                    m_autoSaveRequired;
     wxTimer*                m_autoSaveTimer;
+    bool                    m_autoSavePermissionError;
 
     int                     m_undoRedoCountMax;  // undo/Redo command Max depth
 

@@ -1196,10 +1196,31 @@ bool PCB_EDIT_FRAME::DoAutoSave()
     // path.  If that path isn't writable, give up.
     if( !autoSaveFileName.IsDirWritable() )
     {
+        if( !m_autoSavePermissionError )
+        {
+            DisplayError( this, wxString::Format(
+                                   _( "Could not autosave files to read-only folder:  '%s'" ),
+                                   autoSaveFileName.GetPath() ) );
+            m_autoSavePermissionError = true;
+        }
+
         autoSaveFileName.SetPath( wxFileName::GetTempDir() );
 
         if( !autoSaveFileName.IsOk() || !autoSaveFileName.IsDirWritable() )
             return false;
+    }
+
+    if( !IsWritable( autoSaveFileName, false ) )
+    {
+        if( !m_autoSavePermissionError )
+        {
+            DisplayError( this, wxString::Format(
+                                   _( "Could not autosave files to read-only folder:  '%s'" ),
+                                   autoSaveFileName.GetPath() ) );
+            m_autoSavePermissionError = true;
+        }
+
+        return false;
     }
 
     wxLogTrace( traceAutoSave,

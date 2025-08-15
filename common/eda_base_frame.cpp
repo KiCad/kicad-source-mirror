@@ -145,6 +145,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_isNonUserClose    = false;
     m_autoSaveTimer     = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_autoSaveRequired  = false;
+    m_autoSavePermissionError = false;
     m_mruPath           = PATHS::GetDefaultUserProjectsPath();
     m_frameSize         = defaultSize( aFrameType, this );
     m_displayIndex      = -1;
