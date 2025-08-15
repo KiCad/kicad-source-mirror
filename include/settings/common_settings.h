@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _COMMON_SETTINGS_H
-#define _COMMON_SETTINGS_H
+#pragma once
 
 #include <settings/environment.h>
 #include <settings/json_settings.h>
@@ -222,34 +221,20 @@ private:
                                   std::vector<LEGACY_3D_SEARCH_PATH>& aSearchPaths );
 
 public:
-    APPEARANCE m_Appearance;
-
-    AUTO_BACKUP m_Backup;
-
-    ENVIRONMENT m_Env;
-
-    INPUT m_Input;
-
-    SPACEMOUSE m_SpaceMouse;
-
-    GRAPHICS m_Graphics;
-
-    SESSION m_Session;
-
-    SYSTEM m_System;
-
+    APPEARANCE        m_Appearance;
+    AUTO_BACKUP       m_Backup;
+    ENVIRONMENT       m_Env;
+    INPUT             m_Input;
+    SPACEMOUSE        m_SpaceMouse;
+    GRAPHICS          m_Graphics;
+    SESSION           m_Session;
+    SYSTEM            m_System;
     DO_NOT_SHOW_AGAIN m_DoNotShowAgain;
-
-    NETCLASS_PANEL m_NetclassPanel;
-
-    PACKAGE_MANAGER m_PackageManager;
-
-    GIT m_Git;
-
-    API m_Api;
+    NETCLASS_PANEL    m_NetclassPanel;
+    PACKAGE_MANAGER   m_PackageManager;
+    GIT               m_Git;
+    API               m_Api;
 
     /// Persistent dialog control values
     std::map<std::string, std::map<std::string, nlohmann::json>> m_dialogControlValues;
 };
-
-#endif

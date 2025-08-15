@@ -199,6 +199,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "system.max_undo_items",
             &m_System.max_undo_items, 0 ) );
 
+    // WARNING: "system.file_history" is a "known" key (see JSON_SETTINGS::GetFileHistories())
     m_params.emplace_back( new PARAM_LIST<wxString>( "system.file_history",
             &m_System.file_history, {} ) );
 

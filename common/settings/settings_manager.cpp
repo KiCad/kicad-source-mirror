@@ -102,6 +102,41 @@ SETTINGS_MANAGER::~SETTINGS_MANAGER()
 }
 
 
+void SETTINGS_MANAGER::ResetToDefaults()
+{
+    for( std::unique_ptr<JSON_SETTINGS>& settings : m_settings )
+    {
+        if( settings->GetLocation() == SETTINGS_LOC::USER || settings->GetLocation() == SETTINGS_LOC::COLORS )
+        {
+            std::map<std::string, nlohmann::json> fileHistories = settings->GetFileHistories();
+
+            settings->Internals()->clear();
+            settings->Load();   // load from nothing (ie: load defaults)
+
+            for( const auto& [path, history] : fileHistories )
+                settings->Set( path, history );
+
+            settings->SaveToFile( GetPathForSettingsFile( settings.get() ) );
+        }
+    }
+}
+
+
+void SETTINGS_MANAGER::ClearFileHistory()
+{
+    for( std::unique_ptr<JSON_SETTINGS>& settings : m_settings )
+    {
+        if( settings->GetLocation() == SETTINGS_LOC::USER )
+        {
+            for( const auto& [path, history] : settings->GetFileHistories() )
+                settings->Set( path, nlohmann::json::array() );
+
+            settings->SaveToFile( GetPathForSettingsFile( settings.get() ) );
+        }
+    }
+}
+
+
 JSON_SETTINGS* SETTINGS_MANAGER::registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow )
 {
     std::unique_ptr<JSON_SETTINGS> ptr( aSettings );
@@ -692,20 +727,21 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
     wxString subdir;
     std::string mine = GetSettingsVersion();
 
-    auto check_dir = [&] ( const wxString& aSubDir )
-    {
-        // Only older versions are valid for migration
-        if( compareVersions( aSubDir.ToStdString(), mine ) <= 0 )
-        {
-            wxString sub_path = dir.GetNameWithSep() + aSubDir;
-
-            if( IsSettingsPathValid( sub_path ) )
+    auto check_dir =
+            [&] ( const wxString& aSubDir )
             {
-                aPaths->push_back( sub_path );
-                wxLogTrace( traceSettings, wxT( "GetPreviousVersionName: %s is valid" ), sub_path );
-            }
-        }
-    };
+                // Only older versions are valid for migration
+                if( compareVersions( aSubDir.ToStdString(), mine ) <= 0 )
+                {
+                    wxString sub_path = dir.GetNameWithSep() + aSubDir;
+
+                    if( IsSettingsPathValid( sub_path ) )
+                    {
+                        aPaths->push_back( sub_path );
+                        wxLogTrace( traceSettings, wxT( "GetPreviousVersionName: %s is valid" ), sub_path );
+                    }
+                }
+            };
 
     std::set<wxString> checkedPaths;
 
@@ -747,21 +783,22 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         }
     }
 
-    std::erase_if( *aPaths, []( const wxString& aPath ) -> bool
-    {
-        wxFileName fulldir = wxFileName::DirName( aPath );
-        const wxArrayString& dirs = fulldir.GetDirs();
+    std::erase_if( *aPaths,
+                   []( const wxString& aPath ) -> bool
+                   {
+                       wxFileName fulldir = wxFileName::DirName( aPath );
+                       const wxArrayString& dirs = fulldir.GetDirs();
 
-        if( dirs.empty() || !fulldir.IsDirReadable() )
-            return true;
+                       if( dirs.empty() || !fulldir.IsDirReadable() )
+                           return true;
 
-        std::string ver = dirs.back().ToStdString();
+                       std::string ver = dirs.back().ToStdString();
 
-        if( !extractVersion( ver ) )
-            return true;
+                       if( !extractVersion( ver ) )
+                           return true;
 
-        return false;
-    } );
+                       return false;
+                    } );
 
     std::sort( aPaths->begin(), aPaths->end(),
                [&]( const wxString& a, const wxString& b ) -> bool
@@ -1074,7 +1111,7 @@ bool SETTINGS_MANAGER::IsProjectOpen() const
 bool SETTINGS_MANAGER::IsProjectOpenNotDummy() const
 {
     return m_projects.size() > 1 || ( m_projects.size() == 1
-        && !m_projects.begin()->second->GetProjectFullName().IsEmpty() );
+                                          && !m_projects.begin()->second->GetProjectFullName().IsEmpty() );
 }
 
 

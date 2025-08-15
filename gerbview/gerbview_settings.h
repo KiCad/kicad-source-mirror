@@ -21,8 +21,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef _GERBVIEW_SETTINGS_H
-#define _GERBVIEW_SETTINGS_H
+#pragma once
 
 #include <settings/app_settings.h>
 #include <excellon_defaults.h>
@@ -40,10 +39,11 @@ public:
     };
 
     GERBVIEW_SETTINGS();
+    virtual ~GERBVIEW_SETTINGS() = default;
 
-    virtual ~GERBVIEW_SETTINGS() {}
+    std::map<std::string, nlohmann::json> GetFileHistories() override;
 
-    virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
+    bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
     /**
      * return the Excellon default values to read a drill file
@@ -55,17 +55,12 @@ public:
     }
 
 public:
-
-    APPEARANCE m_Appearance;
-
-    GBR_DISPLAY_OPTIONS m_Display;
-
-    int m_BoardLayersCount;
+    APPEARANCE            m_Appearance;
+    GBR_DISPLAY_OPTIONS   m_Display;
+    int                   m_BoardLayersCount;
 
     std::vector<wxString> m_DrillFileHistory;
-
     std::vector<wxString> m_ZipFileHistory;
-
     std::vector<wxString> m_JobFileHistory;
 
     /**
@@ -77,9 +72,6 @@ public:
     EXCELLON_DEFAULTS m_ExcellonDefaults;
 
 protected:
-
     virtual std::string getLegacyFrameName() const override { return "GerberFrame"; }
 
 };
-
-#endif

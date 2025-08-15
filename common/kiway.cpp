@@ -609,6 +609,29 @@ void KIWAY::CommonSettingsChanged( int aFlags )
 }
 
 
+void KIWAY::ClearFileHistory()
+{
+    if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
+    {
+        // A dynamic_cast could be better, but creates link issues
+        // (some basic_frame functions not found) on some platforms,
+        // so a static_cast is used.
+        EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_top );
+
+        if( top )
+            top->ClearFileHistory();
+    }
+
+    for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
+    {
+        KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );
+
+        if( frame )
+            frame->ClearFileHistory();
+    }
+}
+
+
 void KIWAY::ProjectChanged()
 {
     APP_MONITOR::AddNavigationBreadcrumb( "Changing project", "kiway.projectchanged" );

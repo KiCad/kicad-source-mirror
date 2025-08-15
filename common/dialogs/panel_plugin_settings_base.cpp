@@ -12,17 +12,14 @@
 PANEL_PLUGIN_SETTINGS_BASE::PANEL_PLUGIN_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
-	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
 	apiLabel = new wxStaticText( this, wxID_ANY, _("KiCad API"), wxDefaultPosition, wxDefaultSize, 0 );
 	apiLabel->Wrap( -1 );
-	bSizer8->Add( apiLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+	bPanelSizer->Add( apiLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bPanelSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* apiBox;
 	apiBox = new wxBoxSizer( wxVERTICAL );
@@ -37,14 +34,17 @@ PANEL_PLUGIN_SETTINGS_BASE::PANEL_PLUGIN_SETTINGS_BASE( wxWindow* parent, wxWind
 	apiBox->Add( m_cbEnableApi, 0, wxALL, 5 );
 
 
-	bSizer8->Add( apiBox, 1, wxEXPAND|wxALL, 5 );
+	bPanelSizer->Add( apiBox, 0, wxEXPAND|wxALL, 5 );
+
+
+	bPanelSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	pythonLabel = new wxStaticText( this, wxID_ANY, _("Python Interpreter"), wxDefaultPosition, wxDefaultSize, 0 );
 	pythonLabel->Wrap( -1 );
-	bSizer8->Add( pythonLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+	bPanelSizer->Add( pythonLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer8->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	bPanelSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* pythonBox;
 	pythonBox = new wxBoxSizer( wxVERTICAL );
@@ -76,13 +76,7 @@ PANEL_PLUGIN_SETTINGS_BASE::PANEL_PLUGIN_SETTINGS_BASE( wxWindow* parent, wxWind
 	pythonBox->Add( m_stApiStatus, 0, wxALL, 5 );
 
 
-	bSizer8->Add( pythonBox, 1, wxEXPAND|wxALL, 5 );
-
-
-	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	bPanelSizer->Add( bSizer8, 1, wxEXPAND, 5 );
+	bPanelSizer->Add( pythonBox, 1, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bPanelSizer );

@@ -79,7 +79,13 @@ void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnClearDrlFileHistory( wxCommandEvent& aEvent )
 {
-    ClearFileHistory( &m_drillFileHistory );
+    m_drillFileHistory.ClearFileHistory();
+
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 
@@ -97,7 +103,13 @@ void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnClearZipFileHistory( wxCommandEvent& aEvent )
 {
-    ClearFileHistory( &m_zipFileHistory );
+    m_zipFileHistory.ClearFileHistory();
+
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 
@@ -112,7 +124,13 @@ void GERBVIEW_FRAME::OnJobFileHistory( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnClearJobFileHistory( wxCommandEvent& aEvent )
 {
-    ClearFileHistory( &m_jobFileHistory );
+    m_jobFileHistory.ClearFileHistory();
+
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 
@@ -689,6 +707,17 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
 
     return true;
 }
+
+
+void GERBVIEW_FRAME::ClearFileHistory()
+{
+    m_drillFileHistory.ClearFileHistory();
+    m_zipFileHistory.ClearFileHistory();
+    m_jobFileHistory.ClearFileHistory();
+
+    EDA_DRAW_FRAME::ClearFileHistory();
+}
+
 
 void GERBVIEW_FRAME::DoWithAcceptedFiles()
 {

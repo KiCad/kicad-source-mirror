@@ -383,10 +383,10 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             &m_NetclassPanel.sash_pos, 160 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "netclass_panel.eeschema_shown_columns",
-                                                &m_NetclassPanel.eeschema_visible_columns, "0 11 12 13 14" ) );
+            &m_NetclassPanel.eeschema_visible_columns, "0 11 12 13 14" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "netclass_panel.pcbnew_shown_columns",
-                                                &m_NetclassPanel.pcbnew_visible_columns, "0 1 2 3 4 5 6 7 8 9 10" ) );
+            &m_NetclassPanel.pcbnew_visible_columns, "0 1 2 3 4 5 6 7 8 9 10" ) );
 
     m_params.emplace_back( new PARAM<int>( "package_manager.sash_pos",
             &m_PackageManager.sash_pos, 380 ) );
@@ -519,21 +519,15 @@ bool COMMON_SETTINGS::migrateSchema0to1()
     if( mwp )
     {
         ( *m_internals )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = true;
-
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] =
-                WXK_SHIFT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_SHIFT;
         ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = 0;
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )] =
-                WXK_CONTROL;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )] = WXK_CONTROL;
     }
     else
     {
         ( *m_internals )[nlohmann::json::json_pointer( "/input/horizontal_pan" )] = false;
-
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] =
-                WXK_CONTROL;
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] =
-                WXK_SHIFT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_h" )] = WXK_CONTROL;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = WXK_SHIFT;
         ( *m_internals )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )] = 0;
     }
 
@@ -560,11 +554,9 @@ bool COMMON_SETTINGS::migrateSchema1to2()
     }
 
     if( prefer_selection )
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] =
-                MOUSE_DRAG_ACTION::SELECT;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::SELECT;
     else
-        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] =
-                MOUSE_DRAG_ACTION::DRAG_ANY;
+        ( *m_internals )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::DRAG_ANY;
 
     return true;
 }
@@ -691,8 +683,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             {
                 wxString key, value;
                 long index = 0;
-                nlohmann::json::json_pointer ptr =
-                        m_internals->PointerFromString( "environment.vars" );
+                nlohmann::json::json_pointer ptr = m_internals->PointerFromString( "environment.vars" );
 
                 aCfg->SetPath( "EnvironmentVariables" );
                 ( *m_internals )[ptr] = nlohmann::json( {} );

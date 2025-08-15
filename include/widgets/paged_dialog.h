@@ -50,6 +50,8 @@ public:
 
     void UpdateResetButton( int aPage );
 
+    WX_INFOBAR* GetInfoBar() { return m_infoBar; }
+
     static PAGED_DIALOG* GetDialog( wxWindow* aWindow );
 
 protected:

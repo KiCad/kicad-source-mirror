@@ -23,17 +23,18 @@
 
 #pragma once
 
-#include <dialogs/panel_common_settings_base.h>
+#include <dialogs/panel_maintenance_base.h>
 
 
 class COMMON_SETTINGS;
+class EDA_BASE_FRAME;
 
 
-class PANEL_COMMON_SETTINGS : public PANEL_COMMON_SETTINGS_BASE
+class PANEL_MAINTENANCE : public PANEL_MAINTENANCE_BASE
 {
 public:
-    PANEL_COMMON_SETTINGS( wxWindow* aParent );
-    ~PANEL_COMMON_SETTINGS() override;
+    PANEL_MAINTENANCE( wxWindow* aParent, EDA_BASE_FRAME* aFrame );
+    ~PANEL_MAINTENANCE() = default;
 
     void ResetPanel() override;
 
@@ -43,21 +44,14 @@ protected:
 
     void applySettingsToPanel( COMMON_SETTINGS& aSettings );
 
-    void OnTextEditorClick( wxCommandEvent& event ) override;
-    void OnPDFViewerClick( wxCommandEvent& event ) override;
-    void OnRadioButtonPdfViewer( wxCommandEvent& event ) override;
+    void doClearDontShowAgain();
+    void doClearDialogState();
 
-    /**
-     * Event fired when the canvas scale field is modified
-     */
-    void OnCanvasScaleChange( wxCommandEvent& aEvent );
+    void onClearFileHistory( wxCommandEvent& event ) override;
+    void onClearDontShowAgain( wxCommandEvent& event ) override;
+    void onClearDialogState( wxCommandEvent& event ) override;
+    void onResetAll( wxCommandEvent& event ) override;
 
-    /**
-     * Event fired when the canvas auto-scale option is changed
-     */
-    void OnCanvasScaleAuto( wxCommandEvent& aEvent ) override;
-
-private:
-    void ShowFileManagerWidgets( bool aBool );
-    void setPdfViewerPathState();
+protected:
+    EDA_BASE_FRAME* m_frame;
 };

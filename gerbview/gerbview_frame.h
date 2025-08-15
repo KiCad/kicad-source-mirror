@@ -303,6 +303,10 @@ public:
      */
     bool LoadZipArchiveFile( const wxString& aFileName );
 
+    /**
+     * Remove all files from the file history.
+     */
+    void ClearFileHistory() override;
 
     /**
      * Load a Gerber job file, and load gerber files found in job files.

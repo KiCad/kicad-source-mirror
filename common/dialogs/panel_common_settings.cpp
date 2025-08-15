@@ -26,7 +26,6 @@
 #include <advanced_config.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
-#include <dialog_shim.h>
 #include <dpi_scaling_common.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
@@ -34,7 +33,6 @@
 #include <id.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
-#include <widgets/stepped_slider.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/filedlg.h>
 
@@ -165,7 +163,6 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_System.autosave_interval = m_SaveTime->GetValue() * 60;
     commonSettings->m_System.file_history_size = m_fileHistorySize->GetValue();
-    commonSettings->m_System.clear_3d_cache_interval = m_Clear3DCacheFilesOlder->GetValue();
 
     commonSettings->m_Graphics.aa_mode = m_antialiasing->GetSelection();
 
@@ -264,8 +261,6 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
         m_rbAccelerated->SetValue( true );
     else
         m_rbFallback->SetValue( true );
-
-    m_Clear3DCacheFilesOlder->SetValue( aSettings.m_System.clear_3d_cache_interval );
 
     if( m_canvasScaleCtrl )
     {

@@ -96,9 +96,6 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
 		wxSpinCtrl* m_fileHistorySize;
-		wxStaticText* m_staticTextClear3DCache;
-		wxSpinCtrl* m_Clear3DCacheFilesOlder;
-		wxStaticText* m_staticTextDays;
 		wxStaticText* m_staticText25;
 		wxStaticLine* m_staticline4;
 		wxCheckBox* m_cbBackupEnabled;

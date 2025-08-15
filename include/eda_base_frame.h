@@ -396,11 +396,8 @@ public:
 
     /**
      * Remove all files from the file history.
-     *
-     * @param aFileHistory The FILE_HISTORY in use. If null, the main application file
-     *                     history is used
      */
-    void ClearFileHistory( FILE_HISTORY* aFileHistory = nullptr );
+    virtual void ClearFileHistory();
 
     /**
      * Update the list of recently opened files.

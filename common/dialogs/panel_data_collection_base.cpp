@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,13 +30,13 @@ PANEL_DATA_COLLECTION_BASE::PANEL_DATA_COLLECTION_BASE( wxWindow* parent, wxWind
 	m_sentryUid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_sentryUid->SetMinSize( wxSize( 340,-1 ) );
 
-	bSizer3->Add( m_sentryUid, 0, wxALL, 5 );
+	bSizer3->Add( m_sentryUid, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_buttonResetId = new wxButton( this, wxID_ANY, _("Reset Unique Id"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_buttonResetId, 0, wxALL, 5 );
+	bSizer3->Add( m_buttonResetId, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
 
-	bSizer8->Add( bSizer3, 1, wxEXPAND, 5 );
+	bSizer8->Add( bSizer3, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bPanelSizer->Add( bSizer8, 1, wxEXPAND, 5 );

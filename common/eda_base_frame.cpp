@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialogs/panel_maintenance.h"
 #include "kicad_manager_frame.h"
 #include <eda_base_frame.h>
 
@@ -1161,14 +1162,11 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 }
 
 
-void EDA_BASE_FRAME::ClearFileHistory( FILE_HISTORY* aFileHistory )
+void EDA_BASE_FRAME::ClearFileHistory()
 {
-    if( !aFileHistory )
-        aFileHistory = m_fileHistory;
+    wxASSERT( m_fileHistory );
 
-    wxASSERT( aFileHistory );
-
-    aFileHistory->ClearFileHistory();
+    m_fileHistory->ClearFileHistory();
 
     // Update the menubar to update the file history menu
     if( GetMenuBar() )
@@ -1195,7 +1193,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParentPage )
 {
     PAGED_DIALOG dlg( this, _( "Preferences" ), true, true, wxEmptyString,
-                      wxWindow::FromDIP( wxSize( 980, 560 ), NULL ) );
+                      wxWindow::FromDIP( wxSize( 980, 560 ), nullptr ) );
 
     dlg.SetEvtHandlerEnabled( false );
 
@@ -1204,7 +1202,6 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
         WX_TREEBOOK*            book = dlg.GetTreebook();
         PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
-        KIFACE*                 kiface = nullptr;
         std::vector<int>        expand;
 
         wxWindow* kicadMgr_window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
@@ -1262,40 +1259,37 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
         try
         {
-            kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+            if( KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_SCH ) )
+            {
+                kiface->GetActions( hotkeysPanel->ActionsList() );
 
-            if( !kiface )
-                return;
+                if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            kiface->GetActions( hotkeysPanel->ActionsList() );
+                book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
 
-            if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
+                if( GetFrameType() == FRAME_SCH )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_TOOLBARS ), _( "Toolbars" ) );
+                book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
 
-            if( GetFrameType() == FRAME_SCH )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
-
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_TOOLBARS ), _( "Toolbars" ) );
-
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ),
-                                  _( "Field Name Templates" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_SIMULATOR ), _( "Simulator" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_SIMULATOR ), _( "Simulator" ) );
+            }
         }
         catch( ... )
         {
@@ -1303,56 +1297,53 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
         try
         {
-            kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+            if( KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB ) )
+            {
+                kiface->GetActions( hotkeysPanel->ActionsList() );
 
-            if( !kiface )
-                return;
+                if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            kiface->GetActions( hotkeysPanel->ActionsList() );
+                book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
 
-            if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_FP_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "Footprint Defaults" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ), _( "Graphics Defaults" ) );
 
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_TOOLBARS ), _( "Toolbars" ) );
+                if( GetFrameType() ==  FRAME_PCB_EDITOR )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "Footprint Defaults" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ),
-                                  _( "Graphics Defaults" ) );
+                book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
 
-            if( GetFrameType() ==  FRAME_PCB_EDITOR )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Plugins" ) );
 
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_TOOLBARS ), _( "Toolbars" ) );
+                if( GetFrameType() == FRAME_PCB_DISPLAY3D )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Plugins" ) );
+                book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
 
-            if( GetFrameType() == FRAME_PCB_DISPLAY3D )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
-
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_TOOLBARS ), _( "Toolbars" ) );
-
-            book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
+            }
         }
         catch( ... )
         {
@@ -1360,26 +1351,23 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
         try
         {
-            kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
+            if( KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW ) )
+            {
+                kiface->GetActions( hotkeysPanel->ActionsList() );
 
-            if( !kiface )
-                return;
+                if( GetFrameType() == FRAME_GERBER )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            kiface->GetActions( hotkeysPanel->ActionsList() );
+                book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
 
-            if( GetFrameType() == FRAME_GERBER )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
-
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_TOOLBARS ), _( "Toolbars" ) );
-
-            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ),
-                                  _( "Excellon Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
+            }
         }
         catch( ... )
         {
@@ -1387,29 +1375,27 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
         try
         {
-            kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+            if( KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR ) )
+            {
+                kiface->GetActions( hotkeysPanel->ActionsList() );
 
-            if( !kiface )
-                return;
+                if( GetFrameType() == FRAME_PL_EDITOR )
+                    expand.push_back( (int) book->GetPageCount() );
 
-            kiface->GetActions( hotkeysPanel->ActionsList() );
+                book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
 
-            if( GetFrameType() == FRAME_PL_EDITOR )
-                expand.push_back( (int) book->GetPageCount() );
+                if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                    book->AddLazySubPage( LAZY_CTOR( PANEL_DS_TOOLBARS ), _( "Toolbars" ) );
 
-            book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
-            book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
-
-            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
-                book->AddLazySubPage( LAZY_CTOR( PANEL_DS_TOOLBARS ), _( "Toolbars" ) );
-
-            book->AddLazyPage(
-                    []( wxWindow* aParent ) -> wxWindow*
-                    {
-                        return new PANEL_PACKAGES_AND_UPDATES( aParent );
-                    }, _( "Packages and Updates" ) );
+                book->AddLazyPage(
+                        []( wxWindow* aParent ) -> wxWindow*
+                        {
+                            return new PANEL_PACKAGES_AND_UPDATES( aParent );
+                        }, _( "Packages and Updates" ) );
+            }
         }
         catch( ... )
         {
@@ -1418,6 +1404,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 #ifdef KICAD_IPC_API
         book->AddPage( new PANEL_PLUGIN_SETTINGS( book ), _( "Plugins" ) );
 #endif
+
+        book->AddPage( new PANEL_MAINTENANCE( book, this ), _( "Maintenance" ) );
 
         // Update all of the action hotkeys. The process of loading the actions through
         // the KiFACE will only get us the default hotkeys

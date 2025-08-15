@@ -166,6 +166,8 @@ public:
     template<typename ValueType>
     void Set( const std::string& aPath, ValueType aVal );
 
+    virtual std::map<std::string, nlohmann::json> GetFileHistories();
+
     /**
      * Migrates the schema of this settings from the version in the file to the latest version
      *

@@ -17,39 +17,44 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/checkbox.h>
-#include <wx/textctrl.h>
+#include <wx/spinctrl.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_DATA_COLLECTION_BASE
+/// Class PANEL_MAINTENANCE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_DATA_COLLECTION_BASE : public RESETTABLE_PANEL
+class PANEL_MAINTENANCE_BASE : public RESETTABLE_PANEL
 {
 	private:
+		wxButton* m_clearDontShowAgain;
+		wxButton* m_clearDialogState;
+		wxButton* m_resetAll;
 
 	protected:
-		wxStaticText* m_stExplanation;
-		wxCheckBox* m_cbOptIn;
-		wxTextCtrl* m_sentryUid;
-		wxButton* m_buttonResetId;
+		wxStaticText* m_staticTextClear3DCache;
+		wxSpinCtrl* m_Clear3DCacheFilesOlder;
+		wxStaticText* m_staticTextDays;
+		wxButton* m_clearFileHistory;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnResetIdClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClearFileHistory( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClearDontShowAgain( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClearDialogState( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onResetAll( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PANEL_DATA_COLLECTION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_MAINTENANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_DATA_COLLECTION_BASE();
+		~PANEL_MAINTENANCE_BASE();
 
 };
 

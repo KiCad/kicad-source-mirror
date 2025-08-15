@@ -397,6 +397,20 @@ void JSON_SETTINGS::ResetToDefaults()
 }
 
 
+std::map<std::string, nlohmann::json> JSON_SETTINGS::GetFileHistories()
+{
+    std::map<std::string, nlohmann::json> histories;
+
+    for( const std::string& candidate : { "system.file_history" } )
+    {
+        if( Contains( candidate ) )
+            histories[candidate] = GetJson( candidate ).value();
+    }
+
+    return histories;
+}
+
+
 bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     if( !m_writeFile )
@@ -480,8 +494,7 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     {
         if( param->ClearUnknownKeys() )
         {
-            nlohmann::json_pointer p
-                    = JSON_SETTINGS_INTERNALS::PointerFromString( param->GetJsonPath() );
+            nlohmann::json_pointer p = JSON_SETTINGS_INTERNALS::PointerFromString( param->GetJsonPath() );
 
             toSave[p] = nlohmann::json( {} );
         }

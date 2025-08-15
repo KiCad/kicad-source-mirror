@@ -436,6 +436,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_image_editor_base.cpp
     dialogs/panel_grid_settings.cpp
     dialogs/panel_grid_settings_base.cpp
+    dialogs/panel_maintenance.cpp
+    dialogs/panel_maintenance_base.cpp
     dialogs/panel_mouse_settings.cpp
     dialogs/panel_mouse_settings_base.cpp
     dialogs/panel_spacemouse.cpp

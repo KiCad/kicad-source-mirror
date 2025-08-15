@@ -92,6 +92,16 @@ public:
     void FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave = true );
 
     /**
+     * Reset all program settings to defaults.
+     */
+    void ResetToDefaults();
+
+    /**
+     * Clear saved file history from all settings files.
+     */
+    void ClearFileHistory();
+
+    /**
      * Return a handle to the a given settings by type.
      *
      * If the settings have already been loaded, returns the existing pointer.
