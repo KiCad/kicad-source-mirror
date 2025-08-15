@@ -441,7 +441,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2I        prevPos;
     bool            enableLocalRatsnest = true;
 
-    bool hv45Mode        = false;
+    bool hv45Mode        = GetAngleSnapMode() != LEADER_MODE::DIRECT;
     bool eatFirstMouseUp = true;
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
     bool showCourtyardConflicts = !m_isFootprintEditor && cfg->m_ShowCourtyardCollisions;
@@ -780,7 +780,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
         else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
         {
-            hv45Mode = !hv45Mode;
+            hv45Mode = GetAngleSnapMode() != LEADER_MODE::DIRECT;
             displayConstraintsMessage( hv45Mode );
             evt->SetPassEvent( false );
         }
