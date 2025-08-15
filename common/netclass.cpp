@@ -278,7 +278,7 @@ bool NETCLASS::ContainsNetclassWithName( const wxString& netclass ) const
     return std::any_of( m_constituents.begin(), m_constituents.end(),
                         [&netclass]( const NETCLASS* nc )
                         {
-                            return nc && nc->GetName() == netclass;
+                            return nc && nc->GetName().Matches( netclass );
                         } );
 }
 
