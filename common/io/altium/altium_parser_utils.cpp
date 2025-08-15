@@ -164,24 +164,71 @@ wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                 
     if( aString.IsEmpty() )
         return aString;
 
+    // Convert a 'special string' to a KiCad variable, substituting any override.
+    const auto getVariable = [&]( const wxString& aSpecialString )
+    {
+        wxString str = aSpecialString;
+        str.UpperCase(); // matching is implemented using upper case strings
+
+        auto it = aOverrides.find( str );
+        if( it != aOverrides.end() )
+            str = it->second;
+
+        return wxString::Format( wxT( "${%s}" ), str );
+    };
+
     // special case: string starts with dot -> whole string is special string
     if( aString.at( 0 ) == '.' )
     {
         wxString specialString = aString.substr( 1 );
-
-        specialString.UpperCase(); // matching is implemented using upper case strings
-
-        auto overrideIt = aOverrides.find( specialString );
-
-        if( overrideIt != aOverrides.end() )
-            specialString = overrideIt->second;
-
-        return wxString::Format( wxT( "${%s}" ), specialString );
+        return getVariable( specialString );
     }
 
-    // TODO: implement Concatenated special strings using apostrophe "'".
+    // Strings can also have one or more special strings using apostrophes to
+    // delineate them, e.g. "foo '.bar' '.baz' = '.qux' quux"
 
-    return aString;
+    // In the common case, the string is a simple string with no special strings,
+    // so bail out early.
+    if( !aString.Contains( "'." ) )
+    {
+        return aString;
+    }
+
+    wxString stringCopy = aString;
+
+    // Given a position of a dot, check if it is a special string variable
+    // and replace it with a variable name if defined.
+    const auto tryReplacement = [&]( wxString& aStr, unsigned aDotPos )
+    {
+        // Check that the dot has an apostrophe before it, if not, it's just a dot
+        if( aDotPos == 0 || aStr.at( aDotPos - 1 ) != '\'' )
+            return;
+
+        // Scan forward for the next apostrophe
+        size_t apostrophePos = aStr.find( '\'', aDotPos + 1 );
+
+        // Didn't find it
+        if( apostrophePos == wxString::npos )
+            return;
+
+        // Extract the special string
+        wxString specialString = aStr.substr( aDotPos + 1, apostrophePos - aDotPos - 1 );
+        wxString replacement = getVariable( specialString );
+
+        aStr.replace( aDotPos - 1, apostrophePos - aDotPos + 2, replacement );
+    };
+
+    // Work backwards through the string checking any dots
+    // (so we don't mess up the positions of the dots as we replace them)
+    for( size_t pos = stringCopy.size() - 1; pos > 0; --pos )
+    {
+        if( stringCopy[pos] == '.' )
+        {
+            tryReplacement( stringCopy, pos );
+        }
+    }
+
+    return stringCopy;
 }
 
 

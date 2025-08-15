@@ -178,11 +178,11 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> pcb_special_string_to_kicad_p
     { ".A", "${C}", { { "A", "C" } } },
     { ".A_B", "${A_B}", {} },
     // Concatenated special strings
-    /*{ "'.A'", "${A}", {} },
+    { "'.A'", "${A}", {} },
     { "'.A''.B'", "${A}${B}", {} },
     { "'.A''.B'", "${C}${B}", { { "A", "C" } } },
-    { "'.A''.B'", "${C}${D}", { { "A", "C" }, { "B", "D" } } },
-    { "A='.A', B='.B'", "A=${A}, B=${B}", {} },*/
+    { "'.A''.B'", "${CC}${D}", { { "A", "CC" }, { "B", "D" } } },
+    { "A='.A', B='.B'", "A=${A}, B=${B}", {} },
     // Case-insensitive special strings
     { ".A", "${C}", { { "A", "C" } } },
     { ".a", "${C}", { { "A", "C" } } },
