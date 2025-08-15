@@ -44,6 +44,7 @@
 
 #include <board_stackup_manager/stackup_predefined_prms.h>
 
+#include <advanced_config.h>
 #include <compoundfilereader.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/outline_font.h>
@@ -1486,6 +1487,11 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
     {
         checkpoint();
         ACOMPONENTBODY6 elem( reader );
+
+        static const bool skipComponentBodies = ADVANCED_CFG::GetCfg().m_ImportSkipComponentBodies;
+
+        if( skipComponentBodies )
+            continue;
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
             continue; // TODO: we do not support components for the board yet

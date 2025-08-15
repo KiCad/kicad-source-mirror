@@ -782,6 +782,18 @@ public:
      */
     int m_PNSProcessClusterTimeout;
 
+    /**
+     * Skip importing component bodies when importing some format files, such as Altium.
+     *
+     * This can be used to drastically speed up the import when testing
+     * import of boards when the bodies are not needed.
+     *
+     * Setting name: "ImportSkipComponentBodies"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_ImportSkipComponentBodies;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 

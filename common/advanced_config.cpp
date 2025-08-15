@@ -129,6 +129,7 @@ static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
 static const wxChar ConfigurableToolbars[] = wxT( "ConfigurableToolbars" );
 static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
 static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
+static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
 
 } // namespace KEYS
 
@@ -314,6 +315,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_MaxPastedTextLength = 100;
 
     m_PNSProcessClusterTimeout = 100; // Default: 100 ms
+
+    m_ImportSkipComponentBodies = false;
 
     loadFromConfigFile();
 }
@@ -622,6 +625,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PNSProcessClusterTimeout,
                                                &m_PNSProcessClusterTimeout, 100, 10, 10000 ) );
 
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ImportSkipComponentBodies,
+                                                &m_ImportSkipComponentBodies,
+                                                m_ImportSkipComponentBodies ) );
+
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
     m_entries.push_back( std::make_unique<PARAM_CFG_WXSTRING>( true, AC_KEYS::TraceMasks, &m_traceMasks,
@@ -644,5 +651,3 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     wxLogTrace( kicadTraceCoroutineStack, wxT( "Using coroutine stack size %d" ),
                 m_CoroutineStackSize );
 }
-
-
