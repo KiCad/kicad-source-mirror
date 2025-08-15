@@ -236,6 +236,8 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
         if( item->Type() == PCB_TABLECELL_T )
             changes.Modify( item->GetParent(), nullptr, RECURSE_MODE::NO_RECURSE );
+        else if( item->Type() == PCB_GENERATOR_T )
+            changes.Modify( item, nullptr, RECURSE_MODE::RECURSE );
         else
             changes.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
 
