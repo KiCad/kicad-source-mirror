@@ -101,7 +101,7 @@ protected:
      * @param aWritable will be set to whether or not the property can be written for the selection
      * @return true if the property is available for all the items in the selection
      */
-    bool extractValueAndWritability( const SELECTION& aSelection, PROPERTY_BASE* aProperty,
+    bool extractValueAndWritability( const SELECTION& aSelection, const wxString& aPropName,
                                      wxVariant& aValue, bool& aWritable, wxPGChoices& aChoices );
 
 public:

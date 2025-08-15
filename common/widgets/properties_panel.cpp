@@ -28,6 +28,7 @@
 #include <properties/pg_cell_renderer.h>
 
 #include <algorithm>
+#include <iterator>
 #include <set>
 
 #include <wx/settings.h>
@@ -223,24 +224,23 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     wxCHECK( !types.empty(), /* void */ );  // already guarded above, but Coverity doesn't know that
 
     PROPERTY_MANAGER&                  propMgr = PROPERTY_MANAGER::Instance();
-    std::set<PROPERTY_BASE*>           commonProps;
+    std::map<wxString, PROPERTY_BASE*> commonProps;
     const std::vector<PROPERTY_BASE*>& allProperties = propMgr.GetProperties( *types.begin() );
 
-    copy( allProperties.begin(), allProperties.end(), inserter( commonProps, commonProps.begin() ) );
+    for( PROPERTY_BASE* property : allProperties )
+        commonProps.emplace( property->Name(), property );
 
-    std::map<PROPERTY_BASE*, int> displayOrder = propMgr.GetDisplayOrder( *types.begin() );
-    std::vector<wxString>         groupDisplayOrder = propMgr.GetGroupDisplayOrder( *types.begin() );
-    std::set<wxString>            groups( groupDisplayOrder.begin(), groupDisplayOrder.end() );
+    std::map<wxString, int> displayOrder;
+    for( const auto& entry : propMgr.GetDisplayOrder( *types.begin() ) )
+        displayOrder.emplace( entry.first->Name(), entry.second );
 
-    std::set<PROPERTY_BASE*> availableProps;
+    std::vector<wxString> groupDisplayOrder = propMgr.GetGroupDisplayOrder( *types.begin() );
+    std::set<wxString>    groups( groupDisplayOrder.begin(), groupDisplayOrder.end() );
 
     // Get all possible properties
-    for( const TYPE_ID& type : types )
+    for( auto itType = std::next( types.begin() ); itType != types.end(); ++itType )
     {
-        const std::vector<PROPERTY_BASE*>&   itemProps = propMgr.GetProperties( type );
-        const std::map<PROPERTY_BASE*, int>& itemDisplayOrder = propMgr.GetDisplayOrder( type );
-
-        copy( itemDisplayOrder.begin(), itemDisplayOrder.end(), inserter( displayOrder, displayOrder.begin() ) );
+        TYPE_ID type = *itType;
 
         for( const wxString& group : propMgr.GetGroupDisplayOrder( type ) )
         {
@@ -251,16 +251,14 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             }
         }
 
-        for( auto it = commonProps.begin(); it != commonProps.end(); /* ++it in the loop */ )
+        for( auto it = commonProps.begin(); it != commonProps.end(); )
         {
-            if( !binary_search( itemProps.begin(), itemProps.end(), *it ) )
+            if( !propMgr.GetProperty( type, it->first ) )
                 it = commonProps.erase( it );
             else
                 ++it;
         }
     }
-
-    EDA_ITEM* firstItem = aSelection.Front();
 
     bool isLibraryEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR )
                         || m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
@@ -268,8 +266,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     bool isDesignEditor = m_frame->IsType( FRAME_PCB_EDITOR )
                        || m_frame->IsType( FRAME_SCH );
 
+    std::set<wxString> availableProps;
+
     // Find a set of properties that is common to all selected items
-    for( PROPERTY_BASE* property : commonProps )
+    for( auto& [name, property] : commonProps )
     {
         if( property->IsHiddenFromPropertiesManager() )
             continue;
@@ -280,30 +280,33 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         if( isDesignEditor && property->IsHiddenFromDesignEditors() )
             continue;
 
-        if( propMgr.IsAvailableFor( TYPE_HASH( *firstItem ), property, firstItem ) )
-            availableProps.insert( property );
+        wxVariant   dummy;
+        wxPGChoices choices;
+        bool        writable;
+
+        if( extractValueAndWritability( aSelection, name, dummy, writable, choices ) )
+            availableProps.insert( name );
     }
 
-    bool writeable = true;
-    std::set<PROPERTY_BASE*> existingProps;
+    bool             writeable = true;
+    std::set<wxString> existingProps;
 
     for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
     {
-        wxPGProperty*  pgProp   = it.GetProperty();
-        PROPERTY_BASE* property = propMgr.GetProperty( TYPE_HASH( *firstItem ), pgProp->GetName() );
+        wxPGProperty* pgProp = it.GetProperty();
+        wxString      name   = pgProp->GetName();
 
-        // Switching item types?  Property may no longer be valid
-        if( !property )
+        if( !availableProps.count( name ) )
             continue;
 
         wxVariant   commonVal;
         wxPGChoices choices;
 
-        extractValueAndWritability( aSelection, property, commonVal, writeable, choices );
+        extractValueAndWritability( aSelection, name, commonVal, writeable, choices );
         pgProp->SetValue( commonVal );
         pgProp->Enable( writeable );
 
-        existingProps.insert( property );
+        existingProps.insert( name );
     }
 
     if( !existingProps.empty() && existingProps == availableProps )
@@ -312,16 +315,17 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     // Some difference exists:  start from scratch
     reset();
 
-    std::map<wxPGProperty*, int> pgPropOrders;
+    std::map<wxPGProperty*, int>                        pgPropOrders;
     std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
 
-    for( PROPERTY_BASE* property : availableProps )
+    for( const wxString& name : availableProps )
     {
-        wxPGProperty* pgProp = createPGProperty( property );
-        wxVariant     commonVal;
-        wxPGChoices   choices;
+        PROPERTY_BASE* property = commonProps[name];
+        wxPGProperty*  pgProp   = createPGProperty( property );
+        wxVariant      commonVal;
+        wxPGChoices    choices;
 
-        if( !extractValueAndWritability( aSelection, property, commonVal, writeable, choices ) )
+        if( !extractValueAndWritability( aSelection, name, commonVal, writeable, choices ) )
             continue;
 
         if( pgProp )
@@ -333,8 +337,8 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             pgProp->Enable( writeable );
             m_displayed.push_back( property );
 
-            wxASSERT( displayOrder.count( property ) );
-            pgPropOrders[pgProp] = displayOrder[property];
+            wxASSERT( displayOrder.count( name ) );
+            pgPropOrders[pgProp] = displayOrder[name];
             pgPropGroups[property->Group()].emplace_back( pgProp );
         }
     }
@@ -347,7 +351,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             continue;
 
         std::vector<wxPGProperty*>& properties = pgPropGroups[groupName];
-        wxString groupCaption = wxGetTranslation( groupName );
+        wxString                    groupCaption = wxGetTranslation( groupName );
 
         auto groupItem = new wxPropertyCategory( groupName.IsEmpty() ? unspecifiedGroupCaption
                                                                      : groupCaption );
@@ -399,7 +403,7 @@ bool PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, 
 }
 
 
-bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, PROPERTY_BASE* aProperty,
+bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, const wxString& aPropName,
                                                    wxVariant& aValue, bool& aWritable, wxPGChoices& aChoices )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -410,13 +414,18 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
 
     for( EDA_ITEM* item : aSelection )
     {
-        if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), aProperty, item ) )
+        PROPERTY_BASE* property = propMgr.GetProperty( TYPE_HASH( *item ), aPropName );
+
+        if( !property )
             return false;
 
-        if( aProperty->IsHiddenFromPropertiesManager() )
+        if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), property, item ) )
             return false;
 
-        wxPGChoices choices = aProperty->GetChoices( item );
+        if( property->IsHiddenFromPropertiesManager() )
+            return false;
+
+        wxPGChoices choices = property->GetChoices( item );
 
         if( first )
         {
@@ -433,12 +442,12 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
         }
 
         // If read-only for any of the selection, read-only for the whole selection.
-        if( !propMgr.IsWriteableFor( TYPE_HASH( *item ), aProperty, item ) )
+        if( !propMgr.IsWriteableFor( TYPE_HASH( *item ), property, item ) )
             aWritable = false;
 
         wxVariant value;
 
-        if( getItemValue( item, aProperty, value ) )
+        if( getItemValue( item, property, value ) )
         {
             // Null value indicates different property values between items
             if( !different && !aValue.IsNull() && value != aValue )

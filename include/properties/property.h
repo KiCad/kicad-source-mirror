@@ -528,11 +528,12 @@ protected:
     {
         wxCHECK( m_setter, /*void*/ );
 
-        if( !v.CheckType<T>() )
+        BASE_TYPE value;
+
+        if( !v.GetAs( &value ) )
             throw std::invalid_argument( "Invalid type requested" );
 
         Owner* o = reinterpret_cast<Owner*>( obj );
-        BASE_TYPE value = wxANY_AS(v, BASE_TYPE);
         (*m_setter)( o, value );
     }
 

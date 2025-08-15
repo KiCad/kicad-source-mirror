@@ -186,8 +186,8 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     const SELECTION&    selection = selectionTool->GetSelection();
-    PROPERTY_BASE*      property = getPropertyFromEvent( aEvent );
-    wxCHECK( property, /* void */ );
+
+    wxCHECK( getPropertyFromEvent( aEvent ), /* void */ );
 
     wxVariant   newValue = aEvent.GetPropertyValue();
     SCH_COMMIT  changes( m_frame );
@@ -201,6 +201,9 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ),
+                                                         aEvent.GetPropertyName() );
+        wxCHECK( property, /* void */ );
 
         if( item->Type() == SCH_TABLECELL_T )
             changes.Modify( item->GetParent(), screen, RECURSE_MODE::NO_RECURSE );

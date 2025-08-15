@@ -37,9 +37,11 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <pcb_generator.h>
+#include <generators/pcb_tuning_pattern.h>
 #include <pad.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
+
 
 
 PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRAME* aFrame ) :
@@ -219,8 +221,7 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
 
-    PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
-    wxCHECK( property, /* void */ );
+    wxCHECK( getPropertyFromEvent( aEvent ), /* void */ );
 
     wxVariant newValue = aEvent.GetPropertyValue();
     BOARD_COMMIT changes( m_frame );
@@ -233,6 +234,9 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
+        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ),
+                                                         aEvent.GetPropertyName() );
+        wxCHECK( property, /* void */ );
 
         if( item->Type() == PCB_TABLECELL_T )
             changes.Modify( item->GetParent(), nullptr, RECURSE_MODE::NO_RECURSE );
@@ -276,6 +280,7 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Top" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Bottom" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_TUNING_PATTERN ), _HKI( "Layer" ) )->SetChoices( layersCu );
 
     // Regenerate nets
 
@@ -295,4 +300,5 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_TUNING_PATTERN ), _HKI( "Net" ) )->SetChoices( nets );
 }

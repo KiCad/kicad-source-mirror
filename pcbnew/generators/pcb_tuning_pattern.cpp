@@ -42,6 +42,7 @@
 #include <core/mirror.h>
 #include <string_utils.h>
 
+#include <board.h>
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
 #include <pcb_track.h>
@@ -73,532 +74,156 @@
 
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
+#include <generators/pcb_tuning_pattern.h>
 
-enum LENGTH_TUNING_MODE
-{
-    SINGLE,
-    DIFF_PAIR,
-    DIFF_PAIR_SKEW
-};
+TUNING_STATUS_VIEW_ITEM::TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
+        EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
+        m_frame( aFrame ), m_min( 0.0 ), m_max( 0.0 ), m_current( 0.0 ), m_isTimeDomain( false )
+{ }
 
-
-class TUNING_STATUS_VIEW_ITEM : public EDA_ITEM
-{
-public:
-    TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
-            EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
-            m_frame( aFrame ), m_min( 0.0 ), m_max( 0.0 ), m_current( 0.0 ), m_isTimeDomain( false )
-    { }
-
-    wxString GetClass() const override { return wxT( "TUNING_STATUS" ); }
+wxString TUNING_STATUS_VIEW_ITEM::GetClass() const  { return wxT( "TUNING_STATUS" ); }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const override {}
+void TUNING_STATUS_VIEW_ITEM::Show( int nestLevel, std::ostream& os ) const  {}
 #endif
 
-    VECTOR2I GetPosition() const override { return m_pos; }
-    void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; };
+VECTOR2I TUNING_STATUS_VIEW_ITEM::GetPosition() const  { return m_pos; }
+void     TUNING_STATUS_VIEW_ITEM::SetPosition( const VECTOR2I& aPos )  { m_pos = aPos; };
 
-    void SetMinMax( const double aMin, const double aMax )
+void TUNING_STATUS_VIEW_ITEM::SetMinMax( const double aMin, const double aMax )
+{
+    const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
+    m_min = aMin;
+    m_minText = m_frame->MessageTextFromValue( m_min, false, unitType );
+    m_max = aMax;
+    m_maxText = m_frame->MessageTextFromValue( m_max, false, unitType );
+}
+
+void TUNING_STATUS_VIEW_ITEM::ClearMinMax()
+{
+    m_min = 0.0;
+    m_minText = wxT( "---" );
+    m_max = std::numeric_limits<double>::max();
+    m_maxText = wxT( "---" );
+}
+
+void TUNING_STATUS_VIEW_ITEM::SetCurrent( const double aCurrent, const wxString& aLabel )
+{
+    const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
+    m_current = aCurrent;
+    m_currentText = m_frame->MessageTextFromValue( aCurrent, true, unitType );
+    m_currentLabel = aLabel;
+}
+
+void TUNING_STATUS_VIEW_ITEM::SetIsTimeDomain( const bool aIsTimeDomain ) { m_isTimeDomain = aIsTimeDomain; }
+
+const BOX2I TUNING_STATUS_VIEW_ITEM::ViewBBox() const
+{
+    BOX2I tmp;
+
+    // this is an edit-time artefact; no reason to try and be smart with the bounding box
+    // (besides, we can't tell the text extents without a view to know what the scale is)
+    tmp.SetMaximum();
+    return tmp;
+}
+
+std::vector<int> TUNING_STATUS_VIEW_ITEM::ViewGetLayers() const
+{
+    return { LAYER_UI_START, LAYER_UI_START + 1 };
+}
+
+void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+{
+    KIGFX::GAL* gal = aView->GetGAL();
+    bool        viewFlipped = gal->IsFlippedX();
+    bool        drawingDropShadows = ( aLayer == LAYER_UI_START );
+
+    gal->Save();
+    gal->Scale( { 1., 1. } );
+
+    KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
+    KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -1 );
+    KIFONT::FONT*             font = KIFONT::FONT::GetFont();
+    const KIFONT::METRICS&    fontMetrics = KIFONT::METRICS::Default();
+    TEXT_ATTRIBUTES           textAttrs;
+
+    int      glyphWidth = textDims.GlyphSize.x;
+    VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), KiROUND( glyphWidth ) );
+    VECTOR2I size( glyphWidth * 25 + margin.x * 2, headerDims.GlyphSize.y + textDims.GlyphSize.y );
+    VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
+
+    if( drawingDropShadows )
     {
-        const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
-
-        m_min = aMin;
-        m_minText = m_frame->MessageTextFromValue( m_min, false, unitType );
-        m_max = aMax;
-        m_maxText = m_frame->MessageTextFromValue( m_max, false, unitType );
-    }
-
-    void ClearMinMax()
-    {
-        m_min = 0.0;
-        m_minText = wxT( "---" );
-        m_max = std::numeric_limits<double>::max();
-        m_maxText = wxT( "---" );
-    }
-
-    void SetCurrent( const double aCurrent, const wxString& aLabel )
-    {
-        const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
-
-        m_current = aCurrent;
-        m_currentText = m_frame->MessageTextFromValue( aCurrent, true, unitType );
-        m_currentLabel = aLabel;
-    }
-
-    void SetIsTimeDomain( const bool aIsTimeDomain ) { m_isTimeDomain = aIsTimeDomain; }
-
-    const BOX2I ViewBBox() const override
-    {
-        BOX2I tmp;
-
-        // this is an edit-time artefact; no reason to try and be smart with the bounding box
-        // (besides, we can't tell the text extents without a view to know what the scale is)
-        tmp.SetMaximum();
-        return tmp;
-    }
-
-    std::vector<int> ViewGetLayers() const override
-    {
-        return { LAYER_UI_START, LAYER_UI_START + 1 };
-    }
-
-    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override
-    {
-        KIGFX::GAL* gal = aView->GetGAL();
-        bool        viewFlipped = gal->IsFlippedX();
-        bool        drawingDropShadows = ( aLayer == LAYER_UI_START );
-
-        gal->Save();
-        gal->Scale( { 1., 1. } );
-
-        KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
-        KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -1 );
-        KIFONT::FONT*             font = KIFONT::FONT::GetFont();
-        const KIFONT::METRICS&    fontMetrics = KIFONT::METRICS::Default();
-        TEXT_ATTRIBUTES           textAttrs;
-
-        int      glyphWidth = textDims.GlyphSize.x;
-        VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), KiROUND( glyphWidth ) );
-        VECTOR2I size( glyphWidth * 25 + margin.x * 2, headerDims.GlyphSize.y + textDims.GlyphSize.y );
-        VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
-
-        if( drawingDropShadows )
-        {
-            gal->SetIsFill( true );
-            gal->SetIsStroke( true );
-            gal->SetLineWidth( gal->GetScreenWorldMatrix().GetScale().x * 2 );
-            gal->SetStrokeColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-            KIGFX::COLOR4D bgColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-            gal->SetFillColor( bgColor.WithAlpha( 0.9 ) );
-
-            gal->DrawRectangle( GetPosition() + offset - margin,
-                                GetPosition() + offset + size + margin );
-            gal->Restore();
-            return;
-        }
-
-        COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
-        COLOR4D normal = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
-        COLOR4D red;
-
-        // Choose a red with reasonable contrasting with the background
-        double  bg_h, bg_s, bg_l;
-        bg.ToHSL( bg_h, bg_s, bg_l );
-        red.FromHSL( 0, 1.0, bg_l < 0.5 ? 0.7 : 0.3 );
-
-        if( viewFlipped )
-            textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
-        else
-            textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
-
-        gal->SetIsFill( false );
+        gal->SetIsFill( true );
         gal->SetIsStroke( true );
-        gal->SetStrokeColor( normal );
+        gal->SetLineWidth( gal->GetScreenWorldMatrix().GetScale().x * 2 );
+        gal->SetStrokeColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+        KIGFX::COLOR4D bgColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+        gal->SetFillColor( bgColor.WithAlpha( 0.9 ) );
+
+        gal->DrawRectangle( GetPosition() + offset - margin,
+                            GetPosition() + offset + size + margin );
+        gal->Restore();
+        return;
+    }
+
+    COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+    COLOR4D normal = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
+    COLOR4D red;
+
+    // Choose a red with reasonable contrasting with the background
+    double  bg_h, bg_s, bg_l;
+    bg.ToHSL( bg_h, bg_s, bg_l );
+    red.FromHSL( 0, 1.0, bg_l < 0.5 ? 0.7 : 0.3 );
+
+    if( viewFlipped )
+        textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
+    else
         textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
 
-        // Prevent text flipping when view is flipped
-        if( gal->IsFlippedX() )
-        {
-            textAttrs.m_Mirrored = true;
-            textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
-        }
+    gal->SetIsFill( false );
+    gal->SetIsStroke( true );
+    gal->SetStrokeColor( normal );
+    textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
 
-        textAttrs.m_Size = headerDims.GlyphSize;
-        textAttrs.m_StrokeWidth = headerDims.StrokeWidth;
-
-        VECTOR2I textPos = GetPosition() + offset;
-        font->Draw( gal, m_currentLabel, textPos, textAttrs, KIFONT::METRICS::Default() );
-
-        textPos.x += glyphWidth * 11 + margin.x;
-        font->Draw( gal, _( "min" ), textPos, textAttrs, fontMetrics );
-
-        textPos.x += glyphWidth * 7 + margin.x;
-        font->Draw( gal, _( "max" ), textPos, textAttrs, fontMetrics );
-
-        textAttrs.m_Size = textDims.GlyphSize;
-        textAttrs.m_StrokeWidth = textDims.StrokeWidth;
-
-        textPos = GetPosition() + offset;
-        textPos.y += KiROUND( headerDims.LinePitch * 1.3 );
-        font->Draw( gal, m_currentText, textPos, textAttrs, KIFONT::METRICS::Default() );
-
-        textPos.x += glyphWidth * 11 + margin.x;
-        gal->SetStrokeColor( m_current < m_min ? red : normal );
-        font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
-
-        textPos.x += glyphWidth * 7 + margin.x;
-        gal->SetStrokeColor( m_current > m_max ? red : normal );
-        font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
-
-        gal->Restore();
-    }
-
-protected:
-    EDA_DRAW_FRAME* m_frame;
-    VECTOR2I        m_pos;
-    double          m_min;
-    double          m_max;
-    double          m_current;
-    wxString        m_currentLabel;
-    wxString        m_currentText;
-    wxString        m_minText;
-    wxString        m_maxText;
-    bool            m_isTimeDomain;
-};
-
-
-class PCB_TUNING_PATTERN : public PCB_GENERATOR
-{
-public:
-    static const wxString GENERATOR_TYPE;
-    static const wxString DISPLAY_NAME;
-
-    PCB_TUNING_PATTERN( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
-                        LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE );
-
-    wxString GetGeneratorType() const override { return wxS( "tuning_pattern" ); }
-
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override
+    // Prevent text flipping when view is flipped
+    if( gal->IsFlippedX() )
     {
-        return wxString( _( "Tuning Pattern" ) );
+        textAttrs.m_Mirrored = true;
+        textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
     }
 
-    wxString GetFriendlyName() const override
-    {
-        return wxString( _( "Tuning Pattern" ) );
-    }
+    textAttrs.m_Size = headerDims.GlyphSize;
+    textAttrs.m_StrokeWidth = headerDims.StrokeWidth;
 
-    wxString GetPluralName() const override
-    {
-        return wxString( _( "Tuning Patterns" ) );
-    }
+    VECTOR2I textPos = GetPosition() + offset;
+    font->Draw( gal, m_currentLabel, textPos, textAttrs, KIFONT::METRICS::Default() );
 
-    BITMAPS GetMenuImage() const override
-    {
-        switch( m_tuningMode )
-        {
-        case SINGLE:         return BITMAPS::ps_tune_length;           break;
-        case DIFF_PAIR:      return BITMAPS::ps_diff_pair_tune_length; break;
-        case DIFF_PAIR_SKEW: return BITMAPS::ps_diff_pair_tune_phase;  break;
-        }
+    textPos.x += glyphWidth * 11 + margin.x;
+    font->Draw( gal, _( "min" ), textPos, textAttrs, fontMetrics );
 
-        return BITMAPS::unknown;
-    }
+    textPos.x += glyphWidth * 7 + margin.x;
+    font->Draw( gal, _( "max" ), textPos, textAttrs, fontMetrics );
 
-    static PCB_TUNING_PATTERN* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                          BOARD_CONNECTED_ITEM* aStartItem,
-                                          LENGTH_TUNING_MODE aMode );
+    textAttrs.m_Size = textDims.GlyphSize;
+    textAttrs.m_StrokeWidth = textDims.StrokeWidth;
 
-    void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
+    textPos = GetPosition() + offset;
+    textPos.y += KiROUND( headerDims.LinePitch * 1.3 );
+    font->Draw( gal, m_currentText, textPos, textAttrs, KIFONT::METRICS::Default() );
 
-    bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
+    textPos.x += glyphWidth * 11 + margin.x;
+    gal->SetStrokeColor( m_current < m_min ? red : normal );
+    font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
 
-    void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
-                   const wxString& aCommitMsg = wxEmptyString, int aCommitFlags = 0 ) override;
+    textPos.x += glyphWidth * 7 + margin.x;
+    gal->SetStrokeColor( m_current > m_max ? red : normal );
+    font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
 
-    void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
-
-    void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
-
-    bool MakeEditPoints( EDIT_POINTS& points ) const override;
-
-    bool UpdateFromEditPoints( EDIT_POINTS& aEditPoints ) override;
-
-    bool UpdateEditPoints( EDIT_POINTS& aEditPoints ) override;
-
-    void Move( const VECTOR2I& aMoveVector ) override
-    {
-        m_origin += aMoveVector;
-        m_end += aMoveVector;
-
-        if( !this->HasFlag( IN_EDIT ) )
-        {
-            PCB_GROUP::Move( aMoveVector );
-
-            if( m_baseLine )
-                m_baseLine->Move( aMoveVector );
-
-            if( m_baseLineCoupled )
-                m_baseLineCoupled->Move( aMoveVector );
-        }
-    }
-
-    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override
-    {
-        if( !this->HasFlag( IN_EDIT ) )
-        {
-            PCB_GENERATOR::Rotate( aRotCentre, aAngle );
-            RotatePoint( m_end, aRotCentre, aAngle );
-
-            if( m_baseLine )
-                m_baseLine->Rotate( aAngle, aRotCentre );
-
-            if( m_baseLineCoupled )
-                m_baseLineCoupled->Rotate( aAngle, aRotCentre );
-        }
-    }
-
-    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override
-    {
-        if( !this->HasFlag( IN_EDIT ) )
-        {
-            PCB_GENERATOR::Flip( aCentre, aFlipDirection );
-
-            baseMirror( aCentre, aFlipDirection );
-        }
-    }
-
-    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override
-    {
-        if( !this->HasFlag( IN_EDIT ) )
-        {
-            PCB_GENERATOR::Mirror( aCentre, aFlipDirection );
-
-            baseMirror( aCentre, aFlipDirection );
-        }
-    }
-
-    void SetLayer( PCB_LAYER_ID aLayer ) override
-    {
-        PCB_GENERATOR::SetLayer( aLayer );
-
-        RunOnChildren( [aLayer]( BOARD_ITEM* item ) { item->SetLayer( aLayer ); },
-                       RECURSE_MODE::RECURSE );
-    }
-
-    const BOX2I GetBoundingBox() const override
-    {
-        return getOutline().BBox();
-    }
-
-    std::vector<int> ViewGetLayers() const override
-    {
-        return { LAYER_ANCHOR, GetLayer() };
-    }
-
-    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
-    {
-        return getOutline().Collide( aPosition, aAccuracy );
-    }
-
-    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const override
-    {
-        BOX2I sel = aRect;
-
-        if ( aAccuracy )
-            sel.Inflate( aAccuracy );
-
-        if( aContained )
-            return sel.Contains( GetBoundingBox() );
-
-        return sel.Intersects( GetBoundingBox() );
-    }
-
-    bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override
-    {
-        return KIGEOM::ShapeHitTest( aPoly, getOutline(), aContained );
-    }
-
-    const BOX2I ViewBBox() const override { return GetBoundingBox(); }
-
-    EDA_ITEM* Clone() const override { return new PCB_TUNING_PATTERN( *this ); }
-
-    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
-
-    const VECTOR2I& GetEnd() const { return m_end; }
-    void            SetEnd( const VECTOR2I& aValue ) { m_end = aValue; }
-
-    int  GetEndX() const { return m_end.x; }
-    void SetEndX( int aValue ) { m_end.x = aValue; }
-
-    int  GetEndY() const { return m_end.y; }
-    void SetEndY( int aValue ) { m_end.y = aValue; }
-
-    LENGTH_TUNING_MODE GetTuningMode() const { return m_tuningMode; }
-
-    PNS::ROUTER_MODE GetPNSMode()
-    {
-        switch( m_tuningMode )
-        {
-        case LENGTH_TUNING_MODE::SINGLE:         return PNS::PNS_MODE_TUNE_SINGLE;
-        case LENGTH_TUNING_MODE::DIFF_PAIR:      return PNS::PNS_MODE_TUNE_DIFF_PAIR;
-        case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW;
-        default:                                 return PNS::PNS_MODE_TUNE_SINGLE;
-        }
-    }
-
-    PNS::MEANDER_SETTINGS& GetSettings() { return m_settings; }
-
-    int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
-    void SetMinAmplitude( int aValue )
-    {
-        aValue = std::max( aValue, 0 );
-
-        m_settings.m_minAmplitude = aValue;
-
-        if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
-            m_settings.m_maxAmplitude = m_settings.m_minAmplitude;
-    }
-
-    int  GetMaxAmplitude() const { return m_settings.m_maxAmplitude; }
-    void SetMaxAmplitude( int aValue )
-    {
-        aValue = std::max( aValue, 0 );
-
-        m_settings.m_maxAmplitude = aValue;
-
-        if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
-            m_settings.m_minAmplitude = m_settings.m_maxAmplitude;
-    }
-
-    // Update the initial side one time at EditStart based on m_end.
-    void UpdateSideFromEnd() { m_updateSideFromEnd = true; }
-
-    PNS::MEANDER_SIDE GetInitialSide() const { return m_settings.m_initialSide; }
-    void              SetInitialSide( PNS::MEANDER_SIDE aValue ) { m_settings.m_initialSide = aValue; }
-
-    int  GetSpacing() const { return m_settings.m_spacing; }
-    void SetSpacing( int aValue ) { m_settings.m_spacing = aValue; }
-
-    std::optional<int> GetTargetLength() const
-    {
-        if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
-            return std::optional<int>();
-        else
-            return m_settings.m_targetLength.Opt();
-    }
-
-    void SetTargetLength( std::optional<int> aValue )
-    {
-        m_settings.m_isTimeDomain = false;
-
-        if( aValue.has_value() )
-            m_settings.SetTargetLength( aValue.value() );
-        else
-            m_settings.SetTargetLength( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
-    }
-
-    std::optional<int> GetTargetDelay() const
-    {
-        if( m_settings.m_targetLengthDelay.Opt() == PNS::MEANDER_SETTINGS::DELAY_UNCONSTRAINED )
-            return std::optional<int>();
-        else
-            return m_settings.m_targetLengthDelay.Opt();
-    }
-
-    void SetTargetDelay( std::optional<int> aValue )
-    {
-        m_settings.m_isTimeDomain = true;
-
-        if( aValue.has_value() )
-            m_settings.SetTargetLengthDelay( aValue.value() );
-        else
-            m_settings.SetTargetLengthDelay( PNS::MEANDER_SETTINGS::DELAY_UNCONSTRAINED );
-    }
-
-    int  GetTargetSkew() const { return m_settings.m_targetSkew.Opt(); }
-    void SetTargetSkew( int aValue ) { m_settings.SetTargetSkew( aValue ); }
-
-    int  GetTargetSkewDelay() const { return m_settings.m_targetSkewDelay.Opt(); }
-    void SetTargetSkewDelay( int aValue ) { m_settings.SetTargetSkewDelay( aValue ); }
-
-    bool GetOverrideCustomRules() const { return m_settings.m_overrideCustomRules; }
-    void SetOverrideCustomRules( bool aOverride ) { m_settings.m_overrideCustomRules = aOverride; }
-
-    int  GetCornerRadiusPercentage() const { return m_settings.m_cornerRadiusPercentage; }
-    void SetCornerRadiusPercentage( int aValue ) { m_settings.m_cornerRadiusPercentage = aValue; }
-
-    bool IsSingleSided() const { return m_settings.m_singleSided; }
-    void SetSingleSided( bool aValue ) { m_settings.m_singleSided = aValue; }
-
-    bool IsRounded() const { return m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND; }
-    void SetRounded( bool aFlag ) { m_settings.m_cornerStyle = aFlag ? PNS::MEANDER_STYLE_ROUND
-                                                                     : PNS::MEANDER_STYLE_CHAMFER; }
-
-    std::vector<std::pair<wxString, wxVariant>> GetRowData() override
-    {
-        std::vector<std::pair<wxString, wxVariant>> data = PCB_GENERATOR::GetRowData();
-        data.emplace_back( _HKI( "Net" ), m_lastNetName );
-        data.emplace_back( _HKI( "Tuning" ), m_tuningInfo );
-        return data;
-    }
-
-    const STRING_ANY_MAP GetProperties() const override;
-    void SetProperties( const STRING_ANY_MAP& aProps ) override;
-
-    void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
-
-    std::vector<EDA_ITEM*> GetPreviewItems( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                            bool aStatusItemsOnly = false ) override;
-
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
-
-protected:
-    void swapData( BOARD_ITEM* aImage ) override
-    {
-        wxASSERT( aImage->Type() == PCB_GENERATOR_T );
-
-        std::swap( *this, *static_cast<PCB_TUNING_PATTERN*>( aImage ) );
-    }
-
-    bool recoverBaseline( PNS::ROUTER* aRouter );
-
-    bool baselineValid();
-
-    bool initBaseLine( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard, VECTOR2I& aStart,
-                       VECTOR2I& aEnd, NETINFO_ITEM* aNet,
-                       std::optional<SHAPE_LINE_CHAIN>& aBaseLine );
-
-    bool initBaseLines( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard );
-
-    bool removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer, SHAPE_LINE_CHAIN& aBaseLine );
-
-    bool resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer, SHAPE_LINE_CHAIN& aBaseLine,
-                          bool aPrimary );
-
-    SHAPE_LINE_CHAIN getOutline() const;
-
-    void baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
-    {
-        PCB_GENERATOR::baseMirror( aCentre, aFlipDirection );
-
-        if( m_baseLine )
-        {
-            m_baseLine->Mirror( aCentre, aFlipDirection );
-            m_origin = m_baseLine->CPoint( 0 );
-            m_end = m_baseLine->CLastPoint();
-        }
-
-        if( m_baseLineCoupled )
-            m_baseLineCoupled->Mirror( aCentre, aFlipDirection );
-
-        if( m_settings.m_initialSide == PNS::MEANDER_SIDE_RIGHT )
-            m_settings.m_initialSide = PNS::MEANDER_SIDE_LEFT;
-        else
-            m_settings.m_initialSide = PNS::MEANDER_SIDE_RIGHT;
-    }
-
-protected:
-    VECTOR2I              m_end;
-
-    PNS::MEANDER_SETTINGS m_settings;
-
-    std::optional<SHAPE_LINE_CHAIN> m_baseLine;
-    std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
-
-    int                   m_trackWidth;
-    int                   m_diffPairGap;
-
-    LENGTH_TUNING_MODE    m_tuningMode;
-
-    wxString              m_lastNetName;
-    wxString              m_tuningInfo;
-
-    PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
-
-    bool                  m_updateSideFromEnd;
-};
+    gal->Restore();
+}
 
 
 static LENGTH_TUNING_MODE tuningFromString( const std::string& aStr )
@@ -2847,6 +2472,40 @@ static struct PCB_TUNING_PATTERN_DESC
         propMgr.AddTypeCast( new TYPE_CAST<PCB_TUNING_PATTERN, BOARD_ITEM> );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TUNING_PATTERN ), TYPE_HASH( PCB_GENERATOR ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TUNING_PATTERN ), TYPE_HASH( BOARD_ITEM ) );
+
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( UNDEFINED_LAYER );
+
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
+                layerEnum.Map( layer, LSET::Name( layer ) );
+        }
+
+        auto layer = new PROPERTY_ENUM<PCB_TUNING_PATTERN, PCB_LAYER_ID>(
+                _HKI( "Layer" ), &PCB_TUNING_PATTERN::SetLayer, &PCB_TUNING_PATTERN::GetLayer );
+        layer->SetChoices( layerEnum.Choices() );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Width" ),
+                                     &PCB_TUNING_PATTERN::SetWidth, &PCB_TUNING_PATTERN::GetWidth,
+                                     PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, int>( _HKI( "Net" ),
+                                     &PCB_TUNING_PATTERN::SetNetCode,
+                                     &PCB_TUNING_PATTERN::GetNetCode ) );
+
+        const wxString groupTechLayers = _HKI( "Technical Layers" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>( _HKI( "Soldermask" ),
+                                     &PCB_TUNING_PATTERN::SetHasSolderMask,
+                                     &PCB_TUNING_PATTERN::HasSolderMask ), groupTechLayers );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
+                                     &PCB_TUNING_PATTERN::SetLocalSolderMaskMargin,
+                                     &PCB_TUNING_PATTERN::GetLocalSolderMaskMargin,
+                                     PROPERTY_DISPLAY::PT_SIZE ), groupTechLayers );
 
         const wxString groupTab = _HKI( "Pattern Properties" );
 
