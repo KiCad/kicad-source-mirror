@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-16 13:41+0000\n"
+"PO-Revision-Date: 2025-08-16 13:55+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -27078,116 +27078,96 @@ msgid "Source"
 msgstr "Джерело"
 
 #: kicad/dialogs/panel_jobset.cpp:152
-#, fuzzy
 msgid "No output messages"
-msgstr "Вихідні повідомлення"
+msgstr "Немає вихідних повідомлень"
 
 #: kicad/dialogs/panel_jobset.cpp:224
-#, fuzzy
 msgid "Last run successful"
-msgstr "З'єднання встановлено"
+msgstr "Останній запуск успішний"
 
 #: kicad/dialogs/panel_jobset.cpp:230
 msgid "Last run failed"
-msgstr ""
+msgstr "Останній запуск не вдався"
 
 #: kicad/dialogs/panel_jobset.cpp:256 kicad/dialogs/panel_jobset.cpp:968
-#, fuzzy
 msgid "Running Jobs"
-msgstr "Модель лінії"
+msgstr "Виконання завдань"
 
 #: kicad/dialogs/panel_jobset.cpp:286
 msgid "Edit Destination Options..."
 msgstr "Редагувати параметри призначення..."
 
 #: kicad/dialogs/panel_jobset.cpp:287
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Видалити відповідність"
+msgstr "Видалити пункт призначення"
 
 #: kicad/dialogs/panel_jobset.cpp:290
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Переглянути як PNG..."
+msgstr "Переглянути журнал останнього запуску..."
 
 #: kicad/dialogs/panel_jobset.cpp:380
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Опис"
+msgstr "Редагувати опис вакансії"
 
 #: kicad/dialogs/panel_jobset.cpp:381
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Редагувати параметри..."
+msgstr "Редагувати налаштування завдання..."
 
 #: kicad/dialogs/panel_jobset.cpp:386
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Видалити виділені елемент(и)"
+msgstr "Видалити вибрані завдання"
 
 #: kicad/dialogs/panel_jobset.cpp:388
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Виділити все"
+msgstr "Вибрати всі вакансії"
 
 #: kicad/dialogs/panel_jobset.cpp:681
-#, fuzzy
 msgid "Job Types"
-msgstr "Файли завдання"
+msgstr "Типи вакансій"
 
 #: kicad/dialogs/panel_jobset.cpp:692
-#, fuzzy
 msgid "Add New Job"
-msgstr "Додати текст"
+msgstr "Додати нову роботу"
 
 #: kicad/dialogs/panel_jobset.cpp:693
-#, fuzzy
 msgid "Select job type:"
-msgstr "Вибрати предустановки:"
+msgstr "Виберіть тип роботи:"
 
 #: kicad/dialogs/panel_jobset.cpp:774
-#, fuzzy
 msgid "Destination Types"
-msgstr "Позначити"
+msgstr "Типи місць призначення"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Позначити"
+msgstr "Додати новий пункт призначення"
 
 #: kicad/dialogs/panel_jobset.cpp:784
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Вибрати предустановки:"
+msgstr "Виберіть тип місця призначення:"
 
 #: kicad/dialogs/panel_jobset.cpp:949
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Не підключено"
+msgstr "Не визначено пунктів призначення"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "на %s"
+msgstr "Робота"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Позначити"
+msgstr "Напрямки"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Зберегти як"
+msgstr "Зберегти набір завдань"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Головні налаштування"
+msgstr "Згенерувати всі пункти призначення"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Jobset Run Log"
-msgstr ""
+msgstr "Журнал виконання набору завдань"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:148
 msgid "Edit the project schematic"
@@ -27296,9 +27276,8 @@ msgstr ""
 "не може бути імпортовано."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Імпортувати файли проекту Eagle"
+msgstr "Імпорт файлів проекту Altium"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27310,7 +27289,7 @@ msgstr "Імпортувати файли проекту Eagle"
 
 #: kicad/import_project.cpp:169
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Імпорт резервної копії EasyEDA Std"
 
 #: kicad/import_project.cpp:176
 msgid "Import EasyEDA Pro Project"
@@ -27322,14 +27301,12 @@ msgid "Running job %d: %s"
 msgstr "Виконання завдання %d: %s"
 
 #: kicad/jobs_runner.cpp:263
-#, fuzzy
 msgid "Job successful"
-msgstr "З'єднання встановлено"
+msgstr "Робота успішна"
 
 #: kicad/jobs_runner.cpp:270
-#, fuzzy
 msgid "Job failed"
-msgstr "Файли завдання"
+msgstr "Завдання не вдалося"
 
 #: kicad/kicad.cpp:321
 #, c-format
@@ -27342,35 +27319,31 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:120
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "Експорт GLB (бінарний GLTF)"
 
 #: kicad/kicad_cli.cpp:121
 msgid "Export STEP"
 msgstr "Експорт STEP"
 
 #: kicad/kicad_cli.cpp:122
-#, fuzzy
 msgid "Export BREP"
-msgstr "Експорт STEP"
+msgstr "Експорт BREP"
 
 #: kicad/kicad_cli.cpp:123
-#, fuzzy
 msgid "Export XAO"
-msgstr "Експорт IDFv3"
+msgstr "Експорт XAO"
 
 #: kicad/kicad_cli.cpp:124
 msgid "Export VRML"
 msgstr "Експорт VRML"
 
 #: kicad/kicad_cli.cpp:125
-#, fuzzy
 msgid "Export PLY"
-msgstr "Експорт STEP"
+msgstr "Експорт PLY"
 
 #: kicad/kicad_cli.cpp:126
-#, fuzzy
 msgid "Export STL"
-msgstr "Експорт STEP"
+msgstr "Експорт STL"
 
 #: kicad/kicad_cli.cpp:146
 msgid "Export PS"
@@ -27398,9 +27371,8 @@ msgid "%d package update(s) avaliable"
 msgstr "Доступно %d оновлення пакета(ів)"
 
 #: kicad/kicad_manager_frame.cpp:797
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Помилка створення svg файла"
+msgstr "Помилка відкриття файлу завдань"
 
 #: kicad/kicad_manager_frame.cpp:972
 msgid "Edit File in Text Editor"
@@ -27433,14 +27405,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Імпорт не KiCad проекту..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Проект EAGLE..."
+msgstr "Проект Altium..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Імпорт схем CADSTAR і PCB (*.csa, *.cpa)"
+msgstr "Імпорт схеми та друкованої плати Altium (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -27460,7 +27430,7 @@ msgstr "Імпорт EAGLE CAM XML схему та плату"
 
 #: kicad/menubar.cpp:129
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "Стандартне резервне копіювання EasyEDA (JLCEDA)..."
 
 #: kicad/menubar.cpp:130
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
@@ -27885,6 +27855,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Цей плагін вимагає API KiCad, який наразі вимкнено в налаштуваннях. Бажаєте "
+"його ввімкнути?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -28008,7 +27980,7 @@ msgstr "Усі операції успішно завершено."
 #: kicad/pcm/pcm_task_manager.cpp:673
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr ""
+msgstr "%d з %d операцій було ініціалізовано, але не успішно."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -28127,9 +28099,8 @@ msgid "Edit in a Text Editor"
 msgstr "Редагувати в текстовому редакторі"
 
 #: kicad/project_tree_pane.cpp:945
-#, fuzzy
 msgid "Run Jobs"
-msgstr "на %s"
+msgstr "Виконання Завдань"
 
 #: kicad/project_tree_pane.cpp:953
 msgid "Rename File..."
@@ -28161,7 +28132,7 @@ msgstr "Перемістити у кошик"
 
 #: kicad/project_tree_pane.cpp:998
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "Додати проєкт до системи контролю версій..."
 
 #: kicad/project_tree_pane.cpp:999
 msgid "Initialize a new repository"
@@ -28173,23 +28144,23 @@ msgstr "Зафіксувати проект..."
 
 #: kicad/project_tree_pane.cpp:1004 kicad/project_tree_pane.cpp:1018
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Зафіксувати зміни в локальному репозиторії"
 
 #: kicad/project_tree_pane.cpp:1007
 msgid "Push"
-msgstr ""
+msgstr "Натисніть"
 
 #: kicad/project_tree_pane.cpp:1008
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "Відправлення зафіксованих локальних змін до віддаленого репозиторію"
 
 #: kicad/project_tree_pane.cpp:1011
 msgid "Pull"
-msgstr ""
+msgstr "Перенесення"
 
 #: kicad/project_tree_pane.cpp:1012
 msgid "Pull changes from remote repository into local"
-msgstr ""
+msgstr "Перенесення змін з віддаленого репозиторію в локальний"
 
 #: kicad/project_tree_pane.cpp:1017
 msgid "Commit File..."
@@ -28217,7 +28188,7 @@ msgstr "Вилучити систему контролю версій"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "Видаліть усі файли контролю версій з каталогу проекту."
 
 #: kicad/project_tree_pane.cpp:1101
 #, c-format
@@ -28237,9 +28208,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Локальне сховище: моніторинг змін теки"
 
 #: kicad/project_tree_pane.cpp:1651
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Вибрана папка вже містить існуючий git проект."
+msgstr "Вибраний каталог вже є проектом Git."
 
 #: kicad/project_tree_pane.cpp:1659
 msgid "Set default remote"
@@ -28260,9 +28230,8 @@ msgid "Fetching Remote"
 msgstr "Отримання репозиторію"
 
 #: kicad/project_tree_pane.cpp:1781
-#, fuzzy
 msgid "Failed to pull project"
-msgstr "Помилка виведення даних"
+msgstr "Не вдалося витягнути проєкт"
 
 #: kicad/project_tree_pane.cpp:1805
 msgid "Failed to push project"
@@ -28289,9 +28258,8 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "потрібно число для '%s'"
 
 #: kicad/project_tree_pane.cpp:1930
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Ви впевнені, що хочете видалити поле '%s'?"
+msgstr "Ви впевнені, що хочете видалити відстеження Git з цього проєкту?"
 
 #: kicad/project_tree_pane.cpp:1947
 #, fuzzy
@@ -28299,17 +28267,16 @@ msgid "Failed to remove Git directory"
 msgstr "Не вдалося видалити теку %s"
 
 #: kicad/project_tree_pane.cpp:2314
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Вибрана папка вже містить існуючий git проект."
+msgstr "Вибраний каталог не є проектом Git."
 
 #: kicad/project_tree_pane.cpp:2460
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "Відхилення коміту через повідомлення про порожній коміт."
 
 #: kicad/project_tree_pane.cpp:2466
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "Відхилення коміту через вибір порожнього файлу."
 
 #: kicad/project_tree_pane.cpp:2472
 #, c-format
@@ -28366,27 +28333,24 @@ msgid "New Project..."
 msgstr "Новий проект..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new, blank project"
-msgstr "Створити новий пустий проект"
+msgstr "Створіть новий, пустий проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
 msgstr "Новий проект із шаблону..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "Створити новий символ, похідний від наявного символу"
+msgstr "Створення нового проекту на основі існуючого проекту"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
 msgstr "Клонувати проєкт з репозиторію..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "Відкрити робочий Gerber файл..."
+msgstr "Новий файл набору завдань..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -28397,28 +28361,24 @@ msgid "Open Project..."
 msgstr "Відкрити проект..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Відкрити робочий Gerber файл..."
+msgstr "Відкрити файл набору завдань..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
 msgstr "Закрити проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
-#, fuzzy
 msgid "Edit schematic in schematic editor"
-msgstr "Відкрити в редакторі схем"
+msgstr "Редагування схеми в редакторі схем"
 
 #: kicad/tools/kicad_manager_actions.cpp:137
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Редагувати в текстовому редакторі"
+msgstr "Редагування друкованої плати в редакторі друкованих плат"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
-#, fuzzy
 msgid "Create, delete and edit PCB footprints"
-msgstr "Створення, видалення і редагування посадкових місць"
+msgstr "Створення, видалення та редагування посадкових місць друкованих плат"
 
 #: kicad/tools/kicad_manager_actions.cpp:159
 msgid "Preview Gerber output files"
@@ -28484,12 +28444,11 @@ msgstr "Репозиторій"
 
 #: kicad/tools/kicad_manager_control.cpp:192
 msgid "No project files were found in the repository."
-msgstr ""
+msgstr "У репозиторії не знайдено жодних файлів проекту."
 
 #: kicad/tools/kicad_manager_control.cpp:219
-#, fuzzy
 msgid "Create New Jobset"
-msgstr "Створити новий проект"
+msgstr "Створити новий набір завдань"
 
 #: kicad/tools/kicad_manager_control.cpp:248
 msgid "System Templates"
@@ -28530,9 +28489,8 @@ msgid "Open Existing Project"
 msgstr "Відкрити існуючий проект"
 
 #: kicad/tools/kicad_manager_control.cpp:436
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Зберегти як"
+msgstr "Відкрити набір завдань"
 
 #: kicad/tools/kicad_manager_control.cpp:643
 #, c-format
@@ -28580,7 +28538,7 @@ msgstr "Перевірка оновлень"
 
 #: kicad/update_manager.cpp:188
 msgid "Requesting update info"
-msgstr ""
+msgstr "Запит інформації про оновлення"
 
 #: kicad/update_manager.cpp:267
 #, c-format
@@ -28593,11 +28551,11 @@ msgstr "Створити нову теку для проекту"
 
 #: libs/kimath/src/geometry/roundrect.cpp:61
 msgid "Roundrect radius is larger than the rectangle's major dimension"
-msgstr ""
+msgstr "Радіус закругленого прямокутника більший за його головний вимір"
 
 #: libs/kimath/src/geometry/roundrect.cpp:66
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "Радіус заокруглення має бути невід'ємним"
 
 #: libs/kiplatform/os/windows/environment.cpp:81
 #, c-format
@@ -28969,18 +28927,16 @@ msgstr ""
 "відображаються не на всій сторінці"
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
-#, fuzzy
 msgid "Place Bitmaps"
-msgstr "Розмістити зображення"
+msgstr "Розмістити растрові зображення"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
 msgstr "Додати існуючу форматну рамку..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:90
-#, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr "Додати існуючий файл форматної рамки в поточний файл"
+msgstr "Додати існуючий файл аркуша креслення до поточного файлу"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid "Show Design Inspector"
@@ -29472,27 +29428,27 @@ msgstr "Множник"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:19
 msgid "IPC 2221"
-msgstr ""
+msgstr "IPC 2221"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:21
 msgid "IEC 60664"
-msgstr ""
+msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
-msgstr ""
+msgstr "Ізоляція обладнання в системах низьковольтного живлення"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
-msgstr ""
+msgstr "Визначте імпульсну напругу перехідного циклу, яку необхідно витримувати"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
-msgstr ""
+msgstr "Номінальна напруга (RMS або DC):"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr ""
+msgstr "Напруга мережі живлення"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
