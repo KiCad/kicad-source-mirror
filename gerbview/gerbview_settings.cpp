@@ -185,9 +185,9 @@ std::map<std::string, nlohmann::json> GERBVIEW_SETTINGS::GetFileHistories()
 {
     std::map<std::string, nlohmann::json> histories = JSON_SETTINGS::GetFileHistories();
 
-    for( const std::string& candidate : { "system.drill_file_history",
-                                          "system.zip_file_history",
-                                          "system.job_file_history" } )
+    for( const std::string& candidate : { std::string("system.drill_file_history"),
+                                          std::string("system.zip_file_history"),
+                                          std::string("system.job_file_history") } )
     {
         if( Contains( candidate ) )
             histories[candidate] = GetJson( candidate ).value();

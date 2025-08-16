@@ -401,7 +401,7 @@ std::map<std::string, nlohmann::json> JSON_SETTINGS::GetFileHistories()
 {
     std::map<std::string, nlohmann::json> histories;
 
-    for( const std::string& candidate : { "system.file_history" } )
+    for( const std::string& candidate : { std::string( "system.file_history" ) } )
     {
         if( Contains( candidate ) )
             histories[candidate] = GetJson( candidate ).value();
