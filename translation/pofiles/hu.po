@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-16 13:41+0000\n"
+"PO-Revision-Date: 2025-08-16 22:11+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -7366,9 +7366,9 @@ msgstr ""
 "könyvtár."
 
 #: common/env_vars.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Elavult KICAD_TEMPLATE_DIR verzió."
+msgstr "Elavult verziójú %s."
 
 #: common/exceptions.cpp:78
 #, fuzzy, c-format
@@ -7379,17 +7379,18 @@ msgstr ""
 "%d. sor, %d. oszlop"
 
 #: common/exceptions.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"A KiCAD nem tudja megnyitni ezt a fájlt, mivel azt a program egy újabb "
+"A KiCad nem tudta megnyitni ezt a fájlt, mivel azt a program egy újabb "
 "verziójával hozták létre.\n"
-"A megnyitásához frissítenie kell a KiCAD programot egy újabb verzióra.\n"
-"A KiCAD minimum %s verziója szükséges a fájl megnyitásához."
+"\n"
+"A megnyitásához frissítenie kell a KiCad-et egy újabb verzióra: %s vagy "
+"újabb."
 
 #: common/exceptions.cpp:117
 #, fuzzy, c-format
@@ -7413,9 +7414,8 @@ msgid "Full error text:"
 msgstr "Teljes hibaüzenet:"
 
 #: common/file_history.cpp:155
-#, fuzzy
 msgid "No Files"
-msgstr "Dokumentum fájlok"
+msgstr "Nincs fájl"
 
 #: common/filename_resolver.cpp:494
 msgid "The given path does not exist"
@@ -7930,9 +7930,8 @@ msgid "Cut"
 msgstr "Kivágás"
 
 #: common/grid_tricks.cpp:362
-#, fuzzy
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "A kijelölt cellák tartalmának vágólapra történő áthelyezése"
+msgstr "A kijelölt cellák tartalmának áthelyezése a vágólapra"
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:323
 #: common/widgets/listbox_tricks.cpp:208 eeschema/tools/sch_actions.cpp:243
@@ -7953,10 +7952,8 @@ msgid "Paste"
 msgstr "Beillesztés"
 
 #: common/grid_tricks.cpp:369
-#, fuzzy
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr ""
-"A vágólapon lévő cellák beillesztése a mátrixba az aktuális cellánál kezdve"
+msgstr "A vágólapon lévő cellák beillesztése a mátrixba az aktuális cellánál"
 
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:389
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:1755
@@ -7979,14 +7976,12 @@ msgstr "Kijelölt cellák tartalmának törlése"
 #: pcbnew/dialogs/dialog_import_settings.cpp:99
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:98
 #: pcbnew/dialogs/panel_setup_rules.cpp:137
-#, fuzzy
 msgid "Select All"
-msgstr "Az összes kijelölése"
+msgstr "Összes kijelölése"
 
 #: common/grid_tricks.cpp:375
-#, fuzzy
 msgid "Select all cells"
-msgstr "Összes cella kiválasztása"
+msgstr "Összes cella kijelölése"
 
 #: common/hotkey_store.cpp:44
 #, fuzzy
@@ -8088,9 +8083,8 @@ msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr "Elfogyott a memória a DXF betöltése közben, lehet, hogy túl nagy."
 
 #: common/import_gfx/dxf_import_plugin.cpp:1549
-#, fuzzy
 msgid "Invalid spline definition encountered"
-msgstr "Panel körvonal meghatározás"
+msgstr "Érvénytelen spline definíciót találtunk"
 
 #: common/import_gfx/dxf_import_plugin.h:210
 #, c-format
@@ -8282,9 +8276,8 @@ msgid "Job Settings"
 msgstr "Beállítások"
 
 #: common/jobs/job_export_pcb_3d.cpp:148
-#, fuzzy
 msgid "3D model export"
-msgstr "Ne exportálja"
+msgstr "3D modell exportálása"
 
 #: common/jobs/job_export_pcb_3d.cpp:154
 #, fuzzy
@@ -8296,9 +8289,8 @@ msgid "PCB: Export 3D Model"
 msgstr "NYÁK: 3D modell exportálása"
 
 #: common/jobs/job_export_pcb_drill.cpp:128
-#, fuzzy
 msgid "Export drill data"
-msgstr "Felső forrasztópaszta"
+msgstr "Furat adatok exportálása"
 
 #: common/jobs/job_export_pcb_drill.cpp:134
 #, fuzzy
@@ -8549,7 +8541,7 @@ msgstr "Beállítások szerkesztése"
 
 #: common/jobs/job_pcb_render.cpp:141
 msgid "PCB: Render"
-msgstr ""
+msgstr "NYÁK: renderelés"
 
 #: common/jobs/job_sch_erc.cpp:33
 #, fuzzy
@@ -8751,29 +8743,24 @@ msgid "Pins"
 msgstr "Lábak"
 
 #: common/layer_id.cpp:93
-#, fuzzy
 msgid "Sheet borders"
 msgstr "Lap keretek"
 
 #: common/layer_id.cpp:94
-#, fuzzy
 msgid "Sheet backgrounds"
 msgstr "Lap hátterek"
 
 #: common/layer_id.cpp:95
-#, fuzzy
 msgid "Sheet names"
-msgstr "Lap név"
+msgstr "Lap nevek"
 
 #: common/layer_id.cpp:96
-#, fuzzy
 msgid "Sheet fields"
-msgstr "Mező törlése"
+msgstr "Lap mezők"
 
 #: common/layer_id.cpp:97
-#, fuzzy
 msgid "Sheet file names"
-msgstr "Lap fájlnév nevek"
+msgstr "Lap fájlnevek"
 
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
