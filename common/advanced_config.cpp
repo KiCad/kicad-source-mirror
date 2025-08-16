@@ -625,7 +625,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PNSProcessClusterTimeout,
                                                &m_PNSProcessClusterTimeout, 100, 10, 10000 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ImportSkipComponentBodies,
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ImportSkipComponentBodies,
                                                 &m_ImportSkipComponentBodies,
                                                 m_ImportSkipComponentBodies ) );
 
