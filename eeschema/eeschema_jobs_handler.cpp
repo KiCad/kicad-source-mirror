@@ -343,6 +343,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
     plotOpts.m_plotHopOver = aPlotJob->m_show_hop_over;
 
+    // Always export dxf in mm by kicad-cli (similar to Pcbnew)
+    plotOpts.m_DXF_File_Unit = DXF_UNITS::MM;
+
     schPlotter->Plot( format, plotOpts, renderSettings.get(), m_reporter );
 
     if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )

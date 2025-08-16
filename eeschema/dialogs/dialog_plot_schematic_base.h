@@ -63,6 +63,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotPDFPropertyPopups;
 		wxCheckBox* m_plotPDFHierarchicalLinks;
 		wxCheckBox* m_plotPDFMetadata;
+		wxStaticBoxSizer* m_SizerDxfOption;
+		wxStaticText* m_staticTextDXF;
+		wxChoice* m_DXF_plotUnits;
 		wxStaticBoxSizer* m_otherOptions;
 		wxCheckBox* m_openFileAfterPlot;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;

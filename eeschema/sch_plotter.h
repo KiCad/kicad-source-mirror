@@ -68,6 +68,8 @@ struct SCH_PLOT_OPTS
 
     wxString       m_outputDirectory;
     wxString       m_outputFile;
+    // has meaning only with DXF plotter: set DXF units in DXF file
+    DXF_UNITS      m_DXF_File_Unit;
 
     SCH_PLOT_OPTS() :
         m_plotAll( true ),
@@ -81,7 +83,8 @@ struct SCH_PLOT_OPTS
         m_PDFMetadata( false ),
         m_theme(),
         m_outputDirectory(),
-        m_outputFile()
+        m_outputFile(),
+        m_DXF_File_Unit( DXF_UNITS::INCH )
     {
 
     }

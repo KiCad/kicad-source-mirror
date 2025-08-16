@@ -149,7 +149,7 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
     }
 
     wxCommandEvent dummy;
-    onColorMode( dummy );
+    onPlotFormatSelection( dummy );
 
     return true;
 }
@@ -266,6 +266,10 @@ void DIALOG_PLOT_SCHEMATIC::onPlotFormatSelection( wxCommandEvent& event )
     m_plotPDFHierarchicalLinks->Enable( fmt == PLOT_FORMAT::PDF );
     m_plotPDFMetadata->Enable( fmt == PLOT_FORMAT::PDF );
 
+    // Currently kicad-cli always exports in mm (also true in Pcbnew)
+    m_staticTextDXF->Enable( fmt == PLOT_FORMAT::DXF && m_job == nullptr );
+    m_DXF_plotUnits->Enable( fmt == PLOT_FORMAT::DXF && m_job == nullptr );
+
     m_paperSizeOption->SetSelection( m_paperSizeOption->GetSelection() );
 
     m_defaultLineWidth.Enable( fmt == PLOT_FORMAT::POST || fmt == PLOT_FORMAT::PDF || fmt == PLOT_FORMAT::SVG );
@@ -332,6 +336,9 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_outputDirectory = getOutputPath();
     plotOpts.m_pageSizeSelect = m_paperSizeOption->GetSelection();
     plotOpts.m_plotHopOver = m_editFrame->Schematic().Settings().m_HopOverScale > 0.0;
+
+    // Select the DXF file unit
+    plotOpts.m_DXF_File_Unit = m_DXF_plotUnits->GetSelection() == 0 ? DXF_UNITS::INCH : DXF_UNITS::MM;
 
     schPlotter->Plot( getPlotFileFormat(), plotOpts, &renderSettings, &m_MessagesBox->Reporter() );
 

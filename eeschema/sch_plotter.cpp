@@ -776,6 +776,8 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
     const PAGE_INFO& pageInfo = aScreen->GetPageSettings();
     DXF_PLOTTER*     plotter = new DXF_PLOTTER();
 
+    plotter->SetUnits( aPlotOpts.m_DXF_File_Unit );
+
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );

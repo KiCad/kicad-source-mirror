@@ -139,7 +139,28 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	sbSizer4->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptionsRight->Add( sbSizer4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bOptionsRight->Add( sbSizer4, 0, wxEXPAND|wxALL, 5 );
+
+	m_SizerDxfOption = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
+
+	wxBoxSizer* bSizerDxf;
+	bSizerDxf = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextDXF = new wxStaticText( m_SizerDxfOption->GetStaticBox(), wxID_ANY, _("Export units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDXF->Wrap( -1 );
+	bSizerDxf->Add( m_staticTextDXF, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
+	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
+	m_DXF_plotUnits = new wxChoice( m_SizerDxfOption->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DXF_plotUnitsNChoices, m_DXF_plotUnitsChoices, 0 );
+	m_DXF_plotUnits->SetSelection( 0 );
+	bSizerDxf->Add( m_DXF_plotUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_SizerDxfOption->Add( bSizerDxf, 1, wxEXPAND, 5 );
+
+
+	bOptionsRight->Add( m_SizerDxfOption, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_otherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
