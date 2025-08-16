@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-16 22:12+0000\n"
-"Last-Translator: Gaston Schelotto <gschelotto@puredsp.com>\n"
+"PO-Revision-Date: 2025-08-16 22:13+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -5663,9 +5663,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Redes que coinciden con «%s»:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Clases de nodos:"
+msgstr "Clases de nodos"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:642
@@ -5759,9 +5758,8 @@ msgid "Import colors from schematic"
 msgstr "Probar desde el esquema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Asignaciones de clases de nodos:"
+msgstr "Asignaciones de clases de nodos"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
