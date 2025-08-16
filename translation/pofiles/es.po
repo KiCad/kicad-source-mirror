@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-13 00:02+0000\n"
+"PO-Revision-Date: 2025-08-16 22:12+0000\n"
 "Last-Translator: Gaston Schelotto <gschelotto@puredsp.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5663,6 +5663,7 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Redes que coinciden con «%s»:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
+#, fuzzy
 msgid "Netclasses"
 msgstr "Clases de nodos:"
 
@@ -5758,6 +5759,7 @@ msgid "Import colors from schematic"
 msgstr "Probar desde el esquema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
+#, fuzzy
 msgid "Netclass Assignments"
 msgstr "Asignaciones de clases de nodos:"
 
