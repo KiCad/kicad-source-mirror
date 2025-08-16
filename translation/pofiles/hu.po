@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-16 16:52+0000\n"
+"PO-Revision-Date: 2025-08-16 22:11+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -8308,29 +8308,24 @@ msgid "Pins"
 msgstr "Lábak"
 
 #: common/layer_id.cpp:93
-#, fuzzy
 msgid "Sheet borders"
 msgstr "Lap keretek"
 
 #: common/layer_id.cpp:94
-#, fuzzy
 msgid "Sheet backgrounds"
 msgstr "Lap hátterek"
 
 #: common/layer_id.cpp:95
-#, fuzzy
 msgid "Sheet names"
-msgstr "Lap név"
+msgstr "Lap nevek"
 
 #: common/layer_id.cpp:96
-#, fuzzy
 msgid "Sheet fields"
-msgstr "Mező törlése"
+msgstr "Lap mezők"
 
 #: common/layer_id.cpp:97
-#, fuzzy
 msgid "Sheet file names"
-msgstr "Lap fájlnév nevek"
+msgstr "Lap fájlnevek"
 
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
