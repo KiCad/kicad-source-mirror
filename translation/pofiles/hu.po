@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 15:14+0300\n"
-"PO-Revision-Date: 2025-08-13 00:02+0000\n"
+"PO-Revision-Date: 2025-08-16 13:41+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:320
@@ -27995,7 +27995,7 @@ msgstr "IPC-D-356 netlista fájl létrehozása"
 #: kicad/cli/command_pcb_export_pdf.cpp:44
 #: kicad/cli/command_pcb_export_svg.cpp:52
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "Panel tükrözése (hasznos, ha az alsó rétegeket akarjuk megjeleníteni)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:89
 msgid "Color theme to use (will default to PCB Editor settings)"
@@ -28020,7 +28020,6 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:45
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
-#, fuzzy
 msgid "Generate Position File"
 msgstr "Alkatrész pozíció fájl létrehozása"
 
@@ -28032,7 +28031,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:54
 msgid "Valid options: ascii,csv,gerber"
-msgstr ""
+msgstr "Elérhető opciók: ASCII, CSV, Gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:59
 msgid "Output units; ascii or csv format only; valid options: in,mm"
@@ -28072,9 +28071,8 @@ msgstr "Panel körvonalait belevesz"
 
 #: kicad/cli/command_pcb_export_pos.cpp:129
 #: kicad/cli/command_sch_export_netlist.cpp:95 kicad/cli/command_version.cpp:71
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "Érvénytelen vezetősáv szélesség."
+msgstr "Érvénytelen formátum\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:155
 msgid "\"both\" not supported for Gerber format\n"
@@ -28200,9 +28198,8 @@ msgid "Invalid preset\n"
 msgstr "Érvénytelen vezetősáv szélesség."
 
 #: kicad/cli/command_pcb_render.cpp:350
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Háttér"
+msgstr "Érvénytelen háttér\n"
 
 #: kicad/cli/command_pcb_render.cpp:356
 #, fuzzy
