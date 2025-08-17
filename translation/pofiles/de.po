@@ -30,15 +30,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-14 12:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-08-18 08:01+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -21939,7 +21939,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Warnung: Referenz ist leer</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -36507,7 +36507,7 @@ msgstr "Text- && Grafikformatierung"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
-msgstr "Designregeln"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
