@@ -31,7 +31,6 @@
 #include <sch_group.h>
 #include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_bitmap.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
 #include <tools/sch_selection_tool.h>
@@ -42,22 +41,16 @@
 
 /* Functions to undo and redo edit commands.
  *
- *  m_UndoList and m_RedoList handle a std::vector of PICKED_ITEMS_LIST
- *  Each PICKED_ITEMS_LIST handle a std::vector of pickers (class ITEM_PICKER),
- *  that store the list of schematic items that are concerned by the command to
- *  undo or redo and is created for each command to undo (handle also a command
- *  to redo). each picker has a pointer pointing to an item to undo or redo (in
- *  fact: deleted, added or modified), and has a pointer to a copy of this item,
- *  when this item has been modified (the old values of parameters are
- *  therefore saved)
+ *  m_UndoList and m_RedoList handle a std::vector of PICKED_ITEMS_LIST.  Each PICKED_ITEMS_LIST handles
+ *  a std::vector of ITEM_PICKER that store the list of schematic items that are concerned by the command
+ *  to undo or redo and is created for each command to undo/redo).  Each picker has a pointer pointing to
+ *  an item to undo or redo (in fact: deleted, added or modified), and has a pointer to a copy of this
+ *  item, when this item has been modified (the old values of parameters are therefore saved).
  *
  *  there are 3 cases:
  *  - delete item(s) command
  *  - change item(s) command
  *  - add item(s) command
- *  and 2 cases for block:
- *  - move list of items
- *  - mirror (Y) list of items
  *
  *  Undo command
  *  - delete item(s) command:
@@ -83,43 +76,17 @@
  *      => The list of item(s) is used to create a deleted list in undo
  *         list(same as a delete command)
  *
- *   Some block operations that change items can be undone without memorized
- *   items, just the coordinates of the transform: move list of items (undo/
- *   redo is made by moving with the opposite move vector) mirror (Y) and flip
- *   list of items (undo/redo is made by mirror or flip items) so they are
- *    handled specifically.
- *
- *  A problem is the hierarchical sheet handling.
- *  the data associated (sub-hierarchy, undo/redo list) is deleted only
- *  when the sheet is really deleted (i.e. when deleted from undo or redo list)
- *  This is handled by its destructor.
+ *  A problem is the hierarchical sheet handling.  The data associated (sub-hierarchy, undo/redo list) is
+ *  deleted only when the sheet is really deleted (i.e. when deleted from undo or redo list).  This is
+ *  handled by its destructor.
  */
 
-
-/* Used if undo / redo command:
- * swap data between Item and its copy, pointed by its picked item link member
- * swapped data is data modified by editing, so not all values are swapped
- */
-
-void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
-                                         UNDO_REDO aCommandType, bool aAppend,
-                                         bool aDirtyConnectivity )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem, UNDO_REDO aCommandType,
+                                         bool aAppend )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
     wxCHECK( aItem, /* void */ );
-
-    if( aDirtyConnectivity )
-    {
-        if( !aItem->IsConnectivityDirty() && aItem->Connection()
-            && ( aItem->Connection()->Name() == m_highlightedConn
-                 || aItem->Connection()->HasDriverChanged() ) )
-        {
-            m_highlightedConnChanged = true;
-        }
-
-        aItem->SetConnectivityDirty();
-    }
 
     PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
 
@@ -153,8 +120,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "SaveCopyInUndoList() error (unknown code %X)" ),
-                                      aCommandType ) );
+        wxFAIL_MSG( wxString::Format( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), aCommandType ) );
         break;
     }
 
@@ -173,9 +139,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
 }
 
 
-void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                         UNDO_REDO aTypeCommand, bool aAppend,
-                                         bool aDirtyConnectivity )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
+                                         bool aAppend )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
@@ -442,16 +407,16 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                     wxCHECK2( origSheet && copySheet, continue );
 
-                    if( ( origSheet->GetName() != copySheet->GetName() )
-                      || ( origSheet->GetFileName() != copySheet->GetFileName() )
-                      || origSheet->HasPageNumberChanges( *copySheet ) )
+                    if( origSheet->GetName() != copySheet->GetName()
+                            || origSheet->GetFileName() != copySheet->GetFileName()
+                            || origSheet->HasPageNumberChanges( *copySheet ) )
                     {
                         rebuildHierarchyNavigator = true;
                     }
 
                     // Sheet name changes do not require rebuilding the hiearchy.
-                    if( ( origSheet->GetFileName() != copySheet->GetFileName() )
-                      || origSheet->HasPageNumberChanges( *copySheet ) )
+                    if( origSheet->GetFileName() != copySheet->GetFileName()
+                            || origSheet->HasPageNumberChanges( *copySheet ) )
                     {
                         refreshHierarchy = true;
                     }
@@ -484,8 +449,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 break;
 
             default:
-                wxFAIL_MSG( wxString::Format( wxT( "Unknown undo/redo command %d" ),
-                                              aList->GetPickedItemStatus( ii ) ) );
+                wxFAIL_MSG( wxString::Format( wxT( "Unknown undo/redo command %d" ), status ) );
                 break;
             }
 
@@ -546,9 +510,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     if( dirtyConnectivity )
     {
-        wxLogTrace( wxS( "CONN_PROFILE" ),
-                    wxS( "Undo/redo %s clean up connectivity rebuild." ),
-                    ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" ) : wxS( "global" ) );
+        wxLogTrace( wxS( "CONN_PROFILE" ), wxS( "Undo/redo %s clean up connectivity rebuild." ),
+                    connectivityCleanUp == LOCAL_CLEANUP ? wxS( "local" ) : wxS( "global" ) );
 
         SCH_COMMIT localCommit( m_toolManager );
 

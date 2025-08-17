@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_TOOL_BASE_H
-#define SCH_TOOL_BASE_H
+#pragma once
 
 #include <math/vector2d.h>
 #include <tool/tool_event.h>
@@ -104,63 +103,46 @@ public:
 
 protected:
     /**
-     * Similar to getView()->Update(), but handles items that are redrawn by their parents
-     * and updating the SCH_SCREEN's RTree.
+     * Similar to getView()->Update(), but also updates the SCH_SCREEN's RTree.
      */
     void updateItem( EDA_ITEM* aItem, bool aUpdateRTree ) const
     {
         m_frame->UpdateItem( aItem, false, aUpdateRTree );
     }
 
-    ///< Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
-    ///< parents.
-    void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aType, bool aAppend = false,
-                             bool aDirtyConnectivity = true )
+    ///< Similar to m_frame->SaveCopyInUndoList(), but also handles connectivity.
+    void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aType, bool aAppend = false, bool aDirtyConnectivity = true )
     {
-        wxASSERT( aItem );
+        if( !aItem->IsSCH_ITEM() )
+            return;
 
-        KICAD_T itemType = aItem->Type();
-        bool    selected = aItem->IsSelected();
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( aItem );
+        bool      selected = item->IsSelected();
 
         // IS_SELECTED flag should not be set on undo items which were added for
         // a drag operation.
-        if( selected && aItem->HasFlag( SELECTED_BY_DRAG ) )
-            aItem->ClearSelected();
+        if( selected && item->HasFlag( SELECTED_BY_DRAG ) )
+            item->ClearSelected();
 
-        if( m_isSymbolEditor )
+        if( SYMBOL_EDIT_FRAME* symbolEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) )
         {
-            SYMBOL_EDIT_FRAME* editFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-            wxCHECK_RET( editFrame, wxT( "editFrame is null" ) );
-
-            editFrame->SaveCopyInUndoList( wxEmptyString, dynamic_cast<LIB_SYMBOL*>( aItem ) );
+            symbolEditFrame->SaveCopyInUndoList( wxEmptyString, dynamic_cast<LIB_SYMBOL*>( item ) );
         }
-        else
+        else if( SCH_EDIT_FRAME* schematicFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
         {
-            SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
-            wxASSERT( editFrame );
+            schematicFrame->SaveCopyInUndoList( schematicFrame->GetScreen(), item, UNDO_REDO::CHANGED, aAppend );
 
-            if( editFrame )
+            if( aDirtyConnectivity )
             {
-                if( itemType == SCH_FIELD_T )
+                if( !item->IsConnectivityDirty()
+                    && item->Connection()
+                    && ( item->Connection()->Name() == schematicFrame->GetHighlightedConnection()
+                             || item->Connection()->HasDriverChanged() ) )
                 {
-                    editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
-                                                   static_cast<SCH_ITEM*>( aItem->GetParent() ),
-                                                   UNDO_REDO::CHANGED, aAppend,
-                                                   false );
+                    schematicFrame->DirtyHighlightedConnection();
                 }
-                else if( itemType == SCH_PIN_T || itemType == SCH_SHEET_PIN_T )
-                {
-                    editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
-                                                   static_cast<SCH_ITEM*>( aItem->GetParent() ),
-                                                   UNDO_REDO::CHANGED, aAppend,
-                                                   aDirtyConnectivity );
-                }
-                else
-                {
-                    editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
-                                                   static_cast<SCH_ITEM*>( aItem ), aType,
-                                                   aAppend, aDirtyConnectivity );
-                }
+
+                item->SetConnectivityDirty();
             }
         }
 
@@ -174,6 +156,3 @@ protected:
     SCH_SELECTION_TOOL* m_selectionTool;
     bool                m_isSymbolEditor;
 };
-
-
-#endif
