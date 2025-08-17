@@ -26,7 +26,6 @@
 #include <panel_sym_lib_table_base.h>
 #include <lib_table_grid.h>
 
-class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_GRID;
 
 /**

@@ -49,7 +49,6 @@
 #include <sch_textbox.h>
 #include <sch_line.h>
 #include <schematic.h>
-#include <symbol_lib_table.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <vector>

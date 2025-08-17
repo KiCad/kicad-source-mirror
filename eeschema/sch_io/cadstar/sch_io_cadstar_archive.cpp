@@ -30,7 +30,6 @@
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
-#include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 #include <libraries/library_table.h>

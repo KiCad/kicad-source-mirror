@@ -39,8 +39,6 @@
 #include <project_sch.h>
 #include <trace_helpers.h>
 
-#include <symbol_lib_table.h>
-
 #include <set>
 #include <libraries/symbol_library_adapter.h>
 

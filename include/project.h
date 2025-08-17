@@ -71,7 +71,7 @@ public:
     {
         FPTBL,
 
-        SCH_SYMBOL_LIBS,
+        LEGACY_SYMBOL_LIBS,
         SCH_SEARCH_STACK,
         S3DCACHE,
         SYMBOL_LIB_TABLE,

@@ -38,7 +38,6 @@
 #include <sch_painter.h>
 #include <string_utils.h>
 #include <symbol_editor/symbol_editor_settings.h>
-#include <symbol_lib_table.h>
 #include <symbol_tree_model_adapter.h>
 #include <symbol_viewer_frame.h>
 #include <tool/library_editor_control.h>

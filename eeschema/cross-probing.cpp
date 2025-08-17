@@ -37,7 +37,6 @@
 #include <project/net_settings.h>
 #include <project_sch.h>
 #include <richio.h>
-#include <symbol_lib_table.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>

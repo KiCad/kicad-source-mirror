@@ -47,7 +47,6 @@
 #include <project_sch.h>
 #include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_adapter.h>
-#include <symbol_lib_table.h>
 #include <sch_base_frame.h>
 #include <dialogs/dialog_sch_find.h>
 #include <design_block.h>

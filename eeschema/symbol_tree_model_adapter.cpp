@@ -32,8 +32,6 @@
 #include <generate_alias_info.h>
 #include <sch_base_frame.h>
 #include <locale_io.h>
-#include <symbol_async_loader.h>
-#include <symbol_lib_table.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <libraries/symbol_library_adapter.h>

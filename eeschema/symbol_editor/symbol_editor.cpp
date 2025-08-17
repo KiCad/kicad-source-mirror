@@ -33,10 +33,10 @@
 #include <symbol_edit_frame.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
-#include <symbol_lib_table.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_tree_pane.h>
 #include <project/project_file.h>
+#include <richio.h>
 #include <widgets/lib_tree.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>

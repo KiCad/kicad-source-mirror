@@ -417,10 +417,8 @@ set( EESCHEMA_SRCS
     schematic_undo_redo.cpp
     sheet.cpp
     symbol.cpp
-    symbol_async_loader.cpp
     symbol_checker.cpp
     symbol_chooser_frame.cpp
-    symbol_lib_table.cpp
 
     symbol_library_manager.cpp
     symbol_tree_model_adapter.cpp

@@ -33,7 +33,6 @@
 #include <sch_edit_frame.h>
 
 class CONNECTION_GRAPH;
-class SYMBOL_LIB_TABLE;
 class XNODE;
 
 #define GENERIC_INTERMEDIATE_NETLIST_EXT wxT( "xml" )

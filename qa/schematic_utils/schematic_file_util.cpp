@@ -141,7 +141,7 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
     else
         aSettingsManager.LoadProject( "" );
 
-    aSettingsManager.Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
+    aSettingsManager.Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
 
     aSchematic = LoadHierarchyFromRoot( schematicPath, &aSettingsManager.Prj() );
 

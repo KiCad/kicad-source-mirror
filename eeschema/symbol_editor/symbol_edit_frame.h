@@ -34,7 +34,6 @@
 #include <optional>
 
 class SCH_EDIT_FRAME;
-class SYMBOL_LIB_TABLE;
 class LIB_SYMBOL;
 class LIB_TREE_NODE;
 class LIB_ID;

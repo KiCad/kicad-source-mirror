@@ -40,7 +40,6 @@
 #include <sch_symbol.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
-#include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <project_sch.h>

@@ -32,8 +32,6 @@
 #include <fmt.h>
 #include <ki_exception.h>
 #include <lib_symbol.h>
-#include <lib_id.h>
-#include <symbol_lib_table.h>
 
 #include "sch_io_database.h"
 
@@ -80,7 +78,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
-    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) );
+    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly ) );
 
     for( auto const& pair : m_nameToSymbolcache )
     {

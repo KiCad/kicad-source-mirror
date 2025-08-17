@@ -48,6 +48,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <project_sch.h>
+#include <richio.h>
 #include <sch_design_block_pane.h>
 #include <sch_edit_frame.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
@@ -61,7 +62,6 @@
 #include <sch_sheet_pin.h>
 #include <sch_commit.h>
 #include <sim/simulator_frame.h>
-#include <symbol_lib_table.h>
 #include <symbol_library_manager.h>
 #include <symbol_viewer_frame.h>
 #include <tool/picker_tool.h>

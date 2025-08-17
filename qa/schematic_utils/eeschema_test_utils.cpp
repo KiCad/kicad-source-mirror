@@ -64,7 +64,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxFileName& aFn )
 
     m_manager.LoadProject( pro.GetFullPath() );
 
-    m_manager.Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
+    m_manager.Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
 
     m_schematic = std::make_unique<SCHEMATIC>( &m_manager.Prj() );
     m_schematic->SetRoot( m_pi->LoadSchematicFile( fn.GetFullPath(), m_schematic.get() ) );

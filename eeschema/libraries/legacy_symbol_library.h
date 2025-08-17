@@ -57,7 +57,7 @@ class LEGACY_SYMBOL_LIB;
 class LEGACY_SYMBOL_LIBS : public boost::ptr_vector<LEGACY_SYMBOL_LIB>, public PROJECT::_ELEM
 {
 public:
-    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SCH_SYMBOL_LIBS; }
+    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::LEGACY_SYMBOL_LIBS; }
 
     LEGACY_SYMBOL_LIBS() {}
 

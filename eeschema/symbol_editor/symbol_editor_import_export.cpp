@@ -27,7 +27,7 @@
 #include <kidialog.h>
 #include <common.h>
 #include <io/eagle/eagle_parser.h>
-#include <symbol_lib_table.h>
+#include <sch_io/sch_io.h>
 #include <symbol_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_symbol_library_manager.h>

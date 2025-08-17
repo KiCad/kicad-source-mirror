@@ -35,7 +35,6 @@ class WX_LISTBOX;
 class wxSearchCtrl;
 class SYMBOL_LIBRARY_FILTER;
 class LIB_SYMBOL;
-class SYMBOL_LIB_TABLE_ROW;
 
 
 /**

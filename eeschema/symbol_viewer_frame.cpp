@@ -41,13 +41,11 @@
 #include <widgets/wx_progress_reporters.h>
 #include <sch_view.h>
 #include <sch_painter.h>
-#include <symbol_lib_table.h>
 #include <symbol_tree_model_adapter.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <project_sch.h>
 #include <settings/settings_manager.h>
-#include <symbol_async_loader.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>

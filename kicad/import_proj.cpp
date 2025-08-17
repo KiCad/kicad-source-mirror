@@ -34,7 +34,6 @@
 #include <pcb_edit_frame.h>
 #include <sch_edit_frame.h>
 
-#include <symbol_lib_table.h>
 #include <fp_lib_table.h>
 
 #include <sch_io/sch_io_mgr.h>

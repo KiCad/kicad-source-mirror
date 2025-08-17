@@ -37,7 +37,6 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <schematic.h>
-#include <symbol_lib_table.h>
 #include <dialogs/dialog_sheet_properties.h>
 #include <tool/actions.h>
 
@@ -380,8 +379,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     duplicateLibNames.Add( name );
             }
 
-            wxFileName symLibTableFn( fileName.GetPath(),
-                                      SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+            wxFileName symLibTableFn( fileName.GetPath(), FILEEXT::SymbolLibraryTableFileName );
             LIBRARY_TABLE table( symLibTableFn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT );
 
             // If there are any new or duplicate libraries, check to see if it's possible that

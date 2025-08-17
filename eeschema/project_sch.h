@@ -23,7 +23,6 @@
 
 #pragma once
 
-class SYMBOL_LIB_TABLE;
 class PROJECT;
 class SEARCH_STACK;
 class LEGACY_SYMBOL_LIBS;

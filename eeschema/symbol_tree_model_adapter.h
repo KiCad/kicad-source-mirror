@@ -65,8 +65,6 @@ protected:
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::SYMBOL_LIB; }
 
 private:
-    friend class SYMBOL_ASYNC_LOADER;
-
     /**
      * Flag to only show the symbol library table load progress dialog the first time.
      */

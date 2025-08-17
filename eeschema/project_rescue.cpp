@@ -33,7 +33,6 @@
 #include <project_sch.h>
 #include <sch_edit_frame.h>
 #include <string_utils.h>
-#include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/msgdlg.h>
 
@@ -680,12 +679,12 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     wxString libPaths;
 
     wxString libName = m_rescue_lib->GetName();
-    LEGACY_SYMBOL_LIBS* libs = dynamic_cast<LEGACY_SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) );
+    LEGACY_SYMBOL_LIBS* libs = dynamic_cast<LEGACY_SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS ) );
 
     if( !libs )
     {
         libs = new LEGACY_SYMBOL_LIBS();
-        m_prj->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, libs );
+        m_prj->SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, libs );
     }
 
     try
@@ -711,7 +710,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     boost::ptr_vector<LEGACY_SYMBOL_LIB> libsSave;
     libsSave.transfer( libsSave.end(), libs->begin(), libs->end(), *libs );
 
-    m_prj->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
+    m_prj->SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
 
     libs = new LEGACY_SYMBOL_LIBS();
 
@@ -732,7 +731,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
         return false;
     }
 
-    m_prj->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, libs );
+    m_prj->SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, libs );
 
     // Update the schematic symbol library links since the library list has changed.
     SCH_SCREENS schematic( m_schematic->Root() );

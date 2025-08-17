@@ -38,13 +38,13 @@
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_chooser_frame.h>
-#include <symbol_lib_table.h>
 #include <dialogs/panel_grid_settings.h>
 #include <dialogs/panel_simulator_preferences.h>
 #include <dialogs/panel_design_block_lib_table.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <project_sch.h>
+#include <richio.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include <sexpr/sexpr.h>
@@ -688,6 +688,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             aErrors += msg;
         }
     }
+    // TODO(JE) library tables - does this feature even need to exist?
+#if 0
     else if( destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
     {
         SYMBOL_LIB_TABLE symbolLibTable;
@@ -723,6 +725,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             aErrors += msg;
         }
     }
+#endif
     else
     {
         wxFAIL_MSG( wxS( "Unexpected filetype for Eeschema::SaveFileAs()" ) );

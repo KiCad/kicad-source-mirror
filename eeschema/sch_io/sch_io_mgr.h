@@ -37,7 +37,6 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_IO;
 class SCHEMATIC;
-class SYMBOL_LIB_TABLE;
 class KIWAY;
 class LIB_SYMBOL;
 class LEGACY_SYMBOL_LIB;

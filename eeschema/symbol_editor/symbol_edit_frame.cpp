@@ -45,7 +45,6 @@
 #include <sch_painter.h>
 #include <sch_view.h>
 #include <settings/settings_manager.h>
-#include <symbol_lib_table.h>
 #include <toolbars_symbol_editor.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
@@ -1917,8 +1916,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABLE_SCOPE aScope )
 {
     wxFileName fn = aLibFile;
-    wxFileName libTableFileName( Prj().GetProjectPath(),
-                                 SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+    wxFileName libTableFileName( Prj().GetProjectPath(), FILEEXT::SymbolLibraryTableFileName );
     wxString libNickname = fn.GetName();
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();

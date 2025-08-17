@@ -41,7 +41,6 @@
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
-#include <symbol_lib_table.h>
 #include <eda_doc.h>
 #include <sch_marker.h>
 #include <project.h>

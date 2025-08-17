@@ -22,7 +22,6 @@
 #include <gal/gal_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <math/vector2wx.h>
-#include <symbol_lib_table.h>
 #include <lib_symbol.h>
 #include <libraries/symbol_library_adapter.h>
 #include <sch_preview_panel.h>

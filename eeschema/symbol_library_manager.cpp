@@ -27,7 +27,6 @@
 
 #include <dialogs/html_message_box.h>
 #include <symbol_edit_frame.h>
-#include <symbol_lib_table.h>
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <project_sch.h>
@@ -35,7 +34,6 @@
 #include <core/profile.h>
 #include <wx_filename.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
-#include <symbol_async_loader.h>
 #include <progress_reporter.h>
 #include <list>
 #include <locale_io.h>

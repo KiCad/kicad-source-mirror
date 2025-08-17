@@ -23,7 +23,6 @@
 #include <pgm_base.h>
 #include <wx/app.h>
 #include <core/utf8.h>
-#include <symbol_lib_table.h>
 #include <project_sch.h>
 #include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_adapter.h>
@@ -90,16 +89,16 @@ SEARCH_STACK* PROJECT_SCH::SchSearchS( PROJECT* aProject )
 
 LEGACY_SYMBOL_LIBS* PROJECT_SCH::LegacySchLibs( PROJECT* aProject )
 {
-    LEGACY_SYMBOL_LIBS* libs = (LEGACY_SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS );
+    auto libs = static_cast<LEGACY_SYMBOL_LIBS*>( aProject->GetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS ) );
 
-    wxASSERT( !libs || libs->ProjectElementType() == PROJECT::ELEM::SCH_SYMBOL_LIBS );
+    wxASSERT( !libs || libs->ProjectElementType() == PROJECT::ELEM::LEGACY_SYMBOL_LIBS );
 
     if( !libs )
     {
         libs = new LEGACY_SYMBOL_LIBS();
 
         // Make PROJECT the new SYMBOL_LIBS owner.
-        aProject->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, libs );
+        aProject->SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, libs );
 
         try
         {
@@ -129,54 +128,6 @@ LEGACY_SYMBOL_LIBS* PROJECT_SCH::LegacySchLibs( PROJECT* aProject )
 
     return libs;
 }
-
-
-#if 0
-SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
-{
-    std::lock_guard<std::mutex> lock( s_symbolTableMutex );
-
-    // This is a lazy loading function, it loads the project specific table when
-    // that table is asked for, not before.
-    SYMBOL_LIB_TABLE* tbl =
-            (SYMBOL_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE );
-
-    // its gotta be NULL or a SYMBOL_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->ProjectElementType() == PROJECT::ELEM::SYMBOL_LIB_TABLE );
-
-    if( !tbl )
-    {
-        // Stack the project specific SYMBOL_LIB_TABLE overlay on top of the global table.
-        // ~SYMBOL_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        tbl = new SYMBOL_LIB_TABLE( &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
-
-        aProject->SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, tbl );
-
-        wxString prjPath;
-
-        wxGetEnv( PROJECT_VAR_NAME, &prjPath );
-
-        if( !prjPath.IsEmpty() )
-        {
-            wxFileName fn( prjPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-
-            try
-            {
-                tbl->Load( fn.GetFullPath() );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                wxString msg;
-                msg.Printf( _( "Error loading the symbol library table '%s'." ), fn.GetFullPath() );
-                DisplayErrorMessage( nullptr, msg, ioe.What() );
-            }
-        }
-    }
-
-    return tbl;
-}
-#endif
 
 
 SYMBOL_LIBRARY_ADAPTER* PROJECT_SCH::SymbolLibAdapter( PROJECT* aProject )

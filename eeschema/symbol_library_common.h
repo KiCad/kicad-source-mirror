@@ -27,7 +27,6 @@
 
 class LIB_SYMBOL;
 class SCH_BASE_FRAME;
-class SYMBOL_LIB_TABLE;
 
 
 enum class SCH_LIB_TYPE

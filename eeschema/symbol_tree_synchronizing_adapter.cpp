@@ -30,7 +30,6 @@
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <lib_symbol_library_manager.h>
-#include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
 #include <project_sch.h>
 #include <string_utils.h>

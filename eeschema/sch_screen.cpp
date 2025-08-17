@@ -55,7 +55,6 @@
 #include <sch_text.h>
 #include <schematic.h>
 #include <symb_transforms_utils.h>
-#include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 #include <sim/sim_model.h> // For V6 to V7 simulation model migration.
 #include <locale_io.h>

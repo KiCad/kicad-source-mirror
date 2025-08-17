@@ -43,7 +43,6 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
-#include <symbol_lib_table.h>
 #include <env_paths.h>
 #include <project_sch.h>
 #include <wx/msgdlg.h>
@@ -122,8 +121,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     // check to see if the schematic has not been converted to the symbol library table
     // method for looking up symbols.
 
-    wxFileName prjSymLibTableFileName( Prj().GetProjectPath(),
-                                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+    wxFileName prjSymLibTableFileName( Prj().GetProjectPath(), FILEEXT::SymbolLibraryTableFileName );
 
     // Delete the existing project symbol library table.
     if( prjSymLibTableFileName.FileExists() )
@@ -143,7 +141,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     LEGACY_SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
 
     // Reload the cache symbol library.
-    Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
+    Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
     PROJECT_SCH::LegacySchLibs( &Prj() );
 
     Raise();
@@ -153,6 +151,8 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
 size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< LEGACY_SYMBOL_LIB* >& aLibs )
 {
+    LIBRARY_MANAGER& mgr = Pgm().GetLibraryManager();
+
     for( LEGACY_SYMBOL_LIB& lib : *PROJECT_SCH::LegacySchLibs( &Prj() ) )
     {
         // Ignore the cache library.
@@ -162,7 +162,7 @@ size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< LEGAC
         // Check for the obvious library name.
         wxString libFileName = lib.GetFullFileName();
 
-        if( !SYMBOL_LIB_TABLE::GetGlobalLibTable().FindRowByURI( libFileName ) )
+        if( !mgr.FindRowByURI( LIBRARY_TABLE_TYPE::SYMBOL, libFileName ) )
             aLibs.push_back( &lib );
     }
 
@@ -172,13 +172,19 @@ size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< LEGAC
 
 void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 {
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+
+    std::optional<LIBRARY_TABLE*> optTable =
+                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    wxCHECK( optTable, /* void */ );
+    LIBRARY_TABLE* projectTable = *optTable;
+
     std::vector<LEGACY_SYMBOL_LIB*> libs;
 
     if( getLibsNotInGlobalSymbolLibTable( libs ) )
     {
         wxBusyCursor          busy;
-        SYMBOL_LIB_TABLE      libTable;
-        std::vector<wxString> libNames = SYMBOL_LIB_TABLE::GetGlobalLibTable().GetLogicalLibs();
+        std::vector<wxString> libNames = adapter->GetLibraryNames();
 
         for( LEGACY_SYMBOL_LIB* lib : libs )
         {
@@ -217,7 +223,10 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
                                                     normalizedPath ),
                                   RPT_SEVERITY_INFO );
 
-                libTable.InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, normalizedPath, type ) );
+                LIBRARY_TABLE_ROW& newRow = projectTable->InsertRow();
+                newRow.SetNickname( libName );
+                newRow.SetURI( normalizedPath );
+                newRow.SetType( type );
             }
             else
             {
@@ -228,22 +237,17 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
         }
 
         // Don't save empty project symbol library table.
-        if( !libTable.IsEmpty() )
+        if( !projectTable->Rows().empty() )
         {
-            wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+            Pgm().GetLibraryManager().Save( projectTable ).map_error(
+                [&aReporter]( const LIBRARY_ERROR& aError )
+                {
+                    aReporter.ReportTail( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
+                                                    aError.message ) );
+                } );
 
-            try
-            {
-                FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
-                libTable.Format( &formatter, 0 );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                aReporter.ReportTail( wxString::Format( _( "Error writing project symbol library "
-                                                           "table.\n  %s" ),
-                                                        ioe.What() ),
-                                      RPT_SEVERITY_ERROR );
-            }
+            // Trigger a reload of the table and cancel an in-progress background load
+            Pgm().GetLibraryManager().ProjectChanged();
 
             aReporter.ReportTail( _( "Created project symbol library table.\n" ),
                                   RPT_SEVERITY_INFO );
@@ -373,7 +377,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 
         // Back up symbol library table.
         srcFileName.SetPath( Prj().GetProjectPath() );
-        srcFileName.SetName( SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        srcFileName.SetName( FILEEXT::SymbolLibraryTableFileName );
         destFileName = srcFileName;
         destFileName.AppendDir( backupFolder );
         destFileName.SetName( destFileName.GetName() + timeStamp );

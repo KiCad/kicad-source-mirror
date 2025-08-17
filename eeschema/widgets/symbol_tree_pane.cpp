@@ -27,7 +27,6 @@
 #include <widgets/lib_tree.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_edit_frame.h>
-#include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 

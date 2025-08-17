@@ -23,7 +23,6 @@
 
 #include <fmt.h>
 #include <lib_symbol.h>
-#include <symbol_lib_table.h>
 
 #include <libraries/symbol_library_adapter.h>
 #include <http_lib/http_lib_connection.h>
@@ -58,7 +57,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
-    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) );
+    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly ) );
 
     for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
     {

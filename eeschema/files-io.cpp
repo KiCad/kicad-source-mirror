@@ -195,21 +195,21 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         // Don't reload the symbol libraries if we are just launching Eeschema from KiCad again.
         // They are already saved in the kiface project object.
-        if( differentProject || !Prj().GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) )
+        if( differentProject || !Prj().GetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS ) )
         {
             // load the libraries here, not in SCH_SCREEN::Draw() which is a context
             // that will not tolerate DisplayError() dialog since we're already in an
             // event handler in there.
             // And when a schematic file is loaded, we need these libs to initialize
             // some parameters (links to PART LIB, dangling ends ...)
-            Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
+            Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
             PROJECT_SCH::LegacySchLibs( &Prj() );
         }
     }
     else
     {
         // No legacy symbol libraries including the cache are loaded with the new file format.
-        Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
+        Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
     }
 
     wxFileName rfn( GetCurrentFileName() );

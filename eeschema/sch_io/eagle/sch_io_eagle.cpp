@@ -55,7 +55,6 @@
 #include <sch_symbol.h>
 #include <schematic.h>
 #include <string_utils.h>
-#include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 #include <libraries/symbol_library_adapter.h>
 
