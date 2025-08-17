@@ -309,7 +309,7 @@ bool DIALOG_PRINT::TransferDataFromWindow()
 
     SavePrintOptions();
 
-#if defined( _MSC_VER )
+#ifndef __MINGW32__
     if( ADVANCED_CFG::GetCfg().m_UsePdfPrint )
     {
         EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
