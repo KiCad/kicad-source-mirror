@@ -266,6 +266,10 @@ public:
     /// Return true if the given nickname exists and is not a read-only library
     virtual bool IsWritable( const wxString& aNickname ) const { return false; }
 
+    virtual bool SupportsConfigurationDialog( const wxString& aNickname ) const { return false; }
+
+    virtual void ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const {};
+
 protected:
     virtual std::map<wxString, LIB_DATA>& globalLibs() = 0;
     virtual std::map<wxString, LIB_DATA>& globalLibs() const = 0;

@@ -77,9 +77,9 @@ public:
 
     std::vector<SUB_LIBRARY> GetSubLibraries( const wxString& aNickname ) const;
 
-    bool SupportsConfigurationDialog( const wxString& aNickname ) const;
+    bool SupportsConfigurationDialog( const wxString& aNickname ) const override;
 
-    void ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const;
+    void ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const override;
 
     enum class SYMBOL_TYPE
     {

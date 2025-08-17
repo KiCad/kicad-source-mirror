@@ -19,6 +19,7 @@
 
 #include "lib_table_grid_tricks.h"
 #include "lib_table_grid.h"
+#include <libraries/library_manager.h>
 #include <wx/clipbrd.h>
 #include <wx/log.h>
 
@@ -89,16 +90,18 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     bool showSettings = false;
 
-    // TODO(JE) library tables
-#if 0
-    if( m_sel_row_count == 1 && tbl->At( m_sel_row_start )->SupportsSettingsDialog() )
+    if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
     {
-        showSettings = true;
-        menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS,
-                     wxString::Format( _( "Library settings for %s..." ),
-                                       tbl->GetValue( m_sel_row_start, 2 ) ) );
+        wxString nickname = tbl->GetValue( m_sel_row_start, COL_NICKNAME );
+
+        if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
+        {
+            showSettings = true;
+            menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS,
+                         wxString::Format( _( "Library settings for %s..." ), nickname ) );
+        }
     }
-#endif
+
     if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showSettings )
         menu.AppendSeparator();
 

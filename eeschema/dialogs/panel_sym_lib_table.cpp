@@ -93,8 +93,8 @@ class SYMBOL_LIB_TABLE_GRID : public LIB_TABLE_GRID
     friend class SYMBOL_GRID_TRICKS;
 
 public:
-    SYMBOL_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
-            LIB_TABLE_GRID( aTableToEdit )
+    SYMBOL_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit, SYMBOL_LIBRARY_ADAPTER* aAdapter ) :
+            LIB_TABLE_GRID( aTableToEdit, aAdapter )
     {
     }
 
@@ -418,9 +418,12 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     std::optional<LIBRARY_TABLE*> table =
         Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
+
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *table.value() ) );
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *table.value(), adapter ) );
 
     // TODO(JE) should use translated string here but type is stored as untranslated string
     // Maybe type storage needs to be enum?
@@ -452,7 +455,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *projectTable.value() ), true );
+        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *projectTable.value(), adapter ), true );
         setupGrid( m_project_grid );
     }
     else
@@ -918,7 +921,9 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
                                              LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( newTable );
 
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *newTable.value() ) );
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_parent->Kiway().Prj() );
+
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *newTable.value(), adapter ) );
     m_global_grid->PopEventHandler( true );
     setupGrid( m_global_grid );
     m_parent->m_GlobalTableChanged = true;

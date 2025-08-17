@@ -25,6 +25,7 @@
 #include <wx/grid.h>
 
 class LIB_TABLE_GRID_TRICKS;
+class LIBRARY_MANAGER_ADAPTER;
 
 /// The library table grid column order is established by this sequence.
 enum COL_ORDER
@@ -50,8 +51,9 @@ class KICOMMON_API LIB_TABLE_GRID : public wxGridTableBase
     friend class LIB_TABLE_GRID_TRICKS;
 
 public:
-    LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
-        m_table( aTableToEdit )
+    LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit, LIBRARY_MANAGER_ADAPTER* aAdapter = nullptr ) :
+        m_table( aTableToEdit ),
+        m_adapter( aAdapter )
     {}
 
     //-----<wxGridTableBase overloads>-------------------------------------------
@@ -92,6 +94,8 @@ public:
 
     LIBRARY_TABLE& Table() { return m_table; }
 
+    LIBRARY_MANAGER_ADAPTER* Adapter() const { return m_adapter; }
+
 protected:
     virtual LIBRARY_TABLE_ROW& at( size_t aIndex );
 
@@ -111,6 +115,9 @@ protected:
 
     /// Working copy of a table
     LIBRARY_TABLE m_table;
+
+    /// Handle to the adapter for the type of table this grid represents (may be null)
+    LIBRARY_MANAGER_ADAPTER* m_adapter;
 };
 
 
