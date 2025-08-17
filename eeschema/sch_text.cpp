@@ -232,8 +232,6 @@ void SCH_TEXT::swapData( SCH_ITEM* aItem )
 {
     SCH_TEXT* item = static_cast<SCH_TEXT*>( aItem );
 
-    std::swap( m_layer, item->m_layer );
-
     SwapText( *item );
     SwapAttributes( *item );
 }

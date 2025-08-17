@@ -54,7 +54,6 @@ void SCH_SHAPE::swapData( SCH_ITEM* aItem )
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
 
     EDA_SHAPE::SwapShape( shape );
-    std::swap( m_layer, shape->m_layer );
 }
 
 

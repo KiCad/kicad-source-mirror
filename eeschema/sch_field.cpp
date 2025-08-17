@@ -402,11 +402,9 @@ void SCH_FIELD::swapData( SCH_ITEM* aItem )
 
     SCH_FIELD* item = static_cast<SCH_FIELD*>( aItem );
 
-    std::swap( m_layer, item->m_layer );
     std::swap( m_showName, item->m_showName );
     std::swap( m_allowAutoPlace, item->m_allowAutoPlace );
     std::swap( m_isGeneratedField, item->m_isGeneratedField );
-    std::swap( m_private, item->m_private );
     SwapText( *item );
     SwapAttributes( *item );
 

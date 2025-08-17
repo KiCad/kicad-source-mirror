@@ -818,8 +818,6 @@ void SCH_LINE::swapData( SCH_ITEM* aItem )
 {
     SCH_LINE* item = (SCH_LINE*) aItem;
 
-    std::swap( m_layer, item->m_layer );
-
     std::swap( m_start, item->m_start );
     std::swap( m_end, item->m_end );
     std::swap( m_startIsDangling, item->m_startIsDangling );

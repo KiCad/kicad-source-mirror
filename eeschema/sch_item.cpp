@@ -490,6 +490,11 @@ void SCH_ITEM::SwapItemData( SCH_ITEM* aImage )
     EDA_ITEM* parent = GetParent();
 
     SwapFlags( aImage );
+    std::swap( m_layer, aImage->m_layer );
+    std::swap( m_unit, aImage->m_unit );
+    std::swap( m_bodyStyle, aImage->m_bodyStyle );
+    std::swap( m_private, aImage->m_private );
+    std::swap( m_fieldsAutoplaced, aImage->m_fieldsAutoplaced );
     std::swap( m_group, aImage->m_group );
     swapData( aImage );
 
