@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-11 14:01+0000\n"
+"PO-Revision-Date: 2025-08-18 07:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -405,9 +405,8 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "复制当前 3D 图像到剪贴板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "编辑图片..."
+msgstr "导出图片..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
 #, fuzzy
@@ -4190,7 +4189,7 @@ msgstr "主题已存在!"
 #: common/dialogs/panel_color_settings.cpp:219
 #: common/dialogs/panel_color_settings.cpp:238
 msgid "New Theme..."
-msgstr "新主题..."
+msgstr "新建主题..."
 
 #: common/dialogs/panel_color_settings.cpp:303
 msgid "Copy color"
@@ -5202,9 +5201,8 @@ msgid "Convert to Greyscale"
 msgstr "转换为灰度"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "历史文件个数:"
+msgstr "文件历史已清除。"
 
 #: common/dialogs/panel_maintenance.cpp:111
 #, fuzzy
@@ -5233,9 +5231,8 @@ msgid "days"
 msgstr "天"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "清除最近的文件"
+msgstr "清除「最近文件」历史"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
@@ -10242,9 +10239,8 @@ msgstr ""
 "要向 KiCad 项目捐赠, 请访问 %s"
 
 #: common/tool/design_block_control.cpp:121
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "设计图块库"
+msgstr "新建设计图块库"
 
 #: common/tool/group_tool.cpp:43
 msgid "Grouping"
@@ -10261,7 +10257,7 @@ msgstr "移除分组项目"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
-msgstr "新名称:"
+msgstr "新的名称:"
 
 #: common/tool/selection_tool.cpp:307
 msgid "Select &All\tA"
@@ -11607,9 +11603,8 @@ msgid "%s not found"
 msgstr "找不到 %s"
 
 #: eeschema/cross-probing.cpp:236
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "高亮网络: %s"
+msgstr "已高亮网络:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
@@ -15695,7 +15690,7 @@ msgstr "#"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:729
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:838
 msgid "New field name:"
-msgstr "新字段名称:"
+msgstr "新建字段名称:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:729
 msgid "Add Field"
@@ -16637,7 +16632,7 @@ msgstr "自动批注符号"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:80
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
-msgstr "新对象的默认值"
+msgstr "新建对象的默认值"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:92
 msgid "Sheet border:"
@@ -18891,9 +18886,8 @@ msgstr ""
 "%s"
 
 #: eeschema/sch_base_frame.cpp:774
-#, fuzzy
 msgid "Create New Library"
-msgstr "创建新目录"
+msgstr "创建新的库"
 
 #: eeschema/sch_base_frame.cpp:790
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1104
@@ -19032,7 +19026,7 @@ msgstr "原理图层次结构"
 
 #: eeschema/sch_edit_frame.cpp:417
 msgid "New schematic file is unsaved"
-msgstr "新原理图文件未保存"
+msgstr "新建原理图文件未保存"
 
 #: eeschema/sch_edit_frame.cpp:1040
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:639
@@ -22218,7 +22212,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>警告: 参考位号为空</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -22420,14 +22414,12 @@ msgid "Copy library"
 msgstr "复制库"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "New Symbol Library"
-msgstr "创建符号库"
+msgstr "新建符号库"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "Add Symbol Library"
-msgstr "创建符号库"
+msgstr "添加符号库"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1115
 #, c-format
@@ -22508,9 +22500,8 @@ msgid "Select Symbol Library"
 msgstr "选择符号库"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:93
-#, fuzzy
 msgid "Library:"
-msgstr "库: "
+msgstr "库:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:112
 #: eeschema/tools/symbol_editor_control.cpp:841
@@ -22539,9 +22530,8 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "当前符号已被修改。是否保存变更?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:350
-#, fuzzy
 msgid "Create symbol in library:"
-msgstr "创建符号库"
+msgstr "在库中创建符号:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
@@ -22743,9 +22733,8 @@ msgid "Import Symbol"
 msgstr "导入符号"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:46
-#, fuzzy
 msgid "Import symbol to library:"
-msgstr "导入符号到当前库"
+msgstr "导入符号到库中:"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:93
 #: pcbnew/load_select_footprint.cpp:352
@@ -24600,14 +24589,12 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "是否放弃变更, 并将 '%s' (及所有子图纸) 重置为上一保存版本?"
 
 #: eeschema/tools/sch_editor_control.cpp:354
-#, fuzzy
 msgid "Export Symbols"
 msgstr "导出符号"
 
 #: eeschema/tools/sch_editor_control.cpp:354
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr "将符号导出到库..."
+msgstr "将符号导出到库:"
 
 #: eeschema/tools/sch_editor_control.cpp:355
 #, fuzzy
@@ -24957,7 +24944,7 @@ msgstr "这个位置已经被另一个引脚占用, 在单元 %d 中。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr ""
+msgstr "禁用「同步引脚模式」选项以避免此提示。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 msgid "Place Pin Anyway"
@@ -25232,9 +25219,9 @@ msgid "Layers Settings"
 msgstr "层设置"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d:"
-msgstr "层 %d"
+msgstr "层 %d:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:169
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:233
@@ -27185,7 +27172,7 @@ msgstr "渲染质量。选项: %s"
 #: kicad/cli/command_pcb_render.cpp:258
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
-msgstr ""
+msgstr "外观预设。选项: %s, %s 或自定义预设名称"
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
@@ -27553,9 +27540,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:89
-#, fuzzy
 msgid "Select a Template"
-msgstr "选择文件"
+msgstr "选择一个模板"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
 #, fuzzy
@@ -28169,7 +28155,6 @@ msgid "Fully qualified repository url:"
 msgstr "请输入合规的仓库 URL"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
 msgstr "添加仓库"
 
@@ -28679,7 +28664,6 @@ msgid "Unable to rename file ... "
 msgstr "无法重命名文件... "
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Permission denied"
 msgstr "权限不足"
 
@@ -28711,7 +28695,7 @@ msgstr "关闭所有编辑器, 然后切换到所选工程"
 
 #: kicad/project_tree_pane.cpp:903
 msgid "New Directory..."
-msgstr "新目录..."
+msgstr "新建目录..."
 
 #: kicad/project_tree_pane.cpp:904
 msgid "Create a New Directory"
@@ -29234,7 +29218,7 @@ msgstr "终点 Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:69
 msgid "New Item"
-msgstr "新建项"
+msgstr "新建项目"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:234
 msgid "Print Drawing Sheet"
@@ -29422,9 +29406,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "当前图框已被修改。保存变更?"
 
 #: pagelayout_editor/files.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "文件 \"%s\" 已加载"
+msgstr "文件 '%s' 已加载"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
@@ -29436,9 +29420,9 @@ msgid "Unable to load %s file"
 msgstr "无法加载文件 %s"
 
 #: pagelayout_editor/files.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "插入文件 \"%s\""
+msgstr "文件 '%s' 已插入"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
@@ -33107,9 +33091,8 @@ msgid "Back copper area:"
 msgstr "底层铜箔面积:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Min track clearance:"
-msgstr "最小间距"
+msgstr "最小走线间距:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 #, fuzzy
@@ -33117,9 +33100,8 @@ msgid "Min track width:"
 msgstr "最小走线宽度:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Min drill diameter:"
-msgstr "最小孔径: "
+msgstr "最小孔径:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 #, fuzzy
@@ -33152,9 +33134,8 @@ msgid "NPTH:"
 msgstr "非电镀孔 (NPTH):"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:188
-#, fuzzy
 msgid "Castellated pad:"
-msgstr "半孔焊盘"
+msgstr "半孔焊盘:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:189
 msgid "Press-fit pad:"
@@ -34904,9 +34885,8 @@ msgid "Y position:"
 msgstr "Y 坐标:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:74
-#, fuzzy
 msgid "Output units:"
-msgstr "输出单元"
+msgstr "输出单位:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:84
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
@@ -35355,7 +35335,6 @@ msgid "meter"
 msgstr "米"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
-#, fuzzy
 msgid "0.1 inch"
 msgstr "0.1 inch"
 
@@ -43882,9 +43861,8 @@ msgstr "无法加载元件类分配规则"
 
 #: pcbnew/files.cpp:835 pcbnew/footprint_libraries_utils.cpp:463
 #: pcbnew/footprint_libraries_utils.cpp:1110 pcbnew/tools/pcb_control.cpp:136
-#, fuzzy
 msgid "New Footprint Library"
-msgstr "创建封装库"
+msgstr "新建封装库"
 
 #: pcbnew/files.cpp:858
 #, c-format
@@ -44252,14 +44230,12 @@ msgid "No footprints to export!"
 msgstr "没有可导出的封装!"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export Footprints"
 msgstr "导出封装"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export footprints to library:"
-msgstr "导出封装到编辑器"
+msgstr "导出封装到库:"
 
 #: pcbnew/footprint_libraries_utils.cpp:639
 #, fuzzy
@@ -44411,7 +44387,6 @@ msgid "Pad To Die Delay"
 msgstr "焊盘到 Die 延迟"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2021 pcbnew/pcb_track.cpp:1870
-#, fuzzy
 msgid "Full Delay"
 msgstr "完整延迟"
 
@@ -44566,9 +44541,8 @@ msgid "Please select a valid layer."
 msgstr "请选择一个有效的层。"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:53
-#, fuzzy
 msgid "1.0"
-msgstr "10"
+msgstr "1.0"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
 msgid "DXF default line width:"
@@ -44579,9 +44553,8 @@ msgid "Used when the DXF items in file have no line thickness set"
 msgstr "当 DXF 文件未设置线宽时使用"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:65
-#, fuzzy
 msgid "0.2"
-msgstr "0.0"
+msgstr "0.2"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -44643,9 +44616,8 @@ msgid "Footprints [%u items]"
 msgstr "封装 [%u 项]"
 
 #: pcbnew/load_select_footprint.cpp:330
-#, fuzzy
 msgid "Save Footprint Library As"
-msgstr "创建封装库"
+msgstr "保存封装库为"
 
 #: pcbnew/load_select_footprint.cpp:359
 #, c-format
@@ -44675,9 +44647,8 @@ msgid "Create a PNG file from the current view"
 msgstr "从当前视图创建一个 PNG 文件"
 
 #: pcbnew/menubar_footprint_editor.cpp:114 pcbnew/menubar_pcb_editor.cpp:185
-#, fuzzy
 msgid "&Select"
-msgstr "选择"
+msgstr "选择 (&S)"
 
 #: pcbnew/menubar_footprint_editor.cpp:152 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Drawing Mode"
@@ -44720,7 +44691,6 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Footprints..."
 msgstr "封装..."
 
@@ -44784,7 +44754,6 @@ msgid "Add Microwave Inductor"
 msgstr "添加微波电感"
 
 #: pcbnew/microwave/microwave_inductor.cpp:367
-#, fuzzy
 msgid "Length of track:"
 msgstr "走线长度:"
 
@@ -44805,7 +44774,6 @@ msgid "Requested length can't be represented"
 msgstr "请求的长度无法表示"
 
 #: pcbnew/microwave/microwave_inductor.cpp:406
-#, fuzzy
 msgid "Component value:"
 msgstr "元件值:"
 
@@ -44858,7 +44826,6 @@ msgid "In Package"
 msgstr "在封装中"
 
 #: pcbnew/netinfo_item.cpp:151 pcbnew/widgets/pcb_net_inspector_panel.cpp:114
-#, fuzzy
 msgid "Net Delay"
 msgstr "网络延迟"
 
@@ -47872,9 +47839,9 @@ msgid "Failed to load board\n"
 msgstr "电路板加载失败\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "无效的层名 \"%s\"\n"
+msgstr "无效的层名称 '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:507 pcbnew/pcbnew_jobs_handler.cpp:585
 #: pcbnew/pcbnew_jobs_handler.cpp:633
@@ -47990,14 +47957,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "保存 DRC 报告到 %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2313
-#, fuzzy
 msgid "Saved board\n"
-msgstr "保存电路板"
+msgstr "已保存电路板\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2317
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "电路板加载失败\n"
+msgstr "电路板保存失败。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2467
 msgid "Successfully created IPC-D-356 file\n"
@@ -50383,9 +50348,8 @@ msgid "Import board file from other applications"
 msgstr "从其它应用程序中导入板文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
-#, fuzzy
 msgid "Export Footprints..."
-msgstr "导出封装... (&X)"
+msgstr "导出封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:1158
 #, fuzzy
@@ -50529,9 +50493,8 @@ msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr "导出封装分配文件 (*.cmp) 用于原理图中反向批注"
 
 #: pcbnew/tools/pcb_actions.cpp:1290
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "选择 3D 模型"
+msgstr "选择并嵌入 3D 模型"
 
 #: pcbnew/tools/pcb_actions.cpp:1291
 msgid "Collect footprint 3D models and embed them into the board"
@@ -51534,9 +51497,8 @@ msgid "Export footprint to editor"
 msgstr "导出封装到编辑器"
 
 #: pcbnew/tools/pcb_control.cpp:138 pcbnew/tools/pcb_control.cpp:168
-#, fuzzy
 msgid "Add Footprint Library"
-msgstr "创建封装库"
+msgstr "添加封装库"
 
 #: pcbnew/tools/pcb_control.cpp:292
 msgid "Don't show again"
@@ -51725,9 +51687,8 @@ msgid "Place Board Stackup Table"
 msgstr "放置电路板叠层表"
 
 #: pcbnew/tools/pcb_control.cpp:2633
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "嵌入模型"
+msgstr "嵌入 3D 模型"
 
 #: pcbnew/tools/pcb_control.cpp:2634
 #, c-format
@@ -52636,7 +52597,6 @@ msgid "Netclass"
 msgstr "网络类"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:114
-#, fuzzy
 msgid "Total Delay"
 msgstr "总延迟"
 
@@ -52649,17 +52609,14 @@ msgid "Via Count"
 msgstr "过孔数量"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:127
-#, fuzzy
 msgid "Via Delay"
 msgstr "过孔延迟"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:129
-#, fuzzy
 msgid "Track Delay"
 msgstr "走线延迟"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:131
-#, fuzzy
 msgid "Die Delay"
 msgstr "Die 延迟"
 
@@ -52750,7 +52707,6 @@ msgid "Show Unconnected Nets"
 msgstr "显示未连接网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1245
-#, fuzzy
 msgid "Show Time Domain Details"
 msgstr "显示时域详细信息"
 
