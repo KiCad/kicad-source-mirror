@@ -31,16 +31,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-13 23:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-08-18 07:02+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -409,14 +409,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Kopiere aktuelle 3D-Ansicht in Zwischenablage"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Exportieren..."
+msgstr "Bild exportieren..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Aktuelle Ansicht als PNG-Datei exportieren"
+msgstr "Aktuelle Ansicht als Bilddatei exportieren"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -1147,14 +1145,12 @@ msgid "(unsaved)"
 msgstr "(nicht gespeichert)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "3D-Modell exportieren"
+msgstr "3D-Ansicht exportieren"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Bildgröße:"
+msgstr "Bildgröße"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1368,9 +1364,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Pin"
+msgstr "Zoll"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1380,34 +1375,29 @@ msgid "Height:"
 msgstr "Höhe:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "3R-Lösung:"
+msgstr "Auflösung"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "3R-Lösung:"
+msgstr "X-Auflösung:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "Pixel"
+msgstr "Pixel/Zoll"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "Pixel"
+msgstr "Pixel/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "3R-Lösung:"
+msgstr "Y-Auflösung:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d Pixel"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -2517,7 +2507,7 @@ msgstr "Paketentwickler"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI-Objekte in Verwendung %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -3714,27 +3704,26 @@ msgid "Close"
 msgstr "Schließen"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "Warnung: Ungültiger Skalierungsfaktor."
+msgstr "Warnung: Benutzerdefinierte Skala ist keine Zahl."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"Warnung: Skalierungsfaktor hat einen sehr großen Wert.\n"
-"Er wird auf %f begrenzt."
+"Warnung: Benutzerdefinierte Skala ist zu groß.\n"
+"Sie wird auf %f begrenzt."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"Warnung: Skalierungsfaktor hat einen sehr kleinen Wert.\n"
-"Er wird auf %f begrenzt."
+"Warnung: Benutzerdefinierte Skala ist zu klein.\n"
+"Sie wird auf %f begrenzt."
 
 #: common/dialogs/dialog_print_generic.cpp:227
 #: common/dialogs/dialog_print_generic.cpp:284
@@ -4394,9 +4383,8 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Hardwarebeschleunigte Grafik (empfohlen)"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
-#, fuzzy
 msgid "Fallback Graphics"
-msgstr "Langsame Grafik"
+msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:42
 msgid ""
@@ -4407,9 +4395,8 @@ msgstr ""
 "Grafikbeschleunigung nicht erfüllen)"
 
 #: common/dialogs/panel_common_settings_base.cpp:59
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "Anti-Aliasing:"
+msgstr "Kantenglättung:"
 
 #: common/dialogs/panel_common_settings_base.cpp:63
 msgid "No Antialiasing"
@@ -5312,9 +5299,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Aktion | Standard-Tastaturbefehl | Beschreibung"
 
 #: common/dialogs/panel_image_editor.cpp:81
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "Der Wert für Außenlinien muss positiv sein."
+msgstr "Die Skala muss eine positive Zahl sein."
 
 #: common/dialogs/panel_image_editor.cpp:91
 #, c-format
@@ -5345,14 +5331,12 @@ msgid "Convert to Greyscale"
 msgstr "In Graustufen konvertieren"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "Größe des Dateiverlaufs:"
+msgstr "Dateiverlauf gelöscht."
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "Nicht wieder anzeigen"
+msgstr "Dialoge „Nicht wieder anzeigen“ zurückgesetzt."
 
 #: common/dialogs/panel_maintenance.cpp:132
 #, fuzzy
@@ -6054,42 +6038,36 @@ msgstr ""
 "Sollen sie neu geladen werden?"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "Bildschwenk und Zoom"
+msgstr "Schwenken und Drehen"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Animationsgeschwindigkeit:"
+msgstr "Drehgeschwindigkeit:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "Pfeilrichtung:"
+msgstr "Drehrichtung umkehren"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "Endpunkte oder Richtung des Startpunkts beibehalten"
+msgstr "Drehrichtung vertauschen"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "Automatische Schwenkgeschwindigkeit:"
+msgstr "Schwenkgeschwindigkeit:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Vertikale Schwenkrichtung umkehren"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Horizontale Schwenkrichtung umkehren"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "Aus Auswahl entfernen"
+msgstr "Zoomrichtung umkehren"
 
 #: common/dialogs/panel_text_variables.cpp:114
 msgid ""
@@ -6362,9 +6340,8 @@ msgid "need a number for '%s'"
 msgstr "benötige eine Zahl für \"%s\""
 
 #: common/dsnlexer.cpp:732
-#, fuzzy
 msgid "Unterminated delimited string"
-msgstr "Getrennte Zeichenkette ist nicht abgeschlossen"
+msgstr "Nicht terminierte begrenzte Zeichenkette"
 
 #: common/dsnlexer.cpp:754
 msgid "String delimiter must be a single character of ', \", or $"
@@ -6545,9 +6522,8 @@ msgid "Packages and Updates"
 msgstr "Pakete und Aktualisierungen"
 
 #: common/eda_base_frame.cpp:1409
-#, fuzzy
 msgid "Maintenance"
-msgstr "Betreuer"
+msgstr "Wartung"
 
 #: common/eda_base_frame.cpp:1491 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:444
@@ -7509,9 +7485,8 @@ msgid "Could not read file: %s"
 msgstr "Konnte Datei nicht lesen: %s"
 
 #: common/git/git_branch_handler.cpp:76
-#, fuzzy
 msgid "No repository available"
-msgstr "Keine Ausgabe verfügbar"
+msgstr "Kein Repository verfügbar"
 
 #: common/git/git_branch_handler.cpp:85
 #, c-format
@@ -9315,9 +9290,8 @@ msgid "Displays the current unit"
 msgstr "Zeigt aktuelle Einheit an"
 
 #: common/tool/action_toolbar.cpp:1043
-#, fuzzy
 msgid "Allow moving of locked items with the mouse"
-msgstr "Auswahl gesperrter Elemente zulassen"
+msgstr "Verschieben von gesperrten Elementen mit der Maus zulassen"
 
 #: common/tool/actions.cpp:47
 msgid "New..."
@@ -9525,17 +9499,16 @@ msgid "Paste item(s) from clipboard"
 msgstr "Fügt Elemente aus der Zwischenablage ein"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Auswahlrechteck zeichnen"
+msgstr "Auswahlmodus auf Rechteck einstellen"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "Lasso"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Auswahlmodus auf Polygon-Lasso einstellen"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10459,9 +10432,8 @@ msgstr ""
 "Um an das KiCad-Projekt zu spenden, besuchen Sie %s"
 
 #: common/tool/design_block_control.cpp:121
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "Designblock-Bibliotheken"
+msgstr "Neue Designblock-Bibliothek"
 
 #: common/tool/group_tool.cpp:43
 msgid "Grouping"
@@ -11867,9 +11839,8 @@ msgid "%s not found"
 msgstr "%s nicht gefunden"
 
 #: eeschema/cross-probing.cpp:236
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "Hervorgehobenes Netz: %s"
+msgstr "Hervorgehobenes Netz:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
@@ -14584,9 +14555,9 @@ msgstr "Ausweichen auf Benutzerpfad \"%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:398
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "Pfad \"%s%s\" kann nicht normalisiert werden."
+msgstr "Der Pfad ‚%s‘ kann nicht normalisiert werden."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:404
 msgid "No project or path defined for the current schematic."
@@ -14727,9 +14698,8 @@ msgid "DXF Options"
 msgstr "Optionen DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:149
-#, fuzzy
 msgid "Export units"
-msgstr "Einheit für Export:"
+msgstr "Exporteinheiten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:239
@@ -14942,9 +14912,8 @@ msgid "Formatting preferences"
 msgstr "Formatierungseinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Annotation preferences"
-msgstr "Formatierungseinstellungen"
+msgstr "Anmerkungseinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
@@ -16790,9 +16759,8 @@ msgid "_1"
 msgstr "_1"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:110
-#, fuzzy
 msgid "Allow reference reuse"
-msgstr "Dialog-Einstellungen"
+msgstr "Wiederverwendung von Referenzen zulassen"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:147
 msgid ""
@@ -17999,9 +17967,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
 
 #: eeschema/erc/erc.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
+msgstr "Pin %s nicht mit dem Erdungsnetz verbunden"
 
 #: eeschema/erc/erc.cpp:1500
 #, c-format
@@ -18962,9 +18930,8 @@ msgid "Netlist..."
 msgstr "Netzliste..."
 
 #: eeschema/menubar.cpp:120
-#, fuzzy
 msgid "Symbols..."
-msgstr "Symbol..."
+msgstr "Symbole..."
 
 #: eeschema/menubar.cpp:180
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:125
@@ -19349,9 +19316,8 @@ msgstr ""
 "%s"
 
 #: eeschema/sch_base_frame.cpp:774
-#, fuzzy
 msgid "Create New Library"
-msgstr "Neues Verzeichnis erstellen"
+msgstr "Neue Bibliothek erstellen"
 
 #: eeschema/sch_base_frame.cpp:790
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1104
@@ -20538,15 +20504,13 @@ msgstr "Unbekannter SCH_FILE_T-Wert: %d"
 
 #: eeschema/sch_item.cpp:170 eeschema/sch_item.cpp:193
 #: eeschema/sch_item.cpp:735
-#, fuzzy
 msgid "All units"
-msgstr "Alle Elemente"
+msgstr "Alle Einheiten"
 
 #: eeschema/sch_item.cpp:204 eeschema/sch_item.cpp:220
 #: eeschema/sch_item.cpp:757
-#, fuzzy
 msgid "All body styles"
-msgstr "Von allen Symbolformen gemeinsam genutzt"
+msgstr ""
 
 #: eeschema/sch_item.cpp:671 eeschema/sch_item.cpp:750
 #: eeschema/sch_symbol.cpp:2943 eeschema/tools/sch_edit_tool.cpp:140
@@ -22806,7 +22770,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Warnung: Referenz ist leer</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -23038,14 +23002,12 @@ msgid "Copy library"
 msgstr "Bibliothek kopieren"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "New Symbol Library"
-msgstr "Symbolbibliothek erstellen"
+msgstr "Neue Symbolbibliothek"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
-#, fuzzy
 msgid "Add Symbol Library"
-msgstr "Symbolbibliothek erstellen"
+msgstr "Symbolbibliothek hinzufügen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1115
 #, c-format
@@ -24089,7 +24051,7 @@ msgstr "Designblock in Projekt kopieren und auf aktueller Seiten zeichnen"
 #: eeschema/tools/sch_actions.cpp:575
 #, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "Elemente aus Zeichenblatt einfügen:"
+msgstr "Pins aus Zeichenblatt einfügen:"
 
 #: eeschema/tools/sch_actions.cpp:576
 #, fuzzy
@@ -24626,9 +24588,8 @@ msgstr ""
 "Generator)"
 
 #: eeschema/tools/sch_actions.cpp:1187
-#, fuzzy
 msgid "Export Symbols..."
-msgstr "Bauteil exportieren..."
+msgstr "Symbole exportieren..."
 
 #: eeschema/tools/sch_actions.cpp:1188
 #, fuzzy
@@ -25284,9 +25245,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Soll \"%s\" auf die letzte gespeicherte Version zurückgesetzt werden?"
 
 #: eeschema/tools/sch_editor_control.cpp:354
-#, fuzzy
 msgid "Export Symbols"
-msgstr "Symbol exportieren"
+msgstr "Symbole exportieren"
 
 #: eeschema/tools/sch_editor_control.cpp:354
 msgid "Export symbols to library:"
@@ -25308,9 +25268,8 @@ msgstr ""
 "Blatt gefunden."
 
 #: eeschema/tools/sch_editor_control.cpp:892
-#, fuzzy
 msgid "No nets selected."
-msgstr "Kein Netz ausgewählt."
+msgstr "Keine Netze ausgewählt."
 
 #: eeschema/tools/sch_editor_control.cpp:933
 #, fuzzy
@@ -25377,9 +25336,8 @@ msgid "Design block %s does not have a schematic file."
 msgstr "Designblock %s hat keine Schaltplandatei."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:348
-#, fuzzy
 msgid "Reached end of symbol."
-msgstr "Ende des Blatts erreicht."
+msgstr "Ende des Symbols erreicht."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:350
 msgid "Reached end of schematic."
@@ -25933,9 +25891,9 @@ msgid "Layers Settings"
 msgstr "Lagen-Einstellungen"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d:"
-msgstr "Lage %d"
+msgstr "Lage %d:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:169
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:233
@@ -26639,9 +26597,9 @@ msgid "(with X2 attributes)"
 msgstr "(mit X2-Attributen)"
 
 #: gerbview/gerbview_frame.cpp:686
-#, fuzzy, c-format
+#, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
-msgstr "Bildname: \"%s\",  Lagenname: \"%s\""
+msgstr "Bildname: ‚%s‘  Lagenname: ‚%s‘"
 
 #: gerbview/gerbview_frame.cpp:702
 msgid "X2 attr"
@@ -26711,15 +26669,15 @@ msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "Ungültige Gerber-Datei: Fehlender G74- oder G75-Bogenbefehl"
 
 #: gerbview/rs274x.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr ""
-"RS274X: Ungültiges GERBER Formatierungskommando \"%c\" in Zeile %d: \"%s\""
+msgstr "RS274X: Ungültiger GERBER-Formatierungsbefehl ‚%c‘ in Zeile %d: ‚%s‘"
 
 #: gerbview/rs274x.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "GERBER file '%s' may not display as intended."
-msgstr "GERBER Datei \"%s\" wird eventuell nicht dargestellt wie beabsichtigt."
+msgstr ""
+"Die GERBER-Datei ‚%s‘ wird möglicherweise nicht wie vorgesehen angezeigt."
 
 #: gerbview/rs274x.cpp:539
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -27152,7 +27110,6 @@ msgid "Delete Column"
 msgstr "Spalte löschen"
 
 #: include/widgets/filedlg_hook_embed_file.h:35
-#, fuzzy
 msgid "Embed file"
 msgstr "Datei einbetten"
 
@@ -27161,9 +27118,8 @@ msgid "Add new library to global library table"
 msgstr "Neue Bibliothek in globale Bibliothekstabelle aufnehmen"
 
 #: include/widgets/filedlg_hook_new_library.h:37
-#, fuzzy
 msgid "Add new library to project library table"
-msgstr "Erstellt einen neuen projektspezifischen Bibliothekstabelleneintrag"
+msgstr "Neue Bibliothek zur Projektbibliothekstabelle hinzufügen"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
 msgid "Show import issues"
@@ -28289,9 +28245,8 @@ msgid "Include jobs:"
 msgstr "Enthaltene Aufträge:"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:135
-#, fuzzy
 msgid "Edit Advanced Configuration"
-msgstr "Konfiguration neu laden"
+msgstr "Erweiterte Konfiguration bearbeiten"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:142
 msgid "Key"
@@ -28302,9 +28257,8 @@ msgid "Extant"
 msgstr ""
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:305
-#, fuzzy
 msgid "Reset to default"
-msgstr "Zurücksetzen auf Standardeinstellungen"
+msgstr "Auf Standardeinstellung zurücksetzen"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
@@ -28333,9 +28287,8 @@ msgid "Project Template Selector"
 msgstr "Projektvorlagenauswahl"
 
 #: kicad/dialogs/dialog_template_selector.cpp:80
-#, fuzzy
 msgid "Welcome to Template Selection!"
-msgstr "Projektvorlagenauswahl"
+msgstr "Willkommen bei der Vorlagenauswahl!"
 
 #: kicad/dialogs/dialog_template_selector.cpp:81
 msgid ""
@@ -28345,9 +28298,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:85
-#, fuzzy
 msgid "Browse Templates"
-msgstr "Benutzervorlagen"
+msgstr "Vorlagen durchsuchen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:86
 msgid ""
@@ -28357,9 +28309,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:89
-#, fuzzy
 msgid "Select a Template"
-msgstr "Datei auswählen"
+msgstr "Vorlage auswählen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
 #, fuzzy
@@ -28367,9 +28318,8 @@ msgid "Click on any template in the list to "
 msgstr "Anklicken eines Pins wählt das Symbol"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
-#, fuzzy
 msgid "preview its details"
-msgstr "Details anzeigen"
+msgstr "Details in der Vorschau anzeigen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
 msgid ""
@@ -28378,9 +28328,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:93
-#, fuzzy
 msgid "Customize Path"
-msgstr "Werkzeugleisten anpassen"
+msgstr "Pfad anpassen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
 #, fuzzy
@@ -28388,9 +28337,8 @@ msgid "Use the "
 msgstr "Dieses Thema verwenden:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
-#, fuzzy
 msgid "folder path field"
-msgstr "Ordner mit %s Dateien"
+msgstr "Ordnerpfadfeld"
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
 msgid ""
@@ -28399,9 +28347,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:97
-#, fuzzy
 msgid "Create Project"
-msgstr "Neues Projekt erstellen"
+msgstr "Projekt erstellen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:98
 msgid "Once you've found the right template, click "
@@ -28418,9 +28365,8 @@ msgid "What You Get with Templates"
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:104
-#, fuzzy
 msgid "Pre-configured libraries"
-msgstr "Bibliotheken migrieren"
+msgstr "Vorkonfigurierte Bibliotheken"
 
 #: kicad/dialogs/dialog_template_selector.cpp:104
 #, fuzzy
@@ -28428,7 +28374,6 @@ msgid "- Common components and footprints already linked"
 msgstr "Nach Footprintbliotheksverknüpfung:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:105
-#, fuzzy
 msgid "Design rules"
 msgstr "Designregeln"
 
@@ -28443,12 +28388,11 @@ msgstr "Lagen-Einrichtung"
 
 #: kicad/dialogs/dialog_template_selector.cpp:106
 msgid "- Optimized for the intended application"
-msgstr ""
+msgstr "- Für die vorgesehene Anwendung optimiert"
 
 #: kicad/dialogs/dialog_template_selector.cpp:107
-#, fuzzy
 msgid "Component placement"
-msgstr "Bauteilplatzierungsdateien"
+msgstr "Bauteilplatzierung"
 
 #: kicad/dialogs/dialog_template_selector.cpp:107
 msgid "- Basic layout and routing guidelines"
@@ -28464,17 +28408,16 @@ msgid "- README files and design notes"
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:109
-#, fuzzy
 msgid "Manufacturing files"
-msgstr "Hersteller:"
+msgstr "Fertigungsdateien"
 
 #: kicad/dialogs/dialog_template_selector.cpp:109
 msgid "- Gerber and drill file configurations"
-msgstr ""
+msgstr "- Gerber- und Bohrdateikonfigurationen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:113
 msgid "Pro Tips"
-msgstr ""
+msgstr "Profi-Tipps"
 
 #: kicad/dialogs/dialog_template_selector.cpp:114
 #, fuzzy
@@ -28486,9 +28429,8 @@ msgid "Begin with basic templates and add more elements as you go."
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
-#, fuzzy
 msgid "Customize Later:"
-msgstr "Werkzeugleisten anpassen"
+msgstr "Später anpassen:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
 msgid ""
@@ -28819,13 +28761,13 @@ msgid "Job failed"
 msgstr "Auftrag fehlgeschlagen"
 
 #: kicad/kicad.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a KiCad project file."
 msgstr ""
-"Datei \"%s\"\n"
-"scheint keine gültige KiCad-Projekt-Datei zu sein."
+"Die Datei ‚%s‘\n"
+"scheint keine KiCad-Projektdatei zu sein."
 
 #: kicad/kicad_cli.cpp:122
 msgid "Export GLB (binary GLTF)"
@@ -28965,12 +28907,11 @@ msgstr "EasyEDA (JLCEDA) Professional Schaltplan und Platine importieren"
 
 #: kicad/menubar.cpp:160
 msgid "Edit Advanced Config..."
-msgstr ""
+msgstr "Erweiterte Konfiguration bearbeiten..."
 
 #: kicad/menubar.cpp:161
-#, fuzzy
 msgid "Edit advanced settings"
-msgstr "Simulationsparameter und -einstellungen"
+msgstr "Erweiterte Einstellungen bearbeiten"
 
 #: kicad/menubar.cpp:205
 msgid "Edit Local File..."
@@ -28989,7 +28930,6 @@ msgid "Fully qualified repository url:"
 msgstr "Vollständige Repository-URL:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
 msgstr "Repository hinzufügen"
 
@@ -29522,7 +29462,6 @@ msgid "Unable to rename file ... "
 msgstr "Konnte Datei nicht umbenennen ... "
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Permission denied"
 msgstr "Berechtigung verweigert"
 
@@ -29753,9 +29692,8 @@ msgstr ""
 "entfernen möchten?"
 
 #: kicad/project_tree_pane.cpp:1836
-#, fuzzy
 msgid "Failed to remove VCS"
-msgstr "Verzeichnis %s konnte nicht entfernt werden"
+msgstr "VCS konnte nicht entfernt werden"
 
 #: kicad/project_tree_pane.cpp:2077
 msgid "The selected directory is not a Git project."
@@ -30276,9 +30214,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "Das aktuelle Zeichnungsblatt wurde geändert. Änderungen speichern?"
 
 #: pagelayout_editor/files.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "Datei \"%s\" geladen"
+msgstr "Datei ‚%s‘ geladen"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
@@ -30290,9 +30228,9 @@ msgid "Unable to load %s file"
 msgstr "Datei %s kann nicht geladen werden"
 
 #: pagelayout_editor/files.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "Datei \"%s\" eingefügt"
+msgstr "Datei ‚%s‘ eingefügt"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
@@ -34032,9 +33970,8 @@ msgid "Min track width:"
 msgstr "Minimale Leiterbahnbreite:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Min drill diameter:"
-msgstr "Min Lochdurchmesser: "
+msgstr "Min. Bohrdurchmesser:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 #, fuzzy
@@ -34172,9 +34109,8 @@ msgid "Min track width"
 msgstr "Minimale Leiterbahnbreite"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:868
-#, fuzzy
 msgid "Min drill diameter"
-msgstr "Min Lochdurchmesser: "
+msgstr "Min. Bohrdurchmesser"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:871
 #, fuzzy
@@ -34856,7 +34792,7 @@ msgstr "Abstand zwischen Spalten"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:85
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "2.54"
-msgstr ""
+msgstr "2,54"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Vertical spacing:"
@@ -35854,9 +35790,8 @@ msgid "Y position:"
 msgstr "Y Position:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:74
-#, fuzzy
 msgid "Output units:"
-msgstr "Ausgabeeinheiten"
+msgstr "Ausgabeeinheiten:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:84
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
@@ -36315,16 +36250,14 @@ msgid "Footprint 3D model path:"
 msgstr "Footprint 3D-Modell Pfad:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:35
-#, fuzzy
 msgid "shapes3D"
-msgstr "Formen"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
 msgid "meter"
 msgstr "Meter"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
-#, fuzzy
 msgid "0.1 inch"
 msgstr "0,1 Zoll"
 
@@ -37336,9 +37269,9 @@ msgid "Unlocked vias"
 msgstr "Entsperrte Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "Nur aktuelle Lage"
+msgstr "Nur aktuelle Lage (%s)"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -37780,9 +37713,8 @@ msgstr "Nur verbundene Lagen"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2778
-#, fuzzy
 msgid "Start and end layers only"
-msgstr "Start, Ende und verbundene Lagen"
+msgstr "Nur Start- und Endlagen"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:184
 msgid "Set to net class / custom rule values"
@@ -37949,7 +37881,7 @@ msgstr "Text- && Grafikformatierung"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
-msgstr "Designregeln"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
@@ -39801,9 +39733,8 @@ msgid "Mid Point"
 msgstr "Mittelpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:916
-#, fuzzy
 msgid "Included Angle"
-msgstr "&Zonen einbeziehen"
+msgstr "Eingeschlossener Winkel"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:933
 msgid "Point on Circle"
@@ -43176,9 +43107,9 @@ msgid "Local override on %s; solder paste relative clearance: %s."
 msgstr "Lokale Überschreibung auf %s; Lötpastenfreiraum (relativ): %s."
 
 #: pcbnew/drc/drc_engine.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion '%s'."
-msgstr "Prüfe Zusicherung \"%s\"."
+msgstr "Zusicherung ‚%s‘ wird überprüft."
 
 #: pcbnew/drc/drc_engine.cpp:1039 pcbnew/drc/drc_engine.cpp:1719
 msgid "Assertion passed."
@@ -43363,9 +43294,9 @@ msgstr ""
 "Bedingungslose Regel angewandt; überschreibt vorherige Einschränkungen."
 
 #: pcbnew/drc/drc_engine.cpp:1430 pcbnew/drc/drc_engine.cpp:1747
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Prüfe Regelbedingung \"%s\"."
+msgstr "Regelbedingung ‚%s‘ wird überprüft."
 
 #: pcbnew/drc/drc_engine.cpp:1440
 msgid "Constraint applied."
@@ -43428,9 +43359,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s thermale Speichenbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1713
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "Regelzusicherung „%s“ wird geprüft."
+msgstr "Regelzusicherung ‚%s‘ wird überprüft."
 
 #: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2046
 msgid "Electrical"
@@ -44673,9 +44604,8 @@ msgid "Save Footprint Association File"
 msgstr "Footprints Assoziierungsdatei speichern"
 
 #: pcbnew/exporters/export_gencad.cpp:45
-#, fuzzy
 msgid "Export to GenCAD"
-msgstr "GenCAD exportieren..."
+msgstr "Nach GenCAD exportieren"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:176
 msgid ""
@@ -45799,9 +45729,8 @@ msgid "Please select a valid layer."
 msgstr "Bitte wählen Sie eine gültige Lage."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:53
-#, fuzzy
 msgid "1.0"
-msgstr "10"
+msgstr "1,0"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
 msgid "DXF default line width:"
@@ -45814,9 +45743,8 @@ msgstr ""
 "festgelegt ist."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:65
-#, fuzzy
 msgid "0.2"
-msgstr "0,0"
+msgstr "0,2"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -45915,9 +45843,8 @@ msgid "Create a PNG file from the current view"
 msgstr "Eine PNG-Datei von aktueller Ansicht erstellen"
 
 #: pcbnew/menubar_footprint_editor.cpp:114 pcbnew/menubar_pcb_editor.cpp:185
-#, fuzzy
 msgid "&Select"
-msgstr "Auswählen"
+msgstr "Au&swählen"
 
 #: pcbnew/menubar_footprint_editor.cpp:152 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Drawing Mode"
@@ -46045,7 +45972,6 @@ msgid "Requested length can't be represented"
 msgstr "Die ausgewählte Länge kann nicht dargestellt werden"
 
 #: pcbnew/microwave/microwave_inductor.cpp:406
-#, fuzzy
 msgid "Component value:"
 msgstr "Bauteilwert:"
 
@@ -46343,19 +46269,19 @@ msgid "Update %s jumper pad groups"
 msgstr "Jumperpadgruppen %s aktualisieren"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "%s aus Gruppe %s entfernen."
+msgstr "%s aus der Gruppe ‚%s‘ entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:876
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "%s aus Gruppe %s entfernt."
+msgstr "%s aus der Gruppe ‚%s‘ entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "%s zur Gruppe \"%s\" hinzufügen."
+msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
 #, fuzzy, c-format
@@ -49269,9 +49195,9 @@ msgid "Failed to load board\n"
 msgstr "Fehler beim Laden der Platine.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "Ungültiger Lagenname \"%s\"\n"
+msgstr "Ungültiger Lagenname ‚%s‘\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:507 pcbnew/pcbnew_jobs_handler.cpp:585
 #: pcbnew/pcbnew_jobs_handler.cpp:633
@@ -49922,9 +49848,8 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Ein wire_via verweist auf den fehlenden Padstack \"%s\"."
 
 #: pcbnew/toolbars_footprint_editor.cpp:86 pcbnew/toolbars_pcb_editor.cpp:189
-#, fuzzy
 msgid "Selection modes"
-msgstr "Auswahl kopiert"
+msgstr "Auswahlmodi"
 
 #: pcbnew/toolbars_footprint_editor.cpp:105 pcbnew/toolbars_pcb_editor.cpp:218
 msgid "Dimension objects"
@@ -50660,9 +50585,8 @@ msgid "Select Via Size"
 msgstr "Via-Größe wählen"
 
 #: pcbnew/tools/drawing_tool.cpp:342
-#, fuzzy
 msgid "Constrain to H, V"
-msgstr "Auf H, V, 45° beschränken"
+msgstr "Auf H, V beschränken"
 
 #: pcbnew/tools/drawing_tool.cpp:381 pcbnew/tools/drawing_tool.cpp:2360
 msgid "Draw Line"
@@ -52024,9 +51948,8 @@ msgstr ""
 "exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1290
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Auswahl des 3D-Modells"
+msgstr "3D-Modelle sammeln und einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1291
 msgid "Collect footprint 3D models and embed them into the board"
@@ -53283,14 +53206,13 @@ msgid "Place Board Stackup Table"
 msgstr "Platinenlagenaufbau einfügen"
 
 #: pcbnew/tools/pcb_control.cpp:2633
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Modell einbetten"
+msgstr "3D-Modelle einbetten"
 
 #: pcbnew/tools/pcb_control.cpp:2634
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d 3D-Modell(e) erfolgreich eingebettet."
 
 #: pcbnew/tools/pcb_point_editor.cpp:1966
 msgid "Resize Table Cells"
