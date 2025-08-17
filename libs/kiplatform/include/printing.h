@@ -23,6 +23,7 @@
 #include <string>
 #include <wx/translation.h>
 
+#define PRINTING_TRACE "KICAD_PRINT"
 namespace KIPLATFORM
 {
 namespace PRINTING

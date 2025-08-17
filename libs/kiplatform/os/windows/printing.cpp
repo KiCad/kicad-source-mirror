@@ -19,7 +19,7 @@
 
 #include <printing.h>
 
-#if defined( _MSC_VER )
+#ifndef _MSC_VER
 #include <windows.h>
 #include <algorithm>
 #include <cmath>
@@ -54,6 +54,8 @@
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Data.Pdf.h>
 #include <winrt/Windows.Graphics.Imaging.h>
+
+#include <wx/log.h>
 
 using namespace winrt;
 
@@ -122,7 +124,10 @@ static ManagedImage RenderPdfPageToImage( winrt::Windows::Data::Pdf::PdfDocument
     auto page = pdf.GetPage( pageIndex );
 
     if( !page )
+    {
+        wxLogTrace( PRINTING_TRACE, "Failed to get page %u from PDF document", pageIndex );
         return {};
+    }
 
     auto [pxW, pxH] = DpToPixels( page, dpi );
 
@@ -136,8 +141,9 @@ static ManagedImage RenderPdfPageToImage( winrt::Windows::Data::Pdf::PdfDocument
     {
         page.RenderToStreamAsync( stream, opts ).get(); // sync for simplicity
     }
-    catch( ... )
+    catch( std::exception& e )
     {
+        wxLogTrace( PRINTING_TRACE, "Failed to render page %u to image: %s", pageIndex, e.what() );
         return {};
     }
 
@@ -149,8 +155,14 @@ static ManagedImage RenderPdfPageToImage( winrt::Windows::Data::Pdf::PdfDocument
         stream.Seek(0);
         bmp.SetSourceAsync( stream ).get();
     }
-    catch( ... )
+    catch( const winrt::hresult_error& e )
     {
+        wxLogTrace( PRINTING_TRACE, "Failed to set BitmapImage source for page %u: %s", pageIndex, e.message().c_str() );
+        return {};
+    }
+    catch( std::exception& e )
+    {
+        wxLogTrace( PRINTING_TRACE, "Failed to set BitmapImage source for page %u: %s", pageIndex, e.what() );
         return {};
     }
 
@@ -178,14 +190,20 @@ public:
     PRINT_RESULT Run()
     {
         if( !m_pdf )
+        {
+            wxLogTrace( PRINTING_TRACE, "Failed to load PDF document" );
             return PRINT_RESULT::FAILED_TO_LOAD;
+        }
 
         // Create hidden XAML Island host
         m_xamlSource = winrt::Windows::UI::Xaml::Hosting::DesktopWindowXamlSource();
         auto native = m_xamlSource.as<IDesktopWindowXamlSourceNative>();
 
         if( !native )
+        {
+            wxLogTrace( PRINTING_TRACE, "Failed to create XAML Island host" );
             return PRINT_RESULT::FAILED_TO_PRINT;
+        }
 
         RECT rc{ 0, 0, 100, 100 }; // Use larger minimum size
         m_host = ::CreateWindowExW( 0, L"STATIC", L"", WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
@@ -196,10 +214,16 @@ public:
                             ( (void*) 1, [this]( void* ){ this->cleanup(); } );
 
         if( !m_host )
+        {
+            wxLogTrace( PRINTING_TRACE, "Failed to create host window" );
             return PRINT_RESULT::FAILED_TO_PRINT;
+        }
 
         if( FAILED( native->AttachToWindow( m_host ) ) )
+        {
+            wxLogTrace( PRINTING_TRACE, "Failed to attach XAML Island to host window" );
             return PRINT_RESULT::FAILED_TO_PRINT;
+        }
 
         m_root = winrt::Windows::UI::Xaml::Controls::Grid();
         m_xamlSource.Content( m_root );
@@ -254,6 +278,7 @@ public:
                                                  winrt::guid_of<winrt::Windows::Graphics::Printing::PrintManager>(),
                                                  winrt::put_abi( printManager ) ) ) )
             {
+                wxLogTrace( PRINTING_TRACE, "Failed to get PrintManager for window" );
                 return PRINT_RESULT::FAILED_TO_PRINT;
             }
 
@@ -274,7 +299,10 @@ public:
 
             // Immediately wait for results to keep this in thread
             if( FAILED( pmInterop->ShowPrintUIForWindowAsync( m_hwnd, winrt::put_abi(asyncOp) ) ) )
+            {
+                wxLogTrace( PRINTING_TRACE, "Failed to show print UI for window" );
                 return PRINT_RESULT::FAILED_TO_PRINT;
+            }
 
             bool shown = false;
 
@@ -282,15 +310,17 @@ public:
             {
                 shown = asyncOp.GetResults();
             }
-            catch( ... )
+            catch( std::exception& e )
             {
+                wxLogTrace( PRINTING_TRACE, "GetResults threw an exception for the print window: %s", e.what() );
                 return PRINT_RESULT::FAILED_TO_PRINT;
             }
 
             return shown ? PRINT_RESULT::OK : PRINT_RESULT::CANCELLED;
         }
-        catch( ... )
+        catch( std::exception& e )
         {
+            wxLogTrace( PRINTING_TRACE, "Exception caught in print operation: %s", e.what() );
             return PRINT_RESULT::FAILED_TO_PRINT;
         }
     }
