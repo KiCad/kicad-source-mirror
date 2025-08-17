@@ -68,6 +68,13 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_excludeFromPosFiles;
 		wxCheckBox* m_excludeFromBOM;
 		wxCheckBox* m_cbDNP;
+		wxPanel* m_LayersPanel;
+		wxCheckBox* m_cbCustomLayers;
+		wxStaticText* m_copperLayerCountLabel;
+		wxChoice* m_copperLayerCount;
+		WX_GRID* m_customUserLayersGrid;
+		STD_BITMAP_BUTTON* m_bpAddCustomLayer;
+		STD_BITMAP_BUTTON* m_bpDeleteCustomLayer;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_NetClearanceLabel;
@@ -114,6 +121,9 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUseCustomLayers( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddCustomLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteCustomLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddNettieGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNettieGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddJumperGroup( wxCommandEvent& event ) { event.Skip(); }

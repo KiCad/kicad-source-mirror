@@ -4579,6 +4579,12 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             break;
         }
 
+        case T_stackup:
+        {
+            parseFootprintStackup( *footprint );
+            break;
+        }
+
         case T_tedit:
             parseHex();
             NeedRIGHT();
@@ -5101,6 +5107,54 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
     footprint->SetFPID( fpid );
 
     return footprint.release();
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintStackup( FOOTPRINT& aFootprint )
+{
+    wxCHECK_RET( CurTok() == T_stackup, "Expected stackup token" );
+
+    // If we have a stackup list at all, we must be in custom layer mode
+    FOOTPRINT_STACKUP stackupMode = FOOTPRINT_STACKUP::CUSTOM_LAYERS;
+    LSET              layers = LSET{};
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( CurTok() != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_layer:
+        {
+            NeedSYMBOLorNUMBER();
+            const wxString layerName = CurText();
+
+            for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+            {
+                if( LayerName( layer ) == layerName )
+                {
+                    layers.set( ToLAYER_ID( layer ) );
+                    break;
+                }
+            }
+
+            NeedRIGHT();
+            break;
+        }
+        default:
+        {
+            Expecting( "layer" );
+            break;
+        }
+        }
+    }
+
+    // Set the mode first, so that the layer count is unlocked if needed
+    aFootprint.SetStackupMode( stackupMode );
+    aFootprint.SetStackupLayers( layers );
 }
 
 

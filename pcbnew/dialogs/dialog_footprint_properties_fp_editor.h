@@ -35,39 +35,16 @@
 class FOOTPRINT_EDIT_FRAME;
 class PANEL_FP_PROPERTIES_3D_MODEL;
 class PANEL_EMBEDDED_FILES;
-
-
-class PRIVATE_LAYERS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<PCB_LAYER_ID>
-{
-public:
-    PRIVATE_LAYERS_GRID_TABLE( PCB_BASE_FRAME* aFrame );
-    ~PRIVATE_LAYERS_GRID_TABLE();
-
-    int GetNumberRows() override { return (int) size(); }
-    int GetNumberCols() override { return 1; }
-
-    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
-    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
-    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
-
-    wxString GetValue( int aRow, int aCol ) override;
-    long GetValueAsLong( int aRow, int aCol ) override;
-
-    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
-    void SetValueAsLong( int aRow, int aCol, long aValue ) override;
-
-private:
-    PCB_BASE_FRAME* m_frame;
-    wxGridCellAttr* m_layerColAttr;
-};
+class LAYERS_GRID_TABLE;
 
 
 enum class NOTEBOOK_PAGES
 {
     PAGE_UNKNOWN = -1,
     PAGE_GENERAL = 0,
-    PAGE_CLEARANCES = 1,
-    PAGE_3D_MODELS = 2
+    PAGE_LAYERS = 1,
+    PAGE_CLEARANCES = 2,
+    PAGE_3D_MODELS = 3
 };
 
 class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR : public DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
@@ -97,13 +74,26 @@ private:
     void OnText( wxCommandEvent& event ) override;
     void OnChoice( wxCommandEvent& event ) override;
     void OnCheckBox( wxCommandEvent& event ) override;
+    void OnUseCustomLayers( wxCommandEvent& event ) override;
+    void OnAddCustomLayer( wxCommandEvent& event ) override;
+    void OnDeleteCustomLayer( wxCommandEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName, LIB_ID* doOverwrite );
+    void setCustomLayerCtrlEnablement();
 
     void onAddGroup( WX_GRID* aGrid );
     void onRemoveGroup( WX_GRID* aGrid );
 
     void adjustGridColumns();
+
+    // Layer grid helper callbacks
+    void                onLayerGridRowDelete( WX_GRID& aGrid, LAYERS_GRID_TABLE& aLayerTable, int aRow );
+    std::pair<int, int> onLayerGridRowAddUserLayer( WX_GRID& aGrid, LAYERS_GRID_TABLE& aLayerTable );
+
+    /**
+     * Get the layers for the footprint from the controls that can be affected by the stackup.
+     */
+    LSET getCustomLayersFromControls() const;
 
 private:
     FOOTPRINT_EDIT_FRAME*      m_frame;
@@ -113,7 +103,8 @@ private:
     static NOTEBOOK_PAGES      m_page;       // remember the last open page during session
 
     PCB_FIELDS_GRID_TABLE*     m_fields;
-    PRIVATE_LAYERS_GRID_TABLE* m_privateLayers;
+    LAYERS_GRID_TABLE*         m_customUserLayers;
+    LAYERS_GRID_TABLE*         m_privateLayers;
 
     UNIT_BINDER                m_netClearance;
     UNIT_BINDER                m_solderMask;

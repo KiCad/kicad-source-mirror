@@ -197,14 +197,6 @@ public:
     static LSET UserDefinedLayersMask( int aUserDefinedLayerCount = MAX_USER_DEFINED_LAYERS );
 
     /**
-     * Layers which are not allowed within footprint definitions.
-     *
-     * Currently internal copper layers and Margin.
-     */
-
-    static const LSET& ForbiddenFootprintLayers();
-
-    /**
      * Return a sequence of copper layers in starting from the front/top
      * and extending to the back/bottom.
      */
@@ -364,4 +356,3 @@ public:
 
 };
 #endif // LSET_H
-

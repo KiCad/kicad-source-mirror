@@ -1274,6 +1274,21 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         m_out->Print( ")" );
     }
 
+    // Expand inner layers is the default stackup mode
+    if( aFootprint->GetStackupMode() != FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS )
+    {
+        m_out->Print( "(stackup" );
+
+        const LSET& fpLset = aFootprint->GetStackupLayers();
+        for( PCB_LAYER_ID layer : fpLset.Seq() )
+        {
+            wxString canonicalName( LSET::Name( layer ) );
+            m_out->Print( "(layer %s)", m_out->Quotew( canonicalName ).c_str() );
+        }
+
+        m_out->Print( ")" );
+    }
+
     if( aFootprint->GetPrivateLayers().any() )
     {
         m_out->Print( "(private_layers" );

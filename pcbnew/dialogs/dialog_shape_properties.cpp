@@ -992,11 +992,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     // Configure the layers list selector
     if( m_parent->GetFrameType() == FRAME_FOOTPRINT_EDITOR )
     {
-        LSET forbiddenLayers = LSET::ForbiddenFootprintLayers();
-
-        // If someone went to the trouble of setting the layer in a text editor, then there's
-        // very little sense in nagging them about it.
-        forbiddenLayers.set( m_item->GetLayer(), false );
+        // In the footprint editor, turn off the layers that the footprint doesn't have
+        const LSET& brdLayers = aParent->GetBoard()->GetEnabledLayers();
+        LSET        forbiddenLayers = LSET::AllLayersMask() & ~brdLayers;
 
         m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     }

@@ -131,7 +131,7 @@ bool PCB_LAYER_BOX_SELECTOR::isLayerEnabled( int aLayer ) const
 
 LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
 {
-    static LSET footprintEditorLayers = LSET::AllLayersMask() & ~LSET::ForbiddenFootprintLayers();
+    static const LSET footprintEditorLayers = LSET::AllLayersMask();
 
     if( m_boardFrame )
         return m_boardFrame->GetBoard()->GetEnabledLayers();

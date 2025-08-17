@@ -375,12 +375,6 @@ void PCB_BASE_EDIT_FRAME::configureToolbars()
                 m_SelLayerBox->SetBoardFrame( this );
             }
 
-            // In the footprint editor, some layers cannot be select (they are shown in the layer
-            // manager only to set the color and visibility, but not for selection)
-            // Disable them in layer box
-            if( IsType( FRAME_FOOTPRINT_EDITOR ) )
-                m_SelLayerBox->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
-
             m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
             m_SelLayerBox->Resync();
 

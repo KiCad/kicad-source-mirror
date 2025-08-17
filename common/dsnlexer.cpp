@@ -348,7 +348,8 @@ void DSNLEXER::Expecting( int aTok ) const
 
 void DSNLEXER::Expecting( const char* text ) const
 {
-    wxString errText = wxString::Format( _( "Expecting %s" ), wxString::FromUTF8( text ) );
+    wxString errText =
+            wxString::Format( _( "Expecting %s. Got '%s'" ), wxString::FromUTF8( text ), GetTokenString( CurTok() ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 

@@ -1331,6 +1331,16 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
 }
 
 
+bool APPEARANCE_CONTROLS::isLayerEnabled( PCB_LAYER_ID aLayer ) const
+{
+    // This used to be used for disabling some layers in the footprint editor, but
+    // now all layers are enabled in the footprint editor.
+    // But this function is the place to add logic if you do need to grey out a layer
+    // from the appearance panel for some reason.
+    return true;
+}
+
+
 void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
 {
     if( m_isFpEditor )
@@ -1794,7 +1804,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         m_layerSettingsMap[layer] = setting.get();
 
-        if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
+        if( !isLayerEnabled( layer ) )
         {
             setting->ctl_text->Disable();
             setting->ctl_color->SetToolTip( wxEmptyString );
@@ -1838,7 +1848,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         m_layerSettingsMap[layer] = setting.get();
 
-        if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
+        if( !isLayerEnabled( layer ) )
         {
             setting->ctl_text->Disable();
             setting->ctl_color->SetToolTip( wxEmptyString );
@@ -2092,7 +2102,7 @@ void APPEARANCE_CONTROLS::onLayerLeftClick( wxMouseEvent& aEvent )
 
     PCB_LAYER_ID layer = ToLAYER_ID( eventSource->GetId() );
 
-    if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
+    if( !isLayerEnabled( layer ) )
         return;
 
     m_frame->SetActiveLayer( layer );

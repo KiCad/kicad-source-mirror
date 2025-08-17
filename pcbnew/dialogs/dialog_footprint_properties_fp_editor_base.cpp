@@ -160,7 +160,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	// Cell Defaults
 	m_privateLayersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bSizerPrivateLayers->Add( m_privateLayersGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerPrivateLayers->Add( m_privateLayersGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bButtonSize1;
 	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
@@ -221,7 +221,95 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
+	m_LayersPanel = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizer11;
+	sbSizer11 = new wxStaticBoxSizer( new wxStaticBox( m_LayersPanel, wxID_ANY, _("Custom Layers") ), wxVERTICAL );
+
+	wxGridBagSizer* gbSizer3;
+	gbSizer3 = new wxGridBagSizer( 0, 0 );
+	gbSizer3->SetFlexibleDirection( wxBOTH );
+	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_cbCustomLayers = new wxCheckBox( sbSizer11->GetStaticBox(), wxID_ANY, _("Use custom stackup"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer3->Add( m_cbCustomLayers, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+
+	m_copperLayerCountLabel = new wxStaticText( sbSizer11->GetStaticBox(), wxID_ANY, _("Copper layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_copperLayerCountLabel->Wrap( -1 );
+	gbSizer3->Add( m_copperLayerCountLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_copperLayerCountChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32"), wxEmptyString };
+	int m_copperLayerCountNChoices = sizeof( m_copperLayerCountChoices ) / sizeof( wxString );
+	m_copperLayerCount = new wxChoice( sbSizer11->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_copperLayerCountNChoices, m_copperLayerCountChoices, 0 );
+	m_copperLayerCount->SetSelection( 0 );
+	m_copperLayerCount->Enable( false );
+
+	gbSizer3->Add( m_copperLayerCount, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbUserCustomerLayers;
+	sbUserCustomerLayers = new wxStaticBoxSizer( new wxStaticBox( sbSizer11->GetStaticBox(), wxID_ANY, _("User Layers") ), wxVERTICAL );
+
+	m_customUserLayersGrid = new WX_GRID( sbUserCustomerLayers->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+
+	// Grid
+	m_customUserLayersGrid->CreateGrid( 2, 1 );
+	m_customUserLayersGrid->EnableEditing( true );
+	m_customUserLayersGrid->EnableGridLines( true );
+	m_customUserLayersGrid->EnableDragGridSize( false );
+	m_customUserLayersGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_customUserLayersGrid->SetColSize( 0, 180 );
+	m_customUserLayersGrid->EnableDragColMove( false );
+	m_customUserLayersGrid->EnableDragColSize( true );
+	m_customUserLayersGrid->SetColLabelSize( 0 );
+	m_customUserLayersGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_customUserLayersGrid->EnableDragRowSize( false );
+	m_customUserLayersGrid->SetRowLabelSize( 0 );
+	m_customUserLayersGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_customUserLayersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	sbUserCustomerLayers->Add( m_customUserLayersGrid, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bButtonSize11;
+	bButtonSize11 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAddCustomLayer = new STD_BITMAP_BUTTON( sbUserCustomerLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize11->Add( m_bpAddCustomLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	bButtonSize11->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_bpDeleteCustomLayer = new STD_BITMAP_BUTTON( sbUserCustomerLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize11->Add( m_bpDeleteCustomLayer, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	sbUserCustomerLayers->Add( bButtonSize11, 0, wxEXPAND, 5 );
+
+
+	gbSizer3->Add( sbUserCustomerLayers, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxALL|wxEXPAND, 5 );
+
+
+	gbSizer3->AddGrowableRow( 2 );
+
+	sbSizer11->Add( gbSizer3, 1, wxEXPAND, 5 );
+
+
+	bSizer14->Add( sbSizer11, 1, wxEXPAND, 5 );
+
+
+	m_LayersPanel->SetSizer( bSizer14 );
+	m_LayersPanel->Layout();
+	bSizer14->Fit( m_LayersPanel );
+	m_NoteBook->AddPage( m_LayersPanel, _("Layers"), true );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -524,6 +612,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_excludeFromPosFiles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
+	m_cbCustomLayers->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnUseCustomLayers ), NULL, this );
+	m_customUserLayersGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddCustomLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddCustomLayer ), NULL, this );
+	m_bpDeleteCustomLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnDeleteCustomLayer ), NULL, this );
 	m_noCourtyards->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_nettieGroupsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
 	m_bpAddNettieGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddNettieGroup ), NULL, this );
@@ -553,6 +645,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDIT
 	m_excludeFromPosFiles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
+	m_cbCustomLayers->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnUseCustomLayers ), NULL, this );
+	m_customUserLayersGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddCustomLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddCustomLayer ), NULL, this );
+	m_bpDeleteCustomLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnDeleteCustomLayer ), NULL, this );
 	m_noCourtyards->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_nettieGroupsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
 	m_bpAddNettieGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddNettieGroup ), NULL, this );

@@ -229,6 +229,7 @@ private:
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     FOOTPRINT*  parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
+    void        parseFootprintStackup( FOOTPRINT& aFootprint );
 
     PAD*        parsePAD( FOOTPRINT* aParent = nullptr );
 

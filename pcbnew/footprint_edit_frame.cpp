@@ -528,14 +528,48 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 
 void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
 {
-    // Enable one internal layer, because footprints support keepout areas that can be on
-    // internal layers only (therefore on the first internal layer).  This is needed to handle
-    // these keepout in internal layers only.
-    GetBoard()->SetCopperLayerCount( 3 );
-    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
+    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( GetModel() );
+    BOARD& board = *GetBoard();
 
-    // Don't drop pre-existing user layers
-    LSET enabledLayers = GetBoard()->GetEnabledLayers();
+    // All FPs have these layers enabled
+    LSET enabledLayers = LSET::AllTechMask() | LSET::UserMask();
+
+    const auto configureStackup = [&]( FOOTPRINT_STACKUP aMode, const LSET& aLayerSet )
+    {
+        const LSET cuLayers = aLayerSet & LSET::AllCuMask();
+        board.SetCopperLayerCount( cuLayers.count() );
+
+        switch( aMode )
+        {
+        case FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS:
+        {
+            enabledLayers |= LSET{ F_Cu, In1_Cu, B_Cu };
+            enabledLayers |= LSET::UserDefinedLayersMask( 4 );
+            board.SetLayerName( In1_Cu, _( "Inner layers" ) );
+            break;
+        }
+        case FOOTPRINT_STACKUP::CUSTOM_LAYERS:
+        {
+            // Nothing extra to add
+
+            // Clear layer name defaults
+            board.SetLayerName( In1_Cu, wxEmptyString );
+            break;
+        }
+        }
+
+        enabledLayers |= aLayerSet;
+    };
+
+    if( footprint )
+    {
+        configureStackup( footprint->GetStackupMode(), footprint->GetStackupLayers() );
+    }
+    else
+    {
+        // If no footprint is loaded, we assume the default stackup mode
+        configureStackup( FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS, LSET{} );
+    }
 
     if( m_originalFootprintCopy )
     {
@@ -560,7 +594,12 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
         }
     }
 
-    GetBoard()->SetEnabledLayers( enabledLayers );
+    board.SetEnabledLayers( enabledLayers );
+
+    // Footprint Editor layer visibility is kept in the view, not the board (because the board
+    // just delegates to the project file, which we don't have).
+    for( const PCB_LAYER_ID& layer : GetBoard()->GetEnabledLayers() )
+        GetCanvas()->GetView()->SetLayerVisible( layer, true );
 }
 
 
@@ -579,11 +618,6 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     aFootprint->FixUuids();
 
     updateEnabledLayers();
-
-    // Footprint Editor layer visibility is kept in the view, not the board (because the board
-    // just delegates to the project file, which we don't have).
-    for( PCB_LAYER_ID layer : GetBoard()->GetEnabledLayers() )
-        GetCanvas()->GetView()->SetLayerVisible( layer, true );
 
     const wxString libName = aFootprint->GetFPID().GetLibNickname();
 

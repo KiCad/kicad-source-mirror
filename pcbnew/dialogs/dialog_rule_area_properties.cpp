@@ -183,12 +183,10 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aPar
         SetTitle( _( "Convert to Rule Area" ) );
     }
 
-    m_isFpEditor = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
-
     BOARD* board = m_parent->GetBoard();
     LSET   layers = LSET::AllNonCuMask() | LSET::AllCuMask( board->GetCopperLayerCount() );
 
-    m_zonesettings.SetupLayersList( m_layers, m_parent, layers, m_isFpEditor );
+    m_zonesettings.SetupLayersList( m_layers, m_parent, layers );
 
     SetupStandardButtons();
 
@@ -383,19 +381,35 @@ void DIALOG_RULE_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
     m_layers->GetValue( layerID, row, LAYER_LIST_COLUMN_NAME );
     bool selected = m_layers->GetToggleValue( row, LAYER_LIST_COLUMN_CHECK );
 
-    // In footprint editor, we have only 3 possible layer selection: C_Cu, inner layers, B_Cu.
+    const auto setSelectedLayer = [&]()
+    {
+        m_zonesettings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), selected );
+    };
+
+    // In footprint editor, we may in "expand inner layer" mode, where we
+    // have only 3 possible layer selection: C_Cu, inner layers, B_Cu.
     // So row LAYER_LIST_ROW_ALL_INNER_LAYERS selection is fp editor specific.
     // in board editor, this row is a normal selection
     if( m_isFpEditor && row == LAYER_LIST_ROW_ALL_INNER_LAYERS )
     {
-        if( selected )
-            m_zonesettings.m_Layers |= LSET::InternalCuMask();
+        const FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent->GetModel() );
+
+        if( !fp || fp->GetStackupMode() == FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS )
+        {
+            if( selected )
+                m_zonesettings.m_Layers |= LSET::InternalCuMask();
+            else
+                m_zonesettings.m_Layers &= ~LSET::InternalCuMask();
+        }
         else
-            m_zonesettings.m_Layers &= ~LSET::InternalCuMask();
+        {
+            // We have a custom stackup footprint, so select just that one layer
+            setSelectedLayer();
+        }
     }
     else
     {
-        m_zonesettings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), selected );
+        setSelectedLayer();
     }
 }
 
@@ -514,5 +528,3 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     *m_ptr = m_zonesettings;
     return true;
 }
-
-

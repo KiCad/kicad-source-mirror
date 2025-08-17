@@ -27,6 +27,9 @@
 
 #include <unordered_set>
 
+#include <wx/log.h>
+#include <wx/debug.h>
+
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -66,7 +69,6 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/api_pcb_utils.h>
-#include <wx/log.h>
 
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
@@ -82,6 +84,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_allowMissingCourtyard( false ),
         m_allowSolderMaskBridges( false ),
         m_zoneConnection( ZONE_CONNECTION::INHERITED ),
+        m_stackupLayers( LSET{ F_Cu, In1_Cu, B_Cu } ),
+        m_stackupMode( FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS ),
         m_lastEditTime( 0 ),
         m_arflag( 0 ),
         m_link( 0 ),
@@ -142,6 +146,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_solderMaskMargin       = aFootprint.m_solderMaskMargin;
     m_solderPasteMargin      = aFootprint.m_solderPasteMargin;
     m_solderPasteMarginRatio = aFootprint.m_solderPasteMarginRatio;
+
+    m_stackupLayers    = aFootprint.m_stackupLayers;
+    m_stackupMode      = aFootprint.m_stackupMode;
 
     m_libDescription   = aFootprint.m_libDescription;
     m_keywords         = aFootprint.m_keywords;
@@ -4146,6 +4153,27 @@ void FOOTPRINT::ResolveComponentClassNames( BOARD* aBoard,
 void FOOTPRINT::InvalidateComponentClassCache() const
 {
     m_componentClassCacheProxy->InvalidateCache();
+}
+
+
+void FOOTPRINT::SetStackupMode( FOOTPRINT_STACKUP aMode )
+{
+    m_stackupMode = aMode;
+
+    if( m_stackupMode == FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS )
+    {
+        // Reset the stackup layers to the default values
+        m_stackupLayers = LSET{ F_Cu, In1_Cu, B_Cu };
+    }
+}
+
+
+void FOOTPRINT::SetStackupLayers( LSET aLayers )
+{
+    wxCHECK2( m_stackupMode == FOOTPRINT_STACKUP::CUSTOM_LAYERS, /*void*/ );
+
+    if( m_stackupMode == FOOTPRINT_STACKUP::CUSTOM_LAYERS )
+        m_stackupLayers = std::move( aLayers );
 }
 
 

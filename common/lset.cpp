@@ -723,13 +723,6 @@ const LSET& LSET::SideSpecificMask()
 }
 
 
-const LSET& LSET::ForbiddenFootprintLayers()
-{
-    static LSET saved = LSET( InternalCuMask() ).set( In1_Cu, false );
-    return saved;
-}
-
-
 LSEQ LSET::UIOrder() const
 {
     LSEQ order = CuStack();

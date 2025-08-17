@@ -340,6 +340,8 @@ private:
 
     void setVisibleLayers( const LSET& aLayers );
 
+    bool isLayerEnabled( PCB_LAYER_ID aLayer ) const;
+
     void setVisibleObjects( GAL_SET aObjects );
 
     LSET getVisibleLayers();

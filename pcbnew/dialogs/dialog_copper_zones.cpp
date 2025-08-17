@@ -197,9 +197,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     m_ptr = aSettings;
     m_settings = *aSettings;
-    m_settings.SetupLayersList( m_layers, m_Parent,
-                                LSET::AllCuMask( aParent->GetBoard()->GetCopperLayerCount() ),
-                                false );
+    m_settings.SetupLayersList( m_layers, m_Parent, LSET::AllCuMask( aParent->GetBoard()->GetCopperLayerCount() ) );
     m_isTeardrop = m_settings.m_TeardropType != TEARDROP_TYPE::TD_NONE;
 
     switch( m_settings.m_TeardropType )

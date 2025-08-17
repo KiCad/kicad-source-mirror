@@ -86,6 +86,20 @@ enum FOOTPRINT_ATTR_T
     FP_DNP                      = 0x0040
 };
 
+enum class FOOTPRINT_STACKUP
+{
+    /**
+     * The 'normal' stackup handling, where there is a single inner layer
+     * (In1) and rule areas using it expand to all inner layer on the host PCB.
+     */
+    EXPAND_INNER_LAYERS,
+    /**
+     * Stackup handling where the footprint can have any number of copper layers,
+     * and objects on those layers go to the matching inner layer on the host PCB.
+     */
+    CUSTOM_LAYERS,
+};
+
 class FP_3DMODEL
 {
 public:
@@ -287,8 +301,24 @@ public:
     std::optional<double> GetLocalSolderPasteMarginRatio() const { return m_solderPasteMarginRatio; }
     void SetLocalSolderPasteMarginRatio( std::optional<double> aRatio ) { m_solderPasteMarginRatio = aRatio; }
 
-    void SetLocalZoneConnection( ZONE_CONNECTION aType )         { m_zoneConnection = aType; }
-    ZONE_CONNECTION GetLocalZoneConnection() const               { return m_zoneConnection; }
+    void SetLocalZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
+    ZONE_CONNECTION GetLocalZoneConnection() const { return m_zoneConnection; }
+
+    /**
+     * Set the stackup mode for this footprint.
+     *
+     * This determines if the footprint lists its own layers or uses a default stackup,
+     * with "expansion" of inner layers to the PCB's inner layers.
+     */
+    void SetStackupMode( FOOTPRINT_STACKUP aMode );
+    FOOTPRINT_STACKUP GetStackupMode() const { return m_stackupMode; }
+
+    /**
+     * If the footprint has a non-default stackup, set the layers that
+     * should be used for the stackup.
+     */
+    void SetStackupLayers( LSET aLayers );
+    const LSET& GetStackupLayers() const { return m_stackupLayers; }
 
     int GetAttributes() const { return m_attributes; }
     void SetAttributes( int aAttributes ) { m_attributes = aAttributes; }
@@ -1119,6 +1149,10 @@ private:
     std::optional<double> m_solderPasteMarginRatio; // Solder mask margin ratio of pad size
                                                     // The final margin is the sum of these 2 values
 
+    LSET              m_stackupLayers; // Layers in the stackup
+    FOOTPRINT_STACKUP m_stackupMode;   // Stackup mode for this footprint
+    LSET              m_privateLayers; // Layers visible only in the footprint editor
+
     wxString        m_libDescription;    // File name and path for documentation file.
     wxString        m_keywords;          // Search keywords to find footprint in library.
     KIID_PATH       m_path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
@@ -1128,7 +1162,6 @@ private:
     timestamp_t     m_lastEditTime;
     int             m_arflag;            // Use to trace ratsnest and auto routing.
     KIID            m_link;              // Temporary logical link used during editing
-    LSET            m_privateLayers;     // Layers visible only in the footprint editor
 
     std::vector<FP_3DMODEL> m_3D_Drawings;       // 3D models.
     wxArrayString*          m_initial_comments;  // s-expression comments in the footprint,

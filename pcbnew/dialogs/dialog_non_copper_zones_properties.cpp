@@ -156,11 +156,9 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
         m_gap = nullptr;
     }
 
-    bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
-
     m_staticTextLayerSelection->SetFont( KIUI::GetStatusFont( this ) );
 
-    m_settings.SetupLayersList( m_layers, m_parent, LSET::AllNonCuMask(), fpEditorMode );
+    m_settings.SetupLayersList( m_layers, m_parent, LSET::AllNonCuMask() );
 
     SetupStandardButtons();
 
@@ -365,5 +363,3 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     *m_ptr = m_settings;
     return true;
 }
-
-

@@ -328,15 +328,10 @@ const ZONE_SETTINGS& ZONE_SETTINGS::GetDefaultSettings()
 
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
 // zone settings dialogs.
-void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
-                                     LSET aLayers, bool aFpEditorMode )
+void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame, LSET aLayers )
 {
     BOARD* board = aFrame->GetBoard();
     COLOR4D backgroundColor = aFrame->GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
-
-    // In the Footprint Editor In1_Cu is used as a proxy for "all inner layers"
-    if( aFpEditorMode )
-        aLayers.set( In1_Cu );
 
     wxDataViewColumn* checkColumn = aList->AppendToggleColumn(
             wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE, wxCOL_WIDTH_DEFAULT, wxALIGN_CENTER );
@@ -350,9 +345,6 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     for( PCB_LAYER_ID layerID : aLayers.UIOrder() )
     {
         wxString layerName = board->GetLayerName( layerID );
-
-        if( aFpEditorMode && layerID == In1_Cu )
-            layerName = _( "Inner layers" );
 
         // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
         textWidth = std::max( textWidth, KIUI::GetTextSize( layerName, aList ).x );
@@ -385,5 +377,3 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     checkColumn->SetWidth( checkColSize );
     layerColumn->SetWidth( layerColSize );
 }
-
-

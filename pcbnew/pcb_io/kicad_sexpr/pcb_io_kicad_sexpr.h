@@ -185,7 +185,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20250401  // Time domain length tuning
 //#define SEXPR_BOARD_FILE_VERSION    20250513  // Groups can have design block lib_id
 //#define SEXPR_BOARD_FILE_VERSION    20250801  // (island) -> (island yes/no)
-#define SEXPR_BOARD_FILE_VERSION      20250811  // press-fit pad fabr prop support
+//#define SEXPR_BOARD_FILE_VERSION    20250811  // press-fit pad fabr prop support
+#define SEXPR_BOARD_FILE_VERSION      20250818  // Support for custom layer counts in footprints
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
