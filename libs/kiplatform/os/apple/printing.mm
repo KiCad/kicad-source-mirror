@@ -26,6 +26,29 @@ namespace KIPLATFORM
 {
 namespace PRINTING
 {
+
+BOOL hasMultipleOrientations( PDFDocument* document )
+{
+    if( [document pageCount] == 0 )
+        return NO;
+
+    PDFPage* firstPage = [document pageAtIndex:0];
+    NSRect firstBounds = [firstPage boundsForBox:kPDFDisplayBoxMediaBox];
+    BOOL firstIsLandscape = firstBounds.size.width > firstBounds.size.height;
+
+    for( NSUInteger i = 1; i < [document pageCount]; i++ )
+    {
+        PDFPage* page = [document pageAtIndex:i];
+        NSRect bounds = [page boundsForBox:kPDFDisplayBoxMediaBox];
+        BOOL isLandscape = bounds.size.width > bounds.size.height;
+
+        if( isLandscape != firstIsLandscape )
+            return YES;
+    }
+
+    return NO;
+}
+
 PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page)
 {
     @autoreleasepool
@@ -44,17 +67,35 @@ PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page)
             return PRINT_RESULT::FAILED_TO_LOAD;
         }
 
-        NSPrintInfo* printInfo = [NSPrintInfo sharedPrintInfo];
+        PDFView* pdfView = [[PDFView alloc] init];
+        [pdfView setDocument:document];
 
-        PDFPrintScalingMode scalingMode = fit_to_page ?
-            kPDFPrintPageScaleDownToFit : kPDFPrintPageScaleNone;
+        NSPrintInfo* printInfo = [[NSPrintInfo sharedPrintInfo] copy];
 
-        NSPrintOperation* op = [document printOperationForPrintInfo:printInfo
-                                                        scalingMode:scalingMode
-                                                         autoRotate:YES];
+        BOOL hasMixed = hasMultipleOrientations( document );
+
+        if( hasMixed )
+        {
+            [printInfo setOrientation:NSPrintingOrientationPortrait];
+            [printInfo setHorizontallyCentered:YES];
+            [printInfo setVerticallyCentered:YES];
+        }
+
+        if( fit_to_page )
+        {
+            NSMutableDictionary* settings = [[printInfo printSettings] mutableCopy];
+            [settings setObject:@YES forKey:@"com.apple.print.PrintSettings.PMScaleToFit"];
+            [printInfo setPrintSettings:settings];
+            [settings release];
+        }
+
+        NSPrintOperation* op = [NSPrintOperation printOperationWithView:pdfView printInfo:printInfo];
+
+        [printInfo release];
 
         if( !op )
         {
+            [pdfView release];
             [document release];
             return PRINT_RESULT::FAILED_TO_PRINT;
         }
@@ -66,22 +107,24 @@ PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page)
 
         PRINT_RESULT result;
 
-        if (success)
+        if( success )
         {
             result = PRINT_RESULT::OK;
         } else
         {
-            // Check if operation was cancelled (uncertain that this works)
             NSPrintInfo* info = [op printInfo];
             NSDictionary* settings = [info printSettings];
 
-            if ([[settings objectForKey:NSPrintJobDisposition] isEqualToString:NSPrintCancelJob]) {
+            if( [[settings objectForKey:NSPrintJobDisposition] isEqualToString:NSPrintCancelJob] )
+            {
                 result = PRINT_RESULT::CANCELLED;
-            } else {
+            } else
+            {
                 result = PRINT_RESULT::FAILED_TO_PRINT;
             }
         }
 
+        [pdfView release];
         [document release];
         return result;
     }
