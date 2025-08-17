@@ -316,7 +316,7 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
 
 void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_boardAdapter" );
+    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_settings" );
 
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
@@ -330,7 +330,7 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_boardAdapter" );
+    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME:SaveSettings with null m_settings" );
 
     GetGalDisplayOptions().m_axesEnabled = true;
 
