@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-12 16:02+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-08-18 07:02+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3647,26 +3647,25 @@ msgid "Close"
 msgstr "閉じる"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "警告: スケール値が数値ではありません。"
+msgstr "警告: カスタムスケール値が数値ではありません。"
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"警告: スケール 値が非常に大きな値になっています。\n"
+"警告: カスタムスケール 値が非常に大きな値になっています。\n"
 "%f に固定されます。"
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"警告: スケール 値が非常に小さな値になっています。\n"
+"警告: カスタムスケール 値が非常に小さな値になっています。\n"
 "%f に固定されます。"
 
 #: common/dialogs/dialog_print_generic.cpp:227
@@ -5953,14 +5952,12 @@ msgstr ""
 "再読み込みを行いますか？"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "パンとズーム"
+msgstr "パンと回転"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "アニメーション速度:"
+msgstr "回転速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
 #, fuzzy
@@ -5973,9 +5970,8 @@ msgid "Swap the direction of rotation"
 msgstr "終点もしくは始点の方向を固定"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "自動パン速度:"
+msgstr "パン速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
@@ -11721,9 +11717,8 @@ msgid "%s not found"
 msgstr "%s が見つかりません"
 
 #: eeschema/cross-probing.cpp:236
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "ハイライトされたネット: "
+msgstr "ハイライトされたネット:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
@@ -14400,9 +14395,9 @@ msgstr "ユーザー パス '%s' にフォールバックします。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:398
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "パス '%s%s' を正規化できません。"
+msgstr "パス '%s' を正規化できません。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:404
 msgid "No project or path defined for the current schematic."
@@ -14543,9 +14538,8 @@ msgid "DXF Options"
 msgstr "DXF オプション"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:149
-#, fuzzy
 msgid "Export units"
-msgstr "エクスポート 単位:"
+msgstr "エクスポート 単位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:239
@@ -14757,9 +14751,8 @@ msgid "Formatting preferences"
 msgstr "フォーマット選択"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Annotation preferences"
-msgstr "フォーマット選択"
+msgstr "アノテーションの設定"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
@@ -24952,7 +24945,6 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "エラー: 現在のシートにサブシート名の重複が見つかりました。"
 
 #: eeschema/tools/sch_editor_control.cpp:892
-#, fuzzy
 msgid "No nets selected."
 msgstr "ネットが未選択です。"
 
@@ -25571,9 +25563,9 @@ msgid "Layers Settings"
 msgstr "レイヤー設定"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d:"
-msgstr "レイヤー %d"
+msgstr "レイヤー %d:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:169
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:233
@@ -27883,16 +27875,15 @@ msgstr "設定を再読み込み"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:142
 msgid "Key"
-msgstr ""
+msgstr "キー"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:144
 msgid "Extant"
 msgstr ""
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:305
-#, fuzzy
 msgid "Reset to default"
-msgstr "デフォルトにリセット"
+msgstr "デフォルト値にリセット"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:151
 msgid "<value set at runtime>"
@@ -28402,13 +28393,13 @@ msgid "Job failed"
 msgstr "ジョブが失敗しました"
 
 #: kicad/kicad.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a KiCad project file."
 msgstr ""
 "ファイル '%s'\n"
-"は有効なKiCadプロジェクト ファイルではないようです。"
+"はKiCadプロジェクト ファイルではないようです。"
 
 #: kicad/kicad_cli.cpp:122
 msgid "Export GLB (binary GLTF)"
@@ -29540,7 +29531,7 @@ msgid "Save Project To"
 msgstr "名前を付けてプロジェクトを保存"
 
 #: kicad/tools/kicad_manager_control.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -29548,7 +29539,7 @@ msgid ""
 msgstr ""
 "フォルダー '%s' を作成できませんでした。\n"
 "\n"
-"書き込み権限があることを確認して、再実行して下さい。"
+"必要な権限があることを確認して下さい。"
 
 #: kicad/tools/kicad_manager_control.cpp:809
 msgid "Create (or open) a project to edit a schematic."
@@ -33552,9 +33543,8 @@ msgid "Min track width:"
 msgstr "最小配線幅:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Min drill diameter:"
-msgstr "最小穴径: "
+msgstr "最小穴径:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 #, fuzzy
@@ -33587,9 +33577,8 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:188
-#, fuzzy
 msgid "Castellated pad:"
-msgstr "端面スルーホール パッド"
+msgstr "端面スルーホール パッド:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:189
 msgid "Press-fit pad:"
@@ -34369,7 +34358,7 @@ msgstr "列の間の距離"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:85
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "2.54"
-msgstr ""
+msgstr "2.54"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Vertical spacing:"
@@ -35353,9 +35342,8 @@ msgid "Y position:"
 msgstr "Y 位置:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:74
-#, fuzzy
 msgid "Output units:"
-msgstr "出力単位"
+msgstr "出力単位:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:84
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
@@ -35816,9 +35804,8 @@ msgid "meter"
 msgstr "メートル"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
-#, fuzzy
 msgid "0.1 inch"
-msgstr "0.1 inch"
+msgstr "0.1 インチ"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:126
 msgid "Copy 3D model files to 3D model path"
@@ -36799,19 +36786,17 @@ msgid "Unlocked tracks"
 msgstr "ロックされていない配線"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
-msgstr "ロックしたアイテム"
+msgstr "ロックしたビア"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
-#, fuzzy
 msgid "Unlocked vias"
-msgstr "ロックされていない配線"
+msgstr "ロックされていないビア"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "現在のレイヤーのみ"
+msgstr "現在のレイヤー(%s)のみ"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -45155,9 +45140,8 @@ msgid "Used when the DXF items in file have no line thickness set"
 msgstr "DXF ファイルに線の太さが設定されていない場合に使用します"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:65
-#, fuzzy
 msgid "0.2"
-msgstr "0.0"
+msgstr "0.2"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -45250,9 +45234,8 @@ msgid "Create a PNG file from the current view"
 msgstr "現在のビューから PNG ファイルを作成します"
 
 #: pcbnew/menubar_footprint_editor.cpp:114 pcbnew/menubar_pcb_editor.cpp:185
-#, fuzzy
 msgid "&Select"
-msgstr "選択"
+msgstr "選択(&S)"
 
 #: pcbnew/menubar_footprint_editor.cpp:152 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Drawing Mode"
@@ -45358,7 +45341,6 @@ msgid "Add Microwave Inductor"
 msgstr "マイクロ波用インダクターを追加"
 
 #: pcbnew/microwave/microwave_inductor.cpp:367
-#, fuzzy
 msgid "Length of track:"
 msgstr "配線長:"
 
@@ -45379,7 +45361,6 @@ msgid "Requested length can't be represented"
 msgstr "指定した長さは表現できません"
 
 #: pcbnew/microwave/microwave_inductor.cpp:406
-#, fuzzy
 msgid "Component value:"
 msgstr "コンポーネント定数:"
 
@@ -49926,9 +49907,8 @@ msgid "Select Via Size"
 msgstr "ビアのサイズを選択"
 
 #: pcbnew/tools/drawing_tool.cpp:342
-#, fuzzy
 msgid "Constrain to H, V"
-msgstr "水平、垂直、45度に制限"
+msgstr "水平、垂直に制限"
 
 #: pcbnew/tools/drawing_tool.cpp:381 pcbnew/tools/drawing_tool.cpp:2360
 msgid "Draw Line"
@@ -52456,9 +52436,8 @@ msgid "Place Board Stackup Table"
 msgstr "基板スタックアップの表をを置く"
 
 #: pcbnew/tools/pcb_control.cpp:2633
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "埋め込みモデル"
+msgstr "埋め込み3Dモデル"
 
 #: pcbnew/tools/pcb_control.cpp:2634
 #, c-format
