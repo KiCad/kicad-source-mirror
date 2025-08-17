@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-11 14:02+0000\n"
+"PO-Revision-Date: 2025-08-18 08:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4035,7 +4035,7 @@ msgstr "主题已存在!"
 #: common/dialogs/panel_color_settings.cpp:219
 #: common/dialogs/panel_color_settings.cpp:238
 msgid "New Theme..."
-msgstr "新主题..."
+msgstr "新建主题..."
 
 #: common/dialogs/panel_color_settings.cpp:303
 msgid "Copy color"
@@ -9616,7 +9616,7 @@ msgstr ""
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
-msgstr "新名称:"
+msgstr "新的名称:"
 
 #: common/tool/selection_tool.cpp:307
 msgid "Select &All\tA"
@@ -15016,7 +15016,7 @@ msgstr "#"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 msgid "New field name:"
-msgstr "新字段名称:"
+msgstr "新建字段名称:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 msgid "Add Field"
@@ -15907,7 +15907,7 @@ msgstr "在选择工具处于活动状态时, 按 <ESC> 清除选择, 接着就�
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
-msgstr "新对象的默认值"
+msgstr "新建对象的默认值"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
@@ -18230,7 +18230,7 @@ msgstr "原理图层次结构"
 
 #: eeschema/sch_edit_frame.cpp:420
 msgid "New schematic file is unsaved"
-msgstr "新原理图文件未保存"
+msgstr "新建原理图文件未保存"
 
 #: eeschema/sch_edit_frame.cpp:1023
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:637
@@ -21343,7 +21343,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>警告: 参考位号为空</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -23989,7 +23989,7 @@ msgstr "这个位置已经被另一个引脚占用, 在单元 %d 中。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr ""
+msgstr "禁用「同步引脚模式」选项以避免此提示。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:244
 msgid "Place Pin Anyway"
@@ -26120,7 +26120,7 @@ msgstr "渲染质量。选项: %s"
 #: kicad/cli/command_pcb_render.cpp:257
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
-msgstr ""
+msgstr "外观预设。选项: %s, %s 或自定义预设名称"
 
 #: kicad/cli/command_pcb_render.cpp:264
 msgid ""
@@ -27482,7 +27482,7 @@ msgstr "关闭所有编辑器, 然后切换到所选工程"
 
 #: kicad/project_tree_pane.cpp:901
 msgid "New Directory..."
-msgstr "新目录..."
+msgstr "新建目录..."
 
 #: kicad/project_tree_pane.cpp:902
 msgid "Create a New Directory"
@@ -28049,7 +28049,7 @@ msgstr "终点 Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:69
 msgid "New Item"
-msgstr "新建项"
+msgstr "新建项目"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:234
 msgid "Print Drawing Sheet"
