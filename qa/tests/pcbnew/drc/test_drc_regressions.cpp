@@ -68,6 +68,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue17967/issue17967",   // Arc dp coupling
         "issue18203",   // DRC error due to colliding arc and circle
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
+        "net_tie_drc"   // Net tie bridging soldermask DRC test
     };
 
     for( const wxString& relPath : tests )
