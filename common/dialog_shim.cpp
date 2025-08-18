@@ -435,30 +435,58 @@ void DIALOG_SHIM::SaveControlState()
 
                 if( !key.empty() )
                 {
-                    if( m_unitBinders.contains( win ) && !m_unitBinders[ win ]->UnitsInvariant() )
-                        dlgMap[ key ] = m_unitBinders[ win ]->GetValue();
+                    if( m_unitBinders.contains( win ) )
+                    {
+                        if( !m_unitBinders[ win ]->UnitsInvariant() )
+                            dlgMap[ key ] = m_unitBinders[ win ]->GetValue();
+                    }
                     else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
+                    {
                         dlgMap[ key ] = combo->GetValue();
+                    }
                     else if( wxOwnerDrawnComboBox* od_combo = dynamic_cast<wxOwnerDrawnComboBox*>( win ) )
+                    {
                         dlgMap[ key ] = od_combo->GetSelection();
+                    }
                     else if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
+                    {
                         dlgMap[ key ] = textEntry->GetValue();
+                    }
                     else if( wxChoice* choice = dynamic_cast<wxChoice*>( win ) )
+                    {
                         dlgMap[ key ] = choice->GetSelection();
+                    }
                     else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
+                    {
                         dlgMap[ key ] = check->GetValue();
+                    }
                     else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                    {
                         dlgMap[ key ] = spin->GetValue();
+                    }
                     else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
+                    {
                         dlgMap[ key ] = radio->GetValue();
+                    }
                     else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( win ) )
+                    {
                         dlgMap[ key ] = radioBox->GetSelection();
+                    }
                     else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
+                    {
                         dlgMap[ key ] = splitter->GetSashPosition();
+                    }
                     else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
+                    {
                         dlgMap[ key ] = scrolled->GetScrollPos( wxVERTICAL );
+                    }
                     else if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( win ) )
-                        dlgMap[ key ] = notebook->GetPageText( notebook->GetSelection() );
+                    {
+                        int index = notebook->GetSelection();
+
+                        if( index >= 0 && index < (int) notebook->GetPageCount() )
+                            dlgMap[ key ] = notebook->GetPageText( notebook->GetSelection() );
+                    }
                 }
 
                 for( wxWindow* child : win->GetChildren() )
