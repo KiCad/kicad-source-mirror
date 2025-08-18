@@ -688,7 +688,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    commit.Modify( symbol );
+    commit.Modify( symbol, m_frame->GetScreen() );
 
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     wxCHECK( selTool, -1 );
@@ -920,7 +920,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     SCH_COMMIT commit( m_toolMgr );
 
-    commit.Modify( symbol );
+    commit.Modify( symbol, m_frame->GetScreen() );
     m_selectionTool->ClearSelection();
 
     for( SCH_ITEM& item : symbol->GetDrawItems() )

@@ -447,7 +447,9 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     auto doReplace =
             [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, EDA_SEARCH_DATA& aData )
             {
-                commit.Modify( aItem, aSheet ? aSheet->LastScreen() : nullptr, RECURSE_MODE::NO_RECURSE );
+                wxCHECK_RET( aSheet, wxT( "must have a sheetpath for undo" ) );
+
+                commit.Modify( aItem, aSheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
 
                 if( aItem->Replace( aData, aSheet ) )
                 {

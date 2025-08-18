@@ -616,8 +616,7 @@ public:
 
 private:
     void dragPinsOnEdge( const std::vector<SEG>& aOldEdges, const std::vector<VECTOR2I>& aMoveVecs,
-                         int aEdgeUnit, COMMIT& aCommit,
-                         std::vector<EDA_ITEM*>& aUpdatedItems ) const
+                         int aEdgeUnit, COMMIT& aCommit, std::vector<EDA_ITEM*>& aUpdatedItems ) const
     {
         wxCHECK( aOldEdges.size() == aMoveVecs.size(), /* void */ );
 
@@ -668,12 +667,11 @@ private:
             if( aMoveVecs[i] == VECTOR2I( 0, 0 ) || !symbol )
                 continue;
 
-            const std::vector<SCH_PIN*> pins = getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i],
-                                                             false );
+            const std::vector<SCH_PIN*> pins = getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i], false );
 
             for( SCH_PIN* pin : pins )
             {
-                aCommit.Modify( pin );
+                aCommit.Modify( pin, editor.GetScreen() );
                 aUpdatedItems.push_back( pin );
 
                 // Move the pin

@@ -363,7 +363,7 @@ protected:
 
         if( deleted.size() == (unsigned) table->GetRowCount() )
         {
-            commit.Remove( table );
+            commit.Remove( table, getScreen() );
         }
         else
         {
@@ -440,7 +440,7 @@ protected:
 
         if( deleted.size() == (unsigned) table->GetColCount() )
         {
-            commit.Remove( table );
+            commit.Remove( table, getScreen() );
         }
         else
         {

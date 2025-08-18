@@ -471,7 +471,7 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
             {
                 SCH_COMMIT commit( m_toolManager );
 
-                commit.Modify( group );
+                commit.Modify( group, GetScreen() );
                 group->SetDesignBlockLibId( aLibId );
 
                 commit.Push( "Set Group Design Block Link" );

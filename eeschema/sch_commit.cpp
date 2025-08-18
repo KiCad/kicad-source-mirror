@@ -198,7 +198,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     // We don't know that anything will be added to the entered group, but it does no harm to
     // add it to the commit anyway.
     if( enteredGroup )
-        Modify( enteredGroup );
+        Modify( enteredGroup, frame->GetScreen() );
 
     // Handle wires with Hop Over shapes:
     for( COMMIT_LINE& entry : m_entries )
@@ -222,7 +222,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         wxCHECK2( schItem, continue );
 
         if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
-            Modify( schItem->GetParentGroup()->AsEdaItem() );
+            Modify( schItem->GetParentGroup()->AsEdaItem(), entry.m_screen );
     }
 
     for( COMMIT_LINE& entry : m_entries )

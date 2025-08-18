@@ -123,7 +123,7 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
     wxBusyCursor dummy;
     SCH_COMMIT   commit( m_editFrame );
 
-    commit.Modify( m_symbol );
+    commit.Modify( m_symbol, m_editFrame->GetScreen() );
 
     // Create the set of fields to be updated
     m_updateFields.clear();
