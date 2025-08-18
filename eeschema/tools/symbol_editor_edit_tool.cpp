@@ -772,7 +772,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    commit.Modify( symbol );
+    commit.Modify( symbol, m_frame->GetScreen() );
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
@@ -988,7 +988,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     SCH_COMMIT commit( m_toolMgr );
 
-    commit.Modify( symbol );
+    commit.Modify( symbol, m_frame->GetScreen() );
     m_selectionTool->ClearSelection();
 
     for( SCH_ITEM& item : symbol->GetDrawItems() )

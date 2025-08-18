@@ -131,7 +131,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin, bool aFocusPinNum
     LIB_SYMBOL*           parentSymbol = static_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
 
     if( aPin->GetEditFlags() == 0 )
-        commit.Modify( parentSymbol );
+        commit.Modify( parentSymbol, m_frame->GetScreen() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
@@ -422,7 +422,7 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
     SCH_COMMIT  commit( m_frame );
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
-    commit.Modify( symbol );
+    commit.Modify( symbol, m_frame->GetScreen() );
 
     SCH_PIN* pin = static_cast<SCH_PIN*>( aSourcePin->Duplicate() );
     VECTOR2I step;
