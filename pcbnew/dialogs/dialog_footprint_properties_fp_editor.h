@@ -63,8 +63,11 @@ private:
     void OnGridSize( wxSizeEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
-    void OnAddLayer( wxCommandEvent& event ) override;
-    void OnDeleteLayer( wxCommandEvent& event ) override;
+    void OnAddPrivateLayer( wxCommandEvent& event ) override;
+    void OnDeletePrivateLayer( wxCommandEvent& event ) override;
+    void OnUseCustomLayers( wxCommandEvent& event ) override;
+    void OnAddCustomLayer( wxCommandEvent& event ) override;
+    void OnDeleteCustomLayer( wxCommandEvent& event ) override;
     void OnAddNettieGroup( wxCommandEvent& event ) override;
     void OnRemoveNettieGroup( wxCommandEvent& event ) override;
     void OnAddJumperGroup( wxCommandEvent& event ) override;
@@ -74,9 +77,6 @@ private:
     void OnText( wxCommandEvent& event ) override;
     void OnChoice( wxCommandEvent& event ) override;
     void OnCheckBox( wxCommandEvent& event ) override;
-    void OnUseCustomLayers( wxCommandEvent& event ) override;
-    void OnAddCustomLayer( wxCommandEvent& event ) override;
-    void OnDeleteCustomLayer( wxCommandEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName, LIB_ID* doOverwrite );
     void setCustomLayerCtrlEnablement();

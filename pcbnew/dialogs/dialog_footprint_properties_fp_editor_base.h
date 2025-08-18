@@ -59,9 +59,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DocCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
-		WX_GRID* m_privateLayersGrid;
-		STD_BITMAP_BUTTON* m_bpAddLayer;
-		STD_BITMAP_BUTTON* m_bpDeleteLayer;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
 		wxCheckBox* m_boardOnly;
@@ -75,6 +72,9 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		WX_GRID* m_customUserLayersGrid;
 		STD_BITMAP_BUTTON* m_bpAddCustomLayer;
 		STD_BITMAP_BUTTON* m_bpDeleteCustomLayer;
+		WX_GRID* m_privateLayersGrid;
+		STD_BITMAP_BUTTON* m_bpAddPrivateLayer;
+		STD_BITMAP_BUTTON* m_bpDeletePrivateLayer;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_NetClearanceLabel;
@@ -117,13 +117,13 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddLayer( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseCustomLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddCustomLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteCustomLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddPrivateLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeletePrivateLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddNettieGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNettieGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddJumperGroup( wxCommandEvent& event ) { event.Skip(); }

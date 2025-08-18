@@ -208,7 +208,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     m_privateLayersGrid->PushEventHandler( new GRID_TRICKS( m_privateLayersGrid,
                                                             [this]( wxCommandEvent& aEvent )
                                                             {
-                                                                OnAddLayer( aEvent );
+                                                                OnAddPrivateLayer( aEvent );
                                                             } ) );
     m_nettieGroupsGrid->PushEventHandler( new GRID_TRICKS( m_nettieGroupsGrid,
                                                            [this]( wxCommandEvent& aEvent )
@@ -265,14 +265,14 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-    m_bpAddLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_bpDeleteLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpAddPrivateLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDeletePrivateLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpAddCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDeleteCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_bpAddNettieGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpRemoveNettieGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_bpAddJumperGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpRemoveJumperGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-    m_bpAddCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_bpDeleteCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
 
@@ -992,7 +992,7 @@ std::pair<int, int> DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onLayerGridRowAddUser
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddPrivateLayer( wxCommandEvent& event )
 {
     m_privateLayersGrid->OnAddRow(
             [&]()
@@ -1002,7 +1002,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeletePrivateLayer( wxCommandEvent& event )
 {
     m_privateLayersGrid->OnDeleteRows(
             [&]( int row )
