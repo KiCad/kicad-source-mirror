@@ -85,6 +85,7 @@
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
+#include <wx/combobox.h>
 #include <wx/log.h>
 
 

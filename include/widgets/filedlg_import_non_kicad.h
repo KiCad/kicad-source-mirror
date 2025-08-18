@@ -17,10 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_FILEDLG_IMPORT_NON_KICAD_H
-#define KICAD_FILEDLG_IMPORT_NON_KICAD_H
+#pragma once
 
-#include <wx/wx.h>
 #include <wx/filedlgcustomize.h>
 
 
@@ -51,5 +49,3 @@ private:
 
     wxDECLARE_NO_COPY_CLASS( FILEDLG_IMPORT_NON_KICAD );
 };
-
-#endif //KICAD_FILEDLG_IMPORT_NON_KICAD_H
