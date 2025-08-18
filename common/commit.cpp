@@ -181,7 +181,7 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BAS
     // N.B. Do not throw an assertion for multiple changed items.  An item can be changed
     // multiple times in a single commit such as when importing graphics and grouping them.
 
-    switch( aType )
+    switch( aType & CHT_TYPE )
     {
     case CHT_ADD:    m_addedItems.insert( { aItem, aScreen } );   break;
     case CHT_REMOVE: m_deletedItems.insert( { aItem, aScreen } ); break;
