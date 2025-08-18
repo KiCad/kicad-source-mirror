@@ -34,6 +34,8 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
         m_job( aJob ),
         m_scintillaTricks( nullptr )
 {
+    m_textCtrlCommand->SetWrapMode( wxSTC_WRAP_CHAR );
+
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textCtrlCommand, wxT( "{}" ), false,
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
