@@ -432,14 +432,27 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aT
         if( fp->AllowSolderMaskBridges() )
             return false;
 
-        // Graphic items are used to implement net-ties between pads of a group within a net-tie
-        // footprint.  They must be allowed to intrude into their pad's mask aperture.
-        if( aTestNet < 0 && aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
+        // Items belonging to a net-tie may share the mask aperture of pads in the same group.
+        if( aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
         {
+            PAD* pad = static_cast<PAD*>( aMaskItem );
             std::map<wxString, int> padNumberToGroupIdxMap = fp->MapPadNumbersToNetTieGroups();
+            int groupIdx = padNumberToGroupIdxMap[ pad->GetNumber() ];
 
-            if( padNumberToGroupIdxMap[ static_cast<PAD*>( aMaskItem )->GetNumber() ] >= 0 )
-                return false;
+            if( groupIdx >= 0 )
+            {
+                if( aTestNet < 0 )
+                    return false;
+
+                if( pad->GetNetCode() == aTestNet )
+                    return false;
+
+                for( PAD* other : fp->GetNetTiePads( pad ) )
+                {
+                    if( other->GetNetCode() == aTestNet )
+                        return false;
+                }
+            }
         }
     }
 
@@ -496,6 +509,22 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                                          || pad->SharesNetTieGroup( otherPad ) ) )
                 {
                     return false;
+                }
+
+                if( itemFP && itemFP->IsNetTie() )
+                {
+                    const std::set<int>& nets = itemFP->GetNetTieCache( aItem );
+
+                    if( otherNet < 0 || nets.count( otherNet ) )
+                        return false;
+                }
+
+                if( FOOTPRINT* otherFP = other->GetParentFootprint(); otherFP && otherFP->IsNetTie() )
+                {
+                    const std::set<int>& nets = otherFP->GetNetTieCache( other );
+
+                    if( itemNet < 0 || nets.count( itemNet ) )
+                        return false;
                 }
 
                 BOARD_ITEM* a = aItem;
