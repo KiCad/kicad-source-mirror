@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
 "PO-Revision-Date: 2025-08-18 07:02+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -635,14 +635,12 @@ msgid "Show board body"
 msgstr "Platinenkörper anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Metallisierte Löcher"
+msgstr "Metallisierte Bohrungen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Durchlochpads anzeigen"
+msgstr "Metallisierte Bohrungen von Durchkontaktierungen und Vias anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
