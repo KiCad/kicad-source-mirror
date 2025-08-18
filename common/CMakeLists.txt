@@ -818,10 +818,6 @@ target_link_libraries( common
 	${Fontconfig_LIBRARIES}
     )
 
-if( UNIX AND NOT APPLE )
-    target_link_libraries( common ${Poppler_LIBRARIES} )
-endif()
-
 if( KICAD_USE_SENTRY )
     target_link_libraries( common
         sentry )
