@@ -24,13 +24,6 @@
  */
 
 
-/*  TODO:
-
-*)  After any change to uri, reparse the environment variables.
-
-*/
-
-
 #include <set>
 #include <wx/dir.h>
 #include <wx/regex.h>
@@ -163,41 +156,28 @@ protected:
     void paste_text( const wxString& cb_text ) override
     {
         // TODO(JE) library tables
-#if 0
-        FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) m_grid->GetTable();
-        size_t             ndx = cb_text.find( "(fp_lib_table" );
+        FP_LIB_TABLE_GRID* tbl = static_cast<FP_LIB_TABLE_GRID*>( m_grid->GetTable() );
 
-        if( ndx != std::string::npos )
+        if( size_t ndx = cb_text.find( "(fp_lib_table" ); ndx != std::string::npos )
         {
             // paste the FP_LIB_TABLE_ROWs of s-expression (fp_lib_table), starting
             // at column 0 regardless of current cursor column.
 
-            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
-            LIB_TABLE_LEXER     lexer( &slr );
-            FP_LIB_TABLE        tmp_tbl;
-            bool                parsed = true;
-
-            try
+            if( LIBRARY_TABLE tempTable( cb_text, tbl->Table().Scope() ); tempTable.IsOk() )
             {
-                tmp_tbl.Parse( &lexer );
+                std::ranges::copy( tempTable.Rows(),
+                                   std::inserter( tbl->Table().Rows(), tbl->Table().Rows().begin() ) );
+
+                if( tbl->GetView() )
+                {
+                    wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, 0, 0 );
+                    tbl->GetView()->ProcessTableMessage( msg );
+                }
             }
-            catch( PARSE_ERROR& pe )
+            else
             {
-                DisplayError( m_dialog, pe.What() );
-                parsed = false;
+                DisplayError( m_dialog, tempTable.ErrorDescription() );
             }
-
-            if( parsed )
-            {
-                // make sure the table is big enough...
-                if( tmp_tbl.GetCount() > (unsigned) tbl->GetNumberRows() )
-                    tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
-
-                for( unsigned i = 0;  i < tmp_tbl.GetCount();  ++i )
-                    tbl->m_rows.replace( i, tmp_tbl.At( i ).clone() );
-            }
-
-            m_grid->AutoSizeColumns( false );
         }
         else
         {
@@ -219,7 +199,8 @@ protected:
 
             m_grid->AutoSizeColumns( false );
         }
-#endif
+
+        m_grid->AutoSizeColumns( false );
     }
 
 
@@ -264,7 +245,7 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
         attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-                m_parent, aGrid, &cfg->m_LastFootprintLibDir, true, m_projectBasePath,
+                m_parent, aGrid, &cfg->m_LastFootprintLibDir, true, m_project->GetProjectPath(),
                 [this]( WX_GRID* grid, int row ) -> wxString
                 {
                     auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
@@ -312,20 +293,13 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 };
 
 
-PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject,
-                                        FP_LIB_TABLE* aGlobalTable, const wxString& aGlobalTblPath,
-                                        FP_LIB_TABLE* aProjectTable, const wxString& aProjectTblPath,
-                                        const wxString& aProjectBasePath ) :
+PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject ) :
         PANEL_FP_LIB_TABLE_BASE( aParent ),
-        m_globalTable( aGlobalTable ),
-        m_projectTable( aProjectTable ),
         m_project( aProject ),
-        m_projectBasePath( aProjectBasePath ),
         m_parent( aParent )
 {
     std::optional<LIBRARY_TABLE*> table =
-        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
-                                         LIBRARY_TABLE_SCOPE::GLOBAL );
+        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
 
     m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *table.value() ), true );
@@ -344,18 +318,18 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
             cfg->m_LastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
     }
 
-    m_lastProjectLibDir = m_projectBasePath;
+    m_lastProjectLibDir = m_project->GetProjectPath();
 
     setupGrid( m_global_grid );
 
     populateEnvironReadOnlyTable();
 
-    if( aProjectTable )
+    std::optional<LIBRARY_TABLE*> projectTable =
+            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+
+    if( projectTable )
     {
-        // TODO(JE) library tables
-#if 0
-        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProjectTable ), true );
-#endif
+        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *projectTable.value() ), true );
         setupGrid( m_project_grid );
     }
     else
@@ -674,17 +648,19 @@ void PANEL_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowUp(
             [&]( int row )
             {
-                // TODO(JE) library tables
-#if 0
-                FP_LIB_TABLE_GRID*                          tbl = cur_model();
-                boost::ptr_vector<LIB_TABLE_ROW>::auto_type move_me = tbl->m_rows.release( tbl->m_rows.begin() + row );
+                FP_LIB_TABLE_GRID* tbl = cur_model();
+                int curRow = m_cur_grid->GetGridCursorRow();
 
-                tbl->m_rows.insert( tbl->m_rows.begin() + row - 1, move_me.release() );
+                std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+
+                auto current = rows.begin() + curRow;
+                auto prev    = rows.begin() + curRow - 1;
+
+                std::iter_swap( current, prev );
 
                 // Update the wxGrid
                 wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
                 tbl->GetView()->ProcessTableMessage( msg );
-#endif
             } );
 }
 
@@ -694,17 +670,18 @@ void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowDown(
             [&]( int row )
             {
-                // TODO(JE) library tables
-#if 0
-                FP_LIB_TABLE_GRID*                          tbl = cur_model();
-                boost::ptr_vector<LIB_TABLE_ROW>::auto_type move_me = tbl->m_rows.release( tbl->m_rows.begin() + row );
+                FP_LIB_TABLE_GRID* tbl = cur_model();
+                int curRow = m_cur_grid->GetGridCursorRow();
+                std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
 
-                tbl->m_rows.insert( tbl->m_rows.begin() + row + 1, move_me.release() );
+                auto current = rows.begin() + curRow;
+                auto next    = rows.begin() + curRow + 1;
+
+                std::iter_swap( current, next );
 
                 // Update the wxGrid
                 wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
                 tbl->GetView()->ProcessTableMessage( msg );
-#endif
             } );
 }
 
@@ -932,7 +909,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             m_cur_grid->SetCellValue( last_row, COL_TYPE, PCB_IO_MGR::ShowType( fileType ) );
 
             // try to use path normalized to an environmental variable or project path
-            wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
+            wxString path = NormalizePath( filePath, &envVars, m_project->GetProjectPath() );
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
@@ -984,30 +961,30 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
-    // TODO(JE) library tables
-#if 0
-    DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG dlg( m_parent );
+    LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE::FOOTPRINT, true );
 
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        m_global_grid->Freeze();
+    // Go ahead and reload here because this action takes place even if the dialog is canceled
+    Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
 
-        wxGridTableBase* table = m_global_grid->GetTable();
-        m_global_grid->DestroyTable( table );
+    if( KIFACE *face = m_parent->Kiway().KiFACE( KIWAY::FACE_PCB ) )
+        face->PreloadLibraries( &m_parent->Kiway().Prj() );
 
-        std::optional<LIBRARY_TABLE*> newTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
-                                                 LIBRARY_TABLE_SCOPE::GLOBAL );
-        wxASSERT( newTable );
+    m_global_grid->Freeze();
 
-        m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *newTable.value() ), true );
-        m_global_grid->PopEventHandler( true );
-        setupGrid( m_global_grid );
-        m_parent->m_GlobalTableChanged = true;
+    wxGridTableBase* table = m_global_grid->GetTable();
+    m_global_grid->DestroyTable( table );
 
-        m_global_grid->Thaw();
-    }
-#endif
+    std::optional<LIBRARY_TABLE*> newTable =
+            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                             LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxASSERT( newTable );
+
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *newTable.value() ), true );
+    m_global_grid->PopEventHandler( true );
+    setupGrid( m_global_grid );
+    m_parent->m_GlobalTableChanged = true;
+
+    m_global_grid->Thaw();
 }
 
 
@@ -1033,26 +1010,35 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
     if( !m_cur_grid->CommitPendingChanges() )
         return false;
 
-    if( verifyTables() )
-    {
-        // TODO(JE) library tables
-#if 0
-        if( *global_model() != *m_globalTable )
-        {
-            m_parent->m_GlobalTableChanged = true;
-            m_globalTable->TransferRows( global_model()->m_rows );
-        }
+    if( !verifyTables() )
+        return false;
 
-        if( project_model() && *project_model() != *m_projectTable )
-        {
-            m_parent->m_ProjectTableChanged = true;
-            m_projectTable->TransferRows( project_model()->m_rows );
-        }
-#endif
-        return true;
+    std::optional<LIBRARY_TABLE*> optTable =
+        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxCHECK( optTable, false );
+    LIBRARY_TABLE* globalTable = *optTable;
+
+    if( global_model()->Table() != *globalTable )
+    {
+        m_parent->m_GlobalTableChanged = true;
+        *globalTable = global_model()->Table();
     }
 
-    return false;
+    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                LIBRARY_TABLE_SCOPE::PROJECT );
+
+    if( optTable && project_model() )
+    {
+        LIBRARY_TABLE* projectTable = *optTable;
+
+        if( project_model()->Table() != *projectTable )
+        {
+            m_parent->m_ProjectTableChanged = true;
+            *projectTable = project_model()->Table();
+        }
+    }
+
+    return true;
 }
 
 
@@ -1130,50 +1116,60 @@ size_t   PANEL_FP_LIB_TABLE::m_pageNdx = 0;
 
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 {
-    FP_LIB_TABLE* globalTable = &GFootprintTable;
-    wxString      globalTablePath = FP_LIB_TABLE::GetGlobalTableFileName();
-    FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &aKiway->Prj() );
-    wxString      projectTablePath = aKiway->Prj().FootprintLibTblName();
     wxString      msg;
 
     DIALOG_EDIT_LIBRARY_TABLES dlg( aCaller, _( "Footprint Libraries" ) );
     dlg.SetKiway( &dlg, aKiway );
 
-    if( aKiway->Prj().IsNullProject() )
-        projectTable = nullptr;
-
-    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable, globalTablePath,
-                                              projectTable, projectTablePath,
-                                              aKiway->Prj().GetProjectPath() ) );
+    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, &aKiway->Prj() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     if( dlg.m_GlobalTableChanged )
     {
-        try
-        {
-            globalTable->Save( globalTablePath );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
+        std::optional<LIBRARY_TABLE*> optTable =
+                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL );
+        wxCHECK( optTable, /* void */ );
+        LIBRARY_TABLE* globalTable = *optTable;
+
+        Pgm().GetLibraryManager().Save( globalTable ).map_error(
+            []( const LIBRARY_ERROR& aError )
+            {
+                wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
+
+        Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+        // TODO(JE) library tables - remove after legacy loading is upgrade
+        GFootprintTable.Load( FP_LIB_TABLE::GetGlobalTableFileName() );
     }
+
+    std::optional<LIBRARY_TABLE*> projectTable =
+            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable && dlg.m_ProjectTableChanged )
     {
-        try
-        {
-            projectTable->Save( projectTablePath );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
+        Pgm().GetLibraryManager().Save( *projectTable ).map_error(
+            []( const LIBRARY_ERROR& aError )
+            {
+                wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
+                                                aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
+
+        // Trigger a reload of the table and cancel an in-progress background load
+        Pgm().GetLibraryManager().ProjectChanged();
+
+        // TODO(JE) library tables - remove after legacy loading is upgrade
+        PROJECT* prj = &aKiway->Prj();
+        PROJECT_PCB::PcbFootprintLibs( prj )->Load( prj->FootprintLibTblName() );
     }
+
+    // Trigger a reload in case any libraries have been added or removed
+    if( KIFACE *face = aKiway->KiFACE( KIWAY::FACE_PCB ) )
+        face->PreloadLibraries( &aKiway->Prj() );
 
     std::string payload = "";
     aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload );
