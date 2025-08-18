@@ -319,6 +319,7 @@ void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
     }
 
     deleteAllMarkers( includeExclusions );
+    m_ercRun = false;
 
     // redraw the schematic
     redrawDrawPanel();
