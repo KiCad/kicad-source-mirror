@@ -1614,7 +1614,9 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             {
                 std::vector<EMBEDDED_FILES*> embeddedFilesStack;
                 embeddedFilesStack.push_back( m_schematic->GetEmbeddedFiles() );
-                embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+                if( EMBEDDED_FILES* symbolEmbeddedFiles = symbol->GetEmbeddedFiles() )
+                    embeddedFilesStack.push_back( symbolEmbeddedFiles );
 
                 simLibMgr.SetFilesStack( embeddedFilesStack );
 

@@ -937,7 +937,9 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
 
                     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
                     embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
-                    embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+                    if( EMBEDDED_FILES* symbolEmbeddedFiles = symbol->GetEmbeddedFiles() )
+                        embeddedFilesStack.push_back( symbolEmbeddedFiles );
 
                     mgr.SetFilesStack( embeddedFilesStack );
 

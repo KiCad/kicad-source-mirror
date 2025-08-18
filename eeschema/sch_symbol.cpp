@@ -2084,6 +2084,11 @@ BITMAPS SCH_SYMBOL::GetMenuImage() const
 
 EMBEDDED_FILES* SCH_SYMBOL::GetEmbeddedFiles()
 {
+    std::unique_ptr<LIB_SYMBOL>& libSymbolRef = GetLibSymbolRef();
+
+    if( !libSymbolRef )
+        return nullptr;
+
     return GetLibSymbolRef()->GetEmbeddedFiles();
 }
 

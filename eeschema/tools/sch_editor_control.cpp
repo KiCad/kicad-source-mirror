@@ -591,7 +591,11 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                         std::vector<EMBEDDED_FILES*> embeddedFilesStack;
                         embeddedFilesStack.push_back( m_frame->Schematic().GetEmbeddedFiles() );
-                        embeddedFilesStack.push_back( symbol->GetEmbeddedFiles() );
+
+                        EMBEDDED_FILES* symbolEmbeddedFile = symbol->GetEmbeddedFiles();
+
+                        if( symbolEmbeddedFile )
+                            embeddedFilesStack.push_back( symbolEmbeddedFile );
 
                         mgr.SetFilesStack( embeddedFilesStack );
 
