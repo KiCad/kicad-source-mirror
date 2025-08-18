@@ -870,10 +870,24 @@ EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
         return ANGLE_360;
 
     VECTOR2L  center = GetCenter();
-    EDA_ANGLE angle1 = EDA_ANGLE( m_mid - center ) - EDA_ANGLE( m_start - center );
-    EDA_ANGLE angle2 = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_mid - center );
+    EDA_ANGLE angle = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_start - center );
 
-    return angle1.Normalize180() + angle2.Normalize180();
+    // Using only m_start and m_end arc points to calculate the central arc is not enough
+    // there are 2 arcs having the same center and end points.
+    // Using the middle point is mandatory to know what arc is the right one.
+    // IsClockwise() uses m_start, m_middle and m_end arc points to know the arc orientation
+    if( !IsClockwise() )
+    {
+        if( angle < ANGLE_0 )
+            angle += ANGLE_360;
+    }
+    else
+    {
+        if( angle > ANGLE_0 )
+            angle -= ANGLE_360;
+    }
+
+    return angle;
 }
 
 
