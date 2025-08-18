@@ -88,7 +88,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
         m_filesStack.push_back( symbol->Schematic()->GetEmbeddedFiles() );
     }
 
-    m_filesStack.push_back( aSymbol.GetEmbeddedFiles() );
+    if( EMBEDDED_FILES* symbolEmbeddedFiles = aSymbol.GetEmbeddedFiles() )
+        m_filesStack.push_back( symbolEmbeddedFiles );
 
     m_libraryModelsMgr.SetFilesStack( m_filesStack );
     m_builtinModelsMgr.SetFilesStack( m_filesStack );

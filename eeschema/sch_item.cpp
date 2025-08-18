@@ -685,8 +685,12 @@ const std::vector<wxString>* SCH_ITEM::GetEmbeddedFonts()
 {
     if( SCHEMATIC* schematic = Schematic() )
         return schematic->GetEmbeddedFiles()->GetFontFiles();
-    else if( SYMBOL* symbol = GetParentSymbol() )
-        return symbol->GetEmbeddedFiles()->UpdateFontFiles();
+
+    if( SYMBOL* symbol = GetParentSymbol() )
+    {
+        if( EMBEDDED_FILES* symbolEmbeddedFiles = symbol->GetEmbeddedFiles() )
+            return symbolEmbeddedFiles->UpdateFontFiles();
+    }
 
     return nullptr;
 }

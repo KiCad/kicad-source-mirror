@@ -1689,7 +1689,8 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             embeddedFilesStack.push_back( symbol->Schematic()->GetEmbeddedFiles() );
         }
 
-        embeddedFilesStack.push_back( aSymbol.GetEmbeddedFiles() );
+        if( EMBEDDED_FILES* symbolEmbeddedFiles = aSymbol.GetEmbeddedFiles() )
+            embeddedFilesStack.push_back( symbolEmbeddedFiles );
 
         libMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 

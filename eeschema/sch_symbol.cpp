@@ -1977,6 +1977,11 @@ BITMAPS SCH_SYMBOL::GetMenuImage() const
 
 EMBEDDED_FILES* SCH_SYMBOL::GetEmbeddedFiles()
 {
+    std::unique_ptr<LIB_SYMBOL>& libSymbolRef = GetLibSymbolRef();
+
+    if( !libSymbolRef )
+        return nullptr;
+
     return GetLibSymbolRef()->GetEmbeddedFiles();
 }
 
@@ -1991,7 +1996,7 @@ void SCH_SYMBOL::MirrorHorizontally( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        // Move the fields to the new position because the symbol itself has moved.
+        // Move the fields to the new position because the sy:Qmbol itself has moved.
         VECTOR2I pos = field.GetTextPos();
         pos.x -= dx;
         field.SetTextPos( pos );
