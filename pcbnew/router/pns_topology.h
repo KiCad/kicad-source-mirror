@@ -36,6 +36,7 @@ class ITEM;
 class SOLID;
 class DIFF_PAIR;
 class ROUTER_IFACE;
+class LINKED_ITEM;
 
 class TOPOLOGY
 {
@@ -103,8 +104,21 @@ public:
 private:
     const int DP_PARALLELITY_THRESHOLD = 5;
 
-    bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
-                            const JOINT** aTerminalJoint = nullptr, bool aFollowLockedSegments = false );
+    struct PATH_RESULT
+    {
+        ITEM_SET    m_items;
+        const JOINT* m_end;
+        int         m_length;
+
+        PATH_RESULT() : m_end( nullptr ), m_length( 0 ) {}
+    };
+
+    PATH_RESULT followBranch( const JOINT* aJoint, LINKED_ITEM* aPrev,
+                              std::set<ITEM*>& aVisited, bool aFollowLockedSegments );
+
+    ITEM_SET followTrivialPath( LINE* aLine, const JOINT** aTerminalJointA,
+                                const JOINT** aTerminalJointB,
+                                bool aFollowLockedSegments = false );
 
     NODE *m_world;
 };
