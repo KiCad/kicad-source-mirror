@@ -339,8 +339,8 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // Choose a text quadrant that keeps the measurement text on-screen while avoiding
     // overlapping the ruler geometry.  Start with the preferred direction (away from the
     // origin) and fall back to other quadrants as needed to keep the label visible.
-    int      prefX = rulerVec.y < 0.0 ? 1 : -1;
-    int      prefY = rulerVec.x < 0.0 ? -1 : 1;
+    int      prefX = rulerVec.y < 0.0 ? -1 : 1;
+    int      prefY = rulerVec.x < 0.0 ? 1 : -1;
 
     double      scale = gal->GetWorldScale();
 
@@ -366,7 +366,6 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     auto fits = [&]( int sx, int sy )
     {
         double left, right, top, bottom;
-
         double xStart = cursorScreen.x + ( sx < 0 ? offsetX : -offsetX );
 
         if( sx < 0 )
