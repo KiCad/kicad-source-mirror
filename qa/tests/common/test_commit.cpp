@@ -41,7 +41,7 @@ public:
     void Revert() override {}
 
 private:
-    EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override { return aItem; }
+    EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override { return aItem; }
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override { return aItem->Clone(); }
 };
 

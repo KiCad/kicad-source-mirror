@@ -936,7 +936,10 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, evt->Parameter<ACTIONS::INCREMENT>() );
+            if( evt->HasParameter() )
+                m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, evt->Parameter<ACTIONS::INCREMENT>() );
+            else
+                m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, ACTIONS::INCREMENT { 1, 0 } );
         }
         else if( evt->IsAction( &SCH_ACTIONS::toCLabel ) )
         {
@@ -1461,8 +1464,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                         if( aPoint != line->GetStartPoint() && aPoint != line->GetEndPoint() )
                         {
                             // Split line in half
-                            if( !line->IsNew() )
-                                aCommit->Modify( line, m_frame->GetScreen() );
+                            aCommit->Modify( line, m_frame->GetScreen() );
 
                             VECTOR2I oldEnd = line->GetEndPoint();
                             line->SetEndPoint( aPoint );

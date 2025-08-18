@@ -2182,8 +2182,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     {
         for( EDA_ITEM* item : selection )
         {
-            if( !item->IsNew() && !item->IsMoving() )
-                commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
+            commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
 
             if( item->IsBOARD_ITEM() )
             {
@@ -2262,6 +2261,7 @@ const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
         PCB_GENERATOR_T,
 };
 
+
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -2318,8 +2318,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         if( !item->IsType( MirrorableItems ) )
             continue;
 
-        if( !item->IsNew() && !item->IsMoving() )
-            commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
+        commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
 
         // modify each object as necessary
         switch( item->Type() )
@@ -2426,16 +2425,12 @@ int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
     {
         if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
         {
-            if( !item->IsNew() && !item->IsMoving() )
-                commit->Modify( item );
-
+            commit->Modify( item );
             setJustify( static_cast<PCB_TEXT*>( item ) );
         }
         else if( item->Type() == PCB_TEXTBOX_T )
         {
-            if( !item->IsNew() && !item->IsMoving() )
-                commit->Modify( item );
-
+            commit->Modify( item );
             setJustify( static_cast<PCB_TEXTBOX*>( item ) );
         }
     }
@@ -2524,8 +2519,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        if( !boardItem->IsNew() && !boardItem->IsMoving() )
-            commit->Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
+        commit->Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
 
         boardItem->Flip( refPt, flipDirection );
         boardItem->Normalize();
@@ -2862,8 +2856,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-            if( !boardItem->IsNew() )
-                commit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
+            commit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
 
             if( !boardItem->GetParent() || !boardItem->GetParent()->IsSelected() )
                 boardItem->Move( translation );
@@ -3080,20 +3073,20 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 {
     const auto incrementableFilter =
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-    {
-        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
-        {
-            switch( aCollector[i]->Type() )
             {
-            case PCB_PAD_T:
-            case PCB_TEXT_T:
-                break;
-            default:
-                aCollector.Remove( i );
-                break;
-            }
-        }
-    };
+                for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+                {
+                    switch( aCollector[i]->Type() )
+                    {
+                    case PCB_PAD_T:
+                    case PCB_TEXT_T:
+                        break;
+                    default:
+                        aCollector.Remove( i );
+                        break;
+                    }
+                }
+            };
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection( incrementableFilter,
                                                                   true /* prompt user regarding locked items */ );
@@ -3101,7 +3094,10 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
+    ACTIONS::INCREMENT param = { 1, 0 };
+
+    if( aEvent.HasParameter() )
+        param = aEvent.Parameter<ACTIONS::INCREMENT>();
 
     STRING_INCREMENTER incrementer;
     incrementer.SetSkipIOSQXZ( true );
@@ -3129,14 +3125,11 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                 continue;
 
             // Increment on the pad numbers
-            std::optional<wxString> newNumber = incrementer.Increment( pad.GetNumber(), incParam.Delta,
-                                                                       incParam.Index );
+            std::optional<wxString> newNumber = incrementer.Increment( pad.GetNumber(), param.Delta, param.Index );
 
             if( newNumber )
             {
-                if( !pad.IsNew() )
-                    commit->Modify( &pad );
-
+                commit->Modify( &pad );
                 pad.SetNumber( *newNumber );
             }
 
@@ -3146,14 +3139,11 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
             PCB_TEXT& text = static_cast<PCB_TEXT&>( *item );
 
-            std::optional<wxString> newText = incrementer.Increment( text.GetText(), incParam.Delta,
-                                                                     incParam.Index );
+            std::optional<wxString> newText = incrementer.Increment( text.GetText(), param.Delta, param.Index );
 
             if( newText )
             {
-                if( !text.IsNew() )
-                    commit->Modify( &text );
-
+                commit->Modify( &text );
                 text.SetText( *newText );
             }
 

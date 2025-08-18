@@ -22,22 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_SCH_EDIT_TOOL_H
-#define KICAD_SCH_EDIT_TOOL_H
+#pragma once
 
 #include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
-
-
-class SCH_EDIT_FRAME;
-class SCH_SELECTION_TOOL;
 
 
 class SCH_EDIT_TOOL : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_EDIT_TOOL();
-    ~SCH_EDIT_TOOL() override { }
+    ~SCH_EDIT_TOOL() = default;
 
     static const std::vector<KICAD_T> RotatableItems;
 
@@ -56,11 +51,6 @@ public:
     int ChangeSymbols( const TOOL_EVENT& aEvent );
     int ChangeBodyStyle( const TOOL_EVENT& aEvent );
     int EditPageNumber( const TOOL_EVENT& aEvent );
-
-    /**
-     * Increment/decrement something about an item.
-     */
-    int Increment( const TOOL_EVENT& aEvent );
 
     /**
      * Change a text type to another one.
@@ -84,9 +74,6 @@ public:
     ///< Delete the selected items, or the item under the cursor.
     int DoDelete( const TOOL_EVENT& aEvent );
 
-    ///< Run the deletion tool.
-    int InteractiveDelete( const TOOL_EVENT& aEvent );
-
     /// Drag and drop
     int DdAppendFile( const TOOL_EVENT& aEvent );
 
@@ -102,9 +89,4 @@ private:
 
     ///< Set up handlers for various events.
     void setTransitions() override;
-
-private:
-    EDA_ITEM* m_pickerItem;
 };
-
-#endif //KICAD_SCH_EDIT_TOOL_H

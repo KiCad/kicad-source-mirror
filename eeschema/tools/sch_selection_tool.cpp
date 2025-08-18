@@ -745,10 +745,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( field >= 0 )
             {
                 const int          delta = evt->Parameter<int>();
-                ACTIONS::INCREMENT incParams{
-                    delta > 0 ? 1 : -1,
-                    field,
-                };
+                ACTIONS::INCREMENT incParams{ delta > 0 ? 1 : -1, field };
 
                 m_toolMgr->RunAction( ACTIONS::increment, incParams );
             }

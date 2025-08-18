@@ -36,7 +36,7 @@ class SYMBOL_EDITOR_EDIT_TOOL : public SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     SYMBOL_EDITOR_EDIT_TOOL();
-    ~SYMBOL_EDITOR_EDIT_TOOL() override { }
+    ~SYMBOL_EDITOR_EDIT_TOOL() = default;
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -59,15 +59,10 @@ public:
     int CopyAsText( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
 
-    int Increment( const TOOL_EVENT& aEvent );
-
     /**
      * Delete the selected items, or the item under the cursor.
      */
     int DoDelete( const TOOL_EVENT& aEvent );
-
-    ///< Run the deletion tool.
-    int InteractiveDelete( const TOOL_EVENT& aEvent );
 
 private:
     void editShapeProperties( SCH_SHAPE* aShape );
@@ -79,6 +74,4 @@ private:
 
     ///< Set up handlers for various events.
     void setTransitions() override;
-
-    EDA_ITEM* m_pickerItem;
 };

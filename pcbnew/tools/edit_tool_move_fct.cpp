@@ -47,8 +47,6 @@
 #include <dialogs/dialog_move_exact.h>
 #include <zone_filler.h>
 #include <drc/drc_engine.h>
-#include <drc/drc_item.h>
-#include <drc/drc_rule.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
 #include <view/view_controls.h>
 
@@ -92,10 +90,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
     // Save items, so changes can be undone
     for( EDA_ITEM* item : selection )
-    {
-        if( !item->IsNew() && !item->IsMoving() )
-            commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
-    }
+        commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
 
     for( size_t i = 0; i < sorted.size() - 1; i++ )
     {
@@ -474,23 +469,22 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
             eatFirstMouseUp = false;
 
-        if( evt->IsAction( &PCB_ACTIONS::move )
-                || evt->IsMotion()
-                || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &ACTIONS::refreshPreview )
-                || evt->IsAction( &PCB_ACTIONS::moveWithReference )
-                || evt->IsAction( &PCB_ACTIONS::moveIndividually ) )
+        if(   evt->IsAction( &PCB_ACTIONS::move )
+           || evt->IsMotion()
+           || evt->IsDrag( BUT_LEFT )
+           || evt->IsAction( &ACTIONS::refreshPreview )
+           || evt->IsAction( &PCB_ACTIONS::moveWithReference )
+           || evt->IsAction( &PCB_ACTIONS::moveIndividually ) )
         {
-            if( m_dragging && (    evt->IsMotion()
-                                || evt->IsDrag( BUT_LEFT )
-                                || evt->IsAction( &ACTIONS::refreshPreview ) ) )
+            if( m_dragging && (   evt->IsMotion()
+                               || evt->IsDrag( BUT_LEFT )
+                               || evt->IsAction( &ACTIONS::refreshPreview ) ) )
             {
                 bool redraw3D = false;
 
                 VECTOR2I mousePos( controls->GetMousePosition() );
 
-                m_cursor = grid.BestSnapAnchor( mousePos, layers,
-                                                grid.GetSelectionGrid( selection ), sel_items );
+                m_cursor = grid.BestSnapAnchor( mousePos, layers, grid.GetSelectionGrid( selection ), sel_items );
 
                 if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
                 {
@@ -498,8 +492,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     grid.SetUseGrid( false );
                 }
 
-                m_cursor = grid.BestSnapAnchor( mousePos, layers,
-                                                grid.GetSelectionGrid( selection ), sel_items );
+                m_cursor = grid.BestSnapAnchor( mousePos, layers, grid.GetSelectionGrid( selection ), sel_items );
 
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
@@ -657,8 +650,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     // Use the mouse position over cursor, as otherwise large grids will allow only
                     // snapping to items that are closest to grid points
-                    m_cursor = grid.BestDragOrigin( originalMousePos, sel_items,
-                                                    grid.GetSelectionGrid( selection ),
+                    m_cursor = grid.BestDragOrigin( originalMousePos, sel_items, grid.GetSelectionGrid( selection ),
                                                     &m_selectionTool->GetFilter() );
 
                     // Set the current cursor position to the first dragged item origin, so the
@@ -710,16 +702,22 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         {
             m_selectionTool->GetToolMenu().ShowContextMenu( selection );
         }
-        else if( evt->IsAction( &ACTIONS::undo ) || evt->IsAction( &ACTIONS::doDelete ) )
+        else if( evt->IsAction( &ACTIONS::undo ) )
         {
             restore_state = true; // Perform undo locally
             break;                // Finish
+        }
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        {
+            evt->SetPassEvent();
+            // Exit on a delete; there will no longer be anything to drag.
+            break;
         }
         else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &ACTIONS::cut ) )
         {
             wxBell();
         }
-        else if( evt->IsAction( &PCB_ACTIONS::rotateCw )
+        else if(   evt->IsAction( &PCB_ACTIONS::rotateCw )
                 || evt->IsAction( &PCB_ACTIONS::rotateCcw )
                 || evt->IsAction( &PCB_ACTIONS::flip )
                 || evt->IsAction( &PCB_ACTIONS::mirrorH )
@@ -786,8 +784,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit,
-                                             evt->Parameter<ACTIONS::INCREMENT>() );
+            if( evt->HasParameter() )
+                m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, evt->Parameter<ACTIONS::INCREMENT>() );
+            else
+                m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, ACTIONS::INCREMENT { 1, 0 } );
         }
         else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
                  || evt->IsAction( &PCB_ACTIONS::moveExact )

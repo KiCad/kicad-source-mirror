@@ -20,6 +20,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
 #include <kiplatform/ui.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_group_tool.h>
@@ -31,6 +32,13 @@
 #include <pcb_group.h>
 #include <collectors.h>
 #include <footprint.h>
+
+
+std::shared_ptr<COMMIT> PCB_GROUP_TOOL::createCommit()
+{
+    return std::make_shared<BOARD_COMMIT>( m_toolMgr, m_frame->IsType( FRAME_PCB_EDITOR ),
+                                                      m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) );
+}
 
 
 int PCB_GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent )

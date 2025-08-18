@@ -532,13 +532,13 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 {
     int totalCopied = 0;
 
-    BOARD_COMMIT commit( GetManager(), true );
+    BOARD_COMMIT commit( GetManager(), true, false );
     for( auto& targetArea : m_areas.m_compatMap )
     {
         if( !targetArea.second.m_doCopy )
         {
             wxLogTrace( traceMultichannelTool, wxT("skipping copy to RA '%s' (disabled in dialog)\n"),
-                 targetArea.first->m_ruleName );
+                        targetArea.first->m_ruleName );
             continue;
         }
 
@@ -549,17 +549,14 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
                                    m_areas.m_options, targetArea.second.m_affectedItems,
                                    targetArea.second.m_groupableItems ) )
         {
-            auto errMsg = wxString::Format(
-                    _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                    m_areas.m_refRA->m_area->GetZoneName(),
-                    targetArea.first->m_area->GetZoneName() );
+            auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
+                                            m_areas.m_refRA->m_area->GetZoneName(),
+                                            targetArea.first->m_area->GetZoneName() );
 
             commit.Revert();
 
             if( Pgm().IsGUI() )
-            {
                 frame()->ShowInfoBarError( errMsg, true );
-            }
 
             return -1;
         }
@@ -1148,7 +1145,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
     wxLogTrace( traceMultichannelTool, wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() );
 
-    BOARD_COMMIT commit( GetManager(), true );
+    BOARD_COMMIT commit( GetManager(), true, false );
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {

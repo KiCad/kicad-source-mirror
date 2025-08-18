@@ -458,6 +458,11 @@ public:
      */
     bool IsSimulator() const;
 
+    bool HasParameter() const
+    {
+        return m_param.has_value();
+    }
+
     /**
      * Return a parameter assigned to the event. Its meaning depends on the target tool.
      */

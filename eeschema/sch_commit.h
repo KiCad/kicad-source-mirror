@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCHEMATIC_COMMIT_H
-#define SCHEMATIC_COMMIT_H
+#pragma once
 
 #include <commit.h>
 
@@ -51,19 +50,16 @@ public:
 
     virtual ~SCH_COMMIT();
 
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ),
-                       int aCommitFlags = 0 ) override;
+    virtual void Push( const wxString& aMessage = wxT( "A commit" ), int aCommitFlags = 0 ) override;
 
     virtual void Revert() override;
     COMMIT& Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen = nullptr,
                    RECURSE_MODE aRecurse = RECURSE_MODE::NO_RECURSE ) override;
     COMMIT& Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
                    BASE_SCREEN *aScreen = nullptr ) override;
-    COMMIT& Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
-                   BASE_SCREEN *aScreen = nullptr ) override;
 
 private:
-    EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
+    EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override;
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
@@ -76,5 +72,3 @@ private:
     TOOL_MANAGER*  m_toolMgr;
     bool           m_isLibEditor;
 };
-
-#endif

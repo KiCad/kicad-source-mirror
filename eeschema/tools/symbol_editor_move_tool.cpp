@@ -153,8 +153,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
     VECTOR2I    prevPos;
     VECTOR2I    moveOffset;
 
-    if( !selection.Front()->IsNew() )
-        aCommit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
+    aCommit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
 
     m_cursor = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 

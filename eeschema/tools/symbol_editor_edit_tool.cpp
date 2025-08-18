@@ -52,8 +52,7 @@
 #include <io/kicad/kicad_io_utils.h>
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
-        SCH_TOOL_BASE( "eeschema.SymbolEditTool" ),
-        m_pickerItem( nullptr )
+        SCH_TOOL_BASE( "eeschema.SymbolEditTool" )
 {
 }
 
@@ -479,86 +478,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     }
 
     m_frame->RebuildView();
-    return 0;
-}
-
-
-#define HITTEST_THRESHOLD_PIXELS 5
-
-
-int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
-{
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
-
-    m_toolMgr->RunAction( ACTIONS::selectionClear );
-    m_pickerItem = nullptr;
-
-    // Deactivate other tools; particularly important if another PICKER is currently running
-    Activate();
-
-    picker->SetCursor( KICURSOR::REMOVE );
-    picker->SetSnapping( false );
-    picker->ClearHandlers();
-
-    picker->SetClickHandler(
-            [this]( const VECTOR2D& aPosition ) -> bool
-            {
-                if( m_pickerItem )
-                {
-                    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-                    selectionTool->UnbrightenItem( m_pickerItem );
-                    selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
-                    m_toolMgr->RunAction( ACTIONS::doDelete );
-                    m_pickerItem = nullptr;
-                }
-
-                return true;
-            } );
-
-    picker->SetMotionHandler(
-            [this]( const VECTOR2D& aPos )
-            {
-                SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-                SCH_COLLECTOR       collector;
-
-                selectionTool->CollectHits( collector, aPos, nonFields );
-
-                // Remove unselectable items
-                for( int i = collector.GetCount() - 1; i >= 0; --i )
-                {
-                    if( !selectionTool->Selectable( collector[ i ] ) )
-                        collector.Remove( i );
-                }
-
-                if( collector.GetCount() > 1 )
-                    selectionTool->GuessSelectionCandidates( collector, aPos );
-
-                EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-                if( m_pickerItem != item )
-                {
-                    if( m_pickerItem )
-                        selectionTool->UnbrightenItem( m_pickerItem );
-
-                    m_pickerItem = item;
-
-                    if( m_pickerItem )
-                        selectionTool->BrightenItem( m_pickerItem );
-                }
-            } );
-
-    picker->SetFinalizeHandler(
-            [this]( const int& aFinalState )
-            {
-                if( m_pickerItem )
-                    m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-                // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->PostAction( ACTIONS::selectionActivate );
-            } );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
-
     return 0;
 }
 
@@ -1118,117 +1037,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         commit.Push( _( "Duplicate" ) );
     else
         commit.Revert();
-
-    return 0;
-}
-
-
-int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
-{
-    const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_PIN_T, SCH_TEXT_T } );
-
-    if( selection.Empty() )
-        return 0;
-
-    KICAD_T type = selection.Front()->Type();
-    bool    allSameType = true;
-    for( EDA_ITEM* item : selection )
-    {
-        if( item->Type() != type )
-        {
-            allSameType = false;
-            break;
-        }
-    }
-
-    // Incrementing multiple types at once seems confusing
-    // though it would work.
-    if( !allSameType )
-        return 0;
-
-    const VECTOR2I mousePosition = getViewControls()->GetMousePosition();
-
-    STRING_INCREMENTER incrementer;
-    incrementer.SetSkipIOSQXZ( true );
-
-    // If we're coming via another action like 'Move', use that commit
-    SCH_COMMIT  localCommit( m_toolMgr );
-    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
-
-    if( !commit )
-        commit = &localCommit;
-
-    const auto modifyItem = [&]( EDA_ITEM& aItem )
-    {
-        if( aItem.IsNew() )
-            m_toolMgr->PostAction( ACTIONS::refreshPreview );
-        else
-            commit->Modify( &aItem, m_frame->GetScreen() );
-    };
-
-    for( EDA_ITEM* item : selection )
-    {
-        switch( item->Type() )
-        {
-        case SCH_PIN_T:
-        {
-            SCH_PIN&          pin = static_cast<SCH_PIN&>( *item );
-            PIN_LAYOUT_CACHE& layout = pin.GetLayoutCache();
-
-            bool      found = false;
-            OPT_BOX2I bbox = layout.GetPinNumberBBox();
-
-            if( bbox && bbox->Contains( mousePosition ) )
-            {
-                std::optional<wxString> nextNumber =
-                        incrementer.Increment( pin.GetNumber(), incParam.Delta, incParam.Index );
-                if( nextNumber )
-                {
-                    modifyItem( pin );
-                    pin.SetNumber( *nextNumber );
-                }
-                found = true;
-            }
-
-            if( !found )
-            {
-                bbox = layout.GetPinNameBBox();
-
-                if( bbox && bbox->Contains( mousePosition ) )
-                {
-                    std::optional<wxString> nextName =
-                            incrementer.Increment( pin.GetName(), incParam.Delta, incParam.Index );
-                    if( nextName )
-                    {
-                        modifyItem( pin );
-                        pin.SetName( *nextName );
-                    }
-                    found = true;
-                }
-            }
-            break;
-        }
-        case SCH_TEXT_T:
-        {
-            SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
-
-            std::optional<wxString> newLabel =
-                    incrementer.Increment( label.GetText(), incParam.Delta, incParam.Index );
-            if( newLabel )
-            {
-                modifyItem( label );
-                label.SetText( *newLabel );
-            }
-            break;
-        }
-        default:
-            // No increment for other items
-            break;
-        }
-    }
-
-    commit->Push( _( "Increment" ) );
 
     return 0;
 }

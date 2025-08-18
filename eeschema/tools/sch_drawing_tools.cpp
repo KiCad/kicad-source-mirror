@@ -51,9 +51,6 @@
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
-#include <sch_rule_area.h>
-#include <sch_text.h>
-#include <sch_textbox.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
 #include <sch_sheet.h>
@@ -73,7 +70,7 @@
 #include <import_gfx/dialog_import_gfx_sch.h>
 #include <sync_sheet_pin/sheet_synchronization_agent.h>
 #include <string_utils.h>
-#include <wildcards_and_files_ext.h>
+//#include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
@@ -2101,8 +2098,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                             {
                                 m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                                 m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                                m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
-                                                     + wxPoint( 20, 20 ) );
+                                m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                                 m_statusPopup->PopupFor( 2000 );
                                 item = nullptr;
 
@@ -2237,10 +2233,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, &commit, evt->Parameter<ACTIONS::INCREMENT>() );
+            if( evt->HasParameter() )
+                m_toolMgr->RunSynchronousAction( ACTIONS::increment, &commit, evt->Parameter<ACTIONS::INCREMENT>() );
+            else
+                m_toolMgr->RunSynchronousAction( ACTIONS::increment, &commit, ACTIONS::INCREMENT { 1, 0 } );
         }
-        else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( item )
             {
@@ -2442,10 +2440,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
-        else if( item && ( evt->IsClick( BUT_LEFT )
-                        || evt->IsDblClick( BUT_LEFT )
-                        || isSyntheticClick
-                        || evt->IsAction( &ACTIONS::finishInteractive ) ) )
+        else if( item && (   evt->IsClick( BUT_LEFT )
+                          || evt->IsDblClick( BUT_LEFT )
+                          || isSyntheticClick
+                          || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             if( evt->IsDblClick( BUT_LEFT )
                     || evt->IsAction( &ACTIONS::finishInteractive )
@@ -2616,9 +2614,8 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_CONNECTABLE );
         controls->ForceCursorPosition( true, cursorPos );
 
-        polyGeomMgr.SetLeaderMode( m_frame->eeconfig()->m_Drawing.line_mode == LINE_MODE_FREE
-                                           ? LEADER_MODE::DIRECT
-                                           : LEADER_MODE::DEG45 );
+        polyGeomMgr.SetLeaderMode( m_frame->eeconfig()->m_Drawing.line_mode == LINE_MODE_FREE ? LEADER_MODE::DIRECT
+                                                                                              : LEADER_MODE::DEG45 );
 
         if( evt->IsCancelInteractive() )
         {
@@ -2663,8 +2660,9 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         // events that lock in nodes
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
-                 || evt->IsAction( &SCH_ACTIONS::closeOutline ) )
+        else if(   evt->IsClick( BUT_LEFT )
+                || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &SCH_ACTIONS::closeOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
@@ -2692,10 +2690,9 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( started
-                 && ( evt->IsAction( &SCH_ACTIONS::deleteLastPoint )
-                      || evt->IsAction( &ACTIONS::doDelete )
-                      || evt->IsAction( &ACTIONS::undo ) ) )
+        else if( started && (   evt->IsAction( &SCH_ACTIONS::deleteLastPoint )
+                             || evt->IsAction( &ACTIONS::doDelete )
+                             || evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( std::optional<VECTOR2I> last = polyGeomMgr.DeleteLastCorner() )
             {

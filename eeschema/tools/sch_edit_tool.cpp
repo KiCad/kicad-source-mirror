@@ -1632,6 +1632,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
 static std::vector<KICAD_T> deletableItems =
 {
+    LIB_SYMBOL_T,
     SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_LINE_T,
@@ -1757,78 +1758,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
     if( updateHierarchy )
         m_frame->UpdateHierarchyNavigator();
-
-    return 0;
-}
-
-
-#define HITTEST_THRESHOLD_PIXELS 5
-
-
-int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
-{
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
-
-    m_toolMgr->RunAction( ACTIONS::selectionClear );
-    m_pickerItem = nullptr;
-
-    // Deactivate other tools; particularly important if another PICKER is currently running
-    Activate();
-
-    picker->SetCursor( KICURSOR::REMOVE );
-    picker->SetSnapping( false );
-    picker->ClearHandlers();
-
-    picker->SetClickHandler(
-            [this]( const VECTOR2D& aPosition ) -> bool
-            {
-                if( m_pickerItem )
-                {
-                    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-                    selectionTool->UnbrightenItem( m_pickerItem );
-                    selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
-                    m_toolMgr->RunAction( ACTIONS::doDelete );
-                    m_pickerItem = nullptr;
-                }
-
-                return true;
-            } );
-
-    picker->SetMotionHandler(
-            [this]( const VECTOR2D& aPos )
-            {
-                SCH_COLLECTOR collector;
-                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-                collector.Collect( m_frame->GetScreen(), deletableItems, aPos );
-
-                SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-                selectionTool->GuessSelectionCandidates( collector, aPos );
-
-                EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-                if( m_pickerItem != item )
-                {
-                    if( m_pickerItem )
-                        selectionTool->UnbrightenItem( m_pickerItem );
-
-                    m_pickerItem = item;
-
-                    if( m_pickerItem )
-                        selectionTool->BrightenItem( m_pickerItem );
-                }
-            } );
-
-    picker->SetFinalizeHandler(
-            [this]( const int& aFinalState )
-            {
-                if( m_pickerItem )
-                    m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-                // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->PostAction( ACTIONS::selectionActivate );
-            } );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -2814,20 +2743,21 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             m_frame->RemoveFromScreen( item, m_frame->GetScreen() );
 
-            if( item->IsNew() )
+            if( commit->GetStatus( item, m_frame->GetScreen() ) == CHT_ADD )
+            {
                 commit->Unstage( item, m_frame->GetScreen() );
+                delete item;
+            }
             else
+            {
                 commit->Removed( item, m_frame->GetScreen() );
+            }
 
             m_frame->AddToScreen( newtext, m_frame->GetScreen() );
             commit->Added( newtext, m_frame->GetScreen() );
 
             if( selected )
                 m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, newtext );
-
-            // Otherwise, pointer is owned by the undo stack
-            if( item->IsNew() )
-                delete item;
         }
     }
 
@@ -3129,91 +3059,6 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( wxS( "Change Sheet Page Number" ) );
-
-    if( selection.IsHover() )
-        m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-    return 0;
-}
-
-
-int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
-{
-    const ACTIONS::INCREMENT          incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
-    static const std::vector<KICAD_T> incrementable = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T,
-                                                        SCH_HIER_LABEL_T, SCH_TEXT_T };
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( incrementable );
-
-    if( selection.Empty() )
-        return 0;
-
-    KICAD_T type = selection.Front()->Type();
-    bool    allSameType = true;
-
-    for( EDA_ITEM* item : selection )
-    {
-        if( item->Type() != type )
-        {
-            allSameType = false;
-            break;
-        }
-    }
-
-    // Incrementing multiple types at once seems confusing
-    // though it would work.
-    if( !allSameType )
-        return 0;
-
-    STRING_INCREMENTER incrementer;
-    // In schematics, it's probably less common to be operating
-    // on pin numbers which are usually IOSQXZ-skippy.
-    incrementer.SetSkipIOSQXZ( false );
-
-    // If we're coming via another action like 'Move', use that commit
-    SCH_COMMIT  localCommit( m_toolMgr );
-    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
-
-    if( !commit )
-        commit = &localCommit;
-
-    const auto modifyItem =
-            [&]( EDA_ITEM& aItem )
-            {
-                if( aItem.IsNew() )
-                    m_toolMgr->PostAction( ACTIONS::refreshPreview );
-                else
-                    commit->Modify( &aItem, m_frame->GetScreen() );
-            };
-
-    for( EDA_ITEM* item : selection )
-    {
-        switch( item->Type() )
-        {
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_TEXT_T:
-        {
-            SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
-
-            std::optional<wxString> newLabel = incrementer.Increment( label.GetText(),
-                                                                      incParam.Delta,
-                                                                      incParam.Index );
-
-            if( newLabel )
-            {
-                modifyItem( label );
-                label.SetText( *newLabel );
-            }
-            break;
-        }
-        default:
-            // No increment for other items (yet)
-            break;
-        }
-    }
-
-    commit->Push( _( "Increment" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( ACTIONS::selectionClear );

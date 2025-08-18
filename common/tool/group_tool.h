@@ -79,7 +79,6 @@ protected:
     DIALOG_GROUP_PROPERTIES* m_propertiesDialog = nullptr;
     SELECTION_TOOL*          m_selectionTool = nullptr;
     std::shared_ptr<COMMIT>  m_commit;
-    bool                     m_isFootprintEditor = false;
 };
 
 #endif

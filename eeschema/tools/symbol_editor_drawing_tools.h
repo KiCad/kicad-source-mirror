@@ -65,9 +65,6 @@ public:
     void SetDrawSpecificUnit( bool aSpecific ) { m_drawSpecificUnit = aSpecific; }
     bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
 
-    KIID GetLastPin() { return g_lastPin; }
-    void SetLastPin( KIID aPin ) { g_lastPin = aPin; }
-
 private:
     int doDrawShape( const TOOL_EVENT& aEvent, std::optional<SHAPE_T> aDrawingShape );
 

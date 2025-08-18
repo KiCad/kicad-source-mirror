@@ -38,52 +38,63 @@ COMMIT::COMMIT()
 
 COMMIT::~COMMIT()
 {
-    for( COMMIT_LINE& ent : m_changes )
+    for( COMMIT_LINE& ent : m_entries )
         delete ent.m_copy;
 }
 
 
-COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen,
-                       RECURSE_MODE aRecurse )
+COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen, RECURSE_MODE aRecurse )
 {
+    int       flags = aChangeType & CHT_FLAGS;
+    int       changeType = aChangeType & CHT_TYPE;
+    EDA_ITEM* undoItem = undoLevelItem( aItem );
+
+    if( undoItem != aItem )
+        changeType = CHT_MODIFY;
+
     // CHT_MODIFY and CHT_DONE are not compatible
-    wxASSERT( ( aChangeType & ( CHT_MODIFY | CHT_DONE ) ) != ( CHT_MODIFY | CHT_DONE ) );
+    if( changeType == CHT_MODIFY )
+        wxASSERT( ( flags & CHT_DONE ) == 0 );
 
-    int flag = aChangeType & CHT_FLAGS;
-
-    switch( aChangeType & CHT_TYPE )
+    switch( changeType )
     {
     case CHT_ADD:
-        makeEntry( aItem, CHT_ADD | flag, nullptr, aScreen );
+        if( m_addedItems.find( { aItem, aScreen } ) != m_addedItems.end() )
+            break;
+
+        makeEntry( aItem, CHT_ADD | flags, nullptr, aScreen );
         break;
 
     case CHT_REMOVE:
-        if( m_deletedItems.insert( aItem ).second )
-        {
-            makeEntry( aItem, CHT_REMOVE | flag, makeImage( aItem ), aScreen );
+        if( m_deletedItems.find( { aItem, aScreen } ) != m_deletedItems.end() )
+            break;
 
-            if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
-                Modify( parentGroup->AsEdaItem(), aScreen, RECURSE_MODE::NO_RECURSE );
-        }
+        makeEntry( aItem, CHT_REMOVE | flags, makeImage( aItem ), aScreen );
+
+        if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
+            Modify( parentGroup->AsEdaItem(), aScreen, RECURSE_MODE::NO_RECURSE );
 
         break;
 
     case CHT_MODIFY:
-        if( EDA_ITEM* parent = parentObject( aItem ) )
-            createModified( parent, makeImage( parent ), flag, aScreen );
+        if( m_addedItems.find( { aItem, aScreen } ) != m_addedItems.end() )
+            break;
 
+        if( m_changedItems.find( { undoItem, aScreen } ) != m_changedItems.end() )
+            break;
+
+        makeEntry( undoItem, CHT_MODIFY | flags, makeImage( undoItem ), aScreen );
         break;
 
     default:
-        wxFAIL;
+        UNIMPLEMENTED_FOR( undoItem->GetClass() );
     }
 
     return *this;
 }
 
 
-COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
-                       BASE_SCREEN *aScreen )
+COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen )
 {
     for( EDA_ITEM* item : container )
         Stage( item, aChangeType, aScreen);
@@ -121,7 +132,7 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag, BASE
 
 void COMMIT::Unstage( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
 {
-    std::erase_if( m_changes,
+    std::erase_if( m_entries,
                    [&]( COMMIT_LINE& line )
                    {
                        if( line.m_item == aItem && line.m_screen == aScreen )
@@ -139,28 +150,22 @@ void COMMIT::Unstage( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
 }
 
 
-int COMMIT::GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
+COMMIT& COMMIT::Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy, BASE_SCREEN *aScreen )
 {
-    COMMIT_LINE* entry = findEntry( parentObject( aItem ), aScreen );
+    if( undoLevelItem( aItem ) != aItem )
+        wxFAIL_MSG( "We've no way to get a copy of the undo level item at this point" );
+    else
+        makeEntry( aItem, CHT_MODIFY, aCopy, aScreen );
 
-    return entry ? entry->m_type : 0;
+    return *this;
 }
 
 
-COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags,
-                                BASE_SCREEN* aScreen )
+int COMMIT::GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 {
-    EDA_ITEM* parent = parentObject( aItem );
+    COMMIT_LINE* entry = findEntry( undoLevelItem( aItem ), aScreen );
 
-    if( m_changedItems.find( parent ) != m_changedItems.end() )
-    {
-        delete aCopy;
-        return *this; // item has been already modified once
-    }
-
-    makeEntry( parent, CHT_MODIFY | aExtraFlags, aCopy, aScreen );
-
-    return *this;
+    return entry ? entry->m_type : 0;
 }
 
 
@@ -176,17 +181,24 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BAS
     // N.B. Do not throw an assertion for multiple changed items.  An item can be changed
     // multiple times in a single commit such as when importing graphics and grouping them.
 
-    m_changedItems.insert( aItem );
-    m_changes.push_back( ent );
+    switch( aType )
+    {
+    case CHT_ADD:    m_addedItems.insert( { aItem, aScreen } );   break;
+    case CHT_REMOVE: m_deletedItems.insert( { aItem, aScreen } ); break;
+    case CHT_MODIFY: m_changedItems.insert( { aItem, aScreen } ); break;
+    default:         wxFAIL;                                      break;
+    }
+
+    m_entries.push_back( ent );
 }
 
 
 COMMIT::COMMIT_LINE* COMMIT::findEntry( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 {
-    for( COMMIT_LINE& change : m_changes )
+    for( COMMIT_LINE& entry : m_entries )
     {
-        if( change.m_item == aItem && change.m_screen == aScreen )
-            return &change;
+        if( entry.m_item == aItem && entry.m_screen == aScreen )
+            return &entry;
     }
 
     return nullptr;
@@ -197,10 +209,10 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
 {
     switch( aType )
     {
-    case UNDO_REDO::NEWITEM:        return CHT_ADD;
-    case UNDO_REDO::DELETED:        return CHT_REMOVE;
-    case UNDO_REDO::CHANGED:        return CHT_MODIFY;
-    default:   wxASSERT( false );   return CHT_MODIFY;
+    case UNDO_REDO::NEWITEM: return CHT_ADD;
+    case UNDO_REDO::DELETED: return CHT_REMOVE;
+    case UNDO_REDO::CHANGED: return CHT_MODIFY;
+    default:     wxFAIL;     return CHT_MODIFY;
     }
 }
 
@@ -209,10 +221,10 @@ UNDO_REDO COMMIT::convert( CHANGE_TYPE aType ) const
 {
     switch( aType )
     {
-    case CHT_ADD:                   return UNDO_REDO::NEWITEM;
-    case CHT_REMOVE:                return UNDO_REDO::DELETED;
-    case CHT_MODIFY:                return UNDO_REDO::CHANGED;
-    default:   wxASSERT( false );   return UNDO_REDO::CHANGED;
+    case CHT_ADD:    return UNDO_REDO::NEWITEM;
+    case CHT_REMOVE: return UNDO_REDO::DELETED;
+    case CHT_MODIFY: return UNDO_REDO::CHANGED;
+    default: wxFAIL; return UNDO_REDO::CHANGED;
     }
 }
 

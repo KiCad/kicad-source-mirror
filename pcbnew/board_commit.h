@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BOARD_COMMIT_H
-#define BOARD_COMMIT_H
+#pragma once
 
 #include <commit.h>
 
@@ -51,7 +50,7 @@ public:
     BOARD_COMMIT( EDA_DRAW_FRAME* aFrame );
     BOARD_COMMIT( TOOL_BASE* aTool );
     BOARD_COMMIT( TOOL_MANAGER* aMgr );
-    BOARD_COMMIT( TOOL_MANAGER* aMgr, bool aIsBoardEditor );
+    BOARD_COMMIT( TOOL_MANAGER* aMgr, bool aIsBoardEditor, bool aIsFootprintEditor );
 
     virtual ~BOARD_COMMIT() {}
 
@@ -72,7 +71,7 @@ public:
     static EDA_ITEM* MakeImage( EDA_ITEM* aItem );
 
 private:
-    EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
+    EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override;
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
@@ -84,5 +83,3 @@ private:
     bool           m_isBoardEditor;
     bool           m_isFootprintEditor;
 };
-
-#endif

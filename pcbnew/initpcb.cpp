@@ -134,6 +134,9 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
     ClearUndoRedoList();
     GetScreen()->SetContentModified( false );
 
+    // Clear the view so we don't attempt redraws
+    GetCanvas()->GetView()->Clear();
+
     if( !m_isClosing )
     {
         SetBoard( new BOARD );
@@ -169,9 +172,6 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
     {
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-
-        // Clear the view so we don't attempt redraws
-        GetCanvas()->GetView()->Clear();
     }
 
 
