@@ -19,7 +19,7 @@
 
 #include <printing.h>
 
-#ifndef _MSC_VER
+#ifndef __MINGW32__
 #include <windows.h>
 #include <algorithm>
 #include <cmath>
