@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-13 00:02+0000\n"
+"PO-Revision-Date: 2025-08-18 08:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -44249,11 +44249,11 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2239
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "(「基準」のプロパティはNPTHパッドに対しては意味がありません)"
+msgstr "(' 基準' プロパティはNPTHパッドに対しては意味がありません)"
 
 #: pcbnew/pad.cpp:2243
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "(「テストポイント」のプロパティはNPTHパッドに対しては意味がありません)"
+msgstr "(' テストポイント' プロパティはNPTHパッドに対しては意味がありません)"
 
 #: pcbnew/pad.cpp:2246
 msgid "('heatsink' property makes no sense of NPTH pads)"
@@ -44261,15 +44261,15 @@ msgstr "(「ヒートシンク」のプロパティはNPTHパッドに対して�
 
 #: pcbnew/pad.cpp:2249
 msgid "('castellated' property is for PTH pads)"
-msgstr "(端面スルーホールのプロパティは PTH パッド用です)"
+msgstr "(' 端面スルーホール' プロパティは PTH パッド用です)"
 
 #: pcbnew/pad.cpp:2252
 msgid "('BGA' property is for SMD pads)"
-msgstr "(BGAのプロパティは SMDパッド用です)"
+msgstr "(' BGA' プロパティは SMDパッド用です)"
 
 #: pcbnew/pad.cpp:2255
 msgid "('mechanical' property is for PTH pads)"
-msgstr "（「機械的」特性はPTHパッド用です）"
+msgstr "（' 機械的' プロパティはPTHパッド用です）"
 
 #: pcbnew/pad.cpp:2271
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
