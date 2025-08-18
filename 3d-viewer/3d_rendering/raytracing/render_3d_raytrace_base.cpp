@@ -702,34 +702,28 @@ void RENDER_3D_RAYTRACE_BASE::postProcessShading( uint8_t* /* ptrPBO */, REPORTE
         m_postShaderSsao.SetShadowsEnabled( m_boardAdapter.m_Cfg->m_Render.raytrace_shadows );
 
         std::atomic<size_t> nextBlock( 0 );
-        std::atomic<size_t> threadsFinished( 0 );
+        thread_pool& tp = GetKiCadThreadPool();
+        BS::multi_future<void> futures;
 
-        size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
-
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        auto process = [&]()
         {
-            std::thread t = std::thread( [&]()
+            for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
+                 y = nextBlock.fetch_add( 1 ) )
             {
-                for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
-                     y = nextBlock.fetch_add( 1 ) )
+                SFVEC3F* ptr = &m_shaderBuffer[ y * m_realBufferSize.x ];
+
+                for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
                 {
-                    SFVEC3F* ptr = &m_shaderBuffer[ y * m_realBufferSize.x ];
-
-                    for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
-                    {
-                        *ptr = m_postShaderSsao.Shade( SFVEC2I( x, y ) );
-                        ptr++;
-                    }
+                    *ptr = m_postShaderSsao.Shade( SFVEC2I( x, y ) );
+                    ptr++;
                 }
+            }
+        };
 
-                threadsFinished++;
-            } );
+        for( size_t i = 0; i < tp.get_thread_count(); ++i )
+            futures.push_back( tp.submit( process ) );
 
-            t.detach();
-        }
-
-        while( threadsFinished < parallelThreadCount )
-            std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+        futures.wait();
 
         m_postShaderSsao.SetShadedBuffer( m_shaderBuffer );
 
@@ -751,47 +745,41 @@ void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( uint8_t* ptrPBO,
     {
         // Now blurs the shader result and compute the final color
         std::atomic<size_t> nextBlock( 0 );
-        std::atomic<size_t> threadsFinished( 0 );
+        thread_pool& tp = GetKiCadThreadPool();
+        BS::multi_future<void> futures;
 
-        size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
-
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        auto process = [&]()
         {
-            std::thread t = std::thread( [&]()
+            for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
+                 y = nextBlock.fetch_add( 1 ) )
             {
-                for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
-                     y = nextBlock.fetch_add( 1 ) )
-                {
-                    uint8_t* ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
+                uint8_t* ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
 
-                    for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
-                    {
-                        const SFVEC3F bluredShadeColor = m_postShaderSsao.Blur( SFVEC2I( x, y ) );
+                for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
+                {
+                    const SFVEC3F bluredShadeColor = m_postShaderSsao.Blur( SFVEC2I( x, y ) );
 
 #ifdef USE_SRGB_SPACE
-                        const SFVEC4F originColor = convertLinearToSRGBA(
-                                m_postShaderSsao.GetColorAtNotProtected( SFVEC2I( x, y ) ) );
+                    const SFVEC4F originColor = convertLinearToSRGBA(
+                            m_postShaderSsao.GetColorAtNotProtected( SFVEC2I( x, y ) ) );
 #else
-                        const SFVEC4F originColor =
-                                m_postShaderSsao.GetColorAtNotProtected( SFVEC2I( x, y ) );
+                    const SFVEC4F originColor =
+                            m_postShaderSsao.GetColorAtNotProtected( SFVEC2I( x, y ) );
 #endif
-                        const SFVEC4F shadedColor = m_postShaderSsao.ApplyShadeColor(
-                                SFVEC2I( x, y ), originColor, bluredShadeColor );
+                    const SFVEC4F shadedColor = m_postShaderSsao.ApplyShadeColor(
+                            SFVEC2I( x, y ), originColor, bluredShadeColor );
 
-                        renderFinalColor( ptr, shadedColor, false );
+                    renderFinalColor( ptr, shadedColor, false );
 
-                        ptr += 4;
-                    }
+                    ptr += 4;
                 }
+            }
+        };
 
-                threadsFinished++;
-            } );
+        for( size_t i = 0; i < tp.get_thread_count(); ++i )
+            futures.push_back( tp.submit( process ) );
 
-            t.detach();
-        }
-
-        while( threadsFinished < parallelThreadCount )
-            std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+        futures.wait();
 
         // Debug code
         //m_postShaderSsao.DebugBuffersOutputAsImages();

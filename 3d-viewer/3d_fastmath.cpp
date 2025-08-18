@@ -29,40 +29,31 @@
 
 
 #include "3d_fastmath.h"
+#include <random>
 
 
 // Fast Float Random Numbers
-// a small and fast implementation for random float numbers in the range [-1,1]
-// References : Posted by dominik.ries[AT]gmail[DOT]com
-// http://www.musicdsp.org/showone.php?id=273
+// Thread safe random generator returning numbers in the range [-1,1].
+// Uses a Mersenne Twister engine per thread to improve quality.
 
+static thread_local std::mt19937 s_rng{ std::random_device{}() };
 
-// set the initial seed to whatever you like
-static int s_randSeed = 1;
-
-// fast rand float, using full 32bit precision
-// returns in the range [-1, 1] (not confirmed)
 float Fast_RandFloat()
 {
-    s_randSeed *= 16807;
-
-    return (float)s_randSeed * 4.6566129e-010f;
+    static thread_local std::uniform_real_distribution<float> dist( -1.0f, 1.0f );
+    return dist( s_rng );
 }
 
 
-// Fast rand, as described here:
-// http://wiki.osdev.org/Random_Number_Generator
-
-static unsigned long int s_nextRandSeed = 1;
-
-int Fast_rand( void ) // RAND_MAX assumed to be 32767
+// Fast rand returning values compatible with the classic rand() interface
+// RAND_MAX is assumed to be 32767
+int Fast_rand( void )
 {
-    s_nextRandSeed = s_nextRandSeed * 1103515245 + 12345;
-
-    return (unsigned int)(s_nextRandSeed >>  16) & 0x7FFF;
+    static thread_local std::uniform_int_distribution<int> dist( 0, 0x7FFF );
+    return dist( s_rng );
 }
 
 void Fast_srand( unsigned int seed )
 {
-    s_nextRandSeed = seed;
+    s_rng.seed( seed );
 }

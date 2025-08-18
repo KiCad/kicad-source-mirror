@@ -54,14 +54,15 @@ inline SFVEC3F SphericalToCartesian( float aInclination, float aAzimuth )
  */
 inline SFVEC3F UniformRandomHemisphereDirection()
 {
-    // It was experienced that this function is slow! do not use it :/
-    // SFVEC3F b( (rand()/(float)RAND_MAX) - 0.5f,
-    //            (rand()/(float)RAND_MAX) - 0.5f,
-    //            (rand()/(float)RAND_MAX) - 0.5f );
+    // Generate a random direction uniformly distributed over the hemisphere
+    const float u1 = ( Fast_RandFloat() + 1.0f ) * 0.5f;
+    const float u2 = ( Fast_RandFloat() + 1.0f ) * 0.5f;
 
-    SFVEC3F b( Fast_RandFloat() * 0.5f, Fast_RandFloat() * 0.5f, Fast_RandFloat() * 0.5f );
+    const float z = u1;
+    const float r = sqrtf( glm::max( 0.0f, 1.0f - z * z ) );
+    const float phi = 2.0f * glm::pi<float>() * u2;
 
-    return b;
+    return SFVEC3F( r * cosf( phi ), z, r * sinf( phi ) );
 }
 
 

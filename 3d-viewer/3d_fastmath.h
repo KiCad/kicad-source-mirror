@@ -48,8 +48,7 @@
 
 
 // Fast Float Random Numbers
-// a small and fast implementation for random float numbers in the range [-1,1]
-// This is not thread safe
+// Thread safe implementation returning values in the range [-1,1]
 float Fast_RandFloat();
 
 int Fast_rand( void );
