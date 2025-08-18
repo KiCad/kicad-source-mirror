@@ -1166,6 +1166,7 @@ void SIMULATOR_FRAME_UI::OnFilterText( wxCommandEvent& aEvent )
 
 void SIMULATOR_FRAME_UI::OnFilterMouseMoved( wxMouseEvent& aEvent )
 {
+#if defined( __WXOSX__ ) || wxCHECK_VERSION( 3, 3, 0 ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_filter->GetScreenRect();
     int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
@@ -1176,6 +1177,7 @@ void SIMULATOR_FRAME_UI::OnFilterMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_ARROW );
     else
         SetCursor( wxCURSOR_IBEAM );
+#endif
 }
 
 

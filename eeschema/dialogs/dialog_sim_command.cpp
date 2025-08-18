@@ -1003,6 +1003,7 @@ void DIALOG_SIM_COMMAND::OnFilterText( wxCommandEvent& aEvent )
 
 void DIALOG_SIM_COMMAND::OnFilterMouseMoved( wxMouseEvent& aEvent )
 {
+#if defined( __WXOSX__ ) || wxCHECK_VERSION( 3, 3, 0 ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_inputSignalsFilter->GetScreenRect();
     int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
@@ -1014,6 +1015,7 @@ void DIALOG_SIM_COMMAND::OnFilterMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_ARROW );
     else
         SetCursor( wxCURSOR_IBEAM );
+#endif
 }
 
 
