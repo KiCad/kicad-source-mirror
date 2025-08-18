@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
 "PO-Revision-Date: 2025-08-18 07:02+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -599,14 +599,12 @@ msgid "Show board body"
 msgstr "基板外形を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "メッキ穴"
+msgstr "スルーホールの内壁に施されたメッキ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "スルーホール パッドを表示"
+msgstr "バレル（メッキ スルーホール と ビア）の表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -2454,7 +2452,8 @@ msgstr "パッケージ 開発者"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "プロセスで使用されているグラフィカル ユーザー インターフェイス (GUI) "
+"オブジェクトへのハンドルの数(GDI) %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -5218,9 +5217,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| アクション | デフォルトのホットキー | 説明"
 
 #: common/dialogs/panel_image_editor.cpp:81
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "拡張量は正の値でなければなりません。"
+msgstr "スケールは正の番号でなければなりません。"
 
 #: common/dialogs/panel_image_editor.cpp:91
 #, c-format
@@ -5250,19 +5248,16 @@ msgid "Convert to Greyscale"
 msgstr "グレースケールに変換"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "ファイル履歴のサイズ:"
+msgstr "ファイル履歴が消去されました。"
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "再表示しない"
+msgstr "「再表示しない」ダイヤログがリセットされます。"
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "デフォルトにリセット"
+msgstr "すべてのダイアログがデフォルトにリセットされます。"
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -5281,21 +5276,18 @@ msgid "days"
 msgstr "日"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "最近開いたファイルをクリア"
+msgstr "最近開いたファイル履歴をクリア"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "「再表示しない」ダイヤログをリセット"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "%s をデフォルトに戻す"
+msgstr "すべてのダイアログをデフォルトに戻す"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
 msgstr "全てデフォルト値に戻す"
 
@@ -5439,7 +5431,7 @@ msgstr "右ボタン ドラッグ:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "マウスの動きでパンするキー:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -5960,14 +5952,12 @@ msgid "Rotation speed:"
 msgstr "回転速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "矢印の向き:"
+msgstr "逆回転方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "終点もしくは始点の方向を固定"
+msgstr "回転方向を入れ替える"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
 msgid "Pan speed:"
@@ -5975,16 +5965,15 @@ msgstr "パン速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "垂直方向のパン方向を反転"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "水平方向のパン方向を反転"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "台形の方向:"
+msgstr "ズーム方向を反転"
 
 #: common/dialogs/panel_text_variables.cpp:114
 msgid ""
@@ -6314,7 +6303,7 @@ msgstr "マウスとタッチパッド"
 
 #: common/eda_base_frame.cpp:1235
 msgid "SpaceMouse"
-msgstr ""
+msgstr "SpaceMouse"
 
 #: common/eda_base_frame.cpp:1237
 msgid "Hotkeys"
@@ -6438,9 +6427,8 @@ msgid "Packages and Updates"
 msgstr "パッケージと更新"
 
 #: common/eda_base_frame.cpp:1409
-#, fuzzy
 msgid "Maintenance"
-msgstr "メンテナー"
+msgstr "メンテナンス"
 
 #: common/eda_base_frame.cpp:1491 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:444
@@ -9194,9 +9182,8 @@ msgid "Displays the current unit"
 msgstr "現在のユニットを表示"
 
 #: common/tool/action_toolbar.cpp:1043
-#, fuzzy
 msgid "Allow moving of locked items with the mouse"
-msgstr "ロックしたアイテムの選択を許可"
+msgstr "ロックしたアイテムのマウスでの移動を許可"
 
 #: common/tool/actions.cpp:47
 msgid "New..."
@@ -9401,17 +9388,16 @@ msgid "Paste item(s) from clipboard"
 msgstr "クリップボードからアイテムを貼り付け"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "選択の矩形を描画"
+msgstr "選択モードを長方形に設定する"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "輪投げ"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "選択モードを輪投げ選択に設定する"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -17780,9 +17766,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "ピン %s が %s と %s の両方に接続されています"
 
 #: eeschema/erc/erc.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "ピン %s が %s と %s の両方に接続されています"
+msgstr "ピン %s がグランド ネットに接続されていません"
 
 #: eeschema/erc/erc.cpp:1500
 #, c-format
@@ -18034,9 +18020,8 @@ msgid "Invalid connection between bus and net items"
 msgstr "バスとネット間の無効な接続"
 
 #: eeschema/erc/erc_item.cpp:161
-#, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "リモートに接続できません"
+msgstr "グランド ピン が グランド ネット に接続されていない"
 
 #: eeschema/erc/erc_item.cpp:165 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
@@ -18398,9 +18383,9 @@ msgstr "プロジェクト保存の中止"
 
 #: eeschema/files-io.cpp:1244 eeschema/files-io.cpp:1270 pcbnew/files.cpp:1202
 #: pcbnew/files.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
+msgstr "自動保存が次の理由でできませんでした :  読み取り専用フォルダ '%s'"
 
 #: eeschema/files-io.cpp:1413
 #, c-format
@@ -23755,14 +23740,12 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr "デザインブロックをプロジェクトにコピーし、シートを現在のシートにします"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "シートからアイテムを配置:"
+msgstr "シートからピンを配置"
 
 #: eeschema/tools/sch_actions.cpp:576
-#, fuzzy
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
-msgstr "シートピン %s に対応する階層ラベルがシート内にありません"
+msgstr "シートにある既存の階層ラベルからシートピンを追加"
 
 #: eeschema/tools/sch_actions.cpp:584
 msgid "Autoplace All Sheet Pins"
@@ -24949,9 +24932,9 @@ msgid "No nets selected."
 msgstr "ネットが未選択です。"
 
 #: eeschema/tools/sch_editor_control.cpp:933
-#, fuzzy
 msgid "All selected nets must be labeled to assign a netclass."
-msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
+msgstr "ネットクラスを割り当てるには、選択したすべてのネットにラベルを付ける必要があ"
+"ります。"
 
 #: eeschema/tools/sch_editor_control.cpp:1690 pcbnew/tools/pcb_control.cpp:1116
 msgid ""
@@ -27559,14 +27542,13 @@ msgstr "外観プリセット。オプション:%s,%s またはユーザー定�
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
-msgstr ""
+msgstr "基板スタックアップで定義されたカラーはプリセットの色を上書きします"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
-msgstr "品質プリセットで無効になっている場合でも、床、影、後処理を有効にします"
+msgstr "品質設定で無効になっている場合でも、床、影、後処理を有効にします"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -27869,9 +27851,8 @@ msgid "Include jobs:"
 msgstr "インクルード JOBs:"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:135
-#, fuzzy
 msgid "Edit Advanced Configuration"
-msgstr "設定を再読み込み"
+msgstr "詳細設定を編集する"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:142
 msgid "Key"
@@ -28540,12 +28521,11 @@ msgstr "EasyEDA (JLCEDA) Professional 回路図と基板図をインポート"
 
 #: kicad/menubar.cpp:160
 msgid "Edit Advanced Config..."
-msgstr ""
+msgstr "詳細設定を編集..."
 
 #: kicad/menubar.cpp:161
-#, fuzzy
 msgid "Edit advanced settings"
-msgstr "ページ設定を編集"
+msgstr "詳細設定を編集します"
 
 #: kicad/menubar.cpp:205
 msgid "Edit Local File..."
@@ -33533,12 +33513,10 @@ msgid "Back copper area:"
 msgstr "裏面の導体層:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Min track clearance:"
-msgstr "配線のクリアランスを表示:"
+msgstr "最小配線クリアランス:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Min track width:"
 msgstr "最小配線幅:"
 
@@ -33547,9 +33525,8 @@ msgid "Min drill diameter:"
 msgstr "最小穴径:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Board stackup thickness:"
-msgstr "基板厚:"
+msgstr "基板スタックアップ厚:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:177
 msgid "THT:"
@@ -33582,7 +33559,7 @@ msgstr "端面スルーホール パッド:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:189
 msgid "Press-fit pad:"
-msgstr ""
+msgstr "プレスフィット パッド:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:192
 msgid "Through vias:"
@@ -33671,24 +33648,20 @@ msgid "Back copper area"
 msgstr "裏面の導体面積"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:862
-#, fuzzy
 msgid "Min track clearance"
-msgstr "最小クリアランス"
+msgstr "最小配線クリアランス"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:865
-#, fuzzy
 msgid "Min track width"
 msgstr "最小配線幅"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:868
-#, fuzzy
 msgid "Min drill diameter"
-msgstr "最小穴径: "
+msgstr "最小ドリル直径"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:871
-#, fuzzy
 msgid "Board stackup thickness"
-msgstr "基板厚:"
+msgstr "基板スタックアップ厚さ"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:918
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -35327,9 +35300,8 @@ msgid "*.emn"
 msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "グリッドの基準点:"
+msgstr "基板の基準点を設定:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:194
@@ -41044,17 +41016,17 @@ msgstr "エラー:"
 #: pcbnew/dialogs/panel_setup_rules.cpp:765
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
-msgstr ""
+msgstr "ルール '%s' と '%s' は同じ条件を共有しています。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "'%s' リファレンス指定子を '%s' へ変更します。"
+msgstr "ルール '%s' は未定義のネットクラス '%s' を参照しています。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
-msgstr "%s リファレンス指定子を %s へ変更します。"
+msgstr "ルール '%s' は未定義のレイヤーを参照しています: %s。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:869
 msgid "Design rules cannot be added without a project"
@@ -41684,7 +41656,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -41818,127 +41789,142 @@ msgid ""
 msgstr ""
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
-"<br><br>\n"
+"全ての関数のパラメーターは単純なワイルドカード (`*` と `?`)をサポートします。"
+"\n"
+"\n"
 "\n"
 "    A.enclosedByArea('<zone_name>')\n"
-"True if all of `A` lies within the given zone's outline.\n"
+"        `A` 全体が指定されたゾーンのアウトライン内にある場合は True "
+"になります。\n"
 "\n"
-"NB: this is potentially a more expensive call than `intersectsArea()`.  Use "
-"`intersectsArea()`\n"
-"where possible.\n"
-"<br><br>\n"
+"        注意: これは、潜在的に `intersectsArea()` "
+"よりもコストのかかる呼び出しになります。\n"
+"        使えるなら `intersectsArea()` を使用してください。\n"
+"\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"True if `A` exists on the given layer.  The layer name can be\n"
-"either the name assigned in Board Setup > Board Editor Layers or\n"
-"the canonical name (ie: `F.Cu`).\n"
+"        指定されたレイヤーに `A` が存在する場合は True になります。\n"
+"        レイヤー名は、ボード設定 > "
+"ボードエディタレイヤーで割り当てられた名前、\n"
+"        または標準名（例：`F.Cu`）のいずれかになります。\n"
 "\n"
-"NB: this returns true if `A` is on the given layer, independently\n"
-"of whether or not the rule is being evaluated for that layer.\n"
-"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
-"<br><br>\n"
+"        注意: `A` が指定されたレイヤー上にある場合、"
+"そのレイヤーに対してルールが\n"
+"        評価されているかいないかに関係なく、 True になります。\n"
+"        後者の場合は、ルール内で `(layer \"layer_name\")`を使用してください。"
+"\n"
+"\n"
 "\n"
 "    A.fromTo('x', 'y')\n"
-"True if the object exists on the copper path between the given \n"
-"pads. `x` and `y` are the full names of pads in the design, such as \n"
-"`R1-Pad1`.\n"
-"<br><br>\n"
+"        指定されたパッド間の銅箔パス上にオブジェクトが存在する場合は True "
+"になります。\n"
+"        `x`と`y`は、`R1-Pad1`など、\n"
+"        設計内のパッドの完全な名前です。\n"
+"\n"
 "\n"
 "    A.getField('<field_name>')\n"
-"The value of the given field. Only footprints have fields, so a field is "
-"only returned if\n"
-"`A` is a footprint.\n"
-"<br><br>\n"
+"        The value of the given field. Only footprints have fields, so a "
+"field is only returned if\n"
+"        `A` is a footprint.\n"
+"\n"
 "\n"
 "    A.hasComponentClass('<component_class_name>')\n"
-"True if the set of component classes assigned to `A` contains the named \n"
-"component class.\n"
-"<br><br>\n"
+"        `A` に割り当てられたコンポーネント クラスのセットに、"
+"名前付きコンポーネント\n"
+"        クラスが含まれている場合は True になります。\n"
+"\n"
 "\n"
 "    A.hasNetclass('<netclass_name>')\n"
-"True if `A` has had the given netclass assigned to it, either by an explicit "
-"netclass label\n"
-"or through a pattern match assignment.\n"
-"<br><br>\n"
+"        明示的なネットクラス ラベルまたはパターン マッチ割り当てによって、\n"
+"       `A` に指定されたネットクラスが割り当てられている場合は True "
+"になります。\n"
+"\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"True if `A` has a net that is part of the specified differential pair.\n"
-"`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('/CLK')`\n"
-"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
-"<br><br>\n"
+"        `A` に指定された差動ペアの一部であるネットがある場合は True "
+"になります。\n"
+"        `<net_name>` は差動ペアのベース名です。\n"
+"        たとえば、`inDiffPair('/CLK')` は `/CLK_P` ネットと `/CLK_N` "
+"ネットの項目と一致します。\n"
+"\n"
 "\n"
 "    A.intersectsArea('<zone_name>')\n"
-"True if any part of `A` lies within the given zone's outline.\n"
-"<br><br>\n"
+"        `A` のいずれかの部分が指定されたゾーンのアウトライン内にある場合は "
+"True になります。\n"
+"\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_identifier>')\n"
-"True if any part of `A` lies within the given footprint's principal "
-"courtyard.\n"
-"<br><br>\n"
+"        `A` のいずれかの部分が、"
+"指定されたフットプリントがprincipalなコートヤード内にある場合は True "
+"になります。\n"
+"\n"
 "\n"
 "    A.intersectsFrontCourtyard('<footprint_identifier>')\n"
-"True if any part of `A` lies within the given footprint's front courtyard.\n"
-"<br><br>\n"
+"        `A` のいずれかの部分が、"
+"指定されたフットプリントが表面のコートヤード内にある場合は True になります。"
+"\n"
+"\n"
 "\n"
 "    A.intersectsBackCourtyard('<footprint_identifier>')\n"
-"True if any part of `A` lies within the given footprint's back courtyard.\n"
-"<br><br>\n"
+"        `A` のいずれかの部分が、"
+"指定されたフットプリントが裏面のコートヤード内にある場合は True になります。"
 "\n"
-"The `footprint_identifier` listed above can be one of the following:\n"
 "\n"
-"1. A reference designator, possibly containing wildcards `*` and `?`\n"
-"2. A footprint library identifier such as `LibName:FootprintName`. In this "
-"case,\n"
-"   the library identifier must contain the `:` character to separate the "
-"library\n"
-"   name from the footprint name, and either name may contain wildcards.\n"
-"3. A component class, in the form `${Class:ClassName}`.  The keyword `Class` "
-"is not\n"
-"   case-sensitive, but component class names are case-sensitive.\n"
 "\n"
-"<br>\n"
+"上記の `footprint_identifier` は、次のいずれかになります。\n"
+"1. リファレンス指定子。ワイルドカード `*` および `?` を含む場合があります。\n"
+"2. `LibName:FootprintName` のようなフットプリント ライブラリ識別子。\n"
+"    この場合、ライブラリ識別子には、"
+"ライブラリ名とフットプリント名を区切るための `:` "
+"文字が含まれている必要があり、\n"
+"    どちらの名前にもワイルドカードを含めることができます。\n"
+"3. コンポーネントクラス。形式は `${Class:ClassName}` です。\n"
+"   キーワード `Class` は大文字と小文字を区別しませんが、コンポーネント "
+"クラス名は大文字と小文字を区別します。\n"
+"\n"
+"\n"
+"\n"
 "\n"
 "    A.isBlindBuriedVia()\n"
-"True if `A` is a blind/buried via.\n"
-"<br><br>\n"
+"        `A` がブラインド/ベリード ビアの場合は True になります。\n"
+"\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
-"True if `A` and `B` are members of the same diff pair.\n"
-"<br><br>\n"
+"        `A` と `B` が同じ 差動ペアのメンバーである場合は True になります。\n"
+"\n"
 "\n"
 "    A.isMicroVia()\n"
-"True if `A` is a microvia.\n"
-"<br><br>\n"
+"        `A` がマイクロビアの場合は True になります。\n"
+"\n"
 "\n"
 "    A.isPlated()\n"
-"True if `A` has a hole which is plated.\n"
-"<br><br>\n"
+"        `A` にメッキされた穴がある場合は True になります。\n"
+"\n"
 "\n"
 "    A.memberOfGroup('<group_name>')\n"
-"True if `A` is a member of the given group. The name can contain wildcards.\n"
-"Includes nested membership.\n"
-"<br><br>\n"
+"        `A` が指定されたグループのメンバーである場合は True になります。\n"
+"        名前にはワイルドカードを含めることができます。\n"
+"        ネストされたメンバーシップも含まれます。\n"
+"\n"
 "\n"
 "    A.memberOfFootprint('<footprint_identifier>')\n"
-"True if `A` is a member of a given footprint (for example, a pad or graphic "
-"shape defined\n"
-"inside that footprint).  The various ways of specifying "
-"`footprint_identifier` are described above.\n"
-"<br><br>\n"
+"        `A` が特定のフットプリントのメンバーである場合は True になります\n"
+"       （たとえば、そのフットプリント内に定義された パッド あるいは "
+"グラフィックス 形状）。\n"
+"        `footprint_identifier` については上記で説明済です。\n"
+"\n"
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
-"True if `A` is a member of the given schematic sheet. The sheet path can "
-"contain wildcards.\n"
-"<br><br>\n"
+"        `A` が指定された回路図シートの メンバー である場合は True "
+"になります。\n"
+"        シート パスにはワイルドカードを含めることができます。\n"
+"\n"
 "\n"
 "    A.memberOfSheetOrChildren('<sheet_path>')\n"
-"True if `A` is a member of the given schematic sheet, or any of its child "
-"hierarchical sheets. The sheet path can \n"
-"contain wildcards.\n"
-"<br><br>\n"
+"        `A` が指定された回路図シート、またはその子階層シートのいずれかの "
+"メンバー である場合は True になります。\n"
+"        シート パスにはワイルドカードを含めることができます。\n"
+"\n"
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
@@ -44024,9 +44010,8 @@ msgid "Save Footprint Association File"
 msgstr "フットプリント関連付けファイルを保存"
 
 #: pcbnew/exporters/export_gencad.cpp:45
-#, fuzzy
 msgid "Export to GenCAD"
-msgstr "GenCADファイルをエクスポート..."
+msgstr "GenCADファイルへのエクスポート"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:176
 msgid ""
@@ -51304,14 +51289,13 @@ msgid "Lock or unlock selected items"
 msgstr "選択したアイテムをロック/ロック解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:1402
-#, fuzzy
 msgid "Cycle H/V/45 constraint"
-msgstr "水平/垂直/45° の制約を無視"
+msgstr "回転 水平/垂直/45° 制約"
 
 #: pcbnew/tools/pcb_actions.cpp:1403
 msgid ""
 "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only"
-msgstr ""
+msgstr "回転制限なし/45度、水平/垂直を切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1411
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -52405,7 +52389,7 @@ msgstr "端面スルーホール パッド: "
 
 #: pcbnew/tools/pcb_control.cpp:2392
 msgid "Press-fit pads: "
-msgstr ""
+msgstr "プレスフィット パッド: "
 
 #: pcbnew/tools/pcb_control.cpp:2396
 msgid "Plated board edge: "
@@ -52442,7 +52426,7 @@ msgstr "埋め込み3Dモデル"
 #: pcbnew/tools/pcb_control.cpp:2634
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d 個の 3D モデルが正常に埋め込まれました。"
 
 #: pcbnew/tools/pcb_point_editor.cpp:1966
 msgid "Resize Table Cells"
