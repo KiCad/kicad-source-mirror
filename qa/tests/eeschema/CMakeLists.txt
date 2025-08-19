@@ -68,6 +68,7 @@ set( QA_EESCHEMA_SRCS
     test_annotation_units_conflicts.cpp
     test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
+    test_crossing_label.cpp
     test_eagle_plugin.cpp
     test_junction_helpers.cpp
     test_bus_entry_concurrency.cpp

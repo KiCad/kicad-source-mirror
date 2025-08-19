@@ -1325,6 +1325,31 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         else
         {
             updateGenericItemConnectivity( aSheet, item, connection_map );
+
+            /// Special case for labels that overlap wires
+            /// While this is an ERC error as there is not an explicit junction,
+            /// we want to enforce connectivity for all items under the label position.
+            if( dynamic_cast<SCH_LABEL_BASE*>( item ) )
+            {
+                VECTOR2I point = item->GetPosition();
+                SCH_SCREEN* screen = aSheet.LastScreen();
+                auto items = screen->Items().Overlapping( point );
+                std::vector<SCH_ITEM*> overlapping_items;
+
+                std::copy_if( items.begin(), items.end(), std::back_inserter( overlapping_items ),
+                              [&]( SCH_ITEM* test_item )
+                              {
+                                  return test_item->Type() == SCH_LINE_T
+                                         && test_item->HitTest( point, -1 );
+                              } );
+
+                // We need at least two connnectable lines that are not the label here
+                // Otherwise, the label will be normally assigned to one or the other
+                if( overlapping_items.size() < 2 ) continue;
+
+                for( SCH_ITEM* test_item : overlapping_items )
+                    connection_map[point].push_back( test_item );
+            }
         }
     }
 
