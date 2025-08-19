@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,6 +35,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
 #include <wx/spinctrl.h>
+#include <wx/bmpcbox.h>
 #include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -239,6 +240,34 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticBitmap* m_nonCopperWarningIcon;
 		wxStaticText* m_nonCopperWarningText;
+		wxPanel* m_backDrillPanel;
+		wxStaticText* m_topPostMachiningLabel;
+		wxChoice* m_topPostMachining;
+		wxStaticText* m_topPostMachineSize1Label;
+		wxTextCtrl* m_topPostmachineSize1;
+		wxStaticText* m_topPostMachineSize1Units;
+		wxStaticText* m_topPostMachineSize2Label;
+		wxTextCtrl* m_topPostMachineSize2;
+		wxStaticText* m_topPostMachineSize2Units;
+		wxStaticText* m_bottomPostMachiningLabel;
+		wxChoice* m_bottomPostMachining;
+		wxStaticText* m_bottomPostMachineSize1Label;
+		wxTextCtrl* m_bottomPostMachineSize1;
+		wxStaticText* m_bottomPostMachineSize1Units;
+		wxStaticText* m_bottomPostMachineSize2Label;
+		wxTextCtrl* m_bottomPostMachineSize2;
+		wxStaticText* m_bottomPostMachineSize2Units;
+		wxChoice* m_backDrillChoice;
+		wxStaticText* m_backDrillTopLayerLabel;
+		wxBitmapComboBox* m_backDrillTopLayer;
+		wxStaticText* m_backDrillTopSizeLabel;
+		wxTextCtrl* m_backDrillTopSize;
+		wxStaticText* m_backDrillTopSizeUnits;
+		wxStaticText* m_backDrillBottomLayerLabel;
+		wxBitmapComboBox* m_backDrillBottomLayer;
+		wxStaticText* m_backDrillBottomSizeLabel;
+		wxTextCtrl* m_backDrillBottomSize;
+		wxStaticText* m_backDrillBottomSizeUnits;
 		wxSimplebook* m_stackupImagesBook;
 		wxPanel* page0;
 		wxStaticBitmap* m_stackupImage0;
@@ -284,6 +313,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModify( wxSpinDoubleEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onTopPostMachining( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBottomPostMachining( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBackDrillChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 

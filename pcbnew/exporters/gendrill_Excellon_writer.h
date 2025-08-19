@@ -31,7 +31,9 @@
 #ifndef _GENDRILL_EXCELLON_WRITER_
 #define _GENDRILL_EXCELLON_WRITER_
 
-#include <gendrill_file_writer_base.h>
+#include "gendrill_file_writer_base.h"
+
+#include <wx/filename.h>
 
 class BOARD;
 class PLOTTER;
@@ -117,7 +119,8 @@ private:
      * @param aHolesType is the holes type (PTH, NPTH, mixed).
      * @return the hole count.
      */
-    int createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType );
+    int createDrillFile( FILE* aFile, const DRILL_SPAN& aSpan, TYPE_FILE aHolesType,
+                         bool aTagBackdrillHit = false );
 
 
     /**
@@ -133,10 +136,10 @@ private:
      * FMAT,2
      * INCH,TZ
      *
-     * @param aLayerPair is the layer pair for the current holes.
+     * @param aSpan is the drilling span for the current holes.
      * @param aHolesType is the holes type in file (PTH, NPTH, mixed).
      */
-    void writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType );
+    void writeEXCELLONHeader( const DRILL_SPAN& aSpan, TYPE_FILE aHolesType );
 
     void writeEXCELLONEndOfFile();
 
@@ -151,6 +154,15 @@ private:
      * @param aAttribute is the hole attribute.
      */
     void writeHoleAttribute( HOLE_ATTRIBUTE aAttribute );
+
+    wxFileName getBackdrillLayerPairFileName( const DRILL_SPAN& aSpan ) const;
+    bool       writeBackdrillLayerPairFile( const wxString& aPlotDirectory,
+                                            REPORTER* aReporter, const DRILL_SPAN& aSpan );
+    void       writeHoleComments( const HOLE_INFO& aHole, bool aTagBackdrillHit );
+    void       writePostMachiningComment( PAD_DRILL_POST_MACHINING_MODE aMode, int aSizeIU,
+                                          int aDepthIU, int aAngleDeciDegree,
+                                          const wxString& aSideLabel );
+    wxString   formatLinearValue( int aValueIU ) const;
 
     FILE*     m_file;                    // The output file
     bool      m_minimalHeader;           // True to use minimal header

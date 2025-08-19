@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -113,7 +113,32 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_annularRingsCtrl;
 		wxStaticText* m_protectionPresetsLabel;
 		wxChoice* m_protectionFeatures;
+		wxStaticText* m_backDrillLabel;
 		wxStaticLine* m_staticline2;
+		wxChoice* m_backDrillChoice;
+		wxStaticText* m_backDrillFrontLayerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_backDrillFrontLayer;
+		wxStaticText* m_backDrillBackLayer;
+		PCB_LAYER_BOX_SELECTOR* m_ViaStartLayer11;
+		wxStaticText* m_postMachineSectionLabel;
+		wxStaticLine* m_staticline21;
+		wxStaticText* m_topPostMachineLabel;
+		wxChoice* m_topPostMachine;
+		wxStaticText* m_topPostMachineSize1Label;
+		wxTextCtrl* m_topPostMachineSize1;
+		wxStaticText* m_topPostMachineSize1Units;
+		wxStaticText* m_topPostMachineSize2Label;
+		wxTextCtrl* m_topPostMachineSize2;
+		wxStaticText* m_topPostMachineSize2Units;
+		wxStaticText* m_bottomPostMachineLabel;
+		wxChoice* m_bottomPostMachine;
+		wxStaticText* m_bottomPostMachineSize1Label;
+		wxTextCtrl* m_bottomPostMachineSize1;
+		wxStaticText* m_bottomPostMachineSize1Units;
+		wxStaticText* m_bottomPostMachineSize2Label;
+		wxTextCtrl* m_bottomPostMachineSize2;
+		wxStaticText* m_bottomPostMachineSize2Units;
+		wxStaticLine* m_staticline4;
 		wxBoxSizer* m_legacyTeardropsWarning;
 		wxStaticBitmap* m_legacyTeardropsIcon;
 		wxStaticText* m_staticText85;
@@ -149,6 +174,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onPadstackModeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onEditLayerChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBackdrillChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTopPostMachineChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBottomPostMachineChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 
 

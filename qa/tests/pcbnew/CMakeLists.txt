@@ -35,6 +35,7 @@ set( QA_PCBNEW_SRCS
     test_barcode_load_save.cpp
     test_board_item.cpp
     test_board_commit.cpp
+    test_cam_backdrill.cpp
     test_component_classes.cpp
     test_generator_load_save.cpp
     test_graphics_load_save.cpp
@@ -61,6 +62,7 @@ set( QA_PCBNEW_SRCS
     test_zone_filler.cpp
 
     drc/test_custom_rule_severities.cpp
+    drc/test_drc_backdrill_postmachining.cpp
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp
     drc/test_drc_regressions.cpp

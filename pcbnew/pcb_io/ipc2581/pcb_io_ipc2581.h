@@ -44,6 +44,7 @@ class FOOTPRINT;
 class PROGRESS_REPORTER;
 class NETINFO_ITEM;
 class PAD;
+class PADSTACK;
 class PCB_SHAPE;
 class PCB_VIA;
 class PCB_TEXT;
@@ -67,6 +68,8 @@ public:
         m_shape_std_node = nullptr;
         m_line_node = nullptr;
         m_last_padstack = nullptr;
+        m_backdrill_spec_index = 0;
+        m_cad_header_node = nullptr;
         m_progress_reporter = nullptr;
         m_xml_doc = nullptr;
         m_xml_root = nullptr;
@@ -210,6 +213,12 @@ private:
 
     void addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia );
 
+    void ensureBackdrillSpecs( const wxString& aPadstackName, const PADSTACK& aPadstack );
+
+    void addBackdrillSpecRefs( wxXmlNode* aHoleNode, const wxString& aPadstackName );
+
+    void pruneUnusedBackdrillSpecs();
+
     void addLocationNode( wxXmlNode* aContentNode, double aX, double aY );
 
     void addLocationNode( wxXmlNode* aContentNode, const PAD& aPad, bool aRelative );
@@ -309,6 +318,12 @@ private:
     std::map<size_t, wxString> m_padstack_dict;     //<! Map between padstack hash values and reference id string (PADSTACK_##)
     std::vector<wxXmlNode*>    m_padstacks;         //<! Holding vector for padstacks.  These need to be inserted prior to the components
     wxXmlNode*                 m_last_padstack;     //<! Pointer to padstack list where we can insert the VIA padstacks once we process tracks
+
+    std::map<wxString, std::pair<wxString, wxString>> m_padstack_backdrill_specs;
+    std::map<wxString, wxXmlNode*>                    m_backdrill_spec_nodes;
+    std::set<wxString>                                m_backdrill_spec_used;
+    int                                               m_backdrill_spec_index;
+    wxXmlNode*                                        m_cad_header_node;
 
     std::map<size_t, wxString>
             m_footprint_dict; //<! Map between the footprint hash values and reference id string (<fpid>_##)

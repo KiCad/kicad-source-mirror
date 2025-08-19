@@ -72,6 +72,22 @@ enum class PAD_DRILL_SHAPE
     OBLONG,
 };
 
+enum class PAD_DRILL_POST_MACHINING_MODE
+{
+    UNKNOWN,
+    NOT_POST_MACHINED,
+    COUNTERBORE,
+    COUNTERSINK
+};
+
+enum class BACKDRILL_MODE
+{
+    NO_BACKDRILL,
+    BACKDRILL_BOTTOM,
+    BACKDRILL_TOP,
+    BACKDRILL_BOTH
+};
+
 /**
  * The set of pad shapes, used with PAD::{Set,Get}Attribute().
  *
@@ -253,6 +269,16 @@ public:
         bool operator==( const DRILL_PROPS& aOther ) const;
     };
 
+    struct POST_MACHINING_PROPS
+    {
+        std::optional<PAD_DRILL_POST_MACHINING_MODE> mode;
+        int size = 0;
+        int depth = 0;
+        int angle = 0;
+
+        bool operator==( const POST_MACHINING_PROPS& aOther ) const;
+    };
+
 public:
     PADSTACK( BOARD_ITEM* aParent );
     virtual ~PADSTACK() = default;
@@ -310,6 +336,15 @@ public:
 
     DRILL_PROPS& SecondaryDrill() { return m_secondaryDrill; }
     const DRILL_PROPS& SecondaryDrill() const { return m_secondaryDrill; }
+
+    DRILL_PROPS& TertiaryDrill() { return m_tertiaryDrill; }
+    const DRILL_PROPS& TertiaryDrill() const { return m_tertiaryDrill; }
+
+    POST_MACHINING_PROPS& FrontPostMachining() { return m_frontPostMachining; }
+    const POST_MACHINING_PROPS& FrontPostMachining() const { return m_frontPostMachining; }
+
+    POST_MACHINING_PROPS& BackPostMachining() { return m_backPostMachining; }
+    const POST_MACHINING_PROPS& BackPostMachining() const { return m_backPostMachining; }
 
     UNCONNECTED_LAYER_MODE UnconnectedLayerMode() const { return m_unconnectedLayerMode; }
     void SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE aMode ) { m_unconnectedLayerMode = aMode; }
@@ -458,6 +493,15 @@ public:
 
     void ClearPrimitives( PCB_LAYER_ID aLayer );
 
+    BACKDRILL_MODE GetBackdrillMode() const;
+    void SetBackdrillMode( BACKDRILL_MODE aMode );
+
+    std::optional<int> GetBackdrillSize( bool aTop ) const;
+    void SetBackdrillSize( bool aTop, std::optional<int> aSize );
+
+    PCB_LAYER_ID GetBackdrillEndLayer( bool aTop ) const;
+    void SetBackdrillEndLayer( bool aTop, PCB_LAYER_ID aLayer );
+
 private:
     void packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadStack& aProto ) const;
 
@@ -501,12 +545,20 @@ private:
     ///! vias and pads (F_Cu to B_Cu for normal holes; a subset of layers for blind/buried vias)
     DRILL_PROPS m_drill;
 
-    ///! Secondary drill, used to define back-drilling
+    ///! Secondary drill, used to define back-drilling starting from the bottom side
     DRILL_PROPS m_secondaryDrill;
+
+    ///! Tertiary drill, used to define back-drilling starting from the top side
+    DRILL_PROPS m_tertiaryDrill;
+
+    POST_MACHINING_PROPS m_frontPostMachining;
+    POST_MACHINING_PROPS m_backPostMachining;
 };
 
 #ifndef SWIG
+DECLARE_ENUM_TO_WXANY( PAD_DRILL_POST_MACHINING_MODE );
 DECLARE_ENUM_TO_WXANY( PADSTACK::UNCONNECTED_LAYER_MODE );
+DECLARE_ENUM_TO_WXANY( BACKDRILL_MODE );
 #endif
 
 

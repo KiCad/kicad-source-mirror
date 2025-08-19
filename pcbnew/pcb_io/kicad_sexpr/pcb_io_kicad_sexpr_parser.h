@@ -40,6 +40,7 @@
 #include <kiid.h>
 #include <math/box2.h>
 #include <string_any_map.h>
+#include <padstack.h>
 
 #include <chrono>
 #include <unordered_map>
@@ -48,6 +49,7 @@
 class PCB_ARC;
 class BOARD;
 class BOARD_ITEM;
+class ZONE_SETTINGS;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM_CONTAINER;
 class PAD;
@@ -240,6 +242,8 @@ private:
 
     // Parse only the (option ...) inside a pad description
     bool        parsePAD_option( PAD* aPad );
+    void        parsePostMachining( PADSTACK::POST_MACHINING_PROPS& aProps );
+
     void        parsePadstack( PAD* aPad );
 
     PCB_ARC*    parseARC();
@@ -312,7 +316,7 @@ private:
 
     void parseMargins( int& aLeft, int& aTop, int& aRight, int& aBottom );
 
-    void parseZoneDefaults( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties );
+    void parseZoneDefaults( ZONE_SETTINGS& aZoneSettings );
 
     void parseZoneLayerProperty( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties );
 

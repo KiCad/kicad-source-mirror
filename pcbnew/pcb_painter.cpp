@@ -70,6 +70,8 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
+#include <geometry/shape_arc.h>
+#include <stroke_params.h>
 #include <bezier_curves.h>
 #include <kiface_base.h>
 #include <gr_text.h>
@@ -1203,6 +1205,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         {
             m_gal->DrawCircle( center, radius );
         }
+
     }
     else if( ( aLayer == F_Mask && aVia->IsOnLayer( F_Mask ) )
              || ( aLayer == B_Mask && aVia->IsOnLayer( B_Mask ) ) )
@@ -1245,13 +1248,40 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         if( draw )
             m_gal->DrawCircle( center, radius );
+
+        // Draw backdrill indicators (semi-circles extending into the hole)
+        // Drawn on copper layer so they appear above the annular ring
+        if( !m_pcbSettings.IsPrinting() && draw )
+        {
+            std::optional<int> secDrill = aVia->GetSecondaryDrillSize();
+            std::optional<int> terDrill = aVia->GetTertiaryDrillSize();
+
+            if( secDrill.value_or( 0 ) > 0 )
+            {
+                drawBackdrillIndicator( aVia, center, *secDrill,
+                                        aVia->GetSecondaryDrillStartLayer(),
+                                        aVia->GetSecondaryDrillEndLayer() );
+            }
+
+            if( terDrill.value_or( 0 ) > 0 )
+            {
+                drawBackdrillIndicator( aVia, center, *terDrill,
+                                        aVia->GetTertiaryDrillStartLayer(),
+                                        aVia->GetTertiaryDrillEndLayer() );
+            }
+        }
+
+        // Draw post-machining indicator if this layer is post-machined
+        if( !m_pcbSettings.IsPrinting() && draw )
+        {
+            drawPostMachiningIndicator( aVia, center, currentLayer );
+        }
     }
     else if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
     {
         m_gal->SetLineWidth( m_lockedShadowMargin );
 
-        m_gal->DrawCircle( center,
-                           ( aVia->GetWidth( currentLayer ) + m_lockedShadowMargin ) / 2.0 );
+        m_gal->DrawCircle( center, ( aVia->GetWidth( currentLayer ) + m_lockedShadowMargin ) / 2.0 );
     }
 
     // Clearance lines
@@ -1558,9 +1588,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     if( aLayer == LAYER_PAD_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         SHAPE_SEGMENT slot = getPadHoleShape( aPad );
+        VECTOR2I center = slot.GetSeg().A;
 
         if( slot.GetSeg().A == slot.GetSeg().B )    // Circular hole
-            m_gal->DrawCircle( slot.GetSeg().A, slot.GetWidth() / 2.0 );
+            m_gal->DrawCircle( center, slot.GetWidth() / 2.0 );
         else
             m_gal->DrawSegment( slot.GetSeg().A, slot.GetSeg().B, slot.GetWidth() );
     }
@@ -1814,6 +1845,33 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             SHAPE_POLY_SET polySet;
             aPad->TransformShapeToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x, m_maxError, ERROR_INSIDE );
             m_gal->DrawPolygon( polySet );
+        }
+
+        // Draw post-machining indicator if this layer is post-machined
+        if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSizeX() > 0 )
+        {
+            VECTOR2D holePos = aPad->GetPosition() + aPad->GetOffset( pcbLayer );
+
+            // Draw backdrill indicators (semi-circles extending into the hole)
+            // Drawn on copper layer so they appear above the annular ring
+            VECTOR2I secDrill = aPad->GetSecondaryDrillSize();
+            VECTOR2I terDrill = aPad->GetTertiaryDrillSize();
+
+            if( secDrill.x > 0 )
+            {
+                drawBackdrillIndicator( aPad, holePos, secDrill.x,
+                                        aPad->GetSecondaryDrillStartLayer(),
+                                        aPad->GetSecondaryDrillEndLayer() );
+            }
+
+            if( terDrill.x > 0 )
+            {
+                drawBackdrillIndicator( aPad, holePos, terDrill.x,
+                                        aPad->GetTertiaryDrillStartLayer(),
+                                        aPad->GetTertiaryDrillEndLayer() );
+            }
+
+            drawPostMachiningIndicator( aPad, holePos, pcbLayer );
         }
     }
 
@@ -3195,6 +3253,73 @@ void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
     m_gal->Restore();
 }
 
+
+void PCB_PAINTER::drawBackdrillIndicator( const BOARD_ITEM* aItem, const VECTOR2D& aCenter,
+                                          int aDrillSize, PCB_LAYER_ID aStartLayer,
+                                          PCB_LAYER_ID aEndLayer )
+{
+    double backdrillRadius = aDrillSize / 2.0;
+    double lineWidth = std::max( backdrillRadius / 4.0, m_pcbSettings.m_outlineWidth * 2.0 );
+
+    GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
+    m_gal->AdvanceDepth();
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( lineWidth );
+
+    // Draw semi-circle in start layer color (top half, from 90° to 270°)
+    m_gal->SetStrokeColor( m_pcbSettings.GetColor( aItem, aStartLayer ) );
+    m_gal->DrawArc( aCenter, backdrillRadius, EDA_ANGLE( 90, DEGREES_T ),
+                    EDA_ANGLE( 180, DEGREES_T ) );
+
+    // Draw semi-circle in end layer color (bottom half, from 270° to 90°)
+    m_gal->SetStrokeColor( m_pcbSettings.GetColor( aItem, aEndLayer ) );
+    m_gal->DrawArc( aCenter, backdrillRadius, EDA_ANGLE( 270, DEGREES_T ),
+                    EDA_ANGLE( 180, DEGREES_T ) );
+}
+
+
+void PCB_PAINTER::drawPostMachiningIndicator( const BOARD_ITEM* aItem, const VECTOR2D& aCenter, PCB_LAYER_ID aLayer )
+{
+    int size = 0;
+
+    // Check to see if the pad or via has a post-machining operation on this layer
+    if( const PAD* pad = dynamic_cast<const PAD*>( aItem ) )
+    {
+        size = pad->GetPostMachiningKnockout( aLayer );
+    }
+    else if( const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( aItem ) )
+    {
+        size = via->GetPostMachiningKnockout( aLayer );
+    }
+
+    if( size <= 0 )
+        return;
+
+    GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
+    m_gal->AdvanceDepth();
+
+    double pmRadius = size / 2.0;
+    // Use a line width proportional to the radius for visibility
+    double lineWidth = std::max( pmRadius / 8.0, m_pcbSettings.m_outlineWidth * 2.0 );
+
+    COLOR4D layerColor = m_pcbSettings.GetColor( aItem, aLayer );
+
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( layerColor );
+    m_gal->SetLineWidth( lineWidth );
+
+    // Draw dashed circle manually with fixed number of segments for consistent appearance
+    constexpr int NUM_DASHES = 12;  // Number of dashes around the circle
+    EDA_ANGLE dashAngle = ANGLE_360 / ( NUM_DASHES * 2 );  // Dash and gap are equal size
+
+    for( int i = 0; i < NUM_DASHES; ++i )
+    {
+        EDA_ANGLE startAngle = dashAngle * ( i * 2 );
+        m_gal->DrawArc( aCenter, pmRadius, startAngle, dashAngle );
+    }
+}
 
 
 const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = pcbIUScale.mmToIU( 10.0 );

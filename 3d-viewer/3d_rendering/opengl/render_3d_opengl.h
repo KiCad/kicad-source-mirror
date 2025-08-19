@@ -40,6 +40,8 @@
 
 #include "3d_cache/3d_info.h"
 
+#include <geometry/eda_angle.h>
+
 #include <map>
 
 typedef std::map< PCB_LAYER_ID, OPENGL_RENDER_LIST* > MAP_OGL_DISP_LISTS;
@@ -123,6 +125,10 @@ private:
                            float aZtop, float aZbot, unsigned int aNr_sides_per_circle,
                            TRIANGLE_DISPLAY_LIST* aDstLayer );
 
+    void generateInvCone( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
+                          float aZtop, float aZbot, unsigned int aNr_sides_per_circle,
+                          TRIANGLE_DISPLAY_LIST* aDstLayer, EDA_ANGLE aAngle );
+
     void generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ,
                        unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
                        bool aTop );
@@ -132,6 +138,24 @@ private:
                          bool aTop );
 
     void generateViasAndPads();
+
+    bool appendPostMachiningGeometry( TRIANGLE_DISPLAY_LIST* aDstLayer,
+                                      const SFVEC2F& aHoleCenter,
+                                      PAD_DRILL_POST_MACHINING_MODE aMode,
+                                      int aSizeIU,
+                                      int aDepthIU,
+                                      float aHoleInnerRadius,
+                                      float aZSurface,
+                                      bool aIsFront,
+                                      float aPlatingThickness3d,
+                                      float aUnitScale,
+                                      float* aZEnd );
+
+    void generateViaBarrels( float aPlatingThickness3d, float aUnitScale );
+
+    void generatePlatedHoleShells( int aPlatingThickness, float aUnitScale );
+
+    void generateViaCovers( float aPlatingThickness3d, float aUnitScale );
 
     /**
      * Load footprint models from the cache and load it to openGL lists in the form of
@@ -201,6 +225,14 @@ private:
     bool initializeOpenGL();
     OPENGL_RENDER_LIST* createBoard( const SHAPE_POLY_SET& aBoardPoly,
                                      const BVH_CONTAINER_2D* aThroughHoles = nullptr );
+
+    /**
+     * Create ring-shaped plugs for holes that have backdrill or post-machining.
+     * These plugs represent the board material that remains in the hole where
+     * the backdrill or post-machining didn't reach.
+     */
+    void backfillPostMachine();
+
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void setArrowMaterial();
@@ -231,6 +263,7 @@ private:
     MAP_OGL_DISP_LISTS  m_innerLayerHoles;
     OPENGL_RENDER_LIST* m_board;
     OPENGL_RENDER_LIST* m_boardWithHoles;
+    OPENGL_RENDER_LIST* m_postMachinePlugs;     ///< Board material plugs for backdrill/counterbore/countersink
     OPENGL_RENDER_LIST* m_antiBoard;
     OPENGL_RENDER_LIST* m_outerThroughHoles;
     OPENGL_RENDER_LIST* m_outerViaThroughHoles;

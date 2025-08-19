@@ -62,6 +62,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
         m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
         m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit ),
+        m_topPostMachineSize1Binder( aParent, m_topPostMachineSize1Label, m_topPostMachineSize1, m_topPostMachineSize1Units ),
+        m_topPostMachineSize2Binder( aParent, m_topPostMachineSize2Label, m_topPostMachineSize2, m_topPostMachineSize2Units ),
+        m_bottomPostMachineSize1Binder( aParent, m_bottomPostMachineSize1Label, m_bottomPostMachineSize1, m_bottomPostMachineSize1Units ),
+        m_bottomPostMachineSize2Binder( aParent, m_bottomPostMachineSize2Label, m_bottomPostMachineSize2, m_bottomPostMachineSize2Units ),
         m_teardropHDPercent( aParent, m_stHDRatio, m_tcHDRatio, m_stHDRatioUnits ),
         m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, nullptr ),
         m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
@@ -69,7 +73,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_teardropMaxWidth( aParent, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
         m_tracks( false ),
         m_vias( false ),
-        m_editLayer( PADSTACK::ALL_LAYERS )
+        m_editLayer( PADSTACK::ALL_LAYERS ),
+        m_backdrillStartIndeterminate( false ),
+        m_backdrillEndIndeterminate( false ),
+        m_padstackDirty( false )
 {
     m_useCalculatedSize = true;
 
@@ -108,6 +115,18 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_ViaEndLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_ViaEndLayer->SetBoardFrame( aParent );
     m_ViaEndLayer->Resync();
+
+    m_backDrillFrontLayer->SetLayersHotkeys( false );
+    m_backDrillFrontLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_backDrillFrontLayer->SetBoardFrame( aParent );
+    m_backDrillFrontLayer->SetUndefinedLayerName( _( "None" ) );
+    m_backDrillFrontLayer->Resync();
+
+    m_ViaStartLayer11->SetLayersHotkeys( false );
+    m_ViaStartLayer11->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_ViaStartLayer11->SetBoardFrame( aParent );
+    m_ViaStartLayer11->SetUndefinedLayerName( _( "None" ) );
+    m_ViaStartLayer11->Resync();
 
     wxFont infoFont = KIUI::GetSmallInfoFont( this );
     m_techLayersLabel->SetFont( infoFont );
@@ -159,6 +178,23 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
 
     // The selection layer for tracks
     int track_selection_layer = -1;
+
+    int backdrill_start_layer = UNDEFINED_LAYER;
+    int backdrill_end_layer = UNDEFINED_LAYER;
+    bool backdrill_start_layer_set = false;
+    bool backdrill_end_layer_set = false;
+    bool backdrill_start_layer_mixed = false;
+    bool backdrill_end_layer_mixed = false;
+
+    std::optional<PAD_DRILL_POST_MACHINING_MODE> primary_post_machining_value;
+    bool primary_post_machining_set = false;
+    bool primary_post_machining_mixed = false;
+
+    std::optional<PAD_DRILL_POST_MACHINING_MODE> secondary_post_machining_value;
+    bool secondary_post_machining_set = false;
+    bool secondary_post_machining_mixed = false;
+
+    m_padstackDirty = false;
 
     auto getAnnularRingSelection =
             []( const PCB_VIA* via ) -> int
@@ -261,6 +297,20 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     m_viaNotFree->SetValue( !v->GetIsFree() );
                     m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
 
+                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
+
+                    primary_post_machining_value = v->Padstack().FrontPostMachining().mode;
+                    primary_post_machining_set = true;
+
+                    secondary_post_machining_value = v->Padstack().BackPostMachining().mode;
+                    secondary_post_machining_set = true;
+
+                    backdrill_start_layer = secondaryDrill.start;
+                    backdrill_start_layer_set = true;
+
+                    backdrill_end_layer = secondaryDrill.end;
+                    backdrill_end_layer_set = true;
+
                     selection_first_layer = v->TopLayer();
                     selection_last_layer = v->BottomLayer();
 
@@ -337,6 +387,20 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
 
                     if( static_cast<int>( getViaConfiguration( v ) ) != m_protectionFeatures->GetSelection() )
                         m_protectionFeatures->SetSelection( m_protectionFeatures->Append( INDETERMINATE_STATE ) );
+
+                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
+
+                    if( primary_post_machining_set && primary_post_machining_value != v->Padstack().FrontPostMachining().mode )
+                        primary_post_machining_mixed = true;
+
+                    if( secondary_post_machining_set && secondary_post_machining_value != v->Padstack().BackPostMachining().mode )
+                        secondary_post_machining_mixed = true;
+
+                    if( backdrill_start_layer_set && backdrill_start_layer != secondaryDrill.start )
+                        backdrill_start_layer_mixed = true;
+
+                    if( backdrill_end_layer_set && backdrill_end_layer != secondaryDrill.end )
+                        backdrill_end_layer_mixed = true;
                 }
 
                 if( v->IsLocked() )
@@ -385,6 +449,96 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         }
 
         m_ViaEndLayer->SetLayerSelection( selection_last_layer );
+
+        if( backdrill_start_layer_mixed )
+        {
+            m_backdrillStartIndeterminate = true;
+            m_backDrillFrontLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
+            m_backDrillFrontLayer->Resync();
+            m_backDrillFrontLayer->SetLayerSelection( UNDEFINED_LAYER );
+        }
+        else
+        {
+            m_backdrillStartIndeterminate = false;
+
+            if( !backdrill_start_layer_set )
+                backdrill_start_layer = UNDEFINED_LAYER;
+
+            m_backDrillFrontLayer->SetUndefinedLayerName( _( "None" ) );
+            m_backDrillFrontLayer->Resync();
+            m_backDrillFrontLayer->SetLayerSelection( backdrill_start_layer );
+        }
+
+        if( backdrill_end_layer_mixed )
+        {
+            m_backdrillEndIndeterminate = true;
+            m_ViaStartLayer11->SetUndefinedLayerName( INDETERMINATE_STATE );
+            m_ViaStartLayer11->Resync();
+            m_ViaStartLayer11->SetLayerSelection( UNDEFINED_LAYER );
+        }
+        else
+        {
+            m_backdrillEndIndeterminate = false;
+
+            if( !backdrill_end_layer_set )
+                backdrill_end_layer = UNDEFINED_LAYER;
+
+            m_ViaStartLayer11->SetUndefinedLayerName( _( "None" ) );
+            m_ViaStartLayer11->Resync();
+            m_ViaStartLayer11->SetLayerSelection( backdrill_end_layer );
+        }
+
+        // Set Backdrill Choice
+        if( backdrill_start_layer_mixed || backdrill_end_layer_mixed )
+        {
+             m_backDrillChoice->SetSelection( wxNOT_FOUND );
+        }
+        else
+        {
+            if( backdrill_start_layer != UNDEFINED_LAYER )
+                m_backDrillChoice->SetSelection( 2 ); // Top
+            else if( backdrill_end_layer != UNDEFINED_LAYER )
+                m_backDrillChoice->SetSelection( 1 ); // Bottom
+            else
+                m_backDrillChoice->SetSelection( 0 ); // None
+        }
+
+        // Post Machining
+        if( primary_post_machining_mixed )
+        {
+            m_topPostMachine->SetSelection( wxNOT_FOUND );
+        }
+        else if( primary_post_machining_set && primary_post_machining_value.has_value() )
+        {
+            switch( primary_post_machining_value.value() )
+            {
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE: m_topPostMachine->SetSelection( 2 ); break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK: m_topPostMachine->SetSelection( 1 ); break;
+            default: m_topPostMachine->SetSelection( 0 ); break;
+            }
+        }
+        else
+        {
+            m_topPostMachine->SetSelection( 0 );
+        }
+
+        if( secondary_post_machining_mixed )
+        {
+            m_bottomPostMachine->SetSelection( wxNOT_FOUND );
+        }
+        else if( secondary_post_machining_set && secondary_post_machining_value.has_value() )
+        {
+            switch( secondary_post_machining_value.value() )
+            {
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE: m_bottomPostMachine->SetSelection( 2 ); break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK: m_bottomPostMachine->SetSelection( 1 ); break;
+            default: m_bottomPostMachine->SetSelection( 0 ); break;
+            }
+        }
+        else
+        {
+            m_bottomPostMachine->SetSelection( 0 );
+        }
     }
 
     m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
@@ -499,6 +653,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         SetInitialFocus( m_netSelector );
     else
         SetInitialFocus( m_ViaDiameterCtrl );
+
+    wxCommandEvent dummyEvent;
+    onBackdrillChange( dummyEvent );
+    onTopPostMachineChange( dummyEvent );
+    onBottomPostMachineChange( dummyEvent );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -660,8 +819,99 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         if( m_ViaEndLayer->GetLayerSelection() != UNDEFINED_LAYER )
             endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
 
+        std::optional<int> secondaryDrill;
+
+        // Calculate backdrill size (10% larger than drill)
+        if( viaDrill.has_value() )
+        {
+            secondaryDrill = viaDrill.value() * 1.1;
+        }
+        else if( !m_viaDrill.IsIndeterminate() )
+        {
+             secondaryDrill = m_viaDrill.GetIntValue() * 1.1;
+        }
+
+        std::optional<PCB_LAYER_ID> secondaryStartLayer;
+        std::optional<PCB_LAYER_ID> secondaryEndLayer;
+
+        int backdrillChoice = m_backDrillChoice->GetSelection();
+
+        if( backdrillChoice == 1 ) // Bottom
+        {
+            secondaryStartLayer = B_Cu;
+            if( m_ViaStartLayer11->GetLayerSelection() != UNDEFINED_LAYER )
+                secondaryEndLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer11->GetLayerSelection() );
+        }
+        else if( backdrillChoice == 2 ) // Top
+        {
+            secondaryStartLayer = F_Cu;
+            if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                secondaryEndLayer = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
+        }
+        // Choice 0 is None, so optional values remain empty
+
+        // Post Machining
+        std::optional<PADSTACK::POST_MACHINING_PROPS> frontPostMachining;
+        std::optional<PADSTACK::POST_MACHINING_PROPS> backPostMachining;
+
+        if( m_topPostMachine->GetSelection() != wxNOT_FOUND )
+        {
+            PADSTACK::POST_MACHINING_PROPS props;
+            switch( m_topPostMachine->GetSelection() )
+            {
+            case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+            case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+            default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+            }
+
+            if( !m_topPostMachineSize1Binder.IsIndeterminate() )
+                props.size = m_topPostMachineSize1Binder.GetIntValue();
+
+            if( !m_topPostMachineSize2Binder.IsIndeterminate() )
+            {
+                if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    props.angle = m_topPostMachineSize2Binder.GetIntValue();
+                else
+                    props.depth = m_topPostMachineSize2Binder.GetIntValue();
+            }
+            frontPostMachining = props;
+        }
+
+        if( m_bottomPostMachine->GetSelection() != wxNOT_FOUND )
+        {
+            PADSTACK::POST_MACHINING_PROPS props;
+            switch( m_bottomPostMachine->GetSelection() )
+            {
+            case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+            case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+            default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+            }
+
+            if( !m_bottomPostMachineSize1Binder.IsIndeterminate() )
+                props.size = m_bottomPostMachineSize1Binder.GetIntValue();
+
+            if( !m_bottomPostMachineSize2Binder.IsIndeterminate() )
+            {
+                if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    props.angle = m_bottomPostMachineSize2Binder.GetIntValue();
+                else
+                    props.depth = m_bottomPostMachineSize2Binder.GetIntValue();
+            }
+            backPostMachining = props;
+        }
+
+        // Tertiary drill not supported in new UI for now
+        std::optional<int> tertiaryDrill;
+        std::optional<PCB_LAYER_ID> tertiaryStartLayer;
+        std::optional<PCB_LAYER_ID> tertiaryEndLayer;
+
+        int copperLayerCount = m_frame->GetBoard() ? m_frame->GetBoard()->GetCopperLayerCount() : 0;
+
         if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
-                    PCB_VIA::ValidateViaParameters( viaDiameter, viaDrill, startLayer, endLayer ) )
+                    PCB_VIA::ValidateViaParameters( viaDiameter, viaDrill, startLayer, endLayer,
+                                                    secondaryDrill, secondaryStartLayer,
+                                                    secondaryEndLayer, tertiaryDrill, tertiaryStartLayer,
+                                                    tertiaryEndLayer, copperLayerCount ) )
         {
             DisplayError( GetParent(), error->m_Message );
 
@@ -675,15 +925,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 m_ViaDiameterCtrl->SelectAll();
                 m_ViaDiameterCtrl->SetFocus();
             }
-
+            // Other fields might not have direct focus targets in new UI or I'd need to map them
             return false;
         }
 
-        if( viaDiameter.has_value() )
-        {
-            int diameter = viaDiameter.value();
-            m_viaStack->SetSize( { diameter, diameter }, m_editLayer );
-        }
     }
 
     if( m_tracks )
@@ -753,6 +998,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             {
                 wxASSERT( m_vias );
                 PCB_VIA* via = static_cast<PCB_VIA*>( track );
+                bool     updatePadstack = m_padstackDirty;
 
                 if( !m_viaX.IsIndeterminate() )
                     via->SetPosition( VECTOR2I( m_viaX.GetIntValue(), via->GetPosition().y ) );
@@ -764,7 +1010,132 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     via->SetIsFree( !m_viaNotFree->GetValue() );
 
                 if( !m_viaDiameter.IsIndeterminate() )
-                    via->SetPadstack( *m_viaStack );
+                {
+                    int newDiameter = m_viaDiameter.GetIntValue();
+                    const VECTOR2I& currentSize = via->Padstack().Size( m_editLayer );
+
+                    if( currentSize.x != newDiameter || currentSize.y != newDiameter )
+                    {
+                        m_viaStack->SetSize( { newDiameter, newDiameter }, m_editLayer );
+                        updatePadstack = true;
+                    }
+                }
+
+                // Backdrill
+                int backdrillChoice = m_backDrillChoice->GetSelection();
+                if( backdrillChoice != wxNOT_FOUND )
+                {
+                    PADSTACK::DRILL_PROPS secondaryDrill;
+                    secondaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+                    // Calculate size (10% larger)
+                    int drillSize = via->GetDrillValue();
+                    if( !m_viaDrill.IsIndeterminate() )
+                        drillSize = m_viaDrill.GetIntValue();
+
+                    secondaryDrill.size = VECTOR2I( drillSize * 1.1, drillSize * 1.1 );
+
+                    if( backdrillChoice == 0 ) // None
+                    {
+                        secondaryDrill.start = UNDEFINED_LAYER;
+                        secondaryDrill.end = UNDEFINED_LAYER;
+                        secondaryDrill.size = { 0, 0 };
+                        secondaryDrill.shape = PAD_DRILL_SHAPE::UNDEFINED;
+                    }
+                    else if( backdrillChoice == 1 ) // Bottom
+                    {
+                        secondaryDrill.start = B_Cu;
+                        if( m_ViaStartLayer11->GetLayerSelection() != UNDEFINED_LAYER )
+                            secondaryDrill.end = static_cast<PCB_LAYER_ID>( m_ViaStartLayer11->GetLayerSelection() );
+                        else
+                            secondaryDrill.end = UNDEFINED_LAYER; // Or keep existing?
+                    }
+                    else if( backdrillChoice == 2 ) // Top
+                    {
+                        secondaryDrill.start = F_Cu;
+                        if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                            secondaryDrill.end = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
+                        else
+                            secondaryDrill.end = UNDEFINED_LAYER;
+                    }
+
+                    if( via->Padstack().SecondaryDrill() != secondaryDrill )
+                    {
+                        m_viaStack->SecondaryDrill() = secondaryDrill;
+                        updatePadstack = true;
+                    }
+                }
+
+                // Post Machining
+                if( m_topPostMachine->GetSelection() != wxNOT_FOUND )
+                {
+                    PADSTACK::POST_MACHINING_PROPS props;
+                    switch( m_topPostMachine->GetSelection() )
+                    {
+                    case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+                    case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+                    default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+                    }
+
+                    if( !m_topPostMachineSize1Binder.IsIndeterminate() )
+                        props.size = m_topPostMachineSize1Binder.GetIntValue();
+                    else
+                        props.size = via->Padstack().FrontPostMachining().size;
+
+                    if( !m_topPostMachineSize2Binder.IsIndeterminate() )
+                    {
+                        if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                            props.angle = m_topPostMachineSize2Binder.GetIntValue();
+                        else
+                            props.depth = m_topPostMachineSize2Binder.GetIntValue();
+                    }
+                    else
+                    {
+                        props.angle = via->Padstack().FrontPostMachining().angle;
+                        props.depth = via->Padstack().FrontPostMachining().depth;
+                    }
+
+                    if( via->Padstack().FrontPostMachining() != props )
+                    {
+                        m_viaStack->FrontPostMachining() = props;
+                        updatePadstack = true;
+                    }
+                }
+
+                if( m_bottomPostMachine->GetSelection() != wxNOT_FOUND )
+                {
+                    PADSTACK::POST_MACHINING_PROPS props;
+                    switch( m_bottomPostMachine->GetSelection() )
+                    {
+                    case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+                    case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+                    default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+                    }
+
+                    if( !m_bottomPostMachineSize1Binder.IsIndeterminate() )
+                        props.size = m_bottomPostMachineSize1Binder.GetIntValue();
+                    else
+                        props.size = via->Padstack().BackPostMachining().size;
+
+                    if( !m_bottomPostMachineSize2Binder.IsIndeterminate() )
+                    {
+                        if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                            props.angle = m_bottomPostMachineSize2Binder.GetIntValue();
+                        else
+                            props.depth = m_bottomPostMachineSize2Binder.GetIntValue();
+                    }
+                    else
+                    {
+                        props.angle = via->Padstack().BackPostMachining().angle;
+                        props.depth = via->Padstack().BackPostMachining().depth;
+                    }
+
+                    if( via->Padstack().BackPostMachining() != props )
+                    {
+                        m_viaStack->BackPostMachining() = props;
+                        updatePadstack = true;
+                    }
+                }
 
                 switch( m_ViaTypeChoice->GetSelection() )
                 {
@@ -780,17 +1151,31 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( startLayer != UNDEFINED_LAYER )
                 {
-                    m_viaStack->Drill().start = startLayer;
+                    if( via->Padstack().Drill().start != startLayer )
+                    {
+                        m_viaStack->Drill().start = startLayer;
+                        updatePadstack = true;
+                    }
+
                     via->SetTopLayer( startLayer );
                 }
 
                 if( endLayer != UNDEFINED_LAYER )
                 {
-                    m_viaStack->Drill().end = endLayer;
+                    if( via->Padstack().Drill().end != endLayer )
+                    {
+                        m_viaStack->Drill().end = endLayer;
+                        updatePadstack = true;
+                    }
+
                     via->SetBottomLayer( endLayer );
                 }
 
-                via->SanitizeLayers();
+                if( updatePadstack )
+                {
+                    via->SetPadstack( *m_viaStack );
+                    via->SanitizeLayers();
+                }
 
                 switch( m_annularRingsCtrl->GetSelection() )
                 {
@@ -981,6 +1366,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onPadstackModeChanged( wxCommandEvent& aEvent 
     case 2: m_viaStack->SetMode( PADSTACK::MODE::CUSTOM );           break;
     }
 
+    m_padstackDirty = true;
+
     afterPadstackModeChanged();
 }
 
@@ -1167,4 +1554,79 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
 {
     event.Enable( !m_frame->GetBoard()->LegacyTeardrops() );
 }
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onBackdrillChange( wxCommandEvent& aEvent )
+{
+    int selection = m_backDrillChoice->GetSelection();
+    // 0: None, 1: Bottom, 2: Top, 3: Both
+
+    bool enableTop = ( selection == 2 || selection == 3 );
+    bool enableBottom = ( selection == 1 || selection == 3 );
+
+    m_backDrillFrontLayer->Enable( enableTop );
+    m_backDrillFrontLayerLabel->Enable( enableTop );
+
+    m_ViaStartLayer11->Enable( enableBottom ); // Back layer selector
+    m_backDrillBackLayer->Enable( enableBottom ); // Back layer label
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onTopPostMachineChange( wxCommandEvent& aEvent )
+{
+    int selection = m_topPostMachine->GetSelection();
+    // 0: None, 1: Countersink, 2: Counterbore
+
+    bool enable = ( selection != 0 );
+    m_topPostMachineSize1Binder.Enable( enable );
+    m_topPostMachineSize2Binder.Enable( enable );
+    m_topPostMachineSize1Label->Enable( enable );
+    m_topPostMachineSize2Label->Enable( enable );
+
+    if( selection == 1 ) // Countersink
+    {
+        m_topPostMachineSize2Label->SetLabel( _( "Angle:" ) );
+        m_topPostMachineSize2Units->SetLabel( _( "deg" ) );
+
+        if( m_topPostMachineSize2Binder.IsIndeterminate() || m_topPostMachineSize2Binder.GetDoubleValue() == 0 )
+        {
+             m_topPostMachineSize2Binder.SetValue( "82" );
+        }
+    }
+    else if( selection == 2 ) // Counterbore
+    {
+        m_topPostMachineSize2Label->SetLabel( _( "Depth:" ) );
+        m_topPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+    }
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onBottomPostMachineChange( wxCommandEvent& aEvent )
+{
+    int selection = m_bottomPostMachine->GetSelection();
+    // 0: None, 1: Countersink, 2: Counterbore
+
+    bool enable = ( selection != 0 );
+    m_bottomPostMachineSize1Binder.Enable( enable );
+    m_bottomPostMachineSize2Binder.Enable( enable );
+    m_bottomPostMachineSize1Label->Enable( enable );
+    m_bottomPostMachineSize2Label->Enable( enable );
+
+    if( selection == 1 ) // Countersink
+    {
+        m_bottomPostMachineSize2Label->SetLabel( _( "Angle:" ) );
+        m_bottomPostMachineSize2Units->SetLabel( _( "deg" ) );
+
+        if( m_bottomPostMachineSize2Binder.IsIndeterminate() || m_bottomPostMachineSize2Binder.GetDoubleValue() == 0 )
+        {
+             m_bottomPostMachineSize2Binder.SetValue( "82" );
+        }
+    }
+    else if( selection == 2 ) // Counterbore
+    {
+        m_bottomPostMachineSize2Label->SetLabel( _( "Depth:" ) );
+        m_bottomPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+    }
+}
+
 

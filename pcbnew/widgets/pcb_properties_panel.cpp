@@ -560,8 +560,12 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     // Copper only properties
     m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PAD ), _HKI( "Bottom Backdrill Layer" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PAD ), _HKI( "Top Backdrill Layer" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Top" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Bottom" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Bottom Backdrill Layer" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Top Backdrill Layer" ) )->SetChoices( layersCu );
     m_propMgr.GetProperty( TYPE_HASH( PCB_TUNING_PATTERN ), _HKI( "Layer" ) )->SetChoices( layersCu );
 
     // Regenerate nets

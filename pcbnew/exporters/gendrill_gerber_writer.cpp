@@ -67,100 +67,103 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
     wxFileName  fn;
     wxString    msg;
 
-    std::vector<DRILL_LAYER_PAIR> hole_sets = getUniqueLayerPairs();
+    std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
 
-    // append a pair representing the NPTH set of holes, for separate drill files.
-    // (Gerber drill files are separate files for PTH and NPTH)
-    hole_sets.emplace_back( F_Cu, B_Cu );
+    hole_sets.emplace_back( F_Cu, B_Cu, false, true );
 
-    for( std::vector<DRILL_LAYER_PAIR>::const_iterator it = hole_sets.begin();
+    for( std::vector<DRILL_SPAN>::const_iterator it = hole_sets.begin();
          it != hole_sets.end();  ++it )
     {
-        DRILL_LAYER_PAIR  pair = *it;
-        // For separate drill files, the last layer pair is the NPTH drill file.
-        bool doing_npth = ( it == hole_sets.end() - 1 );
+        const DRILL_SPAN& span = *it;
+        bool doing_npth = span.m_IsNonPlatedFile;
 
-        buildHolesList( pair, doing_npth );
+        buildHolesList( span, doing_npth );
 
-        // The file is created if it has holes, or if it is the non plated drill file
-        // to be sure the NPTH file is up to date in separate files mode.
-        // Also a PTH drill/map file is always created, to be sure at least one plated hole drill
-        // file is created (do not create any PTH drill file can be seen as not working drill
-        // generator).
-        if( getHolesCount() > 0 || doing_npth || pair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
+        if( getHolesCount() == 0 )
+            continue;
+
+        fn = getDrillFileName( span, doing_npth, m_merge_PTH_NPTH );
+        fn.SetPath( aPlotDirectory );
+
+        if( aGenDrill )
         {
-            fn = getDrillFileName( pair, doing_npth, false );
-            fn.SetPath( aPlotDirectory );
+            wxString fullFilename = fn.GetFullPath();
+            bool     isNonPlated = doing_npth || span.m_IsBackdrill;
+            bool     wroteDrillFile = false;
 
-            if( aGenDrill )
+            int result = createDrillFile( fullFilename, isNonPlated, span );
+
+            if( result < 0 )
             {
-                wxString fullFilename = fn.GetFullPath();
-
-                int result = createDrillFile( fullFilename, doing_npth, pair );
-
-                if( result < 0 )
+                if( aReporter )
                 {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
-                        aReporter->Report( msg, RPT_SEVERITY_ERROR );
-                        success = false;
-                    }
-
-                    break;
+                    msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
-                else
+
+                success = false;
+                break;
+            }
+
+            wroteDrillFile = true;
+
+            if( aReporter )
+            {
+                msg.Printf( _( "Created file '%s'." ), fullFilename );
+                aReporter->Report( msg, RPT_SEVERITY_ACTION );
+            }
+
+            if( wroteDrillFile && span.m_IsBackdrill )
+            {
+                if( !writeBackdrillLayerPairFile( aPlotDirectory, aReporter, span ) )
                 {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Created file '%s'." ), fullFilename );
-                        aReporter->Report( msg, RPT_SEVERITY_ACTION );
-                    }
+                    success = false;
+                    break;
                 }
             }
         }
 
-        if( getHolesCount() > 0 && !doing_npth )
+        if( doing_npth )
+            continue;
+
+        for( IPC4761_FEATURES feature :
+             { IPC4761_FEATURES::FILLED, IPC4761_FEATURES::CAPPED,
+               IPC4761_FEATURES::COVERED_BACK, IPC4761_FEATURES::COVERED_FRONT,
+               IPC4761_FEATURES::PLUGGED_BACK, IPC4761_FEATURES::PLUGGED_FRONT,
+               IPC4761_FEATURES::TENTED_BACK, IPC4761_FEATURES::TENTED_FRONT } )
         {
-            for( IPC4761_FEATURES feature :
-                 { IPC4761_FEATURES::FILLED, IPC4761_FEATURES::CAPPED,
-                   IPC4761_FEATURES::COVERED_BACK, IPC4761_FEATURES::COVERED_FRONT,
-                   IPC4761_FEATURES::PLUGGED_BACK, IPC4761_FEATURES::PLUGGED_FRONT,
-                   IPC4761_FEATURES::TENTED_BACK, IPC4761_FEATURES::TENTED_FRONT } )
+            if( !aGenTenting )
             {
-                if( !aGenTenting )
-                {
-                    if( feature == IPC4761_FEATURES::TENTED_BACK
+                if( feature == IPC4761_FEATURES::TENTED_BACK
                         || feature == IPC4761_FEATURES::TENTED_FRONT )
-                    {
-                        continue;
-                    }
-                }
-
-                if( !hasViaType( feature ) )
+                {
                     continue;
-
-                fn = getProtectionFileName( pair, feature );
-                fn.SetPath( aPlotDirectory );
-
-                wxString fullFilename = fn.GetFullPath();
-
-                if( createProtectionFile( fullFilename, feature, pair ) < 0 )
-                {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
-                        aReporter->Report( msg, RPT_SEVERITY_ERROR );
-                        success = false;
-                    }
                 }
-                else
+            }
+
+            if( !hasViaType( feature ) )
+                continue;
+
+            fn = getProtectionFileName( span, feature );
+            fn.SetPath( aPlotDirectory );
+
+            wxString fullFilename = fn.GetFullPath();
+
+            if( createProtectionFile( fullFilename, feature, span.Pair() ) < 0 )
+            {
+                if( aReporter )
                 {
-                    if( aReporter )
-                    {
-                        msg.Printf( _( "Created file '%s'." ), fullFilename );
-                        aReporter->Report( msg, RPT_SEVERITY_ACTION );
-                    }
+                    msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                    success = false;
+                }
+            }
+            else
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "Created file '%s'." ), fullFilename );
+                    aReporter->Report( msg, RPT_SEVERITY_ACTION );
                 }
             }
         }
@@ -318,7 +321,7 @@ int GERBER_WRITER::createProtectionFile( const wxString& aFullFilename, IPC4761_
 }
 
 int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
-                                    DRILL_LAYER_PAIR aLayerPair )
+                                    const DRILL_SPAN& aSpan )
 {
     int    holes_count;
 
@@ -341,7 +344,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
     // Add the standard X2 FileFunction for drill files
     // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Rout][Mixed]*%
-    wxString text = BuildFileFunctionAttributeString( aLayerPair,
+    wxString text = BuildFileFunctionAttributeString( aSpan,
                                                       aIsNpth ? TYPE_FILE::NPTH_FILE
                                                               : TYPE_FILE::PTH_FILE );
     plotter.AddLineToHeader( text );
@@ -373,7 +376,10 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
         if( dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
         {
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIADRILL );
+            if( hole_descr.m_IsBackdrill )
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BACKDRILL );
+            else
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIADRILL );
 
             if( !last_item_is_via )
             {
@@ -454,6 +460,49 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 }
 
 
+wxFileName GERBER_WRITER::getBackdrillLayerPairFileName( const DRILL_SPAN& aSpan ) const
+{
+    wxFileName fn = m_pcb->GetFileName();
+    wxString   pairName = wxString::FromUTF8( layerPairName( aSpan.Pair() ).c_str() );
+
+    fn.SetName( fn.GetName() + wxT( "-" ) + pairName + wxT( "-backdrill-drl" ) );
+    fn.SetExt( m_drillFileExtension );
+
+    return fn;
+}
+
+
+bool GERBER_WRITER::writeBackdrillLayerPairFile( const wxString& aPlotDirectory,
+                                                 REPORTER* aReporter, const DRILL_SPAN& aSpan )
+{
+    wxFileName fn = getBackdrillLayerPairFileName( aSpan );
+    fn.SetPath( aPlotDirectory );
+
+    wxString fullFilename = fn.GetFullPath();
+
+    if( createDrillFile( fullFilename, true, aSpan ) < 0 )
+    {
+        if( aReporter )
+        {
+            wxString msg;
+            msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        }
+
+        return false;
+    }
+
+    if( aReporter )
+    {
+        wxString msg;
+        msg.Printf( _( "Created file '%s'." ), fullFilename );
+        aReporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    return true;
+}
+
+
 #if !FLASH_OVAL_HOLE
 void convertOblong2Segment( const VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart,
                             VECTOR2I& aEnd )
@@ -491,12 +540,12 @@ void GERBER_WRITER::SetFormat( int aRightDigits )
 }
 
 
-const wxString GERBER_WRITER::getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
+const wxString GERBER_WRITER::getDrillFileName( const DRILL_SPAN& aSpan, bool aNPTH,
                                                 bool aMerge_PTH_NPTH ) const
 {
     // Gerber files extension is always .gbr.
     // Therefore, to mark drill files, add "-drl" to the filename.
-    wxFileName fname( GENDRILL_WRITER_BASE::getDrillFileName( aPair, aNPTH, aMerge_PTH_NPTH ) );
+    wxFileName fname( GENDRILL_WRITER_BASE::getDrillFileName( aSpan, aNPTH, aMerge_PTH_NPTH ) );
     fname.SetName( fname.GetName() + wxT( "-drl" ) );
 
     return fname.GetFullPath();

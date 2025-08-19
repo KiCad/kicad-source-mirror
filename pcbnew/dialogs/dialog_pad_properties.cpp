@@ -48,10 +48,12 @@
 #include <settings/color_settings.h>
 #include <view/view_controls.h>
 #include <widgets/net_selector.h>
+#include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
 #include <tools/pad_tool.h>
 #include <advanced_config.h>    // for pad property feature management
 #include <wx/choicdlg.h>
+#include <wx/msgdlg.h>
 
 
 int DIALOG_PAD_PROPERTIES::m_page = 0;     // remember the last open page during session
@@ -146,7 +148,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_spokeAngle( aParent, m_spokeAngleLabel, m_spokeAngleCtrl, m_spokeAngleUnits ),
         m_pad_orientation( aParent, m_PadOrientText, m_cb_padrotation, m_orientationUnits ),
         m_teardropMaxLenSetting( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
-        m_teardropMaxHeightSetting( aParent, m_stTdMaxSize, m_tcMaxHeight, m_stMaxHeightUnits )
+        m_teardropMaxHeightSetting( aParent, m_stTdMaxSize, m_tcMaxHeight, m_stMaxHeightUnits ),
+        m_topPostMachineSize1Binder( aParent, m_topPostMachineSize1Label, m_topPostmachineSize1, m_topPostMachineSize1Units ),
+        m_topPostMachineSize2Binder( aParent, m_topPostMachineSize2Label, m_topPostMachineSize2, m_topPostMachineSize2Units ),
+        m_bottomPostMachineSize1Binder( aParent, m_bottomPostMachineSize1Label, m_bottomPostMachineSize1, m_bottomPostMachineSize1Units ),
+        m_bottomPostMachineSize2Binder( aParent, m_bottomPostMachineSize2Label, m_bottomPostMachineSize2, m_bottomPostMachineSize2Units ),
+        m_backDrillTopSizeBinder( aParent, m_backDrillTopSizeLabel, m_backDrillTopSize, m_backDrillTopSizeUnits ),
+        m_backDrillBottomSizeBinder( aParent, m_backDrillBottomSizeLabel, m_backDrillBottomSize, m_backDrillBottomSizeUnits )
 {
     SetName( PAD_PROPERTIES_DLG_NAME );
     m_isFpEditor = aParent->GetFrameType() == FRAME_FOOTPRINT_EDITOR;
@@ -817,6 +825,87 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_holeShapeCtrl->SetSelection( 1 );
 
+    // Backdrill properties
+    const PADSTACK::DRILL_PROPS& secondaryDrill = m_previewPad->Padstack().SecondaryDrill();
+    const PADSTACK::DRILL_PROPS& tertiaryDrill = m_previewPad->Padstack().TertiaryDrill();
+    bool hasBackdrill = secondaryDrill.start != UNDEFINED_LAYER;
+    bool hasTertiaryDrill = tertiaryDrill.start != UNDEFINED_LAYER;
+
+    int selection = hasBackdrill
+                    ? ( hasTertiaryDrill ? 3 : 2 )
+                    : ( hasTertiaryDrill ? 1 : 0 );
+    m_backDrillChoice->SetSelection( selection );
+
+    if( !hasBackdrill )
+    {
+        m_backDrillBottomSizeBinder.SetValue( 0 );
+    }
+    else
+    {
+        m_backDrillBottomSizeBinder.SetValue( secondaryDrill.size.x );
+
+        for( unsigned int i = 0; i < m_backDrillBottomLayer->GetCount(); ++i )
+        {
+            if( (PCB_LAYER_ID)(intptr_t)m_backDrillBottomLayer->GetClientData( i ) == secondaryDrill.end )
+            {
+                m_backDrillBottomLayer->SetSelection( i );
+                break;
+            }
+        }
+    }
+
+    if( !hasTertiaryDrill )
+    {
+        m_backDrillTopSizeBinder.SetValue( 0 );
+    }
+    else
+    {
+        m_backDrillTopSizeBinder.SetValue( tertiaryDrill.size.x );
+
+        for( unsigned int i = 0; i < m_backDrillTopLayer->GetCount(); ++i )
+        {
+            if( (PCB_LAYER_ID)(intptr_t)m_backDrillTopLayer->GetClientData( i ) == tertiaryDrill.end )
+            {
+                m_backDrillTopLayer->SetSelection( i );
+                break;
+            }
+        }
+    }
+
+    // Post machining
+    const PADSTACK::POST_MACHINING_PROPS& frontPostMachining = m_previewPad->Padstack().FrontPostMachining();
+
+    if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+        m_topPostMachining->SetSelection( 2 );
+    else if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        m_topPostMachining->SetSelection( 1 );
+    else
+        m_topPostMachining->SetSelection( 0 );
+
+    m_topPostMachineSize1Binder.SetValue( frontPostMachining.size );
+
+    if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        m_topPostMachineSize2Binder.SetValue( frontPostMachining.angle );
+    else
+        m_topPostMachineSize2Binder.SetValue( frontPostMachining.depth );
+
+    const PADSTACK::POST_MACHINING_PROPS& backPostMachining = m_previewPad->Padstack().BackPostMachining();
+
+    if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+        m_bottomPostMachining->SetSelection( 2 );
+    else if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        m_bottomPostMachining->SetSelection( 1 );
+    else
+        m_bottomPostMachining->SetSelection( 0 );
+
+    m_bottomPostMachineSize1Binder.SetValue( backPostMachining.size );
+
+    if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        m_bottomPostMachineSize2Binder.SetValue( backPostMachining.angle );
+    else
+        m_bottomPostMachineSize2Binder.SetValue( backPostMachining.depth );
+
+
     updatePadLayersList( m_previewPad->GetLayerSet(), m_previewPad->GetRemoveUnconnected(),
                          m_previewPad->GetKeepTopBottom() );
 
@@ -824,6 +913,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     wxCommandEvent cmd_event;
     OnPadShapeSelection( cmd_event );
     OnOffsetCheckbox( cmd_event );
+    updateHoleControls();
 
     // Restore thermal spoke angle to its initial value, because it can be modified
     // by the call to OnPadShapeSelection()
@@ -1111,6 +1201,23 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 {
+    if( m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CIRCLE )
+    {
+        bool hasBackdrill = ( m_backDrillChoice->GetSelection() != 0 );
+        bool hasTopPost = ( m_topPostMachining->GetSelection() != 0 );
+        bool hasBottomPost = ( m_bottomPostMachining->GetSelection() != 0 );
+
+        if( hasBackdrill || hasTopPost || hasBottomPost )
+        {
+            if( wxMessageBox( _( "Switching to non-circular hole will disable backdrills and post-machining. Continue?" ),
+                              _( "Warning" ), wxOK | wxCANCEL | wxICON_WARNING, this ) != wxOK )
+            {
+                m_holeShapeCtrl->SetSelection( CHOICE_SHAPE_CIRCLE );
+                return;
+            }
+        }
+    }
+
     transferDataToPad( m_previewPad );
     updateHoleControls();
     redraw();
@@ -1163,6 +1270,19 @@ void DIALOG_PAD_PROPERTIES::UpdateLayersDropdown()
     case APERTURE_DLG_TYPE:
         m_rbCopperLayersSel->Append( _( "None" ) );
         break;
+    }
+
+    m_backDrillTopLayer->Clear();
+    m_backDrillBottomLayer->Clear();
+
+    for( PCB_LAYER_ID layerId : m_board->GetEnabledLayers().UIOrder() )
+    {
+        if( IsCopperLayer( layerId ) )
+        {
+            wxString layerName = m_board->GetLayerName( layerId );
+            m_backDrillTopLayer->Append( layerName, wxBitmapBundle(), (void*)(intptr_t)layerId );
+            m_backDrillBottomLayer->Append( layerName, wxBitmapBundle(), (void*)(intptr_t)layerId );
+        }
     }
 }
 
@@ -1701,7 +1821,9 @@ PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
 
 void DIALOG_PAD_PROPERTIES::updateHoleControls()
 {
-    if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
+    bool isRound = ( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE );
+
+    if( isRound )
     {
         m_holeXLabel->SetLabel( _( "Diameter:" ) );
         m_holeY.Show( false );
@@ -1713,6 +1835,41 @@ void DIALOG_PAD_PROPERTIES::updateHoleControls()
     }
 
     m_holeXLabel->GetParent()->Layout();
+
+    if( !isRound )
+    {
+        // Disable all
+        m_backDrillChoice->Enable( false );
+        m_backDrillTopLayer->Enable( false );
+        m_backDrillTopLayerLabel->Enable( false );
+        m_backDrillBottomLayer->Enable( false );
+        m_backDrillBottomLayerLabel->Enable( false );
+
+        m_topPostMachining->Enable( false );
+        m_topPostMachineSize1Binder.Enable( false );
+        m_topPostMachineSize2Binder.Enable( false );
+        m_topPostMachineSize1Label->Enable( false );
+        m_topPostMachineSize2Label->Enable( false );
+
+        m_bottomPostMachining->Enable( false );
+        m_bottomPostMachineSize1Binder.Enable( false );
+        m_bottomPostMachineSize2Binder.Enable( false );
+        m_bottomPostMachineSize1Label->Enable( false );
+        m_bottomPostMachineSize2Label->Enable( false );
+    }
+    else
+    {
+        // Enable main choices
+        m_backDrillChoice->Enable( true );
+        m_topPostMachining->Enable( true );
+        m_bottomPostMachining->Enable( true );
+
+        // Update sub-controls based on selection
+        wxCommandEvent dummy;
+        onBackDrillChoice( dummy );
+        onTopPostMachining( dummy );
+        onBottomPostMachining( dummy );
+    }
 }
 
 
@@ -2111,7 +2268,164 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     aPad->SetLayerSet( padLayerMask );
 
+    // Save backdrill properties
+    PADSTACK::DRILL_PROPS secondaryDrill;
+    secondaryDrill.size = VECTOR2I( m_backDrillBottomSizeBinder.GetIntValue(),
+                                    m_backDrillBottomSizeBinder.GetIntValue() );
+    secondaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+    PADSTACK::DRILL_PROPS tertiaryDrill;
+    tertiaryDrill.size = VECTOR2I( m_backDrillTopSizeBinder.GetIntValue(),
+                                   m_backDrillTopSizeBinder.GetIntValue() );
+    tertiaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+    if( !m_backDrillChoice->GetSelection() )
+    {
+        secondaryDrill.start = UNDEFINED_LAYER;
+        secondaryDrill.end = UNDEFINED_LAYER;
+    }
+
+    if( m_backDrillChoice->GetSelection() & 1 ) // Bottom
+    {
+        secondaryDrill.start = B_Cu;
+
+        if( m_backDrillBottomLayer->GetSelection() != wxNOT_FOUND )
+            secondaryDrill.end = (PCB_LAYER_ID)(intptr_t)m_backDrillBottomLayer->GetClientData( m_backDrillBottomLayer->GetSelection() );
+        else
+            secondaryDrill.end = UNDEFINED_LAYER;
+    }
+
+    if( m_backDrillChoice->GetSelection() & 2 ) // Top
+    {
+        tertiaryDrill.start = F_Cu;
+
+        if( m_backDrillTopLayer->GetSelection() != wxNOT_FOUND )
+            tertiaryDrill.end = (PCB_LAYER_ID)(intptr_t)m_backDrillTopLayer->GetClientData( m_backDrillTopLayer->GetSelection() );
+        else
+            tertiaryDrill.end = UNDEFINED_LAYER;
+    }
+
+    aPad->Padstack().SecondaryDrill() = secondaryDrill;
+    aPad->Padstack().TertiaryDrill() = tertiaryDrill;
+
+    // Front Post Machining
+    PADSTACK::POST_MACHINING_PROPS frontPostMachining;
+
+    switch( m_topPostMachining->GetSelection() )
+    {
+    case 1: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+    case 2: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+    default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+    }
+
+    frontPostMachining.size = m_topPostMachineSize1Binder.GetIntValue();
+
+    if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        frontPostMachining.angle = m_topPostMachineSize2Binder.GetIntValue();
+    else
+        frontPostMachining.depth = m_topPostMachineSize2Binder.GetIntValue();
+
+    aPad->Padstack().FrontPostMachining() = frontPostMachining;
+
+    // Back Post Machining
+    PADSTACK::POST_MACHINING_PROPS backPostMachining;
+
+    switch( m_bottomPostMachining->GetSelection() )
+    {
+    case 1: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+    case 2: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+    default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+    }
+
+    backPostMachining.size = m_bottomPostMachineSize1Binder.GetIntValue();
+
+    if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        backPostMachining.angle = m_bottomPostMachineSize2Binder.GetIntValue();
+    else
+        backPostMachining.depth = m_bottomPostMachineSize2Binder.GetIntValue();
+
+    aPad->Padstack().BackPostMachining() = backPostMachining;
+
     return !error;
+}
+
+
+
+
+void DIALOG_PAD_PROPERTIES::onBackDrillChoice( wxCommandEvent& event )
+{
+    int selection = m_backDrillChoice->GetSelection();
+    // 0: None, 1: Bottom, 2: Top, 3: Both
+
+    bool enableTop = ( selection == 2 || selection == 3 );
+    bool enableBottom = ( selection == 1 || selection == 3 );
+
+    m_backDrillTopSizeBinder.Enable( enableTop );
+    m_backDrillTopLayer->Enable( enableTop );
+    m_backDrillTopLayerLabel->Enable( enableTop );
+
+    m_backDrillBottomSizeBinder.Enable( enableBottom );
+    m_backDrillBottomLayer->Enable( enableBottom );
+    m_backDrillBottomLayerLabel->Enable( enableBottom );
+
+}
+
+
+void DIALOG_PAD_PROPERTIES::onTopPostMachining( wxCommandEvent& event )
+{
+    int selection = m_topPostMachining->GetSelection();
+    // 0: None, 1: Countersink, 2: Counterbore
+
+    bool enable = ( selection != 0 );
+    m_topPostMachineSize1Binder.Enable( enable );
+    m_topPostMachineSize2Binder.Enable( enable );
+    m_topPostMachineSize1Label->Enable( enable );
+    m_topPostMachineSize2Label->Enable( enable );
+
+    if( selection == 1 ) // Countersink
+    {
+        m_topPostMachineSize2Label->SetLabel( _( "Angle:" ) );
+        m_topPostMachineSize2Units->SetLabel( _( "deg" ) );
+
+        if( m_topPostMachineSize2Binder.IsIndeterminate() || m_topPostMachineSize2Binder.GetDoubleValue() == 0 )
+        {
+             m_topPostMachineSize2Binder.SetValue( "82" );
+        }
+    }
+    else if( selection == 2 ) // Counterbore
+    {
+        m_topPostMachineSize2Label->SetLabel( _( "Depth:" ) );
+        m_topPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_parent->GetUserUnits() ) );
+    }
+}
+
+
+void DIALOG_PAD_PROPERTIES::onBottomPostMachining( wxCommandEvent& event )
+{
+    int selection = m_bottomPostMachining->GetSelection();
+    // 0: None, 1: Countersink, 2: Counterbore
+
+    bool enable = ( selection != 0 );
+    m_bottomPostMachineSize1Binder.Enable( enable );
+    m_bottomPostMachineSize2Binder.Enable( enable );
+    m_bottomPostMachineSize1Label->Enable( enable );
+    m_bottomPostMachineSize2Label->Enable( enable );
+
+    if( selection == 1 ) // Countersink
+    {
+        m_bottomPostMachineSize2Label->SetLabel( _( "Angle:" ) );
+        m_bottomPostMachineSize2Units->SetLabel( _( "deg" ) );
+
+        if( m_bottomPostMachineSize2Binder.IsIndeterminate() || m_bottomPostMachineSize2Binder.GetDoubleValue() == 0 )
+        {
+             m_bottomPostMachineSize2Binder.SetValue( "82" );
+        }
+    }
+    else if( selection == 2 ) // Counterbore
+    {
+        m_bottomPostMachineSize2Label->SetLabel( _( "Depth:" ) );
+        m_bottomPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_parent->GetUserUnits() ) );
+    }
 }
 
 

@@ -80,6 +80,7 @@ RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
     m_lastGridType = GRID3D_TYPE::NONE;
     m_currentRollOverItem = nullptr;
     m_boardWithHoles = nullptr;
+    m_postMachinePlugs = nullptr;
 
     m_3dModelMap.clear();
 
@@ -481,6 +482,16 @@ void RENDER_3D_OPENGL::renderBoardBody( bool aSkipRenderHoles )
 
         ogl_disp_list->SetItIsTransparent( true );
         ogl_disp_list->DrawAll();
+    }
+
+    // Also render post-machining plugs (board material that remains after backdrill/counterbore/countersink)
+    if( !aSkipRenderHoles && m_postMachinePlugs )
+    {
+        m_postMachinePlugs->ApplyScalePosition( -m_boardAdapter.GetBoardBodyThickness() / 2.0f,
+                                                m_boardAdapter.GetBoardBodyThickness() );
+
+        m_postMachinePlugs->SetItIsTransparent( true );
+        m_postMachinePlugs->DrawAll();
     }
 }
 
@@ -941,6 +952,7 @@ void RENDER_3D_OPENGL::freeAllLists()
 
     DELETE_AND_FREE( m_board )
     DELETE_AND_FREE( m_boardWithHoles )
+    DELETE_AND_FREE( m_postMachinePlugs )
     DELETE_AND_FREE( m_antiBoard )
 
     DELETE_AND_FREE( m_outerThroughHoles )

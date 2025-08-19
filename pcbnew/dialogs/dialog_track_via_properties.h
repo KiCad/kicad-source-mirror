@@ -53,6 +53,9 @@ private:
     void onTrackEdit( wxCommandEvent& aEvent ) override;
     void onPadstackModeChanged( wxCommandEvent& aEvent ) override;
     void onEditLayerChanged( wxCommandEvent& aEvent ) override;
+    void onBackdrillChange( wxCommandEvent& aEvent ) override;
+    void onTopPostMachineChange( wxCommandEvent& aEvent ) override;
+    void onBottomPostMachineChange( wxCommandEvent& aEvent ) override;
 
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
@@ -78,6 +81,11 @@ private:
     UNIT_BINDER          m_viaX, m_viaY;
     UNIT_BINDER          m_viaDiameter, m_viaDrill;
 
+    UNIT_BINDER          m_topPostMachineSize1Binder;
+    UNIT_BINDER          m_topPostMachineSize2Binder;
+    UNIT_BINDER          m_bottomPostMachineSize1Binder;
+    UNIT_BINDER          m_bottomPostMachineSize2Binder;
+
     UNIT_BINDER          m_teardropHDPercent;
     UNIT_BINDER          m_teardropLenPercent;
     UNIT_BINDER          m_teardropMaxLen;
@@ -93,4 +101,7 @@ private:
     /// The currently-shown copper layer of the edited via(s)
     PCB_LAYER_ID m_editLayer;
     std::map<int, PCB_LAYER_ID> m_editLayerCtrlMap;
+    bool                 m_backdrillStartIndeterminate;
+    bool                 m_backdrillEndIndeterminate;
+    bool                 m_padstackDirty;
 };

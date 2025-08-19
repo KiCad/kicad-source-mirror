@@ -26,6 +26,7 @@
 #include "render_3d_opengl.h"
 #include <board.h>
 #include <footprint.h>
+#include <layer_range.h>
 #include <pcb_track.h>
 #include "../../3d_math.h"
 #include "convert_basic_shapes_to_polygon.h"
@@ -428,6 +429,262 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardP
 }
 
 
+void RENDER_3D_OPENGL::backfillPostMachine()
+{
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
+    const int copperLayerCount = m_boardAdapter.GetBoard()->GetCopperLayerCount();
+    const float unitScale = m_boardAdapter.BiuTo3dUnits();
+    const int platingThickness = m_boardAdapter.GetHolePlatingThickness();
+    const float boardBodyThickness = m_boardAdapter.GetBoardBodyThickness();
+
+    // We use the same unit z range as the board (0 to 1) and apply scaling when rendering
+    const float boardZTop = 1.0f;  // Top of board body
+    const float boardZBot = 0.0f;  // Bottom of board body
+
+    // Helper to convert layer Z position to normalized 0-1 range
+    auto normalizeZ = [&]( float absZ ) -> float
+    {
+        float boardTop = m_boardAdapter.GetLayerBottomZPos( F_Cu );
+        float boardBot = m_boardAdapter.GetLayerBottomZPos( B_Cu );
+        float boardThick = boardTop - boardBot;
+
+        if( boardThick <= 0 )
+            return 0.5f;
+
+        // Map absolute Z to 0-1 range where 0 = B_Cu and 1 = F_Cu
+        return ( absZ - boardBot ) / boardThick;
+    };
+
+    // We'll accumulate all plug geometry into a single triangle list
+    TRIANGLE_DISPLAY_LIST* plugTriangles = new TRIANGLE_DISPLAY_LIST( 1024 );
+
+    // Process vias for backdrill and post-machining plugs
+    for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
+        const float holeDiameter = via->GetDrillValue() * unitScale;
+        const float holeInnerRadius = holeDiameter / 2.0f;
+        const float holeOuterRadius = holeInnerRadius + platingThickness * unitScale;
+        const SFVEC2F center( via->GetStart().x * unitScale, -via->GetStart().y * unitScale );
+        const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
+
+        PCB_LAYER_ID topLayer, bottomLayer;
+        via->LayerPair( &topLayer, &bottomLayer );
+
+        float viaZTop, viaZBot, dummy;
+        getLayerZPos( topLayer, viaZTop, dummy );
+        getLayerZPos( bottomLayer, dummy, viaZBot );
+
+        // Handle backdrill plugs
+        const float secondaryDrillRadius = via->GetSecondaryDrillSize().value_or( 0 ) * 0.5f * unitScale;
+        const float tertiaryDrillRadius = via->GetTertiaryDrillSize().value_or( 0 ) * 0.5f * unitScale;
+
+        if( secondaryDrillRadius > holeOuterRadius || tertiaryDrillRadius > holeOuterRadius )
+        {
+            PCB_LAYER_ID plug_start_layer = F_Cu;
+            PCB_LAYER_ID plug_end_layer = B_Cu;
+
+            // Case 1: secondary drill exists, so we need to adjust the plug_end_layer
+            if( secondaryDrillRadius > holeOuterRadius )
+            {
+                plug_end_layer = via->GetSecondaryDrillEndLayer();
+            }
+            // Case 2: tertiary drill exists, so we need to adjust the plug_start_layer
+            if( tertiaryDrillRadius > holeOuterRadius )
+            {
+                plug_start_layer = via->GetTertiaryDrillStartLayer();
+            }
+
+            // Calculate where the backdrill ends and plug should start
+            float plugZTop, plugZBot, temp;
+            getLayerZPos( plug_end_layer, temp, plugZBot );
+            getLayerZPos( plug_start_layer, plugZTop, temp );
+
+            // Create a ring from holeOuterRadius to backdrillRadius
+            generateCylinder( center, holeOuterRadius, std::max( secondaryDrillRadius, tertiaryDrillRadius ),
+                                plugZTop, plugZBot, nrSegments, plugTriangles );
+        }
+
+        // Handle front post-machining plugs
+        const auto frontMode = via->GetFrontPostMachining();
+
+        if( frontMode.has_value()
+            && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+            && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+        {
+            const float frontRadius = via->GetFrontPostMachiningSize() * 0.5f * unitScale;
+            const float frontDepth = via->GetFrontPostMachiningDepth() * unitScale;
+
+            if( frontRadius > holeOuterRadius && frontDepth > 0 )
+            {
+                // Plug goes from bottom of post-machining to bottom of via
+                float pmBottomZ = normalizeZ( viaZTop - frontDepth );
+                float plugZBot = normalizeZ( viaZBot );
+
+                if( pmBottomZ > plugZBot )
+                {
+                    if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    {
+                        EDA_ANGLE angle( via->GetFrontPostMachiningAngle(), TENTHS_OF_A_DEGREE_T );
+                        generateInvCone( center, holeOuterRadius, frontRadius,
+                                         pmBottomZ, plugZBot, nrSegments, plugTriangles, angle );
+                    }
+                    else
+                    {
+                        generateCylinder( center, holeOuterRadius, frontRadius,
+                                          pmBottomZ, plugZBot, nrSegments, plugTriangles );
+                    }
+                }
+            }
+        }
+
+        // Handle back post-machining plugs
+        const auto backMode = via->GetBackPostMachining();
+
+        if( backMode.has_value()
+            && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+            && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+        {
+            const float backRadius = via->GetBackPostMachiningSize() * 0.5f * unitScale;
+            const float backDepth = via->GetBackPostMachiningDepth() * unitScale;
+
+            if( backRadius > holeOuterRadius && backDepth > 0 )
+            {
+                // Plug goes from top of via to top of post-machining
+                float plugZTop = normalizeZ( viaZTop );
+                float pmTopZ = normalizeZ( viaZBot + backDepth );
+
+                if( plugZTop > pmTopZ )
+                {
+                    if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    {
+                        EDA_ANGLE angle( via->GetBackPostMachiningAngle(), TENTHS_OF_A_DEGREE_T );
+                        generateInvCone( center, holeOuterRadius, backRadius,
+                                         plugZTop, pmTopZ, nrSegments, plugTriangles, angle );
+                    }
+                    else
+                    {
+                        generateCylinder( center, holeOuterRadius, backRadius,
+                                          plugZTop, pmTopZ, nrSegments, plugTriangles );
+                    }
+                }
+            }
+        }
+    }
+
+    // Process pads for post-machining plugs
+    for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
+    {
+        for( const PAD* pad : footprint->Pads() )
+        {
+            if( !pad->HasHole() )
+                continue;
+
+            if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                continue;
+
+            const SFVEC2F padCenter( pad->GetPosition().x * unitScale,
+                                     -pad->GetPosition().y * unitScale );
+            const float holeInnerRadius = pad->GetDrillSize().x * 0.5f * unitScale;
+            const float holeOuterRadius = holeInnerRadius + platingThickness * unitScale;
+            const int nrSegments = m_boardAdapter.GetCircleSegmentCount( pad->GetDrillSize().x );
+
+            float padZTop, padZBot, padDummy;
+            getLayerZPos( F_Cu, padZTop, padDummy );
+            getLayerZPos( B_Cu, padDummy, padZBot );
+
+            // Handle front post-machining plugs for pads
+            const auto frontMode = pad->GetFrontPostMachining();
+
+            if( frontMode.has_value()
+                && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+            {
+                const float frontRadius = pad->GetFrontPostMachiningSize() * 0.5f * unitScale;
+                const float frontDepth = pad->GetFrontPostMachiningDepth() * unitScale;
+
+                if( frontRadius > holeOuterRadius && frontDepth > 0 )
+                {
+                    float pmBottomZ = normalizeZ( padZTop - frontDepth );
+                    float plugZBot = normalizeZ( padZBot );
+
+                    if( pmBottomZ > plugZBot )
+                    {
+                        if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                        {
+                            EDA_ANGLE angle( pad->GetFrontPostMachiningAngle(), TENTHS_OF_A_DEGREE_T );
+                            generateInvCone( padCenter, holeOuterRadius, frontRadius,
+                                             pmBottomZ, plugZBot, nrSegments, plugTriangles, angle );
+                        }
+                        else
+                        {
+                            generateCylinder( padCenter, holeOuterRadius, frontRadius,
+                                              pmBottomZ, plugZBot, nrSegments, plugTriangles );
+                        }
+                    }
+                }
+            }
+
+            // Handle back post-machining plugs for pads
+            const auto backMode = pad->GetBackPostMachining();
+
+            if( backMode.has_value()
+                && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+            {
+                const float backRadius = pad->GetBackPostMachiningSize() * 0.5f * unitScale;
+                const float backDepth = pad->GetBackPostMachiningDepth() * unitScale;
+
+                if( backRadius > holeOuterRadius && backDepth > 0 )
+                {
+                    float plugZTop = normalizeZ( padZTop );
+                    float pmTopZ = normalizeZ( padZBot + backDepth );
+
+                    if( plugZTop > pmTopZ )
+                    {
+                        if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                        {
+                            EDA_ANGLE angle( pad->GetBackPostMachiningAngle(), TENTHS_OF_A_DEGREE_T );
+                            generateInvCone( padCenter, holeOuterRadius, backRadius,
+                                             plugZTop, pmTopZ, nrSegments, plugTriangles, angle );
+                        }
+                        else
+                        {
+                            generateCylinder( padCenter, holeOuterRadius, backRadius,
+                                              plugZTop, pmTopZ, nrSegments, plugTriangles );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // If we have any plug geometry, create a render list for it
+    if( plugTriangles->m_layer_top_triangles->GetVertexSize() > 0
+        || plugTriangles->m_layer_bot_triangles->GetVertexSize() > 0
+        || plugTriangles->m_layer_middle_contours_quads->GetVertexSize() > 0 )
+    {
+        // Store the triangles for later cleanup
+        m_triangles.push_back( plugTriangles );
+
+        // Create a render list for the plugs using the same Z range as the board
+        // This will be scaled and drawn alongside m_boardWithHoles in renderBoardBody()
+        m_postMachinePlugs = new OPENGL_RENDER_LIST( *plugTriangles, m_circleTexture,
+                                                     boardZTop, boardZTop );
+    }
+    else
+    {
+        delete plugTriangles;
+    }
+}
+
+
 void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     m_reloadRequested = false;
@@ -463,7 +720,30 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly().CloneDropTriangulation();
     board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
 
+    // Also subtract counterbore, countersink, and backdrill polygons from the board
+    if( m_boardAdapter.GetFrontCounterborePolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetFrontCounterborePolys() );
+
+    if( m_boardAdapter.GetBackCounterborePolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackCounterborePolys() );
+
+    if( m_boardAdapter.GetFrontCountersinkPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetFrontCountersinkPolys() );
+
+    if( m_boardAdapter.GetBackCountersinkPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
+
+    if( m_boardAdapter.GetBackdrillPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackdrillPolys() );
+
+    if( m_boardAdapter.GetTertiarydrillPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
+
+
     m_boardWithHoles = createBoard( board_poly_with_holes, &m_boardAdapter.GetTH_IDs() );
+
+    // Create plugs for backdrilled and post-machined areas
+    backfillPostMachine();
 
     if( m_antiBoard )
         m_antiBoard->SetItIsTransparent( true );
@@ -560,6 +840,18 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                 {
                     polyListSubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
                     polyListSubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
+
+                    // Subtract counterbore/countersink cutouts from copper layers
+                    if( layer == F_Cu )
+                    {
+                        polyListSubtracted.BooleanSubtract( m_boardAdapter.GetFrontCounterborePolys() );
+                        polyListSubtracted.BooleanSubtract( m_boardAdapter.GetFrontCountersinkPolys() );
+                    }
+                    else if( layer == B_Cu )
+                    {
+                        polyListSubtracted.BooleanSubtract( m_boardAdapter.GetBackCounterborePolys() );
+                        polyListSubtracted.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
+                    }
                 }
 
                 if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
@@ -596,6 +888,9 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             poly.BooleanIntersection( m_boardAdapter.GetBoardPoly() );
             poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetFrontCounterborePolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetFrontCountersinkPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
 
             m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly,
                                                    F_Cu );
@@ -611,6 +906,9 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             poly.BooleanIntersection( m_boardAdapter.GetBoardPoly() );
             poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetBackCounterborePolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetBackdrillPolys() );
 
             m_platedPadsBack = generateLayerList( m_boardAdapter.GetPlatedPadsBack(), &poly, B_Cu );
 
@@ -707,6 +1005,69 @@ void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 }
 
 
+void RENDER_3D_OPENGL::generateInvCone( const SFVEC2F& aCenter, float aInnerRadius,
+                                        float aOuterRadius, float aZtop, float aZbot,
+                                        unsigned int aNr_sides_per_circle,
+                                        TRIANGLE_DISPLAY_LIST* aDstLayer, EDA_ANGLE aAngle )
+{
+    // For a countersink cone:
+    // - The outer contour goes from aZbot to aZtop (full height)
+    // - The inner contour goes from aZbot to aZbot + innerHeight
+    // - The top surface is conical, sloping from inner top to outer top
+    // - aAngle is the half-angle of the cone (in decidegrees from the vertical)
+
+    // Calculate the inner contour height based on the cone angle
+    // tan(angle) = (outerRadius - innerRadius) / innerHeight
+    // innerHeight = (outerRadius - innerRadius) / tan(angle)
+    float radialDiff = aOuterRadius - aInnerRadius;
+    float angleRad = aAngle.AsRadians();
+
+    // Clamp angle to avoid division by zero or negative heights
+    if( angleRad < 0.01f )
+        angleRad = 0.01f;
+
+    float innerHeight = radialDiff / tanf( angleRad );
+    float totalHeight = aZtop - aZbot;
+
+    // Clamp inner height to not exceed total height
+    if( innerHeight > totalHeight )
+        innerHeight = totalHeight;
+
+    float zInnerTop = aZbot + innerHeight;
+
+    std::vector< SFVEC2F > innerContour;
+    std::vector< SFVEC2F > outerContour;
+
+    generateRing( aCenter, aInnerRadius, aOuterRadius, aNr_sides_per_circle, innerContour,
+                  outerContour, false );
+
+    for( unsigned int i = 0; i < ( innerContour.size() - 1 ); ++i )
+    {
+        const SFVEC2F& vi0 = innerContour[i + 0];
+        const SFVEC2F& vi1 = innerContour[i + 1];
+        const SFVEC2F& vo0 = outerContour[i + 0];
+        const SFVEC2F& vo1 = outerContour[i + 1];
+
+        // Conical top surface: from inner contour at zInnerTop to outer contour at aZtop
+        aDstLayer->m_layer_top_triangles->AddQuad( SFVEC3F( vi1.x, vi1.y, zInnerTop ),
+                                                   SFVEC3F( vi0.x, vi0.y, zInnerTop ),
+                                                   SFVEC3F( vo0.x, vo0.y, aZtop ),
+                                                   SFVEC3F( vo1.x, vo1.y, aZtop ) );
+
+        // Flat bottom surface
+        aDstLayer->m_layer_bot_triangles->AddQuad( SFVEC3F( vi1.x, vi1.y, aZbot ),
+                                                   SFVEC3F( vo1.x, vo1.y, aZbot ),
+                                                   SFVEC3F( vo0.x, vo0.y, aZbot ),
+                                                   SFVEC3F( vi0.x, vi0.y, aZbot ) );
+    }
+
+    // Outer contour wall goes full height
+    aDstLayer->AddToMiddleContours( outerContour, aZbot, aZtop, true );
+    // Inner contour wall only goes up to zInnerTop
+    aDstLayer->AddToMiddleContours( innerContour, aZbot, zInnerTop, false );
+}
+
+
 void RENDER_3D_OPENGL::generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ,
                                      unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
                                      bool aTop )
@@ -755,162 +1116,383 @@ void RENDER_3D_OPENGL::generateDimple( const SFVEC2F& aCenter, float aRadius, fl
 }
 
 
-void RENDER_3D_OPENGL::generateViasAndPads()
+bool RENDER_3D_OPENGL::appendPostMachiningGeometry( TRIANGLE_DISPLAY_LIST* aDstLayer,
+                                                    const SFVEC2F& aHoleCenter,
+                                                    PAD_DRILL_POST_MACHINING_MODE aMode,
+                                                    int aSizeIU,
+                                                    int aDepthIU,
+                                                    float aHoleInnerRadius,
+                                                    float aZSurface,
+                                                    bool aIsFront,
+                                                    float aPlatingThickness3d,
+                                                    float aUnitScale,
+                                                    float* aZEnd )
+{
+    if( !m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
+        return false;
+
+    if( !aDstLayer || aPlatingThickness3d <= 0.0f || aHoleInnerRadius <= 0.0f )
+        return false;
+
+    if( aMode != PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+            && aMode != PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+    {
+        return false;
+    }
+
+    if( aSizeIU <= 0 || aDepthIU <= 0 )
+        return false;
+
+    const float radius = aSizeIU * 0.5f * aUnitScale;
+    const float depth = aDepthIU * aUnitScale;
+
+    if( radius <= aHoleInnerRadius || depth <= 0.0f )
+        return false;
+
+    float zEnd = aIsFront ? ( aZSurface - depth ) : ( aZSurface + depth );
+
+    if( aZEnd )
+        *aZEnd = zEnd;
+
+    const float zTop = std::max( aZSurface, zEnd );
+    const float zBot = std::min( aZSurface, zEnd );
+
+    const int diameterBIU = std::max( aSizeIU,
+                                      std::max( 1,
+                                                (int) ( ( aHoleInnerRadius * 2.0f )
+                                                        / aUnitScale ) ) );
+    const unsigned int nrSegments =
+            std::max( 12u, m_boardAdapter.GetCircleSegmentCount( diameterBIU ) );
+
+    if( aMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+    {
+        generateCylinder( aHoleCenter, radius, radius + aPlatingThickness3d, zTop, zBot,
+                          nrSegments, aDstLayer );
+        return true;
+    }
+
+    float csTopRadius = radius;
+    float csBotRadius = aHoleInnerRadius;
+
+    std::vector< SFVEC2F > innerContourTop, outerContourTop;
+    std::vector< SFVEC2F > innerContourBot, outerContourBot;
+
+    generateRing( aHoleCenter, csTopRadius, csTopRadius + aPlatingThickness3d, nrSegments,
+                  innerContourTop, outerContourTop, false );
+    generateRing( aHoleCenter, csBotRadius, csBotRadius + aPlatingThickness3d, nrSegments,
+                  innerContourBot, outerContourBot, false );
+
+    for( unsigned int i = 0; i < ( innerContourTop.size() - 1 ); ++i )
+    {
+        const SFVEC2F& vi0_top = innerContourTop[i + 0];
+        const SFVEC2F& vi1_top = innerContourTop[i + 1];
+        const SFVEC2F& vo0_top = outerContourTop[i + 0];
+        const SFVEC2F& vo1_top = outerContourTop[i + 1];
+
+        const SFVEC2F& vi0_bot = innerContourBot[i + 0];
+        const SFVEC2F& vi1_bot = innerContourBot[i + 1];
+        const SFVEC2F& vo0_bot = outerContourBot[i + 0];
+        const SFVEC2F& vo1_bot = outerContourBot[i + 1];
+
+        aDstLayer->m_layer_middle_contours_quads->AddQuad(
+                SFVEC3F( vi1_top.x, vi1_top.y, zTop ),
+                SFVEC3F( vi0_top.x, vi0_top.y, zTop ),
+                SFVEC3F( vi0_bot.x, vi0_bot.y, zBot ),
+                SFVEC3F( vi1_bot.x, vi1_bot.y, zBot ) );
+
+        aDstLayer->m_layer_middle_contours_quads->AddQuad(
+                SFVEC3F( vo1_top.x, vo1_top.y, zTop ),
+                SFVEC3F( vo0_top.x, vo0_top.y, zTop ),
+                SFVEC3F( vo0_bot.x, vo0_bot.y, zBot ),
+                SFVEC3F( vo1_bot.x, vo1_bot.y, zBot ) );
+    }
+
+    return true;
+}
+
+
+void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUnitScale )
+{
+    if( !m_boardAdapter.GetBoard() || m_boardAdapter.GetViaCount() <= 0 )
+        return;
+
+    if( !m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
+        return;
+
+    float        averageDiameter = m_boardAdapter.GetAverageViaHoleDiameter();
+    unsigned int averageSegCount = m_boardAdapter.GetCircleSegmentCount( averageDiameter );
+    unsigned int trianglesEstimate = averageSegCount * 8 * m_boardAdapter.GetViaCount();
+
+    TRIANGLE_DISPLAY_LIST* layerTriangleVIA = new TRIANGLE_DISPLAY_LIST( trianglesEstimate );
+
+    for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+        bool isBackdrilled = via->GetSecondaryDrillSize().has_value();
+        bool isTertiarydrilled = via->GetTertiaryDrillSize().has_value();
+        bool hasFrontPostMachining = via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                                     != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN
+                                     && via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                                                != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;
+        bool hasBackPostMachining = via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                                    != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN
+                                    && via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                                               != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;
+
+        if( via->GetViaType() == VIATYPE::THROUGH && !isBackdrilled
+                && !hasFrontPostMachining && !hasBackPostMachining )
+        {
+            continue;
+        }
+
+        const float holediameter = via->GetDrillValue() * aUnitScale;
+        const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
+        const float hole_inner_radius = holediameter / 2.0f;
+
+        const SFVEC2F via_center( via->GetStart().x * aUnitScale,
+                                  -via->GetStart().y * aUnitScale );
+
+        PCB_LAYER_ID top_layer, bottom_layer;
+        via->LayerPair( &top_layer, &bottom_layer );
+
+        float ztop, zbot, dummy;
+
+        getLayerZPos( top_layer, ztop, dummy );
+        getLayerZPos( bottom_layer, dummy, zbot );
+
+        wxASSERT( zbot < ztop );
+
+        float ztop_plated = ztop;
+        float zbot_plated = zbot;
+
+        if( isBackdrilled )
+        {
+            PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
+            float secZEnd;
+
+            // Backdrill goes from the back surface up to secEnd, so get the top of that layer
+            // as the bottom of the plated barrel
+            getLayerZPos( secEnd, secZEnd, dummy );
+            zbot_plated = std::max( zbot_plated, secZEnd );
+        }
+
+        if( isTertiarydrilled )
+        {
+            PCB_LAYER_ID terEnd = via->GetTertiaryDrillEndLayer();
+            float terZEnd;
+
+            // Tertiary drill goes from the front surface down to terEnd, so get the bottom of that layer
+            // as the top of the plated barrel
+            getLayerZPos( terEnd, dummy, terZEnd );
+            ztop_plated = std::min( ztop_plated, terZEnd );
+        }
+
+        auto applyViaPostMachining = [&]( bool isFront )
+        {
+            auto modeOpt = isFront ? via->GetFrontPostMachining()
+                                   : via->GetBackPostMachining();
+
+            if( !modeOpt
+                    || modeOpt.value() == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+            {
+                return;
+            }
+
+            int sizeIU = isFront ? via->GetFrontPostMachiningSize()
+                                  : via->GetBackPostMachiningSize();
+            int depthIU = isFront ? via->GetFrontPostMachiningDepth()
+                                   : via->GetBackPostMachiningDepth();
+            float zSurface = isFront ? ztop : zbot;
+            float zEnd = 0.0f;
+
+            if( appendPostMachiningGeometry( layerTriangleVIA, via_center, modeOpt.value(),
+                                             sizeIU, depthIU, hole_inner_radius, zSurface,
+                                             isFront, aPlatingThickness3d, aUnitScale, &zEnd ) )
+            {
+                if( isFront )
+                    ztop_plated = std::min( ztop_plated, zEnd );
+                else
+                    zbot_plated = std::max( zbot_plated, zEnd );
+            }
+        };
+
+        if( hasFrontPostMachining )
+            applyViaPostMachining( true );
+        if( hasBackPostMachining )
+            applyViaPostMachining( false );
+
+        // generateCylinder( via_center, hole_inner_radius,
+        //                     hole_inner_radius + aPlatingThickness3d, ztop_plated,
+        //                     zbot_plated, nrSegments, layerTriangleVIA );
+    }
+
+    const float padFrontSurface =
+            m_boardAdapter.GetLayerBottomZPos( F_Cu )
+            + m_boardAdapter.GetFrontCopperThickness() * 0.99f;
+    const float padBackSurface =
+            m_boardAdapter.GetLayerBottomZPos( B_Cu )
+            - m_boardAdapter.GetBackCopperThickness() * 0.99f;
+
+    for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
+    {
+        for( const PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                continue;
+
+            if( !pad->HasHole() )
+                continue;
+
+            if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                continue;
+
+            const SFVEC2F padCenter( pad->GetPosition().x * aUnitScale,
+                                        -pad->GetPosition().y * aUnitScale );
+            const float holeInnerRadius =
+                    pad->GetDrillSize().x * 0.5f * aUnitScale;
+
+            auto emitPadPostMachining = [&]( bool isFront )
+            {
+                auto modeOpt = isFront ? pad->GetFrontPostMachining()
+                                        : pad->GetBackPostMachining();
+
+                if( !modeOpt
+                        || modeOpt.value() == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+                {
+                    return;
+                }
+
+                int sizeIU = isFront ? pad->GetFrontPostMachiningSize()
+                                        : pad->GetBackPostMachiningSize();
+                int depthIU = isFront ? pad->GetFrontPostMachiningDepth()
+                                        : pad->GetBackPostMachiningDepth();
+                float zSurface = isFront ? padFrontSurface : padBackSurface;
+
+                appendPostMachiningGeometry( layerTriangleVIA, padCenter, modeOpt.value(),
+                                                sizeIU, depthIU, holeInnerRadius, zSurface,
+                                                isFront, aPlatingThickness3d, aUnitScale,
+                                                nullptr );
+            };
+
+            emitPadPostMachining( true );
+            emitPadPostMachining( false );
+        }
+    }
+
+    m_microviaHoles = new OPENGL_RENDER_LIST( *layerTriangleVIA, 0, 0.0f, 0.0f );
+
+    delete layerTriangleVIA;
+}
+
+
+void RENDER_3D_OPENGL::generatePlatedHoleShells( int aPlatingThickness, float aUnitScale )
 {
     if( !m_boardAdapter.GetBoard() )
         return;
 
-    const int   platingThickness    = m_boardAdapter.GetHolePlatingThickness();
-    const float platingThickness3d  = platingThickness * m_boardAdapter.BiuTo3dUnits();
+    if( m_boardAdapter.GetHoleCount() <= 0 && m_boardAdapter.GetViaCount() <= 0 )
+        return;
 
-    if( m_boardAdapter.GetViaCount() > 0 )
+    SHAPE_POLY_SET tht_outer_holes_poly; // Stores the outer poly of the copper holes
+    SHAPE_POLY_SET tht_inner_holes_poly; // Stores the inner poly of the copper holes
+
+    tht_outer_holes_poly.RemoveAllContours();
+    tht_inner_holes_poly.RemoveAllContours();
+
+    for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
     {
-        float        averageDiameter = m_boardAdapter.GetAverageViaHoleDiameter();
-        unsigned int averageSegCount = m_boardAdapter.GetCircleSegmentCount( averageDiameter );
-        unsigned int trianglesEstimate = averageSegCount * 8 * m_boardAdapter.GetViaCount();
+        if( track->Type() != PCB_VIA_T )
+            continue;
 
-        TRIANGLE_DISPLAY_LIST* layerTriangleVIA = new TRIANGLE_DISPLAY_LIST( trianglesEstimate );
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
-        // Insert plated vertical holes inside the board
-
-        // Insert vias holes (vertical cylinders)
-        for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+        if( via->GetViaType() == VIATYPE::THROUGH )
         {
-            if( track->Type() == PCB_VIA_T )
-            {
-                const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+            TransformCircleToPolygon( tht_outer_holes_poly, via->GetPosition(),
+                                      via->GetDrill() / 2 + aPlatingThickness,
+                                      via->GetMaxError(), ERROR_INSIDE );
 
-                if( via->GetViaType() == VIATYPE::THROUGH )
-                    continue;   // handle with pad holes so castellation is taken into account
-
-                const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
-                const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
-                const float hole_inner_radius = holediameter / 2.0f;
-
-                const SFVEC2F via_center( via->GetStart().x * m_boardAdapter.BiuTo3dUnits(),
-                                          -via->GetStart().y * m_boardAdapter.BiuTo3dUnits() );
-
-                PCB_LAYER_ID top_layer, bottom_layer;
-                via->LayerPair( &top_layer, &bottom_layer );
-
-                float ztop, zbot, dummy;
-
-                getLayerZPos( top_layer, ztop, dummy );
-                getLayerZPos( bottom_layer, dummy, zbot );
-
-                wxASSERT( zbot < ztop );
-
-                if( m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
-                {
-                    generateCylinder( via_center, hole_inner_radius, hole_inner_radius + platingThickness3d,
-                                      ztop, zbot, nrSegments, layerTriangleVIA );
-                }
-            }
+            TransformCircleToPolygon( tht_inner_holes_poly, via->GetPosition(), via->GetDrill() / 2,
+                                      via->GetMaxError(), ERROR_INSIDE );
         }
-
-        m_microviaHoles = new OPENGL_RENDER_LIST( *layerTriangleVIA, 0, 0.0f, 0.0f );
-
-        delete layerTriangleVIA;
     }
 
-
-    if( m_boardAdapter.GetHoleCount() > 0 || m_boardAdapter.GetViaCount() > 0 )
+    for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        SHAPE_POLY_SET tht_outer_holes_poly; // Stores the outer poly of the copper holes
-        SHAPE_POLY_SET tht_inner_holes_poly; // Stores the inner poly of the copper holes
-
-        tht_outer_holes_poly.RemoveAllContours();
-        tht_inner_holes_poly.RemoveAllContours();
-
-        // Insert through-via holes (vertical cylinders)
-        for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+        for( const PAD* pad : footprint->Pads() )
         {
-            if( track->Type() == PCB_VIA_T )
+            if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
             {
-                const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+                if( !pad->HasHole() )
+                    continue;
 
-                if( via->GetViaType() == VIATYPE::THROUGH )
-                {
-                    TransformCircleToPolygon( tht_outer_holes_poly, via->GetPosition(),
-                                              via->GetDrill() / 2 + platingThickness,
-                                              via->GetMaxError(), ERROR_INSIDE );
-
-                    TransformCircleToPolygon( tht_inner_holes_poly, via->GetPosition(), via->GetDrill() / 2,
-                                              via->GetMaxError(), ERROR_INSIDE );
-                }
+                pad->TransformHoleToPolygon( tht_outer_holes_poly, aPlatingThickness,
+                                             pad->GetMaxError(), ERROR_INSIDE );
+                pad->TransformHoleToPolygon( tht_inner_holes_poly, 0,
+                                             pad->GetMaxError(), ERROR_INSIDE );
             }
-        }
-
-        // Insert pads holes (vertical cylinders)
-        for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
-        {
-            for( const PAD* pad : footprint->Pads() )
-            {
-                if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
-                {
-                    if( !pad->HasHole() )
-                        continue;
-
-                    pad->TransformHoleToPolygon( tht_outer_holes_poly, platingThickness,
-                                                 pad->GetMaxError(), ERROR_INSIDE );
-                    pad->TransformHoleToPolygon( tht_inner_holes_poly, 0,
-                                                 pad->GetMaxError(), ERROR_INSIDE );
-                }
-            }
-        }
-
-        // Subtract the holes
-        tht_outer_holes_poly.BooleanSubtract( tht_inner_holes_poly );
-
-        tht_outer_holes_poly.BooleanSubtract( m_antiBoardPolys );
-
-        CONTAINER_2D holesContainer;
-
-        ConvertPolygonToTriangles( tht_outer_holes_poly, holesContainer,
-                                   m_boardAdapter.BiuTo3dUnits(), *m_boardAdapter.GetBoard() );
-
-        const LIST_OBJECT2D& holes2D = holesContainer.GetList();
-
-        if( holes2D.size() > 0 && m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
-        {
-            float layer_z_top, layer_z_bot, dummy;
-
-            getLayerZPos( F_Cu, layer_z_top, dummy );
-            getLayerZPos( B_Cu, dummy, layer_z_bot );
-
-            TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( holes2D.size() );
-
-            // Convert the list of objects(triangles) to triangle layer structure
-            for( const OBJECT_2D* itemOnLayer : holes2D )
-            {
-                const OBJECT_2D* object2d_A = itemOnLayer;
-
-                wxASSERT( object2d_A->GetObjectType() == OBJECT_2D_TYPE::TRIANGLE );
-
-                const TRIANGLE_2D* tri = static_cast<const TRIANGLE_2D*>( object2d_A );
-
-                const SFVEC2F& v1 = tri->GetP1();
-                const SFVEC2F& v2 = tri->GetP2();
-                const SFVEC2F& v3 = tri->GetP3();
-
-                addTopAndBottomTriangles( layerTriangles, v1, v2, v3, layer_z_top, layer_z_bot );
-            }
-
-            wxASSERT( tht_outer_holes_poly.OutlineCount() > 0 );
-
-            if( tht_outer_holes_poly.OutlineCount() > 0 )
-            {
-                layerTriangles->AddToMiddleContours( tht_outer_holes_poly,
-                                                     layer_z_bot, layer_z_top,
-                                                     m_boardAdapter.BiuTo3dUnits(), false );
-
-                m_padHoles = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture,
-                                                     layer_z_top, layer_z_top );
-            }
-
-            delete layerTriangles;
         }
     }
+
+    tht_outer_holes_poly.BooleanSubtract( tht_inner_holes_poly );
+
+    tht_outer_holes_poly.BooleanSubtract( m_antiBoardPolys );
+
+    CONTAINER_2D holesContainer;
+
+    ConvertPolygonToTriangles( tht_outer_holes_poly, holesContainer,
+                               aUnitScale, *m_boardAdapter.GetBoard() );
+
+    const LIST_OBJECT2D& holes2D = holesContainer.GetList();
+
+    if( holes2D.size() > 0 && m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
+    {
+        float layer_z_top, layer_z_bot, dummy;
+
+        getLayerZPos( F_Cu, layer_z_top, dummy );
+        getLayerZPos( B_Cu, dummy, layer_z_bot );
+
+        TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( holes2D.size() );
+
+        for( const OBJECT_2D* itemOnLayer : holes2D )
+        {
+            const OBJECT_2D* object2d_A = itemOnLayer;
+
+            wxASSERT( object2d_A->GetObjectType() == OBJECT_2D_TYPE::TRIANGLE );
+
+            const TRIANGLE_2D* tri = static_cast<const TRIANGLE_2D*>( object2d_A );
+
+            const SFVEC2F& v1 = tri->GetP1();
+            const SFVEC2F& v2 = tri->GetP2();
+            const SFVEC2F& v3 = tri->GetP3();
+
+            addTopAndBottomTriangles( layerTriangles, v1, v2, v3, layer_z_top, layer_z_bot );
+        }
+
+        wxASSERT( tht_outer_holes_poly.OutlineCount() > 0 );
+
+        if( tht_outer_holes_poly.OutlineCount() > 0 )
+        {
+            layerTriangles->AddToMiddleContours( tht_outer_holes_poly,
+                                                 layer_z_bot, layer_z_top,
+                                                 aUnitScale, false );
+
+            m_padHoles = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture,
+                                                 layer_z_top, layer_z_top );
+        }
+
+        delete layerTriangles;
+    }
+}
+
+
+void RENDER_3D_OPENGL::generateViaCovers( float aPlatingThickness3d, float aUnitScale )
+{
+    if( !m_boardAdapter.GetBoard() || m_boardAdapter.GetViaCount() <= 0 )
+        return;
 
     TRIANGLE_DISPLAY_LIST* frontCover = new TRIANGLE_DISPLAY_LIST( m_boardAdapter.GetViaCount() );
     TRIANGLE_DISPLAY_LIST* backCover = new TRIANGLE_DISPLAY_LIST( m_boardAdapter.GetViaCount() );
@@ -922,10 +1504,10 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
         const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
-        const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
-        const float hole_radius = holediameter / 2.0f + 2.0 * platingThickness3d;
-        const SFVEC2F center( via->GetStart().x * m_boardAdapter.BiuTo3dUnits(),
-                              -via->GetStart().y * m_boardAdapter.BiuTo3dUnits() );
+        const float holediameter = via->GetDrillValue() * aUnitScale;
+        const float hole_radius = holediameter / 2.0f + 2.0f * aPlatingThickness3d;
+        const SFVEC2F center( via->GetStart().x * aUnitScale,
+                              -via->GetStart().y * aUnitScale );
         unsigned int seg = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
 
         PCB_LAYER_ID top_layer, bottom_layer;
@@ -934,16 +1516,31 @@ void RENDER_3D_OPENGL::generateViasAndPads()
         getLayerZPos( top_layer, ztop, dummy );
         getLayerZPos( bottom_layer, dummy, zbot );
 
-        bool frontCovering = via->GetFrontCoveringMode() == COVERING_MODE::COVERED || via->IsTented( F_Mask );
-        bool backCovering = via->GetBackCoveringMode() == COVERING_MODE::COVERED || via->IsTented( B_Mask );
+        bool frontCovering = via->GetFrontCoveringMode() == COVERING_MODE::COVERED
+                             || via->IsTented( F_Mask );
+        bool backCovering = via->GetBackCoveringMode() == COVERING_MODE::COVERED
+                            || via->IsTented( B_Mask );
         bool frontPlugged = via->GetFrontPluggingMode() == PLUGGING_MODE::PLUGGED;
         bool backPlugged  = via->GetBackPluggingMode() == PLUGGING_MODE::PLUGGED;
         bool filled = via->GetFillingMode() == FILLING_MODE::FILLED
                       || via->GetCappingMode() == CAPPING_MODE::CAPPED;
 
+        const auto frontPostMachining =
+                via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED );
+        const auto backPostMachining =
+                via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED );
+
+        bool hasFrontPostMachining = frontPostMachining != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                                     && frontPostMachining != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+        bool hasBackPostMachining = backPostMachining != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                                    && backPostMachining != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+
+        bool hasFrontBackdrill = via->GetSecondaryDrillStartLayer() == F_Cu;
+        bool hasBackBackdrill = via->GetSecondaryDrillStartLayer() == B_Cu;
+
         const float depth = hole_radius * 0.3f;
 
-        if( frontCovering )
+        if( frontCovering && !hasFrontPostMachining && !hasFrontBackdrill )
         {
             if( filled || !frontPlugged )
                 generateDisk( center, hole_radius, ztop, seg, frontCover, true );
@@ -951,7 +1548,7 @@ void RENDER_3D_OPENGL::generateViasAndPads()
                 generateDimple( center, hole_radius, ztop, depth, seg, frontCover, true );
         }
 
-        if( backCovering )
+        if( backCovering && !hasBackPostMachining && !hasBackBackdrill )
         {
             if( filled || !backPlugged )
                 generateDisk( center, hole_radius, zbot, seg, backCover, false );
@@ -968,6 +1565,21 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
     delete frontCover;
     delete backCover;
+}
+
+
+void RENDER_3D_OPENGL::generateViasAndPads()
+{
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
+    const int   platingThickness    = m_boardAdapter.GetHolePlatingThickness();
+    const float unitScale           = m_boardAdapter.BiuTo3dUnits();
+    const float platingThickness3d  = platingThickness * unitScale;
+
+    // generateViaBarrels( platingThickness3d, unitScale );
+    // generatePlatedHoleShells( platingThickness, unitScale );
+    // generateViaCovers( platingThickness3d, unitScale );
 }
 
 

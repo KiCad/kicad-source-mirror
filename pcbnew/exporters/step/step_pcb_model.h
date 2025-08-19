@@ -113,6 +113,72 @@ public:
     bool AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerTop, PCB_LAYER_ID aLayerBot,
                     bool aVia, const VECTOR2D& aOrigin, const wxString& aNetname );
 
+    /**
+     * Add a backdrill hole shape to remove board material and copper plating.
+     *
+     * A backdrill removes board material between the specified layers (inclusive), removes
+     * annular rings on copper layers within that span, and removes the copper barrel plating
+     * through those layers.
+     *
+     * @param aShape The hole shape (position and diameter of the backdrill)
+     * @param aLayerStart The starting copper layer (e.g., F_Cu for top backdrill)
+     * @param aLayerEnd The ending copper layer (inclusive, the layer where backdrill stops)
+     * @param aOrigin The origin offset for coordinate transformation
+     * @return true if successfully added
+     */
+    bool AddBackdrill( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerStart,
+                       PCB_LAYER_ID aLayerEnd, const VECTOR2D& aOrigin );
+
+    /**
+     * Add a counterbore shape to remove board material from the top or bottom of a hole.
+     *
+     * A counterbore creates a cylindrical recess from the specified side of the board,
+     * removing board material and copper down to the specified depth.
+     *
+     * @param aPosition The center position of the counterbore
+     * @param aDiameter The diameter of the counterbore (in IU)
+     * @param aDepth The depth of the counterbore from the board surface (in IU)
+     * @param aFrontSide True if counterbore is on the front (top) side, false for back (bottom)
+     * @param aOrigin The origin offset for coordinate transformation
+     * @return true if successfully added
+     */
+    bool AddCounterbore( const VECTOR2I& aPosition, int aDiameter, int aDepth,
+                         bool aFrontSide, const VECTOR2D& aOrigin );
+
+    /**
+     * Add a countersink shape to remove board material from the top or bottom of a hole.
+     *
+     * A countersink creates an inverted cone recess from the specified side of the board.
+     * The angle parameter specifies the total cone angle (the angle between opposite sides
+     * of the cone), so the angle between the board surface and the cone slope is half this value.
+     *
+     * @param aPosition The center position of the countersink
+     * @param aDiameter The diameter of the countersink at the board surface (in IU)
+     * @param aDepth The depth of the countersink from the board surface (in IU)
+     * @param aAngle The total cone angle in decidegrees (e.g., 900 = 90°, 820 = 82°)
+     * @param aFrontSide True if countersink is on the front (top) side, false for back (bottom)
+     * @param aOrigin The origin offset for coordinate transformation
+     * @return true if successfully added
+     */
+    bool AddCountersink( const VECTOR2I& aPosition, int aDiameter, int aDepth, int aAngle,
+                         bool aFrontSide, const VECTOR2D& aOrigin );
+
+    /**
+     * Get the knockout diameters for copper layers that a counterbore or countersink crosses.
+     *
+     * For a counterbore, the diameter is constant for all layers within the depth.
+     * For a countersink, the diameter varies based on the cone angle and the Z position
+     * of each layer.
+     *
+     * @param aDiameter The diameter at the board surface (in IU)
+     * @param aDepth The depth of the feature from the board surface (in IU)
+     * @param aAngle The cone angle in decidegrees (0 for counterbore, >0 for countersink)
+     * @param aFrontSide True if feature is on the front (top) side, false for back (bottom)
+     * @return A map of PCB_LAYER_ID to knockout diameter (in IU) for each affected copper layer
+     */
+    std::map<PCB_LAYER_ID, int> GetCopperLayerKnockouts( int aDiameter, int aDepth,
+                                                         int aAngle, bool aFrontSide );
+
     // add a set of polygons (must be in final position)
     bool AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
                            const VECTOR2D& aOrigin, const wxString& aNetname );

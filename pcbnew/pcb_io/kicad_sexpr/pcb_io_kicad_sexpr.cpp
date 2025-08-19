@@ -1641,6 +1641,45 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
         m_out->Print( ")" );
     }
 
+    if( aPad->Padstack().SecondaryDrill().size.x > 0 )
+    {
+        m_out->Print( "(backdrill (size %s) (layers %s %s))",
+                        formatInternalUnits( aPad->Padstack().SecondaryDrill().size.x ).c_str(),
+                        m_out->Quotew( LSET::Name( aPad->Padstack().SecondaryDrill().start ) ).c_str(),
+                        m_out->Quotew( LSET::Name( aPad->Padstack().SecondaryDrill().end ) ).c_str() );
+    }
+
+    if( aPad->Padstack().TertiaryDrill().size.x > 0 )
+    {
+        m_out->Print( "(tertiary_drill (size %s) (layers %s %s))",
+                        formatInternalUnits( aPad->Padstack().TertiaryDrill().size.x ).c_str(),
+                        m_out->Quotew( LSET::Name( aPad->Padstack().TertiaryDrill().start ) ).c_str(),
+                        m_out->Quotew( LSET::Name( aPad->Padstack().TertiaryDrill().end ) ).c_str() );
+    }
+
+    auto formatPostMachining = [&]( const char* aName, const PADSTACK::POST_MACHINING_PROPS& aProps )
+    {
+        if( !aProps.mode.has_value() || aProps.mode == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+            return;
+
+        m_out->Print( "(%s %s", aName,
+                        aProps.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE ? "counterbore" : "countersink" );
+
+        if( aProps.size > 0 )
+            m_out->Print( " (size %s)", formatInternalUnits( aProps.size ).c_str() );
+
+        if( aProps.depth > 0 )
+            m_out->Print( " (depth %s)", formatInternalUnits( aProps.depth ).c_str() );
+
+        if( aProps.angle > 0 )
+            m_out->Print( " (angle %s)", FormatDouble2Str( aProps.angle / 10.0 ).c_str() );
+
+        m_out->Print( ")" );
+    };
+
+    formatPostMachining( "front_post_machining", aPad->Padstack().FrontPostMachining() );
+    formatPostMachining( "back_post_machining", aPad->Padstack().BackPostMachining() );
+
     // Add pad property, if exists.
     if( property )
         m_out->Print( "(property %s)", property );
@@ -2473,6 +2512,45 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
             m_out->Print( "(drill %s)", formatInternalUnits( via->GetDrill() ).c_str() );
         else
             m_out->Print( "(drill %s)", formatInternalUnits( via->GetDrillValue() ).c_str() );
+
+        if( via->Padstack().SecondaryDrill().size.x > 0 )
+        {
+            m_out->Print( "(backdrill (size %s) (layers %s %s))",
+                          formatInternalUnits( via->Padstack().SecondaryDrill().size.x ).c_str(),
+                          m_out->Quotew( LSET::Name( via->Padstack().SecondaryDrill().start ) ).c_str(),
+                          m_out->Quotew( LSET::Name( via->Padstack().SecondaryDrill().end ) ).c_str() );
+        }
+
+        if( via->Padstack().TertiaryDrill().size.x > 0 )
+        {
+            m_out->Print( "(tertiary_drill (size %s) (layers %s %s))",
+                          formatInternalUnits( via->Padstack().TertiaryDrill().size.x ).c_str(),
+                          m_out->Quotew( LSET::Name( via->Padstack().TertiaryDrill().start ) ).c_str(),
+                          m_out->Quotew( LSET::Name( via->Padstack().TertiaryDrill().end ) ).c_str() );
+        }
+
+        auto formatPostMachining = [&]( const char* aName, const PADSTACK::POST_MACHINING_PROPS& aProps )
+        {
+            if( !aProps.mode.has_value() || aProps.mode == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+                return;
+
+            m_out->Print( "(%s %s", aName,
+                            aProps.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE ? "counterbore" : "countersink" );
+
+            if( aProps.size > 0 )
+                m_out->Print( " (size %s)", formatInternalUnits( aProps.size ).c_str() );
+
+            if( aProps.depth > 0 )
+                m_out->Print( " (depth %s)", formatInternalUnits( aProps.depth ).c_str() );
+
+            if( aProps.angle > 0 )
+                m_out->Print( " (angle %s)", FormatDouble2Str( aProps.angle / 10.0 ).c_str() );
+
+            m_out->Print( ")" );
+        };
+
+        formatPostMachining( "front_post_machining", via->Padstack().FrontPostMachining() );
+        formatPostMachining( "back_post_machining", via->Padstack().BackPostMachining() );
 
         m_out->Print( "(layers %s %s)",
                       m_out->Quotew( LSET::Name( layer1 ) ).c_str(),

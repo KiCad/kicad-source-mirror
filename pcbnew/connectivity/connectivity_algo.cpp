@@ -757,6 +757,10 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
         {
             return;
         }
+
+        // Don't connect zones to pads on backdrilled or post-machined layers
+        if( pad->IsBackdrilledOrPostMachined( layer ) )
+            return;
     }
     else if( item->Type() == PCB_VIA_T )
     {
@@ -767,6 +771,10 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
         {
             return;
         }
+
+        // Don't connect zones to vias on backdrilled or post-machined layers
+        if( via->IsBackdrilledOrPostMachined( layer ) )
+            return;
     }
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )

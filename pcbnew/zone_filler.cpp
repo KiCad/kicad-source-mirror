@@ -1135,6 +1135,10 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 }
             }
 
+            // Check if the pad is backdrilled or post-machined on this layer
+            if( pad->IsBackdrilledOrPostMachined( aLayer ) )
+                noConnection = true;
+
             if( noConnection )
             {
                 // collect these for knockout in buildCopperItemClearances()
@@ -1244,6 +1248,47 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                              && aLayer != via->Padstack().Drill().start
                              && aLayer != via->Padstack().Drill().end );
 
+                // Check if this layer is affected by backdrill or post-machining
+                if( via->IsBackdrilledOrPostMachined( aLayer ) )
+                {
+                    noConnection = true;
+
+                    // Add knockout for backdrill/post-machining hole
+                    int pmSize = 0;
+                    int bdSize = 0;
+
+                    const PADSTACK::POST_MACHINING_PROPS& frontPM = via->Padstack().FrontPostMachining();
+                    const PADSTACK::POST_MACHINING_PROPS& backPM = via->Padstack().BackPostMachining();
+
+                    if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                        && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                    {
+                        pmSize = std::max( pmSize, frontPM.size );
+                    }
+
+                    if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                        && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                    {
+                        pmSize = std::max( pmSize, backPM.size );
+                    }
+
+                    const PADSTACK::DRILL_PROPS& secDrill = via->Padstack().SecondaryDrill();
+
+                    if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
+                        bdSize = secDrill.size.x;
+
+                    int knockoutSize = std::max( pmSize, bdSize );
+
+                    if( knockoutSize > 0 )
+                    {
+                        int clearance = aZone->GetLocalClearance().value_or( 0 );
+
+                        TransformCircleToPolygon( holes, via->GetPosition(),
+                                                  knockoutSize / 2 + clearance,
+                                                  m_maxError, ERROR_OUTSIDE );
+                    }
+                }
+
                 if( noConnection )
                     continue;
 
@@ -1331,6 +1376,44 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     if( gap >= 0 )
                         addHoleKnockout( aPad, gap + extra_margin, aHoles );
                 }
+
+                // Handle backdrill and post-machining knockouts
+                if( aPad->IsBackdrilledOrPostMachined( aLayer ) )
+                {
+                    int pmSize = 0;
+                    int bdSize = 0;
+
+                    const PADSTACK::POST_MACHINING_PROPS& frontPM = aPad->Padstack().FrontPostMachining();
+                    const PADSTACK::POST_MACHINING_PROPS& backPM = aPad->Padstack().BackPostMachining();
+
+                    if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                        && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                    {
+                        pmSize = std::max( pmSize, frontPM.size );
+                    }
+
+                    if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                        && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                    {
+                        pmSize = std::max( pmSize, backPM.size );
+                    }
+
+                    const PADSTACK::DRILL_PROPS& secDrill = aPad->Padstack().SecondaryDrill();
+
+                    if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
+                        bdSize = secDrill.size.x;
+
+                    int knockoutSize = std::max( pmSize, bdSize );
+
+                    if( knockoutSize > 0 )
+                    {
+                        int clearance = std::max( gap, 0 ) + extra_margin;
+
+                        TransformCircleToPolygon( aHoles, aPad->GetPosition(),
+                                                  knockoutSize / 2 + clearance,
+                                                  m_maxError, ERROR_OUTSIDE );
+                    }
+                }
             };
 
     for( PAD* pad : aNoConnectionPads )
@@ -1395,6 +1478,44 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                             TransformCircleToPolygon( aHoles, via->GetPosition(), radius + gap + extra_margin,
                                                       m_maxError, ERROR_OUTSIDE );
+                        }
+
+                        // Handle backdrill and post-machining knockouts
+                        if( via->IsBackdrilledOrPostMachined( aLayer ) )
+                        {
+                            int pmSize = 0;
+                            int bdSize = 0;
+
+                            const PADSTACK::POST_MACHINING_PROPS& frontPM = via->Padstack().FrontPostMachining();
+                            const PADSTACK::POST_MACHINING_PROPS& backPM = via->Padstack().BackPostMachining();
+
+                            if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                                && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                            {
+                                pmSize = std::max( pmSize, frontPM.size );
+                            }
+
+                            if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                                && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                            {
+                                pmSize = std::max( pmSize, backPM.size );
+                            }
+
+                            const PADSTACK::DRILL_PROPS& secDrill = via->Padstack().SecondaryDrill();
+
+                            if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
+                                bdSize = secDrill.size.x;
+
+                            int knockoutSize = std::max( pmSize, bdSize );
+
+                            if( knockoutSize > 0 )
+                            {
+                                int clearance = std::max( gap, 0 ) + extra_margin;
+
+                                TransformCircleToPolygon( aHoles, via->GetPosition(),
+                                                          knockoutSize / 2 + clearance,
+                                                          m_maxError, ERROR_OUTSIDE );
+                            }
                         }
                     }
                     else

@@ -264,6 +264,10 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,ViaDrill";
         break;
 
+    case GBR_APERTURE_ATTRIB_BACKDRILL:
+        attribute_string = "TA.AperFunction,BackDrill";
+        break;
+
     case GBR_APERTURE_ATTRIB_CMP_DRILL:     // print info associated to a component
                                             // round pad hole in drill files
         attribute_string = "TA.AperFunction,ComponentDrill";

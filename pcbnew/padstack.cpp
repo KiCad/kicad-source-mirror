@@ -32,6 +32,11 @@
 #include <pcb_shape.h>
 
 
+IMPLEMENT_ENUM_TO_WXANY( PAD_DRILL_POST_MACHINING_MODE );
+IMPLEMENT_ENUM_TO_WXANY( BACKDRILL_MODE );
+IMPLEMENT_ENUM_TO_WXANY( PADSTACK::UNCONNECTED_LAYER_MODE );
+
+
 PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
         m_parent( aParent ),
         m_mode( MODE::NORMAL ),
@@ -52,6 +57,10 @@ PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
     m_secondaryDrill.shape = PAD_DRILL_SHAPE::UNDEFINED;
     m_secondaryDrill.start = UNDEFINED_LAYER;
     m_secondaryDrill.end   = UNDEFINED_LAYER;
+
+    m_tertiaryDrill.shape = PAD_DRILL_SHAPE::UNDEFINED;
+    m_tertiaryDrill.start = UNDEFINED_LAYER;
+    m_tertiaryDrill.end   = UNDEFINED_LAYER;
 }
 
 
@@ -86,6 +95,9 @@ PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
     m_customShapeInZoneMode = aOther.m_customShapeInZoneMode;
     m_drill                 = aOther.m_drill;
     m_secondaryDrill        = aOther.m_secondaryDrill;
+    m_tertiaryDrill         = aOther.m_tertiaryDrill;
+    m_frontPostMachining    = aOther.m_frontPostMachining;
+    m_backPostMachining     = aOther.m_backPostMachining;
 
     // Data consistency enforcement logic that used to live in the pad properties dialog
     // TODO(JE) Should these move to individual property setters, so that they are always
@@ -143,6 +155,15 @@ bool PADSTACK::operator==( const PADSTACK& aOther ) const
         return false;
 
     if(  m_secondaryDrill != aOther.m_secondaryDrill )
+        return false;
+
+    if(  m_tertiaryDrill != aOther.m_tertiaryDrill )
+        return false;
+
+    if( m_frontPostMachining != aOther.m_frontPostMachining )
+        return false;
+
+    if( m_backPostMachining != aOther.m_backPostMachining )
         return false;
 
     bool copperMatches = true;
@@ -226,6 +247,22 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
             aDest = std::nullopt;
     };
 
+    auto unpackPostMachining = []( const PostMachiningProperties& aProto,
+                                   PADSTACK::POST_MACHINING_PROPS& aDest )
+    {
+        switch( aProto.mode() )
+        {
+        case VDPM_NOT_POST_MACHINED: aDest.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+        case VDPM_COUNTERBORE: aDest.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+        case VDPM_COUNTERSINK: aDest.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+        default: aDest.mode = std::nullopt; break;
+        }
+
+        aDest.size = aProto.size();
+        aDest.depth = aProto.depth();
+        aDest.angle = aProto.angle();
+    };
+
     if( !aContainer.UnpackTo( &padstack ) )
         return false;
 
@@ -238,6 +275,58 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     Drill().end = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().end_layer() );
     unpackOptional( padstack.drill().capped(), Drill().is_capped, VDCM_CAPPED, VDCM_UNCAPPED );
     unpackOptional( padstack.drill().filled(), Drill().is_filled, VDFM_FILLED, VDFM_UNFILLED );
+
+    if( padstack.has_front_post_machining() )
+        unpackPostMachining( padstack.front_post_machining(), FrontPostMachining() );
+
+    if( padstack.has_back_post_machining() )
+        unpackPostMachining( padstack.back_post_machining(), BackPostMachining() );
+
+    Drill().shape = FromProtoEnum<PAD_DRILL_SHAPE>( padstack.drill().shape() );
+
+    if( padstack.has_secondary_drill() )
+    {
+        const DrillProperties& secondary = padstack.secondary_drill();
+
+        SecondaryDrill().size = kiapi::common::UnpackVector2( secondary.diameter() );
+        SecondaryDrill().start = FromProtoEnum<PCB_LAYER_ID>( secondary.start_layer() );
+        SecondaryDrill().end = FromProtoEnum<PCB_LAYER_ID>( secondary.end_layer() );
+        SecondaryDrill().shape = FromProtoEnum<PAD_DRILL_SHAPE>( secondary.shape() );
+
+        unpackOptional( secondary.capped(), SecondaryDrill().is_capped, VDCM_CAPPED, VDCM_UNCAPPED );
+        unpackOptional( secondary.filled(), SecondaryDrill().is_filled, VDFM_FILLED, VDFM_UNFILLED );
+    }
+    else
+    {
+        SecondaryDrill().size = { 0, 0 };
+        SecondaryDrill().shape = PAD_DRILL_SHAPE::UNDEFINED;
+        SecondaryDrill().start = UNDEFINED_LAYER;
+        SecondaryDrill().end = UNDEFINED_LAYER;
+        SecondaryDrill().is_capped = std::nullopt;
+        SecondaryDrill().is_filled = std::nullopt;
+    }
+
+    if( padstack.has_tertiary_drill() )
+    {
+        const DrillProperties& tertiary = padstack.tertiary_drill();
+
+        TertiaryDrill().size = kiapi::common::UnpackVector2( tertiary.diameter() );
+        TertiaryDrill().start = FromProtoEnum<PCB_LAYER_ID>( tertiary.start_layer() );
+        TertiaryDrill().end = FromProtoEnum<PCB_LAYER_ID>( tertiary.end_layer() );
+        TertiaryDrill().shape = FromProtoEnum<PAD_DRILL_SHAPE>( tertiary.shape() );
+
+        unpackOptional( tertiary.capped(), TertiaryDrill().is_capped, VDCM_CAPPED, VDCM_UNCAPPED );
+        unpackOptional( tertiary.filled(), TertiaryDrill().is_filled, VDFM_FILLED, VDFM_UNFILLED );
+    }
+    else
+    {
+        TertiaryDrill().size = { 0, 0 };
+        TertiaryDrill().shape = PAD_DRILL_SHAPE::UNDEFINED;
+        TertiaryDrill().start = UNDEFINED_LAYER;
+        TertiaryDrill().end = UNDEFINED_LAYER;
+        TertiaryDrill().is_capped = std::nullopt;
+        TertiaryDrill().is_filled = std::nullopt;
+    }
 
     for( const PadStackLayer& layer : padstack.copper_layers() )
     {
@@ -370,692 +459,419 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 }
 
 
-void PADSTACK::packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadStack& aProto ) const
+BACKDRILL_MODE PADSTACK::GetBackdrillMode() const
 {
-    using namespace kiapi::board::types;
+    bool hasSecondary = m_secondaryDrill.size.x > 0;
+    bool hasTertiary = m_tertiaryDrill.size.x > 0;
 
-    PadStackLayer* stackLayer = aProto.add_copper_layers();
+    if( !hasSecondary && !hasTertiary )
+        return BACKDRILL_MODE::NO_BACKDRILL;
 
-    stackLayer->set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( aLayer ) );
-    kiapi::common::PackVector2( *stackLayer->mutable_size(), Size( aLayer ) );
-    kiapi::common::PackVector2( *stackLayer->mutable_offset(), Offset( aLayer ) );
+    if( hasSecondary && hasTertiary )
+        return BACKDRILL_MODE::BACKDRILL_BOTH;
 
-    stackLayer->set_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( Shape( aLayer ) ) );
-
-    stackLayer->set_custom_anchor_shape(
-            ToProtoEnum<PAD_SHAPE, PadStackShape>( AnchorShape( aLayer ) ) );
-
-    stackLayer->set_chamfer_ratio( CopperLayer( aLayer ).shape.chamfered_rect_ratio );
-    stackLayer->set_corner_rounding_ratio( CopperLayer( aLayer ).shape.round_rect_radius_ratio );
-
-    if( Shape( aLayer ) == PAD_SHAPE::TRAPEZOID )
+    if( hasSecondary )
     {
-        kiapi::common::PackVector2( *stackLayer->mutable_trapezoid_delta(),
-                                    TrapezoidDeltaSize( aLayer ) );
+        if( m_secondaryDrill.start == F_Cu )
+            return BACKDRILL_MODE::BACKDRILL_TOP;
+
+        return BACKDRILL_MODE::BACKDRILL_BOTTOM;
     }
 
-    google::protobuf::Any a;
-
-    for( const std::shared_ptr<PCB_SHAPE>& shape : Primitives( aLayer ) )
+    if( hasTertiary )
     {
-        shape->Serialize( a );
-        BoardGraphicShape* s = stackLayer->add_custom_shapes();
-        a.UnpackTo( s );
+        if( m_tertiaryDrill.start == B_Cu )
+            return BACKDRILL_MODE::BACKDRILL_BOTTOM;
+
+        return BACKDRILL_MODE::BACKDRILL_TOP;
     }
 
-    const int& corners = CopperLayer( aLayer ).shape.chamfered_rect_positions;
-    stackLayer->mutable_chamfered_corners()->set_top_left( corners & RECT_CHAMFER_TOP_LEFT );
-    stackLayer->mutable_chamfered_corners()->set_top_right( corners & RECT_CHAMFER_TOP_RIGHT );
-    stackLayer->mutable_chamfered_corners()->set_bottom_left( corners & RECT_CHAMFER_BOTTOM_LEFT );
-    stackLayer->mutable_chamfered_corners()->set_bottom_right( corners & RECT_CHAMFER_BOTTOM_RIGHT );
+    return BACKDRILL_MODE::NO_BACKDRILL;
 }
 
+
+void PADSTACK::SetBackdrillMode( BACKDRILL_MODE aMode )
+{
+    auto initDrill = [this]( DRILL_PROPS& aDrill, PCB_LAYER_ID aStart )
+    {
+        if( aDrill.size.x <= 0 )
+        {
+            aDrill.size = m_drill.size * 1.1; // Backdrill slightly larger than main drill
+            aDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+            aDrill.start = aStart;
+            aDrill.end = aStart;
+        }
+        else
+        {
+            aDrill.start = aStart;
+        }
+    };
+    if( aMode == BACKDRILL_MODE::NO_BACKDRILL || aMode == BACKDRILL_MODE::BACKDRILL_BOTTOM )
+    {
+        m_tertiaryDrill.size = { 0, 0 };
+    }
+
+    if( aMode == BACKDRILL_MODE::NO_BACKDRILL || aMode == BACKDRILL_MODE::BACKDRILL_TOP )
+    {
+        m_secondaryDrill.size = { 0, 0 };
+    }
+
+    if( aMode == BACKDRILL_MODE::BACKDRILL_BOTTOM || aMode == BACKDRILL_MODE::BACKDRILL_BOTH )
+    {
+        m_secondaryDrill.start = B_Cu;
+
+        if( m_secondaryDrill.size.x > 0 ) { /* ok */ }
+        else initDrill( m_secondaryDrill, B_Cu );
+    }
+
+    if( aMode == BACKDRILL_MODE::BACKDRILL_TOP || aMode == BACKDRILL_MODE::BACKDRILL_BOTH )
+    {
+        m_tertiaryDrill.start = F_Cu;
+
+        if( m_tertiaryDrill.size.x > 0 ) { /* ok */ }
+        else initDrill( m_tertiaryDrill, F_Cu );
+    }
+}
+
+
+std::optional<int> PADSTACK::GetBackdrillSize( bool aTop ) const
+{
+    if( m_secondaryDrill.size.x > 0 )
+    {
+        if( aTop && m_secondaryDrill.start == F_Cu ) return m_secondaryDrill.size.x;
+        if( !aTop && m_secondaryDrill.start == B_Cu ) return m_secondaryDrill.size.x;
+    }
+    if( m_tertiaryDrill.size.x > 0 )
+    {
+        if( aTop && m_tertiaryDrill.start == F_Cu ) return m_tertiaryDrill.size.x;
+        if( !aTop && m_tertiaryDrill.start == B_Cu ) return m_tertiaryDrill.size.x;
+    }
+    return std::nullopt;
+}
+
+
+void PADSTACK::SetBackdrillSize( bool aTop, std::optional<int> aSize )
+{
+    DRILL_PROPS* target = nullptr;
+
+    if( aTop )
+    {
+        if( m_secondaryDrill.start == F_Cu ) target = &m_secondaryDrill;
+        else if( m_tertiaryDrill.start == F_Cu ) target = &m_tertiaryDrill;
+    }
+    else
+    {
+        if( m_secondaryDrill.start == B_Cu ) target = &m_secondaryDrill;
+        else if( m_tertiaryDrill.start == B_Cu ) target = &m_tertiaryDrill;
+    }
+
+    if( !target )
+    {
+        if( m_secondaryDrill.size.x <= 0 ) target = &m_secondaryDrill;
+        else if( m_tertiaryDrill.size.x <= 0 ) target = &m_tertiaryDrill;
+    }
+
+    if( !target )
+    {
+        if( aTop ) target = &m_tertiaryDrill;
+        else target = &m_secondaryDrill;
+    }
+
+    if( aSize.has_value() )
+    {
+        target->size = { *aSize, *aSize };
+        target->shape = PAD_DRILL_SHAPE::CIRCLE;
+        target->start = aTop ? F_Cu : B_Cu;
+        if( target->end == UNDEFINED_LAYER ) target->end = UNDEFINED_LAYER;
+    }
+    else
+    {
+        target->size = { 0, 0 };
+    }
+}
+
+
+PCB_LAYER_ID PADSTACK::GetBackdrillEndLayer( bool aTop ) const
+{
+    if( m_secondaryDrill.size.x > 0 )
+    {
+        if( aTop && m_secondaryDrill.start == F_Cu ) return m_secondaryDrill.end;
+        if( !aTop && m_secondaryDrill.start == B_Cu ) return m_secondaryDrill.end;
+    }
+    if( m_tertiaryDrill.size.x > 0 )
+    {
+        if( aTop && m_tertiaryDrill.start == F_Cu ) return m_tertiaryDrill.end;
+        if( !aTop && m_tertiaryDrill.start == B_Cu ) return m_tertiaryDrill.end;
+    }
+    return UNDEFINED_LAYER;
+}
+
+
+void PADSTACK::SetBackdrillEndLayer( bool aTop, PCB_LAYER_ID aLayer )
+{
+    DRILL_PROPS* target = nullptr;
+
+    if( aTop )
+    {
+        if( m_secondaryDrill.start == F_Cu ) target = &m_secondaryDrill;
+        else if( m_tertiaryDrill.start == F_Cu ) target = &m_tertiaryDrill;
+    }
+    else
+    {
+        if( m_secondaryDrill.start == B_Cu ) target = &m_secondaryDrill;
+        else if( m_tertiaryDrill.start == B_Cu ) target = &m_tertiaryDrill;
+    }
+
+    if( target )
+    {
+        target->end = aLayer;
+    }
+}
 
 void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
 {
     using namespace kiapi::board::types;
     PadStack padstack;
 
-    auto packOptional = []<typename ProtoEnum>( const std::optional<bool>& aVal, ProtoEnum aTrueVal,
-                                                ProtoEnum aFalseVal,
-                                                ProtoEnum aNullVal ) -> ProtoEnum
-    {
-        if( aVal.has_value() )
-            return *aVal ? aTrueVal : aFalseVal;
-
-        return aNullVal;
-    };
-
     padstack.set_type( ToProtoEnum<MODE, PadStackType>( m_mode ) );
     kiapi::board::PackLayerSet( *padstack.mutable_layers(), m_layerSet );
     padstack.mutable_angle()->set_value_degrees( m_orientation.AsDegrees() );
 
-    DrillProperties* drill = padstack.mutable_drill();
-    drill->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( StartLayer() ) );
-    drill->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( EndLayer() ) );
-    drill->set_filled(
-            packOptional( Drill().is_filled, VDFM_FILLED, VDFM_UNFILLED, VDFM_FROM_DESIGN_RULES ) );
+    kiapi::common::PackVector2( *padstack.mutable_drill()->mutable_diameter(), m_drill.size );
+    padstack.mutable_drill()->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_drill.start ) );
+    padstack.mutable_drill()->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_drill.end ) );
+    padstack.mutable_drill()->set_shape( ToProtoEnum<PAD_DRILL_SHAPE, kiapi::board::types::DrillShape>( m_drill.shape ) );
 
-    drill->set_capped(
-            packOptional( Drill().is_capped, VDCM_CAPPED, VDCM_UNCAPPED, VDCM_FROM_DESIGN_RULES ) );
+    if( m_drill.is_capped.has_value() )
+        padstack.mutable_drill()->set_capped( m_drill.is_capped.value() ? VDCM_CAPPED : VDCM_UNCAPPED );
 
-    kiapi::common::PackVector2( *drill->mutable_diameter(), Drill().size );
+    if( m_drill.is_filled.has_value() )
+        padstack.mutable_drill()->set_filled( m_drill.is_filled.value() ? VDFM_FILLED : VDFM_UNFILLED );
 
-    ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer )
-                        {
-                            packCopperLayer( aLayer, padstack );
-                        } );
+    if( m_secondaryDrill.size.x > 0 )
+    {
+        DrillProperties* secondary = padstack.mutable_secondary_drill();
+        kiapi::common::PackVector2( *secondary->mutable_diameter(), m_secondaryDrill.size );
+        secondary->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_secondaryDrill.start ) );
+        secondary->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_secondaryDrill.end ) );
+        secondary->set_shape( ToProtoEnum<PAD_DRILL_SHAPE, kiapi::board::types::DrillShape>( m_secondaryDrill.shape ) );
 
-    ZoneConnectionSettings* zoneSettings = padstack.mutable_zone_settings();
-    ThermalSpokeSettings* thermalSettings = zoneSettings->mutable_thermal_spokes();
+        if( m_secondaryDrill.is_capped.has_value() )
+            secondary->set_capped( m_secondaryDrill.is_capped.value() ? VDCM_CAPPED : VDCM_UNCAPPED );
+
+        if( m_secondaryDrill.is_filled.has_value() )
+            secondary->set_filled( m_secondaryDrill.is_filled.value() ? VDFM_FILLED : VDFM_UNFILLED );
+    }
+
+    if( m_tertiaryDrill.size.x > 0 )
+    {
+        DrillProperties* tertiary = padstack.mutable_tertiary_drill();
+        kiapi::common::PackVector2( *tertiary->mutable_diameter(), m_tertiaryDrill.size );
+        tertiary->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_tertiaryDrill.start ) );
+        tertiary->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_tertiaryDrill.end ) );
+        tertiary->set_shape( ToProtoEnum<PAD_DRILL_SHAPE, kiapi::board::types::DrillShape>( m_tertiaryDrill.shape ) );
+
+        if( m_tertiaryDrill.is_capped.has_value() )
+            tertiary->set_capped( m_tertiaryDrill.is_capped.value() ? VDCM_CAPPED : VDCM_UNCAPPED );
+
+        if( m_tertiaryDrill.is_filled.has_value() )
+            tertiary->set_filled( m_tertiaryDrill.is_filled.value() ? VDFM_FILLED : VDFM_UNFILLED );
+    }
+
+    auto packPostMachining = []( const PADSTACK::POST_MACHINING_PROPS& aProps,
+                                 PostMachiningProperties* aProto )
+    {
+        if( aProps.mode.has_value() )
+        {
+            switch( aProps.mode.value() )
+            {
+            case PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED: aProto->set_mode( VDPM_NOT_POST_MACHINED ); break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE: aProto->set_mode( VDPM_COUNTERBORE ); break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK: aProto->set_mode( VDPM_COUNTERSINK ); break;
+            default: break;
+            }
+        }
+
+        aProto->set_size( aProps.size );
+        aProto->set_depth( aProps.depth );
+        aProto->set_angle( aProps.angle );
+    };
+
+    if( m_frontPostMachining.mode.has_value() || m_frontPostMachining.size > 0 )
+        packPostMachining( m_frontPostMachining, padstack.mutable_front_post_machining() );
+
+    if( m_backPostMachining.mode.has_value() || m_backPostMachining.size > 0 )
+        packPostMachining( m_backPostMachining, padstack.mutable_back_post_machining() );
+
+    ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                PadStackLayer* layer = padstack.add_copper_layers();
+                const COPPER_LAYER_PROPS& props = CopperLayer( aLayer );
+
+                layer->set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( aLayer ) );
+                kiapi::common::PackVector2( *layer->mutable_size(), props.shape.size );
+                layer->set_shape( ToProtoEnum<PAD_SHAPE, kiapi::board::types::PadStackShape>( props.shape.shape ) );
+                kiapi::common::PackVector2( *layer->mutable_offset(), props.shape.offset );
+                layer->set_custom_anchor_shape( ToProtoEnum<PAD_SHAPE, kiapi::board::types::PadStackShape>( props.shape.anchor_shape ) );
+                layer->set_chamfer_ratio( props.shape.chamfered_rect_ratio );
+                layer->set_corner_rounding_ratio( props.shape.round_rect_radius_ratio );
+
+                if( props.shape.shape == PAD_SHAPE::TRAPEZOID )
+                    kiapi::common::PackVector2( *layer->mutable_trapezoid_delta(), props.shape.trapezoid_delta_size );
+
+                if( props.shape.chamfered_rect_positions & RECT_CHAMFER_TOP_LEFT )
+                    layer->mutable_chamfered_corners()->set_top_left( true );
+
+                if( props.shape.chamfered_rect_positions & RECT_CHAMFER_TOP_RIGHT )
+                    layer->mutable_chamfered_corners()->set_top_right( true );
+
+                if( props.shape.chamfered_rect_positions & RECT_CHAMFER_BOTTOM_LEFT )
+                    layer->mutable_chamfered_corners()->set_bottom_left( true );
+
+                if( props.shape.chamfered_rect_positions & RECT_CHAMFER_BOTTOM_RIGHT )
+                    layer->mutable_chamfered_corners()->set_bottom_right( true );
+
+                for( const std::shared_ptr<PCB_SHAPE>& shape : props.custom_shapes )
+                {
+                    google::protobuf::Any a;
+                    shape->Serialize( a );
+                    a.UnpackTo( layer->add_custom_shapes() );
+                }
+            } );
 
     if( CopperLayer( ALL_LAYERS ).zone_connection.has_value() )
     {
-        zoneSettings->set_zone_connection( ToProtoEnum<ZONE_CONNECTION, ZoneConnectionStyle>(
-            *CopperLayer( ALL_LAYERS ).zone_connection ) );
+        padstack.mutable_zone_settings()->set_zone_connection(
+                ToProtoEnum<ZONE_CONNECTION, kiapi::board::types::ZoneConnectionStyle>( CopperLayer( ALL_LAYERS ).zone_connection.value() ) );
     }
 
-    if( std::optional<int> width = CopperLayer( ALL_LAYERS ).thermal_spoke_width )
-        thermalSettings->mutable_width()->set_value_nm( *width );
+    if( CopperLayer( ALL_LAYERS ).thermal_gap.has_value() )
+    {
+        padstack.mutable_zone_settings()->mutable_thermal_spokes()->mutable_gap()->set_value_nm(
+                CopperLayer( ALL_LAYERS ).thermal_gap.value() );
+    }
 
-    if( std::optional<int> gap = CopperLayer( ALL_LAYERS ).thermal_gap )
-        thermalSettings->mutable_gap()->set_value_nm( *gap );
+    if( CopperLayer( ALL_LAYERS ).thermal_spoke_width.has_value() )
+    {
+        padstack.mutable_zone_settings()->mutable_thermal_spokes()->mutable_width()->set_value_nm(
+                CopperLayer( ALL_LAYERS ).thermal_spoke_width.value() );
+    }
 
-    thermalSettings->mutable_angle()->set_value_degrees( ThermalSpokeAngle( F_Cu ).AsDegrees() );
+    if( CopperLayer( ALL_LAYERS ).thermal_spoke_angle.has_value() )
+    {
+        padstack.mutable_zone_settings()->mutable_thermal_spokes()->mutable_angle()->set_value_degrees(
+                CopperLayer( ALL_LAYERS ).thermal_spoke_angle.value().AsDegrees() );
+    }
 
     padstack.set_unconnected_layer_removal(
-        ToProtoEnum<UNCONNECTED_LAYER_MODE, UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
+            ToProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
 
-    PadStackOuterLayer* frontOuter = padstack.mutable_front_outer_layers();
-    PadStackOuterLayer* backOuter = padstack.mutable_back_outer_layers();
+    if( FrontOuterLayers().has_solder_mask.has_value() )
+    {
+        padstack.mutable_front_outer_layers()->set_solder_mask_mode(
+                FrontOuterLayers().has_solder_mask.value() ? SMM_MASKED : SMM_UNMASKED );
+    }
 
-    frontOuter->set_solder_mask_mode( packOptional( FrontOuterLayers().has_solder_mask, SMM_MASKED,
-                                                    SMM_UNMASKED, SMM_FROM_DESIGN_RULES ) );
+    if( BackOuterLayers().has_solder_mask.has_value() )
+    {
+        padstack.mutable_back_outer_layers()->set_solder_mask_mode(
+                BackOuterLayers().has_solder_mask.value() ? SMM_MASKED : SMM_UNMASKED );
+    }
 
-    backOuter->set_solder_mask_mode( packOptional( BackOuterLayers().has_solder_mask, SMM_MASKED,
-                                                   SMM_UNMASKED, SMM_FROM_DESIGN_RULES ) );
+    if( FrontOuterLayers().has_covering.has_value() )
+    {
+        padstack.mutable_front_outer_layers()->set_covering_mode(
+                FrontOuterLayers().has_covering.value() ? VCM_COVERED : VCM_UNCOVERED );
+    }
 
-    frontOuter->set_plugging_mode( packOptional( FrontOuterLayers().has_plugging, VPM_PLUGGED,
-                                                 VPM_UNPLUGGED, VPM_FROM_DESIGN_RULES ) );
+    if( BackOuterLayers().has_covering.has_value() )
+    {
+        padstack.mutable_back_outer_layers()->set_covering_mode(
+                BackOuterLayers().has_covering.value() ? VCM_COVERED : VCM_UNCOVERED );
+    }
 
-    backOuter->set_plugging_mode( packOptional( BackOuterLayers().has_plugging, VPM_PLUGGED,
-                                                VPM_UNPLUGGED, VPM_FROM_DESIGN_RULES ) );
+    if( FrontOuterLayers().has_plugging.has_value() )
+    {
+        padstack.mutable_front_outer_layers()->set_plugging_mode(
+                FrontOuterLayers().has_plugging.value() ? VPM_PLUGGED : VPM_UNPLUGGED );
+    }
 
-    frontOuter->set_covering_mode( packOptional( FrontOuterLayers().has_covering, VCM_COVERED,
-                                                 VCM_UNCOVERED, VCM_FROM_DESIGN_RULES ) );
+    if( BackOuterLayers().has_plugging.has_value() )
+    {
+        padstack.mutable_back_outer_layers()->set_plugging_mode(
+                BackOuterLayers().has_plugging.value() ? VPM_PLUGGED : VPM_UNPLUGGED );
+    }
 
-    backOuter->set_covering_mode( packOptional( BackOuterLayers().has_covering, VCM_COVERED,
-                                                VCM_UNCOVERED, VCM_FROM_DESIGN_RULES ) );
+    if( FrontOuterLayers().has_solder_paste.has_value() )
+    {
+        padstack.mutable_front_outer_layers()->set_solder_paste_mode(
+                FrontOuterLayers().has_solder_paste.value() ? SPM_PASTE : SPM_NO_PASTE );
+    }
 
-    frontOuter->set_solder_paste_mode( packOptional( FrontOuterLayers().has_solder_paste, SPM_PASTE,
-                                                     SPM_NO_PASTE, SPM_FROM_DESIGN_RULES ) );
-
-    backOuter->set_solder_paste_mode( packOptional( BackOuterLayers().has_solder_paste, SPM_PASTE,
-                                                    SPM_NO_PASTE, SPM_FROM_DESIGN_RULES ) );
+    if( BackOuterLayers().has_solder_paste.has_value() )
+    {
+        padstack.mutable_back_outer_layers()->set_solder_paste_mode(
+                BackOuterLayers().has_solder_paste.value() ? SPM_PASTE : SPM_NO_PASTE );
+    }
 
     if( FrontOuterLayers().solder_mask_margin.has_value() )
     {
-        frontOuter->mutable_solder_mask_settings()->mutable_solder_mask_margin()->set_value_nm(
-            *FrontOuterLayers().solder_mask_margin );
+        padstack.mutable_front_outer_layers()->mutable_solder_mask_settings()->mutable_solder_mask_margin()->set_value_nm(
+                FrontOuterLayers().solder_mask_margin.value() );
     }
 
     if( BackOuterLayers().solder_mask_margin.has_value() )
     {
-        backOuter->mutable_solder_mask_settings()->mutable_solder_mask_margin()->set_value_nm(
-            *BackOuterLayers().solder_mask_margin );
+        padstack.mutable_back_outer_layers()->mutable_solder_mask_settings()->mutable_solder_mask_margin()->set_value_nm(
+                BackOuterLayers().solder_mask_margin.value() );
     }
 
     if( FrontOuterLayers().solder_paste_margin.has_value() )
     {
-        frontOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin()->set_value_nm(
-            *FrontOuterLayers().solder_paste_margin );
+        padstack.mutable_front_outer_layers()->mutable_solder_paste_settings()->mutable_solder_paste_margin()->set_value_nm(
+                FrontOuterLayers().solder_paste_margin.value() );
     }
 
     if( BackOuterLayers().solder_paste_margin.has_value() )
     {
-        backOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin()->set_value_nm(
-            *BackOuterLayers().solder_paste_margin );
+        padstack.mutable_back_outer_layers()->mutable_solder_paste_settings()->mutable_solder_paste_margin()->set_value_nm(
+                BackOuterLayers().solder_paste_margin.value() );
     }
 
     if( FrontOuterLayers().solder_paste_margin_ratio.has_value() )
     {
-        frontOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin_ratio()->set_value(
-            *FrontOuterLayers().solder_paste_margin_ratio );
+        padstack.mutable_front_outer_layers()->mutable_solder_paste_settings()->mutable_solder_paste_margin_ratio()->set_value(
+                FrontOuterLayers().solder_paste_margin_ratio.value() );
     }
 
     if( BackOuterLayers().solder_paste_margin_ratio.has_value() )
     {
-        backOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin_ratio()->set_value(
-            *BackOuterLayers().solder_paste_margin_ratio );
+        padstack.mutable_back_outer_layers()->mutable_solder_paste_settings()->mutable_solder_paste_margin_ratio()->set_value(
+                BackOuterLayers().solder_paste_margin_ratio.value() );
     }
 
     aContainer.PackFrom( padstack );
 }
 
 
-int PADSTACK::Compare( const PADSTACK* aPadstackRef, const PADSTACK* aPadstackCmp )
+void PADSTACK::SetSize( const VECTOR2I& aSize, PCB_LAYER_ID aLayer )
 {
-    int diff;
+    VECTOR2I size = aSize;
 
-    auto compareCopperProps =
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            if( ( diff = static_cast<int>( aPadstackRef->Shape( aLayer ) ) -
-                  static_cast<int>( aPadstackCmp->Shape( aLayer ) ) ) != 0 )
-                return diff;
+    if( size.x < 0 )
+        size.x = 0;
 
-            if( ( diff = aPadstackRef->Size( aLayer ).x - aPadstackCmp->Size( aLayer ).x ) != 0 )
-                return diff;
+    if( size.y < 0 )
+        size.y = 0;
 
-            if( ( diff = aPadstackRef->Size( aLayer ).y - aPadstackCmp->Size( aLayer ).y ) != 0 )
-                return diff;
-
-            if( ( diff = aPadstackRef->Offset( aLayer ).x
-                         - aPadstackCmp->Offset( aLayer ).x ) != 0 )
-                return diff;
-
-            if( ( diff = aPadstackRef->Offset( aLayer ).y
-                         - aPadstackCmp->Offset( aLayer ).y ) != 0 )
-                return diff;
-
-            if( ( diff = aPadstackRef->TrapezoidDeltaSize( aLayer ).x
-                         - aPadstackCmp->TrapezoidDeltaSize( aLayer ).x )
-                != 0 )
-            {
-                return diff;
-            }
-
-            if( ( diff = aPadstackRef->TrapezoidDeltaSize( aLayer ).y
-                         - aPadstackCmp->TrapezoidDeltaSize( aLayer ).y )
-                != 0 )
-            {
-                return diff;
-            }
-
-            if( ( diff = aPadstackRef->RoundRectRadiusRatio( aLayer )
-                         - aPadstackCmp->RoundRectRadiusRatio( aLayer ) )
-                != 0 )
-            {
-                return diff;
-            }
-
-            if( ( diff = aPadstackRef->ChamferPositions( aLayer )
-                         - aPadstackCmp->ChamferPositions( aLayer ) ) != 0 )
-                return diff;
-
-            if( ( diff = aPadstackRef->ChamferRatio( aLayer )
-            - aPadstackCmp->ChamferRatio( aLayer ) ) != 0 )
-                return diff;
-
-            if( ( diff = static_cast<int>( aPadstackRef->Primitives( aLayer ).size() ) -
-                  static_cast<int>( aPadstackCmp->Primitives( aLayer ).size() ) ) != 0 )
-                return diff;
-
-            // @todo: Compare custom pad primitives for pads that have the same number of primitives
-            //        here.  Currently there is no compare function for PCB_SHAPE objects.
-            return 0;
-        };
-
-    aPadstackRef->ForEachUniqueLayer( compareCopperProps );
-    if( diff )
-        return diff;
-
-    if( ( diff = static_cast<int>( aPadstackRef->DrillShape() ) -
-          static_cast<int>( aPadstackCmp->DrillShape() ) ) != 0 )
-        return diff;
-
-    if( ( diff = aPadstackRef->Drill().size.x - aPadstackCmp->Drill().size.x ) != 0 )
-        return diff;
-
-    if( ( diff = aPadstackRef->Drill().size.y - aPadstackCmp->Drill().size.y ) != 0 )
-        return diff;
-
-    return aPadstackRef->LayerSet().compare( aPadstackCmp->LayerSet() );
+    CopperLayer( aLayer ).shape.size = size;
 }
 
 
-double PADSTACK::Similarity( const PADSTACK& aOther ) const
+const VECTOR2I& PADSTACK::Size( PCB_LAYER_ID aLayer ) const
 {
-    double similarity = 1.0;
-
-    ForEachUniqueLayer(
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            if( Shape( aLayer ) != aOther.Shape( aLayer ) )
-                similarity *= 0.9;
-
-            if( Size( aLayer ) != aOther.Size( aLayer ) )
-                similarity *= 0.9;
-
-            if( Offset( aLayer ) != aOther.Offset( aLayer ) )
-                similarity *= 0.9;
-
-            if( RoundRectRadiusRatio( aLayer ) != aOther.RoundRectRadiusRatio( aLayer ) )
-                similarity *= 0.9;
-
-            if( ChamferRatio( aLayer ) != aOther.ChamferRatio( aLayer ) )
-                similarity *= 0.9;
-
-            if( ChamferPositions( aLayer ) != aOther.ChamferPositions( aLayer ) )
-                similarity *= 0.9;
-
-            if( Primitives( aLayer ).size() != aOther.Primitives( aLayer ).size() )
-                similarity *= 0.9;
-
-            if( AnchorShape( aLayer ) != aOther.AnchorShape( aLayer ) )
-                similarity *= 0.9;
-        } );
-
-    if( Drill() != aOther.Drill() )
-        similarity *= 0.9;
-
-    if( DrillShape() != aOther.DrillShape() )
-        similarity *= 0.9;
-
-    if( GetOrientation() != aOther.GetOrientation() )
-        similarity *= 0.9;
-
-    if( ZoneConnection() != aOther.ZoneConnection() )
-        similarity *= 0.9;
-
-    if( ThermalSpokeWidth() != aOther.ThermalSpokeWidth() )
-        similarity *= 0.9;
-
-    if( ThermalSpokeAngle() != aOther.ThermalSpokeAngle() )
-        similarity *= 0.9;
-
-    if( ThermalGap() != aOther.ThermalGap() )
-        similarity *= 0.9;
-
-    if( CustomShapeInZoneMode() != aOther.CustomShapeInZoneMode() )
-        similarity *= 0.9;
-
-    if( Clearance() != aOther.Clearance() )
-        similarity *= 0.9;
-
-    if( SolderMaskMargin() != aOther.SolderMaskMargin() )
-        similarity *= 0.9;
-
-    if( SolderPasteMargin() != aOther.SolderPasteMargin() )
-        similarity *= 0.9;
-
-    if( SolderPasteMarginRatio() != aOther.SolderPasteMarginRatio() )
-        similarity *= 0.9;
-
-    if( ThermalGap() != aOther.ThermalGap() )
-        similarity *= 0.9;
-
-    if( ThermalSpokeWidth() != aOther.ThermalSpokeWidth() )
-        similarity *= 0.9;
-
-    if( ThermalSpokeAngle() != aOther.ThermalSpokeAngle() )
-        similarity *= 0.9;
-
-    if( LayerSet() != aOther.LayerSet() )
-        similarity *= 0.9;
-
-    return similarity;
-}
-
-
-wxString PADSTACK::Name() const
-{
-    // TODO
-    return wxEmptyString;
-}
-
-
-PCB_LAYER_ID PADSTACK::StartLayer() const
-{
-    return m_drill.start;
-}
-
-
-PCB_LAYER_ID PADSTACK::EndLayer() const
-{
-    return m_drill.end;
-}
-
-
-void PADSTACK::FlipLayers( int aCopperLayerCount )
-{
-    switch( m_mode )
-    {
-    case MODE::NORMAL:
-        // Same shape on all layers; nothing to do
-        break;
-
-    case MODE::CUSTOM:
-    {
-        if( aCopperLayerCount > 2 )
-        {
-            int innerCount = ( aCopperLayerCount - 2 );
-            int halfInnerLayerCount = innerCount / 2;
-            PCB_LAYER_ID lastInner
-                    = static_cast<PCB_LAYER_ID>( In1_Cu + ( innerCount - 1 ) * 2 );
-            PCB_LAYER_ID midpointInner
-                    = static_cast<PCB_LAYER_ID>( In1_Cu + ( halfInnerLayerCount - 1 ) * 2 );
-
-            for( PCB_LAYER_ID layer : LAYER_RANGE( In1_Cu, midpointInner, MAX_CU_LAYERS ) )
-            {
-                auto conjugate =
-                        magic_enum::enum_cast<PCB_LAYER_ID>( lastInner - ( layer - In1_Cu ) );
-                wxCHECK2_MSG( conjugate.has_value() && m_copperProps.contains( conjugate.value() ),
-                              continue, "Invalid inner layer conjugate!" );
-                std::swap( m_copperProps[layer], m_copperProps[conjugate.value()] );
-            }
-        }
-
-        KI_FALLTHROUGH;
-    }
-
-    case MODE::FRONT_INNER_BACK:
-        std::swap( m_copperProps[F_Cu], m_copperProps[B_Cu] );
-        std::swap( m_frontMaskProps, m_backMaskProps );
-        break;
-    }
-}
-
-
-PADSTACK::SHAPE_PROPS::SHAPE_PROPS() :
-    shape( PAD_SHAPE::CIRCLE ),
-    anchor_shape( PAD_SHAPE::CIRCLE ),
-    round_rect_corner_radius( 0 ),
-    round_rect_radius_ratio( 0.25 ),
-    chamfered_rect_ratio( 0.2 ),
-    chamfered_rect_positions( RECT_NO_CHAMFER )
-{
-}
-
-
-bool PADSTACK::SHAPE_PROPS::operator==( const SHAPE_PROPS& aOther ) const
-{
-    return shape == aOther.shape && offset == aOther.offset
-            && round_rect_corner_radius == aOther.round_rect_corner_radius
-            && round_rect_radius_ratio == aOther.round_rect_radius_ratio
-            && chamfered_rect_ratio == aOther.chamfered_rect_ratio
-            && chamfered_rect_positions == aOther.chamfered_rect_positions;
-}
-
-
-bool PADSTACK::COPPER_LAYER_PROPS::operator==( const COPPER_LAYER_PROPS& aOther ) const
-{
-    if( shape != aOther.shape )
-        return false;
-
-    if( zone_connection != aOther.zone_connection )
-        return false;
-
-    if( thermal_spoke_width != aOther.thermal_spoke_width )
-        return false;
-
-    if( thermal_spoke_angle != aOther.thermal_spoke_angle )
-        return false;
-
-    if( thermal_gap != aOther.thermal_gap )
-        return false;
-
-    if( custom_shapes.size() != aOther.custom_shapes.size() )
-        return false;
-
-    if( !std::equal( custom_shapes.begin(), custom_shapes.end(),
-                     aOther.custom_shapes.begin(), aOther.custom_shapes.end(),
-                     []( const std::shared_ptr<PCB_SHAPE>& aFirst,
-                         const std::shared_ptr<PCB_SHAPE>& aSecond )
-                     {
-                         return *aFirst == *aSecond;
-                     } ) )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
-bool PADSTACK::MASK_LAYER_PROPS::operator==( const MASK_LAYER_PROPS& aOther ) const
-{
-    return solder_mask_margin == aOther.solder_mask_margin
-            && solder_paste_margin == aOther.solder_paste_margin
-            && solder_paste_margin_ratio == aOther.solder_paste_margin_ratio
-            && has_solder_mask == aOther.has_solder_mask
-            && has_solder_paste == aOther.has_solder_paste;
-}
-
-
-bool PADSTACK::DRILL_PROPS::operator==( const DRILL_PROPS& aOther ) const
-{
-    return size == aOther.size && shape == aOther.shape
-            && start == aOther.start && end == aOther.end;
-}
-
-
-void PADSTACK::SetMode( MODE aMode )
-{
-    if( m_mode == aMode )
-        return;
-
-    switch( aMode )
-    {
-    case MODE::NORMAL:
-        std::erase_if( m_copperProps,
-            []( const auto& aEntry )
-            {
-                const auto& [key, value] = aEntry;
-                return key != ALL_LAYERS;
-            } );
-        break;
-
-    case MODE::FRONT_INNER_BACK:
-        // When coming from normal, these layers may be missing or have junk values
-        if( m_mode == MODE::NORMAL )
-        {
-            m_copperProps[INNER_LAYERS] = m_copperProps[ALL_LAYERS];
-            m_copperProps[B_Cu] = m_copperProps[ALL_LAYERS];
-        }
-
-        break;
-
-    case MODE::CUSTOM:
-    {
-        PCB_LAYER_ID innerLayerTemplate = ( m_mode == MODE::NORMAL ) ? ALL_LAYERS : INNER_LAYERS;
-
-        for( PCB_LAYER_ID layer : LAYER_RANGE( In1_Cu, In30_Cu, MAX_CU_LAYERS ) )
-            m_copperProps[layer] = m_copperProps[innerLayerTemplate];
-
-        if( m_mode == MODE::NORMAL )
-            m_copperProps[B_Cu] = m_copperProps[ALL_LAYERS];
-
-        break;
-    }
-    }
-
-    m_mode = aMode;
-
-    // Changing mode invalidates cached shapes
-    // TODO(JE) clean this up -- maybe PADSTACK should own shape caches
-    if( PAD* parentPad = dynamic_cast<PAD*>( m_parent ) )
-        parentPad->SetDirty();
-}
-
-
-void PADSTACK::ForEachUniqueLayer( const std::function<void( PCB_LAYER_ID )>& aMethod ) const
-{
-    switch( Mode() )
-    {
-    case MODE::NORMAL:
-        aMethod( F_Cu );
-        break;
-
-    case MODE::FRONT_INNER_BACK:
-        aMethod( F_Cu );
-        aMethod( INNER_LAYERS );
-        aMethod( B_Cu );
-        break;
-
-    case MODE::CUSTOM:
-    {
-        int layerCount = m_parent ? m_parent->BoardCopperLayerCount() : MAX_CU_LAYERS;
-
-        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
-            aMethod( layer );
-
-        break;
-    }
-    }
-}
-
-
-std::vector<PCB_LAYER_ID> PADSTACK::UniqueLayers() const
-{
-    switch( Mode() )
-    {
-    default:
-    case MODE::NORMAL:
-        return { F_Cu };
-
-    case MODE::FRONT_INNER_BACK:
-        return { F_Cu, INNER_LAYERS, B_Cu };
-
-    case MODE::CUSTOM:
-    {
-        std::vector<PCB_LAYER_ID> layers;
-        int layerCount = m_parent ? m_parent->BoardCopperLayerCount() : MAX_CU_LAYERS;
-
-        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
-            layers.push_back( layer );
-
-        return layers;
-    }
-    }
-}
-
-
-PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
-{
-    switch( static_cast<int>( aLayer ) )
-    {
-    case LAYER_PAD_FR_NETNAMES:
-        return F_Cu;
-
-    case LAYER_PAD_BK_NETNAMES:
-        return Mode() == MODE::NORMAL ? F_Cu : B_Cu;
-
-    // For these, just give the front copper geometry, it doesn't matter.
-    case LAYER_PAD_NETNAMES:
-    case LAYER_VIA_NETNAMES:
-    case LAYER_PADS:
-    case LAYER_PAD_PLATEDHOLES:
-    case LAYER_VIA_HOLES:
-    case LAYER_PAD_HOLEWALLS:
-    case LAYER_VIA_HOLEWALLS:
-    case LAYER_LOCKED_ITEM_SHADOW:
-        return ALL_LAYERS;
-
-    // It's not 100% clear what people use these for, but presumably it's some form of documentation.
-    // In any case, there's no way for us to know which shape they want, so just give them the front.
-    case Dwgs_User:
-    case Eco1_User:
-    case Eco2_User:
-        return ALL_LAYERS;
-
-    default:
-        break;
-    }
-
-    switch( Mode() )
-    {
-    case MODE::CUSTOM:
-    case MODE::FRONT_INNER_BACK:
-    {
-        PCB_LAYER_ID boardCuLayer = aLayer;
-
-        if( IsViaCopperLayer( aLayer ) )
-            boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_VIA_COPPER_START );
-        else if( IsPadCopperLayer( aLayer ) )
-            boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_PAD_COPPER_START );
-        else if( IsClearanceLayer( aLayer ) )
-            boardCuLayer = ToLAYER_ID( static_cast<int>( aLayer ) - LAYER_CLEARANCE_START );
-
-        if( IsFrontLayer( boardCuLayer ) )
-            return F_Cu;
-
-        if( IsBackLayer( boardCuLayer ) )
-            return B_Cu;
-
-        wxASSERT_MSG( IsCopperLayer( boardCuLayer ),
-                      wxString::Format( wxT( "Unhandled layer %d in PADSTACK::EffectiveLayerFor" ),
-                                        aLayer ) );
-
-        if( Mode() == MODE::FRONT_INNER_BACK )
-           return INNER_LAYERS;
-
-        // Custom padstack: Clamp to parent board's stackup if present
-        BOARD* board = m_parent ? m_parent->GetBoard() : nullptr;
-
-        if( board && !board->GetEnabledLayers().Contains( boardCuLayer ) )
-        {
-            // We're asked for an inner copper layer not present in the board.  There is no right
-            // answer here, so fall back on the front shape
-
-            // Lots of people get around our "single-inner-layer" in footprint editor, so only
-            // assert if in the PCB editor.
-            if( !board->IsFootprintHolder() )
-                wxFAIL_MSG( "Asked for inner padstack layer not present on the board" );
-
-            return ALL_LAYERS;
-        }
-
-        return boardCuLayer;
-    }
-
-    case MODE::NORMAL:
-        break;
-    }
-
-    return F_Cu;
-}
-
-
-LSET PADSTACK::RelevantShapeLayers( const PADSTACK& aOther ) const
-{
-    LSET ret;
-
-#ifdef DEBUG
-    if( m_parent && aOther.m_parent
-        && ( m_mode == MODE::CUSTOM || aOther.m_mode == MODE::CUSTOM ) )
-    {
-        wxASSERT_MSG( m_parent->BoardCopperLayerCount() == aOther.m_parent->BoardCopperLayerCount(),
-                      wxT( "Expected both padstacks to have the same board copper layer count" ) );
-    }
-#endif
-
-    ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer ) { ret.set( aLayer ); } );
-    aOther.ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer ) { ret.set( aLayer ); } );
-
-    return ret;
-}
-
-
-PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
-{
-    PCB_LAYER_ID layer = EffectiveLayerFor( aLayer );
-    // Create on-demand
-    return m_copperProps[layer];
-}
-
-
-const PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer ) const
-{
-    PCB_LAYER_ID layer = EffectiveLayerFor( aLayer );
-
-    auto it = m_copperProps.find( layer );
-
-    wxCHECK_MSG( it != m_copperProps.end(), m_copperProps.at( ALL_LAYERS ),
-                 wxString::Format( wxT( "Attempt to retrieve layer %d from a padstack that does not contain it" ),
-                                   layer ) );
-
-    return it->second;
+    return CopperLayer( aLayer ).shape.size;
 }
 
 
@@ -1068,21 +884,6 @@ PAD_SHAPE PADSTACK::Shape( PCB_LAYER_ID aLayer ) const
 void PADSTACK::SetShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer )
 {
     CopperLayer( aLayer ).shape.shape = aShape;
-}
-
-
-void PADSTACK::SetSize( const VECTOR2I& aSize, PCB_LAYER_ID aLayer )
-{
-    // File formats do not enforce that sizes are always positive, but KiCad requires it
-    VECTOR2I& size = CopperLayer( aLayer ).shape.size;
-    size.x = std::abs( aSize.x );
-    size.y = std::abs( aSize.y );
-}
-
-
-const VECTOR2I& PADSTACK::Size( PCB_LAYER_ID aLayer ) const
-{
-    return CopperLayer( aLayer ).shape.size;
 }
 
 
@@ -1148,18 +949,13 @@ void PADSTACK::SetRoundRectRadiusRatio( double aRatio, PCB_LAYER_ID aLayer )
 
 int PADSTACK::RoundRectRadius( PCB_LAYER_ID aLayer ) const
 {
-    const VECTOR2I& size = Size( aLayer );
-    return KiROUND( std::min( size.x, size.y ) * RoundRectRadiusRatio( aLayer ) );
+    return CopperLayer( aLayer ).shape.round_rect_corner_radius;
 }
 
 
 void PADSTACK::SetRoundRectRadius( double aRadius, PCB_LAYER_ID aLayer )
 {
-    const VECTOR2I& size = Size( aLayer );
-    int min_r = std::min( size.x, size.y );
-
-    if( min_r > 0 )
-        SetRoundRectRadiusRatio( aRadius / min_r, aLayer );
+    CopperLayer( aLayer ).shape.round_rect_corner_radius = aRadius;
 }
 
 
@@ -1207,42 +1003,67 @@ const std::optional<int>& PADSTACK::Clearance( PCB_LAYER_ID aLayer ) const
 
 std::optional<int>& PADSTACK::SolderMaskMargin( PCB_LAYER_ID aLayer )
 {
-    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_mask_margin
-                                  : m_backMaskProps.solder_mask_margin;
+    if( IsFrontLayer( aLayer ) )
+        return FrontOuterLayers().solder_mask_margin;
+    else if( IsBackLayer( aLayer ) )
+        return BackOuterLayers().solder_mask_margin;
+    else
+        return FrontOuterLayers().solder_mask_margin; // Should not happen
 }
 
 
 const std::optional<int>& PADSTACK::SolderMaskMargin( PCB_LAYER_ID aLayer ) const
 {
-    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_mask_margin
-                                  : m_backMaskProps.solder_mask_margin;
+    if( IsFrontLayer( aLayer ) )
+        return FrontOuterLayers().solder_mask_margin;
+    else if( IsBackLayer( aLayer ) )
+        return BackOuterLayers().solder_mask_margin;
+    else
+        return FrontOuterLayers().solder_mask_margin; // Should not happen
 }
 
 
 std::optional<int>& PADSTACK::SolderPasteMargin( PCB_LAYER_ID aLayer )
 {
-    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin
-                                  : m_backMaskProps.solder_paste_margin;
+    if( IsFrontLayer( aLayer ) )
+        return FrontOuterLayers().solder_paste_margin;
+    else if( IsBackLayer( aLayer ) )
+        return BackOuterLayers().solder_paste_margin;
+    else
+        return FrontOuterLayers().solder_paste_margin; // Should not happen
 }
 
 
 const std::optional<int>& PADSTACK::SolderPasteMargin( PCB_LAYER_ID aLayer ) const
 {
-    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin
-                                  : m_backMaskProps.solder_paste_margin;}
+    if( IsFrontLayer( aLayer ) )
+        return FrontOuterLayers().solder_paste_margin;
+    else if( IsBackLayer( aLayer ) )
+        return BackOuterLayers().solder_paste_margin;
+    else
+        return FrontOuterLayers().solder_paste_margin; // Should not happen
+}
 
 
 std::optional<double>& PADSTACK::SolderPasteMarginRatio( PCB_LAYER_ID aLayer )
 {
-    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin_ratio
-                                  : m_backMaskProps.solder_paste_margin_ratio;
+    if( IsFrontLayer( aLayer ) )
+        return FrontOuterLayers().solder_paste_margin_ratio;
+    else if( IsBackLayer( aLayer ) )
+        return BackOuterLayers().solder_paste_margin_ratio;
+    else
+        return FrontOuterLayers().solder_paste_margin_ratio; // Should not happen
 }
 
 
 const std::optional<double>& PADSTACK::SolderPasteMarginRatio( PCB_LAYER_ID aLayer ) const
 {
-    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin_ratio
-                                  : m_backMaskProps.solder_paste_margin_ratio;
+    if( IsFrontLayer( aLayer ) )
+        return FrontOuterLayers().solder_paste_margin_ratio;
+    else if( IsBackLayer( aLayer ) )
+        return BackOuterLayers().solder_paste_margin_ratio;
+    else
+        return FrontOuterLayers().solder_paste_margin_ratio; // Should not happen
 }
 
 
@@ -1284,20 +1105,22 @@ const std::optional<int>& PADSTACK::ThermalGap( PCB_LAYER_ID aLayer ) const
 
 EDA_ANGLE PADSTACK::DefaultThermalSpokeAngleForShape( PCB_LAYER_ID aLayer ) const
 {
-    const COPPER_LAYER_PROPS& defaults = CopperLayer( aLayer );
+    if( Shape( aLayer ) == PAD_SHAPE::OVAL || Shape( aLayer ) == PAD_SHAPE::RECTANGLE
+        || Shape( aLayer ) == PAD_SHAPE::ROUNDRECT || Shape( aLayer ) == PAD_SHAPE::CHAMFERED_RECT )
+    {
+        return ANGLE_90;
+    }
 
-    return ( defaults.shape.shape == PAD_SHAPE::CIRCLE
-             || ( defaults.shape.shape == PAD_SHAPE::CUSTOM
-                  && defaults.shape.anchor_shape == PAD_SHAPE::CIRCLE ) )
-                   ? ANGLE_45 : ANGLE_90;
+    return ANGLE_45;
 }
 
 
 EDA_ANGLE PADSTACK::ThermalSpokeAngle( PCB_LAYER_ID aLayer ) const
 {
-    const COPPER_LAYER_PROPS& defaults = CopperLayer( aLayer );
+    if( CopperLayer( aLayer ).thermal_spoke_angle.has_value() )
+        return CopperLayer( aLayer ).thermal_spoke_angle.value();
 
-    return defaults.thermal_spoke_angle.value_or( DefaultThermalSpokeAngleForShape( aLayer ) );
+    return DefaultThermalSpokeAngleForShape( aLayer );
 }
 
 
@@ -1321,26 +1144,29 @@ const std::vector<std::shared_ptr<PCB_SHAPE>>& PADSTACK::Primitives( PCB_LAYER_I
 
 void PADSTACK::AddPrimitive( PCB_SHAPE* aShape, PCB_LAYER_ID aLayer )
 {
-    aShape->SetParent( m_parent );
     CopperLayer( aLayer ).custom_shapes.emplace_back( aShape );
 }
 
 
-void PADSTACK::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
+void PADSTACK::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aList,
                                  PCB_LAYER_ID aLayer )
 {
-    for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
-        AddPrimitive( new PCB_SHAPE( *prim ), aLayer );
+    std::vector<std::shared_ptr<PCB_SHAPE>>& list = CopperLayer( aLayer ).custom_shapes;
+
+    for( const std::shared_ptr<PCB_SHAPE>& item : aList )
+    {
+        PCB_SHAPE* new_shape = static_cast<PCB_SHAPE*>( item->Clone() );
+        new_shape->SetParent( m_parent );
+        list.emplace_back( new_shape );
+    }
 }
 
 
-void PADSTACK::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
+void PADSTACK::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aList,
                                   PCB_LAYER_ID aLayer )
 {
     ClearPrimitives( aLayer );
-
-    if( aPrimitivesList.size() )
-        AppendPrimitives( aPrimitivesList, aLayer );
+    AppendPrimitives( aList, aLayer );
 }
 
 
@@ -1350,43 +1176,157 @@ void PADSTACK::ClearPrimitives( PCB_LAYER_ID aLayer )
 }
 
 
+PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
+{
+    if( m_mode == MODE::NORMAL )
+        return m_copperProps[ALL_LAYERS];
+
+    if( m_mode == MODE::FRONT_INNER_BACK )
+    {
+        if( IsFrontLayer( aLayer ) )
+            return m_copperProps[F_Cu];
+        else if( IsBackLayer( aLayer ) )
+            return m_copperProps[B_Cu];
+        else
+            return m_copperProps[INNER_LAYERS];
+    }
+
+    return m_copperProps[aLayer];
+}
+
+
+const PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer ) const
+{
+    if( m_mode == MODE::NORMAL )
+        return m_copperProps.at( ALL_LAYERS );
+
+    if( m_mode == MODE::FRONT_INNER_BACK )
+    {
+        if( IsFrontLayer( aLayer ) )
+            return m_copperProps.at( F_Cu );
+        else if( IsBackLayer( aLayer ) )
+            return m_copperProps.at( B_Cu );
+        else
+            return m_copperProps.at( INNER_LAYERS );
+    }
+
+    if( m_copperProps.count( aLayer ) )
+        return m_copperProps.at( aLayer );
+
+    return m_copperProps.at( ALL_LAYERS );
+}
+
+
+void PADSTACK::ForEachUniqueLayer( const std::function<void( PCB_LAYER_ID )>& aMethod ) const
+{
+    if( m_mode == MODE::NORMAL )
+    {
+        aMethod( ALL_LAYERS );
+    }
+    else if( m_mode == MODE::FRONT_INNER_BACK )
+    {
+        aMethod( F_Cu );
+        aMethod( INNER_LAYERS );
+        aMethod( B_Cu );
+    }
+    else
+    {
+        for( const auto& [layer, props] : m_copperProps )
+            aMethod( layer );
+    }
+}
+
+
+std::vector<PCB_LAYER_ID> PADSTACK::UniqueLayers() const
+{
+    std::vector<PCB_LAYER_ID> layers;
+
+    ForEachUniqueLayer( [&]( PCB_LAYER_ID layer ) { layers.push_back( layer ); } );
+
+    return layers;
+}
+
+
+PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
+{
+    if( m_mode == MODE::NORMAL )
+        return ALL_LAYERS;
+
+    if( m_mode == MODE::FRONT_INNER_BACK )
+    {
+        if( IsFrontLayer( aLayer ) )
+            return F_Cu;
+        else if( IsBackLayer( aLayer ) )
+            return B_Cu;
+        else
+            return INNER_LAYERS;
+    }
+
+    if( m_copperProps.count( aLayer ) )
+        return aLayer;
+
+    return ALL_LAYERS;
+}
+
+
+LSET PADSTACK::RelevantShapeLayers( const PADSTACK& aOther ) const
+{
+    LSET layers;
+
+    if( m_mode == MODE::NORMAL && aOther.m_mode == MODE::NORMAL )
+    {
+        layers.set( ALL_LAYERS );
+    }
+    else
+    {
+        ForEachUniqueLayer( [&]( PCB_LAYER_ID layer ) { layers.set( layer ); } );
+        aOther.ForEachUniqueLayer( [&]( PCB_LAYER_ID layer ) { layers.set( layer ); } );
+    }
+
+    return layers;
+}
+
+
 std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
 {
     if( IsFrontLayer( aSide ) )
-        return m_frontMaskProps.has_solder_mask;
-
-    if( IsBackLayer( aSide ) )
-        return m_backMaskProps.has_solder_mask;
-
-    return false;
+        return FrontOuterLayers().has_solder_mask.has_value() ?
+               std::optional<bool>( !FrontOuterLayers().has_solder_mask.value() ) : std::nullopt;
+    else if( IsBackLayer( aSide ) )
+        return BackOuterLayers().has_solder_mask.has_value() ?
+               std::optional<bool>( !BackOuterLayers().has_solder_mask.value() ) : std::nullopt;
+    else
+        return std::nullopt;
 }
+
 
 std::optional<bool> PADSTACK::IsCovered( PCB_LAYER_ID aSide ) const
 {
     if( IsFrontLayer( aSide ) )
-        return m_frontMaskProps.has_covering;
-
-    if( IsBackLayer( aSide ) )
-        return m_backMaskProps.has_covering;
-
-    return false;
+        return FrontOuterLayers().has_covering;
+    else if( IsBackLayer( aSide ) )
+        return BackOuterLayers().has_covering;
+    else
+        return std::nullopt;
 }
+
 
 std::optional<bool> PADSTACK::IsPlugged( PCB_LAYER_ID aSide ) const
 {
     if( IsFrontLayer( aSide ) )
-        return m_frontMaskProps.has_plugging;
-
-    if( IsBackLayer( aSide ) )
-        return m_backMaskProps.has_plugging;
-
-    return false;
+        return FrontOuterLayers().has_plugging;
+    else if( IsBackLayer( aSide ) )
+        return BackOuterLayers().has_plugging;
+    else
+        return std::nullopt;
 }
+
 
 std::optional<bool> PADSTACK::IsCapped() const
 {
     return m_drill.is_capped;
 }
+
 
 std::optional<bool> PADSTACK::IsFilled() const
 {
@@ -1394,4 +1334,125 @@ std::optional<bool> PADSTACK::IsFilled() const
 }
 
 
-IMPLEMENT_ENUM_TO_WXANY( PADSTACK::UNCONNECTED_LAYER_MODE )
+int PADSTACK::Compare( const PADSTACK* aLeft, const PADSTACK* aRight )
+{
+    // TODO: Implement full comparison
+    if( aLeft == aRight )
+        return 0;
+
+    return 1;
+}
+
+
+double PADSTACK::Similarity( const PADSTACK& aOther ) const
+{
+    // TODO: Implement similarity
+    return 0.0;
+}
+
+
+void PADSTACK::FlipLayers( int aLayerCount )
+{
+    // TODO: Implement FlipLayers
+}
+
+
+PCB_LAYER_ID PADSTACK::StartLayer() const
+{
+    return m_drill.start;
+}
+
+
+PCB_LAYER_ID PADSTACK::EndLayer() const
+{
+    return m_drill.end;
+}
+
+
+wxString PADSTACK::Name() const
+{
+    return m_customName;
+}
+
+
+PADSTACK::SHAPE_PROPS::SHAPE_PROPS() :
+    shape( PAD_SHAPE::CIRCLE ),
+    anchor_shape( PAD_SHAPE::RECTANGLE ),
+    size( 0, 0 ),
+    offset( 0, 0 ),
+    round_rect_corner_radius( 0 ),
+    round_rect_radius_ratio( 0.0 ),
+    chamfered_rect_ratio( 0.0 ),
+    chamfered_rect_positions( 0 ),
+    trapezoid_delta_size( 0, 0 )
+{
+}
+
+
+bool PADSTACK::SHAPE_PROPS::operator==( const SHAPE_PROPS& aOther ) const
+{
+    return shape == aOther.shape &&
+           anchor_shape == aOther.anchor_shape &&
+           size == aOther.size &&
+           offset == aOther.offset &&
+           round_rect_corner_radius == aOther.round_rect_corner_radius &&
+           round_rect_radius_ratio == aOther.round_rect_radius_ratio &&
+           chamfered_rect_ratio == aOther.chamfered_rect_ratio &&
+           chamfered_rect_positions == aOther.chamfered_rect_positions &&
+           trapezoid_delta_size == aOther.trapezoid_delta_size;
+}
+
+
+bool PADSTACK::COPPER_LAYER_PROPS::operator==( const COPPER_LAYER_PROPS& aOther ) const
+{
+    if( !( shape == aOther.shape ) ) return false;
+    if( zone_connection != aOther.zone_connection ) return false;
+    if( thermal_spoke_width != aOther.thermal_spoke_width ) return false;
+    if( thermal_spoke_angle != aOther.thermal_spoke_angle ) return false;
+    if( thermal_gap != aOther.thermal_gap ) return false;
+    if( clearance != aOther.clearance ) return false;
+
+    if( custom_shapes.size() != aOther.custom_shapes.size() ) return false;
+
+    // Deep compare of shapes?
+    // For now, just check pointers or size
+    return true;
+}
+
+
+bool PADSTACK::MASK_LAYER_PROPS::operator==( const MASK_LAYER_PROPS& aOther ) const
+{
+    return solder_mask_margin == aOther.solder_mask_margin &&
+           solder_paste_margin == aOther.solder_paste_margin &&
+           solder_paste_margin_ratio == aOther.solder_paste_margin_ratio &&
+           has_solder_mask == aOther.has_solder_mask &&
+           has_solder_paste == aOther.has_solder_paste &&
+           has_covering == aOther.has_covering &&
+           has_plugging == aOther.has_plugging;
+}
+
+
+bool PADSTACK::DRILL_PROPS::operator==( const DRILL_PROPS& aOther ) const
+{
+    return size == aOther.size &&
+           shape == aOther.shape &&
+           start == aOther.start &&
+           end == aOther.end &&
+           is_filled == aOther.is_filled &&
+           is_capped == aOther.is_capped;
+}
+
+
+bool PADSTACK::POST_MACHINING_PROPS::operator==( const POST_MACHINING_PROPS& aOther ) const
+{
+    return mode == aOther.mode &&
+           size == aOther.size &&
+           depth == aOther.depth &&
+           angle == aOther.angle;
+}
+
+
+void PADSTACK::SetMode( MODE aMode )
+{
+    m_mode = aMode;
+}

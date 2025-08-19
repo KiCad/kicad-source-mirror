@@ -34,6 +34,66 @@
 #include <memory>
 #include "odb_entity.h"
 
+struct ODB_DRILL_SPAN
+{
+    ODB_DRILL_SPAN()
+    {
+        m_StartLayer = F_Cu;
+        m_EndLayer = B_Cu;
+        m_IsBackdrill = false;
+        m_IsNonPlated = false;
+    }
+
+    ODB_DRILL_SPAN( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer, bool aIsBackdrill,
+                    bool aIsNonPlated )
+    {
+        m_StartLayer = aStartLayer;
+        m_EndLayer = aEndLayer;
+        m_IsBackdrill = aIsBackdrill;
+        m_IsNonPlated = aIsNonPlated;
+    }
+
+    PCB_LAYER_ID TopLayer() const
+    {
+        return m_StartLayer < m_EndLayer ? m_StartLayer : m_EndLayer;
+    }
+
+    PCB_LAYER_ID BottomLayer() const
+    {
+        return m_StartLayer < m_EndLayer ? m_EndLayer : m_StartLayer;
+    }
+
+    std::pair<PCB_LAYER_ID, PCB_LAYER_ID> Pair() const
+    {
+        return std::make_pair( TopLayer(), BottomLayer() );
+    }
+
+    bool operator<( const ODB_DRILL_SPAN& aOther ) const
+    {
+        if( TopLayer() != aOther.TopLayer() )
+            return TopLayer() < aOther.TopLayer();
+
+        if( BottomLayer() != aOther.BottomLayer() )
+            return BottomLayer() < aOther.BottomLayer();
+
+        if( m_IsBackdrill != aOther.m_IsBackdrill )
+            return m_IsBackdrill && !aOther.m_IsBackdrill;
+
+        if( m_IsNonPlated != aOther.m_IsNonPlated )
+            return m_IsNonPlated && !aOther.m_IsNonPlated;
+
+        if( m_StartLayer != aOther.m_StartLayer )
+            return m_StartLayer < aOther.m_StartLayer;
+
+        return m_EndLayer < aOther.m_EndLayer;
+    }
+
+    PCB_LAYER_ID m_StartLayer;
+    PCB_LAYER_ID m_EndLayer;
+    bool         m_IsBackdrill;
+    bool         m_IsNonPlated;
+};
+
 class BOARD;
 class BOARD_ITEM;
 class EDA_TEXT;
@@ -100,10 +160,14 @@ public:
         return m_loaded_footprints;
     }
 
-    inline std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>&
-    GetDrillLayerItemsMap()
+    inline std::map<ODB_DRILL_SPAN, std::vector<BOARD_ITEM*>>& GetDrillLayerItemsMap()
     {
         return m_drill_layers;
+    }
+
+    inline std::map<ODB_DRILL_SPAN, wxString>& GetDrillSpanNameMap()
+    {
+        return m_drill_span_names;
     }
 
     inline std::map<std::tuple<ODB_AUX_LAYER_TYPE, PCB_LAYER_ID, PCB_LAYER_ID>,
@@ -169,8 +233,9 @@ private:
     std::vector<std::pair<PCB_LAYER_ID, wxString>>
             m_layer_name_list; //<! layer name in matrix entity to the internal layer id
 
-    std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
+    std::map<ODB_DRILL_SPAN, std::vector<BOARD_ITEM*>>
             m_drill_layers; //<! Drill sets are output as layers (to/from pairs)
+    std::map<ODB_DRILL_SPAN, wxString> m_drill_span_names;
 
     std::map<std::tuple<ODB_AUX_LAYER_TYPE, PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
             m_auxilliary_layers; //<! Auxilliary layers, from/to pairs or simple (depending on type)

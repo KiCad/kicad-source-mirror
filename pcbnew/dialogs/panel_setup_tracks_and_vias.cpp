@@ -392,7 +392,9 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
             viaDrillSize = m_viaSizesGrid->GetUnitValue( row, VIA_DRILL_COL );
 
         if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
-                    PCB_VIA::ValidateViaParameters( viaDiameter, viaDrillSize ) )
+                    PCB_VIA::ValidateViaParameters( viaDiameter, viaDrillSize, std::nullopt,
+                                                    std::nullopt, std::nullopt, std::nullopt,
+                                                    std::nullopt, m_Pcb ? m_Pcb->GetCopperLayerCount() : 0 ) )
         {
             msg = error->m_Message;
 

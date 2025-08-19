@@ -27,6 +27,7 @@
 #include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <footprint.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -157,6 +158,46 @@ EXPORTER_STEP::~EXPORTER_STEP()
 }
 
 
+bool EXPORTER_STEP::isLayerInBackdrillSpan( PCB_LAYER_ID aLayer, PCB_LAYER_ID aStartLayer,
+                                            PCB_LAYER_ID aEndLayer ) const
+{
+    if( !IsCopperLayer( aLayer ) )
+        return false;
+
+    // Quick check for exact match
+    if( aLayer == aStartLayer || aLayer == aEndLayer )
+        return true;
+
+    // Convert layers to a sortable index for comparison
+    // F_Cu = -1, In1_Cu through In30_Cu = 0-29, B_Cu = MAX_CU_LAYERS (32)
+    auto layerToIndex = []( PCB_LAYER_ID layer ) -> int
+    {
+        if( layer == F_Cu )
+            return -1;
+
+        if( layer == B_Cu )
+            return MAX_CU_LAYERS;
+
+        if( IsInnerCopperLayer( layer ) )
+            return layer - In1_Cu;
+
+        return -2; // Invalid copper layer
+    };
+
+    int startIdx = layerToIndex( aStartLayer );
+    int endIdx = layerToIndex( aEndLayer );
+    int layerIdx = layerToIndex( aLayer );
+
+    if( layerIdx == -2 )
+        return false;
+
+    int minIdx = std::min( startIdx, endIdx );
+    int maxIdx = std::max( startIdx, endIdx );
+
+    return ( layerIdx >= minIdx && layerIdx <= maxIdx );
+}
+
+
 bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2D& aOrigin,
                                             SHAPE_POLY_SET* aClipPolygon )
 {
@@ -194,6 +235,166 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             //    m_poly_holes[F_SilkS].Append( holePoly );
             //    m_poly_holes[B_SilkS].Append( holePoly );
             //}
+
+            // Handle backdrills - secondary and tertiary drills defined in the padstack
+            const PADSTACK& padstack = pad->Padstack();
+            const PADSTACK::DRILL_PROPS& secondaryDrill = padstack.SecondaryDrill();
+            const PADSTACK::DRILL_PROPS& tertiaryDrill = padstack.TertiaryDrill();
+
+            // Process secondary drill (typically bottom backdrill)
+            if( secondaryDrill.size.x > 0 )
+            {
+                SHAPE_SEGMENT backdrillShape( pad->GetPosition(), pad->GetPosition(),
+                                              secondaryDrill.size.x );
+                m_pcbModel->AddBackdrill( backdrillShape, secondaryDrill.start,
+                                          secondaryDrill.end, aOrigin );
+
+                // Add backdrill holes to affected copper layers for 2D polygon subtraction
+                SHAPE_POLY_SET backdrillPoly;
+                backdrillShape.TransformToPolygon( backdrillPoly, pad->GetMaxError(), ERROR_INSIDE );
+
+                for( PCB_LAYER_ID layer : pad->GetLayerSet() )
+                {
+                    if( isLayerInBackdrillSpan( layer, secondaryDrill.start, secondaryDrill.end ) )
+                        m_poly_holes[layer].Append( backdrillPoly );
+                }
+
+                // Add knockouts for silkscreen and soldermask on the backdrill side
+                if( isLayerInBackdrillSpan( F_Cu, secondaryDrill.start, secondaryDrill.end ) )
+                {
+                    m_poly_holes[F_SilkS].Append( backdrillPoly );
+                    m_poly_holes[F_Mask].Append( backdrillPoly );
+                }
+                if( isLayerInBackdrillSpan( B_Cu, secondaryDrill.start, secondaryDrill.end ) )
+                {
+                    m_poly_holes[B_SilkS].Append( backdrillPoly );
+                    m_poly_holes[B_Mask].Append( backdrillPoly );
+                }
+            }
+
+            // Process tertiary drill (typically top backdrill)
+            if( tertiaryDrill.size.x > 0 )
+            {
+                SHAPE_SEGMENT backdrillShape( pad->GetPosition(), pad->GetPosition(),
+                                              tertiaryDrill.size.x );
+                m_pcbModel->AddBackdrill( backdrillShape, tertiaryDrill.start,
+                                          tertiaryDrill.end, aOrigin );
+
+                // Add backdrill holes to affected copper layers for 2D polygon subtraction
+                SHAPE_POLY_SET backdrillPoly;
+                backdrillShape.TransformToPolygon( backdrillPoly, pad->GetMaxError(), ERROR_INSIDE );
+
+                for( PCB_LAYER_ID layer : pad->GetLayerSet() )
+                {
+                    if( isLayerInBackdrillSpan( layer, tertiaryDrill.start, tertiaryDrill.end ) )
+                        m_poly_holes[layer].Append( backdrillPoly );
+                }
+
+                // Add knockouts for silkscreen and soldermask on the backdrill side
+                if( isLayerInBackdrillSpan( F_Cu, tertiaryDrill.start, tertiaryDrill.end ) )
+                {
+                    m_poly_holes[F_SilkS].Append( backdrillPoly );
+                    m_poly_holes[F_Mask].Append( backdrillPoly );
+                }
+                if( isLayerInBackdrillSpan( B_Cu, tertiaryDrill.start, tertiaryDrill.end ) )
+                {
+                    m_poly_holes[B_SilkS].Append( backdrillPoly );
+                    m_poly_holes[B_Mask].Append( backdrillPoly );
+                }
+            }
+
+            // Process post-machining (counterbore/countersink) on front and back
+            const PADSTACK::POST_MACHINING_PROPS& frontPM = padstack.FrontPostMachining();
+            const PADSTACK::POST_MACHINING_PROPS& backPM = padstack.BackPostMachining();
+
+            wxLogTrace( traceKiCad2Step, wxT( "PAD post-machining check: frontPM.mode.has_value=%d frontPM.size=%d frontPM.depth=%d frontPM.angle=%d" ),
+                        frontPM.mode.has_value() ? 1 : 0, frontPM.size, frontPM.depth, frontPM.angle );
+            wxLogTrace( traceKiCad2Step, wxT( "PAD post-machining check: backPM.mode.has_value=%d backPM.size=%d backPM.depth=%d backPM.angle=%d" ),
+                        backPM.mode.has_value() ? 1 : 0, backPM.size, backPM.depth, backPM.angle );
+
+            // For counterbore, depth must be > 0. For countersink, depth can be 0 (calculated from diameter/angle)
+            bool frontPMValid = frontPM.mode.has_value() && frontPM.size > 0 &&
+                                ( ( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE && frontPM.depth > 0 ) ||
+                                  ( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && frontPM.angle > 0 ) );
+
+            if( frontPMValid )
+            {
+                wxLogTrace( traceKiCad2Step, wxT( "PAD front post-machining: mode=%d (COUNTERBORE=2, COUNTERSINK=3)" ),
+                            static_cast<int>( *frontPM.mode ) );
+
+                int pmAngle = ( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK ) ? frontPM.angle : 0;
+
+                if( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                {
+                    m_pcbModel->AddCounterbore( pad->GetPosition(), frontPM.size,
+                                                frontPM.depth, true, aOrigin );
+                }
+                else if( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                {
+                    m_pcbModel->AddCountersink( pad->GetPosition(), frontPM.size,
+                                                frontPM.depth, frontPM.angle, true, aOrigin );
+                }
+
+                // Add knockouts to all copper layers the feature crosses
+                auto knockouts = m_pcbModel->GetCopperLayerKnockouts( frontPM.size, frontPM.depth,
+                                                                      pmAngle, true );
+                for( const auto& [layer, diameter] : knockouts )
+                {
+                    SHAPE_POLY_SET pmPoly;
+                    TransformCircleToPolygon( pmPoly, pad->GetPosition(), diameter / 2,
+                                              pad->GetMaxError(), ERROR_INSIDE );
+                    m_poly_holes[layer].Append( pmPoly );
+                }
+
+                // Add knockout for silkscreen and soldermask on front side (full diameter)
+                SHAPE_POLY_SET pmPoly;
+                TransformCircleToPolygon( pmPoly, pad->GetPosition(), frontPM.size / 2,
+                                          pad->GetMaxError(), ERROR_INSIDE );
+                m_poly_holes[F_SilkS].Append( pmPoly );
+                m_poly_holes[F_Mask].Append( pmPoly );
+            }
+
+            // For counterbore, depth must be > 0. For countersink, depth can be 0 (calculated from diameter/angle)
+            bool backPMValid = backPM.mode.has_value() && backPM.size > 0 &&
+                               ( ( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE && backPM.depth > 0 ) ||
+                                 ( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && backPM.angle > 0 ) );
+
+            if( backPMValid )
+            {
+                wxLogTrace( traceKiCad2Step, wxT( "PAD back post-machining: mode=%d (COUNTERBORE=2, COUNTERSINK=3)" ),
+                            static_cast<int>( *backPM.mode ) );
+
+                int pmAngle = ( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK ) ? backPM.angle : 0;
+
+                if( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                {
+                    m_pcbModel->AddCounterbore( pad->GetPosition(), backPM.size,
+                                                backPM.depth, false, aOrigin );
+                }
+                else if( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                {
+                    m_pcbModel->AddCountersink( pad->GetPosition(), backPM.size,
+                                                backPM.depth, backPM.angle, false, aOrigin );
+                }
+
+                // Add knockouts to all copper layers the feature crosses
+                auto knockouts = m_pcbModel->GetCopperLayerKnockouts( backPM.size, backPM.depth,
+                                                                      pmAngle, false );
+                for( const auto& [layer, diameter] : knockouts )
+                {
+                    SHAPE_POLY_SET pmPoly;
+                    TransformCircleToPolygon( pmPoly, pad->GetPosition(), diameter / 2,
+                                              pad->GetMaxError(), ERROR_INSIDE );
+                    m_poly_holes[layer].Append( pmPoly );
+                }
+
+                // Add knockout for silkscreen and soldermask on back side (full diameter)
+                SHAPE_POLY_SET pmPoly;
+                TransformCircleToPolygon( pmPoly, pad->GetPosition(), backPM.size / 2,
+                                          pad->GetMaxError(), ERROR_INSIDE );
+                m_poly_holes[B_SilkS].Append( pmPoly );
+                m_poly_holes[B_Mask].Append( pmPoly );
+            }
         }
 
         if( !m_params.m_NetFilter.IsEmpty() && !pad->GetNetname().Matches( m_params.m_NetFilter ) )
@@ -460,6 +661,166 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, const VECTOR2D& aOrigi
 
         m_pcbModel->AddHole( *holeShape, m_platingThickness, top_layer, bot_layer, true, aOrigin,
                              !m_params.m_FillAllVias, m_params.m_CutViasInBody );
+
+        // Handle via backdrills - secondary and tertiary drills defined in the padstack
+        const PADSTACK& padstack = via->Padstack();
+        const PADSTACK::DRILL_PROPS& secondaryDrill = padstack.SecondaryDrill();
+        const PADSTACK::DRILL_PROPS& tertiaryDrill = padstack.TertiaryDrill();
+
+        // Process secondary drill (typically bottom backdrill)
+        if( secondaryDrill.size.x > 0 )
+        {
+            SHAPE_SEGMENT backdrillShape( via->GetPosition(), via->GetPosition(),
+                                          secondaryDrill.size.x );
+            m_pcbModel->AddBackdrill( backdrillShape, secondaryDrill.start,
+                                      secondaryDrill.end, aOrigin );
+
+            // Add backdrill holes to affected copper layers for 2D polygon subtraction
+            SHAPE_POLY_SET backdrillPoly;
+            backdrillShape.TransformToPolygon( backdrillPoly, via->GetMaxError(), ERROR_INSIDE );
+
+            for( PCB_LAYER_ID layer : via->GetLayerSet() )
+            {
+                if( isLayerInBackdrillSpan( layer, secondaryDrill.start, secondaryDrill.end ) )
+                    m_poly_holes[layer].Append( backdrillPoly );
+            }
+
+            // Add knockouts for silkscreen and soldermask on the backdrill side
+            if( isLayerInBackdrillSpan( F_Cu, secondaryDrill.start, secondaryDrill.end ) )
+            {
+                m_poly_holes[F_SilkS].Append( backdrillPoly );
+                m_poly_holes[F_Mask].Append( backdrillPoly );
+            }
+            if( isLayerInBackdrillSpan( B_Cu, secondaryDrill.start, secondaryDrill.end ) )
+            {
+                m_poly_holes[B_SilkS].Append( backdrillPoly );
+                m_poly_holes[B_Mask].Append( backdrillPoly );
+            }
+        }
+
+        // Process tertiary drill (typically top backdrill)
+        if( tertiaryDrill.size.x > 0 )
+        {
+            SHAPE_SEGMENT backdrillShape( via->GetPosition(), via->GetPosition(),
+                                          tertiaryDrill.size.x );
+            m_pcbModel->AddBackdrill( backdrillShape, tertiaryDrill.start,
+                                      tertiaryDrill.end, aOrigin );
+
+            // Add backdrill holes to affected copper layers for 2D polygon subtraction
+            SHAPE_POLY_SET backdrillPoly;
+            backdrillShape.TransformToPolygon( backdrillPoly, via->GetMaxError(), ERROR_INSIDE );
+
+            for( PCB_LAYER_ID layer : via->GetLayerSet() )
+            {
+                if( isLayerInBackdrillSpan( layer, tertiaryDrill.start, tertiaryDrill.end ) )
+                    m_poly_holes[layer].Append( backdrillPoly );
+            }
+
+            // Add knockouts for silkscreen and soldermask on the backdrill side
+            if( isLayerInBackdrillSpan( F_Cu, tertiaryDrill.start, tertiaryDrill.end ) )
+            {
+                m_poly_holes[F_SilkS].Append( backdrillPoly );
+                m_poly_holes[F_Mask].Append( backdrillPoly );
+            }
+            if( isLayerInBackdrillSpan( B_Cu, tertiaryDrill.start, tertiaryDrill.end ) )
+            {
+                m_poly_holes[B_SilkS].Append( backdrillPoly );
+                m_poly_holes[B_Mask].Append( backdrillPoly );
+            }
+        }
+
+        // Process post-machining (counterbore/countersink) on front and back
+        const PADSTACK::POST_MACHINING_PROPS& frontPM = padstack.FrontPostMachining();
+        const PADSTACK::POST_MACHINING_PROPS& backPM = padstack.BackPostMachining();
+
+        wxLogTrace( traceKiCad2Step, wxT( "VIA post-machining check: frontPM.mode.has_value=%d frontPM.size=%d frontPM.depth=%d frontPM.angle=%d" ),
+                    frontPM.mode.has_value() ? 1 : 0, frontPM.size, frontPM.depth, frontPM.angle );
+        wxLogTrace( traceKiCad2Step, wxT( "VIA post-machining check: backPM.mode.has_value=%d backPM.size=%d backPM.depth=%d backPM.angle=%d" ),
+                    backPM.mode.has_value() ? 1 : 0, backPM.size, backPM.depth, backPM.angle );
+
+        // For counterbore, depth must be > 0. For countersink, depth can be 0 (calculated from diameter/angle)
+        bool frontPMValid = frontPM.mode.has_value() && frontPM.size > 0 &&
+                            ( ( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE && frontPM.depth > 0 ) ||
+                              ( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && frontPM.angle > 0 ) );
+
+        if( frontPMValid )
+        {
+            wxLogTrace( traceKiCad2Step, wxT( "VIA front post-machining: mode=%d (COUNTERBORE=2, COUNTERSINK=3)" ),
+                        static_cast<int>( *frontPM.mode ) );
+
+            int pmAngle = ( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK ) ? frontPM.angle : 0;
+
+            if( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+            {
+                m_pcbModel->AddCounterbore( via->GetPosition(), frontPM.size,
+                                            frontPM.depth, true, aOrigin );
+            }
+            else if( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            {
+                m_pcbModel->AddCountersink( via->GetPosition(), frontPM.size,
+                                            frontPM.depth, frontPM.angle, true, aOrigin );
+            }
+
+            // Add knockouts to all copper layers the feature crosses
+            auto knockouts = m_pcbModel->GetCopperLayerKnockouts( frontPM.size, frontPM.depth,
+                                                                  pmAngle, true );
+            for( const auto& [layer, diameter] : knockouts )
+            {
+                SHAPE_POLY_SET pmPoly;
+                TransformCircleToPolygon( pmPoly, via->GetPosition(), diameter / 2,
+                                          via->GetMaxError(), ERROR_INSIDE );
+                m_poly_holes[layer].Append( pmPoly );
+            }
+
+            // Add knockout for silkscreen and soldermask on front side (full diameter)
+            SHAPE_POLY_SET pmPoly;
+            TransformCircleToPolygon( pmPoly, via->GetPosition(), frontPM.size / 2,
+                                      via->GetMaxError(), ERROR_INSIDE );
+            m_poly_holes[F_SilkS].Append( pmPoly );
+            m_poly_holes[F_Mask].Append( pmPoly );
+        }
+
+        // For counterbore, depth must be > 0. For countersink, depth can be 0 (calculated from diameter/angle)
+        bool backPMValid = backPM.mode.has_value() && backPM.size > 0 &&
+                           ( ( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE && backPM.depth > 0 ) ||
+                             ( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && backPM.angle > 0 ) );
+
+        if( backPMValid )
+        {
+            wxLogTrace( traceKiCad2Step, wxT( "VIA back post-machining: mode=%d (COUNTERBORE=2, COUNTERSINK=3)" ),
+                        static_cast<int>( *backPM.mode ) );
+
+            int pmAngle = ( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK ) ? backPM.angle : 0;
+
+            if( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+            {
+                m_pcbModel->AddCounterbore( via->GetPosition(), backPM.size,
+                                            backPM.depth, false, aOrigin );
+            }
+            else if( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            {
+                m_pcbModel->AddCountersink( via->GetPosition(), backPM.size,
+                                            backPM.depth, backPM.angle, false, aOrigin );
+            }
+
+            // Add knockouts to all copper layers the feature crosses
+            auto knockouts = m_pcbModel->GetCopperLayerKnockouts( backPM.size, backPM.depth,
+                                                                  pmAngle, false );
+            for( const auto& [layer, diameter] : knockouts )
+            {
+                SHAPE_POLY_SET pmPoly;
+                TransformCircleToPolygon( pmPoly, via->GetPosition(), diameter / 2,
+                                          via->GetMaxError(), ERROR_INSIDE );
+                m_poly_holes[layer].Append( pmPoly );
+            }
+
+            // Add knockout for silkscreen and soldermask on back side (full diameter)
+            SHAPE_POLY_SET pmPoly;
+            TransformCircleToPolygon( pmPoly, via->GetPosition(), backPM.size / 2,
+                                      via->GetMaxError(), ERROR_INSIDE );
+            m_poly_holes[B_SilkS].Append( pmPoly );
+            m_poly_holes[B_Mask].Append( pmPoly );
+        }
 
         return true;
     }

@@ -26,6 +26,8 @@
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
+#include <pad.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
@@ -109,6 +111,71 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
             drcItem->SetItems( track );
             reportViolation( drcItem, pos, track->GetLayer() );
+        }
+    }
+
+    // Test for tracks connecting to post-machined or backdrilled layers
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_ON_POST_MACHINED_LAYER ) )
+    {
+        for( PCB_TRACK* track : board->Tracks() )
+        {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_ON_POST_MACHINED_LAYER ) )
+                break;
+
+            // Only check traces and arcs (not vias)
+            if( track->Type() != PCB_TRACE_T && track->Type() != PCB_ARC_T )
+                continue;
+
+            PCB_LAYER_ID layer = track->GetLayer();
+
+            // Get items connected to this track
+            const std::list<CN_ITEM*>& items = connectivity->GetConnectivityAlgo()->ItemEntry( track ).GetItems();
+
+            if( items.empty() )
+                continue;
+
+            CN_ITEM* citem = items.front();
+
+            if( !citem->Valid() )
+                continue;
+
+            for( CN_ITEM* connected : citem->ConnectedItems() )
+            {
+                BOARD_CONNECTED_ITEM* item = connected->Parent();
+
+                if( item->GetFlags() & IS_DELETED )
+                    continue;
+
+                bool isPostMachined = false;
+
+                if( item->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( item );
+                    isPostMachined = pad->IsBackdrilledOrPostMachined( layer );
+                }
+                else if( item->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+                    isPostMachined = via->IsBackdrilledOrPostMachined( layer );
+                }
+
+                if( isPostMachined )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_ON_POST_MACHINED_LAYER );
+                    drcItem->SetItems( track, item );
+
+                    VECTOR2I pos = ( track->GetStart() + track->GetEnd() ) / 2;
+
+                    // Use the endpoint that's closer to the pad/via
+                    if( item->HitTest( track->GetStart() ) )
+                        pos = track->GetStart();
+                    else if( item->HitTest( track->GetEnd() ) )
+                        pos = track->GetEnd();
+
+                    reportViolation( drcItem, pos, layer );
+                    break;  // Only report once per track
+                }
+            }
         }
     }
 

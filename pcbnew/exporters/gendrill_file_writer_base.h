@@ -35,11 +35,13 @@
 // Set to 1 to add these comments and 0 to not use these comments
 #define USE_ATTRIB_FOR_HOLES 1
 
-#include <vector>
+#include <optional>
 #include <string>
+#include <vector>
 
 #include <layer_ids.h>
 #include <plotters/plotter.h>
+#include <padstack.h>
 
 
 class BOARD;
@@ -55,6 +57,7 @@ enum class HOLE_ATTRIBUTE
     HOLE_UNKNOWN,           // uninitialized type
     HOLE_VIA_THROUGH,       // a via hole (always plated) from top to bottom
     HOLE_VIA_BURIED,        // a via hole (always plated) not through hole
+    HOLE_VIA_BACKDRILL,     // a via hole created by a backdrill operation
     HOLE_PAD,               // a plated or not plated pad hole
     HOLE_PAD_CASTELLATED,   // a plated castelleted pad hole
     HOLE_PAD_PRESSFIT,      // a plated press-fit pad hole
@@ -84,6 +87,10 @@ public:
     int m_OvalCount;                // oblong count
     bool m_Hole_NotPlated;          // Is the hole plated or not plated
     HOLE_ATTRIBUTE m_HoleAttribute; // Attribute (used in Excellon drill file)
+    bool m_IsBackdrill;             // True when drilling a backdrill span
+    bool m_HasPostMachining;        // True if any hole for this tool has post-machining
+    std::optional<int> m_MinStubLength; // Minimum stub length for this tool (IU)
+    std::optional<int> m_MaxStubLength; // Maximum stub length for this tool (IU)
 
 public:
     DRILL_TOOL( int aDiameter, bool a_NotPlated )
@@ -93,6 +100,8 @@ public:
         m_Diameter       = aDiameter;
         m_Hole_NotPlated = a_NotPlated;
         m_HoleAttribute  = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
+        m_IsBackdrill    = false;
+        m_HasPostMachining = false;
     }
 };
 
@@ -126,6 +135,17 @@ public:
         m_Hole_Bot_Plugged = false;
         m_Hole_Top_Tented = false;
         m_Hole_Bot_Tented = false;
+        m_IsBackdrill = false;
+        m_FrontPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+        m_FrontPostMachiningSize = 0;
+        m_FrontPostMachiningDepth = 0;
+        m_FrontPostMachiningAngle = 0;
+        m_BackPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+        m_BackPostMachiningSize = 0;
+        m_BackPostMachiningDepth = 0;
+        m_BackPostMachiningAngle = 0;
+        m_DrillStart = UNDEFINED_LAYER;
+        m_DrillEnd = UNDEFINED_LAYER;
     }
 
 public:
@@ -145,15 +165,102 @@ public:
                                          // section.
     HOLE_ATTRIBUTE m_HoleAttribute;      // Attribute, used in Excellon drill file and to sort holes
                                          // by type.
+    bool         m_Hole_Filled;          // True if the hole is filled
+    bool         m_Hole_Capped;          // True if the hole is capped
+    bool         m_Hole_Top_Covered;     // True if the hole is covered on the top layer
+    bool         m_Hole_Bot_Covered;     // True if the hole is covered on the bottom layer
+    bool         m_Hole_Top_Plugged;     // True if the hole is plugged on the top layer
+    bool         m_Hole_Bot_Plugged;     // True if the hole is plugged on the bottom layer
+    bool         m_Hole_Top_Tented;      // True if the hole is tented on the top layer
+    bool         m_Hole_Bot_Tented;      // True if the hole is tented on the bottom layer
+    bool         m_IsBackdrill;          // True if the hole is a backdrill
+    PAD_DRILL_POST_MACHINING_MODE m_FrontPostMachining; // Post-machining mode
+    int          m_FrontPostMachiningSize;    // Post-machining size
+    int          m_FrontPostMachiningDepth;   // Post-machining depth
+    int          m_FrontPostMachiningAngle;   // Post-machining angle
+    PAD_DRILL_POST_MACHINING_MODE m_BackPostMachining; // Post-machining mode
+    int          m_BackPostMachiningSize;    // Post-machining size
+    int          m_BackPostMachiningDepth;   // Post-machining depth
+    int          m_BackPostMachiningAngle;   // Post-machining angle
+    PCB_LAYER_ID m_DrillStart;           // Start layer for backdrills
+    PCB_LAYER_ID m_DrillEnd;             // End layer for backdrills
+    std::optional<int> m_StubLength;     // Stub length for backdrills
 
-    bool m_Hole_Filled;      // hole should be filled
-    bool m_Hole_Capped;      // hole should be capped
-    bool m_Hole_Top_Covered; // hole should be covered on top
-    bool m_Hole_Bot_Covered; // hole should be covered on bottom
-    bool m_Hole_Top_Plugged; // hole should be plugged on top
-    bool m_Hole_Bot_Plugged; // hole should be plugged on bottom
-    bool m_Hole_Top_Tented;  // hole should be tented on top
-    bool m_Hole_Bot_Tented;  // hole should be tented on bottom
+
+};
+
+
+typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID>   DRILL_LAYER_PAIR;
+
+
+struct DRILL_SPAN
+{
+    DRILL_SPAN()
+    {
+        m_StartLayer = F_Cu;
+        m_EndLayer = B_Cu;
+        m_IsBackdrill = false;
+        m_IsNonPlatedFile = false;
+    }
+
+    DRILL_SPAN( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer, bool aIsBackdrill,
+                bool aIsNonPlated )
+    {
+        m_StartLayer = aStartLayer;
+        m_EndLayer = aEndLayer;
+        m_IsBackdrill = aIsBackdrill;
+        m_IsNonPlatedFile = aIsNonPlated;
+    }
+
+    PCB_LAYER_ID TopLayer() const
+    {
+        return m_StartLayer < m_EndLayer ? m_StartLayer : m_EndLayer;
+    }
+
+    PCB_LAYER_ID BottomLayer() const
+    {
+        return m_StartLayer < m_EndLayer ? m_EndLayer : m_StartLayer;
+    }
+
+    PCB_LAYER_ID DrillStartLayer() const
+    {
+        return m_StartLayer;
+    }
+
+    PCB_LAYER_ID DrillEndLayer() const
+    {
+        return m_EndLayer;
+    }
+
+    DRILL_LAYER_PAIR Pair() const
+    {
+        return DRILL_LAYER_PAIR( TopLayer(), BottomLayer() );
+    }
+
+    bool operator<( const DRILL_SPAN& aOther ) const
+    {
+        if( TopLayer() != aOther.TopLayer() )
+            return TopLayer() < aOther.TopLayer();
+
+        if( BottomLayer() != aOther.BottomLayer() )
+            return BottomLayer() < aOther.BottomLayer();
+
+        if( m_IsBackdrill != aOther.m_IsBackdrill )
+            return m_IsBackdrill && !aOther.m_IsBackdrill;
+
+        if( m_IsNonPlatedFile != aOther.m_IsNonPlatedFile )
+            return m_IsNonPlatedFile && !aOther.m_IsNonPlatedFile;
+
+        if( m_StartLayer != aOther.m_StartLayer )
+            return m_StartLayer < aOther.m_StartLayer;
+
+        return m_EndLayer < aOther.m_EndLayer;
+    }
+
+    PCB_LAYER_ID m_StartLayer;
+    PCB_LAYER_ID m_EndLayer;
+    bool         m_IsBackdrill;
+    bool         m_IsNonPlatedFile;
 };
 
 
@@ -181,8 +288,6 @@ public:
     int m_Rhs;      // Right digit number (decimal value of coordinates)
 };
 
-
-typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID>   DRILL_LAYER_PAIR;
 
 /**
  * Create drill maps and drill reports and drill files.
@@ -335,7 +440,7 @@ protected:
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
      */
-    void buildHolesList( DRILL_LAYER_PAIR aLayerPair, bool aGenerateNPTH_list );
+    void buildHolesList( const DRILL_SPAN& aSpan, bool aGenerateNPTH_list );
 
     int  getHolesCount() const { return m_holeListBuffer.size(); }
 
@@ -351,7 +456,7 @@ protected:
     bool plotDrillMarks( PLOTTER* aPlotter );
 
     /// Get unique layer pairs by examining the micro and blind_buried vias.
-    std::vector<DRILL_LAYER_PAIR> getUniqueLayerPairs() const;
+    std::vector<DRILL_SPAN> getUniqueLayerPairs() const;
 
     /**
      * Print m_toolListBuffer[] tools to aOut and returns total hole count.
@@ -383,7 +488,7 @@ protected:
      * it is the board name with the layer pair names added, and for separate
      * (PTH and NPTH) files, "-NPH" or "-NPTH" added
      */
-    virtual const wxString getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
+    virtual const wxString getDrillFileName( const DRILL_SPAN& aSpan, bool aNPTH,
                                              bool aMerge_PTH_NPTH ) const;
 
 
@@ -393,7 +498,7 @@ protected:
      * @return a filename which identifies the specific protection feature.
      * It is the board file name followed by the feature name and the layer(s) associated with it.
      */
-    virtual const wxString getProtectionFileName( DRILL_LAYER_PAIR aPair,
+    virtual const wxString getProtectionFileName( const DRILL_SPAN& aSpan,
                                                   IPC4761_FEATURES aFeature ) const;
 
 
@@ -408,7 +513,7 @@ protected:
      * There is no X1 version, as the Gerber drill files uses only X2 format
      * There is a compatible NC drill version.
      */
-    const wxString BuildFileFunctionAttributeString( DRILL_LAYER_PAIR aLayerPair,
+    const wxString BuildFileFunctionAttributeString( const DRILL_SPAN& aSpan,
                                                      TYPE_FILE aHoleType,
                                                      bool aCompatNCdrill = false ) const;
 

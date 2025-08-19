@@ -113,7 +113,9 @@ enum PCB_DRC_CODE
     DRCE_MISSING_TUNING_PROFILE,        // Tuning profile used in net class is not defined
     DRCE_TUNING_PROFILE_IMPLICIT_RULES, // Pseudo-code for setting severities
 
-    DRCE_LAST = DRCE_TUNING_PROFILE_IMPLICIT_RULES
+    DRCE_TRACK_ON_POST_MACHINED_LAYER,  // Track connected to pad/via on post-machined/backdrilled layer
+
+    DRCE_LAST = DRCE_TRACK_ON_POST_MACHINED_LAYER
 };
 
 
@@ -248,6 +250,7 @@ private:
     static DRC_ITEM nonMirroredTextOnBackLayer;
     static DRC_ITEM missingTuningProfile;
     static DRC_ITEM tuningProfileImplicitRules;
+    static DRC_ITEM trackOnPostMachinedLayer;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

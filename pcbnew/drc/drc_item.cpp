@@ -306,6 +306,10 @@ DRC_ITEM DRC_ITEM::tuningProfileImplicitRules( DRCE_TUNING_PROFILE_IMPLICIT_RULE
         _HKI( "Tuning profile track geometries" ),
         wxT( "tuning_profile_track_geometries" ) );
 
+DRC_ITEM DRC_ITEM::trackOnPostMachinedLayer( DRCE_TRACK_ON_POST_MACHINED_LAYER,
+        _HKI( "Track connected to post-machined or backdrilled layer" ),
+        wxT( "track_on_post_machined_layer" ) );
+
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::heading_electrical,
         DRC_ITEM::shortingItems,
@@ -334,6 +338,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::copperSliver,
         DRC_ITEM::solderMaskBridge,
         DRC_ITEM::connectionWidth,
+        DRC_ITEM::trackOnPostMachinedLayer,
         DRC_ITEM::tuningProfileImplicitRules,
 
         DRC_ITEM::heading_schematic_parity,
@@ -454,6 +459,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_MIRRORED_TEXT_ON_FRONT_LAYER:        return std::make_shared<DRC_ITEM>( mirroredTextOnFrontLayer );
     case DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER:      return std::make_shared<DRC_ITEM>( nonMirroredTextOnBackLayer );
     case DRCE_MISSING_TUNING_PROFILE:   return std::make_shared<DRC_ITEM>( missingTuningProfile );
+    case DRCE_TRACK_ON_POST_MACHINED_LAYER: return std::make_shared<DRC_ITEM>( trackOnPostMachinedLayer );
     default:
         wxFAIL_MSG( wxT( "Unknown DRC error code" ) );
         return nullptr;

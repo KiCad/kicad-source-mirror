@@ -1224,19 +1224,18 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             // Make sure the destination layer is enabled, even if not in the file
             m_board->SetEnabledLayers( LSET( m_board->GetEnabledLayers() ).set( destLayer ) );
 
-            const auto visitItem =
-                    [&]( BOARD_ITEM& curr_item )
-                    {
-                        LSET layers = curr_item.GetLayerSet();
+            const auto visitItem = [&]( BOARD_ITEM& curr_item )
+            {
+                LSET layers = curr_item.GetLayerSet();
 
-                        if( layers.test( Rescue ) )
-                        {
-                            layers.set( destLayer );
-                            layers.reset( Rescue );
-                        }
+                if( layers.test( Rescue ) )
+                {
+                    layers.set( destLayer );
+                    layers.reset( Rescue );
+                }
 
-                        curr_item.SetLayerSet( layers );
-                    };
+                curr_item.SetLayerSet( layers );
+            };
 
             for( PCB_TRACK* track : m_board->Tracks() )
             {
@@ -2594,7 +2593,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             break;
         }
         case T_zone_defaults:
-            parseZoneDefaults( bds.m_ZoneLayerProperties );
+            parseZoneDefaults( bds.GetDefaultZoneSettings() );
             break;
 
         default:
@@ -2613,23 +2612,24 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings )
 {
     T token;
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
+        {
             Expecting( T_LEFT );
+        }
 
         token = NextTok();
 
         switch( token )
         {
         case T_property:
-            parseZoneLayerProperty( aProperties );
+            parseZoneLayerProperty( aZoneSettings.m_LayerProperties );
             break;
-
         default:
             Unexpected( CurText() );
         }
@@ -2637,7 +2637,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( std::map<PCB_LAYER_ID, ZONE_L
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty(
+        std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
 {
     T token;
 
@@ -2647,7 +2648,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty( std::map<PCB_LAYER_ID, Z
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
+        {
             Expecting( T_LEFT );
+        }
 
         token = NextTok();
 
@@ -2657,14 +2660,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty( std::map<PCB_LAYER_ID, Z
             layer = parseBoardItemLayer();
             NeedRIGHT();
             break;
-
         case T_hatch_position:
         {
             properties.hatching_offset = parseXY();
             NeedRIGHT();
             break;
         }
-
         default:
             Unexpected( CurText() );
             break;
@@ -5649,6 +5650,86 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
         }
 
+        case T_backdrill:
+        {
+            // Parse: (backdrill (size ...) (layers start end))
+            PADSTACK::DRILL_PROPS& secondary = pad->Padstack().SecondaryDrill();
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_size:
+                {
+                    int size = parseBoardUnits( "backdrill size" );
+                    secondary.size = VECTOR2I( size, size );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_layers:
+                {
+                    NextTok();
+                    secondary.start = lookUpLayer( m_layerIndices );
+                    NextTok();
+                    secondary.end = lookUpLayer( m_layerIndices );
+                    NeedRIGHT();
+                    break;
+                }
+
+                default:
+                    Expecting( "size or layers" );
+                }
+            }
+
+            break;
+        }
+
+        case T_tertiary_drill:
+        {
+            // Parse: (tertiary_drill (size ...) (layers start end))
+            PADSTACK::DRILL_PROPS& tertiary = pad->Padstack().TertiaryDrill();
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_size:
+                {
+                    int size = parseBoardUnits( "tertiary drill size" );
+                    tertiary.size = VECTOR2I( size, size );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_layers:
+                {
+                    NextTok();
+                    tertiary.start = lookUpLayer( m_layerIndices );
+                    NextTok();
+                    tertiary.end = lookUpLayer( m_layerIndices );
+                    NeedRIGHT();
+                    break;
+                }
+
+                default:
+                    Expecting( "size or layers" );
+                }
+            }
+
+            break;
+        }
+
         case T_layers:
         {
             LSET layerMask = parseBoardItemLayersAsMask();
@@ -6011,12 +6092,20 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedRIGHT();
             break;
 
+        case T_front_post_machining:
+            parsePostMachining( pad->Padstack().FrontPostMachining() );
+            break;
+
+        case T_back_post_machining:
+            parsePostMachining( pad->Padstack().BackPostMachining() );
+            break;
+
         default:
             Expecting( "at, locked, drill, layers, net, die_length, roundrect_rratio, "
                        "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, uuid, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
-                       "pinfunction, pintype, zone_connect, thermal_width, thermal_gap, padstack or "
-                       "teardrops" );
+                       "pinfunction, pintype, zone_connect, thermal_width, thermal_gap, padstack, "
+                       "teardrops, front_post_machining, or back_post_machining" );
         }
     }
 
@@ -6142,6 +6231,59 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
     }
 
     return true;
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parsePostMachining( PADSTACK::POST_MACHINING_PROPS& aProps )
+{
+    // Parse: (front_post_machining counterbore (size ...) (depth ...) (angle ...))
+    // or:    (back_post_machining countersink (size ...) (depth ...) (angle ...))
+    // The mode token (counterbore/countersink) comes first
+    T token = NextTok();
+
+    switch( token )
+    {
+    case T_counterbore:
+        aProps.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
+        break;
+
+    case T_countersink:
+        aProps.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+        break;
+
+    default:
+        Expecting( "counterbore or countersink" );
+    }
+
+    // Parse optional properties
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_size:
+            aProps.size = parseBoardUnits( "post machining size" );
+            NeedRIGHT();
+            break;
+
+        case T_depth:
+            aProps.depth = parseBoardUnits( "post machining depth" );
+            NeedRIGHT();
+            break;
+
+        case T_angle:
+            aProps.angle = KiROUND( parseDouble( "post machining angle" ) * 10.0 );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "size, depth, or angle" );
+        }
+    }
 }
 
 
@@ -7136,8 +7278,98 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             via->SetIsFree( parseMaybeAbsentBool( true ) );
             break;
 
+        case T_backdrill:
+        {
+            // Parse: (backdrill (size ...) (layers start end))
+            PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_size:
+                {
+                    int size = parseBoardUnits( "backdrill size" );
+                    secondary.size = VECTOR2I( size, size );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_layers:
+                {
+                    NextTok();
+                    secondary.start = lookUpLayer( m_layerIndices );
+                    NextTok();
+                    secondary.end = lookUpLayer( m_layerIndices );
+                    NeedRIGHT();
+                    break;
+                }
+
+                default:
+                    Expecting( "size or layers" );
+                }
+            }
+
+            break;
+        }
+
+        case T_tertiary_drill:
+        {
+            // Parse: (tertiary_drill (size ...) (layers start end))
+            PADSTACK::DRILL_PROPS& tertiary = via->Padstack().TertiaryDrill();
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_size:
+                {
+                    int size = parseBoardUnits( "tertiary drill size" );
+                    tertiary.size = VECTOR2I( size, size );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_layers:
+                {
+                    NextTok();
+                    tertiary.start = lookUpLayer( m_layerIndices );
+                    NextTok();
+                    tertiary.end = lookUpLayer( m_layerIndices );
+                    NeedRIGHT();
+                    break;
+                }
+
+                default:
+                    Expecting( "size or layers" );
+                }
+            }
+
+            break;
+        }
+
+        case T_front_post_machining:
+            parsePostMachining( via->Padstack().FrontPostMachining() );
+            break;
+
+        case T_back_post_machining:
+            parsePostMachining( via->Padstack().BackPostMachining() );
+            break;
+
         default:
-            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, uuid, status or teardrops" );
+            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, uuid, status, "
+                       "teardrops, backdrill, tertiary_drill, front_post_machining, or "
+                       "back_post_machining" );
         }
     }
 

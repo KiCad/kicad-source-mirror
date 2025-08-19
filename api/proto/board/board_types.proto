@@ -368,6 +368,14 @@ enum ViaDrillFillingMode
   VDFM_FROM_DESIGN_RULES = 3;
 }
 
+enum ViaDrillPostMachiningMode
+{
+  VDPM_UNKNOWN = 0;
+  VDPM_NOT_POST_MACHINED = 1;
+  VDPM_COUNTERBORE = 2;
+  VDPM_COUNTERSINK = 3;
+}
+
 message DrillProperties
 {
   // Lowest (closest to F_Cu) layer this drill exists on.
@@ -385,6 +393,15 @@ message DrillProperties
   ViaDrillCappingMode capped = 5;
 
   ViaDrillFillingMode filled = 6;
+
+}
+
+message PostMachiningProperties
+{
+  ViaDrillPostMachiningMode mode = 1;
+  int32 size = 2;
+  int32 depth = 3;
+  int32 angle = 4;
 }
 
 // A pad stack definition for a multilayer pad or via.
@@ -415,6 +432,15 @@ message PadStack
 
   // Controls for how copper zones connect to the padstack
   ZoneConnectionSettings zone_settings = 9;
+
+  // Optional secondary drill hit for backdrilling
+  DrillProperties secondary_drill = 10;
+
+  // Optional tertiary drill hit for backdrilling
+  DrillProperties tertiary_drill = 11;
+
+  PostMachiningProperties front_post_machining = 12;
+  PostMachiningProperties back_post_machining = 13;
 }
 
 enum ViaType

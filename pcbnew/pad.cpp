@@ -490,25 +490,371 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 }
 
 
-void PAD::SetDrillSizeX( const int aX )
+void PAD::SetPrimaryDrillSize( const VECTOR2I& aSize )
+{
+    m_padStack.Drill().size = aSize;
+    SetDirty();
+}
+
+
+void PAD::SetPrimaryDrillSizeX( const int aX )
 {
     m_padStack.Drill().size.x = aX;
 
-    if( GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
-        SetDrillSizeY( aX );
+    if( GetPrimaryDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
+        m_padStack.Drill().size.y = aX;
 
     SetDirty();
 }
 
 
-void PAD::SetDrillShape( PAD_DRILL_SHAPE aShape )
+void PAD::SetDrillSizeX( const int aX )
+{
+    SetPrimaryDrillSizeX( aX );
+}
+
+
+void PAD::SetPrimaryDrillSizeY( const int aY )
+{
+    m_padStack.Drill().size.y = aY;
+    SetDirty();
+}
+
+
+void PAD::SetDrillSizeY( const int aY )
+{
+    SetPrimaryDrillSizeY( aY );
+}
+
+
+void PAD::SetPrimaryDrillShape( PAD_DRILL_SHAPE aShape )
 {
     m_padStack.Drill().shape = aShape;
 
     if( aShape == PAD_DRILL_SHAPE::CIRCLE )
-        SetDrillSizeY( GetDrillSizeX() );
+        m_padStack.Drill().size.y = m_padStack.Drill().size.x;
 
     m_shapesDirty = true;
+    SetDirty();
+}
+
+
+void PAD::SetPrimaryDrillStartLayer( PCB_LAYER_ID aLayer )
+{
+    m_padStack.Drill().start = aLayer;
+    SetDirty();
+}
+
+
+void PAD::SetPrimaryDrillEndLayer( PCB_LAYER_ID aLayer )
+{
+    m_padStack.Drill().end = aLayer;
+    SetDirty();
+}
+
+
+bool PAD::IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const
+{
+    if( !IsCopperLayer( aLayer ) )
+        return false;
+
+    const BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    // Check secondary drill (backdrill from top)
+    const PADSTACK::DRILL_PROPS& secondaryDrill = m_padStack.SecondaryDrill();
+
+    if( secondaryDrill.size.x > 0 && secondaryDrill.start != UNDEFINED_LAYER
+            && secondaryDrill.end != UNDEFINED_LAYER )
+    {
+        // Secondary drill goes from start to end layer, removing copper on those layers
+        int startOrdinal = board->IsLayerEnabled( secondaryDrill.start )
+                                   ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.start == F_Cu ? 0 : secondaryDrill.start / 2 + 1 )
+                                                                    : secondaryDrill.start / 2
+                                   : -1;
+        int endOrdinal = board->IsLayerEnabled( secondaryDrill.end )
+                                 ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1 : secondaryDrill.end / 2 + 1 )
+                                                                  : secondaryDrill.end / 2
+                                 : -1;
+        int layerOrdinal = board->IsLayerEnabled( aLayer )
+                                   ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0 : aLayer == B_Cu ? board->GetCopperLayerCount() - 1 : aLayer / 2 + 1 )
+                                                                    : aLayer / 2
+                                   : -1;
+
+        if( layerOrdinal >= 0 && startOrdinal >= 0 && endOrdinal >= 0 )
+        {
+            if( startOrdinal > endOrdinal )
+                std::swap( startOrdinal, endOrdinal );
+
+            if( layerOrdinal >= startOrdinal && layerOrdinal <= endOrdinal )
+                return true;
+        }
+    }
+
+    // Check tertiary drill (backdrill from bottom)
+    const PADSTACK::DRILL_PROPS& tertiaryDrill = m_padStack.TertiaryDrill();
+
+    if( tertiaryDrill.size.x > 0 && tertiaryDrill.start != UNDEFINED_LAYER
+            && tertiaryDrill.end != UNDEFINED_LAYER )
+    {
+        int startOrdinal = board->IsLayerEnabled( tertiaryDrill.start )
+                                   ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.start == F_Cu ? 0 : tertiaryDrill.start / 2 + 1 )
+                                                                    : tertiaryDrill.start / 2
+                                   : -1;
+        int endOrdinal = board->IsLayerEnabled( tertiaryDrill.end )
+                                 ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1 : tertiaryDrill.end / 2 + 1 )
+                                                                  : tertiaryDrill.end / 2
+                                 : -1;
+        int layerOrdinal = board->IsLayerEnabled( aLayer )
+                                   ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0 : aLayer == B_Cu ? board->GetCopperLayerCount() - 1 : aLayer / 2 + 1 )
+                                                                    : aLayer / 2
+                                   : -1;
+
+        if( layerOrdinal >= 0 && startOrdinal >= 0 && endOrdinal >= 0 )
+        {
+            if( startOrdinal > endOrdinal )
+                std::swap( startOrdinal, endOrdinal );
+
+            if( layerOrdinal >= startOrdinal && layerOrdinal <= endOrdinal )
+                return true;
+        }
+    }
+
+    // Check if the layer is affected by post-machining
+    if( GetPostMachiningKnockout( aLayer ) > 0 )
+        return true;
+
+    return false;
+}
+
+
+int PAD::GetPostMachiningKnockout( PCB_LAYER_ID aLayer ) const
+{
+    if( !IsCopperLayer( aLayer ) )
+        return 0;
+
+    const BOARD* board = GetBoard();
+
+    if( !board )
+        return 0;
+
+    const BOARD_STACKUP& stackup = board->GetDesignSettings().GetStackupDescriptor();
+
+    // Check front post-machining (counterbore/countersink from top)
+    const PADSTACK::POST_MACHINING_PROPS& frontPM = m_padStack.FrontPostMachining();
+
+    if( frontPM.mode.has_value() && *frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+            && *frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN && frontPM.size > 0 )
+    {
+        int pmDepth = frontPM.depth;
+
+        // For countersink without explicit depth, calculate from diameter and angle
+        if( pmDepth <= 0 && *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
+                && frontPM.angle > 0 )
+        {
+            double halfAngleRad = ( frontPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
+            pmDepth = static_cast<int>( ( frontPM.size / 2.0 ) / tan( halfAngleRad ) );
+        }
+
+        if( pmDepth > 0 )
+        {
+            // Calculate distance from F_Cu to aLayer
+            int layerDist = stackup.GetLayerDistance( F_Cu, aLayer );
+
+            if( layerDist < pmDepth )
+            {
+                // For countersink, diameter decreases with depth
+                if( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && frontPM.angle > 0 )
+                {
+                    double halfAngleRad = ( frontPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
+                    int diameterAtLayer = frontPM.size - static_cast<int>( 2.0 * layerDist * tan( halfAngleRad ) );
+                    return std::max( 0, diameterAtLayer );
+                }
+                else
+                {
+                    // Counterbore - constant diameter
+                    return frontPM.size;
+                }
+            }
+        }
+    }
+
+    // Check back post-machining (counterbore/countersink from bottom)
+    const PADSTACK::POST_MACHINING_PROPS& backPM = m_padStack.BackPostMachining();
+
+    if( backPM.mode.has_value() && *backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+            && *backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN && backPM.size > 0 )
+    {
+        int pmDepth = backPM.depth;
+
+        // For countersink without explicit depth, calculate from diameter and angle
+        if( pmDepth <= 0 && *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
+                && backPM.angle > 0 )
+        {
+            double halfAngleRad = ( backPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
+            pmDepth = static_cast<int>( ( backPM.size / 2.0 ) / tan( halfAngleRad ) );
+        }
+
+        if( pmDepth > 0 )
+        {
+            // Calculate distance from B_Cu to aLayer
+            int layerDist = stackup.GetLayerDistance( B_Cu, aLayer );
+
+            if( layerDist < pmDepth )
+            {
+                // For countersink, diameter decreases with depth
+                if( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && backPM.angle > 0 )
+                {
+                    double halfAngleRad = ( backPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
+                    int diameterAtLayer = backPM.size - static_cast<int>( 2.0 * layerDist * tan( halfAngleRad ) );
+                    return std::max( 0, diameterAtLayer );
+                }
+                else
+                {
+                    // Counterbore - constant diameter
+                    return backPM.size;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+void PAD::SetPrimaryDrillFilled( const std::optional<bool>& aFilled )
+{
+    m_padStack.Drill().is_filled = aFilled;
+    SetDirty();
+}
+
+
+void PAD::SetPrimaryDrillFilledFlag( bool aFilled )
+{
+    m_padStack.Drill().is_filled = aFilled;
+    SetDirty();
+}
+
+
+void PAD::SetPrimaryDrillCapped( const std::optional<bool>& aCapped )
+{
+    m_padStack.Drill().is_capped = aCapped;
+    SetDirty();
+}
+
+
+void PAD::SetPrimaryDrillCappedFlag( bool aCapped )
+{
+    m_padStack.Drill().is_capped = aCapped;
+    SetDirty();
+}
+
+
+void PAD::SetSecondaryDrillSize( const VECTOR2I& aSize )
+{
+    m_padStack.SecondaryDrill().size = aSize;
+    SetDirty();
+}
+
+
+void PAD::SetSecondaryDrillSizeX( int aX )
+{
+    m_padStack.SecondaryDrill().size.x = aX;
+
+    if( GetSecondaryDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
+        m_padStack.SecondaryDrill().size.y = aX;
+
+    SetDirty();
+}
+
+
+void PAD::SetSecondaryDrillSizeY( int aY )
+{
+    m_padStack.SecondaryDrill().size.y = aY;
+    SetDirty();
+}
+
+
+void PAD::ClearSecondaryDrillSize()
+{
+    m_padStack.SecondaryDrill().size = VECTOR2I( 0, 0 );
+    SetDirty();
+}
+
+
+void PAD::SetSecondaryDrillShape( PAD_DRILL_SHAPE aShape )
+{
+    m_padStack.SecondaryDrill().shape = aShape;
+    SetDirty();
+}
+
+
+void PAD::SetSecondaryDrillStartLayer( PCB_LAYER_ID aLayer )
+{
+    m_padStack.SecondaryDrill().start = aLayer;
+    SetDirty();
+}
+
+
+void PAD::SetSecondaryDrillEndLayer( PCB_LAYER_ID aLayer )
+{
+    m_padStack.SecondaryDrill().end = aLayer;
+    SetDirty();
+}
+
+
+void PAD::SetTertiaryDrillSize( const VECTOR2I& aSize )
+{
+    m_padStack.TertiaryDrill().size = aSize;
+    SetDirty();
+}
+
+
+void PAD::SetTertiaryDrillSizeX( int aX )
+{
+    m_padStack.TertiaryDrill().size.x = aX;
+
+    if( GetTertiaryDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
+        m_padStack.TertiaryDrill().size.y = aX;
+
+    SetDirty();
+}
+
+
+void PAD::SetTertiaryDrillSizeY( int aY )
+{
+    m_padStack.TertiaryDrill().size.y = aY;
+    SetDirty();
+}
+
+
+void PAD::ClearTertiaryDrillSize()
+{
+    m_padStack.TertiaryDrill().size = VECTOR2I( 0, 0 );
+    SetDirty();
+}
+
+
+void PAD::SetTertiaryDrillShape( PAD_DRILL_SHAPE aShape )
+{
+    m_padStack.TertiaryDrill().shape = aShape;
+    SetDirty();
+}
+
+
+void PAD::SetTertiaryDrillStartLayer( PCB_LAYER_ID aLayer )
+{
+    m_padStack.TertiaryDrill().start = aLayer;
+    SetDirty();
+}
+
+
+void PAD::SetTertiaryDrillEndLayer( PCB_LAYER_ID aLayer )
+{
+    m_padStack.TertiaryDrill().end = aLayer;
+    SetDirty();
 }
 
 
@@ -598,6 +944,47 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
             effective_compund->AddShape( std::make_shared<SHAPE_NULL>() );
             return effective_compund;
         }
+    }
+
+    // Check if this layer has copper removed by backdrill or post-machining
+    if( IsBackdrilledOrPostMachined( aLayer ) )
+    {
+        std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
+
+        // Return the larger of the backdrill or post-machining hole
+        int holeSize = 0;
+
+        const PADSTACK::POST_MACHINING_PROPS& frontPM = Padstack().FrontPostMachining();
+        const PADSTACK::POST_MACHINING_PROPS& backPM = Padstack().BackPostMachining();
+
+        if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+            && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+        {
+            holeSize = std::max( holeSize, frontPM.size );
+        }
+
+        if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+            && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+        {
+            holeSize = std::max( holeSize, backPM.size );
+        }
+
+        const PADSTACK::DRILL_PROPS& secDrill = Padstack().SecondaryDrill();
+
+        if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
+            holeSize = std::max( holeSize, secDrill.size.x );
+
+        if( holeSize > 0 )
+        {
+            effective_compound->AddShape(
+                    std::make_shared<SHAPE_CIRCLE>( GetPosition(), holeSize / 2 ) );
+        }
+        else
+        {
+            effective_compound->AddShape( GetEffectiveHoleShape() );
+        }
+
+        return effective_compound;
     }
 
     if( GetAttribute() == PAD_ATTRIB::PTH )
@@ -1976,7 +2363,7 @@ const BOX2I PAD::ViewBBox() const
             } );
 
     BOX2I    bbox              = GetBoundingBox();
-    int      clearance         = 0;
+    int      clearance                                 = 0;
 
     // If we're drawing clearance lines then get the biggest possible clearance
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
@@ -2566,10 +2953,10 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool 
     // For now we just check for disappearing paste
     wxSize paste_size;
     int    paste_margin = GetLocalSolderPasteMargin().value_or( 0 );
-    double paste_ratio = GetLocalSolderPasteMarginRatio().value_or( 0 );
+    auto   mratio = GetLocalSolderPasteMarginRatio();
 
-    paste_size.x = pad_size.x + paste_margin + KiROUND( pad_size.x * paste_ratio );
-    paste_size.y = pad_size.y + paste_margin + KiROUND( pad_size.y * paste_ratio );
+    paste_size.x = pad_size.x + paste_margin + KiROUND( pad_size.x * mratio.value_or( 0 ) );
+    paste_size.y = pad_size.y + paste_margin + KiROUND( pad_size.y * mratio.value_or( 0 ) );
 
     if( paste_size.x <= 0 || paste_size.y <= 0 )
     {
@@ -2832,8 +3219,37 @@ static struct PAD_DESC
                 .Map( PAD_PROP::PRESSFIT,          _HKI( "Press-fit pad" ) );
 
         ENUM_MAP<PAD_DRILL_SHAPE>::Instance()
+                .Map( PAD_DRILL_SHAPE::UNDEFINED,  _HKI( "Undefined" ) )
                 .Map( PAD_DRILL_SHAPE::CIRCLE,     _HKI( "Round" ) )
                 .Map( PAD_DRILL_SHAPE::OBLONG,     _HKI( "Oblong" ) );
+
+        // Ensure post-machining mode enum choices are defined before properties use them
+        {
+            ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>& pmMap =
+                    ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>::Instance();
+
+            if( pmMap.Choices().GetCount() == 0 )
+            {
+                pmMap.Undefined( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                    .Map( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED, _HKI( "Not post-machined" ) )
+                    .Map( PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,       _HKI( "Counterbore" ) )
+                    .Map( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,       _HKI( "Countersink" ) );
+            }
+        }
+
+        // Ensure backdrill mode enum choices are defined before properties use them
+        {
+            ENUM_MAP<BACKDRILL_MODE>& bdMap = ENUM_MAP<BACKDRILL_MODE>::Instance();
+
+            if( bdMap.Choices().GetCount() == 0 )
+            {
+                bdMap.Undefined( BACKDRILL_MODE::NO_BACKDRILL )
+                    .Map( BACKDRILL_MODE::NO_BACKDRILL,   _HKI( "No backdrill" ) )
+                    .Map( BACKDRILL_MODE::BACKDRILL_BOTTOM, _HKI( "Backdrill bottom" ) )
+                    .Map( BACKDRILL_MODE::BACKDRILL_TOP,    _HKI( "Backdrill top" ) )
+                    .Map( BACKDRILL_MODE::BACKDRILL_BOTH,   _HKI( "Backdrill both" ) );
+            }
+        }
 
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
@@ -2899,6 +3315,8 @@ static struct PAD_DESC
                                       isCopperPad );
 
         const wxString groupPad = _HKI( "Pad Properties" );
+        const wxString groupPostMachining = _HKI( "Post-machining Properties" );
+        const wxString groupBackdrill = _HKI( "Backdrill Properties" );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
                     &PAD::SetAttribute, &PAD::GetAttribute ), groupPad );
@@ -2992,6 +3410,184 @@ static struct PAD_DESC
 
                                        return true;
                                    } );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_POST_MACHINING_MODE>( _HKI( "Top Post-machining" ),
+                    &PAD::SetFrontPostMachiningMode, &PAD::GetFrontPostMachiningMode ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        return pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE;
+                    }
+
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Top Post-machining Size" ),
+                    &PAD::SetFrontPostMachiningSize, &PAD::GetFrontPostMachiningSize, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                            return false;
+
+                        auto mode = pad->GetFrontPostMachining();
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE || mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                    }
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Top Counterbore Depth" ),
+                    &PAD::SetFrontPostMachiningDepth, &PAD::GetFrontPostMachiningDepth, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                            return false;
+
+                        auto mode = pad->GetFrontPostMachining();
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
+                    }
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Top Countersink Angle" ),
+                    &PAD::SetFrontPostMachiningAngle, &PAD::GetFrontPostMachiningAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                            return false;
+
+                        auto mode = pad->GetFrontPostMachining();
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                    }
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_POST_MACHINING_MODE>( _HKI( "Bottom Post-machining" ),
+                    &PAD::SetBackPostMachiningMode, &PAD::GetBackPostMachiningMode ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        return pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE;
+                    }
+
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Bottom Post-machining Size" ),
+                    &PAD::SetBackPostMachiningSize, &PAD::GetBackPostMachiningSize, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                            return false;
+
+                        auto mode = pad->GetBackPostMachining();
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE || mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                    }
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Bottom Counterbore Depth" ),
+                    &PAD::SetBackPostMachiningDepth, &PAD::GetBackPostMachiningDepth, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                            return false;
+
+                        auto mode = pad->GetBackPostMachining();
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
+                    }
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Bottom Countersink Angle" ),
+                    &PAD::SetBackPostMachiningAngle, &PAD::GetBackPostMachiningAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ), groupPostMachining )
+                .SetWriteableFunc( padCanHaveHole )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) {
+                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                            return false;
+
+                        auto mode = pad->GetBackPostMachining();
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                    }
+                    return false;
+                } );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, BACKDRILL_MODE>( _HKI( "Backdrill Mode" ),
+                    &PAD::SetBackdrillMode, &PAD::GetBackdrillMode ), groupBackdrill );
+
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Bottom Backdrill Size" ),
+                    &PAD::SetBottomBackdrillSize, &PAD::GetBottomBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ), groupBackdrill )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                       {
+                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                               return false;
+
+                                           auto mode = pad->GetBackdrillMode();
+                                           return mode == BACKDRILL_MODE::BACKDRILL_BOTTOM || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                                       }
+                                       return false;
+                                   } );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PCB_LAYER_ID>( _HKI( "Bottom Backdrill Layer" ),
+                    &PAD::SetBottomBackdrillLayer, &PAD::GetBottomBackdrillLayer ), groupBackdrill )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                       {
+                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                               return false;
+
+                                           auto mode = pad->GetBackdrillMode();
+                                           return mode == BACKDRILL_MODE::BACKDRILL_BOTTOM || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                                       }
+                                       return false;
+                                   } );
+
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Top Backdrill Size" ),
+                    &PAD::SetTopBackdrillSize, &PAD::GetTopBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ), groupBackdrill )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                       {
+                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                               return false;
+
+                                           auto mode = pad->GetBackdrillMode();
+                                           return mode == BACKDRILL_MODE::BACKDRILL_TOP || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                                       }
+                                       return false;
+                                   } );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PCB_LAYER_ID>( _HKI( "Top Backdrill Layer" ),
+                    &PAD::SetTopBackdrillLayer, &PAD::GetTopBackdrillLayer ), groupBackdrill )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                       {
+                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                               return false;
+
+                                           auto mode = pad->GetBackdrillMode();
+                                           return mode == BACKDRILL_MODE::BACKDRILL_TOP || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                                       }
+                                       return false;
+                                   } );
+
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );

@@ -110,6 +110,13 @@ protected:
     void addPadsAndVias();
     void insertHole( const PCB_VIA* aVia );
     void insertHole( const PAD* aPad );
+    void addCounterborePlating( const BOARD_ITEM& aSource, const SFVEC2F& aCenter,
+                                float aInnerRadius, float aDepth, float aSurfaceZ,
+                                bool aIsFront );
+    void addCountersinkPlating( const SFVEC2F& aCenter, float aTopInnerRadius,
+                                float aBottomInnerRadius, float aSurfaceZ, float aDepth,
+                                bool aIsFront );
+    void backfillPostMachine();
     void load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation );
     void addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
                     const glm::mat4& aModelMatrix, float aFPOpacity,

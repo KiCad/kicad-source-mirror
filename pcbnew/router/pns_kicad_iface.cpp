@@ -38,6 +38,7 @@
 #include <board_commit.h>
 #include <eda_group.h>
 #include <layer_ids.h>
+#include <optional>
 #include <kidialog.h>
 #include <tools/pcb_tool_base.h>
 #include <tool/tool_manager.h>
@@ -1377,6 +1378,29 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
                                                aVia->GetDrillValue() / 2,
                                                SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ) ) );
 
+    PCB_LAYER_ID primaryStart = aVia->GetPrimaryDrillStartLayer();
+    PCB_LAYER_ID primaryEnd = aVia->GetPrimaryDrillEndLayer();
+
+    if( primaryStart != UNDEFINED_LAYER && primaryEnd != UNDEFINED_LAYER )
+        via->SetHoleLayers( SetLayersFromPCBNew( primaryStart, primaryEnd ) );
+    else
+        via->SetHoleLayers( SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ) );
+
+    via->SetHolePostMachining( aVia->GetFrontPostMachining() );
+    via->SetSecondaryDrill( aVia->GetSecondaryDrillSize() );
+
+    std::optional<PNS_LAYER_RANGE> secondaryLayers;
+
+    if( aVia->GetSecondaryDrillStartLayer() != UNDEFINED_LAYER
+            && aVia->GetSecondaryDrillEndLayer() != UNDEFINED_LAYER )
+    {
+        secondaryLayers = SetLayersFromPCBNew( aVia->GetSecondaryDrillStartLayer(),
+                                               aVia->GetSecondaryDrillEndLayer() );
+    }
+
+    via->SetSecondaryHoleLayers( secondaryLayers );
+    via->SetSecondaryHolePostMachining( std::nullopt );
+
     return via;
 }
 
@@ -1916,7 +1940,7 @@ void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit, int aFlags )
 {
-    if( aItem->IsVirtual() )
+       if( aItem->IsVirtual() )
         return;
 
     if( ZONE* zone = dynamic_cast<ZONE*>( aItem->Parent() ) )
@@ -2138,6 +2162,31 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );
+
+        PNS_LAYER_RANGE holeLayers = via->HoleLayers();
+
+        if( holeLayers.Start() >= 0 && holeLayers.End() >= 0 )
+        {
+            via_board->SetPrimaryDrillStartLayer( GetBoardLayerFromPNSLayer( holeLayers.Start() ) );
+            via_board->SetPrimaryDrillEndLayer( GetBoardLayerFromPNSLayer( holeLayers.End() ) );
+        }
+
+        via_board->SetFrontPostMachining( via->HolePostMachining() );
+        via_board->SetSecondaryDrillSize( via->SecondaryDrill() );
+
+        if( std::optional<PNS_LAYER_RANGE> secondaryLayers = via->SecondaryHoleLayers() )
+        {
+            via_board->SetSecondaryDrillStartLayer(
+                    GetBoardLayerFromPNSLayer( secondaryLayers->Start() ) );
+            via_board->SetSecondaryDrillEndLayer(
+                    GetBoardLayerFromPNSLayer( secondaryLayers->End() ) );
+        }
+        else
+        {
+            via_board->SetSecondaryDrillStartLayer( UNDEFINED_LAYER );
+            via_board->SetSecondaryDrillEndLayer( UNDEFINED_LAYER );
+        }
+
         break;
     }
 
@@ -2238,6 +2287,30 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );
+
+        PNS_LAYER_RANGE holeLayers = via->HoleLayers();
+
+        if( holeLayers.Start() >= 0 && holeLayers.End() >= 0 )
+        {
+            via_board->SetPrimaryDrillStartLayer( GetBoardLayerFromPNSLayer( holeLayers.Start() ) );
+            via_board->SetPrimaryDrillEndLayer( GetBoardLayerFromPNSLayer( holeLayers.End() ) );
+        }
+
+        via_board->SetFrontPostMachining( via->HolePostMachining() );
+        via_board->SetSecondaryDrillSize( via->SecondaryDrill() );
+
+        if( std::optional<PNS_LAYER_RANGE> secondaryLayers = via->SecondaryHoleLayers() )
+        {
+            via_board->SetSecondaryDrillStartLayer(
+                    GetBoardLayerFromPNSLayer( secondaryLayers->Start() ) );
+            via_board->SetSecondaryDrillEndLayer(
+                    GetBoardLayerFromPNSLayer( secondaryLayers->End() ) );
+        }
+        else
+        {
+            via_board->SetSecondaryDrillStartLayer( UNDEFINED_LAYER );
+            via_board->SetSecondaryDrillEndLayer( UNDEFINED_LAYER );
+        }
 
         if( aItem->GetSourceItem() && aItem->GetSourceItem()->Type() == PCB_VIA_T )
         {

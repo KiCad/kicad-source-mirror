@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,7 +17,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_sbCommonSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Common") ), wxVERTICAL );
+	m_sbCommonSizer = new wxStaticBoxSizer( wxVERTICAL, this, _("Common") );
 
 	wxBoxSizer* bSizerNetWidgets;
 	bSizerNetWidgets = new wxBoxSizer( wxHORIZONTAL );
@@ -61,7 +61,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 10 );
 
-	m_sbTrackSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks") ), wxHORIZONTAL );
+	m_sbTrackSizer = new wxStaticBoxSizer( wxHORIZONTAL, this, _("Tracks") );
 
 	wxBoxSizer* bSizerTracksLeftCol;
 	bSizerTracksLeftCol = new wxBoxSizer( wxVERTICAL );
@@ -228,7 +228,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
-	m_sbViaSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias") ), wxVERTICAL );
+	m_sbViaSizer = new wxStaticBoxSizer( wxVERTICAL, this, _("Vias") );
 
 	wxBoxSizer* bSizerViaCols;
 	bSizerViaCols = new wxBoxSizer( wxHORIZONTAL );
@@ -406,8 +406,181 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_sbViaSizer->Add( bSizerViaCols, 0, wxALL|wxEXPAND, 5 );
 
+	wxBoxSizer* bBackdrillLabel;
+	bBackdrillLabel = new wxBoxSizer( wxHORIZONTAL );
+
+	m_backDrillLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Backdrill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillLabel->Wrap( -1 );
+	bBackdrillLabel->Add( m_backDrillLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
 	m_staticline2 = new wxStaticLine( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbViaSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 8 );
+	bBackdrillLabel->Add( m_staticline2, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 8 );
+
+
+	m_sbViaSizer->Add( bBackdrillLabel, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerBackdrill;
+	bSizerBackdrill = new wxBoxSizer( wxHORIZONTAL );
+
+	wxFlexGridSizer* fgSizer6;
+	fgSizer6 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer6->SetFlexibleDirection( wxBOTH );
+	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxString m_backDrillChoiceChoices[] = { _("None"), _("Bottom"), _("Top"), _("Both") };
+	int m_backDrillChoiceNChoices = sizeof( m_backDrillChoiceChoices ) / sizeof( wxString );
+	m_backDrillChoice = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_backDrillChoiceNChoices, m_backDrillChoiceChoices, 0 );
+	m_backDrillChoice->SetSelection( 0 );
+	fgSizer6->Add( m_backDrillChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	bSizerBackdrill->Add( fgSizer6, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer7;
+	fgSizer7 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer7->SetFlexibleDirection( wxBOTH );
+	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_backDrillFrontLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Backdrill front ending layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillFrontLayerLabel->Wrap( -1 );
+	fgSizer7->Add( m_backDrillFrontLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_backDrillFrontLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	fgSizer7->Add( m_backDrillFrontLayer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	bSizerBackdrill->Add( fgSizer7, 2, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer8;
+	fgSizer8 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer8->SetFlexibleDirection( wxBOTH );
+	fgSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_backDrillBackLayer = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Backdrill bottom ending layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillBackLayer->Wrap( -1 );
+	fgSizer8->Add( m_backDrillBackLayer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_ViaStartLayer11 = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	fgSizer8->Add( m_ViaStartLayer11, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	bSizerBackdrill->Add( fgSizer8, 2, wxEXPAND, 5 );
+
+
+	m_sbViaSizer->Add( bSizerBackdrill, 0, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bPostMachineLabel;
+	bPostMachineLabel = new wxBoxSizer( wxHORIZONTAL );
+
+	m_postMachineSectionLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Hole post-machining"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_postMachineSectionLabel->Wrap( -1 );
+	bPostMachineLabel->Add( m_postMachineSectionLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_staticline21 = new wxStaticLine( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bPostMachineLabel->Add( m_staticline21, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 8 );
+
+
+	m_sbViaSizer->Add( bPostMachineLabel, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerPostMachine;
+	bSizerPostMachine = new wxBoxSizer( wxHORIZONTAL );
+
+	wxFlexGridSizer* fgSizer9;
+	fgSizer9 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer9->AddGrowableCol( 1 );
+	fgSizer9->SetFlexibleDirection( wxBOTH );
+	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_topPostMachineLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Top:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_topPostMachineLabel->Wrap( -1 );
+	fgSizer9->Add( m_topPostMachineLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_topPostMachineChoices[] = { _("None"), _("Countersink"), _("Counterbore") };
+	int m_topPostMachineNChoices = sizeof( m_topPostMachineChoices ) / sizeof( wxString );
+	m_topPostMachine = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_topPostMachineNChoices, m_topPostMachineChoices, 0 );
+	m_topPostMachine->SetSelection( 0 );
+	fgSizer9->Add( m_topPostMachine, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	fgSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_topPostMachineSize1Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_topPostMachineSize1Label->Wrap( -1 );
+	fgSizer9->Add( m_topPostMachineSize1Label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_topPostMachineSize1 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer9->Add( m_topPostMachineSize1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_topPostMachineSize1Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_topPostMachineSize1Units->Wrap( -1 );
+	fgSizer9->Add( m_topPostMachineSize1Units, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_topPostMachineSize2Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_topPostMachineSize2Label->Wrap( -1 );
+	fgSizer9->Add( m_topPostMachineSize2Label, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_topPostMachineSize2 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer9->Add( m_topPostMachineSize2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_topPostMachineSize2Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_topPostMachineSize2Units->Wrap( -1 );
+	fgSizer9->Add( m_topPostMachineSize2Units, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerPostMachine->Add( fgSizer9, 1, wxEXPAND, 5 );
+
+
+	bSizerPostMachine->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 15 );
+
+	wxFlexGridSizer* fgSizer10;
+	fgSizer10 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer10->AddGrowableCol( 1 );
+	fgSizer10->SetFlexibleDirection( wxBOTH );
+	fgSizer10->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_bottomPostMachineLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Bottom:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bottomPostMachineLabel->Wrap( -1 );
+	fgSizer10->Add( m_bottomPostMachineLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_bottomPostMachineChoices[] = { _("None"), _("Countersink"), _("Counterbore") };
+	int m_bottomPostMachineNChoices = sizeof( m_bottomPostMachineChoices ) / sizeof( wxString );
+	m_bottomPostMachine = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_bottomPostMachineNChoices, m_bottomPostMachineChoices, 0 );
+	m_bottomPostMachine->SetSelection( 0 );
+	fgSizer10->Add( m_bottomPostMachine, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	fgSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_bottomPostMachineSize1Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bottomPostMachineSize1Label->Wrap( -1 );
+	fgSizer10->Add( m_bottomPostMachineSize1Label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_bottomPostMachineSize1 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer10->Add( m_bottomPostMachineSize1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_bottomPostMachineSize1Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bottomPostMachineSize1Units->Wrap( -1 );
+	fgSizer10->Add( m_bottomPostMachineSize1Units, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_bottomPostMachineSize2Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bottomPostMachineSize2Label->Wrap( -1 );
+	fgSizer10->Add( m_bottomPostMachineSize2Label, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_bottomPostMachineSize2 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer10->Add( m_bottomPostMachineSize2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_bottomPostMachineSize2Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bottomPostMachineSize2Units->Wrap( -1 );
+	fgSizer10->Add( m_bottomPostMachineSize2Units, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerPostMachine->Add( fgSizer10, 1, wxEXPAND, 5 );
+
+
+	m_sbViaSizer->Add( bSizerPostMachine, 0, wxEXPAND, 5 );
+
+	m_staticline4 = new wxStaticLine( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_sbViaSizer->Add( m_staticline4, 0, wxBOTTOM|wxEXPAND|wxTOP, 8 );
 
 	m_legacyTeardropsWarning = new wxBoxSizer( wxHORIZONTAL );
 
@@ -665,6 +838,11 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_backDrillChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onBackdrillChange ), NULL, this );
+	m_backDrillFrontLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_ViaStartLayer11->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_topPostMachine->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTopPostMachineChange ), NULL, this );
+	m_bottomPostMachine->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onBottomPostMachineChange ), NULL, this );
 	m_cbTeardrops->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_cbTeardropsUseNextTrack->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stHDRatio->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
@@ -706,6 +884,11 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::~DIALOG_TRACK_VIA_PROPERTIES_BASE()
 	m_ViaTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_backDrillChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onBackdrillChange ), NULL, this );
+	m_backDrillFrontLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_ViaStartLayer11->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
+	m_topPostMachine->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTopPostMachineChange ), NULL, this );
+	m_bottomPostMachine->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onBottomPostMachineChange ), NULL, this );
 	m_cbTeardrops->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_cbTeardropsUseNextTrack->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stHDRatio->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );

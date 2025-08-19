@@ -372,6 +372,7 @@ set( PCBNEW_CLASS_SRCS
     load_select_footprint.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
+    padstack.cpp
     pcb_base_edit_frame.cpp
     pcb_design_block_utils.cpp
     pcb_layer_box_selector.cpp

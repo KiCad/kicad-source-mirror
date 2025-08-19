@@ -1394,6 +1394,8 @@ wxXmlNode* PCB_IO_IPC2581::generateEcadSection()
     generateStackup( cadDataNode );
     generateStepSection( cadDataNode );
 
+    pruneUnusedBackdrillSpecs();
+
     return ecadNode;
 }
 
@@ -1497,6 +1499,8 @@ void PCB_IO_IPC2581::addCadHeader( wxXmlNode* aEcadNode )
 {
     wxXmlNode* cadHeaderNode = appendNode( aEcadNode, "CadHeader" );
     addAttribute( cadHeaderNode,  "units", m_units_str );
+
+    m_cad_header_node = cadHeaderNode;
 
     generateCadSpecs( cadHeaderNode );
 }
@@ -1984,6 +1988,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 
     wxXmlNode* padStackDefNode = new wxXmlNode( wxXML_ELEMENT_NODE, "PadStackDef" );
     addAttribute( padStackDefNode,  "name", name );
+    ensureBackdrillSpecs( name, aPad->Padstack() );
     m_padstacks.push_back( padStackDefNode );
 
     if( m_last_padstack )
@@ -2056,6 +2061,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
     insertNodeAfter( m_last_padstack, padStackDefNode );
     m_last_padstack = padStackDefNode;
     addAttribute( padStackDefNode,  "name", name );
+    ensureBackdrillSpecs( name, aVia->Padstack() );
 
     wxXmlNode* padStackHoleNode = appendNode( padStackDefNode, "PadstackHoleDef" );
     addAttribute( padStackHoleNode, "name", wxString::Format( "PH%d", aVia->GetDrillValue() ) );
@@ -2111,6 +2117,143 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 
         if( aVia->Padstack().IsTented( layer ).value_or( false ) )
             addPadShape( layer, aVia, genLayerString( layer, "TENTING" ), false );
+    }
+}
+
+
+void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const PADSTACK& aPadstack )
+{
+    if( m_padstack_backdrill_specs.find( aPadstackName ) != m_padstack_backdrill_specs.end() )
+        return;
+
+    const PADSTACK::DRILL_PROPS& secondary = aPadstack.SecondaryDrill();
+
+    if( secondary.start == UNDEFINED_LAYER || secondary.end == UNDEFINED_LAYER )
+        return;
+
+    if( secondary.size.x <= 0 && secondary.size.y <= 0 )
+        return;
+
+    if( !m_cad_header_node )
+        return;
+
+    auto layerHasRef = [&]( PCB_LAYER_ID aLayer ) -> bool
+    {
+        return m_layer_name_map.find( aLayer ) != m_layer_name_map.end();
+    };
+
+    if( !layerHasRef( secondary.start ) || !layerHasRef( secondary.end ) )
+        return;
+
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
+    BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
+    stackup.SynchronizeWithBoard( &dsnSettings );
+
+    auto createSpec = [&]( const PADSTACK::DRILL_PROPS& aDrill, const wxString& aSpecName ) -> wxString
+    {
+        if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
+            return wxString();
+
+        auto startLayer = m_layer_name_map.find( aDrill.start );
+        auto endLayer = m_layer_name_map.find( aDrill.end );
+
+        if( startLayer == m_layer_name_map.end() || endLayer == m_layer_name_map.end() )
+            return wxString();
+
+        wxXmlNode* specNode = appendNode( m_cad_header_node, "Spec" );
+        addAttribute( specNode,  "name", aSpecName );
+
+        wxXmlNode* backdrillNode = appendNode( specNode, "Backdrill" );
+        addAttribute( backdrillNode,  "startLayerRef", startLayer->second );
+        addAttribute( backdrillNode,  "mustNotCutLayerRef", endLayer->second );
+
+        int stubLength = stackup.GetLayerDistance( aDrill.start, aDrill.end );
+
+        if( stubLength < 0 )
+            stubLength = 0;
+
+        addAttribute( backdrillNode,  "maxStubLength", floatVal( m_scale * stubLength ) );
+
+        PAD_DRILL_POST_MACHINING_MODE pm_mode = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+
+        if( aDrill.start == F_Cu )
+            pm_mode = aPadstack.FrontPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+        else if( aDrill.start == B_Cu )
+            pm_mode = aPadstack.BackPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+
+        bool isPostMachined = ( pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE ||
+                                pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK );
+
+        addAttribute( backdrillNode,  "postMachining", isPostMachined ? wxT( "true" )
+                                                                      : wxT( "false" ) );
+
+        m_backdrill_spec_nodes[aSpecName] = specNode;
+
+        return aSpecName;
+    };
+
+    int specIndex = m_backdrill_spec_index + 1;
+
+    const PADSTACK::DRILL_PROPS& primary = aPadstack.Drill();
+    wxString primarySpec = createSpec( primary, wxString::Format( wxT( "BD_%dA" ), specIndex ) );
+
+    wxString secondarySpec = createSpec( secondary, wxString::Format( wxT( "BD_%dB" ), specIndex ) );
+
+    if( primarySpec.IsEmpty() && secondarySpec.IsEmpty() )
+        return;
+
+    m_backdrill_spec_index = specIndex;
+    m_padstack_backdrill_specs.emplace( aPadstackName, std::make_pair( primarySpec, secondarySpec ) );
+}
+
+
+void PCB_IO_IPC2581::addBackdrillSpecRefs( wxXmlNode* aHoleNode, const wxString& aPadstackName )
+{
+    auto it = m_padstack_backdrill_specs.find( aPadstackName );
+
+    if( it == m_padstack_backdrill_specs.end() )
+        return;
+
+    auto addRef = [&]( const wxString& aSpecName )
+    {
+        if( aSpecName.IsEmpty() )
+            return;
+
+        wxXmlNode* specRefNode = appendNode( aHoleNode, "SpecRef" );
+        addAttribute( specRefNode,  "id", aSpecName );
+        m_backdrill_spec_used.insert( aSpecName );
+    };
+
+    addRef( it->second.first );
+    addRef( it->second.second );
+}
+
+
+void PCB_IO_IPC2581::pruneUnusedBackdrillSpecs()
+{
+    if( !m_cad_header_node )
+        return;
+
+    auto it = m_backdrill_spec_nodes.begin();
+
+    while( it != m_backdrill_spec_nodes.end() )
+    {
+        if( m_backdrill_spec_used.find( it->first ) == m_backdrill_spec_used.end() )
+        {
+            wxXmlNode* specNode = it->second;
+
+            if( specNode )
+            {
+                m_cad_header_node->RemoveChild( specNode );
+                delete specNode;
+            }
+
+            it = m_backdrill_spec_nodes.erase( it );
+        }
+        else
+        {
+            ++it;
+        }
     }
 }
 
@@ -2870,6 +3013,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( holeNode,  "plusTol", "0.0" );
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, via->GetPosition() );
+                addBackdrillSpecRefs( holeNode, it->second );
             }
             else if( item->Type() == PCB_PAD_T )
             {
@@ -2897,6 +3041,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( holeNode,  "plusTol", "0.0" );
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, pad->GetPosition() );
+                addBackdrillSpecRefs( holeNode, it->second );
             }
         }
     }
@@ -3405,6 +3550,12 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
                                 const std::map<std::string, UTF8>* aProperties )
 {
     m_board = aBoard;
+    m_padstack_backdrill_specs.clear();
+    m_backdrill_spec_nodes.clear();
+    m_backdrill_spec_used.clear();
+    m_backdrill_spec_index = 0;
+    m_cad_header_node = nullptr;
+    m_layer_name_map.clear();
     m_units_str = "MILLIMETER";
     m_scale = 1.0 / PCB_IU_PER_MM;
     m_sigfig = 6;

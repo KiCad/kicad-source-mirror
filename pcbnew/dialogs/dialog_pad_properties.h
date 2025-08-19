@@ -83,6 +83,10 @@ private:
 
     void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override;
 
+    void onBackDrillChoice( wxCommandEvent& event ) override;
+    void onTopPostMachining( wxCommandEvent& event ) override;
+    void onBottomPostMachining( wxCommandEvent& event ) override;
+
     void OnPadShapeSelection( wxCommandEvent& event ) override;
     void OnDrillShapeSelected( wxCommandEvent& event ) override;
 	void onChangePadMode( wxCommandEvent& event ) override;
@@ -182,6 +186,14 @@ private:
     UNIT_BINDER m_pad_orientation;
     UNIT_BINDER m_teardropMaxLenSetting;
     UNIT_BINDER m_teardropMaxHeightSetting;
+
+    UNIT_BINDER m_topPostMachineSize1Binder;
+    UNIT_BINDER m_topPostMachineSize2Binder;
+    UNIT_BINDER m_bottomPostMachineSize1Binder;
+    UNIT_BINDER m_bottomPostMachineSize2Binder;
+
+    UNIT_BINDER m_backDrillTopSizeBinder;
+    UNIT_BINDER m_backDrillBottomSizeBinder;
 };
 
 

@@ -44,6 +44,7 @@
 #include <decompress.hpp>
 
 #include <thread_pool.h>
+#include <trace_helpers.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -109,6 +110,8 @@
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepPrimAPI_MakeCone.hxx>
+#include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepTools.hxx>
 #include <BRepLib_MakeWire.hxx>
@@ -1057,6 +1060,458 @@ bool STEP_PCB_MODEL::AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayer
         m_board_copper_pads[aNetname].push_back( plating );
 
     return true;
+}
+
+
+bool STEP_PCB_MODEL::AddBackdrill( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerStart,
+                                   PCB_LAYER_ID aLayerEnd, const VECTOR2D& aOrigin )
+{
+    // A backdrill removes board material and copper plating between two layers.
+    // The backdrill typically starts from an outer layer and drills into an inner layer.
+    // For example, a top backdrill starts at F_Cu and ends at an inner layer.
+    // A bottom backdrill starts at B_Cu and ends at an inner layer.
+
+    double margin = 0.001; // a small margin on the Z axis to ensure the hole
+                           // is bigger than the board section being removed
+
+    // Extra margin to extend past outer copper layers to ensure complete annular ring removal
+    double copperMargin = 0.5;  // 0.5mm extra to cut through any copper/pad thickness
+
+    double start_pos, start_thickness;
+    double end_pos, end_thickness;
+    getLayerZPlacement( aLayerStart, start_pos, start_thickness );
+    getLayerZPlacement( aLayerEnd, end_pos, end_thickness );
+
+    // Calculate the Z extent of the backdrill
+    double top = std::max( { start_pos, start_pos + start_thickness,
+                             end_pos, end_pos + end_thickness } );
+    double bottom = std::min( { start_pos, start_pos + start_thickness,
+                                end_pos, end_pos + end_thickness } );
+
+    // Extend past outer copper layers if the backdrill reaches them
+    if( aLayerStart == F_Cu || aLayerEnd == F_Cu )
+        top += copperMargin;
+    if( aLayerStart == B_Cu || aLayerEnd == B_Cu )
+        bottom -= copperMargin;
+
+    double holeZsize = ( top - bottom ) + ( margin * 2 );
+    double holeZpos = bottom - margin;
+
+    double backdrillDiameter = aShape.GetWidth();
+
+    TopoDS_Shape backdrillHole;
+
+    // Create the backdrill hole shape - this cuts the board body
+    if( MakeShapeAsThickSegment( backdrillHole, aShape.GetSeg().A, aShape.GetSeg().B,
+                                 backdrillDiameter, holeZsize, holeZpos, aOrigin ) )
+    {
+        m_boardCutouts.push_back( backdrillHole );
+
+        // This removes annular rings and barrel copper between the backdrill layers.
+        m_copperCutouts.push_back( backdrillHole );
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+bool STEP_PCB_MODEL::AddCounterbore( const VECTOR2I& aPosition, int aDiameter, int aDepth,
+                                     bool aFrontSide, const VECTOR2D& aOrigin )
+{
+    wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: pos=(%d,%d) diameter=%d depth=%d frontSide=%d origin=(%f,%f)" ),
+                aPosition.x, aPosition.y, aDiameter, aDepth, aFrontSide ? 1 : 0, aOrigin.x, aOrigin.y );
+
+    // A counterbore is a cylindrical recess from the top or bottom of the board
+    if( aDiameter <= 0 || aDepth <= 0 )
+    {
+        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: REJECTED - invalid diameter=%d or depth=%d" ),
+                    aDiameter, aDepth );
+        return false;
+    }
+
+    double margin = 0.001;  // small margin to ensure clean cuts
+
+    // Extra margin to extend past outer copper layers to ensure complete annular ring removal
+    double copperMargin = 0.5;  // 0.5mm extra to cut through any copper/pad thickness
+
+    // Get board body position (between copper layers)
+    double boardZpos, boardThickness;
+    getBoardBodyZPlacement( boardZpos, boardThickness );
+
+    // Get copper layer positions - these extend beyond the board body
+    double f_pos, f_thickness, b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+
+    // Calculate actual outer surfaces including copper
+    // F_Cu: f_pos is inner surface, f_pos + f_thickness is outer surface (copper extends upward)
+    // B_Cu: b_pos is inner surface, b_pos + b_thickness is outer surface (thickness is negative, copper extends downward)
+    double topOuterSurface = std::max( f_pos, f_pos + f_thickness );
+    double bottomOuterSurface = std::min( b_pos, b_pos + b_thickness );
+
+    wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: boardZpos=%f boardThickness=%f f_pos=%f f_thickness=%f topOuter=%f bottomOuter=%f" ),
+                boardZpos, boardThickness, f_pos, f_thickness, topOuterSurface, bottomOuterSurface );
+
+    // Convert dimensions to mm
+    double diameter_mm = pcbIUScale.IUTomm( aDiameter );
+    double depth_mm = pcbIUScale.IUTomm( aDepth );
+    double radius_mm = diameter_mm / 2.0;
+
+    wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: diameter_mm=%f depth_mm=%f radius_mm=%f" ),
+                diameter_mm, depth_mm, radius_mm );
+
+    // Calculate cylinder position based on which side
+    // The cylinder must extend past the outer surface to ensure complete copper removal
+    double cylinderZpos;
+    double cylinderHeight;
+
+    if( aFrontSide )
+    {
+        // Counterbore from top - cylinder extends from above outer copper surface down to depth
+        // Add copperMargin above the surface to ensure complete annular ring removal
+        cylinderZpos = topOuterSurface - depth_mm - margin;
+        cylinderHeight = depth_mm + copperMargin + 2 * margin;
+    }
+    else
+    {
+        // Counterbore from bottom - cylinder extends from below outer copper surface up to depth
+        // Add copperMargin below the surface to ensure complete annular ring removal
+        cylinderZpos = bottomOuterSurface - copperMargin - margin;
+        cylinderHeight = depth_mm + copperMargin + 2 * margin;
+    }
+
+    // Convert position to mm
+    double posX_mm = pcbIUScale.IUTomm( aPosition.x - aOrigin.x );
+    double posY_mm = -pcbIUScale.IUTomm( aPosition.y - aOrigin.y );
+
+    wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: posX_mm=%f posY_mm=%f cylinderZpos=%f cylinderHeight=%f" ),
+                posX_mm, posY_mm, cylinderZpos, cylinderHeight );
+
+    try
+    {
+        // Create coordinate system for the cylinder
+        // The cylinder axis is along Z, positioned at the counterbore center
+        gp_Ax2 axis( gp_Pnt( posX_mm, posY_mm, cylinderZpos ), gp::DZ() );
+
+        TopoDS_Shape cylinder = BRepPrimAPI_MakeCylinder( axis, radius_mm, cylinderHeight );
+
+        if( cylinder.IsNull() )
+        {
+            wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: FAILED - cylinder shape is null" ) );
+            m_reporter->Report( _( "Failed to create counterbore cylinder shape" ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        // Add to both board and copper cutouts
+        m_boardCutouts.push_back( cylinder );
+        m_copperCutouts.push_back( cylinder );
+
+        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: SUCCESS - added cylinder. boardCutouts=%zu copperCutouts=%zu" ),
+                    m_boardCutouts.size(), m_copperCutouts.size() );
+    }
+    catch( const Standard_Failure& e )
+    {
+        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: EXCEPTION - %s" ), e.GetMessageString() );
+        m_reporter->Report( wxString::Format( _( "OCC exception creating counterbore: %s" ),
+                                              e.GetMessageString() ),
+                            RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool STEP_PCB_MODEL::AddCountersink( const VECTOR2I& aPosition, int aDiameter, int aDepth,
+                                     int aAngle, bool aFrontSide, const VECTOR2D& aOrigin )
+{
+    wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: pos=(%d,%d) diameter=%d depth=%d angle=%d frontSide=%d origin=(%f,%f)" ),
+                aPosition.x, aPosition.y, aDiameter, aDepth, aAngle, aFrontSide ? 1 : 0, aOrigin.x, aOrigin.y );
+
+    // A countersink is a conical recess from the top or bottom of the board
+    // The angle parameter is the total cone angle in decidegrees
+    // (angle between opposite sides of the cone)
+    if( aDiameter <= 0 || aAngle <= 0 )
+    {
+        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: REJECTED - invalid diameter=%d or angle=%d" ),
+                    aDiameter, aAngle );
+        return false;
+    }
+
+    double margin = 0.001;  // small margin to ensure clean cuts
+
+    // Extra margin to extend past outer copper layers to ensure complete annular ring removal
+    double copperMargin = 0.5;  // 0.5mm extra to cut through any copper/pad thickness
+
+    // Get board body position (between copper layers)
+    double boardZpos, boardThickness;
+    getBoardBodyZPlacement( boardZpos, boardThickness );
+
+    // Get copper layer positions - these extend beyond the board body
+    double f_pos, f_thickness, b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+
+    // Calculate actual outer surfaces including copper
+    double topOuterSurface = std::max( f_pos, f_pos + f_thickness );
+    double bottomOuterSurface = std::min( b_pos, b_pos + b_thickness );
+
+    wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: boardZpos=%f boardThickness=%f f_pos=%f f_thickness=%f topOuter=%f bottomOuter=%f" ),
+                boardZpos, boardThickness, f_pos, f_thickness, topOuterSurface, bottomOuterSurface );
+
+    // Convert dimensions to mm
+    double diameter_mm = pcbIUScale.IUTomm( aDiameter );
+    double radius_mm = diameter_mm / 2.0;
+
+    // Convert angle from decidegrees to radians
+    // aAngle is the total cone angle, so half-angle is used for geometry
+    double halfAngleRad = ( aAngle / 10.0 ) * M_PI / 180.0 / 2.0;
+
+    // If depth is not specified, calculate it from the diameter and angle
+    // The countersink depth is the full cone height: depth = radius / tan(halfAngle)
+    double depth_mm;
+    if( aDepth <= 0 )
+    {
+        // Calculate depth from diameter and angle
+        depth_mm = radius_mm / tan( halfAngleRad );
+        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: depth not specified, calculated depth_mm=%f from radius=%f and angle" ),
+                    depth_mm, radius_mm );
+    }
+    else
+    {
+        depth_mm = pcbIUScale.IUTomm( aDepth );
+    }
+
+    wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: diameter_mm=%f depth_mm=%f radius_mm=%f halfAngleRad=%f (deg=%f)" ),
+                diameter_mm, depth_mm, radius_mm, halfAngleRad, halfAngleRad * 180.0 / M_PI );
+
+    // Calculate the cone geometry
+    // For a countersink, R1 (bottom radius) may be 0 (sharp point) or non-zero
+    // R2 (top radius) is at the surface
+    // The cone depth determines how deep it goes
+
+    // Calculate bottom radius based on depth and angle
+    // tan(halfAngle) = (R2 - R1) / depth
+    // If we want the surface radius to be radius_mm and depth to be depth_mm:
+    // R1 = R2 - depth * tan(halfAngle)
+    double bottomRadius_mm = radius_mm - depth_mm * tan( halfAngleRad );
+
+    wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: bottomRadius_mm=%f (before clamp), tan(halfAngle)=%f" ),
+                bottomRadius_mm, tan( halfAngleRad ) );
+
+    if( bottomRadius_mm < 0 )
+        bottomRadius_mm = 0;  // Cone comes to a point before reaching full depth
+
+    // Calculate position based on which side
+    // Extend the cone past the outer surface by copperMargin to ensure complete copper removal
+    double coneZpos;
+    double coneHeight = depth_mm + copperMargin + margin;
+    double r1, r2;  // bottom and top radii for BRepPrimAPI_MakeCone
+
+    // Convert position to mm
+    double posX_mm = pcbIUScale.IUTomm( aPosition.x - aOrigin.x );
+    double posY_mm = -pcbIUScale.IUTomm( aPosition.y - aOrigin.y );
+
+    try
+    {
+        TopoDS_Shape cone;
+
+        if( aFrontSide )
+        {
+            // Countersink from top - cone apex points down
+            // In OCC, cone is built from z=0 to z=H with R1 at z=0 and R2 at z=H
+            // For a top countersink, we want large radius at top, small at bottom
+            coneZpos = topOuterSurface - depth_mm - margin;
+            r1 = bottomRadius_mm;  // smaller radius at bottom (deeper into board)
+            // Extend the top radius to account for the copperMargin extension above the surface
+            r2 = radius_mm + ( copperMargin + margin ) * tan( halfAngleRad );
+
+            wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: FRONT - coneZpos=%f r1=%f r2=%f coneHeight=%f" ),
+                        coneZpos, r1, r2, coneHeight );
+
+            gp_Ax2 axis( gp_Pnt( posX_mm, posY_mm, coneZpos ), gp::DZ() );
+            cone = BRepPrimAPI_MakeCone( axis, r1, r2, coneHeight );
+        }
+        else
+        {
+            // Countersink from bottom - cone apex points up
+            // For bottom countersink, large radius at bottom, small at top
+            // Extend below the surface by copperMargin
+            coneZpos = bottomOuterSurface - copperMargin - margin;
+            // Extend the bottom radius to account for the copperMargin extension below the surface
+            r1 = radius_mm + ( copperMargin + margin ) * tan( halfAngleRad );
+            r2 = bottomRadius_mm;  // smaller radius at top (deeper into board)
+
+            wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: BACK - coneZpos=%f r1=%f r2=%f coneHeight=%f" ),
+                        coneZpos, r1, r2, coneHeight );
+
+            gp_Ax2 axis( gp_Pnt( posX_mm, posY_mm, coneZpos ), gp::DZ() );
+            cone = BRepPrimAPI_MakeCone( axis, r1, r2, coneHeight );
+        }
+
+        if( cone.IsNull() )
+        {
+            wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: FAILED - cone shape is null" ) );
+            m_reporter->Report( _( "Failed to create countersink cone shape" ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        // Add to both board and copper cutouts
+        m_boardCutouts.push_back( cone );
+        m_copperCutouts.push_back( cone );
+
+        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: SUCCESS - added cone. boardCutouts=%zu copperCutouts=%zu" ),
+                    m_boardCutouts.size(), m_copperCutouts.size() );
+    }
+    catch( const Standard_Failure& e )
+    {
+        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: EXCEPTION - %s" ), e.GetMessageString() );
+        m_reporter->Report( wxString::Format( _( "OCC exception creating countersink: %s" ),
+                                              e.GetMessageString() ),
+                            RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    return true;
+}
+
+
+std::map<PCB_LAYER_ID, int> STEP_PCB_MODEL::GetCopperLayerKnockouts( int aDiameter, int aDepth,
+                                                                     int aAngle, bool aFrontSide )
+{
+    std::map<PCB_LAYER_ID, int> knockouts;
+
+    // Get the outer surface positions (including copper)
+    double f_pos, f_thickness, b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+
+    double topOuterSurface = std::max( f_pos, f_pos + f_thickness );
+    double bottomOuterSurface = std::min( b_pos, b_pos + b_thickness );
+
+    // Convert dimensions to mm
+    double diameter_mm = pcbIUScale.IUTomm( aDiameter );
+    double radius_mm = diameter_mm / 2.0;
+
+    // Calculate depth in mm
+    double depth_mm;
+    double halfAngleRad = 0.0;
+
+    if( aAngle > 0 )
+    {
+        // Countersink - calculate half angle
+        halfAngleRad = ( aAngle / 10.0 ) * M_PI / 180.0 / 2.0;
+
+        // If depth is not specified for countersink, calculate from diameter and angle
+        if( aDepth <= 0 )
+            depth_mm = radius_mm / tan( halfAngleRad );
+        else
+            depth_mm = pcbIUScale.IUTomm( aDepth );
+    }
+    else
+    {
+        // Counterbore - use specified depth
+        depth_mm = pcbIUScale.IUTomm( aDepth );
+    }
+
+    // Determine the Z range of the feature
+    double featureTop, featureBottom;
+
+    if( aFrontSide )
+    {
+        featureTop = topOuterSurface;
+        featureBottom = topOuterSurface - depth_mm;
+    }
+    else
+    {
+        featureBottom = bottomOuterSurface;
+        featureTop = bottomOuterSurface + depth_mm;
+    }
+
+    wxLogTrace( traceKiCad2Step, wxT( "GetCopperLayerKnockouts: featureTop=%f featureBottom=%f depth_mm=%f frontSide=%d" ),
+                featureTop, featureBottom, depth_mm, aFrontSide ? 1 : 0 );
+
+    // Iterate through all copper layers and check if they fall within the feature range
+    for( const BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
+    {
+        if( item->GetType() != BS_ITEM_TYPE_COPPER )
+            continue;
+
+        PCB_LAYER_ID layer = item->GetBrdLayerId();
+        double layerZ, layerThickness;
+        getLayerZPlacement( layer, layerZ, layerThickness );
+
+        // Get the Z range of this copper layer (both inner and outer surfaces)
+        double layerTop = std::max( layerZ, layerZ + layerThickness );
+        double layerBottom = std::min( layerZ, layerZ + layerThickness );
+
+        // Check if this layer overlaps with the feature Z range
+        // A layer is affected if any part of it is within the feature range
+        bool layerInRange = ( layerTop >= featureBottom && layerBottom <= featureTop );
+
+        wxLogTrace( traceKiCad2Step, wxT( "GetCopperLayerKnockouts: layer %d Z=[%f, %f] feature=[%f, %f] inRange=%d" ),
+                    static_cast<int>( layer ), layerBottom, layerTop, featureBottom, featureTop, layerInRange ? 1 : 0 );
+
+        if( !layerInRange )
+            continue;
+
+        int knockoutDiameter;
+
+        if( aAngle > 0 )
+        {
+            // Countersink - calculate diameter at this layer's Z level
+            // Use the layer surface that's closest to the feature origin surface
+            double layerSurfaceZ;
+            if( aFrontSide )
+            {
+                // For front-side countersink, use the top surface of the layer
+                layerSurfaceZ = layerTop;
+            }
+            else
+            {
+                // For back-side countersink, use the bottom surface of the layer
+                layerSurfaceZ = layerBottom;
+            }
+
+            // Distance from the surface determines the radius at this Z
+            double distanceFromSurface;
+            if( aFrontSide )
+                distanceFromSurface = topOuterSurface - layerSurfaceZ;
+            else
+                distanceFromSurface = layerSurfaceZ - bottomOuterSurface;
+
+            // Radius at this depth: r = R - d * tan(halfAngle)
+            double radiusAtLayer_mm = radius_mm - distanceFromSurface * tan( halfAngleRad );
+
+            if( radiusAtLayer_mm <= 0 )
+            {
+                wxLogTrace( traceKiCad2Step, wxT( "GetCopperLayerKnockouts: layer %d - countersink tapers to point before this layer" ),
+                            static_cast<int>( layer ) );
+                continue;  // Cone tapers to a point before reaching this layer
+            }
+
+            knockoutDiameter = pcbIUScale.mmToIU( radiusAtLayer_mm * 2.0 );
+            wxLogTrace( traceKiCad2Step, wxT( "GetCopperLayerKnockouts: layer %d (countersink) - distFromSurface=%f radiusAtLayer=%f diameter=%d" ),
+                        static_cast<int>( layer ), distanceFromSurface, radiusAtLayer_mm, knockoutDiameter );
+        }
+        else
+        {
+            // Counterbore - constant diameter
+            knockoutDiameter = aDiameter;
+            wxLogTrace( traceKiCad2Step, wxT( "GetCopperLayerKnockouts: layer %d (counterbore) - diameter=%d" ),
+                        static_cast<int>( layer ), knockoutDiameter );
+        }
+
+        knockouts[layer] = knockoutDiameter;
+    }
+
+    return knockouts;
 }
 
 

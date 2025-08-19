@@ -174,6 +174,11 @@ void BOARD_ADAPTER::destroyLayers()
     m_viaTH_ODPolys.RemoveAllContours();
     m_viaAnnuliPolys.RemoveAllContours();
 
+    m_frontCounterborePolys.RemoveAllContours();
+    m_backCounterborePolys.RemoveAllContours();
+    m_frontCountersinkPolys.RemoveAllContours();
+    m_backCountersinkPolys.RemoveAllContours();
+
     DELETE_AND_FREE_MAP( m_layerMap )
     DELETE_AND_FREE_MAP( m_layerHoleMap )
 
@@ -186,6 +191,13 @@ void BOARD_ADAPTER::destroyLayers()
     m_TH_IDs.Clear();
     m_viaAnnuli.Clear();
     m_viaTH_ODs.Clear();
+
+    m_frontCounterboreCutouts.Clear();
+    m_backCounterboreCutouts.Clear();
+    m_frontCountersinkCutouts.Clear();
+    m_backCountersinkCutouts.Clear();
+    m_backdrillCutouts.Clear();
+    m_tertiarydrillCutouts.Clear();
 }
 
 
@@ -318,6 +330,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // Create VIAS and THTs objects and add it to holes containers
     for( PCB_LAYER_ID layer : layer_ids )
     {
+        // Check if the layer is already created
+        if( !m_layerHoleMap.contains( layer ) )
+        {
+            m_layerHoleMap[layer] = new BVH_CONTAINER_2D;
+        }
+
         // ADD TRACKS
         unsigned int nTracks = trackList.size();
 
@@ -349,19 +367,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     // Add hole objects
                     BVH_CONTAINER_2D *layerHoleContainer = nullptr;
-
-                    // Check if the layer is already created
-                    if( !m_layerHoleMap.contains( layer ) )
-                    {
-                        // not found, create a new container
-                        layerHoleContainer = new BVH_CONTAINER_2D;
-                        m_layerHoleMap[layer] = layerHoleContainer;
-                    }
-                    else
-                    {
-                        // found
-                        layerHoleContainer = m_layerHoleMap[layer];
-                    }
+                    layerHoleContainer = m_layerHoleMap[layer];
 
                     // Add a hole for this layer
                     layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness,
@@ -378,6 +384,88 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     if( hole_inner_radius > 0.0 )
                         m_TH_IDs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius, *track ) );
+                }
+
+                // Add counterbore/countersink cutouts for vias
+                const auto frontMode = via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+                const double frontRadius = via->GetFrontPostMachiningSize() * m_biuTo3Dunits / 2.0;
+
+                if( frontMode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                    && frontMode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN
+                    && frontRadius > hole_inner_radius )
+                {
+                    if( layer == layer_ids[0] ) // only add once for front layer
+                    {
+                        if( frontMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                            m_frontCounterboreCutouts.Add( new FILLED_CIRCLE_2D( via_center, frontRadius, *track ) );
+                        else if( frontMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                            m_frontCountersinkCutouts.Add( new FILLED_CIRCLE_2D( via_center, frontRadius, *track ) );
+                    }
+
+                    BVH_CONTAINER_2D *layerHoleContainer = m_layerHoleMap[layer];
+                    layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, frontRadius + thickness, *track ) );
+                }
+
+                const auto backMode = via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+                const double backRadius = via->GetBackPostMachiningSize() * m_biuTo3Dunits / 2.0;
+
+                if( backMode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                    && backMode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN
+                    && backRadius > hole_inner_radius )
+                {
+
+                    if( layer == layer_ids.back() ) // only add once for back layer
+                    {
+                        if( backMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                            m_backCounterboreCutouts.Add( new FILLED_CIRCLE_2D( via_center, backRadius, *track ) );
+                        else if( backMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                            m_backCountersinkCutouts.Add( new FILLED_CIRCLE_2D( via_center, backRadius, *track ) );
+                    }
+
+                    BVH_CONTAINER_2D *layerHoleContainer = m_layerHoleMap[layer];
+                    layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, backRadius + thickness, *track ) );
+                }
+
+                // Add backdrill cutouts for vias - affects specific layers only
+                float backdrillRadius = via->GetSecondaryDrillSize().value_or( 0 ) * m_biuTo3Dunits / 2.0f ;
+
+                // Only add if backdrill is larger than original hole
+                if( backdrillRadius > hole_inner_radius + thickness )
+                {
+                    PCB_LAYER_ID secStart = via->GetSecondaryDrillStartLayer();
+                    PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
+
+                    if( LAYER_RANGE( secStart, secEnd, m_copperLayersCount ).Contains( layer ) )
+                    {
+                        // Add to layer hole map for this layer
+                        BVH_CONTAINER_2D* layerHoleContainer = m_layerHoleMap[layer];
+
+                        layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius, *track ) );
+                    }
+
+                    if( layer == secStart )
+                        m_backdrillCutouts.Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius, *track ) );
+                }
+
+                // Add tertiary drill cutouts for vias - affects specific layers only
+                float tertiaryDrillRadius = via->GetTertiaryDrillSize().value_or( 0 ) * m_biuTo3Dunits / 2.0f ;
+
+                // Only add if tertiary drill is larger than original hole
+                if( tertiaryDrillRadius > hole_inner_radius + thickness )
+                {
+                    PCB_LAYER_ID terStart = via->GetTertiaryDrillStartLayer();
+                    PCB_LAYER_ID terEnd = via->GetTertiaryDrillEndLayer();
+
+                    if( LAYER_RANGE( terStart, terEnd, m_copperLayersCount ).Contains( layer ) )
+                    {
+                        // Add to layer hole map for this layer
+                        BVH_CONTAINER_2D* layerHoleContainer = m_layerHoleMap[layer];
+
+                        layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, tertiaryDrillRadius, *track ) );
+                    }
+
+                    if( layer == terStart )
+                        m_tertiarydrillCutouts.Add( new FILLED_CIRCLE_2D( via_center, tertiaryDrillRadius, *track ) );
                 }
             }
 
@@ -397,6 +485,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // Create VIAS and THTs objects and add it to holes containers
     for( PCB_LAYER_ID layer : layer_ids )
     {
+        if( !m_layerHoleOdPolys.contains( layer ) )
+        {
+            m_layerHoleOdPolys[layer] = new SHAPE_POLY_SET;
+        }
+
+        if( !m_layerHoleIdPolys.contains( layer ) )
+        {
+            m_layerHoleIdPolys[layer] = new SHAPE_POLY_SET;
+        }
+
         // ADD TRACKS
         const unsigned int nTracks = trackList.size();
 
@@ -413,39 +511,23 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
                 const VIATYPE  viatype = via->GetViaType();
 
+                // Add outer holes of VIAs
+                SHAPE_POLY_SET *layerOuterHolesPoly = nullptr;
+                SHAPE_POLY_SET *layerInnerHolesPoly = nullptr;
+
+                // found
+                wxASSERT( m_layerHoleOdPolys.contains( layer ) );
+                wxASSERT( m_layerHoleIdPolys.contains( layer ) );
+
+                layerOuterHolesPoly = m_layerHoleOdPolys[layer];
+                layerInnerHolesPoly = m_layerHoleIdPolys[layer];
+
+                const int holediameter = via->GetDrillValue();
+                const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
+
                 if( viatype != VIATYPE::THROUGH )
                 {
                     // Add PCB_VIA hole contours
-
-                    // Add outer holes of VIAs
-                    SHAPE_POLY_SET *layerOuterHolesPoly = nullptr;
-                    SHAPE_POLY_SET *layerInnerHolesPoly = nullptr;
-
-                    // Check if the layer is already created
-                    if( !m_layerHoleOdPolys.contains( layer ) )
-                    {
-                        // not found, create a new container
-                        layerOuterHolesPoly = new SHAPE_POLY_SET;
-                        m_layerHoleOdPolys[layer] = layerOuterHolesPoly;
-
-                        wxASSERT( !m_layerHoleIdPolys.contains( layer ) );
-
-                        layerInnerHolesPoly = new SHAPE_POLY_SET;
-                        m_layerHoleIdPolys[layer] = layerInnerHolesPoly;
-                    }
-                    else
-                    {
-                        // found
-                        layerOuterHolesPoly = m_layerHoleOdPolys[layer];
-
-                        wxASSERT( m_layerHoleIdPolys.contains( layer ) );
-
-                        layerInnerHolesPoly = m_layerHoleIdPolys[layer];
-                    }
-
-                    const int holediameter = via->GetDrillValue();
-                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
-
                     TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(), hole_outer_radius,
                                               via->GetMaxError(), ERROR_INSIDE );
 
@@ -454,8 +536,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 }
                 else if( layer == layer_ids[0] ) // it only adds once the THT holes
                 {
-                    const int holediameter = via->GetDrillValue();
-                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
                     const int hole_outer_ring_radius = KiROUND( via->GetWidth( layer ) / 2.0 );
 
                     // Add through hole contours
@@ -470,6 +550,142 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         TransformCircleToPolygon( m_viaAnnuliPolys, via->GetStart(), hole_outer_ring_radius,
                                                   via->GetMaxError(), ERROR_INSIDE );
+                    }
+                }
+
+                // Add counterbore/countersink polygons for vias
+                const auto frontMode = via->GetFrontPostMachining();
+
+                if( frontMode.has_value()
+                    && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                    && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                {
+                    const int frontRadiusBIU = via->GetFrontPostMachiningSize() / 2;
+
+                    if( frontRadiusBIU > holediameter / 2 )
+                    {
+                        int frontRadiusOuterBIU = frontRadiusBIU + GetHolePlatingThickness();
+
+                        if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                        {
+                            TransformCircleToPolygon( m_frontCounterborePolys, via->GetStart(),
+                                                        frontRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
+                        else if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                        {
+                            TransformCircleToPolygon( m_frontCountersinkPolys, via->GetStart(),
+                                                        frontRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
+
+                        TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(),
+                                                    frontRadiusOuterBIU, via->GetMaxError(),
+                                                    ERROR_INSIDE );
+                        TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(),
+                                                    frontRadiusBIU, via->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                }
+
+                const auto backMode = via->GetBackPostMachining();
+
+                if( backMode.has_value()
+                    && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                    && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                {
+                    const int backRadiusBIU = via->GetBackPostMachiningSize() / 2;
+
+                    if( backRadiusBIU > holediameter / 2 )
+                    {
+                        int backRadiusOuterBIU = backRadiusBIU + GetHolePlatingThickness();
+
+                        if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                        {
+                            TransformCircleToPolygon( m_backCounterborePolys, via->GetStart(),
+                                                        backRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
+                        else if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                        {
+                            TransformCircleToPolygon( m_backCountersinkPolys, via->GetStart(),
+                                                        backRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
+
+                        TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(),
+                                                    backRadiusOuterBIU, via->GetMaxError(),
+                                                    ERROR_INSIDE );
+                        TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(),
+                                                    backRadiusBIU, via->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                }
+
+                // Add backdrill polygons for vias - affects specific layers only
+                const auto secondaryDrillSize = via->GetSecondaryDrillSize();
+
+                if( secondaryDrillSize.has_value() && secondaryDrillSize.value() > 0 )
+                {
+                    const int backdrillRadiusBIU = secondaryDrillSize.value() / 2;
+                    const int backdrillOuterRadiusBIU = backdrillRadiusBIU + GetHolePlatingThickness();
+                    const int holeOuterRadiusBIU = hole_outer_radius;
+
+                    // Only add if backdrill is larger than original hole outer diameter
+                    if( backdrillOuterRadiusBIU > holeOuterRadiusBIU )
+                    {
+                        PCB_LAYER_ID secStart = via->GetSecondaryDrillStartLayer();
+                        PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
+
+                        // Iterate through layers affected by backdrill
+                        if( LAYER_RANGE( secStart, secEnd, m_copperLayersCount ).Contains( layer ) )
+                        {
+                            TransformCircleToPolygon( *m_layerHoleOdPolys[layer], via->GetStart(),
+                                                        backdrillOuterRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+
+                            TransformCircleToPolygon( *m_layerHoleIdPolys[layer], via->GetStart(),
+                                                        backdrillRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+
+                            TransformCircleToPolygon( m_BackdrillPolys, via->GetStart(),
+                                                        backdrillOuterRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
+                    }
+                }
+
+                // Add backdrill polygons for vias - affects specific layers only
+                const auto tertiaryDrillSize = via->GetTertiaryDrillSize();
+
+                if( tertiaryDrillSize.has_value() && tertiaryDrillSize.value() > 0 )
+                {
+                    const int backdrillRadiusBIU = tertiaryDrillSize.value() / 2;
+                    const int backdrillOuterRadiusBIU = backdrillRadiusBIU + GetHolePlatingThickness();
+                    const int holeOuterRadiusBIU = hole_outer_radius;
+
+                    // Only add if backdrill is larger than original hole outer diameter
+                    if( backdrillOuterRadiusBIU > holeOuterRadiusBIU )
+                    {
+                        PCB_LAYER_ID terStart = via->GetTertiaryDrillStartLayer();
+                        PCB_LAYER_ID terEnd = via->GetTertiaryDrillEndLayer();
+
+                        if( LAYER_RANGE( terStart, terEnd, m_copperLayersCount ).Contains( layer ) )
+                        {
+                            PCB_LAYER_ID backdrillLayer = layer;
+
+                            TransformCircleToPolygon( *m_layerHoleOdPolys[backdrillLayer], via->GetStart(),
+                                                        backdrillOuterRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+
+                            TransformCircleToPolygon( *m_layerHoleIdPolys[backdrillLayer], via->GetStart(),
+                                                        backdrillRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+
+                            TransformCircleToPolygon( m_TertiarydrillPolys, via->GetStart(),
+                                                        backdrillOuterRadiusBIU, via->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
                     }
                 }
             }
@@ -536,6 +752,103 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 createPadHoleShape( pad, &m_viaAnnuli, inflate );
 
             createPadHoleShape( pad, &m_TH_IDs, 0 );
+
+            // Add counterbore/countersink cutouts for pads
+            const float    holeDiameterUnits = static_cast<float>(
+                    ( pad->GetDrillSize().x + pad->GetDrillSize().y ) / 2.0 * m_biuTo3Dunits );
+            const float    holeInnerRadius = holeDiameterUnits / 2.0f;
+            const SFVEC2F  padCenter( pad->GetPosition().x * static_cast<float>( m_biuTo3Dunits ),
+                                      -pad->GetPosition().y * static_cast<float>( m_biuTo3Dunits ) );
+
+            const auto frontMode = pad->GetFrontPostMachining();
+
+            if( frontMode.has_value()
+                && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+            {
+                const float frontRadius = pad->GetFrontPostMachiningSize() * 0.5f
+                                          * static_cast<float>( m_biuTo3Dunits );
+
+                if( frontRadius > holeInnerRadius )
+                {
+                    if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                    {
+                        m_frontCounterboreCutouts.Add(
+                                new FILLED_CIRCLE_2D( padCenter, frontRadius, *pad ) );
+                    }
+                    else if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    {
+                        m_frontCountersinkCutouts.Add(
+                                new FILLED_CIRCLE_2D( padCenter, frontRadius, *pad ) );
+                    }
+                }
+            }
+
+            const auto backMode = pad->GetBackPostMachining();
+
+            if( backMode.has_value()
+                && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+            {
+                const float backRadius = pad->GetBackPostMachiningSize() * 0.5f
+                                         * static_cast<float>( m_biuTo3Dunits );
+
+                if( backRadius > holeInnerRadius )
+                {
+                    if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                    {
+                        m_backCounterboreCutouts.Add(
+                                new FILLED_CIRCLE_2D( padCenter, backRadius, *pad ) );
+                    }
+                    else if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    {
+                        m_backCountersinkCutouts.Add(
+                                new FILLED_CIRCLE_2D( padCenter, backRadius, *pad ) );
+                    }
+                }
+            }
+
+            // Add backdrill cutouts for pads - affects specific layers only
+            const VECTOR2I& secDrillSize = pad->GetSecondaryDrillSize();
+
+            if( secDrillSize.x > 0 || secDrillSize.y > 0 )
+            {
+                const float backdrillRadius = ( secDrillSize.x + secDrillSize.y ) * 0.25f
+                                              * static_cast<float>( m_biuTo3Dunits );
+
+                // The hole outer diameter with plating
+                const float holeOuterRadius = holeInnerRadius
+                                              + static_cast<float>( GetHolePlatingThickness()
+                                                                    * m_biuTo3Dunits );
+
+                // Only add if backdrill is larger than original hole outer diameter
+                if( backdrillRadius > holeOuterRadius )
+                {
+                    PCB_LAYER_ID secStart = pad->GetSecondaryDrillStartLayer();
+                    PCB_LAYER_ID secEnd = pad->GetSecondaryDrillEndLayer();
+
+                    // Iterate through layers affected by backdrill
+                    for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd,
+                                                                     m_copperLayersCount ) )
+                    {
+                        // Add to layer hole map for this layer
+                        BVH_CONTAINER_2D* layerHoleContainer = nullptr;
+
+                        if( !m_layerHoleMap.contains( backdrillLayer ) )
+                        {
+                            layerHoleContainer = new BVH_CONTAINER_2D;
+                            m_layerHoleMap[backdrillLayer] = layerHoleContainer;
+                        }
+                        else
+                        {
+                            layerHoleContainer = m_layerHoleMap[backdrillLayer];
+                        }
+
+                        layerHoleContainer->Add(
+                                new FILLED_CIRCLE_2D( padCenter, backdrillRadius, *pad ) );
+                    }
+                }
+            }
         }
     }
 
@@ -567,6 +880,103 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     pad->TransformHoleToPolygon( m_viaAnnuliPolys, 0, pad->GetMaxError(), ERROR_INSIDE );
 
                 pad->TransformHoleToPolygon( m_NPTH_ODPolys, 0, pad->GetMaxError(), ERROR_INSIDE );
+            }
+
+
+            // Add counterbore/countersink polygons for pads
+            const double holeDiameter = ( pad->GetDrillSize().x + pad->GetDrillSize().y ) / 2.0;
+            const int holeRadius = KiROUND( holeDiameter / 2.0 );
+
+            const auto frontMode = pad->GetFrontPostMachining();
+
+            if( frontMode.has_value()
+                && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                && frontMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+            {
+                const int frontRadiusBIU = pad->GetFrontPostMachiningSize() / 2;
+
+                if( frontRadiusBIU > holeRadius )
+                {
+                    if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                    {
+                        TransformCircleToPolygon( m_frontCounterborePolys, pad->GetPosition(),
+                                                    frontRadiusBIU, pad->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                    else if( frontMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    {
+                        TransformCircleToPolygon( m_frontCountersinkPolys, pad->GetPosition(),
+                                                    frontRadiusBIU, pad->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                }
+            }
+
+            const auto backMode = pad->GetBackPostMachining();
+
+            if( backMode.has_value()
+                && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                && backMode.value() != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+            {
+                const int backRadiusBIU = pad->GetBackPostMachiningSize() / 2;
+
+                if( backRadiusBIU > holeRadius )
+                {
+                    if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+                    {
+                        TransformCircleToPolygon( m_backCounterborePolys, pad->GetPosition(),
+                                                    backRadiusBIU, pad->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                    else if( backMode.value() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+                    {
+                        TransformCircleToPolygon( m_backCountersinkPolys, pad->GetPosition(),
+                                                    backRadiusBIU, pad->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                }
+            }
+
+            // Add backdrill polygons for pads - affects specific layers only
+            const VECTOR2I& secDrillSize = pad->GetSecondaryDrillSize();
+
+            if( secDrillSize.x > 0 || secDrillSize.y > 0 )
+            {
+                const int backdrillRadiusBIU = ( secDrillSize.x + secDrillSize.y ) / 4;
+                const int holeOuterRadiusBIU = holeRadius + inflate;
+
+                // Only add if backdrill is larger than original hole outer diameter
+                if( backdrillRadiusBIU > holeOuterRadiusBIU )
+                {
+                    PCB_LAYER_ID secStart = pad->GetSecondaryDrillStartLayer();
+                    PCB_LAYER_ID secEnd = pad->GetSecondaryDrillEndLayer();
+
+                    TransformCircleToPolygon( m_BackdrillPolys, pad->GetPosition(),
+                                                backdrillRadiusBIU, pad->GetMaxError(),
+                                                ERROR_INSIDE );
+
+                    // Iterate through layers affected by backdrill
+                    for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd,
+                                                                        m_copperLayersCount ) )
+                    {
+                        // Add polygon to per-layer hole polys
+                        SHAPE_POLY_SET* layerHolePoly = nullptr;
+
+                        if( !m_layerHoleOdPolys.contains( backdrillLayer ) )
+                        {
+                            layerHolePoly = new SHAPE_POLY_SET;
+                            m_layerHoleOdPolys[backdrillLayer] = layerHolePoly;
+                        }
+                        else
+                        {
+                            layerHolePoly = m_layerHoleOdPolys[backdrillLayer];
+                        }
+
+                        TransformCircleToPolygon( *layerHolePoly, pad->GetPosition(),
+                                                    backdrillRadiusBIU, pad->GetMaxError(),
+                                                    ERROR_INSIDE );
+                    }
+                }
             }
         }
     }
@@ -850,6 +1260,35 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_NPTH_ODPolys.Simplify();
     m_viaTH_ODPolys.Simplify();
     m_viaAnnuliPolys.Simplify();
+
+    m_frontCounterborePolys.Simplify();
+    m_backCounterborePolys.Simplify();
+    m_frontCountersinkPolys.Simplify();
+    m_backCountersinkPolys.Simplify();
+
+    // Remove counterbore/countersink/backdrill cutouts from via annuli (both front and back)
+    // The via annuli are used for silkscreen clipping and shouldn't include areas removed
+    // by counterbore, countersink, or backdrill operations
+    if( m_viaAnnuliPolys.OutlineCount() > 0 )
+    {
+        if( m_frontCounterborePolys.OutlineCount() > 0 )
+            m_viaAnnuliPolys.BooleanSubtract( m_frontCounterborePolys );
+
+        if( m_backCounterborePolys.OutlineCount() > 0 )
+            m_viaAnnuliPolys.BooleanSubtract( m_backCounterborePolys );
+
+        if( m_frontCountersinkPolys.OutlineCount() > 0 )
+            m_viaAnnuliPolys.BooleanSubtract( m_frontCountersinkPolys );
+
+        if( m_backCountersinkPolys.OutlineCount() > 0 )
+            m_viaAnnuliPolys.BooleanSubtract( m_backCountersinkPolys );
+
+        if( m_BackdrillPolys.OutlineCount() > 0 )
+            m_viaAnnuliPolys.BooleanSubtract( m_BackdrillPolys );
+
+        if( m_TertiarydrillPolys.OutlineCount() > 0 )
+            m_viaAnnuliPolys.BooleanSubtract( m_TertiarydrillPolys );
+    }
 
     // Build Tech layers
     // Based on:
@@ -1328,6 +1767,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_TH_IDs.BuildBVH();
     m_TH_ODs.BuildBVH();
     m_viaAnnuli.BuildBVH();
+
+    m_frontCounterboreCutouts.BuildBVH();
+    m_backCounterboreCutouts.BuildBVH();
+    m_frontCountersinkCutouts.BuildBVH();
+    m_backCountersinkCutouts.BuildBVH();
+    m_backdrillCutouts.BuildBVH();
+    m_tertiarydrillCutouts.BuildBVH();
 
     if( !m_layerHoleMap.empty() )
     {

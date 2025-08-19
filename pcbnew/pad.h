@@ -26,6 +26,7 @@
 
 #include <mutex>
 #include <array>
+#include <optional>
 
 #include <board_connected_item.h>
 #include <core/arraydim.h>
@@ -301,12 +302,19 @@ public:
         return m_padStack.TrapezoidDeltaSize( aLayer );
     }
 
-    void SetDrillSize( const VECTOR2I& aSize )  { m_padStack.Drill().size = aSize; SetDirty(); }
-    const VECTOR2I& GetDrillSize() const        { return m_padStack.Drill().size; }
+    void SetPrimaryDrillSize( const VECTOR2I& aSize );
+    const VECTOR2I& GetPrimaryDrillSize() const { return m_padStack.Drill().size; }
+    void SetPrimaryDrillSizeX( int aX );
+    int GetPrimaryDrillSizeX() const            { return m_padStack.Drill().size.x; }
+    void SetPrimaryDrillSizeY( int aY );
+    int GetPrimaryDrillSizeY() const            { return m_padStack.Drill().size.y; }
+
+    void SetDrillSize( const VECTOR2I& aSize )  { SetPrimaryDrillSize( aSize ); }
+    const VECTOR2I& GetDrillSize() const        { return GetPrimaryDrillSize(); }
     void SetDrillSizeX( int aX );
-    int GetDrillSizeX() const                   { return m_padStack.Drill().size.x; }
-    void SetDrillSizeY( int aY )                { m_padStack.Drill().size.y = aY; SetDirty(); }
-    int GetDrillSizeY() const                   { return m_padStack.Drill().size.y; }
+    int GetDrillSizeX() const                   { return GetPrimaryDrillSizeX(); }
+    void SetDrillSizeY( int aY );
+    int GetDrillSizeY() const                   { return GetPrimaryDrillSizeY(); }
 
     void SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
     {
@@ -418,8 +426,119 @@ public:
         return m_padStack.GetOrientation().AsDegrees();
     }
 
-    void SetDrillShape( PAD_DRILL_SHAPE aShape );
-    PAD_DRILL_SHAPE GetDrillShape() const { return m_padStack.Drill().shape; }
+    void SetPrimaryDrillShape( PAD_DRILL_SHAPE aShape );
+    PAD_DRILL_SHAPE GetPrimaryDrillShape() const { return m_padStack.Drill().shape; }
+
+    void SetDrillShape( PAD_DRILL_SHAPE aShape ) { SetPrimaryDrillShape( aShape ); }
+    PAD_DRILL_SHAPE GetDrillShape() const { return GetPrimaryDrillShape(); }
+
+    void SetPrimaryDrillStartLayer( PCB_LAYER_ID aLayer );
+    PCB_LAYER_ID GetPrimaryDrillStartLayer() const { return m_padStack.Drill().start; }
+    void SetPrimaryDrillEndLayer( PCB_LAYER_ID aLayer );
+    PCB_LAYER_ID GetPrimaryDrillEndLayer() const { return m_padStack.Drill().end; }
+
+    void SetFrontPostMachining( const std::optional<PAD_DRILL_POST_MACHINING_MODE>& aMode ) { m_padStack.FrontPostMachining().mode = aMode; }
+    std::optional<PAD_DRILL_POST_MACHINING_MODE> GetFrontPostMachining() const { return m_padStack.FrontPostMachining().mode; }
+
+    void SetFrontPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE aMode )
+    {
+        m_padStack.FrontPostMachining().mode = aMode;
+    }
+
+    PAD_DRILL_POST_MACHINING_MODE GetFrontPostMachiningMode() const
+    {
+        return m_padStack.FrontPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED );
+    }
+
+    void SetFrontPostMachiningSize( int aSize ) { m_padStack.FrontPostMachining().size = aSize; }
+    int GetFrontPostMachiningSize() const { return m_padStack.FrontPostMachining().size; }
+    void SetFrontPostMachiningDepth( int aDepth ) { m_padStack.FrontPostMachining().depth = aDepth; }
+    int GetFrontPostMachiningDepth() const { return m_padStack.FrontPostMachining().depth; }
+    void SetFrontPostMachiningAngle( int aAngle ) { m_padStack.FrontPostMachining().angle = aAngle; }
+    int GetFrontPostMachiningAngle() const { return m_padStack.FrontPostMachining().angle; }
+
+    void SetBackPostMachining( const std::optional<PAD_DRILL_POST_MACHINING_MODE>& aMode ) { m_padStack.BackPostMachining().mode = aMode; }
+    std::optional<PAD_DRILL_POST_MACHINING_MODE> GetBackPostMachining() const { return m_padStack.BackPostMachining().mode; }
+
+    void SetBackPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE aMode )
+    {
+        m_padStack.BackPostMachining().mode = aMode;
+    }
+
+    PAD_DRILL_POST_MACHINING_MODE GetBackPostMachiningMode() const
+    {
+        return m_padStack.BackPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED );
+    }
+
+    void SetBackPostMachiningSize( int aSize ) { m_padStack.BackPostMachining().size = aSize; }
+    int GetBackPostMachiningSize() const { return m_padStack.BackPostMachining().size; }
+    void SetBackPostMachiningDepth( int aDepth ) { m_padStack.BackPostMachining().depth = aDepth; }
+    int GetBackPostMachiningDepth() const { return m_padStack.BackPostMachining().depth; }
+    void SetBackPostMachiningAngle( int aAngle ) { m_padStack.BackPostMachining().angle = aAngle; }
+    int GetBackPostMachiningAngle() const { return m_padStack.BackPostMachining().angle; }
+
+    /**
+     * Check if a layer is affected by backdrilling or post-machining operations.
+     *
+     * This checks both the secondary drill (backdrill) and post-machining (counterbore/countersink)
+     * settings to determine if the given layer has had copper removed.
+     *
+     * @param aLayer the copper layer to check
+     * @return true if the layer is affected by backdrilling or post-machining
+     */
+    bool IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Get the knockout diameter for a layer affected by post-machining.
+     *
+     * @param aLayer the copper layer to check
+     * @return the diameter to knockout on this layer, or 0 if layer is not affected
+     */
+    int GetPostMachiningKnockout( PCB_LAYER_ID aLayer ) const;
+
+    void SetPrimaryDrillFilled( const std::optional<bool>& aFilled );
+    void SetPrimaryDrillFilledFlag( bool aFilled );
+    std::optional<bool> GetPrimaryDrillFilled() const { return m_padStack.Drill().is_filled; }
+    bool GetPrimaryDrillFilledFlag() const { return m_padStack.Drill().is_filled.value_or( false ); }
+
+    void SetPrimaryDrillCapped( const std::optional<bool>& aCapped );
+    void SetPrimaryDrillCappedFlag( bool aCapped );
+    std::optional<bool> GetPrimaryDrillCapped() const { return m_padStack.Drill().is_capped; }
+    bool GetPrimaryDrillCappedFlag() const { return m_padStack.Drill().is_capped.value_or( false ); }
+
+    void SetSecondaryDrillSize( const VECTOR2I& aSize );
+    const VECTOR2I& GetSecondaryDrillSize() const { return m_padStack.SecondaryDrill().size; }
+    void ClearSecondaryDrillSize();
+
+    void SetSecondaryDrillSizeX( int aX );
+    int GetSecondaryDrillSizeX() const { return m_padStack.SecondaryDrill().size.x; }
+    void SetSecondaryDrillSizeY( int aY );
+    int GetSecondaryDrillSizeY() const { return m_padStack.SecondaryDrill().size.y; }
+
+    void SetSecondaryDrillShape( PAD_DRILL_SHAPE aShape );
+    PAD_DRILL_SHAPE GetSecondaryDrillShape() const { return m_padStack.SecondaryDrill().shape; }
+
+    void SetSecondaryDrillStartLayer( PCB_LAYER_ID aLayer );
+    PCB_LAYER_ID GetSecondaryDrillStartLayer() const { return m_padStack.SecondaryDrill().start; }
+    void SetSecondaryDrillEndLayer( PCB_LAYER_ID aLayer );
+    PCB_LAYER_ID GetSecondaryDrillEndLayer() const { return m_padStack.SecondaryDrill().end; }
+
+    void SetTertiaryDrillSize( const VECTOR2I& aSize );
+    const VECTOR2I& GetTertiaryDrillSize() const { return m_padStack.TertiaryDrill().size; }
+    void ClearTertiaryDrillSize();
+
+    void SetTertiaryDrillSizeX( int aX );
+    int GetTertiaryDrillSizeX() const { return m_padStack.TertiaryDrill().size.x; }
+    void SetTertiaryDrillSizeY( int aY );
+    int GetTertiaryDrillSizeY() const { return m_padStack.TertiaryDrill().size.y; }
+
+    void SetTertiaryDrillShape( PAD_DRILL_SHAPE aShape );
+    PAD_DRILL_SHAPE GetTertiaryDrillShape() const { return m_padStack.TertiaryDrill().shape; }
+
+    void SetTertiaryDrillStartLayer( PCB_LAYER_ID aLayer );
+    PCB_LAYER_ID GetTertiaryDrillStartLayer() const { return m_padStack.TertiaryDrill().start; }
+    void SetTertiaryDrillEndLayer( PCB_LAYER_ID aLayer );
+    PCB_LAYER_ID GetTertiaryDrillEndLayer() const { return m_padStack.TertiaryDrill().end; }
 
     bool IsDirty() const
     {
@@ -914,6 +1033,21 @@ public:
 
     void CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                    const std::function<void( int aErrorCode, const wxString& aMsg )>& aErrorHandler ) const;
+
+    BACKDRILL_MODE GetBackdrillMode() const { return m_padStack.GetBackdrillMode(); }
+    void SetBackdrillMode( BACKDRILL_MODE aMode ) { m_padStack.SetBackdrillMode( aMode ); }
+
+    std::optional<int> GetBottomBackdrillSize() const { return m_padStack.GetBackdrillSize( false ); }
+    void SetBottomBackdrillSize( std::optional<int> aSize ) { m_padStack.SetBackdrillSize( false, aSize ); }
+
+    PCB_LAYER_ID GetBottomBackdrillLayer() const { return m_padStack.GetBackdrillEndLayer( false ); }
+    void SetBottomBackdrillLayer( PCB_LAYER_ID aLayer ) { m_padStack.SetBackdrillEndLayer( false, aLayer ); }
+
+    std::optional<int> GetTopBackdrillSize() const { return m_padStack.GetBackdrillSize( true ); }
+    void SetTopBackdrillSize( std::optional<int> aSize ) { m_padStack.SetBackdrillSize( true, aSize ); }
+
+    PCB_LAYER_ID GetTopBackdrillLayer() const { return m_padStack.GetBackdrillEndLayer( true ); }
+    void SetTopBackdrillLayer( PCB_LAYER_ID aLayer ) { m_padStack.SetBackdrillEndLayer( true, aLayer ); }
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 

@@ -609,6 +609,10 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) c
         static_cast<EDA_ANGLE_VARIANT_DATA*>( aVariant.GetData() )->Write( ret );
         return ret;
     }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        return wxString::Format( wxS( "%g\u00B0" ), (double) aVariant.GetLong() / m_scale );
+    }
     else
     {
         wxCHECK_MSG( false, wxEmptyString, wxS( "Unexpected variant type in PGPROPERTY_ANGLE" ) );

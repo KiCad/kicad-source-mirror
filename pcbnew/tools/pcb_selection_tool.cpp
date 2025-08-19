@@ -744,7 +744,7 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
 
 bool PCB_SELECTION_TOOL::ctrlClickHighlights()
 {
-    return m_frame && m_frame->GetPcbNewSettings()->m_CtrlClickHighlight && !m_isFootprintEditor;
+    return m_frame && m_frame->GetPcbNewSettings() && m_frame->GetPcbNewSettings()->m_CtrlClickHighlight && !m_isFootprintEditor;
 }
 
 

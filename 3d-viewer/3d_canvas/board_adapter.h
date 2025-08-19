@@ -305,6 +305,96 @@ public:
         return m_viaTH_ODPolys;
     }
 
+    /**
+     *  Get the backdrill and tertiary drill polygons.
+     *
+     */
+    const SHAPE_POLY_SET& GetBackdrillPolys() const noexcept
+    {
+        return m_BackdrillPolys;
+    }
+
+    const SHAPE_POLY_SET& GetTertiarydrillPolys() const noexcept
+    {
+        return m_TertiarydrillPolys;
+    }
+
+    const BVH_CONTAINER_2D& GetBackdrillCutouts() const noexcept
+    {
+        return m_backdrillCutouts;
+    }
+
+    const BVH_CONTAINER_2D& GetTertiarydrillCutouts() const noexcept
+    {
+        return m_tertiarydrillCutouts;
+    }
+
+    /**
+     * Get the container of counterbore cutout geometry for the front (top) side.
+     * These are circles representing the counterbore diameter for cutting into the board.
+     */
+    const BVH_CONTAINER_2D& GetFrontCounterboreCutouts() const noexcept
+    {
+        return m_frontCounterboreCutouts;
+    }
+
+    /**
+     * Get the container of counterbore cutout geometry for the back (bottom) side.
+     */
+    const BVH_CONTAINER_2D& GetBackCounterboreCutouts() const noexcept
+    {
+        return m_backCounterboreCutouts;
+    }
+
+    /**
+     * Get the container of countersink cutout geometry for the front (top) side.
+     * These are circles representing the countersink outer diameter for cutting into the board.
+     */
+    const BVH_CONTAINER_2D& GetFrontCountersinkCutouts() const noexcept
+    {
+        return m_frontCountersinkCutouts;
+    }
+
+    /**
+     * Get the container of countersink cutout geometry for the back (bottom) side.
+     */
+    const BVH_CONTAINER_2D& GetBackCountersinkCutouts() const noexcept
+    {
+        return m_backCountersinkCutouts;
+    }
+
+    /**
+     * Get the polygon set of counterbore outer diameters for the front (top) side.
+     */
+    const SHAPE_POLY_SET& GetFrontCounterborePolys() const noexcept
+    {
+        return m_frontCounterborePolys;
+    }
+
+    /**
+     * Get the polygon set of counterbore outer diameters for the back (bottom) side.
+     */
+    const SHAPE_POLY_SET& GetBackCounterborePolys() const noexcept
+    {
+        return m_backCounterborePolys;
+    }
+
+    /**
+     * Get the polygon set of countersink outer diameters for the front (top) side.
+     */
+    const SHAPE_POLY_SET& GetFrontCountersinkPolys() const noexcept
+    {
+        return m_frontCountersinkPolys;
+    }
+
+    /**
+     * Get the polygon set of countersink outer diameters for the back (bottom) side.
+     */
+    const SHAPE_POLY_SET& GetBackCountersinkPolys() const noexcept
+    {
+        return m_backCountersinkPolys;
+    }
+
     unsigned int GetViaCount() const noexcept { return m_viaCount; }
     unsigned int GetHoleCount() const noexcept { return m_holeCount; }
 
@@ -472,10 +562,18 @@ private:
     MAP_POLY          m_layerHoleOdPolys;     ///< Hole outer diameters (per layer)
     MAP_POLY          m_layerHoleIdPolys;     ///< Hole inner diameters (per layer)
 
+    SHAPE_POLY_SET    m_BackdrillPolys;        ///< Board backdrill polygons B.Cu->in
+    SHAPE_POLY_SET    m_TertiarydrillPolys;    ///< Board tertiary drill polygons F.Cu->in
+
     SHAPE_POLY_SET    m_NPTH_ODPolys;         ///< NPTH outer diameters
     SHAPE_POLY_SET    m_TH_ODPolys;           ///< PTH outer diameters
     SHAPE_POLY_SET    m_viaTH_ODPolys;        ///< Via hole outer diameters
     SHAPE_POLY_SET    m_viaAnnuliPolys;       ///< Via annular ring outer diameters
+
+    SHAPE_POLY_SET    m_frontCounterborePolys;   ///< Counterbore outer diameters on front
+    SHAPE_POLY_SET    m_backCounterborePolys;    ///< Counterbore outer diameters on back
+    SHAPE_POLY_SET    m_frontCountersinkPolys;   ///< Countersink outer diameters on front
+    SHAPE_POLY_SET    m_backCountersinkPolys;    ///< Countersink outer diameters on back
 
     SHAPE_POLY_SET    m_board_poly;           ///< Board outline polygon.
 
@@ -491,6 +589,14 @@ private:
     BVH_CONTAINER_2D  m_TH_IDs;               ///< List of PTH inner diameters
     BVH_CONTAINER_2D  m_viaAnnuli;            ///< List of via annular rings
     BVH_CONTAINER_2D  m_viaTH_ODs;            ///< List of via hole outer diameters
+
+    BVH_CONTAINER_2D  m_backdrillCutouts;          ///< Backdrill cutouts
+    BVH_CONTAINER_2D  m_tertiarydrillCutouts;      ///< Tertiary drill cutouts
+
+    BVH_CONTAINER_2D  m_frontCounterboreCutouts;   ///< Counterbore cutouts on front (top)
+    BVH_CONTAINER_2D  m_backCounterboreCutouts;    ///< Counterbore cutouts on back (bottom)
+    BVH_CONTAINER_2D  m_frontCountersinkCutouts;   ///< Countersink cutouts on front (top)
+    BVH_CONTAINER_2D  m_backCountersinkCutouts;    ///< Countersink cutouts on back (bottom)
 
     unsigned int      m_copperLayersCount;
 
