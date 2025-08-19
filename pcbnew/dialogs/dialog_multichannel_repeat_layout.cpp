@@ -94,7 +94,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     wxArrayString refFpNames;
     refFpNames.push_back( "" );
 
-    for( FOOTPRINT* fp : data->m_refRA->m_raFootprints )
+    for( FOOTPRINT* fp : data->m_refRA->m_components )
         refFpNames.push_back( fp->GetReference() );
 
     refFpNames.Sort();

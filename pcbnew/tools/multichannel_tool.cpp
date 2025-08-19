@@ -386,15 +386,13 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
         area.m_existsAlready = true;
         area.m_area = zone;
 
-        identifyComponentsInRuleArea( zone, area.m_raFootprints );
+        identifyComponentsInRuleArea( zone, area.m_components );
 
         area.m_ruleName = zone->GetZoneName();
         area.m_center = zone->Outline()->COutline( 0 ).Centre();
         m_areas.m_areas.push_back( area );
 
-        wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"),
-                    area.m_ruleName,
-                    (int) area.m_raFootprints.size() );
+        wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"), area.m_ruleName, (int) area.m_components.size() );
     }
 
     wxLogTrace( traceMultichannelTool, wxT("Total RAs found: %d\n"), (int) m_areas.m_areas.size() );
@@ -1009,8 +1007,8 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 {
     using namespace TMATCH;
 
-    std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_raFootprints ) );
-    std::unique_ptr<CONNECTION_GRAPH> cgTarget( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_raFootprints ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgRef ( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgTarget ( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components ) );
 
     auto status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents );
 
