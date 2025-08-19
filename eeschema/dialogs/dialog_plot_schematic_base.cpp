@@ -121,32 +121,32 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bOptionsRight;
 	bOptionsRight = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxVERTICAL );
+	wxStaticBoxSizer* m_sizerPDFOptions;
+	m_sizerPDFOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PDF Options") ), wxVERTICAL );
 
-	m_plotPDFPropertyPopups = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Generate property popups"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotPDFPropertyPopups = new wxCheckBox( m_sizerPDFOptions->GetStaticBox(), wxID_ANY, _("Generate property popups"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPDFPropertyPopups->SetValue(true);
-	sbSizer4->Add( m_plotPDFPropertyPopups, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sizerPDFOptions->Add( m_plotPDFPropertyPopups, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_plotPDFHierarchicalLinks = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Generate clickable links for hierarchical elements"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotPDFHierarchicalLinks = new wxCheckBox( m_sizerPDFOptions->GetStaticBox(), wxID_ANY, _("Generate clickable links for hierarchical elements"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPDFHierarchicalLinks->SetValue(true);
-	sbSizer4->Add( m_plotPDFHierarchicalLinks, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_sizerPDFOptions->Add( m_plotPDFHierarchicalLinks, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
-	m_plotPDFMetadata = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Generate metadata from AUTHOR && SUBJECT variables"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotPDFMetadata = new wxCheckBox( m_sizerPDFOptions->GetStaticBox(), wxID_ANY, _("Generate metadata from AUTHOR && SUBJECT variables"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPDFMetadata->SetValue(true);
 	m_plotPDFMetadata->SetToolTip( _("Generate PDF document properties from AUTHOR and SUBJECT text variables") );
 
-	sbSizer4->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sizerPDFOptions->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptionsRight->Add( sbSizer4, 0, wxEXPAND|wxALL, 5 );
+	bOptionsRight->Add( m_sizerPDFOptions, 0, wxEXPAND|wxALL, 5 );
 
 	m_SizerDxfOption = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerDxf;
 	bSizerDxf = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextDXF = new wxStaticText( m_SizerDxfOption->GetStaticBox(), wxID_ANY, _("Export units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDXF = new wxStaticText( m_SizerDxfOption->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDXF->Wrap( -1 );
 	bSizerDxf->Add( m_staticTextDXF, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
