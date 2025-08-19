@@ -3022,7 +3022,12 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
     double footprintRegionArea = polygonArea( footprintRegion );
     double uncoveredRegionArea = footprintRegionArea - polygonArea( coveredRegion );
     double coveredArea = footprintRegionArea - uncoveredRegionArea;
-    double ratio = ( coveredArea / footprintRegionArea );
+
+    // Avoid div-by-zero (this will result in the disambiguate dialog)
+    if( footprintRegionArea == 0 )
+        return 1.0;
+
+    double ratio = coveredArea / footprintRegionArea;
 
     // Test for negative ratio (should not occur).
     // better to be conservative (this will result in the disambiguate dialog)
