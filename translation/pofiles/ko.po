@@ -36,15 +36,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-06-05 14:56+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2025-08-20 01:21+0000\n"
+"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -622,7 +622,7 @@ msgstr "후면 구리 보기 / 표면 마감 색상"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "접착면"
+msgstr "접착제"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
@@ -797,69 +797,56 @@ msgid "Show user defined layer 32"
 msgstr "사용자 정의된 레이어 32 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "사용자 정의 레이어 33"
+msgstr "사용자 정의 레이어 33 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "사용자 정의 레이어 34"
+msgstr "사용자 정의 레이어 34 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "사용자 정의 레이어 35"
+msgstr "사용자 정의 레이어 35 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "사용자 정의 레이어 36"
+msgstr "사용자 정의 레이어 36 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "사용자 정의 레이어 37"
+msgstr "사용자 정의 레이어 37 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "사용자 정의 레이어 38"
+msgstr "사용자 정의 레이어 38 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "사용자 정의 레이어 39"
+msgstr "사용자 정의 레이어 39 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "사용자 정의 레이어 40"
+msgstr "사용자 정의 레이어 40 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "사용자 정의 레이어 41"
+msgstr "사용자 정의 레이어 41 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "사용자 정의 레이어 42"
+msgstr "사용자 정의 레이어 42 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "사용자 정의 레이어 43"
+msgstr "사용자 정의 레이어 43 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "사용자 정의 레이어 44"
+msgstr "사용자 정의 레이어 44 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "사용자 정의 레이어 45"
+msgstr "사용자 정의 레이어 45 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -953,15 +940,13 @@ msgid "Use board stackup colors"
 msgstr "기판 스택업 색상 사용"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "보드 편집기 구리색 사용"
+msgstr "PCB 편집기 구리 색상 사용"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "보드 편집기 구리색 사용(openGL만 해당)"
+msgstr "구리 레이어에 PCB 편집기 레이어 색상 사용 (실시간 렌더링 전용)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1758,16 +1743,12 @@ msgid "Errors"
 msgstr "오류"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "다음 검색 및 교체"
+msgstr "로드된 파일을 교체하시겠습니까?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"확장자를 바꾸면 파일 형식이 변경됩니다.\n"
-"그래도 계속 하시겠습니까?"
+msgstr "로드된 파일이 있습니다. 교체하시겠습니까?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -4016,9 +3997,8 @@ msgid "Add"
 msgstr "추가"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "트랙 자동 삭제 기능 사용"
+msgstr "Git 추적 활성화"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
