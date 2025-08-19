@@ -31,9 +31,15 @@ public:
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
-        // Radio buttons are only grouped if they are consecutive.  Since we want padding, we need to
-        // Add padding to the first radio button
-        m_addGlobalTableEntry  = customizer.AddRadioButton( _( "Add new library to global library table" ) );
+        wxString padding;
+#ifdef __WXMAC__
+        padding = wxT( "                    " );
+        customizer.AddStaticText( wxT( "\n\n" ) );
+#endif
+
+        // Radio buttons are only grouped if they are consecutive.  If we want padding, we need to add it to the
+        // first radio button
+        m_addGlobalTableEntry  = customizer.AddRadioButton( _( "Add new library to global library table" ) + padding );
         m_addProjectTableEntry = customizer.AddRadioButton( _( "Add new library to project library table" ) );
 
         if( m_useGlobalTable )

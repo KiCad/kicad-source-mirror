@@ -406,6 +406,10 @@ public:
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
+#ifdef __WXMAC__
+        customizer.AddStaticText( wxT( "\n\n" ) );  // Increase height of static box
+#endif
+
         m_cb = customizer.AddCheckBox( _( "Do not export unconnected pads" ) );
         m_cb->SetValue( m_doNotExportUnconnectedPads );
     }

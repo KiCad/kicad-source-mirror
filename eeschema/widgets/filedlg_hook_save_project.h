@@ -29,6 +29,10 @@ public:
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
+#ifdef __WXMAC__
+        customizer.AddStaticText( wxT( "\n\n" ) );
+#endif
+
         m_cb = customizer.AddCheckBox( _( "Create a new project for this schematic" ) );
         m_cb->SetValue( true );
 

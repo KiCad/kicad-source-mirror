@@ -32,10 +32,18 @@ public:
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
-        m_simpleSaveAs         = customizer.AddRadioButton( _( "Do not update library tables" ) );
-        m_replaceTableEntry    = customizer.AddRadioButton( _( "Update existing library table entry" ) );
-        m_addGlobalTableEntry  = customizer.AddRadioButton( _( "Add new global library table entry" ) );
-        m_addProjectTableEntry = customizer.AddRadioButton( _( "Add new project library table entry" ) );
+        wxString padding;
+#ifdef __WXMAC__
+        padding = wxT( "     " );
+        customizer.AddStaticText( padding + wxT( "\n\n" ) );  // Increase height of static box
+#endif
+
+        // Radio buttons are only grouped if they are consecutive.  If we want padding, we need to add it
+        // to the radio button labels
+        m_simpleSaveAs         = customizer.AddRadioButton( _( "Do not update library tables" ) + padding );
+        m_replaceTableEntry    = customizer.AddRadioButton( _( "Update existing library table entry" ) + padding );
+        m_addGlobalTableEntry  = customizer.AddRadioButton( _( "Add new global library table entry" ) + padding );
+        m_addProjectTableEntry = customizer.AddRadioButton( _( "Add new project library table entry" ) + padding );
 
         // Note, due to windows api, wx does not actually support calling SetValue( false ) (it asserts)
         if( m_option == SYMBOL_SAVEAS_TYPE::NORMAL_SAVE_AS )
