@@ -101,6 +101,7 @@ public:
     RULE_AREAS_DATA* GetData() { return &m_areas; }
     int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );
     int RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone );
+    int RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea );
     void             QuerySheetsAndComponentClasses();
     void FindExistingRuleAreas();
     int CheckRACompatibility( ZONE *aRefZone );

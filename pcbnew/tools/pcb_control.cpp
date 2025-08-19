@@ -45,6 +45,8 @@
 #include <design_block.h>
 #include <dialogs/dialog_paste_special.h>
 #include <pcb_dimension.h>
+#include <geometry/convex_hull.h>
+#include <geometry/shape_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
 #include <layer_pairs.h>
@@ -73,6 +75,7 @@
 #include <settings/color_settings.h>
 #include <string>
 #include <tool/tool_manager.h>
+#include <tools/multichannel_tool.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <footprint_viewer_frame.h>
@@ -1374,6 +1377,175 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
     return ret;
 }
 
+int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 1;
+
+    BOARD* brd = board();
+
+    if( !brd )
+        return 1;
+
+    // Need to have a group selected and it needs to have a linked design block
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION       selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != PCB_GROUP_T )
+        return 1;
+
+    PCB_GROUP* group = static_cast<PCB_GROUP*>( selection[0] );
+
+    if( !group->HasDesignBlockLink() )
+        return 1;
+
+    std::set<EDA_ITEM*> originalItems;
+    // Apply MCT_SKIP_STRUCT to every EDA_ITEM on the board so we know what is not part of the design block
+    // Can't use SKIP_STRUCT as that is used and cleared by the temporary board appending
+    brd->Visit( []( EDA_ITEM* item, void* )
+            {
+                item->SetFlags( MCT_SKIP_STRUCT );
+                return INSPECT_RESULT::CONTINUE;
+            },
+            nullptr, GENERAL_COLLECTOR::AllBoardItems );
+
+    int ret = PlaceLinkedDesignBlock( aEvent );
+
+    // If we succeeded in placing the linked design block, we're ready to apply the multichannel tool
+    if( ret == 0 )
+    {
+        // Make a lambda for the bounding box of all the components
+        auto generateBoundingBox = [&]( std::unordered_set<EDA_ITEM*> aItems )
+            {
+                std::vector<VECTOR2I> bbCorners;
+                bbCorners.reserve( aItems.size() * 4 );
+
+                for( auto item : aItems )
+                {
+                    const BOX2I bb = item->GetBoundingBox().GetInflated( 100000 );
+                    KIGEOM::CollectBoxCorners( bb, bbCorners );
+                }
+
+                std::vector<VECTOR2I> hullVertices;
+                BuildConvexHull( hullVertices, bbCorners );
+
+                SHAPE_LINE_CHAIN hull( hullVertices );
+
+                // Make the newly computed convex hull use only 90 degree segments
+                return KIGEOM::RectifyPolygon( hull );
+            };
+
+        // Build an outline that is the entire board editor since a design block can
+        // have anything within this space
+        SHAPE_LINE_CHAIN wholeEditorOutline;
+        wholeEditorOutline.Append( VECTOR2I( -INT_MAX, -INT_MAX ) );
+        wholeEditorOutline.Append( VECTOR2I( INT_MAX, -INT_MAX ) );
+        wholeEditorOutline.Append( VECTOR2I( INT_MAX, INT_MAX ) );
+        wholeEditorOutline.Append( VECTOR2I( -INT_MAX, INT_MAX ) );
+        wholeEditorOutline.SetClosed( true );
+
+        // Build a rule area that contains all the components in the design block,
+        // meaning all items without SKIP_STRUCT set.
+        RULE_AREA dbRA;
+
+        dbRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+        dbRA.m_generateEnabled = true;
+
+        // Add all components that aren't marked MCT_SKIP_STRUCT to ra.m_components
+        std::unordered_set<EDA_ITEM*> allDbItems;
+        brd->Visit(
+                [&]( EDA_ITEM* item, void* data )
+                {
+                    if( !item->HasFlag( MCT_SKIP_STRUCT ) )
+                    {
+                        allDbItems.insert( item );
+
+                        if( item->Type() == PCB_FOOTPRINT_T )
+                            dbRA.m_components.insert( static_cast<FOOTPRINT*>( item ) );
+                    }
+                    return INSPECT_RESULT::CONTINUE;
+                },
+                nullptr, GENERAL_COLLECTOR::AllBoardItems );
+
+        dbRA.m_area = new ZONE( board() );
+        //dbRA.m_area->SetZoneName( wxString::Format( wxT( "design-block-source-%s" ), group->GetDesignBlockLibId().GetUniStringLibId() ) );
+        dbRA.m_area->SetIsRuleArea( true );
+        dbRA.m_area->SetLayerSet( LSET::AllCuMask() );
+        dbRA.m_area->SetPlacementAreaEnabled( true );
+        dbRA.m_area->SetDoNotAllowZoneFills( false );
+        dbRA.m_area->SetDoNotAllowVias( false );
+        dbRA.m_area->SetDoNotAllowTracks( false );
+        dbRA.m_area->SetDoNotAllowPads( false );
+        dbRA.m_area->SetDoNotAllowFootprints( false );
+        dbRA.m_area->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        dbRA.m_area->SetPlacementAreaSource( group->GetDesignBlockLibId().GetUniStringLibId() );
+        dbRA.m_area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+        dbRA.m_area->AddPolygon( generateBoundingBox( allDbItems ) );
+        dbRA.m_center = dbRA.m_area->Outline()->COutline( 0 ).Centre();
+
+        // Create the destination rule area for the group
+        RULE_AREA destRA;
+
+        destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+
+        // Add all the design block group footprints to the destination rule area
+        for( EDA_ITEM* item : group->GetItems() )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+
+                // If the footprint is locked, we can't place it
+                if( fp->IsLocked() )
+                {
+                    wxString msg;
+                    msg.Printf( _( "Footprint %s is locked and cannot be placed." ), fp->GetReference() );
+                    m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+                    return 1;
+                }
+
+                destRA.m_components.insert( fp );
+            }
+        }
+
+        destRA.m_area = new ZONE( board() );
+        destRA.m_area->SetZoneName(
+                wxString::Format( wxT( "design-block-dest-%s" ), group->GetDesignBlockLibId().GetUniStringLibId() ) );
+        destRA.m_area->SetIsRuleArea( true );
+        destRA.m_area->SetLayerSet( LSET::AllCuMask() );
+        destRA.m_area->SetPlacementAreaEnabled( true );
+        destRA.m_area->SetDoNotAllowZoneFills( false );
+        destRA.m_area->SetDoNotAllowVias( false );
+        destRA.m_area->SetDoNotAllowTracks( false );
+        destRA.m_area->SetDoNotAllowPads( false );
+        destRA.m_area->SetDoNotAllowFootprints( false );
+        destRA.m_area->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        destRA.m_area->SetPlacementAreaSource( group->GetName() );
+        destRA.m_area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+        destRA.m_area->AddPolygon( generateBoundingBox( group->GetItems() ) );
+        destRA.m_center = destRA.m_area->Outline()->COutline( 0 ).Centre();
+
+        // Use the multichannel tool to repeat the layout
+        MULTICHANNEL_TOOL* mct = m_toolMgr->GetTool<MULTICHANNEL_TOOL>();
+
+        ret = mct->RepeatLayout( aEvent, dbRA, destRA );
+
+        delete dbRA.m_area;
+        delete destRA.m_area;
+    }
+
+    // We're done, remove SKIP_STRUCT
+    brd->Visit( []( EDA_ITEM* item, void* )
+            {
+                item->ClearFlags( MCT_SKIP_STRUCT );
+                return INSPECT_RESULT::CONTINUE;
+            },
+            nullptr, GENERAL_COLLECTOR::AllBoardItems );
+
+    return ret;
+}
 
 int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
 {
@@ -2732,6 +2904,7 @@ void PCB_CONTROL::setTransitions()
 
     // Append control
     Go( &PCB_CONTROL::AppendDesignBlock,    PCB_ACTIONS::placeDesignBlock.MakeEvent() );
+    Go( &PCB_CONTROL::ApplyDesignBlockLayout, PCB_ACTIONS::applyDesignBlockLayout.MakeEvent() );
     Go( &PCB_CONTROL::PlaceLinkedDesignBlock, PCB_ACTIONS::placeLinkedDesignBlock.MakeEvent() );
     Go( &PCB_CONTROL::SaveToLinkedDesignBlock, PCB_ACTIONS::saveToLinkedDesignBlock.MakeEvent() );
     Go( &PCB_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );

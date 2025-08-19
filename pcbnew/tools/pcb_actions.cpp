@@ -463,6 +463,14 @@ TOOL_ACTION PCB_ACTIONS::placeLinkedDesignBlock( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_component )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::applyDesignBlockLayout( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.applyDesignBlockLayout" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Apply Design Block Layout" ) )
+        .Tooltip( _( "Apply linked design block layout to selected group" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::saveToLinkedDesignBlock( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.saveToLinkedDesignBlock" )
         .Scope( AS_GLOBAL )

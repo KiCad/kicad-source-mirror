@@ -66,7 +66,7 @@
 #define SHOW_ELEC_TYPE          (1UL << 25)   ///< Show pin electrical type
 #define BRIGHTENED              (1UL << 26)   ///< item is drawn with a bright contour
 
-// 27 is unused
+#define MCT_SKIP_STRUCT (1 << 27)    ///< flag used by the multichannel tool to mark items that should be skipped
 
 #define UR_TRANSIENT             (1UL << 28)   ///< indicates the item is owned by the undo/redo stack
 

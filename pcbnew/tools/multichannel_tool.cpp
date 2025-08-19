@@ -526,6 +526,44 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 }
 
 
+int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea )
+{
+    RULE_AREA_COMPAT_DATA compat;
+
+    if( !resolveConnectionTopology( &aRefArea, &aTargetArea, compat ) )
+    {
+        if( Pgm().IsGUI() )
+        {
+            auto errMsg = wxString::Format( _( "Rule Area topologies do not match: %s" ), compat.m_errorMsg );
+            frame()->ShowInfoBarError( errMsg, true );
+        }
+        return -1;
+    }
+
+    BOARD_COMMIT commit( GetManager(), true );
+
+    if( !copyRuleAreaContents( compat.m_matchingComponents, &commit, &aRefArea, &aTargetArea, m_areas.m_options,
+                               compat.m_affectedItems, compat.m_groupableItems ) )
+    {
+        auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
+                                        m_areas.m_refRA->m_area->GetZoneName(), aTargetArea.m_area->GetZoneName() );
+
+        commit.Revert();
+
+        if( Pgm().IsGUI() )
+        {
+            frame()->ShowInfoBarError( errMsg, true );
+        }
+
+        return -1;
+    }
+
+    commit.Push( _( "Repeat layout" ) );
+
+    return 0;
+}
+
+
 int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 {
     int totalCopied = 0;

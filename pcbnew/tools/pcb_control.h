@@ -107,6 +107,7 @@ public:
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendDesignBlock( const TOOL_EVENT& aEvent );
+    int ApplyDesignBlockLayout( const TOOL_EVENT& aEvent );
     int PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent );
     int SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent );
     int AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock = nullptr );
