@@ -92,7 +92,7 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
 
     do
     {
-        if( info.hasExplicitJunctionDot )
+        if( info.hasExplicitJunctionDot || aBreakCrossings )
             break;
 
         merged = false;
