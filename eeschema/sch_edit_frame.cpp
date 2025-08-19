@@ -2481,6 +2481,7 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
     delete m_schematic;
 
     m_schematic = aSchematic;
+    m_schematic->SetSchematicHolder( this );
 
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
     static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
