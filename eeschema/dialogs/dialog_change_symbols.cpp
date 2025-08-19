@@ -108,16 +108,16 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     updateFieldsList();
 
     // initialize controls based on m_mode in case there is no saved state yet
-    m_removeExtraBox->SetValue(         m_mode == MODE::CHANGE ? false : false );
-    m_resetEmptyFields->SetValue(       m_mode == MODE::CHANGE ? false : false );
-    m_resetFieldText->SetValue(         m_mode == MODE::CHANGE ? true  : true  );
-    m_resetFieldVisibilities->SetValue( m_mode == MODE::CHANGE ? true  : false );
-    m_resetFieldEffects->SetValue(      m_mode == MODE::CHANGE ? true  : false );
-    m_resetFieldPositions->SetValue(    m_mode == MODE::CHANGE ? true  : false );
-    m_resetAttributes->SetValue(        m_mode == MODE::CHANGE ? true  : false );
-    m_resetPinTextVisibility->SetValue( m_mode == MODE::CHANGE ? true  : false );
-    m_resetCustomPower->SetValue(       m_mode == MODE::CHANGE ? false : false );
-    m_resetAlternatePin->SetValue(      m_mode == MODE::CHANGE ? true  : false );
+    m_removeExtraBox->SetValue(         ( m_mode == MODE::CHANGE ) ? false : false );
+    m_resetEmptyFields->SetValue(       ( m_mode == MODE::CHANGE ) ? false : false );
+    m_resetFieldText->SetValue(         ( m_mode == MODE::CHANGE ) ? true  : true  );
+    m_resetFieldVisibilities->SetValue( ( m_mode == MODE::CHANGE ) ? true  : false );
+    m_resetFieldEffects->SetValue(      ( m_mode == MODE::CHANGE ) ? true  : false );
+    m_resetFieldPositions->SetValue(    ( m_mode == MODE::CHANGE ) ? true  : false );
+    m_resetAttributes->SetValue(        ( m_mode == MODE::CHANGE ) ? true  : false );
+    m_resetPinTextVisibility->SetValue( ( m_mode == MODE::CHANGE ) ? true  : false );
+    m_resetCustomPower->SetValue(       ( m_mode == MODE::CHANGE ) ? false : false );
+    m_resetAlternatePin->SetValue(      ( m_mode == MODE::CHANGE ) ? true  : false );
 
     m_messagePanel->SetLazyUpdate( true );
     m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
