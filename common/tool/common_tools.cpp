@@ -65,6 +65,11 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
         return;
 
     GRID_SETTINGS& settings = m_frame->GetWindowSettings( m_toolMgr->GetSettings() )->grid;
+
+    // Protect against misconfigured settings with no grids
+    if( settings.grids.empty() )
+        settings.grids = m_frame->config()->DefaultGridSizeList();
+
     EDA_IU_SCALE   scale = m_frame->GetIuScale();
 
     for( GRID& gridDef : settings.grids )
