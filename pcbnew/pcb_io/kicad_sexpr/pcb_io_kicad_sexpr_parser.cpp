@@ -5130,15 +5130,15 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintStackup( FOOTPRINT& aFootprint )
         case T_layer:
         {
             NeedSYMBOLorNUMBER();
-            const wxString layerName = CurText();
 
-            for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+            const auto it = m_layerIndices.find( CurStr() );
+            if( it == m_layerIndices.end() )
             {
-                if( LayerName( layer ) == layerName )
-                {
-                    layers.set( ToLAYER_ID( layer ) );
-                    break;
-                }
+                Expecting( "layer name" );
+            }
+            else
+            {
+                layers.set( it->second );
             }
 
             NeedRIGHT();
@@ -5150,6 +5150,31 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintStackup( FOOTPRINT& aFootprint )
             break;
         }
         }
+    }
+
+    // Check that the copper layers are sensible and contiguous
+    const LSET gotCuLayers = layers & LSET::AllCuMask();
+
+    // Remove this check when we support odd copper layer stackups
+    if( gotCuLayers.count() % 2 != 0 )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid stackup in footprint: "
+                                             "odd number of copper layers (%d)." ),
+                                          gotCuLayers.count() ) );
+    }
+
+    const LSET expectedCuLayers = LSET::AllCuMask( gotCuLayers.count() );
+    if( gotCuLayers != expectedCuLayers )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid stackup in footprint: "
+                                             "copper layers are not contiguous." ) ) );
+    }
+
+    if( ( layers & LSET::AllTechMask() ).count() > 0 )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid stackup in footprint: "
+                                             "technology layers are implicit in footprints and "
+                                             "should not be specified in the stackup." ) ) );
     }
 
     // Set the mode first, so that the layer count is unlocked if needed
