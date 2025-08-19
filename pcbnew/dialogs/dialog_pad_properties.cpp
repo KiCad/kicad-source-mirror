@@ -151,7 +151,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_teardropMaxHeightSetting( aParent, m_stTdMaxSize, m_tcMaxHeight, m_stMaxHeightUnits )
 {
     SetName( PAD_PROPERTIES_DLG_NAME );
-    m_isFpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( aParent ) != nullptr;
+    m_isFpEditor = aParent->GetFrameType() == FRAME_FOOTPRINT_EDITOR;
 
     m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
                                 // from the footprint editor to set default pad setup

@@ -117,6 +117,7 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aPar
         m_originalPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME ),
         m_lastPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
 {
+    m_isFpEditor = aParent->GetFrameType() == FRAME_FOOTPRINT_EDITOR;
     m_parent = aParent;
 
     m_ptr = aSettings;
