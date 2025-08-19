@@ -1237,6 +1237,9 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments( SCH_COMMIT& aCommit )
         aCommit.Added( m_busUnfold.label, screen );
         m_frame->AddCopyForRepeatItem( m_busUnfold.label );
         m_busUnfold.label->ClearEditFlags();
+
+        if( !m_wires.empty() )
+            m_frame->AddCopyForRepeatItem( m_wires[0] );
     }
     else if( !m_wires.empty() )
     {
@@ -1245,10 +1248,6 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments( SCH_COMMIT& aCommit )
 
     for( size_t ii = 1; ii < m_wires.size(); ++ii )
         m_frame->AddCopyForRepeatItem( m_wires[ii] );
-
-    // Get the last non-null wire (this is the last created segment).
-    if( !m_wires.empty() )
-        m_frame->AddCopyForRepeatItem( m_wires.back() );
 
     // Add the new wires
     for( SCH_LINE* wire : m_wires )
