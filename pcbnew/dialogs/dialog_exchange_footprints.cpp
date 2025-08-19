@@ -136,7 +136,8 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::TransferDataToWindow()
 {
     if( m_currentFootprint )
     {
-        m_newID->AppendText( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
+        if( m_updateMode )
+            m_newID->ChangeValue( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
 
         // Use ChangeValue() instead of SetValue() so we don't generate events.
         m_specifiedRef->ChangeValue( m_currentFootprint->GetReference() );
