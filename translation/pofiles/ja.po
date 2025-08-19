@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-18 07:02+0000\n"
+"PO-Revision-Date: 2025-08-19 08:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5253,11 +5253,11 @@ msgstr "ファイル履歴が消去されました。"
 
 #: common/dialogs/panel_maintenance.cpp:111
 msgid "\"Don't show again\" dialogs reset."
-msgstr "「再表示しない」ダイヤログがリセットされます。"
+msgstr "ダイヤログを「再表示しない」とした設定を戻しました。"
 
 #: common/dialogs/panel_maintenance.cpp:132
 msgid "All dialogs reset to defaults."
-msgstr "すべてのダイアログがデフォルトにリセットされます。"
+msgstr "すべてのダイアログがデフォルトにリセットされました。"
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -5277,7 +5277,7 @@ msgstr "日"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
 msgid "Clear \"Open Recent\" History"
-msgstr "最近開いたファイル履歴をクリア"
+msgstr "「最近開いたファイル」の履歴をクリア"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
@@ -5289,7 +5289,7 @@ msgstr "すべてのダイアログをデフォルトに戻す"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
 msgid "Reset All Program Settings to Defaults"
-msgstr "全てデフォルト値に戻す"
+msgstr "全ての設定をデフォルト値に戻す"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -35767,9 +35767,8 @@ msgid "Footprint 3D model path:"
 msgstr "フットプリントの3D モデル パス:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:35
-#, fuzzy
 msgid "shapes3D"
-msgstr "形状"
+msgstr "3Dシェイプ"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
 msgid "meter"
@@ -37206,9 +37205,8 @@ msgstr "接続されたレイヤーのみ"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2778
-#, fuzzy
 msgid "Start and end layers only"
-msgstr "始点, 終点, および接続されたレイヤー"
+msgstr "始点レイヤーと終点レイヤーのみ"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:184
 msgid "Set to net class / custom rule values"
@@ -38092,9 +38090,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "端面スルーホール パッド (スルーホールのみ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round through hole only)"
-msgstr "端面スルーホール パッド (スルーホールのみ)"
+msgstr "プレスフィット (ラウンド スルーホールのみ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:648
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:420
@@ -45968,9 +45965,8 @@ msgid "Castellated"
 msgstr "端面スルーホール"
 
 #: pcbnew/pad.cpp:1403
-#, fuzzy
 msgid "Press-fit"
-msgstr "プリセット"
+msgstr "プレスフィット"
 
 #: pcbnew/pad.cpp:1436
 msgid "Length in Package"
@@ -46063,32 +46059,31 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2295
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "(「基準」のプロパティはNPTHパッドに対しては意味がありません)"
+msgstr "(' 基準' プロパティはNPTHパッドに対しては意味がありません)"
 
 #: pcbnew/pad.cpp:2299
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "(「テストポイント」のプロパティはNPTHパッドに対しては意味がありません)"
+msgstr "(' テストポイント' プロパティはNPTHパッドに対しては意味がありません)"
 
 #: pcbnew/pad.cpp:2302
 msgid "('heatsink' property makes no sense on NPTH pads)"
-msgstr "(「ヒートシンク」のプロパティはNPTHパッドに対しては意味がありません)"
+msgstr "(' ヒートシンク' プロパティはNPTHパッドに対しては意味がありません)"
 
 #: pcbnew/pad.cpp:2305
 msgid "('castellated' property is for PTH pads)"
-msgstr "(端面スルーホールのプロパティは PTH パッド用です)"
+msgstr "(' 端面スルーホール' プロパティは PTH パッド用です)"
 
 #: pcbnew/pad.cpp:2308
 msgid "('BGA' property is for SMD pads)"
-msgstr "(BGAのプロパティは SMDパッド用です)"
+msgstr "(' BGA' プロパティは SMDパッド用です)"
 
 #: pcbnew/pad.cpp:2311
 msgid "('mechanical' property is for PTH pads)"
-msgstr "（「機械的」特性はPTHパッド用です）"
+msgstr "（' 機械的' プロパティはPTHパッド用です）"
 
 #: pcbnew/pad.cpp:2315
-#, fuzzy
 msgid "('press-fit' property is for PTH pads with round holes)"
-msgstr "（「機械的」特性はPTHパッド用です）"
+msgstr "（' プレスフィット' プロパティはラウンド穴付きPTHパッド用です）"
 
 #: pcbnew/pad.cpp:2331
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -46210,9 +46205,8 @@ msgid "Mechanical pad"
 msgstr "メカニカルパッド"
 
 #: pcbnew/pad.cpp:2754
-#, fuzzy
 msgid "Press-fit pad"
-msgstr "印刷ページ %d"
+msgstr "プレスフィットパッド"
 
 #: pcbnew/pad.cpp:2776
 msgid "Front, back and connected layers"
@@ -49171,9 +49165,8 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via が失われたパッドスタック '%s' を参照しています。"
 
 #: pcbnew/toolbars_footprint_editor.cpp:86 pcbnew/toolbars_pcb_editor.cpp:189
-#, fuzzy
 msgid "Selection modes"
-msgstr "選択対象をコピーしました"
+msgstr "選択モード"
 
 #: pcbnew/toolbars_footprint_editor.cpp:105 pcbnew/toolbars_pcb_editor.cpp:218
 msgid "Dimension objects"
@@ -51213,14 +51206,12 @@ msgstr ""
 "クスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1290
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "3D モデルを選択"
+msgstr "3Dモデルを集めて埋め込む"
 
 #: pcbnew/tools/pcb_actions.cpp:1291
-#, fuzzy
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "メイン基板上からフットプリントのソースを見つけました"
+msgstr "フットプリントの3Dモデルを集めて、基板に埋め込みます"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Switch Track Width to Next"
