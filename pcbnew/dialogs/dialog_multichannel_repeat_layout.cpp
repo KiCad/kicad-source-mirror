@@ -39,7 +39,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
 {
     m_board = aFrame->GetBoard();
     auto data = m_parentTool->GetData();
-    m_refRAName->SetLabelText( data->m_refRA->m_area->GetZoneName() );
+    m_refRAName->SetLabelText( data->m_refRA->m_zone->GetZoneName() );
 
     for( auto& ra : data->m_compatMap )
     {

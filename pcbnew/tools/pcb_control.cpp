@@ -1472,22 +1472,22 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                 },
                 nullptr, GENERAL_COLLECTOR::AllBoardItems );
 
-        dbRA.m_area = new ZONE( board() );
+        dbRA.m_zone = new ZONE( board() );
         //dbRA.m_area->SetZoneName( wxString::Format( wxT( "design-block-source-%s" ), group->GetDesignBlockLibId().GetUniStringLibId() ) );
-        dbRA.m_area->SetIsRuleArea( true );
-        dbRA.m_area->SetLayerSet( LSET::AllCuMask() );
-        dbRA.m_area->SetPlacementAreaEnabled( true );
-        dbRA.m_area->SetDoNotAllowZoneFills( false );
-        dbRA.m_area->SetDoNotAllowVias( false );
-        dbRA.m_area->SetDoNotAllowTracks( false );
-        dbRA.m_area->SetDoNotAllowPads( false );
-        dbRA.m_area->SetDoNotAllowFootprints( false );
-        dbRA.m_area->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
-        dbRA.m_area->SetPlacementAreaSource( group->GetDesignBlockLibId().GetUniStringLibId() );
-        dbRA.m_area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
-        dbRA.m_area->AddPolygon( generateBoundingBox( allDbItems ) );
-        dbRA.m_center = dbRA.m_area->Outline()->COutline( 0 ).Centre();
-        tempCommit.Add( dbRA.m_area );
+        dbRA.m_zone->SetIsRuleArea( true );
+        dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+        dbRA.m_zone->SetPlacementAreaEnabled( true );
+        dbRA.m_zone->SetDoNotAllowZoneFills( false );
+        dbRA.m_zone->SetDoNotAllowVias( false );
+        dbRA.m_zone->SetDoNotAllowTracks( false );
+        dbRA.m_zone->SetDoNotAllowPads( false );
+        dbRA.m_zone->SetDoNotAllowFootprints( false );
+        dbRA.m_zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        dbRA.m_zone->SetPlacementAreaSource( group->GetDesignBlockLibId().GetUniStringLibId() );
+        dbRA.m_zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+        dbRA.m_zone->AddPolygon( generateBoundingBox( allDbItems ) );
+        dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
+        tempCommit.Add( dbRA.m_zone );
 
         // Create the destination rule area for the group
         RULE_AREA destRA;
@@ -1514,23 +1514,23 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
             }
         }
 
-        destRA.m_area = new ZONE( board() );
-        destRA.m_area->SetZoneName(
+        destRA.m_zone = new ZONE( board() );
+        destRA.m_zone->SetZoneName(
                 wxString::Format( wxT( "design-block-dest-%s" ), group->GetDesignBlockLibId().GetUniStringLibId() ) );
-        destRA.m_area->SetIsRuleArea( true );
-        destRA.m_area->SetLayerSet( LSET::AllCuMask() );
-        destRA.m_area->SetPlacementAreaEnabled( true );
-        destRA.m_area->SetDoNotAllowZoneFills( false );
-        destRA.m_area->SetDoNotAllowVias( false );
-        destRA.m_area->SetDoNotAllowTracks( false );
-        destRA.m_area->SetDoNotAllowPads( false );
-        destRA.m_area->SetDoNotAllowFootprints( false );
-        destRA.m_area->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
-        destRA.m_area->SetPlacementAreaSource( group->GetName() );
-        destRA.m_area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
-        destRA.m_area->AddPolygon( generateBoundingBox( group->GetItems() ) );
-        destRA.m_center = destRA.m_area->Outline()->COutline( 0 ).Centre();
-        tempCommit.Add( dbRA.m_area );
+        destRA.m_zone->SetIsRuleArea( true );
+        destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+        destRA.m_zone->SetPlacementAreaEnabled( true );
+        destRA.m_zone->SetDoNotAllowZoneFills( false );
+        destRA.m_zone->SetDoNotAllowVias( false );
+        destRA.m_zone->SetDoNotAllowTracks( false );
+        destRA.m_zone->SetDoNotAllowPads( false );
+        destRA.m_zone->SetDoNotAllowFootprints( false );
+        destRA.m_zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        destRA.m_zone->SetPlacementAreaSource( group->GetName() );
+        destRA.m_zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+        destRA.m_zone->AddPolygon( generateBoundingBox( group->GetItems() ) );
+        destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
+        tempCommit.Add( dbRA.m_zone );
 
         // Use the multichannel tool to repeat the layout
         MULTICHANNEL_TOOL* mct = m_toolMgr->GetTool<MULTICHANNEL_TOOL>();
@@ -1540,8 +1540,8 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         // Get rid of the temporary design blocks and rule areas
         tempCommit.Revert();
 
-        delete dbRA.m_area;
-        delete destRA.m_area;
+        delete dbRA.m_zone;
+        delete destRA.m_zone;
     }
 
     // We're done, remove SKIP_STRUCT

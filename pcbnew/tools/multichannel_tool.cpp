@@ -384,7 +384,7 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
         RULE_AREA area;
 
         area.m_existsAlready = true;
-        area.m_area = zone;
+        area.m_zone = zone;
 
         identifyComponentsInRuleArea( zone, area.m_components );
 
@@ -500,7 +500,7 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
-        if( ra.m_area == aRefZone )
+        if( ra.m_zone == aRefZone )
         {
             m_areas.m_refRA = &ra;
             break;
@@ -514,7 +514,7 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
-        if( ra.m_area == m_areas.m_refRA->m_area )
+        if( ra.m_zone == m_areas.m_refRA->m_zone )
             continue;
 
         m_areas.m_compatMap[&ra] = RULE_AREA_COMPAT_DATA();
@@ -546,7 +546,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
                                compat.m_affectedItems, compat.m_groupableItems ) )
     {
         auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                                        m_areas.m_refRA->m_area->GetZoneName(), aTargetArea.m_area->GetZoneName() );
+                                        m_areas.m_refRA->m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
 
         commit.Revert();
 
@@ -585,9 +585,10 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
                                    m_areas.m_options, targetArea.second.m_affectedItems,
                                    targetArea.second.m_groupableItems ) )
         {
-            auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                                            m_areas.m_refRA->m_area->GetZoneName(),
-                                            targetArea.first->m_area->GetZoneName() );
+            auto errMsg = wxString::Format(
+                    _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
+                    m_areas.m_refRA->m_zone->GetZoneName(),
+                    targetArea.first->m_zone->GetZoneName() );
 
             commit.Revert();
 
@@ -677,13 +678,13 @@ int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&            
 
     bool restoreBlankName = false;
 
-    if( aRA->m_area->GetZoneName().IsEmpty() )
+    if( aRA->m_zone->GetZoneName().IsEmpty() )
     {
         restoreBlankName = true;
-        aRA->m_area->SetZoneName( aRA->m_area->m_Uuid.AsString() );
+        aRA->m_zone->SetZoneName( aRA->m_zone->m_Uuid.AsString() );
     }
 
-    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRA->m_area->GetZoneName() );
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRA->m_zone->GetZoneName() );
 
     auto testAndAdd =
             [&]( BOARD_CONNECTED_ITEM* aItem )
@@ -708,7 +709,7 @@ int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&            
     }
 
     if( restoreBlankName )
-        aRA->m_area->SetZoneName( wxEmptyString );
+        aRA->m_zone->SetZoneName( wxEmptyString );
 
     return count;
 }
@@ -720,8 +721,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                                               std::unordered_set<BOARD_ITEM*>& aGroupableItems )
 {
     // copy RA shapes first
-    SHAPE_LINE_CHAIN refOutline = aRefArea->m_area->Outline()->COutline( 0 );
-    SHAPE_LINE_CHAIN targetOutline = aTargetArea->m_area->Outline()->COutline( 0 );
+    SHAPE_LINE_CHAIN refOutline = aRefArea->m_zone->Outline()->COutline( 0 );
+    SHAPE_LINE_CHAIN targetOutline = aTargetArea->m_zone->Outline()->COutline( 0 );
 
     FOOTPRINT* targetAnchorFp = nullptr;
     VECTOR2I disp = aTargetArea->m_center - aRefArea->m_center;
@@ -761,10 +762,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
     auto connectivity = board()->GetConnectivity();
 
-    aCommit->Modify( aTargetArea->m_area );
+    aCommit->Modify( aTargetArea->m_zone );
 
-    aAffectedItems.insert( aTargetArea->m_area );
-    aGroupableItems.insert( aTargetArea->m_area );
+    aAffectedItems.insert( aTargetArea->m_zone );
+    aGroupableItems.insert( aTargetArea->m_zone );
 
     if( aOpts.m_copyRouting )
     {
@@ -798,7 +799,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             if( aCommit->GetStatus( item ) != 0 )
                 continue;
 
-            if( aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+            if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
             {
                 aAffectedItems.insert( item );
                 aCommit->Remove( item );
@@ -811,10 +812,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 continue;
             if( aOpts.m_connectedRoutingOnly && !refc.contains( item->GetNetCode() ) )
                 continue;
-            if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+            if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
-            if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+            if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
             BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Clone() );
@@ -835,8 +836,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         std::set<BOARD_ITEM*> sourceItems;
         std::set<BOARD_ITEM*> targetItems;
 
-        findOtherItemsInRuleArea( aRefArea->m_area, sourceItems );
-        findOtherItemsInRuleArea( aTargetArea->m_area, targetItems );
+        findOtherItemsInRuleArea( aRefArea->m_zone, sourceItems );
+        findOtherItemsInRuleArea( aTargetArea->m_zone, targetItems );
 
         for( BOARD_ITEM* item : targetItems )
         {
@@ -852,7 +853,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
             if( item->Type() != PCB_ZONE_T )
             {
-                if( aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 {
                     aAffectedItems.insert( item );
                     aCommit->Remove( item );
@@ -868,7 +869,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
                 for( const PCB_LAYER_ID& layer : zoneLayers )
                 {
-                    if( !aTargetArea->m_area->GetLayerSet().Contains( layer ) )
+                    if( !aTargetArea->m_zone->GetLayerSet().Contains( layer ) )
                         layerMismatch = true;
                 }
 
@@ -892,10 +893,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
             if( item->Type() != PCB_ZONE_T )
             {
-                if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
-
-                if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
 
                 if( item->Type() == PCB_GROUP_T )
@@ -913,8 +913,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
                 for( const PCB_LAYER_ID& layer : zoneLayers )
                 {
-                    if( !aRefArea->m_area->GetLayerSet().Contains( layer )
-                        || !aTargetArea->m_area->GetLayerSet().Contains( layer ) )
+                    if( !aRefArea->m_zone->GetLayerSet().Contains( layer )
+                        || !aTargetArea->m_zone->GetLayerSet().Contains( layer ) )
                     {
                         layerMismatch = true;
                     }
@@ -949,13 +949,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             FOOTPRINT* refFP = fpPair.first;
             FOOTPRINT* targetFP = fpPair.second;
 
-            if( !aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
+            if( !aRefArea->m_zone->GetLayerSet().Contains( refFP->GetLayer() ) )
             {
                 wxLogTrace( traceMultichannelTool, wxT( "discard ref:%s (ref layer)\n" ),
                             refFP->GetReference() );
                 continue;
             }
-            if( !aTargetArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
+            if( !aTargetArea->m_zone->GetLayerSet().Contains( refFP->GetLayer() ) )
             {
                 wxLogTrace( traceMultichannelTool, wxT( "discard ref:%s (target layer)\n" ),
                             refFP->GetReference() );
@@ -996,10 +996,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         }
     }
 
-    aTargetArea->m_area->RemoveAllContours();
-    aTargetArea->m_area->AddPolygon( newTargetOutline );
-    aTargetArea->m_area->UnHatchBorder();
-    aTargetArea->m_area->HatchBorder();
+    aTargetArea->m_zone->RemoveAllContours();
+    aTargetArea->m_zone->AddPolygon( newTargetOutline );
+    aTargetArea->m_zone->UnHatchBorder();
+    aTargetArea->m_zone->HatchBorder();
 
     return true;
 }
@@ -1173,7 +1173,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
                                 ra.m_groupName, zone->GetZoneName() );
                 }
 
-                ra.m_oldArea = zone;
+                ra.m_oldZone = zone;
                 ra.m_existsAlready = true;
             }
         }
@@ -1238,10 +1238,12 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
 
         if( ra.m_existsAlready )
-            commit.Remove( ra.m_oldArea );
+        {
+            commit.Remove( ra.m_oldZone );
+        }
 
-        ra.m_area = newZone.release();
-        commit.Add( ra.m_area );
+        ra.m_zone = newZone.release();
+        commit.Add( ra.m_zone );
     }
 
     // fixme: handle corner cases where the items belonging to a Rule Area already
@@ -1262,7 +1264,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             std::copy( ra.m_components.begin(), ra.m_components.end(), std::inserter( toPrune, toPrune.begin() ) );
 
             if( ra.m_existsAlready )
-                toPrune.insert( ra.m_area );
+                toPrune.insert( ra.m_zone );
 
             pruneExistingGroups( commit, toPrune );
 
@@ -1270,8 +1272,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
             commit.Add( group );
 
-            commit.Modify( ra.m_area );
-            group->AddItem( ra.m_area );
+            commit.Modify( ra.m_zone );
+            group->AddItem( ra.m_zone );
 
             for( FOOTPRINT* fp : ra.m_components )
             {
