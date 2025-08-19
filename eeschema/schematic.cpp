@@ -1279,7 +1279,7 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 
                     aCommit->Added( mergedLine, aScreen );
 
-                    if( firstLine->IsSelected() || secondLine->IsSelected() )
+                    if( selectionTool && ( firstLine->IsSelected() || secondLine->IsSelected() ) )
                         selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
 
                     break;
