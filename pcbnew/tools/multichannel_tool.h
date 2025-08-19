@@ -38,13 +38,6 @@
 #include <reporter.h>
 #include <zone_settings.h>
 
-enum class REPEAT_LAYOUT_EDGE_MODE
-{
-    INSIDE = 0,
-    TOUCHING,
-    CLIP
-};
-
 struct REPEAT_LAYOUT_OPTIONS
 {
     bool                    m_copyRouting = true;
@@ -52,20 +45,14 @@ struct REPEAT_LAYOUT_OPTIONS
     bool                    m_copyPlacement = true;
     bool                    m_copyOtherItems = true;
     bool                    m_groupItems = false;
-    bool                    m_moveOffRAComponents = true;
     bool                    m_includeLockedItems = true;
-    bool                    m_keepOldRouting = false;
-    bool                    m_copyOnlyMatchingRAShapes = false;
     FOOTPRINT*              m_anchorFp = nullptr;
-    REPEAT_LAYOUT_EDGE_MODE m_edgeMode = REPEAT_LAYOUT_EDGE_MODE::INSIDE;
 };
-
 
 struct RULE_AREA;
 
 struct RULE_AREA_COMPAT_DATA
 {
-    RULE_AREA*                m_refArea = nullptr;
     bool                      m_isOk = false;
     bool                      m_doCopy = false;
     wxString                  m_errorMsg;
@@ -87,17 +74,8 @@ struct RULE_AREA
     wxString                  m_sheetName;
     wxString                  m_ruleName;
     wxString                  m_componentClass;
-    KIID                      m_group;
     wxString                  m_groupName;
     VECTOR2I                  m_center;
-};
-
-
-struct RA_SHEET
-{
-    bool     m_generateEnabled = false;
-    wxString m_sheetPath;
-    wxString m_sheetName;
 };
 
 

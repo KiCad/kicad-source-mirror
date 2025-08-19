@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -112,11 +112,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_cbCopyOtherItems->SetToolTip( _("Copy text, shapes, zones, and other items inside the source rule area") );
 
 	bSizer13->Add( m_cbCopyOtherItems, 0, wxALL, 5 );
-
-	m_cbIncludeOffRAComponents = new wxCheckBox( this, wxID_ANY, _("Include footprints outside the reference rule area"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbIncludeOffRAComponents->Hide();
-
-	bSizer13->Add( m_cbIncludeOffRAComponents, 0, wxALL, 5 );
 
 	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group items with their target rule areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer13->Add( m_cbGroupItems, 0, wxALL, 5 );

@@ -107,7 +107,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     m_cbGroupItems->SetValue( data->m_options.m_groupItems );
     m_cbCopyOtherItems->SetValue( data->m_options.m_copyOtherItems );
     m_cbIncludeLockedComponents->SetValue( data->m_options.m_includeLockedItems );
-    m_cbIncludeOffRAComponents->SetValue( data->m_options.m_moveOffRAComponents );
 
     Layout();
     SetupStandardButtons();
@@ -137,7 +136,6 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
     data->m_options.m_copyOtherItems = m_cbCopyOtherItems->GetValue();
     data->m_options.m_groupItems = m_cbGroupItems->GetValue();
     data->m_options.m_includeLockedItems = m_cbIncludeLockedComponents->GetValue();
-    data->m_options.m_moveOffRAComponents = m_cbIncludeOffRAComponents->GetValue();
 
     if( m_refAnchorFp->GetString( m_refAnchorFp->GetSelection() ) == "" )
     {

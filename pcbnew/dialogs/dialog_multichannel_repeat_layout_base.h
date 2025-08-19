@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,7 +44,6 @@ class DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbCopyRouting;
 		wxCheckBox* m_cbCopyOnlyConnectedRouting;
 		wxCheckBox* m_cbCopyOtherItems;
-		wxCheckBox* m_cbIncludeOffRAComponents;
 		wxCheckBox* m_cbGroupItems;
 		wxCheckBox* m_cbIncludeLockedComponents;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
