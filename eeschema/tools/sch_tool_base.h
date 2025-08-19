@@ -39,6 +39,7 @@
 #include <pin_layout_cache.h>
 #include <sch_commit.h>
 #include <tool/picker_tool.h>
+#include <view/view_controls.h>
 
 class SCH_SELECTION;
 
