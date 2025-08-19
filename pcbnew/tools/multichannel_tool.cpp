@@ -74,9 +74,12 @@ void MULTICHANNEL_TOOL::setTransitions()
 }
 
 
-bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRuleArea,
-                                                      std::set<FOOTPRINT*>& aComponents )
+bool MULTICHANNEL_TOOL::findComponentsInRuleArea( RULE_AREA*            aRuleArea,
+                                                  std::set<FOOTPRINT*>& aComponents )
 {
+    if( !aRuleArea || !aRuleArea->m_zone )
+        return false;
+
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
     PCBEXPR_UCODE    ucode;
     PCBEXPR_CONTEXT  ctx, preflightCtx;
@@ -92,20 +95,20 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
     compiler.SetErrorCallback( reportError );
     //compiler.SetDebugReporter( m_reporter );
 
-    wxLogTrace( traceMultichannelTool, wxT( "rule area '%s'"), aRuleArea->GetZoneName() );
+    wxLogTrace( traceMultichannelTool, wxT( "rule area '%s'" ), aRuleArea->m_zone->GetZoneName() );
 
     wxString ruleText;
 
-    switch( aRuleArea->GetPlacementAreaSourceType() )
+    switch( aRuleArea->m_zone->GetPlacementAreaSourceType() )
     {
     case PLACEMENT_SOURCE_T::SHEETNAME:
-        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + aRuleArea->GetPlacementAreaSource() + wxT( "')" );
+        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
         break;
     case PLACEMENT_SOURCE_T::COMPONENT_CLASS:
-        ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->GetPlacementAreaSource() + wxT( "')" );
+        ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
         break;
     case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
-        ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->GetPlacementAreaSource() + wxT( "')" );
+        ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
         break;
     }
 
@@ -133,8 +136,11 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 }
 
 
-bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOARD_ITEM*>& aItems )
+bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_ITEM*>& aItems )
 {
+    if( !aRuleArea || !aRuleArea->m_zone )
+        return false;
+
     std::vector<BOARD_ITEM*> result;
 
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
@@ -153,18 +159,18 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
 
     bool restoreBlankName = false;
 
-    if( aRuleArea->GetZoneName().IsEmpty() )
+    if( aRuleArea->m_zone->GetZoneName().IsEmpty() )
     {
         restoreBlankName = true;
-        aRuleArea->SetZoneName( aRuleArea->m_Uuid.AsString() );
+        aRuleArea->m_zone->SetZoneName( aRuleArea->m_zone->m_Uuid.AsString() );
     }
 
-    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRuleArea->GetZoneName() );
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRuleArea->m_zone->GetZoneName() );
 
     if( !compiler.Compile( ruleText, &ucode, &preflightCtx ) )
     {
         if( restoreBlankName )
-            aRuleArea->SetZoneName( wxEmptyString );
+            aRuleArea->m_zone->SetZoneName( wxEmptyString );
 
         return false;
     }
@@ -181,7 +187,7 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
 
     for( ZONE* zone : board()->Zones() )
     {
-        if( zone == aRuleArea )
+        if( zone == aRuleArea->m_zone )
             continue;
 
         testAndAdd( zone );
@@ -214,7 +220,7 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
     }
 
     if( restoreBlankName )
-        aRuleArea->SetZoneName( wxEmptyString );
+        aRuleArea->m_zone->SetZoneName( wxEmptyString );
 
     return true;
 }
@@ -385,11 +391,11 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
 
         area.m_existsAlready = true;
         area.m_zone = zone;
-
-        identifyComponentsInRuleArea( zone, area.m_components );
-
         area.m_ruleName = zone->GetZoneName();
         area.m_center = zone->Outline()->COutline( 0 ).Centre();
+
+        findComponentsInRuleArea( &area, area.m_components );
+
         m_areas.m_areas.push_back( area );
 
         wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"), area.m_ruleName, (int) area.m_components.size() );
@@ -652,11 +658,9 @@ wxString MULTICHANNEL_TOOL::stripComponentIndex( const wxString& aRef ) const
 }
 
 
-int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&             aOutput,
+int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_CONNECTED_ITEM*>& aOutput,
                                               std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
-                                              const SHAPE_POLY_SET&        aRAPoly,
-                                              RULE_AREA*                   aRA,
-                                              const REPEAT_LAYOUT_OPTIONS& aOpts ) const
+                                              const SHAPE_POLY_SET& aRAPoly, const REPEAT_LAYOUT_OPTIONS& aOpts ) const
 {
     // The user also will consider tracks and vias that are inside the source area but
     // not connected to any of the source pads to count as "routing" (e.g. stitching vias)
@@ -678,13 +682,13 @@ int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&            
 
     bool restoreBlankName = false;
 
-    if( aRA->m_zone->GetZoneName().IsEmpty() )
+    if( aRuleArea->m_zone->GetZoneName().IsEmpty() )
     {
         restoreBlankName = true;
-        aRA->m_zone->SetZoneName( aRA->m_zone->m_Uuid.AsString() );
+        aRuleArea->m_zone->SetZoneName( aRuleArea->m_zone->m_Uuid.AsString() );
     }
 
-    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRA->m_zone->GetZoneName() );
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRuleArea->m_zone->GetZoneName() );
 
     auto testAndAdd =
             [&]( BOARD_CONNECTED_ITEM* aItem )
@@ -709,7 +713,7 @@ int MULTICHANNEL_TOOL::findRouting( std::set<BOARD_CONNECTED_ITEM*>&            
     }
 
     if( restoreBlankName )
-        aRA->m_zone->SetZoneName( wxEmptyString );
+        aRuleArea->m_zone->SetZoneName( wxEmptyString );
 
     return count;
 }
@@ -786,8 +790,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 targc.insert( pad->GetNetCode() );
         }
 
-        findRouting( targetRouting, connectivity, targetPoly, aTargetArea, aOpts );
-        findRouting( refRouting, connectivity, refPoly, aRefArea, aOpts );
+        findRoutingInRuleArea( aTargetArea, targetRouting, connectivity, targetPoly, aOpts );
+        findRoutingInRuleArea( aRefArea, refRouting, connectivity, refPoly, aOpts );
 
         for( BOARD_CONNECTED_ITEM* item : targetRouting )
         {
@@ -836,8 +840,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         std::set<BOARD_ITEM*> sourceItems;
         std::set<BOARD_ITEM*> targetItems;
 
-        findOtherItemsInRuleArea( aRefArea->m_zone, sourceItems );
-        findOtherItemsInRuleArea( aTargetArea->m_zone, targetItems );
+        findOtherItemsInRuleArea( aRefArea, sourceItems );
+        findOtherItemsInRuleArea( aTargetArea, targetItems );
 
         for( BOARD_ITEM* item : targetItems )
         {
@@ -1145,7 +1149,10 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             continue;
 
         std::set<FOOTPRINT*> components;
-        identifyComponentsInRuleArea( zone, components );
+        RULE_AREA            zoneRA;
+        zoneRA.m_zone = zone;
+        zoneRA.m_sourceType = zone->GetPlacementAreaSourceType();
+        findComponentsInRuleArea( &zoneRA, components );
 
         if( components.empty() )
             continue;
