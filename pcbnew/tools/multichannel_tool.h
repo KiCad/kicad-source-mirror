@@ -121,10 +121,9 @@ private:
     int  findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_CONNECTED_ITEM*>& aOutput,
                                 std::shared_ptr<CONNECTIVITY_DATA> aConnectivity, const SHAPE_POLY_SET& aRAPoly,
                                 const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
-    bool copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
-                               RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts,
-                               std::unordered_set<BOARD_ITEM*>& aAffectedItems,
-                               std::unordered_set<BOARD_ITEM*>& aGroupableItems );
+    bool copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
+                               BOARD_COMMIT* aCommit, REPEAT_LAYOUT_OPTIONS aOpts,
+                               RULE_AREA_COMPAT_DATA& aCompatData );
 
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
 

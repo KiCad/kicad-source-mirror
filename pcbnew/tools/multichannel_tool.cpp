@@ -549,8 +549,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
     BOARD_COMMIT commit( GetManager(), true );
 
-    if( !copyRuleAreaContents( compat.m_matchingComponents, &commit, &aRefArea, &aTargetArea, m_areas.m_options,
-                               compat.m_affectedItems, compat.m_groupableItems ) )
+    if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, m_areas.m_options, compat ) )
     {
         auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
                                         m_areas.m_refRA->m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
@@ -588,9 +587,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         if( !targetArea.second.m_isOk )
             continue;
 
-        if( !copyRuleAreaContents( targetArea.second.m_matchingComponents, &commit, m_areas.m_refRA, targetArea.first,
-                                   m_areas.m_options, targetArea.second.m_affectedItems,
-                                   targetArea.second.m_groupableItems ) )
+        if( !copyRuleAreaContents( m_areas.m_refRA, targetArea.first, &commit, m_areas.m_options, targetArea.second ) )
         {
             auto errMsg = wxString::Format(
                     _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
@@ -720,10 +717,9 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
 }
 
 
-bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit,
-                                              RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts,
-                                              std::unordered_set<BOARD_ITEM*>& aAffectedItems,
-                                              std::unordered_set<BOARD_ITEM*>& aGroupableItems )
+bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
+                                              BOARD_COMMIT* aCommit, REPEAT_LAYOUT_OPTIONS aOpts,
+                                              RULE_AREA_COMPAT_DATA& aCompatData )
 {
     // copy RA shapes first
     SHAPE_LINE_CHAIN refOutline = aRefArea->m_zone->Outline()->COutline( 0 );
@@ -735,7 +731,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
     if( aOpts.m_anchorFp )
     {
-        for( auto& fpPair : aMatches )
+        for( auto& fpPair : aCompatData.m_matchingComponents )
         {
             if( fpPair.first->GetReference() == aOpts.m_anchorFp->GetReference() )
                 targetAnchorFp = fpPair.second;
@@ -769,20 +765,21 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
     aCommit->Modify( aTargetArea->m_zone );
 
-    aAffectedItems.insert( aTargetArea->m_zone );
-    aGroupableItems.insert( aTargetArea->m_zone );
+    aCompatData.m_affectedItems.insert( aTargetArea->m_zone );
+    aCompatData.m_groupableItems.insert( aTargetArea->m_zone );
 
     if( aOpts.m_copyRouting )
     {
         std::set<BOARD_CONNECTED_ITEM*> refRouting;
         std::set<BOARD_CONNECTED_ITEM*> targetRouting;
 
-        wxLogTrace( traceMultichannelTool, wxT( "copying routing: %d fps\n" ), (int) aMatches.size() );
+        wxLogTrace( traceMultichannelTool, wxT( "copying routing: %d fps\n" ),
+                    (int) aCompatData.m_matchingComponents.size() );
 
         std::set<int> refc;
         std::set<int> targc;
 
-        for( auto& fpPair : aMatches )
+        for( auto& fpPair : aCompatData.m_matchingComponents )
         {
             for( PAD* pad : fpPair.first->Pads() )
                 refc.insert( pad->GetNetCode() );
@@ -806,7 +803,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
             if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
             {
-                aAffectedItems.insert( item );
+                aCompatData.m_affectedItems.insert( item );
                 aCommit->Remove( item );
             }
         }
@@ -825,13 +822,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
             BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Clone() );
 
-            fixupNet( item, copied, aMatches );
+            fixupNet( item, copied, aCompatData.m_matchingComponents );
 
             copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
             copied->SetParentGroup( nullptr );
             const_cast<KIID&>( copied->m_Uuid ) = KIID();
-            aGroupableItems.insert( copied );
+            aCompatData.m_groupableItems.insert( copied );
             aCommit->Add( copied );
         }
     }
@@ -860,7 +857,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             {
                 if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 {
-                    aAffectedItems.insert( item );
+                    aCompatData.m_affectedItems.insert( item );
                     aCommit->Remove( item );
                 }
             }
@@ -880,7 +877,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
                 if( !layerMismatch )
                 {
-                    aAffectedItems.insert( zone );
+                    aCompatData.m_affectedItems.insert( zone );
                     aCommit->Remove( zone );
                 }
             }
@@ -929,7 +926,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                     continue;
 
                 ZONE* targetZone = static_cast<ZONE*>( item->Clone() );
-                fixupNet( zone, targetZone, aMatches );
+                fixupNet( zone, targetZone, aCompatData.m_matchingComponents );
 
                 copied = targetZone;
             }
@@ -941,7 +938,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 const_cast<KIID&>( copied->m_Uuid ) = KIID();
                 copied->Rotate( VECTOR2( 0, 0 ), rot );
                 copied->Move( disp );
-                aGroupableItems.insert( copied );
+                aCompatData.m_groupableItems.insert( copied );
                 aCommit->Add( copied );
             }
         }
@@ -949,7 +946,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
     if( aOpts.m_copyPlacement )
     {
-        for( auto& fpPair : aMatches )
+        for( auto& fpPair : aCompatData.m_matchingComponents )
         {
             FOOTPRINT* refFP = fpPair.first;
             FOOTPRINT* targetFP = fpPair.second;
@@ -996,8 +993,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 targetField->SetIsKnockout( refField->IsKnockout() );
             }
 
-            aAffectedItems.insert( targetFP );
-            aGroupableItems.insert( targetFP );
+            aCompatData.m_affectedItems.insert( targetFP );
+            aCompatData.m_groupableItems.insert( targetFP );
         }
     }
 
