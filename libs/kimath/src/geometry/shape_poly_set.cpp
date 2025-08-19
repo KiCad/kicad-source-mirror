@@ -3204,7 +3204,6 @@ const std::vector<SEG> SHAPE_POLY_SET::GenerateHatchLines( const std::vector<dou
         for( int64_t a = min_a; a < max_a; a += aSpacing )
         {
             pointbuffer.clear();
-            SEG hatch_line( VECTOR2I( 0, a ), VECTOR2I( 1, a + slope ) );
 
             // Iterate through all vertices
             for( auto iterator = CIterateSegmentsWithHoles(); iterator; iterator++ )
@@ -3230,35 +3229,49 @@ const std::vector<SEG> SHAPE_POLY_SET::GenerateHatchLines( const std::vector<dou
                 sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
 
             // creates lines or short segments inside the complex polygon
-            for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip += 2 )
+            for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip++ )
             {
-                int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
+                const VECTOR2I& p1 = pointbuffer[ip];
+                const VECTOR2I& p2 = pointbuffer[ip + 1];
 
-                // Push only one line for diagonal hatch or for small lines < twice the line
-                // length; else push 2 small lines
-                if( aLineLength == -1 || std::abs( dx ) < 2 * aLineLength )
-                {
-                    hatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ ip + 1] ) );
-                }
-                else
-                {
-                    double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
-                    slope = dy / dx;
+                // Avoid duplicated intersections or segments
+                if( p1 == p2 )
+                    continue;
 
-                    if( dx > 0 )
-                        dx = aLineLength;
+                SEG candidate( p1, p2 );
+
+                VECTOR2I mid( ( candidate.A.x + candidate.B.x ) / 2, ( candidate.A.y + candidate.B.y ) / 2 );
+
+                // Check if segment is inside the polygon by checking its middle point
+                if( containsSingle( mid, 0, 1, true ) )
+                {
+                    int dx = p2.x - p1.x;
+
+                    // Push only one line for diagonal hatch or for small lines < twice
+                    // the line length; else push 2 small lines
+                    if( aLineLength == -1 || std::abs( dx ) < 2 * aLineLength )
+                    {
+                        hatchLines.emplace_back( candidate );
+                    }
                     else
-                        dx = -aLineLength;
+                    {
+                        double dy = p2.y - p1.y;
+                        slope = dy / dx;
 
-                    int x1 = KiROUND( pointbuffer[ip].x + dx );
-                    int x2 = KiROUND( pointbuffer[ip + 1].x - dx );
-                    int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
-                    int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
+                        if( dx > 0 )
+                            dx = aLineLength;
+                        else
+                            dx = -aLineLength;
 
-                    hatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y, x1, y1 ) );
+                        int x1 = KiROUND( p1.x + dx );
+                        int x2 = KiROUND( p2.x - dx );
+                        int y1 = KiROUND( p1.y + dx * slope );
+                        int y2 = KiROUND( p2.y - dx * slope );
 
-                    hatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2,
-                                                  y2 ) );
+                        hatchLines.emplace_back( SEG( p1.x, p1.y, x1, y1 ) );
+
+                        hatchLines.emplace_back( SEG( p2.x, p2.y, x2, y2 ) );
+                    }
                 }
             }
         }
