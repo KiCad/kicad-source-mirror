@@ -1075,15 +1075,16 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
+        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+
         // If we move items away from a junction, we _may_ want to add a junction there
         // to denote the state.
         for( const DANGLING_END_ITEM& it : internalPoints )
         {
             if( m_frame->GetScreen()->IsExplicitJunctionNeeded( it.GetPosition()) )
-                m_frame->AddJunction( aCommit, m_frame->GetScreen(), it.GetPosition() );
+                lwbTool->AddJunction( aCommit, m_frame->GetScreen(), it.GetPosition() );
         }
 
-        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
         lwbTool->TrimOverLappingWires( aCommit, &selectionCopy );
         lwbTool->AddJunctionsIfNeeded( aCommit, &selectionCopy );
 

@@ -1288,7 +1288,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments( SCH_COMMIT& aCommit )
     for( const VECTOR2I& pt : new_ends )
     {
         if( m_frame->GetScreen()->IsExplicitJunctionNeeded( pt ) )
-            m_frame->AddJunction( &aCommit, m_frame->GetScreen(), pt );
+            AddJunction( &aCommit, m_frame->GetScreen(), pt );
     }
 
     if( m_busUnfold.in_progress )
@@ -1363,9 +1363,82 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( SCH_COMMIT* aCommit, SCH_SELEC
     }
 
     for( const VECTOR2I& point : screen->GetNeededJunctions( allItems ) )
-        m_frame->AddJunction( aCommit, m_frame->GetScreen(), point );
+        AddJunction( aCommit, m_frame->GetScreen(), point );
 
     return 0;
+}
+
+
+void SCH_LINE_WIRE_BUS_TOOL::BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
+                              SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
+{
+    // Save the copy of aSegment before breaking it
+    aCommit->Modify( aSegment, aScreen );
+
+    SCH_LINE* newSegment = aSegment->BreakAt( aCommit, aPoint );
+
+    aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
+    newSegment->SetFlags( IS_NEW | IS_BROKEN );
+    m_frame->AddToScreen( newSegment, aScreen );
+
+    aCommit->Added( newSegment, aScreen );
+
+    *aNewSegment = newSegment;
+}
+
+
+bool SCH_LINE_WIRE_BUS_TOOL::BreakSegments( SCH_COMMIT* aCommit, const VECTOR2I& aPos, SCH_SCREEN* aScreen )
+{
+    bool      brokenSegments = false;
+    SCH_LINE* new_line;
+
+    for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPos, true ) )
+    {
+        BreakSegment( aCommit, wire, aPos, &new_line, aScreen );
+        brokenSegments = true;
+    }
+
+    return brokenSegments;
+}
+
+
+bool SCH_LINE_WIRE_BUS_TOOL::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
+{
+    bool brokenSegments = false;
+
+    std::set<VECTOR2I> point_set;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
+        point_set.insert( item->GetPosition() );
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+    {
+        SCH_BUS_WIRE_ENTRY* entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
+        point_set.insert( entry->GetPosition() );
+        point_set.insert( entry->GetEnd() );
+    }
+
+    for( const VECTOR2I& pt : point_set )
+    {
+        BreakSegments( aCommit, pt, aScreen );
+        brokenSegments = true;
+    }
+
+    return brokenSegments;
+}
+
+
+SCH_JUNCTION* SCH_LINE_WIRE_BUS_TOOL::AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen,
+                                           const VECTOR2I& aPos )
+{
+    SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );
+
+    m_frame->AddToScreen( junction, aScreen );
+    aCommit->Added( junction, aScreen );
+
+    BreakSegments( aCommit, aPos, aScreen );
+
+    return junction;
 }
 
 

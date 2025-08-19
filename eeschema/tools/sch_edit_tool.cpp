@@ -2874,6 +2874,8 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
     SCH_SCREEN*    screen = m_frame->GetScreen();
     SCH_COMMIT     commit( m_toolMgr );
+
+    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
     std::vector<SCH_LINE*> lines;
 
     // Save the current orthogonal mode so we can restore it later
@@ -2908,9 +2910,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
         // We let the user select the break point if they're on a single line
         if( lines.size() == 1 && line->HitTest( cursorPos ) && !line->IsEndPoint( cursorPos ) )
-            m_frame->Schematic().BreakSegment( &commit, line, cursorPos, &newLine, screen );
+            lwbTool->BreakSegment( &commit, line, cursorPos, &newLine, screen );
         else
-            m_frame->Schematic().BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
+            lwbTool->BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
 
         // Make sure both endpoints are deselected
         newLine->ClearFlags( ENDPOINT | STARTPOINT );

@@ -31,6 +31,7 @@
 #include <sch_no_connect.h>
 #include <sch_commit.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <trigo.h>
 
@@ -56,6 +57,7 @@ bool SCH_EDIT_FRAME::TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, cons
     std::vector<SCH_LINE*> wires;
     BOX2I                  bb( aStart );
 
+    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolManager->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
     bb.Merge( aEnd );
 
     // We cannot modify the RTree while iterating, so push the possible
@@ -90,14 +92,14 @@ bool SCH_EDIT_FRAME::TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, cons
         // Step 1: break the segment on one end.
         // Ensure that *line points to the segment containing aEnd
         SCH_LINE* new_line;
-        Schematic().BreakSegment( aCommit, line, aStart, &new_line, screen );
+        lwbTool->BreakSegment( aCommit, line, aStart, &new_line, screen );
 
         if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aEnd ) )
             line = new_line;
 
         // Step 2: break the remaining segment.
         // Ensure that *line _also_ contains aStart.  This is our overlapping segment
-        Schematic().BreakSegment( aCommit, line, aEnd, &new_line, screen );
+        lwbTool->BreakSegment( aCommit, line, aEnd, &new_line, screen );
 
         if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aStart ) )
             line = new_line;
@@ -182,20 +184,6 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aJunction )
             aCommit->Removed( line, screen );
         }
     }
-}
-
-
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen,
-                                           const VECTOR2I& aPos )
-{
-    SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );
-
-    AddToScreen( junction, aScreen );
-    aCommit->Added( junction, aScreen );
-
-    Schematic().BreakSegments( aCommit, aPos, aScreen );
-
-    return junction;
 }
 
 void SCH_EDIT_FRAME::UpdateHopOveredWires( SCH_ITEM* aItem )
