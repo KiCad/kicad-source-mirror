@@ -211,6 +211,10 @@ void FILEDLG_IMPORT_SHEET_CONTENTS::TransferDataFromCustomControls()
 
 void FILEDLG_IMPORT_SHEET_CONTENTS::AddCustomControls( wxFileDialogCustomize& customizer )
 {
+#ifdef __WXMAC__
+        customizer.AddStaticText( wxT( "\n\n" ) );  // Increase height of static box
+#endif
+
     m_cbRepeatedPlacement = customizer.AddCheckBox( REPEATED_PLACEMENT );
     m_cbRepeatedPlacement->SetValue( m_settings->m_DesignBlockChooserPanel.repeated_placement );
     m_cbPlaceAsSheet = customizer.AddCheckBox( PLACE_AS_SHEET );

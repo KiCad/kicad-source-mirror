@@ -33,6 +33,11 @@ public:
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
+        wxString padding;
+#ifdef __WXMAC__
+        customizer.AddStaticText( wxT( "\n\n" ) );  // Increase height of static box
+#endif
+
         m_cb = customizer.AddCheckBox( _( "Show import issues" ) );
         m_cb->SetValue( m_showIssues );
     }
