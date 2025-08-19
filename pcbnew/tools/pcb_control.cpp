@@ -1128,7 +1128,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             newItems.push_back( item.release() );
         }
 
-        bool cancelled = !placeBoardItems( &commit, newItems, true, false, false );
+        bool cancelled = !placeBoardItems( &commit, newItems, true, false, false, false );
 
         if( cancelled )
             commit.Revert();
@@ -1248,8 +1248,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 pruneItemLayers( pastedItems );
 
-                cancelled = !placeBoardItems( &commit, pastedItems, true, true,
-                                              mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+                cancelled = !placeBoardItems( &commit, pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS,
+                                              false );
             }
             else    // isBoardEditor
             {
@@ -1266,8 +1266,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         fp->SetReference( defaultRef );
                 }
 
-                cancelled = !placeBoardItems( &commit, clipBoard, true,
-                                              mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+                cancelled = !placeBoardItems( &commit, clipBoard, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS, false );
             }
 
             break;
@@ -1297,8 +1296,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             pruneItemLayers( pastedItems );
 
-            cancelled = !placeBoardItems( &commit, pastedItems, true, true,
-                                          mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+            cancelled =
+                    !placeBoardItems( &commit, pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS, false );
             break;
         }
 
@@ -1401,6 +1400,8 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     if( !group->HasDesignBlockLink() )
         return 1;
 
+    BOARD_COMMIT tempCommit( m_frame );
+
     std::set<EDA_ITEM*> originalItems;
     // Apply MCT_SKIP_STRUCT to every EDA_ITEM on the board so we know what is not part of the design block
     // Can't use SKIP_STRUCT as that is used and cleared by the temporary board appending
@@ -1411,10 +1412,12 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
             },
             nullptr, GENERAL_COLLECTOR::AllBoardItems );
 
-    int ret = PlaceLinkedDesignBlock( aEvent );
+    int ret = 1;
+
+    VECTOR2I placementPos( 0, 0 );
 
     // If we succeeded in placing the linked design block, we're ready to apply the multichannel tool
-    if( ret == 0 )
+    if( m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit, &placementPos ) )
     {
         // Make a lambda for the bounding box of all the components
         auto generateBoundingBox = [&]( std::unordered_set<EDA_ITEM*> aItems )
@@ -1484,6 +1487,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         dbRA.m_area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         dbRA.m_area->AddPolygon( generateBoundingBox( allDbItems ) );
         dbRA.m_center = dbRA.m_area->Outline()->COutline( 0 ).Centre();
+        tempCommit.Add( dbRA.m_area );
 
         // Create the destination rule area for the group
         RULE_AREA destRA;
@@ -1526,11 +1530,15 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         destRA.m_area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         destRA.m_area->AddPolygon( generateBoundingBox( group->GetItems() ) );
         destRA.m_center = destRA.m_area->Outline()->COutline( 0 ).Centre();
+        tempCommit.Add( dbRA.m_area );
 
         // Use the multichannel tool to repeat the layout
         MULTICHANNEL_TOOL* mct = m_toolMgr->GetTool<MULTICHANNEL_TOOL>();
 
         ret = mct->RepeatLayout( aEvent, dbRA, destRA );
+
+        // Get rid of the temporary design blocks and rule areas
+        tempCommit.Revert();
 
         delete dbRA.m_area;
         delete destRA.m_area;
@@ -1595,9 +1603,11 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
     if( !pi )
         return 1;
 
-    int ret = AppendBoard( *pi, designBlock->GetBoardFile() );
-
-    return ret;
+    if( aEvent.Parameter<VECTOR2I*>() != nullptr )
+        return AppendBoard( *pi, designBlock->GetBoardFile(), nullptr, static_cast<BOARD_COMMIT*>( aEvent.Commit() ),
+                            true, *aEvent.Parameter<VECTOR2I*>() );
+    else
+        return AppendBoard( *pi, designBlock->GetBoardFile() );
 }
 
 
@@ -1674,7 +1684,7 @@ static void moveUnflaggedItems( const std::vector<T>& aList, std::vector<BOARD_I
 
 
 bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin,
-                                   bool aReannotateDuplicates )
+                                   bool aReannotateDuplicates, bool aSkipMove )
 {
     // items are new if the current board is not the board source
     bool isNew = board() != aBoard;
@@ -1707,12 +1717,12 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aA
 
     pruneItemLayers( items );
 
-    return placeBoardItems( aCommit, items, isNew, aAnchorAtOrigin, aReannotateDuplicates );
+    return placeBoardItems( aCommit, items, isNew, aAnchorAtOrigin, aReannotateDuplicates, aSkipMove );
 }
 
 
-bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems,
-                                   bool aIsNew, bool aAnchorAtOrigin, bool aReannotateDuplicates )
+bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
+                                   bool aAnchorAtOrigin, bool aReannotateDuplicates, bool aSkipMove )
 {
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -1808,14 +1818,16 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
-        return m_toolMgr->RunSynchronousAction( PCB_ACTIONS::move, aCommit );
+        if( !aSkipMove )
+            return m_toolMgr->RunSynchronousAction( PCB_ACTIONS::move, aCommit );
     }
 
     return true;
 }
 
 
-int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock )
+int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock, BOARD_COMMIT* aCommit,
+                              bool aHasPosition, VECTOR2I aPosition )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
@@ -1827,7 +1839,15 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     if( !brd )
         return 1;
 
-    BOARD_COMMIT    commit( editFrame );
+    // Give ourselves a commit to work with if we weren't provided one
+    std::unique_ptr<BOARD_COMMIT> tempCommit;
+    BOARD_COMMIT*                 commit = aCommit;
+
+    if( !commit )
+    {
+        tempCommit = std::make_unique<BOARD_COMMIT>( editFrame );
+        commit = tempCommit.get();
+    }
 
     // Mark existing items, in order to know what are the new items so we can select only
     // the new items after loading
@@ -1930,7 +1950,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     if( APP_SETTINGS_BASE* cfg = editFrame->config() )
         placeAsGroup = cfg->m_DesignBlockChooserPanel.place_as_group;
 
-    if( placeBoardItems( &commit, brd, false, false /* Don't reannotate dupes on Append Board */ ) )
+    if( placeBoardItems( commit, brd, false, false /* Don't reannotate dupes on Append Board */, aHasPosition ) )
     {
         if( placeAsGroup )
         {
@@ -1959,13 +1979,13 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
                 }
             }
 
-            commit.Add( group );
+            commit->Add( group );
 
             for( EDA_ITEM* eda_item : selection )
             {
                 if( eda_item->IsBOARD_ITEM() && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
                 {
-                    commit.Modify( eda_item );
+                    commit->Modify( eda_item );
                     group->AddItem( eda_item );
                 }
             }
@@ -1978,14 +1998,19 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
             m_frame->Refresh();
         }
 
-        commit.Push( _( "Append Board" ) );
+        // If we were provided a commit, let the caller control when to push it
+        if( !aCommit )
+            commit->Push( _( "Append Board" ) );
 
         editFrame->GetBoard()->BuildConnectivity();
         ret = 0;
     }
     else
     {
-        commit.Revert();
+        // If we were provided a commit, let the caller control when to revert it
+        if( !aCommit )
+            commit->Revert();
+
         ret = 1;
     }
 
@@ -2598,7 +2623,7 @@ int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> items;
     items.push_back( table );
 
-    if( placeBoardItems( &commit, items, true, true, false ) )
+    if( placeBoardItems( &commit, items, true, true, false, false ) )
         commit.Push( _( "Place Board Characteristics" ) );
     else
         delete table;
@@ -2710,7 +2735,7 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> items;
     items.push_back( table );
 
-    if( placeBoardItems( &commit, items, true, true, false ) )
+    if( placeBoardItems( &commit, items, true, true, false, false ) )
         commit.Push( _( "Place Board Stackup Table" ) );
     else
         delete table;

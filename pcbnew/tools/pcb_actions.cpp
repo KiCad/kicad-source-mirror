@@ -461,7 +461,8 @@ TOOL_ACTION PCB_ACTIONS::placeLinkedDesignBlock( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Place Linked Design Block" ) )
         .Tooltip( _( "Place design block linked to selected group" ) )
         .Icon( BITMAPS::add_component )
-        .Flags( AF_ACTIVATE ) );
+        .Flags( AF_ACTIVATE )
+        .Parameter<VECTOR2I*>( nullptr ) );
 
 TOOL_ACTION PCB_ACTIONS::applyDesignBlockLayout( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.applyDesignBlockLayout" )
