@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-08-18 08:02+0000\n"
+"PO-Revision-Date: 2025-08-19 11:40+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -38567,7 +38567,7 @@ msgstr "电路板上, 非铜层"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:133
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "如果您希望在电路板正面使用焊膏层"
+msgstr "如果您希望在电路板正面使用锡膏层"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:151
 msgid "If you want a silk screen layer for the front side of the board"
@@ -43617,7 +43617,7 @@ msgstr "(贴片焊盘在电路板的不同面上分别有铜层和阻焊层)"
 
 #: pcbnew/pad.cpp:2296 pcbnew/pad.cpp:2309
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr "(贴片焊盘的铜层和焊膏层分别处在电路板的不同面上)"
+msgstr "(贴片焊盘的铜层和锡膏层分别处在电路板的不同面上)"
 
 #: pcbnew/pad.cpp:2315
 msgid "(SMD pad has no outer layers)"
@@ -43646,25 +43646,25 @@ msgstr "(焊盘孔不在焊盘形状内)"
 
 #: pcbnew/pad.cpp:2391
 msgid "(negative local clearance values have no effect)"
-msgstr "(负局部间距值无效)"
+msgstr "(负的局部间距值无效)"
 
 #: pcbnew/pad.cpp:2410
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
-msgstr "(负阻焊间距大于某些形状原型; 可能产生意料之外的结果)"
+msgstr "(负的阻焊间距大于某些形状原型; 可能产生意料之外的结果)"
 
 #: pcbnew/pad.cpp:2420
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
-msgstr "(负阻焊间距大于焊盘; 不会生成阻焊层)"
+msgstr "(负的阻焊间距大于焊盘; 不会生成阻焊层)"
 
 #: pcbnew/pad.cpp:2439
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
-msgstr "(负焊膏余量大于焊盘; 不会生成锡膏层)"
+msgstr "(锡膏的内缩量超过焊盘尺寸, 不会生成该焊盘的锡膏层)"
 
 #: pcbnew/pad.cpp:2446
 msgid "(negative corner radius is not allowed)"
