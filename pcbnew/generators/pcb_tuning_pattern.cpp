@@ -78,17 +78,27 @@
 
 TUNING_STATUS_VIEW_ITEM::TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
         EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
-        m_frame( aFrame ), m_min( 0.0 ), m_max( 0.0 ), m_current( 0.0 ), m_isTimeDomain( false )
+        m_frame( aFrame ),
+        m_min( 0.0 ),
+        m_max( 0.0 ),
+        m_current( 0.0 ),
+        m_isTimeDomain( false )
 { }
 
-wxString TUNING_STATUS_VIEW_ITEM::GetClass() const  { return wxT( "TUNING_STATUS" ); }
+
+wxString TUNING_STATUS_VIEW_ITEM::GetClass() const
+{
+    return wxT( "TUNING_STATUS" );
+}
 
 #if defined(DEBUG)
 void TUNING_STATUS_VIEW_ITEM::Show( int nestLevel, std::ostream& os ) const  {}
 #endif
 
+
 VECTOR2I TUNING_STATUS_VIEW_ITEM::GetPosition() const  { return m_pos; }
 void     TUNING_STATUS_VIEW_ITEM::SetPosition( const VECTOR2I& aPos )  { m_pos = aPos; };
+
 
 void TUNING_STATUS_VIEW_ITEM::SetMinMax( const double aMin, const double aMax )
 {
@@ -100,6 +110,7 @@ void TUNING_STATUS_VIEW_ITEM::SetMinMax( const double aMin, const double aMax )
     m_maxText = m_frame->MessageTextFromValue( m_max, false, unitType );
 }
 
+
 void TUNING_STATUS_VIEW_ITEM::ClearMinMax()
 {
     m_min = 0.0;
@@ -107,6 +118,7 @@ void TUNING_STATUS_VIEW_ITEM::ClearMinMax()
     m_max = std::numeric_limits<double>::max();
     m_maxText = wxT( "---" );
 }
+
 
 void TUNING_STATUS_VIEW_ITEM::SetCurrent( const double aCurrent, const wxString& aLabel )
 {
@@ -117,7 +129,12 @@ void TUNING_STATUS_VIEW_ITEM::SetCurrent( const double aCurrent, const wxString&
     m_currentLabel = aLabel;
 }
 
-void TUNING_STATUS_VIEW_ITEM::SetIsTimeDomain( const bool aIsTimeDomain ) { m_isTimeDomain = aIsTimeDomain; }
+
+void TUNING_STATUS_VIEW_ITEM::SetIsTimeDomain( const bool aIsTimeDomain )
+{
+    m_isTimeDomain = aIsTimeDomain;
+}
+
 
 const BOX2I TUNING_STATUS_VIEW_ITEM::ViewBBox() const
 {
@@ -129,10 +146,12 @@ const BOX2I TUNING_STATUS_VIEW_ITEM::ViewBBox() const
     return tmp;
 }
 
+
 std::vector<int> TUNING_STATUS_VIEW_ITEM::ViewGetLayers() const
 {
     return { LAYER_UI_START, LAYER_UI_START + 1 };
 }
+
 
 void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
