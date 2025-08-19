@@ -581,8 +581,7 @@ static wxString GetLayerStringList( const BOARD& aBoard, const LSET& layers )
 
     for( PCB_LAYER_ID layer : layers.UIOrder() )
     {
-        wxString layerName = aBoard.GetLayerName( layer );
-        layerNames.push_back( layerName );
+        layerNames.push_back( aBoard.GetLayerName( layer ) );
     }
 
     return AccumulateDescriptions( layerNames );

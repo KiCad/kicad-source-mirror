@@ -131,7 +131,7 @@ static void CheckArc( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps, const
     // Test the Clone function (also tests copy-ctor)
     std::unique_ptr<SHAPE> new_shape{ aArc.Clone() };
 
-    BOOST_CHECK_EQUAL( new_shape->Type(), SH_ARC );
+    BOOST_REQUIRE_EQUAL( new_shape->Type(), SH_ARC );
 
     SHAPE_ARC* new_arc = dynamic_cast<SHAPE_ARC*>( new_shape.get() );
 

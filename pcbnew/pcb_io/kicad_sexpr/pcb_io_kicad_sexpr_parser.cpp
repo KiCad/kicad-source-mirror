@@ -5154,7 +5154,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintStackup( FOOTPRINT& aFootprint )
 
     // Set the mode first, so that the layer count is unlocked if needed
     aFootprint.SetStackupMode( stackupMode );
-    aFootprint.SetStackupLayers( layers );
+    aFootprint.SetStackupLayers( std::move( layers ) );
 }
 
 
