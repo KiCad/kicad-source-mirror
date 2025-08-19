@@ -94,8 +94,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_viaX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_viaY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    VIATYPE viaType = VIATYPE::NOT_DEFINED;
-
     m_TrackLayerCtrl->SetLayersHotkeys( false );
     m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_TrackLayerCtrl->SetBoardFrame( aParent );
@@ -114,10 +112,29 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     wxFont infoFont = KIUI::GetSmallInfoFont( this );
     m_techLayersLabel->SetFont( infoFont );
 
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
+    m_netSelector->Bind( FILTERED_ITEM_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
+
+    SetupStandardButtons();
+}
+
+
+DIALOG_TRACK_VIA_PROPERTIES::~DIALOG_TRACK_VIA_PROPERTIES()
+{
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
+    m_netSelector->Unbind( FILTERED_ITEM_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
+}
+
+
+bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
+{
+    // Setting widgets states/values must be in TransferDataToWindow, not in CTor
+    // otherwise states/values are overwritten by the DIALOG_SHIM::TransferDataToWindow() config values
     bool nets = false;
     int  net = 0;
     bool hasLocked = false;
     bool hasUnlocked = false;
+    VIATYPE viaType = VIATYPE::NOT_DEFINED;
 
     // Start and end layers of vias
     // if at least 2 vias do not have the same start or the same end layer
@@ -449,7 +466,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_ViaEndLayer->SetLayerSelection( selection_last_layer );
     }
 
-    m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
+    m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
 
     if ( net >= 0 )
     {
@@ -477,9 +494,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         int viaSelection = wxNOT_FOUND;
 
         // 0 is the netclass place-holder
-        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+        for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
-            VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
+            VIA_DIMENSION* viaDimension = &m_frame->GetDesignSettings().m_ViasDimensionsList[ii];
             wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
                                     + wxT( " / " )
                                     + m_frame->StringFromValue( viaDimension->m_Drill );
@@ -526,9 +543,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         int widthSelection = wxNOT_FOUND;
 
         // 0 is the netclass place-holder
-        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+        for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
-            int      width = aParent->GetDesignSettings().m_TrackWidthList[ii];
+            int      width = m_frame->GetDesignSettings().m_TrackWidthList[ii];
             wxString msg = m_frame->StringFromValue( width );
             m_predefinedTrackWidthsCtrl->Append( msg );
 
@@ -561,19 +578,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     else
         SetInitialFocus( m_ViaDiameterCtrl );
 
-    SetupStandardButtons();
-
-    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
-    m_netSelector->Bind( FILTERED_ITEM_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-}
 
-
-DIALOG_TRACK_VIA_PROPERTIES::~DIALOG_TRACK_VIA_PROPERTIES()
-{
-    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
+    return true;
 }
 
 

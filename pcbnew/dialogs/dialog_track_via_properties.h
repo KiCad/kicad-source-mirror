@@ -62,6 +62,9 @@ private:
     int getLayerDepth();
     void afterPadstackModeChanged();
 
+    ///< Get data from the PCB board and display it to dialog
+    bool TransferDataToWindow() override;
+
 private:
     PCB_BASE_EDIT_FRAME* m_frame;
     const PCB_SELECTION& m_items;      // List of items to be modified.
