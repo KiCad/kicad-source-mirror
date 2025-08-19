@@ -25,7 +25,7 @@
 # KwonHyeokbeom <gurqja3810@naver.com>, 2022.
 # "minsu kim (0xGabriel)" <rlaalstn9601@gmail.com>, 2023.
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023, 2024.
-# Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
+# Pedro Moreira <pedroltmoreira@gmail.com>, 2024, 2025.
 # simmon <simmon@nplob.com>, 2024.
 # jeong-sangwon <drone5023@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
@@ -38,16 +38,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 01:15+0300\n"
-"PO-Revision-Date: 2025-06-05 14:56+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2025-08-20 01:21+0000\n"
+"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -148,7 +148,7 @@ msgstr "마지막 렌더링 시간 %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:803
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "오프스크린 렌더링 중 OpenGL 오류: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:967
 #, c-format
@@ -408,14 +408,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "현재 3D 이미지를 클립보드에 복사"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "라벨 편집"
+msgstr "이미지 내보내기..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "현재 보기를 PNG 이미지로 내보내기"
+msgstr "현재 보기를 이미지로 내보내기"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -607,9 +605,8 @@ msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr "실시간 렌더러에 3D 모델 경계 상자 표시"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "네트 탐색기 표시"
+msgstr "3D 탐색기 표시"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:374
 msgid "Show Appearance Manager"
@@ -629,7 +626,6 @@ msgid "Show board body"
 msgstr "보드 본체 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
 msgstr "도금 홀"
 
@@ -648,7 +644,7 @@ msgstr "후면 구리 보기 / 표면 마감 색상"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Adhesive"
-msgstr "접착면"
+msgstr "접착제"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show adhesive"
@@ -824,69 +820,56 @@ msgid "Show user defined layer 32"
 msgstr "사용자 정의된 레이어 32 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "사용자 정의 레이어 33"
+msgstr "사용자 정의 레이어 33 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "사용자 정의 레이어 34"
+msgstr "사용자 정의 레이어 34 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "사용자 정의 레이어 35"
+msgstr "사용자 정의 레이어 35 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "사용자 정의 레이어 36"
+msgstr "사용자 정의 레이어 36 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "사용자 정의 레이어 37"
+msgstr "사용자 정의 레이어 37 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "사용자 정의 레이어 38"
+msgstr "사용자 정의 레이어 38 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "사용자 정의 레이어 39"
+msgstr "사용자 정의 레이어 39 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "사용자 정의 레이어 40"
+msgstr "사용자 정의 레이어 40 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "사용자 정의 레이어 41"
+msgstr "사용자 정의 레이어 41 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "사용자 정의 레이어 42"
+msgstr "사용자 정의 레이어 42 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "사용자 정의 레이어 43"
+msgstr "사용자 정의 레이어 43 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "사용자 정의 레이어 44"
+msgstr "사용자 정의 레이어 44 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "사용자 정의 레이어 45"
+msgstr "사용자 정의 레이어 45 표시"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 msgid "Through-hole Models"
@@ -955,9 +938,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "보드 외곽선에 맞게 실크 레이어를 자르지 마십시오"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "3D Navigator"
-msgstr "네트 탐색기"
+msgstr "3D 탐색기"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
 msgid "Background Start"
@@ -982,15 +964,13 @@ msgid "Use board stackup colors"
 msgstr "기판 스택업 색상 사용"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "보드 편집기 구리색 사용"
+msgstr "PCB 편집기 구리 색상 사용"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "보드 편집기 구리색 사용(openGL만 해당)"
+msgstr "구리 레이어에 PCB 편집기 레이어 색상 사용 (실시간 렌더링 전용)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1148,14 +1128,12 @@ msgid "(unsaved)"
 msgstr "(저장되지 않음)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "3D 모델 내보내기"
+msgstr "3D 뷰 내보내기"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "이미지 크기:"
+msgstr "이미지 크기"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1369,9 +1347,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "핀"
+msgstr "인치"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1381,34 +1358,29 @@ msgid "Height:"
 msgstr "높이:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "3R 해답:"
+msgstr "해상도"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "3R 해답:"
+msgstr "X 해상도:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "픽셀"
+msgstr "인치당 픽셀"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "픽셀"
+msgstr "밀리미터당 픽셀"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "3R 해답:"
+msgstr "Y 해상도:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d 픽셀"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1885,16 +1857,12 @@ msgid "Errors"
 msgstr "오류"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "다음 검색 및 교체"
+msgstr "로드된 파일을 교체하시겠습니까?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"확장자를 바꾸면 파일 형식이 변경됩니다.\n"
-"그래도 계속 하시겠습니까?"
+msgstr "로드된 파일이 있습니다. 교체하시겠습니까?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2315,7 +2283,7 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "회로도 파일 '%s'을(를) 디자인 블록 '%s'에 저장할 수 없습니다."
 
 #: common/design_block_io.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "'%s' 보드 파일을 '%s' 디자인 블록으로 저장하지 못했습니다."
 
@@ -2492,7 +2460,7 @@ msgstr "패키지 개발자"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "사용 중인 GDI 객체 수 %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -3674,27 +3642,26 @@ msgid "Close"
 msgstr "닫기"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "경고: 스케일은 숫자가 아닙니다."
+msgstr "경고: 사용자 지정 스케일은 숫자가 아닙니다."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"경고: 스케일이 매우 큰 값으로 설정되었습니다.\n"
-" %f에 고정됨."
+"경고: 사용자 지정 스케일이 너무 큽니다.\n"
+"%f로 제한됩니다."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"경고: 배율 옵션이 매우 작은 값으로 설정됩니다.\n"
-" %f에 고정됨."
+"경고: 사용자 지정 스케일이 너무 작습니다.\n"
+" %f로 제한됩니다."
 
 #: common/dialogs/dialog_print_generic.cpp:227
 #: common/dialogs/dialog_print_generic.cpp:284
@@ -4337,16 +4304,14 @@ msgid "Rendering Engine"
 msgstr "렌더링 엔진"
 
 #: common/dialogs/panel_common_settings_base.cpp:36
-#, fuzzy
 msgid "Accelerated Graphics"
-msgstr "그래픽 추가"
+msgstr "가속 그래픽"
 
 #: common/dialogs/panel_common_settings_base.cpp:37
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "하드웨어 가속 그래픽 (권장)"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
-#, fuzzy
 msgid "Fallback Graphics"
 msgstr "대체 그래픽"
 
@@ -4358,9 +4323,8 @@ msgstr ""
 "소프트웨어 그래픽 (KiCad의 하드웨어 가속 요구사항을 충족하지 못하는 컴퓨터용)"
 
 #: common/dialogs/panel_common_settings_base.cpp:59
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "안티-앨리어싱:"
+msgstr "안티앨리어싱:"
 
 #: common/dialogs/panel_common_settings_base.cpp:63
 msgid "No Antialiasing"
@@ -5225,9 +5189,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| 액션 | 기본 단축키 | 설명"
 
 #: common/dialogs/panel_image_editor.cpp:81
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "(패드는 양수의 크기여야 함)"
+msgstr "스케일은 양수여야 합니다."
 
 #: common/dialogs/panel_image_editor.cpp:91
 #, c-format
@@ -5257,19 +5220,16 @@ msgid "Convert to Greyscale"
 msgstr "회색조로 변환"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "파일 기록 크기:"
+msgstr "파일 기록 삭제됨."
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "다시 표시 안 함"
+msgstr "\"다시 표시 안 함\" 대화 상자가 초기화되었습니다."
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "기본값으로 재설정"
+msgstr "모든 대화 상자가 기본값으로 초기화되었습니다."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -5288,23 +5248,20 @@ msgid "days"
 msgstr "일"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "최근 파일 지우기"
+msgstr "최근 파일 열기 기록 지우기"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "\"다시 표시 안 함\" 대화 상자 초기화"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "%s을 기본값으로 초기화"
+msgstr "모든 대화 상자를 기본값으로 초기화"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "%s을 기본값으로 초기화"
+msgstr "모든 설정을 기본값으로 초기화"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5960,19 +5917,16 @@ msgid "Pan and Rotate"
 msgstr "이동 및 확대/축소"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "애니메이션 속도:"
+msgstr "회전 속도:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "화살표 방향:"
+msgstr "회전 방향 반전"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "끝점 또는 시작점 방향 유지"
+msgstr "회전 방향을 반대로 설정"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
 #, fuzzy
@@ -5988,9 +5942,8 @@ msgid "Reverse horizontal pan direction"
 msgstr ""
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "선택에서 제거"
+msgstr "줌 방향 반전"
 
 #: common/dialogs/panel_text_variables.cpp:114
 msgid ""
@@ -6446,9 +6399,8 @@ msgid "Packages and Updates"
 msgstr "패키지와 업데이트"
 
 #: common/eda_base_frame.cpp:1409
-#, fuzzy
 msgid "Maintenance"
-msgstr "관리자"
+msgstr "유지 관리"
 
 #: common/eda_base_frame.cpp:1491 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:444
@@ -7398,9 +7350,8 @@ msgid "Could not read file: %s"
 msgstr "파일을 읽을 수 없음: %s"
 
 #: common/git/git_branch_handler.cpp:76
-#, fuzzy
 msgid "No repository available"
-msgstr "<정의되지 않음>"
+msgstr "사용 가능한 Git 저장소가 없습니다"
 
 #: common/git/git_branch_handler.cpp:85
 #, c-format
@@ -7408,14 +7359,14 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "분기 '%s' 조회에 실패함: %s"
 
 #: common/git/git_branch_handler.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "'%s'의 분기 헤드를 찾지 못함"
+msgstr "'%s' 브랜치의 헤드를 찾지 못함: %s"
 
 #: common/git/git_branch_handler.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "'%s' 분기로 전환 실패"
+msgstr "'%s' 브랜치로 전환 실패: %s"
 
 #: common/git/git_branch_handler.cpp:114
 #, fuzzy, c-format
