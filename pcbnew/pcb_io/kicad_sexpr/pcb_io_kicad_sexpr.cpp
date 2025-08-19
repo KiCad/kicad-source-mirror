@@ -2630,6 +2630,9 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
         case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
             m_out->Print( "(group %s)", m_out->Quotew( aZone->GetPlacementAreaSource() ).c_str() );
             break;
+        // These are transitory and should not be saved
+        case PLACEMENT_SOURCE_T::DESIGN_BLOCK:
+            break;
         }
 
         m_out->Print( ")" );

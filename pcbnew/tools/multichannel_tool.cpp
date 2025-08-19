@@ -80,6 +80,21 @@ bool MULTICHANNEL_TOOL::findComponentsInRuleArea( RULE_AREA*            aRuleAre
     if( !aRuleArea || !aRuleArea->m_zone )
         return false;
 
+    // When we're copying the layout of a design block, we are provided an exact list of items
+    // rather than querying the board for items that are inside the area.
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
+    {
+        // Get all board connected items that are from the design bloc
+        for( EDA_ITEM* item : aRuleArea->m_designBlockItems )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+                aComponents.insert( static_cast<FOOTPRINT*>( item ) );
+        }
+
+        return (int) aComponents.size();
+    }
+
+
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
     PCBEXPR_UCODE    ucode;
     PCBEXPR_CONTEXT  ctx, preflightCtx;
@@ -109,6 +124,9 @@ bool MULTICHANNEL_TOOL::findComponentsInRuleArea( RULE_AREA*            aRuleAre
         break;
     case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
         ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
+        break;
+    case PLACEMENT_SOURCE_T::DESIGN_BLOCK:
+        // For design blocks, handled above outside the rules system
         break;
     }
 
@@ -140,6 +158,27 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
 {
     if( !aRuleArea || !aRuleArea->m_zone )
         return false;
+
+    // When we're copying the layout of a design block, we are provided an exact list of items
+    // rather than querying the board for items that are inside the area.
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
+    {
+        // Get all board items that aren't footprints or connected items,
+        // since they'll be handled in the the other findXInRuleArea routines
+        for( EDA_ITEM* item : aRuleArea->m_designBlockItems )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+                continue;
+
+            if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                continue;
+
+            if( item->IsBOARD_ITEM() )
+                aItems.insert( static_cast<BOARD_ITEM*>( item ) );
+        }
+
+        return (int) aItems.size();
+    }
 
     std::vector<BOARD_ITEM*> result;
 
@@ -660,10 +699,27 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
                                               std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
                                               const SHAPE_POLY_SET& aRAPoly, const REPEAT_LAYOUT_OPTIONS& aOpts ) const
 {
+    if( !aRuleArea || !aRuleArea->m_zone )
+        return 0;
+
     // The user also will consider tracks and vias that are inside the source area but
     // not connected to any of the source pads to count as "routing" (e.g. stitching vias)
 
     int count = 0;
+
+    // When we're copying the layout of a design block, we are provided an exact list of items
+    // rather than querying the board for items that are inside the area.
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
+    {
+        // Get all board connected items that are from the design bloc
+        for( EDA_ITEM* item : aRuleArea->m_designBlockItems )
+        {
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                aOutput.insert( bci );
+        }
+
+        return (int) aOutput.size();
+    }
 
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
     PCBEXPR_UCODE    ucode;

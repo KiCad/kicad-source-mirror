@@ -1419,7 +1419,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     // If we succeeded in placing the linked design block, we're ready to apply the multichannel tool
     if( m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit, &placementPos ) )
     {
-        // Make a lambda for the bounding box of all the components
+        // Lambda for the bounding box of all the components
         auto generateBoundingBox = [&]( std::unordered_set<EDA_ITEM*> aItems )
             {
                 std::vector<VECTOR2I> bbCorners;
@@ -1440,30 +1440,20 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                 return KIGEOM::RectifyPolygon( hull );
             };
 
-        // Build an outline that is the entire board editor since a design block can
-        // have anything within this space
-        SHAPE_LINE_CHAIN wholeEditorOutline;
-        wholeEditorOutline.Append( VECTOR2I( -INT_MAX, -INT_MAX ) );
-        wholeEditorOutline.Append( VECTOR2I( INT_MAX, -INT_MAX ) );
-        wholeEditorOutline.Append( VECTOR2I( INT_MAX, INT_MAX ) );
-        wholeEditorOutline.Append( VECTOR2I( -INT_MAX, INT_MAX ) );
-        wholeEditorOutline.SetClosed( true );
-
         // Build a rule area that contains all the components in the design block,
         // meaning all items without SKIP_STRUCT set.
         RULE_AREA dbRA;
 
-        dbRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+        dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
         dbRA.m_generateEnabled = true;
 
         // Add all components that aren't marked MCT_SKIP_STRUCT to ra.m_components
-        std::unordered_set<EDA_ITEM*> allDbItems;
         brd->Visit(
                 [&]( EDA_ITEM* item, void* data )
                 {
                     if( !item->HasFlag( MCT_SKIP_STRUCT ) )
                     {
-                        allDbItems.insert( item );
+                        dbRA.m_designBlockItems.insert( item );
 
                         if( item->Type() == PCB_FOOTPRINT_T )
                             dbRA.m_components.insert( static_cast<FOOTPRINT*>( item ) );
@@ -1482,10 +1472,10 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         dbRA.m_zone->SetDoNotAllowTracks( false );
         dbRA.m_zone->SetDoNotAllowPads( false );
         dbRA.m_zone->SetDoNotAllowFootprints( false );
-        dbRA.m_zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        dbRA.m_zone->SetPlacementAreaSourceType( dbRA.m_sourceType );
         dbRA.m_zone->SetPlacementAreaSource( group->GetDesignBlockLibId().GetUniStringLibId() );
         dbRA.m_zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
-        dbRA.m_zone->AddPolygon( generateBoundingBox( allDbItems ) );
+        dbRA.m_zone->AddPolygon( generateBoundingBox( dbRA.m_designBlockItems ) );
         dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
         tempCommit.Add( dbRA.m_zone );
 
@@ -1525,7 +1515,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         destRA.m_zone->SetDoNotAllowTracks( false );
         destRA.m_zone->SetDoNotAllowPads( false );
         destRA.m_zone->SetDoNotAllowFootprints( false );
-        destRA.m_zone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        destRA.m_zone->SetPlacementAreaSourceType( destRA.m_sourceType );
         destRA.m_zone->SetPlacementAreaSource( group->GetName() );
         destRA.m_zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         destRA.m_zone->AddPolygon( generateBoundingBox( group->GetItems() ) );

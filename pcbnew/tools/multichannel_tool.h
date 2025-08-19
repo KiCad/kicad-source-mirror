@@ -69,6 +69,7 @@ struct RULE_AREA
     ZONE*                     m_oldZone = nullptr;
     ZONE*                     m_zone = nullptr;
     std::set<FOOTPRINT*>      m_components;
+    std::unordered_set<EDA_ITEM*> m_designBlockItems;
     bool                      m_existsAlready = false;
     bool                      m_generateEnabled = false;
     wxString                  m_sheetPath;
