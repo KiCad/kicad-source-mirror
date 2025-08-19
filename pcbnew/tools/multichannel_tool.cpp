@@ -586,7 +586,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
         return -1;
     }
 
-    BOARD_COMMIT commit( GetManager(), true );
+    BOARD_COMMIT commit( GetManager(), true, false );
 
     if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, m_areas.m_options, compat ) )
     {
