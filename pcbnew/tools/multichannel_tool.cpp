@@ -304,7 +304,7 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
 }
 
 
-void MULTICHANNEL_TOOL::QuerySheetsAndComponentClasses()
+void MULTICHANNEL_TOOL::GeneratePotentialRuleAreas()
 {
     using PathAndName = std::pair<wxString, wxString>;
     std::set<PathAndName> uniqueSheets;
@@ -398,10 +398,11 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
 
         m_areas.m_areas.push_back( area );
 
-        wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"), area.m_ruleName, (int) area.m_components.size() );
+        wxLogTrace( traceMultichannelTool, wxT( "RA '%s', %d footprints\n" ), area.m_ruleName,
+                    (int) area.m_components.size() );
     }
 
-    wxLogTrace( traceMultichannelTool, wxT("Total RAs found: %d\n"), (int) m_areas.m_areas.size() );
+    wxLogTrace( traceMultichannelTool, wxT( "Total RAs found: %d\n" ), (int) m_areas.m_areas.size() );
 }
 
 
@@ -579,7 +580,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
     {
         if( !targetArea.second.m_doCopy )
         {
-            wxLogTrace( traceMultichannelTool, wxT("skipping copy to RA '%s' (disabled in dialog)\n"),
+            wxLogTrace( traceMultichannelTool, wxT( "skipping copy to RA '%s' (disabled in dialog)\n" ),
                         targetArea.first->m_ruleName );
             continue;
         }
@@ -673,7 +674,7 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
 
     auto reportError = [&]( const wxString& aMessage, int aOffset )
     {
-        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
+        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s" ), aMessage );
     };
 
     ctx.SetErrorCallback( reportError );
@@ -776,7 +777,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         std::set<BOARD_CONNECTED_ITEM*> refRouting;
         std::set<BOARD_CONNECTED_ITEM*> targetRouting;
 
-        wxLogTrace( traceMultichannelTool, wxT("copying routing: %d fps\n"), (int) aMatches.size() );
+        wxLogTrace( traceMultichannelTool, wxT( "copying routing: %d fps\n" ), (int) aMatches.size() );
 
         std::set<int> refc;
         std::set<int> targc;
@@ -1058,23 +1059,23 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
     {
         case CONNECTION_GRAPH::ST_OK:
             aMatches.m_isOk = true;
-            aMatches.m_errorMsg = _("OK");
+            aMatches.m_errorMsg = _( "OK" );
             break;
         case CONNECTION_GRAPH::ST_EMPTY:
             aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _("One or both of the areas has no components assigned.");
+            aMatches.m_errorMsg = _( "One or both of the areas has no components assigned." );
             break;
         case CONNECTION_GRAPH::ST_COMPONENT_COUNT_MISMATCH:
             aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _("Component count mismatch");
+            aMatches.m_errorMsg = _( "Component count mismatch" );
             break;
         case CONNECTION_GRAPH::ST_ITERATION_COUNT_EXCEEDED:
             aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _("Iteration count exceeded (timeout)");
+            aMatches.m_errorMsg = _( "Iteration count exceeded (timeout)" );
             break;
         case CONNECTION_GRAPH::ST_TOPOLOGY_MISMATCH:
             aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _("Topology mismatch");
+            aMatches.m_errorMsg = _( "Topology mismatch" );
             break;
         default:
             break;
@@ -1122,13 +1123,13 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 {
     if( Pgm().IsGUI() )
     {
-        QuerySheetsAndComponentClasses();
+        GeneratePotentialRuleAreas();
 
         if( m_areas.m_areas.size() <= 1 )
         {
             frame()->ShowInfoBarError( _( "Cannot auto-generate any placement areas because the "
-                                          "schematic has only one or no hierarchical sheet(s) or "
-                                          "component classes." ),
+                                          "schematic has only one or no hierarchical sheets, "
+                                          "groups, or component classes." ),
                                        true );
             return 0;
         }

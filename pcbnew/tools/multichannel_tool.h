@@ -57,7 +57,9 @@ struct RULE_AREA_COMPAT_DATA
     bool                      m_doCopy = false;
     wxString                  m_errorMsg;
     TMATCH::COMPONENT_MATCHES m_matchingComponents;
+    /// Filled in by copyRuleAreaContents with items that were affected by the copy operation.
     std::unordered_set<BOARD_ITEM*> m_affectedItems;
+    /// Filled in by copyRuleAreaContents with affected items that can be grouped together.
     std::unordered_set<BOARD_ITEM*> m_groupableItems;
 };
 
@@ -95,44 +97,47 @@ public:
     MULTICHANNEL_TOOL();
     ~MULTICHANNEL_TOOL();
 
+    int RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone );
+    int RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea );
+    int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );
+
     void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) override {};
     void UpdatePickedItem( const EDA_ITEM* aItem ) override;
 
     RULE_AREAS_DATA* GetData() { return &m_areas; }
-    int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );
-    int RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone );
-    int RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea );
-    void             QuerySheetsAndComponentClasses();
+
+    void GeneratePotentialRuleAreas();
     void FindExistingRuleAreas();
-    int CheckRACompatibility( ZONE *aRefZone );
+    int  CheckRACompatibility( ZONE* aRefZone );
 
 private:
-    void     setTransitions() override;
-    int      repeatLayout( const TOOL_EVENT& aEvent );
+    void setTransitions() override;
+    int  repeatLayout( const TOOL_EVENT& aEvent );
 
     wxString stripComponentIndex( const wxString& aRef ) const;
-    bool     findComponentsInRuleArea( RULE_AREA* aRuleArea, std::set<FOOTPRINT*>& aComponents );
-    bool     findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_ITEM*>& aItems );
-    int      findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_CONNECTED_ITEM*>& aOutput,
-                                    std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
-                                    const SHAPE_POLY_SET& aRAPoly,
-                                    const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
+
+    bool findComponentsInRuleArea( RULE_AREA* aRuleArea, std::set<FOOTPRINT*>& aComponents );
+    bool findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_ITEM*>& aItems );
+    int  findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_CONNECTED_ITEM*>& aOutput,
+                                std::shared_ptr<CONNECTIVITY_DATA> aConnectivity, const SHAPE_POLY_SET& aRAPoly,
+                                const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
+    bool copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
+                               RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts,
+                               std::unordered_set<BOARD_ITEM*>& aAffectedItems,
+                               std::unordered_set<BOARD_ITEM*>& aGroupableItems );
+
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
-    std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName ) const;
-    std::set<FOOTPRINT*>
-               queryComponentsInComponentClass( const wxString& aComponentClassName ) const;
+
+    std::set<FOOTPRINT*> queryComponentsInSheet( wxString aSheetName ) const;
+    std::set<FOOTPRINT*> queryComponentsInComponentClass( const wxString& aComponentClassName ) const;
     std::set<FOOTPRINT*> queryComponentsInGroup( const wxString& aGroupName ) const;
+
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                           RULE_AREA_COMPAT_DATA& aMatches );
-    bool       copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
-                                     RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts,
-                                     std::unordered_set<BOARD_ITEM*>& aAffectedItems,
-                                     std::unordered_set<BOARD_ITEM*>& aGroupableItems );
     void       fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
                          TMATCH::COMPONENT_MATCHES& aComponentMatches );
-
-    bool pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToCheck );
+    bool       pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToCheck );
 
     std::unique_ptr<REPORTER> m_reporter;
     RULE_AREAS_DATA           m_areas;
