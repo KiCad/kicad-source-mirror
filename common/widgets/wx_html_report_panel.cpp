@@ -272,6 +272,14 @@ static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SE
 
 void WX_HTML_REPORT_PANEL::onCheckBox( wxCommandEvent& event )
 {
+    if( event.GetEventObject() == m_checkBoxShowAll )
+    {
+        m_checkBoxShowErrors->SetValue( true );
+        m_checkBoxShowWarnings->SetValue( event.IsChecked() );
+        m_checkBoxShowInfos->SetValue( event.IsChecked() );
+        m_checkBoxShowActions->SetValue( event.IsChecked() );
+    }
+
     CallAfter(
             [&]()
             {
