@@ -662,6 +662,12 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 }
 
 
+void PANEL_PREVIEW_3D_MODEL::SetEmbeddedFilesDelegate( EMBEDDED_FILES* aDelegate )
+{
+    m_dummyBoard->SetEmbeddedFilesDelegate( aDelegate );
+}
+
+
 void PANEL_PREVIEW_3D_MODEL::onModify()
 {
     KIWAY_HOLDER* kiwayHolder = dynamic_cast<KIWAY_HOLDER*>( wxGetTopLevelParent( this ) );

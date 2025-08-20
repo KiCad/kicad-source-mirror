@@ -59,6 +59,7 @@ wxDECLARE_EVENT( wxCUSTOM_PANEL_SHOWN_EVENT, wxCommandEvent );
 class WX_INFOBAR;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
+class EMBEDDED_FILES;
 class BOARD;
 class BOARD_ADAPTER;
 class FOOTPRINT;
@@ -100,6 +101,8 @@ public:
      * footprint that is on the preview dummy board.
      */
     void UpdateDummyFootprint( bool aRelaodRequired = true );
+
+    void SetEmbeddedFilesDelegate( EMBEDDED_FILES* aDelegate );
 
     /**
      * Get the dummy footprint that is used for previewing the 3D model.
