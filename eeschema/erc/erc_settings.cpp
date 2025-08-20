@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <erc/erc_item.h>
 #include <erc/erc_settings.h>
 #include <schematic.h>
@@ -397,6 +398,13 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
                 if( markerSeverity & m_severities )
                     m_filteredMarkers.push_back( aMarker );
             } );
+
+    // Sort markers so that errors appear before warnings
+    std::stable_sort( m_filteredMarkers.begin(), m_filteredMarkers.end(),
+                      []( const SCH_MARKER* a, const SCH_MARKER* b )
+                      {
+                          return a->GetSeverity() > b->GetSeverity();
+                      } );
 }
 
 
