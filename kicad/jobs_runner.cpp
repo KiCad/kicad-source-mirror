@@ -56,37 +56,51 @@ bool JOBS_RUNNER::RunJobsAllDestinations( bool aBail )
 }
 
 
-int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject )
+int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter, PROJECT* aProject )
 {
     JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job.get() );
     wxString             cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
 
-    // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
+    aReporter->Report( cmd, RPT_SEVERITY_INFO );
+    aReporter->Report( wxEmptyString, RPT_SEVERITY_INFO );
+
     wxProcess process;
     process.Redirect();
 
+    // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
     int result = static_cast<int>( wxExecute( cmd, wxEXEC_SYNC, &process ) );
 
-    if( specialJob->m_recordOutput )
+    wxInputStream* inputStream = process.GetInputStream();
+    wxInputStream* errorStream = process.GetErrorStream();
+
+    if( inputStream && errorStream )
     {
-        if( specialJob->GetConfiguredOutputPath().IsEmpty() )
+        wxTextInputStream inputTextStream( *inputStream );
+        wxTextInputStream errorTextStream( *errorStream );
+
+        while( !inputStream->Eof() )
+            aReporter->Report( inputTextStream.ReadLine(), RPT_SEVERITY_INFO );
+
+        while( !errorStream->Eof() )
+            aReporter->Report( errorTextStream.ReadLine(), RPT_SEVERITY_ERROR );
+
+        if( specialJob->m_recordOutput )
         {
-            wxFileName fn( aJob->m_id );
-            fn.SetExt( wxT( "log" ) );
-            specialJob->SetConfiguredOutputPath( fn.GetFullPath() );
+            if( specialJob->GetConfiguredOutputPath().IsEmpty() )
+            {
+                wxFileName fn( aJob->m_id );
+                fn.SetExt( wxT( "log" ) );
+                specialJob->SetConfiguredOutputPath( fn.GetFullPath() );
+            }
+
+            wxFFileOutputStream procOutput( specialJob->GetFullOutputPath( aProject ) );
+
+            if( !procOutput.IsOk() )
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+
+            inputStream->Reset();
+            *inputStream >> procOutput;
         }
-
-        wxFFileOutputStream procOutput( specialJob->GetFullOutputPath( aProject ) );
-
-        if( !procOutput.IsOk() )
-            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-
-        wxInputStream* inputStream = process.GetInputStream();
-
-        if( inputStream )
-            inputStream->Read( procOutput );
-
-        procOutput.Close();
     }
 
     if( specialJob->m_ignoreExitcode )
@@ -247,7 +261,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
             // special jobs
             if( job.m_job->GetType() == "special_execute" )
 			{
-                result = runSpecialExecute( &job, m_project );
+                result = runSpecialExecute( &job, reporterToUse, m_project );
             }
             else if( job.m_job->GetType() == "special_copyfiles" )
             {
