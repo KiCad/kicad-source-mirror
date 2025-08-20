@@ -652,7 +652,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
 
     if( mkFuse.HasErrors() || mkFuse.HasWarnings() )
     {
-        aReporter->Report( _( "** Got problems while fusing shapes **\n" ), RPT_SEVERITY_ERROR );
+        aReporter->Report( _( "** Got problems while fusing shapes **" ), RPT_SEVERITY_ERROR );
 
         if( mkFuse.HasErrors() )
         {
@@ -687,7 +687,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
 
         if( unifiedShapes.IsNull() )
         {
-            aReporter->Report( _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ),
+            aReporter->Report( _( "** ShapeUpgrade_UnifySameDomain produced a null shape **" ),
                                RPT_SEVERITY_ERROR );
         }
         else
@@ -945,7 +945,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
     }
 
     if( !success ) // Error
-        m_reporter->Report( _( "OCC error adding pad/via polygon.\n" ), RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "OCC error adding pad/via polygon." ), RPT_SEVERITY_ERROR );
 
     if( !padShapes.empty() )
     {
@@ -1190,7 +1190,7 @@ bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LA
 
     if( !MakeShapes( targetVec, *aPolyShapes, m_simplifyShapes, thickness, z_pos, aOrigin ) )
     {
-        m_reporter->Report( wxString::Format( _( "Could not add shape (%d points) to copper layer %s.\n" ),
+        m_reporter->Report( wxString::Format( _( "Could not add shape (%d points) to copper layer %s." ),
                                               aPolyShapes->FullPointCount(),
                                               LayerName( aLayer ) ),
                             RPT_SEVERITY_ERROR );
@@ -1208,13 +1208,13 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 {
     if( aFileNameUTF8.empty() )
     {
-        m_reporter->Report( wxString::Format( _( "No model defined for %s.\n" ), aRefDes ),
+        m_reporter->Report( wxString::Format( _( "No model defined for %s." ), aRefDes ),
                             RPT_SEVERITY_WARNING );
         return false;
     }
 
     wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
-    m_reporter->Report( wxString::Format( wxT( "Adding component %s.\n" ), aRefDes ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxString::Format( wxT( "Adding component %s." ), aRefDes ), RPT_SEVERITY_DEBUG );
 
     // first retrieve a label
     TDF_Label lmodel;
@@ -1223,7 +1223,7 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
     if( !getModelLabel( aFileNameUTF8, aScale, lmodel, aSubstituteModels, &errorMessage ) )
     {
         if( errorMessage.IsEmpty() )
-            errorMessage.Printf( _( "No model for filename '%s'.\n" ), fileName );
+            errorMessage.Printf( _( "No model for filename '%s'." ), fileName );
 
         m_reporter->Report( errorMessage, RPT_SEVERITY_ERROR );
         return false;
@@ -1234,7 +1234,7 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 
     if( !getModelLocation( aBottom, aPosition, aRotation, aOffset, aOrientation, toploc ) )
     {
-        m_reporter->Report( wxString::Format( _( "No location data for filename '%s'.\n" ), fileName ),
+        m_reporter->Report( wxString::Format( _( "No location data for filename '%s'." ), fileName ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -1244,7 +1244,7 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 
     if( llabel.IsNull() )
     {
-        m_reporter->Report( wxString::Format( _( "Could not add component with filename '%s'.\n" ), fileName ),
+        m_reporter->Report( wxString::Format( _( "Could not add component with filename '%s'." ), fileName ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -1414,7 +1414,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
     }
     catch( const Standard_Failure& e )
     {
-        m_reporter->Report( wxString::Format( _( "OCC exception building shape segment: %s\n" ),
+        m_reporter->Report( wxString::Format( _( "OCC exception building shape segment: %s" ),
                                               e.GetMessageString() ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -1429,7 +1429,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
     }
     catch( const Standard_Failure& e )
     {
-        m_reporter->Report( wxString::Format( _( "OCC exception building face: %s\n" ),
+        m_reporter->Report( wxString::Format( _( "OCC exception building face: %s" ),
                                               e.GetMessageString() ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -1441,7 +1441,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 
         if( aShape.IsNull() )
         {
-            m_reporter->Report( _( "Failed to create a prismatic shape\n" ),
+            m_reporter->Report( _( "Failed to create a prismatic shape" ),
                                 RPT_SEVERITY_ERROR );
             return false;
         }
@@ -1514,7 +1514,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
             if( !mkEdge.IsDone() || mkEdge.Edge().IsNull() )
             {
                 aReporter->Report( wxString::Format( _( "Failed to make segment edge (%d %d) -> (%d %d), "
-                                                        "skipping\n" ),
+                                                        "skipping" ),
                                                      aPt0.x, aPt0.y,
                                                      aPt1.x, aPt1.y ),
                                    RPT_SEVERITY_ERROR );
@@ -1525,7 +1525,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 
                 if( aMkWire.Error() != BRepLib_WireDone )
                 {
-                    aReporter->Report( wxString::Format( _( "Failed to add segment edge (%d %d) -> (%d %d)\n" ),
+                    aReporter->Report( wxString::Format( _( "Failed to add segment edge (%d %d) -> (%d %d)" ),
                                                          aPt0.x, aPt0.y,
                                                          aPt1.x, aPt1.y ),
                                        RPT_SEVERITY_ERROR );
@@ -1562,7 +1562,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
             if( !aMkWire.IsDone() )
             {
                 aReporter->Report( wxString::Format( _( "Failed to add arc curve from (%d %d), arc p0 "
-                                                        "(%d %d), mid (%d %d), p1 (%d %d)\n" ),
+                                                        "(%d %d), mid (%d %d), p1 (%d %d)" ),
                                                      aPt0.x, aPt0.y,
                                                      aArc.GetP0().x, aArc.GetP0().y,
                                                      aArc.GetArcMid().x, aArc.GetArcMid().y,
@@ -1637,7 +1637,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 
         if( lastPt != firstPt && !addSegment( lastPt, firstPt ) )
         {
-            aReporter->Report( wxString::Format( _( "Failed to close wire at %d, %d -> %d, %d **\n" ),
+            aReporter->Report( wxString::Format( _( "Failed to close wire at %d, %d -> %d, %d **" ),
                                                  lastPt.x, lastPt.y,
                                                  firstPt.x, firstPt.y ),
                                RPT_SEVERITY_ERROR );
@@ -1647,7 +1647,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
     }
     catch( const Standard_Failure& e )
     {
-        aReporter->Report( wxString::Format( _( "OCC exception creating wire: %s\n" ),
+        aReporter->Report( wxString::Format( _( "OCC exception creating wire: %s" ),
                                              e.GetMessageString() ),
                            RPT_SEVERITY_ERROR );
         return false;
@@ -1685,7 +1685,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         /*if( approximated.IsSelfIntersecting() )
         {
             m_reporter->Report( wxString::Format( _( "Approximated polygon self-intersection check failed\n"
-                                                     "z: %g; bounding box: %s\n" ) ),
+                                                     "z: %g; bounding box: %s" ) ),
                                                   aZposition,
                                                   formatBBox( workingPoly.BBox() ) ),
                                 RPT_SEVERITY_ERROR );
@@ -1727,7 +1727,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             else
             {
                 m_reporter->Report( wxString::Format( _( "Wire not done (contour points %d): OCC error %d\n"
-                                                         "z: %g; bounding box: %s\n" ),
+                                                         "z: %g; bounding box: %s" ),
                                                       static_cast<int>( aContour.PointCount() ),
                                                       static_cast<int>( mkWire.Error() ),
                                                       formatBBox( aContour.BBox() ) ),
@@ -1741,7 +1741,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                 if( !check.IsValid() )
                 {
                     m_reporter->Report( wxString::Format( _( "Wire self-interference check failed\n"
-                                                             "z: %g; bounding box: %s\n" ),
+                                                             "z: %g; bounding box: %s" ),
                                                           aZposition,
                                                           formatBBox( aContour.BBox() ) ),
                                         RPT_SEVERITY_ERROR );
@@ -1762,7 +1762,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( aConvertToArcs && wire.IsNull() )
                 {
-                    m_reporter->Report( wxString::Format( _( "Using non-simplified polygon.\n" ) ),
+                    m_reporter->Report( wxString::Format( _( "Using non-simplified polygon." ) ),
                                         RPT_SEVERITY_DEBUG );
 
                     // Fall back to original shape
@@ -1781,7 +1781,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     else
                     {
                         m_reporter->Report( wxString::Format( wxT( "** Outline skipped **\n"
-                                                                   "z: %g; bounding box: %s\n" ),
+                                                                   "z: %g; bounding box: %s" ),
                                                               aZposition,
                                                               formatBBox( polygon[contId].BBox() ) ),
                                             RPT_SEVERITY_DEBUG );
@@ -1800,7 +1800,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     else
                     {
                         m_reporter->Report( wxString::Format( wxT( "** Hole skipped **\n"
-                                                                   "z: %g; bounding box: %s\n" ),
+                                                                   "z: %g; bounding box: %s" ),
                                                               aZposition,
                                                               formatBBox( polygon[contId].BBox() ) ),
                                             RPT_SEVERITY_DEBUG );
@@ -1809,7 +1809,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             }
             catch( const Standard_Failure& e )
             {
-                m_reporter->Report( wxString::Format( _( "OCC exception creating contour %d: %s\n" ),
+                m_reporter->Report( wxString::Format( _( "OCC exception creating contour %d: %s" ),
                                                       static_cast<int>( contId ),
                                                       e.GetMessageString() ),
                                     RPT_SEVERITY_ERROR );
@@ -1828,7 +1828,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( prism.IsNull() )
                 {
-                    m_reporter->Report( _( "Failed to create a prismatic shape\n" ), RPT_SEVERITY_ERROR );
+                    m_reporter->Report( _( "Failed to create a prismatic shape" ), RPT_SEVERITY_ERROR );
                     return false;
                 }
             }
@@ -1839,7 +1839,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         }
         else
         {
-            m_reporter->Report( _( "** Face skipped **\n" ), RPT_SEVERITY_DEBUG );
+            m_reporter->Report( _( "** Face skipped **" ), RPT_SEVERITY_DEBUG );
         }
     }
 
@@ -1910,7 +1910,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
 
     // Support for more than one main outline (more than one board)
-    m_reporter->Report( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points.\n" ),
+    m_reporter->Report( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points." ),
                                           aOutline.OutlineCount(),
                                           aOutline.FullPointCount() ),
                         RPT_SEVERITY_DEBUG );
@@ -1929,7 +1929,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     if( !MakeShapes( m_board_outlines, aOutline, false, boardThickness, boardZPos, aOrigin ) )
     {
         // Error
-        m_reporter->Report( _( "OCC error creating main outline.\n" ), RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "OCC error creating main outline." ), RPT_SEVERITY_ERROR );
     }
 #else
     // Workaround for bug #17446 Holes are missing from STEP export with circular PCB outline
@@ -1946,7 +1946,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                 if( !MakeShapes( m_board_outlines, polyset, false, boardThickness, boardZPos,
                                  aOrigin ) )
                 {
-                    m_reporter->Report( _( "OCC error creating main outline.\n" ),
+                    m_reporter->Report( _( "OCC error creating main outline." ),
                                         RPT_SEVERITY_ERROR );
                 }
             }
@@ -1955,7 +1955,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                 if( !MakeShapes( m_boardCutouts, polyset, false, boardThickness, boardZPos,
                                  aOrigin ) )
                 {
-                    m_reporter->Report( _( "OCC error creating hole in main outline.\n" ),
+                    m_reporter->Report( _( "OCC error creating hole in main outline." ),
                                         RPT_SEVERITY_ERROR );
                 }
             }
@@ -1970,7 +1970,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         BRepBndLib::Add( brdShape, brdBndBox );
 
     // subtract cutouts (if any)
-    m_reporter->Report( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
+    m_reporter->Report( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s))." ),
                                           (int) ( m_boardCutouts.size() + m_copperCutouts.size() ) ),
                         RPT_SEVERITY_DEBUG );
 
@@ -1998,7 +1998,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
             [&tp, this]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
                          std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
             {
-                m_reporter->Report( wxString::Format( _( "Subtracting holes for %s\n" ), aWhat ),
+                m_reporter->Report( wxString::Format( _( "Subtracting holes for %s" ), aWhat ),
                                     RPT_SEVERITY_DEBUG );
 
                 for( auto& [netname, vec] : aShapesMap )
@@ -2043,7 +2043,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
                             if( cut.HasErrors() || cut.HasWarnings() )
                             {
                                 m_reporter->Report( wxString::Format( _( "** Got problems while cutting "
-                                                                         "%s net '%s' **\n" ),
+                                                                         "%s net '%s' **" ),
                                                                       aWhat,
                                                                       UnescapeString( netname ) ),
                                                     RPT_SEVERITY_ERROR );
@@ -2126,7 +2126,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         for( const auto& [netname, shapes] : m_board_copper_vias )
             addShapes( netname, shapes );
 
-        m_reporter->Report( wxT( "Fusing shapes\n" ), RPT_SEVERITY_DEBUG );
+        m_reporter->Report( wxT( "Fusing shapes" ), RPT_SEVERITY_DEBUG );
 
         // Do fusing in parallel
         std::mutex mutex;
@@ -2157,7 +2157,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     }
 
     // push the board to the data structure
-    m_reporter->Report( wxT( "Generate board full shape.\n" ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxT( "Generate board full shape." ), RPT_SEVERITY_DEBUG );
 
     // AddComponent adds a label that has a reference (not a parent/child relation) to the real
     // label.  We need to extract that real label to name it for the STEP output cleanly
@@ -2334,7 +2334,7 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -2404,7 +2404,7 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize, bool 
 {
     if( !isBoardOutlineValid() )
     {
-        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -2485,7 +2485,7 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize, bool 
 
         if( !wxRenameFile( tmpfname, fn.GetFullName(), true ) )
         {
-            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'." ),
                                                   tmpfname,
                                                   fn.GetFullName() ),
                                 RPT_SEVERITY_ERROR );
@@ -2503,7 +2503,7 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -2666,8 +2666,8 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 
     int groupNumber = 1;
 
-    m_reporter->Report( wxT( "Pad definitions:\n" ), RPT_SEVERITY_DEBUG );
-    m_reporter->Report( wxT( "Number\tName\tArea (m^2)\n" ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxT( "Pad definitions:" ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxT( "Number\tName\tArea (m^2)" ), RPT_SEVERITY_DEBUG );
 
     for( int dim = 0; dim <= 3; dim++ )
     {
@@ -2697,7 +2697,7 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 
             file << "    </group>" << std::endl;
 
-            m_reporter->Report( wxString::Format( "%d\t%s\t%g\n",
+            m_reporter->Report( wxString::Format( "%d\t%s\t%g",
                                                   groupNumber,
                                                   name,
                                                   groupAreas[name] ),
@@ -2707,7 +2707,7 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
         }
     }
 
-    m_reporter->Report( wxT( "\n" ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxT( "" ), RPT_SEVERITY_DEBUG );
 
     file << "  </groups>" << std::endl;
     file << "  <fields count=\"0\"/>" << std::endl;
@@ -2744,7 +2744,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     case FMT_IGES:
         if( !readIGES( doc, aFileNameUTF8.c_str() ) )
         {
-            m_reporter->Report( wxString::Format( wxT( "readIGES() failed on filename '%s'.\n" ),
+            m_reporter->Report( wxString::Format( wxT( "readIGES() failed on filename '%s'." ),
                                                   fileName ),
                                 RPT_SEVERITY_ERROR );
             return false;
@@ -2754,7 +2754,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     case FMT_STEP:
         if( !readSTEP( doc, aFileNameUTF8.c_str() ) )
         {
-            m_reporter->Report( wxString::Format( wxT( "readSTEP() failed on filename '%s'.\n" ),
+            m_reporter->Report( wxString::Format( wxT( "readSTEP() failed on filename '%s'." ),
                                                   fileName ),
                                 RPT_SEVERITY_ERROR );
             return false;
@@ -2774,7 +2774,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
         if( size == wxInvalidOffset )
         {
-            m_reporter->Report( wxString::Format( wxT( "getModelLabel() failed on filename '%s'.\n" ),
+            m_reporter->Report( wxString::Format( wxT( "getModelLabel() failed on filename '%s'." ),
                                                   fileName ),
                                 RPT_SEVERITY_ERROR );
             return false;
@@ -2799,7 +2799,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
             }
             catch( ... )
             {
-                m_reporter->Report( wxString::Format( wxT( "failed to decompress '%s'.\n" ),
+                m_reporter->Report( wxString::Format( wxT( "failed to decompress '%s'." ),
                                                       fileName ),
                                     RPT_SEVERITY_ERROR );
             }
@@ -2916,7 +2916,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
                 }
                 else
                 {
-                    m_reporter->Report( wxString::Format( wxT( "readVRML() failed on filename '%s'.\n" ),
+                    m_reporter->Report( wxString::Format( wxT( "readVRML() failed on filename '%s'." ),
                                                           fileName ),
                                         RPT_SEVERITY_ERROR );
                     return false;
@@ -2926,7 +2926,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         else // Substitution is not allowed
         {
             if( aErrorMessage )
-                aErrorMessage->Printf( wxT( "Cannot load any VRML model for this export.\n" ) );
+                aErrorMessage->Printf( wxT( "Cannot load any VRML model for this export." ) );
 
             return false;
         }
@@ -2936,7 +2936,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         // TODO: implement IDF and EMN converters
 
     default:
-        m_reporter->Report( wxString::Format( _( "Cannot identify actual file type for '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "Cannot identify actual file type for '%s'." ),
                                               fileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -2946,7 +2946,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
     if( aLabel.IsNull() )
     {
-        m_reporter->Report( wxString::Format( _( "Could not transfer model data from file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "Could not transfer model data from file '%s'." ),
                                               fileName  ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -3187,7 +3187,7 @@ bool STEP_PCB_MODEL::performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool )
     TDF_LabelSequence freeShapes;
     aShapeTool->GetFreeShapes( freeShapes );
 
-    m_reporter->Report( wxT( "Meshing model\n" ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxT( "Meshing model" ), RPT_SEVERITY_DEBUG );
 
     // GLTF is a mesh format, we have to trigger opencascade to mesh the shapes we composited into the asesmbly
     // To mesh models, lets just grab the free shape root and execute on them
@@ -3214,7 +3214,7 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -3265,7 +3265,7 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 
         if( !wxRenameFile( tmpGltfname, fn.GetFullName(), true ) )
         {
-            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'." ),
                                                   tmpGltfname,
                                                   fn.GetFullName() ),
                                 RPT_SEVERITY_ERROR );
@@ -3282,13 +3282,13 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
 {
 #if OCC_VERSION_HEX < 0x070700
-    m_reporter->Report( wxT( "PLY export is not supported before OCCT 7.7.0\n" ), RPT_SEVERITY_ERROR );
+    m_reporter->Report( wxT( "PLY export is not supported before OCCT 7.7.0" ), RPT_SEVERITY_ERROR );
     return false;
 #else
 
     if( !isBoardOutlineValid() )
     {
-        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -3337,7 +3337,7 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
 
         if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
         {
-            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'." ),
                                                   tmpFname,
                                                   fn.GetFullName() ),
                                 RPT_SEVERITY_ERROR );
@@ -3356,7 +3356,7 @@ bool STEP_PCB_MODEL::WriteSTL( const wxString& aFileName )
 {
     if( !isBoardOutlineValid() )
     {
-        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ),
+        m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -3386,7 +3386,7 @@ bool STEP_PCB_MODEL::WriteSTL( const wxString& aFileName )
 
         if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
         {
-            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'.\n" ),
+            m_reporter->Report( wxString::Format( _( "Cannot rename temporary file '%s' to '%s'." ),
                                                   tmpFname,
                                                   fn.GetFullName() ),
                                 RPT_SEVERITY_ERROR );
