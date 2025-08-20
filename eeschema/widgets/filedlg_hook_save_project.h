@@ -36,25 +36,44 @@ public:
         m_cb = customizer.AddCheckBox( _( "Create a new project for this schematic" ) );
         m_cb->SetValue( true );
 
+        wxString choices[] = {
+            _( "Do not copy subsheets" ),
+            _( "Copy internal subsheets only" ),
+            _( "Copy all subsheets" )
+        };
+
+        m_choice = customizer.AddChoice( 3, choices );
+        m_choice->SetSelection( 1 ); // Default to copying internal subsheets only
         m_controlsAttached = true;
     }
 
     virtual void TransferDataFromCustomControls() override
     {
         m_createNewProject = m_cb->GetValue();
+        m_copySubsheets = m_choice->GetSelection() > 0;
+        m_includeExternal = m_choice->GetSelection() > 1;
     }
 
     ///< Gets the selected state of the create new project option
     bool GetCreateNewProject() const { return m_createNewProject; }
+
+    ///< Gets the selected state of the copy subsheets option
+    bool GetCopySubsheets() const { return m_copySubsheets; }
+
+    ///< Gets the selected state of the include external sheets option
+    bool GetIncludeExternSheets() const { return m_includeExternal; }
 
     ///< Gets if this hook has attached controls to a dialog box
     bool IsAttachedToDialog() const { return m_controlsAttached; }
 
 private:
     bool m_createNewProject = true;
+    bool m_copySubsheets = true;
+    bool m_includeExternal = false;
     bool m_controlsAttached = false;
 
     wxFileDialogCheckBox* m_cb = nullptr;
+    wxFileDialogChoice* m_choice = nullptr;
 
     wxDECLARE_NO_COPY_CLASS( FILEDLG_HOOK_SAVE_PROJECT );
 };

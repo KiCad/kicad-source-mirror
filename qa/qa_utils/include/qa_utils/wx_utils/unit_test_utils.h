@@ -36,6 +36,7 @@
 #include <set>
 
 #include <wx/gdicmn.h>
+#include <wx/string.h>
 
 
 
@@ -134,6 +135,42 @@ std::ostream& boost_test_print_type( std::ostream& os, std::pair<K, V> const& aP
 }
 
 } // namespace std
+
+
+//-----------------------------------------------------------------------------+
+// Boost.Test printing helpers for wx types / wide string literals
+//-----------------------------------------------------------------------------+
+namespace boost { namespace test_tools { namespace tt_detail {
+
+template<>
+struct print_log_value<wxString>
+{
+    void operator()( std::ostream& os, wxString const& v )
+    {
+#if wxUSE_UNICODE
+        os << v.ToUTF8().data();
+#else
+        os << v;
+#endif
+    }
+};
+
+// Wide string literal arrays
+template<std::size_t N>
+struct print_log_value<wchar_t[ N ]>
+{
+    void operator()( std::ostream& os, const wchar_t (&ws)[ N ] )
+    {
+        wxString tmp( ws );
+#if wxUSE_UNICODE
+        os << tmp.ToUTF8().data();
+#else
+        os << tmp;
+#endif
+    }
+};
+
+}}} // namespace boost::test_tools::tt_detail
 
 
 /**

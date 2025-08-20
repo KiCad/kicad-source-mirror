@@ -81,6 +81,7 @@
 #include <kiplatform/io.h>
 
 #include "widgets/filedlg_hook_save_project.h"
+#include "save_project_utils.h"
 
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
@@ -848,6 +849,75 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 }
 
 
+bool PrepareSaveAsFiles( SCHEMATIC& aSchematic, SCH_SCREENS& aScreens,
+                         const wxFileName& aOldRoot, const wxFileName& aNewRoot,
+                         bool aSaveCopy, bool aCopySubsheets, bool aIncludeExternSheets,
+                         std::unordered_map<SCH_SCREEN*, wxString>& aFilenameMap,
+                         wxString& aErrorMsg )
+{
+    SCH_SCREEN* screen;
+
+    for( size_t i = 0; i < aScreens.GetCount(); i++ )
+    {
+        screen = aScreens.GetScreen( i );
+
+        wxCHECK2( screen, continue );
+
+        if( screen == aSchematic.RootScreen() )
+            continue;
+
+        wxFileName src = screen->GetFileName();
+
+        if( !src.IsAbsolute() )
+            src.MakeAbsolute( aOldRoot.GetPath() );
+
+        bool internalSheet = src.GetPath().StartsWith( aOldRoot.GetPath() );
+
+        if( aCopySubsheets && ( internalSheet || aIncludeExternSheets ) )
+        {
+            wxFileName dest = src;
+
+            if( internalSheet && dest.MakeRelativeTo( aOldRoot.GetPath() ) )
+                dest.MakeAbsolute( aNewRoot.GetPath() );
+            else
+                dest.Assign( aNewRoot.GetPath(), dest.GetFullName() );
+
+            wxLogTrace( tracePathsAndFiles,
+                        wxS( "Moving schematic from '%s' to '%s'." ),
+                        screen->GetFileName(),
+                        dest.GetFullPath() );
+
+            if( !dest.DirExists() && !dest.Mkdir() )
+            {
+                aErrorMsg.Printf( _( "Folder '%s' could not be created.\n\n"
+                                     "Make sure you have write permissions and try again." ),
+                                 dest.GetPath() );
+                return false;
+            }
+
+            if( aSaveCopy )
+                aFilenameMap[screen] = dest.GetFullPath();
+            else
+                screen->SetFileName( dest.GetFullPath() );
+        }
+        else
+        {
+            if( aSaveCopy )
+                aFilenameMap[screen] = wxString();
+
+            screen->SetFileName( src.GetFullPath() );
+        }
+    }
+
+    for( SCH_SHEET_PATH& sheet : aSchematic.Hierarchy() )
+    {
+        if( !sheet.Last()->IsRootSheet() )
+            sheet.MakeFilePathRelativeToParentSheet();
+    }
+
+    return true;
+}
+
 bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 {
     wxString msg;
@@ -857,6 +927,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     bool        success           = true;
     bool        updateFileHistory = false;
     bool        createNewProject  = false;
+    bool        copySubsheets     = false;
+    bool        includeExternSheets = false;
 
     // I want to see it in the debugger, show me the string!  Can't do that with wxFileName.
     wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
@@ -920,7 +992,11 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         }
 
         if( newProjectHook.IsAttachedToDialog() )
+        {
             createNewProject = newProjectHook.GetCreateNewProject();
+            copySubsheets = newProjectHook.GetCopySubsheets();
+            includeExternSheets = newProjectHook.GetIncludeExternSheets();
+        }
 
         if( !saveCopy )
         {
@@ -933,71 +1009,14 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             filenameMap[Schematic().RootScreen()] = newFileName.GetFullPath();
         }
 
-        // Set the base path to all new sheets.
-        for( size_t i = 0; i < screens.GetCount(); i++ )
+        if( !PrepareSaveAsFiles( Schematic(), screens, fn, newFileName, saveCopy,
+                                 copySubsheets, includeExternSheets, filenameMap, msg ) )
         {
-            screen = screens.GetScreen( i );
+            wxMessageDialog dlgBadFilePath( this, msg, _( "Error" ),
+                                            wxOK | wxICON_EXCLAMATION | wxCENTER );
 
-            wxCHECK2( screen, continue );
-
-            // The root screen file name has already been set.
-            if( screen == Schematic().RootScreen() )
-                continue;
-
-            wxFileName tmp = screen->GetFileName();
-
-            // Assume existing sheet files are being reused and do not save them to the new
-            // path.  Maybe in the future, add a user option to copy schematic files to the
-            // new project path.
-            if( tmp.FileExists() )
-                continue;
-
-            if( tmp.GetPath().IsEmpty() )
-            {
-                tmp.SetPath( newFileName.GetPath() );
-            }
-            else if( tmp.GetPath() == fn.GetPath() )
-            {
-                tmp.SetPath( newFileName.GetPath() );
-            }
-            else if( tmp.GetPath().StartsWith( fn.GetPath() ) )
-            {
-                // NOTE: this hasn't been tested because the sheet properties dialog no longer
-                //       allows adding a path specifier in the file name field.
-                wxString newPath = newFileName.GetPath();
-                newPath += tmp.GetPath().Right( fn.GetPath().Length() );
-                tmp.SetPath( newPath );
-            }
-
-            wxLogTrace( tracePathsAndFiles,
-                        wxS( "Moving schematic from '%s' to '%s'." ),
-                        screen->GetFileName(),
-                        tmp.GetFullPath() );
-
-            if( !tmp.DirExists() && !tmp.Mkdir() )
-            {
-                msg.Printf( _( "Folder '%s' could not be created.\n\n"
-                               "Make sure you have write permissions and try again." ),
-                            newFileName.GetPath() );
-
-                wxMessageDialog dlgBadFilePath( this, msg, _( "Error" ),
-                                                wxOK | wxICON_EXCLAMATION | wxCENTER );
-
-                dlgBadFilePath.ShowModal();
-                return false;
-            }
-
-            if( saveCopy )
-                filenameMap[screen] = tmp.GetFullPath();
-            else
-                screen->SetFileName( tmp.GetFullPath() );
-        }
-
-        // Attempt to make sheet file name paths relative to the new root schematic path.
-        for( SCH_SHEET_PATH& sheet : Schematic().Hierarchy() )
-        {
-            if( !sheet.Last()->IsRootSheet() )
-                sheet.MakeFilePathRelativeToParentSheet();
+            dlgBadFilePath.ShowModal();
+            return false;
         }
     }
     else if( !fn.FileExists() )
