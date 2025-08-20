@@ -239,8 +239,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::GetSelection()
 }
 
 
-PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                                 bool aConfirmLockedItems )
+PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter )
 {
     return m_selection;
 }
