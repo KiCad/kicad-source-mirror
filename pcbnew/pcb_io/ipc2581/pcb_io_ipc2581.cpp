@@ -923,7 +923,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         break;
     }
     default:
-        wxLogError( "Unknown pad type" );
+        Report( _( "Pad has unsupported type; it was skipped." ), RPT_SEVERITY_WARNING );
         break;
     }
 
@@ -1256,8 +1256,9 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
         if( iter == m_footprint_dict.end() )
         {
-            wxLogError( "Footprint %s not found in dictionary",
-                        fp->GetFPID().GetLibItemName().wx_str() );
+            Report( wxString::Format( _( "Footprint %s not found in dictionary; BOM data may be incomplete." ),
+                                      fp->GetFPID().GetLibItemName().wx_str() ),
+                    RPT_SEVERITY_WARNING );
             continue;
         }
 
@@ -1271,8 +1272,9 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         }
         else
         {
-            wxLogError( "Footprint %s not found in OEMRef dictionary",
-                        fp->GetFPID().GetLibItemName().wx_str() );
+            Report( wxString::Format( _( "Component \"%s\" missing OEM reference; BOM entry will be skipped." ),
+                                      fp->GetFPID().GetLibItemName().wx_str() ),
+                    RPT_SEVERITY_WARNING );
         }
 
         entry->m_OEMDesignRef = genString( entry->m_OEMDesignRef, "REF" );
@@ -2253,7 +2255,7 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
 
     if( ! m_board->GetBoardPolygonOutlines( board_outline ) )
     {
-        wxLogError( "Failed to get board outline" );
+        Report( _( "Board outline is invalid or missing.  Please run DRC." ), RPT_SEVERITY_ERROR );
         return;
     }
 
@@ -2614,7 +2616,8 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         }
 
         if( !m_OEMRef_dict.emplace( fp, name ).second )
-            wxLogError( "Duplicate footprint pointers.  Please report this bug." );
+            Report( _( "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect." ),
+                    RPT_SEVERITY_ERROR );
 
         addAttribute( componentNode,  "part", genString( name, "REF" ) );
         addAttribute( componentNode,  "layerRef", m_layer_name_map[fp->GetLayer()] );
@@ -2814,7 +2817,8 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
 
                 if( it == m_padstack_dict.end() )
                 {
-                    wxLogError( "Failed to find padstack for via" );
+                    Report( _( "Via uses unsupported padstack; omitted from drill data." ),
+                            RPT_SEVERITY_WARNING );
                     continue;
                 }
 
@@ -2839,7 +2843,8 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
 
                 if( it == m_padstack_dict.end() )
                 {
-                    wxLogError( "Failed to find padstack for pad" );
+                    Report( _( "Pad uses unsupported padstack; hole was omitted from drill data." ),
+                            RPT_SEVERITY_WARNING );
                     continue;
                 }
 
@@ -2899,6 +2904,8 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     wxXmlNode* teardropLayerSetNode = nullptr;
     wxXmlNode* teardropFeatureSetNode = nullptr;
 
+    bool teardrop_warning = false;
+
     if( BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( *it );
         IsCopperLayer( aLayer ) && item )
     {
@@ -2954,25 +2961,34 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             {
                 wxXmlNode* zoneFeatureNode = specialNode;
 
-                if( zone->IsTeardropArea() && m_version > 'B' )
+                if( zone->IsTeardropArea() )
                 {
-                    if( !teardropFeatureSetNode )
+                    if( m_version > 'B' )
                     {
-                        teardropLayerSetNode = appendNode( aLayerNode, "Set" );
-                        addAttribute( teardropLayerSetNode,  "geometryUsage", "TEARDROP" );
-
-                        if( zone->GetNetCode() > 0 )
+                        if( !teardropFeatureSetNode )
                         {
-                            addAttribute( teardropLayerSetNode,  "net",
-                                          genString( zone->GetNetname(), "NET" ) );
+                            teardropLayerSetNode = appendNode( aLayerNode, "Set" );
+                            addAttribute( teardropLayerSetNode,  "geometryUsage", "TEARDROP" );
+
+                            if( zone->GetNetCode() > 0 )
+                            {
+                                addAttribute( teardropLayerSetNode,  "net",
+                                              genString( zone->GetNetname(), "NET" ) );
+                            }
+
+                            wxXmlNode* new_teardrops = appendNode( teardropLayerSetNode, "Features" );
+                            addLocationNode( new_teardrops, 0.0, 0.0 );
+                            teardropFeatureSetNode = appendNode( new_teardrops, "UserSpecial" );
                         }
 
-                        wxXmlNode* new_teardrops = appendNode( teardropLayerSetNode, "Features" );
-                        addLocationNode( new_teardrops, 0.0, 0.0 );
-                        teardropFeatureSetNode = appendNode( new_teardrops, "UserSpecial" );
+                        zoneFeatureNode = teardropFeatureSetNode;
                     }
-
-                    zoneFeatureNode = teardropFeatureSetNode;
+                    else if( !teardrop_warning )
+                    {
+                        Report( _( "Teardrops are not supported in IPC-2581 revision B; they were exported as zones." ),
+                                RPT_SEVERITY_WARNING );
+                        teardrop_warning = true;
+                    }
                 }
                 else
                 {
@@ -3448,7 +3464,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     if( !m_xml_doc->Save( out_stream ) )
     {
-        wxLogError( _( "Failed to save file to buffer" ) );
+        Report( _( "Failed to save IPC-2581 data to buffer." ), RPT_SEVERITY_ERROR );
         return;
     }
 

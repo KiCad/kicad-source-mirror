@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
+class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -31,6 +32,7 @@ class STD_BITMAP_BUTTON;
 #include <wx/spinctrl.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
+#include <wx/panel.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -68,6 +70,7 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		wxChoice* m_choiceDistPN;
 		wxStaticText* m_staticText9;
 		wxTextCtrl* m_textDistributor;
+		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

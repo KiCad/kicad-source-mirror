@@ -103,6 +103,7 @@ private:
     void onCompressCheck( wxCommandEvent& event ) override;
     void onMfgPNChange( wxCommandEvent& event ) override;
     void onDistPNChange( wxCommandEvent& event ) override;
+    void onOKClick( wxCommandEvent& event ) override;
 
     void init();
 
