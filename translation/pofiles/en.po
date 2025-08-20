@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 01:15+0300\n"
+"POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1678,6 +1678,39 @@ msgstr "Description:"
 msgid "Design Block Properties"
 msgstr "Design Block Properties"
 
+msgid "Generate Database Connection"
+msgstr "Generate Database Connection"
+
+msgid "Custom"
+msgstr "Custom"
+
+msgid "Data Source Name"
+msgstr "Data Source Name"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Timeout"
+msgstr "Timeout"
+
+msgid "Connection String"
+msgstr "Connection String"
+
+msgid "Test Connection"
+msgstr "Test Connection"
+
+msgid "Tables"
+msgstr "Tables"
+
+msgid "Unable to connect to database"
+msgstr "Unable to connect to database"
+
+msgid "Database Error"
+msgstr "Database Error"
+
 msgid "design block"
 msgstr "design block"
 
@@ -2269,9 +2302,6 @@ msgstr "Authentication"
 msgid "User Name"
 msgstr "User Name"
 
-msgid "Password"
-msgstr "Password"
-
 msgid "Commit Changes"
 msgstr "Commit Changes"
 
@@ -2301,9 +2331,6 @@ msgstr "C&ommit"
 
 msgid "Commit message cannot be empty"
 msgstr "Commit message cannot be empty"
-
-msgid "Test Connection"
-msgstr "Test Connection"
 
 msgid "Enter the password for the SSH key"
 msgstr "Enter the password for the SSH key"
@@ -3712,8 +3739,8 @@ msgid "Expecting '%s'"
 msgstr "Expecting '%s'"
 
 #, c-format
-msgid "Expecting %s"
-msgstr "Expecting %s"
+msgid "Expecting %s. Got '%s'"
+msgstr "Expecting %s. Got '%s'"
 
 #, c-format
 msgid "Unexpected '%s'"
@@ -9263,8 +9290,8 @@ msgstr ""
 msgid "DXF Options"
 msgstr "DXF Options"
 
-msgid "Export units"
-msgstr "Export units"
+msgid "Export units:"
+msgstr "Export units:"
 
 msgid "Other Options"
 msgstr "Other Options"
@@ -9691,9 +9718,6 @@ msgstr "NOISE"
 
 msgid "SP"
 msgstr "SP"
-
-msgid "Custom"
-msgstr "Custom"
 
 msgid "Decade"
 msgstr "Decade"
@@ -17119,6 +17143,15 @@ msgstr "Repeat Pin"
 msgid "Create a new project for this schematic"
 msgstr "Create a new project for this schematic"
 
+msgid "Do not copy subsheets"
+msgstr "Do not copy subsheets"
+
+msgid "Copy internal subsheets only"
+msgstr "Copy internal subsheets only"
+
+msgid "Copy all subsheets"
+msgstr "Copy all subsheets"
+
 msgid "Edit Page Number"
 msgstr "Edit Page Number"
 
@@ -20235,6 +20268,27 @@ msgstr "Roundrect radius is larger than the rectangle's major dimension"
 
 msgid "Roundrect radius must be non-negative"
 msgstr "Roundrect radius must be non-negative"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Cancelled"
+msgstr "Cancelled"
+
+msgid "File not found"
+msgstr "File not found"
+
+msgid "Failed to load PDF"
+msgstr "Failed to load PDF"
+
+msgid "Failed to print"
+msgstr "Failed to print"
+
+msgid "Unsupported"
+msgstr "Unsupported"
+
+msgid "Unknown error"
+msgstr "Unknown error"
 
 #, c-format
 msgid "Error code: %d"
@@ -24264,6 +24318,27 @@ msgstr "manufacturer"
 msgid "mfg"
 msgstr "mfg"
 
+msgid "The board must be saved before generating IPC-2581 file."
+msgstr "The board must be saved before generating IPC-2581 file."
+
+#, c-format
+msgid "Insufficient permissions to write file '%s'."
+msgstr "Insufficient permissions to write file '%s'."
+
+msgid "Generate IPC-2581 File"
+msgstr "Generate IPC-2581 File"
+
+#, c-format
+msgid ""
+"Error generating IPC-2581 file '%s'.\n"
+"%s"
+msgstr ""
+"Error generating IPC-2581 file '%s'.\n"
+"%s"
+
+msgid "IPC-2581 file generated successfully."
+msgstr "IPC-2581 file generated successfully."
+
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
@@ -24659,9 +24734,6 @@ msgstr "Export 3D Model"
 msgid "Process failed with exit code %d"
 msgstr "Process failed with exit code %d"
 
-msgid "Success"
-msgstr "Success"
-
 msgid "Do you want to cancel the export process?"
 msgstr "Do you want to cancel the export process?"
 
@@ -25043,17 +25115,37 @@ msgstr ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 
+#, c-format
+msgid ""
+"You are trying to remove layers that are used by the footprint: %s.\n"
+"Please remove the objects that use these layers first."
+msgstr ""
+"You are trying to remove layers that are used by the footprint: %s.\n"
+"Please remove the objects that use these layers first."
+
 msgid "Unconstrained"
 msgstr "Unconstrained"
 
 msgid "Footprint name:"
 msgstr "Footprint name:"
 
-msgid "Private Layers"
-msgstr "Private Layers"
-
 msgid "Component type:"
 msgstr "Component type:"
+
+msgid "Custom Layers"
+msgstr "Custom Layers"
+
+msgid "Use custom stackup"
+msgstr "Use custom stackup"
+
+msgid "Copper layers"
+msgstr "Copper layers"
+
+msgid "User Layers"
+msgstr "User Layers"
+
+msgid "Private Layers"
+msgstr "Private Layers"
 
 msgid "Leave values blank to use netclass values."
 msgstr "Leave values blank to use netclass values."
@@ -25948,9 +26040,6 @@ msgstr "Copy other items"
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr "Copy text, shapes, zones, and other items inside the source rule area"
 
-msgid "Include footprints outside the reference rule area"
-msgstr "Include footprints outside the reference rule area"
-
 msgid "Group items with their target rule areas"
 msgstr "Group items with their target rule areas"
 
@@ -26655,9 +26744,6 @@ msgstr "Force A4 output"
 
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr "Uncheck to plot graphic items using their center lines"
-
-msgid "Export units:"
-msgstr "Export units:"
 
 msgid "The units to use for the exported DXF file"
 msgstr "The units to use for the exported DXF file"
@@ -27857,14 +27943,8 @@ msgstr "No filename entered"
 msgid "Illegal filename"
 msgstr "Illegal filename"
 
-msgid "File not found"
-msgstr "File not found"
-
 msgid "Unable to open file"
 msgstr "Unable to open file"
-
-msgid "Unknown error"
-msgstr "Unknown error"
 
 msgid "3D Model(s)"
 msgstr "3D Model(s)"
@@ -31080,8 +31160,8 @@ msgstr ""
 "\n"
 "Export time %.3f s\n"
 
-msgid "** Got problems while fusing shapes **\n"
-msgstr "** Got problems while fusing shapes **\n"
+msgid "** Got problems while fusing shapes **"
+msgstr "** Got problems while fusing shapes **"
 
 msgid "Errors:\n"
 msgstr "Errors:\n"
@@ -31089,106 +31169,104 @@ msgstr "Errors:\n"
 msgid "Warnings:\n"
 msgstr "Warnings:\n"
 
-msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
+msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **"
 
-msgid "OCC error adding pad/via polygon.\n"
-msgstr "OCC error adding pad/via polygon.\n"
-
-#, c-format
-msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr "Could not add shape (%d points) to copper layer %s.\n"
+msgid "OCC error adding pad/via polygon."
+msgstr "OCC error adding pad/via polygon."
 
 #, c-format
-msgid "No model defined for %s.\n"
-msgstr "No model defined for %s.\n"
+msgid "Could not add shape (%d points) to copper layer %s."
+msgstr "Could not add shape (%d points) to copper layer %s."
 
 #, c-format
-msgid "No model for filename '%s'.\n"
-msgstr "No model for filename '%s'.\n"
+msgid "No model defined for %s."
+msgstr "No model defined for %s."
 
 #, c-format
-msgid "No location data for filename '%s'.\n"
-msgstr "No location data for filename '%s'.\n"
+msgid "No model for filename '%s'."
+msgstr "No model for filename '%s'."
 
 #, c-format
-msgid "Could not add component with filename '%s'.\n"
-msgstr "Could not add component with filename '%s'.\n"
+msgid "No location data for filename '%s'."
+msgstr "No location data for filename '%s'."
 
 #, c-format
-msgid "OCC exception building shape segment: %s\n"
-msgstr "OCC exception building shape segment: %s\n"
+msgid "Could not add component with filename '%s'."
+msgstr "Could not add component with filename '%s'."
 
 #, c-format
-msgid "OCC exception building face: %s\n"
-msgstr "OCC exception building face: %s\n"
-
-msgid "Failed to create a prismatic shape\n"
-msgstr "Failed to create a prismatic shape\n"
+msgid "OCC exception building shape segment: %s"
+msgstr "OCC exception building shape segment: %s"
 
 #, c-format
-msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
+msgid "OCC exception building face: %s"
+msgstr "OCC exception building face: %s"
+
+msgid "Failed to create a prismatic shape"
+msgstr "Failed to create a prismatic shape"
 
 #, c-format
-msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr "Failed to add segment edge (%d %d) -> (%d %d)\n"
+msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
+msgstr "Failed to make segment edge (%d %d) -> (%d %d), skipping"
+
+#, c-format
+msgid "Failed to add segment edge (%d %d) -> (%d %d)"
+msgstr "Failed to add segment edge (%d %d) -> (%d %d)"
 
 #, c-format
 msgid ""
-"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
-"%d)\n"
+"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
-"%d)\n"
+"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 
 #, c-format
-msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr "Failed to close wire at %d, %d -> %d, %d **\n"
+msgid "Failed to close wire at %d, %d -> %d, %d **"
+msgstr "Failed to close wire at %d, %d -> %d, %d **"
 
 #, c-format
-msgid "OCC exception creating wire: %s\n"
-msgstr "OCC exception creating wire: %s\n"
+msgid "OCC exception creating wire: %s"
+msgstr "OCC exception creating wire: %s"
 
 #, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 msgstr ""
 "Wire not done (contour points %d): OCC error %d\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 
 #, c-format
 msgid ""
 "Wire self-interference check failed\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 msgstr ""
 "Wire self-interference check failed\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 
-msgid "Using non-simplified polygon.\n"
-msgstr "Using non-simplified polygon.\n"
-
-#, c-format
-msgid "OCC exception creating contour %d: %s\n"
-msgstr "OCC exception creating contour %d: %s\n"
-
-msgid "** Face skipped **\n"
-msgstr "** Face skipped **\n"
-
-msgid "OCC error creating main outline.\n"
-msgstr "OCC error creating main outline.\n"
-
-msgid "OCC error creating hole in main outline.\n"
-msgstr "OCC error creating hole in main outline.\n"
+msgid "Using non-simplified polygon."
+msgstr "Using non-simplified polygon."
 
 #, c-format
-msgid "Subtracting holes for %s\n"
-msgstr "Subtracting holes for %s\n"
+msgid "OCC exception creating contour %d: %s"
+msgstr "OCC exception creating contour %d: %s"
+
+msgid "** Face skipped **"
+msgstr "** Face skipped **"
+
+msgid "OCC error creating main outline."
+msgstr "OCC error creating main outline."
+
+msgid "OCC error creating hole in main outline."
+msgstr "OCC error creating hole in main outline."
 
 #, c-format
-msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr "** Got problems while cutting %s net '%s' **\n"
+msgid "Subtracting holes for %s"
+msgstr "Subtracting holes for %s"
+
+#, c-format
+msgid "** Got problems while cutting %s net '%s' **"
+msgstr "** Got problems while cutting %s net '%s' **"
 
 msgid "shapes"
 msgstr "shapes"
@@ -31200,8 +31278,8 @@ msgid "vias"
 msgstr "vias"
 
 #, c-format
-msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "No valid PCB assembly; cannot create output file '%s'.\n"
+msgid "No valid PCB assembly; cannot create output file '%s'."
+msgstr "No valid PCB assembly; cannot create output file '%s'."
 
 #, c-format
 msgid "Cannot create input stream '%s'.\n"
@@ -31224,16 +31302,16 @@ msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr "Failed to set surface curve mode, but will attempt to continue."
 
 #, c-format
-msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Cannot rename temporary file '%s' to '%s'.\n"
+msgid "Cannot rename temporary file '%s' to '%s'."
+msgstr "Cannot rename temporary file '%s' to '%s'."
 
 #, c-format
-msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Cannot identify actual file type for '%s'.\n"
+msgid "Cannot identify actual file type for '%s'."
+msgstr "Cannot identify actual file type for '%s'."
 
 #, c-format
-msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Could not transfer model data from file '%s'.\n"
+msgid "Could not transfer model data from file '%s'."
+msgstr "Could not transfer model data from file '%s'."
 
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
@@ -31315,10 +31393,6 @@ msgid "Error saving project specific footprint library table."
 msgstr "Error saving project specific footprint library table."
 
 #, c-format
-msgid "Insufficient permissions to write file '%s'."
-msgstr "Insufficient permissions to write file '%s'."
-
-#, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Error saving custom rules file '%s'."
 
@@ -31329,36 +31403,6 @@ msgid ""
 msgstr ""
 "Error saving board file '%s'.\n"
 "%s"
-
-msgid "The board must be saved before generating IPC-2581 file."
-msgstr "The board must be saved before generating IPC-2581 file."
-
-msgid "Generate IPC-2581 File"
-msgstr "Generate IPC-2581 File"
-
-#, c-format
-msgid ""
-"Error generating IPC-2581 file '%s'.\n"
-"%s"
-msgstr ""
-"Error generating IPC-2581 file '%s'.\n"
-"%s"
-
-#, c-format
-msgid "Failed to create temporary file '%s'."
-msgstr "Failed to create temporary file '%s'."
-
-#, c-format
-msgid ""
-"Error generating IPC-2581 file '%s'.\n"
-"Failed to rename temporary file '%s."
-msgstr ""
-"Error generating IPC-2581 file '%s'.\n"
-"Failed to rename temporary file '%s."
-
-#, c-format
-msgid "Failed to rename temporary file '%s'."
-msgstr "Failed to rename temporary file '%s'."
 
 msgid "Generate ODB++ Files"
 msgstr "Generate ODB++ Files"
@@ -33878,18 +33922,50 @@ msgstr "gEDA PCB footprint library directory"
 msgid "Generating content section"
 msgstr "Generating content section"
 
+msgid "Pad has unsupported type; it was skipped."
+msgstr "Pad has unsupported type; it was skipped."
+
 msgid "Generating history section"
 msgstr "Generating history section"
 
 msgid "Generating BOM section"
 msgstr "Generating BOM section"
 
+#, c-format
+msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
+msgstr "Footprint %s not found in dictionary; BOM data may be incomplete."
+
+#, c-format
+msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
+msgstr "Component \"%s\" missing OEM reference; BOM entry will be skipped."
+
 msgid "Generating CAD data"
 msgstr "Generating CAD data"
+
+msgid "Board outline is invalid or missing.  Please run DRC."
+msgstr "Board outline is invalid or missing.  Please run DRC."
+
+msgid ""
+"Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
+msgstr ""
+"Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "Exporting Layer %s, Net %s"
+
+msgid "Via uses unsupported padstack; omitted from drill data."
+msgstr "Via uses unsupported padstack; omitted from drill data."
+
+msgid "Pad uses unsupported padstack; hole was omitted from drill data."
+msgstr "Pad uses unsupported padstack; hole was omitted from drill data."
+
+msgid ""
+"Teardrops are not supported in IPC-2581 revision B; they were exported as "
+"zones."
+msgstr ""
+"Teardrops are not supported in IPC-2581 revision B; they were exported as "
+"zones."
 
 msgid "Generating logistic section"
 msgstr "Generating logistic section"
@@ -33897,8 +33973,8 @@ msgstr "Generating logistic section"
 msgid "Saving file"
 msgstr "Saving file"
 
-msgid "Failed to save file to buffer"
-msgstr "Failed to save file to buffer"
+msgid "Failed to save IPC-2581 data to buffer."
+msgstr "Failed to save IPC-2581 data to buffer."
 
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
@@ -34085,6 +34161,20 @@ msgstr ""
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
+
+#, c-format
+msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
+msgstr "Invalid stackup in footprint: odd number of copper layers (%d)."
+
+msgid "Invalid stackup in footprint: copper layers are not contiguous."
+msgstr "Invalid stackup in footprint: copper layers are not contiguous."
+
+msgid ""
+"Invalid stackup in footprint: technology layers are implicit in footprints "
+"and should not be specified in the stackup."
+msgstr ""
+"Invalid stackup in footprint: technology layers are implicit in footprints "
+"and should not be specified in the stackup."
 
 #, c-format
 msgid ""
@@ -34586,6 +34676,14 @@ msgstr "Saved board\n"
 
 msgid "Failed to save board.\n"
 msgstr "Failed to save board.\n"
+
+#, c-format
+msgid ""
+"Error generating IPC-2581 file '%s'.\n"
+"Failed to rename temporary file '%s."
+msgstr ""
+"Error generating IPC-2581 file '%s'.\n"
+"Failed to rename temporary file '%s."
 
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Successfully created IPC-D-356 file\n"
@@ -35683,9 +35781,6 @@ msgstr "Update %s"
 msgid "Regenerate Selected"
 msgstr "Regenerate Selected"
 
-msgid "Regenerate Item"
-msgstr "Regenerate Item"
-
 msgid "Modify zones properties with zone manager"
 msgstr "Modify zones properties with zone manager"
 
@@ -35772,6 +35867,10 @@ msgid "No Rule Areas to repeat layout to have been found."
 msgstr "No Rule Areas to repeat layout to have been found."
 
 #, c-format
+msgid "Rule Area topologies do not match: %s"
+msgstr "Rule Area topologies do not match: %s"
+
+#, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 
@@ -35796,10 +35895,10 @@ msgstr "Topology mismatch"
 
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
-"or no hierarchical sheet(s) or component classes."
+"or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "Cannot auto-generate any placement areas because the schematic has only one "
-"or no hierarchical sheet(s) or component classes."
+"or no hierarchical sheets, groups, or component classes."
 
 msgid "Auto-generate placement rule areas"
 msgstr "Auto-generate placement rule areas"
@@ -36001,6 +36100,12 @@ msgstr "Show the design rules checker window"
 
 msgid "Add selected design block to current board"
 msgstr "Add selected design block to current board"
+
+msgid "Apply Design Block Layout"
+msgstr "Apply Design Block Layout"
+
+msgid "Apply linked design block layout to selected group"
+msgstr "Apply linked design block layout to selected group"
 
 msgid "Save Current Board as Design Block..."
 msgstr "Save Current Board as Design Block..."
@@ -37329,6 +37434,10 @@ msgid "Invalid clipboard contents"
 msgstr "Invalid clipboard contents"
 
 #, c-format
+msgid "Footprint %s is locked and cannot be placed."
+msgstr "Footprint %s is locked and cannot be placed."
+
+#, c-format
 msgid "Design block %s does not have a board file."
 msgstr "Design block %s does not have a board file."
 
@@ -38545,6 +38654,157 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Expecting %s"
+#~ msgstr "Expecting %s"
+
+#~ msgid "Export units"
+#~ msgstr "Export units"
+
+#~ msgid "Include footprints outside the reference rule area"
+#~ msgstr "Include footprints outside the reference rule area"
+
+#~ msgid "** Got problems while fusing shapes **\n"
+#~ msgstr "** Got problems while fusing shapes **\n"
+
+#~ msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+#~ msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+
+#~ msgid "OCC error adding pad/via polygon.\n"
+#~ msgstr "OCC error adding pad/via polygon.\n"
+
+#, c-format
+#~ msgid "Could not add shape (%d points) to copper layer %s.\n"
+#~ msgstr "Could not add shape (%d points) to copper layer %s.\n"
+
+#, c-format
+#~ msgid "No model defined for %s.\n"
+#~ msgstr "No model defined for %s.\n"
+
+#, c-format
+#~ msgid "No model for filename '%s'.\n"
+#~ msgstr "No model for filename '%s'.\n"
+
+#, c-format
+#~ msgid "No location data for filename '%s'.\n"
+#~ msgstr "No location data for filename '%s'.\n"
+
+#, c-format
+#~ msgid "Could not add component with filename '%s'.\n"
+#~ msgstr "Could not add component with filename '%s'.\n"
+
+#, c-format
+#~ msgid "OCC exception building shape segment: %s\n"
+#~ msgstr "OCC exception building shape segment: %s\n"
+
+#, c-format
+#~ msgid "OCC exception building face: %s\n"
+#~ msgstr "OCC exception building face: %s\n"
+
+#~ msgid "Failed to create a prismatic shape\n"
+#~ msgstr "Failed to create a prismatic shape\n"
+
+#, c-format
+#~ msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
+#~ msgstr "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
+
+#, c-format
+#~ msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
+#~ msgstr "Failed to add segment edge (%d %d) -> (%d %d)\n"
+
+#, c-format
+#~ msgid ""
+#~ "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
+#~ "%d)\n"
+#~ msgstr ""
+#~ "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
+#~ "%d)\n"
+
+#, c-format
+#~ msgid "Failed to close wire at %d, %d -> %d, %d **\n"
+#~ msgstr "Failed to close wire at %d, %d -> %d, %d **\n"
+
+#, c-format
+#~ msgid "OCC exception creating wire: %s\n"
+#~ msgstr "OCC exception creating wire: %s\n"
+
+#, c-format
+#~ msgid ""
+#~ "Wire not done (contour points %d): OCC error %d\n"
+#~ "z: %g; bounding box: %s\n"
+#~ msgstr ""
+#~ "Wire not done (contour points %d): OCC error %d\n"
+#~ "z: %g; bounding box: %s\n"
+
+#, c-format
+#~ msgid ""
+#~ "Wire self-interference check failed\n"
+#~ "z: %g; bounding box: %s\n"
+#~ msgstr ""
+#~ "Wire self-interference check failed\n"
+#~ "z: %g; bounding box: %s\n"
+
+#~ msgid "Using non-simplified polygon.\n"
+#~ msgstr "Using non-simplified polygon.\n"
+
+#, c-format
+#~ msgid "OCC exception creating contour %d: %s\n"
+#~ msgstr "OCC exception creating contour %d: %s\n"
+
+#~ msgid "** Face skipped **\n"
+#~ msgstr "** Face skipped **\n"
+
+#~ msgid "OCC error creating main outline.\n"
+#~ msgstr "OCC error creating main outline.\n"
+
+#~ msgid "OCC error creating hole in main outline.\n"
+#~ msgstr "OCC error creating hole in main outline.\n"
+
+#, c-format
+#~ msgid "Subtracting holes for %s\n"
+#~ msgstr "Subtracting holes for %s\n"
+
+#, c-format
+#~ msgid "** Got problems while cutting %s net '%s' **\n"
+#~ msgstr "** Got problems while cutting %s net '%s' **\n"
+
+#, c-format
+#~ msgid "No valid PCB assembly; cannot create output file '%s'.\n"
+#~ msgstr "No valid PCB assembly; cannot create output file '%s'.\n"
+
+#, c-format
+#~ msgid "Cannot rename temporary file '%s' to '%s'.\n"
+#~ msgstr "Cannot rename temporary file '%s' to '%s'.\n"
+
+#, c-format
+#~ msgid "Cannot identify actual file type for '%s'.\n"
+#~ msgstr "Cannot identify actual file type for '%s'.\n"
+
+#, c-format
+#~ msgid "Could not transfer model data from file '%s'.\n"
+#~ msgstr "Could not transfer model data from file '%s'.\n"
+
+#, c-format
+#~ msgid "Failed to create temporary file '%s'."
+#~ msgstr "Failed to create temporary file '%s'."
+
+#, c-format
+#~ msgid "Failed to rename temporary file '%s'."
+#~ msgstr "Failed to rename temporary file '%s'."
+
+#~ msgid "Failed to save file to buffer"
+#~ msgstr "Failed to save file to buffer"
+
+#~ msgid "Regenerate Item"
+#~ msgstr "Regenerate Item"
+
+#~ msgid ""
+#~ "Cannot auto-generate any placement areas because the schematic has only "
+#~ "one or no hierarchical sheet(s) or component classes."
+#~ msgstr ""
+#~ "Cannot auto-generate any placement areas because the schematic has only "
+#~ "one or no hierarchical sheet(s) or component classes."
 
 #~ msgid "Skip Locked Items"
 #~ msgstr "Skip Locked Items"
@@ -41419,9 +41679,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "SSH Private Key"
 #~ msgstr "SSH Private Key"
-
-#~ msgid "Username"
-#~ msgstr "Username"
 
 #~ msgid "Display previous symbol"
 #~ msgstr "Display previous symbol"
