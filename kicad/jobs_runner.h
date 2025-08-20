@@ -67,7 +67,7 @@ public:
     bool RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool aBail = false );
 
 private:
-    int runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject );
+    int runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter, PROJECT* aProject );
     int runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject );
 
 private:
