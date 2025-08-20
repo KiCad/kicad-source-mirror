@@ -40,7 +40,7 @@ public:
         SENTINEL            ///< Just a dummy entry for end of list
     };
 
-    DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, wxString aStepCmd );
+    DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, const wxString& aStepCmd );
     ~DIALOG_EXPORT_STEP_LOG() override;
 
 private:
@@ -48,8 +48,10 @@ private:
     void onProcessTerminate( wxProcessEvent& aEvent );
     void onThreadInput( wxThreadEvent& );
     void onClose( wxCloseEvent& event );
+    bool TransferDataToWindow() override;
 
     wxProcess*                    m_process;
     wxThread*                     m_stdioThread;
     wxMessageQueue<STATE_MESSAGE> m_msgQueue;
+    wxString                      m_startMessage;
 };

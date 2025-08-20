@@ -152,6 +152,15 @@ void STDSTREAM_THREAD::DrainInput()
 }
 
 
+bool DIALOG_EXPORT_STEP_LOG::TransferDataToWindow()
+{
+    // Ensure we start with a clean log window message
+    m_textCtrlLog->Clear();
+    m_textCtrlLog->AppendText( m_startMessage );
+    return true;
+}
+
+
 void DIALOG_EXPORT_STEP_LOG::appendMessage( const wxString& aMessage )
 {
     m_textCtrlLog->AppendText( aMessage );
@@ -229,6 +238,9 @@ void DIALOG_EXPORT_STEP_LOG::onClose( wxCloseEvent& aEvent )
         m_process->Detach();
     }
 
+    // Clear log window message, storing the log data in config has no interest.
+    m_textCtrlLog->Clear();
+
     aEvent.Skip();
 }
 
@@ -238,7 +250,7 @@ DIALOG_EXPORT_STEP_LOG::~DIALOG_EXPORT_STEP_LOG()
 }
 
 
-DIALOG_EXPORT_STEP_LOG::DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, wxString aStepCmd ) :
+DIALOG_EXPORT_STEP_LOG::DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, const wxString& aStepCmd ) :
         DIALOG_EXPORT_STEP_PROCESS_BASE( aParent )
 {
     m_sdbSizerOK->Enable( false );
@@ -254,16 +266,18 @@ DIALOG_EXPORT_STEP_LOG::DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, wxString aSte
 
     // Print the command line used to run kicad-cli.
     // it can be useful if kicad-cli as a problem.
-    m_textCtrlLog->AppendText( _( "Command line:\n" ) );
-    m_textCtrlLog->AppendText( aStepCmd );
-    m_textCtrlLog->AppendText( wxT( "\n\n" ) );
+    // However it cannot be printed in the Ctor, but only in TransferDataToWindow(),
+    // after DIALOG_SHIM initializations
+    m_startMessage.Append( _( "Command line:\n" ) );
+    m_startMessage.Append( aStepCmd );
+    m_startMessage.Append( wxT( "\n\n" ) );
 
     m_stdioThread = new STDSTREAM_THREAD( this, m_process, m_msgQueue );
     m_stdioThread->Run();
 
     if( !m_stdioThread->IsRunning() )
     {
-        m_textCtrlLog->AppendText( "Unable to launch stdstream thread.\n" );
+        m_startMessage.Append( "Unable to launch stdstream thread.\n" );
         delete m_stdioThread;
         return;
     }
