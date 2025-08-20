@@ -35,6 +35,8 @@
 
 #include <macros.h>
 #include <functional>
+#include <algorithm>
+#include <vector>
 
 #include <wx/log.h>
 
@@ -70,11 +72,18 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         if( aFlags & HASH_ROT )
             hash_combine( ret, footprint->GetOrientation().AsDegrees() );
 
+        std::vector<size_t> hashes;
+
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
-            hash_combine( ret, hash_fp_item( item, aFlags ) );
+            hashes.push_back( hash_fp_item( item, aFlags ) );
 
         for( PAD* pad : footprint->Pads() )
-            hash_combine( ret, hash_fp_item( static_cast<EDA_ITEM*>( pad ), aFlags ) );
+            hashes.push_back( hash_fp_item( static_cast<EDA_ITEM*>( pad ), aFlags ) );
+
+        std::sort( hashes.begin(), hashes.end() );
+
+        for( size_t h : hashes )
+            hash_combine( ret, h );
     }
         break;
 
