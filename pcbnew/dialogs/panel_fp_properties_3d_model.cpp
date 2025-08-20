@@ -106,9 +106,30 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
 
     // Filename
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid,
-                                                &cfg->m_lastFootprint3dDir, wxT( "*.*" ), true,
-                                                m_frame->Prj().GetProjectPath() ) );
+
+    if( cfg )
+    {
+        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid,
+                                                    &cfg->m_lastFootprint3dDir, wxT( "*.*" ), true,
+                                                    m_frame->Prj().GetProjectPath(),
+                                                    [this]( const wxString& aFile ) -> wxString
+                                                    {
+                                                        EMBEDDED_FILES::EMBEDDED_FILE* result =
+                                                                m_filesPanel->AddEmbeddedFile( aFile );
+
+                                                        if( !result )
+                                                        {
+                                                            wxString msg = wxString::Format(
+                                                                    _( "Error adding 3D model" ) );
+                                                            wxMessageBox( msg, _( "Error" ),
+                                                                          wxICON_ERROR | wxOK, this );
+                                                            return wxString();
+                                                        }
+
+                                                        return result->GetLink();
+                                                    } ) );
+    }
+
     m_modelsGrid->SetColAttr( COL_FILENAME, attr );
 
     // Show checkbox

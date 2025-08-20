@@ -443,7 +443,8 @@ public:
     TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg, WX_GRID* aGrid,
                               wxString* aCurrentDir, const wxString& aFileFilter = wxEmptyString,
                               bool aNormalize = false,
-                              const wxString& aNormalizeBasePath = wxEmptyString ) :
+                              const wxString& aNormalizeBasePath = wxEmptyString,
+                              std::function<wxString( const wxString& )> aEmbedCallback = nullptr ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
@@ -451,7 +452,8 @@ public:
             m_currentDir( aCurrentDir ),
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath ),
-            m_fileFilter( aFileFilter )
+            m_fileFilter( aFileFilter ),
+            m_embedCallback( std::move( aEmbedCallback ) )
     {
         SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -463,7 +465,8 @@ public:
                               wxString* aCurrentDir,
                               std::function<wxString( WX_GRID* grid, int row )> aFileFilterFn,
                               bool aNormalize = false,
-                              const wxString& aNormalizeBasePath = wxEmptyString ) :
+                              const wxString& aNormalizeBasePath = wxEmptyString,
+                              std::function<wxString( const wxString& )> aEmbedCallback = nullptr ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
@@ -471,7 +474,8 @@ public:
             m_currentDir( aCurrentDir ),
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath ),
-            m_fileFilterFn( std::move( aFileFilterFn ) )
+            m_fileFilterFn( std::move( aFileFilterFn ) ),
+            m_embedCallback( std::move( aEmbedCallback ) )
     {
         SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -502,8 +506,12 @@ protected:
 
         if( !m_fileFilter.IsEmpty() )
         {
+            FILEDLG_OPEN_EMBED_FILE customize( false );
             wxFileDialog dlg( m_dlg, _( "Select a File" ), fn.GetPath(), fn.GetFullName(),
                               m_fileFilter, wxFD_FILE_MUST_EXIST | wxFD_OPEN );
+
+            if( m_embedCallback )
+                dlg.SetCustomizeHook( customize );
 
             if( dlg.ShowModal() == wxID_OK )
             {
@@ -511,7 +519,17 @@ protected:
                 wxString lastPath = dlg.GetDirectory();
                 wxString relPath = wxEmptyString;
 
-                if( m_normalize )
+                if( m_embedCallback && customize.GetEmbed() )
+                {
+                    relPath = m_embedCallback( filePath );
+
+                    if( relPath.IsEmpty() )
+                    {
+                        m_dlg->CleanupAfterModalSubDialog();
+                        return;
+                    }
+                }
+                else if( m_normalize )
                 {
                     relPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(),
                                              m_normalizeBasePath );
@@ -573,6 +591,7 @@ protected:
 
     wxString                                            m_fileFilter;
     std::function<wxString( WX_GRID* aGrid, int aRow )> m_fileFilterFn;
+    std::function<wxString( const wxString& )>          m_embedCallback;
 };
 
 
@@ -583,12 +602,13 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
     {
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir,
                                                   m_fileFilterFn, m_normalize,
-                                                  m_normalizeBasePath );
+                                                  m_normalizeBasePath, m_embedCallback );
     }
     else
     {
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir,
-                                                  m_fileFilter, m_normalize, m_normalizeBasePath );
+                                                  m_fileFilter, m_normalize, m_normalizeBasePath,
+                                                  m_embedCallback );
     }
 
     WX_GRID::CellEditorSetMargins( Combo() );

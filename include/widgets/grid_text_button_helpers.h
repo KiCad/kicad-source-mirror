@@ -158,13 +158,15 @@ public:
      */
     GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
                            bool aNormalize, const wxString& aNormalizeBasePath,
-                           std::function<wxString( WX_GRID* grid, int row )> aFileFilterFn ) :
+                           std::function<wxString( WX_GRID* grid, int row )> aFileFilterFn,
+                           std::function<wxString( const wxString& )> aEmbedCallback = nullptr ) :
             m_dlg( aParentDialog ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath ),
-            m_fileFilterFn( std::move( aFileFilterFn ) )
+            m_fileFilterFn( std::move( aFileFilterFn ) ),
+            m_embedCallback( std::move( aEmbedCallback ) )
     { }
 
     /**
@@ -180,13 +182,15 @@ public:
      */
     GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
                            const wxString& aFileFilter, bool aNormalize = false,
-                           const wxString& aNormalizeBasePath = wxEmptyString ) :
+                           const wxString& aNormalizeBasePath = wxEmptyString,
+                           std::function<wxString( const wxString& )> aEmbedCallback = nullptr ) :
             m_dlg( aParentDialog ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath ),
-            m_fileFilter( aFileFilter )
+            m_fileFilter( aFileFilter ),
+            m_embedCallback( std::move( aEmbedCallback ) )
     { }
 
     wxGridCellEditor* Clone() const override
@@ -194,12 +198,12 @@ public:
         if( m_fileFilterFn )
         {
             return new GRID_CELL_PATH_EDITOR( m_dlg, m_grid, m_currentDir, m_normalize,
-                                              m_normalizeBasePath, m_fileFilterFn );
+                                              m_normalizeBasePath, m_fileFilterFn, m_embedCallback );
         }
         else
         {
             return new GRID_CELL_PATH_EDITOR( m_dlg, m_grid, m_currentDir, m_fileFilter,
-                                              m_normalize, m_normalizeBasePath );
+                                              m_normalize, m_normalizeBasePath, m_embedCallback );
         }
     }
 
@@ -214,6 +218,7 @@ protected:
 
     wxString                                            m_fileFilter;
     std::function<wxString( WX_GRID* aGrid, int aRow )> m_fileFilterFn;
+    std::function<wxString( const wxString& )>          m_embedCallback;
 };
 
 
