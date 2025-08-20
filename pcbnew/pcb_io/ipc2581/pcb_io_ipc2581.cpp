@@ -2516,39 +2516,53 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         }
     }
 
+    std::map<wxString, wxXmlNode*> pin_nodes;
+
     for( size_t ii = 0; ii < fp->Pads().size(); ++ii )
     {
         PAD* pad = fp->Pads()[ii];
-        wxXmlNode* pinNode = appendNode( packageNode, "Pin" );
         wxString name = pinName( pad );
+        wxXmlNode* pinNode = nullptr;
 
-        addAttribute( pinNode,  "number", name );
+        auto [ it, inserted ] = pin_nodes.emplace( name, nullptr );
 
-        m_net_pin_dict[pad->GetNetCode()].emplace_back(
-                genString( fp->GetReference(), "CMP" ), name );
-
-        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-            addAttribute( pinNode,  "electricalType", "MECHANICAL" );
-        else if( pad->IsOnCopperLayer() )
-            addAttribute( pinNode,  "electricalType", "ELECTRICAL" );
-        else
-            addAttribute( pinNode,  "electricalType", "UNDEFINED" );
-
-        if( pad->HasHole() )
-            addAttribute( pinNode,  "type", "THRU" );
-        else
-            addAttribute( pinNode,  "type", "SURFACE" );
-
-        if( pad->GetFPRelativeOrientation() != ANGLE_0 )//|| fp->IsFlipped() )
+        if( inserted )
         {
-            wxXmlNode* xformNode = appendNode( pinNode, "Xform" );
-            EDA_ANGLE pad_angle = pad->GetFPRelativeOrientation().Normalize();
+            pinNode = appendNode( packageNode, "Pin" );
+            it->second = pinNode;
 
-            if( fp->IsFlipped() )
-                pad_angle = ( pad_angle.Invert() - ANGLE_180 ).Normalize();
+            addAttribute( pinNode,  "number", name );
 
-            if( pad_angle != ANGLE_0 )
-                xformNode->AddAttribute( "rotation", floatVal( pad_angle.AsDegrees() ) );
+            m_net_pin_dict[pad->GetNetCode()].emplace_back(
+                    genString( fp->GetReference(), "CMP" ), name );
+
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                addAttribute( pinNode,  "electricalType", "MECHANICAL" );
+            else if( pad->IsOnCopperLayer() )
+                addAttribute( pinNode,  "electricalType", "ELECTRICAL" );
+            else
+                addAttribute( pinNode,  "electricalType", "UNDEFINED" );
+
+            if( pad->HasHole() )
+                addAttribute( pinNode,  "type", "THRU" );
+            else
+                addAttribute( pinNode,  "type", "SURFACE" );
+
+            if( pad->GetFPRelativeOrientation() != ANGLE_0 )//|| fp->IsFlipped() )
+            {
+                wxXmlNode* xformNode = appendNode( pinNode, "Xform" );
+                EDA_ANGLE pad_angle = pad->GetFPRelativeOrientation().Normalize();
+
+                if( fp->IsFlipped() )
+                    pad_angle = ( pad_angle.Invert() - ANGLE_180 ).Normalize();
+
+                if( pad_angle != ANGLE_0 )
+                    xformNode->AddAttribute( "rotation", floatVal( pad_angle.AsDegrees() ) );
+            }
+        }
+        else
+        {
+            pinNode = it->second;
         }
 
         addLocationNode( pinNode, *pad, true );
