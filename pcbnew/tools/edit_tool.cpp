@@ -557,20 +557,28 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 std::vector<PCB_TRACK*> vias;
                 std::vector<FOOTPRINT*> footprints;
 
-                for( EDA_ITEM* item : aCollector )
-                {
-                    if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
-                    {
-                        if( track->Type() == PCB_VIA_T )
-                            vias.push_back( track );
-                        else
-                            tracks.push_back( track );
-                    }
-                    else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
-                    {
-                        footprints.push_back( footprint );
-                    }
-                }
+                // Gather items from the collector into per-type vectors
+                const auto gatherItemsByType =
+                        [&]()
+                        {
+                            for( EDA_ITEM* item : aCollector )
+                            {
+                                if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+                                {
+                                    if( track->Type() == PCB_VIA_T )
+                                        vias.push_back( track );
+                                    else
+                                        tracks.push_back( track );
+                                }
+                                else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
+                                {
+                                    footprints.push_back( footprint );
+                                }
+                            }
+                        };
+
+                // Initial gathering of items
+                gatherItemsByType();
 
                 if( !sTool->GetSelection().IsHover() && footprints.size() )
                 {
@@ -587,7 +595,16 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                      * First trim down selection to active layer, tracks vs zones, etc.
                      */
                     if( aCollector.GetCount() > 1 )
+                    {
                         sTool->GuessSelectionCandidates( aCollector, aPt );
+
+                        // Re-gather items after trimming to update counts
+                        tracks.clear();
+                        vias.clear();
+                        footprints.clear();
+
+                        gatherItemsByType();
+                    }
 
                     /*
                      * If we have a knee between two tracks, or a via attached to two tracks,
