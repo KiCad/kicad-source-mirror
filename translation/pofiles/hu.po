@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-16 22:11+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1339,34 +1339,29 @@ msgid "Height:"
 msgstr "Magasság:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Alacsony felbontás"
+msgstr "Felbontás"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "Felbontás:"
+msgstr "X felbontás:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "pixel"
+msgstr "pixel/hüvelyk"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "pixel"
+msgstr "pixel/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "Felbontás:"
+msgstr "Y felbontás:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d pixel"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -3917,15 +3912,13 @@ msgstr "Minden vezetősáv hiba jelentése (lassabb)"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:62
 #: pcbnew/dialogs/dialog_drc_base.cpp:42
-#, fuzzy
 msgid "Test for parity between PCB and schematic"
-msgstr "NYÁK terv összevetése a kapcsolásirajzzal"
+msgstr "NYÁK terv összevetése a kapcsolási rajzzal"
 
 #: common/dialogs/dialog_rc_job_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
-#, fuzzy
 msgid "Refill all zones before performing DRC"
-msgstr "DRC ellenőrzés előtt mindig végezze el a zónák újra kitöltését"
+msgstr "Zónák újra kitöltése DRC ellenőrzés előtt"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -3960,9 +3953,8 @@ msgid "Title"
 msgstr "Cím"
 
 #: common/dialogs/dialog_unit_entry_base.h:80
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "Alkatrész kiválasztása:"
+msgstr "Pont mozgatása adott helyre"
 
 #: common/dialogs/eda_list_dialog.cpp:51 common/dialogs/eda_list_dialog.cpp:92
 #: common/widgets/lib_tree.cpp:223 common/widgets/lib_tree.cpp:307
@@ -5808,9 +5800,8 @@ msgid "*.*"
 msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:62
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Automatikus igazítás"
+msgstr "Automatikus felismerés"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:68
 msgid ""
