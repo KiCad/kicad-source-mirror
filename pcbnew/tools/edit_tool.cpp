@@ -2674,17 +2674,15 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_GENERATOR_T:
-            if( aItems.Size() == 1 )
-            {
-                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
+        {
+            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
 
-                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, &commit,
-                                                                 generator );
+            if( SELECTION_CONDITIONS::OnlyTypes( { PCB_GENERATOR_T } ) )
+            {
+                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, &commit, generator );
             }
             else
             {
-                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
-
                 for( EDA_ITEM* member : generator->GetItems() )
                     commit.Remove( member );
 
@@ -2693,9 +2691,9 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
             itemsDeleted++;
             break;
+        }
 
         default:
-            wxASSERT_MSG( parentFP == nullptr, wxT( "Try to delete an item living in a footprint" ) );
             commit.Remove( board_item );
             itemsDeleted++;
             break;
