@@ -1619,8 +1619,9 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                     if( !dynamic_cast<BOARD_CONNECTED_ITEM*>( aCollector[ i ] ) )
                         aCollector.Remove( aCollector[ i ] );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     std::set<wxString> netNames;
     std::set<int>      netCodes;

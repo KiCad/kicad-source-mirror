@@ -68,19 +68,6 @@ static void moveSelectionBy( const PCB_SELECTION& aSelection, const VECTOR2I& aM
 }
 
 
-/**
- * Position relative tools all use the same filter for selecting items.
- */
-static void positionRelativeClientSelectionFilter( const VECTOR2I&     aPt,
-                                                   GENERAL_COLLECTOR&  aCollector,
-                                                   PCB_SELECTION_TOOL* sTool )
-{
-    sTool->FilterCollectorForHierarchy( aCollector, true );
-    sTool->FilterCollectorForMarkers( aCollector );
-    sTool->FilterCollectorForFreePads( aCollector, false );
-}
-
-
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
     PCB_TOOL_BASE( "pcbnew.PositionRelative" ),
     m_dialog( nullptr ),
@@ -111,8 +98,13 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     const auto& selection = m_selectionTool->RequestSelection(
-            positionRelativeClientSelectionFilter,
-            !m_isFootprintEditor /* prompt user regarding locked items */ );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForFreePads( aCollector, false );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -164,11 +156,15 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
 
     REENTRANCY_GUARD guard( &m_inInteractivePosition );
 
-    // First, acquire the selection that we will be moving after
-    // we have the new offset vector.
-    const auto& selection = m_selectionTool->RequestSelection(
-            positionRelativeClientSelectionFilter,
-            !m_isFootprintEditor /* prompt user regarding locked items */ );
+    // First, acquire the selection that we will be moving after we have the new offset vector.
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForFreePads( aCollector, false );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;

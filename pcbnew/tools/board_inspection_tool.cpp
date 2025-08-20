@@ -1578,8 +1578,7 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
                     if( !dynamic_cast<FOOTPRINT*>( item ) )
                         aCollector.Remove( item );
                 }
-            },
-            false /* ignore locked flag */ );
+            } );
 
     if( selection.Size() == 1 )
         DiffFootprint( static_cast<FOOTPRINT*>( selection.GetItem( 0 ) ) );

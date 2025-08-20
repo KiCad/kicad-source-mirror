@@ -69,8 +69,7 @@ const SELECTION& PCB_EDIT_TABLE_TOOL::getTableCellSelection()
                     if( !dynamic_cast<PCB_TABLECELL*>( aCollector[ i ] ) )
                         aCollector.Remove( aCollector[ i ] );
                 }
-            },
-            false /* prompt user regarding locked items */ );
+            } );
 }
 
 

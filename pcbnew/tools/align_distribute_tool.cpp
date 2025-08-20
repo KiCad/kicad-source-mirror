@@ -476,8 +476,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
-                           PCB_SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
@@ -485,9 +484,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
                 // Don't filter for free pads.  We want to allow for distributing other
                 // items (such as a via) between two pads.
                 // sTool->FilterCollectorForFreePads( aCollector );
-            },
-            m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */
-    );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     // Need at least 3 items to distribute - one at each end and at least on in the middle
     if( selection.Size() < 3 )

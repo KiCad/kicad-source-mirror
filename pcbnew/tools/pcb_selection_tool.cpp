@@ -634,8 +634,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::GetSelection()
 }
 
 
-PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                                     bool aConfirmLockedItems )
+PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter )
 {
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
@@ -698,29 +697,6 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
         }
 
         m_frame->GetCanvas()->ForceRefresh();
-    }
-
-    if( aConfirmLockedItems && !m_frame->GetOverrideLocks() )
-    {
-        for( EDA_ITEM* item : m_selection )
-        {
-            if( !item->IsBOARD_ITEM() )
-                continue;
-
-            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-            bool        lockedDescendant = false;
-
-            boardItem->RunOnChildren(
-                    [&]( BOARD_ITEM* curr_item )
-                    {
-                        if( curr_item->IsLocked() )
-                            lockedDescendant = true;
-                    },
-                    RECURSE_MODE::RECURSE );
-
-            if( boardItem->IsLocked() || lockedDescendant )
-                unselect( boardItem );
-        }
     }
 
     return m_selection;
@@ -3877,6 +3853,31 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         {
             for( BOARD_ITEM* item : rejected )
                 aCollector.Transfer( item );
+        }
+    }
+}
+
+
+void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector )
+{
+    if( m_frame && m_frame->IsType( FRAME_PCB_EDITOR ) && !m_frame->GetOverrideLocks() )
+    {
+        // Iterate from the back so we don't have to worry about removals.
+        for( int i = (int) aCollector.GetCount() - 1; i >= 0; --i )
+        {
+            BOARD_ITEM* item = aCollector[i];
+            bool        lockedDescendant = false;
+
+            item->RunOnChildren(
+                    [&]( BOARD_ITEM* curr_item )
+                    {
+                        if( curr_item->IsLocked() )
+                            lockedDescendant = true;
+                    },
+                    RECURSE_MODE::RECURSE );
+
+            if( item->IsLocked() || lockedDescendant )
+                aCollector.Remove( item );
         }
     }
 }

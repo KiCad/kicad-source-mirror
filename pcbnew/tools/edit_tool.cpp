@@ -634,8 +634,9 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                         }
                     }
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -1021,8 +1022,9 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
                     if( !dynamic_cast<PCB_TRACK*>( item ) )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     BOARD_COMMIT commit( this );
 
@@ -1099,8 +1101,9 @@ int EDIT_TOOL::ChangeTrackLayer( const TOOL_EVENT& aEvent )
                     if( !dynamic_cast<PCB_TRACK*>( item ) )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     PCB_LAYER_ID origLayer = frame()->GetActiveLayer();
 
@@ -1160,8 +1163,9 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                     if( !dynamic_cast<PCB_TRACK*>( item ) )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Size() < 2 )
     {
@@ -1459,8 +1463,9 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                     }
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     std::set<PCB_SHAPE*>    lines_to_add;
     std::vector<PCB_SHAPE*> items_to_remove;
@@ -1709,8 +1714,9 @@ int EDIT_TOOL::SimplifyPolygons( const TOOL_EVENT& aEvent )
                             aCollector.Remove( item );
                     }
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     // Store last used value
     static int s_toleranceValue = pcbIUScale.mmToIU( 3 );
@@ -1778,8 +1784,9 @@ int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                     }
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     // Store last used value
     static int s_toleranceValue = pcbIUScale.mmToIU( 3 );
@@ -1856,8 +1863,9 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
                     if( !item->IsType( polygonBooleanTypes ) )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     const EDA_ITEM* const last_item = selection.GetLastAddedItem();
 
@@ -2102,16 +2110,18 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            [&]( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector, false );
                 sTool->FilterCollectorForTableCells( aCollector );
-            },
-            // Prompt user regarding locked items if in board editor and in free-pad-mode (if
-            // we're not in free-pad mode we delay this until the second RequestSelection()).
-            !m_dragging && frame()->GetPcbNewSettings()->m_AllowFreePads && !m_isFootprintEditor );
+
+                // Filter locked items if in board editor and in free-pad-mode.  (If we're not in
+                // free-pad mode we delay this until the second RequestSelection().)
+                if( !m_isFootprintEditor && frame()->GetPcbNewSettings()->m_AllowFreePads )
+                    sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -2134,8 +2144,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                     sTool->FilterCollectorForFreePads( aCollector );
                     sTool->FilterCollectorForTableCells( aCollector );
-                },
-                !m_dragging /* prompt user regarding locked items */ );
+                    sTool->FilterCollectorForLockedItems( aCollector );
+                } );
     }
 
     // Did we filter everything out?  If so, don't try to operate further
@@ -2299,8 +2309,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector );
-            },
-            !m_dragging /* prompt user regarding locked items */ );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -2421,8 +2431,8 @@ int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
-            },
-            !m_dragging /* prompt user regarding locked items */ );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -2498,8 +2508,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForTableCells( aCollector );
-            },
-            !m_dragging /* prompt user regarding locked items */ );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -2777,15 +2787,17 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                     sTool->FilterCollectorForHierarchy( aCollector, true );
+                    sTool->FilterCollectorForLockedItems( aCollector );
                 } );
 
         size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
 
-        m_selectionTool->RequestSelection(
+        selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                     sTool->FilterCollectorForFreePads( aCollector );
+                    sTool->FilterCollectorForLockedItems( aCollector );
                 } );
 
         if( !selectionCopy.IsHover()
@@ -2799,19 +2811,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         // In "alternative" mode, we expand selected track items to their full connection.
         if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
-        {
             m_toolMgr->RunAction( PCB_ACTIONS::selectConnection );
-        }
-
-        // Finally run RequestSelection() one more time to find out what user wants to do about
-        // locked objects.
-        selectionCopy = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-                {
-                    sTool->FilterCollectorForHierarchy( aCollector, true );
-                    sTool->FilterCollectorForFreePads( aCollector );
-                },
-                true /* prompt user regarding locked items */ );
     }
 
     DeleteItems( selectionCopy, isCut );
@@ -2837,8 +2837,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector, false );
                 sTool->FilterCollectorForTableCells( aCollector );
-            },
-            true /* prompt user regarding locked items */ );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -3069,8 +3069,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // record the new items as added
     if( !selection.Empty() )
     {
-        editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
-                                                     (int) new_items.size() ) );
+        editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ), (int) new_items.size() ) );
 
         // If items were duplicated, pick them up
         if( doMoveSelection( aEvent, &commit, true ) )
@@ -3089,7 +3088,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 {
-    const auto incrementableFilter =
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
@@ -3104,10 +3103,9 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
                         break;
                     }
                 }
-            };
 
-    PCB_SELECTION& selection = m_selectionTool->RequestSelection( incrementableFilter,
-                                                                  true /* prompt user regarding locked items */ );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -3371,14 +3369,14 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     Activate();
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            [&]( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
-            },
 
-            // Prompt user regarding locked items.
-            aEvent.IsAction( &ACTIONS::cut ) && !m_isFootprintEditor );
+                if( aEvent.IsAction( &ACTIONS::cut ) )
+                    sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( !selection.Empty() )
     {
@@ -3395,9 +3393,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         if( aEvent.IsAction( &PCB_ACTIONS::copyWithReference ) )
         {
             if( !pickReferencePoint( _( "Select reference point for the copy..." ),
-                                     _( "Selection copied" ),
-                                     _( "Copy canceled" ),
-                                     refPoint ) )
+                                     _( "Selection copied" ), _( "Copy canceled" ), refPoint ) )
             {
                 frame()->PopTool( selectReferencePoint );
                 return 0;
@@ -3430,9 +3426,7 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Anything unsupported will just be ignored
-            },
-            // No prompt for locked items
-            false );
+            } );
 
     if( selection.IsHover() )
         m_selectionTool->ClearSelection();

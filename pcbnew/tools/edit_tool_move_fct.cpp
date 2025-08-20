@@ -74,8 +74,9 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                     if( item->Type() == PCB_TRACE_T )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( selection.Size() < 2 )
         return 0;
@@ -177,8 +178,9 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
                     if( !dynamic_cast<FOOTPRINT*>( item ) )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     std::vector<FOOTPRINT*> footprintsToPack;
 
@@ -311,8 +313,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForTableCells( aCollector );
-            },
-            true /* prompt user regarding locked items */ );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     if( m_dragging || selection.Empty() )
         return false;

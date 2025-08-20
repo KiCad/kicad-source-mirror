@@ -1335,8 +1335,9 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
                     if( !item->IsType( { PCB_PAD_T, PCB_SHAPE_T } ) )
                         aCollector.Remove( item );
                 }
-            },
-            true /* prompt user regarding locked items */ );
+
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
 
     BOARD_COMMIT commit( this );
 

@@ -97,11 +97,8 @@ public:
      * If the set is empty, performs the legacy-style hover selection.
      *
      * @param aClientFilter A callback to allow tool- or action-specific filtering.
-     * @param aConfirmLockedItems [optional] Signals that locked items should be skipped/included
-     *                            according PCB_EDIT_FRAME::GetOverrideLocks().
      */
-    PCB_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                     bool aConfirmLockedItems = false );
+    PCB_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter );
 
     ///< Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
@@ -221,6 +218,11 @@ public:
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
 
     PCB_LAYER_ID GetActiveLayer() { return m_frame->GetActiveLayer(); }
+
+    /**
+     * In the PCB editor strip out any locked items unless the OverrideLocks checkbox is set.
+     */
+    void FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector );
 
     /**
      * In general we don't want to select both a parent and any of it's children.  This includes
