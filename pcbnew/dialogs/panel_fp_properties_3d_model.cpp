@@ -145,6 +145,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     m_previewPane = new PANEL_PREVIEW_3D_MODEL( m_lowerPanel, m_frame, m_footprint,
                                                 &m_shapes3D_list );
 
+    m_previewPane->SetEmbeddedFilesDelegate( m_filesPanel->GetLocalFiles() );
+
     m_LowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     // Configure button logos
