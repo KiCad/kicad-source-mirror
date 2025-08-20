@@ -1702,6 +1702,17 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
+          <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
+          <property name="proportion">1</property>
+          <object class="wxPanel" expanded="false">
+            <property name="minimum_size">-300,150</property>
+            <property name="name">m_messagesPanel</property>
+            <property name="permission">protected</property>
+            <property name="subclass">WX_HTML_REPORT_PANEL; widgets/wx_html_report_panel.h; forward_declare</property>
+          </object>
+        </object>
+        <object class="sizeritem" expanded="true">
+          <property name="border">5</property>
           <property name="flag">wxALL|wxEXPAND</property>
           <property name="proportion">0</property>
           <object class="wxStdDialogButtonSizer" expanded="true">

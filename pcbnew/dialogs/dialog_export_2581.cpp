@@ -17,7 +17,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_export_2581.h>
+#include "dialogs/dialog_export_2581.h"
+
+#include <set>
+#include <map>
+#include <vector>
+
+#include <wx/filedlg.h>
+#include <wx/filefn.h>
 
 #include <board.h>
 #include <footprint.h>
@@ -28,9 +35,13 @@
 #include <project.h>
 #include <project/board_project_settings.h>
 #include <project/project_file.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <widgets/wx_html_report_panel.h>
+#include <widgets/wx_progress_reporters.h>
 #include <settings/settings_manager.h>
 #include <widgets/std_bitmap_button.h>
 #include <jobs/job_export_pcb_ipc2581.h>
+#include <wx_filename.h>
 
 #include <set>
 #include <vector>
@@ -110,16 +121,6 @@ void DIALOG_EXPORT_2581::onBrowseClicked( wxCommandEvent& event )
 
     m_outputFileName->SetValue( dlg.GetPath() );
 
-}
-
-void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
-{
-    if( !m_job )
-    {
-        m_parent->SetLastPath( LAST_PATH_2581, m_outputFileName->GetValue() );
-    }
-
-    event.Skip();
 }
 
 
@@ -239,6 +240,88 @@ void DIALOG_EXPORT_2581::onDistPNChange( wxCommandEvent& event )
             m_textDistributor->SetValue( wxT( "LCSC" ) );
         }
     }
+}
+
+
+void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
+{
+    if( m_job )
+    {
+        if( TransferDataFromWindow() )
+            EndModal( wxID_OK );
+
+        return;
+    }
+
+    if( !TransferDataFromWindow() )
+        return;
+
+    m_messagesPanel->Clear();
+
+    REPORTER& reporter = m_messagesPanel->Reporter();
+
+    wxFileName pcbFileName = GetOutputPath();
+    WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
+
+    if( pcbFileName.GetName().empty() )
+    {
+        reporter.Report( _( "The board must be saved before generating IPC-2581 file." ),
+                         RPT_SEVERITY_ERROR );
+        return;
+    }
+
+    if( !m_parent->IsWritable( pcbFileName ) )
+    {
+        reporter.Report( wxString::Format( _( "Insufficient permissions to write file '%s'." ),
+                                           pcbFileName.GetFullPath() ),
+                         RPT_SEVERITY_ERROR );
+        return;
+    }
+
+    wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
+
+    WX_PROGRESS_REPORTER progress( this, _( "Generate IPC-2581 File" ), 5 );
+
+    std::map<std::string, UTF8> props;
+
+    props[ "units" ] = TO_UTF8( GetUnitsString() );
+    props[ "sigfig" ] = TO_UTF8( GetPrecision() );
+    props[ "version" ] = TO_UTF8( wxString( GetVersion() ) );
+    props[ "OEMRef" ] = TO_UTF8( GetOEM() );
+    props[ "mpn" ] = TO_UTF8( GetMPN() );
+    props[ "mfg" ] = TO_UTF8( GetMfg() );
+    props[ "dist" ] = TO_UTF8( GetDist() );
+    props[ "distpn" ] = TO_UTF8( GetDistPN() );
+
+    try
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
+        pi->SetProgressReporter( &progress );
+        pi->SetReporter( &reporter );
+        pi->SaveBoard( tempFile, m_parent->GetBoard(), &props );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        reporter.Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n%s" ),
+                                           pcbFileName.GetFullPath(), ioe.What() ),
+                         RPT_SEVERITY_ERROR );
+
+        wxRemoveFile( tempFile );
+        return;
+    }
+
+    if( wxFileExists( pcbFileName.GetFullPath() ) )
+        wxRemoveFile( pcbFileName.GetFullPath() );
+
+    if( !wxRenameFile( tempFile, pcbFileName.GetFullPath() ) )
+    {
+        reporter.Report( wxString::Format( _( "Failed to create file '%s'." ), pcbFileName.GetFullPath() ),
+                         RPT_SEVERITY_ERROR );
+        wxRemoveFile( tempFile );
+        return;
+    }
+
+    reporter.Report( _( "IPC-2581 file generated successfully." ), RPT_SEVERITY_ACTION );
 }
 
 
