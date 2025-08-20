@@ -815,8 +815,20 @@ bool EXPORTER_STEP::Export()
     int64_t stats_startExportTime = GetRunningMicroSecs();
 
     // setup opencascade message log
+    struct SCOPED_PRINTER
+    {
+        Handle( Message_Printer ) m_handle;
+
+        SCOPED_PRINTER( const Handle( Message_Printer ) & aHandle ) : m_handle( aHandle )
+        {
+            Message::DefaultMessenger()->AddPrinter( m_handle );
+        };
+
+        ~SCOPED_PRINTER() { Message::DefaultMessenger()->RemovePrinter( m_handle ); }
+    };
+
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );
-    Message::DefaultMessenger()->AddPrinter( new KICAD_PRINTER( m_reporter ) );
+    SCOPED_PRINTER occtPrinter( new KICAD_PRINTER( m_reporter ) );
 
     m_reporter->Report( wxT( "Determining PCB data.\n" ), RPT_SEVERITY_DEBUG );
 
