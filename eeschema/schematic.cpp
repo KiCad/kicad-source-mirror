@@ -1289,6 +1289,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                                         PICKED_ITEMS_LIST* aLastChangeList )
 {
     SCHEMATIC_SETTINGS& settings = Settings();
+    RefreshHierarchy();
     SCH_SHEET_LIST      list = Hierarchy();
     SCH_COMMIT          localCommit( aToolManager );
 
