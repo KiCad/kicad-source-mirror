@@ -405,6 +405,9 @@ types::PlacementRuleSourceType ToProtoEnum( PLACEMENT_SOURCE_T aValue )
     case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
         return types::PlacementRuleSourceType::PRST_GROUP;
 
+    case PLACEMENT_SOURCE_T::DESIGN_BLOCK:
+        return types::PlacementRuleSourceType::PRST_DESIGN_BLOCK;
+
     default:
         wxCHECK_MSG( false, types::PlacementRuleSourceType::PRST_UNKNOWN,
                      "Unhandled case in ToProtoEnum<PLACEMENT_SOURCE_T>");
@@ -426,6 +429,9 @@ PLACEMENT_SOURCE_T FromProtoEnum( types::PlacementRuleSourceType aValue )
 
     case types::PlacementRuleSourceType::PRST_GROUP:
         return PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+
+    case types::PlacementRuleSourceType::PRST_DESIGN_BLOCK:
+        return PLACEMENT_SOURCE_T::DESIGN_BLOCK;
 
     default:
         wxCHECK_MSG( false, PLACEMENT_SOURCE_T::SHEETNAME,

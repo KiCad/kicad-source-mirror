@@ -85,7 +85,7 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
         //RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
-        mtTool->QuerySheetsAndComponentClasses();
+        mtTool->GeneratePotentialRuleAreas();
 
         auto ruleData = mtTool->GetData();
 
@@ -127,12 +127,12 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
             if( ra.m_ruleName.Contains( wxT( "io_drivers_fp" ) ) )
             {
                 n_areas_io++;
-                BOOST_CHECK_EQUAL( ra.m_raFootprints.size(), 31 );
+                BOOST_CHECK_EQUAL( ra.m_components.size(), 31 );
             }
             else if( ra.m_ruleName.Contains( wxT( "io_drivers_pp" ) ) )
             {
                 n_areas_pp++;
-                BOOST_CHECK_EQUAL( ra.m_raFootprints.size(), 11 );
+                BOOST_CHECK_EQUAL( ra.m_components.size(), 11 );
             }
             else
             {
@@ -161,15 +161,15 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
                 for( const RULE_AREA& targetArea : ruleData->m_areas )
                 {
-                    if( targetArea.m_area == refArea.m_area )
+                    if( targetArea.m_zone == refArea.m_zone )
                         continue;
 
                     if( !targetArea.m_ruleName.Contains( ruleName ) )
                         continue;
 
-                    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_raFootprints );
+                    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_components );
                     auto cgTarget =
-                        CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_raFootprints );
+                        CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_components );
 
                     TMATCH::COMPONENT_MATCHES result;
 
@@ -179,9 +179,9 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                     BOOST_TEST_MESSAGE( wxString::Format(
                             "topo match: '%s' [%d] -> '%s' [%d] result %d",
                             refArea.m_ruleName.c_str().AsChar(),
-                            static_cast<int>( refArea.m_raFootprints.size() ),
+                            static_cast<int>( refArea.m_components.size() ),
                             targetArea.m_ruleName.c_str().AsChar(),
-                            static_cast<int>( targetArea.m_raFootprints.size() ), status ) );
+                            static_cast<int>( targetArea.m_components.size() ), status ) );
 
                     for( const auto& iter : result )
                     {
@@ -214,7 +214,7 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
             ruleData->m_compatMap[targetRA].m_doCopy = true;
         }
 
-        int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_area );
+        int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone );
 
         BOOST_ASSERT( result >= 0 );
     }
