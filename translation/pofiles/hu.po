@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-16 22:11+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -3709,9 +3709,8 @@ msgstr "Minden vezetősáv hiba jelentése (lassabb)"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
-#, fuzzy
 msgid "Test for parity between PCB and schematic"
-msgstr "NYÁK terv összevetése a kapcsolásirajzzal"
+msgstr "NYÁK terv összevetése a kapcsolási rajzzal"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -3746,9 +3745,8 @@ msgid "Title"
 msgstr "Cím"
 
 #: common/dialogs/dialog_unit_entry_base.h:80
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "Alkatrész kiválasztása:"
+msgstr "Pont mozgatása adott helyre"
 
 #: common/dialogs/eda_list_dialog.cpp:49 common/dialogs/eda_list_dialog.cpp:77
 #: common/widgets/lib_tree.cpp:220 common/widgets/lib_tree.cpp:304
@@ -5538,9 +5536,8 @@ msgid "*.*"
 msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Automatikus igazítás"
+msgstr "Automatikus felismerés"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
@@ -35729,9 +35726,8 @@ msgid "not run"
 msgstr "nem fut"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
-#, fuzzy
 msgid "Refill all zones before performing DRC"
-msgstr "DRC ellenőrzés előtt mindig végezze el a zónák újra kitöltését"
+msgstr "Zónák újra kitöltése DRC ellenőrzés előtt"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 #, fuzzy
