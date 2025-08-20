@@ -99,17 +99,22 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override
     {
-        return wxString( _( "Tuning Pattern" ) );
+        return _( "Tuning Pattern" );
     }
 
     wxString GetFriendlyName() const override
     {
-        return wxString( _( "Tuning Pattern" ) );
+        return _( "Tuning Pattern" );
     }
 
     wxString GetPluralName() const override
     {
-        return wxString( _( "Tuning Patterns" ) );
+        return _( "Tuning Patterns" );
+    }
+
+    wxString GetCommitMessage() const override
+    {
+        return _( "Edit Tuning Pattern" );
     }
 
     BITMAPS GetMenuImage() const override
@@ -129,13 +134,9 @@ public:
                                           LENGTH_TUNING_MODE aMode );
 
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
-
     bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
-
-    void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
-                   const wxString& aCommitMsg = wxEmptyString, int aCommitFlags = 0 ) override;
-
-    void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
+    void EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
+    void EditCancel( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 
     void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 

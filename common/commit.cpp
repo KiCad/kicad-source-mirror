@@ -72,7 +72,10 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
         makeEntry( aItem, CHT_REMOVE | flags, makeImage( aItem ), aScreen );
 
         if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
-            Modify( parentGroup->AsEdaItem(), aScreen, RECURSE_MODE::NO_RECURSE );
+        {
+            if( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED )
+                Modify( parentGroup->AsEdaItem(), aScreen, RECURSE_MODE::NO_RECURSE );
+        }
 
         break;
 

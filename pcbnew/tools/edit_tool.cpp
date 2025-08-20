@@ -2557,6 +2557,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD_COMMIT         commit( this );
+    int                  commitFlags = 0;
 
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -2680,6 +2681,8 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             if( SELECTION_CONDITIONS::OnlyTypes( { PCB_GENERATOR_T } ) )
             {
                 m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, &commit, generator );
+                commit.Push( _( "Delete" ), commitFlags );
+                commitFlags |= APPEND_UNDO;
             }
             else
             {
@@ -2708,20 +2711,20 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
     if( aIsCut )
     {
-        commit.Push( _( "Cut" ) );
+        commit.Push( _( "Cut" ), commitFlags );
     }
     else if( itemsDeleted == 0 )
     {
         if( fieldsHidden == 1 )
-            commit.Push( _( "Hide Field" ) );
+            commit.Push( _( "Hide Field" ), commitFlags );
         else if( fieldsHidden > 1 )
-            commit.Push( _( "Hide Fields" ) );
+            commit.Push( _( "Hide Fields" ), commitFlags );
         else if( fieldsAlreadyHidden > 0 )
             editFrame->ShowInfoBarError( _( "Use the Footprint Properties dialog to remove fields." ) );
     }
     else
     {
-        commit.Push( _( "Delete" ) );
+        commit.Push( _( "Delete" ), commitFlags );
     }
 }
 

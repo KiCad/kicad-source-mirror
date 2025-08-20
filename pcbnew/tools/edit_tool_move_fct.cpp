@@ -827,7 +827,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     {
         if( sel_items.size() == 1 && sel_items.back()->Type() == PCB_GENERATOR_T )
         {
-            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, aCommit,
+            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genCancelEdit, aCommit,
                                              static_cast<PCB_GENERATOR*>( sel_items.back() ) );
         }
     }
@@ -835,7 +835,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     {
         if( sel_items.size() == 1 && sel_items.back()->Type() == PCB_GENERATOR_T )
         {
-            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, aCommit,
+            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genFinishEdit, aCommit,
                                              static_cast<PCB_GENERATOR*>( sel_items.back() ) );
         }
 

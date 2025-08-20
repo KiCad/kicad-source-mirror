@@ -276,8 +276,8 @@ public:
     static TOOL_ACTION regenerateItem;
     static TOOL_ACTION genStartEdit;
     static TOOL_ACTION genUpdateEdit;
-    static TOOL_ACTION genPushEdit;
-    static TOOL_ACTION genRevertEdit;
+    static TOOL_ACTION genFinishEdit;
+    static TOOL_ACTION genCancelEdit;
     static TOOL_ACTION genRemove;
 
     static TOOL_ACTION generatorsShowManager;

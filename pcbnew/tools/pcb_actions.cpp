@@ -2634,12 +2634,12 @@ TOOL_ACTION PCB_ACTIONS::genUpdateEdit( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Generator.genUpdateEdit" )
         .Scope( AS_CONTEXT ) );
 
-TOOL_ACTION PCB_ACTIONS::genPushEdit( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Generator.genPushEdit" )
+TOOL_ACTION PCB_ACTIONS::genFinishEdit( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genFinishEdit" )
         .Scope( AS_CONTEXT ) );
 
-TOOL_ACTION PCB_ACTIONS::genRevertEdit( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Generator.genRevertEdit" )
+TOOL_ACTION PCB_ACTIONS::genCancelEdit( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genCacnelEdit" )
         .Scope( AS_CONTEXT ) );
 
 TOOL_ACTION PCB_ACTIONS::genRemove( TOOL_ACTION_ARGS()

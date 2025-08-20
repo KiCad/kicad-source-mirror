@@ -926,8 +926,6 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         for( BOARD_ITEM* item : routerAddedItems )
             aCommit->Add( item );
     }
-
-    aCommit->Push( "Remove Tuning Pattern" );
 }
 
 
@@ -1233,8 +1231,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 }
 
 
-void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
-                                   const wxString& aCommitMsg, int aCommitFlags )
+void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit  )
 {
     if( !( GetFlags() & IN_EDIT ) )
         return;
@@ -1291,15 +1288,10 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
             }
         }
     }
-
-    if( aCommitMsg.IsEmpty() )
-        aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
-    else
-        aCommit->Push( aCommitMsg, aCommitFlags );
 }
 
 
-void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::EditCancel( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     if( !( GetFlags() & IN_EDIT ) )
         return;
@@ -1320,9 +1312,6 @@ void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
     }
 
     aTool->Router()->StopRouting();
-
-    if( aCommit )
-        aCommit->Revert();
 }
 
 
@@ -1825,7 +1814,9 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
         GENERATOR_TOOL* generatorTool = aEditFrame->GetToolManager()->GetTool<GENERATOR_TOOL>();
         EditStart( generatorTool, GetBoard(), &commit );
         Update( generatorTool, GetBoard(), &commit );
-        EditPush( generatorTool, GetBoard(), &commit );
+        EditFinish( generatorTool, GetBoard(), &commit );
+
+        commit.Push( _( "Edit Tuning Pattern" ) );
     }
 }
 
@@ -2248,7 +2239,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             if( m_tuningPattern )
             {
                 // First click already made; clean up tuning pattern preview
-                m_tuningPattern->EditRevert( generatorTool, m_board, nullptr );
+                m_tuningPattern->EditCancel( generatorTool, m_board, nullptr );
 
                 delete m_tuningPattern;
                 m_tuningPattern = nullptr;
@@ -2364,7 +2355,9 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 m_tuningPattern->EditStart( generatorTool, m_board, &commit );
                 m_tuningPattern->Update( generatorTool, m_board, &commit );
-                m_tuningPattern->EditPush( generatorTool, m_board, &commit, _( "Tune" ) );
+                m_tuningPattern->EditFinish( generatorTool, m_board, &commit );
+
+                commit.Push( _( "Tune" ) );
 
                 m_tuningPattern = nullptr;
                 m_pickerItem = nullptr;

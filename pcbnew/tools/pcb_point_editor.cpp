@@ -1957,9 +1957,12 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             if( item->Type() == PCB_GENERATOR_T )
             {
+                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+
                 m_preview.FreeItems();
-                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &commit,
-                                                 static_cast<PCB_GENERATOR*>( item ) );
+                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genFinishEdit, &commit, generator );
+
+                commit.Push( generator->GetCommitMessage() );
             }
             else if( item->Type() == PCB_TABLECELL_T )
             {
@@ -1979,8 +1982,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             inDrag = false;
             frame()->UndoRedoBlock( false );
 
-            m_toolMgr->PostAction<EDA_ITEM*>( ACTIONS::reselectItem,
-                                              item ); // FIXME: Needed for generators
+            m_toolMgr->PostAction<EDA_ITEM*>( ACTIONS::reselectItem, item ); // FIXME: Needed for generators
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1988,9 +1990,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( item->Type() == PCB_GENERATOR_T )
                 {
-                    m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, &commit,
+                    m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genCancelEdit, &commit,
                                                      static_cast<PCB_GENERATOR*>( item ) );
                 }
+
                 commit.Revert();
 
                 if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
