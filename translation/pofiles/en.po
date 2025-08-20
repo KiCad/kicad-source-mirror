@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 01:15+0300\n"
+"POT-Creation-Date: 2025-08-21 00:16+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1376,6 +1376,10 @@ msgstr "Icons"
 
 msgid "Package Developers"
 msgstr "Package Developers"
+
+#, c-format
+msgid "GDI objects in use %u"
+msgstr "GDI objects in use %u"
 
 #, c-format
 msgid "About %s"
@@ -29884,8 +29888,8 @@ msgstr ""
 "\n"
 "Export time %.3f s\n"
 
-msgid "** Got problems while fusing shapes **\n"
-msgstr "** Got problems while fusing shapes **\n"
+msgid "** Got problems while fusing shapes **"
+msgstr "** Got problems while fusing shapes **"
 
 msgid "Errors:\n"
 msgstr "Errors:\n"
@@ -29893,106 +29897,104 @@ msgstr "Errors:\n"
 msgid "Warnings:\n"
 msgstr "Warnings:\n"
 
-msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
+msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **"
 
-msgid "OCC error adding pad/via polygon.\n"
-msgstr "OCC error adding pad/via polygon.\n"
-
-#, c-format
-msgid "Could not add shape (%d points) to copper layer %s.\n"
-msgstr "Could not add shape (%d points) to copper layer %s.\n"
+msgid "OCC error adding pad/via polygon."
+msgstr "OCC error adding pad/via polygon."
 
 #, c-format
-msgid "No model defined for %s.\n"
-msgstr "No model defined for %s.\n"
+msgid "Could not add shape (%d points) to copper layer %s."
+msgstr "Could not add shape (%d points) to copper layer %s."
 
 #, c-format
-msgid "No model for filename '%s'.\n"
-msgstr "No model for filename '%s'.\n"
+msgid "No model defined for %s."
+msgstr "No model defined for %s."
 
 #, c-format
-msgid "No location data for filename '%s'.\n"
-msgstr "No location data for filename '%s'.\n"
+msgid "No model for filename '%s'."
+msgstr "No model for filename '%s'."
 
 #, c-format
-msgid "Could not add component with filename '%s'.\n"
-msgstr "Could not add component with filename '%s'.\n"
+msgid "No location data for filename '%s'."
+msgstr "No location data for filename '%s'."
 
 #, c-format
-msgid "OCC exception building shape segment: %s\n"
-msgstr "OCC exception building shape segment: %s\n"
+msgid "Could not add component with filename '%s'."
+msgstr "Could not add component with filename '%s'."
 
 #, c-format
-msgid "OCC exception building face: %s\n"
-msgstr "OCC exception building face: %s\n"
-
-msgid "Failed to create a prismatic shape\n"
-msgstr "Failed to create a prismatic shape\n"
+msgid "OCC exception building shape segment: %s"
+msgstr "OCC exception building shape segment: %s"
 
 #, c-format
-msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
-msgstr "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
+msgid "OCC exception building face: %s"
+msgstr "OCC exception building face: %s"
+
+msgid "Failed to create a prismatic shape"
+msgstr "Failed to create a prismatic shape"
 
 #, c-format
-msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
-msgstr "Failed to add segment edge (%d %d) -> (%d %d)\n"
+msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
+msgstr "Failed to make segment edge (%d %d) -> (%d %d), skipping"
+
+#, c-format
+msgid "Failed to add segment edge (%d %d) -> (%d %d)"
+msgstr "Failed to add segment edge (%d %d) -> (%d %d)"
 
 #, c-format
 msgid ""
-"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
-"%d)\n"
+"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
-"%d)\n"
+"Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 
 #, c-format
-msgid "Failed to close wire at %d, %d -> %d, %d **\n"
-msgstr "Failed to close wire at %d, %d -> %d, %d **\n"
+msgid "Failed to close wire at %d, %d -> %d, %d **"
+msgstr "Failed to close wire at %d, %d -> %d, %d **"
 
 #, c-format
-msgid "OCC exception creating wire: %s\n"
-msgstr "OCC exception creating wire: %s\n"
+msgid "OCC exception creating wire: %s"
+msgstr "OCC exception creating wire: %s"
 
 #, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 msgstr ""
 "Wire not done (contour points %d): OCC error %d\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 
 #, c-format
 msgid ""
 "Wire self-interference check failed\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 msgstr ""
 "Wire self-interference check failed\n"
-"z: %g; bounding box: %s\n"
+"z: %g; bounding box: %s"
 
-msgid "Using non-simplified polygon.\n"
-msgstr "Using non-simplified polygon.\n"
-
-#, c-format
-msgid "OCC exception creating contour %d: %s\n"
-msgstr "OCC exception creating contour %d: %s\n"
-
-msgid "** Face skipped **\n"
-msgstr "** Face skipped **\n"
-
-msgid "OCC error creating main outline.\n"
-msgstr "OCC error creating main outline.\n"
-
-msgid "OCC error creating hole in main outline.\n"
-msgstr "OCC error creating hole in main outline.\n"
+msgid "Using non-simplified polygon."
+msgstr "Using non-simplified polygon."
 
 #, c-format
-msgid "Subtracting holes for %s\n"
-msgstr "Subtracting holes for %s\n"
+msgid "OCC exception creating contour %d: %s"
+msgstr "OCC exception creating contour %d: %s"
+
+msgid "** Face skipped **"
+msgstr "** Face skipped **"
+
+msgid "OCC error creating main outline."
+msgstr "OCC error creating main outline."
+
+msgid "OCC error creating hole in main outline."
+msgstr "OCC error creating hole in main outline."
 
 #, c-format
-msgid "** Got problems while cutting %s net '%s' **\n"
-msgstr "** Got problems while cutting %s net '%s' **\n"
+msgid "Subtracting holes for %s"
+msgstr "Subtracting holes for %s"
+
+#, c-format
+msgid "** Got problems while cutting %s net '%s' **"
+msgstr "** Got problems while cutting %s net '%s' **"
 
 msgid "shapes"
 msgstr "shapes"
@@ -30004,8 +30006,8 @@ msgid "vias"
 msgstr "vias"
 
 #, c-format
-msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "No valid PCB assembly; cannot create output file '%s'.\n"
+msgid "No valid PCB assembly; cannot create output file '%s'."
+msgstr "No valid PCB assembly; cannot create output file '%s'."
 
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr "Failed to set STEP product name, but will attempt to continue."
@@ -30014,16 +30016,16 @@ msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr "Failed to set surface curve mode, but will attempt to continue."
 
 #, c-format
-msgid "Cannot rename temporary file '%s' to '%s'.\n"
-msgstr "Cannot rename temporary file '%s' to '%s'.\n"
+msgid "Cannot rename temporary file '%s' to '%s'."
+msgstr "Cannot rename temporary file '%s' to '%s'."
 
 #, c-format
-msgid "Cannot identify actual file type for '%s'.\n"
-msgstr "Cannot identify actual file type for '%s'.\n"
+msgid "Cannot identify actual file type for '%s'."
+msgstr "Cannot identify actual file type for '%s'."
 
 #, c-format
-msgid "Could not transfer model data from file '%s'.\n"
-msgstr "Could not transfer model data from file '%s'.\n"
+msgid "Could not transfer model data from file '%s'."
+msgstr "Could not transfer model data from file '%s'."
 
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
@@ -37128,6 +37130,126 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "** Got problems while fusing shapes **\n"
+#~ msgstr "** Got problems while fusing shapes **\n"
+
+#~ msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+#~ msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+
+#~ msgid "OCC error adding pad/via polygon.\n"
+#~ msgstr "OCC error adding pad/via polygon.\n"
+
+#, c-format
+#~ msgid "Could not add shape (%d points) to copper layer %s.\n"
+#~ msgstr "Could not add shape (%d points) to copper layer %s.\n"
+
+#, c-format
+#~ msgid "No model defined for %s.\n"
+#~ msgstr "No model defined for %s.\n"
+
+#, c-format
+#~ msgid "No model for filename '%s'.\n"
+#~ msgstr "No model for filename '%s'.\n"
+
+#, c-format
+#~ msgid "No location data for filename '%s'.\n"
+#~ msgstr "No location data for filename '%s'.\n"
+
+#, c-format
+#~ msgid "Could not add component with filename '%s'.\n"
+#~ msgstr "Could not add component with filename '%s'.\n"
+
+#, c-format
+#~ msgid "OCC exception building shape segment: %s\n"
+#~ msgstr "OCC exception building shape segment: %s\n"
+
+#, c-format
+#~ msgid "OCC exception building face: %s\n"
+#~ msgstr "OCC exception building face: %s\n"
+
+#~ msgid "Failed to create a prismatic shape\n"
+#~ msgstr "Failed to create a prismatic shape\n"
+
+#, c-format
+#~ msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
+#~ msgstr "Failed to make segment edge (%d %d) -> (%d %d), skipping\n"
+
+#, c-format
+#~ msgid "Failed to add segment edge (%d %d) -> (%d %d)\n"
+#~ msgstr "Failed to add segment edge (%d %d) -> (%d %d)\n"
+
+#, c-format
+#~ msgid ""
+#~ "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
+#~ "%d)\n"
+#~ msgstr ""
+#~ "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d "
+#~ "%d)\n"
+
+#, c-format
+#~ msgid "Failed to close wire at %d, %d -> %d, %d **\n"
+#~ msgstr "Failed to close wire at %d, %d -> %d, %d **\n"
+
+#, c-format
+#~ msgid "OCC exception creating wire: %s\n"
+#~ msgstr "OCC exception creating wire: %s\n"
+
+#, c-format
+#~ msgid ""
+#~ "Wire not done (contour points %d): OCC error %d\n"
+#~ "z: %g; bounding box: %s\n"
+#~ msgstr ""
+#~ "Wire not done (contour points %d): OCC error %d\n"
+#~ "z: %g; bounding box: %s\n"
+
+#, c-format
+#~ msgid ""
+#~ "Wire self-interference check failed\n"
+#~ "z: %g; bounding box: %s\n"
+#~ msgstr ""
+#~ "Wire self-interference check failed\n"
+#~ "z: %g; bounding box: %s\n"
+
+#~ msgid "Using non-simplified polygon.\n"
+#~ msgstr "Using non-simplified polygon.\n"
+
+#, c-format
+#~ msgid "OCC exception creating contour %d: %s\n"
+#~ msgstr "OCC exception creating contour %d: %s\n"
+
+#~ msgid "** Face skipped **\n"
+#~ msgstr "** Face skipped **\n"
+
+#~ msgid "OCC error creating main outline.\n"
+#~ msgstr "OCC error creating main outline.\n"
+
+#~ msgid "OCC error creating hole in main outline.\n"
+#~ msgstr "OCC error creating hole in main outline.\n"
+
+#, c-format
+#~ msgid "Subtracting holes for %s\n"
+#~ msgstr "Subtracting holes for %s\n"
+
+#, c-format
+#~ msgid "** Got problems while cutting %s net '%s' **\n"
+#~ msgstr "** Got problems while cutting %s net '%s' **\n"
+
+#, c-format
+#~ msgid "No valid PCB assembly; cannot create output file '%s'.\n"
+#~ msgstr "No valid PCB assembly; cannot create output file '%s'.\n"
+
+#, c-format
+#~ msgid "Cannot rename temporary file '%s' to '%s'.\n"
+#~ msgstr "Cannot rename temporary file '%s' to '%s'.\n"
+
+#, c-format
+#~ msgid "Cannot identify actual file type for '%s'.\n"
+#~ msgstr "Cannot identify actual file type for '%s'.\n"
+
+#, c-format
+#~ msgid "Could not transfer model data from file '%s'.\n"
+#~ msgstr "Could not transfer model data from file '%s'.\n"
 
 #~ msgid "EDA"
 #~ msgstr "EDA"
