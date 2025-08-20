@@ -1370,7 +1370,7 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
 
     do
     {
-        ret = AppendBoard( *pi, designBlock->GetBoardFile() );
+        ret = AppendBoard( *pi, designBlock->GetBoardFile(), designBlock.get() );
     } while( repeatPlacement && ret == 0 );
 
     return ret;
@@ -1594,10 +1594,10 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     if( aEvent.Parameter<bool*>() != nullptr )
-        return AppendBoard( *pi, designBlock->GetBoardFile(), nullptr, static_cast<BOARD_COMMIT*>( aEvent.Commit() ),
-                            *aEvent.Parameter<bool*>() );
+        return AppendBoard( *pi, designBlock->GetBoardFile(), designBlock.get(),
+                            static_cast<BOARD_COMMIT*>( aEvent.Commit() ), *aEvent.Parameter<bool*>() );
     else
-        return AppendBoard( *pi, designBlock->GetBoardFile() );
+        return AppendBoard( *pi, designBlock->GetBoardFile(), designBlock.get() );
 }
 
 
@@ -1990,7 +1990,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
         // If we were provided a commit, let the caller control when to push it
         if( !aCommit )
-            commit->Push( _( "Append Board" ) );
+            commit->Push( _( aDesignBlock ? "Place Design Block" : "Append Board" ) );
 
         editFrame->GetBoard()->BuildConnectivity();
         ret = 0;
