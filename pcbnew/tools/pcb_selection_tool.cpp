@@ -516,7 +516,15 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     // Otherwise drag a selection box
-                    SelectRectArea( aEvent );
+                    if( m_selectionMode == SELECTION_MODE::INSIDE_LASSO
+                        || m_selectionMode == SELECTION_MODE::TOUCHING_LASSO )
+                    {
+                        SelectPolyArea( aEvent );
+                    }
+                    else
+                    {
+                        SelectRectArea( aEvent );
+                    }
                 }
             }
         }
