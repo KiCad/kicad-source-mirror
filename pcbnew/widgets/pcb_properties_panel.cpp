@@ -234,8 +234,7 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
-        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ),
-                                                         aEvent.GetPropertyName() );
+        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ), aEvent.GetPropertyName() );
         wxCHECK( property, /* void */ );
 
         if( item->Type() == PCB_TABLECELL_T )
@@ -254,6 +253,10 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     // Perform grid updates as necessary based on value change
     AfterCommit();
+
+    // PointEditor may need to update if locked/unlocked
+    if( aEvent.GetPropertyName() == _HKI( "Locked" ) )
+        m_frame->GetToolManager()->ProcessEvent( EVENTS::SelectedEvent );
 
     aEvent.Skip();
 }

@@ -840,13 +840,35 @@ bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aPNSLayer, BOA
     return true;
 }
 
-bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer,
-                                           SHAPE_LINE_CHAIN& aBaseLine )
+
+class UNLOCKER
+{
+public:
+    UNLOCKER( PCB_TUNING_PATTERN* aPattern ) :
+            m_pattern( aPattern ),
+            m_wasLocked( aPattern->IsLocked() )
+    {
+        m_pattern->SetLocked( false );
+    }
+
+    ~UNLOCKER()
+    {
+        if( m_wasLocked )
+            m_pattern->SetLocked( true );
+    }
+
+private:
+    PCB_TUNING_PATTERN*  m_pattern;
+    bool                 m_wasLocked;
+};
+
+
+bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer, SHAPE_LINE_CHAIN& aBaseLine )
 {
     VECTOR2I startSnapPoint, endSnapPoint;
 
-    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CLastPoint(),
-                                                   aRouter, aPNSLayer, startSnapPoint, endSnapPoint );
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CLastPoint(), aRouter,
+                                                   aPNSLayer, startSnapPoint, endSnapPoint );
 
     wxCHECK( pnsLine, false );
 
@@ -879,6 +901,7 @@ bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer,
 
 void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
+    UNLOCKER raiiUnlocker( this );
     SetFlags( IN_EDIT );
 
     aTool->Router()->SyncWorld();
@@ -1003,16 +1026,16 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 }
 
 
-bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer,
-                                          SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
+bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer, SHAPE_LINE_CHAIN& aBaseLine,
+                                          bool aPrimary )
 {
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
     PNS::ROUTER*     router = aTool->Router();
     PNS::NODE*       world = router->GetWorld();
     VECTOR2I         startSnapPoint, endSnapPoint;
 
-    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CLastPoint(),
-                                                   router, aPNSLayer, startSnapPoint, endSnapPoint );
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CLastPoint(), router,
+                                                   aPNSLayer, startSnapPoint, endSnapPoint );
 
     if( !pnsLine )
     {
@@ -1095,6 +1118,8 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 {
     if( !( GetFlags() & IN_EDIT ) )
         return false;
+
+    UNLOCKER raiiUnlocker( this );
 
     KIGFX::VIEW*     view = aTool->GetManager()->GetView();
     PNS::ROUTER*     router = aTool->Router();

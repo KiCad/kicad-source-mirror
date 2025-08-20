@@ -280,14 +280,10 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &PCB_ACTIONS::genFinishEdit ) )
     {
         gen->EditFinish( this, board(), commit );
-
-        wxASSERT( commit->Empty() );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genCancelEdit ) )
     {
         gen->EditCancel( this, board(), commit );
-
-        wxASSERT( commit->Empty() );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genRemove ) )
     {
