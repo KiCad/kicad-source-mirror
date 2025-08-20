@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-18 07:02+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -609,9 +609,8 @@ msgid "Plated Barrels"
 msgstr "Pläterade hål"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Visa hålmonterings-lödytor"
+msgstr "Visa innerväggarna i pläterade hål och vior"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -2870,9 +2869,8 @@ msgid "Custom"
 msgstr "Användardefinierad"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Källnamn"
+msgstr "Datakällans namn"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2884,14 +2882,12 @@ msgid "Password"
 msgstr "Lösenord"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Tid"
+msgstr "Tidsgräns"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Anslutningssträng:"
+msgstr "Anslutningssträng"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -2900,19 +2896,16 @@ msgid "Test Connection"
 msgstr "Testa anslutning"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Tabell"
+msgstr "Tabeller"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Ingen anslutning till databas"
+msgstr "Kunde inte ansluta till databas"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Fel i datafilen."
+msgstr "Databasfel"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -6290,9 +6283,9 @@ msgid "Expecting '%s'"
 msgstr "Förväntar '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Förväntar '%s'"
+msgstr "Förväntar %s. Fick '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -25421,19 +25414,16 @@ msgid "Create a new project for this schematic"
 msgstr "Skapa ett nytt projekt för detta schema"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Gå rekursivt in i underark"
+msgstr "Kopiera inte underark"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Endast nuvarande ark"
+msgstr "Kopiera endast interna underark"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Alla ark"
+msgstr "Kopiera alla underark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:430
 msgid "Edit Page Number"
@@ -29763,9 +29753,8 @@ msgid "Success"
 msgstr "Slutförd"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
-msgstr "Avbryt"
+msgstr "Avbruten"
 
 #: libs/kiplatform/include/printing.h:48
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:499
@@ -29774,19 +29763,16 @@ msgid "File not found"
 msgstr "Filen hittades inte"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "Det gick inte att läsa in '%s'."
+msgstr "Det gick inte att läsa in PDF"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
-msgstr "Filtrerade fotavtryck"
+msgstr "Det gick inte att skriva ut"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "%s stöds inte."
+msgstr "Stöds inte"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:509
@@ -33804,7 +33790,6 @@ msgid "Min track clearance:"
 msgstr "Minsta isolationsavstånd för ledare:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Min track width:"
 msgstr "Minsta ledarbredd:"
 
@@ -35517,9 +35502,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Filen skapades."
+msgstr "IPC-2581-fil skapades framgångsrikt."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -36607,6 +36591,8 @@ msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
+"Du försöker ta bort lager som används av fotavtrycket: %s. \n"
+"Vänligen ta bort de objekt som använder dessa lager först."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -36621,24 +36607,20 @@ msgid "Component type:"
 msgstr "Komponenttyp:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:182
-#, fuzzy
 msgid "Custom Layers"
-msgstr "Anpassa senare:"
+msgstr "Användaranpassade lager"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
-#, fuzzy
 msgid "Use custom stackup"
-msgstr "Använd anpassade värden ..."
+msgstr "Använd anpassad mönsterkortsuppbyggnad"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
-#, fuzzy
 msgid "Copper layers"
-msgstr "Kopparlager:"
+msgstr "Kopparlager"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#, fuzzy
 msgid "User Layers"
-msgstr "Andra lager"
+msgstr "Användarlager"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid "Private Layers"
@@ -44463,9 +44445,8 @@ msgstr ""
 "Export-tid %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:655
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Fick problem vid sammanslagning av former **\n"
+msgstr "** Fick problem vid sammanslagning av former **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:2054
@@ -44478,137 +44459,130 @@ msgid "Warnings:\n"
 msgstr "Varningar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:690
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "OCC-fel vid tillägg av polygon för lödyta/via.\n"
+msgstr "OCC-fel vid tillägg av polygon för lödyta/via."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Kunde inte lägga till form (%d punkter) till kopparlager %s.\n"
+msgstr "Kunde inte lägga till form (%d punkter) till kopparlager %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Ingen modell angiven för %s.\n"
+msgstr "Ingen modell angiven för %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Ingen modell för filnamn '%s'.\n"
+msgstr "Ingen modell för filnamn '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Inget placeringsdata för filnamn '%s'.\n"
+msgstr "Inget placeringsdata för filnamn '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Kunde inte lägga till komponent med filnamn '%s'.\n"
+msgstr "Kunde inte lägga till komponent med filnamn '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC-undantag vid uppbyggnad av formsegment: %s\n"
+msgstr "OCC-undantag vid uppbyggnad av formsegment: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC-undantag vid uppbyggnad av yta: %s\n"
+msgstr "OCC-undantag vid uppbyggnad av yta: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1444
 #: pcbnew/exporters/step/step_pcb_model.cpp:1831
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Det gick inte att skapa en prismatisk form\n"
+msgstr "Det gick inte att skapa en prismatisk form"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "Kunde inte skapa segmentkant (%d %d) -> (%d %d), hoppar över\n"
+msgstr "Kunde inte skapa segmentkant (%d %d) -> (%d %d), hoppar över"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Kunde inte lägga till segmentkant (%d %d) -> (%d %d)\n"
+msgstr "Kunde inte lägga till segmentkant (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Kunde inte lägga till bågkurva från (%d %d), båge p0 (%d %d), mitt (%d %d), "
-"p1 (%d %d)\n"
+"p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Kunde inte sluta ledning vid %d, %d -> %d, %d **\n"
+msgstr "Kunde inte sluta ledning vid %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "OCC-undantag vid skapande av ledning: %s\n"
+msgstr "OCC-undantag vid skapande av ledning: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
-"z: %g; konturbox: %s\n"
+"Ledare utfördes inte (konturpunkter %d): OCC-fel %d \n"
+"z: %g; konturbox: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"Kontroll för ledares överlappande med sig själv fallerade\n"
-"z: %g; konturbox: %s\n"
+"Kontroll för ledares överlappande med sig själv fallerade \n"
+"z: %g; konturbox: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1765
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Använder icke förenklad polygon.\n"
+msgstr "Använder icke förenklad polygon."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1812
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "OCC-undantag vid skapande av kontur %d: %s\n"
+msgstr "OCC-undantag vid skapande av kontur %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1842
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Yta hoppades över **\n"
+msgstr "** Yta hoppades över **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "OCC-fel vid skapande av huvudkontur.\n"
+msgstr "OCC-fel vid skapande av huvudkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "OCC-fel vid skapande av hål i huvudkontur.\n"
+msgstr "OCC-fel vid skapande av hål i huvudkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Subtraherar hål för %s\n"
+msgstr "Subtraherar hål för %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Fick problem vid skärning av %s nät '%s' **\n"
+msgstr "** Fick problem vid skärning av %s nät '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2097
 msgid "shapes"
@@ -44628,9 +44602,9 @@ msgstr "vior"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3217
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3359
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'.\n"
+msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #, c-format
@@ -44662,19 +44636,19 @@ msgstr "Kunde inte ställa in ytkurvläge, men försöker fortsätta."
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
 #: pcbnew/exporters/step/step_pcb_model.cpp:3389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Kan inte döpa om temporär fil '%s' till '%s'.\n"
+msgstr "Kan inte döpa om temporär fil '%s' till '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2939
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Kan inte identifiera faktisk filtyp för '%s'.\n"
+msgstr "Kan inte identifiera faktisk filtyp för '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2949
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Det gick inte att överföra modelldata från fil '%s'.\n"
+msgstr "Det gick inte att överföra modelldata från fil '%s'."
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -48033,7 +48007,7 @@ msgstr "Genererar innehållssektion"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Lödytan har en typ som inte stöds; den hoppades över."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1176
 msgid "Generating history section"
@@ -48045,30 +48019,35 @@ msgid "Generating BOM section"
 msgstr "Genererar komponentlistesektion"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
+msgstr ""
+"Fotavtryck %s hittades inte i bibliotek; komponentlistans data kan vara "
+"ofullständigt."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Komponent \"%s\" saknar OEM-referens; komponentlisteposition kommer att "
+"hoppas över."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1369
 msgid "Generating CAD data"
 msgstr "Genererar CAD-data"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2258
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Mönsterkortets kontur saknas eller är felaktig. Kör designregelkontroll för "
-"en fullständig analys."
+"Mönsterkortets kontur är felaktig eller saknas.  Vänligen kör "
+"designregelkontroll."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Duplikat av fotavtryckspekare påträffades; IPC-2581-utmatning kan vara "
+"felaktig."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2784
 #, c-format
@@ -48077,17 +48056,20 @@ msgstr "Exporterar lager %s, nät %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2820
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "Via använder kragstack som inte stöds; utelämnad från borrdata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2846
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Lödyta avnäder kragstapel som inte stöds; hålet utelämnades från borrdata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2988
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Kragförstärkningar stöds inte i IPC-2581 revision B; de exporterades som "
+"kopparzoner."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3423
 msgid "Generating logistic section"
@@ -48098,9 +48080,8 @@ msgid "Saving file"
 msgstr "Sparar fil"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3467
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Lyckades inte spara fil till buffert"
+msgstr "Lyckades inte spara IPC-2581-data till buffert."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -48334,17 +48315,20 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5161
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
-msgstr ""
+msgstr "Ogiltig lageruppbyggnad i fotavtryck: udda antal kopparlager (%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5169
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
 msgstr ""
+"Ogiltig lageruppbyggnad i fotavtryck: kopparlager är inte sammanhängande."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5175
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
+"Ogiltig lageruppbyggnad i fotavtryck: tekniklager är implicita i fotavtryck "
+"och skall inte specificeras i lageruppbyggnaden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5400
 #, c-format
@@ -50611,7 +50595,7 @@ msgstr "Inga regelområden att upprepa layouten till har hittats."
 #: pcbnew/tools/multichannel_tool.cpp:583
 #, c-format
 msgid "Rule Area topologies do not match: %s"
-msgstr ""
+msgstr "Regelareatopologier överensstämmer inte: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:593
 #: pcbnew/tools/multichannel_tool.cpp:632
@@ -50648,13 +50632,12 @@ msgid "Topology mismatch"
 msgstr "Topoligi överensstämmer ej"
 
 #: pcbnew/tools/multichannel_tool.cpp:1183
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
-"Kan inte autogenerera några placeringsområden eftersom kretsschemat bara har "
-"ett eller inga hierarkiska ark eller komponentklasser."
+"Kan inte autogenerera några placeringsområden eftersom kretsschemat har bara "
+"ett eller inga hierarkiska ark, grupper eller komponentklasser."
 
 #: pcbnew/tools/multichannel_tool.cpp:1347
 msgid "Auto-generate placement rule areas"
@@ -50921,14 +50904,12 @@ msgid "Add selected design block to current board"
 msgstr "Lägg till valt designblock till aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "Nytt designblocksbibliotek"
+msgstr "Tillämpa designblockslayout"
 
 #: pcbnew/tools/pcb_actions.cpp:471
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Placera designblocket länkat till vald grupp"
+msgstr "Tillämpa länkad designblockslayout på vald grupp"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Save Current Board as Design Block..."
@@ -52693,9 +52674,9 @@ msgid "Invalid clipboard contents"
 msgstr "Ogiltigt urklippsinnehåll"
 
 #: pcbnew/tools/pcb_control.cpp:1498
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Fotavtrycksnamnet kan inte vara tomt."
+msgstr "Fotavtryck %s är låst och kan inte placeras ut."
 
 #: pcbnew/tools/pcb_control.cpp:1583
 #, c-format
