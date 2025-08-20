@@ -1990,7 +1990,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
         // If we were provided a commit, let the caller control when to push it
         if( !aCommit )
-            commit->Push( _( aDesignBlock ? "Place Design Block" : "Append Board" ) );
+            commit->Push( aDesignBlock ? _( "Place Design Block" ) : _( "Append Board" ) );
 
         editFrame->GetBoard()->BuildConnectivity();
         ret = 0;
