@@ -3010,6 +3010,14 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
                     addLocationNode( tempFeature, *shape );
 
+                    EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
+
+                    if( fp_angle != ANGLE_0 )
+                    {
+                        wxXmlNode* xformNode = appendNode( tempFeature, "Xform" );
+                        addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
+                    }
+
                     addShape( tempFeature, *shape );
                 }
                 else if( shape->GetShape() == SHAPE_T::CIRCLE
