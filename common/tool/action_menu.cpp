@@ -24,22 +24,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tool/action_menu.h"
+
+#include <wx/grid.h>
+#include <wx/listctrl.h>
+#include <wx/log.h>
+#include <wx/textentry.h>
+#include <wx/stc/stc.h>
+
 #include <bitmaps.h>
 #include <eda_base_frame.h>
 #include <functional>
 #include <id.h>
 #include <kiface_base.h>
-#include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>
-#include <wx/log.h>
-#include <wx/stc/stc.h>
 #include <textentry_tricks.h>
-#include <wx/listctrl.h>
-#include <wx/grid.h>
 #include <widgets/ui_common.h>
 
 using namespace std::placeholders;

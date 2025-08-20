@@ -21,13 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GROUP_TOOL_H
-#define GROUP_TOOL_H
+#pragma once
 
-#include <tool/selection_tool.h>
+#include <tool/tool_interactive.h>
 
 class COMMIT;
 class DIALOG_GROUP_PROPERTIES;
+class EDA_DRAW_FRAME;
+class EDA_GROUP;
+class SELECTION_TOOL;
+
 
 class GROUP_TOOL : public TOOL_INTERACTIVE
 {
@@ -80,5 +83,3 @@ protected:
     SELECTION_TOOL*          m_selectionTool = nullptr;
     std::shared_ptr<COMMIT>  m_commit;
 };
-
-#endif

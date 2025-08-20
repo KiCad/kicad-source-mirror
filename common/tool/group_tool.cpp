@@ -20,14 +20,15 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include "tool/group_tool.h"
 
 #include <eda_draw_frame.h>
 #include <kiplatform/ui.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
-#include <tool/group_tool.h>
 #include <tool/selection.h>
+#include <tool/selection_tool.h>
 #include <status_popup.h>
 #include <commit.h>
 #include <bitmaps.h>

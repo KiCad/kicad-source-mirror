@@ -427,5 +427,3 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
 
     return false;
 }
-
-

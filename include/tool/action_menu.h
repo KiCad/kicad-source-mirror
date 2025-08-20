@@ -25,15 +25,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __CONTEXT_MENU_H
-#define __CONTEXT_MENU_H
+#pragma once
 
 #include <map>
 #include <list>
 #include <functional>
 
 #include <wx/menu.h>
-#include <wx/textentry.h>
 #include <tool/tool_event.h>
 
 class KIFACE_BASE;
@@ -285,5 +283,3 @@ protected:
 
     friend class TOOL_INTERACTIVE;
 };
-
-#endif

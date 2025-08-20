@@ -22,12 +22,11 @@
  */
 
 #pragma once
-#ifndef INCLUDE_TOOL_SELECTION_TOOL_H_
-#define INCLUDE_TOOL_SELECTION_TOOL_H_
+
+#include <wx/timer.h>
 
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
-#include <wx/timer.h>
 #include <eda_item.h>
 
 class COLLECTOR;
@@ -166,5 +165,3 @@ protected:
 
     VECTOR2I        m_originalCursor;    ///< Location of original cursor when starting click.
 };
-
-#endif /* INCLUDE_TOOL_SELECTION_TOOL_H_ */
