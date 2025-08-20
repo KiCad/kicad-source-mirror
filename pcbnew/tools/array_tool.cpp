@@ -147,6 +147,7 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
 
     ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( unchangingPadNumbers, *m_array_opts );
 
+    const bool will_reannotate = !m_isFootprintEditor && m_array_opts->ShouldReannotateFootprints();
     EDA_ITEMS all_added_items;
 
     int arraySize = m_array_opts->GetArraySize();
@@ -246,9 +247,6 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     }
                 }
 
-                // Add new items to selection (footprints in the selection will be reannotated)
-                items_for_this_block.Add( this_item );
-
                 if( this_item )
                 {
                     // Because aItem is/can be created from a selected item, and inherits from
@@ -279,6 +277,10 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                 }
             }
 
+            // Add new items to selection (footprints in the selection will be reannotated)
+            if( this_item )
+                items_for_this_block.Add( this_item );
+
             // attempt to renumber items if the array parameters define
             // a complete numbering scheme to number by (as opposed to
             // implicit numbering by incrementing the items during creation
@@ -298,7 +300,9 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
             }
         }
 
-        if( !m_isFootprintEditor && m_array_opts->ShouldReannotateFootprints() )
+        // Do not reannotate the first item, or it will skip its own numbering and
+        // the array annotations will shift by one cell.
+        if( will_reannotate && ptN != arraySize - 1 )
         {
             m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicates( items_for_this_block,
                                                                                all_added_items );
