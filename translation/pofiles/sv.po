@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-18 08:02+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -42616,9 +42616,8 @@ msgstr ""
 "Export-tid %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Fick problem vid sammanslagning av former **\n"
+msgstr "** Fick problem vid sammanslagning av former **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2050
@@ -42631,137 +42630,130 @@ msgid "Warnings:\n"
 msgstr "Varningar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "OCC-fel vid tillägg av polygon för lödyta/via.\n"
+msgstr "OCC-fel vid tillägg av polygon för lödyta/via."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Kunde inte lägga till form (%d punkter) till kopparlager %s.\n"
+msgstr "Kunde inte lägga till form (%d punkter) till kopparlager %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Ingen modell angiven för %s.\n"
+msgstr "Ingen modell angiven för %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Ingen modell för filnamn '%s'.\n"
+msgstr "Ingen modell för filnamn '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Inget placeringsdata för filnamn '%s'.\n"
+msgstr "Inget placeringsdata för filnamn '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Kunde inte lägga till komponent med filnamn '%s'.\n"
+msgstr "Kunde inte lägga till komponent med filnamn '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC-undantag vid uppbyggnad av formsegment: %s\n"
+msgstr "OCC-undantag vid uppbyggnad av formsegment: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC-undantag vid uppbyggnad av yta: %s\n"
+msgstr "OCC-undantag vid uppbyggnad av yta: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1439
 #: pcbnew/exporters/step/step_pcb_model.cpp:1828
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Det gick inte att skapa en prismatisk form\n"
+msgstr "Det gick inte att skapa en prismatisk form"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "Kunde inte skapa segmentkant (%d %d) -> (%d %d), hoppar över\n"
+msgstr "Kunde inte skapa segmentkant (%d %d) -> (%d %d), hoppar över"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Kunde inte lägga till segmentkant (%d %d) -> (%d %d)\n"
+msgstr "Kunde inte lägga till segmentkant (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Kunde inte lägga till bågkurva från (%d %d), båge p0 (%d %d), mitt (%d %d), "
-"p1 (%d %d)\n"
+"p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1634
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Kunde inte sluta ledning vid %d, %d -> %d, %d **\n"
+msgstr "Kunde inte sluta ledning vid %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "OCC-undantag vid skapande av ledning: %s\n"
+msgstr "OCC-undantag vid skapande av ledning: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
-"z: %g; konturbox: %s\n"
+"Ledare utfördes inte (konturpunkter %d): OCC-fel %d \n"
+"z: %g; konturbox: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1740
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"Kontroll för ledares överlappande med sig själv fallerade\n"
-"z: %g; konturbox: %s\n"
+"Kontroll för ledares överlappande med sig själv fallerade \n"
+"z: %g; konturbox: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1762
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Använder icke förenklad polygon.\n"
+msgstr "Använder icke förenklad polygon."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "OCC-undantag vid skapande av kontur %d: %s\n"
+msgstr "OCC-undantag vid skapande av kontur %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Yta hoppades över **\n"
+msgstr "** Yta hoppades över **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1929
 #: pcbnew/exporters/step/step_pcb_model.cpp:1946
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "OCC-fel vid skapande av huvudkontur.\n"
+msgstr "OCC-fel vid skapande av huvudkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "OCC-fel vid skapande av hål i huvudkontur.\n"
+msgstr "OCC-fel vid skapande av hål i huvudkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1997
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Subtraherar hål för %s\n"
+msgstr "Subtraherar hål för %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Fick problem vid skärning av %s nät '%s' **\n"
+msgstr "** Fick problem vid skärning av %s nät '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2094
 msgid "shapes"
@@ -42781,9 +42773,9 @@ msgstr "vior"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3310
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'.\n"
+msgstr "Inget giltigt kretskort; kan inte skapa utmatningsfil '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2387
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -42797,19 +42789,19 @@ msgstr "Kunde inte ställa in ytkurvläge, men försöker fortsätta."
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Kan inte döpa om temporär fil '%s' till '%s'.\n"
+msgstr "Kan inte döpa om temporär fil '%s' till '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Kan inte identifiera faktisk filtyp för '%s'.\n"
+msgstr "Kan inte identifiera faktisk filtyp för '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2897
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Det gick inte att överföra modelldata från fil '%s'.\n"
+msgstr "Det gick inte att överföra modelldata från fil '%s'."
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
