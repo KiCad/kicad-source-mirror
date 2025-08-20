@@ -26,6 +26,7 @@
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include "core/kicad_algo.h"
+#include <algorithm>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <board.h>
@@ -523,6 +524,13 @@ void DRC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
             m_filteredMarkers.push_back( marker );
         }
     }
+
+    // Sort markers so that errors appear before warnings
+    std::stable_sort( m_filteredMarkers.begin(), m_filteredMarkers.end(),
+                      []( const PCB_MARKER* a, const PCB_MARKER* b )
+                      {
+                          return a->GetSeverity() > b->GetSeverity();
+                      } );
 }
 
 
