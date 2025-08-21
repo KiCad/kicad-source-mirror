@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-18 07:02+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2449,7 +2449,7 @@ msgstr "Розробники пакетів"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr "Використовувані об'єкти GDI %u"
+msgstr "Використовувані об'єкти із GDI %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -2846,9 +2846,8 @@ msgid "Design Block Properties"
 msgstr "Властивості блоку дизайну"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Генерування розділу контенту"
+msgstr "Створення підключення до бази даних"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2860,9 +2859,8 @@ msgid "Custom"
 msgstr "Користувацький"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Назва джерела"
+msgstr "Назва джерела даних"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2874,14 +2872,12 @@ msgid "Password"
 msgstr "Пароль"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Час"
+msgstr "Тайм-аут"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Рядок підключення:"
+msgstr "Рядок підключення"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -2890,19 +2886,16 @@ msgid "Test Connection"
 msgstr "Тест з'єднання"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Таблиця"
+msgstr "Столи"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Немає з'єднання з базою даних"
+msgstr "Не вдається підключитися до бази даних"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Помилка файлу даних."
+msgstr "Помилка бази даних"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -6276,9 +6269,9 @@ msgid "Expecting '%s'"
 msgstr "Очікується '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Очікується '%s'"
+msgstr "Очікується %s. Отримано '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -25382,19 +25375,16 @@ msgid "Create a new project for this schematic"
 msgstr "Створити новий проект для цієї схеми"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Досягнуто кінця листа"
+msgstr "Не копіювати підтаблиці"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Тільки поточний лист"
+msgstr "Копіювати лише внутрішні підтаблиці"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Усі аркуші"
+msgstr "Копіювати всі підтаблиці"
 
 #: eeschema/widgets/hierarchy_pane.cpp:430
 msgid "Edit Page Number"
@@ -29707,9 +29697,8 @@ msgid "Success"
 msgstr "Успіх"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
-msgstr "Скасувати"
+msgstr "Скасовано"
 
 #: libs/kiplatform/include/printing.h:48
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:499
@@ -29718,19 +29707,16 @@ msgid "File not found"
 msgstr "Файл не знайдено"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "Не вдалося завантажити '%s."
+msgstr "Не вдалося завантажити PDF"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
-msgstr "Відфільтровані посадкові місця"
+msgstr "Не вдалося надрукувати"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "%s не підтримується."
+msgstr "Не підтримується"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:509
@@ -35448,9 +35434,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Файл сформовано."
+msgstr "Файл IPC-2581 успішно згенеровано."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -36541,6 +36526,8 @@ msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
+"Ви намагаєтеся видалити шари, які використовуються посадковим місцем: %s.\n"
+"Спочатку видаліть об'єкти, які використовують ці шари."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -36555,24 +36542,20 @@ msgid "Component type:"
 msgstr "Тип компонента:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:182
-#, fuzzy
 msgid "Custom Layers"
-msgstr "Налаштувати пізніше:"
+msgstr "Користувацькі шари"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
-#, fuzzy
 msgid "Use custom stackup"
-msgstr "Використати значення користувача..."
+msgstr "Використовувати власне стекування"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
-#, fuzzy
 msgid "Copper layers"
-msgstr "Шари міді:"
+msgstr "Мідні шари"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#, fuzzy
 msgid "User Layers"
-msgstr "Інші шари"
+msgstr "Шари користувача"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid "Private Layers"
@@ -37343,7 +37326,7 @@ msgstr "Шари шовкографії"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:66 pcbnew/pad.cpp:2921
 msgid "Copper Layers"
-msgstr "Мідні шари"
+msgstr "Мідні Шари"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:65
@@ -44490,9 +44473,8 @@ msgstr ""
 "Час експорту %.3f сек\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:655
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Виникли проблеми під час поєднання фігур **\n"
+msgstr "** Виникли проблеми під час поєднання фігур **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:2054
@@ -44505,139 +44487,132 @@ msgid "Warnings:\n"
 msgstr "Попередження:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:690
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain створив нульову фігуру **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain створив нульову фігуру **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
 msgstr ""
 "Помилка OCC під час додавання полігону контактної площадки/перехідного "
-"отвору.\n"
+"отвору."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Не вдалося додати форму (%d точок) до мідного шару %s.\n"
+msgstr "Не вдалося додати форму (%d точок) до мідного шару %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Модель не визначена для %s.\n"
+msgstr "Для %s не визначено жодної моделі."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Немає моделі для імені файлу '%s'.\n"
+msgstr "Немає моделі для файлу з назвою '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Немає даних про місцезнаходження для назви файлу '%s'.\n"
+msgstr "Немає даних про місцезнаходження для файлу з назвою '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Не вдалося додати компонент із назвою файлу '%s'.\n"
+msgstr "Не вдалося додати компонент з назвою файлу '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "Сегмент форми будівлі винятку OCC: %s\n"
+msgstr "Сегмент форми будівлі винятку OCC: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "Виняток OCC для створення об'єкта: %s\n"
+msgstr "Виняток OCC для створення об'єкта: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1444
 #: pcbnew/exporters/step/step_pcb_model.cpp:1831
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Не вдалося створити призматичну фігуру\n"
+msgstr "Не вдалося створити призматичну фігуру"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "Не вдалося створити край сегмента (%d %d) -> (%d %d), пропускаємо\n"
+msgstr "Не вдалося створити край сегмента (%d %d) -> (%d %d), пропускаємо"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Не вдалося додати край сегмента (%d %d) -> (%d %d)\n"
+msgstr "Не вдалося додати край сегмента (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Не вдалося додати дугу з (%d %d), дуги p0 (%d %d), середини (%d %d), p1 (%d "
-"%d)\n"
+"%d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Не вдалося замкнути провід у %d, %d -> %d, %d **\n"
+msgstr "Не вдалося замкнути дротяну трубу о %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "Виняток OCC, що створює провід: %s\n"
+msgstr "Виняток OCC, що створює дріт: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Дріт не виконано (точки контуру %d): помилка OCC %d\n"
-"z: %g; обмежувальна рамка: %s\n"
+"z: %g; обмежувальна рамка: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Перевірка дроту на самоперешкоди не вдалася\n"
-"z: %g; обмежувальна рамка: %s\n"
+"z: %g; обмежувальна рамка: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1765
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Використання неспрощеного полігону.\n"
+msgstr "Використання неспрощеного полігону."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1812
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "Виняток OCC, що створює контур %d: %s\n"
+msgstr "Виняток OCC, що створює контур %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1842
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Обличчя пропущено **\n"
+msgstr "** Обличчя пропущено **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "Помилка OCC при створенні основного контуру.\n"
+msgstr "Помилка OCC під час створення основного контуру."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "Помилка OCC під час створення отвору в основному контурі.\n"
+msgstr "Помилка OCC під час створення отвору в основному контурі."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Віднімання отворів для %s\n"
+msgstr "Віднімання отворів для %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Виникли проблеми під час обрізання %s мережі '%s' **\n"
+msgstr "** Виникли проблеми під час обрізання %s мережі '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2097
 msgid "shapes"
@@ -44657,11 +44632,11 @@ msgstr "перехідний отвір"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3217
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3359
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr ""
 "Немає коректної збірки друкованої плати; неможливо створити вихідний файл "
-"'%s'.\n"
+"'%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #, c-format
@@ -44697,19 +44672,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
 #: pcbnew/exporters/step/step_pcb_model.cpp:3389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Неможливо перейменувати тимчасовий файл '%s' на '%s'.\n"
+msgstr "Неможливо перейменувати тимчасовий файл '%s' на '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2939
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Не вдається визначити фактичний тип файлу для '%s'.\n"
+msgstr "Не вдається визначити фактичний тип файлу для '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2949
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Не вдалося перенести дані моделі з файлу '%s'.\n"
+msgstr "Не вдалося перенести дані моделі з файлу '%s'."
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -48082,7 +48057,7 @@ msgstr "Генерування розділу контенту"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Тип блокнота непідтримуваний; його було пропущено."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1176
 msgid "Generating history section"
@@ -48094,29 +48069,28 @@ msgid "Generating BOM section"
 msgstr "Генерування розділу BOM"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Посадкове місце '%s' не знайдено в бібліотеці '%s'."
+msgstr "Слід %s не знайдено у словнику; дані BOM можуть бути неповними."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "Компоненту \"%s\" бракує посилання на OEM; запис BOM буде пропущено."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1369
 msgid "Generating CAD data"
 msgstr "Створення даних CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2258
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"Контур плати відсутній або спотворений. Запустіть DRC для повного аналізу."
+msgstr "Структура дошки недійсна або відсутня. Будь ласка, запустіть DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Виявлено дублікати вказівників слідів; вивід IPC-2581 може бути неправильним."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2784
 #, c-format
@@ -48126,16 +48100,22 @@ msgstr "Експорт шару %s, мережа %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2820
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Via використовує непідтримуваний стек контактних площадок; пропущено в даних "
+"свердління."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2846
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Площадка використовує непідтримуваний стек контактних площадок; отвір було "
+"пропущено з даних свердління."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2988
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Краплеподібні форми не підтримуються в IPC-2581 версії B; вони були "
+"експортовані як зони."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3423
 msgid "Generating logistic section"
@@ -48146,9 +48126,8 @@ msgid "Saving file"
 msgstr "Збереження файлу"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3467
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Не вдалося зберегти файл у буфер"
+msgstr "Не вдалося зберегти дані IPC-2581 до буфера."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -48385,16 +48364,20 @@ msgstr ""
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
 msgstr ""
+"Недійсне нагромадження в посадковому місці: непарна кількість мідних шарів "
+"(%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5169
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
-msgstr ""
+msgstr "Недійсне накладання в контурі: мідні шари не є суміжними."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5175
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
+"Недійсний стек у сліді: технологічні шари неявно входять до слідів і не "
+"повинні бути вказані в стеку."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5400
 #, c-format
@@ -50650,7 +50633,7 @@ msgstr "Не знайдено жодних областей правил для 
 #: pcbnew/tools/multichannel_tool.cpp:583
 #, c-format
 msgid "Rule Area topologies do not match: %s"
-msgstr ""
+msgstr "Топології області правил не збігаються: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:593
 #: pcbnew/tools/multichannel_tool.cpp:632
@@ -50686,13 +50669,12 @@ msgid "Topology mismatch"
 msgstr "Невідповідність топології"
 
 #: pcbnew/tools/multichannel_tool.cpp:1183
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "Не вдається автоматично згенерувати області розміщення, оскільки схема має "
-"лише один або жодного ієрархічного аркуша(ів) чи класу компонентів."
+"лише один або взагалі не має ієрархічних аркушів, груп чи класів компонентів."
 
 #: pcbnew/tools/multichannel_tool.cpp:1347
 msgid "Auto-generate placement rule areas"
@@ -50959,14 +50941,12 @@ msgid "Add selected design block to current board"
 msgstr "Додати вибраний блок дизайну до поточної плати"
 
 #: pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "Нова бібліотека блоків проектування"
+msgstr "Застосувати макет блоку дизайну"
 
 #: pcbnew/tools/pcb_actions.cpp:471
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Розмістити блок дизайну, пов'язаний з вибраною групою"
+msgstr "Застосувати макет зв'язаного блоку дизайну до вибраної групи"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Save Current Board as Design Block..."
@@ -52747,9 +52727,9 @@ msgid "Invalid clipboard contents"
 msgstr "Неприпустимий вміст буфера обміну"
 
 #: pcbnew/tools/pcb_control.cpp:1498
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Поле імені посадкового місця не може бути незаповненим."
+msgstr "Слід %s заблоковано та не може бути розміщено."
 
 #: pcbnew/tools/pcb_control.cpp:1583
 #, c-format
