@@ -1134,6 +1134,35 @@ FOOTPRINT* PCB_IO_EASYEDA_PARSER::ParseFootprint(
         footprint->Add( shape.release(), ADD_MODE::APPEND );
     }
 
+    bool hasFabRef = false;
+
+    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+    {
+        if( item->Type() == PCB_TEXT_T && item->IsOnLayer( F_Fab ) )
+        {
+            if( static_cast<PCB_TEXT*>( item )->GetText() == wxT( "${REFERENCE}" ) )
+            {
+                hasFabRef = true;
+                break;
+            }
+        }
+    }
+
+    if( !hasFabRef )
+    {
+        // Add reference text field on F_Fab
+        int c_refTextSize = pcbIUScale.mmToIU( 0.5 );      // KLC min Fab text size
+        int c_refTextThickness = pcbIUScale.mmToIU( 0.1 ); // Decent text thickness
+        std::unique_ptr<PCB_TEXT> refText = std::make_unique<PCB_TEXT>( footprint.get() );
+
+        refText->SetLayer( F_Fab );
+        refText->SetTextSize( VECTOR2I( c_refTextSize, c_refTextSize ) );
+        refText->SetTextThickness( c_refTextThickness );
+        refText->SetText( wxT( "${REFERENCE}" ) );
+
+        footprint->Add( refText.release(), ADD_MODE::APPEND );
+    }
+
     return footprint.release();
 }
 
