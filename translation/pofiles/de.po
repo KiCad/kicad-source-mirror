@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-18 07:02+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2919,9 +2919,8 @@ msgid "Custom"
 msgstr "Benutzerdefiniert"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Quellename"
+msgstr "Quellenname"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2951,7 +2950,7 @@ msgstr "Verbindung testen"
 #: common/dialogs/dialog_generate_database_connection.cpp:79
 #, fuzzy
 msgid "Tables"
-msgstr "Tabelle"
+msgstr "Tabellen"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 #, fuzzy
@@ -54639,7 +54638,7 @@ msgstr "Quellentyp"
 
 #: pcbnew/zone.cpp:1967
 msgid "Source Name"
-msgstr "Quellename"
+msgstr "Quellenname"
 
 #: pcbnew/zone.cpp:1981
 msgid "Hatch Orientation"
