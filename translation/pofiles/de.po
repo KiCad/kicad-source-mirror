@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
 "PO-Revision-Date: 2025-08-21 23:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1774,10 +1774,8 @@ msgid "Replace Loaded File?"
 msgstr "Geladene Datei ersetzen?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"Die Ausgabedatei ‚%s‘ existiert bereits. Möchten Sie diese überschreiben?"
+msgstr "Es ist bereits eine Datei geladen. Möchten Sie diese ersetzen?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -44881,7 +44879,7 @@ msgstr "(BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden.)"
 
 #: pcbnew/pad.cpp:2255
 msgid "('mechanical' property is for PTH pads)"
-msgstr "(mechanisch-Eigenschaft ist für Durchsteckpads)"
+msgstr "(Mechanisch-Eigenschaft ist für Durchsteckpads)"
 
 #: pcbnew/pad.cpp:2271
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -52400,7 +52398,7 @@ msgstr "Quellentyp"
 
 #: pcbnew/zone.cpp:2035
 msgid "Source Name"
-msgstr "Quellename"
+msgstr "Quellenname"
 
 #: pcbnew/zone.cpp:2049
 msgid "Hatch Orientation"
