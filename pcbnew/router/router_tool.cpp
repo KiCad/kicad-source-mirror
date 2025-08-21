@@ -2274,26 +2274,33 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
-    std::set<PNS::NET_HANDLE> highlightNetcodes;
-
     if( itemsToDrag.Count() >= 1 )
     {
-        int layer = m_iface->GetPNSLayerFromBoardLayer( m_originalActiveLayer );
+        // Snap to closest item
+        int         layer = m_iface->GetPNSLayerFromBoardLayer( m_originalActiveLayer );
+        PNS::ITEM*  closestItem = nullptr;
+        SEG::ecoord closestDistSq = std::numeric_limits<SEG::ecoord>::max();
 
         for( PNS::ITEM* pitem : itemsToDrag.Items() )
         {
-            if( pitem->Shape( layer )->Collide( p0, 0 ) )
-            {
-                p = snapToItem( pitem, p0 );
-                m_startItem = pitem;
+            SEG::ecoord distSq = pitem->Shape( layer )->SquaredDistance( p0, 0 );
 
-                if( pitem->Net() )
-                    highlightNetcodes.insert( pitem->Net() );
+            if( distSq < closestDistSq )
+            {
+                closestDistSq = distSq;
+                closestItem = pitem;
             }
         }
 
-        if( highlightNetcodes.size() )
-            highlightNets( true, highlightNetcodes );
+        if( closestItem )
+        {
+            p = snapToItem( closestItem, p0 );
+
+            m_startItem = closestItem;
+
+            if( closestItem->Net() )
+                highlightNets( true, { closestItem->Net() } );
+        }
     }
 
     if( !footprints.empty() && singleFootprintDrag )
