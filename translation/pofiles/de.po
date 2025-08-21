@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-21 23:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -149,7 +149,7 @@ msgstr "Letzte Renderdauer %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:803
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "OpenGL-Fehler während des Offscreen-Renderings: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:967
 #, c-format
@@ -2920,7 +2920,7 @@ msgstr "Benutzerdefiniert"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
 msgid "Data Source Name"
-msgstr "Quellenname"
+msgstr "Datenquellenname"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2937,9 +2937,8 @@ msgid "Timeout"
 msgstr "Zeit"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Verbindungszeichenkette:"
+msgstr "Verbindungszeichenkette"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -2958,9 +2957,8 @@ msgid "Unable to connect to database"
 msgstr "Keine Verbindung zur Datenbank"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Datendatei Fehler."
+msgstr "Datenbankfehler"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -5387,9 +5385,8 @@ msgid "\"Don't show again\" dialogs reset."
 msgstr "Dialoge „Nicht wieder anzeigen“ zurückgesetzt."
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "Zurücksetzen auf Standardeinstellungen"
+msgstr "Zurücksetzen aller Dialoge auf Standardeinstellungen."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -6363,9 +6360,9 @@ msgid "Expecting '%s'"
 msgstr "Erwarte \"%s\""
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Erwarte \"%s\""
+msgstr "Erwarte %s, habe \"%s\""
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -18645,9 +18642,11 @@ msgstr "Speichern des Projekts abbrechen"
 
 #: eeschema/files-io.cpp:1271 eeschema/files-io.cpp:1297 pcbnew/files.cpp:1202
 #: pcbnew/files.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Konnte die Plotdateien nicht im Ordner \"%s\" anlegen."
+msgstr ""
+"Konnte Dateien nicht automatisch in schreibgeschützem Ordner speichern:   "
+"\"%s\""
 
 #: eeschema/files-io.cpp:1444
 #, c-format
@@ -20553,7 +20552,7 @@ msgstr "Alle Einheiten"
 #: eeschema/sch_item.cpp:204 eeschema/sch_item.cpp:220
 #: eeschema/sch_item.cpp:766
 msgid "All body styles"
-msgstr ""
+msgstr "Alle Symbolformen"
 
 #: eeschema/sch_item.cpp:676 eeschema/sch_item.cpp:759
 #: eeschema/sch_symbol.cpp:2948 eeschema/tools/sch_edit_tool.cpp:140
@@ -24093,9 +24092,8 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr "Designblock in Projekt kopieren und auf aktueller Seiten zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "Pins aus Zeichenblatt einfügen:"
+msgstr "Pins von Schaltplanblatt einfügen"
 
 #: eeschema/tools/sch_actions.cpp:576
 #, fuzzy
@@ -28376,9 +28374,8 @@ msgid "Select a Template"
 msgstr "Vorlage auswählen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
-#, fuzzy
 msgid "Click on any template in the list to "
-msgstr "Anklicken eines Pins wählt das Symbol"
+msgstr "Auf eine Vorlage in der Liste klicken um zu "
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
 msgid "preview its details"
@@ -28395,9 +28392,8 @@ msgid "Customize Path"
 msgstr "Pfad anpassen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
-#, fuzzy
 msgid "Use the "
-msgstr "Dieses Thema verwenden:"
+msgstr "Benutze "
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
 msgid "folder path field"
@@ -28432,9 +28428,8 @@ msgid "Pre-configured libraries"
 msgstr "Vorkonfigurierte Bibliotheken"
 
 #: kicad/dialogs/dialog_template_selector.cpp:104
-#, fuzzy
 msgid "- Common components and footprints already linked"
-msgstr "Nach Footprintbliotheksverknüpfung:"
+msgstr "- Gemeinsame Bauteile und Footprints sind bereits verknüpft"
 
 #: kicad/dialogs/dialog_template_selector.cpp:105
 msgid "Design rules"
@@ -28502,9 +28497,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
-#, fuzzy
 msgid "Save Your Own:"
-msgstr "Router-Protokoll speichern"
+msgstr "Eigenen speichern:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
 msgid ""
@@ -30036,9 +30030,8 @@ msgid "File not found"
 msgstr "Datei nicht gefunden"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "Fehler beim Laden von \"%s\"."
+msgstr "Fehler beim Laden von PDF"
 
 #: libs/kiplatform/include/printing.h:50
 #, fuzzy
@@ -30046,9 +30039,8 @@ msgid "Failed to print"
 msgstr "Gefilterte Footprints"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "%s wird nicht unterstützt."
+msgstr "Nicht unterstützt"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:509
@@ -34071,9 +34063,8 @@ msgid "Back copper area:"
 msgstr "Rückseitige Kupferfläche:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Min track clearance:"
-msgstr "Min. Freiraum"
+msgstr "Min. Leiterbahnfreiraum:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 #, fuzzy
@@ -34115,13 +34106,12 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:188
-#, fuzzy
 msgid "Castellated pad:"
-msgstr "Castellated Pad (Halbloch)"
+msgstr "Castellated Pad (Halbloch):"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:189
 msgid "Press-fit pad:"
-msgstr ""
+msgstr "Einpresspad:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:192
 msgid "Through vias:"
@@ -34224,9 +34214,8 @@ msgid "Min drill diameter"
 msgstr "Min. Bohrdurchmesser"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:871
-#, fuzzy
 msgid "Board stackup thickness"
-msgstr "Platinen-Dicke:"
+msgstr "Platinen Lagenaufbaudicke"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:918
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -36920,19 +36909,16 @@ msgid "Component type:"
 msgstr "Bauteiltyp:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:182
-#, fuzzy
 msgid "Custom Layers"
-msgstr "Später anpassen:"
+msgstr "Benutzerdef. Lagen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
-#, fuzzy
 msgid "Use custom stackup"
-msgstr "Verwende Benutzerdefinierte Werte..."
+msgstr "Verwende Benutzerdefinierten Lagenaufbau"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
-#, fuzzy
 msgid "Copper layers"
-msgstr "Kupferlagen:"
+msgstr "Kupferlagen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
 #, fuzzy
@@ -38046,7 +38032,7 @@ msgstr "Text- && Grafikformatierung"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
-msgstr ""
+msgstr "Designregelvorgaben"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
@@ -42405,7 +42391,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -42537,69 +42522,84 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"### Functionsausdrücke\n"
+"### Funktionsausdrücke\n"
 "\n"
 "Alle Funktionsparameter unterstützen einfache Wildcards (`*` und `?`).\n"
-"<br><br>\n"
+"\n"
 "\n"
 "    A.enclosedByArea('<Zonenname>')\n"
-"Wahr, wenn `A` vollständig innerhalb des Zonenumrisses liegt.\n"
+"        Wahr, wenn `A` vollständig innerhalb des Zonenumrisses liegt.\n"
 "\n"
-"Anmerkung: Dies ist ein potentiell aufwendigerer Aufruf als "
-"`intersectsArea()`.  Wenn möglich, sollte letzteres verwendet werden.\n"
-"<br><br>\n"
+"        Anmerkung: Dies ist ein potentiell aufwendigerer Aufruf als "
+"`intersectsArea()`.\n"
+"        Wenn möglich, sollte letzteres verwendet werden.\n"
+"\n"
 "\n"
 "    A.existsOnLayer('<Lagenname>')\n"
-"Wahr, wenn `A` auf der angegebenen Lage existiert. Der Lagenname\n"
-"kann entweder der in Platinenkonfiguration > Platineneditor-Lagen\n"
-"vergebene Name oder der kanonische Name sein (z.B.: `F.Cu`).\n"
+"        Wahr, wenn `A` auf der angegebenen Lage existiert. Der Lagenname\n"
+"        kann entweder der in Platinenkonfiguration > Platineneditor-Lagen\n"
+"        vergebene Name oder der kanonische Name sein (z.B.: `F.Cu`).\n"
 "\n"
-"Anmerkung: Wahr wird zurückgegeben, wenn `A` auf der angegebenen Lage ist,\n"
-"unabhängig davon, ob die Regel für diese Lage ausgewertet wird oder nicht.\n"
-"Für letzteres muss `(layer \"Lagenname\")` in der Regel definiert sein.\n"
-"<br><br>\n"
+"        Anmerkung: Wahr wird zurückgegeben, wenn `A` auf der angegebenen "
+"Lage ist,\n"
+"        unabhängig davon, ob die Regel für diese Lage ausgewertet wird oder "
+"nicht.\n"
+"        Für letzteres muss `(layer \"Lagenname\")` in der Regel definiert "
+"sein.\n"
+"\n"
+"\n"
+"    A.fromTo('x', 'y')\n"
+"        Wahr, wenn Objekt auf Kupferpfad zwischen angegebenen Pads existiert."
+"\n"
+"        `x` und `y` sind die vollständinge Padnamen innerhalb des Designs,\n"
+"        wie z.B. `R1-Pad1`.\n"
+"\n"
 "\n"
 "    A.getField('<Feldname>')\n"
-"Wert des angegebenen Feldes. Nur Footprints haben Felder, also wird ein Feld "
-"nur zurückgegeben, wenn `A` ein Footprint ist.\n"
-"<br><br>\n"
+"        Wert des angegebenen Feldes. Nur Footprints haben Felder, also wird "
+"ein\n"
+"        Feld nur zurückgegeben, wenn `A` ein Footprint ist.\n"
+"\n"
 "\n"
 "    A.hasComponentClass('<Bauteilklasse>')\n"
-"Wahr, wenn die genannte Bauteilklasse in denen an `A` die zugewiesenen "
-"Bauteilklassen\n"
-"enthalten ist.\n"
-"<br><br>\n"
+"        Wahr, wenn die genannte Bauteilklasse in denen an `A` die "
+"zugewiesenen\n"
+"        Bauteilklassen enthalten ist.\n"
+"\n"
 "\n"
 "    A.hasNetclass('<Netzklasse>')\n"
-"Wahr, wenn `A` die angegebene Netzklasse zugewiesen ist, entweder explizit\n"
-"mittels Netzklassen-Bezeichner oder durch Zuweisung mittels Muster.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` die angegebene Netzklasse zugewiesen ist, entweder "
+"explizit\n"
+"        mittels Netzklassen-Bezeichner oder durch Zuweisung mittels Muster.\n"
+"\n"
 "\n"
 "    A.inDiffPair('<Netzname>')\n"
-"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares "
-"ist.\n"
-"`<Netzname>` ist der Basisname des Differentialpaares.  Zum Beispiel passt\n"
-"`inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und `/CLK_N`.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein Netz hat, das Teil des angegebenen "
+"Differentialpaares ist.\n"
+"        `<Netzname>` ist der Basisname des Differentialpaares.  Zum Beispiel "
+"passt\n"
+"        `inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und "
+"`/CLK_N`.\n"
+"\n"
 "\n"
 "    A.intersectsArea('<Zonenname>')\n"
-"Wahr, wenn ein Teil von `A` innerhalb des Zonenumrisses liegt.\n"
-"<br><br>\n"
+"        Wahr, wenn ein Teil von `A` innerhalb des Zonenumrisses liegt.\n"
+"\n"
 "\n"
 "    A.intersectsCourtyard('<Footprintreferenz>')\n"
-"Wahr, wenn ein Teil von `A` innerhalb der Abstandsfläche des Footprints "
-"liegt.\n"
-"<br><br>\n"
+"        Wahr, wenn ein Teil von `A` innerhalb der Abstandsfläche des "
+"Footprints liegt.\n"
+"\n"
 "\n"
 "    A.intersectsFrontCourtyard('<Footprintreferenz>')\n"
-"Wahr, wenn ein Teil von `A` innerhalb der vorderseitigen Abstandsfläche des "
-"Footprints liegt.\n"
-"<br><br>\n"
+"        Wahr, wenn ein Teil von `A` innerhalb der vorderseitigen "
+"Abstandsfläche des Footprints liegt.\n"
+"\n"
 "\n"
 "    A.intersectsBackCourtyard('<Footprintreferenz>')\n"
-"Wahr, wenn ein Teil von `A` innerhalb der rückseitigen Abstandsfläche des "
-"Footprints liegt.\n"
-"<br><br>\n"
+"        Wahr, wenn ein Teil von `A` innerhalb der rückseitigen "
+"Abstandsfläche des Footprints liegt.\n"
+"\n"
 "\n"
 "Der oben aufgeführte Footprintreferenz kann folgendes sein:\n"
 "\n"
@@ -42614,48 +42614,48 @@ msgstr ""
 "   unterscheidet nicht zwischen Groß- und Kleinschreibung, "
 "Bauteilklassennamen jedoch sehr wohl.\n"
 "\n"
-"<br>\n"
+"\n"
 "\n"
 "    A.isBlindBuriedVia()\n"
-"Wahr, wenn `A` ein blindes/vergrabenes Via ist.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein blindes/vergrabenes Via ist.\n"
+"\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
-"Wahr, wenn `A` und `B` Teil des selben Differentialpaares sind.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` und `B` Teil des selben Differentialpaares sind.\n"
+"\n"
 "\n"
 "    A.isMicroVia()\n"
-"Wahr, wenn `A` ein Microvia ist.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein Microvia ist.\n"
+"\n"
 "\n"
 "    A.isPlated()\n"
-"Wahr, wenn `A` ein Loch hat, das metallisiert ist.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein Loch hat, das metallisiert ist.\n"
+"\n"
 "\n"
 "    A.memberOfGroup('<Gruppenname>')\n"
-"Wahr, wenn `A` ein Teil der angegebenen Gruppe ist. Der Name kann Wildcards "
-"enthalten.\n"
-"Die Prüfung umfasst verschachtelte Gruppenmitgliedschaften.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein Teil der angegebenen Gruppe ist.\n"
+"        Der Name kann Wildcards enthalten.\n"
+"        Die Prüfung umfasst verschachtelte Gruppenmitgliedschaften.\n"
+"\n"
 "\n"
 "    A.memberOfFootprint('<Footprintreferenz>')\n"
-"Wahr, wenn `A` ein Teil des Footprints mit der angegebenen Footprintreferenz "
-"ist\n"
-"(z.B. ein Pad oder eine Form innerhalb des Footprints). Verschiedene "
+"        Wahr, wenn `A` ein Teil des Footprints mit der angegebenen "
+"Footprintreferenz ist\n"
+"        (z.B. ein Pad oder eine Form innerhalb des Footprints). Verschiedene "
 "Möglichkeiten für die\n"
-"Angabe der Footprintreferenz sind oben beschrieben.\n"
-"<br><br>\n"
+"        Angabe der Footprintreferenz sind oben beschrieben.\n"
+"\n"
 "\n"
 "    A.memberOfSheet('<Schaltplanblatt-Pfad>')\n"
-"Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts ist. Der Pfad kann "
-"Wildcards enthalten.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts ist. Der "
+"Pfad kann Wildcards enthalten.\n"
+"\n"
 "\n"
 "    A.memberOfSheetOrChildren('<Schaltplanblatt-Pfad>')\n"
-"Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts oder eines "
-"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards "
-"enthalten.\n"
-"<br><br>\n"
+"        Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts oder eines "
+"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards enthalten."
+"\n"
+"\n"
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
@@ -44879,9 +44879,8 @@ msgstr ""
 "Exportiert in %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:655
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Probleme beim Zusammenfügen von Formen **\n"
+msgstr "** Probleme beim Zusammenfügen von Formen **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:2054
@@ -44894,138 +44893,131 @@ msgid "Warnings:\n"
 msgstr "Warnungen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:690
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen.\n"
+msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen\n"
+msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Kein Modell für %s definiert.\n"
+msgstr "Kein Modell für %s definiert."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Kein Modell für Dateiname \"%s\".\n"
+msgstr "Kein Modell für Dateiname \"%s\"."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Kein Speicherort für Dateiname \"%s\".\n"
+msgstr "Kein Speicherort für Dateiname \"%s\"."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen.\n"
+msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC-Exception beim Erzeugen von Formsegement: %s\n"
+msgstr "OCC-Exception beim Erzeugen von Formsegement: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC-Exception beim Erzeugen von Fläche: %s\n"
+msgstr "OCC-Exception beim Erzeugen von Fläche: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1444
 #: pcbnew/exporters/step/step_pcb_model.cpp:1831
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Konnte prismatische Form nicht erstellen\n"
+msgstr "Konnte prismatische Form nicht erstellen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
 msgstr ""
-"Konnte Segmentkante (%d %d) -> (%d %d) nicht erzeugen, wird übersprungen\n"
+"Konnte Segmentkante (%d %d) -> (%d %d) nicht erzeugen, wird übersprungen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Konnte Segmentkante (%d %d) -> (%d %d) nicht hinzhufügen\n"
+msgstr "Konnte Segmentkante (%d %d) -> (%d %d) nicht hinzufügen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Konnte Bogenkurve von (%d %d), Bogen p0 (%d %d), Mitte (%d %d), p1 (%d %d) "
-"nicht hinzufügen\n"
+"nicht hinzufügen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Konnte Verbindung %d, %d -> %d, %d nicht schließen **\n"
+msgstr "Konnte Verbindung %d, %d -> %d, %d nicht schließen **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "OCC-Exception beim Erzeugen von Verbindung: %s\n"
+msgstr "OCC-Exception beim Erzeugen von Verbindung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
-"z: %g; Begrenzungsrahmen: %s\n"
+"z: %g; Begrenzungsrahmen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Prüfung auf Selbststörung der Verbindung fehlgeschlagen\n"
-"z: %g; Begrenzungsrahmen: %s\n"
+"z: %g; Begrenzungsrahmen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1765
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Verwende nicht vereinfachtes Polygon.\n"
+msgstr "Verwende nicht vereinfachtes Polygon."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1812
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s\n"
+msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1842
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Fläche ausgelassen **\n"
+msgstr "** Fläche ausgelassen **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "OCC-Fehler während der Erstellung der Hauptkontur.\n"
+msgstr "OCC-Fehler während der Erstellung der Hauptkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "OCC-Fehler während der Erstellung eines Lochs in der Hauptkontur.\n"
+msgstr "OCC-Fehler während der Erstellung eines Lochs in der Hauptkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Erstelle Löcher für %s\n"
+msgstr "Erstelle Löcher für %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Probleme beim Schneiden von %s Netz \"%s\" **\n"
+msgstr "** Probleme beim Schneiden von %s Netz \"%s\" **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2097
 msgid "shapes"
@@ -45045,10 +45037,10 @@ msgstr "Vias"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3217
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3359
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr ""
-"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen.\n"
+"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #, c-format
@@ -45082,19 +45074,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
 #: pcbnew/exporters/step/step_pcb_model.cpp:3389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen.\n"
+msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2939
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Kann tatsächlichen Typ der Datei \"%s\" nicht identifizieren.\n"
+msgstr "Kann tatsächlichen Typ der Datei \"%s\" nicht identifizieren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2949
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen.\n"
+msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen."
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -48542,9 +48534,11 @@ msgid "Generating BOM section"
 msgstr "Erzeuge Stücklisten(BOM)-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
+msgstr ""
+"Footprint %s nicht in Wörterbuch gefunden; Stückliste (BOM) könnte "
+"unvollständig sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
@@ -48595,9 +48589,8 @@ msgid "Saving file"
 msgstr "Datei wird gespeichert"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3467
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Konnte Datei nicht im Puffer speichern"
+msgstr "Konnte IPC-2581-Daten nicht im Puffer speichern."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -53263,9 +53256,9 @@ msgid "Invalid clipboard contents"
 msgstr "Inhalt der Zwischenablage ungültig"
 
 #: pcbnew/tools/pcb_control.cpp:1498
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Footprint-Name darf nicht leer sein."
+msgstr "Footprint %s ist gesperrt und kann nicht platziert werden."
 
 #: pcbnew/tools/pcb_control.cpp:1583
 #, c-format
