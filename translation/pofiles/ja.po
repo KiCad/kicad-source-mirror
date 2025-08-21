@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-19 11:40+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -2333,7 +2333,8 @@ msgstr "パッケージ 開発者"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "プロセスで使用されているグラフィカル ユーザー インターフェイス (GUI) "
+"オブジェクトへのハンドルの数(GDI) %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -42425,9 +42426,8 @@ msgstr ""
 "エクスポート時間 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** 図形を融合する際に問題が発生しました **\n"
+msgstr "** 図形を融合する際に問題が発生しました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2050
@@ -42440,138 +42440,129 @@ msgid "Warnings:\n"
 msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "パッド/ビア ポリゴン追加中にOCC エラー\n"
+msgstr "パッド/ビア ポリゴン追加中にOCC エラー。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr ""
-"形状(%d ポイント)を導体レイヤー %s に追加することができませんでした。\n"
+msgstr "形状(%d ポイント)を導体レイヤー %s に追加することができませんでした。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "%s に対してモデルが定義されていません。\n"
+msgstr "%s に対してモデルが定義されていません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "ファイル名 '%s' に対応するモデルがありません。\n"
+msgstr "ファイル名 '%s' に対応するモデルがありません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "ファイル名 '%s' に位置情報がありません。\n"
+msgstr "ファイル名 '%s' に位置情報がありません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "ファイル名 '%s' にコンポーネントの追加ができませんでした。\n"
+msgstr "ファイル名 '%s' にコンポーネントの追加ができませんでした。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "形状セグメント構築中にOCC例外: %s\n"
+msgstr "形状セグメント構築中にOCC例外: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "フェイスの構築中にOCC例外:%s\n"
+msgstr "フェイスの構築中にOCC例外:%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1439
 #: pcbnew/exporters/step/step_pcb_model.cpp:1828
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "多面体の形状を作成できませんでした\n"
+msgstr "多面体の形状を作成できませんでした"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "セグメントの端を作成できません (%d %d) -> (%d %d) スキップします\n"
+msgstr "セグメントの端を作成できません (%d %d) -> (%d %d) スキップします"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "セグメントの端を追加できませんでした (%d %d) -> (%d %d)\n"
+msgstr "セグメントの端を追加できませんでした (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
-msgstr ""
-"円弧の曲線を (%d %d) から追加するのに失敗、円弧 p0 (%d %d)、mid (%d %d)、p1 "
-"(%d %d)\n"
+msgstr "円弧の曲線を (%d %d) から追加するのに失敗、円弧 p0 (%d %d)、mid (%d %d)、p1 ("
+"%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1634
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "配線を閉じるのに失敗しました %d,%d -> %d,%d **\n"
+msgstr "配線を閉じるのに失敗しました %d,%d -> %d,%d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "配線作成中のOCC例外: %s\n"
+msgstr "配線作成中のOCC例外: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
-"z: %g; bounding box:%s\n"
+"z: %g; 境界ボックス :%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1740
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "配線の自己干渉チェックに失敗しました\n"
-"z: %g; bounding box: %s\n"
+"z: %g; 境界ボックス : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1762
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "単純化されていないポリゴンを使用します。\n"
+msgstr "単純化されていないポリゴンを使用します。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "輪郭作成中のOCC例外 %d:%s\n"
+msgstr "輪郭作成中のOCC例外 %d:%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Face はスキップされました **\n"
+msgstr "** Face はスキップされました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1929
 #: pcbnew/exporters/step/step_pcb_model.cpp:1946
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "メインのアウトラインを作成中のOCCエラー。\n"
+msgstr "メインのアウトラインを作成中のOCCエラー。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "メインのアウトライン中にスルーホールを作成中にOCCエラー。\n"
+msgstr "メインのアウトライン作成中にOCCエラーにより穴がつくられました。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1997
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "%s の穴を削除しています\n"
+msgstr "%s の穴を削除しています"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** %s ネット '%s' 切断中に問題が発生しました **\n"
+msgstr "** %s ネット '%s' 切断中に問題が発生しました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2094
 msgid "shapes"
@@ -42591,10 +42582,9 @@ msgstr "ビア"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3310
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr ""
-"有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。\n"
+msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2387
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -42608,19 +42598,19 @@ msgstr "表面曲線モードの設定に失敗しましたが、続行します
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "一時ファイル '%s' を '%s' にリネームできません。\n"
+msgstr "一時ファイル '%s' を '%s' にリネームできません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "'%s' の実際のファイルタイプを識別できません。\n"
+msgstr "'%s' の実際のファイルタイプを識別できません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2897
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "ファイル '%s' からモデルを推論できませんでした。\n"
+msgstr "ファイル '%s' からモデルを推論できませんでした。"
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
