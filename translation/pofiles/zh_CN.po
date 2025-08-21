@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-19 11:40+0000\n"
+"PO-Revision-Date: 2025-08-21 23:03+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -2334,7 +2334,7 @@ msgstr "软件包开发者"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "正在使用的 GDI 对象数量 %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -26424,7 +26424,7 @@ msgstr "包含作业:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:152
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<运行时设置值>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -31448,23 +31448,18 @@ msgid ""
 msgstr "应使用\"从 PCB 更新原理图\"工具对 PCB 批注和原理图进行同步变更。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"有 %i 种类型的位号。\n"
-"**********************************************************\n"
+"<br/>有 %i 个参考位号前缀在被使用<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"排除: 来自重新批注的 %s\n"
-"\n"
+msgstr "排除: 来自重新批注的 %s<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
 msgid ""
@@ -31483,18 +31478,12 @@ msgid "<br/>No footprints"
 msgstr "<br/>没有封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"*********** 对 %s 排序 ***********"
+msgstr "<br/>*********** 对封装坐标排序 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"*********** 对 %s 排序 ***********"
+msgstr "<br/>*********** 对位号坐标排序 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
 #, c-format
@@ -31506,14 +31495,12 @@ msgid "Selected options resulted in errors! Change them and try again."
 msgstr "所选的选项导致错误! 更改它们, 再试一次。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
-msgstr ""
-"\n"
-"PCB 上有 %d 个空白或无效的位号。\n"
-"建议选中\"检查 PCB 和原理图是否一致\"选项, 然后运行 DRC。\n"
+msgstr "<br/>PCB 上有 %d 个空的或无效的位号。<br/>建议选中 '检查 PCB "
+"和原理图是否一致' 选项后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
 #, c-format
@@ -41783,9 +41770,8 @@ msgstr ""
 "导出耗时 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** 融合图形时遇到问题 **\n"
+msgstr "** 融合形状时遇到问题 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2050
@@ -41798,137 +41784,129 @@ msgid "Warnings:\n"
 msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "添加焊盘/过孔多边形时发生 OCC 错误。\n"
+msgstr "添加焊盘/过孔多边形时发生 OCC 错误。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "无法将形状 (%d 点) 添加到铜层 %s。\n"
+msgstr "无法将形状 (%d 点) 添加到铜层 %s。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "没有为 %s 定义模型。\n"
+msgstr "没有为 %s 定义的模型。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "没有文件名为 '%s' 的模型。\n"
+msgstr "没有文件名为 '%s' 的模型。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "文件 '%s' 中没有定位数据。\n"
+msgstr "文件 '%s' 中没有定位数据。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "无法添加文件名为'%s'的组件。\n"
+msgstr "无法添加文件名为 '%s' 的组件。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "构建形状段时发生 OCC 异常: %s\n"
+msgstr "构建形状段时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "构建面时发生 OCC 异常: %s\n"
+msgstr "构建面时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1439
 #: pcbnew/exporters/step/step_pcb_model.cpp:1828
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "创建 prismatic 形状失败\n"
+msgstr "创建 prismatic 形状失败"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "生成线段边 (%d %d) -> (%d %d) 失败, 跳过该段\n"
+msgstr "生成线段边 (%d %d) -> (%d %d) 失败, 跳过"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "添加线段边 (%d %d) -> (%d %d) 失败\n"
+msgstr "添加线段边 (%d %d) -> (%d %d) 失败"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
-msgstr ""
-"添加弧形曲线失败, 起点 (%d %d), 弧点 p0 (%d %d), 中点 (%d %d), 终点 p1 (%d "
-"%d)\n"
+msgstr "添加弧形曲线失败, 起点 (%d %d), 弧点 p0 (%d %d), 中点 (%d %d), 终点 p1 (%d "
+"%d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1634
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "闭合连线失败, 位置 %d, %d -> %d, %d **\n"
+msgstr "闭合连线失败, 位置 %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "创建连时发生 OCC 异常: %s\n"
+msgstr "创建连线时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"走线未完成 (轮廓点%d): OCC错误 %d\n"
-"z: %g; 边界框: %s\n"
+"连线未完成 (轮廓点 %d): OCC错误 %d\n"
+"z: %g; 边界框: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1740
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"线路自干扰检查失败\n"
-"z: %g; 边界框: %s\n"
+"连线自干扰检查失败\n"
+"z: %g; 边界框: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1762
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "使用非简化的多边形\n"
+msgstr "使用非简化的多边形。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "创建轮廓 %d 时发生 OCC 异常: %s\n"
+msgstr "创建轮廓 %d 时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** 跳过 Face **\n"
+msgstr "** 跳过面 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1929
 #: pcbnew/exporters/step/step_pcb_model.cpp:1946
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "创建主轮廓时发生 OCC 错误。\n"
+msgstr "创建主轮廓时发生 OCC 错误。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "在主轮廓中创建孔时发生 OCC 错误。\n"
+msgstr "在主轮廓中创建孔时发生 OCC 错误。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1997
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "在 %s 去除孔\n"
+msgstr "为 %s 减去孔"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** 切割 %s 网络 '%s' 时遇到问题 **\n"
+msgstr "** 切割 %s 网络 '%s' 时遇到问题 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2094
 msgid "shapes"
@@ -41948,9 +41926,9 @@ msgstr "过孔"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3310
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。\n"
+msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2387
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -41964,19 +41942,19 @@ msgstr "设置曲面曲线模式失败, 但将尝试继续。"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "无法将临时文件 '%s' 重命名为 '%s'。\n"
+msgstr "无法将临时文件 '%s' 重命名为 '%s'。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "无法识别 '%s' 的实际文件类型。\n"
+msgstr "无法识别 '%s' 的实际文件类型。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2897
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "无法从文件 '%s' 中获取模型数据。\n"
+msgstr "无法从文件 '%s' 中获取模型数据。"
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
