@@ -86,7 +86,7 @@ PCB_LAYER_ID PCB_IO_EASYEDA_PARSER::LayerToKi( const wxString& aLayer )
     case 14: return B_Fab;
     case 15: return Eco2_User;
 
-    case 19: return User_2; // 3D model
+    case 19: return F_Fab; // 3D model
 
     case 21: return In1_Cu;
     case 22: return In2_Cu;

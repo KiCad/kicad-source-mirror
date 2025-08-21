@@ -139,8 +139,8 @@ PCB_LAYER_ID PCB_IO_EASYEDAPRO_PARSER::LayerToKi( int aLayer )
     case 43: return In29_Cu;
     case 44: return In30_Cu;
 
-    case 48: return User_2; // Component shape layer
-    case 49: return User_3; // Component marking
+    case 48: return F_Fab; // Component shape layer
+    case 49: return F_Fab; // Component marking
 
     case 53: return User_4; // 3D shell outline
     case 54: return User_5; // 3D shell top
