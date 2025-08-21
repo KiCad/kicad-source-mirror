@@ -541,7 +541,7 @@ void DIALOG_SHIM::LoadControlState()
                         if( m_unitBinders.contains( win ) && !m_unitBinders[ win ]->UnitsInvariant() )
                         {
                             if( j.is_number_integer() )
-                                m_unitBinders[ win ]->SetValue( j.get<int>() );
+                                m_unitBinders[ win ]->ChangeValue( j.get<int>() );
                         }
                         else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
                         {
