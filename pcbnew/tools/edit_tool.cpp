@@ -2243,25 +2243,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     FLIP_DIRECTION flipDirection = aEvent.IsAction( &PCB_ACTIONS::mirrorV ) ? FLIP_DIRECTION::TOP_BOTTOM
                                                                             : FLIP_DIRECTION::LEFT_RIGHT;
 
-    std::vector<EDA_ITEM*> items;
-
     for( EDA_ITEM* item : selection )
-    {
-        if( item->Type() == PCB_GROUP_T )
-        {
-            static_cast<PCB_GROUP*>( item )->RunOnDescendants(
-                    [&]( BOARD_ITEM* descendant )
-                    {
-                        items.push_back( descendant );
-                    } );
-        }
-        else
-        {
-            items.push_back( item );
-        }
-    }
-
-    for( EDA_ITEM* item : items )
     {
         if( !item->IsType( MirrorableItems ) )
             continue;

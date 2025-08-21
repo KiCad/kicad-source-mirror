@@ -137,12 +137,7 @@ PCB_GROUP* getNestedGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprin
         return nullptr;
 
     while( group && group->GetParentGroup() && group->GetParentGroup() != aScope )
-    {
-        if( group->GetParent()->Type() == PCB_FOOTPRINT_T && isFootprintEditor )
-            break;
-
         group = group->GetParentGroup();
-    }
 
     return group;
 }
