@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-19 08:02+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -1128,9 +1128,8 @@ msgid "(unsaved)"
 msgstr "(未保存)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "导出 3D 模型"
+msgstr "导出 3D 视图"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
 #, fuzzy
@@ -2463,7 +2462,7 @@ msgstr "软件包开发者"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "正在使用的 GDI 对象数量 %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -23989,7 +23988,6 @@ msgid ""
 msgstr "为当前原理图生成物料清单(外部生成器)"
 
 #: eeschema/tools/sch_actions.cpp:1187
-#, fuzzy
 msgid "Export Symbols..."
 msgstr "导出符号..."
 
@@ -25015,9 +25013,8 @@ msgid "Copy internal subsheets only"
 msgstr "仅当前图纸"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "全部图纸"
+msgstr "复制全部子图纸"
 
 #: eeschema/widgets/hierarchy_pane.cpp:430
 msgid "Edit Page Number"
@@ -26489,7 +26486,6 @@ msgid "Delete Column"
 msgstr "删除列"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
-#, fuzzy
 msgid "Embed file"
 msgstr "嵌入文件"
 
@@ -27556,7 +27552,7 @@ msgstr "重置为默认值"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:153
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<运行时设置值>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -27581,9 +27577,8 @@ msgid "Project Template Selector"
 msgstr "选择工程模板"
 
 #: kicad/dialogs/dialog_template_selector.cpp:80
-#, fuzzy
 msgid "Welcome to Template Selection!"
-msgstr "选择工程模板"
+msgstr "欢迎来到模板选择!"
 
 #: kicad/dialogs/dialog_template_selector.cpp:81
 msgid ""
@@ -27609,9 +27604,8 @@ msgid "Select a Template"
 msgstr "选择一个模板"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
-#, fuzzy
 msgid "Click on any template in the list to "
-msgstr "单击引脚将选择符号"
+msgstr "点击列表中的任意模板 "
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
 #, fuzzy
@@ -27630,9 +27624,8 @@ msgid "Customize Path"
 msgstr "自定义工具栏"
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
-#, fuzzy
 msgid "Use the "
-msgstr "使用主题:"
+msgstr "使用 "
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
 #, fuzzy
@@ -27646,9 +27639,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:97
-#, fuzzy
 msgid "Create Project"
-msgstr "新建工程"
+msgstr "创建工程"
 
 #: kicad/dialogs/dialog_template_selector.cpp:98
 msgid "Once you've found the right template, click "
@@ -27724,35 +27716,32 @@ msgid "Pro Tips"
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:114
-#, fuzzy
 msgid "Start Simple:"
-msgstr "起始层:"
+msgstr "从最简单开始:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:114
 msgid "Begin with basic templates and add more elements as you go."
-msgstr ""
+msgstr "从基础模板着手, 随着项目进展逐步添加更多元素。"
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
-#, fuzzy
 msgid "Customize Later:"
-msgstr "自定义工具栏"
+msgstr "后续可自定义:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
 msgid ""
 "Templates are starting points - you can modify libraries, rules, and layouts "
 "after project creation."
-msgstr ""
+msgstr "模板只是起点, 项目创建后可修改库, 规则和布局。"
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
-#, fuzzy
 msgid "Save Your Own:"
-msgstr "保存布线器日志"
+msgstr "保存个性设置:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
 msgid ""
 "Once you develop preferred settings, create a custom template for future "
 "projects."
-msgstr ""
+msgstr "设置完成后, 可保存当前配置为自定义模板, 便于复用。"
 
 #: kicad/dialogs/dialog_template_selector.cpp:390
 msgid "Select Templates Directory"
@@ -28048,13 +28037,13 @@ msgid "Job failed"
 msgstr "作业运行失败"
 
 #: kicad/kicad.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a KiCad project file."
 msgstr ""
 "文件 '%s'\n"
-"似乎不是有效的 KiCad 工程文件。"
+"似乎不是 KiCad 工程文件。"
 
 #: kicad/kicad_cli.cpp:122
 msgid "Export GLB (binary GLTF)"
@@ -28085,9 +28074,8 @@ msgid "Export STL"
 msgstr "导出 STL"
 
 #: kicad/kicad_cli.cpp:129
-#, fuzzy
 msgid "Export STEPZ"
-msgstr "导出 STEP"
+msgstr "导出 STEPZ"
 
 #: kicad/kicad_cli.cpp:151
 msgid "Export PS"
@@ -28195,12 +28183,11 @@ msgstr "导入 (嘉立创 EDA) 专业版原理图和电路板"
 
 #: kicad/menubar.cpp:160
 msgid "Edit Advanced Config..."
-msgstr ""
+msgstr "编辑高级配置..."
 
 #: kicad/menubar.cpp:161
-#, fuzzy
 msgid "Edit advanced settings"
-msgstr "编辑图框设置"
+msgstr "编辑高级设置"
 
 #: kicad/menubar.cpp:205
 msgid "Edit Local File..."
@@ -28693,9 +28680,9 @@ msgid "%d out of %d operations were initialized but not successful."
 msgstr "已初始化 %d 个操作中的 %d 个, 但未成功。"
 
 #: kicad/project_template.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "可以打开模板路径!"
+msgstr "无法打开模板路径 '%s'"
 
 #: kicad/project_template.cpp:59
 #, fuzzy, c-format
@@ -32814,23 +32801,18 @@ msgid ""
 msgstr "应使用\"从 PCB 更新原理图\"工具对 PCB 批注和原理图进行同步变更。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"有 %i 种类型的位号。\n"
-"**********************************************************\n"
+"<br/>有 %i 个参考位号前缀在被使用<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"排除: 来自重新批注的 %s\n"
-"\n"
+msgstr "排除: 来自重新批注的 %s<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:325
 msgid ""
@@ -32849,18 +32831,12 @@ msgid "<br/>No footprints"
 msgstr "<br/>没有封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"*********** 对 %s 排序 ***********"
+msgstr "<br/>*********** 对封装坐标排序 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:354
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr ""
-"\n"
-"*********** 对 %s 排序 ***********"
+msgstr "<br/>*********** 对位号坐标排序 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
 #, c-format
@@ -32872,14 +32848,12 @@ msgid "Selected options resulted in errors! Change them and try again."
 msgstr "所选的选项导致错误! 更改它们, 再试一次。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
-msgstr ""
-"\n"
-"PCB 上有 %d 个空白或无效的位号。\n"
-"建议选中\"检查 PCB 和原理图是否一致\"选项, 然后运行 DRC。\n"
+msgstr "<br/>PCB 上有 %d 个空的或无效的位号。<br/>建议选中 '检查 PCB "
+"和原理图是否一致' 选项后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:392
 #, c-format
@@ -33351,9 +33325,8 @@ msgid "Min track width"
 msgstr "最小走线宽度"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:868
-#, fuzzy
 msgid "Min drill diameter"
-msgstr "最小孔径: "
+msgstr "最小孔径"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:871
 #, fuzzy
@@ -43716,9 +43689,8 @@ msgstr ""
 "导出耗时 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:655
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** 融合图形时遇到问题 **\n"
+msgstr "** 融合形状时遇到问题 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:2054
@@ -43731,137 +43703,129 @@ msgid "Warnings:\n"
 msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:690
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "添加焊盘/过孔多边形时发生 OCC 错误。\n"
+msgstr "添加焊盘/过孔多边形时发生 OCC 错误。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "无法将形状 (%d 点) 添加到铜层 %s。\n"
+msgstr "无法将形状 (%d 点) 添加到铜层 %s。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "没有为 %s 定义模型。\n"
+msgstr "没有为 %s 定义的模型。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "没有文件名为 '%s' 的模型。\n"
+msgstr "没有文件名为 '%s' 的模型。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "文件 '%s' 中没有定位数据。\n"
+msgstr "文件 '%s' 中没有定位数据。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "无法添加文件名为'%s'的组件。\n"
+msgstr "无法添加文件名为 '%s' 的组件。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "构建形状段时发生 OCC 异常: %s\n"
+msgstr "构建形状段时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "构建面时发生 OCC 异常: %s\n"
+msgstr "构建面时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1444
 #: pcbnew/exporters/step/step_pcb_model.cpp:1831
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "创建 prismatic 形状失败\n"
+msgstr "创建 prismatic 形状失败"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "生成线段边 (%d %d) -> (%d %d) 失败, 跳过该段\n"
+msgstr "生成线段边 (%d %d) -> (%d %d) 失败, 跳过"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "添加线段边 (%d %d) -> (%d %d) 失败\n"
+msgstr "添加线段边 (%d %d) -> (%d %d) 失败"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
-msgstr ""
-"添加弧形曲线失败, 起点 (%d %d), 弧点 p0 (%d %d), 中点 (%d %d), 终点 p1 (%d "
-"%d)\n"
+msgstr "添加弧形曲线失败, 起点 (%d %d), 弧点 p0 (%d %d), 中点 (%d %d), 终点 p1 (%d "
+"%d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "闭合连线失败, 位置 %d, %d -> %d, %d **\n"
+msgstr "闭合连线失败, 位置 %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "创建连时发生 OCC 异常: %s\n"
+msgstr "创建连线时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"走线未完成 (轮廓点%d): OCC错误 %d\n"
-"z: %g; 边界框: %s\n"
+"连线未完成 (轮廓点 %d): OCC错误 %d\n"
+"z: %g; 边界框: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"线路自干扰检查失败\n"
-"z: %g; 边界框: %s\n"
+"连线自干扰检查失败\n"
+"z: %g; 边界框: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1765
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "使用非简化的多边形\n"
+msgstr "使用非简化的多边形。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1812
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "创建轮廓 %d 时发生 OCC 异常: %s\n"
+msgstr "创建轮廓 %d 时发生 OCC 异常: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1842
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** 跳过 Face **\n"
+msgstr "** 跳过面 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "创建主轮廓时发生 OCC 错误。\n"
+msgstr "创建主轮廓时发生 OCC 错误。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "在主轮廓中创建孔时发生 OCC 错误。\n"
+msgstr "在主轮廓中创建孔时发生 OCC 错误。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "在 %s 去除孔\n"
+msgstr "为 %s 减去孔"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** 切割 %s 网络 '%s' 时遇到问题 **\n"
+msgstr "** 切割 %s 网络 '%s' 时遇到问题 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2097
 msgid "shapes"
@@ -43881,9 +43845,9 @@ msgstr "过孔"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3217
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3359
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。\n"
+msgstr "没有有效的 PCB 组件; 无法创建输出文件 '%s'。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #, c-format
@@ -43915,19 +43879,19 @@ msgstr "设置曲面曲线模式失败, 但将尝试继续。"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
 #: pcbnew/exporters/step/step_pcb_model.cpp:3389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "无法将临时文件 '%s' 重命名为 '%s'。\n"
+msgstr "无法将临时文件 '%s' 重命名为 '%s'。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2939
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "无法识别 '%s' 的实际文件类型。\n"
+msgstr "无法识别 '%s' 的实际文件类型。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2949
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "无法从文件 '%s' 中获取模型数据。\n"
+msgstr "无法从文件 '%s' 中获取模型数据。"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
