@@ -57,36 +57,6 @@
 #include <sys/mman.h>   // mmap, mprotect, munmap
 #endif
 
-#ifdef KICAD_SANITIZE_ADDRESS
-#include <sanitizer/asan_interface.h>
-// ASan fiber switching APIs (available since Clang 3.9/GCC 7)
-extern "C" {
-    void __sanitizer_start_switch_fiber(void** fake_stack_save,
-                                      const void* bottom, size_t size);
-    void __sanitizer_finish_switch_fiber(void* fake_stack_save,
-                                       const void** bottom_old,
-                                       size_t* size_old);
-}
-
-// Thread-local tracking of ASAN fiber switch state
-static bool& GetAsanFiberSwitchState()
-{
-    thread_local bool asan_fiber_switch_active = false;
-    return asan_fiber_switch_active;
-}
-
-// Add runtime ASAN detection
-static bool IsASanEnabled()
-{
-    static std::optional<bool> asan_enabled;
-    if (!asan_enabled.has_value())
-    {
-        asan_enabled = (__has_feature(address_sanitizer) );
-    }
-    return asan_enabled.value();
-}
-#endif
-
 /**
  *  Implement a coroutine.
  *
@@ -140,24 +110,12 @@ private:
         void* tsan_fiber;               // The TSAN fiber for this context
         bool  own_tsan_fiber;           // Do we own this TSAN fiber? (we only delete fibers we own)
 #endif
-#ifdef KICAD_SANITIZE_ADDRESS
-        void* asan_fake_stack;          // ASan fake stack for this context
-        const void* asan_stack_bottom;  // Stack bottom for ASan
-        size_t asan_stack_size;         // Stack size for ASan
-        bool asan_stack_registered;     // Track if we registered this stack
-#endif
 
         CONTEXT_T() :
             ctx( nullptr )
 #ifdef KICAD_SANITIZE_THREADS
             ,tsan_fiber( nullptr )
             ,own_tsan_fiber( true )
-#endif
-#ifdef KICAD_SANITIZE_ADDRESS
-            ,asan_fake_stack( nullptr )
-            ,asan_stack_bottom( nullptr )
-            ,asan_stack_size( 0 )
-            ,asan_stack_registered( false )
 #endif
             {}
 
@@ -167,15 +125,6 @@ private:
             // Only destroy the fiber when we own it
             if( own_tsan_fiber )
                 __tsan_destroy_fiber( tsan_fiber );
-#endif
-#ifdef KICAD_SANITIZE_ADDRESS
-            // Clean up ASAN registration if we registered it
-            if( asan_stack_registered && IsASanEnabled() )
-            {
-                // Note: ASAN doesn't provide explicit stack deregistration,
-                // but we should reset our tracking
-                asan_stack_registered = false;
-            }
 #endif
         }
     };
@@ -258,6 +207,9 @@ public:
 #ifdef KICAD_USE_VALGRIND
         ,m_valgrind_stack( 0 )
 #endif
+#ifdef KICAD_SANITIZE_ADDRESS
+        ,asan_stack( nullptr )
+#endif
     {
         m_stacksize = ADVANCED_CFG::GetCfg().m_CoroutineStackSize;
     }
@@ -324,6 +276,12 @@ public:
         CALL_CONTEXT ctx;
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROOT, this, &ctx };
 
+#ifdef KICAD_SANITIZE_THREADS
+        // Get the TSAN fiber for the current stack here
+        m_caller.tsan_fiber     = __tsan_get_current_fiber();
+        m_caller.own_tsan_fiber = false;
+#endif
+
         wxLogTrace( kicadTraceCoroutineStack,  "COROUTINE::Call (from root)" );
 
         ctx.Continue( doCall( &args, aArg ) );
@@ -363,6 +321,12 @@ public:
     {
         CALL_CONTEXT ctx;
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROOT, this, &ctx };
+
+#ifdef KICAD_SANITIZE_THREADS
+        // Get the TSAN fiber for the current stack here
+        m_caller.tsan_fiber     = __tsan_get_current_fiber();
+        m_caller.own_tsan_fiber = false;
+#endif
 
         wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::Resume (from root)" ) );
 
@@ -413,22 +377,6 @@ private:
         assert( m_func );
         assert( !( m_callee.ctx ) );
 
-#ifdef KICAD_SANITIZE_THREADS
-        // Get the TSAN fiber for the current stack here
-        m_caller.tsan_fiber     = __tsan_get_current_fiber();
-        m_caller.own_tsan_fiber = false;
-#endif
-#ifdef KICAD_SANITIZE_ADDRESS
-        if( IsASanEnabled() )
-        {
-            // Initialize caller's ASan context (main stack)
-            m_caller.asan_fake_stack = nullptr;
-            m_caller.asan_stack_bottom = nullptr;  // Main stack, managed by ASan
-            m_caller.asan_stack_size = 0;
-            m_caller.asan_stack_registered = false;
-        }
-#endif
-
         m_args = &aArgs;
 
         std::size_t stackSize = m_stacksize;
@@ -459,22 +407,6 @@ private:
 
 #ifdef KICAD_USE_VALGRIND
         m_valgrind_stack = VALGRIND_STACK_REGISTER( sp, m_stack.get() );
-#endif
-#ifdef KICAD_SANITIZE_ADDRESS
-        if( IsASanEnabled() )
-        {
-            // Register the allocated stack with ASan
-            m_callee.asan_stack_bottom = m_stack.get();
-            m_callee.asan_stack_size = stackSize;
-            m_callee.asan_fake_stack = nullptr;
-            m_callee.asan_stack_registered = true;
-
-            // Poison the guard page for better debugging
-            if( m_stack.get() )
-            {
-                __asan_poison_memory_region( m_stack.get(), SystemPageSize() );
-            }
-        }
 #endif
 #endif
 
@@ -562,21 +494,6 @@ private:
 
     INVOCATION_ARGS* doResume( INVOCATION_ARGS* args )
     {
-
-#ifdef KICAD_SANITIZE_THREADS
-        // Get the TSAN fiber for the current stack here
-        m_caller.tsan_fiber     = __tsan_get_current_fiber();
-        m_caller.own_tsan_fiber = false;
-#endif
-#ifdef KICAD_SANITIZE_ADDRESS
-        if( IsASanEnabled() )
-        {
-            // Initialize caller's ASan context for resume
-            m_caller.asan_fake_stack = nullptr;
-            m_caller.asan_stack_bottom = nullptr;
-            m_caller.asan_stack_size = 0;
-        }
-#endif
         return jumpIn( args );
     }
 
@@ -602,38 +519,17 @@ private:
 
     INVOCATION_ARGS* jumpIn( INVOCATION_ARGS* args )
     {
-
-        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::jumpIn" ) );
-#ifdef KICAD_SANITIZE_ADDRESS
-        // Only use ASAN fiber switching for root-level calls to avoid nesting
-        if( IsASanEnabled() && !GetAsanFiberSwitchState()
-            && ( m_callee.asan_stack_registered || m_callee.asan_stack_bottom ) )
-        {
-            GetAsanFiberSwitchState() = true;
-            __sanitizer_start_switch_fiber( &m_caller.asan_fake_stack,
-                                             m_callee.asan_stack_bottom,
-                                             m_callee.asan_stack_size );
-        }
-#endif
 #ifdef KICAD_SANITIZE_THREADS
         // Tell TSAN we are changing fibers to the callee
         __tsan_switch_to_fiber( m_callee.tsan_fiber, 0 );
 #endif
 
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::jumpIn" ) );
+
         args = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_caller.ctx ), m_callee.ctx,
                                        reinterpret_cast<intptr_t>( args ) )
             );
-#ifdef KICAD_SANITIZE_ADDRESS
-        // Complete fiber switch only if we started it
-        if( IsASanEnabled() && GetAsanFiberSwitchState() )
-        {
-            __sanitizer_finish_switch_fiber( m_caller.asan_fake_stack,
-                                            &m_caller.asan_stack_bottom,
-                                            &m_caller.asan_stack_size );
-            GetAsanFiberSwitchState() = false;
-        }
-#endif
 
         return args;
     }
@@ -643,16 +539,6 @@ private:
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, nullptr, nullptr };
         INVOCATION_ARGS* ret;
 
-#ifdef KICAD_SANITIZE_ADDRESS
-        // Only use ASAN fiber switching for root-level calls to avoid nesting
-        if( IsASanEnabled() && !GetAsanFiberSwitchState() )
-        {
-            GetAsanFiberSwitchState() = true;
-            __sanitizer_start_switch_fiber( &m_callee.asan_fake_stack,
-                                             m_caller.asan_stack_bottom,
-                                             m_caller.asan_stack_size );
-        }
-#endif
 #ifdef KICAD_SANITIZE_THREADS
         // Tell TSAN we are changing fibers back to the caller
         __tsan_switch_to_fiber( m_caller.tsan_fiber, 0 );
@@ -665,16 +551,6 @@ private:
                                        reinterpret_cast<intptr_t>( &args ) )
             );
 
-#ifdef KICAD_SANITIZE_ADDRESS
-        // Complete fiber switch only if we started it
-        if( IsASanEnabled() && GetAsanFiberSwitchState() )
-        {
-            __sanitizer_finish_switch_fiber( m_callee.asan_fake_stack,
-                                            &m_callee.asan_stack_bottom,
-                                            &m_callee.asan_stack_size );
-            GetAsanFiberSwitchState() = false;
-        }
-#endif
         m_callContext = ret->context;
 
         if( ret->type == INVOCATION_ARGS::FROM_ROOT )
@@ -682,24 +558,6 @@ private:
             m_callContext->SetMainStack( &m_caller );
         }
     }
-
-#ifdef KICAD_SANITIZE_ADDRESS
-    // Additional helper for debugging ASAN integration
-    void LogASanStatus() const
-    {
-        if( !IsASanEnabled() )
-            return;
-
-        wxLogTrace( kicadTraceCoroutineStack,
-                    wxT("ASAN Coroutine Status: fiber_switch_active=%s, "
-                        "caller_bottom=%p, caller_size=%zu, "
-                        "callee_bottom=%p, callee_size=%zu, callee_registered=%s"),
-                    GetAsanFiberSwitchState() ? "yes" : "no",
-                    m_caller.asan_stack_bottom, m_caller.asan_stack_size,
-                    m_callee.asan_stack_bottom, m_callee.asan_stack_size,
-                    m_callee.asan_stack_registered ? "yes" : "no" );
-    }
-#endif
 
 #ifndef LIBCONTEXT_HAS_OWN_STACK
     /// Coroutine stack.
@@ -728,6 +586,10 @@ private:
 
 #ifdef KICAD_USE_VALGRIND
     uint32_t m_valgrind_stack;
+#endif
+
+#ifdef KICAD_SANITIZE_ADDRESS
+    void* asan_stack;
 #endif
 };
 
