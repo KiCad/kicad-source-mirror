@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-19 08:01+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2850,9 +2850,8 @@ msgid "Design Block Properties"
 msgstr "デザインブロックのプロパティ"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "ラベルとラベルの接続"
+msgstr "データベース接続を生成する"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2864,9 +2863,8 @@ msgid "Custom"
 msgstr "カスタム"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "ソース名"
+msgstr "データソース名"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2878,14 +2876,12 @@ msgid "Password"
 msgstr "パスワード"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "時間"
+msgstr "タイムアウト"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "接続文字列:"
+msgstr "接続文字列"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -2894,19 +2890,16 @@ msgid "Test Connection"
 msgstr "接続をテスト"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
 msgstr "テーブル"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "データベースへの接続がない"
+msgstr "データベースへの接続ができない"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "データ ファイルのエラー."
+msgstr "データーベースのエラー"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -6272,9 +6265,9 @@ msgid "Expecting '%s'"
 msgstr "予期される '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "予期される '%s'"
+msgstr "予期される '%s'、得た値 '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -25333,19 +25326,16 @@ msgid "Create a new project for this schematic"
 msgstr "この回路図向けに新規プロジェクトを作成"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "シートの最後まで進みます"
+msgstr "サブシートをコピーしない"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "現在のシートのみ"
+msgstr "中のサブシートのみコピー"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "すべてのシート"
+msgstr "すべてのサブシートをコピー"
 
 #: eeschema/widgets/hierarchy_pane.cpp:430
 msgid "Edit Page Number"
@@ -29636,7 +29626,6 @@ msgid "Success"
 msgstr "成功"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
 msgstr "キャンセル"
 
@@ -29647,19 +29636,16 @@ msgid "File not found"
 msgstr "ファイルが見つかりません"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "'%s' のロードに失敗しました。"
+msgstr "PDFのロードに失敗しました"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
-msgstr "フィルターしたフットプリント"
+msgstr "印刷に失敗しました"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "%s はサポートされていません。"
+msgstr "サポートしていません"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:509
@@ -35333,9 +35319,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "ファイルの生成に成功しました。"
+msgstr "IPC-2581 ファイルの生成に成功しました。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -36420,6 +36405,8 @@ msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
+"フットプリント %s が使用されているレイヤーを削除しようとしています。\n"
+"まず、これらのレイヤーから使用しているオブジェクトを削除してください。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -36434,24 +36421,20 @@ msgid "Component type:"
 msgstr "部品のタイプ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:182
-#, fuzzy
 msgid "Custom Layers"
-msgstr "後でカスタマイズ:"
+msgstr "カスタムレイヤー"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
-#, fuzzy
 msgid "Use custom stackup"
-msgstr "カスタム値を使用..."
+msgstr "カスタムスタックアップを使用"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
-#, fuzzy
 msgid "Copper layers"
-msgstr "導体レイヤー:"
+msgstr "導体レイヤー"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#, fuzzy
 msgid "User Layers"
-msgstr "その他のレイヤー"
+msgstr "ユーザーレイヤー"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid "Private Layers"
@@ -44281,9 +44264,8 @@ msgstr ""
 "エクスポート時間 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:655
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** 図形を融合する際に問題が発生しました **\n"
+msgstr "** 図形を融合する際に問題が発生しました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:2054
@@ -44296,138 +44278,129 @@ msgid "Warnings:\n"
 msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:690
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "パッド/ビア ポリゴン追加中にOCC エラー\n"
+msgstr "パッド/ビア ポリゴン追加中にOCC エラー。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr ""
-"形状(%d ポイント)を導体レイヤー %s に追加することができませんでした。\n"
+msgstr "形状(%d ポイント)を導体レイヤー %s に追加することができませんでした。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "%s に対してモデルが定義されていません。\n"
+msgstr "%s に対してモデルが定義されていません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "ファイル名 '%s' に対応するモデルがありません。\n"
+msgstr "ファイル名 '%s' に対応するモデルがありません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "ファイル名 '%s' に位置情報がありません。\n"
+msgstr "ファイル名 '%s' に位置情報がありません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "ファイル名 '%s' にコンポーネントの追加ができませんでした。\n"
+msgstr "ファイル名 '%s' にコンポーネントの追加ができませんでした。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "形状セグメント構築中にOCC例外: %s\n"
+msgstr "形状セグメント構築中にOCC例外: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "フェイスの構築中にOCC例外:%s\n"
+msgstr "フェイスの構築中にOCC例外:%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1444
 #: pcbnew/exporters/step/step_pcb_model.cpp:1831
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "多面体の形状を作成できませんでした\n"
+msgstr "多面体の形状を作成できませんでした"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "セグメントの端を作成できません (%d %d) -> (%d %d) スキップします\n"
+msgstr "セグメントの端を作成できません (%d %d) -> (%d %d) スキップします"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "セグメントの端を追加できませんでした (%d %d) -> (%d %d)\n"
+msgstr "セグメントの端を追加できませんでした (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
-msgstr ""
-"円弧の曲線を (%d %d) から追加するのに失敗、円弧 p0 (%d %d)、mid (%d %d)、p1 "
-"(%d %d)\n"
+msgstr "円弧の曲線を (%d %d) から追加するのに失敗、円弧 p0 (%d %d)、mid (%d %d)、p1 ("
+"%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "配線を閉じるのに失敗しました %d,%d -> %d,%d **\n"
+msgstr "配線を閉じるのに失敗しました %d,%d -> %d,%d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "配線作成中のOCC例外: %s\n"
+msgstr "配線作成中のOCC例外: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
-"z: %g; bounding box:%s\n"
+"z: %g; 境界ボックス :%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "配線の自己干渉チェックに失敗しました\n"
-"z: %g; bounding box: %s\n"
+"z: %g; 境界ボックス : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1765
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "単純化されていないポリゴンを使用します。\n"
+msgstr "単純化されていないポリゴンを使用します。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1812
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "輪郭作成中のOCC例外 %d:%s\n"
+msgstr "輪郭作成中のOCC例外 %d:%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1842
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Face はスキップされました **\n"
+msgstr "** Face はスキップされました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "メインのアウトラインを作成中のOCCエラー。\n"
+msgstr "メインのアウトラインを作成中のOCCエラー。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "メインのアウトライン中にスルーホールを作成中にOCCエラー。\n"
+msgstr "メインのアウトライン作成中にOCCエラーにより穴がつくられました。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "%s の穴を削除しています\n"
+msgstr "%s の穴を削除しています"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** %s ネット '%s' 切断中に問題が発生しました **\n"
+msgstr "** %s ネット '%s' 切断中に問題が発生しました **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2097
 msgid "shapes"
@@ -44447,10 +44420,9 @@ msgstr "ビア"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3217
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3359
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr ""
-"有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。\n"
+msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #, c-format
@@ -44482,19 +44454,19 @@ msgstr "表面曲線モードの設定に失敗しましたが、続行します
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
 #: pcbnew/exporters/step/step_pcb_model.cpp:3389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "一時ファイル '%s' を '%s' にリネームできません。\n"
+msgstr "一時ファイル '%s' を '%s' にリネームできません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2939
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "'%s' の実際のファイルタイプを識別できません。\n"
+msgstr "'%s' の実際のファイルタイプを識別できません。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2949
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "ファイル '%s' からモデルを推論できませんでした。\n"
+msgstr "ファイル '%s' からモデルを推論できませんでした。"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -47864,7 +47836,7 @@ msgstr "contextセクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "パッドのタイプはサポートされていないため、スキップされました。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1176
 msgid "Generating history section"
@@ -47876,14 +47848,16 @@ msgid "Generating BOM section"
 msgstr "BOMセクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "フットプリント '%s' がライブラリ'%s'にありません。"
+msgstr "フットプリント %s "
+"が見つかりません。BOM(部品表)データが不完全な可能性があります。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "コンポーネント \"%s\" に OEM "
+"リファレンスがありません。BOM(部品表)エントリーはスキップされます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1369
 msgid "Generating CAD data"
@@ -47899,7 +47873,8 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr ""
+msgstr "重複したフットプリント ポインタが検出されました。IPC-2581 "
+"出力が正しくない可能性があります。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2784
 #, c-format
@@ -47908,17 +47883,20 @@ msgstr "レイヤー %s, ネット %s をエクスポート"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2820
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "ビアがサポートされていないパッドスタックを使用しているため、ドリル "
+"データでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2846
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr ""
+msgstr "ビアがサポートされていないパッドスタックを使用しているため、穴はドリル "
+"データでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2988
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
-msgstr ""
+msgstr "ティアドロップは IPC-2581 リビジョン B "
+"ではサポートされていないため、ゾーンとしてエクスポートされました。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3423
 msgid "Generating logistic section"
@@ -47929,9 +47907,8 @@ msgid "Saving file"
 msgstr "ファイルを保存中"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3467
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "ファイルをバッファに保存できませんでした"
+msgstr "IPC-2581 データをバッファに保存できませんでした。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -48167,17 +48144,20 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5161
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
-msgstr ""
+msgstr "フットプリント内のスタックアップが不正です。導体レイヤーの数が奇数です (%d)。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5169
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
-msgstr ""
+msgstr "フットプリント内のスタックアップが不正です。導体レイヤーが連続していません。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5175
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
+"フットプリント内のスタックアップが不正です。テクノロジー "
+"レイヤーはフットプリントでは暗黙的であるため、スタックアップでは指定しないで"
+"ください。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5400
 #, c-format
@@ -50427,7 +50407,7 @@ msgstr "レイアウトを繰り返すルール領域が見つかりません。
 #: pcbnew/tools/multichannel_tool.cpp:583
 #, c-format
 msgid "Rule Area topologies do not match: %s"
-msgstr ""
+msgstr "ルールエリアのトポロジーが一致しません: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:593
 #: pcbnew/tools/multichannel_tool.cpp:632
@@ -50462,13 +50442,11 @@ msgid "Topology mismatch"
 msgstr "トポロジの不一致"
 
 #: pcbnew/tools/multichannel_tool.cpp:1183
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
-msgstr ""
-"回路図に階層シート/コンポーネントが 1 つしかないか、1つもないため、配置領域を"
-"自動生成できません。"
+msgstr "回路図に階層シート/コンポーネント/グループが 1 "
+"つあるいは全く無いため、配置領域を自動生成できません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1347
 msgid "Auto-generate placement rule areas"
@@ -50733,14 +50711,12 @@ msgid "Add selected design block to current board"
 msgstr "選択されたデザインブロックを現在の基板に追加"
 
 #: pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "新しいデザインブロックライブラリ"
+msgstr "デザインブロックレイアウトを適用"
 
 #: pcbnew/tools/pcb_actions.cpp:471
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "デザインブロックを選択したグループにリンクし配置します"
+msgstr "選択したグループにリンクされたデザインブロックレイアウトを適用"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Save Current Board as Design Block..."
@@ -52469,9 +52445,9 @@ msgid "Invalid clipboard contents"
 msgstr "不正なクリップボードのデータ"
 
 #: pcbnew/tools/pcb_control.cpp:1498
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "フットプリント %s はロックされており、削除をスキップしています。"
+msgstr "フットプリント %s はロックされており、配置できません。"
 
 #: pcbnew/tools/pcb_control.cpp:1583
 #, c-format
