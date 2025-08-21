@@ -189,4 +189,30 @@ BOOST_AUTO_TEST_CASE( PinNumberingPower )
     BOOST_CHECK_EQUAL( pwr_name, "voltage_value" );
 }
 
+BOOST_AUTO_TEST_CASE( AlternatePinRenameUpdates )
+{
+    SCH_PIN::ALT alt;
+    alt.m_Name = wxS( "ALT1" );
+    alt.m_Shape = GRAPHIC_PINSHAPE::INVERTED;
+    alt.m_Type = ELECTRICAL_PINTYPE::PT_INPUT;
+    m_lib_pin->GetAlternates()[ wxS( "ALT1" ) ] = alt;
+
+    m_parent_symbol->UpdatePins();
+    m_sch_pin = m_parent_symbol->GetPins()[0];
+    m_sch_pin->SetAlt( wxS( "ALT1" ) );
+
+    SCH_PIN::ALT altNew = alt;
+    m_lib_pin->GetAlternates().erase( wxS( "ALT1" ) );
+    altNew.m_Name = wxS( "ALT1_NEW" );
+    m_lib_pin->GetAlternates()[ wxS( "ALT1_NEW" ) ] = altNew;
+
+    m_parent_symbol->SetLibSymbol( m_parent_part->Flatten().release() );
+    m_parent_symbol->UpdatePins();
+
+    SCH_PIN* updatedPin = m_parent_symbol->GetPins()[0];
+
+    BOOST_CHECK_EQUAL( updatedPin->GetAlt(), "ALT1_NEW" );
+    BOOST_CHECK( updatedPin->GetAlternates().count( wxS( "ALT1" ) ) == 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
