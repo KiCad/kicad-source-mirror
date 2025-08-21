@@ -174,11 +174,14 @@ public:
         COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
         COLOR4D normal = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
         COLOR4D red;
+        COLOR4D green;
 
-        // Choose a red with reasonable contrasting with the background
-        double  bg_h, bg_s, bg_l;
+        double bg_h, bg_s, bg_l;
         bg.ToHSL( bg_h, bg_s, bg_l );
-        red.FromHSL( 0, 1.0, bg_l < 0.5 ? 0.7 : 0.3 );
+
+        // Choose colors with reasonable contrasting with the background
+        red.FromHSL( 0.0, 1.0, bg_l < 0.5 ? 0.7 : 0.3 );
+        green.FromHSL( 120.0, 1.0, bg_l < 0.5 ? 0.8 : 0.2 );
 
         if( viewFlipped )
             textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
@@ -214,14 +217,15 @@ public:
 
         textPos = GetPosition() + offset;
         textPos.y += KiROUND( headerDims.LinePitch * 1.3 );
+        gal->SetStrokeColor( m_current < m_min || m_current > m_max ? red : green );
         font->Draw( gal, m_currentText, textPos, textAttrs, KIFONT::METRICS::Default() );
 
         textPos.x += glyphWidth * 11 + margin.x;
-        gal->SetStrokeColor( m_current < m_min ? red : normal );
+        gal->SetStrokeColor( m_current < m_min ? red : green );
         font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
 
         textPos.x += glyphWidth * 7 + margin.x;
-        gal->SetStrokeColor( m_current > m_max ? red : normal );
+        gal->SetStrokeColor( m_current > m_max ? red : green );
         font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
 
         gal->Restore();
