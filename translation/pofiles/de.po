@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-21 23:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -2934,7 +2934,7 @@ msgstr "Passwort"
 #: common/dialogs/dialog_generate_database_connection.cpp:63
 #, fuzzy
 msgid "Timeout"
-msgstr "Zeit"
+msgstr "Zeitüberschreitung"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
 msgid "Connection String"
@@ -2954,7 +2954,7 @@ msgstr "Tabellen"
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 #, fuzzy
 msgid "Unable to connect to database"
-msgstr "Keine Verbindung zur Datenbank"
+msgstr "Keine Verbindung zur Datenbank möglich"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 msgid "Database Error"
@@ -5416,7 +5416,7 @@ msgstr ""
 #: common/dialogs/panel_maintenance_base.cpp:51
 #, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "%s auf Standardwerte zurücksetzen"
+msgstr "Zurücksetzen aller Dialoge auf Standardeinstellungen"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
 #, fuzzy
@@ -7620,7 +7620,7 @@ msgstr "Kein Repository verfügbar, um Remote einzurichten"
 #: common/git/git_init_handler.cpp:143
 #, fuzzy, c-format
 msgid "Failed to create remote: %s"
-msgstr "Konnte Commit nicht erstellen: %s"
+msgstr "Konnte Remote nicht erstellen: %s"
 
 #: common/git/git_pull_handler.cpp:67
 #, c-format
@@ -18210,12 +18210,12 @@ msgstr "Unverbundene \"keine Verbindung\"-Kennzeichnung"
 #: eeschema/erc/erc_item.cpp:105
 #, fuzzy
 msgid "Label not connected"
-msgstr "Pin nicht verbunden"
+msgstr "Bezeichner ist nicht verbunden"
 
 #: eeschema/erc/erc_item.cpp:109
 #, fuzzy
 msgid "Label connected to only one pin"
-msgstr "Bezeichner ist mit nichts verbunden"
+msgstr "Bezeichner ist nur mit einem Pin verbunden"
 
 #: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
@@ -18278,7 +18278,7 @@ msgstr "Ungültige Verbindung zwischen Bus und Netzelementen"
 #: eeschema/erc/erc_item.cpp:161
 #, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "Konnte nicht mit Remote verbinden"
+msgstr "Ground-Pin ist nicht mit Ground-Netz verbunden"
 
 #: eeschema/erc/erc_item.cpp:165 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
@@ -24099,8 +24099,8 @@ msgstr "Pins von Schaltplanblatt einfügen"
 #, fuzzy
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
 msgstr ""
-"Schaltplanpin %s hat keinen entsprechenden hierarchischen Bezeichner im "
-"Schaltplanblatt"
+"Fügen Sie Schaltplanpins aus vorhandenen hierarchischen Bezeichnern auf "
+"diesem Schaltplanblatt hinzu"
 
 #: eeschema/tools/sch_actions.cpp:584
 msgid "Autoplace All Sheet Pins"
@@ -24639,8 +24639,8 @@ msgid ""
 "Add symbols from schematic to a new or an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Von der Platine verwendete Symbole einer vorhandenen Symbolbibliothek "
-"hinzufügen\n"
+"Von der Platine verwendete Symbole einer neuen oder vorhandenen "
+"Symbolbibliothek hinzufügen\n"
 "(entfernt keine anderen Symbole aus dieser Bibliothek)"
 
 #: eeschema/tools/sch_actions.cpp:1195
@@ -25316,7 +25316,9 @@ msgstr "Keine Netze ausgewählt."
 #: eeschema/tools/sch_editor_control.cpp:937
 #, fuzzy
 msgid "All selected nets must be labeled to assign a netclass."
-msgstr "Das Netz muss beschriftet sein, um eine Netzklasse zuzuweisen."
+msgstr ""
+"Alle selektierten Netze müssen beschriftet sein, um eine Netzklasse "
+"zuzuweisen."
 
 #: eeschema/tools/sch_editor_control.cpp:1694 pcbnew/tools/pcb_control.cpp:1119
 msgid ""
@@ -25672,17 +25674,17 @@ msgstr "Ein neues Projekt für diesen Schaltplan erstellen"
 #: eeschema/widgets/filedlg_hook_save_project.h:40
 #, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Untergeordnete Blätter einbeziehen"
+msgstr "Untergeordnete Schaltplanseiten nicht kopieren"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
 #, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Nur aktuelles Blatt"
+msgstr "Nur interne, untergeordnete Schaltplanseiten kopieren"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
 #, fuzzy
 msgid "Copy all subsheets"
-msgstr "Alle Schaltplanseiten"
+msgstr "Alle untergeordnete Schaltplanseiten kopieren"
 
 #: eeschema/widgets/hierarchy_pane.cpp:430
 msgid "Edit Page Number"
@@ -27353,7 +27355,7 @@ msgstr ""
 #: kicad/cli/command_pcb_drc.cpp:95
 #, fuzzy
 msgid "Refill zones before running DRC"
-msgstr "Alle Zonen ausfüllen vor dem DRC"
+msgstr "Alle Zonen vor dem DRC ausfüllen"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
@@ -27979,8 +27981,11 @@ msgstr ""
 "Voreinstellungsname"
 
 #: kicad/cli/command_pcb_render.cpp:266
+#, fuzzy
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Die im Lagenaufbau der Platine definierten Farben überschreiben die aus der "
+"Voreinstellung"
 
 #: kicad/cli/command_pcb_render.cpp:270
 #, fuzzy
@@ -28442,7 +28447,7 @@ msgstr ""
 #: kicad/dialogs/dialog_template_selector.cpp:106
 #, fuzzy
 msgid "Layer stackups"
-msgstr "Lagen-Einrichtung"
+msgstr "Lagenaufbauten"
 
 #: kicad/dialogs/dialog_template_selector.cpp:106
 msgid "- Optimized for the intended application"
@@ -28483,28 +28488,36 @@ msgid "Start Simple:"
 msgstr "Startlage:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:114
+#, fuzzy
 msgid "Begin with basic templates and add more elements as you go."
 msgstr ""
+"Mit einer Basisvorlage anfangen und nach und nach mehr Elemente hinzufügen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
 msgid "Customize Later:"
 msgstr "Später anpassen:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
+#, fuzzy
 msgid ""
 "Templates are starting points - you can modify libraries, rules, and layouts "
 "after project creation."
 msgstr ""
+"Vorlagen sind Ausgangspunkte - Sie können Bibliotheken, Regeln und Layouts "
+"nach der Projekterstellung modifizieren."
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
 msgid "Save Your Own:"
 msgstr "Eigenen speichern:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
+#, fuzzy
 msgid ""
 "Once you develop preferred settings, create a custom template for future "
 "projects."
 msgstr ""
+"Sobald Sie Ihre bevorzugten Einstellungen festgelegt haben, erstellen Sie "
+"eine benutzerdefinierte Vorlage für zukünftige Projekte."
 
 #: kicad/dialogs/dialog_template_selector.cpp:390
 msgid "Select Templates Directory"
@@ -46824,12 +46837,12 @@ msgstr "(BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden.)"
 
 #: pcbnew/pad.cpp:2311
 msgid "('mechanical' property is for PTH pads)"
-msgstr "(mechanisch-Eigenschaft ist für Durchsteckpads)"
+msgstr "(Mechanisch-Eigenschaft ist für Durchsteckpads)"
 
 #: pcbnew/pad.cpp:2315
 #, fuzzy
 msgid "('press-fit' property is for PTH pads with round holes)"
-msgstr "(mechanisch-Eigenschaft ist für Durchsteckpads)"
+msgstr "(Presssitz-Eigenschaft ist für Durchsteckpads mit runden Löchern)"
 
 #: pcbnew/pad.cpp:2331
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -46956,7 +46969,7 @@ msgstr "Mechanisches Pad"
 #: pcbnew/pad.cpp:2754
 #, fuzzy
 msgid "Press-fit pad"
-msgstr "Drucke Seite %d"
+msgstr "Presssitz Pad"
 
 #: pcbnew/pad.cpp:2776
 msgid "Front, back and connected layers"
@@ -48554,7 +48567,7 @@ msgstr "Erzeuge CAD-Daten"
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
 "Platinenumriss fehlt oder ist fehlerhaft. Bitte den Design-Rule-Check (DRC) "
-"für eine vollständige Analyse ausführen."
+"ausführen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
 msgid ""
@@ -49482,7 +49495,7 @@ msgstr "Platine gespeichert\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:2317
 #, fuzzy
 msgid "Failed to save board.\n"
-msgstr "Fehler beim Laden der Platine.\n"
+msgstr "Fehler beim Speichern der Platine.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2419
 #, c-format
@@ -51992,8 +52005,8 @@ msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Von der Platine verwendete Footprints einer vorhandenen Footprintbibliothek "
-"hinzufügen\n"
+"Von der Platine verwendete Footprints einer neuen oder vorhandenen "
+"Footprintbibliothek hinzufügen\n"
 "(entfernt keine anderen Footprints aus dieser Bibliothek)"
 
 #: pcbnew/tools/pcb_actions.cpp:1174
@@ -52211,12 +52224,14 @@ msgstr "Ausgewählte Elemente sperren oder entsperren"
 #: pcbnew/tools/pcb_actions.cpp:1411
 #, fuzzy
 msgid "Cycle H/V/45 constraint"
-msgstr "H/V/45-Einschränkungen ignorieren"
+msgstr "H/V/45-Einschränkung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1412
+#, fuzzy
 msgid ""
 "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only"
 msgstr ""
+"Zwischen einer 0°, 45° oder horizontalen/vertikalen-Einschränkung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1420
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -53202,7 +53217,7 @@ msgstr "Footprint an den Editor exportieren"
 #: pcbnew/tools/pcb_control.cpp:141 pcbnew/tools/pcb_control.cpp:171
 #, fuzzy
 msgid "Add Footprint Library"
-msgstr "Footprintbibliothek erstellen"
+msgstr "Footprintbibliothek hinzufügen"
 
 #: pcbnew/tools/pcb_control.cpp:295
 msgid "Don't show again"
