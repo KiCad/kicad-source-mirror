@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-16 22:11+0000\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -2330,7 +2330,7 @@ msgstr "Розробники пакетів"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "Використовувані об'єкти із GDI %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -35791,7 +35791,7 @@ msgstr "Шари шовкографії"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2868
 msgid "Copper Layers"
-msgstr "Мідні шари"
+msgstr "Мідні Шари"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:276
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:65
@@ -42613,9 +42613,8 @@ msgstr ""
 "Час експорту %.3f сек\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Виникли проблеми під час поєднання фігур **\n"
+msgstr "** Виникли проблеми під час поєднання фігур **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2050
@@ -42628,139 +42627,132 @@ msgid "Warnings:\n"
 msgstr "Попередження:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain створив нульову фігуру **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain створив нульову фігуру **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
 msgstr ""
 "Помилка OCC під час додавання полігону контактної площадки/перехідного "
-"отвору.\n"
+"отвору."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Не вдалося додати форму (%d точок) до мідного шару %s.\n"
+msgstr "Не вдалося додати форму (%d точок) до мідного шару %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Модель не визначена для %s.\n"
+msgstr "Для %s не визначено жодної моделі."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Немає моделі для імені файлу '%s'.\n"
+msgstr "Немає моделі для файлу з назвою '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Немає даних про місцезнаходження для назви файлу '%s'.\n"
+msgstr "Немає даних про місцезнаходження для файлу з назвою '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Не вдалося додати компонент із назвою файлу '%s'.\n"
+msgstr "Не вдалося додати компонент з назвою файлу '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "Сегмент форми будівлі винятку OCC: %s\n"
+msgstr "Сегмент форми будівлі винятку OCC: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "Виняток OCC для створення об'єкта: %s\n"
+msgstr "Виняток OCC для створення об'єкта: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1439
 #: pcbnew/exporters/step/step_pcb_model.cpp:1828
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Не вдалося створити призматичну фігуру\n"
+msgstr "Не вдалося створити призматичну фігуру"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "Не вдалося створити край сегмента (%d %d) -> (%d %d), пропускаємо\n"
+msgstr "Не вдалося створити край сегмента (%d %d) -> (%d %d), пропускаємо"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Не вдалося додати край сегмента (%d %d) -> (%d %d)\n"
+msgstr "Не вдалося додати край сегмента (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Не вдалося додати дугу з (%d %d), дуги p0 (%d %d), середини (%d %d), p1 (%d "
-"%d)\n"
+"%d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1634
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Не вдалося замкнути провід у %d, %d -> %d, %d **\n"
+msgstr "Не вдалося замкнути дротяну трубу о %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "Виняток OCC, що створює провід: %s\n"
+msgstr "Виняток OCC, що створює дріт: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Дріт не виконано (точки контуру %d): помилка OCC %d\n"
-"z: %g; обмежувальна рамка: %s\n"
+"z: %g; обмежувальна рамка: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1740
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Перевірка дроту на самоперешкоди не вдалася\n"
-"z: %g; обмежувальна рамка: %s\n"
+"z: %g; обмежувальна рамка: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1762
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Використання неспрощеного полігону.\n"
+msgstr "Використання неспрощеного полігону."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "Виняток OCC, що створює контур %d: %s\n"
+msgstr "Виняток OCC, що створює контур %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Обличчя пропущено **\n"
+msgstr "** Обличчя пропущено **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1929
 #: pcbnew/exporters/step/step_pcb_model.cpp:1946
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "Помилка OCC при створенні основного контуру.\n"
+msgstr "Помилка OCC під час створення основного контуру."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "Помилка OCC під час створення отвору в основному контурі.\n"
+msgstr "Помилка OCC під час створення отвору в основному контурі."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1997
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Віднімання отворів для %s\n"
+msgstr "Віднімання отворів для %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Виникли проблеми під час обрізання %s мережі '%s' **\n"
+msgstr "** Виникли проблеми під час обрізання %s мережі '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2094
 msgid "shapes"
@@ -42780,11 +42772,11 @@ msgstr "перехідний отвір"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3310
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr ""
 "Немає коректної збірки друкованої плати; неможливо створити вихідний файл "
-"'%s'.\n"
+"'%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2387
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -42802,19 +42794,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Неможливо перейменувати тимчасовий файл '%s' на '%s'.\n"
+msgstr "Неможливо перейменувати тимчасовий файл '%s' на '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Не вдається визначити фактичний тип файлу для '%s'.\n"
+msgstr "Не вдається визначити фактичний тип файлу для '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2897
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Не вдалося перенести дані моделі з файлу '%s'.\n"
+msgstr "Не вдалося перенести дані моделі з файлу '%s'."
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
