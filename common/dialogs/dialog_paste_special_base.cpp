@@ -19,11 +19,11 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* optionsSizer;
 	optionsSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_pasteOptionsChoices[] = { _("Assign unique reference designators to pasted symbols"), _("Keep existing reference designators, even if they are duplicated"), _("Clear reference designators on all pasted symbols") };
-	int m_pasteOptionsNChoices = sizeof( m_pasteOptionsChoices ) / sizeof( wxString );
-	m_pasteOptions = new wxRadioBox( this, wxID_ANY, _("Reference Designators"), wxDefaultPosition, wxDefaultSize, m_pasteOptionsNChoices, m_pasteOptionsChoices, 1, wxRA_SPECIFY_COLS );
-	m_pasteOptions->SetSelection( 1 );
-	optionsSizer->Add( m_pasteOptions, 0, wxALL, 5 );
+	wxString m_optionsChoices[] = { _("Assign unique reference designators to pasted symbols"), _("Keep existing reference designators, even if they are duplicated"), _("Clear reference designators on all pasted symbols") };
+	int m_optionsNChoices = sizeof( m_optionsChoices ) / sizeof( wxString );
+	m_options = new wxRadioBox( this, wxID_ANY, _("Reference Designators"), wxDefaultPosition, wxDefaultSize, m_optionsNChoices, m_optionsChoices, 1, wxRA_SPECIFY_COLS );
+	m_options->SetSelection( 1 );
+	optionsSizer->Add( m_options, 0, wxALL, 5 );
 
 	m_clearNetsCB = new wxCheckBox( this, wxID_ANY, _("Clear net assignments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearNetsCB->SetToolTip( _("Remove the net information from all connected items before pasting") );
@@ -50,12 +50,12 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_pasteOptions->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::onRadioBoxEvent ), NULL, this );
+	m_options->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::onRadioBoxEvent ), NULL, this );
 }
 
 DIALOG_PASTE_SPECIAL_BASE::~DIALOG_PASTE_SPECIAL_BASE()
 {
 	// Disconnect Events
-	m_pasteOptions->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::onRadioBoxEvent ), NULL, this );
+	m_options->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PASTE_SPECIAL_BASE::onRadioBoxEvent ), NULL, this );
 
 }

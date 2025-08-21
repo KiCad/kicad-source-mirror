@@ -1266,7 +1266,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         fp->SetReference( defaultRef );
                 }
 
-                cancelled = !placeBoardItems( &commit, clipBoard, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS, false );
+                cancelled = !placeBoardItems( &commit, clipBoard, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS,
+                                              false );
             }
 
             break;
@@ -1288,16 +1289,15 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     clipFootprint->SetReference( defaultRef );
 
                 clipFootprint->SetParent( board() );
-                clipFootprint->ResolveComponentClassNames(
-                        board(), clipFootprint->GetTransientComponentClassNames() );
+                clipFootprint->ResolveComponentClassNames( board(), clipFootprint->GetTransientComponentClassNames() );
                 clipFootprint->ClearTransientComponentClassNames();
                 pastedItems.push_back( clipFootprint );
             }
 
             pruneItemLayers( pastedItems );
 
-            cancelled =
-                    !placeBoardItems( &commit, pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS, false );
+            cancelled = !placeBoardItems( &commit, pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS,
+                                          false );
             break;
         }
 

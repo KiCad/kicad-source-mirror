@@ -32,7 +32,7 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxRadioBox* m_pasteOptions;
+		wxRadioBox* m_options;
 		wxCheckBox* m_clearNetsCB;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

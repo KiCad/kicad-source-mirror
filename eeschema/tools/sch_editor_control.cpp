@@ -1714,20 +1714,19 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     SCHEMATIC_SETTINGS& schematicSettings = m_frame->Schematic().Settings();
     int annotateStartNum = schematicSettings.m_AnnotateStartNum;
 
-    PASTE_MODE pasteMode = annotateAutomatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
+    PASTE_MODE pasteMode = annotateAutomatic ? PASTE_MODE::UNIQUE_ANNOTATIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
     bool       forceRemoveAnnotations = false;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
-        PASTE_MODE           pasteModeSpecial = pasteMode;
-        DIALOG_PASTE_SPECIAL dlg( m_frame, &pasteModeSpecial );
+        PASTE_MODE           defaultPasteMode = pasteMode;
+        DIALOG_PASTE_SPECIAL dlg( m_frame, &pasteMode );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
 
         // We have to distinguish if removing was explicit
-        forceRemoveAnnotations = ( pasteModeSpecial == PASTE_MODE::REMOVE_ANNOTATIONS );
-        pasteMode = pasteModeSpecial;
+        forceRemoveAnnotations = pasteMode == PASTE_MODE::REMOVE_ANNOTATIONS && pasteMode != defaultPasteMode;
     }
 
     bool forceKeepAnnotations = pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS;
@@ -1866,8 +1865,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 symbol->SetLibSymbol( libSymbol );
             }
 
-            // If the symbol is already in the schematic we have to always keep the
-            // annotations. The exception is if the user has chosen to remove them.
+            // If the symbol is already in the schematic we have to always keep the annotations. The exception
+            // is if the user has chosen to remove them.
             for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
             {
                 if( !existingRefsSet.contains( instance.m_Reference ) )
@@ -1880,11 +1879,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
                 updatePastedSymbol( symbol, sheetPath, clipPath, forceKeepAnnotations );
 
-            // Most modes will need new KIIDs for the symbol and its pins
-            // However, if we are pasting unique annotations, we need to check if the symbol
-            // is not already in the hierarchy.  If we don't already have a copy of the
-            // symbol, we just keep the existing KIID data as it is likely the same symbol
-            // being moved around the schematic
+            // Most modes will need new KIIDs for the symbol and its pins.  However, if we are pasting
+            // unique annotations, we need to check if the symbol is not already in the hierarchy.  If we
+            // don't already have a copy of the symbol, we just keep the existing KIID data as it is likely
+            // the same symbol being moved around the schematic.
             bool needsNewKiid = ( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS );
 
             for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
@@ -1955,13 +1953,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( !fn.IsAbsolute() )
             {
                 wxFileName currentSheetFileName = pasteRoot.LastScreen()->GetFileName();
-                fn.Normalize(  FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
-                               currentSheetFileName.GetPath() );
+                fn.Normalize(  FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS, currentSheetFileName.GetPath() );
             }
 
             // Try to find the screen for the pasted sheet by several means
-            if( !m_frame->Schematic().Root().SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ),
-                                                              &existingScreen ) )
+            if( !m_frame->Schematic().Root().SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
             {
                 if( loadedScreens.count( sheet->GetFileName() ) > 0 )
                     existingScreen = loadedScreens.at( sheet->GetFileName() );
@@ -2003,8 +1999,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             {
                 SCH_SHEET_PATH subPath = updatePastedSheet( sheet, sheetPath, clipPath,
                                                             ( forceKeepAnnotations && annotateAutomatic ),
-                                                            &pastedSheets[sheetPath],
-                                                            pastedSymbols );
+                                                            &pastedSheets[sheetPath], pastedSymbols );
             }
         }
         else
@@ -2099,24 +2094,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         for( size_t i = 0; i < pastedSymbols[sheetPath].GetCount(); i++ )
         {
-            if(  pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS
-              || pasteMode == PASTE_MODE::RESPECT_OPTIONS
-              || pastedSymbols[sheetPath][i].AlwaysAnnotate() )
-            {
+            if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS || pastedSymbols[sheetPath][i].AlwaysAnnotate() )
                 annotatedSymbols[sheetPath].AddItem( pastedSymbols[sheetPath][i] );
-            }
         }
 
         for( const SCH_SHEET_PATH& pastedSheetPath : pastedSheets[sheetPath] )
         {
             for( size_t i = 0; i < pastedSymbols[pastedSheetPath].GetCount(); i++ )
             {
-                if(  pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS
-                  || pasteMode == PASTE_MODE::RESPECT_OPTIONS
-                  || pastedSymbols[pastedSheetPath][i].AlwaysAnnotate() )
-                {
+                if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS || pastedSymbols[pastedSheetPath][i].AlwaysAnnotate() )
                     annotatedSymbols[pastedSheetPath].AddItem( pastedSymbols[pastedSheetPath][i] );
-                }
             }
         }
     }
@@ -2137,10 +2124,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
-                annotatedSymbols[path].ReannotateByOptions( annotateOrder,
-                                                            annotateAlgo,
-                                                            annotateStartNum, existingRefs, false,
-                                                            &hierarchy );
+                annotatedSymbols[path].ReannotateByOptions( annotateOrder, annotateAlgo, annotateStartNum,
+                                                            existingRefs, false, &hierarchy );
             }
 
             annotatedSymbols[path].UpdateAnnotation();
@@ -2160,11 +2145,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    annotatedSymbols[pastedSheetPath].ReannotateByOptions( annotateOrder,
-                                                                           annotateAlgo,
+                    annotatedSymbols[pastedSheetPath].ReannotateByOptions( annotateOrder, annotateAlgo,
                                                                            annotateStartNum, existingRefs,
-                                                                           false,
-                                                                           &hierarchy );
+                                                                           false, &hierarchy );
                 }
 
                 annotatedSymbols[pastedSheetPath].UpdateAnnotation();
