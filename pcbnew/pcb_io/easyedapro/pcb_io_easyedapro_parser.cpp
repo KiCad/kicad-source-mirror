@@ -928,22 +928,36 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
     }
 
     // Heal board outlines
-    std::vector<PCB_SHAPE*>                 shapes;
+    std::vector<PCB_SHAPE*>                 edgeShapes;
     std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
 
     for( BOARD_ITEM* item : footprint->GraphicalItems() )
     {
-        if( !item->IsOnLayer( Edge_Cuts ) )
-            continue;
-
-        if( item->Type() == PCB_SHAPE_T )
-            shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+        if( item->IsOnLayer( Edge_Cuts ) && item->Type() == PCB_SHAPE_T )
+            edgeShapes.push_back( static_cast<PCB_SHAPE*>( item ) );
     }
 
-    ConnectBoardShapes( shapes, newShapes, SHAPE_JOIN_DISTANCE );
+    ConnectBoardShapes( edgeShapes, newShapes, SHAPE_JOIN_DISTANCE );
 
     for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
         footprint->Add( ptr.release(), ADD_MODE::APPEND );
+
+    // EasyEDA footprints don't have courtyard, so build a box ourselves
+    if( !footprint->IsOnLayer( F_CrtYd ) )
+    {
+        BOX2I bbox = footprint->GetLayerBoundingBox( { F_Cu, F_Fab, F_Paste, F_Mask, Edge_Cuts } );
+        bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Default courtyard clearance
+
+        std::unique_ptr<PCB_SHAPE> shape =
+                std::make_unique<PCB_SHAPE>( footprint, SHAPE_T::RECTANGLE );
+
+        shape->SetWidth( pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH ) );
+        shape->SetLayer( F_CrtYd );
+        shape->SetStart( bbox.GetOrigin() );
+        shape->SetEnd( bbox.GetEnd() );
+
+        footprint->Add( shape.release(), ADD_MODE::APPEND );
+    }
 
     return footprintPtr.release();
 }

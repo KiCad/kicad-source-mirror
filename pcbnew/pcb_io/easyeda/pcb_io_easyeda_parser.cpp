@@ -1117,6 +1117,23 @@ FOOTPRINT* PCB_IO_EASYEDA_PARSER::ParseFootprint(
     for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
         footprint->Add( ptr.release(), ADD_MODE::APPEND );
 
+    // EasyEDA footprints don't have courtyard, so build a box ourselves
+    if( !footprint->IsOnLayer( F_CrtYd ) )
+    {
+        BOX2I bbox = footprint->GetLayerBoundingBox( { F_Cu, F_Fab, F_Paste, F_Mask, Edge_Cuts } );
+        bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Default courtyard clearance
+
+        std::unique_ptr<PCB_SHAPE> shape =
+                std::make_unique<PCB_SHAPE>( footprint.get(), SHAPE_T::RECTANGLE );
+
+        shape->SetWidth( pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH ) );
+        shape->SetLayer( F_CrtYd );
+        shape->SetStart( bbox.GetOrigin() );
+        shape->SetEnd( bbox.GetEnd() );
+
+        footprint->Add( shape.release(), ADD_MODE::APPEND );
+    }
+
     return footprint.release();
 }
 
