@@ -431,10 +431,10 @@ void DIALOG_LABEL_PROPERTIES::OnEnterKey( wxCommandEvent& aEvent )
 
 void DIALOG_LABEL_PROPERTIES::OnCBValueCharHook( wxKeyEvent& aEvent )
 {
-    // If the key is WXK_RETURN because m_valueCombo is the source event, we do not skip
+    // If the key is WXK_RETURN/WXK_NUMPAD_ENTER because m_valueCombo is the source event, we do not skip
     // the key event because the default action is to show the m_valueCombo dropdown list,
     // and we only want to accept the entered string.
-    if( aEvent.GetKeyCode() == WXK_RETURN )
+    if(( aEvent.GetKeyCode() == WXK_RETURN ) || (aEvent.GetKeyCode() == WXK_NUMPAD_ENTER))
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
