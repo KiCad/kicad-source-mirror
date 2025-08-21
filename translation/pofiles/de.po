@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-18 08:01+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1770,9 +1770,8 @@ msgid "Errors"
 msgstr "Fehler"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Nächstes Element suchen und ersetzen"
+msgstr "Geladene Datei ersetzen?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
@@ -2388,7 +2387,7 @@ msgstr "Paketentwickler"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI-Objekte in Verwendung %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -36512,7 +36511,7 @@ msgstr "Text- && Grafikformatierung"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
-msgstr ""
+msgstr "Designregelvorgaben"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
@@ -43006,9 +43005,8 @@ msgstr ""
 "Exportiert in %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Probleme beim Zusammenfügen von Formen **\n"
+msgstr "** Probleme beim Zusammenfügen von Formen **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2050
@@ -43021,138 +43019,131 @@ msgid "Warnings:\n"
 msgstr "Warnungen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen.\n"
+msgstr "OCC-Fehler beim Hinzufügen von Pad/Via-Polygonen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen\n"
+msgstr "Konnte Form (%d Punkte) nicht zu Kupferlage %s hinzufügen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Kein Modell für %s definiert.\n"
+msgstr "Kein Modell für %s definiert."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Kein Modell für Dateiname \"%s\".\n"
+msgstr "Kein Modell für Dateiname \"%s\"."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Kein Speicherort für Dateiname \"%s\".\n"
+msgstr "Kein Speicherort für Dateiname \"%s\"."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen.\n"
+msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC-Exception beim Erzeugen von Formsegement: %s\n"
+msgstr "OCC-Exception beim Erzeugen von Formsegement: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC-Exception beim Erzeugen von Fläche: %s\n"
+msgstr "OCC-Exception beim Erzeugen von Fläche: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1439
 #: pcbnew/exporters/step/step_pcb_model.cpp:1828
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Konnte prismatische Form nicht erstellen\n"
+msgstr "Konnte prismatische Form nicht erstellen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
 msgstr ""
-"Konnte Segmentkante (%d %d) -> (%d %d) nicht erzeugen, wird übersprungen\n"
+"Konnte Segmentkante (%d %d) -> (%d %d) nicht erzeugen, wird übersprungen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Konnte Segmentkante (%d %d) -> (%d %d) nicht hinzhufügen\n"
+msgstr "Konnte Segmentkante (%d %d) -> (%d %d) nicht hinzufügen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Konnte Bogenkurve von (%d %d), Bogen p0 (%d %d), Mitte (%d %d), p1 (%d %d) "
-"nicht hinzufügen\n"
+"nicht hinzufügen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1634
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Konnte Verbindung %d, %d -> %d, %d nicht schließen **\n"
+msgstr "Konnte Verbindung %d, %d -> %d, %d nicht schließen **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "OCC-Exception beim Erzeugen von Verbindung: %s\n"
+msgstr "OCC-Exception beim Erzeugen von Verbindung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
-"z: %g; Begrenzungsrahmen: %s\n"
+"z: %g; Begrenzungsrahmen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1740
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Prüfung auf Selbststörung der Verbindung fehlgeschlagen\n"
-"z: %g; Begrenzungsrahmen: %s\n"
+"z: %g; Begrenzungsrahmen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1762
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Verwende nicht vereinfachtes Polygon.\n"
+msgstr "Verwende nicht vereinfachtes Polygon."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s\n"
+msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Fläche ausgelassen **\n"
+msgstr "** Fläche ausgelassen **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1929
 #: pcbnew/exporters/step/step_pcb_model.cpp:1946
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "OCC-Fehler während der Erstellung der Hauptkontur.\n"
+msgstr "OCC-Fehler während der Erstellung der Hauptkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "OCC-Fehler während der Erstellung eines Lochs in der Hauptkontur.\n"
+msgstr "OCC-Fehler während der Erstellung eines Lochs in der Hauptkontur."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1997
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Erstelle Löcher für %s\n"
+msgstr "Erstelle Löcher für %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Probleme beim Schneiden von %s Netz \"%s\" **\n"
+msgstr "** Probleme beim Schneiden von %s Netz \"%s\" **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2094
 msgid "shapes"
@@ -43172,10 +43163,10 @@ msgstr "Vias"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3310
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr ""
-"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen.\n"
+"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2387
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43191,19 +43182,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen.\n"
+msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Kann tatsächlichen Typ der Datei \"%s\" nicht identifizieren.\n"
+msgstr "Kann tatsächlichen Typ der Datei \"%s\" nicht identifizieren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2897
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen.\n"
+msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen."
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
