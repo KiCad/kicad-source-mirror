@@ -915,7 +915,8 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
 
 
 const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
-                                            bool aIgnoreHiddenFields ) const
+                                            bool aIgnoreHiddenFields,
+                                            bool aIgnoreLabelsOnInvisiblePins ) const
 {
     BOX2I bBox;     // Start with a fresh BOX2I so the Merge algorithm works
 
@@ -933,7 +934,13 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
                 continue;
         }
 
-        bBox.Merge( item.GetBoundingBox() );
+        if( item.Type() == SCH_PIN_T && !aIgnoreLabelsOnInvisiblePins )
+        {
+            const SCH_PIN& pin = static_cast<const SCH_PIN&>( item );
+            bBox.Merge( pin.GetBoundingBox( true, true, false ) );
+        }
+        else
+            bBox.Merge( item.GetBoundingBox() );
     }
 
     return bBox;

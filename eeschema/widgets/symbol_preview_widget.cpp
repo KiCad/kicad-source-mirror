@@ -72,22 +72,22 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
     // Early initialization of the canvas background color,
     // before any OnPaint event is fired for the canvas using a wrong bg color
     KIGFX::VIEW* view = m_preview->GetView();
-    auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    m_renderSettings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
     if( COLOR_SETTINGS* cs = ::GetColorSettings( app_settings ? app_settings->m_ColorTheme : DEFAULT_THEME ) )
-        settings->LoadColors( cs );
+        m_renderSettings->LoadColors( cs );
 
-    const COLOR4D& backgroundColor = settings->GetBackgroundColor();
-    const COLOR4D& foregroundColor = settings->GetCursorColor();
+    const COLOR4D& backgroundColor = m_renderSettings->GetBackgroundColor();
+    const COLOR4D& foregroundColor = m_renderSettings->GetCursorColor();
 
     m_preview->GetGAL()->SetClearColor( backgroundColor );
 
-    settings->m_ShowPinsElectricalType = app_settings->m_LibViewPanel.show_pin_electrical_type;
-    settings->m_ShowPinNumbers = app_settings->m_LibViewPanel.show_pin_numbers;
-    settings->m_ShowHiddenPins = false;
-    settings->m_ShowHiddenFields = false;
-    settings->m_ShowPinAltIcons = false;
-    settings->m_ShowPinsElectricalType = false;
+    m_renderSettings->m_ShowPinsElectricalType = app_settings->m_LibViewPanel.show_pin_electrical_type;
+    m_renderSettings->m_ShowPinNumbers = app_settings->m_LibViewPanel.show_pin_numbers;
+    m_renderSettings->m_ShowHiddenPins = false;
+    m_renderSettings->m_ShowHiddenFields = false;
+    m_renderSettings->m_ShowPinAltIcons = false;
+    m_renderSettings->m_ShowPinsElectricalType = false;
 
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -96,7 +96,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
         m_statusPanel = new wxPanel( this );
         m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
         m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );
-        m_status->SetForegroundColour( settings->GetLayerColor( LAYER_REFERENCEPART ).ToColour() );
+        m_status->SetForegroundColour( m_renderSettings->GetLayerColor( LAYER_REFERENCEPART ).ToColour() );
         m_statusSizer = new wxBoxSizer( wxVERTICAL );
         m_statusSizer->Add( 0, 0, 1 );  // add a spacer
         m_statusSizer->Add( m_status, 0, wxALIGN_CENTER );
@@ -188,7 +188,6 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
 void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aBodyStyle )
 {
     KIGFX::VIEW* view = m_preview->GetView();
-    auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
     std::unique_ptr< LIB_SYMBOL > symbol;
 
     try
@@ -220,14 +219,14 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)
-        settings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
+        m_renderSettings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
 
         // For symbols having a De Morgan body style, use the first style
-        settings->m_ShowBodyStyle =
+        m_renderSettings->m_ShowBodyStyle =
                 ( m_previewItem->HasAlternateBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
 
-        m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
-        m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
+        m_previewItem->SetPreviewUnit( m_renderSettings->m_ShowUnit );
+        m_previewItem->SetPreviewBodyStyle( m_renderSettings->m_ShowBodyStyle );
 
         if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
@@ -238,8 +237,8 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
         view->Add( m_previewItem );
 
         // Get the symbol size, in internal units
-        m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit,
-                                                        settings->m_ShowBodyStyle );
+        m_itemBBox = m_previewItem->GetUnitBoundingBox( m_renderSettings->m_ShowUnit,
+                                                        m_renderSettings->m_ShowBodyStyle );
 
         if( !m_preview->IsShownOnScreen() )
         {
@@ -275,17 +274,16 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
         m_previewItem = new LIB_SYMBOL( *aSymbol );
 
         // For symbols having a De Morgan body style, use the first style
-        auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)
-        settings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
+        m_renderSettings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
 
-        settings->m_ShowBodyStyle =
+        m_renderSettings->m_ShowBodyStyle =
                 ( m_previewItem->HasAlternateBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
 
-        m_previewItem->SetPreviewUnit( settings->m_ShowUnit );
-        m_previewItem->SetPreviewBodyStyle( settings->m_ShowBodyStyle );
+        m_previewItem->SetPreviewUnit( m_renderSettings->m_ShowUnit );
+        m_previewItem->SetPreviewBodyStyle( m_renderSettings->m_ShowBodyStyle );
 
         if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
@@ -296,7 +294,9 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
         view->Add( m_previewItem );
 
         // Get the symbol size, in internal units
-        m_itemBBox = aSymbol->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowBodyStyle );
+        m_itemBBox = m_previewItem->GetUnitBoundingBox( m_renderSettings->m_ShowUnit,
+                                                        m_renderSettings->m_ShowBodyStyle,
+                                                        true, false );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();

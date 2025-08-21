@@ -30,6 +30,7 @@ class LIB_ID;
 class LIB_SYMBOL;
 class wxStaticText;
 class wxSizer;
+class SCH_RENDER_SETTINGS;
 
 
 class SYMBOL_PREVIEW_WIDGET: public wxPanel
@@ -62,6 +63,8 @@ public:
 
     EDA_DRAW_PANEL_GAL* GetCanvas() const { return m_preview; }
 
+    SCH_RENDER_SETTINGS* GetRenderSettings() { return m_renderSettings; }
+
 protected:
     void onSize( wxSizeEvent& aEvent );
 
@@ -81,6 +84,7 @@ protected:
      * A local copy of the #LIB_SYMBOL to display on the canvas.
      */
     LIB_SYMBOL*                m_previewItem;
+    SCH_RENDER_SETTINGS*       m_renderSettings;
 
     /// The bounding box of the current item
     BOX2I                      m_itemBBox;

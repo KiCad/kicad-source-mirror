@@ -166,6 +166,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     previewSizer->Add( m_previewWidget, 1, wxEXPAND, 5 );
     m_panelShowPin->SetSizer( previewSizer );
 
+    m_previewWidget->GetRenderSettings()->m_ShowHiddenPins = true;
+
     const wxArrayString&        orientationNames = PinOrientationNames();
     const std::vector<BITMAPS>& orientationIcons = PinOrientationIcons();
 

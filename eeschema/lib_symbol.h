@@ -235,9 +235,12 @@ public:
      *  If aUnit == 0, unit is not used
      *  if aBodyStyle == 0 Convert is non used
      * @param aIgnoreHiddenFields default true, ignores any hidden fields
+     * @param aIgnoreLabelsOnInvisiblePins default true, ignores pin number and pin name
+     * of invisible pins
      **/
     const BOX2I GetUnitBoundingBox( int aUnit, int aBodyStyle,
-                                    bool aIgnoreHiddenFields = true ) const;
+                                    bool aIgnoreHiddenFields = true,
+                                    bool aIgnoreLabelsOnInvisiblePins = true ) const;
 
     const BOX2I GetBoundingBox() const override
     {
