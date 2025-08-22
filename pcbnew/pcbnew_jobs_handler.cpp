@@ -667,6 +667,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         45, 135, 225, 315, 45, 135, 225, 315,
     };
 
+    cfg.m_UseStackupColors = true;
     cfg.m_CurrentPreset = aRenderJob->m_appearancePreset;
     boardAdapter.m_Cfg = &cfg;
 
