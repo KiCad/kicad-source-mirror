@@ -254,6 +254,12 @@ void SCH_SYMBOL::SetLibSymbol( LIB_SYMBOL* aLibSymbol )
     wxCHECK2( !aLibSymbol || aLibSymbol->IsRoot(), aLibSymbol = nullptr );
 
     m_part.reset( aLibSymbol );
+
+    // We've just reset the library symbol, so the lib_pins, which were just
+    // pointers to the old symbol, need to be cleared.
+    for( auto& pin : m_pins )
+        pin->SetLibPin( nullptr );
+
     UpdatePins();
 }
 
@@ -302,7 +308,6 @@ void SCH_SYMBOL::UpdatePins()
         if( !pin->GetAlt().IsEmpty() )
         {
             altPinMap[ pin->GetNumber() ] = pin->GetAlt();
-
             auto altDefIt = pin->GetAlternates().find( pin->GetAlt() );
 
             if( altDefIt != pin->GetAlternates().end() )

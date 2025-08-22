@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE( AlternatePinRenameUpdates )
     alt.m_Type = ELECTRICAL_PINTYPE::PT_INPUT;
     m_lib_pin->GetAlternates()[ wxS( "ALT1" ) ] = alt;
 
-    m_parent_symbol->UpdatePins();
+    m_parent_symbol->SetLibSymbol( m_parent_part->Flatten().release() );
     m_sch_pin = m_parent_symbol->GetPins()[0];
     m_sch_pin->SetAlt( wxS( "ALT1" ) );
 
@@ -207,7 +207,6 @@ BOOST_AUTO_TEST_CASE( AlternatePinRenameUpdates )
     m_lib_pin->GetAlternates()[ wxS( "ALT1_NEW" ) ] = altNew;
 
     m_parent_symbol->SetLibSymbol( m_parent_part->Flatten().release() );
-    m_parent_symbol->UpdatePins();
 
     SCH_PIN* updatedPin = m_parent_symbol->GetPins()[0];
 
