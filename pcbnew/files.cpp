@@ -178,8 +178,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
 
     bool kicadFormat = ( aCtl & KICTL_KICAD_ONLY );
 
-    wxFileDialog dlg( aParent,
-                      kicadFormat ? _( "Open Board File" ) : _( "Import Non KiCad Board File" ),
+    wxFileDialog dlg( aParent, kicadFormat ? _( "Open Board File" ) : _( "Import Non KiCad Board File" ),
                       path, name, fileFiltersStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     FILEDLG_IMPORT_NON_KICAD importOptions( aParent->config()->m_System.show_import_issues );
