@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-23 07:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -36924,7 +36924,7 @@ msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
-"Sie versuchen Lagen, die von dem Footprint '%s' verwendet werden, zu "
+"Sie versuchen Lagen, die von dem Footprint \"%s\" verwendet werden, zu "
 "entfernen.\n"
 "Bitte entfernen Sie zuerst die Objekte, die diese Lagen verwenden."
 
@@ -46021,9 +46021,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Footprints..."
-msgstr "Footprint..."
+msgstr "Footprints..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Fabrication Outputs"
@@ -52034,7 +52033,7 @@ msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Von der Platine verwendete Footprints einer neuen oder vorhandenen "
+"Auf der Platine verwendete Footprints einer neuen oder vorhandenen "
 "Footprintbibliothek hinzufügen\n"
 "(entfernt keine anderen Footprints aus dieser Bibliothek)"
 
