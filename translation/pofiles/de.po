@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-22 06:41+0000\n"
+"PO-Revision-Date: 2025-08-23 07:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -5415,7 +5415,7 @@ msgstr "Tage"
 #: common/dialogs/panel_maintenance_base.cpp:42
 #, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "Liste der zuletzt verwendeten Dateien leeren"
+msgstr "Liste der zuletzt geöffneten Dateien leeren"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 #, fuzzy
@@ -5576,7 +5576,7 @@ msgstr "Ziehen mit rechter Taste:"
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 #, fuzzy
 msgid "Pan on mouse movement with key:"
-msgstr "Schwenk der Mausbewegung über Taste:"
+msgstr "Schwenken bei Mausbewegung über Pfeil-Taste:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -6453,7 +6453,7 @@ msgstr "Maus und Touchpad"
 
 #: common/eda_base_frame.cpp:1235
 msgid "SpaceMouse"
-msgstr ""
+msgstr "Spacemaus"
 
 #: common/eda_base_frame.cpp:1237
 msgid "Hotkeys"
@@ -28367,11 +28367,16 @@ msgid "Welcome to Template Selection!"
 msgstr "Willkommen bei der Vorlagenauswahl!"
 
 #: kicad/dialogs/dialog_template_selector.cpp:81
+#, fuzzy
 msgid ""
 "Choose from a variety of pre-configured project templates to jumpstart your "
 "PCB design. Templates provide ready-to-use project structures with common "
 "components, libraries, and design rules."
 msgstr ""
+"Für den Schnellstart Ihres PCB-Designs können Sie aus einer Vielzahl an "
+"vorkonfigurierten Projektvorlagen auswählen. Vorlagen stellen vorgefertigte "
+"Projektstrukturen mit allgemeinen Bauteilen, Biblitheken und Designregeln "
+"zur Verfügung."
 
 #: kicad/dialogs/dialog_template_selector.cpp:85
 msgid "Browse Templates"
@@ -30044,7 +30049,7 @@ msgstr "Erfolg"
 #: libs/kiplatform/include/printing.h:47
 #, fuzzy
 msgid "Cancelled"
-msgstr "Abbrechen"
+msgstr "Abgebrochen"
 
 #: libs/kiplatform/include/printing.h:48
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:499
@@ -30059,7 +30064,7 @@ msgstr "Fehler beim Laden von PDF"
 #: libs/kiplatform/include/printing.h:50
 #, fuzzy
 msgid "Failed to print"
-msgstr "Gefilterte Footprints"
+msgstr "Druckvorgang fehlgeschlagen"
 
 #: libs/kiplatform/include/printing.h:51
 msgid "Unsupported"
@@ -34230,7 +34235,7 @@ msgstr "Min. Freiraum"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:865
 #, fuzzy
 msgid "Min track width"
-msgstr "Minimale Leiterbahnbreite"
+msgstr "Min. Leiterbahnbreite"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:868
 msgid "Min drill diameter"
@@ -35818,7 +35823,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
 #, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Datei erfolgreich erstellt."
+msgstr "IPC-2581-Datei erfolgreich erstellt."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -36913,11 +36918,14 @@ msgstr ""
 "Schriftstärke wird begrenzt."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:693
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
+"Sie versuchen Lagen, die von dem Footprint '%s' verwendet werden, zu "
+"entfernen.\n"
+"Bitte entfernen Sie zuerst die Objekte, die diese Lagen verwenden."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -36946,7 +36954,7 @@ msgstr "Kupferlagen"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
 #, fuzzy
 msgid "User Layers"
-msgstr "Weitere Lagen"
+msgstr "Benutzerlagen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid "Private Layers"
@@ -37435,12 +37443,12 @@ msgstr "Entsperrte Leiterbahnen"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
 #, fuzzy
 msgid "Locked vias"
-msgstr "Gesperrte Elemente"
+msgstr "Gesperrte Vias"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
 #, fuzzy
 msgid "Unlocked vias"
-msgstr "Entsperrte Leiterbahnen"
+msgstr "Entsperrte Vias"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
 #, c-format
@@ -38162,14 +38170,13 @@ msgid "KiCad Layer"
 msgstr "KiCad-Lage"
 
 #: pcbnew/dialogs/dialog_map_layers.cpp:332
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
 "Alle erforderlichen Lagen (mit \"*\" markiert) müssen zugeordnet werden. "
 "Klicken Sie auf \"Lagen automatisch zuordnen\", um die verbleibenden Lagen "
-"automatisch anzupassen"
+"automatisch zuzuweisen."
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:86
 msgid "Rotate around item anchor"
@@ -38789,9 +38796,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Halbloch-Pad (castellated; nur durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round through hole only)"
-msgstr "Halbloch-Pad (castellated; nur durchgehende Bohrung)"
+msgstr "Pressitz-Pad (nur runde, durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:648
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:420
@@ -41615,8 +41621,8 @@ msgid ""
 "Consult your PCB manufacturer's specifications for solder mask expansion, "
 "web width, and clearance settings."
 msgstr ""
-"Verwenden Sie die Empfehlungen Ihres Platinenfertigers für "
-"Lötstoppmaskenerweiterung und minimale Brückenbreite."
+"Ziehen Sie die Empfehlungen Ihres Platinenfertigers für "
+"Lötstoppmaskenerweiterung und minimale Brückenbreite zu Rate."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
 #, fuzzy
@@ -41763,17 +41769,17 @@ msgstr "FEHLER:"
 #: pcbnew/dialogs/panel_setup_rules.cpp:765
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
-msgstr ""
+msgstr "Die Regeln '%s' und '%s' teilen die gleiche Bedingung."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:785
 #, fuzzy, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "Referenzbezeichner \"%s\" in \"%s\" ändern."
+msgstr "Regel \"%s\" referenziert auf die nicht definierte Netzklasse \"%s\"."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
-msgstr "Referenzbezeichner %s in %s ändern."
+msgstr "Regel %s referenziert auf nicht definierte Lage(n): %s."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:869
 msgid "Design rules cannot be added without a project"
@@ -44754,9 +44760,8 @@ msgid "Edit Zone Properties"
 msgstr "Zoneneigenschaften bearbeiten"
 
 #: pcbnew/exporters/export_d356.cpp:413
-#, fuzzy
 msgid "Do not export unconnected pads"
-msgstr "In nicht-verbundene Segmente zerschneiden"
+msgstr "Exportieren Sie keine nicht verbundenen Pads"
 
 #: pcbnew/exporters/export_d356.cpp:443 pcbnew/tools/pcb_actions.cpp:1245
 msgid "Generate IPC-D-356 netlist file"
@@ -45379,17 +45384,17 @@ msgstr "Footprint-Auswahl"
 #: pcbnew/footprint_chooser_frame.cpp:150
 #, fuzzy
 msgid "Show/hide description panel"
-msgstr "Suchfeld anzeigen/ausblenden"
+msgstr "Beschreibungsfeld anzeigen/ausblenden"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
 #, fuzzy
 msgid "Show/hide 3D view panel"
-msgstr "Suchfeld anzeigen/ausblenden"
+msgstr "3D-Anzeigefeld anzeigen/ausblenden"
 
 #: pcbnew/footprint_chooser_frame.cpp:168
 #, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "Zeige Footprintwerte"
+msgstr "Footprintfeld anzeigen/ausblenden"
 
 #: pcbnew/footprint_chooser_frame.cpp:176
 msgid "Show 3D viewer in own window"
@@ -46414,7 +46419,7 @@ msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
 #, fuzzy, c-format
 msgid "Added %s group '%s'."
-msgstr "%s hinzugefügt Gruppe \"%s\"."
+msgstr "%s zur Gruppe \"%s\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
@@ -46728,9 +46733,8 @@ msgid "Castellated"
 msgstr "Castellated (Halbloch)"
 
 #: pcbnew/pad.cpp:1403
-#, fuzzy
 msgid "Press-fit"
-msgstr "Voreinstellungen"
+msgstr "Presssitz"
 
 #: pcbnew/pad.cpp:1436
 msgid "Length in Package"
@@ -48544,8 +48548,9 @@ msgid "Generating content section"
 msgstr "Erzeuge Inhalts-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
+#, fuzzy
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Pad hat nicht unterstützen Typ; es wurde übersprungen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1176
 msgid "Generating history section"
@@ -48564,9 +48569,10 @@ msgstr ""
 "unvollständig sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
-#, c-format
+#, c-format, fuzzy
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Dem Bauteil \"%s\" fehlt die OEM-Referenz; BOM-Eintrag wird übersprungen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1369
 msgid "Generating CAD data"
@@ -48580,9 +48586,11 @@ msgstr ""
 "ausführen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
+#, fuzzy
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Doppelten Footprint-Zeiger gefunden; IPC-2581 Ausgabe könnte fehlerhaft sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2784
 #, c-format
@@ -48590,18 +48598,26 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "Exportieren der Lage %s und der Netzliste %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2820
+#, fuzzy
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Via verwendet nicht unterstützten Padstack; wird in den Bohrdaten "
+"weggelassen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2846
+#, fuzzy
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Pad verwendet nicht unterstützten Padstack; Bohrung wird in den Bohrdaten "
+"weggelassen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2988
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Teardrops werden in der IPC-2581 Rev.B nicht unterstützt; sie werden als "
+"Zonen exportiert."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3423
 msgid "Generating logistic section"
@@ -48850,17 +48866,19 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5161
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
-msgstr ""
+msgstr "Ungültiger Stackup im Footprint: ungerade Anzahl an Kupferlagen (%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5169
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
-msgstr ""
+msgstr "Ungültiger Stackup im Footprint: Kupferlagen sind nicht fortlaufend."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5175
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
+"Ungültiger Stackup im Footprint: Technologielagen sind in den Footprints "
+"impliziert und sollten nicht im Stackup angegeben werden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5400
 #, c-format
@@ -49505,7 +49523,7 @@ msgstr "Platine gespeichert\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:2317
 #, fuzzy
 msgid "Failed to save board.\n"
-msgstr "Fehler beim Speichern der Platine.\n"
+msgstr "Das Speichern der Platine ist fehlgeschlagen.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2419
 #, c-format
@@ -51465,7 +51483,7 @@ msgstr "Gewählten Designblock in aktuelle Leiterplatte einfügen"
 #: pcbnew/tools/pcb_actions.cpp:470
 #, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "Neue Designblock-Bibliothek"
+msgstr "Designblock verwenden"
 
 #: pcbnew/tools/pcb_actions.cpp:471
 #, fuzzy
@@ -52160,8 +52178,9 @@ msgid "Collect And Embed 3D Models"
 msgstr "3D-Modelle sammeln und einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
+#, fuzzy
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "3D-Modelle von Footprints sammeln und sie in die Platine einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 msgid "Switch Track Width to Next"
@@ -52234,14 +52253,14 @@ msgstr "Ausgewählte Elemente sperren oder entsperren"
 #: pcbnew/tools/pcb_actions.cpp:1411
 #, fuzzy
 msgid "Cycle H/V/45 constraint"
-msgstr "H/V/45-Einschränkung wechseln"
+msgstr "H/V/45-Beschränkung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1412
 #, fuzzy
 msgid ""
 "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only"
 msgstr ""
-"Zwischen einer 0°, 45° oder horizontalen/vertikalen-Einschränkung wechseln"
+"Nur zwischen einer 0°, 45° oder horizontalen/vertikalen-Beschränkung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1420
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -53390,7 +53409,7 @@ msgstr "Castellated Pads: "
 
 #: pcbnew/tools/pcb_control.cpp:2579
 msgid "Press-fit pads: "
-msgstr ""
+msgstr "Pressitz Pads: "
 
 #: pcbnew/tools/pcb_control.cpp:2583
 msgid "Plated board edge: "
