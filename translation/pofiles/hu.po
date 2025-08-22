@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-08-22 06:41+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -39109,7 +39109,6 @@ msgid "Origin:"
 msgstr "Kezdőpont:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:148
-#, fuzzy
 msgid "Absolute"
 msgstr "Abszolút"
 
