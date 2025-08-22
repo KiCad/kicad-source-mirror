@@ -337,17 +337,6 @@ BOOST_AUTO_TEST_CASE( NullReporter_Singleton )
     BOOST_CHECK_EQUAL( &reporter1, &reporter2 );
 }
 
-BOOST_AUTO_TEST_CASE( NullReporter_NoMessages )
-{
-    REPORTER& reporter = NULL_REPORTER::GetInstance();
-
-    BOOST_CHECK( !reporter.HasMessage() );
-
-    reporter.Report( wxT("Test message"), RPT_SEVERITY_INFO );
-
-    BOOST_CHECK( !reporter.HasMessage() );  // Should still report no messages
-}
-
 BOOST_AUTO_TEST_CASE( NullReporter_SeverityMask )
 {
     REPORTER& reporter = NULL_REPORTER::GetInstance();
@@ -368,17 +357,6 @@ BOOST_AUTO_TEST_CASE( CliReporter_Singleton )
     BOOST_CHECK_EQUAL( &reporter1, &reporter2 );
 }
 
-BOOST_AUTO_TEST_CASE( CliReporter_NoMessages )
-{
-    REPORTER& reporter = CLI_REPORTER::GetInstance();
-
-    BOOST_CHECK( !reporter.HasMessage() );
-
-    reporter.Report( wxT("Test message"), RPT_SEVERITY_INFO );
-
-    BOOST_CHECK( !reporter.HasMessage() );  // Should not store messages
-}
-
 BOOST_AUTO_TEST_CASE( StdoutReporter_Singleton )
 {
     REPORTER& reporter1 = STDOUT_REPORTER::GetInstance();
@@ -387,34 +365,12 @@ BOOST_AUTO_TEST_CASE( StdoutReporter_Singleton )
     BOOST_CHECK_EQUAL( &reporter1, &reporter2 );
 }
 
-BOOST_AUTO_TEST_CASE( StdoutReporter_NoMessages )
-{
-    REPORTER& reporter = STDOUT_REPORTER::GetInstance();
-
-    BOOST_CHECK( !reporter.HasMessage() );
-
-    reporter.Report( wxT("Test message"), RPT_SEVERITY_INFO );
-
-    BOOST_CHECK( !reporter.HasMessage() );  // Should not store messages
-}
-
 BOOST_AUTO_TEST_CASE( WxLogReporter_Singleton )
 {
     REPORTER& reporter1 = WXLOG_REPORTER::GetInstance();
     REPORTER& reporter2 = WXLOG_REPORTER::GetInstance();
 
     BOOST_CHECK_EQUAL( &reporter1, &reporter2 );
-}
-
-BOOST_AUTO_TEST_CASE( WxLogReporter_NoMessages )
-{
-    REPORTER& reporter = WXLOG_REPORTER::GetInstance();
-
-    BOOST_CHECK( !reporter.HasMessage() );
-
-    reporter.Report( wxT("Test message"), RPT_SEVERITY_INFO );
-
-    BOOST_CHECK( !reporter.HasMessage() );  // Should not store messages
 }
 
 // Note: WX_TEXT_CTRL_REPORTER and STATUSBAR_REPORTER tests would require
@@ -428,14 +384,9 @@ BOOST_AUTO_TEST_CASE( ReporterInterface_Polymorphism )
 
     for( auto& reporter : reporters )
     {
-        reporter->Report( wxT("Polymorphic test"), RPT_SEVERITY_INFO );
+        reporter->Report( wxT( "Polymorphic test" ), RPT_SEVERITY_INFO );
 
-        // WX_STRING_REPORTER and TEST_REPORTER should both store messages
-        if( dynamic_cast<WX_STRING_REPORTER*>( reporter.get() ) ||
-            dynamic_cast<TEST_REPORTER*>( reporter.get() ) )
-        {
-            BOOST_CHECK( reporter->HasMessage() );
-        }
+        BOOST_CHECK( reporter->HasMessage() );
     }
 }
 

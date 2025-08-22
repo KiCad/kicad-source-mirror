@@ -65,12 +65,6 @@ REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, SEVERITY aSeveri
 }
 
 
-bool WX_TEXT_CTRL_REPORTER::HasMessage() const
-{
-    return !m_textCtrl->IsEmpty();
-}
-
-
 REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     REPORTER::Report( aText, aSeverity );
@@ -90,12 +84,6 @@ void WX_STRING_REPORTER::Clear()
 {
     REPORTER::Clear();
     m_string.clear();
-}
-
-
-bool WX_STRING_REPORTER::HasMessage() const
-{
-    return !m_string.IsEmpty();
 }
 
 
@@ -230,13 +218,4 @@ REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
         m_statusBar->SetStatusText( aText, m_position );
 
     return *this;
-}
-
-
-bool STATUSBAR_REPORTER::HasMessage() const
-{
-    if( m_statusBar )
-        return !m_statusBar->GetStatusText( m_position ).IsEmpty();
-
-    return false;
 }

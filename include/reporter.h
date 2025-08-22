@@ -73,7 +73,7 @@ class KICOMMON_API REPORTER
 {
 public:
     REPORTER() :
-            m_severityMask( 0 )
+            m_reportedSeverityMask( 0 )
     { }
 
     virtual ~REPORTER()
@@ -102,7 +102,7 @@ public:
     virtual REPORTER& Report( const wxString& aText,
                               SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
     {
-        m_severityMask |= aSeverity;
+        m_reportedSeverityMask |= aSeverity;
         return *this;
     }
 
@@ -129,11 +129,11 @@ public:
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
 
     /**
-     * Returns true if the reporter client is non-empty.
+     * Returns true if any messages were reported.
      */
     virtual bool HasMessage() const
     {
-        return m_severityMask != 0;
+        return m_reportedSeverityMask != 0;
     }
 
     /**
@@ -142,7 +142,7 @@ public:
      */
     virtual bool HasMessageOfSeverity( int aSeverityMask ) const
     {
-        return ( m_severityMask & aSeverityMask ) != 0;
+        return ( m_reportedSeverityMask & aSeverityMask ) != 0;
     }
 
     virtual EDA_UNITS GetUnits() const
@@ -152,11 +152,11 @@ public:
 
     virtual void Clear()
     {
-        m_severityMask = 0;
+        m_reportedSeverityMask = 0;
     }
 
 private:
-    int m_severityMask;
+    int m_reportedSeverityMask;
 };
 
 
@@ -179,8 +179,6 @@ public:
     REPORTER& Report( const wxString& aText,
                       SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
-    bool HasMessage() const override;
-
 private:
     wxTextCtrl* m_textCtrl;
 };
@@ -200,8 +198,6 @@ public:
     { }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override;
 
     const wxString& GetMessages() const;
     void            Clear() override;
@@ -307,8 +303,6 @@ public:
     { }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override;
 
 private:
     wxStatusBar* m_statusBar;
