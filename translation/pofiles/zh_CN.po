@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-22 06:41+0000\n"
+"PO-Revision-Date: 2025-08-23 07:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -1387,7 +1387,7 @@ msgstr "3R 解决方案:"
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d 像素"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -2854,9 +2854,8 @@ msgid "Design Block Properties"
 msgstr "设计图块属性"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "标签与标签连接"
+msgstr "生成数据库连接"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2868,9 +2867,8 @@ msgid "Custom"
 msgstr "自定义"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "源名称"
+msgstr "数据源名称"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2882,12 +2880,10 @@ msgid "Password"
 msgstr "密码"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "时间"
+msgstr "超时"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
 msgstr "连接字符串(URL):"
 
@@ -2903,14 +2899,12 @@ msgid "Tables"
 msgstr "表格"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "没有数据库连接"
+msgstr "无法连接到数据库"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "数据文件错误。"
+msgstr "数据库错误"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -5255,14 +5249,12 @@ msgid "File history cleared."
 msgstr "文件历史已清除。"
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "不再显示"
+msgstr "「不再显示」的对话框已重置。"
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "重置为默认值"
+msgstr "所有对话框已重置为默认值。"
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -5286,17 +5278,15 @@ msgstr "清除「最近文件」历史"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "重置「不再显示」的对话框"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "重置 %s 为默认值"
+msgstr "重置所有对话框为默认值"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "全部还原为默认值"
+msgstr "重置所有程序设置为默认值"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5940,42 +5930,36 @@ msgstr ""
 "是否重新加载?"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "平移和缩放"
+msgstr "平移和旋转"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "动画速度："
+msgstr "旋转速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "箭头方向:"
+msgstr "反转旋转方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "保持端点或起点的方向"
+msgstr "调换旋转方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "自动平移速度:"
+msgstr "平移速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "反转垂直平移方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "反转水平平移方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "从选区中移除"
+msgstr "反转缩放方向"
 
 #: common/dialogs/panel_text_variables.cpp:114
 msgid ""
@@ -6223,9 +6207,9 @@ msgid "Expecting '%s'"
 msgstr "应为 '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "应为 '%s'"
+msgstr "应为 %s。实际 '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -7385,19 +7369,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "找不到分支 '%s': %s"
 
 #: common/git/git_branch_handler.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "找不到 '%s' 的分支 head"
+msgstr "找不到 '%s' 的分支 head: %s"
 
 #: common/git/git_branch_handler.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "切换到分支 '%s' 失败"
+msgstr "切换到分支 '%s' 失败: %s"
 
 #: common/git/git_branch_handler.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "更新分支 '%s' 的 HEAD 引用失败"
+msgstr "更新分支 '%s' 的 HEAD 引用失败: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7455,9 +7439,9 @@ msgid "Failed to create commit: %s"
 msgstr "无法创建提交: %s"
 
 #: common/git/git_init_handler.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Git 工程初始化失败。"
+msgstr "Git 仓库初始化失败: %s"
 
 #: common/git/git_init_handler.cpp:87
 msgid "No repository available to set up remote"
@@ -18058,7 +18042,7 @@ msgstr "加载原理图文件 '%s' 时内存耗尽。"
 #: eeschema/files-io.cpp:1448 eeschema/sheet.cpp:234
 #, c-format
 msgid "Failed to load '%s'."
-msgstr "未能加载 '%s'。"
+msgstr "'%s' 加载失败。"
 
 #: eeschema/files-io.cpp:355
 msgid ""
@@ -18235,9 +18219,9 @@ msgstr "中止工程保存"
 
 #: eeschema/files-io.cpp:1271 eeschema/files-io.cpp:1297 pcbnew/files.cpp:1202
 #: pcbnew/files.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "无法将绘制文件写入文件夹 '%s'。"
+msgstr "无法将自动保存的文件写入到只读的文件夹:  '%s'"
 
 #: eeschema/files-io.cpp:1444
 #, c-format
@@ -18504,7 +18488,7 @@ msgstr "排除电路板设置差异。"
 #: eeschema/libarch.cpp:77
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "未能将符号 %s 添加到库文件 '%s'。"
+msgstr "添加符号 %s 到库文件 '%s' 失败。"
 
 #: eeschema/libarch.cpp:86
 msgid "Unexpected exception occurred."
@@ -18886,7 +18870,7 @@ msgstr "未恢复元件符号。"
 #: eeschema/symbol_editor/symbol_editor.cpp:1203
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "未能创建符号库文件 '%s'。"
+msgstr "符号库文件 '%s' 创建失败。"
 
 #: eeschema/project_rescue.cpp:870
 #, c-format
@@ -22951,7 +22935,7 @@ msgstr "修改可见性"
 #: eeschema/tools/assign_footprints.cpp:233
 #, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "未能打开符号封装链接文件 '%s'。"
+msgstr "符号封装链接文件 '%s' 打开失败。"
 
 #: eeschema/tools/backannotate.cpp:76
 msgid "Select at least one property to back annotate."
@@ -24640,13 +24624,12 @@ msgid "Export symbols to library:"
 msgstr "将符号导出到库:"
 
 #: eeschema/tools/sch_editor_control.cpp:355
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "将原理图中的电源符号纳入库中?"
+msgstr "将电源符号一同导出"
 
 #: eeschema/tools/sch_editor_control.cpp:356
 msgid "Update schematic symbols to link to exported symbols"
-msgstr ""
+msgstr "更新原理图中的符号以链接到已导出的符号"
 
 #: eeschema/tools/sch_editor_control.cpp:789
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -26510,7 +26493,7 @@ msgstr "隐藏此消息。"
 
 #: include/wxstream_helper.h:49
 msgid "Failed to output data"
-msgstr "未能输出数据"
+msgstr "数据输出失败"
 
 #: kicad/cli/command.cpp:127
 msgid "Input directory"
@@ -28193,9 +28176,8 @@ msgid "Add Default Repository"
 msgstr "添加默认仓库"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
-#, fuzzy
 msgid "Fully qualified repository url:"
-msgstr "请输入合规的仓库 URL"
+msgstr "请输入完整的仓库 URL:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add Repository"
@@ -28584,7 +28566,7 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"未能下载 URL %s\n"
+"URL %s 下载失败\n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:191
@@ -28649,7 +28631,7 @@ msgstr "正在移除目录 %s"
 #: kicad/pcm/pcm_task_manager.cpp:514
 #, c-format
 msgid "Failed to remove directory %s"
-msgstr "未能移除目录 %s"
+msgstr "目录 %s 移除失败"
 
 #: kicad/pcm/pcm_task_manager.cpp:575
 #, c-format
@@ -28936,9 +28918,8 @@ msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "确定要从工程中移除 Git 追踪?"
 
 #: kicad/project_tree_pane.cpp:1836
-#, fuzzy
 msgid "Failed to remove VCS"
-msgstr "未能移除目录 %s"
+msgstr "VCS 移除失败"
 
 #: kicad/project_tree_pane.cpp:2077
 msgid "The selected directory is not a Git project."
@@ -29210,9 +29191,8 @@ msgid "File not found"
 msgstr "文件未找到"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "未能加载 '%s'。"
+msgstr "PDF 加载失败"
 
 #: libs/kiplatform/include/printing.h:50
 #, fuzzy
@@ -35944,9 +35924,8 @@ msgid "Custom Layers"
 msgstr "自定义板层"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
-#, fuzzy
 msgid "Use custom stackup"
-msgstr "使用自定义值..."
+msgstr "使用自定义叠层"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 msgid "Copper layers"
@@ -36851,7 +36830,7 @@ msgstr "所有铜层"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381
 msgid "Start, end, and connected layers"
-msgstr "启动、结束和连接层"
+msgstr "起始, 结束和已连接层"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1150
@@ -43542,9 +43521,8 @@ msgid "Save Footprint Association File"
 msgstr "保存封装分配文件"
 
 #: pcbnew/exporters/export_gencad.cpp:45
-#, fuzzy
 msgid "Export to GenCAD"
-msgstr "导出 GenCAD..."
+msgstr "导出到 GenCAD"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:176
 msgid ""
@@ -44293,14 +44271,13 @@ msgid "Export footprints to library:"
 msgstr "导出封装到库:"
 
 #: pcbnew/footprint_libraries_utils.cpp:639
-#, fuzzy
 msgid "Update board footprints to link to exported footprints"
-msgstr "更新板上的封装指向 %s?"
+msgstr "更新电路板中的封装以链接到已导出的封装"
 
 #: pcbnew/footprint_libraries_utils.cpp:830
 #: pcbnew/footprint_viewer_frame.cpp:737
 msgid "No board currently open."
-msgstr "当前没有打开的板。"
+msgstr "当前未打开任何电路板。"
 
 #: pcbnew/footprint_libraries_utils.cpp:859
 msgid ""
@@ -47195,9 +47172,8 @@ msgid "Saving file"
 msgstr "保存文件"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3467
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "无法将文件保存到缓存"
+msgstr "无法将 IPC-2581 数据保存到缓存。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -48731,7 +48707,7 @@ msgstr "找不到原理图文件 '%s'。"
 
 #: pcbnew/tools/board_editor_control.cpp:712
 msgid "Eeschema failed to load."
-msgstr "未能加载 Eeschema。"
+msgstr "Eeschema 加载失败。"
 
 #: pcbnew/tools/board_editor_control.cpp:825
 msgid "Increase Track Width"
