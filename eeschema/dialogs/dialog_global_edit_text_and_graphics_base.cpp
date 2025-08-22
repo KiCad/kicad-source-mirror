@@ -313,7 +313,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxBOTTOM, 0 );
 
-	m_showFieldNames = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Show field name"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_showFieldNames = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Show field name"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	fgSizer1->Add( m_showFieldNames, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText13 = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("(fields only)"), wxDefaultPosition, wxDefaultSize, 0 );

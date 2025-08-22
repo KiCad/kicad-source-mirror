@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wx
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 0, 2, 3, 3 );
 
-	m_All_Items = new wxCheckBox( this, wxID_ANY, _("All items"), wxPoint( -1,-1 ), wxDefaultSize, wxCHK_3STATE );
+	m_All_Items = new wxCheckBox( this, wxID_ANY, _("All items"), wxPoint( -1,-1 ), wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	gSizer1->Add( m_All_Items, 0, 0, 5 );
 
 	m_Hidden_Spacer = new wxCheckBox( this, wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxDefaultSize, 0 );

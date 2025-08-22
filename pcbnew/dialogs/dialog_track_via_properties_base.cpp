@@ -38,7 +38,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bNetWidgetsRightCol;
 	bNetWidgetsRightCol = new wxBoxSizer( wxHORIZONTAL );
 
-	m_viaNotFree = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Automatically update via nets"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_viaNotFree = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Automatically update via nets"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	m_viaNotFree->SetToolTip( _("Automatically change the net of this via when the pads or zones it touches are changed") );
 
 	bNetWidgetsRightCol->Add( m_viaNotFree, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -55,7 +55,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_sbCommonSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
-	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	m_sbCommonSizer->Add( m_lockedCbox, 0, wxTOP|wxBOTTOM|wxLEFT, 4 );
 
 
@@ -200,7 +200,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizerTrackMaskMargin->SetFlexibleDirection( wxBOTH );
 	fgSizerTrackMaskMargin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_trackHasSolderMask = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_trackHasSolderMask = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	fgSizerTrackMaskMargin->Add( m_trackHasSolderMask, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_trackMaskMarginLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -443,10 +443,10 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	bSizerLeftCol11->Add( 0, 2, 0, wxEXPAND, 5 );
 
-	m_cbTeardrops = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Add teardrops on via's track connections"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_cbTeardrops = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Add teardrops on via's track connections"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	bSizerLeftCol11->Add( m_cbTeardrops, 0, wxBOTTOM|wxRIGHT, 3 );
 
-	m_cbTeardropsUseNextTrack = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Allow teardrops to span two track segments"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	m_cbTeardropsUseNextTrack = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Allow teardrops to span two track segments"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
 	bSizerLeftCol11->Add( m_cbTeardropsUseNextTrack, 0, wxBOTTOM|wxRIGHT, 5 );
