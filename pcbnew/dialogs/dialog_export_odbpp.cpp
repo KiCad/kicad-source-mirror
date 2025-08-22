@@ -271,7 +271,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
     bool     outputIsSingleFile = aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
     wxString msg;
 
-    if( !PATHS::EnsurePathExists( outputFn.GetPath(), outputIsSingleFile ) )
+    if( !PATHS::EnsurePathExists( outputFn.GetFullPath(), outputIsSingleFile ) )
     {
         msg.Printf( _( "Cannot create output directory '%s'." ), outputFn.GetFullPath() );
 
