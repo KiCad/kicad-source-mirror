@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-08-22 06:41+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4429,8 +4429,9 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Hardwarebeschleunigte Grafik (empfohlen)"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
+#, fuzzy
 msgid "Fallback Graphics"
-msgstr ""
+msgstr "Langsame Grafik"
 
 #: common/dialogs/panel_common_settings_base.cpp:42
 msgid ""
@@ -5130,16 +5131,23 @@ msgid "Copy the reference for this embedded file"
 msgstr "Referenz dieser eingebetteten Datei kopieren"
 
 #: common/dialogs/panel_embedded_files.cpp:206
+#, fuzzy
 msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Die gelöschten eingebetteten Dateien beziehen sich auch auf einige "
+"Footprints.\n"
+"Sollen sie auch aus diesen Footprints gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:211
+#, fuzzy
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Die gelöschten eingebetteten Dateien beziehen sich auch auf einige Symbole.\n"
+"Sollen sie auch aus diesen Symbolen gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:328
 #: common/dialogs/panel_embedded_files.cpp:436
@@ -5410,8 +5418,9 @@ msgid "Clear \"Open Recent\" History"
 msgstr "Liste der zuletzt verwendeten Dateien leeren"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
+#, fuzzy
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "\"Nicht wieder anzeigen\"-Dialoge zurücksetzen"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
 #, fuzzy
@@ -5565,8 +5574,9 @@ msgid "Right button drag:"
 msgstr "Ziehen mit rechter Taste:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
+#, fuzzy
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Schwenk der Mausbewegung über Taste:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
