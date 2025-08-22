@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-22 06:41+0000\n"
+"PO-Revision-Date: 2025-08-23 07:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -112,7 +112,7 @@ msgstr "Legutóbbi renderelési idő %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:803
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "OpenGL hiba háttérben zajló renderelés közben: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:967
 #, c-format
@@ -2028,7 +2028,7 @@ msgstr "Felhasználó.Eco2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:188
 msgid "Postscript (.ps file)"
@@ -5522,7 +5522,7 @@ msgstr "Apertúra"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
 msgid "Left button drag:"
-msgstr ""
+msgstr "Bal gomb vonszolás:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 #, fuzzy
@@ -5540,7 +5540,7 @@ msgstr "A kijelölt elem(ek) vonszolása"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Középső gomb vonszolás:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -5593,7 +5593,7 @@ msgstr "Nincs"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:148
 msgid "Right button drag:"
-msgstr ""
+msgstr "Jobb gomb vonszolás:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
@@ -8261,7 +8261,6 @@ msgstr "Nem sikerült megnyitni az alábbi fájlt: '%s'"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:119
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "Fájl importálását megszakította a felhasználó."
 
@@ -8322,9 +8321,9 @@ msgstr "Nem sikerült értelmezni a(z) %s busz-csoportot."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:171
 #: common/io/easyedapro/easyedapro_import_utils.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Lap szerkesztés befejezése"
+msgstr "JSON hiba \"%s\" olvasásakor: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:175
 #: common/io/easyedapro/easyedapro_import_utils.cpp:230
@@ -14718,13 +14717,11 @@ msgid "Show or hide pin numbers"
 msgstr "Láb számozás megjelenítése / elrejtése"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:229
-#, fuzzy
 msgid "Show pin name"
 msgstr "Lábnév megjelenítése"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:185
-#, fuzzy
 msgid "Show or hide pin names"
 msgstr "Lábnév megjelenítése / elrejtése"
 
@@ -48384,7 +48381,7 @@ msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr "A(z) %s alkatrész %s lábához tartozó vezeték törlése."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1084
-#, fuzzy, c-format
+#, c-format
 msgid "Add net %s."
 msgstr "%s vezeték hozzáadása."
 
@@ -48409,9 +48406,9 @@ msgid "Connected %s pin %s to %s."
 msgstr "%s:%s láb csatlakoztatása (-> %s)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1202
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Via átcsatlakoztatása (%s -> %s)"
+msgstr "Via átcsatlakoztatása (%s -> %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1222
 #, fuzzy, c-format
@@ -48419,7 +48416,7 @@ msgid "Reconnected via from %s to %s."
 msgstr "Via átcsatlakoztatása (%s -> %s)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Ismeretlen (%s) vezetékhez csatlakozó via."
 
@@ -48643,19 +48640,16 @@ msgstr ""
 
 #: pcbnew/pad.cpp:1133 pcbnew/pad.cpp:1311 pcbnew/pad.cpp:1327
 #: pcbnew/pad.cpp:1336
-#, fuzzy
 msgid "pad"
-msgstr "Forrszem"
+msgstr "forrszem"
 
 #: pcbnew/pad.cpp:1359 pcbnew/pad.cpp:2839
-#, fuzzy
 msgid "Pin Type"
 msgstr "Láb típus"
 
 #: pcbnew/pad.cpp:1396
-#, fuzzy
 msgid "BGA"
-msgstr "Forrszem hozzáadása"
+msgstr "BGA"
 
 #: pcbnew/pad.cpp:1397
 #, fuzzy
