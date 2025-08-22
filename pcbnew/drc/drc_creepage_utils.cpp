@@ -2522,7 +2522,7 @@ std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNetElements( int aNetCode, PCB_LA
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( pad->GetNetCode() != aNetCode )
+            if( pad->GetNetCode() != aNetCode || !pad->GetLayerSet().test( aLayer ) )
                 continue;
 
             std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( aLayer );
