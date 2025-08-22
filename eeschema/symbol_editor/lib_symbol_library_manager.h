@@ -24,6 +24,27 @@
 #include <symbol_tree_synchronizing_adapter.h>
 
 
+struct NEW_SYMBOL_PROPERTIES
+{
+    wxString name;
+    wxString parentSymbolName;
+    wxString reference;
+    int      unitCount;
+    bool     pinNameInside;
+    int      pinTextPosition;
+    bool     powerSymbol;
+    bool     showPinNumber;
+    bool     showPinName;
+    bool     unitsInterchangeable;
+    bool     includeInBom;
+    bool     includeOnBoard;
+    bool     alternateBodyStyle;
+    bool     keepFootprint;
+    bool     keepDatasheet;
+    bool     transferUserFields;
+    bool     keepContentUserFields;
+};
+
 /**
  * Symbol library management helper that is specific to the symbol library editor frame
  *
@@ -39,6 +60,11 @@ public:
      */
     void Sync( const wxString& aForceRefresh,
                std::function<void( int, int, const wxString& )> aProgressCallback );
+
+    static std::unique_ptr<LIB_SYMBOL> CreateSymbol( const NEW_SYMBOL_PROPERTIES& aProps,
+                                                     LIB_SYMBOL* aParent );
+
+    bool CreateNewSymbol( const wxString& aLibrary, const NEW_SYMBOL_PROPERTIES& aProps );
 
     /**
      * Return the adapter object that provides the stored data.

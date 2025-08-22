@@ -27,6 +27,8 @@
 
 // Code under test
 #include <symbol_library_manager.h>
+#include <symbol_editor/lib_symbol_library_manager.h>
+#include <sch_field.h>
 
 class SYMBOL_LIBRARY_MANAGER_TEST_FIXTURE
 {
@@ -146,6 +148,71 @@ BOOST_AUTO_TEST_CASE( LibBuffer )
     const bool deletedOk = libBuffer.DeleteBuffer( *buf );
     BOOST_CHECK( deletedOk );
     BOOST_CHECK( libBuffer.GetBuffers().empty() );
+}
+
+
+/**
+ * Test new symbol creation routines.
+ */
+BOOST_AUTO_TEST_CASE( NewSymbolCreation )
+{
+    NEW_SYMBOL_PROPERTIES props;
+
+    props.name = wxS( "Standalone" );
+    props.reference = wxS( "U" );
+    props.unitCount = 2;
+    props.pinNameInside = true;
+    props.pinTextPosition = 2;
+    props.powerSymbol = false;
+    props.showPinNumber = true;
+    props.showPinName = true;
+    props.unitsInterchangeable = false;
+    props.includeInBom = true;
+    props.includeOnBoard = true;
+    props.alternateBodyStyle = false;
+
+    std::unique_ptr<LIB_SYMBOL> standalone =
+            LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( props, nullptr );
+
+    BOOST_CHECK_EQUAL( standalone->GetReferenceField().GetText(), props.reference );
+    BOOST_CHECK_EQUAL( standalone->GetUnitCount(), props.unitCount );
+    BOOST_CHECK( standalone->GetPinNameOffset() > 0 );
+
+    auto parent = std::make_unique<LIB_SYMBOL>( wxS( "Parent" ) );
+    parent->GetValueField().SetText( parent->GetName() );
+    SCH_FIELD* user = new SCH_FIELD( parent.get(), FIELD_T::USER, wxS( "UF" ) );
+    user->SetText( wxS( "V" ) );
+    parent->AddField( user );
+
+    props.name = wxS( "Child" );
+    props.parentSymbolName = parent->GetName();
+    props.keepFootprint = false;
+    props.keepDatasheet = false;
+    props.transferUserFields = true;
+    props.keepContentUserFields = false;
+
+    std::unique_ptr<LIB_SYMBOL> child =
+            LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( props, parent.get() );
+
+    BOOST_CHECK( child->GetParent().lock().get() == parent.get() );
+    BOOST_CHECK( child->GetFootprintField().GetText().IsEmpty() );
+    BOOST_CHECK( child->GetDatasheetField().GetText().IsEmpty() );
+
+    std::vector<SCH_FIELD*> childFields;
+    child->GetFields( childFields );
+
+    bool found = false;
+
+    for( SCH_FIELD* field : childFields )
+    {
+        if( field->GetId() == FIELD_T::USER )
+        {
+            found = true;
+            BOOST_CHECK( field->GetText().IsEmpty() );
+        }
+    }
+
+    BOOST_CHECK( found );
 }
 
 

@@ -391,121 +391,36 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString name = dlg.GetName();
+    NEW_SYMBOL_PROPERTIES props;
 
-    LIB_SYMBOL new_symbol( name );  // do not create symbol on the heap, it will be buffered soon
+    props.name = dlg.GetName();
+    props.parentSymbolName = dlg.GetParentSymbolName();
+    props.reference = dlg.GetReference();
+    props.unitCount = dlg.GetUnitCount();
+    props.pinNameInside = dlg.GetPinNameInside();
+    props.pinTextPosition = dlg.GetPinTextPosition();
+    props.powerSymbol = dlg.GetPowerSymbol();
+    props.showPinNumber = dlg.GetShowPinNumber();
+    props.showPinName = dlg.GetShowPinName();
+    props.unitsInterchangeable = dlg.GetUnitsInterchangeable();
+    props.includeInBom = dlg.GetIncludeInBom();
+    props.includeOnBoard = dlg.GetIncludeOnBoard();
+    props.alternateBodyStyle = dlg.GetAlternateBodyStyle();
+    props.keepFootprint = dlg.GetKeepFootprint();
+    props.keepDatasheet = dlg.GetKeepDatasheet();
+    props.transferUserFields = dlg.GetTransferUserFields();
+    props.keepContentUserFields = dlg.GetKeepContentUserFields();
 
-    wxString parentSymbolName = dlg.GetParentSymbolName();
-
-    if( parentSymbolName.IsEmpty() )
-    {
-        new_symbol.GetReferenceField().SetText( dlg.GetReference() );
-        new_symbol.SetUnitCount( dlg.GetUnitCount() );
-
-        // Initialize new_symbol.m_TextInside member:
-        // if 0, pin text is outside the body (on the pin)
-        // if > 0, pin text is inside the body
-        if( dlg.GetPinNameInside() )
-        {
-            new_symbol.SetPinNameOffset( dlg.GetPinTextPosition() );
-
-            if( new_symbol.GetPinNameOffset() == 0 )
-                new_symbol.SetPinNameOffset( 1 );
-        }
-        else
-        {
-            new_symbol.SetPinNameOffset( 0 );
-        }
-
-        ( dlg.GetPowerSymbol() ) ? new_symbol.SetGlobalPower() : new_symbol.SetNormal();
-        new_symbol.SetShowPinNumbers( dlg.GetShowPinNumber() );
-        new_symbol.SetShowPinNames( dlg.GetShowPinName() );
-        new_symbol.LockUnits( !dlg.GetUnitsInterchangeable() );
-        new_symbol.SetExcludedFromBOM( !dlg.GetIncludeInBom() );
-        new_symbol.SetExcludedFromBoard( !dlg.GetIncludeOnBoard() );
-
-        if( dlg.GetUnitCount() < 2 )
-            new_symbol.LockUnits( false );
-
-        new_symbol.SetHasAlternateBodyStyle( dlg.GetAlternateBodyStyle() );
-    }
-    else
-    {
-        LIB_SYMBOL* parent = m_libMgr->GetSymbol( parentSymbolName, lib );
-        wxCHECK( parent, /* void */ );
-        new_symbol.SetParent( parent );
-
-        // Inherit the parent mandatory field attributes.
-        for( FIELD_T fieldId : MANDATORY_FIELDS )
-        {
-            SCH_FIELD* field = new_symbol.GetField( fieldId );
-            SCH_FIELD* parentField = parent->GetField( fieldId );
-
-            *field = *parentField;
-
-            switch( fieldId )
-            {
-            case FIELD_T::REFERENCE:
-                // parent's reference already copied
-                break;
-
-            case FIELD_T::VALUE:
-                if( parent->IsPower() )
-                    field->SetText( name );
-                break;
-
-            case FIELD_T::FOOTPRINT:
-                if( !dlg.GetKeepFootprint() )
-                    field->SetText( wxEmptyString );
-                break;
-
-            case FIELD_T::DATASHEET:
-                // - footprint might be the same as parent, but might not
-                // - datasheet is most likely different
-                // - probably best to play it safe and copy neither
-                if( !dlg.GetKeepDatasheet() )
-                    field->SetText( wxEmptyString );
-                break;
-
-            default:
-                break;
-            }
-
-            field->SetParent( &new_symbol );
-        }
-
-        if( dlg.GetTransferUserFields() )
-        {
-            std::vector<SCH_FIELD*> listFields;
-            parent->GetFields( listFields );
-
-            for( SCH_FIELD* field : listFields )
-            {
-                if( field->GetId() == FIELD_T::USER )
-                {
-                    SCH_FIELD* new_field = new SCH_FIELD( *field );
-
-                    if( !dlg.GetKeepContentUserFields() )
-                        new_field->SetText( wxEmptyString );
-
-                    new_field->SetParent( &new_symbol );
-                    new_symbol.AddField( new_field );
-                }
-            }
-        }
-    }
-
-    m_libMgr->UpdateSymbol( &new_symbol, lib );
+    m_libMgr->CreateNewSymbol( lib, props );
     SyncLibraries( false );
-    LoadSymbol( name, lib, 1 );
+    LoadSymbol( props.name, lib, 1 );
 
-    // must be called after loadSymbol, that calls SetShowDeMorgan, but
-    // because the symbol is empty,it looks like it has no alternate body
-    // and a derived symbol inherits its parent body.
-    if( !new_symbol.GetParent().lock() )
-        SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
-    else
-        SetShowDeMorgan( new_symbol.HasAlternateBodyStyle() );
+    LIB_SYMBOL* createdSymbol = m_libMgr->GetSymbol( props.name, lib );
+
+    if( props.parentSymbolName.IsEmpty() )
+        SetShowDeMorgan( props.alternateBodyStyle );
+    else if( createdSymbol )
+        SetShowDeMorgan( createdSymbol->HasAlternateBodyStyle() );
 }
 
 

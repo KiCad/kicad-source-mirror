@@ -21,6 +21,9 @@
 #include <lib_symbol_library_manager.h>
 #include <symbol_edit_frame.h>
 #include <symbol_lib_table.h>
+#include <template_fieldnames.h>
+#include <lib_symbol.h>
+#include <sch_field.h>
 
 
 LIB_SYMBOL_LIBRARY_MANAGER::LIB_SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
@@ -42,6 +45,120 @@ void LIB_SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
         m_syncHash = symTable()->GetModifyHash();
     }
     m_logger->Deactivate();
+}
+
+
+std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( const NEW_SYMBOL_PROPERTIES& aProps,
+                                                                      LIB_SYMBOL* aParent )
+{
+    std::unique_ptr<LIB_SYMBOL> new_symbol = std::make_unique<LIB_SYMBOL>( aProps.name );
+
+    if( !aParent )
+    {
+        new_symbol->GetReferenceField().SetText( aProps.reference );
+        new_symbol->SetUnitCount( aProps.unitCount );
+
+        if( aProps.pinNameInside )
+        {
+            new_symbol->SetPinNameOffset( aProps.pinTextPosition );
+
+            if( new_symbol->GetPinNameOffset() == 0 )
+                new_symbol->SetPinNameOffset( 1 );
+        }
+        else
+        {
+            new_symbol->SetPinNameOffset( 0 );
+        }
+
+        ( aProps.powerSymbol ) ? new_symbol->SetGlobalPower() : new_symbol->SetNormal();
+        new_symbol->SetShowPinNumbers( aProps.showPinNumber );
+        new_symbol->SetShowPinNames( aProps.showPinName );
+        new_symbol->LockUnits( !aProps.unitsInterchangeable );
+        new_symbol->SetExcludedFromBOM( !aProps.includeInBom );
+        new_symbol->SetExcludedFromBoard( !aProps.includeOnBoard );
+
+        if( aProps.unitCount < 2 )
+            new_symbol->LockUnits( false );
+
+        new_symbol->SetHasAlternateBodyStyle( aProps.alternateBodyStyle );
+    }
+    else
+    {
+        new_symbol->SetParent( aParent );
+
+        for( FIELD_T fieldId : MANDATORY_FIELDS )
+        {
+            SCH_FIELD* field = new_symbol->GetField( fieldId );
+            SCH_FIELD* parentField = aParent->GetField( fieldId );
+
+            *field = *parentField;
+
+            switch( fieldId )
+            {
+            case FIELD_T::REFERENCE:
+                break;
+
+            case FIELD_T::VALUE:
+                if( aParent->IsPower() )
+                    field->SetText( aProps.name );
+                break;
+
+            case FIELD_T::FOOTPRINT:
+                if( !aProps.keepFootprint )
+                    field->SetText( wxEmptyString );
+                break;
+
+            case FIELD_T::DATASHEET:
+                if( !aProps.keepDatasheet )
+                    field->SetText( wxEmptyString );
+                break;
+
+            default:
+                break;
+            }
+
+            field->SetParent( new_symbol.get() );
+        }
+
+        if( aProps.transferUserFields )
+        {
+            std::vector<SCH_FIELD*> listFields;
+            aParent->GetFields( listFields );
+
+            for( SCH_FIELD* field : listFields )
+            {
+                if( field->GetId() == FIELD_T::USER )
+                {
+                    SCH_FIELD* new_field = new SCH_FIELD( *field );
+
+                    if( !aProps.keepContentUserFields )
+                        new_field->SetText( wxEmptyString );
+
+                    new_field->SetParent( new_symbol.get() );
+                    new_symbol->AddField( new_field );
+                }
+            }
+        }
+    }
+
+    return new_symbol;
+}
+
+
+bool LIB_SYMBOL_LIBRARY_MANAGER::CreateNewSymbol( const wxString& aLibrary,
+                                                  const NEW_SYMBOL_PROPERTIES& aProps )
+{
+    LIB_SYMBOL* parent = nullptr;
+
+    if( !aProps.parentSymbolName.IsEmpty() )
+        parent = GetSymbol( aProps.parentSymbolName, aLibrary );
+
+    std::unique_ptr<LIB_SYMBOL> new_symbol = CreateSymbol( aProps, parent );
+
+    if( !UpdateSymbol( new_symbol.get(), aLibrary ) )
+        return false;
+
+    return true;
 }
 
 
