@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-21 23:03+0000\n"
+"PO-Revision-Date: 2025-08-23 07:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -17274,7 +17274,7 @@ msgstr "加载原理图文件 '%s' 时内存耗尽。"
 #: eeschema/files-io.cpp:1382 eeschema/sheet.cpp:234
 #, c-format
 msgid "Failed to load '%s'."
-msgstr "未能加载 '%s'。"
+msgstr "'%s' 加载失败。"
 
 #: eeschema/files-io.cpp:341
 msgid ""
@@ -17714,7 +17714,7 @@ msgstr "排除电路板设置差异。"
 #: eeschema/libarch.cpp:77
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "未能将符号 %s 添加到库文件 '%s'。"
+msgstr "添加符号 %s 到库文件 '%s' 失败。"
 
 #: eeschema/libarch.cpp:86
 msgid "Unexpected exception occurred."
@@ -18103,7 +18103,7 @@ msgstr "未恢复元件符号。"
 #: eeschema/symbol_editor/symbol_editor.cpp:1214
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "未能创建符号库文件 '%s'。"
+msgstr "符号库文件 '%s' 创建失败。"
 
 #: eeschema/project_rescue.cpp:870
 #, c-format
@@ -22034,7 +22034,7 @@ msgstr "修改可见性"
 #: eeschema/tools/assign_footprints.cpp:233
 #, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "未能打开符号封装链接文件 '%s'。"
+msgstr "符号封装链接文件 '%s' 打开失败。"
 
 #: eeschema/tools/backannotate.cpp:76
 msgid "Select at least one property to back annotate."
@@ -25455,7 +25455,7 @@ msgstr "隐藏此消息。"
 
 #: include/wxstream_helper.h:49
 msgid "Failed to output data"
-msgstr "未能输出数据"
+msgstr "数据输出失败"
 
 #: kicad/cli/command.cpp:126
 msgid "Input directory"
@@ -27331,7 +27331,7 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"未能下载 URL %s\n"
+"URL %s 下载失败\n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:191
@@ -27396,7 +27396,7 @@ msgstr "正在移除目录 %s"
 #: kicad/pcm/pcm_task_manager.cpp:514
 #, c-format
 msgid "Failed to remove directory %s"
-msgstr "未能移除目录 %s"
+msgstr "目录 %s 移除失败"
 
 #: kicad/pcm/pcm_task_manager.cpp:575
 #, c-format
@@ -35272,7 +35272,7 @@ msgstr "所有铜层"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388
 msgid "Start, end, and connected layers"
-msgstr "启动、结束和连接层"
+msgstr "起始, 结束和已连接层"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1078
@@ -42404,7 +42404,7 @@ msgstr "更新板上的封装以引用新库?"
 #: pcbnew/footprint_libraries_utils.cpp:877
 #: pcbnew/footprint_viewer_frame.cpp:744
 msgid "No board currently open."
-msgstr "当前没有打开的板。"
+msgstr "当前未打开任何电路板。"
 
 #: pcbnew/footprint_libraries_utils.cpp:906
 msgid ""
@@ -43886,7 +43886,7 @@ msgstr "找不到原理图文件 '%s'。"
 
 #: pcbnew/pcb_edit_frame.cpp:2105
 msgid "Eeschema failed to load."
-msgstr "未能加载 Eeschema。"
+msgstr "Eeschema 加载失败。"
 
 #: pcbnew/pcb_edit_frame.cpp:2616
 msgid "Edit design rules"
