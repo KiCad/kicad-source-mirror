@@ -131,7 +131,10 @@ public:
     /**
      * Returns true if the reporter client is non-empty.
      */
-    virtual bool HasMessage() const = 0;
+    virtual bool HasMessage() const
+    {
+        return m_severityMask != 0;
+    }
 
     /**
      * Returns true if the reporter has one or more messages matching the specified
@@ -226,8 +229,6 @@ public:
 
     REPORTER& Report( const wxString& aText,
                       SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override { return false; }
 };
 
 
@@ -246,8 +247,6 @@ public:
     static REPORTER& GetInstance();
 
     REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override { return false; }
 };
 
 
@@ -266,8 +265,6 @@ public:
     static REPORTER& GetInstance();
 
     REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override { return false; }
 };
 
 
@@ -283,8 +280,17 @@ public:
     static REPORTER& GetInstance();
 
     REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+};
 
-    bool HasMessage() const override { return false; }
+
+class KICOMMON_API REDIRECT_REPORTER : public REPORTER
+{
+public:
+    REDIRECT_REPORTER( REPORTER* aRedirectTarget ) : m_redirectTarget( aRedirectTarget ) {}
+
+    REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    REPORTER* m_redirectTarget;
 };
 
 

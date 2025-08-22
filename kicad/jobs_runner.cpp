@@ -240,28 +240,31 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
         job.m_job->SetTempOutputDirectory( tempDirPath );
 
-        REPORTER* reporterToUse = &m_reporter;
+        REPORTER* targetReporter = &m_reporter;
 
-        if( reporterToUse == &NULL_REPORTER::GetInstance() )
+        if( targetReporter == &NULL_REPORTER::GetInstance() )
         {
-            aDestination->m_lastRunReporters[job.m_id] = std::make_shared<JOBSET_OUTPUT_REPORTER>( tempDirPath,
-                                                                                                   m_progressReporter );
-            reporterToUse = aDestination->m_lastRunReporters[job.m_id].get();
+            aDestination->m_lastRunReporters[job.m_id] =
+                    std::make_shared<JOBSET_OUTPUT_REPORTER>( tempDirPath, m_progressReporter );
+
+            targetReporter = aDestination->m_lastRunReporters[job.m_id].get();
         }
 
-        int result = CLI::EXIT_CODES::SUCCESS;
-
+        // Use a redirect reporter so we don't have error flags set after running previous jobs
+        REDIRECT_REPORTER isolatedReporter( targetReporter );
+        int               result = CLI::EXIT_CODES::SUCCESS;
 
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
-            result = m_kiway->ProcessJob( iface, job.m_job.get(), reporterToUse, m_progressReporter );
+            result = m_kiway->ProcessJob( iface, job.m_job.get(), &isolatedReporter,
+                                          m_progressReporter );
         }
         else
         {
             // special jobs
             if( job.m_job->GetType() == "special_execute" )
-			{
-                result = runSpecialExecute( &job, reporterToUse, m_project );
+            {
+                result = runSpecialExecute( &job, &isolatedReporter, m_project );
             }
             else if( job.m_job->GetType() == "special_copyfiles" )
             {
