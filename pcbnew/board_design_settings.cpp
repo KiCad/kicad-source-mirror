@@ -338,7 +338,15 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 if( !aJson.is_object() )
                     return;
 
-                for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities( true ) )
+                // Load V8 'hole_near_hole' token first (if present).  Any current 'hole_to_hole' token
+                // found will then overwrite it.
+                // We can't use the migration architecture because we forgot to bump the version number
+                // when the change was made.  But this is a one-off as any future deprecations should
+                // bump the version number and use registerMigration().
+                if( aJson.contains( "hole_near_hole" ) )
+                    m_DRCSeverities[DRCE_DRILLED_HOLES_TOO_CLOSE] = SeverityFromString( aJson["hole_near_hole"] );
+
+                for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
                 {
                     wxString name = item.GetSettingsKey();
                     std::string key( name.ToUTF8() );

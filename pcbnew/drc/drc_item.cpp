@@ -298,13 +298,6 @@ DRC_ITEM DRC_ITEM::nonMirroredTextOnBackLayer( DRCE_NONMIRRORED_TEXT_ON_BACK_LAY
         _HKI( "Non-Mirrored text on back layer" ),
         wxT( "nonmirrored_text_on_back_layer" ) );
 
-/// Deprecated item names
-/// They have the current error code but the old name for compatibility with old settings files
-
-DRC_ITEM DRC_ITEM::holeNearHolev8( DRCE_DRILLED_HOLES_TOO_CLOSE,
-        _HKI( "Drilled hole too close to other hole - deprecated" ),
-        wxT( "hole_near_hole" ) );
-
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
         {
             DRC_ITEM::heading_electrical,
@@ -375,12 +368,6 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::libFootprintIssues,
             DRC_ITEM::libFootprintMismatch,
             DRC_ITEM::footprintTHPadhasNoHole,
-
-            // Deprecated items need to come second to last in the list
-            // They will not be shown in the panel but will be used to
-            // parse old settings files
-            DRC_ITEM::heading_deprecated,
-            DRC_ITEM::holeNearHolev8,
 
             // DRC_ITEM types with no user-editable severities
             // NOTE: this MUST be the last grouping in the list!
