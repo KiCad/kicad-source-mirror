@@ -77,7 +77,6 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char*       text;
     int         netcode = -1;
     bool        multiHighlight = false;
-    PAD*        pad = nullptr;
     BOARD*      pcb = GetBoard();
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = GetPcbNewSettings()->m_CrossProbing;

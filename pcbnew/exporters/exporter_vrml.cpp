@@ -1113,10 +1113,6 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             int old_precision = aOutputFile->precision();
             aOutputFile->precision( m_precision );
 
-            std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
-            embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
-            embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
-
             wxFileName srcFile = m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename, wxEmptyString,
                                                                               embeddedFilesStack );
             wxFileName dstFile;
