@@ -41,7 +41,7 @@ JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
         m_filename(),
         m_drawingSheet(),
         m_units( ODB_UNITS::MM ),
-        m_precision( 2 ),
+        m_precision( 4 ),
         m_compressionMode( ODB_COMPRESSION::ZIP )
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
