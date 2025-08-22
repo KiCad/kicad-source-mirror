@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-23 07:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -5131,22 +5131,21 @@ msgid "Copy the reference for this embedded file"
 msgstr "Referenz dieser eingebetteten Datei kopieren"
 
 #: common/dialogs/panel_embedded_files.cpp:206
-#, fuzzy
 msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
-"Die gelöschten eingebetteten Dateien beziehen sich auch auf einige "
-"Footprints.\n"
+"Auf die gelöschten eingebetteten Dateien ebenfalls von einigen Footprints "
+"verwiesen.\n"
 "Sollen sie auch aus diesen Footprints gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:211
-#, fuzzy
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
-"Die gelöschten eingebetteten Dateien beziehen sich auch auf einige Symbole.\n"
+"Auf die gelöschten eingebetteten Dateien ebenfalls von einigen Symbolen "
+"verwiesen.\n"
 "Sollen sie auch aus diesen Symbolen gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:328
@@ -6453,7 +6452,7 @@ msgstr "Maus und Touchpad"
 
 #: common/eda_base_frame.cpp:1235
 msgid "SpaceMouse"
-msgstr "Spacemaus"
+msgstr "SpaceMouse"
 
 #: common/eda_base_frame.cpp:1237
 msgid "Hotkeys"
@@ -13476,7 +13475,7 @@ msgstr "Schrittweite:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 msgid "All sheets"
-msgstr "Alle Schaltplanseiten"
+msgstr "Alle Blätter"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 msgid "Increment Annotations From"
@@ -19480,7 +19479,7 @@ msgstr ""
 #: eeschema/sch_design_block_utils.cpp:409
 msgid "Design blocks with nested sheets are not supported."
 msgstr ""
-"Designblocks mit verschachtelten Schaltplanseiten werden nicht unterstützt."
+"Designblocks mit verschachtelten Schaltplanblättern werden nicht unterstützt."
 
 #: eeschema/sch_design_block_utils.cpp:124
 #: eeschema/sch_design_block_utils.cpp:206
@@ -25682,19 +25681,16 @@ msgid "Create a new project for this schematic"
 msgstr "Ein neues Projekt für diesen Schaltplan erstellen"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Untergeordnete Schaltplanseiten nicht kopieren"
+msgstr "Untergeordnete Schaltplanblätter nicht kopieren"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Nur interne, untergeordnete Schaltplanseiten kopieren"
+msgstr "Nur interne, untergeordnete Schaltplanblätter kopieren"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Alle untergeordnete Schaltplanseiten kopieren"
+msgstr "Alle untergeordnete Schaltplanblätter kopieren"
 
 #: eeschema/widgets/hierarchy_pane.cpp:430
 msgid "Edit Page Number"
@@ -28326,11 +28322,11 @@ msgstr "Erweiterte Konfiguration bearbeiten"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:142
 msgid "Key"
-msgstr ""
+msgstr "Schlüssel"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:144
 msgid "Extant"
-msgstr ""
+msgstr "Vorhanden"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:305
 msgid "Reset to default"
@@ -28388,6 +28384,9 @@ msgid ""
 "project templates. Each tab contains templates organized by type or "
 "complexity."
 msgstr ""
+"Wählen Sie obige Registerkarten für Vorlagen aus, um verschiedene Kategorien "
+"von Projektvorlagen zu vergleichen. Jede Registerkarte enthält Vorlagen, die "
+"nach Typ oder Komplexität sortiert sind."
 
 #: kicad/dialogs/dialog_template_selector.cpp:89
 msgid "Select a Template"
@@ -28406,6 +28405,8 @@ msgid ""
 "The template information will appear in this panel, showing descriptions, "
 "included components, and project structure."
 msgstr ""
+"Vorlageninformationen werden in diesem Bereich angezeigt und umfassen "
+"Beschreibungen, enthaltene Bauteile und die Projektstruktur."
 
 #: kicad/dialogs/dialog_template_selector.cpp:93
 msgid "Customize Path"
@@ -38174,7 +38175,7 @@ msgid ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Alle erforderlichen Lagen (mit \"*\" markiert) müssen zugeordnet werden. "
+"Alle erforderlichen Lagen (mit \"*\" markiert) müssen zugeordnet sein. "
 "Klicken Sie auf \"Lagen automatisch zuordnen\", um die verbleibenden Lagen "
 "automatisch zuzuweisen."
 
@@ -38797,7 +38798,7 @@ msgstr "Halbloch-Pad (castellated; nur durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
 msgid "Press-fit (round through hole only)"
-msgstr "Pressitz-Pad (nur runde, durchgehende Bohrung)"
+msgstr "Einpresspad (nur runde, durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:648
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:420
@@ -41769,7 +41770,7 @@ msgstr "FEHLER:"
 #: pcbnew/dialogs/panel_setup_rules.cpp:765
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
-msgstr "Die Regeln '%s' und '%s' teilen die gleiche Bedingung."
+msgstr "Die Regeln \"%s\" und \"%s\" teilen die gleiche Bedingung."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:785
 #, fuzzy, c-format
@@ -41779,7 +41780,7 @@ msgstr "Regel \"%s\" referenziert auf die nicht definierte Netzklasse \"%s\"."
 #: pcbnew/dialogs/panel_setup_rules.cpp:806
 #, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
-msgstr "Regel %s referenziert auf nicht definierte Lage(n): %s."
+msgstr "Regel \"%s\" referenziert auf undefinierte Lage(n): %s."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:869
 msgid "Design rules cannot be added without a project"
@@ -44761,7 +44762,7 @@ msgstr "Zoneneigenschaften bearbeiten"
 
 #: pcbnew/exporters/export_d356.cpp:413
 msgid "Do not export unconnected pads"
-msgstr "Exportieren Sie keine nicht verbundenen Pads"
+msgstr "Unverbundene Pads nicht exportieren"
 
 #: pcbnew/exporters/export_d356.cpp:443 pcbnew/tools/pcb_actions.cpp:1245
 msgid "Generate IPC-D-356 netlist file"
@@ -46734,7 +46735,7 @@ msgstr "Castellated (Halbloch)"
 
 #: pcbnew/pad.cpp:1403
 msgid "Press-fit"
-msgstr "Presssitz"
+msgstr "Einpress"
 
 #: pcbnew/pad.cpp:1436
 msgid "Length in Package"
@@ -46854,9 +46855,8 @@ msgid "('mechanical' property is for PTH pads)"
 msgstr "(Mechanisch-Eigenschaft ist für Durchsteckpads)"
 
 #: pcbnew/pad.cpp:2315
-#, fuzzy
 msgid "('press-fit' property is for PTH pads with round holes)"
-msgstr "(Presssitz-Eigenschaft ist für Durchsteckpads mit runden Löchern)"
+msgstr "(Einpress-Eigenschaft ist für Durchsteckpads mit runden Löchern)"
 
 #: pcbnew/pad.cpp:2331
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -46981,9 +46981,8 @@ msgid "Mechanical pad"
 msgstr "Mechanisches Pad"
 
 #: pcbnew/pad.cpp:2754
-#, fuzzy
 msgid "Press-fit pad"
-msgstr "Presssitz Pad"
+msgstr "Einpresspad"
 
 #: pcbnew/pad.cpp:2776
 msgid "Front, back and connected layers"
@@ -48616,7 +48615,7 @@ msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
-"Teardrops werden in der IPC-2581 Rev.B nicht unterstützt; sie werden als "
+"Teardrops werden in der IPC-2581 Rev.B nicht unterstützt; sie wurden als "
 "Zonen exportiert."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3423
@@ -48866,19 +48865,21 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5161
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
-msgstr "Ungültiger Stackup im Footprint: ungerade Anzahl an Kupferlagen (%d)."
+msgstr ""
+"Ungültiger Lagenaufbau im Footprint: ungerade Anzahl an Kupferlagen (%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5169
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
-msgstr "Ungültiger Stackup im Footprint: Kupferlagen sind nicht fortlaufend."
+msgstr ""
+"Ungültiger Lagenaufbau im Footprint: Kupferlagen sind nicht fortlaufend."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5175
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
-"Ungültiger Stackup im Footprint: Technologielagen sind in den Footprints "
-"impliziert und sollten nicht im Stackup angegeben werden."
+"Ungültiger Lagenaufbau im Footprint: Technologielagen sind in den Footprints "
+"impliziert und sollten nicht im Lagenaufbau angegeben werden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5400
 #, c-format
@@ -53409,7 +53410,7 @@ msgstr "Castellated Pads: "
 
 #: pcbnew/tools/pcb_control.cpp:2579
 msgid "Press-fit pads: "
-msgstr "Pressitz Pads: "
+msgstr "Einpresspads: "
 
 #: pcbnew/tools/pcb_control.cpp:2583
 msgid "Plated board edge: "
