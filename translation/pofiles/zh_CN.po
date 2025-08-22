@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-08-22 06:41+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -7376,9 +7376,8 @@ msgid "Could not read file: %s"
 msgstr "无法读取文件: %s"
 
 #: common/git/git_branch_handler.cpp:76
-#, fuzzy
 msgid "No repository available"
-msgstr "无可用输出"
+msgstr "无可用仓库"
 
 #: common/git/git_branch_handler.cpp:85
 #, c-format
@@ -26490,14 +26489,12 @@ msgid "Embed file"
 msgstr "嵌入文件"
 
 #: include/widgets/filedlg_hook_new_library.h:42
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "是否将库添加到全局库表?"
+msgstr "将新库添加到全局库表"
 
 #: include/widgets/filedlg_hook_new_library.h:43
-#, fuzzy
 msgid "Add new library to project library table"
-msgstr "添加新的工程库表条目"
+msgstr "将新库添加到工程库表"
 
 #: include/widgets/filedlg_import_non_kicad.h:39
 msgid "Show import issues"
@@ -27533,9 +27530,8 @@ msgid "Include jobs:"
 msgstr "包含作业:"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:135
-#, fuzzy
 msgid "Edit Advanced Configuration"
-msgstr "重新加载配置"
+msgstr "编辑高级配置"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:142
 msgid "Key"
@@ -27546,7 +27542,6 @@ msgid "Extant"
 msgstr ""
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:305
-#, fuzzy
 msgid "Reset to default"
 msgstr "重置为默认值"
 
@@ -27588,9 +27583,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:85
-#, fuzzy
 msgid "Browse Templates"
-msgstr "自定义模板"
+msgstr "浏览模板"
 
 #: kicad/dialogs/dialog_template_selector.cpp:86
 msgid ""
@@ -27608,9 +27602,8 @@ msgid "Click on any template in the list to "
 msgstr "点击列表中的任意模板 "
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
-#, fuzzy
 msgid "preview its details"
-msgstr "查看详情"
+msgstr "预览详情"
 
 #: kicad/dialogs/dialog_template_selector.cpp:90
 msgid ""
@@ -27619,9 +27612,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:93
-#, fuzzy
 msgid "Customize Path"
-msgstr "自定义工具栏"
+msgstr "自定义路径"
 
 #: kicad/dialogs/dialog_template_selector.cpp:94
 msgid "Use the "
@@ -27667,7 +27659,6 @@ msgid "- Common components and footprints already linked"
 msgstr "按父封装的库链接:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:105
-#, fuzzy
 msgid "Design rules"
 msgstr "设计规则"
 
@@ -29209,9 +29200,8 @@ msgid "Success"
 msgstr "成功"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
-msgstr "取消"
+msgstr "已取消"
 
 #: libs/kiplatform/include/printing.h:48
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:499
@@ -29230,9 +29220,8 @@ msgid "Failed to print"
 msgstr "筛选的封装"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "不支持 %s。"
+msgstr "不支持"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:509
@@ -33182,7 +33171,6 @@ msgid "Min track clearance:"
 msgstr "最小走线间距:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Min track width:"
 msgstr "最小走线宽度:"
 
@@ -33315,12 +33303,10 @@ msgid "Back copper area"
 msgstr "底层铜箔面积"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:862
-#, fuzzy
 msgid "Min track clearance"
-msgstr "最小间距"
+msgstr "最小走线间距"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:865
-#, fuzzy
 msgid "Min track width"
 msgstr "最小走线宽度"
 
@@ -33992,7 +33978,7 @@ msgstr "列间间距"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:85
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "2.54"
-msgstr ""
+msgstr "2.54"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Vertical spacing:"
@@ -34601,7 +34587,6 @@ msgid "Show design rules."
 msgstr "显示设计规则。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:330
-#, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC 已被用户取消。<br><br>"
 
@@ -34874,9 +34859,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "文件已经成功创建。"
+msgstr "成功生成 IPC-2581 文件。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -35956,9 +35940,8 @@ msgid "Component type:"
 msgstr "元件类型:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:182
-#, fuzzy
 msgid "Custom Layers"
-msgstr "自定义工具栏"
+msgstr "自定义板层"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
 #, fuzzy
@@ -35966,14 +35949,12 @@ msgid "Use custom stackup"
 msgstr "使用自定义值..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
-#, fuzzy
 msgid "Copper layers"
-msgstr "铜层:"
+msgstr "铜层"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#, fuzzy
 msgid "User Layers"
-msgstr "其他层"
+msgstr "用户层"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid "Private Layers"
@@ -36436,19 +36417,17 @@ msgid "Unlocked tracks"
 msgstr "解锁走线"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
-msgstr "锁定项目"
+msgstr "锁定过孔"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
-#, fuzzy
 msgid "Unlocked vias"
-msgstr "解锁走线"
+msgstr "解锁过孔"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "仅当前层"
+msgstr "仅当前层 (%s)"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -36882,9 +36861,8 @@ msgstr "仅连接的层"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:2778
-#, fuzzy
 msgid "Start and end layers only"
-msgstr "启动、结束和连接层"
+msgstr "仅起始层和结束层"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:184
 msgid "Set to net class / custom rule values"
@@ -39683,9 +39661,8 @@ msgid "Cmd:"
 msgstr "Cmd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:267
-#, fuzzy
 msgid "Option:"
-msgstr "选项："
+msgstr "选项:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:294
 #: pcbnew/dialogs/panel_edit_options_base.cpp:324
