@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-08-22 06:41+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -4697,18 +4697,23 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
-"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
-"りにします。\n"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に自動でレポート報告する"
+"ことが出来ます。 "
+"ユーザーベース全体からの報告を通じて重大なバグをより効果的に特定し、 "
+"機能改善のための分析の手がかりに役立てられます。\n"
 "\n"
-"インストールされたKiCadと自動的に送信するレポートを紐づけるために完全にランダ"
-"ムで一意の識別子を生成し、クラッシュのレポートの目的だけに使用します。IPアド"
-"レスを含む個人情報はこの識別子に保存されたり関連付けたりしません。この識別子"
-"はボタンを押すことでいつでもリセットすることができます。\n"
+"同一のKiCadからの報告を特定するため、 完全にランダムで一意の識別子 (固有ID) "
+"を生成して、 上記の目的のためだけに使用します。 "
+"IPアドレスを含む個人情報はこの識別子 (固有ID) "
+"に保存されたり関連付けたりしません。 この識別子 (固有ID) は "
+"'固有IDのリセット' "
+"ボタンを押すことでいつでも新しい値を生成することができます。\n"
 "\n"
-"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
-"に自動的にレポートを送信します。回路図やPCBのようなユーザーの設計ファイルはこ"
-"の過程で共有されることはありません。"
+"自発的にこの報告活動に参加することを選択 ( "
+"'匿名レポートの提供に同意')した場合、 "
+"KiCadはクラッシュやイベントが発生した時に自動的にレポートを送信します。 "
+"回路図やPCBのようなユーザーの設計ファイルはこの過程で共有されることはありませ"
+"ん。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -33179,7 +33184,7 @@ msgstr "(閉じていない形状)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:594
 msgid "(multiple board outlines not supported)"
-msgstr "(複数の基板外形はサポートされていません)"
+msgstr "(複数の基板外形線はサポートされていません)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:762
 #, c-format
@@ -33870,7 +33875,7 @@ msgstr "(ネットタイのグループにあるパッドはマージの考慮�
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr "基板の外形線の不連続を補正"
+msgstr "基板外形の線の不連続性を補正"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:179
@@ -35825,7 +35830,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
 msgid "Board outline chaining tolerance:"
-msgstr "基板外形線接続の許容値:"
+msgstr "基板外形の線を接続とする許容値:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:271
 msgid "Tight (0.001 mm)"
@@ -35843,8 +35848,7 @@ msgstr "緩い（0.1 mm）"
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr ""
-"許容誤差は基板の外形を作るときに、接続されたと見做される２点間の距離を規定し"
+msgstr "許容値は基板外形の線を作るときに、接続されているとみなす２点間の距離を規定し"
 "ます。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:106
@@ -43911,7 +43915,7 @@ msgstr "(レイヤー %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:425
 msgid "Checking board outline..."
-msgstr "フットプリントをチェック..."
+msgstr "基板外形をチェック..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:433
 msgid "Checking disabled layers..."
@@ -47864,11 +47868,8 @@ msgid "Generating CAD data"
 msgstr "CADデータを生成中"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2258
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"基板のアウトラインが欠落しているか、不正な形式です。完全な分析のためにDRCを実"
-"行します。"
+msgstr "基板外形が存在しないか、不正な形です。DRCを実行してください。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
 msgid ""
