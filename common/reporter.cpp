@@ -211,6 +211,17 @@ REPORTER& WXLOG_REPORTER::GetInstance()
 }
 
 
+REPORTER& REDIRECT_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    REPORTER::Report( aText, aSeverity );
+
+    if( m_redirectTarget )
+        m_redirectTarget->Report( aText, aSeverity );
+
+    return *this;
+}
+
+
 REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     REPORTER::Report( aText, aSeverity );
