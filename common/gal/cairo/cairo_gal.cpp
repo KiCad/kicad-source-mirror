@@ -1198,13 +1198,22 @@ void CAIRO_GAL_BASE::blitCursor( wxMemoryDC& clientDC )
 
     VECTOR2D      p = ToScreen( m_cursorPosition );
     const COLOR4D cColor = getCursorColor();
-    const int     cursorSize = m_fullscreenCursor ? 8000 : 80;
 
     wxColour color( cColor.r * cColor.a * 255, cColor.g * cColor.a * 255, cColor.b * cColor.a * 255,
                     255 );
     clientDC.SetPen( wxPen( color ) );
-    clientDC.DrawLine( p.x - cursorSize / 2, p.y, p.x + cursorSize / 2, p.y );
-    clientDC.DrawLine( p.x, p.y - cursorSize / 2, p.x, p.y + cursorSize / 2 );
+
+    if( m_fullscreenCursor )
+    {
+        clientDC.DrawLine( 0, p.y, m_screenSize.x, p.y );
+        clientDC.DrawLine( p.x, 0, p.x, m_screenSize.y );
+    }
+    else
+    {
+        const int cursorSize = 80;
+        clientDC.DrawLine( p.x - cursorSize / 2, p.y, p.x + cursorSize / 2, p.y );
+        clientDC.DrawLine( p.x, p.y - cursorSize / 2, p.x, p.y + cursorSize / 2 );
+    }
 }
 
 

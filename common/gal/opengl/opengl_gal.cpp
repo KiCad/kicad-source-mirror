@@ -2644,11 +2644,21 @@ void OPENGL_GAL::blitCursor()
 
     m_compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
-    const int cursorSize = m_fullscreenCursor ? 8000 : 80;
+    VECTOR2D cursorBegin;
+    VECTOR2D cursorEnd;
+    VECTOR2D cursorCenter = m_cursorPosition;
 
-    VECTOR2D cursorBegin = m_cursorPosition - cursorSize / ( 2 * m_worldScale );
-    VECTOR2D cursorEnd = m_cursorPosition + cursorSize / ( 2 * m_worldScale );
-    VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;
+    if( m_fullscreenCursor )
+    {
+        cursorBegin = m_screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
+        cursorEnd = m_screenWorldMatrix * VECTOR2D( m_screenSize );
+    }
+    else
+    {
+        const int cursorSize = 80;
+        cursorBegin = m_cursorPosition - cursorSize / ( 2 * m_worldScale );
+        cursorEnd = m_cursorPosition + cursorSize / ( 2 * m_worldScale );
+    }
 
     const COLOR4D color = getCursorColor();
 
