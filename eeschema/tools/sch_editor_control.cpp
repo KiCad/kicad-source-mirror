@@ -1626,7 +1626,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     VECTOR2I            eventPos;
 
     SCH_SHEET   tempSheet;
-    SCH_SCREEN* tempScreen = new SCH_SCREEN( &m_frame->Schematic() );
+
     std::unique_ptr<wxImage> clipImg = GetImageFromClipboard();
 
     if( !aEvent.IsAction( &ACTIONS::duplicate ) && clipImg )
@@ -1637,53 +1637,46 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         bool ok = bitmap->GetReferenceImage().SetImage( *clipImg );
 
         if( !ok )
-        {
-            delete tempScreen;
             return 0;
-        }
 
-        tempScreen->Append( bitmap.release() );
+        return m_toolMgr->RunAction( SCH_ACTIONS::placeImage, bitmap.release() );
     }
+
+    if( aEvent.IsAction( &ACTIONS::duplicate ) )
+        content = m_duplicateClipboard;
     else
+        content = GetClipboardUTF8();
+
+    if( content.empty() )
+        return 0;
+
+    if( aEvent.IsAction( &ACTIONS::duplicate ) )
+        eventPos = getViewControls()->GetCursorPosition( false );
+
+    STRING_LINE_READER reader( content, "Clipboard" );
+    SCH_IO_KICAD_SEXPR plugin;
+
+    // Screen object on heap is owned by the sheet.
+    SCH_SCREEN* tempScreen = new SCH_SCREEN( &m_frame->Schematic() );
+    tempSheet.SetScreen( tempScreen );
+
+    try
     {
-        if( aEvent.IsAction( &ACTIONS::duplicate ) )
-            content = m_duplicateClipboard;
-        else
-            content = GetClipboardUTF8();
-
-        if( content.empty() )
+        plugin.LoadContent( reader, &tempSheet );
+    }
+    catch( IO_ERROR& )
+    {
+        // If it wasn't content, then paste as a text object.
+        if( content.size() > static_cast<size_t>( ADVANCED_CFG::GetCfg().m_MaxPastedTextLength ) )
         {
-            delete tempScreen;
-            return 0;
+            int result = IsOK( m_frame, _( "Pasting a long text text string may be very slow.  "
+                                            "Do you want to continue?" ) );
+            if( !result )
+                return 0;
         }
 
-        if( aEvent.IsAction( &ACTIONS::duplicate ) )
-            eventPos = getViewControls()->GetCursorPosition( false );
-
-        STRING_LINE_READER reader( content, "Clipboard" );
-        SCH_IO_KICAD_SEXPR plugin;
-
-        // Screen object on heap is owned by the sheet.
-        tempSheet.SetScreen( tempScreen );
-
-        try
-        {
-            plugin.LoadContent( reader, &tempSheet );
-        }
-        catch( IO_ERROR& )
-        {
-            // If it wasn't content, then paste as a text object.
-            if( content.size() > static_cast<size_t>( ADVANCED_CFG::GetCfg().m_MaxPastedTextLength ) )
-            {
-                int result = IsOK( m_frame, _( "Pasting a long text text string may be very slow.  "
-                                               "Do you want to continue?" ) );
-                if( !result )
-                    return 0;
-            }
-
-            SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
-            tempScreen->Append( text_item );
-        }
+        SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
+        tempScreen->Append( text_item );
     }
 
     m_pastedSymbols.clear();

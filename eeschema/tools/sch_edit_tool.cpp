@@ -3075,6 +3075,26 @@ int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::DdAddImage( const TOOL_EVENT& aEvent )
+{
+    wxString* filename = aEvent.Parameter<wxString*>();
+
+    if( !filename )
+        return 0;
+
+    SCH_BITMAP* image = new SCH_BITMAP( VECTOR2I( 0, 0 ) );
+
+    if( !image->GetReferenceImage().ReadImageFile( *filename ) )
+    {
+        wxMessageBox( wxString::Format( _( "Could not load image from '%s'." ), *filename ) );
+        delete image;
+        return 0;
+    }
+
+    return m_toolMgr->RunAction( SCH_ACTIONS::placeImage, image );
+}
+
+
 void SCH_EDIT_TOOL::collectUnits( const SCH_SELECTION& aSelection,
                                   std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>>& aCollectedUnits )
 {
@@ -3212,5 +3232,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditPageNumber,     SCH_ACTIONS::editPageNumber.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::DdAppendFile,       SCH_ACTIONS::ddAppendFile.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DdAddImage,        SCH_ACTIONS::ddAddImage.MakeEvent() );
     // clang-format on
 }

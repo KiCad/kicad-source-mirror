@@ -416,6 +416,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Init for dropping files
     m_acceptedExts.emplace( FILEEXT::KiCadSchematicFileExtension, &SCH_ACTIONS::ddAppendFile );
+    m_acceptedExts.emplace( FILEEXT::PngFileExtension, &SCH_ACTIONS::ddAddImage );
+    m_acceptedExts.emplace( FILEEXT::JpegFileExtension, &SCH_ACTIONS::ddAddImage );
+    m_acceptedExts.emplace( wxS( "jpeg" ), &SCH_ACTIONS::ddAddImage );
     DragAcceptFiles( true );
 
     // Ensure the window is on top

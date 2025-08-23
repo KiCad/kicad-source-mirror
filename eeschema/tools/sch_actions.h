@@ -301,6 +301,7 @@ public:
 
     // Drag and drop
     static TOOL_ACTION ddAppendFile;
+    static TOOL_ACTION ddAddImage;
 
     struct PLACE_SYMBOL_PARAMS
     {

@@ -76,6 +76,7 @@ public:
 
     /// Drag and drop
     int DdAppendFile( const TOOL_EVENT& aEvent );
+    int DdAddImage( const TOOL_EVENT& aEvent );
 
     /// Modify Attributes (DNP, Exclude, etc.)  All attributes are
     /// set to true unless all symbols already have the attribute set to true.
