@@ -38,7 +38,9 @@ bool FOOTPRINT_CHOOSER_SELECTION_TOOL::Init()
 
     menu.AddSeparator( 1 );
     menu.AddCheckItem( ACTIONS::toggleGrid,           SELECTION_CONDITIONS::ShowAlways, 1 );
-    menu.AddCheckItem( ACTIONS::toggleCursorStyle,    SELECTION_CONDITIONS::ShowAlways, 1 );
+    menu.AddCheckItem( ACTIONS::cursorSmallCrosshairs,    SELECTION_CONDITIONS::ShowAlways, 1 );
+    menu.AddCheckItem( ACTIONS::cursorFullCrosshairs,     SELECTION_CONDITIONS::ShowAlways, 1 );
+    menu.AddCheckItem( ACTIONS::cursor45Crosshairs,       SELECTION_CONDITIONS::ShowAlways, 1 );
 
     menu.AddSeparator( 10 );
     menu.AddCheckItem( ACTIONS::inchesUnits,          SELECTION_CONDITIONS::ShowAlways, 10 );

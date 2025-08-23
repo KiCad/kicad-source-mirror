@@ -23,6 +23,7 @@
 
 #include <widgets/gal_options_panel.h>
 #include <settings/app_settings.h>
+#include <gal/gal_display_options.h>
 #include <eda_draw_frame.h>
 
 #include <config_map.h>
@@ -92,10 +93,12 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 
     m_gridMinSpacing->SetValue( m_cfg->m_Window.grid.min_spacing );
 
-    if( m_cfg->m_Window.cursor.fullscreen_cursor )
-        m_rbFullWindowCrosshairs->SetValue( true );
-    else
+    if( m_cfg->m_Window.cursor.cross_hair_mode == KIGFX::CROSS_HAIR_MODE::SMALL_CROSS )
         m_rbSmallCrosshairs->SetValue( true );
+    else if( m_cfg->m_Window.cursor.cross_hair_mode == KIGFX::CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL )
+        m_rb45DegreeCrosshairs->SetValue( true );
+    else
+        m_rbFullWindowCrosshairs->SetValue( true );
 
     m_forceCursorDisplay->SetValue( m_cfg->m_Window.cursor.always_show_cursor );
 
@@ -119,7 +122,12 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 
     m_cfg->m_Window.grid.min_spacing = m_gridMinSpacing->GetValue();
 
-    m_cfg->m_Window.cursor.fullscreen_cursor = m_rbFullWindowCrosshairs->GetValue();
+    if( m_rbFullWindowCrosshairs->GetValue() )
+        m_cfg->m_Window.cursor.cross_hair_mode = KIGFX::CROSS_HAIR_MODE::FULLSCREEN_CROSS;
+    else if( m_rb45DegreeCrosshairs->GetValue() )
+        m_cfg->m_Window.cursor.cross_hair_mode = KIGFX::CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL;
+    else
+        m_cfg->m_Window.cursor.cross_hair_mode = KIGFX::CROSS_HAIR_MODE::SMALL_CROSS;
     m_cfg->m_Window.cursor.always_show_cursor = m_forceCursorDisplay->GetValue();
 
     return true;

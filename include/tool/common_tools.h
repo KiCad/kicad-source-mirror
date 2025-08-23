@@ -64,7 +64,9 @@ public:
     // Cursor control
     int CursorControl( const TOOL_EVENT& aEvent );
     int ToggleCursor( const TOOL_EVENT& aEvent );
-    int ToggleCursorStyle( const TOOL_EVENT& aEvent );
+    int CursorSmallCrosshairs( const TOOL_EVENT& aEvent );
+    int CursorFullCrosshairs( const TOOL_EVENT& aEvent );
+    int Cursor45Crosshairs( const TOOL_EVENT& aEvent );
 
     int ToggleBoundingBoxes( const TOOL_EVENT& aEvent );
 

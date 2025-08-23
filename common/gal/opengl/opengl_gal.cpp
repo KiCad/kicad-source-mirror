@@ -2648,12 +2648,12 @@ void OPENGL_GAL::blitCursor()
     VECTOR2D cursorEnd;
     VECTOR2D cursorCenter = m_cursorPosition;
 
-    if( m_fullscreenCursor )
+    if( m_crossHairMode == CROSS_HAIR_MODE::FULLSCREEN_CROSS )
     {
         cursorBegin = m_screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
         cursorEnd = m_screenWorldMatrix * VECTOR2D( m_screenSize );
     }
-    else
+    else if( m_crossHairMode == CROSS_HAIR_MODE::SMALL_CROSS )
     {
         const int cursorSize = 80;
         cursorBegin = m_cursorPosition - cursorSize / ( 2 * m_worldScale );
@@ -2671,11 +2671,46 @@ void OPENGL_GAL::blitCursor()
     glColor4d( color.r, color.g, color.b, color.a );
 
     glBegin( GL_LINES );
-    glVertex2d( cursorCenter.x, cursorBegin.y );
-    glVertex2d( cursorCenter.x, cursorEnd.y );
 
-    glVertex2d( cursorBegin.x, cursorCenter.y );
-    glVertex2d( cursorEnd.x, cursorCenter.y );
+    if( m_crossHairMode == CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL )
+    {
+        // Calculate screen bounds in world coordinates
+        VECTOR2D screenTopLeft = m_screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
+        VECTOR2D screenBottomRight = m_screenWorldMatrix * VECTOR2D( m_screenSize );
+
+        // For 45-degree lines passing through cursor position
+        // Line equation: y = x + (cy - cx) for positive slope
+        // Line equation: y = -x + (cy + cx) for negative slope
+        double cx = m_cursorPosition.x;
+        double cy = m_cursorPosition.y;
+
+        // Calculate intersections for positive slope diagonal (y = x + offset)
+        double offset1 = cy - cx;
+        VECTOR2D pos_start( screenTopLeft.x, screenTopLeft.x + offset1 );
+        VECTOR2D pos_end( screenBottomRight.x, screenBottomRight.x + offset1 );
+
+        // Draw positive slope diagonal
+        glVertex2d( pos_start.x, pos_start.y );
+        glVertex2d( pos_end.x, pos_end.y );
+
+        // Calculate intersections for negative slope diagonal (y = -x + offset)
+        double offset2 = cy + cx;
+        VECTOR2D neg_start( screenTopLeft.x, offset2 - screenTopLeft.x );
+        VECTOR2D neg_end( screenBottomRight.x, offset2 - screenBottomRight.x );
+
+        // Draw negative slope diagonal
+        glVertex2d( neg_start.x, neg_start.y );
+        glVertex2d( neg_end.x, neg_end.y );
+    }
+    else
+    {
+        glVertex2d( cursorCenter.x, cursorBegin.y );
+        glVertex2d( cursorCenter.x, cursorEnd.y );
+
+        glVertex2d( cursorBegin.x, cursorCenter.y );
+        glVertex2d( cursorEnd.x, cursorCenter.y );
+    }
+
     glEnd();
 }
 

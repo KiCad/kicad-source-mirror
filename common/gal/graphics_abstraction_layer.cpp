@@ -79,7 +79,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    m_fullscreenCursor = false;
+    m_crossHairMode = CROSS_HAIR_MODE::SMALL_CROSS;
     m_forceDisplayCursor = false;
     SetCursorEnabled( false );
 
@@ -142,9 +142,9 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
         refresh = true;
     }
 
-    if( m_options.m_fullscreenCursor != m_fullscreenCursor )
+    if( m_options.GetCursorMode() != m_crossHairMode )
     {
-        m_fullscreenCursor = m_options.m_fullscreenCursor;
+        m_crossHairMode = m_options.GetCursorMode();
         refresh = true;
     }
 

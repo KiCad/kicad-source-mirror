@@ -710,11 +710,35 @@ int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
 }
 
 
-int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
+int COMMON_TOOLS::CursorSmallCrosshairs( const TOOL_EVENT& aEvent )
 {
     GAL_DISPLAY_OPTIONS_IMPL& galOpts = m_frame->GetGalDisplayOptions();
 
-    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
+    galOpts.SetCursorMode( KIGFX::CROSS_HAIR_MODE::SMALL_CROSS );
+    galOpts.WriteConfig( *m_frame->GetWindowSettings( m_toolMgr->GetSettings() ) );
+    galOpts.NotifyChanged();
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::CursorFullCrosshairs( const TOOL_EVENT& aEvent )
+{
+    GAL_DISPLAY_OPTIONS_IMPL& galOpts = m_frame->GetGalDisplayOptions();
+
+    galOpts.SetCursorMode( KIGFX::CROSS_HAIR_MODE::FULLSCREEN_CROSS );
+    galOpts.WriteConfig( *m_frame->GetWindowSettings( m_toolMgr->GetSettings() ) );
+    galOpts.NotifyChanged();
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::Cursor45Crosshairs( const TOOL_EVENT& aEvent )
+{
+    GAL_DISPLAY_OPTIONS_IMPL& galOpts = m_frame->GetGalDisplayOptions();
+
+    galOpts.SetCursorMode( KIGFX::CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL );
     galOpts.WriteConfig( *m_frame->GetWindowSettings( m_toolMgr->GetSettings() ) );
     galOpts.NotifyChanged();
 
@@ -800,6 +824,8 @@ void COMMON_TOOLS::setTransitions()
 
     // Misc
     Go( &COMMON_TOOLS::ToggleCursor,        ACTIONS::toggleCursor.MakeEvent() );
-    Go( &COMMON_TOOLS::ToggleCursorStyle,   ACTIONS::toggleCursorStyle.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorSmallCrosshairs,   ACTIONS::cursorSmallCrosshairs.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorFullCrosshairs,   ACTIONS::cursorFullCrosshairs.MakeEvent() );
+    Go( &COMMON_TOOLS::Cursor45Crosshairs,   ACTIONS::cursor45Crosshairs.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleBoundingBoxes, ACTIONS::toggleBoundingBoxes.MakeEvent() );
 }

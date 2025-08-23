@@ -28,6 +28,7 @@
 #include <class_draw_panel_gal.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
+#include <gal/gal_display_options.h>
 #include <tool/editor_conditions.h>
 #include <tool/selection.h>
 
@@ -106,14 +107,36 @@ SELECTION_CONDITION EDITOR_CONDITIONS::PolarCoordinates()
 }
 
 
-SELECTION_CONDITION EDITOR_CONDITIONS::FullscreenCursor()
+SELECTION_CONDITION EDITOR_CONDITIONS::CursorSmallCrosshairs()
 {
-    // The fullscreen cursor requires a draw frame
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
     wxASSERT( drwFrame );
 
-    return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame );
+    return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame,
+                      KIGFX::CROSS_HAIR_MODE::SMALL_CROSS );
+}
+
+
+SELECTION_CONDITION EDITOR_CONDITIONS::CursorFullCrosshairs()
+{
+    EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
+
+    wxASSERT( drwFrame );
+
+    return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame,
+                      KIGFX::CROSS_HAIR_MODE::FULLSCREEN_CROSS );
+}
+
+
+SELECTION_CONDITION EDITOR_CONDITIONS::Cursor45Crosshairs()
+{
+    EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
+
+    wxASSERT( drwFrame );
+
+    return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame,
+                      KIGFX::CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL );
 }
 
 
@@ -193,9 +216,10 @@ bool EDITOR_CONDITIONS::polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FR
 }
 
 
-bool EDITOR_CONDITIONS::cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame )
+bool EDITOR_CONDITIONS::cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame,
+                                    KIGFX::CROSS_HAIR_MODE aMode )
 {
-    return aFrame->GetGalDisplayOptions().m_fullscreenCursor;
+    return aFrame->GetGalDisplayOptions().GetCursorMode() == aMode;
 }
 
 

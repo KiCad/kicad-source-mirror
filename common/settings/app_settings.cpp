@@ -21,6 +21,7 @@
 #include <class_draw_panel_gal.h>
 #include <common.h>
 #include <eda_units.h>
+#include <gal/gal_display_options.h>
 #include <layer_ids.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
@@ -386,8 +387,8 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
 
     ret &= fromLegacy<bool>( aCfg, frameGDO + "ForceDisplayCursor",
                              cursorPath + ".always_show_cursor" );
-    ret &= fromLegacy<bool>( aCfg, frameGDO + "CursorFullscreen",
-                             cursorPath + ".fullscreen_cursor" );
+    ret &= fromLegacy<int>( aCfg, frameGDO + "CursorFullscreen",
+                             cursorPath + ".cross_hair_mode" );
 
     ret &= fromLegacy<int>(  aCfg, aFrame + "_LastGridSize",        gridPath + ".last_size" );
 
@@ -539,8 +540,8 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".cursor.always_show_cursor",
             &aWindow->cursor.always_show_cursor, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( aJsonPath + ".cursor.fullscreen_cursor",
-            &aWindow->cursor.fullscreen_cursor, false ) );
+    m_params.emplace_back( new PARAM<KIGFX::CROSS_HAIR_MODE>( aJsonPath + ".cursor.cross_hair_mode",
+            &aWindow->cursor.cross_hair_mode, KIGFX::CROSS_HAIR_MODE::SMALL_CROSS ) );
 }
 
 

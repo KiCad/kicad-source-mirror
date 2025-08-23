@@ -1103,7 +1103,9 @@ void GERBVIEW_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::togglePolarCoords, CHECK( cond.PolarCoordinates() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::cursorSmallCrosshairs, CHECK( cond.CursorSmallCrosshairs() ) );
+    mgr->SetConditions( ACTIONS::cursorFullCrosshairs,  CHECK( cond.CursorFullCrosshairs() ) );
+    mgr->SetConditions( ACTIONS::cursor45Crosshairs,    CHECK( cond.Cursor45Crosshairs() ) );
 
     mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MM ) ) );
     mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCH ) ) );

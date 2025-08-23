@@ -1203,10 +1203,19 @@ void CAIRO_GAL_BASE::blitCursor( wxMemoryDC& clientDC )
                     255 );
     clientDC.SetPen( wxPen( color ) );
 
-    if( m_fullscreenCursor )
+    if( m_crossHairMode == CROSS_HAIR_MODE::FULLSCREEN_CROSS )
     {
         clientDC.DrawLine( 0, p.y, m_screenSize.x, p.y );
         clientDC.DrawLine( p.x, 0, p.x, m_screenSize.y );
+    }
+    else if( m_crossHairMode == CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL )
+    {
+        // Oversized but that's ok
+        int diagonalSize = m_screenSize.x + m_screenSize.y;
+        clientDC.DrawLine( p.x - diagonalSize, p.y - diagonalSize,
+                           p.x + diagonalSize, p.y + diagonalSize );
+        clientDC.DrawLine( p.x - diagonalSize, p.y + diagonalSize,
+                           p.x + diagonalSize, p.y - diagonalSize );
     }
     else
     {

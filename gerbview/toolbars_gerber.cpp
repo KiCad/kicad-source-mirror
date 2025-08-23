@@ -58,7 +58,10 @@ std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( ACTIONS::inchesUnits )
               .AppendAction( ACTIONS::milsUnits )
               .AppendAction( ACTIONS::millimetersUnits )
-              .AppendAction( ACTIONS::toggleCursorStyle );
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Crosshair modes" ) )
+                            .AddAction( ACTIONS::cursorSmallCrosshairs )
+                            .AddAction( ACTIONS::cursorFullCrosshairs )
+                            .AddAction( ACTIONS::cursor45Crosshairs ) );
 
         config.AppendSeparator()
               .AppendAction( GERBVIEW_ACTIONS::flashedDisplayOutlines )

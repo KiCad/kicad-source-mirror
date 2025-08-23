@@ -143,6 +143,8 @@ enum class BITMAPS : unsigned int
     cpw,
     cpw_back,
     cursor,
+    cursor_fullscreen,
+    cursor_fullscreen45,
     cursor_shape,
     curved_ratsnest,
     custom_pad_to_primitives,

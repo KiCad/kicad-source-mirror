@@ -36,13 +36,18 @@ struct KICOMMON_API CROSS_PROBING_SETTINGS
     bool auto_highlight;  ///< Automatically turn on highlight mode in the target frame.
 };
 
+namespace KIGFX
+{
+    enum class CROSS_HAIR_MODE : int;
+}
+
 /**
  * Common cursor settings, available to every frame.
  */
 struct KICOMMON_API CURSOR_SETTINGS
 {
     bool always_show_cursor;
-    bool fullscreen_cursor;
+    KIGFX::CROSS_HAIR_MODE cross_hair_mode;
 };
 
 /**

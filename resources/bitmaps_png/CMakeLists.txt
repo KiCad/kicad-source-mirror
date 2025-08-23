@@ -239,6 +239,8 @@ set( BMAPS_MID
     convert
     copy
     copy_pad_settings
+    cursor_fullscreen
+    cursor_fullscreen45
     cursor_shape
     cursor
     custom_pad_to_primitives

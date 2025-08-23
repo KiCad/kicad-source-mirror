@@ -64,6 +64,13 @@ namespace KIGFX
         NEVER
     };
 
+    enum class CROSS_HAIR_MODE : int
+    {
+        SMALL_CROSS,
+        FULLSCREEN_CROSS,
+        FULLSCREEN_DIAGONAL
+    };
+
     class GAL_DISPLAY_OPTIONS;
 
     class GAL_API GAL_DISPLAY_OPTIONS_OBSERVER
@@ -101,14 +108,18 @@ namespace KIGFX
         ///< Whether or not to draw the coordinate system axes
         bool m_axesEnabled;
 
-        ///< Fullscreen crosshair or small cross
-        bool m_fullscreenCursor;
+        ///< Crosshair drawing mode
+        CROSS_HAIR_MODE m_crossHairMode;
 
         ///< Force cursor display
         bool m_forceDisplayCursor;
 
         ///< The pixel scale factor (>1 for hi-DPI scaled displays)
         double m_scaleFactor;
+
+        void SetCursorMode( CROSS_HAIR_MODE aMode ) { m_crossHairMode = aMode; }
+
+        CROSS_HAIR_MODE GetCursorMode() const { return m_crossHairMode; }
 
         void NotifyChanged();
     };

@@ -651,6 +651,8 @@ template KICOMMON_API std::optional<wxRect>
                       JSON_SETTINGS::Get<wxRect>( const std::string& aPath ) const;
 template KICOMMON_API std::optional<wxAuiPaneInfo>
                       JSON_SETTINGS::Get<wxAuiPaneInfo>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<KIGFX::CROSS_HAIR_MODE>
+                      JSON_SETTINGS::Get<KIGFX::CROSS_HAIR_MODE>( const std::string& aPath ) const;
 
 template<typename ValueType>
 void JSON_SETTINGS::Set( const std::string& aPath, ValueType aVal )
@@ -688,6 +690,8 @@ template KICOMMON_API void JSON_SETTINGS::Set<wxSize>( const std::string& aPath,
 template KICOMMON_API void JSON_SETTINGS::Set<wxRect>( const std::string& aPath, wxRect aValue );
 template KICOMMON_API void JSON_SETTINGS::Set<wxAuiPaneInfo>( const std::string& aPath,
                                                               wxAuiPaneInfo      aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<KIGFX::CROSS_HAIR_MODE>( const std::string& aPath,
+                                                                        KIGFX::CROSS_HAIR_MODE aValue );
 
 
 void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,

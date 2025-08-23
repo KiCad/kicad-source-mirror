@@ -1169,13 +1169,29 @@ TOOL_ACTION ACTIONS::toggleCursor( TOOL_ACTION_ARGS()
         .Tooltip( _( "Display crosshairs even when not drawing objects" ) )
         .Icon( BITMAPS::cursor ) );
 
-TOOL_ACTION ACTIONS::toggleCursorStyle( TOOL_ACTION_ARGS()
-        .Name( "common.Control.toggleCursorStyle" )
+TOOL_ACTION ACTIONS::cursorSmallCrosshairs( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorSmallCrosshairs" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Full-Window Crosshairs" ) )
-        .Tooltip( _( "Switch display of full-window crosshairs" ) )
+        .FriendlyName( _( "Small crosshairs" ) )
+        .Tooltip( _( "Use small crosshairs aligned at 0 and 90 degrees" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::cursor_shape ) );
+
+TOOL_ACTION ACTIONS::cursorFullCrosshairs( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursorFullCrosshairs" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Full-Window Crosshairs" ) )
+        .Tooltip( _( "Display full-window crosshairs aligned at 0 and 90 degrees" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::cursor_fullscreen ) );
+
+TOOL_ACTION ACTIONS::cursor45Crosshairs( TOOL_ACTION_ARGS()
+        .Name( "common.Control.cursor45Crosshairs" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "45 Degree Crosshairs" ) )
+        .Tooltip( _( "Display full-window crosshairs aligned at 45 and 135 degrees" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::cursor_fullscreen45 ) );
 
 TOOL_ACTION ACTIONS::highContrastMode( TOOL_ACTION_ARGS()
         .Name( "common.Control.highContrastMode" )

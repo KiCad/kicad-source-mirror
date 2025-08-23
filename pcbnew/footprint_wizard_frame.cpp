@@ -28,6 +28,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <gal/gal_display_options.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
@@ -197,7 +198,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     auto& galOpts = GetGalDisplayOptions();
-    galOpts.m_fullscreenCursor = true;
+    galOpts.SetCursorMode( KIGFX::CROSS_HAIR_MODE::FULLSCREEN_CROSS );
     galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
 

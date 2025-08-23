@@ -148,7 +148,9 @@ public:
     static TOOL_ACTION centerContents;
     static TOOL_ACTION centerSelection;
     static TOOL_ACTION toggleCursor;
-    static TOOL_ACTION toggleCursorStyle;
+    static TOOL_ACTION cursorSmallCrosshairs;
+    static TOOL_ACTION cursorFullCrosshairs;
+    static TOOL_ACTION cursor45Crosshairs;
     static TOOL_ACTION highContrastMode;
     static TOOL_ACTION highContrastModeCycle;
     static TOOL_ACTION toggleBoundingBoxes;

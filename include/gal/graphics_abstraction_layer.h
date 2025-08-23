@@ -1113,7 +1113,7 @@ protected:
     bool                 m_isCursorEnabled;    ///< Is the cursor enabled?
     bool                 m_forceDisplayCursor; ///< Always show cursor
     COLOR4D              m_cursorColor;        ///< Cursor color
-    bool                 m_fullscreenCursor;   ///< Shape of the cursor (fullscreen or small cross)
+    KIGFX::CROSS_HAIR_MODE m_crossHairMode;    ///< Crosshair drawing mode
     VECTOR2D             m_cursorPosition;     ///< Current cursor position (world coordinates)
 
     KICURSOR             m_currentNativeCursor; ///< Current cursor

@@ -71,7 +71,7 @@ void GAL_DISPLAY_OPTIONS_IMPL::ReadWindowSettings( WINDOW_SETTINGS& aCfg )
     m_gridMinSpacing = aCfg.grid.min_spacing;
     m_axesEnabled = aCfg.grid.axes_enabled;
 
-    m_fullscreenCursor = aCfg.cursor.fullscreen_cursor;
+    m_crossHairMode = aCfg.cursor.cross_hair_mode;
     m_forceDisplayCursor = aCfg.cursor.always_show_cursor;
 
     NotifyChanged();
@@ -112,7 +112,7 @@ void GAL_DISPLAY_OPTIONS_IMPL::WriteConfig( WINDOW_SETTINGS& aCfg )
     aCfg.grid.line_width = m_gridLineWidth;
     aCfg.grid.min_spacing = m_gridMinSpacing;
     aCfg.grid.axes_enabled = m_axesEnabled;
-    aCfg.cursor.fullscreen_cursor = m_fullscreenCursor;
+    aCfg.cursor.cross_hair_mode = m_crossHairMode;
     aCfg.cursor.always_show_cursor = m_forceDisplayCursor;
 }
 

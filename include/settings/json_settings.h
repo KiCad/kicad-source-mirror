@@ -22,6 +22,7 @@
 #define _JSON_SETTINGS_H
 
 #include <core/wx_stl_compat.h>
+#include <gal/gal_display_options.h>
 
 #include <utility>
 #include <wx/string.h>
@@ -388,5 +389,6 @@ extern template std::optional<wxPoint> JSON_SETTINGS::Get<wxPoint>( const std::s
 extern template std::optional<wxSize> JSON_SETTINGS::Get<wxSize>( const std::string& aPath ) const;
 extern template std::optional<wxRect> JSON_SETTINGS::Get<wxRect>( const std::string& aPath ) const;
 extern template std::optional<wxAuiPaneInfo> JSON_SETTINGS::Get<wxAuiPaneInfo>( const std::string& aPath ) const;
+extern template std::optional<KIGFX::CROSS_HAIR_MODE> JSON_SETTINGS::Get<KIGFX::CROSS_HAIR_MODE>( const std::string& aPath ) const;
 
 #endif

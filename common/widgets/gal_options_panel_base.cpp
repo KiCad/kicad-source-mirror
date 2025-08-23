@@ -102,8 +102,11 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 	m_rbSmallCrosshairs = new wxRadioButton( this, wxID_ANY, _("Small crosshairs"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizer1->Add( m_rbSmallCrosshairs, 0, wxTOP|wxLEFT, 5 );
 
-	m_rbFullWindowCrosshairs = new wxRadioButton( this, wxID_ANY, _("Full window crosshairs"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_rbFullWindowCrosshairs, 0, wxLEFT, 5 );
+        m_rbFullWindowCrosshairs = new wxRadioButton( this, wxID_ANY, _("Full window crosshairs"), wxDefaultPosition, wxDefaultSize, 0 );
+        fgSizer1->Add( m_rbFullWindowCrosshairs, 0, wxLEFT, 5 );
+
+        m_rb45DegreeCrosshairs = new wxRadioButton( this, wxID_ANY, _("45 degree crosshairs"), wxDefaultPosition, wxDefaultSize, 0 );
+        fgSizer1->Add( m_rb45DegreeCrosshairs, 0, wxLEFT, 5 );
 
 
 	fgSizer1->Add( 0, 8, 0, wxEXPAND, 5 );

@@ -448,6 +448,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_24.png" ), 24, wxT( "light" ) );
@@ -885,6 +887,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1322,6 +1326,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_16.png" ), 16, wxT( "light" ) );
@@ -1759,6 +1765,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2196,6 +2204,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_32.png" ), 32, wxT( "light" ) );
@@ -2633,6 +2643,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_dark_32.png" ), 32, wxT( "dark" ) );
@@ -3070,6 +3082,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_48.png" ), 48, wxT( "light" ) );
@@ -3507,6 +3521,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3944,6 +3960,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_64.png" ), 64, wxT( "light" ) );
@@ -4381,6 +4399,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::convert].emplace_back( BITMAPS::convert, wxT( "convert_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy].emplace_back( BITMAPS::copy, wxT( "copy_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::copy_pad_settings].emplace_back( BITMAPS::copy_pad_settings, wxT( "copy_pad_settings_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen].emplace_back( BITMAPS::cursor_fullscreen, wxT( "cursor_fullscreen_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::cursor_fullscreen45].emplace_back( BITMAPS::cursor_fullscreen45, wxT( "cursor_fullscreen45_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor_shape].emplace_back( BITMAPS::cursor_shape, wxT( "cursor_shape_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cursor].emplace_back( BITMAPS::cursor, wxT( "cursor_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::custom_pad_to_primitives].emplace_back( BITMAPS::custom_pad_to_primitives, wxT( "custom_pad_to_primitives_dark_64.png" ), 64, wxT( "dark" ) );

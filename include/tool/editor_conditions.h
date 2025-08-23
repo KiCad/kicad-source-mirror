@@ -34,6 +34,11 @@ class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
 class TOOL_ACTION;
 
+namespace KIGFX
+{
+    enum class CROSS_HAIR_MODE;
+}
+
 /**
  * Class that groups generic conditions for editor states.
  */
@@ -125,7 +130,9 @@ public:
      *
      * @return Functor testing if the cursor is full screen
      */
-    SELECTION_CONDITION FullscreenCursor();
+    SELECTION_CONDITION CursorSmallCrosshairs();
+    SELECTION_CONDITION CursorFullCrosshairs();
+    SELECTION_CONDITION Cursor45Crosshairs();
 
     SELECTION_CONDITION BoundingBoxes();
 
@@ -168,7 +175,8 @@ protected:
     static bool polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
     /// Helper function used by FullscreenCursor().
-    static bool cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
+    static bool cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame,
+                            KIGFX::CROSS_HAIR_MODE aMode );
 
     /// Helper function used by DrawBoundingBoxes().
     static bool bboxesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );

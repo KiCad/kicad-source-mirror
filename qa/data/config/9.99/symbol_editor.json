@@ -124,7 +124,7 @@
   "window": {
     "cursor": {
       "always_show_cursor": true,
-      "fullscreen_cursor": false
+      "cross_hair_mode": 0
     },
     "display": 0,
     "grid": {

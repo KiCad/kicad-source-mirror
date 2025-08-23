@@ -153,7 +153,7 @@
     "autozoom": true,
     "cursor": {
       "always_show_cursor": true,
-      "fullscreen_cursor": false
+      "cross_hair_mode": 0
     },
     "display": 0,
     "fp_list_width": 300,
@@ -326,7 +326,7 @@
   "footprint_wizard": {
     "cursor": {
       "always_show_cursor": true,
-      "fullscreen_cursor": false
+      "cross_hair_mode": 0
     },
     "display": 0,
     "grid": {
@@ -635,7 +635,7 @@
   "window": {
     "cursor": {
       "always_show_cursor": true,
-      "fullscreen_cursor": false
+      "cross_hair_mode": 0
     },
     "display": 0,
     "footprint_text_shown_columns": "0 1 2 3 4 5 7",

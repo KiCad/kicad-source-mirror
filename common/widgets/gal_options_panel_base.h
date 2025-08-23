@@ -51,9 +51,10 @@ class GAL_OPTIONS_PANEL_BASE : public wxPanel
 		wxChoice* m_gridSnapOptions;
 		wxStaticText* m_stGridLabel;
 		wxStaticLine* m_staticline2;
-		wxRadioButton* m_rbSmallCrosshairs;
-		wxRadioButton* m_rbFullWindowCrosshairs;
-		wxCheckBox* m_forceCursorDisplay;
+                wxRadioButton* m_rbSmallCrosshairs;
+                wxRadioButton* m_rbFullWindowCrosshairs;
+                wxRadioButton* m_rb45DegreeCrosshairs;
+                wxCheckBox* m_forceCursorDisplay;
 
 	public:
 
