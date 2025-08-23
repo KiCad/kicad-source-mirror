@@ -326,7 +326,9 @@ void COLOR_SWATCH::GetNewSwatchColor()
 
 void COLOR_SWATCH::OnDarkModeToggle()
 {
-    m_checkerboardBg = m_parent->GetBackgroundColour();
+    wxWindow* parent = GetParent();
+    m_checkerboardBg = parent ? parent->GetBackgroundColour() : wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 
-    m_swatch->SetBitmap( makeBitmap() );
+    if( m_swatch )
+        m_swatch->SetBitmap( makeBitmap() );
 }
