@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-23 07:01+0000\n"
+"PO-Revision-Date: 2025-08-24 11:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -310,7 +310,7 @@ msgstr "Platine neu laden"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
-msgstr "Kopiere 3D-Grafik in die Zwischenablage"
+msgstr "Kopiere 3D-Grafik in Zwischenablage"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
@@ -398,7 +398,7 @@ msgstr "Fehler"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:794
 msgid "Failed to copy image to clipboard"
-msgstr "Konnte Grafik nicht in die Zwischenablage kopieren"
+msgstr "Konnte Grafik nicht in Zwischenablage kopieren"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:805
 msgid "Can't save file"
@@ -6158,7 +6158,7 @@ msgstr "Standardeinstellungen für neue Footprints"
 
 #: common/eda_base_frame.cpp:1172
 msgid "Graphics Defaults"
-msgstr "Standardeinstellungen für Graphik"
+msgstr "Standardeinstellungen für Grafik"
 
 #: common/eda_base_frame.cpp:1177 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:613 kicad/tools/kicad_manager_actions.cpp:136
@@ -37464,7 +37464,7 @@ msgstr "Verbergen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:96
 msgid "Hide the footprint text and graphics"
-msgstr "Footprinttexte und -graphikelemente verstecken"
+msgstr "Footprinttexte und -grafikelemente verstecken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:100
 msgid "Cross-out"
@@ -49302,7 +49302,7 @@ msgid ""
 "Add bitmap images to be used as reference (images will not be included in "
 "any output)"
 msgstr ""
-"Bitmapgraphik als Referenz hinzufügen (Graphiken werden in keiner Ausgabe "
+"Bitmapgrafik als Referenz hinzufügen (Grafiken werden in keiner Ausgabe "
 "enthalten sein)"
 
 #: pcbnew/tools/pcb_actions.cpp:208
