@@ -590,7 +590,16 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
     {
         SCH_SYMBOL* symbol = it->first;
 
-        wxCHECK2( symbol && it->second.m_LibId.IsValid(), continue );
+        wxCHECK2( symbol, ++it; continue );
+
+        if( !it->second.m_LibId.IsValid() )
+        {
+            msg = getSymbolReferences( *symbol, it->second.m_LibId );
+            msg << wxT( ": " ) << _( "*** symbol lib id not valid ***" );
+            m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
+            it = symbols.erase( it );
+            continue;
+        }
 
         LIB_SYMBOL* libSymbol = frame->GetLibSymbol( it->second.m_LibId );
 
@@ -647,10 +656,13 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         // Remember initial link before changing for diags purpose
         wxString initialLibLinkName = UnescapeString( symbol->GetLibId().Format() );
 
+        LIB_SYMBOL* libSymbol = frame->GetLibSymbol( symbol_change_info.m_LibId );
+
+        wxCHECK2( libSymbol, continue );
+
         if( symbol_change_info.m_LibId != symbol->GetLibId() )
             symbol->SetLibId( symbol_change_info.m_LibId );
 
-        LIB_SYMBOL*                 libSymbol = frame->GetLibSymbol( symbol_change_info.m_LibId );
         std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
         SCH_SCREEN*                 screen = symbol_change_info.m_Instances[0].LastScreen();
 
