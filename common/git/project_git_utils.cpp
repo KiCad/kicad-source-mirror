@@ -24,6 +24,7 @@
 #include "project_git_utils.h"
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
+#include <git/kicad_git_compat.h>
 #include <trace_helpers.h>
 #include <wx/log.h>
 #include <wx/filename.h>
