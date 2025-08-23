@@ -859,7 +859,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         holeToHoleMin = constraint.m_Value.Min();
     }
 
-    aSizes.SetDiffPairHoleToHole( holeToHoleMin );
+    aSizes.SetDiffPairHoleToHole( std::max( holeToHoleMin, aSizes.GetHoleToHole() ) );
 
     return true;
 }
