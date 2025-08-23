@@ -1026,9 +1026,6 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::OnClose( wxCloseEvent& aEvent )
 {
-    if( m_running )
-        aEvent.Veto();
-
     wxCommandEvent dummy;
     OnCancelClick( dummy );
 }
