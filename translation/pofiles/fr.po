@@ -43064,9 +43064,8 @@ msgstr ""
 "Durée d'exportation %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Problèmes en fusionnant des formes **\n"
+msgstr "** Problèmes en fusionnant des formes **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2050
@@ -43079,91 +43078,88 @@ msgid "Warnings:\n"
 msgstr "Warnings:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain a produit une forme nulle **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain a produit une forme nulle **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "Erreur OCC lors de l'ajout d'un polygone de pad/via.\n"
+msgstr "Erreur OCC lors de l'ajout d'un polygone de pad/via."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Impossible d'ajouter une forme (%d points) à la couche cuivre %s.\n"
+msgstr "Impossible d'ajouter une forme (%d points) à la couche cuivre %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Pas de modèle défini pour %s.\n"
+msgstr "Pas de modèle défini pour %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Pas de modèle pour le nom de fichier '%s'.\n"
+msgstr "Pas de modèle pour le nom de fichier '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1232
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Pas de données d'emplacement pour le nom de fichier '%s'.\n"
+msgstr "Pas de données d'emplacement pour le nom de fichier '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Impossible d'ajouter un composant avec le nom de fichier '%s'.\n"
+msgstr "Impossible d'ajouter un composant avec le nom de fichier '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "Exception OCC en génération de forme segment: %s\n"
+msgstr "Exception OCC en génération de forme segment: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC exception building face : %s\n"
+msgstr "OCC exception building face : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1439
 #: pcbnew/exporters/step/step_pcb_model.cpp:1828
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Impossible de créer une forme prismatique\n"
+msgstr "Impossible de créer une forme prismatique"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1510
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "Échec en création d'une arête de segment (%d %d) -> (%d %d), ignoré\n"
+msgstr "Échec en création d'une arête de segment (%d %d) -> (%d %d), ignoré"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1522
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Échec de l'ajout d'une arête de segment (%d %d) -> (%d %d)\n"
+msgstr "Échec de l'ajout d'une arête de segment (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Échec de l'ajout d'arc  de (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)\n"
+"Échec de l'ajout d'arc  de (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1634
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Echec de fermeture de \"wire\" à %d, %d -> %d, %d **\n"
+msgstr "Echec de fermeture de \"wire\" à %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1644
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "Exception OCC en créant un \"wire\" : %s\n"
+msgstr "Exception OCC en créant un \"wire\" : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Le fil n'est pas fait (points de contour %d) : Erreur OCC %d\n"
-"z : %g ; boîte de délimitation : %s\n"
+"z : %g ; boîte de délimitation : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1740
 #, fuzzy, c-format
@@ -43175,40 +43171,36 @@ msgstr ""
 "z : %g ; boîte englobante : %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1762
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Utilisation d'un polygone non simplifié.\n"
+msgstr "Utilisation d'un polygone non simplifié."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "Exception OCC en créant un contour %d : %s\n"
+msgstr "Exception OCC en créant un contour %d : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Face skipped **\n"
+msgstr "** Face skipped **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1929
 #: pcbnew/exporters/step/step_pcb_model.cpp:1946
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "Erreur OCC lors de la création du contour principal.\n"
+msgstr "Erreur OCC lors de la création du contour principal."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1955
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "Erreur OCC créant un trou dans le contour principal.\n"
+msgstr "Erreur OCC créant un trou dans le contour principal."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1997
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Soustraction des trous pour %s\n"
+msgstr "Soustraction des trous pour %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr " ** Problèmes lors de la découpe de %s net %s **\n"
+msgstr " ** Problèmes lors de la découpe de %s net %s **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2094
 msgid "shapes"
@@ -43228,11 +43220,11 @@ msgstr "vias"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3167
 #: pcbnew/exporters/step/step_pcb_model.cpp:3241
 #: pcbnew/exporters/step/step_pcb_model.cpp:3310
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr ""
 "Pas d'assemblage PCB valide ; impossible de créer le fichier de sortie "
-"'%s'.\n"
+"'%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2387
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43248,20 +43240,20 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3218
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Impossible de renommer le fichier temporaire '%s' en '%s'.\n"
+msgstr "Impossible de renommer le fichier temporaire '%s' en '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Impossible d'identifier le type de fichier pour '%s'.\n"
+msgstr "Impossible d'identifier le type de fichier pour '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2897
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
 msgstr ""
-"Impossible de transférer les données du modèle à partir du fichier '%s'.\n"
+"Impossible de transférer les données du modèle à partir du fichier '%s'."
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
@@ -53574,9 +53566,8 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgid "PCB DXF export"
 #~ msgstr "PCB: Export DXF"
 
-#, fuzzy
 #~ msgid "Single Gerber export"
-#~ msgstr "Exportation d'un seul gerber"
+#~ msgstr "Exportation d'un seul Gerber"
 
 #~ msgid "PCB Gerbers export"
 #~ msgstr "Exportation PCB Gerbers"
