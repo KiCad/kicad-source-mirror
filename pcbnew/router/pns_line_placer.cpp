@@ -1501,10 +1501,25 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     current = Trace();
 
+    VECTOR2I splitPoint = current.CLine().CLastPoint();
+
+    if( reachesEnd && aEndItem && current.SegmentCount() && aEndItem->OfKind( ITEM::SEGMENT_T ) )
+    {
+        const SEG lastSeg = current.CLine().CSegment( current.SegmentCount() - 1 );
+        const SEG targetSeg = static_cast<SEGMENT*>( aEndItem )->Seg();
+
+        if( lastSeg.Collinear( targetSeg ) && targetSeg.Overlaps( lastSeg ) )
+        {
+            splitPoint = targetSeg.NearestPoint( lastSeg.A );
+            current.Line().SetPoint( current.PointCount() - 1, splitPoint );
+            m_head.Line().SetPoint( m_head.PointCount() - 1, splitPoint );
+        }
+    }
+
     if( !current.PointCount() )
         m_currentEnd = m_p_start;
     else
-        m_currentEnd = current.CLine().CLastPoint();
+        m_currentEnd = splitPoint;
 
     NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
@@ -1515,7 +1530,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
             && current.SegmentCount() )
     {
         if ( aEndItem->Net() == m_currentNet )
-            SplitAdjacentSegments( m_lastNode, aEndItem, current.CLastPoint() );
+            SplitAdjacentSegments( m_lastNode, aEndItem, splitPoint );
 
         if( Settings().RemoveLoops() )
             removeLoops( m_lastNode, current );
@@ -1900,6 +1915,18 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
                             ( nB == aJoint && nA->LinkCount() == 1 ) )
                         {
                             cleanup.insert( neighbor );
+                        }
+                    }
+                    else if( testSeg.Contains( refSeg ) )
+                    {
+                        const JOINT* aA = aNode->FindJoint( aItem->Anchor( 0 ), aItem );
+                        const JOINT* aB = aNode->FindJoint( aItem->Anchor( 1 ), aItem );
+
+                        if( ( aA == aJoint && aB->LinkCount() == 1 ) ||
+                            ( aB == aJoint && aA->LinkCount() == 1 ) )
+                        {
+                            cleanup.insert( aItem );
+                            return;
                         }
                     }
                 }
