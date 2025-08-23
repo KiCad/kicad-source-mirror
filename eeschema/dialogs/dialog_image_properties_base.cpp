@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,16 +13,11 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-	wxBoxSizer* m_GeneralBoxSizer;
-	m_GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMainSizer;
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_Notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PanelGeneral = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerProperties;
-	bSizerProperties = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerProperties;
-	sbSizerProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Position") ), wxVERTICAL );
+	bMainSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerPos;
 	fgSizerPos = new wxFlexGridSizer( 2, 3, 1, 0 );
@@ -31,41 +26,36 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 	fgSizerPos->SetFlexibleDirection( wxBOTH );
 	fgSizerPos->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_XPosLabel = new wxStaticText( sbSizerProperties->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_XPosLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_XPosLabel->Wrap( -1 );
 	fgSizerPos->Add( m_XPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_ModPositionX = new wxTextCtrl( sbSizerProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ModPositionX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPos->Add( m_ModPositionX, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_XPosUnit = new wxStaticText( sbSizerProperties->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_XPosUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_XPosUnit->Wrap( -1 );
 	fgSizerPos->Add( m_XPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_YPosLabel = new wxStaticText( sbSizerProperties->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_YPosLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_YPosLabel->Wrap( -1 );
 	fgSizerPos->Add( m_YPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_ModPositionY = new wxTextCtrl( sbSizerProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ModPositionY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPos->Add( m_ModPositionY, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 1 );
 
-	m_YPosUnit = new wxStaticText( sbSizerProperties->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_YPosUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_YPosUnit->Wrap( -1 );
 	fgSizerPos->Add( m_YPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerProperties->Add( fgSizerPos, 0, wxBOTTOM|wxEXPAND, 3 );
+	bMainSizer->Add( fgSizerPos, 0, wxEXPAND|wxALL, 8 );
 
+	m_imageSizer = new wxBoxSizer( wxVERTICAL );
 
-	bSizerProperties->Add( sbSizerProperties, 1, wxALL|wxEXPAND, 5 );
+	m_imageSizer->SetMinSize( wxSize( 360,-1 ) );
 
-
-	m_PanelGeneral->SetSizer( bSizerProperties );
-	m_PanelGeneral->Layout();
-	bSizerProperties->Fit( m_PanelGeneral );
-	m_Notebook->AddPage( m_PanelGeneral, _("General"), false );
-
-	m_GeneralBoxSizer->Add( m_Notebook, 1, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_imageSizer, 1, wxEXPAND, 5 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -74,11 +64,12 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	m_GeneralBoxSizer->Add( m_sdbSizerStdButtons, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizerStdButtons, 0, wxALL|wxEXPAND, 5 );
 
 
-	this->SetSizer( m_GeneralBoxSizer );
+	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 }

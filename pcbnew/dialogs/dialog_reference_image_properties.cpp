@@ -41,8 +41,9 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
 {
     // Create the image editor page
-    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap.GetReferenceImage().MutableImage() );
-    m_Notebook->AddPage( m_imageEditor, _( "Image" ), false );
+    m_imageEditor = new PANEL_IMAGE_EDITOR( aParent, this, aBitmap.GetReferenceImage().MutableImage() );
+
+    m_imageSizer->Add( m_imageEditor, 1, wxEXPAND | wxALL, 5 );
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
@@ -87,7 +88,7 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataToWindow()
     m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas and can only be "
                                "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
 
-    return true;
+    return m_imageEditor->TransferDataToWindow();
 }
 
 
@@ -103,7 +104,7 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
         m_imageEditor->TransferToImage( m_bitmap.GetReferenceImage().MutableImage() );
 
         // Set position, etc.
-        m_bitmap.SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
+        m_bitmap.SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
         m_bitmap.SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
         m_bitmap.SetLocked( m_cbLocked->GetValue() );
 

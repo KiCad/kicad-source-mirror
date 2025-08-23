@@ -26,30 +26,30 @@
 #include <wx/msgdlg.h>
 #include <bitmap_base.h>
 #include <pcb_base_edit_frame.h>
-#include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <confirm.h>
-
+#include <units_provider.h>
 #include <dialogs/panel_image_editor.h>
 
 #include <algorithm>
 
 
-PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( wxWindow* aParent, const BITMAP_BASE& aItem ) :
+PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( UNITS_PROVIDER* aUnitsProvider, wxWindow* aParent, const BITMAP_BASE& aItem ) :
         PANEL_IMAGE_EDITOR_BASE( aParent ),
+        m_scale( aUnitsProvider, aParent, m_staticTextScale, m_textCtrlScale, nullptr ),
         m_workingImage( std::make_unique<BITMAP_BASE>( aItem ) )
 {
-    wxString msg;
-    msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
-    m_textCtrlScale->SetValue( msg );
-
-    msg.Printf( wxT( "%d" ), m_workingImage->GetPPI() );
-    m_stPPI_Value->SetLabel( msg );
+    m_scale.SetUnits( EDA_UNITS::UNSCALED );
 }
 
 
-PANEL_IMAGE_EDITOR::~PANEL_IMAGE_EDITOR()
+bool PANEL_IMAGE_EDITOR::TransferDataToWindow()
 {
+    m_scale.SetDoubleValue( m_workingImage->GetScale() );
+
+    m_stPPI_Value->SetLabel( wxString::Format( wxT( "%d" ), m_workingImage->GetPPI() ) );
+
+    return true;
 }
 
 
@@ -72,11 +72,10 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
 
 #define MIN_SIZE 15   // Min size in pixels after scaling (50 mils)
 #define MAX_SIZE 6000 // Max size in pixels after scaling (20 inches)
-    double   tmp;
-    wxString msg = m_textCtrlScale->GetValue();
+    double tmp = m_scale.GetDoubleValue();
 
     // Test number correctness
-    if( !msg.ToDouble( &tmp ) || tmp < 0.0 )
+    if( tmp < 0.0 )
     {
         DisplayErrorMessage( host, _( "Scale must be a positive number." ) );
         return false;
@@ -84,7 +83,7 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
 
     // Test value correctness
     VECTOR2I psize = m_workingImage->GetSizePixels();
-    int    size_min = (int) std::min( ( psize.x * tmp ), ( psize.y * tmp ) );
+    int      size_min = (int) std::min( ( psize.x * tmp ), ( psize.y * tmp ) );
 
     if( size_min < MIN_SIZE ) // if the size is too small, the image will be hard to locate
     {

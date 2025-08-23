@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,16 +24,10 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
-#include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE
@@ -43,8 +37,6 @@ class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxNotebook* m_Notebook;
-		wxPanel* m_PanelGeneral;
 		wxStaticText* m_XPosLabel;
 		wxTextCtrl* m_ModPositionX;
 		wxStaticText* m_XPosUnit;
@@ -54,6 +46,7 @@ class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxCheckBox* m_cbLocked;
+		wxBoxSizer* m_imageSizer;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
