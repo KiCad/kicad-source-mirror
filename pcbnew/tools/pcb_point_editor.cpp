@@ -35,6 +35,7 @@ using namespace std::placeholders;
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>
 #include <geometry/vector_utils.h>
+#include <math/util.h>
 #include <confirm.h>
 #include <tool/tool_manager.h>
 #include <tool/point_editor_behavior.h>
@@ -49,6 +50,7 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <pcb_reference_image.h>
 #include <pcb_generator.h>
+#include <pcb_group.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
 #include <pcb_tablecell.h>
@@ -1456,6 +1458,112 @@ private:
     PCB_TEXTBOX& m_textbox;
 };
 
+class SHAPE_GROUP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    SHAPE_GROUP_POINT_EDIT_BEHAVIOR( PCB_GROUP& aGroup ) :
+            m_group( aGroup )
+    {
+        // Store original line widths as doubles for better scaling precision
+        for( BOARD_ITEM* item : m_group.GetBoardItems() )
+        {
+            if( item->Type() == PCB_SHAPE_T )
+            {
+                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+                m_originalWidths[shape] = static_cast<double>( shape->GetWidth() );
+            }
+        }
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        BOX2I bbox = m_group.GetBoundingBox();
+        VECTOR2I tl = bbox.GetOrigin();
+        VECTOR2I br = bbox.GetEnd();
+
+        aPoints.AddPoint( tl );
+        aPoints.AddPoint( VECTOR2I( br.x, tl.y ) );
+        aPoints.AddPoint( br );
+        aPoints.AddPoint( VECTOR2I( tl.x, br.y ) );
+        aPoints.AddPoint( bbox.Centre() );
+
+        aPoints.AddIndicatorLine( aPoints.Point( RECT_TOP_LEFT ), aPoints.Point( RECT_TOP_RIGHT ) );
+        aPoints.AddIndicatorLine( aPoints.Point( RECT_TOP_RIGHT ), aPoints.Point( RECT_BOT_RIGHT ) );
+        aPoints.AddIndicatorLine( aPoints.Point( RECT_BOT_RIGHT ), aPoints.Point( RECT_BOT_LEFT ) );
+        aPoints.AddIndicatorLine( aPoints.Point( RECT_BOT_LEFT ), aPoints.Point( RECT_TOP_LEFT ) );
+    }
+
+    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        BOX2I bbox = m_group.GetBoundingBox();
+        VECTOR2I tl = bbox.GetOrigin();
+        VECTOR2I br = bbox.GetEnd();
+
+        aPoints.Point( RECT_TOP_LEFT ).SetPosition( tl );
+        aPoints.Point( RECT_TOP_RIGHT ).SetPosition( br.x, tl.y );
+        aPoints.Point( RECT_BOT_RIGHT ).SetPosition( br );
+        aPoints.Point( RECT_BOT_LEFT ).SetPosition( tl.x, br.y );
+        aPoints.Point( RECT_CENTER ).SetPosition( bbox.Centre() );
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        BOX2I oldBox = m_group.GetBoundingBox();
+        VECTOR2I oldCenter = oldBox.Centre();
+
+        if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
+        {
+            VECTOR2I delta = aPoints.Point( RECT_CENTER ).GetPosition() - oldCenter;
+
+            m_group.Move( delta );
+
+            for( BOARD_ITEM* item : m_group.GetBoardItems() )
+                aUpdatedItems.push_back( item );
+
+            UpdatePoints( aPoints );
+            return;
+        }
+
+        VECTOR2I tl = aPoints.Point( RECT_TOP_LEFT ).GetPosition();
+        VECTOR2I br = aPoints.Point( RECT_BOT_RIGHT ).GetPosition();
+
+        double sx = static_cast<double>( br.x - tl.x ) / static_cast<double>( oldBox.GetWidth() );
+        double sy = static_cast<double>( br.y - tl.y ) / static_cast<double>( oldBox.GetHeight() );
+        double scale = ( sx + sy ) / 2.0;
+
+        for( BOARD_ITEM* item : m_group.GetBoardItems() )
+        {
+            if( item->Type() != PCB_SHAPE_T )
+                continue;
+
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            shape->Move( -oldCenter );
+            shape->Scale( scale );
+            shape->Move( oldCenter );
+
+            if( auto shapeIt = m_originalWidths.find( shape ); shapeIt != m_originalWidths.end() )
+            {
+                shapeIt->second = shapeIt->second * scale;
+                shape->SetWidth( KiROUND( shapeIt->second ) );
+            }
+            else
+            {
+                // Shouldn't happen, but just in case
+                shape->SetWidth( KiROUND( shape->GetWidth() * scale ) );
+            }
+
+            aUpdatedItems.push_back( shape );
+        }
+
+        UpdatePoints( aPoints );
+    }
+
+private:
+    PCB_GROUP& m_group;
+    std::unordered_map<PCB_SHAPE*, double> m_originalWidths;
+};
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         PCB_TOOL_BASE( "pcbnew.PointEditor" ),
         m_frame( nullptr ),
@@ -1627,6 +1735,28 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         default:        // suppress warnings
             break;
         }
+
+        break;
+    }
+
+    case PCB_GROUP_T:
+    {
+        PCB_GROUP* group = static_cast<PCB_GROUP*>( aItem );
+        bool shapesOnly = true;
+
+        for( BOARD_ITEM* child : group->GetBoardItems() )
+        {
+            if( child->Type() != PCB_SHAPE_T )
+            {
+                shapesOnly = false;
+                break;
+            }
+        }
+
+        if( shapesOnly )
+            m_editorBehavior = std::make_unique<SHAPE_GROUP_POINT_EDIT_BEHAVIOR>( *group );
+        else
+            points.reset();
 
         break;
     }

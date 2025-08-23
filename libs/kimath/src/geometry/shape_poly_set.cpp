@@ -2186,6 +2186,8 @@ bool SHAPE_POLY_SET::Collide( const SHAPE* aShape, int aClearance, int* aActual,
 void SHAPE_POLY_SET::RemoveAllContours()
 {
     m_polys.clear();
+    m_triangulatedPolys.clear();
+    m_triangulationValid = false;
 }
 
 
