@@ -71,7 +71,8 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_matchSpecifiedValue->SetLabel( _( "Change footprints matching value:" ) );
         m_matchSpecifiedID->SetLabel( _( "Change footprints with library id:" ) );
         m_resetTextItemLayers->SetLabel( _( "Update text layers and visibilities" ) );
-        m_resetTextItemEffects->SetLabel( _( "Update text sizes, styles and positions" ) );
+        m_resetTextItemEffects->SetLabel( _( "Update text sizes and styles" ) );
+        m_resetTextItemPositions->SetLabel( _( "Update text positions" ) );
         m_resetTextItemContent->SetLabel( _( "Update text content" ) );
         m_resetFabricationAttrs->SetLabel( _( "Update fabrication attributes" ) );
         m_resetClearanceOverrides->SetLabel( _( "Update clearance overrides" ) );
@@ -104,6 +105,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_removeExtraBox->SetValue(          m_updateMode ? false : false );
     m_resetTextItemLayers->SetValue(     m_updateMode ? false : true  );
     m_resetTextItemEffects->SetValue(    m_updateMode ? false : true  );
+    m_resetTextItemPositions->SetValue(  m_updateMode ? false : true  );
     m_resetTextItemContent->SetValue(    m_updateMode ? false : true  );
     m_resetFabricationAttrs->SetValue(   m_updateMode ? false : true  );
     m_resetClearanceOverrides->SetValue( m_updateMode ? true  : true  );
@@ -284,12 +286,13 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& aEvent )
 void DIALOG_EXCHANGE_FOOTPRINTS::checkAll( bool aCheck )
 {
     m_removeExtraBox->SetValue( aCheck );
-  	m_resetTextItemLayers->SetValue( aCheck );
-  	m_resetTextItemEffects->SetValue( aCheck );
-  	m_resetTextItemContent->SetValue( aCheck );
-  	m_resetFabricationAttrs->SetValue( aCheck );
-  	m_resetClearanceOverrides->SetValue( aCheck );
-  	m_reset3DModels->SetValue( aCheck );
+        m_resetTextItemLayers->SetValue( aCheck );
+        m_resetTextItemEffects->SetValue( aCheck );
+        m_resetTextItemPositions->SetValue( aCheck );
+        m_resetTextItemContent->SetValue( aCheck );
+        m_resetFabricationAttrs->SetValue( aCheck );
+        m_resetClearanceOverrides->SetValue( aCheck );
+        m_reset3DModels->SetValue( aCheck );
 }
 
 
@@ -380,6 +383,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
                                  m_removeExtraBox->GetValue(),
                                  m_resetTextItemLayers->GetValue(),
                                  m_resetTextItemEffects->GetValue(),
+                                 m_resetTextItemPositions->GetValue(),
                                  m_resetTextItemContent->GetValue(),
                                  m_resetFabricationAttrs->GetValue(),
                                  m_resetClearanceOverrides->GetValue(),

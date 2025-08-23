@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -112,8 +112,11 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_resetTextItemLayers, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_resetTextItemEffects, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_resetTextItemPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_resetTextItemPositions, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetTextItemContent = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text content"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_resetTextItemContent, 0, wxBOTTOM|wxRIGHT, 5 );

@@ -525,8 +525,9 @@ public:
                             bool deleteExtraTexts = true,
                             bool resetTextLayers = true,
                             bool resetTextEffects = true,
-                            bool resetFabricationAttrs = true,
+                            bool resetTextPositions = true,
                             bool resetTextContent = true,
+                            bool resetFabricationAttrs = true,
                             bool resetClearanceOverrides = true,
                             bool reset3DModels = true,
                             bool* aUpdated = nullptr );

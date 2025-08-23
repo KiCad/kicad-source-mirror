@@ -2210,7 +2210,7 @@ int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aU
  */
 static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
                              bool aResetText, bool aResetTextLayers, bool aResetTextEffects,
-                             bool* aUpdated )
+                             bool aResetTextPositions, bool* aUpdated )
 {
     if( aResetText )
         *aUpdated |= aSrc.GetText() != aDest.GetText();
@@ -2228,6 +2228,8 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
         aDest.SetVisible( aSrc.IsVisible() );
     }
 
+    VECTOR2I origPos = aDest.GetFPRelativePosition();
+
     if( aResetTextEffects )
     {
         *aUpdated |= aSrc.GetHorizJustify() != aDest.GetHorizJustify();
@@ -2235,12 +2237,19 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
         *aUpdated |= aSrc.GetTextSize() != aDest.GetTextSize();
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
-        *aUpdated |= aSrc.GetFPRelativePosition() != aDest.GetFPRelativePosition();
     }
     else
     {
-        // Careful: SetAttributes() will clobber the position
         aDest.SetAttributes( aSrc );
+    }
+
+    if( aResetTextPositions )
+    {
+        *aUpdated |= aSrc.GetFPRelativePosition() != origPos;
+        aDest.SetFPRelativePosition( origPos );
+    }
+    else
+    {
         aDest.SetFPRelativePosition( aSrc.GetFPRelativePosition() );
     }
 
@@ -2302,6 +2311,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                                         bool deleteExtraTexts,
                                         bool resetTextLayers,
                                         bool resetTextEffects,
+                                        bool resetTextPositions,
                                         bool resetTextContent,
                                         bool resetFabricationAttrs,
                                         bool resetClearanceOverrides,
@@ -2398,7 +2408,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
             {
                 handledTextItems.insert( newTextItem );
                 processTextItem( *oldTextItem, *newTextItem, resetTextContent, resetTextLayers,
-                                 resetTextEffects, aUpdated );
+                                 resetTextEffects, resetTextPositions, aUpdated );
             }
             else if( deleteExtraTexts )
             {
@@ -2434,14 +2444,14 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     // Copy reference. The initial text is always used, never resetted
     processTextItem( aExisting->Reference(), aNew->Reference(), false, resetTextLayers,
-                     resetTextEffects, aUpdated );
+                     resetTextEffects, resetTextPositions, aUpdated );
 
     // Copy value
     processTextItem( aExisting->Value(), aNew->Value(),
                      // reset value text only when it is a proxy for the footprint ID
                      // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
                      aExisting->GetValue() == aExisting->GetFPID().GetLibItemName().wx_str(),
-                     resetTextLayers, resetTextEffects, aUpdated );
+                     resetTextLayers, resetTextEffects, resetTextPositions, aUpdated );
 
     std::set<PCB_FIELD*> handledFields;
 
@@ -2458,7 +2468,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         {
             handledFields.insert( newField );
             processTextItem( *oldField, *newField, resetTextContent, resetTextLayers,
-                             resetTextEffects, aUpdated );
+                             resetTextEffects, resetTextPositions, aUpdated );
         }
         else if( deleteExtraTexts )
         {
