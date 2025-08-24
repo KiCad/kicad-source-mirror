@@ -1830,17 +1830,6 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         return lodScaleForThreshold( aView, minSize, pcbIUScale.mmToIU( 0.5 ) );
     }
 
-    // Hole walls always need a repaint when zoom level changes after the last
-    // LAYER_PAD_HOLEWALLS shape rebuild
-    if( aLayer == LAYER_PAD_HOLEWALLS )
-    {
-        if( aView->GetGAL()->GetZoomFactor() != m_lastGalZoomLevel )
-        {
-            aView->Update( this, KIGFX::REPAINT );
-            m_lastGalZoomLevel = aView->GetGAL()->GetZoomFactor();
-        }
-    }
-
     VECTOR2L padSize = GetBoundingBox().GetSize();
     int64_t  minSide = std::min( padSize.x, padSize.y );
 

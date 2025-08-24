@@ -53,7 +53,8 @@ enum SHADER_MODE
     SHADER_LINE_C = 7,
     SHADER_LINE_D = 8,
     SHADER_LINE_E = 9,
-    SHADER_LINE_F = 10
+    SHADER_LINE_F = 10,
+    SHADER_HOLE_WALL = 11
 };
 
 ///< Data structure for vertices {X,Y,Z,R,G,B,A,shader&param}

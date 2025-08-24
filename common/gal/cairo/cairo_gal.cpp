@@ -322,6 +322,12 @@ void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& a
 }
 
 
+void CAIRO_GAL_BASE::DrawHoleWall( const VECTOR2D& aCenterPoint, double aRadius, double aWallWidth )
+{
+    DrawCircle( aCenterPoint, aRadius + aWallWidth );
+}
+
+
 void CAIRO_GAL_BASE::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
     syncLineWidth();

@@ -36,6 +36,7 @@ const float SHADER_LINE_C               = 7.0;
 const float SHADER_LINE_D               = 8.0;
 const float SHADER_LINE_E               = 9.0;
 const float SHADER_LINE_F               = 10.0;
+const float SHADER_HOLE_WALL            = 11.0;
 
 // Minimum line width
 const float MIN_WIDTH = 1.0;
@@ -72,8 +73,8 @@ void computeLineCoords( bool posture, vec2 vs, vec2 vp, vec2 texcoord, vec2 dir,
     vec2 s = sign( vec2( gl_ModelViewProjectionMatrix[0][0], gl_ModelViewProjectionMatrix[1][1] ) );
 
 
-    if( pixelWidth < 1.0 )
-        pixelWidth = 1.0;
+    if( pixelWidth < u_minLinePixelWidth )
+        pixelWidth = u_minLinePixelWidth;
 
     if ( pixelWidth > 1.0 || u_pixelSizeMultiplier > 1.0 )
     {
@@ -126,8 +127,59 @@ void computeCircleCoords( float mode, float vertexIndex, float radius, float lin
 
     vec4 adjust = vec4(-1, -1, 0, 0);
 
-    if( pixelWidth < 1.0 )
-        pixelWidth = 1.0;
+    if( pixelWidth < u_minLinePixelWidth )
+        pixelWidth = u_minLinePixelWidth;
+
+    if( vertexIndex == 1.0 )
+    {
+        v_circleCoords = vec2( -sqrt( 3.0 ), -1.0 );
+        delta = vec4( -pixelR * sqrt(3.0), -pixelR, 0, 0 );
+    }
+    else if( vertexIndex == 2.0 )
+    {
+        v_circleCoords = vec2( sqrt( 3.0 ), -1.0 );
+        delta = vec4( pixelR * sqrt( 3.0 ), -pixelR, 0, 0 );
+    }
+    else if( vertexIndex == 3.0 )
+    {
+        v_circleCoords = vec2( 0.0, 2.0 );
+        delta = vec4( 0, 2 * pixelR, 0, 0 );
+    }
+    else if( vertexIndex == 4.0 )
+    {
+        v_circleCoords = vec2( -sqrt( 3.0 ), 0.0 );
+        delta = vec4( 0, 0, 0, 0 );
+    }
+    else if( vertexIndex == 5.0 )
+    {
+        v_circleCoords = vec2( sqrt( 3.0 ), 0.0 );
+        delta = vec4( 0, 0, 0, 0 );
+    }
+    else if( vertexIndex == 6.0 )
+    {
+        v_circleCoords = vec2( 0.0, 2.0 );
+        delta = vec4( 0, 0, 0, 0 );
+    }
+
+    v_shaderParams[2] = pixelR;
+    v_shaderParams[3] = pixelWidth;
+
+    delta.x *= u_screenPixelSize.x;
+    delta.y *= u_screenPixelSize.y;
+
+    gl_Position = center + delta + adjust;
+    gl_FrontColor = gl_Color;
+}
+
+void computeHoleWallCoords( float vertexIndex, float radius, float lineWidth )
+{
+    vec4 delta;
+    vec4 center = roundv( gl_ModelViewProjectionMatrix * gl_Vertex + vec4(1, 1, 0, 0), u_screenPixelSize );
+    float pixelWidth = roundr( lineWidth / u_worldPixelSize, 1.0 );
+    if( pixelWidth < u_minLinePixelWidth )
+        pixelWidth = u_minLinePixelWidth;
+    float pixelR = roundr( radius / u_worldPixelSize, 1.0 ) + pixelWidth;
+    vec4 adjust = vec4(-1, -1, 0, 0);
 
     if( vertexIndex == 1.0 )
     {
@@ -195,6 +247,8 @@ void main()
         computeLineCoords( posture,  vs, vp,   vec2( -1,  1 ), vec2( -1, 0 ), lineWidth, true );
     else if( mode == SHADER_LINE_F )
         computeLineCoords( posture,  -vs, vp,  vec2(  1,  1 ), vec2( -1, 0 ), lineWidth, false );
+    else if( mode == SHADER_HOLE_WALL )
+        computeHoleWallCoords( v_shaderParams.y, v_shaderParams.z, v_shaderParams.w );
     else if( mode == SHADER_FILLED_CIRCLE || mode == SHADER_STROKED_CIRCLE)
         computeCircleCoords( mode, v_shaderParams.y, v_shaderParams.z, v_shaderParams.w );
     else

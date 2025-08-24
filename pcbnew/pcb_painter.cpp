@@ -1439,22 +1439,26 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetIsStroke( false );
         double widthFactor = ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
         double lineWidth = widthFactor * m_holePlatingThickness;
-
-        // Prevent the hole wall from being drawn too thin (at least two pixels)
-        // or too thick (cap at the size of the pad )
-        lineWidth = std::max( lineWidth, 2.0 / m_gal->GetWorldScale() );
         lineWidth = std::min( lineWidth, aPad->GetSizeX() / 2.0 );
         lineWidth = std::min( lineWidth, aPad->GetSizeY() / 2.0 );
 
         m_gal->SetFillColor( color );
+        m_gal->SetMinLineWidth( lineWidth );
 
         std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
-        int holeSize = slot->GetWidth() + ( 2 * lineWidth );
 
         if( slot->GetSeg().A == slot->GetSeg().B )    // Circular hole
-            m_gal->DrawCircle( slot->GetSeg().A, KiROUND( holeSize / 2.0 ) );
+        {
+            double holeRadius = slot->GetWidth() / 2.0;
+            m_gal->DrawHoleWall( slot->GetSeg().A, holeRadius, lineWidth );
+        }
         else
+        {
+            int holeSize = slot->GetWidth() + ( 2 * lineWidth );
             m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B, holeSize );
+        }
+
+        m_gal->SetMinLineWidth( 1.0 );
 
         return;
     }

@@ -413,10 +413,13 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     SetTarget( TARGET_NONCACHED );
 
     // Avoid uninitialized variables:
-    ufm_worldPixelSize = 1;
-    ufm_screenPixelSize = 1;
-    ufm_pixelSizeMultiplier = 1;
-    ufm_antialiasingOffset = 1;
+    ufm_worldPixelSize = -1;
+    ufm_screenPixelSize = -1;
+    ufm_pixelSizeMultiplier = -1;
+    ufm_antialiasingOffset = -1;
+    ufm_minLinePixelWidth = -1;
+    ufm_fontTexture = -1;
+    ufm_fontTextureWidth = -1;
     m_swapInterval  = 0;
 }
 
@@ -672,14 +675,6 @@ void OPENGL_GAL::BeginDrawing()
             glActiveTexture( GL_TEXTURE0 );
         }
 
-        // Set shader parameter
-        GLint ufm_fontTexture = m_shader->AddParameter( "u_fontTexture" );
-        GLint ufm_fontTextureWidth = m_shader->AddParameter( "u_fontTextureWidth" );
-        ufm_worldPixelSize = m_shader->AddParameter( "u_worldPixelSize" );
-        ufm_screenPixelSize = m_shader->AddParameter( "u_screenPixelSize" );
-        ufm_pixelSizeMultiplier = m_shader->AddParameter( "u_pixelSizeMultiplier" );
-        ufm_antialiasingOffset = m_shader->AddParameter( "u_antialiasingOffset" );
-
         m_shader->Use();
         m_shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
         m_shader->SetParameter( ufm_fontTextureWidth, (int) font_image.width );
@@ -700,6 +695,7 @@ void OPENGL_GAL::BeginDrawing()
     renderingOffset.x *= screenPixelSize.x;
     renderingOffset.y *= screenPixelSize.y;
     m_shader->SetParameter( ufm_antialiasingOffset, renderingOffset );
+    m_shader->SetParameter( ufm_minLinePixelWidth, GetMinLineWidth() );
     m_shader->Deactivate();
 
     // Something between BeginDrawing and EndDrawing seems to depend on
@@ -714,6 +710,18 @@ void OPENGL_GAL::BeginDrawing()
     wxLogTrace( traceGalProfile, wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
 #endif /* KICAD_GAL_PROFILE */
+}
+
+void OPENGL_GAL::SetMinLineWidth( float aLineWidth )
+{
+    GAL::SetMinLineWidth( aLineWidth );
+
+    if( m_shader && ufm_minLinePixelWidth != -1 )
+    {
+        m_shader->Use();
+        m_shader->SetParameter( ufm_minLinePixelWidth, aLineWidth );
+        m_shader->Deactivate();
+    }
 }
 
 
@@ -904,6 +912,25 @@ void OPENGL_GAL::drawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
     drawCircle( aCenterPoint, aRadius );
+}
+
+
+void OPENGL_GAL::DrawHoleWall( const VECTOR2D& aCenterPoint, double aHoleRadius,
+                               double aWallWidth )
+{
+    if( m_isFillEnabled )
+    {
+        m_currentManager->Color( m_fillColor.r, m_fillColor.g, m_fillColor.b, m_fillColor.a );
+
+        m_currentManager->Shader( SHADER_HOLE_WALL, 1.0, aHoleRadius, aWallWidth );
+        m_currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, m_layerDepth );
+
+        m_currentManager->Shader( SHADER_HOLE_WALL, 2.0, aHoleRadius, aWallWidth );
+        m_currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, m_layerDepth );
+
+        m_currentManager->Shader( SHADER_HOLE_WALL, 3.0, aHoleRadius, aWallWidth );
+        m_currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, m_layerDepth );
+    }
 }
 
 
@@ -2753,6 +2780,9 @@ void OPENGL_GAL::init()
     if( !m_shader->IsLinked() && !m_shader->Link() )
         throw std::runtime_error( "Cannot link the shaders!" );
 
+    // Set up shader parameters after linking
+    setupShaderParameters();
+
     // Check if video card supports textures big enough to fit the font atlas
     int maxTextureSize;
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
@@ -2778,6 +2808,19 @@ void OPENGL_GAL::init()
     m_tempManager->SetShader( *m_shader );
 
     m_isInitialized = true;
+}
+
+
+void OPENGL_GAL::setupShaderParameters()
+{
+    // Initialize shader uniform parameter locations
+    ufm_fontTexture = m_shader->AddParameter( "u_fontTexture" );
+    ufm_fontTextureWidth = m_shader->AddParameter( "u_fontTextureWidth" );
+    ufm_worldPixelSize = m_shader->AddParameter( "u_worldPixelSize" );
+    ufm_screenPixelSize = m_shader->AddParameter( "u_screenPixelSize" );
+    ufm_pixelSizeMultiplier = m_shader->AddParameter( "u_pixelSizeMultiplier" );
+    ufm_antialiasingOffset = m_shader->AddParameter( "u_antialiasingOffset" );
+    ufm_minLinePixelWidth = m_shader->AddParameter( "u_minLinePixelWidth" );
 }
 
 
