@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,66 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+
 	m_galOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	bupperSizer->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 10 );
+	bSizer11->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 10 );
+
+	wxBoxSizer* bSizerPads;
+	bSizerPads = new wxBoxSizer( wxVERTICAL );
+
+	m_padsLabel = new wxStaticText( this, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padsLabel->Wrap( -1 );
+	bSizerPads->Add( m_padsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticlinePads = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerPads->Add( m_staticlinePads, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+	m_OptUseViaColorForNormalTHPadstacks = new wxCheckBox( this, wxID_ANY, _("Use via color for normal through hole padstacks"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerPads->Add( m_OptUseViaColorForNormalTHPadstacks, 0, wxALL, 5 );
+
+
+	bSizerPads->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	m_clearanceLabel = new wxStaticText( this, wxID_ANY, _("Clearance Outlines"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearanceLabel->Wrap( -1 );
+	bSizerPads->Add( m_clearanceLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerPads->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 2, 0 );
+	gbSizer2->SetFlexibleDirection( wxBOTH );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_trackClearancesLabel = new wxStaticText( this, wxID_ANY, _("Tracks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackClearancesLabel->Wrap( -1 );
+	gbSizer2->Add( m_trackClearancesLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+
+	wxString m_OptDisplayTracksClearanceChoices[] = { _("Do not show clearances"), _("Show when routing"), _("Show when routing w/ via clearance at end"), _("Show when routing and editing"), _("Show always") };
+	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
+	m_OptDisplayTracksClearance = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 0 );
+	m_OptDisplayTracksClearance->SetSelection( 0 );
+	gbSizer2->Add( m_OptDisplayTracksClearance, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_OptDisplayPadClearence = new wxCheckBox( this, wxID_ANY, _("Show pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_OptDisplayPadClearence, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+
+
+	bSizerPads->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerPads->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer11->Add( bSizerPads, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bupperSizer->Add( bSizer11, 1, wxEXPAND, 5 );
 
 
 	bupperSizer->Add( 15, 0, 0, 0, 5 );
@@ -131,38 +187,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bMargins->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
-
-	m_clearanceLabel = new wxStaticText( pcbPage, wxID_ANY, _("Clearance Outlines"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_clearanceLabel->Wrap( -1 );
-	bMargins->Add( m_clearanceLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
-
-	m_staticline2 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMargins->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
-
-	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 2, 0 );
-	gbSizer2->SetFlexibleDirection( wxBOTH );
-	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_trackClearancesLabel = new wxStaticText( pcbPage, wxID_ANY, _("Tracks:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_trackClearancesLabel->Wrap( -1 );
-	gbSizer2->Add( m_trackClearancesLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
-
-	wxString m_OptDisplayTracksClearanceChoices[] = { _("Do not show clearances"), _("Show when routing"), _("Show when routing w/ via clearance at end"), _("Show when routing and editing"), _("Show always") };
-	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
-	m_OptDisplayTracksClearance = new wxChoice( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 0 );
-	m_OptDisplayTracksClearance->SetSelection( 0 );
-	gbSizer2->Add( m_OptDisplayTracksClearance, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_OptDisplayPadClearence = new wxCheckBox( pcbPage, wxID_ANY, _("Show pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_OptDisplayPadClearence, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
-
-
-	bMargins->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
+	bMargins->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	m_staticText4 = new wxStaticText( pcbPage, wxID_ANY, _("Selection && Highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
@@ -182,7 +207,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bMargins->Add( bSizer9, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
+	bMargins->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	m_crossProbingLabel = new wxStaticText( pcbPage, wxID_ANY, _("Cross-probing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_crossProbingLabel->Wrap( -1 );
@@ -223,6 +248,9 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 
 	bMargins->Add( bSizer8, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bMargins->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	pcbOptionsSizer->Add( bMargins, 1, wxEXPAND, 5 );

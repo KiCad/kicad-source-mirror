@@ -249,7 +249,28 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
     // Pad and via copper and clearance outlines take their color from the copper layer
     if( IsPadCopperLayer( aLayer ) )
-        aLayer = aLayer - LAYER_PAD_COPPER_START;
+    {
+        if( pcbconfig() && aItem && aItem->Type() == PCB_PAD_T )
+        {
+            const PAD* pad = static_cast<const PAD*>( aItem );
+
+            // Old-skool display for people who struggle with change
+            if( pcbconfig()->m_Display.m_UseViaColorForNormalTHPadstacks
+                    && pad->GetAttribute() == PAD_ATTRIB::PTH
+                    && pad->Padstack().Mode() == PADSTACK::MODE::NORMAL )
+            {
+                aLayer = LAYER_VIA_HOLES;
+            }
+            else
+            {
+                aLayer = aLayer - LAYER_PAD_COPPER_START;
+            }
+        }
+        else
+        {
+            aLayer = aLayer - LAYER_PAD_COPPER_START;
+        }
+    }
     else if( IsViaCopperLayer( aLayer ) )
         aLayer = aLayer - LAYER_VIA_COPPER_START;
     else if( IsClearanceLayer( aLayer ) )

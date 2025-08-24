@@ -236,6 +236,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_clearance",
             &m_Display.m_PadClearance, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_use_via_color_for_normal_th_padstacks",
+            &m_Display.m_UseViaColorForNormalTHPadstacks, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_ViewersDisplay.m_DisplayPadFill, true ) );
 

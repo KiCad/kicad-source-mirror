@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,6 +21,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
 #include <wx/grid.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -28,10 +32,6 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/panel.h>
-#include <wx/statline.h>
-#include <wx/choice.h>
-#include <wx/checkbox.h>
-#include <wx/gbsizer.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,6 +45,14 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxBoxSizer* m_galOptionsSizer;
+		wxStaticText* m_padsLabel;
+		wxStaticLine* m_staticlinePads;
+		wxCheckBox* m_OptUseViaColorForNormalTHPadstacks;
+		wxStaticText* m_clearanceLabel;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_trackClearancesLabel;
+		wxChoice* m_OptDisplayTracksClearance;
+		wxCheckBox* m_OptDisplayPadClearence;
 		wxSimplebook* m_optionsBook;
 		wxStaticText* m_layerNamesLabel;
 		WX_GRID* m_layerNameitemsGrid;
@@ -55,11 +63,6 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_netNamesLabel;
 		wxChoice* m_ShowNetNamesOption;
 		wxCheckBox* m_OptDisplayPadNumber;
-		wxStaticText* m_clearanceLabel;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_trackClearancesLabel;
-		wxChoice* m_OptDisplayTracksClearance;
-		wxCheckBox* m_OptDisplayPadClearence;
 		wxStaticText* m_staticText4;
 		wxStaticLine* m_staticline4;
 		wxCheckBox* m_checkForceShowFieldsWhenFPSelected;

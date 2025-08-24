@@ -195,6 +195,7 @@ public:
 
         TRACK_CLEARANCE_MODE m_TrackClearance;
         bool                 m_PadClearance;
+        bool                 m_UseViaColorForNormalTHPadstacks;
 
         int                  m_NetNames;
 
