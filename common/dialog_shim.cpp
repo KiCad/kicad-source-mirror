@@ -435,10 +435,9 @@ void DIALOG_SHIM::SaveControlState()
 
                 if( !key.empty() )
                 {
-                    if( m_unitBinders.contains( win ) )
+                    if( m_unitBinders.contains( win ) && !m_unitBinders[ win ]->UnitsInvariant() )
                     {
-                        if( !m_unitBinders[ win ]->UnitsInvariant() )
-                            dlgMap[ key ] = m_unitBinders[ win ]->GetValue();
+                        dlgMap[ key ] = m_unitBinders[ win ]->GetValue();
                     }
                     else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
                     {
