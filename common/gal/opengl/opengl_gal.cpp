@@ -2662,6 +2662,9 @@ void OPENGL_GAL::blitCursor()
 
     const COLOR4D color = getCursorColor();
 
+    GLboolean depthTestEnabled = glIsEnabled( GL_DEPTH_TEST );
+    glDisable( GL_DEPTH_TEST );
+
     glActiveTexture( GL_TEXTURE0 );
     glDisable( GL_TEXTURE_2D );
     glEnable( GL_BLEND );
@@ -2712,6 +2715,9 @@ void OPENGL_GAL::blitCursor()
     }
 
     glEnd();
+
+    if( depthTestEnabled )
+        glEnable( GL_DEPTH_TEST );
 }
 
 
