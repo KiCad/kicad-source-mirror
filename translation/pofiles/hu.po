@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-24 11:02+0000\n"
+"PO-Revision-Date: 2025-08-25 12:03+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -47001,7 +47001,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_edit_frame.cpp:2074
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
 msgstr "A(z) \"%s\" kapcsolási rajz fájl nem található."
 
@@ -49129,9 +49129,8 @@ msgstr ""
 "Beállítások menüben."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:324
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "\"%s\" betöltése sikertelen"
+msgstr "Nem sikerült betölteni a panelt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:389
 #, fuzzy, c-format
@@ -49140,9 +49139,8 @@ msgstr "Érvénytelen jel név"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:430 pcbnew/pcbnew_jobs_handler.cpp:507
 #: pcbnew/pcbnew_jobs_handler.cpp:555
-#, fuzzy
 msgid "Unknown export format"
-msgstr "ismeretlen via típus (%d)"
+msgstr "Ismeretlen exportálási formátum"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:484
 #, c-format
@@ -49155,9 +49153,8 @@ msgid "Error exporting VRML"
 msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:533
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "Panel körvonal meghatározás"
+msgstr "Érvénytelen képméret"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:773
 #, fuzzy
@@ -49171,9 +49168,8 @@ msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:830 pcbnew/pcbnew_jobs_handler.cpp:893
 #: pcbnew/pcbnew_jobs_handler.cpp:978 pcbnew/pcbnew_jobs_handler.cpp:1282
-#, fuzzy
 msgid "At least one layer must be specified\n"
-msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
+msgstr "Legalább egy réteget meg kell adni\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1181 pcbnew/pcbnew_jobs_handler.cpp:1335
 #, fuzzy, c-format
@@ -49182,7 +49178,7 @@ msgstr "\"%s\" betöltése sikertelen"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1251
 msgid "Successfully created genCAD file\n"
-msgstr ""
+msgstr "Sikerült létrehozni a genCAD fájlt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1544 pcbnew/pcbnew_jobs_handler.cpp:1617
 #, fuzzy, c-format
@@ -49195,24 +49191,23 @@ msgid "Wrote back position data to '%s'.\n"
 msgstr "BOM kimenet írása a '%s'-ra"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1591
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Alkatrészrajzolat exportálása"
+msgstr "Pozíció adatok kiírva ide: %s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1687
-#, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Az alkatrészrajzolat könyvtár \"%s\" elérési útvonala nem létezik"
+msgstr ""
+"Az alkatrészrajzolat könyvtár \"%s\" elérési útvonala nem létezik vagy nem "
+"elérhető\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1727
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "nincs aktív könyvtár kiválasztva"
+msgstr "Nem sikerült menteni a könyvtárat\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1733
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Az alkatrészrajzolat könyvtár nincs engedélyezve."
+msgstr "Az alkatrészrajzolat könyvtár nem lett frissítve\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1811
 #, fuzzy
@@ -49227,9 +49222,8 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "%s alkatrészrajzolat módosítása (\"%s\" -> \"%s\")"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1873
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "Hiba az SVG fájl létrehozása közben"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1941 pcbnew/tools/drc_tool.cpp:160
 #, fuzzy
@@ -49244,14 +49238,13 @@ msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Nem sikerült betölteni a(z) \"%s\" kapcsolási rajzot"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2017 pcbnew/tools/drc_tool.cpp:200
-#, fuzzy
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2038
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Kapcsolat nélküli elemek (%s)"
+msgstr "%d kapcsolat nélküli elemet találtunk\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2044
 #, c-format
@@ -49266,9 +49259,9 @@ msgstr ""
 "\"%s\""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2065
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "DRC hibajelentés mentése"
+msgstr "DRC hibajelentés mentése ide: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2212
 #, fuzzy
@@ -49297,13 +49290,12 @@ msgstr "Kivétel történt a Python plugin futása során"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:139
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
 msgstr "A(z) \"%s\" eljárás nem található, vagy nem hívható"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:140
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
-#, fuzzy
 msgid "Unknown Method"
 msgstr "Ismeretlen eljárás"
 
@@ -49723,7 +49715,6 @@ msgid "Routing Track"
 msgstr "Vezetősáv"
 
 #: pcbnew/router/router_tool.cpp:2744
-#, fuzzy
 msgid "(no net)"
 msgstr "(nincs vezeték)"
 
@@ -49733,32 +49724,27 @@ msgid "Free-angle"
 msgstr "Szabad szög"
 
 #: pcbnew/router/router_tool.cpp:2759
-#, fuzzy
 msgid "45-degree"
-msgstr "45- fok"
+msgstr "45°"
 
 #: pcbnew/router/router_tool.cpp:2760
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "45-fokban lekerekített"
+msgstr "45°, lekerekített"
 
 #: pcbnew/router/router_tool.cpp:2761
-#, fuzzy
 msgid "90-degree"
-msgstr "90-fok"
+msgstr "90°"
 
 #: pcbnew/router/router_tool.cpp:2762
-#, fuzzy
 msgid "90-degree rounded"
-msgstr "90-fokban lekerekített"
+msgstr "90°, lekerekített"
 
 #: pcbnew/router/router_tool.cpp:2767
-#, fuzzy
 msgid "Corner Style"
-msgstr "Vonalstílus"
+msgstr "Sarokstílus"
 
 #: pcbnew/router/router_tool.cpp:2783 pcbnew/router/router_tool.cpp:2812
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
 msgstr "Vezetősáv szélesség: %s"
 
@@ -49944,17 +49930,14 @@ msgid "Align to Top"
 msgstr "Igazítás felülre"
 
 #: pcbnew/tools/align_distribute_tool.cpp:293 pcbnew/tools/pcb_actions.cpp:1904
-#, fuzzy
 msgid "Align to Bottom"
 msgstr "Igazítás alulra"
 
 #: pcbnew/tools/align_distribute_tool.cpp:343 pcbnew/tools/pcb_actions.cpp:1911
-#, fuzzy
 msgid "Align to Left"
 msgstr "Igazítás balra"
 
 #: pcbnew/tools/align_distribute_tool.cpp:393 pcbnew/tools/pcb_actions.cpp:1918
-#, fuzzy
 msgid "Align to Right"
 msgstr "Igazítás jobbra"
 
