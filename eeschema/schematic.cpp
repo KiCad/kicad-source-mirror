@@ -898,6 +898,10 @@ void SCHEMATIC::ResolveERCExclusionsPostUpdate()
         else
             RootScreen()->Append( marker );
     }
+
+    // Once we have the ERC Exclusions, record them in the project file so that
+    // they are retained even before the schematic is saved (PCB Editor can also save the project)
+    RecordERCExclusions();
 }
 
 
