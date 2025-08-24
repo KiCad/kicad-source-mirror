@@ -458,6 +458,28 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 
     text.Printf( format, value );
 
+    // Check if the formatted value shows only zeros but the actual value is non-zero
+    // If so, use scientific notation instead
+    if( value != 0.0 )
+    {
+        bool showsOnlyZeros = true;
+
+        // Check if the text contains only zeros (allowing for decimal point, minus sign, etc.)
+        for( auto ch : text )
+        {
+            if( ch >= '1' && ch <= '9' )
+            {
+                showsOnlyZeros = false;
+                break;
+            }
+        }
+
+        if( showsOnlyZeros )
+        {
+            text.Printf( wxT( "%.3e" ), value );
+        }
+    }
+
     // Trim to 2-1/2 digits after the decimal place for short-form mm
     if( short_form && aUnits == EDA_UNITS::MM )
     {
