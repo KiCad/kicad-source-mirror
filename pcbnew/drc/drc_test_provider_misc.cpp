@@ -27,11 +27,15 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
+#include <collectors.h>
+#include <pcb_shape.h>
 #include <pad.h>
 #include <pcb_track.h>
 
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+
+#include <limits>
 
 /*
     Miscellaneous tests:
@@ -43,6 +47,64 @@
     - DRCE_GENERIC_WARNING                    ///< user-defined warnings
     - DRCE_GENERIC_ERROR                      ///< user-defined errors
 */
+
+static void findClosestOutlineGap( BOARD* aBoard, PCB_SHAPE*& aItemA, PCB_SHAPE*& aItemB,
+                                   VECTOR2I& aMidpoint, int& aDistance )
+{
+    PCB_TYPE_COLLECTOR items;
+    items.Collect( aBoard, { PCB_SHAPE_T } );
+
+    std::vector<PCB_SHAPE*> shapes;
+
+    for( int ii = 0; ii < items.GetCount(); ++ii )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( items[ii] );
+
+        if( shape->GetLayer() == Edge_Cuts )
+            shapes.push_back( shape );
+    }
+
+    int       best = std::numeric_limits<int>::max();
+    VECTOR2I  bestA;
+    VECTOR2I  bestB;
+
+    for( size_t ii = 0; ii < shapes.size(); ++ii )
+    {
+        std::shared_ptr<SHAPE> shapeA = shapes[ii]->GetEffectiveShape();
+
+        for( size_t jj = ii + 1; jj < shapes.size(); ++jj )
+        {
+            std::shared_ptr<SHAPE> shapeB = shapes[jj]->GetEffectiveShape();
+            VECTOR2I            ptA;
+            VECTOR2I            ptB;
+
+            if( shapeA && shapeB && shapeA->NearestPoints( shapeB.get(), ptA, ptB ) )
+            {
+                int dist = ( ptA - ptB ).EuclideanNorm();
+
+                if( dist < best )
+                {
+                    best = dist;
+                    bestA = ptA;
+                    bestB = ptB;
+                    aItemA = shapes[ii];
+                    aItemB = shapes[jj];
+                }
+            }
+        }
+    }
+
+    if( aItemA && aItemB )
+    {
+        aDistance = best;
+        aMidpoint = ( bestA + bestB ) / 2;
+    }
+    else
+    {
+        aDistance = 0;
+        aMidpoint = VECTOR2I();
+    }
+}
 
 class DRC_TEST_PROVIDER_MISC : public DRC_TEST_PROVIDER
 {
@@ -85,12 +147,46 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 if( !itemA )        // If we only have a single item, make sure it's A
                     std::swap( itemA, itemB );
 
+                VECTOR2I markerPos = pt;
+                int      gap = 0;
+
+                if( itemA && itemB )
+                {
+                    std::shared_ptr<SHAPE> shapeA = itemA->GetEffectiveShape();
+                    std::shared_ptr<SHAPE> shapeB = itemB->GetEffectiveShape();
+                    VECTOR2I            ptA;
+                    VECTOR2I            ptB;
+
+                    if( shapeA && shapeB && shapeA->NearestPoints( shapeB.get(), ptA, ptB ) )
+                    {
+                        gap = ( ptA - ptB ).EuclideanNorm();
+                        markerPos = ( ptA + ptB ) / 2;
+                    }
+                }
+                else
+                {
+                    PCB_SHAPE* shapeA = nullptr;
+                    PCB_SHAPE* shapeB = nullptr;
+
+                    findClosestOutlineGap( m_board, shapeA, shapeB, markerPos, gap );
+
+                    itemA = shapeA;
+                    itemB = shapeB;
+                }
+
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                wxString msg2;
+
+                if( itemA && itemB )
+                    msg2.Printf( _( "%s (gap %s)" ), msg, MessageTextFromValue( gap ) );
+                else
+                    msg2 = msg;
+
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg2 );
                 drcItem->SetItems( itemA, itemB );
 
-                reportViolation( drcItem, pt, Edge_Cuts );
+                reportViolation( drcItem, markerPos, Edge_Cuts );
             };
 
     // Test for very small graphic items (a few nm size) that can create issues
