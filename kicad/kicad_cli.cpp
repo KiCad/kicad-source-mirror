@@ -364,7 +364,19 @@ int PGM_KICAD::OnPgmRun()
     // std::runtime_error doesn't seem to be enough for the scan<>()
     catch( const std::exception& err )
     {
-        wxPrintf( "%s\n", err.what() );
+        bool requestedHelp = false;
+
+        for( int i = 0; i < m_argcUtf8; ++i )
+        {
+            if( std::string arg( m_argvUtf8[i] ); arg == ARG_HELP_SHORT || arg == ARG_HELP )
+            {
+                requestedHelp = true;
+                break;
+            }
+        }
+
+        if( !requestedHelp )
+            wxPrintf( "%s\n", err.what() );
 
         // find the correct argparser object to output the command usage info
         COMMAND_ENTRY* cliCmd = nullptr;
@@ -386,7 +398,7 @@ int PGM_KICAD::OnPgmRun()
             printHelp( argParser );
         }
 
-        return CLI::EXIT_CODES::ERR_ARGS;
+        return requestedHelp ? 0 : CLI::EXIT_CODES::ERR_ARGS;
     }
 
     if( argParser[ ARG_HELP ] == true )
