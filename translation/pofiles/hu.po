@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-24 12:02+0000\n"
+"PO-Revision-Date: 2025-08-25 13:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -51353,7 +51353,7 @@ msgstr "\"%s\" betöltése sikertelen"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1461
 msgid "Successfully created genCAD file\n"
-msgstr ""
+msgstr "Sikerült létrehozni a genCAD fájlt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1764 pcbnew/pcbnew_jobs_handler.cpp:1837
 #, fuzzy, c-format
@@ -51366,24 +51366,23 @@ msgid "Wrote back position data to '%s'.\n"
 msgstr "BOM kimenet írása a '%s'-ra"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1811
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Alkatrészrajzolat exportálása"
+msgstr "Pozíció adatok kiírva ide: %s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1907
-#, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Az alkatrészrajzolat könyvtár \"%s\" elérési útvonala nem létezik"
+msgstr ""
+"Az alkatrészrajzolat könyvtár \"%s\" elérési útvonala nem létezik vagy nem "
+"elérhető\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1947
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "nincs aktív könyvtár kiválasztva"
+msgstr "Nem sikerült menteni a könyvtárat\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1953
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Az alkatrészrajzolat könyvtár nincs engedélyezve."
+msgstr "Az alkatrészrajzolat könyvtár nem lett frissítve\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2034
 #, fuzzy
@@ -51418,9 +51417,9 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2279
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Kapcsolat nélküli elemek (%s)"
+msgstr "%d kapcsolat nélküli elemet találtunk\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2285
 #, c-format
@@ -51488,7 +51487,7 @@ msgstr "Kivétel történt a Python plugin futása során"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:139
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
 msgstr "A(z) \"%s\" eljárás nem található, vagy nem hívható"
 
