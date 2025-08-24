@@ -67,6 +67,7 @@
 #include <core/kicad_algo.h>
 #include <view/view_controls.h>
 #include <wx/textdlg.h>
+#include <wx/msgdlg.h>
 #include <project/net_settings.h>
 
 
