@@ -67,6 +67,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetLayerDepth( 0.0 );
     SetFlip( false, false );
     SetLineWidth( 1.0f );
+    SetMinLineWidth( 1.0f );
     computeWorldScale();
     SetAxesEnabled( false );
 

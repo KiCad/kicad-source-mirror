@@ -78,6 +78,10 @@ public:
     /// @copydoc GAL::DrawCircle()
     void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
 
+    /// @copydoc GAL::DrawHoleWall()
+    void DrawHoleWall( const VECTOR2D& aCenterPoint, double aHoleRadius,
+                       double aWallWidth ) override;
+
     /// @copydoc GAL::DrawArc()
     void DrawArc( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
                   const EDA_ANGLE& aAngle ) override;

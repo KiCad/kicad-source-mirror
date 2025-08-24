@@ -113,6 +113,8 @@ public:
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
     }
 
+    void SetMinLineWidth( float aLineWidth ) override;
+
     // ---------------
     // Drawing methods
     // ---------------
@@ -130,6 +132,10 @@ public:
 
     /// @copydoc GAL::DrawCircle()
     void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
+
+    /// @copydoc GAL::DrawHoleWall()
+    void DrawHoleWall( const VECTOR2D& aCenterPoint, double aHoleRadius,
+                       double aWallWidth ) override;
 
     /// @copydoc GAL::DrawArc()
     void DrawArc( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
@@ -377,6 +383,9 @@ private:
     GLint                   ufm_screenPixelSize;
     GLint                   ufm_pixelSizeMultiplier;
     GLint                   ufm_antialiasingOffset;
+    GLint                   ufm_minLinePixelWidth;
+    GLint                   ufm_fontTexture;
+    GLint                   ufm_fontTextureWidth;
 
     /// wx cursor showing the current native cursor.
     WX_CURSOR_TYPE          m_currentwxCursor;
@@ -585,6 +594,13 @@ private:
     double getWorldPixelSize() const;
 
     VECTOR2D getScreenPixelSize() const;
+
+    /**
+     * Set up the shader parameters for OpenGL rendering.
+     * This method initializes all the uniform parameter locations
+     * after the shader has been linked.
+     */
+    void setupShaderParameters();
 
     /**
      * Basic OpenGL initialization and feature checks.

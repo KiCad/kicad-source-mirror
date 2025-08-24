@@ -35,6 +35,7 @@ const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
 const float SHADER_FONT                 = 4.0;
 const float SHADER_LINE_A               = 5.0;
+const float SHADER_HOLE_WALL            = 11.0;
 
 varying vec4 v_shaderParams;
 varying vec2 v_circleCoords;
@@ -121,6 +122,10 @@ void main()
         filledCircle( v_circleCoords );
     }
     else if( mode == SHADER_STROKED_CIRCLE )
+    {
+        strokedCircle( v_circleCoords, v_shaderParams[2], v_shaderParams[3] );
+    }
+    else if( mode == SHADER_HOLE_WALL )
     {
         strokedCircle( v_circleCoords, v_shaderParams[2], v_shaderParams[3] );
     }

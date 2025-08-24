@@ -143,6 +143,16 @@ public:
     virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) {};
 
     /**
+     * Draw a hole wall ring.
+     *
+     * @param aCenterPoint is the center point of the hole.
+     * @param aHoleRadius is the radius of the hole.
+     * @param aWallWidth is the wall thickness.
+     */
+    virtual void DrawHoleWall( const VECTOR2D& aCenterPoint, double aHoleRadius,
+                               double aWallWidth ) {};
+
+    /**
      * Draw an arc.
      *
      * @param aCenterPoint  is the center point of the arc.
@@ -370,6 +380,16 @@ public:
     }
 
     /**
+     * Set the minimum line width in pixels.
+     *
+     * @param aLineWidth is the minimum line width.
+     */
+    virtual void SetMinLineWidth( float aLineWidth )
+    {
+        m_minLineWidth = aLineWidth;
+    }
+
+    /**
      * Get the line width.
      *
      * @return the actual line width.
@@ -377,6 +397,16 @@ public:
     inline float GetLineWidth() const
     {
         return m_lineWidth;
+    }
+
+    /**
+     * Get the minimum line width in pixels.
+     *
+     * @return the minimum line width.
+     */
+    inline float GetMinLineWidth() const
+    {
+        return m_minLineWidth;
     }
 
     /**
@@ -1084,6 +1114,7 @@ protected:
     bool                 m_globalFlipY;        ///< Flag for Y axis flipping
 
     float                m_lineWidth;          ///< The line width
+    float                m_minLineWidth;       ///< Minimum line width in pixels
 
     bool                 m_isFillEnabled;      ///< Is filling of graphic objects enabled ?
     bool                 m_isStrokeEnabled;    ///< Are the outlines stroked ?
