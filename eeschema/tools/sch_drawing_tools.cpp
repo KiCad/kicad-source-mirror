@@ -1515,21 +1515,35 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
-                const_cast<KIID&>( newItem->m_Uuid ) = KIID();
-                newItem->SetPosition( cursorPos );
-                newItem->SetFlags( IS_NEW );
-                m_frame->AddToScreen( newItem, screen );
+                if( type == SCH_JUNCTION_T )
+                {
+                    SCH_COMMIT commit( m_toolMgr );
+                    SCH_LINE_WIRE_BUS_TOOL* lwbTool =
+                            m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+                    lwbTool->AddJunction( &commit, screen, cursorPos );
 
-                if( allowRepeat )
-                    m_frame->SaveCopyForRepeatItem( newItem );
+                    m_frame->Schematic().CleanUp( &commit );
 
-                SCH_COMMIT commit( m_toolMgr );
-                commit.Added( newItem, screen );
+                    commit.Push( description );
+                }
+                else
+                {
+                    SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
+                    const_cast<KIID&>( newItem->m_Uuid ) = KIID();
+                    newItem->SetPosition( cursorPos );
+                    newItem->SetFlags( IS_NEW );
+                    m_frame->AddToScreen( newItem, screen );
 
-                m_frame->Schematic().CleanUp( &commit );
+                    if( allowRepeat )
+                        m_frame->SaveCopyForRepeatItem( newItem );
 
-                commit.Push( description );
+                    SCH_COMMIT commit( m_toolMgr );
+                    commit.Added( newItem, screen );
+
+                    m_frame->Schematic().CleanUp( &commit );
+
+                    commit.Push( description );
+                }
             }
 
             if( evt->IsDblClick( BUT_LEFT ) || type == SCH_SHEET_PIN_T )  // Finish tool.

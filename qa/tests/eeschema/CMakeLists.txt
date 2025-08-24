@@ -71,6 +71,7 @@ set( QA_EESCHEMA_SRCS
     test_crossing_label.cpp
     test_eagle_plugin.cpp
     test_junction_helpers.cpp
+    test_junction_place.cpp
     test_bus_entry_concurrency.cpp
     test_lib_part.cpp
     test_ee_grid_helper.cpp
