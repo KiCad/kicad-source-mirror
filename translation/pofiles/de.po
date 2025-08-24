@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-23 11:11+0000\n"
+"PO-Revision-Date: 2025-08-24 12:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -25307,10 +25307,9 @@ msgid "No nets selected."
 msgstr "Keine Netze ausgewählt."
 
 #: eeschema/tools/sch_editor_control.cpp:937
-#, fuzzy
 msgid "All selected nets must be labeled to assign a netclass."
 msgstr ""
-"Alle selektierten Netze müssen beschriftet sein, um eine Netzklasse "
+"Alle gewählten Netze müssen mit Bezeichnern benannt sein, um eine Netzklasse "
 "zuzuweisen."
 
 #: eeschema/tools/sch_editor_control.cpp:1694 pcbnew/tools/pcb_control.cpp:1119
@@ -27343,9 +27342,8 @@ msgstr ""
 "Einen nicht-Null Rückgabewert zurückgeben, sofern DRC-Verstöße vorliegen"
 
 #: kicad/cli/command_pcb_drc.cpp:95
-#, fuzzy
 msgid "Refill zones before running DRC"
-msgstr "Alle Zonen vor dem DRC ausfüllen"
+msgstr "Alle Zonen vor dem DRC neu füllen"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
@@ -27971,14 +27969,12 @@ msgstr ""
 "Voreinstellungsname"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
 "Die im Lagenaufbau der Platine definierten Farben überschreiben die aus der "
 "Voreinstellung"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
@@ -28347,7 +28343,6 @@ msgid "Welcome to Template Selection!"
 msgstr "Willkommen bei der Vorlagenauswahl!"
 
 #: kicad/dialogs/dialog_template_selector.cpp:81
-#, fuzzy
 msgid ""
 "Choose from a variety of pre-configured project templates to jumpstart your "
 "PCB design. Templates provide ready-to-use project structures with common "
@@ -28355,7 +28350,7 @@ msgid ""
 msgstr ""
 "Für den Schnellstart Ihres PCB-Designs können Sie aus einer Vielzahl an "
 "vorkonfigurierten Projektvorlagen auswählen. Vorlagen stellen vorgefertigte "
-"Projektstrukturen mit allgemeinen Bauteilen, Biblitheken und Designregeln "
+"Projektstrukturen mit verbreiteten Bauteilen, Bibliotheken und Designregeln "
 "zur Verfügung."
 
 #: kicad/dialogs/dialog_template_selector.cpp:85
@@ -28450,7 +28445,6 @@ msgid "- Appropriate electrical and mechanical constraints"
 msgstr "- Angemessene elektrische und mechanische Einschränkungen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:106
-#, fuzzy
 msgid "Layer stackups"
 msgstr "Lagenaufbauten"
 
@@ -28488,41 +28482,38 @@ msgid "Pro Tips"
 msgstr "Profi-Tipps"
 
 #: kicad/dialogs/dialog_template_selector.cpp:114
-#, fuzzy
 msgid "Start Simple:"
-msgstr "Startlage:"
+msgstr "Einfacher Einstieg:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:114
-#, fuzzy
 msgid "Begin with basic templates and add more elements as you go."
 msgstr ""
-"Mit einer Basisvorlage anfangen und nach und nach mehr Elemente hinzufügen."
+"Mit einer einfachen Vorlage anfangen und nach und nach mehr Elemente "
+"hinzufügen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
 msgid "Customize Later:"
 msgstr "Später anpassen:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
-#, fuzzy
 msgid ""
 "Templates are starting points - you can modify libraries, rules, and layouts "
 "after project creation."
 msgstr ""
 "Vorlagen sind Ausgangspunkte - Sie können Bibliotheken, Regeln und Layouts "
-"nach der Projekterstellung modifizieren."
+"nach der Projekterstellung anpassen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
 msgid "Save Your Own:"
 msgstr "Eigenen speichern:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
-#, fuzzy
 msgid ""
 "Once you develop preferred settings, create a custom template for future "
 "projects."
 msgstr ""
-"Sobald Sie Ihre bevorzugten Einstellungen festgelegt haben, erstellen Sie "
-"eine benutzerdefinierte Vorlage für zukünftige Projekte."
+"Sobald Sie Ihre bevorzugten Einstellungen gefunden haben, erstellen Sie eine "
+"benutzerdefinierte Vorlage für zukünftige Projekte."
 
 #: kicad/dialogs/dialog_template_selector.cpp:390
 msgid "Select Templates Directory"
@@ -29506,14 +29497,14 @@ msgid "Could not open the template path '%s'"
 msgstr "Konnte den Vorlagenpfad \"%s\" nicht öffnen"
 
 #: kicad/project_template.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected 'meta' directory at '%s'"
-msgstr "Konnte Verzeichnis \"%s\" nicht erstellen"
+msgstr "Konnte das erwartete Verzeichnis \"meta\" unter \"%s\" nicht finden"
 
 #: kicad/project_template.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected meta HTML file at '%s'"
-msgstr "Konnte die Bibliotheksdatei \"%s\" nicht finden"
+msgstr "Konnte die erwartete meta-HTML-Datei unter \"%s\" nicht finden"
 
 #: kicad/project_template.cpp:341
 #, c-format
@@ -29978,7 +29969,7 @@ msgid "Save Project To"
 msgstr "Projekt speichern zu"
 
 #: kicad/tools/kicad_manager_control.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -29986,7 +29977,7 @@ msgid ""
 msgstr ""
 "Ordner \"%s\" konnte nicht erstellt werden.\n"
 "\n"
-"Bitte Schreibrechte überprüfen und erneut versuchen."
+"Bitte sicherstellen, dass Sie Schreibrechte besitzen."
 
 #: kicad/tools/kicad_manager_control.cpp:809
 msgid "Create (or open) a project to edit a schematic."
@@ -30037,7 +30028,6 @@ msgid "Success"
 msgstr "Erfolg"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
@@ -30052,7 +30042,6 @@ msgid "Failed to load PDF"
 msgstr "Fehler beim Laden von PDF"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
 msgstr "Druckvorgang fehlgeschlagen"
 
@@ -34085,18 +34074,16 @@ msgid "Min track clearance:"
 msgstr "Min. Leiterbahnfreiraum:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Min track width:"
-msgstr "Minimale Leiterbahnbreite:"
+msgstr "Min. Leiterbahnbreite:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
 msgid "Min drill diameter:"
 msgstr "Min. Bohrdurchmesser:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Board stackup thickness:"
-msgstr "Platinen-Dicke:"
+msgstr "Lagenaufbaudicke:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:177
 msgid "THT:"
@@ -34218,12 +34205,10 @@ msgid "Back copper area"
 msgstr "Rückseitige Kupferfläche"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:862
-#, fuzzy
 msgid "Min track clearance"
-msgstr "Min. Freiraum"
+msgstr "Min. Leiterbahnfreiraum"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:865
-#, fuzzy
 msgid "Min track width"
 msgstr "Min. Leiterbahnbreite"
 
@@ -35811,7 +35796,6 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
 msgstr "IPC-2581-Datei erfolgreich erstellt."
 
@@ -35924,9 +35908,8 @@ msgid "*.emn"
 msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "Raster-Bezugspunkt:"
+msgstr "Platinen-Bezugspunkt festlegen:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:194
@@ -36566,13 +36549,12 @@ msgid "3D Models"
 msgstr "3D-Modelle"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:284
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved or oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
 msgstr ""
-"Gesperrte Footprints können auf der Arbeitsfläche nicht frei verschoben und "
+"Gesperrte Footprints können nicht frei auf der Arbeitsfläche verschoben oder "
 "gedreht werden und können nur ausgewählt werden, wenn das Kontrollkästchen "
 "\"Gesperrte Elemente\" im Auswahlfilter aktiviert ist."
 
@@ -36908,14 +36890,14 @@ msgstr ""
 "Schriftstärke wird begrenzt."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:693
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
 "Sie versuchen Lagen, die von dem Footprint \"%s\" verwendet werden, zu "
 "entfernen.\n"
-"Bitte entfernen Sie zuerst die Objekte, die diese Lagen verwenden."
+"Bitte entfernen Sie erst die Objekte, die diese Lagen verwenden."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -36942,7 +36924,6 @@ msgid "Copper layers"
 msgstr "Kupferlagen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
-#, fuzzy
 msgid "User Layers"
 msgstr "Benutzerlagen"
 
@@ -37431,12 +37412,10 @@ msgid "Unlocked tracks"
 msgstr "Entsperrte Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
 msgstr "Gesperrte Vias"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
-#, fuzzy
 msgid "Unlocked vias"
 msgstr "Entsperrte Vias"
 
