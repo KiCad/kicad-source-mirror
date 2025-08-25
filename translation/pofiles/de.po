@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-24 12:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-08-25 13:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -17728,7 +17728,7 @@ msgid ""
 msgstr ""
 "Beim Laden der globalen Designblock-Bibliothekstabelle ist ein Fehler "
 "aufgetreten.\n"
-"Die globale Designblock-Bibliothekstabelle bitte in den Einstellung "
+"Die globale Designblock-Bibliothekstabelle bitte in den Einstellungen "
 "bearbeiten."
 
 #: eeschema/eeschema.cpp:585
@@ -19481,14 +19481,14 @@ msgstr ""
 #: eeschema/sch_design_block_utils.cpp:392
 msgid "Please select a design block to save the schematic to."
 msgstr ""
-"Bitte eine Bibliothek wählen, in welcher der Designblock gespeichert werden "
+"Bitte einen Designblock wählen, in welchem der Schaltplan gespeichert werden "
 "soll."
 
 #: eeschema/sch_design_block_utils.cpp:242
 #: eeschema/sch_design_block_utils.cpp:385
 #: pcbnew/pcb_design_block_utils.cpp:359 pcbnew/pcb_design_block_utils.cpp:399
 msgid "Please select some items to save as a design block."
-msgstr "Bitte einige Elemente auswählen um sie als Designblock zu speichern."
+msgstr "Bitte einige Elemente auswählen, um sie als Designblock zu speichern."
 
 #: eeschema/sch_edit_frame.cpp:158
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -51454,9 +51454,8 @@ msgid "Apply Design Block Layout"
 msgstr "Designblock verwenden"
 
 #: pcbnew/tools/pcb_actions.cpp:471
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Designblock mit gewählter Gruppe verknüpft einfügen"
+msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Save Current Board as Design Block..."
