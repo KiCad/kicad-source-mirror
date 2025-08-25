@@ -160,6 +160,22 @@ public:
 
         TRIANGULATED_POLYGON& operator=( const TRIANGULATED_POLYGON& aOther );
 
+        // Move assignment operator.
+        TRIANGULATED_POLYGON& operator=( TRIANGULATED_POLYGON&& aOther ) noexcept
+        {
+            if( this != &aOther )
+            {
+                m_sourceOutline = aOther.m_sourceOutline;
+                m_triangles = std::move( aOther.m_triangles );
+                m_vertices = std::move( aOther.m_vertices );
+
+                for( TRI& tri : m_triangles )
+                    tri.parent = this;
+            }
+
+            return *this;
+        }
+
         void AddTriangle( int a, int b, int c );
 
         void AddVertex( const VECTOR2I& aP )
@@ -240,8 +256,7 @@ public:
          */
         bool IsEndContour() const
         {
-            return m_currentVertex + 1 ==
-                    m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount();
+            return m_currentVertex + 1 == m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount();
         }
 
         /**
@@ -280,8 +295,7 @@ public:
             if( m_iterateHoles )
             {
                 // If the last vertex of the contour was reached, advance the contour index
-                if( m_currentVertex >=
-                    m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
+                if( m_currentVertex >= m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
                 {
                     m_currentVertex = 0;
                     m_currentContour++;
@@ -731,8 +745,7 @@ public:
     /// Returns the number of holes in a given outline
     int HoleCount( int aOutline ) const
     {
-        if( ( aOutline < 0 ) || ( aOutline >= (int) m_polys.size() )
-          || ( m_polys[aOutline].size() < 2 ) )
+        if( aOutline < 0 || aOutline >= (int) m_polys.size() || m_polys[aOutline].size() < 2 )
             return 0;
 
         // the first polygon in m_polys[aOutline] is the main contour,
