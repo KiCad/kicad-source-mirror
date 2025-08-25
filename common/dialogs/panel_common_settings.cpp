@@ -105,6 +105,10 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent ) :
         m_canvasScaleAuto->Show( false );
     }
 
+    m_zoomCorrectionCtrl = new ZOOM_CORRECTION_CTRL( this,
+            Pgm().GetCommonSettings()->m_Appearance.zoom_correction_factor );
+    bLeftSizer->Add( m_zoomCorrectionCtrl, 1, wxEXPAND );
+
     // Hide the option of icons in menus for platforms that do not support them
     m_checkBoxIconsInMenus->Show( KIPLATFORM::UI::AllowIconsInMenus() );
 
@@ -198,6 +202,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Appearance.grid_striping = m_gridStriping->GetValue();
 
+    commonSettings->m_Appearance.zoom_correction_factor = m_zoomCorrectionCtrl->GetValue();
+
     double dimmingPercent = 80;
     m_highContrastCtrl->GetValue().ToDouble( &dimmingPercent );
     commonSettings->m_Appearance.hicontrast_dimming_factor = dimmingPercent / 100.0f;
@@ -287,6 +293,8 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     m_scaleFonts->SetValue( aSettings.m_Appearance.apply_icon_scale_to_fonts );
 
     m_gridStriping->SetValue( aSettings.m_Appearance.grid_striping );
+
+    m_zoomCorrectionCtrl->SetDisplayedValue( aSettings.m_Appearance.zoom_correction_factor );
 
     double dimmingPercent = aSettings.m_Appearance.hicontrast_dimming_factor * 100.0f;
     m_highContrastCtrl->SetValue( wxString::Format( "%.0f", dimmingPercent ) );

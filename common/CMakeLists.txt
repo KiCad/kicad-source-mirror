@@ -523,6 +523,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_splitter_window.cpp
     widgets/wx_treebook.cpp
     widgets/webview_panel.cpp
+    widgets/zoom_correction_ctrl.cpp
     )
 
 set( COMMON_DRAWING_SHEET_SRCS

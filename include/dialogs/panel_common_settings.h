@@ -24,6 +24,7 @@
 #pragma once
 
 #include <dialogs/panel_common_settings_base.h>
+#include <widgets/zoom_correction_ctrl.h>
 
 
 class COMMON_SETTINGS;
@@ -60,4 +61,6 @@ protected:
 private:
     void ShowFileManagerWidgets( bool aBool );
     void setPdfViewerPathState();
+
+    ZOOM_CORRECTION_CTRL* m_zoomCorrectionCtrl;
 };

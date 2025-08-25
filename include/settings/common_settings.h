@@ -57,6 +57,7 @@ public:
         int        text_editor_zoom;
         int        toolbar_icon_size;
         bool       grid_striping;
+        double     zoom_correction_factor;
     };
 
     struct AUTO_BACKUP

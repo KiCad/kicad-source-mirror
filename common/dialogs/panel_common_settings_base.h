@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,6 +44,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxBoxSizer* bLeftSizer;
 		wxStaticText* m_staticText20;
 		wxStaticLine* m_staticline3;
 		wxFlexGridSizer* m_renderingSizer;
@@ -85,6 +86,8 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_highContrastLabel;
 		wxTextCtrl* m_highContrastCtrl;
 		wxStaticText* m_highContrastUnits;
+		wxStaticText* m_staticText251;
+		wxStaticLine* m_staticline7;
 		wxStaticText* m_staticText23;
 		wxStaticLine* m_staticline6;
 		wxCheckBox* m_warpMouseOnMove;

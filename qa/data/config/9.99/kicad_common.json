@@ -10,7 +10,8 @@
     "show_scrollbars": false,
     "text_editor_zoom": 0,
     "toolbar_icon_size": 24,
-    "use_icons_in_menus": false
+    "use_icons_in_menus": false,
+    "zoom_correction_factor": 1
   },
   "auto_backup": {
     "backup_on_autosave": false,

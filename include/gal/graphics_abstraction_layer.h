@@ -40,6 +40,8 @@
 #include <gal/gal_display_options.h>
 #include <font/stroke_font.h>
 #include <geometry/eda_angle.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 
 class SHAPE_LINE_CHAIN;
 class SHAPE_POLY_SET;
@@ -1041,6 +1043,9 @@ protected:
     inline void computeWorldScale()
     {
         m_worldScale = m_screenDPI * m_worldUnitLength * m_zoomFactor;
+
+        if( Pgm().GetCommonSettings() )
+            m_worldScale *= Pgm().GetCommonSettings()->m_Appearance.zoom_correction_factor;
     }
 
     /**
