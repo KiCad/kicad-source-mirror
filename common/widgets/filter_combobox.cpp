@@ -447,7 +447,7 @@ FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint
 
 #ifdef __WXMSW__
     // On Windows the listbox background doesn't have the right colour in dark mode
-    if( KIUI::IsDarkModeEnabled() )
+    if( KIPLATFORM::UI::IsDarkTheme() )
         SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
     else
 #endif
