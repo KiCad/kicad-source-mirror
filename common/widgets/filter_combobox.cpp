@@ -445,6 +445,12 @@ FILTER_COMBOBOX::FILTER_COMBOBOX( wxWindow *parent, wxWindowID id, const wxPoint
     UseAltPopupWindow();
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( FILTER_COMBOBOX::onKeyDown ), nullptr, this );
 
+#ifdef __WXMSW__
+    // On Windows the listbox background doesn't have the right colour in dark mode
+    if( KIUI::IsDarkModeEnabled() )
+        SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+    else
+#endif
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 }
 
