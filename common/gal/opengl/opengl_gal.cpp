@@ -2689,6 +2689,10 @@ void OPENGL_GAL::blitCursor()
     glLineWidth( 1.0 );
     glColor4d( color.r, color.g, color.b, color.a );
 
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glTranslated( 0, 0, -0.5 );
+
     glBegin( GL_LINES );
     glVertex2d( cursorCenter.x, cursorBegin.y );
     glVertex2d( cursorCenter.x, cursorEnd.y );
@@ -2696,6 +2700,8 @@ void OPENGL_GAL::blitCursor()
     glVertex2d( cursorBegin.x, cursorCenter.y );
     glVertex2d( cursorEnd.x, cursorCenter.y );
     glEnd();
+
+    glPopMatrix();
 }
 
 
