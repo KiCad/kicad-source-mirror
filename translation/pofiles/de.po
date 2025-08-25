@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-25 13:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -41585,7 +41585,6 @@ msgid "Add User Defined Layer..."
 msgstr "Benutzerdefinierte Lage hinzufügen..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Consult your PCB manufacturer's specifications for solder mask expansion, "
 "web width, and clearance settings."
@@ -41594,7 +41593,6 @@ msgstr ""
 "Lötstoppmaskenerweiterung und minimale Brückenbreite zu Rate."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
-#, fuzzy
 msgid ""
 "If no specifications are provided, setting these values to zero is "
 "recommended."
@@ -41741,9 +41739,9 @@ msgid "Rules '%s' and '%s' share the same condition."
 msgstr "Die Regeln \"%s\" und \"%s\" teilen die gleiche Bedingung."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "Regel \"%s\" referenziert auf die nicht definierte Netzklasse \"%s\"."
+msgstr "Regel \"%s\" referenziert auf undefinierte Netzklasse \"%s\"."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:806
 #, c-format
@@ -41822,7 +41820,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -42031,38 +42028,39 @@ msgstr ""
 "| "
 "Beschreibung                                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                            "
-"| Prüft die Ringringbreite von Vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                              "
+"| Prüft die Ringringbreite von "
+"Vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                      "
-"| Prüft den angegebenen Ausdruck."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                      "
+"| Prüft den angegebenen "
+"Ausdruck.<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                    "
 "| Gibt den **elektrischen** Freiraum zwischen Kupferobjekten "
 "unterschiedlicher Netze an. (Wenn Sie den Abstand zwischen Objekten "
-"netzunabhängig festlegen möchten, nutzen Sie "
-"`physical_clearance`.)<br><br>Um zuzulassen, dass Kupferobjekte sich "
-"überlappen (kollidieren), erstellen Sie eine clearance`-Einschränkung mit "
-"einem `min`-Wert kleiner als Null (zum Beispiel `-1`)."
-"<br>                                                               |\n"
+"netzunabhängig festlegen möchten, nutzen Sie `physical_clearance`.)"
+"<br><br>Um zuzulassen, dass Kupferobjekte sich überlappen (kollidieren), "
+"erstellen Sie eine clearance`-Einschränkung mit einem `min`-Wert kleiner als "
+"Null (zum Beispiel `-1`)"
+".<br>                                                               |\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                    "
 "| Prüft den Freiraum zwischen Abstandsflächen von Footprints und erzeugt "
 "einen Fehler, wenn zwei Abstandsflächen näher als der `min` Abstand sind.  "
 "Wenn eine Footprint keine Abstandsfläche hat, werden durch diese "
-"Einschränkung keine Fehler erzeugt."
-"<br>                                                                                                                                                                                          "
+"Einschränkung keine Fehler "
+"erzeugt.<br>                                                                                                                                                                                          "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                    "
-"| Gibt die Kriechstrecke zwischen Kupferobjekten unterschiedlicher Netze an."
-"<br>                                                                                                                                                                                                                                                                                                                                                                      "
+"| Gibt die Kriechstrecke zwischen Kupferobjekten unterschiedlicher Netze "
+"an.<br>                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                            "
@@ -42070,54 +42068,53 @@ msgstr ""
 "Differentialpaar.  Gekoppelte Leiterbahnen sind Segmente, die parallel "
 "zueinander liegen.  Der Differentialpaar-Abstand wird an ungekoppelten "
 "Teilen eines Differentialpaares (z. B. dem Fanout einer Komponente) nicht "
-"geprüft."
-"<br>                                                                                                                                                   "
+"geprüft.<br>                                                                                                                                                   "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                    "
 "| Prüft die Entfernung, über die eine Differentialpaarleiterbahn entkoppelt "
 "von der anderen Leiterbahn des Paares verlegt ist (z. B. wenn sich das Paar "
 "von einem Bauteil ausgehend auffächert oder entkoppelt wird, um ein anderes "
-"Objekt wie ein Via zu umgehen)."
-"<br>                                                                                                                                                                               "
+"Objekt wie ein Via zu umgehen)"
+".<br>                                                                                                                                                                               "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Gibt einen oder, getrennt durch Leerzeichen, mehrere Objekttypen an, die "
-"ferngehalten werden sollen.  Zum Beispiel: `(constraint disallow track)` "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Gibt einen oder, getrennt durch Leerzeichen, mehrere Objekttypen an, "
+"die ferngehalten werden sollen.  Zum Beispiel: `(constraint disallow track)` "
 "oder `(constraint disallow track via pad)`.  Wenn ein Objekt dieser Typen "
 "die Regelbedingung erfüllt, wird ein DRC-Fehler erzeugt.<br><br>Diese "
-"Einschränkung ist im Wesentlichen dasselbe wie ein Regelbereich "
-"(Sperrfläche), kann aber feiner abgestimmte Ausgrenzungen realisieren."
-"<br>        |\n"
+"Einschränkung ist im Wesentlichen dasselbe wie ein Regelbereich (Sperrfläche)"
+", kann aber feiner abgestimmte Ausgrenzungen realisieren.<br>        |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                            "
 "| Prüft den Freiraum zwischen Objekten und dem Platinenrand.<br><br>Dies "
 "kann auch als \"Frästoleranz\" betrachtet werden, da der Platinenrand alle "
 "graphischen Objekte auf der Ebene `Edge.Cuts` sowie alle *ovalen* Pad-Löcher "
 "einschließt.  (Für die Bohrtoleranzprüfing ist `physical_hole_clearance` zu "
-"nutzen.)<br>                                                                                                                               "
+"nutzen.)"
+"<br>                                                                                                                               "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                                "
 "| Prüft die Gesamtlänge der Netze, die der Regelbedingung entsprechen, und "
 "erzeugt für jedes Netz, das unter dem `min`-Wert (sofern angegeben) oder "
-"über dem `max`-Wert (sofern angegeben) der Bedingung liegt, einen Fehler."
-"<br>                                                                                                                                                                                                                     "
+"über dem `max`-Wert (sofern angegeben) der Bedingung liegt, einen "
+"Fehler.<br>                                                                                                                                                                                                                     "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                                "
 "| Prüft den Durchmesser eines gebohrten Lochs in einem Pad oder Via.  Bei "
 "ovalen Löchern wird der kleinere Durchmesser gegen den `min`-Wert (sofern "
-"angegeben) und der größere Durchmesser gegen den `max`-Wert (sofern) geprüft."
-"<br>                                                                                                                                                                                                                 "
+"angegeben) und der größere Durchmesser gegen den `max`-Wert (sofern) "
+"geprüft.<br>                                                                                                                                                                                                                 "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                    "
 "| Prüft den Freiraum zwischen einem Bohrloch innerhalb eines Pads oder Vias "
 "und Kupferobjekten anderer Netze.  Gemessen wird vom Rand des Lochs aus, "
-"nicht aus der Mitte."
-"<br>                                                                                                                                                                                                                                                                         "
+"nicht aus der "
+"Mitte.<br>                                                                                                                                                                                                                                                                         "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                    "
@@ -42126,38 +42123,38 @@ msgstr ""
 "Einschränkung dient ausschließlich dem Schutz der Bohrer.  Der Freiraum "
 "zwischen **lasergebohrten** (µVias) und anderen nicht mechanisch gebohrten "
 "Löchern wird nicht geprüft. Ebenso wenig wie der Freiraum zwischen "
-"**gefrästen** (ovalen) und anderen nicht mechanisch gebohrten Löchern.<br> "
-"|\n"
+"**gefrästen** (ovalen) und anderen nicht mechanisch gebohrten Löchern.<br> |"
+"\n"
 "| `physical_clearance`      | "
 "min                                                                                                                    "
-"| Prüft den Freiraum zwischen zwei Objekten auf einer bestimmten Lage "
-"(einschließlich mechanischer Lagen etc.).<br><br>Hiermit können zwar "
+"| Prüft den Freiraum zwischen zwei Objekten auf einer bestimmten Lage ("
+"einschließlich mechanischer Lagen etc.).<br><br>Hiermit können zwar "
 "allgemeinere Prüfungen als mit `clearance` durchgeführt werden, es ist aber "
-"viel langsamer.  Wo immer möglich sollte `clearance` verwendet werden."
-"<br>                                                                                                                                                     "
+"viel langsamer.  Wo immer möglich sollte `clearance` verwendet "
+"werden.<br>                                                                                                                                                     "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                    "
 "| Prüft den Freiraum zwischen einem Bohrloch in einem Pad oder Via und einem "
 "anderen Objekt, unabhängig vom Netz. Der Freiraum wird vom Rand des Lochs "
-"aus gemessen, nicht aus der Mitte.<br><br>Dies kann auch als "
-"\"Bohrtoleranz\" betrachtet werden, da sie nur **runde** Löcher umfasst (für "
-"\"Frästoleranz\" siehe `edge_clearance`)."
-"<br>                                                                                                            "
+"aus gemessen, nicht aus der Mitte.<br><br>Dies kann auch als \"Bohrtoleranz\""
+" betrachtet werden, da sie nur **runde** Löcher umfasst (für \"Frästoleranz\""
+" siehe `edge_clearance`)"
+".<br>                                                                                                            "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                            "
 "| Überprüft den Freiraum zwischen Objekten auf Bestückungsdrucklagen und "
-"anderen Objekten."
-"<br>                                                                                                                                                                                                                                                                                                                                                        "
+"anderen "
+"Objekten.<br>                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                    "
 "| Prüft den Gesamtversatz für die Netze, d.h. die Differenz zwischen der "
 "Länge eines jeden Netzes und dem Mittelwert der Längen aller Netze, die der "
 "Regel entsprechen.  Wenn die absolute Differenz zwischen jenem Mittelwert "
-"und der Länge eines der Netze über `max`-Wert liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                      "
+"und der Länge eines der Netze über `max`-Wert liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                      "
 "|\n"
 "| `solder_mask_expansion`   | "
 "opt                                                                                                                    "
@@ -42181,47 +42178,47 @@ msgstr ""
 "| `thermal_relief_gap`      | "
 "min                                                                                                                    "
 "| Definiert die Spaltbreite einer thermischen Entlastung zwischen einem Pad "
-"und einer Zone."
-"<br>                                                                                                                                                                                                                                                                                                                                                       "
+"und einer "
+"Zone.<br>                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                    "
 "| Definiert die Speichenbreite einer thermischen Entlastung zwischen einem "
-"Pad und einer Zone."
-"<br>                                                                                                                                                                                                                                                                                                                                                    "
+"Pad und einer "
+"Zone.<br>                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                            "
 "| Prüft die Breite von Leiterbahn- und Bogensegmenten. Für jedes Segment, "
 "dessen Breite unter dem `min`-Wert (sofern angegeben) oder über dem `max`-"
-"Wert (sofern angegeben) liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                       "
+"Wert (sofern angegeben) liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                       "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                            "
 "| Prüft den Winkel zweier Leiterbahnsegmente. Erzeugt für jedes "
-"Leiterbahnpaar mit einem Winkel unterhalb des `min`-Wertes (sofern "
-"angegeben) oder überhalb des `max`-Wertes (sofern angegeben) einen Fehler."
-"<br>                                                                                                                                                                                                                                     "
+"Leiterbahnpaar mit einem Winkel unterhalb des `min`-Wertes (sofern angegeben)"
+" oder überhalb des `max`-Wertes (sofern angegeben) einen "
+"Fehler.<br>                                                                                                                                                                                                                                     "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                                "
 "| Prüft die Länge eines Leiterbahn- oder Bogensegments. Für jedes Segment, "
 "dessen Länge unter dem `min`-Wert (sofern angegeben) oder über dem `max`-"
-"Wert (sofern angegeben) liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                       "
+"Wert (sofern angegeben) liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                       "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                    "
 "| Überschreitet die Anzahl von Vias in einem Netz, auf das diese Regel "
 "zutrifft, den `max`-Wert dieser Einschränkung, wird für dieses Netz ein "
-"Fehlery erzeugt."
-"<br>                                                                                                                                                                                                                                                                                   "
+"Fehlery "
+"erzeugt.<br>                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Definiert den Verbindungstyp zwischen einer Zone und einem Pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                 "
+"| Definiert den Verbindungstyp zwischen einer Zone und einem "
+"Pad.<br>                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
 "\n"
 "\n"
@@ -42657,7 +42654,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -42835,13 +42831,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -42932,8 +42928,8 @@ msgstr ""
 "    (rule silk_board_edge_clearance\n"
 "        (constraint silk_clearance)\n"
 "        (severity ignore)\n"
-"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge."
-"Cuts'\"))\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge.Cuts'\"))"
+"\n"
 "\n"
 "\n"
 "    # Prüfung der Strombelastbarkeit \n"
@@ -42958,8 +42954,8 @@ msgstr ""
 "    # sofern es bekannt ist, dass in der Herstellung erstere mechanisch "
 "gebohrt -bevor- letztere gelasert werden.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -45178,9 +45174,8 @@ msgstr "Bauteilklassen-Zuweisungsregeln konnten nicht geladen werden"
 
 #: pcbnew/files.cpp:835 pcbnew/footprint_libraries_utils.cpp:463
 #: pcbnew/footprint_libraries_utils.cpp:1110 pcbnew/tools/pcb_control.cpp:139
-#, fuzzy
 msgid "New Footprint Library"
-msgstr "Footprintbibliothek erstellen"
+msgstr "Neue Footprintbibliothek erstellen"
 
 #: pcbnew/files.cpp:858
 #, c-format
@@ -45351,17 +45346,14 @@ msgid "Footprint Chooser"
 msgstr "Footprint-Auswahl"
 
 #: pcbnew/footprint_chooser_frame.cpp:150
-#, fuzzy
 msgid "Show/hide description panel"
 msgstr "Beschreibungsfeld anzeigen/ausblenden"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
-#, fuzzy
 msgid "Show/hide 3D view panel"
 msgstr "3D-Anzeigefeld anzeigen/ausblenden"
 
 #: pcbnew/footprint_chooser_frame.cpp:168
-#, fuzzy
 msgid "Show/hide footprint view panel"
 msgstr "Footprintfeld anzeigen/ausblenden"
 
@@ -45515,9 +45507,8 @@ msgid "No footprints to export!"
 msgstr "Keine Footprints zu exportieren!"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export Footprints"
-msgstr "Footprint exportieren"
+msgstr "Footprints exportieren"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
 msgid "Export footprints to library:"
@@ -45915,7 +45906,7 @@ msgstr "Footprints [%u Elemente]"
 #: pcbnew/load_select_footprint.cpp:330
 #, fuzzy
 msgid "Save Footprint Library As"
-msgstr "Footprintbibliothek erstellen"
+msgstr "Footprintbibliothek speichern unter"
 
 #: pcbnew/load_select_footprint.cpp:359
 #, c-format
@@ -46052,7 +46043,6 @@ msgid "Add Microwave Inductor"
 msgstr "Mikrowellen-Induktivität hinzufügen"
 
 #: pcbnew/microwave/microwave_inductor.cpp:367
-#, fuzzy
 msgid "Length of track:"
 msgstr "Leiterbahnlänge:"
 
@@ -46385,7 +46375,7 @@ msgid "Add %s to group '%s'."
 msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group '%s'."
 msgstr "%s zur Gruppe \"%s\" hinzugefügt."
 
@@ -46804,10 +46794,8 @@ msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr "(Testpunkt-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2302
-#, fuzzy
 msgid "('heatsink' property makes no sense on NPTH pads)"
-msgstr ""
-"(Kühlkörper-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
+msgstr "(Kühlkörper-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn)"
 
 #: pcbnew/pad.cpp:2305
 msgid "('castellated' property is for PTH pads)"
@@ -47518,18 +47506,18 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Footprint %s Pad %s verwendet ein Loch von unbekannter Art %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3521
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad shape."
 msgstr ""
 "Fehler beim Laden der Bibliothek \"%s\":\n"
-"Pad %s im Footprint %s verwendet eine unbekannte Pad-Form."
+"Footprint %s, Pad %s verwendet eine unbekannte Form."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3534
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
-msgstr "Footprint %s Pad %s verwendet eine unbekannte Pad-Form."
+msgstr "Footprint %s, Pad %s verwendet eine unbekannte Form."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3633
 #, c-format
@@ -47579,9 +47567,9 @@ msgstr ""
 "unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3872
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
-msgstr "Nicht-Kupfer-Pad %s verwendet eine unbekannte Pad-Form."
+msgstr "Kupferloses Pad %s verwendet eine unbekannte Form."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3885
 msgid "Loading vias..."
@@ -48514,7 +48502,6 @@ msgid "Generating content section"
 msgstr "Erzeuge Inhalts-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
-#, fuzzy
 msgid "Pad has unsupported type; it was skipped."
 msgstr "Pad hat nicht unterstützen Typ; es wurde übersprungen."
 
@@ -48535,7 +48522,7 @@ msgstr ""
 "unvollständig sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
-#, c-format, fuzzy
+#, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
 "Dem Bauteil \"%s\" fehlt die OEM-Referenz; BOM-Eintrag wird übersprungen."
@@ -48545,18 +48532,16 @@ msgid "Generating CAD data"
 msgstr "Erzeuge CAD-Daten"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2258
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Platinenumriss fehlt oder ist fehlerhaft. Bitte den Design-Rule-Check (DRC) "
+"Platinenumriss fehlt oder ist fehlerhaft.  Bitte Design-Rule-Check (DRC) "
 "ausführen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2619
-#, fuzzy
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
-"Doppelten Footprint-Zeiger gefunden; IPC-2581 Ausgabe könnte fehlerhaft sein."
+"Doppelte Footprint-Zeiger gefunden; IPC-2581-Ausgabe könnte fehlerhaft sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2784
 #, c-format
@@ -48564,14 +48549,12 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "Exportieren der Lage %s und der Netzliste %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2820
-#, fuzzy
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
 "Via verwendet nicht unterstützten Padstack; wird in den Bohrdaten "
 "weggelassen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2846
-#, fuzzy
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
 "Pad verwendet nicht unterstützten Padstack; Bohrung wird in den Bohrdaten "
@@ -48630,12 +48613,12 @@ msgstr "Doppelter NETCLASS-Name \"%s\"."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2491
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2502
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZAux for CZONE_CONTAINER '%s'"
 msgstr "Fehlerhafter ZAux für CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2517
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER '%s'"
 msgstr "Fehlerhaftes ZSmoothing für CZONE_CONTAINER \"%s\""
 
@@ -48649,7 +48632,7 @@ msgstr ""
 "Zonenfüllungen werden bestmöglich umgewandelt."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2595
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER '%s'"
 msgstr "Fehlerhafte ZClearance Padoption für CZONE_CONTAINER \"%s\""
 
@@ -49489,9 +49472,8 @@ msgid "Saved board\n"
 msgstr "Platine gespeichert\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2317
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "Das Speichern der Platine ist fehlgeschlagen.\n"
+msgstr "Speichern der Platine ist fehlgeschlagen.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2419
 #, c-format
@@ -51168,13 +51150,13 @@ msgid "Topology mismatch"
 msgstr "Topologie stimmt nicht überein"
 
 #: pcbnew/tools/multichannel_tool.cpp:1183
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "Platzierungsbereiche können nicht automatisch erzeugt werden, da der "
-"Schaltplan nur eine oder keine hierarchische Seite der Bauteilklasse hat."
+"Schaltplan nur eines oder kein hierarchisches Schaltplanblatt, Gruppe oder "
+"Bauteilklasse hat."
 
 #: pcbnew/tools/multichannel_tool.cpp:1347
 msgid "Auto-generate placement rule areas"
@@ -51449,9 +51431,8 @@ msgid "Add selected design block to current board"
 msgstr "Gewählten Designblock in aktuelle Leiterplatte einfügen"
 
 #: pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "Designblock verwenden"
+msgstr "Designblock-Layout verwenden"
 
 #: pcbnew/tools/pcb_actions.cpp:471
 msgid "Apply linked design block layout to selected group"
@@ -51995,7 +51976,6 @@ msgid "Export Footprints..."
 msgstr "Footprints exportieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:1167
-#, fuzzy
 msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
@@ -52145,9 +52125,8 @@ msgid "Collect And Embed 3D Models"
 msgstr "3D-Modelle sammeln und einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
-#, fuzzy
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "3D-Modelle von Footprints sammeln und sie in die Platine einbetten"
+msgstr "3D-Modelle von Footprints sammeln und sie in Platine einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 msgid "Switch Track Width to Next"
@@ -52218,12 +52197,10 @@ msgid "Lock or unlock selected items"
 msgstr "Ausgewählte Elemente sperren oder entsperren"
 
 #: pcbnew/tools/pcb_actions.cpp:1411
-#, fuzzy
 msgid "Cycle H/V/45 constraint"
 msgstr "H/V/45-Beschränkung wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1412
-#, fuzzy
 msgid ""
 "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only"
 msgstr ""
@@ -53211,7 +53188,6 @@ msgid "Export footprint to editor"
 msgstr "Footprint an den Editor exportieren"
 
 #: pcbnew/tools/pcb_control.cpp:141 pcbnew/tools/pcb_control.cpp:171
-#, fuzzy
 msgid "Add Footprint Library"
 msgstr "Footprintbibliothek hinzufügen"
 
