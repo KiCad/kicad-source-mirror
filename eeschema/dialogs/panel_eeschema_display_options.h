@@ -17,13 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_EESCHEMA_DISPLAY_OPTIONS_H
-#define PANEL_EESCHEMA_DISPLAY_OPTIONS_H
+#pragma once
 
 #include "panel_eeschema_display_options_base.h"
 
 class APP_SETTINGS_BASE;
-class GAL_OPTIONS_PANEL;
+class PANEL_GAL_OPTIONS;
 class EESCHEMA_SETTINGS;
 
 
@@ -41,8 +40,5 @@ private:
     void loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg );
 
 private:
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
+    PANEL_GAL_OPTIONS* m_galOptsPanel;
 };
-
-
-#endif // PANEL_EESCHEMA_DISPLAY_OPTIONS_H

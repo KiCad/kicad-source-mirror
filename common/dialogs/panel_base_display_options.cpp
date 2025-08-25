@@ -17,21 +17,19 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 #include <widgets/paged_dialog.h>
+#include <dialogs/panel_base_display_options.h>
 
-#include <dialogs/panel_gal_display_options.h>
 
-
-PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( wxWindow* aParent,
-                                                      APP_SETTINGS_BASE* aAppSettings ) :
-    wxPanel( aParent, wxID_ANY )
+PANEL_BASE_DISPLAY_OPTIONS::PANEL_BASE_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
+        wxPanel( aParent, wxID_ANY )
 {
     auto mainSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( mainSizer );
 
     // install GAL options pane
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
+    m_galOptsPanel = new PANEL_GAL_OPTIONS( this, aAppSettings );
     mainSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxLEFT, 5 );
 
     // a spacer to take up the other half of the width
@@ -40,14 +38,14 @@ PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( wxWindow* aParent,
 }
 
 
-bool PANEL_GAL_DISPLAY_OPTIONS::TransferDataToWindow()
+bool PANEL_BASE_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     m_galOptsPanel->TransferDataToWindow();
     return true;
 }
 
 
-bool PANEL_GAL_DISPLAY_OPTIONS::TransferDataFromWindow()
+bool PANEL_BASE_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     m_galOptsPanel->TransferDataFromWindow();
     return true;

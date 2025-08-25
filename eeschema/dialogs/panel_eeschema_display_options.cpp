@@ -26,7 +26,7 @@
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
 #include <panel_eeschema_display_options.h>
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 #include <widgets/ui_common.h>
 #include <widgets/font_choice.h>
 
@@ -34,11 +34,10 @@
 #include <font/kicad_font_name.h>
 
 
-PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParent,
-                                                                APP_SETTINGS_BASE* aAppSettings ) :
+PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
         PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aParent )
 {
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
+    m_galOptsPanel = new PANEL_GAL_OPTIONS( this, aAppSettings );
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 0 );
 

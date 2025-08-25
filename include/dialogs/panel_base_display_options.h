@@ -18,24 +18,21 @@
  */
 
 
-#ifndef PANEL_DISPLAY_OPTIONS_H
-#define PANEL_DISPLAY_OPTIONS_H
+#pragma once
 
 #include <wx/panel.h>
 
-class GAL_OPTIONS_PANEL;
+class PANEL_GAL_OPTIONS;
 
 
-class PANEL_GAL_DISPLAY_OPTIONS : public wxPanel
+class PANEL_BASE_DISPLAY_OPTIONS : public wxPanel
 {
 public:
-    PANEL_GAL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
+    PANEL_BASE_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    GAL_OPTIONS_PANEL*  m_galOptsPanel;
+    PANEL_GAL_OPTIONS*  m_galOptsPanel;
 };
-
-#endif //PANEL_DISPLAY_OPTIONS_H

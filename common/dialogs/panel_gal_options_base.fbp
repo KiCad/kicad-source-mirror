@@ -13,12 +13,12 @@
     <property name="cpp_use_enum">0</property>
     <property name="embedded_files_path">res</property>
     <property name="encoding">UTF-8</property>
-    <property name="file">gal_options_panel_base</property>
+    <property name="file">panel_gal_options_base</property>
     <property name="first_id">1000</property>
     <property name="internationalize">1</property>
     <property name="lua_skip_events">1</property>
     <property name="lua_ui_table">UI</property>
-    <property name="name">GAL_OPTIONS_PANEL_BASE_PRJ</property>
+    <property name="name">PANEL_GAL_OPTIONS_BASE</property>
     <property name="path">.</property>
     <property name="php_disconnect_events">0</property>
     <property name="php_disconnect_mode">source_name</property>
@@ -46,7 +46,7 @@
       <property name="id">wxID_ANY</property>
       <property name="maximum_size"></property>
       <property name="minimum_size"></property>
-      <property name="name">GAL_OPTIONS_PANEL_BASE</property>
+      <property name="name">PANEL_GAL_OPTIONS_BASE</property>
       <property name="pos"></property>
       <property name="size">-1,-1</property>
       <property name="subclass">; ; forward_declare</property>
@@ -1267,7 +1267,7 @@
                 <property name="value">0</property>
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
-              <property name="window_style"></property>
+                <property name="window_style"></property>
               </object>
             </object>
             <object class="sizeritem" expanded="true">

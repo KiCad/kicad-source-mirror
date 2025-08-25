@@ -23,7 +23,7 @@
 class PCBNEW_SETTINGS;
 class FOOTPRINT_EDITOR_SETTINGS;
 class APP_SETTINGS_BASE;
-class GAL_OPTIONS_PANEL;
+class PANEL_GAL_OPTIONS;
 
 
 class PANEL_DISPLAY_OPTIONS : public PANEL_DISPLAY_OPTIONS_BASE
@@ -51,6 +51,6 @@ private:
 
 private:
     bool               m_isPCBEdit;
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
+    PANEL_GAL_OPTIONS* m_galOptsPanel;
 };
 

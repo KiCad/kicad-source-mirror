@@ -22,16 +22,16 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <gerbview_settings.h>
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 #include "panel_gerbview_display_options.h"
 
 
 PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent ) :
-    PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aParent, wxID_ANY )
+     PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aParent, wxID_ANY )
 {
     GERBVIEW_SETTINGS* cfg = GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" );
 
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, cfg );
+    m_galOptsPanel = new PANEL_GAL_OPTIONS( this, cfg );
     m_galOptionsSizer->Add( m_galOptsPanel, 0, wxEXPAND|wxRIGHT, 15 );
 }
 

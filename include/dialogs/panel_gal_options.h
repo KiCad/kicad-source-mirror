@@ -21,10 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef WIDGETS_GAL_OPTIONS_PANEL__H_
-#define WIDGETS_GAL_OPTIONS_PANEL__H_
+#pragma once
 
-#include <../../common/widgets/gal_options_panel_base.h>
+#include <dialogs/panel_gal_options_base.h>
 #include <gal/gal_display_options.h>
 
 class wxBoxSizer;
@@ -37,11 +36,11 @@ class EDA_DRAW_FRAME;
 class APP_SETTINGS_BASE;
 
 
-class GAL_OPTIONS_PANEL: public GAL_OPTIONS_PANEL_BASE
+class PANEL_GAL_OPTIONS: public PANEL_GAL_OPTIONS_BASE
 {
 public:
 
-    GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
+    PANEL_GAL_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
     /**
      * Load the panel controls from the given opt
@@ -60,5 +59,3 @@ private:
     APP_SETTINGS_BASE* m_cfg;
 };
 
-
-#endif // WIDGETS_GAL_OPTIONS_PANEL__H_

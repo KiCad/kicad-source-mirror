@@ -22,7 +22,7 @@
 #include "panel_sym_display_options_base.h"
 
 class APP_SETTINGS_BASE;
-class GAL_OPTIONS_PANEL;
+class PANEL_GAL_OPTIONS;
 class SYMBOL_EDITOR_SETTINGS;
 
 
@@ -40,5 +40,5 @@ private:
     void loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg );
 
 private:
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
+    PANEL_GAL_OPTIONS* m_galOptsPanel;
 };

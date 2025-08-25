@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 #include <settings/app_settings.h>
 #include <gal/gal_display_options.h>
 #include <eda_draw_frame.h>
@@ -57,8 +57,8 @@ static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
 };
 
 
-GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
-        GAL_OPTIONS_PANEL_BASE( aParent ),
+PANEL_GAL_OPTIONS::PANEL_GAL_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
+        PANEL_GAL_OPTIONS_BASE( aParent ),
         m_cfg( aAppSettings )
 {
     // Grid settings subpanel
@@ -80,7 +80,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
 }
 
 
-bool GAL_OPTIONS_PANEL::TransferDataToWindow()
+bool PANEL_GAL_OPTIONS::TransferDataToWindow()
 {
     m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );
 
@@ -106,7 +106,7 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 }
 
 
-bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
+bool PANEL_GAL_OPTIONS::TransferDataFromWindow()
 {
     m_cfg->m_Window.grid.snap = m_gridSnapOptions->GetSelection();
 
@@ -134,7 +134,7 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 }
 
 
-bool GAL_OPTIONS_PANEL::ResetPanel( APP_SETTINGS_BASE* aAppSettings )
+bool PANEL_GAL_OPTIONS::ResetPanel( APP_SETTINGS_BASE* aAppSettings )
 {
     APP_SETTINGS_BASE* saved = m_cfg;
 

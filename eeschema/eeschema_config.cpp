@@ -25,7 +25,7 @@
 #include <dialogs/dialog_schematic_setup.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
-#include <dialogs/panel_gal_display_options.h>
+#include <dialogs/panel_base_display_options.h>
 #include <filename_resolver.h>
 #include <pgm_base.h>
 #include <project/project_file.h>

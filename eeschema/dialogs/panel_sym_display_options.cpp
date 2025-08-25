@@ -26,14 +26,13 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 
 
-PANEL_SYM_DISPLAY_OPTIONS::PANEL_SYM_DISPLAY_OPTIONS( wxWindow*          aParent,
-                                                      APP_SETTINGS_BASE* aAppSettings ) :
+PANEL_SYM_DISPLAY_OPTIONS::PANEL_SYM_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
         PANEL_SYM_DISPLAY_OPTIONS_BASE( aParent )
 {
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
+    m_galOptsPanel = new PANEL_GAL_OPTIONS( this, aAppSettings );
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxRIGHT, 5 );
 }

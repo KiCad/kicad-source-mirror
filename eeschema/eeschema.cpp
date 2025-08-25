@@ -62,7 +62,7 @@
 #include <panel_eeschema_editing_options.h>
 #include <panel_eeschema_annotation_options.h>
 #include <panel_sym_editing_options.h>
-#include <dialogs/panel_gal_display_options.h>
+#include <dialogs/panel_base_display_options.h>
 #include <panel_eeschema_display_options.h>
 #include <panel_sym_display_options.h>
 #include <sim/simulator_frame.h>

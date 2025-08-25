@@ -24,7 +24,7 @@
 #include <config_map.h>
 #include <panel_display_options.h>
 #include <widgets/paged_dialog.h>
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 #include <widgets/std_bitmap_button.h>
 #include <grid_tricks.h>
 #include <board_design_settings.h>
@@ -150,7 +150,7 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BA
         PANEL_DISPLAY_OPTIONS_BASE( aParent ),
         m_isPCBEdit( dynamic_cast<PCBNEW_SETTINGS*>( aAppSettings ) != nullptr )
 {
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
+    m_galOptsPanel = new PANEL_GAL_OPTIONS( this, aAppSettings );
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 5 );
 
     m_optionsBook->SetSelection( m_isPCBEdit ? 1 : 0 );

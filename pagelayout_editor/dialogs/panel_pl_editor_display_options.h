@@ -17,14 +17,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_PL_EDITOR_DISPLAY_OPTIONS_H
-#define PANEL_PL_EDITOR_DISPLAY_OPTIONS_H
+#pragma once
 
 #include <widgets/resettable_panel.h>
 
 
 class APP_SETTINGS_BASE;
-class GAL_OPTIONS_PANEL;
+class PANEL_GAL_OPTIONS;
 
 
 class PANEL_PL_EDITOR_DISPLAY_OPTIONS : public RESETTABLE_PANEL
@@ -38,8 +37,5 @@ public:
     void ResetPanel() override;
 
 private:
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
+    PANEL_GAL_OPTIONS* m_galOptsPanel;
 };
-
-
-#endif // PANEL_PL_EDITOR_DISPLAY_OPTIONS_H

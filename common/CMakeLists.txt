@@ -430,10 +430,12 @@ set( COMMON_DLG_SRCS
     dialogs/panel_design_block_lib_table.cpp
     dialogs/panel_embedded_files.cpp
     dialogs/panel_embedded_files_base.cpp
-    dialogs/panel_gal_display_options.cpp
+        dialogs/panel_base_display_options.cpp
     dialogs/panel_hotkeys_editor.cpp
     dialogs/panel_image_editor.cpp
     dialogs/panel_image_editor_base.cpp
+    dialogs/panel_gal_options.cpp
+    dialogs/panel_gal_options_base.cpp
     dialogs/panel_grid_settings.cpp
     dialogs/panel_grid_settings_base.cpp
     dialogs/panel_maintenance.cpp
@@ -477,8 +479,6 @@ set( COMMON_WIDGET_SRCS
     widgets/footprint_diff_widget.cpp
     widgets/footprint_preview_widget.cpp
     widgets/footprint_select_widget.cpp
-    widgets/gal_options_panel.cpp
-    widgets/gal_options_panel_base.cpp
     widgets/grid_bitmap_toggle.cpp
     widgets/grid_button.cpp
     widgets/grid_checkbox.cpp

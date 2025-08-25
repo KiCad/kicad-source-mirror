@@ -24,7 +24,7 @@
 #include <settings/settings_manager.h>
 #include <pl_editor_settings.h>
 #include <panel_pl_editor_display_options.h>
-#include <widgets/gal_options_panel.h>
+#include <dialogs/panel_gal_options.h>
 #include <widgets/ui_common.h>
 #include <wx/sizer.h>
 
@@ -36,7 +36,7 @@ PANEL_PL_EDITOR_DISPLAY_OPTIONS::PANEL_PL_EDITOR_DISPLAY_OPTIONS( wxWindow* aPar
     wxBoxSizer* bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* bLeftCol = new wxBoxSizer( wxVERTICAL );
 
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
+    m_galOptsPanel = new PANEL_GAL_OPTIONS( this, aAppSettings );
     bLeftCol->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
 
     bPanelSizer->Add( bLeftCol, 0, wxEXPAND, 0 );

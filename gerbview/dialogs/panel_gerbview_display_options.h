@@ -21,13 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_GERBVIEW_DISPLAY_OPTIONS_H
-#define PANEL_GERBVIEW_DISPLAY_OPTIONS_H
+#pragma once
 
 #include "panel_gerbview_display_options_base.h"
 
 
-class GAL_OPTIONS_PANEL;
+class PANEL_GAL_OPTIONS;
 
 
 class PANEL_GERBVIEW_DISPLAY_OPTIONS : public PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE
@@ -45,9 +44,5 @@ private:
     void loadSettings( GERBVIEW_SETTINGS* aCfg );
 
 private:
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
+    PANEL_GAL_OPTIONS* m_galOptsPanel;
 };
-
-
-
-#endif // PANEL_GERBVIEW_DISPLAY_OPTIONS_H
