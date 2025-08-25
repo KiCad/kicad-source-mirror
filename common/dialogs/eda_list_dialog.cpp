@@ -41,8 +41,7 @@ static int DEFAULT_COL_WIDTHS[] = { 200, 300 };
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aPreselectText, bool aSortList,
-                                  const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes ) :
+                                  const wxString& aPreselectText, bool aSortList ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
     m_sortList( aSortList )
 {
@@ -63,11 +62,6 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
     // columns, different column names, and column widths.
     m_hash_key = TO_UTF8( aTitle );
 
-    for( const auto& [label, valuePtr] : aExtraCheckboxes )
-    {
-        AddExtraCheckbox( label, valuePtr );
-    }
-
     SetupStandardButtons();
 
     Layout();
@@ -87,14 +81,16 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, boo
 
 void EDA_LIST_DIALOG::AddExtraCheckbox( const wxString& aLabel, bool* aValuePtr )
 {
-    if( m_extraCheckboxMap.size() == 0 )
-    {
-        m_ExtrasSizer->AddSpacer( 5 );
-    }
+    wxCHECK2_MSG( aValuePtr, return, wxT( "Null pointer for checkbox value." ) );
+
+    int flags = wxBOTTOM;
+
+    if( m_ExtrasSizer->GetItemCount() > 0 )
+        flags |= wxTOP;
 
     wxCheckBox* cb = new wxCheckBox( this, wxID_ANY, aLabel );
     cb->SetValue( *aValuePtr );
-    m_ExtrasSizer->Add( cb, 0, wxBOTTOM, 5 );
+    m_ExtrasSizer->Add( cb, 0, flags, 5 );
     m_extraCheckboxMap[cb] = aValuePtr;
 }
 

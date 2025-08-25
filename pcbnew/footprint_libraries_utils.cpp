@@ -429,8 +429,11 @@ wxString PCB_BASE_EDIT_FRAME::SelectLibrary( const wxString& aDialogTitle, const
 
         wxString libraryName = Prj().GetRString( PROJECT::PCB_LIB_NICKNAME );
 
-        EDA_LIST_DIALOG dlg( this, aDialogTitle, headers, itemsToDisplay, libraryName, false, aExtraCheckboxes );
+        EDA_LIST_DIALOG dlg( this, aDialogTitle, headers, itemsToDisplay, libraryName, false );
         dlg.SetListLabel( aListLabel );
+
+        for( const auto& [label, val] : aExtraCheckboxes )
+            dlg.AddExtraCheckbox( label, val );
 
         wxButton* newLibraryButton = new wxButton( &dlg, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
         dlg.m_ButtonsSizer->Prepend( 80, 20 );
@@ -1313,5 +1316,3 @@ void PCB_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
         }
     }
 }
-
-

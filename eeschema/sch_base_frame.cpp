@@ -735,8 +735,11 @@ wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxSt
 
         wxString libraryName = Prj().GetRString( PROJECT::SCH_LIB_SELECT );
 
-        EDA_LIST_DIALOG dlg( this, aDialogTitle, headers, itemsToDisplay, libraryName, false, aExtraCheckboxes );
+        EDA_LIST_DIALOG dlg( this, aDialogTitle, headers, itemsToDisplay, libraryName, false );
         dlg.SetListLabel( aListLabel );
+
+        for( const auto& [label, val] : aExtraCheckboxes )
+            dlg.AddExtraCheckbox( label, val );
 
         wxButton* newLibraryButton = new wxButton( &dlg, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
         dlg.m_ButtonsSizer->Prepend( 80, 20 );

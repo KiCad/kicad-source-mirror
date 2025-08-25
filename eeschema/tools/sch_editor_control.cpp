@@ -73,7 +73,6 @@
 #include <tools/sch_tool_utils.h>
 #include <tools/sch_edit_table_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
-#include <eda_list_dialog.h>
 #include <view/view_controls.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>

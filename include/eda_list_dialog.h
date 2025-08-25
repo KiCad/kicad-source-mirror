@@ -26,7 +26,7 @@
 #define  EDA_LIST_DIALOG_H
 
 
-#include <../common/dialogs/eda_list_dialog_base.h>
+#include <dialogs/eda_list_dialog_base.h>
 
 
 class EDA_DRAW_FRAME;
@@ -53,8 +53,7 @@ public:
     EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
                      const wxString& aPreselectText = wxEmptyString,
-                     bool aSortList = true,
-                     const std::vector<std::pair<wxString, bool*>>& aExtraCheckboxes = {} );
+                     bool aSortList = true );
 
     EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSortList = true );
 
