@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,6 +28,9 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 	bSizer11->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
+
+	bSizer11->Add( 0, 8, 0, 0, 5 );
+
 	wxBoxSizer* bSizerPads;
 	bSizerPads = new wxBoxSizer( wxVERTICAL );
 
@@ -42,7 +45,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bSizerPads->Add( m_OptUseViaColorForNormalTHPadstacks, 0, wxALL, 5 );
 
 
-	bSizerPads->Add( 0, 0, 0, wxEXPAND, 5 );
+	bSizerPads->Add( 0, 8, 0, wxEXPAND, 5 );
 
 	m_clearanceLabel = new wxStaticText( this, wxID_ANY, _("Clearance Outlines"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearanceLabel->Wrap( -1 );
@@ -70,7 +73,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	gbSizer2->Add( m_OptDisplayPadClearence, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
 
 
-	bSizerPads->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerPads->Add( gbSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerPads->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -148,7 +151,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	fpEditorPage->SetSizer( fpEditorOptionsSizer );
 	fpEditorPage->Layout();
 	fpEditorOptionsSizer->Fit( fpEditorPage );
-	m_optionsBook->AddPage( fpEditorPage, _("a page"), false );
+	m_optionsBook->AddPage( fpEditorPage, _("Footprint Editor"), false );
 	wxPanel* pcbPage;
 	pcbPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* pcbOptionsSizer;
@@ -184,10 +187,10 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	gbSizer1->Add( m_OptDisplayPadNumber, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
 
 
-	bMargins->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( gbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( 0, 0, 0, wxEXPAND, 5 );
+	bMargins->Add( 0, 8, 0, 0, 5 );
 
 	m_staticText4 = new wxStaticText( pcbPage, wxID_ANY, _("Selection && Highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
@@ -204,10 +207,10 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bSizer9->Add( m_checkForceShowFieldsWhenFPSelected, 0, wxALL, 5 );
 
 
-	bMargins->Add( bSizer9, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( bSizer9, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( 0, 0, 0, wxEXPAND, 5 );
+	bMargins->Add( 0, 8, 0, 0, 5 );
 
 	m_crossProbingLabel = new wxStaticText( pcbPage, wxID_ANY, _("Cross-probing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_crossProbingLabel->Wrap( -1 );
@@ -247,19 +250,19 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bSizer8->Add( m_live3Drefresh, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bMargins->Add( bSizer8, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( bSizer8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( 0, 0, 1, wxEXPAND, 5 );
+	bMargins->Add( 0, 8, 1, wxEXPAND, 5 );
 
 
-	pcbOptionsSizer->Add( bMargins, 1, wxEXPAND, 5 );
+	pcbOptionsSizer->Add( bMargins, 0, wxEXPAND, 5 );
 
 
 	pcbPage->SetSizer( pcbOptionsSizer );
 	pcbPage->Layout();
 	pcbOptionsSizer->Fit( pcbPage );
-	m_optionsBook->AddPage( pcbPage, _("a page"), false );
+	m_optionsBook->AddPage( pcbPage, _("PCB Editor"), true );
 
 	bupperSizer->Add( m_optionsBook, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 

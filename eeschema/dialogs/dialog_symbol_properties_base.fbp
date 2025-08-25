@@ -181,16 +181,16 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="false">
+                <object class="wxBoxSizer" expanded="true">
                   <property name="minimum_size"></property>
                   <property name="name">generalPageSizer</property>
                   <property name="orient">wxVERTICAL</property>
                   <property name="permission">none</property>
-                  <object class="sizeritem" expanded="false">
+                  <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                     <property name="proportion">1</property>
-                    <object class="wxStaticBoxSizer" expanded="false">
+                    <object class="wxStaticBoxSizer" expanded="true">
                       <property name="id">wxID_ANY</property>
                       <property name="label">Fields</property>
                       <property name="minimum_size"></property>
@@ -229,7 +229,7 @@
                           <property name="col_label_values">&quot;Name&quot; &quot;Value&quot; &quot;Show&quot; &quot;Show Name&quot; &quot;H Align&quot; &quot;V Align&quot; &quot;Italic&quot; &quot;Bold&quot; &quot;Text Size&quot; &quot;Orientation&quot; &quot;X Position&quot; &quot;Y Position&quot; &quot;Font&quot; &quot;Color&quot;</property>
                           <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                           <property name="cols">14</property>
-                          <property name="column_sizes">72,120,48,84,70,70,48,48,84,84,84,84,140,48</property>
+                          <property name="column_sizes">72,10,48,84,66,66,48,48,84,84,84,84,10,48</property>
                           <property name="context_help"></property>
                           <property name="context_menu">1</property>
                           <property name="default_pane">0</property>

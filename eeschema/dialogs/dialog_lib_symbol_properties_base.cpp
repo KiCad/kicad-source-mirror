@@ -41,18 +41,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	// Columns
 	m_grid->SetColSize( 0, 72 );
-	m_grid->SetColSize( 1, 120 );
+	m_grid->SetColSize( 1, 8 );
 	m_grid->SetColSize( 2, 48 );
 	m_grid->SetColSize( 3, 84 );
-	m_grid->SetColSize( 4, 70 );
-	m_grid->SetColSize( 5, 70 );
+	m_grid->SetColSize( 4, 66 );
+	m_grid->SetColSize( 5, 66 );
 	m_grid->SetColSize( 6, 48 );
 	m_grid->SetColSize( 7, 48 );
-	m_grid->SetColSize( 8, 84 );
+	m_grid->SetColSize( 8, 80 );
 	m_grid->SetColSize( 9, 84 );
 	m_grid->SetColSize( 10, 84 );
 	m_grid->SetColSize( 11, 84 );
-	m_grid->SetColSize( 12, 140 );
+	m_grid->SetColSize( 12, 10 );
 	m_grid->SetColSize( 13, 48 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
@@ -282,10 +282,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerAttributes->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_excludeFromBomCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerAttributes->Add( m_excludeFromBomCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	sbSizerAttributes->Add( m_excludeFromBomCheckBox, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_excludeFromBoardCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerAttributes->Add( m_excludeFromBoardCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	sbSizerAttributes->Add( m_excludeFromBoardCheckBox, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerRightCol->Add( sbSizerAttributes, 1, wxEXPAND|wxALL, 5 );

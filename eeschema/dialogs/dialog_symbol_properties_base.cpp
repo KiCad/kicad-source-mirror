@@ -38,18 +38,18 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	// Columns
 	m_fieldsGrid->SetColSize( 0, 72 );
-	m_fieldsGrid->SetColSize( 1, 120 );
+	m_fieldsGrid->SetColSize( 1, 10 );
 	m_fieldsGrid->SetColSize( 2, 48 );
 	m_fieldsGrid->SetColSize( 3, 84 );
-	m_fieldsGrid->SetColSize( 4, 70 );
-	m_fieldsGrid->SetColSize( 5, 70 );
+	m_fieldsGrid->SetColSize( 4, 66 );
+	m_fieldsGrid->SetColSize( 5, 66 );
 	m_fieldsGrid->SetColSize( 6, 48 );
 	m_fieldsGrid->SetColSize( 7, 48 );
 	m_fieldsGrid->SetColSize( 8, 84 );
 	m_fieldsGrid->SetColSize( 9, 84 );
 	m_fieldsGrid->SetColSize( 10, 84 );
 	m_fieldsGrid->SetColSize( 11, 84 );
-	m_fieldsGrid->SetColSize( 12, 140 );
+	m_fieldsGrid->SetColSize( 12, 10 );
 	m_fieldsGrid->SetColSize( 13, 48 );
 	m_fieldsGrid->EnableDragColMove( false );
 	m_fieldsGrid->EnableDragColSize( true );
