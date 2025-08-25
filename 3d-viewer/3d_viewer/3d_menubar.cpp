@@ -86,22 +86,39 @@ void EDA_3D_VIEWER_FRAME::doReCreateMenuBar()
     viewMenu->Add( gridSubmenu );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EDA_3D_ACTIONS::rotateXCW );
-    viewMenu->Add( EDA_3D_ACTIONS::rotateXCCW );
+    viewMenu->Add( EDA_3D_ACTIONS::viewTop );
+    viewMenu->Add( EDA_3D_ACTIONS::viewBottom );
+    viewMenu->Add( EDA_3D_ACTIONS::viewRight );
+    viewMenu->Add( EDA_3D_ACTIONS::viewLeft );
+    viewMenu->Add( EDA_3D_ACTIONS::viewFront );
+    viewMenu->Add( EDA_3D_ACTIONS::viewBack );
+
+    ACTION_MENU* rotateSubmenu = new ACTION_MENU( false, tool );
+    rotateSubmenu->SetTitle( _( "Rotate Board" ) );
+    rotateSubmenu->SetIcon( BITMAPS::rotate_cw );
+
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateXCW );
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateXCCW );
+    rotateSubmenu->AppendSeparator();
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateYCW );
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateYCCW );
+    rotateSubmenu->AppendSeparator();
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateZCW );
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateZCCW );
+
+    ACTION_MENU* moveSubmenu = new ACTION_MENU( false, tool );
+    moveSubmenu->SetTitle( _( "Move Board" ) );
+    moveSubmenu->SetIcon( BITMAPS::move );
+
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveLeft );
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveRight );
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveUp );
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveDown );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EDA_3D_ACTIONS::rotateYCW );
-    viewMenu->Add( EDA_3D_ACTIONS::rotateYCCW );
-
-    viewMenu->AppendSeparator();
-    viewMenu->Add( EDA_3D_ACTIONS::rotateZCW );
-    viewMenu->Add( EDA_3D_ACTIONS::rotateZCCW );
-
-    viewMenu->AppendSeparator();
-    viewMenu->Add( EDA_3D_ACTIONS::moveLeft );
-    viewMenu->Add( EDA_3D_ACTIONS::moveRight );
-    viewMenu->Add( EDA_3D_ACTIONS::moveUp );
-    viewMenu->Add( EDA_3D_ACTIONS::moveDown );
+    viewMenu->Add( rotateSubmenu );
+    viewMenu->Add( EDA_3D_ACTIONS::flipView );
+    viewMenu->Add( moveSubmenu );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( EDA_3D_ACTIONS::showLayersManager, ACTION_MENU::CHECK );

@@ -63,8 +63,7 @@ ACTION_MENU::ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
 
 ACTION_MENU::~ACTION_MENU()
 {
-    Disconnect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ),
-                nullptr, this );
+    Disconnect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), nullptr, this );
     Disconnect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), nullptr, this );
 
     // Set parent to NULL to prevent submenus from unregistering from a nonexistent object
@@ -86,8 +85,7 @@ void ACTION_MENU::SetIcon( BITMAPS aIcon )
 
 void ACTION_MENU::setupEvents()
 {
-    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), nullptr,
-             this );
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), nullptr, this );
     Connect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), nullptr, this );
 }
 
@@ -159,8 +157,8 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
 {
     wxASSERT_MSG( FindItem( aId ) == nullptr, wxS( "Duplicate menu IDs!" ) );
 
-    wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip,
-                                       aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
+    wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip, aIsCheckmarkEntry ? wxITEM_CHECK
+                                                                                      : wxITEM_NORMAL );
 
     if( !!aIcon )
         KIUI::AddBitmapToMenuItem( item, KiBitmapBundle( aIcon ) );
@@ -178,8 +176,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
     // Allow the label to be overridden at point of use
     wxString menuLabel = aOverrideLabel.IsEmpty() ? aAction.GetMenuItem() : aOverrideLabel;
 
-    wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), menuLabel,
-                                       aAction.GetTooltip(),
+    wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), menuLabel, aAction.GetTooltip(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
     if( !!icon )
         KIUI::AddBitmapToMenuItem( item, KiBitmapBundle( icon ) );
@@ -194,8 +191,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 {
     m_submenus.push_back( aMenu );
 
-    wxASSERT_MSG( !aMenu->m_title.IsEmpty(),
-                  wxS( "Set a title for ACTION_MENU using SetTitle()" ) );
+    wxASSERT_MSG( !aMenu->m_title.IsEmpty(), wxS( "Set a title for ACTION_MENU using SetTitle()" ) );
 
     if( !!aMenu->m_icon )
     {
@@ -334,8 +330,7 @@ ACTION_MENU* ACTION_MENU::create() const
     ACTION_MENU* menu = new ACTION_MENU( false );
 
     wxASSERT_MSG( typeid( *this ) == typeid( *menu ),
-                  wxString::Format( "You need to override create() method for class %s",
-                                    typeid( *this ).name() ) );
+                  wxString::Format( "You need to override create() method for class %s", typeid( *this ).name() ) );
 
     return menu;
 }
@@ -524,9 +519,8 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
             #define ID_CONTEXT_MENU_ID_MAX wxID_LOWEST  /* = 100 should be plenty */
 
-            if( !evt &&
-                    ( ( m_selected >= 0 && m_selected < ID_CONTEXT_MENU_ID_MAX ) ||
-                      ( m_selected >= ID_POPUP_MENU_START && m_selected <= ID_POPUP_MENU_END ) ) )
+            if( !evt && (   ( m_selected >= 0 && m_selected < ID_CONTEXT_MENU_ID_MAX )
+                         || ( m_selected >= ID_POPUP_MENU_START && m_selected <= ID_POPUP_MENU_END ) ) )
             {
                 ACTION_MENU* actionMenu = dynamic_cast<ACTION_MENU*>( GetParent() );
 

@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _3D_VIEWER_CONTROL_H
-#define _3D_VIEWER_CONTROL_H
+#pragma once
 
 #include <tool/tool_interactive.h>
 
@@ -38,12 +37,12 @@ class BOARD_ADAPTER;
 class EDA_3D_CONTROLLER : public TOOL_INTERACTIVE
 {
 public:
-    EDA_3D_CONTROLLER()
-            : TOOL_INTERACTIVE( "3DViewer.Control" ),
-              m_canvas( nullptr ),
-              m_boardAdapter( nullptr ),
-              m_camera( nullptr ),
-              m_rotationIncrement( 10.0 )
+    EDA_3D_CONTROLLER() :
+            TOOL_INTERACTIVE( "3DViewer.Control" ),
+            m_canvas( nullptr ),
+            m_boardAdapter( nullptr ),
+            m_camera( nullptr ),
+            m_rotationIncrement( 10.0 )
     { }
 
     ~EDA_3D_CONTROLLER() override { }
@@ -63,20 +62,8 @@ public:
      *
      * @param aRotIncrement is the rotation increment in degrees
      */
-    void SetRotationIncrement( double aRotIncrement )
-    {
-        m_rotationIncrement = aRotIncrement;
-    }
-
-    /**
-     * Get the increment used by the RotateView actions.
-     *
-     * @return the rotation increment in degrees
-     */
-    double GetRotationIncrement()
-    {
-        return m_rotationIncrement;
-    }
+    void SetRotationIncrement( double aRotIncrement ) { m_rotationIncrement = aRotIncrement; }
+    double GetRotationIncrement() { return m_rotationIncrement; }
 
     // View controls
     int ZoomRedraw( const TOOL_EVENT& aEvent );
@@ -112,5 +99,3 @@ private:
     CAMERA*        m_camera;
     double         m_rotationIncrement;     ///< Rotation increment for the rotate actions (degrees)
 };
-
-#endif

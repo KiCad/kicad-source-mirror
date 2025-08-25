@@ -38,6 +38,30 @@
 
 bool EDA_3D_CONTROLLER::Init()
 {
+    std::shared_ptr<ACTION_MENU> rotateSubmenu = std::make_shared<ACTION_MENU>( true, this );
+    rotateSubmenu->SetTitle( _( "Rotate Board" ) );
+    rotateSubmenu->SetIcon( BITMAPS::rotate_cw );
+    m_menu->RegisterSubMenu( rotateSubmenu );
+
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateXCW );
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateXCCW );
+    rotateSubmenu->AppendSeparator();
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateYCW );
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateYCCW );
+    rotateSubmenu->AppendSeparator();
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateZCW );
+    rotateSubmenu->Add( EDA_3D_ACTIONS::rotateZCCW );
+
+    std::shared_ptr<ACTION_MENU> moveSubmenu = std::make_shared<ACTION_MENU>( true, this );
+    moveSubmenu->SetTitle( _( "Move Board" ) );
+    moveSubmenu->SetIcon( BITMAPS::move );
+    m_menu->RegisterSubMenu( moveSubmenu );
+
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveLeft );
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveRight );
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveUp );
+    moveSubmenu->Add( EDA_3D_ACTIONS::moveDown );
+
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     ctxMenu.AddItem( ACTIONS::zoomInCenter,       SELECTION_CONDITIONS::ShowAlways );
@@ -46,23 +70,15 @@ bool EDA_3D_CONTROLLER::Init()
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( EDA_3D_ACTIONS::viewTop,     SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( EDA_3D_ACTIONS::viewBottom,  SELECTION_CONDITIONS::ShowAlways );
-
-    ctxMenu.AddSeparator();
     ctxMenu.AddItem( EDA_3D_ACTIONS::viewRight,   SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( EDA_3D_ACTIONS::viewLeft,    SELECTION_CONDITIONS::ShowAlways );
-
-    ctxMenu.AddSeparator();
     ctxMenu.AddItem( EDA_3D_ACTIONS::viewFront,   SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( EDA_3D_ACTIONS::viewBack,    SELECTION_CONDITIONS::ShowAlways );
 
     ctxMenu.AddSeparator();
+    ctxMenu.AddMenu( rotateSubmenu.get(),         SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( EDA_3D_ACTIONS::flipView,    SELECTION_CONDITIONS::ShowAlways );
-
-    ctxMenu.AddSeparator();
-    ctxMenu.AddItem( EDA_3D_ACTIONS::moveLeft,    SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( EDA_3D_ACTIONS::moveRight,   SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( EDA_3D_ACTIONS::moveUp,      SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( EDA_3D_ACTIONS::moveDown,    SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddMenu( moveSubmenu.get(),           SELECTION_CONDITIONS::ShowAlways );
 
     return true;
 }
@@ -116,12 +132,6 @@ int EDA_3D_CONTROLLER::UpdateMenu( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
 {
-    // Track right mouse button state and movement
-    VECTOR2D rightButtonDownPos;
-
-    const int DRAG_THRESHOLD = 4; // pixels
-    bool rightButtonDragged = false;
-
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -247,8 +257,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
     auto flipLayer =
             [&]( int layer )
             {
-                appearanceManager->OnLayerVisibilityChanged( layer,
-                                                             !visibilityFlags.test( layer ) );
+                appearanceManager->OnLayerVisibilityChanged( layer, !visibilityFlags.test( layer ) );
             };
 
     EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
@@ -258,20 +267,13 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 
     if( appearanceManager )
     {
-        if( aEvent.IsAction( &EDA_3D_ACTIONS::showTHT ) )
-            flipLayer( LAYER_3D_TH_MODELS );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showSMD ) )
-            flipLayer( LAYER_3D_SMD_MODELS );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showVirtual ) )
-            flipLayer( LAYER_3D_VIRTUAL_MODELS );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNotInPosFile ) )
-            flipLayer( LAYER_3D_MODELS_NOT_IN_POS );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showDNP ) )
-            flipLayer( LAYER_3D_MODELS_MARKED_DNP );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNavigator ) )
-            flipLayer( LAYER_3D_NAVIGATOR );
-        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )
-            flipLayer( LAYER_3D_BOUNDING_BOXES );
+        if(      aEvent.IsAction( &EDA_3D_ACTIONS::showTHT ) )          flipLayer( LAYER_3D_TH_MODELS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showSMD ) )          flipLayer( LAYER_3D_SMD_MODELS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showVirtual ) )      flipLayer( LAYER_3D_VIRTUAL_MODELS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNotInPosFile ) ) flipLayer( LAYER_3D_MODELS_NOT_IN_POS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showDNP ) )          flipLayer( LAYER_3D_MODELS_MARKED_DNP );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNavigator ) )    flipLayer( LAYER_3D_NAVIGATOR );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )       flipLayer( LAYER_3D_BOUNDING_BOXES );
     }
 
     return 0;
@@ -325,8 +327,7 @@ int EDA_3D_CONTROLLER::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 {
     if( m_canvas )
     {
-        m_canvas->SetView3D( aDirection ? VIEW3D_TYPE::VIEW3D_ZOOM_IN
-                                        : VIEW3D_TYPE::VIEW3D_ZOOM_OUT );
+        m_canvas->SetView3D( aDirection ? VIEW3D_TYPE::VIEW3D_ZOOM_IN : VIEW3D_TYPE::VIEW3D_ZOOM_OUT );
         m_canvas->DisplayStatus();
     }
 
