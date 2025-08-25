@@ -74,6 +74,11 @@ public:
     wxString GetTextSelection( int aColumn = 0 );
 
     /**
+     * Add a checkbox value to the dialog.
+     */
+    void AddExtraCheckbox( const wxString& aLabel, bool* aValuePtr );
+
+    /**
      * Fills in the value pointers from the checkboxes after the dialog has run.
      */
     void GetExtraCheckboxValues();

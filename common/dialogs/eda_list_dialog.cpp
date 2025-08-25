@@ -63,17 +63,9 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
     // columns, different column names, and column widths.
     m_hash_key = TO_UTF8( aTitle );
 
-    if( !aExtraCheckboxes.empty() )
+    for( const auto& [label, valuePtr] : aExtraCheckboxes )
     {
-        m_ExtrasSizer->AddSpacer( 5 );
-
-        for( const auto& [label, valuePtr] : aExtraCheckboxes )
-        {
-            wxCheckBox* cb = new wxCheckBox( this, wxID_ANY, label );
-            cb->SetValue( *valuePtr );
-            m_ExtrasSizer->Add( cb, 0, wxBOTTOM, 5 );
-            m_extraCheckboxMap[cb] = valuePtr;
-        }
+        AddExtraCheckbox( label, valuePtr );
     }
 
     SetupStandardButtons();
@@ -90,6 +82,20 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, boo
     m_sortList( aSortList )
 {
     m_filterBox->SetHint( _( "Filter" ) );
+}
+
+
+void EDA_LIST_DIALOG::AddExtraCheckbox( const wxString& aLabel, bool* aValuePtr )
+{
+    if( m_extraCheckboxMap.size() == 0 )
+    {
+        m_ExtrasSizer->AddSpacer( 5 );
+    }
+
+    wxCheckBox* cb = new wxCheckBox( this, wxID_ANY, aLabel );
+    cb->SetValue( *aValuePtr );
+    m_ExtrasSizer->Add( cb, 0, wxBOTTOM, 5 );
+    m_extraCheckboxMap[cb] = aValuePtr;
 }
 
 

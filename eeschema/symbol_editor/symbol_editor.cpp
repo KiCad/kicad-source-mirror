@@ -481,15 +481,23 @@ void SYMBOL_EDIT_FRAME::SaveSymbolCopyAs( bool aOpenCopy )
  * with the "leaf" symbol at the start and the "rootiest" symbol at the end.
  *
  * If the symbol is not an alias, the list will contain only the symbol itself.
+ *
+ * If aIncludeLeaf is false, the leaf symbol (the one that was actually named)
+ * is not included in the list, so the list may be empty if the symbol is not derived.
  */
-static std::vector<LIB_SYMBOL_SPTR> GetParentChain( const LIB_SYMBOL& aSymbol )
+static std::vector<LIB_SYMBOL_SPTR> GetParentChain( const LIB_SYMBOL& aSymbol, bool aIncludeLeaf = true )
 {
-    std::vector<LIB_SYMBOL_SPTR> chain( { aSymbol.SharedPtr() } );
+    std::vector<LIB_SYMBOL_SPTR> chain;
+    LIB_SYMBOL_SPTR              sym = aSymbol.SharedPtr();
 
-    while( chain.back()->IsDerived() )
+    if( aIncludeLeaf )
+        chain.push_back( sym );
+
+    while( sym->IsDerived() )
     {
-        LIB_SYMBOL_SPTR parent = chain.back()->GetParent().lock();
+        LIB_SYMBOL_SPTR parent = sym->GetParent().lock();
         chain.push_back( parent );
+        sym = parent;
     }
 
     return chain;
@@ -524,7 +532,7 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
     bool inDescendents = false;
 
     {
-        const std::vector<LIB_SYMBOL_SPTR> parentChainFromUs = GetParentChain( aSymbol );
+        const std::vector<LIB_SYMBOL_SPTR> parentChainFromUs = GetParentChain( aSymbol, true );
 
         // Ignore the leaf symbol (0) - that must match
         for( size_t i = 1; i < parentChainFromUs.size(); ++i )
@@ -540,7 +548,7 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
 
     {
         LIB_SYMBOL* targetSymbol = aLibMgr.GetSymbol( aNewSymbolName, aNewLibraryName );
-        const std::vector<LIB_SYMBOL_SPTR> parentChainFromTarget = GetParentChain( *targetSymbol );
+        const std::vector<LIB_SYMBOL_SPTR> parentChainFromTarget = GetParentChain( *targetSymbol, true );
         const wxString                     oldSymbolName = aSymbol.GetName();
 
         // Ignore the leaf symbol - it'll match if we're saving the symbol
@@ -568,22 +576,24 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
  */
 static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_MANAGER& aLibMgr,
                                                              LIB_SYMBOL&                 aSymbol,
+                                                             bool                        aFlattenSymbol,
                                                              const wxString& newSymbolName,
                                                              const wxString& newLibraryName )
 {
     std::vector<wxString> conflicts;
     const wxString&       oldLibraryName = aSymbol.GetLibId().GetLibNickname();
 
-    if( newLibraryName == oldLibraryName )
+    if( newLibraryName == oldLibraryName || aFlattenSymbol )
     {
         // Saving into the same library - the only conflict could be the symbol itself
+        // Different library and flattening - ditto
         if( aLibMgr.SymbolNameInUse( newSymbolName, newLibraryName ) )
             conflicts.push_back( newSymbolName );
     }
     else
     {
-        // In a different library, check the whole chain
-        const std::vector<LIB_SYMBOL_SPTR> parentChain = GetParentChain( aSymbol );
+        // In a different library with parents - check the whole chain
+        const std::vector<LIB_SYMBOL_SPTR> parentChain = GetParentChain( aSymbol, true );
 
         for( size_t i = 0; i < parentChain.size(); ++i )
         {
@@ -627,23 +637,40 @@ public:
         // PROMPT
     };
 
-    SYMBOL_SAVE_AS_HANDLER( LIB_SYMBOL_LIBRARY_MANAGER& aLibMgr, CONFLICT_STRATEGY aStrategy,
-                            bool aValueFollowsName ) :
+    SYMBOL_SAVE_AS_HANDLER( LIB_SYMBOL_LIBRARY_MANAGER& aLibMgr, CONFLICT_STRATEGY aStrategy, bool aValueFollowsName ) :
             m_libMgr( aLibMgr ),
             m_strategy( aStrategy ),
             m_valueFollowsName( aValueFollowsName )
     {
     }
 
-    bool DoSave( LIB_SYMBOL& symbol, const wxString& aNewSymName, const wxString& aNewLibName )
+    bool DoSave( LIB_SYMBOL& symbol, const wxString& aNewSymName, const wxString& aNewLibName, bool aFlattenSymbol )
     {
+        std::unique_ptr<LIB_SYMBOL>  flattenedSymbol; // for ownership
         std::vector<LIB_SYMBOL_SPTR> parentChain;
-        // If we're saving into the same library, we don't need to check the parental chain
-        // because we can just keep the same parent symbol
-        if( aNewLibName == symbol.GetLibId().GetLibNickname().wx_str() )
+
+        const bool sameLib = aNewLibName == symbol.GetLibId().GetLibNickname().wx_str();
+
+        if( !sameLib && aFlattenSymbol )
+        {
+            // If we're not copying parent symbols, we need to flatten the symbol
+            // and only save that.
+            flattenedSymbol = symbol.Flatten();
+            wxCHECK( flattenedSymbol, false );
+
+            parentChain.push_back( flattenedSymbol->SharedPtr() );
+        }
+        else if( sameLib )
+        {
+            // If we're saving into the same library, we don't need to check the parental chain
+            // because we can just keep the same parent symbol
             parentChain.push_back( symbol.SharedPtr() );
+        }
         else
-            parentChain = GetParentChain( symbol );
+        {
+            // Need to copy all parent symbols
+            parentChain = GetParentChain( symbol, true );
+        }
 
         std::vector<wxString> newNames;
 
@@ -746,20 +773,39 @@ class SAVE_SYMBOL_AS_DIALOG : public EDA_LIST_DIALOG
 public:
     using SymLibNameValidator = std::function<int( const wxString& libName, const wxString& symbolName )>;
 
-    SAVE_SYMBOL_AS_DIALOG( SYMBOL_EDIT_FRAME* aParent, const wxString& aSymbolName,
-                           const wxString& aLibraryPreselect, SymLibNameValidator aValidator,
-                           SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY& aConflictStrategy ) :
+    struct PARAMS
+    {
+        wxString                                  m_SymbolName;
+        wxString                                  m_LibraryName;
+        bool                                      m_FlattenSymbol;
+        SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY m_ConflictStrategy;
+    };
+
+    SAVE_SYMBOL_AS_DIALOG( SYMBOL_EDIT_FRAME* aParent,
+                           PARAMS& aParams,
+                           SymLibNameValidator aValidator,
+                           const std::vector<wxString>& aParentSymbolNames ) :
             EDA_LIST_DIALOG( aParent, _( "Save Symbol As" ), false ),
             m_validator( std::move( aValidator ) ),
-            m_conflictStrategy( aConflictStrategy )
+            m_params( aParams )
     {
         SYMBOL_LIB_TABLE*          tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
         wxArrayString              headers;
         std::vector<wxArrayString> itemsToDisplay;
 
+        if( aParentSymbolNames.size() )
+        {
+            // This is a little trick to word - when saving to another library, "copy parents" makes sense,
+            // but when in the same library, the parents will be untouched in any case.
+            const wxString aParentNames = AccumulateDescriptions( aParentSymbolNames );
+            AddExtraCheckbox(
+                    wxString::Format( "Flatten/remove symbol inheritance (current parent symbols: %s)", aParentNames ),
+                    &m_params.m_FlattenSymbol );
+        }
+
         aParent->GetLibraryItemsForListDialog( headers, itemsToDisplay );
-        initDialog( headers, itemsToDisplay, aLibraryPreselect );
+        initDialog( headers, itemsToDisplay, m_params.m_LibraryName );
 
         SetListLabel( _( "Save in library:" ) );
         SetOKLabel( _( "Save" ) );
@@ -769,7 +815,7 @@ public:
         wxStaticText* label = new wxStaticText( this, wxID_ANY, _( "Name:" ) );
         bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-        m_symbolNameCtrl = new wxTextCtrl( this, wxID_ANY, UnescapeString( aSymbolName ) );
+        m_symbolNameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString );
         bNameSizer->Add( m_symbolNameCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
         wxButton* newLibraryButton = new wxButton( this, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
@@ -798,7 +844,8 @@ public:
         Centre();
     }
 
-    wxString GetSymbolName()
+protected:
+    wxString getSymbolName() const
     {
         wxString symbolName = m_symbolNameCtrl->GetValue();
         symbolName.Trim( true );
@@ -807,26 +854,38 @@ public:
         return EscapeString( symbolName, CTX_LIBID );
     }
 
-protected:
+    bool TransferDataToWindow() override
+    {
+        m_symbolNameCtrl->SetValue( UnescapeString( m_params.m_SymbolName ) );
+        return true;
+    }
+
     bool TransferDataFromWindow() override
     {
-        int ret = m_validator( GetTextSelection(), GetSymbolName() );
+        // This updates m_params.m_FlattenSymbol
+        // Do this now, so the validator can use it
+        GetExtraCheckboxValues();
+
+        m_params.m_SymbolName = getSymbolName();
+        m_params.m_LibraryName = GetTextSelection();
+
+        int ret = m_validator( m_params.m_LibraryName, m_params.m_SymbolName );
 
         if( ret == wxID_CANCEL )
             return false;
 
         if( ret == ID_OVERWRITE_CONFLICTS )
-            m_conflictStrategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::OVERWRITE;
+            m_params.m_ConflictStrategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::OVERWRITE;
         else if( ret == ID_RENAME_CONFLICTS )
-            m_conflictStrategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::RENAME;
+            m_params.m_ConflictStrategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::RENAME;
 
         return true;
     }
 
 private:
-    wxTextCtrl*                                m_symbolNameCtrl;
-    SymLibNameValidator                        m_validator;
-    SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY& m_conflictStrategy;
+    wxTextCtrl*         m_symbolNameCtrl;
+    SymLibNameValidator m_validator;
+    PARAMS&             m_params;
 };
 
 
@@ -843,6 +902,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
     bool     valueFollowsName = symbol->GetValueField().GetText() == symbolName;
     wxString msg;
     bool     done = false;
+    bool     flattenSymbol = false;
 
     // This is the function that will be called when the user clicks OK in the dialog and checks
     // if the proposed name has problems, and asks for clarification.
@@ -898,8 +958,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                     return wxID_CANCEL;
                 }
 
-                const std::vector<wxString> conflicts = CheckForParentalChainConflicts( *m_libMgr, *symbol,
-                                                                                        newName, newLib );
+                const std::vector<wxString> conflicts =
+                        CheckForParentalChainConflicts( *m_libMgr, *symbol, flattenSymbol, newName, newLib );
 
                 if( conflicts.size() == 1 && conflicts.front() == newName )
                 {
@@ -946,10 +1006,27 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
 
     auto strategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::OVERWRITE;
 
+    std::vector<wxString> parentSymbolNames;
+    if( symbol->IsDerived() )
+    {
+        // The parents are everything but the leaf symbol
+        std::vector<std::shared_ptr<LIB_SYMBOL>> parentChain = GetParentChain( *symbol, false );
+
+        for( const auto& parent : parentChain )
+            parentSymbolNames.push_back( parent->GetName() );
+    }
+
+    SAVE_SYMBOL_AS_DIALOG::PARAMS params{
+        symbolName,
+        libraryName,
+        flattenSymbol,
+        strategy,
+    };
+
     // Keep asking the user for a new name until they give a valid one or cancel the operation
     while( !done )
     {
-        SAVE_SYMBOL_AS_DIALOG dlg( this, symbolName, libraryName, dialogValidatorFunc, strategy );
+        SAVE_SYMBOL_AS_DIALOG dlg( this, params, dialogValidatorFunc, parentSymbolNames );
 
         int ret = dlg.ShowModal();
 
@@ -961,19 +1038,16 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
         case wxID_OK: // No conflicts
         case ID_OVERWRITE_CONFLICTS:
         case ID_RENAME_CONFLICTS:
-            symbolName = dlg.GetSymbolName();
-            libraryName = dlg.GetTextSelection();
-
-            if( ret == ID_RENAME_CONFLICTS )
-                strategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::RENAME;
-
+        {
             done = true;
             break;
-
+        }
         case ID_MAKE_NEW_LIBRARY:
         {
             wxFileName newLibrary( AddLibraryFile( true ) );
-            libraryName = newLibrary.GetName();
+            params.m_LibraryName = newLibrary.GetName();
+
+            // Go round again to ask for the symbol name
             break;
         }
 
@@ -982,14 +1056,14 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
         }
     }
 
-    SYMBOL_SAVE_AS_HANDLER saver( *m_libMgr, strategy, valueFollowsName );
+    SYMBOL_SAVE_AS_HANDLER saver( *m_libMgr, params.m_ConflictStrategy, valueFollowsName );
 
-    saver.DoSave( *symbol, symbolName, libraryName );
+    saver.DoSave( *symbol, params.m_SymbolName, params.m_LibraryName, params.m_FlattenSymbol );
 
     SyncLibraries( false );
 
     if( aOpenCopy )
-        LoadSymbol( symbolName, libraryName, 1 );
+        LoadSymbol( params.m_SymbolName, params.m_LibraryName, 1 );
 }
 
 
@@ -1053,7 +1127,7 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
                 return;
         }
 
-        saver.DoSave( *flattenedSymbol, symbol->GetName(), libraryName );
+        saver.DoSave( *flattenedSymbol, symbol->GetName(), libraryName, false );
 
         SyncLibraries( false );
         return;
