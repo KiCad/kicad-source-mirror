@@ -2700,6 +2700,10 @@ void OPENGL_GAL::blitCursor()
     glLineWidth( 1.0 );
     glColor4d( color.r, color.g, color.b, color.a );
 
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glTranslated( 0, 0, -0.5 );
+
     glBegin( GL_LINES );
 
     if( m_crossHairMode == CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL )
@@ -2742,6 +2746,8 @@ void OPENGL_GAL::blitCursor()
     }
 
     glEnd();
+
+    glPopMatrix();
 
     if( depthTestEnabled )
         glEnable( GL_DEPTH_TEST );
