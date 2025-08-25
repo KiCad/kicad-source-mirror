@@ -2274,7 +2274,7 @@ static struct SCH_LABEL_DESC
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aItem ) )
-                        return label->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } );
+                        return label->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_SHEET_PIN_T } );
 
                     return false;
                 };
