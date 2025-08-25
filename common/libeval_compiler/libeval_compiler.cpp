@@ -857,7 +857,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         case TR_OP_FUNC_CALL:
             // Function call's uop was generated inside TR_STRUCT_REF
             if( !node->uop )
-                reportError( CST_CODEGEN,  _( "Unknown parent of function parameters" ), node->srcPos );
+            {
+                reportError( CST_CODEGEN, _( "Unknown parent of function parameters" ), node->srcPos );
+                // This function call is bare so we don't know who to apply it to
+                // Set a safe default value to exit gracefully with an error
+                node->SetUop( TR_UOP_PUSH_VALUE, 0.0, EDA_UNITS::UNSCALED );
+            }
 
             node->isTerminal = true;
             break;
@@ -875,6 +880,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     pos -= static_cast<int>( formatNode( node->leaf[0] ).length() );
 
                 reportError( CST_CODEGEN,  _( "Unknown parent of property" ), pos );
+                return false;
 
                 node->leaf[0]->isVisited = true;
                 node->leaf[1]->isVisited = true;
