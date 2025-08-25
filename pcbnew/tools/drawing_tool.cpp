@@ -1850,8 +1850,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     if( dlg.ShouldFixDiscontinuities() )
     {
-        std::vector<PCB_SHAPE*>                 shapeList;
-        std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
+        std::vector<PCB_SHAPE*> shapeList;
 
         for( const std::unique_ptr<EDA_ITEM>& ptr : list )
         {
@@ -1859,13 +1858,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
                 shapeList.push_back( shape );
         }
 
-        ConnectBoardShapes( shapeList, newShapes, dlg.GetTolerance() );
-
-        for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
-        {
-            ptr->SetParent( m_frame->GetBoard() );
-            list.push_back( std::move( ptr ) );
-        }
+        ConnectBoardShapes( shapeList, dlg.GetTolerance() );
     }
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )

@@ -1101,7 +1101,6 @@ FOOTPRINT* PCB_IO_EASYEDA_PARSER::ParseFootprint(
 
     // Heal board outlines
     std::vector<PCB_SHAPE*>                 shapes;
-    std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
 
     for( BOARD_ITEM* item : footprint->GraphicalItems() )
     {
@@ -1112,10 +1111,7 @@ FOOTPRINT* PCB_IO_EASYEDA_PARSER::ParseFootprint(
             shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
     }
 
-    ConnectBoardShapes( shapes, newShapes, SHAPE_JOIN_DISTANCE );
-
-    for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
-        footprint->Add( ptr.release(), ADD_MODE::APPEND );
+    ConnectBoardShapes( shapes, SHAPE_JOIN_DISTANCE );
 
     // EasyEDA footprints don't have courtyard, so build a box ourselves
     if( !footprint->IsOnLayer( F_CrtYd ) )
@@ -1177,7 +1173,6 @@ void PCB_IO_EASYEDA_PARSER::ParseBoard( BOARD* aBoard, const VECTOR2D& aOrigin,
 
     // Heal board outlines
     std::vector<PCB_SHAPE*>                 shapes;
-    std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
 
     for( BOARD_ITEM* item : aBoard->Drawings() )
     {
@@ -1188,8 +1183,5 @@ void PCB_IO_EASYEDA_PARSER::ParseBoard( BOARD* aBoard, const VECTOR2D& aOrigin,
             shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
     }
 
-    ConnectBoardShapes( shapes, newShapes, SHAPE_JOIN_DISTANCE );
-
-    for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
-        aBoard->Add( ptr.release(), ADD_MODE::APPEND );
+    ConnectBoardShapes( shapes, SHAPE_JOIN_DISTANCE );
 }

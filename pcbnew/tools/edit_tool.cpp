@@ -1804,8 +1804,7 @@ int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit{ this };
 
-    std::vector<PCB_SHAPE*>                 shapeList;
-    std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
+    std::vector<PCB_SHAPE*> shapeList;
 
     for( EDA_ITEM* item : selection )
     {
@@ -1816,26 +1815,9 @@ int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
         }
     }
 
-    ConnectBoardShapes( shapeList, newShapes, s_toleranceValue );
-
-    std::vector<PCB_SHAPE*> items_to_select;
-
-    for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
-    {
-        PCB_SHAPE* shape = ptr.release();
-
-        commit.Add( shape );
-        items_to_select.push_back( shape );
-    }
+    ConnectBoardShapes( shapeList, s_toleranceValue );
 
     commit.Push( _( "Heal Shapes" ) );
-
-    // Select added items
-    for( PCB_SHAPE* item : items_to_select )
-        m_selectionTool->AddItemToSel( item, true );
-
-    if( items_to_select.size() > 0 )
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     // Notify other tools of the changes
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );

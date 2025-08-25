@@ -214,7 +214,6 @@ void GRAPHICS_CLEANER::fixBoardOutlines()
         return;
 
     std::vector<PCB_SHAPE*>                 shapeList;
-    std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -229,12 +228,9 @@ void GRAPHICS_CLEANER::fixBoardOutlines()
             m_commit.Modify( shape );
     }
 
-    ConnectBoardShapes( shapeList, newShapes, m_outlinesTolerance );
+    ConnectBoardShapes( shapeList, m_outlinesTolerance );
 
     std::vector<PCB_SHAPE*> items_to_select;
-
-    for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
-        m_commit.Add( ptr.release() );
 }
 
 

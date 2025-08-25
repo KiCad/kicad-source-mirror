@@ -147,21 +147,15 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 if( !itemA )        // If we only have a single item, make sure it's A
                     std::swap( itemA, itemB );
 
-                VECTOR2I markerPos = pt;
-                int      gap = 0;
+                VECTOR2I   markerPos = pt;
+                int        gap = 0;
+                PCB_SHAPE* shapeA = nullptr;
+                PCB_SHAPE* shapeB = nullptr;
 
-                if( itemA && itemB )
+                if( itemA && itemB && itemA->Type() == PCB_SHAPE_T && itemB->Type() == PCB_SHAPE_T )
                 {
-                    std::shared_ptr<SHAPE> shapeA = itemA->GetEffectiveShape();
-                    std::shared_ptr<SHAPE> shapeB = itemB->GetEffectiveShape();
-                    VECTOR2I            ptA;
-                    VECTOR2I            ptB;
-
-                    if( shapeA && shapeB && shapeA->NearestPoints( shapeB.get(), ptA, ptB ) )
-                    {
-                        gap = ( ptA - ptB ).EuclideanNorm();
-                        markerPos = ( ptA + ptB ) / 2;
-                    }
+                    shapeA = static_cast<PCB_SHAPE*>( itemA );
+                    shapeB = static_cast<PCB_SHAPE*>( itemB );
                 }
                 else
                 {
@@ -174,9 +168,24 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                     itemB = shapeB;
                 }
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+                if( shapeA && shapeB )
+                {
+                    VECTOR2I pts0[2] = { shapeA->GetStart(), shapeA->GetEnd() };
+                    VECTOR2I pts1[2] = { shapeB->GetStart(), shapeB->GetEnd() };
 
-                wxString msg2;
+                    SEG::ecoord d[4];
+                    d[0] = ( pts0[0] - pts1[0] ).SquaredEuclideanNorm();
+                    d[1] = ( pts0[0] - pts1[1] ).SquaredEuclideanNorm();
+                    d[2] = ( pts0[1] - pts1[0] ).SquaredEuclideanNorm();
+                    d[3] = ( pts0[1] - pts1[1] ).SquaredEuclideanNorm();
+
+                    int idx = std::min_element( d, d + 4 ) - d;
+                    gap = std::sqrt( d[idx] );
+                    markerPos = ( pts0[idx / 2] + pts1[idx % 2] ) / 2;
+                }
+
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+                wxString                  msg2;
 
                 if( itemA && itemB )
                     msg2.Printf( _( "%s (gap %s)" ), msg, MessageTextFromValue( gap ) );

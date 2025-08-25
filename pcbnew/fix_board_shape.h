@@ -32,10 +32,8 @@
 /**
  * Connects shapes to each other, making continious contours (adjacent shapes will have a common vertex)
  * aChainingEpsilon is the max distance between vertices of different shapes to connect.
- * Modifies original shapes, or creates new line segments and stores them in aNewShapes.
+ * Modifies original shapes
  */
-void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
-                         std::vector<std::unique_ptr<PCB_SHAPE>>& aNewShapes,
-                         int                                      aChainingEpsilon );
+void ConnectBoardShapes( std::vector<PCB_SHAPE*>& aShapeList, int aChainingEpsilon );
 
 #endif // FIX_BOARD_SHAPE_H_
