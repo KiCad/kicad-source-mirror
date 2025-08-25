@@ -200,7 +200,7 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint, const KDT
         if( candidate == aShape )
             continue;
 
-        if( match.second < closest_dist_sq && !candidate->HasFlag( SKIP_STRUCT ) )
+        if( match.second < closest_dist_sq )
         {
             closest_dist_sq = match.second;
             closest_graphic = candidate;
