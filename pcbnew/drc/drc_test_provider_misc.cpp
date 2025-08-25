@@ -190,7 +190,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
             };
 
     // Test for very small graphic items (a few nm size) that can create issues
-    // when trying to build the board outlines, and they are not easy to locate onn screen.
+    // when trying to build the board outlines, and they are not easy to locate on screen.
     const int minSizeForValideGraphics =  pcbIUScale.mmToIU( 0.001 );
 
     if( !TestBoardOutlinesGraphicItems(m_board, minSizeForValideGraphics, &errorHandler ) )

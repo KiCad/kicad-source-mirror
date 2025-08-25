@@ -24,6 +24,7 @@
  */
 
 #include <unordered_set>
+#include <deque>
 
 #include <trigo.h>
 #include <macros.h>
@@ -240,6 +241,8 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     PCB_SHAPE* prevGraphic = nullptr;
     VECTOR2I   prevPt;
 
+    std::set<std::pair<PCB_SHAPE*, PCB_SHAPE*>> reportedGaps;
+
     std::vector<SHAPE_LINE_CHAIN> contours;
     contours.reserve( startCandidates.size() );
 
@@ -321,41 +324,108 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
         }
         else
         {
-            // Polygon start point. Arbitrarily chosen end of the segment and build the poly
-            // from here.
-            VECTOR2I startPt = graphic->GetEnd();
-            prevPt = startPt;
-            currContour.Append( prevPt );
+            std::deque<PCB_SHAPE*> chain;
+            chain.push_back( graphic );
 
-            // do not append the other end point yet, this first 'graphic' might be an arc
-            for(;;)
+            bool     closed = false;
+            VECTOR2I frontPt = graphic->GetStart();
+            VECTOR2I backPt = graphic->GetEnd();
+
+            auto extendChain =
+                    [&]( bool forward )
+                    {
+                        PCB_SHAPE* curr = forward ? chain.back() : chain.front();
+                        VECTOR2I   prev = forward ? backPt : frontPt;
+
+                        for(;;)
+                        {
+                            PCB_SHAPE* next =
+                                    findNext( curr, prev, kdTree, adaptor, aChainingEpsilon );
+
+                            if( next && !( next->GetFlags() & SKIP_STRUCT ) )
+                            {
+                                next->SetFlags( SKIP_STRUCT );
+                                aCleaner.insert( next );
+                                startCandidates.erase( next );
+
+                                if( forward )
+                                    chain.push_back( next );
+                                else
+                                    chain.push_front( next );
+
+                                if( closer_to_first( prev, next->GetStart(), next->GetEnd() ) )
+                                    prev = next->GetEnd();
+                                else
+                                    prev = next->GetStart();
+
+                                curr = next;
+                                continue;
+                            }
+
+                            if( next )
+                            {
+                                PCB_SHAPE* chainEnd = forward ? chain.front() : chain.back();
+                                VECTOR2I   chainPt  = forward ? frontPt : backPt;
+
+                                if( next == chainEnd
+                                        && close_enough( prev, chainPt, aChainingEpsilon ) )
+                                {
+                                    closed = true;
+                                }
+                                else
+                                {
+                                    if( aErrorHandler )
+                                        (*aErrorHandler)( _( "(self-intersecting)" ), curr, next, prev );
+                                    selfIntersecting = true;
+                                }
+                            }
+
+                            if( forward )
+                                backPt = prev;
+                            else
+                                frontPt = prev;
+
+                            break;
+                        }
+                    };
+
+            extendChain( true );
+
+            if( !closed )
+                extendChain( false );
+
+            PCB_SHAPE* first = chain.front();
+            VECTOR2I   startPt;
+
+            if( chain.size() > 1 )
+            {
+                PCB_SHAPE* second = *( std::next( chain.begin() ) );
+
+                if( close_enough( first->GetStart(), second->GetStart(), aChainingEpsilon )
+                        || close_enough( first->GetStart(), second->GetEnd(), aChainingEpsilon ) )
+                    startPt = first->GetEnd();
+                else
+                    startPt = first->GetStart();
+            }
+            else
+            {
+                startPt = first->GetStart();
+            }
+
+            currContour.Append( startPt );
+            prevPt = startPt;
+
+            for( PCB_SHAPE* graphic : chain )
             {
                 switch( graphic->GetShape() )
                 {
-                case SHAPE_T::RECTANGLE:
-                case SHAPE_T::CIRCLE:
-                {
-                    // As a non-first item, closed shapes can't be anything but self-intersecting
-                    if( aErrorHandler )
-                    {
-                        wxASSERT( prevGraphic );
-                        (*aErrorHandler)( _( "(self-intersecting)" ), prevGraphic, graphic,
-                                          prevPt );
-                    }
-
-                    selfIntersecting = true;
-
-                    // A closed shape will finish where it started, so no point in updating prevPt
-                    break;
-                }
-
                 case SHAPE_T::SEGMENT:
                 {
                     VECTOR2I nextPt;
 
                     // Use the line segment end point furthest away from prevPt as we assume
                     // the other end to be ON prevPt or very close to it.
-                    if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
+                    if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
                         nextPt = graphic->GetEnd();
                     else
                         nextPt = graphic->GetStart();
@@ -368,9 +438,9 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
 
                 case SHAPE_T::ARC:
                 {
-                    VECTOR2I  pstart = graphic->GetStart();
-                    VECTOR2I  pmid = graphic->GetArcMid();
-                    VECTOR2I  pend = graphic->GetEnd();
+                    VECTOR2I pstart = graphic->GetStart();
+                    VECTOR2I pmid = graphic->GetArcMid();
+                    VECTOR2I pend = graphic->GetEnd();
 
                     if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                     {
@@ -390,15 +460,13 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     if( !aAllowUseArcsInPolygons )
                         arcChain.ClearArcs();
 
-                    // set shapeOwners for arcChain points created by appending the sarc:
                     for( int ii = 1; ii < arcChain.PointCount(); ++ii )
                     {
-                        shapeOwners[std::make_pair( arcChain.CPoint( ii - 1 ),
-                                                    arcChain.CPoint( ii ) )] = graphic;
+                        shapeOwners[ std::make_pair( arcChain.CPoint( ii - 1 ),
+                                                     arcChain.CPoint( ii ) ) ] = graphic;
                     }
 
                     currContour.Append( arcChain );
-
                     prevPt = pend;
                 }
                 break;
@@ -408,11 +476,9 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     // We do not support Bezier curves in polygons, so approximate with a series
                     // of short lines and put those line segments into the !same! PATH.
                     VECTOR2I nextPt;
-                    bool    reverse = false;
+                    bool     reverse = false;
 
-                    // Use the end point furthest away from  prevPt as we assume the other
-                    // end to be ON prevPt or very close to it.
-                    if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
+                    if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
                     {
                         nextPt = graphic->GetEnd();
                     }
@@ -422,12 +488,11 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                         reverse = true;
                     }
 
-                    // Ensure the approximated Bezier shape is built
                     graphic->RebuildBezierToSegmentsPointsList( aErrorMax );
 
                     if( reverse )
                     {
-                        for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
+                        for( int jj = graphic->GetBezierPoints().size() - 1; jj >= 0; jj-- )
                         {
                             const VECTOR2I& pt = graphic->GetBezierPoints()[jj];
 
@@ -460,81 +525,65 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     UNIMPLEMENTED_FOR( graphic->SHAPE_T_asString() );
                     return false;
                 }
+            }
 
-                PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, kdTree, adaptor, aChainingEpsilon );
-
-                if( nextGraphic && !( nextGraphic->GetFlags() & SKIP_STRUCT ) )
+            if( close_enough( currContour.CPoint( 0 ), currContour.CLastPoint(),
+                              aChainingEpsilon ) )
+            {
+                if( currContour.CPoint( 0 ) != currContour.CLastPoint()
+                        && currContour.PointCount() > 2 )
                 {
-                    prevGraphic = graphic;
-                    graphic = nextGraphic;
-                    graphic->SetFlags( SKIP_STRUCT );
-                    aCleaner.insert( graphic );
-                    startCandidates.erase( graphic );
-                    continue;
-                }
+                    PCB_SHAPE* owner = fetchOwner( currContour.CSegment( -1 ) );
 
-                // Finished, or ran into trouble...
-                if( close_enough( startPt, prevPt, aChainingEpsilon ) )
-                {
-                    if( startPt != prevPt && currContour.PointCount() > 2 )
+                    if( currContour.IsArcEnd( currContour.PointCount() - 1 ) )
                     {
-                        // Snap the last shape's endpoint to the outline startpoint
-                        PCB_SHAPE* owner = fetchOwner( currContour.CSegment( -1 ) );
+                        SHAPE_ARC arc =
+                                currContour.Arc( currContour.ArcIndex( currContour.PointCount() - 1 ) );
 
-                        if( currContour.IsArcEnd( currContour.PointCount() - 1 ) )
+                        SHAPE_ARC sarc( arc.GetP0(), arc.GetArcMid(), currContour.CPoint( 0 ), 0 );
+
+                        SHAPE_LINE_CHAIN arcChain;
+                        arcChain.Append( sarc, aErrorMax );
+
+                        if( !aAllowUseArcsInPolygons )
+                            arcChain.ClearArcs();
+
+                        for( int ii = 1; ii < arcChain.PointCount(); ++ii )
                         {
-                            SHAPE_ARC arc = currContour.Arc(
-                                    currContour.ArcIndex( currContour.PointCount() - 1 ) );
-
-                            // Snap the arc endpoint
-                            SHAPE_ARC sarc( arc.GetP0(), arc.GetArcMid(), startPt, 0 );
-
-                            SHAPE_LINE_CHAIN arcChain;
-                            arcChain.Append( sarc, aErrorMax );
-
-                            if( !aAllowUseArcsInPolygons )
-                                arcChain.ClearArcs();
-
-                            // Set shapeOwners for arcChain points created by appending the sarc:
-                            for( int ii = 1; ii < arcChain.PointCount(); ++ii )
-                            {
-                                shapeOwners[std::make_pair( arcChain.CPoint( ii - 1 ),
-                                                            arcChain.CPoint( ii ) )] = owner;
-                            }
-
-                            currContour.RemoveShape( currContour.PointCount() - 1 );
-                            currContour.Append( arcChain );
-                        }
-                        else
-                        {
-                            // Snap the segment endpoint
-                            currContour.SetPoint( -1, startPt );
-
-                            shapeOwners[std::make_pair( currContour.CPoints()[currContour.PointCount() - 2 ],
-                                                        currContour.CLastPoint() )] = owner;
+                            shapeOwners[ std::make_pair( arcChain.CPoint( ii - 1 ),
+                                                         arcChain.CPoint( ii ) ) ] = owner;
                         }
 
-                        prevPt = startPt;
+                        currContour.RemoveShape( currContour.PointCount() - 1 );
+                        currContour.Append( arcChain );
                     }
+                    else
+                    {
+                        currContour.SetPoint( -1, currContour.CPoint( 0 ) );
 
-                    currContour.SetClosed( true );
-                    break;
+                        shapeOwners[ std::make_pair( currContour.CPoints()[currContour.PointCount() - 2],
+                                                     currContour.CLastPoint() ) ] = owner;
+                    }
                 }
-                else if( nextGraphic )  // encountered already-used segment, but not at the start
-                {
-                    if( aErrorHandler )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), graphic, nextGraphic,
-                                          prevPt );
 
-                    break;
-                }
-                else                    // encountered discontinuity
-                {
-                    if( aErrorHandler )
-                        (*aErrorHandler)( _( "(not a closed shape)" ), graphic, nullptr, prevPt );
+                currContour.SetClosed( true );
+            }
+            else
+            {
+                auto report_gap =
+                        [&]( PCB_SHAPE* a, PCB_SHAPE* b, const VECTOR2I& pt )
+                        {
+                            if( !aErrorHandler )
+                                return;
 
-                    break;
-                }
+                            auto key = std::minmax( a, b );
+
+                            if( reportedGaps.insert( key ).second )
+                                (*aErrorHandler)( _( "(not a closed shape)" ), a, b, pt );
+                        };
+
+                report_gap( chain.front(), chain.back(), currContour.CPoint( 0 ) );
+                report_gap( chain.back(), chain.front(), currContour.CLastPoint() );
             }
         }
     }
