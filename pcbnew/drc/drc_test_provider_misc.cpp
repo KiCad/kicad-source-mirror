@@ -159,9 +159,6 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 }
                 else
                 {
-                    PCB_SHAPE* shapeA = nullptr;
-                    PCB_SHAPE* shapeB = nullptr;
-
                     findClosestOutlineGap( m_board, shapeA, shapeB, markerPos, gap );
 
                     itemA = shapeA;
