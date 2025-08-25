@@ -26,6 +26,7 @@
 #include <reporter.h>
 #include <drc/drc_rule_condition.h>
 #include <pcbexpr_evaluator.h>
+#include <vector>
 
 
 DRC_RULE_CONDITION::DRC_RULE_CONDITION( const wxString& aExpression ) :
@@ -88,6 +89,83 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
 bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
+    static std::vector<wxString> propNames;
+
+    if( propNames.empty() )
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+
+        for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
+        {
+            for( PROPERTY_BASE* prop : cls.properties )
+            {
+                if( prop->IsHiddenFromRulesEditor() )
+                    continue;
+
+                wxString name = prop->Name();
+                name.Replace( wxT( " " ), wxT( "_" ) );
+                propNames.push_back( name.Lower() );
+            }
+        }
+
+        for( const wxString& sig : PCBEXPR_BUILTIN_FUNCTIONS::Instance().GetSignatures() )
+        {
+            wxString name = sig.BeforeFirst( '(' );
+            propNames.push_back( name.Lower() );
+        }
+    }
+
+    wxString exprLower = m_expression.Lower();
+
+    auto isIdent = []( wxChar c )
+    {
+        return ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) ||
+                 ( c >= '0' && c <= '9' ) || c == '_' );
+    };
+
+    for( const wxString& name : propNames )
+    {
+        size_t pos = 0;
+
+        while( ( pos = exprLower.find( name, pos ) ) != exprLower.npos )
+        {
+            size_t end = pos + name.Length();
+
+            bool boundaryStart = ( pos == 0 ) || !isIdent( exprLower[ pos - 1 ] );
+            bool boundaryEnd = ( end == exprLower.Length() ) || !isIdent( exprLower[ end ] );
+
+            if( boundaryStart && boundaryEnd )
+            {
+                bool needPrefix = true;
+
+                if( pos >= 2 && m_expression[ pos - 1 ] == '.'
+                        && ( m_expression[ pos - 2 ] == 'A' || m_expression[ pos - 2 ] == 'B' ) )
+                {
+                    needPrefix = false;
+                }
+
+                if( needPrefix )
+                {
+                    if( aReporter )
+                    {
+                        wxString msg = wxString::Format(
+                                _( "The '%s' property requires an 'A.' or 'B.' prefix; assuming 'A.'" ),
+                                m_expression.Mid( pos, name.Length() ) );
+
+                        aReporter->Report( msg, RPT_SEVERITY_WARNING );
+                    }
+
+                    m_expression.insert( pos, wxT( "A." ) );
+                    exprLower.insert( pos, wxT( "a." ) );
+                    pos += name.Length() + 2;
+                    continue;
+                }
+            }
+
+            pos += name.Length();
+        }
+    }
+
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
 
     if( aReporter )

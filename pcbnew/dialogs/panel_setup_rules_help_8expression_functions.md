@@ -2,6 +2,8 @@
 
 All function parameters support simple wildcards (`*` and `?`).
 
+All properties and functions must specify the item they apply to using either `A.` or `B.`.
+Unqualified usage defaults to `A.`.
 
     A.enclosedByArea('<zone_name>')
         True if all of `A` lies within the given zone's outline.
