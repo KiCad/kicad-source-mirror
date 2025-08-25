@@ -138,6 +138,9 @@ public:
 
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& aOther );
 
+    // Move assignment operator
+    SCH_SHEET_PATH& operator=( SCH_SHEET_PATH&& aOther );
+
     SCH_SHEET_PATH operator+( const SCH_SHEET_PATH& aOther );
 
     ~SCH_SHEET_PATH() = default;

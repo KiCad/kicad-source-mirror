@@ -125,6 +125,21 @@ SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& aOther )
 }
 
 
+// Move assignment operator
+SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( SCH_SHEET_PATH&& aOther )
+{
+    m_sheets = std::move( aOther.m_sheets );
+
+    m_virtualPageNumber  = aOther.m_virtualPageNumber;
+    m_current_hash       = aOther.m_current_hash;
+    m_cached_page_number = aOther.m_cached_page_number;
+
+    m_recursion_test_cache = std::move( aOther.m_recursion_test_cache );
+
+    return *this;
+}
+
+
 SCH_SHEET_PATH SCH_SHEET_PATH::operator+( const SCH_SHEET_PATH& aOther )
 {
     SCH_SHEET_PATH retv = *this;
@@ -145,9 +160,9 @@ void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
     m_current_hash       = aOther.m_current_hash;
     m_cached_page_number = aOther.m_cached_page_number;
 
-    // Note: don't copy m_recursion_test_cache as it is slow and we want
-    // std::vector<SCH_SHEET_PATH> to be very fast to construct for use in
-    // the connectivity algorithm.
+    // Note: don't copy m_recursion_test_cache as it is slow and we want std::vector<SCH_SHEET_PATH>
+    // to be very fast to construct for use in the connectivity algorithm.
+    m_recursion_test_cache.clear();
 }
 
 
