@@ -23,6 +23,7 @@
  * Released under GNU GPL v2+
  */
 
+#include <advanced_config.h>
 #include <widgets/zoom_correction_ctrl.h>
 #include <widgets/ui_common.h>
 
@@ -55,7 +56,7 @@ private:
         double value = parent->GetValue();
         ZOOM_CORRECTION_UNITS units = static_cast<ZOOM_CORRECTION_UNITS>( parent->GetUnitsSelection() );
 
-        double dpi = GetDPI().x;
+        double dpi = ADVANCED_CFG::GetCfg().m_ScreenDPI;
         double unitsPerInch = 25.4;
 
         if( units == ZOOM_CORRECTION_UNITS::CM )
@@ -221,6 +222,7 @@ int ZOOM_CORRECTION_CTRL::GetUnitsSelection() const
 {
     return m_unitsChoice->GetSelection();
 }
+
 
 bool ZOOM_CORRECTION_CTRL::TransferDataToWindow()
 {

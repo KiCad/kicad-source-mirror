@@ -27,6 +27,8 @@
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
 #include <dpi_scaling_common.h>
+#include <eda_draw_frame.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 #include <pgm_base.h>

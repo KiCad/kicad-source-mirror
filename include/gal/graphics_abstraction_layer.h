@@ -644,6 +644,7 @@ public:
      * For instance a typical notebook with HD+ resolution (1600x900) has 106 DPI.
      */
     void SetScreenDPI( double aScreenDPI ) { m_screenDPI = aScreenDPI; }
+    double GetScreenDPI() const            { return m_screenDPI; }
 
     /**
      * Get/set the Point in world space to look at.

@@ -803,6 +803,18 @@ public:
      */
     bool m_ImportSkipComponentBodies;
 
+    /**
+     * Screen DPI setting for display calculations.
+     *
+     * This setting controls the assumed screen DPI for various display calculations.
+     * Can be used to adjust sizing for high-DPI displays or unusual screen configurations.
+     *
+     * Setting name: "ScreenDPI"
+     * Valid values: 50 to 500
+     * Default value: 91
+     */
+    int m_ScreenDPI;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 

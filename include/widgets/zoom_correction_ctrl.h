@@ -49,11 +49,11 @@ class ZOOM_CORRECTION_CTRL : public wxPanel
 public:
     ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue );
 
-    void SetDisplayedValue( double aValue );
+    void   SetDisplayedValue( double aValue );
     double GetValue() const;
-    int GetUnitsSelection() const;
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
+    int    GetUnitsSelection() const;
+    bool   TransferDataToWindow() override;
+    bool   TransferDataFromWindow() override;
 
 private:
     void sliderChanged( wxCommandEvent& aEvent );

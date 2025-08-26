@@ -25,7 +25,7 @@
  */
 
 #include <wx/log.h>
-
+#include <advanced_config.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
 #include <font/font.h>
@@ -62,7 +62,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
 
     // wxDC::GetPPI() reports 96 DPI, but somehow this value
     // is the closest match to the legacy renderer
-    SetScreenDPI( 91 );
+    SetScreenDPI( ADVANCED_CFG::GetCfg().m_ScreenDPI );
     SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
     SetLayerDepth( 0.0 );
     SetFlip( false, false );

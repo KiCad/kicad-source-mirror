@@ -131,6 +131,7 @@ static const wxChar ConfigurableToolbars[] = wxT( "ConfigurableToolbars" );
 static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
 static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
+static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 
 } // namespace KEYS
 
@@ -319,6 +320,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_PNSProcessClusterTimeout = 100; // Default: 100 ms
 
     m_ImportSkipComponentBodies = false;
+
+    m_ScreenDPI = 91;
 
     loadFromConfigFile();
 }
@@ -633,6 +636,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ImportSkipComponentBodies,
                                                 &m_ImportSkipComponentBodies,
                                                 m_ImportSkipComponentBodies ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ScreenDPI,
+                                               &m_ScreenDPI, m_ScreenDPI,
+                                               50, 500 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
