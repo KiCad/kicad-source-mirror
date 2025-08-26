@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-25 12:03+0000\n"
+"PO-Revision-Date: 2025-08-27 06:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -1254,7 +1254,7 @@ msgstr "8×"
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 "3D-Betrachter muss geschlossen und wieder geöffnet werden, um diese Änderung "
-"anzuwenden"
+"anzuwenden."
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -30561,7 +30561,7 @@ msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
 msgid "Power Comment:"
-msgstr "Versorgungskommentar:"
+msgstr "Kommentar zur Spg.-Versorgung:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
@@ -37160,11 +37160,11 @@ msgstr ""
 "Das BGA-Attribut gilt für Pads in BGA-Footprints\n"
 "Passermarke lokal ist eine Referenz für den übergeordneten Footprint\n"
 "Passermarke global ist eine Referenz für die gesamte Platine\n"
-"Testpad ist nützlich, um Testpunkte in Gerber-Dateien anzugeben\n"
+"Testpad spezifiziert einen elektrischen Testpunkt\n"
 "Kühlkörperpad gibt ein Thermopad an\n"
-"Halbloch-Pads spezifiziert castellated Pads an einer Platinenkante\n"
+"Halbloch-Pad spezifiziert ein Durchkontaktierungspad an einer Platinenkante\n"
 "Mechanisch spezifiziert ein Durchkontaktierungspad zur mechanischen "
-"Versteifung verwendet wird"
+"Versteifung"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2692
 msgid "BGA pad"
