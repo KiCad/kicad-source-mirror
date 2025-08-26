@@ -28,6 +28,7 @@
 #include <wx/generic/grideditors.h>
 #include "pcb_layer_box_selector.h"
 #include <lset.h>
+#include <wx/bitmap.h>
 
 class wxGrid;
 class PCB_LAYER_BOX_SELECTOR;
@@ -46,6 +47,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_frame;
+    wxBitmap        m_bitmap;
 };
 
 

@@ -74,14 +74,15 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 #else
     int      size = KiROUND( 14 * aDC.GetContentScaleFactor() );
 #endif
-    wxBitmap bitmap( size, size );
+    if( !m_bitmap.IsOk() || m_bitmap.GetWidth() != size || m_bitmap.GetHeight() != size )
+        m_bitmap = wxBitmap( size, size );
 
-    LAYER_PRESENTATION::DrawColorSwatch( bitmap,
+    LAYER_PRESENTATION::DrawColorSwatch( m_bitmap,
                                          cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
                                          cs->GetColor( ToLAYER_ID( value ) ) );
 
-    aDC.DrawBitmap( bitmap, rect.GetLeft() + 4,
-                    rect.GetTop() + ( rect.GetHeight() - bitmap.GetHeight() ) / 2, true );
+    aDC.DrawBitmap( m_bitmap, rect.GetLeft() + 4,
+                    rect.GetTop() + ( rect.GetHeight() - m_bitmap.GetHeight() ) / 2, true );
 
     // draw the text
     PCB_LAYER_ID layer = ToLAYER_ID( value );
@@ -92,7 +93,7 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     else
         layerName = BOARD::GetStandardLayerName( layer );
 
-    rect.SetLeft( rect.GetLeft() + bitmap.GetWidth() + 8 );
+    rect.SetLeft( rect.GetLeft() + m_bitmap.GetWidth() + 8 );
     SetTextColoursAndFont( aGrid, aAttr, aDC, isSelected );
     aGrid.DrawTextRectangle( aDC, layerName, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
