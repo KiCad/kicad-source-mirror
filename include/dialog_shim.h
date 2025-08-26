@@ -30,6 +30,8 @@
 #include <kiway_holder.h>
 #include <wx/dialog.h>
 #include <map>
+#include <vector>
+#include <wx/variant.h>
 #include <core/raii.h>
 
 class EDA_BASE_FRAME;
@@ -38,6 +40,11 @@ class UNIT_BINDER;
 class wxGridEvent;
 class wxGUIEventLoop;
 class wxInitDialogEvent;
+class wxSpinEvent;
+class wxSpinDoubleEvent;
+class wxStyledTextEvent;
+class wxPropertyGridEvent;
+class wxDataViewEvent;
 
 
 /**
@@ -229,6 +236,20 @@ private:
 
     std::string generateKey( const wxWindow* aWin ) const;
 
+    void registerUndoRedoHandlers( wxWindowList& aChildren );
+    void recordControlChange( wxWindow* aCtrl );
+    void onCommandEvent( wxCommandEvent& aEvent );
+    void onSpinEvent( wxSpinEvent& aEvent );
+    void onSpinDoubleEvent( wxSpinDoubleEvent& aEvent );
+    void onStyledTextChanged( wxStyledTextEvent& aEvent );
+    void onGridCellChanged( wxGridEvent& aEvent );
+    void onPropertyGridChanged( wxPropertyGridEvent& aEvent );
+    void onDataViewListChanged( wxDataViewEvent& aEvent );
+    void doUndo();
+    void doRedo();
+    wxVariant getControlValue( wxWindow* aCtrl );
+    void setControlValue( wxWindow* aCtrl, const wxVariant& aValue );
+
     DECLARE_EVENT_TABLE();
 
 protected:
@@ -263,6 +284,18 @@ protected:
     // Used to support first-esc-cancels-edit logic
     std::map<wxWindow*, wxString>     m_beforeEditValues;
     std::map<wxWindow*, UNIT_BINDER*> m_unitBinders;
+
+    struct UNDO_STEP
+    {
+        wxWindow* ctrl;
+        wxVariant before;
+        wxVariant after;
+    };
+
+    std::vector<UNDO_STEP>            m_undoStack;
+    std::vector<UNDO_STEP>            m_redoStack;
+    std::map<wxWindow*, wxVariant>    m_currentValues;
+    bool                              m_handlingUndoRedo;
 };
 
 #endif  // DIALOG_SHIM_

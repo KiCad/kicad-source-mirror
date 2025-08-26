@@ -41,6 +41,9 @@
 #include <wx/app.h>
 #include <wx/event.h>
 #include <wx/grid.h>
+#include <wx/propgrid/propgrid.h>
+#include <wx/checklst.h>
+#include <wx/dataview.h>
 #include <wx/bmpbuttn.h>
 #include <wx/textctrl.h>
 #include <wx/stc/stc.h>
@@ -79,7 +82,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         m_qmodal_parent_disabler( nullptr ),
         m_parentFrame( nullptr ),
         m_userPositioned( false ),
-        m_userResized( false )
+        m_userResized( false ),
+        m_handlingUndoRedo( false )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
     m_initialSize = size;
@@ -173,6 +177,75 @@ DIALOG_SHIM::~DIALOG_SHIM()
             };
 
     disconnectFocusHandlers( GetChildren() );
+
+    std::function<void( wxWindowList& )> disconnectUndoRedoHandlers =
+            [&]( wxWindowList& children )
+            {
+                for( wxWindow* child : children )
+                {
+                    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+                    {
+                        textCtrl->Unbind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
+                    {
+                        scintilla->Unbind( wxEVT_STC_CHANGE, &DIALOG_SHIM::onStyledTextChanged, this );
+                    }
+                    else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( child ) )
+                    {
+                        combo->Unbind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+                        combo->Unbind( wxEVT_COMBOBOX, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxChoice* choice = dynamic_cast<wxChoice*>( child ) )
+                    {
+                        choice->Unbind( wxEVT_CHOICE, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( child ) )
+                    {
+                        check->Unbind( wxEVT_CHECKBOX, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( child ) )
+                    {
+                        spin->Unbind( wxEVT_SPINCTRL, &DIALOG_SHIM::onSpinEvent, this );
+                        spin->Unbind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxSpinCtrlDouble* spinD = dynamic_cast<wxSpinCtrlDouble*>( child ) )
+                    {
+                        spinD->Unbind( wxEVT_SPINCTRLDOUBLE, &DIALOG_SHIM::onSpinDoubleEvent, this );
+                        spinD->Unbind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( child ) )
+                    {
+                        radio->Unbind( wxEVT_RADIOBUTTON, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( child ) )
+                    {
+                        radioBox->Unbind( wxEVT_RADIOBOX, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxGrid* grid = dynamic_cast<wxGrid*>( child ) )
+                    {
+                        grid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SHIM::onGridCellChanged, this );
+                    }
+                    else if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( child ) )
+                    {
+                        propGrid->Unbind( wxEVT_PG_CHANGED, &DIALOG_SHIM::onPropertyGridChanged, this );
+                    }
+                    else if( wxCheckListBox* checkList = dynamic_cast<wxCheckListBox*>( child ) )
+                    {
+                        checkList->Unbind( wxEVT_CHECKLISTBOX, &DIALOG_SHIM::onCommandEvent, this );
+                    }
+                    else if( wxDataViewListCtrl* dataList = dynamic_cast<wxDataViewListCtrl*>( child ) )
+                    {
+                        dataList->Unbind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &DIALOG_SHIM::onDataViewListChanged, this );
+                    }
+                    else
+                    {
+                        disconnectUndoRedoHandlers( child->GetChildren() );
+                    }
+                }
+            };
+
+    disconnectUndoRedoHandlers( GetChildren() );
 
     // if the dialog is quasi-modal, this will end its event loop
     if( IsQuasiModal() )
@@ -732,6 +805,347 @@ void DIALOG_SHIM::SelectAllInTextCtrls( wxWindowList& children )
 }
 
 
+void DIALOG_SHIM::registerUndoRedoHandlers( wxWindowList& children )
+{
+    for( wxWindow* child : children )
+    {
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+        {
+            textCtrl->Bind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ textCtrl ] = textCtrl->GetValue();
+        }
+        else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
+        {
+            scintilla->Bind( wxEVT_STC_CHANGE, &DIALOG_SHIM::onStyledTextChanged, this );
+            m_currentValues[ scintilla ] = scintilla->GetText();
+        }
+        else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( child ) )
+        {
+            combo->Bind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+            combo->Bind( wxEVT_COMBOBOX, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ combo ] = combo->GetValue();
+        }
+        else if( wxChoice* choice = dynamic_cast<wxChoice*>( child ) )
+        {
+            choice->Bind( wxEVT_CHOICE, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ choice ] = static_cast<long>( choice->GetSelection() );
+        }
+        else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( child ) )
+        {
+            check->Bind( wxEVT_CHECKBOX, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ check ] = check->GetValue();
+        }
+        else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( child ) )
+        {
+            spin->Bind( wxEVT_SPINCTRL, &DIALOG_SHIM::onSpinEvent, this );
+            spin->Bind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ spin ] = static_cast<long>( spin->GetValue() );
+        }
+        else if( wxSpinCtrlDouble* spinD = dynamic_cast<wxSpinCtrlDouble*>( child ) )
+        {
+            spinD->Bind( wxEVT_SPINCTRLDOUBLE, &DIALOG_SHIM::onSpinDoubleEvent, this );
+            spinD->Bind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ spinD ] = spinD->GetValue();
+        }
+        else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( child ) )
+        {
+            radio->Bind( wxEVT_RADIOBUTTON, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ radio ] = radio->GetValue();
+        }
+        else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( child ) )
+        {
+            radioBox->Bind( wxEVT_RADIOBOX, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ radioBox ] = static_cast<long>( radioBox->GetSelection() );
+        }
+        else if( wxGrid* grid = dynamic_cast<wxGrid*>( child ) )
+        {
+            grid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SHIM::onGridCellChanged, this );
+            m_currentValues[ grid ] = getControlValue( grid );
+        }
+        else if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( child ) )
+        {
+            propGrid->Bind( wxEVT_PG_CHANGED, &DIALOG_SHIM::onPropertyGridChanged, this );
+            m_currentValues[ propGrid ] = getControlValue( propGrid );
+        }
+        else if( wxCheckListBox* checkList = dynamic_cast<wxCheckListBox*>( child ) )
+        {
+            checkList->Bind( wxEVT_CHECKLISTBOX, &DIALOG_SHIM::onCommandEvent, this );
+            m_currentValues[ checkList ] = getControlValue( checkList );
+        }
+        else if( wxDataViewListCtrl* dataList = dynamic_cast<wxDataViewListCtrl*>( child ) )
+        {
+            dataList->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &DIALOG_SHIM::onDataViewListChanged, this );
+            m_currentValues[ dataList ] = getControlValue( dataList );
+        }
+        else
+        {
+            registerUndoRedoHandlers( child->GetChildren() );
+        }
+    }
+}
+
+
+void DIALOG_SHIM::recordControlChange( wxWindow* aCtrl )
+{
+    wxVariant before = m_currentValues[ aCtrl ];
+    wxVariant after = getControlValue( aCtrl );
+
+    if( before != after )
+    {
+        m_undoStack.push_back( { aCtrl, before, after } );
+        m_redoStack.clear();
+        m_currentValues[ aCtrl ] = after;
+    }
+}
+
+
+void DIALOG_SHIM::onCommandEvent( wxCommandEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::onSpinEvent( wxSpinEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::onSpinDoubleEvent( wxSpinDoubleEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::onStyledTextChanged( wxStyledTextEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::onGridCellChanged( wxGridEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+void DIALOG_SHIM::onPropertyGridChanged( wxPropertyGridEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+void DIALOG_SHIM::onDataViewListChanged( wxDataViewEvent& aEvent )
+{
+    if( !m_handlingUndoRedo )
+        recordControlChange( static_cast<wxWindow*>( aEvent.GetEventObject() ) );
+
+    aEvent.Skip();
+}
+
+wxVariant DIALOG_SHIM::getControlValue( wxWindow* aCtrl )
+{
+    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
+        return wxVariant( textCtrl->GetValue() );
+    else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aCtrl ) )
+        return wxVariant( scintilla->GetText() );
+    else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( aCtrl ) )
+        return wxVariant( combo->GetValue() );
+    else if( wxChoice* choice = dynamic_cast<wxChoice*>( aCtrl ) )
+        return wxVariant( (long) choice->GetSelection() );
+    else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( aCtrl ) )
+        return wxVariant( check->GetValue() );
+    else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( aCtrl ) )
+        return wxVariant( (long) spin->GetValue() );
+    else if( wxSpinCtrlDouble* spinD = dynamic_cast<wxSpinCtrlDouble*>( aCtrl ) )
+        return wxVariant( spinD->GetValue() );
+    else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( aCtrl ) )
+        return wxVariant( radio->GetValue() );
+    else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( aCtrl ) )
+        return wxVariant( (long) radioBox->GetSelection() );
+    else if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::array();
+        int rows = grid->GetNumberRows();
+        int cols = grid->GetNumberCols();
+        for( int r = 0; r < rows; ++r )
+        {
+            nlohmann::json row = nlohmann::json::array();
+            for( int c = 0; c < cols; ++c )
+                row.push_back( std::string( grid->GetCellValue( r, c ).ToUTF8() ) );
+            j.push_back( row );
+        }
+        return wxVariant( wxString( j.dump() ) );
+    }
+    else if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( aCtrl ) )
+    {
+        nlohmann::json j;
+        for( wxPropertyGridIterator it = propGrid->GetIterator(); !it.AtEnd(); ++it )
+        {
+            wxPGProperty* prop = *it;
+            j[ prop->GetName().ToStdString() ] = prop->GetValueAsString().ToStdString();
+        }
+        return wxVariant( wxString( j.dump() ) );
+    }
+    else if( wxCheckListBox* checkList = dynamic_cast<wxCheckListBox*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::array();
+        unsigned int count = checkList->GetCount();
+        for( unsigned int i = 0; i < count; ++i )
+            if( checkList->IsChecked( i ) )
+                j.push_back( i );
+        return wxVariant( wxString( j.dump() ) );
+    }
+    else if( wxDataViewListCtrl* dataList = dynamic_cast<wxDataViewListCtrl*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::array();
+        unsigned int rows = dataList->GetItemCount();
+        unsigned int cols = dataList->GetColumnCount();
+        for( unsigned int r = 0; r < rows; ++r )
+        {
+            nlohmann::json row = nlohmann::json::array();
+            for( unsigned int c = 0; c < cols; ++c )
+            {
+                wxVariant val;
+                dataList->GetValue( val, r, c );
+                row.push_back( std::string( val.GetString().ToUTF8() ) );
+            }
+            j.push_back( row );
+        }
+        return wxVariant( wxString( j.dump() ) );
+    }
+    else
+        return wxVariant();
+}
+
+
+void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
+{
+    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
+        textCtrl->SetValue( aValue.GetString() );
+    else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aCtrl ) )
+        scintilla->SetText( aValue.GetString() );
+    else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( aCtrl ) )
+        combo->SetValue( aValue.GetString() );
+    else if( wxChoice* choice = dynamic_cast<wxChoice*>( aCtrl ) )
+        choice->SetSelection( (int) aValue.GetLong() );
+    else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( aCtrl ) )
+        check->SetValue( aValue.GetBool() );
+    else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( aCtrl ) )
+        spin->SetValue( (int) aValue.GetLong() );
+    else if( wxSpinCtrlDouble* spinD = dynamic_cast<wxSpinCtrlDouble*>( aCtrl ) )
+        spinD->SetValue( aValue.GetDouble() );
+    else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( aCtrl ) )
+        radio->SetValue( aValue.GetBool() );
+    else if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( aCtrl ) )
+        radioBox->SetSelection( (int) aValue.GetLong() );
+    else if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+        if( j.is_array() )
+        {
+            int rows = std::min( (int) j.size(), grid->GetNumberRows() );
+            for( int r = 0; r < rows; ++r )
+            {
+                nlohmann::json row = j[r];
+                int cols = std::min( (int) row.size(), grid->GetNumberCols() );
+                for( int c = 0; c < cols; ++c )
+                    grid->SetCellValue( r, c, wxString( row[c].get<std::string>() ) );
+            }
+        }
+    }
+    else if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+        if( j.is_object() )
+        {
+            for( auto it = j.begin(); it != j.end(); ++it )
+                propGrid->SetPropertyValue( wxString( it.key() ), wxString( it.value().get<std::string>() ) );
+        }
+    }
+    else if( wxCheckListBox* checkList = dynamic_cast<wxCheckListBox*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+        if( j.is_array() )
+        {
+            unsigned int count = checkList->GetCount();
+            for( unsigned int i = 0; i < count; ++i )
+                checkList->Check( i, false );
+            for( auto& idx : j )
+            {
+                unsigned int i = idx.get<unsigned int>();
+                if( i < count )
+                    checkList->Check( i, true );
+            }
+        }
+    }
+    else if( wxDataViewListCtrl* dataList = dynamic_cast<wxDataViewListCtrl*>( aCtrl ) )
+    {
+        nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+        if( j.is_array() )
+        {
+            unsigned int rows = std::min( static_cast<unsigned int>( j.size() ), static_cast<unsigned int>( dataList->GetItemCount() ) );
+            for( unsigned int r = 0; r < rows; ++r )
+            {
+                nlohmann::json row = j[r];
+                unsigned int cols = std::min( (unsigned int) row.size(), dataList->GetColumnCount() );
+                for( unsigned int c = 0; c < cols; ++c )
+                {
+                    wxVariant val( wxString( row[c].get<std::string>() ) );
+                    dataList->SetValue( val, r, c );
+                }
+            }
+        }
+    }
+}
+
+
+void DIALOG_SHIM::doUndo()
+{
+    if( m_undoStack.empty() )
+        return;
+
+    m_handlingUndoRedo = true;
+    UNDO_STEP step = m_undoStack.back();
+    m_undoStack.pop_back();
+    setControlValue( step.ctrl, step.before );
+    m_currentValues[ step.ctrl ] = step.before;
+    m_redoStack.push_back( step );
+    m_handlingUndoRedo = false;
+}
+
+
+void DIALOG_SHIM::doRedo()
+{
+    if( m_redoStack.empty() )
+        return;
+
+    m_handlingUndoRedo = true;
+    UNDO_STEP step = m_redoStack.back();
+    m_redoStack.pop_back();
+    setControlValue( step.ctrl, step.after );
+    m_currentValues[ step.ctrl ] = step.after;
+    m_undoStack.push_back( step );
+    m_handlingUndoRedo = false;
+}
+
+
 void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
 {
     if( m_firstPaintEvent )
@@ -739,6 +1153,7 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
         KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( this );
 
         SelectAllInTextCtrls( GetChildren() );
+        registerUndoRedoHandlers( GetChildren() );
 
         if( m_initialFocusTarget )
             KIPLATFORM::UI::ForceFocus( m_initialFocusTarget );
@@ -966,6 +1381,30 @@ void DIALOG_SHIM::onChildSetFocus( wxFocusEvent& aEvent )
 
 void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 {
+    int key = aEvt.GetKeyCode();
+    int mods = 0;
+
+    if( aEvt.ControlDown() )
+        mods |= MD_CTRL;
+    if( aEvt.ShiftDown() )
+        mods |= MD_SHIFT;
+    if( aEvt.AltDown() )
+        mods |= MD_ALT;
+
+    int hotkey = key | mods;
+
+    // Check for standard undo/redo hotkeys
+    if( hotkey == (MD_CTRL + 'Z') )
+    {
+        doUndo();
+        return;
+    }
+    else if( hotkey == (MD_CTRL + MD_SHIFT + 'Z') || hotkey == (MD_CTRL + 'Y') )
+    {
+        doRedo();
+        return;
+    }
+
     if( aEvt.GetKeyCode() == 'U' && aEvt.GetModifiers() == wxMOD_CONTROL )
     {
         if( m_parentFrame )
