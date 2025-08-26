@@ -748,14 +748,9 @@ void EDA_SHAPE::scale( double aScale )
 
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECTANGLE:
+    case SHAPE_T::CIRCLE:
         scalePt( m_start );
         scalePt( m_end );
-        break;
-
-    case SHAPE_T::CIRCLE: //  ring or circle
-        scalePt( m_start );
-        m_end.x = m_start.x + KiROUND( GetRadius() * aScale );
-        m_end.y = m_start.y;
         break;
 
     case SHAPE_T::POLY: // polygon
