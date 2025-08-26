@@ -57,6 +57,7 @@ void LAYER_PRESENTATION::DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aB
     bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
     bmpDC.SetPen( *wxBLACK_PEN );
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
+    bmpDC.SelectObject( wxNullBitmap );
 }
 
 

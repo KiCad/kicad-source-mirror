@@ -66,9 +66,18 @@ ACTION_MENU::~ACTION_MENU()
     Disconnect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), nullptr, this );
     Disconnect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), nullptr, this );
 
+    // Explicitly release the GDI resources
+    for( auto subitem : GetMenuItems() )
+        subitem->SetBitmap( wxNullBitmap );
+
     // Set parent to NULL to prevent submenus from unregistering from a nonexistent object
     for( ACTION_MENU* menu : m_submenus )
+    {
+        for( auto menuItem : GetMenuItems() )
+            menuItem->SetBitmap( wxNullBitmap );
+
         menu->SetParent( nullptr );
+    }
 
     ACTION_MENU* parent = dynamic_cast<ACTION_MENU*>( GetParent() );
 
@@ -108,6 +117,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
         // Destroy the menu entry keeping the title..
         wxMenuItem* item = FindItemByPosition( 0 );
         wxASSERT( item->GetItemLabelText() == GetTitle() );
+        item->SetBitmap( wxNullBitmap );
         Destroy( item );
 
         // ..and separator
