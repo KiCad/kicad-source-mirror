@@ -1501,7 +1501,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     current = Trace();
 
-    VECTOR2I splitPoint = current.CLine().CLastPoint();
+    VECTOR2I splitPoint = current.PointCount() ? current.CLine().CLastPoint() : m_p_start;
 
     if( reachesEnd && aEndItem && current.SegmentCount() && aEndItem->OfKind( ITEM::SEGMENT_T ) )
     {
