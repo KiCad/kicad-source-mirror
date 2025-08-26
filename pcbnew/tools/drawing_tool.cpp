@@ -3480,11 +3480,21 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         {
         }
 
-        PCB_TRACK* findTrack( PCB_VIA* aVia )
+        /**
+         * Get the bounding box the via would have if placed at the given position
+         * (the via's bounding box is relative to its own position).
+         */
+        static BOX2I getEffectiveBoundingBox( const PCB_VIA& aVia, const VECTOR2I& aPosition )
         {
-            const LSET lset = aVia->GetLayerSet();
-            VECTOR2I   position = aVia->GetPosition();
-            BOX2I      bbox = aVia->GetBoundingBox();
+            BOX2I bbox = aVia.GetBoundingBox();
+            bbox.Move( aPosition - aVia.GetPosition() );
+            return bbox;
+        }
+
+        PCB_TRACK* findTrack( const PCB_VIA* aVia, const VECTOR2I& aPosition ) const
+        {
+            const LSET  lset = aVia->GetLayerSet();
+            const BOX2I bbox = getEffectiveBoundingBox( *aVia, aPosition );
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             KIGFX::PCB_VIEW*        view = m_frame->GetCanvas()->GetView();
@@ -3508,9 +3518,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-                    if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
-                                        ( track->GetWidth()
-                                            + aVia->GetWidth( track->GetLayer() ) ) / 2 ) )
+                    if( TestSegmentHit( aPosition, track->GetStart(), track->GetEnd(),
+                                        ( track->GetWidth() + aVia->GetWidth( track->GetLayer() ) ) / 2 ) )
                     {
                         possible_tracks.push_back( track );
                     }
@@ -3519,7 +3528,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     PCB_ARC* arc = static_cast<PCB_ARC*>( item );
 
-                    if( arc->HitTest( position, aVia->GetWidth( arc->GetLayer() ) / 2 ) )
+                    if( arc->HitTest( aPosition, aVia->GetWidth( arc->GetLayer() ) / 2 ) )
                         possible_tracks.push_back( arc );
                 }
             }
@@ -3530,7 +3539,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             for( PCB_TRACK* track : possible_tracks )
             {
                 SEG test( track->GetStart(), track->GetEnd() );
-                int dist = ( test.NearestPoint( position ) - position ).EuclideanNorm();
+                int dist = ( test.NearestPoint( aPosition ) - aPosition ).EuclideanNorm();
 
                 if( dist < min_d )
                 {
@@ -3671,11 +3680,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return false;
         }
 
-        PAD* findPad( PCB_VIA* aVia )
+        PAD* findPad( const PCB_VIA* aVia, const VECTOR2I& aPosition ) const
         {
-            const VECTOR2I position = aVia->GetPosition();
-            const LSET     lset = aVia->GetLayerSet();
-            const BOX2I    bbox = aVia->GetBoundingBox();
+            const LSET  lset = aVia->GetLayerSet();
+            const BOX2I bbox = getEffectiveBoundingBox( *aVia, aPosition );
 
             const KIGFX::PCB_VIEW&                    view = *m_frame->GetCanvas()->GetView();
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
@@ -3693,7 +3701,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     PAD& pad = static_cast<PAD&>( item );
 
-                    if( pad.HitTest( position ) )
+                    if( pad.HitTest( aPosition ) )
                     {
                         return &pad;
                     }
@@ -3703,11 +3711,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return nullptr;
         }
 
-        PCB_SHAPE* findGraphic( const PCB_VIA* aVia ) const
+        PCB_SHAPE* findGraphic( const PCB_VIA* aVia, const VECTOR2I& aPosition ) const
         {
             const LSET lset = aVia->GetLayerSet() & LSET::AllCuMask();
-            VECTOR2I   position = aVia->GetPosition();
-            BOX2I      bbox = aVia->GetBoundingBox();
+            BOX2I      bbox = getEffectiveBoundingBox( *aVia, aPosition );
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
@@ -3730,7 +3737,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-                    if( shape->HitTest( position, aVia->GetWidth( activeLayer ) / 2 ) )
+                    if( shape->HitTest( aPosition, aVia->GetWidth( activeLayer ) / 2 ) )
                         possible_shapes.push_back( shape );
                 }
             }
@@ -3740,7 +3747,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( PCB_SHAPE* shape : possible_shapes )
             {
-                int dist = ( shape->GetPosition() - position ).EuclideanNorm();
+                int dist = ( shape->GetPosition() - aPosition ).EuclideanNorm();
 
                 if( dist < min_d )
                 {
@@ -3891,11 +3898,16 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             MAGNETIC_SETTINGS* settings = m_frame->GetMagneticItemsSettings();
             PCB_VIA*           via = static_cast<PCB_VIA*>( aItem );
-            VECTOR2I           position = via->GetPosition();
+
+            // When snapping, use the mouse position, not the item position, which may be
+            // grid-snapped, so that we can get the cursor within snap-range of snap points.
+            // If we don't get a snap, the via will be left as it is (i.e. maybe grid-snapped).
+            KIGFX::VIEW_CONTROLS& viewControls = *m_frame->GetCanvas()->GetViewControls();
+            const VECTOR2I        position = viewControls.GetMousePosition();
 
             if( settings->tracks != MAGNETIC_OPTIONS::NO_EFFECT && m_gridHelper.GetSnap() )
             {
-                if( PCB_TRACK* track = findTrack( via ) )
+                if( PCB_TRACK* track = findTrack( via, position ) )
                 {
                     SEG      trackSeg( track->GetStart(), track->GetEnd() );
                     VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
@@ -3907,7 +3919,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( settings->pads != MAGNETIC_OPTIONS::NO_EFFECT && m_gridHelper.GetSnap() )
             {
-                if( PAD* pad = findPad( via ) )
+                if( PAD* pad = findPad( via, position ) )
                 {
                     aItem->SetPosition( pad->GetPosition() );
                     return;
@@ -3916,7 +3928,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( settings->graphics && m_gridHelper.GetSnap() )
             {
-                if( PCB_SHAPE* shape = findGraphic( via ) )
+                if( PCB_SHAPE* shape = findGraphic( via, position ) )
                 {
                     if( shape->IsFilled() )
                     {
@@ -4002,8 +4014,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             WX_INFOBAR* infobar = m_frame->GetInfoBar();
             PCB_VIA*    via = static_cast<PCB_VIA*>( aItem );
             VECTOR2I    viaPos = via->GetPosition();
-            PCB_TRACK*  track = findTrack( via );
-            PAD*        pad = findPad( via );
+            PCB_TRACK*  track = findTrack( via, via->GetPosition() );
+            PAD*        pad = findPad( via, via->GetPosition() );
 
             if( track )
             {
