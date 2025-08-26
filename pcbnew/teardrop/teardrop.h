@@ -129,6 +129,8 @@ public:
     static int GetWidth( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
     static bool IsRound( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
+    void BuildTrackCaches();
+
 private:
     /**
      * @return true if the given aViaPad + aTrack is located inside a zone of the same netname
@@ -209,6 +211,30 @@ private:
                               std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const;
 
     /**
+     * Creates and adds a teardrop with optional mask to the board
+     * @param aCommit the board commit to add the teardrop to
+     * @param aTeardropVariant = variant of the teardrop( attached to a pad, or a track end )
+     * @param aPoints is the polygonal shape
+     * @param aTrack is the track connected to the starting points of the teardrop
+     */
+    void createAndAddTeardropWithMask( BOARD_COMMIT& aCommit, TEARDROP_VARIANT aTeardropVariant,
+                                       std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack );
+
+    /**
+     * Attempts to create a track-to-track teardrop
+     * @param aCommit the board commit to add the teardrop to
+     * @param aParams the teardrop parameters
+     * @param aTeardropVariant = variant of the teardrop( attached to a pad, or a track end )
+     * @param aTrack the source track
+     * @param aCandidate the target item
+     * @param aPos the connection position
+     * @return true if teardrop was created successfully
+     */
+    bool tryCreateTrackTeardrop( BOARD_COMMIT& aCommit, const TEARDROP_PARAMETERS& aParams,
+                                 TEARDROP_VARIANT aTeardropVariant, PCB_TRACK* aTrack,
+                                 BOARD_ITEM* aCandidate, const VECTOR2I& aPos );
+
+    /**
      * Set priority of created teardrops. smaller have bigger priority
      */
     void setTeardropPriorities();
@@ -232,8 +258,6 @@ private:
                                   VECTOR2I& aEndPoint, VECTOR2I& aIntersection,
                                   PCB_TRACK*& aTrack, BOARD_ITEM* aOther, const VECTOR2I& aOtherPos,
                                   int* aEffectiveTeardropLen ) const;
-
-    void buildTrackCaches();
 
 private:
     int                       m_tolerance;      // max dist between track end point and pad/via

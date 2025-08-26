@@ -132,6 +132,44 @@ ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
 }
 
 
+void TEARDROP_MANAGER::createAndAddTeardropWithMask( BOARD_COMMIT& aCommit,
+                                                     TEARDROP_VARIANT aTeardropVariant,
+                                                     std::vector<VECTOR2I>& aPoints,
+                                                     PCB_TRACK* aTrack )
+{
+    ZONE* new_teardrop = createTeardrop( aTeardropVariant, aPoints, aTrack );
+    m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
+    m_createdTdList.push_back( new_teardrop );
+
+    aCommit.Added( new_teardrop );
+
+    if( aTrack->HasSolderMask() && IsExternalCopperLayer( aTrack->GetLayer() ) )
+    {
+        ZONE* new_teardrop_mask = createTeardropMask( aTeardropVariant, aPoints, aTrack );
+        m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
+        aCommit.Added( new_teardrop_mask );
+    }
+}
+
+
+bool TEARDROP_MANAGER::tryCreateTrackTeardrop( BOARD_COMMIT& aCommit,
+                                               const TEARDROP_PARAMETERS& aParams,
+                                               TEARDROP_MANAGER::TEARDROP_VARIANT aTeardropVariant,
+                                               PCB_TRACK* aTrack, BOARD_ITEM* aCandidate,
+                                               const VECTOR2I& aPos )
+{
+    std::vector<VECTOR2I> points;
+
+    if( computeTeardropPolygon( aParams, points, aTrack, aCandidate, aPos ) )
+    {
+        createAndAddTeardropWithMask( aCommit, aTeardropVariant, points, aTrack );
+        return true;
+    }
+
+    return false;
+}
+
+
 void TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT& aCommit,
                                         const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
                                         const std::set<PCB_TRACK*>* dirtyTracks )
@@ -188,7 +226,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
     // Init parameters:
     m_tolerance = pcbIUScale.mmToIU( 0.01 );
 
-    buildTrackCaches();
+    BuildTrackCaches();
 
     // Old teardrops must be removed, to ensure a clean teardrop rebuild
     if( aForceFullUpdate )
@@ -237,8 +275,11 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
             }
 
-            if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
-                // The track is entirely inside the pad; cannot create a teardrop
+            bool startHitsPad = pad->HitTest( track->GetStart() );
+            bool endHitsPad = pad->HitTest( track->GetEnd() );
+
+            // The track is entirely inside the pad; cannot create a teardrop
+            if( startHitsPad && endHitsPad )
                 continue;
 
             // Skip case where pad and the track are within a copper zone with the same net
@@ -246,22 +287,16 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
             if( !tdParams.m_TdOnPadsInZones && areItemsInSameZone( pad, track ) )
                 continue;
 
-            std::vector<VECTOR2I> points;
+            tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track, pad, pad->GetPosition() );
 
-            if( computeTeardropPolygon( tdParams, points, track, pad, pad->GetPosition() ) )
+            if( !startHitsPad && !endHitsPad )
             {
-                ZONE* new_teardrop = createTeardrop( TD_TYPE_PADVIA, points, track );
-                m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
-                m_createdTdList.push_back( new_teardrop );
-
-                aCommit.Added( new_teardrop );
-
-                if( track->HasSolderMask() && IsExternalCopperLayer( track->GetLayer() ) )
-                {
-                    ZONE* new_teardrop_mask = createTeardropMask( TD_TYPE_PADVIA, points, track );
-                    m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
-                    aCommit.Added( new_teardrop_mask );
-                }
+                PCB_TRACK reversed( *track );
+                reversed.SetStart( track->GetEnd() );
+                reversed.SetEnd( pad->GetPosition() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, pad, pad->GetPosition() );
+                reversed.SetStart( track->GetStart() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, pad, pad->GetPosition() );
             }
         }
 
@@ -285,26 +320,25 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
             }
 
-            if( via->HitTest( track->GetStart() ) && via->HitTest( track->GetEnd() ) )
-                // The track is entirely inside the via; cannot create a teardrop
+            bool startHitsVia = via->HitTest( track->GetStart() );
+            bool endHitsVia = via->HitTest( track->GetEnd() );
+
+            // The track is entirely inside the via; cannot create a teardrop
+            if( startHitsVia && endHitsVia )
                 continue;
 
-            std::vector<VECTOR2I> points;
 
-            if( computeTeardropPolygon( tdParams, points, track, via, via->GetPosition() ) )
+            tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track, via,
+                                    via->GetPosition() );
+
+            if( !startHitsVia && !endHitsVia )
             {
-                ZONE* new_teardrop = createTeardrop( TD_TYPE_PADVIA, points, track );
-                m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
-                m_createdTdList.push_back( new_teardrop );
-
-                aCommit.Added( new_teardrop );
-
-                if( track->HasSolderMask() && IsExternalCopperLayer( track->GetLayer() ) )
-                {
-                    ZONE* new_teardrop_mask = createTeardropMask( TD_TYPE_PADVIA, points, track );
-                    m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
-                    aCommit.Added( new_teardrop_mask );
-                }
+                PCB_TRACK reversed( *track );
+                reversed.SetStart( track->GetEnd() );
+                reversed.SetEnd( via->GetPosition() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, via, via->GetPosition() );
+                reversed.SetStart( track->GetStart() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, via, via->GetPosition() );
             }
         }
     }
@@ -471,23 +505,7 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
                 if( existingPadOrVia )
                     continue;
 
-                std::vector<VECTOR2I> points;
-
-                if( computeTeardropPolygon( params, points, track, candidate, pos ) )
-                {
-                    ZONE* new_teardrop = createTeardrop( TD_TYPE_TRACKEND, points, track );
-                    m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
-                    m_createdTdList.push_back( new_teardrop );
-
-                    aCommit.Added( new_teardrop );
-
-                    if( track->HasSolderMask() && IsExternalCopperLayer( track->GetLayer() ) )
-                    {
-                        ZONE* new_teardrop_mask = createTeardropMask( TD_TYPE_TRACKEND, points, track );
-                        m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
-                        aCommit.Added( new_teardrop_mask );
-                    }
-                }
+                tryCreateTrackTeardrop( aCommit, params, TEARDROP_MANAGER::TD_TYPE_TRACKEND, track, candidate, pos );
             }
         }
     }

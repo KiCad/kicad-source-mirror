@@ -417,6 +417,7 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
         TEARDROP_MANAGER          teardropManager( m_brd, m_parent->GetToolManager() );
 
         teardropManager.DeleteTrackToTrackTeardrops( commit );
+        teardropManager.BuildTrackCaches();
 
         if( m_removeTeardrops->GetValue() || m_removeAllTeardrops->GetValue() )
         {

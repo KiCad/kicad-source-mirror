@@ -100,7 +100,7 @@ bool TEARDROP_MANAGER::IsRound( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 }
 
 
-void TEARDROP_MANAGER::buildTrackCaches()
+void TEARDROP_MANAGER::BuildTrackCaches()
 {
     for( PCB_TRACK* track : m_board->Tracks() )
     {
