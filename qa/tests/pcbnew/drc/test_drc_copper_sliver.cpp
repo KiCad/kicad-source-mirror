@@ -35,12 +35,31 @@
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
 
+#include <thread>
+#include <chrono>
+#include <exception>
+
 
 struct DRC_REGRESSION_TEST_FIXTURE
 {
     DRC_REGRESSION_TEST_FIXTURE() :
             m_settingsManager( true /* headless */ )
     { }
+
+    ~DRC_REGRESSION_TEST_FIXTURE()
+    {
+        // Ensure proper cleanup
+        if( m_board && m_board->GetDesignSettings().m_DRCEngine )
+        {
+            m_board->GetDesignSettings().m_DRCEngine->ClearViolationHandler();
+        }
+
+        if( m_board )
+        {
+            m_board->SetProject( nullptr );
+            m_board = nullptr;
+        }
+    }
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
@@ -65,10 +84,17 @@ BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
     // Check for minimum copper connection errors
 
     KI_TEST::LoadBoard( m_settingsManager, test.first, m_board );
+
+    // Validate board was loaded successfully
+    BOOST_REQUIRE_MESSAGE( m_board, "Failed to load board for test: " + test.first.ToStdString() );
+
     KI_TEST::FillZones( m_board.get() );
 
     std::vector<DRC_ITEM>  violations;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    // Validate DRC engine is properly initialized
+    BOOST_REQUIRE_MESSAGE( bds.m_DRCEngine, "DRC engine not initialized for test: " + test.first.ToStdString() );
 
     // Disable DRC tests not useful or not handled in this testcase
     for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
@@ -86,7 +112,33 @@ BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
             } );
 
     BOOST_TEST_CHECKPOINT( "Running copper sliver drc" );
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    // Add exception handling around DRC engine run to catch potential crashes
+    try
+    {
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+        // Add a small delay to allow any background threads to complete
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+
+        BOOST_TEST_CHECKPOINT( "DRC engine run completed successfully" );
+    }
+    catch( const std::exception& e )
+    {
+        BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, exception during RunTests: %s",
+                                       test.first, e.what() ) );
+        return;
+    }
+    catch( ... )
+    {
+        BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, unknown exception during RunTests",
+                                       test.first ) );
+        return;
+    }
+
+    // Clear the violation handler to prevent any potential issues with cleanup
+    BOOST_TEST_CHECKPOINT( "Clearing violation handler" );
+    bds.m_DRCEngine->ClearViolationHandler();
 
     if( violations.size() == test.second )
     {
@@ -98,10 +150,42 @@ BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
-        m_board->FillItemMap( itemMap );
 
-        for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+        // Safely build the item map with error handling
+        try
+        {
+            m_board->FillItemMap( itemMap );
+        }
+        catch( const std::exception& e )
+        {
+            BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, exception in FillItemMap: %s",
+                                           test.first, e.what() ) );
+            return;
+        }
+        catch( ... )
+        {
+            BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, unknown exception in FillItemMap",
+                                           test.first ) );
+            return;
+        }
+
+        // Safely report violations with bounds checking
+        for( size_t i = 0; i < violations.size() && i < 100; ++i ) // Limit output to prevent excessive logging
+        {
+            try
+            {
+                const DRC_ITEM& item = violations[i];
+                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            }
+            catch( const std::exception& e )
+            {
+                BOOST_TEST_MESSAGE( wxString::Format( "Error reporting violation %zu: %s", i, e.what() ) );
+            }
+            catch( ... )
+            {
+                BOOST_TEST_MESSAGE( wxString::Format( "Unknown error reporting violation %zu", i ) );
+            }
+        }
 
         BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, failed (violations found %d "
                                        "expected %d)",

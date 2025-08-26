@@ -126,24 +126,64 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     aBoard->GetDesignSettings().m_DRCEngine = m_DRCEngine;
 
     BOOST_TEST_CHECKPOINT( "Build list of nets" );
-    aBoard->BuildListOfNets();
+    try
+    {
+        aBoard->BuildListOfNets();
+    }
+    catch( const std::exception& e )
+    {
+        BOOST_TEST_ERROR( "Exception in BuildListOfNets: " << e.what() );
+        return;
+    }
 
     BOOST_TEST_CHECKPOINT( "Build connectivity" );
-    aBoard->BuildConnectivity();
+    try
+    {
+        aBoard->BuildConnectivity();
+    }
+    catch( const std::exception& e )
+    {
+        BOOST_TEST_ERROR( "Exception in BuildConnectivity: " << e.what() );
+        return;
+    }
 
     BOOST_TEST_CHECKPOINT( "Synchronize Time Domain Properties" );
-    aBoard->GetLengthCalculation()->SynchronizeTimeDomainProperties();
+    try
+    {
+        aBoard->GetLengthCalculation()->SynchronizeTimeDomainProperties();
+    }
+    catch( const std::exception& e )
+    {
+        BOOST_TEST_ERROR( "Exception in SynchronizeTimeDomainProperties: " << e.what() );
+        return;
+    }
 
     if( aBoard->GetProject() )
     {
         std::unordered_set<wxString> dummy;
         BOOST_TEST_CHECKPOINT( "Synchronize Component Classes" );
-        aBoard->SynchronizeComponentClasses( dummy );
+        try
+        {
+            aBoard->SynchronizeComponentClasses( dummy );
+        }
+        catch( const std::exception& e )
+        {
+            BOOST_TEST_ERROR( "Exception in SynchronizeComponentClasses: " << e.what() );
+            return;
+        }
 
         BOOST_TEST_CHECKPOINT( "Run DRC cache generator" );
-        DRC_CACHE_GENERATOR cacheGenerator;
-        cacheGenerator.SetDRCEngine( m_DRCEngine.get() );
-        cacheGenerator.Run();
+        try
+        {
+            DRC_CACHE_GENERATOR cacheGenerator;
+            cacheGenerator.SetDRCEngine( m_DRCEngine.get() );
+            cacheGenerator.Run();
+        }
+        catch( const std::exception& e )
+        {
+            BOOST_TEST_ERROR( "Exception in DRC cache generator: " << e.what() );
+            return;
+        }
     }
 }
 
