@@ -22,6 +22,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
+#include <pad.h>
 #include <pcb_generator.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
@@ -361,6 +362,24 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
                                 return false;
                             }
                         }
+                        else if( aItem->Type() == PCB_PAD_T )
+                        {
+                            PAD* pad = static_cast<PAD*>( aItem );
+
+                            auto trackExitsPad = [&]( PCB_TRACK* track )
+                            {
+                                bool startIn = pad->HitTest( track->GetStart(), 0 );
+                                bool endIn = pad->HitTest( track->GetEnd(), 0 );
+
+                                return startIn ^ endIn;
+                            };
+
+                            if( trackExitsPad( static_cast<PCB_TRACK*>( coupled->parentP ) )
+                                    || trackExitsPad( static_cast<PCB_TRACK*>( coupled->parentN ) ) )
+                            {
+                                return false;
+                            }
+                        }
 
                         return true;
                     };
@@ -434,6 +453,24 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 
                             if( bci->GetNetCode() == coupled->parentN->GetNetCode()
                                     ||  bci->GetNetCode() == coupled->parentP->GetNetCode() )
+                            {
+                                return false;
+                            }
+                        }
+                        else if( aItem->Type() == PCB_PAD_T )
+                        {
+                            PAD* pad = static_cast<PAD*>( aItem );
+
+                            auto arcExitsPad = [&]( PCB_ARC* arc )
+                            {
+                                bool startIn = pad->HitTest( arc->GetStart(), 0 );
+                                bool endIn = pad->HitTest( arc->GetEnd(), 0 );
+
+                                return startIn ^ endIn;
+                            };
+
+                            if( arcExitsPad( static_cast<PCB_ARC*>( coupled->parentP ) )
+                                    || arcExitsPad( static_cast<PCB_ARC*>( coupled->parentN ) ) )
                             {
                                 return false;
                             }
