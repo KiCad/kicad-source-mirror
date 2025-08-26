@@ -23,6 +23,8 @@
 #define __PNS_KICAD_IFACE_H
 
 #include <unordered_set>
+#include <unordered_map>
+#include <vector>
 
 #include "pns_router.h"
 
@@ -38,6 +40,8 @@ class FOOTPRINT;
 class PAD;
 class EDA_TEXT;
 class LENGTH_DELAY_CALCULATION_ITEM;
+class BOARD_ITEM;
+class EDA_GROUP;
 
 namespace PNS
 {
@@ -175,6 +179,9 @@ protected:
     KIGFX::VIEW*                    m_view;
     KIGFX::VIEW_GROUP*              m_previewItems;
     std::unordered_set<BOARD_ITEM*> m_hiddenItems;
+
+    std::unordered_map<BOARD_ITEM*, EDA_GROUP*>               m_itemGroups;
+    std::unordered_map<BOARD_ITEM*, std::vector<BOARD_ITEM*>> m_replacementMap;
 
     PCB_TOOL_BASE*                  m_tool;
     std::unique_ptr<BOARD_COMMIT>   m_commit;
