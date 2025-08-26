@@ -23,6 +23,7 @@
 #include <mock_pgm_base.h>
 #include <pgm_base.h>
 #include <qa_utils/wx_utils/wx_assert.h>
+#include <settings/settings_manager.h>
 #include <locale_io.h>
 
 bool init_unit_test()
@@ -44,6 +45,9 @@ bool init_unit_test()
         wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
         Pgm().InitPgm( true, true, true );
+        const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
+        MOCK_EXPECT( program.GetCommonSettings )
+                .returns( Pgm().GetSettingsManager().GetCommonSettings() );
     }
 
     return ok;
