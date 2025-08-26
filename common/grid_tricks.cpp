@@ -30,7 +30,8 @@
 #include <wx/log.h>
 #include <wx/stc/stc.h>
 #include <widgets/grid_text_helpers.h>
-
+#include <search_stack.h>
+#include <widgets/grid_text_button_helpers.h>
 
 // It works for table data on clipboard for an Excel spreadsheet,
 // why not us too for now.
@@ -95,8 +96,11 @@ void GRID_TRICKS::init()
 bool GRID_TRICKS::isTextEntry( int aRow, int aCol )
 {
     wxGridCellEditor* editor = m_grid->GetCellEditor( aRow, aCol );
-    bool              retval = ( dynamic_cast<wxTextEntry*>( editor )
-                              || dynamic_cast<GRID_CELL_STC_EDITOR*>( editor ) );
+    bool              retval = ( dynamic_cast<wxGridCellTextEditor*>( editor )
+                              || dynamic_cast<GRID_CELL_STC_EDITOR*>( editor )
+                              || dynamic_cast<GRID_CELL_FPID_EDITOR*>( editor )
+                              || dynamic_cast<GRID_CELL_PATH_EDITOR*>( editor )
+                              || dynamic_cast<GRID_CELL_URL_EDITOR*>( editor ) );
 
     editor->DecRef();
     return retval;
