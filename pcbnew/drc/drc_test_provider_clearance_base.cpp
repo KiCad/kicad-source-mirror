@@ -27,6 +27,8 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
+#include <wx/app.h>
+
 DRC_CUSTOM_MARKER_HANDLER
 DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAPE>& aShapes,
                                                       const VECTOR2I& aStart, const VECTOR2I& aEnd,
@@ -106,7 +108,8 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu( std::shared_ptr<
 
     VECTOR2I ptA, ptB;
 
-    if( aShape1->NearestPoints( aShape2.get(), ptA, ptB ) )
+    // Don't try showing graphics if we don't have a GUI instance
+    if( wxApp::GetGUIInstance() && aShape1->NearestPoints( aShape2.get(), ptA, ptB ) )
     {
         PCB_SHAPE ptAShape( nullptr, SHAPE_T::SEGMENT );
         ptAShape.SetStart( ptA );
