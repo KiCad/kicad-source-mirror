@@ -3675,14 +3675,27 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         {
             const VECTOR2I position = aVia->GetPosition();
             const LSET     lset = aVia->GetLayerSet();
+            const BOX2I    bbox = aVia->GetBoundingBox();
 
-            for( FOOTPRINT* fp : m_board->Footprints() )
+            const KIGFX::PCB_VIEW&                    view = *m_frame->GetCanvas()->GetView();
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+
+            view.Query( bbox, items );
+
+            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
             {
-                for( PAD* pad : fp->Pads() )
+                if( !it.first->IsBOARD_ITEM() )
+                    continue;
+
+                BOARD_ITEM& item = static_cast<BOARD_ITEM&>( *it.first );
+
+                if( item.Type() == PCB_PAD_T && ( item.GetLayerSet() & lset ).any() )
                 {
-                    if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
+                    PAD& pad = static_cast<PAD&>( item );
+
+                    if( pad.HitTest( position ) )
                     {
-                        return pad;
+                        return &pad;
                     }
                 }
             }
