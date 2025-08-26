@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -43,6 +43,12 @@ class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_YPosLabel;
 		wxTextCtrl* m_ModPositionY;
 		wxStaticText* m_YPosUnit;
+		wxStaticText* m_WidthLabel;
+		wxTextCtrl* m_ModWidth;
+		wxStaticText* m_WidthUnit;
+		wxStaticText* m_HeightLabel;
+		wxTextCtrl* m_ModHeight;
+		wxStaticText* m_HeightUnit;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxCheckBox* m_cbLocked;

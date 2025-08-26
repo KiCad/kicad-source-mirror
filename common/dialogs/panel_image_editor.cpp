@@ -118,6 +118,26 @@ bool PANEL_IMAGE_EDITOR::TransferDataFromWindow()
 }
 
 
+double PANEL_IMAGE_EDITOR::GetScale() const
+{
+    return m_scale.GetDoubleValue();
+}
+
+
+void PANEL_IMAGE_EDITOR::SetScale( double aScale )
+{
+    m_scale.ChangeDoubleValue( aScale );
+    m_workingImage->SetScale( aScale );
+    m_panelDraw->Refresh();
+}
+
+
+VECTOR2I PANEL_IMAGE_EDITOR::GetImageSize() const
+{
+    return m_workingImage->GetSize();
+}
+
+
 void PANEL_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 {
     wxPaintDC dc( m_panelDraw );

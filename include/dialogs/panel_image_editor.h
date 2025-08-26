@@ -26,6 +26,7 @@
 
 #include <panel_image_editor_base.h>
 #include <widgets/unit_binder.h>
+#include <math/vector2d.h>
 
 #include <memory>
 
@@ -42,6 +43,11 @@ public:
 public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    double GetScale() const;
+    void   SetScale( double aScale );
+    VECTOR2I GetImageSize() const;
+    wxTextCtrl* GetScaleCtrl() const { return m_textCtrlScale; }
 
     /**
      * Copy edited image to \a aItem.

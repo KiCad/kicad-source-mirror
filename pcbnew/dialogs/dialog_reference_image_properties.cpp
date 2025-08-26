@@ -38,7 +38,9 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
         m_frame( aParent ),
         m_bitmap( aBitmap ),
         m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
-        m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
+        m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
+        m_width( aParent, m_WidthLabel, m_ModWidth, m_WidthUnit ),
+        m_height( aParent, m_HeightLabel, m_ModHeight, m_HeightUnit )
 {
     // Create the image editor page
     m_imageEditor = new PANEL_IMAGE_EDITOR( aParent, this, aBitmap.GetReferenceImage().MutableImage() );
@@ -47,6 +49,12 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_width.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_height.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
+    m_ModWidth->Bind( wxEVT_TEXT, &DIALOG_REFERENCE_IMAGE_PROPERTIES::onWidthChanged, this );
+    m_ModHeight->Bind( wxEVT_TEXT, &DIALOG_REFERENCE_IMAGE_PROPERTIES::onHeightChanged, this );
+    m_imageEditor->GetScaleCtrl()->Bind( wxEVT_TEXT, &DIALOG_REFERENCE_IMAGE_PROPERTIES::onScaleChanged, this );
 
     // Only show unactivated board layers if the bitmap is on one of them
     if( !m_frame->GetBoard()->IsLayerEnabled( m_bitmap.GetLayer() ) )
@@ -88,7 +96,12 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataToWindow()
     m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas and can only be "
                                "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
 
-    return m_imageEditor->TransferDataToWindow();
+    m_imageEditor->TransferDataToWindow();
+    VECTOR2I size = m_imageEditor->GetImageSize();
+    m_width.SetValue( size.x );
+    m_height.SetValue( size.y );
+
+    return true;
 }
 
 
@@ -112,4 +125,48 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
     }
 
     return false;
+}
+
+
+void DIALOG_REFERENCE_IMAGE_PROPERTIES::onWidthChanged( wxCommandEvent& aEvent )
+{
+    double newWidth = m_width.GetDoubleValue();
+    VECTOR2I size = m_imageEditor->GetImageSize();
+
+    if( size.x > 0 )
+    {
+        double scale = m_imageEditor->GetScale() * newWidth / size.x;
+        m_imageEditor->SetScale( scale );
+        VECTOR2I newSize = m_imageEditor->GetImageSize();
+        m_height.ChangeDoubleValue( newSize.y );
+    }
+}
+
+
+void DIALOG_REFERENCE_IMAGE_PROPERTIES::onHeightChanged( wxCommandEvent& aEvent )
+{
+    double newHeight = m_height.GetDoubleValue();
+    VECTOR2I size = m_imageEditor->GetImageSize();
+
+    if( size.y > 0 )
+    {
+        double scale = m_imageEditor->GetScale() * newHeight / size.y;
+        m_imageEditor->SetScale( scale );
+        VECTOR2I newSize = m_imageEditor->GetImageSize();
+        m_width.ChangeDoubleValue( newSize.x );
+    }
+}
+
+
+void DIALOG_REFERENCE_IMAGE_PROPERTIES::onScaleChanged( wxCommandEvent& aEvent )
+{
+    double scale = m_imageEditor->GetScale();
+
+    if( scale <= 0 )
+        return;
+
+    m_imageEditor->SetScale( scale );
+    VECTOR2I size = m_imageEditor->GetImageSize();
+    m_width.ChangeDoubleValue( size.x );
+    m_height.ChangeDoubleValue( size.y );
 }

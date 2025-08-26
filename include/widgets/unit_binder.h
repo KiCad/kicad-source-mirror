@@ -129,9 +129,9 @@ public:
     /**
      * Return the current value in Internal Units.
      */
-    virtual long long int GetValue();
+    virtual long long int GetValue() const;
 
-    int GetIntValue() { return (int) GetValue(); }
+    int GetIntValue() const { return (int) GetValue(); }
 
     /**
      * Return the current value in Internal Units.
@@ -139,7 +139,7 @@ public:
      * The returned value will be truncated according to the precision set by
      * SetPrecision() (if not <= 0).
      */
-    virtual double GetDoubleValue();
+    virtual double GetDoubleValue() const;
 
     virtual EDA_ANGLE GetAngleValue();
 
@@ -259,7 +259,7 @@ protected:
 
     wxString            m_errorMessage;
 
-    NUMERIC_EVALUATOR   m_eval;
+    mutable NUMERIC_EVALUATOR   m_eval;
     bool                m_allowEval;
     bool                m_needsEval;
 

@@ -41,6 +41,9 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+    void onWidthChanged( wxCommandEvent& aEvent );
+    void onHeightChanged( wxCommandEvent& aEvent );
+    void onScaleChanged( wxCommandEvent& aEvent );
 
 private:
     PCB_BASE_FRAME*      m_frame;
@@ -50,4 +53,6 @@ private:
 
     UNIT_BINDER          m_posX;
     UNIT_BINDER          m_posY;
+    UNIT_BINDER          m_width;
+    UNIT_BINDER          m_height;
 };

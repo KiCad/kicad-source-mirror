@@ -516,7 +516,7 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
 }
 
 
-long long int UNIT_BINDER::GetValue()
+long long int UNIT_BINDER::GetValue() const
 {
     wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
     wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
@@ -565,7 +565,7 @@ double UNIT_BINDER::setPrecision( double aValue, bool aValueUsesUserUnits ) cons
 }
 
 
-double UNIT_BINDER::GetDoubleValue()
+double UNIT_BINDER::GetDoubleValue() const
 {
     wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
     wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
