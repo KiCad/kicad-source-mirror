@@ -984,32 +984,42 @@ wxVariant DIALOG_SHIM::getControlValue( wxWindow* aCtrl )
         nlohmann::json j = nlohmann::json::array();
         int rows = grid->GetNumberRows();
         int cols = grid->GetNumberCols();
+
         for( int r = 0; r < rows; ++r )
         {
             nlohmann::json row = nlohmann::json::array();
+
             for( int c = 0; c < cols; ++c )
                 row.push_back( std::string( grid->GetCellValue( r, c ).ToUTF8() ) );
+
             j.push_back( row );
         }
+
         return wxVariant( wxString( j.dump() ) );
     }
     else if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( aCtrl ) )
     {
         nlohmann::json j;
+
         for( wxPropertyGridIterator it = propGrid->GetIterator(); !it.AtEnd(); ++it )
         {
             wxPGProperty* prop = *it;
             j[ prop->GetName().ToStdString() ] = prop->GetValueAsString().ToStdString();
         }
+
         return wxVariant( wxString( j.dump() ) );
     }
     else if( wxCheckListBox* checkList = dynamic_cast<wxCheckListBox*>( aCtrl ) )
     {
         nlohmann::json j = nlohmann::json::array();
         unsigned int count = checkList->GetCount();
+
         for( unsigned int i = 0; i < count; ++i )
+        {
             if( checkList->IsChecked( i ) )
                 j.push_back( i );
+        }
+
         return wxVariant( wxString( j.dump() ) );
     }
     else if( wxDataViewListCtrl* dataList = dynamic_cast<wxDataViewListCtrl*>( aCtrl ) )
@@ -1017,17 +1027,21 @@ wxVariant DIALOG_SHIM::getControlValue( wxWindow* aCtrl )
         nlohmann::json j = nlohmann::json::array();
         unsigned int rows = dataList->GetItemCount();
         unsigned int cols = dataList->GetColumnCount();
+
         for( unsigned int r = 0; r < rows; ++r )
         {
             nlohmann::json row = nlohmann::json::array();
+
             for( unsigned int c = 0; c < cols; ++c )
             {
                 wxVariant val;
                 dataList->GetValue( val, r, c );
                 row.push_back( std::string( val.GetString().ToUTF8() ) );
             }
+
             j.push_back( row );
         }
+
         return wxVariant( wxString( j.dump() ) );
     }
     else
@@ -1058,13 +1072,16 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
     else if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
     {
         nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+
         if( j.is_array() )
         {
             int rows = std::min( (int) j.size(), grid->GetNumberRows() );
+
             for( int r = 0; r < rows; ++r )
             {
                 nlohmann::json row = j[r];
                 int cols = std::min( (int) row.size(), grid->GetNumberCols() );
+
                 for( int c = 0; c < cols; ++c )
                     grid->SetCellValue( r, c, wxString( row[c].get<std::string>() ) );
             }
@@ -1073,6 +1090,7 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
     else if( wxPropertyGrid* propGrid = dynamic_cast<wxPropertyGrid*>( aCtrl ) )
     {
         nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+
         if( j.is_object() )
         {
             for( auto it = j.begin(); it != j.end(); ++it )
@@ -1082,14 +1100,18 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
     else if( wxCheckListBox* checkList = dynamic_cast<wxCheckListBox*>( aCtrl ) )
     {
         nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+
         if( j.is_array() )
         {
             unsigned int count = checkList->GetCount();
+
             for( unsigned int i = 0; i < count; ++i )
                 checkList->Check( i, false );
+
             for( auto& idx : j )
             {
                 unsigned int i = idx.get<unsigned int>();
+
                 if( i < count )
                     checkList->Check( i, true );
             }
@@ -1098,13 +1120,17 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
     else if( wxDataViewListCtrl* dataList = dynamic_cast<wxDataViewListCtrl*>( aCtrl ) )
     {
         nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
+
         if( j.is_array() )
         {
-            unsigned int rows = std::min( static_cast<unsigned int>( j.size() ), static_cast<unsigned int>( dataList->GetItemCount() ) );
+            unsigned int rows = std::min( static_cast<unsigned int>( j.size() ),
+                                          static_cast<unsigned int>( dataList->GetItemCount() ) );
+
             for( unsigned int r = 0; r < rows; ++r )
             {
                 nlohmann::json row = j[r];
                 unsigned int cols = std::min( (unsigned int) row.size(), dataList->GetColumnCount() );
+
                 for( unsigned int c = 0; c < cols; ++c )
                 {
                     wxVariant val( wxString( row[c].get<std::string>() ) );
