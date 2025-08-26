@@ -66,6 +66,7 @@ public:
     bool HasPoint()    { return m_editedPoint != nullptr; }
     bool HasMidpoint() { return HasPoint() && dynamic_cast<EDIT_LINE*>( m_editedPoint ); }
     bool HasCorner()   { return HasPoint() && !HasMidpoint(); }
+    bool HasCorner()   { return HasPoint() && !HasMidpoint() && ( !m_editPoints || m_editPoints->GetParent()->Type() != PCB_GROUP_T ); }
 
 private:
     ///< Set up handlers for various events.
