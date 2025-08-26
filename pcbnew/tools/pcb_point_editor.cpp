@@ -1526,7 +1526,11 @@ public:
         }
 
         VECTOR2I tl = aPoints.Point( RECT_TOP_LEFT ).GetPosition();
+        VECTOR2I tr = aPoints.Point( RECT_TOP_RIGHT ).GetPosition();
+        VECTOR2I bl = aPoints.Point( RECT_BOT_LEFT ).GetPosition();
         VECTOR2I br = aPoints.Point( RECT_BOT_RIGHT ).GetPosition();
+
+        RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( aEditedPoint, aPoints, tl, tr, bl, br );
 
         double sx = static_cast<double>( br.x - tl.x ) / static_cast<double>( oldBox.GetWidth() );
         double sy = static_cast<double>( br.y - tl.y ) / static_cast<double>( oldBox.GetHeight() );
