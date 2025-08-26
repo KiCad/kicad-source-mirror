@@ -1538,6 +1538,7 @@ public:
                 continue;
 
             PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            aCommit.Modify( shape );
             shape->Move( -oldCenter );
             shape->Scale( scale );
             shape->Move( oldCenter );
