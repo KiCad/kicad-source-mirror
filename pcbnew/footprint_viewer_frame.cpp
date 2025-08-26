@@ -534,7 +534,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
             m_fpList->Append( footprint->GetFootprintName() );
     }
 
-    int index = m_fpList->FindString( getCurFootprintName(), true );
+    int index = wxNOT_FOUND;
+
+    if( !getCurFootprintName().IsEmpty() )
+        index = m_fpList->FindString( getCurFootprintName(), true );
 
     if( index == wxNOT_FOUND )
     {
@@ -555,6 +558,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     {
         m_fpList->SetSelection( index, true );
         m_fpList->EnsureVisible( index );
+
+        wxCommandEvent dummy;
+        ClickOnFootprintList( dummy );
     }
 }
 
