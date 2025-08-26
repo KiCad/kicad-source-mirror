@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-09 07:44+0000\n"
+"PO-Revision-Date: 2025-08-27 06:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1122,9 +1122,8 @@ msgid "Export 3D View"
 msgstr "Eksportuj model 3D"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Rozmiar obrazu:"
+msgstr "Rozmiar obrazu"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1350,9 +1349,8 @@ msgid "Height:"
 msgstr "Wysokość:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Rozwiązanie 3xR:"
+msgstr "Rozdzielczość"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
 #, fuzzy
@@ -2911,9 +2909,8 @@ msgid "Timeout"
 msgstr "Czas"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Tekst łącza:"
+msgstr "Tekst połączenia"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -2932,9 +2929,8 @@ msgid "Unable to connect to database"
 msgstr "Brak połączenia z bazą danych"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Błąd pliku danych."
+msgstr "Błąd bazy danych"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -5351,19 +5347,16 @@ msgid "Convert to Greyscale"
 msgstr "Konwertuj do skali szarości"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "Rozmiar historii plików:"
+msgstr "Historia plików została wyczyszczona."
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "Nie pokazuj ponownie"
+msgstr "Zresetuj opcję \"Nie pokazuj ponownie\"."
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "Resetuj do domyślnych"
+msgstr "Resetuj okna dialogowe do wartości domyślnych."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -6070,9 +6063,8 @@ msgid "Rotation speed:"
 msgstr "Szybkość animacji:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "Kierunek strzałki:"
+msgstr "Odwróć kierunek rotacji"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
 #, fuzzy
@@ -6342,9 +6334,9 @@ msgid "Expecting '%s'"
 msgstr "Spodziewano się '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Spodziewano się '%s'"
+msgstr "Spodziewano się %s. Otrzymano '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -7520,19 +7512,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Nie można przejrzeć gałęzi '%s': %s"
 
 #: common/git/git_branch_handler.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Nie można odnaleźć głównej gałęzi dla '%s'"
+msgstr "Nie można odnaleźć głównej gałęzi dla '%s': %s"
 
 #: common/git/git_branch_handler.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Nie można przełączyć się na '%s'"
+msgstr "Nie można przełączyć się do gałęzi '%s': %s"
 
 #: common/git/git_branch_handler.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s'"
+msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s': %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -11849,9 +11841,8 @@ msgid "%s not found"
 msgstr "Nie znaleziono %s"
 
 #: eeschema/cross-probing.cpp:236
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "Podświetlona sieć: %s"
+msgstr "Podświetlona sieć:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
@@ -14059,9 +14050,9 @@ msgid "Edit Symbol Properties"
 msgstr "Edycja właściwości symbolu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Ten plik jest już otwarty."
+msgstr "To pole zostało odziedziczone z '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:669
 #, c-format
@@ -14562,9 +14553,9 @@ msgstr "Powrót do ścieżki użytkownika '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:398
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "Nie można znormalizować ścieżki '%s%s'."
+msgstr "Nie można znormalizować ścieżki '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:404
 msgid "No project or path defined for the current schematic."
@@ -17967,9 +17958,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s jest połączony zarówno do %s jak i %s"
 
 #: eeschema/erc/erc.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "Pin %s jest połączony zarówno do %s jak i %s"
+msgstr "Pin %s nie jest połączony z siecią masy"
 
 #: eeschema/erc/erc.cpp:1500
 #, c-format
@@ -18596,9 +18587,11 @@ msgstr "Przerwij zapis projektu"
 
 #: eeschema/files-io.cpp:1271 eeschema/files-io.cpp:1297 pcbnew/files.cpp:1202
 #: pcbnew/files.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+msgstr ""
+"Nie mogę automatycznie zapisać plików w folderze '%s', oznaczonym jako tylko "
+"do odczytu"
 
 #: eeschema/files-io.cpp:1444
 #, c-format
@@ -23086,9 +23079,8 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Bieżący symbol został zmieniony.  Zapisać zmiany?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:350
-#, fuzzy
 msgid "Create symbol in library:"
-msgstr "Utwórz bibliotekę symboli"
+msgstr "Utwórz symbol w bibliotece:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
@@ -23296,9 +23288,8 @@ msgid "Import Symbol"
 msgstr "Importuj symbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:46
-#, fuzzy
 msgid "Import symbol to library:"
-msgstr "Importuje symbol do bieżącej biblioteki"
+msgstr "Importuj symbol do biblioteki:"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:93
 #: pcbnew/load_select_footprint.cpp:352
@@ -24011,9 +24002,8 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr "Kopiuje blok projektowy i rysuje go jako bieżący arkusz"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "Umieść elementy z arkusza:"
+msgstr "Umieść piny z arkusza"
 
 #: eeschema/tools/sch_actions.cpp:576
 #, fuzzy
@@ -25854,9 +25844,9 @@ msgid "Layers Settings"
 msgstr "Ustawienia warstw"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d:"
-msgstr "Warstwa %d"
+msgstr "Warstwa %d:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:169
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:233
@@ -28337,9 +28327,8 @@ msgid "Pre-configured libraries"
 msgstr "Migracja bibliotek"
 
 #: kicad/dialogs/dialog_template_selector.cpp:104
-#, fuzzy
 msgid "- Common components and footprints already linked"
-msgstr "Na podstawie nadrzędnego łącza biblioteki:"
+msgstr "- Wspólne komponenty i footprinty aktualnie połączone"
 
 #: kicad/dialogs/dialog_template_selector.cpp:105
 #, fuzzy
@@ -28378,9 +28367,8 @@ msgid "- README files and design notes"
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:109
-#, fuzzy
 msgid "Manufacturing files"
-msgstr "Producent:"
+msgstr "Pliki produkcyjne"
 
 #: kicad/dialogs/dialog_template_selector.cpp:109
 msgid "- Gerber and drill file configurations"
@@ -28400,9 +28388,8 @@ msgid "Begin with basic templates and add more elements as you go."
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
-#, fuzzy
 msgid "Customize Later:"
-msgstr "Personalizuj paski narzędzi"
+msgstr "Personalizuj później:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:115
 msgid ""
@@ -28411,9 +28398,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
-#, fuzzy
 msgid "Save Your Own:"
-msgstr "Zapisz dziennik zdarzeń trasowania"
+msgstr "Zapisz samodzielnie:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:116
 msgid ""
@@ -28899,9 +28885,8 @@ msgid "Add Default Repository"
 msgstr "Dodaj do domyślnego repozytorium"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
-#, fuzzy
 msgid "Fully qualified repository url:"
-msgstr "Wprowadź w pełni kwalifikowany adres URL repozytorium"
+msgstr "W pełni kwalifikowany adres URL repozytorium:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 #, fuzzy
@@ -29940,9 +29925,8 @@ msgid "File not found"
 msgstr "Nie znaleziono pliku"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "Nie można załadować '%s'."
+msgstr "Nie można załadować PDF"
 
 #: libs/kiplatform/include/printing.h:50
 #, fuzzy
@@ -29950,9 +29934,8 @@ msgid "Failed to print"
 msgstr "Footprinty filtrowane"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "%s nie jest obsługiwany."
+msgstr "Nie jest obsługiwany"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:509
@@ -33581,7 +33564,7 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>Istnieje %i użytych przedrostków oznaczeń<br/"
+"<br/>Użyto %i przedrostków oznaczeń<br/"
 ">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:322
@@ -33965,9 +33948,8 @@ msgid "Back copper area:"
 msgstr "Dolna warstwa miedzi:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Min track clearance:"
-msgstr "Minimalny prześwit"
+msgstr "Minimalna odległość ścieżek:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 #, fuzzy
@@ -33975,9 +33957,8 @@ msgid "Min track width:"
 msgstr "Miminalna szerokość ścieżki:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Min drill diameter:"
-msgstr "Minimalna średnica otworu: "
+msgstr "Minimalna średnica otworu:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 #, fuzzy
@@ -34010,9 +33991,8 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:188
-#, fuzzy
 msgid "Castellated pad:"
-msgstr "Pole z kastelacją"
+msgstr "Pole z kastelacją:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:189
 msgid "Press-fit pad:"
@@ -34115,14 +34095,12 @@ msgid "Min track width"
 msgstr "Minimalna szerokość ścieżki"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:868
-#, fuzzy
 msgid "Min drill diameter"
-msgstr "Minimalna średnica otworu: "
+msgstr "Minimalna średnica otworu"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:871
-#, fuzzy
 msgid "Board stackup thickness"
-msgstr "Grubość płytki:"
+msgstr "Grubość stosu warstw płytki"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:918
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -35821,9 +35799,8 @@ msgid "Y position:"
 msgstr "Pozycja Y:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:74
-#, fuzzy
 msgid "Output units:"
-msgstr "Jednostki wyjściowe"
+msgstr "Jednostki wyjściowe:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:84
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
@@ -36816,14 +36793,12 @@ msgid "Custom Layers"
 msgstr "Personalizuj paski narzędzi"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:189
-#, fuzzy
 msgid "Use custom stackup"
-msgstr "Użyj wartości użytkownika..."
+msgstr "Użyj stosu użytkownika"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
-#, fuzzy
 msgid "Copper layers"
-msgstr "Warstwy miedzi:"
+msgstr "Warstwy miedzi"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:205
 #, fuzzy
@@ -37318,9 +37293,9 @@ msgid "Unlocked vias"
 msgstr "Odblokowane ścieżki"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "Tylko bieżąca warstwa"
+msgstr "Tylko bieżąca warstwa (%s)"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -44618,9 +44593,8 @@ msgid "Save Footprint Association File"
 msgstr "Zapisz plik z przydziałem footprintów do komponentów"
 
 #: pcbnew/exporters/export_gencad.cpp:45
-#, fuzzy
 msgid "Export to GenCAD"
-msgstr "Eksportuj jako GenCAD..."
+msgstr "Eksportuj jako GenCAD"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:176
 msgid ""
@@ -44744,9 +44718,8 @@ msgstr ""
 "Czas eksportu %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:655
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Napotkano problemy podczas nakładania kształtów **\n"
+msgstr "** Napotkano problemy podczas łączenia kształtów **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:2054
@@ -44759,141 +44732,132 @@ msgid "Warnings:\n"
 msgstr "Ostrzeżenia:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:690
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain wygenerowało pusty kształt **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain wygenerowało pusty kształt **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "Błąd OCC podczas dodawania pola/przelotki strefy.\n"
+msgstr "Błąd OCC podczas dodawania pola/przelotki strefy."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "Nie można dodać kształtu (%d punktów) do warstwy miedzi %s.\n"
+msgstr "Nie można dodać kształtu (%d punktów) na warstwę miedzi %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "Nie ma zdefiniowanego modelu dla %s.\n"
+msgstr "Nie ma zdefiniowanego modelu dla %s."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "Nie ma modelu dla pliku '%s'.\n"
+msgstr "Nie ma modelu w pliku '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "Brak danych o pozycji dla pliku '%s'.\n"
+msgstr "Brak danych o lokalizacji w pliku '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "Nie można dodać komponentu z nazwą pliku '%s'.\n"
+msgstr "Nie można dodać komponentu z nazwą pliku '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "Wystąpił wyjątek OCC podczas budowania segmentu kształtu: %s\n"
+msgstr "Wystąpił wyjątek OCC podczas budowania segmentu kształtu: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "Wystąpił wyjątek OCC podczas budowania postaci: %s\n"
+msgstr "Wystąpił wyjątek OCC podczas budowania postaci: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1444
 #: pcbnew/exporters/step/step_pcb_model.cpp:1831
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Nie udało się utworzyć kształtu pryzmatycznego\n"
+msgstr "Nie udało się utworzyć kształtu pryzmatycznego"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
 msgstr ""
-"Niepowodzenie podczas tworzenia krawędzi segmentu (%d %d) -> (%d %d), "
-"pomijam\n"
+"Niepowodzenie podczas tworzenia krawędzi segmentu (%d %d) -> (%d %d), pomijam"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr ""
-"Niepowodzenie podczas umieszczania krawędzi segmentu (%d %d) -> (%d %d)\n"
+msgstr "Niepowodzenie podczas umieszczania krawędzi segmentu (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
 "Niepowodzenie podczas umieszczania krzywej łuku z (%d %d), łuk p0 (%d %d), "
-"centrum (%d %d), p1 (%d %d)\n"
+"centrum (%d %d), p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
 msgstr ""
-"Niepowodzenie podczas kończenia połączenia na pozycji %d, %d -> %d, %d **\n"
+"Niepowodzenie podczas kończenia połączenia na pozycji %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "Wystąpił wyjątek OCC podczas tworzenia połączenia: %s\n"
+msgstr "Wystąpił wyjątek OCC podczas tworzenia połączenia: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Połączenie niedokończone (%d punktów konturu): błąd OCC %d\n"
-"z: %g; obszar: %s\n"
+"z: %g; obszar: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "Sprawdzenie zakłóceń własnych przewodu nie powiodło się\n"
-"z: %g; obszar: %s\n"
+"z: %g; obszar: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1765
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Użycie nieuproszczonego wielokąta.\n"
+msgstr "Użycie nieuproszczonego wielokąta."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1812
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "Wystąpił wyjątek OCC podczas tworzenia konturu %d: %s\n"
+msgstr "Wystąpił wyjątek OCC podczas tworzenia konturu %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1842
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Pominięto widok **\n"
+msgstr "** Pominięto widok **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1932
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "Wystąpił błąd OCC podczas tworzenia głównego obrysu.\n"
+msgstr "Wystąpił błąd OCC podczas tworzenia głównego obrysu."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1958
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "Wystąpił błąd OCC podczas tworzenia otworu w głównym obrysie.\n"
+msgstr "Wystąpił błąd OCC podczas tworzenia otworu w głównym obrysie."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "Odejmowanie otworów dla %s\n"
+msgstr "Odejmowanie otworów dla %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Napotkano problemy podczas wycinania %s sieć '%s' **\n"
+msgstr "** Napotkano problemy podczas wycinania %s sieć '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2097
 msgid "shapes"
@@ -44913,11 +44877,10 @@ msgstr "przelotki"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3217
 #: pcbnew/exporters/step/step_pcb_model.cpp:3291
 #: pcbnew/exporters/step/step_pcb_model.cpp:3359
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr ""
-"Nieprawidłowe dane o montażu PCB; nie można utworzyć pliku wyjściowego "
-"'%s'.\n"
+"Nieprawidłowe dane o montażu PCB; nie można utworzyć pliku wyjściowego '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
 #, c-format
@@ -44953,19 +44916,19 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
 #: pcbnew/exporters/step/step_pcb_model.cpp:3340
 #: pcbnew/exporters/step/step_pcb_model.cpp:3389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na '%s'.\n"
+msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2939
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Nie można zidentyfikować typu pliku dla '%s'.\n"
+msgstr "Nie można zidentyfikować obecnego typu pliku dla '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2949
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "Nie udało się przenieść danych o modelu z pliku '%s'.\n"
+msgstr "Nie udało się przenieść danych o modelu z pliku '%s'."
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -45397,9 +45360,8 @@ msgid "Export Footprints"
 msgstr "Eksportuj footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:638
-#, fuzzy
 msgid "Export footprints to library:"
-msgstr "Eksportuj footprint do edytora"
+msgstr "Eksportuj footprinty do biblioteki:"
 
 #: pcbnew/footprint_libraries_utils.cpp:639
 msgid "Update board footprints to link to exported footprints"
@@ -48396,9 +48358,11 @@ msgid "Generating BOM section"
 msgstr "Generowania sekcji BOM"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'."
+msgstr ""
+"Footprint %s nie został znaleziony w bibliotece; dane BOM mogą być "
+"niekompletne."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
@@ -48449,9 +48413,8 @@ msgid "Saving file"
 msgstr "Zapis pliku"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3467
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Nie udało się zapisać bufora do pliku"
+msgstr "Nie udało się zapisać w buforze danych IPC-2581."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -53094,9 +53057,9 @@ msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
 #: pcbnew/tools/pcb_control.cpp:1498
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Nazwa footprintu nie może być pusta."
+msgstr "Footprint %s jest zablokowany i nie można go umieścić."
 
 #: pcbnew/tools/pcb_control.cpp:1583
 #, c-format
