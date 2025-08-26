@@ -247,6 +247,10 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
         ret = new PGPROPERTY_RATIO();
         break;
 
+    case PROPERTY_DISPLAY::PT_NET:
+        ret = new PGPROPERTY_NET( aProperty->Choices() );
+        break;
+
     default:
         wxFAIL;
         KI_FALLTHROUGH;
@@ -791,4 +795,20 @@ bool PGPROPERTY_TIME::ValidateValue( wxVariant& aValue, wxPGValidationInfo& aVal
 wxValidator* PGPROPERTY_TIME::DoGetValidator() const
 {
     return nullptr;
+}
+
+
+PGPROPERTY_NET::PGPROPERTY_NET( const wxPGChoices& aChoices ) :
+        wxEnumProperty( wxPG_LABEL, wxPG_LABEL, const_cast<wxPGChoices&>( aChoices ) )
+{
+    SetEditor( wxS( "PG_NET_SELECTOR_EDITOR" ) );
+}
+
+
+const wxPGEditor* PGPROPERTY_NET::DoGetEditorClass() const
+{
+    wxCHECK_MSG( m_customEditor, wxPGEditor_Choice,
+                 wxT( "Make sure to RegisterEditorClass() for PGPROPERTY_NET!" ) );
+
+    return m_customEditor;
 }

@@ -66,6 +66,7 @@ enum PROPERTY_DISPLAY
     PT_DECIDEGREE, ///< Angle expressed in decidegrees
     PT_RATIO,
     PT_TIME, ///< Time expressed in ps
+    PT_NET,        ///< Net selection property
 };
 
 ///< Macro to generate unique identifier for a type

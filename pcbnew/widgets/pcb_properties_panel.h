@@ -32,6 +32,7 @@ class PROPERTY_MANAGER;
 class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
 class PG_RATIO_EDITOR;
+class PG_NET_SELECTOR_EDITOR;
 
 class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -61,6 +62,7 @@ protected:
     PG_UNIT_EDITOR*      m_unitEditorInstance;
     PG_CHECKBOX_EDITOR*  m_checkboxEditorInstance;
     PG_RATIO_EDITOR*     m_ratioEditorInstance;
+    PG_NET_SELECTOR_EDITOR* m_netSelectorEditorInstance;
 
     wxPGChoices m_nets;
 };

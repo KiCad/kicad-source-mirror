@@ -2535,7 +2535,7 @@ static struct PCB_TUNING_PATTERN_DESC
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, int>( _HKI( "Net" ),
                                      &PCB_TUNING_PATTERN::SetNetCode,
-                                     &PCB_TUNING_PATTERN::GetNetCode ) );
+                                     &PCB_TUNING_PATTERN::GetNetCode, PT_NET ) );
 
         const wxString groupTechLayers = _HKI( "Technical Layers" );
 

@@ -213,7 +213,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
 
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
                              &BOARD_CONNECTED_ITEM::SetNetCode,
-                             &BOARD_CONNECTED_ITEM::GetNetCode ) )
+                             &BOARD_CONNECTED_ITEM::GetNetCode, PT_NET ) )
                 .SetIsHiddenFromRulesEditor()
                 .SetIsHiddenFromLibraryEditors();
 

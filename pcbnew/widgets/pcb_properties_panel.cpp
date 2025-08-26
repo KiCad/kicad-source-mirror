@@ -32,6 +32,7 @@
 #include <properties/pg_editors.h>
 #include <board_commit.h>
 #include <board_connected_item.h>
+#include <board.h>
 #include <properties/pg_properties.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
@@ -41,6 +42,82 @@
 #include <pad.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
+#include <widgets/net_selector.h>
+#include <widgets/ui_common.h>
+
+
+class PG_NET_SELECTOR_EDITOR : public wxPGEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    PG_NET_SELECTOR_EDITOR( PCB_BASE_EDIT_FRAME* aFrame ) : m_frame( aFrame )
+    {
+    }
+
+    wxString GetName() const override { return EDITOR_NAME; }
+
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                   const wxPoint& aPos, const wxSize& aSize ) const override
+    {
+        NET_SELECTOR* editor = new NET_SELECTOR( aGrid->GetPanel(), wxID_ANY, aPos, aSize, 0 );
+
+        if( BOARD* board = m_frame->GetBoard() )
+            editor->SetNetInfo( &board->GetNetInfo() );
+
+        editor->SetIndeterminateString( INDETERMINATE_STATE );
+        UpdateControl( aProperty, editor );
+
+        editor->Bind( FILTERED_ITEM_SELECTED,
+                      [=]( wxCommandEvent& aEvt )
+                      {
+                          auto& choices = const_cast<wxPGChoices&>( aProperty->GetChoices() );
+                          wxString netname = editor->GetSelectedNetname();
+
+                          if( choices.Index( netname ) == wxNOT_FOUND )
+                              choices.Add( netname, editor->GetSelectedNetcode() );
+
+                          wxVariant val( editor->GetSelectedNetcode() );
+                          aGrid->ChangePropertyValue( aProperty, val );
+                      } );
+
+        return editor;
+    }
+
+    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override
+    {
+        if( NET_SELECTOR* editor = dynamic_cast<NET_SELECTOR*>( aCtrl ) )
+        {
+            if( aProperty->IsValueUnspecified() )
+                editor->SetIndeterminate();
+            else
+                editor->SetSelectedNetcode( (int) aProperty->GetValue().GetLong() );
+        }
+    }
+
+    bool GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty,
+                              wxWindow* aCtrl ) const override
+    {
+        NET_SELECTOR* editor = dynamic_cast<NET_SELECTOR*>( aCtrl );
+
+        if( !editor )
+            return false;
+
+        aVariant = static_cast<long>( editor->GetSelectedNetcode() );
+        return true;
+    }
+
+    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow,
+                  wxEvent& aEvent ) const override
+    {
+        return false;
+    }
+
+private:
+    PCB_BASE_EDIT_FRAME* m_frame;
+};
+
+const wxString PG_NET_SELECTOR_EDITOR::EDITOR_NAME = wxS( "PG_NET_SELECTOR_EDITOR" );
 
 
 
@@ -93,6 +170,18 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     else
     {
         m_ratioEditorInstance = static_cast<PG_RATIO_EDITOR*>( it->second );
+    }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_NET_SELECTOR_EDITOR::EDITOR_NAME );
+
+    if( it == wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        PG_NET_SELECTOR_EDITOR* netEditor = new PG_NET_SELECTOR_EDITOR( m_frame );
+        m_netSelectorEditorInstance = static_cast<PG_NET_SELECTOR_EDITOR*>( wxPropertyGrid::RegisterEditorClass( netEditor ) );
+    }
+    else
+    {
+        m_netSelectorEditorInstance = static_cast<PG_NET_SELECTOR_EDITOR*>( it->second );
     }
 }
 
@@ -303,5 +392,7 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
-    m_propMgr.GetProperty( TYPE_HASH( PCB_TUNING_PATTERN ), _HKI( "Net" ) )->SetChoices( nets );
+
+    auto tuningNet = m_propMgr.GetProperty( TYPE_HASH( PCB_TUNING_PATTERN ), _HKI( "Net" ) );
+    tuningNet->SetChoices( nets );
 }

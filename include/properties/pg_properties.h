@@ -366,4 +366,15 @@ protected:
     EDA_DRAW_FRAME* m_parentFrame;
 };
 
+
+class PGPROPERTY_NET : public wxEnumProperty
+{
+public:
+    PGPROPERTY_NET( const wxPGChoices& aChoices = wxPGChoices() );
+
+    virtual ~PGPROPERTY_NET() = default;
+
+    const wxPGEditor* DoGetEditorClass() const override;
+};
+
 #endif /* PG_PROPERTIES_H */
