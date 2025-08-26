@@ -34,6 +34,7 @@
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <board_commit.h>
+#include <eda_group.h>
 #include <layer_ids.h>
 #include <kidialog.h>
 #include <tools/pcb_tool_base.h>
@@ -1973,6 +1974,9 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 
     if( parent )
     {
+        if( PCB_GROUP* group = parent->GetParentGroup() )
+            m_itemGroups[parent] = group;
+
         m_commit->Remove( parent );
     }
 }
@@ -2165,6 +2169,15 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         newNetInfo->SetNetClass( m_board->GetDesignSettings().m_NetSettings->GetDefaultNetclass() );
     }
 
+    if( newBoardItem )
+    {
+        if( BOARD_ITEM* src = aItem->GetSourceItem() )
+        {
+            if( m_itemGroups.contains( src ) )
+                m_replacementMap[src].push_back( newBoardItem );
+        }
+    }
+
     return newBoardItem;
 }
 
@@ -2205,6 +2218,21 @@ void PNS_KICAD_IFACE::Commit()
     }
 
     m_fpOffsets.clear();
+
+    for( const auto& [ src, items ] : m_replacementMap )
+    {
+        if( auto it = m_itemGroups.find( src ); it != m_itemGroups.end() )
+        {
+            PCB_GROUP* group = it->second;
+            m_commit->Modify( group );
+
+            for( BOARD_ITEM* bi : items )
+                group->AddItem( bi );
+        }
+    }
+
+    m_itemGroups.clear();
+    m_replacementMap.clear();
 
     m_commit->Push( _( "Routing" ), m_commitFlags );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
