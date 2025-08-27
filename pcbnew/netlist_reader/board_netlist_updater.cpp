@@ -480,12 +480,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     // the footprint fields to match the symbol, so we manually check the fields
     // in the order they are stored in the symbol.
     bool same = true;
+    bool remove_only = true;
 
     for( const auto& [name, value] : compFields )
     {
         if( fpFieldsAsMap.count( name ) == 0 || fpFieldsAsMap[name] != value )
         {
             same = false;
+            remove_only = false;
             break;
         }
     }
@@ -503,7 +505,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     {
         if( m_isDryRun )
         {
-            if( m_updateFields )
+            if( m_updateFields && ( !remove_only || m_removeExtraFields ) )
             {
                 msg.Printf( _( "Update %s fields." ), aPcbFootprint->GetReference() );
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -530,7 +532,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         }
         else
         {
-            if( m_updateFields )
+            if( m_updateFields && ( !remove_only || m_removeExtraFields ) )
             {
                 msg.Printf( _( "Updated %s fields." ), aPcbFootprint->GetReference() );
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
