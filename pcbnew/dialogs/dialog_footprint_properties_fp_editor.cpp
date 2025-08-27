@@ -43,6 +43,7 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <grid_layer_box_helpers.h>
+#include <layer_utils.h>
 #include <kiplatform/ui.h>
 #include <panel_embedded_files.h>
 #include <panel_fp_properties_3d_model.h>
@@ -575,19 +576,6 @@ static LSET GetAllUsedFootprintLayers( const FOOTPRINT& aFootprint )
 }
 
 
-static wxString GetLayerStringList( const BOARD& aBoard, const LSET& layers )
-{
-    std::vector<wxString> layerNames;
-
-    for( PCB_LAYER_ID layer : layers.UIOrder() )
-    {
-        layerNames.push_back( aBoard.GetLayerName( layer ) );
-    }
-
-    return AccumulateDescriptions( layerNames );
-}
-
-
 bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
 {
     if( !m_itemsGrid->CommitPendingChanges() )
@@ -692,7 +680,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
         m_delayedErrorMessage =
                 wxString::Format( _( "You are trying to remove layers that are used by the footprint: %s.\n"
                                      "Please remove the objects that use these layers first." ),
-                                  GetLayerStringList( *m_frame->GetBoard(), usedLayers ) );
+                                  LAYER_UTILS::AccumulateNames( usedLayers, m_frame->GetBoard() ) );
         m_delayedFocusGrid = m_customUserLayersGrid;
         m_delayedFocusColumn = 0;
         m_delayedFocusRow = 0;

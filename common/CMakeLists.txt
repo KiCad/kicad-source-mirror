@@ -877,6 +877,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_marker.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/fix_board_shape.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/layer_utils.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_list.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pad.cpp

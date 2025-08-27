@@ -22,6 +22,7 @@
  */
 
 #include <layer_range.h>
+#include <layer_utils.h>
 #include <kiway.h>
 #include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -581,6 +582,74 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
 }
 
 
+/**
+ * Compare the stackup related settings of two footprints.
+ *
+ * Returns true if they differ.
+ */
+bool stackupNeedsUpdate( const FOOTPRINT& a, const FOOTPRINT& b, REPORTER* aReporter )
+{
+    bool diff = false;
+
+    TEST( a.GetStackupMode(), b.GetStackupMode(),
+          wxString::Format( _( "Footprint stackup mode differs." ) ) );
+
+    const LSET& aLayers = a.GetLayerSet();
+    const LSET& bLayers = b.GetLayerSet();
+
+    TEST( aLayers, bLayers,
+          wxString::Format( _( "Footprint layers differ." ) ) );
+
+    return diff;
+}
+
+
+/**
+ * Report board->footprint stackup differences.
+ *
+ * This is not necessarily a comparison failure, but may be useful information
+ * for the user to see.
+ *
+ * @return true if there is
+ */
+bool footprintVsBoardStackup( const FOOTPRINT& aFp, const BOARD& aBoard, REPORTER* aReporter )
+{
+    if( aFp.GetStackupMode() == FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS )
+        return false;
+
+    // Filter only layers that can differ between footprint and board
+    const LSET& fpLayers = aFp.GetStackupLayers();
+    const LSET& brdLayers = aBoard.GetEnabledLayers() & ( LSET::AllCuMask() | LSET::UserDefinedLayersMask() );
+
+    bool mismatch = false;
+
+    // Any layer in the FP and not on the board is flagged
+    const LSET onlyInFp = fpLayers & ~brdLayers;
+
+    if( onlyInFp.count() )
+    {
+        mismatch = true;
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "Footprint has %lu layers not on board: %s" ), onlyInFp.count(),
+                                                 LAYER_UTILS::AccumulateNames( onlyInFp, &aBoard ) ) );
+    }
+
+    // Only look at copper layers here: user layers on the board and not in the FP is normal
+    const LSET cuOnlyInBoard = ( brdLayers & ~fpLayers ) & LSET::AllCuMask();
+
+    if( cuOnlyInBoard.count() )
+    {
+        mismatch = true;
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "Board has %lu copper layers not in footprint: %s" ),
+                                                 cuOnlyInBoard.count(),
+                                                 LAYER_UTILS::AccumulateNames( cuOnlyInBoard, &aBoard ) ) );
+    }
+
+    return mismatch;
+}
+
+
 bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags,
                                       REPORTER* aReporter )
 {
@@ -617,6 +686,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
 
     aLibFP = temp.get();
 
+    // These checks don't set off errors, they're just informational
+    footprintVsBoardStackup( *this, *GetBoard(), aReporter );
+
 #define TEST_ATTR( a, b, attr, msg ) TEST( ( a & attr ), ( b & attr ), msg )
 
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
@@ -648,6 +720,12 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
 
 #define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
 #define CHECKPOINT { if( diff && !aReporter ) return diff; }
+
+    if( stackupNeedsUpdate( *this, *aLibFP, aReporter ) )
+    {
+        diff = true;
+        REPORT( _( "Footprint stackup differs." ) );
+    }
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
