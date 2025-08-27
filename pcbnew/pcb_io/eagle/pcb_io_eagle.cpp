@@ -2926,10 +2926,9 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
 
             // therefore omit this signal/net.
         }
-        else
-        {
-            netCode++;
-        }
+
+        //Next signal needs a new netCode
+        netCode++;
 
         // Get next signal
         net = net->GetNext();
