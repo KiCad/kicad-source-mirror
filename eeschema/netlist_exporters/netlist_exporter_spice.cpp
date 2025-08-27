@@ -180,22 +180,23 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !symbol || symbol->ResolveExcludedFromSim() )
                 continue;
 
-            wxString ref = symbol->GetRef( &sheet );
-
-            if( !refNames.insert( ref.ToStdString() ).second )
-                continue;
-
             try
             {
                 SPICE_ITEM            spiceItem;
                 std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet, true );
-                std::vector<SCH_FIELD> fields = collectSimFields( *symbol, sheet );
 
-                for( SCH_FIELD& field : fields )
-                    spiceItem.fields.push_back( field );
+                for( const SCH_FIELD& field : symbol->GetFields() )
+                {
+                    spiceItem.fields.emplace_back( symbol, FIELD_T::USER, field.GetName() );
 
-                readRefName( sheet, *symbol, spiceItem );
-                readModel( fields, *symbol, spiceItem, aReporter );
+                    if( field.GetId() == FIELD_T::REFERENCE )
+                        spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
+                    else
+                        spiceItem.fields.back().SetText( field.GetShownText( &sheet, false ) );
+                }
+
+                readRefName( sheet, *symbol, spiceItem, refNames );
+                readModel( sheet, *symbol, spiceItem, aReporter );
                 readPinNumbers( *symbol, spiceItem, pins );
                 readPinNetNames( *symbol, spiceItem, pins, ncCounter );
                 readNodePattern( spiceItem );
@@ -211,94 +212,6 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
     }
 
     return !aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR );
-}
-
-
-std::vector<SCH_FIELD> NETLIST_EXPORTER_SPICE::collectSimFields( SCH_SYMBOL& aSymbol,
-                                                                const SCH_SHEET_PATH& aSheet )
-{
-    std::vector<SCH_FIELD>                     fields;
-    SCH_FIELD*                                 pinsFieldPtr = nullptr;
-    std::vector<std::pair<wxString, wxString>> pinList;
-    std::set<wxString>                         pinNames;
-
-    for( const SCH_FIELD& field : aSymbol.GetFields() )
-    {
-        fields.emplace_back( &aSymbol, FIELD_T::USER, field.GetName() );
-
-        if( field.GetId() == FIELD_T::REFERENCE )
-            fields.back().SetText( aSymbol.GetRef( &aSheet ) );
-        else
-            fields.back().SetText( field.GetShownText( &aSheet, false ) );
-
-        if( field.GetName() == SIM_PINS_FIELD )
-            pinsFieldPtr = &fields.back();
-    }
-
-    auto parsePins = [&]( const wxString& aPins )
-    {
-        wxStringTokenizer tokenizer( aPins, wxS( " \t\r\n" ), wxTOKEN_STRTOK );
-
-        while( tokenizer.HasMoreTokens() )
-        {
-            wxString token = tokenizer.GetNextToken();
-            int      pos = token.Find( wxS( '=' ) );
-
-            if( pos == wxNOT_FOUND )
-                continue;
-
-            wxString name = token.Left( pos );
-            wxString node = token.Mid( pos + 1 );
-
-            if( pinNames.insert( name ).second )
-                pinList.emplace_back( name, node );
-        }
-    };
-
-    if( pinsFieldPtr )
-        parsePins( pinsFieldPtr->GetText() );
-
-    wxString ref = aSymbol.GetRef( &aSheet );
-
-    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
-    {
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
-        {
-            SCH_SYMBOL* other = static_cast<SCH_SYMBOL*>( item );
-
-            if( other == &aSymbol )
-                continue;
-
-            if( other->GetRef( &sheet ) != ref )
-                continue;
-
-            if( SCH_FIELD* pinsField = other->GetField( SIM_PINS_FIELD ) )
-                parsePins( pinsField->GetShownText( &sheet, false ) );
-        }
-    }
-
-    if( !pinList.empty() )
-    {
-        wxString merged;
-
-        for( const auto& pin : pinList )
-        {
-            if( !merged.IsEmpty() )
-                merged += wxS( " " );
-
-            merged += pin.first + wxS( "=" ) + pin.second;
-        }
-
-        if( pinsFieldPtr )
-            pinsFieldPtr->SetText( merged );
-        else
-        {
-            fields.emplace_back( &aSymbol, FIELD_T::USER, SIM_PINS_FIELD );
-            fields.back().SetText( merged );
-        }
-    }
-
-    return fields;
 }
 
 
@@ -496,17 +409,19 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
 
 void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
-                                          SPICE_ITEM& aItem )
+                                          SPICE_ITEM& aItem, std::set<std::string>& aRefNames )
 {
     aItem.refName = aSymbol.GetRef( &aSheet );
+
+    if( !aRefNames.insert( aItem.refName ).second )
+        wxASSERT( wxT( "Duplicate refdes encountered; what happened to ReadyToNetlist()?" ) );
 }
 
 
-void NETLIST_EXPORTER_SPICE::readModel( const std::vector<SCH_FIELD>& aFields, SCH_SYMBOL& aSymbol,
+void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
                                         SPICE_ITEM& aItem, REPORTER& aReporter )
 {
-    const SIM_LIBRARY::MODEL& libModel =
-            m_libMgr.CreateModel( aFields, true, 0, aSymbol.GetAllLibPins(), aReporter );
+    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true, 0, aReporter );
 
     aItem.baseModelName = libModel.name;
     aItem.model = &libModel.model;
@@ -529,7 +444,7 @@ void NETLIST_EXPORTER_SPICE::readModel( const std::vector<SCH_FIELD>& aFields, S
         wxFileName cacheFn;
         cacheFn.AssignDir( PATHS::GetUserCachePath() );
         cacheFn.AppendDir( wxT( "ibis" ) );
-        cacheFn.SetFullName( aItem.refName + wxT( ".cache" ) );
+        cacheFn.SetFullName( aSymbol.GetRef( &aSheet ) + wxT( ".cache" ) );
 
         wxFile cacheFile( cacheFn.GetFullPath(), wxFile::write );
 
