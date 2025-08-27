@@ -717,10 +717,10 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     {
         PAD* pad = static_cast<PAD*>( aOther );
 
-        if( pad->HitTest( pointA ) )
+        if( pad->HitTest( pointA, 0, layer ) )
             return false;
 
-        if( pad->HitTest( pointB ) )
+        if( pad->HitTest( pointB, 0, layer ) )
             return false;
     }
 

@@ -236,8 +236,11 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
             }
 
-            if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
-                // The track is entirely inside the pad; cannot create a teardrop
+            bool startHitsPad = pad->HitTest( track->GetStart(), 0, track->GetLayer() );
+            bool endHitsPad = pad->HitTest( track->GetEnd(), 0, track->GetLayer() );
+
+            // if the track is entirely inside the pad, cannot create a teardrop
+            if( startHitsPad && endHitsPad )
                 continue;
 
             // Skip case where pad and the track are within a copper zone with the same net

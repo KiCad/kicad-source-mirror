@@ -1445,6 +1445,20 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 }
 
 
+bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy, PCB_LAYER_ID aLayer ) const
+{
+    VECTOR2I delta = aPosition - GetPosition();
+    int      boundingRadius = GetBoundingRadius() + aAccuracy;
+
+    if( delta.SquaredEuclideanNorm() > SEG::Square( boundingRadius ) )
+        return false;
+
+    bool contains = GetEffectivePolygon( aLayer, ERROR_INSIDE )->Contains( aPosition, -1, aAccuracy );
+
+    return contains;
+}
+
+
 bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     VECTOR2I delta = aPosition - GetPosition();
