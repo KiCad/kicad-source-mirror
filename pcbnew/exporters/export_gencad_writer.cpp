@@ -31,6 +31,7 @@
 #include <locale_io.h>
 #include <macros.h>
 #include <hash_eda.h>
+#include <fmt/format.h>
 
 
 /// Layer names for GenCAD export.
@@ -163,9 +164,6 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
     if( !m_file )
         return false;
 
-    // Switch the locale to standard C (needed to print floating point numbers)
-    LOCALE_IO toggle;
-
     BOARD*  pcb = m_board;
 
     // Update some board data, to ensure a reliable GenCAD export.
@@ -189,27 +187,35 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
         }
     }
 
-    /* GenCAD has some mandatory and some optional sections: some importer
-     * need the padstack section (which is optional) anyway. Also the
-     * order of the section *is* important */
+    bool success = true;
+    try
+    {
+        /* GenCAD has some mandatory and some optional sections: some importer
+         * need the padstack section (which is optional) anyway. Also the
+         * order of the section *is* important */
 
-    createHeaderInfoData();         // GenCAD header
-    createBoardSection();           // Board perimeter
+        createHeaderInfoData();         // GenCAD header
+        createBoardSection();           // Board perimeter
 
-    createPadsShapesSection();      // Pads and padstacks
-    createArtworksSection();        // Empty but mandatory
+        createPadsShapesSection();      // Pads and padstacks
+        createArtworksSection();        // Empty but mandatory
 
-    /* GenCAD splits a footprint information in shape, component and device.
-     * We don't do any sharing (it would be difficult since each module is
-     * customizable after placement) */
-    createShapesSection();
-    createComponentsSection();
-    createDevicesSection();
+        /* GenCAD splits a footprint information in shape, component and device.
+         * We don't do any sharing (it would be difficult since each module is
+         * customizable after placement) */
+        createShapesSection();
+        createComponentsSection();
+        createDevicesSection();
 
-    // In a similar way the netlist is split in net, track and route
-    createSignalsSection();
-    createTracksInfoData();
-    createRoutesSection();
+        // In a similar way the netlist is split in net, track and route
+        createSignalsSection();
+        createTracksInfoData();
+        createRoutesSection();
+    }
+    catch( ... )
+    {
+        success = false;
+    }
 
     fclose( m_file );
 
@@ -226,7 +232,7 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
     componentShapes.clear();
     shapeNames.clear();
 
-    return true;
+    return success;
 }
 
 
@@ -249,8 +255,8 @@ static bool viaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 void GENCAD_EXPORTER::createArtworksSection()
 {
     // The ARTWORKS section is empty but (officially) mandatory
-    fputs( "$ARTWORKS\n", m_file );
-    fputs( "$ENDARTWORKS\n\n", m_file );
+    fmt::print( m_file, "$ARTWORKS\n" );
+    fmt::print( m_file, "$ENDARTWORKS\n\n" );
 }
 
 
@@ -272,7 +278,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
     LSET    master_layermask = m_board->GetDesignSettings().GetEnabledLayers();
     int     cu_count = m_board->GetCopperLayerCount();
 
-    fputs( "$PADS\n", m_file );
+    fmt::print( m_file, "$PADS\n" );
 
     // Enumerate and sort the pads
     std::vector<PAD*> pads = m_board->GetPads();
@@ -299,12 +305,12 @@ void GENCAD_EXPORTER::createPadsShapesSection()
     for( PCB_VIA* via : vias )
     {
         viastacks.push_back( via );
-        fprintf( m_file, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
-                 via->GetWidth( PADSTACK::ALL_LAYERS ),
-                 via->GetDrillValue(),
-                 fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
-                 via->GetDrillValue() / SCALE_FACTOR,
-                 via->GetWidth( PADSTACK::ALL_LAYERS ) / (SCALE_FACTOR * 2) );
+        fmt::print( m_file, "PAD V{}.{}.{} ROUND {}\nCIRCLE 0 0 {}\n",
+                    via->GetWidth( PADSTACK::ALL_LAYERS ),
+                    via->GetDrillValue(),
+                    fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
+                    via->GetDrillValue() / SCALE_FACTOR,
+                    via->GetWidth( PADSTACK::ALL_LAYERS ) / (SCALE_FACTOR * 2) );
     }
 
     // Emit component pads
@@ -328,7 +334,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         pad_name_number++;
         pad->SetSubRatsnest( pad_name_number );
 
-        fprintf( m_file, "PAD P%d", pad->GetSubRatsnest() );
+        fmt::print( m_file, "PAD P{}", pad->GetSubRatsnest() );
 
         padstacks.push_back( pad ); // Will have its own padstack later
         int dx = pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2;
@@ -341,25 +347,25 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             KI_FALLTHROUGH;
 
         case PAD_SHAPE::CIRCLE:
-            fprintf( m_file, " ROUND %g\n",
-                     pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, " ROUND {}\n",
+                        pad->GetDrillSize().x / SCALE_FACTOR );
 
             /* Circle is center, radius */
-            fprintf( m_file, "CIRCLE %g %g %g\n",
-                     off.x / SCALE_FACTOR,
-                     -off.y / SCALE_FACTOR,
-                     pad->GetSize( PADSTACK::ALL_LAYERS ).x / (SCALE_FACTOR * 2) );
+            fmt::print( m_file, "CIRCLE {} {} {}\n",
+                        off.x / SCALE_FACTOR,
+                        -off.y / SCALE_FACTOR,
+                        pad->GetSize( PADSTACK::ALL_LAYERS ).x / (SCALE_FACTOR * 2) );
             break;
 
         case PAD_SHAPE::RECTANGLE:
-            fprintf( m_file, " RECTANGULAR %g\n",
-                     pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, " RECTANGULAR {}\n",
+                        pad->GetDrillSize().x / SCALE_FACTOR );
 
             // Rectangle is begin, size *not* begin, end!
-            fprintf( m_file, "RECTANGLE %g %g %g %g\n",
-                     (-dx + off.x ) / SCALE_FACTOR,
-                     (-dy - off.y ) / SCALE_FACTOR,
-                     dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
+            fmt::print( m_file, "RECTANGLE {} {} {} {}\n",
+                        (-dx + off.x ) / SCALE_FACTOR,
+                        (-dy - off.y ) / SCALE_FACTOR,
+                        dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
             break;
 
         case PAD_SHAPE::ROUNDRECT:
@@ -376,82 +382,82 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             int lineX = size.x / 2 - radius;
             int lineY = size.y / 2 - radius;
 
-            fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
             // bottom left arc
-            fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     ( off.x - lineX - radius ) / SCALE_FACTOR,
-                     ( -off.y - lineY ) / SCALE_FACTOR,
-                     ( off.x - lineX ) / SCALE_FACTOR,
-                     ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                     ( off.x - lineX ) / SCALE_FACTOR,
-                     ( -off.y - lineY ) / SCALE_FACTOR );
+            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR,
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR );
 
             // bottom line
             if( lineX > 0 )
             {
-                fprintf( m_file, "LINE %g %g %g %g\n",
-                         ( off.x - lineX ) / SCALE_FACTOR,
-                         ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                         ( off.x + lineX ) / SCALE_FACTOR,
-                         ( -off.y - lineY - radius ) / SCALE_FACTOR );
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            ( off.x - lineX ) / SCALE_FACTOR,
+                            ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                            ( off.x + lineX ) / SCALE_FACTOR,
+                            ( -off.y - lineY - radius ) / SCALE_FACTOR );
             }
 
             // bottom right arc
-            fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     ( off.x + lineX ) / SCALE_FACTOR,
-                     ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                     ( off.x + lineX + radius ) / SCALE_FACTOR,
-                     ( -off.y - lineY ) / SCALE_FACTOR,
-                     ( off.x + lineX ) / SCALE_FACTOR,
-                     ( -off.y - lineY ) / SCALE_FACTOR );
+            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR );
 
             // right line
             if( lineY > 0 )
             {
-                fprintf( m_file, "LINE %g %g %g %g\n",
-                         ( off.x + lineX + radius ) / SCALE_FACTOR,
-                         ( -off.y + lineY ) / SCALE_FACTOR,
-                         ( off.x + lineX + radius ) / SCALE_FACTOR,
-                         ( -off.y - lineY ) / SCALE_FACTOR );
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            ( off.x + lineX + radius ) / SCALE_FACTOR,
+                            ( -off.y + lineY ) / SCALE_FACTOR,
+                            ( off.x + lineX + radius ) / SCALE_FACTOR,
+                            ( -off.y - lineY ) / SCALE_FACTOR );
             }
 
             // top right arc
-            fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     ( off.x + lineX + radius ) / SCALE_FACTOR,
-                     ( -off.y + lineY ) / SCALE_FACTOR,
-                     ( off.x + lineX ) / SCALE_FACTOR,
-                     ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                     ( off.x + lineX ) / SCALE_FACTOR,
-                     ( -off.y + lineY ) / SCALE_FACTOR );
+            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR );
 
             // top line
             if( lineX > 0 )
             {
-                fprintf( m_file, "LINE %g %g %g %g\n",
-                         ( off.x - lineX ) / SCALE_FACTOR,
-                         ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                         ( off.x + lineX ) / SCALE_FACTOR,
-                         ( -off.y + lineY + radius ) / SCALE_FACTOR );
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            ( off.x - lineX ) / SCALE_FACTOR,
+                            ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                            ( off.x + lineX ) / SCALE_FACTOR,
+                            ( -off.y + lineY + radius ) / SCALE_FACTOR );
             }
 
             // top left arc
-            fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     ( off.x - lineX ) / SCALE_FACTOR,
-                     ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                     ( off.x - lineX - radius ) / SCALE_FACTOR,
-                     ( -off.y + lineY ) / SCALE_FACTOR,
-                     ( off.x - lineX ) / SCALE_FACTOR,
-                     ( -off.y + lineY ) / SCALE_FACTOR );
+            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR,
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR );
 
             // left line
             if( lineY > 0 )
             {
-                fprintf( m_file, "LINE %g %g %g %g\n",
-                         ( off.x - lineX - radius ) / SCALE_FACTOR,
-                         ( -off.y - lineY ) / SCALE_FACTOR,
-                         ( off.x - lineX - radius ) / SCALE_FACTOR,
-                         ( -off.y + lineY ) / SCALE_FACTOR );
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            ( off.x - lineX - radius ) / SCALE_FACTOR,
+                            ( -off.y - lineY ) / SCALE_FACTOR,
+                            ( off.x - lineX - radius ) / SCALE_FACTOR,
+                            ( -off.y + lineY ) / SCALE_FACTOR );
             }
 
             break;
@@ -459,7 +465,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
 
         case PAD_SHAPE::TRAPEZOID:
         {
-            fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
             int  ddx = pad->GetDelta( PADSTACK::ALL_LAYERS ).x / 2;
             int  ddy = pad->GetDelta( PADSTACK::ALL_LAYERS ).y / 2;
@@ -473,11 +479,11 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             for( int cur = 0; cur < 4; ++cur )
             {
                 int next = ( cur + 1 ) % 4;
-                fprintf( m_file, "LINE %g %g %g %g\n",
-                         ( off.x + poly[cur].x ) / SCALE_FACTOR,
-                         ( -off.y - poly[cur].y ) / SCALE_FACTOR,
-                         ( off.x + poly[next].x ) / SCALE_FACTOR,
-                         ( -off.y - poly[next].y ) / SCALE_FACTOR );
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            ( off.x + poly[cur].x ) / SCALE_FACTOR,
+                            ( -off.y - poly[cur].y ) / SCALE_FACTOR,
+                            ( off.x + poly[next].x ) / SCALE_FACTOR,
+                            ( -off.y - poly[next].y ) / SCALE_FACTOR );
             }
 
             break;
@@ -485,7 +491,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
 
         case PAD_SHAPE::CHAMFERED_RECT:
         {
-            fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
             SHAPE_POLY_SET outline;
             VECTOR2I       padOffset( 0, 0 );
@@ -506,11 +512,11 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                 for( int ii = 0; ii < pointCount; ii++ )
                 {
                     int next = ( ii + 1 ) % pointCount;
-                    fprintf( m_file, "LINE %g %g %g %g\n",
-                             poly.CPoint( ii ).x / SCALE_FACTOR,
-                             -poly.CPoint( ii ).y / SCALE_FACTOR,
-                             poly.CPoint( next ).x / SCALE_FACTOR,
-                             -poly.CPoint( next ).y / SCALE_FACTOR );
+                    fmt::print( m_file, "LINE {} {} {} {}\n",
+                                poly.CPoint( ii ).x / SCALE_FACTOR,
+                                -poly.CPoint( ii ).y / SCALE_FACTOR,
+                                poly.CPoint( next ).x / SCALE_FACTOR,
+                                -poly.CPoint( next ).y / SCALE_FACTOR );
                 }
             }
 
@@ -519,7 +525,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
 
         case PAD_SHAPE::CUSTOM:
         {
-            fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
             SHAPE_POLY_SET outline;
             pad->MergePrimitivesAsPolygon( F_Cu, &outline );
@@ -532,11 +538,11 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                 for( int ii = 0; ii < pointCount; ii++ )
                 {
                     int next = ( ii + 1 ) % pointCount;
-                    fprintf( m_file, "LINE %g %g %g %g\n",
-                             ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
-                             ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
-                             ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
-                             ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+                    fmt::print( m_file, "LINE {} {} {} {}\n",
+                                ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                                ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                                ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                                ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
                 }
             }
 
@@ -545,10 +551,10 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         }
     }
 
-    fputs( "\n$ENDPADS\n\n", m_file );
+    fmt::print( m_file, "\n$ENDPADS\n\n" );
 
     // Now emit the padstacks definitions, using the combined layer masks
-    fputs( "$PADSTACKS\n", m_file );
+    fmt::print( m_file, "$PADSTACKS\n" );
 
     // Via padstacks
     for( unsigned i = 0; i < viastacks.size(); i++ )
@@ -557,19 +563,19 @@ void GENCAD_EXPORTER::createPadsShapesSection()
 
         LSET mask = via->GetLayerSet() & master_layermask;
 
-        fprintf( m_file, "PADSTACK VIA%d.%d.%s %g\n",
-                 via->GetWidth( PADSTACK::ALL_LAYERS ),
-                 via->GetDrillValue(),
-                 fmt_mask( mask ).c_str(),
-                 via->GetDrillValue() / SCALE_FACTOR );
+        fmt::print( m_file, "PADSTACK VIA{}.{}.{} {}\n",
+                    via->GetWidth( PADSTACK::ALL_LAYERS ),
+                    via->GetDrillValue(),
+                    fmt_mask( mask ).c_str(),
+                    via->GetDrillValue() / SCALE_FACTOR );
 
         for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
-            fprintf( m_file, "PAD V%d.%d.%s %s 0 0\n",
-                     via->GetWidth( PADSTACK::ALL_LAYERS ),
-                     via->GetDrillValue(),
-                     fmt_mask( mask ).c_str(),
-                     genCADLayerName( cu_count, layer ).c_str() );
+            fmt::print( m_file, "PAD V{}.{}.{} {} 0 0\n",
+                        via->GetWidth( PADSTACK::ALL_LAYERS ),
+                        via->GetDrillValue(),
+                        fmt_mask( mask ).c_str(),
+                        genCADLayerName( cu_count, layer ).c_str() );
         }
     }
 
@@ -583,33 +589,33 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         PAD* pad = padstacks[i];
 
         // Straight padstack
-        fprintf( m_file, "PADSTACK PAD%u %g\n",
-                 i,
-                 pad->GetDrillSize().x / SCALE_FACTOR );
+        fmt::print( m_file, "PADSTACK PAD{} {}\n",
+                    i,
+                    pad->GetDrillSize().x / SCALE_FACTOR );
 
         LSET pad_set = pad->GetLayerSet() & master_layermask;
 
         // the special gc_seq
         for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq ) )
         {
-            fprintf( m_file, "PAD P%u %s 0 0\n",
-                     i,
-                     genCADLayerName( cu_count, layer ).c_str() );
+            fmt::print( m_file, "PAD P{} {} 0 0\n",
+                        i,
+                        genCADLayerName( cu_count, layer ).c_str() );
         }
 
         // Flipped padstack
         if( m_flipBottomPads )
         {
-            fprintf( m_file, "PADSTACK PAD%uF %g\n",
-                     i,
-                     pad->GetDrillSize().x / SCALE_FACTOR );
+            fmt::print( m_file, "PADSTACK PAD{}F {}\n",
+                        i,
+                        pad->GetDrillSize().x / SCALE_FACTOR );
 
             // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
             for( PCB_LAYER_ID layer : pad_set.Seq() )
             {
-                fprintf( m_file, "PAD P%u %s 0 0\n",
-                         i,
-                         genCADLayerNameFlipped( cu_count, layer ).c_str() );
+                fmt::print( m_file, "PAD P{} {} 0 0\n",
+                            i,
+                            genCADLayerNameFlipped( cu_count, layer ).c_str() );
             }
         }
     }
@@ -642,7 +648,7 @@ void GENCAD_EXPORTER::createShapesSection()
     const char* mirror = "0";
     std::map<wxString, size_t> shapes;
 
-    fputs( "$SHAPES\n", m_file );
+    fmt::print( m_file, "$SHAPES\n" );
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
@@ -733,27 +739,29 @@ void GENCAD_EXPORTER::createShapesSection()
 
             VECTOR2I padPos = pad->GetFPRelativePosition();
 
+            std::string flipStr = ( m_flipBottomPads && footprint->GetFlag() ) ? "F" : "";
+
             // Bottom side footprints use the flipped padstack
-            fprintf( m_file,
-                     ( m_flipBottomPads && footprint->GetFlag() ) ? "PIN \"%s\" PAD%dF %g %g %s %g %s\n"
-                                                                  : "PIN \"%s\" PAD%d %g %g %s %g %s\n",
-                     TO_UTF8( escapeString( pinname ) ),
-                     pad->GetSubRatsnest(),
-                     padPos.x / SCALE_FACTOR,
-                     -padPos.y / SCALE_FACTOR,
-                     layer,
-                     orient.AsDegrees(),
-                     mirror );
+            fmt::print( m_file,
+                        "PIN \"{}\" PAD{}{} {} {} {} {} {}\n",
+                        TO_UTF8( escapeString( pinname ) ),
+                        pad->GetSubRatsnest(),
+                        flipStr,
+                        padPos.x / SCALE_FACTOR,
+                        -padPos.y / SCALE_FACTOR,
+                        layer,
+                        orient.AsDegrees(),
+                        mirror );
         }
     }
 
-    fputs( "$ENDSHAPES\n\n", m_file );
+    fmt::print( m_file, "$ENDSHAPES\n\n" );
 }
 
 
 void GENCAD_EXPORTER::createComponentsSection()
 {
-    fputs( "$COMPONENTS\n", m_file );
+    fmt::print( m_file, "$COMPONENTS\n" );
 
     int cu_count = m_board->GetCopperLayerCount();
 
@@ -775,49 +783,49 @@ void GENCAD_EXPORTER::createComponentsSection()
             flip   = "0";
         }
 
-        fprintf( m_file, "\nCOMPONENT \"%s\"\n",
-                 TO_UTF8( escapeString( footprint->GetReference() ) ) );
-        fprintf( m_file, "DEVICE \"DEV_%s\"\n",
-                 TO_UTF8( escapeString( getShapeName( footprint ) ) ) );
-        fprintf( m_file, "PLACE %g %g\n",
-                 mapXTo( footprint->GetPosition().x ),
-                 mapYTo( footprint->GetPosition().y ) );
-        fprintf( m_file, "LAYER %s\n",
-                 footprint->GetFlag() ? "BOTTOM" : "TOP" );
-        fprintf( m_file, "ROTATION %g\n",
-                 fp_orient.AsDegrees() );
-        fprintf( m_file, "SHAPE \"%s\" %s %s\n",
-                 TO_UTF8( escapeString( getShapeName( footprint ) ) ),
-                 mirror, flip );
+        fmt::print( m_file, "\nCOMPONENT \"{}\"\n",
+                    TO_UTF8( escapeString( footprint->GetReference() ) ) );
+        fmt::print( m_file, "DEVICE \"DEV_{}\"\n",
+                    TO_UTF8( escapeString( getShapeName( footprint ) ) ) );
+        fmt::print( m_file, "PLACE {} {}\n",
+                    mapXTo( footprint->GetPosition().x ),
+                    mapYTo( footprint->GetPosition().y ) );
+        fmt::print( m_file, "LAYER {}\n",
+                    footprint->GetFlag() ? "BOTTOM" : "TOP" );
+        fmt::print( m_file, "ROTATION {}\n",
+                    fp_orient.AsDegrees() );
+        fmt::print( m_file, "SHAPE \"{}\" {} {}\n",
+                    TO_UTF8( escapeString( getShapeName( footprint ) ) ),
+                    mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
         for( PCB_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
         {
             std::string layer = genCADLayerName( cu_count, footprint->GetFlag() ? B_SilkS : F_SilkS );
 
-            fprintf( m_file, "TEXT %g %g %g %g %s %s \"%s\"",
-                     textItem->GetFPRelativePosition().x / SCALE_FACTOR,
-                     -textItem->GetFPRelativePosition().y / SCALE_FACTOR,
-                     textItem->GetTextWidth() / SCALE_FACTOR,
-                     textItem->GetTextAngle().AsDegrees(),
-                     mirror,
-                     layer.c_str(),
-                     TO_UTF8( escapeString( textItem->GetText() ) ) );
+            fmt::print( m_file, "TEXT {} {} {} {} {} {} \"{}\"",
+                        textItem->GetFPRelativePosition().x / SCALE_FACTOR,
+                        -textItem->GetFPRelativePosition().y / SCALE_FACTOR,
+                        textItem->GetTextWidth() / SCALE_FACTOR,
+                        textItem->GetTextAngle().AsDegrees(),
+                        mirror,
+                        layer.c_str(),
+                        TO_UTF8( escapeString( textItem->GetText() ) ) );
 
             BOX2I textBox = textItem->GetTextBox( nullptr );
 
-            fprintf( m_file, " 0 0 %g %g\n",
-                     textBox.GetWidth() / SCALE_FACTOR,
-                     textBox.GetHeight() / SCALE_FACTOR );
+            fmt::print( m_file, " 0 0 {} {}\n",
+                        textBox.GetWidth() / SCALE_FACTOR,
+                        textBox.GetHeight() / SCALE_FACTOR );
         }
 
         // The SHEET is a 'generic description' for referencing the component
-        fprintf( m_file, "SHEET \"RefDes: %s, Value: %s\"\n",
-                 TO_UTF8( footprint->GetReference() ),
-                 TO_UTF8( footprint->GetValue() ) );
+        fmt::print( m_file, "SHEET \"RefDes: {}, Value: {}\"\n",
+                    TO_UTF8( footprint->GetReference() ),
+                    TO_UTF8( footprint->GetValue() ) );
     }
 
-    fputs( "$ENDCOMPONENTS\n\n", m_file );
+    fmt::print( m_file, "$ENDCOMPONENTS\n\n" );
 }
 
 
@@ -830,7 +838,7 @@ void GENCAD_EXPORTER::createSignalsSection()
     NETINFO_ITEM* net;
     int           NbNoConn = 1;
 
-    fputs( "$SIGNALS\n", m_file );
+    fmt::print( m_file, "$SIGNALS\n" );
 
     for( unsigned ii = 0; ii < m_board->GetNetCount(); ii++ )
     {
@@ -848,8 +856,8 @@ void GENCAD_EXPORTER::createSignalsSection()
 
             msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + wxT( "\"" );
 
-            fputs( TO_UTF8( msg ), m_file );
-            fputs( "\n", m_file );
+            fmt::print( m_file, "{}", TO_UTF8( msg ) );
+            fmt::print( m_file, "\n" );
 
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
@@ -862,14 +870,14 @@ void GENCAD_EXPORTER::createSignalsSection()
                                 escapeString( footprint->GetReference() ),
                                 escapeString( pad->GetNumber() ) );
 
-                    fputs( TO_UTF8( msg ), m_file );
-                    fputs( "\n", m_file );
+                    fmt::print( m_file, "{}", TO_UTF8( msg ) );
+                    fmt::print( m_file, "\n" );
                 }
             }
         }
     }
 
-    fputs( "$ENDSIGNALS\n\n", m_file );
+    fmt::print( m_file, "$ENDSIGNALS\n\n" );
 }
 
 
@@ -877,31 +885,31 @@ bool GENCAD_EXPORTER::createHeaderInfoData()
 {
     wxString msg;
 
-    fputs( "$HEADER\n", m_file );
-    fputs( "GENCAD 1.4\n", m_file );
+    fmt::print( m_file, "$HEADER\n" );
+    fmt::print( m_file, "GENCAD 1.4\n" );
 
     // Please note: GenCAD syntax requires quoted strings if they can contain spaces
     msg.Printf( wxT( "USER \"KiCad %s\"\n" ), GetBuildVersion() );
-    fputs( TO_UTF8( msg ), m_file );
+    fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
     msg = wxT( "DRAWING \"" ) + m_board->GetFileName() + wxT( "\"\n" );
-    fputs( TO_UTF8( msg ), m_file );
+    fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
     wxString rev = ExpandTextVars( m_board->GetTitleBlock().GetRevision(), m_board->GetProject() );
     wxString date = ExpandTextVars( m_board->GetTitleBlock().GetDate(), m_board->GetProject() );
     msg = wxT( "REVISION \"" ) + rev + wxT( " " ) + date + wxT( "\"\n" );
 
-    fputs( TO_UTF8( msg ), m_file );
-    fputs( "UNITS INCH\n", m_file );
+    fmt::print( m_file, "{}", TO_UTF8( msg ) );
+    fmt::print( m_file, "UNITS INCH\n" );
 
     // giving 0 as the argument to Map{X,Y}To returns the scaled origin point
     msg.Printf( wxT( "ORIGIN %g %g\n" ),
                 m_storeOriginCoords ? mapXTo( 0 ) : 0,
                 m_storeOriginCoords ? mapYTo( 0 ) : 0 );
-    fputs( TO_UTF8( msg ), m_file );
+    fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
-    fputs( "INTERTRACK 0\n", m_file );
-    fputs( "$ENDHEADER\n\n", m_file );
+    fmt::print( m_file, "INTERTRACK 0\n" );
+    fmt::print( m_file, "$ENDHEADER\n\n" );
 
     return true;
 }
@@ -942,7 +950,7 @@ void GENCAD_EXPORTER::createRoutesSection()
                    return ( a->GetNetCode() < b->GetNetCode() );
                } );
 
-    fputs( "$ROUTES\n", m_file );
+    fmt::print( m_file, "$ROUTES\n" );
 
     old_netcode = -1;
     old_width = -1;
@@ -961,7 +969,7 @@ void GENCAD_EXPORTER::createRoutesSection()
             else
                 netname = wxT( "_noname_" );
 
-            fprintf( m_file, "ROUTE \"%s\"\n", TO_UTF8( escapeString( netname ) ) );
+            fmt::print( m_file, "ROUTE \"{}\"\n", TO_UTF8( escapeString( netname ) ) );
         }
 
         int currentWidth = 0;
@@ -974,7 +982,7 @@ void GENCAD_EXPORTER::createRoutesSection()
         if( old_width != currentWidth )
         {
             old_width = currentWidth;
-            fprintf( m_file, "TRACK TRACK%d\n", currentWidth );
+            fmt::print( m_file, "TRACK TRACK{}\n", currentWidth );
         }
 
         if( track->Type() == PCB_TRACE_T )
@@ -982,21 +990,21 @@ void GENCAD_EXPORTER::createRoutesSection()
             if( old_layer != track->GetLayer() )
             {
                 old_layer = track->GetLayer();
-                fprintf( m_file, "LAYER %s\n",
-                         genCADLayerName( cu_count, track->GetLayer() ).c_str() );
+                fmt::print( m_file, "LAYER {}\n",
+                            genCADLayerName( cu_count, track->GetLayer() ).c_str() );
             }
 
-            fprintf( m_file, "LINE %g %g %g %g\n",
-                     mapXTo( track->GetStart().x ), mapYTo( track->GetStart().y ),
-                     mapXTo( track->GetEnd().x ), mapYTo( track->GetEnd().y ) );
+            fmt::print( m_file, "LINE {} {} {} {}\n",
+                        mapXTo( track->GetStart().x ), mapYTo( track->GetStart().y ),
+                        mapXTo( track->GetEnd().x ), mapYTo( track->GetEnd().y ) );
         }
         else if( track->Type() == PCB_ARC_T )
         {
             if( old_layer != track->GetLayer() )
             {
                 old_layer = track->GetLayer();
-                fprintf( m_file, "LAYER %s\n",
-                         genCADLayerName( cu_count, track->GetLayer() ).c_str() );
+                fmt::print( m_file, "LAYER {}\n",
+                            genCADLayerName( cu_count, track->GetLayer() ).c_str() );
             }
 
             VECTOR2I start = track->GetStart();
@@ -1010,10 +1018,10 @@ void GENCAD_EXPORTER::createRoutesSection()
 
             VECTOR2I center = arc->GetCenter();
 
-            fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                     mapXTo( start.x ), mapYTo( start.y ),
-                     mapXTo( end.x ), mapYTo( end.y ),
-                     mapXTo( center.x ), mapYTo( center.y ) );
+            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                        mapXTo( start.x ), mapYTo( start.y ),
+                        mapXTo( end.x ), mapYTo( end.y ),
+                        mapXTo( center.x ), mapYTo( center.y ) );
         }
         else if( track->Type() == PCB_VIA_T )
         {
@@ -1021,17 +1029,17 @@ void GENCAD_EXPORTER::createRoutesSection()
 
             LSET vset = via->GetLayerSet() & master_layermask;
 
-            fprintf( m_file, "VIA VIA%d.%d.%s %g %g ALL %g via%d\n",
-                     via->GetWidth( PADSTACK::ALL_LAYERS ),
-                     via->GetDrillValue(),
-                     fmt_mask( vset ).c_str(),
-                     mapXTo( via->GetStart().x ), mapYTo( via->GetStart().y ),
-                     via->GetDrillValue() / SCALE_FACTOR,
-                     vianum++ );
+            fmt::print( m_file, "VIA VIA{}.{}.{} {} {} ALL {} via{}\n",
+                        via->GetWidth( PADSTACK::ALL_LAYERS ),
+                        via->GetDrillValue(),
+                        fmt_mask( vset ).c_str(),
+                        mapXTo( via->GetStart().x ), mapYTo( via->GetStart().y ),
+                        via->GetDrillValue() / SCALE_FACTOR,
+                        vianum++ );
         }
     }
 
-    fputs( "$ENDROUTES\n\n", m_file );
+    fmt::print( m_file, "$ENDROUTES\n\n" );
 }
 
 
@@ -1039,7 +1047,7 @@ void GENCAD_EXPORTER::createDevicesSection()
 {
     std::set<wxString> emitted;
 
-    fputs( "$DEVICES\n", m_file );
+    fmt::print( m_file, "$DEVICES\n" );
 
     // componentShapes (as a std::map<>) does not give the same order for items between 2 runs.
     // This is annoying when one want to compare 2 similar files.
@@ -1070,9 +1078,9 @@ void GENCAD_EXPORTER::createDevicesSection()
     data.Sort();
 
     for( wxString& item : data )
-        fprintf( m_file, "%s", TO_UTF8( item ) );
+        fmt::print( m_file, "{}", TO_UTF8( item ) );
 
-    fputs( "$ENDDEVICES\n\n", m_file );
+    fmt::print( m_file, "$ENDDEVICES\n\n" );
 }
 
 
@@ -1080,7 +1088,7 @@ void GENCAD_EXPORTER::createBoardSection()
 {
     // Creates the section $BOARD.
     //  We output here only the board perimeter
-    fputs( "$BOARD\n", m_file );
+    fmt::print( m_file, "$BOARD\n" );
 
     // Extract the board edges
     SHAPE_POLY_SET outline;
@@ -1089,12 +1097,12 @@ void GENCAD_EXPORTER::createBoardSection()
     for( auto seg1 = outline.IterateSegmentsWithHoles(); seg1; seg1++ )
     {
         SEG seg = *seg1;
-        fprintf( m_file, "LINE %g %g %g %g\n",
-                 mapXTo( seg.A.x ), mapYTo( seg.A.y ),
-                 mapXTo( seg.B.x ), mapYTo( seg.B.y ) );
+        fmt::print( m_file, "LINE {} {} {} {}\n",
+                    mapXTo( seg.A.x ), mapYTo( seg.A.y ),
+                    mapXTo( seg.B.x ), mapYTo( seg.B.y ) );
     }
 
-    fputs( "$ENDBOARD\n\n", m_file );
+    fmt::print( m_file, "$ENDBOARD\n\n" );
 }
 
 
@@ -1112,24 +1120,24 @@ void GENCAD_EXPORTER::createTracksInfoData()
     }
 
     // Write data
-    fputs( "$TRACKS\n", m_file );
+    fmt::print( m_file, "$TRACKS\n" );
 
     for( int size : trackinfo )
-        fprintf( m_file, "TRACK TRACK%d %g\n", size, size / SCALE_FACTOR );
+        fmt::print( m_file, "TRACK TRACK{} {}\n", size, size / SCALE_FACTOR );
 
-    fputs( "$ENDTRACKS\n\n", m_file );
+    fmt::print( m_file, "$ENDTRACKS\n\n" );
 }
 
 
 void GENCAD_EXPORTER::footprintWriteShape( FOOTPRINT* aFootprint, const wxString& aShapeName )
 {
     /* creates header: */
-    fprintf( m_file, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
+    fmt::print( m_file, "\nSHAPE \"{}\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
     if( aFootprint->GetAttributes() & FP_THROUGH_HOLE )
-        fprintf( m_file, "INSERT TH\n" );
+        fmt::print( m_file, "INSERT TH\n" );
     else
-        fprintf( m_file, "INSERT SMD\n" );
+        fmt::print( m_file, "INSERT SMD\n" );
 
     // Silk outline; wildly interpreted by various importers:
     // CAM350 read it right but only closed shapes
@@ -1151,7 +1159,7 @@ void GENCAD_EXPORTER::footprintWriteShape( FOOTPRINT* aFootprint, const wxString
             switch( shape->GetShape() )
             {
             case SHAPE_T::SEGMENT:
-                fprintf( m_file, "LINE %g %g %g %g\n",
+                fmt::print( m_file, "LINE {} {} {} {}\n",
                          start.x / SCALE_FACTOR,
                          -start.y / SCALE_FACTOR,
                          end.x / SCALE_FACTOR,
@@ -1159,22 +1167,22 @@ void GENCAD_EXPORTER::footprintWriteShape( FOOTPRINT* aFootprint, const wxString
                 break;
 
             case SHAPE_T::RECTANGLE:
-                fprintf( m_file, "LINE %g %g %g %g\n",
+                fmt::print( m_file, "LINE {} {} {} {}\n",
                          start.x / SCALE_FACTOR,
                          -start.y / SCALE_FACTOR,
                          end.x / SCALE_FACTOR,
                          -end.y / SCALE_FACTOR );
-                fprintf( m_file, "LINE %g %g %g %g\n",
+                fmt::print( m_file, "LINE {} {} {} {}\n",
                          end.x / SCALE_FACTOR,
                          -start.y / SCALE_FACTOR,
                          end.x / SCALE_FACTOR,
                          -end.y / SCALE_FACTOR );
-                fprintf( m_file, "LINE %g %g %g %g\n",
+                fmt::print( m_file, "LINE {} {} {} {}\n",
                          end.x / SCALE_FACTOR,
                          -end.y / SCALE_FACTOR,
                          start.x / SCALE_FACTOR,
                          -end.y / SCALE_FACTOR );
-                fprintf( m_file, "LINE %g %g %g %g\n",
+                fmt::print( m_file, "LINE {} {} {} {}\n",
                          start.x / SCALE_FACTOR,
                          -end.y / SCALE_FACTOR,
                          start.x / SCALE_FACTOR,
@@ -1185,10 +1193,10 @@ void GENCAD_EXPORTER::footprintWriteShape( FOOTPRINT* aFootprint, const wxString
             {
                 int radius = KiROUND( end.Distance( start ) );
 
-                fprintf( m_file, "CIRCLE %g %g %g\n",
-                         start.x / SCALE_FACTOR,
-                         -start.y / SCALE_FACTOR,
-                         radius / SCALE_FACTOR );
+                fmt::print( m_file, "CIRCLE {} {} {}\n",
+                            start.x / SCALE_FACTOR,
+                            -start.y / SCALE_FACTOR,
+                            radius / SCALE_FACTOR );
                 break;
             }
 
@@ -1196,13 +1204,13 @@ void GENCAD_EXPORTER::footprintWriteShape( FOOTPRINT* aFootprint, const wxString
                 if( shape->GetArcAngle() > ANGLE_0 )
                     std::swap( start, end );
 
-                fprintf( m_file, "ARC %g %g %g %g %g %g\n",
-                         start.x / SCALE_FACTOR,
-                         -start.y / SCALE_FACTOR,
-                         end.x / SCALE_FACTOR,
-                         -end.y / SCALE_FACTOR,
-                         center.x / SCALE_FACTOR,
-                         -center.y / SCALE_FACTOR );
+                fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                            start.x / SCALE_FACTOR,
+                            -start.y / SCALE_FACTOR,
+                            end.x / SCALE_FACTOR,
+                            -end.y / SCALE_FACTOR,
+                            center.x / SCALE_FACTOR,
+                            -center.y / SCALE_FACTOR );
                 break;
 
             case SHAPE_T::POLY:
