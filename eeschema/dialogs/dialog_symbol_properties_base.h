@@ -29,8 +29,8 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
-#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/textctrl.h>
@@ -55,7 +55,8 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_unitLabel;
 		wxChoice* m_unitChoice;
-		wxCheckBox* m_cbAlternateSymbol;
+		wxStaticText* m_bodyStyle;
+		wxChoice* m_bodyStyleChoice;
 		wxStaticText* m_orientationLabel;
 		wxChoice* m_orientationCtrl;
 		wxStaticText* m_mirrorLabel;
@@ -91,8 +92,8 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUnitChoice( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExchangeSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSymbol( wxCommandEvent& event ) { event.Skip(); }

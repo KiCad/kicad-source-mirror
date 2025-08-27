@@ -1039,5 +1039,9 @@ ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::layerSelector( "control.LayerSel
 ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::unitSelector( "control.UnitSelector", _( "Symbol unit selector" ),
                                                               _( "Displays the current unit" ) );
 
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::bodyStyleSelector( "control.BodyStyleSelector",
+                                                                   _( "Symbol body style selector" ),
+                                                                   _( "Displays the current body style" ) );
+
 ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::overrideLocks( "control.OverrideLocks", _( "Override locks" ),
                                                                _( "Allow moving of locked items with the mouse" ) );

@@ -185,36 +185,25 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 }
 
 
-void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
+void SCH_EDIT_FRAME::SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle )
 {
     if( !aSymbol || !aSymbol->GetLibSymbolRef() )
         return;
 
-    SCH_COMMIT commit( m_toolManager );
-    wxString   msg;
+    const int bodyStyleCount = aSymbol->GetLibSymbolRef()->GetBodyStyleCount();
+    const int currentBodyStyle = aSymbol->GetBodyStyle();
 
-    if( !aSymbol->GetLibSymbolRef()->HasAlternateBodyStyle() )
-    {
-        LIB_ID id = aSymbol->GetLibSymbolRef()->GetLibId();
-
-        msg.Printf( _( "No alternate body style found for symbol '%s' in library '%s'." ),
-                    id.GetLibItemName().wx_str(),
-                    id.GetLibNickname().wx_str() );
-        DisplayError( this,  msg );
+    if( bodyStyleCount <= 1 || currentBodyStyle == aBodyStyle )
         return;
-    }
+
+    if( aBodyStyle > bodyStyleCount )
+        aBodyStyle = bodyStyleCount;
+
+    SCH_COMMIT commit( m_toolManager );
 
     commit.Modify( aSymbol, GetScreen() );
 
-    aSymbol->SetBodyStyle( aSymbol->GetBodyStyle() + 1 );
-
-    // ensure m_bodyStyle = 1 or 2
-    // 1 = shape 1 = first (base DeMorgan) alternate body style
-    // 2 = shape 2 = second (DeMorgan conversion) alternate body style
-    // > 2 is not currently supported
-    // When m_bodyStyle = val max, return to the first shape
-    if( aSymbol->GetBodyStyle() > BODY_STYLE::DEMORGAN )
-        aSymbol->SetBodyStyle( BODY_STYLE::BASE );
+    aSymbol->SetBodyStyle( aBodyStyle );
 
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )

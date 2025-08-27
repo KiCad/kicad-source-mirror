@@ -650,6 +650,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
+    m_frame->RebuildSymbolUnitAndBodyStyleLists();
     m_frame->OnModify();
 
     // if m_UnitSelectionLocked has changed, set some edit options or defaults
@@ -668,17 +669,6 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     }
 }
 
-void SYMBOL_EDITOR_EDIT_TOOL::handlePinDuplication( SCH_PIN* aOldPin, SCH_PIN* aNewPin,
-                                                    int& aSymbolLastPinNumber )
-{
-    if( !aNewPin->GetNumber().IsEmpty() )
-    {
-        // when duplicating a pin in symbol editor, assigning identical pin number
-        // to the old one does not makes any sense, so assign the next unassigned number to it
-        aSymbolLastPinNumber++;
-        aNewPin->SetNumber( wxString::Format( wxT( "%i" ), aSymbolLastPinNumber ) );
-    }
-}
 
 int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
@@ -739,45 +729,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return -1;
-    }
-
-    return 0;
-}
-
-
-int SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName( const TOOL_EVENT& aEvent )
-{
-    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
-
-    if( !symbol )
-        return 0;
-
-    int unitid = m_frame->GetUnit();
-
-    if( unitid == 0 )
-    {
-        return -1;
-    }
-
-    wxString promptText = wxString::Format( _( "Enter display name for unit %s" ),
-                                            LIB_SYMBOL::LetterSubReference( unitid, 'A' ) );
-    wxString currentvalue;
-
-    if( symbol->HasUnitDisplayName( unitid ) )
-        currentvalue = symbol->GetUnitDisplayName( unitid, false );
-
-    wxTextEntryDialog dlg( m_frame, promptText, _( "Set Unit Display Name" ), currentvalue );
-
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
-        symbol->SetUnitDisplayName( unitid, dlg.GetValue() );
-        m_frame->RebuildSymbolUnitsList();
-        m_frame->OnModify();
-    }
-    else
-    {
-        return -1;
     }
 
     return 0;
@@ -1071,6 +1022,5 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::symbolProperties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           SCH_ACTIONS::pinTable.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, SCH_ACTIONS::updateSymbolFields.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName, SCH_ACTIONS::setUnitDisplayName.MakeEvent() );
     // clang-format on
 }

@@ -243,14 +243,12 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, i
         return false;
 
     // Enable synchronized pin edit mode for symbols with interchangeable units
-    m_SyncPinEdit = GetCurSymbol()->IsMulti() && !GetCurSymbol()->UnitsLocked();
+    m_SyncPinEdit = GetCurSymbol()->IsMultiUnit() && !GetCurSymbol()->UnitsLocked();
 
     ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
-    SetShowDeMorgan( GetCurSymbol()->Flatten()->HasAlternateBodyStyle() );
 
-    if( aUnit > 0 )
-        RebuildSymbolUnitsList();
+    RebuildSymbolUnitAndBodyStyleLists();
 
     return true;
 }
@@ -306,8 +304,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
     }
 
     UpdateTitle();
-    RebuildSymbolUnitsList();
-    SetShowDeMorgan( GetCurSymbol()->HasAlternateBodyStyle() );
+    RebuildSymbolUnitAndBodyStyleLists();
 
     ClearUndoRedoList();
 
@@ -414,13 +411,6 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
     m_libMgr->CreateNewSymbol( lib, props );
     SyncLibraries( false );
     LoadSymbol( props.name, lib, 1 );
-
-    LIB_SYMBOL* createdSymbol = m_libMgr->GetSymbol( props.name, lib );
-
-    if( props.parentSymbolName.IsEmpty() )
-        SetShowDeMorgan( props.alternateBodyStyle );
-    else if( createdSymbol )
-        SetShowDeMorgan( createdSymbol->HasAlternateBodyStyle() );
 }
 
 
@@ -1231,8 +1221,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, m_symbol->GetName() ) );
     }
 
-    RebuildSymbolUnitsList();
-    SetShowDeMorgan( GetCurSymbol()->Flatten()->HasAlternateBodyStyle() );
+    RebuildSymbolUnitAndBodyStyleLists();
     UpdateTitle();
 
     // N.B. The view needs to be rebuilt first as the Symbol Properties change may invalidate
@@ -1623,7 +1612,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     ClearMsgPanel();
     msg.Printf( _( "Symbol library file '%s' saved." ), fn.GetFullPath() );
-    RebuildSymbolUnitsList();
+    RebuildSymbolUnitAndBodyStyleLists();
 
     return true;
 }

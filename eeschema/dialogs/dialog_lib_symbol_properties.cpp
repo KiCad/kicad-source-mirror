@@ -131,14 +131,30 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
 
+    m_unitNamesGrid->PushEventHandler( new GRID_TRICKS( m_unitNamesGrid ) );
+    m_unitNamesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    m_bodyStyleNamesGrid->PushEventHandler( new GRID_TRICKS( m_bodyStyleNamesGrid,
+                                                             [this]( wxCommandEvent& aEvent )
+                                                             {
+                                                                 OnAddBodyStyle( aEvent );
+                                                             } ) );
+    m_bodyStyleNamesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
+    m_bpAddBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpMoveUpBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_bpMoveDownBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_bpDeleteBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
     m_addFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_deleteFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_editFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+    m_deleteFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_btnCreateJumperPinGroup->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
     m_btnRemoveJumperPinGroup->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
@@ -153,10 +169,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     }
 
     // wxFormBuilder doesn't include this event...
-    m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ), nullptr, this );
-    m_grid->Connect( wxEVT_GRID_CELL_CHANGED,
-                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged ), nullptr, this );
+    m_grid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging, this );
+    m_grid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged, this );
     m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion, this );
 
 
@@ -205,14 +219,14 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
 
-    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ), nullptr, this );
-    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED,
-                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged ), nullptr, this );
+    m_grid->Unbind( wxEVT_GRID_CELL_CHANGING, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging, this );
+    m_grid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged, this );
     m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
+    m_unitNamesGrid->PopEventHandler( true );
+    m_bodyStyleNamesGrid->PopEventHandler( true );
 }
 
 
@@ -264,15 +278,36 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_SymbolNameCtrl->ChangeValue( UnescapeString( m_libEntry->GetName() ) );
 
     m_KeywordCtrl->ChangeValue( m_libEntry->GetKeyWords() );
-    m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
+    m_unitSpinCtrl->SetValue( m_libEntry->GetUnitCount() );
     m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() || m_libEntry->GetUnitCount() == 1 );
 
-    // If a symbol contains no body-style-specific pins or graphic items,
-    // symbol->HasAlternateBodyStyle() will return false.
-    // But when editing a symbol with DeMorgan option set, we don't want to keep turning it off
-    // just because there aren't any body-style-specific items yet, so we force it to on if the
-    // parent frame has it enabled.
-    m_hasAlternateBodyStyles->SetValue( m_Parent->GetShowDeMorgan() );
+    updateUnitCount();
+
+    for( int unit = 0; unit < m_libEntry->GetUnitCount(); unit++ )
+    {
+        if( m_libEntry->GetUnitDisplayNames().contains( unit + 1 ) )
+            m_unitNamesGrid->SetCellValue( unit, 1, m_libEntry->GetUnitDisplayNames().at( unit + 1 ) );
+    }
+
+    if( m_libEntry->HasDeMorganBodyStyles() )
+    {
+        m_radioDeMorgan->SetValue( true );
+    }
+    else if( m_libEntry->IsMultiBodyStyle() )
+    {
+        m_radioCustom->SetValue( true );
+
+        for( const wxString& name : m_libEntry->GetBodyStyleNames() )
+        {
+            int row = m_bodyStyleNamesGrid->GetNumberRows();
+            m_bodyStyleNamesGrid->AppendRows( 1 );
+            m_bodyStyleNamesGrid->SetCellValue( row, 0, name );
+        }
+    }
+    else
+    {
+        m_radioSingle->SetValue( true );
+    }
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
     m_OptionLocalPower->SetValue( m_libEntry->IsLocalPower() );
@@ -440,15 +475,40 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
      * Confirm destructive actions.
      */
 
-    if( m_SelNumberOfUnits->GetValue() < m_libEntry->GetUnitCount() )
+    if( m_unitSpinCtrl->GetValue() < m_libEntry->GetUnitCount() )
     {
         if( !IsOK( this, _( "Delete extra units from symbol?" ) ) )
             return false;
     }
 
-    if( !m_hasAlternateBodyStyles->GetValue() && m_libEntry->HasAlternateBodyStyle() )
+    int bodyStyleCount = 0;
+
+    if( m_radioSingle->GetValue() )
     {
-        if( !IsOK( this, _( "Delete alternate body style (De Morgan) from symbol?" ) ) )
+        bodyStyleCount = 1;
+    }
+    if( m_radioDeMorgan->GetValue() )
+    {
+        bodyStyleCount = 2;
+    }
+    else if( m_radioCustom->GetValue() )
+    {
+        for( int ii = 0; ii < m_bodyStyleNamesGrid->GetNumberRows(); ++ii )
+        {
+            if( !m_bodyStyleNamesGrid->GetCellValue( ii, 0 ).IsEmpty() )
+                bodyStyleCount++;
+        }
+    }
+
+    if( bodyStyleCount == 0 )
+    {
+        m_delayedErrorMessage = _( "Symbol must have at least 1 body style" );
+        return false;
+    }
+
+    if( bodyStyleCount < m_libEntry->GetBodyStyleCount() )
+    {
+        if( !IsOK( this, _( "Delete extra body styles from symbol?" ) ) )
             return false;
     }
 
@@ -462,6 +522,12 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         return false;
 
     if( !m_grid->CommitPendingChanges() )
+        return false;
+
+    if( !m_unitNamesGrid->CommitPendingChanges() )
+        return false;
+
+    if( !m_bodyStyleNamesGrid->CommitPendingChanges() )
         return false;
 
     wxString   newName = EscapeString( m_SymbolNameCtrl->GetValue(), CTX_LIBID );
@@ -550,10 +616,43 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_libEntry->SetName( newName );
     m_libEntry->SetKeyWords( m_KeywordCtrl->GetValue() );
-    m_libEntry->SetUnitCount( m_SelNumberOfUnits->GetValue() );
+    m_libEntry->SetUnitCount( m_unitSpinCtrl->GetValue(), true );
     m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && !m_OptionPartsInterchangeable->GetValue() );
-    m_libEntry->SetHasAlternateBodyStyle( m_hasAlternateBodyStyles->GetValue() );
-    m_Parent->SetShowDeMorgan( m_hasAlternateBodyStyles->GetValue() );
+
+    m_libEntry->GetUnitDisplayNames().clear();
+
+    for( int row = 0; row < m_unitNamesGrid->GetNumberRows(); row++ )
+    {
+        if( !m_unitNamesGrid->GetCellValue( row, 1 ).IsEmpty() )
+            m_libEntry->GetUnitDisplayNames()[row+1] = m_unitNamesGrid->GetCellValue( row, 1 );
+    }
+
+    if( m_radioSingle->GetValue() )
+    {
+        m_libEntry->SetHasDeMorganBodyStyles( false );
+        m_libEntry->SetBodyStyleCount( 1, false, false );
+        m_libEntry->SetBodyStyleNames( {} );
+    }
+    else if( m_radioDeMorgan->GetValue() )
+    {
+        m_libEntry->SetHasDeMorganBodyStyles( true );
+        m_libEntry->SetBodyStyleCount( 2, false, true );
+        m_libEntry->SetBodyStyleNames( {} );
+    }
+    else
+    {
+        std::vector<wxString> bodyStyleNames;
+
+        for( int row = 0; row < m_bodyStyleNamesGrid->GetNumberRows(); ++row )
+        {
+            if( !m_bodyStyleNamesGrid->GetCellValue( row, 0 ).IsEmpty() )
+                bodyStyleNames.push_back( m_bodyStyleNamesGrid->GetCellValue( row, 0 ) );
+        }
+
+        m_libEntry->SetHasDeMorganBodyStyles( false );
+        m_libEntry->SetBodyStyleCount( bodyStyleNames.size(), true, true );
+        m_libEntry->SetBodyStyleNames( bodyStyleNames );
+    }
 
     if( m_OptionPower->GetValue() )
     {
@@ -610,13 +709,18 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_Parent->UpdateAfterSymbolProperties( &oldName );
 
-    // It's possible that the symbol being edited has no pins, in which case there may be no
-    // alternate body style objects causing #LIB_SYMBOL::HasAlternateBodyStyle() to always return
-    // false.  This allows the user to edit the alternate body style just in case this condition
-    // occurs.
-    m_Parent->SetShowDeMorgan( m_hasAlternateBodyStyles->GetValue() );
-
     return true;
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnBodyStyle( wxCommandEvent& event )
+{
+    m_bodyStyleNamesGrid->Enable( m_radioCustom->GetValue() );
+
+    m_bpAddBodyStyle->Enable( m_radioCustom->GetValue() );
+    m_bpMoveUpBodyStyle->Enable( m_radioCustom->GetValue() );
+    m_bpMoveDownBodyStyle->Enable( m_radioCustom->GetValue() );
+    m_bpDeleteBodyStyle->Enable( m_radioCustom->GetValue() );
 }
 
 
@@ -635,9 +739,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion( wxMouseEvent& aEvent )
         return;
     }
 
-    m_grid->SetToolTip(
-            wxString::Format( _( "This field is inherited from '%s'." ),
-                              m_fields->ParentField( row ).GetName() ) );
+    m_grid->SetToolTip( wxString::Format( _( "This field is inherited from '%s'." ),
+                                          m_fields->ParentField( row ).GetName() ) );
 }
 
 
@@ -799,6 +902,53 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 }
 
 
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddBodyStyle( wxCommandEvent& event )
+{
+    m_bodyStyleNamesGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_bodyStyleNamesGrid->AppendRows( 1 );
+                OnModify();
+
+                return { m_bodyStyleNamesGrid->GetNumberRows() - 1, 0 };
+            } );
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteBodyStyle( wxCommandEvent& event )
+{
+    m_bodyStyleNamesGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                m_bodyStyleNamesGrid->DeleteRows( row );
+            } );
+
+    OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnBodyStyleMoveUp( wxCommandEvent& event )
+{
+    m_bodyStyleNamesGrid->OnMoveRowUp(
+            [&]( int row )
+            {
+                m_bodyStyleNamesGrid->SwapRows( row, row - 1 );
+                OnModify();
+            } );
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnBodyStyleMoveDown( wxCommandEvent& event )
+{
+    m_bodyStyleNamesGrid->OnMoveRowDown(
+            [&]( int row )
+            {
+                m_bodyStyleNamesGrid->SwapRows( row, row + 1 );
+                OnModify();
+            } );
+}
+
+
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
@@ -949,7 +1099,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns()
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    m_OptionPartsInterchangeable->Enable( m_SelNumberOfUnits->GetValue() > 1 );
+    m_OptionPartsInterchangeable->Enable( m_unitSpinCtrl->GetValue() > 1 );
     m_pinNameOffset.Enable( m_PinsNameInsideButt->GetValue() );
 
     if( m_grid->IsCellEditControlShown() )
@@ -1092,15 +1242,57 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnCheckBox( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnSpinCtrl( wxSpinEvent& event )
+bool DIALOG_LIB_SYMBOL_PROPERTIES::updateUnitCount()
 {
-    OnModify();
+    m_unitNamesGrid->CommitPendingChanges( true /* aQuietMode */ );
+
+    int extra = m_unitNamesGrid->GetNumberRows() - m_unitSpinCtrl->GetValue();
+    int needed = m_unitSpinCtrl->GetValue() - m_unitNamesGrid->GetNumberRows();
+
+    if( extra > 0 )
+    {
+        m_unitNamesGrid->DeleteRows( m_unitNamesGrid->GetNumberRows() - extra, extra );
+        return true;
+    }
+
+    if( needed > 0 )
+    {
+        m_unitNamesGrid->AppendRows( needed );
+
+        for( int row = m_unitNamesGrid->GetNumberRows() - needed; row < m_unitNamesGrid->GetNumberRows(); ++row )
+            m_unitNamesGrid->SetCellValue( row, 0, LIB_SYMBOL::LetterSubReference( row + 1, 'A' ) );
+
+        return true;
+    }
+
+    return false;
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnSpinCtrlText( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnUnitSpinCtrl( wxSpinEvent& event )
 {
-    OnModify();
+    if( updateUnitCount() )
+        OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnUnitSpinCtrlText( wxCommandEvent& event )
+{
+    // wait for kill focus to update unit count
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnUnitSpinCtrlEnter( wxCommandEvent& event )
+{
+    if( updateUnitCount() )
+        OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnUnitSpinCtrlKillFocus( wxFocusEvent& event )
+{
+    if( updateUnitCount() )
+        OnModify();
 }
 
 

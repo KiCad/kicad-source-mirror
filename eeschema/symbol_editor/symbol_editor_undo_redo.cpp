@@ -103,8 +103,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
     }
 
-    RebuildSymbolUnitsList();
-    SetShowDeMorgan( symbol->HasAlternateBodyStyle() );
+    RebuildSymbolUnitAndBodyStyleLists();
     UpdateTitle();
 
     RebuildView();
@@ -154,8 +153,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
     }
 
-    RebuildSymbolUnitsList();
-    SetShowDeMorgan( symbol->HasAlternateBodyStyle() );
+    RebuildSymbolUnitAndBodyStyleLists();
     UpdateTitle();
 
     RebuildView();

@@ -164,31 +164,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	wxStaticBoxSizer* sbSizerSymbol;
 	sbSizerSymbol = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General") ), wxVERTICAL );
 
-	wxBoxSizer* bSizerUnitCount;
-	bSizerUnitCount = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticTextNbUnits = new wxStaticText( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Number of units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextNbUnits->Wrap( -1 );
-	m_staticTextNbUnits->SetToolTip( _("Enter the number of units for a symbol that contains more than one unit") );
-
-	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_SelNumberOfUnits = new wxSpinCtrl( sbSizerSymbol->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 64, 1 );
-	bSizerUnitCount->Add( m_SelNumberOfUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND|wxLEFT, 4 );
-
-	m_OptionPartsInterchangeable = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("All units are interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPartsInterchangeable->SetToolTip( _("Check this option when all symbol units have the same function.\nFor instance, this should be checked for a quad NAND gate, while it should not be checked for a dual triode (where unit C is the filament).") );
-
-	sbSizerSymbol->Add( m_OptionPartsInterchangeable, 0, wxALL, 4 );
-
-	m_hasAlternateBodyStyles = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hasAlternateBodyStyles->SetToolTip( _("Check this option if the symbol has an alternate body style for a De Morgan logic equivalence.\nFor instance, this should be checked for a NAND gate to provide an alternate representation as an OR gate with inverted inputs.") );
-
-	sbSizerSymbol->Add( m_hasAlternateBodyStyles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
 	m_OptionPower = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptionPower->SetToolTip( _("Power symbols define a global net with the value as a netname.\nThey will not be included in the BOM and cannot be assigned a footprint.") );
 
@@ -209,7 +184,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerSymbol->Add( bSizer16, 1, wxEXPAND, 5 );
 
 
-	bSizerLeftCol->Add( sbSizerSymbol, 0, wxEXPAND|wxALL, 5 );
+	bSizerLeftCol->Add( sbSizerSymbol, 1, wxEXPAND|wxALL, 5 );
 
 
 	bSizerLowerBasicPanel->Add( bSizerLeftCol, 1, wxEXPAND, 5 );
@@ -258,7 +233,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bSizerNameOffset->Add( m_nameOffsetUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 4 );
+	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxEXPAND|wxTOP, 2 );
 
 
 	sbSizerPinTextOpts->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -300,32 +275,187 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("General"), false );
-	m_PanelFootprintFilter = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bPanelFpFilterBoxSizer;
-	bPanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_NoteBook->AddPage( m_PanelBasic, _("General"), true );
+	m_PanelUnitsAndBodyStyles = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizerUnitsAndBodyStyles;
+	bSizerUnitsAndBodyStyles = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bFpFilterLeftBoxSizer;
-	bFpFilterLeftBoxSizer = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbSizerUnits;
+	sbSizerUnits = new wxStaticBoxSizer( new wxStaticBox( m_PanelUnitsAndBodyStyles, wxID_ANY, _("Symbol Units") ), wxVERTICAL );
 
-	m_staticTextFootprints = new wxStaticText( m_PanelFootprintFilter, wxID_ANY, _("Footprint filters:"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizerUnitCount;
+	bSizerUnitCount = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextNbUnits = new wxStaticText( sbSizerUnits->GetStaticBox(), wxID_ANY, _("Number of units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNbUnits->Wrap( -1 );
+	m_staticTextNbUnits->SetToolTip( _("Enter the number of units for a symbol that contains more than one unit") );
+
+	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_unitSpinCtrl = new wxSpinCtrl( sbSizerUnits->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 64, 1 );
+	bSizerUnitCount->Add( m_unitSpinCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizerUnits->Add( bSizerUnitCount, 0, wxEXPAND|wxBOTTOM|wxLEFT, 4 );
+
+
+	sbSizerUnits->Add( 0, 2, 0, wxEXPAND, 5 );
+
+	m_OptionPartsInterchangeable = new wxCheckBox( sbSizerUnits->GetStaticBox(), wxID_ANY, _("All units are interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptionPartsInterchangeable->SetToolTip( _("Check this option when all symbol units have the same function.\nFor instance, this should be checked for a quad NAND gate, while it should not be checked for a dual triode (where unit C is the filament).") );
+
+	sbSizerUnits->Add( m_OptionPartsInterchangeable, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
+
+	sbSizerUnits->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	m_unitNamesLabel = new wxStaticText( sbSizerUnits->GetStaticBox(), wxID_ANY, _("Unit display names (optional):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitNamesLabel->Wrap( -1 );
+	sbSizerUnits->Add( m_unitNamesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_unitNamesGrid = new WX_GRID( sbSizerUnits->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+
+	// Grid
+	m_unitNamesGrid->CreateGrid( 0, 2 );
+	m_unitNamesGrid->EnableEditing( true );
+	m_unitNamesGrid->EnableGridLines( true );
+	m_unitNamesGrid->EnableDragGridSize( false );
+	m_unitNamesGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_unitNamesGrid->SetColSize( 0, 36 );
+	m_unitNamesGrid->SetColSize( 1, 400 );
+	m_unitNamesGrid->EnableDragColMove( false );
+	m_unitNamesGrid->EnableDragColSize( false );
+	m_unitNamesGrid->SetColLabelSize( 0 );
+	m_unitNamesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_unitNamesGrid->EnableDragRowSize( false );
+	m_unitNamesGrid->SetRowLabelSize( 0 );
+	m_unitNamesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_unitNamesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	sbSizerUnits->Add( m_unitNamesGrid, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizerUnitsAndBodyStyles->Add( sbSizerUnits, 1, wxEXPAND|wxALL, 10 );
+
+	wxStaticBoxSizer* sbSizerBodyStyles;
+	sbSizerBodyStyles = new wxStaticBoxSizer( new wxStaticBox( m_PanelUnitsAndBodyStyles, wxID_ANY, _("Body Styles") ), wxVERTICAL );
+
+	m_radioSingle = new wxRadioButton( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, _("Single body style"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	sbSizerBodyStyles->Add( m_radioSingle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizerBodyStyles->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_radioDeMorgan = new wxRadioButton( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, _("‘Standard’ and ‘Alternate’ De Morgan body styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerBodyStyles->Add( m_radioDeMorgan, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizerBodyStyles->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_radioCustom = new wxRadioButton( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, _("Custom body styles:"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerBodyStyles->Add( m_radioCustom, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizerIndent;
+	bSizerIndent = new wxBoxSizer( wxVERTICAL );
+
+	m_bodyStyleNamesGrid = new WX_GRID( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+
+	// Grid
+	m_bodyStyleNamesGrid->CreateGrid( 0, 1 );
+	m_bodyStyleNamesGrid->EnableEditing( true );
+	m_bodyStyleNamesGrid->EnableGridLines( true );
+	m_bodyStyleNamesGrid->EnableDragGridSize( false );
+	m_bodyStyleNamesGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_bodyStyleNamesGrid->SetColSize( 0, 400 );
+	m_bodyStyleNamesGrid->EnableDragColMove( false );
+	m_bodyStyleNamesGrid->EnableDragColSize( false );
+	m_bodyStyleNamesGrid->SetColLabelSize( 0 );
+	m_bodyStyleNamesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_bodyStyleNamesGrid->EnableDragRowSize( false );
+	m_bodyStyleNamesGrid->SetRowLabelSize( 0 );
+	m_bodyStyleNamesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_bodyStyleNamesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizerIndent->Add( m_bodyStyleNamesGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAddBodyStyle = new STD_BITMAP_BUTTON( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAddBodyStyle->SetToolTip( _("Add field") );
+
+	bButtonSize1->Add( m_bpAddBodyStyle, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_bpMoveUpBodyStyle = new STD_BITMAP_BUTTON( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveUpBodyStyle->SetToolTip( _("Move up") );
+
+	bButtonSize1->Add( m_bpMoveUpBodyStyle, 0, wxRIGHT, 5 );
+
+	m_bpMoveDownBodyStyle = new STD_BITMAP_BUTTON( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveDownBodyStyle->SetToolTip( _("Move down") );
+
+	bButtonSize1->Add( m_bpMoveDownBodyStyle, 0, wxRIGHT, 5 );
+
+
+	bButtonSize1->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_bpDeleteBodyStyle = new STD_BITMAP_BUTTON( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDeleteBodyStyle->SetToolTip( _("Delete field") );
+
+	bButtonSize1->Add( m_bpDeleteBodyStyle, 0, wxRIGHT|wxLEFT, 10 );
+
+
+	bSizerIndent->Add( bButtonSize1, 0, wxEXPAND, 5 );
+
+
+	sbSizerBodyStyles->Add( bSizerIndent, 1, wxEXPAND|wxLEFT, 24 );
+
+
+	bSizerUnitsAndBodyStyles->Add( sbSizerBodyStyles, 1, wxEXPAND|wxALL, 10 );
+
+
+	m_PanelUnitsAndBodyStyles->SetSizer( bSizerUnitsAndBodyStyles );
+	m_PanelUnitsAndBodyStyles->Layout();
+	bSizerUnitsAndBodyStyles->Fit( m_PanelUnitsAndBodyStyles );
+	m_NoteBook->AddPage( m_PanelUnitsAndBodyStyles, _("Units && Body Styles"), false );
+	m_PanelFootprintFilters = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizerFPFilters;
+	bSizerFPFilters = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bFPFiltersMargins;
+	bFPFiltersMargins = new wxBoxSizer( wxVERTICAL );
+
+	m_staticTextFootprints = new wxStaticText( m_PanelFootprintFilters, wxID_ANY, _("Footprint filters:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFootprints->Wrap( -1 );
 	m_staticTextFootprints->SetToolTip( _("A list of footprints names that can be used for this symbol.\nFootprints names can used wildcards like sm* to allow all footprints names starting by sm.") );
 
-	bFpFilterLeftBoxSizer->Add( m_staticTextFootprints, 0, wxRIGHT|wxLEFT, 5 );
+	bFPFiltersMargins->Add( m_staticTextFootprints, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_FootprintFilterListBox = new wxListBox( m_PanelFootprintFilter, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE );
-	bFpFilterLeftBoxSizer->Add( m_FootprintFilterListBox, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_FootprintFilterListBox = new wxListBox( m_PanelFootprintFilters, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE );
+	bFPFiltersMargins->Add( m_FootprintFilterListBox, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bFpFilterRightBoxSizer;
 	bFpFilterRightBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_addFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilters, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_addFilterButton->SetToolTip( _("Add footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_editFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_editFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilters, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_editFilterButton->SetToolTip( _("Edit footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_editFilterButton, 0, wxALL, 5 );
@@ -333,94 +463,97 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bFpFilterRightBoxSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_deleteFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_deleteFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilters, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_deleteFilterButton->SetToolTip( _("Delete footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_deleteFilterButton, 0, wxALL, 5 );
 
 
-	bFpFilterLeftBoxSizer->Add( bFpFilterRightBoxSizer, 0, 0, 5 );
+	bFPFiltersMargins->Add( bFpFilterRightBoxSizer, 0, 0, 5 );
 
 
-	bPanelFpFilterBoxSizer->Add( bFpFilterLeftBoxSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerFPFilters->Add( bFPFiltersMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	m_PanelFootprintFilter->SetSizer( bPanelFpFilterBoxSizer );
-	m_PanelFootprintFilter->Layout();
-	bPanelFpFilterBoxSizer->Fit( m_PanelFootprintFilter );
-	m_NoteBook->AddPage( m_PanelFootprintFilter, _("Footprint Filters"), false );
+	m_PanelFootprintFilters->SetSizer( bSizerFPFilters );
+	m_PanelFootprintFilters->Layout();
+	bSizerFPFilters->Fit( m_PanelFootprintFilters );
+	m_NoteBook->AddPage( m_PanelFootprintFilters, _("Footprint Filters"), false );
 	m_PanelPinConnections = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer19;
-	bSizer19 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerPinConnections;
+	bSizerPinConnections = new wxBoxSizer( wxVERTICAL );
 
 	m_cbDuplicatePinsAreJumpers = new wxCheckBox( m_PanelPinConnections, wxID_ANY, _("Pins with duplicate numbers are jumpers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbDuplicatePinsAreJumpers->SetToolTip( _("When enabled, this symbol can have more than one pin with the same number, and pins with the same number will be considered to be jumpered together internally.") );
 
-	bSizer19->Add( m_cbDuplicatePinsAreJumpers, 0, wxALL, 5 );
+	bSizerPinConnections->Add( m_cbDuplicatePinsAreJumpers, 0, wxALL, 5 );
+
+
+	bSizerPinConnections->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbJumperPinGroups;
 	sbJumperPinGroups = new wxStaticBoxSizer( new wxStaticBox( m_PanelPinConnections, wxID_ANY, _("Jumper Pin Groups") ), wxVERTICAL );
 
-	wxBoxSizer* bSizer20;
-	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerMargins;
+	bSizerMargins = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer22;
-	bSizer22 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerLeft;
+	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 
-	stLabelAvailablePins = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Available pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	stLabelAvailablePins = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Available pins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	stLabelAvailablePins->Wrap( -1 );
-	bSizer22->Add( stLabelAvailablePins, 0, wxALL, 5 );
+	bSizerLeft->Add( stLabelAvailablePins, 0, wxRIGHT|wxLEFT, 4 );
 
 	m_listAvailablePins = new wxListBox( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_SORT );
 	m_listAvailablePins->SetMinSize( wxSize( 200,-1 ) );
 
-	bSizer22->Add( m_listAvailablePins, 1, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( m_listAvailablePins, 1, wxALL|wxEXPAND, 2 );
 
 
-	bSizer20->Add( bSizer22, 1, wxEXPAND, 5 );
+	bSizerMargins->Add( bSizerLeft, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerCenter;
+	bSizerCenter = new wxBoxSizer( wxVERTICAL );
 
 	m_btnCreateJumperPinGroup = new wxBitmapButton( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnCreateJumperPinGroup->SetToolTip( _("Create jumper group from the selected pins") );
 
-	bSizer21->Add( m_btnCreateJumperPinGroup, 0, wxALL, 5 );
+	bSizerCenter->Add( m_btnCreateJumperPinGroup, 0, wxALL, 5 );
 
 	m_btnRemoveJumperPinGroup = new wxBitmapButton( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnRemoveJumperPinGroup->SetToolTip( _("Remove the selected jumper pin group") );
 
-	bSizer21->Add( m_btnRemoveJumperPinGroup, 0, wxALL, 5 );
+	bSizerCenter->Add( m_btnRemoveJumperPinGroup, 0, wxALL, 5 );
 
 
-	bSizer20->Add( bSizer21, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerMargins->Add( bSizerCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxBoxSizer* bSizer23;
-	bSizer23 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerRight;
+	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
-	stLabelGroups = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Grouped pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	stLabelGroups = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Grouped pins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	stLabelGroups->Wrap( -1 );
-	bSizer23->Add( stLabelGroups, 0, wxALL, 5 );
+	bSizerRight->Add( stLabelGroups, 0, wxRIGHT|wxLEFT, 4 );
 
 	m_listJumperPinGroups = new wxListBox( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_SORT );
 	m_listJumperPinGroups->SetMinSize( wxSize( 200,-1 ) );
 
-	bSizer23->Add( m_listJumperPinGroups, 1, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( m_listJumperPinGroups, 1, wxALL|wxEXPAND, 2 );
 
 
-	bSizer20->Add( bSizer23, 1, wxEXPAND, 5 );
+	bSizerMargins->Add( bSizerRight, 1, wxEXPAND, 5 );
 
 
-	sbJumperPinGroups->Add( bSizer20, 1, wxEXPAND, 5 );
+	sbJumperPinGroups->Add( bSizerMargins, 1, wxEXPAND|wxTOP, 2 );
 
 
-	bSizer19->Add( sbJumperPinGroups, 1, wxALL|wxTOP, 5 );
+	bSizerPinConnections->Add( sbJumperPinGroups, 1, wxALL|wxTOP, 5 );
 
 
-	m_PanelPinConnections->SetSizer( bSizer19 );
+	m_PanelPinConnections->SetSizer( bSizerPinConnections );
 	m_PanelPinConnections->Layout();
-	bSizer19->Fit( m_PanelPinConnections );
-	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), true );
+	bSizerPinConnections->Fit( m_PanelPinConnections );
+	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), false );
 
 	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
@@ -469,10 +602,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_KeywordCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
 	m_inheritanceSelectCombo->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCombobox ), NULL, this );
 	m_inheritanceSelectCombo->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
-	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
-	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
-	m_OptionPartsInterchangeable->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_hasAlternateBodyStyles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_OptionPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_OptionLocalPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_ShowPinNumButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
@@ -482,6 +611,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_excludeFromSimCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBomCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBoardCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_unitSpinCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlKillFocus ), NULL, this );
+	m_unitSpinCtrl->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrl ), NULL, this );
+	m_unitSpinCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlText ), NULL, this );
+	m_unitSpinCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlEnter ), NULL, this );
+	m_OptionPartsInterchangeable->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_radioSingle->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyle ), NULL, this );
+	m_radioDeMorgan->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyle ), NULL, this );
+	m_radioCustom->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyle ), NULL, this );
+	m_bpAddBodyStyle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddBodyStyle ), NULL, this );
+	m_bpMoveUpBodyStyle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyleMoveUp ), NULL, this );
+	m_bpMoveDownBodyStyle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyleMoveDown ), NULL, this );
+	m_bpDeleteBodyStyle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnDeleteBodyStyle ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnFpFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );
@@ -509,10 +650,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_KeywordCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
 	m_inheritanceSelectCombo->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCombobox ), NULL, this );
 	m_inheritanceSelectCombo->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
-	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
-	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
-	m_OptionPartsInterchangeable->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_hasAlternateBodyStyles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_OptionPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_OptionLocalPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_ShowPinNumButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
@@ -522,6 +659,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_excludeFromSimCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBomCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBoardCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_unitSpinCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlKillFocus ), NULL, this );
+	m_unitSpinCtrl->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrl ), NULL, this );
+	m_unitSpinCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlText ), NULL, this );
+	m_unitSpinCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlEnter ), NULL, this );
+	m_OptionPartsInterchangeable->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_radioSingle->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyle ), NULL, this );
+	m_radioDeMorgan->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyle ), NULL, this );
+	m_radioCustom->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyle ), NULL, this );
+	m_bpAddBodyStyle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddBodyStyle ), NULL, this );
+	m_bpMoveUpBodyStyle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyleMoveUp ), NULL, this );
+	m_bpMoveDownBodyStyle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBodyStyleMoveDown ), NULL, this );
+	m_bpDeleteBodyStyle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnDeleteBodyStyle ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnFpFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );

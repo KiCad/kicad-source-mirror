@@ -302,11 +302,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::copySymbolItems( std::unique_ptr<LIB_SYMBOL>& a
                                                   int aDestUnit, bool aOverrideFields )
 {
     // Ensure there are no items on the unit we want to load onto
-    for( SCH_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, 0 /*aConvert*/ ) )
+    for( SCH_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, 0 /* aBodyStyle */ ) )
         aDestSym->RemoveDrawItem( item );
 
     // Copy all draw items
-    for( SCH_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, 0 /*aConvert*/ ) )
+    for( SCH_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, 0 /* aBodyStyle */ ) )
     {
         SCH_ITEM* itemCopy = static_cast<SCH_ITEM*>( newItem->Clone() );
         itemCopy->SetParent( aDestSym.get() );
@@ -664,7 +664,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         wxString    escapedPartName = EscapeString( part.Name, CTX_LIBID );
         LIB_SYMBOL* kiSym = new LIB_SYMBOL( escapedPartName );
 
-        kiSym->SetUnitCount( part.Definition.GateSymbols.size() );
+        kiSym->SetUnitCount( part.Definition.GateSymbols.size(), true );
         bool ok = true;
 
         for( std::pair<GATE_ID, PART::DEFINITION::GATE> gatePair : part.Definition.GateSymbols )

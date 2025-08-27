@@ -54,14 +54,21 @@ protected:
     void OnText( wxCommandEvent& event ) override;
   	void OnCombobox( wxCommandEvent& event ) override;
   	void OnCheckBox( wxCommandEvent& event ) override;
-    void OnSpinCtrl( wxSpinEvent& event ) override;
-    void OnSpinCtrlText( wxCommandEvent& event ) override;
+    void OnUnitSpinCtrl( wxSpinEvent& event ) override;
+    void OnUnitSpinCtrlText( wxCommandEvent& event ) override;
+    void OnUnitSpinCtrlKillFocus( wxFocusEvent& event ) override;
+    void OnUnitSpinCtrlEnter( wxCommandEvent& event ) override;
+    void OnBodyStyle( wxCommandEvent& event ) override;
 
 private:
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
+    void OnAddBodyStyle( wxCommandEvent& event ) override;
+    void OnBodyStyleMoveUp( wxCommandEvent& event ) override;
+    void OnBodyStyleMoveDown( wxCommandEvent& event ) override;
+    void OnDeleteBodyStyle( wxCommandEvent& event ) override;
     void OnSymbolNameKillFocus( wxFocusEvent& event ) override;
     void OnSymbolNameText( wxCommandEvent& event ) override;
     void OnAddFootprintFilter( wxCommandEvent& event ) override;
@@ -80,6 +87,7 @@ private:
     void OnGroupedPinListClick( wxCommandEvent& event ) override;
     void OnAvailablePinsClick( wxCommandEvent& event ) override;
 
+    bool updateUnitCount();
     void adjustGridColumns();
     void syncControlStates( bool aIsAlias );
 

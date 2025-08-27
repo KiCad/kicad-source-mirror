@@ -68,8 +68,7 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_TOOLBAR_SETTINGS::DefaultTool
               .AppendAction( SCH_ACTIONS::showPinNumbers );
 
         config.AppendSeparator()
-              .AppendAction( SCH_ACTIONS::showDeMorganStandard )
-              .AppendAction( SCH_ACTIONS::showDeMorganAlternate );
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::bodyStyleSelector );
 
         config.AppendSeparator()
               .AppendControl( ACTION_TOOLBAR_CONTROLS::unitSelector );
@@ -98,13 +97,26 @@ void SYMBOL_VIEWER_FRAME::configureToolbars()
             if( !m_unitChoice )
             {
                 m_unitChoice = new wxChoice( m_tbTopMain, ID_LIBVIEW_SELECT_UNIT_NUMBER,
-                    wxDefaultPosition, wxSize( 150, -1 ) );
+                                             wxDefaultPosition, wxSize( 150, -1 ) );
             }
 
             aToolbar->Add( m_unitChoice );
         };
 
+    auto bodyChoiceFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_bodyStyleChoice )
+            {
+                m_bodyStyleChoice = new wxChoice( m_tbTopMain, ID_LIBVIEW_SELECT_BODY_STYLE,
+                                                  wxDefaultPosition, wxSize( 150, -1 ) );
+            }
+
+            aToolbar->Add( m_bodyStyleChoice );
+        };
+
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::unitSelector, unitChoiceFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::bodyStyleSelector, bodyChoiceFactory );
 }
 
 

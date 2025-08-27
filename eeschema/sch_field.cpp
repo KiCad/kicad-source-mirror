@@ -306,7 +306,7 @@ wxString SCH_FIELD::GetFullText( int unit ) const
     wxString text = GetText();
     text << wxT( "?" );
 
-    if( GetParentSymbol() && GetParentSymbol()->IsMulti() )
+    if( GetParentSymbol() && GetParentSymbol()->IsMultiUnit() )
         text << LIB_SYMBOL::LetterSubReference( unit, 'A' );
 
     return text;

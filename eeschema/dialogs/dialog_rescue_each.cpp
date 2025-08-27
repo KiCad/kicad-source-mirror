@@ -230,17 +230,17 @@ void DIALOG_RESCUE_EACH::displayItemsInConflict()
 
     if( row < 0 )
     {
-        m_previewOldWidget->DisplayPart( nullptr, 0 );
-        m_previewNewWidget->DisplayPart( nullptr, 0 );
+        m_previewOldWidget->DisplayPart( nullptr, 0, 0 );
+        m_previewNewWidget->DisplayPart( nullptr, 0, 0 );
     }
     else
     {
         RESCUE_CANDIDATE& selected_part = m_rescuer->m_all_candidates[row];
 
         m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(), selected_part.GetUnit(),
-                                         selected_part.GetConvert() );
+                                         selected_part.GetBodyStyle() );
         m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(), selected_part.GetUnit(),
-                                         selected_part.GetConvert() );
+                                         selected_part.GetBodyStyle() );
     }
 }
 

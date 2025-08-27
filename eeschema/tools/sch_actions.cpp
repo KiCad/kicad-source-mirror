@@ -270,12 +270,6 @@ TOOL_ACTION SCH_ACTIONS::updateSymbolFields( TOOL_ACTION_ARGS()
         .Tooltip( _( "Update symbol to match changes made in parent symbol" ) )
         .Icon( BITMAPS::refresh ) );
 
-TOOL_ACTION SCH_ACTIONS::setUnitDisplayName( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.setUnitDisplayName" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Set Unit Display Name..." ) )
-        .Tooltip( _( "Set the display name for a particular unit in a multi-unit symbol" ) ) );
-
 TOOL_ACTION SCH_ACTIONS::addSymbolToSchematic( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.addSymbolToSchematic" )
         .Scope( AS_GLOBAL )
@@ -846,27 +840,11 @@ TOOL_ACTION SCH_ACTIONS::assignNetclass( TOOL_ACTION_ARGS()
         .Tooltip( _( "Assign a netclass to nets matching a pattern" ) )
         .Icon( BITMAPS::netlist ) );
 
-TOOL_ACTION SCH_ACTIONS::toggleDeMorgan( TOOL_ACTION_ARGS()
+TOOL_ACTION SCH_ACTIONS::cycleBodyStyle( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.toggleDeMorgan" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "De Morgan Conversion" ) )
-        .Tooltip( _( "Switch between De Morgan representations" ) )
-        .Icon( BITMAPS::morgan2 ) );
-
-TOOL_ACTION SCH_ACTIONS::showDeMorganStandard( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveEdit.showDeMorganStandard" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "De Morgan Standard" ) )
-        .Tooltip( _( "Switch to standard De Morgan representation" ) )
-        .ToolbarState( TOOLBAR_STATE::TOGGLE )
-        .Icon( BITMAPS::morgan1 ) );
-
-TOOL_ACTION SCH_ACTIONS::showDeMorganAlternate( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveEdit.showDeMorganAlternate" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "De Morgan Alternate" ) )
-        .Tooltip( _( "Switch to alternate De Morgan representation" ) )
-        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .FriendlyName( _( "Cycle Body Style" ) )
+        .Tooltip( _( "Switch between De Morgan (or other) representations" ) )
         .Icon( BITMAPS::morgan2 ) );
 
 TOOL_ACTION SCH_ACTIONS::toLabel( TOOL_ACTION_ARGS()

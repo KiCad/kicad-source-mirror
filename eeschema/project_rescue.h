@@ -63,6 +63,15 @@ enum RESCUE_TYPE
 class RESCUE_CANDIDATE
 {
 public:
+    RESCUE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
+                      LIB_SYMBOL* aLibCandidate, int aUnit, int aBodyStyle ) :
+            m_requested_name( aRequestedName ),
+            m_new_name( aNewName ),
+            m_lib_candidate( aLibCandidate ),
+            m_unit( aUnit ),
+            m_bodyStyle( aBodyStyle )
+    {}
+
     virtual ~RESCUE_CANDIDATE() {}
 
     /**
@@ -88,8 +97,7 @@ public:
     virtual LIB_SYMBOL* GetLibCandidate() const { return m_lib_candidate; }
 
     int GetUnit() const { return m_unit; }
-
-    int GetConvert() const { return m_convert; }
+    int GetBodyStyle() const { return m_bodyStyle; }
 
     /**
      * Get a description of the action proposed, for displaying in the UI.
@@ -108,7 +116,7 @@ protected:
     wxString    m_new_name;
     LIB_SYMBOL* m_lib_candidate;
     int         m_unit;
-    int         m_convert;
+    int         m_bodyStyle;
 };
 
 
@@ -130,12 +138,14 @@ public:
      * @param aNewName is the name we want to change it to.
      * @param aLibCandidate is the part that will give us.
      * @param aUnit is the unit of the rescued symbol.
-     * @param aConvert is the body style of the rescued symbol.
+     * @param aBodyStyle is the body style of the rescued symbol.
      */
     RESCUE_CASE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
-                           LIB_SYMBOL* aLibCandidate, int aUnit = 0, int aConvert = 0 );
+                           LIB_SYMBOL* aLibCandidate, int aUnit = 0, int aBodyStyle = 0 );
 
-    RESCUE_CASE_CANDIDATE() { m_lib_candidate = nullptr; }
+    RESCUE_CASE_CANDIDATE()  :
+            RESCUE_CANDIDATE( wxEmptyString, wxEmptyString, nullptr, 0, 0 )
+    {}
 
     virtual wxString GetActionDescription() const override;
 
@@ -164,13 +174,19 @@ public:
      * @param aCacheCandidate is the part from the cache.
      * @param aLibCandidate is the part that would be loaded from the library.
      * @param aUnit is the unit of the rescued symbol.
-     * @param aConvert is the body style of the rescued symbol.
+     * @param aBodyStyle is the body style of the rescued symbol.
      */
     RESCUE_CACHE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
                             LIB_SYMBOL* aCacheCandidate, LIB_SYMBOL* aLibCandidate,
-                            int aUnit = 0, int aConvert = 0 );
+                            int aUnit = 0, int aBodyStyle = 0 ) :
+            RESCUE_CANDIDATE( aRequestedName, aNewName, aLibCandidate, aUnit, aBodyStyle ),
+            m_cache_candidate( aCacheCandidate )
+    {}
 
-    RESCUE_CACHE_CANDIDATE();
+    RESCUE_CACHE_CANDIDATE() :
+            RESCUE_CANDIDATE( wxEmptyString, wxEmptyString, nullptr, 0, 0 ),
+            m_cache_candidate( nullptr )
+    {}
 
     virtual LIB_SYMBOL* GetCacheCandidate() const override { return m_cache_candidate; }
 
@@ -199,11 +215,11 @@ public:
      * @param aCacheCandidate is the part from the cache.
      * @param aLibCandidate is the part that would be loaded from the library.
      * @param aUnit is the unit of the rescued symbol.
-     * @param aConvert is the body style of the rescued symbol.
+     * @param aBodyStyle is the body style of the rescued symbol.
      */
     RESCUE_SYMBOL_LIB_TABLE_CANDIDATE( const LIB_ID& aRequestedId, const LIB_ID& aNewId,
                                        LIB_SYMBOL* aCacheCandidate, LIB_SYMBOL* aLibCandidate,
-                                       int aUnit = 0, int aConvert = 0 );
+                                       int aUnit = 0, int aBodyStyle = 0 );
 
     RESCUE_SYMBOL_LIB_TABLE_CANDIDATE();
 
@@ -235,9 +251,7 @@ public:
     RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCurrentSheet,
              EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
-    virtual ~RESCUER()
-    {
-    }
+    virtual ~RESCUER() = default;
 
     /**
      * Write the rescue library.
@@ -313,16 +327,16 @@ public:
 protected:
     friend class DIALOG_RESCUE_EACH;
 
-    std::vector<SCH_SYMBOL*> m_symbols;
-    PROJECT* m_prj;
-    SCHEMATIC* m_schematic;
+    std::vector<SCH_SYMBOL*>     m_symbols;
+    PROJECT*                     m_prj;
+    SCHEMATIC*                   m_schematic;
     EDA_DRAW_PANEL_GAL::GAL_TYPE m_galBackEndType;
-    SCH_SHEET_PATH* m_currentSheet;
+    SCH_SHEET_PATH*              m_currentSheet;
 
     boost::ptr_vector<RESCUE_CANDIDATE> m_all_candidates;
-    std::vector<RESCUE_CANDIDATE*> m_chosen_candidates;
+    std::vector<RESCUE_CANDIDATE*>      m_chosen_candidates;
 
-    std::vector<RESCUE_LOG> m_rescue_log;
+    std::vector<RESCUE_LOG>             m_rescue_log;
 };
 
 
@@ -335,9 +349,7 @@ public:
     {
     }
 
-    virtual ~LEGACY_RESCUER()
-    {
-    }
+    virtual ~LEGACY_RESCUER() = default;
 
     virtual void FindCandidates() override;
 
@@ -361,9 +373,7 @@ public:
                               SCH_SHEET_PATH* aCurrentSheet,
                               EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
-    virtual ~SYMBOL_LIB_TABLE_RESCUER()
-    {
-    }
+    virtual ~SYMBOL_LIB_TABLE_RESCUER() = default;
 
     virtual void FindCandidates() override;
 
@@ -376,8 +386,7 @@ public:
     virtual void AddSymbol( LIB_SYMBOL* aNewSymbol ) override;
 
 private:
-    std::vector<std::unique_ptr<LIB_SYMBOL>> m_rescueLibSymbols;
-
+    std::vector<std::unique_ptr<LIB_SYMBOL>>     m_rescueLibSymbols;
     std::unique_ptr<std::map<std::string, UTF8>> m_properties;   ///< Library plugin properties.
 };
 

@@ -80,14 +80,14 @@ SELECTION_CONDITION SCH_CONDITIONS::SingleSymbolOrPower = []( const SELECTION& a
 };
 
 
-SELECTION_CONDITION SCH_CONDITIONS::SingleDeMorganSymbol = []( const SELECTION& aSel )
+SELECTION_CONDITION SCH_CONDITIONS::SingleMultiBodyStyleSymbol = []( const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )
     {
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->HasAlternateBodyStyle();
+            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsMultiBodyStyle();
     }
 
     return false;
@@ -284,21 +284,6 @@ bool SCH_SELECTION_TOOL::Init()
                 return m_enteredGroup != nullptr;
             };
 
-    auto symbolDisplayNameIsEditable =
-            [&]( const SELECTION& sel )
-            {
-                if ( !m_isSymbolEditor )
-                    return false;
-
-                SYMBOL_EDIT_FRAME* symbEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-
-                return symbEditorFrame
-                        && symbEditorFrame->GetCurSymbol()
-                        && symbEditorFrame->GetCurSymbol()->IsMulti()
-                        && symbEditorFrame->IsSymbolEditable()
-                        && !symbEditorFrame->IsSymbolAlias();
-            };
-
     auto& menu = m_menu->GetMenu();
 
     // clang-format off
@@ -341,7 +326,6 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddSeparator( 400 );
     menu.AddItem( SCH_ACTIONS::symbolProperties,      haveSymbol && SCH_CONDITIONS::Empty, 400 );
     menu.AddItem( SCH_ACTIONS::pinTable,              haveSymbol && SCH_CONDITIONS::Empty, 400 );
-    menu.AddItem( SCH_ACTIONS::setUnitDisplayName,    haveSymbol && symbolDisplayNameIsEditable && SCH_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( *m_menu.get() );
@@ -764,14 +748,14 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( symbol )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( symbol, unit );
             }
-            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BASE
-                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_ALT )
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BODY_STYLE
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_BODY_STYLE_END )
             {
                 SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selection.Front() );
-                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BASE ) + 1;
+                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BODY_STYLE ) + 1;
 
                 if( symbol && symbol->GetBodyStyle() != bodyStyle )
-                    static_cast<SCH_EDIT_FRAME*>( m_frame )->FlipBodyStyle( symbol );
+                    static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectBodyStyle( symbol, bodyStyle );
             }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_ALT_PIN_FUNCTION
                      && *evt->GetCommandId() <= ID_POPUP_SCH_ALT_PIN_FUNCTION_END )

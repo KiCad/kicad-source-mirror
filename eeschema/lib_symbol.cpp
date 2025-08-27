@@ -91,11 +91,12 @@ struct null_deleter
 
 
 LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* aLibrary ) :
-    SYMBOL( LIB_SYMBOL_T ),
-    m_me( this, null_deleter() )
+        SYMBOL( LIB_SYMBOL_T ),
+        m_me( this, null_deleter() )
 {
     m_lastModDate    = 0;
     m_unitCount      = 1;
+    m_demorgan       = false;
     m_pinNameOffset  = schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET );
     m_options        = ENTRY_NORMAL;
     m_unitsLocked    = false;
@@ -126,14 +127,15 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 
 
 LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
-    SYMBOL( aSymbol ),
-    EMBEDDED_FILES( aSymbol ),
-    m_me( this, null_deleter() )
+        SYMBOL( aSymbol ),
+        EMBEDDED_FILES( aSymbol ),
+        m_me( this, null_deleter() )
 {
     m_library        = aLibrary;
     m_name           = aSymbol.m_name;
     m_fpFilters      = wxArrayString( aSymbol.m_fpFilters );
     m_unitCount      = aSymbol.m_unitCount;
+    m_demorgan       = aSymbol.m_demorgan;
     m_unitsLocked    = aSymbol.m_unitsLocked;
     m_lastModDate    = aSymbol.m_lastModDate;
     m_options        = aSymbol.m_options;
@@ -143,7 +145,8 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     std::ranges::copy( aSymbol.m_jumperPinGroups, std::back_inserter( m_jumperPinGroups ) );
     m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
-    aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
+    m_unitDisplayNames = aSymbol.GetUnitDisplayNames();
+    m_bodyStyleNames = aSymbol.GetBodyStyleNames();
 
     ClearSelected();
 
@@ -184,6 +187,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_name        = aSymbol.m_name;
     m_fpFilters   = wxArrayString( aSymbol.m_fpFilters );
     m_unitCount   = aSymbol.m_unitCount;
+    m_demorgan    = aSymbol.m_demorgan;
     m_unitsLocked = aSymbol.m_unitsLocked;
     m_lastModDate = aSymbol.m_lastModDate;
     m_options     = aSymbol.m_options;
@@ -193,8 +197,8 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     std::ranges::copy( aSymbol.m_jumperPinGroups, std::back_inserter( m_jumperPinGroups ) );
     m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
-    m_unitDisplayNames.clear();
-    aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
+    m_unitDisplayNames = aSymbol.GetUnitDisplayNames();
+    m_bodyStyleNames = aSymbol.GetBodyStyleNames();
 
     m_drawings.clear();
 
@@ -278,12 +282,6 @@ LIB_SYMBOL_SPTR LIB_SYMBOL::GetRootSymbol() const
 }
 
 
-bool LIB_SYMBOL::HasUnitDisplayName( int aUnit ) const
-{
-    return ( m_unitDisplayNames.count( aUnit ) == 1 );
-}
-
-
 wxString LIB_SYMBOL::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
     if( m_unitDisplayNames.contains( aUnit ) )
@@ -297,31 +295,20 @@ wxString LIB_SYMBOL::GetUnitDisplayName( int aUnit, bool aLabel ) const
 
 wxString LIB_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
 {
-    if( aBodyStyle == BODY_STYLE::DEMORGAN )
-        return aLabel ? _( "Alternate" ) : wxString( _HKI( "Alternate" ) );
-    else if( aBodyStyle == BODY_STYLE::BASE )
-        return aLabel ? _( "Standard" ) : wxString( _HKI( "Standard" ) );
-    else
-        return wxT( "?" );
-}
-
-
-void LIB_SYMBOL::CopyUnitDisplayNames( std::map<int, wxString>& aTarget ) const
-{
-    for( const auto& it : m_unitDisplayNames )
-        aTarget[it.first] = it.second;
-}
-
-
-void LIB_SYMBOL::SetUnitDisplayName( int aUnit, const wxString& aName )
-{
-    if( aUnit <= GetUnitCount() )
+    if( HasDeMorganBodyStyles() )
     {
-        if( aName.Length() > 0 )
-            m_unitDisplayNames[aUnit] = aName;
-        else
-            m_unitDisplayNames.erase( aUnit );
+        if( aBodyStyle == BODY_STYLE::DEMORGAN )
+            return aLabel ? _( "Alternate" ) : wxString( _HKI( "Alternate" ) );
+        else if( aBodyStyle == BODY_STYLE::BASE )
+            return aLabel ? _( "Standard" ) : wxString( _HKI( "Standard" ) );
     }
+    else if( IsMultiBodyStyle() )
+    {
+        if( aBodyStyle <= (int) m_bodyStyleNames.size() )
+            return m_bodyStyleNames[aBodyStyle-1];
+    }
+
+    return wxT( "?" );
 }
 
 
@@ -1215,7 +1202,11 @@ void LIB_SYMBOL::Move( const VECTOR2I& aOffset )
 }
 
 
-bool LIB_SYMBOL::HasAlternateBodyStyle() const
+// Before V10 we didn't store the number of body styles in a symbol -- we just looked through all
+// its drawings each time we wanted to know.  This is now only used to set the count when a legacy
+// symbol is first read.  (Legacy symbols also didn't support arbitrary body styles, so the count
+// is always 1 or 2, and when 2 it is always a De Morgan pair.)
+bool LIB_SYMBOL::HasLegacyAlternateBodyStyle() const
 {
     for( const SCH_ITEM& item : m_drawings )
     {
@@ -1387,20 +1378,23 @@ int LIB_SYMBOL::GetUnitCount() const
 }
 
 
-void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePins )
+void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool aDuplicatePins )
 {
-    if( aHasAlternate == HasAlternateBodyStyle() )
+    if( GetBodyStyleCount() == aCount )
         return;
 
     // Duplicate items to create the converted shape
-    if( aHasAlternate )
+    if( GetBodyStyleCount() < aCount )
     {
-        if( aDuplicatePins )
+        if( aDuplicateDrawItems || aDuplicatePins )
         {
             std::vector<SCH_ITEM*> tmp;     // Temporarily store the duplicated pins here.
 
-            for( SCH_ITEM& item : m_drawings[ SCH_PIN_T ] )
+            for( SCH_ITEM& item : m_drawings )
             {
+                if( item.Type() != SCH_PIN_T && !aDuplicateDrawItems )
+                    continue;
+
                 if( item.m_bodyStyle == 1 )
                 {
                     SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
@@ -1754,10 +1748,16 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         if( m_unitsLocked != aRhs.m_unitsLocked )
             return ( m_unitsLocked ) ? 1 : -1;
 
-        // Compare unit display names
+        // Compare unit display names...
         if( m_unitDisplayNames < aRhs.m_unitDisplayNames )
             return -1;
         else if( m_unitDisplayNames > aRhs.m_unitDisplayNames )
+            return 1;
+
+        // ... and body style names.
+        if( m_bodyStyleNames < aRhs.m_bodyStyleNames )
+            return -1;
+        else if( m_bodyStyleNames > aRhs.m_bodyStyleNames )
             return 1;
     }
 
@@ -1840,6 +1840,11 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
 
     if( m_unitCount != other.m_unitCount )
         similarity *= 0.5;
+
+    if( GetBodyStyleCount() != other.GetBodyStyleCount() )
+        similarity *= 0.5;
+    else if( m_bodyStyleNames != other.m_bodyStyleNames )
+        similarity *= 0.9;
 
     if( m_pinNameOffset != other.m_pinNameOffset )
         similarity *= 0.9;

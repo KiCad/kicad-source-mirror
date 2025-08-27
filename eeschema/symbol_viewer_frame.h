@@ -137,6 +137,7 @@ private:
     void DClickOnSymbolList( wxCommandEvent& event );
 
     void onUpdateUnitChoice( wxUpdateUIEvent& aEvent );
+    void onUpdateBodyStyleChoice( wxUpdateUIEvent& aEvent );
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnSymFilter( wxCommandEvent& aEvent );
@@ -145,6 +146,7 @@ private:
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
     void onSelectSymbolUnit( wxCommandEvent& aEvent );
+    void onSelectSymbolBodyStyle( wxCommandEvent& aEvent );
 
     void updatePreviewSymbol();
 
@@ -152,6 +154,7 @@ private:
 
 private:
     wxChoice*           m_unitChoice;
+    wxChoice*           m_bodyStyleChoice;
 
     wxSearchCtrl*       m_libFilter;
     WX_LISTBOX*         m_libList;             // The list of libraries.

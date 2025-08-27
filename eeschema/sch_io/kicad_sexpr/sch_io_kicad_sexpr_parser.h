@@ -203,8 +203,8 @@ private:
         aBottom = parseInternalUnits( "bottom margin" );
     }
 
-    void parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax,
-                        bool aEnforceMinTextSize = true );
+    void parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax, bool aEnforceMinTextSize = true );
+    void parseBodyStyles( std::unique_ptr<LIB_SYMBOL>& aSymbol );
     void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );
     void parsePinNumbers( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 

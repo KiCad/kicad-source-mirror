@@ -168,6 +168,23 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         // TODO: add anchor position token here.
 
+        if( aSymbol->IsMultiBodyStyle() )
+        {
+            aFormatter.Print( "(body_styles " );
+
+            if( aSymbol->HasDeMorganBodyStyles() )
+            {
+                aFormatter.Print( "demorgan" );
+            }
+            else
+            {
+                for( const wxString& bodyStyle : aSymbol->GetBodyStyleNames() )
+                    aFormatter.Print( "%s ", aFormatter.Quotew( bodyStyle ).c_str() );
+            }
+
+            aFormatter.Print( ")" );
+        }
+
         if( !aSymbol->GetShowPinNumbers() )
             aFormatter.Print( "(pin_numbers (hide yes))" );
 
@@ -258,9 +275,9 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                               unit.m_bodyStyle );
 
             // if the unit has a display name, write that
-            if( aSymbol->HasUnitDisplayName( unit.m_unit ) )
+            if( aSymbol->GetUnitDisplayNames().contains( unit.m_unit ) )
             {
-                name = aSymbol->GetUnitDisplayName( unit.m_unit, false );
+                name = aSymbol->GetUnitDisplayNames().at( unit.m_unit );
                 aFormatter.Print( "(unit_name %s)", aFormatter.Quotes( name ).c_str() );
             }
 

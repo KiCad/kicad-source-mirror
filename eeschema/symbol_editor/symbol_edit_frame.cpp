@@ -94,6 +94,7 @@ bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
 
 BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, SCH_BASE_FRAME )
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_UNIT_NUMBER, SYMBOL_EDIT_FRAME::OnSelectUnit )
+    EVT_COMBOBOX( ID_LIBEDIT_SELECT_BODY_STYLE, SYMBOL_EDIT_FRAME::OnSelectBodyStyle )
 
     // menubar commands
     EVT_MENU( wxID_EXIT, SYMBOL_EDIT_FRAME::OnExitKiCad )
@@ -101,6 +102,7 @@ BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, SCH_BASE_FRAME )
 
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_UNIT_NUMBER, SYMBOL_EDIT_FRAME::OnUpdateUnitNumber )
+    EVT_UPDATE_UI( ID_LIBEDIT_SELECT_BODY_STYLE, SYMBOL_EDIT_FRAME::OnUpdateBodyStyle )
 
     // Drop files event
     EVT_DROP_FILES( SYMBOL_EDIT_FRAME::OnDropFiles )
@@ -113,9 +115,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         LIB_EDIT_FRAME_NAME ),
         m_unitSelectBox( nullptr ),
+        m_bodyStyleSelectBox( nullptr ),
         m_isSymbolFromSchematic( false )
 {
-    SetShowDeMorgan( false );
     m_SyncPinEdit = false;
 
     m_symbol = nullptr;
@@ -190,7 +192,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     UpdateTitle();
     UpdateSymbolMsgPanelInfo();
-    RebuildSymbolUnitsList();
+    RebuildSymbolUnitAndBodyStyleLists();
 
     m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
     m_propertiesPanel->SetSplitterProportion( m_settings->m_AuiPanels.properties_splitter );
@@ -560,34 +562,16 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );
     mgr->SetConditions( SCH_ACTIONS::togglePinAltIcons,   CHECK( showPinAltIconsCond ) );
 
-    auto demorganCond =
-            [this]( const SELECTION& )
-            {
-                return GetShowDeMorgan();
-            };
-
-    auto demorganStandardCond =
-            [this]( const SELECTION& )
-            {
-                return m_bodyStyle == BODY_STYLE::BASE;
-            };
-
-    auto demorganAlternateCond =
-            [this]( const SELECTION& )
-            {
-                return m_bodyStyle == BODY_STYLE::DEMORGAN;
-            };
-
     auto multiUnitModeCond =
             [this]( const SELECTION& )
             {
-                return m_symbol && m_symbol->IsMulti() && !m_symbol->UnitsLocked();
+                return m_symbol && m_symbol->IsMultiUnit() && !m_symbol->UnitsLocked();
             };
 
-    auto hasMultipleUnitsCond =
+    auto multiBodyStyleModeCond =
             [this]( const SELECTION& )
             {
-                return m_symbol && m_symbol->IsMulti();
+                return m_symbol && m_symbol->IsMultiBodyStyle();
             };
 
     auto syncedPinsModeCond =
@@ -606,11 +590,9 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::cycleBodyStyle,   ENABLE( multiBodyStyleModeCond ) );
 
-    mgr->SetConditions( SCH_ACTIONS::showDeMorganStandard,  ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
-    mgr->SetConditions( SCH_ACTIONS::showDeMorganAlternate, ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
     mgr->SetConditions( SCH_ACTIONS::toggleSyncedPinsMode,  ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
-    mgr->SetConditions( SCH_ACTIONS::setUnitDisplayName,    ACTION_CONDITIONS().Enable( isEditableCond && hasMultipleUnitsCond ) );
 
 // Only enable a tool if the symbol is edtable
 #define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isEditableCond ).Check( cond.CurrentTool( tool ) )
@@ -705,33 +687,58 @@ void SYMBOL_EDIT_FRAME::doCloseWindow()
 }
 
 
-void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
+void SYMBOL_EDIT_FRAME::RebuildSymbolUnitAndBodyStyleLists()
 {
-    if( !m_unitSelectBox )
-        return;
-
-    if( m_unitSelectBox->GetCount() != 0 )
-        m_unitSelectBox->Clear();
-
-    if( !m_symbol || m_symbol->GetUnitCount() <= 1 )
+    if( m_unitSelectBox )
     {
-        m_unit = 1;
-        m_unitSelectBox->Append( wxEmptyString );
-    }
-    else
-    {
-        for( int i = 0; i < m_symbol->GetUnitCount(); i++ )
+        if( m_unitSelectBox->GetCount() != 0 )
+            m_unitSelectBox->Clear();
+
+        if( !m_symbol || m_symbol->GetUnitCount() <= 1 )
         {
-            wxString unitDisplayName = m_symbol->GetUnitDisplayName( i + 1, true );
-            m_unitSelectBox->Append( unitDisplayName );
+            m_unit = 1;
+            m_unitSelectBox->Append( wxEmptyString );
         }
+        else
+        {
+            for( int i = 0; i < m_symbol->GetUnitCount(); i++ )
+                m_unitSelectBox->Append( m_symbol->GetUnitDisplayName( i + 1, true ) );
+        }
+
+        // Ensure the selected unit is compatible with the number of units of the current symbol:
+        if( m_symbol && m_symbol->GetUnitCount() < m_unit )
+            m_unit = 1;
+
+        m_unitSelectBox->SetSelection( ( m_unit > 0 ) ? m_unit - 1 : 0 );
     }
 
-    // Ensure the selected unit is compatible with the number of units of the current symbol:
-    if( m_symbol && m_symbol->GetUnitCount() < m_unit )
-        m_unit = 1;
+    if( m_bodyStyleSelectBox )
+    {
+        if( m_bodyStyleSelectBox->GetCount() != 0 )
+            m_bodyStyleSelectBox->Clear();
 
-    m_unitSelectBox->SetSelection(( m_unit > 0 ) ? m_unit - 1 : 0 );
+        if( !m_symbol || !m_symbol->IsMultiBodyStyle() )
+        {
+            m_bodyStyle = 1;
+            m_bodyStyleSelectBox->Append( wxEmptyString );
+        }
+        else if( m_symbol && m_symbol->HasDeMorganBodyStyles() )
+        {
+            m_bodyStyleSelectBox->Append( wxGetTranslation( DEMORGAN_STD ) );
+            m_bodyStyleSelectBox->Append( wxGetTranslation( DEMORGAN_ALT ) );
+        }
+        else
+        {
+            for( int i = 0; i < m_symbol->GetBodyStyleCount(); i++ )
+                m_bodyStyleSelectBox->Append( m_symbol->GetBodyStyleNames()[i] );
+        }
+
+        // Ensure the selected body style is compatible with the number of body styles of the current symbol:
+        if( m_symbol && m_symbol->GetBodyStyleCount() < m_bodyStyle )
+            m_bodyStyle = 1;
+
+        m_bodyStyleSelectBox->SetSelection( ( m_bodyStyle > 0 ) ? m_bodyStyle - 1 : 0 );
+    }
 }
 
 
@@ -811,12 +818,25 @@ void SYMBOL_EDIT_FRAME::OnUpdateUnitNumber( wxUpdateUIEvent& event )
 
 void SYMBOL_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 {
-    int i = event.GetSelection();
-
-    if( i == wxNOT_FOUND )
+    if( event.GetSelection() == wxNOT_FOUND )
         return;
 
-    SetUnit( i + 1 );
+    SetUnit( event.GetSelection() + 1 );
+}
+
+
+void SYMBOL_EDIT_FRAME::OnUpdateBodyStyle( wxUpdateUIEvent& event )
+{
+    event.Enable( m_symbol && m_symbol->GetBodyStyleCount() > 1 );
+}
+
+
+void SYMBOL_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
+{
+    if( event.GetSelection() == wxNOT_FOUND )
+        return;
+
+    SetBodyStyle( event.GetSelection() + 1 );
 }
 
 
@@ -893,7 +913,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_SYMBOL, symbolName );
 
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
-    m_SyncPinEdit = aSymbol && aSymbol->IsRoot() && aSymbol->IsMulti() && !aSymbol->UnitsLocked();
+    m_SyncPinEdit = aSymbol && aSymbol->IsRoot() && aSymbol->IsMultiUnit() && !aSymbol->UnitsLocked();
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
@@ -1076,9 +1096,31 @@ void SYMBOL_EDIT_FRAME::SetUnit( int aUnit )
 }
 
 
+void SYMBOL_EDIT_FRAME::SetBodyStyle( int aBodyStyle )
+{
+    wxCHECK( aBodyStyle > 0 && aBodyStyle <= GetCurSymbol()->GetBodyStyleCount(), /* void */ );
+
+    if( m_bodyStyle == aBodyStyle )
+        return;
+
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
+    m_toolManager->RunAction( ACTIONS::selectionClear );
+
+    m_bodyStyle = aBodyStyle;
+
+    if( m_bodyStyleSelectBox->GetSelection() != ( m_bodyStyle - 1 ) )
+        m_bodyStyleSelectBox->SetSelection( m_bodyStyle - 1 );
+
+
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    RebuildView();
+    UpdateSymbolMsgPanelInfo();
+}
+
+
 bool SYMBOL_EDIT_FRAME::SynchronizePins()
 {
-    return m_SyncPinEdit && m_symbol && m_symbol->IsMulti() && !m_symbol->UnitsLocked();
+    return m_SyncPinEdit && m_symbol && m_symbol->IsMultiUnit() && !m_symbol->UnitsLocked();
 }
 
 
@@ -1656,8 +1698,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
                 SetScreen( symbol_screen );
                 SetCurSymbol( new LIB_SYMBOL( *lib_symbol ), false );
-                RebuildSymbolUnitsList();
-                SetShowDeMorgan( GetCurSymbol()->HasAlternateBodyStyle() );
+                RebuildSymbolUnitAndBodyStyleLists();
 
                 if( m_toolManager )
                     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
@@ -1837,8 +1878,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
         ToggleLibraryTree();
 
     UpdateTitle();
-    RebuildSymbolUnitsList();
-    SetShowDeMorgan( GetCurSymbol()->HasAlternateBodyStyle() );
+    RebuildSymbolUnitAndBodyStyleLists();
     UpdateSymbolMsgPanelInfo();
 
     // Let tools add things to the view if necessary

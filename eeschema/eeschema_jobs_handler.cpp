@@ -823,9 +823,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 }
 
 
-int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
-                                           SCH_RENDER_SETTINGS* aRenderSettings,
-                                           LIB_SYMBOL*          symbol )
+int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_RENDER_SETTINGS* aRenderSettings,
+                                           LIB_SYMBOL* symbol )
 {
     wxCHECK( symbol, CLI::EXIT_CODES::ERR_UNKNOWN );
 
@@ -845,8 +844,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
-        for( int bodyStyle = 1; bodyStyle < ( symbol->HasAlternateBodyStyle() ? 2 : 1 ) + 1;
-             ++bodyStyle )
+        for( int bodyStyle = 1; bodyStyle <= symbol->GetBodyStyleCount(); ++bodyStyle )
         {
             wxString   filename;
             wxFileName fn;
@@ -864,8 +862,15 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
             // Also avoids aliasing 'sym', unit 2 and 'sym_unit2', unit 1 to the same file.
             filename += wxString::Format( "_unit%d", unit );
 
-            if( bodyStyle == 2 )
-                filename += wxS( "_demorgan" );
+            if( symbol->HasDeMorganBodyStyles() )
+            {
+                if( bodyStyle == 2 )
+                    filename += wxS( "_demorgan" );
+            }
+            else if( bodyStyle <= (int) symbol->GetBodyStyleNames().size() )
+            {
+                filename += wxS( "_" ) + symbol->GetBodyStyleNames()[bodyStyle-1].Lower();
+            }
 
             fn.SetName( filename );
             m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),

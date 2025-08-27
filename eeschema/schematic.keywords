@@ -8,6 +8,8 @@ background
 bezier
 bidirectional
 bitmap
+body_style
+body_styles
 bold
 border
 bottom
@@ -32,6 +34,7 @@ data
 date
 default
 default_instance
+demorgan
 diameter
 diamond
 directive_label

@@ -87,7 +87,8 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_grid->SetColSize( 9, 84 );
 	m_grid->SetColSize( 10, 84 );
 	m_grid->SetColSize( 11, 84 );
-	m_grid->SetColSize( 12, 66 );
+	m_grid->SetColSize( 12, 100 );
+	m_grid->SetColSize( 13, 100 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelValue( 0, _("Count") );
@@ -103,7 +104,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_grid->SetColLabelValue( 10, _("Y Position") );
 	m_grid->SetColLabelValue( 11, _("Visible") );
 	m_grid->SetColLabelValue( 12, _("Unit") );
-	m_grid->SetColLabelValue( 13, _("De Morgan") );
+	m_grid->SetColLabelValue( 13, _("Body Style") );
 	m_grid->SetColLabelSize( 24 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

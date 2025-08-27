@@ -123,13 +123,13 @@ INSPECT_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 
 
 void SCH_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aFilterList,
-                             const VECTOR2I& aPos, int aUnit, int aConvert )
+                             const VECTOR2I& aPos, int aUnit, int aBodyStyle )
 {
     Empty(); // empty the collection just in case
 
     SetScanTypes( aFilterList );
     m_Unit = aUnit;
-    m_BodyStyle = aConvert;
+    m_BodyStyle = aBodyStyle;
 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );
@@ -143,13 +143,13 @@ void SCH_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aF
 
 
 void SCH_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD_T>& aFilterList,
-                             const VECTOR2I& aPos, int aUnit, int aConvert )
+                             const VECTOR2I& aPos, int aUnit, int aBodyStyle )
 {
     Empty();        // empty the collection just in case
 
     SetScanTypes( aFilterList );
     m_Unit = aUnit;
-    m_BodyStyle = aConvert;
+    m_BodyStyle = aBodyStyle;
 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );

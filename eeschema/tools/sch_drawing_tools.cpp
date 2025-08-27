@@ -528,14 +528,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }
-            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BASE
-                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_ALT )
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BODY_STYLE
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_BODY_STYLE_END )
             {
-                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BASE ) + 1;
+                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BODY_STYLE ) + 1;
 
                 if( symbol && symbol->GetBodyStyle() != bodyStyle )
                 {
-                    m_frame->FlipBodyStyle( symbol );
+                    m_frame->SelectBodyStyle( symbol, bodyStyle );
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }
@@ -612,7 +612,7 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    if( !symbol->IsMulti() )
+    if( !symbol->IsMultiUnit() )
     {
         m_frame->ShowInfoBarMsg( _( "This symbol has only one unit." ) );
         return 0;

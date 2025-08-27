@@ -2038,7 +2038,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 
             // Process each gate in the deviceset for this device.
             int        gate_count = static_cast<int>( edeviceset->gates.size() );
-            libSymbol->SetUnitCount( gate_count );
+            libSymbol->SetUnitCount( gate_count, true );
             libSymbol->LockUnits( true );
 
             SCH_FIELD* reference = libSymbol->GetField( FIELD_T::REFERENCE );
@@ -2078,7 +2078,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 gateindex++;
             }
 
-            libSymbol->SetUnitCount( gate_count );
+            libSymbol->SetUnitCount( gate_count, true );
 
             if( gate_count == 1 && ispower )
                 libSymbol->SetGlobalPower();

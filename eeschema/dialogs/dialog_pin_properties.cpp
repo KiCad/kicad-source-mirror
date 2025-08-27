@@ -160,7 +160,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
                                                  m_frame->GetCanvas()->GetBackend() );
 
     m_previewWidget->SetLayoutDirection( wxLayout_LeftToRight );
-    m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), 0 );
+    m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), m_dummyPin->GetBodyStyle() );
 
     wxBoxSizer* previewSizer = new wxBoxSizer( wxHORIZONTAL );
     previewSizer->Add( m_previewWidget, 1, wxEXPAND, 5 );
@@ -217,12 +217,12 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
                                                          } ) );
     m_alternatesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-    if( aPin->GetParentSymbol()->HasAlternateBodyStyle() )
+    if( aPin->GetParentSymbol()->IsMultiBodyStyle() )
     {
         m_alternatesTurndown->Collapse();
         m_alternatesTurndown->Disable();
-        m_alternatesTurndown->SetToolTip( _( "Alternate pin assignments are not available for "
-                                             "De Morgan symbols." ) );
+        m_alternatesTurndown->SetToolTip( _( "Alternate pin assignments are not available for symbols with "
+                                             "multiple body styles." ) );
     }
 
     // Set special attributes
@@ -287,8 +287,9 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_textPinNumber->SetValue( m_pin->GetNumber() );
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
-    m_checkApplyToAllParts->Enable( m_pin->GetParentSymbol()->IsMulti() );
-    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMulti() && m_pin->GetUnit() == 0 );
+    m_checkApplyToAllParts->Enable( m_pin->GetParentSymbol()->IsMultiUnit() );
+    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMultiUnit() && m_pin->GetUnit() == 0 );
+    m_checkApplyToAllBodyStyles->Enable( m_pin->GetParentSymbol()->IsMultiBodyStyle() );
     m_checkApplyToAllBodyStyles->SetValue( m_pin->GetBodyStyle() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
@@ -321,7 +322,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
         commonUnitsToolTip = _( "If checked, this pin will exist in all units." );
     }
 
-    if( !m_pin->GetParentSymbol()->IsMulti() )
+    if( !m_pin->GetParentSymbol()->IsMultiUnit() )
         commonUnitsToolTip = _( "This symbol only has one unit. This control has no effect." );
 
     m_checkApplyToAllParts->SetToolTip( commonUnitsToolTip );
@@ -418,7 +419,7 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
         m_infoBar->GetSizer()->Layout();
     }
 
-    m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), 0 );
+    m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), m_dummyPin->GetBodyStyle() );
 }
 
 

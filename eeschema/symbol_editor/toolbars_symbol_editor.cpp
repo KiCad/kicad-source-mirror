@@ -145,8 +145,7 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
               .AppendAction( SCH_ACTIONS::checkSymbol );
 
         config.AppendSeparator()
-              .AppendAction( SCH_ACTIONS::showDeMorganStandard )
-              .AppendAction( SCH_ACTIONS::showDeMorganAlternate );
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::bodyStyleSelector );
 
         config.AppendSeparator()
               .AppendControl( ACTION_TOOLBAR_CONTROLS::unitSelector );
@@ -182,6 +181,21 @@ void SYMBOL_EDIT_FRAME::configureToolbars()
             aToolbar->Add( m_unitSelectBox );
         };
 
+    auto bodyDisplayFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_bodyStyleSelectBox )
+            {
+                m_bodyStyleSelectBox = new wxComboBox( aToolbar, ID_LIBEDIT_SELECT_BODY_STYLE,
+                                                       wxEmptyString, wxDefaultPosition,
+                                                       wxSize( LISTBOX_WIDTH, -1 ), 0,
+                                                       nullptr, wxCB_READONLY );
+            }
+
+            aToolbar->Add( m_bodyStyleSelectBox );
+        };
+
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::unitSelector, unitDisplayFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::bodyStyleSelector, bodyDisplayFactory );
 }
 

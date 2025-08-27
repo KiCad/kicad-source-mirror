@@ -127,9 +127,7 @@ public:
     static TOOL_ACTION editValue;
     static TOOL_ACTION editFootprint;
     static TOOL_ACTION autoplaceFields;
-    static TOOL_ACTION toggleDeMorgan;
-    static TOOL_ACTION showDeMorganStandard;
-    static TOOL_ACTION showDeMorganAlternate;
+    static TOOL_ACTION cycleBodyStyle;
     static TOOL_ACTION editSymbolUnit;
     static TOOL_ACTION toLabel;
     static TOOL_ACTION toCLabel;
@@ -211,7 +209,6 @@ public:
     static TOOL_ACTION importSymbol;
     static TOOL_ACTION exportSymbol;
     static TOOL_ACTION updateSymbolFields;
-    static TOOL_ACTION setUnitDisplayName;
 
     // Hierarchy navigation
     static TOOL_ACTION changeSheet;

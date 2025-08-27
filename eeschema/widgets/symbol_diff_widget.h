@@ -45,7 +45,7 @@ public:
     /**
      * Set the currently displayed symbol.
      */
-    void DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol, int aUnit, int aConvert );
+    void DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol, int aUnit, int aBodyStyle );
 
     /**
      * Toggle between full-A and full-B display.

@@ -56,7 +56,7 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( const NEW_
     if( !aParent )
     {
         new_symbol->GetReferenceField().SetText( aProps.reference );
-        new_symbol->SetUnitCount( aProps.unitCount );
+        new_symbol->SetUnitCount( aProps.unitCount, true );
 
         if( aProps.pinNameInside )
         {
@@ -80,7 +80,8 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( const NEW_
         if( aProps.unitCount < 2 )
             new_symbol->LockUnits( false );
 
-        new_symbol->SetHasAlternateBodyStyle( aProps.alternateBodyStyle );
+        if( aProps.alternateBodyStyle )
+            new_symbol->SetBodyStyleCount( 2, false, true );
     }
     else
     {

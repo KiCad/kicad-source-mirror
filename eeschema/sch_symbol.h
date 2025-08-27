@@ -232,15 +232,6 @@ public:
 
     void SetBodyStyle( int aBodyStyle ) override;
 
-    /**
-     * Similar to SetBodyStyle(), but always set the body style, regardless
-     * the lib symbol properties (the LIB_SYMBOL m_part can be not set during
-     * schematic files loading)
-     */
-    void SetBodyStyleUnconditional( int aBodyStyle );
-
-    bool HasAlternateBodyStyle() const override;
-
     wxString GetPrefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
 
@@ -258,7 +249,18 @@ public:
      */
     int GetUnitCount() const override;
 
-    bool IsMulti() const override { return GetUnitCount() > 1; }
+    bool IsMultiUnit() const override { return GetUnitCount() > 1; }
+
+    /**
+     * Return the number of body styles of the symbol.
+     *
+     * @return the number of body styles or zero if the library entry cannot be found.
+     */
+    int GetBodyStyleCount() const override;
+
+    bool IsMultiBodyStyle() const override { return GetBodyStyleCount() > 1; }
+
+    bool HasDeMorganBodyStyles() const override;
 
     /**
      * Compute the new transform matrix based on \a aOrientation for the symbol which is
@@ -522,7 +524,7 @@ public:
 
     void SetBodyStyleProp( const wxString& aBodyStyle ) override
     {
-        for( int bodyStyle : { BODY_STYLE::BASE, BODY_STYLE::DEMORGAN } )
+        for( int bodyStyle = 1; bodyStyle <= GetBodyStyleCount(); bodyStyle++ )
         {
             if( GetBodyStyleDescription( bodyStyle, false ) == aBodyStyle )
             {

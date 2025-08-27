@@ -1485,7 +1485,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     ksymbol->SetName( name );
     ksymbol->SetDescription( elem.componentdescription );
     ksymbol->SetLibId( libId );
-    ksymbol->SetUnitCount( elem.partcount - 1 );
+    ksymbol->SetUnitCount( elem.partcount - 1, true );
     m_libSymbols.insert( { aIndex, ksymbol } );
 
     // each component has its own symbol for now
@@ -4499,7 +4499,7 @@ std::vector<LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibComponent( const std::map<wxStri
         LIB_ID libId = AltiumToKiCadLibID( getLibName(), symbol->GetName() );
         symbol->SetDescription( elem.componentdescription );
         symbol->SetLibId( libId );
-        symbol->SetUnitCount( elem.partcount - 1 );
+        symbol->SetUnitCount( elem.partcount - 1, true );
         symbols.push_back( symbol );
     }
 

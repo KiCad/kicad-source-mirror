@@ -96,8 +96,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
 
     for( SCH_PIN* pin : aSymbol.GetPins() )
     {
-        // De Morgan conversions are equivalences, not additional items to simulate
-        if( !pin->GetParentSymbol()->HasAlternateBodyStyle() || pin->GetBodyStyle() < 2 )
+        // Body styles (including De Morgan variants) are equivalences, not additional items to simulate
+        if( !pin->GetParentSymbol()->IsMultiBodyStyle() || pin->GetBodyStyle() < 2 )
             m_sortedPartPins.push_back( pin );
     }
 

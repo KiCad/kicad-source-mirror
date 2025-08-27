@@ -251,8 +251,8 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     wxBoxSizer* treeSizer = new wxBoxSizer( wxVERTICAL );
     treePanel->SetSizer( treeSizer );
 
-    m_tree = new LIB_TREE( treePanel, m_showPower ? wxT( "power" ) : wxT( "symbols" ),
-                           libs, m_adapter, LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
+    m_tree = new LIB_TREE( treePanel, m_showPower ? wxT( "power" ) : wxT( "symbols" ), libs, m_adapter,
+                           LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
 
     treeSizer->Add( m_tree, 1, wxALL | wxEXPAND, 5 );
     treePanel->Layout();
@@ -284,17 +284,10 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     aFrame->Bind( wxEVT_MENU_CLOSE, &PANEL_SYMBOL_CHOOSER::onMenuClose, this );
 
     if( m_fp_sel_ctrl )
-    {
-        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected,
-                             this );
-    }
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected, this );
 
     if( m_details )
-    {
-        m_details->Connect( wxEVT_CHAR_HOOK,
-                            wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnDetailsCharHook ),
-                            nullptr, this );
-    }
+        m_details->Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnDetailsCharHook, this );
 
     // Open the user's previously opened libraries on timer expiration.
     // This is done on a timer because we need a gross hack to keep GTK from garbling the
@@ -323,17 +316,10 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
         g_symbolSearchString = m_tree->GetSearchString();
 
     if( m_fp_sel_ctrl )
-    {
-        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected,
-                               this );
-    }
+        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected, this );
 
     if( m_details )
-    {
-        m_details->Disconnect( wxEVT_CHAR_HOOK,
-                               wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnDetailsCharHook ),
-                               nullptr, this );
-    }
+        m_details->Unbind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnDetailsCharHook, this );
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {

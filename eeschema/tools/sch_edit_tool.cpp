@@ -159,11 +159,23 @@ private:
 
         wxCHECK( symbol, /* void */ );
 
-        item = Append( ID_POPUP_SCH_SELECT_BASE, _( "Standard" ), wxEmptyString, wxITEM_CHECK );
-        item->Check( symbol->GetBodyStyle() == BODY_STYLE::BASE );
+        if( symbol->HasDeMorganBodyStyles() )
+        {
+            item = Append( ID_POPUP_SCH_SELECT_BODY_STYLE, _( "Standard" ), wxEmptyString, wxITEM_CHECK );
+            item->Check( symbol->GetBodyStyle() == BODY_STYLE::BASE );
 
-        item = Append( ID_POPUP_SCH_SELECT_ALT, _( "Alternate" ), wxEmptyString, wxITEM_CHECK );
-        item->Check( symbol->GetBodyStyle() != BODY_STYLE::BASE );
+            item = Append( ID_POPUP_SCH_SELECT_BODY_STYLE1, _( "Alternate" ), wxEmptyString, wxITEM_CHECK );
+            item->Check( symbol->GetBodyStyle() != BODY_STYLE::BASE );
+        }
+        else if( symbol->IsMultiBodyStyle() )
+        {
+            for( int i = 0; i < symbol->GetBodyStyleCount(); i++ )
+            {
+                item = Append( ID_POPUP_SCH_SELECT_BODY_STYLE + i, symbol->GetBodyStyleDescription( i + 1, true ),
+                               wxEmptyString, wxITEM_CHECK );
+                item->Check( symbol->GetBodyStyle() == i + 1 );
+            }
+        }
     }
 };
 
@@ -658,7 +670,7 @@ bool SCH_EDIT_TOOL::Init()
 
     moveMenu.AddSeparator();
     moveMenu.AddMenu( makeSymbolUnitMenu( moveTool ), S_C::SingleMultiUnitSymbol, 1 );
-    moveMenu.AddMenu( makeBodyStyleMenu( moveTool ),  S_C::SingleDeMorganSymbol, 1 );
+    moveMenu.AddMenu( makeBodyStyleMenu( moveTool ),  S_C::SingleMultiBodyStyleSymbol, 1 );
 
     moveMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
     moveMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
@@ -685,7 +697,7 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddSeparator(                            sheetSelection && SCH_CONDITIONS::Idle, 1 );
 
     drawMenu.AddMenu( makeSymbolUnitMenu( drawingTools ), S_C::SingleMultiUnitSymbol, 1 );
-    drawMenu.AddMenu( makeBodyStyleMenu( drawingTools ),  S_C::SingleDeMorganSymbol, 1 );
+    drawMenu.AddMenu( makeBodyStyleMenu( drawingTools ),  S_C::SingleMultiBodyStyleSymbol, 1 );
 
     drawMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
     drawMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
@@ -707,7 +719,7 @@ bool SCH_EDIT_TOOL::Init()
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddMenu( makeSymbolUnitMenu( m_selectionTool ),  S_C::SingleMultiUnitSymbol, 1 );
-    selToolMenu.AddMenu( makeBodyStyleMenu( m_selectionTool ),   S_C::SingleDeMorganSymbol, 1 );
+    selToolMenu.AddMenu( makeBodyStyleMenu( m_selectionTool ),   S_C::SingleMultiBodyStyleSymbol, 1 );
     selToolMenu.AddMenu( makePinFunctionMenu( m_selectionTool ), S_C::SingleMultiFunctionPin, 1 );
     selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   S_C::AllPinsOrSheetPins, 1 );
 
@@ -1958,11 +1970,8 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
     DIALOG_CHANGE_SYMBOLS::MODE mode = DIALOG_CHANGE_SYMBOLS::MODE::UPDATE;
 
-    if( aEvent.IsAction( &SCH_ACTIONS::changeSymbol )
-            || aEvent.IsAction( &SCH_ACTIONS::changeSymbols ) )
-    {
+    if( aEvent.IsAction( &SCH_ACTIONS::changeSymbol ) || aEvent.IsAction( &SCH_ACTIONS::changeSymbols ) )
         mode = DIALOG_CHANGE_SYMBOLS::MODE::CHANGE;
-    }
 
     DIALOG_CHANGE_SYMBOLS dlg( m_frame, selectedSymbol, mode );
 
@@ -1976,7 +1985,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
+int SCH_EDIT_TOOL::CycleBodyStyle( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
@@ -1984,25 +1993,17 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
         return 0;
 
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
-
-    if( aEvent.IsAction( &SCH_ACTIONS::showDeMorganStandard )
-            && symbol->GetBodyStyle() == BODY_STYLE::BASE )
-    {
-        return 0;
-    }
-
-    if( aEvent.IsAction( &SCH_ACTIONS::showDeMorganAlternate )
-            && symbol->GetBodyStyle() == BODY_STYLE::DEMORGAN )
-    {
-        return 0;
-    }
-
-    SCH_COMMIT commit( m_toolMgr );
+    SCH_COMMIT  commit( m_toolMgr );
 
     if( !symbol->IsNew() )
         commit.Modify( symbol, m_frame->GetScreen() );
 
-    m_frame->FlipBodyStyle( symbol );
+    int nextBodyStyle = symbol->GetBodyStyle() + 1;
+
+    if( nextBodyStyle > symbol->GetBodyStyleCount() )
+        nextBodyStyle = 1;
+
+    m_frame->SelectBodyStyle( symbol, nextBodyStyle );
 
     if( symbol->IsNew() )
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -3207,9 +3208,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::updateSymbols.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::changeSymbol.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::updateSymbol.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    SCH_ACTIONS::toggleDeMorgan.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    SCH_ACTIONS::showDeMorganStandard.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    SCH_ACTIONS::showDeMorganAlternate.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::CycleBodyStyle,     SCH_ACTIONS::cycleBodyStyle.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toGLabel.MakeEvent() );

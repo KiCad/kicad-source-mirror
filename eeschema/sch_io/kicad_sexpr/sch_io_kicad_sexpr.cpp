@@ -733,9 +733,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     }
 
     m_out->Print( "(unit %d)", unit );
-
-    if( aSymbol->GetBodyStyle() == BODY_STYLE::DEMORGAN )
-        m_out->Print( "(convert %d)", aSymbol->GetBodyStyle() );
+    m_out->Print( "(body_style %d)", aSymbol->GetBodyStyle() );
 
     KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", aSymbol->GetExcludedFromSim() );
     KICAD_FORMAT::FormatBool( m_out, "in_bom", !aSymbol->GetExcludedFromBOM() );

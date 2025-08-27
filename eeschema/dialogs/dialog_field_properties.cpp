@@ -306,7 +306,7 @@ void DIALOG_FIELD_PROPERTIES::init()
     bool showUnitSelector = m_fieldId == FIELD_T::REFERENCE
                             && m_field->GetParentSymbol()
                             && m_field->GetParentSymbol()->Type() == SCH_SYMBOL_T
-                            && m_field->GetParentSymbol()->IsMulti();
+                            && m_field->GetParentSymbol()->IsMultiUnit();
 
     m_unitLabel->Show( showUnitSelector );
     m_unitChoice->Show( showUnitSelector );

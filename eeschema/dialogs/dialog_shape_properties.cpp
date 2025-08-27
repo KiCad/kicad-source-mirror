@@ -190,20 +190,10 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
         const SYMBOL* symbol = m_shape->GetParentSymbol();
 
         m_privateCheckbox->SetValue( m_shape->IsPrivate() );
-        m_checkApplyToAllUnits->SetValue( symbol->GetUnitCount() > 1 && m_shape->GetUnit() == 0 );
-        m_checkApplyToAllUnits->Enable( symbol->GetUnitCount() > 1 );
-        m_checkApplyToAllBodyStyles->SetValue( m_shape->GetBodyStyle() == 0 );
-
-        bool enableAlternateBodyStyle = symbol->HasAlternateBodyStyle();
-
-        // If a symbol contains no body-style-specific pins or graphic items,
-        // symbol->HasAlternateBodyStyle() will return false.
-        // But when creating a new symbol, with DeMorgan option set, the m_checkApplyToAllBodyStyles
-        // must be enabled in order to be able to create graphic items shared by all body styles.
-        if( symbolEditor->GetShowDeMorgan() )
-            enableAlternateBodyStyle = true;
-
-        m_checkApplyToAllBodyStyles->Enable( enableAlternateBodyStyle );
+        m_checkApplyToAllUnits->SetValue( symbol->IsMultiUnit() && m_shape->GetUnit() == 0 );
+        m_checkApplyToAllUnits->Enable( symbol->IsMultiUnit() );
+        m_checkApplyToAllBodyStyles->SetValue( symbol->IsMultiBodyStyle() && m_shape->GetBodyStyle() == 0 );
+        m_checkApplyToAllBodyStyles->Enable( symbol->IsMultiBodyStyle() );
     }
     else
     {

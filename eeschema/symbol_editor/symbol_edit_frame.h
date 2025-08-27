@@ -43,6 +43,12 @@ class SYMBOL_EDITOR_SETTINGS;
 class EDA_LIST_DIALOG;
 
 
+#define UNITS_ALL _HKI( "ALL" )
+#define DEMORGAN_ALL _HKI( "ALL" )
+#define DEMORGAN_STD _HKI( "Standard" )
+#define DEMORGAN_ALT _HKI( "Alternate" )
+
+
 /**
  * The symbol library editor main window.
  */
@@ -180,6 +186,7 @@ public:
     void DuplicateSymbol( bool aFromClipboard );
 
     void OnSelectUnit( wxCommandEvent& event );
+    void OnSelectBodyStyle( wxCommandEvent& event );
 
     void ToggleProperties() override;
 
@@ -190,9 +197,10 @@ public:
     void ThawLibraryTree();
 
     void OnUpdateUnitNumber( wxUpdateUIEvent& event );
+    void OnUpdateBodyStyle( wxUpdateUIEvent& event );
 
     void UpdateAfterSymbolProperties( wxString* aOldName = nullptr );
-    void RebuildSymbolUnitsList();
+    void RebuildSymbolUnitAndBodyStyleLists();
 
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
@@ -232,10 +240,7 @@ public:
     void SetUnit( int aUnit );
 
     int  GetBodyStyle() const { return m_bodyStyle; }
-    void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
-
-    bool GetShowDeMorgan() const { return m_showDeMorgan; }
-    void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
+    void SetBodyStyle( int aBodyStyle );
 
     bool GetShowInvisibleFields();
     bool GetShowInvisiblePins();
@@ -545,17 +550,18 @@ public:
 
 private:
     ///< Helper screen used when no symbol is loaded
-    SCH_SCREEN*             m_dummyScreen;
+    SCH_SCREEN*         m_dummyScreen;
 
-    LIB_SYMBOL*             m_symbol;            // a symbol I own, it is not in any library, but a
-                                                 // copy could be.
-    wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
-                                                 // symbol has multiple units)
-    SYMBOL_TREE_PANE*       m_treePane;          // symbol search tree widget
+    LIB_SYMBOL*         m_symbol;                // a symbol I own, it is not in any library, but a copy could be.
+    wxComboBox*         m_unitSelectBox;         // a ComboBox to select a unit to edit (if the
+                                                 //   symbol has multiple units)
+    wxComboBox*         m_bodyStyleSelectBox;    // a ComboBox to select a body style to edit (if the symbol has
+                                                 //   multiple body styles)
+    SYMBOL_TREE_PANE*           m_treePane;      // symbol search tree widget
     LIB_SYMBOL_LIBRARY_MANAGER* m_libMgr;        // manager taking care of temporary modifications
-    SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
+    SYMBOL_EDITOR_SETTINGS*     m_settings;      // Handle to the settings
 
-    LIB_ID                  m_centerItemOnIdle;
+    LIB_ID                      m_centerItemOnIdle;
 
     // The unit number to edit and show
     int         m_unit;

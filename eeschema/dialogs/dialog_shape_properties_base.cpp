@@ -251,7 +251,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRight2->Add( m_checkApplyToAllUnits, 0, wxTOP|wxRIGHT, 5 );
 
-	m_checkApplyToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRight2->Add( m_checkApplyToAllBodyStyles, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 

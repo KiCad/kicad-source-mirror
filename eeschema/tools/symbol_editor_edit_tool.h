@@ -49,7 +49,6 @@ public:
 
     int Properties( const TOOL_EVENT& aEvent );
     int PinTable( const TOOL_EVENT& aEvent );
-    int SetUnitDisplayName( const TOOL_EVENT& aEvent );
     int UpdateSymbolFields( const TOOL_EVENT& aEvent );
 
     int Undo( const TOOL_EVENT& aEvent );
@@ -70,7 +69,6 @@ private:
     void editTextBoxProperties( SCH_ITEM* aItem );
     void editFieldProperties( SCH_FIELD* aField );
     void editSymbolProperties();
-    void handlePinDuplication(SCH_PIN* aOldPin, SCH_PIN* aNewPin, int &aSymbolLastPinNumber );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

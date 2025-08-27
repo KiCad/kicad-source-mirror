@@ -86,6 +86,7 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, SCH_BASE_FRAME )
     EVT_TOOL( ID_LIBVIEW_NEXT, SYMBOL_VIEWER_FRAME::onSelectNextSymbol )
     EVT_TOOL( ID_LIBVIEW_PREVIOUS, SYMBOL_VIEWER_FRAME::onSelectPreviousSymbol )
     EVT_CHOICE( ID_LIBVIEW_SELECT_UNIT_NUMBER, SYMBOL_VIEWER_FRAME::onSelectSymbolUnit )
+    EVT_CHOICE( ID_LIBVIEW_SELECT_BODY_STYLE, SYMBOL_VIEWER_FRAME::onSelectSymbolBodyStyle )
 
     // listbox events
     EVT_TEXT( ID_LIBVIEW_LIB_FILTER, SYMBOL_VIEWER_FRAME::OnLibFilter )
@@ -98,6 +99,7 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, SCH_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, SYMBOL_VIEWER_FRAME::CloseLibraryViewer )
 
     EVT_UPDATE_UI( ID_LIBVIEW_SELECT_UNIT_NUMBER, SYMBOL_VIEWER_FRAME::onUpdateUnitChoice )
+    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_BODY_STYLE, SYMBOL_VIEWER_FRAME::onUpdateBodyStyleChoice )
 
 END_EVENT_TABLE()
 
@@ -107,6 +109,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         LIB_VIEW_FRAME_NAME ),
         m_unitChoice( nullptr ),
+        m_bodyStyleChoice( nullptr ),
         m_libList( nullptr ),
         m_symbolList( nullptr )
 {
@@ -371,25 +374,6 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
                 return GetRenderSettings() && GetRenderSettings()->m_ShowPinNumbers;
             };
 
-    auto demorganCond =
-            [this]( const SELECTION& )
-            {
-                LIB_SYMBOL* symbol = GetSelectedSymbol();
-                return symbol && symbol->HasAlternateBodyStyle();
-            };
-
-    auto demorganStandardCond =
-            []( const SELECTION& )
-            {
-                return m_bodyStyle == BODY_STYLE::BASE;
-            };
-
-    auto demorganAlternateCond =
-            []( const SELECTION& )
-            {
-                return m_bodyStyle == BODY_STYLE::DEMORGAN;
-            };
-
     auto haveDatasheetCond =
             [this]( const SELECTION& )
             {
@@ -400,9 +384,6 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::showDatasheet,             ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( SCH_ACTIONS::showElectricalTypes,   CHECK( electricalTypesShownCondition ) );
     mgr->SetConditions( SCH_ACTIONS::showPinNumbers,        CHECK( pinNumbersShownCondition ) );
-
-    mgr->SetConditions( SCH_ACTIONS::showDeMorganStandard,  ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
-    mgr->SetConditions( SCH_ACTIONS::showDeMorganAlternate, ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
 
 #undef CHECK
 #undef ENABLE
@@ -498,28 +479,50 @@ void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
         unit_count = std::max( symbol->GetUnitCount(), 1 );
 
     m_unitChoice->Enable( unit_count > 1 );
+    m_unitChoice->Clear();
 
     if( unit_count > 1 )
     {
         // rebuild the unit list if it is not suitable (after a new selection for instance)
-        if( unit_count != (int)m_unitChoice->GetCount() )
+        if( unit_count != (int) m_unitChoice->GetCount() )
         {
-            m_unitChoice->Clear();
-
             for( int ii = 0; ii < unit_count; ii++ )
-            {
-                wxString unit = symbol->GetUnitDisplayName( ii + 1, true );
-                m_unitChoice->Append( unit );
-            }
-
+                m_unitChoice->Append( symbol->GetUnitDisplayName( ii + 1, true ) );
         }
 
         if( m_unitChoice->GetSelection() != std::max( 0, m_unit - 1 ) )
             m_unitChoice->SetSelection( std::max( 0, m_unit - 1 ) );
     }
-    else if( m_unitChoice->GetCount() )
+}
+
+
+void SYMBOL_VIEWER_FRAME::onUpdateBodyStyleChoice( wxUpdateUIEvent& aEvent )
+{
+    LIB_SYMBOL* symbol = GetSelectedSymbol();
+
+    int bodyStyle_count = 1;
+
+    if( symbol )
+        bodyStyle_count = std::max( symbol->GetBodyStyleCount(), 1 );
+
+    m_bodyStyleChoice->Enable( bodyStyle_count > 1 );
+    m_bodyStyleChoice->Clear();
+
+    if( bodyStyle_count > 1 )
     {
-        m_unitChoice->Clear();
+        if( symbol && symbol->HasDeMorganBodyStyles() )
+        {
+            m_bodyStyleChoice->Append( wxGetTranslation( DEMORGAN_STD ) );
+            m_bodyStyleChoice->Append( wxGetTranslation( DEMORGAN_ALT ) );
+        }
+        else if( symbol )
+        {
+            for( int i = 0; i < symbol->GetBodyStyleCount(); i++ )
+                m_bodyStyleChoice->Append( symbol->GetBodyStyleNames()[i] );
+        }
+
+        if( m_bodyStyleChoice->GetSelection() != std::max( 0, m_bodyStyle - 1 ) )
+            m_bodyStyleChoice->SetSelection( std::max( 0, m_bodyStyle - 1 ) );
     }
 }
 
@@ -1100,6 +1103,19 @@ void SYMBOL_VIEWER_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
         return;
 
     m_unit = ii + 1;
+
+    updatePreviewSymbol();
+}
+
+
+void SYMBOL_VIEWER_FRAME::onSelectSymbolBodyStyle( wxCommandEvent& aEvent )
+{
+    int ii = m_bodyStyleChoice->GetSelection();
+
+    if( ii < 0 )
+        return;
+
+    m_bodyStyle = ii + 1;
 
     updatePreviewSymbol();
 }

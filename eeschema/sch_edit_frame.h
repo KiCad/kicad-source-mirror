@@ -394,8 +394,7 @@ public:
 
     void SetCurrentSheet( const SCH_SHEET_PATH& aSheet );
 
-    void UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete = false,
-                     bool aUpdateRtree = false ) override;
+    void UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete = false, bool aUpdateRtree = false ) override;
 
     /**
      * Rebuild the GAL and redraw the screen.
@@ -589,9 +588,8 @@ public:
      *                      new/duplicate libs.
      * @return True if the schematic was imported properly.
      */
-    bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet,
-                            const wxString& aFileName, bool aSkipRecursionCheck = false,
-                            bool aSkipLibCheck = false );
+    bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet, const wxString& aFileName,
+                            bool aSkipRecursionCheck = false, bool aSkipLibCheck = false );
 
     /**
      * Remove a given junction and heals any wire segments under the junction.
@@ -602,9 +600,9 @@ public:
 
     void UpdateHopOveredWires( SCH_ITEM* aItem );
 
-    void FlipBodyStyle( SCH_SYMBOL* aSymbol );
-
     void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit );
+
+    void SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle );
 
     void SetAltPinFunction( SCH_PIN* aPin, const wxString& aFunction );
 

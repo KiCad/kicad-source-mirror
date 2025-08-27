@@ -979,15 +979,15 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }
-            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BASE
-                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_ALT )
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BODY_STYLE
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_BODY_STYLE_END )
             {
                 SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
-                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BASE ) + 1;
+                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BODY_STYLE ) + 1;
 
                 if( symbol && symbol->GetBodyStyle() != bodyStyle )
                 {
-                    m_frame->FlipBodyStyle( symbol );
+                    m_frame->SelectBodyStyle( symbol, bodyStyle );
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }

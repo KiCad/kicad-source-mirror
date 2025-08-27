@@ -89,8 +89,7 @@ public:
 
     LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary = nullptr );
 
-    virtual ~LIB_SYMBOL()
-    {}
+    virtual ~LIB_SYMBOL() = default;
 
     /// http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared.
     LIB_SYMBOL_SPTR SharedPtr() const { return m_me; }
@@ -231,9 +230,9 @@ public:
      *
      * @return the symbol bounding box ( in user coordinates )
      * @param aUnit = unit selection = 0, or 1..n
-     * @param aBodyStyle = 0, 1 or 2
+     * @param aBodyStyle = body style selection = 0, or 1..n
      *  If aUnit == 0, unit is not used
-     *  if aBodyStyle == 0 Convert is non used
+     *  if aBodyStyle == 0, body style is not used
      * @param aIgnoreHiddenFields default true, ignores any hidden fields
      * @param aIgnoreLabelsOnInvisiblePins default true, ignores pin number and pin name
      * of invisible pins
@@ -252,9 +251,9 @@ public:
      *
      * @return the symbol bounding box ( in user coordinates ) without fields
      * @param aUnit = unit selection = 0, or 1..n
-     * @param aBodyStyle = 0, 1 or 2
+     * @param aBodyStyle = body style selection = 0, or 1..n
      *  If aUnit == 0, unit is not used
-     *  if aBodyStyle == 0 Convert is non used
+     *  if aBodyStyle == 0, body style is not used
      *  Fields are not taken in account
      */
     const BOX2I GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aIncludePins,
@@ -422,9 +421,9 @@ public:
      * Note pin objects are owned by the draw list of the symbol.  Deleting any of the objects
      * will leave list in a unstable state and will likely segfault when the list is destroyed.
      *
-     * @param aUnit - Unit number of pins to collect.  Set to 0 to get pins from any symbol unit.
+     * @param aUnit - Unit number of pins to collect.  Set to 0 to get pins from all symbol units.
      * @param aBodyStyle - Symbol alternate body style of pins to collect.  Set to 0 to get pins
-     *                     from any DeMorgan variant of symbol.
+     *                     from all body styles.
      */
     std::vector<SCH_PIN*> GetPins( int aUnit, int aBodyStyle ) const;
 
@@ -444,8 +443,7 @@ public:
      *
      * @param aNumber - Number of the pin to find.
      * @param aUnit - Unit filter.  Set to 0 if a specific unit number is not required.
-     * @param aBodyStyle - DeMorgan variant filter.  Set to 0 if no specific DeMorgan variant is
-     *                   required.
+     * @param aBodyStyle - Body style filter.  Set to 0 if no specific body style is not required.
      * @return The pin object if found.  Otherwise NULL.
      */
     SCH_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
@@ -472,11 +470,12 @@ public:
     void Move( const VECTOR2I& aOffset ) override;
 
     /**
-     * Test if symbol has more than one body conversion type (DeMorgan).
-     *
-     * @return True if symbol has more than one conversion.
+     * Before V10 we didn't store the number of body styles in a symbol -- we just looked through all
+     * its drawings each time we wanted to know.  This is now only used to set the count when a legacy
+     * symbol is first read.  (Legacy symbols also didn't support arbitrary body styles, so the count
+     * is always 1 or 2, and when 2 it is always a De Morgan pair.)
      */
-    bool HasAlternateBodyStyle() const override;
+    bool HasLegacyAlternateBodyStyle() const;
 
     /**
      * @return the highest pin number of the symbol's pins.
@@ -542,13 +541,8 @@ public:
      * @param aCount - Number of units per package.
      * @param aDuplicateDrawItems Create duplicate draw items of unit 1 for each additional unit.
      */
-    void SetUnitCount( int aCount, bool aDuplicateDrawItems = true );
+    void SetUnitCount( int aCount, bool aDuplicateDrawItems );
     int GetUnitCount() const override;
-
-    /**
-     * Return true if the given unit \a aUnit has a display name defined
-     */
-    bool HasUnitDisplayName( int aUnit ) const;
 
     wxString GetUnitName( int aUnit ) const override
     {
@@ -562,15 +556,8 @@ public:
 
     wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const override;
 
-    /**
-     * Copy all unit display names into the given map \a aTarget
-     */
-    void CopyUnitDisplayNames( std::map<int, wxString>& aTarget ) const;
-
-    /**
-     * Set the user-defined display name for \a aUnit to \a aName for symbols with units.
-     */
-    void SetUnitDisplayName( int aUnit, const wxString& aName );
+    std::map<int, wxString>& GetUnitDisplayNames() { return m_unitDisplayNames; }
+    const std::map<int, wxString>& GetUnitDisplayNames() const { return m_unitDisplayNames; }
 
     bool GetDuplicatePinNumbersAreJumpers() const { return m_duplicatePinNumbersAreJumpers; }
     void SetDuplicatePinNumbersAreJumpers( bool aEnabled ) { m_duplicatePinNumbersAreJumpers = aEnabled; }
@@ -589,9 +576,25 @@ public:
      * @return true if the symbol has multiple units per symbol.
      * When true, the reference has a sub reference to identify symbol.
      */
-    bool IsMulti() const override { return m_unitCount > 1; }
+    bool IsMultiUnit() const override { return m_unitCount > 1; }
 
     static wxString LetterSubReference( int aUnit, wxChar aInitialLetter );
+
+    bool IsMultiBodyStyle() const override { return GetBodyStyleCount() > 1; }
+
+    int GetBodyStyleCount() const override
+    {
+        if( m_demorgan )
+            return 2;
+        else
+            return std::max( 1, (int) m_bodyStyleNames.size() );
+    }
+
+    bool HasDeMorganBodyStyles() const override { return m_demorgan; }
+    void SetHasDeMorganBodyStyles( bool aFlag ) { m_demorgan = aFlag; }
+
+    const std::vector<wxString>& GetBodyStyleNames() const { return m_bodyStyleNames; }
+    void SetBodyStyleNames( const std::vector<wxString>& aBodyStyleNames ) { m_bodyStyleNames = aBodyStyleNames; }
 
     /**
      * Set or clear the alternate body style (DeMorgan) for the symbol.
@@ -604,7 +607,7 @@ public:
      * @param aHasAlternate - Set or clear the symbol alternate body style.
      * @param aDuplicatePins - Duplicate all pins from original body style if true.
      */
-    void SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePins = true );
+    void SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool aDuplicatePins );
 
     /**
      * Comparison test that can be used for operators.
@@ -682,18 +685,22 @@ private:
     timestamp_t         m_lastModDate;
 
     int                 m_unitCount;        ///< Number of units (parts) per package.
-    bool                m_unitsLocked;      ///< True if symbol has multiple units and changing one
-                                            ///< unit does not automatically change another unit.
+    bool                m_unitsLocked;      ///< True if symbol has multiple units and changing one unit
+                                            ///< does not automatically change another unit.
 
-    LIBRENTRYOPTIONS    m_options;          ///< Special symbol features such as POWER or NORMAL.)
+    bool                m_demorgan;         ///< True if there are two body styles: normal and De Morgan
+                                            ///< If false, the body style count is taken from m_bodyStyleNames
+                                            ///< size
+
+    LIBRENTRYOPTIONS    m_options;          ///< Special symbol features such as POWER or NORMAL.
 
     LIB_ITEMS_CONTAINER m_drawings;
 
     SYMBOL_LIB*         m_library;
     wxString            m_name;
     wxString            m_keyWords;         ///< Search keywords
-    wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the
-                                            ///<  symbol (wild card names accepted).
+    wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the symbol (wild card
+                                            ///< names accepted).
 
     /// A list of jumper pin groups, each of which is a set of pin numbers that should be jumpered
     /// together (treated as internally connected for the purposes of connectivity)
@@ -704,6 +711,7 @@ private:
     bool m_duplicatePinNumbersAreJumpers;
 
     std::map<int, wxString> m_unitDisplayNames;
+    std::vector<wxString>   m_bodyStyleNames;
 };
 
 #endif  //  CLASS_LIBENTRY_H

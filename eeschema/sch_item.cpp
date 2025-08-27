@@ -669,10 +669,10 @@ void SCH_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     if( SYMBOL* symbol = GetParentSymbol() )
     {
-        if( symbol->GetUnitCount() )
+        if( symbol->IsMultiUnit() )
             aList.emplace_back( _( "Unit" ), GetUnitDisplayName( GetUnit(), false ) );
 
-        if( symbol->HasAlternateBodyStyle() )
+        if( symbol->IsMultiBodyStyle() )
             aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( GetBodyStyle(), true ) );
 
         if( dynamic_cast<LIB_SYMBOL*>( symbol ) && IsPrivate() )
@@ -716,7 +716,7 @@ static struct SCH_ITEM_DESC
                     if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem ) )
                     {
                         if( const SYMBOL* symbol = schItem->GetParentSymbol() )
-                            return symbol->IsMulti();
+                            return symbol->IsMultiUnit();
                     }
 
                     return false;
@@ -728,7 +728,7 @@ static struct SCH_ITEM_DESC
                     if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem ) )
                     {
                         if( const SYMBOL* symbol = schItem->GetParentSymbol() )
-                            return symbol->HasAlternateBodyStyle();
+                            return symbol->IsMultiBodyStyle();
                     }
 
                     return false;

@@ -74,10 +74,10 @@ public:
      *                   the priority order of the resulting collection.
      * @param aPos are the coordinates to use in hit testing.
      * @param aUnit is the symbol unit filter (for symbol editor).
-     * @param aConvert is the DeMorgan filter (for symbol editor)
+     * @param aBodyStyle is the body style filter (for symbol editor)
      */
     void Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aScanTypes,
-                  const VECTOR2I& aPos, int aUnit = 0, int aConvert = 0 );
+                  const VECTOR2I& aPos, int aUnit = 0, int aBodyStyle = 0 );
 
     /**
      * Scan an #EDA_ITEM using this class's Inspector method which does the collection.
@@ -87,10 +87,10 @@ public:
      *                   and the priority order of the resulting collection.
      * @param aPos are the coordinates to use in hit testing.
      * @param aUnit is the symbol unit filter (for symbol editor).
-     * @param aConvert is the DeMorgan filter (for symbol editor).
+     * @param aBodyStyle is the body style filter (for symbol editor).
      */
     void Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD_T>& aScanTypes,
-                  const VECTOR2I& aPos, int aUnit = 0, int aConvert = 0 );
+                  const VECTOR2I& aPos, int aUnit = 0, int aBodyStyle = 0 );
 
     /**
      * Test if the collected items form a corner of two line segments.
@@ -101,7 +101,7 @@ public:
 
 public:
     int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
-    int      m_BodyStyle;       // Fixed DeMorgan filter (for symbol editor)
+    int      m_BodyStyle;       // Fixed body style filter (for symbol editor)
 
     bool     m_ShowPinElectricalTypes;
 };

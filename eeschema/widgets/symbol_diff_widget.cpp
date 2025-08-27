@@ -87,7 +87,7 @@ SYMBOL_DIFF_WIDGET::~SYMBOL_DIFF_WIDGET()
 
 
 void SYMBOL_DIFF_WIDGET::DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSymbol, int aUnit,
-                                      int aConvert )
+                                      int aBodyStyle )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 
@@ -111,14 +111,13 @@ void SYMBOL_DIFF_WIDGET::DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSy
         // For symbols having a De Morgan body style, use the first style
         auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-        settings->m_ShowUnit = ( m_previewItem->IsMulti() && !aUnit ) ? 1 : aUnit;
-        settings->m_ShowBodyStyle = ( m_previewItem->HasAlternateBodyStyle() && !aConvert ) ? 1 : aConvert;
+        settings->m_ShowUnit = ( m_previewItem->IsMultiUnit() && !aUnit ) ? 1 : aUnit;
+        settings->m_ShowBodyStyle = ( m_previewItem->IsMultiBodyStyle() && !aBodyStyle ) ? 1 : aBodyStyle;
 
         view->Add( m_previewItem );
 
         // Get the symbol size, in internal units
-        m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit,
-                                                        settings->m_ShowBodyStyle );
+        m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowBodyStyle );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();

@@ -154,7 +154,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	checkboxesSizer->Add( m_checkApplyToAllParts, 0, wxBOTTOM, 3 );
 
-	m_checkApplyToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	checkboxesSizer->Add( m_checkApplyToAllBodyStyles, 0, wxBOTTOM, 3 );
 
 

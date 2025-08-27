@@ -454,38 +454,15 @@ void SCH_SYMBOL::UpdatePins()
 }
 
 
-void SCH_SYMBOL::SetBodyStyleUnconditional( int aBodyStyle )
-{
-    if( m_bodyStyle != aBodyStyle )
-    {
-        m_bodyStyle = ( m_bodyStyle == BODY_STYLE::BASE ) ? BODY_STYLE::DEMORGAN
-                                                          : BODY_STYLE::BASE;
-
-        // The body style may have a different pin layout so the update the pin map.
-        UpdatePins();
-    }
-}
-
-
 void SCH_SYMBOL::SetBodyStyle( int aBodyStyle )
 {
-    if( HasAlternateBodyStyle() && m_bodyStyle != aBodyStyle )
+    if( aBodyStyle != m_bodyStyle )
     {
-        m_bodyStyle = ( m_bodyStyle == BODY_STYLE::BASE ) ? BODY_STYLE::DEMORGAN
-                                                          : BODY_STYLE::BASE;
+        m_bodyStyle = aBodyStyle;
 
         // The body style may have a different pin layout so the update the pin map.
         UpdatePins();
     }
-}
-
-
-bool SCH_SYMBOL::HasAlternateBodyStyle() const
-{
-    if( m_part )
-        return m_part->HasAlternateBodyStyle();
-
-    return false;
 }
 
 
@@ -495,6 +472,24 @@ int SCH_SYMBOL::GetUnitCount() const
         return m_part->GetUnitCount();
 
     return 0;
+}
+
+
+int SCH_SYMBOL::GetBodyStyleCount() const
+{
+    if( m_part )
+        return m_part->GetBodyStyleCount();
+
+    return 0;
+}
+
+
+bool SCH_SYMBOL::HasDeMorganBodyStyles() const
+{
+    if( m_part )
+        return m_part->HasDeMorganBodyStyles();
+
+    return false;
 }
 
 
@@ -513,10 +508,6 @@ wxString SCH_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) cons
 {
     if( m_part )
         return m_part->GetBodyStyleDescription( aBodyStyle, aLabel );
-    else if( aBodyStyle == BODY_STYLE::DEMORGAN )
-        return aLabel ? _( "Alternate" ) : wxString( _HKI( "Alternate" ) );
-    else if( aBodyStyle == BODY_STYLE::BASE )
-        return aLabel ? _( "Standard" ) : wxString( _HKI( "Standard" ) );
     else
         return wxT( "?" );
 }
@@ -2972,7 +2963,7 @@ static struct SCH_SYMBOL_DESC
                 [=]( INSPECTABLE* aItem ) -> bool
                 {
                     if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                        return symbol->IsMulti();
+                        return symbol->IsMultiUnit();
 
                     return false;
                 };
@@ -2981,7 +2972,7 @@ static struct SCH_SYMBOL_DESC
                 [=]( INSPECTABLE* aItem ) -> bool
                 {
                     if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                        return symbol->HasAlternateBodyStyle();
+                        return symbol->IsMultiBodyStyle();
 
                     return false;
                 };
@@ -3011,7 +3002,7 @@ static struct SCH_SYMBOL_DESC
 
                                      if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
                                      {
-                                         for( int ii : { BODY_STYLE::BASE, BODY_STYLE::DEMORGAN } )
+                                         for( int ii = 1; ii <= symbol->GetBodyStyleCount(); ii++ )
                                              choices.Add( symbol->GetBodyStyleDescription( ii, false ) );
                                      }
 

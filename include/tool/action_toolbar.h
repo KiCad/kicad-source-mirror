@@ -467,6 +467,7 @@ public:
     static ACTION_TOOLBAR_CONTROL zoomSelect;
     static ACTION_TOOLBAR_CONTROL ipcScripting;
     static ACTION_TOOLBAR_CONTROL unitSelector;
+    static ACTION_TOOLBAR_CONTROL bodyStyleSelector;
     static ACTION_TOOLBAR_CONTROL layerSelector;
     static ACTION_TOOLBAR_CONTROL overrideLocks;
 };

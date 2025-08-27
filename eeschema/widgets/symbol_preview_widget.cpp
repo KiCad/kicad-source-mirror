@@ -173,8 +173,8 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
     view->SetScale( 1.0 );
     VECTOR2D clientSize = view->ToWorld( ToVECTOR2D( m_preview->GetClientSize() ), false );
     // Calculate the draw scale to fit the drawing area
-    double    scale = std::min( fabs( clientSize.x / m_itemBBox.GetWidth() ),
-                                fabs( clientSize.y / m_itemBBox.GetHeight() ) );
+    double    scale = std::min( fabs( clientSize.x / (double) m_itemBBox.GetWidth() ),
+                                fabs( clientSize.y / (double) m_itemBBox.GetHeight() ) );
 
     // Above calculation will yield an exact fit; add a bit of whitespace around symbol
     scale /= 1.2;
@@ -217,13 +217,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
         // This will flatten derived parts so that the correct final symbol can be shown.
         m_previewItem = symbol.release();
 
-        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
-        // draw all of them.)
-        m_renderSettings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
+        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll draw all of them.)
+        m_renderSettings->m_ShowUnit = ( m_previewItem->IsMultiUnit() && aUnit == 0 ) ? 1 : aUnit;
 
-        // For symbols having a De Morgan body style, use the first style
-        m_renderSettings->m_ShowBodyStyle =
-                ( m_previewItem->HasAlternateBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
+        // For symbols having multiple body styles, use the first style.
+        m_renderSettings->m_ShowBodyStyle = ( m_previewItem->IsMultiBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
 
         m_previewItem->SetPreviewUnit( m_renderSettings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( m_renderSettings->m_ShowBodyStyle );
@@ -275,12 +273,10 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
 
         // For symbols having a De Morgan body style, use the first style
 
-        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
-        // draw all of them.)
-        m_renderSettings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
+        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll draw all of them.)
+        m_renderSettings->m_ShowUnit = ( m_previewItem->IsMultiUnit() && aUnit == 0 ) ? 1 : aUnit;
 
-        m_renderSettings->m_ShowBodyStyle =
-                ( m_previewItem->HasAlternateBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
+        m_renderSettings->m_ShowBodyStyle = ( m_previewItem->IsMultiBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
 
         m_previewItem->SetPreviewUnit( m_renderSettings->m_ShowUnit );
         m_previewItem->SetPreviewBodyStyle( m_renderSettings->m_ShowBodyStyle );

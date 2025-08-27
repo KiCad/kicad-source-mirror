@@ -56,11 +56,6 @@
 #define BOOL_TRUE _HKI( "True" )
 #define BOOL_FALSE _HKI( "False" )
 
-#define UNITS_ALL _HKI( "ALL" )
-#define DEMORGAN_ALL _HKI( "ALL" )
-#define DEMORGAN_STD _HKI( "Standard" )
-#define DEMORGAN_ALT _HKI( "Alternate" )
-
 
 /**
  * Get the label for a given column in the pin table.
@@ -84,7 +79,7 @@ static wxString GetPinTableColLabel( int aCol )
     case COL_POSY:         return _HKI( "Y Position" );
     case COL_VISIBLE:      return _HKI( "Visible" );
     case COL_UNIT:         return _HKI( "Unit" );
-    case COL_DEMORGAN:     return _HKI( "De Morgan" );
+    case COL_BODY_STYLE:   return _HKI( "Body Style" );
     default:               wxFAIL; return wxEmptyString;
     }
 }
@@ -131,71 +126,64 @@ public:
 
     wxString Format( const SCH_PIN& aPin, int aFieldId ) const
     {
-        wxString val;
         switch( aFieldId )
         {
         case COL_NAME:
-            val << aPin.GetName();
-            break;
+            return aPin.GetName();
+
         case COL_NUMBER:
-            val << aPin.GetNumber();
-            break;
+            return aPin.GetNumber();
+
         case COL_TYPE:
-            val << PinTypeNames()[static_cast<int>( aPin.GetType() )];
-            break;
+            return PinTypeNames()[static_cast<int>( aPin.GetType() )];
+
         case COL_SHAPE:
-            val << PinShapeNames()[static_cast<int>( aPin.GetShape() )];
-            break;
+            return PinShapeNames()[static_cast<int>( aPin.GetShape() )];
+
         case COL_ORIENTATION:
         {
             const int index = PinOrientationIndex( aPin.GetOrientation() );
+
             if( index >= 0)
-                val << PinOrientationNames()[ index ];
-            break;
+                return PinOrientationNames()[ index ];
+
+            return wxEmptyString;
         }
+
         case COL_NUMBER_SIZE:
-            val << m_unitsProvider.StringFromValue( aPin.GetNumberTextSize(), m_includeUnits );
-            break;
+            return m_unitsProvider.StringFromValue( aPin.GetNumberTextSize(), m_includeUnits );
+
         case COL_NAME_SIZE:
-            val << m_unitsProvider.StringFromValue( aPin.GetNameTextSize(), m_includeUnits );
-            break;
+            return m_unitsProvider.StringFromValue( aPin.GetNameTextSize(), m_includeUnits );
+
         case COL_LENGTH:
-            val << m_unitsProvider.StringFromValue( aPin.GetLength(), m_includeUnits );
-            break;
+            return m_unitsProvider.StringFromValue( aPin.GetLength(), m_includeUnits );
+
         case COL_POSX:
-            val << m_unitsProvider.StringFromValue( aPin.GetPosition().x, m_includeUnits );
-            break;
+            return m_unitsProvider.StringFromValue( aPin.GetPosition().x, m_includeUnits );
+
         case COL_POSY:
-            val << m_unitsProvider.StringFromValue( aPin.GetPosition().y, m_includeUnits );
-            break;
+            return m_unitsProvider.StringFromValue( aPin.GetPosition().y, m_includeUnits );
+
         case COL_VISIBLE:
-            val << stringFromBool( aPin.IsVisible() );
-            break;
+            return stringFromBool( aPin.IsVisible() );
+
         case COL_UNIT:
-            if( aPin.GetUnit() )
-                val << LIB_SYMBOL::LetterSubReference( aPin.GetUnit(), 'A' );
-            else
-                val << wxGetTranslation( UNITS_ALL );
-            break;
-        case COL_DEMORGAN:
-            switch( aPin.GetBodyStyle() )
-            {
-            case BODY_STYLE::BASE:
-                val << wxGetTranslation( DEMORGAN_STD );
-                break;
-            case BODY_STYLE::DEMORGAN:
-                val << wxGetTranslation( DEMORGAN_ALT );
-                break;
-            default:
-                val << wxGetTranslation( DEMORGAN_ALL );
-                break;
-            }
-            break;
+            if( aPin.GetUnit() == 0 )
+                return wxGetTranslation( UNITS_ALL );
+
+            return aPin.GetUnitDisplayName( aPin.GetUnit(), true );
+
+        case COL_BODY_STYLE:
+            if( aPin.GetBodyStyle() == 0 )
+                return wxGetTranslation( DEMORGAN_ALL );
+
+            return aPin.GetBodyStyleDescription( aPin.GetBodyStyle(), true );
+
         default:
             wxFAIL_MSG( wxString::Format( "Invalid field id %d", aFieldId ) );
-            break;
+            return wxEmptyString;
         }
-        return val;
     }
 
     /**
@@ -219,16 +207,19 @@ public:
         case COL_TYPE:
             if( PinTypeNames().Index( aValue, false ) != wxNOT_FOUND )
                 aPin.SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( aValue ) );
+
             break;
 
         case COL_SHAPE:
             if( PinShapeNames().Index( aValue, false ) != wxNOT_FOUND )
                 aPin.SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( aValue ) );
+
             break;
 
         case COL_ORIENTATION:
             if( PinOrientationNames().Index( aValue, false ) != wxNOT_FOUND )
                 aPin.SetOrientation( (PIN_ORIENTATION) PinOrientationNames().Index( aValue ) );
+
             break;
 
         case COL_NUMBER_SIZE:
@@ -244,8 +235,7 @@ public:
             break;
 
         case COL_POSX:
-            aPin.SetPosition( VECTOR2I( m_unitsProvider.ValueFromString( aValue ),
-                                        aPin.GetPosition().y ) );
+            aPin.SetPosition( VECTOR2I( m_unitsProvider.ValueFromString( aValue ), aPin.GetPosition().y ) );
             break;
 
         case COL_POSY:
@@ -253,35 +243,45 @@ public:
             break;
 
         case COL_VISIBLE:
-            aPin.SetVisible(boolFromString( aValue, m_reporter ));
+            aPin.SetVisible(boolFromString( aValue, m_reporter ) );
             break;
 
         case COL_UNIT:
             if( MatchTranslationOrNative( aValue, UNITS_ALL, false ) )
             {
                 aPin.SetUnit( 0 );
+                break;
             }
-            else
+
+            for( int i = 1; i <= aSymbol.GetUnitCount(); i++ )
             {
-                for( int i = 1; i <= aSymbol.GetUnitCount(); i++ )
+                if( aValue == aPin.GetBodyStyleDescription( i, true )
+                        || aValue == aPin.GetBodyStyleDescription( i, false ) )
                 {
-                    if( aValue == LIB_SYMBOL::LetterSubReference( i, 'A' ) )
-                    {
-                        aPin.SetUnit( i );
-                        break;
-                    }
+                    aPin.SetUnit( i );
+                    break;
                 }
             }
 
             break;
 
-        case COL_DEMORGAN:
-            if( MatchTranslationOrNative( aValue, DEMORGAN_STD, false ) )
-                aPin.SetBodyStyle( 1 );
-            else if( MatchTranslationOrNative( aValue, DEMORGAN_ALT, false ) )
-                aPin.SetBodyStyle( 2 );
-            else
+        case COL_BODY_STYLE:
+            if( MatchTranslationOrNative( aValue, DEMORGAN_ALL, false ) )
+            {
                 aPin.SetBodyStyle( 0 );
+                break;
+            }
+
+            for( int i = 1; i <= aSymbol.GetBodyStyleCount(); i++ )
+            {
+                if( aValue == aPin.GetBodyStyleDescription( i, true )
+                        || aValue == aPin.GetBodyStyleDescription( i, false ) )
+                {
+                    aPin.SetBodyStyle( i );
+                    break;
+                }
+            }
+
             break;
 
         default:
@@ -434,8 +434,7 @@ public:
         return GetValue( m_rows[ aRow ], aCol, m_frame );
     }
 
-    static wxString GetValue( const std::vector<SCH_PIN*>& pins, int aCol,
-                              EDA_DRAW_FRAME* aParentFrame )
+    static wxString GetValue( const std::vector<SCH_PIN*>& pins, int aCol, EDA_DRAW_FRAME* aParentFrame )
     {
         wxString fieldValue;
 
@@ -615,13 +614,14 @@ public:
 
         // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
         // to get the opposite sort.  i.e. ~(a<b) != (a>b)
-        auto cmp = [ ascending ]( const auto a, const auto b )
-                   {
-                       if( ascending )
-                           return a < b;
-                       else
-                           return b < a;
-                   };
+        auto cmp =
+                [ ascending ]( const auto a, const auto b )
+                {
+                    if( ascending )
+                        return a < b;
+                    else
+                        return b < a;
+                };
 
         switch( sortCol )
         {
@@ -629,19 +629,21 @@ public:
         case COL_NAME:
             res = cmp( PIN_NUMBERS::Compare( lhStr, rhStr ), 0 );
             break;
+
         case COL_NUMBER_SIZE:
         case COL_NAME_SIZE:
-            res = cmp( parentFrame->ValueFromString( lhStr ),
-                       parentFrame->ValueFromString( rhStr ) );
+            res = cmp( parentFrame->ValueFromString( lhStr ), parentFrame->ValueFromString( rhStr ) );
             break;
+
         case COL_LENGTH:
         case COL_POSX:
         case COL_POSY:
-            res = cmp( parentFrame->ValueFromString( lhStr ),
-                       parentFrame->ValueFromString( rhStr ) );
+            res = cmp( parentFrame->ValueFromString( lhStr ), parentFrame->ValueFromString( rhStr ) );
             break;
+
         case COL_VISIBLE:
-        case COL_DEMORGAN:
+        case COL_UNIT:
+        case COL_BODY_STYLE:
         default:
             res = cmp( StrNumCmp( lhStr, rhStr ), 0 );
             break;
@@ -728,10 +730,8 @@ public:
 
         for( SCH_PIN* pin : aPins )
         {
-            const bool includedByUnit =
-                    ( m_unitFilter == -1 ) || ( pin->GetUnit() == 0 ) || ( pin->GetUnit() == m_unitFilter );
-            const bool includedByBodyStyle =
-                    ( m_bodyStyleFilter == -1 ) || ( pin->GetBodyStyle() == m_bodyStyleFilter );
+            const bool includedByUnit = m_unitFilter == -1 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter;
+            const bool includedByBodyStyle = m_bodyStyleFilter == -1 || pin->GetBodyStyle() == m_bodyStyleFilter;
             const bool includedBySelection = !m_filterBySelection || pinIsInEditorSelection( pin );
 
             if( includedByUnit && includedByBodyStyle && includedBySelection )
@@ -885,7 +885,7 @@ public:
             COL_POSY,
             COL_VISIBLE,
             COL_UNIT,
-            COL_DEMORGAN,
+            COL_BODY_STYLE,
         };
 
         std::vector<std::vector<wxString>> exportTable;
@@ -1038,8 +1038,7 @@ private:
 };
 
 
-DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
-                                                      LIB_SYMBOL* aSymbol,
+DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_SYMBOL* aSymbol,
                                                       const std::vector<SCH_PIN*>& aSelectedPins ) :
         DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
         m_editFrame( parent ),
@@ -1089,8 +1088,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     attr = new wxGridCellAttr;
     wxArrayString orientationNames = PinOrientationNames();
     orientationNames.push_back( INDETERMINATE_STATE );
-    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinOrientationIcons(),
-                                                         orientationNames ) );
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinOrientationIcons(), orientationNames ) );
     attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinOrientationIcons(), orientationNames ) );
     m_grid->SetColAttr( COL_ORIENTATION, attr );
 
@@ -1105,12 +1103,15 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_grid->SetColAttr( COL_UNIT, attr );
 
     attr = new wxGridCellAttr;
-    wxArrayString demorganNames;
-    demorganNames.push_back( wxGetTranslation( DEMORGAN_ALL ) );
-    demorganNames.push_back( wxGetTranslation( DEMORGAN_STD ) );
-    demorganNames.push_back( wxGetTranslation( DEMORGAN_ALT ) );
-    attr->SetEditor( new GRID_CELL_COMBOBOX( demorganNames ) );
-    m_grid->SetColAttr( COL_DEMORGAN, attr );
+    wxArrayString bodyStyleNames;
+
+    bodyStyleNames.push_back( wxGetTranslation( DEMORGAN_ALL ) );
+
+    for( int i = 0; i < aSymbol->GetBodyStyleCount(); i++ )
+        bodyStyleNames.push_back( aSymbol->GetBodyStyleNames()[i] );
+
+    attr->SetEditor( new GRID_CELL_COMBOBOX( bodyStyleNames ) );
+    m_grid->SetColAttr( COL_BODY_STYLE, attr );
 
     attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -1139,7 +1140,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     GetSizer()->SetSizeHints(this);
     Centre();
 
-    if( aSymbol->IsMulti() )
+    if( aSymbol->IsMultiUnit() )
     {
         m_unitFilter->Append( wxGetTranslation( UNITS_ALL ) );
 
@@ -1154,11 +1155,20 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_unitFilter->Enable( false );
     }
 
-    if( aSymbol->HasAlternateBodyStyle() )
+    if( aSymbol->HasDeMorganBodyStyles() )
     {
         m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_ALL ) );
         m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_STD ) );
         m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_ALT ) );
+
+        m_bodyStyleFilter->SetSelection( -1 );
+    }
+    else if( aSymbol->IsMultiBodyStyle() )
+    {
+        m_bodyStyleFilter->Append( wxGetTranslation( DEMORGAN_ALL ) );
+
+        for( const wxString& bodyStyle : aSymbol->GetBodyStyleNames() )
+            m_bodyStyleFilter->Append( bodyStyle );
 
         m_bodyStyleFilter->SetSelection( -1 );
     }
@@ -1223,15 +1233,15 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
-    if( m_symbol->IsMulti() )
+    if( m_symbol->IsMultiUnit() )
         m_grid->ShowCol( COL_UNIT );
     else
         m_grid->HideCol( COL_UNIT );
 
-    if( m_editFrame->GetShowDeMorgan() )
-        m_grid->ShowCol( COL_DEMORGAN );
+    if( m_symbol->IsMultiBodyStyle() )
+        m_grid->ShowCol( COL_BODY_STYLE );
     else
-        m_grid->HideCol( COL_DEMORGAN );
+        m_grid->HideCol( COL_BODY_STYLE );
 
     updateSummary();
 

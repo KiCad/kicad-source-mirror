@@ -309,19 +309,15 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
     long tmp;
     wxString name;
     wxString error;
-    wxString unitDisplayName;
     SCH_ITEM* item;
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
 
-    symbol->SetUnitCount( 1 );
+    symbol->SetUnitCount( 1, true );
 
     token = NextTok();
 
     if( !IsSymbol( token ) )
-    {
-        THROW_PARSE_ERROR( _( "Invalid symbol name" ), CurSource(), CurLine(), CurLineNumber(),
-                           CurOffset() );
-    }
+        THROW_PARSE_ERROR( _( "Invalid symbol name" ), CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 
     name = FromUTF8();
 
@@ -375,6 +371,10 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                 Expecting( "global or local" );
 
             NeedRIGHT();
+            break;
+
+        case T_body_styles:
+            parseBodyStyles( symbol );
             break;
 
         case T_pin_names:
@@ -512,14 +512,14 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
 
             if( !tokenizer.GetNextToken().ToLong( &tmp ) )
             {
-                error.Printf( _( "Invalid symbol convert number %s" ), name.c_str() );
+                error.Printf( _( "Invalid symbol body style number %s" ), name.c_str() );
                 THROW_PARSE_ERROR( error, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
             m_bodyStyle = static_cast<int>( tmp );
 
             if( m_bodyStyle > 1 )
-                symbol->SetHasAlternateBodyStyle( true, false );
+                symbol->SetBodyStyleCount( m_bodyStyle, false, false );
 
             if( m_unit > symbol->GetUnitCount() )
                 symbol->SetUnitCount( m_unit, false );
@@ -537,10 +537,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                     token = NextTok();
 
                     if( IsSymbol( token ) )
-                    {
-                        unitDisplayName = FromUTF8();
-                        symbol->SetUnitDisplayName( m_unit, unitDisplayName );
-                    }
+                        symbol->GetUnitDisplayNames()[m_unit] = FromUTF8();
 
                     NeedRIGHT();
                     break;
@@ -621,8 +618,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
     symbol->GetDrawItems().sort();
     m_symbolName.clear();
 
-    const std::vector<wxString>* embeddedFonts =
-            symbol->GetEmbeddedFiles()->UpdateFontFiles();
+    const std::vector<wxString>* embeddedFonts = symbol->GetEmbeddedFiles()->UpdateFontFiles();
 
     symbol->RunOnChildren(
             [&]( SCH_ITEM* aChild )
@@ -631,6 +627,11 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                     textItem->ResolveFont( embeddedFonts );
             },
             RECURSE_MODE::NO_RECURSE );
+
+    // Before V10 we didn't store the number of body styles in a symbol, we just looked at all its
+    // drawings each time we wanted to know.
+    if( m_requiredVersion < 20250827 )
+        symbol->SetHasDeMorganBodyStyles( symbol->HasLegacyAlternateBodyStyle() );
 
     return symbol.release();
 }
@@ -903,6 +904,34 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aF
     {
         m_requiredVersion = aFileVersion;
     }
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parseBodyStyles( std::unique_ptr<LIB_SYMBOL>& aSymbol )
+{
+    wxCHECK_RET( CurTok() == T_body_styles,
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a body_styles token." );
+
+    std::vector<wxString> names;
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_demorgan )
+        {
+            aSymbol->SetHasDeMorganBodyStyles( true );
+            continue;
+        }
+        else if( !IsSymbol( token ) )
+        {
+            THROW_PARSE_ERROR( _( "Invalid property value" ), CurSource(), CurLine(), CurLineNumber(),
+                               CurOffset() );
+        }
+
+        names.push_back( FromUTF8() );
+    }
+
+    if( !names.empty() )
+        aSymbol->SetBodyStyleNames( names );
 }
 
 
@@ -3146,10 +3175,9 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
-        case T_convert:
-            // Use SetBodyStyleUnconditional() because the full symbol properties
-            // (including the corresponding LIB_SYMBOL) are not known
-            symbol->SetBodyStyleUnconditional( parseInt( "symbol body style" ) );
+        case T_convert:     // Legacy token
+        case T_body_style:
+            symbol->SetBodyStyle( parseInt( "symbol body style" ) );
             NeedRIGHT();
             break;
 

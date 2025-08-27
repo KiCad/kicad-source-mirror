@@ -71,7 +71,7 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         if( !next->GetName().IsEmpty() )
             nextName = " '" + next->GetName() + "'";
 
-        if( aSymbol->HasAlternateBodyStyle() && next->GetBodyStyle() )
+        if( aSymbol->IsMultiBodyStyle() && next->GetBodyStyle() )
         {
             if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
             {
@@ -217,12 +217,6 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             aMessages.push_back( msg );
         }
 
-        if( aSymbol->HasAlternateBodyStyle() )
-        {
-            msg.Printf( _( "<b>A Power Symbol should not have DeMorgan variants</b><br><br>" ) );
-            aMessages.push_back( msg );
-        }
-
         if( pinList.size() != 1 )
         {
             msg.Printf( _( "<b>A Power Symbol should have only one pin</b><br><br>" ) );
@@ -262,7 +256,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                 && !pin->IsVisible() )
         {
             // hidden power pin
-            if( aSymbol->HasAlternateBodyStyle() && pin->GetBodyStyle() )
+            if( aSymbol->IsMultiBodyStyle() && pin->GetBodyStyle() )
             {
                 if( aSymbol->GetUnitCount() <= 1 )
                 {
@@ -321,7 +315,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             // pin is off grid
             msg.Empty();
 
-            if( aSymbol->HasAlternateBodyStyle() && pin->GetBodyStyle() )
+            if( aSymbol->IsMultiBodyStyle() && pin->GetBodyStyle() )
             {
                 if( aSymbol->GetUnitCount() <= 1 )
                 {

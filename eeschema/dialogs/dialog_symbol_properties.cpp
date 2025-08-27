@@ -342,13 +342,14 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         m_shownColumns = m_fieldsGrid->GetShownColumns();
     }
 
-    if( m_part && m_part->HasAlternateBodyStyle() )
+    if( m_part && m_part->IsMultiBodyStyle() )
     {
-        // DeMorgan conversions are a subclass of alternate pin assignments, so don't allow
+        // Multiple body styles are a superclass of alternate pin assignments, so don't allow
         // free-form alternate assignments as well.  (We won't know how to map the alternates
-        // back and forth when the conversion is changed.)
+        // back and forth when the body style is changed.)
         m_pinTablePage->Disable();
-        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for De Morgan symbols." ) );
+        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for symbols with multiple "
+                                       "body styles." ) );
     }
     else
     {
@@ -472,7 +473,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     AdjustFieldsGridColumns();
 
     // If a multi-unit symbol, set up the unit selector and interchangeable checkbox.
-    if( m_symbol->GetUnitCount() > 1 )
+    if( m_symbol->IsMultiUnit() )
     {
         // Ensure symbol unit is the currently selected unit (mandatory in complex hierarchies)
         // from the current sheet path, because it can be modified by previous calculations
@@ -490,14 +491,18 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_unitChoice->Enable( false );
     }
 
-    if( m_part && m_part->HasAlternateBodyStyle() )
+    if( m_part && m_part->IsMultiBodyStyle() )
     {
-        if( m_symbol->GetBodyStyle() > BODY_STYLE::BASE )
-            m_cbAlternateSymbol->SetValue( true );
+        for( int ii = 0; ii < m_part->GetBodyStyleCount(); ii++ )
+            m_bodyStyleChoice->Append( m_part->GetBodyStyleNames()[ii] );
+
+        if( m_symbol->GetBodyStyle() <= (int) m_bodyStyleChoice->GetCount() )
+            m_bodyStyleChoice->SetSelection( m_symbol->GetBodyStyle() - 1 );
     }
     else
     {
-        m_cbAlternateSymbol->Enable( false );
+        m_bodyStyle->Enable( false );
+        m_bodyStyleChoice->Enable( false );
     }
 
     // Set the symbol orientation and mirroring.
@@ -517,8 +522,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     switch( mirror )
     {
     default:           m_mirrorCtrl->SetSelection( 0 ) ; break;
-    case SYM_MIRROR_X: m_mirrorCtrl->SetSelection( 1 ); break;
-    case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
+    case SYM_MIRROR_X: m_mirrorCtrl->SetSelection( 1 );  break;
+    case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 );  break;
     }
 
     m_cbExcludeFromSim->SetValue( m_symbol->GetExcludedFromSim() );
@@ -681,16 +686,13 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // Save current flags which could be modified by next change settings
     EDA_ITEM_FLAGS flags = m_symbol->GetFlags();
 
-    // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
-    if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
-        m_symbol->SetBodyStyle( BODY_STYLE::DEMORGAN );
-    else
-        m_symbol->SetBodyStyle( BODY_STYLE::BASE );
-
     //Set the part selection in multiple part per package
     int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;
     m_symbol->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
     m_symbol->SetUnit( unit_selection );
+
+    int bodyStyle_selection = m_bodyStyleChoice->IsEnabled() ? m_bodyStyleChoice->GetSelection() + 1 : 1;
+    m_symbol->SetBodyStyle( bodyStyle_selection );
 
     switch( m_orientationCtrl->GetSelection() )
     {

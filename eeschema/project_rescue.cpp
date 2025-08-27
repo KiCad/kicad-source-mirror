@@ -114,22 +114,13 @@ static wxFileName GetRescueLibraryFileName( SCHEMATIC* aSchematic )
 }
 
 
-RESCUE_CASE_CANDIDATE::RESCUE_CASE_CANDIDATE( const wxString& aRequestedName,
-                                              const wxString& aNewName,
-                                              LIB_SYMBOL* aLibCandidate,
-                                              int aUnit,
-                                              int aConvert )
-{
-    m_requested_name = aRequestedName;
-    m_new_name = aNewName;
-    m_lib_candidate = aLibCandidate;
-    m_unit = aUnit;
-    m_convert = aConvert;
-}
+RESCUE_CASE_CANDIDATE::RESCUE_CASE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
+                                              LIB_SYMBOL* aLibCandidate, int aUnit, int aBodyStyle ) :
+        RESCUE_CANDIDATE( aRequestedName, aNewName, aLibCandidate, aUnit, aBodyStyle )
+{}
 
 
-void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
-                                         boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates )
+void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer, boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates )
 {
     std::map<wxString, RESCUE_CASE_CANDIDATE> candidate_map;
 
@@ -214,31 +205,7 @@ bool RESCUE_CASE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 }
 
 
-RESCUE_CACHE_CANDIDATE::RESCUE_CACHE_CANDIDATE( const wxString& aRequestedName,
-                                                const wxString& aNewName,
-                                                LIB_SYMBOL* aCacheCandidate,
-                                                LIB_SYMBOL* aLibCandidate,
-                                                int aUnit,
-                                                int aConvert )
-{
-    m_requested_name = aRequestedName;
-    m_new_name = aNewName;
-    m_cache_candidate = aCacheCandidate;
-    m_lib_candidate = aLibCandidate;
-    m_unit = aUnit;
-    m_convert = aConvert;
-}
-
-
-RESCUE_CACHE_CANDIDATE::RESCUE_CACHE_CANDIDATE()
-{
-    m_cache_candidate = nullptr;
-    m_lib_candidate = nullptr;
-}
-
-
-void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
-                                          boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates )
+void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer, boost::ptr_vector<RESCUE_CANDIDATE>& aCandidates )
 {
     std::map<wxString, RESCUE_CACHE_CANDIDATE> candidate_map;
 
@@ -258,8 +225,7 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             // A new symbol name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_symbol_name = symbol_name;
-            cache_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ),
-                                      true );
+            cache_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
             lib_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), false );
 
             // At some point during V5 development, the LIB_ID delimiter character ':' was
@@ -304,8 +270,7 @@ wxString RESCUE_CACHE_CANDIDATE::GetActionDescription() const
 
     if( !m_cache_candidate && !m_lib_candidate )
     {
-        action.Printf( _( "Cannot rescue symbol %s which is not available in any library or "
-                          "the cache." ),
+        action.Printf( _( "Cannot rescue symbol %s which is not available in any library or the cache." ),
                        m_requested_name );
     }
     else if( m_cache_candidate && !m_lib_candidate )
@@ -358,24 +323,20 @@ RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE( const LIB_
                                                                       const LIB_ID& aNewId,
                                                                       LIB_SYMBOL* aCacheCandidate,
                                                                       LIB_SYMBOL* aLibCandidate,
-                                                                      int aUnit, int aConvert ) :
-        RESCUE_CANDIDATE()
-{
-    m_requested_id = aRequestedId;
-    m_requested_name = aRequestedId.Format().wx_str();
-    m_new_id = aNewId;
-    m_lib_candidate = aLibCandidate;
-    m_cache_candidate = aCacheCandidate;
-    m_unit = aUnit;
-    m_convert = aConvert;
-}
+                                                                      int aUnit, int aBodyStyle ) :
+        RESCUE_CANDIDATE( aRequestedId.Format().wx_str(), wxEmptyString, aLibCandidate, aUnit, aBodyStyle ),
+        m_requested_id( aRequestedId ),
+        m_new_id( aNewId ),
+        m_cache_candidate( aCacheCandidate )
+{}
 
 
-RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE()
-{
-    m_cache_candidate = nullptr;
-    m_lib_candidate = nullptr;
-}
+RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE() :
+        RESCUE_CANDIDATE( wxEmptyString, wxEmptyString, nullptr, 0, 0 ),
+        m_requested_id(),
+        m_new_id(),
+        m_cache_candidate( nullptr )
+{}
 
 
 void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
@@ -415,13 +376,11 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
                 symbolName.Printf( wxT( "%s-%s" ),
                                    symbol_id.GetLibNickname().wx_str(),
                                    symbol_id.GetLibItemName().wx_str() );
-                cache_match = findSymbol( symbolName, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ),
-                                          true );
+                cache_match = findSymbol( symbolName, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
             }
 
             // Get the library symbol from the symbol library table.
-            lib_match = SchGetLibSymbol( symbol_id,
-                                         PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
+            lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -484,8 +443,7 @@ wxString RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::GetActionDescription() const
 
     if( !m_cache_candidate && !m_lib_candidate )
     {
-        action.Printf( _( "Cannot rescue symbol %s which is not available in any library or "
-                          "the cache." ),
+        action.Printf( _( "Cannot rescue symbol %s which is not available in any library or the cache." ),
                        UnescapeString( m_requested_id.GetLibItemName().wx_str() ) );
     }
     else if( m_cache_candidate && !m_lib_candidate )
@@ -546,8 +504,7 @@ RESCUER::RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCur
 }
 
 
-void RESCUER::LogRescue( SCH_SYMBOL* aSymbol, const wxString &aOldName,
-                         const wxString &aNewName )
+void RESCUER::LogRescue( SCH_SYMBOL* aSymbol, const wxString &aOldName, const wxString &aNewName )
 {
     RESCUE_LOG logitem;
     logitem.symbol = aSymbol;
@@ -711,11 +668,8 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        wxString msg;
-
-        msg.Printf( _( "Failed to create symbol library file '%s'." ),
-                    m_rescue_lib->GetFullFileName() );
-        DisplayError( aParent, msg );
+        DisplayError( aParent, wxString::Format( _( "Failed to create symbol library file '%s'." ),
+                                                 m_rescue_lib->GetFullFileName() ) );
         return false;
     }
 
@@ -723,8 +677,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     wxString libPaths;
 
     wxString libName = m_rescue_lib->GetName();
-    SYMBOL_LIBS* libs =
-            dynamic_cast<SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) );
+    SYMBOL_LIBS* libs = dynamic_cast<SYMBOL_LIBS*>( m_prj->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) );
 
     if( !libs )
     {

@@ -72,10 +72,10 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 
     // no sub units
     BOOST_CHECK_EQUAL( m_part_no_data.GetUnitCount(), 1 );
-    BOOST_CHECK_EQUAL( m_part_no_data.IsMulti(), false );
+    BOOST_CHECK_EQUAL( m_part_no_data.IsMultiUnit(), false );
 
-    // no conversion
-    BOOST_CHECK_EQUAL( m_part_no_data.HasAlternateBodyStyle(), false );
+    // single body style
+    BOOST_CHECK_EQUAL( m_part_no_data.HasDeMorganBodyStyles(), false );
 }
 
 
@@ -383,12 +383,12 @@ BOOST_AUTO_TEST_CASE( Compare )
     testPart.SetLibId( id );
 
     // Unit count comparison tests.
-    testPart.SetUnitCount( 2 );
+    testPart.SetUnitCount( 2, true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    testPart.SetUnitCount( 1 );
-    m_part_no_data.SetUnitCount( 2 );
+    testPart.SetUnitCount( 1, true );
+    m_part_no_data.SetUnitCount( 2, true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    m_part_no_data.SetUnitCount( 1 );
+    m_part_no_data.SetUnitCount( 1, true );
 
     // Options flag comparison tests.
     testPart.SetGlobalPower();
@@ -534,7 +534,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assigned to
     // unit 2 and body style 1.
     SCH_PIN* pin2 = new SCH_PIN( &m_part_no_data );
-    m_part_no_data.SetUnitCount( 2 );
+    m_part_no_data.SetUnitCount( 2, true );
     pin2->SetUnit( 2 );
     pin2->SetBodyStyle( 2 );
     pin2->SetNumber( "4" );
@@ -587,8 +587,7 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( child->IsDerived() );
     BOOST_CHECK_EQUAL( child->GetInheritanceDepth(), 1 );
 
-    std::unique_ptr<LIB_SYMBOL> grandChild = std::make_unique<LIB_SYMBOL>( "grandchild",
-                                                                           child.get() );
+    std::unique_ptr<LIB_SYMBOL> grandChild = std::make_unique<LIB_SYMBOL>( "grandchild", child.get() );
     BOOST_CHECK( grandChild->IsDerived() );
     BOOST_CHECK_EQUAL( grandChild->GetInheritanceDepth(), 2 );
 
@@ -607,9 +606,9 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK_EQUAL( child->SharedPtr().use_count(), 3 );
 
     BOOST_CHECK_EQUAL( child->GetUnitCount(), 1 );
-    parent->SetUnitCount( 4 );
+    parent->SetUnitCount( 4, true );
     BOOST_CHECK_EQUAL( child->GetUnitCount(), 4 );
-    parent->SetUnitCount( 1 );
+    parent->SetUnitCount( 1, true );
 
     parent->GetField( FIELD_T::DATASHEET )->SetText( "https://kicad/resistors.pdf" );
     ref->GetField( FIELD_T::DATASHEET )->SetText( "https://kicad/resistors.pdf" );

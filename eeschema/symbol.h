@@ -116,21 +116,26 @@ public:
     virtual bool IsNormal() const = 0;
 
     /**
-     * Test if symbol has more than one body conversion type (DeMorgan).
-     *
-     * @return True if symbol has more than one conversion.
-     */
-    virtual bool HasAlternateBodyStyle() const = 0;
-
-    /**
      * @return true if the symbol has multiple units per symbol.
      */
-    virtual bool IsMulti() const = 0;
+    virtual bool IsMultiUnit() const = 0;
 
     /**
      * @return the number of units defined for the symbol.
      */
     virtual int GetUnitCount() const = 0;
+
+    /**
+     * @return true if the symbol has multiple body styles available.
+     */
+    virtual bool IsMultiBodyStyle() const = 0;
+
+    /**
+     * @return the number of body styles defined for the symbol.
+     */
+    virtual int GetBodyStyleCount() const = 0;
+
+    virtual bool HasDeMorganBodyStyles() const = 0;
 
     virtual const wxString GetRef( const SCH_SHEET_PATH* aSheet,
                                    bool aIncludeUnit = false ) const = 0;
