@@ -340,8 +340,11 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 
             if( layer == B_Cu )
                 gbr_layer_id << m_pcb->GetCopperLayerCount();
-            else
-                gbr_layer_id << layer + 1;
+            else if( layer == F_Cu )
+                gbr_layer_id << 1;
+            else    // Copper layers are numbered B_Cu + n*2 for inner layer n (n = 1 ... val max)
+                    // and gbr_layer_id = 2 ... val max
+                gbr_layer_id << (layer-B_Cu) / 2 + 1;
 
             gbr_layer_id << wxT( "," );
 
