@@ -47,6 +47,7 @@ set( QA_KIMATH_SRCS
     geometry/test_shape_poly_set_collision.cpp
     geometry/test_shape_poly_set_distance.cpp
     geometry/test_shape_poly_set_iterator.cpp
+    geometry/test_shape_poly_set_split_outlines.cpp
     geometry/test_shape_line_chain.cpp
     geometry/test_shape_line_chain_collision.cpp
     geometry/test_vector_utils.cpp
