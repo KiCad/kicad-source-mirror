@@ -1470,6 +1470,8 @@ private:
     void inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, int aCircleSegCount,
                        CORNER_STRATEGY aCornerStrategy, bool aSimplify = false );
 
+    void splitCollinearOutlines();
+
     /**
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon
      * simplification (merging overlapping  polygons).

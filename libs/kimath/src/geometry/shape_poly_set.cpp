@@ -41,6 +41,7 @@
 #include <unordered_set>
 #include <utility> // for swap, move
 #include <vector>
+#include <array>
 
 #include <clipper2/clipper.h>
 #include <geometry/geometry_utils.h>
@@ -49,6 +50,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/rtree.h>
 #include <math/box2.h>                       // for BOX2I
 #include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
@@ -71,6 +73,46 @@
     #define TRIANGULATESIMPLIFICATIONLEVEL ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel
     #define ENABLECACHEFRIENDLYFRACTURE ADVANCED_CFG::GetCfg().m_EnableCacheFriendlyFracture
 #endif
+
+static bool segmentsColinearOverlap( const SEG& a, const SEG& b, VECTOR2I& s, VECTOR2I& e )
+{
+    const VECTOR2I da = a.B - a.A;
+    const VECTOR2I db = b.B - b.A;
+
+    if( da.Cross( db ) != 0 )
+        return false;
+
+    if( da.Cross( b.A - a.A ) != 0 )
+        return false;
+
+    int axis = std::abs( da.x ) >= std::abs( da.y ) ? 0 : 1;
+
+    int aMin = axis == 0 ? std::min( a.A.x, a.B.x ) : std::min( a.A.y, a.B.y );
+    int aMax = axis == 0 ? std::max( a.A.x, a.B.x ) : std::max( a.A.y, a.B.y );
+    int bMin = axis == 0 ? std::min( b.A.x, b.B.x ) : std::min( b.A.y, b.B.y );
+    int bMax = axis == 0 ? std::max( b.A.x, b.B.x ) : std::max( b.A.y, b.B.y );
+
+    int lo = std::max( aMin, bMin );
+    int hi = std::min( aMax, bMax );
+
+    if( hi <= lo )
+        return false;
+
+    std::array<VECTOR2I,4> pts = { a.A, a.B, b.A, b.B };
+
+    std::sort( pts.begin(), pts.end(), [axis]( const VECTOR2I& p, const VECTOR2I& q )
+    {
+        if( axis == 0 )
+            return p.x < q.x || ( p.x == q.x && p.y < q.y );
+        else
+            return p.y < q.y || ( p.y == q.y && p.x < q.x );
+    } );
+
+    s = pts[1];
+    e = pts[2];
+
+    return true;
+}
 
 SHAPE_POLY_SET::SHAPE_POLY_SET() :
     SHAPE( SH_POLY_SET )
@@ -1861,8 +1903,110 @@ void SHAPE_POLY_SET::Unfracture()
 }
 
 
+void SHAPE_POLY_SET::splitCollinearOutlines()
+{
+    for( size_t polyIdx = 0; polyIdx < m_polys.size(); ++polyIdx )
+    {
+        bool changed = true;
+
+        while( changed )
+        {
+            changed = false;
+
+            SHAPE_LINE_CHAIN& outline = m_polys[polyIdx][0];
+            intptr_t count = outline.PointCount();
+
+            RTree<intptr_t, intptr_t, 2, intptr_t> rtree;
+
+            for( intptr_t i = 0; i < count; ++i )
+            {
+                const VECTOR2I& a = outline.CPoint( i );
+                const VECTOR2I& b = outline.CPoint( ( i + 1 ) % count );
+                intptr_t min[2] = { std::min( a.x, b.x ), std::min( a.y, b.y ) };
+                intptr_t max[2] = { std::max( a.x, b.x ), std::max( a.y, b.y ) };
+                rtree.Insert( min, max, i );
+            }
+
+            bool found = false;
+            int segA = -1;
+            int segB = -1;
+            VECTOR2I s, e;
+
+            for( intptr_t i = 0; i < count && !found; ++i )
+            {
+                const VECTOR2I& a = outline.CPoint( i );
+                const VECTOR2I& b = outline.CPoint( ( i + 1 ) % count );
+                SEG seg( a, b );
+                intptr_t min[2] = { std::min( a.x, b.x ), std::min( a.y, b.y ) };
+                intptr_t max[2] = { std::max( a.x, b.x ), std::max( a.y, b.y ) };
+
+                auto visitor =
+                        [&]( const int& j ) -> bool
+                        {
+                            if( j == i || j == ( ( i + 1 ) % count ) || j == ( ( i + count - 1 ) % count ) )
+                                return true;
+
+                            VECTOR2I oa = outline.CPoint( j );
+                            VECTOR2I ob = outline.CPoint( ( j + 1 ) % count );
+                            SEG other( oa, ob );
+
+                            if( segmentsColinearOverlap( seg, other, s, e ) )
+                            {
+                                segA = i;
+                                segB = j;
+                                found = true;
+                                return false;
+                            }
+
+                            return true;
+                        };
+
+                rtree.Search( min, max, visitor );
+            }
+
+            if( !found )
+                break;
+
+            int a0 = segA;
+            int a1 = ( segA + 1 ) % outline.PointCount();
+            int b0 = segB;
+            int b1 = ( segB + 1 ) % outline.PointCount();
+
+            SHAPE_LINE_CHAIN lc1;
+            int idx = a1;
+            lc1.Append( outline.CPoint( idx ) );
+            while( idx != b0 )
+            {
+                idx = ( idx + 1 ) % outline.PointCount();
+                lc1.Append( outline.CPoint( idx ) );
+            }
+            lc1.SetClosed( true );
+
+            SHAPE_LINE_CHAIN lc2;
+            idx = b1;
+            lc2.Append( outline.CPoint( idx ) );
+            while( idx != a0 )
+            {
+                idx = ( idx + 1 ) % outline.PointCount();
+                lc2.Append( outline.CPoint( idx ) );
+            }
+            lc2.SetClosed( true );
+
+            m_polys[polyIdx][0] = lc1;
+            POLYGON np;
+            np.push_back( lc2 );
+            m_polys.push_back( np );
+
+            changed = true;
+        }
+    }
+}
+
+
 void SHAPE_POLY_SET::Simplify()
 {
+    splitCollinearOutlines();
+
     SHAPE_POLY_SET empty;
 
     booleanOp( Clipper2Lib::ClipType::Union, empty );
