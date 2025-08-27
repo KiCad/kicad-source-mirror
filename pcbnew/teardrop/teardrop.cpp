@@ -275,8 +275,8 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
             }
 
-            bool startHitsPad = pad->HitTest( track->GetStart() );
-            bool endHitsPad = pad->HitTest( track->GetEnd() );
+            bool startHitsPad = pad->HitTest( track->GetStart(), 0, track->GetLayer() );
+            bool endHitsPad = pad->HitTest( track->GetEnd(), 0, track->GetLayer() );
 
             // The track is entirely inside the pad; cannot create a teardrop
             if( startHitsPad && endHitsPad )

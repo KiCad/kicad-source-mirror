@@ -824,6 +824,11 @@ public:
     bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
 
     /**
+     * return true if hit test on the specified layer
+     */
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy, PCB_LAYER_ID aLayer ) const;
+
+    /**
      * Recombines the pad with other graphical shapes in the footprint
      *
      * @param aIsDryRun if true, the pad will not be recombined but the operation will still be logged
