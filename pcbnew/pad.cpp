@@ -1447,6 +1447,9 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
 bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy, PCB_LAYER_ID aLayer ) const
 {
+    if( !IsOnLayer( aLayer ) )
+        return false;
+
     VECTOR2I delta = aPosition - GetPosition();
     int      boundingRadius = GetBoundingRadius() + aAccuracy;
 
