@@ -529,7 +529,7 @@ void NETLIST_EXPORTER_SPICE::readModel( const std::vector<SCH_FIELD>& aFields, S
         wxFileName cacheFn;
         cacheFn.AssignDir( PATHS::GetUserCachePath() );
         cacheFn.AppendDir( wxT( "ibis" ) );
-        cacheFn.SetFullName( aItem.refName + ".cache" );
+        cacheFn.SetFullName( aItem.refName + wxT( ".cache" ) );
 
         wxFile cacheFile( cacheFn.GetFullPath(), wxFile::write );
 
