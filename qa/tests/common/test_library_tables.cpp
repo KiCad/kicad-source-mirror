@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
                 continue;
 
             std::ifstream inFp;
-            inFp.open( fn.GetFullPath() );
+            inFp.open( fn.GetFullPath().fn_str() );
             BOOST_REQUIRE( inFp.is_open() );
 
             std::stringstream inBuf;

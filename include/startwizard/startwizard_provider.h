@@ -28,12 +28,12 @@ class wxPanel;
 class wxWindow;
 class STARTWIZARD;
 
-class STARTWIZARD_PROVIDER
+class KICOMMON_API STARTWIZARD_PROVIDER
 {
 public:
     STARTWIZARD_PROVIDER( const wxString& aPageName ) : m_pageName( aPageName ) {}
 
-    virtual ~STARTWIZARD_PROVIDER() {}
+    virtual ~STARTWIZARD_PROVIDER() = default;
 
     virtual wxString Name() const = 0;
 

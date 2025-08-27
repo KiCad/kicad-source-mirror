@@ -21,10 +21,11 @@
 #define STARTWIZARD_H
 
 #include <kicommon.h>
+#include <startwizard/startwizard_provider.h>
 
 class wxWizard;
 class wxWindow;
-class STARTWIZARD_PROVIDER;
+
 
 class KICOMMON_API STARTWIZARD
 {
@@ -32,6 +33,9 @@ public:
     STARTWIZARD();
 
     ~STARTWIZARD();
+
+    STARTWIZARD( const STARTWIZARD& ) = delete;
+    STARTWIZARD& operator=( const STARTWIZARD& ) = delete;
 
     void CheckAndRun( wxWindow* parent );
 

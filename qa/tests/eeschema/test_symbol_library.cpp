@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE( AsyncLoad )
             BOOST_REQUIRE( !status.error.has_value() );
             break;
 
-        case LOAD_STATUS::ERROR:
+        case LOAD_STATUS::LOAD_ERROR:
             BOOST_REQUIRE( status.error.has_value() );
             msg << ": error: " << status.error->message;
             break;

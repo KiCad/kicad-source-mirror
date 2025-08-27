@@ -198,7 +198,7 @@ tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::Parse(
     catch( std::filesystem::filesystem_error& e )
     {
         wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse loading '%s' error: %s",
-                    std::string( aPath ), e.what() );
+                    aPath.string(), e.what() );
         return tl::unexpected( LIBRARY_PARSE_ERROR( {
             .description = e.what()
         } ) );

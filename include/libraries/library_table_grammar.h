@@ -32,6 +32,7 @@
 namespace LIBRARY_TABLE_GRAMMAR
 {
 using namespace tao::pegtl;
+using eof = tao::pegtl::eof;
 
 namespace KEYWORDS
 {

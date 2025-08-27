@@ -27,6 +27,7 @@
 #include <libraries/symbol_library_adapter.h>
 #include <http_lib/http_lib_connection.h>
 #include "sch_io_http_lib.h"
+#include <ki_exception.h>
 
 
 SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() :

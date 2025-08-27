@@ -794,7 +794,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     if( !uri )
     {
         wxLogTrace( "KICAD_LIB_WATCH", "Could not get URI for library %s",
-                    wxString( aID->GetLibNickname() ) );
+                    wxString( aID->GetLibNickname().c_str() ) );
         return;
     }
 

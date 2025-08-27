@@ -780,6 +780,12 @@ LIBRARY_MANAGER_ADAPTER::~LIBRARY_MANAGER_ADAPTER()
 }
 
 
+LIBRARY_MANAGER& LIBRARY_MANAGER_ADAPTER::Manager() const
+{
+    return m_manager;
+}
+
+
 void LIBRARY_MANAGER_ADAPTER::ProjectChanged()
 {
     abortLoad();
@@ -814,6 +820,7 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
         globalLibs().clear();
     }
 }
+    
 
 
 LIBRARY_TABLE* LIBRARY_MANAGER_ADAPTER::GlobalTable() const
