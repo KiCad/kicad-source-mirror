@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-22 06:41+0000\n"
+"PO-Revision-Date: 2025-08-27 06:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -27923,7 +27923,7 @@ msgstr "キー"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:144
 msgid "Extant"
-msgstr ""
+msgstr "Extant"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:305
 msgid "Reset to default"
