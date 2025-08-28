@@ -861,30 +861,8 @@ wxArrayString* DSNLEXER::ReadCommentLines()
 
 double DSNLEXER::parseDouble()
 {
-// We try here to be locale independent to avoid the need to switch to a "C" locale
-#if ( defined( __GNUC__ ) && __GNUC__ < 11 ) || ( defined( __clang__ ) && __clang_major__ < 13 )
-    // GCC older than 11 "supports" C++17 without supporting the C++17 std::from_chars for doubles
-    // clang is similar
-
-    // Use wxString::ToCDouble() which is designed to be locale independent
-    wxString tmp = CurStr();
-    double fval;
-    bool success = tmp.ToCDouble( &fval );
-
-    if( !success )
-    {
-        wxString error;
-        error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
-                      CurSource(), CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
-    }
-
-    return fval;
-#else
     // Use std::from_chars which is designed to be locale independent and performance oriented
     // for data interchange
-
     const std::string& str = CurStr();
 
     // Offset any leading whitespace, this is one thing from_chars does not handle
@@ -896,8 +874,7 @@ double DSNLEXER::parseDouble()
     }
 
     double                 dval{};
-    std::from_chars_result res =
-            std::from_chars( str.data() + woff, str.data() + str.size(), dval );
+    std::from_chars_result res = std::from_chars( str.data() + woff, str.data() + str.size(), dval );
 
     if( res.ec != std::errc() )
     {
@@ -906,5 +883,4 @@ double DSNLEXER::parseDouble()
     }
 
     return dval;
-#endif
 }
