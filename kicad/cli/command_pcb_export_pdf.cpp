@@ -25,8 +25,6 @@
 #include <string_utils.h>
 #include <wx/crt.h>
 
-#include <locale_io.h>
-
 #define ARG_MODE_SEPARATE "--mode-separate"
 #define ARG_MODE_MULTIPAGE "--mode-multipage"
 #define ARG_MODE_SINGLE "--mode-single"
@@ -197,6 +195,5 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     else if( argModeSingle )
         pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE;
 
-    LOCALE_IO dummy;    // Switch to "C" locale
     return aKiway.ProcessJob( KIWAY::FACE_PCB, pdfJob.get() );
 }

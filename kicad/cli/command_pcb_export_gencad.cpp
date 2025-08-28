@@ -25,8 +25,6 @@
 #include <string_utils.h>
 #include <wx/crt.h>
 
-#include <locale_io.h>
-
 
 CLI::PCB_EXPORT_GENCAD_COMMAND::PCB_EXPORT_GENCAD_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "gencad", false, true )
@@ -83,6 +81,5 @@ int CLI::PCB_EXPORT_GENCAD_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    LOCALE_IO dummy; // Switch to "C" locale
     return aKiway.ProcessJob( KIWAY::FACE_PCB, gencadJob.get() );
 }

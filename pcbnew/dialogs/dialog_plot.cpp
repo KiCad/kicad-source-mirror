@@ -39,7 +39,6 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <layer_ids.h>
-#include <locale_io.h>
 #include <bitmaps.h>
 #include <dialog_gendrill.h>
 #include <string_utils.h>
@@ -1244,7 +1243,6 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // Save the current plot options in the board
         m_editFrame->SetPlotSettings( m_plotOpts );
 
-        LOCALE_IO dummy;    // Ensure the "C3 locale is used by the plotter
         PCB_PLOTTER pcbPlotter( m_editFrame->GetBoard(), &reporter, m_plotOpts );
 
         LSEQ layersToPlot = m_plotOpts.GetLayerSelection().UIOrder();

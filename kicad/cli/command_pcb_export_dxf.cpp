@@ -26,7 +26,6 @@
 #include <wx/crt.h>
 
 #include <macros.h>
-#include <locale_io.h>
 
 #define ARG_USE_CONTOURS "--use-contours"
 #define ARG_OUTPUT_UNITS "--output-units"
@@ -191,7 +190,5 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
                    _( "The new behavior will match --mode-multi" ) );
     }
 
-
-    LOCALE_IO dummy;    // Switch to "C" locale
     return aKiway.ProcessJob( KIWAY::FACE_PCB, dxfJob.get() );
 }
