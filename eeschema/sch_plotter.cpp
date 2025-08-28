@@ -27,7 +27,6 @@
 #include <wx/log.h>
 #include <common.h>
 #include <sch_plotter.h>
-#include <locale_io.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotters_pslike.h>
 
