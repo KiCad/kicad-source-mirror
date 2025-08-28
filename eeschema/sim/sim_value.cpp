@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <charconv>
 #include <sim/sim_value.h>
 #include <wx/translation.h>
 #include <ki_exception.h>
