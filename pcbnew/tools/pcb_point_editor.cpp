@@ -1516,6 +1516,7 @@ public:
         {
             VECTOR2I delta = aPoints.Point( RECT_CENTER ).GetPosition() - oldCenter;
 
+            aCommit.Modify( &m_group, nullptr, RECURSE_MODE::RECURSE );
             m_group.Move( delta );
 
             for( BOARD_ITEM* item : m_group.GetBoardItems() )
