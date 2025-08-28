@@ -168,8 +168,6 @@ bool GERBER_JOBFILE_WRITER::WriteJSONJobFile( const wxString& aFullFilename )
     // Note: in Gerber job file, dimensions are in mm, and are floating numbers
     std::ofstream file( aFullFilename.ToUTF8() );
 
-    LOCALE_IO dummy;
-
     m_json = nlohmann::ordered_json( {} );
 
     // output the job file header
