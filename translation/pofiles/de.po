@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
 "PO-Revision-Date: 2025-08-28 11:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1324,7 +1324,7 @@ msgid ""
 "point"
 msgstr ""
 "Anzahl der Strahlen, die in Lichtrichtung geworfen werden, um einen "
-"Schattenpunkt auszuwerten"
+"Schattenpunkt auszuwerten."
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
@@ -2780,7 +2780,7 @@ msgid ""
 "table"
 msgstr ""
 "Wählen Sie diese Option, wenn Sie sich unsicher sind, wie die globale %s-"
-"Bibliothekstabelle konfiguriert werden soll"
+"Bibliothekstabelle konfiguriert werden soll."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
@@ -2793,7 +2793,7 @@ msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
 "Wählen Sie diese Option, um eine andere %s-Bibliothekstabellendatei als die "
-"standardmäßige zu kopieren"
+"standardmäßige zu kopieren."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -10650,8 +10650,8 @@ msgstr ""
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
-"Bei dem Versuch die globale Tabelle der Bibliotheken für Footprints zu laden "
-"ist ein Fehler aufgetreten."
+"Bei dem Versuch, die globale Tabelle der Bibliotheken für Footprints zu "
+"laden, ist ein Fehler aufgetreten."
 
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
@@ -11244,7 +11244,7 @@ msgstr ""
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:431
 msgid "Error saving temporary schematic file to create design block."
 msgstr ""
-"Fehler beim Speichern der temporären Schaltplandatei um Designblock zu "
+"Fehler beim Speichern der temporären Schaltplandatei, um Designblock zu "
 "erstellen."
 
 #: eeschema/design_block_utils.cpp:378
@@ -14593,7 +14593,7 @@ msgid ""
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
 "Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken\n"
-"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen"
+"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
@@ -14605,7 +14605,7 @@ msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die ausschließlich in die "
 "Stückliste exportiert werden, jedoch\n"
 "nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
-"Verbinder und Gehäuse"
+"Verbinder und Gehäuse."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
@@ -18013,7 +18013,7 @@ msgstr ""
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:272
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:304
 msgid "There is no plugin to handle this file type."
-msgstr "Es gibt kein Plugin um diesen Dateityp zu verarbeiten."
+msgstr "Es gibt kein Plugin, um diesen Dateityp zu verarbeiten."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:26
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:31
@@ -22594,7 +22594,7 @@ msgid ""
 "document to undo them"
 msgstr ""
 "Veränderungen innerhalb dieses Dialogs werden sofort angewendet, verwenden "
-"Sie Rückgängig in jedem einzelnen Dokument um diese zurückzusetzen"
+"Sie Rückgängig in jedem einzelnen Dokument, um diese zurückzusetzen."
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 #: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
@@ -22975,8 +22975,8 @@ msgstr "Symbolfelder aktualisieren..."
 #: eeschema/tools/sch_actions.cpp:282
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
-"Symbol aktualisieren um alle Änderungen vom übergeordneten Symbol zu "
-"übernehmen"
+"Symbol aktualisieren, um alle Änderungen vom übergeordneten Symbol zu "
+"übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:288
 msgid "Set Unit Display Name..."
@@ -23321,7 +23321,7 @@ msgstr "Symbole aus Bibliothek aktualisieren..."
 
 #: eeschema/tools/sch_actions.cpp:783
 msgid "Update symbols to include any changes from the library"
-msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen"
+msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:790
 msgid "Assign a different symbol from the library"
@@ -23334,7 +23334,7 @@ msgstr "Symbol aktualisieren..."
 #: eeschema/tools/sch_actions.cpp:797
 msgid "Update symbol to include any changes from the library"
 msgstr ""
-"Symbol aktualisieren um alle Änderungen aus der Bibliothek zu übernehmen"
+"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
 msgid "Assign Netclass..."
@@ -24115,7 +24115,7 @@ msgstr "Symbol einfügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:575
 msgid "Select a single symbol to place the next unit."
-msgstr "Ein einzelnes Symbol wählen um die nächste Einheit einzufügen."
+msgstr "Ein einzelnes Symbol wählen, um die nächste Einheit einzufügen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:588
 msgid "This symbol has only one unit."
@@ -24440,7 +24440,7 @@ msgstr "Ende des Blatts erreicht."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:335
 msgid "Find again to wrap around to the start."
-msgstr "Erneut suchen um zum Anfang zurückzukehren."
+msgstr "Erneut suchen, um zum Anfang zurückzukehren."
 
 #: eeschema/tools/sch_inspection_tool.cpp:224
 #: pcbnew/tools/board_inspection_tool.cpp:292
@@ -24699,7 +24699,7 @@ msgstr ""
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
-"Deaktivieren Sie den \"Synchronisierten Pin-Bearbeitungsmodus\" um diese "
+"Deaktivieren Sie den \"Synchronisierten Pin-Bearbeitungsmodus\", um diese "
 "Meldung zu vermeiden."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:244
@@ -25405,7 +25405,8 @@ msgstr "Unbekannter Excellon-G-Code: &lt;%s&gt;"
 #: gerbview/files.cpp:44
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
-"In GerbView sind <b>keine freien Lagen mehr vorhanden</b> um Dateien zu laden"
+"In GerbView sind <b>keine freien Lagen mehr vorhanden</b>, um Dateien zu "
+"laden."
 
 #: gerbview/files.cpp:45
 #, c-format
@@ -28773,7 +28774,7 @@ msgstr "Ähnliche Dateien existieren im Zielordner."
 #: kicad/tools/kicad_manager_control.cpp:374
 msgid "A problem occurred creating new project from template."
 msgstr ""
-"Bei dem Versuch ein neues Projekt aus der Vorlage zu erstellen ist ein "
+"Bei dem Versuch, ein neues Projekt aus der Vorlage zu erstellen, ist ein "
 "Problem aufgetreten."
 
 #: kicad/tools/kicad_manager_control.cpp:396
@@ -29056,7 +29057,7 @@ msgstr "X-Schritt:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:423
 msgid "Distance on the X axis to step for each repeat."
-msgstr "Distanz auf der X-Achse, die jede Wiederholung versetzt wird."
+msgstr "Distanz auf der X-Achse, um die bei jeder Wiederholung versetzt wird."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:431
 msgid "Step Y:"
@@ -29064,7 +29065,7 @@ msgstr "Y-Schritt:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:436
 msgid "Distance to step on Y axis for each repeat."
-msgstr "Distanz auf der Y-Achse, die jede Wiederholung versetzt wird."
+msgstr "Distanz auf der Y-Achse, um die bei jeder Wiederholung versetzt wird."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:454
 msgid "Item Properties"
@@ -39957,7 +39958,7 @@ msgstr ""
 "Dieser Wert kann durch lokale Werte eines Footprints oder Pads überschrieben "
 "werden.\n"
 "Positiver Freiraum bedeutet, dass die Lötstoppmaskenöffnung größer als das "
-"Pad ist (typisch für Lötstoffmaskenfreiraum)."
+"Pad ist (typisch für Lötstoppmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid "Solder mask minimum web width:"
@@ -43763,8 +43764,8 @@ msgstr "Dokumentation öffnen"
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
 msgstr ""
-"Bei dem Versuch den Footprint %s aus der Bibliothek \"%s\" zu laden ist ein "
-"Fehler aufgetreten."
+"Bei dem Versuch, den Footprint %s aus der Bibliothek \"%s\" zu laden, ist "
+"ein Fehler aufgetreten."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:256
 #: pcbnew/generators/pcb_tuning_pattern.cpp:261
@@ -46321,8 +46322,8 @@ msgstr "Fehler beim Enumerieren der Symbolbibliothek \"%s\": %s"
 #, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
 msgstr ""
-"Bei dem Versuch den Footprint %s aus der Bibliothek \"%s\" zu laden ist ein "
-"Fehler aufgetreten: %s"
+"Bei dem Versuch, den Footprint %s aus der Bibliothek \"%s\" zu laden, ist "
+"ein Fehler aufgetreten: %s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:412
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:468
@@ -49608,7 +49609,7 @@ msgstr "Polygone subtrahieren"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Subtract selected polygons from the last one selected"
-msgstr "Ausgewählte Polygone vom zuletzt ausgewählten subtrahieren"
+msgstr "Ausgewählte Polygone vom zuletzt Ausgewählten subtrahieren"
 
 #: pcbnew/tools/pcb_actions.cpp:657
 msgid "Intersect Polygons"
