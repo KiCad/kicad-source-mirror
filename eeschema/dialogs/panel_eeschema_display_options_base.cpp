@@ -87,21 +87,21 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	wxBoxSizer* bAppearanceSizer;
 	bAppearanceSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerDefaultFont;
+	bSizerDefaultFont = new wxBoxSizer( wxHORIZONTAL );
 
 	m_defaultFontLabel = new wxStaticText( this, wxID_ANY, _("Default font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_defaultFontLabel->Wrap( -1 );
-	bSizer4->Add( m_defaultFontLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDefaultFont->Add( m_defaultFontLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_defaultFontCtrlChoices[] = { _("KiCad Font") };
 	int m_defaultFontCtrlNChoices = sizeof( m_defaultFontCtrlChoices ) / sizeof( wxString );
 	m_defaultFontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_defaultFontCtrlNChoices, m_defaultFontCtrlChoices, 0 );
 	m_defaultFontCtrl->SetSelection( 0 );
-	bSizer4->Add( m_defaultFontCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerDefaultFont->Add( m_defaultFontCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bAppearanceSizer->Add( bSizer4, 1, wxEXPAND|wxTOP, 5 );
+	bAppearanceSizer->Add( bSizerDefaultFont, 1, wxEXPAND|wxTOP, 5 );
 
 	m_checkShowHiddenPins = new wxCheckBox( this, wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
@@ -109,10 +109,16 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkShowHiddenFields = new wxCheckBox( this, wxID_ANY, _("Show hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowHiddenFields, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
+	m_checkShowDirectiveLabels = new wxCheckBox( this, wxID_ANY, _("Show directive labels"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowDirectiveLabels->SetValue(true);
+	bAppearanceSizer->Add( m_checkShowDirectiveLabels, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_checkShowERCErrors = new wxCheckBox( this, wxID_ANY, _("Show ERC errors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowERCErrors->SetValue(true);
 	bAppearanceSizer->Add( m_checkShowERCErrors, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowERCWarnings = new wxCheckBox( this, wxID_ANY, _("Show ERC warnings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowERCWarnings->SetValue(true);
 	bAppearanceSizer->Add( m_checkShowERCWarnings, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowERCExclusions = new wxCheckBox( this, wxID_ANY, _("Show ERC exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -123,12 +129,15 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bAppearanceSizer->Add( m_cbMarkSimExclusions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowOPVoltages = new wxCheckBox( this, wxID_ANY, _("Show OP voltages"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowOPVoltages->SetValue(true);
 	bAppearanceSizer->Add( m_checkShowOPVoltages, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowOPCurrents = new wxCheckBox( this, wxID_ANY, _("Show OP currents"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowOPCurrents->SetValue(true);
 	bAppearanceSizer->Add( m_checkShowOPCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowPinAltModeIcons = new wxCheckBox( this, wxID_ANY, _("Show pin alternate mode indicator icons"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowPinAltModeIcons->SetValue(true);
 	bAppearanceSizer->Add( m_checkShowPinAltModeIcons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_checkPageLimits = new wxCheckBox( this, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -152,36 +161,37 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bSelectionSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_checkSelDrawChildItems = new wxCheckBox( this, wxID_ANY, _("Draw selected child items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkSelDrawChildItems->SetValue(true);
 	bSelectionSizer->Add( m_checkSelDrawChildItems, 0, wxEXPAND|wxALL, 5 );
 
 	m_checkSelFillShapes = new wxCheckBox( this, wxID_ANY, _("Fill selected shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSelectionSizer->Add( m_checkSelFillShapes, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1 = new wxGridBagSizer( 2, 5 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
 
 	m_selWidthLabel = new wxStaticText( this, wxID_ANY, _("Selection thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_selWidthLabel->Wrap( -1 );
-	gbSizer1->Add( m_selWidthLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_selWidthLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
-	m_selWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0.000000, 1 );
+	m_selWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 3.000000, 1 );
 	m_selWidthCtrl->SetDigits( 0 );
-	gbSizer1->Add( m_selWidthCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_selWidthCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_highlightColorNote = new wxStaticText( this, wxID_ANY, _("(selection color can be edited in the \"Colors\" page)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_highlightColorNote->Wrap( -1 );
-	gbSizer1->Add( m_highlightColorNote, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_highlightColorNote, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT, 5 );
 
 	m_highlightWidthLabel = new wxStaticText( this, wxID_ANY, _("Highlight thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_highlightWidthLabel->Wrap( -1 );
-	gbSizer1->Add( m_highlightWidthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_highlightWidthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_highlightWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0, 1 );
+	m_highlightWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 2.000000, 1 );
 	m_highlightWidthCtrl->SetDigits( 0 );
-	gbSizer1->Add( m_highlightWidthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_highlightWidthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 
 	bSelectionSizer->Add( gbSizer1, 0, wxEXPAND|wxRIGHT, 5 );
@@ -190,25 +200,25 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bSelectionSizer->Add( m_highlightNetclassColors, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxGridBagSizer* gbSizer11;
-	gbSizer11 = new wxGridBagSizer( 0, 0 );
+	gbSizer11 = new wxGridBagSizer( 2, 5 );
 	gbSizer11->SetFlexibleDirection( wxBOTH );
 	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
 	m_colorHighlightLabel = new wxStaticText( this, wxID_ANY, _("Color highlight thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorHighlightLabel->Wrap( -1 );
-	gbSizer11->Add( m_colorHighlightLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer11->Add( m_colorHighlightLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
-	m_colHighlightThickness = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0, 1 );
+	m_colHighlightThickness = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 15.000000, 1 );
 	m_colHighlightThickness->SetDigits( 0 );
-	gbSizer11->Add( m_colHighlightThickness, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer11->Add( m_colHighlightThickness, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_colHighlightLabel2 = new wxStaticText( this, wxID_ANY, _("Color highlight opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colHighlightLabel2->Wrap( -1 );
-	gbSizer11->Add( m_colHighlightLabel2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer11->Add( m_colHighlightLabel2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_colHighlightTransparency = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 100, 0, 1 );
+	m_colHighlightTransparency = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 100, 60.000000, 1 );
 	m_colHighlightTransparency->SetDigits( 0 );
-	gbSizer11->Add( m_colHighlightTransparency, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer11->Add( m_colHighlightTransparency, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSelectionSizer->Add( gbSizer11, 0, wxEXPAND, 5 );

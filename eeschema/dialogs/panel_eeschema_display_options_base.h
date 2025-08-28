@@ -50,6 +50,7 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		FONT_CHOICE* m_defaultFontCtrl;
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkShowHiddenFields;
+		wxCheckBox* m_checkShowDirectiveLabels;
 		wxCheckBox* m_checkShowERCErrors;
 		wxCheckBox* m_checkShowERCWarnings;
 		wxCheckBox* m_checkShowERCExclusions;
