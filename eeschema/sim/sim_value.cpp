@@ -388,7 +388,7 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
             std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
                                                                          aToNotation );
             double significand{};
-#ifndef defined( __clang__ )
+#if !defined( __clang__ )
             // clang still violates the standard
             // best effort, ignore errors
             std::from_chars( parseResult.significand.data(),
