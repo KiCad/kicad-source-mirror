@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-28 12:03+0000\n"
+"PO-Revision-Date: 2025-08-28 23:15+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -992,7 +992,7 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Speichern und Wiederherstellen von Farb- und Sichbarkeitskombinationen.\n"
+"Speichern und Wiederherstellen von Farb- und Sichtbarkeitskombinationen.\n"
 "%s+Tab verwenden, um den Wählschalter zu aktivieren.\n"
 "Weiteres Betätigen von Tab, während %s gehalten wird, schaltet zwischen den "
 "Voreinstellungen im Popup-Fenster um."
@@ -4262,7 +4262,7 @@ msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
-"Anazahl der Minuten zwischen Überprüfungen auf Aktualisierungen.  \"Null\" "
+"Anzahl der Minuten zwischen Überprüfungen auf Aktualisierungen.  \"Null\" "
 "deaktiviert die Überprüfungen."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
@@ -11374,11 +11374,11 @@ msgstr ""
 "Sie haben CvPcb mit der neuen Footprint-Bibliothekstabelle-Methode zum "
 "Auffinden von Footprints das erste Mal gestartet.\n"
 "CvPcb hat entweder die Standardtabelle kopiert oder eine leere Tabelle in "
-"Ihrem Heimatverzeichnis erstellt.\n"
+"Ihrem Benutzerverzeichnis erstellt.\n"
 "Sie müssen zuerst die Bibliothekstabelle konfigurieren, um alle noch nicht "
 "eingebundenen Footprintbibliotheken in KiCad verwenden zu können.\n"
-"Weitere Informationen finden Sie im Abschnitt \"Footprint "
-"Bibliothekstabelle\" der CvPcb Dokumentation."
+"Weitere Informationen finden Sie im Abschnitt "
+"\"Footprint Bibliothekstabelle\" der CvPcb Dokumentation."
 
 #: cvpcb/cvpcb.cpp:206
 msgid ""
@@ -13810,8 +13810,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
-"Der Wert \"%s\" konnte nicht korrekt in einen Wahrheitswert gewandelt "
-"werden; er wurde als \"falsch\" interpretert"
+"Der Wert \"%s\" konnte nicht korrekt in einen Wahrheitswert gewandelt werden;"
+" er wurde als \"falsch\" interpretiert"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1002
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1534
@@ -17052,7 +17052,7 @@ msgstr ""
 "\"Standard\" entspricht der Symboldefinition.\n"
 "\"Global\" wird neue Spannungssymbole zu globalen Spannungssymbolen "
 "umwandeln.\n"
-"\"Lokal\" wird neue Spannungssymbole zu lokalenSpannungssymbolen umwandeln."
+"\"Lokal\" wird neue Spannungssymbole zu lokalen Spannungssymbolen umwandeln."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:147
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:205
@@ -19169,7 +19169,7 @@ msgstr "Einheit ändern"
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
-"Keine alternative Dastellungsform für Symbol \"%s\" in Bibliothek \"%s\" "
+"Keine alternative Darstellungsform für Symbol \"%s\" in Bibliothek \"%s\" "
 "gefunden."
 
 #: eeschema/picksymbol.cpp:223 eeschema/tools/sch_edit_tool.cpp:2010
@@ -20079,7 +20079,7 @@ msgid ""
 "in the schematic."
 msgstr ""
 "Fehler beim Parsen der Eagle-Datei. Die Instanz \"%s\" konnte nicht gefunden "
-"werden obwohl diese im Schaltplan referenziert ist."
+"werden, obwohl diese im Schaltplan referenziert ist."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1803
 #, c-format
@@ -20157,7 +20157,7 @@ msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
 msgstr ""
-"Einstellungsdatei %s der HTTP-Bibliothekt verwendet API-Version %s, KiCad "
+"Einstellungsdatei %s der HTTP-Bibliothek verwendet API-Version %s, KiCad "
 "benötigt jedoch Version %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:249
@@ -20169,7 +20169,7 @@ msgstr "Einstellungsdatei %s der HTTP-Bibliothek gibt keine Wurzel-URL an!"
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
 msgstr ""
-"Einstellungsdatei %s der HTTP-Bibilothek enthält einen ungültigen "
+"Einstellungsdatei %s der HTTP-Bibliothek enthält einen ungültigen "
 "Bibliothekstyp"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:305
@@ -20292,7 +20292,7 @@ msgid ""
 "the schematic hierarchy."
 msgstr ""
 "Schaltplanblatt \"%s\" konnte nicht geladen werden, da es als direkter "
-"Vorfahr in der Schaltplan-HIerarchie vorkommt."
+"Vorfahr in der Schaltplan-Hierarchie vorkommt."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:342
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:291
@@ -23692,7 +23692,7 @@ msgstr "Das Fenster für die Symbolprüfung anzeigen"
 #: eeschema/tools/sch_actions.cpp:65
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr ""
-"Unterschiede zwischen Schaltplan-Symbol und dessen entsprechedem Symbol aus "
+"Unterschiede zwischen Schaltplan-Symbol und dessen entsprechendem Symbol aus "
 "der Bibliothek anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:71
@@ -25327,8 +25327,8 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 "Das eingefügte Blatt \"%s\"\n"
-"wurde verworfen da das Ziel bereits das Blatt oder eines seiner Unterblätter "
-"dies in seiner Hierarchie enthält."
+"wurde verworfen, da das Ziel bereits das Blatt oder eines seiner "
+"Unterblätter in seiner Hierarchie enthält."
 
 #: eeschema/tools/sch_editor_control.cpp:2394
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -25802,8 +25802,8 @@ msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
-"Referenzbezeichner aus Quellenschaltplan erhalten. Andererseits diese "
-"zurücksetzen und nach Einstellungen neu annotiertieren."
+"Referenzbezeichner im Quellenschaltplan erhalten. Andernfalls diese löschen "
+"und entsprechend den Einstellungen neu annotieren."
 
 #: eeschema/widgets/sch_properties_panel.cpp:219
 #: pcbnew/widgets/pcb_properties_panel.cpp:251
@@ -28405,7 +28405,7 @@ msgid ""
 "above to browse custom template directories. Click the folder icon to "
 "browse, or the refresh icon to reload templates."
 msgstr ""
-"oberhalb, um die benutzerdefinierte Vorlagenverzeichnisse zu durchsuchen. "
+"oberhalb, um die benutzerdefinierten Vorlagenverzeichnisse zu durchsuchen. "
 "Zum Durchsuchen auf das Ordnersymbol klicken oder, um die Vorlagen neu zu "
 "laden, auf das Aktualisierungssymbol klicken."
 
@@ -28459,7 +28459,7 @@ msgstr "Bauteilplatzierung"
 
 #: kicad/dialogs/dialog_template_selector.cpp:107
 msgid "- Basic layout and routing guidelines"
-msgstr "- Grundlegende Richtlinien für Layout- und Routing"
+msgstr "- Grundlegende Richtlinien für Layout und Routing"
 
 #: kicad/dialogs/dialog_template_selector.cpp:108
 #: pcbnew/generate_footprint_info.cpp:43
@@ -31103,7 +31103,7 @@ msgid ""
 "equivalent to a double insulation. ( which is two separate basic "
 "insulations, in case one of them fails  )."
 msgstr ""
-"Funktionale Isolation: Für den gefahrlisen Betrieb des Geräts erforderliche "
+"Funktionale Isolation: Für den gefahrlosen Betrieb des Geräts erforderliche "
 "Isolation.\n"
 "\n"
 "Basisisolation: Isolierung von gefährlichen stromführenden Teilen.\n"
@@ -31355,7 +31355,7 @@ msgstr ""
 "*  B3 - Außenleiter, unisoliert, über 3050 m\n"
 "*  B4 - Außenleiter, mit Schutzschicht (jede Höhe)\n"
 "*  A5 - Außenleiter, mit Schutzlack über Montage (jede Höhe)\n"
-"*  A6 - externe Komponente Leitungsanschluss, unisloliert\n"
+"*  A6 - externe Komponente Leitungsanschluss, unisoliert\n"
 "*  A7 - externe Komponente Leitungsanschluss, mit Schutzlack (jede Höhe)"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
@@ -31821,7 +31821,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:258
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Nur beim dreibeinigen Typ: Die Stromstärke des Regeleingangs."
+msgstr "Nur beim dreibeinigen Typ: Die Stromaufnahme des Regeleingangs."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
@@ -32437,9 +32437,9 @@ msgstr ""
 "- Bei Frequenzen über 30 kHz verschlechtern sich dielektrische "
 "Eigenschaften. IEC60664-4 deckt diese Fälle ab.\n"
 "- Bei Verwendung eines Schutzlacks oder eines Vergusses zum Schutz vor "
-"Verschmutzung können – sofern alle Bedingungen nach IEC60664-3 erfüllt sind "
-"– die Luft- und Kriechstrecken reduziert werden. Lötstopplack wird nicht als "
-"hinreiche Beschichtung betrachtet.\n"
+"Verschmutzung können – sofern alle Bedingungen nach IEC60664-3 erfüllt sind –"
+" die Luft- und Kriechstrecken reduziert werden. Lötstopplack wird nicht als "
+"hinreichende Beschichtung betrachtet.\n"
 "- Isolation durch Flüssigkeiten, Druckluft oder andere Gase als Luft fallen "
 "nicht in den Anwendungsbereich der IEC60664."
 
@@ -42898,7 +42898,7 @@ msgstr ""
 "        (constraint thermal_spoke_width (min 12mil))\n"
 "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
 "\n"
-"    # Kupferfüllungen innerhalb von Abstandsflächen von Kondernsatoren "
+"    # Kupferfüllungen innerhalb von Abstandsflächen von Kondensatoren "
 "verhindern\n"
 "    (rule no_copper_under_caps\n"
 "        (constraint physical_clearance (min 0mm))\n"
@@ -47677,8 +47677,8 @@ msgid ""
 "of the zone priorities is required."
 msgstr ""
 "Die Zonenfüllprioritäten für die Lage \"%s\" konnten nicht bestimmt werden. "
-"Trotz größter Mühe ist möglich, dass DRC-Fehler vorliegen und eine manuelle "
-"Korrektur der Zonenprioritäten erforderlich ist."
+"Trotz größter Mühe ist es möglich, dass DRC-Fehler vorliegen und eine "
+"manuelle Korrektur der Zonenprioritäten erforderlich ist."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:147
 msgid ""
@@ -52118,7 +52118,7 @@ msgstr "Footprint-Assoziierungsdatei (.cmp) exportieren ..."
 #: pcbnew/tools/pcb_actions.cpp:1287
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Footprint-Assozierungsdatei (*.cmp) für Schaltplan-Rückannotierung "
+"Footprint-Assoziierungsdatei (*.cmp) für Schaltplan-Rückannotierung "
 "exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1299
@@ -52612,7 +52612,7 @@ msgstr "Zeigt die Ermittlung der Einschränkungen für das ausgewählte Objekt a
 #: pcbnew/tools/pcb_actions.cpp:2086
 msgid "Show differences between board footprint and its library equivalent"
 msgstr ""
-"Unterschiede zwischen Platinen-Footprint und dessen entsprechedem Footprint "
+"Unterschiede zwischen Platinen-Footprint und dessen entsprechendem Footprint "
 "aus der Bibliothek anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:2092
@@ -53107,8 +53107,8 @@ msgstr "Freien Winkel ziehen"
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
-"Verschiebt den nächstgelegen Punkt der Leiterbahn, ohne die Ausrichtung der "
-"Leiterbahn zu verändern."
+"Verschiebt den nächstgelegenen Punkt der Leiterbahn, ohne die Ausrichtung "
+"der Leiterbahn zu verändern."
 
 #: pcbnew/tools/pcb_actions.cpp:2617
 msgid "Update All Tuning Patterns"
