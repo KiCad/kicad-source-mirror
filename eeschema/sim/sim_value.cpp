@@ -383,14 +383,18 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
 
         try
         {
-            LOCALE_IO   toggle;
             int         expReduction = 0;
             std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
                                                                          aToNotation );
 
+            double significand{};
+            // best effort, ignore errors
+            std::from_chars( parseResult.significand.data(),
+                             parseResult.significand.data() + parseResult.significand.size(),
+                             significand );
+
             exponent -= expReduction;
-            return fmt::format( "{:g}{}",
-                                std::stod( parseResult.significand ) * std::pow( 10, exponent ),
+            return fmt::format( "{:g}{}", significand * std::pow( 10, exponent ),
                                 prefix );
         }
         catch( const std::invalid_argument& )
