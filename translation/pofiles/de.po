@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-28 06:52+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -41615,7 +41615,7 @@ msgstr ""
 "Dieser Wert kann durch lokale Werte eines Footprints oder Pads überschrieben "
 "werden.\n"
 "Positiver Freiraum bedeutet, dass die Lötstoppmaskenöffnung größer als das "
-"Pad ist (typisch für Lötstoffmaskenfreiraum)."
+"Pad ist (typisch für Lötstoppmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid "Solder mask minimum web width:"
@@ -51618,7 +51618,7 @@ msgstr "Zusammenfügen ausgewählter Polygone zu einem einzigen Polygon"
 
 #: pcbnew/tools/pcb_actions.cpp:772
 msgid "Subtract selected polygons from the last one selected"
-msgstr "Ausgewählte Polygone vom zuletzt ausgewählten subtrahieren"
+msgstr "Ausgewählte Polygone vom zuletzt Ausgewählten subtrahieren"
 
 #: pcbnew/tools/pcb_actions.cpp:779
 msgid "Create the intersection of the selected polygons"
