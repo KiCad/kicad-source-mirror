@@ -387,12 +387,16 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
             int         expReduction = 0;
             std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
                                                                          aToNotation );
-
             double significand{};
+#ifndef defined( __clang__ )
+            // clang still violates the standard
             // best effort, ignore errors
             std::from_chars( parseResult.significand.data(),
                              parseResult.significand.data() + parseResult.significand.size(),
                              significand );
+#else
+            wxString( parseResult.significand ).ToCDouble( &significand );
+#endif
 
             exponent -= expReduction;
             return fmt::format( "{:g}{}", significand * std::pow( 10, exponent ),
