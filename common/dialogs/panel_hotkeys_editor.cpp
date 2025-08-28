@@ -25,7 +25,6 @@
 #include <gestfich.h>
 #include <hotkeys_basic.h>
 #include <kiway_player.h>
-#include <locale_io.h>
 #include <panel_hotkeys_editor.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>

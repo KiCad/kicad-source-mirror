@@ -132,7 +132,6 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
 
     wxString   msg;
     wxFileName plotFileName;
-    LOCALE_IO  toggle; // Switch the locale to standard C
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -453,8 +452,6 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
         return false;
     }
 
-    LOCALE_IO toggle; // Switch the locale to standard C
-
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 
     if( aPlotOpts.m_useBackgroundColor && plotter->GetColorMode() )
@@ -633,8 +630,6 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
         return false;
     }
 
-    LOCALE_IO toggle;
-
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 
     if( aPlotOpts.m_useBackgroundColor && plotter->GetColorMode() )
@@ -793,8 +788,6 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
         delete plotter;
         return false;
     }
-
-    LOCALE_IO toggle;
 
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 

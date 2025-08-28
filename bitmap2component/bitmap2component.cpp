@@ -387,8 +387,6 @@ void BITMAPCONV_INFO::createOutputData( const wxString& aLayer )
 
     potrace_dpoint_t( *c )[3];
 
-    LOCALE_IO toggle;   // Temporary switch the locale to standard C to r/w floats
-
     // The layer name has meaning only for .kicad_mod files.
     // For these files the header creates 2 invisible texts: value and ref
     // (needed but not useful) on silk screen layer
