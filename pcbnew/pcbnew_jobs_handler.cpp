@@ -1126,9 +1126,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
             sheetPath = pdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-
-    LOCALE_IO dummy;
-
     if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence,
                           pdfJob->m_plotOnAllLayersSequence, false, plotAllLayersOneFile,
                           layerName, sheetName, sheetPath ) )
@@ -1221,8 +1218,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
         if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
             sheetPath = psJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
-
-    LOCALE_IO dummy;
 
     if( !pcbPlotter.Plot( outPath, psJob->m_plotLayerSequence, psJob->m_plotOnAllLayersSequence, false, isSingle,
                           layerName, sheetName, sheetPath ) )
@@ -1371,17 +1366,14 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         // We are feeding it one layer at the start here to silence a logic check
         GERBER_PLOTTER* plotter;
-        {
-            LOCALE_IO dummy;
-            plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
-                                                        fn.GetFullPath(), sheetName, sheetPath );
-        }
+        plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                    fn.GetFullPath(), sheetName, sheetPath );
 
         if( plotter )
         {
             m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
-            LOCALE_IO dummy;
+
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
             plotter->EndPlot();
         }

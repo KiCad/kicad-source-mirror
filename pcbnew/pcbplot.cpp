@@ -404,8 +404,6 @@ PLOT_CONTROLLER::~PLOT_CONTROLLER()
  */
 void PLOT_CONTROLLER::ClosePlot()
 {
-    LOCALE_IO toggle;
-
     if( m_plotter )
     {
         m_plotter->EndPlot();
@@ -421,8 +419,6 @@ void PLOT_CONTROLLER::ClosePlot()
 bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat,
                                     const wxString& aSheetName, const wxString& aSheetPath )
 {
-    LOCALE_IO toggle;
-
     // Save the current format: sadly some plot routines depends on this but the main reason
     // is that the StartPlot method uses it to dispatch the plotter creation
     GetPlotOptions().SetFormat( aFormat );
@@ -477,8 +473,6 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
 
 bool PLOT_CONTROLLER::PlotLayer()
 {
-    LOCALE_IO toggle;
-
     // No plot open, nothing to do...
     if( !m_plotter )
         return false;
@@ -501,8 +495,6 @@ bool PLOT_CONTROLLER::PlotLayer()
 
 bool PLOT_CONTROLLER::PlotLayers( const LSEQ& aLayerSequence )
 {
-    LOCALE_IO toggle;
-
     // No plot open, nothing to do...
     if( !m_plotter )
         return false;
