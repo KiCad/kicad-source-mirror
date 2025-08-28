@@ -246,34 +246,6 @@ public:
 
     int InteractiveDelete( const TOOL_EVENT& aEvent )
     {
-        static std::vector<KICAD_T> deletableItems =
-        {
-            LIB_SYMBOL_T,
-            SCH_MARKER_T,
-            SCH_JUNCTION_T,
-            SCH_LINE_T,
-            SCH_BUS_BUS_ENTRY_T,
-            SCH_BUS_WIRE_ENTRY_T,
-            SCH_SHAPE_T,
-            SCH_RULE_AREA_T,
-            SCH_TEXT_T,
-            SCH_TEXTBOX_T,
-            SCH_TABLECELL_T,    // Clear contents
-            SCH_TABLE_T,
-            SCH_LABEL_T,
-            SCH_GLOBAL_LABEL_T,
-            SCH_HIER_LABEL_T,
-            SCH_DIRECTIVE_LABEL_T,
-            SCH_NO_CONNECT_T,
-            SCH_SHEET_T,
-            SCH_SHEET_PIN_T,
-            SCH_SYMBOL_T,
-            SCH_FIELD_T,        // Will be hidden
-            SCH_BITMAP_T,
-            SCH_GROUP_T
-        };
-
-
         PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
         m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -307,7 +279,7 @@ public:
                     SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                     SCH_COLLECTOR       collector;
 
-                    selectionTool->CollectHits( collector, aPos, deletableItems );
+                    selectionTool->CollectHits( collector, aPos, SCH_COLLECTOR::DeletableItems );
 
                     // Remove unselectable items
                     for( int i = collector.GetCount() - 1; i >= 0; --i )

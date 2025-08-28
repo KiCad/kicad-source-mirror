@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_ITEM_H
-#define SCH_ITEM_H
+#pragma once
 
 #include <unordered_map>
 #include <unordered_set>
@@ -376,8 +375,7 @@ public:
      */
     virtual void MirrorHorizontally( int aCenter )
     {
-        wxCHECK_MSG( false, /*void*/,
-                     wxT( "MirrorHorizontally not implemented in " ) + GetClass() );
+        wxCHECK_MSG( false, /*void*/, wxT( "MirrorHorizontally not implemented in " ) + GetClass() );
     }
 
     /**
@@ -767,5 +765,3 @@ private:
 #ifndef SWIG
 DECLARE_ENUM_TO_WXANY( SCH_LAYER_ID );
 #endif
-
-#endif /* SCH_ITEM_H */

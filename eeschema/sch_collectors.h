@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_COLLECTORS_H
-#define SCH_COLLECTORS_H
+#pragma once
+
 
 #include <lib_symbol.h>
 #include <collector.h>
@@ -41,6 +41,7 @@ public:
     static const std::vector<KICAD_T> EditableItems;
     static const std::vector<KICAD_T> MovableItems;
     static const std::vector<KICAD_T> FieldOwners;
+    static const std::vector<KICAD_T> DeletableItems;
 
     SCH_COLLECTOR( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
             m_Unit( 0 ),
@@ -109,5 +110,3 @@ public:
 
 void CollectOtherUnits( const wxString& thisRef, int thisUnit, const LIB_ID& aLibId,
                         SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits );
-
-#endif // SCH_COLLECTORS_H
