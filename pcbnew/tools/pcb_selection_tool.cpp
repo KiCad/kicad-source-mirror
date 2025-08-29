@@ -1657,7 +1657,10 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
 
         // Select any starting track items
         if( startItem->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
-            select( startItem );
+        {
+            if( itemPassesFilter( startItem, true ) )
+                select( startItem );
+        }
     }
 
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
@@ -1771,6 +1774,18 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                 bool gotPad = padIt != padMap.end() && ( padIt->second->GetLayerSet() & layerSetCu ).any();
                 bool gotNonStartPad = gotPad && ( startPadSet.find( padIt->second ) == startPadSet.end() );
 
+                if( gotPad && !itemPassesFilter( padIt->second, true ) )
+                {
+                    activePts.erase( activePts.begin() + i );
+                    continue;
+                }
+
+                if( gotVia && !itemPassesFilter( viaIt->second, true ) )
+                {
+                    activePts.erase( activePts.begin() + i );
+                    continue;
+                }
+
                 if( aStopCondition == STOP_AT_JUNCTION )
                 {
                     size_t pt_count = 0;
@@ -1815,6 +1830,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                     if( !layerSetCu.Contains( track->GetLayer() ) )
                         continue;
 
+                    if( !itemPassesFilter( track, true ) )
+                        continue;
+
                     if( !track->IsSelected() )
                         select( track );
 
@@ -1836,6 +1854,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                 for( PCB_SHAPE* shape : shapeMap[pt] )
                 {
                     if( !layerSetCu.Contains( shape->GetLayer() ) )
+                        continue;
+
+                    if( !itemPassesFilter( shape, true ) )
                         continue;
 
                     if( !shape->IsSelected() )
@@ -1862,6 +1883,12 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                 if( viaMap.count( pt ) )
                 {
                     PCB_VIA* via = viaMap[pt];
+
+                    if( !itemPassesFilter( via, true ) )
+                    {
+                        activePts.erase( activePts.begin() + i );
+                        continue;
+                    }
 
                     if( !via->IsSelected() )
                         select( via );
