@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-28 11:02+0000\n"
+"PO-Revision-Date: 2025-08-29 12:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -553,7 +553,7 @@ msgstr "3D-Modelle von Durchsteck-Bauteilen anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "3D-Modelle von Footprints for Durchsteckmontage (THT) anzeigen"
+msgstr "3D-Modelle von Footprints für Durchsteckmontage (THT) anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 msgid "Show SMD 3D Models"
@@ -812,7 +812,7 @@ msgstr "Benutzerdefinierte Lage 33 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
 msgid "Show user defined layer 34"
-msgstr "Benutzerdefinierte Lage 34 anzeigenv"
+msgstr "Benutzerdefinierte Lage 34 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 msgid "Show user defined layer 35"
@@ -969,7 +969,7 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Speichern und Wiederherstellen von Farb- und Sichbarkeitskombinationen.\n"
+"Speichern und Wiederherstellen von Farb- und Sichtbarkeitskombinationen.\n"
 "%s+Tab verwenden, um den Wählschalter zu aktivieren.\n"
 "Weiteres Betätigen von Tab, während %s gehalten wird, schaltet zwischen den "
 "Voreinstellungen im Popup-Fenster um."
@@ -2209,7 +2209,7 @@ msgstr "Die Schaltplandatei \"%s\" ist nicht vorhanden."
 #: common/design_block_io.cpp:376
 #, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Designblock-Verzeichniss \"%s\" konnte nicht erstellt werden."
+msgstr "Designblock-Verzeichnis \"%s\" konnte nicht erstellt werden."
 
 #: common/design_block_io.cpp:393
 #, c-format
@@ -2231,7 +2231,7 @@ msgstr "Designblock \"%s\" existiert nicht."
 #: common/design_block_io.cpp:447
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Designblock-Verzeichniss \"%s\" konnte nicht gelöscht werden."
+msgstr "Designblock-Verzeichnis \"%s\" konnte nicht gelöscht werden."
 
 #: common/design_block_lib_table.cpp:234
 #, c-format
@@ -4076,14 +4076,14 @@ msgstr "Entfernte Nachverfolgung"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
-msgstr "Aktualisierungsinterval:"
+msgstr "Aktualisierungsintervall:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
-"Anazahl der Minuten zwischen Überprüfungen auf Aktualisierungen.  \"Null\" "
+"Anzahl der Minuten zwischen Überprüfungen auf Aktualisierungen.  \"Null\" "
 "deaktiviert die Überprüfungen."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
@@ -4215,7 +4215,7 @@ msgid ""
 "example:"
 msgstr ""
 "Datei-Explorer Kommando.\n"
-"Bespiel:"
+"Beispiel:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
@@ -5836,7 +5836,7 @@ msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/draw_panel_gal.cpp:541
 msgid "Error switching GAL backend"
-msgstr "Fehler beim Welchseln des GAL-Backends"
+msgstr "Fehler beim Wechseln des GAL-Backends"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3429
@@ -6000,7 +6000,7 @@ msgstr "Erwarte \"%s\""
 #: common/dsnlexer.cpp:361
 #, c-format
 msgid "Unexpected %s"
-msgstr "Unerwartes %s"
+msgstr "Unerwartetes %s"
 
 #: common/dsnlexer.cpp:369
 #, c-format
@@ -8858,7 +8858,7 @@ msgstr "Mit Texteditor bearbeiten..."
 
 #: common/tool/actions.cpp:76
 msgid "Open a library file with a text editor"
-msgstr "Eine Blibliotheksdatei mit Texteditor öffnen"
+msgstr "Eine Bibliotheksdatei mit Texteditor öffnen"
 
 #: common/tool/actions.cpp:82
 msgid "Open in file explorer..."
@@ -8866,7 +8866,7 @@ msgstr "Im Dateiexplorer öffnen..."
 
 #: common/tool/actions.cpp:83
 msgid "Open a library file with system file explorer"
-msgstr "Blibliotheksdatei mit System-Dateiexplorer öffnen"
+msgstr "Bibliotheksdatei mit System-Dateiexplorer öffnen"
 
 #: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:857
 #: eeschema/widgets/tuner_slider_base.cpp:117
@@ -9104,7 +9104,7 @@ msgstr "Zeile(n) auswählen"
 
 #: common/tool/actions.cpp:384
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr "Zeile(n) auswählen, welchedie aktuell gewählte(n) Zelle(n) enthalten"
+msgstr "Zeile(n) auswählen, welche die aktuell gewählte(n) Zelle(n) enthalten"
 
 #: common/tool/actions.cpp:390
 msgid "Select Table"
@@ -10640,11 +10640,11 @@ msgstr ""
 "Sie haben CvPcb mit der neuen Footprint-Bibliothekstabelle-Methode zum "
 "Auffinden von Footprints das erste Mal gestartet.\n"
 "CvPcb hat entweder die Standardtabelle kopiert oder eine leere Tabelle in "
-"Ihrem Heimatverzeichnis erstellt.\n"
+"Ihrem Benutzerverzeichnis erstellt.\n"
 "Sie müssen zuerst die Bibliothekstabelle konfigurieren, um alle noch nicht "
 "eingebundenen Footprintbibliotheken in KiCad verwenden zu können.\n"
-"Weitere Informationen finden Sie im Abschnitt \"Footprint "
-"Bibliothekstabelle\" der CvPcb Dokumentation."
+"Weitere Informationen finden Sie im Abschnitt "
+"\"Footprint Bibliothekstabelle\" der CvPcb Dokumentation."
 
 #: cvpcb/cvpcb.cpp:206
 msgid ""
@@ -11071,7 +11071,7 @@ msgstr "Annotation vollständig."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
-msgstr "Mittels API hinzugfügte Elemente"
+msgstr "Mittels API hinzugefügte Elemente"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:506
 msgid "Created items via API"
@@ -11612,8 +11612,8 @@ msgstr ""
 "projektspezifischen Pfad oder Dateinamen ersetzt werden. Unterstützte "
 "Formatierungsparameter:\n"
 "\n"
-" * `%I`: Absoluter Pfad und Dateiname der Netzlistenzwischendatei "
-"(Datenquelle für den Stücklistengenerator)\n"
+" * `%I`: Absoluter Pfad und Dateiname der Netzlistenzwischendatei ("
+"Datenquelle für den Stücklistengenerator)\n"
 " * `%O`: Absoluter Pfad und Dateiname der Stücklistendatei (ohne "
 "Dateierweiterung)\n"
 " * `%B`: Basisdateiname der Stücklistendatei (ohne Dateierweiterung)\n"
@@ -11635,13 +11635,13 @@ msgstr ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"Unter Windows, wenn das gewünschte Generatorsckript für eine CSV-Stückliste "
+"Unter Windows, wenn das gewünschte Generatorscript für eine CSV-Stückliste "
 "`C:\\Users\\username\\kicad\\my_python_script.py` ist, lautet die "
 "Kommandozeile:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
 "```\n"
 "\n"
 "Unter Linux, wenn das gewünschte Generatorscript für eine CSV-Stückliste `/"
@@ -12479,7 +12479,7 @@ msgstr "Scripte durchsuchen..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
-msgstr "Sciptbasierten Netzlistenexport hinzufügen"
+msgstr "Scriptbasierten Netzlistenexport hinzufügen"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:252
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -18435,7 +18435,7 @@ msgstr "Einheit ändern"
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
-"Keine alternative Dastellungsform für Symbol \"%s\" in Bibliothek \"%s\" "
+"Keine alternative Darstellungsform für Symbol \"%s\" in Bibliothek \"%s\" "
 "gefunden."
 
 #: eeschema/picksymbol.cpp:221 eeschema/tools/sch_edit_tool.cpp:2048
@@ -19269,7 +19269,7 @@ msgid ""
 "in the schematic."
 msgstr ""
 "Fehler beim Parsen der Eagle-Datei. Die Instanz \"%s\" konnte nicht gefunden "
-"werden obwohl diese im Schaltplan referenziert ist."
+"werden, obwohl diese im Schaltplan referenziert ist."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1808
 #, c-format
@@ -19291,7 +19291,7 @@ msgstr "Eagle XML-Bibliotheksdateien"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:521
 #, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "Kann keine gültige Schalplandatei in \"%s\" finden"
+msgstr "Kann keine gültige Schaltplandatei in \"%s\" finden"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:293
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:298
@@ -19347,7 +19347,7 @@ msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
 msgstr ""
-"Einstellungsdatei %s der HTTP-Bibliothekt verwendet API-Version %s, KiCad "
+"Einstellungsdatei %s der HTTP-Bibliothek verwendet API-Version %s, KiCad "
 "benötigt jedoch Version %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:249
@@ -19359,7 +19359,7 @@ msgstr "Einstellungsdatei %s der HTTP-Bibliothek gibt keine Wurzel-URL an!"
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
 msgstr ""
-"Einstellungsdatei %s der HTTP-Bibilothek enthält einen ungültigen "
+"Einstellungsdatei %s der HTTP-Bibliothek enthält einen ungültigen "
 "Bibliothekstyp"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:305
@@ -19489,7 +19489,7 @@ msgid ""
 "the schematic hierarchy."
 msgstr ""
 "Schaltplanblatt \"%s\" konnte nicht geladen werden, da es als direkter "
-"Vorfahr in der Schaltplan-HIerarchie vorkommt."
+"Vorfahr in der Schaltplan-Hierarchie vorkommt."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:291
 #, c-format
@@ -21036,7 +21036,7 @@ msgstr "Ungültige Syntax. Gültig: |_char oder &_char, usw."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1215
 msgid "No extra argument was expected"
-msgstr "Es wurd kein zusätzliches Argument erwartet"
+msgstr "Es wurde kein zusätzliches Argument erwartet"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1363
 msgid "Unknown keyword in "
@@ -21376,7 +21376,7 @@ msgstr ""
 
 #: eeschema/sim/sim_model.cpp:420
 msgid "No simulation model definition found."
-msgstr "Keine Definition eines Simulationsmodelles gefunden."
+msgstr "Keine Definition eines Simulationsmodells gefunden."
 
 #: eeschema/sim/sim_model.cpp:594 eeschema/sim/sim_model.cpp:642
 #, c-format
@@ -22816,7 +22816,7 @@ msgstr "Das Fenster für die Symbolprüfung anzeigen"
 #: eeschema/tools/sch_actions.cpp:62
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr ""
-"Unterschiede zwischen Schaltplan-Symbol und dessen entsprechedem Symbol aus "
+"Unterschiede zwischen Schaltplan-Symbol und dessen entsprechendem Symbol aus "
 "der Bibliothek anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:68
@@ -23784,7 +23784,7 @@ msgstr "OP-Ströme anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1212
 msgid "Show operating point current data from simulation"
-msgstr "Stromwerte des Arbeitspunktes aus der SImulation anzeigen"
+msgstr "Stromwerte des Arbeitspunktes aus der Simulation anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1217
 msgid "Show Pin Alternate Icons"
@@ -24398,8 +24398,8 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 "Das eingefügte Blatt \"%s\"\n"
-"wurde verworfen da das Ziel bereits das Blatt oder eines seiner Unterblätter "
-"dies in seiner Hierarchie enthält."
+"wurde verworfen, da das Ziel bereits das Blatt oder eines seiner "
+"Unterblätter in seiner Hierarchie enthält."
 
 #: eeschema/tools/sch_editor_control.cpp:2370
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -24480,7 +24480,7 @@ msgstr "Zusammenfassung"
 
 #: eeschema/tools/sch_inspection_tool.cpp:387
 msgid "Schematic vs library diff for:"
-msgstr "Unterschied zwischen Schlatplan und Bibliothek für:"
+msgstr "Unterschied zwischen Schaltplan und Bibliothek für:"
 
 #: eeschema/tools/sch_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
@@ -24731,8 +24731,8 @@ msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
-"Referenzbezeichner aus Quellenschaltplan erhalten. Andererseits diese "
-"zurücksetzen und nach Einstellungen neu annotiertieren."
+"Referenzbezeichner im Quellenschaltplan erhalten. Andernfalls diese löschen "
+"und entsprechend den Einstellungen neu annotieren."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -28500,7 +28500,7 @@ msgstr "Lokaler Pfad: Ordneränderungen überwachen"
 
 #: kicad/project_tree_pane.cpp:1651
 msgid "The selected directory is already a Git project."
-msgstr "Das ausgewählte Vereichnis ist bereits ein Git-Projekt."
+msgstr "Das ausgewählte Verzeichnis ist bereits ein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:1659
 msgid "Set default remote"
@@ -29885,7 +29885,7 @@ msgid ""
 "equivalent to a double insulation. ( which is two separate basic "
 "insulations, in case one of them fails  )."
 msgstr ""
-"Funktionale Isolation: Für den gefahrlisen Betrieb des Geräts erforderliche "
+"Funktionale Isolation: Für den gefahrlosen Betrieb des Geräts erforderliche "
 "Isolation.\n"
 "\n"
 "Basisisolation: Isolierung von gefährlichen stromführenden Teilen.\n"
@@ -30133,7 +30133,7 @@ msgstr ""
 "*  B3 - Außenleiter, unisoliert, über 3050 m\n"
 "*  B4 - Außenleiter, mit Schutzschicht (jede Höhe)\n"
 "*  A5 - Außenleiter, mit Schutzlack über Montage (jede Höhe)\n"
-"*  A6 - externe Komponente Leitungsanschluss, unisloliert\n"
+"*  A6 - externe Komponente Leitungsanschluss, unisoliert\n"
 "*  A7 - externe Komponente Leitungsanschluss, mit Schutzlack (jede Höhe)"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
@@ -30535,7 +30535,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:258
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Nur beim dreibeinigen Typ: Die Stromstärke des Regeleingangs."
+msgstr "Nur beim dreibeinigen Typ: Die Stromaufnahme des Regeleingangs."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
@@ -31145,9 +31145,9 @@ msgstr ""
 "- Bei Frequenzen über 30 kHz verschlechtern sich dielektrische "
 "Eigenschaften. IEC60664-4 deckt diese Fälle ab.\n"
 "- Bei Verwendung eines Schutzlacks oder eines Vergusses zum Schutz vor "
-"Verschmutzung können – sofern alle Bedingungen nach IEC60664-3 erfüllt sind "
-"– die Luft- und Kriechstrecken reduziert werden. Lötstopplack wird nicht als "
-"hinreiche Beschichtung betrachtet.\n"
+"Verschmutzung können – sofern alle Bedingungen nach IEC60664-3 erfüllt sind –"
+" die Luft- und Kriechstrecken reduziert werden. Lötstopplack wird nicht als "
+"hinreichende Beschichtung betrachtet.\n"
 "- Isolation durch Flüssigkeiten, Druckluft oder andere Gase als Luft fallen "
 "nicht in den Anwendungsbereich der IEC60664."
 
@@ -39225,7 +39225,7 @@ msgstr "Footprints zu ausgewählten Symbolen hervorheben"
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:138
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
-"Stellt sicher, dass kreuzreferenzierte Footprins innerhalb des aktuellen "
+"Stellt sicher, dass kreuzreferenzierte Footprints innerhalb des aktuellen "
 "Sichtbereichs liegen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:148
@@ -43053,7 +43053,7 @@ msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen."
 #: pcbnew/exporters/step/step_pcb_model.cpp:1412
 #, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC-Exception beim Erzeugen von Formsegement: %s"
+msgstr "OCC-Exception beim Erzeugen von Formsegment: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1427
 #, c-format
@@ -44123,7 +44123,7 @@ msgstr "Footprints Assoziierungsdatei (.cmp)..."
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Footprint-Assozierungsdatei (*.cmp) für Schaltplan-Rückannotierung "
+"Footprint-Assoziierungsdatei (*.cmp) für Schaltplan-Rückannotierung "
 "exportieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:142
@@ -44207,7 +44207,7 @@ msgstr "Winkel in Grad:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:108
 msgid "Incorrect number, abort"
-msgstr "Falsche Nummer, abbruch"
+msgstr "Falsche Nummer, Abbruch"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
 msgid "Add Microwave Inductor"
@@ -45757,8 +45757,8 @@ msgid ""
 "of the zone priorities is required."
 msgstr ""
 "Die Zonenfüllprioritäten für die Lage \"%s\" konnten nicht bestimmt werden. "
-"Trotz größter Mühe ist möglich, dass DRC-Fehler vorliegen und eine manuelle "
-"Korrektur der Zonenprioritäten erforderlich ist."
+"Trotz größter Mühe ist es möglich, dass DRC-Fehler vorliegen und eine "
+"manuelle Korrektur der Zonenprioritäten erforderlich ist."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -45875,7 +45875,7 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"Die CADSTAR-Pad-Definition \"%s\" hat die Lochform außerhalb der Pad-Form. "
+"Die CADSTAR-Paddefinition \"%s\" hat die Lochform außerhalb der Pad-Form. "
 "Das Loch wurde in die Mitte des Pads verschoben."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1342
@@ -46471,8 +46471,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
-"In Zeile %z fehlt für Referenzbezeichner %s entweder X, Y oder die "
-"Rotation . Dies könnte ein unbestücktes Bauteil sein."
+"In Zeile %zu fehlt für Referenzbezeichner %s entweder X, Y oder die "
+"Rotation. Dies könnte ein unbestücktes Bauteil sein."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2647
 #, c-format
@@ -47376,7 +47376,7 @@ msgstr "Vorderseitige Platzierungsdaten nach \"%s\" geschrieben.\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1562 pcbnew/pcbnew_jobs_handler.cpp:1640
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Hinterseitige Platzierungsdaten wurden nach '%s' geschrieben.\n"
+msgstr "Rückseitige Platzierungsdaten wurden nach '%s' geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1591
 #, c-format
@@ -49118,7 +49118,7 @@ msgstr "Außenlinien um gewählte Elemente konnten nicht erstellen werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:689
 msgid "Some of the items could not be outset."
-msgstr "Um manche Elementen konnten keinen Außenlinien erstellt werden."
+msgstr "Um manche Elemente konnten keine Außenlinien erstellt werden."
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
@@ -49710,8 +49710,8 @@ msgstr "Footprint aktualisieren..."
 #: pcbnew/tools/pcb_actions.cpp:785
 msgid "Update footprint to include any changes from the library"
 msgstr ""
-"Aktualisieren des Footprints um alle Änderungen aus der Bibliothek zu "
-"übernehmen"
+"Aktualisieren des Footprints, um alle Änderungen aus der Bibliothek zu "
+"übernehmen."
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Update Footprints from Library..."
@@ -49891,8 +49891,8 @@ msgstr "Pad als Grafikform bearbeiten"
 #: pcbnew/tools/pcb_actions.cpp:956
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
 msgstr ""
-"Entgruppiert ein benutzerdefiniertes Pad um es als einzelne Grafikformen zu "
-"bearbeiten"
+"Entgruppiert ein benutzerdefiniertes Pad, um es als einzelne Grafikformen zu "
+"bearbeiten."
 
 #: pcbnew/tools/pcb_actions.cpp:963
 msgid "Finish Pad Edit"
@@ -50515,7 +50515,7 @@ msgstr "Zeigt die Ermittlung der Einschränkungen für das ausgewählte Objekt a
 #: pcbnew/tools/pcb_actions.cpp:1859
 msgid "Show differences between board footprint and its library equivalent"
 msgstr ""
-"Unterschiede zwischen Platinen-Footprint und dessen entsprechedem Footprint "
+"Unterschiede zwischen Platinen-Footprint und dessen entsprechendem Footprint "
 "aus der Bibliothek anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1865
@@ -50848,7 +50848,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2233
 msgid "Generate Placement Rule Areas..."
-msgstr "Platzierungregelflächen erzeugen ..."
+msgstr "Platzierungsregelflächen erzeugen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2234
 msgid "Creates best-fit placement rule areas"
@@ -51024,8 +51024,8 @@ msgstr "Freien Winkel ziehen"
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
-"Verschiebt den nächstgelegen Punkt der Leiterbahn, ohne die Ausrichtung der "
-"Leiterbahn zu verändern."
+"Verschiebt den nächstgelegenen Punkt der Leiterbahn, ohne die Ausrichtung "
+"der Leiterbahn zu verändern."
 
 #: pcbnew/tools/pcb_actions.cpp:2444
 msgid "Update All Tuning Patterns"
@@ -51232,7 +51232,7 @@ msgstr "Verbindung auswählen/erweitern ..."
 
 #: pcbnew/tools/position_relative_tool.cpp:220
 msgid "Select the reference point on the item to move."
-msgstr "Bezugspunkt am zu verschiebenen Element wählen."
+msgstr "Bezugspunkt am zu verschiebenden Element wählen."
 
 #: pcbnew/tools/position_relative_tool.cpp:226
 msgid "Select the point to define the new offset from."
