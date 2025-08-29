@@ -26,6 +26,11 @@
 #include <wx/log.h>
 #include <wx/textctrl.h>
 #include <wx/uri.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/stattext.h>
+#include <algorithm>
 #include <string_utils.h>
 #include <dialogs/html_message_box.h>
 #include <build_version.h>
@@ -37,6 +42,33 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
 {
     m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
     ListClear();
+
+    m_searchPanel = new wxPanel( this );
+    wxBoxSizer* searchSizer = new wxBoxSizer( wxHORIZONTAL );
+    m_matchCount = new wxStaticText( m_searchPanel, wxID_ANY, wxEmptyString );
+    m_searchCtrl = new wxTextCtrl( m_searchPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+    m_prevBtn = new wxButton( m_searchPanel, wxID_ANY, wxS( "∧" ), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
+    m_nextBtn = new wxButton( m_searchPanel, wxID_ANY, wxS( "∨" ), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
+
+    // Set minimum size for buttons to make them thinner
+    m_prevBtn->SetMinSize( wxSize( 25, -1 ) );
+    m_nextBtn->SetMinSize( wxSize( 25, -1 ) );
+
+    // Set minimum width for match count to ensure it's visible
+    m_matchCount->SetMinSize( wxSize( 60, -1 ) );
+
+    searchSizer->Add( m_matchCount, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+    searchSizer->Add( m_searchCtrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+    searchSizer->Add( m_prevBtn, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
+    searchSizer->Add( m_nextBtn, 0, wxALIGN_CENTER_VERTICAL );
+    m_searchPanel->SetSizer( searchSizer );
+    m_searchPanel->Hide();
+    GetSizer()->Insert( 0, m_searchPanel, 0, wxALIGN_RIGHT|wxTOP|wxRIGHT, 5 );
+
+    m_searchCtrl->Bind( wxEVT_TEXT, &HTML_MESSAGE_BOX::OnSearchText, this );
+    m_searchCtrl->Bind( wxEVT_TEXT_ENTER, &HTML_MESSAGE_BOX::OnNext, this );
+    m_prevBtn->Bind( wxEVT_BUTTON, &HTML_MESSAGE_BOX::OnPrev, this );
+    m_nextBtn->Bind( wxEVT_BUTTON, &HTML_MESSAGE_BOX::OnNext, this );
 
     // Gives a default logical size (the actual size depends on the display definition)
     if( aSize != wxDefaultSize )
@@ -162,7 +194,46 @@ void HTML_MESSAGE_BOX::OnHTMLLinkClicked( wxHtmlLinkEvent& event )
 
 void HTML_MESSAGE_BOX::OnCharHook( wxKeyEvent& aEvent )
 {
-    // shift-return (Mac default) or Ctrl-Return (GTK) for OK
+    if( m_searchPanel->IsShown() )
+    {
+        if( aEvent.GetKeyCode() == WXK_ESCAPE )
+        {
+            HideSearchBar();
+            return;
+        }
+        else if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+        {
+            wxCommandEvent evt;
+            OnNext( evt );
+            return;
+        }
+        else if( aEvent.GetKeyCode() == WXK_BACK )
+        {
+            long from, to;
+            m_searchCtrl->GetSelection( &from, &to );
+
+            if( from == to )
+                m_searchCtrl->Remove( std::max( 0L, from - 1 ), from );
+            else
+                m_searchCtrl->Remove( from, to );
+
+            return;
+        }
+        else if( !aEvent.HasModifiers() && wxIsprint( aEvent.GetUnicodeKey() ) )
+        {
+            m_searchCtrl->AppendText( wxString( (wxChar) aEvent.GetUnicodeKey() ) );
+            return;
+        }
+    }
+    else if( !aEvent.HasModifiers() && wxIsprint( aEvent.GetUnicodeKey() ) )
+    {
+        ShowSearchBar();
+        m_searchCtrl->SetValue( wxString( (wxChar) aEvent.GetUnicodeKey() ) );
+        m_currentMatch = 0;
+        updateSearch();
+        return;
+    }
+
     if( aEvent.GetKeyCode() == WXK_ESCAPE )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
@@ -188,4 +259,196 @@ void HTML_MESSAGE_BOX::OnCharHook( wxKeyEvent& aEvent )
     }
 
     aEvent.Skip();
+}
+
+void HTML_MESSAGE_BOX::OnSearchText( wxCommandEvent& aEvent )
+{
+    m_currentMatch = 0;
+    updateSearch();
+}
+
+void HTML_MESSAGE_BOX::OnNext( wxCommandEvent& aEvent )
+{
+    if( !m_matchPos.empty() )
+    {
+        m_currentMatch = ( m_currentMatch + 1 ) % m_matchPos.size();
+        updateSearch();
+    }
+}
+
+void HTML_MESSAGE_BOX::OnPrev( wxCommandEvent& aEvent )
+{
+    if( !m_matchPos.empty() )
+    {
+        m_currentMatch = ( m_currentMatch + m_matchPos.size() - 1 ) % m_matchPos.size();
+        updateSearch();
+    }
+}
+
+void HTML_MESSAGE_BOX::ShowSearchBar()
+{
+    if( !m_searchPanel->IsShown() )
+    {
+        m_originalSource = m_source;
+        m_searchPanel->Show();
+        Layout();
+        m_searchCtrl->SetFocus();
+    }
+}
+
+void HTML_MESSAGE_BOX::HideSearchBar()
+{
+    if( m_searchPanel->IsShown() )
+    {
+        m_searchPanel->Hide();
+        Layout();
+        m_source = m_originalSource;
+        reload();
+
+        // Refocus on the main HTML window so user can press Escape again to close the dialog
+        m_htmlWindow->SetFocus();
+    }
+}
+
+void HTML_MESSAGE_BOX::updateSearch()
+{
+    wxString term = m_searchCtrl->GetValue();
+
+    if( term.IsEmpty() )
+    {
+        m_source = m_originalSource;
+        reload();
+        m_matchPos.clear();
+        m_matchCount->SetLabel( wxEmptyString );
+        return;
+    }
+
+    m_matchPos.clear();
+
+    // Search only in text content, not in HTML tags
+    wxString termLower = term.Lower();
+    size_t pos = 0;
+    bool insideTag = false;
+
+    while( pos < m_originalSource.length() )
+    {
+        wxChar ch = m_originalSource[pos];
+
+        if( ch == '<' )
+        {
+            insideTag = true;
+        }
+        else if( ch == '>' )
+        {
+            insideTag = false;
+            pos++;
+            continue;
+        }
+
+        // Only search for matches when we're not inside an HTML tag
+        if( !insideTag )
+        {
+            // Check if we have a match starting at this position
+            if( pos + termLower.length() <= m_originalSource.length() )
+            {
+                wxString candidate = m_originalSource.Mid( pos, termLower.length() ).Lower();
+                if( candidate == termLower )
+                {
+                    // Verify that this match doesn't span into an HTML tag
+                    bool validMatch = true;
+                    for( size_t i = 0; i < termLower.length(); i++ )
+                    {
+                        if( pos + i < m_originalSource.length() && m_originalSource[pos + i] == '<' )
+                        {
+                            validMatch = false;
+                            break;
+                        }
+                    }
+
+                    if( validMatch )
+                    {
+                        m_matchPos.push_back( pos );
+                    }
+                }
+            }
+        }
+
+        pos++;
+    }
+
+    if( m_matchPos.empty() )
+    {
+        m_source = m_originalSource;
+        reload();
+        m_matchCount->SetLabel( wxS( "0/0" ) );
+        return;
+    }
+
+    if( m_currentMatch >= (int) m_matchPos.size() )
+        m_currentMatch = 0;
+
+    wxString out;
+    size_t start = 0;
+
+    for( size_t i = 0; i < m_matchPos.size(); ++i )
+    {
+        size_t idx = m_matchPos[i];
+        out += m_originalSource.Mid( start, idx - start );
+        wxString matchStr = m_originalSource.Mid( idx, term.length() );
+
+        // HTML-escape the match string to prevent HTML parsing issues
+        wxString escapedMatchStr = matchStr;
+        escapedMatchStr.Replace( wxS( "&" ), wxS( "&amp;" ) );
+        escapedMatchStr.Replace( wxS( "<" ), wxS( "&lt;" ) );
+        escapedMatchStr.Replace( wxS( ">" ), wxS( "&gt;" ) );
+        escapedMatchStr.Replace( wxS( "\"" ), wxS( "&quot;" ) );
+
+        if( (int) i == m_currentMatch )
+        {
+            // Use a unique anchor name for each search to avoid conflicts
+            wxString anchorName = wxString::Format( wxS( "kicad_search_%d" ), m_currentMatch );
+            out += wxString::Format( wxS( "<a name=\"%s\"></a><span style=\"background-color:#DDAAFF;\">%s</span>" ),
+                                   anchorName, escapedMatchStr );
+        }
+        else
+        {
+            out += wxString::Format( wxS( "<span style=\"background-color:#FFFFAA;\">%s</span>" ), escapedMatchStr );
+        }
+
+        start = idx + term.length();
+    }
+
+    out += m_originalSource.Mid( start );
+    m_source = out;
+    reload();
+
+    // Use CallAfter to ensure the HTML is fully loaded before scrolling
+    // Only scroll if we have matches and a valid current match
+    if( !m_matchPos.empty() && m_currentMatch >= 0 && m_currentMatch < (int)m_matchPos.size() )
+    {
+        CallAfter( [this]()
+        {
+            // Try to scroll to the anchor, with fallback if it fails
+            wxString anchorName = wxString::Format( wxS( "kicad_search_%d" ), m_currentMatch );
+            if( !m_htmlWindow->ScrollToAnchor( anchorName ) )
+            {
+                // If anchor scrolling fails, try to scroll to approximate position
+                // Calculate approximate scroll position based on match location
+                if( !m_matchPos.empty() && m_currentMatch < (int)m_matchPos.size() )
+                {
+                    size_t matchPos = m_matchPos[m_currentMatch];
+                    size_t totalLength = m_originalSource.length();
+                    if( totalLength > 0 )
+                    {
+                        // Scroll to approximate percentage of document
+                        double ratio = (double)matchPos / (double)totalLength;
+                        int scrollPos = (int)(ratio * m_htmlWindow->GetScrollRange( wxVERTICAL ));
+                        m_htmlWindow->Scroll( 0, scrollPos );
+                    }
+                }
+            }
+        } );
+    }
+
+    m_matchCount->SetLabel( wxString::Format( wxS( "%d/%zu" ), m_currentMatch + 1, m_matchPos.size() ) );
 }

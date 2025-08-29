@@ -48,6 +48,11 @@ public:
      */
     void ThemeChanged();
 
+    /*
+     * Scroll to an anchor in the HTML content.
+     */
+    bool ScrollToAnchor( const wxString& aAnchor );
+
 private:
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
     void onRightClick( wxMouseEvent& event );

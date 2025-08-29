@@ -26,6 +26,12 @@
 #define HTML_MESSAGE_BOX_H
 
 #include <dialog_display_html_text_base.h>
+#include <vector>
+
+class wxPanel;
+class wxStaticText;
+class wxTextCtrl;
+class wxButton;
 
 
 class HTML_MESSAGE_BOX : public DIALOG_DISPLAY_HTML_TEXT_BASE
@@ -91,9 +97,23 @@ protected:
 
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
     virtual void OnCharHook( wxKeyEvent& aEvt ) override;
+    void OnSearchText( wxCommandEvent& aEvent );
+    void OnNext( wxCommandEvent& aEvent );
+    void OnPrev( wxCommandEvent& aEvent );
+    void ShowSearchBar();
+    void HideSearchBar();
+    void updateSearch();
 
 private:
     wxString  m_source;
+    wxString  m_originalSource;
+    wxPanel*  m_searchPanel;
+    wxStaticText* m_matchCount;
+    wxTextCtrl* m_searchCtrl;
+    wxButton* m_prevBtn;
+    wxButton* m_nextBtn;
+    std::vector<size_t> m_matchPos;
+    int      m_currentMatch;
 };
 
 #endif // HTML_MESSAGE_BOX_H

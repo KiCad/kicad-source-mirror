@@ -78,6 +78,18 @@ void HTML_WINDOW::ThemeChanged()
 }
 
 
+bool HTML_WINDOW::ScrollToAnchor( const wxString& aAnchor )
+{
+    // Check if we have content loaded
+    if( !GetInternalRepresentation() )
+        return false;
+
+    // Try to scroll to the anchor
+    bool result = wxHtmlWindow::ScrollToAnchor( aAnchor );
+    return result;
+}
+
+
 void HTML_WINDOW::onThemeChanged( wxSysColourChangedEvent &aEvent )
 {
     ThemeChanged();
