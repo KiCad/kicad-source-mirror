@@ -779,7 +779,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
         if( !testClearance && !testHoles )
             return;
 
-        DRC_RTREE*     zoneTree = m_board->m_CopperZoneRTreeCache[ zone ].get();
+        DRC_RTREE*     zoneRTree = m_board->m_CopperZoneRTreeCache[ zone ].get();
         DRC_CONSTRAINT constraint;
         bool           colliding;
         int            clearance = -1;
@@ -788,8 +788,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
 
         if( testClearance )
         {
-            constraint = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, aItem, zone,
-                                                 aLayer );
+            constraint = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, aItem, zone, aLayer );
             clearance = constraint.GetValue().Min();
         }
 
@@ -813,10 +812,10 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                 }
             }
 
-            if( zoneTree )
+            if( IsCopperLayer( aLayer ) && zoneRTree )
             {
-                colliding = zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer, clearance,
-                                                      &actual, &pos );
+                colliding = zoneRTree->QueryColliding( itemBBox, itemShape.get(), aLayer, clearance,
+                                                       &actual, &pos );
             }
             else
             {
@@ -855,26 +854,35 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
 
             if( holeShape )
             {
-                constraint = m_drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, aItem,
-                                                     zone, aLayer );
+                constraint = m_drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, aItem, zone, aLayer );
                 clearance = constraint.GetValue().Min();
 
-                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE
-                        && clearance > 0
-                        && zoneTree->QueryColliding( itemBBox, holeShape.get(), aLayer, clearance,
-                                                     &actual, &pos ) )
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
                 {
-                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              clearance,
-                                              actual );
+                    if( IsCopperLayer( aLayer ) && zoneRTree )
+                    {
+                        colliding = zoneRTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
+                                                               clearance, &actual, &pos );
+                    }
+                    else
+                    {
+                        colliding = zone->Outline()->Collide( holeShape.get(), clearance, &actual, &pos );
+                    }
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                    drce->SetItems( aItem, zone );
-                    drce->SetViolatingRule( constraint.GetParentRule() );
+                    if( colliding )
+                    {
+                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                        wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                  constraint.GetName(),
+                                                  clearance,
+                                                  actual );
 
-                    reportViolation( drce, pos, aLayer );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                        drce->SetItems( aItem, zone );
+                        drce->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drce, pos, aLayer );
+                    }
                 }
             }
         }
