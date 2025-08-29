@@ -74,46 +74,6 @@
     #define ENABLECACHEFRIENDLYFRACTURE ADVANCED_CFG::GetCfg().m_EnableCacheFriendlyFracture
 #endif
 
-static bool segmentsColinearOverlap( const SEG& a, const SEG& b, VECTOR2I& s, VECTOR2I& e )
-{
-    const VECTOR2I da = a.B - a.A;
-    const VECTOR2I db = b.B - b.A;
-
-    if( da.Cross( db ) != 0 )
-        return false;
-
-    if( da.Cross( b.A - a.A ) != 0 )
-        return false;
-
-    int axis = std::abs( da.x ) >= std::abs( da.y ) ? 0 : 1;
-
-    int aMin = axis == 0 ? std::min( a.A.x, a.B.x ) : std::min( a.A.y, a.B.y );
-    int aMax = axis == 0 ? std::max( a.A.x, a.B.x ) : std::max( a.A.y, a.B.y );
-    int bMin = axis == 0 ? std::min( b.A.x, b.B.x ) : std::min( b.A.y, b.B.y );
-    int bMax = axis == 0 ? std::max( b.A.x, b.B.x ) : std::max( b.A.y, b.B.y );
-
-    int lo = std::max( aMin, bMin );
-    int hi = std::min( aMax, bMax );
-
-    if( hi <= lo )
-        return false;
-
-    std::array<VECTOR2I,4> pts = { a.A, a.B, b.A, b.B };
-
-    std::sort( pts.begin(), pts.end(), [axis]( const VECTOR2I& p, const VECTOR2I& q )
-    {
-        if( axis == 0 )
-            return p.x < q.x || ( p.x == q.x && p.y < q.y );
-        else
-            return p.y < q.y || ( p.y == q.y && p.x < q.x );
-    } );
-
-    s = pts[1];
-    e = pts[2];
-
-    return true;
-}
-
 SHAPE_POLY_SET::SHAPE_POLY_SET() :
     SHAPE( SH_POLY_SET )
 {
@@ -1903,6 +1863,50 @@ void SHAPE_POLY_SET::Unfracture()
 }
 
 
+bool SHAPE_POLY_SET::isExteriorWaist( const SEG& aSegA, const SEG& aSegB ) const
+{
+    const VECTOR2I da = aSegA.B - aSegA.A;
+
+    int axis = std::abs( da.x ) >= std::abs( da.y ) ? 0 : 1;
+
+    std::array<VECTOR2I,4> pts = { aSegA.A, aSegA.B, aSegB.A, aSegB.B };
+
+    std::sort( pts.begin(), pts.end(), [axis]( const VECTOR2I& p, const VECTOR2I& q )
+    {
+        if( axis == 0 )
+            return p.x < q.x || ( p.x == q.x && p.y < q.y );
+        else
+            return p.y < q.y || ( p.y == q.y && p.x < q.x );
+    } );
+
+    VECTOR2I s = pts[1];
+    VECTOR2I e = pts[2];
+
+    // Check if there is polygon material on either side of the overlapping segments
+    // Get the midpoint between s and e for testing
+    VECTOR2I midpoint = ( s + e ) / 2;
+
+    // Create perpendicular offset vector to check both sides
+    VECTOR2I segDir = e - s;
+
+    if( segDir.EuclideanNorm() > 0 )
+    {
+        VECTOR2I perp = segDir.Perpendicular().Resize( 10 );
+
+        // Test points on both sides of the overlapping segment
+        bool side1 = PointInside( midpoint + perp );
+        bool side2 = PointInside( midpoint - perp );
+
+        // Only return true if both sides are outside the polygon
+        // This is the case for non-fractured segments
+        if( !side1 && !side2 )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SHAPE_POLY_SET::splitCollinearOutlines()
 {
     for( size_t polyIdx = 0; polyIdx < m_polys.size(); ++polyIdx )
@@ -1930,7 +1934,6 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
             bool found = false;
             int segA = -1;
             int segB = -1;
-            VECTOR2I s, e;
 
             for( intptr_t i = 0; i < count && !found; ++i )
             {
@@ -1950,7 +1953,15 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
                             VECTOR2I ob = outline.CPoint( ( j + 1 ) % count );
                             SEG other( oa, ob );
 
-                            if( segmentsColinearOverlap( seg, other, s, e ) )
+                            // Skip segments that share start/end points.  This is the case for
+                            // fractured segments
+                            if( oa == a && ob == b )
+                                return true;
+
+                            if( oa == b && ob == a )
+                                return true;
+
+                            if( seg.ApproxCollinear( other, 10 ) && isExteriorWaist( seg, other ) )
                             {
                                 segA = i;
                                 segB = j;
@@ -1975,21 +1986,25 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
             SHAPE_LINE_CHAIN lc1;
             int idx = a1;
             lc1.Append( outline.CPoint( idx ) );
+
             while( idx != b0 )
             {
                 idx = ( idx + 1 ) % outline.PointCount();
                 lc1.Append( outline.CPoint( idx ) );
             }
+
             lc1.SetClosed( true );
 
             SHAPE_LINE_CHAIN lc2;
             idx = b1;
             lc2.Append( outline.CPoint( idx ) );
+
             while( idx != a0 )
             {
                 idx = ( idx + 1 ) % outline.PointCount();
                 lc2.Append( outline.CPoint( idx ) );
             }
+
             lc2.SetClosed( true );
 
             m_polys[polyIdx][0] = lc1;
