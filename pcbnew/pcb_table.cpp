@@ -459,7 +459,7 @@ INSPECT_RESULT PCB_TABLE::Visit( INSPECTOR aInspector, void* aTestData,
 
 wxString PCB_TABLE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "%d Column Table" ), m_colCount );
+    return wxString::Format( _( "%d column table" ), m_colCount );
 }
 
 

@@ -170,8 +170,8 @@ wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND_BURIED: formatStr = _( "Blind/Buried Via %s on %s" ); break;
-    case VIATYPE::MICROVIA:     formatStr = _( "Micro Via %s on %s" );        break;
+    case VIATYPE::BLIND_BURIED: formatStr = _( "Blind/buried via %s on %s" ); break;
+    case VIATYPE::MICROVIA:     formatStr = _( "Micro via %s on %s" );        break;
     default:                    formatStr = _( "Via %s on %s" );              break;
     }
 

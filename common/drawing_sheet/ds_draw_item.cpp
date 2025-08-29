@@ -333,10 +333,9 @@ bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const BOX2I& aRect, bool aContained, in
 }
 
 
-wxString DS_DRAW_ITEM_POLYPOLYGONS::GetItemDescription( UNITS_PROVIDER* aUnitsProvider,
-                                                        bool aFull ) const
+wxString DS_DRAW_ITEM_POLYPOLYGONS::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return _( "Imported Shape" );
+    return _( "Imported shape" );
 }
 
 
@@ -435,10 +434,9 @@ bool DS_DRAW_ITEM_RECT::HitTest( const BOX2I& aRect, bool aContained, int aAccur
 
 wxString DS_DRAW_ITEM_RECT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format(
-            _( "Rectangle, width %s height %s" ),
-            aUnitsProvider->MessageTextFromValue( std::abs( GetStart().x - GetEnd().x ) ),
-            aUnitsProvider->MessageTextFromValue( std::abs( GetStart().y - GetEnd().y ) ) );
+    return wxString::Format( _( "Rectangle, width %s height %s" ),
+                             aUnitsProvider->MessageTextFromValue( std::abs( GetStart().x - GetEnd().x ) ),
+                             aUnitsProvider->MessageTextFromValue( std::abs( GetStart().y - GetEnd().y ) ) );
 }
 
 
@@ -527,7 +525,7 @@ wxString DS_DRAW_ITEM_BITMAP::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
 
 wxString DS_DRAW_ITEM_PAGE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return _( "Page Limits" );
+    return _( "Page limits" );
 }
 
 

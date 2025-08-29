@@ -1190,7 +1190,7 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
         }
         else
         {
-            return wxString::Format( _( "Rule Area '%s' %s" ),
+            return wxString::Format( _( "Rule area '%s' %s" ),
                                      GetZoneName(),
                                      layerDesc );
         }

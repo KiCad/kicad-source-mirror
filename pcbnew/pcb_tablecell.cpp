@@ -55,7 +55,7 @@ void PCB_TABLECELL::swapData( BOARD_ITEM* aImage )
 
 wxString PCB_TABLECELL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Table Cell %s" ), GetAddr() );
+    return wxString::Format( _( "Table cell %s" ), GetAddr() );
 }
 
 

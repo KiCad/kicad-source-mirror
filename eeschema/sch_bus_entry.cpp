@@ -416,13 +416,13 @@ bool SCH_BUS_ENTRY_BASE::HasConnectivityChanges( const SCH_ITEM* aItem,
 
 wxString SCH_BUS_WIRE_ENTRY::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString( _( "Bus to Wire Entry" ) );
+    return wxString( _( "Bus to wire entry" ) );
 }
 
 
 wxString SCH_BUS_BUS_ENTRY::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString( _( "Bus to Bus Entry" ) );
+    return wxString( _( "Bus to bus entry" ) );
 }
 
 
