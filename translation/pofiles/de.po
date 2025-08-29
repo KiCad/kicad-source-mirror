@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-28 23:15+0000\n"
+"PO-Revision-Date: 2025-08-29 11:44+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -566,7 +566,7 @@ msgstr "3D-Modelle von Durchsteck-Bauteilen anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "3D-Modelle von Footprints for Durchsteckmontage (THT) anzeigen"
+msgstr "3D-Modelle von Footprints für Durchsteckmontage (THT) anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show SMD 3D Models"
@@ -834,7 +834,7 @@ msgstr "Benutzerdefinierte Lage 33 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
 msgid "Show user defined layer 34"
-msgstr "Benutzerdefinierte Lage 34 anzeigenv"
+msgstr "Benutzerdefinierte Lage 34 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
 msgid "Show user defined layer 35"
@@ -2313,7 +2313,7 @@ msgstr "Platinendatei \"%s\" existiert nicht."
 #: common/design_block_io.cpp:402
 #, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Designblock-Verzeichniss \"%s\" konnte nicht erstellt werden."
+msgstr "Designblock-Verzeichnis \"%s\" konnte nicht erstellt werden."
 
 #: common/design_block_io.cpp:421
 #, c-format
@@ -2337,7 +2337,7 @@ msgstr "Designblock Metadatendatei \"%s\" konnte nicht gespeichert werden."
 #: common/design_block_io.cpp:494
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Designblock-Verzeichniss \"%s\" konnte nicht gelöscht werden."
+msgstr "Designblock-Verzeichnis \"%s\" konnte nicht gelöscht werden."
 
 #: common/design_block_lib_table.cpp:250
 #, c-format
@@ -4255,7 +4255,7 @@ msgstr "Entfernte Nachverfolgung"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
-msgstr "Aktualisierungsinterval:"
+msgstr "Aktualisierungsintervall:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4394,7 +4394,7 @@ msgid ""
 "example:"
 msgstr ""
 "Datei-Explorer Kommando.\n"
-"Bespiel:"
+"Beispiel:"
 
 #: common/dialogs/panel_common_settings.cpp:362
 #, c-format
@@ -6202,7 +6202,7 @@ msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/draw_panel_gal.cpp:542
 msgid "Error switching GAL backend"
-msgstr "Fehler beim Welchseln des GAL-Backends"
+msgstr "Fehler beim Wechseln des GAL-Backends"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3488
@@ -6376,7 +6376,7 @@ msgstr "%s ist ein Duplikat"
 #: common/dsnlexer.cpp:373
 #, c-format
 msgid "Unexpected %s"
-msgstr "Unerwartes %s"
+msgstr "Unerwartetes %s"
 
 #: common/dsnlexer.cpp:433
 #, c-format
@@ -9380,7 +9380,7 @@ msgstr "Mit Texteditor bearbeiten..."
 
 #: common/tool/actions.cpp:78
 msgid "Open a library file with a text editor"
-msgstr "Eine Blibliotheksdatei mit Texteditor öffnen"
+msgstr "Eine Bibliotheksdatei mit Texteditor öffnen"
 
 #: common/tool/actions.cpp:84
 msgid "Open in file explorer..."
@@ -9388,7 +9388,7 @@ msgstr "Im Dateiexplorer öffnen..."
 
 #: common/tool/actions.cpp:85
 msgid "Open a library file with system file explorer"
-msgstr "Blibliotheksdatei mit System-Dateiexplorer öffnen"
+msgstr "Bibliotheksdatei mit System-Dateiexplorer öffnen"
 
 #: common/tool/actions.cpp:93 eeschema/symbol_editor/symbol_editor.cpp:850
 #: eeschema/widgets/tuner_slider_base.cpp:117
@@ -9688,7 +9688,7 @@ msgstr "Zeile(n) auswählen"
 
 #: common/tool/actions.cpp:498
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr "Zeile(n) auswählen, welchedie aktuell gewählte(n) Zelle(n) enthalten"
+msgstr "Zeile(n) auswählen, welche die aktuell gewählte(n) Zelle(n) enthalten"
 
 #: common/tool/actions.cpp:504
 msgid "Select Table"
@@ -11798,7 +11798,7 @@ msgstr "Annotation vollständig."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
-msgstr "Mittels API hinzugfügte Elemente"
+msgstr "Mittels API hinzugefügte Elemente"
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:509
 msgid "Created items via API"
@@ -12212,8 +12212,8 @@ msgstr ""
 "projektspezifischen Pfad oder Dateinamen ersetzt werden. Unterstützte "
 "Formatierungsparameter:\n"
 "\n"
-" * `%I`: Absoluter Pfad und Dateiname der Netzlistenzwischendatei "
-"(Datenquelle für den Stücklistengenerator)\n"
+" * `%I`: Absoluter Pfad und Dateiname der Netzlistenzwischendatei ("
+"Datenquelle für den Stücklistengenerator)\n"
 " * `%O`: Absoluter Pfad und Dateiname der Stücklistendatei (ohne "
 "Dateierweiterung)\n"
 " * `%B`: Basisdateiname der Stücklistendatei (ohne Dateierweiterung)\n"
@@ -12235,13 +12235,13 @@ msgstr ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"Unter Windows, wenn das gewünschte Generatorsckript für eine CSV-Stückliste "
+"Unter Windows, wenn das gewünschte Generatorscript für eine CSV-Stückliste "
 "`C:\\Users\\username\\kicad\\my_python_script.py` ist, lautet die "
 "Kommandozeile:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
 "```\n"
 "\n"
 "Unter Linux, wenn das gewünschte Generatorscript für eine CSV-Stückliste `/"
@@ -13051,7 +13051,7 @@ msgstr "Scripte durchsuchen..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
-msgstr "Sciptbasierten Netzlistenexport hinzufügen"
+msgstr "Scriptbasierten Netzlistenexport hinzufügen"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:598
 #: eeschema/dialogs/dialog_label_properties.cpp:559
@@ -18641,7 +18641,7 @@ msgstr "Speichern des Projekts abbrechen"
 #, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
 msgstr ""
-"Konnte Dateien nicht automatisch in schreibgeschützem Ordner speichern:   "
+"Konnte Dateien nicht automatisch in schreibgeschütztem Ordner speichern:   "
 "\"%s\""
 
 #: eeschema/files-io.cpp:1444
@@ -20101,7 +20101,7 @@ msgstr "Eagle XML-Bibliotheksdateien"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:521
 #, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "Kann keine gültige Schalplandatei in \"%s\" finden"
+msgstr "Kann keine gültige Schaltplandatei in \"%s\" finden"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:293
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:298
@@ -21875,7 +21875,7 @@ msgstr "Ungültige Syntax. Gültig: |_char oder &_char, usw."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1215
 msgid "No extra argument was expected"
-msgstr "Es wurd kein zusätzliches Argument erwartet"
+msgstr "Es wurde kein zusätzliches Argument erwartet"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1363
 msgid "Unknown keyword in "
@@ -22217,7 +22217,7 @@ msgstr ""
 
 #: eeschema/sim/sim_model.cpp:422
 msgid "No simulation model definition found."
-msgstr "Keine Definition eines Simulationsmodelles gefunden."
+msgstr "Keine Definition eines Simulationsmodells gefunden."
 
 #: eeschema/sim/sim_model.cpp:582 eeschema/sim/sim_model.cpp:629
 #, c-format
@@ -24696,7 +24696,7 @@ msgstr "OP-Ströme anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1257
 msgid "Show operating point current data from simulation"
-msgstr "Stromwerte des Arbeitspunktes aus der SImulation anzeigen"
+msgstr "Stromwerte des Arbeitspunktes aus der Simulation anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1263
 msgid "Show Pin Alternate Icons"
@@ -25429,7 +25429,7 @@ msgstr "Zusammenfassung"
 
 #: eeschema/tools/sch_inspection_tool.cpp:387
 msgid "Schematic vs library diff for:"
-msgstr "Unterschied zwischen Schlatplan und Bibliothek für:"
+msgstr "Unterschied zwischen Schaltplan und Bibliothek für:"
 
 #: eeschema/tools/sch_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
@@ -29725,7 +29725,7 @@ msgstr "Warte auf Ende der Git-Operationen ..."
 
 #: kicad/project_tree_pane.cpp:1673
 msgid "The selected directory is already a Git project."
-msgstr "Das ausgewählte Vereichnis ist bereits ein Git-Projekt."
+msgstr "Das ausgewählte Verzeichnis ist bereits ein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:1680
 msgid "Failed to initialize Git project."
@@ -30171,7 +30171,7 @@ msgstr "(Papierformat)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 msgid "Item Type"
-msgstr "Elemettyp"
+msgstr "Elementtyp"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -40154,7 +40154,7 @@ msgstr "Typ II a (oberseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
 msgid "Type II b ( covered and tented both sides )"
-msgstr "Typ II a (beiseitig abgedeckt (Trockenfilm + LPI))"
+msgstr "Typ II a (beidseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type II a ( covered and tented bottom )"
@@ -40178,7 +40178,7 @@ msgstr "Typ IV a (oberseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type IV b ( plugged and tented both sides )"
-msgstr "Typ IV b (beiseitig geplugged und abgedeckt)"
+msgstr "Typ IV b (beidseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type IV a ( plugged and tented bottom )"
@@ -40659,7 +40659,7 @@ msgstr "Footprints zu ausgewählten Symbolen hervorheben"
 #: pcbnew/dialogs/panel_display_options_base.cpp:205
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
-"Stellt sicher, dass kreuzreferenzierte Footprins innerhalb des aktuellen "
+"Stellt sicher, dass kreuzreferenzierte Footprints innerhalb des aktuellen "
 "Sichtbereichs liegen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:215
@@ -42547,7 +42547,7 @@ msgstr ""
 "    A.fromTo('x', 'y')\n"
 "        Wahr, wenn Objekt auf Kupferpfad zwischen angegebenen Pads existiert."
 "\n"
-"        `x` und `y` sind die vollständinge Padnamen innerhalb des Designs,\n"
+"        `x` und `y` sind die vollständigen Padnamen innerhalb des Designs,\n"
 "        wie z.B. `R1-Pad1`.\n"
 "\n"
 "\n"
@@ -44922,7 +44922,7 @@ msgstr "Konnte Komponente mit Dateiname \"%s\" nicht hinzufügen."
 #: pcbnew/exporters/step/step_pcb_model.cpp:1417
 #, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC-Exception beim Erzeugen von Formsegement: %s"
+msgstr "OCC-Exception beim Erzeugen von Formsegment: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
 #, c-format
@@ -46037,7 +46037,7 @@ msgstr "Winkel in Grad:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:108
 msgid "Incorrect number, abort"
-msgstr "Falsche Nummer, abbruch"
+msgstr "Falsche Nummer, Abbruch"
 
 #: pcbnew/microwave/microwave_inductor.cpp:317
 msgid "Add Microwave Inductor"
@@ -47795,7 +47795,7 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"Die CADSTAR-Pad-Definition \"%s\" hat die Lochform außerhalb der Pad-Form. "
+"Die CADSTAR-Paddefinition \"%s\" hat die Lochform außerhalb der Pad-Form. "
 "Das Loch wurde in die Mitte des Pads verschoben."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1344
@@ -49403,7 +49403,7 @@ msgstr "Vorderseitige Platzierungsdaten nach \"%s\" geschrieben.\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1782 pcbnew/pcbnew_jobs_handler.cpp:1860
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Hinterseitige Platzierungsdaten wurden nach '%s' geschrieben.\n"
+msgstr "Rückseitige Platzierungsdaten wurden nach '%s' geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1811
 #, c-format
@@ -52931,7 +52931,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2401
 msgid "Generate Placement Rule Areas..."
-msgstr "Platzierungregelflächen erzeugen ..."
+msgstr "Platzierungsregelflächen erzeugen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2402
 msgid "Creates best-fit placement rule areas"
@@ -53446,7 +53446,7 @@ msgstr "Verbindung auswählen/erweitern ..."
 
 #: pcbnew/tools/position_relative_tool.cpp:216
 msgid "Select the reference point on the item to move."
-msgstr "Bezugspunkt am zu verschiebenen Element wählen."
+msgstr "Bezugspunkt am zu verschiebenden Element wählen."
 
 #: pcbnew/tools/position_relative_tool.cpp:222
 msgid "Select the point to define the new offset from."
