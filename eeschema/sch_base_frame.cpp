@@ -35,6 +35,7 @@
 #include <project/project_file.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <sch_draw_panel.h>
+#include <widgets/panel_sch_selection_filter.h>
 #include <sch_group.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -941,4 +942,11 @@ SCH_SELECTION_TOOL* SCH_BASE_FRAME::GetSelectionTool()
         return m_toolManager->GetTool<SCH_SELECTION_TOOL>();
 
     return nullptr;
+}
+
+
+void SCH_BASE_FRAME::HighlightSelectionFilter( const SCH_SELECTION_FILTER_OPTIONS& aOptions )
+{
+    SCH_SELECTION_FILTER_EVENT evt( aOptions );
+    wxPostEvent( this, evt );
 }

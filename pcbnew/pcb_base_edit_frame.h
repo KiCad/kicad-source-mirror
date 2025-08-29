@@ -38,6 +38,7 @@ class PCB_TABLE;
 class PCB_TEXT;
 class PCB_SHAPE;
 class FILEDLG_HOOK_NEW_LIBRARY;
+struct PCB_SELECTION_FILTER_OPTIONS;
 
 /**
  * Common, abstract interface for edit frames.
@@ -244,6 +245,8 @@ public:
 
     void GetContextualTextVars( BOARD_ITEM* aSourceItem, const wxString& aCrossRef,
                                 wxArrayString* aTokens );
+
+    void HighlightSelectionFilter( const PCB_SELECTION_FILTER_OPTIONS& aOptions );
 
 protected:
     void configureToolbars() override;

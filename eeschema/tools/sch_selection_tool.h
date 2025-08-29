@@ -237,7 +237,8 @@ private:
      * @param aSelectedOnly If true, remove non-selected items from #collector
      */
     void narrowSelection( SCH_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
-                          bool aSelectedOnly = false );
+                          bool aSelectedOnly = false,
+                          SCH_SELECTION_FILTER_OPTIONS* aRejected = nullptr );
 
     /**
      * Perform a click-type selection at a point (usually the cursor position).
@@ -341,7 +342,7 @@ private:
     /**
      * Return true if the given item passes the stateful selection filter
      */
-    bool itemPassesFilter( EDA_ITEM* aItem );
+    bool itemPassesFilter( EDA_ITEM* aItem, SCH_SELECTION_FILTER_OPTIONS* aRejected = nullptr );
 
     /**
      * In general we don't want to select both a parent and any of it's children.  This includes

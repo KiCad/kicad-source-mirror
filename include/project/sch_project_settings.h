@@ -77,6 +77,20 @@ struct SCH_SELECTION_FILTER_OPTIONS
         ruleAreas   = true;
         otherItems  = true;
     }
+
+    void SetAll( bool aState )
+    {
+        lockedItems = aState;
+        symbols     = aState;
+        text        = aState;
+        wires       = aState;
+        labels      = aState;
+        pins        = aState;
+        graphics    = aState;
+        images      = aState;
+        ruleAreas   = aState;
+        otherItems  = aState;
+    }
 };
 
 #endif //KICAD_SCH_PROJECT_SETTINGS_H

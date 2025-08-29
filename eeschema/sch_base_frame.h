@@ -55,6 +55,7 @@ class LIB_ID;
 class SYMBOL_LIB_TABLE;
 class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
+struct SCH_SELECTION_FILTER_OPTIONS;
 
 #ifndef __linux__
 class NL_SCHEMATIC_PLUGIN;
@@ -288,6 +289,8 @@ public:
     SCH_SELECTION_TOOL* GetSelectionTool() override;
 
     void GetLibraryItemsForListDialog( wxArrayString& aHeaders, std::vector<wxArrayString>& aItemsToDisplay );
+
+    void HighlightSelectionFilter( const SCH_SELECTION_FILTER_OPTIONS& aOptions );
 
 protected:
     void handleActivateEvent( wxActivateEvent& aEvent ) override;

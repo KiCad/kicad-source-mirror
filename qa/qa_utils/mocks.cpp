@@ -38,6 +38,7 @@
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
 #include <zone_filler.h>
+struct PCB_SELECTION_FILTER_OPTIONS;
 #include <preview_items/selection_area.h>
 
 FP_LIB_TABLE GFootprintTable;
@@ -360,12 +361,14 @@ int PCB_SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect )
+void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect,
+                                               PCB_SELECTION_FILTER_OPTIONS* aRejected )
 {
 }
 
 
-bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect )
+bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
+                                          PCB_SELECTION_FILTER_OPTIONS* aRejected )
 {
     return true;
 }

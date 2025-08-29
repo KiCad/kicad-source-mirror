@@ -250,7 +250,8 @@ public:
     /**
      * Apply the SELECTION_FITLER_OPTIONS to the collector.
      */
-    void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect );
+    void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect,
+                               PCB_SELECTION_FILTER_OPTIONS* aRejected = nullptr );
 
     /**
      * Drop footprints that are not directly selected
@@ -426,7 +427,8 @@ private:
     int filterSelection( const TOOL_EVENT& aEvent );
 
     ///< Return true if the given item passes the current SELECTION_FILTER_OPTIONS.
-    bool itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect );
+    bool itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
+                           PCB_SELECTION_FILTER_OPTIONS* aRejected = nullptr );
 
     /**
      * Take necessary action mark an item as unselected.

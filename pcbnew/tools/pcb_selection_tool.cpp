@@ -38,6 +38,7 @@ using namespace std::placeholders;
 #include <pcb_tablecell.h>
 #include <pcb_marker.h>
 #include <pcb_generator.h>
+#include <pcb_base_edit_frame.h>
 #include <zone.h>
 #include <collectors.h>
 #include <dialog_filter_selection.h>
@@ -769,8 +770,20 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag, bool
 
     m_selection.ClearReferencePoint();
 
+    size_t preFilterCount = collector.GetCount();
+    PCB_SELECTION_FILTER_OPTIONS rejected;
+    rejected.SetAll( false );
+
     // Apply the stateful filter (remove items disabled by the Selection Filter)
-    FilterCollectedItems( collector, false );
+    FilterCollectedItems( collector, false, &rejected );
+
+    if( collector.GetCount() == 0 && preFilterCount > 0 )
+    {
+        if( PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame ) )
+            editFrame->HighlightSelectionFilter( rejected );
+
+        return false;
+    }
 
     // Allow the client to do tool- or action-specific filtering to see if we can get down
     // to a single item
@@ -1288,7 +1301,7 @@ void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
     }
 
     // Apply the stateful filter
-    FilterCollectedItems( collector, true );
+    FilterCollectedItems( collector, true, nullptr );
 
     FilterCollectorForHierarchy( collector, true );
 
@@ -1296,7 +1309,7 @@ void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
     if( collector.GetCount() == 0 )
     {
         collector = padsCollector;
-        FilterCollectedItems( collector, true );
+        FilterCollectedItems( collector, true, nullptr );
         FilterCollectorForHierarchy( collector, true );
     }
 
@@ -1390,7 +1403,7 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
 
-                    if( item && Selectable( item ) && itemPassesFilter( item, true ) )
+                    if( item && Selectable( item ) && itemPassesFilter( item, true, nullptr ) )
                         collection.Append( item );
                 }
 
@@ -2114,7 +2127,7 @@ void PCB_SELECTION_TOOL::SelectAllItemsOnNet( int aNetCode, bool aSelect )
                                                            PCB_VIA_T,
                                                            PCB_SHAPE_T } ) )
     {
-        if( itemPassesFilter( item, true ) )
+        if( itemPassesFilter( item, true, nullptr ) )
             aSelect ? select( item ) : unselect( item );
     }
 }
@@ -2719,7 +2732,8 @@ int PCB_SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect )
+void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect,
+                                               PCB_SELECTION_FILTER_OPTIONS* aRejected )
 {
     if( aCollector.GetCount() == 0 )
         return;
@@ -2733,7 +2747,7 @@ void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bo
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
 
-        if( !itemPassesFilter( item, aMultiSelect ) )
+        if( !itemPassesFilter( item, aMultiSelect, aRejected ) )
             rejected.insert( item );
     }
 
@@ -2742,7 +2756,8 @@ void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bo
 }
 
 
-bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect )
+bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
+                                          PCB_SELECTION_FILTER_OPTIONS* aRejected )
 {
     if( !m_filter.lockedItems )
     {
@@ -2755,6 +2770,8 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
             }
             else
             {
+                if( aRejected )
+                    aRejected->lockedItems = true;
                 return false;
             }
         }
@@ -2770,7 +2787,11 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         if( static_cast<PCB_GENERATOR*>( aItem )->GetItems().empty() )
         {
             if( !m_filter.otherItems )
+            {
+                if( aRejected )
+                    aRejected->otherItems = true;
                 return false;
+            }
         }
         else
         {
@@ -2782,26 +2803,42 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     {
     case PCB_FOOTPRINT_T:
         if( !m_filter.footprints )
+        {
+            if( aRejected )
+                aRejected->footprints = true;
             return false;
+        }
 
         break;
 
     case PCB_PAD_T:
         if( !m_filter.pads )
+        {
+            if( aRejected )
+                aRejected->pads = true;
             return false;
+        }
 
         break;
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
         if( !m_filter.tracks )
+        {
+            if( aRejected )
+                aRejected->tracks = true;
             return false;
+        }
 
         break;
 
     case PCB_VIA_T:
         if( !m_filter.vias )
+        {
+            if( aRejected )
+                aRejected->vias = true;
             return false;
+        }
 
         break;
 
@@ -2812,6 +2849,13 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         if( ( !m_filter.zones && !zone->GetIsRuleArea() )
             || ( !m_filter.keepouts && zone->GetIsRuleArea() ) )
         {
+            if( aRejected )
+            {
+                if( zone->GetIsRuleArea() )
+                    aRejected->keepouts = true;
+                else
+                    aRejected->zones = true;
+            }
             return false;
         }
 
@@ -2827,17 +2871,29 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     case PCB_SHAPE_T:
     case PCB_TARGET_T:
         if( !m_filter.graphics )
+        {
+            if( aRejected )
+                aRejected->graphics = true;
             return false;
+        }
 
         break;
 
     case PCB_REFERENCE_IMAGE_T:
         if( !m_filter.graphics )
+        {
+            if( aRejected )
+                aRejected->graphics = true;
             return false;
+        }
 
         // a reference image living in a footprint must not be selected inside the board editor
         if( !m_isFootprintEditor && aItem->GetParentFootprint() )
+        {
+            if( aRejected )
+                aRejected->text = true;
             return false;
+        }
 
         break;
 
@@ -2857,13 +2913,21 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         if( !m_filter.dimensions )
+        {
+            if( aRejected )
+                aRejected->dimensions = true;
             return false;
+        }
 
         break;
 
     default:
         if( !m_filter.otherItems )
+        {
+            if( aRejected )
+                aRejected->otherItems = true;
             return false;
+        }
     }
 
     return true;

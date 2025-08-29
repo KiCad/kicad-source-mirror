@@ -23,7 +23,11 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
 #include <widgets/panel_sch_selection_filter.h>
+#include <wx/settings.h>
+#include <wx/dcbuffer.h>
 
+
+wxDEFINE_EVENT( EVT_SCH_SELECTION_FILTER_FLASH, SCH_SELECTION_FILTER_EVENT );
 
 PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
         PANEL_SCH_SELECTION_FILTER_BASE( aParent ),
@@ -83,12 +87,27 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
     }
 
     m_frame->Bind( EDA_LANG_CHANGED, &PANEL_SCH_SELECTION_FILTER::OnLanguageChanged, this );
+
+    m_flashSteps = 10;
+    m_defaultBg = GetBackgroundColour();
+    m_flashTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, &PANEL_SCH_SELECTION_FILTER::onFlashTimer, this );
+    aParent->Bind( EVT_SCH_SELECTION_FILTER_FLASH, &PANEL_SCH_SELECTION_FILTER::OnFlashEvent, this );
 }
 
 
 PANEL_SCH_SELECTION_FILTER::~PANEL_SCH_SELECTION_FILTER()
 {
+    // Stop any active flashing
+    m_flashTimer.Stop();
+    if( !m_flashCounters.empty() )
+    {
+        Unbind( wxEVT_PAINT, &PANEL_SCH_SELECTION_FILTER::onPanelPaint, this );
+    }
+    m_flashCounters.clear();
+
     m_frame->Unbind( EDA_LANG_CHANGED, &PANEL_SCH_SELECTION_FILTER::OnLanguageChanged, this );
+    m_frame->Unbind( EVT_SCH_SELECTION_FILTER_FLASH, &PANEL_SCH_SELECTION_FILTER::OnFlashEvent, this );
 }
 
 
@@ -219,4 +238,128 @@ void PANEL_SCH_SELECTION_FILTER::OnLanguageChanged( wxCommandEvent& aEvent )
     m_cbAllItems->GetParent()->Layout();
 
     aEvent.Skip();
+}
+
+
+void PANEL_SCH_SELECTION_FILTER::flashCheckbox( wxCheckBox* aBox )
+{
+    if( !aBox )
+        return;
+
+    // If already flashing, just reset the counter
+    if( m_flashCounters.find( aBox ) != m_flashCounters.end() )
+    {
+        m_flashCounters[aBox] = m_flashSteps;
+        return;
+    }
+
+    m_flashCounters[aBox] = m_flashSteps;
+    m_defaultBg = aBox->GetBackgroundColour();
+
+    // Bind paint event to this panel if not already bound
+    if( m_flashCounters.size() == 1 )
+    {
+        Bind( wxEVT_PAINT, &PANEL_SCH_SELECTION_FILTER::onPanelPaint, this );
+    }
+
+    Refresh();
+}
+
+
+void PANEL_SCH_SELECTION_FILTER::onFlashTimer( wxTimerEvent& aEvent )
+{
+    for( auto it = m_flashCounters.begin(); it != m_flashCounters.end(); )
+    {
+        int step = --( it->second );
+
+        if( step <= 0 )
+            it = m_flashCounters.erase( it );
+        else
+            ++it;
+    }
+
+    if( m_flashCounters.empty() )
+    {
+        m_flashTimer.Stop();
+        // Unbind paint event when no more flashing
+        Unbind( wxEVT_PAINT, &PANEL_SCH_SELECTION_FILTER::onPanelPaint, this );
+    }
+
+    Refresh();
+}
+
+
+void PANEL_SCH_SELECTION_FILTER::onPanelPaint( wxPaintEvent& aEvent )
+{
+    wxPaintDC dc( this );
+
+    // First, let the default painting happen
+    aEvent.Skip();
+
+    // Then draw our highlights on top
+    for( auto& pair : m_flashCounters )
+    {
+        wxCheckBox* checkbox = pair.first;
+        int step = pair.second;
+
+        if( step > 0 )
+        {
+            // Get the checkbox position relative to this panel
+            wxPoint checkboxPos = checkbox->GetPosition();
+            wxSize checkboxSize = checkbox->GetSize();
+            wxRect checkboxRect( checkboxPos, checkboxSize );
+
+            // Calculate blended color based on current flash step
+            wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+            wxColour blend(
+                ( highlight.Red() * step + m_defaultBg.Red() * ( m_flashSteps - step ) ) / m_flashSteps,
+                ( highlight.Green() * step + m_defaultBg.Green() * ( m_flashSteps - step ) ) / m_flashSteps,
+                ( highlight.Blue() * step + m_defaultBg.Blue() * ( m_flashSteps - step ) ) / m_flashSteps );
+
+            // Draw semi-transparent overlay
+            wxColour overlayColor( blend.Red(), blend.Green(), blend.Blue(), 128 );
+            dc.SetBrush( wxBrush( overlayColor ) );
+            dc.SetPen( wxPen( overlayColor ) );
+            dc.DrawRectangle( checkboxRect );
+        }
+    }
+}
+
+
+void PANEL_SCH_SELECTION_FILTER::OnFlashEvent( SCH_SELECTION_FILTER_EVENT& aEvent )
+{
+    const SCH_SELECTION_FILTER_OPTIONS& aOptions = aEvent.m_options;
+
+    if( aOptions.lockedItems )
+        flashCheckbox( m_cbLockedItems );
+
+    if( aOptions.symbols )
+        flashCheckbox( m_cbSymbols );
+
+    if( aOptions.text )
+        flashCheckbox( m_cbText );
+
+    if( aOptions.wires )
+        flashCheckbox( m_cbWires );
+
+    if( aOptions.labels )
+        flashCheckbox( m_cbLabels );
+
+    if( aOptions.pins )
+        flashCheckbox( m_cbPins );
+
+    if( aOptions.graphics )
+        flashCheckbox( m_cbGraphics );
+
+    if( aOptions.images )
+        flashCheckbox( m_cbImages );
+
+    if( aOptions.ruleAreas )
+        flashCheckbox( m_cbRuleAreas );
+
+    if( aOptions.otherItems )
+        flashCheckbox( m_cbOtherItems );
+
+    if( !m_flashCounters.empty() )
+        m_flashTimer.Start( 50 );
 }

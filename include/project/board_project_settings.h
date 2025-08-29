@@ -86,6 +86,21 @@ struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
         return ( footprints && text && tracks && vias && pads && graphics && zones
                  && keepouts && dimensions && otherItems );
     }
+
+    void SetAll( bool aState )
+    {
+        footprints  = aState;
+        text        = aState;
+        tracks      = aState;
+        vias        = aState;
+        pads        = aState;
+        graphics    = aState;
+        zones       = aState;
+        keepouts    = aState;
+        dimensions  = aState;
+        otherItems  = aState;
+        lockedItems = aState;
+    }
 };
 
 /**

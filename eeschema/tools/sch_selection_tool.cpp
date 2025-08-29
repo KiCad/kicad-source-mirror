@@ -30,6 +30,7 @@
 #include <sch_actions.h>
 #include <sch_collectors.h>
 #include <sch_selection_tool.h>
+#include <sch_base_frame.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -480,9 +481,13 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 schframe->ClearFocus();
 
             // Collect items at the clicked location (doesn't select them yet)
-            SCH_COLLECTOR collector;
+            SCH_COLLECTOR                collector;
+            SCH_SELECTION_FILTER_OPTIONS rejected;
+
             CollectHits( collector, evt->Position() );
-            narrowSelection( collector, evt->Position(), false );
+            size_t preFilterCount = collector.GetCount();
+            rejected.SetAll( false );
+            narrowSelection( collector, evt->Position(), false, false, &rejected );
 
             if( m_selection.GetSize() != 0 && dynamic_cast<SCH_TABLECELL*>( m_selection.GetItem( 0 ) ) && m_additive
                 && collector.GetCount() == 1 && dynamic_cast<SCH_TABLECELL*>( collector[0] ) )
@@ -564,6 +569,12 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( !selCancelled )
             {
+                if( collector.GetCount() == 0 && preFilterCount > 0 )
+                {
+                    if( SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( m_frame ) )
+                        frame->HighlightSelectionFilter( rejected );
+                }
+
                 selectPoint( collector, evt->Position(), nullptr, nullptr, m_additive,
                              m_subtractive, m_exclusive_or );
                 m_selection.SetIsHover( false );
@@ -1028,7 +1039,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( CollectHits( collector, evt->Position() ) )
             {
-                narrowSelection( collector, evt->Position(), false );
+                narrowSelection( collector, evt->Position(), false, false, nullptr );
 
                 if( collector.GetCount() == 1 && !hasModifier() )
                 {
@@ -1339,7 +1350,8 @@ bool SCH_SELECTION_TOOL::CollectHits( SCH_COLLECTOR& aCollector, const VECTOR2I&
 
 
 void SCH_SELECTION_TOOL::narrowSelection( SCH_COLLECTOR& collector, const VECTOR2I& aWhere,
-                                          bool aCheckLocked, bool aSelectedOnly )
+                                          bool aCheckLocked, bool aSelectedOnly,
+                                          SCH_SELECTION_FILTER_OPTIONS* aRejected )
 {
     SYMBOL_EDIT_FRAME* symbolEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
@@ -1378,11 +1390,13 @@ void SCH_SELECTION_TOOL::narrowSelection( SCH_COLLECTOR& collector, const VECTOR
 
         if( aCheckLocked && collector[i]->IsLocked() )
         {
+            if( aRejected )
+                aRejected->lockedItems = true;
             collector.Remove( i );
             continue;
         }
 
-        if( !itemPassesFilter( collector[i] ) )
+        if( !itemPassesFilter( collector[i], aRejected ) )
         {
             collector.Remove( i );
             continue;
@@ -1539,7 +1553,18 @@ bool SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere,
     if( !CollectHits( collector, aWhere, aScanTypes ) )
         return false;
 
-    narrowSelection( collector, aWhere, aCheckLocked, aSubtract );
+    size_t preFilterCount = collector.GetCount();
+    SCH_SELECTION_FILTER_OPTIONS rejected;
+    rejected.SetAll( false );
+    narrowSelection( collector, aWhere, aCheckLocked, aSubtract, &rejected );
+
+    if( collector.GetCount() == 0 && preFilterCount > 0 )
+    {
+        if( SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( m_frame ) )
+            frame->HighlightSelectionFilter( rejected );
+
+        return false;
+    }
 
     return selectPoint( collector, aWhere, aItem, aSelectionCancelledFlag, aAdd, aSubtract,
                         aExclusiveOr );
@@ -1589,7 +1614,7 @@ int SCH_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : collection )
     {
-        if( Selectable( item ) && itemPassesFilter( item ) )
+        if( Selectable( item ) && itemPassesFilter( item, nullptr ) )
         {
             if( item->Type() == SCH_LINE_T )
                 item->SetFlags( STARTPOINT | ENDPOINT );
@@ -1949,7 +1974,7 @@ void SCH_SELECTION_TOOL::filterCollectedItems( SCH_COLLECTOR& aCollector, bool a
 
     for( EDA_ITEM* item : aCollector )
     {
-        if( !itemPassesFilter( item ) )
+        if( !itemPassesFilter( item, nullptr ) )
             rejected.insert( item );
     }
 
@@ -1958,7 +1983,7 @@ void SCH_SELECTION_TOOL::filterCollectedItems( SCH_COLLECTOR& aCollector, bool a
 }
 
 
-bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
+bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem, SCH_SELECTION_FILTER_OPTIONS* aRejected )
 {
     if( !aItem )
         return false;
@@ -1977,20 +2002,32 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     case SCH_SYMBOL_T:
     case SCH_SHEET_T:
         if( !m_filter.symbols )
+        {
+            if( aRejected )
+                aRejected->symbols = true;
             return false;
+        }
 
         break;
 
     case SCH_PIN_T:
     case SCH_SHEET_PIN_T:
         if( !m_filter.pins )
+        {
+            if( aRejected )
+                aRejected->pins = true;
             return false;
+        }
 
         break;
 
     case SCH_JUNCTION_T:
         if( !m_filter.wires )
+        {
+            if( aRejected )
+                aRejected->wires = true;
             return false;
+        }
 
         break;
 
@@ -2001,13 +2038,21 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
         case LAYER_WIRE:
         case LAYER_BUS:
             if( !m_filter.wires )
+            {
+                if( aRejected )
+                    aRejected->wires = true;
                 return false;
+            }
 
             break;
 
         default:
             if( !m_filter.graphics )
+            {
+                if( aRejected )
+                    aRejected->graphics = true;
                 return false;
+            }
         }
 
        break;
@@ -2015,7 +2060,11 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
 
     case SCH_SHAPE_T:
         if( !m_filter.graphics )
+        {
+            if( aRejected )
+                aRejected->graphics = true;
             return false;
+        }
 
         break;
 
@@ -2025,7 +2074,11 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     case SCH_TABLECELL_T:
     case SCH_FIELD_T:
         if( !m_filter.text )
+        {
+            if( aRejected )
+                aRejected->text = true;
             return false;
+        }
 
         break;
 
@@ -2033,25 +2086,41 @@ bool SCH_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
         if( !m_filter.labels )
+        {
+            if( aRejected )
+                aRejected->labels = true;
             return false;
+        }
 
         break;
 
     case SCH_BITMAP_T:
         if( !m_filter.images )
+        {
+            if( aRejected )
+                aRejected->images = true;
             return false;
+        }
 
         break;
 
     case SCH_RULE_AREA_T:
         if( !m_filter.ruleAreas )
+        {
+            if( aRejected )
+                aRejected->ruleAreas = true;
             return false;
+        }
 
         break;
 
     default:
         if( !m_filter.otherItems )
+        {
+            if( aRejected )
+                aRejected->otherItems = true;
             return false;
+        }
 
         break;
     }
@@ -2335,7 +2404,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
 
-                if( Selectable( item ) && itemPassesFilter( item ) && !item->GetParent()->HasFlag( SELECTION_CANDIDATE )
+                if( Selectable( item ) && itemPassesFilter( item, nullptr ) && !item->GetParent()->HasFlag( SELECTION_CANDIDATE )
                     && item->HitTest( selectionRect, !isGreedy ) )
                 {
                     selectItem( item, 0 );

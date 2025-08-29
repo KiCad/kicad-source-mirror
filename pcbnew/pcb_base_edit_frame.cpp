@@ -30,6 +30,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <widgets/panel_selection_filter.h>
 #include <pgm_base.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -405,4 +406,11 @@ void PCB_BASE_EDIT_FRAME::configureToolbars()
         };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::layerSelector, layerSelectorFactory );
+}
+
+
+void PCB_BASE_EDIT_FRAME::HighlightSelectionFilter( const PCB_SELECTION_FILTER_OPTIONS& aOptions )
+{
+    PCB_SELECTION_FILTER_EVENT evt( aOptions );
+    wxPostEvent( this, evt );
 }

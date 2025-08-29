@@ -879,7 +879,7 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
                 }
 
                 selectionTool->FilterCollectorForHierarchy( collector, false );
-                selectionTool->FilterCollectedItems( collector, false );
+                selectionTool->FilterCollectedItems( collector, false, nullptr );
 
                 if( collector.GetCount() > 1 )
                     selectionTool->GuessSelectionCandidates( collector, aPos );
