@@ -1509,6 +1509,15 @@ private:
     void splitCollinearOutlines();
 
     /**
+     * Check if two line segments are collinear and overlap.
+     *
+     * @param aSegA First line segment
+     * @param aSegB Second line segment
+     * @return true if segments are collinear and overlap
+     */
+    bool isExteriorWaist( const SEG& aSegA, const SEG& aSegB ) const;
+
+    /**
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon
      * simplification (merging overlapping  polygons).
      *
