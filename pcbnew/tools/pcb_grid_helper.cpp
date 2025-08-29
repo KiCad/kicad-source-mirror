@@ -26,6 +26,7 @@
 #include "pcb_grid_helper.h"
 
 #include <functional>
+#include <algorithm>
 
 #include <advanced_config.h>
 #include <pcb_dimension.h>
@@ -539,13 +540,17 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             BOX2ISafe( VECTOR2D( aOrigin ) - snapRange / 2.0, VECTOR2D( snapRange, snapRange ) );
 
     clearAnchors();
-    m_snapItem = std::nullopt;
 
     const std::vector<BOARD_ITEM*> visibleItems = queryVisible( visibilityHorizon, aSkip );
     computeAnchors( visibleItems, aOrigin, false, nullptr, &aLayers, false );
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
+
+    const int hysteresisWorld =
+            KiROUND( m_toolMgr->GetView()->ToWorld( ADVANCED_CFG::GetCfg().m_SnapHysteresis ) );
+    const int snapIn = std::max( 0, snapRange - hysteresisWorld );
+    const int snapOut = snapRange + hysteresisWorld;
 
     if( KIGFX::ANCHOR_DEBUG* ad = enableAndGetAnchorDebug(); ad )
     {
@@ -563,6 +568,13 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     if( nearest )
         snapDist = nearest->Distance( aOrigin );
+
+    if( m_snapItem )
+    {
+        int existingDist = m_snapItem->Distance( aOrigin );
+        if( !snapDist || existingDist < *snapDist )
+            snapDist = existingDist;
+    }
 
     showConstructionGeometry( m_enableSnap );
 
@@ -635,8 +647,27 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             }
         }
 
+        if( m_snapItem )
+        {
+            int dist = m_snapItem->Distance( aOrigin );
+
+            if( dist <= snapOut )
+            {
+                if( nearest && ptIsReferenceOnly( nearest->pos ) &&
+                        nearest->Distance( aOrigin ) <= snapRange )
+                    snapLineManager.SetSnapLineOrigin( nearest->pos );
+
+                snapLineManager.SetSnappedAnchor( m_snapItem->pos );
+                updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
+
+                return m_snapItem->pos;
+            }
+
+            m_snapItem = std::nullopt;
+        }
+
         // If there's a snap anchor within range, use it if we can
-        if( nearest && nearest->Distance( aOrigin ) <= snapRange )
+        if( nearest && nearest->Distance( aOrigin ) <= snapIn )
         {
             const bool anchorIsConstructed = nearest->flags & ANCHOR_FLAGS::CONSTRUCTED;
 

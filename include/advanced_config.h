@@ -702,6 +702,15 @@ public:
     bool m_EnableSnapAnchorsDebug;
 
     /**
+     * Hysteresis in pixels used for snap activation and deactivation.
+     *
+     * Setting name: "SnapHysteresis"
+     * Default value: 5
+     * Valid values: 0 to 100
+     */
+    int m_SnapHysteresis;
+
+    /**
      * Minimum overlapping angle for which an arc is considered to be parallel
      * to its paired arc.
      *
