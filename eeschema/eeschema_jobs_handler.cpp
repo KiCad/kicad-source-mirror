@@ -77,6 +77,9 @@
 #include <dialogs/dialog_erc_job_config.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <confirm.h>
+#include <project_sch.h>
+
+#include <libraries/symbol_library_adapter.h>
 
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
@@ -1163,6 +1166,11 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     std::shared_ptr<SHEETLIST_ERC_ITEMS_PROVIDER> markersProvider =
             std::make_shared<SHEETLIST_ERC_ITEMS_PROVIDER>( sch );
+
+    // Running ERC requires libraries be loaded, so make sure they have been
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &sch->Project() );
+    adapter->AsyncLoad();
+    adapter->BlockUntilLoaded();
 
     ERC_TESTER ercTester( sch );
 

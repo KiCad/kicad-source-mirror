@@ -1470,7 +1470,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             std::optional<const LIBRARY_TABLE_ROW*> optRow =
                     manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, libName );
 
-            if( !optRow || !adapter->HasLibrary( libName, true ) )
+            if( !optRow || ( *optRow )->Disabled() )
             {
                 if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {

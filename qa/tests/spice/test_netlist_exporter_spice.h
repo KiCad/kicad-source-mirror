@@ -71,7 +71,7 @@ public:
     {
     }
 
-    ~TEST_NETLIST_EXPORTER_SPICE_FIXTURE()
+    virtual ~TEST_NETLIST_EXPORTER_SPICE_FIXTURE()
     {
         using namespace boost::unit_test;
 

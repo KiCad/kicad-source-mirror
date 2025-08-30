@@ -19,6 +19,7 @@
  */
 
 #include <fmt/format.h>
+#include <mock_pgm_base.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pgm_base.h>
 #include "eeschema_test_utils.h"

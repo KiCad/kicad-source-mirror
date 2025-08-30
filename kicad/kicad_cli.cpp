@@ -29,6 +29,7 @@
 #include <wx/wxcrtvararg.h>     //for wxPrintf
 
 #include <kiway.h>
+#include <libraries/library_manager.h>
 #include <string_utils.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
@@ -345,6 +346,8 @@ bool PGM_KICAD::OnPgmInit()
     GetSettingsManager().RegisterSettings( PgmSettings() );
     GetSettingsManager().SetKiway( &Kiway );
     m_bm.Init();
+
+    GetLibraryManager().LoadGlobalTables();
 
     return true;
 }

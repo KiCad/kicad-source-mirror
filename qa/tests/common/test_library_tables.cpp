@@ -21,9 +21,11 @@
 #include <filesystem>
 #include <fstream>
 
+#include <mock_pgm_base.h>
 #include <richio.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <settings/settings_manager.h>
 #include <pegtl/contrib/analyze.hpp>
 
 #include <libraries/library_manager.h>
