@@ -716,8 +716,9 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void onRoundedRectChanged( wxCommandEvent& event ) override;
+    void onCornerRadius( wxCommandEvent& event ) override;
     void onLayerSelection( wxCommandEvent& event ) override;
-
     void onTechLayersChanged( wxCommandEvent& event ) override;
 
     bool Validate() override;
@@ -748,6 +749,7 @@ private:
     PCB_BASE_EDIT_FRAME*  m_parent;
     PCB_SHAPE*            m_item;
 
+    UNIT_BINDER           m_cornerRadius;
     UNIT_BINDER           m_thickness;
     UNIT_BINDER           m_solderMaskMargin;
 
@@ -842,6 +844,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
         m_parent( aParent ),
         m_item( aShape ),
+        m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
         m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
         m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
         m_workingCopy( *m_item )
@@ -909,6 +912,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         showPage( *m_gbsLineByEnds, true );
         showPage( *m_gbsLineByLengthAngle );
         showPage( *m_gbsLineByStartMid );
+
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::ARC:
@@ -924,6 +930,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         showPage( *m_gbsArcByCSA, true );
         showPage( *m_gbsArcBySME );
+
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::CIRCLE:
@@ -937,6 +946,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         showPage( *m_gbsCircleCenterRadius, true );
         showPage( *m_gbsCircleCenterPoint );
+
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::BEZIER:
@@ -953,6 +965,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     case SHAPE_T::POLY:
         m_notebookShapeDefs->Hide();
         // Nothing to do here...yet
+
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::UNDEFINED:
@@ -1061,6 +1076,19 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 }
 
 
+void DIALOG_SHAPE_PROPERTIES::onRoundedRectChanged(wxCommandEvent &event)
+{
+    if( !m_cbRoundRect->GetValue() )
+        m_cornerRadius.ChangeValue( wxEmptyString );
+}
+
+
+void DIALOG_SHAPE_PROPERTIES::onCornerRadius(wxCommandEvent &event)
+{
+    m_cbRoundRect->SetValue( true );
+}
+
+
 void DIALOG_SHAPE_PROPERTIES::onLayerSelection( wxCommandEvent& event )
 {
     if( m_LayerSelectionCtrl->GetLayerSelection() >= 0 )
@@ -1081,12 +1109,18 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     if( !m_item )
         return false;
 
-    // Not al shapes have a syncer (e.g. polygons)
+    // Not all shapes have a syncer (e.g. polygons)
     if( m_geomSync )
         m_geomSync->SetShape( *m_item );
 
     m_fillCtrl->SetSelection( m_item->GetFillModeProp() );
     m_locked->SetValue( m_item->IsLocked() );
+
+    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
+    {
+        m_cbRoundRect->SetValue( m_item->GetCornerRadius() > 0 );
+        m_cornerRadius.ChangeValue( m_item->GetCornerRadius() );
+    }
 
     m_thickness.SetValue( m_item->GetStroke().GetWidth() );
 
@@ -1136,6 +1170,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     *m_item = m_workingCopy;
 
     bool wasLocked = m_item->IsLocked();
+
+    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
+        m_item->SetCornerRadius( m_cbRoundRect->GetValue() ? m_cornerRadius.GetIntValue() : 0 );
 
     m_item->SetFillModeProp( (UI_FILL_MODE) m_fillCtrl->GetSelection() );
     m_item->SetLocked( m_locked->GetValue() );
@@ -1205,14 +1242,20 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
         break;
 
     case SHAPE_T::RECTANGLE:
+    {
         if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
 
-        if( m_item->GetCornerRadius() * 2 > std::min( m_item->GetRectangleWidth(),
-                                                      m_item->GetRectangleHeight() ) )
+        int shortSide = std::min( m_item->GetRectangleWidth(), m_item->GetRectangleHeight() );
+
+        if( m_cornerRadius.GetIntValue() * 2 > shortSide )
+        {
             errors.Add( _( "Corner radius must be less than or equal to half the smaller side." ) );
+            m_cornerRadius.SetValue( KiROUND( shortSide / 2.0 ) );
+        }
 
         break;
+    }
 
     case SHAPE_T::POLY:
         if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )

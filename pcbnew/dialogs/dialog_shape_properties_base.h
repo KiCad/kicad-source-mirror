@@ -68,8 +68,12 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxGridBagSizer* m_gbsCircleCenterPoint;
 		wxPanel* m_bezier;
 		wxGridBagSizer* m_gbsBezier;
-		wxBoxSizer* m_upperSizer;
 		wxCheckBox* m_locked;
+		wxCheckBox* m_cbRoundRect;
+		wxStaticText* m_cornerRadiusLabel;
+		wxTextCtrl* m_cornerRadiusCtrl;
+		wxStaticText* m_cornerRadiusUnits;
+		wxBoxSizer* m_upperSizer;
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
@@ -77,10 +81,10 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapComboBox* m_lineStyleCombo;
 		wxStaticText* m_fillLabel;
 		wxChoice* m_fillCtrl;
-		wxStaticText* m_LayerLabel;
-		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxStaticText* m_netLabel;
 		NET_SELECTOR* m_netSelector;
+		wxStaticText* m_LayerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxStaticText* m_techLayersLabel;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_hasSolderMask;
@@ -92,6 +96,8 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_StandardButtonsSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onRoundedRectChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCornerRadius( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLayerSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTechLayersChanged( wxCommandEvent& event ) { event.Skip(); }
 
