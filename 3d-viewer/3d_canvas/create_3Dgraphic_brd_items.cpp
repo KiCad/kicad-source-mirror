@@ -47,6 +47,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_circle.h>
+#include <geometry/roundrect.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
 #include <utility>
@@ -649,16 +650,37 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             }
             else
             {
-                std::vector<VECTOR2I> pts = aShape->GetRectCorners();
+                if( aShape->GetCornerRadius() > 0 )
+                {
+                    ROUNDRECT rr( SHAPE_RECT( aShape->GetPosition(),
+                                              aShape->GetRectangleWidth(),
+                                              aShape->GetRectangleHeight() ),
+                                              aShape->GetCornerRadius() );
+                    SHAPE_POLY_SET poly;
+                    rr.TransformToPolygon( poly );
+                    SHAPE_LINE_CHAIN& r_outline = poly.Outline( 0 );
+                    r_outline.SetClosed( true );
 
-                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[0] ), TO_SFVEC2F( pts[1] ),
-                                     linewidth3DU, *aOwner );
-                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[1] ), TO_SFVEC2F( pts[2] ),
-                                     linewidth3DU, *aOwner );
-                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[2] ), TO_SFVEC2F( pts[3] ),
-                                     linewidth3DU, *aOwner );
-                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[3] ), TO_SFVEC2F( pts[0] ),
-                                     linewidth3DU, *aOwner );
+                    for( int ii = 0; ii < r_outline.PointCount(); ii++ )
+                    {
+                        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( r_outline.CPoint( ii ) ),
+                                             TO_SFVEC2F( r_outline.CPoint( ii+1 ) ),
+                                             linewidth3DU, *aOwner );
+                    }
+                }
+                else
+                {
+                    std::vector<VECTOR2I> pts = aShape->GetRectCorners();
+
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[0] ), TO_SFVEC2F( pts[1] ),
+                                         linewidth3DU, *aOwner );
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[1] ), TO_SFVEC2F( pts[2] ),
+                                         linewidth3DU, *aOwner );
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[2] ), TO_SFVEC2F( pts[3] ),
+                                         linewidth3DU, *aOwner );
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[3] ), TO_SFVEC2F( pts[0] ),
+                                         linewidth3DU, *aOwner );
+                }
             }
             break;
 
