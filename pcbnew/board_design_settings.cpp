@@ -1236,9 +1236,7 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
     auto drcName =
             []( int aCode ) -> std::string
             {
-                std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( aCode );
-                wxString name = item->GetSettingsKey();
-                return std::string( name.ToUTF8() );
+                return std::string( DRC_ITEM::Create( aCode )->GetSettingsKey().ToUTF8() );
             };
 
     const std::string rs = "rule_severities.";
