@@ -1211,8 +1211,8 @@ bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LA
 
 
 bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::string& aRefDes,
-                             bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
-                             VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels )
+                             bool aBottom, const VECTOR2D& aPosition, double aRotation, const VECTOR3D& aOffset,
+                             const VECTOR3D& aOrientation, const VECTOR3D& aScale, bool aSubstituteModels )
 {
     if( aFileNameUTF8.empty() )
     {
@@ -1324,9 +1324,8 @@ bool STEP_PCB_MODEL::isBoardOutlineValid()
 }
 
 
-bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
-                                              VECTOR2D aStartPoint, VECTOR2D aEndPoint,
-                                              double aWidth, double aThickness,
+bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR2D& aStartPoint,
+                                              const VECTOR2D& aEndPoint, double aWidth, double aThickness,
                                               double aZposition, const VECTOR2D& aOrigin )
 {
     // make a wide segment from 2 lines and 2 180 deg arcs
@@ -1915,7 +1914,7 @@ static bool colorFromStackup( BOARD_STACKUP_ITEM_TYPE aType, const wxString& aCo
 }
 
 
-bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool aPushBoardBody )
+bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigin, bool aPushBoardBody )
 {
     if( m_hasPCB )
     {
@@ -2745,8 +2744,8 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 }
 
 
-bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D aScale, TDF_Label& aLabel,
-                              bool aSubstituteModels, wxString* aErrorMessage )
+bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, const VECTOR3D& aScale, TDF_Label& aLabel,
+                                    bool aSubstituteModels, wxString* aErrorMessage )
 {
     std::string model_key = aFileNameUTF8 + "_" + std::to_string( aScale.x )
                             + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
@@ -2993,8 +2992,8 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 }
 
 
-bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation,
-                                       VECTOR3D aOffset, VECTOR3D aOrientation,
+bool STEP_PCB_MODEL::getModelLocation( bool aBottom, const VECTOR2D& aPosition, double aRotation,
+                                       const VECTOR3D& aOffset, const VECTOR3D& aOrientation,
                                        TopLoc_Location& aLocation )
 {
     // Order of operations:
@@ -3012,7 +3011,8 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     lPos.SetTranslation( gp_Vec( aPosition.x, -aPosition.y, 0.0 ) );
 
     // Offset board thickness
-    aOffset.z += BOARD_OFFSET;
+    VECTOR3D offset( aOffset );
+    offset.z += BOARD_OFFSET;
 
     double boardThickness;
     double boardZPos;
@@ -3033,7 +3033,7 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
 
     if( aBottom )
     {
-        aOffset.z -= bottom;
+        offset.z -= bottom;
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), aRotation );
         lPos.Multiply( lRot );
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 1.0, 0.0, 0.0 ) ), M_PI );
@@ -3041,13 +3041,13 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     }
     else
     {
-        aOffset.z += top;
+        offset.z += top;
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), aRotation );
         lPos.Multiply( lRot );
     }
 
     gp_Trsf lOff;
-    lOff.SetTranslation( gp_Vec( aOffset.x, aOffset.y, aOffset.z ) );
+    lOff.SetTranslation( gp_Vec( offset.x, offset.y, offset.z ) );
     lPos.Multiply( lOff );
 
     gp_Trsf lOrient;
@@ -3168,7 +3168,7 @@ bool STEP_PCB_MODEL::readVRML( Handle( TDocStd_Document ) & doc, const char* fna
 
 
 TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
-                                         Handle( TDocStd_Document ) & dest, VECTOR3D aScale )
+                                         Handle( TDocStd_Document ) & dest, const VECTOR3D& aScale )
 {
     // transfer data from Source into a top level component of Dest
     // s_assy = shape tool for the source

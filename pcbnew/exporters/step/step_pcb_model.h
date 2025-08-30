@@ -117,8 +117,8 @@ public:
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
-                       VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
-                       VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels = true );
+                       const VECTOR2D& aPosition, double aRotation, const VECTOR3D& aOffset,
+                       const VECTOR3D& aOrientation, const VECTOR3D& aScale, bool aSubstituteModels = true );
 
     void SetCopperColor( double r, double g, double b );
     void SetPadColor( double r, double g, double b );
@@ -134,7 +134,7 @@ public:
     void OCCSetMergeMaxDistance( double aDistance = OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
     // create the PCB model using the current outlines and drill holes
-    bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool aPushBoardBody );
+    bool CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigin, bool aPushBoardBody );
 
     /**
      * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms, or flat faces)
@@ -146,8 +146,7 @@ public:
      * @return true if success
      */
     bool MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
-                     bool aConvertToArcs, double aThickness, double aZposition,
-                     const VECTOR2D& aOrigin );
+                     bool aConvertToArcs, double aThickness, double aZposition, const VECTOR2D& aOrigin );
 
     /**
      * Make a segment shape based on start and end point. If they're too close, make a cylinder.
@@ -160,10 +159,9 @@ public:
      * @param aOrigin is the origin of the coordinates
      * @return true if success
      */
-    bool MakeShapeAsThickSegment( TopoDS_Shape& aShape,
-                                  VECTOR2D aStartPoint, VECTOR2D aEndPoint,
-                                  double aWidth, double aThickness, double aZposition,
-                                  const VECTOR2D& aOrigin );
+    bool MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR2D& aStartPoint,
+                                  const VECTOR2D& aEndPoint, double aWidth, double aThickness,
+                                  double aZposition, const VECTOR2D& aOrigin );
 
     /**
      * Make a polygonal shape to create a vertical wall.
@@ -175,9 +173,7 @@ public:
      * @param aOrigin is the origin of the coordinates
      * @return true if success
      */
-    bool MakePolygonAsWall( TopoDS_Shape& aShape,
-                            SHAPE_POLY_SET& aPolySet,
-                            double aHeight,
+    bool MakePolygonAsWall( TopoDS_Shape& aShape, SHAPE_POLY_SET& aPolySet, double aHeight,
                             double aZposition, const VECTOR2D& aOrigin );
 
 #ifdef SUPPORTS_IGES
@@ -222,9 +218,9 @@ private:
      */
     bool isBoardOutlineValid();
 
-    void getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
+    void getLayerZPlacement( PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
 
-    void getCopperLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
+    void getCopperLayerZPlacement( PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
 
     void getBoardBodyZPlacement( double& aZPos, double& aThickness );
 
@@ -240,11 +236,11 @@ private:
      * @param aErrorMessage (can be nullptr) is an error message to be displayed on error.
      * @return true if successfully loaded, false on error.
      */
-    bool getModelLabel( const std::string& aFileNameUTF8, VECTOR3D aScale, TDF_Label& aLabel,
+    bool getModelLabel( const std::string& aFileNameUTF8, const VECTOR3D& aScale, TDF_Label& aLabel,
                         bool aSubstituteModels, wxString* aErrorMessage = nullptr );
 
-    bool getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
-                           VECTOR3D aOrientation, TopLoc_Location& aLocation );
+    bool getModelLocation( bool aBottom, const VECTOR2D& aPosition, double aRotation, const VECTOR3D& aOffset,
+                           const VECTOR3D& aOrientation, TopLoc_Location& aLocation );
 
     bool readIGES( Handle( TDocStd_Document ) & aDoc, const char* aFname );
     bool readSTEP( Handle( TDocStd_Document ) & aDoc, const char* aFname );
@@ -253,7 +249,7 @@ private:
     bool performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool );
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source, Handle( TDocStd_Document ) & dest,
-                             VECTOR3D aScale );
+                             const VECTOR3D& aScale );
 
     bool CompressSTEP( wxString& inputFile, wxString& outputFile );
 

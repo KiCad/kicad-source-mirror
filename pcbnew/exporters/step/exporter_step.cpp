@@ -159,7 +159,7 @@ EXPORTER_STEP::~EXPORTER_STEP()
 }
 
 
-bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin,
+bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2D& aOrigin,
                                             SHAPE_POLY_SET* aClipPolygon )
 {
     bool              hasdata = false;
@@ -377,6 +377,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
         std::string fname( mname.ToUTF8() );
         std::string refName( aFootprint->GetReference().ToUTF8() );
+
         try
         {
             bool bottomSide = aFootprint->GetLayer() == B_Cu;
@@ -386,8 +387,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
             modelRot *= M_PI;
             modelRot /= 180.0;
 
-            if( m_pcbModel->AddComponent( fname, refName, bottomSide,
-                                          newpos,
+            if( m_pcbModel->AddComponent( fname, refName, bottomSide, newpos,
                                           aFootprint->GetOrientation().AsRadians(),
                                           fp_model.m_Offset, modelRot,
                                           fp_model.m_Scale, m_params.m_SubstModels ) )
@@ -410,7 +410,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 }
 
 
-bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
+bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, const VECTOR2D& aOrigin )
 {
     bool skipCopper = !m_params.m_ExportTracksVias
                       || ( !m_params.m_NetFilter.IsEmpty()
@@ -515,7 +515,7 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 }
 
 
-bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
+bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOrigin )
 {
     PCB_LAYER_ID pcblayer = aItem->GetLayer();
 
