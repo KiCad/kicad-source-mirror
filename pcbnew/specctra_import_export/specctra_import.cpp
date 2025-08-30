@@ -35,6 +35,7 @@
 
 #include <confirm.h>            // DisplayErrorMessage()
 #include <gestfich.h>           // EDA_FileSelector()
+#include <fast_float/fast_float.h>
 #include <pcb_edit_frame.h>
 #include <locale_io.h>
 #include <macros.h>
@@ -229,7 +230,9 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
             std::string diam_txt( aPadstack->m_padstack_id, drillStartNdx,
                                   drillEndNdx-drillStartNdx );
 
-            double drill_um = strtod( diam_txt.c_str(), nullptr );
+            double drill_um{};
+            auto   res = fast_float::from_chars( diam_txt.data(), diam_txt.data() + diam_txt.size(), drill_um,
+                                                 fast_float::chars_format::skip_white_space );
 
             drill_diam_iu = static_cast<int>( drill_um * ( pcbIUScale.IU_PER_MM / 1000.0 ) );
 
