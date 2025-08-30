@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-29 12:02+0000\n"
+"PO-Revision-Date: 2025-08-30 13:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -39840,7 +39840,7 @@ msgid ""
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
 "Kupferlagentyp für Freerouter und andere externe Router.\n"
-"Spannungs-/Stromlagen werden aus Freerouters Lagenmenüs entfernt."
+"Potentialflächen werden aus den Lagenmenüs von Freeroutern entfernt."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:482
 msgid "Off-board, front"
@@ -39954,7 +39954,7 @@ msgid ""
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Globaler Freiraum zwischen Pads und Lötpaste.\n"
+"Globaler Freiraum zwischen Pads und Lötstoppmaske.\n"
 "Dieser Wert kann durch lokale Werte eines Footprints oder Pads überschrieben "
 "werden.\n"
 "Positiver Freiraum bedeutet, dass die Lötstoppmaskenöffnung größer als das "
@@ -41833,7 +41833,7 @@ msgstr "Fehlender Footprint"
 
 #: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
-msgstr "Zusätzlicher Footprints"
+msgstr "Zusätzlicher Footprint"
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
@@ -42018,7 +42018,7 @@ msgstr "Fehlender Bedingungsausdruck."
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
 msgstr ""
-"Nicht erkanntes Element \"%s\". | Erwartete Ausdruck in Anführungszeichen."
+"Nicht erkanntes Element \"%s\". | Erwarteter Ausdruck in Anführungszeichen."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
@@ -42541,7 +42541,7 @@ msgstr "Keine Abstandsfläche erforderlich"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:675
 msgid "Pad clearance overridden."
-msgstr "Freiraum um Pads überschrieben."
+msgstr "Freiraum der Pads überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:682
 msgid "Solder mask expansion overridden."
@@ -50090,8 +50090,8 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:1196
 msgid "Group the selected items so that they are treated as a single item"
 msgstr ""
-"Gruppiert die ausgewählten Elemente, sodass diese als ein Element behandelt "
-"werden"
+"Gruppiert die ausgewählten Elemente, sodass diese als ein einziges Element "
+"behandelt werden"
 
 #: pcbnew/tools/pcb_actions.cpp:1203
 msgid "Ungroup any selected groups"
