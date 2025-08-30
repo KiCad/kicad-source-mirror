@@ -30,6 +30,7 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <jobs/job_sch_erc.h>
+#include <jobs/job_sch_upgrade.h>
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
@@ -55,6 +56,7 @@
 #include <settings/settings_manager.h>
 
 #include <sch_file_versions.h>
+#include <sch_io/sch_io.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 
 #include <netlist.h>
@@ -157,6 +159,11 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   DIALOG_ERC_JOB_CONFIG dlg( aParent, ercJob );
                   return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "upgrade", std::bind( &EESCHEMA_JOBS_HANDLER::JobUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
               } );
 }
 
@@ -1070,8 +1077,8 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
         if( m_progressReporter )
             m_progressReporter->KeepRefreshing();
 
-        bool shouldSave = upgradeJob->m_force
-                            || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
+        bool shouldSave =
+                upgradeJob->m_force || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
 
         if( shouldSave )
         {
@@ -1193,6 +1200,54 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         if( markersProvider->GetCount() > 0 )
             return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
     }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobUpgrade( JOB* aJob )
+{
+    JOB_SCH_UPGRADE* aUpgradeJob = dynamic_cast<JOB_SCH_UPGRADE*>( aJob );
+
+    if( aUpgradeJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    SCHEMATIC* sch = getSchematic( aUpgradeJob->m_filename );
+
+    if( !sch )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    bool shouldSave = aUpgradeJob->m_force;
+
+    if( sch->RootScreen()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
+        shouldSave = true;
+
+    if( !shouldSave )
+    {
+        m_reporter->Report( _( "Schematic file was not updated\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::SUCCESS;
+    }
+
+    // needs an absolute path
+    wxFileName schPath( aUpgradeJob->m_filename );
+    schPath.MakeAbsolute();
+    const wxString schFullPath = schPath.GetFullPath();
+
+    try
+    {
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        SCH_SHEET*          loadedSheet = pi->LoadSchematicFile( schFullPath, sch );
+        pi->SaveSchematicFile( schFullPath, loadedSheet, sch );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg =
+                wxString::Format( _( "Error saving schematic file '%s'.\n%s" ), schFullPath, ioe.What().GetData() );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    m_reporter->Report( _( "Successfully saved schematic file using the latest format\n" ), RPT_SEVERITY_INFO );
 
     return CLI::EXIT_CODES::SUCCESS;
 }

@@ -44,6 +44,7 @@
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_render.h>
 #include <jobs/job_pcb_drc.h>
+#include <jobs/job_pcb_upgrade.h>
 #include <lset.h>
 #include <cli/exit_codes.h>
 #include <exporters/place_file_exporter.h>
@@ -135,6 +136,11 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   DIALOG_RENDER_JOB dlg( aParent, renderJob );
                   return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "upgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
               } );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -2516,6 +2522,42 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
     return CLI::EXIT_CODES::SUCCESS;
 }
 
+int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
+{
+    JOB_PCB_UPGRADE* job = dynamic_cast<JOB_PCB_UPGRADE*>( aJob );
+
+    if( job == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    bool shouldSave = job->m_force;
+
+    try
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        BOARD*              brd = getBoard( job->m_filename );
+        if( brd->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
+            shouldSave = true;
+
+        if( shouldSave )
+        {
+            pi->SaveBoard( brd->GetFileName(), brd );
+            m_reporter->Report( _( "Successfully saved board file using the latest format\n" ), RPT_SEVERITY_INFO );
+        }
+        else
+        {
+            m_reporter->Report( _( "Board file was not updated\n" ), RPT_SEVERITY_ERROR );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg =
+                wxString::Format( _( "Error saving board file '%s'.\n%s" ), job->m_filename, ioe.What().GetData() );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
 
 DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )
 {
