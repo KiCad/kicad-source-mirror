@@ -1183,12 +1183,20 @@ bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LA
     double z_pos, thickness;
     getLayerZPlacement( aLayer, z_pos, thickness );
 
-    std::vector<TopoDS_Shape>& targetVec = IsCopperLayer( aLayer ) ? m_board_copper[aNetname]
-                                           : aLayer == F_SilkS || aLayer == B_SilkS
-                                                   ? m_board_silkscreen
-                                                   : m_board_soldermask;
+    std::vector<TopoDS_Shape>* targetVec = nullptr;
 
-    if( !MakeShapes( targetVec, *aPolyShapes, m_simplifyShapes, thickness, z_pos, aOrigin ) )
+    if( IsCopperLayer( aLayer ) )
+        targetVec = &m_board_copper[aNetname];
+    else if( aLayer == F_SilkS )
+        targetVec = &m_board_front_silk;
+    else if( aLayer == B_SilkS )
+        targetVec = &m_board_back_silk;
+    else if( aLayer == F_Mask )
+        targetVec = &m_board_front_mask;
+    else
+        targetVec = &m_board_back_mask;
+
+    if( !MakeShapes( *targetVec, *aPolyShapes, m_simplifyShapes, thickness, z_pos, aOrigin ) )
     {
         m_reporter->Report( wxString::Format( _( "Could not add shape (%d points) to copper layer %s." ),
                                               aPolyShapes->FullPointCount(),
@@ -2288,8 +2296,10 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     Quantity_ColorRGBA pad_color( m_padColor[0], m_padColor[1], m_padColor[2], 1.0 );
 
     Quantity_ColorRGBA board_color( 0.3f, 0.3f, 0.3f, 1.0f );
-    Quantity_ColorRGBA silk_color( 1.0f, 1.0f, 1.0f, 0.9f );
-    Quantity_ColorRGBA mask_color( 0.08f, 0.2f, 0.14f, 0.83f );
+    Quantity_ColorRGBA front_silk_color( 1.0f, 1.0f, 1.0f, 0.9f );
+    Quantity_ColorRGBA back_silk_color = front_silk_color;
+    Quantity_ColorRGBA front_mask_color( 0.08f, 0.2f, 0.14f, 0.83f );
+    Quantity_ColorRGBA back_mask_color = front_mask_color;
 
     // Get colors from stackup
     for( const BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
@@ -2302,24 +2312,26 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         if( item->GetBrdLayerId() == F_Mask || item->GetBrdLayerId() == B_Mask )
         {
             col.Darken( 0.2 );
-            mask_color.SetValues( col.r, col.g, col.b, col.a );
+
+            if( item->GetBrdLayerId() == F_Mask )
+                front_mask_color.SetValues( col.r, col.g, col.b, col.a );
+            else
+                back_mask_color.SetValues( col.r, col.g, col.b, col.a );
         }
 
-        if( item->GetBrdLayerId() == F_SilkS || item->GetBrdLayerId() == B_SilkS )
-            silk_color.SetValues( col.r, col.g, col.b, col.a );
+        if( item->GetBrdLayerId() == F_SilkS )
+            front_silk_color.SetValues( col.r, col.g, col.b, col.a );
+        else if( item->GetBrdLayerId() == B_SilkS )
+            back_silk_color.SetValues( col.r, col.g, col.b, col.a );
 
         if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->GetTypeName() == KEY_CORE )
             board_color.SetValues( col.r, col.g, col.b, col.a );
     }
 
-    if( !m_enabledLayers.Contains( F_Mask ) && !m_enabledLayers.Contains( B_Mask ) )
-    {
-        board_color = mask_color;
-        board_color.SetAlpha( 1.0 );
-    }
-
-    TDF_Label mask_mat = makeMaterial( "soldermask", mask_color, 0.0, 0.6 );
-    TDF_Label silk_mat = makeMaterial( "silkscreen", silk_color, 0.0, 0.9 );
+    TDF_Label front_mask_mat = makeMaterial( "soldermask", front_mask_color, 0.0, 0.6 );
+    TDF_Label back_mask_mat = makeMaterial( "soldermask", back_mask_color, 0.0, 0.6 );
+    TDF_Label front_silk_mat = makeMaterial( "silkscreen", front_silk_color, 0.0, 0.9 );
+    TDF_Label back_silk_mat = makeMaterial( "silkscreen", back_silk_color, 0.0, 0.9 );
     TDF_Label copper_mat = makeMaterial( "copper", copper_color, 1.0, 0.4 );
     TDF_Label pad_mat = makeMaterial( "pad", pad_color, 1.0, 0.4 );
     TDF_Label board_mat = makeMaterial( "board", board_color, 0.0, 0.8 );
@@ -2328,8 +2340,10 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     pushToAssemblyMap( m_board_copper_pads, pad_mat, "pad", true, true );
     pushToAssemblyMap( m_board_copper_vias, copper_mat, "via", true, true );
     pushToAssemblyMap( m_board_copper_fused, copper_mat, "copper", true, true );
-    pushToAssembly( m_board_silkscreen, silk_mat, "silkscreen", true );
-    pushToAssembly( m_board_soldermask, mask_mat, "soldermask", true );
+    pushToAssembly( m_board_front_silk, front_silk_mat, "silkscreen", true );
+    pushToAssembly( m_board_back_silk, back_silk_mat, "silkscreen", true );
+    pushToAssembly( m_board_front_mask, front_mask_mat, "soldermask", true );
+    pushToAssembly( m_board_back_mask, back_mask_mat, "soldermask", true );
 
     if( aPushBoardBody )
         pushToAssembly( m_board_outlines, board_mat, "PCB", false );

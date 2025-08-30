@@ -293,8 +293,10 @@ private:
     std::map<wxString, std::vector<TopoDS_Shape>> m_board_copper_fused;
 
     // Graphical items
-    std::vector<TopoDS_Shape> m_board_silkscreen;
-    std::vector<TopoDS_Shape> m_board_soldermask;
+    std::vector<TopoDS_Shape> m_board_front_silk;
+    std::vector<TopoDS_Shape> m_board_back_silk;
+    std::vector<TopoDS_Shape> m_board_front_mask;
+    std::vector<TopoDS_Shape> m_board_back_mask;
 
     // Data for pads. Key example: Pad_F_U2_1_GND
     std::map<wxString, std::vector<std::pair<gp_Pnt, TopoDS_Shape>>> m_pad_points;
