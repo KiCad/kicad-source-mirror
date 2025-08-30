@@ -595,15 +595,19 @@ if( MSVC )
         # /DEBUG: create PDB
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
         # /OPT:REF: omit unreferenced code
-        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF /MANIFEST:NO" )
-        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:REF /MANIFEST:NO" )
-        # /OPT:ICF: fold common data
-        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF /MANIFEST:NO" )
-        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:ICF /MANIFEST:NO" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:REF" )
+        # /MANIFEST:NO
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /MANIFEST:NO" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /MANIFEST:NO" )
 
         if( KICAD_MSVC_DYNDEOPT )
             string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /dynamicdeopt" )
             string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /dynamicdeopt" )
+        else()
+            # /OPT:ICF: fold common data
+            string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF" )
+            string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:ICF" )
         endif()
 
         if( KICAD_WIN32_LTCG )
@@ -612,6 +616,11 @@ if( MSVC )
             string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /LTCG" )
         endif()
     endforeach()
+
+    if( KICAD_MSVC_DYNDEOPT )
+        string( APPEND CMAKE_STATIC_LINKER_FLAGS_RELEASE " /dynamicdeopt" )
+        string( APPEND CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO " /dynamicdeopt" )
+    endif()
 
     # Let cl.exe parallelize builds
     if( KICAD_WIN32_BUILD_PARALLEL_CL_MP )
