@@ -1844,6 +1844,8 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
                 for( int i = 0; i < outline.PointCount() - 1; ++i )
                     effectiveShapes.emplace_back(
                             new SHAPE_SEGMENT( outline.CPoint( i ), outline.CPoint( i + 1 ), width ) );
+
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( outline.CPoint( outline.PointCount() - 1 ), outline.CPoint( 0 ), width ) );
             }
         }
         else

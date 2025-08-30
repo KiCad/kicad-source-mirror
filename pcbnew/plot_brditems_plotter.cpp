@@ -1102,7 +1102,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                 SHAPE_POLY_SET  poly;
                 poly.NewOutline();
 
-                for( int ii = 0; ii < outline.PointCount() - 1; ++ii )
+                for( int ii = 0; ii < outline.PointCount(); ++ii )
                     poly.Append( outline.CPoint( ii ) );
 
                 if( margin < 0 )
