@@ -38,6 +38,8 @@
 #include <geometry/roundrect.h>
 #include <geometry/geometry_utils.h>
 #include <macros.h>
+#include <algorithm>
+#include <properties/property_validators.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_item.h>
 #include <plotters/plotter.h>
@@ -444,7 +446,18 @@ int EDA_SHAPE::GetCornerRadius() const
 
 void EDA_SHAPE::SetCornerRadius( int aRadius )
 {
-    m_cornerRadius = aRadius;
+    if( m_shape == SHAPE_T::RECTANGLE )
+    {
+        int width = std::abs( GetRectangleWidth() );
+        int height = std::abs( GetRectangleHeight() );
+        int maxRadius = std::min( width, height ) / 2;
+
+        m_cornerRadius = std::clamp( aRadius, 0, maxRadius );
+    }
+    else
+    {
+        m_cornerRadius = aRadius;
+    }
 }
 
 
@@ -2704,7 +2717,32 @@ static struct EDA_SHAPE_DESC
                     &EDA_SHAPE::SetCornerRadius, &EDA_SHAPE::GetCornerRadius,
                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                     shapeProps )
-                .SetAvailableFunc( isRectangle );
+                .SetAvailableFunc( isRectangle )
+                .SetValidator( []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                               {
+                                   wxASSERT_MSG( aValue.CheckType<int>(),
+                                                 "Expecting int-containing value" );
+
+                                   int radius = aValue.As<int>();
+
+                                   EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem );
+
+                                   if( !shape )
+                                   {
+                                       wxLogDebug( wxT( "Corner Radius Validator: Not an EDA_SHAPE" ) );
+                                       return std::nullopt;
+                                   }
+
+                                   int maxRadius = std::min( shape->GetRectangleWidth(),
+                                                             shape->GetRectangleHeight() ) / 2;
+
+                                   if( radius > maxRadius )
+                                       return std::make_unique<VALIDATION_ERROR_TOO_LARGE<int>>( radius, maxRadius );
+                                   else if( radius < 0 )
+                                       return std::make_unique<VALIDATION_ERROR_TOO_SMALL<int>>( radius, 0 );
+
+                                   return std::nullopt;
+                               } );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ),

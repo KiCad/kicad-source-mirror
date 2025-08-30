@@ -41,6 +41,7 @@
 #include <tool/actions.h>
 #include <pcb_shape.h>
 #include <macros.h>
+#include <algorithm>
 #include <widgets/unit_binder.h>
 
 #include <tools/drawing_tool.h>
@@ -1206,6 +1207,10 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
     case SHAPE_T::RECTANGLE:
         if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
+
+        if( m_item->GetCornerRadius() * 2 > std::min( m_item->GetRectangleWidth(),
+                                                      m_item->GetRectangleHeight() ) )
+            errors.Add( _( "Corner radius must be less than or equal to half the smaller side." ) );
 
         break;
 
