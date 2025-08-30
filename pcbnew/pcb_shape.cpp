@@ -1055,9 +1055,8 @@ static struct PCB_SHAPE_DESC
                 .SetIsHiddenFromRulesEditor();
 
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Thermal Spoke Template" ),
-                                                            &PCB_SHAPE::SetIsProxyItem,
-                                                            &PCB_SHAPE::IsProxyItem ),
-                             groupPadPrimitives )
+                     &PCB_SHAPE::SetIsProxyItem, &PCB_SHAPE::IsProxyItem ),
+                     groupPadPrimitives )
                 .SetAvailableFunc( showSpokeTemplateProperty )
                 .SetIsHiddenFromRulesEditor();
 
@@ -1073,17 +1072,14 @@ static struct PCB_SHAPE_DESC
                 };
 
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Soldermask" ),
-                                                            &PCB_SHAPE::SetHasSolderMask,
-                                                            &PCB_SHAPE::HasSolderMask ),
-                             groupTechLayers )
+                    &PCB_SHAPE::SetHasSolderMask, &PCB_SHAPE::HasSolderMask ),
+                    groupTechLayers )
                 .SetAvailableFunc( isExternalCuLayer );
 
-        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, std::optional<int>>(
-                                                            _HKI( "Soldermask Margin Override" ),
-                                                            &PCB_SHAPE::SetLocalSolderMaskMargin,
-                                                            &PCB_SHAPE::GetLocalSolderMaskMargin,
-                                                            PROPERTY_DISPLAY::PT_SIZE ),
-                             groupTechLayers )
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
+                    &PCB_SHAPE::SetLocalSolderMaskMargin, &PCB_SHAPE::GetLocalSolderMaskMargin,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupTechLayers )
                 .SetAvailableFunc( isExternalCuLayer );
     }
 } _PCB_SHAPE_DESC;

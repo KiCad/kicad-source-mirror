@@ -363,31 +363,25 @@ static struct PCB_REFERENCE_IMAGE_DESC
                              &PCB_REFERENCE_IMAGE::GetImageScale ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
-                                     _HKI( "Transform Offset X" ),
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Transform Offset X" ),
                                      &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetX,
                                      &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetX,
                                      PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
-                                     _HKI( "Transform Offset Y" ),
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Transform Offset Y" ),
                                      &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetY,
                                      &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetY,
                                      PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
-                                     _HKI( "Width" ),
-                                     &PCB_REFERENCE_IMAGE::SetWidth,
-                                     &PCB_REFERENCE_IMAGE::GetWidth,
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Width" ),
+                                     &PCB_REFERENCE_IMAGE::SetWidth, &PCB_REFERENCE_IMAGE::GetWidth,
                                      PROPERTY_DISPLAY::PT_COORD ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
-                                     _HKI( "Height" ),
-                                     &PCB_REFERENCE_IMAGE::SetHeight,
-                                     &PCB_REFERENCE_IMAGE::GetHeight,
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Height" ),
+                                     &PCB_REFERENCE_IMAGE::SetHeight, &PCB_REFERENCE_IMAGE::GetHeight,
                                      PROPERTY_DISPLAY::PT_COORD ),
                              groupImage );
 

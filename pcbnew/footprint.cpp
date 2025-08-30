@@ -4248,9 +4248,9 @@ static struct FOOTPRINT_DESC
                     groupFields );
 
         // Note: Also used by DRC engine
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>(
-                                     _HKI( "Component Class" ), NO_SETTER( FOOTPRINT, wxString ),
-                                     &FOOTPRINT::GetComponentClassAsString ), groupFields )
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Component Class" ),
+                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetComponentClassAsString ),
+                    groupFields )
                 .SetIsHiddenFromLibraryEditors();
 
         const wxString groupAttributes = _HKI( "Attributes" );
@@ -4269,28 +4269,23 @@ static struct FOOTPRINT_DESC
 
         const wxString groupOverrides = _HKI( "Overrides" );
 
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>(
-                    _HKI( "Exempt From Courtyard Requirement" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exempt From Courtyard Requirement" ),
                     &FOOTPRINT::SetAllowMissingCourtyard, &FOOTPRINT::AllowMissingCourtyard ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>(
-                    _HKI( "Clearance Override" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>( _HKI( "Clearance Override" ),
                     &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>(
-                    _HKI( "Solderpaste Margin Override" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<double>>(
-                    _HKI( "Solderpaste Margin Ratio Override" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<double>>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
                     &FOOTPRINT::GetLocalSolderPasteMarginRatio,
                     PROPERTY_DISPLAY::PT_RATIO ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, ZONE_CONNECTION>(
-                    _HKI( "Zone Connection Style" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),
                     &FOOTPRINT::SetLocalZoneConnection, &FOOTPRINT::GetLocalZoneConnection ),
                     groupOverrides );
     }

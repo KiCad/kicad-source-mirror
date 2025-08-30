@@ -1405,12 +1405,10 @@ static struct EDA_TEXT_DESC
                 PROPERTY_DISPLAY::PT_SIZE ),
                 textProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_H_ALIGN_T>(
-                _HKI( "Horizontal Justification" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
                 &EDA_TEXT::SetHorizJustify, &EDA_TEXT::GetHorizJustify ),
                 textProps );
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_V_ALIGN_T>(
-                _HKI( "Vertical Justification" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
                 &EDA_TEXT::SetVertJustify, &EDA_TEXT::GetVertJustify ),
                 textProps );
 

@@ -1710,13 +1710,11 @@ static struct SCH_PIN_DESC
                     &SCH_PIN::SetNumber, &SCH_PIN::GetNumber ) )
                 .SetWriteableFunc( isSymbolEditor );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_PIN, ELECTRICAL_PINTYPE>(
-                    _HKI( "Electrical Type" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_PIN, ELECTRICAL_PINTYPE>( _HKI( "Electrical Type" ),
                     &SCH_PIN::SetType, &SCH_PIN::GetType ) )
                 .SetWriteableFunc( isSymbolEditor );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_PIN, GRAPHIC_PINSHAPE>(
-                    _HKI( "Graphic Style" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_PIN, GRAPHIC_PINSHAPE>( _HKI( "Graphic Style" ),
                     &SCH_PIN::SetShape, &SCH_PIN::GetShape ) )
                 .SetWriteableFunc( isSymbolEditor );
 

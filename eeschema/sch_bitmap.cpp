@@ -296,47 +296,40 @@ static struct SCH_BITMAP_DESC
         REGISTER_TYPE( SCH_BITMAP );
         propMgr.InheritsAfter( TYPE_HASH( SCH_BITMAP ), TYPE_HASH( SCH_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Position X" ), &SCH_BITMAP::SetX,
-                                                            &SCH_BITMAP::GetX,
-                                                            PROPERTY_DISPLAY::PT_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Position X" ),
+                                     &SCH_BITMAP::SetX, &SCH_BITMAP::GetX,
+                                     PROPERTY_DISPLAY::PT_COORD ) );
 
 
-        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Position Y" ), &SCH_BITMAP::SetY,
-                                                            &SCH_BITMAP::GetY,
-                                                            PROPERTY_DISPLAY::PT_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Position Y" ),
+                                     &SCH_BITMAP::SetY, &SCH_BITMAP::GetY,
+                                     PROPERTY_DISPLAY::PT_COORD ) );
 
         const wxString groupImage = _HKI( "Image Properties" );
 
         propMgr.AddProperty( new PROPERTY<SCH_BITMAP, double>( _HKI( "Scale" ),
-                                                               &SCH_BITMAP::SetImageScale,
-                                                               &SCH_BITMAP::GetImageScale ),
+                                     &SCH_BITMAP::SetImageScale, &SCH_BITMAP::GetImageScale ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
-                                     _HKI( "Transform Offset X" ),
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Transform Offset X" ),
                                      &SCH_BITMAP::SetTransformOriginOffsetX,
                                      &SCH_BITMAP::GetTransformOriginOffsetX,
                                      PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
-                                     _HKI( "Transform Offset Y" ),
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Transform Offset Y" ),
                                      &SCH_BITMAP::SetTransformOriginOffsetY,
                                      &SCH_BITMAP::GetTransformOriginOffsetY,
                                      PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
-                                     _HKI( "Width" ),
-                                     &SCH_BITMAP::SetWidth,
-                                     &SCH_BITMAP::GetWidth,
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Width" ),
+                                     &SCH_BITMAP::SetWidth, &SCH_BITMAP::GetWidth,
                                      PROPERTY_DISPLAY::PT_COORD ),
                              groupImage );
 
-        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
-                                     _HKI( "Height" ),
-                                     &SCH_BITMAP::SetHeight,
-                                     &SCH_BITMAP::GetHeight,
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Height" ),
+                                     &SCH_BITMAP::SetHeight, &SCH_BITMAP::GetHeight,
                                      PROPERTY_DISPLAY::PT_COORD ),
                              groupImage );
     }
