@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-29 17:40+0000\n"
+"PO-Revision-Date: 2025-08-30 20:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -24093,7 +24093,7 @@ msgstr "Pins von Schaltplanblatt einfügen"
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
 msgstr ""
-"Schaltplanbatt-Pins aus vorhandenen hierarchischen Bezeichnern auf diesem "
+"Schaltplanblatt-Pins aus vorhandenen hierarchischen Bezeichnern auf diesem "
 "Schaltplanblatt hinzufügen"
 
 #: eeschema/tools/sch_actions.cpp:584
@@ -41496,7 +41496,7 @@ msgid ""
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
 "Kupferlagentyp für Freerouter und andere externe Router.\n"
-"Spannungs-/Stromlagen werden aus Freerouters Lagenmenüs entfernt."
+"Potentialflächen werden aus den Lagenmenüs von Freeroutern entfernt."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:537
 msgid "Off-board, front"
@@ -41612,7 +41612,7 @@ msgid ""
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Globaler Freiraum zwischen Pads und Lötpaste.\n"
+"Globaler Freiraum zwischen Pads und Lötstoppmaske.\n"
 "Dieser Wert kann durch lokale Werte eines Footprints oder Pads überschrieben "
 "werden.\n"
 "Positiver Freiraum bedeutet, dass die Lötstoppmaskenöffnung größer als das "
@@ -43669,7 +43669,7 @@ msgstr "Fehlender Footprint"
 
 #: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
-msgstr "Zusätzlicher Footprints"
+msgstr "Zusätzlicher Footprint"
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
@@ -43858,7 +43858,7 @@ msgstr "Fehlender Bedingungsausdruck."
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
 msgstr ""
-"Nicht erkanntes Element \"%s\". | Erwartete Ausdruck in Anführungszeichen."
+"Nicht erkanntes Element \"%s\". | Erwarteter Ausdruck in Anführungszeichen."
 
 #: pcbnew/drc/drc_rule_parser.cpp:334
 msgid "'layer' keyword already present."
