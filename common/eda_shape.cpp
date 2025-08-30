@@ -439,10 +439,12 @@ int EDA_SHAPE::GetRectangleWidth() const
     }
 }
 
+
 int EDA_SHAPE::GetCornerRadius() const
 {
     return m_cornerRadius;
 }
+
 
 void EDA_SHAPE::SetCornerRadius( int aRadius )
 {
@@ -2240,6 +2242,7 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     SWAPITEM( m_bezierC2 );
     SWAPITEM( m_bezierPoints );
     SWAPITEM( m_poly );
+    SWAPITEM( m_cornerRadius );
     SWAPITEM( m_fill );
     SWAPITEM( m_fillColor );
     SWAPITEM( m_editState );
@@ -2263,7 +2266,11 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 
     TEST( (int) m_shape, (int) aOther->m_shape );
 
-    if( m_shape == SHAPE_T::ARC )
+    if( m_shape == SHAPE_T::RECTANGLE )
+    {
+        TEST( m_cornerRadius, aOther->m_cornerRadius );
+    }
+    else if( m_shape == SHAPE_T::ARC )
     {
         TEST_PT( GetArcMid(), aOther->GetArcMid() );
     }
