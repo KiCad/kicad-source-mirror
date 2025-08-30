@@ -17,10 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <errno.h>
-
 #include <wx/intl.h>
 #include <wx/string.h>
+
+#include <fast_float/fast_float.h>
 
 #include <string_utils.h>
 #include <richio.h>
@@ -138,13 +138,18 @@ double parseDouble( LINE_READER& aReader, const char* aLine, const char** aOutpu
     if( !*aLine )
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, aLine );
 
-    // Clear errno before calling strtod() in case some other crt call set it.
-    errno = 0;
+    double retv{};
 
-    double retv = strtod( aLine, (char**) aOutput );
+    const char*                   end = aLine;
+    fast_float::from_chars_result result =
+            fast_float::from_chars( aLine, aLine + strlen( aLine ), retv, fast_float::chars_format::skip_white_space );
+    end = result.ptr;
 
-    // Make sure no error occurred when calling strtod().
-    if( errno == ERANGE )
+    if( aOutput )
+        *aOutput = end;
+
+    // Make sure no error occurred when calling from_chars.
+    if( result.ec != std::errc() )
         SCH_PARSE_ERROR( "invalid floating point number", aReader, aLine );
 
     // strtod does not strip off whitespace before the next token.

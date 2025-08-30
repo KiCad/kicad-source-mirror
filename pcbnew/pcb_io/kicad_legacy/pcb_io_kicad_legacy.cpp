@@ -61,6 +61,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <fast_float/fast_float.h>
 #include <pcb_io/kicad_legacy/pcb_io_kicad_legacy.h>   // implement this here
 #include <wx/ffile.h>
 #include <wx/log.h>
@@ -2880,13 +2881,13 @@ void PCB_IO_KICAD_LEGACY::loadPCB_TARGET()
 
 BIU PCB_IO_KICAD_LEGACY::biuParse( const char* aValue, const char** nptrptr )
 {
-    char*   nptr;
+    const char* end = aValue;
+    double      fval{};
+    fast_float::from_chars_result result = fast_float::from_chars( aValue, aValue + strlen( aValue ), fval,
+                                                                   fast_float::chars_format::skip_white_space );
+    end = result.ptr;
 
-    errno = 0;
-
-    double fval = strtod( aValue, &nptr );
-
-    if( errno )
+    if( result.ec != std::errc() )
     {
         m_error.Printf( _( "Invalid floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
@@ -2896,7 +2897,7 @@ BIU PCB_IO_KICAD_LEGACY::biuParse( const char* aValue, const char** nptrptr )
         THROW_IO_ERROR( m_error );
     }
 
-    if( aValue == nptr )
+    if( aValue == end )
     {
         m_error.Printf( _( "Missing floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
@@ -2907,7 +2908,7 @@ BIU PCB_IO_KICAD_LEGACY::biuParse( const char* aValue, const char** nptrptr )
     }
 
     if( nptrptr )
-        *nptrptr = nptr;
+        *nptrptr = end;
 
     fval *= diskToBiu;
 
