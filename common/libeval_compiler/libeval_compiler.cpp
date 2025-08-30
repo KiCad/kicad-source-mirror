@@ -858,9 +858,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             // Function call's uop was generated inside TR_STRUCT_REF
             if( !node->uop )
             {
-                reportError( CST_CODEGEN, _( "Unknown parent of function parameters" ), node->srcPos );
                 // This function call is bare so we don't know who to apply it to
                 // Set a safe default value to exit gracefully with an error
+                reportError( CST_CODEGEN, _( "Unknown parent of function parameters" ), node->srcPos );
                 node->SetUop( TR_UOP_PUSH_VALUE, 0.0, EDA_UNITS::UNSCALED );
             }
 
@@ -1101,7 +1101,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 stack.push_back( node->leaf[0] );
                 node->leaf[0]->isVisited = true;
-                continue;
             }
             else if( node->leaf[1] && !node->leaf[1]->isVisited )
             {
