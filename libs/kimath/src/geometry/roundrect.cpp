@@ -55,6 +55,7 @@ ROUNDRECT::ROUNDRECT( SHAPE_RECT aRect, int aRadius ) :
         m_rect( std::move( aRect ) ),
         m_radius( aRadius )
 {
+#if !defined( __MINGW32__ )
     if( m_radius > m_rect.MajorDimension() )
     {
         throw KI_PARAM_ERROR(
@@ -65,6 +66,17 @@ ROUNDRECT::ROUNDRECT( SHAPE_RECT aRect, int aRadius ) :
     {
         throw KI_PARAM_ERROR( _( "Roundrect radius must be non-negative" ) );
     }
+#else
+    if( m_radius > m_rect.MajorDimension() )
+    {
+        throw std::invalid_argument( "Roundrect radius is larger than the rectangle's major dimension" );
+    }
+
+    if( m_radius < 0 )
+    {
+        throw std::invalid_argument( "Roundrect radius must be non-negative" );
+    }
+#endif
 }
 
 
