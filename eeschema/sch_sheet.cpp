@@ -1222,14 +1222,14 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( aBackground && backgroundColor.a > 0.0 )
     {
         aPlotter->SetColor( backgroundColor );
-        aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::FILLED_SHAPE, 1 );
+        aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::FILLED_SHAPE, 1, 0 );
     }
     else
     {
         aPlotter->SetColor( borderColor );
 
         int penWidth = GetEffectivePenWidth( getRenderSettings( aPlotter ) );
-        aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::NO_FILL, penWidth );
+        aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::NO_FILL, penWidth, 0 );
     }
 
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)

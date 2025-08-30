@@ -391,6 +391,9 @@ public:
 
     void SetRectangle( const long long int& aHeight, const long long int& aWidth );
 
+    void SetCornerRadius( int aRadius );
+    int GetCornerRadius() const;
+
     void SetSegmentAngle( const EDA_ANGLE& aAngle );
 
     bool IsClockwiseArc() const;
@@ -496,6 +499,7 @@ protected:
 
     long long int          m_rectangleHeight;
     long long int          m_rectangleWidth;
+    int                    m_cornerRadius;
 
     double                 m_segmentLength;
     EDA_ANGLE              m_segmentAngle;

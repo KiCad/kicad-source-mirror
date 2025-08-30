@@ -54,6 +54,7 @@ public:
             m_position( aPoint ),
             m_isActive( false ),
             m_isHover( false ),
+            m_drawCircle( false ),
             m_gridConstraint( SNAP_TO_GRID ),
             m_snapConstraint( OBJECT_LAYERS ),
             m_connected( aConnected )
@@ -175,6 +176,9 @@ public:
     bool IsHover() const { return m_isHover; }
     void SetHover( bool aHover = true ) { m_isHover = aHover; }
 
+    bool DrawCircle() const { return m_drawCircle; }
+    void SetDrawCircle( bool aDrawCircle = true ) { m_drawCircle = aDrawCircle; }
+
     GRID_CONSTRAINT_TYPE GetGridConstraint() const { return m_gridConstraint; }
     void SetGridConstraint( GRID_CONSTRAINT_TYPE aConstraint ) { m_gridConstraint = aConstraint; }
 
@@ -201,6 +205,7 @@ private:
     VECTOR2I             m_position;        ///< Position of EDIT_POINT.
     bool                 m_isActive;        ///< True if this point is being manipulated.
     bool                 m_isHover;         ///< True if this point is being hovered over.
+    bool                 m_drawCircle;      ///< True if the point is drawn circular.
     GRID_CONSTRAINT_TYPE m_gridConstraint;  ///< Describe the grid snapping behavior.
     SNAP_CONSTRAINT_TYPE m_snapConstraint;  ///< Describe the object snapping behavior.
 

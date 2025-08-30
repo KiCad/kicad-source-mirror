@@ -54,7 +54,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240819  // Embedded Files - Update hash algorithm to Murmur3
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20241209  // Private flags for SCH_FIELDs
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250318  // ~ no longer means empty text
-#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20250324  // Jumper pin groups
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250324  // Jumper pin groups
+#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20250829  // Rounded Rectangles
 
 /**
  * Schematic file version.
@@ -124,4 +125,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250425  // uuids for tables
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250513  // Groups can have design block lib_id
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250610  // DNP, etc. flags for rule areas
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20250827  // Custom body styles
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20250827  // Custom body styles
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20250829  // Rounded Rectangles

@@ -32,6 +32,8 @@
 #include <callback_gal.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
+#include <geometry/roundrect.h>
+#include <geometry/shape_poly_set.h>
 #include <geometry/shape_utils.h>
 #include <gr_text.h>
 #include <sch_pin.h>
@@ -1588,7 +1590,20 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                     break;
 
                 case SHAPE_T::RECTANGLE:
-                    m_gal->DrawRectangle( shape->GetPosition(), shape->GetEnd() );
+                    if( shape->GetCornerRadius() > 0 )
+                    {
+                        ROUNDRECT rr( SHAPE_RECT( shape->GetPosition(),
+                                                  shape->GetRectangleWidth(),
+                                                  shape->GetRectangleHeight() ),
+                                                  shape->GetCornerRadius() );
+                        SHAPE_POLY_SET poly;
+                        rr.TransformToPolygon( poly );
+                        m_gal->DrawPolygon( poly );
+                    }
+                    else
+                    {
+                        m_gal->DrawRectangle( shape->GetPosition(), shape->GetEnd() );
+                    }
                     break;
 
                 case SHAPE_T::POLY:

@@ -26,6 +26,7 @@
 
 #include <geometry/shape_rect.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/roundrect.h>
 
 bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
@@ -114,6 +115,8 @@ const std::string SHAPE_RECT::Format( bool aCplusPlus ) const
     ss << m_w;
     ss << ", ";
     ss << m_h;
+    ss << ", ";
+    ss << m_radius;
     ss << ");";
 
     return ss.str();
@@ -123,6 +126,13 @@ const std::string SHAPE_RECT::Format( bool aCplusPlus ) const
 void SHAPE_RECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                                      ERROR_LOC aErrorLoc ) const
 {
+    if( m_radius > 0 )
+    {
+        ROUNDRECT rr( *this, m_radius );
+        rr.TransformToPolygon( aBuffer );
+        return;
+    }
+
     int idx = aBuffer.NewOutline();
     SHAPE_LINE_CHAIN& outline = aBuffer.Outline( idx );
 
@@ -131,4 +141,24 @@ void SHAPE_RECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
     outline.Append( { m_p0.x + m_w, m_p0.y + m_h } );
     outline.Append( { m_p0.x, m_p0.y + m_h } );
     outline.SetClosed( true );
+}
+
+const SHAPE_LINE_CHAIN SHAPE_RECT::Outline() const
+{
+    if( m_radius > 0 )
+    {
+        SHAPE_POLY_SET poly;
+        ROUNDRECT      rr( *this, m_radius );
+        rr.TransformToPolygon( poly );
+        return poly.Outline( 0 );
+    }
+
+    SHAPE_LINE_CHAIN rv;
+    rv.Append( m_p0 );
+    rv.Append( m_p0.x, m_p0.y + m_h );
+    rv.Append( m_p0.x + m_w, m_p0.y + m_h );
+    rv.Append( m_p0.x + m_w, m_p0.y );
+    rv.Append( m_p0 );
+    rv.SetClosed( true );
+    return rv;
 }

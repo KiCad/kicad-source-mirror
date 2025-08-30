@@ -35,6 +35,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
+#include <geometry/roundrect.h>
 #include <geometry/geometry_utils.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
@@ -54,6 +55,7 @@ EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_hatchingDirty( true ),
         m_rectangleHeight( 0 ),
         m_rectangleWidth( 0 ),
+        m_cornerRadius( 0 ),
         m_segmentLength( 0 ),
         m_editState( 0 ),
         m_proxyItem( false )
@@ -73,6 +75,7 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
         m_hatchingDirty( true ),
         m_rectangleHeight( 0 ),
         m_rectangleWidth( 0 ),
+        m_cornerRadius( 0 ),
         m_segmentLength( 0 ),
         m_editState( 0 ),
         m_proxyItem( false )
@@ -188,6 +191,7 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
         types::GraphicRectangleAttributes* rectangle = shape.mutable_rectangle();
         PackVector2( *rectangle->mutable_top_left(), GetStart() );
         PackVector2( *rectangle->mutable_bottom_right(), GetEnd() );
+        rectangle->mutable_corner_radius()->set_value_nm( GetCornerRadius() );
         break;
     }
 
@@ -280,6 +284,7 @@ bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
         SetShape( SHAPE_T::RECTANGLE );
         SetStart( UnpackVector2( shape.rectangle().top_left() ) );
         SetEnd( UnpackVector2( shape.rectangle().bottom_right() ) );
+        SetCornerRadius( shape.rectangle().corner_radius().value_nm() );
     }
     else if( shape.has_arc() )
     {
@@ -430,6 +435,16 @@ int EDA_SHAPE::GetRectangleWidth() const
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return 0;
     }
+}
+
+int EDA_SHAPE::GetCornerRadius() const
+{
+    return m_cornerRadius;
+}
+
+void EDA_SHAPE::SetCornerRadius( int aRadius )
+{
+    m_cornerRadius = aRadius;
 }
 
 
@@ -1800,17 +1815,38 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
     case SHAPE_T::RECTANGLE:
     {
-        std::vector<VECTOR2I> pts = GetRectCorners();
-
-        if( solidFill )
-            effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
-
-        if( width > 0 || !solidFill )
+        if( m_cornerRadius > 0 )
         {
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], width ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], width ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], width ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], width ) );
+            ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ),
+                          m_cornerRadius );
+            SHAPE_POLY_SET poly;
+            rr.TransformToPolygon( poly );
+            SHAPE_LINE_CHAIN outline = poly.Outline( 0 );
+
+            if( solidFill )
+                effectiveShapes.emplace_back( new SHAPE_SIMPLE( outline ) );
+
+            if( width > 0 || !solidFill )
+            {
+                for( int i = 0; i < outline.PointCount() - 1; ++i )
+                    effectiveShapes.emplace_back(
+                            new SHAPE_SEGMENT( outline.CPoint( i ), outline.CPoint( i + 1 ), width ) );
+            }
+        }
+        else
+        {
+            std::vector<VECTOR2I> pts = GetRectCorners();
+
+            if( solidFill )
+                effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
+
+            if( width > 0 || !solidFill )
+            {
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], width ) );
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], width ) );
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], width ) );
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], width ) );
+            }
         }
         break;
     }
@@ -2639,6 +2675,12 @@ static struct EDA_SHAPE_DESC
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Height" ),
                     &EDA_SHAPE::SetRectangleHeight, &EDA_SHAPE::GetRectangleHeight,
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    shapeProps )
+                .SetAvailableFunc( isRectangle );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Corner Radius" ),
+                    &EDA_SHAPE::SetCornerRadius, &EDA_SHAPE::GetCornerRadius,
                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isRectangle );

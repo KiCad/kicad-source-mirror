@@ -29,6 +29,7 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>        // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>          // for SHAPE_POLY_SET, SHAPE_P...
+#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <string_utils.h>
 #include <macros.h>
@@ -1081,19 +1082,28 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
         case SHAPE_T::RECTANGLE:
         {
-            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
+            int radius = aShape->GetCornerRadius();
 
-            if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
+            if( radius == 0 && m_plotter->GetPlotterType() == PLOT_FORMAT::DXF &&
+                GetDXFPlotMode() == SKETCH )
             {
+                std::vector<VECTOR2I> pts = aShape->GetRectCorners();
                 m_plotter->ThickRect( pts[0], pts[2], thickness, getMetadata() );
             }
             else
             {
-                SHAPE_POLY_SET poly;
+                BOX2I box( aShape->GetStart(), VECTOR2I( aShape->GetEnd().x - aShape->GetStart().x,
+                                                         aShape->GetEnd().y - aShape->GetStart().y ) );
+                box.Normalize();
+                SHAPE_RECT rect( box );
+                rect.SetRadius( radius );
+
+                SHAPE_LINE_CHAIN outline = rect.Outline();
+                SHAPE_POLY_SET  poly;
                 poly.NewOutline();
 
-                for( const VECTOR2I& pt : pts )
-                    poly.Append( pt );
+                for( int ii = 0; ii < outline.PointCount() - 1; ++ii )
+                    poly.Append( outline.CPoint( ii ) );
 
                 if( margin < 0 )
                     poly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aShape->GetMaxError() );

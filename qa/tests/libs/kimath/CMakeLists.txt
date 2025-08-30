@@ -51,6 +51,7 @@ set( QA_KIMATH_SRCS
     geometry/test_shape_line_chain.cpp
     geometry/test_shape_line_chain_collision.cpp
     geometry/test_vector_utils.cpp
+    geometry/test_shape_rect_corner.cpp
 
     math/test_box2.cpp
     math/test_matrix3x3.cpp

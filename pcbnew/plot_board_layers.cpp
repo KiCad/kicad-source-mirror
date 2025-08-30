@@ -1180,7 +1180,7 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 
     BOX2I area = aBbbox;
     area.Inflate( margin );
-    aPlotter->Rect( area.GetOrigin(), area.GetEnd(), FILL_T::FILLED_SHAPE, 0 );
+    aPlotter->Rect( area.GetOrigin(), area.GetEnd(), FILL_T::FILLED_SHAPE, 0, 0 );
     aPlotter->SetColor( BLACK );
 }
 

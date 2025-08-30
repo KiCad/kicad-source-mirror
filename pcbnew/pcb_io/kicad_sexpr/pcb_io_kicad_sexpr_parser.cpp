@@ -3192,6 +3192,11 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_radius:
+            shape->SetCornerRadius( parseBoardUnits( "corner radius" ) );
+            NeedRIGHT();
+            break;
+
         case T_stroke:
         {
             STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );

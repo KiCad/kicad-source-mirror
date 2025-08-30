@@ -25,6 +25,7 @@
 
 #include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/shape_rect.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
@@ -846,8 +847,19 @@ void GERBER_PLOTTER::PenTo( const VECTOR2I& aPos, char plume )
 }
 
 
-void GERBER_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
+void GERBER_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                           int aCornerRadius )
 {
+    if( aCornerRadius > 0 )
+    {
+        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
+        box.Normalize();
+        SHAPE_RECT rect( box );
+        rect.SetRadius( aCornerRadius );
+        PlotPoly( rect.Outline(), fill, width, nullptr );
+        return;
+    }
+
     std::vector<VECTOR2I> cornerList;
 
     cornerList.reserve( 5 );

@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <memory>
+#include <algorithm>
 
 using namespace std::placeholders;
 #include <advanced_config.h>
@@ -68,6 +69,7 @@ const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 enum RECT_POINTS
 {
     RECT_TOP_LEFT,
+    RECT_RADIUS,
     RECT_TOP_RIGHT,
     RECT_BOT_RIGHT,
     RECT_BOT_LEFT,
@@ -137,6 +139,8 @@ public:
             std::swap( topLeft.y, botRight.y );
 
         aPoints.AddPoint( topLeft );
+        aPoints.AddPoint( VECTOR2I( botRight.x - aRectangle.GetCornerRadius(), topLeft.y ) );
+        aPoints.Point( RECT_RADIUS ).SetDrawCircle();
         aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
         aPoints.AddPoint( botRight );
         aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
@@ -203,6 +207,16 @@ public:
                     aPoints.Point( RECT_CENTER ).GetPosition() - aRectangle.GetCenter();
             aRectangle.Move( moveVector );
         }
+        else if( isModified( aEditedPoint, aPoints.Point( RECT_RADIUS ) ) )
+        {
+            int width = std::abs( botRight.x - topLeft.x );
+            int height = std::abs( botRight.y - topLeft.y );
+            int maxRadius = std::min( width, height ) / 2;
+            int x = aPoints.Point( RECT_RADIUS ).GetX();
+            x = std::clamp( x, botRight.x - maxRadius, botRight.x );
+            aPoints.Point( RECT_RADIUS ).SetPosition( x, topLeft.y );
+            aRectangle.SetCornerRadius( botRight.x - x );
+        }
         else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
         {
             setTop( topLeft.y );
@@ -246,6 +260,7 @@ public:
             std::swap( topLeft.y, botRight.y );
 
         aPoints.Point( RECT_TOP_LEFT ).SetPosition( topLeft );
+        aPoints.Point( RECT_RADIUS ).SetPosition( botRight.x - aRectangle.GetCornerRadius(), topLeft.y );
         aPoints.Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );
         aPoints.Point( RECT_BOT_RIGHT ).SetPosition( botRight );
         aPoints.Point( RECT_BOT_LEFT ).SetPosition( topLeft.x, botRight.y );

@@ -228,7 +228,8 @@ public:
     int GetPlotterArcHighDef() const { return m_IUsPerDecimil * 2; }
 
     // Low level primitives
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) = 0;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                       int aCornerRadius = 0 ) = 0;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) = 0;
 
     virtual void Arc( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd,

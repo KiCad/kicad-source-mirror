@@ -274,7 +274,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         break;
 
     case SHAPE_T::RECTANGLE:
-        aPlotter->Rect( start, end, fill, pen_size );
+        aPlotter->Rect( start, end, fill, pen_size, GetCornerRadius() );
         break;
 
     case SHAPE_T::POLY:

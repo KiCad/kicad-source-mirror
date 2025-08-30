@@ -51,6 +51,7 @@
 #include <fmt/ranges.h>
 
 #include <plotters/plotters_pslike.h>
+#include <geometry/shape_rect.h>
 
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
@@ -227,7 +228,8 @@ void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 }
 
 
-void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
+void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                        int aCornerRadius )
 {
     wxASSERT( m_workFile );
 
@@ -235,6 +237,16 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
         return;
 
     SetCurrentLineWidth( width );
+
+    if( aCornerRadius > 0 )
+    {
+        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
+        box.Normalize();
+        SHAPE_RECT rect( box );
+        rect.SetRadius( aCornerRadius );
+        PlotPoly( rect.Outline(), fill, width, nullptr );
+        return;
+    }
 
     VECTOR2I size = p2 - p1;
 
@@ -426,6 +438,22 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
         fmt::println( m_workFile, "f" );
     else
         fmt::println( m_workFile, "b" );
+}
+
+
+void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
+                            void* aData )
+{
+    std::vector<VECTOR2I> cornerList;
+    cornerList.reserve( aCornerList.PointCount() );
+
+    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
+        cornerList.emplace_back( aCornerList.CPoint( ii ) );
+
+    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
+        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
+
+    PlotPoly( cornerList, aFill, aWidth, aData );
 }
 
 

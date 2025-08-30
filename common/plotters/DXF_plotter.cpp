@@ -29,6 +29,7 @@
 #include <macros.h>
 #include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/shape_rect.h>
 #include <trigo.h>
 #include <fmt/core.h>
 
@@ -446,9 +447,20 @@ void DXF_PLOTTER::SetColor( const COLOR4D& color )
 }
 
 
-void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
+void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                        int aCornerRadius )
 {
     wxASSERT( m_outputFile );
+
+    if( aCornerRadius > 0 )
+    {
+        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
+        box.Normalize();
+        SHAPE_RECT rect( box );
+        rect.SetRadius( aCornerRadius );
+        PlotPoly( rect.Outline(), fill, width, nullptr );
+        return;
+    }
 
     if( p1 != p2 )
     {
@@ -605,6 +617,22 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
+void DXF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
+                            void* aData )
+{
+    std::vector<VECTOR2I> cornerList;
+    cornerList.reserve( aCornerList.PointCount() );
+
+    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
+        cornerList.emplace_back( aCornerList.CPoint( ii ) );
+
+    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
+        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
+
+    PlotPoly( cornerList, aFill, aWidth, aData );
+}
+
+
 void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
     wxASSERT( m_outputFile );
@@ -735,17 +763,17 @@ void DXF_PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, 
     {
         VECTOR2I offsetp1( p1.x - width/2, p1.y - width/2 );
         VECTOR2I offsetp2( p2.x + width/2, p2.y + width/2 );
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DXF_LINE_WIDTH, 0 );
 
         offsetp1.x += width;
         offsetp1.y += width;
         offsetp2.x -= width;
         offsetp2.y -= width;
-        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, DXF_LINE_WIDTH, 0 );
     }
     else
     {
-        Rect( p1, p2, FILL_T::NO_FILL, DXF_LINE_WIDTH );
+        Rect( p1, p2, FILL_T::NO_FILL, DXF_LINE_WIDTH, 0 );
     }
 }
 

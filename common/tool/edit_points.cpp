@@ -312,7 +312,7 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             };
 
     for( const EDIT_POINT& point : m_points )
-        drawPoint( point );
+        drawPoint( point, point.DrawCircle() );
 
     for( const EDIT_LINE& line : m_lines )
     {

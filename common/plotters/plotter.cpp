@@ -267,7 +267,7 @@ void PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aSc
     end.x += size.x;
     end.y += size.y;
 
-    Rect( start, end, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH );
+    Rect( start, end, FILL_T::NO_FILL, USE_DEFAULT_LINE_WIDTH, 0 );
 }
 
 
@@ -584,7 +584,7 @@ void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape, void* aData, int aWidth )
 
 void PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData )
 {
-    Rect( p1, p2, FILL_T::NO_FILL, width );
+    Rect( p1, p2, FILL_T::NO_FILL, width, 0 );
 }
 
 

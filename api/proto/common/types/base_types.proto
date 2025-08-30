@@ -371,6 +371,7 @@ message GraphicRectangleAttributes
 {
   kiapi.common.types.Vector2  top_left     = 1;
   kiapi.common.types.Vector2  bottom_right = 2;
+  kiapi.common.types.Distance corner_radius = 3;
 }
 
 message GraphicArcAttributes

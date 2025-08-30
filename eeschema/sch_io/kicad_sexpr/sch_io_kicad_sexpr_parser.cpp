@@ -1895,6 +1895,11 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolRectangle()
             NeedRIGHT();
             break;
 
+        case T_radius:
+            rectangle->SetCornerRadius( parseDouble( "corner radius" ) * schIUScale.IU_PER_MM );
+            NeedRIGHT();
+            break;
+
         case T_stroke:
             parseStroke( stroke );
             rectangle->SetStroke( stroke );
@@ -4183,6 +4188,11 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchRectangle()
 
         case T_end:
             rectangle->SetEnd( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_radius:
+            rectangle->SetCornerRadius( parseDouble( "corner radius" ) * schIUScale.IU_PER_MM );
             NeedRIGHT();
             break;
 

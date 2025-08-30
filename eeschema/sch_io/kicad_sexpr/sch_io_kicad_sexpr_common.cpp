@@ -269,6 +269,9 @@ void formatRect( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aRect, bool aIsPrivate,
                        aIsPrivate ? "private" : "",
                        formatIU( aRect->GetStart(), aInvertY ).c_str(),
                        formatIU( aRect->GetEnd(), aInvertY ).c_str() );
+    if( aRect->GetCornerRadius() > 0 )
+        aFormatter->Print( "(radius %s)",
+                           formatIU( aRect->GetCornerRadius() ).c_str() );
     aStroke.Format( aFormatter, schIUScale );
     formatFill( aFormatter, aFillMode, aFillColor );
 

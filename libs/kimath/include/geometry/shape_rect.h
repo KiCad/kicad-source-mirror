@@ -30,6 +30,7 @@
 #include <geometry/seg.h>
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <trigo.h>
@@ -43,7 +44,8 @@ public:
     SHAPE_RECT() :
         SHAPE( SH_RECT ),
         m_w( 0 ),
-        m_h( 0 )
+        m_h( 0 ),
+        m_radius( 0 )
     {}
 
     /**
@@ -53,7 +55,8 @@ public:
         SHAPE( SH_RECT ),
         m_p0( aBox.GetPosition() ),
         m_w( aBox.GetWidth() ),
-        m_h( aBox.GetHeight() )
+        m_h( aBox.GetHeight() ),
+        m_radius( 0 )
     {}
 
     /**
@@ -63,7 +66,8 @@ public:
         SHAPE( SH_RECT ),
         m_p0( aX0, aY0 ),
         m_w( aW ),
-        m_h( aH )
+        m_h( aH ),
+        m_radius( 0 )
     {}
 
     /**
@@ -73,7 +77,8 @@ public:
         SHAPE( SH_RECT ),
         m_p0( aP0 ),
         m_w( aW ),
-        m_h( aH )
+        m_h( aH ),
+        m_radius( 0 )
     {}
 
     /**
@@ -83,14 +88,16 @@ public:
         SHAPE( SH_RECT ),
         m_p0( aP0 ),
         m_w( aP1.x - aP0.x ),
-        m_h( aP1.y - aP0.y )
+        m_h( aP1.y - aP0.y ),
+        m_radius( 0 )
     {}
 
     SHAPE_RECT( const SHAPE_RECT& aOther ) :
         SHAPE( SH_RECT ),
         m_p0( aOther.m_p0 ),
         m_w( aOther.m_w ),
-        m_h( aOther.m_h )
+        m_h( aOther.m_h ),
+        m_radius( aOther.m_radius )
     {};
 
     SHAPE* Clone() const override
@@ -112,11 +119,13 @@ public:
      */
     SHAPE_RECT GetInflated( int aOffset ) const
     {
-        return SHAPE_RECT{
+        SHAPE_RECT r{
             m_p0 - VECTOR2I( aOffset, aOffset ),
             m_w + 2 * aOffset,
             m_h + 2 * aOffset,
         };
+        r.SetRadius( m_radius + aOffset );
+        return r;
     }
 
     /**
@@ -186,6 +195,19 @@ public:
         return m_h;
     }
 
+    /**
+     * @return the corner radius of the rectangle.
+     */
+    int GetRadius() const
+    {
+        return m_radius;
+    }
+
+    void SetRadius( int aRadius )
+    {
+        m_radius = aRadius;
+    }
+
     void Move( const VECTOR2I& aVector ) override
     {
         m_p0 += aVector;
@@ -209,17 +231,7 @@ public:
         return true;
     }
 
-    const SHAPE_LINE_CHAIN Outline() const
-    {
-        SHAPE_LINE_CHAIN rv;
-        rv.Append( m_p0 );
-        rv.Append( m_p0.x, m_p0.y + m_h );
-        rv.Append( m_p0.x + m_w, m_p0.y + m_h );
-        rv.Append( m_p0.x + m_w, m_p0.y );
-        rv.Append( m_p0 );
-        rv.SetClosed( true );
-        return rv;
-    }
+    const SHAPE_LINE_CHAIN Outline() const;
 
     virtual const std::string Format( bool aCplusPlus = true ) const override;
 
@@ -230,6 +242,7 @@ private:
     VECTOR2I m_p0;      ///< Top-left corner
     int      m_w;       ///< Width
     int      m_h;       ///< Height
+    int      m_radius;  ///< Corner radius
 };
 
 #endif // __SHAPE_RECT_H

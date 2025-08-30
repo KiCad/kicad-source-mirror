@@ -372,7 +372,8 @@ void SVG_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 }
 
 
-void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
+void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                        int aCornerRadius )
 {
     BOX2I rect( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
     rect.Normalize();
@@ -412,7 +413,7 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
                       rect_dev.GetPosition().y,
                       rect_dev.GetSize().x,
                       rect_dev.GetSize().y,
-                      0.0 /* radius of rounded corners */ );
+                      userToDeviceSize( aCornerRadius ) );
     }
 }
 

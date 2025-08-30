@@ -462,7 +462,7 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
         VECTOR2I end( actualPage.GetWidthIU( schIUScale.IU_PER_MILS ),
                       actualPage.GetHeightIU( schIUScale.IU_PER_MILS ) );
 
-        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0, 0 );
     }
 
     if( aPlotOpts.m_plotDrawingSheet )
@@ -639,7 +639,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
         VECTOR2I end( actualPage.GetWidthIU( schIUScale.IU_PER_MILS ),
                       actualPage.GetHeightIU( schIUScale.IU_PER_MILS ) );
 
-        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0, 0 );
     }
 
     if( aPlotOpts.m_plotDrawingSheet )

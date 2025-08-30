@@ -63,6 +63,8 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_poly_set.h>
+#include <geometry/roundrect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
@@ -1973,50 +1975,97 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         case SHAPE_T::RECTANGLE:
         {
-            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
+            if( aShape->GetCornerRadius() > 0 )
+            {
+                ROUNDRECT rr( SHAPE_RECT( aShape->GetStart(), aShape->GetRectangleWidth(),
+                                          aShape->GetRectangleHeight() ),
+                              aShape->GetCornerRadius() );
+                SHAPE_POLY_SET poly;
+                rr.TransformToPolygon( poly );
+                SHAPE_LINE_CHAIN outline = poly.Outline( 0 );
 
-            if( aShape->IsProxyItem() )
-            {
-                m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-                m_gal->DrawLine( pts[0], pts[1] );
-                m_gal->DrawLine( pts[1], pts[2] );
-                m_gal->DrawLine( pts[2], pts[3] );
-                m_gal->DrawLine( pts[3], pts[0] );
-                m_gal->DrawLine( pts[0], pts[2] );
-                m_gal->DrawLine( pts[1], pts[3] );
-            }
-            else if( outline_mode )
-            {
-                m_gal->DrawSegment( pts[0], pts[1], thickness );
-                m_gal->DrawSegment( pts[1], pts[2], thickness );
-                m_gal->DrawSegment( pts[2], pts[3], thickness );
-                m_gal->DrawSegment( pts[3], pts[0], thickness );
+                if( aShape->IsProxyItem() )
+                {
+                    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+                    m_gal->DrawPolygon( outline );
+                }
+                else if( outline_mode )
+                {
+                    m_gal->DrawSegmentChain( outline, thickness );
+                }
+                else
+                {
+                    m_gal->SetIsFill( true );
+                    m_gal->SetIsStroke( false );
+
+                    if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
+                    {
+                        m_gal->DrawSegmentChain( outline, thickness );
+                    }
+
+                    if( isSolidFill )
+                    {
+                        if( thickness < 0 )
+                        {
+                            SHAPE_POLY_SET deflated_shape = outline;
+                            deflated_shape.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
+                            m_gal->DrawPolygon( deflated_shape );
+                        }
+                        else
+                        {
+                            m_gal->DrawPolygon( outline );
+                        }
+                    }
+                }
             }
             else
             {
-                m_gal->SetIsFill( true );
-                m_gal->SetIsStroke( false );
+                std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-                if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
+                if( aShape->IsProxyItem() )
+                {
+                    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+                    m_gal->DrawLine( pts[0], pts[1] );
+                    m_gal->DrawLine( pts[1], pts[2] );
+                    m_gal->DrawLine( pts[2], pts[3] );
+                    m_gal->DrawLine( pts[3], pts[0] );
+                    m_gal->DrawLine( pts[0], pts[2] );
+                    m_gal->DrawLine( pts[1], pts[3] );
+                }
+                else if( outline_mode )
                 {
                     m_gal->DrawSegment( pts[0], pts[1], thickness );
                     m_gal->DrawSegment( pts[1], pts[2], thickness );
                     m_gal->DrawSegment( pts[2], pts[3], thickness );
                     m_gal->DrawSegment( pts[3], pts[0], thickness );
                 }
-
-                if( isSolidFill )
+                else
                 {
-                    SHAPE_POLY_SET poly;
-                    poly.NewOutline();
+                    m_gal->SetIsFill( true );
+                    m_gal->SetIsStroke( false );
 
-                    for( const VECTOR2I& pt : pts )
-                        poly.Append( pt );
+                    if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
+                    {
+                        m_gal->DrawSegment( pts[0], pts[1], thickness );
+                        m_gal->DrawSegment( pts[1], pts[2], thickness );
+                        m_gal->DrawSegment( pts[2], pts[3], thickness );
+                        m_gal->DrawSegment( pts[3], pts[0], thickness );
+                    }
 
-                    if( thickness < 0 )
-                        poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
+                    if( isSolidFill )
+                    {
+                        SHAPE_POLY_SET poly;
+                        poly.NewOutline();
 
-                    m_gal->DrawPolygon( poly );
+                        for( const VECTOR2I& pt : pts )
+                            poly.Append( pt );
+
+                        if( thickness < 0 )
+                            poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                          m_maxError );
+
+                        m_gal->DrawPolygon( poly );
+                    }
                 }
             }
 

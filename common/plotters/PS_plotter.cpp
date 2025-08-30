@@ -30,6 +30,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
+#include <geometry/shape_rect.h>
 #include <string_utils.h>
 #include <trigo.h>
 #include <fmt/format.h>
@@ -457,12 +458,23 @@ void PS_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 }
 
 
-void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
+void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                       int aCornerRadius )
 {
     SetCurrentLineWidth( width );
 
     if( fill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
         return;
+
+    if( aCornerRadius > 0 )
+    {
+        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
+        box.Normalize();
+        SHAPE_RECT rect( box );
+        rect.SetRadius( aCornerRadius );
+        PlotPoly( rect.Outline(), fill, width, nullptr );
+        return;
+    }
 
     VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
@@ -553,6 +565,22 @@ void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFil
 
     // Close/(fill) the path
     fmt::print( m_outputFile, "poly{}\n", getFillId( aFill ) );
+}
+
+
+void PS_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData )
+{
+    std::vector<VECTOR2I> cornerList;
+    cornerList.reserve( aCornerList.PointCount() );
+
+    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
+        cornerList.emplace_back( aCornerList.CPoint( ii ) );
+
+    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
+        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
+
+    PlotPoly( cornerList, aFill, aWidth, aData );
 }
 
 

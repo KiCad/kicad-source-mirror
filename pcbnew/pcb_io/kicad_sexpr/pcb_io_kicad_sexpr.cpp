@@ -964,6 +964,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
                       prefix.c_str(),
                       formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
+
+        if( aShape->GetCornerRadius() > 0 )
+            m_out->Print( " (radius %s)", formatInternalUnits( aShape->GetCornerRadius() ).c_str() );
         break;
 
     case SHAPE_T::CIRCLE:
@@ -1801,6 +1804,9 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                         m_out->Print( "(gr_rect (start %s) (end %s)",
                                       formatInternalUnits( primitive->GetStart() ).c_str(),
                                       formatInternalUnits( primitive->GetEnd() ).c_str() );
+
+                        if( primitive->GetCornerRadius() > 0 )
+                            m_out->Print( " (radius %s)", formatInternalUnits( primitive->GetCornerRadius() ).c_str() );
                     }
                     break;
 

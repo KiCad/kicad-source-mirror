@@ -84,7 +84,8 @@ public:
     /**
      * DXF rectangle: fill not supported.
      */
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                       int aCornerRadius = 0 ) override;
 
     /**
      * DXF circle: full functionality; it even does 'fills' drawing a
@@ -105,6 +106,9 @@ public:
      * are converted to inflated polygon by aWidth/2.
      */
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
+                           int aWidth, void* aData = nullptr ) override;
+
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                            int aWidth, void* aData = nullptr ) override;
 
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,

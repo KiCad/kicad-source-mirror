@@ -24,6 +24,7 @@
 
 #include "sch_point_editor.h"
 
+#include <algorithm>
 #include <ee_grid_helper.h>
 #include <tool/tool_manager.h>
 #include <sch_commit.h>
@@ -61,7 +62,7 @@ enum ARC_POINTS
 
 enum RECTANGLE_POINTS
 {
-    RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER
+    RECT_TOPLEFT, RECT_RADIUS, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER
 };
 
 
@@ -391,6 +392,8 @@ public:
         VECTOR2I botRight = aRect.GetEnd();
 
         aPoints.AddPoint( topLeft );
+        aPoints.AddPoint( VECTOR2I( botRight.x - aRect.GetCornerRadius(), topLeft.y ) );
+        aPoints.Point( RECT_RADIUS ).SetDrawCircle();
         aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
         aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
         aPoints.AddPoint( botRight );
@@ -412,6 +415,7 @@ public:
         VECTOR2I botRight = aRect.GetEnd();
 
         aPoints.Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        aPoints.Point( RECT_RADIUS ).SetPosition( VECTOR2I( botRight.x - aRect.GetCornerRadius(), topLeft.y ) );
         aPoints.Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
         aPoints.Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
         aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
@@ -577,6 +581,16 @@ public:
         {
             VECTOR2I moveVec = aPoints.Point( RECT_CENTER ).GetPosition() - oldBox.GetCenter();
             m_rect.Move( moveVec );
+        }
+        else if( isModified( aEditedPoint, aPoints.Point( RECT_RADIUS ) ) )
+        {
+            int width = std::abs( botRight.x - topLeft.x );
+            int height = std::abs( botRight.y - topLeft.y );
+            int maxRadius = std::min( width, height ) / 2;
+            int x = aPoints.Point( RECT_RADIUS ).GetX();
+            x = std::clamp( x, botRight.x - maxRadius, botRight.x );
+            aPoints.Point( RECT_RADIUS ).SetPosition( VECTOR2I( x, topLeft.y ) );
+            m_rect.SetCornerRadius( botRight.x - x );
         }
         else if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
         {

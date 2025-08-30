@@ -60,7 +60,8 @@ public:
                               double aScale, bool aMirror ) override;
 
     // Basic plot primitives
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
+                       int aCornerRadius = 0 ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth ) override;
