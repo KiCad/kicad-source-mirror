@@ -1718,7 +1718,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         SHAPE_POLY_SET::POLYGON& polygon = workingPoly.Polygon( polyId );
 
         auto tryMakeWire = [this, &aZposition,
-                            &aOrigin]( const SHAPE_LINE_CHAIN& aContour ) -> TopoDS_Wire
+                            &aOrigin]( const SHAPE_LINE_CHAIN& aContour, bool aAllowRetry ) -> TopoDS_Wire
         {
             TopoDS_Wire      wire;
             BRepLib_MakeWire mkWire;
@@ -1745,11 +1745,20 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( !check.IsValid() )
                 {
-                    m_reporter->Report( wxString::Format( _( "Wire self-interference check failed\n"
-                                                             "z: %g; bounding box: %s" ),
-                                                          aZposition,
-                                                          formatBBox( aContour.BBox() ) ),
-                                        RPT_SEVERITY_ERROR );
+                    if( aAllowRetry )
+                    {
+                        m_reporter->Report( _( "Wire self-interference check failed. Allow retry" ),
+                                            RPT_SEVERITY_DEBUG );
+                    }
+                    else
+                    {
+                        m_reporter->Report( wxString::Format( _( "Wire self-interference check failed\n"
+                                                                 "z: %g; bounding box: %s" ),
+                                                                aZposition,
+                                                                formatBBox( aContour.BBox() ) ),
+                                            RPT_SEVERITY_ERROR );
+                    }
+
                     wire.Nullify();
                 }
             }
@@ -1763,15 +1772,20 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         {
             try
             {
-                TopoDS_Wire wire = tryMakeWire( polygon[contId] );
+                // We allow retry when trying to convert polygon[contId] when a convert error
+                // happens, using an equivalent polygon shape.
+                bool allow_retry = aConvertToArcs ? true : false;
+
+                TopoDS_Wire wire = tryMakeWire( polygon[contId], allow_retry );
 
                 if( aConvertToArcs && wire.IsNull() )
                 {
                     m_reporter->Report( wxString::Format( _( "Using non-simplified polygon." ) ),
                                         RPT_SEVERITY_DEBUG );
 
-                    // Fall back to original shape
-                    wire = tryMakeWire( fallbackPoly.CPolygon( polyId )[contId] );
+                    // Fall back to original shape. Do not allow retry
+                    allow_retry = false;
+                    wire = tryMakeWire( fallbackPoly.CPolygon( polyId )[contId], allow_retry );
                 }
 
                 if( contId == 0 ) // Outline
