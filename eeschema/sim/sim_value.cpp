@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <charconv>
+#include <fast_float/fast_float.h>
 #include <sim/sim_value.h>
 #include <wx/translation.h>
 #include <ki_exception.h>
@@ -382,22 +382,20 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
         int exponent = parseResult.exponent ? *parseResult.exponent : 0;
         exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
 
-        try
-        {
-            int         expReduction = 0;
-            std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
-                                                                         aToNotation );
-            double significand{};
-            wxString( parseResult.significand ).ToCDouble( &significand );
+        int         expReduction = 0;
+        std::string prefix = SIM_VALUE_PARSER::ExponentToUnitPrefix( exponent, expReduction,
+                                                                        aToNotation );
+        double significand{};
 
-            exponent -= expReduction;
-            return fmt::format( "{:g}{}", significand * std::pow( 10, exponent ),
-                                prefix );
-        }
-        catch( const std::invalid_argument& )
-        {
-            // best efforts
-        }
+        fast_float::from_chars(
+                parseResult.significand.data(),
+                parseResult.significand.data() + parseResult.significand.size(),
+                significand,
+                fast_float::chars_format::skip_white_space | fast_float::chars_format::allow_leading_plus );
+
+        exponent -= expReduction;
+        return fmt::format( "{:g}{}", significand * std::pow( 10, exponent ),
+                            prefix );
     }
 
     return aString;
@@ -446,19 +444,17 @@ double SIM_VALUE::ToDouble( const std::string& aString, double aDefault )
 
     if( parseResult.isOk && !parseResult.isEmpty && !parseResult.significand.empty() )
     {
-        try
-        {
-            LOCALE_IO toggle;
-            int       exponent = parseResult.exponent ? *parseResult.exponent : 0;
+        int       exponent = parseResult.exponent ? *parseResult.exponent : 0;
 
-            exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
+        exponent += parseResult.unitPrefixExponent ? *parseResult.unitPrefixExponent : 0;
+        double significand{};
 
-            return std::stod( parseResult.significand ) * std::pow( 10, exponent );
-        }
-        catch( const std::invalid_argument& )
-        {
-            // best efforts
-        }
+        fast_float::from_chars( parseResult.significand.data(),
+                                parseResult.significand.data() + parseResult.significand.size(),
+                                significand,
+                                fast_float::chars_format::skip_white_space | fast_float::chars_format::allow_leading_plus );
+
+        return significand * std::pow( 10, exponent );
     }
 
     return aDefault;

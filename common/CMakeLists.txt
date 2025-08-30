@@ -269,6 +269,7 @@ target_link_libraries( kicommon
     kiplatform
     nlohmann_json
     nlohmann_json_schema_validator
+    FastFloat::fast_float
     fmt::fmt
     CURL::libcurl
     picosha2
