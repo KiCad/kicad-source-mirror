@@ -193,7 +193,12 @@ option( KICAD_I18N_UNIX_STRICT_PATH
 cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
     "Installs debug pdb to the bin folder, DO NOT USE (NOR REQUIRED) FOR DEBUGGING THE SOURCE ON MSVC. This is purely for release building.
     MSVC can find the PDBs without this."
-    OFF "WIN32"
+    OFF "MSVC"
+    OFF )
+
+cmake_dependent_option( KICAD_MSVC_DYNDEOPT
+    "Builds release builds with /dynamicdeopt for dynamic debugging."
+    OFF "MSVC"
     OFF )
 
 ####################################
@@ -557,6 +562,11 @@ if( MSVC )
     # but we want to turn it on to enable debug performance improvements available under C++17 in MSVC 17.5+
     string( APPEND CMAKE_CXX_FLAGS " /permissive-" )
 
+    if( KICAD_MSVC_DYNDEOPT )
+        string( APPEND CMAKE_CXX_FLAGS_RELEASE " /dynamicdeopt" )
+        string( APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO " /dynamicdeopt" )
+    endif()
+
     # Exception handling
     # Remove the potential default EHsc option cmake doesn't allow us to remove easily
     string( REPLACE "/EHsc" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
@@ -590,6 +600,11 @@ if( MSVC )
         # /OPT:ICF: fold common data
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF /MANIFEST:NO" )
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:ICF /MANIFEST:NO" )
+
+        if( KICAD_MSVC_DYNDEOPT )
+            string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /dynamicdeopt" )
+            string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /dynamicdeopt" )
+        endif()
 
         if( KICAD_WIN32_LTCG )
             # we are implementing this manually because CMake's LTCG option is incomplete
