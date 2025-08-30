@@ -2301,23 +2301,44 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
 
     case SHAPE_T::RECTANGLE:
     {
-        std::vector<VECTOR2I> pts = GetRectCorners();
-
-        if( solidFill )
+        if( GetCornerRadius() > 0 )
         {
-            aBuffer.NewOutline();
+            // Use specialized function for rounded rectangles
+            VECTOR2I size( GetRectangleWidth(), GetRectangleHeight() );
+            VECTOR2I position = GetStart() + size / 2;  // Center position
 
-            for( const VECTOR2I& pt : pts )
-                aBuffer.Append( pt );
+            TransformRoundChamferedRectToPolygon( aBuffer, position, size, ANGLE_0,
+                                                  GetCornerRadius(), 0.0, 0,
+                                                  solidFill ? 0 : width / 2, aError, aErrorLoc );
+
+            if( solidFill && width > 0 )
+            {
+                // Add outline for filled shapes with border
+                TransformRoundChamferedRectToPolygon( aBuffer, position, size, ANGLE_0,
+                                                      GetCornerRadius(), 0.0, 0,
+                                                      width / 2, aError, aErrorLoc );
+            }
         }
-
-        if( width > 0 || !solidFill )
+        else
         {
-            // Add in segments
-            TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+            std::vector<VECTOR2I> pts = GetRectCorners();
+
+            if( solidFill )
+            {
+                aBuffer.NewOutline();
+
+                for( const VECTOR2I& pt : pts )
+                    aBuffer.Append( pt );
+            }
+
+            if( width > 0 || !solidFill )
+            {
+                // Add in segments
+                TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+                TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+                TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+                TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+            }
         }
 
         break;

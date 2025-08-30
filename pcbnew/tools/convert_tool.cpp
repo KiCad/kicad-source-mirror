@@ -978,23 +978,13 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 {
                     PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
 
-                    if( graphic->GetShape() == SHAPE_T::POLY )
+                    if( graphic->GetShape() == SHAPE_T::RECTANGLE )
+                    {
+                        graphic->TransformShapeToPolygon( set, graphic->GetLayer(), 0, graphic->GetMaxError(), ERROR_INSIDE );
+                    }
+                    else if( graphic->GetShape() == SHAPE_T::POLY )
                     {
                         set = graphic->GetPolyShape();
-                    }
-                    else if( graphic->GetShape() == SHAPE_T::RECTANGLE )
-                    {
-                        SHAPE_LINE_CHAIN outline;
-                        VECTOR2I start( graphic->GetStart() );
-                        VECTOR2I end( graphic->GetEnd() );
-
-                        outline.Append( start );
-                        outline.Append( VECTOR2I( end.x, start.y ) );
-                        outline.Append( end );
-                        outline.Append( VECTOR2I( start.x, end.y ) );
-                        outline.SetClosed( true );
-
-                        set.AddOutline( outline );
                     }
                     else
                     {
