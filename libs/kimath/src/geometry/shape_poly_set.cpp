@@ -2006,10 +2006,11 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
 
             lc2.SetClosed( true );
 
-            m_polys[polyIdx][0] = lc1;
+            m_polys[polyIdx][0] = std::move( lc1 );
+
             POLYGON np;
-            np.push_back( lc2 );
-            m_polys.push_back( np );
+            np.push_back( std::move( lc2 ) );
+            m_polys.push_back( std::move( np ) );
 
             changed = true;
         }
