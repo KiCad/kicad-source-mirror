@@ -62,6 +62,8 @@ using namespace std::placeholders;
 #include <footprint_editor_settings.h>
 #include <connectivity/connectivity_data.h>
 #include <progress_reporter.h>
+#include <layer_ids.h>
+#include <preview_items/preview_utils.h>
 
 const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
@@ -106,6 +108,72 @@ enum TEXTBOX_POINT_COUNT
 {
     WHEN_RECTANGLE = RECT_MAX_POINTS,
     WHEN_POLYGON = 0,
+};
+
+
+class RECT_RADIUS_TEXT_ITEM : public EDA_ITEM
+{
+public:
+    RECT_RADIUS_TEXT_ITEM( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits ) :
+            EDA_ITEM( NOT_USED ),
+            m_iuScale( aIuScale ),
+            m_units( aUnits ),
+            m_radius( 0 ),
+            m_corner(),
+            m_quadrant( -1, 1 ),
+            m_visible( false )
+    {
+    }
+
+    const BOX2I ViewBBox() const override
+    {
+        BOX2I tmp;
+        tmp.SetMaximum();
+        return tmp;
+    }
+
+    std::vector<int> ViewGetLayers() const override
+    {
+        return { LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY };
+    }
+
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override
+    {
+        if( !m_visible )
+            return;
+
+        wxArrayString strings;
+        strings.push_back( KIGFX::PREVIEW::DimensionLabel( "r", m_radius, m_iuScale, m_units ) );
+        KIGFX::PREVIEW::DrawTextNextToCursor( aView, m_corner, m_quadrant, strings,
+                                              aLayer == LAYER_SELECT_OVERLAY );
+    }
+
+    void Set( int aRadius, const VECTOR2I& aCorner, const VECTOR2I& aQuadrant, EDA_UNITS aUnits )
+    {
+        m_radius = aRadius;
+        m_corner = aCorner;
+        m_quadrant = aQuadrant;
+        m_units = aUnits;
+        m_visible = true;
+    }
+
+    void Hide()
+    {
+        m_visible = false;
+    }
+
+    wxString GetClass() const override
+    {
+        return wxT( "RECT_RADIUS_TEXT_ITEM" );
+    }
+
+private:
+    const EDA_IU_SCALE& m_iuScale;
+    EDA_UNITS           m_units;
+    int                 m_radius;
+    VECTOR2I            m_corner;
+    VECTOR2I            m_quadrant;
+    bool                m_visible;
 };
 
 
@@ -1946,6 +2014,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     m_preview.FreeItems();
     getView()->Add( &m_preview );
 
+    RECT_RADIUS_TEXT_ITEM* radiusHelper = new RECT_RADIUS_TEXT_ITEM( pcbIUScale,
+                                                                    editFrame->GetUserUnits() );
+    m_preview.Add( radiusHelper );
+
     getView()->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
@@ -2080,6 +2152,28 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             updateItem( commit );
             getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updatePoints();
+
+            if( m_editPoints->PointsSize() > RECT_RADIUS
+                && m_editedPoint == &m_editPoints->Point( RECT_RADIUS ) )
+            {
+                if( PCB_SHAPE* rect = dynamic_cast<PCB_SHAPE*>( item ) )
+                {
+                    int radius = rect->GetCornerRadius();
+                    int offset = radius - M_SQRT1_2 * radius;
+                    VECTOR2I topLeft = rect->GetTopLeft();
+                    VECTOR2I botRight = rect->GetBotRight();
+                    VECTOR2I topRight( botRight.x, topLeft.y );
+                    VECTOR2I center( topRight.x - offset, topRight.y + offset );
+                    radiusHelper->Set( radius, center, VECTOR2I( 1, -1 ),
+                                       editFrame->GetUserUnits() );
+                }
+            }
+            else
+            {
+                radiusHelper->Hide();
+            }
+
+            getView()->Update( &m_preview );
         }
         else if( m_editedPoint && evt->Action() == TA_MOUSE_DOWN && evt->Buttons() == BUT_LEFT )
         {
@@ -2102,6 +2196,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->SetActive( false );
                 getView()->Update( m_editPoints.get() );
             }
+
+            radiusHelper->Hide();
+            getView()->Update( &m_preview );
 
             getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
