@@ -57,7 +57,6 @@
 */
 
 
-#include <cerrno>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -2920,13 +2919,13 @@ BIU PCB_IO_KICAD_LEGACY::biuParse( const char* aValue, const char** nptrptr )
 
 EDA_ANGLE PCB_IO_KICAD_LEGACY::degParse( const char* aValue, const char** nptrptr )
 {
-    char*   nptr;
+    const char*                   end = aValue;
+    double                        fval{};
+    fast_float::from_chars_result result = fast_float::from_chars( aValue, aValue + strlen( aValue ), fval,
+                                                                   fast_float::chars_format::skip_white_space );
+    end = result.ptr;
 
-    errno = 0;
-
-    double fval = strtod( aValue, &nptr );
-
-    if( errno )
+    if( result.ec != std::errc() )
     {
         m_error.Printf( _( "Invalid floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
@@ -2936,7 +2935,7 @@ EDA_ANGLE PCB_IO_KICAD_LEGACY::degParse( const char* aValue, const char** nptrpt
         THROW_IO_ERROR( m_error );
     }
 
-    if( aValue == nptr )
+    if( aValue == end )
     {
         m_error.Printf( _( "Missing floating point number in file: '%s'\nline: %d, offset: %d" ),
                         m_reader->GetSource().GetData(),
@@ -2947,7 +2946,7 @@ EDA_ANGLE PCB_IO_KICAD_LEGACY::degParse( const char* aValue, const char** nptrpt
     }
 
     if( nptrptr )
-        *nptrptr = nptr;
+        *nptrptr = end;
 
     return EDA_ANGLE( fval, TENTHS_OF_A_DEGREE_T );
 }
