@@ -634,11 +634,11 @@ void EDA_SHAPE::UpdateHatching() const
         return;
 
     case SHAPE_T::RECTANGLE:
-        shapeBuffer.NewOutline();
-
-        for( const VECTOR2I& pt : GetRectCorners() )
-            shapeBuffer.Append( pt );
-
+        {
+            ROUNDRECT rr( SHAPE_RECT( getPosition(), GetRectangleWidth(),
+                                      GetRectangleHeight() ), GetCornerRadius() );
+            rr.TransformToPolygon( shapeBuffer );
+        }
         break;
 
     case SHAPE_T::CIRCLE:
