@@ -2317,23 +2317,25 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
-            m_editedPoint->SetPosition( pos );
-
-            // Constrain edited line midpoints to move normal to themselves
-            if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
+            // Apply 45 degree or other constraints
+            if( m_altConstraint )
             {
+                m_editedPoint->SetPosition( pos );
                 m_altConstraint->Apply( grid );
             }
             else if( m_editedPoint->IsConstrained() )
             {
+                m_editedPoint->SetPosition( pos );
                 m_editedPoint->ApplyConstraint( grid );
             }
             else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
-                                                                 snapLayers,
-                                                                 grid.GetItemGrid( item ),
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, grid.GetItemGrid( item ),
                                                                  { item } ) );
+            }
+            else
+            {
+                m_editedPoint->SetPosition( pos );
             }
 
             updateItem( commit );
