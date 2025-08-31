@@ -856,8 +856,10 @@ TOOL_ACTION SCH_ACTIONS::toLabel( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( SCH_LABEL_T ) );
 
-TOOL_ACTION SCH_ACTIONS::toCLabel( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveEdit.toCLabel" )
+TOOL_ACTION SCH_ACTIONS::toDLabel(TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toCLabel" )    // Old name based on netClass label.
+                                                        // There's no sense losing hotkey assignments, so we
+                                                        // leave it as-is)
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Change to Directive Label" ) )
         .Tooltip( _( "Change existing item to a directive label" ) )

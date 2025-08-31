@@ -929,10 +929,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         else if( evt->IsAction( &SCH_ACTIONS::rotateCW ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::rotateCW, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &SCH_ACTIONS::rotateCCW ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::rotateCCW, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
@@ -940,30 +942,38 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, evt->Parameter<ACTIONS::INCREMENT>() );
             else
                 m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, ACTIONS::INCREMENT { 1, 0 } );
+
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
-        else if( evt->IsAction( &SCH_ACTIONS::toCLabel ) )
+        else if( evt->IsAction( &SCH_ACTIONS::toDLabel ) )
         {
-            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toCLabel, aCommit );
+            m_toolMgr->RunSynchronousAction(SCH_ACTIONS::toDLabel, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &SCH_ACTIONS::toGLabel ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toGLabel, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &SCH_ACTIONS::toHLabel ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toHLabel, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &SCH_ACTIONS::toLabel ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toLabel, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &SCH_ACTIONS::toText ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toText, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->IsAction( &SCH_ACTIONS::toTextBox ) )
         {
             m_toolMgr->RunSynchronousAction( SCH_ACTIONS::toTextBox, aCommit );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
