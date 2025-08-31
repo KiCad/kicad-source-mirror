@@ -30,6 +30,8 @@
 #include <tool/selection.h>
 #include <tool/tool_menu.h>
 
+namespace KIGFX { namespace PREVIEW { class ANGLE_ITEM; } }
+
 class PL_SELECTION_TOOL;
 class PL_EDITOR_FRAME;
 
@@ -99,6 +101,7 @@ private:
 
     ///< Currently available edit points.
     std::shared_ptr<EDIT_POINTS> m_editPoints;
+    std::unique_ptr<KIGFX::PREVIEW::ANGLE_ITEM> m_angleItem;
 };
 
 #endif  // PL_POINT_EDITOR_H

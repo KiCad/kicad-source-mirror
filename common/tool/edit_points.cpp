@@ -27,6 +27,10 @@
 #include <gal/color4d.h>
 #include <gal/painter.h>
 #include <math/util.h>      // for KiROUND
+#include <geometry/seg.h>
+#include <wx/string.h>
+#include <vector>
+#include <algorithm>
 #include "tool/edit_points.h"
 
 
@@ -331,4 +335,5 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             gal->DrawLine( line.GetOrigin().GetPosition(), line.GetEnd().GetPosition() );
         }
     }
+
 }

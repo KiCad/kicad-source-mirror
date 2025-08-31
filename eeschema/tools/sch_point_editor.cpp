@@ -32,6 +32,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
 #include <geometry/shape_utils.h>
+#include <preview_items/angle_item.h>
 #include <tool/point_editor_behavior.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
@@ -1068,7 +1069,9 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
 
     makePointsAndBehavior( item );
+    m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints.get() );
     view->Add( m_editPoints.get() );
+    view->Add( m_angleItem.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
@@ -1188,8 +1191,10 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( m_editPoints )
     {
         view->Remove( m_editPoints.get() );
+        view->Remove( m_angleItem.get() );
 
         m_editPoints.reset();
+        m_angleItem.reset();
         m_frame->GetCanvas()->Refresh();
     }
 
@@ -1226,6 +1231,7 @@ void SCH_POINT_EDITOR::updatePoints()
 
     m_editBehavior->UpdatePoints( *m_editPoints );
     getView()->Update( m_editPoints.get() );
+    getView()->Update( m_angleItem.get() );
 }
 
 

@@ -34,6 +34,8 @@
 
 #include <memory>
 
+namespace KIGFX { namespace PREVIEW { class ANGLE_ITEM; } }
+
 
 class PCB_SELECTION_TOOL;
 class POINT_EDIT_BEHAVIOR;
@@ -125,6 +127,7 @@ private:
     PCB_BASE_FRAME*               m_frame;
     PCB_SELECTION_TOOL*           m_selectionTool;
     std::shared_ptr<EDIT_POINTS>  m_editPoints;
+    std::unique_ptr<KIGFX::PREVIEW::ANGLE_ITEM> m_angleItem;
 
     EDIT_POINT*                   m_editedPoint;
     EDIT_POINT*                   m_hoveredPoint;
