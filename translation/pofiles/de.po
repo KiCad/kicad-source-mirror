@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-30 20:01+0000\n"
+"PO-Revision-Date: 2025-08-31 06:06+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -45905,7 +45905,6 @@ msgid "Footprints [%u items]"
 msgstr "Footprints [%u Elemente]"
 
 #: pcbnew/load_select_footprint.cpp:330
-#, fuzzy
 msgid "Save Footprint Library As"
 msgstr "Footprintbibliothek speichern unter"
 
