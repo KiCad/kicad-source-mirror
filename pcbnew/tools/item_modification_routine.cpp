@@ -34,7 +34,6 @@
 #include <pcb_track.h>
 #include <tools/pcb_tool_utils.h>
 #include <confirm.h>
-#include <ki_exception.h>
 
 namespace
 {
@@ -933,9 +932,9 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                     rrect.TransformToPolygon( poly );
                     addPoly( poly );
                 }
-                catch( const KI_PARAM_ERROR& error )
+                catch( ... )
                 {
-                    DisplayErrorMessage( nullptr, error.What() );
+                    DisplayErrorMessage( nullptr, _( "Cannot create rectangle outset" ) );
                 }
             }
             else
