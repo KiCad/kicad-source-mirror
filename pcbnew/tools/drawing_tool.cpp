@@ -3926,7 +3926,17 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     if( shape->IsFilled() )
                     {
-                        aItem->SetPosition( shape->GetPosition() );
+                        // Is this shape something to be replaced by the via, or something to be
+                        // stitched by multiple vias?  Use an area-based test to make a guess.
+                        SHAPE_POLY_SET poly;
+                        shape->TransformShapeToPolygon( poly, shape->GetLayer(), 0, ARC_LOW_DEF, ERROR_INSIDE );
+                        double shapeArea = poly.Area();
+
+                        int    R = via->GetWidth() / 2;
+                        double viaArea = M_PI * R * R;
+
+                        if( viaArea * 4 > shapeArea )
+                            aItem->SetPosition( shape->GetPosition() );
                     }
                     else
                     {
