@@ -37,6 +37,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/roundrect.h>
 #include <convert_shape_list_to_polygon.h>
 #include <board.h>
 #include <collectors.h>
@@ -222,6 +223,16 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
     }
     case SHAPE_T::RECTANGLE:
     {
+        if( aShape->GetCornerRadius() > 0 )
+        {
+            ROUNDRECT rr( SHAPE_RECT( aShape->GetStart(), aShape->GetRectangleWidth(), aShape->GetRectangleHeight() ),
+                          aShape->GetCornerRadius() );
+            SHAPE_POLY_SET poly;
+            rr.TransformToPolygon( poly );
+            aContour.Append( poly.Outline( 0 ) );
+            break;
+        }
+
         std::vector<VECTOR2I> pts = aShape->GetRectCorners();
         VECTOR2I prevPt;
         bool firstPt = true;
@@ -237,6 +248,7 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
 
             prevPt = pt;
         }
+
         aContour.SetClosed( true );
         break;
     }
