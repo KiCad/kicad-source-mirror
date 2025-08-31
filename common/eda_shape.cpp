@@ -2329,17 +2329,27 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
             VECTOR2I size( GetRectangleWidth(), GetRectangleHeight() );
             VECTOR2I position = GetStart() + size / 2;  // Center position
 
-            TransformRoundChamferedRectToPolygon( aBuffer, position, size, ANGLE_0,
-                                                  GetCornerRadius(), 0.0, 0,
-                                                  solidFill ? 0 : width / 2, aError, aErrorLoc );
-
-            if( solidFill && width > 0 )
+            if( solidFill )
             {
-                // Add outline for filled shapes with border
                 TransformRoundChamferedRectToPolygon( aBuffer, position, size, ANGLE_0,
                                                       GetCornerRadius(), 0.0, 0,
                                                       width / 2, aError, aErrorLoc );
             }
+            else
+            {
+                // Export outline as a set of thick segments:
+                SHAPE_POLY_SET poly;
+                TransformRoundChamferedRectToPolygon( poly, position, size, ANGLE_0,
+                                                      GetCornerRadius(), 0.0, 0,
+                                                      0, aError, aErrorLoc );
+                SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+                outline.SetClosed( true );
+
+                for( int ii = 0; ii < outline.PointCount(); ii++ )
+                    TransformOvalToPolygon( aBuffer, outline.CPoint( ii ),
+                                            outline.CPoint( ii+1 ), width, aError, aErrorLoc );
+
+           }
         }
         else
         {
@@ -2734,16 +2744,16 @@ static struct EDA_SHAPE_DESC
 
                                    int radius = aValue.As<int>();
 
-                                   EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem );
+                                   EDA_SHAPE* prop_shape = dynamic_cast<EDA_SHAPE*>( aItem );
 
-                                   if( !shape )
+                                   if( !prop_shape )
                                    {
                                        wxLogDebug( wxT( "Corner Radius Validator: Not an EDA_SHAPE" ) );
                                        return std::nullopt;
                                    }
 
-                                   int maxRadius = std::min( shape->GetRectangleWidth(),
-                                                             shape->GetRectangleHeight() ) / 2;
+                                   int maxRadius = std::min( prop_shape->GetRectangleWidth(),
+                                                             prop_shape->GetRectangleHeight() ) / 2;
 
                                    if( radius > maxRadius )
                                        return std::make_unique<VALIDATION_ERROR_TOO_LARGE<int>>( radius, maxRadius );
