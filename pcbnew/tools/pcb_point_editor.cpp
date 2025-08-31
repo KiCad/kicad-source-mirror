@@ -1663,7 +1663,10 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         m_original( VECTOR2I( 0, 0 ) ),
         m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_altConstrainer( VECTOR2I( 0, 0 ) ),
-        m_inPointEditorTool( false )
+        m_inPointEditorTool( false ),
+        m_angleSnapPos( VECTOR2I( 0, 0 ) ),
+        m_stickyDisplacement( VECTOR2I( 0, 0 ) ),
+        m_angleSnapActive( false )
 {
 }
 
@@ -1674,6 +1677,8 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
+    m_angleSnapActive = false;
+    m_stickyDisplacement = VECTOR2I( 0, 0 );
 }
 
 
@@ -1717,6 +1722,50 @@ static bool canChamferCorner( const EDA_ITEM& aItem )
     }
 
     return false;
+}
+
+static VECTOR2I snapCorner( const VECTOR2I& aPrev, const VECTOR2I& aNext, const VECTOR2I& aGuess,
+                            double aAngleDeg )
+{
+    double angleRad = aAngleDeg * M_PI / 180.0;
+    VECTOR2D prev( aPrev );
+    VECTOR2D next( aNext );
+    double chord = ( next - prev ).EuclideanNorm();
+    double sinA = sin( angleRad );
+
+    if( chord == 0.0 || fabs( sinA ) < 1e-9 )
+        return aGuess;
+
+    double     radius = chord / ( 2.0 * sinA );
+    VECTOR2D   mid = ( prev + next ) / 2.0;
+    VECTOR2D   dir = next - prev;
+    VECTOR2D   normal( -dir.y, dir.x );
+    normal = normal.Resize( 1 );
+    double h_sq = radius * radius - ( chord * chord ) / 4.0;
+    double h = h_sq > 0.0 ? sqrt( h_sq ) : 0.0;
+
+    VECTOR2D center1 = mid + normal * h;
+    VECTOR2D center2 = mid - normal * h;
+
+    auto project = [&]( const VECTOR2D& center )
+    {
+        VECTOR2D v = VECTOR2D( aGuess ) - center;
+
+        if( v.EuclideanNorm() == 0.0 )
+            v = prev - center;
+
+        v = v.Resize( 1 );
+        VECTOR2D p = center + v * radius;
+        return VECTOR2I( KiROUND( p.x ), KiROUND( p.y ) );
+    };
+
+    VECTOR2I p1 = project( center1 );
+    VECTOR2I p2 = project( center2 );
+
+    double d1 = ( VECTOR2D( aGuess ) - VECTOR2D( p1 ) ).EuclideanNorm();
+    double d2 = ( VECTOR2D( aGuess ) - VECTOR2D( p2 ) ).EuclideanNorm();
+
+    return d1 < d2 ? p1 : p2;
 }
 
 
@@ -2150,18 +2199,58 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
+            if( m_angleSnapActive )
+            {
+                m_stickyDisplacement = evt->Position() - m_angleSnapPos;
+                int stickyLimit = KiROUND( getView()->ToWorld( 5 ) );
+
+                if( m_stickyDisplacement.EuclideanNorm() > stickyLimit || evt->Modifier( MD_SHIFT ) )
+                {
+                    m_angleSnapActive = false;
+                }
+                else
+                {
+                    pos = m_angleSnapPos;
+                }
+            }
+
+            if( !m_angleSnapActive && m_editPoints->PointsSize() > 2 && !evt->Modifier( MD_SHIFT ) )
+            {
+                int idx = getEditedPointIndex();
+
+                if( idx != wxNOT_FOUND )
+                {
+                    int prevIdx = ( idx + m_editPoints->PointsSize() - 1 ) % m_editPoints->PointsSize();
+                    int nextIdx = ( idx + 1 ) % m_editPoints->PointsSize();
+                    VECTOR2I prev = m_editPoints->Point( prevIdx ).GetPosition();
+                    VECTOR2I next = m_editPoints->Point( nextIdx ).GetPosition();
+                    SEG      segA( pos, prev );
+                    SEG      segB( pos, next );
+                    double   ang = segA.Angle( segB ).AsDegrees();
+                    double   snapAng = 45.0 * std::round( ang / 45.0 );
+
+                    if( std::abs( ang - snapAng ) < 2.0 )
+                    {
+                        m_angleSnapPos = snapCorner( prev, next, pos, snapAng );
+                        m_angleSnapActive = true;
+                        m_stickyDisplacement = evt->Position() - m_angleSnapPos;
+                        pos = m_angleSnapPos;
+                    }
+                }
+            }
+
             // Apply 45 degree or other constraints
-            if( m_altConstraint )
+            if( !m_angleSnapActive && m_altConstraint )
             {
                 m_editedPoint->SetPosition( pos );
                 m_altConstraint->Apply( grid );
             }
-            else if( m_editedPoint->IsConstrained() )
+            else if( !m_angleSnapActive && m_editedPoint->IsConstrained() )
             {
                 m_editedPoint->SetPosition( pos );
                 m_editedPoint->ApplyConstraint( grid );
             }
-            else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
+            else if( !m_angleSnapActive && m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, grid.GetItemGrid( item ),
                                                                  { item } ) );

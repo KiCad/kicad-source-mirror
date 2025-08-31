@@ -144,6 +144,10 @@ private:
 
     bool                          m_inPointEditorTool; // Re-entrancy guard
 
+    VECTOR2I                      m_angleSnapPos;
+    VECTOR2I                      m_stickyDisplacement;
+    bool                          m_angleSnapActive;
+
     // This handles the edit process for a specific tpye of item (not
     // just C++ type, because PCB_SHAPE is one type that has many subtypes)
     std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editorBehavior;
