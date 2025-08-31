@@ -667,6 +667,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                                              TO_SFVEC2F( r_outline.CPoint( ii+1 ) ),
                                              linewidth3DU, *aOwner );
                     }
+
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( r_outline.CLastPoint() ),
+                                      TO_SFVEC2F( r_outline.CPoint( 0 ) ), linewidth3DU, *aOwner );
                 }
                 else
                 {
