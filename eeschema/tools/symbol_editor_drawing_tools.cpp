@@ -265,7 +265,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 else
                 {
                     getViewControls()->PinCursorInsideNonAutoscrollArea( true );
-                    cursorPos = getViewControls()->GetMousePosition();
+                    cursorPos = grid.Align( getViewControls()->GetMousePosition(), grid.GetItemGrid( item ) );
                 }
 
                 if( item )
@@ -281,7 +281,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     setCursor();
                 }
 
-                controls->SetCursorPosition( cursorPos, false );
+                if( m_frame->GetMoveWarpsCursor() )
+                    controls->SetCursorPosition( cursorPos, false );
+
+                m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
             // ... and second click places:
             else

@@ -538,9 +538,31 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         {
             cleanup();
         }
-        else if( symbol && evt->IsAction( &ACTIONS::redo ) )
+        else if( symbol && (   evt->IsAction( &ACTIONS::redo )
+                            || evt->IsAction( &SCH_ACTIONS::editWithLibEdit )
+                            || evt->IsAction( &SCH_ACTIONS::changeSymbol ) ) )
         {
             wxBell();
+        }
+        else if( symbol && (   evt->IsAction( &SCH_ACTIONS::properties )
+                            || evt->IsAction( &SCH_ACTIONS::editReference )
+                            || evt->IsAction( &SCH_ACTIONS::editValue )
+                            || evt->IsAction( &SCH_ACTIONS::editFootprint )
+                            || evt->IsAction( &SCH_ACTIONS::autoplaceFields )
+                            || evt->IsAction( &SCH_ACTIONS::showDeMorganStandard )
+                            || evt->IsAction( &SCH_ACTIONS::showDeMorganAlternate )
+                            || evt->IsAction( &SCH_ACTIONS::toggleDeMorgan )
+                            || evt->IsAction( &SCH_ACTIONS::setExcludeFromBOM )
+                            || evt->IsAction( &SCH_ACTIONS::setExcludeFromBoard )
+                            || evt->IsAction( &SCH_ACTIONS::setExcludeFromSimulation )
+                            || evt->IsAction( &SCH_ACTIONS::setDNP )
+                            || evt->IsAction( &SCH_ACTIONS::rotateCW )
+                            || evt->IsAction( &SCH_ACTIONS::rotateCCW )
+                            || evt->IsAction( &SCH_ACTIONS::mirrorV )
+                            || evt->IsAction( &SCH_ACTIONS::mirrorH ) ) )
+        {
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
+            evt->SetPassEvent();
         }
         else
         {
@@ -1869,7 +1891,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 setCursor();
             };
 
-
     Activate();
 
     // Must be done after Activate() so that it gets set into the correct context
@@ -2080,7 +2101,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 if( item )
                     prepItemForPlacement( item, cursorPos );
 
-                controls->SetCursorPosition( cursorPos, false );
+                if( m_frame->GetMoveWarpsCursor() )
+                    controls->SetCursorPosition( cursorPos, false );
+
+                m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
             else            // ... and second click places:
             {
@@ -2212,6 +2236,25 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();
+        }
+        else if( item && (   evt->IsAction( &SCH_ACTIONS::toDLabel )
+                          || evt->IsAction( &SCH_ACTIONS::toGLabel )
+                          || evt->IsAction( &SCH_ACTIONS::toHLabel )
+                          || evt->IsAction( &SCH_ACTIONS::toLabel )
+                          || evt->IsAction( &SCH_ACTIONS::toText )
+                          || evt->IsAction( &SCH_ACTIONS::toTextBox ) ) )
+        {
+            wxBell();
+        }
+        else if( item && (   evt->IsAction( &SCH_ACTIONS::properties )
+                          || evt->IsAction( &SCH_ACTIONS::autoplaceFields )
+                          || evt->IsAction( &SCH_ACTIONS::rotateCW )
+                          || evt->IsAction( &SCH_ACTIONS::rotateCCW )
+                          || evt->IsAction( &SCH_ACTIONS::mirrorV )
+                          || evt->IsAction( &SCH_ACTIONS::mirrorH ) ) )
+        {
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
+            evt->SetPassEvent();
         }
         else
         {
@@ -2389,9 +2432,18 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                         || isSyntheticClick
                         || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
-            if( evt->IsDblClick( BUT_LEFT )
-                    || evt->IsAction( &ACTIONS::finishInteractive )
-                    || !item->ContinueEdit( cursorPos ) )
+            bool finished = false;
+
+            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::finishInteractive ) )
+            {
+                finished = true;
+            }
+            else
+            {
+                finished = !item->ContinueEdit( cursorPos );
+            }
+
+            if( finished )
             {
                 item->EndEdit();
                 item->ClearEditFlags();
@@ -2439,8 +2491,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_toolMgr->PostAction( ACTIONS::activatePointEditor );
             }
         }
-        else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( item )
             {

@@ -629,7 +629,7 @@ bool SCH_EDIT_TOOL::Init()
                 menu->SetIcon( BITMAPS::right );
 
                 menu->AddItem( SCH_ACTIONS::toLabel,    toLabelCondition );
-                menu->AddItem( SCH_ACTIONS::toCLabel,   toCLabelCondition );
+                menu->AddItem(SCH_ACTIONS::toDLabel, toCLabelCondition );
                 menu->AddItem( SCH_ACTIONS::toHLabel,   toHLabelCondition );
                 menu->AddItem( SCH_ACTIONS::toGLabel,   toGLabelCondition );
                 menu->AddItem( SCH_ACTIONS::toText,     toTextCondition );
@@ -3278,7 +3278,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toGLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toCLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toDLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toText.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toTextBox.MakeEvent() );
     Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::leftJustify.MakeEvent() );

@@ -142,7 +142,7 @@ public:
     static TOOL_ACTION showDeMorganAlternate;
     static TOOL_ACTION editSymbolUnit;
     static TOOL_ACTION toLabel;
-    static TOOL_ACTION toCLabel;
+    static TOOL_ACTION toDLabel;
     static TOOL_ACTION toHLabel;
     static TOOL_ACTION toGLabel;
     static TOOL_ACTION toText;
