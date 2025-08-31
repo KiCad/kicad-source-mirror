@@ -71,11 +71,11 @@ const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 enum RECT_POINTS
 {
     RECT_TOP_LEFT,
-    RECT_RADIUS,
     RECT_TOP_RIGHT,
     RECT_BOT_RIGHT,
     RECT_BOT_LEFT,
     RECT_CENTER,
+    RECT_RADIUS,
 
     RECT_MAX_POINTS, // Must be last
 };
@@ -207,12 +207,12 @@ public:
             std::swap( topLeft.y, botRight.y );
 
         aPoints.AddPoint( topLeft );
-        aPoints.AddPoint( VECTOR2I( botRight.x - aRectangle.GetCornerRadius(), topLeft.y ) );
-        aPoints.Point( RECT_RADIUS ).SetDrawCircle();
         aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
         aPoints.AddPoint( botRight );
         aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
         aPoints.AddPoint( aRectangle.GetCenter() );
+        aPoints.AddPoint( VECTOR2I( botRight.x - aRectangle.GetCornerRadius(), topLeft.y ) );
+        aPoints.Point( RECT_RADIUS ).SetDrawCircle();
 
         aPoints.AddLine( aPoints.Point( RECT_TOP_LEFT ), aPoints.Point( RECT_TOP_RIGHT ) );
         aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );

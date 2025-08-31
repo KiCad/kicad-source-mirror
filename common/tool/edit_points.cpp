@@ -57,8 +57,11 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aVie
 
     if( m_allowPoints )
     {
-        for( EDIT_POINT& point : m_points )
+        // Check from the end so that we get the topmost point
+        for( auto r_it = m_points.rbegin(); r_it != m_points.rend(); ++r_it )
         {
+            EDIT_POINT& point = *r_it;
+
             if( point.WithinPoint( aLocation, size ) )
                 return &point;
         }

@@ -62,7 +62,7 @@ enum ARC_POINTS
 
 enum RECTANGLE_POINTS
 {
-    RECT_TOPLEFT, RECT_RADIUS, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER
+    RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER, RECT_RADIUS
 };
 
 
@@ -392,12 +392,12 @@ public:
         VECTOR2I botRight = aRect.GetEnd();
 
         aPoints.AddPoint( topLeft );
-        aPoints.AddPoint( VECTOR2I( botRight.x - aRect.GetCornerRadius(), topLeft.y ) );
-        aPoints.Point( RECT_RADIUS ).SetDrawCircle();
         aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
         aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
         aPoints.AddPoint( botRight );
         aPoints.AddPoint( aRect.GetCenter() );
+        aPoints.AddPoint( VECTOR2I( botRight.x - aRect.GetCornerRadius(), topLeft.y ) );
+        aPoints.Point( RECT_RADIUS ).SetDrawCircle();
 
         aPoints.AddLine( aPoints.Point( RECT_TOPLEFT ), aPoints.Point( RECT_TOPRIGHT ) );
         aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
