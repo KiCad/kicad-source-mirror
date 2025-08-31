@@ -38,6 +38,7 @@
 #include <pcb_track.h>
 #include <pcb_generator.h>
 #include <pad.h>
+#include <footprint.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
 
@@ -238,6 +239,38 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             changes.Modify( item->GetParent() );
         else
             changes.Modify( item );
+
+        // In the PCB Editor, we generally restrict pad movement to the footprint (like dragging)
+        if( item->Type() == PCB_PAD_T && m_frame
+                && m_frame->IsType( FRAME_PCB_EDITOR )
+                && !m_frame->GetPcbNewSettings()->m_AllowFreePads
+                && ( aEvent.GetPropertyName() == _HKI( "Position X" )
+                     || aEvent.GetPropertyName() == _HKI( "Position Y" ) ) )
+        {
+            PAD* pad = static_cast<PAD*>( item );
+            FOOTPRINT* fp = pad->GetParentFootprint();
+
+            if( fp )
+            {
+                VECTOR2I oldPos = pad->GetPosition();
+                VECTOR2I newPos = oldPos;
+
+                if( aEvent.GetPropertyName() == _HKI( "Position X" ) )
+                    newPos.x = (int) newValue.GetLong();
+                else
+                    newPos.y = (int) newValue.GetLong();
+
+                VECTOR2I delta = newPos - oldPos;
+
+                if( delta.x != 0 || delta.y != 0 )
+                {
+                    changes.Modify( fp );
+                    fp->Move( delta );
+                }
+            }
+
+            continue;
+        }
 
         item->Set( property, newValue );
     }
