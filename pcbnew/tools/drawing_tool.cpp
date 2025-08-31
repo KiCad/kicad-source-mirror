@@ -3598,19 +3598,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( aOther->HasHole() )
             {
-                constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aVia, aOther,
-                                                     UNDEFINED_LAYER );
+                constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aVia, aOther, UNDEFINED_LAYER );
                 clearance = constraint.GetValue().Min();
 
                 if( clearance >= 0 )
                 {
                     std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( UNDEFINED_LAYER );
 
-                    if( viaShape->Collide( aOther->GetEffectiveHoleShape().get(),
-                                           clearance - m_drcEpsilon ) )
-                    {
+                    if( viaShape->Collide( aOther->GetEffectiveHoleShape().get(), clearance - m_drcEpsilon ) )
                         return true;
-                    }
                 }
             }
 
@@ -3688,9 +3684,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     PAD& pad = static_cast<PAD&>( item );
 
                     if( pad.HitTest( aPosition ) )
-                    {
                         return &pad;
-                    }
                 }
             }
 
@@ -4002,6 +3996,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             VECTOR2I    viaPos = via->GetPosition();
             PCB_TRACK*  track = findTrack( via, via->GetPosition() );
             PAD*        pad = findPad( via, via->GetPosition() );
+            PCB_SHAPE*  shape = findGraphic( via, via->GetPosition() );
 
             if( track )
             {
@@ -4011,6 +4006,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             else if( pad )
             {
                 via->SetNetCode( pad->GetNetCode() );
+                via->SetIsFree( false );
+            }
+            else if( shape && shape->GetNetCode() > 0 )
+            {
+                via->SetNetCode( shape->GetNetCode() );
                 via->SetIsFree( false );
             }
             else
