@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-31 06:06+0000\n"
+"PO-Revision-Date: 2025-08-31 23:56+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -46778,11 +46778,12 @@ msgid "PTH pad %s"
 msgstr "Durchsteckpad %s"
 
 #: pcbnew/pad.cpp:2287
+#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
-"(Metallisierte Löcher haben normalerweise ein Kupferpad auf mindestens einer "
-"Außenlage.)"
+"(Durchgehende Bohrungen haben normalerweise ein Kupferpad auf mindestens "
+"einer Außenlage.)"
 
 #: pcbnew/pad.cpp:2295
 msgid "('fiducial' property makes no sense on NPTH pads)"
