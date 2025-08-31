@@ -667,15 +667,30 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     }
                     else
                     {
-                        // Check if user wants to warp the mouse to origin of moved object
-                        if( !editFrame->GetMoveWarpsCursor() )
-                            m_cursor = originalCursorPos; // No, so use original mouse pos instead
+                        VECTOR2I snapped = grid.Align( m_cursor, grid.GetSelectionGrid( selection ) );
+                        VECTOR2I delta = snapped - m_cursor;
 
-                        selection.SetReferencePoint( m_cursor );
-                        grid.SetAuxAxes( true, m_cursor );
+                        if( delta.x || delta.y )
+                        {
+                            for( BOARD_ITEM* item : sel_items )
+                            {
+                                if( item->GetParent() && item->GetParent()->IsSelected() )
+                                    continue;
+
+                                item->Move( delta );
+                            }
+                        }
+
+                        selection.SetReferencePoint( snapped );
+                        grid.SetAuxAxes( true, snapped );
+
+                        if( !editFrame->GetMoveWarpsCursor() )
+                            m_cursor = originalCursorPos;
+                        else
+                            m_cursor = snapped;
                     }
 
-                    originalPos = m_cursor;
+                    originalPos = selection.GetReferencePoint();
                 }
 
                 // Update variables for bounding box collision calculations
