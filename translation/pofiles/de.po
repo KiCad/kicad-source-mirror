@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
 "PO-Revision-Date: 2025-08-31 23:56+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -41491,6 +41491,7 @@ msgid "jumper"
 msgstr "Überbrückung"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:491
+#, fuzzy
 msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
@@ -43858,7 +43859,7 @@ msgstr "Fehlender Bedingungsausdruck."
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
 msgstr ""
-"Nicht erkanntes Element \"%s\". | Erwarteter Ausdruck in Anführungszeichen."
+"Nicht erkanntes Element \"%s\". | Ausdruck in Anführungszeichen erwartet."
 
 #: pcbnew/drc/drc_rule_parser.cpp:334
 msgid "'layer' keyword already present."
@@ -44393,7 +44394,7 @@ msgstr "\"%s\" Einstellungen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:667
 msgid "Pad clearance overridden."
-msgstr "Freiraum der Pads überschrieben."
+msgstr "Padfreiraum überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:674
 msgid "Solder mask expansion overridden."
@@ -49403,7 +49404,7 @@ msgstr "Vorderseitige Platzierungsdaten nach \"%s\" geschrieben.\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1782 pcbnew/pcbnew_jobs_handler.cpp:1860
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Rückseitige Platzierungsdaten wurden nach '%s' geschrieben.\n"
+msgstr "Rückseitige Platzierungsdaten wurden nach \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1811
 #, c-format
