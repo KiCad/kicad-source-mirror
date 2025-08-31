@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-06-01 16:38+0000\n"
-"Last-Translator: Morad Tamer <Morad.TFarouk@gmail.com>\n"
+"PO-Revision-Date: 2025-08-31 23:57+0000\n"
+"Last-Translator: Hesham Eina Abdalla <hesham.eina@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/v9/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:320
@@ -64,12 +64,11 @@ msgstr "بناء طبقات تكنولوجية"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:947
 #, c-format
 msgid "Build Tech layer %d"
-msgstr ""
+msgstr "بناء الطبقة التقنية %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "تبسيط مضلعات طبقات النحاس"
+msgstr "تبسيط مضلعات طبقة النحاس"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1213
 msgid "Calculating plated copper"
@@ -78,7 +77,7 @@ msgstr "حساب النحاس المطلي"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1267
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr ""
+msgstr "تبسيط %d من طبقات النحاس"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1310
 msgid "Simplify holes contours"
@@ -86,11 +85,11 @@ msgstr "تبسيط حدود الثقوب"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1330
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "بناء هيكل BVH للثقوب والفتحات (Vias)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
-msgstr ""
+msgstr "خطأ في إنشاء سياق OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
