@@ -2012,7 +2012,13 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( !m_editPoints )
         return 0;
 
-    m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints.get() );
+    PCB_SHAPE* graphicItem = dynamic_cast<PCB_SHAPE*>( item );
+
+    // Only add the angle_item if we are editing a polygon or zone
+    if( item->Type() == PCB_ZONE_T || ( graphicItem && graphicItem->GetShape() == SHAPE_T::POLY ) )
+    {
+        m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints.get() );
+    }
 
     m_preview.FreeItems();
     getView()->Add( &m_preview );
@@ -2022,7 +2028,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     m_preview.Add( radiusHelper );
 
     getView()->Add( m_editPoints.get() );
-    getView()->Add( m_angleItem.get() );
+
+    if( m_angleItem )
+        getView()->Add( m_angleItem.get() );
+
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
@@ -2053,7 +2062,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         if( prevHover != m_hoveredPoint )
         {
             getView()->Update( m_editPoints.get() );
-            getView()->Update( m_angleItem.get() );
+
+            if( m_angleItem )
+                getView()->Update( m_angleItem.get() );
         }
 
         if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
@@ -2198,7 +2209,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             getView()->Update( m_editPoints.get() );
-            getView()->Update( m_angleItem.get() );
+
+            if( m_angleItem )
+                getView()->Update( m_angleItem.get() );
         }
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
@@ -2206,7 +2219,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 m_editedPoint->SetActive( false );
                 getView()->Update( m_editPoints.get() );
-                getView()->Update( m_angleItem.get() );
+
+                if( m_angleItem )
+                    getView()->Update( m_angleItem.get() );
             }
 
             radiusHelper->Hide();
@@ -2278,11 +2293,19 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             if( item->Type() == PCB_PAD_T && m_isFootprintEditor )
             {
                 getView()->Remove( m_editPoints.get() );
-                getView()->Remove( m_angleItem.get() );
+
+                if( m_angleItem )
+                    getView()->Remove( m_angleItem.get() );
+
                 m_editPoints = makePoints( item );
-                m_angleItem->SetEditPoints( m_editPoints.get() );
+
+                if( m_angleItem )
+                {
+                    m_angleItem->SetEditPoints( m_editPoints.get() );
+                    getView()->Add( m_angleItem.get() );
+                }
+
                 getView()->Add( m_editPoints.get() );
-                getView()->Add( m_angleItem.get() );
             }
         }
         else if( evt->Action() == TA_UNDO_REDO_POST )
@@ -2307,7 +2330,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( m_editPoints )
     {
         getView()->Remove( m_editPoints.get() );
-        getView()->Remove( m_angleItem.get() );
+
+        if( m_angleItem )
+            getView()->Remove( m_angleItem.get() );
+
         m_editPoints.reset();
         m_angleItem.reset();
     }
@@ -2445,7 +2471,9 @@ void PCB_POINT_EDITOR::updatePoints()
 
     m_editorBehavior->UpdatePoints( *m_editPoints );
     getView()->Update( m_editPoints.get() );
-    getView()->Update( m_angleItem.get() );
+
+    if( m_angleItem )
+        getView()->Update( m_angleItem.get() );
 }
 
 
