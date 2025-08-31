@@ -2132,21 +2132,25 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
-            m_editedPoint->SetPosition( pos );
-
             // Apply 45 degree or other constraints
             if( m_altConstraint )
             {
+                m_editedPoint->SetPosition( pos );
                 m_altConstraint->Apply( grid );
             }
             else if( m_editedPoint->IsConstrained() )
             {
+                m_editedPoint->SetPosition( pos );
                 m_editedPoint->ApplyConstraint( grid );
             }
             else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers,
-                                                                 grid.GetItemGrid( item ), { item } ) );
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, grid.GetItemGrid( item ),
+                                                                 { item } ) );
+            }
+            else
+            {
+                m_editedPoint->SetPosition( pos );
             }
 
             updateItem( commit );
@@ -2164,8 +2168,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     VECTOR2I botRight = rect->GetBotRight();
                     VECTOR2I topRight( botRight.x, topLeft.y );
                     VECTOR2I center( topRight.x - offset, topRight.y + offset );
-                    radiusHelper->Set( radius, center, VECTOR2I( 1, -1 ),
-                                       editFrame->GetUserUnits() );
+                    radiusHelper->Set( radius, center, VECTOR2I( 1, -1 ), editFrame->GetUserUnits() );
                 }
             }
             else
