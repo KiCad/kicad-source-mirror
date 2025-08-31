@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( AlignGridWithCustomGrid )
     BOOST_CHECK_EQUAL( aligned.y, 50 );
 
     // Test AlignGrid with specific grid parameter
-    aligned = helper.AlignGrid( VECTOR2I( 26, 74 ), VECTOR2D( 25, 25 ) );
+    aligned = helper.AlignGrid( VECTOR2I( 26, 74 ), VECTOR2D( 25, 25 ), VECTOR2D( 0, 0 ) );
     BOOST_CHECK_EQUAL( aligned.x, 25 );
     BOOST_CHECK_EQUAL( aligned.y, 75 );
 }
