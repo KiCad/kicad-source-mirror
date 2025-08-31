@@ -104,9 +104,7 @@ EDA_ANGLE SEG::Angle( const SEG& aOther ) const
     EDA_ANGLE thisAngle = EDA_ANGLE( A - B ).Normalize180();
     EDA_ANGLE otherAngle = EDA_ANGLE( aOther.A - aOther.B ).Normalize180();
 
-    EDA_ANGLE angle = std::abs( ( thisAngle - otherAngle ).Normalize180() );
-
-    return std::min( ANGLE_180 - angle, angle );
+    return std::abs( ( thisAngle - otherAngle ).Normalize180() );
 }
 
 
