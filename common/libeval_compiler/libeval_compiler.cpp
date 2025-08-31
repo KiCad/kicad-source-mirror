@@ -880,7 +880,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     pos -= static_cast<int>( formatNode( node->leaf[0] ).length() );
 
                 reportError( CST_CODEGEN,  _( "Unknown parent of property" ), pos );
-                return false;
 
                 node->leaf[0]->isVisited = true;
                 node->leaf[1]->isVisited = true;
