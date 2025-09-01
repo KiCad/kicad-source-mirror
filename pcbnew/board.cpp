@@ -1490,6 +1490,132 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
 }
 
 
+bool BOARD::HasItemsOnLayer( PCB_LAYER_ID aLayer )
+{
+    PCB_LAYER_COLLECTOR collector;
+
+    collector.SetLayerId( aLayer );
+    collector.Collect( this, GENERAL_COLLECTOR::BoardLevelItems );
+
+    if( collector.GetCount() != 0 )
+    {
+        // Skip items owned by footprints and footprints when building
+        // the actual list of removed layers: these items are not removed
+        for( int i = 0; i < collector.GetCount(); i++ )
+        {
+            BOARD_ITEM* item = collector[i];
+
+            if( item->Type() == PCB_FOOTPRINT_T || item->GetParentFootprint() )
+                continue;
+
+            // Vias are on multiple adjacent layers, but only the top and
+            // the bottom layers are stored. So there are issues only if one
+            // is on a removed layer
+            if( item->Type() == PCB_VIA_T )
+            {
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                if( via->GetViaType() == VIATYPE::THROUGH )
+                    continue;
+                else
+                {
+                    PCB_LAYER_ID top_layer;
+                    PCB_LAYER_ID bottom_layer;
+                    via->LayerPair( &top_layer, &bottom_layer );
+
+                    if( top_layer != aLayer && bottom_layer != aLayer )
+                        continue;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool BOARD::RemoveAllItemsOnLayer( PCB_LAYER_ID aLayer )
+{
+    bool modified = false;
+    bool removedItemLayers = false;
+    PCB_LAYER_COLLECTOR collector;
+
+    collector.SetLayerId( aLayer );
+    collector.Collect( this, GENERAL_COLLECTOR::BoardLevelItems );
+
+    for( int i = 0; i < collector.GetCount(); i++ )
+    {
+        BOARD_ITEM* item = collector[i];
+
+        // Do not remove/change an item owned by a footprint
+        if( item->GetParentFootprint() )
+            continue;
+
+        // Do not remove footprints
+        if( item->Type() == PCB_FOOTPRINT_T )
+            continue;
+
+        // Note: vias are specific. They are only on copper layers,  and
+        // do not use a layer set, only store the copper top and the copper bottom.
+        // So reinit the layer set does not work with vias
+        if( item->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+            if( via->GetViaType() == VIATYPE::THROUGH )
+            {
+                removedItemLayers = true;
+                continue;
+            }
+            else if( via->IsOnLayer( aLayer ) )
+            {
+                PCB_LAYER_ID top_layer;
+                PCB_LAYER_ID bottom_layer;
+                via->LayerPair( &top_layer, &bottom_layer );
+
+                if( top_layer == aLayer || bottom_layer == aLayer )
+                {
+                    // blind/buried vias with a top or bottom layer on a removed layer
+                    // are removed. Perhaps one could just modify the top/bottom layer,
+                    // but I am not sure this is better.
+                    Remove( item );
+                    delete item;
+                    modified = true;
+                }
+
+                removedItemLayers = true;
+            }
+        }
+        else if( item->IsOnLayer( aLayer ) )
+        {
+            LSET layers = item->GetLayerSet();
+
+            layers.reset( aLayer );
+
+            if( layers.any() )
+            {
+                item->SetLayerSet( layers );
+            }
+            else
+            {
+                Remove( item );
+                delete item;
+                modified = true;
+            }
+
+            removedItemLayers = true;
+        }
+    }
+
+    if( removedItemLayers )
+        BuildConnectivity();
+
+    return modified;
+}
+
+
 wxString BOARD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "PCB" ) );

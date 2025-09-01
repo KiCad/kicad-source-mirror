@@ -424,6 +424,18 @@ public:
                                                               PCB_GENERATOR_T, PCB_FOOTPRINT_T,
                                                               PCB_TRACE_T, PCB_SHAPE_T } );
 
+    bool HasItemsOnLayer( PCB_LAYER_ID aLayer );
+
+    /**
+     * Removes all owned items other than footprints existing on the given board layer, and modifies
+     * the stackup for multilayer items to remove the given layer where applicable.
+     * Used when removing an existing layer from the board via Board Setup or the API.
+     * Caller is responsible for clearing the selection before calling this.
+     * @param aLayer should be a layer enabled for this board
+     * @return true if any items were removed or modified
+     */
+    bool RemoveAllItemsOnLayer( PCB_LAYER_ID aLayer );
+
     /**
      * Remove all teardrop zones with the STRUCT_DELETED flag set.  This avoids O(n^2) traversal
      * over the zone list.

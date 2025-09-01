@@ -89,6 +89,12 @@ private:
     HANDLER_RESULT<BoardStackupResponse> handleGetStackup(
             const HANDLER_CONTEXT<GetBoardStackup>& aCtx );
 
+    HANDLER_RESULT<BoardEnabledLayersResponse> handleGetBoardEnabledLayers(
+            const HANDLER_CONTEXT<GetBoardEnabledLayers>& aCtx );
+
+    HANDLER_RESULT<BoardEnabledLayersResponse> handleSetBoardEnabledLayers(
+            const HANDLER_CONTEXT<SetBoardEnabledLayers>& aCtx );
+
     HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults(
             const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx );
 
