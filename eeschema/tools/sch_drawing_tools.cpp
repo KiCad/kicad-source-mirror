@@ -295,6 +295,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             if( symbol )
             {
                 cleanup();
+
+                if( keepSymbol )
+                {
+                    // Re-enter symbol chooser
+                    m_toolMgr->PostAction( ACTIONS::cursorClick );
+                }
             }
             else
             {
@@ -329,7 +335,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || isSyntheticClick
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( !symbol )
             {
@@ -946,7 +954,9 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             m_frame->GetInfoBar()->Dismiss();
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || isSyntheticClick
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( placingDesignBlock )
             {
@@ -1117,7 +1127,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || isSyntheticClick
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( !image )
             {
@@ -1374,7 +1386,8 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
         {
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             // Place the imported drawings
             for( SCH_ITEM* item : newItems )
@@ -1517,7 +1530,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( !screen->GetItem( cursorPos, 0, type ) )
             {
@@ -2047,7 +2061,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || isSyntheticClick
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
         PLACE_NEXT:
             // First click creates...
@@ -2459,7 +2475,8 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) && !item )
+        else if( !item && (   evt->IsClick( BUT_LEFT )
+                           || evt->IsAction( &ACTIONS::cursorClick ) ) )
         {
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -2500,14 +2517,16 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
-        else if( item && (   evt->IsClick( BUT_LEFT )
-                          || evt->IsDblClick( BUT_LEFT )
+        else if( item && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                           || isSyntheticClick
+                          || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
                           || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             bool finished = false;
 
-            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::finishInteractive ) )
+            if( evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorDblClick )
+                    || evt->IsAction( &ACTIONS::finishInteractive ) )
             {
                 finished = true;
             }
@@ -2728,12 +2747,13 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         // events that lock in nodes
-        else if(   evt->IsClick( BUT_LEFT )
-                || evt->IsDblClick( BUT_LEFT )
+        else if(   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
                 || evt->IsAction( &SCH_ACTIONS::closeOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
+                                    || evt->IsAction( &ACTIONS::cursorDblClick )
                                     || evt->IsAction( &SCH_ACTIONS::closeOutline )
                                     || polyGeomMgr.NewPointClosesOutline( cursorPos );
 
@@ -2892,7 +2912,8 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) && !table )
+        else if( !table && (   evt->IsClick( BUT_LEFT )
+                            || evt->IsAction( &ACTIONS::cursorClick ) ) )
         {
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -2912,9 +2933,9 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( table->Clone() );
         }
-        else if( table && (   evt->IsClick( BUT_LEFT )
-                           || evt->IsDblClick( BUT_LEFT )
+        else if( table && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                            || isSyntheticClick
+                           || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
                            || evt->IsAction( &SCH_ACTIONS::finishInteractive ) ) )
         {
             table->ClearEditFlags();
@@ -3148,7 +3169,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( !sheet && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) ) )
+        else if( !sheet && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                            || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) ) )
         {
             SCH_SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -3156,12 +3178,12 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                     && selection.Front()->Type() == SCH_SHEET_T
                     && selection.Front()->GetBoundingBox().Contains( cursorPos ) )
             {
-                if( evt->IsClick( BUT_LEFT ) )
+                if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
                 {
                     // sheet already selected
                     continue;
                 }
-                else if( evt->IsDblClick( BUT_LEFT ) )
+                else if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
                 {
                     m_toolMgr->PostAction( SCH_ACTIONS::enterSheet );
                     m_frame->PopTool( aEvent );
@@ -3174,19 +3196,21 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
             sheet->SetScreen( nullptr );
 
+            wxString ext = wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
+
             if( isDrawSheetCopy )
             {
                 wxFileName fn( filename );
 
                 sheet->GetField( FIELD_T::SHEET_NAME )->SetText( fn.GetName() );
-                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + ext );
             }
             else if( isDrawSheetFromDesignBlock )
             {
                 wxFileName fn( filename );
 
                 sheet->GetField( FIELD_T::SHEET_NAME )->SetText( designBlock->GetLibId().GetLibItemName() );
-                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + ext );
 
                 std::vector<SCH_FIELD>& sheetFields = sheet->GetFields();
 
@@ -3201,7 +3225,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             else
             {
                 sheet->GetField( FIELD_T::SHEET_NAME )->SetText( wxT( "Untitled Sheet" ) );
-                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( wxString::Format( wxT( "untitled.%s" ), FILEEXT::KiCadSchematicFileExtension ) );
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( wxT( "untitled" ) + ext );
             }
 
             sheet->SetFlags( IS_NEW | IS_MOVING );
@@ -3223,17 +3247,16 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( sheet->Clone() );
         }
-        else if( sheet && ( evt->IsClick( BUT_LEFT )
-                         || evt->IsDblClick( BUT_LEFT )
-                         || isSyntheticClick
-                         || evt->IsAction( &ACTIONS::finishInteractive ) ) )
+        else if( sheet && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                           || isSyntheticClick
+                           || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
+                           || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
 
-            if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
-                                              &m_frame->GetCurrentSheet(), nullptr, nullptr,
-                                              nullptr, &filename ) )
+            if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ), &m_frame->GetCurrentSheet(),
+                                              nullptr, nullptr, nullptr, &filename ) )
             {
                 m_view->ClearPreview();
 
@@ -3259,10 +3282,15 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                     m_selectionTool->AddItemToSel( sheet );
 
                     NULL_REPORTER reporter;
-                    m_frame->AnnotateSymbols(
-                            &c, ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
-                            (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true /* recursive */,
-                            schSettings.m_AnnotateStartNum, true, false, reporter );
+                    m_frame->AnnotateSymbols( &c,
+                                              ANNOTATE_SELECTION,
+                                              (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
+                                              (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod,
+                                              true,   /* recursive */
+                                              schSettings.m_AnnotateStartNum,
+                                              true,   /* reset */
+                                              false,  /* repair */
+                                              reporter );
                 }
 
                 c.Push( isDrawSheetCopy ? "Import Sheet Copy" : "Draw Sheet" );
@@ -3277,8 +3305,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             sheet = nullptr;
         }
-        else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( sheet )
             {
