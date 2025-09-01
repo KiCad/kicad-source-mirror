@@ -25,6 +25,9 @@
 #include <string>
 #include <iostream>
 #include <qa_utils/error_handlers.h>
+#ifdef __APPLE__
+#define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
+#endif
 #include <boost/stacktrace.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
