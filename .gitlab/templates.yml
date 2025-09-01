@@ -20,6 +20,7 @@
   variables:
     BOOST_TEST_LOGGER: 'JUNIT,warning,test_results.${TEST}.xml:HRF,message'
     CTEST_OUTPUT_ON_FAILURE: 1
+    BOOST_TEST_CATCH_SYSTEM_ERRORS: 'no'
   script:
     - cd build/linux/qa
     - ctest -R qa_${TEST}
