@@ -1456,8 +1456,10 @@ wxString SCH_PIN::getItemDescription( ALT* aAlt ) const
 
 int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
-    // Ignore the UUID here.
-    int retv = SCH_ITEM::compare( aOther, aCompareFlags | SCH_ITEM::COMPARE_FLAGS::EQUALITY );
+    // Ignore the UUID here
+    // And the position, which we'll do after the number.
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags | SCH_ITEM::COMPARE_FLAGS::EQUALITY
+                                                  | SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS );
 
     if( retv )
         return retv;
@@ -1467,7 +1469,10 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     wxCHECK( tmp, -1 );
 
     if( m_number != tmp->m_number )
-        return m_number.Cmp( tmp->m_number );
+    {
+        // StrNumCmp: sort the same as the pads in the footprint file
+        return StrNumCmp( m_number, tmp->m_number ) < 0;
+    }
 
     if( m_position.x != tmp->m_position.x )
         return m_position.x - tmp->m_position.x;
