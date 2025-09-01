@@ -37,7 +37,15 @@ class ROUNDRECT
 public:
     ROUNDRECT() : m_rect(), m_radius( 0 ) {}
 
-    ROUNDRECT( SHAPE_RECT aRect, int aRadius );
+    /**
+     * Creates a ROUNDRECT instance
+     * @param aRect in the rectangle model
+     * @param aRadius is the radius of the round rect
+     * @param aNormalizeOnCreate allows normalization of the created rect, i.e ensure
+     * width and height > 0, regardless width and height of aRect
+     * allowing normalization can modifiy the value of origin of created instance from aRect
+     */
+    ROUNDRECT( SHAPE_RECT aRect, int aRadius, bool aNormalizeOnCreate = false );
 
     static ROUNDRECT OutsetFrom( const SHAPE_RECT& aRect, int aOutset );
 

@@ -238,6 +238,12 @@ public:
     void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override;
 
+    /**
+     * Ensure that the height and width are positive.
+     */
+    void Normalize();
+
+
 private:
     VECTOR2I m_p0;      ///< Top-left corner
     int      m_w;       ///< Width

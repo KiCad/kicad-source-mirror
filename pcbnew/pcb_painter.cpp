@@ -1977,9 +1977,11 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         {
             if( aShape->GetCornerRadius() > 0 )
             {
+                // Creates a normalized ROUNDRECT item
+                // (GetRectangleWidth() and GetRectangleHeight() can be < 0 with transforms
                 ROUNDRECT rr( SHAPE_RECT( aShape->GetStart(), aShape->GetRectangleWidth(),
                                           aShape->GetRectangleHeight() ),
-                              aShape->GetCornerRadius() );
+                              aShape->GetCornerRadius(), true /* normalize */  );
                 SHAPE_POLY_SET poly;
                 rr.TransformToPolygon( poly );
                 SHAPE_LINE_CHAIN outline = poly.Outline( 0 );

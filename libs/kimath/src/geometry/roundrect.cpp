@@ -48,13 +48,18 @@ SHAPE_ARC MakeSideArcCw180( const SHAPE_RECT& aRect, int aRadius, DIRECTION_45::
 } // namespace
 
 
-ROUNDRECT::ROUNDRECT( SHAPE_RECT aRect, int aRadius ) :
+ROUNDRECT::ROUNDRECT( SHAPE_RECT aRect, int aRadius, bool aNormalizeOnCreate ) :
         m_rect( std::move( aRect ) ),
         m_radius( aRadius )
 {
+    if( aNormalizeOnCreate )
+        m_rect.Normalize();
+
     // Ensure radius is compatible with rectangle size:
-    if( m_radius > m_rect.MinorDimension()/2 )
-        m_radius = m_rect.MinorDimension()/2;
+    int min_radius = std::abs( m_rect.MinorDimension() )/2;
+
+    if( m_radius > min_radius )
+        m_radius = min_radius;
 
     if( m_radius < 0 )
         m_radius = 0;

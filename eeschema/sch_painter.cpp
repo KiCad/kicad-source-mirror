@@ -1592,10 +1592,12 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                 case SHAPE_T::RECTANGLE:
                     if( shape->GetCornerRadius() > 0 )
                     {
+                        // Creates a normalized ROUNDRECT item
+                        // (GetRectangleWidth() and GetRectangleHeight() can be < 0 with transforms
                         ROUNDRECT rr( SHAPE_RECT( shape->GetPosition(),
                                                   shape->GetRectangleWidth(),
                                                   shape->GetRectangleHeight() ),
-                                                  shape->GetCornerRadius() );
+                                                  shape->GetCornerRadius(), true /* normalize */ );
                         SHAPE_POLY_SET poly;
                         rr.TransformToPolygon( poly );
                         m_gal->DrawPolygon( poly );

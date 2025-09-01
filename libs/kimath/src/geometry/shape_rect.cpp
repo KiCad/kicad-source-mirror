@@ -162,3 +162,20 @@ const SHAPE_LINE_CHAIN SHAPE_RECT::Outline() const
     rv.SetClosed( true );
     return rv;
 }
+
+
+void SHAPE_RECT::Normalize()
+{
+    // Ensure that the height and width are positive.
+    if( m_w < 0 )
+    {
+        m_w = -m_w;
+        m_p0.x -= m_w;
+    }
+
+    if( m_h < 0 )
+    {
+        m_h = -m_h;
+        m_p0.y -= m_h;
+    }
+}
