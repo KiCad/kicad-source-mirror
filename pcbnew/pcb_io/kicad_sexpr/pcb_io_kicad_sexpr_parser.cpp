@@ -6867,8 +6867,8 @@ PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aLegacy )
 {
     T token = NextTok();
 
-    std::optional<bool> front{ std::nullopt };
-    std::optional<bool> back{ std::nullopt };
+    std::optional<bool> front( std::nullopt );
+    std::optional<bool> back( std::nullopt );
 
     if( token != T_LEFT && aLegacy )
     {
