@@ -28,6 +28,9 @@
 #ifdef __APPLE__
 #define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
 #endif
+#ifdef __linux__
+#define BOOST_STACKTRACE_USE_ADDR2LINE
+#endif
 #include <boost/stacktrace.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
