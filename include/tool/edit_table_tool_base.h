@@ -49,7 +49,7 @@ protected:
                                                                           PCB_TABLECELL_T } );
 
         auto cellBlockSelection =
-                [&]( const SELECTION& sel )
+                [this]( const SELECTION& sel )
                 {
                     if( sel.Size() < 2 )
                         return false;
@@ -77,7 +77,7 @@ protected:
                 };
 
         auto mergedCellsSelection =
-                [&]( const SELECTION& sel )
+                [this]( const SELECTION& sel )
                 {
                     for( EDA_ITEM* item : sel )
                     {
@@ -95,18 +95,13 @@ protected:
         // Add editing actions to the selection tool menu
         //
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::addRowAbove,
-                             cellSelection && SELECTION_CONDITIONS::Idle, 100 );
-        selToolMenu.AddItem( ACTIONS::addRowBelow,
-                             cellSelection && SELECTION_CONDITIONS::Idle, 100 );
-        selToolMenu.AddItem( ACTIONS::addColBefore,
-                             cellSelection && SELECTION_CONDITIONS::Idle, 100 );
-        selToolMenu.AddItem( ACTIONS::addColAfter,
-                             cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addRowAbove,   cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addRowBelow,   cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addColBefore,  cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addColAfter,   cellSelection && SELECTION_CONDITIONS::Idle, 100 );
 
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::deleteRows,
-                             cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::deleteRows,    cellSelection && SELECTION_CONDITIONS::Idle, 100 );
         selToolMenu.AddItem( ACTIONS::deleteColumns, cellSelection && SELECTION_CONDITIONS::Idle,
                              100 );
 
@@ -115,8 +110,7 @@ protected:
         selToolMenu.AddItem( ACTIONS::unmergeCells,  cellSelection && mergedCellsSelection, 100 );
 
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::editTable,
-                             cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::editTable,     cellSelection && SELECTION_CONDITIONS::Idle, 100 );
 
         selToolMenu.AddSeparator( 100 );
     }

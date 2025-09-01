@@ -193,7 +193,7 @@ DRAWING_TOOL::~DRAWING_TOOL()
 bool DRAWING_TOOL::Init()
 {
     auto haveHighlight =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 KIGFX::RENDER_SETTINGS* cfg = m_toolMgr->GetView()->GetPainter()->GetSettings();
 

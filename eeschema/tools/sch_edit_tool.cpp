@@ -353,7 +353,7 @@ bool SCH_EDIT_TOOL::Init()
     auto sheetSelection = S_C::Count( 1 ) && S_C::OnlyTypes( sheetTypes );
 
     auto haveHighlight =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -389,7 +389,7 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto propertiesCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 if( aSel.GetSize() == 0 )
                 {

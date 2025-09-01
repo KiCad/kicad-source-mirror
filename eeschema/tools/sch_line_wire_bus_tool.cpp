@@ -189,10 +189,11 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 {
     SCH_TOOL_BASE::Init();
 
-    const auto busGetter = [this]()
-    {
-        return getBusForUnfolding();
-    };
+    const auto busGetter =
+            [this]()
+            {
+                return getBusForUnfolding();
+            };
 
     std::shared_ptr<BUS_UNFOLD_MENU>
             busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>( busGetter );
@@ -217,7 +218,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
             };
 
     auto belowRootSheetCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
             };
@@ -226,7 +227,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
                         && SCH_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_BUS_T } );
 
     auto haveHighlight =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 

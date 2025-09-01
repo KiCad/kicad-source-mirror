@@ -43,7 +43,7 @@ bool PCB_VIEWER_TOOLS::Init()
 {
     // Populate the context menu displayed during the tool (primarily the measure tool)
     auto activeToolCondition =
-            [ this ] ( const SELECTION& aSel )
+            [this] ( const SELECTION& aSel )
             {
                 return !frame()->ToolStackIsEmpty();
             };

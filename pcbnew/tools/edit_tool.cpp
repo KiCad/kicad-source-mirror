@@ -219,7 +219,7 @@ bool EDIT_TOOL::Init()
     m_selectionTool->GetToolMenu().RegisterSubMenu( shapeModificationSubMenu );
 
     auto positioningToolsCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 std::shared_ptr<CONDITIONAL_MENU> subMenu = makePositioningToolsMenu( this );
                 subMenu->Evaluate( aSel );
@@ -227,7 +227,7 @@ bool EDIT_TOOL::Init()
             };
 
     auto shapeModificationCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 std::shared_ptr<CONDITIONAL_MENU> subMenu = makeShapeModificationMenu( this );
                 subMenu->Evaluate( aSel );
@@ -235,7 +235,7 @@ bool EDIT_TOOL::Init()
             };
 
     auto propertiesCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 if( aSel.GetSize() == 0 )
                 {
@@ -264,13 +264,13 @@ bool EDIT_TOOL::Init()
             };
 
     auto inFootprintEditor =
-            [ this ]( const SELECTION& aSelection )
+            [this]( const SELECTION& aSelection )
             {
                 return m_isFootprintEditor;
             };
 
     auto canMirror =
-            [ this ]( const SELECTION& aSelection )
+            [this]( const SELECTION& aSelection )
             {
                 if( !m_isFootprintEditor
                     && SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
@@ -307,7 +307,7 @@ bool EDIT_TOOL::Init()
             };
 
     auto noActiveToolCondition =
-            [ this ]( const SELECTION& aSelection )
+            [this]( const SELECTION& aSelection )
             {
                 return frame()->ToolStackIsEmpty();
             };
@@ -319,13 +319,13 @@ bool EDIT_TOOL::Init()
             };
 
     auto noItemsCondition =
-            [ this ]( const SELECTION& aSelections ) -> bool
+            [this]( const SELECTION& aSelections ) -> bool
             {
                 return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
             };
 
     auto isSkippable =
-            [ this ]( const SELECTION& aSelection )
+            [this]( const SELECTION& aSelection )
             {
                 return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
             };
