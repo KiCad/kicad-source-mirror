@@ -485,7 +485,7 @@ bool ROUTER_TOOL::Init()
     m_menu->RegisterSubMenu( m_diffPairMenu );
 
     auto haveHighlight =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 KIGFX::RENDER_SETTINGS* cfg = m_toolMgr->GetView()->GetPainter()->GetSettings();
 
@@ -499,7 +499,7 @@ bool ROUTER_TOOL::Init()
             };
 
     auto hasOtherEnd =
-            [&]( const SELECTION& )
+            [this]( const SELECTION& )
             {
                 std::vector<PNS::NET_HANDLE> currentNets = m_router->GetCurrentNets();
 

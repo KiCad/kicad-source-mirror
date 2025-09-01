@@ -100,12 +100,11 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
     SCH_TOOL_BASE::Init();
 
     auto canEdit =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-                wxCHECK( editor, false );
 
-                return editor->IsSymbolEditable() && !editor->IsSymbolAlias();
+                return editor && editor->IsSymbolEditable() && !editor->IsSymbolAlias();
             };
 
     static const std::vector<KICAD_T> pinTypes = { SCH_PIN_T };

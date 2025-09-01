@@ -232,7 +232,7 @@ bool SCH_SELECTION_TOOL::Init()
     // clang-format on
 
     auto schEditSheetPageNumberCondition =
-            [&] ( const SELECTION& aSel )
+            [this] ( const SELECTION& aSel )
             {
                 if( m_isSymbolEditor || m_isSymbolViewer )
                     return false;
@@ -248,7 +248,7 @@ bool SCH_SELECTION_TOOL::Init()
             };
 
     auto belowRootSheetCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -257,7 +257,7 @@ bool SCH_SELECTION_TOOL::Init()
             };
 
     auto haveHighlight =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -265,14 +265,14 @@ bool SCH_SELECTION_TOOL::Init()
             };
 
     auto haveSymbol =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 return m_isSymbolEditor &&
                        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
             };
 
     auto symbolDisplayNameIsEditable =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 if ( !m_isSymbolEditor )
                     return false;

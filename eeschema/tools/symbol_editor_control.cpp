@@ -55,79 +55,104 @@ bool SYMBOL_EDITOR_CONTROL::Init()
     {
         LIBRARY_EDITOR_CONTROL* libraryTreeTool = m_toolMgr->GetTool<LIBRARY_EDITOR_CONTROL>();
         CONDITIONAL_MENU&       ctxMenu = m_menu->GetMenu();
-        SYMBOL_EDIT_FRAME*      editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-
-        wxCHECK( editFrame, false );
 
         auto libSelectedCondition =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
-                    LIB_ID sel = editFrame->GetTreeLIBID();
-                    return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        LIB_ID sel = editFrame->GetTreeLIBID();
+                        return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
+                    }
+
+                    return false;
                 };
 
         // The libInferredCondition allows you to do things like New Symbol and Paste with a
         // symbol selected (in other words, when we know the library context even if the library
         // itself isn't selected.
         auto libInferredCondition =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
-                    LIB_ID sel = editFrame->GetTreeLIBID();
-                    return !sel.GetLibNickname().empty();
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        LIB_ID sel = editFrame->GetTreeLIBID();
+                        return !sel.GetLibNickname().empty();
+                    }
+
+                    return false;
                 };
 
         auto symbolSelectedCondition =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
-                    LIB_ID sel = editFrame->GetTargetLibId();
-                    return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        LIB_ID sel = editFrame->GetTargetLibId();
+                        return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+                    }
+
+                    return false;
                 };
 
 /* not used, but used to be used
         auto multiSelectedCondition =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
-                    return editFrame->GetTreeSelectionCount() > 1;
+                    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+                    return editFrame && editFrame->GetTreeSelectionCount() > 1;
                 };
 */
         auto multiSymbolSelectedCondition =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
-                    if( editFrame->GetTreeSelectionCount() > 1 )
+                    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+                    if( editFrame && editFrame->GetTreeSelectionCount() > 1 )
                     {
                         for( LIB_ID& sel : editFrame->GetSelectedLibIds() )
                         {
                             if( !sel.IsValid() )
                                 return false;
                         }
+
                         return true;
                     }
+
                     return false;
                 };
 /* not used, yet
         auto multiLibrarySelectedCondition =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
-                    if( editFrame->GetTreeSelectionCount() > 1 )
+                    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+                    if( editFrame && editFrame->GetTreeSelectionCount() > 1 )
                     {
                         for( LIB_ID& sel : editFrame->GetSelectedLibIds() )
                         {
                             if( sel.IsValid() )
                                 return false;
                         }
+
                         return true;
                     }
+
                     return false;
                 };
 */
         auto canOpenExternally =
-                [ editFrame ]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
                     // The option is shown if the lib has no current edits
-                    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
-                    wxString libName = editFrame->GetTargetLibId().GetLibNickname();
-                    bool     ret = !libMgr.IsLibraryModified( libName );
-                    return ret;
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+                        wxString                    libName = editFrame->GetTargetLibId().GetLibNickname();
+                        return !libMgr.IsLibraryModified( libName );
+                    }
+
+                    return false;
                 };
 
 // clang-format off

@@ -176,13 +176,14 @@ bool PCB_SELECTION_TOOL::Init()
     auto& menu = m_menu->GetMenu();
 
     auto activeToolCondition =
-            [ frame ] ( const SELECTION& aSel )
+            [this] ( const SELECTION& aSel )
             {
-                return !frame->ToolStackIsEmpty();
+                PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+                return frame && !frame->ToolStackIsEmpty();
             };
 
     auto haveHighlight =
-            [&]( const SELECTION& sel )
+            [this]( const SELECTION& sel )
             {
                 KIGFX::RENDER_SETTINGS* cfg = m_toolMgr->GetView()->GetPainter()->GetSettings();
 

@@ -83,7 +83,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     auto libSelectedCondition =
-            [ this ]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 LIB_ID sel = m_frame->GetLibTree()->GetSelectedLibId();
                 return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
@@ -93,28 +93,28 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     // symbol selected (in other words, when we know the library context even if the library
     // itself isn't selected.
     auto libInferredCondition =
-            [ this ]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 LIB_ID sel = m_frame->GetLibTree()->GetSelectedLibId();
                 return !sel.GetLibNickname().empty();
             };
 
     auto fpSelectedCondition =
-            [ this ]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 LIB_ID sel = m_frame->GetLibTree()->GetSelectedLibId();
                 return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
             };
 
     auto fpExportCondition =
-            [ this ]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint();
                 return fp != nullptr;
             };
 
     auto canOpenExternally =
-            [ this ]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 // The option is shown if the editor has no current edits,
                 // dumb/simple guard against opening a new file that does not exist on disk

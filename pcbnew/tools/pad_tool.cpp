@@ -98,13 +98,13 @@ bool PAD_TOOL::Init()
                                            SELECTION_CONDITIONS::OnlyTypes( padTypes );
 
         auto explodeCondition =
-                [&]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
                     return m_editPad == niluuid && aSel.Size() == 1 && aSel[0]->Type() == PCB_PAD_T;
                 };
 
         auto recombineCondition =
-                [&]( const SELECTION& aSel )
+                [this]( const SELECTION& aSel )
                 {
                     return m_editPad != niluuid;
                 };

@@ -1947,22 +1947,25 @@ bool PCB_POINT_EDITOR::Init()
 
     wxASSERT_MSG( m_selectionTool, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
 
-    const auto addCornerCondition = [&]( const SELECTION& aSelection ) -> bool
-    {
-        const EDA_ITEM* item = aSelection.Front();
-        return ( item != nullptr ) && canAddCorner( *item );
-    };
+    const auto addCornerCondition =
+            [this]( const SELECTION& aSelection ) -> bool
+            {
+                const EDA_ITEM* item = aSelection.Front();
+                return ( item != nullptr ) && canAddCorner( *item );
+            };
 
-    const auto addChamferCondition = [&]( const SELECTION& aSelection ) -> bool
-    {
-        const EDA_ITEM* item = aSelection.Front();
-        return ( item != nullptr ) && canChamferCorner( *item );
-    };
+    const auto addChamferCondition =
+            [this]( const SELECTION& aSelection ) -> bool
+        {
+            const EDA_ITEM* item = aSelection.Front();
+            return ( item != nullptr ) && canChamferCorner( *item );
+        };
 
-    const auto removeCornerCondition = [&]( const SELECTION& aSelection ) -> bool
-    {
-        return PCB_POINT_EDITOR::removeCornerCondition( aSelection );
-    };
+    const auto removeCornerCondition =
+            [this]( const SELECTION& aSelection ) -> bool
+            {
+                return PCB_POINT_EDITOR::removeCornerCondition( aSelection );
+            };
 
     using S_C = SELECTION_CONDITIONS;
 

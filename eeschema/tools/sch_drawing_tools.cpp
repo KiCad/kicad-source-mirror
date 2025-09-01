@@ -109,13 +109,13 @@ bool SCH_DRAWING_TOOLS::Init()
     SCH_TOOL_BASE::Init();
 
     auto belowRootSheetCondition =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
             };
 
     auto inDrawingRuleArea =
-            [&]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return m_drawingRuleArea;
             };
