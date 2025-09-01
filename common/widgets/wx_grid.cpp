@@ -76,8 +76,7 @@ wxGridCellAttr* WX_GRID_TABLE_BASE::enhanceAttr( wxGridCellAttr* aInputAttr, int
 
 void WX_GRID::CellEditorSetMargins( wxTextEntryBase* aEntry )
 {
-    // This is consistent with wxGridCellTextEditor. But works differently across platforms or
-    // course.
+    // This is consistent with wxGridCellTextEditor. But works differently across platforms of course.
     aEntry->SetMargins( 0, 0 );
 }
 
@@ -202,13 +201,12 @@ private:
 };
 
 
-WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                  long style, const wxString& name ) :
+WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
+                  const wxString& name ) :
         wxGrid( parent, id, pos, size, style, name ),
         m_weOwnTable( false )
 {
-    // Grids with comboboxes need a bit of extra height; other grids look better if they're
-    // consistent.
+    // Grids with comboboxes need a bit of extra height; other grids look better if they're consistent.
     SetDefaultRowSize( GetDefaultRowSize() + FromDIP( 4 ) );
 
     SetDefaultCellOverflow( false );
@@ -241,11 +239,7 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
                    wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
                } );
 
-    /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that
-    /// happens on Macs when moving a window between monitors of different DPIs.
-#ifndef __WXMAC__
-    aEvt.Skip();
-#endif
+    // Don't skip, otherwise the grid gets too big
 }
 
 
@@ -422,8 +416,7 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
                             }
                             else
                             {
-                                val = unitsProvider->OptionalValueFromString( m_eval->Result(),
-                                                                              cellDataType );
+                                val = unitsProvider->OptionalValueFromString( m_eval->Result(), cellDataType );
                             }
 
                             evalValue = unitsProvider->StringFromOptionalValue( val, true, cellDataType );
@@ -518,8 +511,7 @@ void WX_GRID::DrawCornerLabel( wxDC& dc )
 
     static WX_GRID_CORNER_HEADER_RENDERER rend;
 
-    // It is reported that we need to erase the background to avoid display
-    // artifacts, see #12055.
+    // It is reported that we need to erase the background to avoid display artifacts; see #12055.
     {
         wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
         wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
@@ -542,8 +534,7 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
 
     static WX_GRID_COLUMN_HEADER_RENDERER rend;
 
-    // It is reported that we need to erase the background to avoid display
-    // artifacts, see #12055.
+    // It is reported that we need to erase the background to avoid display artifacts; see #12055.
     {
         wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
         wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
@@ -578,8 +569,7 @@ void WX_GRID::DrawRowLabel( wxDC& dc, int row )
 
     static WX_GRID_ROW_HEADER_RENDERER rend;
 
-    // It is reported that we need to erase the background to avoid display
-    // artifacts, see #12055.
+    // It is reported that we need to erase the background to avoid display artifacts; see #12055.
     {
         wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
         wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
