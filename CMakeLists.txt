@@ -48,6 +48,7 @@ project( kicad )
 
 # Create a default build type for our QA that doesn't include `NDEBUG`
 set(CMAKE_CXX_FLAGS_QABUILD "-Os -g1 -ggdb1")
+string( APPEND CMAKE_EXE_LINKER_FLAGS_QABUILD " -rdynamic" )
 
 include( GNUInstallDirs )
 include( CMakeDependentOption )
