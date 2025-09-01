@@ -228,6 +228,18 @@ int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
 
     wxFileName jobsetFn( dlg.GetPath() );
 
+    // Check if the file already exists
+    bool fileExists = wxFileExists( jobsetFn.GetFullPath() );
+
+    if( fileExists )
+    {
+        // Remove the existing file so that a new one can be created
+        if( !wxRemoveFile( jobsetFn.GetFullPath() ) )
+        {
+            return -1;
+        }
+    }
+
     m_frame->OpenJobsFile( jobsetFn.GetFullPath(), true );
 
     return 0;
