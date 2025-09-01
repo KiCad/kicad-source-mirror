@@ -2326,6 +2326,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
 
+            if( m_editorBehavior )
+                m_editorBehavior->FinalizeItem( *m_editPoints, commit );
+
             if( item->Type() == PCB_GENERATOR_T )
             {
                 PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
@@ -2565,7 +2568,30 @@ void PCB_POINT_EDITOR::updatePoints()
     if( !m_editorBehavior )
         return;
 
+    int editedIndex = -1;
+
+    if( m_editedPoint )
+    {
+        for( unsigned ii = 0; ii < m_editPoints->PointsSize(); ++ii )
+        {
+            if( &m_editPoints->Point( ii ) == m_editedPoint )
+            {
+                editedIndex = ii;
+                break;
+            }
+        }
+    }
+
     m_editorBehavior->UpdatePoints( *m_editPoints );
+
+    if( editedIndex >= 0 )
+    {
+        if( editedIndex < (int) m_editPoints->PointsSize() )
+            m_editedPoint = &m_editPoints->Point( editedIndex );
+        else
+            m_editedPoint = nullptr;
+    }
+
     getView()->Update( m_editPoints.get() );
 
     if( m_angleItem )

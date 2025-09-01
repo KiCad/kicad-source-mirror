@@ -70,6 +70,17 @@ public:
     virtual void UpdatePoints( EDIT_POINTS& aPoints ) = 0;
 
     /**
+     * Finalize the edit operation. (optional)
+     *
+     * This is called once, after the user has finished editing
+     * (e.g. released the mouse button).
+     *
+     * @param aPoints The final positions of the edit points.
+     * @param aCommit The commit object to use to modify the item.
+     */
+    virtual void FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit ) {};
+
+    /**
      * Update the item with the new positions of the edit points.
      *
      * This method should all commit and add to the update list anything that
@@ -167,6 +178,8 @@ public:
     {
         UpdateOutlineFromPoints( m_polygon, aEditedPoint, aPoints );
     }
+
+    void FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit ) override;
 
 private:
     SHAPE_POLY_SET& m_polygon;

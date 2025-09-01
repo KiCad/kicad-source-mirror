@@ -24,6 +24,7 @@
 #include "tool/point_editor_behavior.h"
 
 #include <advanced_config.h>
+#include <commit.h>
 #include <geometry/shape_poly_set.h>
 
 
@@ -100,6 +101,11 @@ void POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints( SHAPE_POLY_SET&   aOu
     }
 }
 
+
+void POLYGON_POINT_EDIT_BEHAVIOR::FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit )
+{
+    m_polygon.RemoveNullSegments();
+}
 
 void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 {
