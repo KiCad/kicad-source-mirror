@@ -263,6 +263,16 @@ private:
     /// Flags to indicate when dragged and neighbouring lines are (almost) collinear.
     bool m_originCollinear;
     bool m_endCollinear;
+
+    /// Previous and next points to keep drag endpoints fixed.
+    EDIT_POINT* m_prevOrigin;
+    EDIT_POINT* m_nextEnd;
+
+    /// Original convergence point of adjacent segments.
+    VECTOR2I m_convergencePoint;
+
+    /// Vector from the convergence point to the mid-line point.
+    VECTOR2I m_midVector;
 };
 
 

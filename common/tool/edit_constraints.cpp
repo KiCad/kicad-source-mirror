@@ -30,6 +30,8 @@
 #include <trigo.h>
 
 #include <geometry/geometry_utils.h>
+#include <math/vector2d.h>
+#include <math/util.h>
 
 
 void EC_VERTICAL::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
@@ -145,6 +147,8 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 
 EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     EDIT_CONSTRAINT<EDIT_LINE>( aLine ),
+    m_prevOrigin( aPoints.Previous( aLine.GetOrigin(), false ) ),
+    m_nextEnd( aPoints.Next( aLine.GetEnd(), false ) ),
     m_colinearConstraint( nullptr ),
     m_editPoints( aPoints )
 {
@@ -152,20 +156,16 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     EDIT_POINT& origin = aLine.GetOrigin();
     EDIT_POINT& end = aLine.GetEnd();
 
-    // Previous and next points, to make constraining lines (adjacent to the dragged line)
-    EDIT_POINT& prevOrigin = *aPoints.Previous( origin, false );
-    EDIT_POINT& nextEnd = *aPoints.Next( end, false );
-
     // Constraints for segments adjacent to the dragged one
-    m_originSideConstraint = std::make_unique<EC_LINE>( origin, prevOrigin );
-    m_endSideConstraint = std::make_unique<EC_LINE>( end, nextEnd );
+    m_originSideConstraint = std::make_unique<EC_LINE>( origin, *m_prevOrigin );
+    m_endSideConstraint = std::make_unique<EC_LINE>( end, *m_nextEnd );
 
     // Store the current vector of the line
     m_draggedVector = end.GetPosition() - origin.GetPosition();
 
     // Check for colinearity
-    SEG originSide( origin.GetPosition(), prevOrigin.GetPosition() );
-    SEG endSide( end.GetPosition(), nextEnd.GetPosition() );
+    SEG originSide( origin.GetPosition(), m_prevOrigin->GetPosition() );
+    SEG endSide( end.GetPosition(), m_nextEnd->GetPosition() );
     SEG dragged( origin.GetPosition(), end.GetPosition() );
 
     // Used to align lines that are almost collinear
@@ -178,6 +178,13 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
         m_colinearConstraint = m_originSideConstraint.get();
     else if( m_endCollinear )
         m_colinearConstraint = m_endSideConstraint.get();
+
+    if( OPT_VECTOR2I intersect = originSide.IntersectLines( endSide ) )
+        m_convergencePoint = *intersect;
+    else
+        m_convergencePoint = aLine.GetPosition();
+
+    m_midVector = aLine.GetPosition() - m_convergencePoint;
 }
 
 
@@ -189,6 +196,21 @@ EC_CONVERGING::~EC_CONVERGING()
 
 void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
 {
+    VECTOR2I handlePos = aHandle.GetPosition();
+    VECTOR2I convToHandle = handlePos - m_convergencePoint;
+    double   t = 0.0;
+
+    if( m_midVector.SquaredEuclideanNorm() )
+        t = double( convToHandle.Dot( m_midVector ) )
+            / double( m_midVector.SquaredEuclideanNorm() );
+
+    if( t < 0.0 )
+        t = 0.0;
+
+    VECTOR2D newCenterD = VECTOR2D( m_convergencePoint ) + VECTOR2D( m_midVector ) * t;
+    VECTOR2I newCenter( KiROUND( newCenterD.x ), KiROUND( newCenterD.y ) );
+    aHandle.SetPosition( newCenter );
+
     // The dragged segment endpoints
     EDIT_POINT& origin = aHandle.GetOrigin();
     EDIT_POINT& end = aHandle.GetEnd();
@@ -209,12 +231,9 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
     m_originSideConstraint->Apply( aGrid );
     m_endSideConstraint->Apply( aGrid );
 
-    EDIT_POINT& prevOrigin = *m_editPoints.Previous( origin, false );
-    EDIT_POINT& nextEnd = *m_editPoints.Next( end, false );
-
     // Two segments adjacent to the dragged segment
-    SEG originSide = SEG( origin.GetPosition(), prevOrigin.GetPosition() );
-    SEG endSide = SEG( end.GetPosition(), nextEnd.GetPosition() );
+    SEG originSide = SEG( origin.GetPosition(), m_prevOrigin->GetPosition() );
+    SEG endSide = SEG( end.GetPosition(), m_nextEnd->GetPosition() );
 
     // First intersection point (dragged segment against origin side)
     if( OPT_VECTOR2I originIntersect = dragged.IntersectLines( originSide ) )
@@ -226,8 +245,8 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
 
     // Check if adjacent segments intersect (did we dragged the line to the point that it may
     // create a selfintersecting polygon?)
-    originSide = SEG( origin.GetPosition(), prevOrigin.GetPosition() );
-    endSide = SEG( end.GetPosition(), nextEnd.GetPosition() );
+    originSide = SEG( origin.GetPosition(), m_prevOrigin->GetPosition() );
+    endSide = SEG( end.GetPosition(), m_nextEnd->GetPosition() );
 
     if( OPT_VECTOR2I originEndIntersect = endSide.Intersect( originSide ) )
     {

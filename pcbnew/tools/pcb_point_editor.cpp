@@ -2084,6 +2084,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
+    bool isConstrained = false;
 
     BOARD_COMMIT commit( editFrame );
 
@@ -2163,7 +2164,13 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 grid.AddConstructionItems( { clone }, false, true );
             }
 
-            setAltConstraint( Is45Limited() || Is90Limited() );
+            bool need_constraint = Is45Limited() || Is90Limited();
+
+            if( isConstrained != need_constraint )
+            {
+                setAltConstraint( need_constraint );
+                isConstrained = need_constraint;
+            }
 
             // Keep point inside of limits with some padding
             VECTOR2I pos = GetClampedCoords<double, int>( evt->Position(), COORDS_PADDING );
