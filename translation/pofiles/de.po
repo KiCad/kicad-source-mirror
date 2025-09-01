@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-31 23:56+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-09-01 08:17+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -41480,7 +41480,7 @@ msgstr "Signal"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:486
 msgid "power plane"
-msgstr "Potenzialfläche"
+msgstr "Versorgungslage"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:487
 msgid "mixed"
@@ -41491,13 +41491,12 @@ msgid "jumper"
 msgstr "Überbrückung"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:491
-#, fuzzy
 msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
 "Kupferlagentyp für Freerouter und andere externe Router.\n"
-"Potentialflächen werden aus den Lagenmenüs von Freeroutern entfernt."
+"Versorgungslagen werden aus den Lagenmenüs von Freeroutern entfernt."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:537
 msgid "Off-board, front"
@@ -47978,7 +47977,7 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"Die CADSTAR-Lage \"%s\" ist als Lage für Potenzialflächen definiert. Es "
+"Die CADSTAR-Lage \"%s\" ist als Lage für Versorgungslagen definiert. Es "
 "existiert jedoch kein Netz mit einem solchen Namen. Die Lage wurde geladen, "
 "aber es wurde keine Kupferzone erstellt."
 
