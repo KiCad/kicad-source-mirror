@@ -4948,8 +4948,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     break;
 
                 default:
-                    // Fields other than reference and value weren't historically
-                    // stored in fp_texts so we don't need to handle them here
+                    // Fields other than reference and value aren't treated specially,
+                    // and can be created if the fp_text was hidden on the board,
+                    // so just add those to the footprint as normal.
+                    footprint->Add(text, ADD_MODE::APPEND, true );
                     break;
                 }
             }
