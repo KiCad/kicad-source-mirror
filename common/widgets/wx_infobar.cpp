@@ -30,6 +30,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/timer.h>
+#include <wx/dcclient.h>
 #include <eda_base_frame.h>
 
 #ifdef __WXMSW__
@@ -240,7 +241,8 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     // do we actually still need this for wx3.3?
     #if wxCHECK_VERSION( 3, 3, 0 )
     wxSizerItem* outerSizer = sizer->GetItem( (size_t) 0 );
-    wxSizerItem* text = nullptr;
+    wxSizerItem* textSizer = nullptr;
+
     if (outerSizer->IsSizer())
     {
         wxBoxSizer* innerSizer1 = dynamic_cast<wxBoxSizer*>( outerSizer->GetSizer() );
@@ -248,15 +250,15 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
                 dynamic_cast<wxBoxSizer*>( innerSizer1->GetItem((size_t)0)->GetSizer() );
 
         if( innerSizer2 )
-            text = innerSizer2->GetItem( 1 );
+            textSizer = innerSizer2->GetItem( 1 );
     }
     #else
-    wxSizerItem* text = sizer->GetItem( 1 );
+    wxSizerItem* textSizer = sizer->GetItem( 1 );
     #endif
 
-    if( text )
+    if( textSizer )
     {
-        if( auto textCtrl = dynamic_cast<wxStaticText*>( text->GetWindow() ) )
+        if( wxStaticText* textCtrl = dynamic_cast<wxStaticText*>( textSizer->GetWindow() ) )
             textCtrl->SetLabelText( m_message );
     }
 
@@ -273,9 +275,9 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     if( barWidth != parentWidth )
         SetSize( parentWidth, GetSize().GetHeight() );
 
-    if( text )
+    if( textSizer )
     {
-        if( auto textCtrl = dynamic_cast<wxStaticText*>( text->GetWindow() ) )
+        if( wxStaticText* textCtrl = dynamic_cast<wxStaticText*>( textSizer->GetWindow() ) )
         {
             // Re-wrap the text (this is done automatically later but we need it now)
             // And count how many lines we need.  If we have embedded newlines, then
@@ -285,9 +287,15 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
             // than the height of the icon for the bar.
             textCtrl->Wrap( -1 );
             wxString wrapped_text = textCtrl->GetLabel();
-            int      height = ( wrapped_text.Freq( '\n' ) + 1 ) * text->GetMinSize().GetHeight();
-            int      margins = text->GetMinSize().GetHeight() - 1;
+            int line_count = wrapped_text.Freq( '\n' ) + 1;
+            int txt_h, txt_v;
+            wxWindowDC dc( textCtrl );
+            dc.GetTextExtent( wxT( "Xp" ), &txt_h, &txt_v );
+
+            int      height = txt_v * line_count;
+            int      margins = txt_v - 1;
             SetMinSize( wxSize( GetSize().GetWidth(), height + margins ) );
+
             textCtrl->Wrap( -1 );
         }
     }
