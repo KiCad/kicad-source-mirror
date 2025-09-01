@@ -597,55 +597,6 @@ struct APP_KICAD : public wxApp
     {
         Pgm().MacOpenFile( aFileName );
     }
-
-
-    // When re-launching a MacOS app on an application that is already visible,
-    // we break the expected Mac behavior and launch a new copy of the application.
-    void MacReopenApp() override
-    {
-        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-
-        while (node)
-        {
-            wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
-
-            if ( !win || !win->IsShown() )
-            {
-                node = node->GetNext();
-                continue;
-            }
-
-            wxString appPath = wxStandardPaths::Get().GetExecutablePath();
-
-            wxString bundlePath = appPath;
-            size_t contentsPos = bundlePath.Find("/Contents/MacOS/");
-
-            if (contentsPos == wxNOT_FOUND)
-            {
-                wxLogDebug("Could not determine bundle path from executable path: %s", appPath);
-                return;
-            }
-
-            bundlePath = bundlePath.Left(contentsPos);
-
-
-            // Validate that the bundle path exists
-            if ( !wxDirExists(bundlePath) )
-            {
-                wxLogDebug("Bundle path does not exist: %s", bundlePath);
-                return;
-            }
-
-            wxString command = wxString::Format("open \"%s\"", bundlePath);
-
-            if ( !wxExecute(command, wxEXEC_ASYNC) )
-                wxLogDebug("Failed to launch new KiCad instance");
-
-            return;
-        }
-
-        wxApp::MacReopenApp();
-    }
 #endif
 };
 
