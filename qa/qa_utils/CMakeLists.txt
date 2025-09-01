@@ -22,6 +22,7 @@
 set( QA_UTIL_COMMON_SRC
     stdstream_line_reader.cpp
     utility_program.cpp
+    error_handlers.cpp
 
     uuid_test_utils.cpp
 
