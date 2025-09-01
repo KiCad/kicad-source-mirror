@@ -167,8 +167,8 @@ bool PCB_SELECTION_TOOL::Init()
     auto activeToolCondition =
             [this] ( const SELECTION& aSel )
             {
-                PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-                return frame && !frame->ToolStackIsEmpty();
+                PCB_BASE_FRAME* pcbFrame = getEditFrame<PCB_BASE_FRAME>();
+                return pcbFrame && !pcbFrame->ToolStackIsEmpty();
             };
 
     auto haveHighlight =
