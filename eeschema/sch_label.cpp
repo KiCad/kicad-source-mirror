@@ -906,6 +906,9 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
             text = ExpandTextVars( text, &textResolver );
     }
 
+    if( text.Contains( wxT( "@{" ) ) )
+        text = EvaluateText( text );
+
     return text;
 }
 

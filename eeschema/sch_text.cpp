@@ -355,6 +355,9 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
             text = ExpandTextVars( text, &textResolver );
     }
 
+    if( text.Contains( wxT( "@{" ) ) )
+        text = EvaluateText( text );
+
     return text;
 }
 

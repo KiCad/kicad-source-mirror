@@ -1,0 +1,200 @@
+%include {
+#include <text_eval/text_eval_parser.h>
+using namespace calc_parser;
+}
+
+%token_type {calc_parser::TOKEN_TYPE}
+%token_prefix KI_EVAL_
+%default_type {calc_parser::NODE*}
+%extra_argument {calc_parser::DOC** pDocument}
+
+%type document {calc_parser::DOC*}
+%type content_list {calc_parser::DOC*}
+%type content_item {calc_parser::NODE*}
+%type calculation {calc_parser::NODE*}
+%type expression {calc_parser::NODE*}
+%type term {calc_parser::NODE*}
+%type factor {calc_parser::NODE*}
+%type variable {calc_parser::NODE*}
+%type function_call {calc_parser::NODE*}
+%type arg_list {std::vector<std::unique_ptr<NODE>>*}
+
+%destructor document { delete $$; }
+%destructor content_list { delete $$; }
+%destructor content_item { delete $$; }
+%destructor calculation { delete $$; }
+%destructor expression { delete $$; }
+%destructor term { delete $$; }
+%destructor factor { delete $$; }
+%destructor variable { delete $$; }
+%destructor function_call { delete $$; }
+%destructor arg_list { delete $$; }
+
+%left LT GT LE GE EQ NE.
+%left PLUS MINUS.
+%left MULTIPLY DIVIDE MODULO.
+%right UMINUS.
+%right POWER.
+%token COMMA.
+
+%start_symbol document
+
+// Main document structure
+document(D) ::= content_list(L). {
+    D = L;
+    *pDocument = D;  // Store the result in the extra argument
+}
+
+content_list(L) ::= . {
+    L = new DOC();
+}
+
+content_list(L) ::= content_list(L) content_item(I). {
+    L->AddNodeRaw(I);
+}
+
+content_item(I) ::= TEXT(T). {
+    I = NODE::CreateTextRaw(GetTokenString(T));
+}
+
+content_item(I) ::= calculation(C). {
+    I = C;
+}
+
+content_item(I) ::= variable(V). {
+    I = NODE::CreateCalcRaw(V);
+}
+
+calculation(C) ::= AT_OPEN expression(E) CLOSE_BRACE. {
+    C = NODE::CreateCalcRaw(E);
+}
+
+// Mathematical expressions with proper precedence
+expression(E) ::= expression(L) LT expression(R). {
+    E = NODE::CreateBinOpRaw(L, '<', R);
+}
+
+expression(E) ::= expression(L) GT expression(R). {
+    E = NODE::CreateBinOpRaw(L, '>', R);
+}
+
+expression(E) ::= expression(L) LE expression(R). {
+    E = NODE::CreateBinOpRaw(L, 1, R);  // Using 1 for <=
+}
+
+expression(E) ::= expression(L) GE expression(R). {
+    E = NODE::CreateBinOpRaw(L, 2, R);  // Using 2 for >=
+}
+
+expression(E) ::= expression(L) EQ expression(R). {
+    E = NODE::CreateBinOpRaw(L, 3, R);  // Using 3 for ==
+}
+
+expression(E) ::= expression(L) NE expression(R). {
+    E = NODE::CreateBinOpRaw(L, 4, R);  // Using 4 for !=
+}
+
+expression(E) ::= expression(L) PLUS expression(R). {
+    E = NODE::CreateBinOpRaw(L, '+', R);
+}
+
+expression(E) ::= expression(L) MINUS expression(R). {
+    E = NODE::CreateBinOpRaw(L, '-', R);
+}
+
+expression(E) ::= term(T). {
+    E = T;
+}
+
+term(T) ::= term(L) MULTIPLY term(R). {
+    T = NODE::CreateBinOpRaw(L, '*', R);
+}
+
+term(T) ::= term(L) DIVIDE term(R). {
+    T = NODE::CreateBinOpRaw(L, '/', R);
+}
+
+term(T) ::= term(L) MODULO term(R). {
+    T = NODE::CreateBinOpRaw(L, '%', R);
+}
+
+term(T) ::= factor(F). {
+    T = F;
+}
+
+factor(F) ::= factor(L) POWER factor(R). {
+    F = NODE::CreateBinOpRaw(L, '^', R);
+}
+
+factor(F) ::= MINUS factor(R). [UMINUS] {
+    F = NODE::CreateBinOpRaw(NODE::CreateNumberRaw(0.0), '-', R);
+}
+
+factor(F) ::= PLUS factor(R). [UMINUS] {
+    F = R;
+}
+
+factor(F) ::= LPAREN expression(E) RPAREN. {
+    F = E;
+}
+
+factor(F) ::= NUMBER(N). {
+    try
+    {
+        F = NODE::CreateNumberRaw( N.isString ? std::stod( GetTokenString( N ) ) : GetTokenDouble( N ) );
+    }
+    catch (const std::exception&)
+    {
+        if (g_errorCollector)
+        {
+            g_errorCollector->AddError( std::format( "Invalid number format: {}", GetTokenString( N ) ) );
+        }
+        F = NODE::CreateNumberRaw( 0.0 );
+    }
+}
+
+factor(F) ::= STRING(S). {
+    F = NODE::CreateStringRaw( GetTokenString( S ) );
+}
+
+factor(F) ::= variable(V). {
+    F = V;
+}
+
+factor(F) ::= function_call(FC). {
+    F = FC;
+}
+
+function_call(FC) ::= IDENTIFIER(I) LPAREN RPAREN. {
+    auto empty_args = new std::vector<std::unique_ptr<NODE>>();
+    FC = NODE::CreateFunctionRaw(GetTokenString(I), empty_args);
+}
+
+function_call(FC) ::= IDENTIFIER(I) LPAREN arg_list(AL) RPAREN. {
+    FC = NODE::CreateFunctionRaw(GetTokenString(I), AL);
+}
+
+arg_list(AL) ::= expression(E). {
+    AL = new std::vector<std::unique_ptr<NODE>>();
+    AL->emplace_back(std::unique_ptr<NODE>(E));
+}
+
+arg_list(AL) ::= arg_list(AL) COMMA expression(E). {
+    AL->emplace_back(std::unique_ptr<NODE>(E));
+}
+
+variable(V) ::= DOLLAR_OPEN IDENTIFIER(I) CLOSE_BRACE. {
+    V = NODE::CreateVarRaw(GetTokenString(I));
+}
+
+%syntax_error {
+    if (g_errorCollector) {
+        g_errorCollector->AddSyntaxError();
+    }
+}
+
+%parse_failure {
+    if (g_errorCollector) {
+        g_errorCollector->AddParseFailure();
+    }
+}

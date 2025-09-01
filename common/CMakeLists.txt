@@ -130,6 +130,9 @@ set( KICOMMON_SRCS
     project/project_local_settings.cpp
     project/time_domain_parameters.cpp
 
+    text_eval/text_eval_wrapper.cpp
+    text_eval/text_eval_parser.cpp
+
     # This is basically a settings object, but for the toolbar
     tool/ui/toolbar_configuration.cpp
 
@@ -1012,6 +1015,13 @@ generate_lemon_grammar(
     libeval_compiler
     libeval_compiler/libeval_compiler.cpp
     libeval_compiler/grammar.lemon
+    )
+
+generate_lemon_grammar(
+    kicommon
+    text_eval
+    text_eval/text_eval_wrapper.cpp
+    text_eval/text_eval.lemon
     )
 
 # auto-generate stroke_params_lexer.h and stroke_params_keywords.cpp

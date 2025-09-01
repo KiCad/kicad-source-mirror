@@ -61,6 +61,12 @@ set( QA_COMMON_SRCS
     test_grid_helper.cpp
     test_richio.cpp
     test_text_attributes.cpp
+    text_eval/test_text_eval_parser.cpp
+    text_eval/test_text_eval_parser_core.cpp
+    text_eval/test_text_eval_parser_datetime.cpp
+    text_eval/test_text_eval_parser_integration.cpp
+    text_eval/test_text_eval_numeric_compat.cpp
+    text_eval/test_text_eval_render.cpp
     test_title_block.cpp
     test_types.cpp
     test_utf8.cpp

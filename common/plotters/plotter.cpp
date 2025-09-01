@@ -38,6 +38,7 @@
 
 #include <trigo.h>
 #include <plotters/plotter.h>
+#include <text_eval/text_eval_wrapper.h>
 #include <geometry/shape_line_chain.h>
 #include <bezier_curves.h>
 #include <callback_gal.h>
@@ -637,6 +638,13 @@ void PLOTTER::Text( const VECTOR2I&        aPos,
                     void*                  aData )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+    wxString                   text( aText );
+
+    if( text.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        text = evaluator.Evaluate( text );
+    }
 
     SetColor( aColor );
 
@@ -680,7 +688,7 @@ void PLOTTER::Text( const VECTOR2I&        aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
-    aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
+    aFont->Draw( &callback_gal, text, aPos, attributes, aFontMetrics );
 }
 
 
@@ -693,6 +701,13 @@ void PLOTTER::PlotText( const VECTOR2I&        aPos,
                         void*                  aData )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+    wxString                   text( aText );
+
+    if( text.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        text = evaluator.Evaluate( text );
+    }
 
     TEXT_ATTRIBUTES attributes = aAttributes;
     int penWidth = attributes.m_StrokeWidth;
@@ -725,5 +740,5 @@ void PLOTTER::PlotText( const VECTOR2I&        aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
-    aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
+    aFont->Draw( &callback_gal, text, aPos, attributes, aFontMetrics );
 }

@@ -445,6 +445,9 @@ wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
             text = ExpandTextVars( text, &resolver );
     }
 
+    if( text.Contains( wxT( "@{" ) ) )
+        text = EvaluateText( text );
+
     KIFONT::FONT*         font = GetDrawFont( nullptr );
     EDA_ANGLE             drawAngle = GetDrawRotation();
     std::vector<VECTOR2I> corners = GetCornersInSequence( drawAngle );

@@ -168,6 +168,9 @@ wxString PCB_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
             text = ExpandTextVars( text, &resolver );
     }
 
+    if( text.Contains( wxT( "@{" ) ) )
+        text = EvaluateText( text );
+
     return text;
 }
 

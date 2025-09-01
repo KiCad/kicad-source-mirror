@@ -29,6 +29,7 @@
 #include <trigo.h>
 #include <math/util.h>          // for KiROUND
 #include <font/font.h>
+#include <text_eval/text_eval_wrapper.h>
 
 #include <callback_gal.h>
 
@@ -100,8 +101,15 @@ int GRTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSi
 {
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
+    wxString evaluated( aText );
 
-    return KiROUND( aFont->StringBoundaryLimits( aText, aSize, aThickness, aBold, aItalic,
+    if( evaluated.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        evaluated = evaluator.Evaluate( evaluated );
+    }
+
+    return KiROUND( aFont->StringBoundaryLimits( evaluated, aSize, aThickness, aBold, aItalic,
                                                  aFontMetrics ).x );
 }
 
@@ -114,6 +122,13 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     bool                       fill_mode = true;
+    wxString                   evaluatedText( aText );
+
+    if( evaluatedText.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        evaluatedText = evaluator.Evaluate( evaluatedText );
+    }
 
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
@@ -156,7 +171,7 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
     attributes.m_Valign = aV_justify;
     attributes.m_Size = aSize;
 
-    aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
+    aFont->Draw( &callback_gal, evaluatedText, aPos, attributes, aFontMetrics );
 }
 
 

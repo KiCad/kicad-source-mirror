@@ -117,6 +117,8 @@ public:
 
     virtual void SetText( const wxString& aText );
 
+    wxString EvaluateText( const wxString& aText ) const;
+
     /**
      * The TextThickness is that set by the user.  The EffectiveTextPenWidth also factors
      * in bold text and thickness clamping.

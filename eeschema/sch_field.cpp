@@ -286,6 +286,9 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;
 
+    if( text.Contains( wxT( "@{" ) ) )
+        text = EvaluateText( text );
+
     return text;
 }
 

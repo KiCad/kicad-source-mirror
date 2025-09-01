@@ -297,6 +297,9 @@ wxString SCH_TEXTBOX::GetShownText( const RENDER_SETTINGS* aSettings, const SCH_
             text = ExpandTextVars( text, &textResolver );
     }
 
+    if( text.Contains( wxT( "@{" ) ) )
+        text = EvaluateText( text );
+
     VECTOR2I size = GetEnd() - GetStart();
     int      colWidth;
 

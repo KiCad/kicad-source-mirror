@@ -35,6 +35,7 @@
 #include <font/glyph.h>
 #include <gr_text.h>
 #include <string_utils.h>     // for UnescapeString
+#include <text_eval/text_eval_wrapper.h>
 #include <math/util.h>        // for KiROUND
 #include <math/vector2d.h>
 #include <core/kicad_algo.h>
@@ -635,6 +636,14 @@ void EDA_TEXT::cacheShownText()
 
     ClearRenderCache();
     ClearBoundingBoxCache();
+}
+
+
+wxString EDA_TEXT::EvaluateText( const wxString& aText ) const
+{
+    static EXPRESSION_EVALUATOR evaluator;
+
+    return evaluator.Evaluate( aText );
 }
 
 
