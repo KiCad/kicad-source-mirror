@@ -73,6 +73,10 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleRemoveFromSelection );
 
     registerHandler<GetBoardStackup, BoardStackupResponse>( &API_HANDLER_PCB::handleGetStackup );
+    registerHandler<GetBoardEnabledLayers, BoardEnabledLayersResponse>(
+        &API_HANDLER_PCB::handleGetBoardEnabledLayers );
+    registerHandler<SetBoardEnabledLayers, BoardEnabledLayersResponse>(
+        &API_HANDLER_PCB::handleSetBoardEnabledLayers );
     registerHandler<GetGraphicsDefaults, GraphicsDefaultsResponse>(
             &API_HANDLER_PCB::handleGetGraphicsDefaults );
     registerHandler<GetBoundingBox, GetBoundingBoxResponse>(
@@ -897,6 +901,108 @@ HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup(
 
         layer.set_user_name( frame()->GetBoard()->GetLayerName( id ) );
     }
+
+    return response;
+}
+
+
+HANDLER_RESULT<BoardEnabledLayersResponse> API_HANDLER_PCB::handleGetBoardEnabledLayers(
+        const HANDLER_CONTEXT<GetBoardEnabledLayers>& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    BoardEnabledLayersResponse response;
+
+    BOARD* board = frame()->GetBoard();
+    int copperLayerCount = board->GetCopperLayerCount();
+
+    response.set_copper_layer_count( copperLayerCount );
+
+    LSET enabled = board->GetEnabledLayers();
+
+    // The Rescue layer is an internal detail and should be hidden from the API
+    enabled.reset( Rescue );
+
+    // Just in case this is out of sync; the API should always return the expected copper layers
+    enabled |= LSET::AllCuMask( copperLayerCount );
+
+    board::PackLayerSet( *response.mutable_layers(), enabled );
+
+    return response;
+}
+
+
+HANDLER_RESULT<BoardEnabledLayersResponse> API_HANDLER_PCB::handleSetBoardEnabledLayers(
+        const HANDLER_CONTEXT<SetBoardEnabledLayers>& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( aCtx.Request.copper_layer_count() % 2 != 0 )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "copper_layer_count must be an even number" );
+        return tl::unexpected( e );
+    }
+
+    if( aCtx.Request.copper_layer_count() > MAX_CU_LAYERS )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "copper_layer_count must be below %d", MAX_CU_LAYERS ) );
+        return tl::unexpected( e );
+    }
+
+    int copperLayerCount = static_cast<int>( aCtx.Request.copper_layer_count() );
+    LSET enabled = board::UnpackLayerSet( aCtx.Request.layers() );
+
+    // Sanitize the input
+    enabled |= LSET( { Edge_Cuts, Margin, F_CrtYd, B_CrtYd } );
+    enabled &= ~LSET::AllCuMask();
+    enabled |= LSET::AllCuMask( copperLayerCount );
+
+    BOARD* board = frame()->GetBoard();
+
+    LSET previousEnabled = board->GetEnabledLayers();
+    LSET changedLayers = enabled ^ previousEnabled;
+
+    board->SetEnabledLayers( enabled );
+    board->SetVisibleLayers( board->GetVisibleLayers() | changedLayers );
+
+    LSEQ removedLayers;
+
+    for( PCB_LAYER_ID layer_id : previousEnabled )
+    {
+        if( !enabled[layer_id] && board->HasItemsOnLayer( layer_id ) )
+            removedLayers.push_back( layer_id );
+    }
+
+    bool modified = false;
+
+    if( !removedLayers.empty() )
+    {
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+
+        for( PCB_LAYER_ID layer_id : removedLayers )
+            modified |= board->RemoveAllItemsOnLayer( layer_id );
+    }
+
+    if( enabled != previousEnabled )
+        frame()->UpdateUserInterface();
+
+    if( modified )
+        frame()->OnModify();
+
+    BoardEnabledLayersResponse response;
+
+    response.set_copper_layer_count( copperLayerCount );
+    board::PackLayerSet( *response.mutable_layers(), enabled );
 
     return response;
 }

@@ -42,10 +42,43 @@ message BoardStackupResponse
   kiapi.board.BoardStackup stackup = 1;
 }
 
+// Changes the stackup for the given board according to the contents of the message (**not yet implemented**)
+// WARNING: any existing content on layers that are removed by this call is deleted.  This operation cannot be undone.
+// Returns BoardStackupResponse with the updated stackup, in normalized form
 message UpdateBoardStackup
 {
   kiapi.common.types.DocumentSpecifier board = 1;
   kiapi.board.BoardStackup stackup = 2;
+}
+
+message GetBoardEnabledLayers
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+}
+
+message BoardEnabledLayersResponse
+{
+  // The number of copper layers enabled in this board.
+  uint32 copper_layer_count = 1;
+
+  // A list of all layers enabled in this board, including copper layers and ones which cannot be disabled.
+  repeated kiapi.board.types.BoardLayer layers = 2;
+}
+
+// Changes which layers are enabled in the board stackup
+// WARNING: any existing content on layers that are removed by this call is deleted.  This operation cannot be undone.
+// Returns BoardEnabledLayersResponse with the updated layer set.
+message SetBoardEnabledLayers
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  // The number of copper layers to enable in the board.  Currently, this must be an even number >= 2.
+  uint32 copper_layer_count = 2;
+
+  // The non-copper layers to enable.  Note that any copper layers in this list are ignored; copper layers are enabled
+  // by setting copper_layer_count.  Note that the F/B.Courtyard, Edge.Cuts, and Margin layers cannot be disabled and
+  // will be present in the board even if they are omitted from this list.
+  repeated kiapi.board.types.BoardLayer layers = 3;
 }
 
 message GetGraphicsDefaults
