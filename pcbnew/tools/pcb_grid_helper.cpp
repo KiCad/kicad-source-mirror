@@ -35,6 +35,7 @@
 #include <pcb_table.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_point.h>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -1150,8 +1151,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     const PCB_LAYER_ID   activeHighContrastPrimaryLayer = settings->GetPrimaryHighContrastLayer();
     bool                 isHighContrast = settings->GetHighContrast();
 
-    auto checkVisibility =
-            [&]( BOARD_ITEM* item )
+    const auto checkVisibility =
+            [&]( const BOARD_ITEM* item )
             {
                 // New moved items don't yet have view flags so VIEW will call them invisible
                 if( !view->IsVisible( item ) && !item->IsMoving() )
@@ -1419,6 +1420,18 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         } );
             }
 
+            // Points are also pick-up points
+            for( const PCB_POINT* pt : footprint->Points() )
+            {
+                if( aSelectionFilter && !aSelectionFilter->points )
+                    continue;
+
+                if( !checkVisibility( pt ) )
+                    continue;
+
+                addAnchor( pt->GetPosition(), ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
+            }
+
             if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
                 break;
 
@@ -1561,8 +1574,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_MARKER_T:
         case PCB_TARGET_T:
-        case PCB_POINT_T:
             addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
+            break;
+
+        case PCB_POINT_T:
+            if( aSelectionFilter && !aSelectionFilter->points )
+                break;
+
+            if( checkVisibility( aItem ) )
+                addAnchor( aItem->GetPosition(), ORIGIN | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
+
             break;
 
         case PCB_VIA_T:

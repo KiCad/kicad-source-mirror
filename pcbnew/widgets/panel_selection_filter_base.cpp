@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,11 +60,15 @@ PANEL_SELECTION_FILTER_BASE::PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWi
 
 	m_cbDimensions = new wxCheckBox( this, wxID_ANY, _("Dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbDimensions->SetValue(true);
-	gbSizer1->Add( m_cbDimensions, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_cbDimensions, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
+
+	m_cbPoints = new wxCheckBox( this, wxID_ANY, _("Points"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPoints->SetValue(true);
+	gbSizer1->Add( m_cbPoints, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_cbOtherItems = new wxCheckBox( this, wxID_ANY, _("Other items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbOtherItems->SetValue(true);
-	gbSizer1->Add( m_cbOtherItems, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_cbOtherItems, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
 
 
 	this->SetSizer( gbSizer1 );
@@ -83,6 +87,7 @@ PANEL_SELECTION_FILTER_BASE::PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWi
 	m_cbZones->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbKeepouts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbPoints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbOtherItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 }
 
@@ -100,6 +105,7 @@ PANEL_SELECTION_FILTER_BASE::~PANEL_SELECTION_FILTER_BASE()
 	m_cbZones->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbKeepouts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbDimensions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbPoints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbOtherItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 
 }

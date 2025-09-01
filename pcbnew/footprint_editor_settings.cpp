@@ -336,6 +336,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 ret["zones"]       = m_SelectionFilter.zones;
                 ret["keepouts"]    = m_SelectionFilter.keepouts;
                 ret["dimensions"]  = m_SelectionFilter.dimensions;
+                ret["points"]      = m_SelectionFilter.points;
                 ret["otherItems"]  = m_SelectionFilter.otherItems;
 
                 return ret;
@@ -355,6 +356,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 SetIfPresent( aVal, "zones", m_SelectionFilter.zones );
                 SetIfPresent( aVal, "keepouts", m_SelectionFilter.keepouts );
                 SetIfPresent( aVal, "dimensions", m_SelectionFilter.dimensions );
+                SetIfPresent( aVal, "points", m_SelectionFilter.points );
                 SetIfPresent( aVal, "otherItems", m_SelectionFilter.otherItems );
             },
             {
@@ -368,6 +370,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 { "zones", true },
                 { "keepouts", true },
                 { "dimensions", true },
+                { "points", true },
                 { "otherItems", true }
             } ) );
 

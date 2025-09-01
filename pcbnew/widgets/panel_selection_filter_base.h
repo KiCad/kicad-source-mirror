@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SELECTION_FILTER_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,6 +41,7 @@ class PANEL_SELECTION_FILTER_BASE : public WX_PANEL
 		wxCheckBox* m_cbZones;
 		wxCheckBox* m_cbKeepouts;
 		wxCheckBox* m_cbDimensions;
+		wxCheckBox* m_cbPoints;
 		wxCheckBox* m_cbOtherItems;
 
 		// Virtual event handlers, override them in your derived class

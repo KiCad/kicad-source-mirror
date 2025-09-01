@@ -133,6 +133,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
     m_filter.zones       = true;
     m_filter.keepouts    = true;
     m_filter.dimensions  = true;
+    m_filter.points      = true;
     m_filter.otherItems  = true;
 }
 
@@ -2945,6 +2946,16 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->dimensions = true;
+            return false;
+        }
+
+        break;
+
+    case PCB_POINT_T:
+        if( !m_filter.points )
+        {
+            if( aRejected )
+                aRejected->points = true;
             return false;
         }
 
