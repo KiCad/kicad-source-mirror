@@ -3196,7 +3196,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
             sheet->SetScreen( nullptr );
 
-            wxString ext = wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
+            wxString ext = wxString( "." ) + FILEEXT::KiCadSchematicFileExtension;
 
             if( isDrawSheetCopy )
             {

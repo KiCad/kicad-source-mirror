@@ -148,8 +148,8 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
         EDIT_CONSTRAINT<EDIT_LINE>( aLine ),
         m_colinearConstraint( nullptr ),
-        m_prevOrigin( aPoints.Previous( aLine.GetOrigin(), false ) ),
         m_editPoints( aPoints ),
+        m_prevOrigin( aPoints.Previous( aLine.GetOrigin(), false ) ),
         m_nextEnd( aPoints.Next( aLine.GetEnd(), false ) )
 {
     // Dragged segment endings
