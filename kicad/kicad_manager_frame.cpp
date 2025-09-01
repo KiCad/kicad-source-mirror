@@ -300,10 +300,8 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     Unbind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Unbind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
 
-    m_notebook->Unbind( wxEVT_AUINOTEBOOK_PAGE_CLOSE,
-                        &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
-    m_notebook->Unbind( wxEVT_AUINOTEBOOK_PAGE_CLOSED,
-                        &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
+    m_notebook->Unbind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
+    m_notebook->Unbind( wxEVT_AUINOTEBOOK_PAGE_CLOSED, &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
 
     Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
@@ -484,8 +482,8 @@ KICAD_SETTINGS* KICAD_MANAGER_FRAME::kicadSettings() const
 
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
-    return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName() :
-                                                        wxString( wxEmptyString );
+    return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName()
+                                                      : wxString( wxEmptyString );
 }
 
 
@@ -607,8 +605,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
         if( wxFileExists( fullEditorName ) )
         {
             wxString command = fullEditorName + " " + gerberFiles;
-            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( FILEEXT::GerberFileExtension ),
-                                                 &command );
+            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( FILEEXT::GerberFileExtension ), &command );
         }
     }
 }
@@ -712,15 +709,12 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     if( !Kiway().PlayersClose( false ) )
         return false;
 
-    bool shouldSaveProject = Prj().GetLocalSettings().ShouldAutoSave()
-                             && Prj().GetProjectFile().ShouldAutoSave();
-
     // Save the project file for the currently loaded project.
     if( m_active_project )
     {
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-        if( shouldSaveProject )
+        if( Prj().GetLocalSettings().ShouldAutoSave() && Prj().GetProjectFile().ShouldAutoSave() )
         {
             mgr.TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
 
@@ -770,8 +764,7 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 
     try
     {
-        std::unique_ptr<JOBSET> jobsFile =
-                std::make_unique<JOBSET>( aFileName.GetFullPath().ToStdString() );
+        std::unique_ptr<JOBSET> jobsFile = std::make_unique<JOBSET>( aFileName.GetFullPath().ToStdString() );
 
         jobsFile->LoadFromFile();
 
@@ -857,8 +850,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 }
 
 
-void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
-                                            bool aCreateStubFiles )
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, bool aCreateStubFiles )
 {
     wxCHECK_RET( aProjectFileName.DirExists() && aProjectFileName.IsDirWritable(),
                  "Project folder must exist and be writable to create a new project." );
@@ -913,6 +905,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
             wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
+            {
                 file.Write( wxString::Format( "(kicad_sch\n"
                                               "\t(version %d)\n"
                                               "\t(generator \"eeschema\")\n"
@@ -929,6 +922,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
                                               ")",
                                               SEXPR_SCHEMATIC_FILE_VERSION, GetMajorMinorVersion(),
                                               KIID().AsString() ) );
+            }
 
             // wxFFile dtor will close the file
         }
@@ -944,9 +938,11 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
             wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
+            {
                 // Create a small dummy file as a stub for pcbnew:
                 file.Write( wxString::Format( "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n)",
                                               SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion() ) );
+            }
 
             // wxFFile dtor will close the file
         }

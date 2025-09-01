@@ -226,9 +226,10 @@ private:
 
     void updatePcmButtonBadge();
 
-    bool m_openSavedWindows;
-    int  m_leftWinWidth;
-    bool m_active_project;
+private:
+    bool                  m_openSavedWindows;
+    int                   m_leftWinWidth;
+    bool                  m_active_project;
 
     PROJECT_TREE_PANE*    m_leftWin;
     wxAuiNotebook*        m_notebook;

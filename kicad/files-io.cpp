@@ -22,16 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file kicad/files-io.cpp
- */
-
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
 
-#include <confirm.h>
-#include <dialogs/panel_kicad_launcher.h>
 #include <kiway.h>
 #include <project/project_archiver.h>
 #include <reporter.h>
@@ -44,6 +38,7 @@
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxFileName projFileName = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
+
     if( !projFileName.FileExists() )
         return;
 
@@ -63,9 +58,8 @@ void KICAD_MANAGER_FRAME::UnarchiveFiles()
 
     fn.SetExt( FILEEXT::ArchiveFileExtension );
 
-    wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
-                             fn.GetFullName(), FILEEXT::ZipFileWildcard(),
-                             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(), fn.GetFullName(),
+                             FILEEXT::ZipFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( zipfiledlg.ShowModal() == wxID_CANCEL )
         return;

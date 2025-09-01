@@ -512,6 +512,7 @@ int KICAD_MANAGER_CONTROL::ViewDroppedViewers( const TOOL_EVENT& aEvent )
 {
     if( aEvent.Parameter<wxString*>() )
         wxExecute( *aEvent.Parameter<wxString*>(), wxEXEC_ASYNC );
+
     return 0;
 }
 
