@@ -231,8 +231,8 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
                                   drillEndNdx-drillStartNdx );
 
             double drill_um{};
-            auto   res = fast_float::from_chars( diam_txt.data(), diam_txt.data() + diam_txt.size(), drill_um,
-                                                 fast_float::chars_format::skip_white_space );
+            fast_float::from_chars( diam_txt.data(), diam_txt.data() + diam_txt.size(), drill_um,
+                                    fast_float::chars_format::skip_white_space );
 
             drill_diam_iu = static_cast<int>( drill_um * ( pcbIUScale.IU_PER_MM / 1000.0 ) );
 

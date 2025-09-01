@@ -48,48 +48,46 @@ protected:
                                     && SELECTION_CONDITIONS::OnlyTypes( { SCH_TABLECELL_T,
                                                                           PCB_TABLECELL_T } );
 
-        auto cellBlockSelection =
-                [this]( const SELECTION& sel )
+        auto cellBlockSelection = []( const SELECTION& sel )
+        {
+            if( sel.Size() < 2 )
+                return false;
+
+            int colMin = std::numeric_limits<int>::max();
+            int colMax = 0;
+            int rowMin = std::numeric_limits<int>::max();
+            int rowMax = 0;
+            int selectedArea = 0;
+
+            for( EDA_ITEM* item : sel )
+            {
+                if( T_TABLECELL* cell = dynamic_cast<T_TABLECELL*>( item ) )
                 {
-                    if( sel.Size() < 2 )
-                        return false;
+                    colMin = std::min( colMin, cell->GetColumn() );
+                    colMax = std::max( colMax, cell->GetColumn() + cell->GetColSpan() );
+                    rowMin = std::min( rowMin, cell->GetRow() );
+                    rowMax = std::max( rowMax, cell->GetRow() + cell->GetRowSpan() );
 
-                    int colMin = std::numeric_limits<int>::max();
-                    int colMax = 0;
-                    int rowMin = std::numeric_limits<int>::max();
-                    int rowMax = 0;
-                    int selectedArea = 0;
+                    selectedArea += cell->GetColSpan() * cell->GetRowSpan();
+                }
+            }
 
-                    for( EDA_ITEM* item : sel )
-                    {
-                        if( T_TABLECELL* cell = dynamic_cast<T_TABLECELL*>( item ) )
-                        {
-                            colMin = std::min( colMin, cell->GetColumn() );
-                            colMax = std::max( colMax, cell->GetColumn() + cell->GetColSpan() );
-                            rowMin = std::min( rowMin, cell->GetRow() );
-                            rowMax = std::max( rowMax, cell->GetRow() + cell->GetRowSpan() );
+            return selectedArea == ( colMax - colMin ) * ( rowMax - rowMin );
+        };
 
-                            selectedArea += cell->GetColSpan() * cell->GetRowSpan();
-                        }
-                    }
-
-                    return selectedArea == ( colMax - colMin ) * ( rowMax - rowMin );
-                };
-
-        auto mergedCellsSelection =
-                [this]( const SELECTION& sel )
+        auto mergedCellsSelection = []( const SELECTION& sel )
+        {
+            for( EDA_ITEM* item : sel )
+            {
+                if( T_TABLECELL* cell = dynamic_cast<T_TABLECELL*>( item ) )
                 {
-                    for( EDA_ITEM* item : sel )
-                    {
-                        if( T_TABLECELL* cell = dynamic_cast<T_TABLECELL*>( item ) )
-                        {
-                            if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
-                                return true;
-                        }
-                    }
+                    if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
+                        return true;
+                }
+            }
 
-                    return false;
-                };
+            return false;
+        };
 
         //
         // Add editing actions to the selection tool menu
