@@ -1,11 +1,10 @@
 // http://turtle.sourceforge.net
 //
-// Copyright Mathieu Champlon 2012
+// Copyright Mathieu Champlon 2013
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#define MOCK_NUM_ARGS BOOST_PP_ITERATION()
-#include "function_template.hpp"
-#undef MOCK_NUM_ARGS
+#define MOCK_VERSION 2.0.0
+#define TURTLE_VERSION "2.0.0"

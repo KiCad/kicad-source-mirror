@@ -106,7 +106,13 @@ namespace detail {
     {
         s << '"' << str << '"';
     }
-    inline void serialize(stream& s, const char* const str) { s << '"' << str << '"'; }
+    inline void serialize(stream& s, const char* const str)
+    {
+        if(str)
+            s << '"' << str << '"';
+        else
+            s << "nullptr";
+    }
     inline void serialize(stream& s, unsigned char c) { s << static_cast<int>(c); }
 } // namespace detail
 } // namespace mock

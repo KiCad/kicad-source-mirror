@@ -39,7 +39,12 @@ class matcher<const char*, const char*>
 {
 public:
     explicit matcher(const char* expected) : expected_(expected) {}
-    bool operator()(const char* actual) { return std::strcmp(actual, expected_) == 0; }
+    bool operator()(const char* actual)
+    {
+        if(!actual || !expected_)
+            return actual == expected_;
+        return std::strcmp(actual, expected_) == 0;
+    }
     friend std::ostream& operator<<(std::ostream& s, const matcher& m) { return s << mock::format(m.expected_); }
 
 private:
