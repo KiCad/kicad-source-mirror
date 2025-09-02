@@ -39,7 +39,6 @@ MOCK_BASE_CLASS( MOCK_PGM_BASE, PGM_BASE )
     virtual ~MOCK_PGM_BASE() {};
 
     MOCK_METHOD( MacOpenFile, 1, void( const wxString& ) );
-    MOCK_METHOD( GetCommonSettings, 0, COMMON_SETTINGS*() );
     MOCK_METHOD( SetTextEditor, 1, void( const wxString& ) );
     MOCK_METHOD( GetTextEditor, 1, wxString&( bool ) );
     MOCK_METHOD( AskUserForPreferredEditor, 1, const wxString( const wxString& ) );

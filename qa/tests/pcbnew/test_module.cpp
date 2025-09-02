@@ -58,8 +58,6 @@ bool init_unit_test()
         Pgm().GetSettingsManager().RegisterSettings( new PCBNEW_SETTINGS, false );
         Pgm().GetSettingsManager().Load();
         const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
-        MOCK_EXPECT( program.GetCommonSettings )
-                .returns( Pgm().GetSettingsManager().GetCommonSettings() );
     }
 
     return ok;
