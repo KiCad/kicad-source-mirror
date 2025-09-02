@@ -157,6 +157,7 @@ private:
     bool      m_mirror;
     bool      m_useRouteModeForOval;     // True to use a route command for oval holes
                                          // False to use a G85 canned mode for oval holes
+    int       m_mantissaLenght;          // Max number of digits printed in float numbers
 };
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_

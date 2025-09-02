@@ -37,7 +37,6 @@
 
 #include <plotters/plotter.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <build_version.h>
@@ -50,6 +49,8 @@
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
+
+#include <fmt/format.h>
 
 
 // Oblong holes can be drilled by a "canned slot" command (G85) or a routing command
@@ -70,6 +71,7 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     m_minimalHeader = false;
     m_drillFileExtension = FILEEXT::DrillFileExtension;
     m_useRouteModeForOval = true;
+    m_mantissaLenght = 3;   // suitable to print coordinates in mm
 }
 
 
@@ -203,14 +205,16 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute )
 int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
                                       TYPE_FILE aHolesType )
 {
+    // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
+    // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
+    m_mantissaLenght = m_unitsMetric ? 3 : 4;
+
     m_file = aFile;
 
     int    diam, holes_count;
     int    x0, y0, xf, yf, xc, yc;
     double xt, yt;
     char   line[1024];
-
-    LOCALE_IO dummy;    // Use the standard notation for double numbers
 
     writeEXCELLONHeader( aLayerPair, aHolesType );
 
@@ -224,13 +228,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 #if USE_ATTRIB_FOR_HOLES
         writeHoleAttribute( tool_descr.m_HoleAttribute );
 #endif
-
-        // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
-        // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
-        if( m_unitsMetric )
-            fprintf( m_file, "T%dC%.3f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
-        else
-            fprintf( m_file, "T%dC%.4f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
+        fmt::print( m_file, "T{}C{:.{}f}\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits, m_mantissaLenght );
     }
 
     fputs( "%\n", m_file );                         // End of header info
@@ -396,29 +394,23 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, size_t aLineSize, double aC
     int      xpad = m_precision.m_Lhs + m_precision.m_Rhs;
     int      ypad = xpad;
 
+    // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
+    // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
+    // in DECIMAL_FORMAT we could use more digits.
+
     switch( m_zeroFormat )
     {
     default:
     case DECIMAL_FORMAT:
         /* In Excellon files, resolution is 1/1000 mm or 1/10000 inch (0.1 mil)
          * Although in decimal format, Excellon specifications do not specify
-         * clearly the resolution. However it seems to be 1/1000mm or 0.1 mil
-         * like in non decimal formats, so we trunk coordinates to 3 or 4 digits in mantissa
+         * clearly the resolution. However it seems to be usually 1/1000mm or 0.1 mil
+         * like in non decimal formats, so we trunk coordinates to m_mantissaLenght in mantissa
          * Decimal format just prohibit useless leading 0:
          * 0.45 or .45 is right, but 00.54 is incorrect.
          */
-        if( m_unitsMetric )
-        {
-            // resolution is 1/1000 mm
-            xs.Printf( wxT( "%.3f" ), aCoordX );
-            ys.Printf( wxT( "%.3f" ), aCoordY );
-        }
-        else
-        {
-            // resolution is 1/10000 inch
-            xs.Printf( wxT( "%.4f" ), aCoordX );
-            ys.Printf( wxT( "%.4f" ), aCoordY );
-        }
+        xs = fmt::format( "{:.{}f}", aCoordX, m_mantissaLenght );
+        ys = fmt::format( "{:.{}f}", aCoordY, m_mantissaLenght );
 
         //Remove useless trailing 0
         while( xs.Last() == '0' )
