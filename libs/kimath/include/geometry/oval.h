@@ -25,86 +25,22 @@
 
 #include <vector>
 
-#include <math/box2.h>
-#include <math/vector2d.h>
-#include <geometry/approximation.h>
-#include <geometry/eda_angle.h>
 #include <geometry/point_types.h>
-#include <geometry/seg.h>
-
-
-class SHAPE_LINE_CHAIN;
+#include <geometry/shape_segment.h>
 
 /**
- * Class that represents an oval shape (rectangle with semicircular end caps)
+ * @file Utility functions for ovals (oblongs/stadiums)
  *
- * This is not a full-blown SHAPE (yet), but can be used for some simple
- * purposes, as well as for type-based logic.
+ * An "oval" is represented by SHAPE_SEGMENT, but these functions
+ * aren't required for most users of SHAPE_SEGMENT.
  */
-class OVAL
-{
-public:
-    /**
-     * Create an oval from the segment joining the centers of the semicircles
-     * and the  diameter of the semicircles.
-     */
-    OVAL( const SEG& aSeg, int aWidth );
 
-    /**
-     * Create an oval from the overall size, the center of the oval, and the rotation.
-     *
-     * The shorter dimension is the width of the semicircles.
-     */
-    OVAL( const VECTOR2I& aOverallSize, const VECTOR2I& aCenter, const EDA_ANGLE& aRotation );
-
-    /**
-     * Get the bounding box of the oval
-     */
-    BOX2I BBox( int aClearance ) const;
-
-    /**
-     * Get the width of the oval (diameter of the semicircles)
-     */
-    int GetWidth() const { return m_width; }
-
-    /**
-     * Get the overall length of the oval from endcap tip to endcap tip
-     */
-    int GetLength() const { return m_seg.Length() + m_width; }
-
-    /**
-     * Get the side length of the oval (=length between the centers of the semicircles)
-     */
-    int GetSideLength() const { return m_seg.Length(); }
-
-    /**
-     * Get the center point of the oval.
-     */
-    VECTOR2I GetCenter() const { return m_seg.Center(); }
-
-    /**
-     * Get the central segment of the oval
-     *
-     * (Endpoint are the centers of the semicircles)
-     */
-    const SEG& GetSegment() const { return m_seg; }
-
-    /**
-     * Get the angle of the oval's central segment.
-     *
-     * The direction is aligned with the segment start/end
-     */
-    EDA_ANGLE GetAngle() const { return EDA_ANGLE( m_seg.B - m_seg.A ); }
-
-private:
-    SEG m_seg;
-    int m_width;
-};
+class SHAPE_LINE_CHAIN;
 
 namespace KIGEOM
 {
 
-SHAPE_LINE_CHAIN ConvertToChain( const OVAL& aOval );
+SHAPE_LINE_CHAIN ConvertToChain( const SHAPE_SEGMENT& aOval );
 
 
 enum OVAL_KEY_POINTS
@@ -129,12 +65,11 @@ using OVAL_KEY_POINT_FLAGS = unsigned int;
  * - The tips of the end caps
  * - The extreme cardinal points of the whole oval (if rotated non-cardinally)
  *
- * @param aOvalSize - The size of the oval (overall length and width)
- * @param aRotation - The rotation of the oval
+ * @param aOval  - The oval to get the points from
  * @param aFlags - The flags indicating which points to return
  *
  * @return std::vector<TYPED_POINT2I> - The list of points and their geomtrical types
  */
-std::vector<TYPED_POINT2I> GetOvalKeyPoints( const OVAL& aOval, OVAL_KEY_POINT_FLAGS aFlags );
+std::vector<TYPED_POINT2I> GetOvalKeyPoints( const SHAPE_SEGMENT& aOval, OVAL_KEY_POINT_FLAGS aFlags );
 
 } // namespace KIGEOM

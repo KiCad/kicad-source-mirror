@@ -27,48 +27,14 @@
 
 #include <trigo.h> // for RotatePoint
 #include <geometry/shape_arc.h>
-#include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
 
 using namespace KIGEOM;
 
-OVAL::OVAL( const SEG& aSeg, int aWidth ) : m_seg( aSeg ), m_width( aWidth )
+
+SHAPE_LINE_CHAIN KIGEOM::ConvertToChain( const SHAPE_SEGMENT& aOval )
 {
-    // A negative width is meaningless
-    wxASSERT( aWidth > 0 );
-}
-
-OVAL::OVAL( const VECTOR2I& aOverallSize, const VECTOR2I& aCenter, const EDA_ANGLE& aRotation )
-{
-    VECTOR2I segVec{};
-
-    // Find the major axis, without endcaps
-    if( aOverallSize.x > aOverallSize.y )
-        segVec.x = ( aOverallSize.x - aOverallSize.y );
-    else
-        segVec.y = ( aOverallSize.y - aOverallSize.x );
-
-    RotatePoint( segVec, aRotation );
-
-    m_seg = SEG( aCenter - segVec / 2, aCenter + segVec / 2 );
-    m_width = std::min( aOverallSize.x, aOverallSize.y );
-}
-
-
-BOX2I OVAL::BBox( int aClearance ) const
-{
-    const int rad = m_width / 2 + aClearance;
-
-    const VECTOR2I& topleft = LexicographicalMin( m_seg.A, m_seg.B );
-    const VECTOR2I& bottomright = LexicographicalMax( m_seg.A, m_seg.B );
-
-    return BOX2I::ByCorners( topleft - VECTOR2I( rad, rad ), bottomright + VECTOR2I( rad, rad ) );
-}
-
-
-SHAPE_LINE_CHAIN KIGEOM::ConvertToChain( const OVAL& aOval )
-{
-    const SEG&     seg = aOval.GetSegment();
+    const SEG&     seg = aOval.GetSeg();
     const VECTOR2I perp = GetRotated( seg.B - seg.A, ANGLE_90 ).Resize( aOval.GetWidth() / 2 );
 
     SHAPE_LINE_CHAIN chain;
@@ -81,11 +47,10 @@ SHAPE_LINE_CHAIN KIGEOM::ConvertToChain( const OVAL& aOval )
 }
 
 
-std::vector<TYPED_POINT2I> KIGEOM::GetOvalKeyPoints( const OVAL&          aOval,
-                                                     OVAL_KEY_POINT_FLAGS aFlags )
+std::vector<TYPED_POINT2I> KIGEOM::GetOvalKeyPoints( const SHAPE_SEGMENT& aOval, OVAL_KEY_POINT_FLAGS aFlags )
 {
     const int       half_width = aOval.GetWidth() / 2;
-    const int       half_len = aOval.GetLength() / 2;
+    const int       half_len = aOval.GetTotalLength() / 2;
     const EDA_ANGLE rotation = aOval.GetAngle() - ANGLE_90;
 
     // Points on a non-rotated pad at the origin, long-axis is y

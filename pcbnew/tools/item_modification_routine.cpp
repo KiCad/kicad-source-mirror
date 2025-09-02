@@ -933,7 +933,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
             if( m_params.roundCorners )
             {
-                const OVAL oval( seg, m_params.outsetDistance * 2 );
+                const SHAPE_SEGMENT oval( seg, m_params.outsetDistance * 2 );
                 addChain( KIGEOM::ConvertToChain( oval ) );
             }
             else

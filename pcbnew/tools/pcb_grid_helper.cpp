@@ -1204,7 +1204,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 }
                 case PAD_SHAPE::OVAL:
                 {
-                    const OVAL oval( aPad->GetSize( aLayer ), aPad->GetPosition(), aPad->GetOrientation() );
+                    const SHAPE_SEGMENT oval = SHAPE_SEGMENT::BySizeAndCenter(
+                            aPad->GetSize( aLayer ), aPad->GetPosition(), aPad->GetOrientation() );
 
                     for( const TYPED_POINT2I& pt : KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags ) )
                         addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
@@ -1281,7 +1282,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         // For now there's no way to have an off-angle hole, so this is the
                         // same as the pad. In future, this may not be true:
                         // https://gitlab.com/kicad/code/kicad/-/issues/4124
-                        const OVAL oval( hole_size, hole_pos, aPad->GetOrientation() );
+                        const SHAPE_SEGMENT oval =
+                                SHAPE_SEGMENT::BySizeAndCenter( hole_size, hole_pos, aPad->GetOrientation() );
                         snap_pts = KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags );
                     }
 

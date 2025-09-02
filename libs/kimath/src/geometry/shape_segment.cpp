@@ -29,6 +29,31 @@
 #include <geometry/shape_circle.h>
 #include <convert_basic_shapes_to_polygon.h>
 
+
+SHAPE_SEGMENT SHAPE_SEGMENT::BySizeAndCenter( const VECTOR2I& aOverallSize, const VECTOR2I& aCenter,
+                                              const EDA_ANGLE& aRotation )
+{
+    VECTOR2I segVec{ 0, 0 };
+    int      width;
+
+    // Find the major axis, without endcaps
+    if( aOverallSize.x > aOverallSize.y )
+    {
+        width = aOverallSize.y;
+        segVec.x = aOverallSize.x - width;
+    }
+    else
+    {
+        width = aOverallSize.x;
+        segVec.y = aOverallSize.y - width;
+    }
+
+    RotatePoint( segVec, aRotation );
+
+    return SHAPE_SEGMENT( aCenter - segVec / 2, aCenter + segVec / 2, width );
+}
+
+
 const std::string SHAPE_SEGMENT::Format( bool aCplusPlus ) const
 {
     std::stringstream ss;

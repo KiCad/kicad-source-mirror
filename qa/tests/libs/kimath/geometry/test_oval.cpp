@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_SUITE( Oval )
 
 struct OVAL_POINTS_TEST_CASE
 {
-    OVAL                       m_oval;
+    SHAPE_SEGMENT              m_oval;
     std::vector<TYPED_POINT2I> m_expected_points;
 };
 
