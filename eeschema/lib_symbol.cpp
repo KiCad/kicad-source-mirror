@@ -216,8 +216,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 
     LIB_SYMBOL_SPTR parent = aSymbol.m_parent.lock();
 
-    if( parent )
-        SetParent( parent.get() );
+    SetParent( parent.get() );
 
     EMBEDDED_FILES::operator=( aSymbol );
 
