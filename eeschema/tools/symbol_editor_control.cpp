@@ -98,6 +98,25 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     return false;
                 };
 
+        auto derivedSymbolSelectedCondition =
+                [this]( const SELECTION& aSel )
+                {
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        LIB_ID sel = editFrame->GetTargetLibId();
+
+                        if( sel.GetLibNickname().empty() || sel.GetLibItemName().empty() )
+                            return false;
+
+                        LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+                        const LIB_SYMBOL* sym = libMgr.GetSymbol( sel.GetLibItemName(), sel.GetLibNickname() );
+
+                        return sym && sym->IsDerived();
+                    }
+
+                    return false;
+                };
+
 /* not used, but used to be used
         auto multiSelectedCondition =
                 [this]( const SELECTION& aSel )
@@ -201,9 +220,13 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( SCH_ACTIONS::renameSymbol,       symbolSelectedCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::deleteSymbol,       symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
 
+        ctxMenu.AddSeparator( 20 );
+        ctxMenu.AddItem( SCH_ACTIONS::flattenSymbol,      derivedSymbolSelectedCondition, 20 );
+
         ctxMenu.AddSeparator( 100 );
         ctxMenu.AddItem( SCH_ACTIONS::importSymbol,       libInferredCondition, 100 );
         ctxMenu.AddItem( SCH_ACTIONS::exportSymbol,       symbolSelectedCondition );
+
 
         if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
         {
@@ -832,6 +855,38 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::FlattenSymbol( const TOOL_EVENT& aEvent )
+{
+    if( !m_isSymbolEditor )
+        return 0;
+
+    SYMBOL_EDIT_FRAME*          editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+    LIB_ID                      symId = editFrame->GetTargetLibId();
+
+    if( !symId.IsValid() )
+    {
+        wxMessageBox( _( "No symbol to flatten" ) );
+        return 0;
+    }
+
+    const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( symId.GetLibItemName(), symId.GetLibNickname() );
+    std::unique_ptr<LIB_SYMBOL> flatSymbol = symbol->Flatten();
+    wxCHECK_MSG( flatSymbol, 0, _( "Failed to flatten symbol" ) );
+
+    if( !libMgr.UpdateSymbol( flatSymbol.get(), symId.GetLibNickname() ) )
+    {
+        wxMessageBox( _( "Failed to update library with flattened symbol" ) );
+        return 0;
+    }
+
+    wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( symId );
+    editFrame->UpdateLibraryTree( treeItem, flatSymbol.get() );
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL* libSymbol = nullptr;
@@ -991,6 +1046,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         SCH_ACTIONS::copySymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       SCH_ACTIONS::pasteSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          SCH_ACTIONS::exportSymbol.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::FlattenSymbol,         SCH_ACTIONS::flattenSymbol.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::OpenDirectory,         ACTIONS::openDirectory.MakeEvent() );

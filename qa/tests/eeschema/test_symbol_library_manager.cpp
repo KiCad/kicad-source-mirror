@@ -132,6 +132,7 @@ BOOST_AUTO_TEST_CASE( LibBuffer )
     BOOST_CHECK_EQUAL( symbolNames[0], childSymbol1Ref.GetName() );
 
     symbolNames.Clear();
+
     BOOST_CHECK_EQUAL( libBuffer.GetDerivedSymbolNames( parentSymbol1Ref.GetName(), symbolNames ),
                        1 );
     BOOST_CHECK_EQUAL( symbolNames[0], childSymbol1Ref.GetName() );

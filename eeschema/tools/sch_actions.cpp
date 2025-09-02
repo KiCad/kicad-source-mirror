@@ -270,6 +270,12 @@ TOOL_ACTION SCH_ACTIONS::updateSymbolFields( TOOL_ACTION_ARGS()
         .Tooltip( _( "Update symbol to match changes made in parent symbol" ) )
         .Icon( BITMAPS::refresh ) );
 
+TOOL_ACTION SCH_ACTIONS::flattenSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.flattenSymbol" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Flatten Symbol" ) )
+        .Tooltip( _( "Remove inheritance from symbol" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::addSymbolToSchematic( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.addSymbolToSchematic" )
         .Scope( AS_GLOBAL )

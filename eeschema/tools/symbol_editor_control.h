@@ -62,6 +62,8 @@ public:
     int ExportSymbolAsSVG( const TOOL_EVENT& aEvent );
     int AddSymbolToSchematic( const TOOL_EVENT& aEvent );
 
+    int FlattenSymbol( const TOOL_EVENT& aEvent );
+
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );
     int ShowPinNumbers( const TOOL_EVENT& aEvent );
     int ToggleProperties( const TOOL_EVENT& aEvent );
