@@ -3326,6 +3326,8 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
         }
     }
 
+    picker->ClearHandlers();
+
     // Ensure statusPopup is hidden after use and before deleting it:
     canvas()->SetStatusPopup( nullptr );
     m_statusPopup->Hide();
