@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-09-01 08:17+0000\n"
+"PO-Revision-Date: 2025-09-02 09:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -39929,7 +39929,7 @@ msgstr "Anhand von Ecke und Größe"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr "Anhand von Mittel und Größe"
+msgstr "Anhand von Mitte und Größe"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 msgid "By Endpoints"
@@ -47977,9 +47977,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"Die CADSTAR-Lage \"%s\" ist als Lage für Versorgungslagen definiert. Es "
-"existiert jedoch kein Netz mit einem solchen Namen. Die Lage wurde geladen, "
-"aber es wurde keine Kupferzone erstellt."
+"Die CADSTAR-Lage \"%s\" ist als Versorgungslage definiert. Es existiert "
+"jedoch kein Netz mit einem solchen Namen. Die Lage wurde geladen, aber es "
+"wurde keine Kupferzone erstellt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2208
 msgid ""
