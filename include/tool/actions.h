@@ -265,6 +265,7 @@ public:
     static TOOL_ACTION showProperties;
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION showLibraryTable;
+    static TOOL_ACTION showRelatedLibraryTable;
 
     // Internal
     static TOOL_ACTION updateMenu;

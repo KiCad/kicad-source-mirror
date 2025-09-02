@@ -959,6 +959,13 @@ TOOL_ACTION ACTIONS::showLibraryTable( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Library Table" ) )
         .Icon( BITMAPS::table ) );
 
+TOOL_ACTION ACTIONS::showRelatedLibraryTable( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showRelatedLibraryTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Edit Related Symbols as Table" ) )
+        .Tooltip( _( "Edit all symbols related to the selected symbol in a table" ) )
+        .Icon( BITMAPS::table ) );
+
 TOOL_ACTION ACTIONS::showLibraryTree( TOOL_ACTION_ARGS()
         .Name( "common.Control.showLibraryTree" )
         .Scope( AS_GLOBAL )

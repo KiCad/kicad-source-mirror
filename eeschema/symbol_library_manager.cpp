@@ -744,6 +744,15 @@ bool SYMBOL_LIBRARY_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
 }
 
 
+size_t SYMBOL_LIBRARY_MANAGER::GetDerivedSymbolNames( const wxString& aSymbolName, const wxString& aLibraryName,
+                                                      wxArrayString& aList )
+{
+    LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
+
+    return libBuf.GetDerivedSymbolNames( aSymbolName, aList );
+}
+
+
 size_t SYMBOL_LIBRARY_MANAGER::GetLibraryCount() const
 {
     return symTable()->GetLogicalLibs().size();
@@ -1237,24 +1246,53 @@ size_t LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName, wxArraySt
 {
     wxCHECK( !aSymbolName.IsEmpty(), 0 );
 
+    // Parent: children map
+    std::unordered_map<LIB_SYMBOL_SPTR, std::vector<LIB_SYMBOL_SPTR>> derivedMap;
+
+    // Iterate the library once to resolve all derived symbol links.
+    // This means we only need to iterate the library once, and we can then look up the links
+    // as needed.
     for( std::shared_ptr<SYMBOL_BUFFER>& entry : m_symbols )
     {
-        const LIB_SYMBOL& symbol = entry->GetSymbol();
-        if( symbol.IsDerived() )
+        LIB_SYMBOL_SPTR symbol = entry->GetSymbol().SharedPtr();
+
+        if( symbol->IsDerived() )
         {
-            LIB_SYMBOL_SPTR parent = symbol.GetParent().lock();
+            LIB_SYMBOL_SPTR parent = symbol->GetParent().lock();
 
             // Check for inherited symbol without a valid parent.
             wxCHECK2( parent, continue );
 
-            if( parent->GetName() == aSymbolName )
-            {
-                aList.Add( symbol.GetName() );
-
-                GetDerivedSymbolNames( symbol.GetName(), aList );
-            }
+            derivedMap[parent].emplace_back( std::move( symbol ) );
         }
     }
+
+    const auto visit = [&]( LIB_SYMBOL& aSymbol )
+    {
+        aList.Add( aSymbol.GetName() );
+    };
+
+    // Assign to std::function to allow recursion
+    const std::function<void( LIB_SYMBOL_SPTR& )> getDerived =
+            [&]( LIB_SYMBOL_SPTR& aSymbol )
+            {
+                auto it = derivedMap.find( aSymbol );
+
+                if( it != derivedMap.end() )
+                {
+                    for( LIB_SYMBOL_SPTR& derivedSymbol : it->second )
+                    {
+                        visit( *derivedSymbol );
+
+                        // Recurse to get symbols derived from this one
+                        getDerived( derivedSymbol );
+                    }
+                }
+            };
+
+    // Start the recursion at the top
+    LIB_SYMBOL_SPTR symbol = GetSymbol( aSymbolName )->SharedPtr();
+    getDerived( symbol );
 
     return aList.GetCount();
 }

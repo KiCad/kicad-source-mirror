@@ -217,7 +217,8 @@ bool SYMBOL_EDITOR_CONTROL::Init()
             ctxMenu.AddItem( ACTIONS::openDirectory,      canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
         }
 
-        ctxMenu.AddItem( ACTIONS::showLibraryTable,  librarySelectedCondition, 300 );
+        ctxMenu.AddItem( ACTIONS::showLibraryTable,        librarySelectedCondition, 300 );
+        ctxMenu.AddItem( ACTIONS::showRelatedLibraryTable, symbolSelectedCondition,  300 );
 
         libraryTreeTool->AddContextMenuItems( &ctxMenu );
     }
@@ -916,14 +917,45 @@ int SYMBOL_EDITOR_CONTROL::ChangeUnit( const TOOL_EVENT& aEvent )
 }
 
 
+static void CollectRelatedSymbols( LIB_SYMBOL_LIBRARY_MANAGER& libMgr, const wxString& aLibName, const LIB_SYMBOL& sym,
+                                   wxArrayString& aSymbolNames )
+{
+    LIB_SYMBOL_SPTR root = sym.SharedPtr();
+
+    while( root->IsDerived() )
+    {
+        LIB_SYMBOL_SPTR parent = root->GetParent().lock();
+        wxCHECK2( parent, /*void*/ );
+        root = parent;
+    }
+
+    aSymbolNames.Add( root->GetName() );
+    // Now we have the root symbol, collect all its derived symbols
+    libMgr.GetDerivedSymbolNames( root->GetName(), aLibName, aSymbolNames );
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
-    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    wxString           libName = editFrame->GetTreeLIBID().GetLibNickname();
+    SYMBOL_EDIT_FRAME*          editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+    wxString                    libName = editFrame->GetTreeLIBID().GetLibNickname();
+    wxArrayString               symbolNames;
 
-    // Get all symbol names from the library manager
-    wxArrayString symbolNames;
-    editFrame->GetLibManager().GetSymbolNames( libName, symbolNames );
+    if( aEvent.IsAction( &ACTIONS::showRelatedLibraryTable ) )
+    {
+        LIB_ID symId = editFrame->GetTargetLibId();
+
+        const LIB_SYMBOL* sym = libMgr.GetBufferedSymbol( symId.GetLibItemName(), libName );
+
+        wxCHECK2( sym, /*void*/ );
+        CollectRelatedSymbols( libMgr, libName, *sym, symbolNames );
+    }
+    else
+    {
+        // Get all symbol names from the library manager
+        editFrame->GetLibManager().GetSymbolNames( libName, symbolNames );
+    }
 
     DIALOG_LIB_FIELDS dlg( editFrame, libName, symbolNames );
     dlg.SetTitle( _( "Library Fields" ) );
@@ -977,6 +1009,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     SCH_ACTIONS::togglePinAltIcons.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showLibraryTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showRelatedLibraryTable.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );

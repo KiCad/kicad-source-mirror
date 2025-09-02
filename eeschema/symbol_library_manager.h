@@ -389,6 +389,11 @@ public:
      */
     bool HasDerivedSymbols( const wxString& aSymbolName, const wxString& aLibraryName );
 
+    /**
+     * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
+     */
+    size_t GetDerivedSymbolNames( const wxString& aSymbolName, const wxString& aLibraryName, wxArrayString& aList );
+
     size_t GetLibraryCount() const;
 
 protected:
