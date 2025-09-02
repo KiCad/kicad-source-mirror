@@ -972,24 +972,6 @@ int SYMBOL_EDITOR_CONTROL::ChangeUnit( const TOOL_EVENT& aEvent )
 }
 
 
-static void CollectRelatedSymbols( LIB_SYMBOL_LIBRARY_MANAGER& libMgr, const wxString& aLibName, const LIB_SYMBOL& sym,
-                                   wxArrayString& aSymbolNames )
-{
-    LIB_SYMBOL_SPTR root = sym.SharedPtr();
-
-    while( root->IsDerived() )
-    {
-        LIB_SYMBOL_SPTR parent = root->GetParent().lock();
-        wxCHECK2( parent, /*void*/ );
-        root = parent;
-    }
-
-    aSymbolNames.Add( root->GetName() );
-    // Now we have the root symbol, collect all its derived symbols
-    libMgr.GetDerivedSymbolNames( root->GetName(), aLibName, aSymbolNames );
-}
-
-
 int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDIT_FRAME*          editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
@@ -1002,9 +984,14 @@ int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
         LIB_ID symId = editFrame->GetTargetLibId();
 
         const LIB_SYMBOL* sym = libMgr.GetBufferedSymbol( symId.GetLibItemName(), libName );
+        wxCHECK_MSG( sym, 0, _( "Failed to find symbol" ) );
 
-        wxCHECK2( sym, /*void*/ );
-        CollectRelatedSymbols( libMgr, libName, *sym, symbolNames );
+        LIB_SYMBOL_SPTR root = sym->GetRootSymbol();
+        wxCHECK_MSG( root, 0, _( "Failed to find root symbol" ) );
+
+        symbolNames.Add( root->GetName() );
+        // Now we have the root symbol, collect all its derived symbols
+        libMgr.GetDerivedSymbolNames( root->GetName(), libName, symbolNames );
     }
     else
     {
