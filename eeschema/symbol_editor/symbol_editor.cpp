@@ -641,7 +641,7 @@ public:
 
         const bool sameLib = aNewLibName == symbol.GetLibId().GetLibNickname().wx_str();
 
-        if( !sameLib && aFlattenSymbol )
+        if( aFlattenSymbol )
         {
             // If we're not copying parent symbols, we need to flatten the symbol
             // and only save that.
