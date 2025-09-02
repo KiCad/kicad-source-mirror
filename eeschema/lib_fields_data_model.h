@@ -166,7 +166,7 @@ public:
         return m_cols[aCol].m_fieldName;
     }
 
-    int GetFieldNameCol( wxString aFieldName );
+    int GetFieldNameCol( const wxString& aFieldName );
 
     void SetFieldsOrder( const std::vector<wxString>& aNewOrder );
 

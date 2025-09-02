@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 <author>
  * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -37,13 +36,13 @@ const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "$
 
 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
-                                               bool aAddedByUser, bool aIsCheckbox )
+                                                   bool aAddedByUser, bool aIsCheckbox )
 {
     // Don't add a field twice
     if( GetFieldNameCol( aFieldName ) != -1 )
         return;
 
-    m_cols.emplace_back( aFieldName, aLabel, aAddedByUser, false, false, aIsCheckbox );
+    m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false, aIsCheckbox } );
 
     for( LIB_SYMBOL* symbol : m_symbolsList )
         updateDataStoreSymbolField( symbol, aFieldName );
@@ -124,7 +123,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& 
 }
 
 
-int LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( wxString aFieldName )
+int LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName )
 {
     for( size_t i = 0; i < m_cols.size(); i++ )
     {
@@ -372,6 +371,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
     if( cellModified )
     {
         wxFont font;
+
         if( attr->HasFont() )
         {
             font = attr->GetFont();
@@ -476,7 +476,8 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::createActualDerivedSymbol( const LIB_SYM
         const_cast<KIID&>( newSymbol->m_Uuid ) = aNewSymbolUuid;
         m_symbolsList.push_back( newSymbol );
 
-        wxLogTrace( traceLibFieldTable, "createActualDerivedSymbol: Added new symbol to list, size now: %zu", m_symbolsList.size() );
+        wxLogTrace( traceLibFieldTable, "createActualDerivedSymbol: Added new symbol to list, size now: %zu",
+                    m_symbolsList.size() );
 
         // Initialize field data for the new symbol in the data store
         for( const auto& col : m_cols )
@@ -574,7 +575,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const LIB_DATA_MODEL_ROW&          
     // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
     // to get the opposite sort.  i.e. ~(a<b) != (a>b)
     auto local_cmp =
-            [ ascending ]( const auto a, const auto b )
+            [ ascending ]( const wxString& a, const wxString& b )
             {
                 if( ascending )
                     return a < b;
@@ -726,7 +727,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         // the editor.
         static_cast<WX_GRID*>( GetView() )->CommitPendingChanges( true );
 
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, (int) m_rows.size() );
         GetView()->ProcessTableMessage( msg );
     }
 
@@ -772,7 +773,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 
     if( GetView() )
     {
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, (int) m_rows.size() );
         GetView()->ProcessTableMessage( msg );
     }
 
@@ -805,7 +806,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
     m_rows[aRow].m_Flag = GROUP_EXPANDED;
     m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
 
-    wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
+    wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, (int) children.size() );
     GetView()->ProcessTableMessage( msg );
 }
 
@@ -864,9 +865,8 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 }
 
 
-void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
-        std::function<void( LIB_SYMBOL* )> symbolChangeHandler,
-        std::function<void()> postApplyHandler )
+void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBOL* )> symbolChangeHandler,
+                                                   std::function<void()> postApplyHandler )
 {
     for( LIB_SYMBOL* symbol : m_symbolsList )
     {
@@ -876,7 +876,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
 
         for( auto& srcData : fieldStore )
         {
-            const wxString& srcName = srcData.first;
+            const wxString&   srcName = srcData.first;
             LIB_DATA_ELEMENT& dataElement = srcData.second;
             const wxString&   srcValue = dataElement.m_currentData;
             int               col = GetFieldNameCol( srcName );
@@ -897,8 +897,8 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             if( srcName.StartsWith( "__DERIVED_SYMBOL_" ) && srcName.EndsWith( "__" ) )
                 continue;
 
-            SCH_FIELD*      destField = symbol->GetField( srcName );
-            bool            userAdded = ( col != -1 && m_cols[col].m_userAdded );
+            SCH_FIELD* destField = symbol->GetField( srcName );
+            bool       userAdded = ( col != -1 && m_cols[col].m_userAdded );
 
             // Add a not existing field if it has a value for this symbol
             bool createField = !destField && ( !srcValue.IsEmpty() || userAdded );
@@ -1009,11 +1009,13 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
                         actualDerivedName = parentSymbol->GetName() + "_1";
 
                         // If that exists, try incrementing the number
-                        int variant = 2;
+                        int  variant = 2;
                         bool nameExists = true;
+
                         while( nameExists && variant < 100 )
                         {
                             nameExists = false;
+
                             for( const LIB_SYMBOL* sym : m_symbolsList )
                             {
                                 if( sym->GetName() == actualDerivedName )
@@ -1022,6 +1024,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
                                     break;
                                 }
                             }
+
                             if( nameExists )
                             {
                                 actualDerivedName = parentSymbol->GetName() + "_" + wxString::Format( "%d", variant );
@@ -1101,6 +1104,7 @@ wxGridCellRenderer* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getStripedRenderer( int a
     stripedRenderer->IncRef();
     return stripedRenderer;
 }
+
 
 // lib_fields_data_model.cpp - Add the isStripeableField method
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::isStripeableField( int aCol )
