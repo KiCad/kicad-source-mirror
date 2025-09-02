@@ -1477,7 +1477,6 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         dbRA.m_zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         dbRA.m_zone->AddPolygon( generateBoundingBox( dbRA.m_designBlockItems ) );
         dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
-        tempCommit.Add( dbRA.m_zone );
 
         // Create the destination rule area for the group
         RULE_AREA destRA;
@@ -1520,7 +1519,6 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         destRA.m_zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         destRA.m_zone->AddPolygon( generateBoundingBox( group->GetItems() ) );
         destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
-        tempCommit.Add( dbRA.m_zone );
 
         // Use the multichannel tool to repeat the layout
         MULTICHANNEL_TOOL* mct = m_toolMgr->GetTool<MULTICHANNEL_TOOL>();

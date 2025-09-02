@@ -262,7 +262,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
     m_ShowRepairSchematic       = false;
-    m_EnablePcbDesignBlocks     = false;
+    m_EnablePcbDesignBlocks     = true;
     m_EnableGenerators          = false;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;

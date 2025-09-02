@@ -711,9 +711,14 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
     // rather than querying the board for items that are inside the area.
     if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
     {
-        // Get all board connected items that are from the design bloc
+        // Get all board connected items that are from the design block, except pads,
+        // which shouldn't be copied
         for( EDA_ITEM* item : aRuleArea->m_designBlockItems )
         {
+            // Include any connected items except pads.
+            if( item->Type() == PCB_PAD_T )
+                continue;
+
             if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                 aOutput.insert( bci );
         }
@@ -819,10 +824,29 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
     auto connectivity = board()->GetConnectivity();
 
-    aCommit->Modify( aTargetArea->m_zone );
+    // Only stage changes for a target Rule Area zone if it actually belongs to the board.
+    // In some workflows (e.g. ApplyDesignBlockLayout), the target area is a temporary zone
+    // and is not added to the BOARD.
+    bool targetZoneOnBoard = false;
 
-    aCompatData.m_affectedItems.insert( aTargetArea->m_zone );
-    aCompatData.m_groupableItems.insert( aTargetArea->m_zone );
+    if( aTargetArea->m_zone )
+    {
+        for( ZONE* z : board()->Zones() )
+        {
+            if( z == aTargetArea->m_zone )
+            {
+                targetZoneOnBoard = true;
+                break;
+            }
+        }
+    }
+
+    if( targetZoneOnBoard )
+    {
+        aCommit->Modify( aTargetArea->m_zone );
+        aCompatData.m_affectedItems.insert( aTargetArea->m_zone );
+        aCompatData.m_groupableItems.insert( aTargetArea->m_zone );
+    }
 
     if( aOpts.m_copyRouting )
     {
@@ -849,6 +873,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
         for( BOARD_CONNECTED_ITEM* item : targetRouting )
         {
+            // Never remove pads as part of routing copy.
+            if( item->Type() == PCB_PAD_T )
+                continue;
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
             if( aOpts.m_connectedRoutingOnly && !targc.contains( item->GetNetCode() ) )
@@ -866,6 +893,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
         for( BOARD_CONNECTED_ITEM* item : refRouting )
         {
+            // Never copy pads as part of routing copy.
+            if( item->Type() == PCB_PAD_T )
+                continue;
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
             if( aOpts.m_connectedRoutingOnly && !refc.contains( item->GetNetCode() ) )
