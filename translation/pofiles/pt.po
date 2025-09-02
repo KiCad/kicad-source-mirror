@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-08 10:01+0000\n"
+"PO-Revision-Date: 2025-09-03 21:02+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13.1-rc\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -50,7 +50,7 @@ msgstr ""
 #: common/dialogs/panel_embedded_files.cpp:365
 #: common/widgets/grid_text_button_helpers.cpp:375
 msgid "All Files"
-msgstr "Todos os arquivos"
+msgstr "Todos os ficheiros"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
@@ -1822,7 +1822,7 @@ msgstr "Abrir Recente"
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr "Limpa os arquivos recentes"
+msgstr "Limpa os ficheiros recentes"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
 #: eeschema/tools/sch_drawing_tools.cpp:1106
@@ -1846,11 +1846,11 @@ msgstr "Criar ficheiro de folha de desenho"
 #: bitmap2component/bitmap2cmp_frame.cpp:551
 #, c-format
 msgid "File '%s' could not be created."
-msgstr "Não foi possível criar o arquivo '%s'."
+msgstr "Não foi possível criar o ficheiro '%s'."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:471
 msgid "Create PostScript File"
-msgstr "Crie o arquivo PostScript"
+msgstr "Crie o ficheiro PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:504
 msgid "Create Symbol Library"
@@ -2009,11 +2009,11 @@ msgstr "Formato de Saída"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
-msgstr "Símbolo (arquivo .kicad_sym)"
+msgstr "Símbolo (ficheiro .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr "footprint (arquivo .kicad_mod)"
+msgstr "footprint (ficheiro .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
@@ -2065,11 +2065,11 @@ msgstr "Fabricação frontal"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:188
 msgid "Postscript (.ps file)"
-msgstr "Postscript (arquivo .ps)"
+msgstr "Postscript (ficheiro .ps)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:191
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Folha do desenho (arquivo .kicad_wks)"
+msgstr "Folha do desenho (ficheiro .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
@@ -2992,7 +2992,7 @@ msgstr "Selecione um ficheiro do bloco de desenho na tabela da biblioteca."
 #: pcbnew/footprint_libraries_utils.cpp:149
 #, c-format
 msgid "File '%s' not found."
-msgstr "O arquivo '%s' não foi encontrado."
+msgstr "O ficheiro '%s' não foi encontrado."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
 #, c-format
@@ -3494,7 +3494,7 @@ msgstr "Paisagem"
 
 #: common/dialogs/dialog_page_settings.cpp:785 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
-msgstr "Arquivo da folha do desenho"
+msgstr "Ficheiro da folha do desenho"
 
 #: common/dialogs/dialog_page_settings.cpp:822
 #, c-format
@@ -4410,7 +4410,7 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
-"Comando do explorador de arquivos.\n"
+"Comando do explorador de ficheiros.\n"
 "exemplo:"
 
 #: common/dialogs/panel_common_settings.cpp:362
@@ -6310,7 +6310,7 @@ msgstr "Imagem"
 #: common/drawing_sheet/ds_data_model_io.cpp:102
 #: common/drawing_sheet/ds_data_model_io.cpp:133
 msgid "Error writing drawing sheet file"
-msgstr "Erro ao gravar arquivo da folha do desenho"
+msgstr "Erro ao gravar ficheiro da folha do desenho"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
@@ -6421,7 +6421,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de ponto flutuante inválido em\n"
-"arquivo: '%s'\n"
+"ficheiro: '%s'\n"
 "linha: %d\n"
 "posição: %d"
 
@@ -6442,7 +6442,7 @@ msgstr "Refazer"
 #: common/eda_base_frame.cpp:1150
 #, c-format
 msgid "File '%s' was not found."
-msgstr "O arquivo '%s' não foi encontrado."
+msgstr "O ficheiro '%s' não foi encontrado."
 
 #: common/eda_base_frame.cpp:1196
 msgid "Preferences"
@@ -6622,17 +6622,17 @@ msgstr "Selecionar Idioma"
 
 #: common/eda_doc.cpp:153
 msgid "Documentation File"
-msgstr "Arquivo da documentação"
+msgstr "Ficheiro da documentação"
 
 #: common/eda_doc.cpp:163
 #, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Arquivo da documentação '%s' não foi encontrado."
+msgstr "Ficheiro da documentação '%s' não foi encontrado."
 
 #: common/eda_doc.cpp:209
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Tipo MIME desconhecido para o arquivo da documentação '%s'"
+msgstr "Tipo MIME desconhecido para o ficheiro da documentação '%s'"
 
 #: common/eda_draw_frame.cpp:228 common/tool/action_toolbar.cpp:1042
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
@@ -7421,7 +7421,7 @@ msgstr "Texto completo do erro:"
 
 #: common/file_history.cpp:155
 msgid "No Files"
-msgstr "Sem arquivos"
+msgstr "Sem ficheiros"
 
 #: common/filename_resolver.cpp:494
 msgid "The given path does not exist"
@@ -7471,7 +7471,7 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Um apelido duplicado da biblioteca '%s' foi encontrado na linha do arquivo "
+"Um apelido duplicado da biblioteca '%s' foi encontrado na linha do ficheiro "
 "da tabela da biblioteca do footprint do componente %d."
 
 #: common/gestfich.cpp:248
@@ -7494,7 +7494,7 @@ msgstr "Houve um problema ao executar o visualizador de PDF '%s'."
 #: pcbnew/pcbnew.cpp:612
 #, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Não é possível copiar o arquivo '%s'."
+msgstr "Não é possível copiar o ficheiro '%s'."
 
 #: common/gestfich.cpp:320
 msgid "Invalid directory name, cannot remove root"
@@ -8096,7 +8096,7 @@ msgstr ""
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:108
 #, c-format
 msgid "Cannot open file '%s'."
-msgstr "Não é possível abrir o arquivo '%s'."
+msgstr "Não é possível abrir o ficheiro '%s'."
 
 #: common/io/altium/altium_binary_parser.cpp:71
 msgid "Error reading file: cannot determine length."
@@ -8105,7 +8105,7 @@ msgstr ""
 
 #: common/io/altium/altium_binary_parser.cpp:84
 msgid "Error reading file."
-msgstr "Houve um erro ao ler o arquivo."
+msgstr "Houve um erro ao ler o ficheiro."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2472
 #, c-format
@@ -8497,7 +8497,7 @@ msgstr "Pasta"
 #: common/json_schema_validator.cpp:48
 #, c-format
 msgid "schema file '%s' not found"
-msgstr "o arquivo do esquema '%s' não foi encontrado"
+msgstr "o ficheiro do esquema '%s' não foi encontrado"
 
 #: common/json_schema_validator.cpp:53
 #, c-format
@@ -8670,7 +8670,7 @@ msgstr "Campos das folhas"
 
 #: common/layer_id.cpp:97
 msgid "Sheet file names"
-msgstr "Nomes dos arquivos das folhas"
+msgstr "Nomes dos ficheiros das folhas"
 
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
@@ -9047,7 +9047,7 @@ msgstr "Nenhum editor padrão foi encontrado, você deve escolher um."
 
 #: common/pgm_base.cpp:244 common/pgm_base.cpp:246
 msgid "Executable file"
-msgstr "Arquivo executável"
+msgstr "Ficheiro executável"
 
 #: common/pgm_base.cpp:256
 msgid "Select Preferred Editor"
@@ -9155,7 +9155,7 @@ msgstr "A Extrair ficheiro '%s'."
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
-msgstr "Houve um erro na extração do arquivo!"
+msgstr "Houve um erro na extração do ficheiro!"
 
 #: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1057
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:62
@@ -9184,7 +9184,7 @@ msgstr "Houve um erro na extração do arquivo!"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:132 pcbnew/pcb_plotter.cpp:280
 #, c-format
 msgid "Failed to create file '%s'."
-msgstr "Houve uma falha ao criar o arquivo '%s'."
+msgstr "Houve uma falha ao criar o ficheiro '%s'."
 
 #: common/project/project_archiver.cpp:263
 #, c-format
@@ -9234,7 +9234,7 @@ msgstr "O ficheiro '%s' não existe."
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3218
 #, c-format
 msgid "Unable to read file '%s'."
-msgstr "Não foi possível ler o arquivo '%s'."
+msgstr "Não foi possível ler o ficheiro '%s'."
 
 #: common/richio.cpp:205
 #, c-format
@@ -10462,13 +10462,13 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"O arquivo de ajuda '%s' ou\n"
+"O ficheiro de ajuda '%s' ou\n"
 "'%s' não foi encontrado.\n"
-"Deseja acessar a ajuda online do KiCad?"
+"Deseja aceder a ajuda online do KiCad?"
 
 #: common/tool/common_control.cpp:314 common/tool/common_control.cpp:334
 msgid "File Not Found"
-msgstr "O arquivo não foi encontrado"
+msgstr "O ficheiro não foi encontrado"
 
 #: common/tool/common_control.cpp:331
 #, c-format
@@ -10476,8 +10476,8 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Não foi possível encontrar o arquivo de ajuda '%s'.\n"
-"Deseja acessar a ajuda online do KiCad?"
+"Não foi possível encontrar o ficheiro de ajuda '%s'.\n"
+"Deseja aceder a ajuda online do KiCad?"
 
 #: common/tool/common_control.cpp:369
 #, c-format
@@ -10612,7 +10612,7 @@ msgstr "O nome da planilha não pode conter %s caracteres(s)."
 #: common/validators.cpp:372
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "O nome do arquivo da folha não pode conter %s caractere(s)."
+msgstr "O nome do ficheiro da folha não pode conter %s caractere(s)."
 
 #: common/validators.cpp:376
 #, c-format
@@ -10833,7 +10833,7 @@ msgstr "Abrir o ficheiro"
 
 #: common/widgets/grid_text_button_helpers.cpp:510
 msgid "Select a File"
-msgstr "Selecione um arquivo"
+msgstr "Selecione um ficheiro"
 
 #: common/widgets/grid_text_button_helpers.cpp:555
 msgid "Select Path"
@@ -11081,7 +11081,7 @@ msgstr "Salvar Ficheiro de Relatório"
 #: common/widgets/wx_html_report_panel.cpp:327
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Não é possível gravar o relatório no arquivo '%s'."
+msgstr "Não é possível gravar o relatório no ficheiro '%s'."
 
 #: common/widgets/wx_html_report_panel.cpp:328
 msgid "File save error"
@@ -11140,11 +11140,11 @@ msgstr "Ficheiro de projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:257
 msgid "KiCad legacy project files"
-msgstr "Arquivos legados do projeto KiCad"
+msgstr "Ficheiros legados do projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:264
 msgid "All KiCad project files"
-msgstr "Todos os arquivos do projeto KiCad"
+msgstr "Todos os ficheiros do projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:271
 msgid "All KiCad schematic files"
@@ -11153,12 +11153,12 @@ msgstr "Todos os ficheiros esquemáticos KiCad"
 #: common/wildcards_and_files_ext.cpp:278
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:74
 msgid "KiCad legacy schematic files"
-msgstr "Arquivos dos esquemáticos legados do KiCad"
+msgstr "Ficheiros dos esquemáticos legados do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:285
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:76
 msgid "KiCad s-expression schematic files"
-msgstr "Arquivos dos esquemáticos s-expression do KiCad"
+msgstr "Ficheiros dos esquemáticos s-expression do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:292
 msgid "Altium Project files"
@@ -11223,7 +11223,7 @@ msgstr "Caminhos da biblioteca de blocos de desenho do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:382
 msgid "Drawing sheet files"
-msgstr "Arquivos dos esquemáticos"
+msgstr "Ficheiros dos esquemáticos"
 
 #: common/wildcards_and_files_ext.cpp:390
 msgid "KiCad symbol footprint link files"
@@ -11267,7 +11267,7 @@ msgstr "Ficheiros de relatório"
 
 #: common/wildcards_and_files_ext.cpp:453
 msgid "Component placement files"
-msgstr "Arquivos de posicionamento dos componentes"
+msgstr "Ficheiros de posicionamento dos componentes"
 
 #: common/wildcards_and_files_ext.cpp:459
 msgid "VRML and X3D files"
@@ -11287,7 +11287,7 @@ msgstr "Ficheiros de exportação de footprint legados"
 
 #: common/wildcards_and_files_ext.cpp:483
 msgid "Electrical rule check file"
-msgstr "Arquivo de verificação das regras elétricas"
+msgstr "Ficheiro de verificação das regras elétricas"
 
 #: common/wildcards_and_files_ext.cpp:489
 msgid "SPICE library file"
@@ -11328,7 +11328,7 @@ msgstr "Ficheiro Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:544
 msgid "Specctra Session file"
-msgstr "Arquivo Specctra Session"
+msgstr "Ficheiro Specctra Session"
 
 #: common/wildcards_and_files_ext.cpp:551
 msgid "IPC-D-356 Test Files"
@@ -11348,7 +11348,7 @@ msgstr "Ficheiro Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:577
 msgid "Hotkey file"
-msgstr "Arquivo da lista das teclas de atalho"
+msgstr "Ficheiro da lista das teclas de atalho"
 
 #: common/wildcards_and_files_ext.cpp:583
 msgid "KiCad jobset files"
@@ -11357,12 +11357,12 @@ msgstr "Ficheiros do conjunto de trabalhos do KiCad"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "O arquivo de equivalência '%s' não pôde ser encontrado."
+msgstr "O ficheiro de equivalência '%s' não pôde ser encontrado."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Erro ao abrir o arquivo de equivalência \"%s\"."
+msgstr "Erro ao abrir o ficheiro de equivalência \"%s\"."
 
 #: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
@@ -11507,7 +11507,7 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:46
 #, c-format
 msgid "Project file: '%s'"
-msgstr "Arquivo do projeto: '%s'"
+msgstr "Ficheiro do projeto: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
@@ -11523,7 +11523,7 @@ msgstr "Ficheiro de Associação de Footprint"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:253
 #, c-format
 msgid "File '%s' already exists in list."
-msgstr "O arquivo '%s' já existe na lista."
+msgstr "O ficheiro '%s' já existe na lista."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
 msgid "Footprint association files:"
@@ -11704,7 +11704,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
 msgid "Save to Schematic and File"
-msgstr "Salvar no Esquema e no Arquivo"
+msgstr "Gravar no Esquema e no Ficheiro"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 msgid ""
@@ -12014,7 +12014,7 @@ msgstr "Gerar"
 
 #: eeschema/dialogs/dialog_bom.cpp:167
 msgid "(file missing)"
-msgstr "(arquivo faltando)"
+msgstr "(ficheiro falta)"
 
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
@@ -12060,7 +12060,7 @@ msgstr "O apelido '%s' já está em uso."
 #: eeschema/dialogs/dialog_bom.cpp:375
 #: eeschema/dialogs/dialog_export_netlist.cpp:791
 msgid "Generator File"
-msgstr "Arquivo gerador"
+msgstr "Ficheiro gerador"
 
 #: eeschema/dialogs/dialog_bom.cpp:394
 msgid "Generator file name not found."
@@ -12823,7 +12823,7 @@ msgstr "Formatação"
 #: eeschema/dialogs/dialog_erc.cpp:1052 pcbnew/dialogs/dialog_gendrill.cpp:424
 #, c-format
 msgid "Report file '%s' created."
-msgstr "O arquivo do relatório '%s' foi criado."
+msgstr "O ficheiro do relatório '%s' foi criado."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:78
@@ -15243,15 +15243,15 @@ msgstr "Propriedades do Pino"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:268
 #: eeschema/dialogs/dialog_sheet_properties.cpp:279
 msgid "A sheet must have a valid file name."
-msgstr "Uma folha deve ter um nome válido de arquivo."
+msgstr "Uma folha deve ter um nome válido de ficheiro."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:315
 msgid "Use relative path for sheet file?"
-msgstr "Usar um caminho relativo para o arquivo da folha?"
+msgstr "Usar um caminho relativo para o ficheiro da folha?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:315
 msgid "Sheet File Path"
-msgstr "Caminho do arquivo da folha"
+msgstr "Caminho do ficheiro da folha"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:318
 msgid ""
@@ -15310,7 +15310,7 @@ msgstr "'%s' já existe."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:501
 #, c-format
 msgid "Link '%s' to this file?"
-msgstr "Deseja vincular '%s' a este arquivo?"
+msgstr "Deseja vincular '%s' a este ficheiro?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:514
 #, c-format
@@ -15331,12 +15331,12 @@ msgstr "Essa ação não pode ser desfeita."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:575
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "Deseja criar novo arquivo '%s' com o conteúdo de '%s ?"
+msgstr "Deseja criar ficheiro '%s' com o conteúdo de '%s ?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:606
 #, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "Ocorreu um erro ao salvar o arquivo do esquema '%s'."
+msgstr "Ocorreu um erro ao gravar o ficheiro do esquema '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:609
 #, c-format
@@ -16469,7 +16469,7 @@ msgstr ""
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Adicionando a biblioteca '%s', arquivo '%s' à tabela de símbolos da "
+"A adicionar a biblioteca '%s', ficheiro '%s' à tabela de símbolos da "
 "biblioteca do projeto."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:240
@@ -16529,7 +16529,7 @@ msgstr "Abortar a Recuperação"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:515
 #, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Fazendo backup do arquivo '%s' em '%s'."
+msgstr "A fazer backup do ficheiro '%s' em '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:389
 #: eeschema/dialogs/dialog_symbol_remap.cpp:431
@@ -16540,7 +16540,7 @@ msgstr "Fazendo backup do arquivo '%s' em '%s'."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:523
 #, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "Falha ao fazer backup do arquivo '%s'.\n"
+msgstr "Falha ao fazer backup do ficheiro '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:423
 #, c-format
@@ -17713,7 +17713,7 @@ msgstr "Ficheiro '%s' já existe. Deseja sobrescrever este ficheiro?"
 #: eeschema/libarch.cpp:135
 #, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Houve uma falha ao salvar o arquivo dos símbolos na biblioteca '%s'."
+msgstr "Houve uma falha ao gravar o ficheiro dos símbolos na biblioteca '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1124
 msgid ""
@@ -18485,7 +18485,7 @@ msgstr "Carregar um esquema"
 
 #: eeschema/files-io.cpp:223
 msgid "Schematic file changes are unsaved"
-msgstr "As alterações feitas no arquivo do esquema não foram salvas"
+msgstr "As alterações feitas no ficheiro do esquema não foram gravadas"
 
 #: eeschema/files-io.cpp:241
 #, c-format
@@ -18548,10 +18548,10 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"Os símbolos das bibliotecas na lista dos símbolos das bibliotecas do arquivo "
-"do projeto não são mais compatíveis e serão removidas.\n"
+"Os símbolos das bibliotecas na lista dos símbolos das bibliotecas do "
+"ficheiro do projeto já não são compatíveis e serão removidas.\n"
 "\n"
-"Sob certas condições, isso pode causar a quebra dos links dos símbolos da "
+"Sob certas condições, isso pode causar a quebra das ligações dos símbolos da "
 "biblioteca."
 
 #: eeschema/files-io.cpp:427
@@ -18562,7 +18562,7 @@ msgstr "Não mostrar esta caixa de diálogo novamente."
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
 msgstr ""
-"O arquivo de cache dos símbolos da biblioteca do projeto '%s' não foram "
+"O ficheiro de cache dos símbolos da biblioteca do projeto '%s' não foram "
 "encontrados."
 
 #: eeschema/files-io.cpp:458
@@ -18645,7 +18645,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Houve um erro ao salvar o arquivo '%s' do esquema.\n"
+"Houve um erro ao gravar o ficheiro '%s' do esquema.\n"
 "%s"
 
 #: eeschema/files-io.cpp:844 pagelayout_editor/files.cpp:173
@@ -18653,7 +18653,7 @@ msgstr ""
 #: pcbnew/files.cpp:1083
 #, c-format
 msgid "File '%s' saved."
-msgstr "O arquivo '%s' foi salvo."
+msgstr "O ficheiro '%s' foi gravado."
 
 #: eeschema/files-io.cpp:892 eeschema/files-io.cpp:983
 #: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:120
@@ -18687,7 +18687,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:1100
 msgid "Saving will overwrite existing files."
-msgstr "Ao salvar, irá sobrescrever os arquivos já existentes."
+msgstr "Ao gravar, irá sobrescrever os ficheiros já existentes."
 
 #: eeschema/files-io.cpp:1101
 msgid "Save Warning"
@@ -18698,12 +18698,12 @@ msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
-"Os seguintes arquivos serão substituídos:\n"
+"Os seguintes ficheiros serão substituídos:\n"
 "\n"
 
 #: eeschema/files-io.cpp:1105
 msgid "Overwrite Files"
-msgstr "Substitua os arquivos"
+msgstr "Substitua os ficheiros"
 
 #: eeschema/files-io.cpp:1106
 msgid "Abort Project Save"
@@ -18751,13 +18751,14 @@ msgstr ""
 #: eeschema/files-io.cpp:1668
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr ""
-"Os seguintes arquivos que foram salvos automaticamente não puderam ser "
+"Os seguintes ficheiros que foram gravados automaticamente não puderam ser "
 "restaurados\n"
 
 #: eeschema/files-io.cpp:1673
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
-"Será preciso fazer a recuperação manual para restaurar o(s) arquivo(s) acima."
+"Será preciso fazer a recuperação manual para restaurar o(s) ficheiro(s) "
+"acima."
 
 #: eeschema/files-io.cpp:1682
 #, c-format
@@ -18771,12 +18772,12 @@ msgstr ""
 #: eeschema/files-io.cpp:1716
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr ""
-"Os seguintes arquivos que foram salvos automaticamente não puderam ser "
+"Os seguintes ficheiros que foram gravados automaticamente não puderam ser "
 "removidos\n"
 
 #: eeschema/files-io.cpp:1721
 msgid "Manual removal will be required for the file(s) above."
-msgstr "Será preciso fazer a remoção manual para os arquivos acima."
+msgstr "Será preciso fazer a remoção manual para os ficheiros acima."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1923
 msgid "Derived from"
@@ -18821,7 +18822,8 @@ msgstr "Nenhum ficheiro selecionado!"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:262
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:224
 msgid "Items in the imported file could not be handled properly."
-msgstr "Os itens importados no arquivo não puderam ser tratados adequadamente."
+msgstr ""
+"Os elementos importados no ficheiro não puderam ser tratados adequadamente."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:272
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:234
@@ -18990,7 +18992,7 @@ msgstr "As configurações de exclusão da placa diferem."
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
 msgstr ""
-"Houve uma falha ao adicionar o símbolo %s ao arquivo '%s' da biblioteca."
+"Houve uma falha ao adicionar o símbolo %s ao ficheiro '%s' da biblioteca."
 
 #: eeschema/libarch.cpp:86
 msgid "Unexpected exception occurred."
@@ -19379,7 +19381,7 @@ msgstr "Nenhum símbolo foi recuperado."
 #: eeschema/symbol_editor/symbol_editor.cpp:1203
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "Houve uma falha ao criar o arquivo dos símbolos da biblioteca '%s'."
+msgstr "Houve uma falha ao criar o ficheiro dos símbolos da biblioteca '%s'."
 
 #: eeschema/project_rescue.cpp:870
 #, c-format
@@ -19566,7 +19568,7 @@ msgstr "Hierarquia do esquema"
 
 #: eeschema/sch_edit_frame.cpp:415
 msgid "New schematic file is unsaved"
-msgstr "O novo arquivo do esquema não foi salvo"
+msgstr "O novo ficheiro do esquema não foi gravado"
 
 #: eeschema/sch_edit_frame.cpp:1017
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:640
@@ -19595,7 +19597,7 @@ msgstr "Novo Esquema"
 #: eeschema/sch_edit_frame.cpp:1259
 #, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "O arquivo '%s' do esquema já existe."
+msgstr "O ficheiro '%s' do esquema já existe."
 
 #: eeschema/sch_edit_frame.cpp:1284
 msgid "Open Schematic"
@@ -19801,7 +19803,7 @@ msgstr "A porta %s não possui conexões."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3974
 #, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "O arquivo incorporado %s não foi encontrado no armazenamento."
+msgstr "O ficheiro incorporado %s não foi encontrado no armazenamento."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3991
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4010
@@ -19812,7 +19814,7 @@ msgstr "Houve um erro ao ler a imagem %s."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4003
 #, c-format
 msgid "File not found %s."
-msgstr "Arquivo não encontrado %s."
+msgstr "Ficheiro não encontrado %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4811
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -19820,7 +19822,7 @@ msgstr "Esperado ficheiro Altium Schematic Library versão 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:83
 msgid "Altium schematic files"
-msgstr "Arquivos do esquemático do Altium"
+msgstr "Ficheiros do esquemático do Altium"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:88
 msgid "Altium Schematic Library or Integrated Library"
@@ -20137,7 +20139,7 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Houve um erro ao analisar o arquivo Eagle. Não foi possível encontrar a "
+"Houve um erro ao analisar o ficheiro Eagle. Não foi possível encontrar a "
 "instância '%s', mas, ela é referenciada no esquema."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1803
@@ -20262,7 +20264,7 @@ msgstr "A abertura foi cancelada pelo utilizador."
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:373
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "'%s' não parece ser um arquivo Eeschema."
+msgstr "'%s' não parece ser um ficheiro Eeschema."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:403
 msgid "Missing 'EELAYER END'"
@@ -20316,7 +20318,7 @@ msgstr "O símbolo da biblioteca '%s' não pode ser excluída."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:80
 msgid "KiCad legacy symbol library files"
-msgstr "Arquivos da biblioteca dos símbolos do KiCad"
+msgstr "Ficheiros da biblioteca dos símbolos do KiCad"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:222
 msgid "expected unquoted string"
@@ -20326,11 +20328,11 @@ msgstr "cadeia sem aspas esperada"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:57
 #, c-format
 msgid "Library file '%s' not found."
-msgstr "O arquivo de biblioteca '%s' não foi encontrado."
+msgstr "O ficheiro de biblioteca '%s' não foi encontrado."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:88
 msgid "Unexpected end of file."
-msgstr "Não era esperado o fim do arquivo."
+msgstr "Não era esperado o fim do ficheiro."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:185
 #, c-format
@@ -23117,7 +23119,7 @@ msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Não foi possível criar o arquivo da biblioteca '%s'.\n"
+"Não foi possível criar o ficheiro da biblioteca '%s'.\n"
 "Certifique-se de ter permissões de gravação e tente novamente."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1127
@@ -23313,7 +23315,8 @@ msgstr "A biblioteca '%s' é somente leitura."
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr ""
-"Ocorreu um erro ao tentar carregar o arquivo '%s' dos símbolos da biblioteca."
+"Ocorreu um erro ao tentar carregar o ficheiro '%s' dos símbolos da "
+"biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1171
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
@@ -23396,7 +23399,7 @@ msgstr "Salve a biblioteca '%s' como..."
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr ""
-"Houve uma falha ao salvar as alterações no arquivo do símbolo da biblioteca "
+"Houve uma falha ao gravar as alterações no ficheiro do símbolo da biblioteca "
 "'%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1590
@@ -23406,7 +23409,7 @@ msgstr "Houve um erro ao salvar a biblioteca"
 #: eeschema/symbol_editor/symbol_editor.cpp:1636
 #, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "O arquivo '%s' do símbolo da biblioteca foi salvo."
+msgstr "O ficheiro '%s' do símbolo da biblioteca foi gravado."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1735
 msgid "Undefined!"
@@ -23454,15 +23457,15 @@ msgstr "Não é possível importar os símbolos da biblioteca '%s'."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:120
 #, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "O arquivo '%s' do símbolo da biblioteca está vazio."
+msgstr "O ficheiro '%s' do símbolo da biblioteca está vazio."
 
 #: eeschema/symbol_lib_table.cpp:283
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"O apelido da biblioteca duplicado '%s' foi encontrado na linha %d do arquivo "
-"da tabela dos símbolos da biblioteca"
+"O apelido da biblioteca duplicado '%s' foi encontrado na linha %d do "
+"ficheiro da tabela dos símbolos da biblioteca"
 
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:226
 #, c-format
@@ -23623,7 +23626,7 @@ msgstr "Alterar Visibilidade"
 #, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
 msgstr ""
-"Houve uma falha ao abrir o arquivo '%s' do link do símbolo do footprint."
+"Houve uma falha ao abrir o ficheiro '%s' da ligação do símbolo do footprint."
 
 #: eeschema/tools/backannotate.cpp:76
 msgid "Select at least one property to back annotate."
@@ -25155,7 +25158,7 @@ msgstr "Adicionar uma imagem"
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:704
 #: pcbnew/tools/drawing_tool.cpp:1829
 msgid "No graphic items found in file."
-msgstr "Nenhum item gráfico foi encontrado no arquivo."
+msgstr "Nenhum elemento gráfico foi encontrado no ficheiro."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1280
 #: eeschema/tools/sch_drawing_tools.cpp:1363
@@ -25670,11 +25673,11 @@ msgstr "Exportar a visualização como um PNG"
 #: eeschema/tools/symbol_editor_control.cpp:739
 #, c-format
 msgid "Can't save file '%s'."
-msgstr "Não é possível salvar o arquivo '%s'."
+msgstr "Não é possível gravar o ficheiro '%s'."
 
 #: eeschema/tools/symbol_editor_control.cpp:775
 msgid "SVG File Name"
-msgstr "Nome do arquivo SVG"
+msgstr "Nome do ficheiro SVG"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:298
 msgid "Place Pin"
@@ -26300,7 +26303,7 @@ msgstr "Tamanho C"
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:17
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:46
 msgid "File Format"
-msgstr "Formato do arquivo"
+msgstr "Formato do ficheiro"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
 msgid "These parameters are usually specified in files, but not always."
@@ -26422,11 +26425,11 @@ msgstr "Gestor de camadas"
 #: gerbview/excellon_read_drill_file.cpp:271
 #, c-format
 msgid "File %s not found."
-msgstr "O arquivo %s não foi encontrado."
+msgstr "O ficheiro %s não foi encontrado."
 
 #: gerbview/excellon_read_drill_file.cpp:283
 msgid "No empty layers to load file into."
-msgstr "Nenhuma camada vazia para carregar um arquivo."
+msgstr "Nenhuma camada vazia para carregar um ficheiro."
 
 #: gerbview/excellon_read_drill_file.cpp:290
 msgid "Error reading EXCELLON drill file"
@@ -26459,7 +26462,7 @@ msgstr "G Code Excellon Desconhecido: &lt;%s&gt;"
 #: gerbview/files.cpp:44
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
-"<b>Não há mais camadas disponíveis</b> no GerbView para carregar os arquivos"
+"<b>Não há mais camadas disponíveis</b> no GerbView para carregar os ficheiros"
 
 #: gerbview/files.cpp:45
 #, c-format
@@ -26566,7 +26569,7 @@ msgstr "Carregando %u/%zu %s..."
 #: gerbview/files.cpp:465
 #, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "O arquivo Zip '%s' não pode ser aberto."
+msgstr "O ficheiro Zip '%s' não pode ser aberto."
 
 #: gerbview/files.cpp:507
 #, c-format
@@ -26701,17 +26704,17 @@ msgstr "Camada gráfica %d"
 #: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:134
 #: gerbview/menubar.cpp:140
 msgid "Clear Recent Zip Files"
-msgstr "Limpe os arquivos recentes zip"
+msgstr "Limpe os ficheiros recentes zip"
 
 #: gerbview/gerbview_frame.cpp:78 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "Limpe os arquivos recentes de perfuração"
+msgstr "Limpe os ficheiros recentes de perfuração"
 
 #: gerbview/gerbview_frame.cpp:80 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "Limpe os arquivos recentes de trabalho"
+msgstr "Limpe os ficheiros recentes de trabalho"
 
 #: gerbview/gerbview_frame.cpp:96
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
@@ -26737,7 +26740,7 @@ msgstr "X2 attr"
 
 #: gerbview/job_file_reader.cpp:153
 msgid "This job file uses an outdated format. Please recreate it."
-msgstr "Este arquivo de trabalho usa um formato desatualizado. Recrie-o."
+msgstr "Este ficheiro de trabalho usa um formato desatualizado. Recrie-o."
 
 #: gerbview/job_file_reader.cpp:189
 msgid "Open Gerber Job File"
@@ -26745,11 +26748,11 @@ msgstr "Abrir Ficheiro de Trabalho Gerber"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
-msgstr "Limpe os recentes arquivos Gerber"
+msgstr "Limpe os recentes ficheiros Gerber"
 
 #: gerbview/menubar.cpp:74 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
-msgstr "Abra arquivo recente Gerber"
+msgstr "Abra ficheiro recente Gerber"
 
 #: gerbview/menubar.cpp:88
 msgid "Open Recent Drill File"
@@ -26757,11 +26760,11 @@ msgstr "Abrir Ficheiro de Perfuração Recente"
 
 #: gerbview/menubar.cpp:118
 msgid "Open Recent Job File"
-msgstr "Abra o arquivo recente de trabalho"
+msgstr "Abra o ficheiro recente de trabalho"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
-msgstr "Abra o arquivo zip recente"
+msgstr "Abra o ficheiro zip recente"
 
 #: gerbview/menubar.cpp:184
 msgid "&Units"
@@ -26770,23 +26773,23 @@ msgstr "&Unidades"
 #: gerbview/readgerb.cpp:64
 #, c-format
 msgid "File '%s' not found"
-msgstr "O arquivo '%s' não foi encontrado"
+msgstr "O ficheiro '%s' não foi encontrado"
 
 #: gerbview/readgerb.cpp:89
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Aviso: este arquivo não tem definição D-Code\n"
-"Portanto, o tamanho de alguns dos itens estará indefinido"
+"Aviso: este ficheiro não tem definição D-Code\n"
+"Portanto, o tamanho de alguns dos elementos estará indefinido"
 
 #: gerbview/readgerb.cpp:92
 msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Aviso: neste arquivo faltam algumas definições D-Code\n"
-"Portanto, o tamanho de alguns itens estará indefinido"
+"Aviso: neste ficheiro faltam algumas definições D-Code\n"
+"Portanto, o tamanho de alguns elementos estará indefinido"
 
 #: gerbview/rs274d.cpp:417
 msgid "Invalid Code Number"
@@ -26885,7 +26888,7 @@ msgstr "Abra o(s) ficheiro(s) de plotagem do Gerber numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:55
 msgid "Open Excellon Drill File(s)..."
-msgstr "Abra os arquivo(s) de treino do Excellon..."
+msgstr "Abra os ficheiro(s) de treino do Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:56
 msgid "Open Excellon drill file(s) on a new layer."
@@ -26893,7 +26896,7 @@ msgstr "Abra o(s) ficheiro(s) de perfuração do Excellon numa nova camada."
 
 #: gerbview/tools/gerbview_actions.cpp:62
 msgid "Open Gerber Job File..."
-msgstr "Abra o arquivo de trabalho Gerber..."
+msgstr "Abra o ficheiro de trabalho Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
@@ -27060,12 +27063,12 @@ msgstr "Códigos D"
 #: gerbview/tools/gerbview_inspection_tool.cpp:173
 #, c-format
 msgid "Source file '%s' not found."
-msgstr "Arquivo fonte '%s' não foi encontrado."
+msgstr "Ficheiro fonte '%s' não foi encontrado."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:189
 #, c-format
 msgid "No file loaded on the active layer %d."
-msgstr "Nenhum arquivo foi carregado na camada %d ativa."
+msgstr "Nenhum ficheiro foi carregado na camada %d ativa."
 
 #: gerbview/tools/gerbview_selection_tool.cpp:68
 #, c-format
@@ -27811,7 +27814,7 @@ msgstr "Gerar uma nova forma para cada footprint (não reutilizar formas)"
 #: kicad/cli/command_pcb_export_gencad.cpp:56
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:216
 msgid "Use drill/place file origin as origin"
-msgstr "Use a origem do arquivo de perfuração/local como origem"
+msgstr "Use a origem do ficheiro de perfuração/local como origem"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:61
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:217
@@ -27838,7 +27841,7 @@ msgstr "Desativa as macros do diafragma"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 #: pcbnew/dialogs/dialog_plot_base.cpp:136
 msgid "Use drill/place file origin"
-msgstr "Use a origem do arquivo de perfuração/local"
+msgstr "Use a origem do ficheiro de perfuração/local"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:93
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
@@ -28803,7 +28806,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:160
 msgid "Preview Gerber files"
-msgstr "Pré-visualize os arquivos Gerber"
+msgstr "Pré-visualize os ficheiros Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:163
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -28968,7 +28971,7 @@ msgstr "Editores"
 
 #: kicad/kicad_manager_frame.cpp:94
 msgid "Project Files"
-msgstr "Arquivos do projeto"
+msgstr "Ficheiros do projeto"
 
 #: kicad/kicad_manager_frame.cpp:380
 msgid "PCM Updates Available"
@@ -29202,7 +29205,7 @@ msgstr "Descarte a ação"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
 msgid "Install from File..."
-msgstr "Instale a partir do arquivo..."
+msgstr "Instale a partir do ficheiro..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
 msgid "Open Package Directory"
@@ -29320,7 +29323,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:550
 msgid "Keep downloaded file"
-msgstr "Mantenha o arquivo que foi baixado"
+msgstr "Mantenha o ficheiro que foi descarregado"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:599
 #: kicad/pcm/pcm_task_manager.cpp:383
@@ -29443,7 +29446,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:762
 msgid "Local file"
-msgstr "Arquivo local"
+msgstr "Ficheiro local"
 
 #: kicad/pcm/pcm.cpp:779
 msgid ""
@@ -29663,7 +29666,7 @@ msgstr "Revela o diretório em uma janela do Finder"
 
 #: kicad/project_tree_pane.cpp:915
 msgid "Open Directory in File Explorer"
-msgstr "Abra o diretório no explorador de arquivos"
+msgstr "Abra o diretório no explorador de ficheiros"
 
 #: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:1136
 msgid "Opens the directory in the default system file manager"
@@ -29675,11 +29678,11 @@ msgstr "Revela as diretorias numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:925
 msgid "Open Directories in File Explorer"
-msgstr "Abra os diretórios no gerenciador de arquivos"
+msgstr "Abra os diretórios no gestor de ficheiros"
 
 #: kicad/project_tree_pane.cpp:926
 msgid "Opens the directories in the default system file manager"
-msgstr "Abre os diretórios no gerenciador de arquivos padrão do sistema"
+msgstr "Abre os diretórios no gestor de ficheiros padrão do sistema"
 
 #: kicad/project_tree_pane.cpp:937
 msgid "Open the file in a Text Editor"
@@ -29687,7 +29690,7 @@ msgstr "Abrir o ficheiro num Editor de Texto"
 
 #: kicad/project_tree_pane.cpp:939
 msgid "Open files in a Text Editor"
-msgstr "Abra os arquivos num editor de texto"
+msgstr "Abra os ficheiros num editor de texto"
 
 #: kicad/project_tree_pane.cpp:941
 msgid "Edit in a Text Editor"
@@ -29699,7 +29702,7 @@ msgstr "Executar tarefas"
 
 #: kicad/project_tree_pane.cpp:955
 msgid "Rename File..."
-msgstr "Renomeia o arquivo..."
+msgstr "Renomeia o ficheiro..."
 
 #: kicad/project_tree_pane.cpp:956
 msgid "Rename file"
@@ -29707,11 +29710,11 @@ msgstr "Renomear ficheiro"
 
 #: kicad/project_tree_pane.cpp:960
 msgid "Rename Files..."
-msgstr "Renomeia os arquivos..."
+msgstr "Renomeia os ficheiros..."
 
 #: kicad/project_tree_pane.cpp:961
 msgid "Rename files"
-msgstr "Renomeie os arquivos"
+msgstr "Renomeie os ficheiros"
 
 #: kicad/project_tree_pane.cpp:971
 msgid "Delete the file and its content"
@@ -29719,7 +29722,7 @@ msgstr "Apagar o ficheiro e conteúdo dele"
 
 #: kicad/project_tree_pane.cpp:973
 msgid "Delete the files and their contents"
-msgstr "Excluí os arquivos e os seus conteúdos"
+msgstr "Apaga os ficheiros e os seus conteúdos"
 
 #: kicad/project_tree_pane.cpp:988
 msgid "Move to Trash"
@@ -29788,7 +29791,7 @@ msgstr "Apagar todos os ficheiros do version control do diretório do projeto."
 #: kicad/project_tree_pane.cpp:1103
 #, c-format
 msgid "Change filename: '%s'"
-msgstr "Altera o nome do arquivo: '%s'"
+msgstr "Altera o nome do ficheiro: '%s'"
 
 #: kicad/project_tree_pane.cpp:1105
 msgid "Change filename"
@@ -29916,7 +29919,7 @@ msgstr "Criar, apagar e editar os footprints da PCI"
 
 #: kicad/tools/kicad_manager_actions.cpp:159
 msgid "Preview Gerber output files"
-msgstr "Faça a pré-visualização dos arquivos gerados pelo Gerber"
+msgstr "Faça a pré-visualização dos ficheiros gerados pelo Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:169
 msgid "Convert bitmap images to schematic or PCB components"
@@ -30438,7 +30441,7 @@ msgstr "Gravar esquema como"
 
 #: pagelayout_editor/files.cpp:269
 msgid "Layout file is read only."
-msgstr "O arquivo de layout é somente leitura."
+msgstr "O ficheiro de layout é somente leitura."
 
 #: pagelayout_editor/pl_editor_frame.cpp:105
 msgid "KiCad Drawing Sheet Editor"
@@ -30463,7 +30466,7 @@ msgstr "origem: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:909
 msgid "New drawing sheet file is unsaved"
-msgstr "O novo arquivo da folha do desenho não foi salvo"
+msgstr "O novo ficheiro da folha do desenho não foi gravado"
 
 #: pagelayout_editor/pl_editor_frame.cpp:913
 msgid "Drawing sheet changes are unsaved"
@@ -31760,7 +31763,7 @@ msgstr "Solução 4R:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:190
 msgid "PCB Calculator data file"
-msgstr "Arquivo de dados da calculadora PCI"
+msgstr "Ficheiro de dados da calculadora PCI"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:196
 msgid "Select PCB Calculator Data File"
@@ -31775,7 +31778,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:229
 #, c-format
 msgid "Unable to read data file '%s'."
-msgstr "Não foi possível ler o arquivo de dados '%s'."
+msgstr "Não foi possível ler o ficheiro de dados '%s'."
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:257
 msgid "This regulator is already in list. Aborted"
@@ -32616,7 +32619,7 @@ msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Nenhum nome do arquivo de dados para salvar as alterações.\n"
+"Nenhum nome do ficheiro de dados para gravar as alterações.\n"
 "Deseja sair e abandonar as suas alterações?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:379
@@ -32625,8 +32628,8 @@ msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Não foi possível escrever no arquivo '%s'\n"
-"Deseja sair e abandonar suas alterações?"
+"Não foi possível escrever no ficheiro '%s'\n"
+"Deseja sair e abandonar as suas alterações?"
 
 #: pcb_calculator/r_calculator_help.h:2
 msgid ""
@@ -34368,7 +34371,7 @@ msgstr "Perfure"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:931
 #, c-format
 msgid "Error writing file '%s'."
-msgstr "Houve um erro ao gravar o arquivo '%s'."
+msgstr "Houve um erro ao gravar o ficheiro '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:120
 msgid "Board Size"
@@ -35691,7 +35694,7 @@ msgstr "Abra a caixa de diálogo Configuração da placa... diálogo"
 #: pcbnew/dialogs/dialog_drc.cpp:1021
 #, c-format
 msgid "Report file '%s' created<br>"
-msgstr "Foi criado o arquivo '%s' do relatório<br>"
+msgstr "Foi criado o ficheiro '%s' do relatório<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1355
 msgid "not run"
@@ -35919,7 +35922,7 @@ msgstr "A placa deve ser gravada antes de gerar o ficheiro IPC-2581."
 #: pcbnew/pcb_design_block_utils.cpp:93
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr "Permissões insuficientes para gravar no arquivo '%s'."
+msgstr "Permissões insuficientes para gravar no ficheiro '%s'."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:259
 #, fuzzy
@@ -36197,7 +36200,7 @@ msgstr "Falha na exportação do STEP! Por favor salve a PCI e tente novamente"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:277
 msgid "STEP files"
-msgstr "Arquivos STEP"
+msgstr "Ficheiros STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:279
 msgid "Binary glTF files"
@@ -36394,7 +36397,7 @@ msgstr "Coordenadas"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:148
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:38
 msgid "Drill/place file origin"
-msgstr "Perfure/posicione o arquivo de origem"
+msgstr "Perfure/posicione o ficheiro de origem"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:174
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
@@ -36432,7 +36435,7 @@ msgstr "Substitua os modelos VRML por modelos STEP de mesmo nome"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:257
 msgid "Overwrite old file"
-msgstr "Sobrescreva o arquivo antigo"
+msgstr "Sobrescreva o ficheiro antigo"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:261
 msgid "Don't write P-curves to STEP file"
@@ -36552,8 +36555,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:132
 msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
-"Use caminhos para o modelo dos arquivos no arquivo VRML da placa em relação "
-"ao arquivo VRML"
+"Use caminhos para o modelo dos ficheiros no ficheiro VRML da placa em "
+"relação ao ficheiro VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:65
 msgid "VRML Export Options"
@@ -36816,7 +36819,7 @@ msgstr "Não está no esquema"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:157
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:638
 msgid "Exclude from position files"
-msgstr "Exclua dos arquivos de posicionamento"
+msgstr "Excluir dos ficheiros de posicionamento"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
 msgid "Update Footprint from Library..."
@@ -37270,7 +37273,7 @@ msgstr "Não foi possível guardar os ficheiros de traçado na pasta '%s'."
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:411
 #, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Arquivo posicionamento da frente (lado de cima): '%s'."
+msgstr "Ficheiro posicionamento da frente (lado de cima): '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:295
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:318
@@ -37284,7 +37287,7 @@ msgstr "Contagem de componentes: %d."
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:454
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "Arquivo de posicionamento de trás (lado de baixo): '%s'."
+msgstr "Ficheiro de posicionamento de trás (lado de baixo): '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:322
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:464
@@ -37299,7 +37302,7 @@ msgstr "Nenhum footprint para posicionamento automático."
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:409
 #, c-format
 msgid "Placement file: '%s'."
-msgstr "Arquivo de posicionamento: '%s'."
+msgstr "Ficheiro de posicionamento: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:536
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:556
@@ -37308,7 +37311,7 @@ msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
-"Arquivo do relatório do footprint foi criado:\n"
+"Ficheiro do relatório do footprint foi criado:\n"
 "'%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:537
@@ -37346,7 +37349,7 @@ msgstr "Gerar um único ficheiro com as posições frontal e traseira"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
-msgstr "Gera os arquivos de posicionamento"
+msgstr "Gera os ficheiros de posicionamento"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:58
 msgid "Output File:"
@@ -37361,7 +37364,7 @@ msgstr ""
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr ""
-"Não foi possível gravar os arquivos de perfuração e/ou mapeamento na pasta "
+"Não foi possível gravar os ficheiros de perfuração e/ou mapeamento na pasta "
 "'%s'."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:398
@@ -38090,7 +38093,7 @@ msgstr "Importar Netlist"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:126
 msgid "Please choose a valid netlist file."
-msgstr "Escolha um arquivo netlist válido."
+msgstr "Escolha um ficheiro netlist válido."
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:132
 #: pcbnew/dialogs/dialog_import_netlist.cpp:169
@@ -38105,7 +38108,7 @@ msgstr "As alterações foram aplicadas na PCI"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:204
 #, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "Lendo o arquivo netlist '%s'.\n"
+msgstr "A ler o ficheiro netlist '%s'.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:208
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -39236,7 +39239,7 @@ msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
 "Use a origem do ficheiro de perfuração/motagem como a origem da coordenada "
-"para os arquivos que foram traçados"
+"para os ficheiros que foram traçados"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid "Mirrored plot"
@@ -39266,7 +39269,7 @@ msgstr "Configuração da placa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:176
 msgid "File > Board Setup..."
-msgstr "Arquivo > Configuração da placa..."
+msgstr "Ficheiro > Configuração da placa..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:189
 msgid "Gerber Options"
@@ -39335,7 +39338,7 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Inclui os metadados da netlist e os atributos da abertura nos arquivos "
+"Inclui os metadados da netlist e os atributos da abertura nos ficheiros "
 "Gerber.\n"
 "No formato X1, eles são comentários.\n"
 "Usado para verificar a conectividade nas ferramentas CAM e nos "
@@ -39772,7 +39775,7 @@ msgstr "Envie o projeto diretamente"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr "Envia os arquivos de produção para o fabricante do KiCad"
+msgstr "Envia os ficheiros de produção para o fabricante do KiCad"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
@@ -41101,15 +41104,15 @@ msgstr "Houve um erro ao adicionar o modelo 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:489
 msgid "No filename entered"
-msgstr "Nenhum nome de arquivo foi inserido"
+msgstr "Nenhum nome de ficheiro foi inserido"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:494
 msgid "Illegal filename"
-msgstr "Nome de arquivo ilegal"
+msgstr "Nome de ficheiro ilegal"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:504
 msgid "Unable to open file"
-msgstr "Não é possível abrir o arquivo"
+msgstr "Não é possível abrir o ficheiro"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:44
 msgid "3D Model(s)"
@@ -44408,19 +44411,19 @@ msgstr "Houve uma falha na exportação do VRML:\n"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:129
 #, c-format
 msgid "Created file '%s'"
-msgstr "Arquivo '%s' criado"
+msgstr "Ficheiro '%s' criado"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:427
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:158
 #, c-format
 msgid "Created file '%s'."
-msgstr "Arquivo '%s' criado."
+msgstr "Ficheiro '%s' criado."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:138
 #, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "Arquivo de trabalho do Gerber '%s' foi criado."
+msgstr "Ficheiro de trabalho do Gerber '%s' foi criado."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:578
 msgid "Board stackup settings not up to date."
@@ -44691,7 +44694,7 @@ msgstr "Houve uma falha ao criar a pasta '%s'."
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
-msgstr "Todos os arquivos das placas do KiCad"
+msgstr "Todos os ficheiros das placas do KiCad"
 
 #: pcbnew/files.cpp:182
 msgid "Open Board File"
@@ -44712,12 +44715,12 @@ msgstr "Imprimir Placa"
 #: pcbnew/files.cpp:309
 #, c-format
 msgid "Recovery file '%s' not found."
-msgstr "Arquivo de recuperação '%s' não foi encontrado."
+msgstr "Ficheiro de recuperação '%s' não foi encontrado."
 
 #: pcbnew/files.cpp:313
 #, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "OK para carregar o arquivo de recuperação '%s'?"
+msgstr "OK para carregar o ficheiro de recuperação '%s'?"
 
 #: pcbnew/files.cpp:355
 #, c-format
@@ -44803,7 +44806,7 @@ msgstr ""
 #: pcbnew/files.cpp:1024 pcbnew/files.cpp:1158
 #, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr "Houve um erro ao salvar o arquivo com as regras personalizadas '%s'."
+msgstr "Houve um erro ao gravar o ficheiro com as regras personalizadas '%s'."
 
 #: pcbnew/files.cpp:1049 pcbnew/files.cpp:1133
 #: pcbnew/pcb_design_block_utils.cpp:111
@@ -44812,7 +44815,7 @@ msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Houve um erro ao salvar o arquivo de placa '%s'.\n"
+"Houve um erro ao gravar o ficheiro de placa '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1310
@@ -44856,7 +44859,7 @@ msgstr "não está no esquema"
 
 #: pcbnew/footprint.cpp:1748
 msgid "exclude from pos files"
-msgstr "exclui dos arquivos pos"
+msgstr "exclui dos ficheiros pos"
 
 #: pcbnew/footprint.cpp:1751
 msgid "exclude from BOM"
@@ -45087,7 +45090,7 @@ msgstr "Importar Footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:177
 msgid "Not a footprint file."
-msgstr "Não é um arquivo de footprint."
+msgstr "Não é um ficheiro de footprint."
 
 #: pcbnew/footprint_libraries_utils.cpp:192
 #, c-format
@@ -45101,7 +45104,7 @@ msgstr "Exportar Footprint"
 #: pcbnew/footprint_libraries_utils.cpp:294
 #, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "O footprint foi exportado para o arquivo '%s'."
+msgstr "O footprint foi exportado para o ficheiro '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:600
 #, c-format
@@ -45702,7 +45705,7 @@ msgstr "Ler Ficheiro de Descrição de Forma..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:209
 msgid "Shape Description File"
-msgstr "Arquivo de descrição da forma"
+msgstr "Ficheiro de descrição da forma"
 
 #: pcbnew/microwave/microwave_polygon.cpp:313
 msgid "Shape has a null size."
@@ -46235,7 +46238,7 @@ msgstr ""
 #: pcbnew/netlist_reader/netlist.cpp:65
 #, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "Não é possível abrir o arquivo netlist '%s'."
+msgstr "Não é possível abrir o ficheiro netlist '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:76
 #, c-format
@@ -46279,7 +46282,7 @@ msgid ""
 "line: %d"
 msgstr ""
 "ID inválido do footprint em\n"
-"arquivo: '%s'\n"
+"ficheiro: '%s'\n"
 "linha: %d"
 
 #: pcbnew/pad.cpp:1133 pcbnew/pad.cpp:1311 pcbnew/pad.cpp:1327
@@ -46728,11 +46731,11 @@ msgstr "Exporta a netlist usada para atualizar os esquemas"
 
 #: pcbnew/pcb_edit_frame.cpp:498
 msgid "New PCB file is unsaved"
-msgstr "O salvamento do novo arquivo da PCI foi desfeito"
+msgstr "A gravação do novo ficheiro da PCI foi desfeito"
 
 #: pcbnew/pcb_edit_frame.cpp:1714
 msgid "Board file is read only."
-msgstr "O arquivo da placa é somente leitura."
+msgstr "O ficheiro da placa é somente leitura."
 
 #: pcbnew/pcb_edit_frame.cpp:1760
 msgid "PCB file changes are unsaved"
@@ -46898,7 +46901,7 @@ msgstr "O diretório do footprint não foi encontrado: '%s'."
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:231
 #, c-format
 msgid "File not found: '%s'."
-msgstr "Arquivo não encontrado: '%s'."
+msgstr "Ficheiro não encontrado: '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:836
 #, c-format
@@ -46980,7 +46983,7 @@ msgstr "A dimensão do tipo %d foi ignorada (ainda não é compatível)."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2056
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Arquivo não encontrado: '%s'. O modelo 3D não foi importado."
+msgstr "Ficheiro não encontrado: '%s'. O modelo 3D não foi importado."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2117
 msgid "Loading nets..."
@@ -47756,7 +47759,7 @@ msgstr "Ficheiros de arquivos CADSTAR PCB"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:197
 #, c-format
 msgid "Unable to read file '%s'"
-msgstr "Não é possível ler o arquivo '%s'"
+msgstr "Não é possível ler o ficheiro '%s'"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1210
 #, c-format
@@ -48056,7 +48059,7 @@ msgstr "Tipo de formato inválido %d no contorno da região"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
-msgstr "Não foi possível ler o arquivo "
+msgstr "Não foi possível ler o ficheiro "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
@@ -48101,7 +48104,7 @@ msgstr "A pasta da biblioteca '%s' tem subpastas inesperadas."
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:989
 #, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "Arquivo '%s' inesperado foi encontrado na biblioteca '%s'."
+msgstr "Ficheiro '%s' inesperado foi encontrado na biblioteca '%s'."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1008
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3305
@@ -48257,7 +48260,7 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Número de ponto flutuante inválido no arquivo: '%s'\n"
+"Número de ponto flutuante inválido no ficheiro: '%s'\n"
 "linha: %d, posição: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2901
@@ -48267,7 +48270,7 @@ msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Falta o número de ponto flutuante no arquivo: '%s'\n"
+"Falta o número de ponto flutuante no ficheiro: '%s'\n"
 "linha: %d, posição: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3084
@@ -48311,7 +48314,7 @@ msgstr "tipo de suavização de canto de zona desconhecido %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2850
 msgid "This file does not contain a PCB."
-msgstr "Este arquivo não contém uma PCI."
+msgstr "Este ficheiro não contém uma PCI."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3020
 #, c-format
@@ -48329,7 +48332,7 @@ msgstr "Biblioteca Não Encontrada"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3050
 #, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "O nome do arquivo do footprint '%s' não é válido."
+msgstr "O nome do ficheiro do footprint '%s' não é válido."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3056
 #, c-format
@@ -48339,7 +48342,7 @@ msgstr "Permissões insuficientes para excluir '%s'."
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3180
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "Arquivo inesperado '%s' foi encontrado no caminho da biblioteca '%s'."
+msgstr "Ficheiro inesperado '%s' foi encontrado no caminho da biblioteca '%s'."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:320
 msgid "KiCad footprint file"
@@ -48381,7 +48384,7 @@ msgstr "O tipo de página '%s' não é válido."
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr ""
-"A camada '%s' no arquivo '%s' na linha %d não está num hash da camada fixa."
+"A camada '%s' no ficheiro '%s' na linha %d não está num hash da camada fixa."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2036
 #, c-format
@@ -48391,7 +48394,7 @@ msgstr "%d não é uma contagem de camada válida"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2855
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "Nome NETCLASS duplicado '%s' no arquivo '%s' na linha %d, posição %d."
+msgstr "Nome NETCLASS duplicado '%s' no ficheiro '%s' na linha %d, posição %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3253
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6612
@@ -48403,7 +48406,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 "ID inválido da rede em\n"
-"arquivo: '%s'\n"
+"ficheiro: '%s'\n"
 "linha: %d\n"
 "posição: %d."
 
@@ -48448,7 +48451,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 "ID da rede em\n"
-"arquivo: '%s'\n"
+"ficheiro: '%s'\n"
 "linha: %d posição: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5419
@@ -48459,7 +48462,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 "O nome da rede não bate com a ID em\n"
-"arquivo: '%s'\n"
+"ficheiro: '%s'\n"
 "linha: %d posição: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5760
@@ -49580,7 +49583,7 @@ msgstr "Ficheiro Session importado e agregado OK."
 #: pcbnew/specctra_import_export/specctra_import.cpp:181
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "O arquivo da sessão atual usa identificador de camada inválido: '%s'."
+msgstr "O ficheiro da sessão atual usa identificador de camada inválido: '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:243
 msgid "Session via padstack has no shapes"
@@ -49727,7 +49730,7 @@ msgstr "Bloqueio"
 
 #: pcbnew/tools/board_editor_control.cpp:380
 msgid "Specctra Session File"
-msgstr "Arquivo de sessão Specctra"
+msgstr "Ficheiro de sessão Specctra"
 
 #: pcbnew/tools/board_editor_control.cpp:407
 msgid "Specctra DSN File"
@@ -49739,7 +49742,7 @@ msgstr "Exporta a lista da placa"
 
 #: pcbnew/tools/board_editor_control.cpp:432
 msgid "KiCad board netlist files"
-msgstr "Arquivos de netlist da placa KiCad"
+msgstr "Ficheiros de netlist da placa KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:533
 #, c-format
@@ -49767,7 +49770,7 @@ msgstr ""
 #: pcbnew/tools/board_editor_control.cpp:681
 #, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Arquivo do esquema '%s' não foi encontrado."
+msgstr "Ficheiro do esquema '%s' não foi encontrado."
 
 #: pcbnew/tools/board_editor_control.cpp:712
 msgid "Eeschema failed to load."
@@ -51298,7 +51301,7 @@ msgstr "Importar Footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:877
 msgid "Import footprint from file"
-msgstr "Importa footprint do arquivo"
+msgstr "Importa footprint do ficheiro"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Export Current Footprint..."
@@ -51563,12 +51566,12 @@ msgstr "Abra outra placa e anexe o seu conteúdo nesta placa"
 #: pcbnew/tools/pcb_actions.cpp:1153
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Limpe a placa e obtenha o último arquivo de resgate salvo automaticamente "
+"Limpe a placa e obtenha o último ficheiro de resgate gravado automaticamente "
 "pelo editor da PCI"
 
 #: pcbnew/tools/pcb_actions.cpp:1159
 msgid "Non-KiCad Board File..."
-msgstr "Arquivo da placa não KiCad..."
+msgstr "Ficheiro da placa não KiCad..."
 
 #: pcbnew/tools/pcb_actions.cpp:1160
 msgid "Import board file from other applications"
@@ -51646,7 +51649,7 @@ msgstr "Posicionamento de componente (.pos, .gbr)..."
 #: pcbnew/tools/pcb_actions.cpp:1217
 msgid "Generate component placement file(s) for pick and place"
 msgstr ""
-"Gerar o(s) arquivo(s) de posicionamento do(s) componente(s) para seleção e "
+"Gerar o(s) ficheiro(s) de posicionamento do(s) componente(s) para seleção e "
 "posicionamento"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
@@ -51792,13 +51795,13 @@ msgstr "Posicionar footprints"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid "Drill/Place File Origin"
-msgstr "Perfura/posiciona o arquivo de origem"
+msgstr "Perfura/posiciona o ficheiro de origem"
 
 #: pcbnew/tools/pcb_actions.cpp:1383
 msgid "Place origin point for drill files and component placement files"
 msgstr ""
-"Posiciona o ponto de origem para os arquivos de perfuração e os arquivos de "
-"posicionamento do componente"
+"Posiciona o ponto de origem para os ficheiros de perfuração e os ficheiros "
+"de posicionamento do componente"
 
 #: pcbnew/tools/pcb_actions.cpp:1391
 msgid "Reset Drill Origin"
@@ -54407,11 +54410,11 @@ msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
-msgstr "Visualizador de arquivo Gerber"
+msgstr "Visualizador de ficheiro Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
-msgstr "Ver arquivos Gerber"
+msgstr "Ver ficheiros Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
@@ -54496,11 +54499,11 @@ msgstr "Os desenvolvedores do KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
-msgstr "Arquivo Gerber"
+msgstr "Ficheiro Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
-msgstr "Arquivo de perfuração Excellon"
+msgstr "Ficheiro de perfuração Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
