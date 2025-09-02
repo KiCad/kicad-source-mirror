@@ -112,13 +112,13 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     // Import phase 1: turn the file into the C++ structs
     std::unique_ptr<ALLEGRO::RAW_BOARD> rawBoard = parser.Parse();
 
-    m_reporter->Report( wxString::Format( "Phase 1 parse took %fms", timer.msecs() ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxString::Format( "Phase 1 parse took %fms", timer.msecs() ), RPT_SEVERITY_DEBUG ); // format:allow
     // Import Phase 2: turn the C++ structs into the KiCad BOARD
     ALLEGRO::BOARD_BUILDER builder( *rawBoard, *m_board, *m_reporter, m_progressReporter );
 
     const bool phase2Ok = builder.BuildBoard();
 
-    m_reporter->Report( wxString::Format( "Phase 2 parse took %fms", timer.msecs( true ) ), RPT_SEVERITY_DEBUG );
+    m_reporter->Report( wxString::Format( "Phase 2 parse took %fms", timer.msecs( true ) ), RPT_SEVERITY_DEBUG ); // format:allow
 
     return m_board;
 }

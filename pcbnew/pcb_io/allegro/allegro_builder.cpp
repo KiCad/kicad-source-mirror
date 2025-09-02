@@ -27,9 +27,12 @@
 
 #include <wx/log.h>
 
+#include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
+#include <pcb_track.h>
 
 
 using namespace ALLEGRO;
