@@ -129,6 +129,7 @@ int PCB_GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent )
             break;
     }
 
+    picker->ClearHandlers();
     m_frame->GetCanvas()->SetStatusPopup( nullptr );
 
     return 0;

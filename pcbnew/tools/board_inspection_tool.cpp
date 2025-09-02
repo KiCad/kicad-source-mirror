@@ -1948,7 +1948,6 @@ int BOARD_INSPECTION_TOOL::ClearHighlight( const TOOL_EVENT& aEvent )
 int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
     PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-    BOARD*            board = getModel<BOARD>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -1958,7 +1957,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     picker->ClearHandlers();
 
     picker->SetClickHandler(
-            [this, board]( const VECTOR2D& pt ) -> bool
+            [this]( const VECTOR2D& pt ) -> bool
             {
                 PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
@@ -1978,7 +1977,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 if( selection.Empty() )
                 {
                     // Clear the previous local ratsnest if we click off all items
-                    for( FOOTPRINT* fp : board->Footprints() )
+                    for( FOOTPRINT* fp : getModel<BOARD>()->Footprints() )
                     {
                         for( PAD* pad : fp->Pads() )
                             pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
@@ -2011,11 +2010,11 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             } );
 
     picker->SetFinalizeHandler(
-            [this, board]( int aCondition )
+            [this]( int aCondition )
             {
                 if( aCondition != PCB_PICKER_TOOL::END_ACTIVATE )
                 {
-                    for( FOOTPRINT* fp : board->Footprints() )
+                    for( FOOTPRINT* fp : getModel<BOARD>()->Footprints() )
                     {
                         for( PAD* pad : fp->Pads() )
                             pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );

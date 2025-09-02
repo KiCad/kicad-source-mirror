@@ -506,8 +506,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     picker->ClearHandlers();
 
     picker->SetClickHandler(
-            [this, simFrame]( const VECTOR2D& aPosition )
+            [this]( const VECTOR2D& aPosition )
             {
+                KIWAY_PLAYER*       player = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+                SIMULATOR_FRAME*    simFrame = static_cast<SIMULATOR_FRAME*>( player );
                 SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
                 // We do not really want to keep an item selected in schematic,
@@ -555,7 +557,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         }
                         else if( currentNames.size() == 1 )
                         {
-                            simFrame->AddCurrentTrace( currentNames.at( 0 ) );
+                            if( simFrame )
+                                simFrame->AddCurrentTrace( currentNames.at( 0 ) );
+
                             return true;
                         }
 
@@ -564,7 +568,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         if( modelPinIndex != SIM_MODEL_PIN::NOT_CONNECTED )
                         {
                             wxString name = currentNames.at( modelPinIndex );
-                            simFrame->AddCurrentTrace( name );
+
+                            if( simFrame )
+                                simFrame->AddCurrentTrace( name );
                         }
                     }
                     catch( const IO_ERROR& e )
@@ -579,7 +585,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         wxString spiceNet = UnescapeString( conn->Name() );
                         NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &spiceNet );
 
-                        simFrame->AddVoltageTrace( wxString::Format( "V(%s)", spiceNet ) );
+                        if( simFrame )
+                            simFrame->AddVoltageTrace( wxString::Format( "V(%s)", spiceNet ) );
                     }
                 }
 
@@ -587,7 +594,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             } );
 
     picker->SetMotionHandler(
-            [this, picker]( const VECTOR2D& aPos )
+            [this]( const VECTOR2D& aPos )
             {
                 SCH_COLLECTOR collector;
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
@@ -610,9 +617,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 }
 
                 if( item && item->Type() == SCH_PIN_T )
-                    picker->SetCursor( KICURSOR::CURRENT_PROBE );
+                    m_toolMgr->GetTool<PICKER_TOOL>()->SetCursor( KICURSOR::CURRENT_PROBE );
                 else
-                    picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
+                    m_toolMgr->GetTool<PICKER_TOOL>()->SetCursor( KICURSOR::VOLTAGE_PROBE );
 
                 if( m_pickerItem != item )
                 {

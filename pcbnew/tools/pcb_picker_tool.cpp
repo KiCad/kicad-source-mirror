@@ -260,11 +260,12 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
 
     statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
 
-    const auto sendPoint = [&]( const std::optional<VECTOR2I>& aPoint )
-    {
-        statusPopup.Hide();
-        params.m_Receiver->UpdatePickedPoint( aPoint );
-    };
+    const auto sendPoint =
+            [&]( const std::optional<VECTOR2I>& aPoint )
+            {
+                statusPopup.Hide();
+                params.m_Receiver->UpdatePickedPoint( aPoint );
+            };
 
     SetSnapping( true );
     SetCursor( KICURSOR::PLACE );
@@ -306,10 +307,12 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
     // Drop into the main event loop
     Main( aEvent );
 
+    ClearHandlers();
     canvas()->SetStatusPopup( nullptr );
     frame()->PopTool( aEvent );
     return 0;
 }
+
 
 int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
 {
@@ -325,11 +328,12 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
 
     statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
 
-    const auto sendItem = [&]( const EDA_ITEM* aItem )
-    {
-        statusPopup.Hide();
-        params.m_Receiver->UpdatePickedItem( aItem );
-    };
+    const auto sendItem =
+            [&]( const EDA_ITEM* aItem )
+            {
+                statusPopup.Hide();
+                params.m_Receiver->UpdatePickedItem( aItem );
+            };
 
     SetCursor( KICURSOR::BULLSEYE );
     SetSnapping( false );
@@ -340,8 +344,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
                 const PCB_SELECTION& sel = selectionTool->RequestSelection(
-                        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
-                            PCB_SELECTION_TOOL* sTool )
+                        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                         {
                         } );
 
@@ -383,6 +386,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
     // Drop into the main event loop
     Main( aEvent );
 
+    ClearHandlers();
     canvas()->SetStatusPopup( nullptr );
     frame()->PopTool( aEvent );
     return 0;
