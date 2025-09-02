@@ -150,6 +150,8 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
     bool                  allPads = true;
     BOARD_ITEM_CONTAINER* currentParent = nullptr;
     bool                  differentParents = false;
+    bool                  allowFreePads = m_selectionTool->IsFootprintEditor()
+                                       || m_frame->GetPcbNewSettings()->m_AllowFreePads;
 
     for( EDA_ITEM* item : selection )
     {
@@ -192,7 +194,7 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        if( allPads && differentParents )
+        if( boardItem->Type() == PCB_PAD_T && ( !allowFreePads || ( allPads && differentParents ) ) )
         {
             FOOTPRINT* parentFp = boardItem->GetParentFootprint();
 
