@@ -944,7 +944,11 @@ int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
     wxString           libName = editFrame->GetTreeLIBID().GetLibNickname();
 
-    DIALOG_LIB_FIELDS dlg( editFrame, libName );
+    // Get all symbol names from the library manager
+    wxArrayString symbolNames;
+    editFrame->GetLibManager().GetSymbolNames( libName, symbolNames );
+
+    DIALOG_LIB_FIELDS dlg( editFrame, libName, symbolNames );
     dlg.SetTitle( _( "Library Fields" ) );
     dlg.ShowModal();
     return 0;

@@ -235,13 +235,13 @@ protected:
 };
 
 
-DIALOG_LIB_FIELDS::DIALOG_LIB_FIELDS( SYMBOL_EDIT_FRAME* parent, wxString libId ) :
+DIALOG_LIB_FIELDS::DIALOG_LIB_FIELDS( SYMBOL_EDIT_FRAME* parent, wxString libId, const wxArrayString& aSymbolNames ) :
         DIALOG_LIB_FIELDS_BASE( parent, wxID_ANY, wxString::Format( _( "Symbol Library Fields: %s" ), libId ) ),
         m_libId( libId ),
         m_parent( parent )
 {
     // Get all symbols from the library
-    loadSymbols();
+    loadSymbols( aSymbolNames );
 
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
@@ -392,25 +392,21 @@ void DIALOG_LIB_FIELDS::OnInit()
 }
 
 
-void DIALOG_LIB_FIELDS::loadSymbols()
+void DIALOG_LIB_FIELDS::loadSymbols( const wxArrayString& aSymbolNames )
 {
     // Clear any existing data
     m_symbolsList.clear();
 
     try
     {
-        // Get all symbol names from the library manager
-        wxArrayString symbolNames;
-        m_parent->GetLibManager().GetSymbolNames( m_libId, symbolNames );
-
-        if( symbolNames.IsEmpty() )
+        if( aSymbolNames.IsEmpty() )
         {
             wxMessageBox( wxString::Format( _( "No symbols found in library %s." ), m_libId ) );
             return;
         }
 
         // Load each symbol from the library manager and add it to our list
-        for( const wxString& symbolName : symbolNames )
+        for( const wxString& symbolName : aSymbolNames )
         {
             LIB_SYMBOL* symbol = nullptr;
 
@@ -1154,4 +1150,3 @@ void DIALOG_LIB_FIELDS::SetupAllColumnProperties()
     m_dataModel->SetSorting( sortCol, sortAscending );
     m_grid->SetSortingColumn( sortCol, sortAscending );
 }
-
