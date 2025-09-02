@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-09-02 07:02+0000\n"
+"PO-Revision-Date: 2025-09-03 08:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38374,7 +38374,7 @@ msgstr "Anhand von Ecke und Größe"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr "Anhand von Mittel und Größe"
+msgstr "Anhand von Mitte und Größe"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 msgid "By Endpoints"
