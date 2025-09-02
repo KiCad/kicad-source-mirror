@@ -30,7 +30,7 @@ class LIB_SYMBOL;
 class DIALOG_LIB_FIELDS : public DIALOG_LIB_FIELDS_BASE
 {
 public:
-    DIALOG_LIB_FIELDS( SYMBOL_EDIT_FRAME* parent, wxString libId );
+    DIALOG_LIB_FIELDS( SYMBOL_EDIT_FRAME* parent, wxString libId, const wxArrayString& aSymbolNames );
     ~DIALOG_LIB_FIELDS() override;
 
     void OnInit();
@@ -68,7 +68,7 @@ private:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
 
-    void loadSymbols();
+    void loadSymbols( const wxArrayString& aSymbolNames );
 
     wxString                           m_libId;
     SYMBOL_EDIT_FRAME*                 m_parent;
