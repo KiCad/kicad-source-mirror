@@ -89,7 +89,24 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         if( connectivity->TestTrackEndpointDangling( track, true, &pos ) )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( code );
+            std::shared_ptr<DRC_ITEM> drcItem;
+
+            if( track->Type() == PCB_VIA_T )
+            {
+                auto constraint = m_drcEngine->EvalRules( VIA_DANGLING_CONSTRAINT, track, nullptr,
+                                                         track->GetLayer() );
+
+                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+                    continue;
+
+                drcItem = DRC_ITEM::Create( code );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
+            }
+            else
+            {
+                drcItem = DRC_ITEM::Create( code );
+            }
+
             drcItem->SetItems( track );
             reportViolation( drcItem, pos, track->GetLayer() );
         }

@@ -496,7 +496,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                          "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
                          "min_resolved_spokes, solder_mask_expansion, solder_paste_abs_margin, "
-                         "solder_paste_rel_margin, length, skew, via_count, via_diameter, "
+                         "solder_paste_rel_margin, length, skew, via_count, via_dangling, via_diameter, "
                          "diff_pair_gap or diff_pair_uncoupled" ) );
         reportError( msg );
         return;
@@ -521,6 +521,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_connection_width:          c.m_Type = CONNECTION_WIDTH_CONSTRAINT;          break;
     case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
     case T_via_diameter:              c.m_Type = VIA_DIAMETER_CONSTRAINT;              break;
+    case T_via_dangling:             c.m_Type = VIA_DANGLING_CONSTRAINT;             break;
     case T_zone_connection:           c.m_Type = ZONE_CONNECTION_CONSTRAINT;           break;
     case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
@@ -543,7 +544,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                          "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
                          "min_resolved_spokes, solder_mask_expansion, solder_paste_abs_margin, "
-                         "solder_paste_rel_margin, length, skew, via_count, via_diameter, "
+                         "solder_paste_rel_margin, length, skew, via_count, via_dangling, via_diameter, "
                          "diff_pair_gap or diff_pair_uncoupled" ) );
         reportError( msg );
     }
@@ -556,7 +557,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     bool unitless = c.m_Type == VIA_COUNT_CONSTRAINT
                     || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
-                    || c.m_Type == TRACK_ANGLE_CONSTRAINT;
+                    || c.m_Type == TRACK_ANGLE_CONSTRAINT
+                    || c.m_Type == VIA_DANGLING_CONSTRAINT;
 
     allowsTimeDomain = c.m_Type == LENGTH_CONSTRAINT || c.m_Type == SKEW_CONSTRAINT;
 

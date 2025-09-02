@@ -73,6 +73,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_orientation.cpp
     drc/test_drc_lengths.cpp
     drc/test_drc_unconnected_items_exclusion_loss.cpp
+    drc/test_drc_via_dangling.cpp
 
     pcb_io/altium/test_altium_rule_transformer.cpp
     pcb_io/altium/test_altium_pcblib_import.cpp

@@ -60,6 +60,7 @@ track_segment_length
 version
 via
 via_count
+via_dangling
 via_diameter
 warning
 within_diff_pairs

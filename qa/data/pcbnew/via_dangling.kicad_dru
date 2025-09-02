@@ -1,0 +1,5 @@
+(version 1)
+(rule ignore_left
+    (constraint via_dangling)
+    (condition "A.Position_X < 20mm")
+    (severity ignore))
