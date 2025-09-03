@@ -36,6 +36,7 @@
 #include <geometry/convex_hull.h>
 #include <geometry/shape_utils.h>
 #include <pcb_group.h>
+#include <footprint.h>
 #include <component_classes/component_class.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/topo_match.h>
@@ -601,6 +602,31 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
         }
 
         return -1;
+    }
+
+    if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
+    {
+        if( aTargetArea.m_components.size() == 0 || !( *aTargetArea.m_components.begin() )->GetParentGroup() )
+        {
+            commit.Revert();
+
+            if( Pgm().IsGUI() )
+            {
+                frame()->ShowInfoBarError( _( "Target group does not have a group." ), true );
+            }
+
+            return -1;
+        }
+
+        EDA_GROUP* group = ( *aTargetArea.m_components.begin() )->GetParentGroup();
+
+        commit.Add( group->AsEdaItem() );
+
+        for( BOARD_ITEM* item : compat.m_groupableItems )
+        {
+            commit.Modify( item );
+            group->AddItem( item );
+        }
     }
 
     commit.Push( _( "Repeat layout" ) );
