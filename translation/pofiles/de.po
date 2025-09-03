@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-09-02 09:02+0000\n"
+"PO-Revision-Date: 2025-09-03 21:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.1-dev\n"
+"X-Generator: Weblate 5.13.1-rc\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4665,7 +4665,7 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Verzögerung nach der ersten Änderung, bevor ein Sicherungskopie des "
+"Verzögerung nach der ersten Änderung, bevor eine Sicherungskopie des "
 "Platinenentwurfs erstellt wird.\n"
 "Wenn Wert auf 0 gesetzt ist, wird keine Sicherungskopie erstellt"
 
@@ -16845,8 +16845,8 @@ msgstr "Ansicht auf kreuzreferenzierte Elemente zentrieren"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:51
 msgid "Ensures that cross-probed symbols are visible in the current view"
 msgstr ""
-"Stellt sicher, das sich kreuzreferenzierte Symbole im aktuellen Sichtbereich "
-"befinden"
+"Stellt sicher, dass sich kreuzreferenzierte Symbole im aktuellen "
+"Sichtbereich befinden"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
 #: pcbnew/dialogs/panel_display_options_base.cpp:209
@@ -25021,7 +25021,7 @@ msgstr "Benutzerdefinierte Signale..."
 #: eeschema/tools/sch_actions.cpp:1644
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
-"benutzerdefinierte Simulationssignale hinzufügen, bearbeiten oder löschen"
+"Benutzerdefinierte Simulationssignale hinzufügen, bearbeiten oder löschen"
 
 #: eeschema/tools/sch_actions.cpp:1650
 msgid "Show SPICE Netlist"
@@ -45057,12 +45057,13 @@ msgstr "Lese- oder Schreibfehler während der Kompression"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2428
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
-"Konnte STEP-Produktname nicht setzen, aber werde versuchen fort zu fahren."
+"Konnte STEP-Produktnamen nicht setzen, aber werde versuchen fortzufahren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2436
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
-"Konnte Oberflächenkurvenmodus nicht setzen, aber versuchen fort zu fahren."
+"Konnte Oberflächenkurvenmodus nicht setzen, aber werde versuchen "
+"fortzufahren."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2488
 #: pcbnew/exporters/step/step_pcb_model.cpp:3268
@@ -51939,8 +51940,8 @@ msgstr "Standard-Pad-Eigenschaften..."
 #: pcbnew/tools/pcb_actions.cpp:1121
 msgid "Edit the pad properties used when creating new pads"
 msgstr ""
-"Bearbeiten der Standard Pad-Eigenschaften, die beim Erstellen neuer Pads "
-"verwendet werden"
+"Bearbeiten der Pad-Eigenschaften, die beim Erstellen neuer Pads verwendet "
+"werden"
 
 #: pcbnew/tools/pcb_actions.cpp:1132
 msgid "Reveal Plugin Folder in Finder"
