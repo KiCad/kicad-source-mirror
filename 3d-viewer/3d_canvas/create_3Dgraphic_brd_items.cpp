@@ -474,12 +474,12 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 }
 
 
-void BOARD_ADAPTER::createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
-                                       int aInflateValue )
+void BOARD_ADAPTER::createPadHoleShape( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+                                        int aInflateValue )
 {
     if( !aPad->HasHole() )
     {
-        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadWithHole - found an invalid pad" ) );
+        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadHole pad has no hole" ) );
         return;
     }
 

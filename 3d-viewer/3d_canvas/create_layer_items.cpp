@@ -507,27 +507,32 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            const VECTOR2I padHole = pad->GetDrillSize();
-
-            if( !padHole.x )    // Not drilled pad like SMD pad
+            // Note: holes of NPTH are already built by GetBoardPolygonOutlines
+            if( !pad->HasHole() )
                 continue;
-
-            // The hole in the body is inflated by copper thickness, if not plated, no copper
-            int inflate = 0;
-
-            if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
-                inflate = KiROUND( GetHolePlatingThickness() / 2.0 );
 
             m_holeCount++;
             double holeDiameter = ( pad->GetDrillSize().x + pad->GetDrillSize().y ) / 2.0;
             m_averageHoleDiameter += static_cast<float>( holeDiameter * m_biuTo3Dunits );
 
-            createPadWithHole( pad, &m_TH_ODs, inflate );
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+            {
+                // Ensure the silk drawings are clipped to the NPTH hole, like other pad/via holes
+                // even if the clip to board body is not activated (remember NPTH holes are part of
+                // the board body)
+                createPadHoleShape( pad, &m_TH_ODs, 0 );
+                continue;
+            }
+
+            // The hole in the body is inflated by copper thickness
+            int inflate = KiROUND( GetHolePlatingThickness() / 2.0 );
+
+            createPadHoleShape( pad, &m_TH_ODs, inflate );
 
             if( cfg.clip_silk_on_via_annuli )
-                createPadWithHole( pad, &m_viaAnnuli, inflate );
+                createPadHoleShape( pad, &m_viaAnnuli, inflate );
 
-            createPadWithHole( pad, &m_TH_IDs, 0 );
+            createPadHoleShape( pad, &m_TH_IDs, 0 );
         }
     }
 
@@ -539,9 +544,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            const VECTOR2I padHole = pad->GetDrillSize();
-
-            if( !padHole.x ) // Not drilled pad like SMD pad
+            if( !pad->HasHole() )
                 continue;
 
             // The hole in the body is inflated by copper thickness.

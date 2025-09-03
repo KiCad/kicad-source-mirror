@@ -819,10 +819,7 @@ void RENDER_3D_OPENGL::generateViasAndPads()
             {
                 if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
                 {
-                    const VECTOR2I drillsize = pad->GetDrillSize();
-                    const bool     hasHole = drillsize.x && drillsize.y;
-
-                    if( !hasHole )
+                    if( !pad->HasHole() )
                         continue;
 
                     pad->TransformHoleToPolygon( tht_outer_holes_poly, platingThickness,
