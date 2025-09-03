@@ -44,6 +44,11 @@ class SCH_TABLECELL;
 namespace KIGFX
 {
 class GAL;
+
+namespace PREVIEW
+{
+class SELECTION_AREA;
+}
 }
 
 
@@ -266,6 +271,14 @@ private:
      */
     bool selectMultiple();
 
+    bool selectLasso();
+
+    int SetSelectRect( const TOOL_EVENT& aEvent );
+    int SetSelectPoly( const TOOL_EVENT& aEvent );
+
+    void SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive = false,
+                         bool aExclusiveOr = false );
+
     /**
      * Handle a table cell drag selection within a table.
      *
@@ -370,6 +383,8 @@ private:
     KIGFX::VIEW_GROUP m_enteredGroupOverlay;  // Overlay for the entered group's frame.
 
     SCH_SELECTION_FILTER_OPTIONS m_filter;
+
+    SELECTION_MODE m_selectionMode; // Current selection mode
 
     SCH_TABLECELL* m_previous_first_cell; // First selected cell for shift+click selection range
 };

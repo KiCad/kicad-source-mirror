@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <sch_plotter.h>
 #include <string_utils.h>
+#include <geometry/geometry_utils.h>
 #include <sch_rule_area.h>
 
 #include <utility>
@@ -2473,6 +2474,15 @@ bool SCH_SYMBOL::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) c
         return rect.Contains( GetBodyBoundingBox() );
 
     return rect.Intersects( GetBodyBoundingBox() );
+}
+
+
+bool SCH_SYMBOL::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
+        return false;
+
+    return KIGEOM::BoxHitTest( aPoly, GetBodyBoundingBox(), aContained );
 }
 
 

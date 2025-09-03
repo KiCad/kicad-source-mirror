@@ -29,6 +29,7 @@
 #include <sch_painter.h>
 #include <sch_plotter.h>
 #include <geometry/shape_segment.h>
+#include <geometry/geometry_utils.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
@@ -811,6 +812,16 @@ bool SCH_LINE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
         return rect.Contains( m_start ) && rect.Contains( m_end );
 
     return rect.Intersects( m_start, m_end );
+}
+
+
+bool SCH_LINE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    SHAPE_SEGMENT line( m_start, m_end, GetPenWidth() );
+    return KIGEOM::ShapeHitTest( aPoly, line, aContained );
 }
 
 

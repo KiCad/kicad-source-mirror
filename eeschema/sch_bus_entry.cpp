@@ -27,6 +27,7 @@
 #include <core/mirror.h>
 #include <schematic.h>
 #include <geometry/shape_segment.h>
+#include <geometry/geometry_utils.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
@@ -458,6 +459,13 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccu
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_BUS_ENTRY_BASE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    SHAPE_SEGMENT line( m_pos, GetEnd(), GetPenWidth() );
+    return KIGEOM::ShapeHitTest( aPoly, line, aContained );
 }
 
 

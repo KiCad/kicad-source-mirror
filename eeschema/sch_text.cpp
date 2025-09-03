@@ -31,6 +31,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <string_utils.h>
+#include <geometry/geometry_utils.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
@@ -403,6 +404,15 @@ bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
         return aRect.Contains( bBox );
 
     return aRect.Intersects( bBox );
+}
+
+
+bool SCH_TEXT::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
 }
 
 

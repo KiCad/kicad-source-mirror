@@ -31,6 +31,7 @@
 #include <plotters/plotter.h>
 #include <bitmaps.h>
 #include <schematic.h>
+#include <geometry/geometry_utils.h>
 #include <sch_no_connect.h>
 #include <settings/color_settings.h>
 #include <default_values.h>    // For some default values
@@ -168,6 +169,12 @@ bool SCH_NO_CONNECT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_NO_CONNECT::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
 }
 
 

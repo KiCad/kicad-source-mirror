@@ -36,6 +36,7 @@
 #include <dialogs/html_message_box.h>
 #include <project/project_file.h>
 #include <trigo.h>
+#include <geometry/geometry_utils.h>
 #include <sch_textbox.h>
 #include <tools/sch_navigate_tool.h>
 
@@ -331,6 +332,12 @@ bool SCH_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_TEXTBOX::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
 }
 
 

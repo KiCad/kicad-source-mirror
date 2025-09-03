@@ -32,6 +32,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <string_utils.h>
+#include <geometry/geometry_utils.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <sch_painter.h>
@@ -1126,6 +1127,36 @@ bool SCH_LABEL_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy
                     fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
 
                 if( rect.Intersects( fieldBBox ) )
+                    return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+
+bool SCH_LABEL_BASE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( aContained )
+    {
+        return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
+    }
+    else
+    {
+        if( KIGEOM::BoxHitTest( aPoly, GetBodyBoundingBox( nullptr ), aContained ) )
+            return true;
+
+        for( const SCH_FIELD& field : m_fields )
+        {
+            if( field.IsVisible() )
+            {
+                BOX2I fieldBBox = field.GetBoundingBox();
+
+                if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
+                    fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
+
+                if( KIGEOM::BoxHitTest( aPoly, fieldBBox, aContained ) )
                     return true;
             }
         }

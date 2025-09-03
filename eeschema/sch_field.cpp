@@ -35,6 +35,7 @@
 #include <symbol_library.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
+#include <geometry/geometry_utils.h>
 #include <trace_helpers.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_navigate_tool.h>
@@ -1196,6 +1197,26 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_FIELD::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( GetShownText( true ).IsEmpty() )
+        return false;
+
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    BOX2I bbox = GetBoundingBox();
+
+    if( GetParent() && GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( GetParent() );
+        bbox.Offset( label->GetSchematicTextOffset( nullptr ) );
+    }
+
+    return KIGEOM::BoxHitTest( aPoly, bbox, aContained );
 }
 
 

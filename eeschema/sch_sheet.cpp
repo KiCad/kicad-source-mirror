@@ -36,6 +36,7 @@
 #include <string_utils.h>
 #include <widgets/msgpanel.h>
 #include <math/util.h>      // for KiROUND
+#include <geometry/geometry_utils.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
@@ -1200,6 +1201,12 @@ bool SCH_SHEET::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         return rect.Contains( GetBodyBoundingBox() );
 
     return rect.Intersects( GetBodyBoundingBox() );
+}
+
+
+bool SCH_SHEET::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::BoxHitTest( aPoly, GetBodyBoundingBox(), aContained );
 }
 
 

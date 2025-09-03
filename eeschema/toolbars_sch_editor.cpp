@@ -93,7 +93,9 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         break;
 
     case TOOLBAR_LOC::RIGHT:
-        config.AppendAction( ACTIONS::selectionTool )
+        config.AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Selection modes" ) )
+                            .AddAction( ACTIONS::selectSetRect )
+                            .AddAction( ACTIONS::selectSetLasso ) )
               .AppendAction( SCH_ACTIONS::highlightNetTool );
 
         config.AppendSeparator()

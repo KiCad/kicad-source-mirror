@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <geometry/shape_rect.h>
+#include <geometry/geometry_utils.h>
 #include <sch_painter.h>
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
@@ -210,6 +211,15 @@ bool SCH_JUNCTION::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy )
 
         return selRect.Collide( &junction, aAccuracy );
     }
+}
+
+
+bool SCH_JUNCTION::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
+        return false;
+
+    return KIGEOM::ShapeHitTest( aPoly, getEffectiveShape(), aContained );
 }
 
 

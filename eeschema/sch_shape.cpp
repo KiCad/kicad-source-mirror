@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 #include <gr_basic.h>
+#include <geometry/geometry_utils.h>
 #include <schematic.h>
 #include <sch_shape.h>
 
@@ -131,6 +132,32 @@ bool SCH_SHAPE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         return false;
 
     return hitTest( aRect, aContained, aAccuracy );
+}
+
+
+bool SCH_SHAPE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    std::vector<SHAPE*> shapes = MakeEffectiveShapes( false );
+
+    for( SHAPE* shape : shapes )
+    {
+        bool hit = KIGEOM::ShapeHitTest( aPoly, *shape, aContained );
+
+        if( hit )
+        {
+            for( SHAPE* s : shapes )
+                delete s;
+            return true;
+        }
+    }
+
+    for( SHAPE* shape : shapes )
+        delete shape;
+
+    return false;
 }
 
 

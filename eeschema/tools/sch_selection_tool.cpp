@@ -35,7 +35,9 @@
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <math/util.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_line_chain.h>
 #include <sch_painter.h>
 #include <preview_items/selection_area.h>
 #include <sch_commit.h>
@@ -150,6 +152,19 @@ SELECTION_CONDITION SCH_CONDITIONS::AllPinsOrSheetPins = []( const SELECTION& aS
 };
 
 
+static void passEvent( TOOL_EVENT* const aEvent, const TOOL_ACTION* const aAllowedActions[] )
+{
+    for( int i = 0; aAllowedActions[i]; ++i )
+    {
+        if( aEvent->IsAction( aAllowedActions[i] ) )
+        {
+            aEvent->SetPassEvent();
+            break;
+        }
+    }
+}
+
+
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
@@ -162,6 +177,7 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         m_unit( 0 ),
         m_bodyStyle( 0 ),
         m_enteredGroup( nullptr ),
+        m_selectionMode( SELECTION_MODE::INSIDE_RECTANGLE ),
         m_previous_first_cell( nullptr )
 {
     m_filter.SetDefaults();
@@ -674,11 +690,19 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( hasModifier() || drag_action == MOUSE_DRAG_ACTION::SELECT )
             {
-                selectMultiple();
+                if( m_selectionMode == SELECTION_MODE::INSIDE_LASSO
+                        || m_selectionMode == SELECTION_MODE::TOUCHING_LASSO )
+                    selectLasso();
+                else
+                    selectMultiple();
             }
             else if( m_selection.Empty() && drag_action != MOUSE_DRAG_ACTION::DRAG_ANY )
             {
-                selectMultiple();
+                if( m_selectionMode == SELECTION_MODE::INSIDE_LASSO
+                        || m_selectionMode == SELECTION_MODE::TOUCHING_LASSO )
+                    selectLasso();
+                else
+                    selectMultiple();
             }
             else
             {
@@ -715,7 +739,11 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     // No -> drag a selection box
-                    selectMultiple();
+                    if( m_selectionMode == SELECTION_MODE::INSIDE_LASSO
+                            || m_selectionMode == SELECTION_MODE::TOUCHING_LASSO )
+                        selectLasso();
+                    else
+                        selectMultiple();
                 }
             }
         }
@@ -2140,6 +2168,24 @@ void SCH_SELECTION_TOOL::updateReferencePoint()
 }
 
 
+int SCH_SELECTION_TOOL::SetSelectPoly( const TOOL_EVENT& aEvent )
+{
+    m_selectionMode = SELECTION_MODE::INSIDE_LASSO;
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
+    m_toolMgr->PostAction( ACTIONS::selectionTool );
+    return 0;
+}
+
+
+int SCH_SELECTION_TOOL::SetSelectRect( const TOOL_EVENT& aEvent )
+{
+    m_selectionMode = SELECTION_MODE::INSIDE_RECTANGLE;
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_toolMgr->PostAction( ACTIONS::selectionTool );
+    return 0;
+}
+
+
 // Some navigation actions are allowed in selectMultiple
 const TOOL_ACTION* allowedActions[] = { &ACTIONS::panUp,          &ACTIONS::panDown,
                                         &ACTIONS::panLeft,        &ACTIONS::panRight,
@@ -2209,234 +2255,13 @@ bool SCH_SELECTION_TOOL::selectMultiple()
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
             getViewControls()->SetAutoPan( false );
-
-            // End drawing the selection box
             view->SetVisible( &area, false );
-
-            // Fetch items from the RTree that are in our area of interest
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
-            BOX2I selectionRect = area.ViewBBox();
-            view->Query( selectionRect, candidates );
-
-            // Ensure candidates only have unique items
-            std::set<SCH_ITEM*> uniqueCandidates;
-
-            for( const auto& [viewItem, layer] : candidates )
-            {
-                if( viewItem->IsSCH_ITEM() )
-                    uniqueCandidates.insert( static_cast<SCH_ITEM*>( viewItem ) );
-            }
-
-            for( KIGFX::VIEW_ITEM* item : uniqueCandidates )
-            {
-                // If the item is a sheet or symbol, ensure we add its pins because they are not
-                // in the RTree and we need to check them against the selection box.
-                if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item ) )
-                {
-                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                    {
-                        // If the pin is within the selection box, add it as a candidate
-                        if( selectionRect.Intersects( pin->GetBoundingBox() ) )
-                            uniqueCandidates.insert( pin );
-                    }
-                }
-                else if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
-                {
-                    for( SCH_PIN* pin : symbol->GetPins() )
-                    {
-                        // If the pin is within the selection box, add it as a candidate
-                        if( selectionRect.Intersects( pin->GetBoundingBox() ) )
-                            uniqueCandidates.insert( pin );
-                    }
-                }
-            }
-
-            // Build lists of nearby items and their children
-            SCH_COLLECTOR       collector;
-            SCH_COLLECTOR       pinsCollector;
-            std::set<EDA_ITEM*> group_items;
-
-            for( EDA_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_GROUP_T ) )
-            {
-                SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
-
-                // The currently entered group does not get limited
-                if( m_enteredGroup == group )
-                    continue;
-
-                std::unordered_set<EDA_ITEM*>& newset = group->GetItems();
-
-                // If we are not greedy and have selected the whole group, add just one item
-                // to allow it to be promoted to the group later
-                if( !isGreedy && selectionRect.Contains( group->GetBoundingBox() ) && newset.size() )
-                {
-                    for( EDA_ITEM* group_item : newset )
-                    {
-                        if( !group_item->IsSCH_ITEM() )
-                            continue;
-
-                        if( Selectable( static_cast<SCH_ITEM*>( group_item ) ) )
-                            collector.Append( *newset.begin() );
-                    }
-                }
-
-                for( EDA_ITEM* group_item : newset )
-                    group_items.emplace( group_item );
-            }
-
-            for( SCH_ITEM* item : uniqueCandidates )
-            {
-                // If the item is a line, add it even if it doesn't pass the hit test using the greedy
-                // flag as we handle partially selecting line ends later
-                if( item && Selectable( item )
-                    && ( item->HitTest( selectionRect, !isGreedy ) || item->Type() == SCH_LINE_T )
-                    && ( isGreedy || !group_items.count( item ) ) )
-                {
-                    if( item->Type() == SCH_PIN_T && !m_isSymbolEditor )
-                        pinsCollector.Append( item );
-                    else
-                        collector.Append( item );
-                }
-            }
-
-            // Apply the stateful filter
-            filterCollectedItems( collector, true );
-
-            filterCollectorForHierarchy( collector, true );
-
-            // If we selected nothing but pins, allow them to be selected
-            if( collector.GetCount() == 0 )
-            {
-                collector = pinsCollector;
-                filterCollectedItems( collector, true );
-                filterCollectorForHierarchy( collector, true );
-            }
-
-            // Sort the filtered selection by rows and columns to have a nice default
-            // for tools that can use it.
-            std::sort( collector.begin(), collector.end(),
-                       []( EDA_ITEM* a, EDA_ITEM* b )
-                       {
-                           VECTOR2I aPos = a->GetPosition();
-                           VECTOR2I bPos = b->GetPosition();
-
-                           if( aPos.y == bPos.y )
-                               return aPos.x < bPos.x;
-
-                           return aPos.y < bPos.y;
-                       } );
-
-            bool anyAdded = false;
-            bool anySubtracted = false;
-
-            auto selectItem =
-                    [&]( EDA_ITEM* aItem, EDA_ITEM_FLAGS flags )
-                    {
-                        if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
-                        {
-                            if ( m_exclusive_or )
-                                aItem->XorFlags( flags );
-                            else
-                                aItem->ClearFlags( flags );
-
-                            if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
-                            {
-                                unselect( aItem );
-                                anySubtracted = true;
-                            }
-
-                            // We changed one line endpoint on a selected line,
-                            // update the view at least.
-                            if( flags && !anySubtracted )
-                                getView()->Update( aItem );
-                        }
-                        else
-                        {
-                            aItem->SetFlags( flags );
-                            select( aItem );
-                            anyAdded = true;
-                        }
-                    };
-
-            std::vector<EDA_ITEM*> flaggedItems;
-
-            for( EDA_ITEM* item : collector )
-            {
-                EDA_ITEM_FLAGS flags = 0;
-
-                item->SetFlags( SELECTION_CANDIDATE );
-                flaggedItems.push_back( item );
-
-                if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
-                    item->SetFlags( SHOW_ELEC_TYPE );
-
-                if( item->Type() == SCH_LINE_T )
-                {
-                    SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-                    if( ( isGreedy && line->HitTest( selectionRect, false ) )
-                        || ( selectionRect.Contains( line->GetEndPoint() )
-                             && selectionRect.Contains( line->GetStartPoint() ) ) )
-                    {
-                        flags |= STARTPOINT | ENDPOINT;
-                    }
-                    else if( !isGreedy )
-                    {
-                        if( selectionRect.Contains( line->GetStartPoint() ) && line->IsStartDangling() )
-                            flags |= STARTPOINT;
-
-                        if( selectionRect.Contains( line->GetEndPoint() ) && line->IsEndDangling() )
-                            flags |= ENDPOINT;
-                    }
-
-                    // Only select a line if it at least one point is selected
-                    if( flags & ( STARTPOINT | ENDPOINT ) )
-                        selectItem( item, flags );
-                }
-                else
-                    selectItem( item, flags );
-
-                item->ClearFlags( SHOW_ELEC_TYPE );
-            }
-
-            for( EDA_ITEM* item : pinsCollector )
-            {
-                if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
-                    item->SetFlags( SHOW_ELEC_TYPE );
-
-                if( Selectable( item ) && itemPassesFilter( item, nullptr ) && !item->GetParent()->HasFlag( SELECTION_CANDIDATE )
-                    && item->HitTest( selectionRect, !isGreedy ) )
-                {
-                    selectItem( item, 0 );
-                }
-
-                item->ClearFlags( SHOW_ELEC_TYPE );
-            }
-
-            for( EDA_ITEM* item : flaggedItems )
-                item->ClearFlags( SELECTION_CANDIDATE );
-
-            m_selection.SetIsHover( false );
-
-            // Inform other potentially interested tools
-            if( anyAdded )
-                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
-            if( anySubtracted )
-                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-
-            break;  // Stop waiting for events
+            SelectMultiple( area, m_drag_subtractive, false );
+            evt->SetPassEvent( false );
+            break;
         }
 
-        // Allow some actions for navigation
-        for( int i = 0; allowedActions[i]; ++i )
-        {
-            if( evt->IsAction( allowedActions[i] ) )
-            {
-                evt->SetPassEvent();
-                break;
-            }
-        }
+        passEvent( evt, allowedActions );
     }
 
     getViewControls()->SetAutoPan( false );
@@ -2449,6 +2274,327 @@ bool SCH_SELECTION_TOOL::selectMultiple()
         m_selection.ClearReferencePoint();
 
     return cancelled;
+}
+
+
+bool SCH_SELECTION_TOOL::selectLasso()
+{
+    bool cancelled = false;
+    m_multiple = true;
+    KIGFX::PREVIEW::SELECTION_AREA area;
+    getView()->Add( &area );
+    getView()->SetVisible( &area, true );
+    getViewControls()->SetAutoPan( true );
+
+    SHAPE_LINE_CHAIN points;
+    points.SetClosed( true );
+
+    SELECTION_MODE selectionMode = SELECTION_MODE::TOUCHING_LASSO;
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        double shapeArea = area.GetPoly().Area( false );
+        bool   isClockwise = shapeArea > 0 ? true : false;
+
+        if( getView()->IsMirroredX() && shapeArea != 0 )
+            isClockwise = !isClockwise;
+
+        selectionMode = isClockwise ? SELECTION_MODE::INSIDE_LASSO : SELECTION_MODE::TOUCHING_LASSO;
+
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            cancelled = true;
+            break;
+        }
+        else if(   evt->IsDrag( BUT_LEFT )
+                || evt->IsClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) )
+        {
+            points.Append( evt->Position() );
+        }
+        else if(   evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorDblClick )
+                || evt->IsAction( &ACTIONS::finishInteractive ) )
+        {
+            area.GetPoly().GenerateBBoxCache();
+            SelectMultiple( area, m_drag_subtractive, false );
+            break;
+        }
+        else if(   evt->IsAction( &ACTIONS::doDelete )
+                || evt->IsAction( &ACTIONS::undo ) )
+        {
+            if( points.GetPointCount() > 0 )
+            {
+                getViewControls()->SetCursorPosition( points.CLastPoint() );
+                points.Remove( points.GetPointCount() - 1 );
+            }
+        }
+        else
+        {
+            passEvent( evt, allowedActions );
+        }
+
+        if( points.PointCount() > 0 )
+        {
+            if( !m_drag_additive && !m_drag_subtractive )
+            {
+                if( m_selection.GetSize() > 0 )
+                {
+                    ClearSelection( true );
+                    m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+                }
+            }
+        }
+
+        area.SetPoly( points );
+        area.GetPoly().Append( m_toolMgr->GetMousePosition() );
+        area.SetAdditive( m_drag_additive );
+        area.SetSubtractive( m_drag_subtractive );
+        area.SetExclusiveOr( false );
+        area.SetMode( selectionMode );
+        getView()->Update( &area );
+    }
+
+    getViewControls()->SetAutoPan( false );
+    getView()->SetVisible( &area, false );
+    getView()->Remove( &area );
+    m_multiple = false;
+
+    if( !cancelled )
+        m_selection.ClearReferencePoint();
+
+    return cancelled;
+}
+
+
+void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive,
+                                         bool aExclusiveOr )
+{
+    KIGFX::VIEW* view = getView();
+
+    SELECTION_MODE selectionMode = aArea.GetMode();
+    bool containedMode = ( selectionMode == SELECTION_MODE::INSIDE_RECTANGLE
+                           || selectionMode == SELECTION_MODE::INSIDE_LASSO );
+    bool boxMode = ( selectionMode == SELECTION_MODE::INSIDE_RECTANGLE
+                     || selectionMode == SELECTION_MODE::TOUCHING_RECTANGLE );
+
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
+    BOX2I selectionRect = aArea.ViewBBox();
+    view->Query( selectionRect, candidates );
+
+    std::set<SCH_ITEM*> uniqueCandidates;
+
+    for( const auto& [viewItem, layer] : candidates )
+    {
+        if( viewItem->IsSCH_ITEM() )
+            uniqueCandidates.insert( static_cast<SCH_ITEM*>( viewItem ) );
+    }
+
+    for( KIGFX::VIEW_ITEM* item : uniqueCandidates )
+    {
+        if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item ) )
+        {
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                if( boxMode ? selectionRect.Intersects( pin->GetBoundingBox() )
+                            : KIGEOM::BoxHitTest( aArea.GetPoly(), pin->GetBoundingBox(), true ) )
+                    uniqueCandidates.insert( pin );
+            }
+        }
+        else if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+        {
+            for( SCH_PIN* pin : symbol->GetPins() )
+            {
+                if( boxMode ? selectionRect.Intersects( pin->GetBoundingBox() )
+                            : KIGEOM::BoxHitTest( aArea.GetPoly(), pin->GetBoundingBox(), true ) )
+                    uniqueCandidates.insert( pin );
+            }
+        }
+    }
+
+    SCH_COLLECTOR       collector;
+    SCH_COLLECTOR       pinsCollector;
+    std::set<EDA_ITEM*> group_items;
+
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_GROUP_T ) )
+    {
+        SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+        if( m_enteredGroup == group )
+            continue;
+
+        std::unordered_set<EDA_ITEM*>& newset = group->GetItems();
+
+        auto boxContained =
+                [&]( const BOX2I& aBox )
+                {
+                    return boxMode ? selectionRect.Contains( aBox )
+                                   : KIGEOM::BoxHitTest( aArea.GetPoly(), aBox, true );
+                };
+
+        if( containedMode && boxContained( group->GetBoundingBox() ) && newset.size() )
+        {
+            for( EDA_ITEM* group_item : newset )
+            {
+                if( !group_item->IsSCH_ITEM() )
+                    continue;
+
+                if( Selectable( static_cast<SCH_ITEM*>( group_item ) ) )
+                    collector.Append( *newset.begin() );
+            }
+        }
+
+        for( EDA_ITEM* group_item : newset )
+            group_items.emplace( group_item );
+    }
+
+    auto hitTest =
+            [&]( SCH_ITEM* aItem )
+            {
+                return boxMode ? aItem->HitTest( selectionRect, containedMode )
+                               : aItem->HitTest( aArea.GetPoly(), containedMode );
+            };
+
+    for( SCH_ITEM* item : uniqueCandidates )
+    {
+        if( Selectable( item ) && ( hitTest( item ) || item->Type() == SCH_LINE_T )
+            && ( !containedMode || !group_items.count( item ) ) )
+        {
+            if( item->Type() == SCH_PIN_T && !m_isSymbolEditor )
+                pinsCollector.Append( item );
+            else
+                collector.Append( item );
+        }
+    }
+
+    filterCollectedItems( collector, true );
+    filterCollectorForHierarchy( collector, true );
+
+    if( collector.GetCount() == 0 )
+    {
+        collector = pinsCollector;
+        filterCollectedItems( collector, true );
+        filterCollectorForHierarchy( collector, true );
+    }
+
+    std::sort( collector.begin(), collector.end(),
+               []( EDA_ITEM* a, EDA_ITEM* b )
+               {
+                   VECTOR2I aPos = a->GetPosition();
+                   VECTOR2I bPos = b->GetPosition();
+
+                   if( aPos.y == bPos.y )
+                       return aPos.x < bPos.x;
+
+                   return aPos.y < bPos.y;
+               } );
+
+    bool anyAdded = false;
+    bool anySubtracted = false;
+
+    auto selectItem =
+            [&]( EDA_ITEM* aItem, EDA_ITEM_FLAGS flags )
+            {
+                if( aSubtractive || ( aExclusiveOr && aItem->IsSelected() ) )
+                {
+                    if( aExclusiveOr )
+                        aItem->XorFlags( flags );
+                    else
+                        aItem->ClearFlags( flags );
+
+                    if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
+                    {
+                        unselect( aItem );
+                        anySubtracted = true;
+                    }
+
+                    if( flags && !anySubtracted )
+                        getView()->Update( aItem );
+                }
+                else
+                {
+                    aItem->SetFlags( flags );
+                    select( aItem );
+                    anyAdded = true;
+                }
+            };
+
+    std::vector<EDA_ITEM*> flaggedItems;
+
+    auto shapeContains =
+            [&]( const VECTOR2I& aPoint )
+            {
+                return boxMode ? selectionRect.Contains( aPoint )
+                                : aArea.GetPoly().PointInside( aPoint );
+            };
+
+    for( EDA_ITEM* item : collector )
+    {
+        EDA_ITEM_FLAGS flags = 0;
+
+        item->SetFlags( SELECTION_CANDIDATE );
+        flaggedItems.push_back( item );
+
+        if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
+            item->SetFlags( SHOW_ELEC_TYPE );
+
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+            bool hits = false;
+
+            if( boxMode )
+                hits = line->HitTest( selectionRect, false );
+            else
+                hits = line->HitTest( aArea.GetPoly(), false );
+
+            if( ( !containedMode && hits )
+                || ( shapeContains( line->GetEndPoint() ) && shapeContains( line->GetStartPoint() ) ) )
+            {
+                flags |= STARTPOINT | ENDPOINT;
+            }
+            else if( containedMode )
+            {
+                if( shapeContains( line->GetStartPoint() ) && line->IsStartDangling() )
+                    flags |= STARTPOINT;
+
+                if( shapeContains( line->GetEndPoint() ) && line->IsEndDangling() )
+                    flags |= ENDPOINT;
+            }
+
+            if( flags & ( STARTPOINT | ENDPOINT ) )
+                selectItem( item, flags );
+        }
+        else
+            selectItem( item, flags );
+
+        item->ClearFlags( SHOW_ELEC_TYPE );
+    }
+
+    for( EDA_ITEM* item : pinsCollector )
+    {
+        if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
+            item->SetFlags( SHOW_ELEC_TYPE );
+
+        if( Selectable( item ) && itemPassesFilter( item, nullptr )
+            && !item->GetParent()->HasFlag( SELECTION_CANDIDATE ) && hitTest( static_cast<SCH_ITEM*>( item ) ) )
+        {
+            selectItem( item, 0 );
+        }
+
+        item->ClearFlags( SHOW_ELEC_TYPE );
+    }
+
+    for( EDA_ITEM* item : flaggedItems )
+        item->ClearFlags( SELECTION_CANDIDATE );
+
+    m_selection.SetIsHover( false );
+
+    if( anyAdded )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    else if( anySubtracted )
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 }
 
 
@@ -3357,6 +3503,9 @@ void SCH_SELECTION_TOOL::setTransitions()
     Go( &SCH_SELECTION_TOOL::SelectTable,         ACTIONS::selectTable.MakeEvent() );
 
     Go( &SCH_SELECTION_TOOL::ClearSelection,      ACTIONS::selectionClear.MakeEvent() );
+
+    Go( &SCH_SELECTION_TOOL::SetSelectPoly,       ACTIONS::selectSetLasso.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SetSelectRect,       ACTIONS::selectSetRect.MakeEvent() );
 
     Go( &SCH_SELECTION_TOOL::AddItemToSel,        ACTIONS::selectItem.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::AddItemsToSel,       ACTIONS::selectItems.MakeEvent() );
