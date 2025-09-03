@@ -1303,7 +1303,7 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     if( !commit.Empty() )
     {
-        commit.Push( aMode == ON ? _( "Lock" ) : _( "Unlock" ) );
+        commit.Push( aMode == ON ? _( "Lock" ) : _( "Unlock" ), SKIP_TEARDROPS );
 
         m_toolMgr->PostEvent( EVENTS::SelectedEvent );
         m_frame->OnModify();
