@@ -39,17 +39,12 @@ public:
     void Draw( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                const wxRect& rect, int row, int col, bool isSelected ) override
     {
-        // First draw the striped background for empty cells
-        wxString cellValue = grid.GetCellValue( row, col );
-
-        if( cellValue.IsEmpty() )
-        {
-            drawStripedBackground( dc, attr, rect, isSelected );
-            attr.SetBackgroundColour( wxColour( 0, 0, 0, wxALPHA_TRANSPARENT ) );
-        }
-
-        // Then draw the foreground content using the base renderer
+        // Draw the foreground content using the base renderer first
         T::Draw( grid, attr, dc, rect, row, col, isSelected );
+
+        // Overlay striped background for empty cells
+        if( grid.GetCellValue( row, col ).IsEmpty() )
+            drawStripedBackground( dc, attr, rect, isSelected );
     }
 
     wxGridCellRenderer* Clone() const override
