@@ -31,7 +31,7 @@
 #include <locale_io.h>
 #include <macros.h>
 #include <hash_eda.h>
-#include <fmt/format.h>
+#include <fmt.h>
 
 
 /// Layer names for GenCAD export.
@@ -883,30 +883,23 @@ void GENCAD_EXPORTER::createSignalsSection()
 
 bool GENCAD_EXPORTER::createHeaderInfoData()
 {
-    wxString msg;
-
     fmt::print( m_file, "$HEADER\n" );
     fmt::print( m_file, "GENCAD 1.4\n" );
 
     // Please note: GenCAD syntax requires quoted strings if they can contain spaces
-    msg.Printf( wxT( "USER \"KiCad %s\"\n" ), GetBuildVersion() );
-    fmt::print( m_file, "{}", TO_UTF8( msg ) );
+    fmt::print( m_file, "USER \"KiCad {}\"\n", GetBuildVersion() );
 
-    msg = wxT( "DRAWING \"" ) + m_board->GetFileName() + wxT( "\"\n" );
-    fmt::print( m_file, "{}", TO_UTF8( msg ) );
+    fmt::print( m_file, "DRAWING \"{}\"\n", m_board->GetFileName() );
 
     wxString rev = ExpandTextVars( m_board->GetTitleBlock().GetRevision(), m_board->GetProject() );
     wxString date = ExpandTextVars( m_board->GetTitleBlock().GetDate(), m_board->GetProject() );
-    msg = wxT( "REVISION \"" ) + rev + wxT( " " ) + date + wxT( "\"\n" );
 
-    fmt::print( m_file, "{}", TO_UTF8( msg ) );
+    fmt::print( m_file, "REVISION \"{} {}\"\n", rev, date );
     fmt::print( m_file, "UNITS INCH\n" );
 
     // giving 0 as the argument to Map{X,Y}To returns the scaled origin point
-    msg.Printf( wxT( "ORIGIN %g %g\n" ),
-                m_storeOriginCoords ? mapXTo( 0 ) : 0,
-                m_storeOriginCoords ? mapYTo( 0 ) : 0 );
-    fmt::print( m_file, "{}", TO_UTF8( msg ) );
+    fmt::print( m_file, "ORIGIN {} {}\n", m_storeOriginCoords ? mapXTo( 0 ) : 0,
+                                          m_storeOriginCoords ? mapYTo( 0 ) : 0 );
 
     fmt::print( m_file, "INTERTRACK 0\n" );
     fmt::print( m_file, "$ENDHEADER\n\n" );
