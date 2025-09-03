@@ -214,7 +214,8 @@ private:
     {
         wxString ret = aString;
 #ifdef __WINDOWS__
-        ret.Replace( wxT( "/" ), wxT( "\\" ) );
+        if( !ret.Contains( wxT( "://" ) ) )
+            ret.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
         return ret;
     }
