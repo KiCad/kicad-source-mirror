@@ -23,6 +23,7 @@
 #define SCH_PROPERTIES_PANEL_H
 
 #include <widgets/properties_panel.h>
+#include <set>
 
 class SELECTION;
 class SCHEMATIC;
@@ -44,6 +45,7 @@ public:
     void AfterCommit() override;
 
 protected:
+    void rebuildProperties( const SELECTION& aSelection ) override;
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
 
     PROPERTY_BASE* getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const;
@@ -59,6 +61,7 @@ protected:
     PG_CHECKBOX_EDITOR* m_checkboxEditorInstance;
     PG_COLOR_EDITOR* m_colorEditorInstance;
 
+    static std::set<wxString> m_currentFieldNames;
     wxPGChoices m_nets;
 };
 

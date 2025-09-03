@@ -32,11 +32,72 @@
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <schematic.h>
+#include <sch_symbol.h>
+#include <sch_field.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
+#include <set>
 
+static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
+
+class SCH_SYMBOL_FIELD_PROPERTY : public PROPERTY_BASE
+{
+public:
+    SCH_SYMBOL_FIELD_PROPERTY( const wxString& aName ) :
+            PROPERTY_BASE( aName ),
+            m_name( aName )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t BaseHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t TypeHash() const override { return TYPE_HASH( wxString ); }
+
+    bool Writeable( INSPECTABLE* aObject ) const override
+    {
+        return PROPERTY_BASE::Writeable( aObject );
+    }
+
+    void setter( void* obj, wxAny& v ) override
+    {
+        wxString value;
+
+        if( !v.GetAs( &value ) )
+            return;
+
+        SCH_SYMBOL* symbol = reinterpret_cast<SCH_SYMBOL*>( obj );
+        SCH_FIELD*  field = symbol->GetField( m_name );
+
+        if( !field )
+        {
+            SCH_FIELD newField( symbol, FIELD_T::USER, m_name );
+            newField.SetText( value );
+            symbol->AddField( newField );
+        }
+        else
+        {
+            field->SetText( value );
+        }
+    }
+
+    wxAny getter( const void* obj ) const override
+    {
+        const SCH_SYMBOL* symbol = reinterpret_cast<const SCH_SYMBOL*>( obj );
+        const SCH_FIELD*  field = symbol->GetField( m_name );
+
+        if( field )
+            return wxAny( field->GetText() );
+        else
+            return wxAny( MISSING_FIELD_SENTINEL );
+    }
+
+private:
+    wxString m_name;
+};
+
+std::set<wxString> SCH_PROPERTIES_PANEL::m_currentFieldNames;
 
 SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
@@ -114,6 +175,44 @@ void SCH_PROPERTIES_PANEL::AfterCommit()
     const SELECTION&    selection = selectionTool->GetSelection();
 
     rebuildProperties( selection );
+}
+
+
+void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
+{
+    m_currentFieldNames.clear();
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( item->Type() != SCH_SYMBOL_T )
+            continue;
+
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        for( const SCH_FIELD& field : symbol->GetFields() )
+        {
+            if( field.IsPrivate() )
+                continue;
+
+            m_currentFieldNames.insert( field.GetCanonicalName() );
+        }
+    }
+
+    const wxString groupFields = _HKI( "Fields" );
+
+    for( const wxString& name : m_currentFieldNames )
+    {
+        if( !m_propMgr.GetProperty( TYPE_HASH( SCH_SYMBOL ), name ) )
+        {
+            m_propMgr.AddProperty( new SCH_SYMBOL_FIELD_PROPERTY( name ), groupFields )
+                    .SetAvailableFunc( [name]( INSPECTABLE* )
+                                       {
+                                           return SCH_PROPERTIES_PANEL::m_currentFieldNames.count( name );
+                                       } );
+        }
+    }
+
+    PROPERTIES_PANEL::rebuildProperties( aSelection );
 }
 
 
