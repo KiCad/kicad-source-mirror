@@ -32,6 +32,7 @@
 #include <wx/wupdlock.h>
 #include <wx/settings.h>
 #include <wx/dc.h>
+#include <wx/log.h>
 #include <string_utils.h>
 
 
@@ -307,6 +308,15 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
     }
 
     const LIB_TREE_NODE* firstMatch = ShowResults();
+
+#ifdef __WXGTK__
+    // Ensure the control is repainted with the updated data.  Without an explicit
+    // refresh the Gtk port can display stale rows until the user interacts with
+    // them, leading to mismatched tree contents.
+    m_widget->Refresh();
+    m_widget->Update();
+    wxYield();
+#endif
 
     if( firstMatch )
     {
