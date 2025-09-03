@@ -229,7 +229,8 @@ void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 
 DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos,
                                                     const wxSize&                  aSize,
-                                                    std::map<wxString, wxFileName> aTitleDirMap ) :
+                                                    std::map<wxString, wxFileName> aTitleDirMap,
+                                                    const wxFileName&             aDefaultTemplate ) :
         DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _( "Project Template Selector" ), aPos,
                                        aSize )
 {
@@ -237,6 +238,8 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
     m_selectedWidget = nullptr;
+    m_defaultTemplatePath = aDefaultTemplate;
+    m_defaultWidget = nullptr;
 
     for( auto& [title, pathFname] : aTitleDirMap )
     {
@@ -273,17 +276,30 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
         m_panels[0]->Layout();
     }
 
+    if( m_defaultWidget )
+        m_defaultWidget->Select();
+
     // Set welcome HTML after dialog is fully constructed
     CallAfter( [this]()
     {
         #if defined (_WIN32)
-        // For some reason the next calls need it to work fine on Windows, especially with MSYS2
         wxSafeYield();
-        // Deselect the m_tcTemplatePath string (selected for some strange reason)
         m_tcTemplatePath->SelectNone();
         #endif
 
-        m_webviewPanel->SetPage( GetWelcomeHtml() );
+        if( m_selectedWidget )
+        {
+            wxFileName htmlFile = m_selectedWidget->GetTemplate()->GetHtmlFile();
+
+            if( htmlFile.FileExists() && htmlFile.IsFileReadable() )
+                m_webviewPanel->LoadURL( wxFileName::FileNameToURL( htmlFile ) );
+            else
+                m_webviewPanel->SetPage( GetWelcomeHtml() );
+        }
+        else
+        {
+            m_webviewPanel->SetPage( GetWelcomeHtml() );
+        }
     });
 
     // When all widgets have the size fixed, call finishDialogSettings to update sizers
@@ -329,6 +345,12 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplate( int aPage, PROJECT_TEMPLATE* aTempla
     TEMPLATE_WIDGET* w = new TEMPLATE_WIDGET( m_panels[aPage]->m_scrolledWindow, this  );
     w->SetTemplate( aTemplate );
     m_panels[aPage]->AddTemplateWidget( w );
+
+    wxFileName base = aTemplate->GetHtmlFile();
+    base.RemoveLastDir();
+
+    if( m_defaultTemplatePath.IsOk() && base == m_defaultTemplatePath )
+        m_defaultWidget = w;
 }
 
 

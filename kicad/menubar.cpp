@@ -75,7 +75,6 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     openRecentMenu->SetTitle( _( "Open Recent" ) );
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
-    fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
 
     if( Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Git.enableGit )
         fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );

@@ -30,6 +30,7 @@
 #include "project_template.h"
 
 #include <map>
+#include <wx/filename.h>
 
 class DIALOG_TEMPLATE_SELECTOR;
 
@@ -90,7 +91,8 @@ class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
 public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
-                              std::map<wxString, wxFileName> aTitleDirMap );
+                              std::map<wxString, wxFileName> aTitleDirMap,
+                              const wxFileName& aDefaultTemplate );
 
     /**
      * @return the selected template, or NULL
@@ -119,6 +121,8 @@ private:
 protected:
     std::vector<TEMPLATE_SELECTION_PANEL*> m_panels;
     TEMPLATE_WIDGET*                       m_selectedWidget;
+    wxFileName                             m_defaultTemplatePath;
+    TEMPLATE_WIDGET*                       m_defaultWidget;
 };
 
 #endif

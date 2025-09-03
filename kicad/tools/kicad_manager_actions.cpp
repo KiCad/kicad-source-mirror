@@ -41,15 +41,6 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::newProject( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'N' )
         .LegacyHotkeyName( "New Project" )
         .FriendlyName( _( "New Project..." ) )
-        .Tooltip( _( "Create a new, blank project" ) )
-        .Icon( BITMAPS::new_project ) );
-
-TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( TOOL_ACTION_ARGS()
-        .Name( "kicad.Control.newFromTemplate" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_CTRL + 'T' )
-        .LegacyHotkeyName( "New Project From Template" )
-        .FriendlyName( _( "New Project from Template..." ) )
         .Tooltip( _( "Create a new project based on an existing project" ) )
         .Icon( BITMAPS::new_project_from_template ) );
 
