@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,13 +18,11 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class WX_TEXT_ENTRY_DIALOG_BASE
@@ -37,8 +35,6 @@ class WX_TEXT_ENTRY_DIALOG_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_mainSizer;
 		wxStaticText* m_label;
 		wxTextCtrl* m_textCtrl;
-		wxStaticText* m_choiceLabel;
-		wxChoice* m_choice;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

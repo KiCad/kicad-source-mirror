@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,25 +25,6 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	m_textCtrl->SetMinSize( wxSize( 300,-1 ) );
 
 	m_ContentSizer->Add( m_textCtrl, 0, wxEXPAND|wxALL, 5 );
-
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_choiceLabel = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_choiceLabel->Wrap( -1 );
-	m_choiceLabel->Hide();
-
-	bSizer3->Add( m_choiceLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxArrayString m_choiceChoices;
-	m_choice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceChoices, 0 );
-	m_choice->SetSelection( 0 );
-	m_choice->Hide();
-
-	bSizer3->Add( m_choice, 3, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-
-	m_ContentSizer->Add( bSizer3, 1, wxEXPAND, 5 );
 
 
 	m_mainSizer->Add( m_ContentSizer, 1, wxALL|wxEXPAND, 5 );
