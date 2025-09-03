@@ -26,6 +26,8 @@
 #include <Python.h>
 
 #include <wx/string.h>
+#include <wx/filename.h>
+#include <wx/msgdlg.h>
 
 #include <pybind11/eval.h>
 
@@ -156,7 +158,38 @@ pcbnew.LoadPlugins( sys_path, user_path, third_party_path )
 void SCRIPTING_TOOL::ShowPluginFolder()
 {
     wxString pluginpath( SCRIPTING::PyPluginsPath( SCRIPTING::PATH_TYPE::USER ) );
-    LaunchExternal( pluginpath );
+
+    if( wxFileName::DirExists( pluginpath ) )
+    {
+        if( !LaunchExternal( pluginpath ) )
+        {
+            wxMessageBox( wxString::Format( _( "Unable to open plugin directory '%s'." ), pluginpath ),
+                          _( "Plugin Directory" ), wxOK | wxICON_ERROR );
+        }
+
+        return;
+    }
+
+    wxString msg = wxString::Format( _( "The plugin directory '%s' does not exist.  Create it?" ), pluginpath );
+
+    wxMessageDialog dlg( nullptr, msg, _( "Plugin Directory" ), wxYES_NO | wxICON_QUESTION );
+
+    if( dlg.ShowModal() == wxID_YES )
+    {
+        if( wxFileName::Mkdir( pluginpath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            if( !LaunchExternal( pluginpath ) )
+            {
+                wxMessageBox( wxString::Format( _( "Unable to open plugin directory '%s'." ), pluginpath ),
+                              _( "Plugin Directory" ), wxOK | wxICON_ERROR );
+            }
+        }
+        else
+        {
+            wxMessageBox( wxString::Format( _( "Unable to create plugin directory '%s'." ), pluginpath ),
+                          _( "Plugin Directory" ), wxOK | wxICON_ERROR );
+        }
+    }
 }
 
 
