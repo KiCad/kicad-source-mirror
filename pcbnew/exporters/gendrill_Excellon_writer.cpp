@@ -145,7 +145,17 @@ bool EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                         file_type = TYPE_FILE::NPTH_FILE;
                 }
 
-                createDrillFile( file, pair, file_type );
+                try
+                {
+                    createDrillFile( file, pair, file_type );
+                }
+                catch( ... )     // Capture fmt::print exception on write issues
+                {
+                    fclose( file );
+                    msg.Printf( _( "Failed to write file '%s'." ), fullFilename );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                    success = false;
+                }
             }
         }
     }
@@ -170,32 +180,32 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute )
         switch( aAttribute )
         {
         case HOLE_ATTRIBUTE::HOLE_VIA_THROUGH:
-            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ViaDrill\n" );
+            fmt::print( m_file, "{}", "; #@! TA.AperFunction,Plated,PTH,ViaDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_VIA_BURIED:
-            fprintf( m_file, "; #@! TA.AperFunction,Plated,Buried,ViaDrill\n" );
+            fmt::print( m_file, "{}", "; #@! TA.AperFunction,Plated,Buried,ViaDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_PAD:
         //case HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED:
-            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ComponentDrill\n" );
+            fmt::print( m_file, "{}", "; #@! TA.AperFunction,Plated,PTH,ComponentDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED:
-            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,CastelletedDrill\n" );
+            fmt::print( m_file, "{}", "; #@! TA.AperFunction,Plated,PTH,CastelletedDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT:
-            fprintf( m_file, "; #@! TA.AperFunction,Plated,PTH,ComponentDrill,PressFit\n" );
+            fmt::print( m_file, "{}", "; #@! TA.AperFunction,Plated,PTH,ComponentDrill,PressFit\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_MECHANICAL:
-            fprintf( m_file, "; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill\n" );
+            fmt::print( m_file, "{}", "; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_UNKNOWN:
-            fprintf( m_file, "; #@! TD\n" );
+            fmt::print( m_file, "{}", "; #@! TD\n" );
             break;
         }
     }
@@ -231,9 +241,9 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         fmt::print( m_file, "T{}C{:.{}f}\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits, m_mantissaLenght );
     }
 
-    fputs( "%\n", m_file );                         // End of header info
-    fputs( "G90\n", m_file );                       // Absolute mode
-    fputs( "G05\n", m_file );                       // Drill mode
+    fmt::print( m_file, "{}", "%\n" );              // End of header info
+    fmt::print( m_file, "{}", "G90\n" );            // Absolute mode
+    fmt::print( m_file, "{}", "G05\n" );            // Drill mode
 
     /* Read the hole list and generate data for normal holes (oblong
      * holes will be created later) */
@@ -249,7 +259,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         if( tool_reference != hole_descr.m_Tool_Reference )
         {
             tool_reference = hole_descr.m_Tool_Reference;
-            fprintf( m_file, "T%d\n", tool_reference );
+            fmt::print( m_file, "T{}\n", tool_reference );
         }
 
         x0 = hole_descr.m_Hole_Pos.x - m_offset.x;
@@ -262,7 +272,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         yt = y0 * m_conversionUnits;
         writeCoordinates( line, sizeof( line ), xt, yt );
 
-        fputs( line, m_file );
+        fmt::print( m_file, "{}", line );
         holes_count++;
     }
 
@@ -281,7 +291,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         if( tool_reference != hole_descr.m_Tool_Reference )
         {
             tool_reference = hole_descr.m_Tool_Reference;
-            fprintf( m_file, "T%d\n", tool_reference );
+            fmt::print( m_file, "T{}\n", tool_reference );
         }
 
         diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
@@ -320,7 +330,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         yt = y0 * m_conversionUnits;
 
         if( m_useRouteModeForOval )
-            fputs( "G00", m_file );    // Select the routing mode
+            fmt::print( m_file, "{}", "G00" );    // Select the routing mode
 
         writeCoordinates( line, sizeof( line ), xt, yt );
 
@@ -334,25 +344,25 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
                     line[kk] = 0;
             }
 
-            fputs( line, m_file );
-            fputs( "G85", m_file );         // add the "G85" command
+            fmt::print( m_file, "{}", line );
+            fmt::print( m_file, "{}", "G85" );         // add the "G85" command
         }
         else
         {
-            fputs( line, m_file );
-            fputs( "M15\nG01", m_file );    // tool down and linear routing from last coordinates
+            fmt::print( m_file, "{}", line );
+            fmt::print( m_file, "{}", "M15\nG01" );    // tool down and linear routing from last coordinates
         }
 
         xt = xf * m_conversionUnits;
         yt = yf * m_conversionUnits;
         writeCoordinates( line, sizeof( line ), xt, yt );
 
-        fputs( line, m_file );
+        fmt::print( m_file, "{}",line );
 
         if( m_useRouteModeForOval )
-            fputs( "M16\n", m_file );       // Tool up (end routing)
+            fmt::print( m_file, "{}", "M16\n" );       // Tool up (end routing)
 
-        fputs( "G05\n", m_file );           // Select drill mode
+        fmt::print( m_file, "{}", "G05\n" );           // Select drill mode
         holes_count++;
     }
 
@@ -490,7 +500,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, size_t aLineSize, double aC
 
 void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType )
 {
-    fputs( "M48\n", m_file );    // The beginning of a header
+    fmt::print( m_file, "{}", "M48\n" );    // The beginning of a header
 
     if( !m_minimalHeader )
     {
@@ -498,7 +508,8 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FIL
         wxString msg;
         msg << wxT( "KiCad " ) << GetBuildVersion();
 
-        fprintf( m_file, "; DRILL file {%s} date %s\n", TO_UTF8( msg ), TO_UTF8( GetISO8601CurrentDateTime() ) );
+        fmt::print( m_file, "; DRILL file {} date {}\n",
+                            TO_UTF8( msg ), TO_UTF8( GetISO8601CurrentDateTime() ) );
         msg = wxT( "; FORMAT={" );
 
         // Print precision:
@@ -530,45 +541,45 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FIL
         };
 
         msg << zero_fmt[m_zeroFormat] << wxT( "}\n" );
-        fputs( TO_UTF8( msg ), m_file );
+        fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
         // add the structured comment TF.CreationDate:
         // The attribute value must conform to the full version of the ISO 8601
         msg = GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT_NCDRILL ) + wxT( "\n" );
-        fputs( TO_UTF8( msg ), m_file );
+        fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
         // Add the application name that created the drill file
         msg = wxT( "; #@! TF.GenerationSoftware,Kicad,Pcbnew," );
         msg << GetBuildVersion() << wxT( "\n" );
-        fputs( TO_UTF8( msg ), m_file );
+        fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
         // Add the standard X2 FileFunction for drill files
         // TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH]
         msg = BuildFileFunctionAttributeString( aLayerPair, aHolesType , true ) + wxT( "\n" );
-        fputs( TO_UTF8( msg ), m_file );
+        fmt::print( m_file, "{}", TO_UTF8( msg ) );
 
-        fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
+        fmt::print( m_file, "{}",  "FMAT,2\n" );     // Use Format 2 commands (version used since 1979)
     }
 
-    fputs( m_unitsMetric ? "METRIC" : "INCH", m_file );
+    fmt::print( m_file, "{}", m_unitsMetric ? "METRIC" : "INCH" );
 
     switch( m_zeroFormat )
     {
     case DECIMAL_FORMAT:
-        fputs( "\n", m_file );
+        fmt::print( m_file, "{}", "\n" );
         break;
 
     case SUPPRESS_LEADING:
-        fputs( ",TZ\n", m_file );
+        fmt::print( m_file, "{}", ",TZ\n" );
         break;
 
     case SUPPRESS_TRAILING:
-        fputs( ",LZ\n", m_file );
+        fmt::print( m_file, "{}", ",LZ\n" );
         break;
 
     case KEEP_ZEROS:
         // write nothing, but TZ is acceptable when all zeros are kept
-        fputs( "\n", m_file );
+        fmt::print( m_file, "{}", "\n" );
         break;
     }
 }
@@ -577,6 +588,6 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FIL
 void EXCELLON_WRITER::writeEXCELLONEndOfFile()
 {
     // add if minimal here
-    fputs( "M30\n", m_file );
+    fmt::print( m_file, "{}", "M30\n" );
     fclose( m_file );
 }
