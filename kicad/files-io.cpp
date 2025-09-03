@@ -84,17 +84,14 @@ void KICAD_MANAGER_FRAME::UnarchiveFiles()
 
     STATUSBAR_REPORTER reporter( GetStatusBar(), 1 );
 
-    PROJECT_ARCHIVER::Unarchive( zipfiledlg.GetPath(), unzipDir, reporter );
-
-    if( unzipDir == Prj().GetProjectPath() )
+    if( PROJECT_ARCHIVER::Unarchive( zipfiledlg.GetPath(), unzipDir, reporter ) )
     {
-        wxString prjPath = Prj().GetProjectFullName();
+        wxArrayString projectFiles;
+        wxDir::GetAllFiles( unzipDir, &projectFiles,
+                            wxT( "*." ) + wxString::FromUTF8( FILEEXT::ProjectFileExtension ),
+                            wxDIR_FILES );
 
-        SETTINGS_MANAGER* mgr = GetSettingsManager();
-
-        mgr->UnloadProject( &Prj(), false );
-        mgr->LoadProject( prjPath );
-
-        RefreshProjectTree();
+        if( projectFiles.size() == 1 )
+            LoadProject( wxFileName( projectFiles[0] ) );
     }
 }
