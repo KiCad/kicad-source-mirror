@@ -735,13 +735,31 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 
     wxLogTrace( traceLibFieldTable, "RebuildRows: About to process %zu symbols", m_symbolsList.size() );
 
-    for(  LIB_SYMBOL* ref : m_symbolsList )
+    for( LIB_SYMBOL* ref : m_symbolsList )
     {
         wxLogTrace( traceLibFieldTable, "RebuildRows: Processing symbol '%s' (UUID: %s)",
                     ref->GetName(), ref->m_Uuid.AsString() );
 
-        if( !m_filter.IsEmpty() && !WildCompareString( m_filter, ref->GetValue( false, nullptr, false ), false ) )
-            continue;
+        if( !m_filter.IsEmpty() )
+        {
+            bool match = false;
+
+            std::map<wxString, LIB_DATA_ELEMENT>& fieldStore = m_dataStore[ref->m_Uuid];
+
+            for( const LIB_DATA_MODEL_COL& col : m_cols )
+            {
+                auto it = fieldStore.find( col.m_fieldName );
+
+                if( it != fieldStore.end() && WildCompareString( m_filter, it->second.m_currentData, false ) )
+                {
+                    match = true;
+                    break;
+                }
+            }
+
+            if( !match )
+                continue;
+        }
 
         bool matchFound = false;
 
