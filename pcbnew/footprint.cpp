@@ -3310,6 +3310,7 @@ void FOOTPRINT::BuildNetTieCache()
     m_netTieCache.clear();
     std::map<wxString, int> map = MapPadNumbersToNetTieGroups();
     std::map<PCB_LAYER_ID, std::vector<PCB_SHAPE*>> layer_shapes;
+    BOARD* board = GetBoard();
 
     std::for_each( m_drawings.begin(), m_drawings.end(),
                    [&]( BOARD_ITEM* item )
@@ -3318,7 +3319,15 @@ void FOOTPRINT::BuildNetTieCache()
                            return;
 
                        for( PCB_LAYER_ID layer : item->GetLayerSet() )
+                       {
+                           if( !IsCopperLayer( layer ) )
+                               continue;
+
+                           if( board && !board->GetEnabledLayers().Contains( layer ) )
+                               continue;
+
                            layer_shapes[layer].push_back( static_cast<PCB_SHAPE*>( item ) );
+                       }
                    } );
 
     for( size_t ii = 0; ii < m_pads.size(); ++ii )
