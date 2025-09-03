@@ -24,6 +24,7 @@
 #define PCB_PROPERTIES_PANEL_H
 
 #include <widgets/properties_panel.h>
+#include <set>
 
 class SELECTION;
 class BOARD;
@@ -46,6 +47,7 @@ public:
     void AfterCommit() override;
 
 protected:
+    void rebuildProperties( const SELECTION& aSelection ) override;
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
 
     PROPERTY_BASE* getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const;
@@ -64,6 +66,7 @@ protected:
     PG_RATIO_EDITOR*     m_ratioEditorInstance;
     PG_NET_SELECTOR_EDITOR* m_netSelectorEditorInstance;
 
+    static std::set<wxString> m_currentFieldNames;
     wxPGChoices m_nets;
 };
 

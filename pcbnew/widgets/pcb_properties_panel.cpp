@@ -41,10 +41,70 @@
 #include <generators/pcb_tuning_pattern.h>
 #include <pad.h>
 #include <footprint.h>
+#include <pcb_field.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <widgets/net_selector.h>
 #include <widgets/ui_common.h>
+
+static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
+
+class PCB_FOOTPRINT_FIELD_PROPERTY : public PROPERTY_BASE
+{
+public:
+    PCB_FOOTPRINT_FIELD_PROPERTY( const wxString& aName ) :
+            PROPERTY_BASE( aName ),
+            m_name( aName )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( FOOTPRINT ); }
+    size_t BaseHash() const override { return TYPE_HASH( FOOTPRINT ); }
+    size_t TypeHash() const override { return TYPE_HASH( wxString ); }
+
+    bool Writeable( INSPECTABLE* aObject ) const override
+    {
+        return PROPERTY_BASE::Writeable( aObject );
+    }
+
+    void setter( void* obj, wxAny& v ) override
+    {
+        wxString value;
+
+        if( !v.GetAs( &value ) )
+            return;
+
+        FOOTPRINT* footprint = reinterpret_cast<FOOTPRINT*>( obj );
+        PCB_FIELD* field = footprint->GetField( m_name );
+
+        if( !field )
+        {
+            PCB_FIELD* newField = new PCB_FIELD( footprint, FIELD_T::USER, m_name );
+            newField->SetText( value );
+            footprint->Add( newField );
+        }
+        else
+        {
+            field->SetText( value );
+        }
+    }
+
+    wxAny getter( const void* obj ) const override
+    {
+        const FOOTPRINT* footprint = reinterpret_cast<const FOOTPRINT*>( obj );
+        PCB_FIELD* field = footprint->GetField( m_name );
+
+        if( field )
+            return wxAny( field->GetText() );
+        else
+            return wxAny( MISSING_FIELD_SENTINEL );
+    }
+
+private:
+    wxString m_name;
+};
+
+std::set<wxString> PCB_PROPERTIES_PANEL::m_currentFieldNames;
 
 
 class PG_NET_SELECTOR_EDITOR : public wxPGEditor
@@ -212,6 +272,39 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
     const SELECTION& selection = selectionTool->GetSelection();
 
     rebuildProperties( selection );
+}
+
+
+void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
+{
+    m_currentFieldNames.clear();
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( item->Type() != PCB_FOOTPRINT_T )
+            continue;
+
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+
+        for( PCB_FIELD* field : footprint->GetFields() )
+            m_currentFieldNames.insert( field->GetCanonicalName() );
+    }
+
+    const wxString groupFields = _HKI( "Fields" );
+
+    for( const wxString& name : m_currentFieldNames )
+    {
+        if( !m_propMgr.GetProperty( TYPE_HASH( FOOTPRINT ), name ) )
+        {
+            m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( name ), groupFields )
+                    .SetAvailableFunc( [name]( INSPECTABLE* )
+                                       {
+                                           return PCB_PROPERTIES_PANEL::m_currentFieldNames.count( name );
+                                       } );
+        }
+    }
+
+    PROPERTIES_PANEL::rebuildProperties( aSelection );
 }
 
 
