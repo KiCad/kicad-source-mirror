@@ -853,6 +853,18 @@ void DIALOG_LIB_FIELDS::OnTableColSize(wxGridSizeEvent& aEvent)
 
 void DIALOG_LIB_FIELDS::OnCancel(wxCommandEvent& event)
 {
+    m_grid->CommitPendingChanges( true );
+
+    if( m_dataModel->IsEdited() )
+    {
+        if( !HandleUnsavedChanges( this, _( "Save changes?" ),
+                                   [&]() -> bool
+                                   {
+                                       return TransferDataFromWindow();
+                                   } ) )
+            return;
+    }
+
     EndModal( wxID_CANCEL );
 }
 
