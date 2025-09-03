@@ -1107,8 +1107,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     bodyStyleNames.push_back( wxGetTranslation( DEMORGAN_ALL ) );
 
-    for( int i = 0; i < aSymbol->GetBodyStyleCount(); i++ )
-        bodyStyleNames.push_back( aSymbol->GetBodyStyleNames()[i] );
+    for( const wxString& body_style_name : aSymbol->GetBodyStyleNames() )
+        bodyStyleNames.push_back( body_style_name );
 
     attr->SetEditor( new GRID_CELL_COMBOBOX( bodyStyleNames ) );
     m_grid->SetColAttr( COL_BODY_STYLE, attr );
