@@ -75,7 +75,7 @@ public:
         IMAGE,
         TEXT,
         ANCHOR,
-        POINT,
+        MD_POINT,           // Do not use POINT: it collide with a Windows header define
         DXF,
         DIMENSION,
         KEEPOUT,
