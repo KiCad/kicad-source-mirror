@@ -22,7 +22,7 @@
 #include <string>
 #include <variant>
 #include <vector>
-#include <format>
+#include <fmt/format.h>
 
 namespace calc_parser
 {
@@ -79,7 +79,7 @@ namespace calc_parser
         auto AddSyntaxError( int aLine = -1, int aColumn = -1 ) -> void
         {
             if( aLine >= 0 && aColumn >= 0 )
-                AddError( std::format( "Syntax error at line {}, column {}", aLine, aColumn ) );
+                AddError( fmt::format( "Syntax error at line {}, column {}", aLine, aColumn ) );
             else
                 AddError( "Syntax error in calculation expression" );
         }
@@ -98,10 +98,10 @@ namespace calc_parser
         {
             std::string result;
             for( const auto& error : m_errors )
-                result += std::format( "Error: {}\n", error );
+                result += fmt::format( "Error: {}\n", error );
 
             for( const auto& warning : m_warnings )
-                result += std::format( "Warning: {}\n", warning );
+                result += fmt::format( "Warning: {}\n", warning );
 
             return result;
         }

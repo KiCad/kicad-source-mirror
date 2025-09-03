@@ -27,7 +27,7 @@
 #include <variant>
 #include <concepts>
 #include <ranges>
-#include <format>
+#include <fmt/format.h>
 #include <optional>
 #include <cassert>
 #include <cmath>
@@ -110,7 +110,7 @@ namespace calc_parser
             }
             catch( ... )
             {
-                return MakeError<double>( std::format( "Cannot convert '{}' to number", str ) );
+                return MakeError<double>( fmt::format( "Cannot convert '{}' to number", str ) );
             }
         }
 
@@ -128,9 +128,9 @@ namespace calc_parser
 
             // If the number is very close to a whole number, treat it as such
             if( std::abs( num - rounded ) < tolerance && std::abs( rounded ) < 1e15 )
-                return std::format( "{:.0f}", rounded );
+                return fmt::format( "{:.0f}", rounded );
 
-            return std::format( "{}", num );
+            return fmt::format( "{}", num );
         }
 
         // Check if Value represents a "truthy" value for conditionals

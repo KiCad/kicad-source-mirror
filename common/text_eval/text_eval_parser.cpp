@@ -18,6 +18,7 @@
  */
 
 #include <text_eval/text_eval_parser.h>
+#include <fmt/format.h>
 #include <array>
 #include <cctype>
 
@@ -274,23 +275,23 @@ public:
         auto [year, month, day] = DaysToYmd( aDaysSinceEpoch );
 
         if( aFormat == "ISO" || aFormat == "iso" )
-            return std::format( "{:04d}-{:02d}-{:02d}", year, month, day );
+            return fmt::format( "{:04d}-{:02d}-{:02d}", year, month, day );
         else if( aFormat == "US" || aFormat == "us" )
-            return std::format( "{:02d}/{:02d}/{:04d}", month, day, year );
+            return fmt::format( "{:02d}/{:02d}/{:04d}", month, day, year );
         else if( aFormat == "EU" || aFormat == "european" )
-            return std::format( "{:02d}/{:02d}/{:04d}", day, month, year );
+            return fmt::format( "{:02d}/{:02d}/{:04d}", day, month, year );
         else if( aFormat == "long" )
-            return std::format( "{} {}, {}", monthNames[month-1], day, year );
+            return fmt::format( "{} {}, {}", monthNames[month-1], day, year );
         else if( aFormat == "short" )
-            return std::format( "{} {}, {}", monthAbbrev[month-1], day, year );
+            return fmt::format( "{} {}, {}", monthAbbrev[month-1], day, year );
         else if( aFormat == "Chinese" || aFormat == "chinese" || aFormat == "CN" || aFormat == "cn" || aFormat == "中文" )
-            return std::format( "{}年{:02d}月{:02d}日", year, month, day );
+            return fmt::format( "{}年{:02d}月{:02d}日", year, month, day );
         else if( aFormat == "Japanese" || aFormat == "japanese" || aFormat == "JP" || aFormat == "jp" || aFormat == "日本語" )
-            return std::format( "{}年{:02d}月{:02d}日", year, month, day );
+            return fmt::format( "{}年{:02d}月{:02d}日", year, month, day );
         else if( aFormat == "Korean" || aFormat == "korean" || aFormat == "KR" || aFormat == "kr" || aFormat == "한국어" )
-            return std::format( "{}년 {:02d}월 {:02d}일", year, month, day );
+            return fmt::format( "{}년 {:02d}월 {:02d}일", year, month, day );
         else
-            return std::format( "{:04d}-{:02d}-{:02d}", year, month, day );
+            return fmt::format( "{:04d}-{:02d}-{:02d}", year, month, day );
     }
 
     static auto GetWeekdayName( int aDaysSinceEpoch ) -> std::string
@@ -342,7 +343,7 @@ auto EVAL_VISITOR::operator()( const NODE& aNode ) const -> Result<Value>
             if( m_variableCallback )
                 return m_variableCallback( varName );
 
-            return MakeError<Value>( std::format( "No variable resolver configured for: {}", varName ) );
+            return MakeError<Value>( fmt::format( "No variable resolver configured for: {}", varName ) );
         }
 
         case NodeType::BinOp:
@@ -436,7 +437,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
                     decimals = static_cast<int>( decResult.GetValue() );
             }
 
-            return MakeValue<Value>( std::format( "{:.{}f}", value, decimals ) );
+            return MakeValue<Value>( fmt::format( "{:.{}f}", value, decimals ) );
         }
         else if( name == "currency" && argc >= 1 )
         {
@@ -447,7 +448,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
             const auto amount = numResult.GetValue();
             const auto symbol = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "$";
 
-            return MakeValue<Value>( std::format( "{}{:.2f}", symbol, amount ) );
+            return MakeValue<Value>( fmt::format( "{}{:.2f}", symbol, amount ) );
         }
         else if( name == "fixed" && argc >= 1 )
         {
@@ -464,7 +465,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
                     decimals = static_cast<int>( decResult.GetValue() );
             }
 
-            return MakeValue<Value>( std::format( "{:.{}f}", value, decimals ) );
+            return MakeValue<Value>( fmt::format( "{:.{}f}", value, decimals ) );
         }
 
         // Date formatting functions (return strings!)
@@ -579,7 +580,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
             return MakeValue<Value>( sum / static_cast<double>( argc ) );
         }
 
-        return MakeError<Value>( std::format( "Unknown function: {} with {} arguments", name, argc ) );
+        return MakeError<Value>( fmt::format( "Unknown function: {} with {} arguments", name, argc ) );
 }
 
 auto DOC_PROCESSOR::Process( const DOC& aDoc, VariableCallback aVariableCallback )

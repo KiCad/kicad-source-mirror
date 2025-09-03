@@ -18,6 +18,7 @@
  */
 
 #include <text_eval/text_eval_wrapper.h>
+#include <fmt/format.h>
 
 // Include the KiCad common functionality
 #include <common.h>
@@ -45,7 +46,6 @@ namespace KI_EVAL
 
 #include <wx/log.h>
 #include <algorithm>
-#include <format>
 #include <regex>
 
 // // Token type enum matching the generated parser
@@ -507,7 +507,7 @@ private:
     {
         if( m_errorCollector )
         {
-            auto error_msg = std::format( "Line {}, Column {}: {}", m_line, m_column, message );
+            auto error_msg = fmt::format( "Line {}, Column {}: {}", m_line, m_column, message );
             m_errorCollector->AddError( error_msg );
         }
     }
@@ -733,7 +733,7 @@ private:
                 auto result = fast_float::from_chars( number_str.data(), number_str.data() + number_str.size(), value );
 
                 if( result.ec != std::errc() || result.ptr != number_str.data() + number_str.size() )
-                    throw std::invalid_argument( std::format( "Cannot convert '{}' to number", number_str ) );
+                    throw std::invalid_argument( fmt::format( "Cannot convert '{}' to number", number_str ) );
 
                 value *= multiplier;
 
@@ -746,7 +746,7 @@ private:
         }
         catch( const std::exception& e )
         {
-            add_error( std::format( "Invalid number format: {}", e.what() ) );
+            add_error( fmt::format( "Invalid number format: {}", e.what() ) );
             value = 0.0;
         }
 
@@ -1544,7 +1544,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
             // Variable not found, record error but leave ${variable} unchanged
             if( !m_lastErrors )
                 m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
-            m_lastErrors->AddError( std::format( "Undefined variable: {}", wxStringToStdString( varName ) ) );
+            m_lastErrors->AddError( fmt::format( "Undefined variable: {}", wxStringToStdString( varName ) ) );
             pos = closePos + 1;
         }
     }
@@ -1642,7 +1642,7 @@ EXPRESSION_EVALUATOR::VariableCallback EXPRESSION_EVALUATOR::createCombinedCallb
                         auto result = fast_float::from_chars( resolvedStd.data(), resolvedStd.data() + resolvedStd.size(), numValue );
 
                         if( result.ec != std::errc() || result.ptr != resolvedStd.data() + resolvedStd.size() )
-                            throw std::invalid_argument( std::format( "Cannot convert '{}' to number", resolvedStd ) );
+                            throw std::invalid_argument( fmt::format( "Cannot convert '{}' to number", resolvedStd ) );
 
                         return calc_parser::MakeValue<calc_parser::Value>( numValue );
                     }
@@ -1667,7 +1667,7 @@ EXPRESSION_EVALUATOR::VariableCallback EXPRESSION_EVALUATOR::createCombinedCallb
 
         // No variable found anywhere
         return calc_parser::MakeError<calc_parser::Value>(
-            std::format( "Undefined variable: {}", aVarName ) );
+            fmt::format( "Undefined variable: {}", aVarName ) );
     };
 }
 
@@ -1695,7 +1695,7 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser(
         return {aInput, true};
     } catch (const std::exception& e) {
         if (m_lastErrors) {
-            m_lastErrors->AddError(std::format("Exception: {}", e.what()));
+            m_lastErrors->AddError(fmt::format("Exception: {}", e.what()));
         }
         return {aInput, true};
     }
@@ -1781,7 +1781,7 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecov
                 if( !oldErrors )
                     oldErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 
-                oldErrors->AddError( std::format( "Failed to evaluate expression: {}", fullExpr ) );
+                oldErrors->AddError( fmt::format( "Failed to evaluate expression: {}", fullExpr ) );
             }
 
             // Restore the main error collector
@@ -1793,7 +1793,7 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecov
             if( !m_lastErrors )
                 m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 
-            m_lastErrors->AddError( std::format( "Exception in expression: {}", fullExpr ) );
+            m_lastErrors->AddError( fmt::format( "Exception in expression: {}", fullExpr ) );
             hadAnyErrors = true;
         }
     }
@@ -1905,7 +1905,7 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
     {
         if( m_lastErrors )
         {
-            m_lastErrors->AddError( std::format( "Exception: {}", e.what() ) );
+            m_lastErrors->AddError( fmt::format( "Exception: {}", e.what() ) );
         }
         return { aInput, true };
     }

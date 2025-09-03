@@ -147,7 +147,7 @@ factor(F) ::= NUMBER(N). {
     {
         if (g_errorCollector)
         {
-            g_errorCollector->AddError( std::format( "Invalid number format: {}", GetTokenString( N ) ) );
+            g_errorCollector->AddError( fmt::format( "Invalid number format: {}", GetTokenString( N ) ) );
         }
         F = NODE::CreateNumberRaw( 0.0 );
     }
