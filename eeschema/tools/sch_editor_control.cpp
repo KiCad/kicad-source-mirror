@@ -489,13 +489,13 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL*     picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    KIWAY_PLAYER*    player = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
-    SIMULATOR_FRAME* simFrame = static_cast<SIMULATOR_FRAME*>( player );
+    KIWAY_PLAYER*    sim_player = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+    SIMULATOR_FRAME* sim_Frame = static_cast<SIMULATOR_FRAME*>( sim_player );
 
-    if( !simFrame )     // Defensive coding; shouldn't happen.
+    if( !sim_Frame )     // Defensive coding; shouldn't happen.
         return 0;
 
-    if( wxWindow* blocking_win = simFrame->Kiway().GetBlockingDialog() )
+    if( wxWindow* blocking_win = sim_Frame->Kiway().GetBlockingDialog() )
         blocking_win->Close( true );
 
     // Deactivate other tools; particularly important if another PICKER is currently running
