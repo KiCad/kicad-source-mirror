@@ -24,6 +24,7 @@
 #include "clipboard.h"
 
 #include <wx/clipbrd.h>
+#include <wx/dataobj.h>
 #include <wx/image.h>
 #include <wx/log.h>
 
@@ -84,10 +85,10 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
     {
         if( wxTheClipboard->IsSupported( wxDF_BITMAP ) )
         {
-            wxImageDataObject data;
+            wxBitmapDataObject data;
             if( wxTheClipboard->GetData( data ) )
             {
-                image = std::make_unique<wxImage>( data.GetImage() );
+                image = std::make_unique<wxImage>( data.GetBitmap().ConvertToImage() );
             }
         }
         else if( wxTheClipboard->IsSupported( wxDF_FILENAME ) )
