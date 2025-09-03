@@ -230,6 +230,17 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
             SHAPE_POLY_SET poly;
             rr.TransformToPolygon( poly );
             aContour.Append( poly.Outline( 0 ) );
+
+            for( int ii = 1; ii < aContour.PointCount(); ++ii )
+            {
+                aShapeOwners[ std::make_pair( aContour.CPoint( ii - 1 ),
+                                             aContour.CPoint( ii ) ) ] = aShape;
+            }
+
+            if( !aAllowUseArcsInPolygons )
+                aContour.ClearArcs();
+
+            aContour.SetClosed( true );
             break;
         }
 
