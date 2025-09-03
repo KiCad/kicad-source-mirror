@@ -114,6 +114,9 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( isInvisibleText( item ) )
+                    return true;
+
                 ++count;
                 return true;
             } );
@@ -125,6 +128,9 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( isInvisibleText( item ) )
+                    return true;
+
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
@@ -174,6 +180,9 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
         forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
                 [&]( BOARD_ITEM* item ) -> bool
                 {
+                    if( isInvisibleText( item ) )
+                        return true;
+
                     if( !reportProgress( ii++, count, progressDelta ) )
                         return false;
 
