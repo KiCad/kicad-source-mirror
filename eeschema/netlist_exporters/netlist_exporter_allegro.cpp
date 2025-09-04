@@ -34,14 +34,15 @@
 #include "netlist_exporter_allegro.h"
 #include "netlist_exporter_xml.h"
 #include <regex>
-
+#include <fmt.h>
+#include <fmt/ranges.h>
 
 bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
                                              unsigned /* aNetlistOptions */,
                                              REPORTER& aReporter )
 {
     m_f = nullptr;
-    int ret = 0; // zero now, OR in the sign bit on error
+    bool success = true;
 
     // Create the devices directory
     m_exportPath = wxFileName( aOutFileName ).GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR )
@@ -64,31 +65,41 @@ bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
         return false;
     }
 
-    ret |= fprintf( m_f, "(Source: %s)\n", TO_UTF8( m_schematic->GetFileName() ) );
-    ret |= fprintf( m_f, "(Date: %s)\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
+    try
+    {
+        fmt::print( m_f, "(NETLIST)\n" );
+        fmt::print( m_f, "(Source: {})\n", TO_UTF8( m_schematic->GetFileName() ) );
+        fmt::print( m_f, "(Date: {})\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
-    m_packageProperties.clear();
-    m_componentGroups.clear();
-    m_orderedSymbolsSheetpath.clear();
-    m_netNameNodes.clear();
+        m_packageProperties.clear();
+        m_componentGroups.clear();
+        m_orderedSymbolsSheetpath.clear();
+        m_netNameNodes.clear();
 
-    extractComponentsInfo();
+        extractComponentsInfo();
 
-    // Start with package definitions, which we create from component groups.
-    toAllegroPackages();
+        // Start with package definitions, which we create from component groups.
+        toAllegroPackages();
 
-    // Write out nets
-    toAllegroNets();
+        // Write out nets
+        toAllegroNets();
 
-    // Write out package properties. NOTE: Allegro doesn't recognize much...
-    toAllegroPackageProperties();
+        // Write out package properties. NOTE: Allegro doesn't recognize much...
+        toAllegroPackageProperties();
+
+        fmt::print( m_f, "$END\n" );
+    }
+    catch (...)
+    {
+        success = false;
+    }
 
     // Done with the netlist
     fclose( m_f );
 
     m_f = nullptr;
 
-    return ret >= 0;
+    return success;
 }
 
 
@@ -429,8 +440,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
             }
         }
 
-        fprintf( d, "PACKAGE '%s'\n", TO_UTF8( formatDevice( footprintText ) ) );
-        fprintf( d, "CLASS IC\n" );
+        fmt::print( d, "PACKAGE '{}'\n", TO_UTF8( formatDevice( footprintText ) ) );
+        fmt::print( d, "CLASS IC\n" );
 
         std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetPins();
 
@@ -455,36 +466,26 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         }
 
         unsigned int pinCount = pinList.size();
-        fprintf( d, "PINCOUNT %u\n", pinCount );
+        fmt::print( d, "PINCOUNT {}\n", pinCount );
 
         if( pinCount > 0 )
         {
-            fprintf( d, "%s", TO_UTF8( formatFunction( "main", pinList ) ) );
+            fmt::print( d, "{}", TO_UTF8( formatFunction( "main", pinList ) ) );
         }
 
         if( !value.IsEmpty() )
         {
-            fprintf( d, "PACKAGEPROP VALUE %s\n", TO_UTF8( value ) );
+            fmt::print( d, "PACKAGEPROP VALUE {}\n", TO_UTF8( value ) );
         }
 
         if( !tol.IsEmpty() )
         {
-            fprintf( d, "PACKAGEPROP TOL %s\n", TO_UTF8( tol ) );
+            fmt::print( d, "PACKAGEPROP TOL {}\n", TO_UTF8( tol ) );
         }
 
         if( !footprintAlt.IsEmpty() )
         {
-            fprintf( d, "PACKAGEPROP ALT_SYMBOLS '(" );
-
-            wxString footprintAltSymbolsText;
-
-            for( const wxString& fp : footprintAlt )
-            {
-                footprintAltSymbolsText += fp + wxString( "," );
-            }
-
-            footprintAltSymbolsText.Truncate( footprintAltSymbolsText.Length() - 1 );
-            fprintf( d, "%s)'\n", TO_UTF8( footprintAltSymbolsText ) );
+            fmt::print( d, "PACKAGEPROP ALT_SYMBOLS '({})'\n", fmt::join( footprintAlt, "," ) );
         }
 
         wxArrayString propArray;
@@ -495,7 +496,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         if(!data.IsEmpty())
         {
-            fprintf( d, "PACKAGEPROP %s %s\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
+            fmt::print( d, "PACKAGEPROP {} {}\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
         }
 
         propArray.clear();
@@ -504,13 +505,15 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         if(!data.IsEmpty())
         {
-            fprintf( d, "PACKAGEPROP %s %s\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
+            fmt::print( d, "PACKAGEPROP {} {}\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
         }
 
-        fprintf( d, "END\n" );
+        fmt::print( d, "END\n" );
 
         fclose( d );
     }
+
+    fmt::print( m_f, "$PACKAGES\n" );
 
     for( auto iter = compPackageMap.begin(); iter != compPackageMap.end(); iter++ )
     {
@@ -520,25 +523,28 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         if( value.IsEmpty() && tolerance.IsEmpty() )
         {
-            fprintf( m_f, "!%s;", TO_UTF8( deviceType ) );
+            fmt::print( m_f, "! '{}' ; ", TO_UTF8( deviceType ) );
         }
         else if( tolerance.IsEmpty() )
         {
-            fprintf( m_f, "!%s!%s;", TO_UTF8( deviceType ), TO_UTF8( value ) );
+            fmt::print( m_f, "! '{}' ! '{}' ; ", TO_UTF8( deviceType ), TO_UTF8( value ) );
         }
         else
         {
-            fprintf( m_f, "!%s!%s!%s;", TO_UTF8( deviceType ), TO_UTF8( value ),
+            fmt::print( m_f, "! '{}' ! '{}' ! '{}' ; ", TO_UTF8( deviceType ), TO_UTF8( value ),
                      TO_UTF8( tolerance ) );
         }
 
         std::vector<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> symbolSheetpaths =
                 iter->second.m_symbolSheetpaths;
 
+        std::vector<wxString> refTexts;
         for( const auto& [ sym, sheetPath ] : symbolSheetpaths)
-            fprintf( m_f, ",\n\t%s", TO_UTF8( sym->GetRef( &sheetPath ) ) );
+            refTexts.push_back( sym->GetRef( &sheetPath ) );
 
-        fprintf( m_f, "\n" );
+        fmt::print( m_f, "{}", fmt::join( refTexts, ",\n\t" ) );
+
+        fmt::print( m_f, "\n" );
     }
 
     if( !deviceFileCreatingError.IsEmpty() )
@@ -672,15 +678,14 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatDevice( wxString aString )
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
 {
-    fprintf( m_f, "%s\n", "$PACKAGES" );
-    fprintf( m_f, "%s\n", "$A_PROPERTIES" );
+    fmt::print( m_f, "$A_PROPERTIES\n" );
 
     while( !m_packageProperties.empty() )
     {
         std::multimap<wxString, wxString>::iterator iter = m_packageProperties.begin();
         wxString                                    sheetPathText = iter->first;
 
-        fprintf( m_f, "ROOM %s;", TO_UTF8( formatText( sheetPathText ) ) );
+        fmt::print( m_f, "'ROOM' '{}' ; ", TO_UTF8( formatText( sheetPathText ) ) );
 
         std::vector<wxString> refTexts;
 
@@ -697,17 +702,16 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
         std::stable_sort( refTexts.begin(), refTexts.end(),
                           NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef );
 
-        for( const wxString& ref : refTexts )
-            fprintf( m_f, ",\n\t%s", TO_UTF8( ref ) );
+        fmt::print( m_f, "{}", fmt::join( refTexts, ",\n\t" ) );
 
-        fprintf( m_f, "\n" );
+        fmt::print( m_f, "\n" );
     }
 }
 
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 {
-    fprintf( m_f, "%s\n", "$NETS" );
+    fmt::print( m_f, "$NET\n" );
 
     while( !m_netNameNodes.empty() )
     {
@@ -716,7 +720,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 
         wxString netName = iter->first;
 
-        fprintf( m_f, "%s;", TO_UTF8( formatText( netName ).MakeUpper() ) );
+        fmt::print( m_f, "{}; ", TO_UTF8( formatText( netName ).MakeUpper() ) );
 
         auto pairIter = m_netNameNodes.equal_range( netName );
 
@@ -730,14 +734,17 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 
         std::stable_sort( netNodes.begin(), netNodes.end() );
 
+        std::vector<wxString> nets;
         for( const NET_NODE& netNode : netNodes )
         {
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
             wxString pinText = netNode.m_Pin->GetShownNumber();
-            fprintf( m_f, ",\n\t%s.%s", TO_UTF8( refText ), TO_UTF8( pinText ) );
+            nets.push_back( refText + wxString( "." ) + pinText );
         }
 
-        fprintf( m_f, "\n" );
+        fmt::print( m_f, "{}", fmt::join( nets, ",\n\t" ) );
+
+        fmt::print( m_f, "\n" );
     }
 }
 
