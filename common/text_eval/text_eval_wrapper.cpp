@@ -392,7 +392,7 @@ namespace KIEVAL_UNIT_CONV {
         {
         case text_eval_units::Unit::MM:            return Unit::MM;
         case text_eval_units::Unit::CM:            return Unit::CM;
-        case text_eval_units::Unit::IN:            return Unit::Inch;
+        case text_eval_units::Unit::INCH:          return Unit::Inch;
         case text_eval_units::Unit::INCH_QUOTE:    return Unit::Inch;
         case text_eval_units::Unit::MIL:           return Unit::Mil;
         case text_eval_units::Unit::THOU:          return Unit::Mil;

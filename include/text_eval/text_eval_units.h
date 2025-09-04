@@ -50,7 +50,7 @@ enum class Unit {
     // Common single and double character units
     MM,             // "mm" - millimeters
     CM,             // "cm" - centimeters
-    IN,             // "in" - inches
+    INCH,           // "in" - inches
     MIL,            // "mil" - mils (thousandths of an inch)
     UM,             // "um" - micrometers
     PS,             // "ps" - picoseconds
@@ -98,7 +98,7 @@ private:
         // Common units
         {Unit::MM,            "mm",    "Millimeters", 1.0},
         {Unit::CM,            "cm",    "Centimeters", 10.0},
-        {Unit::IN,            "in",    "Inches", 25.4},
+        {Unit::INCH,          "in",    "Inches", 25.4},
         {Unit::MIL,           "mil",   "Mils (thousandths of an inch)", 25.4 / 1000.0},
         {Unit::UM,            "um",    "Micrometers", 1.0 / 1000.0},
         {Unit::PS,            "ps",    "Picoseconds", 1.0},
@@ -200,7 +200,7 @@ public:
             case EDA_UNITS::MM:          return Unit::MM;
             case EDA_UNITS::CM:          return Unit::CM;
             case EDA_UNITS::MILS:        return Unit::MIL;
-            case EDA_UNITS::INCH:        return Unit::IN;
+            case EDA_UNITS::INCH:        return Unit::INCH;
             case EDA_UNITS::DEGREES:     return Unit::DEG;
             case EDA_UNITS::FS:          return Unit::FS;
             case EDA_UNITS::PS:          return Unit::PS;
