@@ -329,6 +329,7 @@ set( PCBNEW_CLASS_SRCS
 
     action_plugin.cpp
     array_pad_number_provider.cpp
+    board_statistics.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
     convert_shape_list_to_polygon.cpp

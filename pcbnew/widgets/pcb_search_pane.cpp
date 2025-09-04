@@ -47,6 +47,7 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     AddSearcher( std::make_shared<RATSNEST_SEARCH_HANDLER>( aFrame ) );
     AddSearcher( std::make_shared<TEXT_SEARCH_HANDLER>( aFrame ) );
     AddSearcher( std::make_shared<GROUP_SEARCH_HANDLER>( aFrame ) );
+    AddSearcher( std::make_shared<DRILL_SEARCH_HANDLER>( aFrame ) );
 }
 
 

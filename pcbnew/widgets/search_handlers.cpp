@@ -32,6 +32,8 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <zone.h>
+#include <pad.h>
+#include <pcb_track.h>
 #include "search_handlers.h"
 
 
@@ -570,4 +572,302 @@ void RATSNEST_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 void RATSNEST_SEARCH_HANDLER::ActivateItem( long aItemRow )
 {
     m_frame->ShowBoardSetupDialog( _( "Net Classes" ) );
+}
+
+
+DRILL_SEARCH_HANDLER::DRILL_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
+        PCB_SEARCH_HANDLER( _HKI( "Drills" ), aFrame ),
+        m_frame( aFrame )
+{
+    m_columns.emplace_back( _HKI( "Count" ),       2, wxLIST_FORMAT_RIGHT );
+    m_columns.emplace_back( _HKI( "Shape" ),       3, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "X Size" ),      3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Y Size" ),      3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Plated" ),      2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Via/Pad" ),     2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Start Layer" ), 4, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Stop Layer" ),  4, wxLIST_FORMAT_CENTER );
+}
+
+
+int DRILL_SEARCH_HANDLER::Search( const wxString& aQuery )
+{
+    BOARD* board = m_frame->GetBoard();
+
+    m_drills.clear();
+    m_ptrToDrill.clear();
+    m_hitlist.clear();
+
+    auto addEntryOrIncrement = [&]( const DRILL_LINE_ITEM& d, BOARD_ITEM* rep )
+        {
+            for( DRILL_ROW& g : m_drills )
+            {
+                if( g.entry == d )
+                {
+                    g.entry.m_Qty++;
+                    return;
+                }
+            }
+
+            DRILL_ROW g = { .entry = d, .item = rep, };
+            g.entry.m_Qty = 1;
+
+            m_drills.push_back( g );
+        };
+
+    // Collect from pads
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( !pad->HasHole() )
+                continue;
+
+            int xs = pad->GetDrillSize().x;
+            int ys = pad->GetDrillSize().y;
+            if( xs <= 0 || ys <= 0 )
+                continue;
+
+            PCB_LAYER_ID top, bottom;
+
+            if( pad->GetLayerSet().CuStack().empty() )
+            {
+                top = UNDEFINED_LAYER;
+                bottom = UNDEFINED_LAYER;
+            }
+            else
+            {
+                top = pad->GetLayerSet().CuStack().front();
+                bottom = pad->GetLayerSet().CuStack().back();
+            }
+
+            DRILL_LINE_ITEM d( xs, ys, pad->GetDrillShape(),
+                               pad->GetAttribute() != PAD_ATTRIB::NPTH,
+                               true, top, bottom );
+
+            addEntryOrIncrement( d, pad );
+        }
+    }
+
+    // Collect from vias
+    for( PCB_TRACK* t : board->Tracks() )
+    {
+        if( t->Type() != PCB_VIA_T )
+            continue;
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( t );
+        int      dmm = via->GetDrillValue();
+        if( dmm <= 0 )
+            continue;
+
+        DRILL_LINE_ITEM d( dmm, dmm, PAD_DRILL_SHAPE::CIRCLE, true,
+                           false, via->TopLayer(), via->BottomLayer() );
+        addEntryOrIncrement( d, via );
+    }
+
+    std::sort( m_drills.begin(), m_drills.end(),
+               []( const DRILL_ROW& a, const DRILL_ROW& b )
+               {
+                   DRILL_LINE_ITEM::COMPARE cmp( DRILL_LINE_ITEM::COL_COUNT, false );
+                   return cmp( a.entry, b.entry );
+               } );
+
+    // Apply filter and populate display list
+    for( size_t i = 0; i < m_drills.size(); ++i )
+    {
+        if( aQuery.IsEmpty() || rowMatchesQuery( m_drills[i].entry, aQuery.Lower() ) )
+        {
+            m_hitlist.push_back( m_drills[i].item );
+            m_ptrToDrill[m_drills[i].item] = (int) i;
+        }
+    }
+
+    return (int) m_hitlist.size();
+}
+
+
+wxString DRILL_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
+{
+    auto it = m_ptrToDrill.find( aItem );
+
+    if( it == m_ptrToDrill.end() )
+        return wxEmptyString;
+
+    const auto& e = m_drills[it->second].entry;
+
+    return cellText( e, aCol );
+}
+
+
+void DRILL_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* aSelection )
+{
+    // Preserve current selection pointers
+    std::vector<BOARD_ITEM*> selPtrs;
+
+    if( aSelection )
+    {
+        for( long row : *aSelection )
+        {
+            if( row >= 0 && row < (long) m_hitlist.size() )
+                selPtrs.push_back( m_hitlist[row] );
+        }
+    }
+
+    auto cmpPtr = [&]( BOARD_ITEM* pa, BOARD_ITEM* pb )
+    {
+        const auto& a = m_drills[m_ptrToDrill[pa]].entry;
+        const auto& b = m_drills[m_ptrToDrill[pb]].entry;
+
+        int col = aCol < 0 ? 0 : aCol;
+        DRILL_LINE_ITEM::COMPARE cmp( static_cast<DRILL_LINE_ITEM::COL_ID>( col ), aAscending );
+
+        return cmp( a, b );
+    };
+
+    std::sort( m_hitlist.begin(), m_hitlist.end(), cmpPtr );
+
+    // Rebuild selection rows from pointers
+    if( aSelection )
+    {
+        aSelection->clear();
+
+        for( long row = 0; row < (long) m_hitlist.size(); ++row )
+        {
+            if( alg::contains( selPtrs, m_hitlist[row] ) )
+                aSelection->push_back( row );
+        }
+    }
+}
+
+
+void DRILL_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
+{
+    BOARD*                          board = m_frame->GetBoard();
+    std::vector<EDA_ITEM*>          selectedItems;
+    APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
+
+    // Collect matching items
+    for( long row : aItemRows )
+    {
+        if( row < 0 || row >= (long) m_hitlist.size() )
+            continue;
+
+        BOARD_ITEM* rep = m_hitlist[row];
+        auto        it = m_ptrToDrill.find( rep );
+
+        if( it == m_ptrToDrill.end() )
+            continue;
+
+        const auto* target = &m_drills[it->second].entry;
+
+        // Pads
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( !pad->HasHole() )
+                    continue;
+
+                int          xs = pad->GetDrillSize().x;
+                int          ys = pad->GetDrillSize().y;
+                PCB_LAYER_ID top, bottom;
+
+                if( pad->GetLayerSet().CuStack().empty() )
+                {
+                    top = UNDEFINED_LAYER;
+                    bottom = UNDEFINED_LAYER;
+                }
+                else
+                {
+                    top = pad->GetLayerSet().CuStack().front();
+                    bottom = pad->GetLayerSet().CuStack().back();
+                }
+
+                DRILL_LINE_ITEM e( xs, ys, pad->GetDrillShape(), pad->GetAttribute() != PAD_ATTRIB::NPTH, true,
+                                   top, bottom );
+
+                if( e == *target )
+                    selectedItems.push_back( pad );
+            }
+        }
+
+        // Vias
+        for( PCB_TRACK* t : board->Tracks() )
+        {
+            if( t->Type() != PCB_VIA_T )
+                continue;
+
+            PCB_VIA* via = static_cast<PCB_VIA*>( t );
+            DRILL_LINE_ITEM e( via->GetDrillValue(), via->GetDrillValue(), PAD_DRILL_SHAPE::CIRCLE, true,
+                               false, via->TopLayer(), via->BottomLayer() );
+
+            if( e == *target )
+                selectedItems.push_back( via );
+        }
+    }
+
+
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
+
+    if( selectedItems.size() )
+    {
+        m_frame->GetToolManager()->RunAction( ACTIONS::selectItems, &selectedItems );
+
+        switch( settings.selection_zoom )
+        {
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN:
+            m_frame->GetToolManager()->RunAction( ACTIONS::centerSelection );
+            break;
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM:
+            m_frame->GetToolManager()->RunAction( ACTIONS::zoomFitSelection );
+            break;
+        case APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE:
+            break;
+        }
+    }
+
+    m_frame->GetCanvas()->Refresh( false );
+}
+
+
+wxString DRILL_SEARCH_HANDLER::cellText( const DRILL_LINE_ITEM& e, int col ) const
+{
+    BOARD* board = m_frame->GetBoard();
+
+    switch( col )
+    {
+    case 0:
+        return wxString::Format( "%d", e.m_Qty );
+    case 1:
+        return e.shape == PAD_DRILL_SHAPE::CIRCLE ? _( "Round" ) : _( "Slot" );
+    case 2:
+        return m_frame->MessageTextFromValue( e.xSize );
+    case 3:
+        return m_frame->MessageTextFromValue( e.ySize );
+    case 4:
+        return e.isPlated ? _( "PTH" ) : _( "NPTH" );
+    case 5:
+        return e.isPad ? _( "Pad" ) : _( "Via" );
+    case 6:
+        return ( e.startLayer == UNDEFINED_LAYER ) ? _( "N/A" ) : board->GetLayerName( e.startLayer );
+    case 7:
+        return ( e.stopLayer == UNDEFINED_LAYER ) ? _( "N/A" ) : board->GetLayerName( e.stopLayer );
+    default:
+        return wxEmptyString;
+    }
+}
+
+
+bool DRILL_SEARCH_HANDLER::rowMatchesQuery( const DRILL_LINE_ITEM& e, const wxString& aQuery ) const
+{
+    if( aQuery.IsEmpty() )
+        return true;
+
+    for( int col = 0; col < 8; ++col )
+    {
+        if( cellText( e, col ).Lower().Contains( aQuery ) )
+            return true;
+    }
+
+    return false;
 }

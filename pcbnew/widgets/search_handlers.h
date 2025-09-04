@@ -25,6 +25,8 @@
 #define SEARCH_HANDLERS_H
 
 #include <widgets/search_pane.h>
+#include <board_statistics.h>
+#include <unordered_map>
 
 class PCB_EDIT_FRAME;
 
@@ -140,6 +142,42 @@ public:
 
 private:
     wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
+};
+
+
+class DRILL_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
+{
+public:
+    DRILL_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
+
+    int  Search( const wxString& aQuery ) override;
+    void Sort( int aCol, bool aAscending, std::vector<long>* aSelection ) override;
+    void SelectItems( std::vector<long>& aItemRows ) override;
+
+private:
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
+
+    wxString cellText( const DRILL_LINE_ITEM& e, int col ) const;
+    bool     rowMatchesQuery( const DRILL_LINE_ITEM& e, const wxString& aQuery ) const;
+
+private:
+    struct DRILL_ROW
+    {
+        DRILL_LINE_ITEM entry;
+        // While a DRILL_ROW will usually represent multiple identical drills/BOARD_ITEMs,
+        // keeping a pointer to one BOARD_ITEM allows use to provide
+        // compatibility with the rest of PCB_SEARCH_HANDLER, and also to allow
+        // some convenience actions to work when there is just a single entry, e.g.
+        // activating the item to show its properties.
+        BOARD_ITEM*                              item;
+    };
+
+    std::vector<DRILL_ROW>               m_drills;
+
+    // This maps the DRILL_ROW.item to the index in m_drills to allow fast lookup
+    std::unordered_map<BOARD_ITEM*, int> m_ptrToDrill;
+
+    PCB_EDIT_FRAME* m_frame;
 };
 
 #endif

@@ -24,6 +24,7 @@
 
 
 #include "dialog_board_statistics.h"
+#include <board_statistics.h>
 
 #include <wx/filedlg.h>
 
@@ -244,9 +245,6 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     SHAPE_POLY_SET frontHoles;
     SHAPE_POLY_SET backHoles;
 
-    m_drillTypes.clear();
-    m_gridDrills->ClearRows();
-
     // Type list for track-related statistics gathering
     static const std::vector<KICAD_T> trackTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T };
 
@@ -292,46 +290,6 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 {
                     line.m_Qty++;
                     break;
-                }
-            }
-
-            if( pad->GetDrillSize().x > 0 && pad->GetDrillSize().y > 0 )
-            {
-                PCB_LAYER_ID top, bottom;
-
-                if( pad->GetLayerSet().CuStack().empty() )
-                {
-                    // The pad is not on any copper layer
-                    top = UNDEFINED_LAYER;
-                    bottom = UNDEFINED_LAYER;
-                }
-                else
-                {
-                    top = pad->GetLayerSet().CuStack().front();
-                    bottom = pad->GetLayerSet().CuStack().back();
-                }
-
-                DRILL_LINE_ITEM drill( pad->GetDrillSize().x, pad->GetDrillSize().y,
-                                       pad->GetDrillShape(),
-                                       pad->GetAttribute() != PAD_ATTRIB::NPTH,
-                                       true, top, bottom );
-
-                auto it = m_drillTypes.begin();
-
-                for( ; it != m_drillTypes.end(); ++it )
-                {
-                    if( *it == drill )
-                    {
-                        it->m_Qty++;
-                        break;
-                    }
-                }
-
-                if( it == m_drillTypes.end() )
-                {
-                    drill.m_Qty = 1;
-                    m_drillTypes.push_back( drill );
-                    m_gridDrills->InsertRows();
                 }
             }
         }
@@ -382,29 +340,20 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                     break;
                 }
             }
-
-            DRILL_LINE_ITEM drill( via->GetDrillValue(), via->GetDrillValue(),
-                                   PAD_DRILL_SHAPE::CIRCLE, true, false, via->TopLayer(),
-                                   via->BottomLayer() );
-
-            auto it = m_drillTypes.begin();
-
-            for( ; it != m_drillTypes.end(); ++it )
-            {
-                if( *it == drill )
-                {
-                    it->m_Qty++;
-                    break;
-                }
-            }
-
-            if( it == m_drillTypes.end() )
-            {
-                drill.m_Qty = 1;
-                m_drillTypes.push_back( drill );
-                m_gridDrills->InsertRows();
-            }
         }
+    }
+
+    // Collect drill information
+    m_drillTypes.clear();
+    m_gridDrills->ClearRows();
+
+    std::vector<DRILL_LINE_ITEM> drills;
+    CollectDrillLineItems( board, drills );
+
+    for( const auto& d : drills )
+    {
+        m_drillTypes.push_back( d );
+        m_gridDrills->InsertRows();
     }
 
     sort( m_drillTypes.begin(), m_drillTypes.end(),
