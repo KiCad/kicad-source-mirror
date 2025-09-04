@@ -43,7 +43,7 @@ class FONT_LIST_MANAGER : public wxEvtHandler
 {
 public:
     static FONT_LIST_MANAGER& Get();
-    const wxArrayString& GetFonts() const;
+    wxArrayString GetFonts() const;
     void Register( FONT_CHOICE* aCtrl );
     void Unregister( FONT_CHOICE* aCtrl );
 
@@ -54,8 +54,7 @@ private:
     void UpdateFonts();
 
     std::thread               m_thread;
-    std::mutex                m_mutex;
-    std::mutex                m_cvMutex;
+    mutable std::mutex        m_mutex;
     std::condition_variable   m_cv;
     wxArrayString             m_fonts;
     std::vector<FONT_CHOICE*> m_controls;
@@ -68,8 +67,9 @@ FONT_LIST_MANAGER& FONT_LIST_MANAGER::Get()
     return mgr;
 }
 
-const wxArrayString& FONT_LIST_MANAGER::GetFonts() const
+wxArrayString FONT_LIST_MANAGER::GetFonts() const
 {
+    std::lock_guard<std::mutex> lock( m_mutex );
     return m_fonts;
 }
 
@@ -97,7 +97,10 @@ FONT_LIST_MANAGER::FONT_LIST_MANAGER()
 
 FONT_LIST_MANAGER::~FONT_LIST_MANAGER()
 {
-    m_quit = true;
+    {
+        std::lock_guard<std::mutex> lock( m_mutex );
+        m_quit = true;
+    }
     m_cv.notify_one();
 
     if( m_thread.joinable() )
@@ -106,14 +109,20 @@ FONT_LIST_MANAGER::~FONT_LIST_MANAGER()
 
 void FONT_LIST_MANAGER::Poll()
 {
-    std::unique_lock<std::mutex> cvLock( m_cvMutex );
+    std::unique_lock<std::mutex> lock( m_mutex );
 
     while( !m_quit )
     {
-        m_cv.wait_for( cvLock, std::chrono::seconds( 30 ), [&] { return m_quit.load(); } );
+        // N.B. wait_for will unlock the mutex while waiting but lock it before continuing
+        // so we need to relock before continuing in the loop
+        m_cv.wait_for( lock, std::chrono::seconds( 30 ), [&] { return m_quit.load(); } );
 
         if( !m_quit )
+        {
+            lock.unlock();
             UpdateFonts();
+            lock.lock();
+        }
     }
 }
 
@@ -129,17 +138,27 @@ void FONT_LIST_MANAGER::UpdateFonts()
 
     menuList.Sort();
 
-    std::lock_guard<std::mutex> lock( m_mutex );
-
-    if( menuList == m_fonts )
-        return;
-
-    m_fonts = menuList;
-
-    CallAfter( [this]() {
+    // Check if fonts changed and update controls
+    {
         std::lock_guard<std::mutex> lock( m_mutex );
 
-        for( FONT_CHOICE* ctrl : m_controls )
+        if( menuList == m_fonts )
+            return;
+
+        m_fonts = menuList;
+    }
+
+    CallAfter( [this]() {
+        std::vector<FONT_CHOICE*> controlsCopy;
+
+        // Copy controls list under lock protection
+        {
+            std::lock_guard<std::mutex> lock( m_mutex );
+            controlsCopy = m_controls;
+        }
+
+        // Update controls without holding lock
+        for( FONT_CHOICE* ctrl : controlsCopy )
         {
             if( ctrl && !ctrl->IsShownOnScreen() )
                 ctrl->RefreshFonts();
