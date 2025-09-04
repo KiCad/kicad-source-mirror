@@ -71,6 +71,14 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const LIB_SY
         dataElement.m_currentlyEmpty = false;
         dataElement.m_isModified = false;
     }
+    else if( aFieldName == wxS( "Keywords" ) )
+    {
+        dataElement.m_originalData = aSymbol->GetKeyWords();
+        dataElement.m_currentData = aSymbol->GetKeyWords();
+        dataElement.m_originallyEmpty = false;
+        dataElement.m_currentlyEmpty = false;
+        dataElement.m_isModified = false;
+    }
     else
     {
         m_dataStore[aSymbol->m_Uuid][aFieldName].m_originalData = wxEmptyString;
@@ -563,10 +571,19 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
     for( const LIB_SYMBOL* ref : rowGroup.m_Refs )
     {
         LIB_DATA_ELEMENT& dataElement = m_dataStore[ref->m_Uuid][m_cols[aCol].m_fieldName];
-        dataElement.m_currentData = wxEmptyString;
-        dataElement.m_currentlyEmpty = true;
-        dataElement.m_isModified = ( dataElement.m_currentData != dataElement.m_originalData )
-                                   || ( dataElement.m_currentlyEmpty != dataElement.m_originallyEmpty );
+        if( m_cols[aCol].m_fieldName == wxS( "Keywords" ) )
+        {
+            dataElement.m_currentData = wxEmptyString;
+            dataElement.m_currentlyEmpty = false;
+            dataElement.m_isModified = ( dataElement.m_currentData != dataElement.m_originalData );
+        }
+        else
+        {
+            dataElement.m_currentData = wxEmptyString;
+            dataElement.m_currentlyEmpty = true;
+            dataElement.m_isModified = ( dataElement.m_currentData != dataElement.m_originalData )
+                                       || ( dataElement.m_currentlyEmpty != dataElement.m_originallyEmpty );
+        }
     }
 
     m_edited = true;
@@ -940,6 +957,16 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             // Skip special derived symbol creation fields - these are handled separately
             if( srcName.StartsWith( "__DERIVED_SYMBOL_" ) && srcName.EndsWith( "__" ) )
                 continue;
+
+            if( srcName == wxS( "Keywords" ) )
+            {
+                symbol->SetKeyWords( srcValue );
+                dataElement.m_originalData = dataElement.m_currentData;
+                dataElement.m_isModified = false;
+                dataElement.m_currentlyEmpty = false;
+                dataElement.m_originallyEmpty = false;
+                continue;
+            }
 
             SCH_FIELD* destField = symbol->GetField( srcName );
             bool       userAdded = ( col != -1 && m_cols[col].m_userAdded );
