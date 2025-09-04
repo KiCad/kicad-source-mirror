@@ -1,7 +1,7 @@
 # lê văn lập <levanlap2502@gmail.com>, 2020, 2021, 2022, 2023.
 # Trần Phi Hải <tranphihai-focus@outlook.com>, 2021, 2022, 2024.
 # Bế Trọng Nghĩa <benghia1st@gmail.com>, 2022.
-# Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>, 2023, 2024.
+# Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>, 2023, 2024, 2025.
 # Phạm Minh Tấn <masterminhtan@gmail.com>, 2023.
 # Nguyen Van Dien <nvdien@tuta.io>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-02-26 02:05+0000\n"
-"Last-Translator: An Nguyen <annguyen.it.utc@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2025-09-05 07:01+0000\n"
+"Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.13.1-rc\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4218,9 +4218,8 @@ msgid "Local"
 msgstr "Nội bộ"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Số SSH cá nhân"
+msgstr "Khóa bí mật SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -7543,14 +7542,14 @@ msgid "Could not create destination directory: %s"
 msgstr "Không thể tạo thư mục đầu ra '%s'"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Không thể kết nối với '%s' "
+msgstr "Không thể sao chép tệp: %s vào %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Không thể kết nối với '%s' "
+msgstr "Không thể sao chép thư mục: %s đến %s"
 
 #: common/gestfich.cpp:529
 #, fuzzy, c-format
@@ -7558,9 +7557,9 @@ msgid "Source directory does not exist: %s"
 msgstr "Thư mục '%s' không tồn tại"
 
 #: common/gestfich.cpp:584
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Không thể đọc tệp "
+msgstr "Không thể đọc tệp: %s"
 
 #: common/git/git_branch_handler.cpp:76
 #, fuzzy
@@ -18619,9 +18618,8 @@ msgstr "Không kết nối"
 #: eeschema/erc/erc.cpp:210 eeschema/erc/erc.cpp:229
 #: pcbnew/drc/drc_test_provider_misc.cpp:311
 #: pcbnew/drc/drc_test_provider_misc.cpp:331
-#, fuzzy
 msgid " (in drawing sheet)"
-msgstr "In bản vẽ kỹ thuật"
+msgstr " (trong bản vẽ)"
 
 #: eeschema/erc/erc.cpp:427
 #, fuzzy
@@ -33685,7 +33683,6 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -33713,9 +33710,9 @@ msgstr ""
 "\n"
 "Các giải pháp được đưa ra dưới các dạng sau:\n"
 "\n"
-"Các điện trở R1 + R2 +...+ Rn mắc nối tiếp\n"
-"R1 | R2 |...| Điện trở Rn mắc song song\n"
-"R1 + (R2|R3)... bất kỳ sự kết hợp nào ở trên\n"
+"\tCác điện trở R1 + R2 +...+ Rn\tmắc nối tiếp\n"
+"\tCác điện trở R1 | R2 |...| Rn \t\tmắc song song\n"
+"\tBất kỳ sự kết hợp nào của R1 + (R2|R3)...\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 #, fuzzy
@@ -34902,12 +34899,11 @@ msgstr "Tùy chỉnh:"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 msgid "Empty"
-msgstr ""
+msgstr "Trống"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
-#, fuzzy
 msgid "Invalid"
-msgstr "Tên tín hiệu không hợp lệ"
+msgstr "Không hợp lệ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:113
 #, fuzzy
@@ -34930,6 +34926,8 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
+"<br/> Có %i tiền tố chỉ định tham chiếu đang được sử dụng <br/> "
+"********************************************************** <br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:322
 #, c-format
@@ -34941,15 +34939,16 @@ msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
+"<br/> Thay đổi mảng\n"
+"********************** <br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:333
 msgid "(will be ignored)"
-msgstr ""
+msgstr "(sẽ bị bỏ qua)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:346
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "Không có footprint"
+msgstr "<br/>Không có footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
@@ -37368,9 +37367,8 @@ msgid "Export ODB++ File"
 msgstr "Xuất ra Tệp"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:159
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Tệp đã chọn không hợp lệ hoặc có thể bị hỏng!"
+msgstr "Tên tệp đầu ra đã chọn không phải là định dạng lưu trữ được hỗ trợ."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:215
 #, fuzzy
@@ -37614,9 +37612,8 @@ msgid "All components"
 msgstr "Đang tải..."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:100
-#, fuzzy
 msgid "Only selected"
-msgstr "Không có symbol nào được chọn"
+msgstr "Chỉ được chọn"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:101
 msgid "Export only the component models that are selected in the PCB editor"
@@ -39334,9 +39331,8 @@ msgid "Filter vias by size:"
 msgstr "Lọc các mục theo net:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "- không thay đổi --"
+msgstr "-- giữ nguyên --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
 #, fuzzy
