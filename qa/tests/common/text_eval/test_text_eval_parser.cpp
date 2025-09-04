@@ -34,6 +34,7 @@
 #include <chrono>
 #include <cmath>
 #include <regex>
+#include <wx/wxcrt.h>
 
 /**
  * Declare the test suite
