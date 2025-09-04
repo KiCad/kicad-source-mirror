@@ -81,11 +81,11 @@ bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
         // Start with package definitions, which we create from component groups.
         toAllegroPackages();
 
-        // Write out nets
-        toAllegroNets();
-
         // Write out package properties. NOTE: Allegro doesn't recognize much...
         toAllegroPackageProperties();
+
+        // Write out nets
+        toAllegroNets();
 
         fmt::print( m_f, "$END\n" );
     }
