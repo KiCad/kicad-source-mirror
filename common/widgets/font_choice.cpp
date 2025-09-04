@@ -34,6 +34,7 @@
 #include <atomic>
 #include <chrono>
 #include <algorithm>
+#include <cwctype>
 
 // The "official" name of the building Kicad stroke font (always existing)
 #include <font/kicad_font_name.h>
