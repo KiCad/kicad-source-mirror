@@ -531,7 +531,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         }
         else
         {
-            fmt::print( m_f, "! '{}' ! '{}' ! '{}' ; ", TO_UTF8( deviceType ), TO_UTF8( value ),
+            fmt::print( m_f, "! '{}' ! '{}' ! {} ; ", TO_UTF8( deviceType ), TO_UTF8( value ),
                      TO_UTF8( tolerance ) );
         }
 
