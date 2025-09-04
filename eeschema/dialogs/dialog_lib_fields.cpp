@@ -28,11 +28,13 @@
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 #include <kiway_player.h>
+#include <string_utils.h>
 #include <symbol_editor/lib_symbol_library_manager.h>
 #include <project_sch.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <widgets/grid_checkbox.h>
+#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <tools/sch_actions.h>
@@ -1063,7 +1065,30 @@ void DIALOG_LIB_FIELDS::SetupColumnProperties( int aCol )
     // Set some column types to specific editors
     if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
     {
-        attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
+        // Create symbol netlist for footprint picker
+        wxString symbolNetlist;
+        if( !m_symbolsList.empty() )
+        {
+            // Use the first symbol's netlist (all symbols in lib should have similar pin structure)
+            LIB_SYMBOL* symbol = m_symbolsList[0];
+            wxArrayString pins;
+
+            for( SCH_PIN* pin : symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+                pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+            if( !pins.IsEmpty() )
+                symbolNetlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+            symbolNetlist << wxS( "\r" );
+
+            wxArrayString fpFilters = symbol->GetFPFilters();
+            if( !fpFilters.IsEmpty() )
+                symbolNetlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+            symbolNetlist << wxS( "\r" );
+        }
+
+        attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, symbolNetlist ) );
         m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
@@ -1076,7 +1101,7 @@ void DIALOG_LIB_FIELDS::SetupColumnProperties( int aCol )
     {
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
         attr->SetRenderer( new GRID_CELL_CHECKBOX_RENDERER() );
-                m_dataModel->SetColAttr( attr, aCol );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else if( IsGeneratedField( m_dataModel->GetColFieldName( aCol ) ) )
     {
@@ -1162,3 +1187,4 @@ void DIALOG_LIB_FIELDS::SetupAllColumnProperties()
     m_dataModel->SetSorting( sortCol, sortAscending );
     m_grid->SetSortingColumn( sortCol, sortAscending );
 }
+

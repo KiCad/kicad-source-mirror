@@ -22,6 +22,7 @@
 
 #include <dialog_lib_fields_base.h>
 #include <sch_reference_list.h>
+#include <widgets/grid_text_button_helpers.h>
 
 class SYMBOL_EDIT_FRAME;
 class LIB_FIELDS_EDITOR_GRID_DATA_MODEL;

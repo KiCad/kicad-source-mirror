@@ -118,6 +118,9 @@ public:
             pair.second->DecRef();
 
         m_stripedRenderers.clear();
+
+        for( const auto& [col, attr] : m_colAttrs )
+            wxSafeDecRef( attr );
     }
 
     static const wxString QUANTITY_VARIABLE;
@@ -287,6 +290,12 @@ public:
         return m_rows[aRow].m_Flag == GROUP_SINGLETON || m_rows[aRow].m_Flag == CHILD_ITEM;
     }
 
+    void SetColAttr( wxGridCellAttr* aAttr, int aCol ) override
+    {
+        wxSafeDecRef( m_colAttrs[aCol] );
+        m_colAttrs[aCol] = aAttr;
+    }
+
 private:
     static bool cmp( const LIB_DATA_MODEL_ROW& lhGroup, const LIB_DATA_MODEL_ROW& rhGroup,
                      LIB_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
@@ -329,4 +338,7 @@ protected:
     // stripe bitmap support
     mutable STRIPED_STRING_RENDERER* m_stripedStringRenderer;
     mutable std::map<wxString, wxGridCellRenderer*> m_stripedRenderers;
+
+    // Column attributes storage
+    std::map<int, wxGridCellAttr*> m_colAttrs;
 };
