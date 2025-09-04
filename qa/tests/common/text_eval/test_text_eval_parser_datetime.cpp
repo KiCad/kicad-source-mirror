@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE( DateFormatting )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -87,8 +87,8 @@ BOOST_AUTO_TEST_CASE( DateFormatting )
         {
             BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
                                 "Error in expression: " + testCase.expression +
-                                " Errors: " + evaluator.GetErrorSummary() );
-            BOOST_CHECK_EQUAL( result, testCase.expected );
+                                " Errors: " + evaluator.GetErrorSummary().ToStdString() );
+            BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), testCase.expected );
         }
     }
 }
@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE( CJKDateFormatting )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -155,8 +155,8 @@ BOOST_AUTO_TEST_CASE( CJKDateFormatting )
         {
             BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
                                 "Error in expression: " + testCase.expression +
-                                " Errors: " + evaluator.GetErrorSummary() );
-            BOOST_CHECK_EQUAL( result, testCase.expected );
+                                " Errors: " + evaluator.GetErrorSummary().ToStdString() );
+            BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), testCase.expected );
         }
     }
 }
@@ -220,20 +220,21 @@ BOOST_AUTO_TEST_CASE( CJKDateParsing )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
             BOOST_CHECK_MESSAGE( evaluator.HasErrors(),
-                                "Expected error but got result: " + result +
+                                "Expected error but got result: " +
+                                result.ToStdString( wxConvUTF8 ) +
                                 " for expression: " + testCase.expression );
         }
         else
         {
             BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
                                 "Error in expression: " + testCase.expression +
-                                " Errors: " + evaluator.GetErrorSummary() );
-            BOOST_CHECK_EQUAL( result, testCase.expected );
+                                " Errors: " + evaluator.GetErrorSummary().ToStdString() );
+            BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), testCase.expected );
         }
     }
 }
@@ -316,7 +317,7 @@ BOOST_AUTO_TEST_CASE( DateArithmetic )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -328,7 +329,7 @@ BOOST_AUTO_TEST_CASE( DateArithmetic )
 
             if( !testCase.expected.empty() )
             {
-                BOOST_CHECK_EQUAL( result, testCase.expected );
+                BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), testCase.expected );
             }
             else
             {
@@ -384,7 +385,7 @@ BOOST_AUTO_TEST_CASE( DateEdgeCases )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -394,7 +395,7 @@ BOOST_AUTO_TEST_CASE( DateEdgeCases )
         {
             BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
                                 "Error in expression: " + testCase.expression );
-            BOOST_CHECK_EQUAL( result, testCase.expected );
+            BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), testCase.expected );
         }
     }
 }
@@ -428,13 +429,13 @@ BOOST_AUTO_TEST_CASE( DateFormattingMixed )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldWork )
         {
             BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
                                 "Error in expression: " + testCase.expression +
-                                " Result: " + result );
+                                " Result: " + result.ToStdString( wxConvUTF8 ) );
             BOOST_CHECK( !result.empty() );
         }
         else

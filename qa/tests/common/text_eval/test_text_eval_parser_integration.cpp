@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE( RealWorldScenarios )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -155,15 +155,15 @@ BOOST_AUTO_TEST_CASE( RealWorldScenarios )
             if( testCase.isRegex )
             {
                 std::regex pattern( testCase.expectedPattern );
-                BOOST_CHECK_MESSAGE( std::regex_match( result.ToStdString(), pattern ),
-                                    "Result '" + result.ToStdString() + "' doesn't match pattern '" +
+                BOOST_CHECK_MESSAGE( std::regex_match( result.ToStdString( wxConvUTF8 ), pattern ),
+                                    "Result '" + result.ToStdString( wxConvUTF8 ) + "' doesn't match pattern '" +
                                     testCase.expectedPattern + "' for: " + testCase.description );
             }
             else
             {
-                BOOST_CHECK_MESSAGE( result.ToStdString() == testCase.expectedPattern,
+                BOOST_CHECK_MESSAGE( result.ToStdString( wxConvUTF8 ) == testCase.expectedPattern,
                                     "Expected '" + testCase.expectedPattern + "' but got '" +
-                                    result.ToStdString() + "' for: " + testCase.description );
+                                    result.ToStdString( wxConvUTF8 ) + "' for: " + testCase.description );
             }
         }
     }
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE( CallbackVariableResolution )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -220,7 +220,7 @@ BOOST_AUTO_TEST_CASE( CallbackVariableResolution )
                 // For floating point comparisons, extract the number
                 std::regex numberRegex( R"([\d.]+)" );
                 std::smatch match;
-                std::string resultStr = result.ToStdString();
+                std::string resultStr = result.ToStdString( wxConvUTF8 );
                 if( std::regex_search( resultStr, match, numberRegex ) )
                 {
                     double actualValue = std::stod( match[0].str() );
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE( CallbackVariableResolution )
             }
             else
             {
-                BOOST_CHECK_EQUAL( result, testCase.expected );
+                BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), testCase.expected );
             }
         }
     }
@@ -259,7 +259,7 @@ BOOST_AUTO_TEST_CASE( ThreadSafety )
         BOOST_CHECK( !evaluators[i]->HasErrors() );
 
         double expected = static_cast<double>( i * 5 );
-        double actual = std::stod( result.ToStdString() );
+        double actual = std::stod( result.ToStdString( wxConvUTF8 ) );
         BOOST_CHECK_CLOSE( actual, expected, 0.001 );
     }
 }
@@ -280,19 +280,19 @@ BOOST_AUTO_TEST_CASE( MemoryManagement )
     }
     complexExpression += "}";
 
-    auto result = evaluator.Evaluate( complexExpression );
+    auto result = evaluator.Evaluate( wxString::FromUTF8( complexExpression ) );
     BOOST_CHECK( !evaluator.HasErrors() );
 
     // Sum of 0..99 is 4950
-    BOOST_CHECK_EQUAL( result, "4950" );
+    BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), std::string( "4950" ) );
 
     // Test many small expressions
     for( int i = 0; i < 1000; ++i )
     {
         auto expr = "@{" + std::to_string( i ) + " * 2}";
-        auto result = evaluator.Evaluate( expr );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( expr ) );
         BOOST_CHECK( !evaluator.HasErrors() );
-        BOOST_CHECK_EQUAL( result, std::to_string( i * 2 ) );
+        BOOST_CHECK_EQUAL( result.ToStdString( wxConvUTF8 ), std::to_string( i * 2 ) );
     }
 }
 
@@ -347,7 +347,7 @@ BOOST_AUTO_TEST_CASE( ParsingEdgeCases )
 
     for( const auto& testCase : cases )
     {
-        auto result = evaluator.Evaluate( testCase.expression );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
         if( testCase.shouldError )
         {
@@ -360,7 +360,7 @@ BOOST_AUTO_TEST_CASE( ParsingEdgeCases )
                 // For floating point comparisons, extract the number
                 std::regex numberRegex( R"([\d.eE+-]+)" );
                 std::smatch match;
-                std::string resultStr = result.ToStdString();
+                std::string resultStr = result.ToStdString( wxConvUTF8 );
                 if( std::regex_search( resultStr, match, numberRegex ) )
                 {
                     double actualValue = std::stod( match[0].str() );
@@ -372,10 +372,10 @@ BOOST_AUTO_TEST_CASE( ParsingEdgeCases )
             {
                 BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
                                     "Unexpected error for: " + testCase.description +
-                                    " - " + evaluator.GetErrorSummary() );
-                BOOST_CHECK_MESSAGE( result == testCase.expected,
+                                    " - " + evaluator.GetErrorSummary().ToStdString() );
+                BOOST_CHECK_MESSAGE( result.ToStdString( wxConvUTF8 ) == testCase.expected,
                                     "Expected '" + testCase.expected + "' but got '" +
-                                    result + "' for: " + testCase.description );
+                                    result.ToStdString( wxConvUTF8 ) + "' for: " + testCase.description );
             }
         }
     }
@@ -417,7 +417,7 @@ BOOST_AUTO_TEST_CASE( RealWorldPerformance )
     {
         for( const auto& expr : expressions )
         {
-            auto result = evaluator.Evaluate( expr );
+            auto result = evaluator.Evaluate( wxString::FromUTF8( expr ) );
             BOOST_CHECK( !evaluator.HasErrors() );
             BOOST_CHECK( !result.empty() );
         }
@@ -432,8 +432,8 @@ BOOST_AUTO_TEST_CASE( RealWorldPerformance )
     // Test that results are consistent
     for( auto& expr : expressions )
     {
-        auto result1 = evaluator.Evaluate( expr );
-        auto result2 = evaluator.Evaluate( expr );
+        auto result1 = evaluator.Evaluate( wxString::FromUTF8( expr ) );
+        auto result2 = evaluator.Evaluate( wxString::FromUTF8( expr ) );
         BOOST_CHECK_EQUAL( result1, result2 );
     }
 }
