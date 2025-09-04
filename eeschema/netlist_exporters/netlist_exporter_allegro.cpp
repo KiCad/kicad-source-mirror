@@ -716,7 +716,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 {
-    fmt::print( m_f, "$NET\n" );
+    fmt::print( m_f, "$NETS\n" );
 
     while( !m_netNameNodes.empty() )
     {
