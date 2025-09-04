@@ -92,7 +92,12 @@ FONT_LIST_MANAGER::FONT_LIST_MANAGER()
 {
     m_quit = false;
     UpdateFonts();
+
+// It appears that the polling mechanism does not work correctly
+// for mingw (hangs on exit)
+#ifndef __MINGW32__
     m_thread = std::thread( &FONT_LIST_MANAGER::Poll, this );
+#endif
 }
 
 FONT_LIST_MANAGER::~FONT_LIST_MANAGER()
@@ -101,10 +106,13 @@ FONT_LIST_MANAGER::~FONT_LIST_MANAGER()
         std::lock_guard<std::mutex> lock( m_mutex );
         m_quit = true;
     }
+
+#ifndef __MINGW32__
     m_cv.notify_one();
 
     if( m_thread.joinable() )
         m_thread.join();
+#endif
 }
 
 void FONT_LIST_MANAGER::Poll()
