@@ -260,8 +260,34 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
 {
     wxGridCellAttr* attr = wxGridTableBase::GetAttr( aRow, aCol, aKind );
 
-    if( !attr )
+    // Check for column-specific attributes first
+    if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
+    {
+        if( attr )
+        {
+            // Merge with existing attributes
+            wxGridCellAttr* newAttr = m_colAttrs[aCol]->Clone();
+
+            // Copy any existing attributes that aren't overridden
+            if( attr->HasBackgroundColour() && !newAttr->HasBackgroundColour() )
+                newAttr->SetBackgroundColour( attr->GetBackgroundColour() );
+            if( attr->HasTextColour() && !newAttr->HasTextColour() )
+                newAttr->SetTextColour( attr->GetTextColour() );
+            if( attr->HasFont() && !newAttr->HasFont() )
+                newAttr->SetFont( attr->GetFont() );
+
+            attr->DecRef();
+            attr = newAttr;
+        }
+        else
+        {
+            attr = m_colAttrs[aCol]->Clone();
+        }
+    }
+    else if( !attr )
+    {
         attr = new wxGridCellAttr;
+    }
 
     bool rowModified = false;
     bool cellModified = false;
