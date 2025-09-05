@@ -30,6 +30,7 @@
 #include <bitmap_base.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <sch_signal.h>
 #include <callback_gal.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
@@ -56,6 +57,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
+#include <sch_label.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
 #include <schematic.h>
@@ -1683,6 +1685,22 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> elecTypeInfo = cache.GetPinElectricalTypeInfo( shadowWidth ) )
         drawTextInfo( *elecTypeInfo, getColorForLayer( LAYER_PRIVATE_NOTES ) );
+
+    if( aPin->IsBrightened() && m_schematic && !m_schematic->GetHighlightedSignal().IsEmpty() )
+    {
+        if( SCH_NETCHAIN* sig = m_schematic->ConnectionGraph()->GetSignalByName( m_schematic->GetHighlightedSignal() ) )
+        {
+            if( sig->GetTerminalPinA() == aPin->m_Uuid || sig->GetTerminalPinB() == aPin->m_Uuid )
+            {
+                CIRCLE c = cache.GetDanglingIndicator();
+                m_gal->SetStrokeColor( color.Brightened( 0.5 ) );
+                m_gal->SetIsFill( false );
+                m_gal->SetIsStroke( true );
+                m_gal->SetLineWidth( getShadowWidth( true ) );
+                m_gal->DrawCircle( c.Center, c.Radius );
+            }
+        }
+    }
 }
 
 

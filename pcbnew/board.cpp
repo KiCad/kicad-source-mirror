@@ -2709,6 +2709,38 @@ FOOTPRINT* BOARD::FindFootprintByPath( const KIID_PATH& aPath ) const
 }
 
 
+PAD* BOARD::FindPadByUuid( const KIID& aUuid ) const
+{
+    for( FOOTPRINT* footprint : m_footprints )
+    {
+        if( PAD* pad = footprint->FindPadByUuid( aUuid ) )
+            return pad;
+    }
+
+    return nullptr;
+}
+
+
+void BOARD::ReplaceSignalTerminalPad( const wxString& aSignal, const KIID& aPrev, const KIID& aNew )
+{
+    PAD* newPad = FindPadByUuid( aNew );
+
+    for( NETINFO_ITEM* net : m_NetInfo )
+    {
+        if( net->GetSignal() == aSignal )
+        {
+            for( int i = 0; i < 2; ++i )
+            {
+                PAD* pad = net->GetTerminalPad( i );
+
+                if( pad && pad->m_Uuid == aPrev )
+                    net->SetTerminalPad( i, newPad );
+            }
+        }
+    }
+}
+
+
 std::set<wxString> BOARD::GetNetClassAssignmentCandidates() const
 {
     std::set<wxString> names;
@@ -3520,7 +3552,9 @@ void BOARD::ResetNetHighLight()
 
 void BOARD::SetHighLightNet( int aNetCode, bool aMulti )
 {
-    if( !m_highLight.m_netCodes.count( aNetCode ) )
+    bool already = m_highLight.m_netCodes.count( aNetCode );
+
+    if( !already )
     {
         if( !aMulti )
             m_highLight.m_netCodes.clear();

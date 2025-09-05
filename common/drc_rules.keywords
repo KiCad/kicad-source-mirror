@@ -27,6 +27,7 @@ ignore
 inner
 layer
 length
+signal_length
 max
 mechanical_clearance
 mechanical_hole_clearance

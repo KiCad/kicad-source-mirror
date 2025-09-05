@@ -32,6 +32,9 @@
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
 
+#include <board.h>
+#include <netinfo.h>
+
 namespace PNS {
 
 MEANDER_SKEW_PLACER::MEANDER_SKEW_PLACER ( ROUTER* aRouter ) :
@@ -130,24 +133,32 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_netClass = conItem->GetEffectiveNetClass();
     m_settings.m_netClass = m_netClass;
 
-    if ( m_originPair.NetP() == m_originLine.Net() )
+    bool pIsActive = ( m_originPair.NetP() == m_originLine.Net() );
+    long long int lenP = m_padToDieLengthP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
+    long long int lenN = m_padToDieLengthN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
+    int64_t delayP = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
+    int64_t delayN = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
+
+    // Query interface for aggregate signal contribution (other nets in same signal)
+    long long int extraSignalLen = 0;
+    long long int extraSignalDelay = 0;
+    Router()->GetInterface()->GetSignalAggregate( m_originPair.NetP(), m_originPair.NetN(),
+                                                  extraSignalLen, extraSignalDelay );
+
+    if( pIsActive )
     {
-        m_coupledLength = m_padToDieLengthN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
-        m_lastLength = m_padToDieLengthP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
-
-        m_coupledDelay = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
-        m_lastDelay = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
-
+        m_coupledLength = lenN + extraSignalLen;
+        m_lastLength = lenP + extraSignalLen;
+        m_coupledDelay = delayN + extraSignalDelay;
+        m_lastDelay = delayP + extraSignalDelay;
         m_tunedPath = m_tunedPathP;
     }
     else
     {
-        m_coupledLength = m_padToDieLengthP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
-        m_lastLength = m_padToDieLengthN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
-
-        m_coupledDelay = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
-        m_lastDelay = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
-
+        m_coupledLength = lenP + extraSignalLen;
+        m_lastLength = lenN + extraSignalLen;
+        m_coupledDelay = delayP + extraSignalDelay;
+        m_lastDelay = delayN + extraSignalDelay;
         m_tunedPath = m_tunedPathN;
     }
 
@@ -177,7 +188,7 @@ int64_t MEANDER_SKEW_PLACER::origPathDelay() const
 
 long long int MEANDER_SKEW_PLACER::CurrentSkew() const
 {
-    return m_lastLength - m_coupledLength;
+    return m_lastLength - m_coupledLength; // Includes aggregate signal contribution if applicable
 }
 
 

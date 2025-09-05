@@ -34,6 +34,7 @@
 #include <pcb_track.h>
 #include <string_utils.h>
 #include <zone.h>
+#include <unordered_map>
 
 
 // Constructor and destructor
@@ -184,9 +185,43 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 
 void NETINFO_LIST::buildListOfNets()
 {
-    // Restore the initial state of NETINFO_ITEMs
+    // Preserve any parsed signal names and terminal pad UUIDs before clearing. The GUI load
+    // path calls BuildListOfNets() after the board file is parsed (see files.cpp) which was
+    // unintentionally wiping the m_signal field set by the (signals ...) section.  Cache and
+    // restore them so persisted signals survive the rebuild.
+    std::unordered_map<int, wxString> preservedSignals;
+    std::unordered_map<int, KIID>     preservedPad0;
+    std::unordered_map<int, KIID>     preservedPad1;
+
+    preservedSignals.reserve( GetNetCount() );
+    preservedPad0.reserve( GetNetCount() );
+    preservedPad1.reserve( GetNetCount() );
+
+    for( NETINFO_ITEM* net : *this )
+    {
+        preservedSignals[ net->GetNetCode() ] = net->GetSignal();
+        preservedPad0[ net->GetNetCode() ]    = net->GetTerminalPadUuid( 0 );
+        preservedPad1[ net->GetNetCode() ]    = net->GetTerminalPadUuid( 1 );
+    }
+
+    // Restore the initial state of NETINFO_ITEMs (except signals & terminal pad UUIDs which we reapply)
     for( NETINFO_ITEM* net : *this )
         net->Clear();
+
+    for( NETINFO_ITEM* net : *this )
+    {
+        auto it = preservedSignals.find( net->GetNetCode() );
+        if( it != preservedSignals.end() )
+            net->SetSignal( it->second );
+
+        auto ip0 = preservedPad0.find( net->GetNetCode() );
+        if( ip0 != preservedPad0.end() )
+            net->SetTerminalPadUuid( 0, ip0->second );
+
+        auto ip1 = preservedPad1.find( net->GetNetCode() );
+        if( ip1 != preservedPad1.end() )
+            net->SetTerminalPadUuid( 1, ip1->second );
+    }
 
     m_parent->SynchronizeNetsAndNetClasses( false );
     m_parent->SetAreasNetCodesFromNetNames();

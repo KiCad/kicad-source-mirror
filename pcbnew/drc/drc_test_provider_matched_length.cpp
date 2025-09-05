@@ -352,7 +352,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT } )
+                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, SIGNAL_LENGTH_CONSTRAINT, SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT } )
                 {
                     DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( jj, item, nullptr, item->GetLayer() );
 
@@ -480,9 +480,13 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 }
             }
 
+            // Check both net-level and signal-level length constraints
             std::optional<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
+            std::optional<DRC_CONSTRAINT> signalLengthConstraint = rule->FindConstraint( SIGNAL_LENGTH_CONSTRAINT );
 
-            if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+            if( signalLengthConstraint && signalLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+                checkLengths( *signalLengthConstraint, matchedConnections );
+            else if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkLengths( *lengthConstraint, matchedConnections );
 
             std::optional<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( SKEW_CONSTRAINT );

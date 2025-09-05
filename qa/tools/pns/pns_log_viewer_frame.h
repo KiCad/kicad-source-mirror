@@ -109,6 +109,14 @@ public:
         return ( aLayer / 2 ) - 1;
     }
 
+    bool GetSignalAggregate( PNS::NET_HANDLE, PNS::NET_HANDLE,
+                             long long& aExtraLength, long long& aExtraDelay ) const override
+    {
+        aExtraLength = 0;
+        aExtraDelay = 0;
+        return false; // Not needed for log viewer
+    }
+
     long long int CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
                                              const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override
     {

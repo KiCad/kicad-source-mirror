@@ -138,4 +138,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260101  // PCB variants
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260306  // Variant in_bom semantics corrected
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260326  // Locking properties
-#define SEXPR_SCHEMATIC_FILE_VERSION 20260508 // Native ellipse primitive
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20260508  // Native ellipse primitive
+#define SEXPR_SCHEMATIC_FILE_VERSION 20260512  // Net chains

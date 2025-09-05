@@ -30,7 +30,7 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
     // Ensure signals are constructed before ERC tests.
     m_schematic->ConnectionGraph()->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
-    // Manually promote all potential signals prior to ERC.
+    // Manually promote all potential signals
     {
         CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
         int idx = 1;
@@ -70,7 +70,7 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
         auto* graph = m_schematic->ConnectionGraph();
         // Ensure signals are rebuilt explicitly in case RunERC did not force it
         graph->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
-        const auto& signals = graph->GetSignals();
+        const auto& signals = graph->GetNetChains();
         std::ostringstream oss;
         oss << "DEBUG Pin-to-Pin mismatch failure: expected=" << expectedMismatches
             << " got=" << mismatchCount << " totalItems=" << provider.GetCount()

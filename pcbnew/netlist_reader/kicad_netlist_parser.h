@@ -82,6 +82,8 @@ private:
      */
     void parseGroup();
 
+    void parseSignal();
+
     /**
      * Parse a variant section
      *   (variant (name "VariantName") (description "Description"))

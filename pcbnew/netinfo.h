@@ -112,6 +112,15 @@ public:
      */
     const wxString& GetDisplayNetname() const { return m_displayNetname; }
 
+    const wxString& GetSignal() const { return m_signal; }
+    void SetSignal( const wxString& aSignal ) { m_signal = aSignal; }
+
+    PAD* GetTerminalPad( int aIndex ) const { return m_terminalPads[aIndex]; }
+    void SetTerminalPad( int aIndex, PAD* aPad ) { m_terminalPads[aIndex] = aPad; }
+    void SetTerminalPadUuid( int aIndex, const KIID& aUuid ) { m_terminalPadUuids[aIndex] = aUuid; }
+    const KIID& GetTerminalPadUuid( int aIndex ) const { return m_terminalPadUuids[aIndex]; }
+    void ResolveTerminalPads( BOARD* aBoard );
+
     /**
      * @return true if the net was not labelled by the user.
      */
@@ -169,9 +178,14 @@ private:
     wxString    m_shortNetname;    ///< Short net name, like vout from /sheet/subsheet/vout.
 
     wxString    m_displayNetname;  ///< Unescaped netname for display.  Usually the short netname,
-                                   ///< but will be the full netname if disambiguation required.
-                                   ///< The NETINFO_LIST is repsonsible for the management of when
-                                   ///< these need to be updated/disambiguated.
+                                  ///< but will be the full netname if disambiguation required.
+                                  ///< The NETINFO_LIST is repsonsible for the management of when
+                                  ///< these need to be updated/disambiguated.
+
+    wxString    m_signal;
+
+    PAD*        m_terminalPads[2];
+    KIID        m_terminalPadUuids[2];
 
     std::shared_ptr<NETCLASS> m_netClass;
 

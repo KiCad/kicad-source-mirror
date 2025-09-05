@@ -38,6 +38,7 @@
 #include <sch_shape.h>
 #include <sch_bitmap.h>
 #include <sch_text.h>
+#include <sch_label.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>

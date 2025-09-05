@@ -2090,6 +2090,27 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 
 void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 {
+    if( !GetHighlightedSignal().IsEmpty() )
+    {
+        if( CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph() )
+        {
+            if( SCH_NETCHAIN* sig = graph->GetSignalByName( GetHighlightedSignal() ) )
+            {
+                wxString nets;
+
+                for( const wxString& n : sig->GetNets() )
+                {
+                    if( !nets.IsEmpty() )
+                        nets += wxT( ", " );
+                    nets += n;
+                }
+
+                SetStatusText( wxString::Format( _( "Signal nets: %s" ), nets ) );
+                return;
+            }
+        }
+    }
+
     if( !GetHighlightedConnection().IsEmpty() )
     {
         SetStatusText( wxString::Format( _( "Highlighted net: %s" ),

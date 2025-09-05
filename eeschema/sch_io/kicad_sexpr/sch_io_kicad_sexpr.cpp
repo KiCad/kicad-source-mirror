@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <fmt/format.h>
+#include <magic_enum.hpp>
 
 #include <wx/dir.h>
 #include <wx/log.h>
@@ -54,6 +55,7 @@
 #include <sch_rule_area.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
+#include <sch_signal.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_symbol.h>
@@ -64,6 +66,7 @@
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <reporter.h>
+#include <connection_graph.h>
 
 using namespace TSCHEMATIC_T;
 
@@ -333,6 +336,9 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
                                       m_appending );
 
     parser.ParseSchematic( aSheet );
+
+    if( m_schematic && m_schematic->ConnectionGraph() )
+        m_schematic->ConnectionGraph()->SetSignalTerminalOverrides( parser.GetSignalTerminals() );
 }
 
 
@@ -343,6 +349,9 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
     SCH_IO_KICAD_SEXPR_PARSER parser( &aReader );
 
     parser.ParseSchematic( aSheet, true, aFileVersion );
+
+    if( m_schematic && m_schematic->ConnectionGraph() )
+        m_schematic->ConnectionGraph()->SetSignalTerminalOverrides( parser.GetSignalTerminals() );
 }
 
 
@@ -516,6 +525,15 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         default:
             wxASSERT( "Unexpected schematic object type in SCH_IO_KICAD_SEXPR::Format()" );
         }
+    }
+
+    for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetNetChains() )
+    {
+        const SCH_NETCHAIN& sig = *sigPtr;
+        m_out->Print( "(signal %s ", m_out->Quotew( sig.GetName() ).c_str() );
+        KICAD_FORMAT::FormatUuid( m_out, sig.GetTerminalPinA() );
+        KICAD_FORMAT::FormatUuid( m_out, sig.GetTerminalPinB() );
+        m_out->Print( ")" );
     }
 
     if( aSheet->HasRootInstance() )
@@ -773,6 +791,16 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aSymbol->GetExcludedFromBoard() );
     KICAD_FORMAT::FormatBool( m_out, "in_pos_files", !aSymbol->GetExcludedFromPosFiles() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aSymbol->GetDNP() );
+    // Persist passthrough mode as enum string for tri-state support, but omit when DEFAULT
+    // to avoid file churn and keep files compact/back-compatible.
+    if( aSymbol->GetPassthroughMode() != SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT )
+    {
+        using magic_enum::enum_name;
+        std::string name = std::string( enum_name( aSymbol->GetPassthroughMode() ) );
+        // enum names are UPPER_CASE; write lowercase tokens
+        std::transform( name.begin(), name.end(), name.begin(), []( unsigned char c ){ return (char) std::tolower( c ); } );
+        m_out->Print( "(passthrough %s)", name.c_str() );
+    }
 
     if( aSymbol->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );

@@ -50,9 +50,15 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
         m_netname( aNetName ),
         m_shortNetname( m_netname.AfterLast( '/' ) ),
         m_displayNetname( UnescapeString( m_shortNetname ) ),
+        m_signal(),
         m_isCurrent( true )
 {
     m_parent = aParent;
+
+    m_terminalPads[0] = nullptr;
+    m_terminalPads[1] = nullptr;
+    m_terminalPadUuids[0] = niluuid;
+    m_terminalPadUuids[1] = niluuid;
 
     if( aParent )
         m_netClass = aParent->GetDesignSettings().m_NetSettings->GetDefaultNetclass();
@@ -71,6 +77,11 @@ void NETINFO_ITEM::Clear()
 {
     wxCHECK( m_parent, /* void */ );
     m_netClass = m_parent->GetDesignSettings().m_NetSettings->GetDefaultNetclass();
+    m_signal.clear();
+    m_terminalPads[0] = nullptr;
+    m_terminalPads[1] = nullptr;
+    m_terminalPadUuids[0] = niluuid;
+    m_terminalPadUuids[1] = niluuid;
 }
 
 
@@ -82,6 +93,19 @@ void NETINFO_ITEM::SetNetClass( const std::shared_ptr<NETCLASS>& aNetClass )
         m_netClass = aNetClass;
     else
         m_netClass = m_parent->GetDesignSettings().m_NetSettings->GetDefaultNetclass();
+}
+
+
+void NETINFO_ITEM::ResolveTerminalPads( BOARD* aBoard )
+{
+    for( int i = 0; i < 2; ++i )
+    {
+        if( m_terminalPads[i] )
+            continue;
+
+        if( aBoard )
+            m_terminalPads[i] = aBoard->FindPadByUuid( m_terminalPadUuids[i] );
+    }
 }
 
 

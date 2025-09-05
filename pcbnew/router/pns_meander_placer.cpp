@@ -28,6 +28,7 @@
 #include "pns_topology.h"
 
 #include <board_connected_item.h>
+#include <algorithm>
 
 #include <length_delay_calculation/tuning_profile_parameters_iface.h>
 
@@ -112,13 +113,15 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
 long long int MEANDER_PLACER::origPathLength() const
 {
-    return m_padToDieLength + lineLength( m_tunedPath, m_startPad_n, m_endPad_n );
+    return m_padToDieLength + m_settings.m_signalExtraLength
+            + lineLength( m_tunedPath, m_startPad_n, m_endPad_n );
 }
 
 
 int64_t MEANDER_PLACER::origPathDelay() const
 {
-    return m_padToDieDelay + lineDelay( m_tunedPath, m_startPad_n, m_endPad_n );
+    return m_padToDieDelay + m_settings.m_signalExtraDelay
+            + lineDelay( m_tunedPath, m_startPad_n, m_endPad_n );
 }
 
 
@@ -127,11 +130,31 @@ void MEANDER_PLACER::calculateTimeDomainTargets()
     // If this is a time domain tuning, calculate the target length for the desired total delay
     if( m_settings.m_isTimeDomain )
     {
-        const int64_t curDelay = origPathDelay();
+        // curDelaySignal includes other nets (signal aggregate). curDelayNet excludes extras.
+        const int64_t curDelaySignal = origPathDelay();
+        const int64_t curDelayNet = curDelaySignal - m_settings.m_signalExtraDelay;
 
-        const int64_t desiredDelayMin = m_settings.m_targetLengthDelay.Min();
-        const int64_t desiredDelayOpt = m_settings.m_targetLengthDelay.Opt();
-        const int64_t desiredDelayMax = m_settings.m_targetLengthDelay.Max();
+        // Prefer signal-level target if explicitly set (i.e. not unconstrained and differs from net target)
+        bool useSignalTarget = ( m_settings.m_targetSignalLengthDelay.Opt() != MEANDER_SETTINGS::DELAY_UNCONSTRAINED );
+
+        const MINOPTMAX<long long int>& targetDelaySet = useSignalTarget ? m_settings.m_targetSignalLengthDelay
+                                                                         : m_settings.m_targetLengthDelay;
+
+        // Desired overall signal delay values
+        int64_t desiredDelayMin = targetDelaySet.Min();
+        int64_t desiredDelayOpt = targetDelaySet.Opt();
+        int64_t desiredDelayMax = targetDelaySet.Max();
+
+        // If using signal target, convert desired overall signal delay into desired per-net contribution
+        if( useSignalTarget )
+        {
+            desiredDelayMin = std::max<int64_t>( 0, desiredDelayMin - m_settings.m_signalExtraDelay );
+            desiredDelayOpt = std::max<int64_t>( 0, desiredDelayOpt - m_settings.m_signalExtraDelay );
+            desiredDelayMax = std::max<int64_t>( desiredDelayOpt, desiredDelayMax - m_settings.m_signalExtraDelay );
+        }
+
+        // Current delay basis for comparison (per-net when using signal target else aggregate)
+        const int64_t curDelay = useSignalTarget ? curDelayNet : curDelaySignal;
 
         const int64_t delayDifferenceOpt = desiredDelayOpt - curDelay;
 

@@ -41,6 +41,7 @@
 #include <pcb_track.h>
 #include <zone.h>
 #include <string_utils.h>
+#include <limits>
 #include <pcbnew_settings.h>
 #include <pcb_edit_frame.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -2436,6 +2437,53 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // Update net, netcode and netclass data after commiting the netlist
         m_board->SynchronizeNetsAndNetClasses( true );
         m_board->GetConnectivity()->RefreshNetcodeMap( m_board );
+
+        for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+            net->SetSignal( aNetlist.GetNetSignal( net->GetNetname() ) );
+
+        for( const auto& sig : aNetlist.GetSignalTerminalPins() )
+        {
+            PAD* pads[2] = { nullptr, nullptr };
+
+            for( size_t i = 0; i < sig.second.size() && i < 2; ++i )
+            {
+                const wxString& ref = sig.second[i].first;
+                const wxString& pin = sig.second[i].second;
+                FOOTPRINT* fp = m_board->FindFootprintByReference( ref );
+
+                if( !fp )
+                    continue;
+
+                PAD* candidate = nullptr;
+                PAD* best = nullptr;
+                int bestDist = std::numeric_limits<int>::max();
+                BOX2I bbox = fp->GetBoundingBox();
+
+                while( ( candidate = fp->FindPadByNumber( pin, candidate ) ) )
+                {
+                    VECTOR2I pos = candidate->GetPosition();
+                    int dist = std::min( { pos.x - bbox.GetLeft(), bbox.GetRight() - pos.x,
+                                            pos.y - bbox.GetTop(), bbox.GetBottom() - pos.y } );
+
+                    if( !best || dist < bestDist || ( dist == bestDist && candidate->m_Uuid < best->m_Uuid ) )
+                    {
+                        best = candidate;
+                        bestDist = dist;
+                    }
+                }
+
+                pads[i] = best;
+            }
+
+            for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+            {
+                if( net->GetSignal() == sig.first )
+                {
+                    net->SetTerminalPad( 0, pads[0] );
+                    net->SetTerminalPad( 1, pads[1] );
+                }
+            }
+        }
 
         // Although m_commit will probably also set this, it's not guaranteed, and we need to make
         // sure any modification to netclasses gets persisted to project settings through a save.

@@ -1238,6 +1238,7 @@ static void isCoupledDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 if( context->GetConstraint() == DRC_CONSTRAINT_T::DIFF_PAIR_GAP_CONSTRAINT
                         || context->GetConstraint() == DRC_CONSTRAINT_T::LENGTH_CONSTRAINT
+                        || context->GetConstraint() == DRC_CONSTRAINT_T::SIGNAL_LENGTH_CONSTRAINT
                         || context->GetConstraint() == DRC_CONSTRAINT_T::SKEW_CONSTRAINT )
                 {
                     // DRC engine evaluates these only in the context of a diffpair, but doesn't

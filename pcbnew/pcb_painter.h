@@ -142,6 +142,10 @@ public:
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }
     const std::set<int>& GetHiddenNets() const { return m_hiddenNets; }
 
+    // Signal highlight support (grouped nets).  Empty when no signal highlight active.
+    const wxString& GetHighlightedSignal() const { return m_highlightedSignal; }
+    void SetHighlightedSignal( const wxString& aSignal ) { m_highlightedSignal = aSignal; }
+
 public:
     bool               m_ForcePadSketchModeOn;
     bool               m_ForceShowFieldsWhenFPSelected;
@@ -174,6 +178,8 @@ protected:
     double m_zoneOpacity;      ///< Opacity override for filled zones
     double m_imageOpacity;     ///< Opacity override for user images
     double m_filledShapeOpacity;     ///< Opacity override for graphic shapes
+
+    wxString m_highlightedSignal;    ///< Active highlighted signal name (if any)
 };
 
 

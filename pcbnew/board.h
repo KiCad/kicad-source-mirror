@@ -1106,6 +1106,10 @@ public:
      */
     FOOTPRINT* FindFootprintByPath( const KIID_PATH& aPath ) const;
 
+    PAD* FindPadByUuid( const KIID& aUuid ) const;
+
+    void ReplaceSignalTerminalPad( const wxString& aSignal, const KIID& aPrev, const KIID& aNew );
+
     /**
      * Return the set of netname candidates for netclass assignment.
      */

@@ -95,7 +95,10 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
         xroot->AddChild( makeLibraries() );
 
     if( aCtl & GNL_NETS )
+    {
         xroot->AddChild( makeListOfNets( aCtl ) );
+        xroot->AddChild( makeSignals() );
+    }
 
     return xroot;
 }
@@ -1299,6 +1302,30 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         delete record;
 
     return xnets;
+}
+
+XNODE* NETLIST_EXPORTER_XML::makeSignals()
+{
+    XNODE* xsignals = node( wxT( "signals" ) );
+
+    for( const std::unique_ptr<SCH_NETCHAIN>& signal : m_schematic->ConnectionGraph()->GetNetChains() )
+    {
+        XNODE* xsignal;
+        xsignals->AddChild( xsignal = node( wxT( "signal" ) ) );
+        xsignal->AddAttribute( wxT( "name" ), signal->GetName() );
+
+        XNODE* xmembers;
+        xsignal->AddChild( xmembers = node( wxT( "members" ) ) );
+
+        for( const wxString& net : signal->GetNets() )
+        {
+            XNODE* xmember;
+            xmembers->AddChild( xmember = node( wxT( "member" ) ) );
+            xmember->AddAttribute( wxT( "net" ), net );
+        }
+    }
+
+    return xsignals;
 }
 
 

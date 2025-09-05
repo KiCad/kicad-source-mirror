@@ -70,6 +70,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_ground_pins.cpp
     erc/test_erc_bus_member_label_local_pins.cpp
     erc/test_erc_marker_deduplication.cpp
+    erc/test_erc_signal_pin_to_pin.cpp
 
     test_schematic_text_var_reactive.cpp
     test_annotation_refdes_tracker_units.cpp
@@ -161,6 +162,11 @@ set( QA_EESCHEMA_SRCS
     test_schematic_clipboard_export.cpp
     test_autoplace_fields.cpp
     test_field_case_conflicts.cpp
+
+    # Signals test suite
+    signals/test_signals.cpp
+    signals/test_signals_remove.cpp
+    signals/test_signals_branching.cpp
 )
 
 if( WIN32 )

@@ -132,6 +132,8 @@ protected:
      */
     XNODE* makeListOfNets( unsigned aCtl );
 
+    XNODE* makeSignals();
+
     /**
      * Fill out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.

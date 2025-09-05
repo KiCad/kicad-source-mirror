@@ -842,6 +842,26 @@ public:
      */
     bool IsInNetlist() const;
 
+    enum class PASSTHROUGH_MODE
+    {
+        DEFAULT,
+        BLOCK,
+        FORCE
+    };
+
+    PASSTHROUGH_MODE GetPassthroughMode() const { return m_passthroughMode; }
+    void SetPassthroughMode( PASSTHROUGH_MODE aMode ) { m_passthroughMode = aMode; }
+
+    // Back-compat helpers used by existing code and old file formats
+    bool GetPassthrough() const { return m_passthroughMode != PASSTHROUGH_MODE::BLOCK; }
+    void SetPassthrough( bool aEnable )
+    {
+        m_passthroughMode = aEnable ? PASSTHROUGH_MODE::FORCE : PASSTHROUGH_MODE::BLOCK;
+    }
+
+    const wxString& GetSignalName() const { return m_signalName; }
+    void SetSignalName( const wxString& aName ) { m_signalName = aName; }
+
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
@@ -1027,6 +1047,10 @@ private:
     std::unique_ptr<LIB_SYMBOL> m_part;          ///< A flattened copy of the #LIB_SYMBOL from the
                                                  ///< #PROJECT object's libraries.
     bool                        m_isInNetlist;   ///< True if the symbol should appear in netlist
+
+    PASSTHROUGH_MODE            m_passthroughMode;
+
+    wxString                    m_signalName;
 
     std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< A #SCH_PIN for every #LIB_PIN.
     std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< Library pin pointer : #SCH_PIN indices.

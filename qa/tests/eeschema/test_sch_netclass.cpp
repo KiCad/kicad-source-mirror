@@ -36,6 +36,12 @@ BOOST_AUTO_TEST_CASE( TestSubsheetNetclass )
 {
     LoadSchematic( SchematicQAPath( "issue14494" ) );
 
+    // Ensure connectivity is up-to-date so effective netclasses resolve via actual connections
+    {
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+        m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+    }
+
     SCH_SHEET_PATH path = m_schematic->BuildSheetListSortedByPageNumbers().at( 1 );
     SCH_SCREEN*    screen = path.GetSheet( 1 )->GetScreen();
 

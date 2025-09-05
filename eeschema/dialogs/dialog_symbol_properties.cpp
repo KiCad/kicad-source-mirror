@@ -564,6 +564,13 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_cbExcludeFromPosFiles->SetValue( m_symbol->GetExcludedFromPosFiles( &sheetPath, variantName ) );
     m_cbDNP->SetValue( m_symbol->GetDNP( &sheetPath, variantName ) );
 
+    switch( m_symbol->GetPassthroughMode() )
+    {
+    case SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT: m_choicePassthrough->SetSelection( 0 ); break;
+    case SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK:   m_choicePassthrough->SetSelection( 1 ); break;
+    case SCH_SYMBOL::PASSTHROUGH_MODE::FORCE:   m_choicePassthrough->SetSelection( 2 ); break;
+    }
+
     if( m_part )
     {
         m_ShowPinNumButt->SetValue( m_part->GetShowPinNumbers() );
@@ -836,6 +843,14 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromPosFiles( m_cbExcludeFromPosFiles->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetDNP( m_cbDNP->IsChecked(), &currentSheet, currentVariant );
+
+    switch( m_choicePassthrough->GetSelection() )
+    {
+    case 0: m_symbol->SetPassthroughMode( SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT ); break;
+    case 1: m_symbol->SetPassthroughMode( SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK );   break;
+    case 2: m_symbol->SetPassthroughMode( SCH_SYMBOL::PASSTHROUGH_MODE::FORCE );   break;
+    default: break;
+    }
 
     // Update any assignments
     if( m_dataModel )

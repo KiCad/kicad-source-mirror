@@ -27,6 +27,7 @@
 
 #include <advanced_config.h>
 #include <board.h>
+#include <netinfo.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
@@ -1975,6 +1976,50 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
             m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B,
                                 slot->GetWidth() + 2 * clearance );
+        }
+    }
+
+    if( m_pcbSettings.IsHighlightEnabled()
+            && m_pcbSettings.GetHighlightNetCodes().contains( aPad->GetNetCode() ) )
+    {
+        NETINFO_ITEM* net = aPad->GetNet();
+        if( net && ( net->GetTerminalPad( 0 ) == aPad || net->GetTerminalPad( 1 ) == aPad ) )
+        {
+            BOX2I box = aPad->GetBoundingBox();
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+
+            // Base emphasis (net highlight)
+            COLOR4D termColor = color.Brightened( 0.2 );
+            int baseWidth = m_pcbSettings.m_outlineWidth * 2;
+
+            // If a grouped signal highlight is active and this pad belongs to that signal,
+            // make the emphasis stronger (brighter + thicker + inset second rectangle).
+            if( !m_pcbSettings.m_highlightedSignal.IsEmpty()
+                    && net && net->GetSignal() == m_pcbSettings.m_highlightedSignal )
+            {
+                termColor = termColor.Brightened( 0.25 );
+                baseWidth = m_pcbSettings.m_outlineWidth * 3;
+            }
+
+            m_gal->SetStrokeColor( termColor );
+            m_gal->SetLineWidth( baseWidth );
+            m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
+
+            if( !m_pcbSettings.m_highlightedSignal.IsEmpty()
+                    && net && net->GetSignal() == m_pcbSettings.m_highlightedSignal )
+            {
+                // Draw an inner rectangle for additional visual distinction.
+                // Shrink by one outline width equivalent to avoid excessive size.
+                int inset = baseWidth * 2; // screen-space approx; acceptable heuristic
+                BOX2I inner = box;
+                inner.Inflate( -inset, -inset );
+                if( inner.GetWidth() > 0 && inner.GetHeight() > 0 )
+                {
+                    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+                    m_gal->DrawRectangle( inner.GetOrigin(), inner.GetEnd() );
+                }
+            }
         }
     }
 }

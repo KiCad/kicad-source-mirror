@@ -91,6 +91,10 @@ public:
     ///< Highlight net under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
+    ///< Highlight signal under the cursor.
+    int HighlightSignal( const TOOL_EVENT& aEvent );
+    int RemoveFromSignal( const TOOL_EVENT& aEvent );
+
     ///< Remove any net highlighting
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
@@ -99,6 +103,13 @@ public:
 
     ///< Launch a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
+
+    ///< Replace one of a signal's terminal pins.
+    int ReplaceTerminalPin( const TOOL_EVENT& aEvent );
+    int NameSignal( const TOOL_EVENT& aEvent );
+    int CreateSignalBetweenPins( const TOOL_EVENT& aEvent );
+
+    int LinkComponents( const TOOL_EVENT& aEvent );
 
     int AssignNetclass( const TOOL_EVENT& aEvent );
     int FindNetInInspector( const TOOL_EVENT& aEvent );

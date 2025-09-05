@@ -90,6 +90,13 @@ set( QA_PCBNEW_SRCS
     test_zone_filler.cpp
     test_poly_simplify.cpp
 
+    # Signals roundtrip tests
+    signals/test_signal_terminal_pads.cpp
+    # Signal aggregation / skew / total length tests
+    signals/test_signal_skew_tuning.cpp
+    signals/test_signal_total_length.cpp
+    signals/test_signal_total_length_sexpr.cpp
+
     drc/test_custom_rule_severities.cpp
     drc/test_drc_backdrill_postmachining.cpp
     drc/test_drc_courtyard_invalid.cpp

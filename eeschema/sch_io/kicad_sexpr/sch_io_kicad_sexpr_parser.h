@@ -36,6 +36,8 @@
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>
 #include <default_values.h>    // For some default values
+#include <map>
+#include <wx/string.h>
 
 
 class SCH_PIN;
@@ -118,6 +120,12 @@ public:
      * These are errors that were handled gracefully but should be reported to the user.
      */
     const std::vector<wxString>& GetParseWarnings() const { return m_parseWarnings; }
+
+    // Access parsed signal terminal overrides for consumers after ParseSchematic.
+    const std::map<wxString, std::pair<KIID, KIID>>& GetSignalTerminals() const
+    {
+        return m_signalTerminals;
+    }
 
 private:
     // Group membership info refers to other Uuids in the file.
@@ -262,6 +270,7 @@ private:
     SCH_TABLECELL* parseSchTableCell();
     SCH_TABLE* parseSchTable();
     void parseBusAlias( SCH_SCREEN* aScreen );
+    void parseSchSignal();
 
     void resolveGroups( SCH_SCREEN* aParent );
 
@@ -302,6 +311,8 @@ private:
     std::vector<GROUP_INFO> m_groupInfos;
 
     std::vector<wxString>   m_parseWarnings;    ///< Non-fatal warnings collected during parsing
+
+    std::map<wxString, std::pair<KIID, KIID>> m_signalTerminals;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

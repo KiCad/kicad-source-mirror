@@ -102,6 +102,8 @@ public:
 
     PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const override;
     int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override;
+    bool GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE aNetN,
+                             long long& aExtraLength, long long& aExtraDelay ) const override;
 
     void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
     void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }
@@ -165,6 +167,8 @@ public:
     int GetNetCode( PNS::NET_HANDLE aNet ) const override;
     wxString GetNetName( PNS::NET_HANDLE aNet ) const override;
     void UpdateNet( PNS::NET_HANDLE aNet ) override;
+    bool GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE aNetN,
+                             long long& aExtraLength, long long& aExtraDelay ) const override;
 
     EDA_UNITS GetUnits() const override;
 

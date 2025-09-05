@@ -202,6 +202,9 @@ public:
         return m_connectionGraph;
     }
 
+    const wxString& GetHighlightedSignal() const { return m_highlightedSignal; }
+    void SetHighlightedSignal( const wxString& aSignal ) { m_highlightedSignal = aSignal; }
+
     SCHEMATIC_SETTINGS& Settings() const;
 
     ERC_SETTINGS& ErcSettings() const;
@@ -578,6 +581,8 @@ private:
 
     /// Hold and calculate connectivity information of this schematic.
     CONNECTION_GRAPH* m_connectionGraph;
+
+    wxString m_highlightedSignal;
 
     /**
      * Holds a map of labels to the page sequence (virtual page number) that they appear on.

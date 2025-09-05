@@ -57,6 +57,8 @@ public:
 
     ///< Highlight net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
+    int HighlightSignal( const TOOL_EVENT& aEvent );
+    int ReplaceTerminalPad( const TOOL_EVENT& aEvent );
 
     ///< Clear all board highlights
     int ClearHighlight( const TOOL_EVENT& aEvent );
@@ -99,6 +101,8 @@ public:
     {
         return !m_currentlyHighlighted.empty();
     }
+
+    wxString m_highlightedSignal;
 
 private:
     ///< Recalculate dynamic ratsnest for the current selection.

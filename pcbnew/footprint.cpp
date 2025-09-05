@@ -2441,6 +2441,18 @@ PAD* FOOTPRINT::FindPadByNumber( const wxString& aPadNumber, PAD* aSearchAfterMe
 }
 
 
+PAD* FOOTPRINT::FindPadByUuid( const KIID& aUuid ) const
+{
+    for( PAD* pad : m_pads )
+    {
+        if( pad->m_Uuid == aUuid )
+            return pad;
+    }
+
+    return nullptr;
+}
+
+
 PAD* FOOTPRINT::GetPad( const VECTOR2I& aPosition, const LSET& aLayerMask )
 {
     for( PAD* pad : m_pads )

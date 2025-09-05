@@ -31,6 +31,8 @@ name
 names
 net
 nets
+signal
+signals
 node
 num
 part
@@ -55,3 +57,5 @@ aliases
 alias
 unit
 units
+terminal_pins
+terminal_pin
