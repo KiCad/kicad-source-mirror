@@ -1733,33 +1733,39 @@ BITMAPS PCB_DIM_CENTER::GetMenuImage() const
 
 const BOX2I PCB_DIM_CENTER::GetBoundingBox() const
 {
-    int halfWidth = VECTOR2I( m_end - m_start ).x + ( m_lineThickness / 2.0 );
-
     BOX2I bBox;
+    int   xmin, xmax, ymin, ymax;
 
-    bBox.SetX( m_start.x - halfWidth );
-    bBox.SetY( m_start.y - halfWidth );
-    bBox.SetWidth( halfWidth * 2 );
-    bBox.SetHeight( halfWidth * 2 );
+    xmin    = m_start.x;
+    xmax    = m_start.x;
+    ymin    = m_start.y;
+    ymax    = m_start.y;
+
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
+    {
+        BOX2I shapeBox = shape->BBox();
+        shapeBox.Inflate( m_lineThickness / 2 );
+
+        xmin = std::min( xmin, shapeBox.GetOrigin().x );
+        xmax = std::max( xmax, shapeBox.GetEnd().x );
+        ymin = std::min( ymin, shapeBox.GetOrigin().y );
+        ymax = std::max( ymax, shapeBox.GetEnd().y );
+    }
+
+    bBox.SetX( xmin );
+    bBox.SetY( ymin );
+    bBox.SetWidth( xmax - xmin + 1 );
+    bBox.SetHeight( ymax - ymin + 1 );
 
     bBox.Normalize();
 
     return bBox;
 }
 
-// fixme: we cannot use GetBoundingBox() as it returns the bbox of the 'leader' segment (used in hit testing and other non-view logic)
+
 const BOX2I PCB_DIM_CENTER::ViewBBox() const
 {
-    const int maxSize = std::max(m_end.x - m_start.x, m_end.y - m_start.y) + m_lineThickness / 2.0;
-
-    BOX2I bBox;
-
-    bBox.SetX( m_start.x - maxSize );
-    bBox.SetY( m_start.y - maxSize );
-    bBox.SetWidth( maxSize * 2 );
-    bBox.SetHeight( maxSize * 2 );
-
-   return bBox;
+    return GetBoundingBox();
 }
 
 
