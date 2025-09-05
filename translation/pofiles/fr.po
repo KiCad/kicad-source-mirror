@@ -839,7 +839,7 @@ msgstr "Modèles CMS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:116
 msgid "Virtual Models"
-msgstr "Modèles Vrtuels"
+msgstr "Modèles Virtuels"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:117
 msgid "Models not in POS File"
