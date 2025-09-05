@@ -59,25 +59,25 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
             &m_AuiPanels.properties_splitter, 0.5f ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.line_width",
-                                           &m_Defaults.line_width, 0 ) );
+            &m_Defaults.line_width, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.text_size",
-                                           &m_Defaults.text_size, DEFAULT_TEXT_SIZE ) );
+            &m_Defaults.text_size, DEFAULT_TEXT_SIZE ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.pin_length",
-                                           &m_Defaults.pin_length, DEFAULT_PIN_LENGTH ) );
+            &m_Defaults.pin_length, DEFAULT_PIN_LENGTH ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.pin_name_size",
-                                           &m_Defaults.pin_name_size, DEFAULT_PINNAME_SIZE ) );
+            &m_Defaults.pin_name_size, DEFAULT_PINNAME_SIZE ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.pin_num_size",
-                                           &m_Defaults.pin_num_size, DEFAULT_PINNUM_SIZE ) );
+            &m_Defaults.pin_num_size, DEFAULT_PINNUM_SIZE ) );
 
     m_params.emplace_back( new PARAM<int>( "repeat.label_delta",
-                                           &m_Repeat.label_delta, 1 ) );
+            &m_Repeat.label_delta, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( "repeat.pin_step",
-                                           &m_Repeat.pin_step, 100 ) );
+            &m_Repeat.pin_step, 100 ) );
 
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );
@@ -101,40 +101,43 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
             &m_ImportGraphics.dxf_units, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "show_pin_electrical_type",
-                                            &m_ShowPinElectricalType, true ) );
+            &m_ShowPinElectricalType, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "show_pin_alt_icons",
-                                            &m_ShowPinAltIcons, true ) );
+            &m_ShowPinAltIcons, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "show_hidden_lib_fields",
-                                            &m_ShowHiddenFields, true ) );
+            &m_ShowHiddenFields, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "show_hidden_lib_pins",
-                                            &m_ShowHiddenPins, true ) );
+            &m_ShowHiddenPins, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "drag_pins_along_with_edges",
-                                            &m_dragPinsAlongWithEdges, true ) );
+            &m_dragPinsAlongWithEdges, true ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_table_width",
-                                           &m_LibWidth, 250 ) );
+            &m_LibWidth, 250 ) );
 
     m_params.emplace_back( new PARAM<int>( "library.sort_mode",
-                                           &m_LibrarySortMode, 0 ) );
+            &m_LibrarySortMode, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "edit_symbol_visible_columns",
-                                                &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );
+            &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "pin_table_visible_columns",
-                                                &m_PinTableVisibleColumns, "0 1 2 3 4 5 9 10" ) );
+            &m_PinTableVisibleColumns, "0 1 2 3 4 5 9 10" ) );
 
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
-                                            &m_UseEeschemaColorSettings, true ) );
+            &m_UseEeschemaColorSettings, true ) );
 
-    m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths", &m_LibFieldEditor.field_widths, {} ) );
+    m_params.emplace_back( new PARAM_MAP<int>( "lib_field_editor.field_widths",
+            &m_LibFieldEditor.field_widths, {} ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.width", &m_LibFieldEditor.width, 0 ) );
+    m_params.emplace_back( new PARAM<wxString>( "lib_field_editor.view_controls_visible_columns",
+            &m_LibFieldEditor.view_controls_visible_columns, "0 2 3" ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.height", &m_LibFieldEditor.height, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "lib_field_editor.sash_pos",
+            &m_LibFieldEditor.sash_pos, 400 ) );
 
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "selection_filter",

@@ -35,7 +35,7 @@ wxString VIEW_CONTROLS_GRID_DATA_MODEL::GetColLabelValue( int aCol )
     switch( aCol )
     {
     case DISPLAY_NAME_COLUMN: return _( "Field" );
-    case LABEL_COLUMN:        return _( "BOM Name" );
+    case LABEL_COLUMN:        return m_forBOM ? _( "BOM Name" ) : _( "Label" );
     case SHOW_FIELD_COLUMN:   return _( "Include" );
     case GROUP_BY_COLUMN:     return _( "Group By" );
     default:                  return wxT( "unknown column" );
@@ -131,7 +131,7 @@ void VIEW_CONTROLS_GRID_DATA_MODEL::SetValueAsBool( int aRow, int aCol, bool aVa
 
 
 void VIEW_CONTROLS_GRID_DATA_MODEL::AppendRow( const wxString& aFieldName, const wxString& aBOMName,
-                                                 bool aShow, bool aGroupBy )
+                                               bool aShow, bool aGroupBy )
 {
     m_fields.emplace_back( BOM_FIELD{ aFieldName, aBOMName, aShow, aGroupBy } );
 
@@ -326,8 +326,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 }
 
 
-wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol,
-                                                        wxGridCellAttr::wxAttrKind aKind )
+wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
             || IsURL( GetValue( m_rows[aRow], aCol ) ) )
@@ -363,11 +362,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
         {
             const KIID& symbolID = ref.GetSymbol()->m_Uuid;
 
-            if( !m_dataStore.count( symbolID )
-                || !m_dataStore[symbolID].count( m_cols[aCol].m_fieldName ) )
-            {
+            if( !m_dataStore.contains( symbolID ) || !m_dataStore[symbolID].contains( m_cols[aCol].m_fieldName ) )
                 return INDETERMINATE_STATE;
-            }
 
             wxString refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
 
@@ -586,8 +582,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef,
-                                               const SCH_REFERENCE& rhRef )
+bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
 {
     // If items are unannotated then we can't tell if they're units of the same symbol or not
     if( lhRef.GetRefNumber() == wxT( "?" ) )
@@ -597,9 +592,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef,
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
-                                                const SCH_REFERENCE& rhRef )
-
+bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
 {
     int  refCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
     bool matchFound = false;
@@ -710,8 +703,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_SYMBOL& aSymbol,
-                                                           const wxString&   aAttributeName )
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_SYMBOL& aSymbol, const wxString& aAttributeName )
 {
     if( aAttributeName == wxS( "${DNP}" ) )
         return aSymbol.GetDNP() ? wxS( "1" ) : wxS( "0" );

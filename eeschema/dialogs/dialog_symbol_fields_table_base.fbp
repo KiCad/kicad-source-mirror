@@ -336,7 +336,7 @@
                                 <property name="col_label_values">&quot;Field&quot; &quot;BOM Name&quot; &quot;Include&quot; &quot;Group By&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                 <property name="cols">4</property>
-                                <property name="column_sizes">80,80,46,56</property>
+                                <property name="column_sizes">60,60,46,56</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>
@@ -3018,7 +3018,7 @@
           <property name="border">5</property>
           <property name="flag">wxEXPAND</property>
           <property name="proportion">0</property>
-          <object class="wxBoxSizer" expanded="false">
+          <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
             <property name="name">bButtonsSizer</property>
             <property name="orient">wxHORIZONTAL</property>

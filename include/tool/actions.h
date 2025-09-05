@@ -264,8 +264,8 @@ public:
     static TOOL_ACTION updateSchematicFromPcb;
     static TOOL_ACTION showProperties;
     static TOOL_ACTION showDatasheet;
-    static TOOL_ACTION showLibraryTable;
-    static TOOL_ACTION showRelatedLibraryTable;
+    static TOOL_ACTION showLibraryFieldsTable;
+    static TOOL_ACTION showRelatedLibraryFieldsTable;
 
     // Internal
     static TOOL_ACTION updateMenu;

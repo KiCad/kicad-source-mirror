@@ -27,7 +27,7 @@
 #include <advanced_config.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
-#include <dialogs/dialog_lib_fields.h>
+#include <dialogs/dialog_lib_fields_table.h>
 #include <gestfich.h> // To open with a text editor
 #include <kidialog.h>
 #include <kiway.h>
@@ -117,14 +117,6 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     return false;
                 };
 
-/* not used, but used to be used
-        auto multiSelectedCondition =
-                [this]( const SELECTION& aSel )
-                {
-                    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-                    return editFrame && editFrame->GetTreeSelectionCount() > 1;
-                };
-*/
         auto multiSymbolSelectedCondition =
                 [this]( const SELECTION& aSel )
                 {
@@ -178,29 +170,6 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                 };
 
 
-        auto librarySelectedCondition = [this]( const SELECTION& aSel ) -> bool
-        {
-            bool      result = false;
-            LIB_TREE* libTree = m_frame->GetLibTree();
-
-            if( libTree )
-            {
-                std::vector<LIB_TREE_NODE*> selection;
-                libTree->GetSelectedTreeNodes( selection );
-
-                if( selection.size() == 1 )
-                {
-                    const LIB_TREE_NODE* lib = selection[0];
-                    if( lib && lib->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
-                    {
-                        result = true;
-                    }
-                }
-            }
-
-            return result;
-        };
-
 // clang-format off
         ctxMenu.AddItem( SCH_ACTIONS::newSymbol,                libInferredCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::deriveFromExistingSymbol, symbolSelectedCondition, 10 );
@@ -240,8 +209,8 @@ bool SYMBOL_EDITOR_CONTROL::Init()
             ctxMenu.AddItem( ACTIONS::openDirectory,      canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
         }
 
-        ctxMenu.AddItem( ACTIONS::showLibraryTable,        librarySelectedCondition, 300 );
-        ctxMenu.AddItem( ACTIONS::showRelatedLibraryTable, symbolSelectedCondition,  300 );
+        ctxMenu.AddItem( ACTIONS::showLibraryFieldsTable,        libInferredCondition, 300 );
+        ctxMenu.AddItem( ACTIONS::showRelatedLibraryFieldsTable, symbolSelectedCondition,  300 );
 
         libraryTreeTool->AddContextMenuItems( &ctxMenu );
     }
@@ -974,33 +943,13 @@ int SYMBOL_EDITOR_CONTROL::ChangeUnit( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
-    SYMBOL_EDIT_FRAME*          editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
-    wxString                    libName = editFrame->GetTreeLIBID().GetLibNickname();
-    wxArrayString               symbolNames;
+    DIALOG_LIB_FIELDS_TABLE::SCOPE scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_LIBRARY;
 
-    if( aEvent.IsAction( &ACTIONS::showRelatedLibraryTable ) )
-    {
-        LIB_ID symId = editFrame->GetTargetLibId();
+    if( aEvent.IsAction( &ACTIONS::showRelatedLibraryFieldsTable ) )
+        scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_RELATED_SYMBOLS;
 
-        const LIB_SYMBOL* sym = libMgr.GetBufferedSymbol( symId.GetLibItemName(), libName );
-        wxCHECK_MSG( sym, 0, _( "Failed to find symbol" ) );
+    DIALOG_LIB_FIELDS_TABLE dlg( getEditFrame<SYMBOL_EDIT_FRAME>(), scope );
 
-        LIB_SYMBOL_SPTR root = sym->GetRootSymbol();
-        wxCHECK_MSG( root, 0, _( "Failed to find root symbol" ) );
-
-        symbolNames.Add( root->GetName() );
-        // Now we have the root symbol, collect all its derived symbols
-        libMgr.GetDerivedSymbolNames( root->GetName(), libName, symbolNames );
-    }
-    else
-    {
-        // Get all symbol names from the library manager
-        editFrame->GetLibManager().GetSymbolNames( libName, symbolNames );
-    }
-
-    DIALOG_LIB_FIELDS dlg( editFrame, libName, symbolNames );
-    dlg.SetTitle( _( "Library Fields" ) );
     dlg.ShowModal();
     return 0;
 }
@@ -1052,8 +1001,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    SCH_ACTIONS::showHiddenFields.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     SCH_ACTIONS::togglePinAltIcons.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showLibraryTable.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showRelatedLibraryTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showLibraryFieldsTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showRelatedLibraryFieldsTable.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );

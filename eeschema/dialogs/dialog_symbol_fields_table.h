@@ -22,9 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_SYMBOL_FIELDS_TABLE_H
-#define DIALOG_SYMBOL_FIELDS_TABLE_H
-
+#pragma once
 
 #include <dialog_symbol_fields_table_base.h>
 #include <sch_reference_list.h>
@@ -66,32 +64,33 @@ private:
 
     void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
+    void OnAddField( wxCommandEvent& event ) override;
+    void OnRemoveField( wxCommandEvent& event ) override;
+    void OnRenameField( wxCommandEvent& event ) override;
 
     void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
-	void OnScope( wxCommandEvent& event ) override;
+    void OnFilterText( wxCommandEvent& aEvent ) override;
+    void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnScope( wxCommandEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
+    void OnMenu( wxCommandEvent& event ) override;
+
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
-    void OnAddField( wxCommandEvent& event ) override;
-    void OnRemoveField( wxCommandEvent& event ) override;
-    void OnRenameField( wxCommandEvent& event ) override;
     void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
-    void OnClose( wxCloseEvent& aEvent ) override;
     void OnOk( wxCommandEvent& aEvent ) override;
-    void OnFilterText( wxCommandEvent& aEvent ) override;
-    void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnClose( wxCloseEvent& aEvent ) override;
 
     void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
     void OnPageChanged( wxNotebookEvent& event ) override;
     void OnPreviewRefresh( wxCommandEvent& event ) override;
-    void OnMenu( wxCommandEvent& event ) override;
     void PreviewRefresh();
 
     std::vector<BOM_PRESET> GetUserBomPresets() const;
@@ -161,5 +160,3 @@ private:
 
     JOB_EXPORT_SCH_BOM* m_job;
 };
-
-#endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */

@@ -122,8 +122,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_label_properties_base.cpp
     dialogs/dialog_lib_edit_pin_table.cpp
     dialogs/dialog_lib_edit_pin_table_base.cpp
-    dialogs/dialog_lib_fields_base.cpp
-    dialogs/dialog_lib_fields.cpp
+    dialogs/dialog_lib_fields_table_base.cpp
+    dialogs/dialog_lib_fields_table.cpp
     dialogs/dialog_lib_new_symbol.cpp
     dialogs/dialog_lib_new_symbol_base.cpp
     dialogs/dialog_lib_symbol_properties.cpp

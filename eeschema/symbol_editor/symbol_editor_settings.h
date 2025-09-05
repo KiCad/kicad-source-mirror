@@ -65,11 +65,11 @@ public:
         int      dxf_units;
     };
 
-    struct LIB_FIELD_EDITOR
+    struct PANEL_LIB_FIELDS_TABLE
     {
         std::map<std::string, int> field_widths;
-        int                        width;
-        int                        height;
+        wxString                   view_controls_visible_columns;
+        int                        sash_pos;
     };
 
     SYMBOL_EDITOR_SETTINGS();
@@ -106,7 +106,7 @@ public:
 
     SCH_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
-    LIB_FIELD_EDITOR m_LibFieldEditor;
+    PANEL_LIB_FIELDS_TABLE m_LibFieldEditor;
 
 protected:
 

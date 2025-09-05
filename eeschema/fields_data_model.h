@@ -41,7 +41,8 @@ struct BOM_FMT_PRESET;
 class VIEW_CONTROLS_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
 public:
-    VIEW_CONTROLS_GRID_DATA_MODEL()
+    VIEW_CONTROLS_GRID_DATA_MODEL( bool aForBOM ) :
+            m_forBOM( aForBOM )
     {}
 
     ~VIEW_CONTROLS_GRID_DATA_MODEL() override = default;
@@ -88,6 +89,7 @@ public:
     void SetCanonicalFieldName( int aRow, const wxString& aName );
 
 protected:
+    bool                   m_forBOM;
     std::vector<BOM_FIELD> m_fields;
 };
 
@@ -133,8 +135,8 @@ public:
     enum SCOPE : int
     {
         SCOPE_ALL = 0,
-        SCOPE_SHEET = 1,
-        SCOPE_SHEET_RECURSIVE = 2
+        SCOPE_SHEET,
+        SCOPE_SHEET_RECURSIVE
     };
 
     FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
@@ -332,8 +334,9 @@ public:
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
-    bool        unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
-    bool        groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
+
+    bool unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
+    bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
 
     // Helper functions to deal with translating wxGrid values to and from
     // named field values like ${DNP}
@@ -349,8 +352,7 @@ private:
      * @retval true if the symbol attribute value has changed.
      * @retval false if the symbol attribute has **not** changed.
      */
-    bool     setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName,
-                                const wxString& aValue );
+    bool setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName, const wxString& aValue );
 
     /* Helper function to get the resolved field value.
      * Handles symbols that are missing fields that would have a variable
@@ -360,8 +362,6 @@ private:
 
     void Sort();
 
-    SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
-    void               storeReferenceFields( SCH_REFERENCE& aRef );
     void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
 
 protected:
@@ -376,7 +376,7 @@ protected:
     int                m_sortColumn;
     bool               m_sortAscending;
     wxString           m_filter;
-    enum SCOPE         m_scope;
+    SCOPE              m_scope;
     SCH_SHEET_PATH     m_path;
     bool               m_groupingEnabled;
     bool               m_excludeDNP;

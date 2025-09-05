@@ -41,8 +41,8 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_viewControlsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_viewControlsGrid->SetColSize( 0, 80 );
-	m_viewControlsGrid->SetColSize( 1, 80 );
+	m_viewControlsGrid->SetColSize( 0, 60 );
+	m_viewControlsGrid->SetColSize( 1, 60 );
 	m_viewControlsGrid->SetColSize( 2, 46 );
 	m_viewControlsGrid->SetColSize( 3, 56 );
 	m_viewControlsGrid->EnableDragColMove( false );

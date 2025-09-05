@@ -17,71 +17,76 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_LIB_FIELDS_H
-#define DIALOG_LIB_FIELDS_H
+#pragma once
 
-#include <dialog_lib_fields_base.h>
+#include <dialog_lib_fields_table_base.h>
 #include <sch_reference_list.h>
-#include <widgets/grid_text_button_helpers.h>
+#include <lib_fields_data_model.h>
 
 class SYMBOL_EDIT_FRAME;
-class LIB_FIELDS_EDITOR_GRID_DATA_MODEL;
 class LIB_SYMBOL;
 
-class DIALOG_LIB_FIELDS : public DIALOG_LIB_FIELDS_BASE
+
+class DIALOG_LIB_FIELDS_TABLE : public DIALOG_LIB_FIELDS_TABLE_BASE
 {
 public:
-    DIALOG_LIB_FIELDS( SYMBOL_EDIT_FRAME* parent, wxString libId, const wxArrayString& aSymbolNames );
-    ~DIALOG_LIB_FIELDS() override;
+    enum SCOPE : int
+    {
+        SCOPE_LIBRARY = 0,
+        SCOPE_RELATED_SYMBOLS
+    };
 
-    void OnInit();
+    DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* parent, DIALOG_LIB_FIELDS_TABLE::SCOPE aScope );
+    ~DIALOG_LIB_FIELDS_TABLE() override;
 
-protected:
-    void OnClose( wxCloseEvent& event ) override;
-    void OnColumnItemToggled( wxDataViewEvent& event ) override;
-    void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
-    void OnSizeFieldList( wxSizeEvent& event ) override;
-    void OnAddField( wxCommandEvent& event ) override;
-    void OnRenameField( wxCommandEvent& event ) override;
-    void OnRemoveField( wxCommandEvent& event ) override;
-    void OnFilterMouseMoved( wxMouseEvent& event ) override;
-    void OnFilterText( wxCommandEvent& event ) override;
-    void OnRegroupSymbols( wxCommandEvent& event ) override;
-    void OnTableValueChanged( wxGridEvent& event ) override;
-    void OnTableCellClick( wxGridEvent& event ) override;
-    void OnTableItemContextMenu( wxGridEvent& event ) override;
-    void OnTableColSize( wxGridSizeEvent& event ) override;
-    void OnCancel( wxCommandEvent& event ) override;
-    void OnOk( wxCommandEvent& event ) override;
-    void OnApply( wxCommandEvent& event ) override;
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    void ShowHideColumn( int aCol, bool aShow );
 
 private:
     void UpdateFieldList();
-    void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool show, bool groupBy, bool addedByUser = false, bool aIsCheckbox = false );
+    void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool show, bool groupBy,
+                   bool addedByUser = false, bool aIsCheckbox = false );
     void RemoveField( const wxString& fieldName );
     void RenameField( const wxString& oldName, const wxString& newName );
     void RegroupSymbols();
 
     void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
-    void OnColLabelChange( wxDataViewEvent& aEvent );
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
+    void setScope( SCOPE aScope );
 
     void loadSymbols( const wxArrayString& aSymbolNames );
 
-    wxString                           m_libId;
-    SYMBOL_EDIT_FRAME*                 m_parent;
+    void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
+    void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
+    void OnAddField( wxCommandEvent& event ) override;
+    void OnRenameField( wxCommandEvent& event ) override;
+    void OnRemoveField( wxCommandEvent& event ) override;
 
-    int                                m_fieldNameColWidth;
-    int                                m_labelColWidth;
-    int                                m_showColWidth;
-    int                                m_groupByColWidth;
+    void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnFilterText( wxCommandEvent& event ) override;
+    void OnScope( wxCommandEvent& event ) override;
+    void OnRegroupSymbols( wxCommandEvent& event ) override;
+
+    void OnTableValueChanged( wxGridEvent& event ) override;
+    void OnTableCellClick( wxGridEvent& event ) override;
+    void OnTableItemContextMenu( wxGridEvent& event ) override;
+    void OnTableColSize( wxGridSizeEvent& event ) override;
+
+    void OnCancel( wxCommandEvent& event ) override;
+    void OnOk( wxCommandEvent& event ) override;
+    void OnApply( wxCommandEvent& event ) override;
+    void OnClose( wxCloseEvent& event ) override;
+
+private:
+    SYMBOL_EDIT_FRAME*                 m_parent;
+    SCOPE                              m_scope;
+
+    VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel;
 
     LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
     std::vector<LIB_SYMBOL*>           m_symbolsList;
 };
-
-
-#endif // DIALOG_LIB_FIELDS_H

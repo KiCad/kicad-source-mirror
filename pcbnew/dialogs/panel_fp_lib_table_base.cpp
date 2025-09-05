@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -154,7 +154,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	bButtonsSizer->Add( 20, 0, 1, wxEXPAND, 5 );
 
 	m_resetGlobal = new wxButton( this, wxID_ANY, _("Reset Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_resetGlobal, 0, wxALL, 5 );
+	bButtonsSizer->Add( m_resetGlobal, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bButtonsSizer->Add( 0, 0, 0, wxEXPAND, 5 );

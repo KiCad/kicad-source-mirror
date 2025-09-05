@@ -208,7 +208,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
-    m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL();
+    m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
 
     m_viewControlsGrid->UseNativeColHeader( true );
     m_viewControlsGrid->SetTable( m_viewControlsDataModel, true );
@@ -328,11 +328,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     finishDialogSettings();
 
-    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+    SetSize( wxSize( horizPixelsFromDU( 600 ), vertPixelsFromDU( 300 ) ) );
 
-    wxSize dlgSize( cfg.width > 0 ? cfg.width : horizPixelsFromDU( 600 ),
-                    cfg.height > 0 ? cfg.height : vertPixelsFromDU( 300 ) );
-    SetSize( dlgSize );
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
     m_nbPages->SetSelection( cfg.page );
 
@@ -358,8 +356,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     Center();
 
     // Connect Events
-    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
-    m_grid->Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
+    m_grid->Bind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColSort, this );
+    m_grid->Bind( wxEVT_GRID_COL_MOVE, &DIALOG_SYMBOL_FIELDS_TABLE::OnColMove, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_viewControlsGrid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged, this );
@@ -375,9 +373,42 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
         m_grid->EnableEditing( false );
         m_buttonApply->Hide();
         m_buttonExport->Hide();
-
-        SetupStandardButtons();
     }
+}
+
+
+DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
+{
+    savePresetsToSchematic();
+    m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+
+    cfg.page = m_nbPages->GetSelection();
+    cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
+    cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
+    {
+        if( m_grid->IsColShown( i ) )
+        {
+            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
+            cfg.field_widths[fieldName] = m_grid->GetColSize( i );
+        }
+    }
+
+    // Disconnect Events
+    m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColSort, this );
+    m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColMove, this );
+    m_cbBomPresets->Unbind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
+    m_cbBomFmtPresets->Unbind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
+    m_viewControlsGrid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged, this );
+
+    // Delete the GRID_TRICKS.
+    m_viewControlsGrid->PopEventHandler( true );
+    m_grid->PopEventHandler( true );
+
+    // we gave ownership of m_viewControlsDataModel & m_dataModel to the wxGrids...
 }
 
 
@@ -493,28 +524,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
 }
 
 
-DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
-{
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        cfg->m_FieldEditorPanel.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
-        cfg->m_FieldEditorPanel.sash_pos = m_splitterMainWindow->GetSashPosition();
-    }
-
-    // Disconnect Events
-    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ),
-                        nullptr, this );
-    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ),
-                        nullptr, this );
-
-    // Delete the GRID_TRICKS.
-    m_viewControlsGrid->PopEventHandler( true );
-    m_grid->PopEventHandler( true );
-
-    // we gave ownership of m_viewControlsDataModel & m_dataModel to the wxGrids...
-}
-
-
 bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
@@ -525,7 +534,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     SCH_SELECTION&      selection = selectionTool->GetSelection();
     SCH_SYMBOL*         symbol = nullptr;
 
-    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
     switch( cfg.scope )
     {
@@ -857,6 +866,29 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::setScope( SCOPE aScope )
+{
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+
+    cfg.scope = aScope;
+
+    m_dataModel->SetPath( m_parent->GetCurrentSheet() );
+    m_dataModel->SetScope( aScope );
+    m_dataModel->RebuildRows();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetSelection() )
+    {
+    case 0: setScope( SCOPE::SCOPE_ALL );             break;
+    case 1: setScope( SCOPE::SCOPE_SHEET );           break;
+    case 2: setScope( SCOPE::SCOPE_SHEET_RECURSIVE ); break;
+    }
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
     m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
@@ -869,7 +901,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 {
-    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
     // Build a pop menu:
     wxMenu menu;
@@ -1112,29 +1144,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::setScope( SCOPE aScope )
-{
-    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
-
-    cfg.scope = aScope;
-
-    m_dataModel->SetPath( m_parent->GetCurrentSheet() );
-    m_dataModel->SetScope( aScope );
-    m_dataModel->RebuildRows();
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
-{
-    switch( aEvent.GetSelection() )
-    {
-    case 0: setScope( SCOPE::SCOPE_ALL );             break;
-    case 1: setScope( SCOPE::SCOPE_SHEET );           break;
-    case 2: setScope( SCOPE::SCOPE_SHEET_RECURSIVE ); break;
-    }
-}
-
-
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
     if( m_dataModel->ColIsReference( event.GetCol() ) )
@@ -1153,7 +1162,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
-    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
@@ -1221,16 +1230,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeViewControlsGrid( wxSizeEvent& event )
 
     if( m_viewControlsGrid->IsColShown( DISPLAY_NAME_COLUMN ) && m_viewControlsGrid->IsColShown( LABEL_COLUMN ) )
     {
-        m_viewControlsGrid->SetColSize( DISPLAY_NAME_COLUMN, remainingWidth / 2 );
-        m_viewControlsGrid->SetColSize( LABEL_COLUMN, remainingWidth - ( remainingWidth / 2 ) );
+        m_viewControlsGrid->SetColSize( DISPLAY_NAME_COLUMN, std::max( remainingWidth / 2, 60 ) );
+        m_viewControlsGrid->SetColSize( LABEL_COLUMN, std::max( remainingWidth - ( remainingWidth / 2 ), 60 ) );
     }
     else if( m_viewControlsGrid->IsColShown( DISPLAY_NAME_COLUMN ) )
     {
-        m_viewControlsGrid->SetColSize( DISPLAY_NAME_COLUMN, remainingWidth );
+        m_viewControlsGrid->SetColSize( DISPLAY_NAME_COLUMN, std::max( remainingWidth, 60 ) );
     }
     else if( m_viewControlsGrid->IsColShown( LABEL_COLUMN ) )
     {
-        m_viewControlsGrid->SetColSize( LABEL_COLUMN, remainingWidth );
+        m_viewControlsGrid->SetColSize( LABEL_COLUMN, std::max( remainingWidth, 60 ) );
     }
 
     event.Skip();
@@ -1478,7 +1487,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
         return;
     }
 
-    // This is a cancel, so commit quietly as we're going to throw the results away anyway.
     m_grid->CommitPendingChanges( true );
 
     if( m_dataModel->IsEdited() && aEvent.CanVeto() )
@@ -1496,26 +1504,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
     // Stop listening to schematic events
     m_parent->Schematic().RemoveListener( this );
-
-    // Save all our settings since we're really closing
-    savePresetsToSchematic();
-    m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
-
-    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-
-    cfg->m_FieldEditorPanel.width = GetSize().x;
-    cfg->m_FieldEditorPanel.height = GetSize().y;
-    cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
-
-    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
-    {
-        if( m_grid->IsColShown( i ) )
-        {
-            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
-        }
-    }
-
     m_parent->ClearFocus();
 
     wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
@@ -2034,12 +2022,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
     int idx = 0;
     int default_idx = 0;
 
-    for( std::pair<const wxString, BOM_FMT_PRESET>& pair : m_bomFmtPresets )
+    for( const auto& [presetName, preset] : m_bomFmtPresets )
     {
-        m_cbBomFmtPresets->Append( wxGetTranslation( pair.first ),
-                                   static_cast<void*>( &pair.second ) );
+        m_cbBomFmtPresets->Append( wxGetTranslation( presetName ), (void*) &preset );
 
-        if( pair.first == BOM_FMT_PRESET::CSV().name )
+        if( presetName == BOM_FMT_PRESET::CSV().name )
             default_idx = idx;
 
         idx++;

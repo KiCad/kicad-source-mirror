@@ -230,11 +230,9 @@ public:
         std::vector<BOM_PLUGIN_SETTINGS> plugins;
     };
 
-    struct PANEL_FIELD_EDITOR
+    struct PANEL_SYMBOL_FIELDS_TABLE
     {
         std::map<std::string, int> field_widths;
-        int                        width;
-        int                        height;
         int                        page;
         wxString                   export_filename;
         int                        selection_mode;
@@ -347,7 +345,7 @@ public:
 
     PANEL_BOM m_BomPanel;
 
-    PANEL_FIELD_EDITOR m_FieldEditorPanel;
+    PANEL_SYMBOL_FIELDS_TABLE m_FieldEditorPanel;
 
     PANEL_LIB_VIEW m_LibViewPanel;
 

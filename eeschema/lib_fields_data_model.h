@@ -16,39 +16,22 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#pragma once
+
 #include <sch_reference_list.h>
 #include <wx/grid.h>
 #include <wx/arrstr.h>
 #include <widgets/grid_striped_renderer.h>
-// The field name in the data model (translated)
-#define DISPLAY_NAME_COLUMN   0
-
-// The field name's label for exporting (CSV, etc.)
-#define LABEL_COLUMN          1
-#define SHOW_FIELD_COLUMN     2
-#define GROUP_BY_COLUMN       3
-
-// The internal field name (untranslated)
-#define FIELD_NAME_COLUMN     4
-
-struct BOM_FIELD;
-struct BOM_PRESET;
-struct BOM_FMT_PRESET;
-
-enum GROUP_TYPE
-{
-    GROUP_SINGLETON,
-    GROUP_COLLAPSED,
-    GROUP_COLLAPSED_DURING_SORT,
-    GROUP_EXPANDED,
-    CHILD_ITEM
-};
+#include <fields_data_model.h>
 
 
 struct LIB_DATA_MODEL_ROW
 {
-    LIB_DATA_MODEL_ROW( const LIB_SYMBOL* aFirstReference, GROUP_TYPE aType )
-        : m_ItemNumber( 0 ), m_Flag( aType ), m_Refs( { aFirstReference } )
+    LIB_DATA_MODEL_ROW( const LIB_SYMBOL* aFirstReference, GROUP_TYPE aType ) :
+            m_ItemNumber( 0 ),
+            m_Flag( aType ),
+            m_Refs( { aFirstReference } )
     {
     }
 
@@ -94,33 +77,25 @@ struct LIB_DATA_ELEMENT
 };
 
 
-class LIB_FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
+class LIB_FIELDS_EDITOR_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
 public:
-    enum SCOPE : int
-    {
-        SCOPE_ALL = 0,
-        SCOPE_SHEET = 1,
-        SCOPE_SHEET_RECURSIVE = 2
-    };
-
-    LIB_FIELDS_EDITOR_GRID_DATA_MODEL( const std::vector<LIB_SYMBOL*>& aSymbolsList ) :
-            m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
-            m_sortAscending( false ), m_filter( wxEmptyString ), m_scope( SCOPE_ALL ),
-            m_path(), m_groupingEnabled( false ), m_cols(), m_rows(),
-            m_dataStore(), m_stripedStringRenderer( nullptr )
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL() :
+            m_edited( false ),
+            m_sortColumn( 0 ),
+            m_sortAscending( false ),
+            m_filter( wxEmptyString ),
+            m_groupingEnabled( false ),
+            m_stripedStringRenderer( nullptr )
     {
     }
 
-    ~LIB_FIELDS_EDITOR_GRID_DATA_MODEL()
+    ~LIB_FIELDS_EDITOR_GRID_DATA_MODEL() override
     {
-        for (auto& pair : m_stripedRenderers)
+        for( auto& pair : m_stripedRenderers )
             pair.second->DecRef();
 
         m_stripedRenderers.clear();
-
-        for( const auto& [col, attr] : m_colAttrs )
-            wxSafeDecRef( attr );
     }
 
     static const wxString QUANTITY_VARIABLE;
@@ -138,13 +113,19 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
 
         if( aCol == aNewPos )
+        {
             return;
+        }
         else if( aCol < aNewPos )
+        {
             std::rotate( std::begin( m_cols ) + aCol, std::begin( m_cols ) + aCol + 1,
                          std::begin( m_cols ) + aNewPos + 1 );
+        }
         else
+        {
             std::rotate( std::begin( m_cols ) + aNewPos, std::begin( m_cols ) + aCol,
                          std::begin( m_cols ) + aCol + 1 );
+        }
     }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
@@ -155,7 +136,6 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_label = aLabel;
     }
-
 
     wxString GetColLabelValue( int aCol ) override
     {
@@ -208,9 +188,12 @@ public:
     void GetSymbolNames( wxArrayString& aList )
     {
         aList.Clear();
+
         for( const LIB_SYMBOL* symbol : m_symbolsList )
             aList.Add( symbol->GetName() );
     }
+
+    void SetSymbols( const std::vector<LIB_SYMBOL*>& aSymbolsList ) { m_symbolsList = aSymbolsList; }
     void RebuildRows();
 
     void ExpandRow( int aRow );
@@ -290,22 +273,16 @@ public:
         return m_rows[aRow].m_Flag == GROUP_SINGLETON || m_rows[aRow].m_Flag == CHILD_ITEM;
     }
 
-    void SetColAttr( wxGridCellAttr* aAttr, int aCol ) override
-    {
-        wxSafeDecRef( m_colAttrs[aCol] );
-        m_colAttrs[aCol] = aAttr;
-    }
-
 private:
     static bool cmp( const LIB_DATA_MODEL_ROW& lhGroup, const LIB_DATA_MODEL_ROW& rhGroup,
                      LIB_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
-    bool        groupMatch( const LIB_SYMBOL* lhRef, const LIB_SYMBOL* rhRef );
-    wxString getAttributeValue( const LIB_SYMBOL*, const wxString& aAttributeName );
-    void     setAttributeValue( LIB_SYMBOL* aSymbol, const wxString& aAttributeName,
-                                const wxString& aValue );
 
-    void     createActualDerivedSymbol( const LIB_SYMBOL* aParentSymbol, const wxString& aNewSymbolName,
-                                        const KIID& aNewSymbolUuid );
+    bool groupMatch( const LIB_SYMBOL* lhRef, const LIB_SYMBOL* rhRef );
+    wxString getAttributeValue( const LIB_SYMBOL*, const wxString& aAttributeName );
+    void setAttributeValue( LIB_SYMBOL* aSymbol, const wxString& aAttributeName, const wxString& aValue );
+
+    void createActualDerivedSymbol( const LIB_SYMBOL* aParentSymbol, const wxString& aNewSymbolName,
+                                    const KIID& aNewSymbolUuid );
 
     void Sort();
 
@@ -320,16 +297,14 @@ protected:
     int                      m_sortColumn;
     bool                     m_sortAscending;
     wxString                 m_filter;
-    enum SCOPE               m_scope;
-    SCH_SHEET_PATH           m_path;
     bool                     m_groupingEnabled;
 
     std::vector<LIB_DATA_MODEL_COL> m_cols;
     std::vector<LIB_DATA_MODEL_ROW> m_rows;
 
     // Data store
-    // The data model is fundamentally m_componentRefs X m_fieldNames.
-    // A map of compID : fieldSet, where fieldSet is a map of fieldName : LIB_DATA_ELEMENT
+    // The data model is fundamentally symbols X fieldNames.
+    // A map of symbolID : fieldSet, where fieldSet is a map of fieldName : LIB_DATA_ELEMENT
     std::map<KIID, std::map<wxString, LIB_DATA_ELEMENT>> m_dataStore;
 
     // Track newly created derived symbols for library manager integration
@@ -338,7 +313,4 @@ protected:
     // stripe bitmap support
     mutable STRIPED_STRING_RENDERER* m_stripedStringRenderer;
     mutable std::map<wxString, wxGridCellRenderer*> m_stripedRenderers;
-
-    // Column attributes storage
-    std::map<int, wxGridCellAttr*> m_colAttrs;
 };
