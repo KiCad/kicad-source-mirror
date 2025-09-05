@@ -527,6 +527,17 @@ public:
     }
 
     /**
+     * Sort the list by the symbol pointer.
+     *
+     * Because symbols are shared in complex hierarchies, this sorting can be used to coalesce symbol
+     * instance changes into a single commit instead of per instances commits.
+     */
+    void SortBySymbolPtr()
+    {
+        sort( m_flatList.begin(), m_flatList.end(), sortBySymbolPtr );
+    }
+
+    /**
      * Search the list for a symbol with a given reference.
      */
     int FindRef( const wxString& aPath ) const;
@@ -619,6 +630,8 @@ private:
     static bool sortByTimeStamp( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByReferenceOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
+
+    static bool sortBySymbolPtr( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     // Used for sorting static sortByTimeStamp function
     friend class BACK_ANNOTATE;

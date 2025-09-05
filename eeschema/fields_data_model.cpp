@@ -728,18 +728,36 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_SYMBOL& aSy
     return wxS( "0" );
 }
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_SYMBOL&     aSymbol,
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_SYMBOL&     aSymbol,
                                                        const wxString& aAttributeName,
                                                        const wxString& aValue )
 {
+    bool attrChanged = false;
+    bool newValue = aValue == wxS( "1" );
+
     if( aAttributeName == wxS( "${DNP}" ) )
-        aSymbol.SetDNP( aValue == wxS( "1" ) );
+    {
+        attrChanged = aSymbol.GetDNP() != newValue;
+        aSymbol.SetDNP( newValue );
+    }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        aSymbol.SetExcludedFromBoard( aValue == wxS( "1" ) );
+    {
+        attrChanged = aSymbol.GetExcludedFromBoard() != newValue;
+        aSymbol.SetExcludedFromBoard( newValue );
+    }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        aSymbol.SetExcludedFromBOM( aValue == wxS( "1" ) );
+    {
+        attrChanged = aSymbol.GetExcludedFromBOM() != newValue;
+        aSymbol.SetExcludedFromBOM( newValue );
+    }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        aSymbol.SetExcludedFromSim( aValue == wxS( "1" ) );
+    {
+        attrChanged = aSymbol.GetExcludedFromSim() != newValue;
+        aSymbol.SetExcludedFromSim( newValue );
+    }
+
+    return attrChanged;
 }
 
 
@@ -944,21 +962,28 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames )
 {
+    bool symbolModified = false;
+    std::unique_ptr<SCH_SYMBOL> symbolCopy;
 
-    for( const SCH_REFERENCE& instance : m_symbolsList )
+    for( size_t i = 0; i < m_symbolsList.GetCount(); i++ )
     {
-        SCH_SYMBOL& symbol = *instance.GetSymbol();
+        SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
+        SCH_SYMBOL* nextSymbol = nullptr;
 
-        aCommit.Modify( &symbol, instance.GetSheetPath().LastScreen() );
+        if( ( i + 1 ) < m_symbolsList.GetCount() )
+            nextSymbol = m_symbolsList[i + 1].GetSymbol();
 
-        const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol.m_Uuid];
+        if( i == 0 )
+            symbolCopy = std::make_unique<SCH_SYMBOL>( *symbol );
+
+        const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol->m_Uuid];
 
         for( const auto& [srcName, srcValue] : fieldStore )
         {
             // Attributes bypass the field logic, so handle them first
             if( isAttribute( srcName ) )
             {
-                setAttributeValue( symbol, srcName, srcValue );
+                symbolModified |= setAttributeValue( *symbol, srcName, srcValue );
                 continue;
             }
 
@@ -967,7 +992,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             if( IsGeneratedField( srcName ) )
                 continue;
 
-            SCH_FIELD* destField = symbol.GetField( srcName );
+            SCH_FIELD* destField = symbol->GetField( srcName );
 
             if( destField && destField->IsPrivate() )
             {
@@ -985,15 +1010,16 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
 
             if( createField )
             {
-                destField = symbol.AddField( SCH_FIELD( &symbol, FIELD_T::USER, srcName ) );
-                destField->SetTextAngle( symbol.GetField( FIELD_T::REFERENCE )->GetTextAngle() );
+                destField = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, srcName ) );
+                destField->SetTextAngle( symbol->GetField( FIELD_T::REFERENCE )->GetTextAngle() );
 
                 if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames.GetFieldName( srcName ) )
                     destField->SetVisible( srcTemplate->m_Visible );
                 else
                     destField->SetVisible( false );
 
-                destField->SetTextPos( symbol.GetPosition() );
+                destField->SetTextPos( symbol->GetPosition() );
+                symbolModified = true;
             }
 
             if( !destField )
@@ -1005,16 +1031,38 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
                 continue;
             }
 
-            destField->SetText( symbol.Schematic()->ConvertRefsToKIIDs( srcValue ) );
+            wxString previousValue = destField->GetText();
+
+            destField->SetText( symbol->Schematic()->ConvertRefsToKIIDs( srcValue ) );
+
+            if( !createField && ( previousValue != srcValue ) )
+                symbolModified = true;
         }
 
-        for( int ii = static_cast<int>( symbol.GetFields().size() ) - 1; ii >= 0; ii-- )
+        for( int ii = static_cast<int>( symbol->GetFields().size() ) - 1; ii >= 0; ii-- )
         {
-            if( symbol.GetFields()[ii].IsMandatory() || symbol.GetFields()[ii].IsPrivate() )
+            if( symbol->GetFields()[ii].IsMandatory() || symbol->GetFields()[ii].IsPrivate() )
                 continue;
 
-            if( fieldStore.count( symbol.GetFields()[ii].GetName() ) == 0 )
-                symbol.GetFields().erase( symbol.GetFields().begin() + ii );
+            if( fieldStore.count( symbol->GetFields()[ii].GetName() ) == 0 )
+            {
+                symbol->GetFields().erase( symbol->GetFields().begin() + ii );
+                symbolModified = true;
+            }
+        }
+
+        if( symbolModified && ( symbol != nextSymbol ) )
+            aCommit.Modified( symbol, symbolCopy.release(), m_symbolsList[i].GetSheetPath().LastScreen() );
+
+        // Only reset the modified flag and next symbol copy if the next symbol is different from the current one.
+        if( symbol != nextSymbol )
+        {
+            if( nextSymbol )
+                symbolCopy = std::make_unique<SCH_SYMBOL>( *nextSymbol );
+            else
+                symbolCopy.reset( nullptr );
+
+            symbolModified = false;
         }
     }
 
@@ -1206,6 +1254,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRefs )
 {
+    bool refListChanged = false;
+
     for( const SCH_REFERENCE& ref : aRefs )
     {
         if( !m_symbolsList.Contains( ref ) )
@@ -1225,8 +1275,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
                     m_dataStore[symbol->m_Uuid][name] = value;
                 }
             }
+
+            refListChanged = true;
         }
     }
+
+    if( refListChanged )
+        m_symbolsList.SortBySymbolPtr();
 }
 
 
@@ -1267,6 +1322,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& 
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs )
 {
+    bool refListChanged = false;
+
     for( const SCH_REFERENCE& ref : aRefs )
     {
         // Update the fields of every reference. Do this by iterating through the data model
@@ -1276,6 +1333,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
             updateDataStoreSymbolField( *ref.GetSymbol(), col.m_fieldName );
 
         if( !m_symbolsList.Contains( ref ) )
+        {
             m_symbolsList.AddItem( ref );
+            refListChanged = true;
+        }
     }
+
+    if( refListChanged )
+        m_symbolsList.SortBySymbolPtr();
 }

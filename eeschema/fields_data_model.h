@@ -339,7 +339,17 @@ private:
     // named field values like ${DNP}
     bool     isAttribute( const wxString& aFieldName );
     wxString getAttributeValue( const SCH_SYMBOL&, const wxString& aAttributeName );
-    void     setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName,
+
+    /**
+     * Set the attribute value.
+     *
+     * @param aSymbol is the symbol to set the attribute.
+     * @param aAttributeName is the name of the symbol attribute.
+     * @param aValue is the value to set the attribute.
+     * @retval true if the symbol attribute value has changed.
+     * @retval false if the symbol attribute has **not** changed.
+     */
+    bool     setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName,
                                 const wxString& aValue );
 
     /* Helper function to get the resolved field value.
@@ -355,6 +365,12 @@ private:
     void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
 
 protected:
+    /**
+     * The flattened by hierarchy list of symbols.
+     *
+     * @warning This list **must** be kept sorted by symbol pointer.  Otherwise, the undo/redo
+     *          commit actions will be broken.
+     */
     SCH_REFERENCE_LIST m_symbolsList;
     bool               m_edited;
     int                m_sortColumn;

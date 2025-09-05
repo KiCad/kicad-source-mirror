@@ -156,6 +156,12 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 }
 
 
+bool SCH_REFERENCE_LIST::sortBySymbolPtr( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
+{
+    return item1.m_rootSymbol < item2.m_rootSymbol;
+}
+
+
 int SCH_REFERENCE_LIST::FindRefByFullPath( const wxString& aFullPath ) const
 {
     for( size_t i = 0; i < m_flatList.size(); ++i )
