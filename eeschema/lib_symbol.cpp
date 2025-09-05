@@ -1419,14 +1419,18 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
     if( aCount < m_unitCount )
     {
-        LIB_ITEMS_CONTAINER::ITERATOR i = m_drawings.begin();
-
-        while( i != m_drawings.end() )
+        // Iterate each drawing-type bucket and erase items that belong to units > aCount.
+        for( int type = LIB_ITEMS_CONTAINER::FIRST_TYPE; type <= LIB_ITEMS_CONTAINER::LAST_TYPE; ++type )
         {
-            if( i->m_unit > aCount )
-                i = m_drawings.erase( i );
-            else
-                ++i;
+            auto it = m_drawings.begin( type );
+
+            while( it != m_drawings.end( type ) )
+            {
+                if( it->m_unit > aCount )
+                    it = m_drawings.erase( it ); // returns next iterator
+                else
+                    ++it;
+            }
         }
     }
     else if( aDuplicateDrawItems )
