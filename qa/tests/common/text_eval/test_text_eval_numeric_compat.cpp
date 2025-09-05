@@ -30,6 +30,7 @@
 
 // Code under test
 #include <text_eval/text_eval_wrapper.h>
+#include <wx/wxcrt.h>
 
 // Make EDA_UNITS printable for Boost.Test
 std::ostream& operator<<( std::ostream& aStream, EDA_UNITS aUnits )
