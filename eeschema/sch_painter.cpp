@@ -64,6 +64,7 @@
 #include <advanced_config.h>
 #include <settings/settings_manager.h>
 #include <stroke_params.h>
+#include <string_utils.h>
 #include "sch_painter.h"
 #include "common.h"
 
@@ -1182,6 +1183,449 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 return aTextSize * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
             };
 
+    // Helper function for drawing braces around multi-line text
+    const auto drawBrace =
+            [&]( KIGFX::GAL& aGal, const VECTOR2D& aTop, const VECTOR2D& aBottom,
+                 int aBraceWidth, bool aLeftBrace, const TEXT_ATTRIBUTES& aAttrs )
+            {
+                // Draw a simple brace using line segments, accounting for text rotation
+                VECTOR2D mid = ( aTop + aBottom ) / 2.0;
+
+                aGal.SetLineWidth( aAttrs.m_StrokeWidth );
+                aGal.SetIsFill( false );
+                aGal.SetIsStroke( true );
+
+                // Calculate brace points in text coordinate system
+                VECTOR2D p1 = aTop;
+                VECTOR2D p2 = aTop;
+                VECTOR2D p3 = mid;
+                VECTOR2D p4 = aBottom;
+                VECTOR2D p5 = aBottom;
+
+                // Apply brace offset based on text orientation
+                if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                {
+                    // For vertical text, braces extend in the Y direction
+                    // "Left" brace is actually towards negative Y, "right" towards positive Y
+                    double braceOffset = aLeftBrace ? -aBraceWidth : aBraceWidth;
+                    p2.y += braceOffset / 2;
+                    p3.y += braceOffset;
+                    p4.y += braceOffset / 2;
+                }
+                else
+                {
+                    // For horizontal text, braces extend in the X direction
+                    double braceOffset = aLeftBrace ? -aBraceWidth : aBraceWidth;
+                    p2.x += braceOffset / 2;
+                    p3.x += braceOffset;
+                    p4.x += braceOffset / 2;
+                }
+
+                // Draw the brace segments
+                aGal.DrawLine( p1, p2 );
+                aGal.DrawLine( p2, p3 );
+                aGal.DrawLine( p3, p4 );
+                aGal.DrawLine( p4, p5 );
+            };
+
+    const auto drawBracesAroundText =
+            [&]( KIGFX::GAL& aGal, const wxArrayString& aLines, const VECTOR2D& aStartPos,
+                 int aLineSpacing, const TEXT_ATTRIBUTES& aAttrs )
+            {
+                if( aLines.size() <= 1 )
+                    return;
+
+                // Calculate brace dimensions
+                int braceWidth = aAttrs.m_Size.x / 3;  // Make braces a bit larger
+
+                // Find the maximum line width to position braces
+                int maxLineWidth = 0;
+                KIFONT::FONT* font = aAttrs.m_Font;
+                if( !font )
+                    font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
+
+                for( const wxString& line : aLines )
+                {
+                    wxString trimmedLine = line;
+                    trimmedLine.Trim( true ).Trim( false );
+                    VECTOR2I lineExtents = font->StringBoundaryLimits( trimmedLine, aAttrs.m_Size,
+                                                                      aAttrs.m_StrokeWidth, false, false,
+                                                                      KIFONT::METRICS() );
+                    maxLineWidth = std::max( maxLineWidth, lineExtents.x );
+                }
+
+                // Calculate brace positions based on text vertical alignment and rotation
+                VECTOR2D braceStart = aStartPos;
+                VECTOR2D braceEnd = aStartPos;
+
+                // Extend braces beyond the text bounds
+                int textHeight = aAttrs.m_Size.y;
+                int extraHeight = textHeight / 3;  // Extend braces by 1/3 of text height beyond text
+
+                if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                {
+                    // For vertical text, lines are spaced horizontally and braces are horizontal
+                    braceEnd.x += ( aLines.size() - 1 ) * aLineSpacing;
+
+                    // Extend braces horizontally to encompass all lines plus extra space
+                    braceStart.x -= 2 * extraHeight;
+
+                    // Position braces in the perpendicular direction (Y) with proper spacing
+                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+
+                    VECTOR2D topBraceStart = braceStart;
+                    topBraceStart.y -= braceSpacing;
+
+                    VECTOR2D topBraceEnd = braceEnd;
+                    topBraceEnd.y -= braceSpacing;
+
+                    drawBrace( aGal, topBraceStart, topBraceEnd, braceWidth, true, aAttrs );
+
+                    VECTOR2D bottomBraceStart = braceStart;
+                    bottomBraceStart.y += braceSpacing;
+
+                    VECTOR2D bottomBraceEnd = braceEnd;
+                    bottomBraceEnd.y += braceSpacing;
+
+                    drawBrace( aGal, bottomBraceStart, bottomBraceEnd, braceWidth, false, aAttrs );
+                }
+                else
+                {
+                    // For horizontal text, lines are spaced vertically and braces are vertical
+                    braceEnd.y += ( aLines.size() - 1 ) * aLineSpacing;
+
+                    // Extend braces vertically to encompass all lines plus extra space
+                    braceStart.y -= 2 * extraHeight;
+
+                    // Position braces in the perpendicular direction (X) with proper spacing
+                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+
+                    // Draw left brace
+                    VECTOR2D leftTop = braceStart;
+                    leftTop.x -= braceSpacing;
+
+                    VECTOR2D leftBottom = braceEnd;
+                    leftBottom.x -= braceSpacing;
+
+                    drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs );
+
+                    // Draw right brace
+                    VECTOR2D rightTop = braceStart;
+                    rightTop.x += braceSpacing;
+
+                    VECTOR2D rightBottom = braceEnd;
+                    rightBottom.x += braceSpacing;
+
+                    drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs );
+                }
+            };
+
+    const auto drawBracesAroundTextBitmap =
+            [&]( KIGFX::GAL& aGal, const wxArrayString& aLines, const VECTOR2D& aStartPos,
+                 int aLineSpacing, const TEXT_ATTRIBUTES& aAttrs )
+            {
+                // Simplified brace drawing for bitmap text
+                if( aLines.size() <= 1 )
+                    return;
+
+                int braceWidth = aAttrs.m_Size.x / 4;
+
+                // Estimate max line width (less precise for bitmap text)
+                int maxLineWidth = aAttrs.m_Size.x * 4;  // Conservative estimate
+
+                // Calculate brace positions based on rotation
+                VECTOR2D braceStart = aStartPos;
+                VECTOR2D braceEnd = aStartPos;
+
+                int textHalfHeight = aAttrs.m_Size.y / 2;
+
+                if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                {
+                    // For vertical text, lines are spaced horizontally
+                    braceEnd.x += ( aLines.size() - 1 ) * aLineSpacing;
+
+                    VECTOR2D leftStart = braceStart;
+                    leftStart.y -= maxLineWidth / 2 + braceWidth / 2;
+
+                    VECTOR2D leftEnd = braceEnd;
+                    leftEnd.y -= maxLineWidth / 2 + braceWidth / 2;
+
+                    drawBrace( aGal, leftStart, leftEnd, braceWidth, true, aAttrs );
+
+                    VECTOR2D rightStart = braceStart;
+                    rightStart.y += maxLineWidth / 2 + braceWidth / 2;
+
+                    VECTOR2D rightEnd = braceEnd;
+                    rightEnd.y += maxLineWidth / 2 + braceWidth / 2;
+
+                    drawBrace( aGal, rightStart, rightEnd, braceWidth, false, aAttrs );
+                }
+                else
+                {
+                    // For horizontal text, lines are spaced vertically
+                    braceEnd.y += ( aLines.size() - 1 ) * aLineSpacing;
+
+                    VECTOR2D braceTop = braceStart;
+                    braceTop.y -= textHalfHeight;
+
+                    VECTOR2D braceBottom = braceEnd;
+                    braceBottom.y += textHalfHeight;
+
+                    VECTOR2D leftTop = braceTop;
+                    leftTop.x -= maxLineWidth / 2 + braceWidth / 2;
+
+                    VECTOR2D leftBottom = braceBottom;
+                    leftBottom.x -= maxLineWidth / 2 + braceWidth / 2;
+
+                    drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs );
+
+                    VECTOR2D rightTop = braceTop;
+                    rightTop.x += maxLineWidth / 2 + braceWidth / 2;
+
+                    VECTOR2D rightBottom = braceBottom;
+                    rightBottom.x += maxLineWidth / 2 + braceWidth / 2;
+
+                    drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs );
+                }
+            };
+
+    // Helper functions for drawing multi-line pin text with braces
+    const auto drawMultiLineText =
+            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                 const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+            {
+                // Check if this is multi-line stacked pin text with braces
+                if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
+                {
+                    // Extract content between braces and split into lines
+                    wxString content = aText.Mid( 1, aText.Length() - 2 );
+                    wxArrayString lines;
+                    wxStringSplit( content, lines, '\n' );
+
+                    if( lines.size() > 1 )
+                    {
+                        // Calculate line spacing (similar to EDA_TEXT::GetInterline)
+                        int lineSpacing = KiROUND( aAttrs.m_Size.y * 1.3 );  // 130% of text height
+
+                        // Calculate positioning based on text alignment and rotation
+                        VECTOR2D startPos = aPosition;
+
+                        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                        {
+                            // For vertical text, lines are spaced horizontally
+                            // Adjust start position based on horizontal alignment
+                            if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
+                            {
+                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth;
+                            }
+                            else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
+                            {
+                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth / 2;
+                            }
+
+                            // Draw each line
+                            for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                VECTOR2D linePos = startPos;
+                                linePos.x += i * lineSpacing;
+
+                                wxString line = lines[i];
+                                line.Trim( true ).Trim( false );
+
+                                strokeText( aGal, line, linePos, aAttrs, aFontMetrics );
+                            }
+                        }
+                        else
+                        {
+                            // For horizontal text, lines are spaced vertically
+                            // Adjust start position based on vertical alignment
+                            if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
+                            {
+                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight;
+                            }
+                            else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
+                            {
+                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight / 2;
+                            }
+
+                            // Draw each line
+                            for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                VECTOR2D linePos = startPos;
+                                linePos.y += i * lineSpacing;
+
+                                wxString line = lines[i];
+                                line.Trim( true ).Trim( false );
+
+                                strokeText( aGal, line, linePos, aAttrs, aFontMetrics );
+                            }
+                        }
+
+                        // Draw braces around the text
+                        drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs );
+                        return;
+                    }
+                }
+
+                // Fallback to regular single-line text
+                strokeText( aGal, aText, aPosition, aAttrs, aFontMetrics );
+            };
+
+    const auto drawMultiLineTextBox =
+            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                 const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+            {
+                // Similar to drawMultiLineText but uses boxText for outline fonts
+                if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
+                {
+                    wxString content = aText.Mid( 1, aText.Length() - 2 );
+                    wxArrayString lines;
+                    wxStringSplit( content, lines, '\n' );
+
+                    if( lines.size() > 1 )
+                    {
+                        int lineSpacing = KiROUND( aAttrs.m_Size.y * 1.3 );
+                        VECTOR2D startPos = aPosition;
+
+                        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                        {
+                            // For vertical text, lines are spaced horizontally
+                            if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
+                            {
+                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth;
+                            }
+                            else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
+                            {
+                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth / 2;
+                            }
+
+                            for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                VECTOR2D linePos = startPos;
+                                linePos.x += i * lineSpacing;
+
+                                wxString line = lines[i];
+                                line.Trim( true ).Trim( false );
+
+                                boxText( aGal, line, linePos, aAttrs, aFontMetrics );
+                            }
+                        }
+                        else
+                        {
+                            // For horizontal text, lines are spaced vertically
+                            if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
+                            {
+                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight;
+                            }
+                            else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
+                            {
+                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight / 2;
+                            }
+
+                            for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                VECTOR2D linePos = startPos;
+                                linePos.y += i * lineSpacing;
+
+                                wxString line = lines[i];
+                                line.Trim( true ).Trim( false );
+
+                                boxText( aGal, line, linePos, aAttrs, aFontMetrics );
+                            }
+                        }
+
+                        drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs );
+                        return;
+                    }
+                }
+
+                boxText( aGal, aText, aPosition, aAttrs, aFontMetrics );
+            };
+
+    const auto drawMultiLineBitmapText =
+            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                 const TEXT_ATTRIBUTES& aAttrs )
+            {
+                // Similar to drawMultiLineText but uses bitmapText
+                if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
+                {
+                    wxString content = aText.Mid( 1, aText.Length() - 2 );
+                    wxArrayString lines;
+                    wxStringSplit( content, lines, '\n' );
+
+                    if( lines.size() > 1 )
+                    {
+                        int lineSpacing = KiROUND( aAttrs.m_Size.y * 1.3 );
+                        VECTOR2D startPos = aPosition;
+
+                        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                        {
+                            // For vertical text, lines are spaced horizontally
+                            if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
+                            {
+                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth;
+                            }
+                            else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
+                            {
+                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth / 2;
+                            }
+
+                            for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                VECTOR2D linePos = startPos;
+                                linePos.x += i * lineSpacing;
+
+                                wxString line = lines[i];
+                                line.Trim( true ).Trim( false );
+
+                                bitmapText( aGal, line, linePos, aAttrs );
+                            }
+                        }
+                        else
+                        {
+                            // For horizontal text, lines are spaced vertically
+                            if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
+                            {
+                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight;
+                            }
+                            else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
+                            {
+                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight / 2;
+                            }
+
+                            for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                VECTOR2D linePos = startPos;
+                                linePos.y += i * lineSpacing;
+
+                                wxString line = lines[i];
+                                line.Trim( true ).Trim( false );
+
+                                bitmapText( aGal, line, linePos, aAttrs );
+                            }
+                        }
+
+                        // Draw braces with bitmap text (simplified version)
+                        drawBracesAroundTextBitmap( aGal, lines, startPos, lineSpacing, aAttrs );
+                        return;
+                    }
+                }
+
+                bitmapText( aGal, aText, aPosition, aAttrs );
+            };
+
     const auto drawTextInfo =
             [&]( const PIN_LAYOUT_CACHE::TEXT_INFO& aTextInfo, const COLOR4D& aColor )
             {
@@ -1206,24 +1650,24 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
                     if( !attrs.m_Font->IsOutline() )
                     {
-                        strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                    aPin->GetFontMetrics() );
+                        drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                         aPin->GetFontMetrics() );
                     }
                     else
                     {
-                        boxText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                 aPin->GetFontMetrics() );
+                        drawMultiLineTextBox( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                            aPin->GetFontMetrics() );
                     }
                 }
                 else if( nonCached( aPin ) && renderTextAsBitmap )
                 {
-                    bitmapText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs );
+                    drawMultiLineBitmapText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs );
                     const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
                 else
                 {
-                    strokeText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                aPin->GetFontMetrics() );
+                    drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                     aPin->GetFontMetrics() );
                     const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
             };
@@ -2251,11 +2695,11 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
     LIB_SYMBOL* originalSymbol =
             aSymbol->GetLibSymbolRef() ? aSymbol->GetLibSymbolRef().get() : LIB_SYMBOL::GetDummy();
-    std::vector<SCH_PIN*> originalPins = originalSymbol->GetPins( unit, bodyStyle );
+    std::vector<SCH_PIN*> originalPins = originalSymbol->GetGraphicalPins( unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
     LIB_SYMBOL            tempSymbol( *originalSymbol );
-    std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( unit, bodyStyle );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
 

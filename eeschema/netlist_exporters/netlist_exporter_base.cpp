@@ -176,7 +176,21 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                         continue;
                 }
 
-                pins.emplace_back( pin->GetShownNumber(), netName );
+                bool                  valid;
+                std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
+                wxString              baseName = pin->GetShownName();
+                wxLogTrace( "KICAD_STACKED_PINS",
+                            wxString::Format( "CreatePinList(single): ref='%s' pinNameBase='%s' shownNum='%s' net='%s' "
+                                              "valid=%d expand=%zu",
+                                              ref, baseName, pin->GetShownNumber(), netName, valid, numbers.size() ) );
+
+                for( const wxString& num : numbers )
+                {
+                    wxString pinName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
+                    wxLogTrace( "KICAD_STACKED_PINS",
+                                wxString::Format( " -> emit pin num='%s' name='%s' net='%s'", num, pinName, netName ) );
+                    pins.emplace_back( num, netName, pinName );
+                }
             }
         }
     }
@@ -266,7 +280,20 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                             continue;
                     }
 
-                    aPins.emplace_back( pin->GetShownNumber(), netName );
+                    bool                        valid;
+                    std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
+                    wxString                     baseName = pin->GetShownName();
+                    wxLogTrace( "KICAD_STACKED_PINS",
+                               wxString::Format( "CreatePinList(multi): ref='%s' pinNameBase='%s' shownNum='%s' net='%s' valid=%d expand=%zu",
+                                                 ref2, baseName, pin->GetShownNumber(), netName, valid, numbers.size() ) );
+
+                    for( const wxString& num : numbers )
+                    {
+                        wxString pinName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
+                        wxLogTrace( "KICAD_STACKED_PINS",
+                                    wxString::Format( " -> emit pin num='%s' name='%s' net='%s'", num, pinName, netName ) );
+                        aPins.emplace_back( num, netName, pinName );
+                    }
                 }
             }
         }

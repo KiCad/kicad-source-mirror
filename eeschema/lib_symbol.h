@@ -416,21 +416,32 @@ public:
     void RemoveField( SCH_FIELD* aField ) { RemoveDrawItem( aField ); }
 
     /**
-     * Return a list of pin object pointers from the draw item list.
+     * Graphical pins: Return schematic pin objects as drawn (unexpanded), filtered by unit/body.
      *
-     * Note pin objects are owned by the draw list of the symbol.  Deleting any of the objects
-     * will leave list in a unstable state and will likely segfault when the list is destroyed.
+     * Note: pin objects are owned by the symbol's draw list; do not delete them.
      *
-     * @param aUnit - Unit number of pins to collect.  Set to 0 to get pins from all symbol units.
-     * @param aBodyStyle - Symbol alternate body style of pins to collect.  Set to 0 to get pins
-     *                     from all body styles.
+     * @param aUnit Unit number to collect; 0 = all units
+     * @param aBodyStyle Alternate body style to collect; 0 = all body styles
      */
-    std::vector<SCH_PIN*> GetPins( int aUnit, int aBodyStyle ) const;
+    std::vector<SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
-     * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
-     * we want to treat all unit as a single part.
+     * Logical pins: Return expanded logical pins based on stacked-pin notation.
+     * Each returned item pairs a base graphical pin with a single expanded logical number.
      */
+    struct LOGICAL_PIN
+    {
+        SCH_PIN*   pin;        ///< pointer to the base graphical pin
+        wxString   number;     ///< expanded logical pin number
+    };
+
+    /**
+     * Return all logical pins (expanded) filtered by unit/body.
+     * For non-stacked pins, the single logical pin's number equals the base pin number.
+     */
+    std::vector<LOGICAL_PIN> GetLogicalPins( int aUnit, int aBodyStyle ) const;
+
+    // Deprecated: use GetGraphicalPins(). This override remains to satisfy SYMBOL's pure virtual.
     std::vector<SCH_PIN*> GetPins() const override;
 
     /**

@@ -469,6 +469,8 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     {
     case MAIL_SYMBOL_NETLIST:
     {
+    wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "MAIL_SYMBOL_NETLIST received: size=%zu" ),
+            payload.size() );
         wxSizer*  filtersSizer = m_chooserPanel->GetFiltersSizer();
         wxWindow* filtersWindow = filtersSizer->GetContainingWindow();
         wxString  msg;
@@ -486,10 +488,24 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         if( strings.size() >= 1 && !strings[0].empty() )
         {
-            for( const wxString& pin : wxSplit( strings[0], '\t' ) )
+            wxArrayString tokens = wxSplit( strings[0], '\t' );
+
+            wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "First line entries=%u" ), (unsigned) tokens.size() );
+
+            for( const wxString& pin : tokens )
                 pinNames[ pin.BeforeFirst( ' ' ) ] = pin.AfterFirst( ' ' );
 
             m_pinCount = (int) pinNames.size();
+
+            wxString pinList;
+            for( const auto& kv : pinNames )
+            {
+                if( !pinList.IsEmpty() )
+                    pinList << wxS( "," );
+                pinList << kv.first;
+            }
+
+            wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Parsed pins=%d -> [%s]" ), m_pinCount, pinList );
         }
 
         if( strings.size() >= 2 && !strings[1].empty() )
@@ -532,6 +548,7 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         if( m_pinCount > 0 )
         {
             msg.Printf( _( "Filter by pin count (%d)" ), m_pinCount );
+            wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Pin-count label: %s" ), msg );
 
             if( !m_filterByPinCount )
             {
@@ -557,7 +574,9 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 m_filterByPinCount->Hide();
         }
 
-        m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
+    m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
+    wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "SetPinFunctions called with %zu entries" ),
+            pinNames.size() );
 
         // Save the wxFormBuilder size of the dialog...
         if( s_dialogRect.GetSize().x == 0 || s_dialogRect.GetSize().y == 0 )

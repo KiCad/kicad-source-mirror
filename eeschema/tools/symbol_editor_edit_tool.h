@@ -49,6 +49,8 @@ public:
 
     int Properties( const TOOL_EVENT& aEvent );
     int PinTable( const TOOL_EVENT& aEvent );
+    int ConvertStackedPins( const TOOL_EVENT& aEvent );
+    int ExplodeStackedPin( const TOOL_EVENT& aEvent );
     int UpdateSymbolFields( const TOOL_EVENT& aEvent );
 
     int Undo( const TOOL_EVENT& aEvent );

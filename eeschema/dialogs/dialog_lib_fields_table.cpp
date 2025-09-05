@@ -402,7 +402,7 @@ void DIALOG_LIB_FIELDS_TABLE::SetupColumnProperties( int aCol )
             LIB_SYMBOL* symbol = m_symbolsList[0];
             wxArrayString pins;
 
-            for( SCH_PIN* pin : symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+            for( SCH_PIN* pin : symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
                 pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
 
             if( !pins.IsEmpty() )

@@ -227,6 +227,7 @@ private:
     static ERC_ITEM busToBusConflict;
     static ERC_ITEM busToNetConflict;
     static ERC_ITEM groundPinNotGround;
+    static ERC_ITEM stackedPinName;
     static ERC_ITEM unresolvedVariable;
     static ERC_ITEM undefinedNetclass;
     static ERC_ITEM simulationModelIssues;

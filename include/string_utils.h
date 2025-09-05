@@ -476,5 +476,23 @@ KICOMMON_API wxString  From_UTF8( const char* cstring );
  */
 KICOMMON_API wxString NormalizeFileUri( const wxString& aFileUri );
 
+/**
+ * Expand stacked pin notation like [1,2,3], [1-4], [A1-A4], or [AA1-AA3,AB4,CD12-CD14]
+ * into individual pin numbers, supporting both numeric and alphanumeric pin prefixes.
+ *
+ * Examples:
+ *   "[1,2,3]" -> {"1", "2", "3"}
+ *   "[1-4]" -> {"1", "2", "3", "4"}
+ *   "[A1-A3]" -> {"A1", "A2", "A3"}
+ *   "[AA1-AA3,AB4]" -> {"AA1", "AA2", "AA3", "AB4"}
+ *   "5" -> {"5"} (non-bracketed pins returned as-is)
+ *
+ * @param aPinName is the pin name to expand (may or may not use stacked notation)
+ * @param aValid is optionally set to indicate whether the notation was valid
+ * @return vector of individual pin numbers
+ */
+KICOMMON_API std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName,
+                                                            bool* aValid = nullptr );
+
 
 #endif  // STRING_UTILS_H

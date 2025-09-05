@@ -495,7 +495,8 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
     XNODE* xcomps = node( wxT( "groups" ) );
 
     m_referencesAlreadyFound.Clear();
-    m_libParts.clear();
+    // Do not clear m_libParts here: it is populated in makeSymbols() and used later by
+    // makeLibParts() to emit the libparts section for CvPcb and other consumers.
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
     SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
@@ -732,7 +733,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
             xlibpart->AddChild( node( wxT( "docs" ),  lcomp->GetDatasheetField().GetText() ) );
 
         // Write the footprint list
-        if( lcomp->GetFPFilters().GetCount() )
+    if( lcomp->GetFPFilters().GetCount() )
         {
             XNODE*  xfootprints;
             xlibpart->AddChild( xfootprints = node( wxT( "footprints" ) ) );
@@ -758,8 +759,10 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
             xfield->AddAttribute( wxT( "name" ), field->GetCanonicalName() );
         }
 
-        //----- show the pins here ------------------------------------
-        std::vector<SCH_PIN*> pinList = lcomp->GetPins( 0, 0 );
+    //----- show the pins here ------------------------------------
+    // NOTE: Expand stacked-pin notation into individual pins so downstream
+    // tools (e.g. CvPcb) see the actual number of footprint pins.
+    std::vector<SCH_PIN*> pinList = lcomp->GetGraphicalPins( 0, 0 );
 
         /*
          * We must erase redundant Pins references in pinList
@@ -780,6 +783,10 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
             }
         }
 
+        wxLogTrace( "CVPCB_PINCOUNT",
+                wxString::Format( "makeLibParts: lib='%s' part='%s' pinList(size)=%zu",
+                          libNickname, lcomp->GetName(), pinList.size() ) );
+
         if( pinList.size() )
         {
             XNODE*     pins;
@@ -788,12 +795,40 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 
             for( unsigned i=0; i<pinList.size();  ++i )
             {
-                XNODE*     pin;
+                SCH_PIN* basePin = pinList[i];
 
-                pins->AddChild( pin = node( wxT( "pin" ) ) );
-                pin->AddAttribute( wxT( "num" ), pinList[i]->GetShownNumber() );
-                pin->AddAttribute( wxT( "name" ), pinList[i]->GetShownName() );
-                pin->AddAttribute( wxT( "type" ), pinList[i]->GetCanonicalElectricalTypeName() );
+                bool                     stackedValid = false;
+                std::vector<wxString>    expandedNums = basePin->GetStackedPinNumbers( &stackedValid );
+
+                // If stacked notation detected and valid, emit one libparts pin per expanded number.
+                if( stackedValid && !expandedNums.empty() )
+                {
+                    for( const wxString& num : expandedNums )
+                    {
+                        XNODE* pin;
+                        pins->AddChild( pin = node( wxT( "pin" ) ) );
+                        pin->AddAttribute( wxT( "num" ), num );
+                        pin->AddAttribute( wxT( "name" ), basePin->GetShownName() );
+                        pin->AddAttribute( wxT( "type" ), basePin->GetCanonicalElectricalTypeName() );
+
+                        wxLogTrace( "CVPCB_PINCOUNT",
+                                    wxString::Format( "makeLibParts: -> pin num='%s' name='%s' (expanded)",
+                                                      num, basePin->GetShownName() ) );
+                    }
+                }
+                else
+                {
+                    XNODE* pin;
+                    pins->AddChild( pin = node( wxT( "pin" ) ) );
+                    pin->AddAttribute( wxT( "num" ), basePin->GetShownNumber() );
+                    pin->AddAttribute( wxT( "name" ), basePin->GetShownName() );
+                    pin->AddAttribute( wxT( "type" ), basePin->GetCanonicalElectricalTypeName() );
+
+                    wxLogTrace( "CVPCB_PINCOUNT",
+                                wxString::Format( "makeLibParts: -> pin num='%s' name='%s'",
+                                                  basePin->GetShownNumber(),
+                                                  basePin->GetShownName() ) );
+                }
 
                 // caution: construction work site here, drive slowly
             }
@@ -953,10 +988,9 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                                  } );
         }
 
-        for( const NET_NODE& netNode : net_record->m_Nodes )
+    for( const NET_NODE& netNode : net_record->m_Nodes )
         {
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
-            wxString pinText = netNode.m_Pin->GetShownNumber();
 
             // Skip power symbols and virtual symbols
             if( refText[0] == wxChar( '#' ) )
@@ -974,21 +1008,39 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                 added = true;
             }
 
-            xnet->AddChild( xnode = node( wxT( "node" ) ) );
-            xnode->AddAttribute( wxT( "ref" ), refText );
-            xnode->AddAttribute( wxT( "pin" ), pinText );
+            std::vector<wxString> nums = netNode.m_Pin->GetStackedPinNumbers();
+            wxString              baseName = netNode.m_Pin->GetShownName();
+            wxString              pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
 
-            wxString pinName = netNode.m_Pin->GetShownName();
-            wxString pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
+            wxLogTrace( "KICAD_STACKED_PINS",
+                        wxString::Format( "XML: net='%s' ref='%s' base='%s' shownNum='%s' expand=%zu",
+                                          net_record->m_Name, refText, baseName,
+                                          netNode.m_Pin->GetShownNumber(), nums.size() ) );
 
-            if( !pinName.IsEmpty() )
-                xnode->AddAttribute( wxT( "pinfunction" ), pinName );
+            for( const wxString& num : nums )
+            {
+                xnet->AddChild( xnode = node( wxT( "node" ) ) );
+                xnode->AddAttribute( wxT( "ref" ), refText );
+                xnode->AddAttribute( wxT( "pin" ), num );
 
-            if( net_record->m_HasNoConnect
-                && ( net_record->m_Nodes.size() == 1 || allNetPinsStacked ) )
-                pinType += wxT( "+no_connect" );
+                wxString fullName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
 
-            xnode->AddAttribute( wxT( "pintype" ), pinType );
+                if( !baseName.IsEmpty() || nums.size() > 1 )
+                    xnode->AddAttribute( wxT( "pinfunction" ), fullName );
+
+                wxString typeAttr = pinType;
+
+                if( net_record->m_HasNoConnect
+                    && ( net_record->m_Nodes.size() == 1 || allNetPinsStacked ) )
+                {
+                    typeAttr += wxT( "+no_connect" );
+                    wxLogTrace( "KICAD_STACKED_PINS",
+                                wxString::Format( "XML: marking node ref='%s' pin='%s' as no_connect",
+                                                  refText, num ) );
+                }
+
+                xnode->AddAttribute( wxT( "pintype" ), typeAttr );
+            }
         }
     }
 

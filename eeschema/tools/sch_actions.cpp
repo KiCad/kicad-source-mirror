@@ -935,6 +935,20 @@ TOOL_ACTION SCH_ACTIONS::pinTable( TOOL_ACTION_ARGS()
         .Tooltip( _( "Displays pin table for bulk editing of pins" ) )
         .Icon( BITMAPS::pin_table ) );
 
+TOOL_ACTION SCH_ACTIONS::convertStackedPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.convertStackedPins" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Convert Stacked Pins" ) )
+        .Tooltip( _( "Convert multiple pins at the same location to a single pin with stacked notation" ) )
+        .Icon( BITMAPS::pin ) );
+
+TOOL_ACTION SCH_ACTIONS::explodeStackedPin( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.explodeStackedPin" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Explode Stacked Pin" ) )
+        .Tooltip( _( "Convert a pin with stacked notation to multiple individual pins" ) )
+        .Icon( BITMAPS::pin ) );
+
 TOOL_ACTION SCH_ACTIONS::breakWire( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.breakWire" )
         .Scope( AS_GLOBAL )

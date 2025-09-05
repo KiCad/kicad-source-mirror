@@ -38,6 +38,7 @@
 #include <fmt/chrono.h>
 #include <wx/log.h>
 #include <wx/regex.h>
+#include <wx/tokenzr.h>
 #include "locale_io.h"
 
 
@@ -1502,4 +1503,125 @@ wxString NormalizeFileUri( const wxString& aFileUri )
     retv += tmp;
 
     return retv;
+}
+
+
+namespace
+{
+    // Extract (prefix, numericValue) where numericValue = -1 if no numeric suffix
+    std::pair<wxString, long> ParseAlphaNumericPin( const wxString& pinNum )
+    {
+        wxString prefix;
+        long     numValue = -1;
+
+        size_t numStart = pinNum.length();
+        for( int i = static_cast<int>( pinNum.length() ) - 1; i >= 0; --i )
+        {
+            if( !wxIsdigit( pinNum[i] ) )
+            {
+                numStart = i + 1;
+                break;
+            }
+            if( i == 0 )
+                numStart = 0; // all digits
+        }
+
+        if( numStart < pinNum.length() )
+        {
+            prefix = pinNum.Left( numStart );
+            wxString numericPart = pinNum.Mid( numStart );
+            numericPart.ToLong( &numValue );
+        }
+
+        return { prefix, numValue };
+    }
+}
+
+std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* aValid )
+{
+    if( aValid )
+        *aValid = true;
+
+    std::vector<wxString> expanded;
+
+    const bool hasOpenBracket  = aPinName.Contains( wxT( "[" ) );
+    const bool hasCloseBracket = aPinName.Contains( wxT( "]" ) );
+
+    if( hasOpenBracket || hasCloseBracket )
+    {
+        if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
+        {
+            if( aValid )
+                *aValid = false;
+            expanded.push_back( aPinName );
+            return expanded;
+        }
+    }
+
+    if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
+    {
+        expanded.push_back( aPinName );
+        return expanded;
+    }
+
+    const wxString inner = aPinName.Mid( 1, aPinName.Length() - 2 );
+
+    size_t start = 0;
+    while( start < inner.length() )
+    {
+        size_t comma = inner.find( ',', start );
+        wxString part = ( comma == wxString::npos ) ? inner.Mid( start ) : inner.Mid( start, comma - start );
+        part.Trim( true ).Trim( false );
+        if( part.empty() )
+        {
+            start = ( comma == wxString::npos ) ? inner.length() : comma + 1;
+            continue;
+        }
+
+        int dashPos = part.Find( '-' );
+        if( dashPos != wxNOT_FOUND )
+        {
+            wxString startTxt = part.Left( dashPos );
+            wxString endTxt   = part.Mid( dashPos + 1 );
+            startTxt.Trim( true ).Trim( false );
+            endTxt.Trim( true ).Trim( false );
+
+            auto [startPrefix, startVal] = ParseAlphaNumericPin( startTxt );
+            auto [endPrefix, endVal]     = ParseAlphaNumericPin( endTxt );
+
+            if( startPrefix != endPrefix || startVal == -1 || endVal == -1 || startVal > endVal )
+            {
+                if( aValid )
+                    *aValid = false;
+                expanded.clear();
+                expanded.push_back( aPinName );
+                return expanded;
+            }
+
+            for( long ii = startVal; ii <= endVal; ++ii )
+            {
+                if( startPrefix.IsEmpty() )
+                    expanded.emplace_back( wxString::Format( wxT( "%ld" ), ii ) );
+                else
+                    expanded.emplace_back( wxString::Format( wxT( "%s%ld" ), startPrefix, ii ) );
+            }
+        }
+        else
+        {
+            expanded.push_back( part );
+        }
+
+        if( comma == wxString::npos )
+            break;
+        start = comma + 1;
+    }
+
+    if( expanded.empty() )
+    {
+        expanded.push_back( aPinName );
+        if( aValid )
+            *aValid = false;
+    }
+
+    return expanded;
 }

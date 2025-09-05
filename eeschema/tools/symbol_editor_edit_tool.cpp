@@ -99,6 +99,70 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
             SCH_TABLECELL_T,
     } );
 
+    const auto canConvertStackedPins =
+            [&]( const SELECTION& sel )
+            {
+                // If multiple pins are selected, check they are all at same location
+                if( sel.Size() >= 2 )
+                {
+                    std::vector<SCH_PIN*> pins;
+                    for( EDA_ITEM* item : sel )
+                    {
+                        if( item->Type() != SCH_PIN_T )
+                            return false;
+                        pins.push_back( static_cast<SCH_PIN*>( item ) );
+                    }
+
+                    // Check that all pins are at the same location
+                    VECTOR2I pos = pins[0]->GetPosition();
+                    for( size_t i = 1; i < pins.size(); ++i )
+                    {
+                        if( pins[i]->GetPosition() != pos )
+                            return false;
+                    }
+                    return true;
+                }
+
+                // If single pin is selected, check if there are other pins at same location
+                if( sel.Size() == 1 && sel.Front()->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN* selectedPin = static_cast<SCH_PIN*>( sel.Front() );
+                    VECTOR2I pos = selectedPin->GetPosition();
+
+                    // Get the symbol and check for other pins at same location
+                    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+                    if( !symbol )
+                        return false;
+
+                    int coLocatedCount = 0;
+
+                    for( SCH_PIN* pin : symbol->GetPins() )
+                    {
+                        if( pin->GetPosition() == pos )
+                        {
+                            coLocatedCount++;
+
+                            if( coLocatedCount >= 2 )
+                                return true;
+                        }
+                    }
+                }
+
+                return false;
+            };
+
+    const auto canExplodeStackedPin =
+            [&]( const SELECTION& sel )
+            {
+                if( sel.Size() != 1 || sel.Front()->Type() != SCH_PIN_T )
+                    return false;
+
+                SCH_PIN* pin = static_cast<SCH_PIN*>( sel.Front() );
+                bool isValid;
+                std::vector<wxString> stackedNumbers = pin->GetStackedPinNumbers( &isValid );
+                return isValid && stackedNumbers.size() > 1;
+            };
+
     // clang-format off
     // Add edit actions to the move tool menu
     if( moveTool )
@@ -147,6 +211,10 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( SCH_ACTIONS::swap,         canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
     selToolMenu.AddItem( SCH_ACTIONS::properties,   canEdit && SCH_CONDITIONS::Count( 1 ), 200 );
+
+    selToolMenu.AddSeparator( 250 );
+    selToolMenu.AddItem( SCH_ACTIONS::convertStackedPins, canEdit && canConvertStackedPins, 250 );
+    selToolMenu.AddItem( SCH_ACTIONS::explodeStackedPin,  canEdit && canExplodeStackedPin, 250 );
 
     selToolMenu.AddSeparator( 300 );
     selToolMenu.AddItem( ACTIONS::cut,              SCH_CONDITIONS::IdleSelection, 300 );
@@ -712,6 +780,330 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
+{
+    SCH_COMMIT  commit( m_frame );
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+
+    if( !symbol )
+        return 0;
+
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    wxCHECK( selTool, -1 );
+
+    SCH_SELECTION& selection = selTool->GetSelection();
+
+    // Collect pins to convert - accept pins with any number format
+    std::vector<SCH_PIN*> pinsToConvert;
+
+    if( selection.Size() == 1 && selection.Front()->Type() == SCH_PIN_T )
+    {
+        // Single pin selected - find all pins at the same location
+        SCH_PIN* selectedPin = static_cast<SCH_PIN*>( selection.Front() );
+        VECTOR2I pos = selectedPin->GetPosition();
+
+        for( SCH_PIN* pin : symbol->GetPins() )
+        {
+            if( pin->GetPosition() == pos )
+                pinsToConvert.push_back( pin );
+        }
+    }
+    else
+    {
+        // Multiple pins selected - use them directly, accepting any pin numbers
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == SCH_PIN_T )
+                pinsToConvert.push_back( static_cast<SCH_PIN*>( item ) );
+        }
+    }
+
+    if( pinsToConvert.size() < 2 )
+    {
+        m_frame->ShowInfoBarError( _( "At least two pins are needed to convert to stacked pins" ) );
+        return 0;
+    }
+
+    // Check that all pins are at the same location
+    VECTOR2I pos = pinsToConvert[0]->GetPosition();
+    for( size_t i = 1; i < pinsToConvert.size(); ++i )
+    {
+        if( pinsToConvert[i]->GetPosition() != pos )
+        {
+            m_frame->ShowInfoBarError( _( "All pins must be at the same location" ) );
+            return 0;
+        }
+    }
+
+    commit.Modify( symbol, m_frame->GetScreen() );
+
+    // Clear selection before modifying pins, like the Delete command does
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    // Sort pins for consistent ordering - handle arbitrary pin number formats
+    std::sort( pinsToConvert.begin(), pinsToConvert.end(),
+        []( SCH_PIN* a, SCH_PIN* b )
+        {
+            wxString numA = a->GetNumber();
+            wxString numB = b->GetNumber();
+
+            // Try to convert to integers for proper numeric sorting
+            long longA, longB;
+            bool aIsNumeric = numA.ToLong( &longA );
+            bool bIsNumeric = numB.ToLong( &longB );
+
+            // Both are purely numeric - sort numerically
+            if( aIsNumeric && bIsNumeric )
+                return longA < longB;
+
+            // Mixed numeric/non-numeric - numeric pins come first
+            if( aIsNumeric && !bIsNumeric )
+                return true;
+            if( !aIsNumeric && bIsNumeric )
+                return false;
+
+            // Both non-numeric or mixed alphanumeric - use lexicographic sorting
+            return numA < numB;
+        });
+
+    // Build the stacked notation string with range collapsing
+    wxString stackedNotation = wxT("[");
+
+    // Helper function to collapse consecutive numbers into ranges - handles arbitrary pin formats
+    auto collapseRanges = [&]() -> wxString
+    {
+        if( pinsToConvert.empty() )
+            return wxT("");
+
+        wxString result;
+
+        // Group pins by their alphanumeric prefix for range collapsing
+        std::map<wxString, std::vector<long>> prefixGroups;
+        std::vector<wxString> nonNumericPins;
+
+        // Parse each pin number to separate prefix from numeric suffix
+        for( SCH_PIN* pin : pinsToConvert )
+        {
+            wxString pinNumber = pin->GetNumber();
+
+            // Skip empty pin numbers (shouldn't happen, but be defensive)
+            if( pinNumber.IsEmpty() )
+            {
+                nonNumericPins.push_back( wxT("(empty)") );
+                continue;
+            }
+
+            wxString prefix;
+            wxString numericPart;
+
+            // Find where numeric part starts (scan from end)
+            size_t numStart = pinNumber.length();
+            for( int i = pinNumber.length() - 1; i >= 0; i-- )
+            {
+                if( !wxIsdigit( pinNumber[i] ) )
+                {
+                    numStart = i + 1;
+                    break;
+                }
+                if( i == 0 )  // All digits
+                    numStart = 0;
+            }
+
+            if( numStart < pinNumber.length() )  // Has numeric suffix
+            {
+                prefix = pinNumber.Left( numStart );
+                numericPart = pinNumber.Mid( numStart );
+
+                long numValue;
+                if( numericPart.ToLong( &numValue ) && numValue >= 0 )  // Valid non-negative number
+                {
+                    prefixGroups[prefix].push_back( numValue );
+                }
+                else
+                {
+                    // Numeric part couldn't be parsed or is negative - treat as non-numeric
+                    nonNumericPins.push_back( pinNumber );
+                }
+            }
+            else  // No numeric suffix - consolidate as individual value
+            {
+                nonNumericPins.push_back( pinNumber );
+            }
+        }
+
+        // Process each prefix group
+        for( auto& [prefix, numbers] : prefixGroups )
+        {
+            if( !result.IsEmpty() )
+                result += wxT(",");
+
+            // Sort numeric values for this prefix
+            std::sort( numbers.begin(), numbers.end() );
+
+            // Collapse consecutive ranges within this prefix
+            size_t i = 0;
+            while( i < numbers.size() )
+            {
+                if( i > 0 )  // Not first number in this prefix group
+                    result += wxT(",");
+
+                long start = numbers[i];
+                long end = start;
+
+                // Find the end of consecutive sequence
+                while( i + 1 < numbers.size() && numbers[i + 1] == numbers[i] + 1 )
+                {
+                    i++;
+                    end = numbers[i];
+                }
+
+                // Add range or single number with prefix
+                if( end > start + 1 )  // Range of 3+ numbers
+                    result += wxString::Format( wxT("%s%ld-%s%ld"), prefix, start, prefix, end );
+                else if( end == start + 1 )  // Two consecutive numbers
+                    result += wxString::Format( wxT("%s%ld,%s%ld"), prefix, start, prefix, end );
+                else  // Single number
+                    result += wxString::Format( wxT("%s%ld"), prefix, start );
+
+                i++;
+            }
+        }
+
+        // Add non-numeric pin numbers as individual comma-separated values
+        for( const wxString& nonNum : nonNumericPins )
+        {
+            if( !result.IsEmpty() )
+                result += wxT(",");
+            result += nonNum;
+        }
+
+        return result;
+    };
+
+    stackedNotation += collapseRanges();
+    stackedNotation += wxT("]");
+
+    // Keep the first pin and give it the stacked notation
+    SCH_PIN* masterPin = pinsToConvert[0];
+    masterPin->SetNumber( stackedNotation );
+
+    // Log information about pins being removed before we remove them
+    wxLogTrace( "KICAD_STACKED_PINS",
+               wxString::Format( "Converting %zu pins to stacked notation '%s'",
+                               pinsToConvert.size(), stackedNotation ) );
+
+    // Remove all other pins from the symbol that were consolidated into the stacked notation
+    // Collect pins to remove first, then remove them all at once like the Delete command
+    std::vector<SCH_PIN*> pinsToRemove;
+    for( size_t i = 1; i < pinsToConvert.size(); ++i )
+    {
+        SCH_PIN* pinToRemove = pinsToConvert[i];
+
+        // Log the pin before removing it
+        wxLogTrace( "KICAD_STACKED_PINS",
+                   wxString::Format( "Will remove pin '%s' at position (%d, %d)",
+                                   pinToRemove->GetNumber(),
+                                   pinToRemove->GetPosition().x,
+                                   pinToRemove->GetPosition().y ) );
+
+        pinsToRemove.push_back( pinToRemove );
+    }
+
+    // Remove all pins at once, like the Delete command does
+    for( SCH_PIN* pin : pinsToRemove )
+    {
+        symbol->RemoveDrawItem( pin );
+    }
+
+    commit.Push( wxString::Format( _( "Convert %zu Stacked Pins to '%s'" ),
+                                  pinsToConvert.size(), stackedNotation ) );
+    m_frame->RebuildView();
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_EDIT_TOOL::ExplodeStackedPin( const TOOL_EVENT& aEvent )
+{
+    SCH_COMMIT  commit( m_frame );
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+
+    if( !symbol )
+        return 0;
+
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    wxCHECK( selTool, -1 );
+
+    SCH_SELECTION& selection = selTool->GetSelection();
+
+    if( selection.GetSize() != 1 || selection.Front()->Type() != SCH_PIN_T )
+    {
+        m_frame->ShowInfoBarError( _( "Select a single pin with stacked notation to explode" ) );
+        return 0;
+    }
+
+    SCH_PIN* pin = static_cast<SCH_PIN*>( selection.Front() );
+
+    // Check if the pin has stacked notation
+    bool isValid;
+    std::vector<wxString> stackedNumbers = pin->GetStackedPinNumbers( &isValid );
+
+    if( !isValid || stackedNumbers.size() <= 1 )
+    {
+        m_frame->ShowInfoBarError( _( "Selected pin does not have valid stacked notation" ) );
+        return 0;
+    }
+
+    commit.Modify( symbol, m_frame->GetScreen() );
+
+    // Clear selection before modifying pins
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    // Sort the stacked numbers to find the smallest one
+    std::sort( stackedNumbers.begin(), stackedNumbers.end(),
+        []( const wxString& a, const wxString& b )
+        {
+            // Try to convert to integers for proper numeric sorting
+            long numA, numB;
+            if( a.ToLong( &numA ) && b.ToLong( &numB ) )
+                return numA < numB;
+
+            // Fall back to string comparison if not numeric
+            return a < b;
+        });
+
+    // Change the original pin to use the first (smallest) number and make it visible
+    pin->SetNumber( stackedNumbers[0] );
+    pin->SetVisible( true );
+
+    // Create additional pins for the remaining numbers and make them invisible
+    for( size_t i = 1; i < stackedNumbers.size(); ++i )
+    {
+        SCH_PIN* newPin = new SCH_PIN( symbol );
+
+        // Copy all properties from the original pin
+        newPin->SetPosition( pin->GetPosition() );
+        newPin->SetOrientation( pin->GetOrientation() );
+        newPin->SetShape( pin->GetShape() );
+        newPin->SetLength( pin->GetLength() );
+        newPin->SetType( pin->GetType() );
+        newPin->SetName( pin->GetName() );
+        newPin->SetNumber( stackedNumbers[i] );
+        newPin->SetNameTextSize( pin->GetNameTextSize() );
+        newPin->SetNumberTextSize( pin->GetNumberTextSize() );
+        newPin->SetUnit( pin->GetUnit() );
+        newPin->SetBodyStyle( pin->GetBodyStyle() );
+        newPin->SetVisible( false );  // Make all other pins invisible
+
+        // Add the new pin to the symbol
+        symbol->AddDrawItem( newPin );
+    }
+
+    commit.Push( _( "Explode Stacked Pin" ) );
+    m_frame->RebuildView();
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
@@ -1021,6 +1413,8 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::symbolProperties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           SCH_ACTIONS::pinTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins, SCH_ACTIONS::convertStackedPins.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::ExplodeStackedPin,  SCH_ACTIONS::explodeStackedPin.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, SCH_ACTIONS::updateSymbolFields.MakeEvent() );
     // clang-format on
 }

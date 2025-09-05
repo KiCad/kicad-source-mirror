@@ -119,6 +119,12 @@ public:
     int TestGroundPins();
 
     /**
+     * Checks for pin numbers that resemble stacked pin notation but are invalid.
+     * @return warning count
+     */
+    int TestStackedPinNotation();
+
+    /**
      * Checks for global and local labels with the same name
      * @return the error count
      */

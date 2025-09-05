@@ -1,11 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -14,59 +14,148 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * along with this program; if not, you may find one at
+ * http://www.gnu.org/licenses/
  */
 
 #include "pin_layout_cache.h"
-
 #include <geometry/direction45.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <sch_symbol.h>
 #include <eeschema_settings.h>
 #include <schematic_settings.h>
-
+#include <string_utils.h>
 #include <geometry/shape_utils.h>
 
+// Small margin in internal units between the pin text and the pin line
+static const int PIN_TEXT_MARGIN = 4;
 
-namespace
+// Forward declaration for helper implemented in sch_pin.cpp
+wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength, int aTextSize,
+                                     KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics );
+
+std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( int aShadowWidth )
 {
+    recomputeCaches();
 
-// small margin in internal units between the pin text and the pin line
-const int PIN_TEXT_MARGIN = 4;
+    wxString number = m_pin.GetShownNumber();
+    if( number.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
+        return std::nullopt;
 
-struct EXTENTS_CACHE
-{
-    KIFONT::FONT* m_Font = nullptr;
-    int           m_FontSize = 0;
-    VECTOR2I      m_Extents;
-};
+    // Format stacked representation if necessary
+    EESCHEMA_SETTINGS*     cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg ? cfg->m_Appearance.default_font : wxString( "" ) );
+    const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
+    wxString formatted = FormatStackedPinForDisplay( number, m_pin.GetLength(), m_pin.GetNumberTextSize(), font, metrics );
 
-/// Utility for getting the size of the 'external' pin decorators (as a radius)
-// i.e. the negation circle, the polarity 'slopes' and the nonlogic
-// marker
-int externalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
+    std::optional<TEXT_INFO> info = TEXT_INFO();
+    info->m_Text      = formatted;
+    info->m_TextSize  = m_pin.GetNumberTextSize();
+    info->m_Thickness = m_numberThickness;
+    info->m_HAlign    = GR_TEXT_H_ALIGN_CENTER;
+    info->m_VAlign    = GR_TEXT_V_ALIGN_CENTER;
+
+    PIN_ORIENTATION orient = m_pin.PinDrawOrient( DefaultTransform );
+
+    auto estimateQABox = [&]( const wxString& txt, int size, bool isVertical ) -> VECTOR2I
+    {
+        int h = size;
+        int w = (int) ( txt.Length() * size * 0.6 );
+        if( txt.Contains( '\n' ) )
+        {
+            wxArrayString lines; wxStringSplit( txt, lines, '\n' );
+            if( isVertical )
+            {
+                int lineSpacing = KiROUND( size * 1.3 );
+                w = (int) lines.size() * lineSpacing;
+                size_t maxLen = 0; for( const wxString& l : lines ) maxLen = std::max( maxLen, l.Length() );
+                h = (int) ( maxLen * size * 0.6 );
+            }
+            else
+            {
+                int lineSpacing = KiROUND( size * 1.3 );
+                h = (int) lines.size() * lineSpacing;
+                size_t maxLen = 0; for( const wxString& l : lines ) maxLen = std::max( maxLen, l.Length() );
+                w = (int) ( maxLen * size * 0.6 );
+            }
+        }
+        return VECTOR2I( w, h );
+    };
+
+    // Pass 1: determine maximum perpendicular half span among all pin numbers to ensure
+    // a single distance from the pin center that avoids overlap for every pin.
+    const SYMBOL* parentSym = m_pin.GetParentSymbol();
+    int maxHalfHeight = 0; // vertical half span across all numbers
+    int maxHalfWidth  = 0; // horizontal half span across all numbers (for vertical pins overlap avoidance)
+    int maxFullHeight = 0; // full height (for dynamic clearance)
+    if( parentSym )
+    {
+        for( const SCH_PIN* p : parentSym->GetPins() )
+        {
+            wxString raw = p->GetShownNumber();
+            if( raw.IsEmpty() )
+                continue;
+            wxString fmt = FormatStackedPinForDisplay( raw, p->GetLength(), p->GetNumberTextSize(), font, p->GetFontMetrics() );
+            // Determine true max height regardless of rotation: use isVertical=false path for multiline height
+            VECTOR2I box = estimateQABox( fmt, p->GetNumberTextSize(), false );
+        maxHalfHeight = std::max( maxHalfHeight, box.y / 2 );
+        maxFullHeight = std::max( maxFullHeight, box.y );
+            maxHalfWidth  = std::max( maxHalfWidth,  box.x / 2 );
+        }
+    }
+    int clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
+    VECTOR2I pinPos = m_pin.GetPosition();
+    bool verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
+
+    // We need the per-pin bounding width for vertical placement (rotated text).  For vertical
+    // pins we anchor by the RIGHT edge of the text box so the gap from the pin to text is
+    // constant (clearance) independent of text width (multi-line vs single-line).
+    auto currentBox = estimateQABox( formatted, info->m_TextSize, verticalOrient );
+
+    if( verticalOrient )
+    {
+        // Vertical pins: text is placed to the LEFT (negative X) and rotated vertical so that it
+        // reads bottom->top when the schematic is in its canonical orientation.  We right-edge
+        // align the text box at (pin.x - clearance) to keep a constant gap regardless of text width.
+        int boxWidth = currentBox.x;
+        int centerX = pinPos.x - clearance - boxWidth / 2;
+        info->m_TextPosition.x = centerX;
+        info->m_TextPosition.y = pinPos.y;
+        info->m_Angle = ANGLE_VERTICAL;
+    }
+    else
+    {
+        // Horizontal pins: "above" means negative Y direction.  All numbers are centered on the
+        // pin X and share a Y offset derived from the maximum half height across all numbers so
+        // that multi-line and single-line numbers align cleanly.
+        int centerY = pinPos.y - ( maxHalfHeight + clearance );
+        info->m_TextPosition.x = pinPos.x; // centered horizontally on pin origin
+        info->m_TextPosition.y = centerY;
+        info->m_Angle = ANGLE_HORIZONTAL;
+    }
+
+    return info;
+}
+// (Removed duplicate license & namespace with second PIN_TEXT_MARGIN to avoid ambiguity)
+
+// NOTE: The real implementation of FormatStackedPinForDisplay lives in sch_pin.cpp.
+// The accidental, partial duplicate that was here has been removed.
+
+// Reintroduce small helper functions (previously inside an anonymous namespace) needed later.
+static int externalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
 {
     if( aSettings && aSettings->m_PinSymbolSize )
         return aSettings->m_PinSymbolSize;
-
     return aPin.GetNumberTextSize() / 2;
 }
 
-
-int internalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
+static int internalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
 {
     if( aSettings && aSettings->m_PinSymbolSize > 0 )
         return aSettings->m_PinSymbolSize;
-
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
-
-} // namespace
 
 
 PIN_LAYOUT_CACHE::PIN_LAYOUT_CACHE( const SCH_PIN& aPin ) :
@@ -131,6 +220,42 @@ void PIN_LAYOUT_CACHE::recomputeExtentsCache( bool aDefinitelyDirty, KIFONT::FON
     VECTOR2D fontSize( aSize, aSize );
     int      penWidth = GetPenSizeForNormal( aSize );
 
+    // Handle multi-line text bounds properly
+    if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
+    {
+        // Extract content between braces and split into lines
+        wxString content = aText.Mid( 1, aText.Length() - 2 );
+        wxArrayString lines;
+        wxStringSplit( content, lines, '\n' );
+
+        if( lines.size() > 1 )
+        {
+            int lineSpacing = KiROUND( aSize * 1.3 );  // Same as drawMultiLineText
+            int maxWidth = 0;
+
+            // Find the widest line
+            for( const wxString& line : lines )
+            {
+                wxString trimmedLine = line;
+                trimmedLine.Trim( true ).Trim( false );
+                VECTOR2I lineExtents = aFont->StringBoundaryLimits( trimmedLine, fontSize, penWidth, false, false, aFontMetrics );
+                maxWidth = std::max( maxWidth, lineExtents.x );
+            }
+
+            // Calculate total dimensions - width is max line width, height accounts for all lines
+            int totalHeight = aSize + ( lines.size() - 1 ) * lineSpacing;
+
+            // Add space for braces
+            int braceWidth = aSize / 3;
+            maxWidth += braceWidth * 2;  // Space for braces on both sides
+            totalHeight += aSize / 3;    // Extra height for brace extensions
+
+            aCache.m_Extents = VECTOR2I( maxWidth, totalHeight );
+            return;
+        }
+    }
+
+    // Single line text (normal case)
     aCache.m_Extents = aFont->StringBoundaryLimits( aText, fontSize, penWidth, false, false, aFontMetrics );
 }
 
@@ -221,35 +346,38 @@ void PIN_LAYOUT_CACHE::transformBoxForPin( BOX2I& aBox ) const
 
 void PIN_LAYOUT_CACHE::transformTextForPin( TEXT_INFO& aInfo ) const
 {
-    // Now, calculate boundary box corners position for the actual pin orientation
+    // Local nominal position for a PIN_RIGHT orientation.
+    const VECTOR2I baseLocal = aInfo.m_TextPosition;
+
+    // We apply a rotation/mirroring depending on the pin orientation so that the text anchor
+    // maintains a constant perpendicular offset from the pin origin regardless of rotation.
+    VECTOR2I rotated = baseLocal;
+    EDA_ANGLE finalAngle = aInfo.m_Angle;
+
     switch( m_pin.PinDrawOrient( DefaultTransform ) )
     {
+    case PIN_ORIENTATION::PIN_RIGHT: // identity
+        break;
     case PIN_ORIENTATION::PIN_LEFT:
-    {
-        aInfo.m_HAlign = GetFlippedAlignment( aInfo.m_HAlign );
-        aInfo.m_TextPosition.x = -aInfo.m_TextPosition.x;
-        break;
-    }
-    case PIN_ORIENTATION::PIN_UP:
-    {
-        aInfo.m_Angle = ANGLE_VERTICAL;
-        aInfo.m_TextPosition = { aInfo.m_TextPosition.y, -aInfo.m_TextPosition.x };
-        break;
-    }
-    case PIN_ORIENTATION::PIN_DOWN:
-    {
-        aInfo.m_Angle = ANGLE_VERTICAL;
-        aInfo.m_TextPosition = { aInfo.m_TextPosition.y, aInfo.m_TextPosition.x };
+        rotated.x = -rotated.x;
+        rotated.y = -rotated.y;
         aInfo.m_HAlign = GetFlippedAlignment( aInfo.m_HAlign );
         break;
-    }
+    case PIN_ORIENTATION::PIN_UP: // rotate +90 (x,y)->(y,-x) and vertical text
+        rotated = { baseLocal.y, -baseLocal.x };
+        finalAngle = ANGLE_VERTICAL;
+        break;
+    case PIN_ORIENTATION::PIN_DOWN: // rotate -90 (x,y)->(-y,x) and vertical text, flip h-align
+        rotated = { -baseLocal.y, baseLocal.x };
+        finalAngle = ANGLE_VERTICAL;
+        aInfo.m_HAlign = GetFlippedAlignment( aInfo.m_HAlign );
+        break;
     default:
-    case PIN_ORIENTATION::PIN_RIGHT:
-        // Already in this form
         break;
     }
 
-    aInfo.m_TextPosition += m_pin.GetPosition();
+    aInfo.m_TextPosition = rotated + m_pin.GetPosition();
+    aInfo.m_Angle = finalAngle;
 }
 
 
@@ -643,48 +771,47 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
         info->m_VAlign = GR_TEXT_V_ALIGN_BOTTOM;
     }
 
-    transformTextForPin( *info );
+    // New policy: names follow same positioning semantics as numbers.
+    const SYMBOL* parentSym = m_pin.GetParentSymbol();
+    if( parentSym )
+    {
+        int maxHalfHeight = 0;
+        for( const SCH_PIN* p : parentSym->GetPins() )
+        {
+            wxString n = p->GetShownName();
+            if( n.IsEmpty() )
+                continue;
+            maxHalfHeight = std::max( maxHalfHeight, p->GetNameTextSize() / 2 );
+        }
+        int clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
+        VECTOR2I pinPos = m_pin.GetPosition();
+        PIN_ORIENTATION orient = m_pin.PinDrawOrient( DefaultTransform );
+        bool verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
+
+        if( verticalOrient )
+        {
+            // Vertical pins: name mirrors number placement (left + rotated) for visual consistency.
+            int boxWidth = info->m_TextSize * (int) info->m_Text.Length() * 0.6; // heuristic width
+            int centerX = pinPos.x - clearance - boxWidth / 2;
+            info->m_TextPosition = { centerX, pinPos.y };
+            info->m_Angle = ANGLE_VERTICAL;
+            info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+            info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+        }
+        else
+        {
+            // Horizontal pins: name above (negative Y) aligned to same Y offset logic as numbers.
+            info->m_TextPosition = { pinPos.x, pinPos.y - ( maxHalfHeight + clearance ) };
+            info->m_Angle = ANGLE_HORIZONTAL;
+            info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+            info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+        }
+    }
     return info;
 }
 
 
-std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( int aShadowWidth )
-{
-    recomputeCaches();
-
-    wxString number = m_pin.GetShownNumber();
-    if( number.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
-        return std::nullopt;
-
-    std::optional<TEXT_INFO> info;
-
-    info = TEXT_INFO();
-    info->m_Text = std::move( number );
-    info->m_TextSize = m_pin.GetNumberTextSize();
-    info->m_Thickness = m_numberThickness;
-    info->m_Angle = ANGLE_HORIZONTAL;
-    info->m_TextPosition = { m_pin.GetLength() / 2, 0 };
-    info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
-
-    // The pin number is above the pin if there's no name, or the name is inside
-    const bool numAbove =
-            m_pin.GetParentSymbol()->GetPinNameOffset() > 0
-            || ( m_pin.GetShownName().empty() || !m_pin.GetParentSymbol()->GetShowPinNames() );
-
-    if( numAbove )
-    {
-        info->m_TextPosition.y -= getPinTextOffset() + info->m_Thickness / 2;
-        info->m_VAlign = GR_TEXT_V_ALIGN_BOTTOM;
-    }
-    else
-    {
-        info->m_TextPosition.y += getPinTextOffset() + info->m_Thickness / 2;
-        info->m_VAlign = GR_TEXT_V_ALIGN_TOP;
-    }
-
-    transformTextForPin( *info );
-    return info;
-}
+// (Removed duplicate later GetPinNumberInfo – earlier definition retained at top of file.)
 
 
 std::optional<PIN_LAYOUT_CACHE::TEXT_INFO>

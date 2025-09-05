@@ -62,6 +62,7 @@
 #include <wx/stattext.h>
 #include <wx/button.h>
 #include <wx/msgdlg.h>
+#include <wx/ffile.h>
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -796,7 +797,12 @@ void CVPCB_MAINFRAME::DisplayStatus()
         msg.Empty();
 
         if( symbol )
-            msg = wxString::Format( wxT( "%i" ), symbol->GetPinCount() );
+        {
+            int pc = symbol->GetPinCount();
+            wxLogTrace( "CVPCB_PINCOUNT", wxT( "DisplayStatus: selected '%s' pinCount=%d" ),
+                        symbol->GetReference(), pc );
+            msg = wxString::Format( wxT( "%i" ), pc );
+        }
 
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
@@ -956,6 +962,12 @@ int CVPCB_MAINFRAME::readSchematicNetlist( const std::string& aNetlist )
     KICAD_NETLIST_READER netlistReader( stringReader, &m_netlist );
 
     m_netlist.Clear();
+
+    // Trace basic payload characteristics to verify libparts are present and visible here
+    wxLogTrace( "CVPCB_PINCOUNT",
+                wxT( "readSchematicNetlist: payload size=%zu has_libparts=%d has_libpart=%d" ),
+                aNetlist.size(), aNetlist.find( "(libparts" ) != std::string::npos,
+                aNetlist.find( "(libpart" ) != std::string::npos );
 
     try
     {

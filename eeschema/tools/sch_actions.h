@@ -148,6 +148,8 @@ public:
     static TOOL_ACTION editSymbolLibraryLinks;
     static TOOL_ACTION symbolProperties;
     static TOOL_ACTION pinTable;
+    static TOOL_ACTION convertStackedPins;
+    static TOOL_ACTION explodeStackedPin;
     static TOOL_ACTION changeSymbols;
     static TOOL_ACTION updateSymbols;
     static TOOL_ACTION changeSymbol;

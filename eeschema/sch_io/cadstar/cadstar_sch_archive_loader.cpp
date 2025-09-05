@@ -3300,7 +3300,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
         }
     }
 
-    for( SCH_PIN* pin : aSymbolToFix->GetPins( aGateNumber, 0 ) )
+    for( SCH_PIN* pin : aSymbolToFix->GetGraphicalPins( aGateNumber, 0 ) )
     {
         auto setPinOrientation =
                 [&]( const EDA_ANGLE& aAngle )

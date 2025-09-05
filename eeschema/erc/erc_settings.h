@@ -87,8 +87,9 @@ enum ERCE_T
     ERCE_FOUR_WAY_JUNCTION,       ///< A four-way junction was found.
     ERCE_LABEL_MULTIPLE_WIRES,    ///< A label is connected to more than one wire.
     ERCE_UNCONNECTED_WIRE_ENDPOINT, ///< A label is connected to more than one wire.
+    ERCE_STACKED_PIN_SYNTAX,      ///< Pin name resembles stacked pin notation.
 
-    ERCE_LAST = ERCE_UNCONNECTED_WIRE_ENDPOINT,
+    ERCE_LAST = ERCE_STACKED_PIN_SYNTAX,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level

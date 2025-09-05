@@ -132,7 +132,13 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
         filter.FilterByFootprintFilters( aComponent->GetFootprintFilters() );
 
     if( aFilterType & FILTERING_BY_PIN_COUNT && aComponent )
-        filter.FilterByPinCount( aComponent->GetPinCount() );
+    {
+        int pc = aComponent->GetPinCount();
+        wxLogTrace( "CVPCB_PINCOUNT",
+                    wxT( "FOOTPRINTS_LISTBOX::SetFootprints: ref='%s' pinCount filter=%d" ),
+                    aComponent->GetReference(), pc );
+        filter.FilterByPinCount( pc );
+    }
 
     if( aFilterType & FILTERING_BY_LIBRARY )
         filter.FilterByLibrary( aLibName );

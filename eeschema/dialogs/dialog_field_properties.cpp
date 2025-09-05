@@ -175,11 +175,28 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
         wxString      netlist;
         wxArrayString pins;
 
-        for( SCH_PIN* pin : symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+        for( SCH_PIN* pin : symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+        {
+            bool valid = false;
+            auto expanded = pin->GetStackedPinNumbers( &valid );
+
+            if( valid && !expanded.empty() )
+            {
+                for( const wxString& num : expanded )
+                    pins.push_back( num + ' ' + pin->GetShownName() );
+            }
+            else
+            {
+                pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+            }
+        }
 
         if( !pins.IsEmpty() )
-            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+        {
+            wxString dbg = wxJoin( pins, '\t' );
+            wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins (LIB_SYMBOL): %s" ), dbg );
+            netlist << EscapeString( dbg, CTX_LINE );
+        }
 
         netlist << wxS( "\r" );
 
@@ -213,12 +230,28 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 
         if( lib_symbol )
         {
-            for( SCH_PIN* pin : lib_symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
-                pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+            for( SCH_PIN* pin : lib_symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+            {
+                bool valid = false;
+                auto expanded = pin->GetStackedPinNumbers( &valid );
+                if( valid && !expanded.empty() )
+                {
+                    for( const wxString& num : expanded )
+                        pins.push_back( num + ' ' + pin->GetShownName() );
+                }
+                else
+                {
+                    pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+                }
+            }
         }
 
         if( !pins.IsEmpty() )
-            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+        {
+            wxString dbg = wxJoin( pins, '\t' );
+            wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins (SCH_SYMBOL): %s" ), dbg );
+            netlist << EscapeString( dbg, CTX_LINE );
+        }
 
         netlist << wxS( "\r" );
 

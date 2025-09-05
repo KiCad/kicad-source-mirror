@@ -658,7 +658,7 @@ private:
                 {
                     std::vector<SCH_PIN*> pins;
 
-                    for( SCH_PIN* pin : aSymbol.GetPins( aUnit, 0 ) )
+                    for( SCH_PIN* pin : aSymbol.GetGraphicalPins( aUnit, 0 ) )
                     {
                         // Figure out if the pin "connects" to the line
                         const VECTOR2I pinRootPos = pin->GetPinRoot();

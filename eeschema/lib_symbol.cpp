@@ -782,7 +782,7 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 }
 
 
-std::vector<SCH_PIN*> LIB_SYMBOL::GetPins( int aUnit, int aBodyStyle ) const
+std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
 {
     std::vector<SCH_PIN*> pins;
 
@@ -807,28 +807,75 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetPins( int aUnit, int aBodyStyle ) const
             continue;
 
         // TODO: get rid of const_cast.  (It used to be a C-style cast so was less noticeable.)
-        pins.push_back( const_cast<SCH_PIN*>( static_cast<const SCH_PIN*>( &item ) ) );
+        SCH_PIN* pin = const_cast<SCH_PIN*>( static_cast<const SCH_PIN*>( &item ) );
+        wxLogTrace( "KICAD_STACKED_PINS",
+                    wxString::Format( "GetGraphicalPins: lib='%s' unit=%d body=%d -> include pin name='%s' number='%s' shownNum='%s'",
+                                      GetLibId().Format().wx_str(), aUnit, aBodyStyle,
+                                      pin->GetName(), pin->GetNumber(), pin->GetShownNumber() ) );
+        pins.push_back( pin );
     }
 
     return pins;
 }
 
 
-std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
+std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int aBodyStyle ) const
 {
-    return GetPins( 0, 0 );
+    std::vector<LOGICAL_PIN> out;
+
+    for( SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
+    {
+        bool valid = false;
+        std::vector<wxString> expanded = pin->GetStackedPinNumbers( &valid );
+
+        if( valid && !expanded.empty() )
+        {
+            for( const wxString& num : expanded )
+            {
+                out.push_back( LOGICAL_PIN{ pin, num } );
+                wxLogTrace( "KICAD_STACKED_PINS",
+                            wxString::Format( "GetLogicalPins: base='%s' -> '%s'",
+                                              pin->GetShownNumber(), num ) );
+            }
+        }
+        else
+        {
+            out.push_back( LOGICAL_PIN{ pin, pin->GetShownNumber() } );
+            wxLogTrace( "KICAD_STACKED_PINS",
+                        wxString::Format( "GetLogicalPins: base='%s' (no expansion)",
+                                          pin->GetShownNumber() ) );
+        }
+    }
+
+    return out;
 }
 
 
 int LIB_SYMBOL::GetPinCount()
 {
-    return (int) GetPins( 0 /* all units */, 1 /* single body style */ ).size();
+    int count = 0;
+
+    for( SCH_PIN* pin : GetGraphicalPins( 0 /* all units */, 1 /* single body style */ ) )
+    {
+        bool                        valid;
+        std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
+    wxLogTrace( "CVPCB_PINCOUNT",
+            wxString::Format( "LIB_SYMBOL::GetPinCount lib='%s' pin base='%s' shown='%s' valid=%d +%zu",
+                      GetLibId().Format().wx_str(), pin->GetName(),
+                      pin->GetShownNumber(), valid, numbers.size() ) );
+        count += numbers.size();
+    }
+
+    wxLogTrace( "CVPCB_PINCOUNT",
+        wxString::Format( "LIB_SYMBOL::GetPinCount total for lib='%s' => %d",
+                  GetLibId().Format().wx_str(), count ) );
+    return count;
 }
 
 
 SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
 {
-    for( SCH_PIN* pin : GetPins( aUnit, aBodyStyle ) )
+    for( SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
     {
         if( aNumber == pin->GetNumber() )
             return pin;
@@ -841,12 +888,12 @@ SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle 
 bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums, bool aTestNames,
                                    bool aTestType, bool aTestOrientation, bool aTestLength ) const
 {
-    for( const SCH_PIN* pin : GetPins() )
+    for( const SCH_PIN* pin : GetGraphicalPins() )
     {
         wxASSERT( pin );
         bool foundMatch = false;
 
-        for( const SCH_PIN* otherPin : aOtherPart.GetPins() )
+        for( const SCH_PIN* otherPin : aOtherPart.GetGraphicalPins() )
         {
             wxASSERT( otherPin );
 
@@ -897,6 +944,12 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
 
     // The loop never gave up, so no conflicts were found.
     return false;
+}
+
+std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
+{
+    // Back-compat shim: return graphical pins for all units/body styles
+    return GetGraphicalPins( 0, 0 );
 }
 
 

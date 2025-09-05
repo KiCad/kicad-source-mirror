@@ -1128,7 +1128,7 @@ const SCH_PIN* SCH_SYMBOL::GetPin( const VECTOR2I& aPos ) const
 std::vector<SCH_PIN*> SCH_SYMBOL::GetLibPins() const
 {
     if( m_part )
-        return m_part->GetPins( m_unit, m_bodyStyle );
+    return m_part->GetGraphicalPins( m_unit, m_bodyStyle );
 
     return std::vector<SCH_PIN*>();
 }
@@ -2530,11 +2530,11 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
     if( m_part )
     {
-        std::vector<SCH_PIN*> libPins = m_part->GetPins( GetUnit(), GetBodyStyle() );
+    std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source so we can re-orient and translate it.
         LIB_SYMBOL            tempSymbol( *m_part );
-        std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( GetUnit(), GetBodyStyle() );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the pin info from the symbol to the temp pins
         for( unsigned i = 0; i < tempPins.size(); ++ i )
@@ -2652,11 +2652,11 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
         TRANSFORM            savedTransform = renderSettings->m_Transform;
         renderSettings->m_Transform = GetTransform();
 
-        std::vector<SCH_PIN*> libPins = m_part->GetPins( GetUnit(), GetBodyStyle() );
+    std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source to stay const
         LIB_SYMBOL            tempSymbol( *m_part );
-        std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( GetUnit(), GetBodyStyle() );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
         SCH_PLOT_OPTS         plotOpts;
 
         // Copy the pin info from the symbol to the temp pins

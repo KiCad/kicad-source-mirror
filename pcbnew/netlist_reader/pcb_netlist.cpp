@@ -29,6 +29,8 @@
 #include <footprint.h>
 #include <richio.h>
 #include <string_utils.h>
+#include <wx/tokenzr.h>
+#include <wx/log.h>
 
 
 int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
@@ -60,14 +62,56 @@ void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
 COMPONENT_NET COMPONENT::m_emptyNet;
 
 
+
+
+
 const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName ) const
 {
+    wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                wxT( "Looking for pin '%s' in component '%s'" ),
+                aPinName, m_reference );
+
     for( const COMPONENT_NET& net : m_nets )
     {
+        wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                    wxT( "  Checking net pin name '%s'" ),
+                    net.GetPinName() );
+
         if( net.GetPinName() == aPinName )
+        {
+            wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                        wxT( "  Found exact match for pin '%s'" ),
+                        aPinName );
             return net;
+        }
+
+        // Check if this net's pin name is a stacked pin notation that expands to include aPinName
+        std::vector<wxString> expandedPins = ExpandStackedPinNotation( net.GetPinName() );
+        if( !expandedPins.empty() )
+        {
+            wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                        wxT( "  Pin name '%s' expanded to %zu pins" ),
+                        net.GetPinName(), expandedPins.size() );
+
+            for( const wxString& expandedPin : expandedPins )
+            {
+                wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                            wxT( "    Checking expanded pin '%s'" ),
+                            expandedPin );
+                if( expandedPin == aPinName )
+                {
+                    wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                                wxT( "  Found match for pin '%s' in stacked notation '%s'" ),
+                                aPinName, net.GetPinName() );
+                    return net;
+                }
+            }
+        }
     }
 
+    wxLogTrace( wxT( "NETLIST_STACKED_PINS" ),
+                wxT( "  No net found for pin '%s'" ),
+                aPinName );
     return m_emptyNet;
 }
 

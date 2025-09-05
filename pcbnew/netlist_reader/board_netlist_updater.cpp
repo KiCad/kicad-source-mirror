@@ -45,6 +45,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <connectivity/connectivity_data.h>
 #include <reporter.h>
+#include <wx/log.h>
 
 #include "board_netlist_updater.h"
 
@@ -965,13 +966,27 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     {
         const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetNumber() );
 
+        wxLogTrace( wxT( "NETLIST_UPDATE" ),
+                    wxT( "Processing pad %s of component %s" ),
+                    pad->GetNumber(),
+                    aNewComponent->GetReference() );
+
         wxString pinFunction;
         wxString pinType;
 
         if( net.IsValid() )     // i.e. the pad has a name
         {
+            wxLogTrace( wxT( "NETLIST_UPDATE" ),
+                        wxT( "  Found valid net: %s" ),
+                        net.GetNetName() );
             pinFunction = net.GetPinFunction();
             pinType = net.GetPinType();
+        }
+        else
+        {
+            wxLogTrace( wxT( "NETLIST_UPDATE" ),
+                        wxT( "  No net found for pad %s" ),
+                        pad->GetNumber() );
         }
 
         if( !m_isDryRun )

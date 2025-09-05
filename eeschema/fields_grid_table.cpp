@@ -79,12 +79,29 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 
     if( lib_symbol )
     {
-        for( SCH_PIN* pin : lib_symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+        for( SCH_PIN* pin : lib_symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+        {
+            bool                  valid = false;
+            std::vector<wxString> expanded = pin->GetStackedPinNumbers( &valid );
+
+            if( valid && !expanded.empty() )
+            {
+                for( const wxString& num : expanded )
+                    pins.push_back( num + ' ' + pin->GetShownName() );
+            }
+            else
+            {
+                pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+            }
+        }
     }
 
     if( !pins.IsEmpty() )
-        netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+    {
+        wxString dbg = wxJoin( pins, '\t' );
+        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins: %s" ), dbg );
+        netlist << EscapeString( dbg, CTX_LINE );
+    }
 
     netlist << wxS( "\r" );
 
@@ -112,11 +129,28 @@ static wxString netList( LIB_SYMBOL* aSymbol )
     wxString      netlist;
     wxArrayString pins;
 
-    for( SCH_PIN* pin : aSymbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
-        pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+    for( SCH_PIN* pin : aSymbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+    {
+        bool valid = false;
+        std::vector<wxString> expanded = pin->GetStackedPinNumbers( &valid );
+
+        if( valid && !expanded.empty() )
+        {
+            for( const wxString& num : expanded )
+                pins.push_back( num + ' ' + pin->GetShownName() );
+        }
+        else
+        {
+            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+        }
+    }
 
     if( !pins.IsEmpty() )
-        netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+    {
+        wxString dbg = wxJoin( pins, '\t' );
+        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins: %s" ), dbg );
+        netlist << EscapeString( dbg, CTX_LINE );
+    }
 
     netlist << wxS( "\r" );
 

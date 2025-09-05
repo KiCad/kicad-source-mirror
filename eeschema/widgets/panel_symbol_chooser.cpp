@@ -632,7 +632,7 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
 
     if( symbol != nullptr )
     {
-        int        pinCount = symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ).size();
+    int        pinCount = symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ).size();
         SCH_FIELD* fp_field = symbol->GetField( FIELD_T::FOOTPRINT );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 

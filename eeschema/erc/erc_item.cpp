@@ -161,6 +161,10 @@ ERC_ITEM ERC_ITEM::groundPinNotGround( ERCE_GROUND_PIN_NOT_GROUND,
         _HKI( "Ground pin not connected to ground net" ),
         wxT( "ground_pin_not_ground" ) );
 
+ERC_ITEM ERC_ITEM::stackedPinName( ERCE_STACKED_PIN_SYNTAX,
+        _HKI( "Pin name resembles stacked pin" ),
+        wxT( "stacked_pin_name" ) );
+
 ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _HKI( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
@@ -268,6 +272,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::groundPinNotGround,
 
             ERC_ITEM::heading_misc,
+            ERC_ITEM::stackedPinName,
             ERC_ITEM::unannotated,
             ERC_ITEM::unresolvedVariable,
             ERC_ITEM::undefinedNetclass,
@@ -351,6 +356,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_MISSING_POWER_INPUT_PIN: return std::make_shared<ERC_ITEM>( missingPowerInputPin );
     case ERCE_MISSING_BIDI_PIN:        return std::make_shared<ERC_ITEM>( missingBidiPin );
     case ERCE_UNCONNECTED_WIRE_ENDPOINT: return std::make_shared<ERC_ITEM>( unconnectedWireEndpoint );
+    case ERCE_STACKED_PIN_SYNTAX:      return std::make_shared<ERC_ITEM>( stackedPinName );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( wxS( "Unknown ERC error code" ) );

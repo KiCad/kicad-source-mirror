@@ -24,6 +24,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <pin_type.h>
 #include <sch_item.h>
@@ -122,6 +123,19 @@ public:
 
     const wxString& GetNumber() const { return m_number; }
     wxString GetShownNumber() const;
+    std::vector<wxString> GetStackedPinNumbers( bool* aValid = nullptr ) const;
+    /**
+     * Return the smallest logical pin number if this pin uses stacked
+     * notation and it is valid.  Otherwise returns std::nullopt.
+     */
+    std::optional<wxString> GetSmallestLogicalNumber() const;
+
+    /**
+     * Return the pin number to be used for deterministic operations such as
+     * auto‑generated net names.  For stacked pins this is the smallest logical
+     * number; otherwise it is the shown number.
+     */
+    wxString GetEffectivePadNumber() const;
     void SetNumber( const wxString& aNumber );
 
     int GetNameTextSize() const;

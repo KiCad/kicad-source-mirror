@@ -71,13 +71,15 @@ struct LIB_SYMBOL_LESS_THAN
 
 struct PIN_INFO
 {
-    PIN_INFO( const wxString& aPinNumber, const wxString& aNetName ) :
+    PIN_INFO( const wxString& aPinNumber, const wxString& aNetName, const wxString& aPinName ) :
             num( aPinNumber ),
-            netName( aNetName )
+            netName( aNetName ),
+            pinName( aPinName )
     {}
 
     wxString num;
     wxString netName;
+    wxString pinName;
 };
 
 
