@@ -43,7 +43,7 @@ enum class VISIBILITY_LAYER
     FOOTPRINT_REFERENCES,
     FOOTPRINT_TEXT,
     FOOTPRINT_ANCHORS,
-    POINTS,
+    LY_POINTS,              // Do not use POINTS: it collide with a Windows header define
     RATSNEST,
     DRC_WARNINGS,
     DRC_ERRORS,
