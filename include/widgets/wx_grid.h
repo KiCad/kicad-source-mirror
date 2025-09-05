@@ -41,9 +41,36 @@ class wxTextEntryBase;
 
 class WX_GRID_TABLE_BASE : public wxGridTableBase
 {
+public:
+    ~WX_GRID_TABLE_BASE() override
+    {
+        for( const auto& [col, attr] : m_colAttrs )
+            wxSafeDecRef( attr );
+    }
+
+    void SetColAttr( wxGridCellAttr* aAttr, int aCol ) override
+    {
+        wxSafeDecRef( m_colAttrs[aCol] );
+        m_colAttrs[aCol] = aAttr;
+    }
+
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override
+    {
+        if( m_colAttrs[aCol] )
+        {
+            m_colAttrs[aCol]->IncRef();
+            return enhanceAttr( m_colAttrs[aCol], aRow, aCol, aKind );
+        }
+
+        return nullptr;
+    }
+
 protected:
     wxGridCellAttr* enhanceAttr( wxGridCellAttr* aInputAttr, int aRow, int aCol,
                                  wxGridCellAttr::wxAttrKind aKind  );
+
+protected:
+    std::map<int, wxGridCellAttr*> m_colAttrs;
 };
 
 
@@ -293,11 +320,10 @@ protected:
 protected:
     bool                               m_weOwnTable;
 
-    std::map<int, UNITS_PROVIDER*>     m_unitsProviders;
-    std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
-    std::vector<int>                   m_autoEvalCols;
-    std::unordered_map<int, std::pair<EDA_UNITS, EDA_DATA_TYPE>> m_autoEvalColsUnits;
-
+    std::map<int, UNITS_PROVIDER*>                                 m_unitsProviders;
+    std::unique_ptr<NUMERIC_EVALUATOR>                             m_eval;
+    std::vector<int>                                               m_autoEvalCols;
+    std::unordered_map<int, std::pair<EDA_UNITS, EDA_DATA_TYPE>>   m_autoEvalColsUnits;
     std::map< std::pair<int, int>, std::pair<wxString, wxString> > m_evalBeforeAfter;
 
     std::optional<wxSize>              m_minSizeOverride;

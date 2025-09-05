@@ -16,24 +16,81 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#pragma once
+
 #include <sch_reference_list.h>
 #include <wx/grid.h>
 #include <widgets/wx_grid.h>
 
-// The field name in the data model (translated)
-#define DISPLAY_NAME_COLUMN   0
-
-// The field name's label for exporting (CSV, etc.)
-#define LABEL_COLUMN          1
-#define SHOW_FIELD_COLUMN     2
-#define GROUP_BY_COLUMN       3
-
-// The internal field name (untranslated)
-#define FIELD_NAME_COLUMN     4
 
 struct BOM_FIELD;
 struct BOM_PRESET;
 struct BOM_FMT_PRESET;
+
+
+// Columns for the View Fields grid
+#define DISPLAY_NAME_COLUMN   0     // The field name in the data model (translated)
+#define LABEL_COLUMN          1     // The field name's label for exporting (CSV, etc.)
+#define SHOW_FIELD_COLUMN     2
+#define GROUP_BY_COLUMN       3
+#define VIEW_FIELDS_COL_COUNT 4
+
+
+// Data model for the list of fields to view (and to group-by) for the Symbol Fields Table
+class VIEW_CONTROLS_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
+{
+public:
+    VIEW_CONTROLS_GRID_DATA_MODEL()
+    {}
+
+    ~VIEW_CONTROLS_GRID_DATA_MODEL() override = default;
+
+    int GetNumberRows() override { return (int) m_fields.size(); }
+    int GetNumberCols() override { return VIEW_FIELDS_COL_COUNT; }
+
+    wxString GetColLabelValue( int aCol ) override;
+
+    bool IsEmptyCell( int aRow, int aCol ) override
+    {
+        return false; // don't allow adjacent cell overflow, even if we are actually empty
+    }
+
+    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
+    {
+        switch( aCol )
+        {
+        case DISPLAY_NAME_COLUMN:
+        case LABEL_COLUMN:        return aTypeName == wxGRID_VALUE_STRING;
+
+        case SHOW_FIELD_COLUMN:
+        case GROUP_BY_COLUMN:     return aTypeName == wxGRID_VALUE_BOOL;
+
+        default:                  wxFAIL; return false;
+        }
+    }
+
+    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
+    {
+        return CanGetValueAs( aRow, aCol, aTypeName );
+    }
+
+    wxString GetValue( int aRow, int aCol ) override;
+    bool GetValueAsBool( int aRow, int aCol ) override;
+
+    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
+    void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
+
+    void AppendRow( const wxString& aFieldName, const wxString& aBOMName, bool aShow, bool aGroupBy );
+    void DeleteRow( int aRow );
+
+    wxString GetCanonicalFieldName( int aRow );
+    void SetCanonicalFieldName( int aRow, const wxString& aName );
+
+protected:
+    std::vector<BOM_FIELD> m_fields;
+};
+
 
 enum GROUP_TYPE
 {
@@ -98,9 +155,6 @@ public:
     ~FIELDS_EDITOR_GRID_DATA_MODEL() override
     {
         wxSafeDecRef( m_urlEditor );
-
-        for( const auto& [col, attr] : m_colAttrs )
-            wxSafeDecRef( attr );
     }
 
     static const wxString QUANTITY_VARIABLE;
@@ -130,15 +184,14 @@ public:
         }
     }
 
-    int GetNumberRows() override { return static_cast<int>( m_rows.size() ); }
-    int GetNumberCols() override { return static_cast<int>( m_cols.size() ); }
+    int GetNumberRows() override { return (int) m_rows.size(); }
+    int GetNumberCols() override { return (int) m_cols.size(); }
 
     void SetColLabelValue( int aCol, const wxString& aLabel ) override
     {
         wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
         m_cols[aCol].m_label = aLabel;
     }
-
 
     wxString GetColLabelValue( int aCol ) override
     {
@@ -276,12 +329,6 @@ public:
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
     void UpdateReferences( const SCH_REFERENCE_LIST& aRefs );
 
-    void SetColAttr( wxGridCellAttr* aAttr, int aCol ) override
-    {
-        wxSafeDecRef( m_colAttrs[aCol] );
-        m_colAttrs[aCol] = aAttr;
-    }
-
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
@@ -319,9 +366,7 @@ protected:
     bool               m_excludeDNP;
     bool               m_includeExcluded;
     bool               m_rebuildsEnabled;
-
-    wxGridCellAttr*                m_urlEditor;
-    std::map<int, wxGridCellAttr*> m_colAttrs;
+    wxGridCellAttr*    m_urlEditor;
 
     std::vector<DATA_MODEL_COL> m_cols;
     std::vector<DATA_MODEL_ROW> m_rows;

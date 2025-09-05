@@ -239,6 +239,8 @@ public:
         wxString                   export_filename;
         int                        selection_mode;
         int                        scope;
+        wxString                   view_controls_visible_columns;
+        int                        sash_pos;
     };
 
     struct PANEL_LIB_VIEW

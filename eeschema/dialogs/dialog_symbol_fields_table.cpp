@@ -75,14 +75,33 @@ enum
     MYID_SHOW_DATASHEET
 };
 
+class VIEW_CONTROLS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    VIEW_CONTROLS_GRID_TRICKS( WX_GRID* aGrid ) :
+            GRID_TRICKS( aGrid )
+    {}
+
+protected:
+    void doPopupSelection( wxCommandEvent& event ) override
+    {
+        if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
+            m_grid->PostSizeEvent();
+
+        GRID_TRICKS::doPopupSelection( event );
+    }
+};
+
+
 class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, WX_GRID* aGrid, wxDataViewListCtrl* aFieldsCtrl,
+    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SYMBOL_FIELDS_TABLE* aParent, WX_GRID* aGrid,
+                               VIEW_CONTROLS_GRID_DATA_MODEL* aViewFieldsData,
                                FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
-            m_fieldsCtrl( aFieldsCtrl ),
+            m_viewControlsDataModel( aViewFieldsData ),
             m_dataModel( aDataModel ),
             m_files( aFiles )
     {}
@@ -127,58 +146,53 @@ protected:
         else if (event.GetId() == MYID_SHOW_DATASHEET )
         {
             wxString datasheet_uri = m_grid->GetCellValue( row, col );
-            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
-                                   PROJECT_SCH::SchSearchS( &m_dlg->Prj() ), { m_files } );
+            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
+                                   { m_files } );
+        }
+        else if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
+        {
+            if( !m_grid->CommitPendingChanges( false ) )
+                return;
+
+            // Pop-up column order is the order of the shown fields, not the viewControls order
+            col = event.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
+
+            bool show = !m_dataModel->GetShowColumn( col );
+
+            m_dlg->ShowHideColumn( col, show );
+
+            wxString fieldName = m_dataModel->GetColFieldName( col );
+
+            for( row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
+            {
+                if( m_viewControlsDataModel->GetCanonicalFieldName( row ) == fieldName )
+                    m_viewControlsDataModel->SetValueAsBool( row, SHOW_FIELD_COLUMN, show );
+            }
+
+            if( m_viewControlsDataModel->GetView() )
+                m_viewControlsDataModel->GetView()->ForceRefresh();
         }
         else
         {
-            // We have grid tricks events to show/hide the columns from the popup menu
-            // and we need to make sure the data model is updated to match the grid,
-            // so do it through our code instead
-            if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
-            {
-                // Pop-up column order is the order of the shown fields, not the
-                // fieldsCtrl order
-                col = event.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
-
-                bool show = !m_dataModel->GetShowColumn( col );
-
-                // Convert data model column to by iterating over m_fieldsCtrl rows
-                // and finding the matching field name
-                wxString fieldName = m_dataModel->GetColFieldName( col );
-
-                for( row = 0; row < m_fieldsCtrl->GetItemCount(); row++ )
-                {
-                    if( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) == fieldName )
-                    {
-                        if( m_grid->CommitPendingChanges( false ) )
-                            m_fieldsCtrl->SetToggleValue( show, row, SHOW_FIELD_COLUMN );
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                GRID_TRICKS::doPopupSelection( event );
-            }
+            GRID_TRICKS::doPopupSelection( event );
         }
     }
 
 private:
-    DIALOG_SHIM*                   m_dlg;
-    wxDataViewListCtrl*            m_fieldsCtrl;
+    DIALOG_SYMBOL_FIELDS_TABLE*    m_dlg;
+    VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
     EMBEDDED_FILES*                m_files;
 };
 
 
-DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
-                                                        JOB_EXPORT_SCH_BOM* aJob ) :
+DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_SCH_BOM* aJob ) :
         DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
         m_currentBomPreset( nullptr ),
         m_lastSelectedBomPreset( nullptr ),
         m_parent( parent ),
+        m_viewControlsDataModel( nullptr ),
+        m_dataModel( nullptr ),
         m_schSettings( parent->Schematic().Settings() ),
         m_job( aJob )
 {
@@ -186,6 +200,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, false );
 
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
+    m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
     m_bRefreshPreview->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -193,84 +208,43 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
-    m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_fieldsCtrl->AppendTextColumn( _( "Column Label" ), wxDATAVIEW_CELL_EDITABLE, 0, wxALIGN_LEFT, 0 );
+    m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL();
 
-    // The two next columns look better when on 2 lines
-    // Unfortunately this is not handled on WXMSW
-#ifdef __WXMSW__
-    m_fieldsCtrl->AppendToggleColumn( _( "Show Column" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
-#else
-    m_fieldsCtrl->AppendToggleColumn( _( "Show\nColumn" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Group\nBy" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
-#endif
+    m_viewControlsGrid->UseNativeColHeader( true );
+    m_viewControlsGrid->SetTable( m_viewControlsDataModel, true );
 
-    // GTK asserts if the number of columns doesn't match the data, but we still don't want
-    // to display the canonical names.  So we'll insert a column for them, but keep it 0 width.
-    m_fieldsCtrl->AppendTextColumn( _( "Name" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+    // must be done after SetTable(), which appears to re-set it
+    m_viewControlsGrid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
-    // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
-    // set the column widths ourselves.
-    wxDataViewColumn* column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
-#ifdef __WXMSW__
-    m_showColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x,
-#else
-    m_showColWidth = std::max( KIUI::GetTextSize( column->GetTitle().Before( '\n' ), m_fieldsCtrl ).x,
-                               KIUI::GetTextSize( column->GetTitle().After( '\n' ), m_fieldsCtrl ).x );
-#endif
-    m_showColWidth += COLUMN_MARGIN;
-    column->SetMinWidth( m_showColWidth );
+    // add Cut, Copy, and Paste to wxGrid
+    m_viewControlsGrid->PushEventHandler( new VIEW_CONTROLS_GRID_TRICKS( m_viewControlsGrid ) );
 
-    column = m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN );
-#ifdef __WXMSW__
-    m_groupByColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x,
-#else
-    m_groupByColWidth = std::max( KIUI::GetTextSize( column->GetTitle().Before( '\n' ), m_fieldsCtrl ).x,
-                                  KIUI::GetTextSize( column->GetTitle().After( '\n' ), m_fieldsCtrl ).x );
-#endif
-    m_groupByColWidth += COLUMN_MARGIN;
-    column->SetMinWidth( m_groupByColWidth );
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly( true );
+    m_viewControlsDataModel->SetColAttr( attr, DISPLAY_NAME_COLUMN );
 
-    // The fact that we're a list should keep the control from reserving space for the
-    // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
-    m_fieldsCtrl->SetIndent( 0 );
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_viewControlsDataModel->SetColAttr( attr, SHOW_FIELD_COLUMN );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_viewControlsDataModel->SetColAttr( attr, GROUP_BY_COLUMN );
+
+    // Compress the view controls grid.  (We want it to look different from the fields grid.)
+    m_viewControlsGrid->SetDefaultRowSize( m_viewControlsGrid->GetDefaultRowSize() - FromDIP( 4 ) );
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
-                                               { &m_parent->Schematic() } ) );
+    attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), { &m_parent->Schematic() } ) );
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
 
-    LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
-
-    // Now that the fields are loaded we can set the initial location of the splitter
-    // based on the list width.  Again, SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails us on GTK.
-    m_fieldNameColWidth = 0;
-    m_labelColWidth = 0;
-
-    for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
-    {
-        const wxString& displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
-        m_fieldNameColWidth = std::max( m_fieldNameColWidth, KIUI::GetTextSize( displayName, m_fieldsCtrl ).x );
-
-        const wxString& label = m_fieldsCtrl->GetTextValue( row, LABEL_COLUMN );
-        m_labelColWidth = std::max( m_labelColWidth, KIUI::GetTextSize( label, m_fieldsCtrl ).x );
-    }
-
-    int colWidth = std::max( m_fieldNameColWidth, m_labelColWidth ) + 30;
-
-    int fieldsMinWidth = colWidth + colWidth + m_groupByColWidth + m_showColWidth;
-
-    m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( m_fieldNameColWidth );
-    m_fieldsCtrl->GetColumn( LABEL_COLUMN )->SetWidth( m_labelColWidth );
-
-    // This is used for data only.  Don't show it to the user.
-    m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetHidden( true );
-
-    m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
-    m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
+    LoadFieldNames();   // loads rows into m_viewControlsDataModel and columns into m_dataModel
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
@@ -279,8 +253,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl,
-                                                             m_dataModel, &m_parent->Schematic() ) );
+    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_viewControlsDataModel, m_dataModel,
+                                                             &m_parent->Schematic() ) );
 
     // Load our BOM view presets
     SetUserBomPresets( m_schSettings.m_BomPresets );
@@ -354,28 +328,20 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
     finishDialogSettings();
 
-    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& panelCfg = cfg->m_FieldEditorPanel;
+    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
-    wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 600 ),
-                    panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
+    wxSize dlgSize( cfg.width > 0 ? cfg.width : horizPixelsFromDU( 600 ),
+                    cfg.height > 0 ? cfg.height : vertPixelsFromDU( 300 ) );
     SetSize( dlgSize );
 
-    m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
+    m_nbPages->SetSelection( cfg.page );
 
-    switch( cfg->m_FieldEditorPanel.selection_mode )
-    {
-    case 0: m_radioHighlight->SetValue( true ); break;
-    case 1: m_radioSelect->SetValue( true );    break;
-    case 2: m_radioOff->SetValue( true );       break;
-    }
+    m_viewControlsGrid->ShowHideColumns( cfg.view_controls_visible_columns );
 
-    switch( cfg->m_FieldEditorPanel.scope )
-    {
-    case SCOPE::SCOPE_ALL:             m_radioProject->SetValue( true );      break;
-    case SCOPE::SCOPE_SHEET:           m_radioCurrentSheet->SetValue( true ); break;
-    case SCOPE::SCOPE_SHEET_RECURSIVE: m_radioRecursive->SetValue( true );    break;
-    }
+    CallAfter( [this, cfg]()
+               {
+                   m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
+               } );
 
     if( m_job )
         m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
@@ -385,14 +351,11 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     Center();
 
     // Connect Events
-    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ),
-                     nullptr, this );
-    m_grid->Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ),
-                     nullptr, this );
+    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
-    m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange,
-                        this );
+    m_viewControlsGrid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged, this );
 
     if( !m_job )
     {
@@ -482,15 +445,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
         }
     }
 
-    // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
-    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
+    // sync m_grid's column visibilities to Show checkboxes in m_viewControlsGrid
+    for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); ++i )
     {
-        int col = m_dataModel->GetFieldNameCol( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) );
+        int col = m_dataModel->GetFieldNameCol( m_viewControlsDataModel->GetCanonicalFieldName( i ) );
 
         if( col == -1 )
             continue;
 
-        bool show = m_fieldsCtrl->GetToggleValue( i, SHOW_FIELD_COLUMN );
+        bool show = m_viewControlsDataModel->GetValueAsBool( i, SHOW_FIELD_COLUMN );
         m_dataModel->SetShowColumn( col, show );
 
         if( show )
@@ -525,6 +488,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        cfg->m_FieldEditorPanel.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
+        cfg->m_FieldEditorPanel.sash_pos = m_splitterMainWindow->GetSashPosition();
+    }
+
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ),
                         nullptr, this );
@@ -532,9 +501,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
                         nullptr, this );
 
     // Delete the GRID_TRICKS.
+    m_viewControlsGrid->PopEventHandler( true );
     m_grid->PopEventHandler( true );
 
-    // we gave ownership of m_dataModel to the wxGrid...
+    // we gave ownership of m_viewControlsDataModel & m_dataModel to the wxGrids...
 }
 
 
@@ -548,7 +518,16 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     SCH_SELECTION&      selection = selectionTool->GetSelection();
     SCH_SYMBOL*         symbol = nullptr;
 
-    UpdateScope();
+    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+
+    switch( cfg.scope )
+    {
+    case SCOPE::SCOPE_ALL:             m_scope->SetSelection( 0 ); break;
+    case SCOPE::SCOPE_SHEET:           m_scope->SetSelection( 1 ); break;
+    case SCOPE::SCOPE_SHEET_RECURSIVE: m_scope->SetSelection( 2 ); break;
+    }
+
+    setScope( static_cast<SCOPE>( cfg.scope ) );
 
     if( selection.GetSize() == 1 )
     {
@@ -651,28 +630,24 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
 {
     // Users can add fields with variable names that match the special names in the grid,
     // e.g. ${QUANTITY} so make sure we don't add them twice
-    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
+    for( int row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
     {
-        if( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) == aFieldName )
+        if( m_viewControlsDataModel->GetCanonicalFieldName( row ) == aFieldName )
             return;
     }
 
     m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
-    wxVector<wxVariant> fieldsCtrlRow;
-    std::string         key( aFieldName.ToUTF8() );
-
-    // Don't change these to emplace_back: some versions of wxWidgets don't support it
-    fieldsCtrlRow.push_back( wxVariant( aFieldName ) );
-    fieldsCtrlRow.push_back( wxVariant( aLabelValue ) );
-    fieldsCtrlRow.push_back( wxVariant( show ) );
-    fieldsCtrlRow.push_back( wxVariant( groupBy ) );
-    fieldsCtrlRow.push_back( wxVariant( aFieldName ) );
-
-    m_fieldsCtrl->AppendItem( fieldsCtrlRow );
-
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
+
+    m_viewControlsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_viewControlsDataModel->AppendRow( aFieldName, aLabelValue, show, groupBy );
+
+                return { m_viewControlsDataModel->GetNumberRows() - 1, -1 };
+            } );
 }
 
 
@@ -681,10 +656,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     auto addMandatoryField =
             [&]( FIELD_T fieldId, bool show, bool groupBy )
             {
-                m_mandatoryFieldListIndexes[fieldId] = m_fieldsCtrl->GetItemCount();
+                m_mandatoryFieldListIndexes[fieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                AddField( GetCanonicalFieldName( fieldId ),
-                          GetDefaultFieldName( fieldId, DO_TRANSLATE ), show, groupBy );
+                AddField( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ),
+                          show, groupBy );
             };
 
     // Add mandatory fields first            show   groupBy
@@ -759,66 +734,49 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 {
-    int col = -1;
-    int row = m_fieldsCtrl->GetSelectedRow();
+    m_viewControlsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                for( FIELD_T id : MANDATORY_FIELDS )
+                {
+                    if( m_mandatoryFieldListIndexes[id] == row )
+                    {
+                        DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                              (int) m_mandatoryFieldListIndexes.size() ) );
+                        return false;
+                    }
+                }
 
-    if( row == -1 )
-    {
-        wxBell();
-        return;
-    }
+                return IsOK( this, wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
+                                                     m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN ) ) );
+            },
+            [&]( int row )
+            {
+                wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+                int col = m_dataModel->GetFieldNameCol( fieldName );
 
-    for( FIELD_T id : MANDATORY_FIELDS )
-    {
-        if( m_mandatoryFieldListIndexes[id] == row )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                  (int) m_mandatoryFieldListIndexes.size() ) );
-            return;
-        }
-    }
+                if( col != -1 )
+                    m_dataModel->RemoveColumn( col );
 
-    wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-    wxString displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
+                m_viewControlsDataModel->DeleteRow( row );
 
-    wxString confirm_msg = wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
-                                             displayName );
-
-    if( !IsOK( this, confirm_msg ) )
-        return;
-
-    for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
-    {
-        if( fieldName == m_dataModel->GetColFieldName( i ) )
-            col = i;
-    }
-
-    m_fieldsCtrl->DeleteItem( row );
-    m_dataModel->RemoveColumn( col );
-
-    // Make selection and update the state of "Remove field..." button via
-    // OnFieldsCtrlSelectionChanged().
-    // Safe to decrement row index because we always have mandatory fields.
-    m_fieldsCtrl->SelectRow( --row );
-
-    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED, col, 1 );
-
-    m_grid->ProcessTableMessage( msg );
-
-    syncBomPresetSelection();
-    OnModify();
+                syncBomPresetSelection();
+                OnModify();
+            } );
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
 {
-    int row = m_fieldsCtrl->GetSelectedRow();
+    wxArrayInt selectedRows = m_viewControlsGrid->GetSelectedRows();
 
-    if( row == -1 )
-    {
-        wxBell();
+    if( selectedRows.empty() && m_viewControlsGrid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_viewControlsGrid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
         return;
-    }
+
+    int row = selectedRows[0];
 
     for( FIELD_T id : MANDATORY_FIELDS )
     {
@@ -830,7 +788,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
         }
     }
 
-    wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+    wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
 
     int col = m_dataModel->GetFieldNameCol( fieldName );
     wxCHECK_RET( col != -1, wxS( "Existing field name missing from data model" ) );
@@ -855,9 +813,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     }
 
     m_dataModel->RenameColumn( col, newFieldName );
-    m_fieldsCtrl->SetTextValue( newFieldName, row, DISPLAY_NAME_COLUMN );
-    m_fieldsCtrl->SetTextValue( newFieldName, row, FIELD_NAME_COLUMN );
-    m_fieldsCtrl->SetTextValue( newFieldName, row, LABEL_COLUMN );
+    m_viewControlsDataModel->SetCanonicalFieldName( row, newFieldName );
+    m_viewControlsDataModel->SetValue( row, DISPLAY_NAME_COLUMN, newFieldName );
+    m_viewControlsDataModel->SetValue( row, LABEL_COLUMN, GetGeneratedFieldDisplayName( newFieldName ) );
 
     syncBomPresetSelection();
     OnModify();
@@ -892,71 +850,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
-{
-    wxDataViewItem item = event.GetItem();
-    int            row = m_fieldsCtrl->ItemToRow( item );
-    int            col = event.GetColumn();
-
-    switch ( col )
-    {
-    case SHOW_FIELD_COLUMN:
-    {
-        wxString name = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-        bool     value = m_fieldsCtrl->GetToggleValue( row, col );
-        int      dataCol = m_dataModel->GetFieldNameCol( name );
-
-        m_dataModel->SetShowColumn( dataCol, value );
-
-        if( dataCol != -1 )
-        {
-            if( value )
-                m_grid->ShowCol( dataCol );
-            else
-                m_grid->HideCol( dataCol );
-        }
-
-        break;
-    }
-
-    case GROUP_BY_COLUMN:
-    {
-        wxString name = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-        bool     value = m_fieldsCtrl->GetToggleValue( row, col );
-        int      dataCol = m_dataModel->GetFieldNameCol( name );
-
-        if( m_dataModel->ColIsQuantity( dataCol ) && value )
-        {
-            DisplayError( this, _( "The Quantity column cannot be grouped by." ) );
-
-            value = false;
-            m_fieldsCtrl->SetToggleValue( value, row, col );
-        }
-
-        if( m_dataModel->ColIsItemNumber( dataCol ) && value )
-        {
-            DisplayError( this, _( "The Item Number column cannot be grouped by." ) );
-
-            value = false;
-            m_fieldsCtrl->SetToggleValue( value, row, col );
-        }
-
-        wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-
-        m_dataModel->SetGroupColumn( m_dataModel->GetFieldNameCol( fieldName ), value );
-        m_dataModel->RebuildRows();
-        m_grid->ForceRefresh();
-        break;
-    }
-
-    default:
-        break;
-    }
-
-    syncBomPresetSelection();
-}
-
-
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
     m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
@@ -967,23 +860,58 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnExcludeDNPToggled( wxCommandEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 {
-    m_dataModel->SetExcludeDNP( m_checkExcludeDNP->GetValue() );
-    m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
+    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
-    syncBomPresetSelection();
-}
+    // Build a pop menu:
+    wxMenu menu;
 
+    menu.Append( 4204, _( "Include 'DNP' Symbols" ), wxEmptyString, wxITEM_CHECK );
+    menu.Append( 4205, _( "Include 'Exclude from BOM' Symbols" ), wxEmptyString, wxITEM_CHECK );
+    menu.AppendSeparator();
+    menu.Append( 4206, _( "Highlight on Cross Probe" ), wxEmptyString, wxITEM_CHECK );
+    menu.Append( 4207, _( "Select on Cross Probe" ), wxEmptyString, wxITEM_CHECK );
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnShowExcludedToggled( wxCommandEvent& event )
-{
-    m_dataModel->SetIncludeExcludedFromBOM( m_checkShowExcluded->GetValue() );
-    m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
+    menu.Check( 4204, !m_dataModel->GetExcludeDNP() );
+    menu.Check( 4205, m_dataModel->GetIncludeExcludedFromBOM() );
 
-    syncBomPresetSelection();
+    menu.Check( 4206, cfg.selection_mode == 0 );
+    menu.Check( 4207, cfg.selection_mode == 1 );
+
+    // menu_id is the selected submenu id from the popup menu or wxID_NONE
+    int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
+
+    if( menu_id == 0 || menu_id == 4204 )
+    {
+        m_dataModel->SetExcludeDNP( !m_dataModel->GetExcludeDNP() );
+        m_dataModel->RebuildRows();
+        m_grid->ForceRefresh();
+
+        syncBomPresetSelection();
+    }
+    else if( menu_id == 1 || menu_id == 4205 )
+    {
+        m_dataModel->SetExcludeDNP( m_dataModel->GetIncludeExcludedFromBOM() );
+        m_dataModel->RebuildRows();
+        m_grid->ForceRefresh();
+
+        syncBomPresetSelection();
+    }
+    else if( menu_id == 3 || menu_id == 4206 )
+    {
+        if( cfg.selection_mode != 0 )
+            cfg.selection_mode = 0;
+        else
+            cfg.selection_mode = 2;
+    }
+    else if( menu_id == 4 || menu_id == 4207 )
+    {
+        if( cfg.selection_mode != 1 )
+            cfg.selection_mode = 1;
+        else
+            cfg.selection_mode = 2;
+    }
 }
 
 
@@ -1062,25 +990,96 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange( wxDataViewEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::ShowHideColumn( int aCol, bool aShow )
 {
-    wxDataViewItem item = aEvent.GetItem();
-    int            row = m_fieldsCtrl->ItemToRow( item );
-    wxString       label = m_fieldsCtrl->GetTextValue( row, LABEL_COLUMN );
-    wxString       fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-    int            col = m_dataModel->GetFieldNameCol( fieldName );
+    if( aShow )
+        m_grid->ShowCol( aCol );
+    else
+        m_grid->HideCol( aCol );
 
-    if( col != -1 )
-    {
-        m_dataModel->SetColLabelValue( col, label );
-        m_grid->SetColLabelValue( col, label );
-    }
+    m_dataModel->SetShowColumn( aCol, aShow );
 
     syncBomPresetSelection();
-
-    aEvent.Skip();
-
     m_grid->ForceRefresh();
+    OnModify();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+
+    wxCHECK( row < m_viewControlsGrid->GetNumberRows(), /* void */ );
+
+    switch( aEvent.GetCol() )
+    {
+    case DISPLAY_NAME_COLUMN:
+    {
+        wxString label = m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN );
+        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+        int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
+
+        if( dataCol != -1 )
+        {
+            m_dataModel->SetColLabelValue( dataCol, label );
+            m_grid->SetColLabelValue( dataCol, label );
+
+            syncBomPresetSelection();
+            m_grid->ForceRefresh();
+            OnModify();
+        }
+
+        break;
+    }
+
+    case SHOW_FIELD_COLUMN:
+    {
+        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+        bool     value = m_viewControlsDataModel->GetValueAsBool( row, SHOW_FIELD_COLUMN );
+        int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
+
+        if( dataCol != -1 )
+            ShowHideColumn( dataCol, value );
+
+        break;
+    }
+
+    case GROUP_BY_COLUMN:
+    {
+        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+        bool     value = m_viewControlsDataModel->GetValueAsBool( row, GROUP_BY_COLUMN );
+        int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
+
+        if( m_dataModel->ColIsQuantity( dataCol ) && value )
+        {
+            DisplayError( this, _( "The Quantity column cannot be grouped by." ) );
+
+            value = false;
+            m_viewControlsDataModel->SetValueAsBool( value, row, GROUP_BY_COLUMN );
+            break;
+        }
+
+        if( m_dataModel->ColIsItemNumber( dataCol ) && value )
+        {
+            DisplayError( this, _( "The Item Number column cannot be grouped by." ) );
+
+            value = false;
+            m_viewControlsDataModel->SetValueAsBool( value, row, GROUP_BY_COLUMN );
+            break;
+        }
+
+        m_dataModel->SetGroupColumn( dataCol, value );
+        m_dataModel->RebuildRows();
+
+        syncBomPresetSelection();
+        m_grid->ForceRefresh();
+        OnModify();
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 
@@ -1093,9 +1092,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableColSize( wxGridSizeEvent& aEvent )
 {
-    int         col = aEvent.GetRowOrCol();
-    std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
-
     aEvent.Skip();
 
     m_grid->ForceRefresh();
@@ -1109,24 +1105,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnScopeChanged( wxCommandEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::setScope( SCOPE aScope )
 {
-    UpdateScope();
+    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+
+    cfg.scope = aScope;
+
+    m_dataModel->SetPath( m_parent->GetCurrentSheet() );
+    m_dataModel->SetScope( aScope );
+    m_dataModel->RebuildRows();
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::UpdateScope()
+void DIALOG_SYMBOL_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
 {
-    m_dataModel->SetPath( m_parent->GetCurrentSheet() );
-
-    if( m_radioProject->GetValue() )
-        m_dataModel->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL );
-    else if( m_radioCurrentSheet->GetValue() )
-        m_dataModel->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_SHEET );
-    else if( m_radioRecursive->GetValue() )
-        m_dataModel->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_SHEET_RECURSIVE );
-
-    m_dataModel->RebuildRows();
+    switch( aEvent.GetSelection() )
+    {
+    case 0: setScope( SCOPE::SCOPE_ALL );             break;
+    case 1: setScope( SCOPE::SCOPE_SHEET );           break;
+    case 2: setScope( SCOPE::SCOPE_SHEET_RECURSIVE ); break;
+    }
 }
 
 
@@ -1148,6 +1146,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
+    EESCHEMA_SETTINGS::PANEL_FIELD_EDITOR& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
         return;
@@ -1170,7 +1170,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
             symbols.insert( ref.GetSymbol() );
     }
 
-    if( m_radioHighlight->GetValue() )
+    if( cfg.selection_mode == 0 )
     {
         SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
@@ -1181,15 +1181,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
             wxString symbol_path = refs.begin()->GetFullPath();
 
             // Focus only handles one item at this time
-            editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL,
-                                       wxEmptyString );
+            editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         }
         else
         {
             m_parent->ClearFocus();
         }
     }
-    else if( m_radioSelect->GetValue() )
+    else if( cfg.selection_mode == 1 )
     {
         SCH_SELECTION_TOOL*    selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
         std::vector<SCH_ITEM*> items( symbols.begin(), symbols.end() );
@@ -1202,37 +1201,30 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeViewControlsGrid( wxSizeEvent& event )
 {
-    // TODO: Option to select footprint if FOOTPRINT column selected
+    const wxString& showColLabel = m_viewControlsGrid->GetColLabelValue( SHOW_FIELD_COLUMN );
+    const wxString& groupByColLabel = m_viewControlsGrid->GetColLabelValue( GROUP_BY_COLUMN );
+    int             showColWidth = KIUI::GetTextSize( showColLabel, m_viewControlsGrid ).x + COLUMN_MARGIN;
+    int             groupByColWidth = KIUI::GetTextSize( groupByColLabel, m_viewControlsGrid ).x + COLUMN_MARGIN;
+    int             remainingWidth = m_viewControlsGrid->GetSize().GetX() - showColWidth - groupByColWidth;
 
-    event.Skip();
-}
+    m_viewControlsGrid->SetColSize( showColWidth, SHOW_FIELD_COLUMN );
+    m_viewControlsGrid->SetColSize( groupByColWidth, GROUP_BY_COLUMN );
 
-
-void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
-{
-    int width = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x - m_showColWidth - m_groupByColWidth;
-
-#ifdef __WXMAC__
-    // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
-    // also be that the width of the column would get set too wide (to 30), but that's patched in
-    // our local wxWidgets fork.)
-    width -= 50;
-#endif
-
-    m_fieldNameColWidth = width / 2;
-    m_labelColWidth = width = m_fieldNameColWidth;
-
-    // GTK loses its head and messes these up when resizing the splitter bar:
-    m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
-    m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN )->SetWidth( m_groupByColWidth );
-
-    m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetHidden( true );
-    m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( m_fieldNameColWidth );
-    m_fieldsCtrl->GetColumn( LABEL_COLUMN )->SetWidth( m_labelColWidth );
-
-    m_fieldsCtrl->Refresh(); // To refresh checkboxes on Windows.
+    if( m_viewControlsGrid->IsColShown( DISPLAY_NAME_COLUMN ) && m_viewControlsGrid->IsColShown( LABEL_COLUMN ) )
+    {
+        m_viewControlsGrid->SetColSize( DISPLAY_NAME_COLUMN, remainingWidth / 2 );
+        m_viewControlsGrid->SetColSize( LABEL_COLUMN, remainingWidth - ( remainingWidth / 2 ) );
+    }
+    else if( m_viewControlsGrid->IsColShown( DISPLAY_NAME_COLUMN ) )
+    {
+        m_viewControlsGrid->SetColSize( DISPLAY_NAME_COLUMN, remainingWidth );
+    }
+    else if( m_viewControlsGrid->IsColShown( LABEL_COLUMN ) )
+    {
+        m_viewControlsGrid->SetColSize( LABEL_COLUMN, remainingWidth );
+    }
 
     event.Skip();
 }
@@ -1508,20 +1500,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
     cfg->m_FieldEditorPanel.height = GetSize().y;
     cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
 
-    if( m_radioHighlight->GetValue() )
-        cfg->m_FieldEditorPanel.selection_mode = 0;
-    else if( m_radioSelect->GetValue() )
-        cfg->m_FieldEditorPanel.selection_mode = 1;
-    else if( m_radioOff->GetValue() )
-        cfg->m_FieldEditorPanel.selection_mode = 2;
-
-    if( m_radioProject->GetValue() )
-        cfg->m_FieldEditorPanel.scope = SCOPE::SCOPE_ALL;
-    else if( m_radioCurrentSheet->GetValue() )
-        cfg->m_FieldEditorPanel.scope = SCOPE::SCOPE_SHEET;
-    else if( m_radioRecursive->GetValue() )
-        cfg->m_FieldEditorPanel.scope = SCOPE::SCOPE_SHEET_RECURSIVE;
-
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
         if( m_grid->IsColShown( i ) )
@@ -1619,17 +1597,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomPresetsWidget()
 {
     m_cbBomPresets->Clear();
 
-    // Build the layers preset list.
-    // By default, the presetAllLayers will be selected
     int idx = 0;
     int default_idx = 0;
 
-    for( std::pair<const wxString, BOM_PRESET>& pair : m_bomPresets )
+    for( const auto& [presetName, preset] : m_bomPresets )
     {
-        m_cbBomPresets->Append( wxGetTranslation( pair.first ),
-                                static_cast<void*>( &pair.second ) );
+        m_cbBomPresets->Append( wxGetTranslation( presetName ), (void*) &preset );
 
-        if( pair.first == BOM_PRESET::DefaultEditing().name )
+        if( presetName == BOM_PRESET::DefaultEditing().name )
             default_idx = idx;
 
         idx++;
@@ -1642,7 +1617,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomPresetsWidget()
     // At least the built-in presets should always be present
     wxASSERT( !m_bomPresets.empty() );
 
-    // Default preset: all Boms
     m_cbBomPresets->SetSelection( default_idx );
     m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( default_idx ) );
 }
@@ -1718,15 +1692,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::updateBomPresetSelection( const wxString& aName
     // in UI selection.  But for a user preset name we search for the untranslated aName.
     wxString ui_label = aName;
 
-    for( std::pair<const wxString, BOM_PRESET>& pair : m_bomPresets )
+    for( const auto& [presetName, preset] : m_bomPresets )
     {
-        if( pair.first != aName )
-            continue;
+        if( presetName == aName )
+        {
+            if( preset.readOnly == true )
+                ui_label = wxGetTranslation( aName );
 
-        if( pair.second.readOnly == true )
-            ui_label = wxGetTranslation( aName );
-
-        break;
+            break;
+        }
     }
 
     int idx = m_cbBomPresets->FindString( ui_label );
@@ -1900,16 +1874,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     // update our UI to reflect resulting the data model state, not the preset.
     m_dataModel->ApplyBomPreset( aPreset );
 
-    // BOM Presets can add, but not remove, columns, so make sure the field control
+    // BOM Presets can add, but not remove, columns, so make sure the view controls
     // grid has all of them before starting
     for( int i = 0; i < m_dataModel->GetColsCount(); i++ )
     {
         const wxString& fieldName( m_dataModel->GetColFieldName( i ) );
         bool            found = false;
 
-        for( int j = 0; j < m_fieldsCtrl->GetItemCount(); j++ )
+        for( int j = 0; j < m_viewControlsDataModel->GetNumberRows(); j++ )
         {
-            if( m_fieldsCtrl->GetTextValue( j, FIELD_NAME_COLUMN ) == fieldName )
+            if( m_viewControlsDataModel->GetCanonicalFieldName( j ) == fieldName )
             {
                 found = true;
                 break;
@@ -1922,9 +1896,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     }
 
     // Sync all fields
-    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
+    for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); i++ )
     {
-        const wxString& fieldName( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) );
+        const wxString& fieldName( m_viewControlsDataModel->GetCanonicalFieldName( i ) );
         int             col = m_dataModel->GetFieldNameCol( fieldName );
 
         if( col == -1 )
@@ -1938,7 +1912,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
         // Set column labels
         const wxString& label = m_dataModel->GetColLabelValue( col );
-        m_fieldsCtrl->SetTextValue( label, i, LABEL_COLUMN );
+        m_viewControlsDataModel->SetValue( i, LABEL_COLUMN, label );
         m_grid->SetColLabelValue( col, label );
 
         if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
@@ -1946,7 +1920,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
         // Set shown columns
         bool show = m_dataModel->GetShowColumn( col );
-        m_fieldsCtrl->SetToggleValue( show, i, SHOW_FIELD_COLUMN );
+        m_viewControlsDataModel->SetValueAsBool( i, SHOW_FIELD_COLUMN, show );
 
         if( show )
             m_grid->ShowCol( col );
@@ -1955,14 +1929,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
         // Set grouped columns
         bool groupBy = m_dataModel->GetGroupColumn( col );
-        m_fieldsCtrl->SetToggleValue( groupBy, i, GROUP_BY_COLUMN );
+        m_viewControlsDataModel->SetValueAsBool( i, GROUP_BY_COLUMN, groupBy );
     }
 
     m_grid->SetSortingColumn( m_dataModel->GetSortCol(), m_dataModel->GetSortAsc() );
     m_groupSymbolsBox->SetValue( m_dataModel->GetGroupingEnabled() );
     m_filter->ChangeValue( m_dataModel->GetFilter() );
-    m_checkExcludeDNP->SetValue( m_dataModel->GetExcludeDNP() );
-    m_checkShowExcluded->SetValue( m_dataModel->GetIncludeExcludedFromBOM() );
 
     SetupAllColumnProperties();
 
@@ -2052,8 +2024,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
 {
     m_cbBomFmtPresets->Clear();
 
-    // Build the layers preset list.
-    // By default, the presetAllLayers will be selected
     int idx = 0;
     int default_idx = 0;
 
@@ -2075,7 +2045,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
     // At least the built-in presets should always be present
     wxASSERT( !m_bomFmtPresets.empty() );
 
-    // Default preset: all Boms
     m_cbBomFmtPresets->SetSelection( default_idx );
     m_currentBomFmtPreset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( default_idx ) );
 }
@@ -2118,20 +2087,19 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomFmtPresetSelection()
 void DIALOG_SYMBOL_FIELDS_TABLE::updateBomFmtPresetSelection( const wxString& aName )
 {
     // look at m_userBomFmtPresets to know if aName is a read only preset, or a user preset.
-    // Read only presets have translated names in UI, so we have to use
-    // a translated name in UI selection.
+    // Read only presets have translated names in UI, so we have to use a translated name in UI selection.
     // But for a user preset name we should search for aName (not translated)
     wxString ui_label = aName;
 
-    for( const auto& [name, preset] : m_bomFmtPresets )
+    for( const auto& [presetName, preset] : m_bomFmtPresets )
     {
-        if( name != aName )
-            continue;
+        if( presetName == aName )
+        {
+            if( preset.readOnly )
+                ui_label = wxGetTranslation( aName );
 
-        if( preset.readOnly )
-            ui_label = wxGetTranslation( aName );
-
-        break;
+            break;
+        }
     }
 
     int idx = m_cbBomFmtPresets->FindString( ui_label );
@@ -2303,7 +2271,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPre
     m_textRefRangeDelimiter->ChangeValue( aPreset.refRangeDelimiter );
     m_checkKeepTabs->SetValue( aPreset.keepTabs );
     m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
-
 
     // Refresh the preview if that's the current page
     if( m_nbPages->GetSelection() == 1 )

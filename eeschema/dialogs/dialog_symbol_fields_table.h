@@ -29,14 +29,12 @@
 #include <dialog_symbol_fields_table_base.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
+#include <fields_data_model.h>
 
 wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
 class SCHEMATIC_SETTINGS;
-struct BOM_PRESET;
-struct BOM_FMT_PRESET;
 class SCH_EDIT_FRAME;
-class FIELDS_EDITOR_GRID_DATA_MODEL;
 class JOB_EXPORT_SCH_BOM;
 
 
@@ -44,19 +42,21 @@ class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE, publi
 {
 public:
     DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_SCH_BOM* aJob = nullptr );
-    virtual ~DIALOG_SYMBOL_FIELDS_TABLE();
+    ~DIALOG_SYMBOL_FIELDS_TABLE() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void ShowEditTab();
     void ShowExportTab();
+    void ShowHideColumn( int aCol, bool aShow );
 
 private:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
                    bool groupBy, bool addedByUser = false );
+    void setScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -64,23 +64,19 @@ private:
      */
     void LoadFieldNames();
 
+    void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
+    void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
+
     void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
-    void OnColLabelChange( wxDataViewEvent& aEvent );
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
-    void OnColumnItemToggled( wxDataViewEvent& event ) override;
+	void OnScope( wxCommandEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
-    void OnExcludeDNPToggled( wxCommandEvent& event ) override;
-    void OnShowExcludedToggled( wxCommandEvent& event ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
-    void OnScopeChanged( wxCommandEvent& aEvent ) override;
-    void UpdateScope();
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
-    void OnTableItemContextMenu( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
-    void OnSizeFieldList( wxSizeEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnRemoveField( wxCommandEvent& event ) override;
     void OnRenameField( wxCommandEvent& event ) override;
@@ -95,6 +91,7 @@ private:
     void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
     void OnPageChanged( wxNotebookEvent& event ) override;
     void OnPreviewRefresh( wxCommandEvent& event ) override;
+    void OnMenu( wxCommandEvent& event ) override;
     void PreviewRefresh();
 
     std::vector<BOM_PRESET> GetUserBomPresets() const;
@@ -155,10 +152,7 @@ private:
     // Index in the fields list control for each MANDATORY_FIELD type
     std::map<FIELD_T, int>             m_mandatoryFieldListIndexes;
 
-    int                                m_fieldNameColWidth;
-    int                                m_labelColWidth;
-    int                                m_showColWidth;
-    int                                m_groupByColWidth;
+    VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel;
 
     SCH_REFERENCE_LIST                 m_symbolsList;
     FIELDS_EDITOR_GRID_DATA_MODEL*     m_dataModel;

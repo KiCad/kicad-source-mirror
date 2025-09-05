@@ -14,12 +14,12 @@ class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
-#include <wx/dataview.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/font.h>
+#include <wx/grid.h>
+#include <wx/gdicmn.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -32,8 +32,6 @@ class WX_GRID;
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/checkbox.h>
-#include <wx/grid.h>
-#include <wx/radiobut.h>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
@@ -54,7 +52,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxPanel* m_panelEdit;
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
-		wxDataViewListCtrl* m_fieldsCtrl;
+		WX_GRID* m_viewControlsGrid;
 		STD_BITMAP_BUTTON* m_addFieldButton;
 		STD_BITMAP_BUTTON* m_renameFieldButton;
 		STD_BITMAP_BUTTON* m_removeFieldButton;
@@ -64,22 +62,14 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
 		wxStaticLine* m_staticline31;
-		wxCheckBox* m_checkExcludeDNP;
-		wxCheckBox* m_checkShowExcluded;
-		wxStaticLine* m_staticline32;
+		wxChoice* m_scope;
+		wxStaticLine* m_staticline311;
 		wxCheckBox* m_groupSymbolsBox;
 		wxStaticLine* m_staticline3;
 		STD_BITMAP_BUTTON* m_bRefresh;
+		STD_BITMAP_BUTTON* m_bMenu;
 		WX_GRID* m_grid;
 		wxStaticLine* m_staticline7;
-		wxStaticText* m_scopeLabel;
-		wxRadioButton* m_radioProject;
-		wxRadioButton* m_radioCurrentSheet;
-		wxRadioButton* m_radioRecursive;
-		wxStaticText* m_crossProbeLabel;
-		wxRadioButton* m_radioHighlight;
-		wxRadioButton* m_radioSelect;
-		wxRadioButton* m_radioOff;
 		wxPanel* m_panelExport;
 		wxStaticText* m_labelFieldDelimiter;
 		wxTextCtrl* m_textFieldDelimiter;
@@ -109,22 +99,20 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
-		virtual void OnColumnItemToggled( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnViewControlsCellChanged( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnSizeViewControlsGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRenameField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExcludeDNPToggled( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnShowExcludedToggled( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnScope( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenu( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
-		virtual void OnScopeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }

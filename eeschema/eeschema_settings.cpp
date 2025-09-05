@@ -529,6 +529,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "field_editor.scope",
             &m_FieldEditorPanel.scope, 0 ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "field_editor.view_controls_visible_columns",
+            &m_FieldEditorPanel.view_controls_visible_columns, "0 1 2 3" ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.sash_pos",
+            &m_FieldEditorPanel.sash_pos, 400 ) );
+
     addParamsForWindow( &m_Simulator.window, "simulator.window", 500, 400 );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_width",
