@@ -1715,14 +1715,29 @@ BITMAPS PCB_DIM_CENTER::GetMenuImage() const
 
 const BOX2I PCB_DIM_CENTER::GetBoundingBox() const
 {
-    int halfWidth = VECTOR2I( m_end - m_start ).x + ( m_lineThickness / 2.0 );
-
     BOX2I bBox;
+    int   xmin, xmax, ymin, ymax;
 
-    bBox.SetX( m_start.x - halfWidth );
-    bBox.SetY( m_start.y - halfWidth );
-    bBox.SetWidth( halfWidth * 2 );
-    bBox.SetHeight( halfWidth * 2 );
+    xmin    = m_start.x;
+    xmax    = m_start.x;
+    ymin    = m_start.y;
+    ymax    = m_start.y;
+
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
+    {
+        BOX2I shapeBox = shape->BBox();
+        shapeBox.Inflate( m_lineThickness / 2 );
+
+        xmin = std::min( xmin, shapeBox.GetOrigin().x );
+        xmax = std::max( xmax, shapeBox.GetEnd().x );
+        ymin = std::min( ymin, shapeBox.GetOrigin().y );
+        ymax = std::max( ymax, shapeBox.GetEnd().y );
+    }
+
+    bBox.SetX( xmin );
+    bBox.SetY( ymin );
+    bBox.SetWidth( xmax - xmin + 1 );
+    bBox.SetHeight( ymax - ymin + 1 );
 
     bBox.Normalize();
 
@@ -1732,8 +1747,7 @@ const BOX2I PCB_DIM_CENTER::GetBoundingBox() const
 
 const BOX2I PCB_DIM_CENTER::ViewBBox() const
 {
-    return BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
-                  VECTOR2I( GetBoundingBox().GetSize() ) );
+    return GetBoundingBox();
 }
 
 
