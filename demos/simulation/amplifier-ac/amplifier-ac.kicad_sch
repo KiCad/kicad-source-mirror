@@ -1855,7 +1855,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 53.34) (xy 234.95 53.34)
+			(xy 233.68 53.34) (xy 237.49 53.34)
 		)
 		(stroke
 			(width 0)
@@ -1995,7 +1995,7 @@
 	)
 	(global_label "VOUT"
 		(shape output)
-		(at 234.95 53.34 0)
+		(at 237.49 53.34 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2005,7 +2005,7 @@
 		)
 		(uuid "e5aefc98-2a36-4b47-b1b3-6340fc8f1986")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 244.2112 53.34 0)
+			(at 246.7512 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
