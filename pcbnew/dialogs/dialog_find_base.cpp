@@ -142,7 +142,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	sizerStatus->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_searchPanelLink = new wxHyperlinkCtrl( this, wxID_ANY, _("Show search panel"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_searchPanelLink = new wxHyperlinkCtrl( this, wxID_ANY, _("Show search panel"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	sizerStatus->Add( m_searchPanelLink, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 

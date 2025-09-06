@@ -149,7 +149,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer6->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	m_searchPanelLink = new wxHyperlinkCtrl( this, wxID_ANY, _("Show search panel"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_searchPanelLink = new wxHyperlinkCtrl( this, wxID_ANY, _("Show search panel"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	bSizer6->Add( m_searchPanelLink, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_RIGHT, 5 );
 
 

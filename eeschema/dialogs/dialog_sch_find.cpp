@@ -133,21 +133,16 @@ void DIALOG_SCH_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
 {
     wxCHECK2( m_frame->GetFrameType() == FRAME_SCH, /* void */ );
 
-    if( static_cast<SCH_EDIT_FRAME*>( m_frame )->IsSearchPaneShown() )
-    {
-        EndModal( wxID_CANCEL );
+    m_frame->GetToolManager()->RunAction( ACTIONS::showSearch );
 
-        CallAfter(
-                []()
-                {
-                    if( wxWindow* frame = wxWindow::FindWindowByName( SCH_EDIT_FRAME_NAME ) )
-                        static_cast<SCH_EDIT_FRAME*>( frame )->FocusSearch();
-                } );
-    }
-    else
-    {
-        m_frame->GetToolManager()->RunAction( ACTIONS::showSearch );
-    }
+    EndModal( wxID_CANCEL );
+
+    CallAfter(
+            []()
+            {
+                if( wxWindow* frame = wxWindow::FindWindowByName( SCH_EDIT_FRAME_NAME ) )
+                    static_cast<SCH_EDIT_FRAME*>( frame )->FocusSearch();
+            } );
 }
 
 

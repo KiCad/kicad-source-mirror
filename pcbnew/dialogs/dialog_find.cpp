@@ -130,21 +130,16 @@ void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 
 void DIALOG_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
 {
-    if( m_frame->IsSearchPaneShown() )
-    {
-        EndModal( wxID_CANCEL );
+    m_frame->GetToolManager()->RunAction( ACTIONS::showSearch );
 
-        CallAfter(
-                []()
-                {
-                    if( wxWindow* frame = wxWindow::FindWindowByName( PCB_EDIT_FRAME_NAME ) )
-                        static_cast<PCB_EDIT_FRAME*>( frame )->FocusSearch();
-                } );
-    }
-    else
-    {
-        m_frame->GetToolManager()->RunAction( ACTIONS::showSearch );
-    }
+    EndModal( wxID_CANCEL );
+
+    CallAfter(
+            []()
+            {
+                if( wxWindow* frame = wxWindow::FindWindowByName( PCB_EDIT_FRAME_NAME ) )
+                    static_cast<PCB_EDIT_FRAME*>( frame )->FocusSearch();
+            } );
 }
 
 
