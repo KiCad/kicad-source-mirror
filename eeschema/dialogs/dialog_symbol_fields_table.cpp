@@ -208,6 +208,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
+    m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+
     m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
 
     m_viewControlsGrid->UseNativeColHeader( true );
@@ -345,7 +347,15 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     CallAfter( [this, cfg]()
                {
-                   m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
+                   if( cfg.sidebar_collapsed )
+                   {
+                       m_splitterMainWindow->Unsplit( m_leftPanel );
+                       m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+                   }
+                   else
+                   {
+                       m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
+                   }
                } );
 
     if( m_job )
@@ -386,7 +396,11 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 
     cfg.page = m_nbPages->GetSelection();
     cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
-    cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+    cfg.sidebar_collapsed = ( m_splitterMainWindow->GetSashPosition() == 0 );
+
+    if( !cfg.sidebar_collapsed )
+        cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
@@ -1039,7 +1053,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::ShowHideColumn( int aCol, bool aShow )
     m_dataModel->SetShowColumn( aCol, aShow );
 
     syncBomPresetSelection();
-    m_grid->ForceRefresh();
+
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
+    else
+        m_grid->ForceRefresh();
+
     OnModify();
 }
 
@@ -1063,8 +1082,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent 
             m_dataModel->SetColLabelValue( dataCol, label );
             m_grid->SetColLabelValue( dataCol, label );
 
+            if( m_nbPages->GetSelection() == 1 )
+                PreviewRefresh();
+            else
+                m_grid->ForceRefresh();
+
             syncBomPresetSelection();
-            m_grid->ForceRefresh();
             OnModify();
         }
 
@@ -1110,8 +1133,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent 
         m_dataModel->SetGroupColumn( dataCol, value );
         m_dataModel->RebuildRows();
 
+        if( m_nbPages->GetSelection() == 1 )
+            PreviewRefresh();
+        else
+            m_grid->ForceRefresh();
+
         syncBomPresetSelection();
-        m_grid->ForceRefresh();
         OnModify();
         break;
     }
@@ -1335,6 +1362,27 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& even
     }
 
     m_outputFileName->SetValue( file.GetFullPath() );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
+{
+    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+
+    if( cfg.sidebar_collapsed )
+    {
+        cfg.sidebar_collapsed = false;
+        m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, cfg.sash_pos );
+        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+    }
+    else
+    {
+        cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+        cfg.sidebar_collapsed = true;
+        m_splitterMainWindow->Unsplit( m_leftPanel );
+        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+    }
 }
 
 
@@ -1937,7 +1985,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     // and labels are right, then we refresh the shown grid data to match
     m_dataModel->EnableRebuilds();
     m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
+
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
+    else
+        m_grid->ForceRefresh();
 }
 
 

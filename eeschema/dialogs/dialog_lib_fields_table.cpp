@@ -260,6 +260,8 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* parent, DIA
     m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
+    m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+
     m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( false );
 
     m_viewControlsGrid->UseNativeColHeader( true );
@@ -319,7 +321,15 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* parent, DIA
 
     CallAfter( [this, cfg]()
                {
-                   m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
+                   if( cfg.sidebar_collapsed )
+                   {
+                       m_splitterMainWindow->Unsplit( m_leftPanel );
+                       m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+                   }
+                   else
+                   {
+                       m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
+                   }
                } );
 
     Center();
@@ -337,7 +347,11 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
     SYMBOL_EDITOR_SETTINGS::PANEL_LIB_FIELDS_TABLE& cfg = m_parent->libeditconfig()->m_LibFieldEditor;
 
     cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
-    cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+    cfg.sidebar_collapsed = ( m_splitterMainWindow->GetSashPosition() == 0 );
+
+    if( !cfg.sidebar_collapsed )
+        cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
@@ -899,6 +913,27 @@ void DIALOG_LIB_FIELDS_TABLE::OnSizeViewControlsGrid( wxSizeEvent& event )
     }
 
     event.Skip();
+}
+
+
+void DIALOG_LIB_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
+{
+    SYMBOL_EDITOR_SETTINGS::PANEL_LIB_FIELDS_TABLE& cfg = m_parent->libeditconfig()->m_LibFieldEditor;
+
+    if( cfg.sidebar_collapsed )
+    {
+        cfg.sidebar_collapsed = false;
+        m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, cfg.sash_pos );
+        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+    }
+    else
+    {
+        cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+        cfg.sidebar_collapsed = true;
+        m_splitterMainWindow->Unsplit( m_leftPanel );
+        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+    }
 }
 
 

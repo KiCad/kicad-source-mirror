@@ -32,10 +32,10 @@ class WX_GRID;
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/checkbox.h>
-#include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/notebook.h>
+#include <wx/splitter.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -48,18 +48,18 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxNotebook* m_nbPages;
-		wxPanel* m_panelEdit;
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
 		WX_GRID* m_viewControlsGrid;
 		STD_BITMAP_BUTTON* m_addFieldButton;
 		STD_BITMAP_BUTTON* m_renameFieldButton;
 		STD_BITMAP_BUTTON* m_removeFieldButton;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline11;
 		wxStaticText* m_bomPresetsLabel;
 		wxChoice* m_cbBomPresets;
 		wxPanel* m_rightPanel;
+		wxNotebook* m_nbPages;
+		wxPanel* m_panelEdit;
 		wxSearchCtrl* m_filter;
 		wxStaticLine* m_staticline31;
 		wxChoice* m_scope;
@@ -69,7 +69,6 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_bRefresh;
 		STD_BITMAP_BUTTON* m_bMenu;
 		WX_GRID* m_grid;
-		wxStaticLine* m_staticline7;
 		wxPanel* m_panelExport;
 		wxStaticText* m_labelFieldDelimiter;
 		wxTextCtrl* m_textFieldDelimiter;
@@ -90,6 +89,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelPreview;
 		STD_BITMAP_BUTTON* m_bRefreshPreview;
 		wxTextCtrl* m_textOutput;
+		STD_BITMAP_BUTTON* m_sidebarButton;
 		wxButton* m_buttonExport;
 		wxButton* m_buttonApply;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -98,12 +98,12 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnViewControlsCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSizeViewControlsGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRenameField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnScope( wxCommandEvent& event ) { event.Skip(); }
@@ -115,6 +115,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSidebarToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }

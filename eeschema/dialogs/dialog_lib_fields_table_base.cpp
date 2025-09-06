@@ -63,7 +63,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_viewControlsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_viewControlsGrid->SetMinSize( wxSize( -1,250 ) );
 
-	bLeftSizer->Add( m_viewControlsGrid, 1, wxALL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_viewControlsGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bFieldsButtons;
 	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -81,7 +81,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	bFieldsButtons->Add( m_removeFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND, 5 );
+	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -152,6 +152,29 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 
 	bRightSizer->Add( m_grid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
+	wxBoxSizer* bButtonsSizer;
+	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_sidebarButton = new STD_BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonsSizer->Add( m_sidebarButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bButtonsSizer->Add( 0, 0, 9, wxEXPAND, 5 );
+
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( m_rightPanel, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerApply = new wxButton( m_rightPanel, wxID_APPLY );
+	m_sdbSizer->AddButton( m_sdbSizerApply );
+	m_sdbSizerCancel = new wxButton( m_rightPanel, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
+
+	bButtonsSizer->Add( m_sdbSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bRightSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
+
 
 	m_rightPanel->SetSizer( bRightSizer );
 	m_rightPanel->Layout();
@@ -161,26 +184,6 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 
 
 	bMainSizer->Add( bEditSizer, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bButtonsSizer;
-	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bButtonsSizer->Add( 0, 0, 9, wxEXPAND, 5 );
-
-	m_sdbSizer = new wxStdDialogButtonSizer();
-	m_sdbSizerOK = new wxButton( this, wxID_OK );
-	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer->AddButton( m_sdbSizerApply );
-	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer->AddButton( m_sdbSizerCancel );
-	m_sdbSizer->Realize();
-
-	bButtonsSizer->Add( m_sdbSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );
@@ -209,6 +212,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_grid->Connect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnEditorShown ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableSelectCell ), NULL, this );
+	m_sidebarButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnSidebarToggle ), NULL, this );
 	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnApply ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnCancel ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnOk ), NULL, this );
@@ -236,6 +240,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::~DIALOG_LIB_FIELDS_TABLE_BASE()
 	m_grid->Disconnect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnEditorShown ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableSelectCell ), NULL, this );
+	m_sidebarButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnSidebarToggle ), NULL, this );
 	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnApply ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnCancel ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnOk ), NULL, this );

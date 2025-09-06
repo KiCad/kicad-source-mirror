@@ -70,6 +70,7 @@ public:
         std::map<std::string, int> field_widths;
         wxString                   view_controls_visible_columns;
         int                        sash_pos;
+        bool                       sidebar_collapsed;
     };
 
     SYMBOL_EDITOR_SETTINGS();

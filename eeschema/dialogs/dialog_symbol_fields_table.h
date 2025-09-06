@@ -82,6 +82,8 @@ private:
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
+
+    void OnSidebarToggle( wxCommandEvent& event ) override;
     void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;

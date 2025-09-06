@@ -56,6 +56,7 @@ class DIALOG_LIB_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline311;
 		STD_BITMAP_BUTTON* m_bRefresh;
 		WX_GRID* m_grid;
+		STD_BITMAP_BUTTON* m_sidebarButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerApply;
@@ -79,6 +80,7 @@ class DIALOG_LIB_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
 		virtual void OnEditorShown( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableSelectCell( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnSidebarToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnApply( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOk( wxCommandEvent& event ) { event.Skip(); }

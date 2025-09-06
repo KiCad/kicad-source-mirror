@@ -239,6 +239,7 @@ public:
         int                        scope;
         wxString                   view_controls_visible_columns;
         int                        sash_pos;
+        bool                       sidebar_collapsed;
     };
 
     struct PANEL_LIB_VIEW

@@ -76,6 +76,7 @@ private:
     void OnTableItemContextMenu( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
 
+    void OnSidebarToggle( wxCommandEvent& event ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnOk( wxCommandEvent& event ) override;
     void OnApply( wxCommandEvent& event ) override;
