@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/std_bitmap_button.h"
-#include "widgets/text_ctrl_eval.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_footprint_properties_fp_editor_base.h"
@@ -226,7 +225,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -292,7 +291,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	gbSizer1->Add( m_PasteMarginRatioLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_PasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PasteMarginRatioCtrl = new wxTextCtrl( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_PasteMarginRatioCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_PasteMarginRatioUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -396,7 +395,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelClearances->SetSizer( bSizerPanelClearances );
 	m_PanelClearances->Layout();
 	bSizerPanelClearances->Fit( m_PanelClearances );
-	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), false );
+	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), true );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
