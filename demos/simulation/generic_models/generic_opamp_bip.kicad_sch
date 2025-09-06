@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "7e4dfe8a-5df9-4426-b328-4b07a6aa7235")
@@ -266,104 +266,6 @@
 						(effects
 							(font
 								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Simulation_SPICE:0"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#GND"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "0"
-				(at 0 -1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "0V reference potential for simulation"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "simulation"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "0_0_1"
-				(polyline
-					(pts
-						(xy -1.27 0) (xy 0 -1.27) (xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "0_1_1"
-				(pin power_in line
-					(at 0 0 0)
-					(length 0)
-					(hide yes)
-					(name "0"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.016 1.016)
 							)
 						)
 					)
@@ -1432,6 +1334,107 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "power:GND"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(text "Generic OpAmp"
 		(exclude_from_sim no)
@@ -1517,6 +1520,16 @@
 	)
 	(wire
 		(pts
+			(xy 156.21 88.9) (xy 156.21 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d6104cb-337d-4943-b0dd-8944f99e1c5f")
+	)
+	(wire
+		(pts
 			(xy 182.88 90.17) (xy 187.96 90.17)
 		)
 		(stroke
@@ -1584,6 +1597,16 @@
 			(type default)
 		)
 		(uuid "348fe1d6-4e84-4bf0-af93-a6740aa76a98")
+	)
+	(wire
+		(pts
+			(xy 156.21 87.63) (xy 161.29 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "458b2f0a-94dd-4122-b1fd-4ae149f93c57")
 	)
 	(wire
 		(pts
@@ -1747,16 +1770,6 @@
 	)
 	(wire
 		(pts
-			(xy 156.21 87.63) (xy 161.29 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c0c37149-28dc-42d5-b701-ffb0e1d5a23e")
-	)
-	(wire
-		(pts
 			(xy 135.89 92.71) (xy 135.89 102.87)
 		)
 		(stroke
@@ -1804,16 +1817,6 @@
 			(type default)
 		)
 		(uuid "d7d6207e-cd83-455e-a057-1ae6276c01be")
-	)
-	(wire
-		(pts
-			(xy 156.21 86.36) (xy 156.21 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ddaae287-f8aa-4b36-ab0a-b5ec0fe1ee8e")
 	)
 	(wire
 		(pts
@@ -2339,7 +2342,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Simulation_SPICE:0")
+		(lib_id "power:GND")
 		(at 270.51 110.49 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2348,8 +2351,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "22fcf0d5-0463-42fe-8be0-1a1a2ae18260")
-		(property "Reference" "#GND06"
-			(at 270.51 113.03 0)
+		(property "Reference" "#PWR6"
+			(at 270.51 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2358,11 +2361,12 @@
 			)
 		)
 		(property "Value" "0"
-			(at 270.51 107.95 0)
+			(at 270.51 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -2374,7 +2378,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 270.51 110.49 0)
 			(effects
 				(font
@@ -2383,7 +2387,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0V reference potential for simulation"
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 270.51 110.49 0)
 			(effects
 				(font
@@ -2398,14 +2402,14 @@
 		(instances
 			(project "generic_opamp_bip"
 				(path "/7e4dfe8a-5df9-4426-b328-4b07a6aa7235"
-					(reference "#GND06")
+					(reference "#PWR6")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Simulation_SPICE:0")
+		(lib_id "power:GND")
 		(at 198.12 95.25 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2414,8 +2418,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2861aaee-2325-4636-9236-df60ef0751d2")
-		(property "Reference" "#GND03"
-			(at 198.12 97.79 0)
+		(property "Reference" "#PWR3"
+			(at 198.12 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2424,7 +2428,7 @@
 			)
 		)
 		(property "Value" "0"
-			(at 198.12 92.71 0)
+			(at 198.12 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2440,7 +2444,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 198.12 95.25 0)
 			(effects
 				(font
@@ -2449,7 +2453,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0V reference potential for simulation"
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 198.12 95.25 0)
 			(effects
 				(font
@@ -2464,7 +2468,7 @@
 		(instances
 			(project "generic_opamp_bip"
 				(path "/7e4dfe8a-5df9-4426-b328-4b07a6aa7235"
-					(reference "#GND03")
+					(reference "#PWR3")
 					(unit 1)
 				)
 			)
@@ -3276,7 +3280,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Simulation_SPICE:0")
+		(lib_id "power:GND")
 		(at 252.73 110.49 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3285,8 +3289,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a044f42a-0fd7-4a07-90a5-05ca17992166")
-		(property "Reference" "#GND05"
-			(at 252.73 113.03 0)
+		(property "Reference" "#PWR5"
+			(at 252.73 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3295,11 +3299,12 @@
 			)
 		)
 		(property "Value" "0"
-			(at 252.73 107.95 0)
+			(at 252.73 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -3311,7 +3316,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 252.73 110.49 0)
 			(effects
 				(font
@@ -3320,7 +3325,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0V reference potential for simulation"
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 252.73 110.49 0)
 			(effects
 				(font
@@ -3335,14 +3340,14 @@
 		(instances
 			(project "generic_opamp_bip"
 				(path "/7e4dfe8a-5df9-4426-b328-4b07a6aa7235"
-					(reference "#GND05")
+					(reference "#PWR5")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Simulation_SPICE:0")
+		(lib_id "power:GND")
 		(at 233.68 110.49 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3351,8 +3356,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a601c847-3958-442b-a945-25af8ed36e0f")
-		(property "Reference" "#GND04"
-			(at 233.68 113.03 0)
+		(property "Reference" "#PWR4"
+			(at 233.68 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3361,11 +3366,12 @@
 			)
 		)
 		(property "Value" "0"
-			(at 233.68 107.95 0)
+			(at 233.68 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -3377,7 +3383,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 233.68 110.49 0)
 			(effects
 				(font
@@ -3386,7 +3392,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0V reference potential for simulation"
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 233.68 110.49 0)
 			(effects
 				(font
@@ -3401,7 +3407,7 @@
 		(instances
 			(project "generic_opamp_bip"
 				(path "/7e4dfe8a-5df9-4426-b328-4b07a6aa7235"
-					(reference "#GND04")
+					(reference "#PWR4")
 					(unit 1)
 				)
 			)
@@ -3475,7 +3481,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Simulation_SPICE:0")
+		(lib_id "power:GND")
 		(at 135.89 114.3 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3484,8 +3490,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b3399f4d-6927-42f5-927a-02ea2fca80bb")
-		(property "Reference" "#GND01"
-			(at 135.89 116.84 0)
+		(property "Reference" "#PWR1"
+			(at 135.89 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3494,11 +3500,12 @@
 			)
 		)
 		(property "Value" "0"
-			(at 135.89 111.76 0)
+			(at 135.89 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -3510,7 +3517,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 135.89 114.3 0)
 			(effects
 				(font
@@ -3519,7 +3526,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "0V reference potential for simulation"
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 135.89 114.3 0)
 			(effects
 				(font
@@ -3534,7 +3541,7 @@
 		(instances
 			(project "generic_opamp_bip"
 				(path "/7e4dfe8a-5df9-4426-b328-4b07a6aa7235"
-					(reference "#GND01")
+					(reference "#PWR1")
 					(unit 1)
 				)
 			)
@@ -3675,17 +3682,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Simulation_SPICE:0")
-		(at 156.21 86.36 0)
-		(mirror x)
+		(lib_id "power:GND")
+		(at 156.21 88.9 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "fce61e56-3d8d-4627-ab66-168c1043305d")
-		(property "Reference" "#GND02"
-			(at 156.21 83.82 0)
+		(property "Reference" "#PWR2"
+			(at 156.21 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3694,15 +3701,25 @@
 			)
 		)
 		(property "Value" "0"
+			(at 156.21 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
 			(at 156.21 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Footprint" ""
-			(at 156.21 86.36 0)
+		(property "Datasheet" ""
+			(at 156.21 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3710,17 +3727,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 156.21 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "0V reference potential for simulation"
-			(at 156.21 86.36 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 156.21 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3734,7 +3742,7 @@
 		(instances
 			(project "generic_opamp_bip"
 				(path "/7e4dfe8a-5df9-4426-b328-4b07a6aa7235"
-					(reference "#GND02")
+					(reference "#PWR2")
 					(unit 1)
 				)
 			)

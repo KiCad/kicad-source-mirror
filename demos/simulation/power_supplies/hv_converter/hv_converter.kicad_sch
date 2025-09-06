@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "4931f31e-df24-471e-b8c2-848a676344f1")
 	(paper "A4")
 	(title_block
@@ -13,7 +13,9 @@
 	(lib_symbols
 		(symbol "DIODE_1"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -92,10 +94,10 @@
 			(symbol "DIODE_1_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -116,10 +118,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -165,11 +167,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "DIODE_2"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -248,10 +255,10 @@
 			(symbol "DIODE_2_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -272,10 +279,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -321,11 +328,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "DIODE_3"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -404,10 +416,10 @@
 			(symbol "DIODE_3_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -428,10 +440,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -477,11 +489,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "DIODE_4"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -560,10 +577,10 @@
 			(symbol "DIODE_4_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -584,10 +601,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -633,11 +650,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "DIODE_5"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -716,10 +738,10 @@
 			(symbol "DIODE_5_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
+						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -740,10 +762,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy 1.27 0) (xy -1.27 -1.27)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -789,11 +811,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:C_Small"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -863,10 +890,10 @@
 			(symbol "C_Small_0_1"
 				(polyline
 					(pts
-						(xy -1.524 -0.508) (xy 1.524 -0.508)
+						(xy -1.524 0.508) (xy 1.524 0.508)
 					)
 					(stroke
-						(width 0.3302)
+						(width 0.3048)
 						(type default)
 					)
 					(fill
@@ -875,10 +902,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.524 0.508) (xy 1.524 0.508)
+						(xy -1.524 -0.508) (xy 1.524 -0.508)
 					)
 					(stroke
-						(width 0.3048)
+						(width 0.3302)
 						(type default)
 					)
 					(fill
@@ -924,11 +951,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:L_Small"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -997,32 +1029,8 @@
 			)
 			(symbol "L_Small_0_1"
 				(arc
-					(start 0 -2.032)
-					(mid 0.5058 -1.524)
-					(end 0 -1.016)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 -1.016)
-					(mid 0.5058 -0.508)
-					(end 0 0)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 0)
-					(mid 0.5058 0.508)
+					(start 0 2.032)
+					(mid 0.5058 1.524)
 					(end 0 1.016)
 					(stroke
 						(width 0)
@@ -1034,8 +1042,32 @@
 				)
 				(arc
 					(start 0 1.016)
-					(mid 0.5058 1.524)
-					(end 0 2.032)
+					(mid 0.5058 0.508)
+					(end 0 0)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0)
+					(mid 0.5058 -0.508)
+					(end 0 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -1.016)
+					(mid 0.5058 -1.524)
+					(end 0 -2.032)
 					(stroke
 						(width 0)
 						(type default)
@@ -1083,10 +1115,13 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:Q_NMOS_GDS"
 			(pin_names
-				(offset 0) hide)
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1147,18 +1182,6 @@
 			(symbol "Q_NMOS_GDS_0_1"
 				(polyline
 					(pts
-						(xy 0.254 0) (xy -2.54 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0.254 1.905) (xy 0.254 -1.905)
 					)
 					(stroke
@@ -1171,7 +1194,19 @@
 				)
 				(polyline
 					(pts
-						(xy 0.762 -1.27) (xy 0.762 -2.286)
+						(xy 0.254 0) (xy -2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 2.286) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0.254)
@@ -1195,34 +1230,10 @@
 				)
 				(polyline
 					(pts
-						(xy 0.762 2.286) (xy 0.762 1.27)
+						(xy 0.762 -1.27) (xy 0.762 -2.286)
 					)
 					(stroke
 						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
-					)
-					(stroke
-						(width 0)
 						(type default)
 					)
 					(fill
@@ -1253,6 +1264,63 @@
 						(type outline)
 					)
 				)
+				(circle
+					(center 1.651 0)
+					(radius 2.794)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 2.54) (xy 2.54 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.54 1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 -1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
 						(xy 2.794 0.508) (xy 2.921 0.381) (xy 3.683 0.381) (xy 3.81 0.254)
@@ -1275,39 +1343,6 @@
 					)
 					(fill
 						(type none)
-					)
-				)
-				(circle
-					(center 1.651 0)
-					(radius 2.794)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.54 -1.778)
-					(radius 0.254)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(circle
-					(center 2.54 1.778)
-					(radius 0.254)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
 					)
 				)
 			)
@@ -1367,11 +1402,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Device:R_Small"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.254) hide)
+				(offset 0.254)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1489,9 +1529,12 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Simulation_SPICE:VPULSE"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.0254)
 			)
@@ -1655,17 +1698,22 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "pspice:0"
+		(symbol "power:GND"
 			(power)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
+				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "#GND"
-				(at 0 -2.54 0)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1673,8 +1721,8 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "0"
-				(at 0 -1.778 0)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1690,7 +1738,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "~"
+			(property "Datasheet" ""
 				(at 0 0 0)
 				(effects
 					(font
@@ -1699,7 +1747,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "0V reference potential for simulation"
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1708,7 +1756,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "simulation"
+			(property "ki_keywords" "global power"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1717,10 +1765,10 @@
 					(hide yes)
 				)
 			)
-			(symbol "0_0_1"
+			(symbol "GND_0_1"
 				(polyline
 					(pts
-						(xy -1.27 0) (xy 0 -1.27) (xy 1.27 0) (xy -1.27 0)
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
 					)
 					(stroke
 						(width 0)
@@ -1731,27 +1779,61 @@
 					)
 				)
 			)
-			(symbol "0_1_1"
+			(symbol "GND_1_1"
 				(pin power_in line
-					(at 0 0 0)
-					(length 0) hide
-					(name "0"
+					(at 0 0 270)
+					(length 0)
+					(name "~"
 						(effects
 							(font
-								(size 1.016 1.016)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.016 1.016)
+								(size 1.27 1.27)
 							)
 						)
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
+	)
+	(text "Power supply is ramped\nto reduce initial current surge"
+		(exclude_from_sim no)
+		(at 72.39 132.588 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "86438291-f196-49c0-a878-520bc44e3a2e")
+	)
+	(text "Hybrid switched capacitor converter HSCC\n28 V to 700 V\nhttps://www.osti.gov/servlets/purl/1497233"
+		(exclude_from_sim no)
+		(at 65.786 81.534 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "87597724-ed0c-41db-8c21-b254de72d6ea")
+	)
+	(text ".tran 200n 120m\n.option chgtol=1e-11 reltol=0.01 method=gear\n"
+		(exclude_from_sim no)
+		(at 148.59 164.592 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f9428b24-7dda-417a-9229-69da64575178")
 	)
 	(junction
 		(at 217.932 96.52)
@@ -2481,42 +2563,8 @@
 		)
 		(uuid "f79b053b-d3c9-423c-bda6-32854af1f236")
 	)
-	(text "Power supply is ramped\nto reduce initial current surge"
-		(exclude_from_sim no)
-		(at 72.39 132.588 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "86438291-f196-49c0-a878-520bc44e3a2e")
-	)
-	(text "Hybrid switched capacitor converter HSCC\n28 V to 700 V\nhttps://www.osti.gov/servlets/purl/1497233"
-		(exclude_from_sim no)
-		(at 65.786 81.534 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "87597724-ed0c-41db-8c21-b254de72d6ea")
-	)
-	(text ".tran 200n 120m\n.option chgtol=1e-11 reltol=0.01 method=gear\n"
-		(exclude_from_sim no)
-		(at 148.59 164.592 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f9428b24-7dda-417a-9229-69da64575178")
-	)
 	(label "pwr"
 		(at 69.342 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2527,7 +2575,6 @@
 	)
 	(label "d4"
 		(at 165.1 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2538,7 +2585,6 @@
 	)
 	(label "d6"
 		(at 192.532 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2549,7 +2595,6 @@
 	)
 	(label "d7"
 		(at 204.47 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2560,7 +2605,6 @@
 	)
 	(label "d5"
 		(at 177.038 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2571,7 +2615,6 @@
 	)
 	(label "d2"
 		(at 136.652 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2582,7 +2625,6 @@
 	)
 	(label "d8"
 		(at 219.456 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2593,7 +2635,6 @@
 	)
 	(label "g"
 		(at 86.106 102.362 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2604,7 +2645,6 @@
 	)
 	(label "d"
 		(at 101.6 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2615,7 +2655,6 @@
 	)
 	(label "out"
 		(at 236.982 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2626,7 +2665,6 @@
 	)
 	(label "d3"
 		(at 148.59 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2637,7 +2675,6 @@
 	)
 	(label "d1"
 		(at 122.428 96.52 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3235,7 +3272,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pspice:0")
+		(lib_id "power:GND")
 		(at 242.57 108.712 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3244,8 +3281,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "43be504e-7702-4b69-939d-ba010d80595c")
-		(property "Reference" "#GND06"
-			(at 242.57 111.252 0)
+		(property "Reference" "#PWR6"
+			(at 242.57 115.062 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3253,12 +3290,13 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "0"
-			(at 242.57 106.172 0)
+		(property "Value" "GND"
+			(at 242.57 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -3270,7 +3308,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 242.57 108.712 0)
 			(effects
 				(font
@@ -3279,7 +3317,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 242.57 108.712 0)
 			(effects
 				(font
@@ -3294,7 +3332,7 @@
 		(instances
 			(project "HSCConverter4_load"
 				(path "/4931f31e-df24-471e-b8c2-848a676344f1"
-					(reference "#GND06")
+					(reference "#PWR6")
 					(unit 1)
 				)
 			)
@@ -3862,7 +3900,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pspice:0")
+		(lib_id "power:GND")
 		(at 233.172 108.712 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3871,8 +3909,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6939400c-1fde-44d5-a619-9283c496e7f3")
-		(property "Reference" "#GND05"
-			(at 233.172 111.252 0)
+		(property "Reference" "#PWR5"
+			(at 233.172 115.062 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3880,12 +3918,13 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "0"
-			(at 233.172 106.172 0)
+		(property "Value" "GND"
+			(at 233.172 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -3897,7 +3936,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 233.172 108.712 0)
 			(effects
 				(font
@@ -3906,7 +3945,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 233.172 108.712 0)
 			(effects
 				(font
@@ -3921,7 +3960,7 @@
 		(instances
 			(project "HSCConverter4_load"
 				(path "/4931f31e-df24-471e-b8c2-848a676344f1"
-					(reference "#GND05")
+					(reference "#PWR5")
 					(unit 1)
 				)
 			)
@@ -4341,7 +4380,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pspice:0")
+		(lib_id "power:GND")
 		(at 120.142 120.396 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4350,8 +4389,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a4a547d3-4174-4d98-a64f-fa412fadcaf6")
-		(property "Reference" "#GND04"
-			(at 120.142 122.936 0)
+		(property "Reference" "#PWR4"
+			(at 120.142 126.746 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4359,12 +4398,13 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "0"
-			(at 120.142 117.856 0)
+		(property "Value" "GND"
+			(at 120.142 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -4376,7 +4416,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 120.142 120.396 0)
 			(effects
 				(font
@@ -4385,7 +4425,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 120.142 120.396 0)
 			(effects
 				(font
@@ -4400,14 +4440,14 @@
 		(instances
 			(project "HSCConverter4_load"
 				(path "/4931f31e-df24-471e-b8c2-848a676344f1"
-					(reference "#GND04")
+					(reference "#PWR4")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "pspice:0")
+		(lib_id "power:GND")
 		(at 81.28 123.444 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4416,8 +4456,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ca988150-bec6-42a5-8c31-4ef907c123ef")
-		(property "Reference" "#GND02"
-			(at 81.28 125.984 0)
+		(property "Reference" "#PWR2"
+			(at 81.28 129.794 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4425,12 +4465,13 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "0"
-			(at 81.28 120.904 0)
+		(property "Value" "GND"
+			(at 81.28 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -4442,7 +4483,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 81.28 123.444 0)
 			(effects
 				(font
@@ -4451,7 +4492,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 81.28 123.444 0)
 			(effects
 				(font
@@ -4466,7 +4507,7 @@
 		(instances
 			(project "HSCConverter4_load"
 				(path "/4931f31e-df24-471e-b8c2-848a676344f1"
-					(reference "#GND02")
+					(reference "#PWR2")
 					(unit 1)
 				)
 			)
@@ -4744,7 +4785,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pspice:0")
+		(lib_id "power:GND")
 		(at 105.156 112.522 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4753,8 +4794,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e79ef649-c298-4c0d-8f69-5d43d9f39174")
-		(property "Reference" "#GND03"
-			(at 105.156 115.062 0)
+		(property "Reference" "#PWR3"
+			(at 105.156 118.872 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4762,12 +4803,13 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "0"
-			(at 105.156 109.982 0)
+		(property "Value" "GND"
+			(at 105.156 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -4779,7 +4821,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 105.156 112.522 0)
 			(effects
 				(font
@@ -4788,7 +4830,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 105.156 112.522 0)
 			(effects
 				(font
@@ -4803,7 +4845,7 @@
 		(instances
 			(project "HSCConverter4_load"
 				(path "/4931f31e-df24-471e-b8c2-848a676344f1"
-					(reference "#GND03")
+					(reference "#PWR3")
 					(unit 1)
 				)
 			)
@@ -5044,7 +5086,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pspice:0")
+		(lib_id "power:GND")
 		(at 68.072 134.366 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5053,8 +5095,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fbd1e545-9fdc-435a-9b2a-30b6a9500b6a")
-		(property "Reference" "#GND01"
-			(at 68.072 136.906 0)
+		(property "Reference" "#PWR1"
+			(at 68.072 140.716 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5062,12 +5104,13 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "0"
-			(at 68.072 131.826 0)
+		(property "Value" "GND"
+			(at 68.072 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" ""
@@ -5079,7 +5122,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" ""
 			(at 68.072 134.366 0)
 			(effects
 				(font
@@ -5088,7 +5131,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 68.072 134.366 0)
 			(effects
 				(font
@@ -5103,7 +5146,7 @@
 		(instances
 			(project "HSCConverter4_load"
 				(path "/4931f31e-df24-471e-b8c2-848a676344f1"
-					(reference "#GND01")
+					(reference "#PWR1")
 					(unit 1)
 				)
 			)
@@ -5114,4 +5157,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )
