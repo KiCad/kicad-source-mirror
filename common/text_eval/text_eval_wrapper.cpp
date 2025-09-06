@@ -1368,8 +1368,7 @@ std::vector<wxString> EXPRESSION_EVALUATOR::ExtractExpressions( const wxString& 
 
         if( end != wxString::npos )
         {
-            wxString expression = aInput.substr( start, end - start );
-            expressions.push_back( expression );
+            expressions.push_back( aInput.substr( start, end - start ) );
             pos = end + 1;
         }
         else
