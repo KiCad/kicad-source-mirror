@@ -336,7 +336,14 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     m_nbPages->SetSelection( cfg.page );
 
-    m_viewControlsGrid->ShowHideColumns( cfg.view_controls_visible_columns );
+    //Hide/display m_viewControlsGrid column. Ensure at least one column is visible
+    // otherwise we cannot add columns
+    wxString visible_column = cfg.view_controls_visible_columns;
+
+    if( visible_column.IsEmpty() )
+        visible_column = wxT( "0" );
+
+    m_viewControlsGrid->ShowHideColumns( visible_column );
 
     CallAfter( [this, cfg]()
                {
