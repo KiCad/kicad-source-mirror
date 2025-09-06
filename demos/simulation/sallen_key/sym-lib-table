@@ -1,3 +1,4 @@
 (sym_lib_table
+  (version 7)
   (lib (name "sallen_key_schlib")(type "KiCad")(uri "${KIPRJMOD}/sallen_key_schlib.kicad_sym")(options "")(descr ""))
 )
