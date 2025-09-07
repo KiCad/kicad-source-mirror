@@ -327,8 +327,13 @@ public:
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
 private:
+    // Lazily load board outline polygons (outer outline + any holes)
+    bool EnsureBoardOutline() const;
+
     PARAMETERS m_params;
     bool m_haveNarrowMouths;
+    mutable bool m_boardOutlineCached = false;
+    mutable SHAPE_POLY_SET m_boardOutline; ///< Cached board outline polygons
 };
 
 

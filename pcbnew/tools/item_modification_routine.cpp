@@ -28,12 +28,16 @@
 #include <geometry/oval.h>
 #include <geometry/roundrect.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_utils.h>
 #include <geometry/vector_utils.h>
+#include <math.h>
 
 #include <pad.h>
 #include <pcb_track.h>
 #include <tools/pcb_tool_utils.h>
 #include <confirm.h>
+#include <board.h>
+#include <wx/log.h>
 
 namespace
 {
@@ -293,7 +297,17 @@ std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage( int aSegmentCo
 void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB )
 {
     if( aLineA.GetLength() == 0.0 || aLineB.GetLength() == 0.0 )
+    {
+        wxLogTrace( "DOGBONE", "Skip: zero-length line(s) (A len=%f, B len=%f)",
+                    aLineA.GetLength(), aLineB.GetLength() );
         return;
+    }
+
+    if( !EnsureBoardOutline() )
+    {
+        wxLogTrace( "DOGBONE", "Skip: board outline unavailable" );
+        return;
+    }
 
     SEG seg_a( aLineA.GetStart(), aLineA.GetEnd() );
     SEG seg_b( aLineB.GetStart(), aLineB.GetEnd() );
@@ -302,13 +316,56 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
     if( !a_pt || !b_pt )
     {
+        wxLogTrace( "DOGBONE", "Skip: segments do not share endpoint" );
         return;
     }
 
     // Cannot handle parallel lines
     if( seg_a.Angle( seg_b ).IsHorizontal() )
     {
+        wxLogTrace( "DOGBONE", "Skip: parallel segments" );
         AddFailure();
+        return;
+    }
+
+    // Determine if this corner points into the board outline: we construct the bisector
+    // vector (as done in ComputeDogbone) and test a point a small distance in the opposite
+    // direction (i.e. exterior). If that opposite point is INSIDE the board outline, the
+    // corner indentation points inward (needs dogbone). If the opposite test point is
+    // outside, skip.
+
+    const VECTOR2I corner = *a_pt; // shared endpoint
+    // Build vectors from corner toward other ends
+    const VECTOR2I vecA = ( seg_a.A == corner ? seg_a.B - corner : seg_a.A - corner );
+    const VECTOR2I vecB = ( seg_b.A == corner ? seg_b.B - corner : seg_b.A - corner );
+    // Normalize (resize) to common length to form bisector reliably
+    int maxLen = std::max( vecA.EuclideanNorm(), vecB.EuclideanNorm() );
+    if( maxLen == 0 )
+    {
+        wxLogTrace( "DOGBONE", "Skip: degenerate corner (maxLen==0)" );
+        return;
+    }
+    VECTOR2I vecAn = vecA.Resize( maxLen );
+    VECTOR2I vecBn = vecB.Resize( maxLen );
+    VECTOR2I bisectorOutward = vecAn + vecBn; // direction inside angle region
+
+    // If vectors are nearly opposite, no meaningful dogbone
+    if( bisectorOutward.EuclideanNorm() == 0 )
+    {
+        wxLogTrace( "DOGBONE", "Skip: bisector zero (vectors opposite)" );
+        return;
+    }
+
+    // Opposite direction of bisector (points "outside" if angle is convex, or further into
+    // material if reflex). We'll sample a point a small distance along -bisectorOutward.
+    VECTOR2I sampleDir = ( -bisectorOutward ).Resize( std::min( 1000, m_params.DogboneRadiusIU ) );
+    VECTOR2I samplePoint = corner + sampleDir; // test point opposite bisector
+
+    bool oppositeInside = m_boardOutline.Contains( samplePoint );
+
+    if( !oppositeInside )
+    {
+        wxLogTrace( "DOGBONE", "Skip: corner not inward (sample outside polygon)" );
         return;
     }
 
@@ -317,12 +374,16 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
     if( !dogbone_result )
     {
+        wxLogTrace( "DOGBONE", "Skip: ComputeDogbone failed (radius=%d slots=%d)",
+                    m_params.DogboneRadiusIU, (int) m_params.AddSlots );
         AddFailure();
         return;
     }
 
     if( dogbone_result->m_small_arc_mouth )
     {
+        wxLogTrace( "DOGBONE", "Info: small arc mouth (slots %s)",
+                    m_params.AddSlots ? "enabled" : "disabled" );
         // The arc is too small to fit the radius
         m_haveNarrowMouths = true;
     }
@@ -365,7 +426,34 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
     ModifyLineOrDeleteIfZeroLength( aLineA, dogbone_result->m_updated_seg_a );
     ModifyLineOrDeleteIfZeroLength( aLineB, dogbone_result->m_updated_seg_b );
 
+    wxLogTrace( "DOGBONE", "Success: dogbone added at (%d,%d)", corner.x, corner.y );
     AddSuccess();
+}
+
+bool DOGBONE_CORNER_ROUTINE::EnsureBoardOutline() const
+{
+    if( m_boardOutlineCached )
+        return !m_boardOutline.IsEmpty();
+
+    m_boardOutlineCached = true;
+
+    BOARD* board = dynamic_cast<BOARD*>( GetBoard() );
+    if( !board )
+    {
+        wxLogTrace( "DOGBONE", "EnsureBoardOutline: board cast failed" );
+        return false;
+    }
+
+    // Build outlines; ignore errors and arcs for this classification
+    if( !board->GetBoardPolygonOutlines( m_boardOutline ) )
+    {
+        wxLogTrace( "DOGBONE", "EnsureBoardOutline: GetBoardPolygonOutlines failed" );
+        return false;
+    }
+
+    bool ok = !m_boardOutline.IsEmpty();
+    wxLogTrace( "DOGBONE", "EnsureBoardOutline: outline %s", ok ? "ready" : "empty" );
+    return ok;
 }
 
 
