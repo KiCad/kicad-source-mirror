@@ -931,8 +931,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
 {
     for( LIB_SYMBOL* symbol : m_symbolsList )
     {
-        symbolChangeHandler( symbol );
-
         std::map<wxString, LIB_DATA_ELEMENT>& fieldStore = m_dataStore[symbol->m_Uuid];
 
         for( auto& srcData : fieldStore )
@@ -941,6 +939,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             LIB_DATA_ELEMENT& dataElement = srcData.second;
             const wxString&   srcValue = dataElement.m_currentData;
             int               col = GetFieldNameCol( srcName );
+
+            if( dataElement.m_isModified )
+                symbolChangeHandler( symbol );
 
             // Attributes bypass the field logic, so handle them first
             if( col != -1 && ColIsCheck( col ) )
@@ -1022,6 +1023,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             // Remove any fields that are not in the fieldStore
             if( !fieldStore.contains( field->GetName() ) )
             {
+                symbolChangeHandler( symbol );
                 symbol->RemoveField( field );
                 delete field;
             }

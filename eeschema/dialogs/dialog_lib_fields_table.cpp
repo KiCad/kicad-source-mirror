@@ -540,18 +540,20 @@ void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
         return;
     }
 
-    try
+    // Load each symbol from the library manager and add it to our list
+    for( const wxString& symbolName : aSymbolNames )
     {
-        // Load each symbol from the library manager and add it to our list
-        for( const wxString& symbolName : aSymbolNames )
-        {
-            LIB_SYMBOL* symbol = nullptr;
+        LIB_SYMBOL* canvasSymbol = m_parent->GetCurSymbol();
 
+        if( canvasSymbol && canvasSymbol->GetLibraryName() == libName && canvasSymbol->GetName() == symbolName )
+        {
+            m_symbolsList.push_back( canvasSymbol );
+        }
+        else
+        {
             try
             {
-                symbol = m_parent->GetLibManager().GetSymbol( symbolName, libName );
-
-                if( symbol )
+                if( LIB_SYMBOL* symbol = m_parent->GetLibManager().GetSymbol( symbolName, libName ) )
                     m_symbolsList.push_back( symbol );
             }
             catch( const IO_ERROR& ioe )
@@ -560,13 +562,6 @@ void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
                 wxLogWarning( wxString::Format( _( "Error loading symbol '%s': %s" ), symbolName, ioe.What() ) );
             }
         }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayErrorMessage( this, wxString::Format( _( "Error accessing library '%s'.\n\n%s" ),
-                                                     libName,
-                                                     ioe.What() ) );
-        return;
     }
 
     if( m_symbolsList.empty() )
@@ -589,10 +584,15 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
+    bool updateCanvas = false;
+
     m_dataModel->ApplyData(
-            [&]( LIB_SYMBOL* )
+            [&]( LIB_SYMBOL* symbol )
             {
-                m_parent->OnModify();
+                m_parent->GetLibManager().UpdateSymbol( symbol, symbol->GetLibNickname() );
+
+                if( m_parent->GetCurSymbol() == symbol )
+                    updateCanvas = true;
             },
             [&]()
             {
@@ -656,6 +656,15 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
     wxLogTrace( traceLibFieldTable, "About to rebuild grid rows to include new symbols" );
     RegroupSymbols();
     wxLogTrace( traceLibFieldTable, "Grid rebuild completed" );
+
+    m_parent->RefreshLibraryTree();
+
+    if( updateCanvas )
+    {
+        m_parent->OnModify();
+        m_parent->HardRedraw();
+    }
+
     return true;
 }
 
