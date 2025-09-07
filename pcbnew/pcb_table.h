@@ -254,6 +254,12 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
+    /**
+     * This function exists to keep tables sorted on save in 9.0 as the uuid
+     * is missing.
+     */
+    size_t GetHash() const;
+
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 

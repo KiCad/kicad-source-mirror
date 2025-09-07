@@ -590,6 +590,24 @@ double PCB_TABLE::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
+size_t PCB_TABLE::GetHash() const
+{
+    size_t hash = 0;
+
+    // The goal here is to generate an hash that would change the least for
+    // mundane things like just moving the table.
+    hash_combine( hash, m_colCount );
+    hash_combine( hash, m_rowHeights.size() );
+
+    for( PCB_TABLECELL* cell : m_cells )
+    {
+        hash_combine( hash, cell->GetText() );
+    }
+
+    return hash;
+}
+
+
 static struct PCB_TABLE_DESC
 {
     PCB_TABLE_DESC()
