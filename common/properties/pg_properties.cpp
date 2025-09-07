@@ -696,7 +696,9 @@ PGPROPERTY_COLOR4D::PGPROPERTY_COLOR4D( const wxString& aLabel, const wxString& 
         m_backgroundColor( aBackgroundColor )
 {
     SetEditor( PG_COLOR_EDITOR::EDITOR_NAME );
-#if wxCHECK_VERSION( 3, 3, 0 )
+#if wxCHECK_VERSION( 3, 3, 1 )
+    SetFlag( wxPGFlags::NoEditor );
+#elif wxCHECK_VERSION( 3, 3, 0 )
     SetFlag( wxPGPropertyFlags::NoEditor );
 #else
     SetFlag( wxPG_PROP_NOEDITOR );

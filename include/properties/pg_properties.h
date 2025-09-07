@@ -214,7 +214,9 @@ public:
             wxEnumProperty( wxPG_LABEL, wxPG_LABEL, *aChoices, 0 ),
             m_colorFunc( []( int aDummy ) { return wxNullColour; } )
     {
-#if wxCHECK_VERSION( 3, 3, 0 )
+#if wxCHECK_VERSION( 3, 3, 1 )
+        SetFlag( wxPGFlags::CustomImage );
+#elif wxCHECK_VERSION( 3, 3, 0 )
         SetFlag( wxPGPropertyFlags::CustomImage );
 #else
         SetFlag( wxPG_PROP_CUSTOMIMAGE );
