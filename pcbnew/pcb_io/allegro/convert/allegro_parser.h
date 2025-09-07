@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include <convert/allegro_db.h>
 #include <convert/allegro_stream.h>
 #include <convert/allegro_pcb_structs.h>
 
@@ -48,7 +49,6 @@ public:
         m_stream( aStream ),
         m_progressReporter( aProgressReporter )
     {
-
     }
 
     /**
@@ -64,12 +64,13 @@ public:
         m_endAtUnknownBlock = aEndAtUnknownBlock;
     }
 
-    std::unique_ptr<RAW_BOARD> Parse();
+    std::unique_ptr<BRD_DB> Parse();
 
 private:
-    void readObjects( RAW_BOARD& aBoard );
+    void readObjects( BRD_DB& aDb );
 
-    FILE_STREAM&       m_stream;
+    FILE_STREAM& m_stream;
+
     bool               m_endAtUnknownBlock = false;
     PROGRESS_REPORTER* m_progressReporter = nullptr;
 };

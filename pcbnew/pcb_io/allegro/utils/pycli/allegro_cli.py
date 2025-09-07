@@ -162,7 +162,7 @@ class AllegroBoard:
             attr_name = attr_name or name
 
             string_id = self._value_or_by_attr(struct_or_sid, attr_name)
-            
+
             if string_id is None:
                 return
 

@@ -1060,7 +1060,7 @@ types:
       - id: segment_ptr
         type: u4
         doc: |
-          Points to a 0x15 or 0x16 or 0x17.
+          Points to a 0x01 (arc), or 0x15 or 0x16 or 0x17 (segment)
       - id: ptr_0x03
         type: u4
         doc: |
@@ -1720,9 +1720,11 @@ types:
         type: u4
       - id: first_inst_ptr
         type: u4
+        doc: |
+          Points to an 0x2d - start of a list of instances
       - id: ptr_2
         type: u4
-        doc: Points to 0x0d
+        doc: Points to 0x0d - start of a list of strings - pad numbers?
       - id: ptr_3
         type: u4
         doc: |

@@ -130,7 +130,7 @@ S!SOT23!PACKAGE!2N2221_SOT23_QBC846B!Q2!PIN!TOP!259 1!FIG_RECTANGLE!6!635!777!20
 Header map: list of:
   Some ID:  e.g. 0, 6, 4, 1, 8, 14, 19
   Pointer to 0x2A or null
-  
+
 IDs can repeat within the map, so they're not unique. Null pointers don't necessarily have ID = 0.
 
 For example, preamp has these header maps to 0x2A. Multiple entires point to the same 0x2A:
@@ -161,7 +161,7 @@ For example, preamp has these header maps to 0x2A. Multiple entires point to the
   - 0x16: 0x04 -> [TOP, BOTTOM]
   - 0x17: 0x06 -> [TOP, BOTTOM]
   - 0x18:    0 -> [TOP, BOTTOM]
-  
+
 CutiePi:
 
   - 0x00:    0 -> 0
@@ -189,17 +189,17 @@ CutiePi:
   - 0x16: 0x04 - [TOP, ...]
   - 0x17: 0x06 - [TOP, ...]
   - 0x18:    0 - [TOP, ...]
-  
+
 BeagleBone:
 
   - 0x09: 0x12 - [LEADS, MECH_DIMENSION, REWORK_PKG_BOTTOM, REWORK_PKG_TOP, MFG_KEEPOUT_TOP, SYMBOL_INFO, LIB_REV, DIMENSION, VIACAP_TOP, PART_DIM, TEST_TOP, TEST_BOTTOM]
- 
+
 0x2a only has a list of entries. In older versions and entry is just a string. In newer versions there are some flags. Presumably then the string is the only crucial thing here.
 
 Things like 0x14 have a layer info that have a "family" and an "ordinal". The ordinal can be small (0, 10), or often large (247, 253, 253)
 
 Family is a small number like:
- 
+
 - In 0x14 / Segment:  0, 1, 6, 7, 9.
 - In 0x0a / DRC:      5
 - In 0x23 / ratline:  1
@@ -262,14 +262,14 @@ looks like the entry in the 0x36 object with c = 0x08:
     a           : 0
     b           : 0
     xs          : [25, 100, 0, 2]
-    
+
 in the 0x30, we see
 
   txt props key: 0x9
   txt props flags: 0x0
   txt props align: TextAligmnent.left (= LEFT above?)
   txt props rev: TextReversal.straight (= NO above?)
-  
+
 S!RES2012X50N_0805!PACKAGE!RESISTOR_RES2012X50N_0805_1K!R16!REF DES!ASSEMBLY_TOP!490 1!TEXT!260!1260!520!0.000!NO!CENTER!17 0 24 18 0.000 4 8 3!R16!!!!!!!!!!!!!!!!
 
 looks like:
@@ -304,7 +304,7 @@ looks like:
         * 0x06
         * 0x11 (not the same as the 0x12)
       * 0x03
-        * subtype: 0x68 
+        * subtype: 0x68
         * str:  @preampl_schem.schematic1(sch_1):page1_ins13791@discrete.\c.normal\(chips)
       * Str: 'F31'
   * 0x32 (pads)
@@ -325,7 +325,7 @@ looks like:
 * Stackup seems to be in one of the 0x21 objects:
 ```
 Hex View  00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
- 
+
 00009EE0                           21 00 18 05 B4 00 00 00          !.......
 00009EF0  70 2E 79 0F FD 00 00 00  00 00 00 00 41 49 52 00  p.y.........AIR.
 00009F00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
@@ -347,7 +347,7 @@ S!000004!!!!NO!1.000000!0 mho/cm!AIR!!0 mil!
 
 * Figureed out several layer maps by comparing unmapped layers with cooridinates.
   * DRAWING FORMAT is class 4, as it have the largest numbers and seems to work
-* https://www.artwork.com/all2dxf/alleggeo.htm seems to be in order. 0xFD looks like the highest in each class, and then count backwards. SO ASSEMBLY_TOP in DEVICE_TYPE is 0xFD, and ASSEMBLY_BOTTOM is 0xFC and so on. 
+* https://www.artwork.com/all2dxf/alleggeo.htm seems to be in order. 0xFD looks like the highest in each class, and then count backwards. SO ASSEMBLY_TOP in DEVICE_TYPE is 0xFD, and ASSEMBLY_BOTTOM is 0xFC and so on.
 
 
 ## 2025-05-14
@@ -365,9 +365,9 @@ S!000004!!!!NO!1.000000!0 mho/cm!AIR!!0 mil!
   coords      : (959, 550)
   unknown_1   : 0x20
   unknown_4   : 0x0
-  
+
 but only these coords match:
- 
+
 S!ETCH!TOP!305 1!LINE!257!959!540!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
 S!ETCH!TOP!306 1!LINE!257!959!550!959!609!20!!!!!CONNECT!!!!!!!!N13829!!!!!
 S!ETCH!TOP!307 4!LINE!257!928!581!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
@@ -390,6 +390,21 @@ S!ETCH!TOP!307 4!LINE!257!928!581!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
     * PASTEMASK_TOP = 5
 
   * Looking at the ASCII headings, the three/layer is PAD, thermal relief, anti-pad (in <V172)
-    * The order in the comps seems to be AP/TR, TR/AP, PAD, X (x is unknown, seems always 0x0 >=V172) 
+    * The order in the comps seems to be AP/TR, TR/AP, PAD, X (x is unknown, seems always 0x0 >=V172)
   * S62D38 in BB-AI tells use it is in order: AP (72.000), TP (null), PAD (62.000), X (unknown function)
  * TSM is index 14 in BB-AI
+
+## 2025-09-05
+
+* Start to consider a multi-step approach, parsing as:
+   * Binary data -> Kaitai-like field structs, then
+   * To a DB object, which mirrors data (presumably) in the BRD DB file
+   * Then resolve inter-object links
+   * Then to KiCad objects, or to an ASCII dump format
+
+* 0x14 (graphic?) can also point to 0x01 (arc), as well as segs
+
+* GRAPHIC_DATA_NAME/GRAPHIC_DATA_NUMBER are the same thing:
+    * ARC = 256
+    * LINE = 257
+    * RECTANGLE = 259

@@ -233,14 +233,16 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
 }
 
 
-static void ReadStringMap( FILE_STREAM& stream, RAW_BOARD& aBoard, uint32_t count )
+static void ReadStringMap( FILE_STREAM& stream, DB& aDb, uint32_t count )
 {
     stream.Seek( RAW_BOARD::STRING_TABLE_OFFSET );
 
     for( uint32_t i = 0; i < count; ++i )
     {
         uint32_t id = stream.ReadU32();
-        aBoard.m_StringTable[id] = stream.ReadString( true );
+        wxString str = stream.ReadString( true );
+
+        aDb.AddString( id, std::move( str ) );
     }
 }
 
@@ -467,21 +469,6 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x05_TRACK( FILE_STREAM& aStream, 
     return block;
 }
 
-#include <convert/allegro_db.h>
-
-class OBJ_0x06: public DB_OBJ
-{
-public:
-    explicit OBJ_0x06(const BLOCK<BLK_0x06>& aBlock ):
-        DB_OBJ( aBlock )
-    {}
-
-    void ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override
-    {
-
-    }
-};
-
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER aVer )
 {
@@ -501,8 +488,6 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER
     data.m_PtrSymbol = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_UnknownPtr2 );
-
-    OBJ_0x06 obj(*block);
 
     return block;
 }
@@ -2005,75 +1990,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VE
 }
 
 
-static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
-{
-    // clang-format off
-    switch( block.GetBlockType() )
-    {
-    case 0x01: return static_cast<const BLOCK<BLK_0x01_ARC>&>( block ).GetData().m_Key;
-    case 0x03: return static_cast<const BLOCK<BLK_0x03>&>( block ).GetData().m_Key;
-    case 0x04: return static_cast<const BLOCK<BLK_0x04_NET_ASSIGNMENT>&>( block ).GetData().m_Key;
-    case 0x05: return static_cast<const BLOCK<BLK_0x05_TRACK>&>( block ).GetData().m_Key;
-    case 0x06: return static_cast<const BLOCK<BLK_0x06>&>( block ).GetData().m_Key;
-    case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
-    case 0x08: return static_cast<const BLOCK<BLK_0x08>&>( block ).GetData().m_Key;
-    case 0x09: return static_cast<const BLOCK<BLK_0x09>&>( block ).GetData().m_Key;
-    case 0x0A: return static_cast<const BLOCK<BLK_0x0A_DRC>&>( block ).GetData().m_Key;
-    case 0x0C: return static_cast<const BLOCK<BLK_0x0C>&>( block ).GetData().m_Key;
-    case 0x0D: return static_cast<const BLOCK<BLK_0x0D_PAD>&>( block ).GetData().m_Key;
-    case 0x0E: return static_cast<const BLOCK<BLK_0x0E>&>( block ).GetData().m_Key;
-    case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
-    case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
-    case 0x11: return static_cast<const BLOCK<BLK_0x11>&>( block ).GetData().m_Key;
-    case 0x12: return static_cast<const BLOCK<BLK_0x12>&>( block ).GetData().m_Key;
-    case 0x14: return static_cast<const BLOCK<BLK_0x14>&>( block ).GetData().m_Key;
-    case 0x15:
-    case 0x16:
-    case 0x17: return static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( block ).GetData().m_Key;
-    case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
-    case 0x1C: return static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( block ).GetData().m_Key;
-    case 0x1D: return static_cast<const BLOCK<BLK_0x1D>&>( block ).GetData().m_Key;
-    case 0x1E: return static_cast<const BLOCK<BLK_0x1E>&>( block ).GetData().m_Key;
-    case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
-    case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
-    case 0x22: return static_cast<const BLOCK<BLK_0x22>&>( block ).GetData().m_Key;
-    case 0x23: return static_cast<const BLOCK<BLK_0x23_RATLINE>&>( block ).GetData().m_Key;
-    case 0x24: return static_cast<const BLOCK<BLK_0x24_RECT>&>( block ).GetData().m_Key;
-    case 0x26: return static_cast<const BLOCK<BLK_0x26>&>( block ).GetData().m_Key;
-    case 0x28: return static_cast<const BLOCK<BLK_0x28_SHAPE>&>( block ).GetData().m_Key;
-    case 0x29: return static_cast<const BLOCK<BLK_0x29_PIN>&>( block ).GetData().m_Key;
-    case 0x2A: return static_cast<const BLOCK<BLK_0x2A_LAYER_LIST>&>( block ).GetData().m_Key;
-    case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
-    case 0x2C: return static_cast<const BLOCK<BLK_0x2C_TABLE>&>( block ).GetData().m_Key;
-    case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
-    case 0x2E: return static_cast<const BLOCK<BLK_0x2E>&>( block ).GetData().m_Key;
-    case 0x2F: return static_cast<const BLOCK<BLK_0x2F>&>( block ).GetData().m_Key;
-    case 0x30: return static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( block ).GetData().m_Key;
-    case 0x31: return static_cast<const BLOCK<BLK_0x31_SGRAPHIC>&>( block ).GetData().m_Key;
-    case 0x32: return static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( block ).GetData().m_Key;
-    case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
-    case 0x34: return static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( block ).GetData().m_Key;
-    case 0x36: return static_cast<const BLOCK<BLK_0x36>&>( block ).GetData().m_Key;
-    case 0x37: return static_cast<const BLOCK<BLK_0x37>&>( block ).GetData().m_Key;
-    case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
-    case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
-    case 0x3A: return static_cast<const BLOCK<TYPE_3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
-    case 0x3C: return static_cast<const BLOCK<BLK_0x3C>&>( block ).GetData().m_Key;
-    default: break;
-    }
-    // clang-format off
-
-    return std::nullopt;
-}
-
-
-uint32_t BLOCK_BASE::GetKey() const
-{
-    return GetBlockKey( *this ).value_or( 0 );
-}
-
-
-void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
+void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 {
     const uint32_t magic = aBoard.m_Header->m_Magic;
     const FMT_VER  ver = aBoard.m_FmtVer;
@@ -2363,13 +2280,14 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         {
             if( !m_endAtUnknownBlock )
             {
-                THROW_IO_ERROR( wxString::Format( "Do not have parser for block index %lu type %#02x available at offset %#010lx",
-                    aBoard.m_Objects.size(), type,
-                                                  offset ) );
+                THROW_IO_ERROR( wxString::Format(
+                        "Do not have parser for block index %lu type %#02x available at offset %#010lx",
+                        aBoard.GetObjectCount(), type, offset ) );
             }
 
             wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Ending at unknown block, index %lu type %#04x at offset %#010lx", aBoard.m_Objects.size(), type, offset ) );
+                        wxString::Format( "Ending at unknown block, index %lu type %#04x at offset %#010lx",
+                                          aBoard.GetObjectCount(), type, offset ) );
             return;
         }
         }
@@ -2378,28 +2296,28 @@ void ALLEGRO::PARSER::readObjects( RAW_BOARD& aBoard )
         {
             wxLogTrace( traceAllegroParser,
                         wxString::Format( "Added block %lu, type %#04x from %#010lx to %#010lx",
-                                          aBoard.m_Objects.size(), type, offset, m_stream.Position() ) );
+                                          aBoard.GetObjectCount(), type, offset, m_stream.Position() ) );
 
-            // Creates the vector if it doesn't exist
-            aBoard.m_ObjectLists[type].push_back( block.get() );
+            // Turn the binary-ish data into database objects
+            aBoard.InsertBlock( *block );
 
-            if( std::optional<uint32_t> blockKey = GetBlockKey( *block ) )
-                aBoard.m_ObjectKeyMap[*blockKey] = block.get();
-
-            aBoard.m_Objects.push_back( std::move( block ) );
-
-            if( m_progressReporter )
-            {
-                m_progressReporter->AdvanceProgress();
-            }
+            // if( m_progressReporter )
+            // {
+            //     m_progressReporter->AdvanceProgress();
+            // }
+        }
+        else
+        {
+            wxFAIL_MSG( "Failed to create block" );
+            return;
         }
     }
 }
 
 
-std::unique_ptr<RAW_BOARD> ALLEGRO::PARSER::Parse()
+std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
 {
-    std::unique_ptr<RAW_BOARD> board = std::make_unique<RAW_BOARD>();
+    std::unique_ptr<BRD_DB> board = std::make_unique<BRD_DB>();
 
     if( m_progressReporter )
     {
@@ -2429,6 +2347,9 @@ std::unique_ptr<RAW_BOARD> ALLEGRO::PARSER::Parse()
 
         THROW_IO_ERROR( s );
     }
+
+    // Now the object are read, resolve the DB links
+    board->ResolveAndValidate();
 
     return board;
 }

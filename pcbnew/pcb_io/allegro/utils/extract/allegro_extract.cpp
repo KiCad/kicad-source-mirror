@@ -36,6 +36,8 @@
 #include <ki_exception.h>
 
 #include <convert/allegro_parser.h>
+#include <convert/allegro_db.h>
+#include <utils/extract/allegro_ascii.h>
 
 
 int main( int argc, char** argv )
@@ -58,6 +60,10 @@ int main( int argc, char** argv )
         .help( "Print a summary of the file" )
         .flag();
 
+    argParser.add_argument( "-e", "--extract" )
+        .help( "Produce an approximate ASCII extract of the file " )
+        .flag();
+
     // clang-format on
 
     try
@@ -78,12 +84,13 @@ int main( int argc, char** argv )
     // kaitai::kstream ks( &fin );
     ALLEGRO::FILE_STREAM allegroStream( fin );
 
+
     ALLEGRO::PARSER parser( allegroStream, nullptr );
     parser.EndAtUnknownBlock( true );
 
     PROF_TIMER parseTimer;
 
-    std::unique_ptr<ALLEGRO::RAW_BOARD> board;
+    std::unique_ptr<ALLEGRO::BRD_DB> board;
 
     try
     {
@@ -109,6 +116,16 @@ int main( int argc, char** argv )
         // dumpObjectCounts( std::cout, boardContent );
 
         fmt::print( "  String map: {} entries", board->m_StringTable.size() );
+    }
+
+    if( argParser.get<bool>( "extract" ) )
+    {
+        ALLEGRO::ASCII_EXTRACTOR extractor;
+
+        STRING_FORMATTER formatter;
+        extractor.Extract( *board, formatter );
+
+        fmt::print( "{}", formatter.GetString() );
     }
 
     wxUninitialize();
