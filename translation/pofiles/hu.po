@@ -9,13 +9,14 @@
 # iamPeter <lopert.peter.otto@gmail.com>, 2025.
 # Elek Zoltán <moncsa58@gmail.com>, 2025.
 # Viktor Döme <domevik@gmail.com>, 2025.
+# KB <kvellbalazs@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-08-25 13:02+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
+"PO-Revision-Date: 2025-09-08 06:02+0000\n"
+"Last-Translator: KB <kvellbalazs@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
 "Language: hu\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:365
@@ -614,7 +615,7 @@ msgstr "Alsó réz/felületkezelés színe"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Adhesive"
-msgstr "Ragasztó"
+msgstr "Ragasztóanyag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show adhesive"
@@ -932,7 +933,7 @@ msgstr "Színátmenetes háttér zárószíne"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:271
 #: pcbnew/dialogs/dialog_render_job_base.cpp:96
 msgid "Use board stackup colors"
-msgstr ""
+msgstr "Használd az eltérő színeket"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
 #, fuzzy
@@ -1555,7 +1556,7 @@ msgstr "Forrpontok száma"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:61
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Kitöltési faktor %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:65
 msgid "Recursion Level"
@@ -2477,7 +2478,7 @@ msgstr "Csomagfejlesztők"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI objektumok %u használatban"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -2612,6 +2613,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Megjegyzés: a teljes hálózati hozzárendelések a kapcsolási rajz "
+"beállításaiban szerkeszthető > Projekt menüpont"
 
 #: common/dialogs/dialog_assign_netclass_base.h:55
 #, fuzzy
@@ -3365,6 +3368,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Ha be van jelölve, az előző verzióból származó szimbólum- és lábkiosztások "
+"importálódnak ebbe a verzióba."
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -8988,7 +8993,7 @@ msgstr "Vezetősávok"
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
-msgstr "Átmenő viák"
+msgstr "átvezető furat"
 
 #: common/layer_id.cpp:130
 msgid "Blind/Buried vias"
@@ -8996,7 +9001,7 @@ msgstr "Vak / eltemetett viák"
 
 #: common/layer_id.cpp:131
 msgid "Micro-vias"
-msgstr "μViák"
+msgstr "Microfuratok"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
@@ -34524,9 +34529,8 @@ msgstr "Vezetéknév"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
-#, fuzzy
 msgid "Teardrops"
-msgstr "Címke hozzáadása"
+msgstr "Csepp"
 
 #: pcbnew/board_connected_item.cpp:278
 #, fuzzy
@@ -35668,7 +35672,7 @@ msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:673 pcbnew/pad.cpp:1623
 msgid "PTH"
-msgstr ""
+msgstr "PTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:673 pcbnew/pad.cpp:1626
 msgid "NPTH"
@@ -46747,9 +46751,8 @@ msgid "pads"
 msgstr "Forrszemek zárolása"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2106
-#, fuzzy
 msgid "vias"
-msgstr "Nem via"
+msgstr "viák"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2337
 #: pcbnew/exporters/step/step_pcb_model.cpp:2407
@@ -51111,9 +51114,8 @@ msgid "From design rules"
 msgstr "Tervezési szabályok szerint"
 
 #: pcbnew/pcb_track.cpp:2327
-#, fuzzy
 msgid "Tented"
-msgstr "Középre"
+msgstr "Letakart"
 
 #: pcbnew/pcb_track.cpp:2328
 #, fuzzy
@@ -55840,9 +55842,8 @@ msgid "Place Board Characteristics"
 msgstr "Alapértelmezett forrpont tulajdonságok beállítása"
 
 #: pcbnew/tools/pcb_control.cpp:2683
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Mágneses Veszteség Tangens"
+msgstr "Veszteség tangens"
 
 #: pcbnew/tools/pcb_control.cpp:2703
 msgid "Dielectric"
