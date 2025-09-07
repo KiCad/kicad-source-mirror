@@ -24,7 +24,7 @@ win64_build:
   script:
     - C:\builder\build.ps1 -Env -Arch x64
     - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
-    - nuget.exe sources add -Name gitlab -Source "https://gitlab.com/api/v4/projects/27426693/packages/nuget/index.json"  -UserName gitlab-ci-token -Password $CI_JOB_TOKEN
+    - nuget.exe sources add -Name gitlab -Source "https://gitlab.com/api/v4/projects/27426693/packages/nuget/index.json"  -UserName gitlab-ci-token -Password $env:CI_JOB_TOKEN
     - mkdir -p build/windows -Force
     - cd build/windows
     - cmake `
