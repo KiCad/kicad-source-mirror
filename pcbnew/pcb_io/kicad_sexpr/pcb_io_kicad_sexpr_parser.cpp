@@ -3862,6 +3862,12 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_uuid:
+            NextTok();
+            const_cast<KIID&>( table->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+
         case T_locked:
             table->SetLocked( parseBool() );
             NeedRIGHT();

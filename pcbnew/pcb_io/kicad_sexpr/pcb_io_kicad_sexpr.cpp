@@ -2181,6 +2181,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
 
     m_out->Print( "(table (column_count %d)", aTable->GetColCount() );
 
+    KICAD_FORMAT::FormatUuid( m_out, aTable->m_Uuid );
+
     if( aTable->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
