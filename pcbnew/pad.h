@@ -303,9 +303,9 @@ public:
 
     void SetDrillSize( const VECTOR2I& aSize )  { m_padStack.Drill().size = aSize; SetDirty(); }
     const VECTOR2I& GetDrillSize() const        { return m_padStack.Drill().size; }
-    void SetDrillSizeX( const int aX );
+    void SetDrillSizeX( int aX );
     int GetDrillSizeX() const                   { return m_padStack.Drill().size.x; }
-    void SetDrillSizeY( const int aY )          { m_padStack.Drill().size.y = aY; SetDirty(); }
+    void SetDrillSizeY( int aY )                { m_padStack.Drill().size.y = aY; SetDirty(); }
     int GetDrillSizeY() const                   { return m_padStack.Drill().size.y; }
 
     void SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
@@ -316,7 +316,7 @@ public:
 
     const VECTOR2I& GetOffset( PCB_LAYER_ID aLayer ) const { return m_padStack.Offset( aLayer ); }
 
-    VECTOR2I GetCenter() const override          { return GetPosition(); }
+    VECTOR2I GetCenter() const override           { return GetPosition(); }
 
     const PADSTACK& Padstack() const              { return m_padStack; }
     PADSTACK& Padstack()                          { return m_padStack; }
@@ -723,9 +723,8 @@ public:
      */
     void SetRemoveUnconnected( bool aSet )
     {
-        m_padStack.SetUnconnectedLayerMode( aSet
-                ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL
-                : PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+        m_padStack.SetUnconnectedLayerMode( aSet ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL
+                                                 : PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
     }
 
     bool GetRemoveUnconnected() const
@@ -739,15 +738,13 @@ public:
      */
     void SetKeepTopBottom( bool aSet )
     {
-        m_padStack.SetUnconnectedLayerMode( aSet
-                ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
-                : PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+        m_padStack.SetUnconnectedLayerMode( aSet ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
+                                                 : PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
     }
 
     bool GetKeepTopBottom() const
     {
-        return m_padStack.UnconnectedLayerMode()
-               == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
+        return m_padStack.UnconnectedLayerMode() == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
     }
 
     void SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE aMode )
@@ -909,8 +906,7 @@ public:
     void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride );
 
     void CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
-                   const std::function<void( int aErrorCode,
-                                             const wxString& aMsg )>& aErrorHandler ) const;
+                   const std::function<void( int aErrorCode, const wxString& aMsg )>& aErrorHandler ) const;
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
@@ -928,17 +924,16 @@ private:
     const SHAPE_COMPOUND& buildEffectiveShape( PCB_LAYER_ID aLayer ) const;
 
     void doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
-                     const std::function<void( int aErrorCode,
-                                               const wxString& aMsg )>& aErrorHandler ) const;
+                     const std::function<void( int aErrorCode, const wxString& aMsg )>& aErrorHandler ) const;
 
 private:
-    wxString      m_number;             // Pad name (pin number in schematic)
-    wxString      m_pinFunction;        // Pin name in schematic
-    wxString      m_pinType;            // Pin electrical type in schematic
+    wxString          m_number;             // Pad name (pin number in schematic)
+    wxString          m_pinFunction;        // Pin name in schematic
+    wxString          m_pinType;            // Pin electrical type in schematic
 
-    VECTOR2I      m_pos; // Pad Position on board
+    VECTOR2I          m_pos;                // Pad Position on board
 
-    PADSTACK      m_padStack;
+    PADSTACK          m_padStack;
 
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     typedef std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_COMPOUND>> LAYER_SHAPE_MAP;
@@ -960,9 +955,9 @@ private:
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations
 
-    PAD_ATTRIB  m_attribute = PAD_ATTRIB::PTH;
+    PAD_ATTRIB        m_attribute = PAD_ATTRIB::PTH;
 
-    PAD_PROP    m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
+    PAD_PROP          m_property;           // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
     int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 
