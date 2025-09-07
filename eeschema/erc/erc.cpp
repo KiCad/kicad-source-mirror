@@ -655,22 +655,19 @@ int ERC_TESTER::TestMissingUnits()
 
         if( !missing_power.empty() && m_settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN ) )
         {
-            report( missing_power,
-                    _( "Symbol %s has input power pins in units %s that are not placed." ),
+            report( missing_power, _( "Symbol %s has input power pins in units %s that are not placed" ),
                     ERCE_MISSING_POWER_INPUT_PIN );
         }
 
         if( !missing_input.empty() && m_settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN ) )
         {
-           report( missing_input,
-                   _( "Symbol %s has input pins in units %s that are not placed." ),
+           report( missing_input, _( "Symbol %s has input pins in units %s that are not placed" ),
                    ERCE_MISSING_INPUT_PIN );
         }
 
         if( !missing_bidi.empty() && m_settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
         {
-            report( missing_bidi,
-                    _( "Symbol %s has bidirectional pins in units %s that are not placed." ),
+            report( missing_bidi, _( "Symbol %s has bidirectional pins in units %s that are not placed" ),
                     ERCE_MISSING_BIDI_PIN );
         }
     }
@@ -1527,7 +1524,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                     ercItem->SetItems( symbol );
-                    msg.Printf( _( "The symbol library '%s' was not found at '%s'." ),
+                    msg.Printf( _( "The symbol library '%s' was not found at '%s'" ),
                                 UnescapeString( libName ),
                                 libTableRow->GetFullURI( true ) );
                     ercItem->SetErrorMessage( msg );
@@ -1631,7 +1628,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
             if( fpID.Parse( footprint, true ) >= 0 )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
-                msg.Printf( _( "'%s' is not a valid footprint identifier." ), footprint );
+                msg.Printf( _( "'%s' is not a valid footprint identifier" ), footprint );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
                 markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
@@ -1645,7 +1642,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
             if( ret == KIFACE_TEST_FOOTPRINT_LINK_NO_LIBRARY )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
-                msg.Printf( _( "The current configuration does not include the footprint library '%s'." ),
+                msg.Printf( _( "The current configuration does not include the footprint library '%s'" ),
                             libName );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
@@ -1654,7 +1651,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
             else if( ret == KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
-                msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
+                msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration" ),
                             libName );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( symbol );
@@ -1663,7 +1660,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
             else if( ret == KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
-                msg.Printf( _( "Footprint '%s' not found in library '%s'." ),
+                msg.Printf( _( "Footprint '%s' not found in library '%s'" ),
                             fpName,
                             libName );
                 ercItem->SetErrorMessage( msg );
@@ -1733,7 +1730,7 @@ int ERC_TESTER::TestFootprintFilters()
             if( !found )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
-                msg.Printf( _( "Assigned footprint (%s) doesn't match footprint filters (%s)." ),
+                msg.Printf( _( "Assigned footprint (%s) doesn't match footprint filters (%s)" ),
                             footprint.GetUniStringLibItemName(),
                             wxJoin( filters, ' ' ) );
                 ercItem->SetErrorMessage( msg );
