@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
-"PO-Revision-Date: 2025-08-25 12:03+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
+"PO-Revision-Date: 2025-09-08 06:01+0000\n"
+"Last-Translator: KB <kvellbalazs@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:320
@@ -588,7 +588,7 @@ msgstr "Alsó réz/felületkezelés színe"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "Ragasztó"
+msgstr "Ragasztóanyag"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
@@ -903,7 +903,7 @@ msgstr "Színátmenetes háttér zárószíne"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:170
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:272
 msgid "Use board stackup colors"
-msgstr ""
+msgstr "Használd az eltérő színeket"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
 #, fuzzy
@@ -1270,7 +1270,7 @@ msgstr "Forrpontok száma"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Kitöltési faktor %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
@@ -2349,7 +2349,7 @@ msgstr "Csomagfejlesztők"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI objektumok %u használatban"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -2484,6 +2484,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Megjegyzés: a teljes hálózati hozzárendelések a kapcsolási rajz "
+"beállításaiban szerkeszthető > Projekt menüpont"
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 #, fuzzy
@@ -3008,6 +3010,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Távolítsd el a zárolt elemeket a kijelölésből, és csak a feloldott elemekre "
+"alkalmazd a műveletet (ha vannak ilyenek)."
 
 #: common/dialogs/dialog_locked_items_query.cpp:42
 msgid ""
@@ -3024,7 +3028,7 @@ msgstr "A kijelölés %z zárolt elemet tartalmaz."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Ezek az elemek kimaradnak, hacsak nem írod felül a zárolásokat."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
@@ -3035,6 +3039,8 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Jegyezze meg a kiválasztott opciót a munkamenet további részében.\n"
+"Ez a párbeszédpanel csak a KiCad újraindítása után jelenik meg újra."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -3099,6 +3105,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Ha be van jelölve, az előző verzióból származó szimbólum- és lábkiosztások "
+"importálódnak ebbe a verzióba."
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -8472,7 +8480,7 @@ msgstr "Vezetősávok"
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
-msgstr "Átmenő viák"
+msgstr "átvezető furat"
 
 #: common/layer_id.cpp:130
 msgid "Blind/Buried vias"
@@ -8480,7 +8488,7 @@ msgstr "Vak / eltemetett viák"
 
 #: common/layer_id.cpp:131
 msgid "Micro-vias"
-msgstr "μViák"
+msgstr "Microfuratok"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
@@ -33115,9 +33123,8 @@ msgstr "Vezetéknév"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:609
-#, fuzzy
 msgid "Teardrops"
-msgstr "Címke hozzáadása"
+msgstr "Csepp"
 
 #: pcbnew/board_connected_item.cpp:278
 #, fuzzy
@@ -34222,7 +34229,7 @@ msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1577
 msgid "PTH"
-msgstr ""
+msgstr "PTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1580
 msgid "NPTH"
@@ -40576,9 +40583,8 @@ msgstr "Tervezési szabályok szerint"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2105
-#, fuzzy
 msgid "Tented"
-msgstr "Középre"
+msgstr "Letakart"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
@@ -44729,9 +44735,8 @@ msgid "pads"
 msgstr "Forrszemek zárolása"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2103
-#, fuzzy
 msgid "vias"
-msgstr "Nem via"
+msgstr "viák"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2334
 #: pcbnew/exporters/step/step_pcb_model.cpp:2366
@@ -50619,9 +50624,8 @@ msgid "Thickness (mils)"
 msgstr "Vastagság (mil)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:279
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Mágneses Veszteség Tangens"
+msgstr "Veszteség tangens"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:302
 msgid "Dielectric"
