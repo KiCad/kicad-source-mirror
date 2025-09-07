@@ -120,7 +120,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
-                msg.Printf( _( "Value (%s) doesn't match symbol value (%s)." ),
+                msg.Printf( _( "Value (%s) doesn't match symbol value (%s)" ),
                             footprint->GetReference(), footprint->GetValue(),
                             component->GetValue() );
 
@@ -134,7 +134,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
-                msg.Printf( _( "%s doesn't match footprint given by symbol (%s)." ),
+                msg.Printf( _( "%s doesn't match footprint given by symbol (%s)" ),
                             footprint->GetFPID().GetUniStringLibId(),
                             component->GetFPID().GetUniStringLibId() );
 
@@ -164,7 +164,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 if( !found )
                 {
                     wxString msg;
-                    msg.Printf( _( "%s doesn't match symbol's footprint filters (%s)." ),
+                    msg.Printf( _( "%s doesn't match symbol's footprint filters (%s)" ),
                                 footprint->GetFPID().GetUniStringLibId(),
                                 wxJoin( component->GetFootprintFilters(), ' ' ) );
 
@@ -180,7 +180,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
-                msg.Printf( _( "'%s' settings differ." ), _( "Do not populate" ) );
+                msg.Printf( _( "'%s' settings differ" ), _( "Do not populate" ) );
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
@@ -193,7 +193,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
-                msg.Printf( _( "'%s' settings differ." ), _( "Exclude from bill of materials" ) );
+                msg.Printf( _( "'%s' settings differ" ), _( "Exclude from bill of materials" ) );
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
@@ -215,7 +215,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 if( !pcb_netname.IsEmpty() && sch_net.GetPinName().IsEmpty() )
                 {
                     wxString msg;
-                    msg.Printf( _( "No corresponding pin found in schematic." ) );
+                    msg.Printf( _( "No corresponding pin found in schematic" ) );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( msg );
@@ -225,7 +225,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
                     wxString msg;
-                    msg.Printf( _( "Pad missing net given by schematic (%s)." ),
+                    msg.Printf( _( "Pad missing net given by schematic (%s)" ),
                                 sch_net.GetNetName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
@@ -239,7 +239,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                                  && pcb_netname.starts_with( sch_net.GetNetName() ) ) )
                 {
                     wxString msg;
-                    msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)." ),
+                    msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)" ),
                                 pcb_netname,
                                 sch_net.GetNetName() );
 
@@ -272,7 +272,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                                                 sch_net.GetNetName() );
                     }
 
-                    msg.Printf( _( "No pad found for pin %s in schematic." ), msg );
+                    msg.Printf( _( "No pad found for pin %s in schematic" ), msg );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( msg );
