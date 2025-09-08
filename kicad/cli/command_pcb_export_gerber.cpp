@@ -136,7 +136,7 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
-        wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );
+        wxFprintf( stdout, DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_WARNING );
 
     if( !wxFile::Exists( aJob->m_filename ) )
     {
