@@ -250,6 +250,7 @@ bool SCH_SELECTION_TOOL::Init()
     auto sheetSelection =        SCH_CONDITIONS::Count( 1 )    && SCH_CONDITIONS::OnlyTypes( sheetTypes );
     auto crossProbingSelection = SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::HasTypes( crossProbingTypes );
     auto tableCellSelection =    SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( tableCellTypes );
+    auto multiplePinsSelection = SCH_CONDITIONS::MoreThan( 1 ) && SCH_CONDITIONS::OnlyTypes( { SCH_PIN_T } );
     // clang-format on
 
     auto schEditSheetPageNumberCondition =
@@ -338,6 +339,7 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddItem( SCH_ACTIONS::autoplaceAllSheetPins, sheetSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::syncSheetPins,         sheetSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::assignNetclass,        connectedSelection && SCH_CONDITIONS::Idle, 250 );
+    menu.AddItem( SCH_ACTIONS::swapPinLabels,         multiplePinsSelection && schEditCondition && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::editPageNumber,        schEditSheetPageNumberCondition, 250 );
 
     menu.AddSeparator( 400 );

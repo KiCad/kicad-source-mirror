@@ -122,6 +122,7 @@ public:
     static TOOL_ACTION mirrorV;
     static TOOL_ACTION mirrorH;
     static TOOL_ACTION swap;
+    static TOOL_ACTION swapPinLabels;
     static TOOL_ACTION properties;
     static TOOL_ACTION editReference;
     static TOOL_ACTION editValue;

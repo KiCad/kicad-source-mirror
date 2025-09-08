@@ -31,6 +31,7 @@
 #include <tools/sch_move_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <confirm.h>
+#include <connection_graph.h>
 #include <sch_actions.h>
 #include <sch_tool_utils.h>
 #include <increment.h>
@@ -40,9 +41,11 @@
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
 #include <sch_group.h>
+#include <sch_label.h>
 #include <sch_junction.h>
 #include <sch_marker.h>
 #include <sch_rule_area.h>
+#include <sch_pin.h>
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
@@ -1510,6 +1513,104 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             m_frame->TestDanglingEnds();
 
         m_frame->OnModify();
+    }
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::SwapPinLabels( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( { SCH_PIN_T } );
+    std::vector<EDA_ITEM*> orderedPins = selection.GetItemsSortedBySelectionOrder();
+
+    if( orderedPins.size() < 2 )
+        return 0;
+
+    CONNECTION_GRAPH* connectionGraph = m_frame->Schematic().ConnectionGraph();
+
+    const SCH_SHEET_PATH& sheetPath = m_frame->GetCurrentSheet();
+
+    auto findSingleNetLabel = [&]( SCH_PIN* aPin ) -> SCH_LABEL_BASE*
+        {
+            CONNECTION_SUBGRAPH* sg = connectionGraph->GetSubgraphForItem( aPin );
+
+            if( !sg )
+                return nullptr;
+
+            const std::set<SCH_ITEM*>& items = sg->GetItems();
+
+            size_t          pinCount = 0;
+            SCH_LABEL_BASE* label = nullptr;
+
+            for( SCH_ITEM* it : items )
+            {
+                if( it->Type() == SCH_PIN_T )
+                    pinCount++;
+
+                switch( it->Type() )
+                {
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                case SCH_HIER_LABEL_T:
+                {
+                    SCH_CONNECTION* conn = it->Connection( &sheetPath );
+
+                    if( conn && conn->IsNet() )
+                    {
+                        if( label )
+                            return nullptr; // more than one label
+
+                        label = static_cast<SCH_LABEL_BASE*>( it );
+                    }
+
+                    break;
+                }
+                default: break;
+                }
+            }
+
+            if( pinCount != 1 )
+                return nullptr;
+
+            return label;
+        };
+
+    std::vector<SCH_LABEL_BASE*> labels;
+
+    for( EDA_ITEM* item : orderedPins )
+    {
+        SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
+        SCH_LABEL_BASE* label = findSingleNetLabel( pin );
+
+        if( !label )
+        {
+            m_frame->ShowInfoBarError(
+                    _( "Each selected pin must have exactly one attached net label and no other pin connections." ) );
+            return 0;
+        }
+
+        labels.push_back( label );
+    }
+
+    if( labels.size() >= 2 )
+    {
+        SCH_COMMIT commit( m_frame );
+
+        for( SCH_LABEL_BASE* lb : labels )
+            commit.Modify( lb, m_frame->GetScreen() );
+
+        for( size_t i = 0; i < labels.size() - 1; ++i )
+        {
+            SCH_LABEL_BASE* a = labels[i];
+            SCH_LABEL_BASE* b = labels[( i + 1 ) % labels.size()];
+            wxString        aText = a->GetText();
+            wxString        bText = b->GetText();
+            a->SetText( bText );
+            b->SetText( aText );
+        }
+
+        commit.Push( _( "Swap Pin Labels" ) );
     }
 
     return 0;
@@ -3162,6 +3263,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorV.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorH.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Swap,               SCH_ACTIONS::swap.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SwapPinLabels,      SCH_ACTIONS::swapPinLabels.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 
