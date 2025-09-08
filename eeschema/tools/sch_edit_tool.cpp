@@ -121,11 +121,16 @@ private:
                 break;      // We have used all IDs for these submenus
         }
 
+        if( !missingUnits.empty() )
         {
             AppendSeparator();
 
-            wxMenuItem* item = Add( SCH_ACTIONS::placeNextSymbolUnit );
-            item->Enable( missingUnits.size() );
+            for( int unitNumber : missingUnits )
+            {
+                wxString placeText = wxString::Format( _( "Place unit %s" ),
+                                                       symbol->GetUnitDisplayName( unitNumber, false ) );
+                Append( ID_POPUP_SCH_PLACE_UNIT1 + unitNumber - 1, placeText );
+            }
         }
     }
 };

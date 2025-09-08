@@ -310,4 +310,12 @@ public:
         ///< If a symbol is provide, reannotate it?
         bool m_Reannotate = true;
     };
+
+    struct PLACE_SYMBOL_UNIT_PARAMS
+    {
+        ///< Symbol used as reference for unit placement
+        SCH_SYMBOL* m_Symbol = nullptr;
+        ///< Unit number to place; 0 means next available unit
+        int m_Unit = 0;
+    };
 };

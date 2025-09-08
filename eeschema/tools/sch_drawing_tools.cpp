@@ -619,7 +619,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
 {
-    SCH_SYMBOL* symbol = aEvent.Parameter<SCH_SYMBOL*>();
+    const SCH_ACTIONS::PLACE_SYMBOL_UNIT_PARAMS& params =
+            aEvent.Parameter<SCH_ACTIONS::PLACE_SYMBOL_UNIT_PARAMS>();
+    SCH_SYMBOL* symbol = params.m_Symbol;
+    int requestedUnit = params.m_Unit;
 
     // TODO: get from selection
     if( !symbol )
@@ -654,8 +657,23 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    // Find the lowest unit number that is missing
-    const int nextMissing = *std::min_element( missingUnits.begin(), missingUnits.end() );
+    int nextMissing;
+
+    if( requestedUnit > 0 )
+    {
+        if( missingUnits.count( requestedUnit ) == 0 )
+        {
+            m_frame->ShowInfoBarMsg( _( "Requested unit already placed." ) );
+            return 0;
+        }
+
+        nextMissing = requestedUnit;
+    }
+    else
+    {
+        // Find the lowest unit number that is missing
+        nextMissing = *std::min_element( missingUnits.begin(), missingUnits.end() );
+    }
 
     std::unique_ptr<SCH_SYMBOL> newSymbol = std::make_unique<SCH_SYMBOL>( *symbol );
     const SCH_SHEET_PATH&       sheetPath = m_frame->GetCurrentSheet();

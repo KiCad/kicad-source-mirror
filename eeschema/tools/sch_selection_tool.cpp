@@ -787,6 +787,16 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( symbol )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( symbol, unit );
             }
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_PLACE_UNIT
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_PLACE_UNIT_END )
+            {
+                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selection.Front() );
+                int unit = *evt->GetCommandId() - ID_POPUP_SCH_PLACE_UNIT;
+
+                if( symbol )
+                    m_toolMgr->RunAction( SCH_ACTIONS::placeNextSymbolUnit,
+                                           SCH_ACTIONS::PLACE_SYMBOL_UNIT_PARAMS{ symbol, unit } );
+            }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BODY_STYLE
                      && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_BODY_STYLE_END )
             {

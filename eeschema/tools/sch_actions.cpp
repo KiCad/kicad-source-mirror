@@ -438,8 +438,8 @@ TOOL_ACTION SCH_ACTIONS::placeNextSymbolUnit( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Place Next Symbol Unit" ) )
         .Tooltip( _( "Place the next unit of the current symbol that is missing from the schematic" ) )
         .Flags( AF_ACTIVATE )
-        // The symbol to use as a reference for the next unit
-        .Parameter<SCH_SYMBOL*>( nullptr ) );
+        // The symbol to use as a reference for the next unit and optionally the unit number
+        .Parameter<SCH_ACTIONS::PLACE_SYMBOL_UNIT_PARAMS>( {} ) );
 
 TOOL_ACTION SCH_ACTIONS::placePower( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placePowerSymbol" )
