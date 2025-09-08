@@ -1364,6 +1364,11 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_currentTarget = TARGET_NONCACHED;
     SetTarget( TARGET_NONCACHED );
 
+#ifdef _WIN32
+    // need to fix broken cairo rendering on Windows with wx 3.3
+    SetDoubleBuffered( false );
+#endif
+
     m_bitmapBuffer = nullptr;
     m_wxOutput = nullptr;
 

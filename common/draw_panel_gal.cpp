@@ -87,6 +87,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
+#ifdef _WIN32
+    // need to fix broken cairo rendering on Windows with wx 3.3
+    SetDoubleBuffered( false );
+#endif
     m_PaintEventCounter = std::make_unique<PROF_COUNTER>( "Draw panel paint events" );
 
     if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
