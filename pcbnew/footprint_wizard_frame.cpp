@@ -202,7 +202,11 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
 
+    // Switch to the canvas type set in config
+    resolveCanvasType();
+    GetCanvas()->SwitchBackend( m_canvasType );
     ActivateGalCanvas();
+
     updateView();
 
     SetActiveLayer( F_Cu );
