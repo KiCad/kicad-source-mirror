@@ -43,10 +43,11 @@
 #include <api/api_utils.h>
 #include <api/board/board_types.pb.h>
 
+
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
-    PCB_SHAPE( aParent, aType, SHAPE_T::RECTANGLE ),
-    EDA_TEXT( pcbIUScale ),
-    m_borderEnabled( true )
+        PCB_SHAPE( aParent, aType, SHAPE_T::RECTANGLE ),
+        EDA_TEXT( pcbIUScale ),
+        m_borderEnabled( true )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
@@ -58,6 +59,7 @@ PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
     m_marginRight = defaultMargin;
     m_marginBottom = defaultMargin;
 }
+
 
 PCB_TEXTBOX::~PCB_TEXTBOX()
 {
@@ -839,6 +841,8 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Corner Radius" ) );
+
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
 
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( PCB_SHAPE ), _HKI( "Soldermask" ) );
