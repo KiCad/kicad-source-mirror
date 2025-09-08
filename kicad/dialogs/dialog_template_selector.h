@@ -29,7 +29,8 @@
 #include <widgets/webview_panel.h>
 #include "project_template.h"
 
-#include <map>
+#include <vector>
+#include <utility>
 #include <wx/filename.h>
 
 class DIALOG_TEMPLATE_SELECTOR;
@@ -91,13 +92,14 @@ class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
 public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
-                              std::map<wxString, wxFileName> aTitleDirMap,
+                              std::vector<std::pair<wxString, wxFileName>> aTitleDirList,
                               const wxFileName& aDefaultTemplate );
 
     /**
      * @return the selected template, or NULL
      */
     PROJECT_TEMPLATE* GetSelectedTemplate();
+    PROJECT_TEMPLATE* GetDefaultTemplate();
 
     void SetWidget( TEMPLATE_WIDGET* aWidget );
 
@@ -123,6 +125,8 @@ protected:
     TEMPLATE_WIDGET*                       m_selectedWidget;
     wxFileName                             m_defaultTemplatePath;
     TEMPLATE_WIDGET*                       m_defaultWidget;
+    // Keep track of all template widgets so we can pick a sensible default
+    std::vector<TEMPLATE_WIDGET*>          m_allWidgets;
 };
 
 #endif

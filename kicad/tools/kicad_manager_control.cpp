@@ -203,8 +203,16 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     }
 
     KICAD_SETTINGS*                settings = GetAppSettings<KICAD_SETTINGS>( "kicad" );
-    std::map<wxString, wxFileName> titleDirMap;
+    std::vector<std::pair<wxString, wxFileName>> titleDirList;
     wxFileName                     templatePath;
+
+    ENV_VAR_MAP_CITER itUser = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
+
+    if( itUser != Pgm().GetLocalEnvVariables().end() && itUser->second.GetValue() != wxEmptyString )
+    {
+        templatePath.AssignDir( itUser->second.GetValue() );
+        titleDirList.emplace_back( _( "User Templates" ), templatePath );
+    }
 
     std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( Pgm().GetLocalEnvVariables(),
                                                                   wxT( "TEMPLATE_DIR" ) );
@@ -212,19 +220,11 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     if( v && !v->IsEmpty() )
     {
         templatePath.AssignDir( *v );
-        titleDirMap.emplace( _( "System Templates" ), templatePath );
-    }
-
-    ENV_VAR_MAP_CITER itUser = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
-
-    if( itUser != Pgm().GetLocalEnvVariables().end() && itUser->second.GetValue() != wxEmptyString )
-    {
-        templatePath.AssignDir( itUser->second.GetValue() );
-        titleDirMap.emplace( _( "User Templates" ), templatePath );
+        titleDirList.emplace_back( _( "System Templates" ), templatePath );
     }
 
     DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos, settings->m_TemplateWindowSize,
-                                 titleDirMap, defaultTemplate );
+                                 titleDirList, defaultTemplate );
 
     int result = ps.ShowModal();
 
@@ -234,7 +234,12 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     if( result != wxID_OK )
         return -1;
 
-    if( !ps.GetSelectedTemplate() )
+    PROJECT_TEMPLATE* selectedTemplate = ps.GetSelectedTemplate();
+
+    if( !selectedTemplate )
+        selectedTemplate = ps.GetDefaultTemplate();
+
+    if( !selectedTemplate )
     {
         wxMessageBox( _( "No project template was selected.  Cannot generate new project." ), _( "Error" ),
                       wxOK | wxICON_ERROR, m_frame );
@@ -288,7 +293,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     std::vector< wxFileName > destFiles;
 
-    if( ps.GetSelectedTemplate()->GetDestinationFiles( fn, destFiles ) )
+    if( selectedTemplate->GetDestinationFiles( fn, destFiles ) )
     {
         std::vector<wxFileName> overwrittenFiles;
 
@@ -318,7 +323,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     wxString errorMsg;
 
-    if( !ps.GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
+    if( !selectedTemplate->CreateProject( fn, &errorMsg ) )
     {
         DisplayErrorMessage( m_frame, _( "A problem occurred creating new project from template." ), errorMsg );
         return -1;
