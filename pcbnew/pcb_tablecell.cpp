@@ -225,6 +225,7 @@ static struct PCB_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_SHAPE ), _HKI( "Soldermask" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_SHAPE ), _HKI( "Soldermask Margin Override" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Corner Radius" ) );
 
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
 
