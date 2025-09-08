@@ -2076,8 +2076,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     m_preview.FreeItems();
     getView()->Add( &m_preview );
 
-    RECT_RADIUS_TEXT_ITEM* radiusHelper = new RECT_RADIUS_TEXT_ITEM( pcbIUScale,
-                                                                    editFrame->GetUserUnits() );
+    RECT_RADIUS_TEXT_ITEM* radiusHelper = new RECT_RADIUS_TEXT_ITEM( pcbIUScale, editFrame->GetUserUnits() );
     m_preview.Add( radiusHelper );
 
     getView()->Add( m_editPoints.get() );
