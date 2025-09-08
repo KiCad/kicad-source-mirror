@@ -115,6 +115,12 @@ public:
     int Swap( const TOOL_EVENT& aEvent );
 
     /**
+     * Swap nets between selected pads and propagate to connected copper items
+     * (tracks, arcs, vias) for unconstrained pin swapping.
+     */
+    int SwapPadNets( const TOOL_EVENT& aEvent );
+
+    /**
      * Try to fit selected footprints inside a minimal area and start movement.
      */
     int PackAndMoveFootprints( const TOOL_EVENT& aEvent );

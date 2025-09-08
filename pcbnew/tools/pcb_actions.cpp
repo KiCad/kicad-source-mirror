@@ -686,6 +686,13 @@ TOOL_ACTION PCB_ACTIONS::swap( TOOL_ACTION_ARGS()
         .Tooltip( _( "Swap positions of selected items" ) )
         .Icon( BITMAPS::swap ) );
 
+TOOL_ACTION PCB_ACTIONS::swapPadNets( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.swapPadNets" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Swap Pad Nets" ) )
+        .Tooltip( _( "Swap nets between two selected pads and their connected copper" ) )
+        .Icon( BITMAPS::swap ) );
+
 TOOL_ACTION PCB_ACTIONS::packAndMoveFootprints( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.packAndMoveFootprints" )
         .Scope( AS_GLOBAL )

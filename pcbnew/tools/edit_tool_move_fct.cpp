@@ -50,6 +50,11 @@
 #include <drc/drc_interactive_courtyard_clearance.h>
 #include <view/view_controls.h>
 
+#include <connectivity/connectivity_data.h>
+#include <wx/richmsgdlg.h>
+#include <unordered_set>
+#include <unordered_map>
+
 
 int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
@@ -148,6 +153,189 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     if( !localCommit.Empty() )
         localCommit.Push( _( "Swap" ) );
 
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    return 0;
+}
+
+
+int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
+{
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection( &EDIT_TOOL::PadFilter );
+
+    if( selection.Size() < 2 || !selection.OnlyContains( { PCB_PAD_T } ) )
+        return 0;
+
+    // Get selected pads in selection order, because swapping is cyclic and we let the user pick
+    // the rotation order
+    std::vector<EDA_ITEM*> orderedPads = selection.GetItemsSortedBySelectionOrder();
+    std::vector<PAD*>      pads;
+    const size_t           padsCount = orderedPads.size();
+
+    for( EDA_ITEM* it : orderedPads )
+        pads.push_back( static_cast<PAD*>( static_cast<BOARD_ITEM*>( it ) ) );
+
+
+    // Record original nets and build selected set for quick membership tests
+    std::vector<int>         originalNets( padsCount );
+    std::unordered_set<PAD*> selectedPads;
+
+    for( size_t i = 0; i < padsCount; ++i )
+    {
+        originalNets[i] = pads[i]->GetNetCode();
+        selectedPads.insert( pads[i] );
+    }
+
+    // If all nets are the same, nothing to do
+    bool allSame = true;
+    for( size_t i = 1; i < padsCount; ++i )
+    {
+        if( originalNets[i] != originalNets[0] )
+        {
+            allSame = false;
+            break;
+        }
+    }
+
+    if( allSame )
+        return 0;
+
+    // Desired new nets are a cyclic rotation of original nets (like Swap positions)
+    auto newNetForIndex = [&]( size_t i )
+        {
+            return originalNets[( i + 1 ) % padsCount];
+        };
+
+    // Take an event commit since we will eventually support this while actively routing the board
+    BOARD_COMMIT  localCommit( this );
+    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    // Connectivity to find items connected to each pad
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
+
+    // Accumulate changes: for each item, assign the resulting new net
+    std::unordered_map<BOARD_CONNECTED_ITEM*, int> itemNewNets;
+    std::vector<PAD*>                              nonSelectedPadsToChange;
+
+    for( size_t i = 0; i < padsCount; ++i )
+    {
+        PAD* pad = pads[i];
+        int  fromNet = originalNets[i];
+        int  toNet = newNetForIndex( i );
+
+        // For each connected item, if it matches fromNet, schedule it for toNet
+        for( BOARD_CONNECTED_ITEM* ci : connectivity->GetConnectedItems( pad, 0 ) )
+        {
+            switch( ci->Type() )
+            {
+            case PCB_TRACE_T:
+            case PCB_ARC_T:
+            case PCB_VIA_T:
+            case PCB_PAD_T:
+                break;
+            // Exclude zones, user probably doesn't want to change zone nets
+            default:
+                continue;
+            }
+
+            if( ci->GetNetCode() != fromNet )
+                continue;
+
+            // Track conflicts: if already assigned a different new net, just overwrite (last wins)
+            itemNewNets[ci] = toNet;
+
+            if( ci->Type() == PCB_PAD_T )
+            {
+                PAD* otherPad = static_cast<PAD*>( ci );
+
+                if( !selectedPads.count( otherPad ) )
+                    nonSelectedPadsToChange.push_back( otherPad );
+            }
+        }
+    }
+
+    // Prompt if we would modify non-selected pads:
+    //  - Ignore Connected Pins (Yes/Enter - default)
+    //  - Swap Connected Pins (No)
+    //  - Cancel (Esc)
+    bool includeConnectedPads = true;
+
+    if( !nonSelectedPadsToChange.empty() )
+    {
+        // Deduplicate and format a list of affected pads (reference + pad number)
+        std::unordered_set<PAD*> uniquePads( nonSelectedPadsToChange.begin(),
+                                             nonSelectedPadsToChange.end() );
+
+        wxString msg;
+        msg.Printf( _( "%zu other connected pad(s) will also change nets. How do you want to proceed?" ),
+                    uniquePads.size() );
+
+        wxString details;
+        details << _( "Affected pads:" ) << '\n';
+        for( PAD* p : uniquePads )
+        {
+            const FOOTPRINT* fp = p->GetParentFootprint();
+            details << wxS( "  • " ) << ( fp ? fp->GetReference() : _( "<no reference designator>" ) )
+                    << wxS( ":" ) << p->GetNumber() << '\n';
+        }
+
+        wxRichMessageDialog dlg( frame(), msg, _( "Swap Pad Nets" ),
+                                 wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING );
+        dlg.SetYesNoLabels( _( "Ignore Connected Pins" ), _( "Swap Connected Pins" ) );
+        dlg.SetExtendedMessage( details );
+
+        int ret = dlg.ShowModal();
+
+        if( ret == wxID_CANCEL )
+            return 0;
+
+        // Yes = Ignore, No = Swap
+        includeConnectedPads = ( ret == wxID_NO );
+    }
+
+    // Apply changes
+    // 1) Selected pads get their new nets directly
+    for( size_t i = 0; i < padsCount; ++i )
+    {
+        commit->Modify( pads[i] );
+        pads[i]->SetNetCode( newNetForIndex( i ) );
+    }
+
+    // 2) Connected items propagate, depending on user choice
+    for( const auto& itemNewNet : itemNewNets )
+    {
+        BOARD_CONNECTED_ITEM* item = itemNewNet.first;
+        int                   newNet = itemNewNet.second;
+
+        if( item->Type() == PCB_PAD_T )
+        {
+            PAD* p = static_cast<PAD*>( item );
+
+            if( selectedPads.count( p ) )
+                continue; // already changed above
+
+            if( !includeConnectedPads )
+                continue; // skip non-selected pads if requested
+        }
+
+        commit->Modify( item );
+        item->SetNetCode( newNet );
+    }
+
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Swap Pad Nets" ) );
+
+    // Ensure connectivity visuals update
+    rebuildConnectivity();
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     return 0;
@@ -868,4 +1056,3 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
     return !restore_state;
 }
-

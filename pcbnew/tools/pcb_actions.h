@@ -128,6 +128,9 @@ public:
     /// Swapping of selected items
     static TOOL_ACTION swap;
 
+    /// Swap nets between selected pads (and connected copper)
+    static TOOL_ACTION swapPadNets;
+
     /// Pack and start moving selected footprints
     static TOOL_ACTION packAndMoveFootprints;
 
