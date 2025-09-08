@@ -706,11 +706,12 @@ public:
     }
 };
 
+
 class DIALOG_SHAPE_PROPERTIES : public DIALOG_SHAPE_PROPERTIES_BASE
 {
 public:
     DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape );
-    ~DIALOG_SHAPE_PROPERTIES() {};
+    ~DIALOG_SHAPE_PROPERTIES() override = default;
 
 private:
     bool TransferDataToWindow() override;
@@ -1029,20 +1030,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_netLabel->Hide();
         m_netSelector->Hide();
     }
-    else
-    {
-        int net = aShape->GetNetCode();
-
-        if( net >= 0 )
-        {
-            m_netSelector->SetSelectedNetcode( net );
-        }
-        else
-        {
-            m_netSelector->SetIndeterminateString( INDETERMINATE_STATE );
-            m_netSelector->SetIndeterminate();
-        }
-    }
 
     if( m_item->GetShape() == SHAPE_T::ARC
         || m_item->GetShape() == SHAPE_T::SEGMENT
@@ -1076,14 +1063,14 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 }
 
 
-void DIALOG_SHAPE_PROPERTIES::onRoundedRectChanged(wxCommandEvent &event)
+void DIALOG_SHAPE_PROPERTIES::onRoundedRectChanged( wxCommandEvent &event )
 {
     if( !m_cbRoundRect->GetValue() )
         m_cornerRadius.ChangeValue( wxEmptyString );
 }
 
 
-void DIALOG_SHAPE_PROPERTIES::onCornerRadius(wxCommandEvent &event)
+void DIALOG_SHAPE_PROPERTIES::onCornerRadius( wxCommandEvent &event )
 {
     m_cbRoundRect->SetValue( true );
 }
@@ -1118,8 +1105,16 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 
     if( m_item->GetShape() == SHAPE_T::RECTANGLE )
     {
-        m_cbRoundRect->SetValue( m_item->GetCornerRadius() > 0 );
-        m_cornerRadius.ChangeValue( m_item->GetCornerRadius() );
+        if( m_item->GetCornerRadius() > 0 )
+        {
+            m_cbRoundRect->SetValue( true );
+            m_cornerRadius.ChangeValue( m_item->GetCornerRadius() );
+        }
+        else
+        {
+            m_cbRoundRect->SetValue( false );
+            m_cornerRadius.ChangeValue( wxEmptyString );
+        }
     }
 
     m_thickness.SetValue( m_item->GetStroke().GetWidth() );
@@ -1139,6 +1134,21 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
         m_solderMaskMargin.SetValue( m_item->GetLocalSolderMaskMargin().value() );
     else
         m_solderMaskMargin.SetValue( wxEmptyString );
+
+    if( m_parent->GetFrameType() == FRAME_PCB_EDITOR )
+    {
+        int net = m_item->GetNetCode();
+
+        if( net >= 0 )
+        {
+            m_netSelector->SetSelectedNetcode( net );
+        }
+        else
+        {
+            m_netSelector->SetIndeterminateString( INDETERMINATE_STATE );
+            m_netSelector->SetIndeterminate();
+        }
+    }
 
     enableNetInfo();
     enableTechLayers();
@@ -1248,7 +1258,7 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
 
         int shortSide = std::min( m_item->GetRectangleWidth(), m_item->GetRectangleHeight() );
 
-        if( m_cornerRadius.GetIntValue() * 2 > shortSide )
+        if( m_cbRoundRect->GetValue() && m_cornerRadius.GetIntValue() * 2 > shortSide )
         {
             errors.Add( _( "Corner radius must be less than or equal to half the smaller side." ) );
             m_cornerRadius.SetValue( KiROUND( shortSide / 2.0 ) );
