@@ -235,7 +235,11 @@ void UNIT_BINDER::onComboBox( wxCommandEvent& aEvent )
     const wxString      value = combo->GetStringSelection();
     const long long int conv = ValueFromString( *m_iuScale, m_units, value, m_dataType );
 
-    SetValue( conv );
+    CallAfter(
+            [this, conv]
+            {
+                SetValue( conv );
+            } );
 
     aEvent.Skip();
 }
