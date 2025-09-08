@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:16+0300\n"
 "PO-Revision-Date: 2025-09-08 22:18+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -25197,7 +25197,7 @@ msgstr "Főmező szerkesztése"
 
 #: eeschema/tools/sch_edit_tool.cpp:628 eeschema/tools/sch_edit_tool.cpp:2800
 msgid "Change To"
-msgstr "Csere erre:"
+msgstr "Csere erre"
 
 #: eeschema/tools/sch_edit_tool.cpp:1052
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
