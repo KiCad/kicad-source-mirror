@@ -10,13 +10,14 @@
 # Elek Zoltán <moncsa58@gmail.com>, 2025.
 # Viktor Döme <domevik@gmail.com>, 2025.
 # KB <kvellbalazs@gmail.com>, 2025.
+# dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-21 00:15+0300\n"
-"PO-Revision-Date: 2025-09-08 06:02+0000\n"
-"Last-Translator: KB <kvellbalazs@gmail.com>\n"
+"PO-Revision-Date: 2025-09-08 22:18+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
 "Language: hu\n"
@@ -26193,9 +26194,8 @@ msgid "Edit Main Fields"
 msgstr "Főmező szerkesztése"
 
 #: eeschema/tools/sch_edit_tool.cpp:626 eeschema/tools/sch_edit_tool.cpp:2765
-#, fuzzy
 msgid "Change To"
-msgstr "Csere erre:"
+msgstr "Csere erre"
 
 #: eeschema/tools/sch_edit_tool.cpp:1064
 #: eeschema/tools/symbol_editor_edit_tool.cpp:209
