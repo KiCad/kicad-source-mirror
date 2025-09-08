@@ -34,6 +34,7 @@ struct KICOMMON_API CROSS_PROBING_SETTINGS
     bool center_on_items; ///< Automatically pan to cross-probed items.
     bool zoom_to_fit;     ///< Zoom to fit items (ignored if center_on_items is off).
     bool auto_highlight;  ///< Automatically turn on highlight mode in the target frame.
+    bool flash_selection; ///< Flash newly cross-probed selection (visual attention aid).
 };
 
 namespace KIGFX

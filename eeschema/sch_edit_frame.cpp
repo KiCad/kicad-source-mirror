@@ -104,6 +104,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <project/project_local_settings.h>
 #include <toolbars_sch_editor.h>
+#include <wx/log.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -157,6 +158,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_syncingPcbToSchSelection = false;
     m_aboutTitle = _HKI( "KiCad Schematic Editor" );
     m_show_search = false;
+    // Ensure timer has an owner before binding so it generates events.
+    m_crossProbeFlashTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, &SCH_EDIT_FRAME::OnCrossProbeFlashTimer, this, m_crossProbeFlashTimer.GetId() );
 
     // Give an icon
     wxIcon icon;
@@ -432,6 +436,95 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
     Bind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
     Bind( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, &SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog, this );
+}
+
+void SCH_EDIT_FRAME::StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems )
+{
+    if( !eeconfig()->m_CrossProbing.flash_selection )
+    {
+        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: aborted (setting disabled) items=%zu", aItems.size() );
+        return;
+    }
+    if( aItems.empty() )
+    {
+        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: aborted (no items)" );
+        return;
+    }
+
+    if( m_crossProbeFlashing )
+    {
+        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: restarting existing flash (phase=%d)", m_crossProbeFlashPhase );
+        m_crossProbeFlashTimer.Stop();
+    }
+
+    wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: starting with %zu items", aItems.size() );
+    m_crossProbeFlashItems.clear();
+    for( SCH_ITEM* it : aItems )
+        m_crossProbeFlashItems.push_back( it->m_Uuid );
+
+    m_crossProbeFlashPhase = 0;
+    m_crossProbeFlashing = true;
+    if( !m_crossProbeFlashTimer.GetOwner() )
+        m_crossProbeFlashTimer.SetOwner( this );
+
+    bool started = m_crossProbeFlashTimer.Start( 500, wxTIMER_CONTINUOUS );
+    wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: timer start=%d id=%d", (int) started, m_crossProbeFlashTimer.GetId() );
+}
+
+
+void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
+{
+    wxLogTrace( "CROSS_PROBE_FLASH", "Timer(SCH) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
+
+    if( !m_crossProbeFlashing )
+    {
+        wxLogTrace( "CROSS_PROBE_FLASH", "Timer fired but not flashing (ignored)" );
+        return;
+    }
+
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    if( !selTool )
+        return;
+
+    bool prevGuard = m_syncingPcbToSchSelection;
+    m_syncingPcbToSchSelection = true;
+
+    if( m_crossProbeFlashPhase % 2 == 0 )
+    {
+        selTool->ClearSelection( true );
+        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d: cleared selection", m_crossProbeFlashPhase );
+    }
+    else
+    {
+        for( const KIID& id : m_crossProbeFlashItems )
+        {
+            if( SCH_ITEM* item = Schematic().ResolveItem( id, nullptr, true ) )
+                selTool->AddItemToSel( item, true );
+        }
+        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d: restored %zu items", m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
+    }
+
+    if( GetCanvas() )
+    {
+        GetCanvas()->ForceRefresh();
+        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d: forced canvas refresh", m_crossProbeFlashPhase );
+    }
+
+    m_syncingPcbToSchSelection = prevGuard;
+    m_crossProbeFlashPhase++;
+
+    if( m_crossProbeFlashPhase > 6 )
+    {
+        for( const KIID& id : m_crossProbeFlashItems )
+        {
+            if( SCH_ITEM* item = Schematic().ResolveItem( id, nullptr, true ) )
+                selTool->AddItemToSel( item, true );
+        }
+
+        m_crossProbeFlashing = false;
+        m_crossProbeFlashTimer.Stop();
+        wxLogTrace( "CROSS_PROBE_FLASH", "Flashing complete. Final selection size=%zu", m_crossProbeFlashItems.size() );
+    }
 }
 
 

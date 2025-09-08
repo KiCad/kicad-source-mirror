@@ -280,6 +280,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
     m_params.emplace_back( new PARAM<bool>( "cross_probing.auto_highlight",
             &m_CrossProbing.auto_highlight, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "cross_probing.flash_selection",
+            &m_CrossProbing.flash_selection, false ) );
 }
 
 

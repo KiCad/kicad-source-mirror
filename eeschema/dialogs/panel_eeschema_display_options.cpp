@@ -75,6 +75,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_checkCrossProbeCenter->SetValue( cfg->m_CrossProbing.center_on_items );
     m_checkCrossProbeZoom->SetValue( cfg->m_CrossProbing.zoom_to_fit );
     m_checkCrossProbeAutoHighlight->SetValue( cfg->m_CrossProbing.auto_highlight );
+    m_checkCrossProbeFlash->SetValue( cfg->m_CrossProbing.flash_selection );
 }
 
 
@@ -117,6 +118,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
         cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
         cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
         cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
+    cfg->m_CrossProbing.flash_selection = m_checkCrossProbeFlash->GetValue();
     }
 
     m_galOptsPanel->TransferDataFromWindow();

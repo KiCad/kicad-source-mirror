@@ -244,6 +244,10 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 
 	bSizer8->Add( m_checkCrossProbeAutoHighlight, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_checkCrossProbeFlash = new wxCheckBox( pcbPage, wxID_ANY, _("Flash cross-probed selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeFlash->SetToolTip( _("Temporarily flash the newly cross-probed selection 3 times") );
+	bSizer8->Add( m_checkCrossProbeFlash, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_live3Drefresh = new wxCheckBox( pcbPage, wxID_ANY, _("Refresh 3D view automatically"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_live3Drefresh->SetToolTip( _("When enabled, edits to the board will cause the 3D view to refresh (may be slow with larger boards)") );
 

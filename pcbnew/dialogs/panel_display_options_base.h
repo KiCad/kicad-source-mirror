@@ -72,6 +72,7 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_checkCrossProbeCenter;
 		wxCheckBox* m_checkCrossProbeZoom;
 		wxCheckBox* m_checkCrossProbeAutoHighlight;
+		wxCheckBox* m_checkCrossProbeFlash;
 		wxCheckBox* m_live3Drefresh;
 
 		// Virtual event handlers, override them in your derived class

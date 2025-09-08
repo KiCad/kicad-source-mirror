@@ -645,6 +645,25 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             Update3DView( false, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
             m_probingSchToPcb = false;
+
+            if( GetPcbNewSettings()->m_CrossProbing.flash_selection )
+            {
+                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE) PCB: flash enabled, items=%zu", items.size() );
+                if( items.empty() )
+                {
+                    wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE) PCB: nothing to flash" );
+                }
+                else
+                {
+                    std::vector<BOARD_ITEM*> boardItems;
+                    std::copy( items.begin(), items.end(), std::back_inserter( boardItems ) );
+                    StartCrossProbeFlash( boardItems );
+                }
+            }
+            else
+            {
+                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE) PCB: flash disabled" );
+            }
         }
 
         break;

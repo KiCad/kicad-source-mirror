@@ -44,6 +44,7 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_checkCrossProbeCenter;
 		wxCheckBox* m_checkCrossProbeZoom;
 		wxCheckBox* m_checkCrossProbeAutoHighlight;
+		wxCheckBox* m_checkCrossProbeFlash;
 		wxStaticText* m_appearanceLabel;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_defaultFontLabel;

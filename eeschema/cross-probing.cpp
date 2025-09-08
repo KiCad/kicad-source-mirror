@@ -931,6 +931,26 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                                                                             items );
 
             m_syncingPcbToSchSelection = false;
+
+            if( eeconfig()->m_CrossProbing.flash_selection )
+            {
+                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE): flash enabled, items=%zu", items.size() );
+                if( items.empty() )
+                {
+                    wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE): nothing to flash" );
+                }
+                else
+                {
+                    std::vector<SCH_ITEM*> itemPtrs;
+                    std::copy( items.begin(), items.end(), std::back_inserter( itemPtrs ) );
+
+                    StartCrossProbeFlash( itemPtrs );
+                }
+            }
+            else
+            {
+                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE): flash disabled" );
+            }
         }
 
         break;

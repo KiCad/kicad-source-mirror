@@ -989,6 +989,9 @@ private:
 
     void CaptureHierarchyPaneSize();
 
+    void StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems );
+    void OnCrossProbeFlashTimer( wxTimerEvent& aEvent );
+
 private:
     // The schematic editor control class should be able to access some internal
     // functions of the editor frame.
@@ -1015,6 +1018,11 @@ private:
     wxTreeCtrl*                 m_netNavigator;
 
 	bool                        m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
+    // Cross-probe flashing support
+    wxTimer                     m_crossProbeFlashTimer;   ///< Timer to toggle selection visibility
+    int                         m_crossProbeFlashPhase = 0;
+    std::vector<KIID>           m_crossProbeFlashItems;   ///< Items to flash
+    bool                        m_crossProbeFlashing = false;
     bool                        m_show_search;
     bool                        m_highlightedConnChanged;
 

@@ -62,6 +62,10 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	bCrossProbingSizer->Add( m_checkCrossProbeAutoHighlight, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_checkCrossProbeFlash = new wxCheckBox( this, wxID_ANY, _("Flash cross-probed selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeFlash->SetToolTip( _("Temporarily flash the newly cross-probed selection 3 times") );
+	bCrossProbingSizer->Add( m_checkCrossProbeFlash, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	bSizer8->Add( bCrossProbingSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 

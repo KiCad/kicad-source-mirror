@@ -222,6 +222,7 @@ void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_checkCrossProbeCenter->SetValue( aCfg->m_CrossProbing.center_on_items );
     m_checkCrossProbeZoom->SetValue( aCfg->m_CrossProbing.zoom_to_fit );
     m_checkCrossProbeAutoHighlight->SetValue( aCfg->m_CrossProbing.auto_highlight );
+    m_checkCrossProbeFlash->SetValue( aCfg->m_CrossProbing.flash_selection );
 }
 
 
@@ -353,6 +354,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
             cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
             cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
             cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
+            cfg->m_CrossProbing.flash_selection = m_checkCrossProbeFlash->GetValue();
         }
     }
     else

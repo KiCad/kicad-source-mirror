@@ -823,6 +823,15 @@ public:
 
     bool m_probingSchToPcb;         // Recursion guard when synchronizing selection from schematic
 
+    // Cross-probe flashing support
+    wxTimer        m_crossProbeFlashTimer;   ///< Timer to toggle selection visibility for flash
+    int            m_crossProbeFlashPhase = 0; ///< Phase counter
+    std::vector<KIID> m_crossProbeFlashItems;  ///< Items to flash (by UUID)
+    bool           m_crossProbeFlashing = false; ///< Currently flashing guard
+
+    void StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItems );
+    void OnCrossProbeFlashTimer( wxTimerEvent& aEvent );
+
 private:
     friend struct PCB::IFACE;
     friend class APPEARANCE_CONTROLS;
