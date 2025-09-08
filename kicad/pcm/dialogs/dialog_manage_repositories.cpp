@@ -258,8 +258,7 @@ void DIALOG_MANAGE_REPOSITORIES::selectRow( int aRow )
 void DIALOG_MANAGE_REPOSITORIES::SetData( const std::vector<std::pair<wxString, wxString>>& aData )
 {
     m_grid->Freeze();
-
-    m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
+    m_grid->ClearRows();
     m_grid->AppendRows( aData.size() );
 
     for( size_t i = 0; i < aData.size(); i++ )

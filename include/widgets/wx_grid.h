@@ -190,10 +190,10 @@ public:
      * to the number of rows (even if the delete count is 0).  Needless to say, this makes using
      * DeleteRows for clearing a lot more cumbersome so we add a helper here.
      */
-    void ClearRows()
+    void ClearRows( bool aUpdateLabels = true )
     {
-        if( GetNumberRows() )
-            DeleteRows( 0, GetNumberRows() );
+        if( GetNumberRows() > 0 )
+            DeleteRows( 0, GetNumberRows(), aUpdateLabels );
     }
 
     /**
