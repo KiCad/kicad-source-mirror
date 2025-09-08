@@ -302,9 +302,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     // Versions table
     m_gridVersions->Freeze();
-
-    if( m_gridVersions->GetNumberRows() != 0 )
-        m_gridVersions->DeleteRows( 0, m_gridVersions->GetNumberRows() );
+    m_gridVersions->ClearRows();
 
     int      row = 0;
     wxString current_version;
@@ -395,10 +393,7 @@ void PANEL_PACKAGES_VIEW::unsetPackageDetails()
 
     // Clean up grid just so we don't keep stale info around (it's already been hidden).
     m_gridVersions->Freeze();
-
-    if( m_gridVersions->GetNumberRows() > 0 )
-        m_gridVersions->DeleteRows( 0, m_gridVersions->GetNumberRows() );
-
+    m_gridVersions->ClearRows();
     m_gridVersions->Thaw();
 }
 

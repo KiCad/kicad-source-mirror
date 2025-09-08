@@ -167,9 +167,7 @@ void PANEL_EMBEDDED_FILES::resizeGrid()
 bool PANEL_EMBEDDED_FILES::TransferDataToWindow()
 {
     m_files_grid->ClearGrid();
-
-    if( m_files_grid->GetNumberRows() > 0 )
-        m_files_grid->DeleteRows( 0, m_files_grid->GetNumberRows() );
+    m_files_grid->ClearRows();
 
     int ii = 0;
 

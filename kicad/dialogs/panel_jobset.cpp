@@ -518,9 +518,7 @@ void PANEL_JOBSET::RemoveDestination( PANEL_DESTINATION* aPanel )
 
 void PANEL_JOBSET::rebuildJobList()
 {
-    if( m_jobsGrid->GetNumberRows() )
-        m_jobsGrid->DeleteRows( 0, m_jobsGrid->GetNumberRows() );
-
+    m_jobsGrid->ClearRows();
     m_jobsGrid->AppendRows( (int) m_jobsFile->GetJobs().size() );
 
     int num = 1;
