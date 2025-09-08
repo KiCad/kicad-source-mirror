@@ -7,28 +7,28 @@ ERC report (2025-08-20T22:34:08+0000, Encoding UTF8)
 [power_pin_not_driven]: Input Power pin not driven by any Output Power pins
     ; error
     @(140.97 mm, 86.36 mm): Symbol U1 Pin 2 [V-, Power input, Line]
-[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.
+[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'
     ; warning
     @(105.41 mm, 63.50 mm): Symbol J1 [Conn_01x01_Pin]
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
     ; warning
     @(105.41 mm, 63.50 mm): Symbol J1 [Conn_01x01_Pin]
-[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.
+[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'
     ; warning
     @(105.41 mm, 76.20 mm): Symbol J2 [Conn_01x01_Pin]
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
     ; warning
     @(105.41 mm, 76.20 mm): Symbol J2 [Conn_01x01_Pin]
-[footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'.
+[footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'
     ; warning
     @(115.57 mm, 76.20 mm): Symbol R3 [R_US]
-[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.
+[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'
     ; warning
     @(105.41 mm, 99.06 mm): Symbol J4 [Conn_01x01_Pin]
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
     ; warning
     @(105.41 mm, 99.06 mm): Symbol J4 [Conn_01x01_Pin]
-[footprint_link_issues]: Footprint 'C_1206_3216Metric' not found in library 'Capacitor_SMD'.
+[footprint_link_issues]: Footprint 'C_1206_3216Metric' not found in library 'Capacitor_SMD'
     ; warning
     @(121.92 mm, 80.01 mm): Symbol C1 [C_Small]
 [lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
@@ -40,10 +40,10 @@ ERC report (2025-08-20T22:34:08+0000, Encoding UTF8)
 [lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
     ; warning
     @(119.38 mm, 96.52 mm): Symbol #PWR01 [GND]
-[footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'.
+[footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'
     ; warning
     @(127.00 mm, 93.98 mm): Symbol R1 [R_US]
-[footprint_link_issues]: Footprint 'SOT-23-5' not found in library 'Package_TO_SOT_SMD'.
+[footprint_link_issues]: Footprint 'SOT-23-5' not found in library 'Package_TO_SOT_SMD'
     ; warning
     @(143.51 mm, 78.74 mm): Symbol U1 [TLV2371DBV]
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Amplifier_Operational'
@@ -52,10 +52,10 @@ ERC report (2025-08-20T22:34:08+0000, Encoding UTF8)
 [lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
     ; warning
     @(140.97 mm, 87.63 mm): Symbol #PWR02 [GND]
-[footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'.
+[footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'
     ; warning
     @(149.86 mm, 93.98 mm): Symbol R2 [R_US]
-[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.
+[footprint_link_issues]: Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'
     ; warning
     @(177.80 mm, 78.74 mm): Symbol J3 [Conn_01x01_Pin]
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'

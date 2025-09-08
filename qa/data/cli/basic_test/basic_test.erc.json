@@ -39,7 +39,7 @@
                     "type": "power_pin_not_driven"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.",
+                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J1 [Conn_01x01_Pin]",
@@ -69,7 +69,7 @@
                     "type": "lib_symbol_issues"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.",
+                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J2 [Conn_01x01_Pin]",
@@ -99,7 +99,7 @@
                     "type": "lib_symbol_issues"
                 },
                 {
-                    "description": "Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'.",
+                    "description": "Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'",
                     "items": [
                         {
                             "description": "Symbol R3 [R_US]",
@@ -114,7 +114,7 @@
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.",
+                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J4 [Conn_01x01_Pin]",
@@ -144,7 +144,7 @@
                     "type": "lib_symbol_issues"
                 },
                 {
-                    "description": "Footprint 'C_1206_3216Metric' not found in library 'Capacitor_SMD'.",
+                    "description": "Footprint 'C_1206_3216Metric' not found in library 'Capacitor_SMD'",
                     "items": [
                         {
                             "description": "Symbol C1 [C_Small]",
@@ -204,7 +204,7 @@
                     "type": "lib_symbol_mismatch"
                 },
                 {
-                    "description": "Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'.",
+                    "description": "Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'",
                     "items": [
                         {
                             "description": "Symbol R1 [R_US]",
@@ -219,7 +219,7 @@
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "Footprint 'SOT-23-5' not found in library 'Package_TO_SOT_SMD'.",
+                    "description": "Footprint 'SOT-23-5' not found in library 'Package_TO_SOT_SMD'",
                     "items": [
                         {
                             "description": "Symbol U1 [TLV2371DBV]",
@@ -264,7 +264,7 @@
                     "type": "lib_symbol_mismatch"
                 },
                 {
-                    "description": "Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'.",
+                    "description": "Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'",
                     "items": [
                         {
                             "description": "Symbol R2 [R_US]",
@@ -279,7 +279,7 @@
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'.",
+                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J3 [Conn_01x01_Pin]",
