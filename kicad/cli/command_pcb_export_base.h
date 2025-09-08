@@ -55,7 +55,7 @@ namespace CLI
 
 #define DEPRECATED_ARG_PLOT_INVISIBLE_TEXT "--plot-invisible-text"
 #define DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC "Deprecated.  Has no effect."
-#define DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING "--plot-invisible-text has been deprecated as of KiCad 9.0.1.  It will have no effect."
+#define DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_WARNING "--plot-invisible-text has been deprecated as of KiCad 9.0.1.  It will have no effect."
 
 #define ARG_FLIP_BOTTOM_PADS "--flip-bottom-pads"
 #define ARG_UNIQUE_PINS "--unique-pins"
