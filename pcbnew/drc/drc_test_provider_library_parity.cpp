@@ -334,23 +334,29 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
                                 PAD_DESC( a ),
                                 layerName ) );
 
-        TEST_D( a->GetRoundRectRadiusRatio( layer ),
-                b->GetRoundRectRadiusRatio( layer ),
-                wxString::Format( _( "%s rounded corners differ on layer %s." ),
-                                  PAD_DESC( a ),
-                                  layerName ) );
+        if( a->GetShape( layer ) == PAD_SHAPE::ROUNDRECT || a->GetShape( layer ) == PAD_SHAPE::CHAMFERED_RECT)
+        {
+            TEST_D( a->GetRoundRectRadiusRatio( layer ),
+                    b->GetRoundRectRadiusRatio( layer ),
+                    wxString::Format( _( "%s rounded corners differ on layer %s." ),
+                                      PAD_DESC( a ),
+                                      layerName ) );
+        }
 
-        TEST_D( a->GetChamferRectRatio( layer ),
-                b->GetChamferRectRatio( layer ),
-                wxString::Format( _( "%s chamfered corner sizes differ on layer %s." ),
-                                  PAD_DESC( a ),
-                                  layerName ) );
+        if( a->GetShape( layer ) == PAD_SHAPE::CHAMFERED_RECT)
+        {
+            TEST_D( a->GetChamferRectRatio( layer ),
+                    b->GetChamferRectRatio( layer ),
+                    wxString::Format( _( "%s chamfered corner sizes differ on layer %s." ),
+                                      PAD_DESC( a ),
+                                      layerName ) );
 
-        TEST( a->GetChamferPositions( layer ),
-              b->GetChamferPositions( layer ),
-              wxString::Format( _( "%s chamfered corners differ on layer %s." ),
-                                PAD_DESC( a ),
-                                layerName ) );
+            TEST( a->GetChamferPositions( layer ),
+                  b->GetChamferPositions( layer ),
+                  wxString::Format( _( "%s chamfered corners differ on layer %s." ),
+                                    PAD_DESC( a ),
+                                    layerName ) );
+        }
 
         TEST_PT( a->GetOffset( layer ), b->GetOffset( layer ),
                  wxString::Format( _( "%s shape offset from hole differs on layer %s." ),
