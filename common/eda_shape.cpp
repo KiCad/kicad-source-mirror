@@ -1382,6 +1382,15 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
             return poly.Collide( aPosition, maxdist );
         }
+        else if( m_cornerRadius > 0 )
+        {
+            ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
+            SHAPE_POLY_SET poly;
+            rr.TransformToPolygon( poly );
+
+            if( poly.CollideEdge( aPosition, nullptr, maxdist ) )
+                return true;
+        }
         else
         {
             std::vector<VECTOR2I> pts = GetRectCorners();
@@ -1393,12 +1402,12 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
             {
                 return true;
             }
-
-            if( IsHatchedFill() && GetHatching().Collide( aPosition, maxdist ) )
-                return true;
-
-            return false;
         }
+
+        if( IsHatchedFill() && GetHatching().Collide( aPosition, maxdist ) )
+            return true;
+
+        return false;
 
     case SHAPE_T::POLY:
         if( IsFilledForHitTesting() )
@@ -1440,6 +1449,40 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
     arect.Inflate( aAccuracy );
 
     BOX2I bbox = getBoundingBox();
+
+    auto checkOutline =
+            [&]( const SHAPE_LINE_CHAIN& outline )
+            {
+                int count = (int) outline.GetPointCount();
+
+                for( int ii = 0; ii < count; ii++ )
+                {
+                    VECTOR2I vertex = outline.GetPoint( ii );
+
+                    // Test if the point is within aRect
+                    if( arect.Contains( vertex ) )
+                        return true;
+
+                    if( ii + 1 < count )
+                    {
+                        VECTOR2I vertexNext = outline.GetPoint( ii + 1 );
+
+                        // Test if this edge intersects aRect
+                        if( arect.Intersects( vertex, vertexNext ) )
+                            return true;
+                    }
+                    else if( outline.IsClosed() )
+                    {
+                        VECTOR2I vertexNext = outline.GetPoint( 0 );
+
+                        // Test if this edge intersects aRect
+                        if( arect.Intersects( vertex, vertexNext ) )
+                            return true;
+                    }
+                }
+
+                return false;
+            };
 
     switch( m_shape )
     {
@@ -1487,6 +1530,17 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         {
             return arect.Contains( bbox );
         }
+        else if( m_cornerRadius > 0 )
+        {
+            ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
+            SHAPE_POLY_SET poly;
+            rr.TransformToPolygon( poly );
+
+            // Account for the width of the line
+            arect.Inflate( GetWidth() / 2 );
+
+            return checkOutline( poly.Outline( 0 ) );
+        }
         else
         {
             std::vector<VECTOR2I> pts = GetRectCorners();
@@ -1528,34 +1582,8 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
             for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
-                const SHAPE_LINE_CHAIN& poly = m_poly.Outline( ii );
-                int                     count = (int) poly.GetPointCount();
-
-                for( int jj = 0; jj < count; jj++ )
-                {
-                    VECTOR2I vertex = poly.GetPoint( jj );
-
-                    // Test if the point is within aRect
-                    if( arect.Contains( vertex ) )
-                        return true;
-
-                    if( jj + 1 < count )
-                    {
-                        VECTOR2I vertexNext = poly.GetPoint( jj + 1 );
-
-                        // Test if this edge intersects aRect
-                        if( arect.Intersects( vertex, vertexNext ) )
-                            return true;
-                    }
-                    else if( poly.IsClosed() )
-                    {
-                        VECTOR2I vertexNext = poly.GetPoint( 0 );
-
-                        // Test if this edge intersects aRect
-                        if( arect.Intersects( vertex, vertexNext ) )
-                            return true;
-                    }
-                }
+                if( checkOutline( m_poly.Outline( ii ) ) )
+                    return true;
             }
 
             return false;
