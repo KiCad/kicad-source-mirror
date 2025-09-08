@@ -269,7 +269,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
         preset.name = m_job->m_bomPresetName;
         preset.excludeDNP = m_job->m_excludeDNP;
-        preset.includeExcludedFromBOM = m_job->m_includeExcludedFromBOM;
         preset.filterString = m_job->m_filterString;
         preset.sortAsc = m_job->m_sortAsc;
         preset.sortField = m_job->m_sortField;
@@ -947,7 +946,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
     }
     else if( menu_id == 1 || menu_id == 4205 )
     {
-        m_dataModel->SetExcludeDNP( m_dataModel->GetIncludeExcludedFromBOM() );
+        m_dataModel->SetIncludeExcludedFromBOM( !m_dataModel->GetIncludeExcludedFromBOM() );
         m_dataModel->RebuildRows();
         m_grid->ForceRefresh();
 
@@ -1300,8 +1299,18 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
 {
+    bool saveIncludeExcudedFromBOM = m_dataModel->GetIncludeExcludedFromBOM();
+
+    m_dataModel->SetIncludeExcludedFromBOM( false );
     m_dataModel->RebuildRows();
+
     m_textOutput->SetValue( m_dataModel->Export( GetCurrentBomFmtSettings() ) );
+
+    if( saveIncludeExcudedFromBOM )
+    {
+        m_dataModel->SetIncludeExcludedFromBOM( true );
+        m_dataModel->RebuildRows();
+    }
 }
 
 
@@ -1499,7 +1508,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
         BOM_PRESET presetFields = m_dataModel->GetBomSettings();
         m_job->m_sortAsc = presetFields.sortAsc;
         m_job->m_excludeDNP = presetFields.excludeDNP;
-        m_job->m_includeExcludedFromBOM = presetFields.includeExcludedFromBOM;
         m_job->m_filterString = presetFields.filterString;
         m_job->m_sortField = presetFields.sortField;
 

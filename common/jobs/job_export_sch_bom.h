@@ -55,7 +55,6 @@ public:
     bool                  m_sortAsc;
     wxString              m_filterString;
     bool                  m_excludeDNP;
-    bool                  m_includeExcludedFromBOM;
 };
 
 #endif

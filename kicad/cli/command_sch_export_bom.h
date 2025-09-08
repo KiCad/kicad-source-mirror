@@ -27,8 +27,7 @@ namespace CLI
 {
 // Options for selecting presets of the export, e.g. GroupedByValue and CSV
 #define ARG_PRESET "--preset"
-#define ARG_PRESET_DESC "Use a named BOM preset setting from the schematic, e.g. " \
-                        "\"Grouped By Value\"."
+#define ARG_PRESET_DESC "Use a named BOM preset setting from the schematic, e.g. \"Grouped By Value\"."
 
 #define ARG_FMT_PRESET "--format-preset"
 #define ARG_FMT_PRESET_DESC "Use a named BOM format preset setting from the schematic, e.g. CSV."
@@ -44,20 +43,17 @@ namespace CLI
 #define ARG_REF_DELIMITER_DESC "Character to place between individual references."
 
 #define ARG_REF_RANGE_DELIMITER "--ref-range-delimiter"
-#define ARG_REF_RANGE_DELIMITER_DESC "Character to place in ranges of references. Leave " \
-                                     "blank for no ranges."
+#define ARG_REF_RANGE_DELIMITER_DESC "Character to place in ranges of references. Leave blank for no ranges."
 
 #define ARG_KEEP_TABS "--keep-tabs"
 #define ARG_KEEP_TABS_DESC "Keep tab characters from input fields. Stripped by default."
 
 #define ARG_KEEP_LINE_BREAKS "--keep-line-breaks"
-#define ARG_KEEP_LINE_BREAKS_DESC "Keep line break characters from input fields. Stripped " \
-                                  "by default."
+#define ARG_KEEP_LINE_BREAKS_DESC "Keep line break characters from input fields. Stripped by default."
 
 //Options for controlling the fields and the grouping
 #define ARG_FIELDS "--fields"
-#define ARG_FIELDS_DESC                                                                            \
-    "An ordered list of fields to export. See documentation for special substitutions."
+#define ARG_FIELDS_DESC "An ordered list of fields to export. See documentation for special substitutions."
 
 #define ARG_LABELS "--labels"
 #define ARG_LABELS_DESC "An ordered list of labels to apply the exported fields."
@@ -77,8 +73,10 @@ namespace CLI
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_EXCLUDE_DNP_DESC "Exclude symbols marked Do-Not-Populate."
 
-#define ARG_INCLUDE_EXCLUDED_FROM_BOM "--include-excluded-from-bom"
-#define ARG_INCLUDE_EXCLUDED_FROM_BOM_DESC "Include symbols marked 'Exclude from BOM'."
+#define DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM "--include-excluded-from-bom"
+#define DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM_DESC "Deprecated.  Has no effect."
+#define DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM_WARNING "--include-excluded-from-bom has been deprecated as of " \
+                                                         "KiCad 10.0.0.  It will have no effect."
 
 class SCH_EXPORT_BOM_COMMAND : public COMMAND
 {

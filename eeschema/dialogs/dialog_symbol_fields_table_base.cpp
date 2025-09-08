@@ -169,7 +169,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_bMenu = new STD_BITMAP_BUTTON( m_panelEdit, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bMenu->SetMinSize( wxSize( 30,30 ) );
 
-	bControls->Add( m_bMenu, 0, wxRIGHT, 5 );
+	bControls->Add( m_bMenu, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bEditSizer->Add( bControls, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
