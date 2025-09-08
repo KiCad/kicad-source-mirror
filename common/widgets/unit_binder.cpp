@@ -230,7 +230,11 @@ void UNIT_BINDER::onComboBox( wxCommandEvent& aEvent )
     const long long int conv =
             EDA_UNIT_UTILS::UI::ValueFromString( *m_iuScale, m_units, value, m_dataType );
 
-    SetValue( conv );
+    CallAfter(
+            [this, conv]
+            {
+                SetValue( conv );
+            } );
 
     aEvent.Skip();
 }
