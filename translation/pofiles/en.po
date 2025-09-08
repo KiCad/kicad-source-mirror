@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-21 00:16+0300\n"
+"POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2901,6 +2901,20 @@ msgstr "Copy Embedded Reference"
 
 msgid "Copy the reference for this embedded file"
 msgstr "Copy the reference for this embedded file"
+
+msgid ""
+"Deleted embedded files are also referenced in some footprints.\n"
+"Delete from footprints as well?"
+msgstr ""
+"Deleted embedded files are also referenced in some footprints.\n"
+"Delete from footprints as well?"
+
+msgid ""
+"Deleted embedded files are also referenced in some symbols.\n"
+"Delete from symbols as well?"
+msgstr ""
+"Deleted embedded files are also referenced in some symbols.\n"
+"Delete from symbols as well?"
 
 #, c-format
 msgid "File '%s' already exists."
@@ -7418,6 +7432,9 @@ msgstr "Update Symbols"
 
 msgid "*** No symbols matching criteria found ***"
 msgstr "*** No symbols matching criteria found ***"
+
+msgid "*** symbol lib id not valid ***"
+msgstr "*** symbol lib id not valid ***"
 
 msgid "*** symbol not found ***"
 msgstr "*** symbol not found ***"
@@ -17490,8 +17507,8 @@ msgstr "Delete Column"
 msgid "Show import issues"
 msgstr "Show import issues"
 
-msgid "Embed File"
-msgstr "Embed File"
+msgid "Embed file"
+msgstr "Embed file"
 
 msgid "Reset all settings on this page to their default"
 msgstr "Reset all settings on this page to their default"
@@ -18016,12 +18033,15 @@ msgstr "Render quality. Options: %s"
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr "Appearance preset. Options: %s, %s, or user-defined preset name"
 
+msgid "Colors defined in board stackup override those in preset"
+msgstr "Colors defined in board stackup override those in preset"
+
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
-"preset"
+"setting"
 msgstr ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
-"preset"
+"setting"
 
 msgid "Use perspective projection instead of orthogonal"
 msgstr "Use perspective projection instead of orthogonal"
@@ -19472,12 +19492,6 @@ msgstr "Unable to parse update response: %s"
 
 msgid "Create a new folder for the project"
 msgstr "Create a new folder for the project"
-
-msgid "Roundrect radius is larger than the rectangle's major dimension"
-msgstr "Roundrect radius is larger than the rectangle's major dimension"
-
-msgid "Roundrect radius must be non-negative"
-msgstr "Roundrect radius must be non-negative"
 
 #, c-format
 msgid "Error code: %d"
@@ -29095,9 +29109,6 @@ msgstr "Mirrored text on front layer"
 msgid "Non-Mirrored text on back layer"
 msgstr "Non-Mirrored text on back layer"
 
-msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Drilled hole too close to other hole - deprecated"
-
 #, c-format
 msgid "Rule: %s"
 msgstr "Rule: %s"
@@ -29963,6 +29974,9 @@ msgid ""
 msgstr ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
+
+msgid "Wire self-interference check failed. Allow retry"
+msgstr "Wire self-interference check failed. Allow retry"
 
 #, c-format
 msgid ""
@@ -34522,6 +34536,9 @@ msgstr "Unable to outset the selected items."
 msgid "Some of the items could not be outset."
 msgstr "Some of the items could not be outset."
 
+msgid "Cannot create rectangle outset"
+msgstr "Cannot create rectangle outset"
+
 msgid "Select a reference Rule Area to copy from..."
 msgstr "Select a reference Rule Area to copy from..."
 
@@ -37130,6 +37147,25 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Embed File"
+#~ msgstr "Embed File"
+
+#~ msgid ""
+#~ "Enables floor, shadows and post-processing, even if disabled in quality "
+#~ "preset"
+#~ msgstr ""
+#~ "Enables floor, shadows and post-processing, even if disabled in quality "
+#~ "preset"
+
+#~ msgid "Roundrect radius is larger than the rectangle's major dimension"
+#~ msgstr "Roundrect radius is larger than the rectangle's major dimension"
+
+#~ msgid "Roundrect radius must be non-negative"
+#~ msgstr "Roundrect radius must be non-negative"
+
+#~ msgid "Drilled hole too close to other hole - deprecated"
+#~ msgstr "Drilled hole too close to other hole - deprecated"
 
 #~ msgid "** Got problems while fusing shapes **\n"
 #~ msgstr "** Got problems while fusing shapes **\n"
