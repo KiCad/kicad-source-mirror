@@ -206,6 +206,16 @@ public:
     NETLIST_GROUP* GetGroup() const { return m_group; }
     void SetGroup( NETLIST_GROUP* aGroup ) { m_group = aGroup; }
 
+    // Unit info for multi-unit symbols
+    struct UNIT_INFO
+    {
+        wxString              m_unitName; // e.g. A
+        std::vector<wxString> m_pins;     // pin numbers in this unit
+    };
+
+    void                          SetUnitInfo( const std::vector<UNIT_INFO>& aUnits ) { m_units = aUnits; }
+    const std::vector<UNIT_INFO>& GetUnitInfo() const { return m_units; }
+
 private:
     std::vector<COMPONENT_NET>   m_nets;  ///< list of nets shared by the component pins
 
@@ -260,6 +270,9 @@ private:
     NETLIST_GROUP*               m_group;
 
     static COMPONENT_NET         m_emptyNet;
+
+    // Unit information parsed from the netlist (optional)
+    std::vector<UNIT_INFO> m_units;
 };
 
 

@@ -56,6 +56,14 @@ void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
     aFootprint->SetValue( m_value );
     aFootprint->SetFPID( m_fpid );
     aFootprint->SetPath( path );
+
+    // Copy over unit info
+    std::vector<FOOTPRINT::FP_UNIT_INFO> fpUnits;
+
+    for( const UNIT_INFO& u : m_units )
+        fpUnits.push_back( { u.m_unitName, u.m_pins } );
+
+    aFootprint->SetUnitInfo( fpUnits );
 }
 
 

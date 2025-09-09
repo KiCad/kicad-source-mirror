@@ -750,6 +750,15 @@ public:
     void ApplyDefaultSettings( const BOARD& board, bool aStyleFields, bool aStyleText,
                                bool aStyleShapes );
 
+    struct FP_UNIT_INFO
+    {
+        wxString              m_unitName; // e.g. A
+        std::vector<wxString> m_pins;     // pin numbers in this unit
+    };
+
+    void                             SetUnitInfo( const std::vector<FP_UNIT_INFO>& aUnits ) { m_unitInfo = aUnits; }
+    const std::vector<FP_UNIT_INFO>& GetUnitInfo() const { return m_unitInfo; }
+
     bool IsBoardOnly() const { return m_attributes & FP_BOARD_ONLY; }
     void SetBoardOnly( bool aIsBoardOnly = true )
     {
@@ -1180,6 +1189,9 @@ private:
 
     std::unordered_set<wxString> m_transientComponentClassNames;
     std::unique_ptr<COMPONENT_CLASS_CACHE_PROXY> m_componentClassCacheProxy;
+
+    // Optional unit mapping information for multi-unit symbols
+    std::vector<FP_UNIT_INFO> m_unitInfo;
 };
 
 #endif     // FOOTPRINT_H

@@ -332,6 +332,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
     bool duplicatePinsAreJumpers = false;
     std::vector<std::set<wxString>> jumperPinGroups;
 
+    std::vector<COMPONENT::UNIT_INFO> parsedUnits;
+
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok() ) != T_RIGHT )
     {
@@ -496,6 +498,87 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
             break;
 
+        case T_units:
+        {
+            // Parse a section like:
+            // (units (unit (ref "U1A") (name "A") (pins (pin "1") (pin "2"))))
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_unit )
+                {
+                    COMPONENT::UNIT_INFO info;
+
+                    while( ( token = NextTok() ) != T_RIGHT )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_name:
+                            NeedSYMBOLorNUMBER();
+                            info.m_unitName = From_UTF8( CurText() );
+                            NeedRIGHT();
+                            break;
+
+                        case T_pins:
+                            while( ( token = NextTok() ) != T_RIGHT )
+                            {
+                                if( token == T_LEFT )
+                                    token = NextTok();
+
+                                if( token == T_pin )
+                                {
+                                    wxString pinNum;
+
+                                    // Parse pins in attribute style: (pin (num "1"))
+                                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                                    {
+                                        if( token == T_LEFT )
+                                            token = NextTok();
+
+                                        if( token == T_num )
+                                        {
+                                            NeedSYMBOLorNUMBER();
+                                            pinNum = From_UTF8( CurText() );
+                                            NeedRIGHT();
+                                        }
+                                        else
+                                        {
+                                            // ignore other subfields of pin
+                                            // leave bare tokens untouched; they are not supported in this context
+                                        }
+                                    }
+
+                                    if( !pinNum.IsEmpty() )
+                                        info.m_pins.emplace_back( pinNum );
+                                }
+                                else
+                                {
+                                    skipCurrent();
+                                }
+                            }
+                            break;
+
+                        default:
+                            skipCurrent();
+                            break;
+                        }
+                    }
+
+                    parsedUnits.push_back( info );
+                }
+                else
+                {
+                    skipCurrent();
+                }
+            }
+            break;
+        }
+
         case T_component_classes:
             while( ( token = NextTok() ) != T_RIGHT )
             {
@@ -583,6 +666,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetDuplicatePadNumbersAreJumpers( duplicatePinsAreJumpers );
     std::ranges::copy( jumperPinGroups, std::inserter( component->JumperPadGroups(),
                                                        component->JumperPadGroups().end() ) );
+    component->SetUnitInfo( parsedUnits );
     m_netlist->AddComponent( component );
 }
 

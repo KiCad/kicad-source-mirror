@@ -481,6 +481,80 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // Output the primary UUID
             uuid = symbol->m_Uuid.AsString();
             xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, uuid ) );
+
+            // Emit unit information (per-unit name and pins) after tstamps
+            XNODE* xunitInfo;
+            xcomp->AddChild( xunitInfo = node( wxT( "units" ) ) );
+
+            // Emit all units defined by the library symbol, independent of placement
+            const std::unique_ptr<LIB_SYMBOL>& libSym = symbol->GetLibSymbolRef();
+
+            if( libSym )
+            {
+                int unitCount = std::max( libSym->GetUnitCount(), 1 );
+
+                for( int unitIdx = 1; unitIdx <= unitCount; ++unitIdx )
+                {
+                    wxString unitName = libSym->GetUnitDisplayName( unitIdx, false );
+
+                    XNODE* xunit;
+                    xunitInfo->AddChild( xunit = node( wxT( "unit" ) ) );
+                    xunit->AddAttribute( wxT( "name" ), unitName );
+
+                    XNODE* xpins;
+                    xunit->AddChild( xpins = node( wxT( "pins" ) ) );
+
+                    // Gather all graphical pins for this unit across body styles
+                    std::vector<SCH_PIN*> pinList = libSym->GetGraphicalPins( unitIdx, 0 );
+
+                    // Sort by X then Y to establish a stable, spatial order for matching pins
+                    // in the PCB editor when swapping gates
+                    std::sort( pinList.begin(), pinList.end(),
+                               []( SCH_PIN* a, SCH_PIN* b )
+                               {
+                                   auto pa = a->GetPosition();
+                                   auto pb = b->GetPosition();
+
+                                   if( pa.x != pb.x )
+                                       return pa.x < pb.x;
+
+                                   return pa.y < pb.y;
+                               } );
+
+                    // Emit pins in this spatial order, deduping by number within the unit only
+                    std::unordered_set<wxString> seen;
+
+                    for( SCH_PIN* basePin : pinList )
+                    {
+                        bool                  stackedValid = false;
+                        std::vector<wxString> expandedNums = basePin->GetStackedPinNumbers( &stackedValid );
+
+                        if( stackedValid && !expandedNums.empty() )
+                        {
+                            for( const wxString& num : expandedNums )
+                            {
+                                if( seen.insert( num ).second )
+                                {
+                                    XNODE* xpin;
+                                    xpins->AddChild( xpin = node( wxT( "pin" ) ) );
+                                    xpin->AddAttribute( wxT( "num" ), num );
+                                }
+                            }
+                        }
+                        else
+                        {
+                            wxString num = basePin->GetShownNumber();
+
+                            if( seen.insert( num ).second )
+                            {
+                                XNODE* xpin;
+                                xpins->AddChild( xpin = node( wxT( "pin" ) ) );
+                                xpin->AddAttribute( wxT( "num" ), num );
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
