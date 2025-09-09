@@ -27,6 +27,8 @@
 #include <git2.h>
 #include <vector>
 #include <wx/string.h>
+// TEMPORARY HACKFIX INCLUDE FOR STD::VECTOR EXPORT OUT OF KICOMMON ON WINDOWS
+#include <settings/parameters.h>
 
 class LIBGIT_BACKEND;
 
