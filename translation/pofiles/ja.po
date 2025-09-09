@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-08-22 06:42+0000\n"
+"PO-Revision-Date: 2025-09-10 01:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4894,12 +4894,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"削除された埋め込みファイルは、一部のフットプリントでも参照されています。\n"
+"フットプリントからも削除しますか?"
 
 #: common/dialogs/panel_embedded_files.cpp:206
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"削除された埋め込みファイルは、一部のシンボルでも参照されています。\n"
+"シンボルからも削除しますか?"
 
 #: common/dialogs/panel_embedded_files.cpp:325
 #: common/dialogs/panel_embedded_files.cpp:440
@@ -11365,7 +11369,7 @@ msgstr "BOM ジェネレーター スクリプトのリストをデフォルト�
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
-msgstr "部品表 (BOM)"
+msgstr "BOM(部品表)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -11613,9 +11617,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "***適合するシンボルが見つからない***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** シンボルが見つかりません ***"
+msgstr "*** シンボル ライブラリ ID が無効です ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -13211,7 +13214,7 @@ msgstr "電源シンボルとしてシンボルを作成"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:206
 msgid "Exclude from bill of materials"
-msgstr "部品表から除外"
+msgstr "BOM(部品表)から除外"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:279
@@ -15344,7 +15347,7 @@ msgstr "未実装を除外"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
 msgid "Show 'Exclude from BOM'"
-msgstr "「BOMから除外」を表示"
+msgstr "「BOM(部品表)から除外」を表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -17881,7 +17884,7 @@ msgstr "ユニット %s"
 #: eeschema/lib_symbol.cpp:580 eeschema/sch_sheet.cpp:310
 #: eeschema/sch_symbol.cpp:1537
 msgid "Excluded from BOM"
-msgstr "部品表から除外"
+msgstr "BOM(部品表)から除外"
 
 #: eeschema/lib_symbol.cpp:585 eeschema/sch_sheet.cpp:319
 #: eeschema/sch_symbol.cpp:1546
@@ -18459,7 +18462,7 @@ msgstr "変形オフセット Y"
 
 #: eeschema/sch_bus_entry.cpp:449
 msgid "Bus to Wire Entry"
-msgstr "ワイヤー-バス エントリー"
+msgstr "バス-配線 エントリー"
 
 #: eeschema/sch_bus_entry.cpp:455
 msgid "Bus to Bus Entry"
@@ -19897,7 +19900,7 @@ msgstr "シミュレーションから除外"
 #: eeschema/sch_sheet.cpp:1753 eeschema/sch_symbol.cpp:1040
 #: eeschema/sch_symbol.cpp:3005 pcbnew/footprint.cpp:4225
 msgid "Exclude From Bill of Materials"
-msgstr "部品表から除外"
+msgstr "BOM(部品表)から除外"
 
 #: eeschema/sch_sheet.cpp:1757 eeschema/sch_symbol.cpp:1041
 #: eeschema/sch_symbol.cpp:3008 eeschema/tools/sch_actions.cpp:993
@@ -19963,7 +19966,7 @@ msgstr "ライブラリへのリンク"
 #: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:419
 #, c-format
 msgid "%d Column Table"
-msgstr "%d列テーブル"
+msgstr "%d 列のテーブル"
 
 #: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:455
 #, c-format
@@ -20006,7 +20009,7 @@ msgstr "セパレーターの色"
 #: eeschema/sch_tablecell.cpp:52 pcbnew/pcb_tablecell.cpp:55
 #, c-format
 msgid "Table Cell %s"
-msgstr "表のセル%s"
+msgstr "表のセル %s"
 
 #: eeschema/sch_tablecell.cpp:152 pcbnew/pcb_tablecell.cpp:144
 msgid "Cell Width"
@@ -23225,7 +23228,7 @@ msgstr "選択したシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/sch_actions.cpp:975
 msgid "Exclude from Bill of Materials"
-msgstr "部品表から除外"
+msgstr "BOM(部品表)から除外"
 
 #: eeschema/tools/sch_actions.cpp:976
 msgid "Set the exclude from bill of materials attribute"
@@ -24548,7 +24551,7 @@ msgstr "シミュレーションから除外"
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "部品表から除外"
+msgstr "BOM(部品表)から除外"
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. board"
@@ -25868,7 +25871,6 @@ msgid "Show import issues"
 msgstr "インポートの問題を表示"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
 msgstr "ファイルを埋め込む"
 
@@ -26587,14 +26589,13 @@ msgstr "外観プリセット。オプション:%s,%s またはユーザー定�
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
-msgstr ""
+msgstr "基板スタックアップで定義されたカラーはプリセットの色を上書きします"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
-msgstr "品質プリセットで無効になっている場合でも、床、影、後処理を有効にします"
+msgstr "品質設定で無効に設定している場合でも、床、影、後処理を有効にします"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -42542,11 +42543,8 @@ msgstr ""
 "z: %g; 境界ボックス :%s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1750
-#, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
-msgstr ""
-"配線の自己干渉チェックに失敗しました\n"
-"z: %g; 境界ボックス : %s"
+msgstr "配線の自己干渉チェックに失敗しました。再試行してください"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1755
 #, c-format
@@ -42842,7 +42840,7 @@ msgstr "部品配置ファイルから除外"
 
 #: pcbnew/footprint.cpp:1771
 msgid "exclude from BOM"
-msgstr "部品表から除外"
+msgstr "BOM(部品表)から除外"
 
 #: pcbnew/footprint.cpp:1776
 msgid "Status: "
@@ -43869,22 +43867,22 @@ msgstr "%s のフットプリント フィルター を '%s' に更新します�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:680
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に '部品表から除外 'の製造属性を設定します。"
+msgstr "%s に 'BOM(部品表)から除外 'の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:685
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の '部品表から除外 'の製造属性を削除します。"
+msgstr "%s の 'BOM(部品表)から除外 'の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:696
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に製造属性 '部品表から除外' を追加しました。"
+msgstr "%s に製造属性 'BOM(部品表)から除外' を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の製造属性 '部品表から除外' を削除しました。"
+msgstr "%s の製造属性 'BOM(部品表)から除外' を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:720
 #, c-format
@@ -45692,7 +45690,7 @@ msgstr "'%s' の中に有効なボードが見つかりません"
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:273
 #, c-format
 msgid "Error loading board '%s': %s"
-msgstr "基板ロード中のエラー '%s': %s"
+msgstr "基板読み込み中のエラー '%s': %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:298
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:398
@@ -46529,7 +46527,7 @@ msgstr "基板上のテキスト '%s' ( %s 上)"
 #: pcbnew/pcb_textbox.cpp:583
 #, c-format
 msgid "PCB Text Box '%s' on %s"
-msgstr "基板上のテキストボックス '%s' (%s 上)"
+msgstr "プリント基板のテキストボックス '%s' (%s 上)"
 
 #: pcbnew/pcb_textbox.cpp:818
 msgid "Border Properties"
@@ -48472,9 +48470,8 @@ msgid "Some of the items could not be outset."
 msgstr "いくつかのアイテムを最初にすることができません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "ファイル \"%s\" を作成できません"
+msgstr "矩形の拡張量変換が出来ません"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
