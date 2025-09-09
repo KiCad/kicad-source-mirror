@@ -22,8 +22,7 @@
  */
 
 #include "git_commit_handler.h"
-#include <git/kicad_git_memory.h>
-#include <wx/log.h>
+#include "git_backend.h"
 
 GIT_COMMIT_HANDLER::GIT_COMMIT_HANDLER( git_repository* aRepo ) :
     KIGIT_COMMON( aRepo )
@@ -34,121 +33,13 @@ GIT_COMMIT_HANDLER::~GIT_COMMIT_HANDLER()
 {}
 
 
-GIT_COMMIT_HANDLER::CommitResult
+CommitResult
 GIT_COMMIT_HANDLER::PerformCommit( const std::vector<wxString>& aFiles,
                                    const wxString&               aMessage,
                                    const wxString&               aAuthorName,
                                    const wxString&               aAuthorEmail )
 {
-    git_repository* repo = GetRepo();
-
-    if( !repo )
-        return CommitResult::Error;
-
-    git_index* index = nullptr;
-
-    if( git_repository_index( &index, repo ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Failed to get repository index: %s" ),
-                                          KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    for( const wxString& file : aFiles )
-    {
-        if( git_index_add_bypath( index, file.mb_str() ) != 0 )
-        {
-            AddErrorString( wxString::Format( _( "Failed to add file to index: %s" ),
-                                              KIGIT_COMMON::GetLastGitError() ) );
-            return CommitResult::Error;
-        }
-    }
-
-    if( git_index_write( index ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Failed to write index: %s" ),
-                                          KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    git_oid tree_id;
-
-    if( git_index_write_tree( &tree_id, index ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Failed to write tree: %s" ),
-                                          KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    git_tree* tree = nullptr;
-
-    if( git_tree_lookup( &tree, repo, &tree_id ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Failed to lookup tree: %s" ),
-                                          KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    KIGIT::GitTreePtr treePtr( tree );
-    git_commit* parent = nullptr;
-
-    if( git_repository_head_unborn( repo ) == 0 )
-    {
-        git_reference* headRef = nullptr;
-
-        if( git_repository_head( &headRef, repo ) != 0 )
-        {
-            AddErrorString( wxString::Format( _( "Failed to get HEAD reference: %s" ),
-                                              KIGIT_COMMON::GetLastGitError() ) );
-            return CommitResult::Error;
-        }
-
-        KIGIT::GitReferencePtr headRefPtr( headRef );
-
-        if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
-        {
-            AddErrorString( wxString::Format( _( "Failed to get commit: %s" ),
-                                              KIGIT_COMMON::GetLastGitError() ) );
-            return CommitResult::Error;
-        }
-    }
-
-    KIGIT::GitCommitPtr parentPtr( parent );
-
-    git_signature* author = nullptr;
-
-    if( git_signature_now( &author, aAuthorName.mb_str(), aAuthorEmail.mb_str() ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Failed to create author signature: %s" ),
-                                          KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    KIGIT::GitSignaturePtr authorPtr( author );
-    git_oid                oid;
-    size_t                 parentsCount = parent ? 1 : 0;
-#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8 \
-    && ( LIBGIT2_VER_REVISION < 2 || LIBGIT2_VER_REVISION == 3 ) )
-    git_commit* const parents[1] = { parent };
-    git_commit** const parentsPtr = parent ? parents : nullptr;
-#else
-    const git_commit* parents[1] = { parent };
-    const git_commit** parentsPtr = parent ? parents : nullptr;
-#endif
-
-
-
-    if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr,
-                           aMessage.mb_str(), tree, parentsCount, parentsPtr ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Failed to create commit: %s" ),
-                                          KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    return CommitResult::Success;
+    return GetGitBackend()->Commit( this, aFiles, aMessage, aAuthorName, aAuthorEmail );
 }
 
 

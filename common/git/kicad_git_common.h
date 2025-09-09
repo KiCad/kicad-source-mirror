@@ -33,6 +33,8 @@
 
 #include <wx/string.h>
 
+class LIBGIT_BACKEND;
+
 class KIGIT_COMMON
 {
 
@@ -174,6 +176,7 @@ protected:
     friend class GIT_PUSH_HANDLER;
     friend class GIT_PULL_HANDLER;
     friend class GIT_CLONE_HANDLER;
+    friend class LIBGIT_BACKEND;
     friend class PROJECT_TREE_PANE;
 
 private:

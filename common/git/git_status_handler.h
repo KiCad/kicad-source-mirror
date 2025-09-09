@@ -29,6 +29,8 @@
 #include <map>
 #include <set>
 
+class LIBGIT_BACKEND;
+
 struct FileStatus
 {
     wxString filePath;
@@ -80,6 +82,7 @@ public:
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 
 private:
+    friend class LIBGIT_BACKEND;
     /**
      * Convert git status flags to KIGIT_COMMON::GIT_STATUS
      * @param aGitStatus Raw git status flags

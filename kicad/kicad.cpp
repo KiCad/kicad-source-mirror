@@ -49,7 +49,8 @@
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
 
-#include <git2.h>
+#include <git/git_backend.h>
+#include <git/libgit_backend.h>
 #include <stdexcept>
 
 #include "pgm_kicad.h"
@@ -97,8 +98,9 @@ bool PGM_KICAD::OnPgmInit()
     }
 #endif
 
-    // Initialize the git library before trying to initialize individual programs
-    git_libgit2_init();
+    // Initialize the git backend before trying to initialize individual programs
+    SetGitBackend( new LIBGIT_BACKEND() );
+    GetGitBackend()->Init();
 
     static const wxCmdLineEntryDesc desc[] = {
         { wxCMD_LINE_OPTION, "f", "frame", "Frame to load", wxCMD_LINE_VAL_STRING, 0 },
@@ -401,7 +403,9 @@ void PGM_KICAD::OnPgmExit()
     // especially wxSingleInstanceCheckerImpl earlier than wxApp and earlier
     // than static destruction would.
     Destroy();
-    git_libgit2_shutdown();
+    GetGitBackend()->Shutdown();
+    delete GetGitBackend();
+    SetGitBackend( nullptr );
 }
 
 

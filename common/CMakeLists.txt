@@ -633,7 +633,8 @@ set( COMMON_GIT_SRCS
     git/project_git_utils.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
-    git/project_git_utils.cpp
+    git/git_backend.cpp
+    git/libgit_backend.cpp
     )
 
 set( COMMON_SRCS

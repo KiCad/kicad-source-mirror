@@ -21,35 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "git_init_handler.h"
 #include "git_backend.h"
-#include <git/kicad_git_common.h>
-#include <git/kicad_git_memory.h>
-#include <trace_helpers.h>
-#include <wx/log.h>
 
-GIT_INIT_HANDLER::GIT_INIT_HANDLER( KIGIT_COMMON* aCommon ) : KIGIT_REPO_MIXIN( aCommon )
-{}
+static GIT_BACKEND* s_backend = nullptr;
 
-GIT_INIT_HANDLER::~GIT_INIT_HANDLER()
-{}
-
-bool GIT_INIT_HANDLER::IsRepository( const wxString& aPath )
+GIT_BACKEND* GetGitBackend()
 {
-    return GetGitBackend()->IsRepository( this, aPath );
+    return s_backend;
 }
 
-InitResult GIT_INIT_HANDLER::InitializeRepository( const wxString& aPath )
+void SetGitBackend( GIT_BACKEND* aBackend )
 {
-    return GetGitBackend()->InitializeRepository( this, aPath );
-}
-
-bool GIT_INIT_HANDLER::SetupRemote( const RemoteConfig& aConfig )
-{
-    return GetGitBackend()->SetupRemote( this, aConfig );
-}
-
-void GIT_INIT_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
-{
-    ReportProgress( aCurrent, aTotal, aMessage );
+    s_backend = aBackend;
 }

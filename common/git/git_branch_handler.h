@@ -57,15 +57,6 @@ public:
     bool BranchExists( const wxString& aBranchName );
 
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
-
-private:
-    /**
-     * Look up a branch reference by name
-     * @param aBranchName Name of the branch
-     * @param aReference Output parameter for the reference
-     * @return True if successful, false otherwise
-     */
-    bool LookupBranchReference( const wxString& aBranchName, git_reference** aReference );
 };
 
 #endif // GIT_BRANCH_HANDLER_H

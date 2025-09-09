@@ -24,12 +24,13 @@
 #ifndef GIT_ADD_TO_INDEX_HANDLER_H_
 #define GIT_ADD_TO_INDEX_HANDLER_H_
 
-#include <git2.h>
+#include <git/kicad_git_common.h>
 #include <vector>
+#include <wx/string.h>
 
-class wxString;
+class LIBGIT_BACKEND;
 
-class GIT_ADD_TO_INDEX_HANDLER
+class GIT_ADD_TO_INDEX_HANDLER : public KIGIT_COMMON
 {
 public:
     GIT_ADD_TO_INDEX_HANDLER( git_repository* aRepository );
@@ -40,8 +41,7 @@ public:
     bool PerformAddToIndex();
 
 private:
-    git_repository* m_repository;
-
+    friend class LIBGIT_BACKEND;
     std::vector<wxString> m_filesToAdd;
     std::vector<wxString> m_filesFailedToAdd;
 };

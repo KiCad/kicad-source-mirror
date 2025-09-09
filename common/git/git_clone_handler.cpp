@@ -23,13 +23,8 @@
 
 #include "git_clone_handler.h"
 
-#include <git/kicad_git_common.h>
-#include <git/kicad_git_memory.h>
 #include <trace_helpers.h>
-
-#include <git2.h>
-#include <wx/filename.h>
-#include <wx/log.h>
+#include "git_backend.h"
 
 GIT_CLONE_HANDLER::GIT_CLONE_HANDLER( KIGIT_COMMON* aCommon ) :  KIGIT_REPO_MIXIN( aCommon )
 {}
@@ -41,55 +36,7 @@ GIT_CLONE_HANDLER::~GIT_CLONE_HANDLER()
 
 bool GIT_CLONE_HANDLER::PerformClone()
 {
-    std::unique_lock<std::mutex> lock( GetCommon()->m_gitActionMutex, std::try_to_lock );
-
-    if( !lock.owns_lock() )
-    {
-        wxLogTrace( traceGit, "GIT_CLONE_HANDLER::PerformClone() could not lock" );
-        return false;
-    }
-
-    wxFileName clonePath( m_clonePath );
-
-    if( !clonePath.DirExists() )
-    {
-        if( !clonePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            AddErrorString( wxString::Format( _( "Could not create directory '%s'" ),
-                                              m_clonePath ) );
-            return false;
-        }
-    }
-
-    git_clone_options cloneOptions;
-    git_clone_init_options( &cloneOptions, GIT_CLONE_OPTIONS_VERSION );
-    cloneOptions.checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
-    cloneOptions.checkout_opts.progress_cb = clone_progress_cb;
-    cloneOptions.checkout_opts.progress_payload = this;
-    cloneOptions.fetch_opts.callbacks.transfer_progress = transfer_progress_cb;
-    cloneOptions.fetch_opts.callbacks.credentials = credentials_cb;
-    cloneOptions.fetch_opts.callbacks.payload = this;
-
-    TestedTypes() = 0;
-    ResetNextKey();
-    git_repository* newRepo = nullptr;
-    wxString        remote = GetCommon()->m_remote;
-
-    if( git_clone( &newRepo, remote.mbc_str(), m_clonePath.mbc_str(),
-                   &cloneOptions ) != 0 )
-    {
-        AddErrorString( wxString::Format( _( "Could not clone repository '%s'" ), remote ) );
-        return false;
-    }
-
-    GetCommon()->SetRepo( newRepo );
-
-    if( m_progressReporter )
-        m_progressReporter->Hide();
-
-    m_previousProgress = 0;
-
-    return true;
+    return GetGitBackend()->Clone( this );
 }
 
 

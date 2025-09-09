@@ -22,16 +22,13 @@
  */
 
 #include "git_add_to_index_handler.h"
-#include <git/kicad_git_memory.h>
+#include "git_backend.h"
 
-#include <iterator>
-
-#include <wx/string.h>
 #include <wx/log.h>
 
-GIT_ADD_TO_INDEX_HANDLER::GIT_ADD_TO_INDEX_HANDLER( git_repository* aRepository )
+GIT_ADD_TO_INDEX_HANDLER::GIT_ADD_TO_INDEX_HANDLER( git_repository* aRepository ) :
+    KIGIT_COMMON( aRepository )
 {
-    m_repository = aRepository;
     m_filesToAdd.clear();
 }
 
@@ -43,66 +40,11 @@ GIT_ADD_TO_INDEX_HANDLER::~GIT_ADD_TO_INDEX_HANDLER()
 
 bool GIT_ADD_TO_INDEX_HANDLER::AddToIndex( const wxString& aFilePath )
 {
-    // Test if file is currently in the index
-
-    git_index* index = nullptr;
-    size_t at_pos = 0;
-
-    if( git_repository_index( &index, m_repository ) != 0 )
-    {
-        wxLogError( "Failed to get repository index" );
-        return false;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) == GIT_OK )
-    {
-        wxLogError( "%s already in index", aFilePath );
-        return false;
-    }
-
-    // Add file to index if not already there
-    m_filesToAdd.push_back( aFilePath );
-
-    return true;
+    return GetGitBackend()->AddToIndex( this, aFilePath );
 }
 
 
 bool GIT_ADD_TO_INDEX_HANDLER::PerformAddToIndex()
 {
-    git_index* index = nullptr;
-
-    m_filesFailedToAdd.clear();
-
-    if( git_repository_index( &index, m_repository ) != 0 )
-    {
-        wxLogError( "Failed to get repository index" );
-        std::copy( m_filesToAdd.begin(), m_filesToAdd.end(), std::back_inserter( m_filesFailedToAdd ) );
-        return false;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    for( auto& file : m_filesToAdd )
-    {
-        if( git_index_add_bypath( index, file.ToUTF8().data() ) != 0 )
-        {
-            wxLogError( "Failed to add %s to index", file );
-            m_filesFailedToAdd.push_back( file );
-            continue;
-        }
-    }
-
-
-    if( git_index_write( index ) != 0 )
-    {
-        wxLogError( "Failed to write index" );
-        m_filesFailedToAdd.clear();
-        std::copy( m_filesToAdd.begin(), m_filesToAdd.end(),
-                   std::back_inserter( m_filesFailedToAdd ) );
-        return false;
-    }
-
-    return true;
+    return GetGitBackend()->PerformAddToIndex( this );
 }

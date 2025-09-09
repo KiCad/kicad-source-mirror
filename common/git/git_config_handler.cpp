@@ -22,6 +22,7 @@
  */
 
 #include "git_config_handler.h"
+#include "git_backend.h"
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <pgm_base.h>
@@ -59,48 +60,12 @@ GitUserConfig GIT_CONFIG_HANDLER::GetUserConfig()
 
 wxString GIT_CONFIG_HANDLER::GetWorkingDirectory()
 {
-    git_repository* repo = GetRepo();
-
-    if( !repo )
-        return wxEmptyString;
-
-    const char* workdir = git_repository_workdir( repo );
-
-    if( !workdir )
-        return wxEmptyString;
-
-    return wxString( workdir );
+    return GetGitBackend()->GetWorkingDirectory( this );
 }
 
 bool GIT_CONFIG_HANDLER::GetConfigString( const wxString& aKey, wxString& aValue )
 {
-    git_repository* repo = GetRepo();
-
-    if( !repo )
-        return false;
-
-    git_config* config = nullptr;
-
-    if( git_repository_config( &config, repo ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to get repository config: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    KIGIT::GitConfigPtr configPtr( config );
-
-    git_config_entry* entry = nullptr;
-    int result = git_config_get_entry( &entry, config, aKey.mb_str() );
-    KIGIT::GitConfigEntryPtr entryPtr( entry );
-
-    if( result != GIT_OK || entry == nullptr )
-    {
-        wxLogTrace( traceGit, "Config key '%s' not found", aKey );
-        return false;
-    }
-
-    aValue = wxString( entry->value );
-    return true;
+    return GetGitBackend()->GetConfigString( this, aKey, aValue );
 }
 
 void GIT_CONFIG_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )

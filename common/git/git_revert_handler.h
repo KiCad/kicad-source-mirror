@@ -28,6 +28,8 @@
 #include <vector>
 #include <wx/string.h>
 
+class LIBGIT_BACKEND;
+
 class GIT_REVERT_HANDLER
 {
 public:
@@ -44,6 +46,7 @@ public:
     }
 
 private:
+    friend class LIBGIT_BACKEND;
     git_repository* m_repository;
 
     std::vector<wxString> m_filesToRevert;

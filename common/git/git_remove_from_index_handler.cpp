@@ -21,15 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/string.h>
+#include "git_remove_from_index_handler.h"
+#include "git_backend.h"
+
 #include <wx/log.h>
 
-#include <git/kicad_git_memory.h>
-#include "git_remove_from_index_handler.h"
-
-GIT_REMOVE_FROM_INDEX_HANDLER::GIT_REMOVE_FROM_INDEX_HANDLER( git_repository* aRepository )
+GIT_REMOVE_FROM_INDEX_HANDLER::GIT_REMOVE_FROM_INDEX_HANDLER( git_repository* aRepository ) :
+    KIGIT_COMMON( aRepository )
 {
-    m_repository = aRepository;
     m_filesToRemove.clear();
 }
 
@@ -41,61 +40,11 @@ GIT_REMOVE_FROM_INDEX_HANDLER::~GIT_REMOVE_FROM_INDEX_HANDLER()
 
 bool GIT_REMOVE_FROM_INDEX_HANDLER::RemoveFromIndex( const wxString& aFilePath )
 {
-    // Test if file is currently in the index
-
-    git_index* index = nullptr;
-    size_t at_pos = 0;
-
-    if( git_repository_index( &index, m_repository ) != 0 )
-    {
-        wxLogError( "Failed to get repository index" );
-        return false;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) != 0 )
-    {
-        wxLogError( "Failed to find index entry for %s", aFilePath );
-        return false;
-    }
-
-    m_filesToRemove.push_back( aFilePath );
-    return true;
+    return GetGitBackend()->RemoveFromIndex( this, aFilePath );
 }
 
 
 void GIT_REMOVE_FROM_INDEX_HANDLER::PerformRemoveFromIndex()
 {
-    for( auto& file : m_filesToRemove )
-    {
-        git_index* index = nullptr;
-        git_oid oid;
-
-        if( git_repository_index( &index, m_repository ) != 0 )
-        {
-            wxLogError( "Failed to get repository index" );
-            return;
-        }
-
-        KIGIT::GitIndexPtr indexPtr( index );
-
-        if( git_index_remove_bypath( index, file.ToUTF8().data() ) != 0 )
-        {
-            wxLogError( "Failed to remove index entry for %s", file );
-            return;
-        }
-
-        if( git_index_write( index ) != 0 )
-        {
-            wxLogError( "Failed to write index" );
-            return;
-        }
-
-        if( git_index_write_tree( &oid, index ) != 0 )
-        {
-            wxLogError( "Failed to write index tree" );
-            return;
-        }
-    }
+    GetGitBackend()->PerformRemoveFromIndex( this );
 }

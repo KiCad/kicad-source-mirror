@@ -22,6 +22,7 @@
  */
 
 #include "git_branch_handler.h"
+#include "git_backend.h"
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <trace_helpers.h>
@@ -35,89 +36,12 @@ GIT_BRANCH_HANDLER::~GIT_BRANCH_HANDLER()
 
 bool GIT_BRANCH_HANDLER::BranchExists( const wxString& aBranchName )
 {
-    git_repository* repo = GetRepo();
-
-    if( !repo )
-        return false;
-
-    git_reference* branchRef = nullptr;
-    bool exists = LookupBranchReference( aBranchName, &branchRef );
-
-    if( branchRef )
-        git_reference_free( branchRef );
-
-    return exists;
-}
-
-bool GIT_BRANCH_HANDLER::LookupBranchReference( const wxString& aBranchName, git_reference** aReference )
-{
-    git_repository* repo = GetRepo();
-
-    if( !repo )
-        return false;
-
-    // Try direct lookup first
-    if( git_reference_lookup( aReference, repo, aBranchName.mb_str() ) == GIT_OK )
-        return true;
-
-    // Try dwim (Do What I Mean) lookup for short branch names
-    if( git_reference_dwim( aReference, repo, aBranchName.mb_str() ) == GIT_OK )
-        return true;
-
-    return false;
+    return GetGitBackend()->BranchExists( this, aBranchName );
 }
 
 BranchResult GIT_BRANCH_HANDLER::SwitchToBranch( const wxString& aBranchName )
 {
-    git_repository* repo = GetRepo();
-
-    if( !repo )
-    {
-        AddErrorString( _( "No repository available" ) );
-        return BranchResult::Error;
-    }
-
-    // Look up the branch reference
-    git_reference* branchRef = nullptr;
-
-    if( !LookupBranchReference( aBranchName, &branchRef ) )
-    {
-        AddErrorString( wxString::Format( _( "Failed to lookup branch '%s': %s" ),
-                                          aBranchName, KIGIT_COMMON::GetLastGitError() ) );
-        return BranchResult::BranchNotFound;
-    }
-
-    KIGIT::GitReferencePtr branchRefPtr( branchRef );
-    const char* branchRefName = git_reference_name( branchRef );
-    git_object* branchObj = nullptr;
-
-    if( git_revparse_single( &branchObj, repo, aBranchName.mb_str() ) != GIT_OK )
-    {
-        AddErrorString( wxString::Format( _( "Failed to find branch head for '%s': %s" ),
-                                          aBranchName, KIGIT_COMMON::GetLastGitError() ) );
-        return BranchResult::Error;
-    }
-
-    KIGIT::GitObjectPtr branchObjPtr( branchObj );
-
-    // Switch to the branch
-    if( git_checkout_tree( repo, branchObj, nullptr ) != GIT_OK )
-    {
-        AddErrorString( wxString::Format( _( "Failed to switch to branch '%s': %s" ),
-                                          aBranchName, KIGIT_COMMON::GetLastGitError() ) );
-        return BranchResult::CheckoutFailed;
-    }
-
-    // Update the HEAD reference
-    if( git_repository_set_head( repo, branchRefName ) != GIT_OK )
-    {
-        AddErrorString( wxString::Format( _( "Failed to update HEAD reference for branch '%s': %s" ),
-                                          aBranchName, KIGIT_COMMON::GetLastGitError() ) );
-        return BranchResult::Error;
-    }
-
-    wxLogTrace( traceGit, "Successfully switched to branch '%s'", aBranchName );
-    return BranchResult::Success;
+    return GetGitBackend()->SwitchToBranch( this, aBranchName );
 }
 
 void GIT_BRANCH_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )

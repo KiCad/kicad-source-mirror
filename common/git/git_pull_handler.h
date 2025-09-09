@@ -29,7 +29,6 @@
 #include <vector>
 #include <string>
 #include <wx/string.h>
-#include <git2.h>
 
 // Structure to store commit details
 struct CommitDetails
@@ -50,22 +49,12 @@ enum class PullResult : int
     FastForward
 };
 
-struct ConflictData
-{
-    std::string filename;
-    std::string our_status;
-    std::string their_status;
-    git_oid our_oid;
-    git_oid their_oid;
-    git_time_t our_commit_time;
-    git_time_t their_commit_time;
-    bool use_ours; // Flag indicating user's choice (true = ours, false = theirs)
-};
-
+class LIBGIT_BACKEND;
 
 class GIT_PULL_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
+    friend class LIBGIT_BACKEND;
     GIT_PULL_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_PULL_HANDLER();
 
@@ -77,15 +66,8 @@ public:
     // Implementation for progress updates
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 
-
 private:
     std::vector<std::pair<std::string, std::vector<CommitDetails>>> m_fetchResults;
-
-    std::string getFirstLineFromCommitMessage( const std::string& aMessage );
-    std::string getFormattedCommitDate( const git_time& aTime );
-    PullResult  handleFastForward();
-    PullResult  handleMerge( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
-    PullResult  handleRebase( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
 };
 
 #endif // _GIT_PULL_HANDLER_H_

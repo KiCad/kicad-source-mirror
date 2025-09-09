@@ -24,7 +24,7 @@
  */
 
 #include <stack>
-#include <git2.h>
+#include <git/git_backend.h>
 
 #include <wx/regex.h>
 #include <wx/stdpaths.h>
@@ -802,14 +802,8 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_can_switch  = vcs_has_repo;
     bool vcs_menu        = Pgm().GetCommonSettings()->m_Git.enableGit;
 
-    // Check if the libgit2 library has been successfully initialized
-#if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
-    int major, minor, rev;
-    bool libgit_init = ( git_libgit2_version( &major, &minor, &rev ) == GIT_OK );
-#else
-    //Work around libgit2 API change for supporting older platforms
-    bool libgit_init = true;
-#endif
+    // Check if the libgit2 library is available via backend
+    bool libgit_init = GetGitBackend() && GetGitBackend()->IsLibraryAvailable();
 
     vcs_menu &= libgit_init;
 
@@ -2176,7 +2170,7 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     auto result = commitHandler.PerformCommit( files, dlg.GetCommitMessage(),
                                               dlg.GetAuthorName(), dlg.GetAuthorEmail() );
 
-    if( result != GIT_COMMIT_HANDLER::CommitResult::Success )
+    if( result != CommitResult::Success )
     {
         wxMessageBox( wxString::Format( _( "Failed to create commit: %s" ),
                                         commitHandler.GetErrorString() ) );
