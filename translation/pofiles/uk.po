@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-09-10 01:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:362
@@ -4892,12 +4892,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Видалені вбудовані файли також згадуються в деяких слідах.\n"
+"Видалити також з слідів?"
 
 #: common/dialogs/panel_embedded_files.cpp:206
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Видалені вбудовані файли також згадуються в деяких символах.\n"
+"Видалити також з символів?"
 
 #: common/dialogs/panel_embedded_files.cpp:325
 #: common/dialogs/panel_embedded_files.cpp:440
@@ -5223,7 +5227,7 @@ msgstr "Панорамування"
 #: common/tool/zoom_menu.cpp:56
 #: eeschema/dialogs/panel_simulator_preferences.cpp:45
 msgid "Zoom"
-msgstr "Масштабування"
+msgstr "Зум"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -5699,7 +5703,7 @@ msgstr "Відповідність класу зв'язків"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
-msgstr "Шаблон"
+msgstr "Візерунок"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1373 eeschema/sch_label.cpp:219
@@ -5840,7 +5844,7 @@ msgstr "Прямокутник"
 #: common/drawing_sheet/ds_draw_item.cpp:137
 #: common/drawing_sheet/ds_draw_item.cpp:339
 msgid "Imported Shape"
-msgstr "Імпортована форма"
+msgstr "Імпортована Форма"
 
 #: common/drawing_sheet/ds_data_item.cpp:369
 #: common/drawing_sheet/ds_draw_item.cpp:141
@@ -11609,9 +11613,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Не знайдено символів, що відповідають критеріям ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** символ не знайдений ***"
+msgstr "*** ідентифікатор бібліотеки символів недійсний ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -13011,7 +13014,7 @@ msgstr "Пасивний"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
 #: eeschema/sch_label.cpp:2299
 msgid "Dot"
-msgstr "Точка"
+msgstr "Дот"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
 #: eeschema/sch_label.cpp:2301
@@ -19970,7 +19973,7 @@ msgstr "Посилання на бібліотеку"
 #: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:419
 #, c-format
 msgid "%d Column Table"
-msgstr "Таблиця стовпців %d"
+msgstr "Таблиця Стовпців %d"
 
 #: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:455
 #, c-format
@@ -20013,7 +20016,7 @@ msgstr "Колір роздільників"
 #: eeschema/sch_tablecell.cpp:52 pcbnew/pcb_tablecell.cpp:55
 #, c-format
 msgid "Table Cell %s"
-msgstr "Комірка таблиці %s"
+msgstr "Комірка Таблиці %s"
 
 #: eeschema/sch_tablecell.cpp:152 pcbnew/pcb_tablecell.cpp:144
 msgid "Cell Width"
@@ -23479,7 +23482,7 @@ msgstr "Обрати відповідні елементи в PCB редакто
 
 #: eeschema/tools/sch_actions.cpp:1178
 msgid "Show Directive Labels"
-msgstr "Показати мітки директив"
+msgstr "Показати Мітки Директив"
 
 #: eeschema/tools/sch_actions.cpp:1183
 msgid "Show ERC Warnings"
@@ -25891,9 +25894,8 @@ msgid "Show import issues"
 msgstr "Показати проблеми з імпортом"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
-msgstr "Вбудувати Файл"
+msgstr "Вбудувати файлу"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -26634,15 +26636,15 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
-msgstr ""
+msgstr "Кольори, визначені в стеку плати, замінюють кольори в пресеті"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"Вмикає підлогу, тіні та постобробку, навіть якщо вимкнено в пресеті якості"
+"Увімкнення підлоги, тіней та постобробки, навіть якщо вони вимкнені в "
+"налаштуваннях якості"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -42728,11 +42730,10 @@ msgstr ""
 "z: %g; обмежувальна рамка: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1750
-#, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
 msgstr ""
-"Перевірка дроту на самоперешкоди не вдалася\n"
-"z: %g; обмежувальна рамка: %s"
+"Перевірка дроту на наявність самоперешкод не вдалася. Дозволити повторну "
+"спробу"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1755
 #, c-format
@@ -48684,9 +48685,8 @@ msgid "Some of the items could not be outset."
 msgstr "Деякі пункти не можна було розпочати."
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Не вдалося створити шлях до бібліотечної таблиці '%s'."
+msgstr "Неможливо створити прямокутник на початку"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
