@@ -486,9 +486,12 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( uint8_t* ptrPBO, signed int iB
     // Initialize ray packets
     const SFVEC2UI& blockPos = m_blockPositions[iBlock];
     const SFVEC2I blockPosI = SFVEC2I( blockPos.x + m_xoffset, blockPos.y + m_yoffset );
+    const SFVEC2F randDisp = ( m_camera.GetProjection() == PROJECTION_TYPE::ORTHO ) ?
+                             SFVEC2F( 0.0f, 0.0f ) :
+                             SFVEC2F( DISP_FACTOR, DISP_FACTOR );
 
-    RAYPACKET blockPacket( m_camera, (SFVEC2F) blockPosI + SFVEC2F( DISP_FACTOR, DISP_FACTOR ),
-                           SFVEC2F( DISP_FACTOR, DISP_FACTOR ) /* Displacement random factor */ );
+    RAYPACKET blockPacket( m_camera, (SFVEC2F) blockPosI + randDisp,
+                           randDisp /* Displacement random factor */ );
 
 
     HITINFO_PACKET hitPacket_X0Y0[RAYPACKET_RAYS_PER_PACKET];
@@ -566,7 +569,7 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( uint8_t* ptrPBO, signed int iB
         HITINFO_PACKET_init( hitPacket_AA_X1Y1 );
 
         RAYPACKET blockPacket_AA_X1Y1( m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.5f, 0.5f ),
-                                       SFVEC2F( DISP_FACTOR, DISP_FACTOR ) );
+                                       randDisp );
 
         if( !m_accelerator->Intersect( blockPacket_AA_X1Y1, hitPacket_AA_X1Y1 ) )
         {
@@ -603,16 +606,16 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( uint8_t* ptrPBO, signed int iB
         RAY blockRayPck_AA_X1Y1_half[RAYPACKET_RAYS_PER_PACKET];
 
         RAYPACKET_InitRays_with2DDisplacement(
-                m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.5f - DISP_FACTOR, DISP_FACTOR ),
-                SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X1Y0 );
+                m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.5f - randDisp.x, randDisp.y ),
+                randDisp, blockRayPck_AA_X1Y0 );
 
         RAYPACKET_InitRays_with2DDisplacement(
-                m_camera, (SFVEC2F) blockPosI + SFVEC2F( DISP_FACTOR, 0.5f - DISP_FACTOR ),
-                SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X0Y1 );
+                m_camera, (SFVEC2F) blockPosI + SFVEC2F( randDisp.x, 0.5f - randDisp.y ),
+                randDisp, blockRayPck_AA_X0Y1 );
 
         RAYPACKET_InitRays_with2DDisplacement(
-                m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR ),
-                SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X1Y1_half );
+                m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.25f - randDisp.x, 0.25f - randDisp.y ),
+                randDisp, blockRayPck_AA_X1Y1_half );
 
         renderAntiAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y0,
                                 hitColor_AA_X1Y0 );
