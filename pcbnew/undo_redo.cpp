@@ -306,6 +306,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     break;
 
                 default:
+                    break;
                 }
             };
 
