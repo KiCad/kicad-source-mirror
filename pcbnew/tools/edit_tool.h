@@ -119,6 +119,8 @@ public:
      * (tracks, arcs, vias) for unconstrained pin swapping.
      */
     int SwapPadNets( const TOOL_EVENT& aEvent );
+    int SwapGateNets( const TOOL_EVENT& aEvent );
+
 
     /**
      * Try to fit selected footprints inside a minimal area and start movement.

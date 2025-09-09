@@ -693,6 +693,14 @@ TOOL_ACTION PCB_ACTIONS::swapPadNets( TOOL_ACTION_ARGS()
         .Tooltip( _( "Swap nets between two selected pads and their connected copper" ) )
         .Icon( BITMAPS::swap ) );
 
+TOOL_ACTION PCB_ACTIONS::swapGateNets( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.swapGateNets" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Swap Gate Nets" ) )
+        .Tooltip( _( "Swap nets between gates of a footprint and their connected copper" ) )
+        .Parameter<wxString>( wxString() )
+        .Icon( BITMAPS::swap ) );
+
 TOOL_ACTION PCB_ACTIONS::packAndMoveFootprints( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.packAndMoveFootprints" )
         .Scope( AS_GLOBAL )

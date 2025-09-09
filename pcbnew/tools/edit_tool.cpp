@@ -58,6 +58,7 @@
 #include <tools/pad_tool.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
+#include <pcbnew_id.h>
 #include <core/kicad_algo.h>
 #include <fix_board_shape.h>
 #include <bitmaps.h>
@@ -208,6 +209,242 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     return menu;
 };
 
+
+// Gate-swap submenu and helpers
+class GATE_SWAP_MENU : public ACTION_MENU
+{
+public:
+    GATE_SWAP_MENU() :
+            ACTION_MENU( true )
+    {
+        SetIcon( BITMAPS::swap );
+        SetTitle( _( "Swap Gate Nets..." ) );
+    }
+
+
+    // We're looking for a selection of pad(s) that belong to a single footprint with multiple units.
+    // Ignore non-pad items since we might have grabbed some traces inside the pad, etc.
+    static const FOOTPRINT* GetSingleEligibleFootprint( const SELECTION& aSelection )
+    {
+        const FOOTPRINT* single = nullptr;
+
+        for( const EDA_ITEM* it : aSelection )
+        {
+            if( it->Type() != PCB_PAD_T )
+                continue;
+
+            const PAD*       pad = static_cast<const PAD*>( static_cast<const BOARD_ITEM*>( it ) );
+            const FOOTPRINT* fp = pad->GetParentFootprint();
+
+            if( !fp )
+                continue;
+
+            const auto& units = fp->GetUnitInfo();
+
+            if( units.size() < 2 )
+                continue;
+
+            const wxString& padNum = pad->GetNumber();
+            bool            inAnyUnit = false;
+
+            for( const auto& u : units )
+            {
+                for( const auto& pnum : u.m_pins )
+                {
+                    if( pnum == padNum )
+                    {
+                        inAnyUnit = true;
+                        break;
+                    }
+                }
+
+                if( inAnyUnit )
+                    break;
+            }
+
+            if( !inAnyUnit )
+                continue;
+
+            if( !single )
+                single = fp;
+            else if( single != fp )
+                return nullptr;
+        }
+
+        return single;
+    }
+
+
+    static std::unordered_set<wxString> CollectSelectedPadNumbers( const SELECTION& aSelection,
+                                                                   const FOOTPRINT* aFootprint )
+    {
+        std::unordered_set<wxString> padNums;
+
+        for( const EDA_ITEM* it : aSelection )
+        {
+            if( it->Type() != PCB_PAD_T )
+                continue;
+
+            const PAD* pad = static_cast<const PAD*>( static_cast<const BOARD_ITEM*>( it ) );
+
+            if( pad->GetParentFootprint() != aFootprint )
+                continue;
+
+            padNums.insert( pad->GetNumber() );
+        }
+
+        return padNums;
+    }
+
+
+    // Make a list of the unit names that have any pad selected
+    static std::vector<int> GetUnitsHitIndices( const FOOTPRINT*                    aFootprint,
+                                                const std::unordered_set<wxString>& aSelPadNums )
+    {
+        std::vector<int> indices;
+
+        const auto& units = aFootprint->GetUnitInfo();
+
+        for( size_t i = 0; i < units.size(); ++i )
+        {
+            bool hasAny = false;
+
+            for( const auto& pn : units[i].m_pins )
+            {
+                if( aSelPadNums.count( pn ) )
+                {
+                    hasAny = true;
+                    break;
+                }
+            }
+
+            if( hasAny )
+                indices.push_back( static_cast<int>( i ) );
+        }
+
+        return indices;
+    }
+
+
+    // Gate swapping requires the swapped units to have equal pin counts
+    static bool EqualPinCounts( const FOOTPRINT* aFootprint, const std::vector<int>& aUnitIndices )
+    {
+        if( aUnitIndices.empty() )
+            return false;
+
+        const auto&  units = aFootprint->GetUnitInfo();
+        const size_t cnt = units[static_cast<size_t>( aUnitIndices.front() )].m_pins.size();
+
+        for( int idx : aUnitIndices )
+        {
+            if( units[static_cast<size_t>( idx )].m_pins.size() != cnt )
+                return false;
+        }
+
+        return true;
+    }
+
+
+    // Used when we have exactly one source unit selected; find all other units with equal pin counts
+    static std::vector<int> GetCompatibleTargets( const FOOTPRINT* aFootprint, int aSourceIdx )
+    {
+        std::vector<int> targets;
+
+        const auto&  units = aFootprint->GetUnitInfo();
+        const size_t pinCount = units[static_cast<size_t>( aSourceIdx )].m_pins.size();
+
+        for( size_t i = 0; i < units.size(); ++i )
+        {
+            if( static_cast<int>( i ) == aSourceIdx )
+                continue;
+
+            if( units[i].m_pins.size() != pinCount )
+                continue;
+
+            targets.push_back( static_cast<int>( i ) );
+        }
+
+        return targets;
+    }
+
+protected:
+    ACTION_MENU* create() const override { return new GATE_SWAP_MENU(); }
+
+    // The gate swap menu dynamically populates itself based on current selection of pads
+    // on a single multi-unit footprint.
+    //
+    // If there is exactly one unit with any pad selected, we build a menu of available swaps
+    // with all other units with equal pin counts.
+    void update() override
+    {
+        Clear();
+
+        PCB_SELECTION_TOOL* selTool = getToolManager()->GetTool<PCB_SELECTION_TOOL>();
+        const SELECTION&    sel = selTool->GetSelection();
+
+        const FOOTPRINT* fp = GetSingleEligibleFootprint( sel );
+
+        if( !fp )
+            return;
+
+        std::unordered_set<wxString> selPadNums = CollectSelectedPadNumbers( sel, fp );
+
+        std::vector<int> unitsHit = GetUnitsHitIndices( fp, selPadNums );
+
+        if( unitsHit.size() != 1 )
+            return;
+
+        const int        sourceIdx = unitsHit.front();
+        std::vector<int> targets = GetCompatibleTargets( fp, sourceIdx );
+
+        for( int idx : targets )
+        {
+            wxString label;
+            label.Printf( _( "Swap with %s" ), fp->GetUnitInfo()[static_cast<size_t>( idx )].m_unitName );
+            Append( ID_POPUP_PCB_SWAP_UNIT_BASE + idx, label );
+        }
+    }
+
+
+    OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
+    {
+        int id = aEvent.GetId();
+
+        if( id >= ID_POPUP_PCB_SWAP_UNIT_BASE && id <= ID_POPUP_PCB_SWAP_UNIT_LAST )
+        {
+            PCB_SELECTION_TOOL* selTool = getToolManager()->GetTool<PCB_SELECTION_TOOL>();
+            const SELECTION&    sel = selTool->GetSelection();
+
+            const FOOTPRINT* fp = GetSingleEligibleFootprint( sel );
+
+            if( !fp )
+                return OPT_TOOL_EVENT();
+
+            const auto& units = fp->GetUnitInfo();
+            const int   targetIdx = id - ID_POPUP_PCB_SWAP_UNIT_BASE;
+
+            if( targetIdx < 0 || targetIdx >= static_cast<int>( units.size() ) )
+                return OPT_TOOL_EVENT();
+
+            TOOL_EVENT evt = PCB_ACTIONS::swapGateNets.MakeEvent();
+            evt.SetParameter( units[targetIdx].m_unitName );
+
+            return OPT_TOOL_EVENT( evt );
+        }
+
+        return OPT_TOOL_EVENT();
+    }
+};
+
+
+static std::shared_ptr<ACTION_MENU> makeGateSwapMenu( TOOL_INTERACTIVE* aTool )
+{
+    auto menu = std::make_shared<GATE_SWAP_MENU>();
+    menu->SetTool( aTool );
+    return menu;
+};
+
+
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
@@ -218,6 +455,9 @@ bool EDIT_TOOL::Init()
 
     std::shared_ptr<CONDITIONAL_MENU> shapeModificationSubMenu = makeShapeModificationMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( shapeModificationSubMenu );
+
+    std::shared_ptr<ACTION_MENU> gateSwapSubMenu = makeGateSwapMenu( this );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( gateSwapSubMenu );
 
     auto positioningToolsCondition =
             [this]( const SELECTION& aSel )
@@ -234,6 +474,47 @@ bool EDIT_TOOL::Init()
                 subMenu->Evaluate( aSel );
                 return subMenu->GetMenuItemCount() > 0;
             };
+
+    // Does selection map to a single eligible footprint and exactly one unit?
+    auto gateSwapSingleUnitOnOneFootprint =
+            []( const SELECTION& aSelection )
+            {
+                const FOOTPRINT* fp = GATE_SWAP_MENU::GetSingleEligibleFootprint( aSelection );
+
+                if( !fp )
+                    return false;
+
+                std::unordered_set<wxString> selPadNums = GATE_SWAP_MENU::CollectSelectedPadNumbers( aSelection, fp );
+
+                std::vector<int> unitsHit = GATE_SWAP_MENU::GetUnitsHitIndices( fp, selPadNums );
+
+                if( unitsHit.size() != 1 )
+                    return false;
+
+                const int sourceIdx = unitsHit.front();
+                std::vector<int> targets = GATE_SWAP_MENU::GetCompatibleTargets( fp, sourceIdx );
+                return !targets.empty();
+            };
+
+    // Does selection map to a single eligible footprint and more than one unit with equal pin counts?
+    auto gateSwapMultipleUnitsOnOneFootprint =
+            []( const SELECTION& aSelection )
+            {
+                const FOOTPRINT* fp = GATE_SWAP_MENU::GetSingleEligibleFootprint( aSelection );
+
+                if( !fp )
+                    return false;
+
+                std::unordered_set<wxString> selPadNums = GATE_SWAP_MENU::CollectSelectedPadNumbers( aSelection, fp );
+
+                std::vector<int> unitsHit = GATE_SWAP_MENU::GetUnitsHitIndices( fp, selPadNums );
+
+                if( unitsHit.size() < 2 )
+                    return false;
+
+                return GATE_SWAP_MENU::EqualPinCounts( fp, unitsHit );
+            };
+
 
     auto propertiesCondition =
             [this]( const SELECTION& aSel )
@@ -383,6 +664,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
     menu.AddItem( PCB_ACTIONS::swapPadNets,       SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( padTypes ) );
+    menu.AddItem( PCB_ACTIONS::swapGateNets,      gateSwapMultipleUnitsOnOneFootprint );
+    menu.AddMenu( gateSwapSubMenu.get(),          gateSwapSingleUnitOnOneFootprint );
     menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
 
@@ -3535,6 +3818,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorV.MakeEvent() );
     Go( &EDIT_TOOL::Swap,                  PCB_ACTIONS::swap.MakeEvent() );
     Go( &EDIT_TOOL::SwapPadNets,           PCB_ACTIONS::swapPadNets.MakeEvent() );
+    Go( &EDIT_TOOL::SwapGateNets,          PCB_ACTIONS::swapGateNets.MakeEvent() );
     Go( &EDIT_TOOL::PackAndMoveFootprints, PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,      PCB_ACTIONS::changeTrackWidth.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackLayer,      PCB_ACTIONS::changeTrackLayerNext.MakeEvent() );
