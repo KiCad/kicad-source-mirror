@@ -1238,6 +1238,26 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     if( !aFootprint->GetSheetfile().empty() )
         m_out->Print( "(sheetfile %s)", m_out->Quotew( aFootprint->GetSheetfile() ).c_str() );
 
+    // Emit unit info for gate swapping metadata (flat pin list form)
+    if( !aFootprint->GetUnitInfo().empty() )
+    {
+        m_out->Print( "(units" );
+
+        for( const FOOTPRINT::FP_UNIT_INFO& u : aFootprint->GetUnitInfo() )
+        {
+            m_out->Print( "(unit (name %s)", m_out->Quotew( u.m_unitName ).c_str() );
+            m_out->Print( "(pins" );
+
+            for( const wxString& n : u.m_pins )
+                m_out->Print( " %s", m_out->Quotew( n ).c_str() );
+
+            m_out->Print( ")" ); // </pins>
+            m_out->Print( ")" ); // </unit>
+        }
+
+        m_out->Print( ")" ); // </units>
+    }
+
     if( aFootprint->GetLocalSolderMaskMargin().has_value() )
     {
         m_out->Print( "(solder_mask_margin %s)",

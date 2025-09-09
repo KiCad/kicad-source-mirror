@@ -121,6 +121,8 @@ private:
 
     void updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
 
+    bool updateComponentUnits( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
+
     void cacheCopperZoneConnections();
 
     bool updateCopperZoneNets( NETLIST& aNetlist );

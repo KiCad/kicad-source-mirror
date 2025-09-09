@@ -191,7 +191,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20250818  // Support for custom layer counts in footprints
 //#define SEXPR_BOARD_FILE_VERSION    20250829  // Support Rounded Rectangles
 //#define SEXPR_BOARD_FILE_VERSION    20250901  // PCB points
-#define SEXPR_BOARD_FILE_VERSION      20250907  // uuids for tables
+//#define SEXPR_BOARD_FILE_VERSION    20250907  // uuids for tables
+#define SEXPR_BOARD_FILE_VERSION      20250909  // footprint unit metadata (units/pins)
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

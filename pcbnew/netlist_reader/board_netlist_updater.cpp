@@ -1166,6 +1166,67 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 }
 
 
+bool BOARD_NETLIST_UPDATER::updateComponentUnits( FOOTPRINT* aFootprint, COMPONENT* aNewComponent )
+{
+    // Build the footprint-side representation from the netlist component
+    std::vector<FOOTPRINT::FP_UNIT_INFO> newUnits;
+
+    for( const COMPONENT::UNIT_INFO& u : aNewComponent->GetUnitInfo() )
+        newUnits.push_back( { u.m_unitName, u.m_pins } );
+
+    const std::vector<FOOTPRINT::FP_UNIT_INFO>& curUnits = aFootprint->GetUnitInfo();
+
+    auto unitsEqual = []( const std::vector<FOOTPRINT::FP_UNIT_INFO>& a,
+                          const std::vector<FOOTPRINT::FP_UNIT_INFO>& b )
+        {
+            if( a.size() != b.size() )
+                return false;
+
+            for( size_t i = 0; i < a.size(); ++i )
+            {
+                if( a[i].m_unitName != b[i].m_unitName )
+                    return false;
+
+                if( a[i].m_pins != b[i].m_pins )
+                    return false;
+            }
+
+            return true;
+        };
+
+    if( unitsEqual( curUnits, newUnits ) )
+        return false;
+
+    wxString msg;
+
+    if( m_isDryRun )
+    {
+        msg.Printf( _( "Update %s unit metadata." ), aFootprint->GetReference() );
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+        return false; // no actual change on board during dry run
+    }
+
+    // Create a copy only if the footprint has not been added during this update
+    FOOTPRINT* copy = nullptr;
+
+    if( !m_commit.GetStatus( aFootprint ) )
+    {
+        copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
+        copy->SetParentGroup( nullptr );
+    }
+
+    aFootprint->SetUnitInfo( newUnits );
+
+    msg.Printf( _( "Updated %s unit metadata." ), aFootprint->GetReference() );
+    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+    if( copy )
+        m_commit.Modified( aFootprint, copy );
+
+    return true;
+}
+
+
 void BOARD_NETLIST_UPDATER::cacheCopperZoneConnections()
 {
     for( ZONE* zone : m_board->Zones() )
@@ -1567,6 +1628,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     updateFootprintGroup( tmp, component );
                     updateComponentPadConnections( tmp, component );
                     updateComponentClass( tmp, component );
+                    updateComponentUnits( tmp, component );
 
                     sheetPaths.insert( footprint->GetSheetname() );
                 }
@@ -1593,6 +1655,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 updateFootprintGroup( footprint, component );
                 updateComponentPadConnections( footprint, component );
                 updateComponentClass( footprint, component );
+                updateComponentUnits( footprint, component );
 
                 sheetPaths.insert( footprint->GetSheetname() );
             }

@@ -4758,6 +4758,68 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             NeedRIGHT();
             break;
 
+        case T_units:
+        {
+            std::vector<FOOTPRINT::FP_UNIT_INFO> unitInfos;
+
+            // (units (unit (name "A") (pins "1" "2" ...)) ...)
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_unit )
+                {
+                    FOOTPRINT::FP_UNIT_INFO info;
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        if( token == T_name )
+                        {
+                            NeedSYMBOLorNUMBER();
+                            info.m_unitName = FromUTF8();
+                            NeedRIGHT();
+                        }
+                        else if( token == T_pins )
+                        {
+                            // Parse a flat list of quoted numbers or symbols until ')'
+                            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                            {
+                                if( token == T_STRING || token == T_NUMBER )
+                                {
+                                    info.m_pins.emplace_back( FromUTF8() );
+                                }
+                                else
+                                {
+                                    Expecting( "pin number" );
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Unknown sub-token inside unit; skip its list if any
+                            skipCurrent();
+                        }
+                    }
+
+                    unitInfos.push_back( info );
+                }
+                else
+                {
+                    // Unknown entry under units; skip
+                    skipCurrent();
+                }
+            }
+
+            if( !unitInfos.empty() )
+                footprint->SetUnitInfo( unitInfos );
+
+            break;
+        }
+
         case T_autoplace_cost90:
         case T_autoplace_cost180:
             parseInt( "legacy auto-place cost" );

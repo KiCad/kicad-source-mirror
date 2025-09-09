@@ -370,6 +370,9 @@ true
 tstamp
 type
 units
+unit
+pins
+num
 units_format
 unlocked
 user
