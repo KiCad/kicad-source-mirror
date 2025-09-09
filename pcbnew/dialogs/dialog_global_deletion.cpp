@@ -31,7 +31,9 @@ using namespace std::placeholders;
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
+#include <pcb_generator.h>
 #include <pcb_track.h>
+#include <generators/pcb_tuning_pattern.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>
@@ -270,6 +272,15 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
                     if( m_trackFilterUnlocked->GetValue() )
                         processConnectedItem( track, layers_filter );
                 }
+            }
+        }
+
+        for( PCB_GENERATOR* generator : board->Generators() )
+        {
+            if( PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( generator ) )
+            {
+                if( pattern->GetBoardItems().empty() )
+                    commit.Remove( pattern );
             }
         }
     }

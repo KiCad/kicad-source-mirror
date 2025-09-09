@@ -23,6 +23,7 @@
  */
 
 #include <eda_item.h>
+#include <geometry/geometry_utils.h>
 #include <pcb_base_edit_frame.h>
 #include <router/pns_meander.h>
 #include <router/pns_meander_placer_base.h>
