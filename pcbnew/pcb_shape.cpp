@@ -991,6 +991,39 @@ static struct PCB_SHAPE_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
                                       _HKI( "Fill" ), isNotBezier );
 
+        auto isCircle =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::CIRCLE;
+
+                    return false;
+                };
+
+        auto isNotCircle =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        return shape->GetShape() != SHAPE_T::CIRCLE;
+
+                    return true;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Start X" ), isNotCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Start Y" ), isNotCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "End X" ), isNotCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "End Y" ), isNotCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Center X" ), isCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Center Y" ), isCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
+                                      _HKI( "Radius" ), isCircle );
+
         auto isCopper =
                 []( INSPECTABLE* aItem ) -> bool
                 {
