@@ -32,6 +32,8 @@ class PROPERTY_MANAGER;
 class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
 class PG_COLOR_EDITOR;
+class PG_FPID_EDITOR;
+class PG_URL_EDITOR;
 
 class SCH_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -60,6 +62,8 @@ protected:
     PG_UNIT_EDITOR* m_unitEditorInstance;
     PG_CHECKBOX_EDITOR* m_checkboxEditorInstance;
     PG_COLOR_EDITOR* m_colorEditorInstance;
+    PG_FPID_EDITOR* m_fpEditorInstance;
+    PG_URL_EDITOR* m_urlEditorInstance;
 
     static std::set<wxString> m_currentFieldNames;
     wxPGChoices m_nets;

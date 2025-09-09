@@ -34,6 +34,7 @@
 #include <schematic.h>
 #include <sch_symbol.h>
 #include <sch_field.h>
+#include <template_fieldnames.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -149,6 +150,32 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     {
         m_colorEditorInstance = static_cast<PG_COLOR_EDITOR*>( it->second );
     }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
+
+    if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        m_fpEditorInstance = static_cast<PG_FPID_EDITOR*>( it->second );
+        m_fpEditorInstance->UpdateFrame( m_frame );
+    }
+    else
+    {
+        PG_FPID_EDITOR* fpEditor = new PG_FPID_EDITOR( m_frame );
+        m_fpEditorInstance = static_cast<PG_FPID_EDITOR*>( wxPropertyGrid::RegisterEditorClass( fpEditor ) );
+    }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_URL_EDITOR::BuildEditorName( m_frame ) );
+
+    if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        m_urlEditorInstance = static_cast<PG_URL_EDITOR*>( it->second );
+        m_urlEditorInstance->UpdateFrame( m_frame );
+    }
+    else
+    {
+        PG_URL_EDITOR* urlEditor = new PG_URL_EDITOR( m_frame );
+        m_urlEditorInstance = static_cast<PG_URL_EDITOR*>( wxPropertyGrid::RegisterEditorClass( urlEditor ) );
+    }
 }
 
 
@@ -156,6 +183,8 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
 SCH_PROPERTIES_PANEL::~SCH_PROPERTIES_PANEL()
 {
     m_unitEditorInstance->UpdateFrame( nullptr );
+    m_fpEditorInstance->UpdateFrame( nullptr );
+    m_urlEditorInstance->UpdateFrame( nullptr );
 }
 
 
@@ -225,6 +254,11 @@ wxPGProperty* SCH_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
         COLOR4D bg = m_frame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
         colorProp->SetBackgroundColor( bg );
     }
+
+    if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+        prop->SetEditor( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
+    else if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+        prop->SetEditor( PG_URL_EDITOR::BuildEditorName( m_frame ) );
 
     return prop;
 }

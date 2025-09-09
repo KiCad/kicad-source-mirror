@@ -34,6 +34,8 @@ class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
 class PG_RATIO_EDITOR;
 class PG_NET_SELECTOR_EDITOR;
+class PG_FPID_EDITOR;
+class PG_URL_EDITOR;
 
 class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -65,6 +67,8 @@ protected:
     PG_CHECKBOX_EDITOR*  m_checkboxEditorInstance;
     PG_RATIO_EDITOR*     m_ratioEditorInstance;
     PG_NET_SELECTOR_EDITOR* m_netSelectorEditorInstance;
+    PG_FPID_EDITOR*      m_fpEditorInstance;
+    PG_URL_EDITOR*       m_urlEditorInstance;
 
     static std::set<wxString> m_currentFieldNames;
     wxPGChoices m_nets;

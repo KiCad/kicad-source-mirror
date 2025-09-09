@@ -125,4 +125,58 @@ public:
 };
 
 
+class PG_FPID_EDITOR : public wxPGTextCtrlEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    PG_FPID_EDITOR( EDA_DRAW_FRAME* aFrame );
+
+    virtual ~PG_FPID_EDITOR() {}
+
+    wxString GetName() const override { return m_editorName; }
+
+    void UpdateFrame( EDA_DRAW_FRAME* aFrame );
+
+    static wxString BuildEditorName( EDA_DRAW_FRAME* aFrame );
+
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                   const wxPoint& aPos, const wxSize& aSize ) const override;
+
+    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aCtrl,
+                  wxEvent& aEvent ) const override;
+
+private:
+    EDA_DRAW_FRAME* m_frame;
+    wxString        m_editorName;
+};
+
+
+class PG_URL_EDITOR : public wxPGTextCtrlEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    PG_URL_EDITOR( EDA_DRAW_FRAME* aFrame );
+
+    virtual ~PG_URL_EDITOR() {}
+
+    wxString GetName() const override { return m_editorName; }
+
+    void UpdateFrame( EDA_DRAW_FRAME* aFrame );
+
+    static wxString BuildEditorName( EDA_DRAW_FRAME* aFrame );
+
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                   const wxPoint& aPos, const wxSize& aSize ) const override;
+
+    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aCtrl,
+                  wxEvent& aEvent ) const override;
+
+private:
+    EDA_DRAW_FRAME* m_frame;
+    wxString        m_editorName;
+};
+
+
 #endif //KICAD_PG_EDITORS_H

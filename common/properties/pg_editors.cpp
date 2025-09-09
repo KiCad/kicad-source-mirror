@@ -24,6 +24,16 @@
 #include <properties/pg_properties.h>
 #include <widgets/color_swatch.h>
 #include <widgets/unit_binder.h>
+#include <bitmaps.h>
+#include <frame_type.h>
+#include <kiway_player.h>
+#include <kiway.h>
+#include <wx/filedlg.h>
+#include <wx/intl.h>
+#include <eda_doc.h>
+
+#include <wx/button.h>
+#include <wx/bmpbuttn.h>
 
 #include <wx/log.h>
 
@@ -31,6 +41,8 @@ const wxString PG_UNIT_EDITOR::EDITOR_NAME = wxS( "KiCadUnitEditor" );
 const wxString PG_CHECKBOX_EDITOR::EDITOR_NAME = wxS( "KiCadCheckboxEditor" );
 const wxString PG_COLOR_EDITOR::EDITOR_NAME = wxS( "KiCadColorEditor" );
 const wxString PG_RATIO_EDITOR::EDITOR_NAME = wxS( "KiCadRatioEditor" );
+const wxString PG_FPID_EDITOR::EDITOR_NAME = wxS( "KiCadFpidEditor" );
+const wxString PG_URL_EDITOR::EDITOR_NAME = wxS( "KiCadUrlEditor" );
 
 
 PG_UNIT_EDITOR::PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame ) :
@@ -51,6 +63,9 @@ PG_UNIT_EDITOR::~PG_UNIT_EDITOR()
 
 wxString PG_UNIT_EDITOR::BuildEditorName( EDA_DRAW_FRAME* aFrame )
 {
+    if( !aFrame )
+        return EDITOR_NAME + "NoFrame";
+
     return EDITOR_NAME + aFrame->GetName();
 }
 
@@ -457,4 +472,165 @@ void PG_RATIO_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) 
         wxFAIL_MSG( wxT( "PG_RATIO_EDITOR should only be used with scale-free numeric "
                          "properties!" ) );
     }
+}
+
+
+PG_FPID_EDITOR::PG_FPID_EDITOR( EDA_DRAW_FRAME* aFrame ) : m_frame( aFrame )
+{
+    m_editorName = BuildEditorName( aFrame );
+}
+
+
+void PG_FPID_EDITOR::UpdateFrame( EDA_DRAW_FRAME* aFrame )
+{
+    m_frame = aFrame;
+    m_editorName = BuildEditorName( aFrame );
+}
+
+
+wxString PG_FPID_EDITOR::BuildEditorName( EDA_DRAW_FRAME* aFrame )
+{
+    if( !aFrame )
+        return EDITOR_NAME + "NoFrame";
+
+    return EDITOR_NAME + aFrame->GetName();
+}
+
+
+wxPGWindowList PG_FPID_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                               const wxPoint& aPos, const wxSize& aSize ) const
+{
+    wxPGMultiButton* buttons = new wxPGMultiButton( aGrid, aSize );
+    buttons->Add( KiBitmap( BITMAPS::small_library ) );
+    buttons->Finalize( aGrid, aPos );
+    wxSize textSize = buttons->GetPrimarySize();
+    wxWindow* textCtrl = aGrid->GenerateEditorTextCtrl( aPos, textSize,
+                                                       aProperty->GetValueAsString(), nullptr, 0,
+                                                       aProperty->GetMaxLength() );
+    wxPGWindowList ret( textCtrl, buttons );
+    return ret;
+}
+
+
+bool PG_FPID_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aCtrl,
+                              wxEvent& aEvent ) const
+{
+    if( aEvent.GetEventType() == wxEVT_BUTTON )
+    {
+        wxString fpid = aProperty->GetValue().GetString();
+
+        if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_frame ) )
+        {
+            if( frame->ShowModal( &fpid, m_frame ) )
+                aGrid->ChangePropertyValue( aProperty, fpid );
+
+            frame->Destroy();
+        }
+
+        return true;
+    }
+
+    return wxPGTextCtrlEditor::OnEvent( aGrid, aProperty, aCtrl, aEvent );
+}
+
+
+PG_URL_EDITOR::PG_URL_EDITOR( EDA_DRAW_FRAME* aFrame ) : m_frame( aFrame )
+{
+    m_editorName = BuildEditorName( aFrame );
+}
+
+
+void PG_URL_EDITOR::UpdateFrame( EDA_DRAW_FRAME* aFrame )
+{
+    m_frame = aFrame;
+    m_editorName = BuildEditorName( aFrame );
+}
+
+
+wxString PG_URL_EDITOR::BuildEditorName( EDA_DRAW_FRAME* aFrame )
+{
+    if( !aFrame )
+        return EDITOR_NAME + "NoFrame";
+
+    return EDITOR_NAME + aFrame->GetName();
+}
+
+
+wxPGWindowList PG_URL_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                              const wxPoint& aPos, const wxSize& aSize ) const
+{
+    wxPGMultiButton* buttons = new wxPGMultiButton( aGrid, aSize );
+    // Use a folder icon when no datasheet is set; otherwise use a globe icon.
+    wxString urlValue = aProperty->GetValueAsString();
+    bool     hasUrl   = !( urlValue.IsEmpty() || urlValue == wxS( "~" ) );
+    buttons->Add( KiBitmap( hasUrl ? BITMAPS::www : BITMAPS::small_folder ) );
+    buttons->Finalize( aGrid, aPos );
+    wxSize textSize = buttons->GetPrimarySize();
+    wxWindow* textCtrl = aGrid->GenerateEditorTextCtrl( aPos, textSize,
+                                                       aProperty->GetValueAsString(), nullptr, 0,
+                                                       aProperty->GetMaxLength() );
+    wxPGWindowList ret( textCtrl, buttons );
+    return ret;
+}
+
+
+bool PG_URL_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aCtrl,
+                             wxEvent& aEvent ) const
+{
+    if( aEvent.GetEventType() == wxEVT_BUTTON )
+    {
+        wxString filename = aProperty->GetValue().GetString();
+
+        if( filename.IsEmpty() || filename == wxS( "~" ) )
+        {
+            wxFileDialog openFileDialog( m_frame, _( "Open file" ), wxS( "" ), wxS( "" ),
+                                         _( "All Files" ) + wxS( " (*.*)|*.*" ),
+                                         wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+            if( openFileDialog.ShowModal() == wxID_OK )
+            {
+                filename = openFileDialog.GetPath();
+                aGrid->ChangePropertyValue( aProperty, wxString::Format( wxS( "file://%s" ),
+                                                                         filename ) );
+            }
+        }
+        else
+        {
+            GetAssociatedDocument( m_frame, filename, &m_frame->Prj() );
+        }
+
+        // Update the button icon to reflect presence/absence of URL
+        if( wxObject* src = aEvent.GetEventObject() )
+        {
+            wxString newUrl = aProperty->GetValueAsString();
+            bool     hasUrl = !( newUrl.IsEmpty() || newUrl == wxS( "~" ) );
+            auto     bmp    = KiBitmap( hasUrl ? BITMAPS::www : BITMAPS::small_folder );
+
+            if( wxWindow* win = wxDynamicCast( src, wxWindow ) )
+            {
+                if( wxBitmapButton* bb = wxDynamicCast( win, wxBitmapButton ) )
+                {
+                    bb->SetBitmap( bmp );
+                }
+                else if( wxButton* b = wxDynamicCast( win, wxButton ) )
+                {
+                    b->SetBitmap( bmp );
+                }
+                else if( wxWindow* parent = win->GetParent() )
+                {
+                    if( wxPGMultiButton* buttons = wxDynamicCast( parent, wxPGMultiButton ) )
+                    {
+                        wxWindow* btn0 = buttons->GetButton( 0 );
+                        if( wxBitmapButton* bb0 = wxDynamicCast( btn0, wxBitmapButton ) )
+                            bb0->SetBitmap( bmp );
+                        else if( wxButton* b0 = wxDynamicCast( btn0, wxButton ) )
+                            b0->SetBitmap( bmp );
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    return wxPGTextCtrlEditor::OnEvent( aGrid, aProperty, aCtrl, aEvent );
 }
