@@ -39,8 +39,6 @@ win64_build:
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../
-  after_script:
-    - Get-Content -Path C:\builder\vcpkg\buildtrees\wxpython-33\python3-tool-post-install-err.log
   artifacts:
     # Only save the artifacts that are needed for running the tests in the next stage
     # and the compilation log. The entire build directory is too large to save as an
