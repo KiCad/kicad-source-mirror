@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-09 12:03+0000\n"
+"PO-Revision-Date: 2025-09-09 20:21+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -10337,7 +10337,7 @@ msgstr "Fadenkreuz auch anzeigen, wenn keine Objekte gezeichnet werden"
 #: common/tool/actions.cpp:1189
 #, fuzzy
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr "Kleine Fadenkreuze mit der Ausrichtung 0 und 90 Grad verwenden"
+msgstr "Kleines Fadenkreuz mit der Ausrichtung 0 und 90 Grad verwenden"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
@@ -10351,7 +10351,7 @@ msgstr "Fensterfüllendes Fadenkreuz mit der Ausrichtung 0 und 90 Grad anzeigen"
 #: common/tool/actions.cpp:1204
 #, fuzzy
 msgid "45 Degree Crosshairs"
-msgstr "45 Grad Fadenkreuze"
+msgstr "45 Grad Fadenkreuz"
 
 #: common/tool/actions.cpp:1205
 #, fuzzy
