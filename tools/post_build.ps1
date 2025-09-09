@@ -12,16 +12,22 @@ $BIN_DIR = "$BUILD_ROOT/out/bin/"
 
 $VCPKG_INSTALL_ROOT = "$BUILD_ROOT/vcpkg_installed"
 
+# Attempt to load System.Drawing.Common to avoid runtime errors
+try {
+    Add-Type -AssemblyName System.Drawing.Common -ErrorAction Stop | Out-Null
+} catch {
+}
+
 cmake --install $BUILD_ROOT
 
-Get-ChildItem -Path $PROJECT_ROOT -Recurse -Filter *.pdb | Where-Object { $_.FullName -notmatch 'build/out/bin' } | ForEach-Object { 
+Get-ChildItem -Path $PROJECT_ROOT -Recurse -Filter *.pdb | Where-Object { $_.FullName -notmatch 'build/out/bin' } | ForEach-Object {
     $destination = Join-Path -Path $BIN_DIR -ChildPath $_.Name
     if ($_.FullName -ne $destination) {
         Copy-Item -Path $_.FullName -Destination $BIN_DIR -Force
     }
 }
 
-Get-ChildItem -Path $VCPKG_INSTALL_ROOT -Recurse -Filter *.dll | ForEach-Object { 
+Get-ChildItem -Path $VCPKG_INSTALL_ROOT -Recurse -Filter *.dll | ForEach-Object {
     $destination = Join-Path -Path $BIN_DIR -ChildPath $_.Name
     if ($_.FullName -ne $destination) {
         Copy-Item -Path $_.FullName -Destination $BIN_DIR -Force
