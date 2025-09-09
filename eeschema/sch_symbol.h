@@ -516,24 +516,15 @@ public:
         SetValueFieldText( aRef );
     }
 
-    wxString GetUnitProp() const override
+    int GetUnitProp() const
     {
-        int unit = GetUnitSelection( &Schematic()->CurrentSheet() );
-
-        return GetUnitDisplayName( unit, false );
+        return GetUnitSelection( &Schematic()->CurrentSheet() );
     }
 
-    void SetUnitProp( const wxString& aUnit ) override
+    void SetUnitProp( int aUnit )
     {
-        for( int unit = 1; unit <= GetUnitCount(); unit++ )
-        {
-            if( GetUnitDisplayName( unit, false ) == aUnit )
-            {
-                SetUnitSelection( &Schematic()->CurrentSheet(), unit );
-                SetUnit( unit );
-                return;
-            }
-        }
+        SetUnitSelection( &Schematic()->CurrentSheet(), aUnit );
+        SetUnit( aUnit );
     }
 
     wxString GetBodyStyleProp() const override

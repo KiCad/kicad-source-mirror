@@ -126,28 +126,6 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 }
 
 
-void SCH_ITEM::SetUnitProp( const wxString& aUnit )
-{
-    if( aUnit == _HKI( "All units" ) )
-    {
-        m_unit = 0;
-        return;
-    }
-
-    if( SYMBOL* symbol = GetParentSymbol() )
-    {
-        for( int unit = 1; unit <= symbol->GetUnitCount(); unit++ )
-        {
-            if( symbol->GetUnitDisplayName( unit, false ) == aUnit )
-            {
-                m_unit = unit;
-                return;
-            }
-        }
-    }
-}
-
-
 wxString SCH_ITEM::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
     if( aUnit == 0 )
@@ -168,13 +146,6 @@ wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
 
     return wxEmptyString;
 }
-
-
-wxString SCH_ITEM::GetUnitProp() const
-{
-    return GetUnitDisplayName( m_unit, false );
-}
-
 
 void SCH_ITEM::SetBodyStyleProp( const wxString& aBodyStyle )
 {
@@ -623,21 +594,21 @@ static struct SCH_ITEM_DESC
                     return false;
                 };
 
-        propMgr.AddProperty( new PROPERTY<SCH_ITEM, wxString>( _HKI( "Unit" ),
-                    &SCH_ITEM::SetUnitProp, &SCH_ITEM::GetUnitProp ) )
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Unit" ),
+                    &SCH_ITEM::SetUnit, &SCH_ITEM::GetUnit ) )
                 .SetAvailableFunc( multiUnit )
                 .SetIsHiddenFromDesignEditors()
                 .SetChoicesFunc( []( INSPECTABLE* aItem )
                                  {
                                      wxPGChoices choices;
-                                     choices.Add( _HKI( "All units" ) );
+                                     choices.Add( _HKI( "All units" ), 0 );
 
                                      if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
                                      {
                                          if( SYMBOL* symbol = item->GetParentSymbol() )
                                          {
                                              for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
-                                                 choices.Add( symbol->GetUnitDisplayName( ii, false ) );
+                                                 choices.Add( symbol->GetUnitDisplayName( ii, false ), ii );
                                          }
                                      }
 

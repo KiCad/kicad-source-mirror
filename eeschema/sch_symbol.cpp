@@ -2994,7 +2994,7 @@ static struct SCH_SYMBOL_DESC
                     return false;
                 };
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Unit" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ),
                     &SCH_SYMBOL::SetUnitProp, &SCH_SYMBOL::GetUnitProp ) )
                 .SetAvailableFunc( multiUnit )
                 .SetChoicesFunc( []( INSPECTABLE* aItem )
@@ -3004,7 +3004,7 @@ static struct SCH_SYMBOL_DESC
                                      if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
                                      {
                                          for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
-                                             choices.Add( symbol->GetUnitDisplayName( ii, false ) );
+                                             choices.Add( symbol->GetUnitDisplayName( ii, false ), ii );
                                      }
 
                                      return choices;
