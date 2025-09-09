@@ -77,8 +77,8 @@ public:
      */
     std::vector<std::pair<FIELD_T, wxString>> GetFields() const;
 
-    bool GetKeepSymbol() { return m_keepSymbol; }
-    bool GetPlaceAllUnits() { return m_useUnits; }
+    bool GetKeepSymbol() { return m_keepSymbol->GetValue(); }
+    bool GetPlaceAllUnits() { return m_useUnits->GetValue(); }
 
 public:
     static std::mutex         g_Mutex;
