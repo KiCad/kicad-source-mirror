@@ -240,9 +240,6 @@ public:
     virtual wxString GetUnitDisplayName( int aUnit, bool aLabel ) const;
     virtual wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const;
 
-    virtual void SetUnitProp( const wxString& aUnit );
-    virtual wxString GetUnitProp() const;
-
     virtual void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
     int  GetBodyStyle() const { return m_bodyStyle; }
 
