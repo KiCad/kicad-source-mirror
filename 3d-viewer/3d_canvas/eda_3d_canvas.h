@@ -42,7 +42,7 @@ class RENDER_3D_RAYTRACE_GL;
 class RENDER_3D_OPENGL;
 
 
-#define EDA_3D_CANVAS_ID wxID_HIGHEST + 1321
+#define EDA_3D_CANVAS_ID (wxID_HIGHEST + 1321)
 
 /**
  *  Implement a canvas based on a wxGLCanvas
@@ -61,7 +61,7 @@ public:
     EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttribs, BOARD_ADAPTER& aSettings,
                    CAMERA& aCamera, S3D_CACHE* a3DCachePointer );
 
-    ~EDA_3D_CANVAS();
+    ~EDA_3D_CANVAS() override;
 
     /**
      * Set a dispatcher that processes events and forwards them to tools.
@@ -302,36 +302,36 @@ private:
     RAY getRayAtCurrentMousePosition();
 
 private:
-    TOOL_DISPATCHER*       m_eventDispatcher;
-    wxStatusBar*           m_parentStatusBar;         // Parent statusbar to report progress
-    WX_INFOBAR*            m_parentInfoBar;
+    TOOL_DISPATCHER*       m_eventDispatcher = nullptr;
+    wxStatusBar*           m_parentStatusBar = nullptr;         // Parent statusbar to report progress
+    WX_INFOBAR*            m_parentInfoBar = nullptr;
 
-    wxGLContext*           m_glRC;                    // Current OpenGL context
-    bool                   m_is_opengl_initialized;
-    bool                   m_is_opengl_version_supported;
+    wxGLContext*           m_glRC = nullptr;                    // Current OpenGL context
+    bool                   m_is_opengl_initialized = false;
+    bool                   m_is_opengl_version_supported = true;
 
     wxTimer                m_editing_timeout_timer;   // Expires after some time signaling that
                                                       // the mouse / keyboard movements are over
     wxTimer                m_redraw_trigger_timer;    // Used to schedule a redraw event
-    std::atomic_flag       m_is_currently_painting;   // Avoid drawing twice at the same time
+    std::atomic_flag       m_is_currently_painting = ATOMIC_FLAG_INIT;   // Avoid drawing twice at the same time
 
-    bool                   m_render_pivot;            // Render the pivot while camera moving
-    float                  m_camera_moving_speed;     // 1.0f will be 1:1
-    int64_t                m_strtime_camera_movement; // Ticktime of camera movement start
-    bool                   m_animation_enabled;       // Camera animation enabled
-    int                    m_moving_speed_multiplier; // Camera animation speed multiplier option
+    bool                   m_render_pivot = false;            // Render the pivot while camera moving
+    float                  m_camera_moving_speed = 1.0f;     // 1.0f will be 1:1
+    int64_t                m_strtime_camera_movement = 0; // Ticktime of camera movement start
+    bool                   m_animation_enabled = true;       // Camera animation enabled
+    int                    m_moving_speed_multiplier = 3; // Camera animation speed multiplier option
 
     BOARD_ADAPTER&         m_boardAdapter;            // Pre-computed 3D info and settings
-    RENDER_3D_BASE*        m_3d_render;
+    RENDER_3D_BASE*        m_3d_render = nullptr;
     RENDER_3D_RAYTRACE_GL* m_3d_render_raytracing;
     RENDER_3D_OPENGL*      m_3d_render_opengl;
 
-    bool                   m_opengl_supports_raytracing;
-    bool                   m_render_raytracing_was_requested;
+    bool                   m_opengl_supports_raytracing = true;
+    bool                   m_render_raytracing_was_requested = false;
 
-    ACCELERATOR_3D*        m_accelerator3DShapes;    // used for mouse over searching
+    ACCELERATOR_3D*        m_accelerator3DShapes = nullptr;    // used for mouse over searching
 
-    BOARD_ITEM*            m_currentRollOverItem;
+    BOARD_ITEM*            m_currentRollOverItem = nullptr;
 
     bool    m_render3dmousePivot = false; // Render the 3dmouse pivot
     SFVEC3F m_3dmousePivotPos;            // The position of the 3dmouse pivot

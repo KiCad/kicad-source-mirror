@@ -35,14 +35,22 @@
 #include <advanced_config.h>
 #include <build_version.h>
 #include <board.h>
+#include <pad.h>
+#include <pcb_field.h>
 #include <reporter.h>
 #include <gal/opengl/gl_context_mgr.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>
+#include <kiway_holder.h>
+#include <kiway.h>
 #include <macros.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <string_utils.h>
+#include <mail_type.h>
+#include <kiway_express.h>
+#include <fmt/format.h>
 
 #include <widgets/wx_busy_indicator.h>
 
@@ -92,28 +100,12 @@ END_EVENT_TABLE()
 EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttribs,
                               BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera,
                               S3D_CACHE* a3DCachePointer ) :
-        HIDPI_GL_3D_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aCamera, aParent, aGLAttribs,
-                            EDA_3D_CANVAS_ID, wxDefaultPosition,
-                            wxDefaultSize, wxFULL_REPAINT_ON_RESIZE ),
-        m_eventDispatcher( nullptr ),
-        m_parentStatusBar( nullptr ),
-        m_parentInfoBar( nullptr ),
-        m_glRC( nullptr ),
-        m_is_opengl_initialized( false ),
-        m_is_opengl_version_supported( true ),
-        m_editing_timeout_timer( this, wxID_HIGHEST + 1 ),
-        m_redraw_trigger_timer( this, wxID_HIGHEST + 2 ),
-        m_render_pivot( false ),
-        m_camera_moving_speed( 1.0f ),
-        m_strtime_camera_movement( 0 ),
-        m_animation_enabled( true ),
-        m_moving_speed_multiplier( 3 ),
-        m_boardAdapter( aBoardAdapter ),
-        m_3d_render( nullptr ),
-        m_opengl_supports_raytracing( true ),
-        m_render_raytracing_was_requested( false ),
-        m_accelerator3DShapes( nullptr ),
-        m_currentRollOverItem( nullptr )
+    HIDPI_GL_3D_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aCamera, aParent, aGLAttribs,
+                EDA_3D_CANVAS_ID, wxDefaultPosition,
+                wxDefaultSize, wxFULL_REPAINT_ON_RESIZE ),
+    m_editing_timeout_timer( this, wxID_HIGHEST + 1 ),
+    m_redraw_trigger_timer( this, wxID_HIGHEST + 2 ),
+    m_boardAdapter( aBoardAdapter )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::EDA_3D_CANVAS" ) );
 
@@ -481,8 +473,10 @@ void EDA_3D_CANVAS::DoRePaint()
 
     if( m_camera_is_moving )
     {
-        const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
-        curtime_delta_s = ( curtime_delta / 1e6 ) * m_camera_moving_speed;
+    const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
+    // Convert microseconds to seconds as float and apply speed multiplier
+    curtime_delta_s = static_cast<float>( static_cast<double>( curtime_delta ) / 1e6 )
+              * m_camera_moving_speed;
         m_camera.Interpolate( curtime_delta_s );
 
         if( curtime_delta_s > 1.0f )
@@ -751,7 +745,8 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
     if( m_camera_is_moving )
     {
         const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
-        curtime_delta_s = ( curtime_delta / 1e6 ) * m_camera_moving_speed;
+        curtime_delta_s = static_cast<float>( static_cast<double>( curtime_delta ) / 1e6 )
+                          * m_camera_moving_speed;
         m_camera.Interpolate( curtime_delta_s );
 
         if( curtime_delta_s > 1.0f )
@@ -887,7 +882,7 @@ void EDA_3D_CANVAS::OnZoomGesture( wxZoomGestureEvent& aEvent )
     m_camera.Pan( aEvent.GetPosition() );
     m_camera.SetCurMousePosition( aEvent.GetPosition() );
 
-    m_camera.Zoom( aEvent.GetZoomFactor() / m_gestureLastZoomFactor );
+    m_camera.Zoom( static_cast<float>( aEvent.GetZoomFactor() / m_gestureLastZoomFactor ) );
 
     m_gestureLastZoomFactor = aEvent.GetZoomFactor();
 
@@ -930,7 +925,7 @@ void EDA_3D_CANVAS::OnRotateGesture( wxRotateGestureEvent& aEvent )
     if( m_camera_is_moving )
         return;
 
-    m_camera.RotateScreen( m_gestureLastAngle - aEvent.GetRotationAngle() );
+    m_camera.RotateScreen( static_cast<float>( m_gestureLastAngle - aEvent.GetRotationAngle() ) );
     m_gestureLastAngle = aEvent.GetRotationAngle();
 
     DisplayStatus();
@@ -1066,9 +1061,45 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
     {
         RAY mouseRay = getRayAtCurrentMousePosition();
 
-        BOARD_ITEM *intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
+        BOARD_ITEM* intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
 
-        // !TODO: send a selection item to pcbnew, eg: via kiway?
+        if( intersectedBoardItem )
+        {
+            FOOTPRINT* footprint = nullptr;
+
+            switch( intersectedBoardItem->Type() )
+            {
+            case PCB_FOOTPRINT_T:
+                footprint = static_cast<FOOTPRINT*>( intersectedBoardItem );
+                break;
+
+            case PCB_PAD_T:
+                footprint = static_cast<PAD*>( intersectedBoardItem )->GetParentFootprint();
+                break;
+
+            case PCB_FIELD_T:
+                footprint = static_cast<PCB_FIELD*>( intersectedBoardItem )->GetParentFootprint();
+                break;
+
+            default:
+                break;
+            }
+
+            if( footprint )
+            {
+                std::string command =
+                        fmt::format( "$SELECT: 0,F{}",
+                                   EscapeString( footprint->GetReference(), CTX_IPC ).ToStdString() );
+
+                EDA_3D_VIEWER_FRAME* frame = static_cast<EDA_3D_VIEWER_FRAME*>( GetParent() );
+
+                if( frame )
+                {
+                    frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, command, frame );
+                    frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, frame );
+                }
+            }
+        }
     }
 }
 
@@ -1088,14 +1119,14 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
     int    logicalW = logicalSize.GetWidth();
     int    logicalH = logicalSize.GetHeight();
 
-    int gizmo_x, gizmo_y, gizmo_width, gizmo_height;
+    int gizmo_x = 0, gizmo_y = 0, gizmo_width = 0, gizmo_height = 0;
     std::tie( gizmo_x, gizmo_y, gizmo_width, gizmo_height ) = m_3d_render_opengl->getGizmoViewport();
 
-    float scaleX = static_cast<float>( gizmo_width ) / logicalW;
-    float scaleY = static_cast<float>( gizmo_height ) / logicalH;
+    float scaleX = static_cast<float>( static_cast<double>( gizmo_width ) / static_cast<double>( logicalW ) );
+    float scaleY = static_cast<float>( static_cast<double>( gizmo_height ) / static_cast<double>( logicalH ) );
 
-    int scaledMouseX = static_cast<int>( event.GetX() * scaleX );
-    int scaledMouseY = static_cast<int>( ( logicalH - event.GetY() ) * scaleY );
+    int scaledMouseX = static_cast<int>( static_cast<float>( event.GetX() ) * scaleX );
+    int scaledMouseY = static_cast<int>( static_cast<float>( logicalH - event.GetY() ) * scaleY );
 
     m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
     Refresh();
@@ -1229,7 +1260,7 @@ void EDA_3D_CANVAS::request_start_moving_camera( float aMovingSpeed, bool aRende
 
     // Map speed multiplier option to actual multiplier value
     // [1,2,3,4,5] -> [0.25, 0.5, 1, 2, 4]
-    aMovingSpeed *= ( 1 << m_moving_speed_multiplier ) / 8.0f;
+    aMovingSpeed *= static_cast<float>( ( 1 << m_moving_speed_multiplier ) ) / 8.0f;
 
     m_render_pivot = aRenderPivot;
     m_camera_moving_speed = aMovingSpeed;
@@ -1249,7 +1280,7 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
 {
     RAY mouseRay = getRayAtCurrentMousePosition();
 
-    float hit_t;
+    float hit_t = 0.0f;
 
     // Test it with the board bounding box
     if( m_boardAdapter.GetBBox().Intersect( mouseRay, &hit_t ) )
