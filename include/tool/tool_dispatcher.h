@@ -88,15 +88,31 @@ private:
     static int decodeModifiers( const wxKeyboardState* aState )
     {
         int mods = 0;
+        int wxmods = aState->GetModifiers();
 
-        if( aState->ControlDown() )
-            mods |= MD_CTRL;
+        if( wxmods & wxMOD_ALTGR )
+            mods |= MD_ALTGR;
+        else
+        {
+            if( wxmods & wxMOD_CONTROL )
+                mods |= MD_CTRL;
 
-        if( aState->AltDown() )
-            mods |= MD_ALT;
+            if( wxmods & wxMOD_ALT )
+                mods |= MD_ALT;
+        }
 
-        if( aState->ShiftDown() )
+        if( wxmods & wxMOD_SHIFT )
             mods |= MD_SHIFT;
+
+#ifdef wxMOD_META
+        if( wxmods & wxMOD_META )
+            mods |= MD_META;
+#endif
+
+#ifdef wxMOD_WIN
+        if( wxmods & wxMOD_WIN )
+            mods |= MD_SUPER;
+#endif
 
         return mods;
     }

@@ -693,14 +693,31 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
          */
         bool keyIsLetter = key >= 'A' && key <= 'Z';
 
-        if( aEvent.ShiftDown() && ( keyIsLetter || key > 256 || key == 9 || key == 32 ) )
+        int mods = aEvent.GetModifiers();
+
+        if( ( mods & wxMOD_SHIFT ) && ( keyIsLetter || key > 256 || key == 9 || key == 32 ) )
             key |= MD_SHIFT;
 
-        if( aEvent.ControlDown() )
-            key |= MD_CTRL;
+        if( mods & wxMOD_ALTGR )
+            key |= MD_ALTGR;
+        else
+        {
+            if( mods & wxMOD_CONTROL )
+                key |= MD_CTRL;
 
-        if( aEvent.AltDown() )
-            key |= MD_ALT;
+            if( mods & wxMOD_ALT )
+                key |= MD_ALT;
+        }
+
+#ifdef wxMOD_META
+        if( mods & wxMOD_META )
+            key |= MD_META;
+#endif
+
+#ifdef wxMOD_WIN
+        if( mods & wxMOD_WIN )
+            key |= MD_SUPER;
+#endif
 
         return key;
     }

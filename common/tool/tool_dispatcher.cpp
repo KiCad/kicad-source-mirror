@@ -297,7 +297,19 @@ static bool isKeyModifierOnly( int aKeyCode )
 {
     static std::vector<enum wxKeyCode> special_keys =
     {
-        WXK_CONTROL, WXK_RAW_CONTROL, WXK_SHIFT, WXK_ALT
+        WXK_CONTROL, WXK_RAW_CONTROL, WXK_SHIFT, WXK_ALT,
+#ifdef WXK_WINDOWS_LEFT
+        WXK_WINDOWS_LEFT, WXK_WINDOWS_RIGHT,
+#endif
+#ifdef WXK_MENU
+        WXK_MENU,
+#endif
+#ifdef WXK_COMMAND
+        WXK_COMMAND,
+#endif
+#ifdef WXK_META
+        WXK_META,
+#endif
     };
 
     return alg::contains( special_keys, aKeyCode );
@@ -515,7 +527,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         if( !evt && me->GetWheelRotation() != 0 )
         {
             const unsigned modBits =
-                    static_cast<unsigned>( mods ) & ( MD_CTRL | MD_ALT | MD_SHIFT );
+                    static_cast<unsigned>( mods ) & MD_MODIFIER_MASK;
             const bool shouldHandle = std::popcount( modBits ) > 1;
 
             if( shouldHandle )

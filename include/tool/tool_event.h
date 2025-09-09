@@ -143,7 +143,10 @@ enum TOOL_MODIFIERS
     MD_SHIFT        = 0x1000,
     MD_CTRL         = 0x2000,
     MD_ALT          = 0x4000,
-    MD_MODIFIER_MASK = MD_SHIFT | MD_CTRL | MD_ALT,
+    MD_SUPER        = 0x8000,
+    MD_META         = 0x10000,
+    MD_ALTGR        = 0x20000,
+    MD_MODIFIER_MASK = MD_SHIFT | MD_CTRL | MD_ALT | MD_SUPER | MD_META | MD_ALTGR,
 };
 
 /// Defines when a context menu is opened.

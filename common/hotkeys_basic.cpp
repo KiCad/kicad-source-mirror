@@ -40,6 +40,7 @@
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 #include <tool/tool_action.h>
+#include <tool/tool_event.h>
 
 
 /*
@@ -159,6 +160,10 @@ static struct hotkey_name_descr hotkeyNameList[] =
 #define MODIFIER_CMD_MAC    wxT( "Cmd+" )
 #define MODIFIER_CTRL_BASE  wxT( "Ctrl+" )
 #define MODIFIER_SHIFT      wxT( "Shift+" )
+#define MODIFIER_META       wxT( "Meta+" )
+#define MODIFIER_WIN        wxT( "Win+" )
+#define MODIFIER_SUPER      wxT( "Super+" )
+#define MODIFIER_ALTGR      wxT( "AltGr+" )
 
 
 wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
@@ -175,6 +180,14 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
         return wxString( MODIFIER_SHIFT ).BeforeFirst( '+' );
     else if( aKeycode == WXK_ALT )
         return wxString( MODIFIER_ALT ).BeforeFirst( '+' );
+#ifdef WXK_WINDOWS_LEFT
+    else if( aKeycode == WXK_WINDOWS_LEFT || aKeycode == WXK_WINDOWS_RIGHT )
+        return wxString( MODIFIER_WIN ).BeforeFirst( '+' );
+#endif
+#ifdef WXK_META
+    else if( aKeycode == WXK_META )
+        return wxString( MODIFIER_META ).BeforeFirst( '+' );
+#endif
 
     // Assume keycode of 0 is "unassigned"
     if( (aKeycode & MD_CTRL) != 0 )
@@ -186,7 +199,16 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     if( (aKeycode & MD_SHIFT) != 0 )
         modifier << MODIFIER_SHIFT;
 
-    aKeycode &= ~( MD_CTRL | MD_ALT | MD_SHIFT );
+    if( (aKeycode & MD_META) != 0 )
+        modifier << MODIFIER_META;
+
+    if( (aKeycode & MD_SUPER) != 0 )
+        modifier << MODIFIER_WIN;
+
+    if( (aKeycode & MD_ALTGR) != 0 )
+        modifier << MODIFIER_ALTGR;
+
+    aKeycode &= ~MD_MODIFIER_MASK;
 
     if( (aKeycode > ' ') && (aKeycode < 0x7F ) )
     {
@@ -262,7 +284,7 @@ int KeyCodeFromKeyName( const wxString& keyname )
 {
     int ii, keycode = KEY_NON_FOUND;
 
-    // Search for modifiers: Ctrl+ Alt+ and Shift+
+    // Search for modifiers: Ctrl+ Alt+ Shift+ and others
     // Note: on Mac OSX, the Cmd key is equiv here to Ctrl
     wxString key = keyname;
     wxString prefix;
@@ -291,6 +313,26 @@ int KeyCodeFromKeyName( const wxString& keyname )
         {
             modifier |= MD_SHIFT;
             prefix = MODIFIER_SHIFT;
+        }
+        else if( key.StartsWith( MODIFIER_META ) )
+        {
+            modifier |= MD_META;
+            prefix = MODIFIER_META;
+        }
+        else if( key.StartsWith( MODIFIER_WIN ) )
+        {
+            modifier |= MD_SUPER;
+            prefix = MODIFIER_WIN;
+        }
+        else if( key.StartsWith( MODIFIER_SUPER ) )
+        {
+            modifier |= MD_SUPER;
+            prefix = MODIFIER_SUPER;
+        }
+        else if( key.StartsWith( MODIFIER_ALTGR ) )
+        {
+            modifier |= MD_ALTGR;
+            prefix = MODIFIER_ALTGR;
         }
         else
         {

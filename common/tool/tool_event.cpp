@@ -149,6 +149,9 @@ const std::string TOOL_EVENT::Format() const
         { MD_SHIFT, "shift" },
         { MD_CTRL,  "ctrl"  },
         { MD_ALT,   "alt"   },
+        { MD_SUPER, "super" },
+        { MD_META,  "meta"  },
+        { MD_ALTGR, "altgr" },
         { 0,        ""      }
     };
 

@@ -546,14 +546,31 @@ void HIERARCHY_PANE::onCharHook( wxKeyEvent& aKeyStroke )
 {
     int hotkey = aKeyStroke.GetKeyCode();
 
-    if( aKeyStroke.GetModifiers() & wxMOD_CONTROL )
-        hotkey += MD_CTRL;
+    int mods = aKeyStroke.GetModifiers();
 
-    if( aKeyStroke.GetModifiers() & wxMOD_ALT )
-        hotkey += MD_ALT;
+    if( mods & wxMOD_ALTGR )
+        hotkey += MD_ALTGR;
+    else
+    {
+        if( mods & wxMOD_CONTROL )
+            hotkey += MD_CTRL;
 
-    if( aKeyStroke.GetModifiers() & wxMOD_SHIFT )
+        if( mods & wxMOD_ALT )
+            hotkey += MD_ALT;
+    }
+
+    if( mods & wxMOD_SHIFT )
         hotkey += MD_SHIFT;
+
+#ifdef wxMOD_META
+    if( mods & wxMOD_META )
+        hotkey += MD_META;
+#endif
+
+#ifdef wxMOD_WIN
+    if( mods & wxMOD_WIN )
+        hotkey += MD_SUPER;
+#endif
 
     if( hotkey == ACTIONS::expandAll.GetHotKey()
         || hotkey == ACTIONS::expandAll.GetHotKeyAlt() )
