@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-06 17:59+0000\n"
+"PO-Revision-Date: 2025-09-09 12:03+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4641,7 +4641,7 @@ msgstr "Potenzieller Abblendfaktor für inaktive Lagen:"
 #: common/dialogs/panel_common_settings_base.cpp:296
 #, fuzzy
 msgid "Scaling"
-msgstr "Skalierung:"
+msgstr "Skalierung"
 
 #: common/dialogs/panel_common_settings_base.cpp:309
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -10177,15 +10177,19 @@ msgstr "Die Bibliothek in der Liste nicht mehr oben halten"
 #: common/tool/actions.cpp:959
 #, fuzzy
 msgid "Library Fields Table"
-msgstr "Symbolfelder-Tabelle"
+msgstr "Bibliotheksfelder-Tabelle"
 
 #: common/tool/actions.cpp:965
+#, fuzzy
 msgid "Library Fields Table of Related Symbols"
-msgstr ""
+msgstr "Bibliotheksfelder-Tabelle der zugehörigen Symbole"
 
 #: common/tool/actions.cpp:966
+#, fuzzy
 msgid "Edit a table of fields of all symbols related to the selected symbol"
 msgstr ""
+"Eine Feldtabelle aller Symbole, mit Bezug auf das gewählte Symbol, "
+"bearbeiten."
 
 #: common/tool/actions.cpp:972
 msgid "Library Tree"
@@ -10331,24 +10335,29 @@ msgid "Display crosshairs even when not drawing objects"
 msgstr "Fadenkreuz auch anzeigen, wenn keine Objekte gezeichnet werden"
 
 #: common/tool/actions.cpp:1189
+#, fuzzy
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Kleine Fadenkreuze mit der Ausrichtung 0 und 90 Grad verwenden"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
 msgstr "Fensterfüllendes Fadenkreuz"
 
 #: common/tool/actions.cpp:1197
+#, fuzzy
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Fensterfüllendes Fadenkreuz mit der Ausrichtung 0 und 90 Grad anzeigen"
 
 #: common/tool/actions.cpp:1204
+#, fuzzy
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "45 Grad Fadenkreuze"
 
 #: common/tool/actions.cpp:1205
+#, fuzzy
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
 msgstr ""
+"Fensterfüllendes Fadenkreuz mit der Ausrichtung 45 und 135 Grad anzeigen"
 
 #: common/tool/actions.cpp:1213
 msgid "Inactive Layer View Mode"
@@ -14048,7 +14057,7 @@ msgstr "Symbol umwandeln"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
 #, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "\"%s\" auf letzte gespeicherte Version zurücksetzen?"
+msgstr "Symbol auf den zuletzt gespeicherten Stand zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 #, fuzzy
@@ -14089,14 +14098,14 @@ msgid "Show datasheet in browser"
 msgstr "Datenblatt im Browser anzeigen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "Symbol %s nicht in Bibliothek \"%s\" gefunden."
+msgstr "Keine entsprechenden Symbole in Bibliothek \"%s\" gefunden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "Symbol %s nicht in Bibliothek \"%s\" gefunden."
+msgstr "Keine Symbole in Bibliothek \"%s\" gefunden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:571
 #, fuzzy, c-format
@@ -14157,7 +14166,7 @@ msgstr "Feldname %s ist bereits vorhanden."
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:91
 #, fuzzy, c-format
 msgid "Library Fields Table (%s)"
-msgstr "Bibliotheken (%d)"
+msgstr "Bibliotheksfelder-Tabelle (%s)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1029
 #, fuzzy
@@ -14197,7 +14206,7 @@ msgstr "Basisname"
 #: eeschema/fields_data_model.cpp:39
 #, fuzzy
 msgid "Include"
-msgstr "Enthalten:"
+msgstr "Enthalten"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:51
@@ -14338,7 +14347,7 @@ msgstr "Zusätzliche Einheiten des Symbols ebenfalls entfernen?"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:505
 #, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "Symbol muss einen Namen haben."
+msgstr "Symbol muss mindestens eine Symbolform haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:511
 #, fuzzy
@@ -14547,7 +14556,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:312
 #, fuzzy
 msgid "Unit display names (optional):"
-msgstr "Anzeigename für Einheit %s eingeben"
+msgstr "Anzeigenamen für Einheiten (optional):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:348
 #, fuzzy
@@ -14560,13 +14569,14 @@ msgid "Single body style"
 msgstr "Alle Symbolformen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
+#, fuzzy
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "\"Standard\"- und \"Alternativ\"-De Morgan Symbolformen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 #, fuzzy
 msgid "Custom body styles:"
-msgstr "Alle Symbolformen"
+msgstr "Benutzerdefinierte Symbolformen:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
 #, fuzzy
@@ -14624,7 +14634,7 @@ msgstr "Jumperpingruppen"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:503
 #, fuzzy
 msgid "Available pins:"
-msgstr "Verfügbare Pins"
+msgstr "Verfügbare Pins:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:519
 msgid "Create jumper group from the selected pins"
@@ -14637,7 +14647,7 @@ msgstr "Gewählte Jumperpingruppe entfernen"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:534
 #, fuzzy
 msgid "Grouped pins:"
-msgstr "Gruppierte Pins"
+msgstr "Gruppierte Pins:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:556
 msgid "Pin Connections"
@@ -16504,7 +16514,7 @@ msgstr "Alternative Zuordnung"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:144
 #, fuzzy
 msgid "Body style:"
-msgstr "Symbolform"
+msgstr "Symbolform:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:361
@@ -17081,12 +17091,14 @@ msgstr "Netze hervorheben, wenn sie im Leiterplatteneditor hervorgehoben sind"
 #: pcbnew/dialogs/panel_display_options_base.cpp:247
 #, fuzzy
 msgid "Flash cross-probed selection"
-msgstr "Kreuzreferenz-Aktion:"
+msgstr "Blinkende kreuzreferenzierte Auswahl"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:248
+#, fuzzy
 msgid "Temporarily flash the newly cross-probed selection 3 times"
 msgstr ""
+"Die eben getroffene kreuzreferenzierte Auswahl blinkt vorübergehend 3-mal"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -18105,7 +18117,7 @@ msgstr "ERC-Bericht in %s gespeichert\n"
 #: eeschema/eeschema_jobs_handler.cpp:1226
 #, fuzzy
 msgid "Schematic file was not updated\n"
-msgstr "Schaltplandatei \"%s\" nicht gefunden."
+msgstr "Schaltplandatei wurde nicht aktualisiert\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1244 eeschema/files-io.cpp:775
 #: eeschema/files-io.cpp:819
@@ -18118,8 +18130,9 @@ msgstr ""
 "%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1249
+#, fuzzy
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr ""
+msgstr "Schaltplandatei erfolgreich im neuesten Fromat gespeichert\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1003
 msgid "Net Navigator"
@@ -18275,7 +18288,7 @@ msgstr ""
 #: eeschema/erc/erc.cpp:1565
 #, fuzzy, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "Die Symbolbibliothek \"%s\" würde nicht unter \"%s\" gefunden."
+msgstr "Die Symbolbibliothek \"%s\" wurde nicht unter \"%s\" gefunden."
 
 #: eeschema/erc/erc.cpp:1585
 #, c-format
@@ -18295,7 +18308,7 @@ msgstr "Symbol \"%s\" stimmt nicht mit Kopie in Bibliothek \"%s\" überein"
 #: eeschema/erc/erc.cpp:1669
 #, fuzzy, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "\"%s\" ist keine gültige Footprint-ID."
+msgstr "\"%s\" ist keine gültige Footprint-ID"
 
 #: eeschema/erc/erc.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:956
@@ -18525,8 +18538,9 @@ msgid "Ground pin not connected to ground net"
 msgstr "Ground-Pin nicht mit Ground-Netz verbunden"
 
 #: eeschema/erc/erc_item.cpp:165
+#, fuzzy
 msgid "Pin name resembles stacked pin"
-msgstr ""
+msgstr "Pinname stimmt mit einem gestapelten Pin überein"
 
 #: eeschema/erc/erc_item.cpp:169 pcbnew/drc/drc_item.cpp:217
 msgid "Unresolved text variable"
@@ -24598,22 +24612,29 @@ msgstr "Anzeige der Pin-Tabelle für Sammelbearbeitung von Pins"
 #: eeschema/tools/sch_actions.cpp:941
 #, fuzzy
 msgid "Convert Stacked Pins"
-msgstr "In Leiterbahnen umwandeln"
+msgstr "In gestapelte Pins umwandeln"
 
 #: eeschema/tools/sch_actions.cpp:942
+#, fuzzy
 msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
+"Konvertiert mehrere Pins, die sich an derselben Stellen befinden, zu einem "
+"einzelnen Pin mit Kennzeichung \"gestapelt\""
 
 #: eeschema/tools/sch_actions.cpp:948
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
+#, fuzzy
 msgid "Explode Stacked Pin"
-msgstr ""
+msgstr "Gestapelten Pin auflösen"
 
 #: eeschema/tools/sch_actions.cpp:949
+#, fuzzy
 msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
+"Konvertiert einen Pin mit Kennzeichnung \"gestapelt\" in mehrere "
+"eigenständige Pins"
 
 #: eeschema/tools/sch_actions.cpp:955
 msgid "Break"
@@ -25855,12 +25876,12 @@ msgstr "Kein Symbol zu exportieren"
 #: eeschema/tools/symbol_editor_control.cpp:844
 #, fuzzy
 msgid "Failed to flatten symbol"
-msgstr "Fehler beim Speichern von \"%s\"."
+msgstr "Symbol konnte nicht abgeflacht werden"
 
 #: eeschema/tools/symbol_editor_control.cpp:848
 #, fuzzy
 msgid "Failed to update library with flattened symbol"
-msgstr "Konnte die Bauteilbibliothek nicht erstellen "
+msgstr "Aktualisierung der Bibliothek mit abgeflachten Symbol fehlgeschlagen"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 msgid "Place Pin"
@@ -25885,26 +25906,33 @@ msgid "Edit Pins"
 msgstr "Pins bearbeiten"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:823
+#, fuzzy
 msgid "At least two pins are needed to convert to stacked pins"
 msgstr ""
+"Für die Konvertierung in einen gestapelten Pin werden mindestens zwei Pins "
+"benötigt"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:833
+#, fuzzy
 msgid "All pins must be at the same location"
-msgstr ""
+msgstr "Alle Pins müssen an derselben Position sein"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1018
 #, fuzzy, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "%s Pin %s nach %s verbinden."
+msgstr "Konvertiert %zu gestapelte Pins zu \"%s\""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
+#, fuzzy
 msgid "Select a single pin with stacked notation to explode"
 msgstr ""
+"Einen einzelnen Pin mit der Kennzeichnung \"gestapelt\" zur Auflösung "
+"auswählen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1052
 #, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Der ausgewählte Pfad enthält keine gültigen KiCad-Einstellungen!"
+msgstr "Ausgewählter Pin hat keine gültige \"gestapelt\" Kennzeichnung"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1116
 msgid "Symbol is not derived from another symbol."
@@ -28506,8 +28534,9 @@ msgstr ""
 "Python-Skripten erzeugt wurde"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
+#, fuzzy
 msgid "Upgrade the schematic file's format to the latest one"
-msgstr ""
+msgstr "Aktualisiert das Format der Schaltplandatei auf die neueste Version."
 
 #: kicad/cli/command_sch_upgrade.cpp:34
 #, fuzzy
@@ -29062,69 +29091,89 @@ msgstr ""
 #: kicad/dialogs/template_default_html.h:130
 #, fuzzy
 msgid "Template"
-msgstr "Benutzervorlagen"
+msgstr "Vorlage"
 
 #: kicad/dialogs/template_default_html.h:131
+#, fuzzy
 msgid ""
 "This project template doesn't include an info page yet. You can still use it "
 "to create a new project."
 msgstr ""
+"Diese Projektvorlage beinhaltet bisher keine Infoseite. Sie können sie immer "
+"noch für die Erstellung eines neuen Projekts verwenden."
 
 #: kicad/dialogs/template_default_html.h:133
+#, fuzzy
 msgid "To use this template:"
-msgstr ""
+msgstr "Verwendung dieser Vorlage:"
 
 #: kicad/dialogs/template_default_html.h:135
 #, fuzzy
 msgid "Create the project"
-msgstr "Neues Projekt erstellen"
+msgstr "Ein Projekt erstellen"
 
 #: kicad/dialogs/template_default_html.h:135
+#, fuzzy
 msgid ""
 "Click OK below. KiCad will create a new project folder populated with the "
 "contents of this template."
 msgstr ""
+"Klicken Sie unten auf OK. KiCad erstellt einen neuen Projektordner, der mit "
+"dem Inhalt dieser Vorlage gefüllt ist."
 
 #: kicad/dialogs/template_default_html.h:136
 #, fuzzy
 msgid "Open schematic and PCB"
-msgstr "Schaltplan öffnen"
+msgstr "Schaltplan und Leiterplatte öffnen"
 
 #: kicad/dialogs/template_default_html.h:136
+#, fuzzy
 msgid ""
 "Use the Project Manager tree or launch Schematic and PCB editors to begin "
 "designing."
 msgstr ""
+"Verwenden Sie die Projektmanager-Verzeichnisstruktur oder starten Sie die "
+"Schaltplan- und PCB-Editoren, um mit dem Design zu beginnen."
 
 #: kicad/dialogs/template_default_html.h:137
 #, fuzzy
 msgid "Review libraries & settings"
-msgstr "Vorschau-Einstellungen"
+msgstr "Bibliotheken und Einstellungen überprüfen"
 
 #: kicad/dialogs/template_default_html.h:137
+#, fuzzy
 msgid ""
 "Confirm symbol/footprint libraries, design rules, and board stackup match "
 "your needs."
 msgstr ""
+"Überprüfen Sie, ob Symbol-/Footprint-Bibliotheken, Designregeln und "
+"Leiterplattenaufbau Ihren Anforderungen entsprechen."
 
 #: kicad/dialogs/template_default_html.h:141
+#, fuzzy
 msgid "Add an info page later:"
-msgstr ""
+msgstr "Eine Infoseite später hinzufügen:"
 
 #: kicad/dialogs/template_default_html.h:142
 #, fuzzy
 msgid "Create a file at"
-msgstr "ERC-Protokolldatei erstellen"
+msgstr "Erstellt eine Datei unter"
 
 #: kicad/dialogs/template_default_html.h:142
+#, fuzzy
 msgid ""
 "inside this template's directory to provide rich documentation, images, or "
 "guidance."
 msgstr ""
+"im Verzeichnis dieser Vorlage, um umfangreiche Dokumentationen, Bilder oder "
+"Anleitungen bereitzustellen."
 
 #: kicad/dialogs/template_default_html.h:143
+#, fuzzy
 msgid "You can copy styling from the default pages for consistency."
 msgstr ""
+"Sie können das Design der Standardseiten kopieren, um ein einheitliches "
+"Erscheinungsbild zu gewährleisten."
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -40300,8 +40349,10 @@ msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr "Linienbreite für ein ungefülltes Rechteck muss größer als Null sein."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1263
+#, fuzzy
 msgid "Corner radius must be less than or equal to half the smaller side."
 msgstr ""
+"Eckenradius muss kleiner oder gleich der Hälfte der kürzeren Seite sein."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
 msgid "Line width must be greater than zero for an unfilled polygon."
@@ -41002,8 +41053,9 @@ msgid "Layer name %s already in use."
 msgstr "Lagenname %s wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:44
+#, fuzzy
 msgid "Use via color for normal through hole padstacks"
-msgstr ""
+msgstr "Verwende die Via-Farben für normale Durchsteck-Padstacks"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:50
 msgid "Clearance Outlines"
@@ -42455,38 +42507,39 @@ msgstr ""
 "| "
 "Beschreibung                                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                            "
-"| Prüft die Restringbreite von Vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                              "
+"| Prüft die Restringbreite von "
+"Vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                      "
-"| Prüft den angegebenen Ausdruck."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                      "
+"| Prüft den angegebenen "
+"Ausdruck.<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                    "
 "| Gibt den **elektrischen** Freiraum zwischen Kupferobjekten "
 "unterschiedlicher Netze an. (Wenn Sie den Abstand zwischen Objekten "
-"netzunabhängig festlegen möchten, nutzen Sie "
-"`physical_clearance`.)<br><br>Um zuzulassen, dass Kupferobjekte sich "
-"überlappen (kollidieren), erstellen Sie eine `clearance`-Einschränkung mit "
-"einem `min`-Wert kleiner als Null (zum Beispiel `-1`)."
-"<br>                                                              |\n"
+"netzunabhängig festlegen möchten, nutzen Sie `physical_clearance`.)"
+"<br><br>Um zuzulassen, dass Kupferobjekte sich überlappen (kollidieren), "
+"erstellen Sie eine `clearance`-Einschränkung mit einem `min`-Wert kleiner "
+"als Null (zum Beispiel `-1`)"
+".<br>                                                              |\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                    "
 "| Prüft den Freiraum zwischen Abstandsflächen von Footprints und erzeugt "
 "einen Fehler, wenn zwei Abstandsflächen näher als der `min` Abstand sind.  "
 "Wenn ein Footprint keine Abstandsfläche hat, werden durch diese "
-"Einschränkung keine Fehler erzeugt."
-"<br>                                                                                                                                                                                           "
+"Einschränkung keine Fehler "
+"erzeugt.<br>                                                                                                                                                                                           "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                    "
-"| Gibt die Kriechstrecke zwischen Kupferobjekten unterschiedlicher Netze an."
-"<br>                                                                                                                                                                                                                                                                                                                                                                      "
+"| Gibt die Kriechstrecke zwischen Kupferobjekten unterschiedlicher Netze "
+"an.<br>                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                            "
@@ -42494,54 +42547,53 @@ msgstr ""
 "Differentialpaar.  Gekoppelte Leiterbahnen sind Segmente, die parallel "
 "zueinander liegen.  Der Differentialpaar-Abstand wird an ungekoppelten "
 "Teilen eines Differentialpaares (z. B. dem Fanout einer Komponente) nicht "
-"geprüft."
-"<br>                                                                                                                                                   "
+"geprüft.<br>                                                                                                                                                   "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                    "
 "| Prüft die Entfernung, über die eine Differentialpaarleiterbahn entkoppelt "
 "von der anderen Leiterbahn des Paares verlegt ist (z. B. wenn sich das Paar "
 "von einem Bauteil ausgehend auffächert oder entkoppelt wird, um ein anderes "
-"Objekt wie ein Via zu umgehen)."
-"<br>                                                                                                                                                                               "
+"Objekt wie ein Via zu umgehen)"
+".<br>                                                                                                                                                                               "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Gibt einen oder, getrennt durch Leerzeichen, mehrere Objekttypen an, die "
-"ferngehalten werden sollen.  Zum Beispiel: `(constraint disallow track)` "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Gibt einen oder, getrennt durch Leerzeichen, mehrere Objekttypen an, "
+"die ferngehalten werden sollen.  Zum Beispiel: `(constraint disallow track)` "
 "oder `(constraint disallow track via pad)`.  Wenn ein Objekt dieser Typen "
 "die Regelbedingung erfüllt, wird ein DRC-Fehler erzeugt.<br><br>Diese "
-"Einschränkung ist im Wesentlichen dasselbe wie ein Regelbereich "
-"(Sperrfläche), kann aber feiner abgestimmte Ausgrenzungen realisieren."
-"<br>        |\n"
+"Einschränkung ist im Wesentlichen dasselbe wie ein Regelbereich (Sperrfläche)"
+", kann aber feiner abgestimmte Ausgrenzungen realisieren.<br>        |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                            "
 "| Prüft den Freiraum zwischen Objekten und dem Platinenrand.<br><br>Dies "
 "kann auch als \"Frästoleranz\" betrachtet werden, da der Platinenrand alle "
 "graphischen Objekte auf der Ebene `Edge.Cuts` sowie alle *ovalen* Pad-Löcher "
 "einschließt.  (Für die Bohrtoleranzprüfung ist `physical_hole_clearance` zu "
-"nutzen.)<br>                                                                                                                               "
+"nutzen.)"
+"<br>                                                                                                                               "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                                "
 "| Prüft die Gesamtlänge der Netze, die der Regelbedingung entsprechen, und "
 "erzeugt für jedes Netz, das unter dem `min`-Wert (sofern angegeben) oder "
-"über dem `max`-Wert (sofern angegeben) der Bedingung liegt, einen Fehler."
-"<br>                                                                                                                                                                                                                     "
+"über dem `max`-Wert (sofern angegeben) der Bedingung liegt, einen "
+"Fehler.<br>                                                                                                                                                                                                                     "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                                "
 "| Prüft den Durchmesser eines gebohrten Lochs in einem Pad oder Via.  Bei "
 "ovalen Löchern wird der kleinere Durchmesser gegen den `min`-Wert (sofern "
-"angegeben) und der größere Durchmesser gegen den `max`-Wert (sofern) geprüft."
-"<br>                                                                                                                                                                                                                 "
+"angegeben) und der größere Durchmesser gegen den `max`-Wert (sofern) "
+"geprüft.<br>                                                                                                                                                                                                                 "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                    "
 "| Prüft den Freiraum zwischen einem Bohrloch innerhalb eines Pads oder Vias "
 "und Kupferobjekten anderer Netze.  Gemessen wird vom Rand des Lochs aus, "
-"nicht aus der Mitte."
-"<br>                                                                                                                                                                                                                                                                         "
+"nicht aus der "
+"Mitte.<br>                                                                                                                                                                                                                                                                         "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                    "
@@ -42550,38 +42602,38 @@ msgstr ""
 "Einschränkung dient ausschließlich dem Schutz der Bohrer.  Der Freiraum "
 "zwischen **lasergebohrten** (µVias) und anderen nicht mechanisch gebohrten "
 "Löchern wird nicht geprüft. Ebenso wenig wie der Freiraum zwischen "
-"**gefrästen** (ovalen) und anderen nicht mechanisch gebohrten Löchern.<br> "
-"|\n"
+"**gefrästen** (ovalen) und anderen nicht mechanisch gebohrten Löchern.<br> |"
+"\n"
 "| `physical_clearance`      | "
 "min                                                                                                                    "
-"| Prüft den Freiraum zwischen zwei Objekten auf einer bestimmten Lage "
-"(einschließlich mechanischer Lagen etc.).<br><br>Hiermit können zwar "
+"| Prüft den Freiraum zwischen zwei Objekten auf einer bestimmten Lage ("
+"einschließlich mechanischer Lagen etc.).<br><br>Hiermit können zwar "
 "allgemeinere Prüfungen als mit `clearance` durchgeführt werden, es ist aber "
-"viel langsamer.  Wo immer möglich sollte `clearance` verwendet werden."
-"<br>                                                                                                                                                     "
+"viel langsamer.  Wo immer möglich sollte `clearance` verwendet "
+"werden.<br>                                                                                                                                                     "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                    "
 "| Prüft den Freiraum zwischen einem Bohrloch in einem Pad oder Via und einem "
 "anderen Objekt, unabhängig vom Netz. Der Freiraum wird vom Rand des Lochs "
-"aus gemessen, nicht aus der Mitte.<br><br>Dies kann auch als "
-"\"Bohrtoleranz\" betrachtet werden, da sie nur **runde** Löcher umfasst (für "
-"\"Frästoleranz\" siehe `edge_clearance`)."
-"<br>                                                                                                            "
+"aus gemessen, nicht aus der Mitte.<br><br>Dies kann auch als \"Bohrtoleranz\""
+" betrachtet werden, da sie nur **runde** Löcher umfasst (für \"Frästoleranz\""
+" siehe `edge_clearance`)"
+".<br>                                                                                                            "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                            "
 "| Überprüft den Freiraum zwischen Objekten auf Bestückungsdrucklagen und "
-"anderen Objekten."
-"<br>                                                                                                                                                                                                                                                                                                                                                        "
+"anderen "
+"Objekten.<br>                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                    "
 "| Prüft den Gesamtversatz für die Netze, d.h. die Differenz zwischen der "
 "Länge eines jeden Netzes und dem Mittelwert der Längen aller Netze, die der "
 "Regel entsprechen.  Wenn die absolute Differenz zwischen jenem Mittelwert "
-"und der Länge eines der Netze über `max`-Wert liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                      "
+"und der Länge eines der Netze über `max`-Wert liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                      "
 "|\n"
 "| `solder_mask_expansion`   | "
 "opt                                                                                                                    "
@@ -42605,47 +42657,56 @@ msgstr ""
 "| `thermal_relief_gap`      | "
 "min                                                                                                                    "
 "| Definiert die Spaltbreite einer thermischen Entlastung zwischen einem Pad "
-"und einer Zone."
-"<br>                                                                                                                                                                                                                                                                                                                                                       "
+"und einer "
+"Zone.<br>                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                    "
 "| Definiert die Speichenbreite einer thermischen Entlastung zwischen einem "
-"Pad und einer Zone."
-"<br>                                                                                                                                                                                                                                                                                                                                                    "
+"Pad und einer "
+"Zone.<br>                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                            "
 "| Prüft die Breite von Leiterbahn- und Bogensegmenten. Für jedes Segment, "
 "dessen Breite unter dem `min`-Wert (sofern angegeben) oder über dem `max`-"
-"Wert (sofern angegeben) liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                       "
+"Wert (sofern angegeben) liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                       "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                            "
 "| Prüft den Winkel zweier Leiterbahnsegmente. Erzeugt für jedes "
-"Leiterbahnpaar mit einem Winkel unterhalb des `min`-Wertes (sofern "
-"angegeben) oder überhalb des `max`-Wertes (sofern angegeben) einen Fehler."
-"<br>                                                                                                                                                                                                                                     "
+"Leiterbahnpaar mit einem Winkel unterhalb des `min`-Wertes (sofern angegeben)"
+" oder überhalb des `max`-Wertes (sofern angegeben) einen "
+"Fehler.<br>                                                                                                                                                                                                                                     "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                                "
 "| Prüft die Länge eines Leiterbahn- oder Bogensegments. Für jedes Segment, "
 "dessen Länge unter dem `min`-Wert (sofern angegeben) oder über dem `max`-"
-"Wert (sofern angegeben) liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                       "
+"Wert (sofern angegeben) liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                       "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                    "
 "| Überschreitet die Anzahl von Vias in einem Netz, auf das diese Regel "
 "zutrifft, den `max`-Wert dieser Einschränkung, wird für dieses Netz ein "
-"Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                                                                    "
+"Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                                                                    "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Definiert den Verbindungstyp zwischen einer Zone und einem Pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `via_dangling`            |"
+"                                                                                                                       "
+"| Prüft auf Vias die nicht oder nur auf einer Lage verbunden sind.  Diese "
+"Einschränkung nimmt keinen min/opt/max-Wert an.  In Kombination mit einer "
+"Schweregrad-Bestimmung kann diese Einschränkung dazu verwendet werden, um "
+"unter verschiedenen Bedingungen baumelnde (`dangling`) Vias zuzulassen oder "
+"zu "
+"verbieten.<br>                                                                                                                               "
+"|\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                 "
+"| Definiert den Verbindungstyp zwischen einer Zone und einem "
+"Pad.<br>                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
 "\n"
 "\n"
@@ -44811,12 +44872,12 @@ msgstr "Footprint-Filter weichen ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:639
 #, fuzzy, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "Footprint existiert bereits auf dem Board."
+msgstr "Footprint hat %lu Lagen nicht auf der Platine: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #, fuzzy, c-format
 msgid "Board has %lu copper layers not in footprint: %s"
-msgstr "Die Platine hat eine fehlerhafte Lagennummer für Footprint %s."
+msgstr "Platine hat %lu Kupferlagen nicht im Footprint: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:701
 msgid "Footprint types differ."
@@ -45028,7 +45089,7 @@ msgstr "Kein entsprechender Pin im Schaltplan gefunden."
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:228
 #, fuzzy, c-format
 msgid "Pad missing net given by schematic (%s)"
-msgstr "Pad fehlt Netz aus Schaltplan (%s)."
+msgstr "Pad fehlt Netz gemäß Schaltplan (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:242
 #, fuzzy, c-format
@@ -45433,8 +45494,8 @@ msgstr ""
 #, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
 msgstr ""
-"Prüfung auf Selbststörung der Verbindung fehlgeschlagen\n"
-"z: %g; Begrenzungsrahmen: %s"
+"Prüfung auf selbstüberschneidende Verbindungen fehlgeschlagen. Wiederholung "
+"zulassen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1757
 #, c-format
@@ -49987,8 +50048,9 @@ msgid "Failed to create IPC-D-356 file\n"
 msgstr "Konnte IPC-D-356-Datei nicht erstellen.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2544
+#, fuzzy
 msgid "Successfully saved board file using the latest format\n"
-msgstr ""
+msgstr "Platinendatei erfolgreich im neuesten Format gespeichert\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2548
 #, fuzzy
@@ -50026,7 +50088,7 @@ msgstr "Plugin-Verzeichnis öffnen"
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:173
 #, fuzzy, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
-msgstr "Verzeichnis \"%s\" existiert nicht."
+msgstr "Plugin-Verzeichnis \"%s\" existiert nicht.  Soll es erstellt werden?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:189
 #, fuzzy, c-format
@@ -51658,8 +51720,9 @@ msgstr ""
 "fehlgeschlagen."
 
 #: pcbnew/tools/multichannel_tool.cpp:615
+#, fuzzy
 msgid "Target group does not have a group."
-msgstr ""
+msgstr "Die Zielgruppe hat keine Gruppe."
 
 #: pcbnew/tools/multichannel_tool.cpp:632
 #: pcbnew/tools/multichannel_tool.cpp:691
@@ -51821,7 +51884,7 @@ msgstr "Pin platzieren"
 #: pcbnew/tools/pcb_actions.cpp:184
 #, fuzzy
 msgid "Add reference/snap points"
-msgstr "Platinen-Bezugspunkt festlegen:"
+msgstr "Referenz-/Fangpunkte hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Place Reference Images"
