@@ -33,6 +33,7 @@
 #include <sch_painter.h>
 #include <wx/log.h>
 #include <sch_table.h>
+#include <geometry/geometry_utils.h>
 
 
 SCH_TABLE::SCH_TABLE( int aLineWidth ) :
@@ -324,6 +325,12 @@ bool SCH_TABLE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_TABLE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
 }
 
 

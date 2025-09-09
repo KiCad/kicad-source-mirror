@@ -159,6 +159,13 @@ bool SCH_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) c
 }
 
 
+bool SCH_BITMAP::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+{
+    return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
+}
+
+
+
 void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                        int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
