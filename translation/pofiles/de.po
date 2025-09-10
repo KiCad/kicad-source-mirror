@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-10 10:30+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -4638,7 +4638,7 @@ msgstr "Potenzieller Abblendfaktor für inaktive Lagen:"
 
 #: common/dialogs/panel_common_settings_base.cpp:296
 msgid "Scaling"
-msgstr "Skalieren"
+msgstr "Skalierung"
 
 #: common/dialogs/panel_common_settings_base.cpp:309
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -14040,13 +14040,13 @@ msgid "Revert symbol"
 msgstr "Symbol zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
+#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Symbol auf seinen zuletzt gespeicherten Stand zurücksetzen"
+msgstr "Symbol auf zuletzt gespeicherten Stand zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear cell"
-msgstr "Zelle löschen"
+msgstr "Zelle leeren"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 #, fuzzy
@@ -44873,9 +44873,8 @@ msgid "'%s' settings differ."
 msgstr "\"%s\" Einstellungen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:733
-#, fuzzy
 msgid "Footprint stackup differs."
-msgstr "Footprint-Aufbau weicht ab."
+msgstr "Footprint-Lagenaufbau weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:751
 msgid "Pad clearance overridden."
