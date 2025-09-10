@@ -921,16 +921,28 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
     // Build a pop menu:
     wxMenu menu;
 
-    menu.Append( 4204, _( "Include 'DNP' Symbols" ), wxEmptyString, wxITEM_CHECK );
-    menu.Append( 4205, _( "Include 'Exclude from BOM' Symbols" ), wxEmptyString, wxITEM_CHECK );
-    menu.AppendSeparator();
-    menu.Append( 4206, _( "Highlight on Cross Probe" ), wxEmptyString, wxITEM_CHECK );
-    menu.Append( 4207, _( "Select on Cross Probe" ), wxEmptyString, wxITEM_CHECK );
-
+    menu.Append( 4204, _( "Include 'DNP' Symbols" ),
+                 _( "Show symbols marked 'DNP' in the table.  This setting also controls whether or not 'DNP' "
+                    "symbols are included on export." ),
+                 wxITEM_CHECK );
     menu.Check( 4204, !m_dataModel->GetExcludeDNP() );
+
+    menu.Append( 4205, _( "Include 'Exclude from BOM' Symbols" ),
+                 _( "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked 'Exclude from BOM' "
+                    "are never included on export." ),
+                 wxITEM_CHECK );
     menu.Check( 4205, m_dataModel->GetIncludeExcludedFromBOM() );
 
+    menu.AppendSeparator();
+
+    menu.Append( 4206, _( "Highlight on Cross-probe" ),
+                 _( "Highlight corresponding item on canvas when it is selected in the table" ),
+                 wxITEM_CHECK );
     menu.Check( 4206, cfg.selection_mode == 0 );
+
+    menu.Append( 4207, _( "Select on Cross-probe" ),
+                 _( "Select corresponding item on canvas when it is selected in the table" ),
+                 wxITEM_CHECK );
     menu.Check( 4207, cfg.selection_mode == 1 );
 
     // menu_id is the selected submenu id from the popup menu or wxID_NONE

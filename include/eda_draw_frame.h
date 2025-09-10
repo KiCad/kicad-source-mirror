@@ -306,7 +306,7 @@ public:
      *
      * @param aPos is the point to go to.
      */
-    void FocusOnLocation( const VECTOR2I& aPos );
+    void FocusOnLocation( const VECTOR2I& aPos, bool aAllowScroll = true );
 
     /**
      * Focus on a particular canvas item.

@@ -77,6 +77,7 @@ private:
 
     bool TransferDataToWindow() override;
 
+    void OnMenu( wxCommandEvent& aEvent ) override;
     void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnDRCItemRClick( wxDataViewEvent& aEvent ) override;
@@ -116,6 +117,10 @@ private:
     bool               m_running;
     bool               m_drcRun;
     bool               m_footprintTestsRun;
+
+    bool               m_report_all_track_errors;
+    bool               m_crossprobe;
+    bool               m_scroll_on_crossprobe;
 
     wxString           m_markersTitleTemplate;
     wxString           m_unconnectedTitleTemplate;

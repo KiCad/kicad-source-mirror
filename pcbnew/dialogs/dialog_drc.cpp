@@ -46,8 +46,10 @@
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/progress_reporter_base.h>
 #include <widgets/wx_html_report_box.h>
+#include <view/view_controls.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <dialogs/dialog_text_entry.h>
 #include <tools/drc_tool.h>
@@ -74,6 +76,9 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_running( false ),
         m_drcRun( false ),
         m_footprintTestsRun( false ),
+        m_report_all_track_errors( false ),
+        m_crossprobe( true ),
+        m_scroll_on_crossprobe( true ),
         m_markersTreeModel( nullptr ),
         m_unconnectedTreeModel( nullptr ),
         m_fpWarningsTreeModel( nullptr ),
@@ -84,6 +89,15 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     m_frame = aEditorFrame;
     m_currentBoard = m_frame->GetBoard();
+
+    m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
+
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+    {
+        m_report_all_track_errors = cfg->m_DRCDialog.report_all_track_errors;
+        m_crossprobe = cfg->m_DRCDialog.crossprobe;
+        m_scroll_on_crossprobe = cfg->m_DRCDialog.scroll_on_crossprobe;
+    }
 
     m_messages->SetImmediateMode();
 
@@ -147,6 +161,13 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
 DIALOG_DRC::~DIALOG_DRC()
 {
+    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+    {
+        cfg->m_DRCDialog.report_all_track_errors = m_report_all_track_errors;
+        cfg->m_DRCDialog.crossprobe = m_crossprobe;
+        cfg->m_DRCDialog.scroll_on_crossprobe = m_scroll_on_crossprobe;
+    }
+
     m_frame->ClearFocus();
 
     g_lastDRCBoard = m_currentBoard;
@@ -240,6 +261,46 @@ int DIALOG_DRC::getSeverities()
 }
 
 
+void DIALOG_DRC::OnMenu( wxCommandEvent& event )
+{
+    // Build a pop menu:
+    wxMenu menu;
+
+    menu.Append( 4205, _( "Report All Errors for Each Track" ),
+                 _( "If unchecked, only the first error will be reported for each track" ),
+                 wxITEM_CHECK );
+    menu.Check( 4205, m_report_all_track_errors );
+
+    menu.AppendSeparator();
+
+    menu.Append( 4206, _( "Cross-probe Selected Items" ),
+                 _( "Highlight corresponding items on canvas when selected in the DRC list" ),
+                 wxITEM_CHECK );
+    menu.Check( 4206, m_crossprobe );
+
+    menu.Append( 4207, _( "Center on Cross-probe" ),
+                 _( "When cross-probing, scroll the canvas so that the item is visible" ),
+                 wxITEM_CHECK );
+    menu.Check( 4207, m_scroll_on_crossprobe );
+
+    // menu_id is the selected submenu id from the popup menu or wxID_NONE
+    int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
+
+    if( menu_id == 0 || menu_id == 4205 )
+    {
+        m_report_all_track_errors = !m_report_all_track_errors;
+    }
+    else if( menu_id == 2 || menu_id == 4206 )
+    {
+        m_crossprobe = !m_crossprobe;
+    }
+    else if( menu_id == 3 || menu_id == 4207 )
+    {
+        m_scroll_on_crossprobe = !m_scroll_on_crossprobe;
+    }
+}
+
+
 void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
     m_frame->ShowBoardSetupDialog( _( "Custom Rules" ) );
@@ -252,7 +313,6 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     DRC_TOOL*         drcTool              = toolMgr->GetTool<DRC_TOOL>();
     ZONE_FILLER_TOOL* zoneFillerTool       = toolMgr->GetTool<ZONE_FILLER_TOOL>();
     bool              refillZones          = m_cbRefillZones->GetValue();
-    bool              reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
     bool              testFootprints       = m_cbTestFootprints->GetValue();
 
     if( zoneFillerTool->IsBusy() )
@@ -326,7 +386,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     {
     wxBusyCursor dummy;
-    drcTool->RunTests( this, refillZones, reportAllTrackErrors, testFootprints );
+    drcTool->RunTests( this, refillZones, m_report_all_track_errors, testFootprints );
     }
 
     if( m_cancelled )
@@ -378,6 +438,12 @@ void DIALOG_DRC::UpdateData()
 
 void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
+    if( !m_crossprobe )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     BOARD*        board = m_frame->GetBoard();
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
@@ -408,11 +474,8 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             {
                 VECTOR2D selectedItemPos = aSelectedMarkerItem->GetPosition() / PCB_IU_PER_MM;
                 VECTOR2D unSelectedItemPos = aUnSelectedMarkerItem->GetPosition() / PCB_IU_PER_MM;
-
-                double dist = selectedItemPos.Distance( unSelectedItemPos );
-
-                double minimumMarkerSeparationDistance =
-                        ADVANCED_CFG::GetCfg().m_MinimumMarkerSeparationDistance;
+                double   dist = selectedItemPos.Distance( unSelectedItemPos );
+                double   minimumMarkerSeparationDistance = ADVANCED_CFG::GetCfg().m_MinimumMarkerSeparationDistance;
 
                 return dist <= minimumMarkerSeparationDistance;
             };
@@ -430,7 +493,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     if( rc_item->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
             && rc_item->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
     {
-        m_frame->FocusOnLocation( node->m_RcItem->GetParent()->GetPos() );
+        m_frame->FocusOnLocation( node->m_RcItem->GetParent()->GetPos(), m_scroll_on_crossprobe );
 
         aEvent.Skip();
         return;
@@ -512,7 +575,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
         if( item->Type() == PCB_ZONE_T )
         {
-            m_frame->FocusOnItem( item, principalLayer );
+            m_frame->FocusOnItem( item, principalLayer, m_scroll_on_crossprobe );
 
             m_frame->GetBoard()->GetConnectivity()->RunOnUnconnectedEdges(
                     [&]( CN_EDGE& edge )
@@ -541,7 +604,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                                                                                       : edge.GetTargetPos();
                             }
 
-                            m_frame->FocusOnLocation( focusPos );
+                            m_frame->FocusOnLocation( focusPos, m_scroll_on_crossprobe );
                             m_frame->RefreshCanvas();
 
                             return false;
@@ -552,7 +615,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         }
         else
         {
-            m_frame->FocusOnItem( item, principalLayer );
+            m_frame->FocusOnItem( item, principalLayer, m_scroll_on_crossprobe );
         }
     }
     else if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
@@ -579,7 +642,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             items.push_back( item );
         }
 
-        m_frame->FocusOnItems( items, principalLayer );
+        m_frame->FocusOnItems( items, principalLayer, m_scroll_on_crossprobe );
     }
     else
     {
@@ -594,11 +657,11 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             }
 
             items.push_back( item );
-            m_frame->FocusOnItems( items, principalLayer );
+            m_frame->FocusOnItems( items, principalLayer, m_scroll_on_crossprobe );
         }
         else
         {
-            m_frame->FocusOnItem( item, principalLayer );
+            m_frame->FocusOnItem( item, principalLayer, m_scroll_on_crossprobe );
         }
     }
 

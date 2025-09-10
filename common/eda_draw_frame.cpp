@@ -1059,32 +1059,35 @@ std::vector<wxWindow*> EDA_DRAW_FRAME::findDialogs()
 }
 
 
-void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
+void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos, bool aAllowScroll )
 {
-    bool  centerView = false;
-    BOX2D r = GetCanvas()->GetView()->GetViewport();
-
-    // Center if we're off the current view, or within 10% of its edge
-    r.Inflate( - r.GetWidth() / 10.0 );
-
-    if( !r.Contains( aPos ) )
-        centerView = true;
-
+    bool               centerView = false;
     std::vector<BOX2D> dialogScreenRects;
 
-    for( wxWindow* dialog : findDialogs() )
+    if( aAllowScroll )
     {
-        dialogScreenRects.emplace_back( ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
-                                        ToVECTOR2D( dialog->GetSize() ) );
-    }
+        BOX2D r = GetCanvas()->GetView()->GetViewport();
 
-    // Center if we're behind an obscuring dialog, or within 10% of its edge
-    for( BOX2D rect : dialogScreenRects )
-    {
-        rect.Inflate( rect.GetWidth() / 10 );
+        // Center if we're off the current view, or within 10% of its edge
+        r.Inflate( - r.GetWidth() / 10.0 );
 
-        if( rect.Contains( GetCanvas()->GetView()->ToScreen( aPos ) ) )
+        if( !r.Contains( aPos ) )
             centerView = true;
+
+        for( wxWindow* dialog : findDialogs() )
+        {
+            dialogScreenRects.emplace_back( ToVECTOR2D( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ) ),
+                                            ToVECTOR2D( dialog->GetSize() ) );
+        }
+
+        // Center if we're behind an obscuring dialog, or within 10% of its edge
+        for( BOX2D rect : dialogScreenRects )
+        {
+            rect.Inflate( rect.GetWidth() / 10 );
+
+            if( rect.Contains( GetCanvas()->GetView()->ToScreen( aPos ) ) )
+                centerView = true;
+        }
     }
 
     if( centerView )

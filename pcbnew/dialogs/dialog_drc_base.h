@@ -10,22 +10,26 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_BOX;
 
 #include "dialog_shim.h"
+#include <wx/sizer.h>
+#include <wx/gdicmn.h>
 #include <wx/string.h>
 #include <wx/checkbox.h>
-#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/html/htmlwin.h>
-#include <wx/gauge.h>
-#include <wx/panel.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/gbsizer.h>
+#include <wx/html/htmlwin.h>
+#include <wx/gauge.h>
+#include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
 #include <wx/listctrl.h>
@@ -33,7 +37,6 @@ class WX_HTML_REPORT_BOX;
 #include <wx/simplebook.h>
 #include <wx/stattext.h>
 #include <widgets/number_badge.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -48,8 +51,8 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_cbRefillZones;
-		wxCheckBox* m_cbReportAllTrackErrors;
 		wxCheckBox* m_cbTestFootprints;
+		STD_BITMAP_BUTTON* m_bMenu;
 		wxSimplebook* m_runningResultsBook;
 		wxPanel* running;
 		wxNotebook* m_runningNotebook;
@@ -85,6 +88,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnMenu( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnErrorLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }

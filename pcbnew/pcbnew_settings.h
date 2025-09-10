@@ -168,6 +168,13 @@ public:
         bool doNotExportUnconnectedPads;
     };
 
+    struct DIALOG_DRC
+    {
+        bool report_all_track_errors;
+        bool crossprobe;
+        bool scroll_on_crossprobe;
+    };
+
     struct FOOTPRINT_CHOOSER
     {
         // Footprint chooser is a FRAME, so there's no DIALOG_SHIM to save/restore control state
@@ -227,6 +234,7 @@ public:
     AUI_PANELS         m_AuiPanels;
 
     DIALOG_EXPORT_D356 m_ExportD356;
+    DIALOG_DRC         m_DRCDialog;
     FOOTPRINT_CHOOSER  m_FootprintChooser;
 
     ZONES              m_Zones;

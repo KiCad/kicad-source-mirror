@@ -262,18 +262,18 @@ void PCB_BASE_FRAME::FocusOnItem( EDA_ITEM* aItem )
     FocusOnItem( static_cast<BOARD_ITEM*>( aItem ), UNDEFINED_LAYER );
 }
 
-void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
+void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, bool aAllowScroll )
 {
     std::vector<BOARD_ITEM*> items;
 
     if( aItem )
         items.push_back( aItem );
 
-    FocusOnItems( items, aLayer );
+    FocusOnItems( items, aLayer, aAllowScroll );
 }
 
 
-void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID aLayer )
+void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID aLayer, bool aAllowScroll )
 {
     static std::vector<KIID> lastBrightenedItemIDs;
 
@@ -361,7 +361,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             case PCB_PAD_T:
             case PCB_MARKER_T:
             case PCB_VIA_T:
-                FocusOnLocation( item->GetFocusPosition() );
+                FocusOnLocation( item->GetFocusPosition(), aAllowScroll );
                 GetCanvas()->Refresh();
                 return;
 
@@ -449,7 +449,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         }
     }
 
-    FocusOnLocation( focusPt );
+    FocusOnLocation( focusPt, aAllowScroll );
 
     GetCanvas()->Refresh();
 }

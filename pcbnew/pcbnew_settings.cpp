@@ -349,6 +349,15 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint3d_dir",
             &m_LastFootprint3dDir, "" ) );
 
+    m_params.emplace_back( new PARAM<bool>( "DRC.report_all_track_errors",
+            &m_DRCDialog.report_all_track_errors, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "DRC.crossprobe",
+            &m_DRCDialog.crossprobe, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "DRC.scroll_on_crossprobe",
+            &m_DRCDialog.scroll_on_crossprobe, true ) );
+
     registerMigration( 0, 1,
             [&]()
             {
