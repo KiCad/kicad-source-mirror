@@ -319,27 +319,17 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
     total_effort = std::max( (size_t) 1, total_effort );
 
     thread_pool& tp = GetKiCadThreadPool();
-    std::vector<std::future<int>> returns;
+    auto returns = tp.submit_loop( 0, zoneLayers.size(),
+                            [&]( const int ii )
+                            {
+                                if( !m_drcEngine->IsCancelled() )
+                                {
+                                    testZoneLayer( zoneLayers[ii].first, zoneLayers[ii].second );
+                                    done.fetch_add( zoneLayers[ii].first->GetFilledPolysList( zoneLayers[ii].second )->FullPointCount() );
+                                }
+                            } );
 
-    returns.reserve( zoneLayers.size() );
-
-    for( const std::pair<ZONE*, PCB_LAYER_ID>& zonelayer : zoneLayers )
-    {
-        returns.emplace_back( tp.submit(
-                [&]( ZONE* aZone, PCB_LAYER_ID aLayer ) -> int
-                {
-                    if( !m_drcEngine->IsCancelled() )
-                    {
-                        testZoneLayer( aZone, aLayer );
-                        done.fetch_add( aZone->GetFilledPolysList( aLayer )->FullPointCount() );
-                    }
-
-                    return 0;
-                },
-                zonelayer.first, zonelayer.second ) );
-    }
-
-    for( const std::future<int>& ret : returns )
+    for( auto& ret : returns )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

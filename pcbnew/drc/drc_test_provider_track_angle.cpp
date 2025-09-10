@@ -70,12 +70,14 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
         return false;       // DRC cancelled
 
     auto checkTrackAngle =
-            [&]( PCB_TRACK* item ) -> bool
+            [&]( const int ind ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_ANGLE ) )
                 {
                     return false;
                 }
+
+                PCB_TRACK* item = m_drcEngine->GetBoard()->Tracks()[ind];
 
                 if( item->Type() != PCB_TRACE_T )
                 {
@@ -195,17 +197,10 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
     const int progressDelta = 250;
     int       ii = 0;
 
-    thread_pool&                   tp = GetKiCadThreadPool();
-    std::vector<std::future<bool>> returns;
+    thread_pool& tp = GetKiCadThreadPool();
+    auto futures = tp.submit_loop( 0, m_drcEngine->GetBoard()->Tracks().size(), checkTrackAngle );
 
-    returns.reserve( m_drcEngine->GetBoard()->Tracks().size() );
-
-    for( PCB_TRACK* item : m_drcEngine->GetBoard()->Tracks() )
-    {
-        returns.emplace_back( tp.submit( checkTrackAngle, item ) );
-    }
-
-    for( std::future<bool>& ret : returns )
+    for( auto& ret : futures )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

@@ -581,7 +581,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         // and extract all of the pairs of segments that might be merged.  Then, perform
         // the actual merge in the main loop.
         thread_pool& tp = GetKiCadThreadPool();
-        auto merge_returns = tp.parallelize_loop( 0, m_brd->Tracks().size(), track_loop );
+        auto merge_returns = tp.submit_blocks( 0, m_brd->Tracks().size(), track_loop );
         bool retval = false;
 
         for( size_t ii = 0; ii < merge_returns.size(); ++ii )

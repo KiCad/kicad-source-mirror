@@ -28,7 +28,7 @@
 #include <bs_thread_pool.hpp>
 #include <import_export.h>
 
-using thread_pool = BS::thread_pool;
+using thread_pool = BS::thread_pool<0>;
 
 /**
  * Get a reference to the current thread pool.  N.B., you cannot copy the thread pool

@@ -25,6 +25,7 @@
 class GL_CONTEXT_MANAGER;
 namespace BS
 {
+template <std::uint8_t>
 class thread_pool;
 }
 
@@ -42,7 +43,7 @@ public:
     void Init();
 
 public:
-    BS::thread_pool*    m_ThreadPool;
+    BS::thread_pool<0>* m_ThreadPool;
     GL_CONTEXT_MANAGER* m_GLContextManager;
 };
 

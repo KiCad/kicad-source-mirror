@@ -149,14 +149,10 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
             };
 
     thread_pool& tp = GetKiCadThreadPool();
-    std::vector<std::future<size_t>> returns;
 
-    returns.reserve( copperLayers.size() );
+    auto returns = tp.submit_loop( 0, copperLayers.size(), build_layer_polys );
 
-    for( size_t ii = 0; ii < copperLayers.size(); ++ii )
-        returns.emplace_back( tp.submit( build_layer_polys, ii ) );
-
-    for( const std::future<size_t>& ret : returns )
+    for( auto& ret : returns )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

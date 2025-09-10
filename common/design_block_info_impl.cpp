@@ -190,7 +190,7 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
             };
 
     for( size_t ii = 0; ii < num_elements; ++ii )
-        returns[ii] = tp.submit( db_thread );
+        returns[ii] = tp.submit_task( db_thread );
 
     for( const std::future<size_t>& ret : returns )
     {

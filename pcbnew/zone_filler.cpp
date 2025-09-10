@@ -611,7 +611,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     thread_pool& tp = GetKiCadThreadPool();
 
     for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
-        returns.emplace_back( std::make_pair( tp.submit( fill_lambda, fillItem ), 0 ) );
+        returns.emplace_back( std::make_pair( tp.submit_task( [&, fillItem]() { return fill_lambda( fillItem ); } ), 0 ) );
 
     while( !cancelled && finished != 2 * toFill.size() )
     {
@@ -636,9 +636,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 {
                     // Queue the next step (will re-queue the existing step if it didn't complete)
                     if( ret.second == 0 )
-                        returns[ii].first = tp.submit( fill_lambda, toFill[ii] );
+                        returns[ii].first = tp.submit_task( [&, idx = ii]() { return fill_lambda( toFill[idx] ); } );
                     else if( ret.second == 1 )
-                        returns[ii].first = tp.submit( tesselate_lambda, toFill[ii] );
+                        returns[ii].first = tp.submit_task( [&, idx = ii]() { return tesselate_lambda( toFill[idx] ); } );
                 }
             }
         }
@@ -827,7 +827,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 return retval;
             };
 
-    auto island_returns = tp.parallelize_loop( 0, polys_to_check.size(), island_lambda );
+    auto island_returns = tp.submit_blocks( 0, polys_to_check.size(), island_lambda );
     cancelled = false;
 
     // Allow island removal threads to finish

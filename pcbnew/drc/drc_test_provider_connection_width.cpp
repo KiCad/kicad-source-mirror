@@ -505,7 +505,6 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     }
 
     thread_pool&                     tp = GetKiCadThreadPool();
-    std::vector<std::future<size_t>> returns;
     size_t                           total_effort = 0;
 
     for( const auto& [ netLayer, itemsPoly ] : dataset )
@@ -513,14 +512,16 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
     total_effort += std::max( (size_t) 1, total_effort ) * distinctMinWidths.size();
 
+    std::vector<std::future<size_t>> returns;
     returns.reserve( dataset.size() );
-
     for( const auto& [ netLayer, itemsPoly ] : dataset )
     {
-        returns.emplace_back( tp.submit( build_netlayer_polys, netLayer.Netcode, netLayer.Layer ) );
+        int netcode = netLayer.Netcode;
+        PCB_LAYER_ID layer = netLayer.Layer;
+        returns.emplace_back( tp.submit_task( [&, netcode, layer]() { return build_netlayer_polys( netcode, layer ); } ) );
     }
 
-    for( std::future<size_t>& ret : returns )
+    for( auto& ret : returns )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
@@ -541,11 +542,13 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             if( minWidth - epsilon <= 0 )
                 continue;
 
-            returns.emplace_back( tp.submit( min_checker, itemsPoly, netLayer.Layer, minWidth ) );
+            returns.emplace_back( tp.submit_task( [min_checker, &itemsPoly, &netLayer, minWidth]() {
+                return min_checker( itemsPoly, netLayer.Layer, minWidth );
+            } ) );
         }
     }
 
-    for( std::future<size_t>& ret : returns )
+    for( auto& ret : returns )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

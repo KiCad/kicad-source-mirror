@@ -67,8 +67,9 @@ bool DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH::Run()
         return false;       // DRC cancelled
 
     auto checkTrackSegmentLength =
-            [&]( BOARD_ITEM* item ) -> bool
+            [&]( const int idx ) -> bool
             {
+                BOARD_ITEM* item = m_drcEngine->GetBoard()->Tracks()[idx];
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_SEGMENT_LENGTH ) )
                     return false;
 
@@ -153,16 +154,9 @@ bool DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH::Run()
     int       ii = 0;
 
     thread_pool&                   tp = GetKiCadThreadPool();
-    std::vector<std::future<bool>> returns;
+    auto futures = tp.submit_loop( 0, m_drcEngine->GetBoard()->Tracks().size(), checkTrackSegmentLength );
 
-    returns.reserve( m_drcEngine->GetBoard()->Tracks().size() );
-
-    for( PCB_TRACK* item : m_drcEngine->GetBoard()->Tracks() )
-    {
-        returns.emplace_back( tp.submit( checkTrackSegmentLength, item ) );
-    }
-
-    for( std::future<bool>& ret : returns )
+    for( auto& ret : futures )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

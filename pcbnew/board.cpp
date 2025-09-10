@@ -1114,7 +1114,7 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
             };
 
     for( ZONE* zone : zones )
-        returns.emplace_back( tp.submit( cache_zones, zone ) );
+        returns.emplace_back( tp.submit_task( [cache_zones, zone] { return cache_zones( zone ); } ) );
 
     // Finalize the triangulation threads
     for( const std::future<size_t>& ret : returns )

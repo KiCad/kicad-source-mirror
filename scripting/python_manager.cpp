@@ -97,7 +97,7 @@ long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
     PYTHON_PROCESS* process = new PYTHON_PROCESS( aCallback );
     process->Redirect();
 
-    auto monitor = 
+    auto monitor =
         []( PYTHON_PROCESS* aProcess )
         {
             wxInputStream* processOut = aProcess->GetInputStream();
@@ -147,7 +147,7 @@ long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
         if( !aSaveOutput )
         {
             thread_pool& tp = GetKiCadThreadPool();
-            auto ret = tp.submit( monitor, process );
+            auto ret = tp.submit_task( [monitor, process] { monitor( process ); } );
         }
     }
 
@@ -236,7 +236,7 @@ std::optional<wxString> PYTHON_MANAGER::GetVirtualPython( const wxString& aNames
         return std::nullopt;
 
     wxFileName python( *envPath, wxEmptyString );
-    
+
 #ifdef _WIN32
     python.AppendDir( "Scripts" );
     python.SetFullName( "pythonw.exe" );

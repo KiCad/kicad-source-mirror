@@ -2026,76 +2026,73 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                 {
                     std::mutex mutex;
 
-                    auto subtractLoopFn = [&]( const int a, const int b )
+                    auto subtractLoopFn = [&]( const int shapeId )
                     {
-                        for( int shapeId = a; shapeId < b; shapeId++ )
+                        TopoDS_Shape& shape = vec[shapeId];
+
+                        Bnd_Box shapeBbox;
+                        BRepBndLib::Add( shape, shapeBbox );
+
+                        TopTools_ListOfShape holelist;
+
                         {
-                            TopoDS_Shape& shape = vec[shapeId];
+                            std::unique_lock lock( mutex );
 
-                            Bnd_Box shapeBbox;
-                            BRepBndLib::Add( shape, shapeBbox );
+                            const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
 
-                            TopTools_ListOfShape holelist;
-
-                            {
-                                std::unique_lock lock( mutex );
-
-                                const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
-
-                                for( const Standard_Integer& index : indices )
-                                    holelist.Append( aHolesList[index] );
-                            }
-
-                            if( holelist.IsEmpty() )
-                                continue;
-
-                            TopTools_ListOfShape cutArgs;
-                            cutArgs.Append( shape );
-
-                            BRepAlgoAPI_Cut cut;
-
-                            cut.SetRunParallel( true );
-                            cut.SetToFillHistory( false );
-
-                            cut.SetArguments( cutArgs );
-                            cut.SetTools( holelist );
-                            cut.Build();
-
-                            if( cut.HasErrors() || cut.HasWarnings() )
-                            {
-                                m_reporter->Report( wxString::Format( _( "** Got problems while cutting "
-                                                                         "%s net '%s' **" ),
-                                                                      aWhat,
-                                                                      UnescapeString( netname ) ),
-                                                    RPT_SEVERITY_ERROR );
-                                shapeBbox.Dump();
-
-                                if( cut.HasErrors() )
-                                {
-                                    wxString             msg = _( "Errors:\n" );
-                                    wxStringOutputStream os_stream( &msg );
-                                    wxStdOutputStream    out( os_stream );
-
-                                    cut.DumpErrors( out );
-                                    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-                                }
-
-                                if( cut.HasWarnings() )
-                                {
-                                    wxString             msg = _( "Warnings:\n" );
-                                    wxStringOutputStream os_stream( &msg );
-                                    wxStdOutputStream    out( os_stream );
-
-                                    cut.DumpWarnings( out );
-                                    m_reporter->Report( msg, RPT_SEVERITY_WARNING );
-                                }
-                            }
-
-                            shape = cut.Shape();
+                            for( const Standard_Integer& index : indices )
+                                holelist.Append( aHolesList[index] );
                         }
+
+                        if( holelist.IsEmpty() )
+                            return; // nothing to cut for this shape
+
+                        TopTools_ListOfShape cutArgs;
+                        cutArgs.Append( shape );
+
+                        BRepAlgoAPI_Cut cut;
+
+                        cut.SetRunParallel( true );
+                        cut.SetToFillHistory( false );
+
+                        cut.SetArguments( cutArgs );
+                        cut.SetTools( holelist );
+                        cut.Build();
+
+                        if( cut.HasErrors() || cut.HasWarnings() )
+                        {
+                            m_reporter->Report( wxString::Format( _( "** Got problems while cutting "
+                                                                        "%s net '%s' **" ),
+                                                                    aWhat,
+                                                                    UnescapeString( netname ) ),
+                                                RPT_SEVERITY_ERROR );
+                            shapeBbox.Dump();
+
+                            if( cut.HasErrors() )
+                            {
+                                wxString             msg = _( "Errors:\n" );
+                                wxStringOutputStream os_stream( &msg );
+                                wxStdOutputStream    out( os_stream );
+
+                                cut.DumpErrors( out );
+                                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                            }
+
+                            if( cut.HasWarnings() )
+                            {
+                                wxString             msg = _( "Warnings:\n" );
+                                wxStringOutputStream os_stream( &msg );
+                                wxStdOutputStream    out( os_stream );
+
+                                cut.DumpWarnings( out );
+                                m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+                            }
+                        }
+
+                        shape = cut.Shape();
                     };
 
-                    tp.parallelize_loop( vec.size(), subtractLoopFn ).wait();
+                    tp.submit_loop( 0, vec.size(), subtractLoopFn ).wait();
                 }
             };
 
@@ -2172,7 +2169,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
         BS::multi_future<void> mf;
 
         for( const auto& [netname, _] : shapesToFuseMap )
-            mf.push_back( tp.submit( fuseLoopFn, netname ) );
+            mf.push_back( tp.submit_task( [&, netname]() { fuseLoopFn( netname ); } ) );
 
         mf.wait();
     }

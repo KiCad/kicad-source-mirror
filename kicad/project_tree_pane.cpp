@@ -636,7 +636,11 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     std::lock_guard<std::mutex> lock2( m_gitTreeCacheMutex );
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.wait_for_tasks();
+    while( tp.get_tasks_running() )
+    {
+        tp.wait_for( std::chrono::milliseconds( 250 ) );
+    }
+
     m_gitStatusTimer.Stop();
     m_gitSyncTimer.Stop();
     m_gitTreeCache.clear();
@@ -2293,25 +2297,21 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.push_task(
-            [this]()
-            {
-                KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
+    tp.submit_task( [this]()
+    {
+        KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
-                if( !gitCommon )
-                {
-                    wxLogTrace( traceGit, "onGitSyncTimer: No git repository found" );
-                    return;
-                }
+        if( !gitCommon )
+        {
+            wxLogTrace( traceGit, "onGitSyncTimer: No git repository found" );
+            return;
+        }
 
-                GIT_PULL_HANDLER handler( gitCommon );
-                handler.PerformFetch();
+        GIT_PULL_HANDLER handler( gitCommon );
+        handler.PerformFetch();
 
-                CallAfter( [this]()
-                {
-                    gitStatusTimerHandler();
-                } );
-            } );
+        CallAfter( [this]() { gitStatusTimerHandler(); } );
+    } );
 
     if( gitSettings.updatInterval > 0 )
     {
@@ -2327,11 +2327,7 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
     updateTreeCache();
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.push_task(
-            [this]()
-            {
-                updateGitStatusIconMap();
-            } );
+    tp.submit_task( [this]() { updateGitStatusIconMap(); } );
 }
 
 void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )

@@ -425,7 +425,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
             };
 
     thread_pool& tp = GetKiCadThreadPool();
-    auto         ret = tp.submit( saveFile );
+    auto         ret = tp.submit_task( saveFile );
 
     std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

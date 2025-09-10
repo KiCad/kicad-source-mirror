@@ -654,49 +654,46 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
     std::mutex   resultsMutex;
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto resultsFuture = tp.parallelize_loop(
-            0, foundNets.size(),
-            [&, this, calc]( const int start, const int end )
+    auto resultsFuture = tp.submit_loop(
+        0, foundNets.size(),
+        [&, this, calc]( const int i )
+        {
+            int netCode = foundNets[i]->GetNetCode();
+
+            constexpr PATH_OPTIMISATIONS opts = { .OptimiseViaLayers = true,
+                                                    .MergeTracks = true,
+                                                    .OptimiseTracesInPads = true,
+                                                    .InferViaInPad = false };
+
+            LENGTH_DELAY_STATS lengthDetails = calc->CalculateLengthDetails(
+                                    netItemsMap[netCode],
+                                    opts,
+                                    nullptr,
+                                    nullptr,
+                                    LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
+                                    m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
+                                                            : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
+
+            if( aIncludeZeroPadNets || lengthDetails.NumPads > 0 )
             {
-                for( int i = start; i < end; ++i )
-                {
-                    int netCode = foundNets[i]->GetNetCode();
+                std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( foundNets[i] );
 
-                    constexpr PATH_OPTIMISATIONS opts = { .OptimiseViaLayers = true,
-                                                          .MergeTracks = true,
-                                                          .OptimiseTracesInPads = true,
-                                                          .InferViaInPad = false };
+                new_item->SetPadCount( lengthDetails.NumPads );
+                new_item->SetLayerCount( m_board->GetCopperLayerCount() );
+                new_item->SetPadDieLength( lengthDetails.PadToDieLength );
+                new_item->SetPadDieDelay( lengthDetails.PadToDieDelay );
+                new_item->SetViaCount( lengthDetails.NumVias );
+                new_item->SetViaLength( lengthDetails.ViaLength );
+                new_item->SetViaDelay( lengthDetails.ViaDelay );
+                new_item->SetLayerWireLengths( *lengthDetails.LayerLengths );
 
-                    LENGTH_DELAY_STATS lengthDetails = calc->CalculateLengthDetails(
-                                            netItemsMap[netCode],
-                                            opts,
-                                            nullptr,
-                                            nullptr,
-                                            LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
-                                            m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
-                                                                    : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
+                if( m_showTimeDomainDetails )
+                    new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
 
-                    if( aIncludeZeroPadNets || lengthDetails.NumPads > 0 )
-                    {
-                        std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( foundNets[i] );
-
-                        new_item->SetPadCount( lengthDetails.NumPads );
-                        new_item->SetLayerCount( m_board->GetCopperLayerCount() );
-                        new_item->SetPadDieLength( lengthDetails.PadToDieLength );
-                        new_item->SetPadDieDelay( lengthDetails.PadToDieDelay );
-                        new_item->SetViaCount( lengthDetails.NumVias );
-                        new_item->SetViaLength( lengthDetails.ViaLength );
-                        new_item->SetViaDelay( lengthDetails.ViaDelay );
-                        new_item->SetLayerWireLengths( *lengthDetails.LayerLengths );
-
-                        if( m_showTimeDomainDetails )
-                            new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
-
-                        std::scoped_lock lock( resultsMutex );
-                        results.emplace_back( std::move( new_item ) );
-                    }
-                }
-            } );
+                std::scoped_lock lock( resultsMutex );
+                results.emplace_back( std::move( new_item ) );
+            }
+        } );
 
     resultsFuture.get();
 

@@ -274,5 +274,5 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
     };
 
     thread_pool& tp = GetKiCadThreadPool();
-    m_updateTask = tp.submit( update_check );
+    m_updateTask = tp.submit_task( update_check );
 }

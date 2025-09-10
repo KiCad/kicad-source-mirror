@@ -737,50 +737,47 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto returns = tp.parallelize_loop( test_items.size(), [&]( size_t a, size_t b ) -> bool
+    auto returns = tp.submit_loop( 0, test_items.size(), [&]( size_t i ) -> bool
+    {
+        BOARD_ITEM* item = test_items[ i ];
+
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
+            return false;
+
+        BOX2I itemBBox = item->GetBoundingBox();
+
+        if( item->IsOnLayer( F_Mask ) && !isNullAperture( item ) )
         {
-            for( size_t i = a; i < b; ++i )
-            {
-                BOARD_ITEM* item = test_items[ i ];
+            // Test for aperture-to-aperture collisions
+            testItemAgainstItems( item, itemBBox, F_Mask, F_Mask );
 
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
-                    return false;
+            // Test for aperture-to-zone collisions
+            testMaskItemAgainstZones( item, itemBBox, F_Mask, F_Cu );
+        }
+        else if( item->IsOnLayer( PADSTACK::ALL_LAYERS ) )
+        {
+            // Test for copper-item-to-aperture collisions
+            testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
+        }
 
-                BOX2I itemBBox = item->GetBoundingBox();
+        if( item->IsOnLayer( B_Mask ) && !isNullAperture( item ) )
+        {
+            // Test for aperture-to-aperture collisions
+            testItemAgainstItems( item, itemBBox, B_Mask, B_Mask );
 
-                if( item->IsOnLayer( F_Mask ) && !isNullAperture( item ) )
-                {
-                    // Test for aperture-to-aperture collisions
-                    testItemAgainstItems( item, itemBBox, F_Mask, F_Mask );
+            // Test for aperture-to-zone collisions
+            testMaskItemAgainstZones( item, itemBBox, B_Mask, B_Cu );
+        }
+        else if( item->IsOnLayer( B_Cu ) )
+        {
+            // Test for copper-item-to-aperture collisions
+            testItemAgainstItems( item, itemBBox, B_Cu, B_Mask );
+        }
 
-                    // Test for aperture-to-zone collisions
-                    testMaskItemAgainstZones( item, itemBBox, F_Mask, F_Cu );
-                }
-                else if( item->IsOnLayer( PADSTACK::ALL_LAYERS ) )
-                {
-                    // Test for copper-item-to-aperture collisions
-                    testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
-                }
+        ++count;
 
-                if( item->IsOnLayer( B_Mask ) && !isNullAperture( item ) )
-                {
-                    // Test for aperture-to-aperture collisions
-                    testItemAgainstItems( item, itemBBox, B_Mask, B_Mask );
-
-                    // Test for aperture-to-zone collisions
-                    testMaskItemAgainstZones( item, itemBBox, B_Mask, B_Cu );
-                }
-                else if( item->IsOnLayer( B_Cu ) )
-                {
-                    // Test for copper-item-to-aperture collisions
-                    testItemAgainstItems( item, itemBBox, B_Cu, B_Mask );
-                }
-
-                ++count;
-            }
-
-            return true;
-        } );
+        return true;
+    } );
 
     for( size_t i = 0; i < returns.size(); ++i )
     {

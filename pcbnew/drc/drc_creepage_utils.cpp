@@ -2317,56 +2317,54 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
         }
     }
 
-    auto processWorkItems = [&]( size_t start_idx, size_t end_idx ) -> bool
+    auto processWorkItems = [&]( size_t idx ) -> bool
     {
-        for( size_t idx = start_idx; idx < end_idx; ++idx )
+        auto [gn1, gn2] = work_items[idx];
+
+        for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
         {
-            auto [gn1, gn2] = work_items[idx];
+            std::vector<const BOARD_ITEM*> IgnoreForTest = {
+                gn1->m_parent->GetParent(), gn2->m_parent->GetParent()
+            };
 
-            for( PATH_CONNECTION pc : GetPaths( gn1->m_parent, gn2->m_parent, aMaxWeight ) )
+            if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
+                            { false, true }, m_minGrooveWidth ) )
+                continue;
+
+            std::shared_ptr<GRAPH_NODE> connect1 = gn1, connect2 = gn2;
+            std::lock_guard<std::mutex> lock( nodes_lock );
+
+            // Handle non-point node1
+            if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
             {
-                std::vector<const BOARD_ITEM*> IgnoreForTest = {
-                    gn1->m_parent->GetParent(), gn2->m_parent->GetParent()
-                };
+                auto gnt1 = AddNode( GRAPH_NODE::POINT, gn1->m_parent, pc.a1 );
+                gnt1->m_connectDirectly = false;
+                connect1 = gnt1;
 
-                if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
-                                { false, true }, m_minGrooveWidth ) )
-                    continue;
-
-                std::shared_ptr<GRAPH_NODE> connect1 = gn1, connect2 = gn2;
-                std::lock_guard<std::mutex> lock( nodes_lock );
-
-                // Handle non-point node1
-                if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                if( gn1->m_parent->IsConductive() )
                 {
-                    auto gnt1 = AddNode( GRAPH_NODE::POINT, gn1->m_parent, pc.a1 );
-                    gnt1->m_connectDirectly = false;
-                    connect1 = gnt1;
-
-                    if( gn1->m_parent->IsConductive() )
-                    {
-                        if( auto gc = AddConnection( gn1, gnt1 ) )
-                            gc->m_path.m_show = false;
-                    }
+                    if( auto gc = AddConnection( gn1, gnt1 ) )
+                        gc->m_path.m_show = false;
                 }
-
-                // Handle non-point node2
-                if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
-                {
-                    auto gnt2 = AddNode( GRAPH_NODE::POINT, gn2->m_parent, pc.a2 );
-                    gnt2->m_connectDirectly = false;
-                    connect2 = gnt2;
-
-                    if( gn2->m_parent->IsConductive() )
-                    {
-                        if( auto gc = AddConnection( gn2, gnt2 ) )
-                            gc->m_path.m_show = false;
-                    }
-                }
-
-                AddConnection( connect1, connect2, pc );
             }
+
+            // Handle non-point node2
+            if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+            {
+                auto gnt2 = AddNode( GRAPH_NODE::POINT, gn2->m_parent, pc.a2 );
+                gnt2->m_connectDirectly = false;
+                connect2 = gnt2;
+
+                if( gn2->m_parent->IsConductive() )
+                {
+                    if( auto gc = AddConnection( gn2, gnt2 ) )
+                        gc->m_path.m_show = false;
+                }
+            }
+
+            AddConnection( connect1, connect2, pc );
         }
+
         return true;
     };
 
@@ -2374,15 +2372,16 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
     // has already parallelized the work, so we can process all items in one go.
     if( tp.get_tasks_total() >= tp.get_thread_count() - 4 )
     {
-        processWorkItems( 0, work_items.size() );
+        for( size_t ii = 0; ii < work_items.size(); ii++ )
+            processWorkItems( ii );
     }
     else
     {
-        auto ret = tp.parallelize_loop( work_items.size(), processWorkItems );
+        auto ret = tp.submit_loop( 0, work_items.size(), processWorkItems );
 
         for( size_t ii = 0; ii < ret.size(); ii++ )
         {
-            std::future<bool>& r = ret[ii];
+            auto& r = ret[ii];
 
             if( !r.valid() )
                 continue;

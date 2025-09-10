@@ -1614,11 +1614,10 @@ void CONNECTION_GRAPH::resolveAllDrivers()
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto results = tp.parallelize_loop( dirty_graphs.size(),
-                        [&]( const int a, const int b)
+    auto results = tp.submit_loop( 0, dirty_graphs.size(),
+                        [&]( const int ii )
                         {
-                            for( int ii = a; ii < b; ++ii )
-                                update_lambda( dirty_graphs[ii] );
+                            update_lambda( dirty_graphs[ii] );
                         });
     results.wait();
 
@@ -2257,11 +2256,10 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto results = tp.parallelize_loop( m_driver_subgraphs.size(),
-                            [&]( const int a, const int b)
+    auto results = tp.submit_loop( 0, m_driver_subgraphs.size(),
+                            [&]( const int ii )
                             {
-                                for( int ii = a; ii < b; ++ii )
-                                    m_driver_subgraphs[ii]->UpdateItemConnections();
+                                m_driver_subgraphs[ii]->UpdateItemConnections();
                             });
 
     results.wait();
@@ -2464,12 +2462,11 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 return 1;
             };
 
-    auto results2 = tp.parallelize_loop( m_driver_subgraphs.size(),
-                            [&]( const int a, const int b)
+    auto results2 = tp.submit_loop( 0, m_driver_subgraphs.size(),
+                            [&]( const int ii )
                             {
-                                for( int ii = a; ii < b; ++ii )
-                                    updateItemConnectionsTask( m_driver_subgraphs[ii] );
-                            });
+                                updateItemConnectionsTask( m_driver_subgraphs[ii] );
+                            } );
     results2.wait();
 
     m_net_code_to_subgraphs_map.clear();

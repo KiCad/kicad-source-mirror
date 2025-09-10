@@ -191,19 +191,17 @@ void CONNECTIVITY_DATA::updateRatsnest()
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto results = tp.parallelize_loop( dirty_nets.size(),
-                            [&]( const int a, const int b )
+    auto results = tp.submit_loop( 0, dirty_nets.size(),
+                            [&]( const int ii )
                             {
-                                for( int ii = a; ii < b; ++ii )
-                                    dirty_nets[ii]->UpdateNet();
+                                dirty_nets[ii]->UpdateNet();
                             } );
     results.wait();
 
-    auto results2 = tp.parallelize_loop( dirty_nets.size(),
-                            [&]( const int a, const int b )
+    auto results2 = tp.submit_loop( 0, dirty_nets.size(),
+                            [&]( const int ii )
                             {
-                                for( int ii = a; ii < b; ++ii )
-                                    dirty_nets[ii]->OptimizeRNEdges();
+                                dirty_nets[ii]->OptimizeRNEdges();
                             } );
     results2.wait();
 
@@ -370,11 +368,10 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
     thread_pool& tp = GetKiCadThreadPool();
     size_t num_nets = std::min( m_nets.size(), aDynamicData->m_nets.size() );
 
-    auto results = tp.parallelize_loop( 1, num_nets,
-                            [&]( const int a, const int b)
+    auto results = tp.submit_loop( 1, num_nets,
+                            [&]( const int ii )
                             {
-                                for( int ii = a; ii < b; ++ii )
-                                    update_lambda( ii );
+                                update_lambda( ii );
                             });
     results.wait();
 

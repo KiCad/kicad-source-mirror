@@ -110,7 +110,7 @@ public:
      */
     void BuildArgvUtf8();
 
-    BS::thread_pool& GetThreadPool() { return *m_singleton.m_ThreadPool; }
+    BS::thread_pool<0>& GetThreadPool() { return *m_singleton.m_ThreadPool; }
 
     GL_CONTEXT_MANAGER* GetGLContextManager() { return m_singleton.m_GLContextManager; }
 

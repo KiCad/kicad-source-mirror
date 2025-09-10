@@ -110,11 +110,11 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     }
 
     auto query_areas =
-            [&]( std::pair<ZONE* /* rule area */, ZONE* /* copper zone */> areaZonePair ) -> size_t
+            [&]( const int idx ) -> size_t
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
-
+                const auto& areaZonePair = toCache[idx];
                 ZONE* ruleArea = areaZonePair.first;
                 ZONE* copperZone = areaZonePair.second;
                 BOX2I areaBBox = ruleArea->GetBoundingBox();
@@ -169,14 +169,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             };
 
     thread_pool& tp = GetKiCadThreadPool();
-    std::vector<std::future<size_t>> returns;
+    auto futures = tp.submit_loop( 0, toCache.size(), query_areas );
 
-    returns.reserve( toCache.size() );
-
-    for( const std::pair<ZONE*, ZONE*>& areaZonePair : toCache )
-        returns.emplace_back( tp.submit( query_areas, areaZonePair ) );
-
-    for( const std::future<size_t>& ret : returns )
+    for( auto& ret : futures )
     {
         std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 

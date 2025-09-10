@@ -140,11 +140,10 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
     // Read all self-contained models in parallel
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto results = tp.parallelize_loop( modelQueue.size(),
-                            [&]( const int a, const int b )
+    auto results = tp.submit_loop( 0, modelQueue.size(),
+                            [&]( const int ii )
                             {
-                                for( int ii = a; ii < b; ++ii )
-                                    createModel( ii, true );
+                                createModel( ii, true );
                             } );
     results.wait();
 

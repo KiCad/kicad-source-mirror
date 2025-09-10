@@ -158,7 +158,7 @@ bool DRC_CACHE_GENERATOR::Run()
 
     forEachGeometryItem( itemTypes, boardCopperLayers, countItems );
 
-    std::future<void> retn = tp.submit(
+    std::future<void> retn = tp.submit_task(
             [&]()
             {
                 std::unique_lock<std::shared_mutex> writeLock( m_board->m_CachesMutex );
@@ -225,7 +225,7 @@ bool DRC_CACHE_GENERATOR::Run()
             };
 
     for( ZONE* zone : allZones )
-        returns.emplace_back( tp.submit( cache_zones, zone ) );
+        returns.emplace_back( tp.submit_task( [cache_zones, zone] { return cache_zones( zone ); } ) );
 
     done.store( 1 );
 

@@ -270,24 +270,21 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     {
         std::vector<std::future<size_t>> returns( dirtyItems.size() );
 
-        auto conn_lambda =
-                [&dirtyItems]( size_t aItem, CN_LIST* aItemList,
-                               PROGRESS_REPORTER* aReporter) -> size_t
-                {
-                    if( aReporter && aReporter->IsCancelled() )
+        for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
+        {
+            returns[ii] = tp.submit_task(
+                [&dirtyItems, ii, this] () ->size_t {
+                    if( m_progressReporter && m_progressReporter->IsCancelled() )
                         return 0;
 
-                    CN_VISITOR visitor( dirtyItems[aItem] );
-                    aItemList->FindNearby( dirtyItems[aItem], visitor );
+                    CN_VISITOR visitor( dirtyItems[ii] );
+                    m_itemList.FindNearby( dirtyItems[ii], visitor );
 
-                    if( aReporter )
-                        aReporter->AdvanceProgress();
+                    if( m_progressReporter )
+                        m_progressReporter->AdvanceProgress();
 
-                    return 1;
-                };
-
-        for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
-            returns[ii] = tp.submit( conn_lambda, ii, &m_itemList, m_progressReporter );
+                    return 1; } );
+        }
 
         for( const std::future<size_t>& ret : returns )
         {
@@ -490,7 +487,11 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
             };
 
     for( size_t ii = 0; ii < zitems.size(); ++ii )
-        returns[ii] = tp.submit( cache_zones, zitems[ii] );
+    {
+        CN_ZONE_LAYER* ptr = zitems[ii];
+        returns[ii] = tp.submit_task(
+            [cache_zones, ptr] { return cache_zones( ptr ); } );
+    }
 
     for( const std::future<size_t>& ret : returns )
     {

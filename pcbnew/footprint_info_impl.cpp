@@ -207,7 +207,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
             };
 
     for( size_t ii = 0; ii < num_elements; ++ii )
-        returns[ii] = tp.submit( fp_thread );
+        returns[ii] = tp.submit_task( fp_thread );
 
     for( const std::future<size_t>& ret : returns )
     {

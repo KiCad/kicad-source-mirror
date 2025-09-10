@@ -277,7 +277,7 @@ void RENDER_3D_RAYTRACE_BASE::renderTracing( uint8_t* ptrPBO, REPORTER* aStatusR
     BS::multi_future<void> futures;
 
     for( size_t i = 0; i < tp.get_thread_count(); ++i )
-        futures.push_back( tp.submit( processBlocks ) );
+        futures.push_back( tp.submit_task( processBlocks ) );
 
     futures.wait();
 
