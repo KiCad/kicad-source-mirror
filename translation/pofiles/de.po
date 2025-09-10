@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-10 01:02+0000\n"
+"PO-Revision-Date: 2025-09-11 04:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -5579,7 +5579,7 @@ msgstr "Voll"
 #: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:620
 #: pcbnew/pcb_textbox.cpp:790
 msgid "Dashed"
-msgstr "Strich"
+msgstr "Gestrichelt"
 
 #: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2344
 #: common/stroke_params.cpp:42
@@ -5588,7 +5588,7 @@ msgstr "Strich"
 #: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:621
 #: pcbnew/pcb_textbox.cpp:791
 msgid "Dotted"
-msgstr "Punkt"
+msgstr "Gepunktet"
 
 #: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2345
 #: common/stroke_params.cpp:43
@@ -11755,7 +11755,7 @@ msgstr "*** Keine Symbole mit passenden Kriterien gefunden ***"
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
 #, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** Symbol nicht gefunden ***"
+msgstr "*** Symbolbibliotheks-ID nicht gültig ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -23187,7 +23187,7 @@ msgstr "Zeichnungsblatt aus Datei zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:535
 msgid "Copy sheet into project and draw on current sheet"
-msgstr "Schaltplanseite in Projekt kopieren und auf aktueller Seiten zeichnen"
+msgstr "Schaltplanseite in Projekt kopieren und auf aktueller Seite zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:543
 msgid "Draw Sheet from Design Block"
@@ -23195,7 +23195,7 @@ msgstr "Schaltplanseite aus Designblock erzeugen"
 
 #: eeschema/tools/sch_actions.cpp:544
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "Designblock in Projekt kopieren und auf aktueller Seiten zeichnen"
+msgstr "Designblock in Projekt kopieren und auf aktueller Seite zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:552
 msgid "Place Sheet Pins"
@@ -23215,7 +23215,7 @@ msgstr "Schaltplanseite in Projekt importieren"
 
 #: eeschema/tools/sch_actions.cpp:586
 msgid "Place Global Labels"
-msgstr "Globale Bezeichner einzufügen"
+msgstr "Globale Bezeichner einfügen"
 
 #: eeschema/tools/sch_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
 msgid "Draw Tables"
@@ -23240,7 +23240,7 @@ msgstr "Bézierkurve zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:649
 msgid "Place Images"
-msgstr "Bilder einzufügen"
+msgstr "Bilder einfügen"
 
 #: eeschema/tools/sch_actions.cpp:657 pcbnew/tools/pcb_actions.cpp:306
 msgid "Draw Rule Areas"
@@ -33047,7 +33047,7 @@ msgstr "Leiterbahnen löschen, die an einem Ende nicht verbunden sind"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:58
 msgid "delete tracks having at least one dangling end"
-msgstr "Leiterbahnen löschen, die mit mindestens ein unverbundenes Ende haben"
+msgstr "Leiterbahnen löschen, die mindestens ein unverbundenes Ende haben"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:62
 msgid "Delete tracks fully inside pads"
@@ -35262,7 +35262,7 @@ msgstr "Freiräume"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 msgid "Leave values blank to use Board Setup values."
-msgstr "Werte frei lassen um Werte der Platinenkonfiguration zu verwenden."
+msgstr "Werte frei lassen, um Werte der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:278
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
@@ -35473,7 +35473,7 @@ msgstr "Bauteiltyp:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:236
 msgid "Leave values blank to use netclass values."
-msgstr "Werte frei lassen um Werte der Netzklasse zu verwenden."
+msgstr "Werte frei lassen, um Werte der Netzklasse zu verwenden."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:248
 msgid ""
@@ -37296,7 +37296,7 @@ msgstr "Freiraum-Überschreibungen"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
 msgid "Leave values blank to use parent footprint or netclass values."
 msgstr ""
-"Werte frei lassen um Werte aus dem übergeordneten Footprint oder Netzklasse "
+"Werte frei lassen, um Werte aus dem übergeordneten Footprint oder Netzklasse "
 "zu verwenden."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:954
@@ -41887,11 +41887,11 @@ msgstr "Lötstoppöffnung über Elementen mit verschiedenen Netzen"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Silkscreen clipped by solder mask"
-msgstr "Bestückungsdruck schneidet Lötstoppmaske"
+msgstr "Bestückungsdruck durch Lötstoppmaske ausgeschnitten"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Silkscreen clipped by board edge"
-msgstr "Bestückungsdruck von Platinenkante abgeschnitten"
+msgstr "Bestückungsdruck durch Platinenkante abgeschnitten"
 
 #: pcbnew/drc/drc_item.cpp:249
 msgid "Silkscreen overlap"
@@ -46428,7 +46428,7 @@ msgstr "Unbekannter Pad-Form-Name \"%s\" auf Lage \"%s\" in Zeile %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
 #, c-format
 msgid "No user layer to put layer %s"
-msgstr "Keine Benutzerlage vorhanden um ihr Lage %s zu zuordnen"
+msgstr "Keine Benutzerlage vorhanden, um ihr Lage %s zu zuordnen"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -49146,7 +49146,7 @@ msgstr "Um manche Elemente konnten keine Außenlinien erstellt werden."
 #: pcbnew/tools/item_modification_routine.cpp:937
 #, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Datei \"%s\" konnte nicht erstellt werden"
+msgstr "Rechteckige Außenlinie kann nicht erstellt werden"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
@@ -49748,7 +49748,7 @@ msgstr "Footprints aus Bibliothek aktualisieren..."
 #: pcbnew/tools/pcb_actions.cpp:792
 msgid "Update footprints to include any changes from the library"
 msgstr ""
-"Aktualisieren der Footprints um alle Änderungen der Bibliothek zu übernehmen"
+"Aktualisieren der Footprints, um alle Änderungen der Bibliothek zu übernehmen"
 
 #: pcbnew/tools/pcb_actions.cpp:798
 msgid "Remove Unused Pads..."
@@ -51470,7 +51470,7 @@ msgstr "DRC-Verstöße, die individuell ausgeschlossen wurden"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show footprint and text origins as a cross"
-msgstr "Footprint- und Textursprung mit Kreuz anzeigen"
+msgstr "Footprint- und Textursprung als Kreuz anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Locked Item Shadow"
