@@ -177,6 +177,38 @@ struct RValueRefParam {
     std::size_t func4(std::string &&s) const & { return s.size(); }
 };
 
+namespace pybind11_tests {
+namespace exercise_is_setter {
+
+struct FieldBase {
+    int int_value() const { return int_value_; }
+
+    FieldBase &SetIntValue(int int_value) {
+        int_value_ = int_value;
+        return *this;
+    }
+
+private:
+    int int_value_ = -99;
+};
+
+struct Field : FieldBase {};
+
+void add_bindings(py::module &m) {
+    py::module sm = m.def_submodule("exercise_is_setter");
+    // NOTE: FieldBase is not wrapped, therefore ...
+    py::class_<Field>(sm, "Field")
+        .def(py::init<>())
+        .def_property(
+            "int_value",
+            &Field::int_value,
+            &Field::SetIntValue // ... the `FieldBase &` return value here cannot be converted.
+        );
+}
+
+} // namespace exercise_is_setter
+} // namespace pybind11_tests
+
 TEST_SUBMODULE(methods_and_attributes, m) {
     // test_methods_and_attributes
     py::class_<ExampleMandA> emna(m, "ExampleMandA");
@@ -262,7 +294,7 @@ TEST_SUBMODULE(methods_and_attributes, m) {
                                  static_cast<py::str (ExampleMandA::*)(int, int)>(
                                      &ExampleMandA::overloaded));
                     })
-        .def("__str__", &ExampleMandA::toString)
+        .def("__str__", &ExampleMandA::toString, py::pos_only())
         .def_readwrite("value", &ExampleMandA::value);
 
     // test_copy_method
@@ -342,8 +374,7 @@ TEST_SUBMODULE(methods_and_attributes, m) {
     m.def("overload_order", [](const std::string &) { return 1; });
     m.def("overload_order", [](const std::string &) { return 2; });
     m.def("overload_order", [](int) { return 3; });
-    m.def(
-        "overload_order", [](int) { return 4; }, py::prepend{});
+    m.def("overload_order", [](int) { return 4; }, py::prepend{});
 
 #if !defined(PYPY_VERSION)
     // test_dynamic_attributes
@@ -361,10 +392,10 @@ TEST_SUBMODULE(methods_and_attributes, m) {
 
     // test_bad_arg_default
     // Issue/PR #648: bad arg default debugging output
-#if !defined(NDEBUG)
-    m.attr("debug_enabled") = true;
+#if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+    m.attr("detailed_error_messages_enabled") = true;
 #else
-    m.attr("debug_enabled") = false;
+    m.attr("detailed_error_messages_enabled") = false;
 #endif
     m.def("bad_arg_def_named", [] {
         auto m = py::module_::import("pybind11_tests");
@@ -456,4 +487,6 @@ TEST_SUBMODULE(methods_and_attributes, m) {
         .def("func2", &RValueRefParam::func2)
         .def("func3", &RValueRefParam::func3)
         .def("func4", &RValueRefParam::func4);
+
+    pybind11_tests::exercise_is_setter::add_bindings(m);
 }

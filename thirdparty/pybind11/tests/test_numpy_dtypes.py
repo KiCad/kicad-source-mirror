@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import re
 
 import pytest
@@ -15,7 +16,7 @@ def simple_dtype():
     return np.dtype(
         {
             "names": ["bool_", "uint_", "float_", "ldbl_"],
-            "formats": ["?", "u4", "f4", "f{}".format(ld.itemsize)],
+            "formats": ["?", "u4", "f4", f"f{ld.itemsize}"],
             "offsets": [0, 4, 8, (16 if ld.alignment > 4 else 12)],
         }
     )
@@ -77,9 +78,7 @@ def partial_nested_fmt():
     partial_size = partial_ld_off + ld.itemsize
     partial_end_padding = partial_size % np.dtype("uint64").alignment
     partial_nested_size = partial_nested_off * 2 + partial_size + partial_end_padding
-    return "{{'names':['a'],'formats':[{}],'offsets':[{}],'itemsize':{}}}".format(
-        partial_dtype_fmt(), partial_nested_off, partial_nested_size
-    )
+    return f"{{'names':['a'],'formats':[{partial_dtype_fmt()}],'offsets':[{partial_nested_off}],'itemsize':{partial_nested_size}}}"
 
 
 def assert_equal(actual, expected_data, expected_dtype):
@@ -126,19 +125,15 @@ def test_dtype(simple_dtype):
     assert [x.replace(" ", "") for x in m.print_dtypes()] == [
         simple_dtype_fmt(),
         packed_dtype_fmt(),
-        "[('a',{}),('b',{})]".format(simple_dtype_fmt(), packed_dtype_fmt()),
+        f"[('a',{simple_dtype_fmt()}),('b',{packed_dtype_fmt()})]",
         partial_dtype_fmt(),
         partial_nested_fmt(),
         "[('a','S3'),('b','S3')]",
         (
-            "{{'names':['a','b','c','d'],"
-            + "'formats':[('S4',(3,)),('"
-            + e
-            + "i4',(2,)),('u1',(3,)),('"
-            + e
-            + "f4',(4,2))],"
-            + "'offsets':[0,12,20,24],'itemsize':56}}"
-        ).format(e=e),
+            "{'names':['a','b','c','d'],"
+            f"'formats':[('S4',(3,)),('{e}i4',(2,)),('u1',(3,)),('{e}f4',(4,2))],"
+            "'offsets':[0,12,20,24],'itemsize':56}"
+        ),
         "[('e1','" + e + "i8'),('e2','u1')]",
         "[('x','i1'),('y','" + e + "u8')]",
         "[('cflt','" + e + "c8'),('cdbl','" + e + "c16')]",
@@ -161,6 +156,7 @@ def test_dtype(simple_dtype):
         d1,
         np.dtype("uint32"),
         d2,
+        np.dtype("d"),
     ]
 
     assert m.test_dtype_methods() == [
@@ -176,8 +172,37 @@ def test_dtype(simple_dtype):
         np.zeros(1, m.trailing_padding_dtype())
     )
 
-    assert m.test_dtype_kind() == list("iiiiiuuuuuffffcccbMmO")
-    assert m.test_dtype_char_() == list("bhilqBHILQefdgFDG?MmO")
+    expected_chars = list("bhilqBHILQefdgFDG?MmO")
+    # Note that int_ and uint size and mapping is NumPy version dependent:
+    expected_chars += [np.dtype(_).char for _ in ("int_", "uint", "intp", "uintp")]
+    assert m.test_dtype_kind() == list("iiiiiuuuuuffffcccbMmOiuiu")
+    assert m.test_dtype_char_() == list(expected_chars)
+    assert m.test_dtype_num() == [np.dtype(ch).num for ch in expected_chars]
+    assert m.test_dtype_byteorder() == [np.dtype(ch).byteorder for ch in expected_chars]
+    assert m.test_dtype_alignment() == [np.dtype(ch).alignment for ch in expected_chars]
+    assert m.test_dtype_flags() == [np.dtype(ch).flags for ch in expected_chars]
+
+    for a, b in m.test_dtype_num_of():
+        assert a == b
+
+    for a, b in m.test_dtype_normalized_num():
+        assert a == b
+
+    arr = np.array([4, 84, 21, 36])
+    # Note: "ulong" does not work in NumPy 1.x, so we use "L"
+    assert (m.test_dtype_switch(arr.astype("byte")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("ubyte")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("short")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("ushort")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("intc")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("uintc")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("long")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("L")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("longlong")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("ulonglong")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("single")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("double")) == arr + 1).all()
+    assert (m.test_dtype_switch(arr.astype("longdouble")) == arr + 1).all()
 
 
 def test_recarray(simple_dtype, packed_dtype):
@@ -286,19 +311,17 @@ def test_array_array():
 
     arr = m.create_array_array(3)
     assert str(arr.dtype).replace(" ", "") == (
-        "{{'names':['a','b','c','d'],"
-        + "'formats':[('S4',(3,)),('"
-        + e
-        + "i4',(2,)),('u1',(3,)),('{e}f4',(4,2))],"
-        + "'offsets':[0,12,20,24],'itemsize':56}}"
-    ).format(e=e)
+        "{'names':['a','b','c','d'],"
+        f"'formats':[('S4',(3,)),('{e}i4',(2,)),('u1',(3,)),('{e}f4',(4,2))],"
+        "'offsets':[0,12,20,24],'itemsize':56}"
+    )
     assert m.print_array_array(arr) == [
         "a={{A,B,C,D},{K,L,M,N},{U,V,W,X}},b={0,1},"
-        + "c={0,1,2},d={{0,1},{10,11},{20,21},{30,31}}",
+        "c={0,1,2},d={{0,1},{10,11},{20,21},{30,31}}",
         "a={{W,X,Y,Z},{G,H,I,J},{Q,R,S,T}},b={1000,1001},"
-        + "c={10,11,12},d={{100,101},{110,111},{120,121},{130,131}}",
+        "c={10,11,12},d={{100,101},{110,111},{120,121},{130,131}}",
         "a={{S,T,U,V},{C,D,E,F},{M,N,O,P}},b={2000,2001},"
-        + "c={20,21,22},d={{200,201},{210,211},{220,221},{230,231}}",
+        "c={20,21,22},d={{200,201},{210,211},{220,221},{230,231}}",
     ]
     assert arr["a"].tolist() == [
         [b"ABCD", b"KLMN", b"UVWX"],
@@ -344,7 +367,7 @@ def test_complex_array():
 def test_signature(doc):
     assert (
         doc(m.create_rec_nested)
-        == "create_rec_nested(arg0: int) -> numpy.ndarray[NestedStruct]"
+        == "create_rec_nested(arg0: typing.SupportsInt) -> numpy.typing.NDArray[NestedStruct]"
     )
 
 

@@ -8,9 +8,7 @@ Frequently asked questions
 filename of the extension library (without suffixes such as ``.so``).
 
 2. If the above did not fix the issue, you are likely using an incompatible
-version of Python (for instance, the extension library was compiled against
-Python 2, while the interpreter is running on top of some version of Python
-3, or vice versa).
+version of Python that does not match what you compiled with.
 
 "Symbol not found: ``__Py_ZeroStruct`` / ``_PyInstanceMethod_Type``"
 ========================================================================
@@ -92,7 +90,7 @@ following example:
     void init_ex2(py::module_ &);
     /* ... */
 
-    PYBIND11_MODULE(example, m) {
+    PYBIND11_MODULE(example, m, py::mod_gil_not_used()) {
         init_ex1(m);
         init_ex2(m);
         /* ... */
@@ -147,7 +145,7 @@ using C++14 template metaprogramming.
 
 .. _`faq:hidden_visibility`:
 
-"‘SomeClass’ declared with greater visibility than the type of its field ‘SomeClass::member’ [-Wattributes]"
+"'SomeClass' declared with greater visibility than the type of its field 'SomeClass::member' [-Wattributes]"
 ============================================================================================================
 
 This error typically indicates that you are compiling without the required
@@ -222,20 +220,6 @@ In addition to decreasing binary size, ``-fvisibility=hidden`` also avoids
 potential serious issues when loading multiple modules and is required for
 proper pybind operation.  See the previous FAQ entry for more details.
 
-Working with ancient Visual Studio 2008 builds on Windows
-=========================================================
-
-The official Windows distributions of Python are compiled using truly
-ancient versions of Visual Studio that lack good C++11 support. Some users
-implicitly assume that it would be impossible to load a plugin built with
-Visual Studio 2015 into a Python distribution that was compiled using Visual
-Studio 2008. However, no such issue exists: it's perfectly legitimate to
-interface DLLs that are built with different compilers and/or C libraries.
-Common gotchas to watch out for involve not ``free()``-ing memory region
-that that were ``malloc()``-ed in another shared library, using data
-structures with incompatible ABIs, and so on. pybind11 is very careful not
-to make these types of mistakes.
-
 How can I properly handle Ctrl-C in long-running functions?
 ===========================================================
 
@@ -251,8 +235,7 @@ been received, you must either explicitly interrupt execution by throwing
 
 .. code-block:: cpp
 
-    PYBIND11_MODULE(example, m)
-    {
+    PYBIND11_MODULE(example, m, py::mod_gil_not_used()) {
         m.def("long running_func", []()
         {
             for (;;) {
@@ -262,6 +245,50 @@ been received, you must either explicitly interrupt execution by throwing
             }
         });
     }
+
+What is a highly conclusive and simple way to find memory leaks (e.g. in pybind11 bindings)?
+============================================================================================
+
+Use ``while True`` & ``top`` (Linux, macOS).
+
+For example, locally change tests/test_type_caster_pyobject_ptr.py like this:
+
+.. code-block:: diff
+
+     def test_return_list_pyobject_ptr_reference():
+    +  while True:
+         vec_obj = m.return_list_pyobject_ptr_reference(ValueHolder)
+         assert [e.value for e in vec_obj] == [93, 186]
+         # Commenting out the next `assert` will leak the Python references.
+         # An easy way to see evidence of the leaks:
+         # Insert `while True:` as the first line of this function and monitor the
+         # process RES (Resident Memory Size) with the Unix top command.
+    -    assert m.dec_ref_each_pyobject_ptr(vec_obj) == 2
+    +    # assert m.dec_ref_each_pyobject_ptr(vec_obj) == 2
+
+Then run the test as you would normally do, which will go into the infinite loop.
+
+**In another shell, but on the same machine** run:
+
+.. code-block:: bash
+
+    top
+
+This will show:
+
+.. code-block::
+
+        PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1266095 rwgk      20   0 5207496 611372  45696 R 100.0   0.3   0:08.01 test_type_caste
+
+Look for the number under ``RES`` there. You'll see it going up very quickly.
+
+**Don't forget to Ctrl-C the test command** before your machine becomes
+unresponsive due to swapping.
+
+This method only takes a couple minutes of effort and is very conclusive.
+What you want to see is that the ``RES`` number is stable after a couple
+seconds.
 
 CMake doesn't detect the right Python version
 =============================================
@@ -274,9 +301,9 @@ CMake configure line. (Replace ``$(which python)`` with a path to python if
 your prefer.)
 
 You can alternatively try ``-DPYBIND11_FINDPYTHON=ON``, which will activate the
-new CMake FindPython support instead of pybind11's custom search. Requires
-CMake 3.12+, and 3.15+ or 3.18.2+ are even better. You can set this in your
-``CMakeLists.txt`` before adding or finding pybind11, as well.
+new CMake FindPython support instead of pybind11's custom search. Newer CMake,
+like, 3.18.2+, is recommended. You can set this in your ``CMakeLists.txt``
+before adding or finding pybind11, as well.
 
 Inconsistent detection of Python version in CMake and pybind11
 ==============================================================
@@ -289,27 +316,7 @@ Conflicts can arise, however, when using pybind11 in a project that *also* uses
 the CMake Python detection in a system with several Python versions installed.
 
 This difference may cause inconsistencies and errors if *both* mechanisms are
-used in the same project. Consider the following CMake code executed in a
-system with Python 2.7 and 3.x installed:
-
-.. code-block:: cmake
-
-    find_package(PythonInterp)
-    find_package(PythonLibs)
-    find_package(pybind11)
-
-It will detect Python 2.7 and pybind11 will pick it as well.
-
-In contrast this code:
-
-.. code-block:: cmake
-
-    find_package(pybind11)
-    find_package(PythonInterp)
-    find_package(PythonLibs)
-
-will detect Python 3.x for pybind11 and may crash on
-``find_package(PythonLibs)`` afterwards.
+used in the same project.
 
 There are three possible solutions:
 
@@ -317,10 +324,11 @@ There are three possible solutions:
    from CMake and rely on pybind11 in detecting Python version. If this is not
    possible, the CMake machinery should be called *before* including pybind11.
 2. Set ``PYBIND11_FINDPYTHON`` to ``True`` or use ``find_package(Python
-   COMPONENTS Interpreter Development)`` on modern CMake (3.12+, 3.15+ better,
-   3.18.2+ best). Pybind11 in these cases uses the new CMake FindPython instead
-   of the old, deprecated search tools, and these modules are much better at
-   finding the correct Python.
+   COMPONENTS Interpreter Development)`` on modern CMake ( 3.18.2+ best).
+   Pybind11 in these cases uses the new CMake FindPython instead of the old,
+   deprecated search tools, and these modules are much better at finding the
+   correct Python. If FindPythonLibs/Interp are not available (CMake 3.27+),
+   then this will be ignored and FindPython will be used.
 3. Set ``PYBIND11_NOPYTHON`` to ``TRUE``. Pybind11 will not search for Python.
    However, you will have to use the target-based system, and do more setup
    yourself, because it does not know about or include things that depend on

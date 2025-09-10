@@ -58,19 +58,51 @@ void bind_ConstructorStats(py::module_ &m) {
         // registered instances to allow instance cleanup checks (invokes a GC first)
         .def_static("detail_reg_inst", []() {
             ConstructorStats::gc();
-            return py::detail::get_internals().registered_instances.size();
+            return py::detail::num_registered_instances();
         });
 }
 
-PYBIND11_MODULE(pybind11_tests, m) {
+const char *cpp_std() {
+    return
+#if defined(PYBIND11_CPP20)
+        "C++20";
+#elif defined(PYBIND11_CPP17)
+        "C++17";
+#elif defined(PYBIND11_CPP14)
+        "C++14";
+#else
+        "C++11";
+#endif
+}
+
+PYBIND11_MODULE(pybind11_tests, m, py::mod_gil_not_used()) {
     m.doc() = "pybind11 test module";
+
+    // Intentionally kept minimal to not create a maintenance chore
+    // ("just enough" to be conclusive).
+#if defined(__VERSION__)
+    m.attr("compiler_info") = __VERSION__;
+#elif defined(_MSC_FULL_VER)
+    m.attr("compiler_info") = "MSVC " PYBIND11_TOSTRING(_MSC_FULL_VER);
+#else
+    m.attr("compiler_info") = py::none();
+#endif
+    m.attr("cpp_std") = cpp_std();
+    m.attr("PYBIND11_INTERNALS_ID") = PYBIND11_INTERNALS_ID;
+    // Free threaded Python uses UINT32_MAX for immortal objects.
+    m.attr("PYBIND11_SIMPLE_GIL_MANAGEMENT") =
+#if defined(PYBIND11_SIMPLE_GIL_MANAGEMENT)
+        true;
+#else
+        false;
+#endif
 
     bind_ConstructorStats(m);
 
-#if !defined(NDEBUG)
-    m.attr("debug_enabled") = true;
+#if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+    m.attr("detailed_error_messages_enabled") = true;
 #else
-    m.attr("debug_enabled") = false;
+    m.attr("detailed_error_messages_enabled") = false;
 #endif
 
     py::class_<UserType>(m, "UserType", "A `py::class_` type for testing")
@@ -89,4 +121,9 @@ PYBIND11_MODULE(pybind11_tests, m) {
     for (const auto &initializer : initializers()) {
         initializer(m);
     }
+
+    py::class_<TestContext>(m, "TestContext")
+        .def(py::init<>(&TestContext::createNewContextForInit))
+        .def("__enter__", &TestContext::contextEnter)
+        .def("__exit__", &TestContext::contextExit);
 }

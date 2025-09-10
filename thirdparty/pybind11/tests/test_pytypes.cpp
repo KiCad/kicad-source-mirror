@@ -7,11 +7,181 @@
     BSD-style license that can be found in the LICENSE file.
 */
 
+#include <pybind11/stl.h>
+#include <pybind11/typing.h>
+
 #include "pybind11_tests.h"
 
 #include <utility>
 
+//__has_include has been part of C++17, no need to check it
+#if defined(PYBIND11_CPP20) && __has_include(<ranges>)
+#    if !defined(PYBIND11_COMPILER_CLANG) || __clang_major__ >= 16 // llvm/llvm-project#52696
+#        define PYBIND11_TEST_PYTYPES_HAS_RANGES
+#        include <ranges>
+#    endif
+#endif
+
+namespace external {
+namespace detail {
+bool check(PyObject *o) { return PyFloat_Check(o) != 0; }
+
+PyObject *conv(PyObject *o) {
+    PyObject *ret = nullptr;
+    if (PyLong_Check(o)) {
+        double v = PyLong_AsDouble(o);
+        if (!(v == -1.0 && PyErr_Occurred())) {
+            ret = PyFloat_FromDouble(v);
+        }
+    } else {
+        py::set_error(PyExc_TypeError, "Unexpected type");
+    }
+    return ret;
+}
+
+PyObject *default_constructed() { return PyFloat_FromDouble(0.0); }
+} // namespace detail
+class float_ : public py::object {
+    PYBIND11_OBJECT_CVT(float_, py::object, external::detail::check, external::detail::conv)
+
+    float_() : py::object(external::detail::default_constructed(), stolen_t{}) {}
+
+    double get_value() const { return PyFloat_AsDouble(this->ptr()); }
+};
+} // namespace external
+
+namespace pybind11 {
+namespace detail {
+template <>
+struct handle_type_name<external::float_> {
+    static constexpr auto name = const_name("float");
+};
+} // namespace detail
+} // namespace pybind11
+
+namespace implicit_conversion_from_0_to_handle {
+// Uncomment to trigger compiler error. Note: Before PR #4008 this used to compile successfully.
+// void expected_to_trigger_compiler_error() { py::handle(0); }
+} // namespace implicit_conversion_from_0_to_handle
+
+// Used to validate systematically that PR #4008 does/did NOT change the behavior.
+void pure_compile_tests_for_handle_from_PyObject_pointers() {
+    {
+        PyObject *ptr = Py_None;
+        py::handle{ptr};
+    }
+    {
+        PyObject *const ptr = Py_None;
+        py::handle{ptr};
+    }
+    // Uncomment to trigger compiler errors.
+    // PyObject const *               ptr = Py_None; py::handle{ptr};
+    // PyObject const *const          ptr = Py_None; py::handle{ptr};
+    // PyObject volatile *            ptr = Py_None; py::handle{ptr};
+    // PyObject volatile *const       ptr = Py_None; py::handle{ptr};
+    // PyObject const volatile *      ptr = Py_None; py::handle{ptr};
+    // PyObject const volatile *const ptr = Py_None; py::handle{ptr};
+}
+
+namespace handle_from_move_only_type_with_operator_PyObject {
+
+// Reduced from
+// https://github.com/pytorch/pytorch/blob/279634f384662b7c3a9f8bf7ccc3a6afd2f05657/torch/csrc/utils/object_ptr.h
+struct operator_ncnst {
+    operator_ncnst() = default;
+    operator_ncnst(operator_ncnst &&) = default;
+    operator PyObject *() /* */ { return Py_None; } // NOLINT(google-explicit-constructor)
+};
+
+struct operator_const {
+    operator_const() = default;
+    operator_const(operator_const &&) = default;
+    operator PyObject *() const { return Py_None; } // NOLINT(google-explicit-constructor)
+};
+
+bool from_ncnst() {
+    operator_ncnst obj;
+    auto h = py::handle(obj);  // Critical part of test: does this compile?
+    return h.ptr() == Py_None; // Just something.
+}
+
+bool from_const() {
+    operator_const obj;
+    auto h = py::handle(obj);  // Critical part of test: does this compile?
+    return h.ptr() == Py_None; // Just something.
+}
+
+void m_defs(py::module_ &m) {
+    m.def("handle_from_move_only_type_with_operator_PyObject_ncnst", from_ncnst);
+    m.def("handle_from_move_only_type_with_operator_PyObject_const", from_const);
+}
+
+} // namespace handle_from_move_only_type_with_operator_PyObject
+
+#if defined(PYBIND11_TYPING_H_HAS_STRING_LITERAL)
+namespace literals {
+enum Color { RED = 0, BLUE = 1 };
+
+typedef py::typing::Literal<"26",
+                            "0x1A",
+                            "\"hello world\"",
+                            "b\"hello world\"",
+                            "u\"hello world\"",
+                            "True",
+                            "Color.RED",
+                            "None">
+    LiteralFoo;
+} // namespace literals
+namespace typevar {
+typedef py::typing::TypeVar<"T"> TypeVarT;
+typedef py::typing::TypeVar<"V"> TypeVarV;
+} // namespace typevar
+#endif
+
+// Custom type for testing arg_name/return_name type hints
+// RealNumber:
+// * in arguments -> float | int
+// * in return -> float
+// The choice of types is not really useful, but just made different for testing purposes.
+// According to `PEP 484 – Type Hints` annotating with `float` also allows `int`,
+// so using `float | int` could be replaced by just `float`.
+
+struct RealNumber {
+    double value;
+};
+
+namespace pybind11 {
+namespace detail {
+
+template <>
+struct type_caster<RealNumber> {
+    PYBIND11_TYPE_CASTER(RealNumber, io_name("float | int", "float"));
+
+    static handle cast(const RealNumber &number, return_value_policy, handle) {
+        return py::float_(number.value).release();
+    }
+
+    bool load(handle src, bool convert) {
+        // If we're in no-convert mode, only load if given a float
+        if (!convert && !py::isinstance<py::float_>(src)) {
+            return false;
+        }
+        if (!py::isinstance<py::float_>(src) && !py::isinstance<py::int_>(src)) {
+            return false;
+        }
+        value.value = src.cast<double>();
+        return true;
+    }
+};
+
+} // namespace detail
+} // namespace pybind11
+
 TEST_SUBMODULE(pytypes, m) {
+    m.def("obj_class_name", [](py::handle obj) { return py::detail::obj_class_name(obj.ptr()); });
+
+    handle_from_move_only_type_with_operator_PyObject::m_defs(m);
+
     // test_bool
     m.def("get_bool", [] { return py::bool_(false); });
     // test_int
@@ -20,6 +190,23 @@ TEST_SUBMODULE(pytypes, m) {
     m.def("get_iterator", [] { return py::iterator(); });
     // test_iterable
     m.def("get_iterable", [] { return py::iterable(); });
+    m.def("get_first_item_from_iterable", [](const py::iterable &iter) {
+        // This tests the postfix increment operator
+        py::iterator it = iter.begin();
+        py::iterator it2 = it++;
+        return *it2;
+    });
+    m.def("get_second_item_from_iterable", [](const py::iterable &iter) {
+        // This tests the prefix increment operator
+        py::iterator it = iter.begin();
+        ++it;
+        return *it;
+    });
+    m.def("get_frozenset_from_iterable",
+          [](const py::iterable &iter) { return py::frozenset(iter); });
+    m.def("get_list_from_iterable", [](const py::iterable &iter) { return py::list(iter); });
+    m.def("get_set_from_iterable", [](const py::iterable &iter) { return py::set(iter); });
+    m.def("get_tuple_from_iterable", [](const py::iterable &iter) { return py::tuple(iter); });
     // test_float
     m.def("get_float", [] { return py::float_(0.0f); });
     // test_list
@@ -28,6 +215,7 @@ TEST_SUBMODULE(pytypes, m) {
     m.def("list_size_t", []() { return py::list{(py::size_t) 0}; });
     m.def("list_insert_ssize_t", [](py::list *l) { return l->insert((py::ssize_t) 1, 83); });
     m.def("list_insert_size_t", [](py::list *l) { return l->insert((py::size_t) 3, 57); });
+    m.def("list_clear", [](py::list *l) { l->clear(); });
     m.def("get_list", []() {
         py::list list;
         list.append("value");
@@ -47,7 +235,7 @@ TEST_SUBMODULE(pytypes, m) {
     m.def("get_none", [] { return py::none(); });
     m.def("print_none", [](const py::none &none) { py::print("none: {}"_s.format(none)); });
 
-    // test_set
+    // test_set, test_frozenset
     m.def("get_set", []() {
         py::set set;
         set.add(py::str("key1"));
@@ -55,14 +243,26 @@ TEST_SUBMODULE(pytypes, m) {
         set.add(std::string("key3"));
         return set;
     });
-    m.def("print_set", [](const py::set &set) {
+    m.def("get_frozenset", []() {
+        py::set set;
+        set.add(py::str("key1"));
+        set.add("key2");
+        set.add(std::string("key3"));
+        return py::frozenset(set);
+    });
+    m.def("print_anyset", [](const py::anyset &set) {
         for (auto item : set) {
             py::print("key:", item);
         }
     });
-    m.def("set_contains",
-          [](const py::set &set, const py::object &key) { return set.contains(key); });
-    m.def("set_contains", [](const py::set &set, const char *key) { return set.contains(key); });
+    m.def("anyset_size", [](const py::anyset &set) { return set.size(); });
+    m.def("anyset_empty", [](const py::anyset &set) { return set.empty(); });
+    m.def("anyset_contains",
+          [](const py::anyset &set, const py::object &key) { return set.contains(key); });
+    m.def("anyset_contains",
+          [](const py::anyset &set, const char *key) { return set.contains(key); });
+    m.def("set_add", [](py::set &set, const py::object &key) { set.add(key); });
+    m.def("set_clear", [](py::set &set) { set.clear(); });
 
     // test_dict
     m.def("get_dict", []() { return py::dict("key"_a = "value"); });
@@ -77,7 +277,7 @@ TEST_SUBMODULE(pytypes, m) {
         return d2;
     });
     m.def("dict_contains",
-          [](const py::dict &dict, py::object val) { return dict.contains(val); });
+          [](const py::dict &dict, const py::object &val) { return dict.contains(val); });
     m.def("dict_contains",
           [](const py::dict &dict, const char *val) { return dict.contains(val); });
 
@@ -87,7 +287,6 @@ TEST_SUBMODULE(pytypes, m) {
     m.def("tuple_size_t", []() { return py::tuple{(py::size_t) 0}; });
     m.def("get_tuple", []() { return py::make_tuple(42, py::none(), "spam"); });
 
-#if PY_VERSION_HEX >= 0x03030000
     // test_simple_namespace
     m.def("get_simple_namespace", []() {
         auto ns = py::module_::import("types").attr("SimpleNamespace")(
@@ -96,13 +295,17 @@ TEST_SUBMODULE(pytypes, m) {
         py::setattr(ns, "right", py::int_(2));
         return ns;
     });
-#endif
 
     // test_str
     m.def("str_from_char_ssize_t", []() { return py::str{"red", (py::ssize_t) 3}; });
     m.def("str_from_char_size_t", []() { return py::str{"blue", (py::size_t) 4}; });
     m.def("str_from_string", []() { return py::str(std::string("baz")); });
+    m.def("str_from_std_string_input", [](const std::string &stri) { return py::str(stri); });
+    m.def("str_from_cstr_input", [](const char *c_str) { return py::str(c_str); });
     m.def("str_from_bytes", []() { return py::str(py::bytes("boo", 3)); });
+    m.def("str_from_bytes_input",
+          [](const py::bytes &encoded_str) { return py::str(encoded_str); });
+
     m.def("str_from_object", [](const py::object &obj) { return py::str(obj); });
     m.def("repr_from_object", [](const py::object &obj) { return py::repr(obj); });
     m.def("str_from_handle", [](py::handle h) { return py::str(h); });
@@ -133,11 +336,40 @@ TEST_SUBMODULE(pytypes, m) {
         return py::capsule([]() { py::print("destructing capsule"); });
     });
 
+    m.def("return_renamed_capsule_with_destructor", []() {
+        py::print("creating capsule");
+        auto cap = py::capsule([]() { py::print("destructing capsule"); });
+        static const char *capsule_name = "test_name1";
+        py::print("renaming capsule");
+        cap.set_name(capsule_name);
+        return cap;
+    });
+
     m.def("return_capsule_with_destructor_2", []() {
         py::print("creating capsule");
         return py::capsule((void *) 1234, [](void *ptr) {
             py::print("destructing capsule: {}"_s.format((size_t) ptr));
         });
+    });
+
+    m.def("return_capsule_with_destructor_3", []() {
+        py::print("creating capsule");
+        auto cap = py::capsule((void *) 1233, "oname", [](void *ptr) {
+            py::print("destructing capsule: {}"_s.format((size_t) ptr));
+        });
+        py::print("original name: {}"_s.format(cap.name()));
+        return cap;
+    });
+
+    m.def("return_renamed_capsule_with_destructor_2", []() {
+        py::print("creating capsule");
+        auto cap = py::capsule((void *) 1234, [](void *ptr) {
+            py::print("destructing capsule: {}"_s.format((size_t) ptr));
+        });
+        static const char *capsule_name = "test_name2";
+        py::print("renaming capsule");
+        cap.set_name(capsule_name);
+        return cap;
     });
 
     m.def("return_capsule_with_name_and_destructor", []() {
@@ -163,6 +395,12 @@ TEST_SUBMODULE(pytypes, m) {
         py::print(
             "created capsule ({}, '{}')"_s.format(result1 & result2 & result3, capsule.name()));
         return capsule;
+    });
+
+    m.def("return_capsule_with_explicit_nullptr_dtor", []() {
+        py::print("creating capsule with explicit nullptr dtor");
+        return py::capsule(reinterpret_cast<void *>(1234),
+                           static_cast<void (*)(void *)>(nullptr)); // PR #4221
     });
 
     // test_accessors
@@ -239,6 +477,55 @@ TEST_SUBMODULE(pytypes, m) {
         return d;
     });
 
+    m.def("accessor_moves", []() { // See PR #3970
+        py::list return_list;
+#ifdef PYBIND11_HANDLE_REF_DEBUG
+        py::int_ py_int_0(0);
+        py::int_ py_int_42(42);
+        py::str py_str_count("count");
+
+        auto tup = py::make_tuple(0);
+
+        py::sequence seq(tup);
+
+        py::list lst;
+        lst.append(0);
+
+#    define PYBIND11_LOCAL_DEF(...)                                                               \
+        {                                                                                         \
+            std::size_t inc_refs = py::handle::inc_ref_counter();                                 \
+            __VA_ARGS__;                                                                          \
+            inc_refs = py::handle::inc_ref_counter() - inc_refs;                                  \
+            return_list.append(inc_refs);                                                         \
+        }
+
+        PYBIND11_LOCAL_DEF(tup[py_int_0])    // l-value (to have a control)
+        PYBIND11_LOCAL_DEF(tup[py::int_(0)]) // r-value
+
+        PYBIND11_LOCAL_DEF(tup.attr(py_str_count))     // l-value
+        PYBIND11_LOCAL_DEF(tup.attr(py::str("count"))) // r-value
+
+        PYBIND11_LOCAL_DEF(seq[py_int_0])    // l-value
+        PYBIND11_LOCAL_DEF(seq[py::int_(0)]) // r-value
+
+        PYBIND11_LOCAL_DEF(seq.attr(py_str_count))     // l-value
+        PYBIND11_LOCAL_DEF(seq.attr(py::str("count"))) // r-value
+
+        PYBIND11_LOCAL_DEF(lst[py_int_0])    // l-value
+        PYBIND11_LOCAL_DEF(lst[py::int_(0)]) // r-value
+
+        PYBIND11_LOCAL_DEF(lst.attr(py_str_count))     // l-value
+        PYBIND11_LOCAL_DEF(lst.attr(py::str("count"))) // r-value
+
+        auto lst_acc = lst[py::int_(0)];
+        lst_acc = py::int_(42);                    // Detaches lst_acc from lst.
+        PYBIND11_LOCAL_DEF(lst_acc = py_int_42)    // l-value
+        PYBIND11_LOCAL_DEF(lst_acc = py::int_(42)) // r-value
+#    undef PYBIND11_LOCAL_DEF
+#endif
+        return return_list;
+    });
+
     // test_constructors
     m.def("default_constructors", []() {
         return py::dict("bytes"_a = py::bytes(),
@@ -264,6 +551,7 @@ TEST_SUBMODULE(pytypes, m) {
                         "list"_a = py::list(d["list"]),
                         "dict"_a = py::dict(d["dict"]),
                         "set"_a = py::set(d["set"]),
+                        "frozenset"_a = py::frozenset(d["frozenset"]),
                         "memoryview"_a = py::memoryview(d["memoryview"]));
     });
 
@@ -279,6 +567,7 @@ TEST_SUBMODULE(pytypes, m) {
                         "list"_a = d["list"].cast<py::list>(),
                         "dict"_a = d["dict"].cast<py::dict>(),
                         "set"_a = d["set"].cast<py::set>(),
+                        "frozenset"_a = d["frozenset"].cast<py::frozenset>(),
                         "memoryview"_a = d["memoryview"].cast<py::memoryview>());
     });
 
@@ -357,6 +646,9 @@ TEST_SUBMODULE(pytypes, m) {
 
     m.def("hash_function", [](py::object obj) { return py::hash(std::move(obj)); });
 
+    m.def("obj_contains",
+          [](py::object &obj, const py::object &key) { return obj.contains(key); });
+
     m.def("test_number_protocol", [](const py::object &a, const py::object &b) {
         py::list l;
         l.append(a.equal(b));
@@ -378,6 +670,8 @@ TEST_SUBMODULE(pytypes, m) {
     });
 
     m.def("test_list_slicing", [](const py::list &a) { return a[py::slice(0, -1, 2)]; });
+
+    m.def("test_list_slicing_default", [](const py::list &a) { return a[py::slice()]; });
 
     // See #2361
     m.def("issue2361_str_implicit_copy_none", []() {
@@ -423,12 +717,10 @@ TEST_SUBMODULE(pytypes, m) {
         return py::memoryview::from_buffer(static_cast<void *>(nullptr), 1, "B", {}, {});
     });
 
-#if PY_MAJOR_VERSION >= 3
     m.def("test_memoryview_from_memory", []() {
         const char *buf = "\xff\xe1\xab\x37";
         return py::memoryview::from_memory(buf, static_cast<py::ssize_t>(strlen(buf)));
     });
-#endif
 
     // test_builtin_functions
     m.def("get_len", [](py::handle h) { return py::len(h); });
@@ -462,8 +754,8 @@ TEST_SUBMODULE(pytypes, m) {
 // This is "most correct" and enforced on these platforms.
 #    define PYBIND11_AUTO_IT auto it
 #else
-// This works on many platforms and is (unfortunately) reflective of existing user code.
-// NOLINTNEXTLINE(bugprone-macro-parentheses)
+    // This works on many platforms and is (unfortunately) reflective of existing user code.
+    // NOLINTNEXTLINE(bugprone-macro-parentheses)
 #    define PYBIND11_AUTO_IT auto &it
 #endif
 
@@ -548,5 +840,374 @@ TEST_SUBMODULE(pytypes, m) {
         py::detail::accessor_policies::tuple_item::set(o, (py::size_t) 1, s1);
         py::detail::accessor_policies::tuple_item::set(o, (py::size_t) 0, s0);
         return o;
+    });
+
+    m.def("square_float_", [](const external::float_ &x) -> double {
+        double v = x.get_value();
+        return v * v;
+    });
+
+    m.def("tuple_rvalue_getter", [](const py::tuple &tup) {
+        // tests accessing tuple object with rvalue int
+        for (size_t i = 0; i < tup.size(); i++) {
+            auto o = py::handle(tup[py::int_(i)]);
+            if (!o) {
+                throw py::value_error("tuple is malformed");
+            }
+        }
+        return tup;
+    });
+    m.def("list_rvalue_getter", [](const py::list &l) {
+        // tests accessing list with rvalue int
+        for (size_t i = 0; i < l.size(); i++) {
+            auto o = py::handle(l[py::int_(i)]);
+            if (!o) {
+                throw py::value_error("list is malformed");
+            }
+        }
+        return l;
+    });
+    m.def("populate_dict_rvalue", [](int population) {
+        auto d = py::dict();
+        for (int i = 0; i < population; i++) {
+            d[py::int_(i)] = py::int_(i);
+        }
+        return d;
+    });
+    m.def("populate_obj_str_attrs", [](py::object &o, int population) {
+        for (int i = 0; i < population; i++) {
+            o.attr(py::str(py::int_(i))) = py::str(py::int_(i));
+        }
+        return o;
+    });
+
+    // testing immutable object augmented assignment: #issue 3812
+    m.def("inplace_append", [](py::object &a, const py::object &b) {
+        a += b;
+        return a;
+    });
+    m.def("inplace_subtract", [](py::object &a, const py::object &b) {
+        a -= b;
+        return a;
+    });
+    m.def("inplace_multiply", [](py::object &a, const py::object &b) {
+        a *= b;
+        return a;
+    });
+    m.def("inplace_divide", [](py::object &a, const py::object &b) {
+        a /= b;
+        return a;
+    });
+    m.def("inplace_or", [](py::object &a, const py::object &b) {
+        a |= b;
+        return a;
+    });
+    m.def("inplace_and", [](py::object &a, const py::object &b) {
+        a &= b;
+        return a;
+    });
+    m.def("inplace_lshift", [](py::object &a, const py::object &b) {
+        a <<= b;
+        return a;
+    });
+    m.def("inplace_rshift", [](py::object &a, const py::object &b) {
+        a >>= b;
+        return a;
+    });
+
+    m.def("annotate_tuple_float_str", [](const py::typing::Tuple<py::float_, py::str> &) {});
+    m.def("annotate_tuple_empty", [](const py::typing::Tuple<> &) {});
+    m.def("annotate_tuple_variable_length",
+          [](const py::typing::Tuple<py::float_, py::ellipsis> &) {});
+    m.def("annotate_dict_str_int", [](const py::typing::Dict<py::str, int> &) {});
+    m.def("annotate_list_int", [](const py::typing::List<int> &) {});
+    m.def("annotate_set_str", [](const py::typing::Set<std::string> &) {});
+    m.def("annotate_iterable_str", [](const py::typing::Iterable<std::string> &) {});
+    m.def("annotate_iterator_int", [](const py::typing::Iterator<int> &) {});
+    m.def("annotate_fn",
+          [](const py::typing::Callable<int(py::typing::List<py::str>, py::str)> &) {});
+
+    m.def("annotate_fn_only_return", [](const py::typing::Callable<int(py::ellipsis)> &) {});
+    m.def("annotate_type", [](const py::typing::Type<int> &t) -> py::type { return t; });
+
+    m.def("annotate_union",
+          [](py::typing::List<py::typing::Union<py::str, py::int_, py::object>> l,
+             py::str a,
+             py::int_ b,
+             py::object c) -> py::typing::List<py::typing::Union<py::str, py::int_, py::object>> {
+              l.append(a);
+              l.append(b);
+              l.append(c);
+              return l;
+          });
+
+    m.def("union_typing_only",
+          [](py::typing::List<py::typing::Union<py::str>> &l)
+              -> py::typing::List<py::typing::Union<py::int_>> { return l; });
+
+    m.def("annotate_union_to_object",
+          [](py::typing::Union<int, py::str> &o) -> py::object { return o; });
+
+    m.def("annotate_optional",
+          [](py::list &list) -> py::typing::List<py::typing::Optional<py::str>> {
+              list.append(py::str("hi"));
+              list.append(py::none());
+              return list;
+          });
+
+    m.def("annotate_type_guard", [](py::object &o) -> py::typing::TypeGuard<py::str> {
+        return py::isinstance<py::str>(o);
+    });
+    m.def("annotate_type_is",
+          [](py::object &o) -> py::typing::TypeIs<py::str> { return py::isinstance<py::str>(o); });
+
+    m.def("annotate_no_return", []() -> py::typing::NoReturn { throw 0; });
+    m.def("annotate_never", []() -> py::typing::Never { throw 0; });
+
+    m.def("annotate_optional_to_object",
+          [](py::typing::Optional<int> &o) -> py::object { return o; });
+
+#if defined(PYBIND11_TYPING_H_HAS_STRING_LITERAL)
+    py::enum_<literals::Color>(m, "Color")
+        .value("RED", literals::Color::RED)
+        .value("BLUE", literals::Color::BLUE);
+
+    m.def("annotate_literal", [](literals::LiteralFoo &o) -> py::object { return o; });
+    // Literal with `@`, `%`, `{`, `}`, and `->`
+    m.def("identity_literal_exclamation", [](const py::typing::Literal<"\"!\""> &x) { return x; });
+    m.def("identity_literal_at", [](const py::typing::Literal<"\"@\""> &x) { return x; });
+    m.def("identity_literal_percent", [](const py::typing::Literal<"\"%\""> &x) { return x; });
+    m.def("identity_literal_curly_open", [](const py::typing::Literal<"\"{\""> &x) { return x; });
+    m.def("identity_literal_curly_close", [](const py::typing::Literal<"\"}\""> &x) { return x; });
+    m.def("identity_literal_arrow_with_io_name",
+          [](const py::typing::Literal<"\"->\""> &x, const RealNumber &) { return x; });
+    m.def("identity_literal_arrow_with_callable",
+          [](const py::typing::Callable<RealNumber(const py::typing::Literal<"\"->\""> &,
+                                                   const RealNumber &)> &x) { return x; });
+    m.def("identity_literal_all_special_chars",
+          [](const py::typing::Literal<"\"!@!!->{%}\""> &x) { return x; });
+    m.def("annotate_generic_containers",
+          [](const py::typing::List<typevar::TypeVarT> &l) -> py::typing::List<typevar::TypeVarV> {
+              return l;
+          });
+
+    m.def("annotate_listT_to_T",
+          [](const py::typing::List<typevar::TypeVarT> &l) -> typevar::TypeVarT { return l[0]; });
+    m.def("annotate_object_to_T", [](const py::object &o) -> typevar::TypeVarT { return o; });
+    m.attr("defined_PYBIND11_TYPING_H_HAS_STRING_LITERAL") = true;
+#else
+    m.attr("defined_PYBIND11_TYPING_H_HAS_STRING_LITERAL") = false;
+#endif
+
+#if defined(PYBIND11_TEST_PYTYPES_HAS_RANGES)
+
+    // test_tuple_ranges
+    m.def("tuple_iterator_default_initialization", []() {
+        using TupleIterator = decltype(std::declval<py::tuple>().begin());
+        static_assert(std::random_access_iterator<TupleIterator>);
+        return TupleIterator{} == TupleIterator{};
+    });
+
+    m.def("transform_tuple_plus_one", [](py::tuple &tpl) {
+        py::list ret{};
+        for (auto &&it :
+             tpl | std::views::transform([](const auto &o) { return py::cast<int>(o) + 1; })) {
+            ret.append(py::int_(it));
+        }
+        return ret;
+    });
+
+    // test_list_ranges
+    m.def("list_iterator_default_initialization", []() {
+        using ListIterator = decltype(std::declval<py::list>().begin());
+        static_assert(std::random_access_iterator<ListIterator>);
+        return ListIterator{} == ListIterator{};
+    });
+
+    m.def("transform_list_plus_one", [](py::list &lst) {
+        py::list ret{};
+        for (auto &&it :
+             lst | std::views::transform([](const auto &o) { return py::cast<int>(o) + 1; })) {
+            ret.append(py::int_(it));
+        }
+        return ret;
+    });
+
+    // test_dict_ranges
+    m.def("dict_iterator_default_initialization", []() {
+        using DictIterator = decltype(std::declval<py::dict>().begin());
+        static_assert(std::forward_iterator<DictIterator>);
+        return DictIterator{} == DictIterator{};
+    });
+
+    m.def("transform_dict_plus_one", [](py::dict &dct) {
+        py::list ret{};
+        for (auto it : dct | std::views::transform([](auto &o) {
+                           return std::pair{py::cast<int>(o.first) + 1,
+                                            py::cast<int>(o.second) + 1};
+                       })) {
+            ret.append(py::make_tuple(py::int_(it.first), py::int_(it.second)));
+        }
+        return ret;
+    });
+
+    m.attr("defined_PYBIND11_TEST_PYTYPES_HAS_RANGES") = true;
+#else
+    m.attr("defined_PYBIND11_TEST_PYTYPES_HAS_RANGES") = false;
+#endif
+
+#if defined(__cpp_inline_variables)
+    // Exercises const char* overload:
+    m.attr_with_type_hint<py::typing::List<int>>("list_int") = py::list();
+    // Exercises py::handle overload:
+    m.attr_with_type_hint<py::typing::Set<py::str>>(py::str("set_str")) = py::set();
+
+    struct foo_t {};
+    struct foo2 {};
+    struct foo3 {};
+
+    pybind11::class_<foo_t>(m, "foo");
+    pybind11::class_<foo2>(m, "foo2");
+    pybind11::class_<foo3>(m, "foo3");
+    m.attr_with_type_hint<foo_t>("foo") = foo_t{};
+
+    m.attr_with_type_hint<py::typing::Union<foo_t, foo2, foo3>>("foo_union") = foo_t{};
+
+    // Include to ensure this does not crash
+    struct foo4 {};
+    m.attr_with_type_hint<foo4>("foo4") = 3;
+
+    struct Empty {};
+    py::class_<Empty>(m, "EmptyAnnotationClass");
+
+    struct Static {};
+    auto static_class = py::class_<Static>(m, "Static");
+    static_class.def(py::init());
+    static_class.attr_with_type_hint<py::typing::ClassVar<float>>("x") = 1.0;
+    static_class.attr_with_type_hint<py::typing::ClassVar<py::typing::Dict<py::str, int>>>(
+        "dict_str_int")
+        = py::dict();
+
+    struct Instance {};
+    auto instance = py::class_<Instance>(m, "Instance", py::dynamic_attr());
+    instance.def(py::init());
+    instance.attr_with_type_hint<float>("y");
+
+    m.def("attr_with_type_hint_float_x",
+          [](py::handle obj) { obj.attr_with_type_hint<float>("x"); });
+
+    m.attr_with_type_hint<py::typing::Final<int>>("CONST_INT") = 3;
+
+    m.attr("defined___cpp_inline_variables") = true;
+#else
+    m.attr("defined___cpp_inline_variables") = false;
+#endif
+    m.def("half_of_number", [](const RealNumber &x) { return RealNumber{x.value / 2}; });
+    m.def(
+        "half_of_number_convert",
+        [](const RealNumber &x) { return RealNumber{x.value / 2}; },
+        py::arg("x"));
+    m.def(
+        "half_of_number_noconvert",
+        [](const RealNumber &x) { return RealNumber{x.value / 2}; },
+        py::arg("x").noconvert());
+    // std::vector<T>
+    m.def("half_of_number_vector", [](const std::vector<RealNumber> &x) {
+        std::vector<RealNumber> result;
+        result.reserve(x.size());
+        for (auto num : x) {
+            result.push_back(RealNumber{num.value / 2});
+        }
+        return result;
+    });
+    // Tuple<T, T>
+    m.def("half_of_number_tuple", [](const py::typing::Tuple<RealNumber, RealNumber> &x) {
+        py::typing::Tuple<RealNumber, RealNumber> result
+            = py::make_tuple(RealNumber{x[0].cast<RealNumber>().value / 2},
+                             RealNumber{x[1].cast<RealNumber>().value / 2});
+        return result;
+    });
+    // Tuple<T, ...>
+    m.def("half_of_number_tuple_ellipsis",
+          [](const py::typing::Tuple<RealNumber, py::ellipsis> &x) {
+              py::typing::Tuple<RealNumber, py::ellipsis> result(x.size());
+              for (size_t i = 0; i < x.size(); ++i) {
+                  result[i] = x[i].cast<RealNumber>().value / 2;
+              }
+              return result;
+          });
+    // Dict<K, V>
+    m.def("half_of_number_dict", [](const py::typing::Dict<std::string, RealNumber> &x) {
+        py::typing::Dict<std::string, RealNumber> result;
+        for (auto it : x) {
+            result[it.first] = RealNumber{it.second.cast<RealNumber>().value / 2};
+        }
+        return result;
+    });
+    // List<T>
+    m.def("half_of_number_list", [](const py::typing::List<RealNumber> &x) {
+        py::typing::List<RealNumber> result;
+        for (auto num : x) {
+            result.append(RealNumber{num.cast<RealNumber>().value / 2});
+        }
+        return result;
+    });
+    // List<List<T>>
+    m.def("half_of_number_nested_list",
+          [](const py::typing::List<py::typing::List<RealNumber>> &x) {
+              py::typing::List<py::typing::List<RealNumber>> result_lists;
+              for (auto nums : x) {
+                  py::typing::List<RealNumber> result;
+                  for (auto num : nums) {
+                      result.append(RealNumber{num.cast<RealNumber>().value / 2});
+                  }
+                  result_lists.append(result);
+              }
+              return result_lists;
+          });
+    // Set<T>
+    m.def("identity_set", [](const py::typing::Set<RealNumber> &x) { return x; });
+    // Iterable<T>
+    m.def("identity_iterable", [](const py::typing::Iterable<RealNumber> &x) { return x; });
+    // Iterator<T>
+    m.def("identity_iterator", [](const py::typing::Iterator<RealNumber> &x) { return x; });
+    // Callable<R(A)> identity
+    m.def("identity_callable",
+          [](const py::typing::Callable<RealNumber(const RealNumber &)> &x) { return x; });
+    // Callable<R(...)> identity
+    m.def("identity_callable_ellipsis",
+          [](const py::typing::Callable<RealNumber(py::ellipsis)> &x) { return x; });
+    // Nested Callable<R(A)> identity
+    m.def("identity_nested_callable",
+          [](const py::typing::Callable<py::typing::Callable<RealNumber(const RealNumber &)>(
+                 py::typing::Callable<RealNumber(const RealNumber &)>)> &x) { return x; });
+    // Callable<R(A)>
+    m.def("apply_callable",
+          [](const RealNumber &x, const py::typing::Callable<RealNumber(const RealNumber &)> &f) {
+              return f(x).cast<RealNumber>();
+          });
+    // Callable<R(...)>
+    m.def("apply_callable_ellipsis",
+          [](const RealNumber &x, const py::typing::Callable<RealNumber(py::ellipsis)> &f) {
+              return f(x).cast<RealNumber>();
+          });
+    // Union<T1, T2>
+    m.def("identity_union", [](const py::typing::Union<RealNumber, std::string> &x) { return x; });
+    // Optional<T>
+    m.def("identity_optional", [](const py::typing::Optional<RealNumber> &x) { return x; });
+    // TypeGuard<T>
+    m.def("check_type_guard",
+          [](const py::typing::List<py::object> &x)
+              -> py::typing::TypeGuard<py::typing::List<RealNumber>> {
+              for (const auto &item : x) {
+                  if (!py::isinstance<RealNumber>(item)) {
+                      return false;
+                  }
+              }
+              return true;
+          });
+    // TypeIs<T>
+    m.def("check_type_is", [](const py::object &x) -> py::typing::TypeIs<RealNumber> {
+        return py::isinstance<RealNumber>(x);
     });
 }

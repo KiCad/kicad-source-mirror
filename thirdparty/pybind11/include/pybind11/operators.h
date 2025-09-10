@@ -84,6 +84,7 @@ struct op_impl {};
 /// Operator implementation generator
 template <op_id id, op_type ot, typename L, typename R>
 struct op_ {
+    static constexpr bool op_enable_if_hook = true;
     template <typename Class, typename... Extra>
     void execute(Class &cl, const Extra &...extra) const {
         using Base = typename Class::type;
@@ -91,16 +92,6 @@ struct op_ {
         using R_type = conditional_t<std::is_same<R, self_t>::value, Base, R>;
         using op = op_impl<id, ot, Base, L_type, R_type>;
         cl.def(op::name(), &op::execute, is_operator(), extra...);
-#if PY_MAJOR_VERSION < 3
-        if (PYBIND11_SILENCE_MSVC_C4127(id == op_truediv)
-            || PYBIND11_SILENCE_MSVC_C4127(id == op_itruediv))
-            cl.def(id == op_itruediv ? "__idiv__"
-                   : ot == op_l      ? "__div__"
-                                     : "__rdiv__",
-                   &op::execute,
-                   is_operator(),
-                   extra...);
-#endif
     }
     template <typename Class, typename... Extra>
     void execute_cast(Class &cl, const Extra &...extra) const {
@@ -109,15 +100,6 @@ struct op_ {
         using R_type = conditional_t<std::is_same<R, self_t>::value, Base, R>;
         using op = op_impl<id, ot, Base, L_type, R_type>;
         cl.def(op::name(), &op::execute_cast, is_operator(), extra...);
-#if PY_MAJOR_VERSION < 3
-        if (id == op_truediv || id == op_itruediv)
-            cl.def(id == op_itruediv ? "__idiv__"
-                   : ot == op_l      ? "__div__"
-                                     : "__rdiv__",
-                   &op::execute,
-                   is_operator(),
-                   extra...);
-#endif
     }
 };
 

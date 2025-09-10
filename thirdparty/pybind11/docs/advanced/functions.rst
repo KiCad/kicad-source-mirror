@@ -16,7 +16,7 @@ lifetime of objects managed by them. This can lead to issues when creating
 bindings for functions that return a non-trivial type. Just by looking at the
 type information, it is not clear whether Python should take charge of the
 returned value and eventually free its resources, or if this is handled on the
-C++ side. For this reason, pybind11 provides a several *return value policy*
+C++ side. For this reason, pybind11 provides several *return value policy*
 annotations that can be passed to the :func:`module_::def` and
 :func:`class_::def` functions. The default policy is
 :enum:`return_value_policy::automatic`.
@@ -81,9 +81,11 @@ The following table provides an overview of available policies:
 |                                                  | it is no longer used. Warning: undefined behavior will ensue when the C++  |
 |                                                  | side deletes an object that is still referenced and used by Python.        |
 +--------------------------------------------------+----------------------------------------------------------------------------+
-| :enum:`return_value_policy::reference_internal`  | Indicates that the lifetime of the return value is tied to the lifetime    |
-|                                                  | of a parent object, namely the implicit ``this``, or ``self`` argument of  |
-|                                                  | the called method or property. Internally, this policy works just like     |
+| :enum:`return_value_policy::reference_internal`  | If the return value is an lvalue reference or a pointer, the parent object |
+|                                                  | (the implicit ``this``, or ``self`` argument of the called method or       |
+|                                                  | property) is kept alive for at least the lifespan of the return value.     |
+|                                                  | **Otherwise this policy falls back to :enum:`return_value_policy::move`    |
+|                                                  | (see #5528).** Internally, this policy works just like                     |
 |                                                  | :enum:`return_value_policy::reference` but additionally applies a          |
 |                                                  | ``keep_alive<0, 1>`` *call policy* (described in the next section) that    |
 |                                                  | prevents the parent object from being garbage collected as long as the     |
@@ -372,7 +374,7 @@ like so:
 Keyword-only arguments
 ======================
 
-Python 3 introduced keyword-only arguments by specifying an unnamed ``*``
+Python implements keyword-only arguments by specifying an unnamed ``*``
 argument in a function definition:
 
 .. code-block:: python
@@ -395,19 +397,18 @@ argument annotations when registering the function:
     m.def("f", [](int a, int b) { /* ... */ },
           py::arg("a"), py::kw_only(), py::arg("b"));
 
-Note that you currently cannot combine this with a ``py::args`` argument.  This
-feature does *not* require Python 3 to work.
-
 .. versionadded:: 2.6
 
-As of pybind11 2.9, a ``py::args`` argument implies that any following arguments
-are keyword-only, as if ``py::kw_only()`` had been specified in the same
-relative location of the argument list as the ``py::args`` argument.  The
-``py::kw_only()`` may be included to be explicit about this, but is not
-required.  (Prior to 2.9 ``py::args`` may only occur at the end of the argument
-list, or immediately before a ``py::kwargs`` argument at the end).
+A ``py::args`` argument implies that any following arguments are keyword-only,
+as if ``py::kw_only()`` had been specified in the same relative location of the
+argument list as the ``py::args`` argument.  The ``py::kw_only()`` may be
+included to be explicit about this, but is not required.
 
-.. versionadded:: 2.9
+.. versionchanged:: 2.9
+   This can now be combined with ``py::args``. Before, ``py::args`` could only
+   occur at the end of the argument list, or immediately before a ``py::kwargs``
+   argument at the end.
+
 
 Positional-only arguments
 =========================
