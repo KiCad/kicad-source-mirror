@@ -101,7 +101,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">10</property>
-          <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+          <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
           <property name="proportion">0</property>
           <object class="wxGridBagSizer" expanded="true">
             <property name="empty_cell_size"></property>
@@ -254,7 +254,7 @@
               <property name="border">5</property>
               <property name="colspan">1</property>
               <property name="column">2</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
               <property name="row">0</property>
               <property name="rowspan">2</property>
               <object class="wxBitmapButton" expanded="true">

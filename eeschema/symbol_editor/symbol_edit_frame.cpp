@@ -1541,7 +1541,7 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
 }
 
 
-void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
+void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 {
     static KIID lastBrightenedItemID( niluuid );
 
@@ -1587,7 +1587,7 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
             lastBrightenedItemID = aItem->m_Uuid;
         }
 
-        FocusOnLocation( VECTOR2I( aItem->GetFocusPosition().x, -aItem->GetFocusPosition().y ) );
+        FocusOnLocation( VECTOR2I( aItem->GetFocusPosition().x, -aItem->GetFocusPosition().y ), aAllowScroll );
     }
 }
 

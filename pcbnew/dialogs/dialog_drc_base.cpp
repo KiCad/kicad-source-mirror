@@ -52,7 +52,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_bMenu = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bMenu->SetMinSize( wxSize( 30,30 ) );
 
-	gbSizerOptions->Add( m_bMenu, wxGBPosition( 0, 2 ), wxGBSpan( 2, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerOptions->Add( m_bMenu, wxGBPosition( 0, 2 ), wxGBSpan( 2, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	gbSizerOptions->AddGrowableCol( 0 );
@@ -60,7 +60,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	gbSizerOptions->AddGrowableRow( 0 );
 	gbSizerOptions->AddGrowableRow( 1 );
 
-	m_MainSizer->Add( gbSizerOptions, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	m_MainSizer->Add( gbSizerOptions, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
 
 	m_runningResultsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	running = new wxPanel( m_runningResultsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

@@ -755,7 +755,7 @@ public:
     int GetSchematicJunctionSize();
     double GetSchematicHopOverScale();
 
-    void FocusOnItem( EDA_ITEM* aItem ) override;
+    void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) override;
 
     bool IsSyncingSelection() { return m_syncingPcbToSchSelection; }
 

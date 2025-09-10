@@ -313,7 +313,7 @@ public:
      *
      * @param aItem is the item to focus on. nullptr clears the focus.
      */
-    virtual void FocusOnItem( EDA_ITEM* aItem ) {}
+    virtual void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) {}
 
     virtual void ClearFocus() { FocusOnItem( nullptr ); }
 

@@ -2032,7 +2032,7 @@ bool SCH_EDIT_FRAME::GetShowAllPins() const
 }
 
 
-void SCH_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
+void SCH_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 {
     // nullptr will clear the current focus
     if( aItem != nullptr && !aItem->IsSCH_ITEM() )
@@ -2060,7 +2060,7 @@ void SCH_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
             lastBrightenedItemID = aItem->m_Uuid;
         }
 
-        FocusOnLocation( aItem->GetFocusPosition() );
+        FocusOnLocation( aItem->GetFocusPosition(), aAllowScroll );
     }
 }
 

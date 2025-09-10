@@ -68,7 +68,6 @@ public:
         int edit_label_width;
         int edit_label_height;
         bool edit_label_multiple;
-        int  erc_severities;
         bool footprint_preview;
         bool print_sheet_reference;
         wxString default_font;
@@ -265,6 +264,12 @@ public:
         int  sort_mode;
     };
 
+    struct DIALOG_ERC
+    {
+        bool crossprobe;
+        bool scroll_on_crossprobe;
+    };
+
     struct DIALOG_IMPORT_GRAPHICS
     {
         bool     interactive_placement;
@@ -328,40 +333,31 @@ private:
     static std::vector<NETLIST_PLUGIN_SETTINGS> netlistSettingsFromJson( const nlohmann::json& aObj );
 
 public:
-    APPEARANCE m_Appearance;
+    APPEARANCE                m_Appearance;
+    AUI_PANELS                m_AuiPanels;
 
-    AUTOPLACE_FIELDS m_AutoplaceFields;
+    DRAWING                   m_Drawing;
+    INPUT                     m_Input;
+    AUTOPLACE_FIELDS          m_AutoplaceFields;
+    SELECTION                 m_Selection;
 
-    AUI_PANELS m_AuiPanels;
-
-    DRAWING m_Drawing;
-
-    FIND_REPLACE_EXTRA m_FindReplaceExtra;
-
-    INPUT m_Input;
-
-    PAGE_SETTINGS m_PageSettings;
-
-    PANEL_ANNOTATE m_AnnotatePanel;
-
-    PANEL_BOM m_BomPanel;
+    PAGE_SETTINGS             m_PageSettings;
+    PANEL_ANNOTATE            m_AnnotatePanel;
+    PANEL_BOM                 m_BomPanel;
 
     PANEL_SYMBOL_FIELDS_TABLE m_FieldEditorPanel;
+    PANEL_LIB_VIEW            m_LibViewPanel;
+    PANEL_NETLIST             m_NetlistPanel;
+    PANEL_SYM_CHOOSER         m_SymChooserPanel;
 
-    PANEL_LIB_VIEW m_LibViewPanel;
+    FIND_REPLACE_EXTRA        m_FindReplaceExtra;
+    DIALOG_ERC                m_ERCDialog;
+    DIALOG_IMPORT_GRAPHICS    m_ImportGraphics;
 
-    PANEL_NETLIST m_NetlistPanel;
+    SIMULATOR                 m_Simulator;
 
-    PANEL_SYM_CHOOSER m_SymChooserPanel;
+    bool                      m_RescueNeverShow;
 
-    DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
-
-    SELECTION m_Selection;
-
-    SIMULATOR m_Simulator;
-
-    bool m_RescueNeverShow;
-
-    wxString m_lastSymbolLibDir;
+    wxString                  m_lastSymbolLibDir;
 };
 

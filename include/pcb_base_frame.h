@@ -220,7 +220,7 @@ public:
 
     EDA_ITEM* ResolveItem( const KIID& aId, bool aAllowNullptrReturn = false ) const override;
 
-    void FocusOnItem( EDA_ITEM* aItem ) override;
+    void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) override;
     void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer = UNDEFINED_LAYER, bool aAllowScroll = true );
     void FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        bool aAllowScroll = true );

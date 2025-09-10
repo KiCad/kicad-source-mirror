@@ -253,13 +253,13 @@ EDA_ITEM* PCB_BASE_FRAME::ResolveItem( const KIID& aId, bool aAllowNullptrReturn
     return GetBoard()->ResolveItem( aId, aAllowNullptrReturn );
 }
 
-void PCB_BASE_FRAME::FocusOnItem( EDA_ITEM* aItem )
+void PCB_BASE_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 {
     // nullptr will clear the current focus
     if( aItem != nullptr && !aItem->IsBOARD_ITEM() )
         return;
 
-    FocusOnItem( static_cast<BOARD_ITEM*>( aItem ), UNDEFINED_LAYER );
+    FocusOnItem( static_cast<BOARD_ITEM*>( aItem ), UNDEFINED_LAYER, aAllowScroll );
 }
 
 void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, bool aAllowScroll )

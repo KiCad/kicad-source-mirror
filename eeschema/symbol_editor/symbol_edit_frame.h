@@ -377,7 +377,7 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
-    void FocusOnItem( EDA_ITEM* aItem ) override;
+    void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) override;
 
     /**
      * Load a symbol from the schematic to edit in place.

@@ -189,9 +189,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "appearance.edit_label_height",
             &m_Appearance.edit_label_height, -1 ) );
 
-    m_params.emplace_back( new PARAM<int>( "appearance.erc_severities",
-            &m_Appearance.erc_severities, RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) );
-
     m_params.emplace_back( new PARAM<bool>( "appearance.footprint_preview",
             &m_Appearance.footprint_preview, true ) );
 
@@ -590,6 +587,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "symbol_chooser.sort_mode",
             &m_SymChooserPanel.sort_mode, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "ERC.crossprobe",
+            &m_ERCDialog.crossprobe, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "ERC.scroll_on_crossprobe",
+            &m_ERCDialog.scroll_on_crossprobe, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );

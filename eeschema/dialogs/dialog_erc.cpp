@@ -42,6 +42,7 @@
 #include <id.h>
 #include <confirm.h>
 #include <widgets/wx_html_report_box.h>
+#include <widgets/std_bitmap_button.h>
 #include <dialogs/dialog_text_entry.h>
 #include <string_utils.h>
 #include <kiplatform/ui.h>
@@ -76,15 +77,15 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         m_running( false ),
         m_ercRun( false ),
         m_centerMarkerOnIdle( nullptr ),
-        m_severities( 0 )
+        m_crossprobe( true ),
+        m_scroll_on_crossprobe( true )
 {
     m_currentSchematic = &parent->Schematic();
 
     SetName( DIALOG_ERC_WINDOW_NAME ); // Set a window name to be able to find it
     KIPLATFORM::UI::SetFloatLevel( this );
 
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        m_severities = cfg->m_Appearance.erc_severities;
+    m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
 
     m_messages->SetImmediateMode();
 
@@ -92,7 +93,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_markerTreeModel = new ERC_TREE_MODEL( parent, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
-    m_markerTreeModel->Update( m_markerProvider, m_severities );
+    m_markerTreeModel->Update( m_markerProvider, getSeverities() );
 
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
 
@@ -129,8 +130,11 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     SetFocus();
 
-    syncCheckboxes();
-    updateDisplayedCounts();
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        m_crossprobe = cfg->m_ERCDialog.crossprobe;
+        m_scroll_on_crossprobe = cfg->m_ERCDialog.scroll_on_crossprobe;
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -148,7 +152,10 @@ DIALOG_ERC::~DIALOG_ERC()
         g_lastERCIgnored.push_back( { m_ignoredList->GetItemText( ii ), m_ignoredList->GetItemData( ii ) } );
 
     if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        cfg->m_Appearance.erc_severities = m_severities;
+    {
+        cfg->m_ERCDialog.crossprobe = m_crossprobe;
+        cfg->m_ERCDialog.scroll_on_crossprobe = m_scroll_on_crossprobe;
+    }
 
     m_markerTreeModel->DecRef();
 }
@@ -189,6 +196,59 @@ void DIALOG_ERC::UpdateAnnotationWarning()
 }
 
 
+int DIALOG_ERC::getSeverities()
+{
+    int severities = 0;
+
+    if( m_showErrors->GetValue() )
+        severities |= RPT_SEVERITY_ERROR;
+
+    if( m_showWarnings->GetValue() )
+        severities |= RPT_SEVERITY_WARNING;
+
+    if( m_showExclusions->GetValue() )
+        severities |= RPT_SEVERITY_EXCLUSION;
+
+    return severities;
+}
+
+
+void DIALOG_ERC::OnMenu( wxCommandEvent& event )
+{
+    // Build a pop menu:
+    wxMenu menu;
+
+    menu.Append( 4206, _( "Cross-probe Selected Items" ),
+                 _( "Highlight corresponding items on canvas when selected in the ERC list" ),
+                 wxITEM_CHECK );
+    menu.Check( 4206, m_crossprobe );
+
+    menu.Append( 4207, _( "Center on Cross-probe" ),
+                 _( "When cross-probing, scroll the canvas so that the item is visible" ),
+                 wxITEM_CHECK );
+    menu.Check( 4207, m_scroll_on_crossprobe );
+
+    // menu_id is the selected submenu id from the popup menu or wxID_NONE
+    int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
+
+    if( menu_id == 0 || menu_id == 4206 )
+    {
+        m_crossprobe = !m_crossprobe;
+    }
+    else if( menu_id == 1 || menu_id == 4207 )
+    {
+        m_scroll_on_crossprobe = !m_scroll_on_crossprobe;
+    }
+}
+
+
+bool DIALOG_ERC::TransferDataToWindow()
+{
+    UpdateData();
+    return true;
+}
+
+
 bool DIALOG_ERC::updateUI()
 {
     // If ERC checks ever get slow enough we'll want a progress indicator...
@@ -214,6 +274,13 @@ void DIALOG_ERC::AdvancePhase( const wxString& aMessage )
 void DIALOG_ERC::Report( const wxString& aMessage )
 {
     m_messages->Report( aMessage );
+}
+
+
+void DIALOG_ERC::UpdateData()
+{
+    m_markerTreeModel->Update( m_markerProvider, getSeverities() );
+    updateDisplayedCounts();
 }
 
 
@@ -348,27 +415,11 @@ void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& aEvent )
     // Dialog is mode-less so let the parent know that it needs to be destroyed.
     if( !IsModal() && !IsQuasiModal() )
     {
-        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_ERC_DIALOG, wxID_ANY );
-
-        wxWindow* parent = GetParent();
-
-        if( parent )
-            wxQueueEvent( parent, evt );
+        if( wxWindow* parent = GetParent() )
+            wxQueueEvent( parent, new wxCommandEvent( EDA_EVT_CLOSE_ERC_DIALOG, wxID_ANY ) );
     }
 
     aEvent.Skip();
-}
-
-
-static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
-
-
-void DIALOG_ERC::syncCheckboxes()
-{
-    m_showAll->SetValue( m_severities == RPT_SEVERITY_ALL );
-    m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
-    m_showWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
-    m_showExclusions->SetValue( m_severities & RPT_SEVERITY_EXCLUSION );
 }
 
 
@@ -446,8 +497,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     }
 
     if( m_cancelled )
-        // @spellingerror
-        m_messages->Report( _( "-------- ERC canceled by user.<br><br>" ), RPT_SEVERITY_INFO );
+        m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ), RPT_SEVERITY_INFO );
     else
         m_messages->Report( _( "Done.<br><br>" ), RPT_SEVERITY_INFO );
 
@@ -508,7 +558,7 @@ void DIALOG_ERC::testErc()
     }
 
     // Update marker list:
-    m_markerTreeModel->Update( m_markerProvider, m_severities );
+    m_markerTreeModel->Update( m_markerProvider, getSeverities() );
 
     // Display new markers from the current screen:
     for( SCH_ITEM* marker : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
@@ -523,6 +573,12 @@ void DIALOG_ERC::testErc()
 
 void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 {
+    if( !m_crossprobe )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     const KIID&     itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     SCH_SHEET_PATH  sheet;
     SCH_ITEM*       item = m_parent->Schematic().ResolveItem( itemID, &sheet, true );
@@ -568,7 +624,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
             m_parent->RedrawScreen( m_parent->GetScreen()->m_ScrollCenter, false );
         }
 
-        m_parent->FocusOnItem( item );
+        m_parent->FocusOnItem( item, m_scroll_on_crossprobe );
         redrawDrawPanel();
     }
 
@@ -762,7 +818,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
             m_parent->GetCanvas()->GetView()->Update( marker );
 
             // Update view
-            if( m_severities & RPT_SEVERITY_EXCLUSION )
+            if( getSeverities() & RPT_SEVERITY_EXCLUSION )
                 static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
             else
                 static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
@@ -788,7 +844,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
         modified = true;
         break;
 
@@ -804,7 +860,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
         modified = true;
         break;
 
@@ -830,7 +886,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, m_severities );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
         modified = true;
     }
         break;
@@ -956,7 +1012,7 @@ void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
         m_parent->GetCanvas()->GetView()->Update( marker );
 
         // Update view
-        if( m_severities & RPT_SEVERITY_EXCLUSION )
+        if( getSeverities() & RPT_SEVERITY_EXCLUSION )
             m_markerTreeModel->ValueChanged( node );
         else
             m_markerTreeModel->DeleteCurrentItem( false );
@@ -976,28 +1032,14 @@ void DIALOG_ERC::OnEditViolationSeverities( wxHyperlinkEvent& aEvent )
 
 void DIALOG_ERC::OnSeverity( wxCommandEvent& aEvent )
 {
-    int flag = 0;
-
     if( aEvent.GetEventObject() == m_showAll )
-        flag = RPT_SEVERITY_ALL;
-    else if( aEvent.GetEventObject() == m_showErrors )
-        flag = RPT_SEVERITY_ERROR;
-    else if( aEvent.GetEventObject() == m_showWarnings )
-        flag = RPT_SEVERITY_WARNING;
-    else if( aEvent.GetEventObject() == m_showExclusions )
-        flag = RPT_SEVERITY_EXCLUSION;
+    {
+        m_showErrors->SetValue( true );
+        m_showWarnings->SetValue( aEvent.IsChecked() );
+        m_showExclusions->SetValue( aEvent.IsChecked() );
+    }
 
-    if( aEvent.IsChecked() )
-        m_severities |= flag;
-    else if( aEvent.GetEventObject() == m_showAll )
-        m_severities = RPT_SEVERITY_ERROR;
-    else
-        m_severities &= ~flag;
-
-    syncCheckboxes();
-
-    m_markerTreeModel->Update( m_markerProvider, m_severities );
-    updateDisplayedCounts();
+    UpdateData();
 }
 
 

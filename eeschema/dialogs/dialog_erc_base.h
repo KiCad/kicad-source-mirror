@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_BOX;
 class WX_INFOBAR;
 
@@ -20,13 +21,16 @@ class WX_INFOBAR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/gbsizer.h>
 #include <wx/html/htmlwin.h>
 #include <wx/gauge.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
 #include <wx/listctrl.h>
@@ -35,12 +39,11 @@ class WX_INFOBAR;
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
 #include <widgets/number_badge.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_ERASE_DRC_MARKERS 1000
+#define ID_ERASE_DRC_MARKERS 7100
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ERC_BASE
@@ -51,6 +54,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_INFOBAR* m_infoBar;
+		STD_BITMAP_BUTTON* m_bMenu;
 		wxSimplebook* m_runningResultsBook;
 		wxPanel* running;
 		wxNotebook* m_runningNotebook;
@@ -82,6 +86,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseErcDialog( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnMenu( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnERCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
