@@ -31,6 +31,7 @@
 #include <sch_table.h>
 #include <sch_tablecell.h>
 #include <sch_textbox.h>
+#include <schematic.h>
 
 #include <wx/arrstr.h>
 
@@ -172,4 +173,73 @@ std::optional<SCH_REFERENCE> FindSymbolByRefAndUnit( const SCHEMATIC& aSchematic
     }
 
     return std::nullopt;
+}
+
+
+std::vector<SCH_SYMBOL*> GetSameSymbolMultiUnitSelection( const SELECTION& aSel )
+{
+    std::vector<SCH_SYMBOL*> result;
+
+    if( aSel.GetSize() < 2 || !aSel.OnlyContains( { SCH_SYMBOL_T } ) )
+        return result;
+
+    wxString rootRef;
+    LIB_ID   rootLibId;
+    bool     haveRootLibId = false;
+    size_t   rootPinCount = 0;
+    bool     haveRootPinCount = false;
+
+    // Preserve selection order for cyclical swaps A->B->C
+    std::vector<EDA_ITEM*> itemsInOrder = aSel.GetItemsSortedBySelectionOrder();
+
+    for( EDA_ITEM* it : itemsInOrder )
+    {
+        SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( it );
+
+        if( !sym || !sym->GetLibSymbolRef() || sym->GetLibSymbolRef()->GetUnitCount() < 2 )
+            return {};
+
+        const SCH_SHEET_PATH& sheet = sym->Schematic()->CurrentSheet();
+
+        // Get unit-less reference
+        wxString ref = sym->GetRef( &sheet, false );
+
+        if( rootRef.IsEmpty() )
+            rootRef = ref;
+
+        if( ref != rootRef )
+            return {};
+
+        // Make sure the user isn't selecting units that are misreferenced such that
+        // they have U1A and U1B that are actually from different library symbols.
+        const LIB_ID& libId = sym->GetLibId();
+
+        if( !haveRootLibId )
+        {
+            rootLibId = libId;
+            haveRootLibId = true;
+        }
+
+        if( libId != rootLibId )
+            return {};
+
+        // Ensure same pin count across selected units
+        size_t pinCount = sym->GetPins( &sheet ).size();
+
+        if( !haveRootPinCount )
+        {
+            rootPinCount = pinCount;
+            haveRootPinCount = true;
+        }
+
+        if( pinCount != rootPinCount )
+            return {};
+
+        result.push_back( sym );
+    }
+
+    if( result.size() < 2 )
+        return {};
+
+    return result;
 }

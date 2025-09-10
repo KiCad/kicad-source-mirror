@@ -72,6 +72,7 @@
 #include <wx/textdlg.h>
 #include <wx/msgdlg.h>
 #include <project/net_settings.h>
+#include <tools/sch_tool_utils.h>
 
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
@@ -1519,6 +1520,57 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 }
 
 
+// Used by SwapPinLabels() and SwapUnitLabels() to find the single net label connected to a pin
+static SCH_LABEL_BASE* findSingleNetLabelForPin( SCH_PIN* aPin, CONNECTION_GRAPH* aGraph,
+                                                 const SCH_SHEET_PATH& aSheetPath )
+{
+    if( !aGraph || !aPin )
+        return nullptr;
+
+    CONNECTION_SUBGRAPH* sg = aGraph->GetSubgraphForItem( aPin );
+
+    if( !sg )
+        return nullptr;
+
+    const std::set<SCH_ITEM*>& items = sg->GetItems();
+
+    size_t          pinCount = 0;
+    SCH_LABEL_BASE* label = nullptr;
+
+    for( SCH_ITEM* item : items )
+    {
+        if( item->Type() == SCH_PIN_T )
+            pinCount++;
+
+        switch( item->Type() )
+        {
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        {
+            SCH_CONNECTION* conn = item->Connection( &aSheetPath );
+
+            if( conn && conn->IsNet() )
+            {
+                if( label )
+                    return nullptr; // more than one label
+
+                label = static_cast<SCH_LABEL_BASE*>( item );
+            }
+
+            break;
+        }
+        default: break;
+        }
+    }
+
+    if( pinCount != 1 )
+        return nullptr;
+
+    return label;
+}
+
+
 int SCH_EDIT_TOOL::SwapPinLabels( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION&         selection = m_selectionTool->RequestSelection( { SCH_PIN_T } );
@@ -1531,57 +1583,12 @@ int SCH_EDIT_TOOL::SwapPinLabels( const TOOL_EVENT& aEvent )
 
     const SCH_SHEET_PATH& sheetPath = m_frame->GetCurrentSheet();
 
-    auto findSingleNetLabel = [&]( SCH_PIN* aPin ) -> SCH_LABEL_BASE*
-        {
-            CONNECTION_SUBGRAPH* sg = connectionGraph->GetSubgraphForItem( aPin );
-
-            if( !sg )
-                return nullptr;
-
-            const std::set<SCH_ITEM*>& items = sg->GetItems();
-
-            size_t          pinCount = 0;
-            SCH_LABEL_BASE* label = nullptr;
-
-            for( SCH_ITEM* it : items )
-            {
-                if( it->Type() == SCH_PIN_T )
-                    pinCount++;
-
-                switch( it->Type() )
-                {
-                case SCH_LABEL_T:
-                case SCH_GLOBAL_LABEL_T:
-                case SCH_HIER_LABEL_T:
-                {
-                    SCH_CONNECTION* conn = it->Connection( &sheetPath );
-
-                    if( conn && conn->IsNet() )
-                    {
-                        if( label )
-                            return nullptr; // more than one label
-
-                        label = static_cast<SCH_LABEL_BASE*>( it );
-                    }
-
-                    break;
-                }
-                default: break;
-                }
-            }
-
-            if( pinCount != 1 )
-                return nullptr;
-
-            return label;
-        };
-
     std::vector<SCH_LABEL_BASE*> labels;
 
     for( EDA_ITEM* item : orderedPins )
     {
         SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
-        SCH_LABEL_BASE* label = findSingleNetLabel( pin );
+        SCH_LABEL_BASE* label = findSingleNetLabelForPin( pin, connectionGraph, sheetPath );
 
         if( !label )
         {
@@ -1612,6 +1619,86 @@ int SCH_EDIT_TOOL::SwapPinLabels( const TOOL_EVENT& aEvent )
 
         commit.Push( _( "Swap Pin Labels" ) );
     }
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::SwapUnitLabels( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION&           selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    std::vector<SCH_SYMBOL*> selectedUnits = GetSameSymbolMultiUnitSelection( selection );
+
+    if( selectedUnits.size() < 2 )
+        return 0;
+
+    CONNECTION_GRAPH* connectionGraph = m_frame->Schematic().ConnectionGraph();
+
+    const SCH_SHEET_PATH& sheetPath = m_frame->GetCurrentSheet();
+
+    // Build ordered label vectors (sorted by pin X/Y) for each selected unit
+    std::vector<std::vector<SCH_LABEL_BASE*>> symbolLabelVectors;
+
+    for( SCH_SYMBOL* symbol : selectedUnits )
+    {
+        std::vector<std::pair<VECTOR2I, SCH_LABEL_BASE*>> byPos;
+
+        for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
+        {
+            SCH_LABEL_BASE* label = findSingleNetLabelForPin( pin, connectionGraph, sheetPath );
+
+            if( !label )
+            {
+                m_frame->ShowInfoBarError( _( "Each pin of selected units must have exactly one attached net label and "
+                                              "no other pin connections." ) );
+                return 0;
+            }
+
+            byPos.emplace_back( pin->GetPosition(), label );
+        }
+
+        // Sort labels by pin position (X, then Y)
+        std::sort( byPos.begin(), byPos.end(), []( const auto& a, const auto& b )
+            {
+                if( a.first.x != b.first.x )
+                    return a.first.x < b.first.x;
+
+                return a.first.y < b.first.y;
+            } );
+
+        // Discard position, just keep the order
+        std::vector<SCH_LABEL_BASE*> labels;
+
+        for( const auto& pr : byPos )
+            labels.push_back( pr.second );
+
+        symbolLabelVectors.push_back( labels );
+    }
+
+    // All selected units are guaranteed to have identical pin counts by GetSameSymbolMultiUnitSelection()
+    const size_t pinCount = symbolLabelVectors.front().size();
+
+    // Perform cyclic swap of labels across all selected symbols, per pin index
+    SCH_COMMIT commit( m_frame );
+
+    for( size_t pin = 0; pin < pinCount; pin++ )
+    {
+        for( auto& vec : symbolLabelVectors )
+            commit.Modify( vec[pin], m_frame->GetScreen() );
+
+        wxString carry = symbolLabelVectors.back()[pin]->GetText();
+
+        for( size_t i = 0; i < symbolLabelVectors.size(); i++ )
+        {
+            SCH_LABEL_BASE* lbl = symbolLabelVectors[i][pin];
+            wxString        next = lbl->GetText();
+            lbl->SetText( carry );
+            carry = next;
+        }
+    }
+
+    if( !commit.Empty() )
+        commit.Push( _( "Swap Unit Labels" ) );
 
     return 0;
 }
@@ -3264,6 +3351,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorH.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Swap,               SCH_ACTIONS::swap.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SwapPinLabels,      SCH_ACTIONS::swapPinLabels.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SwapUnitLabels,     SCH_ACTIONS::swapUnitLabels.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 

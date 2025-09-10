@@ -32,6 +32,7 @@
 class SCH_REFERENCE;
 class SCH_SYMBOL;
 class SCHEMATIC;
+class LIB_ID;
 
 wxString GetSchItemAsText( const SCH_ITEM& aItem );
 
@@ -49,3 +50,13 @@ std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym );
  */
 std::optional<SCH_REFERENCE> FindSymbolByRefAndUnit( const SCHEMATIC& aSheet, const wxString& aRef,
                                                      int aUnit );
+
+/**
+ * Validates and gathers a selection containing multiple symbol units that all belong to the
+ * same reference designator and originate from the same library symbol (LIB_ID).
+ *
+ * Used by gate label swap.
+ *
+ * @return a SELECTION of SCH_SYMBOL* if valid, or an empty vector if not valid.
+ */
+std::vector<SCH_SYMBOL*> GetSameSymbolMultiUnitSelection( const SELECTION& aSel );

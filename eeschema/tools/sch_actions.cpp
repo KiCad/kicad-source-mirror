@@ -774,7 +774,15 @@ TOOL_ACTION SCH_ACTIONS::swapPinLabels( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.swapPinLabels" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Swap Pin Labels" ) )
-        .Tooltip( _( "Swap the labels attached to selected pins" ) ) );
+        .Tooltip( _( "Swap the labels attached to selected pins" ) )
+        .Icon( BITMAPS::swap ) );
+
+TOOL_ACTION SCH_ACTIONS::swapUnitLabels( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.swapUnitLabels" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Swap Unit Labels" ) )
+        .Tooltip( _( "Swap labels between selected units" ) )
+        .Icon( BITMAPS::swap ) );
 
 TOOL_ACTION SCH_ACTIONS::properties( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.properties" )

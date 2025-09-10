@@ -43,6 +43,7 @@ public:
     int Mirror( const TOOL_EVENT& aEvent );
     int Swap( const TOOL_EVENT& aEvent );
     int SwapPinLabels( const TOOL_EVENT& aEvent );
+    int SwapUnitLabels( const TOOL_EVENT& aEvent );
 
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
 

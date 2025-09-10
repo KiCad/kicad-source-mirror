@@ -55,6 +55,7 @@
 #include <tools/sch_point_editor.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_tool_utils.h>
 #include <trigo.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -302,6 +303,12 @@ bool SCH_SELECTION_TOOL::Init()
                 return m_enteredGroup != nullptr;
             };
 
+    auto multipleUnitsSelection = []( const SELECTION& aSel )
+        {
+            return !GetSameSymbolMultiUnitSelection( aSel ).empty();
+        };
+
+
     auto& menu = m_menu->GetMenu();
 
     // clang-format off
@@ -340,6 +347,7 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddItem( SCH_ACTIONS::syncSheetPins,         sheetSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::assignNetclass,        connectedSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::swapPinLabels,         multiplePinsSelection && schEditCondition && SCH_CONDITIONS::Idle, 250 );
+    menu.AddItem( SCH_ACTIONS::swapUnitLabels,        multipleUnitsSelection && schEditCondition && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::editPageNumber,        schEditSheetPageNumberCondition, 250 );
 
     menu.AddSeparator( 400 );
