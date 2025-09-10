@@ -670,7 +670,7 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
 {
     long key = aEvent.GetKeyCode();
     bool is_tab = aEvent.IsKeyInCategory( WXK_CATEGORY_TAB );
-
+printf("key %lX mod %X\n", key, aEvent.GetModifiers());
     if( key == WXK_ESCAPE )
     {
         return 0;
@@ -698,9 +698,13 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
         if( ( mods & wxMOD_SHIFT ) && ( keyIsLetter || key > 256 || key == 9 || key == 32 ) )
             key |= MD_SHIFT;
 
-        if( mods & wxMOD_ALTGR )
-            key |= MD_ALTGR;
+        // the flag wxMOD_ALTGR is defined in wxWidgets as wxMOD_CONTROL|wxMOD_ALT
+        // So AltGr key cannot used as modifier key because it is the same as Alt key + Ctrl key.
+    #if CAN_USE_ALTGR_KEY
+        if( wxmods & wxMOD_ALTGR )
+            mods |= MD_ALTGR;
         else
+    #endif
         {
             if( mods & wxMOD_CONTROL )
                 key |= MD_CTRL;

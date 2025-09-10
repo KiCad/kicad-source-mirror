@@ -642,9 +642,13 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
     int mods = aKeyStroke.GetModifiers();
 
-    if( mods & wxMOD_ALTGR )
-        hotkey += MD_ALTGR;
+    // the flag wxMOD_ALTGR is defined in wxWidgets as wxMOD_CONTROL|wxMOD_ALT
+    // So AltGr key cannot used as modifier key because it is the same as Alt key + Ctrl key.
+#if CAN_USE_ALTGR_KEY
+    if( wxmods & wxMOD_ALTGR )
+        mods |= MD_ALTGR;
     else
+#endif
     {
         if( mods & wxMOD_CONTROL )
             hotkey += MD_CTRL;

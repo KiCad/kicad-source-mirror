@@ -84,38 +84,9 @@ private:
     /// Returns the instance of VIEW, used by the application.
     KIGFX::VIEW* getView();
 
-    /// Saves the state of key modifiers (Alt, Ctrl and so on).
-    static int decodeModifiers( const wxKeyboardState* aState )
-    {
-        int mods = 0;
-        int wxmods = aState->GetModifiers();
-
-        if( wxmods & wxMOD_ALTGR )
-            mods |= MD_ALTGR;
-        else
-        {
-            if( wxmods & wxMOD_CONTROL )
-                mods |= MD_CTRL;
-
-            if( wxmods & wxMOD_ALT )
-                mods |= MD_ALT;
-        }
-
-        if( wxmods & wxMOD_SHIFT )
-            mods |= MD_SHIFT;
-
-#ifdef wxMOD_META
-        if( wxmods & wxMOD_META )
-            mods |= MD_META;
-#endif
-
-#ifdef wxMOD_WIN
-        if( wxmods & wxMOD_WIN )
-            mods |= MD_SUPER;
-#endif
-
-        return mods;
-    }
+    /// Returns the state of key modifiers (Alt, Ctrl and so on) as OR'ed list
+    /// of bits (MD_CTRL, MD_ALT ...)
+    static int decodeModifiers( const wxKeyboardState* aState );
 
 private:
     /// The time threshold for a mouse button press that distinguishes between a single mouse

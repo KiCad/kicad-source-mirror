@@ -158,6 +158,43 @@ TOOL_DISPATCHER::~TOOL_DISPATCHER()
         delete st;
 }
 
+int TOOL_DISPATCHER::decodeModifiers( const wxKeyboardState* aState )
+{
+    int mods = 0;
+    int wxmods = aState->GetModifiers();
+
+    // Returns the state of key modifiers (Alt, Ctrl and so on). Be carefull:
+    // the flag wxMOD_ALTGR is defined in wxWidgets as wxMOD_CONTROL|wxMOD_ALT
+    // So AltGr key cannot used as modifier key because it is the same as Alt key + Ctrl key.
+#if CAN_USE_ALTGR_KEY
+    if( wxmods & wxMOD_ALTGR )
+        mods |= MD_ALTGR;
+    else
+#endif
+    {
+        if( wxmods & wxMOD_CONTROL )
+            mods |= MD_CTRL;
+
+        if( wxmods & wxMOD_ALT )
+            mods |= MD_ALT;
+    }
+
+    if( wxmods & wxMOD_SHIFT )
+        mods |= MD_SHIFT;
+
+#ifdef wxMOD_META
+    if( wxmods & wxMOD_META )
+        mods |= MD_META;
+#endif
+
+#ifdef wxMOD_WIN
+    if( wxmods & wxMOD_WIN )
+        mods |= MD_SUPER;
+#endif
+
+    return mods;
+}
+
 
 void TOOL_DISPATCHER::ResetState()
 {
