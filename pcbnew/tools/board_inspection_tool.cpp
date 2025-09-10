@@ -27,6 +27,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/edit_tool.h>
+#include <tools/drc_tool.h>
 #include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
@@ -34,11 +35,12 @@
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <dialogs/dialog_footprint_associations.h>
+#include <dialogs/dialog_drc.h>
+#include <kiplatform/ui.h>
 #include <string_utils.h>
 #include <tools/board_inspection_tool.h>
 #include <fp_lib_table.h>
 #include <pcb_shape.h>
-#include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_html_report_box.h>
 #include <widgets/footprint_diff_widget.h>
@@ -338,7 +340,9 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
 
 void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
 {
-    wxCHECK( m_frame, /* void */ );
+    DRC_TOOL* drcTool = m_toolMgr->GetTool<DRC_TOOL>();
+
+    wxCHECK( drcTool && m_frame, /* void */ );
 
     BOARD_ITEM*           a = m_frame->GetBoard()->ResolveItem( aDRCItem->GetMainItemID() );
     BOARD_ITEM*           b = m_frame->GetBoard()->ResolveItem( aDRCItem->GetAuxItemID() );
@@ -349,7 +353,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
     {
         if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( a ) )
-            DiffFootprint( footprint );
+            DiffFootprint( footprint, drcTool->GetDRCDialog() );
 
         return;
     }
@@ -698,7 +702,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     r->Flush();
 
-    dialog->Raise();
+    KIPLATFORM::UI::ReparentWindow( dialog, drcTool->GetDRCDialog() );
     dialog->Show( true );
 }
 
@@ -1613,7 +1617,7 @@ int BOARD_INSPECTION_TOOL::ShowFootprintLinks( const TOOL_EVENT& aEvent )
 }
 
 
-void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint )
+void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWindow* aReparentTo )
 {
     DIALOG_BOOK_REPORTER* dialog = m_frame->GetFootprintDiffDialog();
 
@@ -1694,7 +1698,11 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint )
 
     r->Flush();
 
-    dialog->Raise();
+    if( aReparentTo )
+        KIPLATFORM::UI::ReparentWindow( dialog, aReparentTo );
+    else
+        dialog->Raise();
+
     dialog->Show( true );
 }
 

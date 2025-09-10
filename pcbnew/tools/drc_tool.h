@@ -60,6 +60,8 @@ public:
 
     int ShowDRCDialog( const TOOL_EVENT& aEvent );
 
+    DIALOG_DRC* GetDRCDialog() { return m_drcDialog; }
+
     /**
      * Check to see if the DRC_TOOL dialog is currently shown
      */

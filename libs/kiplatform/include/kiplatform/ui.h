@@ -25,6 +25,7 @@
 
 class wxChoice;
 class wxNonOwnedWindow;
+class wxTopLevelWindow;
 class wxWindow;
 
 namespace KIPLATFORM
@@ -70,6 +71,8 @@ namespace KIPLATFORM
          * @param aWindow is the window to reparent
          */
         void ReparentModal( wxNonOwnedWindow* aWindow );
+
+        void ReparentWindow( wxNonOwnedWindow* aWindow, wxTopLevelWindow* aParent );
 
         /*
          * An ugly hack to fix an issue on OSX: cmd+c closes the dialog instead of copying the

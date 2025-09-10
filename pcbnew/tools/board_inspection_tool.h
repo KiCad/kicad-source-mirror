@@ -90,7 +90,7 @@ public:
     int ShowFootprintLinks( const TOOL_EVENT& aEvent );
 
     int DiffFootprint( const TOOL_EVENT& aEvent );
-    void DiffFootprint( FOOTPRINT* aFootprint );
+    void DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWindow* aReparentTo = nullptr );
 
     /**
      * @return true if a net or nets to highlight have been set

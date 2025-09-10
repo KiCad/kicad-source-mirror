@@ -103,24 +103,21 @@ void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
 }
 
 
-void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
+void KIPLATFORM::UI::ReparentWindow( wxNonOwnedWindow* aWindow, wxTopLevelWindow* aParent )
 {
-    wxTopLevelWindow* parent =
-            static_cast<wxTopLevelWindow*>( wxGetTopLevelParent( aWindow->GetParent() ) );
-
-    // Quietly return if no parent is found
-    if( !parent )
-    {
-        return;
-    }
-
-    NSWindow* parentWindow = parent->GetWXWindow();
+    NSWindow* parentWindow = aParent->GetWXWindow();
     NSWindow* theWindow    = aWindow->GetWXWindow();
 
     if( parentWindow && theWindow )
-    {
         [parentWindow addChildWindow:theWindow ordered:NSWindowAbove];
-    }
+}
+
+
+void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
+{
+    // Quietly return if no parent is found
+    if( wxTopLevelWindow* parent = static_cast<wxTopLevelWindow*>( wxGetTopLevelParent( aWindow->GetParent() ) ) )
+        ReparentWindow( aWindow, parent );
 }
 
 
