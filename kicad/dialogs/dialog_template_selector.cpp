@@ -54,6 +54,56 @@ void TEMPLATE_SELECTION_PANEL::AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidg
 }
 
 
+// Sort the widgets alphabetically, leaving Default at the top
+void TEMPLATE_SELECTION_PANEL::SortAlphabetically()
+{
+    std::vector<TEMPLATE_WIDGET*> sortedList;
+    TEMPLATE_WIDGET*              default_temp = nullptr;
+    size_t                        count = m_SizerChoice->GetItemCount();
+
+    if( count <= 1 )
+        return;
+
+    for( size_t idx = 0; idx < count; idx++ )
+    {
+        wxSizerItem* item = m_SizerChoice->GetItem( idx );
+        if( item && item->IsWindow() )
+        {
+            TEMPLATE_WIDGET* temp = static_cast<TEMPLATE_WIDGET*>( item->GetWindow() );
+
+            const wxString title = *temp->GetTemplate()->GetTitle();
+
+            if( default_temp == nullptr && title.CmpNoCase( "default" ) == 0 )
+                default_temp = temp;
+            else
+                sortedList.push_back( temp );
+        }
+    }
+
+    std::sort(
+            sortedList.begin(), sortedList.end(),
+            []( TEMPLATE_WIDGET* aWidgetA, TEMPLATE_WIDGET* aWidgetB ) -> bool
+    {
+                   const wxString* a = aWidgetA->GetTemplate()->GetTitle();
+                   const wxString* b = aWidgetB->GetTemplate()->GetTitle();
+                   
+                   return ( *a ).CmpNoCase( *b ) < 0;
+    });
+
+    m_SizerChoice->Clear( false );
+
+    if( default_temp != nullptr )
+        m_SizerChoice->Add( default_temp );
+
+    for (TEMPLATE_WIDGET* temp : sortedList)
+    {
+        m_SizerChoice->Add( temp );
+    }
+
+    Layout();
+}
+
+
 TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* aDialog ) :
     TEMPLATE_WIDGET_BASE( aParent )
 {
@@ -337,6 +387,7 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
         }
     }
 
+    m_panels[aPage]->SortAlphabetically();
     Layout();
 }
 

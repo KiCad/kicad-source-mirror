@@ -81,6 +81,8 @@ public:
 
     void AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget );
 
+    void SortAlphabetically();
+
 protected:
     wxNotebookPage* m_parent;
     wxString        m_templatesPath;   ///< the path to access to the folder
