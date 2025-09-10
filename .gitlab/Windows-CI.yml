@@ -8,6 +8,7 @@ win64_build:
   interruptible: false
   image: registry.gitlab.com/kicad/kicad-ci/windows-build-image/ltsc2022-msvc:latest
   variables:
+    VCPKG_BINARY_SOURCES: 'nuget,gitlab,readwrite'
     # Switch the compressor to fastzip and reduce the compression level
     FF_USE_FASTZIP: "true"
     CACHE_COMPRESSION_LEVEL: "fast"
@@ -23,6 +24,7 @@ win64_build:
   script:
     - C:\builder\build.ps1 -Env -Arch x64
     - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
+    - nuget.exe sources add -Name gitlab -Source "https://gitlab.com/api/v4/projects/27426693/packages/nuget/index.json"  -UserName gitlab-ci-token -Password $env:CI_JOB_TOKEN
     - mkdir -p build/windows -Force
     - cd build/windows
     - cmake `
@@ -34,6 +36,8 @@ win64_build:
       -DKICAD_BUILD_PNS_DEBUG_TOOL=ON `
       -DKICAD_USE_3DCONNEXION=ON `
       -DVCPKG_BUILD_TYPE=debug `
+      -DVCPKG_INSTALL_OPTIONS="--x-abi-tools-use-exact-versions" `
+      -DVCPKG_OVERLAY_TRIPLETS="$Env:CI_PROJECT_DIR/tools/custom_vcpkg_triplets" `
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../

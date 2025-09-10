@@ -6,7 +6,12 @@
     },
     {
       "environment": "vcpkg",
-      "VcPkgDir": "D:/vcpkg/"
+      "VcPkgDir": "D:/vcpkg/",
+      "VCPKG_BINARY_SOURCES": "nuget,kicad-gitlab,read"
+    },
+    {
+      "environment": "swig",
+      "SwigExePath": "D:/swigwin-4.1.1/swig.exe"
     }
   ],
   "configurations": [
@@ -14,7 +19,7 @@
       "name": "x64-Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
-      "inheritEnvironments": [ "msvc_x64_x64", "vcpkg" ],
+      "inheritEnvironments": [ "msvc_x64_x64", "vcpkg", "swig"],
       "buildRoot": "${env.BuildDir}\\${name}",
       "installRoot": "${env.InstallDir}\\${name}",
       "cmakeCommandArgs": "",
@@ -30,6 +35,21 @@
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
+        },
+        {
+          "name": "SWIG_EXECUTABLE",
+          "value": "${env.SwigExePath}",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_OVERLAY_TRIPLETS",
+          "value": "${workspaceRoot}/tools/custom_vcpkg_triplets",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_INSTALL_OPTIONS",
+          "value": "--x-abi-tools-use-exact-versions",
+          "type": "STRING"
         }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
@@ -38,7 +58,7 @@
       "name": "x64-Release",
       "generator": "Ninja",
       "configurationType": "RelWithDebInfo",
-      "inheritEnvironments": [ "msvc_x64_x64", "vcpkg" ],
+      "inheritEnvironments": [ "msvc_x64_x64", "vcpkg", "swig"],
       "buildRoot": "${env.BuildDir}\\${name}",
       "installRoot": "${env.InstallDir}\\${name}",
       "cmakeCommandArgs": "",
@@ -54,6 +74,21 @@
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
+        },
+        {
+          "name": "SWIG_EXECUTABLE",
+          "value": "${env.SwigExePath}",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_OVERLAY_TRIPLETS",
+          "value": "${workspaceRoot}/tools/custom_vcpkg_triplets",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_INSTALL_OPTIONS",
+          "value": "--x-abi-tools-use-exact-versions",
+          "type": "STRING"
         }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
