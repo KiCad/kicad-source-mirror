@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 11:47+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-11 19:38+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -28645,7 +28645,7 @@ msgstr "Ausgegebene Meldungen aufzeichnen"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:82
 msgid "Ignore non-zero exit code"
-msgstr "Ergebniscode ungleich Null ignorieren"
+msgstr "Rückgabewert ungleich Null ignorieren"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 msgid "Available text variables:"
@@ -44838,7 +44838,6 @@ msgid "%s corners differ."
 msgstr "%s Ecken weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:601
-#, fuzzy
 msgid "Footprint stackup mode differs."
 msgstr "Footprint-Aufbautyp weicht ab."
 
@@ -50067,9 +50066,9 @@ msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Plugin-Verzeichnis \"%s\" existiert nicht.  Soll es erstellt werden?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Plugin-Verzeichnis \"%s\" konnte nicht erstellen."
+msgstr "Plugin-Verzeichnis \"%s\" konnte nicht erstellt werden."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
