@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 09:08+0000\n"
+"PO-Revision-Date: 2025-09-11 11:47+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -18310,9 +18310,9 @@ msgid "Footprint '%s' not found in library '%s'"
 msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
 
 #: eeschema/erc/erc.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "Zugewiesener Footprint (%s) passt nicht zum Footprintfilter (%s)."
+msgstr "Zugewiesener Footprint (%s) passt nicht zum Footprintfilter (%s)"
 
 #: eeschema/erc/erc.cpp:1937
 msgid "Checking sheet names..."
@@ -27636,7 +27636,7 @@ msgstr ""
 #: kicad/cli/command_pcb_drc.cpp:91
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
-"Einen nicht-Null Rückgabewert zurückgeben, sofern DRC-Verstöße vorliegen"
+"Einen Rückgabewert ungleich Null zurückgeben, sofern DRC-Verstöße vorliegen"
 
 #: kicad/cli/command_pcb_drc.cpp:95
 msgid "Refill zones before running DRC"
@@ -28430,7 +28430,7 @@ msgstr ""
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
 msgstr ""
-"Einen Ergebniscode ungleich Null zurückgeben wenn ERC-Verletzungen vorliegen"
+"Einen Ergebniscode ungleich Null zurückgeben, wenn ERC-Verletzungen vorliegen"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
@@ -29111,7 +29111,7 @@ msgid ""
 "designing."
 msgstr ""
 "Verwenden Sie die Projektmanager-Verzeichnisstruktur oder starten Sie die "
-"Schaltplan- und PCB-Editoren, um mit dem Design zu beginnen."
+"Schaltplan- und Leiterplatteneditoren, um mit dem Design zu beginnen."
 
 #: kicad/dialogs/template_default_html.h:137
 #, fuzzy
@@ -30221,7 +30221,7 @@ msgstr "Schaltplan im Schaltplan-Editor bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:128
 msgid "Edit PCB in PCB editor"
-msgstr "Leiterplatte in Leiterplatteneditor bearbeiten"
+msgstr "Leiterplatte im Leiterplatteneditor bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:139
 msgid "Create, delete and edit PCB footprints"
