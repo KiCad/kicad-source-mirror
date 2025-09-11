@@ -3097,6 +3097,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
+    bool                  startedWithDrag = false;   // Track if initial sheet placement started with a drag
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -3188,7 +3189,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
         }
         else if( !sheet && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
-                            || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) ) )
+                            || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
+                            || evt->IsDrag( BUT_LEFT ) ) )
         {
             SCH_SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -3211,7 +3213,15 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
+            VECTOR2I sheetPos = evt->IsDrag( BUT_LEFT ) ?
+                               grid.Align( evt->DragOrigin(), GRID_HELPER_GRIDS::GRID_GRAPHICS ) :
+                               cursorPos;
+
+            // Remember whether this sheet was initiated with a drag so we can treat mouse-up as
+            // the terminating (second) click.
+            startedWithDrag = evt->IsDrag( BUT_LEFT );
+
+            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), sheetPos );
             sheet->SetScreen( nullptr );
 
             wxString ext = wxString( "." ) + FILEEXT::KiCadSchematicFileExtension;
@@ -3265,10 +3275,11 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( sheet->Clone() );
         }
-        else if( sheet && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
-                           || isSyntheticClick
-                           || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
-                           || evt->IsAction( &ACTIONS::finishInteractive ) ) )
+    else if( sheet && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+               || isSyntheticClick
+               || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )
+               || evt->IsAction( &ACTIONS::finishInteractive )
+               || ( startedWithDrag && evt->IsMouseUp( BUT_LEFT ) ) ) )
         {
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
@@ -3338,7 +3349,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
             break;
         }
-        else if( sheet && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( sheet && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion()
+                           || evt->IsDrag( BUT_LEFT ) ) )
         {
             sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();
