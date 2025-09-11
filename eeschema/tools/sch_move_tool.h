@@ -35,6 +35,9 @@ class SCH_LINE;
 class SCH_LABEL_BASE;
 class SCH_SHEET_PIN;
 class SCH_JUNCTION;
+class SCH_SELECTION;
+class SCH_SHEET;
+class SCH_COMMIT;
 
 
 struct SPECIAL_CASE_LABEL_INFO
@@ -80,6 +83,8 @@ private:
 
     void orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VECTOR2I& splitDelta,
                         int& xBendCount, int& yBendCount, const EE_GRID_HELPER& grid );
+
+    void moveSelectionToSheet( SCH_SELECTION& aSelection, SCH_SHEET* aTarget, SCH_COMMIT* aCommit );
 
     ///< Clears the new drag lines and removes them from the screen
     void clearNewDragLines();

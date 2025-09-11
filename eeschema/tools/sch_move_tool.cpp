@@ -46,6 +46,9 @@
 #include <pgm_base.h>
 #include <view/view_controls.h>
 #include <settings/settings_manager.h>
+#include <math/box2.h>
+#include <base_units.h>
+#include <sch_screen.h>
 #include "sch_move_tool.h"
 
 
@@ -500,6 +503,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     TOOL_EVENT* evt = &copy;
     VECTOR2I    prevPos;
     GRID_HELPER_GRIDS snapLayer = GRID_CURRENT;
+    SCH_SHEET*  hoverSheet = nullptr;
 
     m_cursor = controls->GetCursorPosition();
 
@@ -771,7 +775,65 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
             m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
                                         snapLayer, selection );
+            // Determine potential target sheet.
+            SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_frame->GetScreen()->GetItem( m_cursor, 0,
+                                                                                       SCH_SHEET_T ) );
+            if( sheet && sheet->IsSelected() )
+                sheet = nullptr;    // Never target a selected sheet
 
+            if( !sheet )
+            {
+                // Build current selection bounding box in its (already moved) position.
+                BOX2I selBBox;
+                for( EDA_ITEM* it : selection )
+                {
+                    if( SCH_ITEM* schIt = dynamic_cast<SCH_ITEM*>( it ) )
+                        selBBox.Merge( schIt->GetBoundingBox() );
+                }
+
+                if( selBBox.GetWidth() > 0 && selBBox.GetHeight() > 0 )
+                {
+                    VECTOR2I selCenter( selBBox.GetX() + selBBox.GetWidth() / 2,
+                                        selBBox.GetY() + selBBox.GetHeight() / 2 );
+
+                    // Find first non-selected sheet whose body fully contains the selection
+                    // or at least contains its center point.
+                    for( SCH_ITEM* it : m_frame->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+                    {
+                        SCH_SHEET* candidate = static_cast<SCH_SHEET*>( it );
+                        if( candidate->IsSelected() || candidate->IsRootSheet() )
+                            continue;
+
+                        BOX2I body = candidate->GetBodyBoundingBox();
+
+                        if( body.Contains( selBBox ) || body.Contains( selCenter ) )
+                        {
+                            sheet = candidate;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if( sheet != hoverSheet )
+            {
+                if( hoverSheet )
+                {
+                    hoverSheet->ClearFlags( BRIGHTENED );
+                    m_frame->UpdateItem( hoverSheet, false );
+                }
+
+                hoverSheet = sheet;
+
+                if( hoverSheet )
+                {
+                    hoverSheet->SetFlags( BRIGHTENED );
+                    m_frame->UpdateItem( hoverSheet, false );
+                }
+            }
+
+            m_frame->GetCanvas()->SetCurrentCursor( hoverSheet ? KICURSOR::PLACE
+                                                               : KICURSOR::MOVING );
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
@@ -1032,6 +1094,22 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
+    SCH_SHEET* targetSheet = hoverSheet;
+
+    if( hoverSheet )
+    {
+        hoverSheet->ClearFlags( BRIGHTENED );
+        m_frame->UpdateItem( hoverSheet, false );
+    }
+
+    if( targetSheet )
+    {
+        moveSelectionToSheet( selection, targetSheet, aCommit );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+        m_newDragLines.clear();
+        m_changedDragLines.clear();
+    }
+
     // Create a selection of original selection, drag selected/changed items, and new
     // bend lines for later before we clear them in the aCommit. We'll need these
     // to check for new junctions needed, etc.
@@ -1135,6 +1213,60 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 }
 
 
+void SCH_MOVE_TOOL::moveSelectionToSheet( SCH_SELECTION& aSelection, SCH_SHEET* aTargetSheet,
+                                          SCH_COMMIT* aCommit )
+{
+    SCH_SCREEN* destScreen = aTargetSheet->GetScreen();
+    SCH_SCREEN* srcScreen = m_frame->GetScreen();
+
+    BOX2I bbox;
+
+    for( EDA_ITEM* item : aSelection )
+        bbox.Merge( static_cast<SCH_ITEM*>( item )->GetBoundingBox() );
+
+    VECTOR2I offset = VECTOR2I( 0, 0 ) - bbox.GetPosition();
+    int      step   = schIUScale.MilsToIU( 50 );
+    bool     overlap = false;
+
+    do
+    {
+        BOX2I moved = bbox;
+        moved.Move( offset );
+        overlap = false;
+
+        for( SCH_ITEM* existing : destScreen->Items() )
+        {
+            if( moved.Intersects( existing->GetBoundingBox() ) )
+            {
+                overlap = true;
+                break;
+            }
+        }
+
+        if( overlap )
+            offset += VECTOR2I( step, step );
+    } while( overlap );
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+
+        // Remove from current screen and view manually
+        m_frame->RemoveFromScreen( schItem, srcScreen );
+
+        // Move the item
+        schItem->Move( offset );
+
+        // Add to destination screen manually (won't add to view since it's not current)
+        destScreen->Append( schItem );
+
+        // Record in commit with CHT_DONE flag to bypass automatic screen/view operations
+        aCommit->Stage( schItem, CHT_REMOVE | CHT_DONE, srcScreen );
+        aCommit->Stage( schItem, CHT_ADD | CHT_DONE, destScreen );
+    }
+}
+
+
 void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
 {
     // Need a local cleanup first to ensure we remove unneeded junctions
@@ -1163,8 +1295,7 @@ void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
     {
         line->SetFlags( STRUCT_DELETED );
         aCommit->Removed( line, m_frame->GetScreen() );
-
-        updateItem( line, false );
+        updateItem( line, false ); // Update any cached visuals before commit processes
         m_frame->RemoveFromScreen( line, m_frame->GetScreen() );
     }
 }
