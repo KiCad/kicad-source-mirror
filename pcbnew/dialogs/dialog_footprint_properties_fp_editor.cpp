@@ -674,6 +674,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
     // Check that the user isn't trying to remove a layer that is used by the footprint
     usedLayers &= ~getCustomLayersFromControls();
     usedLayers &= ~LSET::AllTechMask();
+    usedLayers &= ~LSET::UserMask();
 
     if( usedLayers.any() )
     {
