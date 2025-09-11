@@ -173,12 +173,19 @@ public:
     bool HasConnectivityChanges( const SCH_ITEM* aItem,
                                  const SCH_SHEET_PATH* aInstance = nullptr ) const override;
 
-    LABEL_FLAG_SHAPE GetShape() const        { return m_shape; }
-    void SetShape( LABEL_FLAG_SHAPE aShape ) { m_shape = aShape; }
-
     // Type-specific versions for property manager
     LABEL_SHAPE GetLabelShape() const        { return (LABEL_SHAPE) m_shape; }
-    void SetLabelShape( LABEL_SHAPE aShape ) { m_shape = (LABEL_FLAG_SHAPE) aShape; }
+    void        SetLabelShape( LABEL_SHAPE aShape );
+
+    LABEL_FLAG_SHAPE GetShape() const        { return m_shape; }
+    void SetShape( LABEL_FLAG_SHAPE aShape )
+    {
+        // Set flags directly if a flag shape
+        if( aShape >= F_FIRST )
+            m_shape = aShape;
+        else
+            SetLabelShape( (LABEL_SHAPE) aShape );
+    }
 
     COLOR4D GetLabelColor() const;
 

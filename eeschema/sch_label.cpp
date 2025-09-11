@@ -34,6 +34,9 @@
 #include <string_utils.h>
 #include <geometry/geometry_utils.h>
 #include <schematic.h>
+#include <sch_screen.h>
+#include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <settings/color_settings.h>
 #include <sch_painter.h>
 #include <default_values.h>
@@ -311,6 +314,82 @@ COLOR4D SCH_LABEL_BASE::GetLabelColor() const
         m_lastResolvedColor = GetEffectiveNetClass()->GetSchematicColor();
 
     return m_lastResolvedColor;
+}
+
+
+void SCH_LABEL_BASE::SetLabelShape( LABEL_SHAPE aShape )
+{
+    m_shape = (LABEL_FLAG_SHAPE) aShape;
+
+    static bool s_inUpdate = false;
+
+    if( s_inUpdate )
+        return;
+
+    s_inUpdate = true;
+
+    if( Type() == SCH_HIER_LABEL_T )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( this );
+        SCH_SCREEN*    screen = static_cast<SCH_SCREEN*>( label->GetParent() );
+
+        if( screen )
+        {
+            const wxString& text = label->GetText();
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+            {
+                SCH_HIERLABEL* other = static_cast<SCH_HIERLABEL*>( item );
+
+                if( other != label && other->GetText() == text )
+                    other->SetLabelShape( aShape );
+            }
+
+            for( const SCH_SHEET_PATH& sheetPath : screen->GetClientSheetPaths() )
+            {
+                SCH_SHEET* sheet = sheetPath.Last();
+
+                if( sheet )
+                {
+                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                    {
+                        if( pin->GetText() == text )
+                            pin->SetLabelShape( aShape );
+                    }
+                }
+            }
+        }
+    }
+    else if( Type() == SCH_SHEET_PIN_T )
+    {
+        SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( this );
+        SCH_SHEET*     parent = pin->GetParent();
+
+        if( parent )
+        {
+            const wxString& text = pin->GetText();
+            SCH_SCREEN*     screen = parent->GetScreen();
+
+            if( screen )
+            {
+                for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+                {
+                    SCH_HIERLABEL* hlabel = static_cast<SCH_HIERLABEL*>( item );
+
+                    if( hlabel->GetText() == text )
+                        hlabel->SetLabelShape( aShape );
+                }
+            }
+
+            for( SCH_SHEET_PIN* other : parent->GetPins() )
+            {
+                if( other != pin && other->GetText() == text )
+                    other->SetLabelShape( aShape );
+            }
+        }
+    }
+
+    s_inUpdate = false;
 }
 
 
