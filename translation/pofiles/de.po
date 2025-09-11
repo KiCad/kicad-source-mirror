@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-12 09:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -27273,7 +27273,7 @@ msgstr "Ausgegebene Meldungen aufzeichnen"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:82
 msgid "Ignore non-zero exit code"
-msgstr "Ergebniscode ungleich Null ignorieren"
+msgstr "Rückgabewert ungleich Null ignorieren"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 msgid "Available text variables:"
