@@ -527,10 +527,9 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 void DRC_ENGINE::compileRules()
 {
     if( m_logReporter )
-    {
-        m_logReporter->Report( ( wxString::Format( wxT( "Compiling Rules (%d rules): " ),
-                                                   (int) m_rules.size() ) ) );
-    }
+        m_logReporter->Report( wxT( "Compiling Rules" ) );
+
+    REPORTER error_semaphore;
 
     for( std::shared_ptr<DRC_RULE>& rule : m_rules )
     {
@@ -539,8 +538,11 @@ void DRC_ENGINE::compileRules()
         if( rule->m_Condition && !rule->m_Condition->GetExpression().IsEmpty() )
         {
             condition = rule->m_Condition;
-            condition->Compile( nullptr );
+            condition->Compile( &error_semaphore );
         }
+
+        if( error_semaphore.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+            THROW_PARSE_ERROR( wxT( "Parse error" ), rule->m_Name, rule->m_Condition->GetExpression(), 0, 0 );
 
         for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
         {
@@ -594,6 +596,8 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     }
     catch( PARSE_ERROR& original_parse_error )
     {
+        m_rules.clear();
+
         try     // try again with just our implicit rules
         {
             loadImplicitRules();
