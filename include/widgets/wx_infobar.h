@@ -327,7 +327,9 @@ class INFOBAR_REPORTER : public REPORTER
 {
 public:
     INFOBAR_REPORTER( WX_INFOBAR* aInfoBar ) :
-            REPORTER(), m_messageSet( false ), m_infoBar( aInfoBar ),
+            REPORTER(),
+            m_messageSet( false ),
+            m_infoBar( aInfoBar ),
             m_severity( RPT_SEVERITY_UNDEFINED )
     {
     }
