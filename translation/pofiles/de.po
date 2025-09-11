@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-11 19:38+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -24605,7 +24605,7 @@ msgstr ""
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
 #, fuzzy
 msgid "Explode Stacked Pin"
-msgstr "Gestapelten Pin auflösen"
+msgstr "Gestapelten Pin aufteilen"
 
 #: eeschema/tools/sch_actions.cpp:949
 #, fuzzy
@@ -28430,7 +28430,7 @@ msgstr ""
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
 msgstr ""
-"Einen Ergebniscode ungleich Null zurückgeben, wenn ERC-Verletzungen vorliegen"
+"Einen Rückgabewert ungleich Null zurückgeben, wenn ERC-Verletzungen vorliegen"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
@@ -42066,8 +42066,9 @@ msgstr ""
 "Pad ist (typisch für Lötstoppmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
+#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "Mindestbreite von Lötstoppmasken-Brücken:"
+msgstr "Mindestbreite von Lötstoppmasken-Stegen:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
@@ -50050,7 +50051,7 @@ msgstr ""
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:183
 #, fuzzy, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Konnte Plugin-Verzeichnis \"%s\" nicht öffnen."
+msgstr "Plugin-Verzeichnis \"%s\" konnte nicht geöffnet werden."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:167
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:175
