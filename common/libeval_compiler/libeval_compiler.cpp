@@ -1160,7 +1160,9 @@ void UOP::Exec( CONTEXT* ctx )
         return;
 
     case TR_OP_METHOD_CALL:
-        m_func( ctx, m_ref.get() );
+        if( m_func )
+            m_func( ctx, m_ref.get() );
+
         return;
 
     default:
@@ -1321,9 +1323,8 @@ VALUE* UCODE::Run( CONTEXT* ctx )
     }
     catch(...)
     {
-        // rules which fail outright should not be fired
-        std::unique_ptr<VALUE> temp_false = std::make_unique<VALUE>( 0 );
-        return ctx->StoreValue( temp_false.get() );
+        // rules which fail outright should not be fired; return 0/false
+        return ctx->StoreValue( new VALUE( 0 ) );
     }
 
     if( ctx->SP() == 1 )
@@ -1339,8 +1340,7 @@ VALUE* UCODE::Run( CONTEXT* ctx )
         wxASSERT( ctx->SP() == 1 );
 
         // non-well-formed rules should not be fired on a release build
-        std::unique_ptr<VALUE> temp_false = std::make_unique<VALUE>( 0 );
-        return ctx->StoreValue( temp_false.get() );
+        return ctx->StoreValue( new VALUE( 0 ) );
     }
 }
 
