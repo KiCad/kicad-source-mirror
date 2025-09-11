@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-08 06:02+0000\n"
+"PO-Revision-Date: 2025-09-11 09:08+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -17717,9 +17717,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "已将 ERC 报告保存到文件 %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1226
-#, fuzzy
 msgid "Schematic file was not updated\n"
-msgstr "找不到原理图文件 '%s'。"
+msgstr "原理图文件未更新\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1244 eeschema/files-io.cpp:775
 #: eeschema/files-io.cpp:819
@@ -50158,9 +50157,8 @@ msgid "Some of the items could not be outset."
 msgstr "部分项目无法进行外扩。"
 
 #: pcbnew/tools/item_modification_routine.cpp:999
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "无法创建文件 \"%s\""
+msgstr "无法创建矩形外扩"
 
 #: pcbnew/tools/multichannel_tool.cpp:511
 msgid "Select a reference Rule Area to copy from..."
