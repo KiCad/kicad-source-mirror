@@ -26,11 +26,14 @@
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/ui_common.h>
+#include <algorithm>
 #include <wx_filename.h>
 #include <wx/dir.h>
 #include <wx/dirdlg.h>
 #include <wx/settings.h>
 #include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/math.h>
 #include "template_default_html.h"
 
 // Welcome / fallback HTML now provided by template_default_html.h
@@ -99,7 +102,24 @@ void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
     wxBitmap* icon = aTemplate->GetIcon();
 
     if( icon && icon->IsOk() )
-        m_bitmapIcon->SetBitmap( *icon );
+    {
+        wxSize maxSize = m_bitmapIcon->GetSize();
+
+        if( icon->GetWidth() > maxSize.x || icon->GetHeight() > maxSize.y )
+        {
+            double   scale = std::min( (double) maxSize.x / icon->GetWidth(),
+                                       (double) maxSize.y / icon->GetHeight() );
+            wxImage  image = icon->ConvertToImage();
+            int      w = wxRound( icon->GetWidth() * scale );
+            int      h = wxRound( icon->GetHeight() * scale );
+            image.Rescale( w, h, wxIMAGE_QUALITY_HIGH );
+            m_bitmapIcon->SetBitmap( wxBitmap( image ) );
+        }
+        else
+        {
+            m_bitmapIcon->SetBitmap( *icon );
+        }
+    }
     else
         m_bitmapIcon->SetBitmap( KiBitmap( BITMAPS::icon_kicad ) );
 }
