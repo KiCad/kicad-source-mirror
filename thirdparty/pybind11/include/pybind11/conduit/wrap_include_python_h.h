@@ -15,20 +15,6 @@
 // To maximize reusability:
 // DO NOT ADD CODE THAT REQUIRES C++ EXCEPTION HANDLING.
 
-// Disable linking to pythonX_d.lib on Windows in debug mode.
-#if defined(_MSC_VER) && defined(_DEBUG) && !defined(Py_DEBUG)
-// Workaround for a VS 2022 issue.
-// See https://github.com/pybind/pybind11/pull/3497 for full context.
-// NOTE: This workaround knowingly violates the Python.h include order
-//       requirement (see above).
-#    include <yvals.h>
-#    if _MSVC_STL_VERSION >= 143
-#        include <crtdefs.h>
-#    endif
-#    define PYBIND11_DEBUG_MARKER
-#    undef _DEBUG
-#endif
-
 // Don't let Python.h #define (v)snprintf as macro because they are implemented
 // properly in Visual Studio since 2015.
 #if defined(_MSC_VER)
