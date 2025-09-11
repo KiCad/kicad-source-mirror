@@ -38,6 +38,7 @@
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <functional>
 
 #include <project.h>
 #include <env_vars.h>
@@ -147,6 +148,12 @@ public:
             m_dialog( aParent )
     { }
 
+    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid,
+            std::function<void( wxCommandEvent& )> aAddHandler ) :
+            LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
+            m_dialog( aParent )
+    { }
+
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
@@ -217,8 +224,21 @@ protected:
         }
         else
         {
-            // paste spreadsheet formatted text.
-            GRID_TRICKS::paste_text( cb_text );
+            wxString text = cb_text;
+
+            if( !text.Contains( '\t' ) && text.Contains( ',' ) )
+                text.Replace( ',', '\t' );
+
+            if( text.Contains( '\t' ) )
+            {
+                int row = m_grid->GetGridCursorRow();
+                m_grid->ClearSelection();
+                m_grid->SelectRow( row );
+                m_grid->SetGridCursor( row, 0 );
+                getSelectedArea();
+            }
+
+            GRID_TRICKS::paste_text( text );
 
             m_grid->AutoSizeColumns( false );
         }
@@ -254,7 +274,8 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
         aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
 
     // add Cut, Copy, and Paste to wxGrids
-    aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid ) );
+    aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid,
+            [this]( wxCommandEvent& event ) { appendRowHandler( event ); } ) );
 
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 

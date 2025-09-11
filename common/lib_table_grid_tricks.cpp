@@ -19,11 +19,23 @@
 
 #include "lib_table_grid_tricks.h"
 #include "lib_table_grid.h"
+#include <wx/clipbrd.h>
+#include <wx/log.h>
 
 
 LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) :
         GRID_TRICKS( aGrid )
 {
+    m_grid->Disconnect( wxEVT_CHAR_HOOK );
+    m_grid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( LIB_TABLE_GRID_TRICKS::onCharHook ), nullptr, this );
+}
+
+LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid,
+        std::function<void( wxCommandEvent& )> aAddHandler ) :
+        GRID_TRICKS( aGrid, aAddHandler )
+{
+    m_grid->Disconnect( wxEVT_CHAR_HOOK );
+    m_grid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( LIB_TABLE_GRID_TRICKS::onCharHook ), nullptr, this );
 }
 
 
@@ -133,6 +145,61 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     {
         GRID_TRICKS::doPopupSelection( event );
     }
+}
+void LIB_TABLE_GRID_TRICKS::onCharHook( wxKeyEvent& ev )
+{
+    if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' && m_grid->IsCellEditControlShown() )
+    {
+        wxLogNull doNotLog;
+
+        if( wxTheClipboard->Open() )
+        {
+            if( wxTheClipboard->IsSupported( wxDF_TEXT ) || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
+            {
+                wxTextDataObject data;
+                wxTheClipboard->GetData( data );
+
+                wxString text = data.GetText();
+
+                if( !text.Contains( '\t' ) && text.Contains( ',' ) )
+                    text.Replace( ',', '\t' );
+
+                if( text.Contains( '\t' ) || text.Contains( '\n' ) || text.Contains( '\r' ) )
+                {
+                    m_grid->CancelPendingChanges();
+                    int row = m_grid->GetGridCursorRow();
+
+                    // Check if the current row already has data (has a nickname)
+                    wxGridTableBase* table = m_grid->GetTable();
+                    if( table && row >= 0 && row < table->GetNumberRows() )
+                    {
+                        // Check if the row has a nickname (indicating it has existing data)
+                        wxString nickname = table->GetValue( row, COL_NICKNAME );
+                        if( !nickname.IsEmpty() )
+                        {
+                            // Row already has data, don't allow pasting over it
+                            wxTheClipboard->Close();
+                            wxBell(); // Provide audio feedback
+                            return;
+                        }
+                    }
+
+                    m_grid->ClearSelection();
+                    m_grid->SelectRow( row );
+                    m_grid->SetGridCursor( row, 0 );
+                    getSelectedArea();
+                    paste_text( text );
+                    wxTheClipboard->Close();
+                    m_grid->ForceRefresh();
+                    return;
+                }
+            }
+
+            wxTheClipboard->Close();
+        }
+    }
+
+    GRID_TRICKS::onCharHook( ev );
 }
 
 

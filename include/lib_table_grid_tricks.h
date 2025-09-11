@@ -18,6 +18,7 @@
  */
 
 #include "grid_tricks.h"
+#include <functional>
 
 class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
 {
@@ -33,6 +34,7 @@ class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
 
 public:
     explicit LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid );
+    LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler );
 
     virtual ~LIB_TABLE_GRID_TRICKS(){};
 
@@ -42,6 +44,8 @@ public:
 protected:
     virtual void optionsEditor( int aRow ) = 0;
     bool handleDoubleClick( wxGridEvent& aEvent ) override;
+
+    void onCharHook( wxKeyEvent& ev );
 
     virtual bool supportsVisibilityColumn() { return false; }
 };
