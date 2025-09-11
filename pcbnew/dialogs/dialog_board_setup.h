@@ -42,7 +42,7 @@ class PANEL_TEXT_VARIABLES;
 class DIALOG_BOARD_SETUP : public PAGED_DIALOG
 {
 public:
-    DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame );
+    DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aWindow = nullptr );
     ~DIALOG_BOARD_SETUP();
 
 protected:

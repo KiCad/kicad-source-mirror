@@ -301,7 +301,7 @@ public:
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 
-    void ShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString );
+    void ShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString, wxWindow* aParent = nullptr );
 
     void PrepareLayerIndicator( bool aForceRebuild = false );
 

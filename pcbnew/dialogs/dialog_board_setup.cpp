@@ -55,8 +55,8 @@
 
 #define RESOLVE_PAGE( T, pageIndex ) static_cast<T*>( m_treebook->ResolvePage( pageIndex ) )
 
-DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Board Setup" ), false, false,
+DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParent ) :
+        PAGED_DIALOG( aParent ? aParent : aFrame, _( "Board Setup" ), false, false,
                       _( "Import Settings from Another Board..." ), wxSize( 980, 600 ) ),
         m_frame( aFrame ),
         m_layers( nullptr ),

@@ -303,7 +303,7 @@ void DIALOG_DRC::OnMenu( wxCommandEvent& event )
 
 void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    m_frame->ShowBoardSetupDialog( _( "Custom Rules" ) );
+    m_frame->ShowBoardSetupDialog( _( "Custom Rules" ), this );
 }
 
 
@@ -993,7 +993,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     }
 
     case ID_EDIT_SEVERITIES:
-        m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
+        m_frame->ShowBoardSetupDialog( _( "Violation Severity" ), this );
         break;
     }
 
@@ -1035,7 +1035,7 @@ void DIALOG_DRC::OnIgnoredItemRClick( wxListEvent& event )
 
 void DIALOG_DRC::OnEditViolationSeverities( wxHyperlinkEvent& aEvent )
 {
-    m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
+    m_frame->ShowBoardSetupDialog( _( "Violation Severity" ), this );
 }
 
 

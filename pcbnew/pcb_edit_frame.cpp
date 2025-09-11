@@ -109,6 +109,7 @@
 #include <widgets/pcb_net_inspector_panel.h>
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
+#include <kiplatform/ui.h>
 #include <core/profile.h>
 #include <math/box2_minmax.h>
 #include <view/wx_view_controls.h>
@@ -1466,7 +1467,7 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
+void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, wxWindow* aParent )
 {
     static std::mutex dialogMutex; // Local static mutex
 
@@ -1486,7 +1487,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
 
-    DIALOG_BOARD_SETUP dlg( this );
+    DIALOG_BOARD_SETUP dlg( this, aParent );
 
     if( !aInitialPage.IsEmpty() )
         dlg.SetInitialPage( aInitialPage, wxEmptyString );
