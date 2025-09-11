@@ -154,6 +154,12 @@ void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 }
 
 
+void KIPLATFORM::UI::ReparentWindow( wxNonOwnedWindow* aWindow, wxTopLevelWindow* aParent )
+{
+    // Not needed on this platform (only relevant for macOS child window ordering)
+}
+
+
 void KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( wxWindow *aWindow )
 {
     // Not needed on this platform
