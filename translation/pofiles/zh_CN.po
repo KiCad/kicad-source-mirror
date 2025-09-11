@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-08 06:02+0000\n"
+"PO-Revision-Date: 2025-09-11 04:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -25462,7 +25462,6 @@ msgid "Show import issues"
 msgstr "显示导入问题"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
 msgstr "嵌入文件"
 
@@ -47660,9 +47659,8 @@ msgid "Some of the items could not be outset."
 msgstr "部分项目无法进行外扩。"
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "无法创建文件 \"%s\""
+msgstr "无法创建矩形外扩"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
