@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-10 10:30+0000\n"
+"PO-Revision-Date: 2025-09-11 09:08+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -16298,14 +16298,13 @@ msgid "Field name %s already exists."
 msgstr "Feldname %s ist bereits vorhanden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:924
-#, fuzzy
 msgid "Include 'DNP' Symbols"
-msgstr "\"DNP\"-Symbole einschliessen"
+msgstr "\"Nicht bestücken\"-Symbole einschliessen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:925
 #, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "Schliesse \"Von Stückliste ausschliessen\"-Symbole mit ein"
+msgstr "\"Von Stückliste ausschliessen\"-Symbole mit einschliessen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:927
 #, fuzzy
@@ -39434,7 +39433,7 @@ msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Indicate DNP on fabrication layers"
-msgstr "Nicht zu bestückende Bauteile Fabrikationslagen markieren"
+msgstr "Nicht zu bestückende Bauteile auf Fabrikationslagen markieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Hide or cross-out DNP footprints on fabrication layers"
@@ -44841,7 +44840,7 @@ msgstr "%s Ecken weichen ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:601
 #, fuzzy
 msgid "Footprint stackup mode differs."
-msgstr "Footprint-Aufbau stimmt nicht überein."
+msgstr "Footprint-Aufbautyp weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:607
 #, fuzzy
@@ -50070,7 +50069,7 @@ msgstr "Plugin-Verzeichnis \"%s\" existiert nicht.  Soll es erstellt werden?"
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:189
 #, fuzzy, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Konnte Plugin-Verzeichnis \"%s\" nicht erstellen."
+msgstr "Plugin-Verzeichnis \"%s\" konnte nicht erstellen."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
