@@ -671,8 +671,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case IMAGE_POLARITY:
-        // These commands are deprecated since 2012.
-        // So do nothing and prompt the user about this command
+        // Note: these commands IPPOS and IPNEG are deprecated since 2012.
         if( strncasecmp( aText, "NEG", 3 ) == 0 )
         {
             m_ImageNegative = true;
@@ -688,7 +687,6 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
             // actual effect. Just skip it.
         }
 
-        ok = false;
         break;
 
     case LOAD_POLARITY:
