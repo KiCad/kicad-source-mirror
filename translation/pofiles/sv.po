@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-09-12 09:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -11635,9 +11635,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Inga symboler som uppfyller kriterierna hittades ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** symbol hittades inte ***"
+msgstr "*** symbolbiblioteksid ogiltigt ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -42729,11 +42728,9 @@ msgstr ""
 "z: %g; konturbox: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1750
-#, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
 msgstr ""
-"Kontroll för ledares överlappande med sig själv fallerade \n"
-"z: %g; konturbox: %s"
+"Kontroll för ledares överlappande med sig själv fallerade. Tillåt nytt försök"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1755
 #, c-format
@@ -48667,9 +48664,8 @@ msgid "Some of the items could not be outset."
 msgstr "Kunde inte skapa kontur kring vissa av objekten."
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Det går inte att skapa filen \"%s\""
+msgstr "Det går inte att skapa rektangulär kontur"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
