@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-10 10:30+0000\n"
+"PO-Revision-Date: 2025-09-11 19:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -616,7 +616,7 @@ msgstr "Visa basmaterial"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 #, fuzzy
 msgid "Plated Barrels"
-msgstr "Pläterade hål"
+msgstr "Pläterade håls väggar"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show barrels of plated through-holes and vias"
@@ -5280,7 +5280,7 @@ msgstr "Hårkors över hela fönstret"
 #: common/widgets/gal_options_panel_base.cpp:108
 #, fuzzy
 msgid "45 degree crosshairs"
-msgstr "45 grader"
+msgstr "45 graders markörlinjer"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
@@ -6377,7 +6377,6 @@ msgid "Text '%s'"
 msgstr "Text '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
-#, fuzzy
 msgid "Imported shape"
 msgstr "Importerad form"
 
@@ -6827,9 +6826,8 @@ msgid "Target"
 msgstr "Mål"
 
 #: common/eda_item.cpp:436 pcbnew/pcb_point.cpp:140
-#, fuzzy
 msgid "Point"
-msgstr "Punkter"
+msgstr "Punkt"
 
 #: common/eda_item.cpp:437 pcbnew/tools/board_inspection_tool.cpp:824
 msgid "Zone"
@@ -7118,9 +7116,8 @@ msgstr "Slut Y"
 #: common/eda_shape.cpp:2768 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
 #: pcbnew/pcb_textbox.cpp:844
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Hörnradie %"
+msgstr "Hörnradie"
 
 #: common/eda_shape.cpp:2799 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:649 eeschema/sch_line.cpp:1253
@@ -9371,12 +9368,11 @@ msgstr "Visar den aktuella symbolenheten"
 #: common/tool/action_toolbar.cpp:1043
 #, fuzzy
 msgid "Symbol body style selector"
-msgstr "Symbolenhetsväljare"
+msgstr "Symbolvariantsväljare"
 
 #: common/tool/action_toolbar.cpp:1044
-#, fuzzy
 msgid "Displays the current body style"
-msgstr "Visar den aktuella symbolenheten"
+msgstr "Visar den aktuella symbolvarianten"
 
 #: common/tool/action_toolbar.cpp:1047
 msgid "Allow moving of locked items with the mouse"
@@ -10077,17 +10073,18 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Behåll inte biblioteket högst upp på listan"
 
 #: common/tool/actions.cpp:959
-#, fuzzy
 msgid "Library Fields Table"
-msgstr "Symbolfältstabell"
+msgstr "Biblioteksfältstabell"
 
 #: common/tool/actions.cpp:965
 msgid "Library Fields Table of Related Symbols"
-msgstr ""
+msgstr "Biblioteksfältstabell för relaterade symboler"
 
 #: common/tool/actions.cpp:966
 msgid "Edit a table of fields of all symbols related to the selected symbol"
 msgstr ""
+"Redigera en tabell av fält för alla symboler relaterade till den valda "
+"symbolen"
 
 #: common/tool/actions.cpp:972
 msgid "Library Tree"
@@ -10234,7 +10231,7 @@ msgstr "Visa hårkors även när man inte ritar objekt"
 
 #: common/tool/actions.cpp:1189
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Använd små markörlinjer i riktningarna 0 och 90 grader"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
@@ -10242,15 +10239,15 @@ msgstr "Korshår över hela fönstret"
 
 #: common/tool/actions.cpp:1197
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Visa markörlinjer över hela fönstret, med riktning 0 och 90 grader"
 
 #: common/tool/actions.cpp:1204
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "45 graders markörlinjer"
 
 #: common/tool/actions.cpp:1205
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "Visa markörlinjer över hela fönstret i riktningarna 45 och 135 grader"
 
 #: common/tool/actions.cpp:1213
 msgid "Inactive Layer View Mode"
@@ -11628,9 +11625,8 @@ msgstr "Kontrollelement för fotavtrycksfilter"
 #: eeschema/toolbars_sch_editor.cpp:64 gerbview/toolbars_gerber.cpp:61
 #: pcbnew/toolbars_footprint_editor.cpp:57
 #: pcbnew/toolbars_footprint_viewer.cpp:83 pcbnew/toolbars_pcb_editor.cpp:143
-#, fuzzy
 msgid "Crosshair modes"
-msgstr "Måttlinjens höjd"
+msgstr "Markörlinjelägen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 msgid "View Selected Footprint"
@@ -12331,9 +12327,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Inga symboler som uppfyller kriterierna hittades ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:586
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** symbol hittades inte ***"
+msgstr "*** symbolbiblioteksid ogiltigt ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:597
 msgid "*** symbol not found ***"
@@ -13918,34 +13913,28 @@ msgid "Pin Table"
 msgstr "Stifttabell"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Konvertera symbol"
+msgstr "Återställ symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Återställ '%s' till den senast sparade versionen?"
+msgstr "Återställ symbol till det senast sparade tillståndet"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear cell"
-msgstr "Isolationsavstånd"
+msgstr "Rensa cell"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Rensa senaste borrfiler"
+msgstr "Rensa värde i cell"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Skapa ett nytt projekt"
+msgstr "Skapa härledd symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Skapa en ny symbol, härledd från en befintlig symbol"
+msgstr "Skapa en ny symbol, härledd från den valda symbolen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:128
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
@@ -13966,29 +13955,27 @@ msgid "Show datasheet in browser"
 msgstr "Visa datablad i webbläsaren"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "Symbol '%s' hittades inte i bibliotek '%s'."
+msgstr "Inga relaterade symboler hittades i bibliotek '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "Symbol '%s' hittades inte i bibliotek '%s'."
+msgstr "Inga symboler hittades i bibliotek '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Fel vid inläsning av mönsterkort '%s':%s"
+msgstr "Fel vid inläsning av symbol '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:579
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
-msgstr "Uppdatera symboler för att inkludera alla ändringar från biblioteket"
+msgstr "Inga relaterade symboler kunde laddas från biblioteket."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:581
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Uppdatera symboler för att inkludera alla ändringar från biblioteket"
+msgstr "Inga symboler kunde laddas från biblioteket."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:683
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:750
@@ -14026,20 +14013,19 @@ msgid "Rename Field"
 msgstr "Byt namn på fält"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Fältnamn %s finns redan."
+msgstr "Fältnamn '%s' finns redan."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:807
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:91
-#, fuzzy, c-format
+#, c-format
 msgid "Library Fields Table (%s)"
-msgstr "Bibliotek (%d)"
+msgstr "Biblioteksfältstabell (%s)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1029
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Utesluten från komponentlistan"
+msgstr "Uteslut från komponentlistan"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1030
 #: eeschema/sch_sheet.cpp:1677 eeschema/sch_symbol.cpp:3026
@@ -14058,23 +14044,20 @@ msgid "Power Symbol"
 msgstr "Power-symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1034
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Power-symbol"
+msgstr "Lokal strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:49
 #: eeschema/fields_data_model.cpp:38
-#, fuzzy
 msgid "BOM Name"
-msgstr "Grundnamn"
+msgstr "Komponentlistans namn"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:50
 #: eeschema/fields_data_model.cpp:39
-#, fuzzy
 msgid "Include"
-msgstr "Inkludera:"
+msgstr "Inkludera"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:51
@@ -14083,14 +14066,12 @@ msgid "Group By"
 msgstr "Gruppera efter"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Whole Library"
-msgstr "Nytt Bibliotek"
+msgstr "Hela biblioteket"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Related Symbols Only"
-msgstr "Mappa om symboler"
+msgstr "Endast relaterade symboler"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:133
 #, c-format
@@ -14213,14 +14194,12 @@ msgid "Delete extra units from symbol?"
 msgstr "Radera extra enheter från symbolen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:505
-#, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "Symbolen måste ha ett namn."
+msgstr "Symbolen måste ha minst en variant"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:511
-#, fuzzy
 msgid "Delete extra body styles from symbol?"
-msgstr "Radera extra enheter från symbolen?"
+msgstr "Radera extra varianter från symbolen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:538
 #: eeschema/symbol_editor/symbol_editor.cpp:358
@@ -14398,9 +14377,8 @@ msgid "Exclude from simulation"
 msgstr "Uteslut från simulering"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
-#, fuzzy
 msgid "Symbol Units"
-msgstr "Symbolenhet"
+msgstr "Symbolenheter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:289
 msgid "Number of units:"
@@ -14421,33 +14399,28 @@ msgstr ""
 "inte markeras för en dubbel triod (var enhet C är glödtråden)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:312
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "Ange visningsnamn för enhet %s"
+msgstr "Enheters visningsnamn (valfritt):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:348
-#, fuzzy
 msgid "Body Styles"
-msgstr "Symbolform"
+msgstr "Varianter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:350
-#, fuzzy
 msgid "Single body style"
-msgstr "Alla symbolformer"
+msgstr "En variant"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "'Standard' och 'alternativ' De Morgan-variant för symbolkropp"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
-#, fuzzy
 msgid "Custom body styles:"
-msgstr "Alla symbolformer"
+msgstr "Användaranpassade varianter:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
-#, fuzzy
 msgid "Units && Body Styles"
-msgstr "Symbolform"
+msgstr "Enheter && Varianter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:441
 msgid "Footprint filters:"
@@ -14497,9 +14470,8 @@ msgid "Jumper Pin Groups"
 msgstr "Grupper av byglade stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:503
-#, fuzzy
 msgid "Available pins:"
-msgstr "Tillgängliga stift"
+msgstr "Tillgängliga stift:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:519
 msgid "Create jumper group from the selected pins"
@@ -14510,9 +14482,8 @@ msgid "Remove the selected jumper pin group"
 msgstr "Ta bort vald grupp av sammankopplade stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:534
-#, fuzzy
 msgid "Grouped pins:"
-msgstr "Grupperade stift"
+msgstr "Grupperade stift:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:556
 msgid "Pin Connections"
@@ -14598,12 +14569,12 @@ msgstr "Alternativt stiftnamn"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties.cpp:351
-#, fuzzy
 msgid ""
 "Alternate pin assignments are not available for symbols with multiple body "
 "styles."
 msgstr ""
-"Alternativa stifttilldelningar är inte tillgängliga för De Morgan-symboler."
+"Alternativa stifttilldelningar är inte tillgängliga för symboler med flera "
+"varianter av symbolkropp."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid "Exit sync pins mode"
@@ -14705,9 +14676,8 @@ msgstr "Gemensamt för alla &enheter i symbol"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
-#, fuzzy
 msgid "Common to all body &styles"
-msgstr "Gemensamt för alla symbolformer"
+msgstr "Gemensamt för alla &symbolvarianter"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -16168,24 +16138,20 @@ msgid "Field name %s already exists."
 msgstr "Fältnamn %s finns redan."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:924
-#, fuzzy
 msgid "Include 'DNP' Symbols"
-msgstr "Rädda symboler"
+msgstr "Inkludera symboler märkta \"monteras ej\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:925
-#, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "Visa \"Uteslut från komponentlistan\""
+msgstr "Visa symboler märkta \"Uteslut från komponentlistan\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:927
-#, fuzzy
 msgid "Highlight on Cross Probe"
-msgstr "Markera korsrefererade nät"
+msgstr "Framhäv vid korsrefererens"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:928
-#, fuzzy
 msgid "Select on Cross Probe"
-msgstr "Endast markering"
+msgstr "Markera vid korsreferens"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1118
 msgid "The Quantity column cannot be grouped by."
@@ -16277,19 +16243,16 @@ msgid "View presets:"
 msgstr "Visa förinställningar:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:146
-#, fuzzy
 msgid "Entire Project"
 msgstr "Hela projektet"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:146
-#, fuzzy
 msgid "Current Sheet Only"
-msgstr "Endast nuvarande ark"
+msgstr "Endast aktuellt ark"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:146
-#, fuzzy
 msgid "Current Sheet and Down"
-msgstr "Endast nuvarande ark"
+msgstr "Aktuellt ark och nedåt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:155
 msgid "Group symbols"
@@ -16363,9 +16326,8 @@ msgid "Alternate Assignment"
 msgstr "Alternativ uppgift"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:144
-#, fuzzy
 msgid "Body style:"
-msgstr "Symbolform"
+msgstr "Symbolvariant:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:361
@@ -16937,14 +16899,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:247
-#, fuzzy
 msgid "Flash cross-probed selection"
-msgstr "Åtgärd vid korsreferens:"
+msgstr "Blinka korsrefererat val"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:248
 msgid "Temporarily flash the newly cross-probed selection 3 times"
-msgstr ""
+msgstr "Blinka tillfälligt den nyligen valda korsreferensen 3 gånger"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -16961,7 +16922,6 @@ msgid "Show hidden fields"
 msgstr "Visa dolda &fält"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:116
-#, fuzzy
 msgid "Show directive labels"
 msgstr "Visa direktivetiketter"
 
@@ -17957,9 +17917,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "Spara rapport för elektrisk regelkontroll till fil %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1226
-#, fuzzy
 msgid "Schematic file was not updated\n"
-msgstr "Kretsschemafil '%s' hittades inte."
+msgstr "Kretsschemafilen uppdaterades inte\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1244 eeschema/files-io.cpp:775
 #: eeschema/files-io.cpp:819
@@ -17973,7 +17932,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1249
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr ""
+msgstr "Sparade kretsschemafilen i senaste formatversion med lyckat resultat\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1003
 msgid "Net Navigator"
@@ -18066,15 +18025,16 @@ msgid "Symbol %s has unplaced units %s"
 msgstr "Symbolen %s har icke utplacerade enheter %s"
 
 #: eeschema/erc/erc.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
 msgstr ""
-"Symbolen %s har inkommande strömförsörjningsstift %s som inte placerats ut."
+"Symbolen %s har inkommande strömförsörjningsstift i enheter %s som inte "
+"placerats ut"
 
 #: eeschema/erc/erc.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed"
-msgstr "Symbolen %s har ingångsstift i enheter %s som inte är utplacerade."
+msgstr "Symbolen %s har ingångsstift i enheter %s som inte placerats ut"
 
 #: eeschema/erc/erc.cpp:670
 #, fuzzy, c-format
@@ -40200,64 +40160,52 @@ msgid "Type II-b (covered and tented both sides)"
 msgstr "Typ II b (torr- och våtfilmstäckt båda sidor )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
-#, fuzzy
 msgid "Type II-a (covered and tented bottom)"
-msgstr "Typ II a ( torr- och våtfilmstäckt undersida )"
+msgstr "Typ II a (torr- och våtfilmstäckt undersida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
-#, fuzzy
 msgid "Type III-a (plugged top)"
-msgstr "Typ III a ( pluggad ovansida )"
+msgstr "Typ III-a (pluggad ovansida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
-#, fuzzy
 msgid "Type III-b (plugged both sides)"
-msgstr "Typ III b ( pluggad båda sidor )"
+msgstr "Typ III-b (pluggad båda sidor)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
-#, fuzzy
 msgid "Type III-a (plugged bottom)"
-msgstr "Typ III a ( pluggad undersida )"
+msgstr "Typ III-a (pluggad undersida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type IV-a (plugged and tented top)"
-msgstr "Type IV a ( pluggad och täckt ovansida )"
+msgstr "Type IV-a (pluggad och täckt ovansida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
-#, fuzzy
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr "Typ IV b ( pluggad och täckt båda sidor )"
+msgstr "Typ IV-b (pluggad och täckt båda sidor)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
-#, fuzzy
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr "Typ IV a ( pluggad och täckt undersida )"
+msgstr "Typ IV-a (pluggad och täckt undersida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
-#, fuzzy
 msgid "Type V (filled )"
-msgstr "Typ V ( fylld )"
+msgstr "Typ V (fylld)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
-#, fuzzy
 msgid "Type VI-a (filled and tented top)"
-msgstr "Typ VI a ( fylld och täckt ovansida )"
+msgstr "Typ VI-a (fylld och täckt ovansida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:197
-#, fuzzy
 msgid "Type VI-b (filled and tented both sides)"
-msgstr "Typ VI b ( fylld och täckt båda sidor )"
+msgstr "Typ VI-b (fylld och täckt båda sidor)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:198
-#, fuzzy
 msgid "Type VI-a (filled and tented bottom)"
-msgstr "Typ VI a ( fylld och täckt undersida )"
+msgstr "Typ VI-a (fylld och täckt undersida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:199
-#, fuzzy
 msgid "Type VII (filled and capped)"
-msgstr "Typ VII ( fylld och överpläterad )"
+msgstr "Typ VII (fylld och överpläterad)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -40641,7 +40589,7 @@ msgstr "Lagernamnet %s används redan."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:44
 msgid "Use via color for normal through hole padstacks"
-msgstr ""
+msgstr "Använd viafärg för normala hålmonteringshåls kragstaplar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:50
 msgid "Clearance Outlines"
@@ -44367,19 +44315,18 @@ msgid "Footprint stackup mode differs."
 msgstr "Fotavtryckstyper är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:607
-#, fuzzy
 msgid "Footprint layers differ."
-msgstr "Fotavtrycksfilter är olika."
+msgstr "Fotavtrycks lager är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "Filnamnet är inte giltigt!"
+msgstr "Fotavtryck har %lu lager som inte finns på mönsterkortet: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #, c-format
 msgid "Board has %lu copper layers not in footprint: %s"
-msgstr ""
+msgstr "Mönsterkortet har %lu kopparlager som inte finns i fotavtrycket: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:701
 msgid "Footprint types differ."
@@ -44395,9 +44342,8 @@ msgid "'%s' settings differ."
 msgstr "Inställningarna '%s' är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:733
-#, fuzzy
 msgid "Footprint stackup differs."
-msgstr "Fotavtryckstyper är olika."
+msgstr "Fotavtrycks lageruppbyggnad är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:751
 msgid "Pad clearance overridden."
@@ -44446,14 +44392,14 @@ msgid "Checking board footprints against library..."
 msgstr "Kontrollerar kortets fotavtryck mot bibliotek..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:984
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'"
-msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'."
+msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1034
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'"
-msgstr "Fotavtryck '%s' stämmer inte överens med kopia i bibliotek '%s'."
+msgstr "Fotavtryck '%s' stämmer inte överens med kopia i bibliotek '%s'"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:121
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:129
@@ -44565,45 +44511,44 @@ msgid "Missing footprint %s (%s)"
 msgstr "Fotavtryck saknas %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)"
-msgstr "Värde (%s) överensstämmer inte med symbolens värde (%s)."
+msgstr "Värde (%s) överensstämmer inte med symbolens värde (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)"
-msgstr "%s matchar inte det fotavtryck som ges av symbolen (%s)."
+msgstr "%s matchar inte det fotavtryck som ges av symbolen (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)"
-msgstr "%s matchar inte symbolens fotavtrycksfilter (%s)."
+msgstr "%s matchar inte symbolens fotavtrycksfilter (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ"
-msgstr "Inställningarna '%s' är olika."
+msgstr "Inställningarna '%s' är olika"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:218
-#, fuzzy
 msgid "No corresponding pin found in schematic"
-msgstr "Inget motsvarande stift hittades i schemat."
+msgstr "Inget motsvarande stift hittades i kretsschemat"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Pad missing net given by schematic (%s)"
-msgstr "Lödyta saknar nät som ges av kretsschemat (%s)."
+msgstr "Lödyta saknar nät som ges av kretsschemat (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)"
-msgstr "Lödytans nät (%s) matchar inte nät från kretsschemat (%s)."
+msgstr "Lödytans nät (%s) matchar inte nät från kretsschemat (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "No pad found for pin %s in schematic"
-msgstr "Ingen lödyta hittades för stift %s i kretsschemat."
+msgstr "Ingen lödyta hittades för stift %s i kretsschemat"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:310
 msgid "Checking PCB to schematic parity..."
@@ -44992,11 +44937,9 @@ msgstr ""
 "z: %g; konturbox: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1752
-#, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
 msgstr ""
-"Kontroll för ledares överlappande med sig själv fallerade \n"
-"z: %g; konturbox: %s"
+"Kontroll för ledares överlappande med sig själv fallerade. Tillåt nytt försök"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1757
 #, c-format
@@ -49003,9 +48946,8 @@ msgstr ""
 "att användas.\n"
 
 #: pcbnew/pcb_point.cpp:166
-#, fuzzy
 msgid "PCB Point"
-msgstr "Mönsterkorts origo"
+msgstr "Mönsterkortspunkt"
 
 #: pcbnew/pcb_reference_image.cpp:356
 msgid "Associated Layer"
@@ -49044,12 +48986,12 @@ msgid "Pad Primitives"
 msgstr "Primitivformer för lödyta"
 
 #: pcbnew/pcb_table.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%d column table"
 msgstr "Tabell med %d kolumner"
 
 #: pcbnew/pcb_tablecell.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Table cell %s"
 msgstr "Tabellens cell %s"
 
@@ -49072,7 +49014,7 @@ msgid "PCB text '%s' on %s"
 msgstr "Mönsterkortstext '%s' på %s"
 
 #: pcbnew/pcb_textbox.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text box '%s' on %s"
 msgstr "Mönsterkorts textruta '%s' på %s"
 
@@ -49081,14 +49023,14 @@ msgid "Border Properties"
 msgstr "Ramens egenskaper"
 
 #: pcbnew/pcb_track.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/buried via %s on %s"
-msgstr "Blind / begravd via %s på %s"
+msgstr "Blind/begravd via %s på %s"
 
 #: pcbnew/pcb_track.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Micro via %s on %s"
-msgstr "Micro Via %s på %s"
+msgstr "Mikrovia %s på %s"
 
 #: pcbnew/pcb_track.cpp:175
 #, c-format
@@ -49479,12 +49421,11 @@ msgstr "Det gick inte att skapa IPC-D-356-fil\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2544
 msgid "Successfully saved board file using the latest format\n"
-msgstr ""
+msgstr "Sparade mönsterkortsfil i senaste formatversion med lyckat resultat\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2548
-#, fuzzy
 msgid "Board file was not updated\n"
-msgstr "Symbolbiblioteket uppdaterades inte\n"
+msgstr "Mönsterkortsfil uppdaterades inte\n"
 
 #: pcbnew/pcbnew_printout.cpp:100
 msgid "Multiple Layers"
@@ -49500,27 +49441,26 @@ msgstr "Fel vid inläsning av projektets fotavtrycksbibliotek."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:166
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Det gick inte att öppna katalogen för insticksprogram '%s'."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:167
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:175
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:184
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:190
-#, fuzzy
 msgid "Plugin Directory"
-msgstr "Öppna mapp med insticksprogram"
+msgstr "Katalog för insticksprogram"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
-msgstr "Katalog '%s' finns inte."
+msgstr "Katalogen för insticksprogram '%s' finns inte.  Skapa den?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Det går inte att skapa katalogen för insticksprogram '%s'."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -50050,9 +49990,8 @@ msgid "Track tuning tools"
 msgstr "Ledarlängdsjusteringsverktyg"
 
 #: pcbnew/toolbars_pcb_editor.cpp:230
-#, fuzzy
 msgid "PCB origins and points"
-msgstr "Mönsterkorts origo"
+msgstr "Mönsterkorts origo och punkter"
 
 #: pcbnew/toolbars_pcb_editor.cpp:384
 msgid ""
@@ -50769,9 +50708,8 @@ msgid "Draw Bezier"
 msgstr "Rita Bézierkurva"
 
 #: pcbnew/tools/drawing_tool.cpp:910
-#, fuzzy
 msgid "Place point"
-msgstr "Placera stift"
+msgstr "Placera punkt"
 
 #: pcbnew/tools/drawing_tool.cpp:1657
 msgid "Draw Dimension"
@@ -51102,9 +51040,8 @@ msgid "Some of the items could not be outset."
 msgstr "Kunde inte skapa kontur kring vissa av objekten."
 
 #: pcbnew/tools/item_modification_routine.cpp:999
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Det går inte att skapa filen \"%s\""
+msgstr "Det går inte att skapa rektangulär kontur"
 
 #: pcbnew/tools/multichannel_tool.cpp:511
 msgid "Select a reference Rule Area to copy from..."
