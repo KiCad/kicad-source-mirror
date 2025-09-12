@@ -1697,16 +1697,35 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
-        else if( int tmp = aField->SCH_ITEM::compare( *bField, aCompareFlags ) )
+        else
         {
-            retv = tmp;
-            REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
-                                      aField->GetName( false ),
-                                      ITEM_DESC( aField ),
-                                      ITEM_DESC( bField ) ) );
+            int tmp = 0;
 
-            if( !aReporter )
-                return retv;
+            // For EQUALITY comparison, we need to compare field content directly
+            // since SCH_ITEM::compare() returns 0 for EQUALITY flag
+            if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+            {
+                // Compare field text content
+                tmp = aField->GetText().CmpNoCase( bField->GetText() );
+            }
+
+            if( tmp == 0 )
+            {
+                // Fall back to base class comparison for other properties
+                tmp = aField->SCH_ITEM::compare( *bField, aCompareFlags );
+            }
+
+            if( tmp != 0 )
+            {
+                retv = tmp;
+                REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
+                                          aField->GetName( false ),
+                                          ITEM_DESC( aField ),
+                                          ITEM_DESC( bField ) ) );
+
+                if( !aReporter )
+                    return retv;
+            }
         }
     }
 

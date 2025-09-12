@@ -750,7 +750,9 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
     info->m_Thickness = m_nameThickness;
     info->m_Angle = ANGLE_HORIZONTAL;
 
-    if( m_pin.GetParentSymbol()->GetPinNameOffset() > 0 )
+    bool nameInside = m_pin.GetParentSymbol()->GetPinNameOffset() > 0;
+
+    if( nameInside )
     {
         // This means name inside the pin
         VECTOR2I  pos = { m_pin.GetLength() + m_pin.GetParentSymbol()->GetPinNameOffset(), 0 };
@@ -760,6 +762,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
         info->m_TextPosition = pos + VECTOR2I{ thickOffset, 0 };
         info->m_HAlign = GR_TEXT_H_ALIGN_LEFT;
         info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+        transformTextForPin( *info );
     }
     else
     {
@@ -769,42 +772,44 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
         info->m_TextPosition = pos;
         info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
         info->m_VAlign = GR_TEXT_V_ALIGN_BOTTOM;
-    }
 
-    // New policy: names follow same positioning semantics as numbers.
-    const SYMBOL* parentSym = m_pin.GetParentSymbol();
-    if( parentSym )
-    {
-        int maxHalfHeight = 0;
-        for( const SCH_PIN* p : parentSym->GetPins() )
+        // New policy: names follow same positioning semantics as numbers except when
+        // specified as inside.  When names are inside, they should not overlap with the
+        // number position.
+        const SYMBOL* parentSym = m_pin.GetParentSymbol();
+        if( parentSym )
         {
-            wxString n = p->GetShownName();
-            if( n.IsEmpty() )
-                continue;
-            maxHalfHeight = std::max( maxHalfHeight, p->GetNameTextSize() / 2 );
-        }
-        int clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
-        VECTOR2I pinPos = m_pin.GetPosition();
-        PIN_ORIENTATION orient = m_pin.PinDrawOrient( DefaultTransform );
-        bool verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
+            int maxHalfHeight = 0;
+            for( const SCH_PIN* p : parentSym->GetPins() )
+            {
+                wxString n = p->GetShownName();
+                if( n.IsEmpty() )
+                    continue;
+                maxHalfHeight = std::max( maxHalfHeight, p->GetNameTextSize() / 2 );
+            }
+            int clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
+            VECTOR2I pinPos = m_pin.GetPosition();
+            PIN_ORIENTATION orient = m_pin.PinDrawOrient( DefaultTransform );
+            bool verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
 
-        if( verticalOrient )
-        {
-            // Vertical pins: name mirrors number placement (left + rotated) for visual consistency.
-            int boxWidth = info->m_TextSize * (int) info->m_Text.Length() * 0.6; // heuristic width
-            int centerX = pinPos.x - clearance - boxWidth / 2;
-            info->m_TextPosition = { centerX, pinPos.y };
-            info->m_Angle = ANGLE_VERTICAL;
-            info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
-            info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
-        }
-        else
-        {
-            // Horizontal pins: name above (negative Y) aligned to same Y offset logic as numbers.
-            info->m_TextPosition = { pinPos.x, pinPos.y - ( maxHalfHeight + clearance ) };
-            info->m_Angle = ANGLE_HORIZONTAL;
-            info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
-            info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+            if( verticalOrient )
+            {
+                // Vertical pins: name mirrors number placement (left + rotated) for visual consistency.
+                int boxWidth = info->m_TextSize * (int) info->m_Text.Length() * 0.6; // heuristic width
+                int centerX = pinPos.x - clearance - boxWidth / 2;
+                info->m_TextPosition = { centerX, pinPos.y };
+                info->m_Angle = ANGLE_VERTICAL;
+                info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+                info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+            }
+            else
+            {
+                // Horizontal pins: name above (negative Y) aligned to same Y offset logic as numbers.
+                info->m_TextPosition = { pinPos.x, pinPos.y - ( maxHalfHeight + clearance ) };
+                info->m_Angle = ANGLE_HORIZONTAL;
+                info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+                info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
+            }
         }
     }
     return info;

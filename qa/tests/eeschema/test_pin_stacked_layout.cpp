@@ -46,6 +46,9 @@ static std::unique_ptr<LIB_SYMBOL> createTestResistorSymbol()
 {
     auto symbol = std::make_unique<LIB_SYMBOL>( wxT( "TestResistor" ) );
 
+    // Set pin name offset to 0 so names are positioned outside (like numbers)
+    symbol->SetPinNameOffset( 0 );
+
     // Create first pin with stacked numbers [1-5]
     auto pin1 = std::make_unique<SCH_PIN>( symbol.get() );
     pin1->SetPosition( VECTOR2I( 0, schIUScale.MilsToIU( 250 ) ) ); // top pin
