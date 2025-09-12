@@ -25,6 +25,7 @@
 #define KICAD_GIT_ERRORS_H
 
 #include <vector>
+#include <import_export.h>
 
 #include <wx/translation.h>
 
