@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 04:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-09-12 09:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -26353,7 +26353,7 @@ msgstr ""
 #: kicad/cli/command_pcb_drc.cpp:89
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
-"Einen nicht-Null Rückgabewert zurückgeben, sofern DRC-Verstöße vorliegen"
+"Einen Rückgabewert ungleich Null zurückgeben, sofern DRC-Verstöße vorliegen"
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:292
 #: kicad/cli/command_pcb_export_drill.cpp:150
@@ -27082,7 +27082,7 @@ msgstr ""
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
 msgstr ""
-"Einen Ergebniscode ungleich Null zurückgeben wenn ERC-Verletzungen vorliegen"
+"Einen Rückgabewert ungleich Null zurückgeben, wenn ERC-Verletzungen vorliegen"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
@@ -28691,7 +28691,7 @@ msgstr "Schaltplan im Schaltplan-Editor bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:137
 msgid "Edit PCB in PCB editor"
-msgstr "Leiterplatte in Leiterplatteneditor bearbeiten"
+msgstr "Leiterplatte im Leiterplatteneditor bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
 msgid "Create, delete and edit PCB footprints"
@@ -37467,7 +37467,7 @@ msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
 msgid "Indicate DNP on fabrication layers"
-msgstr "Nicht zu bestückende Bauteile Fabrikationslagen markieren"
+msgstr "Nicht zu bestückende Bauteile auf Fabrikationslagen markieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Hide or cross-out DNP footprints on fabrication layers"
@@ -39979,8 +39979,9 @@ msgstr ""
 "Pad ist (typisch für Lötstoppmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
+#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "Mindestbreite von Lötstoppmasken-Brücken:"
+msgstr "Mindestbreite von Lötstoppmasken-Stegen:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
@@ -41886,8 +41887,9 @@ msgid "Solder mask aperture bridges items with different nets"
 msgstr "Lötstoppöffnung über Elementen mit verschiedenen Netzen"
 
 #: pcbnew/drc/drc_item.cpp:241
+#, fuzzy
 msgid "Silkscreen clipped by solder mask"
-msgstr "Bestückungsdruck durch Lötstoppmaske ausgeschnitten"
+msgstr "Bestückungsdruck überlappt Lötstoppmaske"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Silkscreen clipped by board edge"
