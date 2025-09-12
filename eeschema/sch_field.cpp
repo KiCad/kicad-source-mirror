@@ -974,9 +974,19 @@ void SCH_FIELD::CalcEdit( const VECTOR2I& aPosition )
 
 wxString SCH_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Field %s '%s'" ),
-                             UnescapeString( GetName() ),
-                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    wxString content = aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() );
+
+    if( content.IsEmpty() )
+    {
+        return wxString::Format( _( "Field %s (empty)" ),
+                                 UnescapeString( GetName() ) );
+    }
+    else
+    {
+        return wxString::Format( _( "Field %s '%s'" ),
+                                 UnescapeString( GetName() ),
+                                 content );
+    }
 }
 
 

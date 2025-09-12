@@ -1542,7 +1542,7 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 
 
 #define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
-#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider, true )
+#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider, false )
 
 int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aReporter ) const
 {
@@ -1586,35 +1586,34 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             return retv;
     }
 
-    // Make sure shapes and pins are sorted. No need with fields as those are
-    // matched by id/name.
+    // Make sure shapes are sorted. No need with fields or pins as those are matched by id/name and number.
 
     std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> aShapes;
-    std::set<const SCH_ITEM*>                      aFields;
-    std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> aPins;
+    std::set<const SCH_FIELD*>                     aFields;
+    std::set<const SCH_PIN*>                       aPins;
 
     for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
     {
         if( it->Type() == SCH_SHAPE_T )
             aShapes.insert( &(*it) );
         else if( it->Type() == SCH_FIELD_T )
-            aFields.insert( &(*it) );
+            aFields.insert( static_cast<const SCH_FIELD*>( &(*it) ) );
         else if( it->Type() == SCH_PIN_T )
-            aPins.insert( &(*it) );
+            aPins.insert( static_cast<const SCH_PIN*>( &(*it) ) );
     }
 
     std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> bShapes;
-    std::set<const SCH_ITEM*>                      bFields;
-    std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> bPins;
+    std::set<const SCH_FIELD*>                     bFields;
+    std::set<const SCH_PIN*>                       bPins;
 
     for( auto it = aRhs.m_drawings.begin(); it != aRhs.m_drawings.end(); ++it )
     {
         if( it->Type() == SCH_SHAPE_T )
             bShapes.insert( &(*it) );
         else if( it->Type() == SCH_FIELD_T )
-            bFields.insert( &(*it) );
+            bFields.insert( static_cast<const SCH_FIELD*>( &(*it) ) );
         else if( it->Type() == SCH_PIN_T )
-            bPins.insert( &(*it) );
+            bPins.insert( static_cast<const SCH_PIN*>( &(*it) ) );
     }
 
     if( int tmp = static_cast<int>( aShapes.size() - bShapes.size() ) )
@@ -1632,7 +1631,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( int tmp2 = (*aIt)->compare( *(*bIt), aCompareFlags ) )
             {
                 retv = tmp2;
-                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
+                REPORT( wxString::Format( _( "Graphic item differs: %s; %s." ),
+                                          ITEM_DESC( *aIt ),
+                                          ITEM_DESC( *bIt ) ) );
 
                 if( !aReporter )
                     return retv;
@@ -1640,46 +1641,48 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         }
     }
 
-    if( int tmp = static_cast<int>( aPins.size() - bPins.size() ) )
+    for( const SCH_PIN* aPin : aPins )
     {
-        retv = tmp;
-        REPORT( _( "Pin count differs." ) );
+        const SCH_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(), aPin->GetBodyStyle() );
 
-        if( !aReporter )
-            return retv;
-    }
-    else
-    {
-        for( const SCH_ITEM* aPinItem : aPins )
+        if( !bPin )
         {
-            const SCH_PIN* aPin = static_cast<const SCH_PIN*>( aPinItem );
-            const SCH_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(),
-                                               aPin->GetBodyStyle() );
+            retv = 1;
+            REPORT( wxString::Format( _( "Extra pin in schematic symbol: %s." ), ITEM_DESC( aPin ) ) );
 
-            if( !bPin )
-            {
-                retv = 1;
-                REPORT( wxString::Format( _( "Pin %s not found." ), aPin->GetNumber() ) );
+            if( !aReporter )
+                return retv;
+        }
+        else if( int tmp = aPin->SCH_ITEM::compare( *bPin, aCompareFlags ) )
+        {
+            retv = tmp;
+            REPORT( wxString::Format( _( "Pin %s differs: %s; %s" ),
+                                      aPin->GetNumber(),
+                                      ITEM_DESC( aPin ),
+                                      ITEM_DESC( bPin ) ) );
 
-                if( !aReporter )
-                    return retv;
-            }
-            else if( int tmp2 = aPinItem->compare( *bPin, aCompareFlags ) )
-            {
-                retv = tmp2;
-                REPORT( wxString::Format( _( "Pin %s differs." ), aPin->GetNumber() ) );
-
-                if( !aReporter )
-                    return retv;
-            }
+            if( !aReporter )
+                return retv;
         }
     }
 
-    for( const SCH_ITEM* aFieldItem : aFields )
+    for( const SCH_PIN* bPin : bPins )
     {
-        const SCH_FIELD* aField = static_cast<const SCH_FIELD*>( aFieldItem );
+        const SCH_PIN* aPin = aRhs.GetPin( bPin->GetNumber(), bPin->GetUnit(), bPin->GetBodyStyle() );
+
+        if( !aPin )
+        {
+            retv = 1;
+            REPORT( wxString::Format( _( "Missing pin in schematic symbol: %s." ), ITEM_DESC( bPin ) ) );
+
+            if( !aReporter )
+                return retv;
+        }
+    }
+
+    for( const SCH_FIELD* aField : aFields )
+    {
         const SCH_FIELD* bField = nullptr;
-        int              tmp = 0;
 
         if( aField->IsMandatory() )
             bField = aRhs.GetField( aField->GetId() );
@@ -1687,33 +1690,49 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             bField = aRhs.GetField( aField->GetName() );
 
         if( !bField )
-            tmp = 1;
-        else
-            tmp = aFieldItem->compare( *bField, aCompareFlags );
+        {
+            retv = 1;
+            REPORT( wxString::Format( _( "Extra field in schematic symbol: %s." ), ITEM_DESC( aField ) ) );
 
-        if( tmp )
+            if( !aReporter )
+                return retv;
+        }
+        else if( int tmp = aField->SCH_ITEM::compare( *bField, aCompareFlags ) )
         {
             retv = tmp;
-            REPORT( wxString::Format( _( "%s field differs." ), aField->GetName( false ) ) );
+            REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
+                                      aField->GetName( false ),
+                                      ITEM_DESC( aField ),
+                                      ITEM_DESC( bField ) ) );
 
             if( !aReporter )
                 return retv;
         }
     }
 
-    if( int tmp = static_cast<int>( aFields.size() - bFields.size() ) )
+    for( const SCH_FIELD* bField : bFields )
     {
-        retv = tmp;
-        REPORT( _( "Field count differs." ) );
+        const SCH_FIELD* aField = nullptr;
 
-        if( !aReporter )
-            return retv;
+        if( bField->IsMandatory() )
+            aField = aRhs.GetField( bField->GetId() );
+        else
+            aField = aRhs.GetField( bField->GetName() );
+
+        if( !aField )
+        {
+            retv = 1;
+            REPORT( wxString::Format( _( "Missing field in schematic symbol: %s." ), ITEM_DESC( bField ) ) );
+
+            if( !aReporter )
+                return retv;
+        }
     }
 
     if( int tmp = static_cast<int>( m_fpFilters.GetCount() - aRhs.m_fpFilters.GetCount() ) )
     {
         retv = tmp;
-        REPORT( _( "Footprint filters differs." ) );
+        REPORT( _( "Footprint filter count differs." ) );
 
         if( !aReporter )
             return retv;

@@ -1937,10 +1937,20 @@ wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
     }
     else
     {
-        return wxString::Format( _( "Directive Label [%s %s]" ),
-                                 UnescapeString( m_fields[0].GetName() ),
-                                 aFull ? m_fields[0].GetShownText( false )
-                                       : KIUI::EllipsizeMenuText( m_fields[0].GetText() ) );
+        const SCH_FIELD& firstField = m_fields[0];
+        wxString content = aFull ? firstField.GetShownText( false ) : KIUI::EllipsizeMenuText( firstField.GetText() );
+
+        if( content.IsEmpty() )
+        {
+            return wxString::Format( _( "Directive Label [%s (empty)]" ),
+                                     UnescapeString( m_fields[0].GetName() ) );
+        }
+        else
+        {
+            return wxString::Format( _( "Directive Label [%s %s]" ),
+                                     UnescapeString( m_fields[0].GetName() ),
+                                     content );
+        }
     }
 }
 

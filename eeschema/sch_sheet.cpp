@@ -1169,7 +1169,7 @@ wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 {
     const SCH_FIELD* sheetnameField = GetField( FIELD_T::SHEET_NAME );
 
-    return wxString::Format( _( "Hierarchical Sheet %s" ),
+    return wxString::Format( _( "Hierarchical Sheet '%s'" ),
                              aFull ? sheetnameField->GetShownText( false )
                                    : KIUI::EllipsizeMenuText( sheetnameField->GetText() ) );
 }
