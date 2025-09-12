@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 19:38+0000\n"
+"PO-Revision-Date: 2025-09-12 19:10+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -44171,7 +44171,7 @@ msgstr "Lötstoppöffnung über Elementen mit verschiedenen Netzen"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Silkscreen clipped by solder mask"
-msgstr "Bestückungsdruck durch Lötstoppmaske ausgeschnitten"
+msgstr "Bestückungsdruck überlappt Lötstoppmaske"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Silkscreen clipped by board edge"
