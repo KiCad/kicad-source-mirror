@@ -1087,14 +1087,16 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
 
             if( footprint )
             {
-                std::string command =
-                        fmt::format( "$SELECT: 0,F{}",
-                                   EscapeString( footprint->GetReference(), CTX_IPC ).ToStdString() );
-
-                EDA_3D_VIEWER_FRAME* frame = static_cast<EDA_3D_VIEWER_FRAME*>( GetParent() );
+                // We send a message (by ExpressMail) to the board and schematic editor, but only
+                // if the manager of this canvas is a EDA_3D_VIEWER_FRAME, because only this
+                // kind of frame has ExpressMail stuff
+                EDA_3D_VIEWER_FRAME* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( GetParent() );
 
                 if( frame )
                 {
+                    std::string command = fmt::format( "$SELECT: 0,F{}",
+                                        EscapeString( footprint->GetReference(), CTX_IPC ).ToStdString() );
+
                     frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, command, frame );
                     frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, frame );
                 }
