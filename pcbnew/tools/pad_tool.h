@@ -46,6 +46,8 @@ public:
      */
     int EnumeratePads( const TOOL_EVENT& aEvent );
 
+    int PadTable( const TOOL_EVENT& aEvent );
+
     /**
      * Place a pad in footprint editor.
      */

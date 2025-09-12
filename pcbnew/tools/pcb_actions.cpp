@@ -899,6 +899,13 @@ TOOL_ACTION PCB_ACTIONS::footprintProperties( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Footprint Properties..." ) )
         .Icon( BITMAPS::module_options ) );
 
+TOOL_ACTION PCB_ACTIONS::padTable( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.padTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Pad Table..." ) )
+        .Tooltip( _( "Displays pad table for bulk editing of pads" ) )
+        .Icon( BITMAPS::pin_table ) );
+
 TOOL_ACTION PCB_ACTIONS::checkFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.checkFootprint" )
         .Scope( AS_GLOBAL )

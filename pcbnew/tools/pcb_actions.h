@@ -488,6 +488,7 @@ public:
 
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;
+    static TOOL_ACTION padTable;
 
     static TOOL_ACTION checkFootprint;
 

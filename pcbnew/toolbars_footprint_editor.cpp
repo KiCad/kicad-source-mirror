@@ -166,6 +166,7 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
 
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::footprintProperties )
+              .AppendAction( PCB_ACTIONS::padTable )
               .AppendAction( PCB_ACTIONS::defaultPadProperties )
               .AppendAction( ACTIONS::showDatasheet )
               .AppendAction( PCB_ACTIONS::checkFootprint );

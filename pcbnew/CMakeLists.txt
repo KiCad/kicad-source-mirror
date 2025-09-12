@@ -120,6 +120,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_outset_items_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
+    dialogs/dialog_fp_edit_pad_table.cpp
     dialogs/dialog_plot.cpp
     dialogs/dialog_plot_base.cpp
     dialogs/dialog_pns_diff_pair_dimensions.cpp

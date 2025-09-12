@@ -1421,6 +1421,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::placeImportedGraphics, ENABLE( haveFootprintCond ) );
 
     mgr->SetConditions( PCB_ACTIONS::footprintProperties,   ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::padTable,            ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::editTextAndGraphics,   ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::checkFootprint,        ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::repairFootprint,       ENABLE( haveFootprintCond ) );

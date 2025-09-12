@@ -37,6 +37,7 @@
 #include <pcbnew_settings.h>
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>
+#include <dialogs/dialog_fp_edit_pad_table.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
@@ -109,6 +110,7 @@ bool PAD_TOOL::Init()
 
         if( m_isFootprintEditor )
         {
+            menu.AddItem( PCB_ACTIONS::padTable,        SELECTION_CONDITIONS::ShowAlways, 400 );
             menu.AddItem( PCB_ACTIONS::enumeratePads,      SELECTION_CONDITIONS::ShowAlways, 400 );
             menu.AddItem( PCB_ACTIONS::recombinePad,       recombineCondition, 400 );
             menu.AddItem( PCB_ACTIONS::explodePad,         explodeCondition, 400 );
@@ -911,6 +913,22 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun )
     return aPad->Recombine( aIsDryRun, maxError );
 }
 
+int PAD_TOOL::PadTable( const TOOL_EVENT& aEvent )
+{
+    if( !m_isFootprintEditor || InPadEditMode() )
+        return 0;
+
+    FOOTPRINT* footprint = board()->GetFirstFootprint();
+
+    if( !footprint )
+        return 0;
+
+    DIALOG_FP_EDIT_PAD_TABLE dlg( frame(), footprint );
+    dlg.ShowQuasiModal();
+
+    return 0;
+}
+
 
 void PAD_TOOL::setTransitions()
 {
@@ -920,6 +938,7 @@ void PAD_TOOL::setTransitions()
 
     Go( &PAD_TOOL::PlacePad,                PCB_ACTIONS::placePad.MakeEvent() );
     Go( &PAD_TOOL::EnumeratePads,           PCB_ACTIONS::enumeratePads.MakeEvent() );
+    Go( &PAD_TOOL::PadTable,              PCB_ACTIONS::padTable.MakeEvent() );
 
     Go( &PAD_TOOL::EditPad,                 PCB_ACTIONS::explodePad.MakeEvent() );
     Go( &PAD_TOOL::EditPad,                 PCB_ACTIONS::recombinePad.MakeEvent() );
