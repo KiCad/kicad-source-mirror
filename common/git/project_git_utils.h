@@ -52,6 +52,16 @@ public:
     static int CreateBranch( git_repository* aRepo, const wxString& aBranchName );
 
     /**
+     * Return the current HEAD commit hash for the repository containing aProjectFile.
+     *
+     * @param aProjectFile Absolute path to any file within the repository (typically the
+     *                     project file path).
+     * @param aShort       If true, return the short (8 char) hash, otherwise full hash.
+     * @return wxString containing the hash or "no hash" if unavailable.
+     */
+    static wxString GetCurrentHash( const wxString& aProjectFile, bool aShort );
+
+    /**
      * Remove version control from a directory by freeing the repository and
      * optionally removing the .git directory.
      *

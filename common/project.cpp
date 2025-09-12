@@ -36,6 +36,8 @@
 #include <kiway.h>
 #include <lockfile.h>
 #include <macros.h>
+#include <git/project_git_utils.h>
+#include <git2.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <trace_helpers.h>
@@ -43,6 +45,7 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <title_block.h>
+
 
 
 PROJECT::PROJECT() :
@@ -83,6 +86,16 @@ bool PROJECT::TextVarResolver( wxString* aToken ) const
     else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) )  )
     {
         *aToken = TITLE_BLOCK::GetCurrentDate();
+        return true;
+    }
+    else if( aToken->IsSameAs( wxT( "VCSHASH" ) ) )
+    {
+        *aToken = KIGIT::PROJECT_GIT_UTILS::GetCurrentHash( GetProjectFullName(), false );
+        return true;
+    }
+    else if( aToken->IsSameAs( wxT( "VCSSHORTHASH" ) ) )
+    {
+        *aToken = KIGIT::PROJECT_GIT_UTILS::GetCurrentHash( GetProjectFullName(), true );
         return true;
     }
     else if( GetTextVars().count( *aToken ) > 0 )

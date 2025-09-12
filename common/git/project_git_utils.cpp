@@ -24,6 +24,9 @@
 #include "project_git_utils.h"
 #include "git_backend.h"
 
+#include <wx/string.h>
+#include <string_utils.h>
+
 namespace KIGIT
 {
 
@@ -41,6 +44,36 @@ bool PROJECT_GIT_UTILS::RemoveVCS( git_repository*& aRepo, const wxString& aProj
                                   bool aRemoveGitDir, wxString* aErrors )
 {
     return GetGitBackend()->RemoveVCS( aRepo, aProjectPath, aRemoveGitDir, aErrors );
+}
+
+wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool aShort )
+{
+    wxString result = wxT( "no hash" );
+    git_repository* repo = PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( aProjectFile ) );
+
+    if( repo )
+    {
+        git_reference* head = nullptr;
+
+    if( git_repository_head( &head, repo ) == 0 )
+        {
+            const git_oid* oid = git_reference_target( head );
+
+            if( oid )
+            {
+                char buf[41];
+                size_t len = aShort ? 8 : 41;
+                git_oid_tostr( buf, len, oid );
+                result = wxString::FromUTF8( buf );
+            }
+
+            git_reference_free( head );
+        }
+
+        git_repository_free( repo );
+    }
+
+    return result;
 }
 
 } // namespace KIGIT
