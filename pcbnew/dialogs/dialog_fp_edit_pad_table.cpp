@@ -226,8 +226,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
                 m_grid->SetCellValue( row, COL_DRILL_Y, m_unitsProvider->StringFromValue( drill.y, true ) );
         }
         else
-        m_grid->SetCellValue( row, COL_SIZE_X, m_unitsProvide
         {
+            // For non-PTH pads, drill columns are not applicable.
             m_grid->SetReadOnly( row, COL_DRILL_X, true );
             m_grid->SetReadOnly( row, COL_DRILL_Y, true );
         }
