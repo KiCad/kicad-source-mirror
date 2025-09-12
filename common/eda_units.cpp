@@ -708,6 +708,104 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
 }
 
 
+bool EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, const wxString& aTextValue,
+                                                double& aDoubleValue )
+{
+    double dtmp = 0;
+
+    // Acquire the 'right' decimal point separator
+    const struct lconv* lc = localeconv();
+
+    wxChar      decimal_point = lc->decimal_point[0];
+    wxString    buf( aTextValue.Strip( wxString::both ) );
+
+    // Convert any entered decimal point separators to the 'right' one
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
+
+    // Find the end of the numeric part
+    unsigned brk_point = 0;
+
+    while( brk_point < buf.Len() )
+    {
+        wxChar ch = buf[brk_point];
+
+        if( !( (ch >= '0' && ch <= '9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
+            break;
+
+        ++brk_point;
+    }
+
+    if( brk_point == 0 )
+        return false;
+
+    // Extract the numeric part
+    buf.Left( brk_point ).ToDouble( &dtmp );
+
+    // Check the unit designator
+    wxString  unit( buf.Mid( brk_point ).Strip( wxString::both ).Lower() );
+    EDA_UNITS units;
+
+    //check for um, μm (µ is MICRO SIGN) and µm (µ is GREEK SMALL LETTER MU) for micrometre
+    if( unit == wxT( "um" ) || unit == wxT( "\u00B5m" ) || unit == wxT( "\u03BCm" ) )
+    {
+        units = EDA_UNITS::UM;
+    }
+    else if( unit == wxT( "mm" ) )
+    {
+        units = EDA_UNITS::MM;
+    }
+    else if( unit == wxT( "cm" ) )
+    {
+        units = EDA_UNITS::CM;
+    }
+    else if( unit == wxT( "mil" ) || unit == wxT( "mils" ) || unit == wxT( "thou" ) )
+    {
+        units = EDA_UNITS::MILS;
+    }
+    else if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+    {
+        units = EDA_UNITS::INCH;
+    }
+    else if( unit == wxT( "oz" ) ) // 1 oz = 1.37 mils
+    {
+        units = EDA_UNITS::MILS;
+        dtmp *= 1.37;
+    }
+    else if( unit == wxT( "ra" ) ) // Radians
+    {
+        dtmp *= 180.0f / M_PI;
+    }
+    else if( unit == wxT( "fs" ) )
+    {
+        units = EDA_UNITS::FS;
+    }
+    else if( unit == wxT( "ps" ) )
+    {
+        units = EDA_UNITS::PS;
+    }
+    else if( unit == wxT( "ps/in" ) )
+    {
+        units = EDA_UNITS::PS_PER_INCH;
+    }
+    else if( unit == wxT( "ps/cm" ) )
+    {
+        units = EDA_UNITS::PS_PER_CM;
+    }
+    else if( unit == wxT( "ps/mm" ) )
+    {
+        units = EDA_UNITS::PS_PER_MM;
+    }
+    else
+    {
+        return false;
+    }
+
+    aDoubleValue = FromUserUnit( aIuScale, units, dtmp );
+    return true;
+}
+
+
 long long int EDA_UNIT_UTILS::UI::ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                    const wxString& aTextValue, EDA_DATA_TYPE aType )
 {
