@@ -123,6 +123,14 @@ private:
                            float aZtop, float aZbot, unsigned int aNr_sides_per_circle,
                            TRIANGLE_DISPLAY_LIST* aDstLayer );
 
+    void generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ,
+                       unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                       bool aTop );
+
+    void generateDimple( const SFVEC2F& aCenter, float aRadius, float aZ, float aDepth,
+                         unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                         bool aTop );
+
     void generateViasAndPads();
 
     /**
@@ -236,6 +244,8 @@ private:
 
     OPENGL_RENDER_LIST* m_microviaHoles;
     OPENGL_RENDER_LIST* m_padHoles;
+    OPENGL_RENDER_LIST* m_viaFrontCover;
+    OPENGL_RENDER_LIST* m_viaBackCover;
 
     // Caches
     std::map<wxString, MODEL_3D*>           m_3dModelMap;

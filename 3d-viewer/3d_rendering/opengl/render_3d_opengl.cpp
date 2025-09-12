@@ -72,6 +72,8 @@ RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
     m_outerViaThroughHoles = nullptr;
     m_microviaHoles = nullptr;
     m_padHoles = nullptr;
+    m_viaFrontCover = nullptr;
+    m_viaBackCover = nullptr;
 
     m_circleTexture = 0;
     m_grid = 0;
@@ -947,6 +949,8 @@ void RENDER_3D_OPENGL::freeAllLists()
 
     DELETE_AND_FREE( m_microviaHoles )
     DELETE_AND_FREE( m_padHoles )
+    DELETE_AND_FREE( m_viaFrontCover )
+    DELETE_AND_FREE( m_viaBackCover )
 }
 
 
@@ -968,6 +972,17 @@ void RENDER_3D_OPENGL::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
         setLayerMaterial( aLayerID );
         m_board->SetItIsTransparent( true );
         m_board->DrawCulled( aShowThickness, solder_mask, via_holes );
+
+        if( aLayerID == F_Mask && m_viaFrontCover )
+        {
+            m_viaFrontCover->ApplyScalePosition( aZPos, 4 * m_boardAdapter.GetNonCopperLayerThickness() );
+            m_viaFrontCover->DrawTop();
+        }
+        else if( aLayerID == B_Mask && m_viaBackCover )
+        {
+            m_viaBackCover->ApplyScalePosition( aZPos, 4 * m_boardAdapter.GetNonCopperLayerThickness() );
+            m_viaBackCover->DrawBot();
+        }
     }
 }
 

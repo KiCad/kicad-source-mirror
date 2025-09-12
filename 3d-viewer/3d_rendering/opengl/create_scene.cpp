@@ -26,6 +26,7 @@
 #include "render_3d_opengl.h"
 #include <board.h>
 #include <footprint.h>
+#include <pcb_track.h>
 #include "../../3d_math.h"
 #include "convert_basic_shapes_to_polygon.h"
 #include <lset.h>
@@ -726,6 +727,54 @@ void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 }
 
 
+void RENDER_3D_OPENGL::generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ,
+                                     unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                                     bool aTop )
+{
+    const float delta = 2.0f * glm::pi<float>() / (float) aNr_sides_per_circle;
+
+    for( unsigned int i = 0; i < aNr_sides_per_circle; ++i )
+    {
+        float a0 = delta * i;
+        float a1 = delta * ( i + 1 );
+        const SFVEC3F p0( aCenter.x + cosf( a0 ) * aRadius,
+                          aCenter.y + sinf( a0 ) * aRadius, aZ );
+        const SFVEC3F p1( aCenter.x + cosf( a1 ) * aRadius,
+                          aCenter.y + sinf( a1 ) * aRadius, aZ );
+        const SFVEC3F c( aCenter.x, aCenter.y, aZ );
+
+        if( aTop )
+            aDstLayer->m_layer_top_triangles->AddTriangle( p1, p0, c );
+        else
+            aDstLayer->m_layer_bot_triangles->AddTriangle( p0, p1, c );
+    }
+}
+
+
+void RENDER_3D_OPENGL::generateDimple( const SFVEC2F& aCenter, float aRadius, float aZ,
+                                       float aDepth, unsigned int aNr_sides_per_circle,
+                                       TRIANGLE_DISPLAY_LIST* aDstLayer, bool aTop )
+{
+    const float delta = 2.0f * glm::pi<float>() / (float) aNr_sides_per_circle;
+    const SFVEC3F c( aCenter.x, aCenter.y, aTop ? aZ - aDepth : aZ + aDepth );
+
+    for( unsigned int i = 0; i < aNr_sides_per_circle; ++i )
+    {
+        float a0 = delta * i;
+        float a1 = delta * ( i + 1 );
+        const SFVEC3F p0( aCenter.x + cosf( a0 ) * aRadius,
+                          aCenter.y + sinf( a0 ) * aRadius, aZ );
+        const SFVEC3F p1( aCenter.x + cosf( a1 ) * aRadius,
+                          aCenter.y + sinf( a1 ) * aRadius, aZ );
+
+        if( aTop )
+            aDstLayer->m_layer_top_triangles->AddTriangle( p0, p1, c );
+        else
+            aDstLayer->m_layer_bot_triangles->AddTriangle( p1, p0, c );
+    }
+}
+
+
 void RENDER_3D_OPENGL::generateViasAndPads()
 {
     if( !m_boardAdapter.GetBoard() )
@@ -882,6 +931,63 @@ void RENDER_3D_OPENGL::generateViasAndPads()
             delete layerTriangles;
         }
     }
+
+    TRIANGLE_DISPLAY_LIST* frontCover = new TRIANGLE_DISPLAY_LIST( m_boardAdapter.GetViaCount() );
+    TRIANGLE_DISPLAY_LIST* backCover = new TRIANGLE_DISPLAY_LIST( m_boardAdapter.GetViaCount() );
+
+    for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
+        const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
+        const float hole_radius = holediameter / 2.0f + 2.0 * platingThickness3d;
+        const SFVEC2F center( via->GetStart().x * m_boardAdapter.BiuTo3dUnits(),
+                              -via->GetStart().y * m_boardAdapter.BiuTo3dUnits() );
+        unsigned int seg = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
+
+        PCB_LAYER_ID top_layer, bottom_layer;
+        via->LayerPair( &top_layer, &bottom_layer );
+        float ztop, zbot, dummy;
+        getLayerZPos( top_layer, ztop, dummy );
+        getLayerZPos( bottom_layer, dummy, zbot );
+
+        bool frontCovering = via->GetFrontCoveringMode() == COVERING_MODE::COVERED || via->IsTented( F_Mask );
+        bool backCovering = via->GetBackCoveringMode() == COVERING_MODE::COVERED || via->IsTented( B_Mask );
+        bool frontPlugged = via->GetFrontPluggingMode() == PLUGGING_MODE::PLUGGED;
+        bool backPlugged  = via->GetBackPluggingMode() == PLUGGING_MODE::PLUGGED;
+        bool filled = via->GetFillingMode() == FILLING_MODE::FILLED
+                      || via->GetCappingMode() == CAPPING_MODE::CAPPED;
+
+        const float depth = hole_radius * 0.3f;
+
+        if( frontCovering )
+        {
+            if( filled || !frontPlugged )
+                generateDisk( center, hole_radius, ztop, seg, frontCover, true );
+            else
+                generateDimple( center, hole_radius, ztop, depth, seg, frontCover, true );
+        }
+
+        if( backCovering )
+        {
+            if( filled || !backPlugged )
+                generateDisk( center, hole_radius, zbot, seg, backCover, false );
+            else
+                generateDimple( center, hole_radius, zbot, depth, seg, backCover, false );
+        }
+    }
+
+    if( frontCover->m_layer_top_triangles->GetVertexSize() > 0 )
+        m_viaFrontCover = new OPENGL_RENDER_LIST( *frontCover, 0, 0.0f, 0.0f );
+
+    if( backCover->m_layer_bot_triangles->GetVertexSize() > 0 )
+        m_viaBackCover = new OPENGL_RENDER_LIST( *backCover, 0, 0.0f, 0.0f );
+
+    delete frontCover;
+    delete backCover;
 }
 
 
