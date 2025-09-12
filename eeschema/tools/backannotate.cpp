@@ -384,7 +384,8 @@ void BACK_ANNOTATE::applyChangelist()
         if( !m_dryRun )
             commit.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
 
-        if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
+        if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip
+                && !symbol->GetField( FIELD_T::REFERENCE )->HasTextVars() )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s reference designator to '%s'." ),
@@ -397,7 +398,8 @@ void BACK_ANNOTATE::applyChangelist()
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
-        if( m_processFootprints && oldFootprint != fpData.m_footprint && !skip )
+        if( m_processFootprints && oldFootprint != fpData.m_footprint && !skip
+                && !symbol->GetField( FIELD_T::FOOTPRINT )->HasTextVars() )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint assignment from '%s' to '%s'." ),
@@ -411,7 +413,8 @@ void BACK_ANNOTATE::applyChangelist()
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
-        if( m_processValues && oldValue != fpData.m_value && !skip )
+        if( m_processValues && oldValue != fpData.m_value && !skip
+                && !symbol->GetField( FIELD_T::VALUE )->HasTextVars() )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s value from '%s' to '%s'." ),
@@ -502,6 +505,7 @@ void BACK_ANNOTATE::applyChangelist()
                 // with all the variables resolved. The footprints field value gets the symbol's
                 // resolved value when the PCB is updated from the schematic.
                 if( symField
+                    && !symField->HasTextVars()
                     && symField->GetShownText( &ref.GetSheetPath(), false ) != fpFieldValue )
                 {
                     m_changesCount++;
