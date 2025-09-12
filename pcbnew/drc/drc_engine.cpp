@@ -542,7 +542,8 @@ void DRC_ENGINE::compileRules()
         }
 
         if( error_semaphore.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
-            THROW_PARSE_ERROR( wxT( "Parse error" ), rule->m_Name, rule->m_Condition->GetExpression(), 0, 0 );
+            THROW_PARSE_ERROR( wxT( "Parse error" ), rule->m_Name,
+                               TO_UTF8( rule->m_Condition->GetExpression() ), 0, 0 );
 
         for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
         {
