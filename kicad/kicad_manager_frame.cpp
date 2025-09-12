@@ -27,6 +27,7 @@
 #include "pcm.h"
 #include "pgm_kicad.h"
 #include "project_tree_pane.h"
+#include "local_history_pane.h"
 #include "widgets/bitmap_button.h"
 
 #include <advanced_config.h>
@@ -139,7 +140,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
         EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         KICAD_MANAGER_FRAME_NAME, &::Kiway, unityScale ),
         m_active_project( false ),
+        m_showHistoryPanel( false ),
         m_leftWin( nullptr ),
+        m_historyPane( nullptr ),
         m_launcher( nullptr ),
         m_lastToolbarIconSize( 0 ),
         m_pcmButton( nullptr ),
@@ -228,6 +231,15 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer( 1 )
                       .Caption( PROJECT_FILES_CAPTION ).PaneBorder( false )
                       .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
+
+    m_historyPane = new LOCAL_HISTORY_PANE( this );
+    m_auimgr.AddPane( m_historyPane,
+                      EDA_PANE().Palette().Name( "LocalHistory" ).Left().Layer( 1 ).Position( 1 )
+                              .Caption( _( "Local History" ) ).PaneBorder( false )
+                              .Floatable( false ).Movable( false ).CloseButton( true ).Hide() );
+
+    if( m_showHistoryPanel )
+        m_auimgr.GetPane( m_historyPane ).Show();
 
     wxSize client_size = GetClientSize();
     m_notebook = new wxAuiNotebook( this, wxID_ANY, wxPoint( client_size.x, client_size.y ),
@@ -449,6 +461,15 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     manager->SetConditions( KICAD_MANAGER_ACTIONS::archiveProject, activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::newJobsetFile,  activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::openJobsetFile, activeProjectCond );
+
+    auto historyCond =
+            [this]( const SELECTION& )
+            {
+                return HistoryPanelShown();
+            };
+
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::showLocalHistory,
+                            ACTION_CONDITIONS().Check( historyCond ) );
 
     // These are just here for text boxes, search boxes, etc. in places such as the standard
     // file dialogs.
@@ -842,6 +863,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     settings->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( settings ) );
 
     m_leftWin->ReCreateTreePrj();
+    m_historyPane->RefreshHistory( Prj().GetProjectPath() );
 
     for( const wxString& jobset : Prj().GetLocalSettings().m_OpenJobSets )
     {
@@ -1144,6 +1166,7 @@ void KICAD_MANAGER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK( settings, /*void*/ );
 
     m_leftWinWidth = settings->m_LeftWinWidth;
+    m_showHistoryPanel = settings->m_ShowHistoryPanel;
 }
 
 
@@ -1156,6 +1179,8 @@ void KICAD_MANAGER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK( settings, /*void*/);
 
     settings->m_LeftWinWidth = m_leftWin->GetSize().x;
+    settings->m_ShowHistoryPanel = m_historyPane &&
+                                   m_auimgr.GetPane( m_historyPane ).IsShown();
 
     if( !m_isClosing )
         settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
@@ -1302,4 +1327,35 @@ void KICAD_MANAGER_FRAME::onToolbarSizeChanged()
                       .Layer( 2 ) );
 
     m_auimgr.Update();
+}
+
+
+void KICAD_MANAGER_FRAME::ToggleLocalHistory()
+{
+    wxAuiPaneInfo& pane = m_auimgr.GetPane( m_historyPane );
+    bool show = !pane.IsShown();
+    pane.Show( show );
+
+    if( show )
+        m_historyPane->RefreshHistory( Prj().GetProjectPath() );
+
+    m_auimgr.Update();
+}
+
+
+void KICAD_MANAGER_FRAME::RestoreCommitFromHistory( const wxString& aHash )
+{
+    if( !Kiway().PlayersClose( true ) )
+        return;
+
+    LOCAL_HISTORY::RestoreCommit( Prj().GetProjectPath(), aHash );
+    m_leftWin->ReCreateTreePrj();
+    m_openSavedWindows = true;
+    m_historyPane->RefreshHistory( Prj().GetProjectPath() );
+}
+
+
+bool KICAD_MANAGER_FRAME::HistoryPanelShown()
+{
+    return m_historyPane && m_auimgr.GetPane( m_historyPane ).IsShown();
 }

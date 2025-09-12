@@ -35,6 +35,7 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
     int m_LeftWinWidth;
+    bool m_ShowHistoryPanel;
 
 
     std::vector<wxString> m_OpenProjects;

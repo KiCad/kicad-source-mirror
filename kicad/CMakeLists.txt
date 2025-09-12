@@ -37,6 +37,7 @@ set( KICAD_SRCS
     import_proj.cpp
     import_project.cpp
     kicad_manager_frame.cpp
+    local_history_pane.cpp
     menubar.cpp
     project_template.cpp
     project_tree_pane.cpp

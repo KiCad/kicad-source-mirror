@@ -255,7 +255,7 @@ bool LOCAL_HISTORY::CommitPending()
 bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
 {
     if( !Pgm().GetCommonSettings()->m_Backup.enabled )
-        return false;
+        return true;
 
     wxString hist = historyPath( aProjectPath );
 

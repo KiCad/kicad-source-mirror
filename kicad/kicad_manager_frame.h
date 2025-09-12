@@ -35,6 +35,7 @@ class PANEL_KICAD_LAUNCHER;
 class PLUGIN_CONTENT_MANAGER;
 class PROJECT_TREE;
 class PROJECT_TREE_PANE;
+class LOCAL_HISTORY_PANE;
 class UPDATE_MANAGER;
 
 /**
@@ -56,6 +57,9 @@ public:
 
     void UnarchiveFiles();
     void RestoreLocalHistory();
+    void RestoreCommitFromHistory( const wxString& aHash );
+    void ToggleLocalHistory();
+    bool HistoryPanelShown();
 
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnEditAdvancedCfg( wxCommandEvent& event );
@@ -231,8 +235,10 @@ private:
     bool                  m_openSavedWindows;
     int                   m_leftWinWidth;
     bool                  m_active_project;
+    bool                  m_showHistoryPanel;
 
     PROJECT_TREE_PANE*    m_leftWin;
+    LOCAL_HISTORY_PANE*   m_historyPane;
     wxAuiNotebook*        m_notebook;
     PANEL_KICAD_LAUNCHER* m_launcher;
     int                   m_lastToolbarIconSize;

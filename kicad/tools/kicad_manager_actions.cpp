@@ -237,3 +237,10 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::restoreLocalHistory( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Restore Project from Local History..." ) )
         .Tooltip( _( "Restore project files from local history" ) )
         .Icon( BITMAPS::restore_from_file ) );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::showLocalHistory( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.showLocalHistory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Local History" ) )
+        .Tooltip( _( "Show or hide local history panel" ) )
+        .Icon( BITMAPS::recent ) );

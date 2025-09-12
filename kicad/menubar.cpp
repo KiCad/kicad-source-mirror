@@ -178,6 +178,12 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, controlTool );
 
+    ACTION_MENU* panelsMenu = new ACTION_MENU( false, controlTool );
+    panelsMenu->SetTitle( _( "Panels" ) );
+    panelsMenu->Add( KICAD_MANAGER_ACTIONS::showLocalHistory, ACTION_MENU::CHECK );
+    viewMenu->Add( panelsMenu );
+
+    viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
