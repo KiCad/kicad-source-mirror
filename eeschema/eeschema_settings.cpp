@@ -152,10 +152,10 @@ const wxAuiPaneInfo& defaultDesignBlocksPaneInfo( wxWindow* aWindow )
 EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         APP_SETTINGS_BASE( "eeschema", eeschemaSchemaVersion ),
         m_Appearance(),
-        m_AutoplaceFields(),
         m_Drawing(),
-        m_FindReplaceExtra(),
         m_Input(),
+        m_AutoplaceFields(),
+        m_Selection(),
         m_PageSettings(),
         m_AnnotatePanel(),
         m_BomPanel(),
@@ -163,8 +163,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         m_LibViewPanel(),
         m_NetlistPanel(),
         m_SymChooserPanel(),
+        m_FindReplaceExtra(),
+        m_ERCDialog(),
         m_ImportGraphics(),
-        m_Selection(),
         m_Simulator(),
         m_RescueNeverShow( false )
 {
