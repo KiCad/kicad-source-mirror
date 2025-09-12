@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-75-g9786507b-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,21 +96,11 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticText24;
 		wxStaticLine* m_staticline5;
 		wxCheckBox* m_cbRememberOpenFiles;
-		wxStaticText* m_staticTextautosave;
-		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
 		wxSpinCtrl* m_fileHistorySize;
 		wxStaticText* m_staticText25;
 		wxStaticLine* m_staticline4;
 		wxCheckBox* m_cbBackupEnabled;
-		wxCheckBox* m_cbBackupAutosave;
-		wxStaticText* m_staticText9;
-		wxSpinCtrl* m_backupLimitTotalFiles;
-		wxStaticText* m_staticText10;
-		wxSpinCtrl* m_backupLimitDailyFiles;
-		wxStaticText* m_staticText11;
-		wxSpinCtrl* m_backupMinInterval;
-		wxStaticText* m_staticText15;
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_backupLimitTotalSize;
 		wxStaticText* m_staticText17;

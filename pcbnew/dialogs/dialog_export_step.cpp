@@ -228,37 +228,8 @@ int BOARD_EDITOR_CONTROL::ExportSTEP( const TOOL_EVENT& aEvent )
     BOARD*     board = m_frame->GetBoard();
     wxFileName brdFile = board->GetFileName();
 
-    // The project filename (.kicad_pro) of the auto saved board filename, if it is created
-    wxFileName autosaveProjFile;
-
-    if( m_frame->GetScreen()->IsContentModified() || brdFile.GetFullPath().empty() )
-    {
-        if( !m_frame->DoAutoSave() )
-        {
-            DisplayErrorMessage( m_frame, _( "STEP export failed!  Please save the PCB and try again" ) );
-            return 0;
-        }
-
-        wxString autosaveFileName = FILEEXT::AutoSaveFilePrefix + brdFile.GetName();
-
-        // Create a dummy .kicad_pro file for this auto saved board file.
-        // this is useful to use some settings (like project path and name)
-        // Because DoAutoSave() works, the target directory exists and is writable
-        autosaveProjFile = brdFile;
-        autosaveProjFile.SetName( autosaveFileName );
-        autosaveProjFile.SetExt( "kicad_pro" );
-
-        // Use auto-saved board for export
-        m_frame->GetSettingsManager()->SaveProjectCopy( autosaveProjFile.GetFullPath(), board->GetProject() );
-        brdFile.SetName( autosaveFileName );
-    }
-
     DIALOG_EXPORT_STEP dlg( m_frame, brdFile.GetFullPath() );
     dlg.ShowModal();
-
-    // If a dummy .kicad_pro file is created, delete it now it is useless.
-    if( !autosaveProjFile.GetFullPath().IsEmpty() )
-        wxRemoveFile( autosaveProjFile.GetFullPath() );
 
     return 0;
 }

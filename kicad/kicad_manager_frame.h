@@ -55,6 +55,7 @@ public:
     void OnSize( wxSizeEvent& event ) override;
 
     void UnarchiveFiles();
+    void RestoreLocalHistory();
 
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnEditAdvancedCfg( wxCommandEvent& event );

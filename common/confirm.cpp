@@ -126,16 +126,24 @@ bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
 }
 
 
+static int g_lastUnsavedChangesResult = -1;
+
 bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
                            const std::function<bool()>& aSaveFunction )
 {
-    switch( UnsavedChangesDialog( aParent, aMessage ) )
+    g_lastUnsavedChangesResult = UnsavedChangesDialog( aParent, aMessage );
+    switch( g_lastUnsavedChangesResult )
     {
     case wxID_YES:    return aSaveFunction();
-    case wxID_NO:     return true;
+    case wxID_NO:     return true; // proceed without saving
     default:
     case wxID_CANCEL: return false;
     }
+}
+
+int GetLastUnsavedChangesResponse()
+{
+    return g_lastUnsavedChangesResult;
 }
 
 

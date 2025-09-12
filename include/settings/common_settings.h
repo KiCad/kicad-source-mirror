@@ -133,7 +133,8 @@ public:
 
     struct SYSTEM
     {
-        int autosave_interval;
+        bool local_history_enabled;
+        int local_history_debounce;
         wxString text_editor;
         wxString file_explorer;
         int file_history_size;

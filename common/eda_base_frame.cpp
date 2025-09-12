@@ -45,6 +45,7 @@
 #include <hotkeys_basic.h>
 #include <panel_hotkeys_editor.h>
 #include <paths.h>
+#include <local_history.h>
 #include <confirm.h>
 #include <panel_packages_and_updates.h>
 #include <pgm_base.h>
@@ -190,6 +191,49 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
     m_tbLeft   = nullptr;
 
     commonInit( aFrameType );
+
+    // Register project file saver (once per process). Ensures project file participates in
+    // autosave history commits without affecting dirty state.
+    static bool s_projectSaverRegistered = false;
+    if( !s_projectSaverRegistered )
+    {
+        LOCAL_HISTORY::RegisterSaver( [this]( std::vector<wxString>& files )
+        {
+            wxString projectPath = Prj().GetProjectFullName(); // path to *.kicad_pro
+            if( projectPath.IsEmpty() )
+                return;
+
+            wxFileName projFn( projectPath );
+            wxString projDir = projFn.GetPath();
+            if( projDir.IsEmpty() )
+                return;
+
+            wxFileName historyRoot( projDir, wxEmptyString );
+            historyRoot.AppendDir( wxS( ".history" ) );
+            if( !historyRoot.DirExists() )
+                wxFileName::Mkdir( historyRoot.GetPath(), 0777, wxPATH_MKDIR_FULL );
+
+            // Copy project file preserving original filename under .history.
+            if( wxFileExists( projectPath ) )
+            {
+                wxFileName dstProj( historyRoot.GetPath(), projFn.GetFullName() );
+                wxCopyFile( projectPath, dstProj.GetFullPath(), true );
+                files.push_back( dstProj.GetFullPath() );
+                wxLogTrace( traceAutoSave, wxS("[history] project saver exported '%s'"), dstProj.GetFullPath() );
+            }
+
+            // Copy local settings (.kicad_prl) if exists.
+            wxFileName localSettings( projDir, projFn.GetName(), wxS( "kicad_prl" ) );
+            if( localSettings.FileExists() )
+            {
+                wxFileName dstLocal( historyRoot.GetPath(), localSettings.GetFullName() );
+                wxCopyFile( localSettings.GetFullPath(), dstLocal.GetFullPath(), true );
+                files.push_back( dstLocal.GetFullPath() );
+                wxLogTrace( traceAutoSave, wxS("[history] project saver exported '%s'"), dstLocal.GetFullPath() );
+            }
+        } );
+        s_projectSaverRegistered = true;
+    }
 }
 
 
@@ -346,7 +390,7 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 
 int EDA_BASE_FRAME::GetAutoSaveInterval() const
 {
-    return Pgm().GetCommonSettings()->m_System.autosave_interval;
+    return Pgm().GetCommonSettings()->m_System.local_history_debounce;
 }
 
 
@@ -366,7 +410,12 @@ void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 
 bool EDA_BASE_FRAME::doAutoSave()
 {
-    wxCHECK_MSG( false, true, wxT( "Auto save timer function not overridden.  Bad programmer!" ) );
+    m_autoSaveRequired = false;
+    m_autoSavePending = false;
+    // Use registered saver callbacks to snapshot editor state into .history and only commit
+    // if there are material changes.
+    LOCAL_HISTORY::RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
+    return true;
 }
 
 
@@ -493,7 +542,6 @@ void EDA_BASE_FRAME::setupUIConditions()
         ACTION_CONDITIONS cond;
         cond.Check( std::bind( isCurrentLang, std::placeholders::_1,
                                LanguagesList[ii].m_WX_Lang_Identifier ) );
-
         RegisterUIUpdateHandler( LanguagesList[ii].m_KI_Lang_Identifier, cond );
     }
 }
@@ -724,6 +772,9 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
         int historySize = settings->m_System.file_history_size;
         m_fileHistory->SetMaxFiles( (unsigned) std::max( 0, historySize ) );
     }
+
+    if( Pgm().GetCommonSettings()->m_Backup.enabled )
+        LOCAL_HISTORY::Init( Prj().GetProjectPath() );
 
     GetBitmapStore()->ThemeChanged();
     ThemeChanged();
@@ -1581,74 +1632,6 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName, bool aVerbose )
     }
 
     return true;
-}
-
-
-void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
-{
-    if( !Pgm().IsGUI() )
-        return;
-
-    wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );
-
-    wxFileName autoSaveFileName = aFileName;
-
-    // Check for auto save file.
-    autoSaveFileName.SetName( FILEEXT::AutoSaveFilePrefix + aFileName.GetName() );
-
-    wxLogTrace( traceAutoSave,
-                wxT( "Checking for auto save file " ) + autoSaveFileName.GetFullPath() );
-
-    if( !autoSaveFileName.FileExists() )
-        return;
-
-    wxString msg = wxString::Format( _( "Well this is potentially embarrassing!\n"
-                                        "It appears that the last time you were editing\n"
-                                        "%s\n"
-                                        "KiCad exited before saving.\n"
-                                        "\n"
-                                        "Do you wish to open the auto-saved file instead?" ),
-                                        aFileName.GetFullName() );
-
-    int response = wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxYES_NO | wxICON_QUESTION,
-                                 this );
-
-    // Make a backup of the current file, delete the file, and rename the auto save file to
-    // the file name.
-    if( response == wxYES )
-    {
-        // Preserve the permissions of the current file
-        KIPLATFORM::IO::DuplicatePermissions( aFileName.GetFullPath(),
-                                              autoSaveFileName.GetFullPath() );
-
-        if( !wxRenameFile( autoSaveFileName.GetFullPath(), aFileName.GetFullPath() ) )
-        {
-            wxMessageBox( _( "The auto save file could not be renamed to the board file name." ),
-                          Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION, this );
-        }
-    }
-    else
-    {
-        DeleteAutoSaveFile( aFileName );
-    }
-}
-
-
-void EDA_BASE_FRAME::DeleteAutoSaveFile( const wxFileName& aFileName )
-{
-    if( !Pgm().IsGUI() )
-        return;
-
-    wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );
-
-    wxFileName autoSaveFn = aFileName;
-    autoSaveFn.SetName( FILEEXT::AutoSaveFilePrefix + aFileName.GetName() );
-
-    if( autoSaveFn.FileExists() )
-    {
-        wxLogTrace( traceAutoSave, wxT( "Removing auto save file " ) + autoSaveFn.GetFullPath() );
-        wxRemoveFile( autoSaveFn.GetFullPath() );
-    }
 }
 
 

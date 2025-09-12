@@ -115,20 +115,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "auto_backup.backup_on_autosave",
-            &m_Backup.backup_on_autosave, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "auto_backup.limit_total_files",
-            &m_Backup.limit_total_files, 25 ) );
-
     m_params.emplace_back( new PARAM<unsigned long long>( "auto_backup.limit_total_size",
             &m_Backup.limit_total_size, 104857600 ) );
-
-    m_params.emplace_back( new PARAM<int>( "auto_backup.limit_daily_files",
-            &m_Backup.limit_daily_files, 5 ) );
-
-    m_params.emplace_back( new PARAM<int>( "auto_backup.min_interval",
-            &m_Backup.min_interval, 300 ) );
 
     auto envVarsParam = m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "environment.vars",
             [&]() -> nlohmann::json
@@ -322,8 +310,10 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "graphics.antialiasing_mode",
             &m_Graphics.aa_mode, 2, 0, 2 ) );
 
-    m_params.emplace_back( new PARAM<int>( "system.autosave_interval",
-            &m_System.autosave_interval, 600 ) );
+    m_params.emplace_back( new PARAM<bool>( "system.local_history_enabled",
+            &m_System.local_history_enabled, true ) );
+    m_params.emplace_back( new PARAM<int>( "system.local_history_debounce",
+            &m_System.local_history_debounce, 5, 0, 100000 ) );
 
 #ifdef __WXMAC__
     m_params.emplace_back( new PARAM<wxString>( "system.text_editor",
@@ -746,7 +736,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>( aCfg, "OpenGLAntialiasingMode", "graphics.opengl_antialiasing_mode" );
     ret &= fromLegacy<int>( aCfg, "CairoAntialiasingMode",  "graphics.cairo_antialiasing_mode" );
 
-    ret &= fromLegacy<int>(  aCfg, "AutoSaveInterval",        "system.autosave_interval" );
+    ret &= fromLegacy<int>(  aCfg, "AutoSaveInterval",        "system.local_history_debounce" );
     ret &= fromLegacyString( aCfg, "Editor",                  "system.editor_name" );
     ret &= fromLegacy<int>(  aCfg, "FileHistorySize",         "system.file_history_size" );
     ret &= fromLegacyString( aCfg, "LanguageID",              "system.language" );

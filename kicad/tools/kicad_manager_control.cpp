@@ -562,6 +562,12 @@ int KICAD_MANAGER_CONTROL::ExploreProject( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int KICAD_MANAGER_CONTROL::RestoreLocalHistory( const TOOL_EVENT& aEvent )
+{
+    m_frame->RestoreLocalHistory();
+    return 0;
+}
+
 
 int KICAD_MANAGER_CONTROL::ViewDroppedViewers( const TOOL_EVENT& aEvent )
 {
@@ -895,6 +901,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::ArchiveProject,     KICAD_MANAGER_ACTIONS::archiveProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UnarchiveProject,   KICAD_MANAGER_ACTIONS::unarchiveProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ExploreProject,     KICAD_MANAGER_ACTIONS::openProjectDirectory.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::RestoreLocalHistory, KICAD_MANAGER_ACTIONS::restoreLocalHistory.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,            ACTIONS::zoomRedraw.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UpdateMenu,         ACTIONS::updateMenu.MakeEvent() );

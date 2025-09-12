@@ -31,6 +31,7 @@
 #include <reporter.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
+#include <local_history.h>
 
 #include "kicad_manager_frame.h"
 
@@ -94,4 +95,9 @@ void KICAD_MANAGER_FRAME::UnarchiveFiles()
         if( projectFiles.size() == 1 )
             LoadProject( wxFileName( projectFiles[0] ) );
     }
+}
+
+void KICAD_MANAGER_FRAME::RestoreLocalHistory()
+{
+    LOCAL_HISTORY::ShowRestoreDialog( Prj().GetProjectPath(), this );
 }

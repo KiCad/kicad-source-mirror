@@ -57,6 +57,7 @@ public:
     int ArchiveProject( const TOOL_EVENT& aEvent );
     int UnarchiveProject( const TOOL_EVENT& aEvent );
     int ExploreProject( const TOOL_EVENT& aEvent );
+    int RestoreLocalHistory( const TOOL_EVENT& aEvent );
 
     /**
      * @brief Imports a non kicad project from a sch/pcb dropped file.

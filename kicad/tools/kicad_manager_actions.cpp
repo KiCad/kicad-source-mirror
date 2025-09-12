@@ -230,3 +230,10 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::openProjectDirectory( TOOL_ACTION_ARGS()
         .Tooltip( _( "Open project directory in file explorer" ) )
 #endif
         .Icon( BITMAPS::directory_browser ) );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::restoreLocalHistory( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.restoreLocalHistory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Restore Project from Local History..." ) )
+        .Tooltip( _( "Restore project files from local history" ) )
+        .Icon( BITMAPS::restore_from_file ) );

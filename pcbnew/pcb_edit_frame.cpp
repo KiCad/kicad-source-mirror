@@ -56,6 +56,7 @@
 #include <layer_pairs.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filename.h>
 #include <functional>
 #include <pcb_barcode.h>
 #include <pcb_painter.h>
@@ -64,6 +65,7 @@
 #include <python_scripting.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <local_history.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
@@ -1339,6 +1341,18 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         {
             return false;
         }
+
+        // If user discarded changes, create a duplicate commit of last saved PCB state and
+        // advance Last_Save_pcb tag for explicit history event.
+        if( GetLastUnsavedChangesResponse() == wxID_NO )
+        {
+            wxString projPath = Prj().GetProjectPath();
+            if( !projPath.IsEmpty() && LOCAL_HISTORY::HistoryExists( projPath ) )
+            {
+                LOCAL_HISTORY::CommitDuplicateOfLastSave( projPath, wxS("pcb"),
+                        wxS("Discard unsaved pcb changes") );
+            }
+        }
     }
 
     return PCB_BASE_EDIT_FRAME::canCloseWindow( aEvent );
@@ -1404,22 +1418,6 @@ void PCB_EDIT_FRAME::doCloseWindow()
 
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
-
-    // Auto save file name is the normal file name prefixed with 'FILEEXT::AutoSaveFilePrefix'.
-    fn.SetName( FILEEXT::AutoSaveFilePrefix + fn.GetName() );
-
-    // When the auto save feature does not have write access to the board file path, it falls
-    // back to a platform specific user temporary file path.
-    if( !fn.IsOk() || !fn.IsDirWritable() )
-        fn.SetPath( wxFileName::GetTempDir() );
-
-    wxLogTrace( traceAutoSave, wxT( "Deleting auto save file <" ) + fn.GetFullPath() + wxT( ">" ) );
-
-    // Remove the auto save file on a normal close of Pcbnew.
-    if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
-    {
-        wxLogTrace( traceAutoSave, wxT( "The auto save file could not be removed!" ) );
-    }
 
     // Make sure local settings are persisted
     if( Prj().GetLocalSettings().ShouldAutoSave() )
@@ -1776,6 +1774,8 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
 
 void PCB_EDIT_FRAME::OnBoardLoaded()
 {
+    wxFileName fn( GetBoard()->GetFileName() );
+    LOCAL_HISTORY::Init( fn.GetPath() );
     ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
     layerEnum.Choices().Clear();
@@ -1803,8 +1803,6 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
     }
 
     UpdateTitle();
-
-    wxFileName fn = GetBoard()->GetFileName();
 
     // Display a warning that the file is read only
     if( fn.FileExists() && !fn.IsFileWritable() )
@@ -1935,6 +1933,7 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
 void PCB_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
+    LOCAL_HISTORY::NoteFileChange( GetBoard()->GetFileName() );
     m_ZoneFillsDirty = true;
 
     if( m_isClosing )
@@ -2953,6 +2952,57 @@ void PCB_EDIT_FRAME::ThemeChanged()
 void PCB_EDIT_FRAME::ProjectChanged()
 {
     PythonSyncProjectName();
+    // Register autosave history saver once (idempotent guard via static flag)
+    static bool s_registeredSaver = false;
+    if( !s_registeredSaver )
+    {
+        // Saver exports the in-memory BOARD into the history mirror preserving the original
+        // relative path and file name (reparented under .history) without touching dirty flags.
+        LOCAL_HISTORY::RegisterSaver( [this]( std::vector<wxString>& files )
+        {
+            if( !GetBoard() )
+                return;
+
+            wxString projPath = Prj().GetProjectPath();
+            if( projPath.IsEmpty() )
+                return;
+
+            wxString boardPath = GetBoard()->GetFileName();
+            if( boardPath.IsEmpty() )
+                return; // unsaved board
+
+            // Derive relative path from project root.
+            if( !boardPath.StartsWith( projPath ) )
+                return; // not under project
+
+            wxString rel = boardPath.Mid( projPath.length() );
+
+            // Build destination path inside .history mirror.
+            wxFileName historyRoot( projPath, wxEmptyString );
+            historyRoot.AppendDir( wxS( ".history" ) );
+            wxFileName dst( historyRoot.GetPath(), rel );
+
+            // Ensure destination directories exist.
+            wxFileName dstDir( dst );
+            dstDir.SetFullName( wxEmptyString );
+            if( !dstDir.DirExists() )
+                wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
+
+            try
+            {
+                IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+                // Save directly to history mirror path.
+                pi->SaveBoard( dst.GetFullPath(), GetBoard(), nullptr );
+                files.push_back( dst.GetFullPath() );
+                wxLogTrace( traceAutoSave, wxS("[history] pcb saver exported '%s'"), dst.GetFullPath() );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogTrace( traceAutoSave, wxS("[history] pcb saver export failed: %s"), wxString::FromUTF8( ioe.What() ) );
+            }
+        } );
+        s_registeredSaver = true;
+    }
 }
 
 
@@ -3229,4 +3279,13 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     default:
         break;
     }
+}
+
+bool PCB_EDIT_FRAME::DoAutoSave()
+{
+    // For now we just delegate to the base implementation which commits any pending
+    // local history snapshots.  If PCB-specific preconditions are later needed (e.g.
+    // flushing zone fills or router state) they can be added here before calling the
+    // base class method.
+    return EDA_BASE_FRAME::doAutoSave();
 }

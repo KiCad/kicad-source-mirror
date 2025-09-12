@@ -144,9 +144,6 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     wxFileName fn( aBoard->GetFileName() );
     m_pcbBaseName = fn.GetName();
 
-    // Remove the autosave prefix
-    m_pcbBaseName.StartsWith( FILEEXT::AutoSaveFilePrefix, &m_pcbBaseName );
-
     m_resolver = std::make_unique<FILENAME_RESOLVER>();
     m_resolver->Set3DConfigDir( wxT( "" ) );
     // needed to add the project to the search stack

@@ -92,7 +92,6 @@ public:
             return wxDIR_CONTINUE;
 
         bool exclude = fn.GetName().Contains( "fp-info-cache" )
-                       || fn.GetName().StartsWith( FILEEXT::AutoSaveFilePrefix )
                        || fn.GetName().StartsWith( FILEEXT::LockFilePrefix );
 
         if( !exclude )

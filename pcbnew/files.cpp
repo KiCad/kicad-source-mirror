@@ -25,6 +25,7 @@
  */
 
 #include <string>
+#include <vector>
 
 #include <confirm.h>
 #include <kidialog.h>
@@ -32,6 +33,7 @@
 #include <thread_pool.h>
 #include <dialog_HTML_reporter_base.h>
 #include <gestfich.h>
+#include <local_history.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
@@ -295,36 +297,6 @@ int BOARD_EDITOR_CONTROL::OpenNonKicadBoard( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_EDITOR_CONTROL::RescueAutosave( const TOOL_EVENT& aEvent )
-{
-    wxFileName currfn = m_frame->Prj().AbsolutePath( m_frame->GetBoard()->GetFileName() );
-    wxFileName fn = currfn;
-
-    wxString rec_name = FILEEXT::AutoSaveFilePrefix + fn.GetName();
-    fn.SetName( rec_name );
-
-    if( !fn.FileExists() )
-    {
-        DisplayError( m_frame, wxString::Format( _( "Recovery file '%s' not found." ), fn.GetFullPath() ) );
-        return 0;
-    }
-
-    if( !IsOK( m_frame, wxString::Format( _( "OK to load recovery file '%s'?" ), fn.GetFullPath() ) ) )
-        return false;
-
-    m_frame->GetScreen()->SetContentModified( false );    // do not prompt the user for changes
-
-    if( m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
-    {
-        // Re-set the name since name or extension was changed
-        m_frame->GetBoard()->SetFileName( currfn.GetFullPath() );
-        m_frame->UpdateTitle();
-    }
-
-    return 0;
-}
-
-
 int BOARD_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
     wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->GetBoard()->GetFileName() );
@@ -499,6 +471,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     wxString   fullFileName( aFileSet[0] );
     wxFileName wx_filename( fullFileName );
+    LOCAL_HISTORY::Init( wx_filename.GetPath() );
     wxString   msg;
 
     if( Kiface().IsSingle() )
@@ -642,16 +615,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             chooser_pi->RegisterCallback( std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::RunModal,
                                                      this,
                                                      std::placeholders::_1 ) );
-        }
-
-        if( ( aCtl & KICTL_REVERT ) )
-        {
-            DeleteAutoSaveFile( fullFileName );
-        }
-        else
-        {
-            // This will rename the file if there is an autosave and the user wants to recover
-            CheckForAutoSaveFile( fullFileName );
         }
 
         DIALOG_HTML_REPORTER errorReporter( this );
@@ -1082,14 +1045,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     if( addToHistory )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
-    // Delete auto save file on successful save.
-    wxFileName autoSaveFileName = pcbFileName;
-
-    autoSaveFileName.SetName( FILEEXT::AutoSaveFilePrefix + pcbFileName.GetName() );
-
-    if( autoSaveFileName.FileExists() )
-        wxRemoveFile( autoSaveFileName.GetFullPath() );
-
     lowerTxt.Printf( _( "File '%s' saved." ), pcbFileName.GetFullPath() );
 
     SetStatusText( lowerTxt, 0 );
@@ -1104,6 +1059,14 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     GetScreen()->SetContentModified( false );
     UpdateTitle();
     UpdateStatusBar();
+
+    // Capture entire project state for PCB save events.
+    LOCAL_HISTORY::CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
+    LOCAL_HISTORY::TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
+    if( m_autoSaveTimer )
+        m_autoSaveTimer->Stop();
+    m_autoSavePending = false;
+    m_autoSaveRequired = false;
     return true;
 }
 
@@ -1170,96 +1133,6 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     }
 
     return true;
-}
-
-
-bool PCB_EDIT_FRAME::DoAutoSave()
-{
-    wxFileName tmpFileName;
-
-    // Don't run autosave if content has not been modified
-    if( !IsContentModified() )
-        return true;
-
-    wxString title = GetTitle();    // Save frame title, that can be modified by the save process
-
-    if( GetBoard()->GetFileName().IsEmpty() )
-    {
-        tmpFileName = wxFileName( PATHS::GetDefaultUserProjectsPath(), NAMELESS_PROJECT,
-                                  FILEEXT::KiCadPcbFileExtension );
-        GetBoard()->SetFileName( tmpFileName.GetFullPath() );
-    }
-    else
-    {
-        tmpFileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
-    }
-
-    wxFileName autoSaveFileName = tmpFileName;
-
-    // Auto save file name is the board file name prepended with autosaveFilePrefix string.
-    autoSaveFileName.SetName( FILEEXT::AutoSaveFilePrefix + autoSaveFileName.GetName() );
-
-    if( !autoSaveFileName.IsOk() )
-        return false;
-
-    // If the board file path is not writable, try writing to a platform specific temp file
-    // path.  If that path isn't writable, give up.
-    if( !autoSaveFileName.IsDirWritable() )
-    {
-        if( !m_autoSavePermissionError )
-        {
-            DisplayError( this, wxString::Format(
-                                   _( "Could not autosave files to read-only folder:  '%s'" ),
-                                   autoSaveFileName.GetPath() ) );
-            m_autoSavePermissionError = true;
-        }
-
-        autoSaveFileName.SetPath( wxFileName::GetTempDir() );
-
-        if( !autoSaveFileName.IsOk() || !autoSaveFileName.IsDirWritable() )
-            return false;
-    }
-
-    if( !IsWritable( autoSaveFileName, false ) )
-    {
-        if( !m_autoSavePermissionError )
-        {
-            DisplayError( this, wxString::Format(
-                                   _( "Could not autosave files to read-only folder:  '%s'" ),
-                                   autoSaveFileName.GetPath() ) );
-            m_autoSavePermissionError = true;
-        }
-
-        return false;
-    }
-
-    wxLogTrace( traceAutoSave,
-                wxT( "Creating auto save file <" ) + autoSaveFileName.GetFullPath() + wxT( ">" ) );
-
-    if( SavePcbFile( autoSaveFileName.GetFullPath(), false, false ) )
-    {
-        GetScreen()->SetContentModified();
-        GetBoard()->SetFileName( tmpFileName.GetFullPath() );
-        UpdateTitle();
-        m_autoSaveRequired = false;
-        m_autoSavePending = false;
-
-        if( !Kiface().IsSingle() &&
-            GetSettingsManager()->GetCommonSettings()->m_Backup.backup_on_autosave )
-        {
-            GetSettingsManager()->TriggerBackupIfNeeded( NULL_REPORTER::GetInstance() );
-        }
-
-        SetTitle( title );      // Restore initial frame title
-
-        return true;
-    }
-
-    GetBoard()->SetFileName( tmpFileName.GetFullPath() );
-
-    SetTitle( title );      // Restore initial frame title
-
-    return false;
 }
 
 

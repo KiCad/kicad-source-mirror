@@ -68,6 +68,10 @@ KICOMMON_API bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage )
 KICOMMON_API bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
                                         const std::function<bool()>& aSaveFunction );
 
+/** Return the result code from the last call to HandleUnsavedChanges(): wxID_YES, wxID_NO or
+ *  wxID_CANCEL (or -1 if none yet). */
+KICOMMON_API int GetLastUnsavedChangesResponse();
+
 
 /**
  * A specialized version of HandleUnsavedChanges which handles an apply-to-all checkbox.

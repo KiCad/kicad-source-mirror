@@ -802,16 +802,6 @@ public:
     void ShowAllIntersheetRefs( bool aShow );
 
     /**
-     * This overloaded version checks if the auto save master file "#auto_saved_files#" exists
-     * and recovers all of the schematic files listed in it.
-     *
-     * @param aFileName is the project auto save master file name.
-     */
-    virtual void CheckForAutoSaveFile( const wxFileName& aFileName ) override;
-
-    virtual void DeleteAutoSaveFile( const wxFileName& aFileName ) override;
-
-    /**
      * Toggle the show/hide state of the left side schematic navigation panel
      */
     void ToggleSchematicHierarchy();

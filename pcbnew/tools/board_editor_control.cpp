@@ -1828,7 +1828,6 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findNext.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findPrevious.MakeEvent() );
 
-    Go( &BOARD_EDITOR_CONTROL::RescueAutosave,         PCB_ACTIONS::rescueAutosave.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::OpenNonKicadBoard,      PCB_ACTIONS::openNonKicadBoard.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportFootprints,       PCB_ACTIONS::exportFootprints.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
