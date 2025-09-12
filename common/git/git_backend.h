@@ -25,6 +25,7 @@
 #define GIT_BACKEND_H_
 
 #include <map>
+#include <import_export.h>
 #include <set>
 #include <vector>
 #include <wx/string.h>
@@ -56,7 +57,7 @@ enum class CommitResult
     Cancelled
 };
 
-class GIT_BACKEND
+class APIEXPORT GIT_BACKEND
 {
 public:
     virtual ~GIT_BACKEND() = default;
@@ -121,7 +122,7 @@ public:
     virtual void PerformRemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler ) = 0;
 };
 
-GIT_BACKEND* GetGitBackend();
-void SetGitBackend( GIT_BACKEND* aBackend );
+APIEXPORT GIT_BACKEND* GetGitBackend();
+APIEXPORT void SetGitBackend( GIT_BACKEND* aBackend );
 
 #endif

@@ -25,10 +25,11 @@
 #define GIT_RESOLVE_CONFLICT_HANDLER_H
 
 #include <git2.h>
+#include <import_export.h>
 
 class wxString;
 
-class GIT_RESOLVE_CONFLICT_HANDLER
+class APIEXPORT GIT_RESOLVE_CONFLICT_HANDLER
 {
 public:
     GIT_RESOLVE_CONFLICT_HANDLER( git_repository* aRepository );

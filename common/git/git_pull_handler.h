@@ -25,6 +25,7 @@
 #define _GIT_PULL_HANDLER_H_
 
 #include <git/git_repo_mixin.h>
+#include <import_export.h>
 
 #include <vector>
 #include <string>
@@ -51,7 +52,7 @@ enum class PullResult : int
 
 class LIBGIT_BACKEND;
 
-class GIT_PULL_HANDLER : public KIGIT_REPO_MIXIN
+class APIEXPORT GIT_PULL_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     friend class LIBGIT_BACKEND;

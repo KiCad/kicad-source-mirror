@@ -25,10 +25,11 @@
 #define GIT_PROGRESS_H_
 
 #include <widgets/wx_progress_reporters.h>
+#include <import_export.h>
 
 #include <memory>
 
-class GIT_PROGRESS
+class APIEXPORT GIT_PROGRESS
 {
 public:
     GIT_PROGRESS() :

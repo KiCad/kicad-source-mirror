@@ -67,6 +67,30 @@ set( KICOMMON_SRCS
     # Gal
     gal/color4d.cpp
     gal/opengl/gl_context_mgr.cpp
+
+    # Git
+    git/git_add_to_index_handler.cpp
+    git/git_branch_handler.cpp
+    git/git_clone_handler.cpp
+    git/git_commit_handler.cpp
+    git/git_config_handler.cpp
+    git/git_compare_handler.cpp
+    git/git_init_handler.cpp
+    git/project_git_utils.cpp
+    git/git_pull_handler.cpp
+    git/git_push_handler.cpp
+    git/git_remove_from_index_handler.cpp
+    git/git_remove_vcs_handler.cpp
+    git/git_resolve_conflict_handler.cpp
+    git/git_revert_handler.cpp
+    git/git_status_handler.cpp
+    git/git_switch_branch_handler.cpp
+    git/git_sync_handler.cpp
+    git/kicad_git_common.cpp
+    git/kicad_git_errors.cpp
+    git/git_backend.cpp
+    git/libgit_backend.cpp
+
     # Jobs
     jobs/job.cpp
     jobs/job_dispatcher.cpp
@@ -616,26 +640,6 @@ set( COMMON_IMPORT_GFX_SRCS
     import_gfx/svg_import_plugin.cpp
     )
 
-set( COMMON_GIT_SRCS
-    git/git_add_to_index_handler.cpp
-    git/git_branch_handler.cpp
-    git/git_clone_handler.cpp
-    git/git_commit_handler.cpp
-    git/git_config_handler.cpp
-    git/git_init_handler.cpp
-    git/git_pull_handler.cpp
-    git/git_push_handler.cpp
-    git/git_remove_from_index_handler.cpp
-    git/git_resolve_conflict_handler.cpp
-    git/git_revert_handler.cpp
-    git/git_status_handler.cpp
-    git/git_sync_handler.cpp
-    git/project_git_utils.cpp
-    git/kicad_git_common.cpp
-    git/kicad_git_errors.cpp
-    git/git_backend.cpp
-    git/libgit_backend.cpp
-    )
 
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
@@ -648,7 +652,6 @@ set( COMMON_SRCS
     ${COMMON_IO_SRCS}
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
-    ${COMMON_GIT_SRCS}
     ${COMMON_TRANSLINE_CALCULATION_SRCS}
     base_screen.cpp
     bin_mod.cpp

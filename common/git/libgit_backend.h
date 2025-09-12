@@ -25,11 +25,12 @@
 #define LIBGIT_BACKEND_H_
 
 #include "git_backend.h"
+#include <import_export.h>
 
 // Forward declarations to avoid exposing libgit2 headers
 struct git_annotated_commit;
 
-class LIBGIT_BACKEND : public GIT_BACKEND
+class APIEXPORT LIBGIT_BACKEND : public GIT_BACKEND
 {
 public:
     void Init() override;

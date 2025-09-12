@@ -25,11 +25,12 @@
 #include <istream>
 #include <string>
 #include <git2.h>
+#include <import_export.h>
 
 #include <richio.h>
 
 
-class BLOB_BUFFER_STREAM : public std::streambuf
+class APIEXPORT BLOB_BUFFER_STREAM : public std::streambuf
 {
 public:
     BLOB_BUFFER_STREAM( git_blob* aBlob )
@@ -57,7 +58,7 @@ public:
 };
 
 // Build a class that implements LINE_READER for git_blobs
-class BLOB_READER : public LINE_READER
+class APIEXPORT BLOB_READER : public LINE_READER
 {
 public:
     BLOB_READER( git_blob* aBlob ) : m_blob( aBlob )

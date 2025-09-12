@@ -26,12 +26,13 @@
 
 #include <git2.h>
 #include <wx/string.h>
+#include <import_export.h>
 
 namespace KIGIT
 {
 
 /** Utility class with helper functions for project level git operations. */
-class PROJECT_GIT_UTILS
+class APIEXPORT PROJECT_GIT_UTILS
 {
 public:
     /**

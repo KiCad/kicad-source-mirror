@@ -25,6 +25,7 @@
 #define GIT_REVERT_HANDLER_H_
 
 #include <git2.h>
+#include <import_export.h>
 #include <vector>
 #include <wx/string.h>
 // TEMPORARY HACKFIX INCLUDE FOR STD::VECTOR EXPORT OUT OF KICOMMON ON WINDOWS
@@ -32,7 +33,7 @@
 
 class LIBGIT_BACKEND;
 
-class GIT_REVERT_HANDLER
+class APIEXPORT GIT_REVERT_HANDLER
 {
 public:
     GIT_REVERT_HANDLER( git_repository* aRepository );

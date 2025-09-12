@@ -26,6 +26,7 @@
 
 #include <git/git_progress.h>
 #include <git/git_repo_mixin.h>
+#include <import_export.h>
 #include <git/kicad_git_errors.h>
 #include <wx/string.h>
 
@@ -37,7 +38,7 @@ enum class PushResult
     Error
 };
 
-class GIT_PUSH_HANDLER : public KIGIT_REPO_MIXIN
+class APIEXPORT GIT_PUSH_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_PUSH_HANDLER( KIGIT_COMMON* aCommon );

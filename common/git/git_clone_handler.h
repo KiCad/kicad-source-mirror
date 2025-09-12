@@ -25,10 +25,11 @@
 #define GIT_CLONE_HANDLER_H_
 
 #include "kicad_git_common.h"
+#include <import_export.h>
 #include "git_repo_mixin.h"
 #include "git_progress.h"
 
-class GIT_CLONE_HANDLER : public KIGIT_REPO_MIXIN
+class APIEXPORT GIT_CLONE_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_CLONE_HANDLER( KIGIT_COMMON* aCommon );

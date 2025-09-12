@@ -25,6 +25,7 @@
 #define GIT_INIT_HANDLER_H
 
 #include <git/git_repo_mixin.h>
+#include <import_export.h>
 #include <wx/string.h>
 
 enum class InitResult
@@ -43,7 +44,7 @@ struct RemoteConfig
     KIGIT_COMMON::GIT_CONN_TYPE connType;
 };
 
-class GIT_INIT_HANDLER : public KIGIT_REPO_MIXIN
+class APIEXPORT GIT_INIT_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_INIT_HANDLER( KIGIT_COMMON* aCommon );

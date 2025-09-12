@@ -25,10 +25,11 @@
 #define GIT_SYNC_HANDLER_H_
 
 #include <git2.h>
+#include <import_export.h>
 
 class wxString;
 
-class GIT_SYNC_HANDLER
+class APIEXPORT GIT_SYNC_HANDLER
 {
 public:
     GIT_SYNC_HANDLER( git_repository* aRepository );

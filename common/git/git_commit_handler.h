@@ -27,6 +27,7 @@
 // Define a class to handle git commit operations
 
 #include <git/kicad_git_common.h>
+#include <import_export.h>
 #include "git_backend.h"
 
 #include <string>
@@ -35,7 +36,7 @@
 
 class LIBGIT_BACKEND;
 
-class GIT_COMMIT_HANDLER : public KIGIT_COMMON
+class APIEXPORT GIT_COMMIT_HANDLER : public KIGIT_COMMON
 {
 public:
     GIT_COMMIT_HANDLER( git_repository* aRepo );

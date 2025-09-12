@@ -25,6 +25,7 @@
 #define GIT_BRANCH_HANDLER_H
 
 #include <git/git_repo_mixin.h>
+#include <import_export.h>
 #include <wx/string.h>
 #include <vector>
 
@@ -36,7 +37,7 @@ enum class BranchResult
     Error
 };
 
-class GIT_BRANCH_HANDLER : public KIGIT_REPO_MIXIN
+class APIEXPORT GIT_BRANCH_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_BRANCH_HANDLER( KIGIT_COMMON* aCommon );

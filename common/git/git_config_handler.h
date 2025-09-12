@@ -25,6 +25,7 @@
 #define GIT_CONFIG_HANDLER_H
 
 #include <git/git_repo_mixin.h>
+#include <import_export.h>
 #include <wx/string.h>
 
 struct GitUserConfig
@@ -35,7 +36,7 @@ struct GitUserConfig
     bool hasEmail = false;
 };
 
-class GIT_CONFIG_HANDLER : public KIGIT_REPO_MIXIN
+class APIEXPORT GIT_CONFIG_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_CONFIG_HANDLER( KIGIT_COMMON* aCommon );

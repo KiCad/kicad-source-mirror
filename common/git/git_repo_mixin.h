@@ -17,8 +17,9 @@
 #include "kicad_git_common.h"
 #include "kicad_git_errors.h"
 #include "git_progress.h"
+#include <import_export.h>
 
-class KIGIT_REPO_MIXIN: public KIGIT_ERRORS, public GIT_PROGRESS
+class APIEXPORT KIGIT_REPO_MIXIN: public KIGIT_ERRORS, public GIT_PROGRESS
 {
 public:
     KIGIT_REPO_MIXIN( KIGIT_COMMON* aCommon ) : m_common( aCommon )

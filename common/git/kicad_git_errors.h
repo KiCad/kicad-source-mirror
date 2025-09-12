@@ -28,7 +28,7 @@
 
 #include <wx/translation.h>
 
-class KIGIT_ERRORS
+class APIEXPORT KIGIT_ERRORS
 {
 public:
 

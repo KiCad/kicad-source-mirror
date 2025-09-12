@@ -25,6 +25,7 @@
 #define _GIT_COMMON_H_
 
 #include <git/kicad_git_errors.h>
+#include <import_export.h>
 
 #include <git2.h>
 #include <atomic>
@@ -35,7 +36,7 @@
 
 class LIBGIT_BACKEND;
 
-class KIGIT_COMMON
+class APIEXPORT KIGIT_COMMON
 {
 
 public:
@@ -193,19 +194,19 @@ private:
     static const unsigned KIGIT_CREDENTIAL_SSH_AGENT = 1 << sizeof( m_testedTypes - 1 );
 };
 
-extern "C" int  progress_cb( const char* str, int len, void* data );
-extern "C" void clone_progress_cb( const char* str, size_t len, size_t total, void* data );
-extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload );
-extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git_oid* aSecond,
-                          void* aPayload );
-extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aTotal,
-                                          size_t aBytes, void* aPayload );
-extern "C" int push_update_reference_cb( const char* aRefname, const char* aStatus,
-                                         void* aPayload );
+extern "C" APIEXPORT int  progress_cb( const char* str, int len, void* data );
+extern "C" APIEXPORT void clone_progress_cb( const char* str, size_t len, size_t total, void* data );
+extern "C" APIEXPORT int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload );
+extern "C" APIEXPORT int update_cb( const char* aRefname, const git_oid* aFirst, const git_oid* aSecond,
+                                    void* aPayload );
+extern "C" APIEXPORT int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aTotal,
+                                                    size_t aBytes, void* aPayload );
+extern "C" APIEXPORT int push_update_reference_cb( const char* aRefname, const char* aStatus,
+                                                   void* aPayload );
 
-extern "C" int fetchhead_foreach_cb( const char*, const char*,
-                                     const git_oid* aOID, unsigned int aIsMerge, void* aPayload );
-extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
-                               unsigned int aAllowedTypes, void* aPayload );
+extern "C" APIEXPORT int fetchhead_foreach_cb( const char*, const char*,
+                                               const git_oid* aOID, unsigned int aIsMerge, void* aPayload );
+extern "C" APIEXPORT int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
+                                         unsigned int aAllowedTypes, void* aPayload );
 
 #endif // _GIT_COMMON_H_

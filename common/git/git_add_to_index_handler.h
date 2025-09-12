@@ -25,12 +25,13 @@
 #define GIT_ADD_TO_INDEX_HANDLER_H_
 
 #include <git/kicad_git_common.h>
+#include <import_export.h>
 #include <vector>
 #include <wx/string.h>
 
 class LIBGIT_BACKEND;
 
-class GIT_ADD_TO_INDEX_HANDLER : public KIGIT_COMMON
+class APIEXPORT GIT_ADD_TO_INDEX_HANDLER : public KIGIT_COMMON
 {
 public:
     GIT_ADD_TO_INDEX_HANDLER( git_repository* aRepository );
