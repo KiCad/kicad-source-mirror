@@ -249,6 +249,9 @@ namespace EDA_UNIT_UTILS
 
         KICOMMON_API double DoubleValueFromString( const wxString& aTextValue );
 
+        KICOMMON_API bool DoubleValueFromString( const EDA_IU_SCALE& aIuScale, const wxString& aTextValue,
+                                                 double& aDoubleValue );
+
         /**
          * Convert \a aTextValue in \a aUnits to internal units used by the application.
          *

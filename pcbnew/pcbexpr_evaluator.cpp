@@ -447,28 +447,33 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
                 if( it->second->Name() == wxT( "Pin Type" ) )
                     return new PCBEXPR_PINTYPE_VALUE( str );
-                else
-                    return new LIBEVAL::VALUE( str );
+
+                // If it quacks like a duck, it is a duck
+                double doubleVal;
+
+                if( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, str, doubleVal ) )
+                    return new LIBEVAL::VALUE( doubleVal );
+
+                return new LIBEVAL::VALUE( str );
             }
-            else
+            else if( it->second->Name() == wxT( "Layer" )
+                        || it->second->Name() == wxT( "Layer Top" )
+                        || it->second->Name() == wxT( "Layer Bottom" ) )
             {
                 const wxAny& any = item->Get( it->second );
                 PCB_LAYER_ID layer;
 
-                if( it->second->Name() == wxT( "Layer" )
-                        || it->second->Name() == wxT( "Layer Top" )
-                        || it->second->Name() == wxT( "Layer Bottom" ) )
-                {
-                    if( any.GetAs<PCB_LAYER_ID>( &layer ) )
-                        return new PCBEXPR_LAYER_VALUE( layer );
-                    else if( any.GetAs<wxString>( &str ) )
-                        return new PCBEXPR_LAYER_VALUE( context->GetBoard()->GetLayerID( str ) );
-                }
-                else
-                {
-                    if( any.GetAs<wxString>( &str ) )
-                        return new LIBEVAL::VALUE( str );
-                }
+                if( any.GetAs<PCB_LAYER_ID>( &layer ) )
+                    return new PCBEXPR_LAYER_VALUE( layer );
+                else if( any.GetAs<wxString>( &str ) )
+                    return new PCBEXPR_LAYER_VALUE( context->GetBoard()->GetLayerID( str ) );
+            }
+            else
+            {
+                const wxAny& any = item->Get( it->second );
+
+                if( any.GetAs<wxString>( &str ) )
+                    return new LIBEVAL::VALUE( str );
             }
 
             return new LIBEVAL::VALUE();
