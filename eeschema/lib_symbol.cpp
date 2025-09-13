@@ -1706,7 +1706,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
             {
                 // Compare field text content
-                tmp = aField->GetText().CmpNoCase( bField->GetText() );
+                tmp = aField->GetText().compare( bField->GetText() );
             }
 
             if( tmp == 0 )
