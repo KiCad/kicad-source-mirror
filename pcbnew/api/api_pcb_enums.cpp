@@ -23,6 +23,7 @@
 #include <api/board/board_types.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <wx/wx.h>
+#include <widgets/report_severity.h>
 
 #include <board_stackup_manager/board_stackup.h>
 #include <padstack.h>
@@ -35,6 +36,7 @@
 // Adding something new here?  Add it to test_api_enums.cpp!
 
 using namespace kiapi::board;
+using namespace kiapi::board::commands;
 
 template<>
 types::PadType ToProtoEnum( PAD_ATTRIB aValue )
@@ -823,6 +825,33 @@ BOARD_STACKUP_ITEM_TYPE FromProtoEnum( BoardStackupLayerType aValue )
     default:
         wxCHECK_MSG( false, BS_ITEM_TYPE_UNDEFINED,
                      "Unhandled case in FromProtoEnum<BoardStackupLayerType>" );
+    }
+}
+
+
+template<>
+DrcSeverity ToProtoEnum( SEVERITY aValue )
+{
+    switch( aValue )
+    {
+    case RPT_SEVERITY_WARNING: return DrcSeverity::DRS_WARNING;
+    case RPT_SEVERITY_ERROR:   return DrcSeverity::DRS_ERROR;
+
+    default:
+        return DrcSeverity::DRS_UNKNOWN;
+    }
+}
+
+
+template<>
+SEVERITY FromProtoEnum( DrcSeverity aValue )
+{
+    switch( aValue )
+    {
+    case DrcSeverity::DRS_WARNING: return RPT_SEVERITY_WARNING;
+    case DrcSeverity::DRS_ERROR:   return RPT_SEVERITY_ERROR;
+    case DrcSeverity::DRS_UNKNOWN:
+    default:                       return RPT_SEVERITY_ERROR;
     }
 }
 

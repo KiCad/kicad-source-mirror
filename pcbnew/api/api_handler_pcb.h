@@ -151,6 +151,9 @@ private:
     HANDLER_RESULT<Empty> handleSetBoardEditorAppearanceSettings(
             const HANDLER_CONTEXT<SetBoardEditorAppearanceSettings>& aCtx );
 
+    HANDLER_RESULT<InjectDrcErrorResponse> handleInjectDrcError(
+            const HANDLER_CONTEXT<InjectDrcError>& aCtx );
+
 protected:
     std::unique_ptr<COMMIT> createCommit() override;
 
