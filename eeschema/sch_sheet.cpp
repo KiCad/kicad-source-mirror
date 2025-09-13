@@ -46,6 +46,8 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trace_helpers.h>
+#include <validators.h>
+#include <properties/property_validators.h>
 #include <pgm_base.h>
 #include <wx/log.h>
 
@@ -1657,7 +1659,21 @@ static struct SCH_SHEET_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_SHEET ), TYPE_HASH( SCH_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, wxString>( _HKI( "Sheet Name" ),
-                             &SCH_SHEET::SetName, &SCH_SHEET::GetName ) );
+                             &SCH_SHEET::SetName, &SCH_SHEET::GetName ) )
+                .SetValidator( []( const wxAny&& aValue, EDA_ITEM* ) -> VALIDATOR_RESULT
+                                {
+                                    wxString value;
+
+                                    if( !aValue.GetAs( &value ) )
+                                        return {};
+
+                                    wxString msg = GetFieldValidationErrorMessage( FIELD_T::SHEET_NAME, value );
+
+                                    if( msg.empty() )
+                                        return {};
+
+                                    return std::make_unique<VALIDATION_ERROR_MSG>( msg );
+                                } );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, int>( _HKI( "Border Width" ),
                              &SCH_SHEET::SetBorderWidth, &SCH_SHEET::GetBorderWidth,

@@ -162,5 +162,11 @@ private:
     FIELD_T m_fieldId;
 };
 
+/**
+ * Return the error message if @a aValue is invalid for @a aFieldId.
+ * Returns an empty string when the value is valid.
+ */
+wxString GetFieldValidationErrorMessage( FIELD_T aFieldId, const wxString& aValue );
+
 
 #endif  // #ifndef VALIDATORS_H
