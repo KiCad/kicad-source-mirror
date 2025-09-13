@@ -1,4 +1,4 @@
-ERC report (2025-08-20T22:34:09+0000, Encoding UTF8)
+ERC report (2025-09-12T21:52:37-0700, Encoding UTF8)
 
 ***** Sheet /
 [power_pin_not_driven]: Input Power pin not driven by any Output Power pins
@@ -31,15 +31,6 @@ ERC report (2025-08-20T22:34:09+0000, Encoding UTF8)
 [footprint_link_issues]: Footprint 'C_1206_3216Metric' not found in library 'Capacitor_SMD'
     ; warning
     @(4.800 in, 3.150 in): Symbol C1 [C_Small]
-[lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
-    ; warning
-    @(4.800 in, 3.300 in): Symbol #PWR03 [GND]
-[lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
-    ; warning
-    @(4.400 in, 3.950 in): Symbol #PWR04 [GND]
-[lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
-    ; warning
-    @(4.700 in, 3.800 in): Symbol #PWR01 [GND]
 [footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'
     ; warning
     @(5.000 in, 3.700 in): Symbol R1 [R_US]
@@ -49,9 +40,6 @@ ERC report (2025-08-20T22:34:09+0000, Encoding UTF8)
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Amplifier_Operational'
     ; warning
     @(5.650 in, 3.100 in): Symbol U1 [TLV2371DBV]
-[lib_symbol_mismatch]: Symbol 'GND' doesn't match copy in library 'power'
-    ; warning
-    @(5.550 in, 3.450 in): Symbol #PWR02 [GND]
 [footprint_link_issues]: Footprint 'R_1206_3216Metric' not found in library 'Resistor_SMD'
     ; warning
     @(5.900 in, 3.700 in): Symbol R2 [R_US]
@@ -62,4 +50,4 @@ ERC report (2025-08-20T22:34:09+0000, Encoding UTF8)
     ; warning
     @(7.000 in, 3.100 in): Symbol J3 [Conn_01x01_Pin]
 
- ** ERC messages: 20  Errors 2  Warnings 18
+ ** ERC messages: 16  Errors 2  Warnings 14
