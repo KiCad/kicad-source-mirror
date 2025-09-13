@@ -198,8 +198,11 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 
 std::vector<int> SCH_LINE::ViewGetLayers() const
 {
-    return { LAYER_DANGLING, m_layer, LAYER_SELECTION_SHADOWS, LAYER_NET_COLOR_HIGHLIGHT,
-             LAYER_OP_VOLTAGES };
+    if( IsWire() || IsBus() )
+        return { LAYER_DANGLING, m_layer, LAYER_SELECTION_SHADOWS, LAYER_NET_COLOR_HIGHLIGHT,
+                 LAYER_OP_VOLTAGES };
+
+    return { LAYER_DANGLING, m_layer, LAYER_SELECTION_SHADOWS, LAYER_OP_VOLTAGES };
 }
 
 
