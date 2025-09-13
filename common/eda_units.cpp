@@ -744,7 +744,7 @@ bool EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, co
 
     // Check the unit designator
     wxString  unit( buf.Mid( brk_point ).Strip( wxString::both ).Lower() );
-    EDA_UNITS units;
+    EDA_UNITS units = EDA_UNITS::MM;    // Make gcc quiet
 
     //check for um, μm (µ is MICRO SIGN) and µm (µ is GREEK SMALL LETTER MU) for micrometre
     if( unit == wxT( "um" ) || unit == wxT( "\u00B5m" ) || unit == wxT( "\u03BCm" ) )

@@ -1365,7 +1365,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     continue;
 
                 count++;
-                tp.submit_task( [checkZones, ia, ia2, sameNet, layer]() { checkZones(ia, ia2, sameNet, layer); } );
+                (void)tp.submit_task( [checkZones, ia, ia2, sameNet, layer]() { checkZones(ia, ia2, sameNet, layer); } );
             }
         }
     }
