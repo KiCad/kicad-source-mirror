@@ -243,5 +243,11 @@ private:
     int m_fieldId;
 };
 
+/**
+ * Return the error message if @a aValue is invalid for @a aFieldId.
+ * Returns an empty string when the value is valid.
+ */
+wxString GetFieldValidationErrorMessage( int aFieldId, const wxString& aValue );
+
 
 #endif  // #ifndef VALIDATORS_H
