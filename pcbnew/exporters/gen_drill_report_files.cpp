@@ -94,7 +94,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     double    scale = 1.0;
     VECTOR2I  offset = GetOffset();
     PLOTTER*  plotter = nullptr;
-    PAGE_INFO dummy( PAGE_INFO::A4, false );
+    PAGE_INFO dummy( PAGE_SIZE_TYPE::A4, false );
     int       bottom_limit = 0;        // Y coord limit of page. 0 mean do not use
 
     PCB_PLOT_PARAMS plot_opts; // starts plotting with default options

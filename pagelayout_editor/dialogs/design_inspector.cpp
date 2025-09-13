@@ -226,7 +226,7 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
     GetGridList()->SetCellValue( row, COL_TYPENAME, _( "Layout" ) );
 
     // Display page format name.
-    GetGridList()->SetCellValue( row, COL_COMMENT, page_info.GetType() );
+    GetGridList()->SetCellValue( row, COL_COMMENT, page_info.GetTypeAsString() );
     GetGridList()->SetCellValue( row, COL_REPEAT_NUMBER, "-" );
     VECTOR2I page_sizeIU = m_editorFrame->GetPageSizeIU();
     GetGridList()->SetCellValue( row, COL_TEXTSTRING,

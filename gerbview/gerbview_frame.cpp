@@ -130,7 +130,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcons( icon_bundle );
 
     // Be sure a page info is set. this default value will be overwritten later.
-    PAGE_INFO pageInfo( wxT( "GERBER" ) );
+    PAGE_INFO pageInfo( PAGE_SIZE_TYPE::GERBER );
     SetLayout( new GBR_LAYOUT() );
     SetPageSettings( pageInfo );
 
@@ -327,7 +327,7 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET, cfg->m_Appearance.show_border_and_titleblock );
     SetElementVisibility( LAYER_GERBVIEW_PAGE_LIMITS, cfg->m_Display.m_DisplayPageLimits );
 
-    PAGE_INFO pageInfo( wxT( "GERBER" ) );
+    PAGE_INFO pageInfo( PAGE_SIZE_TYPE::GERBER );
     pageInfo.SetType( cfg->m_Appearance.page_type );
     SetPageSettings( pageInfo );
 
@@ -346,7 +346,7 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg ) )
     {
-        cfg->m_Appearance.page_type = GetPageSettings().GetType();
+        cfg->m_Appearance.page_type = GetPageSettings().GetTypeAsString();
 
         m_drillFileHistory.Save( &cfg->m_DrillFileHistory );
         m_zipFileHistory.Save( &cfg->m_ZipFileHistory );
@@ -1196,7 +1196,10 @@ void GERBVIEW_FRAME::CommonSettingsChanged( int aFlags )
     {
         GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
-        SetPageSettings( PAGE_INFO( cfg->m_Appearance.page_type ) );
+        PAGE_INFO pgInfo;
+        pgInfo.SetType( cfg->m_Appearance.page_type );
+
+        SetPageSettings( pgInfo );
         SetElementVisibility( LAYER_DCODES, cfg->m_Appearance.show_dcodes );
     }
 

@@ -156,7 +156,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetGalDisplayOptions().m_axesEnabled = true;
 
     // In Footprint Editor, set the default paper size to A4 for plot/print
-    SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
+    SetPageSettings( PAGE_INFO( PAGE_SIZE_TYPE::A4 ) );
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS ) ) );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher

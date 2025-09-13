@@ -801,7 +801,7 @@ void PCB_IO_KICAD_LEGACY::loadSHEET()
                 char*   orient = strtok_r( nullptr, delims, &data );
 
                 // only parse the width and height if page size is custom ("User")
-                if( wname == PAGE_INFO::Custom )
+                if( page.GetType() == PAGE_SIZE_TYPE::User )
                 {
                     if( width && height )
                     {

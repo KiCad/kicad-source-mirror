@@ -424,7 +424,7 @@ void SCH_IO_KICAD_LEGACY::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aS
     int pagew = parseInt( aReader, line, &line );
     int pageh = parseInt( aReader, line, &line );
 
-    if( buf == PAGE_INFO::Custom )
+    if( pageInfo.GetType() == PAGE_SIZE_TYPE::User )
     {
         pageInfo.SetWidthMils( pagew );
         pageInfo.SetHeightMils( pageh );
@@ -1541,7 +1541,7 @@ void SCH_IO_KICAD_LEGACY::Format( SCH_SHEET* aSheet )
     const TITLE_BLOCK& tb = screen->GetTitleBlock();
     const PAGE_INFO& page = screen->GetPageSettings();
 
-    m_out->Print( 0, "$Descr %s %d %d%s\n", TO_UTF8( page.GetType() ),
+    m_out->Print( 0, "$Descr %s %d %d%s\n", TO_UTF8( page.GetTypeAsString() ),
                   (int)page.GetWidthMils(),
                   (int)page.GetHeightMils(),
                   !page.IsCustom() && page.IsPortrait() ? " portrait" : "" );

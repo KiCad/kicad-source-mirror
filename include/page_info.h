@@ -30,6 +30,7 @@
 #ifndef PAGE_INFO_H
 #define PAGE_INFO_H
 
+#include <map>
 #include <kicommon.h>
 #include <wx/string.h>
 #include <math/vector2d.h>
@@ -46,6 +47,30 @@
 
 class OUTPUTFORMATTER;
 
+/*
+ * @brief Standard paper sizes nicknames
+ * Do not rename entires as these names are saved to file and parsed back
+ */
+enum class PAGE_SIZE_TYPE
+{
+    A5,
+    A4,
+    A3,
+    A2,
+    A1,
+    A0,
+    A,
+    B,
+    C,
+    D,
+    E,
+    GERBER,
+    USLetter,
+    USLegal,
+    USLedger,
+    User
+};
+
 /**
  * Describe the page size and margins of a paper page on which to eventually print or plot.
  *
@@ -58,28 +83,10 @@ class OUTPUTFORMATTER;
 class KICOMMON_API PAGE_INFO
 {
 public:
-    PAGE_INFO( const wxString& aType = PAGE_INFO::A3, bool IsPortrait = false );
+    PAGE_INFO( PAGE_SIZE_TYPE aType = PAGE_SIZE_TYPE::A3, bool IsPortrait = false );
 
     // paper size names which are part of the public API, pass to SetType() or
     // above constructor.
-
-    // these were once wxStrings, but it caused static construction sequence problems:
-    static const wxChar A5[];
-    static const wxChar A4[];
-    static const wxChar A3[];
-    static const wxChar A2[];
-    static const wxChar A1[];
-    static const wxChar A0[];
-    static const wxChar A[];
-    static const wxChar B[];
-    static const wxChar C[];
-    static const wxChar D[];
-    static const wxChar E[];
-    static const wxChar GERBER[];
-    static const wxChar USLetter[];
-    static const wxChar USLegal[];
-    static const wxChar USLedger[];
-    static const wxChar Custom[];     ///< "User" defined page type
 
 
     /**
@@ -95,13 +102,17 @@ public:
      * @param aIsPortrait Set to true to set page orientation to portrait mode.
      * @return true if @a aStandarePageDescription was a recognized type.
      */
-    bool SetType( const wxString& aStandardPageDescriptionName, bool aIsPortrait = false );
-    const wxString& GetType() const { return m_type; }
+    bool                  SetType( PAGE_SIZE_TYPE aPageSize, bool aIsPortrait = false );
+    bool                  SetType( const wxString& aPageSize, bool aIsPortrait = false );
+    const PAGE_SIZE_TYPE& GetType() const { return m_type; }
+    wxString       GetTypeAsString() const;
+
+    const wxString& GetPageFormatDescription() const { return m_description;  }
 
     /**
      * @return True if the object has the default page settings which are A3, landscape.
      */
-    bool IsDefault() const { return m_type == PAGE_INFO::A3 && !m_portrait; }
+    bool IsDefault() const { return m_type == PAGE_SIZE_TYPE::A3 && !m_portrait; }
 
     /**
      * @return true if the type is Custom.
@@ -203,39 +214,25 @@ public:
      */
     void Format( OUTPUTFORMATTER* aFormatter ) const;
 
+    static const std::vector<PAGE_INFO>& GetPageFormatsList();
+
 protected:
     // only the class implementation(s) may use this constructor
-    PAGE_INFO( const VECTOR2D& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
+    PAGE_INFO( const VECTOR2D& aSizeMils, const PAGE_SIZE_TYPE aType, wxPaperSize aPaperId,
+               const wxString& aDescription = wxEmptyString );
 
 private:
-    // standard pre-defined sizes
-    static const PAGE_INFO pageA5;
-    static const PAGE_INFO pageA4;
-    static const PAGE_INFO pageA3;
-    static const PAGE_INFO pageA2;
-    static const PAGE_INFO pageA1;
-    static const PAGE_INFO pageA0;
-    static const PAGE_INFO pageA;
-    static const PAGE_INFO pageB;
-    static const PAGE_INFO pageC;
-    static const PAGE_INFO pageD;
-    static const PAGE_INFO pageE;
-    static const PAGE_INFO pageGERBER;
-
-    static const PAGE_INFO pageUSLetter;
-    static const PAGE_INFO pageUSLegal;
-    static const PAGE_INFO pageUSLedger;
-
-    static const PAGE_INFO pageUser;
+    static std::vector<PAGE_INFO> standardPageSizes;
 
     // all dimensions here are in mils
 
-    wxString    m_type;             ///< paper type: A4, A3, etc.
+    PAGE_SIZE_TYPE m_type; ///< paper type: A4, A3, etc.
     VECTOR2D    m_size;             ///< mils
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 
     wxPaperSize m_paper_id;         ///< wx' style paper id.
+    wxString    m_description;      ///< more human friendly description of page size
 
     static double s_user_height;
     static double s_user_width;

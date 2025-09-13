@@ -102,8 +102,6 @@ private:
     // return true if changes are made, or false if not
     bool SavePageSettings();
 
-    void SetCurrentPageSizeSelection( const wxString& aPaperSize );
-
     // Update drawing sheet example
     void UpdateDrawingSheetExample();
 
@@ -121,7 +119,6 @@ protected:
     EDA_DRAW_FRAME* m_parent;
     BASE_SCREEN*    m_screen;
     wxString        m_projectPath; // the curr project path
-    wxArrayString   m_pageFmt;     /// list of page sizes (not translated)
     bool            m_initialized;
     bool            m_localPrjConfigChanged; /// the page layuout filename was changed
     wxBitmap*       m_pageBitmap;            /// Temporary bitmap for the drawing sheet example.

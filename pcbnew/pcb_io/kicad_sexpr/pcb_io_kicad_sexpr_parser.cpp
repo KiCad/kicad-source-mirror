@@ -1445,7 +1445,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePAGE_INFO()
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
-    if( pageType == PAGE_INFO::Custom )
+    if( pageInfo.GetType() == PAGE_SIZE_TYPE::User )
     {
         double width = parseDouble( "width" );      // width in mm
 

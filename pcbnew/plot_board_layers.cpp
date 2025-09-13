@@ -1088,7 +1088,7 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
  */
 static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts )
 {
-    PAGE_INFO pageA4( wxT( "A4" ) );
+    PAGE_INFO pageA4( PAGE_SIZE_TYPE::A4 );
     const PAGE_INFO& pageInfo = aBoard->GetPageSettings();
     const PAGE_INFO* sheet_info;
     double paperscale; // Page-to-paper ratio

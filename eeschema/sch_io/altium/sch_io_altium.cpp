@@ -4040,7 +4040,7 @@ void SCH_IO_ALTIUM::ParseSheet( const std::map<wxString, wxString>& aProperties 
     {
         PAGE_INFO::SetCustomWidthMils( schIUScale.IUToMils( m_altiumSheet->customSize.x ) );
         PAGE_INFO::SetCustomHeightMils( schIUScale.IUToMils( m_altiumSheet->customSize.y ) );
-        pageInfo.SetType( PAGE_INFO::Custom, isPortrait );
+        pageInfo.SetType( PAGE_SIZE_TYPE::User, isPortrait );
     }
     else
     {

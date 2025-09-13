@@ -84,7 +84,7 @@ BOARD::BOARD() :
         m_LegacyNetclassesLoaded( false ),
         m_boardUse( BOARD_USE::NORMAL ),
         m_timeStamp( 1 ),
-        m_paper( PAGE_INFO::A4 ),
+        m_paper( PAGE_SIZE_TYPE::A4 ),
         m_project( nullptr ),
         m_userUnits( EDA_UNITS::MM ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),

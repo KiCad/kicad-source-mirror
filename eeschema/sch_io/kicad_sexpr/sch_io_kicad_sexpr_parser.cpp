@@ -2120,7 +2120,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
                            CurOffset() );
     }
 
-    if( pageType == PAGE_INFO::Custom )
+    if( aPageInfo.GetType() == PAGE_SIZE_TYPE::User )
     {
         double width = parseDouble( "width" );
 

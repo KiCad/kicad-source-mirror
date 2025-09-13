@@ -828,7 +828,7 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
     // Also note pageSize is given in mils, not in internal units and must be
     // converted to internal units.
 
-    wxString pageType = m_pageInfo.GetType();
+    wxString pageType = m_pageInfo.GetTypeAsString();
     if( m_pageInfo.IsCustom() )
         pageType = "Custom";
 

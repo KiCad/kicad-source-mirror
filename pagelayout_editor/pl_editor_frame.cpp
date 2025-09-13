@@ -559,7 +559,7 @@ void PL_EDITOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_PropertiesFrameWidth = m_propertiesFrameWidth;
     cfg->m_CornerOrigin         = m_originSelectChoice;
     cfg->m_BlackBackground      = GetDrawBgColor() == BLACK;
-    cfg->m_LastPaperSize        = GetPageSettings().GetType();
+    cfg->m_LastPaperSize        = GetPageSettings().GetTypeAsString();
     cfg->m_LastWasPortrait      = GetPageSettings().IsPortrait();
     cfg->m_LastCustomWidth      = PAGE_INFO::GetCustomWidthMils();
     cfg->m_LastCustomHeight     = PAGE_INFO::GetCustomHeightMils();

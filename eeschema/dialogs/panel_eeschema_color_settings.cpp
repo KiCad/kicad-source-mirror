@@ -247,7 +247,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
     std::vector<DANGLING_END_ITEM> endPointsByType;
 
-    m_page       = new PAGE_INFO( PAGE_INFO::Custom );
+    m_page       = new PAGE_INFO( PAGE_SIZE_TYPE::User );
     m_titleBlock = new TITLE_BLOCK;
     m_titleBlock->SetTitle( _( "Color Preview" ) );
     m_titleBlock->SetDate( wxDateTime::Now().FormatDate() );

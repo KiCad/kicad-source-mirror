@@ -796,7 +796,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::onNewThemeSelected()
 
 void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
 {
-    m_page       = new PAGE_INFO( PAGE_INFO::Custom );
+    m_page       = new PAGE_INFO( PAGE_SIZE_TYPE::User );
     m_titleBlock = new TITLE_BLOCK;
     m_titleBlock->SetTitle( _( "Color Preview" ) );
     m_titleBlock->SetDate( wxDateTime::Now().FormatDate() );

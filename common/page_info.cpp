@@ -27,36 +27,7 @@
 #include <eda_units.h>
 #include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
 #include <string_utils.h>
-
-
-// late arriving wxPAPER_A0, wxPAPER_A1
-#if wxABI_VERSION >= 20999
- #define PAPER_A0   wxPAPER_A0
- #define PAPER_A1   wxPAPER_A1
-#else
- #define PAPER_A0   wxPAPER_A2
- #define PAPER_A1   wxPAPER_A2
-#endif
-
-
-// Standard paper sizes nicknames.
-const wxChar PAGE_INFO::A5[] = wxT( "A5" );
-const wxChar PAGE_INFO::A4[] = wxT( "A4" );
-const wxChar PAGE_INFO::A3[] = wxT( "A3" );
-const wxChar PAGE_INFO::A2[] = wxT( "A2" );
-const wxChar PAGE_INFO::A1[] = wxT( "A1" );
-const wxChar PAGE_INFO::A0[] = wxT( "A0" );
-const wxChar PAGE_INFO::A[]  = wxT( "A" );
-const wxChar PAGE_INFO::B[]  = wxT( "B" );
-const wxChar PAGE_INFO::C[]  = wxT( "C" );
-const wxChar PAGE_INFO::D[]  = wxT( "D" );
-const wxChar PAGE_INFO::E[]  = wxT( "E" );
-
-const wxChar PAGE_INFO::GERBER[]   = wxT( "GERBER" );
-const wxChar PAGE_INFO::USLetter[] = wxT( "USLetter" );
-const wxChar PAGE_INFO::USLegal[]  = wxT( "USLegal" );
-const wxChar PAGE_INFO::USLedger[] = wxT( "USLedger" );
-const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
+#include <magic_enum.hpp>
 
 
 // Standard page sizes in mils, all constants
@@ -66,29 +37,34 @@ const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
 // local readability macro for millimeter wxSize
 #define MMsize( x, y ) VECTOR2D( EDA_UNIT_UTILS::Mm2mils( x ), EDA_UNIT_UTILS::Mm2mils( y ) )
 
-// All MUST be defined as landscape.
-const PAGE_INFO  PAGE_INFO::pageA5(     MMsize( 210,   148 ),   wxT( "A5" ),    wxPAPER_A5 );
-const PAGE_INFO  PAGE_INFO::pageA4(     MMsize( 297,   210 ),   wxT( "A4" ),    wxPAPER_A4 );
-const PAGE_INFO  PAGE_INFO::pageA3(     MMsize( 420,   297 ),   wxT( "A3" ),    wxPAPER_A3 );
-const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    wxPAPER_A2 );
-const PAGE_INFO  PAGE_INFO::pageA1(     MMsize( 841,   594 ),   wxT( "A1" ),    PAPER_A1 );
-const PAGE_INFO  PAGE_INFO::pageA0(     MMsize( 1189,  841 ),   wxT( "A0" ),    PAPER_A0 );
+// List of page formats.
+// they are prefixed by "_HKI" (already in use for hotkeys) instead of "_",
+// because we need both the translated and the not translated version.
+// when displayed in dialog we should explicitly call wxGetTranslation()
+#define _HKI( x ) wxT( x )
 
-const PAGE_INFO  PAGE_INFO::pageA( VECTOR2D( 11000, 8500 ), wxT( "A" ), wxPAPER_LETTER );
-const PAGE_INFO  PAGE_INFO::pageB( VECTOR2D( 17000, 11000 ), wxT( "B" ), wxPAPER_TABLOID );
-const PAGE_INFO  PAGE_INFO::pageC( VECTOR2D( 22000, 17000 ), wxT( "C" ), wxPAPER_CSHEET );
-const PAGE_INFO  PAGE_INFO::pageD( VECTOR2D( 34000, 22000 ), wxT( "D" ), wxPAPER_DSHEET );
-const PAGE_INFO  PAGE_INFO::pageE( VECTOR2D( 44000, 34000 ), wxT( "E" ), wxPAPER_ESHEET );
+std::vector<PAGE_INFO> PAGE_INFO::standardPageSizes = {
+    // All MUST be defined as landscape.
+    PAGE_INFO( MMsize( 210, 148 ), PAGE_SIZE_TYPE::A5, wxPAPER_A5, _HKI( "A5 148 x 210mm" ) ),
+    PAGE_INFO( MMsize( 297, 210 ), PAGE_SIZE_TYPE::A4, wxPAPER_A4, _HKI( "A4 210 x 297mm" ) ),
+    PAGE_INFO( MMsize( 420, 297 ), PAGE_SIZE_TYPE::A3, wxPAPER_A3, _HKI( "A3 297 x 420mm" ) ),
+    PAGE_INFO( MMsize( 594, 420 ), PAGE_SIZE_TYPE::A2, wxPAPER_A2, _HKI( "A2 420 x 594mm" ) ),
+    PAGE_INFO( MMsize( 841, 594 ), PAGE_SIZE_TYPE::A1, wxPAPER_A1, _HKI( "A1 594 x 841mm" ) ),
+    PAGE_INFO( MMsize( 1189, 841 ), PAGE_SIZE_TYPE::A0, wxPAPER_A0, _HKI( "A0 841 x 1189mm" ) ),
+    PAGE_INFO( VECTOR2D( 11000, 8500 ), PAGE_SIZE_TYPE::A, wxPAPER_LETTER, _HKI( "A 8.5 x 11in" ) ),
+    PAGE_INFO( VECTOR2D( 17000, 11000 ), PAGE_SIZE_TYPE::B, wxPAPER_TABLOID, _HKI( "B 11 x 17in" ) ),
+    PAGE_INFO( VECTOR2D( 22000, 17000 ), PAGE_SIZE_TYPE::C, wxPAPER_CSHEET, _HKI( "C 17 x 22in" ) ),
+    PAGE_INFO( VECTOR2D( 34000, 22000 ), PAGE_SIZE_TYPE::D, wxPAPER_DSHEET, _HKI( "D 22 x 34in" ) ),
+    PAGE_INFO( VECTOR2D( 44000, 34000 ), PAGE_SIZE_TYPE::E, wxPAPER_ESHEET, _HKI( "E 34 x 44in" ) ),
 
-const PAGE_INFO PAGE_INFO::pageGERBER( VECTOR2D( 32000, 32000 ), wxT( "GERBER" ), wxPAPER_NONE );
-const PAGE_INFO PAGE_INFO::pageUser( VECTOR2D( 17000, 11000 ), Custom, wxPAPER_NONE );
+    // US paper sizes
+    PAGE_INFO( VECTOR2D( 32000, 32000 ), PAGE_SIZE_TYPE::GERBER, wxPAPER_NONE ),
+    PAGE_INFO( VECTOR2D( 17000, 11000 ), PAGE_SIZE_TYPE::User, wxPAPER_NONE, _HKI( "User (Custom)" ) ),
 
-// US paper sizes
-const PAGE_INFO  PAGE_INFO::pageUSLetter( VECTOR2D( 11000, 8500  ),  wxT( "USLetter" ),
-                                          wxPAPER_LETTER );
-const PAGE_INFO PAGE_INFO::pageUSLegal( VECTOR2D( 14000, 8500 ), wxT( "USLegal" ), wxPAPER_LEGAL );
-const PAGE_INFO  PAGE_INFO::pageUSLedger( VECTOR2D( 17000, 11000 ), wxT( "USLedger" ),
-                                          wxPAPER_TABLOID );
+    PAGE_INFO( VECTOR2D( 11000, 8500 ), PAGE_SIZE_TYPE::USLetter, wxPAPER_LETTER, _HKI("US Letter 8.5 x 11in") ),
+    PAGE_INFO( VECTOR2D( 14000, 8500 ), PAGE_SIZE_TYPE::USLegal, wxPAPER_LEGAL, _HKI("US Legal 8.5 x 14in") ),
+    PAGE_INFO( VECTOR2D( 17000, 11000 ), PAGE_SIZE_TYPE::USLedger, wxPAPER_TABLOID, _HKI("US Ledger 11 x 17in") )
+};
 
 // Custom paper size for next instantiation of type "User"
 double PAGE_INFO::s_user_width  = 17000;
@@ -102,8 +78,12 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
-PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
-    m_type( aType ), m_size( aSizeMils ), m_paper_id( aPaperId )
+PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, PAGE_SIZE_TYPE aType, wxPaperSize aPaperId,
+                      const wxString& aDescription ) :
+        m_type( aType ),
+        m_size( aSizeMils ),
+        m_paper_id( aPaperId ),
+        m_description( aDescription )
 {
     updatePortrait();
 
@@ -113,61 +93,52 @@ PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, const wxString& aType, wxPaperS
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxString& aType, bool aIsPortrait )
+PAGE_INFO::PAGE_INFO( PAGE_SIZE_TYPE aType, bool aIsPortrait )
 {
     SetType( aType, aIsPortrait );
 }
 
 
-bool PAGE_INFO::SetType( const wxString& aType, bool aIsPortrait )
+bool PAGE_INFO::SetType( const wxString& aPageSize, bool aIsPortrait )
+{
+    auto type =
+            magic_enum::enum_cast<PAGE_SIZE_TYPE>( aPageSize.ToStdString(), magic_enum::case_insensitive );
+
+    if( !type.has_value() )
+        return false;
+
+    return SetType( type.value(), aIsPortrait );
+}
+
+
+bool PAGE_INFO::SetType( PAGE_SIZE_TYPE aType, bool aIsPortrait )
 {
     bool rc = true;
 
-    // all are landscape initially
-    if( aType == pageA5.GetType() )
-        *this = pageA5;
-    else if( aType == pageA4.GetType() )
-        *this = pageA4;
-    else if( aType == pageA3.GetType() )
-        *this = pageA3;
-    else if( aType == pageA2.GetType() )
-        *this = pageA2;
-    else if( aType == pageA1.GetType() )
-        *this = pageA1;
-    else if( aType == pageA0.GetType() )
-        *this = pageA0;
-    else if( aType == pageA.GetType() )
-        *this = pageA;
-    else if( aType == pageB.GetType() )
-        *this = pageB;
-    else if( aType == pageC.GetType() )
-        *this = pageC;
-    else if( aType == pageD.GetType() )
-        *this = pageD;
-    else if( aType == pageE.GetType() )
-        *this = pageE;
-    else if( aType == pageGERBER.GetType() )
-        *this = pageGERBER;
-    else if( aType == pageUSLetter.GetType() )
-        *this = pageUSLetter;
-    else if( aType == pageUSLegal.GetType() )
-        *this = pageUSLegal;
-    else if( aType == pageUSLedger.GetType() )
-        *this = pageUSLedger;
-    else if( aType == pageUser.GetType() )
-    {
-        // pageUser is const, and may not and does not hold the custom size,
-        // so customize *this later
-        *this  = pageUser;
+    auto result = std::find_if( standardPageSizes.begin(), standardPageSizes.end(),
+                  [aType]( const PAGE_INFO& p )
+                  {
+                      return p.m_type == aType;
+                  } );
 
-        // customize:
+    if( result != standardPageSizes.end() )
+    {
+        *this = *result;
+    }
+    else
+    {
+        rc = false;
+    }
+
+    if( aType == PAGE_SIZE_TYPE::User )
+    {
+        m_type = PAGE_SIZE_TYPE::User;
+        m_paper_id = wxPAPER_NONE;
         m_size.x = s_user_width;
         m_size.y = s_user_height;
 
         updatePortrait();
     }
-    else
-        rc = false;
 
     if( aIsPortrait )
     {
@@ -180,9 +151,16 @@ bool PAGE_INFO::SetType( const wxString& aType, bool aIsPortrait )
 }
 
 
+wxString PAGE_INFO::GetTypeAsString() const
+{
+    std::string typeStr( magic_enum::enum_name( m_type ) );
+    return wxString( typeStr );
+}
+
+
 bool PAGE_INFO::IsCustom() const
 {
-    return m_type == Custom;
+    return m_type == PAGE_SIZE_TYPE::User;
 }
 
 
@@ -251,7 +229,7 @@ void PAGE_INFO::SetWidthMils( double aWidthInMils )
     {
         m_size.x = clampWidth( aWidthInMils );
 
-        m_type = Custom;
+        m_type = PAGE_SIZE_TYPE::User;
         m_paper_id = wxPAPER_NONE;
 
         updatePortrait();
@@ -265,7 +243,7 @@ void PAGE_INFO::SetHeightMils( double aHeightInMils )
     {
         m_size.y = clampHeight( aHeightInMils );
 
-        m_type = Custom;
+        m_type = PAGE_SIZE_TYPE::User;
         m_paper_id = wxPAPER_NONE;
 
         updatePortrait();
@@ -275,11 +253,12 @@ void PAGE_INFO::SetHeightMils( double aHeightInMils )
 
 void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter ) const
 {
-    aFormatter->Print( "(paper %s", aFormatter->Quotew( GetType() ).c_str() );
+    std::string typeStr( magic_enum::enum_name( GetType() ) );
+    aFormatter->Print( "(paper %s", aFormatter->Quotew( typeStr ).c_str() );
 
     // The page dimensions are only required for user defined page sizes.
     // Internally, the page size is in mils
-    if( GetType() == PAGE_INFO::Custom )
+    if( GetType() == PAGE_SIZE_TYPE::User )
     {
         aFormatter->Print( " %s %s",
                            FormatDouble2Str( GetWidthMils() * 25.4 / 1000.0 ).c_str(),
@@ -290,4 +269,10 @@ void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter ) const
         aFormatter->Print( " portrait" );
 
     aFormatter->Print( ")" );
+}
+
+
+const std::vector<PAGE_INFO>& PAGE_INFO::GetPageFormatsList()
+{
+    return PAGE_INFO::standardPageSizes;
 }

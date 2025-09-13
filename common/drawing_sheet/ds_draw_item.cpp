@@ -549,7 +549,7 @@ void DS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
     m_titleBlock = &aTitleBlock;
-    m_paperFormat = aPageInfo.GetType();
+    m_paperFormat = aPageInfo.GetTypeAsString();
 
     // Build the basic layout shape, if the layout list is empty
     if( model.GetCount() == 0 && !model.VoidListAllowed() )

@@ -29,7 +29,7 @@
 PL_EDITOR_LAYOUT::PL_EDITOR_LAYOUT() :
     m_drawItemList( drawSheetIUScale )
 {
-    PAGE_INFO pageInfo( wxT( "A4" ) );
+    PAGE_INFO pageInfo( PAGE_SIZE_TYPE::A4 );
     SetPageSettings( pageInfo );
 }
 
