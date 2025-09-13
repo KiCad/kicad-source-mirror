@@ -227,15 +227,15 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
     page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
     m_PanelNetType[PANELALLEGRO] = page;
 
-    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "PADS" ), NET_TYPE_PADS, false );
-    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in PADS format" ) );
-    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
-    m_PanelNetType[PANELPADS] = page;
-
     page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
     label = new wxStaticText( page, wxID_ANY, _( "Export netlist in CadStar format" ) );
     page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
     m_PanelNetType[PANELCADSTAR] = page;
+
+    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "PADS" ), NET_TYPE_PADS, false );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in PADS format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    m_PanelNetType[PANELPADS] = page;
 
     InstallPageSpice();
     InstallPageSpiceModel();
