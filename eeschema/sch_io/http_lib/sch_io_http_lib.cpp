@@ -29,7 +29,9 @@
 #include "sch_io_http_lib.h"
 
 
-SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() : SCH_IO( wxS( "HTTP library" ) ), m_libTable( nullptr )
+SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() :
+        SCH_IO( wxS( "HTTP library" ) ),
+        m_libTable( nullptr )
 {
 }
 
@@ -214,64 +216,52 @@ void SCH_IO_HTTP_LIB::GetDefaultSymbolFields( std::vector<wxString>& aNames )
 
 void SCH_IO_HTTP_LIB::ensureSettings( const wxString& aSettingsPath )
 {
-    auto tryLoad = [&]()
-    {
-        if( !m_settings->LoadFromFile() )
-        {
-            wxString msg = wxString::Format(
-                    _( "HTTP library settings file %s missing or invalid" ), aSettingsPath );
+    auto tryLoad =
+            [&]()
+            {
+                if( !m_settings->LoadFromFile() )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s missing or invalid." ),
+                                                      aSettingsPath ) );
+                }
 
-            THROW_IO_ERROR( msg );
-        }
+                if( m_settings->m_Source.api_version.empty() )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s is missing the API version "
+                                                         "number." ),
+                                                      aSettingsPath ) );
+                }
 
-        if( m_settings->m_Source.api_version.empty() )
-        {
-            wxString msg = wxString::Format(
-                    _( "HTTP library settings file %s is missing the API version number!" ),
-                    aSettingsPath );
+                if( m_settings->getSupportedAPIVersion() != m_settings->m_Source.api_version )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s uses API version %s, but "
+                                                         "KiCad requires version %s." ),
+                                                      aSettingsPath, m_settings->m_Source.api_version,
+                                                      m_settings->getSupportedAPIVersion() ) );
+                }
 
-            THROW_IO_ERROR( msg );
-        }
+                if( m_settings->m_Source.root_url.empty() )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s is missing the root URL." ),
+                                                      aSettingsPath ) );
+                }
 
-        if( m_settings->getSupportedAPIVersion() != m_settings->m_Source.api_version )
-        {
-            wxString msg = wxString::Format( _( "HTTP library settings file %s uses API version "
-                                                "%s, but KiCad requires version %s" ),
-                                             aSettingsPath, m_settings->m_Source.api_version,
-                                             m_settings->getSupportedAPIVersion() );
+                // map lib source type
+                m_settings->m_Source.type = m_settings->get_HTTP_LIB_SOURCE_TYPE();
 
-            THROW_IO_ERROR( msg );
-        }
+                if( m_settings->m_Source.type == HTTP_LIB_SOURCE_TYPE::INVALID )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s has invalid library type." ),
+                                                      aSettingsPath ) );
+                }
 
-        if( m_settings->m_Source.root_url.empty() )
-        {
-            wxString msg = wxString::Format(
-                    _( "HTTP library settings file %s is missing the root URL!" ), aSettingsPath );
+                // make sure that the root url finishes with a forward slash
+                if( m_settings->m_Source.root_url.at( m_settings->m_Source.root_url.length() - 1 ) != '/' )
+                    m_settings->m_Source.root_url += "/";
 
-            THROW_IO_ERROR( msg );
-        }
-
-        // map lib source type
-        m_settings->m_Source.type = m_settings->get_HTTP_LIB_SOURCE_TYPE();
-
-        if( m_settings->m_Source.type == HTTP_LIB_SOURCE_TYPE::INVALID )
-        {
-            wxString msg = wxString::Format(
-                    _( "HTTP library settings file %s has an invalid library type" ),
-                    aSettingsPath );
-
-            THROW_IO_ERROR( msg );
-        }
-
-        // make sure that the root url finishes with a forward slash
-        if( m_settings->m_Source.root_url.at( m_settings->m_Source.root_url.length() - 1 ) != '/' )
-        {
-            m_settings->m_Source.root_url += "/";
-        }
-
-        // Append api version to root URL
-        m_settings->m_Source.root_url += m_settings->m_Source.api_version + "/";
-    };
+                // Append api version to root URL
+                m_settings->m_Source.root_url += m_settings->m_Source.api_version + "/";
+            };
 
     if( !m_settings && !aSettingsPath.IsEmpty() )
     {
@@ -302,10 +292,9 @@ void SCH_IO_HTTP_LIB::ensureConnection()
 
     if( !m_conn || !m_conn->IsValidEndpoint() )
     {
-        wxString msg = wxString::Format( _( "Could not connect to %s. Errors: %s" ),
-                                         m_settings->m_Source.root_url, m_lastError );
-
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERROR( wxString::Format( _( "Could not connect to %s. Errors: %s" ),
+                                          m_settings->m_Source.root_url,
+                                          m_lastError ) );
     }
 }
 
@@ -346,9 +335,9 @@ void SCH_IO_HTTP_LIB::syncCache( const HTTP_LIB_CATEGORY& category )
     {
         if( !m_conn->GetLastError().empty() )
         {
-            wxString msg = wxString::Format( _( "Error retriving data from HTTP library %s: %s" ),
-                                             category.name, m_conn->GetLastError() );
-            THROW_IO_ERROR( msg );
+            THROW_IO_ERROR( wxString::Format( _( "Error retrieving data from HTTP library %s: %s" ),
+                                              category.name,
+                                              m_conn->GetLastError() ) );
         }
 
         return;
