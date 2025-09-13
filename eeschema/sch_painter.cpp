@@ -1291,6 +1291,9 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     if( !highlightNetclassColors && drawingNetColorHighlights )
         return;
 
+    if( drawingNetColorHighlights && !( aLine->IsWire() || aLine->IsBus() ) )
+        return;
+
     if( m_schSettings.m_OverrideItemColors && drawingNetColorHighlights )
         return;
 
