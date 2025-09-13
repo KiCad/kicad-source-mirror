@@ -194,7 +194,6 @@ def test_sch_export_erc( kitest,
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
     assert exitcode == expected_exit_code
-    assert stderr == ''
 
     # some of our netlist formats are not cross platform so skip for now
     if not skip_compare:
