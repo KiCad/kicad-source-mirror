@@ -380,7 +380,9 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                     return i->second;
                             }
 
-                            bool res = collidesWithCourtyard( item, itemShape, context, fp, F_Cu );
+                            PCB_LAYER_ID layerId = fp->IsFlipped() ? B_Cu : F_Cu;
+
+                            bool res = collidesWithCourtyard( item, itemShape, context, fp, layerId );
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                             {
@@ -443,7 +445,9 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                     return i->second;
                             }
 
-                            bool res = collidesWithCourtyard( item, itemShape, context, fp, B_Cu );
+                                PCB_LAYER_ID layerId = fp->IsFlipped() ? F_Cu : B_Cu;
+
+                                bool res = collidesWithCourtyard( item, itemShape, context, fp, layerId );
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                             {
