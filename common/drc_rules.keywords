@@ -2,6 +2,7 @@ annular_width
 assertion
 assign_component_class
 board_edge
+bridged_mask
 buried_via
 clearance
 condition

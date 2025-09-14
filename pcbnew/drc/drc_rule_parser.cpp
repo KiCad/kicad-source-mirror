@@ -521,7 +521,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_connection_width:          c.m_Type = CONNECTION_WIDTH_CONSTRAINT;          break;
     case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
     case T_via_diameter:              c.m_Type = VIA_DIAMETER_CONSTRAINT;              break;
-    case T_via_dangling:             c.m_Type = VIA_DANGLING_CONSTRAINT;             break;
+    case T_via_dangling:              c.m_Type = VIA_DANGLING_CONSTRAINT;              break;
     case T_zone_connection:           c.m_Type = ZONE_CONNECTION_CONSTRAINT;           break;
     case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
@@ -537,6 +537,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_diff_pair_uncoupled:       c.m_Type = MAX_UNCOUPLED_CONSTRAINT;             break;
     case T_physical_clearance:        c.m_Type = PHYSICAL_CLEARANCE_CONSTRAINT;        break;
     case T_physical_hole_clearance:   c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
+    case T_bridged_mask:              c.m_Type = BRIDGED_MASK_CONSTRAINT;              break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     wxT( "assertion, clearance, hole_clearance, edge_clearance, physical_clearance, "
@@ -545,7 +546,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
                          "min_resolved_spokes, solder_mask_expansion, solder_paste_abs_margin, "
                          "solder_paste_rel_margin, length, skew, via_count, via_dangling, via_diameter, "
-                         "diff_pair_gap or diff_pair_uncoupled" ) );
+                         "diff_pair_gap, diff_pair_uncoupled or bridged_mask" ) );
         reportError( msg );
     }
 
@@ -558,7 +559,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     bool unitless = c.m_Type == VIA_COUNT_CONSTRAINT
                     || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
                     || c.m_Type == TRACK_ANGLE_CONSTRAINT
-                    || c.m_Type == VIA_DANGLING_CONSTRAINT;
+                    || c.m_Type == VIA_DANGLING_CONSTRAINT
+                    || c.m_Type == BRIDGED_MASK_CONSTRAINT;
 
     allowsTimeDomain = c.m_Type == LENGTH_CONSTRAINT || c.m_Type == SKEW_CONSTRAINT;
 

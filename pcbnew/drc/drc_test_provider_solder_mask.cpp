@@ -78,7 +78,7 @@ private:
     bool checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem, PCB_LAYER_ID aTestLayer,
                             int aTestNet, BOARD_ITEM** aCollidingItem );
 
-    bool checkItemMask( BOARD_ITEM* aMaskItem, int aTestNet );
+    bool checkItemMask( BOARD_ITEM* aItem, int aTestNet );
 
 private:
     DRC_RULE m_bridgeRule;
@@ -320,7 +320,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
                                                        PCB_LAYER_ID aTestLayer, int aTestNet,
                                                        BOARD_ITEM** aCollidingItem )
 {
-    if( aTestLayer == F_Mask && !aTestItem->IsOnLayer( PADSTACK::ALL_LAYERS ) )
+    if( aTestLayer == F_Mask && !aTestItem->IsOnLayer( F_Cu ) )
         return false;
 
     if( aTestLayer == B_Mask && !aTestItem->IsOnLayer( B_Cu ) )
@@ -388,18 +388,18 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
 }
 
 
-bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aTestNet )
+bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aItem, int aTestNet )
 {
-    if( FOOTPRINT* fp = aMaskItem->GetParentFootprint() )
+    if( FOOTPRINT* fp = aItem->GetParentFootprint() )
     {
         // If we're allowing bridges then we're allowing bridges.  Nothing to check.
         if( fp->AllowSolderMaskBridges() )
             return false;
 
         // Items belonging to a net-tie may share the mask aperture of pads in the same group.
-        if( aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
+        if( aItem->Type() == PCB_PAD_T && fp->IsNetTie() )
         {
-            PAD* pad = static_cast<PAD*>( aMaskItem );
+            PAD* pad = static_cast<PAD*>( aItem );
             std::map<wxString, int> padNumberToGroupIdxMap = fp->MapPadNumbersToNetTieGroups();
             int groupIdx = padNumberToGroupIdxMap[ pad->GetNumber() ];
 
@@ -431,6 +431,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
     PCB_VIA*   via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
     PCB_SHAPE* shape = aItem->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( aItem ) : nullptr;
     int        itemNet = -1;
+
+    DRC_CONSTRAINT      constraint;
+    std::optional<bool> itemConstraintIgnored;
 
     if( aItem->IsConnected() )
         itemNet = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
@@ -550,11 +553,28 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     clearance += otherPad->GetSolderMaskExpansion( aTargetLayer );
                 else if( otherVia && !otherVia->IsTented( aTargetLayer ) )
                     clearance += otherVia->GetSolderMaskExpansion();
-                else if( shape )
+                else if( otherShape )
                     clearance += otherShape->GetSolderMaskExpansion();
 
                 if( itemShape->Collide( otherItemShape.get(), clearance, &actual, &pos ) )
                 {
+                    if( !itemConstraintIgnored.has_value() )
+                    {
+                        constraint = m_drcEngine->EvalRules( BRIDGED_MASK_CONSTRAINT, aItem, nullptr, aRefLayer );
+                        itemConstraintIgnored = constraint.GetSeverity() == RPT_SEVERITY_IGNORE;
+                    }
+
+                    constraint = m_drcEngine->EvalRules( BRIDGED_MASK_CONSTRAINT, other, nullptr, aTargetLayer );
+                    bool otherConstraintIgnored = constraint.GetSeverity() == RPT_SEVERITY_IGNORE;
+
+                    // Mask apertures are ignored on their own; in other cases both participants must be ignored
+                    if(    ( isMaskAperture( aItem ) && itemConstraintIgnored )
+                        || ( isMaskAperture( other ) && otherConstraintIgnored )
+                        || ( itemConstraintIgnored && otherConstraintIgnored ) )
+                    {
+                        return !m_drcEngine->IsCancelled();
+                    }
+
                     wxString    msg;
                     BOARD_ITEM* colliding = nullptr;
 

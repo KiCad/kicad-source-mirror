@@ -465,6 +465,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             tokens = wxT( "annular_width|"
                           "assertion|"
+                          "bridged_mask|"
                           "clearance|"
                           "connection_width|"
                           "courtyard_clearance|"
