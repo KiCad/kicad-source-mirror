@@ -114,6 +114,13 @@ private:
      */
     virtual const wxString getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
                                              bool aMerge_PTH_NPTH ) const override;
+
+    /**
+     * test for an existing via having the given feature IPC4761_FEATURES
+     * @param aFeature is the feature to find
+     * @return true if at least one via having this feature is found in m_holeListBuffer
+     */
+    bool hasViaType( IPC4761_FEATURES aFeature );
 };
 
 #endif  //  #ifndef _GENDRILL_GERBER_WRITER_

@@ -137,6 +137,9 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                     }
                 }
 
+                if( !hasViaType( feature ) )
+                    continue;
+
                 fn = getProtectionFileName( pair, feature );
                 fn.SetPath( aPlotDirectory );
 
@@ -497,4 +500,61 @@ const wxString GERBER_WRITER::getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNP
     fname.SetName( fname.GetName() + wxT( "-drl" ) );
 
     return fname.GetFullPath();
+}
+
+
+bool GERBER_WRITER::hasViaType( IPC4761_FEATURES aFeature )
+{
+    for( auto& hole_descr : m_holeListBuffer )
+    {
+        if( !dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
+        {
+            continue;
+        }
+
+        switch( aFeature )
+        {
+        case IPC4761_FEATURES::FILLED:
+            if( hole_descr.m_Hole_Filled )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::CAPPED:
+            if( hole_descr.m_Hole_Capped )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::COVERED_BACK:
+            if( hole_descr.m_Hole_Bot_Covered )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::COVERED_FRONT:
+            if( hole_descr.m_Hole_Top_Covered )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::PLUGGED_BACK:
+            if( hole_descr.m_Hole_Bot_Plugged )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::PLUGGED_FRONT:
+            if( hole_descr.m_Hole_Top_Plugged )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::TENTED_BACK:
+            if( hole_descr.m_Hole_Bot_Tented )
+                return true;
+            break;
+
+        case IPC4761_FEATURES::TENTED_FRONT:
+            if( hole_descr.m_Hole_Top_Tented )
+                return true;
+            break;
+        }
+    }
+
+    return false;
 }
