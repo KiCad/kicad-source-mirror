@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 19:38+0000\n"
+"PO-Revision-Date: 2025-09-14 08:45+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5278,7 +5278,6 @@ msgstr "Hårkors över hela fönstret"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
 msgstr "45 graders markörlinjer"
 
@@ -9366,7 +9365,6 @@ msgid "Displays the current unit"
 msgstr "Visar den aktuella symbolenheten"
 
 #: common/tool/action_toolbar.cpp:1043
-#, fuzzy
 msgid "Symbol body style selector"
 msgstr "Symbolvariantsväljare"
 
@@ -18037,9 +18035,9 @@ msgid "Symbol %s has input pins in units %s that are not placed"
 msgstr "Symbolen %s har ingångsstift i enheter %s som inte placerats ut"
 
 #: eeschema/erc/erc.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
-msgstr "Symbolen %s har tvåvägs stift i enheter %s som inte placerats ut."
+msgstr "Symbolen %s har tvåvägs stift i enheter %s som inte placerats ut"
 
 #: eeschema/erc/erc.cpp:693
 #, c-format
@@ -18087,9 +18085,9 @@ msgstr ""
 "Symbolbiblioteket '%s' är inte aktiverat i den nuvarande konfigurationen"
 
 #: eeschema/erc/erc.cpp:1565
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'."
+msgstr "Symbolbiblioteket '%s' hittades inte på '%s'"
 
 #: eeschema/erc/erc.cpp:1585
 #, c-format
@@ -18107,34 +18105,34 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Symbol '%s' stämmer inte överens med kopian i bibliotek '%s'"
 
 #: eeschema/erc/erc.cpp:1669
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "'%s' är inte en giltigt fotavtrycksidentifierare."
+msgstr "'%s' är inte en giltigt fotavtrycksidentifierare"
 
 #: eeschema/erc/erc.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'"
 msgstr ""
-"Den aktuella konfigurationen inkluderar inte fotavtrycksbiblioteket '%s'."
+"Den aktuella konfigurationen inkluderar inte fotavtrycksbiblioteket '%s'"
 
 #: eeschema/erc/erc.cpp:1692
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
 msgstr ""
-"Fotavtrycksbiblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
+"Fotavtrycksbiblioteket '%s' är inte aktiverat i den aktuella konfigurationen"
 
 #: eeschema/erc/erc.cpp:1701
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
+msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'"
 
 #: eeschema/erc/erc.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "Tilldelat fotavtryck (%s) matchar inte fotavtrycksfilter (%s)."
+msgstr "Tilldelat fotavtryck (%s) matchar inte fotavtrycksfilter (%s)"
 
 #: eeschema/erc/erc.cpp:1937
 msgid "Checking sheet names..."
@@ -18336,7 +18334,7 @@ msgstr "Jordstift inte anslutet till jordnät"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
-msgstr ""
+msgstr "Stiftnamn påminner om överlagrat stift"
 
 #: eeschema/erc/erc_item.cpp:169 pcbnew/drc/drc_item.cpp:217
 msgid "Unresolved text variable"
@@ -19447,14 +19445,12 @@ msgid "Transform Offset Y"
 msgstr "Y-förskjutning av transformering"
 
 #: eeschema/sch_bus_entry.cpp:420
-#, fuzzy
 msgid "Bus to wire entry"
-msgstr "Buss till ledning-post"
+msgstr "Buss-till-ledningsanslutning"
 
 #: eeschema/sch_bus_entry.cpp:426
-#, fuzzy
 msgid "Bus to bus entry"
-msgstr "Buss till buss-post"
+msgstr "Buss-till-buss-anslutning"
 
 #: eeschema/sch_bus_entry.cpp:505 eeschema/sch_line.cpp:150
 #: eeschema/sch_line.cpp:920 eeschema/tools/sch_edit_tool.cpp:264
@@ -19468,7 +19464,7 @@ msgstr "Buss"
 
 #: eeschema/sch_bus_entry.cpp:509
 msgid "Bus Entry Type"
-msgstr "Bussposttyp"
+msgstr "Bussanslutningstyp"
 
 #: eeschema/sch_bus_entry.cpp:521 eeschema/sch_junction.cpp:312
 #: eeschema/sch_label.cpp:1368 eeschema/sch_line.cpp:945
@@ -20383,9 +20379,9 @@ msgid "Invalid symbol unit number %s"
 msgstr "Ogiltigt symbolenhetsnummer %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol body style number %s"
-msgstr "Ogiltigt symbolenhetsnummer %s"
+msgstr "Ogiltigt symbolvariantnummer %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:863
 #, c-format
@@ -21381,9 +21377,9 @@ msgstr ""
 "\n"
 
 #: eeschema/sch_textbox.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Text box '%s'"
-msgstr "Text '%s'"
+msgstr "Textruta '%s'"
 
 #: eeschema/sch_textbox.cpp:481 pcbnew/pcb_textbox.cpp:497
 msgid "Box Width"
@@ -23842,9 +23838,8 @@ msgid "Flatten Symbol"
 msgstr "Klistra in symbol"
 
 #: eeschema/tools/sch_actions.cpp:277
-#, fuzzy
 msgid "Remove inheritance from symbol"
-msgstr "Ta bort biblioteket från tabellen"
+msgstr "Ta bort härledning från symbol"
 
 #: eeschema/tools/sch_actions.cpp:282
 msgid "Add Symbol to Schematic"
@@ -24234,14 +24229,12 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Tilldela en nätklass till nät som matchar vissa villkor"
 
 #: eeschema/tools/sch_actions.cpp:852
-#, fuzzy
 msgid "Cycle Body Style"
-msgstr "Byt symbolform"
+msgstr "Växla symbolvariant"
 
 #: eeschema/tools/sch_actions.cpp:853
-#, fuzzy
 msgid "Switch between De Morgan (or other) representations"
-msgstr "Växla mellan De Morgan-representationer"
+msgstr "Växla mellan De Morgan-representationer eller andra varianter"
 
 #: eeschema/tools/sch_actions.cpp:859
 msgid "Change to Label"
@@ -24320,24 +24313,26 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Visar stifttabell för massredigering av stift"
 
 #: eeschema/tools/sch_actions.cpp:941
-#, fuzzy
 msgid "Convert Stacked Pins"
-msgstr "Konvertera till spår"
+msgstr "Konvertera överlagrade stift"
 
 #: eeschema/tools/sch_actions.cpp:942
 msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
+"Konvertera multipla stift på samma position till ett enda stift med "
+"överlagrad notation"
 
 #: eeschema/tools/sch_actions.cpp:948
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
 msgid "Explode Stacked Pin"
-msgstr ""
+msgstr "Expandera överlagrat stift"
 
 #: eeschema/tools/sch_actions.cpp:949
 msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
+"Konvertera stift med överlagrad notation till multipla individuella stift"
 
 #: eeschema/tools/sch_actions.cpp:955
 msgid "Break"
@@ -25593,25 +25588,24 @@ msgstr "Redigera stift"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:823
 msgid "At least two pins are needed to convert to stacked pins"
-msgstr ""
+msgstr "Minst två stift behövs för att konvertera till överlagrat stift"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:833
 msgid "All pins must be at the same location"
-msgstr ""
+msgstr "Alla stift måste vara överlagrade på samma position"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "Anslut %s stift %s till %s."
+msgstr "Konvertera %zu överlagrade stift till '%s'"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
 msgid "Select a single pin with stacked notation to explode"
-msgstr ""
+msgstr "Välj ett enda stift med överlagrad notation att expandera"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1052
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Den valda sökvägen innehåller inte giltiga KiCad-inställningar!"
+msgstr "Det valda stiftet har inte en giltig överlagrad notation"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1116
 msgid "Symbol is not derived from another symbol."
@@ -28065,14 +28059,12 @@ msgid "Invalid image format\n"
 msgstr "Ogiltigt bildformat\n"
 
 #: kicad/cli/command_pcb_upgrade.cpp:31
-#, fuzzy
 msgid "Upgrade the board file's format to the latest one"
-msgstr "Importera kortfil från andra applikationer"
+msgstr "Uppdatera mönsterkortfilens format till den senaste versionen"
 
 #: kicad/cli/command_pcb_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the board file to be resaved regardless of versioning"
-msgstr "Tvingar symbolbiblioteket att sparas om oberoende av version"
+msgstr "Tvingar mönsterkortsfilen att sparas om oberoende av version"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -28201,12 +28193,11 @@ msgstr ""
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
-msgstr ""
+msgstr "Uppgradera kretsschemafilens format till den senaste versionen"
 
 #: kicad/cli/command_sch_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the schematic file to be resaved regardless of versioning"
-msgstr "Tvingar symbolbiblioteket att sparas om oberoende av version"
+msgstr "Tvingar kretsschemafilen att sparas om oberoende av version"
 
 #: kicad/cli/command_sym.h:31
 msgid "Symbol and Symbol Libraries"
@@ -28745,71 +28736,76 @@ msgstr ""
 "framtida projekt."
 
 #: kicad/dialogs/template_default_html.h:130
-#, fuzzy
 msgid "Template"
-msgstr "Egna mallar"
+msgstr "Mall"
 
 #: kicad/dialogs/template_default_html.h:131
 msgid ""
 "This project template doesn't include an info page yet. You can still use it "
 "to create a new project."
 msgstr ""
+"Denn projektmall innehåller inte ännu en informationssida. Du kan ändå "
+"använda den för att skapa ett nytt projekt."
 
 #: kicad/dialogs/template_default_html.h:133
 msgid "To use this template:"
-msgstr ""
+msgstr "För att använda denna mall:"
 
 #: kicad/dialogs/template_default_html.h:135
-#, fuzzy
 msgid "Create the project"
-msgstr "Skapa ett nytt projekt"
+msgstr "Skapa projektet"
 
 #: kicad/dialogs/template_default_html.h:135
 msgid ""
 "Click OK below. KiCad will create a new project folder populated with the "
 "contents of this template."
 msgstr ""
+"Klicka OK nedan. KiCad kommer att skapa en ny projektkatalog med innehållet "
+"från denna mall."
 
 #: kicad/dialogs/template_default_html.h:136
-#, fuzzy
 msgid "Open schematic and PCB"
-msgstr "Öppna kretsschema"
+msgstr "Öppna kretsschema och mönsterkort"
 
 #: kicad/dialogs/template_default_html.h:136
 msgid ""
 "Use the Project Manager tree or launch Schematic and PCB editors to begin "
 "designing."
 msgstr ""
+"Använd projekthanterarträdet eller starta kretsschema- och "
+"mönsterkortsredigerarna för att börja designa."
 
 #: kicad/dialogs/template_default_html.h:137
-#, fuzzy
 msgid "Review libraries & settings"
-msgstr "Förhandsgranska inställningar"
+msgstr "Granska bibliotek & inställningar"
 
 #: kicad/dialogs/template_default_html.h:137
 msgid ""
 "Confirm symbol/footprint libraries, design rules, and board stackup match "
 "your needs."
 msgstr ""
+"Bekräfta att symbol-/fotavtrycksbibliotek, designregler och mönsterkorts "
+"lageruppbyggnad passar dina behov."
 
 #: kicad/dialogs/template_default_html.h:141
 msgid "Add an info page later:"
-msgstr ""
+msgstr "Lägg till en informationssida senare:"
 
 #: kicad/dialogs/template_default_html.h:142
-#, fuzzy
 msgid "Create a file at"
-msgstr "Skapade fil '%s'"
+msgstr "Skapa fil på"
 
 #: kicad/dialogs/template_default_html.h:142
 msgid ""
 "inside this template's directory to provide rich documentation, images, or "
 "guidance."
 msgstr ""
+"inuti denna malls katalog för att tillhandahålla omfattande dokumentation, "
+"bilder och anvisningar."
 
 #: kicad/dialogs/template_default_html.h:143
 msgid "You can copy styling from the default pages for consistency."
-msgstr ""
+msgstr "Du kan kopiera stil från de förinställda sidorna för enhetlighet."
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -33756,7 +33752,7 @@ msgid "<br/>*********** Sort on Reference Coordinates ***********"
 msgstr "<br/>*********** Sortera efter referenskoordinater ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
 msgstr "<br/>%d %s X, Y: %s; rundad X, Y: %s"
 
@@ -35673,14 +35669,12 @@ msgid "Update text layers and visibilities"
 msgstr "Uppdatera textlager och synligheter"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update text sizes and styles"
-msgstr "Uppdatera fältstorlekar och stilar"
+msgstr "Uppdatera textstorlekar och stilar"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Update text positions"
-msgstr "Uppdatera fältplacering"
+msgstr "Uppdatera textplacering"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Update text content"
@@ -35769,14 +35763,12 @@ msgid "Update/reset text layers and visibilities"
 msgstr "Uppdatera / återställ textlager och synligheter"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
-msgstr "Uppdatera/återställ fältens textstorlekar och -stilar"
+msgstr "Uppdatera/återställ textstorlekar och -stilar"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text positions"
-msgstr "Uppdatera/återställ fältens placering"
+msgstr "Uppdatera/återställ texternas placering"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
@@ -39907,6 +39899,7 @@ msgstr "Linjebredden måste vara större än 0 för en ofylld rektangel."
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1263
 msgid "Corner radius must be less than or equal to half the smaller side."
 msgstr ""
+"Hörnradie måste vara mindre än eller lika med hälften av den mindre sidan."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
 msgid "Line width must be greater than zero for an unfilled polygon."
@@ -40135,29 +40128,24 @@ msgid "From rules"
 msgstr "Från designregler"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
-#, fuzzy
 msgid "Type I-a (tented top)"
-msgstr "Typ I a ( täckt ovansida )"
+msgstr "Typ I-a (täckt ovansida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
-#, fuzzy
 msgid "Type I-b (tented both sides)"
-msgstr "Typ I b ( täckt på båda sidor )"
+msgstr "Typ I-b (täckt på båda sidor)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
-#, fuzzy
 msgid "Type I-a (tented bottom)"
-msgstr "Typ I a ( täckt undersida )"
+msgstr "Typ I-a (täckt undersida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
-#, fuzzy
 msgid "Type II-a (covered and tented top)"
-msgstr "Typ II a ( torr- och våtfilmstäckt ovansida )"
+msgstr "Typ II-a (torr- och våtfilmstäckt ovansida)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
-#, fuzzy
 msgid "Type II-b (covered and tented both sides)"
-msgstr "Typ II b (torr- och våtfilmstäckt båda sidor )"
+msgstr "Typ II-b (torr- och våtfilmstäckt båda sidor)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type II-a (covered and tented bottom)"
@@ -44310,9 +44298,8 @@ msgid "%s corners differ."
 msgstr "%s hörn är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:601
-#, fuzzy
 msgid "Footprint stackup mode differs."
-msgstr "Fotavtryckstyper är olika."
+msgstr "Fotavtrycks lageruppbyggnadsläge är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:607
 msgid "Footprint layers differ."
@@ -51066,7 +51053,7 @@ msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:615
 msgid "Target group does not have a group."
-msgstr ""
+msgstr "Målgrupp har ingen grupp."
 
 #: pcbnew/tools/multichannel_tool.cpp:632
 #: pcbnew/tools/multichannel_tool.cpp:691
@@ -51218,14 +51205,12 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Lägg till en lageruppbyggnadstabell på ett grafiskt lager"
 
 #: pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Place Point"
-msgstr "Placera stift"
+msgstr "Placera punkt"
 
 #: pcbnew/tools/pcb_actions.cpp:184
-#, fuzzy
 msgid "Add reference/snap points"
-msgstr "Definiera mönsterkortets referenspunkt:"
+msgstr "Lägg till referenspunkter/snäpp-punkter"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Place Reference Images"
@@ -53563,9 +53548,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Visa referenspunkt för fotavtryck och text som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show explicit snap points as crosses"
-msgstr "Visa referenspunkt för fotavtryck och text som ett kors"
+msgstr "Visa explicita snäpp-punkter som kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Locked Item Shadow"
@@ -54395,9 +54379,8 @@ msgid "No Net"
 msgstr "Inget nät"
 
 #: pcbnew/widgets/search_handlers.cpp:579
-#, fuzzy
 msgid "Drills"
-msgstr "Borra"
+msgstr "Borrar"
 
 #: pcbnew/zone.cpp:870
 msgid "No vias"
@@ -54478,7 +54461,7 @@ msgid "Rule Area %s"
 msgstr "Regelområde %s"
 
 #: pcbnew/zone.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
 msgstr "Regelområde '%s' %s"
 
