@@ -478,8 +478,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             [&]( BOARD_ITEM* other ) -> bool
             {
                 FOOTPRINT* itemFP = aItem->GetParentFootprint();
-                PAD*       otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other )
-                                                                 : nullptr;
+                PAD*       otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
                 int        otherNet = -1;
 
                 if( other->IsConnected() )
@@ -552,10 +551,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             // Visitor:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                PAD*     otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other )
-                                                               : nullptr;
-                PCB_VIA* otherVia = other->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( other )
-                                                               : nullptr;
+                PAD*     otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
+                PCB_VIA* otherVia = other->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( other ) : nullptr;
                 auto     otherShape = other->GetEffectiveShape( aTargetLayer );
                 int      otherNet = -1;
 
@@ -604,7 +601,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     {
                         if( checkMaskAperture( aItem, other, aRefLayer, otherNet, &colliding ) )
                         {
-                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                             drce->SetErrorMessage( msg );
                             drce->SetItems( aItem, colliding, other );
@@ -616,7 +613,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     {
                         if( checkMaskAperture( other, aItem, aRefLayer, itemNet, &colliding ) )
                         {
-                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                             drce->SetErrorMessage( msg );
                             drce->SetItems( other, colliding, aItem );
@@ -626,7 +623,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     }
                     else if( checkItemMask( other, itemNet ) )
                     {
-                        auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                         drce->SetErrorMessage( msg );
                         drce->SetItems( aItem, other );
@@ -737,59 +734,56 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto returns = tp.submit_loop( 0, test_items.size(), [&]( size_t i ) -> bool
+    auto returns = tp.submit_loop( 0, test_items.size(),
+            [&]( size_t i ) -> bool
+            {
+                BOARD_ITEM* item = test_items[ i ];
+
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
+                    return false;
+
+                BOX2I itemBBox = item->GetBoundingBox();
+
+                if( item->IsOnLayer( F_Mask ) && !isNullAperture( item ) )
+                {
+                    // Test for aperture-to-aperture collisions
+                    testItemAgainstItems( item, itemBBox, F_Mask, F_Mask );
+
+                    // Test for aperture-to-zone collisions
+                    testMaskItemAgainstZones( item, itemBBox, F_Mask, F_Cu );
+                }
+                else if( item->IsOnLayer( PADSTACK::ALL_LAYERS ) )
+                {
+                    // Test for copper-item-to-aperture collisions
+                    testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
+                }
+
+                if( item->IsOnLayer( B_Mask ) && !isNullAperture( item ) )
+                {
+                    // Test for aperture-to-aperture collisions
+                    testItemAgainstItems( item, itemBBox, B_Mask, B_Mask );
+
+                    // Test for aperture-to-zone collisions
+                    testMaskItemAgainstZones( item, itemBBox, B_Mask, B_Cu );
+                }
+                else if( item->IsOnLayer( B_Cu ) )
+                {
+                    // Test for copper-item-to-aperture collisions
+                    testItemAgainstItems( item, itemBBox, B_Cu, B_Mask );
+                }
+
+                ++count;
+
+                return true;
+            } );
+
+    for( auto& ret : returns )
     {
-        BOARD_ITEM* item = test_items[ i ];
-
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
-            return false;
-
-        BOX2I itemBBox = item->GetBoundingBox();
-
-        if( item->IsOnLayer( F_Mask ) && !isNullAperture( item ) )
-        {
-            // Test for aperture-to-aperture collisions
-            testItemAgainstItems( item, itemBBox, F_Mask, F_Mask );
-
-            // Test for aperture-to-zone collisions
-            testMaskItemAgainstZones( item, itemBBox, F_Mask, F_Cu );
-        }
-        else if( item->IsOnLayer( PADSTACK::ALL_LAYERS ) )
-        {
-            // Test for copper-item-to-aperture collisions
-            testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
-        }
-
-        if( item->IsOnLayer( B_Mask ) && !isNullAperture( item ) )
-        {
-            // Test for aperture-to-aperture collisions
-            testItemAgainstItems( item, itemBBox, B_Mask, B_Mask );
-
-            // Test for aperture-to-zone collisions
-            testMaskItemAgainstZones( item, itemBBox, B_Mask, B_Cu );
-        }
-        else if( item->IsOnLayer( B_Cu ) )
-        {
-            // Test for copper-item-to-aperture collisions
-            testItemAgainstItems( item, itemBBox, B_Cu, B_Mask );
-        }
-
-        ++count;
-
-        return true;
-    } );
-
-    for( size_t i = 0; i < returns.size(); ++i )
-    {
-        auto& ret = returns[ i ];
-
         if( !ret.valid() )
             continue;
 
         while( ret.wait_for( std::chrono::milliseconds( 100 ) ) == std::future_status::timeout )
-        {
             reportProgress( count, test_items.size() );
-        }
     }
 }
 
