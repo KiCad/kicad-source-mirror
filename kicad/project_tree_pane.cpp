@@ -2297,7 +2297,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.submit_task( [this]()
+    tp.detach_task( [this]()
     {
         KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
@@ -2327,7 +2327,7 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
     updateTreeCache();
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.submit_task( [this]() { updateGitStatusIconMap(); } );
+    tp.detach_task( [this]() { updateGitStatusIconMap(); } );
 }
 
 void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
