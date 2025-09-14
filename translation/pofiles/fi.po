@@ -20,16 +20,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-06-22 20:04+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2025-09-15 10:02+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -132,7 +132,7 @@ msgstr "Viimeisin renderointiaika %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:803
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "OpenGL-virhe näytön ulkopuolisen renderöinnin aikana 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:967
 #, c-format
@@ -240,15 +240,13 @@ msgstr "3D-Ruudukko"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Kierrä +"
+msgstr "Käännä piirilevyä"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Siirrä piirilevyä ylöspäin"
+msgstr "Siirrä piirilevyä"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -405,14 +403,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Kopioi nykyinen 3D-kuva leikepöydälle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Muokkaa kuvaa"
+msgstr "Vie kuva..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Vie Nykyinen Näkymä PNG-muodossa..."
+msgstr "Vie nykyinen näkymä kuvatiedostona"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -605,9 +601,8 @@ msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr "Näytä 3D-mallin rajoitusruudut reaaliaikaisessa renderöijässä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Näytä Verkkonavigaattori"
+msgstr "Näytä 3D-Katseluohjelma"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:374
 msgid "Show Appearance Manager"
@@ -627,14 +622,12 @@ msgid "Show board body"
 msgstr "Näytä levyn runko"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Päällystetyt reiät"
+msgstr "Pinnoitetut läpiviennit"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Näytä läpireikäanturat"
+msgstr "Näytä läpireikien ja läpivientien pinnoitetut seinämät"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -694,229 +687,184 @@ msgid "Show user ECO2 layer"
 msgstr "Näytä käyttäjän ECO2-taso"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Käyttäjän määrittelemä taso 1"
+msgstr "Näytä käyttäjän määrittelemä taso 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Käyttäjän määrittelemä taso 2"
+msgstr "Näytä käyttäjän määrittelemä taso 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Käyttäjän määrittelemä taso 3"
+msgstr "Näytä käyttäjän määrittelemä taso 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Käyttäjän määrittelemä taso 4"
+msgstr "Näytä käyttäjän määrittelemä taso 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Käyttäjän määrittelemä taso 5"
+msgstr "Näytä käyttäjän määrittelemä taso 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Käyttäjän määrittelemä taso 6"
+msgstr "Näytä käyttäjän määrittelemä taso 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Käyttäjän määrittelemä taso 7"
+msgstr "Näytä käyttäjän määrittelemä taso 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Käyttäjän määrittelemä taso 8"
+msgstr "Näytä käyttäjän määrittelemä taso 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Käyttäjän määrittelemä taso 9"
+msgstr "Näytä käyttäjän määrittelemä taso 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Käyttäjän määrittelemä taso 1"
+msgstr "Näytä käyttäjän määrittelemä taso 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Käyttäjän määrittelemä taso 1"
+msgstr "Näytä käyttäjän määrittelemä taso 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Käyttäjän määrittelemä taso 12"
+msgstr "Näytä käyttäjän määrittelemä taso 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Käyttäjän määrittelemä taso 13"
+msgstr "Näytä käyttäjän määrittelemä taso 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Käyttäjän määrittelemä taso 14"
+msgstr "Näytä käyttäjän määrittelemä taso 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Käyttäjän määrittelemä taso 15"
+msgstr "Näytä käyttäjän määrittelemä taso 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Käyttäjän määrittelemä taso 16"
+msgstr "Näytä käyttäjän määrittelemä taso 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Käyttäjän määrittelemä taso 17"
+msgstr "Näytä käyttäjän määrittelemä taso 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Käyttäjän määrittelemä taso 18"
+msgstr "Näytä käyttäjän määrittelemä taso 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Käyttäjän määrittelemä taso 19"
+msgstr "Näytä käyttäjän määrittelemä taso 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Käyttäjän määrittelemä taso 20"
+msgstr "Näytä käyttäjän määrittelemä taso 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Käyttäjän määrittelemä taso 21"
+msgstr "Näytä käyttäjän määrittelemä taso 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Käyttäjän määrittelemä taso 22"
+msgstr "Näytä käyttäjän määrittelemä taso 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Käyttäjän määrittelemä taso 23"
+msgstr "Näytä käyttäjän määrittelemä taso 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Käyttäjän määrittelemä taso 24"
+msgstr "Näytä käyttäjän määrittelemä taso 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Käyttäjän määrittelemä taso 25"
+msgstr "Näytä käyttäjän määrittelemä taso 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Käyttäjän määrittelemä taso 26"
+msgstr "Näytä käyttäjän määrittelemä taso 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Käyttäjän määrittelemä taso 27"
+msgstr "Näytä käyttäjän määrittelemä taso 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Käyttäjän määrittelemä taso 28"
+msgstr "Näytä käyttäjän määrittelemä taso 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Käyttäjän määrittelemä taso 29"
+msgstr "Näytä käyttäjän määrittelemä taso 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Käyttäjän määrittelemä taso 30"
+msgstr "Näytä käyttäjän määrittelemä taso 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Käyttäjän määrittelemä taso 31"
+msgstr "Näytä käyttäjän määrittelemä taso 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Käyttäjän määrittelemä taso 32"
+msgstr "Näytä käyttäjän määrittelemä taso 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Käyttäjän määrittelemä taso 33"
+msgstr "Näytä käyttäjän määrittelemä taso 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Käyttäjän määrittelemä taso 34"
+msgstr "Näytä käyttäjän määrittelemä taso 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Käyttäjän määrittelemä taso 35"
+msgstr "Näytä käyttäjän määrittelemä taso 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Käyttäjän määrittelemä taso 36"
+msgstr "Näytä käyttäjän määrittelemä taso 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Käyttäjän määrittelemä taso 37"
+msgstr "Näytä käyttäjän määrittelemä taso 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Käyttäjän määrittelemä taso 38"
+msgstr "Näytä käyttäjän määrittelemä taso 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Käyttäjän määrittelemä taso 39"
+msgstr "Näytä käyttäjän määrittelemä taso 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Käyttäjän määrittelemä taso 40"
+msgstr "Näytä käyttäjän määrittelemä taso 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Käyttäjän määrittelemä taso 41"
+msgstr "Näytä käyttäjän määrittelemä taso 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Käyttäjän määrittelemä taso 42"
+msgstr "Näytä käyttäjän määrittelemä taso 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Käyttäjän määrittelemä taso 43"
+msgstr "Näytä käyttäjän määrittelemä taso 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Käyttäjän määrittelemä taso 44"
+msgstr "Näytä käyttäjän määrittelemä taso 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Käyttäjän määrittelemä taso 45"
+msgstr "Näytä käyttäjän määrittelemä taso 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 msgid "Through-hole Models"
@@ -985,9 +933,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Älä leikkaa silkkikerroksia piirilevyn ääriviivoihin"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Verkkonavigaattori"
+msgstr "3D-Katselin"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
 msgid "Background Start"
@@ -1012,15 +959,15 @@ msgid "Use board stackup colors"
 msgstr "Käytä piirilevyn kerrospinon värejä"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Käytä piirilevyeditorin kuparivärejä"
+msgstr "Käytä Piirilevyeditorin kuparivärejä"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Käytä piirilevyeditorin kuparivärejä (vain openGL)"
+msgstr ""
+"Käytä kuparikerroksille piirilevyeditorin tasovärejä (vain reaaliaikaisessa "
+"renderöinnissä)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1182,14 +1129,12 @@ msgid "(unsaved)"
 msgstr "(tallentamaton)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Vie 3D-malli"
+msgstr "Vie 3D-näkymä"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Kuvakoko:"
+msgstr "Kuvakoko"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1406,9 +1351,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Nasta"
+msgstr "in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1419,34 +1363,29 @@ msgid "Height:"
 msgstr "Korkeus:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "3R ratkaisu:"
+msgstr "Resoluutio"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "3R ratkaisu:"
+msgstr "X resoluutio:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "pikseliä"
+msgstr "pikseliä/in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "pikseliä"
+msgstr "pikseliä/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "3R ratkaisu:"
+msgstr "Y resoluutio:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d pikseliä"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1550,9 +1489,8 @@ msgid "Show model bounding boxes"
 msgstr "Näytä mallin rajausalueet"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "Näytä kuparin ja tekniikkakerroksen paksuus (hyvin hidas)"
+msgstr "Näytä kupari ja tekniikkakerroksen paksuus (hyvin hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1600,14 +1538,12 @@ msgid "Disable thickness"
 msgstr "Poista paksuus käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Poista reiät käytöstä"
+msgstr "Poista mikroläpivientireiät käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Poista reiät käytöstä"
+msgstr "Poista kaikki pinnoitetut reiät käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
@@ -1931,16 +1867,12 @@ msgid "Errors"
 msgstr "Virheet"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Korvaa ja Etsi Seuraava"
+msgstr "Korvataanko ladattu tiedosto?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"Tiedostopäätteen vaihto muuttaa tiedosto tyyppiä.\n"
-"Jatketaanko?"
+msgstr "Tiedosto on jo ladattu. Haluatko korvata sen?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2125,6 +2057,7 @@ msgstr "Vie Leikepöydälle"
 #: bitmap2component/bitmap2component.cpp:404
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Mustavalkoisessa kuvassa ei ole muunnettavaa muotoa: ääriviivaa ei luotu."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -2341,9 +2274,8 @@ msgid "Design block does not have a valid library ID."
 msgstr "Suunnittelulohkolla ei ole kelvollista kirjastotunnusta."
 
 #: common/design_block_io.cpp:375
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Suunnittelulohkolla ei ole kelvollista kirjastotunnusta."
+msgstr "Suunnittelulohkolla ei ole kytkentäkaaviota tai piirilevyä."
 
 #: common/design_block_io.cpp:384
 #, c-format
@@ -2351,9 +2283,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Kytkentäkaaviolähdetiedostoa '%s' ei ole olemassa."
 
 #: common/design_block_io.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Kytkentäkaaviolähdetiedostoa '%s' ei ole olemassa."
+msgstr "Piirilevyn lähdetiedostoa '%s' ei ole olemassa."
 
 #: common/design_block_io.cpp:402
 #, c-format
@@ -2367,10 +2299,9 @@ msgstr ""
 "Kytkentäkaaviotiedostoa '%s' ei voitu tallentaa suunnittelulohkoksi '%s'."
 
 #: common/design_block_io.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr ""
-"Kytkentäkaaviotiedostoa '%s' ei voitu tallentaa suunnittelulohkoksi '%s'."
+msgstr "Piirilevytiedostoa '%s' ei voitu tallentaa suunnittelulohkoksi '%s'."
 
 #: common/design_block_io.cpp:474
 #, c-format
@@ -2548,7 +2479,7 @@ msgstr "Paketin kehittäjät"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI-objektit käytössä %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -2862,9 +2793,9 @@ msgid "Path"
 msgstr "Polku"
 
 #: common/dialogs/dialog_design_block_properties.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Laiton merkki '%c' lempinimessä '%s'."
+msgstr "Laiton merkki '%c' nimessä '%s'."
 
 #: common/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
@@ -2876,9 +2807,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Päällekkäisiä kenttiä ei sallita."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Poista kenttä"
+msgstr "Vakiokentät"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
@@ -2941,14 +2871,12 @@ msgid "Description:"
 msgstr "Selite:"
 
 #: common/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Suunnittelun lohkokirjastot"
+msgstr "Suunnittelulohkon Ominaisuudet"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Poista liitos"
+msgstr "Luo tietokantayhteys"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2960,9 +2888,8 @@ msgid "Custom"
 msgstr "Mukautettu"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Lähteen nimi"
+msgstr "Tietolähteen nimi"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2974,36 +2901,30 @@ msgid "Password"
 msgstr "Salasana"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Aika"
+msgstr "Aikakatkaisu"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Yhteysmerkkijono:"
+msgstr "Yhteysmerkkijono"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testaa yhteys"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Taulukko"
+msgstr "Taulukot"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Ei yhteyttä tietokantaan"
+msgstr "Tietokantaan ei voida muodostaa yhteyttä"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Datatiedostovirhe."
+msgstr "Tietokantavirhe"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -3287,9 +3208,9 @@ msgid "Grid Settings"
 msgstr "Ruudukon Asetukset"
 
 #: common/dialogs/dialog_group_properties.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Virheellinen kirjastotunniste"
+msgstr "Virheellinen kirjastolinkki: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:138
 msgid "Edit Group Properties"
@@ -3597,7 +3518,7 @@ msgstr "Vie muille lehdille"
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:244
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Drawing Sheet"
-msgstr "Piirustuslehti"
+msgstr "Piirustusarkki"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:49
@@ -3805,27 +3726,26 @@ msgid "Close"
 msgstr "Sulje"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "Varoitus: mittakaava ei ole numero."
+msgstr "Varoitus: mukautettu mittakaava ei ole numero."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"Varoitus: asteikko asetettu erittäin suurelle arvolle.\n"
-"Se kiinnitetään kohtaan %f."
+"Varoitus: mukautettu mittakaava on liian suuri.\n"
+"Se rajoitetaan arvoon %f."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"Varoitus: asteikko asetettu erittäin pienelle arvolle.\n"
-"Se kiinnitetään kohtaan %f."
+"Varoitus: mukautettu skaala on liian pieni.\n"
+"Se rajoitetaan arvoon %f."
 
 #: common/dialogs/dialog_print_generic.cpp:227
 #: common/dialogs/dialog_print_generic.cpp:284
@@ -4299,19 +4219,16 @@ msgid "Add"
 msgstr "Lisää"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Ota suunnittelusääntöjen tarkistus (DRC) käyttöön"
+msgstr "Ota Git-seuranta käyttöön"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Automaattireititetyt liuskat"
+msgstr "Etäseuranta"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Päivitä kentät"
+msgstr "Päivitysväli:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4479,9 +4396,8 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Laitteistokiihdytetytgrafiikat (suositellaan)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
-#, fuzzy
 msgid "Fallback Graphics"
-msgstr "Varagrafiikka"
+msgstr "Vaihtoehtoinen grafiikka"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
 msgid ""
@@ -4492,9 +4408,8 @@ msgstr ""
 "laitteistokiihdytysvaatimuksia)"
 
 #: common/dialogs/panel_common_settings_base.cpp:58
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "Reunojenpehmennys:"
+msgstr "Reunojen pehmennys:"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "No Antialiasing"
@@ -4674,9 +4589,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Korkea kontrasti moodi himmennyskerroin:"
 
 #: common/dialogs/panel_common_settings_base.cpp:296
-#, fuzzy
 msgid "Scaling"
-msgstr "Mittakaava:"
+msgstr "Skaalaus"
 
 #: common/dialogs/panel_common_settings_base.cpp:309
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4684,9 +4598,8 @@ msgid "Editing"
 msgstr "Muokkaus"
 
 #: common/dialogs/panel_common_settings_base.cpp:319
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Siirrä hiiren kohdistin liikuteltavan kohteen keskelle"
+msgstr "Siirrä osoitin siirretyn objektin ankkurikohtaan"
 
 #: common/dialogs/panel_common_settings_base.cpp:323
 msgid "First hotkey selects tool"
@@ -4915,9 +4828,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Useat kirjastot eivät voi jakaa samaa lempinimeä ('%s')."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "Symbolikirjaston \"%s\" lataaminen epäonnistui."
+msgstr "Suunnittelulohkokirjaston '%s' lataus epäonnistui."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:589
 #: eeschema/dialogs/panel_sym_lib_table.cpp:579
@@ -5181,12 +5094,18 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Poistettuihin upotettuihin tiedostoihin viitataan myös joissakin "
+"jalanjäljissä.\n"
+"Poistetaanko myös jalanjäljistä?"
 
 #: common/dialogs/panel_embedded_files.cpp:209
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Poistettuihin upotettuihin tiedostoihin viitataan myös joissakin symboleissa."
+"\n"
+"Poistetaanko myös symboleista?"
 
 #: common/dialogs/panel_embedded_files.cpp:326
 #: common/dialogs/panel_embedded_files.cpp:434
@@ -5258,9 +5177,8 @@ msgid "Failed to write file '%s'."
 msgstr "Tiedoston '%s' kirjoittaminen epäonnistui."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Kopioi upotettu viite"
+msgstr "Upotettu viite"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -5375,9 +5293,8 @@ msgstr "Koko ikkunan hiusristikot"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
-msgstr "45 astetta"
+msgstr "45 asteen ristikot"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
@@ -5496,9 +5413,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Toiminta | Oletuspikapainike | Kuvaus"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "(Anturalla on oltava positiivinen koko)"
+msgstr "Skaalan on oltava positiivinen luku."
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5531,17 +5447,15 @@ msgstr "Muunna harmaasävyksi"
 #: common/dialogs/panel_maintenance.cpp:88
 #, fuzzy
 msgid "File history cleared."
-msgstr "Tiedostohistorian koko:"
+msgstr "Tiedostohistoria tyhjennetty:"
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "Älä näytä uudelleen"
+msgstr "\"Älä näytä uudelleen\" -valintaikkunat nollataan."
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "Palauta oletukset"
+msgstr "Kaikki dialogi-ikkunat palautetaan oletusasetuksiin."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -5560,23 +5474,20 @@ msgid "days"
 msgstr "päivät"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "Tyhjennä Viimeisimmät Tiedostot"
+msgstr "Tyhjennä \"Avaa viimeisimmät\" -historia"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "Palauta \"Älä näytä uudelleen\" -valintaikkunat"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "Palauta %s Oletusasetuksille"
+msgstr "Palauta kaikki valintaikkunat oletusasetuksiin"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "Palauta %s Oletusasetuksille"
+msgstr "Palauta kaikki ohjelma-asetukset oletusarvoihin"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5719,7 +5630,7 @@ msgstr "Oikea painike vetää:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Panoroi hiiren liikkeessä näppäimellä:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -5928,14 +5839,12 @@ msgstr "Python-tulkin tila"
 
 #: common/dialogs/panel_printer_list.cpp:155
 #: common/dialogs/panel_printer_list.cpp:176
-#, fuzzy
 msgid "Default printer"
-msgstr "Oletuskirjasin"
+msgstr "Oletustulostin"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "Tulosta"
+msgstr "Tulostimet"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:235
@@ -6022,7 +5931,7 @@ msgstr "Verkkoluokan nimi on jo käytössä."
 #: common/dialogs/panel_setup_netclasses.cpp:597
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "Vapaa tila oli liian suuri. Se on lyhennetty arvoon %s."
 
 #: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Minimum copper clearance"
@@ -6128,9 +6037,8 @@ msgid "DP Gap"
 msgstr "DP-aukko"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Delay Profile"
-msgstr "Viiveaika:"
+msgstr "Viiveprofiili"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -6233,42 +6141,36 @@ msgstr ""
 "Haluatko ladata ne uudelleen?"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "Panorointi ja zoomaus"
+msgstr "Panoroi ja Käännä"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Animaationopeus:"
+msgstr "Käännösnopeus:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "Nuolen suunta:"
+msgstr "Käänteinen pyörimissuunta"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "Säilytä päätepisteet tai aloituspisteen suunta"
+msgstr "Vaihda pyörimissuunta"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "Automaattinen panoroinnin nopeus:"
+msgstr "Panorointinopeus:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Käänteinen pystysuuntainen panorointisuunta"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Käänteinen vaakasuuntainen panorointisuunta"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "Poista valinnasta"
+msgstr "Käänteinen zoomaussuunta"
 
 #: common/dialogs/panel_text_variables.cpp:114
 msgid ""
@@ -6315,28 +6217,24 @@ msgstr "Oikea"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Yläpää"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Ylin kerros"
+msgstr "Ylä varalla oleva"
 
 #: common/dialogs/panel_toolbar_customization.cpp:143
 #: common/dialogs/panel_toolbar_customization_base.cpp:71
-#, fuzzy
 msgid "Insert separator"
-msgstr "Solun erottimet"
+msgstr "Aseta erotin"
 
 #: common/dialogs/panel_toolbar_customization.cpp:149
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Lisää alkuun"
+msgstr "Aseta välikappale"
 
 #: common/dialogs/panel_toolbar_customization.cpp:150
-#, fuzzy
 msgid "Insert group"
-msgstr "Syötä ryhmä"
+msgstr "Aseta ryhmä"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:440
 #: common/eda_item.cpp:464 eeschema/sch_group.cpp:335 pcbnew/pcb_group.cpp:392
@@ -6345,9 +6243,8 @@ msgid "Group"
 msgstr "Ryhmä"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Mukautettu tasosarja"
+msgstr "Mukauta työkalupalkkeja"
 
 #: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:511
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -6493,9 +6390,8 @@ msgid "Text '%s'"
 msgstr "Teksti \"%s\""
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
-#, fuzzy
 msgid "Imported shape"
-msgstr "Tuotu Muoto"
+msgstr "Tuotu muoto"
 
 #: common/drawing_sheet/ds_draw_item.cpp:437 eeschema/sch_shape.cpp:365
 #, c-format
@@ -6522,9 +6418,9 @@ msgid "Expecting '%s'"
 msgstr "Odottaa '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Odottaa '%s'"
+msgstr "Odotettiin %s. Sain '%s'."
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -6547,9 +6443,8 @@ msgid "need a number for '%s'"
 msgstr "tarvitset numeron \"%s\""
 
 #: common/dsnlexer.cpp:733
-#, fuzzy
 msgid "Unterminated delimited string"
-msgstr "Päättämätön rajattu merkkijono"
+msgstr "Päättämätön erotinmerkeillä merkitty merkkijono"
 
 #: common/dsnlexer.cpp:755
 msgid "String delimiter must be a single character of ', \", or $"
@@ -6636,9 +6531,8 @@ msgstr "Värit"
 #: common/eda_base_frame.cpp:1316 common/eda_base_frame.cpp:1332
 #: common/eda_base_frame.cpp:1343 common/eda_base_frame.cpp:1367
 #: common/eda_base_frame.cpp:1392
-#, fuzzy
 msgid "Toolbars"
-msgstr "&Työkalut"
+msgstr "Työkalurivit"
 
 #: common/eda_base_frame.cpp:1282 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:616 eeschema/menubar.cpp:132
@@ -6720,9 +6614,8 @@ msgid "Packages and Updates"
 msgstr "Paketit ja päivitykset"
 
 #: common/eda_base_frame.cpp:1409
-#, fuzzy
 msgid "Maintenance"
-msgstr "Ylläpitäjä"
+msgstr "Ylläpito"
 
 #: common/eda_base_frame.cpp:1491 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:444
@@ -6773,9 +6666,8 @@ msgstr "Tuntematon MIME-tyyppi dokumentaatiotiedostolle '%s'"
 
 #: common/eda_draw_frame.cpp:228 common/tool/action_toolbar.cpp:1046
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
-msgstr "Ohita Lukitukset"
+msgstr "Ohita lukot"
 
 #: common/eda_draw_frame.cpp:422 common/tool/actions.cpp:1098
 msgid "Edit Grids..."
@@ -6947,9 +6839,8 @@ msgid "Target"
 msgstr "Kohde"
 
 #: common/eda_item.cpp:436 pcbnew/pcb_point.cpp:140
-#, fuzzy
 msgid "Point"
-msgstr "Pisteet"
+msgstr "Piste"
 
 #: common/eda_item.cpp:437 pcbnew/tools/board_inspection_tool.cpp:824
 msgid "Zone"
@@ -7182,23 +7073,20 @@ msgstr "Bézier"
 #: common/eda_shape.cpp:2671
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#, fuzzy
 msgid "Hatch"
-msgstr "Täyttöviivoitettu"
+msgstr "Täyttöviivoitus"
 
 #: common/eda_shape.cpp:2672
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "Päinvastainen"
+msgstr "Käänteinen täyttöviivoitus"
 
 #: common/eda_shape.cpp:2673
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "Yliviivaa"
+msgstr "Ristiviivoitus"
 
 #: common/eda_shape.cpp:2709 eeschema/sch_shape.cpp:589
 msgid "Shape Properties"
@@ -7241,9 +7129,8 @@ msgstr "Loppu Y"
 #: common/eda_shape.cpp:2768 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
 #: pcbnew/pcb_textbox.cpp:844
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Kulman säde %"
+msgstr "Kulman säde"
 
 #: common/eda_shape.cpp:2799 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:649 eeschema/sch_line.cpp:1253
@@ -7412,9 +7299,8 @@ msgid "Font"
 msgstr "Kirjasin"
 
 #: common/eda_text.cpp:1375
-#, fuzzy
 msgid "Auto Thickness"
-msgstr "Väylän Paksuus"
+msgstr "Automaatinen paksuus"
 
 #: common/eda_text.cpp:1378 eeschema/sch_field.cpp:1646
 #: eeschema/sch_label.cpp:2396 eeschema/sch_tablecell.cpp:231
@@ -7524,16 +7410,15 @@ msgstr ""
 "nimeltä footprints.pretty."
 
 #: common/env_vars.cpp:135
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
-msgstr "Hakemisto, joka sisältää KiCadin kanssa asennetut komentotiedostot"
+msgstr ""
+"Hakemisto, joka sisältää KiCadin mukana asennetut koko järjestelmän kattavat "
+"skriptit."
 
 #: common/env_vars.cpp:138
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
 msgstr ""
-"Hakemisto, joka sisältää KiCadin kanssa asennetut käyttäjäkohtaiset "
-"komentotiedostot"
+"Hakemisto, joka sisältää KiCadin mukana asennetut käyttäjäkohtaiset skriptit."
 
 #: common/env_vars.cpp:141
 #, c-format
@@ -7705,9 +7590,8 @@ msgid "Could not read file: %s"
 msgstr "Tiedostoa %s ei voitu lukea"
 
 #: common/git/git_branch_handler.cpp:76
-#, fuzzy
 msgid "No repository available"
-msgstr "Pakettipäivityksiä ei ole saatavilla"
+msgstr "Ei saatavilla olevaa arkistoa"
 
 #: common/git/git_branch_handler.cpp:85
 #, c-format
@@ -7715,19 +7599,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Haaran '%s' haku epäonnistui: %s"
 
 #: common/git/git_branch_handler.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "päähaaraa ei löytynyt kohteelle '%s'"
+msgstr "Haaran otsikkoa '%s' ei löytynyt: %s"
 
 #: common/git/git_branch_handler.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Siirtyminen haaraan '%s' epäonnistui"
+msgstr "Vaihto haaraan '%s' epäonnistui: %s"
 
 #: common/git/git_branch_handler.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Haaran '%s' HEAD-viitteen päivittäminen epäonnistui"
+msgstr "Haaran '%s' HEAD-viittauksen päivittäminen epäonnistui: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7785,18 +7669,18 @@ msgid "Failed to create commit: %s"
 msgstr "Ei onnistunut luoda commit: %s"
 
 #: common/git/git_init_handler.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Git-projektin alustaminen epäonnistui."
+msgstr "Git-arkiston alustaminen epäonnistui: %s"
 
 #: common/git/git_init_handler.cpp:87
 msgid "No repository available to set up remote"
-msgstr ""
+msgstr "Ei käytettävissä olevaa tietovarastoa etäkäytön määrittämiseen"
 
 #: common/git/git_init_handler.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "Ei onnistunut luoda commit: %s"
+msgstr "Etäkäytön luominen epäonnistui: %s"
 
 #: common/git/git_pull_handler.cpp:67
 #, c-format
@@ -7830,9 +7714,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Virheellinen HEAD. Ei voi yhdistää."
 
 #: common/git/git_pull_handler.cpp:182
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Arkistoindeksiä ei voitu hakea"
+msgstr "Ei voitu käyttää tietovaraston määrityksiä"
 
 #: common/git/git_pull_handler.cpp:252 common/git/git_push_handler.cpp:92
 msgid "Could not get repository head"
@@ -7858,24 +7741,21 @@ msgid "Failed to perform checkout operation."
 msgstr "Tarkistustoiminnon suorittaminen epäonnistui."
 
 #: common/git/git_pull_handler.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Haaran '%s' HEAD-viitteen päivittäminen epäonnistui"
+msgstr "Viitteen '%s' päivittäminen osoittamaan kohteeseen '%s' epäonnistui."
 
 #: common/git/git_pull_handler.cpp:351
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Arkiston kloonaaminen epäonnistui."
+msgstr "Tietovaraston tilan tyhjentäminen pikakelauksen jälkeen epäonnistui."
 
 #: common/git/git_pull_handler.cpp:360
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Git-projektin alustaminen epäonnistui."
+msgstr "Versioselaimen alustaminen epäonnistui."
 
 #: common/git/git_pull_handler.cpp:369
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Muutosten työntäminen etätietovarastoon epäonnistui."
+msgstr "Viittauksen siirtäminen versioselaimelle epäonnistui."
 
 #: common/git/git_pull_handler.cpp:384
 #, fuzzy, c-format
@@ -7904,7 +7784,7 @@ msgstr "Lisätty"
 
 #: common/git/git_pull_handler.cpp:553
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Uudelleenpohjustuksen aikana havaitut ristiriidat"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7951,9 +7831,8 @@ msgid "[updated] %s"
 msgstr "[päivitetty] %s"
 
 #: common/git/kicad_git_common.cpp:992
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Luominen ei onnistu"
+msgstr "Todennus ei onnistu"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -9496,7 +9375,7 @@ msgstr "Komentosarjakonsoli"
 
 #: common/tool/action_toolbar.cpp:1034
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "Alue, jossa IPC/Scripting-toimintopainikkeita pidetään"
 
 #: common/tool/action_toolbar.cpp:1036
 #, fuzzy
@@ -9744,11 +9623,11 @@ msgstr "Piirrä valintaan suorakulmio"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "Lasso"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Aseta valintatila käyttämään monikulmiolassoa"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10065,6 +9944,7 @@ msgstr "Zoomaa Sopivaksi"
 #: common/tool/actions.cpp:714
 msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
+"Zoomaa työlista-alueeseen, jos sellainen on olemassa tai sitä on muokattu"
 
 #: common/tool/actions.cpp:721
 #, fuzzy
@@ -10146,7 +10026,7 @@ msgstr "Zoomaa Valintaan"
 
 #: common/tool/actions.cpp:810
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "Zoomaa hiirellä vetämällä luotuun aluevalintaan"
 
 #: common/tool/actions.cpp:818 common/widgets/mathplot.cpp:1397
 msgid "Undo Last Zoom"
@@ -10239,11 +10119,12 @@ msgstr "Symbolikenttätaulukko"
 
 #: common/tool/actions.cpp:965
 msgid "Library Fields Table of Related Symbols"
-msgstr ""
+msgstr "Kirjastokenttien taulukko aiheeseen liittyvistä symboleista"
 
 #: common/tool/actions.cpp:966
 msgid "Edit a table of fields of all symbols related to the selected symbol"
 msgstr ""
+"Muokkaa kaikkien valittuun symboliin liittyvien symbolien kenttien taulukkoa"
 
 #: common/tool/actions.cpp:972
 msgid "Library Tree"
@@ -10390,7 +10271,7 @@ msgstr "Näytä hiusristikko, vaikka ei piirretä esineitä"
 
 #: common/tool/actions.cpp:1189
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Käytä pieniä ristikoita, jotka on kohdistettu 0 ja 90 asteen kulmiin"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
@@ -10398,15 +10279,15 @@ msgstr "Kokoruudun hiusristikko"
 
 #: common/tool/actions.cpp:1197
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Näytä koko ikkunan ristikko kohdistettuna 0 ja 90 asteeseen"
 
 #: common/tool/actions.cpp:1204
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "45 asteen ristikko"
 
 #: common/tool/actions.cpp:1205
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "Näytä koko ikkunan ristikot 45 ja 135 asteen kulmissa"
 
 #: common/tool/actions.cpp:1213
 msgid "Inactive Layer View Mode"
@@ -13453,7 +13334,7 @@ msgstr "Teholähde-symboli"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
-msgstr ""
+msgstr "Verkon mukaan:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:123
@@ -13876,7 +13757,7 @@ msgstr "Automaattinen"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
 msgid "True"
-msgstr ""
+msgstr "Tosi"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
 #, fuzzy
@@ -13949,6 +13830,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
+"Arvoa '%s' ei voida muuntaa totuusarvoksi oikein, se on tulkittu "
+"'väärä'-arvoksi"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1002
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1544
@@ -13959,7 +13842,7 @@ msgstr "Valitse tiedosto"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1028
 #, c-format
 msgid "Unknown columns in data: %s. These columns will be ignored."
-msgstr ""
+msgstr "Tuntemattomia sarakkeita tiedoissa: %s. Nämä sarakkeet ohitetaan."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1186
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:167
@@ -14633,7 +14516,7 @@ msgstr "Yhteinen kaikille kappaletyyleille"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "De Morganin vakio- ja vaihtoehtoiset runkomallit"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 #, fuzzy
@@ -14685,10 +14568,13 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"Kun tämä on käytössä, tällä symbolilla voi olla useampi kuin yksi "
+"samannumeroinen nasta, ja samannumeroiset nastat tulkitaan sisäisesti yhteen "
+"liitettäväksi."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:495
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "Hyppynastaryhmät"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:503
 #, fuzzy
@@ -17148,7 +17034,7 @@ msgstr "Ristimittaustoiminto:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:248
 msgid "Temporarily flash the newly cross-probed selection 3 times"
-msgstr ""
+msgstr "Väläytä juuri ristiinmitattua valintaa väliaikaisesti 3 kertaa"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -17341,6 +17227,10 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"Valitse uuden tehosymbolin määritetty tyyppi.\n"
+"Oletusarvo noudattaa symbolin määritelmää.\n"
+"Globaali muuntaa uudet tehosymbolit globaaleiksi tehosymboleiksi.\n"
+"Paikallinen muuntaa uudet tehosymbolit paikallisiksi tehosymboleiksi."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:147
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:205
@@ -17548,7 +17438,7 @@ msgstr "Kulman koko:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:150
 msgid "Medium"
-msgstr ""
+msgstr "Keskikokoinen"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:156
 msgid "Connection grid:"
@@ -18029,7 +17919,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:134 pcbnew/pcbnew_jobs_handler.cpp:254
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "HPGL-muotoon piirtämistä ei enää tueta KiCad 10.0:sta alkaen."
 
 #: eeschema/eeschema_jobs_handler.cpp:206
 msgid "Failed to load schematic\n"
@@ -18039,7 +17929,7 @@ msgstr "Kytkentäkaavion lataaminen epäonnistui\n"
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
 #: kicad/cli/command_sch_export_plot.cpp:132 pcbnew/pcbnew_jobs_handler.cpp:242
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
-msgstr ""
+msgstr "HPGL-muotoon piirtämistä ei enää tueta KiCad 10.0:sta alkaen.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:324
 #: eeschema/eeschema_jobs_handler.cpp:470
@@ -18177,6 +18067,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:1249
 msgid "Successfully saved schematic file using the latest format\n"
 msgstr ""
+"Kytkentäkaaviotiedosto tallennettu onnistuneesti uusimmalla formaatilla\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1003
 msgid "Net Navigator"
@@ -18579,7 +18470,7 @@ msgstr "Ei saatu yhteyttä etätietovarastoon"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
-msgstr ""
+msgstr "Nastan nimi muistuttaa pinottua nastaa"
 
 #: eeschema/erc/erc_item.cpp:169 pcbnew/drc/drc_item.cpp:217
 msgid "Unresolved text variable"
@@ -20788,6 +20679,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"LTspice-symboleja ei löydy.\n"
+"Asenna LTspice tai siirrä sen kirjastotiedostot kansioon %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -22418,7 +22311,7 @@ msgstr "odottaa mittausmuodon määritystä"
 
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "Ngspicen jaetun kirjaston lataaminen epäonnistui. Tarkista asennus."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22810,6 +22703,8 @@ msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
 msgstr ""
+"Virta-analyysissä on oltava kuvaaja, jotta passiivisen R-, L- tai C-mallin "
+"tai jännite- tai virtalähteen arvoa voidaan säätää."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1659
 #: eeschema/sim/simulator_frame_ui.cpp:1681
@@ -23051,7 +22946,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Varoitus: viite on tyhjä</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -24604,15 +24499,17 @@ msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
+"Muunna useita samassa paikassa olevia nastoja yhdeksi nastan pinotulla "
+"merkinnällä"
 
 #: eeschema/tools/sch_actions.cpp:948
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
 msgid "Explode Stacked Pin"
-msgstr ""
+msgstr "Räjäytä pinottu nasta"
 
 #: eeschema/tools/sch_actions.cpp:949
 msgid "Convert a pin with stacked notation to multiple individual pins"
-msgstr ""
+msgstr "Muunna pinottu merkintätapa useiksi yksittäisiksi nastoiksi"
 
 #: eeschema/tools/sch_actions.cpp:955
 msgid "Break"
@@ -25539,7 +25436,7 @@ msgstr "Sisällytetäänkö tehosymbolit kytkentäkaaviosta kirjastoon?"
 
 #: eeschema/tools/sch_editor_control.cpp:352
 msgid "Update schematic symbols to link to exported symbols"
-msgstr ""
+msgstr "Päivitä kytkentäkaaviosymbolit linkittymään vietyihin symboleihin"
 
 #: eeschema/tools/sch_editor_control.cpp:787
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -25880,11 +25777,11 @@ msgstr "Muokkaa nastoja"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:823
 msgid "At least two pins are needed to convert to stacked pins"
-msgstr ""
+msgstr "Pinottuiksi pinoiksi muuntamiseen tarvitaan vähintään kaksi nastaa"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:833
 msgid "All pins must be at the same location"
-msgstr ""
+msgstr "Kaikkien nastojen on oltava samassa paikassa"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1018
 #, fuzzy, c-format
@@ -25893,7 +25790,7 @@ msgstr "Liitä %s nasta %s liittimeen %s."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
 msgid "Select a single pin with stacked notation to explode"
-msgstr ""
+msgstr "Valitse yksi pinottu merkintätapa räjäyttääksesi sen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1052
 #, fuzzy
@@ -25916,6 +25813,8 @@ msgstr "Tämä sijainnin on jo varannut toinen nasta, yksikössä %d."
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Vältä tämä viesti poistamalla käytöstä 'Synkronoidut nastat -tila' "
+"-asetuksen."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Place Pin Anyway"
@@ -27643,6 +27542,8 @@ msgstr ""
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
 msgstr ""
+"Tallenna piirilevy DRC:n jälkeen, on käytettävä --uudelleentäyttöalueet "
+"valitsimen kanssa"
 
 #: kicad/cli/command_pcb_drc.cpp:156 kicad/cli/command_pcb_export_3d.cpp:294
 #: kicad/cli/command_pcb_export_drill.cpp:155
@@ -28090,7 +27991,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "Ei enää tuettu KiCad 10.0:sta alkaen."
 
 #: kicad/cli/command_pcb_export_pdf.cpp:35
 msgid "Generate PDF from a list of layers"
@@ -28272,10 +28173,14 @@ msgstr "Renderöinnin laatu. Vaihtoehdot: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Ulkoasun esiasetus. Vaihtoehdot: %s, %s tai käyttäjän määrittämä "
+"esiasetuksen nimi"
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Piirilevyn pinoamisessa määritetyt värit korvaavat esiasetuksessa määritetyt "
+"värit"
 
 #: kicad/cli/command_pcb_render.cpp:270
 #, fuzzy
@@ -28633,7 +28538,7 @@ msgstr "Palauta oletukset"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:153
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<arvo asetettu suorituksen aikana>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
