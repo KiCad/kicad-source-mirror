@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-12 09:02+0000\n"
+"PO-Revision-Date: 2025-09-14 08:45+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -18521,7 +18521,7 @@ msgstr "Buss"
 
 #: eeschema/sch_bus_entry.cpp:531
 msgid "Bus Entry Type"
-msgstr "Bussposttyp"
+msgstr "Bussanslutningstyp"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:951
@@ -32153,7 +32153,7 @@ msgid "<br/>*********** Sort on Reference Coordinates ***********"
 msgstr "<br/>*********** Sortera efter referenskoordinater ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
 msgstr "<br/>%d %s X, Y: %s; rundad X, Y: %s"
 
