@@ -991,6 +991,9 @@ message( STATUS "Python module install path: ${PYTHON_DEST}" )
 find_package( PythonLibs 3.6 REQUIRED )
 
 # pybind11 is header-only, so include the subdir
+# USE_CROSSCOMPILING is needed to avoid pybind11 trying to run a non-native intrepreter
+# It also makes no sense it needs a second flag in addition to CMAKE_CROSSCOMPILING
+set( PYBIND11_USE_CROSSCOMPILING TRUE )
 add_subdirectory(thirdparty/pybind11)
 
 # Make sure that we get our pybind11 and not the system pybind11 (ours is patched to work with wx)
