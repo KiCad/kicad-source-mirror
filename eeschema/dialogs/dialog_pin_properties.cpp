@@ -150,6 +150,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
                                   RECURSE_MODE::NO_RECURSE );
 
     m_dummyPin = new SCH_PIN( *m_pin );
+    m_dummyPin->ClearFlags( IS_NEW );       // Needed to display the dummy pin
     m_dummyPin->SetUnit( 2 );
     m_dummyParent->AddDrawItem( m_dummyPin, false );
 
