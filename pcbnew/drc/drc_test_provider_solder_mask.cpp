@@ -103,78 +103,42 @@ private:
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 {
-    ZONE* solderMask = m_board->m_SolderMaskBridges;
-
-    if( aItem->Type() == PCB_ZONE_T )
+    for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
     {
-        ZONE* zone = static_cast<ZONE*>( aItem );
+        if( !aItem->IsOnLayer( layer ) )
+            continue;
 
-        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
+        SHAPE_POLY_SET* solderMask = m_board->m_SolderMaskBridges->GetFill( layer );
+
+        if( aItem->Type() == PCB_ZONE_T )
         {
-            if( zone->IsOnLayer( layer ) )
-            {
-                solderMask->GetFill( layer )->BooleanAdd( *zone->GetFilledPolysList( layer ) );
-            }
+            ZONE* zone = static_cast<ZONE*>( aItem );
+
+            solderMask->BooleanAdd( *zone->GetFilledPolysList( layer ) );
         }
-    }
-    else if( aItem->Type() == PCB_PAD_T )
-    {
-        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
+        else
         {
-            if( aItem->IsOnLayer( layer ) )
+            int clearance = m_webWidth / 2;
+
+            if( aItem->Type() == PCB_PAD_T )
+                clearance += static_cast<PAD*>( aItem )->GetSolderMaskExpansion( layer );
+            else if( aItem->Type() == PCB_VIA_T )
+                clearance += static_cast<PCB_VIA*>( aItem )->GetSolderMaskExpansion();
+            else if( aItem->Type() == PCB_SHAPE_T )
+                clearance += static_cast<PCB_SHAPE*>( aItem )->GetSolderMaskExpansion();
+
+            if( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
             {
-                PAD* pad = static_cast<PAD*>( aItem );
-                int clearance = ( m_webWidth / 2 ) + pad->GetSolderMaskExpansion( layer );
+                PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
 
-                aItem->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer, clearance,
-                                                m_maxError, ERROR_OUTSIDE );
-
-                m_itemTree->Insert( aItem, layer, m_largestClearance );
+                text->TransformTextToPolySet( *solderMask, clearance, m_maxError, ERROR_OUTSIDE );
             }
-        }
-    }
-    else if( aItem->Type() == PCB_VIA_T )
-    {
-        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
-        {
-            if( aItem->IsOnLayer( layer ) )
+            else
             {
-                PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-                int      clearance = ( m_webWidth / 2 ) + via->GetSolderMaskExpansion();
-
-                via->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer, clearance,
-                                              m_maxError, ERROR_OUTSIDE );
-
-                m_itemTree->Insert( aItem, layer, m_largestClearance );
+                aItem->TransformShapeToPolygon( *solderMask, layer, clearance, m_maxError, ERROR_OUTSIDE );
             }
-        }
-    }
-    else if( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
-    {
-        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
-        {
-            if( aItem->IsOnLayer( layer ) )
-            {
-                const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
-                text->TransformTextToPolySet( *solderMask->GetFill( layer ),
-                                              m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
-
-                m_itemTree->Insert( aItem, layer, m_largestClearance );
-            }
-        }
-    }
-    else
-    {
-        for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
-        {
-            if( aItem->IsOnLayer( layer ) )
-            {
-                aItem->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer,
-                                                m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
-
-                m_itemTree->Insert( aItem, layer, m_largestClearance );
-            }
+            m_itemTree->Insert( aItem, layer, m_largestClearance );
         }
     }
 }
@@ -461,12 +425,12 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aT
 
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
-                                                          PCB_LAYER_ID aRefLayer,
-                                                          PCB_LAYER_ID aTargetLayer )
+                                                          PCB_LAYER_ID aRefLayer, PCB_LAYER_ID aTargetLayer )
 {
-    PAD*     pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
-    PCB_VIA* via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
-    int      itemNet = -1;
+    PAD*       pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
+    PCB_VIA*   via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
+    PCB_SHAPE* shape = aItem->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( aItem ) : nullptr;
+    int        itemNet = -1;
 
     if( aItem->IsConnected() )
         itemNet = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
@@ -551,10 +515,11 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             // Visitor:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                PAD*     otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
-                PCB_VIA* otherVia = other->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( other ) : nullptr;
-                auto     otherShape = other->GetEffectiveShape( aTargetLayer );
-                int      otherNet = -1;
+                PAD*       otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
+                PCB_VIA*   otherVia = other->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( other ) : nullptr;
+                PCB_SHAPE* otherShape = other->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( other ) : nullptr;
+                auto       otherItemShape = other->GetEffectiveShape( aTargetLayer );
+                int        otherNet = -1;
 
                 if( other->IsConnected() )
                     otherNet = static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetCode();
@@ -575,16 +540,20 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                 }
 
                 if( pad )
-                    clearance += pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
+                    clearance += pad->GetSolderMaskExpansion( aRefLayer );
                 else if( via && !via->IsTented( aRefLayer ) )
                     clearance += via->GetSolderMaskExpansion();
+                else if( shape )
+                    clearance += shape->GetSolderMaskExpansion();
 
                 if( otherPad )
-                    clearance += otherPad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
-                else if( otherVia && !otherVia->IsTented( aRefLayer ) )
+                    clearance += otherPad->GetSolderMaskExpansion( aTargetLayer );
+                else if( otherVia && !otherVia->IsTented( aTargetLayer ) )
                     clearance += otherVia->GetSolderMaskExpansion();
+                else if( shape )
+                    clearance += otherShape->GetSolderMaskExpansion();
 
-                if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
+                if( itemShape->Collide( otherItemShape.get(), clearance, &actual, &pos ) )
                 {
                     wxString    msg;
                     BOARD_ITEM* colliding = nullptr;
@@ -638,11 +607,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 }
 
 
-void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
-                                                              const BOX2I& aItemBBox,
-                                                              PCB_LAYER_ID aMaskLayer,
-                                                              PCB_LAYER_ID aTargetLayer )
+void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
+                                                              PCB_LAYER_ID aMaskLayer, PCB_LAYER_ID aTargetLayer )
 {
+    PAD*       pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
+    PCB_VIA*   via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
+    PCB_SHAPE* shape = aItem->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( aItem ) : nullptr;
+
     for( ZONE* zone : m_board->m_DRCCopperZones )
     {
         if( !zone->GetLayerSet().test( aTargetLayer ) )
@@ -661,10 +632,12 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
         BOX2I inflatedBBox( aItemBBox );
         int   clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
 
-        if( aItem->Type() == PCB_PAD_T )
-            clearance += static_cast<PAD*>( aItem )->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
-        else if( aItem->Type() == PCB_VIA_T )
-            clearance += static_cast<PCB_VIA*>( aItem )->GetSolderMaskExpansion();
+        if( pad )
+            clearance += pad->GetSolderMaskExpansion( aTargetLayer );
+        else if( via && !via->IsTented( aTargetLayer ) )
+            clearance += via->GetSolderMaskExpansion();
+        else if( shape )
+            clearance += shape->GetSolderMaskExpansion();
 
         inflatedBBox.Inflate( clearance );
 
@@ -677,8 +650,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
         std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aMaskLayer );
 
-        if( zoneTree && zoneTree->QueryColliding( aItemBBox, itemShape.get(), aTargetLayer,
-                                                  clearance, &actual, &pos ) )
+        if( zoneTree && zoneTree->QueryColliding( aItemBBox, itemShape.get(), aTargetLayer, clearance,
+                                                  &actual, &pos ) )
         {
             wxString    msg;
             BOARD_ITEM* colliding = nullptr;
@@ -694,7 +667,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
             {
                 if( checkMaskAperture( aItem, zone, aTargetLayer, zoneNet, &colliding ) )
                 {
-                    auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                     drce->SetErrorMessage( msg );
                     drce->SetItems( aItem, colliding, zone );
@@ -704,7 +677,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
             }
             else
             {
-                auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                 drce->SetErrorMessage( msg );
                 drce->SetItems( aItem, zone );
@@ -802,10 +775,31 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     m_maxError = m_board->GetDesignSettings().m_MaxError;
     m_largestClearance = 0;
 
+    auto updateLargestClearance =
+            [&]( int aClearance )
+            {
+                m_largestClearance = std::max( m_largestClearance, aClearance );
+            };
+
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
-            m_largestClearance = std::max( m_largestClearance, pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS ) );
+            updateLargestClearance( pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS ) );
+
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        {
+            if( item->Type() == PCB_SHAPE_T )
+                updateLargestClearance( static_cast<PCB_SHAPE*>( item )->GetSolderMaskExpansion() );
+        }
+    }
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+        updateLargestClearance( track->GetSolderMaskExpansion() );
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T )
+            updateLargestClearance( static_cast<PCB_SHAPE*>( item )->GetSolderMaskExpansion() );
     }
 
     // Order is important here: m_webWidth must be added in before m_largestCourtyardClearance is

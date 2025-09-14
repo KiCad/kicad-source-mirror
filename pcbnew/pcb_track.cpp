@@ -1130,10 +1130,10 @@ int PCB_TRACK::GetSolderMaskExpansion() const
 {
     int margin = 0;
 
-    if( const BOARD* board = GetBoard() )
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
         DRC_CONSTRAINT              constraint;
-        std::shared_ptr<DRC_ENGINE> drcEngine = board->GetDesignSettings().m_DRCEngine;
+        std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
         constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, m_layer );
 
