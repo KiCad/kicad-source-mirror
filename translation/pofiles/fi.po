@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-05-01 03:03+0000\n"
+"PO-Revision-Date: 2025-09-15 11:02+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
 "Language: fi\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -658,229 +658,184 @@ msgid "Show user ECO2 layer"
 msgstr "Näytä käyttäjän ECO2-taso"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Käyttäjän määrittelemä taso 1"
+msgstr "Näytä käyttäjän määrittelemä taso 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Käyttäjän määrittelemä taso 2"
+msgstr "Näytä käyttäjän määrittelemä taso 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Käyttäjän määrittelemä taso 3"
+msgstr "Näytä käyttäjän määrittelemä taso 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Käyttäjän määrittelemä taso 4"
+msgstr "Näytä käyttäjän määrittelemä taso 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Käyttäjän määrittelemä taso 5"
+msgstr "Näytä käyttäjän määrittelemä taso 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Käyttäjän määrittelemä taso 6"
+msgstr "Näytä käyttäjän määrittelemä taso 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Käyttäjän määrittelemä taso 7"
+msgstr "Näytä käyttäjän määrittelemä taso 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Käyttäjän määrittelemä taso 8"
+msgstr "Näytä käyttäjän määrittelemä taso 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Käyttäjän määrittelemä taso 9"
+msgstr "Näytä käyttäjän määrittelemä taso 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Käyttäjän määrittelemä taso 1"
+msgstr "Näytä käyttäjän määrittelemä taso 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Käyttäjän määrittelemä taso 1"
+msgstr "Näytä käyttäjän määrittelemä taso 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Käyttäjän määrittelemä taso 12"
+msgstr "Näytä käyttäjän määrittelemä taso 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Käyttäjän määrittelemä taso 13"
+msgstr "Näytä käyttäjän määrittelemä taso 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Käyttäjän määrittelemä taso 14"
+msgstr "Näytä käyttäjän määrittelemä taso 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Käyttäjän määrittelemä taso 15"
+msgstr "Näytä käyttäjän määrittelemä taso 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Käyttäjän määrittelemä taso 16"
+msgstr "Näytä käyttäjän määrittelemä taso 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Käyttäjän määrittelemä taso 17"
+msgstr "Näytä käyttäjän määrittelemä taso 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Käyttäjän määrittelemä taso 18"
+msgstr "Näytä käyttäjän määrittelemä taso 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Käyttäjän määrittelemä taso 19"
+msgstr "Näytä käyttäjän määrittelemä taso 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Käyttäjän määrittelemä taso 20"
+msgstr "Näytä käyttäjän määrittelemä taso 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Käyttäjän määrittelemä taso 21"
+msgstr "Näytä käyttäjän määrittelemä taso 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Käyttäjän määrittelemä taso 22"
+msgstr "Näytä käyttäjän määrittelemä taso 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Käyttäjän määrittelemä taso 23"
+msgstr "Näytä käyttäjän määrittelemä taso 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Käyttäjän määrittelemä taso 24"
+msgstr "Näytä käyttäjän määrittelemä taso 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Käyttäjän määrittelemä taso 25"
+msgstr "Näytä käyttäjän määrittelemä taso 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Käyttäjän määrittelemä taso 26"
+msgstr "Näytä käyttäjän määrittelemä taso 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Käyttäjän määrittelemä taso 27"
+msgstr "Näytä käyttäjän määrittelemä taso 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Käyttäjän määrittelemä taso 28"
+msgstr "Näytä käyttäjän määrittelemä taso 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Käyttäjän määrittelemä taso 29"
+msgstr "Näytä käyttäjän määrittelemä taso 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Käyttäjän määrittelemä taso 30"
+msgstr "Näytä käyttäjän määrittelemä taso 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Käyttäjän määrittelemä taso 31"
+msgstr "Näytä käyttäjän määrittelemä taso 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Käyttäjän määrittelemä taso 32"
+msgstr "Näytä käyttäjän määrittelemä taso 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Käyttäjän määrittelemä taso 33"
+msgstr "Näytä käyttäjän määrittelemä taso 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Käyttäjän määrittelemä taso 34"
+msgstr "Näytä käyttäjän määrittelemä taso 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Käyttäjän määrittelemä taso 35"
+msgstr "Näytä käyttäjän määrittelemä taso 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Käyttäjän määrittelemä taso 36"
+msgstr "Näytä käyttäjän määrittelemä taso 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Käyttäjän määrittelemä taso 37"
+msgstr "Näytä käyttäjän määrittelemä taso 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Käyttäjän määrittelemä taso 38"
+msgstr "Näytä käyttäjän määrittelemä taso 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Käyttäjän määrittelemä taso 39"
+msgstr "Näytä käyttäjän määrittelemä taso 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Käyttäjän määrittelemä taso 40"
+msgstr "Näytä käyttäjän määrittelemä taso 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Käyttäjän määrittelemä taso 41"
+msgstr "Näytä käyttäjän määrittelemä taso 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Käyttäjän määrittelemä taso 42"
+msgstr "Näytä käyttäjän määrittelemä taso 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Käyttäjän määrittelemä taso 43"
+msgstr "Näytä käyttäjän määrittelemä taso 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Käyttäjän määrittelemä taso 44"
+msgstr "Näytä käyttäjän määrittelemä taso 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Käyttäjän määrittelemä taso 45"
+msgstr "Näytä käyttäjän määrittelemä taso 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -975,15 +930,15 @@ msgid "Use board stackup colors"
 msgstr "Käytä piirilevyn kerrospinon värejä"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Käytä piirilevyeditorin kuparivärejä"
+msgstr "Käytä Piirilevyeditorin kuparivärejä"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Käytä piirilevyeditorin kuparivärejä (vain openGL)"
+msgstr ""
+"Käytä kuparikerroksille piirilevyeditorin tasovärejä (vain reaaliaikaisessa "
+"renderöinnissä)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1791,16 +1746,12 @@ msgid "Errors"
 msgstr "Virheet"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Korvaa ja Etsi Seuraava"
+msgstr "Korvataanko ladattu tiedosto?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"Tiedostopäätteen vaihto muuttaa tiedosto tyyppiä.\n"
-"Jatketaanko?"
+msgstr "Tiedosto on jo ladattu. Haluatko korvata sen?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -1994,6 +1945,7 @@ msgstr "Vie Leikepöydälle"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Mustavalkoisessa kuvassa ei ole muunnettavaa muotoa: ääriviivaa ei luotu."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -2399,7 +2351,7 @@ msgstr "Paketin kehittäjät"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI-objektit käytössä %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -3051,9 +3003,9 @@ msgstr ""
 "asetuksissa."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Valinta sisältää %lu lukittua kohdetta."
+msgstr "Valinta sisältää %zu lukittua kohdetta."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3336,7 +3288,7 @@ msgstr "Vie muille lehdille"
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:241
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Drawing Sheet"
-msgstr "Piirustuslehti"
+msgstr "Piirustusarkki"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
@@ -3949,7 +3901,6 @@ msgstr "Commit viesti ei voi olla tyhjä"
 
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testaa yhteys"
 
@@ -4073,19 +4024,16 @@ msgid "Add"
 msgstr "Lisää"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Ota suunnittelusääntöjen tarkistus (DRC) käyttöön"
+msgstr "Ota Git-seuranta käyttöön"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Automaattireititetyt liuskat"
+msgstr "Etäseuranta"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Päivitä kentät"
+msgstr "Päivitysväli:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4462,9 +4410,8 @@ msgid "Editing"
 msgstr "Muokkaus"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
-#, fuzzy
 msgid "Warp mouse to anchor of moved object"
-msgstr "Siirrä hiiren kohdistin liikuteltavan kohteen keskelle"
+msgstr "Siirrä osoitin siirretyn objektin ankkurikohtaan"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -4969,12 +4916,18 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Poistettuihin upotettuihin tiedostoihin viitataan myös joissakin "
+"jalanjäljissä.\n"
+"Poistetaanko myös jalanjäljistä?"
 
 #: common/dialogs/panel_embedded_files.cpp:206
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Poistettuihin upotettuihin tiedostoihin viitataan myös joissakin symboleissa."
+"\n"
+"Poistetaanko myös symboleista?"
 
 #: common/dialogs/panel_embedded_files.cpp:325
 #: common/dialogs/panel_embedded_files.cpp:440
@@ -5041,9 +4994,8 @@ msgid "Failed to write file '%s'."
 msgstr "Tiedoston '%s' kirjoittaminen epäonnistui."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Kopioi upotettu viite"
+msgstr "Upotettu viite"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -7228,24 +7180,21 @@ msgid "Failed to perform checkout operation."
 msgstr "Tarkistustoiminnon suorittaminen epäonnistui."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Haaran '%s' HEAD-viitteen päivittäminen epäonnistui"
+msgstr "Viitteen '%s' päivittäminen osoittamaan kohteeseen '%s' epäonnistui."
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Arkiston kloonaaminen epäonnistui."
+msgstr "Tietovaraston tilan tyhjentäminen pikakelauksen jälkeen epäonnistui."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Git-projektin alustaminen epäonnistui."
+msgstr "Versioselaimen alustaminen epäonnistui."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Muutosten työntäminen etätietovarastoon epäonnistui."
+msgstr "Viittauksen siirtäminen versioselaimelle epäonnistui."
 
 #: common/git/git_pull_handler.cpp:358
 #, fuzzy, c-format
@@ -7274,7 +7223,7 @@ msgstr "Lisätty"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Uudelleenpohjustuksen aikana havaitut ristiriidat"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7321,9 +7270,8 @@ msgid "[updated] %s"
 msgstr "[päivitetty] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Luominen ei onnistu"
+msgstr "Todennus ei onnistu"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -11925,9 +11873,9 @@ msgid "Database Library Settings"
 msgstr "Tietokantakirjaston asetukset"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Laiton merkki '%c' lempinimessä '%s'."
+msgstr "Laiton merkki '%c' nimessä '%s'."
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
@@ -11939,9 +11887,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Päällekkäisiä kenttiä ei sallita."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Poista kenttä"
+msgstr "Vakiokentät"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11956,9 +11903,8 @@ msgid "Description:"
 msgstr "Selite:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Suunnittelun lohkokirjastot"
+msgstr "Suunnittelulohkon Ominaisuudet"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -19584,6 +19530,8 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"LTspice-symboleja ei löydy.\n"
+"Asenna LTspice tai siirrä sen kirjastotiedostot kansioon %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -21219,7 +21167,7 @@ msgstr "odottaa mittausmuodon määritystä"
 
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
+msgstr "Ngspicen jaetun kirjaston lataaminen epäonnistui. Tarkista asennus."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -21829,7 +21777,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Varoitus: viite on tyhjä</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -24545,6 +24493,8 @@ msgstr "Tämä sijainnin on jo varannut toinen nasta, yksikössä %d."
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Vältä tämä viesti poistamalla käytöstä 'Synkronoidut nastat -tila' "
+"-asetuksen."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
@@ -26752,10 +26702,14 @@ msgstr "Renderöinnin laatu. Vaihtoehdot: %s"
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"Ulkoasun esiasetus. Vaihtoehdot: %s, %s tai käyttäjän määrittämä "
+"esiasetuksen nimi"
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Piirilevyn pinoamisessa määritetyt värit korvaavat esiasetuksessa määritetyt "
+"värit"
 
 #: kicad/cli/command_pcb_render.cpp:270
 #, fuzzy
@@ -27078,7 +27032,7 @@ msgstr "Sisällytä työt:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:152
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<arvo asetettu suorituksen aikana>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -38667,9 +38621,8 @@ msgstr ""
 "kytkentäkaaviosymboliin."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
-msgstr "Ohita Lukitukset"
+msgstr "Ohita lukot"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
 #, fuzzy
