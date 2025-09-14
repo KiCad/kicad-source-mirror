@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-10 01:09+0000\n"
+"PO-Revision-Date: 2025-09-15 10:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -35574,7 +35574,7 @@ msgstr "テキストのサイズとスタイルを更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
 msgid "Update/reset text positions"
-msgstr "テキスト位置を更新/リセット"
+msgstr "テキストの位置を更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
