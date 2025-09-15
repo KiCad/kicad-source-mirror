@@ -381,7 +381,7 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
                           wxS( "Attempting to annotate item on sheet not part of the "
                                "hierarchy?" ) );
 
-            ref.SetSheetNumber( path->GetVirtualPageNumber() );
+            ref.SetSheetNumber( path->GetPageNumberAsInt() );
         }
 
         // Never lock unassigned references
@@ -398,9 +398,9 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
 }
 
 
-void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences )
+void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences, ANNOTATE_ALGO_T aAlgoOption )
 {
-    ReannotateByOptions( UNSORTED, INCREMENTAL_BY_REF, 0, aAdditionalReferences, true, nullptr );
+    ReannotateByOptions( UNSORTED, aAlgoOption, 0, aAdditionalReferences, true, nullptr );
 }
 
 

@@ -384,11 +384,11 @@ public:
      * @note Do not use as a general reannotation method.
      *
      * Replaces any duplicate reference designators with the next available number after the
-     * present number regardless of configured annotation options.
+     * present number obeying the current annotation style.
      *
      * Multi-unit symbols are reannotated together.
      */
-    void ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences );
+    void ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences, ANNOTATE_ALGO_T aAlgoOption );
 
     /**
      * Annotate the references by the provided options.

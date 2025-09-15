@@ -203,6 +203,8 @@ public:
 
     wxString GetPageNumber() const;
 
+    int GetPageNumberAsInt() const;
+
     const SCH_SHEET* GetSheet( unsigned aIndex ) const
     {
         SCH_SHEET* retv = nullptr;

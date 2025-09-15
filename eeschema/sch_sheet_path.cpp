@@ -443,7 +443,7 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
         {
             SCH_REFERENCE schReference( aSymbol, *this );
 
-            schReference.SetSheetNumber( m_virtualPageNumber );
+            schReference.SetSheetNumber( GetPageNumberAsInt() );
             aReferences.AddItem( schReference );
         }
     }
@@ -475,7 +475,7 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
     if( symbol && symbol->GetUnitCount() > 1 )
     {
         SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, *this );
-        schReference.SetSheetNumber( m_virtualPageNumber );
+        schReference.SetSheetNumber( GetPageNumberAsInt() );
         wxString reference_str = schReference.GetRef();
 
         // Never lock unassigned references
@@ -583,6 +583,17 @@ wxString SCH_SHEET_PATH::GetPageNumber() const
     tmpPath.pop_back();
 
     return sheet->getPageNumber( tmpPath );
+}
+
+int SCH_SHEET_PATH::GetPageNumberAsInt() const
+{
+    long page;
+    wxString pageStr = GetPageNumber();
+
+    if( pageStr.ToLong( &page ) )
+        return (int) page;
+
+    return GetVirtualPageNumber();
 }
 
 

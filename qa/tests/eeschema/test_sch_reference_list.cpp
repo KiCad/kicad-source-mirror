@@ -286,7 +286,7 @@ BOOST_AUTO_TEST_CASE( ReannotateDuplicates )
 
         loadTestCase( c.m_SchematicRelativePath, c.m_ExpectedReannotations );
 
-        m_refsToReannotate.ReannotateDuplicates( getAdditionalRefs() );
+        m_refsToReannotate.ReannotateDuplicates( getAdditionalRefs(), INCREMENTAL_BY_REF );
         m_refsToReannotate.UpdateAnnotation();
 
         checkAnnotation( c.m_ExpectedReannotations );
