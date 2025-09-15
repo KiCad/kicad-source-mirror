@@ -225,7 +225,13 @@ bool DRC_CACHE_GENERATOR::Run()
             };
 
     for( ZONE* zone : allZones )
-        returns.emplace_back( tp.submit_task( [cache_zones, zone] { return cache_zones( zone ); } ) );
+    {
+        returns.emplace_back( tp.submit_task(
+                [cache_zones, zone]
+                {
+                    return cache_zones( zone );
+                } ) );
+    }
 
     done.store( 1 );
 
