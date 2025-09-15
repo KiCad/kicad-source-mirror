@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-12 19:10+0000\n"
+"PO-Revision-Date: 2025-09-15 10:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -10167,14 +10167,12 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Die Bibliothek in der Liste nicht mehr oben halten"
 
 #: common/tool/actions.cpp:959
-#, fuzzy
 msgid "Library Fields Table"
 msgstr "Bibliotheksfelder-Tabelle"
 
 #: common/tool/actions.cpp:965
-#, fuzzy
 msgid "Library Fields Table of Related Symbols"
-msgstr "Bibliotheksfelder-Tabelle der zugehörigen Symbole"
+msgstr "Bibliotheksfelder-Tabelle zugehöriger Symbole"
 
 #: common/tool/actions.cpp:966
 msgid "Edit a table of fields of all symbols related to the selected symbol"
@@ -11735,7 +11733,6 @@ msgstr "Footprintfiltersteuerung"
 #: eeschema/toolbars_sch_editor.cpp:64 gerbview/toolbars_gerber.cpp:61
 #: pcbnew/toolbars_footprint_editor.cpp:57
 #: pcbnew/toolbars_footprint_viewer.cpp:83 pcbnew/toolbars_pcb_editor.cpp:143
-#, fuzzy
 msgid "Crosshair modes"
 msgstr "Fadenkreuzmodi"
 
@@ -12439,7 +12436,6 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Keine Symbole mit passenden Kriterien gefunden ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:586
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
 msgstr "*** Symbolbibliotheks-ID nicht gültig ***"
 
@@ -14040,7 +14036,6 @@ msgid "Revert symbol"
 msgstr "Symbol zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
 msgstr "Symbol auf zuletzt gespeicherten Stand zurücksetzen"
 
@@ -14049,14 +14044,12 @@ msgid "Clear cell"
 msgstr "Zelle leeren"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Zellenwert löschen"
+msgstr "Zellwert leeren"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Abgeleitetes Bauteil erstellen"
+msgstr "Abgeleitetes Symbol erstellen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
 #, fuzzy
@@ -18203,7 +18196,7 @@ msgid "Symbol %s has unplaced units %s"
 msgstr "Symbol %s hat unplatzierte Einheiten %s"
 
 #: eeschema/erc/erc.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
 msgstr "Symbol %s hat in den Einheiten %s unplatzierte Stromversorgungs-Pins."
 
@@ -18290,7 +18283,7 @@ msgstr "\"%s\" ist keine gültige Footprint-ID"
 
 #: eeschema/erc/erc.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'"
 msgstr ""
 "Die aktuelle Konfiguration enthält nicht die Footprint-Bibliothek \"%s\"."
