@@ -552,6 +552,15 @@ void RN_NET::RemoveInvalidRefs()
 
     for( CN_EDGE& edge : m_boardEdges )
         edge.RemoveInvalidRefs();
+
+    auto is_invalid = []( const CN_EDGE& edge )
+                      {
+                          return !edge.GetSourceNode() || !edge.GetTargetNode();
+                      };
+
+    m_rnEdges.erase( std::remove_if( m_rnEdges.begin(), m_rnEdges.end(), is_invalid ), m_rnEdges.end() );
+    m_boardEdges.erase( std::remove_if( m_boardEdges.begin(), m_boardEdges.end(), is_invalid ),
+                        m_boardEdges.end() );
 }
 
 
