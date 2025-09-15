@@ -323,6 +323,54 @@ public:
     bool m_DebugPDFWriter;
 
     /**
+     * Stroke font line width factor relative to EM size for PDF stroke fonts.
+     *
+     * Setting name: "PDFStrokeFontWidthFactor"
+     * Valid values: 0.0 to 1.0 (practical range 0.005 - 0.1)
+     * Default value: 0.04
+     */
+    double m_PDFStrokeFontWidthFactor;
+
+    /**
+     * Horizontal offset factor applied to stroke font glyph coordinates (in EM units) after
+     * to compensate misalignment. Positive values move glyphs right.
+     *
+     * Setting name: "PDFStrokeFontXOffset"
+     * Valid values: -1.0 to 1.0
+     * Default value: 0.0
+     */
+    double m_PDFStrokeFontXOffset;
+
+    /**
+     * Vertical offset factor applied to stroke font glyph coordinates (in EM units) after
+     * Y inversion to compensate baseline misalignment. Positive values move glyphs up.
+     *
+     * Setting name: "PDFStrokeFontYOffset"
+     * Valid values: -1.0 to 1.0
+     * Default value: 0.0
+     */
+    double m_PDFStrokeFontYOffset;
+
+    /**
+     * Multiplier applied to stroke width factor when rendering bold stroke font subsets.
+     *
+     * Setting name: "PDFStrokeFontBoldMultiplier"
+     * Valid values: 1.0 to 5.0
+     * Default value: 1.6
+     */
+    double m_PDFStrokeFontBoldMultiplier;
+
+    /**
+     * Kerning (spacing) factor applied to glyph advance (width). Values < 1 tighten spacing.
+     * Applied uniformly across stroke font PDF output.
+     *
+     * Setting name: "PDFStrokeFontKerningFactor"
+     * Valid values: 0.5 to 2.0
+     * Default value: 0.9
+     */
+    double m_PDFStrokeFontKerningFactor;
+
+    /**
      * Use legacy wxWidgets-based printing.
      *
      * Setting name: "UsePdfPrint"

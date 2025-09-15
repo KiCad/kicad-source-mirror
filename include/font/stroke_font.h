@@ -77,6 +77,12 @@ public:
                               const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
                               const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const override;
 
+    unsigned GetGlyphCount() const;
+
+    const STROKE_GLYPH* GetGlyph( unsigned aIndex ) const;
+
+    const BOX2D& GetGlyphBoundingBox( unsigned aIndex ) const;
+
 private:
     /**
      * Load the standard KiCad stroke font.

@@ -593,6 +593,8 @@ set( PLOTTERS_CONTROL_SRCS
     plotters/DXF_plotter.cpp
     plotters/GERBER_plotter.cpp
     plotters/PDF_plotter.cpp
+    plotters/pdf_stroke_font.cpp
+    plotters/pdf_outline_font.cpp
     plotters/PS_plotter.cpp
     plotters/SVG_plotter.cpp
     plotters/common_plot_functions.cpp

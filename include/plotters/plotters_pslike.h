@@ -26,7 +26,11 @@
 #pragma once
 
 #include "plotter.h"
+#include <memory>
+#include <plotters/pdf_stroke_font.h>
+#include <plotters/pdf_outline_font.h>
 
+namespace MARKUP { struct NODE; }
 
 /**
  * The PSLIKE_PLOTTER class is an intermediate class to handle common routines for engines
@@ -256,9 +260,13 @@ public:
             m_workFile( nullptr ),
             m_totalOutlineNodes( 0 ),
             m_3dModelHandle( -1 ),
-            m_3dExportMode( false )
+            m_3dExportMode( false ),
+            m_strokeFontManager( nullptr ),
+            m_outlineFontManager( nullptr )
     {
     }
+
+    virtual ~PDF_PLOTTER();
 
     virtual PLOT_FORMAT GetPlotterType() const override
     {
@@ -371,6 +379,45 @@ public:
                        const KIFONT::METRICS& aFontMetrics,
                        void*                  aData = nullptr ) override;
 
+private:
+    // Structure to hold overbar drawing information
+    struct OverbarInfo
+    {
+        VECTOR2I startPos;  // Start position of overbar text
+        VECTOR2I endPos;    // End position of overbar text
+        VECTOR2I fontSize;  // Font size for proper overbar positioning
+        bool     isOutline; // True if the overbar applies to an outline font run
+        GR_TEXT_V_ALIGN_T vAlign; // Original vertical alignment of the parent text
+    };
+
+    /**
+     * Render a single word with the given style parameters
+     */
+    VECTOR2I renderWord( const wxString& aWord, const VECTOR2I& aPosition,
+                         const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                         bool aTextMirrored, int aWidth, bool aBold, bool aItalic,
+                         KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics,
+                         enum GR_TEXT_V_ALIGN_T aV_justify, TEXT_STYLE_FLAGS aTextStyle );
+
+    /**
+     * Recursively render markup nodes with appropriate styling
+     */
+    VECTOR2I renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
+                               const VECTOR2I& aBaseSize, const EDA_ANGLE& aOrient,
+                               bool aTextMirrored, int aWidth, bool aBaseBold,
+                               bool aBaseItalic, KIFONT::FONT* aFont,
+                               const KIFONT::METRICS& aFontMetrics,
+                               enum GR_TEXT_V_ALIGN_T aV_justify,
+                               TEXT_STYLE_FLAGS aTextStyle,
+                               std::vector<OverbarInfo>& aOverbars );
+
+    /**
+     * Draw overbar lines above text
+     */
+    void drawOverbars( const std::vector<OverbarInfo>& aOverbars,
+                       const EDA_ANGLE& aOrient, const KIFONT::METRICS& aFontMetrics );
+
+public:
     virtual void PlotText( const VECTOR2I&        aPos,
                            const COLOR4D&         aColor,
                            const wxString&        aText,
@@ -509,6 +556,11 @@ protected:
 
     void endPlotEmitResources();
 
+    void emitStrokeFonts();
+    void emitOutlineFonts();
+
+    std::string encodeByteString( const std::string& aBytes );
+
     int m_pageTreeHandle;           ///< Handle to the root of the page tree object.
     int m_fontResDictHandle;        ///< Font resource dictionary.
     int m_imgResDictHandle;         ///< Image resource dictionary.
@@ -544,6 +596,8 @@ protected:
 
     int  m_3dModelHandle;
     bool m_3dExportMode;
+    std::unique_ptr<PDF_STROKE_FONT_MANAGER> m_strokeFontManager;
+    std::unique_ptr<PDF_OUTLINE_FONT_MANAGER> m_outlineFontManager;
 };
 
 

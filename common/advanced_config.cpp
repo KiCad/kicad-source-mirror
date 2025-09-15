@@ -84,6 +84,11 @@ static const wxChar ExtraZoneDisplayModes[] = wxT( "ExtraZoneDisplayModes" );
 static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
 static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
 static const wxChar DebugPDFWriter[] = wxT( "DebugPDFWriter" );
+static const wxChar PDFStrokeFontWidthFactor[] = wxT( "PDFStrokeFontWidthFactor" );
+static const wxChar PDFStrokeFontXOffset[] = wxT( "PDFStrokeFontXOffset" );
+static const wxChar PDFStrokeFontYOffset[] = wxT( "PDFStrokeFontYOffset" );
+static const wxChar PDFStrokeFontBoldMultiplier[] = wxT( "PDFStrokeFontBoldMultiplier" );
+static const wxChar PDFStrokeFontKerningFactor[] = wxT( "PDFStrokeFontKerningFactor" );
 static const wxChar UsePdfPrint[] = wxT( "UsePdfPrint" );
 static const wxChar SmallDrillMarkSize[] = wxT( "SmallDrillMarkSize" );
 static const wxChar HotkeysDumper[] = wxT( "HotkeysDumper" );
@@ -248,6 +253,11 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_DebugZoneFiller           = false;
     m_DebugPDFWriter            = false;
+    m_PDFStrokeFontWidthFactor  = .12; // default 12% of EM
+    m_PDFStrokeFontXOffset      = 0.1;
+    m_PDFStrokeFontYOffset      = 0.35;
+    m_PDFStrokeFontBoldMultiplier = 1.8;
+    m_PDFStrokeFontKerningFactor = 1.0;
     m_UsePdfPrint               = false;
     m_SmallDrillMarkSize        = 0.35;
     m_HotkeysDumper             = false;
@@ -462,6 +472,21 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::DebugPDFWriter,
                                                 &m_DebugPDFWriter, m_DebugPDFWriter ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PDFStrokeFontWidthFactor,
+                                                &m_PDFStrokeFontWidthFactor, m_PDFStrokeFontWidthFactor ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PDFStrokeFontXOffset,
+                                                &m_PDFStrokeFontXOffset, m_PDFStrokeFontXOffset ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PDFStrokeFontYOffset,
+                                                &m_PDFStrokeFontYOffset, m_PDFStrokeFontYOffset ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PDFStrokeFontBoldMultiplier,
+                                                &m_PDFStrokeFontBoldMultiplier, m_PDFStrokeFontBoldMultiplier ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PDFStrokeFontKerningFactor,
+                                                &m_PDFStrokeFontKerningFactor, m_PDFStrokeFontKerningFactor ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::UsePdfPrint,
                                                 &m_UsePdfPrint, m_UsePdfPrint ) );

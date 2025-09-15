@@ -76,6 +76,10 @@ public:
         return m_face && ( m_fakeItal || ( m_face->style_flags & FT_STYLE_FLAG_ITALIC ) );
     }
 
+    // Accessors to distinguish fake vs real style for diagnostics and rendering decisions
+    bool IsFakeItalic() const { return m_fakeItal; }
+    bool IsFakeBold() const { return m_fakeBold; }
+
     void SetFakeBold()
     {
         m_fakeBold = true;

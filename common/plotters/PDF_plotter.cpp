@@ -1,8 +1,3 @@
-/**
- * @file PDF_plotter.cpp
- * @brief KiCad: specialized plotter for PDF files format
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -28,6 +23,7 @@
  */
 
 #include <algorithm>
+#include <iterator>
 #include <cstdio> // snprintf
 #include <stack>
 
@@ -44,14 +40,22 @@
 #include <font/font.h>
 #include <core/ignore.h>
 #include <macros.h>
+#include <trace_helpers.h>
 #include <trigo.h>
 #include <string_utils.h>
+#include <markup_parser.h>
 #include <fmt/format.h>
 #include <fmt/chrono.h>
 #include <fmt/ranges.h>
 
+#include <plotters/pdf_stroke_font.h>
+#include <plotters/pdf_outline_font.h>
 #include <plotters/plotters_pslike.h>
 #include <geometry/shape_rect.h>
+#include <text_eval/text_eval_wrapper.h>
+
+
+PDF_PLOTTER::~PDF_PLOTTER() = default;
 
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
@@ -112,6 +116,34 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
         result += '>';
     }
 
+    return result;
+}
+
+
+std::string PDF_PLOTTER::encodeByteString( const std::string& aBytes )
+{
+    std::string result;
+    result.reserve( aBytes.size() * 4 + 2 );
+    result.push_back( '(' );
+
+    for( unsigned char byte : aBytes )
+    {
+        if( byte == '(' || byte == ')' || byte == '\\' )
+        {
+            result.push_back( '\\' );
+            result.push_back( static_cast<char>( byte ) );
+        }
+        else if( byte < 32 || byte > 126 )
+        {
+            fmt::format_to( std::back_inserter( result ), "\\{:03o}", byte );
+        }
+        else
+        {
+            result.push_back( static_cast<char>( byte ) );
+        }
+    }
+
+    result.push_back( ')' );
     return result;
 }
 
@@ -610,17 +642,15 @@ int PDF_PLOTTER::startPdfStream( int aHandle )
 
     if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
-        fmt::println( m_outputFile,
-                      "<< /Length {} 0 R >>\n"
-                      "stream",
-                      handle + 1 );
+        fmt::print( m_outputFile,
+                     "<< /Length {} 0 R >>\nstream\n",
+                     m_streamLengthHandle );
     }
     else
     {
-        fmt::println( m_outputFile,
-                      "<< /Length {} 0 R /Filter /FlateDecode >>\n"
-                      "stream",
-                      handle + 1 );
+        fmt::print( m_outputFile,
+                     "<< /Length {} 0 R /Filter /FlateDecode >>\nstream\n",
+                     m_streamLengthHandle );
     }
 
     // Open a temporary file to accumulate the stream
@@ -1059,6 +1089,16 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
 
     m_outlineRoot = std::make_unique<OUTLINE_NODE>();
 
+    if( !m_strokeFontManager )
+        m_strokeFontManager = std::make_unique<PDF_STROKE_FONT_MANAGER>();
+    else
+        m_strokeFontManager->Reset();
+
+    if( !m_outlineFontManager )
+        m_outlineFontManager = std::make_unique<PDF_OUTLINE_FONT_MANAGER>();
+    else
+        m_outlineFontManager->Reset();
+
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
        that they must have the bit 7 set) */
@@ -1225,46 +1265,204 @@ int PDF_PLOTTER::emitOutline()
     return -1;
 }
 
-void PDF_PLOTTER::endPlotEmitResources()
+void PDF_PLOTTER::emitStrokeFonts()
 {
-    /* We need to declare the resources we're using (fonts in particular)
-       The useful standard one is the Helvetica family. Adding external fonts
-       is *very* involved! */
-    struct {
-        const char *psname;
-        const char *rsname;
-        int font_handle;
-    } fontdefs[4] = {
-        { "/Helvetica",             "/KicadFont",   0 },
-        { "/Helvetica-Oblique",     "/KicadFontI",  0 },
-        { "/Helvetica-Bold",        "/KicadFontB",  0 },
-        { "/Helvetica-BoldOblique", "/KicadFontBI", 0 }
-    };
+    if( !m_strokeFontManager )
+        return;
 
-    /* Declare the font resources. Since they're builtin fonts, no descriptors (yay!)
-       We'll need metrics anyway to do any alignment (these are in the shared with
-       the postscript engine) */
-    for( int i = 0; i < 4; i++ )
+    for( PDF_STROKE_FONT_SUBSET* subsetPtr : m_strokeFontManager->AllSubsets() )
     {
-        fontdefs[i].font_handle = startPdfObject();
-        fmt::println( m_outputFile,
-                      "<< /BaseFont {}\n"
-                      "   /Type /Font\n"
-                      "   /Subtype /Type1\n"
-                      "   /Encoding /WinAnsiEncoding\n"
-                      ">>",
-                      fontdefs[i].psname );
+        PDF_STROKE_FONT_SUBSET& subset = *subsetPtr;
+
+        if( subset.GlyphCount() <= 1 )
+        {
+            subset.SetCharProcsHandle( -1 );
+            subset.SetFontHandle( -1 );
+            subset.SetToUnicodeHandle( -1 );
+            continue;
+        }
+
+        for( PDF_STROKE_FONT_SUBSET::GLYPH& glyph : subset.Glyphs() )
+        {
+            int charProcHandle = startPdfStream();
+
+            if( !glyph.m_stream.empty() )
+                fmt::print( m_workFile, "{}\n", glyph.m_stream );
+
+            closePdfStream();
+            glyph.m_charProcHandle = charProcHandle;
+        }
+
+        int charProcDictHandle = startPdfObject();
+        fmt::println( m_outputFile, "<<" );
+
+        for( const PDF_STROKE_FONT_SUBSET::GLYPH& glyph : subset.Glyphs() )
+            fmt::println( m_outputFile, "    /{} {} 0 R", glyph.m_name, glyph.m_charProcHandle );
+
+        fmt::println( m_outputFile, ">>" );
+        closePdfObject();
+        subset.SetCharProcsHandle( charProcDictHandle );
+
+        int toUnicodeHandle = startPdfStream();
+        std::string cmap = subset.BuildToUnicodeCMap();
+
+        if( !cmap.empty() )
+            fmt::print( m_workFile, "{}", cmap );
+
+        closePdfStream();
+        subset.SetToUnicodeHandle( toUnicodeHandle );
+
+        double fontMatrixScale = 1.0 / subset.UnitsPerEm();
+        double minX = subset.FontBBoxMinX();
+        double minY = subset.FontBBoxMinY();
+        double maxX = subset.FontBBoxMaxX();
+        double maxY = subset.FontBBoxMaxY();
+
+        int fontHandle = startPdfObject();
+        fmt::print( m_outputFile,
+                    "<<\n/Type /Font\n/Subtype /Type3\n/Name {}\n/FontBBox [ {:g} {:g} {:g} {:g} ]\n",
+                    subset.ResourceName(),
+                    minX,
+                    minY,
+                    maxX,
+                    maxY );
+        fmt::print( m_outputFile,
+                    "/FontMatrix [ {:g} 0 0 {:g} 0 0 ]\n/CharProcs {} 0 R\n",
+                    fontMatrixScale,
+                    fontMatrixScale,
+                    subset.CharProcsHandle() );
+        fmt::print( m_outputFile,
+                    "/Encoding << /Type /Encoding /Differences {} >>\n",
+                    subset.BuildDifferencesArray() );
+        fmt::print( m_outputFile,
+                    "/FirstChar {}\n/LastChar {}\n/Widths {}\n",
+                    subset.FirstChar(),
+                    subset.LastChar(),
+                    subset.BuildWidthsArray() );
+        fmt::print( m_outputFile,
+                    "/ToUnicode {} 0 R\n/Resources << /ProcSet [/PDF /Text] >>\n>>\n",
+                    subset.ToUnicodeHandle() );
+        closePdfObject();
+        subset.SetFontHandle( fontHandle );
+    }
+}
+
+
+void PDF_PLOTTER::emitOutlineFonts()
+{
+    if( !m_outlineFontManager )
+        return;
+
+    for( PDF_OUTLINE_FONT_SUBSET* subsetPtr : m_outlineFontManager->AllSubsets() )
+    {
+        if( !subsetPtr || !subsetPtr->HasGlyphs() )
+            continue;
+
+        const std::vector<uint8_t>& fontData = subsetPtr->FontFileData();
+
+        if( fontData.empty() )
+            continue;
+
+        int fontFileHandle = startPdfStream();
+        subsetPtr->SetFontFileHandle( fontFileHandle );
+
+        if( !fontData.empty() )
+            fwrite( fontData.data(), fontData.size(), 1, m_workFile );
+
+        closePdfStream();
+
+        std::string cidMap = subsetPtr->BuildCIDToGIDStream();
+        int cidMapHandle = startPdfStream();
+        subsetPtr->SetCIDMapHandle( cidMapHandle );
+
+        if( !cidMap.empty() )
+            fwrite( cidMap.data(), cidMap.size(), 1, m_workFile );
+
+        closePdfStream();
+
+        std::string toUnicode = subsetPtr->BuildToUnicodeCMap();
+        int toUnicodeHandle = startPdfStream();
+        subsetPtr->SetToUnicodeHandle( toUnicodeHandle );
+
+        if( !toUnicode.empty() )
+            fmt::print( m_workFile, "{}", toUnicode );
+
+        closePdfStream();
+
+        int descriptorHandle = startPdfObject();
+        subsetPtr->SetFontDescriptorHandle( descriptorHandle );
+
+        fmt::print( m_outputFile,
+                    "<<\n/Type /FontDescriptor\n/FontName /{}\n/Flags {}\n/ItalicAngle {:g}\n/Ascent {:g}\n/Descent {:g}\n"
+                    "/CapHeight {:g}\n/StemV {:g}\n/FontBBox [ {:g} {:g} {:g} {:g} ]\n/FontFile2 {} 0 R\n>>\n",
+                    subsetPtr->BaseFontName(),
+                    subsetPtr->Flags(),
+                    subsetPtr->ItalicAngle(),
+                    subsetPtr->Ascent(),
+                    subsetPtr->Descent(),
+                    subsetPtr->CapHeight(),
+                    subsetPtr->StemV(),
+                    subsetPtr->BBoxMinX(),
+                    subsetPtr->BBoxMinY(),
+                    subsetPtr->BBoxMaxX(),
+                    subsetPtr->BBoxMaxY(),
+                    subsetPtr->FontFileHandle() );
+        closePdfObject();
+
+        int cidFontHandle = startPdfObject();
+        subsetPtr->SetCIDFontHandle( cidFontHandle );
+
+        std::string widths = subsetPtr->BuildWidthsArray();
+
+        fmt::print( m_outputFile,
+                    "<<\n/Type /Font\n/Subtype /CIDFontType2\n/BaseFont /{}\n"
+                    "/CIDSystemInfo << /Registry (Adobe) /Ordering (Identity) /Supplement 0 >>\n"
+                    "/FontDescriptor {} 0 R\n/W {}\n/CIDToGIDMap {} 0 R\n>>\n",
+                    subsetPtr->BaseFontName(),
+                    subsetPtr->FontDescriptorHandle(),
+                    widths,
+                    subsetPtr->CIDMapHandle() );
+        closePdfObject();
+
+        int fontHandle = startPdfObject();
+        subsetPtr->SetFontHandle( fontHandle );
+
+        fmt::print( m_outputFile,
+                    "<<\n/Type /Font\n/Subtype /Type0\n/BaseFont /{}\n/Encoding /Identity-H\n"
+                    "/DescendantFonts [ {} 0 R ]\n/ToUnicode {} 0 R\n>>\n",
+                    subsetPtr->BaseFontName(),
+                    subsetPtr->CIDFontHandle(),
+                    subsetPtr->ToUnicodeHandle() );
         closePdfObject();
     }
+}
 
-    // Named font dictionary (was allocated, now we emit it)
+
+void PDF_PLOTTER::endPlotEmitResources()
+{
+    emitOutlineFonts();
+    emitStrokeFonts();
+
     startPdfObject( m_fontResDictHandle );
     fmt::println( m_outputFile, "<<" );
 
-    for( int i = 0; i < 4; i++ )
+    if( m_outlineFontManager )
     {
-        fmt::println( m_outputFile, "    {} {} 0 R",
-                 fontdefs[i].rsname, fontdefs[i].font_handle );
+        for( PDF_OUTLINE_FONT_SUBSET* subsetPtr : m_outlineFontManager->AllSubsets() )
+        {
+            if( subsetPtr && subsetPtr->FontHandle() >= 0 )
+                fmt::println( m_outputFile, "    {} {} 0 R", subsetPtr->ResourceName(), subsetPtr->FontHandle() );
+        }
+    }
+
+    if( m_strokeFontManager )
+    {
+        for( PDF_STROKE_FONT_SUBSET* subsetPtr : m_strokeFontManager->AllSubsets() )
+        {
+            const PDF_STROKE_FONT_SUBSET& subset = *subsetPtr;
+            if( subset.FontHandle() >= 0 )
+                fmt::println( m_outputFile, "    {} {} 0 R", subset.ResourceName(), subset.FontHandle() );
+        }
     }
 
     fmt::println( m_outputFile, ">>" );
@@ -1714,6 +1912,14 @@ bool PDF_PLOTTER::EndPlot()
 }
 
 
+struct OverbarInfo
+{
+    VECTOR2I startPos;
+    VECTOR2I endPos;
+    VECTOR2I fontSize;
+};
+
+
 void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
                         const COLOR4D&         aColor,
                         const wxString&        aText,
@@ -1733,34 +1939,45 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     if( aSize.x == 0 || aSize.y == 0 )
         return;
 
-    // Render phantom text (which will be searchable) behind the stroke font.  This won't
-    // be pixel-accurate, but it doesn't matter for searching.
-    int render_mode = 3;    // invisible
+    wxString text( aText );
 
-    VECTOR2I pos( aPos );
-    const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
-                                   : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
-
-    // Compute the copious transformation parameters of the Current Transform Matrix
-    double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
-    double wideningFactor, heightFactor;
-
-    VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
-    bool     textMirrored = aSize.x < 0;
-
-    computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify,
-                           aWidth, aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d,
-                           &ctm_e, &ctm_f, &heightFactor );
+    if( text.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        text = evaluator.Evaluate( text );
+    }
 
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
 
-    wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
-
     if( !aFont )
         aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
-    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic,
+    VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
+    bool     textMirrored = aSize.x < 0;
+
+    // Parse the text for markup
+    MARKUP::MARKUP_PARSER markupParser( text.ToStdString() );
+    std::unique_ptr<MARKUP::NODE> markupTree( markupParser.Parse() );
+
+    if( !markupTree )
+    {
+        wxLogTrace( tracePdfPlotter, "PDF_PLOTTER::Text: Markup parsing failed, falling back to plain text." );
+        // Fallback to simple text rendering if parsing fails
+        wxStringTokenizer str_tok( text, " ", wxTOKEN_RET_DELIMS );
+        VECTOR2I pos = aPos;
+
+        while( str_tok.HasMoreTokens() )
+        {
+            wxString word = str_tok.GetNextToken();
+            pos = renderWord( word, pos, t_size, aOrient, textMirrored, aWidth, aBold, aItalic,
+                              aFont, aFontMetrics, aV_justify, 0 );
+        }
+        return;
+    }
+
+    // Calculate the full text bounding box for alignment
+    VECTOR2I full_box( aFont->StringBoundaryLimits( text, t_size, aWidth, aBold, aItalic,
                                                     aFontMetrics ) );
 
     if( textMirrored )
@@ -1772,6 +1989,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     RotatePoint( box_x, aOrient );
     RotatePoint( box_y, aOrient );
 
+    VECTOR2I pos( aPos );
     if( aH_justify == GR_TEXT_H_ALIGN_CENTER )
         pos -= box_x / 2;
     else if( aH_justify == GR_TEXT_H_ALIGN_RIGHT )
@@ -1782,49 +2000,468 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
         pos += box_y;
 
-    while( str_tok.HasMoreTokens() )
+    // Render markup tree
+    std::vector<OverbarInfo> overbars;
+    renderMarkupNode( markupTree.get(), pos, t_size, aOrient, textMirrored, aWidth,
+                      aBold, aItalic, aFont, aFontMetrics, aV_justify, 0, overbars );
+
+    // Draw any overbars that were accumulated
+    drawOverbars( overbars, aOrient, aFontMetrics );
+}
+
+
+VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPosition,
+                                  const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                                  bool aTextMirrored, int aWidth, bool aBold, bool aItalic,
+                                  KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics,
+                                  enum GR_TEXT_V_ALIGN_T aV_justify, TEXT_STYLE_FLAGS aTextStyle )
+{
+    if( wxGetEnv( "KICAD_DEBUG_SYN_STYLE", nullptr ) )
     {
-        wxString word = str_tok.GetNextToken();
-
-        computeTextParameters( pos, word, aOrient, t_size, textMirrored, GR_TEXT_H_ALIGN_LEFT,
-                               GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
-                               &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
-
-        // Extract the changed width and rotate by the orientation to get the offset for the
-        // next word
-        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth,
-                                                    aBold, aItalic, aFontMetrics ).x, 0 );
-
-        if( textMirrored )
-            bbox.x *= -1;
-
-        RotatePoint( bbox, aOrient );
-        pos += bbox;
-
-        // Don't try to output a blank string
-        if( word.Trim( false ).Trim( true ).empty() )
-            continue;
-
-        /* We use the full CTM instead of the text matrix because the same
-           coordinate system will be used for the overlining. Also the %f
-           for the trig part of the matrix to avoid %g going in exponential
-           format (which is not supported) */
-        fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} {:g} Tf {} Tr {:g} Tz ",
-                    ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
-                    fontname,
-                    heightFactor,
-                    render_mode,
-                    wideningFactor * 100 );
-
-        std::string txt_pdf = encodeStringForPlotter( word );
-        fmt::println( m_workFile, "{} Tj ET", txt_pdf );
-        // Restore the CTM
-        fmt::println( m_workFile, "Q" );
+        int styleFlags = 0;
+        if( aFont && aFont->IsOutline() )
+            styleFlags = static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace() ? static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace()->style_flags : 0;
+        wxLogTrace( tracePdfPlotter, "renderWord enter word='%s' bold=%d italic=%d textStyle=%u styleFlags=%d", TO_UTF8( aWord ), (int) aBold, (int) aItalic, (unsigned) aTextStyle, styleFlags );
     }
 
-    // Plot the stroked text (if requested)
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aFont, aFontMetrics );
+    // Don't try to output a blank string, but handle space characters for word separation
+    if( aWord.empty() )
+        return aPosition;
+
+    // If the word is just a space character, advance position by space width and continue
+    if( aWord == wxT(" ") )
+    {
+        // Calculate space width and advance position
+        VECTOR2I spaceBox( aFont->StringBoundaryLimits( wxT("n"), aSize, aWidth,
+                                                        aBold, aItalic, aFontMetrics ).x / 2, 0 );
+
+        if( aTextMirrored )
+            spaceBox.x *= -1;
+
+        VECTOR2I rotatedSpaceBox = spaceBox;
+        RotatePoint( rotatedSpaceBox, aOrient );
+        return aPosition + rotatedSpaceBox;
+    }
+
+    // Compute transformation parameters for this word
+    double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
+    double wideningFactor, heightFactor;
+
+    computeTextParameters( aPosition, aWord, aOrient, aSize, aTextMirrored,
+                          GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_BOTTOM, aWidth,
+                          aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
+                          &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+
+    // Calculate next position for word spacing
+    VECTOR2I bbox( aFont->StringBoundaryLimits( aWord, aSize, aWidth, aBold, aItalic, aFontMetrics ).x, 0 );
+    if( aTextMirrored )
+        bbox.x *= -1;
+    RotatePoint( bbox, aOrient );
+    VECTOR2I nextPos = aPosition + bbox;
+
+    // Apply vertical offset for subscript/superscript
+    // Stroke font positioning (baseline) already correct per user feedback.
+    // Outline fonts need: superscript +1 full font height higher; subscript +1 full font height higher
+    if( aTextStyle & TEXT_STYLE::SUPERSCRIPT )
+    {
+        double factor = ( aFont && aFont->IsOutline() ) ? 0.050 : 0.030; // stroke original ~0.40, outline needs +1.0
+        VECTOR2I offset( 0, static_cast<int>( std::lround( aSize.y * factor ) ) );
+        RotatePoint( offset, aOrient );
+        ctm_e -= offset.x;
+        ctm_f += offset.y; // Note: PDF Y increases upward
+    }
+    else if( aTextStyle & TEXT_STYLE::SUBSCRIPT )
+    {
+        // For outline fonts raise by one font height versus stroke (which shifts downward slightly)
+        VECTOR2I offset( 0, 0 );
+
+        if( !aFont || aFont->IsStroke() )
+            offset.y = static_cast<int>( std::lround( aSize.y * 0.01 ) );
+
+        RotatePoint( offset, aOrient );
+        ctm_e += offset.x;
+        ctm_f -= offset.y; // Note: PDF Y increases upward
+    }
+
+    // Render the word using existing outline font logic
+    bool useOutlineFont = aFont && aFont->IsOutline();
+
+    if( useOutlineFont )
+    {
+        std::vector<PDF_OUTLINE_FONT_RUN> outlineRuns;
+
+        if( m_outlineFontManager )
+        {
+            m_outlineFontManager->EncodeString( aWord, static_cast<KIFONT::OUTLINE_FONT*>( aFont ),
+                                                ( aItalic || ( aTextStyle & TEXT_STYLE::ITALIC ) ),
+                                                ( aBold || ( aTextStyle & TEXT_STYLE::BOLD ) ),
+                                                &outlineRuns );
+        }
+
+        if( !outlineRuns.empty() )
+        {
+            // Apply baseline adjustment (keeping existing logic)
+            double baseline_factor = 0.17;
+            double alignment_multiplier = 1.0;
+            if( aV_justify == GR_TEXT_V_ALIGN_CENTER )
+                alignment_multiplier = 2.0;
+            else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
+                alignment_multiplier = 4.0;
+
+            VECTOR2D font_size_dev = userToDeviceSize( aSize );
+            double baseline_adjustment = font_size_dev.y * baseline_factor * alignment_multiplier;
+
+            double adjusted_ctm_e = ctm_e;
+            double adjusted_ctm_f = ctm_f;
+
+            double angle_rad = aOrient.AsRadians();
+            double cos_angle = cos( angle_rad );
+            double sin_angle = sin( angle_rad );
+
+            adjusted_ctm_e = ctm_e - baseline_adjustment * sin_angle;
+            adjusted_ctm_f = ctm_f + baseline_adjustment * cos_angle;
+
+            double adj_c = ctm_c;
+            double adj_d = ctm_d;
+
+            if( aItalic && ( !aFont || !aFont->IsOutline() ) )
+            {
+                double tilt = -ITALIC_TILT;
+                if( wideningFactor < 0 )
+                    tilt = -tilt;
+
+                adj_c -= ctm_a * tilt;
+                adj_d -= ctm_b * tilt;
+            }
+
+            // Synthetic italic (shear) for outline font if requested but font not intrinsically italic
+            bool syntheticItalicApplied = false;
+            double appliedTilt = 0.0;
+            double syn_c = adj_c;
+            double syn_d = adj_d;
+            double syn_a = ctm_a;
+            double syn_b = ctm_b;
+            bool wantItalic = ( aItalic || ( aTextStyle & TEXT_STYLE::ITALIC ) );
+            if( std::getenv( "KICAD_FORCE_SYN_ITALIC" ) )
+                wantItalic = true; // debug: ensure path triggers when forcing synthetic italic
+            bool wantBold   = ( aBold   || ( aTextStyle & TEXT_STYLE::BOLD ) );
+            bool fontIsItalic = aFont && aFont->IsOutline() && aFont->IsItalic();
+            bool fontIsBold   = aFont && aFont->IsOutline() && aFont->IsBold();
+            bool fontIsFakeItalic = aFont && aFont->IsOutline() && static_cast<KIFONT::OUTLINE_FONT*>( aFont )->IsFakeItalic();
+            bool fontIsFakeBold   = aFont && aFont->IsOutline() && static_cast<KIFONT::OUTLINE_FONT*>( aFont )->IsFakeBold();
+
+            // Environment overrides for testing synthetic italics:
+            //   KICAD_FORCE_SYN_ITALIC=1 forces synthetic shear even if font has italic face
+            //   KICAD_SYN_ITALIC_TILT=<float degrees or tangent?>: if value contains 'deg' treat as degrees,
+            //   otherwise treat as raw tilt factor (x += tilt*y)
+            bool forceSynItalic = false;
+            double overrideTilt = 0.0;
+            if( const char* envForce = std::getenv( "KICAD_FORCE_SYN_ITALIC" ) )
+            {
+                if( *envForce != '\0' && *envForce != '0' )
+                    forceSynItalic = true;
+            }
+
+            if( const char* envTilt = std::getenv( "KICAD_SYN_ITALIC_TILT" ) )
+            {
+                std::string tiltStr( envTilt );
+                try
+                {
+                    if( tiltStr.find( "deg" ) != std::string::npos )
+                    {
+                        double deg = std::stod( tiltStr );
+                        overrideTilt = tan( deg * M_PI / 180.0 );
+                    }
+                    else
+                    {
+                        overrideTilt = std::stod( tiltStr );
+                    }
+                }
+                catch( ... )
+                {
+                    overrideTilt = 0.0; // ignore malformed
+                }
+            }
+
+            // Trace after we know style flags
+            wxLogTrace( tracePdfPlotter,
+                        "Outline path word='%s' runs=%zu wantItalic=%d fontIsItalic=%d fontIsFakeItalic=%d wantBold=%d fontIsBold=%d fontIsFakeBold=%d forceSyn=%d",
+                        TO_UTF8( aWord ), outlineRuns.size(), (int) wantItalic, (int) fontIsItalic,
+                        (int) fontIsFakeItalic, (int) wantBold, (int) fontIsBold, (int) fontIsFakeBold,
+                        (int) forceSynItalic );
+
+            // Apply synthetic italic if:
+            //  - Italic requested AND outline font
+            //  - And either forceSynItalic env var set OR there is no REAL italic face.
+            //    (A fake italic flag from fontconfig substitution should NOT block synthetic shear.)
+            bool realItalicFace = aFont && aFont->IsOutline() && aFont->IsItalic() && !fontIsFakeItalic;
+            if( wantItalic && aFont && aFont->IsOutline() && ( forceSynItalic || !realItalicFace ) )
+            {
+                // We want to apply a horizontal shear so that x' = x + tilt * y in the glyph's
+                // local coordinate system BEFORE rotation.  The existing text matrix columns are:
+                //   first column  = (a, b)^T  -> x-axis direction & scale
+                //   second column = (c, d)^T  -> y-axis direction & scale
+                // Prepending a shear matrix S = [[1 tilt][0 1]] (i.e. T' = T * S is WRONG here).
+                // We need to LEFT-multiply: T' = R * S where R is the original rotation/scale.
+                // Left multiplication keeps first column unchanged and adds (tilt * firstColumn)
+                // to the second column: (c', d') = (c + tilt * a, d + tilt * b).
+                // This produces a right-leaning italic for positive tilt.
+                double tilt = ( overrideTilt != 0.0 ) ? overrideTilt : ITALIC_TILT;
+                if( wideningFactor < 0 )       // mirrored text should mirror the shear
+                    tilt = -tilt;
+
+                syn_c = adj_c + tilt * syn_a;
+                syn_d = adj_d + tilt * syn_b;
+                appliedTilt = tilt;
+                syntheticItalicApplied = true;
+
+                wxLogTrace( tracePdfPlotter,
+                            "Synthetic italic shear applied: tilt=%f a=%f b=%f c->%f d->%f",
+                            tilt, syn_a, syn_b, syn_c, syn_d );
+            }
+
+            if( wantBold && aFont && aFont->IsOutline() && !fontIsBold )
+            {
+                // Slight horizontal widening to simulate bold (~3%)
+                syn_a *= 1.03;
+                syn_b *= 1.03;
+            }
+
+            if( syntheticItalicApplied )
+            {
+                // PDF comment to allow manual inspection in the output stream
+                fmt::print( m_workFile, "% syn-italic tilt={} a={} b={} c={} d={}\n", appliedTilt, syn_a, syn_b, syn_c, syn_d );
+            }
+
+            fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {:g} Tz ",
+                        syn_a, syn_b, syn_c, syn_d, adjusted_ctm_e, adjusted_ctm_f,
+                        0, // render_mode
+                        wideningFactor * 100 );
+
+            for( const PDF_OUTLINE_FONT_RUN& run : outlineRuns )
+            {
+                fmt::print( m_workFile, "{} {:g} Tf <", run.m_subset->ResourceName(), heightFactor );
+
+                for( const PDF_OUTLINE_FONT_GLYPH& glyph : run.m_glyphs )
+                {
+                    fmt::print( m_workFile, "{:02X}{:02X}",
+                                static_cast<unsigned char>( ( glyph.cid >> 8 ) & 0xFF ),
+                                static_cast<unsigned char>( glyph.cid & 0xFF ) );
+                }
+
+                fmt::print( m_workFile, "> Tj " );
+            }
+
+            fmt::println( m_workFile, "ET" );
+            fmt::println( m_workFile, "Q" );
+        }
+    }
+    else
+    {
+        // Handle stroke fonts
+        if( !m_strokeFontManager )
+            return nextPos;
+
+        wxLogTrace( tracePdfPlotter, "Stroke path word='%s' wantItalic=%d aItalic=%d aBold=%d",
+                    TO_UTF8( aWord ), (int) ( aItalic || ( aTextStyle & TEXT_STYLE::ITALIC ) ), (int) aItalic, (int) aBold );
+
+        std::vector<PDF_STROKE_FONT_RUN> runs;
+        m_strokeFontManager->EncodeString( aWord, &runs, aBold, aItalic );
+
+        if( !runs.empty() )
+        {
+            VECTOR2D dev_size = userToDeviceSize( aSize );
+            double fontSize = dev_size.y;
+
+            double adj_c = ctm_c;
+            double adj_d = ctm_d;
+
+            if( aItalic && ( !aFont || !aFont->IsOutline() ) )
+            {
+                double tilt = -ITALIC_TILT;
+                if( wideningFactor < 0 )
+                    tilt = -tilt;
+
+                adj_c -= ctm_a * tilt;
+                adj_d -= ctm_b * tilt;
+            }
+
+            fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {:g} Tz ",
+                        ctm_a, ctm_b, adj_c, adj_d, ctm_e, ctm_f,
+                        0, // render_mode
+                        wideningFactor * 100 );
+
+            for( const PDF_STROKE_FONT_RUN& run : runs )
+            {
+                fmt::print( m_workFile, "{} {:g} Tf {} Tj ",
+                            run.m_subset->ResourceName(),
+                            fontSize,
+                            encodeByteString( run.m_bytes ) );
+            }
+
+            fmt::println( m_workFile, "ET" );
+            fmt::println( m_workFile, "Q" );
+        }
+    }
+
+    return nextPos;
+}
+
+
+VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
+                                         const VECTOR2I& aBaseSize, const EDA_ANGLE& aOrient,
+                                         bool aTextMirrored, int aWidth, bool aBaseBold,
+                                         bool aBaseItalic, KIFONT::FONT* aFont,
+                                         const KIFONT::METRICS& aFontMetrics,
+                                         enum GR_TEXT_V_ALIGN_T aV_justify,
+                                         TEXT_STYLE_FLAGS aTextStyle,
+                                         std::vector<OverbarInfo>& aOverbars )
+{
+    VECTOR2I nextPosition = aPosition;
+
+    if( !aNode )
+        return nextPosition;
+
+    TEXT_STYLE_FLAGS currentStyle = aTextStyle;
+    VECTOR2I currentSize = aBaseSize;
+    bool drawOverbar = false;
+
+    // Handle markup node types
+    if( !aNode->is_root() )
+    {
+        if( aNode->isSubscript() )
+        {
+            currentStyle |= TEXT_STYLE::SUBSCRIPT;
+            // Subscript: smaller size and lower position
+            currentSize = VECTOR2I( aBaseSize.x * 0.5, aBaseSize.y * 0.6 );
+        }
+        else if( aNode->isSuperscript() )
+        {
+            currentStyle |= TEXT_STYLE::SUPERSCRIPT;
+            // Superscript: smaller size and higher position
+            currentSize = VECTOR2I( aBaseSize.x * 0.5, aBaseSize.y * 0.6 );
+        }
+
+        if( aNode->isOverbar() )
+        {
+            drawOverbar = true;
+            // Overbar doesn't change font size, just adds decoration
+        }
+
+        // Render content of this node if it has text
+        if( aNode->has_content() )
+        {
+            wxString nodeText = aNode->asWxString();
+
+            // Process text content (simplified version of the main text processing)
+            wxStringTokenizer str_tok( nodeText, " ", wxTOKEN_RET_DELIMS );
+
+            while( str_tok.HasMoreTokens() )
+            {
+                wxString word = str_tok.GetNextToken();
+                nextPosition = renderWord( word, nextPosition, currentSize, aOrient, aTextMirrored,
+                                         aWidth, aBaseBold || (currentStyle & TEXT_STYLE::BOLD),
+                                         aBaseItalic || (currentStyle & TEXT_STYLE::ITALIC),
+                                         aFont, aFontMetrics, aV_justify, currentStyle );
+            }
+        }
+    }
+
+    // Process child nodes recursively
+    for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
+    {
+        VECTOR2I startPos = nextPosition;
+
+        nextPosition = renderMarkupNode( child.get(), nextPosition, currentSize, aOrient,
+                                       aTextMirrored, aWidth, aBaseBold, aBaseItalic,
+                                       aFont, aFontMetrics, aV_justify, currentStyle, aOverbars );
+
+        // Store overbar info for later rendering
+        if( drawOverbar )
+        {
+            VECTOR2I endPos = nextPosition;
+            aOverbars.push_back( { startPos, endPos, currentSize, aFont && aFont->IsOutline(), aV_justify } );
+        }
+    }
+
+    return nextPosition;
+}
+
+
+void PDF_PLOTTER::drawOverbars( const std::vector<OverbarInfo>& aOverbars,
+                                 const EDA_ANGLE& aOrient, const KIFONT::METRICS& aFontMetrics )
+{
+    for( const OverbarInfo& overbar : aOverbars )
+    {
+        // Baseline direction (vector from start to end). If zero length, derive from orientation.
+        VECTOR2D dir( overbar.endPos.x - overbar.startPos.x,
+                      overbar.endPos.y - overbar.startPos.y );
+
+        double len = hypot( dir.x, dir.y );
+        if( len <= 1e-6 )
+        {
+            // Fallback: derive direction from orientation angle
+            double ang = aOrient.AsRadians();
+            dir.x = cos( ang );
+            dir.y = sin( ang );
+            len = 1.0;
+        }
+
+        dir.x /= len;
+        dir.y /= len;
+
+        // Perpendicular (rotate dir 90° CCW). Upward in text space so overbar sits above baseline.
+        VECTOR2D nrm( -dir.y, dir.x );
+
+        // Base vertical offset distance in device units (baseline -> default overbar position)
+        double barOffset = aFontMetrics.GetOverbarVerticalPosition( overbar.fontSize.y );
+
+        // Adjust further for outline fonts
+        if( overbar.isOutline )
+            barOffset += overbar.fontSize.y * 0.25; // extra raise for outline font
+
+        // Mirror the text vertical alignment adjustments used for baseline shifting.
+        // Earlier logic scales baseline adjustment: CENTER ~2x, TOP ~4x. We apply proportional
+        // extra raise so that overbars track visually with perceived baseline shift.
+        double alignMult = 1.0;
+
+        switch( overbar.vAlign )
+        {
+        case GR_TEXT_V_ALIGN_CENTER: alignMult = overbar.isOutline ? 2.0 : 1.0; break;
+        case GR_TEXT_V_ALIGN_TOP:    alignMult = overbar.isOutline ? 4.0 : 1.0; break;
+        default:                     alignMult = 1.0; break; // bottom
+        }
+
+        if( alignMult > 1.0 )
+        {
+            // Scale only the baseline component (approx 17% of height, matching earlier baseline_factor)
+            double baseline_factor = 0.17;
+            barOffset += ( alignMult - 1.0 ) * ( baseline_factor * overbar.fontSize.y );
+        }
+
+        // Trim to avoid rounded cap extension (assumes stroke caps); proportion of font width.
+        double barTrim = overbar.fontSize.x * 0.1;
+
+        // Apply trim along baseline direction and offset along normal
+        VECTOR2D startPt( overbar.startPos.x, overbar.startPos.y );
+        VECTOR2D endPt( overbar.endPos.x, overbar.endPos.y );
+
+        // Both endpoints should share identical vertical (normal) offset above baseline.
+        // Use a single offset vector offVec = -barOffset * nrm (negative because nrm points 'up').
+        VECTOR2D offVec( -barOffset * nrm.x, -barOffset * nrm.y );
+
+        startPt.x += dir.x * barTrim + offVec.x;
+        startPt.y += dir.y * barTrim + offVec.y;
+        endPt.x -= dir.x * barTrim - offVec.x; // subtract trim, then apply same vertical offset
+        endPt.y -= dir.y * barTrim - offVec.y;
+
+        VECTOR2I iStart( KiROUND( startPt.x ), KiROUND( startPt.y ) );
+        VECTOR2I iEnd( KiROUND( endPt.x ), KiROUND( endPt.y ) );
+
+        MoveTo( iStart );
+        LineTo( iEnd );
+        PenFinish();
+    }
 }
 
 

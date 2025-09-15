@@ -255,6 +255,13 @@ extern KICOMMON_API const wxChar* const traceDesignBlocks;
  */
 extern KICOMMON_API const wxChar* const traceLibFieldTable;
 
+/**
+ * Flag to enable PDF plotter debug tracing.
+ *
+ * Use "KICAD_PDF_PLOTTER" to enable.
+ */
+extern KICOMMON_API const wxChar* const tracePdfPlotter;
+
 ///@}
 
 /**
