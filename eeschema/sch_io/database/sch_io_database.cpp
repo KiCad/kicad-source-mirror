@@ -463,13 +463,13 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     LIB_ID libId = symbol->GetLibId();
     libId.SetSubLibraryName( aTable.name );;
     symbol->SetLibId( libId );
+    wxArrayString footprintsList;
 
     if( aRow.count( aTable.footprints_col ) )
     {
         std::string footprints = std::any_cast<std::string>( aRow.at( aTable.footprints_col ) );
 
         wxString footprintsStr = wxString( footprints.c_str(), wxConvUTF8 );
-        wxArrayString footprintsList;
         wxStringTokenizer tokenizer( footprintsStr, ';' );
 
         while( tokenizer.HasMoreTokens() )
@@ -477,8 +477,6 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
         if( footprintsList.size() > 0 )
             symbol->GetFootprintField().SetText( footprintsList[0] );
-
-        symbol->SetFPFilters( footprintsList );
     }
     else
     {
@@ -507,10 +505,10 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         wxString value( std::any_cast<std::string>( aRow.at( aTable.properties.footprint_filters ) )
                                 .c_str(),
                         wxConvUTF8 );
-        wxArrayString filters;
-        filters.push_back( value );
-        symbol->SetFPFilters( filters );
+        footprintsList.push_back( value );
     }
+
+    symbol->SetFPFilters( footprintsList );
 
     if( !aTable.properties.exclude_from_sim.empty()
         && aRow.count( aTable.properties.exclude_from_sim ) )
