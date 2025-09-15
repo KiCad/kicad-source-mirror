@@ -4839,8 +4839,7 @@ void SCH_IO_ALTIUM::doEnumerateSymbolLib( const wxString& aLibraryPath,
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
-    bool powerSymbolsOnly = ( aProperties &&
-                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
+    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) );
 
     auto it = m_libCache.find( aLibraryPath );
 

@@ -73,9 +73,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
-    bool powerSymbolsOnly = ( aProperties &&
-                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) !=
-                              aProperties->end() );
+    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) );
 
     for( auto const& pair : m_nameToSymbolcache )
     {

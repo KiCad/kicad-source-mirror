@@ -2118,8 +2118,7 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                               const wxString&   aLibraryPath,
                                               const std::map<std::string, UTF8>* aProperties )
 {
-    bool powerSymbolsOnly = ( aProperties &&
-                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
+    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) );
 
     cacheLib( aLibraryPath, aProperties  );
 
@@ -2134,11 +2133,10 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 
 void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                              const wxString&   aLibraryPath,
-                                            const std::map<std::string, UTF8>* aProperties )
+                                              const wxString& aLibraryPath,
+                                              const std::map<std::string, UTF8>* aProperties )
 {
-    bool powerSymbolsOnly = ( aProperties &&
-                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
+    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) );
 
     cacheLib( aLibraryPath, aProperties );
 
