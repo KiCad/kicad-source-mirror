@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-13 10:02+0000\n"
+"PO-Revision-Date: 2025-09-15 11:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -11753,7 +11753,6 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Keine Symbole mit passenden Kriterien gefunden ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
 msgstr "*** Symbolbibliotheks-ID nicht gültig ***"
 
