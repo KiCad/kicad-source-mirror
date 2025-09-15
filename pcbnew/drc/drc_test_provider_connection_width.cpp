@@ -514,11 +514,16 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
     std::vector<std::future<size_t>> returns;
     returns.reserve( dataset.size() );
+
     for( const auto& [ netLayer, itemsPoly ] : dataset )
     {
         int netcode = netLayer.Netcode;
         PCB_LAYER_ID layer = netLayer.Layer;
-        returns.emplace_back( tp.submit_task( [&, netcode, layer]() { return build_netlayer_polys( netcode, layer ); } ) );
+        returns.emplace_back( tp.submit_task(
+                [&, netcode, layer]()
+                {
+                    return build_netlayer_polys( netcode, layer );
+                } ) );
     }
 
     for( auto& ret : returns )
@@ -542,9 +547,11 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             if( minWidth - epsilon <= 0 )
                 continue;
 
-            returns.emplace_back( tp.submit_task( [min_checker, &itemsPoly, &netLayer, minWidth]() {
-                return min_checker( itemsPoly, netLayer.Layer, minWidth );
-            } ) );
+            returns.emplace_back( tp.submit_task(
+                    [min_checker, &itemsPoly, &netLayer, minWidth]()
+                    {
+                        return min_checker( itemsPoly, netLayer.Layer, minWidth );
+                    } ) );
         }
     }
 

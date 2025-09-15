@@ -1068,7 +1068,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
             };
 
     auto testGraphicAgainstZone =
-            [&]( BOARD_ITEM* item )
+            [this, isKnockoutText]( BOARD_ITEM* item )
             {
                 if( item->Type() == PCB_REFERENCE_IMAGE_T )
                     return;
@@ -1097,7 +1097,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     std::mutex                                            checkedPairsMutex;
 
     auto testCopperGraphic =
-            [&]( PCB_SHAPE* aShape )
+            [this, &checkedPairs, &checkedPairsMutex]( PCB_SHAPE* aShape )
             {
                 PCB_LAYER_ID layer = aShape->GetLayer();
 
@@ -1149,42 +1149,49 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                             m_board->m_DRCMaxClearance );
             };
 
-    std::future<void> retn = tp.submit_task(
-            [&]()
-            {
-                for( BOARD_ITEM* item : m_board->Drawings() )
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        (void)tp.submit_task(
+                [this, item, &done, testGraphicAgainstZone, testCopperGraphic]()
                 {
-                    testGraphicAgainstZone( item );
-
-                    if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
-                        testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
-
-                    done.fetch_add( 1 );
-
-                    if( m_drcEngine->IsCancelled() )
-                        break;
-                }
-
-                for( FOOTPRINT* footprint : m_board->Footprints() )
-                {
-                    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+                    if( !m_drcEngine->IsCancelled() )
                     {
                         testGraphicAgainstZone( item );
 
+                        if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
+                            testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
+
                         done.fetch_add( 1 );
-
-                        if( m_drcEngine->IsCancelled() )
-                            break;
                     }
-                }
-            } );
+                } );
+    }
 
-    std::future_status status = retn.wait_for( std::chrono::milliseconds( 250 ) );
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        (void)tp.submit_task(
+                [this, footprint, &done, testGraphicAgainstZone]()
+                {
+                    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+                    {
+                        if( !m_drcEngine->IsCancelled() )
+                        {
+                            testGraphicAgainstZone( item );
 
-    while( status != std::future_status::ready )
+                            done.fetch_add( 1 );
+                        }
+                    }
+                } );
+    }
+
+    while( true )
     {
         reportProgress( done, count );
-        status = retn.wait_for( std::chrono::milliseconds( 250 ) );
+
+        if( m_drcEngine->IsCancelled() )
+            break;
+
+        if( tp.wait_for( std::chrono::milliseconds( 250 ) ) )
+            break;
     }
 }
 
