@@ -55,8 +55,11 @@ struct HTTP_LIB_PART
 
     std::time_t lastCached = 0;
 
-    std::vector<std::pair<std::string, std::tuple<std::string, bool>>>
-            fields; ///< additional generic fields
+    std::string              desc;
+    std::string              keywords;
+    std::vector<std::string> fp_filters;
+
+    std::vector<std::pair<std::string, std::tuple<std::string, bool>>> fields;
 };
 
 

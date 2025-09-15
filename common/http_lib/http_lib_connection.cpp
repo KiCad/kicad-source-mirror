@@ -288,6 +288,27 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             aFetchedPart.fields.push_back(
                     std::make_pair( key, std::make_tuple( value, visible ) ) );
         }
+
+        if( response.contains( "description" ) )
+            aFetchedPart.desc = response.at( "description" );
+
+        if( response.contains( "keywords" ) )
+            aFetchedPart.keywords = response.at( "keywords" );
+
+        if( response.contains( "footprint_filters" ) )
+        {
+            nlohmann::json filters_json = response.at( "footprint_filters" );
+
+            if( filters_json.is_array() )
+            {
+                for( const auto& val : filters_json )
+                    aFetchedPart.fp_filters.push_back( val );
+            }
+            else
+            {
+                aFetchedPart.fp_filters.push_back( filters_json );
+            }
+        }
     }
     catch( const std::exception& e )
     {

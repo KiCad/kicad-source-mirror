@@ -397,17 +397,13 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
         }
         else if( !symbolId.IsValid() )
         {
-            wxLogTrace( traceHTTPLib,
-                        wxT( "loadSymbolFromPart: source symbol id '%s' is invalid, "
-                             "will create empty symbol" ),
-                        symbolIdStr );
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: source symbol id '%s' is invalid, "
+                                           "will create empty symbol" ), symbolIdStr );
         }
         else
         {
-            wxLogTrace( traceHTTPLib,
-                        wxT( "loadSymbolFromPart: source symbol '%s' not found, "
-                             "will create empty symbol" ),
-                        symbolIdStr );
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: source symbol '%s' not found, "
+                                           "will create empty symbol" ), symbolIdStr );
         }
     }
 
@@ -496,6 +492,16 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
             }
         }
     }
+
+    symbol->SetDescription( aPart.desc );
+    symbol->SetKeyWords( aPart.keywords );
+
+    wxArrayString filters;
+
+    for( const std::string& filter : aPart.fp_filters )
+        filters.push_back( filter );
+
+    symbol->SetFPFilters( filters );
 
     return symbol;
 }
