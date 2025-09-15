@@ -36,7 +36,7 @@ if( MSVC )
         set( KICAD_HOST_ARCH "x64" )
         set( KICAD_HOST_ARCH_X64 1 )
     else()
-        message(FATAL_ERROR "Failed to determine the host architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+        message(FATAL_ERROR "Failed to determine the host architecture: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
     endif()
 
     if( NOT KICAD_BUILD_ARCH STREQUAL KICAD_HOST_ARCH )
