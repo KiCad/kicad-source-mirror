@@ -405,14 +405,23 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
     symbol->SetExcludedFromBoard( aPart.exclude_from_board );
     symbol->SetExcludedFromSim( aPart.exclude_from_sim );
 
+    wxArrayString fp_filters;
+
     for( auto& [fieldName, fieldProperties] : aPart.fields )
     {
         wxString lowerFieldName = wxString( fieldName ).Lower();
 
         if( lowerFieldName == footprint_field )
         {
-            SCH_FIELD* field = &symbol->GetFootprintField();
-            field->SetText( std::get<0>( fieldProperties ) );
+            SCH_FIELD*        field = &symbol->GetFootprintField();
+            wxStringTokenizer tokenizer( std::get<0>( fieldProperties ), ';' );
+
+            while( tokenizer.HasMoreTokens() )
+                fp_filters.Add( tokenizer.GetNextToken() );
+
+            if( fp_filters.size() > 0 )
+                field->SetText( fp_filters[0] );
+
             field->SetVisible( std::get<1>( fieldProperties ) );
         }
         else if( lowerFieldName == description_field )
@@ -476,12 +485,10 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
     symbol->SetDescription( aPart.desc );
     symbol->SetKeyWords( aPart.keywords );
 
-    wxArrayString filters;
-
     for( const std::string& filter : aPart.fp_filters )
-        filters.push_back( filter );
+        fp_filters.push_back( filter );
 
-    symbol->SetFPFilters( filters );
+    symbol->SetFPFilters( fp_filters );
 
     return symbol;
 }
