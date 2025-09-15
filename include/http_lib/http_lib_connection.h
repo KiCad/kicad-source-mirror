@@ -36,10 +36,9 @@ public:
     static const long DEFAULT_TIMEOUT = 10;
 
     HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow );
+    virtual ~HTTP_LIB_CONNECTION() = default;
 
-    ~HTTP_LIB_CONNECTION();
-
-    bool IsValidEndpoint() const;
+    bool IsValidEndpoint() const { return m_endpointValid; }
 
     /**
      * Retrieve a single part with full details from the HTTP library.
@@ -71,7 +70,7 @@ public:
            return "";
     }
 
-    auto& getCachedParts() { return m_cache; }
+    auto& GetCachedParts() { return m_cache; }
 
 private:
     // This is clunky but at the moment the only way to free the pointer after use without
@@ -89,7 +88,7 @@ private:
         return aCurl;
     }
 
-    bool ValidateHTTPLibraryEndpoints();
+    bool validateHttpLibraryEndpoints();
 
     bool syncCategories();
 
@@ -112,27 +111,20 @@ private:
      */
     wxString httpErrorCodeDescription( uint16_t aHttpCode );
 
+private:
     HTTP_LIB_SOURCE m_source;
+    bool            m_endpointValid = false;
+    std::string     m_lastError;
+
+    std::vector<HTTP_LIB_CATEGORY>     m_categories;
+    std::map<std::string, std::string> m_categoryDescriptions;
+    std::map<std::string, std::string> m_parts;
 
     //          part.id     part
     std::map<std::string, HTTP_LIB_PART> m_cachedParts;
 
     //        part.name               part.id     category.id
     std::map<std::string, std::tuple<std::string, std::string>> m_cache;
-
-    bool m_endpointValid = false;
-
-    std::string m_lastError;
-
-    std::vector<HTTP_LIB_CATEGORY>     m_categories;
-    std::map<std::string, std::string> m_categoryDescriptions;
-
-    std::map<std::string, std::string> m_parts;
-
-    const std::string http_endpoint_categories = "categories";
-    const std::string http_endpoint_parts = "parts";
-    const std::string http_endpoint_settings = "settings";
-    const std::string http_endpoint_auth = "authentication";
 };
 
 #endif //KICAD_HTTP_LIB_CONNECTION_H

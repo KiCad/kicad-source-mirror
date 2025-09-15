@@ -2170,8 +2170,8 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 
 void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                              const wxString&   aLibraryPath,
-                                            const std::map<std::string, UTF8>* aProperties )
+                                              const wxString& aLibraryPath,
+                                              const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 

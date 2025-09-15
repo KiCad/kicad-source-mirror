@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_HTTP_LIB_SETTINGS_H
-#define KICAD_HTTP_LIB_SETTINGS_H
+#pragma once
 
 #include <settings/json_settings.h>
 #include <ctime>
@@ -49,9 +48,9 @@ struct HTTP_LIB_PART
     std::string name;
     std::string symbolIdStr;
 
-    bool exclude_from_bom = false;
-    bool exclude_from_board = false;
-    bool exclude_from_sim = false;
+    bool        exclude_from_bom = false;
+    bool        exclude_from_board = false;
+    bool        exclude_from_sim = false;
 
     std::time_t lastCached = 0;
 
@@ -79,29 +78,26 @@ class HTTP_LIB_SETTINGS : public JSON_SETTINGS
 {
 public:
     HTTP_LIB_SETTINGS( const std::string& aFilename );
-
-    virtual ~HTTP_LIB_SETTINGS() {}
-
-    HTTP_LIB_SOURCE m_Source;
+    ~HTTP_LIB_SETTINGS() override = default;
 
     HTTP_LIB_SOURCE_TYPE get_HTTP_LIB_SOURCE_TYPE()
     {
-        if( sourceType.compare( "REST_API" ) == 0 )
-        {
+        if( m_sourceType == "REST_API" )
             return HTTP_LIB_SOURCE_TYPE::REST_API;
-        }
 
         return HTTP_LIB_SOURCE_TYPE::INVALID;
     }
 
-    std::string getSupportedAPIVersion() { return api_version; }
+    std::string getSupportedAPIVersion() { return m_api_version; }
 
 protected:
     wxString getFileExt() const override;
 
+public:
+    HTTP_LIB_SOURCE m_Source;
+
 private:
-    std::string sourceType;
-    std::string api_version = "v1";
+    std::string     m_sourceType;
+    std::string     m_api_version = "v1";
 };
 
-#endif //KICAD_HTTP_LIB_SETTINGS_H

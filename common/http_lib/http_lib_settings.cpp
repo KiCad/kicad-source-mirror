@@ -35,10 +35,9 @@ const int httplibSchemaVersion = 1;
 HTTP_LIB_SETTINGS::HTTP_LIB_SETTINGS( const std::string& aFilename ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::NONE, httplibSchemaVersion )
 {
-    m_params.emplace_back( new PARAM<std::string>( "source.type", &sourceType, "" ) );
+    m_params.emplace_back( new PARAM<std::string>( "source.type", &m_sourceType, "" ) );
 
-    m_params.emplace_back(
-            new PARAM<std::string>( "source.api_version", &m_Source.api_version, "" ) );
+    m_params.emplace_back( new PARAM<std::string>( "source.api_version", &m_Source.api_version, "" ) );
 
     m_params.emplace_back( new PARAM<std::string>( "source.root_url", &m_Source.root_url, "" ) );
 
@@ -46,8 +45,7 @@ HTTP_LIB_SETTINGS::HTTP_LIB_SETTINGS( const std::string& aFilename ) :
 
     m_params.emplace_back( new PARAM<int>( "source.timeout_parts_seconds", &m_Source.timeout_parts, 30 ) );
 
-    m_params.emplace_back( new PARAM<int>( "source.timeout_categories_seconds",
-                                           &m_Source.timeout_categories, 600 ) );
+    m_params.emplace_back( new PARAM<int>( "source.timeout_categories_seconds", &m_Source.timeout_categories, 600 ) );
 
 }
 

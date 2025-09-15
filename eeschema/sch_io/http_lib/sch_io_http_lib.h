@@ -18,9 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef SCH_IO_HTTP_LIB_H
-#define SCH_IO_HTTP_LIB_H
+#pragma once
 
 #include "http_lib/http_lib_settings.h"
 #include <http_lib/http_lib_connection.h>
@@ -40,12 +38,11 @@ class SCH_IO_HTTP_LIB : public SCH_IO
 {
 public:
     SCH_IO_HTTP_LIB();
-    virtual ~SCH_IO_HTTP_LIB();
+    ~SCH_IO_HTTP_LIB() override = default;
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad HTTP library files" ),
-                                      { FILEEXT::HTTPLibraryFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad HTTP library files" ), { FILEEXT::HTTPLibraryFileExtension } );
     }
 
     int GetModifyHash() const override { return 0; }
@@ -94,18 +91,15 @@ private:
     LIB_SYMBOL* loadSymbolFromPart( const wxString& aSymbolName, const HTTP_LIB_CATEGORY& aCategory,
                                     const HTTP_LIB_PART& aPart );
 
-    SYMBOL_LIB_TABLE* m_libTable;
+private:
+    SYMBOL_LIB_TABLE*                    m_libTable;
 
     /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;
-
-    std::unique_ptr<HTTP_LIB_SETTINGS> m_settings;
-
-    std::set<wxString> m_customFields;
-
-    std::set<wxString> m_defaultShownFields;
-
-    wxString m_lastError;
+    std::unique_ptr<HTTP_LIB_SETTINGS>   m_settings;
+    std::set<wxString>                   m_customFields;
+    std::set<wxString>                   m_defaultShownFields;
+    wxString                             m_lastError;
 
     wxString symbol_field = "symbol";
     wxString footprint_field = "footprint";
@@ -118,5 +112,3 @@ private:
     //     category.id       category
     std::map<std::string, HTTP_LIB_CATEGORY> m_cachedCategories;
 };
-
-#endif // SCH_IO_HTTP_LIB_H_

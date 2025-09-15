@@ -40,19 +40,11 @@ HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool a
     m_source = aSource;
 
     if( aTestConnectionNow )
-    {
-        ValidateHTTPLibraryEndpoints();
-    }
+        validateHttpLibraryEndpoints();
 }
 
 
-HTTP_LIB_CONNECTION::~HTTP_LIB_CONNECTION()
-{
-    // Do nothing
-}
-
-
-bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
+bool HTTP_LIB_CONNECTION::validateHttpLibraryEndpoints()
 {
     m_endpointValid = false;
     std::string res = "";
@@ -78,11 +70,8 @@ bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
             nlohmann::json response = nlohmann::json::parse( res );
 
             // Check that the endpoints exist, if not fail.
-            if( !response.at( http_endpoint_categories ).empty()
-                && !response.at( http_endpoint_parts ).empty() )
-            {
+            if( !response.at( "categories" ).empty() && !response.at( "parts" ).empty() )
                 m_endpointValid = true;
-            }
         }
     }
     catch( const std::exception& e )
@@ -90,25 +79,15 @@ bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
         m_lastError += wxString::Format( _( "Error: %s" ) + "\n" + _( "API Response:  %s" ) + "\n",
                                          e.what(), res );
 
-        wxLogTrace( traceHTTPLib,
-                    wxT( "ValidateHTTPLibraryEndpoints: Exception occurred while testing the API "
-                         "connection: %s" ),
+        wxLogTrace( traceHTTPLib, wxT( "validateHttpLibraryEndpoints: Exception while testing API connection: %s" ),
                     m_lastError );
 
         m_endpointValid = false;
     }
 
     if( m_endpointValid )
-    {
         syncCategories();
-    }
 
-    return m_endpointValid;
-}
-
-
-bool HTTP_LIB_CONNECTION::IsValidEndpoint() const
-{
     return m_endpointValid;
 }
 
@@ -124,7 +103,7 @@ bool HTTP_LIB_CONNECTION::syncCategories()
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_source.root_url + http_endpoint_categories + ".json" );
+    curl->SetURL( m_source.root_url + "categories.json" );
 
     try
     {
@@ -133,9 +112,7 @@ bool HTTP_LIB_CONNECTION::syncCategories()
         res = curl->GetBuffer();
 
         if( !checkServerResponse( curl ) )
-        {
             return false;
-        }
 
         nlohmann::json response = nlohmann::json::parse( res );
 
@@ -162,9 +139,7 @@ bool HTTP_LIB_CONNECTION::syncCategories()
         m_lastError += wxString::Format( _( "Error: %s" ) + "\n" + _( "API Response:  %s" ) + "\n",
                                          e.what(), res );
 
-        wxLogTrace( traceHTTPLib,
-                    wxT( "syncCategories: Exception occurred while syncing categories: %s" ),
-                    m_lastError );
+        wxLogTrace( traceHTTPLib, wxT( "syncCategories: Exception while syncing categories: %s" ), m_lastError );
 
         m_categories.clear();
 
@@ -187,8 +162,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     if( m_cachedParts.find( aPartID ) != m_cachedParts.end() )
     {
         // check if it's outdated, if so re-fetch
-        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached )
-            < m_source.timeout_parts )
+        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached ) < m_source.timeout_parts )
         {
             aFetchedPart = m_cachedParts[aPartID];
             return true;
@@ -198,7 +172,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    std::string url = m_source.root_url + fmt::format( "{}/{}.json", http_endpoint_parts, aPartID );
+    std::string url = m_source.root_url + fmt::format( "parts/{}.json", aPartID );
     curl->SetURL( url );
 
     try
@@ -208,9 +182,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         res = curl->GetBuffer();
 
         if( !checkServerResponse( curl ) )
-        {
             return false;
-        }
 
         nlohmann::ordered_json response = nlohmann::ordered_json::parse( res );
         std::string    key = "";
@@ -225,13 +197,9 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
 
         // API might not want to return an optional name.
         if( response.contains( "name" ) )
-        {
             aFetchedPart.name = response.at( "name" );
-        }
         else
-        {
             aFetchedPart.name = aFetchedPart.id;
-        }
 
         aFetchedPart.symbolIdStr = response.at( "symbolIdStr" );
 
@@ -285,8 +253,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             }
 
             // Add field to fields list
-            aFetchedPart.fields.push_back(
-                    std::make_pair( key, std::make_tuple( value, visible ) ) );
+            aFetchedPart.fields.push_back( std::make_pair( key, std::make_tuple( value, visible ) ) );
         }
 
         if( response.contains( "description" ) )
@@ -312,12 +279,10 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     }
     catch( const std::exception& e )
     {
-        m_lastError += wxString::Format( _( "Error: %s" ) + "\n" + _( "API Response:  %s" ) + "\n",
+        m_lastError += wxString::Format( _( "Error: %s" ) + "\n" + _( "API Response: %s" ) + "\n",
                                          e.what(), res );
 
-        wxLogTrace( traceHTTPLib,
-                    wxT( "SelectOne: Exception occurred while retrieving part from REST API: %s" ),
-                    m_lastError );
+        wxLogTrace( traceHTTPLib, wxT( "SelectOne: Exception while fetching part: %s" ), m_lastError );
 
         return false;
     }
@@ -328,8 +293,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
 }
 
 
-bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY&    aCategory,
-                                     std::vector<HTTP_LIB_PART>& aParts )
+bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::vector<HTTP_LIB_PART>& aParts )
 {
     if( !IsValidEndpoint() )
     {
@@ -341,8 +305,7 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY&    aCategory,
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
 
-    curl->SetURL( m_source.root_url
-                  + fmt::format( "{}/category/{}.json", http_endpoint_parts, aCategory.id ) );
+    curl->SetURL( m_source.root_url + fmt::format( "parts/category/{}.json", aCategory.id ) );
 
     try
     {
@@ -362,19 +325,15 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY&    aCategory,
             if( item.contains( "description" ) )
             {
                 // At this point we don't display anything so just set it to false
-                part.fields.push_back( std::make_pair(
-                        "description", std::make_tuple( item.at( "description" ), false ) ) );
+                part.fields.push_back( std::make_pair( "description",
+                                                       std::make_tuple( item.at( "description" ), false ) ) );
             }
 
             // API might not want to return an optional name.
             if( item.contains( "name" ) )
-            {
                 part.name = item.at( "name" );
-            }
             else
-            {
                 part.name = part.id;
-            }
 
             // add to cache
             m_cache[part.name] = std::make_tuple( part.id, aCategory.id );
@@ -384,11 +343,10 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY&    aCategory,
     }
     catch( const std::exception& e )
     {
-        m_lastError += wxString::Format( _( "Error: %s" ) + "\n" + _( "API Response:  %s" ) + "\n",
+        m_lastError += wxString::Format( _( "Error: %s" ) + "\n" + _( "API Response: %s" ) + "\n",
                                          e.what(), res );
 
-        wxLogTrace( traceHTTPLib, wxT( "Exception occurred while syncing parts from REST API: %s" ),
-                    m_lastError );
+        wxLogTrace( traceHTTPLib, wxT( "Exception occurred while syncing parts: %s" ), m_lastError );
 
         return false;
     }
@@ -400,6 +358,7 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY&    aCategory,
 bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl )
 {
     int statusCode = aCurl->GetResponseStatusCode();
+
     if( statusCode != 200 )
     {
         m_lastError += wxString::Format( _( "API responded with error code: %s" ) + "\n",
