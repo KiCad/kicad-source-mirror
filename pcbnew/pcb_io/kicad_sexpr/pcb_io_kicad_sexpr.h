@@ -477,7 +477,7 @@ private:
 
     void formatLayer( PCB_LAYER_ID aLayer, bool aIsKnockout = false ) const;
 
-    void formatLayers( LSET aLayerMask, bool aEnumerateLayers ) const;
+    void formatLayers( LSET aLayerMask, bool aEnumerateLayers, bool aIsZone = false ) const;
 
     friend class FP_CACHE;
 
