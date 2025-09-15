@@ -1363,7 +1363,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) const
+void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers, bool aIsZone ) const
 {
     static const LSET cu_all( LSET::AllCuMask() );
     static const LSET fr_bk(  { B_Cu, F_Cu } );
@@ -1392,7 +1392,11 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) 
         }
         else if( ( aLayerMask & cu_board_mask ) == fr_bk )
         {
-            output += ' ' + m_out->Quotew( "F&B.Cu" );
+            if( aIsZone )
+                output += ' ' + m_out->Quotew( "F&B.Cu" );
+            else
+                output += ' ' + m_out->Quotew( "*.Cu" );
+
             aLayerMask &= ~fr_bk;
         }
 
@@ -2477,7 +2481,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
 
     // Always enumerate every layer for a zone on a copper layer
     if( layers.count() > 1 )
-        formatLayers( layers, aZone->IsOnCopperLayer() );
+        formatLayers( layers, aZone->IsOnCopperLayer(), true );
     else
         formatLayer( aZone->GetFirstLayer() );
 
