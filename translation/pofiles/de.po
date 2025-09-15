@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-15 10:02+0000\n"
+"PO-Revision-Date: 2025-09-15 11:46+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -14052,9 +14052,8 @@ msgid "Create Derived Symbol"
 msgstr "Abgeleitetes Symbol erstellen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Neues Symbol erstellen, abgeleitet von dem ausgewählten Symbol"
+msgstr "Neues Symbol erstellen, abgeleitet vom ausgewählten Symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:128
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
@@ -14090,12 +14089,10 @@ msgid "Error loading symbol '%s': %s"
 msgstr "Fehler beim Einlesen des Symbols \"%s\": %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:579
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
 msgstr "Es konnten keine zugehörigen Symbole aus der Bibliothek geladen werden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:581
-#, fuzzy
 msgid "No symbols could be loaded from the library."
 msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
 
@@ -14141,7 +14138,7 @@ msgstr "Feldname \"%s\" ist bereits vorhanden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:807
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:91
-#, fuzzy, c-format
+#, c-format
 msgid "Library Fields Table (%s)"
 msgstr "Bibliotheksfelder-Tabelle (%s)"
 
@@ -14178,9 +14175,8 @@ msgstr "BOM-Name"
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:50
 #: eeschema/fields_data_model.cpp:39
-#, fuzzy
 msgid "Include"
-msgstr "Enthalten"
+msgstr "Einbeziehen"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:51
@@ -14189,12 +14185,10 @@ msgid "Group By"
 msgstr "Gruppieren nach"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Whole Library"
 msgstr "Ganze Bibliothek"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Related Symbols Only"
 msgstr "Nur zugehörige Symbole"
 
@@ -14323,9 +14317,8 @@ msgid "Symbol must have at least 1 body style"
 msgstr "Symbol muss mindestens eine Symbolform haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:511
-#, fuzzy
 msgid "Delete extra body styles from symbol?"
-msgstr "Zusätzliche Symbolformen ebenfalls entfernen?"
+msgstr "Zusätzliche Symbolformen aus Symbol entfernen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:538
 #: eeschema/symbol_editor/symbol_editor.cpp:358
@@ -14501,7 +14494,6 @@ msgid "Exclude from simulation"
 msgstr "Von der Simulation ausschließen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
-#, fuzzy
 msgid "Symbol Units"
 msgstr "Symboleinheiten"
 
