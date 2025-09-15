@@ -1895,7 +1895,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     if( libSymbol )
                     {
                         SCH_REFERENCE schReference( symbol, sheetPath );
-                        schReference.SetSheetNumber( sheetPath.GetVirtualPageNumber() );
+                        schReference.SetSheetNumber( sheetPath.GetPageNumberAsInt() );
                         pastedSymbols[sheetPath].AddItem( schReference );
                     }
                 }
@@ -2103,7 +2103,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
             {
-                annotatedSymbols[path].ReannotateDuplicates( existingRefs );
+                annotatedSymbols[path].ReannotateDuplicates( existingRefs, annotateAlgo );
             }
             else
             {
@@ -2124,7 +2124,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
                 {
-                    annotatedSymbols[pastedSheetPath].ReannotateDuplicates( existingRefs );
+                    annotatedSymbols[pastedSheetPath].ReannotateDuplicates( existingRefs, annotateAlgo );
                 }
                 else
                 {
