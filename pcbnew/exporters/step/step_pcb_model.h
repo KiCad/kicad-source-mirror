@@ -84,7 +84,9 @@ enum class OUTPUT_FORMAT
     FMT_OUT_XAO,
     FMT_OUT_GLTF,
     FMT_OUT_PLY,
-    FMT_OUT_STL
+    FMT_OUT_STL,
+    FMT_OUT_U3D,
+    FMT_OUT_PDF
 };
 
 class STEP_PCB_MODEL
@@ -212,6 +214,11 @@ public:
     // write the assembly in STL format (mesh)
     bool WriteSTL( const wxString& aFileName );
 
+    // write the assembly in U3D format (mesh)
+    bool WriteU3D( const wxString& aFileName );
+
+    // write the assembly in U3D format (mesh)
+    bool WritePDF( const wxString& aFileName );
 private:
     /**
      * @return true if the board(s) outline is valid. False otherwise

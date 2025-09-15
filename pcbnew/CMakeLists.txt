@@ -236,8 +236,14 @@ set( PCBNEW_EXPORTERS
     exporters/export_gencad_writer.cpp
     exporters/export_idf.cpp
     exporters/step/exporter_step.cpp
+    exporters/step/kicad3d_info.cpp
     exporters/step/step_pcb_model.cpp
     exporters/step/KI_XCAFDoc_AssemblyGraph.cxx
+    exporters/u3d/bit_stream_writer.cpp
+    exporters/u3d/constants.cpp
+    exporters/u3d/context_manager.cpp
+    exporters/u3d/data_block.cpp
+    exporters/u3d/writer.cpp
     exporters/exporter_vrml.cpp
     exporters/place_file_exporter.cpp
     exporters/gen_drill_report_files.cpp

@@ -29,6 +29,7 @@
 #include <memory>
 #include <plotters/pdf_stroke_font.h>
 #include <plotters/pdf_outline_font.h>
+#include <math/vector3.h>
 
 namespace MARKUP { struct NODE; }
 
@@ -240,7 +241,7 @@ protected:
 struct PDF_3D_VIEW
 {
     std::string m_name;
-    float       m_cameraMatrix[12];
+    std::vector<float> m_cameraMatrix;
     float       m_cameraCenter;
     float       m_fov;
 };
@@ -442,6 +443,24 @@ public:
      */
     void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor ) override;
 
+    /**
+     * Generates the camera to world matrix for use with a 3D View.
+     *
+     * @param aTargetPosition The position of the target, which is also the camera rotation center
+     * @param aCameraDistance The distance the camera should be set back from the target
+     * @param aYawDegrees The yaw angle in degrees
+     * @param aPitchDegrees The pitch angle in degrees
+     * @param aRollDegrees The roll angle in degrees
+     *
+     * @return A vector of 12 floats that represent the camera to world matrix
+     * in linear form as specified by the PDF Spec 1.7 section 13.6.5
+     *
+     */
+    static std::vector<float> CreateC2WMatrixFromAngles( const VECTOR3D& aTargetPosition,
+                                                            float aCameraDistance,
+                                                            float aYawDegrees,
+                                                            float aPitchDegrees,
+                                                            float aRollDegrees );
 
 protected:
     struct OUTLINE_NODE

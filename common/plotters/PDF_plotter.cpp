@@ -57,6 +57,8 @@
 
 PDF_PLOTTER::~PDF_PLOTTER() = default;
 
+#include <glm/glm.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
@@ -934,12 +936,12 @@ void PDF_PLOTTER::ClosePage()
     }
 
 
-    int hyperLinkArrayHandle = -1;
+    int annotArrayHandle = -1;
 
     // If we have added any annotation links, create an array containing all the objects
     if( annotHandles.size() > 0 )
     {
-        hyperLinkArrayHandle = startPdfObject();
+        annotArrayHandle = startPdfObject();
         bool isFirst = true;
 
         fmt::print( m_outputFile, "[" );
@@ -970,13 +972,18 @@ void PDF_PLOTTER::ClosePage()
                 "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
                 "    /Font {} 0 R\n"
                 "    /XObject {} 0 R >>\n"
-                "/MediaBox [0 0 {:g} {:g}]\n"
-                "/Contents {} 0 R\n",
-                m_pageTreeHandle, m_fontResDictHandle, m_imgResDictHandle, psPaperSize.x, psPaperSize.y,
-                m_pageStreamHandle );
+                "/MediaBox [0 0 {:g} {:g}]\n",
+                m_pageTreeHandle,
+                m_fontResDictHandle,
+                m_imgResDictHandle,
+                psPaperSize.x,
+                psPaperSize.y );
+
+    if( m_pageStreamHandle != -1 )
+        fmt::print( m_outputFile, "/Contents {} 0 R\n", m_pageStreamHandle );
 
     if( annotHandles.size() > 0 )
-        fmt::print( m_outputFile, "/Annots {} 0 R", hyperLinkArrayHandle );
+        fmt::print( m_outputFile, "/Annots {} 0 R", annotArrayHandle );
 
     fmt::print( m_outputFile, ">>\n" );
 
@@ -2516,6 +2523,9 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
 
     for( const PDF_3D_VIEW& view : a3DViews )
     {
+        // this is a strict need
+        wxASSERT( view.m_cameraMatrix.size() == 12 );
+
         int fovHandle = -1;
         if( !m_fovMap.contains( view.m_fov ) )
         {
@@ -2629,4 +2639,49 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
     closePdfObject();
 
     outputFFile.Detach(); // Don't close it
+}
+
+
+std::vector<float> PDF_PLOTTER::CreateC2WMatrixFromAngles( const VECTOR3D& aTargetPosition,
+                                                            float aCameraDistance,
+                                                            float aYawDegrees,
+                                                            float aPitchDegrees,
+                                                            float aRollDegrees )
+{
+    float yRadians = glm::radians( aYawDegrees );
+    float xRadians = glm::radians( aPitchDegrees );
+    float zRadians = glm::radians( aRollDegrees );
+
+    // Create rotation matrix from Euler angles
+    glm::mat4 rotationMatrix = glm::eulerAngleYXZ( yRadians, xRadians, zRadians );
+
+    // Calculate camera position based on target, distance, and rotation
+    // Start with a vector pointing backward along the z-axis
+    glm::vec4 cameraOffset = glm::vec4( 0.0f, 0.0f, aCameraDistance, 1.0f );
+
+    // Apply rotation to this offset
+    cameraOffset = rotationMatrix * cameraOffset;
+
+    // Camera position is target position minus the rotated offset
+    glm::vec3 cameraPosition = glm::vec3(aTargetPosition.x, aTargetPosition.y, aTargetPosition.z)
+        - glm::vec3( cameraOffset );
+
+    std::vector<float> result( 12 );
+
+    // Handle rotation part in column-major order (first 9 elements)
+    int index = 0;
+    for( int col = 0; col < 3; ++col )
+    {
+        for( int row = 0; row < 3; ++row )
+        {
+            result[index++] = static_cast<float>( rotationMatrix[col][row] );
+        }
+    }
+
+    // Handle translation part (last 3 elements)
+    result[9] = static_cast<float>( cameraPosition.x );
+    result[10] = static_cast<float>( cameraPosition.y );
+    result[11] = static_cast<float>( cameraPosition.z );
+
+    return result;
 }

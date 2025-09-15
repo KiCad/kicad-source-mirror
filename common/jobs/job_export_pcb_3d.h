@@ -68,7 +68,9 @@ public:
         XAO,
         GLB,
         PLY,
-        STL
+        STL,
+        U3D,
+        PDF
     };
 
     wxString m_NetFilter;
@@ -125,7 +127,9 @@ public:
         GLB,
         VRML,
         PLY,
-        STL
+        STL,
+        U3D,
+        PDF
     };
 
     enum class VRML_UNITS

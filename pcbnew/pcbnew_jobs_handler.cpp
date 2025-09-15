@@ -509,6 +509,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:  fn.SetExt( FILEEXT::GltfBinaryFileExtension ); break;
         case JOB_EXPORT_PCB_3D::FORMAT::PLY:  fn.SetExt( FILEEXT::PlyFileExtension );        break;
         case JOB_EXPORT_PCB_3D::FORMAT::STL:  fn.SetExt( FILEEXT::StlFileExtension );        break;
+        case JOB_EXPORT_PCB_3D::FORMAT::U3D:  fn.SetExt( FILEEXT::U3DFileExtension );        break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PDF:  fn.SetExt( FILEEXT::PdfFileExtension );        break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -587,6 +589,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;  break;
         case JOB_EXPORT_PCB_3D::FORMAT::PLY:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;  break;
         case JOB_EXPORT_PCB_3D::FORMAT::STL:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::U3D:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::U3D;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PDF:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PDF;  break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here

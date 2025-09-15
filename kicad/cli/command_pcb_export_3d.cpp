@@ -270,6 +270,10 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;
         else if( format == wxS( "stl" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;
+        else if( format == wxS( "u3d" ) )
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::U3D;
+        else if( format == wxS( "pdf" ) )
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::PDF;
         else
         {
             wxFprintf( stderr, _( "Invalid format specified\n" ) );

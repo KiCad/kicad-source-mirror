@@ -679,6 +679,14 @@ void EXPORTER_STEP::initOutputVariant()
             m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STL );
             break;
 
+        case EXPORTER_STEP_PARAMS::FORMAT::U3D:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_U3D );
+            break;
+
+        case EXPORTER_STEP_PARAMS::FORMAT::PDF:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_PDF );
+            break;
+
         default:
             m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_UNKNOWN );
             break;
@@ -891,6 +899,10 @@ bool EXPORTER_STEP::Export()
             success = m_pcbModel->WritePLY( m_outputFile );
         else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::STL )
             success = m_pcbModel->WriteSTL( m_outputFile );
+        else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::U3D )
+            success = m_pcbModel->WriteU3D( m_outputFile );
+        else if( m_params.m_Format == EXPORTER_STEP_PARAMS::FORMAT::PDF )
+            success = m_pcbModel->WritePDF( m_outputFile );
 
         if( !success )
         {
@@ -917,6 +929,7 @@ bool EXPORTER_STEP::Export()
                             RPT_SEVERITY_ERROR );
         return false;
     }
+    #ifndef DEBUG
     catch( ... )
     {
         m_reporter->Report( wxString::Format( _( "\n"
@@ -925,6 +938,7 @@ bool EXPORTER_STEP::Export()
                             RPT_SEVERITY_ERROR );
         return false;
     }
+    #endif
 
     // Display calculation time in seconds
     double calculation_time = (double)( GetRunningMicroSecs() - stats_startExportTime) / 1e6;

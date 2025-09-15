@@ -58,6 +58,11 @@
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <reporter.h>
 
+#include <exporters/u3d/writer.h>
+
+#include <plotters/plotters_pslike.h>
+#include <pcb_painter.h>
+
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
 
@@ -93,6 +98,7 @@
 #include <XCAFDoc_Centroid.hxx>
 #include <XCAFDoc_Location.hxx>
 #include <XCAFDoc_Volume.hxx>
+#include "kicad3d_info.h"
 
 #include "KI_XCAFDoc_AssemblyGraph.hxx"
 
@@ -1261,6 +1267,8 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
     TCollection_ExtendedString refdes( aRefDes.c_str() );
     TDataStd_Name::Set( llabel, refdes );
 
+    KICAD3D_INFO::Set( llabel, KICAD3D_MODEL_TYPE::COMPONENT, aRefDes );
+
     return true;
 }
 
@@ -2189,7 +2197,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
     auto pushToAssemblyMap =
             [&]( const std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
                  const TDF_Label& aVisMatLabel, const wxString& aShapeName, bool aCompoundNets,
-                 bool aCompoundAll )
+                 bool aCompoundAll, const wxString& aNiceName )
             {
                 std::map<wxString, std::vector<TopoDS_Shape>> shapesMap;
 
@@ -2225,6 +2233,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
                         // Dont expand the component or else coloring it gets hard
                         TDF_Label lbl = m_assy->AddComponent( m_assy_label, shape, false );
+                        KICAD3D_INFO::Set( lbl, KICAD3D_MODEL_TYPE::BOARD, aNiceName.ToStdString() );
                         m_pcb_labels.push_back( lbl );
 
                         if( m_pcb_labels.back().IsNull() )
@@ -2267,11 +2276,11 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
     auto pushToAssembly =
             [&]( const std::vector<TopoDS_Shape>& aShapesList, const TDF_Label& aVisMatLabel,
-                 const wxString& aShapeName, bool aCompound )
+                 const wxString& aShapeName, bool aCompound, const wxString& aNiceName )
             {
                 const std::map<wxString, std::vector<TopoDS_Shape>> shapesMap{ { wxEmptyString, aShapesList } };
 
-                pushToAssemblyMap( shapesMap, aVisMatLabel, aShapeName, aCompound, aCompound );
+                pushToAssemblyMap( shapesMap, aVisMatLabel, aShapeName, aCompound, aCompound, aNiceName );
             };
 
     auto makeMaterial =
@@ -2332,17 +2341,17 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
     TDF_Label pad_mat = makeMaterial( "pad", pad_color, 1.0, 0.4 );
     TDF_Label board_mat = makeMaterial( "board", board_color, 0.0, 0.8 );
 
-    pushToAssemblyMap( m_board_copper, copper_mat, "copper", true, true );
-    pushToAssemblyMap( m_board_copper_pads, pad_mat, "pad", true, true );
-    pushToAssemblyMap( m_board_copper_vias, copper_mat, "via", true, true );
-    pushToAssemblyMap( m_board_copper_fused, copper_mat, "copper", true, true );
-    pushToAssembly( m_board_front_silk, front_silk_mat, "silkscreen", true );
-    pushToAssembly( m_board_back_silk, back_silk_mat, "silkscreen", true );
-    pushToAssembly( m_board_front_mask, front_mask_mat, "soldermask", true );
-    pushToAssembly( m_board_back_mask, back_mask_mat, "soldermask", true );
+    pushToAssemblyMap( m_board_copper, copper_mat, "copper", true, true, "Copper" );
+    pushToAssemblyMap( m_board_copper_pads, pad_mat, "pad", true, true, "Pads" );
+    pushToAssemblyMap( m_board_copper_vias, copper_mat, "via", true, true, "Via" );
+    pushToAssemblyMap( m_board_copper_fused, copper_mat, "copper", true, true, "Copper" );
+    pushToAssembly( m_board_front_silk, front_silk_mat, "silkscreen", true, "Top Silkscreen" );
+    pushToAssembly( m_board_back_silk, back_silk_mat, "silkscreen", true, "Bottom Silkscreen" );
+    pushToAssembly( m_board_front_mask, front_mask_mat, "soldermask", true, "Top Soldermask" );
+    pushToAssembly( m_board_back_mask, back_mask_mat, "soldermask", true, "Bottom Soldermask" );
 
     if( aPushBoardBody )
-        pushToAssembly( m_board_outlines, board_mat, "PCB", false );
+        pushToAssembly( m_board_outlines, board_mat, "PCB", false, "Body" );
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
     m_assy->UpdateAssemblies();
@@ -3420,6 +3429,171 @@ bool STEP_PCB_MODEL::WriteSTL( const wxString& aFileName )
     }
 
     wxSetWorkingDirectory( currCWD );
+
+    return success;
+}
+
+
+
+bool STEP_PCB_MODEL::WriteU3D( const wxString& aFileName )
+{
+    if( !isBoardOutlineValid() )
+    {
+        m_reporter->Report(
+                wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ), aFileName ),
+                RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_U3D;
+
+    performMeshing( m_assy );
+
+    wxFileName fn( aFileName );
+
+    const char* tmpFname = "$tempfile$.u3d";
+
+    // Creates a temporary file with a ascii7 name, because writer does not know unicode filenames.
+    wxString currCWD = wxGetCwd();
+    wxString workCWD = fn.GetPath();
+
+    if( !workCWD.IsEmpty() )
+        wxSetWorkingDirectory( workCWD );
+
+    U3D::WRITER writer( tmpFname );
+    bool success = writer.Perform( m_doc );
+    if( success )
+    {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpFname );
+
+        if( !wxRenameFile( tmpFname, fn.GetFullName(), true ) )
+        {
+            m_reporter->Report( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ), tmpFname,
+                                                  fn.GetFullName() ),
+                    RPT_SEVERITY_ERROR );
+            success = false;
+        }
+    }
+
+    wxSetWorkingDirectory( currCWD );
+
+    return success;
+}
+
+
+bool STEP_PCB_MODEL::WritePDF( const wxString& aFileName )
+{
+    if( !isBoardOutlineValid() )
+    {
+        m_reporter->Report(
+                wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'.\n" ), aFileName ),
+                RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_PDF;
+
+    performMeshing( m_assy );
+
+    wxFileName fn( aFileName );
+
+    wxFileName  u3dTmpfn = wxFileName::CreateTempFileName( "" );
+    wxFileName  pdfTmpfn = wxFileName::CreateTempFileName( "" );
+
+    U3D::WRITER writer( u3dTmpfn.GetFullPath().ToStdString() );
+    bool        success = writer.Perform( m_doc );
+
+    // PDF test
+    std::unique_ptr<PDF_PLOTTER> plotter = std::make_unique<PDF_PLOTTER>();
+
+    plotter->SetColorMode( true );
+    plotter->Set3DExport( true );
+    plotter->SetCreator( wxT( "Mark's awesome 3d exporter" ) );
+    KIGFX::PCB_RENDER_SETTINGS renderSettings;
+    plotter->SetRenderSettings( &renderSettings );
+
+    if( !plotter->OpenFile( pdfTmpfn.GetFullPath() ) )
+    {
+        m_reporter->Report( wxString::Format( wxT( "Cannot open temporary file '%s'.\n" ), pdfTmpfn.GetFullPath() ),
+                RPT_SEVERITY_ERROR );
+        success = false;
+    }
+    else
+    {
+        plotter->StartPlot( "1", "3D Model" );
+        double fov_degrees = 16.5f;
+
+        // kind of an arbitrary distance determination
+        float distance = sqrt( writer.GetMeshBoundingBox().SquareExtent() ) * 3;
+
+        std::vector<PDF_3D_VIEW> views;
+
+        VECTOR3D camTarget = writer.GetCenter();
+
+
+        std::vector<float> c2wMatrix =
+                PDF_PLOTTER::CreateC2WMatrixFromAngles( camTarget, distance, 180.0f, -75.0f, 25.0f );
+
+        views.emplace_back( PDF_3D_VIEW{
+                .m_name = "Default",
+                .m_cameraMatrix = c2wMatrix,
+                .m_cameraCenter = (float) distance,
+                .m_fov = (float) fov_degrees,
+        } );
+
+
+
+        c2wMatrix = PDF_PLOTTER::CreateC2WMatrixFromAngles( camTarget, distance, 180.0, 0.0f, 0.0f );
+
+        views.emplace_back( PDF_3D_VIEW{
+                .m_name = "Top",
+                .m_cameraMatrix = c2wMatrix,
+                .m_cameraCenter = (float) distance,
+                .m_fov = (float) fov_degrees,
+        } );
+
+
+
+        c2wMatrix = PDF_PLOTTER::CreateC2WMatrixFromAngles( camTarget, distance, 0.0, 0.0f, 0.0f );
+
+        views.emplace_back( PDF_3D_VIEW{
+                .m_name = "Bottom",
+                .m_cameraMatrix = c2wMatrix,
+                .m_cameraCenter = (float) distance,
+                .m_fov = (float) fov_degrees,
+        } );
+
+
+
+        c2wMatrix = PDF_PLOTTER::CreateC2WMatrixFromAngles( camTarget, distance, 90.0f, -90.0f, 90.0f );
+
+        views.emplace_back( PDF_3D_VIEW{
+                .m_name = "Front",
+                .m_cameraMatrix = c2wMatrix,
+                .m_cameraCenter = (float) distance,
+                .m_fov = (float) fov_degrees,
+        } );
+
+        plotter->Plot3DModel( u3dTmpfn.GetFullPath(), views );
+        plotter->EndPlot();
+    }
+
+    if( success )
+    {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), pdfTmpfn.GetFullPath() );
+
+        if( !wxRenameFile( pdfTmpfn.GetFullPath(), fn.GetFullPath(), true ) )
+        {
+            m_reporter->Report(  wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                             pdfTmpfn.GetFullPath(), fn.GetFullPath() ),
+                                RPT_SEVERITY_ERROR );
+            success = false;
+        }
+    }
+
+    wxRemoveFile( u3dTmpfn.GetFullPath() );
 
     return success;
 }

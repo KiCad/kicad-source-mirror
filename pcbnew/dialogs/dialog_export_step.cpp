@@ -61,7 +61,10 @@ static const std::vector<wxString> c_formatCommand = { FILEEXT::StepFileExtensio
                                                        FILEEXT::BrepFileExtension,
                                                        FILEEXT::PlyFileExtension,
                                                        FILEEXT::StlFileExtension,
-                                                       FILEEXT::StepZFileAbrvExtension };
+                                                       FILEEXT::StepZFileAbrvExtension,
+                                                       FILEEXT::U3DFileExtension,
+                                                       FILEEXT::PdfFileExtension,
+                                                    };
 
 // Maps file extensions to m_choiceFormat selection
 static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFileExtension, 0 },
@@ -71,7 +74,9 @@ static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFile
                                                              { FILEEXT::BrepFileExtension, 3 },
                                                              { FILEEXT::PlyFileExtension, 4 },
                                                              { FILEEXT::StlFileExtension, 5 },
-                                                             { FILEEXT::StepZFileAbrvExtension, 6 }};
+                                                             { FILEEXT::StepZFileAbrvExtension, 6 },
+                                                             { FILEEXT::U3DFileExtension, 7 },
+                                                             { FILEEXT::PdfFileExtension, 8 }};
 
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, const wxString& aBoardPath ) :
@@ -285,7 +290,11 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
                       + _( "PLY files" )
                       + AddFileExtListToFilter( { FILEEXT::PlyFileExtension} ) + "|"
                       + _( "STL files" )
-                      + AddFileExtListToFilter( { FILEEXT::StlFileExtension} );
+                      + AddFileExtListToFilter( { FILEEXT::StlFileExtension} ) + "|"
+                      + _( "Universal 3D files" )
+                      + AddFileExtListToFilter( { FILEEXT::U3DFileExtension} )+ "|"
+                      + _( "PDF files" )
+                      + AddFileExtListToFilter( { FILEEXT::PdfFileExtension} );
     // clang-format on
 
     // Build the absolute path of current output directory to preselect it in the file browser.
@@ -596,13 +605,15 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         // ensure the main format on the job is populated
         switch( m_job->m_3dparams.m_Format )
         {
-        case EXPORTER_STEP_PARAMS::FORMAT::STEP:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::STEP:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP; break;
         case EXPORTER_STEP_PARAMS::FORMAT::STEPZ: m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEPZ; break;
-        case EXPORTER_STEP_PARAMS::FORMAT::GLB:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;   break;
-        case EXPORTER_STEP_PARAMS::FORMAT::XAO:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;   break;
-        case EXPORTER_STEP_PARAMS::FORMAT::BREP:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP;  break;
-        case EXPORTER_STEP_PARAMS::FORMAT::PLY:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;   break;
-        case EXPORTER_STEP_PARAMS::FORMAT::STL:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;   break;
+        case EXPORTER_STEP_PARAMS::FORMAT::GLB:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::XAO:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::BREP:  m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP; break;
+        case EXPORTER_STEP_PARAMS::FORMAT::PLY:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::STL:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::U3D:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::U3D;  break;
+        case EXPORTER_STEP_PARAMS::FORMAT::PDF:   m_job->m_format = JOB_EXPORT_PCB_3D::FORMAT::PDF;  break;
         }
 
         m_job->m_3dparams.m_UseDrillOrigin = false;
