@@ -143,10 +143,10 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 
     std::vector<wxString> pages;
     wxString              pagesStr = From_UTF8( m_argParser.get<std::string>( ARG_PAGES ).c_str() );
-    wxStringTokenizer     tokenizer( pagesStr, "," );
+    wxStringTokenizer     tokenizer( pagesStr, ",", wxTOKEN_STRTOK );
 
     while( tokenizer.HasMoreTokens() )
-        pages.push_back( tokenizer.GetNextToken().Trim() );
+        pages.push_back( tokenizer.GetNextToken().Trim( wxString::both) );
 
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob;
 

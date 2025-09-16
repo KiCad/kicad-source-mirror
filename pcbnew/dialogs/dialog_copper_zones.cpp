@@ -734,15 +734,13 @@ void DIALOG_COPPER_ZONE::updateShowNetsFilter()
     if( netNameShowFilter.Len() == 0 )
         netNameShowFilter = wxT( "*" );
 
-    wxStringTokenizer showFilters( netNameShowFilter.Lower(), wxT( "," ) );
+    wxStringTokenizer showFilters( netNameShowFilter.Lower(), "," );
 
     m_showNetsFilter.clear();
 
     while( showFilters.HasMoreTokens() )
     {
-        wxString filter = showFilters.GetNextToken();
-        filter.Trim( false );
-        filter.Trim( true );
+        wxString filter = showFilters.GetNextToken().Trim( wxString::both );
 
         if( !filter.IsEmpty() )
         {

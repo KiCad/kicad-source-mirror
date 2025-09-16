@@ -291,7 +291,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         // the search box.
         constexpr int MAX_TERMS = 100;
 
-        wxStringTokenizer                                  tokenizer( aSearch );
+        wxStringTokenizer                                  tokenizer( aSearch, " \t\r\n", wxTOKEN_STRTOK );
         std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> termMatchers;
 
         while( tokenizer.HasMoreTokens() && termMatchers.size() < MAX_TERMS )

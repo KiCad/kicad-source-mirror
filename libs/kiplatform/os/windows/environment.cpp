@@ -264,9 +264,10 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
     }
 
     bool bypassed = false;
+
     if( bypassProxyStr != NULL )
     {
-        wxStringTokenizer tokenizer( bypassProxyStr, wxT( ";" ) );
+        wxStringTokenizer tokenizer( bypassProxyStr, ";" );
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -298,7 +299,7 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
         // proxyStr can be in the following format per MSDN
         //([<scheme>=][<scheme>"://"]<server>[":"<port>])
         //and separated by semicolons or whitespace
-        wxStringTokenizer tokenizer( proxyStr, wxT( "; \t" ) );
+        wxStringTokenizer tokenizer( proxyStr, "; \t" );
 
         while( tokenizer.HasMoreTokens() )
         {

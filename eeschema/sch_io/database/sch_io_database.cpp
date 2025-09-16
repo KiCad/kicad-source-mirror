@@ -470,7 +470,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         std::string footprints = std::any_cast<std::string>( aRow.at( aTable.footprints_col ) );
 
         wxString footprintsStr = wxString( footprints.c_str(), wxConvUTF8 );
-        wxStringTokenizer tokenizer( footprintsStr, ';' );
+        wxStringTokenizer tokenizer( footprintsStr, ";\t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
             footprintsList.Add( tokenizer.GetNextToken() );

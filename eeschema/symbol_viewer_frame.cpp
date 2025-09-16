@@ -570,9 +570,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 {
                     wxArrayString aliasNames;
 
-                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->EnumerateSymbolLib( aLib,
-                                                                                  aliasNames,
-                                                                                  true );
+                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->EnumerateSymbolLib( aLib, aliasNames, true );
 
                     if( aliasNames.IsEmpty() )
                         return;
@@ -612,7 +610,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     }
     else
     {
-        wxStringTokenizer tokenizer( m_libFilter->GetValue() );
+        wxStringTokenizer tokenizer( m_libFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -648,8 +646,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     {
         // If not found, clear current library selection because it can be deleted after a
         // config change.
-        m_currentSymbol.SetLibNickname( m_libList->GetCount() > 0
-                                        ? m_libList->GetBaseString( 0 ) : wxString( wxT( "" ) ) );
+        m_currentSymbol.SetLibNickname( m_libList->GetCount() > 0 ? m_libList->GetBaseString( 0 )
+                                                                  : wxString( wxEmptyString ) );
         m_currentSymbol.SetLibItemName( wxEmptyString );
         m_unit = 1;
         m_bodyStyle = BODY_STYLE::BASE;
@@ -681,8 +679,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     try
     {
         if( row )
-            PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbolLib( symbols, libName,
-                                                                     m_listPowerOnly );
+            PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbolLib( symbols, libName, m_listPowerOnly );
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -690,7 +687,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     if( !m_symbolFilter->GetValue().IsEmpty() )
     {
-        wxStringTokenizer tokenizer( m_symbolFilter->GetValue() );
+        wxStringTokenizer tokenizer( m_symbolFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
         {

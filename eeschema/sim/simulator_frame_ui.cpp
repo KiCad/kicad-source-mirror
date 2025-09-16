@@ -870,7 +870,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
 
     if( plotPanel->GetSimType() == ST_FFT )
     {
-        wxStringTokenizer tokenizer( plotPanel->GetSimCommand(), wxT( " \t\r\n" ), wxTOKEN_STRTOK );
+        wxStringTokenizer tokenizer( plotPanel->GetSimCommand(), " \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() && tokenizer.GetNextToken().Lower() != wxT( "fft" ) )
         {};
@@ -1113,7 +1113,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
     // Add .SAVE and .PROBE directives
     for( const wxString& directive : circuitModel()->GetDirectives() )
     {
-        wxStringTokenizer directivesTokenizer( directive, wxT( "\r\n" ), wxTOKEN_STRTOK );
+        wxStringTokenizer directivesTokenizer( directive, "\r\n", wxTOKEN_STRTOK );
 
         while( directivesTokenizer.HasMoreTokens() )
         {
@@ -1123,7 +1123,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
             if( line.StartsWith( wxS( ".SAVE" ), &directiveParams )
                     || line.StartsWith( wxS( ".PROBE" ), &directiveParams ) )
             {
-                wxStringTokenizer paramsTokenizer( directiveParams, wxT( " \t" ), wxTOKEN_STRTOK );
+                wxStringTokenizer paramsTokenizer( directiveParams, " \t", wxTOKEN_STRTOK );
 
                 while( paramsTokenizer.HasMoreTokens() )
                     addSignal( paramsTokenizer.GetNextToken() );

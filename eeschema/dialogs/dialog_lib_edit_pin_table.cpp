@@ -518,7 +518,7 @@ public:
                 wxString pinName = tokenizer.GetNextToken();
 
                 // Trim whitespace from both ends of the string
-                pinName.Trim( true ).Trim( false );
+                pinName.Trim( wxString::both );
 
                 if( i < pins.size() )
                 {

@@ -338,7 +338,7 @@ void TRACE_MANAGER::init()
     if( !m_globalTraceEnabled )
         return;
 
-    wxStringTokenizer tokenizer( traceVars, wxT( "," ) );
+    wxStringTokenizer tokenizer( traceVars, "," );
 
     while( tokenizer.HasMoreTokens() )
     {

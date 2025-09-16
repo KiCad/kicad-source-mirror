@@ -1017,7 +1017,7 @@ void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
 
         if( GetSimType() == ST_TRAN )
         {
-            wxStringTokenizer tokenizer( GetSimCommand(), wxS( " \t\n\r" ), wxTOKEN_STRTOK );
+            wxStringTokenizer tokenizer( GetSimCommand(), " \t\r\n", wxTOKEN_STRTOK );
             wxString          cmd = tokenizer.GetNextToken().Lower();
 
             wxASSERT( cmd == wxS( ".tran" ) );

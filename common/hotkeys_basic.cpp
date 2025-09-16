@@ -394,19 +394,21 @@ void ReadHotKeyConfig( const wxString&                             aFileName,
     wxString input;
     file.ReadAll( &input );
     input.Replace( "\r\n", "\n" );  // Convert Windows files to Unix line-ends
-    wxStringTokenizer fileTokenizer( input, wxS( "\n" ), wxTOKEN_STRTOK );
+    wxStringTokenizer fileTokenizer( input, "\n", wxTOKEN_STRTOK );
 
     while( fileTokenizer.HasMoreTokens() )
     {
-        wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), wxS( "\t" ) );
+        wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), "\t" );
 
         wxString cmdName   = lineTokenizer.GetNextToken();
         wxString primary   = lineTokenizer.GetNextToken();
         wxString secondary = lineTokenizer.GetNextToken();
 
         if( !cmdName.IsEmpty() )
-            aHotKeys[cmdName.ToStdString()] = std::pair<int, int>(
-                    KeyCodeFromKeyName( primary ), KeyCodeFromKeyName( secondary ) );
+        {
+            aHotKeys[cmdName.ToStdString()] = std::pair<int, int>( KeyCodeFromKeyName( primary ),
+                                                                   KeyCodeFromKeyName( secondary ) );
+        }
     }
 }
 
@@ -507,12 +509,12 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
         data.Replace( "\\n", "\n", true );
 
     // parse
-    wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
+    wxStringTokenizer tokenizer( data, "\r\n", wxTOKEN_STRTOK );
 
     while( tokenizer.HasMoreTokens() )
     {
         wxString          line = tokenizer.GetNextToken();
-        wxStringTokenizer lineTokenizer( line );
+        wxStringTokenizer lineTokenizer( line, " \t\r\n" );
 
         wxString          line_type = lineTokenizer.GetNextToken();
 

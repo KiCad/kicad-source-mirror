@@ -316,7 +316,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                 continue;
 
             // Send anything that contains directives to SPICE
-            wxStringTokenizer tokenizer( text, wxT( "\r\n" ), wxTOKEN_STRTOK );
+            wxStringTokenizer tokenizer( text, "\r\n", wxTOKEN_STRTOK );
             bool              foundDirective = false;
 
             auto isDirective =
@@ -377,7 +377,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                 else if( line.StartsWith( wxT( "K" ) ) )
                 {
                     // Check for mutual inductor declaration
-                    wxStringTokenizer line_t( line, wxT( " \t" ), wxTOKEN_STRTOK );
+                    wxStringTokenizer line_t( line, " \t", wxTOKEN_STRTOK );
 
                     // Coupling ID
                     if( !line_t.HasMoreTokens() || !line_t.GetNextToken().StartsWith( wxT( "K" ) ) )

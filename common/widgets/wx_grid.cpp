@@ -489,7 +489,7 @@ void WX_GRID::ShowHideColumns( const wxString& shownColumns )
     for( int i = 0; i < GetNumberCols(); ++i )
         HideCol( i );
 
-    wxStringTokenizer shownTokens( shownColumns );
+    wxStringTokenizer shownTokens( shownColumns, " \t\r\n", wxTOKEN_STRTOK );
 
     while( shownTokens.HasMoreTokens() )
     {

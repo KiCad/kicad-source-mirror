@@ -643,7 +643,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
     m_commandTypeSizer->Show( false );
 
-    wxStringTokenizer tokenizer( aCommand, wxS( " \t\n\r" ), wxTOKEN_STRTOK );
+    wxStringTokenizer tokenizer( aCommand, " \t\r\n", wxTOKEN_STRTOK );
     wxString          token = tokenizer.GetNextToken().Lower();
 
     switch( simType )

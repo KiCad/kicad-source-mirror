@@ -366,7 +366,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     for( const wxString& group : GetNetTiePadGroups() )
     {
         types::NetTieDefinition* netTie = def->add_net_ties();
-        wxStringTokenizer tokenizer( group, " " );
+        wxStringTokenizer tokenizer( group, ", \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
             netTie->add_pad_number( tokenizer.GetNextToken().ToStdString() );

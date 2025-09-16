@@ -3440,7 +3440,7 @@ wxString SCH_IO_EAGLE::translateEagleBusName( const wxString& aEagleName ) const
 
     wxString ret = wxT( "{" );
 
-    wxStringTokenizer tokenizer( aEagleName, wxT( "," ) );
+    wxStringTokenizer tokenizer( aEagleName, "," );
 
     while( tokenizer.HasMoreTokens() )
     {

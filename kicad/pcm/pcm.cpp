@@ -611,7 +611,7 @@ void PLUGIN_CONTENT_MANAGER::PreparePackage( PCM_PACKAGE& aPackage )
         if( ver.version_epoch )
             epoch = *ver.version_epoch;
 
-        wxStringTokenizer version_tokenizer( ver.version, wxT( "." ) );
+        wxStringTokenizer version_tokenizer( ver.version, "." );
 
         major = wxAtoi( version_tokenizer.GetNextToken() );
 
@@ -633,7 +633,7 @@ void PLUGIN_CONTENT_MANAGER::PreparePackage( PCM_PACKAGE& aPackage )
                     int ver_minor = deflt;
                     int ver_patch = deflt;
 
-                    wxStringTokenizer tokenizer( version, wxT( "." ) );
+                    wxStringTokenizer tokenizer( version, "." );
 
                     ver_major = wxAtoi( tokenizer.GetNextToken() );
 

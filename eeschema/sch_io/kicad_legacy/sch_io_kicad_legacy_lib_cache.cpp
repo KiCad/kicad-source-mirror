@@ -310,7 +310,7 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY_LIB_CACHE::LoadPart( LINE_READER& aReader, int a
     long num;
     size_t pos = 4;                               // "DEF" plus the first space.
     wxString utf8Line = wxString::FromUTF8( line );
-    wxStringTokenizer tokens( utf8Line, " \r\n\t" );
+    wxStringTokenizer tokens( utf8Line, " \t\r\n" );
 
     if( tokens.CountTokens() < 8 )
         SCH_PARSE_ERROR( "invalid symbol definition", aReader, line );
@@ -491,7 +491,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aS
     wxCHECK_RET( strCompare( "ALIAS", line, &line ), "Invalid ALIAS section" );
 
     wxString utf8Line = wxString::FromUTF8( line );
-    wxStringTokenizer tokens( utf8Line, " \r\n\t" );
+    wxStringTokenizer tokens( utf8Line, " \t\r\n" );
 
     // Parse the ALIAS list.
     while( tokens.HasMoreTokens() )
@@ -1114,7 +1114,7 @@ SCH_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aS
     size_t pos = 2;                               // "X" plus ' ' space character.
     wxString tmp;
     wxString utf8Line = wxString::FromUTF8( line );
-    wxStringTokenizer tokens( utf8Line, " \r\n\t" );
+    wxStringTokenizer tokens( utf8Line, " \t\r\n" );
 
     if( tokens.CountTokens() < 11 )
         SCH_PARSE_ERROR( "invalid pin definition", aReader, line );

@@ -697,7 +697,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     for( unsigned i = 0; i < m_listJumperPinGroups->GetCount(); ++i )
     {
-        wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( i ), ", " );
+        wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( i ), ", \t\r\n", wxTOKEN_STRTOK );
         std::set<wxString>& group = jumpers.emplace_back();
 
         while( tokenizer.HasMoreTokens() )
@@ -1347,7 +1347,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnRemoveJumperPinGroup( wxCommandEvent& aE
 
         for( int idx : selections )
         {
-            wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( idx ), ", " );
+            wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( idx ), ", \t\r\n", wxTOKEN_STRTOK );
 
             while( tokenizer.HasMoreTokens() )
             {

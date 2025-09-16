@@ -622,7 +622,7 @@ bool COMMON_SETTINGS::migrateSchema3to4()
         const nlohmann::json::json_pointer v3_pointer_eeschema( "/netclass_panel/eeschema_shown_columns"_json_pointer );
         wxString                           eeSchemaColumnList_old = m_internals->at( v3_pointer_eeschema );
 
-        wxStringTokenizer eeSchemaShownTokens( eeSchemaColumnList_old );
+        wxStringTokenizer eeSchemaShownTokens( eeSchemaColumnList_old, " \t\r\n" );
         wxString          eeSchemaColumnList_new;
 
         while( eeSchemaShownTokens.HasMoreTokens() )
@@ -645,7 +645,7 @@ bool COMMON_SETTINGS::migrateSchema3to4()
         const nlohmann::json::json_pointer v3_pointer_pcbnew( "/netclass_panel/pcbnew_shown_columns"_json_pointer );
         wxString                           pcbnewColumnList_old = m_internals->at( v3_pointer_pcbnew );
 
-        wxStringTokenizer pcbnewShownTokens( pcbnewColumnList_old );
+        wxStringTokenizer pcbnewShownTokens( pcbnewColumnList_old, " \t\r\n" );
         wxString          pcbnewColumnList_new;
 
         while( pcbnewShownTokens.HasMoreTokens() )

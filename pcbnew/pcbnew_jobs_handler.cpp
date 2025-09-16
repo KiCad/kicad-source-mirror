@@ -462,7 +462,7 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
 
         while( layerTokens.HasMoreTokens() )
         {
-            std::string token = TO_UTF8( layerTokens.GetNextToken() );
+            std::string token = TO_UTF8( layerTokens.GetNextToken().Trim( wxString::both ) );
 
             if( layerUserMasks.contains( token ) )
                 pushLayers( layerUserMasks.at( token ) );

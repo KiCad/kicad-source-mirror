@@ -149,12 +149,12 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxStringTokenizer netsTok = wxStringTokenizer( From_UTF8( text ), wxT( "," ) );
+        wxStringTokenizer netsTok = wxStringTokenizer( From_UTF8( text ), ",", wxTOKEN_STRTOK );
         bool first = true;
 
         while( netsTok.HasMoreTokens() )
         {
-            NETINFO_ITEM* netinfo = pcb->FindNet( netsTok.GetNextToken() );
+            NETINFO_ITEM* netinfo = pcb->FindNet( netsTok.GetNextToken().Trim( wxString::both ) );
 
             if( netinfo )
             {

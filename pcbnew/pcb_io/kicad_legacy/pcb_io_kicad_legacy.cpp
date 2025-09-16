@@ -1813,33 +1813,34 @@ void PCB_IO_KICAD_LEGACY::load3D( FOOTPRINT* aFootprint )
     FP_3DMODEL t3D;
 
     // Lambda to parse three space-separated doubles using wxString::ToCDouble with C locale
-    auto parseThreeDoubles = []( const char* str, double& x, double& y, double& z ) -> bool
-    {
-        wxString wxStr( str );
-        wxStr.Trim( false ).Trim( true );
+    auto parseThreeDoubles =
+            []( const char* str, double& x, double& y, double& z ) -> bool
+            {
+                wxString wxStr( str );
+                wxStr.Trim( wxString::both );
 
-        wxStringTokenizer tokenizer( wxStr, wxT( " \t" ), wxTOKEN_STRTOK );
+                wxStringTokenizer tokenizer( wxStr, " \t", wxTOKEN_STRTOK );
 
-        if( !tokenizer.HasMoreTokens() )
-            return false;
+                if( !tokenizer.HasMoreTokens() )
+                    return false;
 
-        wxString token1 = tokenizer.GetNextToken();
+                wxString token1 = tokenizer.GetNextToken();
 
-        if( !token1.ToCDouble( &x ) || !tokenizer.HasMoreTokens() )
-            return false;
+                if( !token1.ToCDouble( &x ) || !tokenizer.HasMoreTokens() )
+                    return false;
 
-        wxString token2 = tokenizer.GetNextToken();
+                wxString token2 = tokenizer.GetNextToken();
 
-        if( !token2.ToCDouble( &y ) || !tokenizer.HasMoreTokens() )
-            return false;
+                if( !token2.ToCDouble( &y ) || !tokenizer.HasMoreTokens() )
+                    return false;
 
-        wxString token3 = tokenizer.GetNextToken();
+                wxString token3 = tokenizer.GetNextToken();
 
-        if( !token3.ToCDouble( &z ) )
-            return false;
+                if( !token3.ToCDouble( &z ) )
+                    return false;
 
-        return true;
-    };
+                return true;
+            };
 
     char* line;
 

@@ -131,7 +131,7 @@ void GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakLine( wxDC& dc, const wxString& logi
     wxString line;
 
     // For each word
-    wxStringTokenizer wordTokenizer( logicalLine, wxS( " \t" ), wxTOKEN_RET_DELIMS );
+    wxStringTokenizer wordTokenizer( logicalLine, " \t", wxTOKEN_RET_DELIMS );
 
     while( wordTokenizer.HasMoreTokens() )
     {

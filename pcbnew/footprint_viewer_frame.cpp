@@ -431,7 +431,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     }
     else
     {
-        wxStringTokenizer tokenizer( m_libFilter->GetValue() );
+        wxStringTokenizer tokenizer( m_libFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -507,7 +507,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     if( !m_fpFilter->GetValue().IsEmpty() )
     {
-        wxStringTokenizer tokenizer( m_fpFilter->GetValue() );
+        wxStringTokenizer tokenizer( m_fpFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
         {

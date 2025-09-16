@@ -426,9 +426,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             m_parameterGrid->SetCellRenderer( i, WIZ_COL_VALUE, new wxGridCellBoolRenderer );
         }
         // Parameters that can be selected from a list of multiple options
-        else if( units.Contains( wxT( "," ) ) )  // Indicates list of available options
+        else if( units.Contains( "," ) )  // Indicates list of available options
         {
-            wxStringTokenizer tokenizer( units, wxT( "," ) );
+            wxStringTokenizer tokenizer( units, "," );
             wxArrayString options;
 
             while( tokenizer.HasMoreTokens() )

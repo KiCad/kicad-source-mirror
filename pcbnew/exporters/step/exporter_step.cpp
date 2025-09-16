@@ -327,10 +327,10 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
 
     if( componentFilter )
     {
-        wxStringTokenizer tokenizer( m_params.m_ComponentFilter, wxS( "," ), wxTOKEN_STRTOK );
+        wxStringTokenizer tokenizer( m_params.m_ComponentFilter, ",", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
-            componentFilterPatterns.push_back( tokenizer.GetNextToken().Trim( false ) );
+            componentFilterPatterns.push_back( tokenizer.GetNextToken().Trim( wxString::both ) );
 
         bool found = false;
 

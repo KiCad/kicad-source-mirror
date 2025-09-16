@@ -291,7 +291,7 @@ wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 
 void DIALOG_BOARD_REANNOTATE::ShowReport( const wxString& aMessage, SEVERITY aSeverity )
 {
-    wxStringTokenizer msgs( aMessage, wxT( "\n" ) );
+    wxStringTokenizer msgs( aMessage, "\n" );
 
     while( msgs.HasMoreTokens() )
         m_MessageWindow->Report( msgs.GetNextToken(), aSeverity );
@@ -441,7 +441,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     m_excludeArray.clear();
     m_footprints = m_frame->GetBoard()->Footprints();
 
-    wxStringTokenizer tokenizer( m_ExcludeList->GetValue(), wxS( " ," ), wxTOKEN_STRTOK );
+    wxStringTokenizer tokenizer( m_ExcludeList->GetValue(), " ,", wxTOKEN_STRTOK );
 
     while( tokenizer.HasMoreTokens() )
         m_excludeArray.push_back( tokenizer.GetNextToken() );

@@ -126,7 +126,7 @@ bool SPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS*
         return false;
 
     wxString          cmd = aCmd.Mid( 3 );
-    wxStringTokenizer tokens( cmd, wxS( " \t" ), wxTOKEN_STRTOK );
+    wxStringTokenizer tokens( cmd, " \t", wxTOKEN_STRTOK );
 
     aSource1->m_source = tokens.GetNextToken();
     aSource1->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
@@ -156,7 +156,7 @@ bool SPICE_CIRCUIT_MODEL::ParsePZCommand( const wxString& aCmd, wxString* transf
     analyses->m_Poles = true;
     analyses->m_Zeros = true;
 
-    wxStringTokenizer tokens( aCmd.Mid( 3 ), wxS( " \t" ), wxTOKEN_STRTOK );
+    wxStringTokenizer tokens( aCmd.Mid( 3 ), " \t", wxTOKEN_STRTOK );
 
     if( tokens.HasMoreTokens() )
         *input = tokens.GetNextToken();
@@ -206,12 +206,12 @@ bool SPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOu
     wxString function = cmd.Before( ')' );
     wxString params = cmd.After( ')' );
 
-    wxStringTokenizer func_tokens( function, wxS( " ,\t" ), wxTOKEN_STRTOK );
+    wxStringTokenizer func_tokens( function, " ,\t", wxTOKEN_STRTOK );
 
     *aOutput = func_tokens.GetNextToken();
     *aRef = func_tokens.GetNextToken();
 
-    wxStringTokenizer tokens( params, wxS( " \t" ), wxTOKEN_STRTOK );
+    wxStringTokenizer tokens( params, " \t", wxTOKEN_STRTOK );
     wxString          token = tokens.GetNextToken();
 
     if( !token.IsEmpty() )

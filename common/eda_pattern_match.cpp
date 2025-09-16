@@ -307,7 +307,7 @@ wxString const& EDA_PATTERN_MATCH_RELATIONAL::GetPattern() const
 
 EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_RELATIONAL::Find( const wxString& aCandidate ) const
 {
-    wxStringTokenizer tokenizer( aCandidate );
+    wxStringTokenizer tokenizer( aCandidate, " \t\r\n", wxTOKEN_STRTOK );
     size_t lastpos = 0;
 
     while( tokenizer.HasMoreTokens() )

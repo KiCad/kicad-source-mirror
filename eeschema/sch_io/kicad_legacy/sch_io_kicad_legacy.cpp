@@ -1131,11 +1131,13 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             wxString libName;
             size_t pos = 2;                               // "X" plus ' ' space character.
             wxString utf8Line = wxString::FromUTF8( line );
-            wxStringTokenizer tokens( utf8Line, " \r\n\t" );
+            wxStringTokenizer tokens( utf8Line, " \t\r\n" );
 
             if( tokens.CountTokens() < 2 )
+            {
                 THROW_PARSE_ERROR( "invalid symbol library definition", aReader.GetSource(),
                                    aReader.Line(), aReader.LineNumber(), pos );
+            }
 
             libName = tokens.GetNextToken();
             libName.Replace( "~", " " );

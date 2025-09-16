@@ -248,7 +248,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
     // getting the OpenGL major and minor version as integers didn't exist.
     wxString tmp;
 
-    wxStringTokenizer tokenizer( version );
+    wxStringTokenizer tokenizer( version, " \t\r\n" );
 
     if( tokenizer.HasMoreTokens() )
     {

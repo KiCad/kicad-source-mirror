@@ -1165,7 +1165,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     {
         // Not a SCH_FIELD object yet.
         wxArrayString filters;
-        wxStringTokenizer tokenizer( value );
+        wxStringTokenizer tokenizer( value, " \t\r\n", wxTOKEN_STRTOK );
 
         while( tokenizer.HasMoreTokens() )
         {

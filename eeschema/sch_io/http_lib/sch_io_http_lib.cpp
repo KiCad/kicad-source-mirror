@@ -403,7 +403,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
         if( lowerFieldName == footprint_field )
         {
             SCH_FIELD*        field = &symbol->GetFootprintField();
-            wxStringTokenizer tokenizer( std::get<0>( fieldProperties ), ';' );
+            wxStringTokenizer tokenizer( std::get<0>( fieldProperties ), ";\t\r\n", wxTOKEN_STRTOK );
 
             while( tokenizer.HasMoreTokens() )
                 fp_filters.Add( tokenizer.GetNextToken() );

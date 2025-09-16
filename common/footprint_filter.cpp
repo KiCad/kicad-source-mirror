@@ -217,7 +217,7 @@ void FOOTPRINT_FILTER::FilterByTextPattern( wxString const& aPattern )
 {
     m_filter_pattern = aPattern;
 
-    wxStringTokenizer tokenizer( aPattern.Lower() );
+    wxStringTokenizer tokenizer( aPattern.Lower(), " \t\r\n", wxTOKEN_STRTOK );
 
     while( tokenizer.HasMoreTokens() )
     {
