@@ -14,9 +14,6 @@ list(APPEND LIBCONTEXT_SOURCES
     )
 
 if( MSVC )
-    # we need our assembly helper until cmake 2.26.1 becomes standard on MSVC
-    include( MSVCAssemblyHelper )
-
     if ( KICAD_BUILD_ARCH_X86 )
         list(APPEND LIBCONTEXT_ASM_SOURCES
             ${CMAKE_CURRENT_SOURCE_DIR}/make_i386_ms_pe_masm.asm
@@ -34,14 +31,7 @@ if( MSVC )
             )
     endif()
 
-    if( KICAD_BUILD_ARCH_ARM64 )
-        # ARM64 needs to use the compile_asm workaround
-        compile_asm( TARGET libcontext ASM_FILES ${LIBCONTEXT_ASM_SOURCES} OUTPUT_OBJECTS ASM_SOURCES_OBJECTS )
-
-        list(APPEND LIBCONTEXT_SOURCES ${ASM_SOURCES_OBJECTS})
-    else()
-        list(APPEND LIBCONTEXT_SOURCES ${LIBCONTEXT_ASM_SOURCES})
-    endif()
+    list(APPEND LIBCONTEXT_SOURCES ${LIBCONTEXT_ASM_SOURCES})
 endif()
 
 add_library( libcontext STATIC

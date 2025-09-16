@@ -22,7 +22,12 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
+if( MSVC )
+# CMake 3.28.1 or higher required for MSVC ARM builds for armasm64.exe support
+cmake_minimum_required( VERSION 3.28.1 FATAL_ERROR )
+else()
 cmake_minimum_required( VERSION 3.22 FATAL_ERROR )
+endif()
 
 # Generate DEPFILES without transforming relative paths
 cmake_policy( SET CMP0116 OLD )
