@@ -149,9 +149,7 @@ _HKI( "### More Examples\n"
 "        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 "\n"
-"    # Allow solder mask bridging under guard ring mask apertures\n"
 "    (rule guard_ring_bridging\n"
-"        (constraint bridged_mask))\n"
+"        (constraint bridged_mask)\n"
 "        (condition \"A.intersectsArea('guard_ring')\")\n"
-"        (severity ignore))\n"
-"" );
+"        (severity ignore))" );

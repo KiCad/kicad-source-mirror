@@ -147,3 +147,8 @@
         (constraint solder_paste_abs_margin (opt -50mm))
         (condition "A.Do_not_Populate"))
 
+
+    (rule guard_ring_bridging
+        (constraint bridged_mask)
+        (condition "A.intersectsArea('guard_ring')")
+        (severity ignore))
