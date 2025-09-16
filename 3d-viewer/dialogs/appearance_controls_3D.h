@@ -149,7 +149,7 @@ private:
 
     void rebuildLayers();
 
-    void rebuildLayerPresetsWidget();
+    void rebuildLayerPresetsWidget( bool aReset );
 
     void syncLayerPresetSelection();
 

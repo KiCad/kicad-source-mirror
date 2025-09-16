@@ -324,7 +324,7 @@ private:
 
     void loadDefaultLayerPresets();
 
-    void rebuildLayerPresetsWidget();
+    void rebuildLayerPresetsWidget( bool aReset );
 
     void syncLayerPresetSelection();
 

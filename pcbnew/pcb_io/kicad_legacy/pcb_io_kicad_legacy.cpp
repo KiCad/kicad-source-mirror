@@ -1817,7 +1817,7 @@ void PCB_IO_KICAD_LEGACY::load3D( FOOTPRINT* aFootprint )
             []( const char* str, double& x, double& y, double& z ) -> bool
             {
                 wxString wxStr( str );
-                wxStr.Trim( wxString::both );
+                wxStr.Trim( true ).Trim( false );
 
                 wxStringTokenizer tokenizer( wxStr, " \t", wxTOKEN_STRTOK );
 

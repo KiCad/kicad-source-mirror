@@ -740,7 +740,7 @@ void DIALOG_COPPER_ZONE::updateShowNetsFilter()
 
     while( showFilters.HasMoreTokens() )
     {
-        wxString filter = showFilters.GetNextToken().Trim( wxString::both );
+        wxString filter = showFilters.GetNextToken().Trim( false ).Trim( true );
 
         if( !filter.IsEmpty() )
         {

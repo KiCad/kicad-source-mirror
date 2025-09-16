@@ -146,7 +146,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     wxStringTokenizer     tokenizer( pagesStr, ",", wxTOKEN_STRTOK );
 
     while( tokenizer.HasMoreTokens() )
-        pages.push_back( tokenizer.GetNextToken().Trim( wxString::both) );
+        pages.push_back( tokenizer.GetNextToken().Trim( true ).Trim( false ) );
 
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob;
 

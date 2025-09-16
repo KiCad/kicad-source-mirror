@@ -102,7 +102,7 @@ bool EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
     }
 
     // Check the unit designator (2 ch significant)
-    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
+    wxString unit( buf.Mid( brk_point ).Trim( false ).Left( 2 ).Lower() );
 
     //check for um, μm (µ is MICRO SIGN) and µm (µ is GREEK SMALL LETTER MU) for micrometre
     if( unit == wxT( "um" ) || unit == wxT( "\u00B5m" ) || unit == wxT( "\u03BCm" ) )
@@ -121,7 +121,7 @@ bool EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
         aUnits = EDA_UNITS::FS;
     else if( unit == wxT( "ps" ) )
     {
-        wxString timeUnit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 5 ).Lower() );
+        wxString timeUnit( buf.Mid( brk_point ).Trim( false ).Left( 5 ).Lower() );
 
         if( timeUnit == wxT( "ps" ) )
             aUnits = EDA_UNITS::PS;
@@ -620,7 +620,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
     buf.Left( brk_point ).ToDouble( &dtmp );
 
     // Check the optional unit designator (2 ch significant)
-    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
+    wxString unit( buf.Mid( brk_point ).Trim( false ).Left( 2 ).Lower() );
 
     if( aUnits == EDA_UNITS::UM
             || aUnits == EDA_UNITS::MM
@@ -664,7 +664,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
              || aUnits == EDA_UNITS::PS_PER_CM || aUnits == EDA_UNITS::PS_PER_MM )
 
     {
-        wxString timeUnit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 5 ).Lower() );
+        wxString timeUnit( buf.Mid( brk_point ).Trim( false ).Left( 5 ).Lower() );
 
         if( timeUnit == wxT( "fs" ) )
             aUnits = EDA_UNITS::FS;

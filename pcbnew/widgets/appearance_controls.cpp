@@ -589,7 +589,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     }
 
     loadDefaultLayerPresets();
-    rebuildLayerPresetsWidget();
+    rebuildLayerPresetsWidget( true );
     rebuildObjects();
     OnBoardChanged();
 
@@ -1037,7 +1037,7 @@ void APPEARANCE_CONTROLS::OnLanguageChanged( wxCommandEvent& aEvent )
     Freeze();
     rebuildLayers();
     rebuildLayerContextMenu();
-    rebuildLayerPresetsWidget();
+    rebuildLayerPresetsWidget( false );
     rebuildViewportsWidget();
     rebuildObjects();
     rebuildNets();
@@ -1065,7 +1065,7 @@ void APPEARANCE_CONTROLS::OnBoardChanged()
     syncColorsAndVisibility();
     syncObjectSettings();
     rebuildNets();
-    rebuildLayerPresetsWidget();
+    rebuildLayerPresetsWidget( true );
     syncLayerPresetSelection();
     rebuildViewportsWidget();
 
@@ -1473,7 +1473,7 @@ void APPEARANCE_CONTROLS::SetUserLayerPresets( std::vector<LAYER_PRESET>& aPrese
         m_presetMRU.Add( preset.name );
     }
 
-    rebuildLayerPresetsWidget();
+    rebuildLayerPresetsWidget( true );
 }
 
 
@@ -2632,30 +2632,49 @@ void APPEARANCE_CONTROLS::rebuildNets()
 }
 
 
-void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
+void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget( bool aReset )
 {
     m_viewportsLabel->SetLabel( wxString::Format( _( "Presets (%s+Tab):" ),
                                                   KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbLayerPresets->Clear();
-    m_presetMRU.clear();
+
+    if( aReset )
+        m_presetMRU.clear();
 
     // Build the layers preset list.
     // By default, the presetAllLayers will be selected
     int idx = 0;
     int default_idx = 0;
+    std::vector<std::pair<wxString, void*>> userPresets;
 
-    for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
+    // m_layerPresets is alphabetical: m_presetMRU should also be alphabetical, but m_cbLayerPresets
+    // is split into build-in and user sections.
+    for( auto& [name, preset] : m_layerPresets )
     {
-        const wxString translatedName = wxGetTranslation( pair.first );
-        m_cbLayerPresets->Append( wxGetTranslation( translatedName ),
-                                  static_cast<void*>( &pair.second ) );
-        m_presetMRU.push_back( translatedName );
+        const wxString translatedName = wxGetTranslation( name );
+        void*          userData = static_cast<void*>( &preset );
 
-        if( pair.first == presetAllLayers.name )
+        if( preset.readOnly )
+            m_cbLayerPresets->Append( translatedName, userData );
+        else
+            userPresets.push_back( { name, userData } );
+
+        if( aReset )
+            m_presetMRU.push_back( translatedName );
+
+        if( name == presetAllLayers.name )
             default_idx = idx;
 
         idx++;
+    }
+
+    if( !userPresets.empty() )
+    {
+        m_cbLayerPresets->Append( wxT( "---" ) );
+
+        for( auto& [name, userData] : userPresets )
+            m_cbLayerPresets->Append( name, userData );
     }
 
     m_cbLayerPresets->Append( wxT( "---" ) );
@@ -2665,9 +2684,12 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
     // At least the built-in presets should always be present
     wxASSERT( !m_layerPresets.empty() );
 
-    // Default preset: all layers
-    m_cbLayerPresets->SetSelection( default_idx );
-    m_currentPreset = &m_layerPresets[presetAllLayers.name];
+    if( aReset )
+    {
+        // Default preset: all layers
+        m_cbLayerPresets->SetSelection( default_idx );
+        m_currentPreset = &m_layerPresets[presetAllLayers.name];
+    }
 }
 
 
@@ -2750,13 +2772,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
                     m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
             };
 
-    if( index == count - 3 )
-    {
-        // Separator: reject the selection
-        resetSelection();
-        return;
-    }
-    else if( index == count - 2 )
+    if( index == count - 2 )
     {
         // Save current state to new preset
         wxString name;
@@ -2786,7 +2802,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
+            rebuildLayerPresetsWidget( false );
+            index = m_cbLayerPresets->FindString( name );
         }
         else if( preset->readOnly )
         {
@@ -2814,7 +2831,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
                 m_presetMRU.Remove( name );
         }
 
-        m_currentPreset      = preset;
+        m_currentPreset = preset;
         m_cbLayerPresets->SetSelection( index );
         m_presetMRU.Insert( name, 0 );
 
@@ -2861,8 +2878,14 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         resetSelection();
         return;
     }
+    else if( m_cbLayerPresets->GetString( index ) == wxT( "---" ) )
+    {
+        // Separator: reject the selection
+        resetSelection();
+        return;
+    }
 
-    // Store the objects visibility settings if the presedt is not a user preset,
+    // Store the objects visibility settings if the preset is not a user preset,
     // to be reused when selecting a new built-in layer preset, even if a previous
     // user preset has changed the object visibility
     if( !m_currentPreset || m_currentPreset->readOnly )

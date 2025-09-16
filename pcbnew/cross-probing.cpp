@@ -154,7 +154,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         while( netsTok.HasMoreTokens() )
         {
-            NETINFO_ITEM* netinfo = pcb->FindNet( netsTok.GetNextToken().Trim( wxString::both ) );
+            NETINFO_ITEM* netinfo = pcb->FindNet( netsTok.GetNextToken().Trim( true ).Trim( false ) );
 
             if( netinfo )
             {

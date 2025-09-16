@@ -269,7 +269,7 @@ void APPEARANCE_CONTROLS_3D::rebuildControls()
 
     rebuildLayers();
     m_cbUseBoardStackupColors->SetLabel( _( "Use board stackup colors" ) );
-    rebuildLayerPresetsWidget();
+    rebuildLayerPresetsWidget( true );
     rebuildViewportsWidget();
 
     Thaw();
@@ -363,7 +363,7 @@ void APPEARANCE_CONTROLS_3D::SetUserViewports( std::vector<VIEWPORT3D>& aViewpor
     rebuildViewportsWidget();
 
     // Now is as good a time as any to initialize the layer presets as well.
-    rebuildLayerPresetsWidget();
+    rebuildLayerPresetsWidget( true );
 
     m_presetMRU.Add( FOLLOW_PCB );
     m_presetMRU.Add( FOLLOW_PLOT_SETTINGS );
@@ -708,7 +708,7 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
 }
 
 
-void APPEARANCE_CONTROLS_3D::rebuildLayerPresetsWidget()
+void APPEARANCE_CONTROLS_3D::rebuildLayerPresetsWidget( bool aReset )
 {
     m_presetsLabel->SetLabel( wxString::Format( _( "Presets (%s+Tab):" ),
                                                 KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
@@ -720,6 +720,9 @@ void APPEARANCE_CONTROLS_3D::rebuildLayerPresetsWidget()
     m_cbLayerPresets->Append( _( "Follow PCB Editor" ) );
     m_cbLayerPresets->Append( _( "Follow PCB Plot Settings" ) );
 
+    if( !m_frame->GetAdapter().m_Cfg->m_LayerPresets.empty() )
+        m_cbLayerPresets->Append( wxT( "---" ) );
+
     for( const LAYER_PRESET_3D& preset : m_frame->GetAdapter().m_Cfg->m_LayerPresets )
         m_cbLayerPresets->Append( preset.name );
 
@@ -727,7 +730,8 @@ void APPEARANCE_CONTROLS_3D::rebuildLayerPresetsWidget()
     m_cbLayerPresets->Append( _( "Save preset..." ) );
     m_cbLayerPresets->Append( _( "Delete preset..." ) );
 
-    updateLayerPresetWidget( m_frame->GetAdapter().m_Cfg->m_CurrentPreset );
+    if( aReset )
+        updateLayerPresetWidget( m_frame->GetAdapter().m_Cfg->m_CurrentPreset );
 }
 
 
@@ -814,12 +818,6 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
     {
         doApplyLayerPreset( FOLLOW_PLOT_SETTINGS );
     }
-    else if( index == count - 3 )
-    {
-        // Separator: reject the selection
-        resetSelection();
-        return;
-    }
     else if( index == count - 2 )
     {
         wxTextEntryDialog dlg( wxGetTopLevelParent( this ), _( "Layer preset name:" ),
@@ -851,7 +849,8 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
         else
         {
             cfg->m_LayerPresets.emplace_back( name, visibleLayers, colors );
-            m_cbLayerPresets->SetSelection( m_cbLayerPresets->Insert( name, index - 1 ) );
+            rebuildLayerPresetsWidget( false );
+            m_cbLayerPresets->SetStringSelection( name );
         }
 
         cfg->m_CurrentPreset = name;
@@ -896,6 +895,12 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
                 m_presetMRU.Remove( name );
         }
 
+        resetSelection();
+        return;
+    }
+    else if( m_cbLayerPresets->GetString( index ) == wxT( "---" ) )
+    {
+        // Separator: reject the selection
         resetSelection();
         return;
     }

@@ -656,11 +656,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     wxConfigLoadSetups( &aCfg, m_entries );
 
     // Now actually set the trace masks
-    wxStringTokenizer traceMaskTokenizer( m_traceMasks, "," );
+    wxStringTokenizer traceMaskTokenizer( m_traceMasks, ", ", wxTOKEN_STRTOK );
 
     while( traceMaskTokenizer.HasMoreTokens() )
     {
-        wxString mask = traceMaskTokenizer.GetNextToken().Trim( wxString::both );
+        wxString mask = traceMaskTokenizer.GetNextToken();
         wxLog::AddTraceMask( mask );
     }
 
