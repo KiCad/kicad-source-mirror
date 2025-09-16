@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-15 11:46+0000\n"
+"PO-Revision-Date: 2025-09-16 10:27+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -9458,7 +9458,6 @@ msgid "Displays the current unit"
 msgstr "Zeigt aktuelle Einheit an"
 
 #: common/tool/action_toolbar.cpp:1043
-#, fuzzy
 msgid "Symbol body style selector"
 msgstr "Symbolform-Auswahl"
 
@@ -14045,7 +14044,7 @@ msgstr "Zelle leeren"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 msgid "Clear the cell value"
-msgstr "Zellwert leeren"
+msgstr "Zellenwert löschen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
 msgid "Create Derived Symbol"
@@ -14519,17 +14518,14 @@ msgstr ""
 "für eine Doppeltriode (bei welcher Einheit C das Heizelement ist)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:312
-#, fuzzy
 msgid "Unit display names (optional):"
 msgstr "Anzeigenamen für Einheiten (optional):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:348
-#, fuzzy
 msgid "Body Styles"
 msgstr "Symbolformen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:350
-#, fuzzy
 msgid "Single body style"
 msgstr "Einzelne Symbolform"
 
@@ -14539,12 +14535,10 @@ msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
 msgstr "\"Standard\"- und \"Alternativ\"-De Morgan Symbolformen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
-#, fuzzy
 msgid "Custom body styles:"
 msgstr "Benutzerdefinierte Symbolformen:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
-#, fuzzy
 msgid "Units && Body Styles"
 msgstr "Einheiten && Symbolformen"
 
@@ -14597,7 +14591,6 @@ msgid "Jumper Pin Groups"
 msgstr "Jumperpingruppen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:503
-#, fuzzy
 msgid "Available pins:"
 msgstr "Verfügbare Pins:"
 
@@ -14610,7 +14603,6 @@ msgid "Remove the selected jumper pin group"
 msgstr "Gewählte Jumperpingruppe entfernen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:534
-#, fuzzy
 msgid "Grouped pins:"
 msgstr "Gruppierte Pins:"
 
@@ -14702,13 +14694,12 @@ msgstr "Alternativer Pinname"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties.cpp:351
-#, fuzzy
 msgid ""
 "Alternate pin assignments are not available for symbols with multiple body "
 "styles."
 msgstr ""
-"Für Symbole mit vielfältigen Symbolformen sind keine alternativen "
-"Pinbelegungen verfügbar."
+"Alternativen Pinbelegungen sind für Symbole mit mehreren Symbolformen nicht "
+"verfügbar."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid "Exit sync pins mode"
@@ -14813,9 +14804,8 @@ msgstr "Von allen &Einheiten eines Symbols gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
-#, fuzzy
 msgid "Common to all body &styles"
-msgstr "Von allen Symbolformen gemeinsam genutzt"
+msgstr "Von allen &Symbolformen gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -16287,19 +16277,16 @@ msgid "Include 'DNP' Symbols"
 msgstr "\"Nicht bestücken\"-Symbole einschliessen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:925
-#, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "\"Von Stückliste ausschliessen\"-Symbole mit einschliessen"
+msgstr "\"Von Stückliste ausschließen\"-Symbole einschließen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:927
-#, fuzzy
 msgid "Highlight on Cross Probe"
-msgstr "Kreuzreferenzierung hervorheben"
+msgstr "Bei Kreuzreferenzierung hervorheben"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:928
-#, fuzzy
 msgid "Select on Cross Probe"
-msgstr "Kreuzreferenzierung auswählen"
+msgstr "Bei Kreuzreferenzierung auswählen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1118
 msgid "The Quantity column cannot be grouped by."
@@ -16400,7 +16387,6 @@ msgid "Current Sheet Only"
 msgstr "Nur aktuelles Blatt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:146
-#, fuzzy
 msgid "Current Sheet and Down"
 msgstr "Aktuelles Blatt und alle darunterliegenden"
 
@@ -17052,16 +17038,13 @@ msgstr "Netze hervorheben, wenn sie im Leiterplatteneditor hervorgehoben sind"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:247
-#, fuzzy
 msgid "Flash cross-probed selection"
 msgstr "Blinkende kreuzreferenzierte Auswahl"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:248
-#, fuzzy
 msgid "Temporarily flash the newly cross-probed selection 3 times"
-msgstr ""
-"Die eben getroffene kreuzreferenzierte Auswahl blinkt vorübergehend 3-mal"
+msgstr "Neue kreuzreferenzierte Auswahl blinkt vorübergehend 3-mal"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -17078,7 +17061,6 @@ msgid "Show hidden fields"
 msgstr "Verborgene Felder anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:116
-#, fuzzy
 msgid "Show directive labels"
 msgstr "Anweisungsbezeichner anzeigen"
 
@@ -18078,7 +18060,6 @@ msgid "Saved ERC Report to %s\n"
 msgstr "ERC-Bericht in %s gespeichert\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1226
-#, fuzzy
 msgid "Schematic file was not updated\n"
 msgstr "Schaltplandatei wurde nicht aktualisiert\n"
 
@@ -18093,9 +18074,8 @@ msgstr ""
 "%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1249
-#, fuzzy
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr "Schaltplandatei erfolgreich im neuesten Fromat gespeichert\n"
+msgstr "Schaltplandatei erfolgreich im neuesten Format gespeichert\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1003
 msgid "Net Navigator"
