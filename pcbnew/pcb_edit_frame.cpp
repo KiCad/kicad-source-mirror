@@ -569,6 +569,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_acceptedExts.emplace( FILEEXT::KiCadPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     m_acceptedExts.emplace( FILEEXT::LegacyPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
+    m_acceptedExts.emplace( wxS( "dxf" ), &PCB_ACTIONS::ddImportGraphics );
+    m_acceptedExts.emplace( FILEEXT::SVGFileExtension, &PCB_ACTIONS::ddImportGraphics );
     DragAcceptFiles( true );
 
     Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );

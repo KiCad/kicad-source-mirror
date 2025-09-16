@@ -66,6 +66,12 @@ public:
      */
     bool ShouldGroupItems() { return m_cbGroupItems->IsChecked(); }
 
+    /**
+     * Set the filename override to be applied in TransferDataToWindow.
+     */
+    void SetFilenameOverride( const wxString& aFilenameOverride );
+
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
@@ -83,4 +89,6 @@ private:
     UNIT_BINDER          m_yOrigin;
     UNIT_BINDER          m_defaultLineWidth;
     UNIT_BINDER          m_tolerance;
+
+    wxString m_filenameOverride;
 };

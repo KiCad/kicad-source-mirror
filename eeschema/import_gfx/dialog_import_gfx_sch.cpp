@@ -157,6 +157,24 @@ DIALOG_IMPORT_GFX_SCH::~DIALOG_IMPORT_GFX_SCH()
 }
 
 
+void DIALOG_IMPORT_GFX_SCH::SetFilenameOverride( const wxString& aFilenameOverride )
+{
+    m_filenameOverride = aFilenameOverride;
+}
+
+
+bool DIALOG_IMPORT_GFX_SCH::TransferDataToWindow()
+{
+    DIALOG_SHIM::TransferDataToWindow();
+
+    // We have to set the filename field value here, otherwise it gets overwritten by state loading
+    if( !m_filenameOverride.IsEmpty() )
+        m_textCtrlFileName->SetValue( m_filenameOverride );
+
+    return true;
+}
+
+
 void DIALOG_IMPORT_GFX_SCH::onFilename( wxCommandEvent& event )
 {
     bool     enableDXFControls = true;

@@ -1287,7 +1287,12 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
     // items if needed
     DIALOG_IMPORT_GFX_SCH dlg( m_frame );
-    int                   dlgResult = dlg.ShowModal();
+
+    // Set filename on drag-and-drop
+    if( aEvent.HasParameter() )
+        dlg.SetFilenameOverride( *aEvent.Parameter<wxString*>() );
+
+    int dlgResult = dlg.ShowModal();
 
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
 
@@ -3720,6 +3725,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawTable,             SCH_ACTIONS::drawTable.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportGraphics,        SCH_ACTIONS::importGraphics.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ImportGraphics,        SCH_ACTIONS::ddImportGraphics.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SyncSheetsPins,        SCH_ACTIONS::syncSheetPins.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SyncAllSheetsPins,     SCH_ACTIONS::syncAllSheetsPins.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins, SCH_ACTIONS::autoplaceAllSheetPins.MakeEvent() );

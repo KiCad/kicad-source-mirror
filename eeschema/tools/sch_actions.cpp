@@ -1511,8 +1511,13 @@ TOOL_ACTION SCH_ACTIONS::saveCurrSheetCopyAs( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::ddAppendFile( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.ddAppendFile" )
         .Scope( AS_GLOBAL ) );
+
 TOOL_ACTION SCH_ACTIONS::ddAddImage( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.ddAddImage" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION SCH_ACTIONS::ddImportGraphics( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.ddImportGraphics" )
         .Scope( AS_GLOBAL ) );
 
 // SIMULATOR

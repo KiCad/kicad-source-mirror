@@ -194,7 +194,7 @@ public:
     int DrawVia( const TOOL_EVENT& aEvent );
 
     /**
-     * Place a drawing imported from a DXF or SVG file in footprint editor.
+     * Place a drawing imported from a DXF or SVG file.
      */
     int PlaceImportedGraphics( const TOOL_EVENT& aEvent );
 

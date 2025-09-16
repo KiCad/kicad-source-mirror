@@ -2692,13 +2692,17 @@ TOOL_ACTION PCB_ACTIONS::lengthTunerSettings( TOOL_ACTION_ARGS()
         .Tooltip( _( "Displays tuning pattern properties dialog" ) )
         .Icon( BITMAPS::router_len_tuner_setup ) );
 
+// Drag and drop
 TOOL_ACTION PCB_ACTIONS::ddAppendBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.DdAppendBoard" )
         .Scope( AS_GLOBAL ) );
 
-
 TOOL_ACTION PCB_ACTIONS::ddImportFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.ddImportFootprint" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION PCB_ACTIONS::ddImportGraphics( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.ddImportGraphics" )
         .Scope( AS_GLOBAL ) );
 
 // actions for footprint wizard frame

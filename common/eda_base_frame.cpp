@@ -1438,6 +1438,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
 void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
 {
+    Raise();
+
     wxString* files = aEvent.GetFiles();
 
     for( int nb = 0; nb < aEvent.GetNumberOfFiles(); nb++ )

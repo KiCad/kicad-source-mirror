@@ -100,6 +100,24 @@ DIALOG_IMPORT_GRAPHICS::~DIALOG_IMPORT_GRAPHICS()
 }
 
 
+void DIALOG_IMPORT_GRAPHICS::SetFilenameOverride( const wxString& aFilenameOverride )
+{
+    m_filenameOverride = aFilenameOverride;
+}
+
+
+bool DIALOG_IMPORT_GRAPHICS::TransferDataToWindow()
+{
+    DIALOG_SHIM::TransferDataToWindow();
+
+    // We have to set the filename field value here, otherwise it gets overwritten by state loading
+    if( !m_filenameOverride.IsEmpty() )
+        m_textCtrlFileName->SetValue( m_filenameOverride );
+
+    return true;
+}
+
+
 void DIALOG_IMPORT_GRAPHICS::onFilename( wxCommandEvent& event )
 {
     bool     enableDXFControls = true;

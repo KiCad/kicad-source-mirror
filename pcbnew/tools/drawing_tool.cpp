@@ -1872,6 +1872,11 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     DIALOG_IMPORT_GRAPHICS dlg( m_frame );
+
+    // Set filename on drag-and-drop
+    if( aEvent.HasParameter() )
+        dlg.SetFilenameOverride( *aEvent.Parameter<wxString*>() );
+
     int dlgResult = dlg.ShowModal();
 
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
@@ -4216,6 +4221,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawTable,             PCB_ACTIONS::drawTable.MakeEvent() );
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::ddImportGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,             PCB_ACTIONS::setAnchor.MakeEvent() );
 
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSingleTrack.MakeEvent() );

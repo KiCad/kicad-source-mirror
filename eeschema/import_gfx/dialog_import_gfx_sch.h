@@ -55,6 +55,12 @@ public:
      */
     bool IsPlacementInteractive() { return m_placementInteractive; }
 
+    /**
+     * Set the filename override to be applied in TransferDataToWindow.
+     */
+    void SetFilenameOverride( const wxString& aFilenameOverride );
+
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
@@ -85,6 +91,8 @@ private:
     static bool          m_placementInteractive;
     static double        m_importScale;         // a scale factor to change the size of imported
                                                 // items m_importScale =1.0 means keep original size
+
+    wxString             m_filenameOverride;
 };
 
 #endif    //  __DIALOG_IMPORT_GFX_SCH_H__

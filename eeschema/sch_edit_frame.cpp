@@ -423,6 +423,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_acceptedExts.emplace( FILEEXT::PngFileExtension, &SCH_ACTIONS::ddAddImage );
     m_acceptedExts.emplace( FILEEXT::JpegFileExtension, &SCH_ACTIONS::ddAddImage );
     m_acceptedExts.emplace( wxS( "jpeg" ), &SCH_ACTIONS::ddAddImage );
+    m_acceptedExts.emplace( wxS( "dxf" ), &SCH_ACTIONS::ddImportGraphics );
+    m_acceptedExts.emplace( FILEEXT::SVGFileExtension, &SCH_ACTIONS::ddImportGraphics );
     DragAcceptFiles( true );
 
     // Ensure the window is on top
