@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 09:08+0000\n"
+"PO-Revision-Date: 2025-09-16 10:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -253,15 +253,13 @@ msgstr "3D 栅格"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "旋转"
+msgstr "旋转电路板"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "上移电路板"
+msgstr "移动电路板"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -1143,9 +1141,8 @@ msgid "Export 3D View"
 msgstr "导出 3D 视图"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "图像尺寸:"
+msgstr "图像尺寸"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1362,9 +1359,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "引脚"
+msgstr "in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1375,29 +1371,24 @@ msgid "Height:"
 msgstr "高度:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "3R 解决方案:"
+msgstr "分辨率"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "3R 解决方案:"
+msgstr "X 分辨率:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "pixels"
+msgstr "pixels/in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "pixels"
+msgstr "pixels/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "3R 解决方案:"
+msgstr "Y 分辨率:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
@@ -2907,9 +2898,8 @@ msgid "Test Connection"
 msgstr "测试连接"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "表格"
+msgstr "表"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 msgid "Unable to connect to database"
@@ -3702,27 +3692,26 @@ msgid "Close"
 msgstr "关闭"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "警告: 缩放比例错误。"
+msgstr "警告: 自定义缩放比例值非数字值。"
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"警告: 缩放比例过大。\n"
-"已限制到 %f。"
+"警告: 自定义缩放比例过大。\n"
+"将被限制为 %f。"
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"警告: 缩放比例过小。\n"
-"已限制到 %f。"
+"警告: 自定义缩放比例过小。\n"
+"将被限制为 %f。"
 
 #: common/dialogs/dialog_print_generic.cpp:227
 #: common/dialogs/dialog_print_generic.cpp:284
@@ -4362,7 +4351,6 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "使用硬件加速图形处理 (推荐)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
-#, fuzzy
 msgid "Fallback Graphics"
 msgstr "软件兼容模式"
 
@@ -4373,7 +4361,6 @@ msgid ""
 msgstr "回落到软件图形处理 (适用于无法满足 KiCad 硬件图形加速条件的设备)"
 
 #: common/dialogs/panel_common_settings_base.cpp:58
-#, fuzzy
 msgid "Antialiasing:"
 msgstr "抗锯齿:"
 
@@ -4548,9 +4535,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "高对比度模式的调光系数:"
 
 #: common/dialogs/panel_common_settings_base.cpp:296
-#, fuzzy
 msgid "Scaling"
-msgstr "缩放比例:"
+msgstr "缩放"
 
 #: common/dialogs/panel_common_settings_base.cpp:309
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -5214,23 +5200,22 @@ msgstr "光标"
 #: common/dialogs/panel_gal_options_base.cpp:102 common/tool/actions.cpp:1188
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Small crosshairs"
-msgstr "小十字"
+msgstr "小十字准线"
 
 #: common/dialogs/panel_gal_options_base.cpp:105
 #: common/widgets/gal_options_panel_base.cpp:105
 msgid "Full window crosshairs"
-msgstr "全屏十字光标"
+msgstr "全屏十字准线"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
-msgstr "45 度"
+msgstr "45 度十字准线"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
 msgid "Always show crosshairs"
-msgstr "始终显示十字光标"
+msgstr "始终显示十字准线"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
@@ -5342,9 +5327,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| 操作 | 默认快捷键 | 描述"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "线宽必须大于 0。"
+msgstr "缩放比例值必须为正数。"
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5552,7 +5536,7 @@ msgstr "右键拖动:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "鼠标移动时按住键盘按键进行平移:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -6130,12 +6114,11 @@ msgstr "向右"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "顶部主工具栏"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "顶部辅助区"
+msgstr "顶部辅助工具栏"
 
 #: common/dialogs/panel_toolbar_customization.cpp:143
 #: common/dialogs/panel_toolbar_customization_base.cpp:71
@@ -6304,9 +6287,8 @@ msgid "Text '%s'"
 msgstr "文本 '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
-#, fuzzy
 msgid "Imported shape"
-msgstr "导入的形状"
+msgstr "已导入形状"
 
 #: common/drawing_sheet/ds_draw_item.cpp:437 eeschema/sch_shape.cpp:365
 #, c-format
@@ -6404,7 +6386,7 @@ msgstr "鼠标和触摸板"
 
 #: common/eda_base_frame.cpp:1235
 msgid "SpaceMouse"
-msgstr ""
+msgstr "SpaceMouse"
 
 #: common/eda_base_frame.cpp:1237
 msgid "Hotkeys"
@@ -10125,31 +10107,31 @@ msgstr "重置局部坐标"
 
 #: common/tool/actions.cpp:1181
 msgid "Always Show Crosshairs"
-msgstr "始终显示十字光标"
+msgstr "始终显示十字准线"
 
 #: common/tool/actions.cpp:1182
 msgid "Display crosshairs even when not drawing objects"
-msgstr "没有进行对象绘制时也显示十字光标"
+msgstr "未绘制对象时也显示十字准线"
 
 #: common/tool/actions.cpp:1189
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "使用小十字准线 (水平垂直方向上的正交十字线)"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
-msgstr "全屏十字光标"
+msgstr "全屏十字准线"
 
 #: common/tool/actions.cpp:1197
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "显示全屏十字准线 (水平垂直方向上的正交十字线)"
 
 #: common/tool/actions.cpp:1204
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "45 度十字准线"
 
 #: common/tool/actions.cpp:1205
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "显示全屏十字准线 (45 度和 135 度方向上的正交十字线)"
 
 #: common/tool/actions.cpp:1213
 msgid "Inactive Layer View Mode"
@@ -12131,9 +12113,8 @@ msgid "Update symbol attributes"
 msgstr "更新符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
-#, fuzzy
 msgid "Update pin name/number visibilities"
-msgstr "更新字段可见性设置"
+msgstr "更新引脚名称/编号可见性设置"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:75
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
@@ -13725,14 +13706,12 @@ msgid "Import"
 msgstr "导入"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:208
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "替换现有的布置规则域"
+msgstr "替换所有现有引脚"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:211
-#, fuzzy
 msgid "Append to existing pins"
-msgstr "附加现有的图框"
+msgstr "追加到现有引脚"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:220
 msgid "From File..."
@@ -13765,24 +13744,20 @@ msgid "Revert the symbol to its last saved state"
 msgstr "是否放弃变更, 并将 '%s' 重置为上一保存版本?"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear cell"
-msgstr "铜皮间距"
+msgstr "清除单元格"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "清除最近的钻孔文件"
+msgstr "清除单元格值"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "创建新符号"
+msgstr "创建派生符号"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "从现有符号派生, 创建一个新符号"
+msgstr "创建一个从所选符号派生出的新符号"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:128
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
@@ -13803,29 +13778,27 @@ msgid "Show datasheet in browser"
 msgstr "在浏览器中显示数据书册"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "符号 '%s' 在库中 '%s' 找不到。"
+msgstr "在库 '%s' 中找不到相关符号 。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "符号 '%s' 在库中 '%s' 找不到。"
+msgstr "在库 '%s' 中找不到符号 。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "加载电路板 '%s' 时出错: %s"
+msgstr "加载符号 '%s' 时出错: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:579
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
-msgstr "更新符号以使原理图符号与库中的符号同步"
+msgstr "无法从库中加载任何相关符号。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:581
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "更新符号以使原理图符号与库中的符号同步"
+msgstr "无法从库中加载任何符号。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:683
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:750
@@ -13869,9 +13842,9 @@ msgstr "名称为 %s 的字段已存在。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:807
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:91
-#, fuzzy, c-format
+#, c-format
 msgid "Library Fields Table (%s)"
-msgstr "库 (%d)"
+msgstr "库字段表 (%s)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1029
 #, fuzzy
@@ -14052,9 +14025,8 @@ msgid "Delete extra units from symbol?"
 msgstr "是否删除符号中多余的单元?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:505
-#, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "符号必须要有一个名称。"
+msgstr "符号必须至少有一个主体样式"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:511
 #, fuzzy
@@ -14079,9 +14051,9 @@ msgid "Edit Symbol Properties"
 msgstr "编辑符号属性"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "文件已经被打开。"
+msgstr "此字段继承于'%s'。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 #, c-format
@@ -14251,9 +14223,8 @@ msgstr ""
 "filament) 则不应选中此选项。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:312
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "输入单元 %s 的显示名"
+msgstr "单元显示名称 (可选):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:348
 #, fuzzy
@@ -14270,14 +14241,12 @@ msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
-#, fuzzy
 msgid "Custom body styles:"
-msgstr "作用于符号的所有图形符号样式"
+msgstr "自定义主体样式:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
-#, fuzzy
 msgid "Units && Body Styles"
-msgstr "主体样式"
+msgstr "单元 && 主体样式"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:441
 msgid "Footprint filters:"
@@ -14328,9 +14297,8 @@ msgid "Jumper Pin Groups"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:503
-#, fuzzy
 msgid "Available pins:"
-msgstr "可用引脚"
+msgstr "可用引脚:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:519
 #, fuzzy
@@ -14587,9 +14555,9 @@ msgstr "退回到用户路径 '%s'。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:398
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "无法正常化路径 '%s%s'。"
+msgstr "无法规范化路径 '%s'。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:404
 msgid "No project or path defined for the current schematic."
@@ -16172,9 +16140,8 @@ msgid "Alternate Assignment"
 msgstr "备选分配"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:144
-#, fuzzy
 msgid "Body style:"
-msgstr "主体样式"
+msgstr "主体样式:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:361
@@ -17884,9 +17851,9 @@ msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "当前配置中未启用符号库 '%s'"
 
 #: eeschema/erc/erc.cpp:1565
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "在 '%2$s' 中找不到符号库 '%1$s'。"
+msgstr "在 '%2$s' 中找不到符号库 '%1$s'"
 
 #: eeschema/erc/erc.cpp:1585
 #, c-format
@@ -17904,32 +17871,32 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "符号 '%s' 与来源库 '%s' 中的符号存在差异"
 
 #: eeschema/erc/erc.cpp:1669
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "'%s' 不是有效封装标识。"
+msgstr "'%s' 不是有效的封装标识"
 
 #: eeschema/erc/erc.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr "当前配置不包含封装库 '%s'。"
+msgstr "当前配置中不包含封装库 '%s'"
 
 #: eeschema/erc/erc.cpp:1692
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
-msgstr "当前配置中未启用封装库 '%s'。"
+msgstr "当前配置中未启用封装库 '%s'"
 
 #: eeschema/erc/erc.cpp:1701
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
+msgstr "在库 '%2$s' 中找不到封装 '%1$s'"
 
 #: eeschema/erc/erc.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "分配的封装 (%s) 与封装筛选规则 (%s) 不匹配。"
+msgstr "已分配封装 (%s) 与封装筛选规则 (%s) 不匹配"
 
 #: eeschema/erc/erc.cpp:1937
 msgid "Checking sheet names..."
@@ -18062,14 +18029,12 @@ msgid "Unconnected \"no connection\" flag"
 msgstr "未连接的 '无连接' 标志"
 
 #: eeschema/erc/erc_item.cpp:105
-#, fuzzy
 msgid "Label not connected"
-msgstr "引脚未连接"
+msgstr "标签未连接"
 
 #: eeschema/erc/erc_item.cpp:109
-#, fuzzy
 msgid "Label connected to only one pin"
-msgstr "标签未连接到任何对象"
+msgstr "标签仅连接到一个引脚"
 
 #: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
@@ -18261,12 +18226,10 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "原理图 '%s' 不存在。是否创建?"
 
 #: eeschema/files-io.cpp:158
-#, fuzzy
 msgid "Create Schematic"
 msgstr "创建原理图"
 
 #: eeschema/files-io.cpp:159
-#, fuzzy
 msgid "Load Schematic"
 msgstr "加载原理图"
 
@@ -18790,7 +18753,6 @@ msgid "Netlist..."
 msgstr "网表..."
 
 #: eeschema/menubar.cpp:120
-#, fuzzy
 msgid "Symbols..."
 msgstr "符号..."
 
@@ -18878,12 +18840,12 @@ msgstr "%s, %s 处没有连接"
 #: eeschema/net_navigator.cpp:161
 #, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "从 %s, %s 到 %s, %s 的总线到连线入口"
+msgstr "从 %s, %s 到 %s, %s 的总线至连线入口"
 
 #: eeschema/net_navigator.cpp:172
 #, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "从 %s, %s 到 %s, %s 的总线到总线入口"
+msgstr "从 %s, %s 到 %s, %s 的总线至总线入口"
 
 #: eeschema/net_navigator.cpp:183
 #, c-format
@@ -19219,14 +19181,12 @@ msgid "Transform Offset Y"
 msgstr "变换偏移 Y"
 
 #: eeschema/sch_bus_entry.cpp:420
-#, fuzzy
 msgid "Bus to wire entry"
-msgstr "总线到连线入口"
+msgstr "总线至连线入口"
 
 #: eeschema/sch_bus_entry.cpp:426
-#, fuzzy
 msgid "Bus to bus entry"
-msgstr "总线到总线入口"
+msgstr "总线至总线入口"
 
 #: eeschema/sch_bus_entry.cpp:505 eeschema/sch_line.cpp:150
 #: eeschema/sch_line.cpp:920 eeschema/tools/sch_edit_tool.cpp:264
@@ -20113,9 +20073,9 @@ msgid "Invalid symbol unit number %s"
 msgstr "无效的符号库单元数 %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol body style number %s"
-msgstr "无效的符号库单元数 %s"
+msgstr "%s 的主体样式数量无效"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:863
 #, c-format
@@ -20270,14 +20230,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice 原理图文件"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr "插件 \"%s\" 不能执行 \"%s\" 功能。"
+msgstr "插件 '%s' 未实现函数 '%s'。"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:45 pcbnew/pcb_io/pcb_io_mgr.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "\"%s\" 类型插件找不到。"
+msgstr "找不到类型为 '%s' 的插件。"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:101
 #, c-format
@@ -20286,15 +20246,13 @@ msgstr "未知 SCH_FILE_T 值: %d"
 
 #: eeschema/sch_item.cpp:170 eeschema/sch_item.cpp:193
 #: eeschema/sch_item.cpp:744
-#, fuzzy
 msgid "All units"
-msgstr "所有项目"
+msgstr "所有单元"
 
 #: eeschema/sch_item.cpp:204 eeschema/sch_item.cpp:220
 #: eeschema/sch_item.cpp:766
-#, fuzzy
 msgid "All body styles"
-msgstr "作用于符号的所有图形符号样式"
+msgstr "所有主体样式"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -21108,9 +21066,9 @@ msgstr ""
 "\n"
 
 #: eeschema/sch_textbox.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Text box '%s'"
-msgstr "文本 '%s'"
+msgstr "文本框 '%s'"
 
 #: eeschema/sch_textbox.cpp:481 pcbnew/pcb_textbox.cpp:497
 msgid "Box Width"
@@ -23703,9 +23661,8 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr "将设计图块复制到工程中, 并作为当前图纸的子图纸"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "从图纸放置项目:"
+msgstr "从图纸放置引脚"
 
 #: eeschema/tools/sch_actions.cpp:576
 #, fuzzy
@@ -23881,14 +23838,12 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "为满足匹配规则的网络分配一个网络类"
 
 #: eeschema/tools/sch_actions.cpp:852
-#, fuzzy
 msgid "Cycle Body Style"
-msgstr "更改主体样式"
+msgstr "循环切换主体样式"
 
 #: eeschema/tools/sch_actions.cpp:853
-#, fuzzy
 msgid "Switch between De Morgan (or other) representations"
-msgstr "在 De Morgan 表示之间切换"
+msgstr "在 De Morgan (或其他) 表示之间切换"
 
 #: eeschema/tools/sch_actions.cpp:859
 msgid "Change to Label"
@@ -24692,7 +24647,7 @@ msgstr "添加结点"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1466
 msgid "Add Wire to Bus Entry"
-msgstr "添加总线入口"
+msgstr "添加连线至总线入口"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1542
 msgid "Junction location contains no joinable wires and/or pins."
@@ -25192,9 +25147,8 @@ msgid "Failed to flatten symbol"
 msgstr "无法保存 %s 。"
 
 #: eeschema/tools/symbol_editor_control.cpp:848
-#, fuzzy
 msgid "Failed to update library with flattened symbol"
-msgstr "无法创建符号库文件 "
+msgstr ""
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 msgid "Place Pin"
@@ -25236,9 +25190,8 @@ msgid "Select a single pin with stacked notation to explode"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1052
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "所选路径不包含有效的 KiCad 设置!"
+msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1116
 msgid "Symbol is not derived from another symbol."
@@ -35067,14 +35020,12 @@ msgid "Update text layers and visibilities"
 msgstr "更新文本层和可见性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update text sizes and styles"
-msgstr "更新字段大小和样式"
+msgstr "更新文本大小和样式"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Update text positions"
-msgstr "更新字段位置"
+msgstr "更新文本位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Update text content"
@@ -35161,14 +35112,12 @@ msgid "Update/reset text layers and visibilities"
 msgstr "更新/重置文本层和可见性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
-msgstr "更新/重置字段文本大小和样式"
+msgstr "更新/重置文本大小和样式"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text positions"
-msgstr "更新/重置字段位置"
+msgstr "更新/重置文本位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
@@ -35347,9 +35296,8 @@ msgid "*.emn"
 msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "栅格参考点:"
+msgstr "设置电路板参考点:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:194
@@ -35558,7 +35506,7 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -36010,7 +35958,7 @@ msgid ""
 "It will be clamped at %s."
 msgstr ""
 "文本线宽与高度比例不对。\n"
-"线宽已被限制为 %s。"
+"将被限制为 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:674
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:886
@@ -43661,7 +43609,7 @@ msgid "Checking board footprints against library..."
 msgstr "正在对照库内容检查电路板封装..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:984
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'"
 msgstr "在 '%2$s' 中找不到封装库 '%1$s'。"
 
@@ -44577,19 +44525,16 @@ msgid "Footprint Chooser"
 msgstr "封装选择器"
 
 #: pcbnew/footprint_chooser_frame.cpp:150
-#, fuzzy
 msgid "Show/hide description panel"
-msgstr "显示/隐藏 搜索面板"
+msgstr "显示/隐藏 描述面板"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
-#, fuzzy
 msgid "Show/hide 3D view panel"
-msgstr "显示/隐藏 搜索面板"
+msgstr "显示/隐藏 3D 视图面板"
 
 #: pcbnew/footprint_chooser_frame.cpp:168
-#, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "显示封装值"
+msgstr "显示/隐藏 封装视图面板"
 
 #: pcbnew/footprint_chooser_frame.cpp:176
 msgid "Show 3D viewer in own window"
@@ -48097,9 +48042,8 @@ msgid "Color theme '%s' not found, will use theme from PCB Editor.\n"
 msgstr "未找到配色主题 '%s', 将使用 PCB 编辑器主题。\n"
 
 #: pcbnew/pcb_point.cpp:166
-#, fuzzy
 msgid "PCB Point"
-msgstr "PCB 原点"
+msgstr "PCB 点"
 
 #: pcbnew/pcb_reference_image.cpp:356
 msgid "Associated Layer"
@@ -48138,12 +48082,12 @@ msgid "Pad Primitives"
 msgstr "焊盘原型"
 
 #: pcbnew/pcb_table.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%d column table"
 msgstr "%d 列表格"
 
 #: pcbnew/pcb_tablecell.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Table cell %s"
 msgstr "单元格 %s"
 
@@ -48166,7 +48110,7 @@ msgid "PCB text '%s' on %s"
 msgstr "%2$s 上的 PCB 文本 '%1$s'"
 
 #: pcbnew/pcb_textbox.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text box '%s' on %s"
 msgstr "%2$s 上的 PCB 文本框 '%1$s'"
 
@@ -48175,14 +48119,14 @@ msgid "Border Properties"
 msgstr "边框属性"
 
 #: pcbnew/pcb_track.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/buried via %s on %s"
-msgstr "盲孔/埋孔 %s (%s)"
+msgstr "%2$s 上的盲孔/埋孔 %1$s"
 
 #: pcbnew/pcb_track.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Micro via %s on %s"
-msgstr "微孔 %s (%s)"
+msgstr "%2$s 上的微孔 %1$s"
 
 #: pcbnew/pcb_track.cpp:175
 #, c-format
@@ -48202,9 +48146,8 @@ msgid "Segment Length"
 msgstr "线段长度"
 
 #: pcbnew/pcb_track.cpp:1831
-#, fuzzy
 msgid "Segment Delay"
-msgstr "线段延迟"
+msgstr "走线段延迟"
 
 #: pcbnew/pcb_track.cpp:1877
 #, fuzzy
@@ -49804,9 +49747,8 @@ msgid "Select Via Size"
 msgstr "选择过孔尺寸"
 
 #: pcbnew/tools/drawing_tool.cpp:343
-#, fuzzy
 msgid "Constrain to H, V"
-msgstr "约束操作于水平/垂直/45度"
+msgstr "约束操作于水平/垂直"
 
 #: pcbnew/tools/drawing_tool.cpp:382 pcbnew/tools/drawing_tool.cpp:2409
 msgid "Draw Line"
@@ -52210,9 +52152,9 @@ msgid "Invalid clipboard contents"
 msgstr "无效的剪贴板内容"
 
 #: pcbnew/tools/pcb_control.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "封装名不能为空。"
+msgstr "封装 %s 已被锁定, 无法放置。"
 
 #: pcbnew/tools/pcb_control.cpp:1581
 #, c-format
@@ -53452,7 +53394,6 @@ msgid "No Net"
 msgstr "无网络"
 
 #: pcbnew/widgets/search_handlers.cpp:579
-#, fuzzy
 msgid "Drills"
 msgstr "钻孔"
 
@@ -53535,7 +53476,7 @@ msgid "Rule Area %s"
 msgstr "规则域 %s"
 
 #: pcbnew/zone.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
 msgstr "规则域 '%s' %s"
 
