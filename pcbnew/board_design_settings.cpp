@@ -1326,7 +1326,7 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
 
 void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
 {
-    m_viaSizeIndex = std::min( aIndex, (unsigned) m_ViasDimensionsList.size() );
+    m_viaSizeIndex = std::min<unsigned>( aIndex,  m_ViasDimensionsList.size() - 1 );
     m_useCustomTrackVia = false;
 }
 
@@ -1359,7 +1359,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
 
 void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
 {
-    m_trackWidthIndex = std::min( aIndex, (unsigned) m_TrackWidthList.size() );
+    m_trackWidthIndex = std::min<unsigned>( aIndex, m_TrackWidthList.size() - 1 );
     m_useCustomTrackVia = false;
 }
 
