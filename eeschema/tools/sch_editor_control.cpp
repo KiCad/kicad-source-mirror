@@ -583,20 +583,22 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                 if( item->Type() == SCH_PIN_T )
                 {
+                    SCH_PIN*    schPin = static_cast<SCH_PIN*>( item );
+                    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( schPin->GetParentSymbol() );
+                    SCH_PIN*    libPin = schPin->GetLibPin();
+
+                    if( !symbol || !libPin )
+                        return false;
+
                     try
                     {
-                        SCH_PIN*    pin = static_cast<SCH_PIN*>( item )->GetLibPin();
-                        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
-
                         WX_STRING_REPORTER reporter;
                         SIM_LIB_MGR        mgr( &m_frame->Prj() );
 
                         std::vector<EMBEDDED_FILES*> embeddedFilesStack;
                         embeddedFilesStack.push_back( m_frame->Schematic().GetEmbeddedFiles() );
 
-                        EMBEDDED_FILES* symbolEmbeddedFile = symbol->GetEmbeddedFiles();
-
-                        if( symbolEmbeddedFile )
+                        if( EMBEDDED_FILES* symbolEmbeddedFile = symbol->GetEmbeddedFiles() )
                             embeddedFilesStack.push_back( symbolEmbeddedFile );
 
                         mgr.SetFilesStack( embeddedFilesStack );
@@ -622,7 +624,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                             return true;
                         }
 
-                        int modelPinIndex = model.FindModelPinIndex( pin->GetNumber().ToStdString() );
+                        int modelPinIndex = model.FindModelPinIndex( libPin->GetNumber().ToStdString() );
 
                         if( modelPinIndex != SIM_MODEL_PIN::NOT_CONNECTED )
                         {
