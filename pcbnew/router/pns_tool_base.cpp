@@ -420,16 +420,14 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     controls()->ForceCursorPosition( true, m_endSnapPoint );
 
-    if( GetAngleSnapMode() != LEADER_MODE::DIRECT
+    if( Is45Limited()
             && ( m_router->GetState() == ROUTER::DRAG_SEGMENT
                 || m_router->GetState() == ROUTER::DRAG_COMPONENT ) )
     {
         VECTOR2I moveVector = m_endSnapPoint - m_startSnapPoint;
 
-        if( GetAngleSnapMode() == LEADER_MODE::DEG45 )
+        if( Is45Limited() )
             m_endSnapPoint = m_startSnapPoint + GetVectorSnapped45( moveVector );
-        else if( GetAngleSnapMode() == LEADER_MODE::DEG90 )
-            m_endSnapPoint = m_startSnapPoint + GetVectorSnapped90( moveVector );
 
         controls()->ForceCursorPosition( true, m_endSnapPoint );
     }
