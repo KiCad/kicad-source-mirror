@@ -78,7 +78,20 @@ void KIPYTHON_FRAME::redirectStdio()
 import sys
 import wx
 output = wx.PyOnDemandOutputWindow()
-sys.stderr = output
+_original_stderr = sys.__stderr__
+class _OutputProxy:
+    def __init__( self, output_window, original_stream ):
+        self._output = output_window
+        self._original = original_stream
+
+    def write( self, data ):
+        self._output.write( data )
+
+    def flush( self ):
+        if self._original:
+            self._original.flush()
+
+sys.stderr = _OutputProxy( output, _original_stderr )
 parent = wx.Window.FindWindowById( parent_id )
 output.SetParent( parent )
     )", pybind11::globals(), locals );
