@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-16 10:27+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-18 01:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -14530,7 +14530,6 @@ msgid "Single body style"
 msgstr "Einzelne Symbolform"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
-#, fuzzy
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
 msgstr "\"Standard\"- und \"Alternativ\"-De Morgan Symbolformen"
 
@@ -18173,12 +18172,12 @@ msgid "Symbol %s has input power pins in units %s that are not placed"
 msgstr "Symbol %s hat in den Einheiten %s unplatzierte Stromversorgungs-Pins."
 
 #: eeschema/erc/erc.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed"
 msgstr "Symbol %s hat in den Einheiten %s unplatzierte Eingangs-Pins."
 
 #: eeschema/erc/erc.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
 msgstr "Symbol %s hat in den Einheiten %s unplatzierte bidirektionale Pins."
 
@@ -18229,7 +18228,7 @@ msgstr ""
 "aktiviert"
 
 #: eeschema/erc/erc.cpp:1565
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
 msgstr "Die Symbolbibliothek \"%s\" wurde nicht unter \"%s\" gefunden."
 
@@ -18249,7 +18248,7 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Symbol \"%s\" stimmt nicht mit Kopie in Bibliothek \"%s\" überein"
 
 #: eeschema/erc/erc.cpp:1669
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
 msgstr "\"%s\" ist keine gültige Footprint-ID"
 
@@ -18262,7 +18261,7 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:1692
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
 msgstr ""
 "Die Footprint-Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht "
@@ -18270,7 +18269,7 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:1701
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
 msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
 
@@ -18481,9 +18480,8 @@ msgid "Ground pin not connected to ground net"
 msgstr "Ground-Pin nicht mit Ground-Netz verbunden"
 
 #: eeschema/erc/erc_item.cpp:165
-#, fuzzy
 msgid "Pin name resembles stacked pin"
-msgstr "Pinname stimmt mit einem gestapelten Pin überein"
+msgstr "Pinname gleicht einem gestapelten Pin"
 
 #: eeschema/erc/erc_item.cpp:169 pcbnew/drc/drc_item.cpp:217
 msgid "Unresolved text variable"
@@ -21579,7 +21577,7 @@ msgstr ""
 "\n"
 
 #: eeschema/sch_textbox.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Text box '%s'"
 msgstr "Textfeld \"%s\""
 
@@ -24072,7 +24070,6 @@ msgid "Flatten Symbol"
 msgstr "Symbol verflachen"
 
 #: eeschema/tools/sch_actions.cpp:277
-#, fuzzy
 msgid "Remove inheritance from symbol"
 msgstr "Vererbung aus dem Symbol entfernen"
 
@@ -24467,14 +24464,12 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
 
 #: eeschema/tools/sch_actions.cpp:852
-#, fuzzy
 msgid "Cycle Body Style"
 msgstr "Symbolform umschalten"
 
 #: eeschema/tools/sch_actions.cpp:853
-#, fuzzy
 msgid "Switch between De Morgan (or other) representations"
-msgstr "Umschalten zwischen den De Morgan- (oder anderen) Darstellungsformen"
+msgstr "Zwischen De Morgan- (oder anderen) Darstellungsformen umschalten"
 
 #: eeschema/tools/sch_actions.cpp:859
 msgid "Change to Label"
@@ -24553,31 +24548,27 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Anzeige der Pin-Tabelle für Sammelbearbeitung von Pins"
 
 #: eeschema/tools/sch_actions.cpp:941
-#, fuzzy
 msgid "Convert Stacked Pins"
 msgstr "In gestapelte Pins umwandeln"
 
 #: eeschema/tools/sch_actions.cpp:942
-#, fuzzy
 msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
-"Konvertiert mehrere Pins, die sich an derselben Stellen befinden, zu einem "
-"einzelnen Pin mit Kennzeichung \"gestapelt\""
+"Wandelt mehrere Pins an derselben Stelle in einen einzelnen Pin mit Nummer "
+"in \"gestapelter\"-Notation um"
 
 #: eeschema/tools/sch_actions.cpp:948
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
-#, fuzzy
 msgid "Explode Stacked Pin"
 msgstr "Gestapelten Pin aufteilen"
 
 #: eeschema/tools/sch_actions.cpp:949
-#, fuzzy
 msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
-"Konvertiert einen Pin mit Kennzeichnung \"gestapelt\" in mehrere "
-"eigenständige Pins"
+"Wandelt einen Pin in Nummer in \"gestapelter\"-Notation in mehrere "
+"eigenständige Pins um"
 
 #: eeschema/tools/sch_actions.cpp:955
 msgid "Break"
