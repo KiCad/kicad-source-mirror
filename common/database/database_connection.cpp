@@ -161,7 +161,7 @@ bool DATABASE_CONNECTION::Connect()
             m_conn = std::make_unique<nanodbc::connection>( cs, m_timeout );
         }
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         return false;
@@ -188,7 +188,7 @@ bool DATABASE_CONNECTION::Disconnect()
     {
         m_conn->disconnect();
     }
-    catch( boost::locale::conv::conversion_error& exc )
+    catch( std::exception& exc )
     {
         wxLogTrace( traceDatabase, wxT( "Disconnect() error \"%s\" occured." ), exc.what() );
         return false;
@@ -250,7 +250,7 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
             return false;
         }
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while caching table info: %s" ), m_lastError );
@@ -277,8 +277,9 @@ bool DATABASE_CONNECTION::getQuoteChar()
 
         wxLogTrace( traceDatabase, wxT( "Quote char retrieved: %c" ), m_quoteChar );
     }
-    catch( nanodbc::database_error& )
+    catch( std::exception& e )
     {
+        m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while querying quote char: %s" ), m_lastError );
         return false;
     }
@@ -401,14 +402,14 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         statement.prepare( *m_conn, query );
         statement.bind( 0, aWhere.second.c_str() );
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while preparing statement for SelectOne: %s" ),
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
-        m_conn->disconnect();
+        Disconnect();
 
         return false;
     }
@@ -422,14 +423,14 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
     {
         results = nanodbc::execute( statement );
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while executing statement for SelectOne: %s" ),
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
-        m_conn->disconnect();
+        Disconnect();
 
         return false;
     }
@@ -480,7 +481,7 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
             }
         }
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         wxLogTrace( traceDatabase, wxT( "Exception while parsing results from SelectOne: %s" ),
@@ -507,7 +508,7 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
     {
         statement.prepare( query );
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         wxLogTrace( traceDatabase,
@@ -515,7 +516,7 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
-        m_conn->disconnect();
+        Disconnect();
 
         return false;
     }
@@ -526,7 +527,7 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
     {
         results = nanodbc::execute( statement );
     }
-    catch( nanodbc::database_error& e )
+    catch( std::exception& e )
     {
         m_lastError = e.what();
         wxLogTrace( traceDatabase,
@@ -534,7 +535,7 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
-        m_conn->disconnect();
+        Disconnect();
 
         return false;
     }
