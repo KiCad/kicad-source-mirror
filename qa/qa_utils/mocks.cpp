@@ -42,7 +42,7 @@
 FP_LIB_TABLE GFootprintTable;
 
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) :
+DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME* aParent ) :
         DIALOG_FIND_BASE( aParent )
 {
     // these members are initialized to avoid warnings about non initialized vars
