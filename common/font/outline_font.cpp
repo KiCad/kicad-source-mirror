@@ -291,6 +291,78 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 }
 
 
+struct HARFBUZZ_CACHE_KEY {
+    FT_Face     face;
+    std::string text;
+    int         scaler;
+
+    bool operator==(const HARFBUZZ_CACHE_KEY& rhs ) const
+    {
+        return face == rhs.face
+                && scaler == rhs.scaler
+                && text == rhs.text;
+    }
+};
+
+
+struct HARFBUZZ_CACHE_ENTRY
+{
+    std::vector<hb_glyph_info_t>     m_GlyphInfo;
+    std::vector<hb_glyph_position_t> m_GlyphPositions;
+    bool                             m_Initialized = false;
+};
+
+
+namespace std
+{
+    template <>
+    struct hash<HARFBUZZ_CACHE_KEY>
+    {
+        std::size_t operator()( const HARFBUZZ_CACHE_KEY& k ) const
+        {
+            return hash_val( k.face, k.scaler, k.text );
+        }
+    };
+}
+
+
+static const HARFBUZZ_CACHE_ENTRY& getHarfbuzzShape( FT_Face aFace, const wxString& aText,
+                                                     int aScaler )
+{
+    static std::unordered_map<HARFBUZZ_CACHE_KEY, HARFBUZZ_CACHE_ENTRY> s_harfbuzzCache;
+
+    std::string textUtf8 = UTF8( aText );
+    HARFBUZZ_CACHE_KEY key = { aFace, textUtf8, aScaler };
+
+    HARFBUZZ_CACHE_ENTRY& entry = s_harfbuzzCache[key];
+
+    if( !entry.m_Initialized )
+    {
+        hb_buffer_t* buf = hb_buffer_create();
+        hb_buffer_add_utf8( buf, textUtf8.c_str(), -1, 0, -1 );
+        hb_buffer_guess_segment_properties( buf );  // guess direction, script, and language based on
+                                                    // contents
+
+        hb_font_t* referencedFont = hb_ft_font_create_referenced( aFace );
+        hb_ft_font_set_funcs( referencedFont );
+        hb_shape( referencedFont, buf, nullptr, 0 );
+
+        unsigned int         glyphCount;
+        hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
+        hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
+
+        entry.m_GlyphInfo.assign( glyphInfo, glyphInfo + glyphCount );
+        entry.m_GlyphPositions.assign( glyphPos, glyphPos + glyphCount );
+        entry.m_Initialized = true;
+
+        hb_buffer_destroy( buf );
+        hb_font_destroy( referencedFont );
+    }
+
+    return entry;
+}
+
+
 struct GLYPH_CACHE_KEY {
     FT_Face        face;
     hb_codepoint_t codepoint;
@@ -349,18 +421,11 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
     // set glyph resolution so that FT_Load_Glyph() results are good enough for decomposing
     FT_Set_Char_Size( face, 0, scaler, GLYPH_RESOLUTION, 0 );
 
-    hb_buffer_t* buf = hb_buffer_create();
-    hb_buffer_add_utf8( buf, UTF8( aText ).c_str(), -1, 0, -1 );
-    hb_buffer_guess_segment_properties( buf );  // guess direction, script, and language based on
-                                                // contents
+    const HARFBUZZ_CACHE_ENTRY& hbShape = getHarfbuzzShape( face, aText, scaler );
 
-    hb_font_t* referencedFont = hb_ft_font_create_referenced( face );
-    hb_ft_font_set_funcs( referencedFont );
-    hb_shape( referencedFont, buf, nullptr, 0 );
-
-    unsigned int         glyphCount;
-    hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
-    hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
+    unsigned int glyphCount = static_cast<unsigned int>( hbShape.m_GlyphInfo.size() );
+    const hb_glyph_info_t* glyphInfo = hbShape.m_GlyphInfo.data();
+    const hb_glyph_position_t* glyphPos = hbShape.m_GlyphPositions.data();
 
     VECTOR2D scaleFactor( glyphSize.x / faceSize(), -glyphSize.y / faceSize() );
     scaleFactor = scaleFactor * m_outlineFontSizeCompensation;
@@ -515,7 +580,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
             aGlyphs->push_back( std::move( glyph ) );
         }
 
-        hb_glyph_position_t& pos = glyphPos[i];
+        const hb_glyph_position_t& pos = glyphPos[i];
         cursor.x += ( pos.x_advance * GLYPH_SIZE_SCALER );
         cursor.y += ( pos.y_advance * GLYPH_SIZE_SCALER );
     }
@@ -523,9 +588,6 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
     int      ascender = abs( face->size->metrics.ascender * GLYPH_SIZE_SCALER );
     int      descender = abs( face->size->metrics.descender * GLYPH_SIZE_SCALER );
     VECTOR2I extents( cursor.x * scaleFactor.x, ( ascender + descender ) * abs( scaleFactor.y ) );
-
-    hb_buffer_destroy( buf );
-    hb_font_destroy( referencedFont );
 
     VECTOR2I cursorDisplacement( cursor.x * scaleFactor.x, -cursor.y * scaleFactor.y );
 
@@ -571,7 +633,7 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
 
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
-        hb_glyph_position_t& pos = glyphPos[i];
+        const hb_glyph_position_t& pos = glyphPos[i];
         int                  codepoint = glyphInfo[i].codepoint;
 
         FT_Error e = FT_Load_Glyph( m_face, codepoint, FT_LOAD_DEFAULT );
