@@ -34,6 +34,7 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
+#include <board_item.h>
 #include <project/net_settings.h>
 #include <board_design_settings.h>
 #include <geometry/shape_segment.h>
@@ -424,6 +425,8 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
 
+    FOOTPRINT* parentFootprint = aItem->GetParentFootprint();
+
     auto matchType =
             [&]( KICAD_T aItemType )
             {
@@ -451,6 +454,36 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     && matchType( connected->Parent()->Type() )
                     && connected->Net() == aItem->GetNetCode() )
             {
+                BOARD_ITEM* connectedItem = connected->Parent();
+
+                if( connectedItem == aItem )
+                    continue;
+
+                if( parentFootprint && connectedItem
+                        && connectedItem->GetParentFootprint() == parentFootprint )
+                {
+                    continue;
+                }
+
+                if( aItem->Type() == PCB_PAD_T && connectedItem
+                        && connectedItem->Type() == PCB_PAD_T )
+                {
+                    const PAD* thisPad = static_cast<const PAD*>( aItem );
+                    const PAD* otherPad = static_cast<const PAD*>( connectedItem );
+
+                    auto flashesConditionally = []( PADSTACK::UNCONNECTED_LAYER_MODE aMode )
+                            {
+                                return aMode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
+                                        || aMode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL;
+                            };
+
+                    if( flashesConditionally( thisPad->Padstack().UnconnectedLayerMode() )
+                            && flashesConditionally( otherPad->Padstack().UnconnectedLayerMode() ) )
+                    {
+                        continue;
+                    }
+                }
+
                 if( aItem->Type() == PCB_PAD_T && zoneLayer )
                 {
                     const PAD*    pad = static_cast<const PAD*>( aItem );

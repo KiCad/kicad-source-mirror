@@ -44,6 +44,7 @@ set( QA_PCBNEW_SRCS
     test_io_mgr.cpp
     test_lset.cpp
     test_pns_basics.cpp
+    test_pad_flashing.cpp
     test_pad_numbering.cpp
     test_prettifier.cpp
     test_libeval_compiler.cpp
