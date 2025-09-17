@@ -393,7 +393,7 @@ REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSever
 
 REPORTER& WX_HTML_PANEL_REPORTER::ReportTail( const wxString& aText, SEVERITY aSeverity )
 {
-    REPORTER::ReportTail( aText, aSeverity );
+    REPORTER::Report( aText, aSeverity );
 
     wxCHECK_MSG( m_panel != nullptr, *this,
                  wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
@@ -405,7 +405,7 @@ REPORTER& WX_HTML_PANEL_REPORTER::ReportTail( const wxString& aText, SEVERITY aS
 
 REPORTER& WX_HTML_PANEL_REPORTER::ReportHead( const wxString& aText, SEVERITY aSeverity )
 {
-    REPORTER::ReportHead( aText, aSeverity );
+    REPORTER::Report( aText, aSeverity );
 
     wxCHECK_MSG( m_panel != nullptr, *this,
                  wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
