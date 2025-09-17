@@ -35,7 +35,9 @@
 #include <sch_pin.h>
 #include <sch_shape.h>
 
+#include <algorithm>
 #include <memory>
+#include <unordered_set>
 
 std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 {
@@ -816,6 +818,63 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) 
     }
 
     return pins;
+}
+
+
+std::vector<LIB_SYMBOL::UNIT_PIN_INFO> LIB_SYMBOL::GetUnitPinInfo() const
+{
+    std::vector<UNIT_PIN_INFO> units;
+
+    int unitCount = std::max( GetUnitCount(), 1 );
+
+    auto compareByPosition = []( SCH_PIN* a, SCH_PIN* b )
+    {
+        VECTOR2I positionA = a->GetPosition();
+        VECTOR2I positionB = b->GetPosition();
+
+        if( positionA.x != positionB.x )
+            return positionA.x < positionB.x;
+
+        return positionA.y < positionB.y;
+    };
+
+    for( int unitIdx = 1; unitIdx <= unitCount; ++unitIdx )
+    {
+        UNIT_PIN_INFO unitInfo;
+        unitInfo.m_unitName = GetUnitDisplayName( unitIdx, false );
+
+        std::vector<SCH_PIN*> pinList = GetGraphicalPins( unitIdx, 0 );
+
+        std::sort( pinList.begin(), pinList.end(), compareByPosition );
+
+        std::unordered_set<wxString> seenNumbers;
+
+        for( SCH_PIN* basePin : pinList )
+        {
+            bool                  stackedValid = false;
+            std::vector<wxString> expandedNumbers = basePin->GetStackedPinNumbers( &stackedValid );
+
+            if( stackedValid && !expandedNumbers.empty() )
+            {
+                for( const wxString& number : expandedNumbers )
+                {
+                    if( seenNumbers.insert( number ).second )
+                        unitInfo.m_pinNumbers.push_back( number );
+                }
+
+                continue;
+            }
+
+            const wxString& number = basePin->GetNumber();
+
+            if( !number.IsEmpty() && seenNumbers.insert( number ).second )
+                unitInfo.m_pinNumbers.push_back( number );
+        }
+
+        units.push_back( std::move( unitInfo ) );
+    }
+
+    return units;
 }
 
 

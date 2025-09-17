@@ -441,6 +441,17 @@ public:
      */
     std::vector<LOGICAL_PIN> GetLogicalPins( int aUnit, int aBodyStyle ) const;
 
+    struct UNIT_PIN_INFO
+    {
+        wxString              m_unitName;
+        std::vector<wxString> m_pinNumbers;
+    };
+
+    /**
+     * Return pin-number lists for each unit, ordered consistently for gate swapping.
+     */
+    std::vector<UNIT_PIN_INFO> GetUnitPinInfo() const;
+
     // Deprecated: use GetGraphicalPins(). This override remains to satisfy SYMBOL's pure virtual.
     std::vector<SCH_PIN*> GetPins() const override;
 

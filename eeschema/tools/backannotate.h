@@ -90,7 +90,7 @@ public:
     BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                    bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
                    bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
-                   bool aDryRun );
+                   bool aPreferUnitSwaps, bool aDryRun );
     ~BACK_ANNOTATE();
 
     /**
@@ -148,6 +148,7 @@ private:
     bool                         m_processNetNames;
     bool                         m_processAttributes;
     bool                         m_processOtherFields;
+    bool                         m_preferUnitSwaps;
     bool                         m_dryRun;
 
     PCB_FOOTPRINTS_MAP           m_pcbFootprints;
