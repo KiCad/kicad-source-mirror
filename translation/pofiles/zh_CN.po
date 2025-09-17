@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-11 04:02+0000\n"
+"PO-Revision-Date: 2025-09-17 02:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -9351,15 +9351,15 @@ msgstr "重置局部坐标"
 
 #: common/tool/actions.cpp:1002
 msgid "Always Show Crosshairs"
-msgstr "始终显示十字光标"
+msgstr "始终显示十字准线"
 
 #: common/tool/actions.cpp:1003
 msgid "Display crosshairs even when not drawing objects"
-msgstr "没有进行对象绘制时也显示十字光标"
+msgstr "未绘制对象时也显示十字准线"
 
 #: common/tool/actions.cpp:1009
 msgid "Full-Window Crosshairs"
-msgstr "全屏十字光标"
+msgstr "全屏十字准线"
 
 #: common/tool/actions.cpp:1010
 msgid "Switch display of full-window crosshairs"
@@ -9877,15 +9877,15 @@ msgstr "从不启用"
 
 #: common/widgets/gal_options_panel_base.cpp:132
 msgid "Small crosshairs"
-msgstr "小十字"
+msgstr "小十字准线"
 
 #: common/widgets/gal_options_panel_base.cpp:135
 msgid "Full window crosshairs"
-msgstr "全屏十字光标"
+msgstr "全屏十字准线"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
-msgstr "始终显示十字光标"
+msgstr "始终显示十字准线"
 
 #: common/widgets/grid_text_button_helpers.cpp:375
 msgid "Open file"
@@ -12371,7 +12371,7 @@ msgstr "作用于符号的所有单元"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:291
 #: eeschema/dialogs/dialog_text_properties_base.cpp:334
 msgid "Common to all body styles"
-msgstr "作用于符号的所有图形符号样式"
+msgstr "作用于符号的所有图形样式"
 
 #: eeschema/dialogs/dialog_field_properties_base.h:104
 msgid "Text Item Properties"
@@ -17874,12 +17874,12 @@ msgstr "%s, %s 处没有连接"
 #: eeschema/net_navigator.cpp:161
 #, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "从 %s, %s 到 %s, %s 的总线到连线入口"
+msgstr "从 %s, %s 到 %s, %s 的总线至连线入口"
 
 #: eeschema/net_navigator.cpp:172
 #, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "从 %s, %s 到 %s, %s 的总线到总线入口"
+msgstr "从 %s, %s 到 %s, %s 的总线至总线入口"
 
 #: eeschema/net_navigator.cpp:183
 #, c-format
@@ -17991,7 +17991,7 @@ msgstr "在库 '%s' 中未找到符号 '%s' 的备选主体图形样式。"
 
 #: eeschema/picksymbol.cpp:221 eeschema/tools/sch_edit_tool.cpp:2048
 msgid "Change Body Style"
-msgstr "更改主体样式"
+msgstr "更改图形样式"
 
 #: eeschema/picksymbol.cpp:238
 msgid "Set Pin Function"
@@ -19187,7 +19187,7 @@ msgstr "未知 SCH_FILE_T 值: %d"
 #: eeschema/sch_pin.cpp:1616 eeschema/sch_symbol.cpp:2993
 #: eeschema/tools/sch_edit_tool.cpp:143
 msgid "Body Style"
-msgstr "主体样式"
+msgstr "图形样式"
 
 #: eeschema/sch_item.cpp:569 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
@@ -21336,8 +21336,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 "
-"<b>(%s, %s)</b>, (%s 的主体样式中)。"
+"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 <b>("
+"%s, %s)</b>, (%s 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:93
 #, c-format
@@ -21345,8 +21345,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 "
-"<b>(%s, %s)</b>, (在单元 %s 和 %s (%s) 的主体样式中)。"
+"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 <b>("
+"%s, %s)</b>, (在单元 %s 和 %s (%s) 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -21407,8 +21407,7 @@ msgstr "<b>可疑电源符号</b><br>不需要不可见的电源输入引脚<br>
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
-msgstr ""
-"信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (%s 的主体样式中)。"
+msgstr "信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (%s 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:279
 #, c-format
@@ -21438,17 +21437,15 @@ msgstr "(隐藏的电源引脚会将其引脚名称驱动到任何连接的网�
 #: eeschema/symbol_checker.cpp:328
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr ""
-"<b>未在栅格上的引脚 %s</b>, %s 位于 <b>(%s, %s)</b>, (%s 的主体样式中)。"
+msgstr "<b>未在栅格上的引脚 %s</b>, %s 位于 <b>(%s, %s)</b>, (%s 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:338
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
-msgstr ""
-"<b>未在栅格上引脚 %s</b>位于 <b>(%s, %s%s )</b>, (单元 %c (属于%s) 的主体样"
-"式。"
+msgstr "<b>未在栅格上引脚 %s</b>位于 <b>(%s, %s%s )</b>, (单元 %c (属于%s) "
+"的图形样式。"
 
 #: eeschema/symbol_checker.cpp:352
 #, c-format
@@ -23507,7 +23504,7 @@ msgstr "添加结点"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1393
 msgid "Add Wire to Bus Entry"
-msgstr "添加总线入口"
+msgstr "添加连线至总线入口"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1468
 msgid "Junction location contains no joinable wires and/or pins."
@@ -34146,7 +34143,7 @@ msgid ""
 "It will be clamped at %s."
 msgstr ""
 "文本线宽与高度比例不对。\n"
-"线宽已被限制为 %s。"
+"将被限制为 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:665
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:688
