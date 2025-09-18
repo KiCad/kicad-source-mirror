@@ -3060,8 +3060,7 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 
         // Don't paint invisible markers.
         // It would be nice to do this through layer dependencies but we can't do an "or" there today
-        if( aMarker->GetBoard()
-            && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+        if( aMarker->GetBoard() && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
             return;
 
         const_cast<PCB_MARKER*>( aMarker )->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
@@ -3069,39 +3068,34 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
         SHAPE_LINE_CHAIN polygon;
         aMarker->ShapeToPolygon( polygon );
 
-        COLOR4D color = m_pcbSettings.GetColor( aMarker, isShadow ? LAYER_MARKER_SHADOWS
-                                                                  : aMarker->GetColorLayer() );
-
         m_gal->Save();
         m_gal->Translate( aMarker->GetPosition() );
 
         if( isShadow )
         {
-            m_gal->SetStrokeColor( color );
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aMarker, LAYER_MARKER_SHADOWS ) );
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( aMarker->MarkerScale() );
         }
         else
         {
-            m_gal->SetFillColor( color );
+            m_gal->SetFillColor( m_pcbSettings.GetColor( aMarker, aMarker->GetColorLayer() ) );
             m_gal->SetIsFill( true );
         }
 
         m_gal->DrawPolygon( polygon );
         m_gal->Restore();
-        return;
+        break;
     }
+
     case LAYER_DRC_SHAPE1:
     case LAYER_DRC_SHAPE2:
-    {
         if( !aMarker->IsBrightened() )
             return;
 
-        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 ); // Allow 5 microns
         m_gal->SetLineWidth( aMarker->MarkerScale() );
 
-        for( auto& shape :
-             aLayer == LAYER_DRC_SHAPE1 ? aMarker->GetShapes1() : aMarker->GetShapes2() )
+        for( const PCB_SHAPE& shape : aLayer == LAYER_DRC_SHAPE1 ? aMarker->GetShapes1() : aMarker->GetShapes2() )
         {
             m_gal->SetIsFill( shape.IsSolidFill() );
             m_gal->SetIsStroke( aLayer == LAYER_DRC_SHAPE1 ? true : false );
@@ -3113,20 +3107,25 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
             case SHAPE_T::SEGMENT:
                 m_gal->DrawSegment( shape.GetStart(), shape.GetEnd(), shape.GetWidth() );
                 break;
+
             case SHAPE_T::ARC:
             {
                 EDA_ANGLE startAngle, endAngle;
                 shape.CalcArcAngles( startAngle, endAngle );
-                m_gal->DrawArcSegment( shape.GetCenter(), shape.GetRadius(), startAngle,
-                                       shape.GetArcAngle(), shape.GetWidth(), arc_to_seg_error );
+                m_gal->DrawArcSegment( shape.GetCenter(), shape.GetRadius(), startAngle, shape.GetArcAngle(),
+                                       shape.GetWidth(), ARC_HIGH_DEF );
                 break;
             }
-            default: break;
+
+            default:
+                break;
             }
         }
-    }
+
+        break;
     }
 }
+
 
 void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
 {
