@@ -1884,6 +1884,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
 
                 updatePreview();
+                m_selectionTool->ClearSelection( true );
                 m_selectionTool->AddItemToSel( item );
                 m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
