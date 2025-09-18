@@ -545,6 +545,9 @@ void SCH_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     wxString msg;
     SYMBOL*  symbol = GetParentSymbol();
 
+    if( !symbol )
+        return;
+
     if( symbol->GetUnitCount() )
         aList.emplace_back( _( "Unit" ), GetUnitDisplayName( GetUnit(), false ) );
 
