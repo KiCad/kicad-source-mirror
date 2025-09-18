@@ -456,9 +456,9 @@ wxString SCH_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) cons
     if( m_part )
         return m_part->GetBodyStyleDescription( aBodyStyle, aLabel );
     else if( aBodyStyle == BODY_STYLE::DEMORGAN )
-        return aLabel ? _( "Alternate" ) : _HKI( "Alternate" );
+        return aLabel ? _( "Alternate" ) : wxString( _HKI( "Alternate" ) );
     else if( aBodyStyle == BODY_STYLE::BASE )
-        return aLabel ? _( "Standard" ) : _HKI( "Standard" );
+        return aLabel ? _( "Standard" ) : wxString( _HKI( "Standard" ) );
     else
         return wxT( "?" );
 }

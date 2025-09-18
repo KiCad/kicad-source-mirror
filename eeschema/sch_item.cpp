@@ -129,7 +129,7 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 wxString SCH_ITEM::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
     if( aUnit == 0 )
-        return aLabel ? _( "All units" ) : _HKI( "All units" );
+        return aLabel ? _( "All units" ) : wxString( _HKI( "All units" ) );
     else if( const SYMBOL* symbol = GetParentSymbol() )
         return symbol->GetUnitDisplayName( aUnit, aLabel );
 
@@ -140,7 +140,7 @@ wxString SCH_ITEM::GetUnitDisplayName( int aUnit, bool aLabel ) const
 wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
 {
     if( aBodyStyle == 0 )
-        return aLabel ? _( "All body styles" ) : _HKI( "All body styles" );
+        return aLabel ? _( "All body styles" ) : wxString( _HKI( "All body styles" ) );
     else if( const SYMBOL* symbol = GetParentSymbol() )
         return symbol->GetBodyStyleDescription( aBodyStyle, aLabel );
 
