@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-08-11 14:02+0000\n"
+"PO-Revision-Date: 2025-09-19 20:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
-"Language-Team: Persian <https://hosted.weblate.org/projects/kicad/master-"
-"source/fa/>\n"
+"Language-Team: Persian <https://hosted.weblate.org/projects/kicad/"
+"master-source/fa/>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:363
@@ -211,15 +211,13 @@ msgstr "حالت شبکه ای در نمای 3 بعدی"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "بارگیری مجدد برد"
+msgstr "چرخش برد"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "حرکت دادن برد به سمت بالا"
+msgstr "حرکت دادن برد"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -376,14 +374,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "کپی کردن تصویر سه بعدی فعلی در کلیپ بورد (Clipboard)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "خروجی به فایل ..."
+msgstr "خروجی تصویر ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "خروجی تصویری از نمای فعلی با فرمت PNG"
+msgstr "خروجی گرفتن از نمای فعلی به صورت یک فایل تصویری"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -603,11 +599,11 @@ msgstr "نمایش بدنه برد"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Plated Barrels"
-msgstr ""
+msgstr "سوراخ های متالیزه شده"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show barrels of plated through-holes and vias"
-msgstr ""
+msgstr "نمایش جدار فلزی سوراخ های متالیزه (Barrels of Plated) و ویا ها (Vias)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -1109,14 +1105,12 @@ msgid "(unsaved)"
 msgstr "(ذخیره نشده است)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "خروجی به فایل ..."
+msgstr "خروجی گرفتن از نمای سه بعدی"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "اندازه تصویر:"
+msgstr "اندازه تصویر"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1169,7 +1163,7 @@ msgstr "پیکسل ها"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:255
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:384
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:74
 #: bitmap2component/bitmap2cmp_panel.cpp:52 common/eda_draw_frame.cpp:707
@@ -1334,7 +1328,7 @@ msgstr "میلی متر"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
 msgid "in"
-msgstr ""
+msgstr "ورودی"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -4447,51 +4441,60 @@ msgstr "این تغییر پس از راه اندازی مجدد ویرایشگ�
 #: common/dialogs/panel_common_settings_base.cpp:179
 msgid "Focus follows mouse between schematic and PCB editors"
 msgstr ""
+"جا به جایی خودکار فوکوس بین ویرایشگر شماتیک (Schematic) و مدارچاپی (PCB) "
+"هنگام حرکت ماوس"
 
 #: common/dialogs/panel_common_settings_base.cpp:180
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"جا به جایی موشواره روی ویرایشگر بوم شماتیک (Schematic) یا مدارچاپی (PCB)، "
+"پنجره‌ی مربوطه را در اولویت نمایش قرار می‌دهد."
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "نمایش اعلان پنجره بازشو(popup) هنگام تغییر تنظیمات با میانبر ها"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"وقتی فعال باشد، برخی کلید های میانبری که بین تنظیمات جا به جا می‌شوند، یک "
+"نشانگر پنجره بازشو (popup) کوتاه مدت نمایش می دهند تا تغییر تنظیمات را نشان "
+"دهند."
 
 #: common/dialogs/panel_common_settings_base.cpp:189
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "استفاده از رنگ های متفاوت برای ردیف های در جدول"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "When enabled, use a different color for every other table row"
-msgstr ""
+msgstr "وقتی فعال باشد، برای هر سطر جدول دیگر از رنگ متفاوتی استفاده می کند"
 
 #: common/dialogs/panel_common_settings_base.cpp:200
 msgid "Icon theme:"
-msgstr ""
+msgstr "ظاهر آیکن:"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Light"
-msgstr ""
+msgstr "روشن (Light)"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Use icons designed for light window backgrounds"
 msgstr ""
+"استفاده از آیکون هایی که برای پس زمینه های پنجره روشن (Light) طراحی شده اند"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 #: gerbview/gerber_draw_item.cpp:725
 msgid "Dark"
-msgstr ""
+msgstr "تیره (Dark)"
 
 #: common/dialogs/panel_common_settings_base.cpp:210
 msgid "Use icons designed for dark window backgrounds"
 msgstr ""
+"استفاده از آیکون هایی که برای پس زمینه های پنجره تیره (Dark) طراحی شده اند"
 
 #: common/dialogs/panel_common_settings_base.cpp:214
 #: common/dialogs/panel_common_settings_base.cpp:267
@@ -4500,12 +4503,14 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/pcb_dimension.cpp:1831
 msgid "Automatic"
-msgstr ""
+msgstr "خودکار"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"انتخاب خودکار ظاهر آیکون های روشن (Light) یا تیره (Dark) بر اساس ظاهر تم رنگ "
+"سیستم"
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Toolbar icon size:"
@@ -4533,29 +4538,30 @@ msgstr "استفاده از آیکون های فشرده در نوار ابزا�
 #: pcbnew/widgets/appearance_controls.cpp:646
 #: pcbnew/widgets/appearance_controls.cpp:1878
 msgid "Normal"
-msgstr ""
+msgstr "معمولی"
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "از اندازه پیش فرض آیکون KiCad در نوار ابزار استفاده کنید"
 
 #: common/dialogs/panel_common_settings_base.cpp:240
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:140
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:150
 msgid "Large"
-msgstr ""
+msgstr "بزرگ"
 
 #: common/dialogs/panel_common_settings_base.cpp:241
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "استفاده از آیکون های بزرگتر در نوار ابزارها"
 
 #: common/dialogs/panel_common_settings_base.cpp:248
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "اعمال مقیاس بندی آیکون ها روی فونت ها"
 
 #: common/dialogs/panel_common_settings_base.cpp:251
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(این راه حل موقت، برخی از مشکلات مقیاس بندی فونت GTK HiDPI را بهبود می بخشد.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:259
 msgid "Canvas scale:"
