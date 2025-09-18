@@ -363,7 +363,7 @@ KIGFX::COLOR4D PCB_MARKER::getColor() const
 }
 
 
-void PCB_MARKER::SetZoom( double aZoomFactor )
+void PCB_MARKER::SetZoom( double aZoomFactor ) const
 {
     SetMarkerScale( SCALING_FACTOR * aZoomFactor );
 }

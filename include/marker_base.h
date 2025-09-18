@@ -67,7 +67,7 @@ public:
      * The scaling factor to convert polygonal shape coordinates to internal units.
      */
     int MarkerScale() const { return m_scalingFactor; }
-    void SetMarkerScale( int aScale ) { m_scalingFactor = aScale; }
+    void SetMarkerScale( int aScale ) const { m_scalingFactor = aScale; }
 
     /**
      * Return the shape polygon in internal units in a #SHAPE_LINE_CHAIN the coordinates
@@ -145,11 +145,10 @@ protected:
     wxString            m_comment;             ///< User supplied comment.
     std::shared_ptr<RC_ITEM> m_rcItem;
 
-    int                 m_scalingFactor;       ///< Scaling factor to convert corners coordinates
-                                               ///< to internal units coordinates.
-    BOX2I               m_shapeBoundingBox;    ///< Bounding box of the graphic symbol relative
-                                               ///< to the position of the shape in marker shape
-                                               ///< units.
+    mutable int         m_scalingFactor;       ///< Scaling factor to convert corners coordinates to internal
+                                               ///< units.  Dependant on current zoom.
+    BOX2I               m_shapeBoundingBox;    ///< Bounding box of the graphic symbol relative to the position
+                                               ///< of the shape in marker shape units.
 };
 
 

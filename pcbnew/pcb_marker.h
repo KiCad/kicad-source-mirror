@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_MARKER_H
-#define PCB_MARKER_H
+#pragma once
 
 
 #include <board_item.h>
@@ -32,10 +31,6 @@
 #include <marker_base.h>
 
 class DRC_ITEM;
-
-// Coordinates count for the basic shape marker
-#define MARKER_SHAPE_POINT_COUNT 9
-
 class MSG_PANEL_ITEM;
 
 
@@ -123,7 +118,7 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void SetZoom( double aZoomFactor );
+    void SetZoom( double aZoomFactor ) const;
 
     const BOX2I ViewBBox() const override;
 
@@ -167,5 +162,3 @@ protected:
     std::vector<PCB_SHAPE> m_shapes1; // Shown on LAYER_DRC_SHAPE1
     std::vector<PCB_SHAPE> m_shapes2; // Shown on LAYER_DRC_SHAPE2
 };
-
-#endif      //  PCB_MARKER_H

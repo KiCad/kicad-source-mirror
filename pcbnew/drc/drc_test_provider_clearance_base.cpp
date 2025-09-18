@@ -59,6 +59,7 @@ DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAP
         shortestPathShapes2.push_back( sh );
     }
 
+    // Draw perpendicular end stops
     if( shortestPathShapes1.size() > 0 )
     {
         PCB_SHAPE s1, s2;

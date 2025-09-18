@@ -3050,6 +3050,13 @@ void PCB_PAINTER::draw( const PCB_POINT* aPoint, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 {
+    // Don't paint invisible markers.
+    // It would be nice to do this through layer dependencies but we can't do an "or" there today
+    if( aMarker->GetBoard() && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+        return;
+
+    aMarker->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
+
     switch( aLayer )
     {
     case LAYER_MARKER_SHADOWS:
@@ -3057,13 +3064,6 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
     case LAYER_DRC_WARNING:
     {
         bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
-
-        // Don't paint invisible markers.
-        // It would be nice to do this through layer dependencies but we can't do an "or" there today
-        if( aMarker->GetBoard() && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
-            return;
-
-        const_cast<PCB_MARKER*>( aMarker )->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
 
         SHAPE_LINE_CHAIN polygon;
         aMarker->ShapeToPolygon( polygon );
