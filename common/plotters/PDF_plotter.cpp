@@ -57,6 +57,7 @@
 
 PDF_PLOTTER::~PDF_PLOTTER() = default;
 
+#define GLM_ENABLE_EXPERIMENTAL //for older glm to enable euler angles
 #include <glm/glm.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
