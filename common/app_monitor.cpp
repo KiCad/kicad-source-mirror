@@ -131,9 +131,12 @@ const wxString& SENTRY::GetSentryId()
 
 void SENTRY::readOrCreateUid()
 {
-    wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath() );
-    sentryInitFile.ReadAll( &m_sentryUid );
-    sentryInitFile.Close();
+    if( m_sentry_optin_fn.Exists() )
+    {
+        wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath() );
+        sentryInitFile.ReadAll( &m_sentryUid );
+        sentryInitFile.Close();
+    }
 
     if( m_sentryUid.IsEmpty() || m_sentryUid.length() != 36 )
     {
