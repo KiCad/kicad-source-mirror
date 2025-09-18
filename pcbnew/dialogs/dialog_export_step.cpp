@@ -63,7 +63,7 @@ static const std::vector<wxString> c_formatCommand = { FILEEXT::StepFileExtensio
                                                        FILEEXT::StlFileExtension,
                                                        FILEEXT::StepZFileAbrvExtension,
                                                        FILEEXT::U3DFileExtension,
-                                                       FILEEXT::PdfFileExtension,
+                                                       wxS( "3dpdf" ),
                                                     };
 
 // Maps file extensions to m_choiceFormat selection
