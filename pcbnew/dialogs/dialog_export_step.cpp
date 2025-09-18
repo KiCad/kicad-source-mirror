@@ -324,7 +324,18 @@ void DIALOG_EXPORT_STEP::onFormatChoice( wxCommandEvent& event )
 
 void DIALOG_EXPORT_STEP::OnFmtChoiceOptionChanged()
 {
-    const wxString& newExt = c_formatCommand[m_choiceFormat->GetSelection()];
+    wxString newExt;
+    int idx = m_choiceFormat->GetSelection();
+
+    for( auto& choices : c_formatExtToChoice )
+    {
+        if( choices.second == idx )
+        {
+            newExt = choices.first;
+            break;
+        }
+    }
+
     wxString        path = m_outputFileName->GetValue();
 
     int sepIdx = std::max( path.Find( '/', true ), path.Find( '\\', true ) );
