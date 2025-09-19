@@ -39,7 +39,7 @@ JOB_RC::JOB_RC( const std::string& aType ) :
         m_units( JOB_RC::UNITS::MM ),
         m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
         m_format( OUTPUT_FORMAT::REPORT ),
-        m_exitCodeViolations( false )
+        m_exitCodeViolations( true ) // this ensures GUI jobs default to treat violations as job failure, cli will default false elsewhere
 {
     m_params.emplace_back( new JOB_PARAM<UNITS>( "units", &m_units, m_units ) );
     m_params.emplace_back( new JOB_PARAM<int>( "severity", &m_severity, m_severity ) );
