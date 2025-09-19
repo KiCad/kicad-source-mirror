@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-15 11:02+0000\n"
+"PO-Revision-Date: 2025-09-20 19:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -4975,12 +4975,18 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Auf die gelöschten eingebetteten Dateien wird ebenfalls von einigen "
+"Footprints verwiesen.\n"
+"Sollen sie auch aus diesen Footprints gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:206
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Auf die gelöschten eingebetteten Dateien wird ebenfalls von einigen Symbolen "
+"verwiesen.\n"
+"Sollen sie auch aus diesen Symbolen gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:325
 #: common/dialogs/panel_embedded_files.cpp:440
@@ -26186,7 +26192,6 @@ msgid "Show import issues"
 msgstr "Import-Probleme anzeigen"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
 msgstr "Datei einbetten"
 
@@ -26933,9 +26938,10 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Die im Lagenaufbau der Platine definierten Farben überschreiben die aus der "
+"Voreinstellung"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
@@ -39978,7 +39984,6 @@ msgstr ""
 "Pad ist (typisch für Lötstoppmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "Mindestbreite von Lötstoppmasken-Stegen:"
 
@@ -43118,7 +43123,6 @@ msgstr ""
 "z: %g; Begrenzungsrahmen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1750
-#, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
 msgstr ""
 "Prüfung auf selbstüberschneidende Verbindungen fehlgeschlagen. Wiederholung "
@@ -44872,7 +44876,6 @@ msgid "PTH pad %s"
 msgstr "Durchsteckpad %s"
 
 #: pcbnew/pad.cpp:2248
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
@@ -49144,9 +49147,8 @@ msgid "Some of the items could not be outset."
 msgstr "Um manche Elemente konnten keine Außenlinien erstellt werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Rechteckige Außenlinie kann nicht erstellt werden"
+msgstr "Kann rechteckige Außenlinie nicht erstellen"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
