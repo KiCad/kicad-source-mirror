@@ -290,14 +290,14 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                                        const Handle( XCAFDoc_ColorTool ) & colorTool,
                                        const Handle( XCAFDoc_VisMaterialTool ) & visMatTool,
                                        const gp_Trsf& cumulativeTransform,
-                                       MESH* mesh )
+                                       const std::string& baseName,
+                                       std::unordered_map<Graphic3d_Vec4, MESH*>& meshesByColor )
 {
     if( label.IsNull() )
         return;
 
     if( shapeTool->IsAssembly( label ) || shapeTool->IsReference( label ) )
     {
-        // We need to delve deeper for blobbing together shapes out of assemblies or references
         TDF_LabelSequence childrenOrComponents;
         TDF_Label         referencedLabel;
         gp_Trsf           currentTransform = cumulativeTransform;
@@ -307,23 +307,19 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
         {
             if( shapeTool->GetReferredShape( label, referencedLabel ) )
             {
-                // Only build the cumulative transform if it's still the identity matrix
-                // It's to guard against Reference -> Assembly -> Reference from stacking the same transform
-                // There may be a smarter way to catch it
                 if( cumulativeTransform.Form() == gp_Identity )
                 {
-                    // Build the transform
                     TopLoc_Location instanceLocation;
                     instanceLocation = shapeTool->GetLocation( label );
                     currentTransform = cumulativeTransform * instanceLocation.Transformation();
                 }
 
-                collectGeometryRecursive( referencedLabel, shapeTool, colorTool, visMatTool, currentTransform, mesh );
+                collectGeometryRecursive( referencedLabel, shapeTool, colorTool, visMatTool, currentTransform,
+                                          baseName, meshesByColor );
             }
         }
         else
         {
-            // Is Assembly
             shapeTool->GetComponents( label, childrenOrComponents );
             for( Standard_Integer i = 1; i <= childrenOrComponents.Length(); ++i )
             {
@@ -334,7 +330,8 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                 compLocation = shapeTool->GetLocation( compLabel );
                 childTransform = currentTransform * compLocation.Transformation();
 
-                collectGeometryRecursive( compLabel, shapeTool, colorTool, visMatTool, childTransform, mesh );
+                collectGeometryRecursive( compLabel, shapeTool, colorTool, visMatTool, childTransform, baseName,
+                                          meshesByColor );
             }
         }
     }
@@ -347,36 +344,8 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
             location = shapeTool->GetLocation( label );
             location = cumulativeTransform * location;
 
-            // Restart this at the coord indices size (coords that already exist when
-            uint32_t nodesExistingSum = mesh->coords.size();
-
-            uint32_t numberTriangles = 0;
-            uint32_t numberNodes = 0;
-
-            for( RWMesh_FaceIterator aFaceIter( label, location, true ); aFaceIter.More(); aFaceIter.Next() )
-            {
-                numberNodes += aFaceIter.NbNodes();
-                numberTriangles += aFaceIter.NbTriangles();
-            }
-
-            mesh->coords.reserve( mesh->coords.size() + numberNodes );
-            mesh->coordIndices.reserve( mesh->coordIndices.size() + ( numberTriangles * 3 ) );
-            mesh->diffuseColorIndices.reserve( mesh->diffuseColorIndices.size() + ( numberTriangles * 3 ) );
-
-            if( m_includeNormals )
-            {
-                mesh->normalIndices.reserve( mesh->normalIndices.size() + ( numberTriangles * 3 ) );
-                mesh->normals.reserve( mesh->normals.size() + numberNodes );
-            }
-
             for( RWMesh_FaceIterator faceIter( label, location, true ); faceIter.More(); faceIter.Next() )
             {
-                TopoDS_Face    aFace = faceIter.Face();
-                Graphic3d_Vec4 aColorF = faceIter.FaceColor();
-                Graphic3d_Vec4 specularColor( 0.2f );
-                uint32_t       diffuseColorIndex = 0;
-                uint32_t       specularColorIndex = 0;
-
                 if( faceIter.IsEmptyMesh() )
                     continue;
 
@@ -384,22 +353,48 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                 if( triangulation.IsNull() )
                     continue;
 
-                if( mesh->perVertexColor )
+                Graphic3d_Vec4 aColorF = faceIter.FaceColor();
+                Graphic3d_Vec4 specularColor( 0.2f );
+
+                MESH* mesh = nullptr;
+                auto  it = meshesByColor.find( aColorF );
+                if( it == meshesByColor.end() )
                 {
-                    diffuseColorIndex = mesh->GetOrAddUniqueDiffuseColor( aColorF );
-                    specularColorIndex = mesh->GetOrAddUniqueSpecularColor( specularColor );
+                    auto newMesh = std::make_unique<MESH>();
+                    newMesh->name = baseName + "_" + std::to_string( meshesByColor.size() );
+                    newMesh->parentName = baseName;
+                    newMesh->diffuse_color = aColorF;
+                    newMesh->specular_color = specularColor.rgb();
+                    mesh = newMesh.get();
+                    meshesByColor.emplace( aColorF, mesh );
+                    m_meshes.emplace_back( std::move( newMesh ) );
                 }
                 else
                 {
-                    mesh->diffuse_color = aColorF;
-                    mesh->specular_color = specularColor.rgb();
+                    mesh = it->second;
                 }
 
+                uint32_t nodesExistingSum = mesh->coords.size();
+                uint32_t numberTriangles = 0;
+                uint32_t numberNodes = 0;
+
                 const Standard_Integer aNodeUpper = faceIter.NodeUpper();
+                numberNodes += faceIter.NbNodes();
+                numberTriangles += faceIter.NbTriangles();
+
+                mesh->coords.reserve( mesh->coords.size() + numberNodes );
+                mesh->coordIndices.reserve( mesh->coordIndices.size() + ( numberTriangles * 3 ) );
+
+                if( m_includeNormals )
+                {
+                    mesh->normalIndices.reserve( mesh->normalIndices.size() + ( numberTriangles * 3 ) );
+                    mesh->normals.reserve( mesh->normals.size() + numberNodes );
+                }
+
                 for( Standard_Integer aNodeIter = faceIter.NodeLower(); aNodeIter <= aNodeUpper; ++aNodeIter )
                 {
                     const gp_Dir aNormal = faceIter.NormalTransformed( aNodeIter );
-                    gp_XYZ vertex = faceIter.NodeTransformed( aNodeIter ).XYZ();
+                    gp_XYZ       vertex = faceIter.NodeTransformed( aNodeIter ).XYZ();
 
                     mesh->coords.emplace_back( vertex.X(), vertex.Y(), vertex.Z() );
 
@@ -429,20 +424,7 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                         mesh->normalIndices.emplace_back( vec.y() + nodesExistingSum );
                         mesh->normalIndices.emplace_back( vec.z() + nodesExistingSum );
                     }
-
-                    if( mesh->perVertexColor )
-                    {
-                        mesh->diffuseColorIndices.emplace_back( diffuseColorIndex );
-                        mesh->diffuseColorIndices.emplace_back( diffuseColorIndex );
-                        mesh->diffuseColorIndices.emplace_back( diffuseColorIndex );
-
-                        mesh->specularColorIndices.emplace_back( specularColorIndex );
-                        mesh->specularColorIndices.emplace_back( specularColorIndex );
-                        mesh->specularColorIndices.emplace_back( specularColorIndex );
-                    }
                 }
-
-                nodesExistingSum += triangulation->NbNodes();
             }
         }
     }
@@ -452,6 +434,7 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
 void WRITER::generateMeshesByAssembly( const Handle( TDocStd_Document ) & doc )
 {
     m_meshes.clear();
+    m_groupNodes.clear();
     m_meshDedupMap.clear();
 
     if( doc.IsNull() )
@@ -489,66 +472,47 @@ void WRITER::generateMeshesByAssembly( const Handle( TDocStd_Document ) & doc )
         TDF_LabelSequence childrenOrComponents;
         shapeTool->GetComponents( label, childrenOrComponents );
         for( Standard_Integer i = 1; i <= childrenOrComponents.Length(); ++i )
-        {
             recurseFindKiCadElements( childrenOrComponents.Value( i ) );
-        }
     };
 
     for( Standard_Integer i = 1; i <= rootLabels.Length(); ++i )
-    {
         recurseFindKiCadElements( rootLabels.Value( i ) );
-    }
 
-
-    // Iterate through potential roots (free shapes or the main label)
     for( Standard_Integer i = 1; i <= meshableLabels.Length(); ++i )
     {
         TDF_Label meshLabel = meshableLabels.Value( i );
+        if( !( shapeTool->IsAssembly( meshLabel ) || shapeTool->IsShape( meshLabel ) ) )
+            continue;
 
-        // We generate a mesh if it's an assembly OR a simple shape at this top level
-        if( shapeTool->IsAssembly( meshLabel ) || shapeTool->IsShape( meshLabel ) )
+        std::string rootGroupName; // Board or Components
+        Handle( KICAD3D_INFO ) c;
+        if( meshLabel.FindAttribute( KICAD3D_INFO::GetID(), c ) )
         {
-            // Only process shape if it's NOT an assembly (avoid double processing if IsShape & IsAssembly are true)
-            if( shapeTool->IsAssembly( meshLabel )
-                || !shapeTool->IsAssembly( meshLabel ) && shapeTool->IsShape( meshLabel ) )
-            {
-                std::unique_ptr<MESH> currentMesh = std::make_unique<MESH>();
-                gp_Trsf          initialTransform; // Start with identity transform
-
-                Handle( KICAD3D_INFO ) c;
-                if( meshLabel.FindAttribute( KICAD3D_INFO::GetID(), c ) )
-                {
-                    if( c->GetModelType() == KICAD3D_MODEL_TYPE::BOARD )
-                    {
-                        currentMesh->parentName = _( MODEL_PARENT_BOARD_NAME ).ToStdString();
-                    }
-                    else
-                    {
-                        currentMesh->parentName = _( MODEL_PARENT_COMPONENTS_NAME ).ToStdString();
-                    }
-                }
-
-                currentMesh->perVertexColor = c->GetModelType() == KICAD3D_MODEL_TYPE::COMPONENT;
-
-                getMeshName( meshLabel, shapeTool, currentMesh.get() );
-                wxLogTrace( TRACE_MASK, wxString::Format( "Processing %s", currentMesh->name ) );
-
-                // Collect all geometry under this rootLabel
-                collectGeometryRecursive( meshLabel, shapeTool, colorTool, visMatTool, initialTransform,
-                                          currentMesh.get() );
-
-                // Set the primary diffuse color to the first per-vertex color if available
-                if( !currentMesh->IsEmpty() && currentMesh->perVertexColor )
-                {
-                    currentMesh->diffuse_color = currentMesh->diffuse_colors[0];
-                }
-                m_meshes.emplace_back( std::move( currentMesh ) );
-            }
+            rootGroupName = c->GetModelType() == KICAD3D_MODEL_TYPE::BOARD
+                                     ? _( MODEL_PARENT_BOARD_NAME ).ToStdString()
+                                     : _( MODEL_PARENT_COMPONENTS_NAME ).ToStdString();
         }
+
+        // Derive component/group name using existing naming logic
+        std::unique_ptr<MESH> dummyNameMesh = std::make_unique<MESH>();
+        getMeshName( meshLabel, shapeTool, dummyNameMesh.get() );
+        std::string topName = dummyNameMesh->name;
+
+        // Create group node for this top-level shape with parent = rootGroupName (unless identical)
+        GROUP_NODE gn; gn.name = topName;
+        if( !rootGroupName.empty() && topName != rootGroupName )
+        {
+            PARENT_NODE pn; pn.name = rootGroupName; pn.mat = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 };
+            gn.parentNodes.push_back( pn );
+        }
+        m_groupNodes.push_back( gn );
+
+        std::unordered_map<Graphic3d_Vec4, MESH*> meshesByColor;
+        gp_Trsf initialTransform; // identity
+        collectGeometryRecursive( meshLabel, shapeTool, colorTool, visMatTool, initialTransform,
+                                  topName, meshesByColor );
     }
 
-    // The U3D file when used in Adobe PDF needs the meshes sorted by name ahead of time
-    // As Adobe builds the navigation hierarchy as-is with no options to sort
     std::sort( m_meshes.begin(), m_meshes.end(),
                []( const std::unique_ptr<MESH>& a, const std::unique_ptr<MESH>& b )
                {
@@ -556,12 +520,13 @@ void WRITER::generateMeshesByAssembly( const Handle( TDocStd_Document ) & doc )
                } );
 }
 
+
 WRITER::WRITER( const std::string& aFilename ) :
         m_filename( aFilename ),
         m_center( 0, 0, 0 ),
         m_meshBoundingBox(),
         m_meshDedupMap(),
-        m_includeNormals( true )
+        m_includeNormals( false )
 {
 }
 
@@ -732,7 +697,7 @@ std::shared_ptr<DATA_BLOCK> WRITER::getLitTextureShaderBlock( const std::string&
     BIT_STREAM_WRITER w;
 
     w.WriteString( aShaderName );
-    w.WriteU32( LIT_TEXTURE_SHADER_ATTRIBUTES::LIGHTING_ENABLED | LIT_TEXTURE_SHADER_ATTRIBUTES::USE_VERTEX_COLOR );
+    w.WriteU32( LIT_TEXTURE_SHADER_ATTRIBUTES::LIGHTING_ENABLED );
 
     w.WriteF32( 0 );                                                          // Alpha Test Reference
     w.WriteU32( static_cast<uint32_t>( ALPHA_TEST_FUNCTION::ALWAYS ) );       // Alpha Test Function
@@ -872,13 +837,13 @@ std::shared_ptr<DATA_BLOCK> WRITER::getMeshContinuationBlock( const MESH* aMesh,
         w.WriteF32( aMesh->normals[i].z ); // base normal z
     }
 
-	for( size_t i = 0; i < aMesh->diffuse_colors.size(); i++ )
+    for( size_t i = 0; i < aMesh->diffuse_colors.size(); i++ )
     {
         w.WriteF32( aMesh->diffuse_colors[i].r() ); // base colors red
         w.WriteF32( aMesh->diffuse_colors[i].g() );   // base colors green
         w.WriteF32( aMesh->diffuse_colors[i].b() ); // base colors blue
         w.WriteF32( aMesh->diffuse_colors[i].a() );   // base colors alpha
-	}
+    }
 
     for( size_t i = 0; i < aMesh->specular_colors.size(); i++ )
     {
@@ -1011,7 +976,6 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
 
     generateMeshesByAssembly( aDocument );
 
-    // Calculate the center
     Standard_Real xMin, yMin, zMin, xMax, yMax, zMax;
     m_meshBoundingBox.Get( xMin, yMin, zMin, xMax, yMax, zMax );
 
@@ -1030,19 +994,21 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
     uint32_t decSize = 0;
     uint32_t contSize = 0;
 
-    std::vector<GROUP_NODE> groupNodes;
-    groupNodes.push_back( { _( MODEL_PARENT_BOARD_NAME ).ToStdString() } );
-    groupNodes.push_back( { _( MODEL_PARENT_COMPONENTS_NAME ).ToStdString() } );
+    std::vector<GROUP_NODE> baseGroupNodes;
+    baseGroupNodes.push_back( { _( MODEL_PARENT_BOARD_NAME ).ToStdString() } );
+    baseGroupNodes.push_back( { _( MODEL_PARENT_COMPONENTS_NAME ).ToStdString() } );
 
-    decSize += writeDataBlock( getGroupNodeModifierChain( "groups", groupNodes ), decStream );
+    // include dynamic top-level component/group names
+    std::vector<GROUP_NODE> allGroups = baseGroupNodes;
+    allGroups.insert( allGroups.end(), m_groupNodes.begin(), m_groupNodes.end() );
+
+    decSize += writeDataBlock( getGroupNodeModifierChain( "groups", allGroups ), decStream );
 
     for( auto& mesh : m_meshes )
     {
         if( mesh->IsEmpty() )
             continue;
 
-        // These strings are fed to the various blocks that build up a model
-        // They act as references between the blocks for the various elements of a mesh
         std::string meshName = "n_" + mesh->name;
 
         std::string modelResourceName = "n_" + mesh->name;

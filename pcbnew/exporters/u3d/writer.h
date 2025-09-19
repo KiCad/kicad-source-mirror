@@ -58,7 +58,8 @@ struct hash<Graphic3d_Vec4>
         size_t h1 = std::hash<float>{}( v.x() );
         size_t h2 = std::hash<float>{}( v.y() );
         size_t h3 = std::hash<float>{}( v.z() );
-        return h1 ^ ( h2 << 1 ) ^ ( h3 << 2 );
+        size_t h4 = std::hash<float>{}( v.w() );
+        return h1 ^ ( h2 << 1 ) ^ ( h3 << 2 ) ^ ( h4 << 3 );
     }
 };
 } // namespace std
@@ -131,7 +132,6 @@ public:
     std::string                        parentName;
 
     bool                               perVertexColor;
-
 
     bool IsEmpty()
     {
@@ -271,8 +271,8 @@ private:
                                    const Handle( XCAFDoc_ColorTool ) & colorTool,
                                    const Handle( XCAFDoc_VisMaterialTool ) & visMatTool,
                                    const gp_Trsf&    cumulativeTransform,
-                                   MESH*             mesh
-                                );
+                                   const std::string& baseName,
+                                   std::unordered_map<Graphic3d_Vec4, MESH*>& meshesByColor );
 
 
     void getMeshName( const TDF_Label& label, Handle( XCAFDoc_ShapeTool ) shapeTool, MESH* mesh );
@@ -285,6 +285,7 @@ private:
     const uint32_t             m_contextBaseShadingID = 1;
     bool                       m_includeNormals;
     std::vector<std::unique_ptr<MESH>> m_meshes;
+    std::vector<GROUP_NODE>    m_groupNodes; // dynamic + root grouping nodes
 };
 
 } // namespace U3D
