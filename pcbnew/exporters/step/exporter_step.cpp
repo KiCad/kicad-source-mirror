@@ -108,7 +108,7 @@ private:
         case Message_Trace:   return RPT_SEVERITY_DEBUG;
         case Message_Info:    return RPT_SEVERITY_DEBUG;
         case Message_Warning: return RPT_SEVERITY_WARNING;
-        case Message_Alarm:   return RPT_SEVERITY_ERROR;
+        case Message_Alarm:   return RPT_SEVERITY_WARNING;
         case Message_Fail:    return RPT_SEVERITY_ERROR;
 
         // There are no other values, but gcc doesn't appear to be able to work that out.
@@ -371,7 +371,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
                                                      "File not found: %s\n" ),
                                                   aFootprint->GetReference(),
                                                   mname ),
-                                RPT_SEVERITY_ERROR );
+                                RPT_SEVERITY_WARNING );
             continue;
         }
 
@@ -401,7 +401,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
                                                      "OpenCASCADE error: %s\n" ),
                                                   aFootprint->GetReference(),
                                                   e.GetMessageString() ),
-                                RPT_SEVERITY_ERROR );
+                                RPT_SEVERITY_WARNING );
         }
 
     }

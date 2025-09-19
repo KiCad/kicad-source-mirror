@@ -1741,12 +1741,13 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             }
             else
             {
-                m_reporter->Report( wxString::Format( _( "Wire not done (contour points %d): OCC error %d\n"
-                                                         "z: %g; bounding box: %s" ),
-                                                      static_cast<int>( aContour.PointCount() ),
-                                                      static_cast<int>( mkWire.Error() ),
-                                                      formatBBox( aContour.BBox() ) ),
-                                    RPT_SEVERITY_ERROR );
+                m_reporter->Report(
+                        wxString::Format( _( "Wire not done (contour points %d): OCC error %d\n"
+                                             "z: %g; bounding box: %s" ),
+                                          static_cast<int>( aContour.PointCount() ),
+                                          static_cast<int>( mkWire.Error() ),
+                                          formatBBox( aContour.BBox() ) ),
+                        RPT_SEVERITY_WARNING );
             }
 
             if( !wire.IsNull() )
@@ -1755,19 +1756,11 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( !check.IsValid() )
                 {
-                    if( aAllowRetry )
-                    {
-                        m_reporter->Report( _( "Wire self-interference check failed. Allow retry" ),
-                                            RPT_SEVERITY_DEBUG );
-                    }
-                    else
-                    {
-                        m_reporter->Report( wxString::Format( _( "Wire self-interference check failed\n"
-                                                                 "z: %g; bounding box: %s" ),
-                                                                aZposition,
-                                                                formatBBox( aContour.BBox() ) ),
-                                            RPT_SEVERITY_ERROR );
-                    }
+                    m_reporter->Report( wxString::Format( _( "Wire self-interference check failed\n"
+                                                             "z: %g; bounding box: %s" ),
+                                                          aZposition,
+                                                          formatBBox( aContour.BBox() ) ),
+                                        RPT_SEVERITY_WARNING );
 
                     wire.Nullify();
                 }
@@ -2073,7 +2066,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                                                                         "%s net '%s' **" ),
                                                                     aWhat,
                                                                     UnescapeString( netname ) ),
-                                                RPT_SEVERITY_ERROR );
+                                                RPT_SEVERITY_WARNING );
                             shapeBbox.Dump();
 
                             if( cut.HasErrors() )
@@ -2083,7 +2076,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                                 wxStdOutputStream    out( os_stream );
 
                                 cut.DumpErrors( out );
-                                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                                m_reporter->Report( msg, RPT_SEVERITY_WARNING);
                             }
 
                             if( cut.HasWarnings() )
@@ -3246,13 +3239,13 @@ bool STEP_PCB_MODEL::performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool )
 
 bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 {
-    if( !isBoardOutlineValid() )
+    /*if( !isBoardOutlineValid() )
     {
         m_reporter->Report( wxString::Format( _( "No valid PCB assembly; cannot create output file '%s'." ),
                                               aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
-    }
+    }*/
 
     m_outFmt = OUTPUT_FORMAT::FMT_OUT_GLTF;
 
