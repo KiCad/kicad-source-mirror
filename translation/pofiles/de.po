@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-19 20:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -5152,8 +5152,8 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
-"Auf die gelöschten eingebetteten Dateien ebenfalls von einigen Footprints "
-"verwiesen.\n"
+"Auf die gelöschten eingebetteten Dateien wird ebenfalls von einigen "
+"Footprints verwiesen.\n"
 "Sollen sie auch aus diesen Footprints gelöscht werden?"
 
 #: common/dialogs/panel_embedded_files.cpp:209
@@ -5161,7 +5161,7 @@ msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
-"Auf die gelöschten eingebetteten Dateien ebenfalls von einigen Symbolen "
+"Auf die gelöschten eingebetteten Dateien wird ebenfalls von einigen Symbolen "
 "verwiesen.\n"
 "Sollen sie auch aus diesen Symbolen gelöscht werden?"
 
@@ -25841,33 +25841,26 @@ msgid "Edit Pins"
 msgstr "Pins bearbeiten"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:823
-#, fuzzy
 msgid "At least two pins are needed to convert to stacked pins"
 msgstr ""
-"Für die Konvertierung in einen gestapelten Pin werden mindestens zwei Pins "
-"benötigt"
+"Zur Umwandlung in einen gestapelten Pin werden mindestens zwei Pins benötigt"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:833
-#, fuzzy
 msgid "All pins must be at the same location"
 msgstr "Alle Pins müssen an derselben Position sein"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
 msgstr "Konvertiert %zu gestapelte Pins zu \"%s\""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
-#, fuzzy
 msgid "Select a single pin with stacked notation to explode"
-msgstr ""
-"Einen einzelnen Pin mit der Kennzeichnung \"gestapelt\" zur Auflösung "
-"auswählen"
+msgstr "Einzelnen Pin mit \"gestapelter\" Notation zur Aufteilung auswählen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1052
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Ausgewählter Pin hat keine gültige \"gestapelt\" Kennzeichnung"
+msgstr "Ausgewählter Pin hat keine gültige \"gestapelte\" Notation"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1116
 msgid "Symbol is not derived from another symbol."
@@ -28330,12 +28323,10 @@ msgid "Invalid image format\n"
 msgstr "Unzulässiges Grafikformat\n"
 
 #: kicad/cli/command_pcb_upgrade.cpp:31
-#, fuzzy
 msgid "Upgrade the board file's format to the latest one"
 msgstr "Aktualisiert das Format der Platinendatei auf die neueste Version"
 
 #: kicad/cli/command_pcb_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the board file to be resaved regardless of versioning"
 msgstr ""
 "Erzwingt das erneute Speichern der Platinendatei unabhängig von der "
@@ -28469,12 +28460,10 @@ msgstr ""
 "Python-Skripten erzeugt wurde"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
-#, fuzzy
 msgid "Upgrade the schematic file's format to the latest one"
 msgstr "Aktualisiert das Format der Schaltplandatei auf die neueste Version"
 
 #: kicad/cli/command_sch_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the schematic file to be resaved regardless of versioning"
 msgstr ""
 "Erzwingt das erneute Speichern der Schaltplandatei unabhängig von der "
@@ -29024,26 +29013,22 @@ msgstr ""
 "benutzerdefinierte Vorlage für zukünftige Projekte."
 
 #: kicad/dialogs/template_default_html.h:130
-#, fuzzy
 msgid "Template"
 msgstr "Vorlage"
 
 #: kicad/dialogs/template_default_html.h:131
-#, fuzzy
 msgid ""
 "This project template doesn't include an info page yet. You can still use it "
 "to create a new project."
 msgstr ""
-"Diese Projektvorlage beinhaltet bisher keine Infoseite. Sie können sie immer "
-"noch für die Erstellung eines neuen Projekts verwenden."
+"Diese Projektvorlage beinhaltet bisher keine Infoseite. Sie können sie "
+"dennoch für ein neues Projekt verwenden."
 
 #: kicad/dialogs/template_default_html.h:133
-#, fuzzy
 msgid "To use this template:"
 msgstr "Verwendung dieser Vorlage:"
 
 #: kicad/dialogs/template_default_html.h:135
-#, fuzzy
 msgid "Create the project"
 msgstr "Ein Projekt erstellen"
 
@@ -42023,7 +42008,6 @@ msgstr ""
 "Pad ist (typisch für Lötstoppmaskenfreiraum)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "Mindestbreite von Lötstoppmasken-Stegen:"
 
@@ -45425,7 +45409,6 @@ msgstr ""
 "z: %g; Begrenzungsrahmen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1752
-#, fuzzy
 msgid "Wire self-interference check failed. Allow retry"
 msgstr ""
 "Prüfung auf selbstüberschneidende Verbindungen fehlgeschlagen. Wiederholung "
@@ -47251,7 +47234,6 @@ msgid "PTH pad %s"
 msgstr "Durchsteckpad %s"
 
 #: pcbnew/pad.cpp:2293
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
@@ -51626,9 +51608,8 @@ msgid "Some of the items could not be outset."
 msgstr "Um manche Elemente konnten keine Außenlinien erstellt werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:999
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Rechteckige Außenlinie kann nicht erstellt werden"
+msgstr "Kann rechteckige Außenlinie nicht erstellen"
 
 #: pcbnew/tools/multichannel_tool.cpp:511
 msgid "Select a reference Rule Area to copy from..."
