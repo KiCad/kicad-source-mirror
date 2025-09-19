@@ -168,18 +168,20 @@ protected:
         }
         else if( event.GetId() == MYID_CREATE_DERIVED_SYMBOL )
         {
+            EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_dlg->GetParent() );
+            wxCHECK( frame, /* void */ );
+
             const LIB_SYMBOL* parentSymbol = m_dataModel->GetSymbolForRow( row );
 
             wxArrayString symbolNames;
             m_dataModel->GetSymbolNames( symbolNames );
 
             auto validator =
-                    [&]( wxString newName ) -> bool
+                    [&]( const wxString& newName ) -> bool
                     {
                         return symbolNames.Index( newName ) == wxNOT_FOUND;
                     };
 
-            EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_dlg->GetParent() );
             DIALOG_NEW_SYMBOL dlg( frame, symbolNames, parentSymbol->GetName(), validator );
 
             if( dlg.ShowModal() != wxID_OK )

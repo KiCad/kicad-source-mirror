@@ -39,7 +39,7 @@ static wxString getDerivativeName( const wxString& aParentName )
 DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
                                               const wxArrayString& aSymbolNames,
                                               const wxString&      aInheritFromSymbolName,
-                                              std::function<bool( wxString newName )> aValidator ) :
+                                              std::function<bool( const wxString& newName )> aValidator ) :
         DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
         m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
                            m_staticPinTextPositionUnits, true ),

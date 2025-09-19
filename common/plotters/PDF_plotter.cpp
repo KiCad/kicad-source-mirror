@@ -1978,15 +1978,14 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         while( str_tok.HasMoreTokens() )
         {
             wxString word = str_tok.GetNextToken();
-            pos = renderWord( word, pos, t_size, aOrient, textMirrored, aWidth, aBold, aItalic,
-                              aFont, aFontMetrics, aV_justify, 0 );
+            pos = renderWord( word, pos, t_size, aOrient, textMirrored, aWidth, aBold, aItalic, aFont,
+                              aFontMetrics, aV_justify, 0 );
         }
         return;
     }
 
     // Calculate the full text bounding box for alignment
-    VECTOR2I full_box( aFont->StringBoundaryLimits( text, t_size, aWidth, aBold, aItalic,
-                                                    aFontMetrics ) );
+    VECTOR2I full_box( aFont->StringBoundaryLimits( text, t_size, aWidth, aBold, aItalic, aFontMetrics ) );
 
     if( textMirrored )
         full_box.x *= -1;
@@ -2027,7 +2026,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     if( wxGetEnv( "KICAD_DEBUG_SYN_STYLE", nullptr ) )
     {
         int styleFlags = 0;
-        if( aFont && aFont->IsOutline() )
+        if( aFont->IsOutline() )
             styleFlags = static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace() ? static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace()->style_flags : 0;
         wxLogTrace( tracePdfPlotter, "renderWord enter word='%s' bold=%d italic=%d textStyle=%u styleFlags=%d", TO_UTF8( aWord ), (int) aBold, (int) aItalic, (unsigned) aTextStyle, styleFlags );
     }
@@ -2040,8 +2039,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     if( aWord == wxT(" ") )
     {
         // Calculate space width and advance position
-        VECTOR2I spaceBox( aFont->StringBoundaryLimits( wxT("n"), aSize, aWidth,
-                                                        aBold, aItalic, aFontMetrics ).x / 2, 0 );
+        VECTOR2I spaceBox( aFont->StringBoundaryLimits( "n", aSize, aWidth, aBold, aItalic, aFontMetrics ).x / 2, 0 );
 
         if( aTextMirrored )
             spaceBox.x *= -1;
@@ -2055,15 +2053,16 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
     double wideningFactor, heightFactor;
 
-    computeTextParameters( aPosition, aWord, aOrient, aSize, aTextMirrored,
-                          GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_BOTTOM, aWidth,
-                          aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
-                          &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+    computeTextParameters( aPosition, aWord, aOrient, aSize, aTextMirrored, GR_TEXT_H_ALIGN_LEFT,
+                           GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
+                           &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
     // Calculate next position for word spacing
     VECTOR2I bbox( aFont->StringBoundaryLimits( aWord, aSize, aWidth, aBold, aItalic, aFontMetrics ).x, 0 );
+
     if( aTextMirrored )
         bbox.x *= -1;
+
     RotatePoint( bbox, aOrient );
     VECTOR2I nextPos = aPosition + bbox;
 
@@ -2072,7 +2071,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     // Outline fonts need: superscript +1 full font height higher; subscript +1 full font height higher
     if( aTextStyle & TEXT_STYLE::SUPERSCRIPT )
     {
-        double factor = ( aFont && aFont->IsOutline() ) ? 0.050 : 0.030; // stroke original ~0.40, outline needs +1.0
+        double factor = aFont->IsOutline() ? 0.050 : 0.030; // stroke original ~0.40, outline needs +1.0
         VECTOR2I offset( 0, static_cast<int>( std::lround( aSize.y * factor ) ) );
         RotatePoint( offset, aOrient );
         ctm_e -= offset.x;
@@ -2083,7 +2082,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
         // For outline fonts raise by one font height versus stroke (which shifts downward slightly)
         VECTOR2I offset( 0, 0 );
 
-        if( !aFont || aFont->IsStroke() )
+        if( aFont->IsStroke() )
             offset.y = static_cast<int>( std::lround( aSize.y * 0.01 ) );
 
         RotatePoint( offset, aOrient );
@@ -2092,9 +2091,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     }
 
     // Render the word using existing outline font logic
-    bool useOutlineFont = aFont && aFont->IsOutline();
-
-    if( useOutlineFont )
+    if( aFont->IsOutline() )
     {
         std::vector<PDF_OUTLINE_FONT_RUN> outlineRuns;
 
@@ -2111,6 +2108,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             // Apply baseline adjustment (keeping existing logic)
             double baseline_factor = 0.17;
             double alignment_multiplier = 1.0;
+
             if( aV_justify == GR_TEXT_V_ALIGN_CENTER )
                 alignment_multiplier = 2.0;
             else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
@@ -2132,16 +2130,6 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             double adj_c = ctm_c;
             double adj_d = ctm_d;
 
-            if( aItalic && ( !aFont || !aFont->IsOutline() ) )
-            {
-                double tilt = -ITALIC_TILT;
-                if( wideningFactor < 0 )
-                    tilt = -tilt;
-
-                adj_c -= ctm_a * tilt;
-                adj_d -= ctm_b * tilt;
-            }
-
             // Synthetic italic (shear) for outline font if requested but font not intrinsically italic
             bool syntheticItalicApplied = false;
             double appliedTilt = 0.0;
@@ -2150,13 +2138,15 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             double syn_a = ctm_a;
             double syn_b = ctm_b;
             bool wantItalic = ( aItalic || ( aTextStyle & TEXT_STYLE::ITALIC ) );
+
             if( std::getenv( "KICAD_FORCE_SYN_ITALIC" ) )
                 wantItalic = true; // debug: ensure path triggers when forcing synthetic italic
-            bool wantBold   = ( aBold   || ( aTextStyle & TEXT_STYLE::BOLD ) );
-            bool fontIsItalic = aFont && aFont->IsOutline() && aFont->IsItalic();
-            bool fontIsBold   = aFont && aFont->IsOutline() && aFont->IsBold();
-            bool fontIsFakeItalic = aFont && aFont->IsOutline() && static_cast<KIFONT::OUTLINE_FONT*>( aFont )->IsFakeItalic();
-            bool fontIsFakeBold   = aFont && aFont->IsOutline() && static_cast<KIFONT::OUTLINE_FONT*>( aFont )->IsFakeBold();
+
+            bool wantBold   = ( aBold || ( aTextStyle & TEXT_STYLE::BOLD ) );
+            bool fontIsItalic = aFont->IsItalic();
+            bool fontIsBold   = aFont->IsBold();
+            bool fontIsFakeItalic = static_cast<KIFONT::OUTLINE_FONT*>( aFont )->IsFakeItalic();
+            bool fontIsFakeBold   = static_cast<KIFONT::OUTLINE_FONT*>( aFont )->IsFakeBold();
 
             // Environment overrides for testing synthetic italics:
             //   KICAD_FORCE_SYN_ITALIC=1 forces synthetic shear even if font has italic face
@@ -2164,6 +2154,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             //   otherwise treat as raw tilt factor (x += tilt*y)
             bool forceSynItalic = false;
             double overrideTilt = 0.0;
+
             if( const char* envForce = std::getenv( "KICAD_FORCE_SYN_ITALIC" ) )
             {
                 if( *envForce != '\0' && *envForce != '0' )
@@ -2173,6 +2164,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             if( const char* envTilt = std::getenv( "KICAD_SYN_ITALIC_TILT" ) )
             {
                 std::string tiltStr( envTilt );
+
                 try
                 {
                     if( tiltStr.find( "deg" ) != std::string::npos )
@@ -2202,8 +2194,9 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             //  - Italic requested AND outline font
             //  - And either forceSynItalic env var set OR there is no REAL italic face.
             //    (A fake italic flag from fontconfig substitution should NOT block synthetic shear.)
-            bool realItalicFace = aFont && aFont->IsOutline() && aFont->IsItalic() && !fontIsFakeItalic;
-            if( wantItalic && aFont && aFont->IsOutline() && ( forceSynItalic || !realItalicFace ) )
+            bool realItalicFace = fontIsItalic && !fontIsFakeItalic;
+
+            if( wantItalic && ( forceSynItalic || !realItalicFace ) )
             {
                 // We want to apply a horizontal shear so that x' = x + tilt * y in the glyph's
                 // local coordinate system BEFORE rotation.  The existing text matrix columns are:
@@ -2215,6 +2208,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                 // to the second column: (c', d') = (c + tilt * a, d + tilt * b).
                 // This produces a right-leaning italic for positive tilt.
                 double tilt = ( overrideTilt != 0.0 ) ? overrideTilt : ITALIC_TILT;
+
                 if( wideningFactor < 0 )       // mirrored text should mirror the shear
                     tilt = -tilt;
 
@@ -2223,12 +2217,11 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                 appliedTilt = tilt;
                 syntheticItalicApplied = true;
 
-                wxLogTrace( tracePdfPlotter,
-                            "Synthetic italic shear applied: tilt=%f a=%f b=%f c->%f d->%f",
+                wxLogTrace( tracePdfPlotter, "Synthetic italic shear applied: tilt=%f a=%f b=%f c->%f d->%f",
                             tilt, syn_a, syn_b, syn_c, syn_d );
             }
 
-            if( wantBold && aFont && aFont->IsOutline() && !fontIsBold )
+            if( wantBold && !fontIsBold )
             {
                 // Slight horizontal widening to simulate bold (~3%)
                 syn_a *= 1.03;
@@ -2238,7 +2231,8 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             if( syntheticItalicApplied )
             {
                 // PDF comment to allow manual inspection in the output stream
-                fmt::print( m_workFile, "% syn-italic tilt={} a={} b={} c={} d={}\n", appliedTilt, syn_a, syn_b, syn_c, syn_d );
+                fmt::print( m_workFile, "% syn-italic tilt={} a={} b={} c={} d={}\n",
+                            appliedTilt, syn_a, syn_b, syn_c, syn_d );
             }
 
             fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {:g} Tz ",
@@ -2287,6 +2281,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             if( aItalic && ( !aFont || !aFont->IsOutline() ) )
             {
                 double tilt = -ITALIC_TILT;
+
                 if( wideningFactor < 0 )
                     tilt = -tilt;
 
@@ -2368,9 +2363,9 @@ VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2
             {
                 wxString word = str_tok.GetNextToken();
                 nextPosition = renderWord( word, nextPosition, currentSize, aOrient, aTextMirrored,
-                                         aWidth, aBaseBold || (currentStyle & TEXT_STYLE::BOLD),
-                                         aBaseItalic || (currentStyle & TEXT_STYLE::ITALIC),
-                                         aFont, aFontMetrics, aV_justify, currentStyle );
+                                           aWidth, aBaseBold || (currentStyle & TEXT_STYLE::BOLD),
+                                           aBaseItalic || (currentStyle & TEXT_STYLE::ITALIC),
+                                           aFont, aFontMetrics, aV_justify, currentStyle );
             }
         }
     }
@@ -2381,14 +2376,14 @@ VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2
         VECTOR2I startPos = nextPosition;
 
         nextPosition = renderMarkupNode( child.get(), nextPosition, currentSize, aOrient,
-                                       aTextMirrored, aWidth, aBaseBold, aBaseItalic,
-                                       aFont, aFontMetrics, aV_justify, currentStyle, aOverbars );
+                                         aTextMirrored, aWidth, aBaseBold, aBaseItalic,
+                                         aFont, aFontMetrics, aV_justify, currentStyle, aOverbars );
 
         // Store overbar info for later rendering
         if( drawOverbar )
         {
             VECTOR2I endPos = nextPosition;
-            aOverbars.push_back( { startPos, endPos, currentSize, aFont && aFont->IsOutline(), aV_justify } );
+            aOverbars.push_back( { startPos, endPos, currentSize, aFont->IsOutline(), aV_justify } );
         }
     }
 

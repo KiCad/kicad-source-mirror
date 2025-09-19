@@ -148,12 +148,13 @@ static bool boxIntersectsLine( const BOX2I& box, const VECTOR2I& lineStart, cons
 BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
 {
     // Create test symbol
-    auto symbol = createTestResistorSymbol();
+    std::unique_ptr<LIB_SYMBOL> symbol = createTestResistorSymbol();
     BOOST_REQUIRE( symbol );
 
     // Get the pins
     std::vector<SCH_PIN*> pins;
-    for( auto& item : symbol->GetDrawItems() )
+
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
         if( item.Type() == SCH_PIN_T )
             pins.push_back( static_cast<SCH_PIN*>( &item ) );
@@ -188,12 +189,12 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
             PIN_LAYOUT_CACHE cache( *pin );
 
             // Get pin number text info (shadow width 0 for testing)
-            auto numberInfoOpt = cache.GetPinNumberInfo( 0 );
+            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfoOpt = cache.GetPinNumberInfo( 0 );
 
             if( !numberInfoOpt.has_value() )
                 continue;
 
-            PIN_LAYOUT_CACHE::TEXT_INFO numberInfo = numberInfoOpt.value();
+            const PIN_LAYOUT_CACHE::TEXT_INFO& numberInfo = numberInfoOpt.value();
 
             if( numberInfo.m_Text.IsEmpty() )
                 continue;
@@ -220,8 +221,10 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
                     textWidth = lines.size() * lineSpacing;
                     // Find longest line for height
                     size_t maxLen = 0;
+
                     for( const wxString& line : lines )
                         maxLen = std::max( maxLen, line.Length() );
+
                     textHeight = maxLen * textHeight * 0.6;
                 }
                 else
@@ -231,8 +234,10 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
                     textHeight = lines.size() * lineSpacing;
                     // Find longest line for width
                     size_t maxLen = 0;
+
                     for( const wxString& line : lines )
                         maxLen = std::max( maxLen, line.Length() );
+
                     textWidth = maxLen * textHeight * 0.6;
                 }
             }
@@ -240,7 +245,7 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
             // Create text bounding box around text position
             BOX2I textBbox;
             textBbox.SetOrigin( numberInfo.m_TextPosition.x - textWidth/2,
-                               numberInfo.m_TextPosition.y - textHeight/2 );
+                                numberInfo.m_TextPosition.y - textHeight/2 );
             textBbox.SetSize( textWidth, textHeight );
 
             // Check for intersection
@@ -248,16 +253,16 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
 
             // Log detailed info for debugging
             wxLogMessage( wxT("Rotation %s, Pin %s: pos=(%d,%d) textPos=(%d,%d) pinLine=(%d,%d)-(%d,%d) textBox=(%d,%d,%dx%d) overlap=%s"),
-                         rotName, pin->GetNumber(),
-                         pinStart.x, pinStart.y,
-                         numberInfo.m_TextPosition.x, numberInfo.m_TextPosition.y,
-                         pinStart.x, pinStart.y, pinEnd.x, pinEnd.y,
-                         (int)textBbox.GetLeft(), (int)textBbox.GetTop(), (int)textBbox.GetWidth(), (int)textBbox.GetHeight(),
-                         overlaps ? wxT("YES") : wxT("NO") );
+                          rotName, pin->GetNumber(),
+                          pinStart.x, pinStart.y,
+                          numberInfo.m_TextPosition.x, numberInfo.m_TextPosition.y,
+                          pinStart.x, pinStart.y, pinEnd.x, pinEnd.y,
+                          (int)textBbox.GetLeft(), (int)textBbox.GetTop(), (int)textBbox.GetWidth(), (int)textBbox.GetHeight(),
+                          overlaps ? wxT("YES") : wxT("NO") );
 
             // Test assertion
             BOOST_CHECK_MESSAGE( !overlaps,
-                                "Pin number '" << pin->GetNumber() << "' overlaps with pin geometry at rotation " << rotName );
+                                 "Pin number '" << pin->GetNumber() << "' overlaps with pin geometry at rotation " << rotName );
         }
 
         // Restore original transform
@@ -272,12 +277,13 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
 BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
 {
     // Create test symbol with both types of pins
-    auto symbol = createTestResistorSymbol();
+    std::unique_ptr<LIB_SYMBOL> symbol = createTestResistorSymbol();
     BOOST_REQUIRE( symbol );
 
     // Get the pins - one will be multiline formatted, one will not
     std::vector<SCH_PIN*> pins;
-    for( auto& item : symbol->GetDrawItems() )
+
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
         if( item.Type() == SCH_PIN_T )
             pins.push_back( static_cast<SCH_PIN*>( &item ) );
@@ -315,7 +321,7 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
 
         std::vector<PinTextInfo> pinInfos;
 
-        for( auto* pin : pins )
+        for( SCH_PIN* pin : pins )
         {
             PinTextInfo info;
             info.pinPos = pin->GetPosition();
@@ -325,30 +331,32 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
             PIN_LAYOUT_CACHE cache( *pin );
 
             // Get number position (shadow width 0 for testing)
-            auto numberInfoOpt = cache.GetPinNumberInfo( 0 );
+            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfoOpt = cache.GetPinNumberInfo( 0 );
+
             if( numberInfoOpt.has_value() )
             {
-                auto numberInfo = numberInfoOpt.value();
+                const PIN_LAYOUT_CACHE::TEXT_INFO& numberInfo = numberInfoOpt.value();
                 info.numberPos = numberInfo.m_TextPosition;
                 info.isMultiline = numberInfo.m_Text.Contains( '\n' );
             }
 
             // Get name position
-            auto nameInfoOpt = cache.GetPinNameInfo( 0 );
+            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfoOpt = cache.GetPinNameInfo( 0 );
+
             if( nameInfoOpt.has_value() )
             {
-                auto nameInfo = nameInfoOpt.value();
+                const PIN_LAYOUT_CACHE::TEXT_INFO& nameInfo = nameInfoOpt.value();
                 info.namePos = nameInfo.m_TextPosition;
             }
 
             pinInfos.push_back( info );
 
             wxLogDebug( "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s",
-                       rotName, info.pinNumber,
-                       info.pinPos.x, info.pinPos.y,
-                       info.numberPos.x, info.numberPos.y,
-                       info.namePos.x, info.namePos.y,
-                       info.isMultiline ? wxT("YES") : wxT("NO") );
+                        rotName, info.pinNumber,
+                        info.pinPos.x, info.pinPos.y,
+                        info.numberPos.x, info.numberPos.y,
+                        info.namePos.x, info.namePos.y,
+                        info.isMultiline ? wxT("YES") : wxT("NO") );
         }
 
         BOOST_REQUIRE_EQUAL( pinInfos.size(), 2 );
@@ -360,7 +368,7 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
 
         if( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN )
         {
-            for( const auto& inf : pinInfos )
+            for( const PinTextInfo& inf : pinInfos )
             {
                 BOOST_CHECK_MESSAGE( inf.numberPos.x < inf.pinPos.x,
                     "At rotation " << rotName << ", number for pin " << inf.pinNumber << " not left of vertical pin." );
@@ -370,7 +378,7 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
         }
         else if( orient == PIN_ORIENTATION::PIN_LEFT || orient == PIN_ORIENTATION::PIN_RIGHT )
         {
-            for( const auto& inf : pinInfos )
+            for( const PinTextInfo& inf : pinInfos )
             {
                 BOOST_CHECK_MESSAGE( inf.numberPos.y < inf.pinPos.y,
                     "At rotation " << rotName << ", number for pin " << inf.pinNumber << " not above horizontal pin." );
@@ -391,12 +399,13 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
 BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
 {
     // Create test symbol with both types of pins
-    auto symbol = createTestResistorSymbol();
+    std::unique_ptr<LIB_SYMBOL> symbol = createTestResistorSymbol();
     BOOST_REQUIRE( symbol );
 
     // Get the pins - one will be multiline formatted, one will not
     std::vector<SCH_PIN*> pins;
-    for( auto& item : symbol->GetDrawItems() )
+
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
         if( item.Type() == SCH_PIN_T )
             pins.push_back( static_cast<SCH_PIN*>( &item ) );
@@ -436,7 +445,7 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
 
         std::vector<PinTextData> pinData;
 
-        for( auto* pin : pins )
+        for( SCH_PIN* pin : pins )
         {
             PinTextData data;
             data.pinPos = pin->GetPosition();
@@ -446,8 +455,9 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
             PIN_LAYOUT_CACHE cache( *pin );
 
             // Get number position (shadow width 0 for testing)
-            auto numberInfoOpt = cache.GetPinNumberInfo( 0 );
+            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfoOpt = cache.GetPinNumberInfo( 0 );
             PIN_LAYOUT_CACHE::TEXT_INFO numberInfo; // store for later heuristics
+
             if( numberInfoOpt.has_value() )
             {
                 numberInfo = numberInfoOpt.value();
@@ -460,8 +470,9 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
             }
 
             // Get name position
-            auto nameInfoOpt = cache.GetPinNameInfo( 0 );
+            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfoOpt = cache.GetPinNameInfo( 0 );
             PIN_LAYOUT_CACHE::TEXT_INFO nameInfo; // store for width/height heuristic
+
             if( nameInfoOpt.has_value() )
             {
                 nameInfo = nameInfoOpt.value();
@@ -480,6 +491,7 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
                 // Vertical pins: measure clearance from pin (at pin.x) to RIGHT edge of text box.
                 // We approximate half width from text length heuristic.
                 int textWidth = data.isMultiline ? 0 : (int)( data.pinNumber.Length() * numberInfo.m_TextSize * 0.6 );
+
                 // (Multiline case: numberInfo.m_Text already contains \n; heuristic in earlier section)
                 if( data.isMultiline )
                 {
@@ -487,6 +499,7 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
                     int lineSpacing = numberInfo.m_TextSize * 1.3;
                     textWidth = lines.size() * lineSpacing; // when vertical orientation text is rotated
                 }
+
                 int rightEdge = data.numberPos.x + textWidth / 2;
                 data.numberBottomDistance = data.pinPos.x - rightEdge; // positive gap
                 int nameWidth = (int)( nameInfo.m_Text.Length() * nameInfo.m_TextSize * 0.6 );
@@ -503,12 +516,12 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
             pinData.push_back( data );
 
             wxLogDebug( "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s numberBottomDist=%d nameBottomDist=%d",
-                       rotName, data.pinNumber,
-                       data.pinPos.x, data.pinPos.y,
-                       data.numberPos.x, data.numberPos.y,
-                       data.namePos.x, data.namePos.y,
-                       data.isMultiline ? wxT("YES") : wxT("NO"),
-                       data.numberBottomDistance, data.nameBottomDistance );
+                        rotName, data.pinNumber,
+                        data.pinPos.x, data.pinPos.y,
+                        data.numberPos.x, data.numberPos.y,
+                        data.namePos.x, data.namePos.y,
+                        data.isMultiline ? wxT("YES") : wxT("NO"),
+                        data.numberBottomDistance, data.nameBottomDistance );
         }
 
         BOOST_REQUIRE_EQUAL( pinData.size(), 2 );

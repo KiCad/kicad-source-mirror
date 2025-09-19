@@ -172,7 +172,6 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
         return -1;
 
     int glyphIndex = glyphIndexForUnicode( aCode );
-    const KIFONT::STROKE_GLYPH* glyph = m_font ? m_font->GetGlyph( glyphIndex ) : nullptr;
 
     int code = m_nextCode++;
     m_lastCode = std::max( m_lastCode, code );
@@ -184,7 +183,15 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
     data.m_name = makeGlyphName( code );
     data.m_charProcHandle = -1;
 
-    const BOX2D& bbox = m_font->GetGlyphBoundingBox( glyphIndex );
+    const KIFONT::STROKE_GLYPH* glyph = nullptr;
+    BOX2D bbox;
+
+    if( m_font )
+    {
+        glyph = m_font->GetGlyph( glyphIndex );
+        bbox = m_font->GetGlyphBoundingBox( glyphIndex );
+    }
+
     VECTOR2D origin = bbox.GetOrigin();
     VECTOR2D size = bbox.GetSize();
 
@@ -231,7 +238,7 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
     m_bboxMaxX = std::max( m_bboxMaxX, data.m_maxX );
     m_bboxMaxY = std::max( m_bboxMaxY, data.m_maxY );
 
-    m_glyphs.push_back( data );
+    m_glyphs.push_back( std::move( data ) );
     m_unicodeToCode.emplace( aCode, code );
 
     return code;
@@ -434,7 +441,7 @@ void PDF_STROKE_FONT_MANAGER::EncodeString( const wxString& aText,
 
     for( wxUniChar ch : aText )
     {
-    PDF_STROKE_FONT_SUBSET* subset = ensureSubsetForGlyph( ch, aBold, aItalic );
+        PDF_STROKE_FONT_SUBSET* subset = ensureSubsetForGlyph( ch, aBold, aItalic );
 
         if( !subset )
             continue;
@@ -457,7 +464,7 @@ void PDF_STROKE_FONT_MANAGER::EncodeString( const wxString& aText,
     }
 
     if( !currentBytes.empty() && currentSubset )
-        aRuns->push_back( { currentSubset, currentBytes, aBold, aItalic } );
+        aRuns->push_back( { currentSubset, std::move( currentBytes ), aBold, aItalic } );
 }
 
 PDF_STROKE_FONT_SUBSET* PDF_STROKE_FONT_MANAGER::ensureSubsetForGlyph( wxUniChar aCode, bool aBold, bool aItalic )
