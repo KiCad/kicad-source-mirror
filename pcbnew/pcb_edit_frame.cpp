@@ -35,6 +35,11 @@
 #include <confirm.h>
 #include <lset.h>
 #include <trace_helpers.h>
+#include <algorithm>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pcb_layer_box_selector.h>
@@ -47,6 +52,7 @@
 #include <dialogs/dialog_table_properties.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_target.h>
+#include <pcb_point.h>
 #include <layer_pairs.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <wildcards_and_files_ext.h>
@@ -2362,51 +2368,75 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
 }
 
 
-static PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint )
+template<typename T>
+static std::vector<std::pair<T*, T*>> matchItemsBySimilarity( const std::vector<T*>& aExisting,
+                                                              const std::vector<T*>& aNew )
 {
-    std::vector<PCB_TEXT*> candidates;
-
-    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    struct MATCH_CANDIDATE
     {
-        PCB_TEXT* candidate = dynamic_cast<PCB_TEXT*>( item );
+        T*      existing;
+        T*      updated;
+        double  score;
+    };
 
-        if( candidate && candidate->GetText() == aRefItem->GetText() )
-            candidates.push_back( candidate );
+    std::vector<MATCH_CANDIDATE> candidates;
+
+    for( T* existing : aExisting )
+    {
+        for( T* updated : aNew )
+        {
+            if( existing->Type() != updated->Type() )
+                continue;
+
+            double similarity = existing->Similarity( *updated );
+
+            if( similarity <= 0.0 )
+                continue;
+
+            double score = similarity;
+
+            if constexpr( std::is_same_v<T, PAD> )
+            {
+                if( existing->GetNumber() == updated->GetNumber() )
+                    score += 2.0;
+            }
+
+            candidates.push_back( { existing, updated, score } );
+        }
     }
 
-    if( candidates.size() == 0 )
-        return nullptr;
+    std::sort( candidates.begin(), candidates.end(),
+               []( const MATCH_CANDIDATE& a, const MATCH_CANDIDATE& b )
+               {
+                   if( a.score != b.score )
+                       return a.score > b.score;
 
-    if( candidates.size() == 1 )
-        return candidates[0];
+                   if( a.existing != b.existing )
+                       return a.existing < b.existing;
 
-    // Try refining the match by layer
-    std::vector<PCB_TEXT*> candidatesOnSameLayer;
+                   return a.updated < b.updated;
+               } );
 
-    for( PCB_TEXT* candidate : candidates )
+    std::vector<std::pair<T*, T*>> matches;
+    matches.reserve( candidates.size() );
+
+    std::unordered_set<T*> matchedExisting;
+    std::unordered_set<T*> matchedNew;
+
+    for( const MATCH_CANDIDATE& candidate : candidates )
     {
-        if( candidate->GetLayer() == aRefItem->GetLayer() )
-            candidatesOnSameLayer.push_back( candidate );
+        if( matchedExisting.find( candidate.existing ) != matchedExisting.end() )
+            continue;
+
+        if( matchedNew.find( candidate.updated ) != matchedNew.end() )
+            continue;
+
+        matchedExisting.insert( candidate.existing );
+        matchedNew.insert( candidate.updated );
+        matches.emplace_back( candidate.existing, candidate.updated );
     }
 
-    if( candidatesOnSameLayer.size() == 1 )
-        return candidatesOnSameLayer[0];
-
-    // Last ditch effort: refine by position
-    std::vector<PCB_TEXT*> candidatesAtSamePos;
-
-    for( PCB_TEXT* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
-    {
-        if( candidate->GetFPRelativePosition() == aRefItem->GetFPRelativePosition() )
-            candidatesAtSamePos.push_back( candidate );
-    }
-
-    if( candidatesAtSamePos.size() > 0 )
-        return candidatesAtSamePos[0];
-    else if( candidatesOnSameLayer.size() > 0 )
-        return candidatesOnSameLayer[0];
-    else
-        return candidates[0];
+    return matches;
 }
 
 
@@ -2451,47 +2481,225 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     aNew->SetLocked( aExisting->IsLocked() );
 
-    // Now transfer the net info from "old" pads to the new footprint
-    for( PAD* newPad : aNew->Pads() )
+    const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
+    const_cast<KIID&>( aNew->Reference().m_Uuid ) = aExisting->Reference().m_Uuid;
+    const_cast<KIID&>( aNew->Value().m_Uuid ) = aExisting->Value().m_Uuid;
+
+    std::vector<PAD*> oldPads;
+    oldPads.reserve( aExisting->Pads().size() );
+
+    for( PAD* pad : aExisting->Pads() )
+        oldPads.push_back( pad );
+
+    std::vector<PAD*> newPads;
+    newPads.reserve( aNew->Pads().size() );
+
+    for( PAD* pad : aNew->Pads() )
+        newPads.push_back( pad );
+
+    auto padMatches = matchItemsBySimilarity<PAD>( oldPads, newPads );
+    std::unordered_set<PAD*> matchedNewPads;
+
+    for( const auto& match : padMatches )
     {
-        PAD* oldPad = nullptr;
+        PAD* oldPad = match.first;
+        PAD* newPad = match.second;
 
-        // Pads with no numbers can't be matched.  (Then again, they're never connected to a
-        // net either, so it's just the UUID retention that we can't perform.)
-        if( newPad->GetNumber().IsEmpty() )
-        {
-            newPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-            continue;
-        }
-
-        // Search for a similar pad to reuse UUID and net info
-        PAD* last_pad = nullptr;
-
-        while( true )
-        {
-            oldPad = aExisting->FindPadByNumber( newPad->GetNumber(), last_pad );
-
-            if( !oldPad )
-                break;
-
-            if( newPad->IsOnCopperLayer() == oldPad->IsOnCopperLayer() )  // a candidate is found
-                break;
-
-            last_pad = oldPad;
-        }
-
-        if( oldPad )
-        {
-            const_cast<KIID&>( newPad->m_Uuid ) = oldPad->m_Uuid;
-            newPad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
-            newPad->SetPinFunction( oldPad->GetPinFunction() );
-            newPad->SetPinType( oldPad->GetPinType() );
-        }
+        matchedNewPads.insert( newPad );
+        const_cast<KIID&>( newPad->m_Uuid ) = oldPad->m_Uuid;
+        newPad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
+        newPad->SetPinFunction( oldPad->GetPinFunction() );
+        newPad->SetPinType( oldPad->GetPinType() );
 
         if( newPad->IsOnCopperLayer() )
-            newPad->SetNetCode( oldPad ? oldPad->GetNetCode() : NETINFO_LIST::UNCONNECTED );
+            newPad->SetNetCode( oldPad->GetNetCode() );
         else
             newPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+    }
+
+    for( PAD* newPad : aNew->Pads() )
+    {
+        if( matchedNewPads.find( newPad ) != matchedNewPads.end() )
+            continue;
+
+        const_cast<KIID&>( newPad->m_Uuid ) = KIID();
+        newPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+    }
+
+    std::vector<BOARD_ITEM*> oldDrawings;
+    oldDrawings.reserve( aExisting->GraphicalItems().size() );
+
+    for( BOARD_ITEM* item : aExisting->GraphicalItems() )
+        oldDrawings.push_back( item );
+
+    std::vector<BOARD_ITEM*> newDrawings;
+    newDrawings.reserve( aNew->GraphicalItems().size() );
+
+    for( BOARD_ITEM* item : aNew->GraphicalItems() )
+        newDrawings.push_back( item );
+
+    auto drawingMatches = matchItemsBySimilarity<BOARD_ITEM>( oldDrawings, newDrawings );
+    std::unordered_map<BOARD_ITEM*, BOARD_ITEM*> oldToNewDrawings;
+    std::unordered_set<BOARD_ITEM*> matchedNewDrawings;
+
+    for( const auto& match : drawingMatches )
+    {
+        BOARD_ITEM* oldItem = match.first;
+        BOARD_ITEM* newItem = match.second;
+
+        oldToNewDrawings[ oldItem ] = newItem;
+        matchedNewDrawings.insert( newItem );
+        const_cast<KIID&>( newItem->m_Uuid ) = oldItem->m_Uuid;
+    }
+
+    for( BOARD_ITEM* newItem : newDrawings )
+    {
+        if( matchedNewDrawings.find( newItem ) == matchedNewDrawings.end() )
+            const_cast<KIID&>( newItem->m_Uuid ) = KIID();
+    }
+
+    std::vector<ZONE*> oldZones;
+    oldZones.reserve( aExisting->Zones().size() );
+
+    for( ZONE* zone : aExisting->Zones() )
+        oldZones.push_back( zone );
+
+    std::vector<ZONE*> newZones;
+    newZones.reserve( aNew->Zones().size() );
+
+    for( ZONE* zone : aNew->Zones() )
+        newZones.push_back( zone );
+
+    auto zoneMatches = matchItemsBySimilarity<ZONE>( oldZones, newZones );
+    std::unordered_set<ZONE*> matchedNewZones;
+
+    for( const auto& match : zoneMatches )
+    {
+        ZONE* oldZone = match.first;
+        ZONE* newZone = match.second;
+
+        matchedNewZones.insert( newZone );
+        const_cast<KIID&>( newZone->m_Uuid ) = oldZone->m_Uuid;
+    }
+
+    for( ZONE* newZone : newZones )
+    {
+        if( matchedNewZones.find( newZone ) == matchedNewZones.end() )
+            const_cast<KIID&>( newZone->m_Uuid ) = KIID();
+    }
+
+    std::vector<PCB_POINT*> oldPoints;
+    oldPoints.reserve( aExisting->Points().size() );
+
+    for( PCB_POINT* point : aExisting->Points() )
+        oldPoints.push_back( point );
+
+    std::vector<PCB_POINT*> newPoints;
+    newPoints.reserve( aNew->Points().size() );
+
+    for( PCB_POINT* point : aNew->Points() )
+        newPoints.push_back( point );
+
+    auto pointMatches = matchItemsBySimilarity<PCB_POINT>( oldPoints, newPoints );
+    std::unordered_set<PCB_POINT*> matchedNewPoints;
+
+    for( const auto& match : pointMatches )
+    {
+        PCB_POINT* oldPoint = match.first;
+        PCB_POINT* newPoint = match.second;
+
+        matchedNewPoints.insert( newPoint );
+        const_cast<KIID&>( newPoint->m_Uuid ) = oldPoint->m_Uuid;
+    }
+
+    for( PCB_POINT* newPoint : newPoints )
+    {
+        if( matchedNewPoints.find( newPoint ) == matchedNewPoints.end() )
+            const_cast<KIID&>( newPoint->m_Uuid ) = KIID();
+    }
+
+    std::vector<PCB_GROUP*> oldGroups;
+    oldGroups.reserve( aExisting->Groups().size() );
+
+    for( PCB_GROUP* group : aExisting->Groups() )
+        oldGroups.push_back( group );
+
+    std::vector<PCB_GROUP*> newGroups;
+    newGroups.reserve( aNew->Groups().size() );
+
+    for( PCB_GROUP* group : aNew->Groups() )
+        newGroups.push_back( group );
+
+    auto groupMatches = matchItemsBySimilarity<PCB_GROUP>( oldGroups, newGroups );
+    std::unordered_set<PCB_GROUP*> matchedNewGroups;
+
+    for( const auto& match : groupMatches )
+    {
+        PCB_GROUP* oldGroup = match.first;
+        PCB_GROUP* newGroup = match.second;
+
+        matchedNewGroups.insert( newGroup );
+        const_cast<KIID&>( newGroup->m_Uuid ) = oldGroup->m_Uuid;
+    }
+
+    for( PCB_GROUP* newGroup : newGroups )
+    {
+        if( matchedNewGroups.find( newGroup ) == matchedNewGroups.end() )
+            const_cast<KIID&>( newGroup->m_Uuid ) = KIID();
+    }
+
+    std::vector<PCB_FIELD*> oldFieldsVec;
+    std::vector<PCB_FIELD*> newFieldsVec;
+
+    oldFieldsVec.reserve( aExisting->GetFields().size() );
+
+    for( PCB_FIELD* field : aExisting->GetFields() )
+    {
+        if( field->IsReference() || field->IsValue() )
+            continue;
+
+        oldFieldsVec.push_back( field );
+    }
+
+    newFieldsVec.reserve( aNew->GetFields().size() );
+
+    for( PCB_FIELD* field : aNew->GetFields() )
+    {
+        if( field->IsReference() || field->IsValue() )
+            continue;
+
+        newFieldsVec.push_back( field );
+    }
+
+    auto fieldMatches = matchItemsBySimilarity<PCB_FIELD>( oldFieldsVec, newFieldsVec );
+    std::unordered_map<PCB_FIELD*, PCB_FIELD*> oldToNewFields;
+    std::unordered_set<PCB_FIELD*> matchedNewFields;
+
+    for( const auto& match : fieldMatches )
+    {
+        PCB_FIELD* oldField = match.first;
+        PCB_FIELD* newField = match.second;
+
+        oldToNewFields[ oldField ] = newField;
+        matchedNewFields.insert( newField );
+        const_cast<KIID&>( newField->m_Uuid ) = oldField->m_Uuid;
+    }
+
+    for( PCB_FIELD* newField : newFieldsVec )
+    {
+        if( matchedNewFields.find( newField ) == matchedNewFields.end() )
+            const_cast<KIID&>( newField->m_Uuid ) = KIID();
+    }
+
+    std::unordered_map<PCB_TEXT*, PCB_TEXT*> oldToNewTexts;
+
+    for( const auto& match : drawingMatches )
+    {
+        PCB_TEXT* oldText = dynamic_cast<PCB_TEXT*>( match.first );
+        PCB_TEXT* newText = dynamic_cast<PCB_TEXT*>( match.second );
+
+        if( oldText && newText )
+            oldToNewTexts[ oldText ] = newText;
     }
 
     std::set<PCB_TEXT*> handledTextItems;
@@ -2506,7 +2714,12 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
             if( dynamic_cast<PCB_DIMENSION_BASE*>( oldTextItem ) )
                 continue;
 
-            PCB_TEXT* newTextItem = getMatchingTextItem( oldTextItem, aNew );
+            PCB_TEXT* newTextItem = nullptr;
+
+            auto textMatchIt = oldToNewTexts.find( oldTextItem );
+
+            if( textMatchIt != oldToNewTexts.end() )
+                newTextItem = textMatchIt->second;
 
             if( newTextItem )
             {
@@ -2566,7 +2779,12 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         if( oldField->IsReference() || oldField->IsValue() )
             continue;
 
-        PCB_FIELD* newField = aNew->GetField( oldField->GetName() );
+        PCB_FIELD* newField = nullptr;
+
+        auto fieldMatchIt = oldToNewFields.find( oldField );
+
+        if( fieldMatchIt != oldToNewFields.end() )
+            newField = fieldMatchIt->second;
 
         if( newField )
         {
@@ -2662,7 +2880,6 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     }
 
     // Updating other parameters
-    const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
     aNew->SetPath( aExisting->GetPath() );
     aNew->SetSheetfile( aExisting->GetSheetfile() );
     aNew->SetSheetname( aExisting->GetSheetname() );
