@@ -1356,7 +1356,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaSize() const
 {
     if( m_useCustomTrackVia )
         return m_customViaSize.m_Diameter;
-    else if( m_viaSizeIndex == 0 )
+    else if( m_viaSizeIndex <= 0 || m_viaSizeIndex >= (int) m_ViasDimensionsList.size() )
         return m_NetSettings->GetDefaultNetclass()->GetViaDiameter();
     else
         return m_ViasDimensionsList[ m_viaSizeIndex ].m_Diameter;
@@ -1369,7 +1369,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
 
     if( m_useCustomTrackVia )
         drill = m_customViaSize.m_Drill;
-    else if( m_viaSizeIndex == 0 )
+    else if( m_viaSizeIndex <= 0 || m_viaSizeIndex >= (int) m_ViasDimensionsList.size() )
         drill = m_NetSettings->GetDefaultNetclass()->GetViaDrill();
     else
         drill = m_ViasDimensionsList[ m_viaSizeIndex ].m_Drill;
@@ -1389,7 +1389,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentTrackWidth() const
 {
     if( m_useCustomTrackVia )
         return m_customTrackWidth;
-    else if( m_trackWidthIndex == 0 )
+    else if( m_trackWidthIndex <= 0 || m_trackWidthIndex >= (int) m_TrackWidthList.size() )
         return m_NetSettings->GetDefaultNetclass()->GetTrackWidth();
     else
         return m_TrackWidthList[ m_trackWidthIndex ];
@@ -1411,7 +1411,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairWidth() const
     {
         return m_customDiffPair.m_Width;
     }
-    else if( m_diffPairIndex == 0 )
+    else if( m_diffPairIndex <= 0 || m_diffPairIndex >= (int) m_DiffPairDimensionsList.size() )
     {
         if( m_NetSettings->GetDefaultNetclass()->HasDiffPairWidth() )
             return m_NetSettings->GetDefaultNetclass()->GetDiffPairWidth();
