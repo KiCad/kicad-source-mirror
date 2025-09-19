@@ -49,7 +49,7 @@ protected:
                                                                           PCB_TABLECELL_T } );
 
         auto cellBlockSelection =
-                [this]( const SELECTION& sel )
+                []( const SELECTION& sel )
                 {
                     if( sel.Size() < 2 )
                         return false;
@@ -77,7 +77,7 @@ protected:
                 };
 
         auto mergedCellsSelection =
-                [this]( const SELECTION& sel )
+                []( const SELECTION& sel )
                 {
                     for( EDA_ITEM* item : sel )
                     {

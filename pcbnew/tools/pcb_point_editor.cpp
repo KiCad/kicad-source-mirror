@@ -1948,14 +1948,14 @@ bool PCB_POINT_EDITOR::Init()
     wxASSERT_MSG( m_selectionTool, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
 
     const auto addCornerCondition =
-            [this]( const SELECTION& aSelection ) -> bool
+            []( const SELECTION& aSelection ) -> bool
             {
                 const EDA_ITEM* item = aSelection.Front();
                 return ( item != nullptr ) && canAddCorner( *item );
             };
 
     const auto addChamferCondition =
-            [this]( const SELECTION& aSelection ) -> bool
+            []( const SELECTION& aSelection ) -> bool
         {
             const EDA_ITEM* item = aSelection.Front();
             return ( item != nullptr ) && canChamferCorner( *item );
