@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-18 01:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-09-19 20:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -24565,6 +24565,7 @@ msgid "Explode Stacked Pin"
 msgstr "Gestapelten Pin aufteilen"
 
 #: eeschema/tools/sch_actions.cpp:949
+#, fuzzy
 msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
 "Wandelt einen Pin in Nummer in \"gestapelter\"-Notation in mehrere "
