@@ -58,9 +58,10 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
               .AppendAction( ACTIONS::toggleGridOverrides )
-              .AppendAction( ACTIONS::inchesUnits )
-              .AppendAction( ACTIONS::milsUnits )
-              .AppendAction( ACTIONS::millimetersUnits )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
+                            .AddAction( ACTIONS::inchesUnits )
+                            .AddAction( ACTIONS::milsUnits )
+                            .AddAction( ACTIONS::millimetersUnits ) )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Crosshair modes" ) )
                             .AddAction( ACTIONS::cursorSmallCrosshairs )
                             .AddAction( ACTIONS::cursorFullCrosshairs )
@@ -70,9 +71,10 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( SCH_ACTIONS::toggleHiddenPins );
 
         config.AppendSeparator()
-              .AppendAction( SCH_ACTIONS::lineModeFree )
-              .AppendAction( SCH_ACTIONS::lineMode90 )
-              .AppendAction( SCH_ACTIONS::lineMode45 );
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Line modes" ) )
+                            .AddAction( SCH_ACTIONS::lineModeFree )
+                            .AddAction( SCH_ACTIONS::lineMode90 )
+                            .AddAction( SCH_ACTIONS::lineMode45 ) );
 
         config.AppendSeparator()
               .AppendAction( SCH_ACTIONS::toggleAnnotateAuto );
