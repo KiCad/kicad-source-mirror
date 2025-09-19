@@ -460,6 +460,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     wxString   file = wxFileNameFromPath( aName );
     wxFileName currfile( file );
     wxFileName project( m_Parent->GetProjectFileName() );
+    bool       showAllSchematics = m_TreeProject->GetGitRepo() != nullptr;
 
     // Ignore legacy projects with the same name as the current project
     if( ( type == TREE_FILE_TYPE::LEGACY_PROJECT )
@@ -468,8 +469,9 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         return wxTreeItemId();
     }
 
-    if( currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::LEGACY_SCHEMATIC )
-                || currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::SEXPR_SCHEMATIC ) )
+    if( !showAllSchematics
+            && ( currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::LEGACY_SCHEMATIC )
+                 || currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::SEXPR_SCHEMATIC ) ) )
     {
         if( aProjectNames )
         {
