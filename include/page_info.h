@@ -23,12 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file page_info.h
- */
-
-#ifndef PAGE_INFO_H
-#define PAGE_INFO_H
+#pragma once
 
 #include <map>
 #include <kicommon.h>
@@ -218,28 +213,24 @@ public:
 
 protected:
     // only the class implementation(s) may use this constructor
-    PAGE_INFO( const VECTOR2D& aSizeMils, const PAGE_SIZE_TYPE aType, wxPaperSize aPaperId,
+    PAGE_INFO( const VECTOR2D& aSizeMils, const PAGE_SIZE_TYPE& aType, wxPaperSize aPaperId,
                const wxString& aDescription = wxEmptyString );
+
+    void    updatePortrait();
 
 private:
     static std::vector<PAGE_INFO> standardPageSizes;
 
     // all dimensions here are in mils
 
-    PAGE_SIZE_TYPE m_type; ///< paper type: A4, A3, etc.
-    VECTOR2D    m_size;             ///< mils
+    PAGE_SIZE_TYPE m_type;             ///< paper type: A4, A3, etc.
+    VECTOR2D       m_size;             ///< mils
 
-    bool        m_portrait;         ///< true if portrait, false if landscape
+    bool           m_portrait;         ///< true if portrait, false if landscape
 
-    wxPaperSize m_paper_id;         ///< wx' style paper id.
-    wxString    m_description;      ///< more human friendly description of page size
+    wxPaperSize    m_paper_id;         ///< wx' style paper id.
+    wxString       m_description;      ///< more human friendly description of page size
 
     static double s_user_height;
     static double s_user_width;
-
-    void    updatePortrait();
-
-    void    setMargins();
 };
-
-#endif  // PAGE_INFO_H

@@ -78,7 +78,7 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
-PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, PAGE_SIZE_TYPE aType, wxPaperSize aPaperId,
+PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, const PAGE_SIZE_TYPE& aType, wxPaperSize aPaperId,
                       const wxString& aDescription ) :
         m_type( aType ),
         m_size( aSizeMils ),
@@ -93,7 +93,9 @@ PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, PAGE_SIZE_TYPE aType, wxPaperSi
 }
 
 
-PAGE_INFO::PAGE_INFO( PAGE_SIZE_TYPE aType, bool aIsPortrait )
+PAGE_INFO::PAGE_INFO( PAGE_SIZE_TYPE aType, bool aIsPortrait ) :
+        m_size( s_user_width, s_user_height ),
+        m_paper_id( wxPAPER_NONE )
 {
     SetType( aType, aIsPortrait );
 }
@@ -101,8 +103,7 @@ PAGE_INFO::PAGE_INFO( PAGE_SIZE_TYPE aType, bool aIsPortrait )
 
 bool PAGE_INFO::SetType( const wxString& aPageSize, bool aIsPortrait )
 {
-    auto type =
-            magic_enum::enum_cast<PAGE_SIZE_TYPE>( aPageSize.ToStdString(), magic_enum::case_insensitive );
+    auto type = magic_enum::enum_cast<PAGE_SIZE_TYPE>( aPageSize.ToStdString(), magic_enum::case_insensitive );
 
     if( !type.has_value() )
         return false;
