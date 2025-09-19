@@ -54,7 +54,6 @@ protected:
                                   int aMarkerLayer, const BOARD_ITEM* aItem1,
                                   const BOARD_ITEM* aItem2, PCB_LAYER_ID layer, int aDistance );
 
-    DRC_CUSTOM_MARKER_HANDLER GetGraphicsHandler( const std::vector<PCB_SHAPE>& aShapes,
-                                                  const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                                  int aLength );
+    std::vector<PCB_SHAPE> GetShapes( const std::vector<PCB_SHAPE>& aShapes, const VECTOR2I& aStart,
+                                      const VECTOR2I& aEnd, int aLength );
 };

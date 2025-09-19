@@ -24,76 +24,51 @@
  */
 
 #include <drc/drc_test_provider_clearance_base.h>
-#include <pgm_base.h>
-#include <settings/settings_manager.h>
-
 #include <wx/app.h>
 
-DRC_CUSTOM_MARKER_HANDLER
-DRC_TEST_PROVIDER_CLEARANCE_BASE::GetGraphicsHandler( const std::vector<PCB_SHAPE>& aShapes,
-                                                      const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                                      int aLength )
+
+std::vector<PCB_SHAPE> DRC_TEST_PROVIDER_CLEARANCE_BASE::GetShapes( const std::vector<PCB_SHAPE>& aShapes,
+                                                                    const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                                                    int aLength )
 {
-    // todo: Move this to a board-level object instead of getting it from the DRC Engine
-    COLOR4D   errorColor = COLOR4D( RED );
+    STROKE_PARAMS          hairline( 1.0 );     // Segments of width 1.0 will get drawn as lines by PCB_PAINTER
+    std::vector<PCB_SHAPE> shortestPathShapes;
 
-    if( PgmOrNull() )
+    // Add the path
+    for( PCB_SHAPE shape : aShapes )
     {
-        COLOR_SETTINGS* colorSettings = ::GetColorSettings( DEFAULT_THEME );
-        errorColor = colorSettings->GetColor( LAYER_DRC_ERROR );
+        shape.SetStroke( hairline );
+        shortestPathShapes.push_back( std::move( shape ) );
     }
 
-    std::vector<PCB_SHAPE> shortestPathShapes1, shortestPathShapes2;
-
-    // Add the path and its outlined area
-    for( PCB_SHAPE sh : aShapes )
+    // Draw perpendicular begin/end stops
+    if( shortestPathShapes.size() > 0 )
     {
-        sh.SetStroke( false );
-        sh.SetFilled( false );
-        sh.SetLineColor( WHITE );
-        shortestPathShapes1.push_back( sh );
-
-        sh.SetFilled( true );
-        sh.SetFillColor( errorColor.WithAlpha( 0.5 ) );
-        sh.SetWidth( aLength / 10 );
-        shortestPathShapes2.push_back( sh );
-    }
-
-    // Draw perpendicular end stops
-    if( shortestPathShapes1.size() > 0 )
-    {
-        PCB_SHAPE s1, s2;
-        s1.SetFilled( false );
-        s2.SetFilled( false );
-        VECTOR2I V1 = shortestPathShapes1[0].GetStart() - shortestPathShapes1[0].GetEnd();
+        VECTOR2I V1 = shortestPathShapes[0].GetStart() - shortestPathShapes[0].GetEnd();
+        VECTOR2I V2 = shortestPathShapes.back().GetStart() - shortestPathShapes.back().GetEnd();
         V1 = V1.Perpendicular().Resize( aLength / 30 );
-
-        s1.SetStart( aStart + V1 );
-        s1.SetEnd( aStart - V1 );
-        s1.SetWidth( 0 );
-        s1.SetLineColor( WHITE );
-
-
-        VECTOR2I V2 = shortestPathShapes1.back().GetStart() - shortestPathShapes1.back().GetEnd();
         V2 = V2.Perpendicular().Resize( aLength / 30 );
 
-        s2.SetStart( aEnd + V2 );
-        s2.SetEnd( aEnd - V2 );
-        s2.SetWidth( 0 );
-        s2.SetLineColor( WHITE );
+        PCB_SHAPE s( nullptr, SHAPE_T::SEGMENT );
+        s.SetStroke( hairline );
 
-        shortestPathShapes1.push_back( s1 );
-        shortestPathShapes1.push_back( s2 );
+        s.SetStart( aStart + V1 );
+        s.SetEnd( aStart - V1 );
+        shortestPathShapes.push_back( s );
+
+        s.SetStart( aEnd + V2 );
+        s.SetEnd( aEnd - V2 );
+        shortestPathShapes.push_back( s );
     }
 
-    return [shortestPathShapes1, shortestPathShapes2]( PCB_MARKER* aMarker )
-           {
-               if( !aMarker )
-                   return;
+    // Add outlined areas
+    for( PCB_SHAPE shape : aShapes )
+    {
+        shape.SetWidth( aLength / 10 );
+        shortestPathShapes.push_back( std::move( shape ) );
+    }
 
-               aMarker->SetShapes1( std::move( shortestPathShapes1 ) );
-               aMarker->SetShapes2( std::move( shortestPathShapes2 ) );
-           };
+    return shortestPathShapes;
 }
 
 
@@ -115,8 +90,7 @@ void DRC_TEST_PROVIDER_CLEARANCE_BASE::ReportAndShowPathCuToCu( std::shared_ptr<
         PCB_SHAPE ptAShape( nullptr, SHAPE_T::SEGMENT );
         ptAShape.SetStart( ptA );
         ptAShape.SetEnd( ptB );
-        DRC_CUSTOM_MARKER_HANDLER handler = GetGraphicsHandler( { ptAShape }, ptA, ptB, aDistance );
-        reportViolation( aDrce, aMarkerPos, aMarkerLayer, &handler );
+        reportViolation( aDrce, aMarkerPos, aMarkerLayer, GetShapes( { ptAShape }, ptA, ptB, aDistance ) );
     }
     else
     {

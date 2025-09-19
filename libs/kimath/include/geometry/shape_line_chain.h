@@ -308,7 +308,7 @@ public:
      *
      * @param aWidth is the width in internal units.
      */
-    void SetWidth( int aWidth )
+    void SetWidth( int aWidth ) override
     {
         m_width = aWidth;
     }

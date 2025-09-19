@@ -58,8 +58,8 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
     bds.m_DRCSeverities[ DRCE_SILK_MASK_CLEARANCE ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
     bds.m_DRCEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::vector<PCB_SHAPE>& aShapes )
             {
                 PCB_MARKER temp( aItem, aPos );
 

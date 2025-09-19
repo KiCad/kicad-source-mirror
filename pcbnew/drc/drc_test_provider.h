@@ -107,8 +107,7 @@ protected:
 #define REPORT_AUX( s ) if( getLogReporter() ) getLogReporter()->Report( s, RPT_SEVERITY_INFO )
 
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
-                                  int                        aMarkerLayer,
-                                  DRC_CUSTOM_MARKER_HANDLER* aCustomHandler = nullptr );
+                                  int aMarkerLayer, const std::vector<PCB_SHAPE>& aShapes = {} );
     virtual bool reportProgress( size_t aCount, size_t aSize, size_t aDelta = 1 );
     virtual bool reportPhase( const wxString& aStageName );
 

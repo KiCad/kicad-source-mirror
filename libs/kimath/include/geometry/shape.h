@@ -283,6 +283,12 @@ public:
      */
     virtual void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) = 0;
 
+    virtual VECTOR2I GetStart() const { return {}; }
+    virtual VECTOR2I GetEnd() const { return {}; }
+
+    virtual int GetWidth() const { return 0; }
+    virtual void SetWidth( int aWidth ) {}
+
     virtual void Move( const VECTOR2I& aVector ) = 0;
 
     virtual bool IsSolid() const = 0;

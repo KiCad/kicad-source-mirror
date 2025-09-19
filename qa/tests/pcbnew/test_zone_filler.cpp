@@ -103,8 +103,8 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
     bds.m_DRCEngine->InitEngine( wxFileName() );     // Just to be sure to be sure
 
     bds.m_DRCEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::vector<PCB_SHAPE>& aShapes )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                 {
@@ -198,8 +198,8 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
     std::vector<DRC_ITEM> violations;
 
     bds.m_DRCEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 std::vector<PCB_SHAPE> aShapes )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                     violations.push_back( *aItem );
@@ -245,8 +245,8 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
     std::vector<DRC_ITEM> violations;
 
     bds.m_DRCEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 std::vector<PCB_SHAPE> aShapes )
             {
                 if( aItem->GetErrorCode() == DRCE_COPPER_SLIVER )
                     violations.push_back( *aItem );

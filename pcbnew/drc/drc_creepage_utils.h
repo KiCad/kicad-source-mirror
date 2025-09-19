@@ -21,8 +21,7 @@
     */
 
 
-#ifndef _DRC_CREEPAGE_UTILS_H
-#define _DRC_CREEPAGE_UTILS_H
+#pragma once
 
 #include <unordered_set>
 
@@ -180,7 +179,6 @@ public:
 
     virtual ~CREEP_SHAPE() {}
 
-
     virtual int       GetRadius() const { return 0; };
     virtual EDA_ANGLE GetStartAngle() const { return EDA_ANGLE( 0 ); };
     virtual EDA_ANGLE GetEndAngle() const { return EDA_ANGLE( 0 ); };
@@ -260,7 +258,6 @@ public:
     //virtual std::vector<PATH_CONNECTION> GetPathsCuToBe( CREEP_SHAPE* aShape ) const{ std::vector<PATH_CONNECTION> a; return a;};
     bool IsConductive() { return m_conductive; };
 
-
 protected:
     bool              m_conductive;
     BOARD_ITEM*       m_parent;
@@ -276,7 +273,11 @@ protected:
 class CU_SHAPE : public CREEP_SHAPE
 {
 public:
-    CU_SHAPE() : CREEP_SHAPE() { m_conductive = true; };
+    CU_SHAPE() :
+            CREEP_SHAPE()
+    {
+        m_conductive = true;
+    };
 };
 
 /** @class BE_SHAPE
@@ -286,7 +287,11 @@ public:
 class BE_SHAPE : public CREEP_SHAPE
 {
 public:
-    BE_SHAPE() : CREEP_SHAPE() { m_conductive = false; };
+    BE_SHAPE() :
+            CREEP_SHAPE()
+    {
+        m_conductive = false;
+    };
 };
 
 /** @class CU_SHAPE_SEGMENT
@@ -296,7 +301,8 @@ public:
 class CU_SHAPE_SEGMENT : public CU_SHAPE
 {
 public:
-    CU_SHAPE_SEGMENT( VECTOR2I aStart, VECTOR2I aEnd, double aWidth = 0 ) : CU_SHAPE()
+    CU_SHAPE_SEGMENT( VECTOR2I aStart, VECTOR2I aEnd, double aWidth = 0 ) :
+            CU_SHAPE()
     {
         m_start = aStart;
         m_end = aEnd;
@@ -334,7 +340,8 @@ private:
 class CU_SHAPE_CIRCLE : public CU_SHAPE
 {
 public:
-    CU_SHAPE_CIRCLE( VECTOR2I aPos, double aRadius = 0 ) : CU_SHAPE()
+    CU_SHAPE_CIRCLE( VECTOR2I aPos, double aRadius = 0 ) :
+            CU_SHAPE()
     {
         m_pos = aPos;
         m_radius = aRadius;
@@ -375,8 +382,10 @@ public:
     CU_SHAPE_ARC( VECTOR2I aPos, double aRadius, EDA_ANGLE aStartAngle, EDA_ANGLE aEndAngle,
                   VECTOR2D aStartPoint, VECTOR2D aEndPoint ) :
             CU_SHAPE_CIRCLE( aPos, aRadius ),
-            m_startAngle( aStartAngle ), m_endAngle( aEndAngle ),
-            m_startPoint( aStartPoint ), m_endPoint( aEndPoint )
+            m_startAngle( aStartAngle ),
+            m_endAngle( aEndAngle ),
+            m_startPoint( aStartPoint ),
+            m_endPoint( aEndPoint )
     {
         m_type = CREEP_SHAPE::TYPE::ARC;
         m_width = 0;
@@ -406,11 +415,9 @@ public:
     std::vector<PATH_CONNECTION> Paths( const CU_SHAPE_ARC& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;
 
-
     EDA_ANGLE GetStartAngle() const override { return m_startAngle; }
     EDA_ANGLE GetEndAngle() const override { return m_endAngle; }
     int       GetRadius() const override { return m_radius; }
-
 
     VECTOR2I  GetStartPoint() const override { return m_startPoint; }
     VECTOR2I  GetEndPoint() const override { return m_endPoint; }
@@ -439,16 +446,15 @@ private:
     VECTOR2I  m_endPoint;
 };
 
-/** @class Graphnode
+/** @class GRAPH_NODE
  *
- *  @brief a node in a @class CreepageGraph
+ *  @brief a node in a @class CREEPAGE_GRAPH
  */
 class GRAPH_NODE
 {
 public:
     enum TYPE
     {
-
         POINT = 0,
         CIRCLE,
         ARC,
@@ -456,7 +462,7 @@ public:
         VIRTUAL
     };
 
-    GRAPH_NODE( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos = VECTOR2I() ) :
+    GRAPH_NODE( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent, const VECTOR2I& aPos = VECTOR2I() ) :
             m_parent( aParent ),
             m_pos( aPos ),
             m_type( aType )
@@ -469,7 +475,7 @@ public:
 
     ~GRAPH_NODE() {};
 
-
+public:
     CREEP_SHAPE*                                m_parent;
     std::set<std::shared_ptr<GRAPH_CONNECTION>> m_node_conns;
     VECTOR2I                                    m_pos;
@@ -482,9 +488,9 @@ public:
     GRAPH_NODE::TYPE m_type;
 };
 
-/** @class GraphConnection
+/** @class GRAPH_CONNECTION
  *
- *  @brief a connection in a @class CreepageGraph
+ *  @brief a connection in a @class CREEPAGE_GRAPH
  */
 class GRAPH_CONNECTION
 {
@@ -498,8 +504,9 @@ public:
         m_forceStraightLine = false;
     };
 
-    std::vector<PCB_SHAPE> GetShapes();
+    void GetShapes( std::vector<PCB_SHAPE>& aShapes );
 
+public:
     std::shared_ptr<GRAPH_NODE> n1;
     std::shared_ptr<GRAPH_NODE> n2;
     PATH_CONNECTION             m_path;
@@ -655,11 +662,9 @@ public:
         return ReversePaths( aS2.Paths( *this, aMaxWeight, aMaxSquaredWeight ) );
     };
 
-
     EDA_ANGLE GetStartAngle() const override { return m_startAngle; }
     EDA_ANGLE GetEndAngle() const override { return m_endAngle; }
     int       GetRadius() const override { return m_radius; }
-
 
     VECTOR2I  GetStartPoint() const override { return m_startPoint; }
     VECTOR2I  GetEndPoint() const override { return m_endPoint; }
@@ -685,7 +690,7 @@ protected:
 };
 
 
-/** @class CreepageGraph
+/** @class CREEPAGE_GRAPH
  *
  *  @brief A graph with nodes and connections for creepage calculation
  */
@@ -729,7 +734,6 @@ public:
         }
     };
 
-
     void TransformEdgeToCreepShapes();
     void TransformCreepShapesToNodes(std::vector<CREEP_SHAPE*>& aShapes);
     void RemoveDuplicatedShapes();
@@ -767,7 +771,6 @@ public:
     void   SetTarget( double aTarget );
     double GetTarget() { return m_creepageTarget; };
 
-
     struct GraphNodeHash
     {
         std::size_t operator()(const std::shared_ptr<GRAPH_NODE>& node) const
@@ -784,6 +787,7 @@ public:
         }
     };
 
+public:
     BOARD&                                         m_board;
     std::vector<BOARD_ITEM*>                       m_boardEdge;
     SHAPE_POLY_SET*                                m_boardOutline;
@@ -801,5 +805,3 @@ private:
     double m_creepageTargetSquared;
 };
 
-
-#endif

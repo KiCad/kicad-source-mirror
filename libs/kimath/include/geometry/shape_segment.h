@@ -132,12 +132,15 @@ public:
         return m_seg;
     }
 
-    void SetWidth( int aWidth )
+    VECTOR2I GetStart() const override { return m_seg.A; }
+    VECTOR2I GetEnd() const override { return m_seg.B; }
+
+    void SetWidth( int aWidth ) override
     {
         m_width = aWidth;
     }
 
-    int GetWidth() const
+    int GetWidth() const override
     {
         return m_width;
     }

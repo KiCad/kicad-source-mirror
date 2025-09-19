@@ -327,11 +327,9 @@ SEVERITY PCB_MARKER::GetSeverity() const
 std::vector<int> PCB_MARKER::ViewGetLayers() const
 {
     if( GetMarkerType() == MARKER_RATSNEST )
-    {
         return {};
-    }
 
-    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_SHAPE1, LAYER_DRC_SHAPE2 };
+    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_SHAPES };
 
     switch( GetSeverity() )
     {
@@ -373,7 +371,7 @@ const BOX2I PCB_MARKER::GetBoundingBox() const
 {
     BOX2I box = GetBoundingBoxMarker();
 
-    for( auto& s : m_shapes1 )
+    for( const PCB_SHAPE& s : m_shapes )
         box.Merge( s.GetBoundingBox() );
 
     return box;
@@ -398,11 +396,7 @@ static struct PCB_MARKER_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_MARKER ), TYPE_HASH( MARKER_BASE ) );
 
         // Markers cannot be locked and have no user-accessible layer control
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ),
-                                      _HKI( "Layer" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ),
-                                      _HKI( "Locked" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.Mask( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) );
+        propMgr.Mask( TYPE_HASH( PCB_MARKER ), TYPE_HASH( BOARD_ITEM ), _HKI( "Locked" ) );
     }
 } _PCB_MARKER_DESC;

@@ -202,12 +202,15 @@ public:
      */
     int Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuffer ) const;
 
-    void SetWidth( int aWidth )
+    VECTOR2I GetStart() const override { return m_start; }
+    VECTOR2I GetEnd() const override { return m_end; }
+
+    void SetWidth( int aWidth ) override
     {
         m_width = aWidth;
     }
 
-    int GetWidth() const
+    int GetWidth() const override
     {
         return m_width;
     }

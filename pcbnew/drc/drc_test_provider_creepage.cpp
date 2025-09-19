@@ -89,21 +89,6 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 }
 
 
-std::shared_ptr<GRAPH_NODE> FindInGraphNodes( std::shared_ptr<GRAPH_NODE>               aNode,
-                                             std::vector<std::shared_ptr<GRAPH_NODE>>& aGraph )
-{
-    if( !aNode )
-        return nullptr;
-
-    for( std::shared_ptr<GRAPH_NODE> gn : aGraph )
-    {
-        if( aNode->m_pos == gn->m_pos )
-            return gn;
-    }
-    return nullptr;
-}
-
-
 int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB,
                                               PCB_LAYER_ID aLayer )
 {
@@ -188,7 +173,8 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     if( !shortestPath.empty() && ( shortestPath.size() >= 4 ) && ( distance - creepageValue < 0 ) )
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CREEPAGE );
-        wxString msg = formatMsg( _( "(%s creepage %s; actual %s)" ), constraint.GetName(),
+        wxString msg = formatMsg( _( "(%s creepage %s; actual %s)" ),
+                                  constraint.GetName(),
                                   creepageValue, distance );
         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
         drce->SetViolatingRule( constraint.GetParentRule() );
@@ -207,29 +193,19 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
                 return 1;
         }
 
-        std::vector<PCB_SHAPE> shortestPathShapes1, shortestPathShapes2;
-
         VECTOR2I               startPoint = gc1->m_path.a2;
         VECTOR2I               endPoint = gc2->m_path.a2;
         std::vector<PCB_SHAPE> path;
 
         for( const std::shared_ptr<GRAPH_CONNECTION>& gc : shortestPath )
-        {
-            if( !gc )
-                continue;
+            gc->GetShapes( path );
 
-            std::vector<PCB_SHAPE> shapes = gc->GetShapes();
-
-            for( const PCB_SHAPE& sh : shapes )
-                path.push_back( sh );
-        }
-
-        DRC_CUSTOM_MARKER_HANDLER handler = GetGraphicsHandler( path, startPoint, endPoint, distance );
-        reportViolation( drce, gc1->m_path.a2, aLayer, &handler );
+        reportViolation( drce, gc1->m_path.a2, aLayer, GetShapes( path, startPoint, endPoint, distance ) );
     }
 
     return 1;
 }
+
 
 double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint( const std::vector<int>& aNetCodes )
 {
@@ -240,27 +216,27 @@ double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint( const std::vector<int>& aNe
     PCB_TRACK bci2( m_board );
 
     alg::for_all_pairs( aNetCodes.begin(), aNetCodes.end(),
-                        [&]( int aNet1, int aNet2 )
-                        {
-                            if( aNet1 == aNet2 )
-                                return;
+            [&]( int aNet1, int aNet2 )
+            {
+                if( aNet1 == aNet2 )
+                    return;
 
-                            bci1.SetNetCode( aNet1 );
-                            bci2.SetNetCode( aNet2 );
+                bci1.SetNetCode( aNet1 );
+                bci2.SetNetCode( aNet2 );
 
-                            for( PCB_LAYER_ID layer : LSET::AllCuMask( m_board->GetCopperLayerCount() ) )
-                            {
-                                bci1.SetLayer( layer );
-                                bci2.SetLayer( layer );
-                                constraint = m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, &bci1,
-                                                                     &bci2, layer );
-                                double value = constraint.Value().Min();
-                                maxConstraint = value > maxConstraint ? value : maxConstraint;
-                            }
-                        } );
+                for( PCB_LAYER_ID layer : LSET::AllCuMask( m_board->GetCopperLayerCount() ) )
+                {
+                    bci1.SetLayer( layer );
+                    bci2.SetLayer( layer );
+                    constraint = m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, &bci1, &bci2, layer );
+                    double value = constraint.Value().Min();
+                    maxConstraint = value > maxConstraint ? value : maxConstraint;
+                }
+            } );
 
     return maxConstraint;
 }
+
 
 void DRC_TEST_PROVIDER_CREEPAGE::CollectNetCodes( std::vector<int>& aVector )
 {
@@ -269,6 +245,7 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectNetCodes( std::vector<int>& aVector )
     for( auto it = nets.begin(); it != nets.end(); it++ )
         aVector.push_back( it->first );
 }
+
 
 void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector )
 {
@@ -313,6 +290,7 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aV
         aVector.push_back( s );
     }
 }
+
 
 int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 {

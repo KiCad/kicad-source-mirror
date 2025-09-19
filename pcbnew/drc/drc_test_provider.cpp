@@ -73,10 +73,10 @@ const wxString DRC_TEST_PROVIDER::GetName() const { return wxT( "<no name test>"
 
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
                                          const VECTOR2I& aMarkerPos, int aMarkerLayer,
-                                         DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+                                         const std::vector<PCB_SHAPE>& aShapes )
 {
     item->SetViolatingTest( this );
-    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer, aCustomHandler );
+    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer, aShapes );
 }
 
 

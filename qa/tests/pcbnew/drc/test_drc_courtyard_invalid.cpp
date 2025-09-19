@@ -304,8 +304,8 @@ void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
     drcEngine.InitEngine( wxFileName() );
 
     drcEngine.SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::vector<PCB_SHAPE>& aShapes )
             {
                 if(    aItem->GetErrorCode() == DRCE_OVERLAPPING_FOOTPRINTS
                     || aItem->GetErrorCode() == DRCE_MALFORMED_COURTYARD

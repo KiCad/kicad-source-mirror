@@ -3055,6 +3055,8 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
     if( aMarker->GetBoard() && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
         return;
 
+    COLOR4D color = m_pcbSettings.GetColor( aMarker, aMarker->GetColorLayer() );
+
     aMarker->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
 
     switch( aLayer )
@@ -3075,11 +3077,11 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
         {
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aMarker, LAYER_MARKER_SHADOWS ) );
             m_gal->SetIsStroke( true );
-            m_gal->SetLineWidth( aMarker->MarkerScale() );
+            m_gal->SetLineWidth( (float) aMarker->MarkerScale() );
         }
         else
         {
-            m_gal->SetFillColor( m_pcbSettings.GetColor( aMarker, aMarker->GetColorLayer() ) );
+            m_gal->SetFillColor( color );
             m_gal->SetIsFill( true );
         }
 
@@ -3088,37 +3090,49 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
         break;
     }
 
-    case LAYER_DRC_SHAPE1:
-    case LAYER_DRC_SHAPE2:
+    case LAYER_DRC_SHAPES:
         if( !aMarker->IsBrightened() )
             return;
 
-        m_gal->SetLineWidth( aMarker->MarkerScale() );
-
-        for( const PCB_SHAPE& shape : aLayer == LAYER_DRC_SHAPE1 ? aMarker->GetShapes1() : aMarker->GetShapes2() )
+        for( const PCB_SHAPE& shape : aMarker->GetShapes() )
         {
-            m_gal->SetIsFill( shape.IsSolidFill() );
-            m_gal->SetIsStroke( aLayer == LAYER_DRC_SHAPE1 ? true : false );
-            m_gal->SetStrokeColor( shape.GetLineColor() );
-            m_gal->SetFillColor( shape.GetFillColor() );
-
-            switch( shape.GetShape() )
+            if( shape.GetStroke().GetWidth() == 1.0 )
             {
-            case SHAPE_T::SEGMENT:
-                m_gal->DrawSegment( shape.GetStart(), shape.GetEnd(), shape.GetWidth() );
-                break;
+                m_gal->SetIsFill( false );
+                m_gal->SetIsStroke( true );
+                m_gal->SetStrokeColor( WHITE );
+                m_gal->SetLineWidth( (float) shape.GetWidth() );
 
-            case SHAPE_T::ARC:
-            {
-                EDA_ANGLE startAngle, endAngle;
-                shape.CalcArcAngles( startAngle, endAngle );
-                m_gal->DrawArcSegment( shape.GetCenter(), shape.GetRadius(), startAngle, shape.GetArcAngle(),
-                                       shape.GetWidth(), ARC_HIGH_DEF );
-                break;
+                if( shape.GetShape() == SHAPE_T::SEGMENT )
+                {
+                    m_gal->DrawLine( shape.GetStart(), shape.GetEnd() );
+                }
+                else if( shape.GetShape() == SHAPE_T::ARC )
+                {
+                    EDA_ANGLE startAngle, endAngle;
+                    shape.CalcArcAngles( startAngle, endAngle );
+
+                    m_gal->DrawArc( shape.GetCenter(), shape.GetRadius(), startAngle, shape.GetArcAngle() );
+                }
             }
+            else
+            {
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
+                m_gal->SetFillColor( color.WithAlpha( 0.5 ) );
 
-            default:
-                break;
+                if( shape.GetShape() == SHAPE_T::SEGMENT )
+                {
+                    m_gal->DrawSegment( shape.GetStart(), shape.GetEnd(), shape.GetWidth() );
+                }
+                else if( shape.GetShape() == SHAPE_T::ARC )
+                {
+                    EDA_ANGLE startAngle, endAngle;
+                    shape.CalcArcAngles( startAngle, endAngle );
+
+                    m_gal->DrawArcSegment( shape.GetCenter(), shape.GetRadius(), startAngle, shape.GetArcAngle(),
+                                           shape.GetWidth(), ARC_HIGH_DEF );
+                }
             }
         }
 

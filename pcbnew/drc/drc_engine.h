@@ -28,7 +28,7 @@
 #include <unordered_map>
 
 #include <units_provider.h>
-#include <geometry/shape.h>
+#include <pcb_shape.h>
 #include <lset.h>
 #include <drc/drc_rule.h>
 
@@ -65,11 +65,10 @@ class DRC_ITEM;
 class DRC_RULE;
 class DRC_CONSTRAINT;
 
-typedef std::function<void( PCB_MARKER* aMarker )> DRC_CUSTOM_MARKER_HANDLER;
 
-typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                            int aLayer, DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )>
-        DRC_VIOLATION_HANDLER;
+typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
+                            const VECTOR2I& aPos, int aLayer,
+                            const std::vector<PCB_SHAPE>& aShapes )> DRC_VIOLATION_HANDLER;
 
 /**
  * Design Rule Checker object that performs all the DRC tests.
@@ -177,7 +176,7 @@ public:
     bool RulesValid() { return m_rulesValid; }
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                          int aMarkerLayer, DRC_CUSTOM_MARKER_HANDLER* aCustomHandler = nullptr );
+                          int aMarkerLayer, const std::vector<PCB_SHAPE>& aShapes = {} );
 
     bool KeepRefreshing( bool aWait = false );
     void AdvanceProgress();

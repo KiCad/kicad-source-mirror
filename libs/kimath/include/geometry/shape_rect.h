@@ -182,7 +182,7 @@ public:
     /**
      * @return the width of the rectangle.
      */
-     int GetWidth() const
+     int GetWidth() const override
      {
          return m_w;
      }
