@@ -78,6 +78,7 @@ private:
     bool TransferDataToWindow() override;
 
     void OnMenu( wxCommandEvent& aEvent ) override;
+    void OnCharHook( wxKeyEvent& aEvt ) override;
     void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnDRCItemRClick( wxDataViewEvent& aEvent ) override;

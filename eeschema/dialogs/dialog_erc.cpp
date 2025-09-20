@@ -242,6 +242,28 @@ void DIALOG_ERC::OnMenu( wxCommandEvent& event )
 }
 
 
+void DIALOG_ERC::OnCharHook( wxKeyEvent& aEvt )
+{
+    if( int hotkey = aEvt.GetKeyCode() )
+    {
+        if( aEvt.ControlDown() )
+            hotkey |= MD_CTRL;
+        if( aEvt.ShiftDown() )
+            hotkey |= MD_SHIFT;
+        if( aEvt.AltDown() )
+            hotkey |= MD_ALT;
+
+        if( hotkey == ACTIONS::excludeMarker.GetHotKey() )
+        {
+            ExcludeMarker();
+            return;
+        }
+    }
+
+    DIALOG_SHIM::OnCharHook( aEvt );
+}
+
+
 bool DIALOG_ERC::TransferDataToWindow()
 {
     UpdateData();
