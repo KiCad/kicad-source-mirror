@@ -2293,7 +2293,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
     Quantity_ColorRGBA copper_color( m_copperColor[0], m_copperColor[1], m_copperColor[2], 1.0 );
     Quantity_ColorRGBA pad_color( m_padColor[0], m_padColor[1], m_padColor[2], 1.0 );
 
-    Quantity_ColorRGBA board_color( 0.3f, 0.3f, 0.3f, 1.0f );
+    Quantity_ColorRGBA board_color( 0.42f, 0.45f, 0.29f, 0.98f );
     Quantity_ColorRGBA front_silk_color( 1.0f, 1.0f, 1.0f, 0.9f );
     Quantity_ColorRGBA back_silk_color = front_silk_color;
     Quantity_ColorRGBA front_mask_color( 0.08f, 0.2f, 0.14f, 0.83f );
