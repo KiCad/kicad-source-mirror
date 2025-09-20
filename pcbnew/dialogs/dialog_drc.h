@@ -76,6 +76,7 @@ private:
     void syncCheckboxes();
     void updateDisplayedCounts();
 
+    void OnCharHook( wxKeyEvent& aEvt ) override;
     void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnDRCItemRClick( wxDataViewEvent& aEvent ) override;

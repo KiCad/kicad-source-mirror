@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_ERC_H_
-#define _DIALOG_ERC_H_
+#pragma once
 
 #include <wx/htmllbox.h>
 
@@ -70,6 +69,7 @@ public:
 
 private:
     // from DIALOG_ERC_BASE:
+    void OnCharHook( wxKeyEvent& aEvt ) override;
     void OnCloseErcDialog( wxCloseEvent& event ) override;
     void OnRunERCClick( wxCommandEvent& event ) override;
     void OnDeleteOneClick( wxCommandEvent& event ) override;
@@ -116,8 +116,3 @@ private:
 
     int                m_severities;
 };
-
-
-#endif
-
-// _DIALOG_ERC_H_

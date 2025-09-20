@@ -273,6 +273,28 @@ void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 }
 
 
+void DIALOG_DRC::OnCharHook( wxKeyEvent& aEvt )
+{
+    if( int hotkey = aEvt.GetKeyCode() )
+    {
+        if( aEvt.ControlDown() )
+            hotkey |= MD_CTRL;
+        if( aEvt.ShiftDown() )
+            hotkey |= MD_SHIFT;
+        if( aEvt.AltDown() )
+            hotkey |= MD_ALT;
+
+        if( hotkey == ACTIONS::excludeMarker.GetHotKey() )
+        {
+            ExcludeMarker();
+            return;
+        }
+    }
+
+    DIALOG_SHIM::OnCharHook( aEvt );
+}
+
+
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
     TOOL_MANAGER*     toolMgr              = m_frame->GetToolManager();
@@ -1185,23 +1207,26 @@ void DIALOG_DRC::ExcludeMarker()
 
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
 
-    PCB_MARKER*   marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
-
-    if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
+    if( node && node->m_RcItem )
     {
-        marker->SetExcluded( true );
-        bds().m_DrcExclusions.insert( marker->SerializeToString() );
-        m_frame->GetCanvas()->GetView()->Update( marker );
+        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
 
-        // Update view
-        if( m_severities & RPT_SEVERITY_EXCLUSION )
-            m_markersTreeModel->ValueChanged( node );
-        else
-            m_markersTreeModel->DeleteCurrentItem( false );
+        if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
+        {
+            marker->SetExcluded( true );
+            bds().m_DrcExclusions.insert( marker->SerializeToString() );
+            m_frame->GetCanvas()->GetView()->Update( marker );
 
-        updateDisplayedCounts();
-        refreshEditor();
-        m_frame->OnModify();
+            // Update view
+            if( m_severities & RPT_SEVERITY_EXCLUSION )
+                m_markersTreeModel->ValueChanged( node );
+            else
+                m_markersTreeModel->DeleteCurrentItem( false );
+
+            updateDisplayedCounts();
+            refreshEditor();
+            m_frame->OnModify();
+        }
     }
 }
 
