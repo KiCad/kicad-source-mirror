@@ -769,7 +769,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
         VECTOR2I  pos = { m_pin.GetLength() + m_pin.GetParentSymbol()->GetPinNameOffset(), 0 };
         const int shadowOffset = KiROUND( aShadowWidth * m_shadowOffsetAdjust ) / 2;
 
-        info->m_TextPosition = pos + VECTOR2I{ shadowOffset, 0 };
+        info->m_TextPosition = pos + VECTOR2I{ -shadowOffset, 0 };
         info->m_HAlign = GR_TEXT_H_ALIGN_LEFT;
         info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
         transformTextForPin( *info );
