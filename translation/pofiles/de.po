@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-21 07:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -29037,7 +29037,6 @@ msgid "Create the project"
 msgstr "Ein Projekt erstellen"
 
 #: kicad/dialogs/template_default_html.h:135
-#, fuzzy
 msgid ""
 "Click OK below. KiCad will create a new project folder populated with the "
 "contents of this template."
@@ -29046,12 +29045,10 @@ msgstr ""
 "dem Inhalt dieser Vorlage gefüllt ist."
 
 #: kicad/dialogs/template_default_html.h:136
-#, fuzzy
 msgid "Open schematic and PCB"
 msgstr "Schaltplan und Leiterplatte öffnen"
 
 #: kicad/dialogs/template_default_html.h:136
-#, fuzzy
 msgid ""
 "Use the Project Manager tree or launch Schematic and PCB editors to begin "
 "designing."
@@ -29060,12 +29057,10 @@ msgstr ""
 "Schaltplan- und Leiterplatteneditoren, um mit dem Design zu beginnen."
 
 #: kicad/dialogs/template_default_html.h:137
-#, fuzzy
 msgid "Review libraries & settings"
 msgstr "Bibliotheken und Einstellungen überprüfen"
 
 #: kicad/dialogs/template_default_html.h:137
-#, fuzzy
 msgid ""
 "Confirm symbol/footprint libraries, design rules, and board stackup match "
 "your needs."
@@ -29074,17 +29069,14 @@ msgstr ""
 "Leiterplattenaufbau Ihren Anforderungen entsprechen."
 
 #: kicad/dialogs/template_default_html.h:141
-#, fuzzy
 msgid "Add an info page later:"
 msgstr "Eine Infoseite später hinzufügen:"
 
 #: kicad/dialogs/template_default_html.h:142
-#, fuzzy
 msgid "Create a file at"
 msgstr "Erstellt eine Datei unter"
 
 #: kicad/dialogs/template_default_html.h:142
-#, fuzzy
 msgid ""
 "inside this template's directory to provide rich documentation, images, or "
 "guidance."
@@ -29093,7 +29085,6 @@ msgstr ""
 "Anleitungen bereitzustellen."
 
 #: kicad/dialogs/template_default_html.h:143
-#, fuzzy
 msgid "You can copy styling from the default pages for consistency."
 msgstr ""
 "Sie können das Design der Standardseiten kopieren, um ein einheitliches "
@@ -35991,14 +35982,12 @@ msgid "Update text layers and visibilities"
 msgstr "Textlagen und Sichtbarkeiten aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update text sizes and styles"
 msgstr "Textgrößen und -stile aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Update text positions"
-msgstr "Text-Positionen aktualisieren"
+msgstr "Textpositionen aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Update text content"
@@ -36084,14 +36073,12 @@ msgid "Update/reset text layers and visibilities"
 msgstr "Textlagen und Sichtbarkeiten aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
 msgstr "Textgrößen und -stile aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text positions"
-msgstr "Text-Positionen aktualisieren/zurücksetzen"
+msgstr "Textpositionen aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
@@ -40273,7 +40260,6 @@ msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr "Linienbreite für ein ungefülltes Rechteck muss größer als Null sein."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1263
-#, fuzzy
 msgid "Corner radius must be less than or equal to half the smaller side."
 msgstr ""
 "Eckenradius muss kleiner oder gleich der Hälfte der kürzeren Seite sein."
@@ -44771,17 +44757,16 @@ msgid "Footprint stackup mode differs."
 msgstr "Footprint-Aufbautyp weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:607
-#, fuzzy
 msgid "Footprint layers differ."
 msgstr "Footprint-Lagen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint has %lu layers not on board: %s"
 msgstr "Footprint hat %lu Lagen nicht auf der Platine: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
-#, fuzzy, c-format
+#, c-format
 msgid "Board has %lu copper layers not in footprint: %s"
 msgstr "Platine hat %lu Kupferlagen nicht im Footprint: %s"
 
@@ -44848,12 +44833,12 @@ msgid "Checking board footprints against library..."
 msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:984
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'"
 msgstr "Die Footprintbibliothek \"%s\" wurde nicht unter \"%s\" gefunden."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1034
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'"
 msgstr "Footprint \"%s\" stimmt nicht mit Kopie in Bibliothek \"%s\" überein."
 
@@ -55008,7 +54993,6 @@ msgid "No Net"
 msgstr "Kein Netz"
 
 #: pcbnew/widgets/search_handlers.cpp:579
-#, fuzzy
 msgid "Drills"
 msgstr "Bohrungen"
 
@@ -55091,7 +55075,7 @@ msgid "Rule Area %s"
 msgstr "Regelbereich %s"
 
 #: pcbnew/zone.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
 msgstr "Regelbereich \"%s\" %s"
 
