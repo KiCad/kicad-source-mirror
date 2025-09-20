@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-19 20:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-09-21 07:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -18480,6 +18480,7 @@ msgid "Ground pin not connected to ground net"
 msgstr "Ground-Pin nicht mit Ground-Netz verbunden"
 
 #: eeschema/erc/erc_item.cpp:165
+#, fuzzy
 msgid "Pin name resembles stacked pin"
 msgstr "Pinname gleicht einem gestapelten Pin"
 
@@ -24552,12 +24553,13 @@ msgid "Convert Stacked Pins"
 msgstr "In gestapelte Pins umwandeln"
 
 #: eeschema/tools/sch_actions.cpp:942
+#, fuzzy
 msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
-"Wandelt mehrere Pins an derselben Stelle in einen einzelnen Pin mit Nummer "
-"in \"gestapelter\"-Notation um"
+"Konvertiert mehrere Pins an derselben Stelle in einen einzelnen Pin, mit "
+"\"gestapelter\"-Notation in der Pin-Nummer"
 
 #: eeschema/tools/sch_actions.cpp:948
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -24565,11 +24567,10 @@ msgid "Explode Stacked Pin"
 msgstr "Gestapelten Pin aufteilen"
 
 #: eeschema/tools/sch_actions.cpp:949
-#, fuzzy
 msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
-"Wandelt einen Pin in Nummer in \"gestapelter\"-Notation in mehrere "
-"eigenständige Pins um"
+"Konvertiert einen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, in "
+"mehrere eigenständige Pins um"
 
 #: eeschema/tools/sch_actions.cpp:955
 msgid "Break"
@@ -25855,8 +25856,11 @@ msgid "Convert %zu Stacked Pins to '%s'"
 msgstr "Konvertiert %zu gestapelte Pins zu \"%s\""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
+#, fuzzy
 msgid "Select a single pin with stacked notation to explode"
-msgstr "Einzelnen Pin mit \"gestapelter\" Notation zur Aufteilung auswählen"
+msgstr ""
+"Einzelnen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, zur "
+"Aufteilung auswählen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1052
 msgid "Selected pin does not have valid stacked notation"
@@ -40504,89 +40508,73 @@ msgid "From rules"
 msgstr "Aus Regeln"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
-#, fuzzy
 msgid "Type I-a (tented top)"
 msgstr "Typ I a (oberseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
-#, fuzzy
 msgid "Type I-b (tented both sides)"
 msgstr "Typ I b (beidseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
-#, fuzzy
 msgid "Type I-a (tented bottom)"
 msgstr "Type I a (unterseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
-#, fuzzy
 msgid "Type II-a (covered and tented top)"
 msgstr "Typ II a (oberseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
-#, fuzzy
 msgid "Type II-b (covered and tented both sides)"
 msgstr "Typ II a (beidseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
-#, fuzzy
 msgid "Type II-a (covered and tented bottom)"
 msgstr "Typ II a (unterseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
-#, fuzzy
 msgid "Type III-a (plugged top)"
 msgstr "Typ III a (oberseitig geplugged)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
-#, fuzzy
 msgid "Type III-b (plugged both sides)"
 msgstr "Typ III b (beidseitig geplugged)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
-#, fuzzy
 msgid "Type III-a (plugged bottom)"
 msgstr "Typ III a (unterseitig geplugged)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type IV-a (plugged and tented top)"
 msgstr "Typ IV a (oberseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
-#, fuzzy
 msgid "Type IV-b (plugged and tented both sides)"
 msgstr "Typ IV b (beidseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
-#, fuzzy
 msgid "Type IV-a (plugged and tented bottom)"
 msgstr "Typ IV a (unterseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
-#, fuzzy
 msgid "Type V (filled )"
 msgstr "Typ V (gefüllt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
-#, fuzzy
 msgid "Type VI-a (filled and tented top)"
 msgstr "Typ VI a (gefüllt und oberseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:197
-#, fuzzy
 msgid "Type VI-b (filled and tented both sides)"
 msgstr "Typ VI b (gefüllt und beidseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:198
-#, fuzzy
 msgid "Type VI-a (filled and tented bottom)"
 msgstr "Typ VI a (gefüllt und unterseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:199
 #, fuzzy
 msgid "Type VII (filled and capped)"
-msgstr "Typ VII (gefüllt und überkontaktiert)"
+msgstr "Typ VII (gefüllt und gedeckelt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -40973,9 +40961,8 @@ msgid "Layer name %s already in use."
 msgstr "Lagenname %s wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:44
-#, fuzzy
 msgid "Use via color for normal through hole padstacks"
-msgstr "Verwende die Via-Farben für normale Durchsteck-Padstacks"
+msgstr "Verwende Via-Farben für normale Durchsteck-Padstacks"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:50
 msgid "Clearance Outlines"
