@@ -386,8 +386,6 @@ std::string PDF_OUTLINE_FONT_SUBSET::sanitizeFontName( const wxString& aName )
     {
         if( std::isalnum( ch ) )
             sanitized.push_back( static_cast<char>( ch ) );
-        else if( ch == '-' )
-            sanitized.push_back( '-' );
         else
             sanitized.push_back( '-' );
     }

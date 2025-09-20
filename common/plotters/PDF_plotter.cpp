@@ -43,6 +43,7 @@
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <string_utils.h>
+#include <core/utf8.h>
 #include <markup_parser.h>
 #include <fmt/format.h>
 #include <fmt/chrono.h>
@@ -1965,7 +1966,11 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     bool     textMirrored = aSize.x < 0;
 
     // Parse the text for markup
-    MARKUP::MARKUP_PARSER markupParser( text.ToStdString() );
+    // IMPORTANT: Use explicit UTF-8 encoding. wxString::ToStdString() is locale-dependent
+    // and under C/POSIX locale can drop or mangle non-ASCII, leading to missing CMaps.
+    // The markup parser expects UTF-8 bytes.
+    UTF8 utf8Text( text );
+    MARKUP::MARKUP_PARSER markupParser( utf8Text.substr() );
     std::unique_ptr<MARKUP::NODE> markupTree( markupParser.Parse() );
 
     if( !markupTree )
