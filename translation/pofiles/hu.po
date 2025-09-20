@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-08 22:18+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"PO-Revision-Date: 2025-09-21 07:02+0000\n"
+"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8470,11 +8470,13 @@ msgid "Error reading '%s': %s"
 msgstr "Hiba \"%s\" olvasása közben: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
-msgstr "A(z) \"%s\" nem kapcsolási rajz fájl"
+msgstr ""
+"\"%s\" nem egy érvényes EasyEDA (JLCEDA) Pro projekt vagy könyvtár fájl. Nem "
+"találunk project.json vagy device.json fájlt."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:210
 #, c-format
@@ -8492,9 +8494,8 @@ msgid "Loading file canceled by user."
 msgstr "A felhasználó megszakította a fájl betöltését."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Beállítások"
+msgstr "Feladat beállítások"
 
 #: common/jobs/job_export_pcb_3d.cpp:148
 msgid "3D model export"
@@ -9383,7 +9384,7 @@ msgstr "Nem található alapértelmezett szövegszerkesztő. Válasz egyet."
 
 #: common/pgm_base.cpp:244 common/pgm_base.cpp:246
 msgid "Executable file"
-msgstr "Végrehajtható fájl"
+msgstr "Futtatható fájl"
 
 #: common/pgm_base.cpp:256
 msgid "Select Preferred Editor"
@@ -9416,18 +9417,16 @@ msgstr ""
 "ebben a folyamatban."
 
 #: common/pgm_base.cpp:279
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Forrszem csatlakozások:"
+msgstr "Részvétel az adatgyűjtésben"
 
 #: common/pgm_base.cpp:281
 msgid "Opt In"
-msgstr ""
+msgstr "Részvétel"
 
 #: common/pgm_base.cpp:281
-#, fuzzy
 msgid "Decline"
-msgstr "Vonalak vázlat módban"
+msgstr "Elutasít"
 
 #: common/pgm_base.cpp:383
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -9469,9 +9468,9 @@ msgid "Failed to open 3D model file: %s"
 msgstr "Nem sikerült megnyitni a 3D modellt: %s"
 
 #: common/project.cpp:419 common/project.cpp:424 pcbnew/project_pcb.cpp:69
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "Hiba történt az alkatrészrajzolat könyvtártáblázat betöltése során"
+msgstr ""
+"Hiba történt a projekt alkatrészrajzolat könyvtártáblázat betöltése során."
 
 #: common/project.cpp:454 common/project.cpp:460
 #, fuzzy
@@ -9485,25 +9484,22 @@ msgstr "Ez az alapértelmezett vezetékosztály."
 
 #: common/project/project_archiver.cpp:87
 #: common/project/project_archiver.cpp:120 kicad/pcm/pcm_task_manager.cpp:329
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "A könyvtár fájlt nem lehet megnyitni."
+msgstr "Nem sikerült megnyitni az archívum fájlt."
 
 #: common/project/project_archiver.cpp:129 kicad/pcm/pcm_task_manager.cpp:337
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "A(z) \"%s\" fájl biztonsági mentése sikertelen.\n"
+msgstr "Érvénytelen archívum fájl formátum."
 
 #: common/project/project_archiver.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "\"%s\" fájl kibontása"
+msgstr "\"%s\" fájl kibontása."
 
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "Hiba történt a fájl kibontása során."
 
 #: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1057
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
@@ -9566,7 +9562,6 @@ msgstr "Mező érték:"
 
 #: common/rc_item.cpp:430 eeschema/erc/erc_item.cpp:423
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1499
-#, fuzzy
 msgid "Warning: "
 msgstr "Figyelmeztetés: "
 
@@ -9593,12 +9588,10 @@ msgid "Unable to open %s for reading."
 msgstr "Nem sikerült megnyitni olvasásra a(z) \"%s\" fájlt."
 
 #: common/richio.cpp:256 common/richio.cpp:354
-#, fuzzy
 msgid "Maximum line length exceeded"
 msgstr "Túllépte a maximális sorhosszúságot"
 
 #: common/richio.cpp:319
-#, fuzzy
 msgid "Line length exceeded"
 msgstr "Túllépte a sorhosszúságot"
 
@@ -9616,7 +9609,6 @@ msgstr "Alapértékek"
 #: eeschema/widgets/search_handlers.cpp:256
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4405 pcbnew/widgets/search_handlers.cpp:121
-#, fuzzy
 msgid "Reference"
 msgstr "Referencia"
 
@@ -9658,9 +9650,8 @@ msgstr "(Alkatrészrajzolatok)"
 
 #: common/settings/color_settings.cpp:445
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:81
-#, fuzzy
 msgid "KiCad Default"
-msgstr "KiCad Alap"
+msgstr "KiCad Alapértelmezett"
 
 #: common/settings/color_settings.cpp:450
 msgid "KiCad Classic"
@@ -9870,9 +9861,8 @@ msgid "Ungroup Items"
 msgstr "Elemcsoport felbontása"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "A kiválasztott csoport egységének megszüntetése"
+msgstr "Kiválasztott csoportok megszüntetése"
 
 #: common/tool/actions.cpp:216
 msgid "Add Items"
@@ -9956,7 +9946,7 @@ msgstr "Négyszög rajzolása"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "Lasszó"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
@@ -9987,12 +9977,10 @@ msgstr "Tartalom beillesztése vágólapról"
 #: common/tool/actions.cpp:391 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1380
 #: pcbnew/tools/edit_tool.cpp:3047
-#, fuzzy
 msgid "Duplicate"
 msgstr "Duplikálás"
 
 #: common/tool/actions.cpp:392
-#, fuzzy
 msgid "Duplicates the selected item(s)"
 msgstr "Kijelölt elem(ek) duplikálása"
 
@@ -10001,9 +9989,8 @@ msgid "Delete selected item(s)"
 msgstr "Kijelölt elem(ek) törlése"
 
 #: common/tool/actions.cpp:412
-#, fuzzy
 msgid "Interactive Delete Tool"
-msgstr "Törlés kattintással"
+msgstr "Interaktív törlő eszköz"
 
 #: common/tool/actions.cpp:413
 #, fuzzy
@@ -10241,9 +10228,8 @@ msgid "Switch to a different method of editing arcs"
 msgstr ""
 
 #: common/tool/actions.cpp:610
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Keereső panel megjelenítése / elrejtése"
+msgstr "Kereső panel megjelenítése / elrejtése"
 
 #: common/tool/actions.cpp:618 eeschema/dialogs/dialog_sch_find.cpp:33
 #: eeschema/dialogs/dialog_sch_find_base.cpp:122
@@ -10264,7 +10250,6 @@ msgid "Find Previous"
 msgstr "Előző keresése"
 
 #: common/tool/actions.cpp:650
-#, fuzzy
 msgid "Find Next Marker"
 msgstr "Következő jelölő keresése"
 
@@ -10577,17 +10562,14 @@ msgid "Grid Origin"
 msgstr "Rács origó"
 
 #: common/tool/actions.cpp:1062
-#, fuzzy
 msgid "Place the grid origin point"
 msgstr "Rács origó megadása"
 
 #: common/tool/actions.cpp:1071
-#, fuzzy
 msgid "Reset Grid Origin"
 msgstr "Rács origó alaphelyzetbe állítása"
 
 #: common/tool/actions.cpp:1081
-#, fuzzy
 msgid "Show Grid"
 msgstr "Rács megjelenítése"
 
@@ -10601,9 +10583,8 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
 #: common/tool/actions.cpp:1099
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Rács méretek megadása"
+msgstr "Rács definíciók szerkesztése"
 
 #: common/tool/actions.cpp:1105
 msgid "Grid Origin..."
@@ -11327,7 +11308,6 @@ msgstr "Zónák létrehozása"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:288
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:480
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
-#, fuzzy
 msgid "Reset to Defaults"
 msgstr "Visszaállítás alapértelmezettre"
 
@@ -11342,9 +11322,9 @@ msgid "Open Preferences Directory"
 msgstr "Beállítások Megnyítása"
 
 #: common/widgets/paged_dialog.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Visszaállítás alapértelmezettre"
+msgstr "%s visszaállítása az alapértelmezettre"
 
 #: common/widgets/panel_design_block_chooser.cpp:71
 #, fuzzy
@@ -11363,17 +11343,15 @@ msgstr "Hiba történt egy alkatrészrajzolat betöltése közben:"
 
 #: common/widgets/properties_panel.cpp:78
 #: common/widgets/properties_panel.cpp:205
-#, fuzzy
 msgid "No objects selected"
 msgstr "Nincs objektum kiválasztva"
 
 #: common/widgets/properties_panel.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "nincs busz kiválasztva"
+msgstr "%d objektum kiválasztva"
 
 #: common/widgets/properties_panel.cpp:346
-#, fuzzy
 msgid "Basic Properties"
 msgstr "Alap Tulajdonságok"
 
@@ -11816,11 +11794,9 @@ msgid "KiCad jobset files"
 msgstr "KiCad projekt fájl"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"A(z) \"%s\" ekvivalencia (alkatrész - alkatrészrajzolat társítások) fájl nem "
-"található az alapértelmezett keresési útvonalakon."
+msgstr "A(z) \"%s\" ekvivalencia fájl nem található."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -12015,7 +11991,7 @@ msgstr "Hozzárendelési fájl eltávolítása"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Ref"
-msgstr "Referencia"
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:39
 msgid "Schematic assignment"
