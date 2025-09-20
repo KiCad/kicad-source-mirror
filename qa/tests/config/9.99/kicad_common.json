@@ -1,0 +1,108 @@
+{
+  "api": {
+    "enable_server": false,
+    "interpreter_path": ""
+  },
+  "appearance": {
+    "grid_striping": false,
+    "hicontrast_dimming_factor": 0.800000011920929,
+    "icon_theme": 2,
+    "show_scrollbars": false,
+    "text_editor_zoom": 0,
+    "toolbar_icon_size": 24,
+    "use_icons_in_menus": true,
+    "zoom_correction_factor": 1.0
+  },
+  "auto_backup": {
+    "backup_on_autosave": false,
+    "enabled": true,
+    "limit_daily_files": 5,
+    "limit_total_files": 25,
+    "limit_total_size": 104857600,
+    "min_interval": 300
+  },
+  "dialog": {
+    "controls": {}
+  },
+  "do_not_show_again": {
+    "data_collection_prompt": false,
+    "env_var_overwrite_warning": false,
+    "scaled_3d_models_warning": false,
+    "update_check_prompt": false,
+    "zone_fill_warning": false
+  },
+  "environment": {
+    "vars": null
+  },
+  "git": {
+    "authorEmail": "",
+    "authorName": "",
+    "enableGit": true,
+    "repositories": null,
+    "updatInterval": 5,
+    "useDefaultAuthor": true
+  },
+  "graphics": {
+    "antialiasing_mode": 2,
+    "canvas_type": 1
+  },
+  "input": {
+    "auto_pan": false,
+    "auto_pan_acceleration": 5,
+    "center_on_zoom": true,
+    "focus_follow_sch_pcb": false,
+    "horizontal_pan": false,
+    "hotkey_feedback": true,
+    "immediate_actions": true,
+    "motion_pan_modifier": 0,
+    "mouse_left": -1,
+    "mouse_middle": 2,
+    "mouse_right": 2,
+    "reverse_scroll_pan_h": false,
+    "reverse_scroll_zoom": false,
+    "scroll_modifier_pan_h": 308,
+    "scroll_modifier_pan_v": 306,
+    "scroll_modifier_zoom": 0,
+    "warp_mouse_on_move": true,
+    "zoom_acceleration": false,
+    "zoom_speed": 1,
+    "zoom_speed_auto": true
+  },
+  "meta": {
+    "filename": "kicad_common.json",
+    "version": 4
+  },
+  "netclass_panel": {
+    "eeschema_shown_columns": "0 11 12 13 14",
+    "pcbnew_shown_columns": "0 1 2 3 4 5 6 7 8 9 10",
+    "sash_pos": 160
+  },
+  "package_manager": {
+    "sash_pos": 380
+  },
+  "session": {
+    "pinned_design_block_libs": [],
+    "pinned_fp_libs": [],
+    "pinned_symbol_libs": [],
+    "remember_open_files": false
+  },
+  "spacemouse": {
+    "pan_speed": 5,
+    "reverse_pan_x": false,
+    "reverse_pan_y": false,
+    "reverse_rotate": false,
+    "reverse_zoom": false,
+    "rotate_speed": 5
+  },
+  "system": {
+    "autosave_interval": 600,
+    "clear_3d_cache_interval": 30,
+    "file_explorer": "",
+    "file_history_size": 9,
+    "language": "Default",
+    "pdf_viewer_name": "",
+    "text_editor": "",
+    "use_system_pdf_viewer": true,
+    "working_dir": ""
+  }
+}

@@ -653,17 +653,34 @@ BOOST_AUTO_TEST_CASE( PlotOutlineFontEmbedding )
 {
     wxString pdfPath = getTempPdfPath( "kicad_pdf_outline_font" );
 
-    wxFileName fontFile( wxString::FromUTF8( __FILE__ ) );
-    fontFile.RemoveLastDir();
+    // Locate test font file (Noto Sans) in test resources
+    wxFileName fontFile( KI_TEST::GetTestDataRootDir() );
     fontFile.RemoveLastDir();
     fontFile.AppendDir( wxT( "resources" ) );
     fontFile.AppendDir( wxT( "fonts" ) );
     fontFile.SetFullName( wxT( "NotoSans-Regular.ttf" ) );
     wxString fontPath = fontFile.GetFullPath();
+
     BOOST_REQUIRE( wxFileExists( fontPath ) );
 
     PDF_PLOTTER plotter;
-    class TEST_RENDER_SETTINGS : public RENDER_SETTINGS { public: TEST_RENDER_SETTINGS(){ m_background=COLOR4D(1,1,1,1); m_grid=COLOR4D(.8,.8,.8,1); m_cursor=COLOR4D(0,0,0,1);} COLOR4D GetColor(const KIGFX::VIEW_ITEM*,int) const override { return COLOR4D(0,0,0,1);} const COLOR4D& GetBackgroundColor() const override {return m_background;} void SetBackgroundColor(const COLOR4D& c) override {m_background=c;} const COLOR4D& GetGridColor() override {return m_grid;} const COLOR4D& GetCursorColor() override {return m_cursor;} COLOR4D m_background,m_grid,m_cursor; } renderSettings;
+    class TEST_RENDER_SETTINGS : public RENDER_SETTINGS
+    {
+    public:
+        TEST_RENDER_SETTINGS()
+        {
+            m_background = COLOR4D( 1, 1, 1, 1 );
+            m_grid = COLOR4D( .8, .8, .8, 1 );
+            m_cursor = COLOR4D( 0, 0, 0, 1 );
+        }
+        COLOR4D        GetColor( const KIGFX::VIEW_ITEM*, int ) const override { return COLOR4D( 0, 0, 0, 1 ); }
+        const COLOR4D& GetBackgroundColor() const override { return m_background; }
+        void           SetBackgroundColor( const COLOR4D& c ) override { m_background = c; }
+        const COLOR4D& GetGridColor() override { return m_grid; }
+        const COLOR4D& GetCursorColor() override { return m_cursor; }
+        COLOR4D        m_background, m_grid, m_cursor;
+    } renderSettings;
+
     plotter.SetRenderSettings( &renderSettings );
     BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
     plotter.SetViewport( VECTOR2I(0,0), 1.0, 1.0, false );
