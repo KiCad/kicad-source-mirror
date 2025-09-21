@@ -2129,6 +2129,21 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
 }
 
 
+static bool isOppositeSideSilk( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer )
+{
+    if( !aFootprint )
+        return false;
+
+    if( aLayer != F_SilkS && aLayer != B_SilkS )
+        return false;
+
+    if( aFootprint->IsFlipped() )
+        return aLayer == F_SilkS;
+
+    return aLayer == B_SilkS;
+}
+
+
 wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
 {
     std::unique_ptr<FOOTPRINT> fp( static_cast<FOOTPRINT*>( aFp->Clone() ) );
@@ -2183,9 +2198,12 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
 
     if( courtyard_back.OutlineCount() > 0 )
     {
-        otherSideViewNode = appendNode( packageNode, "OtherSideView" );
-        addOutlineNode( otherSideViewNode, courtyard_back, courtyard_back.Outline( 0 ).Width(),
-                        LINE_STYLE::SOLID );
+        if( m_version > 'B' )
+        {
+            otherSideViewNode = appendNode( packageNode, "OtherSideView" );
+            addOutlineNode( otherSideViewNode, courtyard_back, courtyard_back.Outline( 0 ).Width(),
+                            LINE_STYLE::SOLID );
+        }
     }
 
     if( !courtyard.OutlineCount() && !courtyard_back.OutlineCount() )
@@ -2210,6 +2228,9 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         if( layer != F_SilkS && layer != B_SilkS && layer != F_Fab && layer != B_Fab )
             continue;
 
+        if( m_version == 'B' && isOppositeSideSilk( fp.get(), layer ) )
+            continue;
+
         bool is_abs = true;
 
         if( item->Type() == PCB_SHAPE_T )
@@ -2231,7 +2252,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                 wxXmlNode* parent = packageNode;
                 bool is_back = aLayer == B_SilkS || aLayer == B_Fab;
 
-                if( is_back )
+                if( is_back && m_version > 'B' )
                 {
                     if( !otherSideViewNode )
                         otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
@@ -2880,7 +2901,13 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     if( m_version > 'B' )
                         addAttribute( tempSetNode,  "geometryUsage", "GRAPHIC" );
 
-                    addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
+                    bool link_to_component = true;
+
+                    if( m_version == 'B' && isOppositeSideSilk( fp, shape->GetLayer() ) )
+                        link_to_component = false;
+
+                    if( link_to_component )
+                        addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
                     addLocationNode( tempFeature, *shape );
@@ -2925,7 +2952,12 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 if( m_version > 'B' )
                     addAttribute( tempSetNode,  "geometryUsage", "TEXT" );
 
-                if( fp )
+                bool link_to_component = fp != nullptr;
+
+                if( m_version == 'B' && fp && isOppositeSideSilk( fp, text->GetLayer() ) )
+                    link_to_component = false;
+
+                if( link_to_component )
                     addAttribute( tempSetNode, "componentRef", componentName( fp ) );
 
                 wxXmlNode* nonStandardAttributeNode = appendNode( tempSetNode, "NonstandardAttribute" );
