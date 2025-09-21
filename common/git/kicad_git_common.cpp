@@ -40,7 +40,7 @@
 
 KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
         m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 ),
-        m_nextPublicKey( 0 )
+        m_nextPublicKey( 0 ), m_secretFetched( false )
 {}
 
 KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
@@ -55,7 +55,8 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         // The mutex is default-initialized, not copied
         m_gitActionMutex(),
         m_publicKeys( aOther.m_publicKeys ),
-        m_nextPublicKey( aOther.m_nextPublicKey )
+        m_nextPublicKey( aOther.m_nextPublicKey ),
+        m_secretFetched( aOther.m_secretFetched )
 {
 }
 
@@ -97,6 +98,25 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
     }
 
     return wxString( branchName );
+}
+
+
+wxString KIGIT_COMMON::GetPassword()
+{
+    if( !m_secretFetched )
+    {
+        if( m_connType != GIT_CONN_TYPE::GIT_CONN_LOCAL && !m_remote.IsEmpty() )
+        {
+            wxString secret;
+
+            if( KIPLATFORM::SECRETS::GetSecret( m_remote, m_username, secret ) )
+                m_password = secret;
+        }
+
+        m_secretFetched = true;
+    }
+
+    return m_password;
 }
 
 
@@ -645,6 +665,10 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
     wxString remote_name = GetRemotename();
     git_remote* remote = nullptr;
 
+    m_remote.clear();
+    m_password.clear();
+    m_secretFetched = false;
+
     if( git_remote_lookup( &remote, m_repo, remote_name.ToStdString().c_str() ) == GIT_OK )
     {
         const char* url = git_remote_url( remote );
@@ -654,9 +678,6 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
 
         git_remote_free( remote );
     }
-
-    // Find the stored password if it exists
-    KIPLATFORM::SECRETS::GetSecret( m_remote, m_username, m_password );
 
     updateConnectionType();
     updatePublicKeys();
@@ -748,6 +769,8 @@ void KIGIT_COMMON::updateConnectionType()
                 m_hostname = host;
         }
     }
+
+    m_secretFetched = !m_password.IsEmpty();
 }
 
 

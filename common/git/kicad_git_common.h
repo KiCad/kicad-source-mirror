@@ -93,11 +93,11 @@ public:
     };
 
     wxString GetUsername() const { return m_username; }
-    wxString GetPassword() const { return m_password; }
+    wxString GetPassword();
     GIT_CONN_TYPE GetConnType() const;
 
-    void SetUsername( const wxString& aUsername ) { m_username = aUsername; }
-    void SetPassword( const wxString& aPassword ) { m_password = aPassword; }
+    void SetUsername( const wxString& aUsername ) { m_username = aUsername; m_secretFetched = false; }
+    void SetPassword( const wxString& aPassword ) { m_password = aPassword; m_secretFetched = true; }
     void SetSSHKey( const wxString& aSSHKey );
 
     // Holds a temporary variable that can be used by the authentication callback
@@ -131,6 +131,8 @@ public:
     void SetRemote( const wxString& aRemote )
     {
         m_remote = aRemote;
+        m_password.clear();
+        m_secretFetched = false;
         updateConnectionType();
     }
 
@@ -186,6 +188,7 @@ private:
 
     std::vector<wxString> m_publicKeys;
     int m_nextPublicKey;
+    bool m_secretFetched;
 
     std::atomic<bool> m_cancel;  // Set to true when the user cancels an operation
 
