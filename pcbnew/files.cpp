@@ -564,6 +564,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 
+    wxString previousBoardFileName = GetBoard() ? GetBoard()->GetFileName() : wxString();
+
     // If its a non-existent PCB and caller thinks it exists
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
@@ -914,15 +916,24 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     {
-        wxFileName fn;
+        wxString fname;
 
-        fn.SetPath( Prj().GetProjectPath() );
-        fn.SetName( Prj().GetProjectName() );
-        fn.SetExt( FILEEXT::KiCadPcbFileExtension );
+        if( !previousBoardFileName.IsEmpty() && ( aCtl & KICTL_NONKICAD_ONLY ) && !setProject )
+        {
+            fname = previousBoardFileName;
+        }
+        else
+        {
+            wxFileName fn;
 
-        wxString fname = fn.GetFullPath();
+            fn.SetPath( Prj().GetProjectPath() );
+            fn.SetName( Prj().GetProjectName() );
+            fn.SetExt( FILEEXT::KiCadPcbFileExtension );
 
-        fname.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+            fname = fn.GetFullPath();
+
+            fname.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+        }
 
         GetBoard()->SetFileName( fname );
     }
