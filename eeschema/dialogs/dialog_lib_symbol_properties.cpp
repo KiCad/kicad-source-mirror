@@ -473,20 +473,12 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     std::vector<SCH_FIELD> fieldsToSave;
 
-    // The Y axis for components in lib is from bottom to top while the screen axis is top
-    // to bottom: we must change the y coord sign when writing back to the library
-    for( int ii = 0; ii < (int) m_fields->size(); ++ii )
-    {
-        VECTOR2I pos = m_fields->at( ii ).GetPosition();
-        pos.y = -pos.y;
-        m_fields->at( ii ).SetPosition( pos );
-        m_fields->at( ii ).SetId( ii );
-    }
-
     for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
     {
         SCH_FIELD& field = m_fields->at( ii );
 
+        // The Y axis for components in lib is from bottom to top while the screen axis is top
+        // to bottom: we must change the y coord sign when writing back to the library
         VECTOR2I pos = field.GetPosition();
         pos.y = -pos.y;
         field.SetPosition( pos );
