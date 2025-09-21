@@ -1888,6 +1888,32 @@ void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
     {
         std::vector<bool> mask( aExpression.length(), false );
 
+        auto isNetnameChar = []( wxUniChar aChar ) -> bool
+        {
+            wxUint32 value = aChar.GetValue();
+
+            if( ( value >= '0' && value <= '9' ) || ( value >= 'A' && value <= 'Z' )
+                || ( value >= 'a' && value <= 'z' ) )
+            {
+                return true;
+            }
+
+            switch( value )
+            {
+            case '_':
+            case '/':
+            case '+':
+            case '-':
+            case '~':
+            case '.':
+                return true;
+            default:
+                break;
+            }
+
+            return false;
+        };
+
         for( const auto& netname : m_netnames )
         {
             size_t pos = aExpression.find( netname );
@@ -1899,6 +1925,33 @@ void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
                     mask[pos + i] = true; // Mark the positions of the netname
                 }
                 pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
+            }
+        }
+
+        for( size_t i = 0; i < aExpression.length(); ++i )
+        {
+            if( !mask[i] || ( i > 0 && mask[i - 1] ) )
+                continue;
+
+            size_t j = i + 1;
+
+            while( j < aExpression.length() )
+            {
+                if( mask[j] )
+                {
+                    ++j;
+                    continue;
+                }
+
+                if( isNetnameChar( aExpression[j] ) )
+                {
+                    mask[j] = true;
+                    ++j;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
 
