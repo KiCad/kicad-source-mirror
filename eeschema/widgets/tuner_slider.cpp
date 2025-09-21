@@ -33,6 +33,7 @@
 #include <widgets/bitmap_button.h>
 #include <widgets/std_bitmap_button.h>
 
+#include <algorithm>
 #include <cmath>   // log log1p expm1
 #include <complex> // norm
 
@@ -49,6 +50,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
         m_min( 0.0 ),
         m_max( 0.0 ),
         m_value( 0.0 ),
+        m_runMode( RUN_MODE::SINGLE ),
         m_frame( aFrame )
 {
 #if  _WIN32
@@ -76,6 +78,11 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
     m_e96->SetIsCheckButton();
     m_e192->SetBitmap( KiBitmapBundle( BITMAPS::e_192 ) );
     m_e192->SetIsCheckButton();
+
+    m_modeChoice->SetSelection( 0 );
+    m_stepCount->SetRange( 2, 100 );
+    m_stepCount->SetValue( 5 );
+    updateModeControls();
 
     const SIM_MODEL::PARAM* tunerParam = item->model->GetTunerParam();
 
@@ -119,9 +126,32 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
 }
 
 
+int TUNER_SLIDER::GetStepCount() const
+{
+    return std::max( 2, m_stepCount->GetValue() );
+}
+
+
 void TUNER_SLIDER::ShowChangedLanguage()
 {
     m_name->SetLabel( wxString::Format( _( "Tune %s" ), m_ref ) );
+
+    wxArrayString modeChoices;
+    modeChoices.Add( _( "Single Run" ) );
+    modeChoices.Add( _( "Multi Run" ) );
+
+    int selection = m_modeChoice->GetSelection();
+
+    m_modeChoice->Set( modeChoices );
+
+    if( selection < 0 || selection >= static_cast<int>( modeChoices.size() ) )
+        selection = 0;
+
+    m_modeChoice->SetSelection( selection );
+
+    m_stepsLabel->SetLabel( _( "Steps" ) );
+
+    updateModeControls();
 }
 
 
@@ -139,6 +169,22 @@ void TUNER_SLIDER::onESeries( wxCommandEvent& event )
 
     if( m_valueText->GetValue() != oldValue )
         updateComponentValue();
+
+    event.Skip();
+}
+
+
+void TUNER_SLIDER::onRunModeChanged( wxCommandEvent& event )
+{
+    int selection = m_modeChoice->GetSelection();
+
+    if( selection == wxNOT_FOUND )
+        selection = 0;
+
+    m_runMode = ( selection == 1 ) ? RUN_MODE::MULTI : RUN_MODE::SINGLE;
+
+    updateModeControls();
+    updateComponentValue();
 
     event.Skip();
 }
@@ -199,6 +245,22 @@ bool TUNER_SLIDER::SetMax( const SPICE_VALUE& aVal )
 void TUNER_SLIDER::updateComponentValue()
 {
     wxQueueEvent( m_frame, new wxCommandEvent( EVT_SIM_UPDATE ) );
+}
+
+void TUNER_SLIDER::updateModeControls()
+{
+    bool enableSteps = ( m_runMode == RUN_MODE::MULTI );
+
+    m_stepCount->Enable( enableSteps );
+    m_stepsLabel->Enable( enableSteps );
+
+    // In Multi Run mode, the middle value text and slider are not directly editable,
+    // and save/trash actions are disabled. Re-enable for Single Run.
+    bool enableDirectControls = ( m_runMode == RUN_MODE::SINGLE );
+    m_valueText->Enable( enableDirectControls );
+    m_slider->Enable( enableDirectControls );
+    m_saveBtn->Enable( enableDirectControls );
+    m_closeBtn->Enable( enableDirectControls );
 }
 
 
@@ -300,6 +362,9 @@ void TUNER_SLIDER::updateMax()
     {
         SPICE_VALUE newMax( m_maxText->GetValue() );
         SetMax( newMax );
+        // If in Multi Run mode, changing the range should trigger a re-run
+        if( m_runMode == RUN_MODE::MULTI )
+            updateComponentValue();
     }
     catch( const KI_PARAM_ERROR& )
     {
@@ -330,6 +395,9 @@ void TUNER_SLIDER::updateMin()
     {
         SPICE_VALUE newMin( m_minText->GetValue() );
         SetMin( newMin );
+        // If in Multi Run mode, changing the range should trigger a re-run
+        if( m_runMode == RUN_MODE::MULTI )
+            updateComponentValue();
     }
     catch( const KI_PARAM_ERROR& )
     {
@@ -403,4 +471,28 @@ void TUNER_SLIDER::onValueTextEnter( wxCommandEvent& event )
 void TUNER_SLIDER::onMinTextEnter( wxCommandEvent& event )
 {
     updateMin();
+}
+
+
+void TUNER_SLIDER::onStepsChanged( wxSpinEvent& event )
+{
+    updateComponentValue();
+    event.Skip();
+}
+
+
+void TUNER_SLIDER::onStepsTextEnter( wxCommandEvent& event )
+{
+    long steps;
+
+    if( !event.GetString().ToLong( &steps ) )
+        steps = m_stepCount->GetValue();
+
+    if( steps < 2 )
+        steps = 2;
+
+    m_stepCount->SetValue( static_cast<int>( steps ) );
+
+    updateComponentValue();
+    event.Skip();
 }

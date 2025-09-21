@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <memory>
 #include <type_traits>
 
@@ -1694,6 +1695,12 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
 void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
 {
     m_tuners.remove( aTuner );
+
+    if( m_multiRunState.tuner == aTuner )
+        clearMultiRunState( true );
+
+    m_tunerOverrides.erase( aTuner );
+
     aTuner->Destroy();
     m_panelTuners->Layout();
     OnModify();
@@ -1974,6 +1981,57 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
         sweepSize = aDataX->size() / sweepCount;
     }
 
+    if( m_multiRunState.storePending )
+        recordMultiRunData( aVectorName, aTraceType, *aDataX, data_y );
+
+    if( hasMultiRunTrace( aVectorName, aTraceType ) )
+    {
+        const std::string key = multiRunTraceKey( aVectorName, aTraceType );
+        const auto        traceIt = m_multiRunState.traces.find( key );
+
+        if( traceIt != m_multiRunState.traces.end() )
+        {
+            const MULTI_RUN_TRACE& traceData = traceIt->second;
+
+            if( !traceData.xValues.empty() && !traceData.yValues.empty() )
+            {
+                size_t sweepSizeMulti = traceData.xValues.size();
+                size_t runCount = traceData.yValues.size();
+
+                if( sweepSizeMulti > 0 && runCount > 0 )
+                {
+                    std::vector<double> combinedX;
+                    std::vector<double> combinedY;
+
+                    combinedX.reserve( sweepSizeMulti * runCount );
+                    combinedY.reserve( sweepSizeMulti * runCount );
+
+                    for( const std::vector<double>& runY : traceData.yValues )
+                    {
+                        if( runY.size() != sweepSizeMulti )
+                            continue;
+
+                        combinedX.insert( combinedX.end(), traceData.xValues.begin(), traceData.xValues.end() );
+                        combinedY.insert( combinedY.end(), runY.begin(), runY.end() );
+                    }
+
+                    if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
+                    {
+                        if( combinedY.size() >= combinedX.size() && sweepSizeMulti > 0 )
+                        {
+                            int sweepCountCombined = combinedX.empty() ? 0 : static_cast<int>( combinedY.size() / sweepSizeMulti );
+
+                            if( sweepCountCombined > 0 )
+                                aPlotTab->SetTraceData( trace, combinedX, combinedY, sweepCountCombined, sweepSizeMulti );
+                        }
+                    }
+
+                    return;
+                }
+            }
+        }
+    }
+
     if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
     {
         if( data_y.size() >= size )
@@ -2225,7 +2283,14 @@ void SIMULATOR_FRAME_UI::applyTuners()
             continue;
         }
 
-        double floatVal = tuner->GetValue().ToDouble();
+        double floatVal;
+
+        auto overrideIt = m_tunerOverrides.find( tuner );
+
+        if( overrideIt != m_tunerOverrides.end() )
+            floatVal = overrideIt->second;
+        else
+            floatVal = tuner->GetValue().ToDouble();
 
         simulator()->Command( item->model->SpiceGenerator().TunerCommand( *item, floatVal ) );
     }
@@ -3145,6 +3210,8 @@ void SIMULATOR_FRAME_UI::OnSimUpdate()
 
     m_simConsole->Clear();
 
+    prepareMultiRunState();
+
     // Do not export netlist, it is already stored in the simulator
     applyTuners();
 
@@ -3195,6 +3262,21 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 
     if( !simTab )
         return;
+
+    bool storeMultiRun = false;
+
+    if( aFinal && m_multiRunState.active )
+    {
+        if( m_multiRunState.currentStep < m_multiRunState.stepValues.size() )
+        {
+            storeMultiRun = true;
+            m_multiRunState.storePending = true;
+        }
+    }
+    else
+    {
+        m_multiRunState.storePending = false;
+    }
 
     SIM_TYPE simType = simTab->GetSimType();
     wxString msg;
@@ -3375,6 +3457,182 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         m_simConsole->SetInsertionPointEnd();
         simulator()->Command( "print all" );
     }
+
+    if( storeMultiRun )
+    {
+        m_multiRunState.storePending = false;
+        m_multiRunState.storedSteps = m_multiRunState.currentStep + 1;
+    }
+
+    if( aFinal && m_multiRunState.active )
+    {
+        if( m_multiRunState.currentStep + 1 < m_multiRunState.stepValues.size() )
+        {
+            m_multiRunState.currentStep++;
+
+            wxQueueEvent( m_simulatorFrame, new wxCommandEvent( EVT_SIM_UPDATE ) );
+        }
+        else
+        {
+            m_multiRunState.active = false;
+            m_multiRunState.stepValues.clear();
+            m_multiRunState.currentStep = 0;
+            m_multiRunState.storePending = false;
+            m_tunerOverrides.clear();
+
+            if( !m_multiRunState.traces.empty() )
+            {
+                auto iter = m_multiRunState.traces.begin();
+
+                if( iter != m_multiRunState.traces.end() )
+                    m_multiRunState.storedSteps = iter->second.yValues.size();
+            }
+        }
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::clearMultiRunState( bool aClearTraces )
+{
+    m_multiRunState.active = false;
+    m_multiRunState.tuner = nullptr;
+    m_multiRunState.stepValues.clear();
+    m_multiRunState.currentStep = 0;
+    m_multiRunState.storePending = false;
+
+    if( aClearTraces )
+    {
+        m_multiRunState.traces.clear();
+        m_multiRunState.storedSteps = 0;
+    }
+
+    m_tunerOverrides.clear();
+}
+
+
+void SIMULATOR_FRAME_UI::prepareMultiRunState()
+{
+    m_tunerOverrides.clear();
+
+    TUNER_SLIDER* multiTuner = nullptr;
+
+    for( TUNER_SLIDER* tuner : m_tuners )
+    {
+        if( tuner->GetRunMode() == TUNER_SLIDER::RUN_MODE::MULTI )
+        {
+            multiTuner = tuner;
+            break;
+        }
+    }
+
+    if( !multiTuner )
+    {
+        clearMultiRunState( true );
+        return;
+    }
+
+    if( m_multiRunState.active && m_multiRunState.tuner != multiTuner )
+        clearMultiRunState( true );
+
+    if( !m_multiRunState.active )
+    {
+        if( m_multiRunState.tuner != multiTuner || m_multiRunState.storedSteps > 0
+                || !m_multiRunState.traces.empty() )
+        {
+            clearMultiRunState( true );
+        }
+
+        m_multiRunState.tuner = multiTuner;
+        m_multiRunState.stepValues = calculateMultiRunSteps( multiTuner );
+        m_multiRunState.currentStep = 0;
+        m_multiRunState.storePending = false;
+
+        if( m_multiRunState.stepValues.size() >= 2 )
+        {
+            m_multiRunState.active = true;
+            m_multiRunState.storedSteps = 0;
+        }
+        else
+        {
+            m_multiRunState.stepValues.clear();
+            return;
+        }
+    }
+
+    if( m_multiRunState.active && m_multiRunState.currentStep < m_multiRunState.stepValues.size() )
+        m_tunerOverrides[multiTuner] = m_multiRunState.stepValues[m_multiRunState.currentStep];
+}
+
+
+std::vector<double> SIMULATOR_FRAME_UI::calculateMultiRunSteps( TUNER_SLIDER* aTuner ) const
+{
+    std::vector<double> steps;
+
+    if( !aTuner )
+        return steps;
+
+    double startValue = aTuner->GetMin().ToDouble();
+    double endValue = aTuner->GetMax().ToDouble();
+    int    stepCount = std::max( 2, aTuner->GetStepCount() );
+
+    if( stepCount < 2 )
+        stepCount = 2;
+
+    double increment = ( endValue - startValue ) / static_cast<double>( stepCount - 1 );
+
+    steps.reserve( stepCount );
+
+    for( int ii = 0; ii < stepCount; ++ii )
+        steps.push_back( startValue + increment * ii );
+
+    return steps;
+}
+
+
+std::string SIMULATOR_FRAME_UI::multiRunTraceKey( const wxString& aVectorName, int aTraceType ) const
+{
+    return fmt::format( "{}|{}", aVectorName.ToStdString(), aTraceType );
+}
+
+
+void SIMULATOR_FRAME_UI::recordMultiRunData( const wxString& aVectorName, int aTraceType,
+                                             const std::vector<double>& aX,
+                                             const std::vector<double>& aY )
+{
+    if( aX.empty() || aY.empty() )
+        return;
+
+    std::string key = multiRunTraceKey( aVectorName, aTraceType );
+    MULTI_RUN_TRACE& trace = m_multiRunState.traces[key];
+
+    trace.traceType = aTraceType;
+
+    if( trace.xValues.empty() )
+        trace.xValues = aX;
+
+    if( trace.xValues.size() != aX.size() )
+        return;
+
+    size_t index = m_multiRunState.currentStep;
+
+    if( trace.yValues.size() <= index )
+        trace.yValues.resize( index + 1 );
+
+    trace.yValues[index] = aY;
+}
+
+
+bool SIMULATOR_FRAME_UI::hasMultiRunTrace( const wxString& aVectorName, int aTraceType ) const
+{
+    std::string key = multiRunTraceKey( aVectorName, aTraceType );
+    auto        it = m_multiRunState.traces.find( key );
+
+    if( it == m_multiRunState.traces.end() )
+        return false;
+
+    const MULTI_RUN_TRACE& trace = it->second;
+
+    return !trace.xValues.empty() && !trace.yValues.empty();
 }
 
 

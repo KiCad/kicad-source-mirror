@@ -337,6 +337,14 @@ private:
      */
     SIM_TRACE_TYPE getXAxisType( SIM_TYPE aType ) const;
 
+    void clearMultiRunState( bool aClearTraces );
+    void prepareMultiRunState();
+    std::vector<double> calculateMultiRunSteps( TUNER_SLIDER* aTuner ) const;
+    std::string multiRunTraceKey( const wxString& aVectorName, int aTraceType ) const;
+    void recordMultiRunData( const wxString& aVectorName, int aTraceType,
+                             const std::vector<double>& aX, const std::vector<double>& aY );
+    bool hasMultiRunTrace( const wxString& aVectorName, int aTraceType ) const;
+
     wxString getNoiseSource() const;
 
     void parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName,
@@ -378,6 +386,27 @@ private:
     std::vector<wxString>        m_signals;
     std::map<int, wxString>      m_userDefinedSignals;
     std::list<TUNER_SLIDER*>     m_tuners;
+    std::map<const TUNER_SLIDER*, double> m_tunerOverrides;
+
+    struct MULTI_RUN_TRACE
+    {
+        int traceType = SPT_UNKNOWN;
+        std::vector<double> xValues;
+        std::vector<std::vector<double>> yValues;
+    };
+
+    struct MULTI_RUN_STATE
+    {
+        bool active = false;
+        TUNER_SLIDER* tuner = nullptr;
+        std::vector<double> stepValues;
+        size_t currentStep = 0;
+        size_t storedSteps = 0;
+        bool storePending = false;
+        std::map<std::string, MULTI_RUN_TRACE> traces;
+    };
+
+    MULTI_RUN_STATE             m_multiRunState;
 
     ///< SPICE expressions need quoted versions of the netnames since KiCad allows '-' and '/'
     ///< in netnames.

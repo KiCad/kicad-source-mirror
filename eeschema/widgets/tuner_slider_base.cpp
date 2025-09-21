@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-75-g9786507b-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,6 +32,25 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 
 
 	bSizer6->Add( bSizerUpper, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerMode;
+	bSizerMode = new wxBoxSizer( wxHORIZONTAL );
+
+	wxString m_modeChoiceChoices[] = { _("Single Run"), _("Multi Run") };
+	int m_modeChoiceNChoices = sizeof( m_modeChoiceChoices ) / sizeof( wxString );
+	m_modeChoice = new wxChoice( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_modeChoiceNChoices, m_modeChoiceChoices, 0 );
+	m_modeChoice->SetSelection( 0 );
+	bSizerMode->Add( m_modeChoice, 1, wxEXPAND|wxRIGHT, 5 );
+
+	m_stepsLabel = new wxStaticText( m_panel1, wxID_ANY, _("Steps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stepsLabel->Wrap( -1 );
+	bSizerMode->Add( m_stepsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_stepCount = new wxSpinCtrl( m_panel1, wxID_ANY, wxT("2"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxTE_PROCESS_ENTER, 2, 100, 2 );
+	bSizerMode->Add( m_stepCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizer6->Add( bSizerMode, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline4 = new wxStaticLine( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer6->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
@@ -135,6 +154,9 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	bSizerMain->Fit( this );
 
 	// Connect Events
+	m_modeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( TUNER_SLIDER_BASE::onRunModeChanged ), NULL, this );
+	m_stepCount->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( TUNER_SLIDER_BASE::onStepsChanged ), NULL, this );
+	m_stepCount->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onStepsTextEnter ), NULL, this );
 	m_e24->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e48->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e96->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
@@ -168,6 +190,9 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 TUNER_SLIDER_BASE::~TUNER_SLIDER_BASE()
 {
 	// Disconnect Events
+	m_modeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( TUNER_SLIDER_BASE::onRunModeChanged ), NULL, this );
+	m_stepCount->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( TUNER_SLIDER_BASE::onStepsChanged ), NULL, this );
+	m_stepCount->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onStepsTextEnter ), NULL, this );
 	m_e24->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e48->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e96->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );

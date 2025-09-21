@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-75-g9786507b-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,8 @@ class STD_BITMAP_BUTTON;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
+#include <wx/choice.h>
+#include <wx/spinctrl.h>
 #include <wx/statline.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -32,7 +34,6 @@ class STD_BITMAP_BUTTON;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class TUNER_SLIDER_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,6 +44,9 @@ class TUNER_SLIDER_BASE : public wxPanel
 	protected:
 		wxPanel* m_panel1;
 		wxStaticText* m_name;
+		wxChoice* m_modeChoice;
+		wxStaticText* m_stepsLabel;
+		wxSpinCtrl* m_stepCount;
 		wxStaticLine* m_staticline4;
 		BITMAP_BUTTON* m_e24;
 		BITMAP_BUTTON* m_separator;
@@ -57,6 +61,9 @@ class TUNER_SLIDER_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_closeBtn;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onRunModeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onStepsChanged( wxSpinEvent& event ) { event.Skip(); }
+		virtual void onStepsTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onESeries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSliderScroll( wxScrollEvent& event ) { event.Skip(); }
 		virtual void onSliderChanged( wxScrollEvent& event ) { event.Skip(); }

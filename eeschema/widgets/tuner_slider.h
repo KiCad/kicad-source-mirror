@@ -43,6 +43,12 @@ class SCH_SYMBOL;
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
 public:
+    enum class RUN_MODE
+    {
+        SINGLE,
+        MULTI
+    };
+
     TUNER_SLIDER( SIMULATOR_FRAME_UI* aPanel, wxWindow* aParent, const SCH_SHEET_PATH& aSheetPath,
                   SCH_SYMBOL* aSymbol );
 
@@ -50,6 +56,13 @@ public:
     {
         return m_ref;
     }
+
+    RUN_MODE GetRunMode() const
+    {
+        return m_runMode;
+    }
+
+    int GetStepCount() const;
 
     const SPICE_VALUE& GetMin() const
     {
@@ -83,11 +96,14 @@ private:
     void updateSlider();
     void updateValueText();
 
+    void updateModeControls();
+
     void updateMax();
     void updateValue();
     void updateMin();
 
     void onESeries( wxCommandEvent& event ) override;
+    void onRunModeChanged( wxCommandEvent& event ) override;
     void onClose( wxCommandEvent& event ) override;
     void onSave( wxCommandEvent& event ) override;
     void onSliderScroll( wxScrollEvent& event ) override;
@@ -100,6 +116,8 @@ private:
     void onMaxTextEnter( wxCommandEvent& event ) override;
     void onValueTextEnter( wxCommandEvent& event ) override;
     void onMinTextEnter( wxCommandEvent& event ) override;
+    void onStepsChanged( wxSpinEvent& event ) override;
+    void onStepsTextEnter( wxCommandEvent& event ) override;
 
 private:
     KIID                m_symbol;
@@ -110,6 +128,7 @@ private:
     SPICE_VALUE         m_max;
     SPICE_VALUE         m_value;
 
+    RUN_MODE            m_runMode;
     SIMULATOR_FRAME_UI* m_frame;
 };
 
