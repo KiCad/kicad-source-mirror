@@ -983,13 +983,19 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                        VECTOR2I{ pcb_shape.GetRectangleWidth(), pcb_shape.GetRectangleHeight() } };
             box.Inflate( m_params.outsetDistance );
 
+            box.Normalize();
+
             SHAPE_RECT rect( box );
 
             if( m_params.roundCorners )
             {
+                if( m_params.gridRounding.has_value() )
+                    rect = GetRectRoundedToGridOutwards( rect, *m_params.gridRounding );
+
                 try
                 {
-                    ROUNDRECT      rrect( rect, m_params.outsetDistance );
+                    int cornerRadius = pcb_shape.GetCornerRadius() + m_params.outsetDistance;
+                    ROUNDRECT      rrect( rect, cornerRadius );
                     SHAPE_POLY_SET poly;
                     rrect.TransformToPolygon( poly );
                     addPoly( poly );
