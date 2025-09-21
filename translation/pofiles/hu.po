@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-21 07:02+0000\n"
+"PO-Revision-Date: 2025-09-22 08:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -12715,19 +12715,16 @@ msgid "Update field visibilities"
 msgstr "A mező láthatóságának frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:71
-#, fuzzy
 msgid "Update field sizes and styles"
 msgstr "Mezőméretek és stílusok frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:72
-#, fuzzy
 msgid "Update field positions"
 msgstr "Mezőpozíciók frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:73
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Frissítse a szimbólum attribútumait"
+msgstr "Szimbólum attribútumok frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 #, fuzzy
@@ -13123,14 +13120,12 @@ msgid "Delete All Markers"
 msgstr "Összes megjelölés törlése"
 
 #: eeschema/dialogs/dialog_erc.cpp:310 pcbnew/dialogs/dialog_drc.cpp:1212
-#, fuzzy
 msgid "Errors and Warnings Only"
-msgstr "Csak a Hibák és Figyelmeztetések"
+msgstr "Csak Hibák és Figyelmeztetések"
 
 #: eeschema/dialogs/dialog_erc.cpp:311 pcbnew/dialogs/dialog_drc.cpp:1213
-#, fuzzy
 msgid "Errors, Warnings and Exclusions"
-msgstr "Hibák,Figyelmeztetések és Kizárások"
+msgstr "Hibák, Figyelmeztetések és Kizárások"
 
 #: eeschema/dialogs/dialog_erc.cpp:443
 #, c-format
@@ -13138,7 +13133,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:450
-#, fuzzy
 msgid "-------- ERC canceled by user.<br><br>"
 msgstr "-------- ERC felhasználó által megszakítva.<br><br>"
 
@@ -13985,9 +13979,8 @@ msgid "Edit Junction"
 msgstr "Csomópont szerkesztése"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Csomópontok"
+msgstr "Csomópontokok szerkesztése"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -14101,9 +14094,8 @@ msgstr "Szintaxis súgó ablak megjelenítése"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4403 pcbnew/widgets/pcb_properties_panel.cpp:293
-#, fuzzy
 msgid "Fields"
-msgstr "Mező"
+msgstr "Mezők"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
@@ -14117,17 +14109,15 @@ msgstr "Mező"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:49
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 #: pcbnew/pcb_fields_grid_table.cpp:149
-#, fuzzy
 msgid "Show"
-msgstr "Megjelenítés"
+msgstr "Megjelenít"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:112
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:527
-#, fuzzy
 msgid "Show Name"
-msgstr "Név"
+msgstr "Név megjelenítése"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:113
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -14430,9 +14420,8 @@ msgid "Export"
 msgstr "Exportálás"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:175
-#, fuzzy
 msgid "Export all pins"
-msgstr "Netlista exportálása"
+msgstr "Összes láb exportálása"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:178
 #, fuzzy
@@ -14492,9 +14481,8 @@ msgid "Revert the symbol to its last saved state"
 msgstr "'%s' visszaállítása az utolsó mentett verzióra?"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear cell"
-msgstr "Szigetelési távolság"
+msgstr "Cella törlése"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 #, fuzzy
@@ -14520,7 +14508,6 @@ msgstr "Alkatrészrajzolat kiválasztása..."
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:128
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
 #: eeschema/fields_grid_table.cpp:1204
-#, fuzzy
 msgid "Browse for footprint"
 msgstr "Alkatrészrajzolat böngésző"
 
@@ -14536,16 +14523,14 @@ msgid "No related symbols found in library '%s'."
 msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
+msgstr "Nem találtunk rajzjeleket a(z) \"%s\" könyvtárban."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr ""
-"Hiba a nyákterv betöltése során.\n"
-"%s"
+msgstr "Hiba a(z) \"%s\" rajzjel betöltése közben: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:579
 #, fuzzy
@@ -14553,9 +14538,8 @@ msgid "No related symbols could be loaded from the library."
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:581
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
+msgstr "Nem sikerült alkatrészrajzolatot betölteni a könyvtárból."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:683
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:750
@@ -14593,7 +14577,7 @@ msgid "Rename Field"
 msgstr "Mező átnevezése"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
 msgstr "Van már \"%s\" nevű mező."
 
@@ -14627,9 +14611,8 @@ msgid "Power Symbol"
 msgstr "Táp szimbólum"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1034
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Táp szimbólum"
+msgstr "Lokális táp szimbólum"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:49
@@ -14652,9 +14635,8 @@ msgid "Group By"
 msgstr "Csoportosítás"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Whole Library"
-msgstr "Új könyvtár"
+msgstr "Teljes könyvtár"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
 #, fuzzy
@@ -14694,12 +14676,11 @@ msgid "All units are interchangeable"
 msgstr "Mindegyik részegység felcserélhető"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Akkor használd ezt ha a részegységek csak a lábak\n"
+"Használja ezt az opciót, ha a részegységek csak a lábak\n"
 "számozásában térnek el."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:83
@@ -15068,9 +15049,8 @@ msgid "Jumper Pin Groups"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:503
-#, fuzzy
 msgid "Available pins:"
-msgstr "Elérhető lábak"
+msgstr "Elérhető lábak:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:519
 #, fuzzy
@@ -15083,9 +15063,8 @@ msgid "Remove the selected jumper pin group"
 msgstr "Kiválasztott egyéni csoport törlése"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:534
-#, fuzzy
 msgid "Grouped pins:"
-msgstr "Csoportosított lábak"
+msgstr "Csoportosított lábak:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:556
 #, fuzzy
@@ -15113,7 +15092,6 @@ msgstr "Vonalak szerkesztése"
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:252
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:232
-#, fuzzy
 msgid "Combo!"
 msgstr "Kombinált!"
 
@@ -17238,17 +17216,15 @@ msgstr "Rajzjelek migrálása"
 
 #: eeschema/dialogs/dialog_table_properties.cpp:392
 #: pcbnew/dialogs/dialog_table_properties.cpp:412
-#, fuzzy
 msgid "Edit Table"
-msgstr "Címke szerkesztése..."
+msgstr "Táblázat szerkesztése"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:40
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "Szöveg lépésköz:"
+msgstr "Cella tartalma:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -17277,15 +17253,13 @@ msgstr "Oszlopok"
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:517 pcbnew/dialogs/dialog_table_properties_base.h:73
 #: pcbnew/pcb_table.cpp:672
-#, fuzzy
 msgid "Table Properties"
-msgstr "Címke tulajdonságok"
+msgstr "Táblázat tulajdonságok"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:417
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:413
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "Rajzjel tulajdonságok"
+msgstr "Táblázat cellák tulajdonságainak szerkesztése"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:102
 msgid "Horizontal alignment:"
@@ -18608,11 +18582,9 @@ msgstr "A(z) \"%s\" fájl nem található"
 
 #: eeschema/eeschema_jobs_handler.cpp:696
 #: eeschema/eeschema_jobs_handler.cpp:910
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr ""
-"Nem sikerült elemezni az URL-t:\n"
-"\"%s\""
+msgstr "Nem sikerült megnyitni: \"%s\""
 
 #: eeschema/eeschema_jobs_handler.cpp:730
 #, fuzzy, c-format
@@ -18648,9 +18620,9 @@ msgstr "Kimeneti mappa \"%s\" nem hozható létre."
 
 #: eeschema/eeschema_jobs_handler.cpp:1018 pcbnew/pcbnew_jobs_handler.cpp:1358
 #: pcbnew/pcbnew_jobs_handler.cpp:2011
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Beállítások importálása"
+msgstr "%s exportálása"
 
 #: eeschema/eeschema_jobs_handler.cpp:1048 pcbnew/pcbnew_jobs_handler.cpp:1888
 msgid "Output path must not conflict with existing path\n"
