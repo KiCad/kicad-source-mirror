@@ -97,6 +97,7 @@ private:
     // Shapes used to define solder mask apertures don't have nets, so we assign them the
     // first object+net that bridges their aperture (after which any other nets will generate
     // violations).
+    std::mutex                                                           m_netMapMutex;
     std::unordered_map<PTR_LAYER_CACHE_KEY, std::pair<BOARD_ITEM*, int>> m_maskApertureNetMap;
 };
 
@@ -335,19 +336,24 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         return false;
 
     PTR_LAYER_CACHE_KEY key = { aMaskItem, maskLayer };
+    BOARD_ITEM*         alreadyEncounteredItem = nullptr;
+    int                 encounteredItemNet = -1;
 
-    auto ii = m_maskApertureNetMap.find( key );
-
-    if( ii == m_maskApertureNetMap.end() )
     {
-        m_maskApertureNetMap[ key ] = { aTestItem, aTestNet };
+        std::lock_guard<std::mutex> lock( m_checkedPairsMutex );
+        auto ii = m_maskApertureNetMap.find( key );
 
-        // First net; no bridge yet....
-        return false;
+        if( ii == m_maskApertureNetMap.end() )
+        {
+            m_maskApertureNetMap[ key ] = { aTestItem, aTestNet };
+
+            // First net; no bridge yet....
+            return false;
+        }
+
+        alreadyEncounteredItem = ii->second.first;
+        encounteredItemNet = ii->second.second;
     }
-
-    auto& [cacheKey, cacheEntry] = *ii;
-    auto& [alreadyEncounteredItem, encounteredItemNet] = cacheEntry;
 
     if( encounteredItemNet == aTestNet && aTestNet >= 0 )
     {
