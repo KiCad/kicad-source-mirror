@@ -432,8 +432,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
     PCB_SHAPE* shape = aItem->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( aItem ) : nullptr;
     int        itemNet = -1;
 
-    DRC_CONSTRAINT      constraint;
-    std::optional<bool> itemConstraintIgnored;
+    std::optional<DRC_CONSTRAINT> itemConstraint;
+    DRC_CONSTRAINT                otherConstraint;
 
     if( aItem->IsConnected() )
         itemNet = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
@@ -558,14 +558,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 
                 if( itemShape->Collide( otherItemShape.get(), clearance, &actual, &pos ) )
                 {
-                    if( !itemConstraintIgnored.has_value() )
-                    {
-                        constraint = m_drcEngine->EvalRules( BRIDGED_MASK_CONSTRAINT, aItem, nullptr, aRefLayer );
-                        itemConstraintIgnored = constraint.GetSeverity() == RPT_SEVERITY_IGNORE;
-                    }
+                    if( !itemConstraint.has_value() )
+                        itemConstraint = m_drcEngine->EvalRules( BRIDGED_MASK_CONSTRAINT, aItem, nullptr, aRefLayer );
 
-                    constraint = m_drcEngine->EvalRules( BRIDGED_MASK_CONSTRAINT, other, nullptr, aTargetLayer );
-                    bool otherConstraintIgnored = constraint.GetSeverity() == RPT_SEVERITY_IGNORE;
+                    otherConstraint = m_drcEngine->EvalRules( BRIDGED_MASK_CONSTRAINT, other, nullptr, aTargetLayer );
+
+                    bool itemConstraintIgnored = itemConstraint->GetSeverity() == RPT_SEVERITY_IGNORE;
+                    bool otherConstraintIgnored = otherConstraint.GetSeverity() == RPT_SEVERITY_IGNORE;
 
                     // Mask apertures are ignored on their own; in other cases both participants must be ignored
                     if(    ( isMaskAperture( aItem ) && itemConstraintIgnored )
