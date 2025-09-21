@@ -495,161 +495,172 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 
 bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const std::string& aKey )
 {
-    nanodbc::statement statement( *m_conn );
-
-    nanodbc::string query = fromUTF8( fmt::format( "SELECT {} FROM {}{}{}", columnsFor( aTable ),
-                                                   m_quoteChar, aTable, m_quoteChar ) );
-
-    wxLogTrace( traceDatabase, wxT( "selectAllAndCache: `%s`" ), toUTF8( query ) );
-
-    PROF_TIMER timer;
-
     try
     {
-        statement.prepare( query );
-    }
-    catch( std::exception& e )
-    {
-        m_lastError = e.what();
-        wxLogTrace( traceDatabase,
-                    wxT( "Exception while preparing query for selectAllAndCache: %s" ),
-                    m_lastError );
+        nanodbc::statement statement( *m_conn );
 
-        // Exception may be due to a connection error; nanodbc won't auto-reconnect
-        Disconnect();
+        nanodbc::string query = fromUTF8( fmt::format( "SELECT {} FROM {}{}{}",
+                                                       columnsFor( aTable ),
+                                                       m_quoteChar, aTable, m_quoteChar ) );
 
-        return false;
-    }
+        wxLogTrace( traceDatabase, wxT( "selectAllAndCache: `%s`" ), toUTF8( query ) );
 
-    nanodbc::result results;
-
-    try
-    {
-        results = nanodbc::execute( statement );
-    }
-    catch( std::exception& e )
-    {
-        m_lastError = e.what();
-        wxLogTrace( traceDatabase,
-                    wxT( "Exception while executing query for selectAllAndCache: %s" ),
-                    m_lastError );
-
-        // Exception may be due to a connection error; nanodbc won't auto-reconnect
-        Disconnect();
-
-        return false;
-    }
-
-    timer.Stop();
-
-    DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
-
-    auto handleException =
-            [&]( std::runtime_error& aException, const std::string& aExtraContext = "" )
-    {
-        m_lastError = aException.what();
-        std::string extra = aExtraContext.empty() ? "" : ": " + aExtraContext;
-        wxLogTrace( traceDatabase,
-                    wxT( "Exception while parsing result %d from selectAllAndCache: %s%s" ),
-                    cacheEntry.size(), m_lastError, extra );
-    };
-
-    while( results.next() )
-    {
-        short columnCount = 0;
-        ROW result;
+        PROF_TIMER timer;
 
         try
         {
-            columnCount = results.columns();
+            statement.prepare( query );
         }
-        catch( nanodbc::database_error& e )
+        catch( std::exception& e )
         {
-            handleException( e );
+            m_lastError = e.what();
+            wxLogTrace( traceDatabase,
+                        wxT( "Exception while preparing query for selectAllAndCache: %s" ),
+                        m_lastError );
+
+            // Exception may be due to a connection error; nanodbc won't auto-reconnect
+            Disconnect();
+
             return false;
         }
 
-        for( short j = 0; j < columnCount; ++j )
+        nanodbc::result results;
+
+        try
         {
-            std::string column;
-            std::string columnExtraDbgInfo;
-            int datatype = SQL_UNKNOWN_TYPE;
+            results = nanodbc::execute( statement );
+        }
+        catch( std::exception& e )
+        {
+            m_lastError = e.what();
+            wxLogTrace( traceDatabase,
+                        wxT( "Exception while executing query for selectAllAndCache: %s" ),
+                        m_lastError );
+
+            // Exception may be due to a connection error; nanodbc won't auto-reconnect
+            Disconnect();
+
+            return false;
+        }
+
+        timer.Stop();
+
+        DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
+
+        auto handleException =
+                [&]( std::runtime_error& aException, const std::string& aExtraContext = "" )
+                {
+                    m_lastError = aException.what();
+                    std::string extra = aExtraContext.empty() ? "" : ": " + aExtraContext;
+                    wxLogTrace( traceDatabase,
+                                wxT( "Exception while parsing result %d from selectAllAndCache: %s%s" ),
+                                cacheEntry.size(), m_lastError, extra );
+                };
+
+        while( results.next() )
+        {
+            short columnCount = 0;
+            ROW result;
 
             try
             {
-                column = toUTF8( results.column_name( j ) );
-                datatype = results.column_datatype( j );
-                columnExtraDbgInfo = fmt::format( "column index {}, name '{}', type {}", j, column,
-                                                  datatype );
+                columnCount = results.columns();
             }
-            catch( nanodbc::index_range_error& e )
+            catch( nanodbc::database_error& e )
             {
-                handleException( e, columnExtraDbgInfo );
+                handleException( e );
                 return false;
             }
 
-            switch( datatype )
+            for( short j = 0; j < columnCount; ++j )
             {
-            case SQL_DOUBLE:
-            case SQL_FLOAT:
-            case SQL_REAL:
-            case SQL_DECIMAL:
-            case SQL_NUMERIC:
-            {
+                std::string column;
+                std::string columnExtraDbgInfo;
+                int datatype = SQL_UNKNOWN_TYPE;
+
                 try
                 {
-                    result[column] = fmt::format( "{:G}", results.get<double>( j ) );
+                    column = toUTF8( results.column_name( j ) );
+                    datatype = results.column_datatype( j );
+                    columnExtraDbgInfo = fmt::format( "column index {}, name '{}', type {}",
+                                                      j,
+                                                      column,
+                                                      datatype );
                 }
-                catch( nanodbc::null_access_error& )
-                {
-                    // Column was empty (null)
-                    result[column] = std::string();
-                }
-                catch( std::runtime_error& e )
+                catch( nanodbc::index_range_error& e )
                 {
                     handleException( e, columnExtraDbgInfo );
                     return false;
                 }
-                break;
+
+                switch( datatype )
+                {
+                case SQL_DOUBLE:
+                case SQL_FLOAT:
+                case SQL_REAL:
+                case SQL_DECIMAL:
+                case SQL_NUMERIC:
+                    try
+                    {
+                        result[column] = fmt::format( "{:G}", results.get<double>( j ) );
+                    }
+                    catch( nanodbc::null_access_error& )
+                    {
+                        // Column was empty (null)
+                        result[column] = std::string();
+                    }
+                    catch( std::runtime_error& e )
+                    {
+                        handleException( e, columnExtraDbgInfo );
+                        return false;
+                    }
+
+                    break;
+
+                default:
+                    try
+                    {
+                        result[column] = toUTF8( results.get<nanodbc::string>( j, NANODBC_TEXT( "" ) ) );
+                    }
+                    catch( std::runtime_error& e )
+                    {
+                        handleException( e, columnExtraDbgInfo );
+                        return false;
+                    }
+                }
             }
 
-            default:
+            if( !result.count( aKey ) )
             {
-                try
-                {
-                    result[column] = toUTF8( results.get<nanodbc::string>( j,
-                                                                           NANODBC_TEXT( "" ) ) );
-                }
-                catch( std::runtime_error& e )
-                {
-                    handleException( e, columnExtraDbgInfo );
-                    return false;
-                }
+                wxLogTrace( traceDatabase,
+                            wxT( "selectAllAndCache: warning: key %s not found in result set" ), aKey );
+                continue;
             }
-            }
+
+            std::string keyStr = std::any_cast<std::string>( result.at( aKey ) );
+            cacheEntry[keyStr] = result;
         }
 
-        if( !result.count( aKey ) )
-        {
-            wxLogTrace( traceDatabase,
-                  wxT( "selectAllAndCache: warning: key %s not found in result set" ), aKey );
-            continue;
-        }
+        wxLogTrace( traceDatabase, wxT( "selectAllAndCache from %s completed in %0.1f ms" ), aTable,
+                    timer.msecs() );
 
-        std::string keyStr = std::any_cast<std::string>( result.at( aKey ) );
-        cacheEntry[keyStr] = result;
+        m_cache->Put( aTable, cacheEntry );
+        return true;
     }
+    catch( std::exception& e )
+    {
+        m_lastError = e.what();
+        wxLogTrace( traceDatabase, wxT( "Exception in selectAllAndCache: %s" ), m_lastError );
 
-    wxLogTrace( traceDatabase, wxT( "selectAllAndCache from %s completed in %0.1f ms" ), aTable,
-                timer.msecs() );
+        // Exception may be due to a connection error; nanodbc won't auto-reconnect
+        Disconnect();
 
-    m_cache->Put( aTable, cacheEntry );
-    return true;
+        return false;
+    }
 }
 
 
-bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::string& aKey,
-                                     std::vector<ROW>& aResults )
+bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::string& aKey, std::vector<ROW>& aResults )
 {
     if( !m_conn )
     {
@@ -661,8 +672,7 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
 
     if( tableMapIter == m_tables.end() )
     {
-        wxLogTrace( traceDatabase, wxT( "SelectAll: requested table %s not found in cache" ),
-                    aTable );
+        wxLogTrace( traceDatabase, wxT( "SelectAll: requested table %s not found in cache" ), aTable );
         return false;
     }
 
@@ -682,8 +692,7 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
 
     if( !m_cache->Get( aTable, cacheEntry ) )
     {
-        wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` failed to get results from cache!" ),
-                    aTable );
+        wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` failed to get results from cache!" ), aTable );
         return false;
     }
 
