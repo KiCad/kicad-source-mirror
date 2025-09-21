@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-21 07:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -5505,7 +5505,7 @@ msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
 msgid "Convert to Greyscale"
-msgstr "In Graustufen konvertieren"
+msgstr "In Graustufen umwandeln"
 
 #: common/dialogs/panel_maintenance.cpp:88
 msgid "File history cleared."
@@ -24558,8 +24558,8 @@ msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
-"Konvertiert mehrere Pins an derselben Stelle in einen einzelnen Pin, mit "
-"\"gestapelter\"-Notation in der Pin-Nummer"
+"Wandelt mehrere Pins an derselben Stelle in einen einzelnen Pin, mit "
+"\"gestapelter\"-Notation in der Pin-Nummer, um."
 
 #: eeschema/tools/sch_actions.cpp:948
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
@@ -24569,8 +24569,8 @@ msgstr "Gestapelten Pin aufteilen"
 #: eeschema/tools/sch_actions.cpp:949
 msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
-"Konvertiert einen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, in "
-"mehrere eigenständige Pins um"
+"Wandelt einen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, in "
+"mehrere eigenständige Pins um."
 
 #: eeschema/tools/sch_actions.cpp:955
 msgid "Break"
@@ -25853,7 +25853,7 @@ msgstr "Alle Pins müssen an derselben Position sein"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1018
 #, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "Konvertiert %zu gestapelte Pins zu \"%s\""
+msgstr "Wandelt %zu gestapelte Pins in \"%s\" um"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
 #, fuzzy
@@ -34828,7 +34828,7 @@ msgstr "Zwischenraum:"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:175
 #: pcbnew/tools/convert_tool.cpp:139
 msgid "Delete source objects after conversion"
-msgstr "Quellobjekte nach der Konvertierung löschen"
+msgstr "Quellobjekte nach der Umwandlung löschen"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:257
 msgid "Convert to Copper Zone"
@@ -40137,7 +40137,7 @@ msgstr "Sperrflächen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:184
 msgid "Convert to Rule Area"
-msgstr "In Regelbereich konvertieren"
+msgstr "In Regelbereich umwandeln"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:314
 msgid "Not found on board: "
@@ -51193,7 +51193,7 @@ msgstr "Kann Auswahl nicht umwandeln"
 
 #: pcbnew/tools/convert_tool.cpp:576
 msgid "Convert to Polygon"
-msgstr "In Polygon konvertieren"
+msgstr "In Polygon umwandeln"
 
 #: pcbnew/tools/convert_tool.cpp:578
 msgid "Create Polygon"
