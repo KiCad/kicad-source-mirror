@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-21 07:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-22 08:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -25856,7 +25856,6 @@ msgid "Convert %zu Stacked Pins to '%s'"
 msgstr "Wandelt %zu gestapelte Pins in \"%s\" um"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1040
-#, fuzzy
 msgid "Select a single pin with stacked notation to explode"
 msgstr ""
 "Einzelnen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, zur "
@@ -44899,7 +44898,7 @@ msgid "Checking length constraints..."
 msgstr "Längenbeschränkungen werden geprüft..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "%s (gap %s)"
 msgstr "%s (Spalt %s)"
 
@@ -44951,45 +44950,44 @@ msgid "Missing footprint %s (%s)"
 msgstr "Fehlender Footprint %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)"
 msgstr "Wert (%s) stimmt nicht mit Symbolwert (%s) überein."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)"
 msgstr "%s stimmt nicht dem Footprint des Symbols (%s) überein."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)"
 msgstr "%s stimmt nicht mit Footprintfilter des Symbols (%s) überein."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ"
 msgstr "\"%s\" Einstellungen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:218
-#, fuzzy
 msgid "No corresponding pin found in schematic"
 msgstr "Kein entsprechender Pin im Schaltplan gefunden."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Pad missing net given by schematic (%s)"
 msgstr "Pad fehlt Netz gemäß Schaltplan (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)"
 msgstr ""
 "Das Pad-Netz (%s) stimmt nicht mit dem im Schaltplan (%s) angegebenen Netz "
 "überein."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "No pad found for pin %s in schematic"
 msgstr "Kein Pad für Pin %s im Schaltplan gefunden."
 
@@ -49506,12 +49504,12 @@ msgid "Pad Primitives"
 msgstr "Pad-Primitiven"
 
 #: pcbnew/pcb_table.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%d column table"
 msgstr "%d Tabellenspalte"
 
 #: pcbnew/pcb_tablecell.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Table cell %s"
 msgstr "Tabellenzelle %s"
 
@@ -49534,7 +49532,7 @@ msgid "PCB text '%s' on %s"
 msgstr "Platinen-Text \"%s\" auf %s"
 
 #: pcbnew/pcb_textbox.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text box '%s' on %s"
 msgstr "PCB-Textfeld \"%s\" auf %s"
 
@@ -49543,12 +49541,12 @@ msgid "Border Properties"
 msgstr "Randeigenschaften"
 
 #: pcbnew/pcb_track.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/buried via %s on %s"
 msgstr "Blindes/vergrabenes Via %s auf %s"
 
 #: pcbnew/pcb_track.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Micro via %s on %s"
 msgstr "Mikro-Via %s auf %s"
 
