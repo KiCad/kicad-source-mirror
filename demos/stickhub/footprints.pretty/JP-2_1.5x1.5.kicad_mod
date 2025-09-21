@@ -1,14 +1,14 @@
 (footprint "JP-2_1.5x1.5"
-	(version 20241229)
+	(version 20250907)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "9.99")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
 		(at 0 -1.5 0)
 		(unlocked yes)
 		(layer "F.SilkS")
 		(hide yes)
-		(uuid "99e55e05-cb25-4ae8-8298-53dad3f9bd0e")
+		(uuid "f714cccf-a522-4cff-a6a8-04b339cc10a8")
 		(effects
 			(font
 				(size 1 1)
@@ -20,7 +20,7 @@
 		(at 0 1.1 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "93ced879-4aec-4797-86ba-08f788cb5808")
+		(uuid "b50e9959-b1c0-40ad-b4e3-bc1f7d13c6a5")
 		(effects
 			(font
 				(size 0.25 0.25)
@@ -33,7 +33,7 @@
 		(unlocked yes)
 		(layer "B.Fab")
 		(hide yes)
-		(uuid "ba7591c5-367e-41fe-bbb7-d9ade403f7d3")
+		(uuid "82f1f774-990f-4ca5-9151-79ca4a736116")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -46,7 +46,7 @@
 		(at 157.25 -105.9 90)
 		(layer "B.Fab")
 		(hide yes)
-		(uuid "555f40cc-a5d0-432c-8dc5-3e2c5c1b6dd9")
+		(uuid "c023a654-b0f0-4b2f-bbd2-0d99aafdbea5")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -56,6 +56,7 @@
 		)
 	)
 	(attr exclude_from_pos_files allow_soldermask_bridges)
+	(duplicate_pad_numbers_are_jumpers no)
 	(fp_poly
 		(pts
 			(xy 0.35 -0.8) (xy 0.349999 0.7) (xy -0.35 0.7) (xy -0.349999 -0.8)
@@ -93,7 +94,7 @@
 		)
 	)
 	(pad "1" connect custom
-		(at -0.975 -0.05 270)
+		(at -0.975 -0.05 90)
 		(size 1.5 1.5)
 		(layers "F.Cu" "F.Mask")
 		(options
@@ -123,10 +124,14 @@
 				(fill yes)
 			)
 		)
+		(tenting
+			(front none)
+			(back none)
+		)
 		(uuid "f6a0ff9e-fbac-47da-ad23-3d64e09fce5e")
 	)
 	(pad "2" connect custom
-		(at 0.975 -0.05 270)
+		(at 0.975 -0.05 90)
 		(size 1.5 1.5)
 		(layers "F.Cu" "F.Mask")
 		(options
@@ -148,6 +153,10 @@
 				(width 0)
 				(fill yes)
 			)
+		)
+		(tenting
+			(front none)
+			(back none)
 		)
 		(uuid "7a454748-bd53-4175-9d29-253084b5c5bc")
 	)
