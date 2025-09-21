@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-20 19:02+0000\n"
+"PO-Revision-Date: 2025-09-21 20:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -9230,9 +9230,8 @@ msgid "Delete selected item(s)"
 msgstr "Kijelölt elem(ek) törlése"
 
 #: common/tool/actions.cpp:299
-#, fuzzy
 msgid "Interactive Delete Tool"
-msgstr "Törlés kattintással"
+msgstr "Interaktív törlő eszköz"
 
 #: common/tool/actions.cpp:300
 #, fuzzy
@@ -9433,9 +9432,8 @@ msgid "Switch to a different method of editing arcs"
 msgstr ""
 
 #: common/tool/actions.cpp:474
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Keereső panel megjelenítése / elrejtése"
+msgstr "Kereső panel megjelenítése / elrejtése"
 
 #: common/tool/actions.cpp:482 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:122
@@ -9457,7 +9455,6 @@ msgid "Find Previous"
 msgstr "Előző keresése"
 
 #: common/tool/actions.cpp:514
-#, fuzzy
 msgid "Find Next Marker"
 msgstr "Következő jelölő keresése"
 
@@ -9741,17 +9738,14 @@ msgid "Grid Origin"
 msgstr "Rács origó"
 
 #: common/tool/actions.cpp:893
-#, fuzzy
 msgid "Place the grid origin point"
 msgstr "Rács origó megadása"
 
 #: common/tool/actions.cpp:901
-#, fuzzy
 msgid "Reset Grid Origin"
 msgstr "Rács origó alaphelyzetbe állítása"
 
 #: common/tool/actions.cpp:911
-#, fuzzy
 msgid "Show Grid"
 msgstr "Rács megjelenítése"
 
@@ -9765,9 +9759,8 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Rács méretek megadása"
+msgstr "Rács definíciók szerkesztése"
 
 #: common/tool/actions.cpp:933
 msgid "Grid Origin..."
@@ -10473,7 +10466,6 @@ msgstr "Zónák létrehozása"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:288
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:472
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
-#, fuzzy
 msgid "Reset to Defaults"
 msgstr "Visszaállítás alapértelmezettre"
 
@@ -10488,23 +10480,21 @@ msgid "Open Preferences Directory"
 msgstr "Beállítások Megnyítása"
 
 #: common/widgets/paged_dialog.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Visszaállítás alapértelmezettre"
+msgstr "%s visszaállítása az alapértelmezettre"
 
 #: common/widgets/properties_panel.cpp:77
 #: common/widgets/properties_panel.cpp:207
-#, fuzzy
 msgid "No objects selected"
 msgstr "Nincs objektum kiválasztva"
 
 #: common/widgets/properties_panel.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "nincs busz kiválasztva"
+msgstr "%d objektum kiválasztva"
 
 #: common/widgets/properties_panel.cpp:346
-#, fuzzy
 msgid "Basic Properties"
 msgstr "Alap Tulajdonságok"
 
@@ -10936,11 +10926,9 @@ msgid "KiCad jobset files"
 msgstr "KiCad projekt fájl"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"A(z) \"%s\" ekvivalencia (alkatrész - alkatrészrajzolat társítások) fájl nem "
-"található az alapértelmezett keresési útvonalakon."
+msgstr "A(z) \"%s\" ekvivalencia fájl nem található."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -11145,7 +11133,7 @@ msgstr "Hozzárendelési fájl eltávolítása"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Ref"
-msgstr "Referencia"
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:39
 msgid "Schematic assignment"
@@ -11987,19 +11975,16 @@ msgid "Update field visibilities"
 msgstr "A mező láthatóságának frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:142
-#, fuzzy
 msgid "Update field sizes and styles"
 msgstr "Mezőméretek és stílusok frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:143
-#, fuzzy
 msgid "Update field positions"
 msgstr "Mezőpozíciók frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:144
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Frissítse a szimbólum attribútumait"
+msgstr "Szimbólum attribútumok frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:162
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
@@ -12421,14 +12406,12 @@ msgid "Delete All Markers"
 msgstr "Összes megjelölés törlése"
 
 #: eeschema/dialogs/dialog_erc.cpp:316 pcbnew/dialogs/dialog_drc.cpp:1268
-#, fuzzy
 msgid "Errors and Warnings Only"
-msgstr "Csak a Hibák és Figyelmeztetések"
+msgstr "Csak Hibák és Figyelmeztetések"
 
 #: eeschema/dialogs/dialog_erc.cpp:317 pcbnew/dialogs/dialog_drc.cpp:1269
-#, fuzzy
 msgid "Errors, Warnings and Exclusions"
-msgstr "Hibák,Figyelmeztetések és Kizárások"
+msgstr "Hibák, Figyelmeztetések és Kizárások"
 
 #: eeschema/dialogs/dialog_erc.cpp:449
 #, c-format
@@ -13295,9 +13278,8 @@ msgid "Edit Junction"
 msgstr "Csomópont szerkesztése"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Csomópontok"
+msgstr "Csomópontokok szerkesztése"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -13411,9 +13393,8 @@ msgstr "Szintaxis súgó ablak megjelenítése"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4193
-#, fuzzy
 msgid "Fields"
-msgstr "Mező"
+msgstr "Mezők"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
@@ -13427,17 +13408,15 @@ msgstr "Mező"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:49
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 #: pcbnew/pcb_fields_grid_table.cpp:149
-#, fuzzy
 msgid "Show"
-msgstr "Megjelenítés"
+msgstr "Megjelenít"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:112
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:481
-#, fuzzy
 msgid "Show Name"
-msgstr "Név"
+msgstr "Név megjelenítése"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:113
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -13728,12 +13707,11 @@ msgid "All units are interchangeable"
 msgstr "Mindegyik részegység felcserélhető"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:78
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Akkor használd ezt ha a részegységek csak a lábak\n"
+"Használja ezt az opciót, ha a részegységek csak a lábak\n"
 "számozásában térnek el."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
@@ -14037,7 +14015,6 @@ msgstr "Vonalak szerkesztése"
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:66
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:221
-#, fuzzy
 msgid "Combo!"
 msgstr "Kombinált!"
 
@@ -15789,7 +15766,6 @@ msgstr "Alkatrészrajzolat kiválasztása..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
 #: eeschema/fields_grid_table.cpp:1058
-#, fuzzy
 msgid "Browse for footprint"
 msgstr "Alkatrészrajzolat böngésző"
 
@@ -16321,15 +16297,13 @@ msgstr "Rajzjelek migrálása"
 
 #: eeschema/dialogs/dialog_table_properties.cpp:394
 #: pcbnew/dialogs/dialog_table_properties.cpp:410
-#, fuzzy
 msgid "Edit Table"
-msgstr "Címke szerkesztése..."
+msgstr "Táblázat szerkesztése"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "Szöveg lépésköz:"
+msgstr "Cella tartalma:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -16358,15 +16332,13 @@ msgstr "Oszlopok"
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:667 pcbnew/dialogs/dialog_table_properties_base.h:73
 #: pcbnew/pcb_table.cpp:641
-#, fuzzy
 msgid "Table Properties"
-msgstr "Címke tulajdonságok"
+msgstr "Táblázat tulajdonságok"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:322
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "Rajzjel tulajdonságok"
+msgstr "Táblázat cellák tulajdonságainak szerkesztése"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
@@ -17622,11 +17594,9 @@ msgstr "A(z) \"%s\" fájl nem található"
 
 #: eeschema/eeschema_jobs_handler.cpp:718
 #: eeschema/eeschema_jobs_handler.cpp:926
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr ""
-"Nem sikerült elemezni az URL-t:\n"
-"\"%s\""
+msgstr "Nem sikerült megnyitni: \"%s\""
 
 #: eeschema/eeschema_jobs_handler.cpp:752
 #, fuzzy, c-format
@@ -17657,9 +17627,9 @@ msgstr "Nincs kijelölve rajzjel a mentéshez."
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1149
 #: pcbnew/pcbnew_jobs_handler.cpp:1791
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Elvárt \"%s\""
+msgstr "%s exportálása"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1671
 msgid "Output path must not conflict with existing path\n"
