@@ -771,10 +771,12 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
 
     m_numRef = -1;
 
-    if( aSymbol->GetValue( false, &aSheetPath, false ).IsEmpty() )
-        aSymbol->SetValueFieldText( wxT( "~" ) );
+    wxString value = aSymbol->GetValue( false, &aSheetPath, false );
 
-    m_value = aSymbol->GetValue( false, &aSheetPath, false );
+    if( value.IsEmpty() )
+        value = wxT( "~" );
+
+    m_value = value;
 }
 
 

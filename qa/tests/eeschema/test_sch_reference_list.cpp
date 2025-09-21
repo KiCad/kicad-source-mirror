@@ -297,4 +297,31 @@ BOOST_AUTO_TEST_CASE( ReannotateDuplicates )
 }
 
 
+BOOST_AUTO_TEST_CASE( ReferenceListDoesNotMutateEmptyValue )
+{
+    loadTestCase( "test_multiunit_reannotate", {} );
+
+    SCH_SHEET_PATH sheetPath = m_schematic->CurrentSheet();
+    SCH_SYMBOL*    symbol = nullptr;
+
+    for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        symbol = static_cast<SCH_SYMBOL*>( item );
+        break;
+    }
+
+    BOOST_REQUIRE( symbol != nullptr );
+
+    symbol->SetValueFieldText( wxEmptyString );
+    BOOST_REQUIRE( symbol->GetValue( false, &sheetPath, false ).IsEmpty() );
+
+    SCH_REFERENCE_LIST refs;
+    sheetPath.AppendSymbol( refs, symbol );
+
+    BOOST_CHECK( symbol->GetValue( false, &sheetPath, false ).IsEmpty() );
+    BOOST_REQUIRE_EQUAL( refs.GetCount(), 1 );
+    BOOST_CHECK_EQUAL( refs[0].GetValue(), wxT( "~" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
