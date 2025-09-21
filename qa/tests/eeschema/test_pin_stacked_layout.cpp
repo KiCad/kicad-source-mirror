@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
             bool overlaps = boxIntersectsLine( textBbox, pinStart, pinEnd );
 
             // Log detailed info for debugging
-            wxLogMessage( wxT("Rotation %s, Pin %s: pos=(%d,%d) textPos=(%d,%d) pinLine=(%d,%d)-(%d,%d) textBox=(%d,%d,%dx%d) overlap=%s"),
+            wxLogDebug( wxT("Rotation %s, Pin %s: pos=(%d,%d) textPos=(%d,%d) pinLine=(%d,%d)-(%d,%d) textBox=(%d,%d,%dx%d) overlap=%s"),
                           rotName, pin->GetNumber(),
                           pinStart.x, pinStart.y,
                           numberInfo.m_TextPosition.x, numberInfo.m_TextPosition.y,

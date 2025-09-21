@@ -41,101 +41,153 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     wxString              msg;
     std::vector<SCH_PIN*> pinList = aSymbol->GetPins();
 
-    // Test for duplicates:
-    // Sort pins by pin num, so 2 duplicate pins
-    // (pins with the same number) will be consecutive in list
-    sort( pinList.begin(), pinList.end(), sort_by_pin_number );
-
-    for( unsigned ii = 1; ii < pinList.size(); ii++ )
+    struct LOGICAL_PIN
     {
-        SCH_PIN* pin  = pinList[ii - 1];
-        SCH_PIN* next = pinList[ii];
+        SCH_PIN* pin;
+        wxString number;
+    };
 
-        if( pin->GetNumber() != next->GetNumber() )
+    std::vector<LOGICAL_PIN> logicalPins;
+    logicalPins.reserve( pinList.size() );
+
+    for( SCH_PIN* pin : pinList )
+    {
+        bool valid = false;
+        std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
+
+        if( !valid || numbers.empty() )
+        {
+            logicalPins.push_back( { pin, pin->GetNumber() } );
+            continue;
+        }
+
+        for( const wxString& number : numbers )
+            logicalPins.push_back( { pin, number } );
+    }
+
+    sort( logicalPins.begin(), logicalPins.end(),
+            []( const LOGICAL_PIN& lhs, const LOGICAL_PIN& rhs )
+            {
+                int result = lhs.number.Cmp( rhs.number );
+
+                if( result == 0 )
+                    result = lhs.pin->GetBodyStyle() - rhs.pin->GetBodyStyle();
+
+                if( result == 0 )
+                    result = lhs.pin->GetUnit() - rhs.pin->GetUnit();
+
+                if( result == 0 && lhs.pin != rhs.pin )
+                    return lhs.pin < rhs.pin;
+
+                return result < 0;
+            } );
+
+    for( unsigned ii = 1; ii < logicalPins.size(); ii++ )
+    {
+        LOGICAL_PIN& prev = logicalPins[ii - 1];
+        LOGICAL_PIN& next = logicalPins[ii];
+
+        if( prev.number != next.number )
+            continue;
+
+        if( prev.pin == next.pin )
             continue;
 
         // Pins are not duplicated only if they are in different body styles
         // (but GetBodyStyle() == 0 means common to all body styles)
-        if( pin->GetBodyStyle() != 0 && next->GetBodyStyle() != 0 )
+        if( prev.pin->GetBodyStyle() != 0 && next.pin->GetBodyStyle() != 0 )
         {
-            if( pin->GetBodyStyle() != next->GetBodyStyle() )
+            if( prev.pin->GetBodyStyle() != next.pin->GetBodyStyle() )
                 continue;
         }
 
         wxString pinName;
         wxString nextName;
 
-        if( !pin->GetName().IsEmpty() )
-            pinName = " '" + pin->GetName() + "'";
+        if( !prev.pin->GetName().IsEmpty() )
+            pinName = " '" + prev.pin->GetName() + "'";
 
-        if( !next->GetName().IsEmpty() )
-            nextName = " '" + next->GetName() + "'";
+        if( !next.pin->GetName().IsEmpty() )
+            nextName = " '" + next.pin->GetName() + "'";
 
-        if( aSymbol->IsMultiBodyStyle() && next->GetBodyStyle() )
+        auto formatNumberForMessage = []( const SCH_PIN* pin, const wxString& logicalNumber )
         {
-            if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
+            wxString shown = pin->GetNumber();
+
+            if( shown == logicalNumber )
+                return logicalNumber;
+
+            return wxString::Format( wxT( "%s (%s)" ), logicalNumber, shown );
+        };
+
+        wxString prevNumber = formatNumberForMessage( prev.pin, prev.number );
+        wxString nextNumber = formatNumberForMessage( next.pin, next.number );
+
+        if( aSymbol->IsMultiBodyStyle() && next.pin->GetBodyStyle() )
+        {
+            if( prev.pin->GetUnit() == 0 || next.pin->GetUnit() == 0 )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " in %s body style." ),
-                            next->GetNumber(),
+                            nextNumber,
                             nextName,
-                            aUnitsProvider->MessageTextFromValue( next->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -next->GetPosition().y ),
-                            pin->GetNumber(),
-                            pin->GetName(),
-                            aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
+                            aUnitsProvider->MessageTextFromValue( next.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -next.pin->GetPosition().y ),
+                            prevNumber,
+                            prev.pin->GetName(),
+                            aUnitsProvider->MessageTextFromValue( prev.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -prev.pin->GetPosition().y ),
+                            aSymbol->GetBodyStyleDescription( prev.pin->GetBodyStyle(), true ).Lower() );
             }
             else
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " in units %s and %s of %s body style." ),
-                            next->GetNumber(),
+                            nextNumber,
                             nextName,
-                            aUnitsProvider->MessageTextFromValue( next->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -next->GetPosition().y ),
-                            pin->GetNumber(),
+                            aUnitsProvider->MessageTextFromValue( next.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -next.pin->GetPosition().y ),
+                            prevNumber,
                             pinName,
-                            aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            aSymbol->GetUnitDisplayName( next->GetUnit(), false ),
-                            aSymbol->GetUnitDisplayName( pin->GetUnit(), false ),
-                            aSymbol->GetBodyStyleDescription( pin->GetBodyStyle(), true ).Lower() );
+                            aUnitsProvider->MessageTextFromValue( prev.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -prev.pin->GetPosition().y ),
+                            aSymbol->GetUnitDisplayName( next.pin->GetUnit(), false ),
+                            aSymbol->GetUnitDisplayName( prev.pin->GetUnit(), false ),
+                            aSymbol->GetBodyStyleDescription( prev.pin->GetBodyStyle(), true ).Lower() );
             }
         }
         else
         {
-            if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
+            if( prev.pin->GetUnit() == 0 || next.pin->GetUnit() == 0 )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>." ),
-                            next->GetNumber(),
+                            nextNumber,
                             nextName,
-                            aUnitsProvider->MessageTextFromValue( next->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -next->GetPosition().y ),
-                            pin->GetNumber(),
+                            aUnitsProvider->MessageTextFromValue( next.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -next.pin->GetPosition().y ),
+                            prevNumber,
                             pinName,
-                            aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ) );
+                            aUnitsProvider->MessageTextFromValue( prev.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -prev.pin->GetPosition().y ) );
             }
             else
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " in units %s and %s." ),
-                            next->GetNumber(),
+                            nextNumber,
                             nextName,
-                            aUnitsProvider->MessageTextFromValue( next->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -next->GetPosition().y ),
-                            pin->GetNumber(),
+                            aUnitsProvider->MessageTextFromValue( next.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -next.pin->GetPosition().y ),
+                            prevNumber,
                             pinName,
-                            aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            aSymbol->GetUnitDisplayName( next->GetUnit(), false ),
-                            aSymbol->GetUnitDisplayName( pin->GetUnit(), false ) );
+                            aUnitsProvider->MessageTextFromValue( prev.pin->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -prev.pin->GetPosition().y ),
+                            aSymbol->GetUnitDisplayName( next.pin->GetUnit(), false ),
+                            aSymbol->GetUnitDisplayName( prev.pin->GetUnit(), false ) );
             }
         }
 

@@ -21,6 +21,11 @@
 #include <sch_pin.h>
 #include <lib_symbol.h>
 #include <eeschema_test_utils.h>
+#include <units_provider.h>
+#include <base_units.h>
+
+extern void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                                UNITS_PROVIDER* aUnitsProvider );
 
 struct STACKED_PIN_CONVERSION_FIXTURE
 {
@@ -738,5 +743,33 @@ BOOST_AUTO_TEST_CASE( TestAlphanumericRangeCollapsing )
     BOOST_CHECK_EQUAL( expectedResult, "AA1-AA3,AB4,CD12-CD14" );
 }
 
+
+BOOST_AUTO_TEST_CASE( TestDuplicatePinDetectionWithStackedNotation )
+{
+    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILS );
+
+    SCH_PIN* stacked = new SCH_PIN( m_symbol.get() );
+    stacked->SetNumber( wxT( "[1-3]" ) );
+    stacked->SetPosition( VECTOR2I( 0, 0 ) );
+    m_symbol->AddDrawItem( stacked );
+
+    SCH_PIN* single = new SCH_PIN( m_symbol.get() );
+    single->SetNumber( wxT( "2" ) );
+    single->SetPosition( VECTOR2I( schIUScale.MilsToIU( 100 ), 0 ) );
+    m_symbol->AddDrawItem( single );
+
+    std::vector<wxString> messages;
+    CheckDuplicatePins( m_symbol.get(), messages, &unitsProvider );
+
+    BOOST_REQUIRE_EQUAL( messages.size(), 1 );
+    BOOST_CHECK( messages.front().Contains( wxT( "Duplicate pin 2" ) ) );
+    BOOST_CHECK( messages.front().Contains( wxT( "[1-3]" ) ) );
+
+    single->SetNumber( wxT( "5" ) );
+    messages.clear();
+
+    CheckDuplicatePins( m_symbol.get(), messages, &unitsProvider );
+    BOOST_CHECK( messages.empty() );
+}
 
 BOOST_AUTO_TEST_SUITE_END()
