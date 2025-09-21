@@ -368,8 +368,9 @@ bool DIALOG_PRINT::TransferDataFromWindow()
     // Using custom page size avoids the problematic
     // gtk_page_setup_set_paper_size_and_default_margins call in wxWidgets.
 
-    wxPaperSize   paperId = data.GetPaperId();
-    const wxChar* paperType = nullptr;
+    wxPaperSize     paperId = data.GetPaperId();
+    PAGE_SIZE_TYPE  paperType = PAGE_SIZE_TYPE::A4; // default; overwritten below when matched
+    bool            havePaperType = false;
 
     // clang-format off
     std::set<wxPaperSize> letterSizes = {
@@ -396,13 +397,22 @@ bool DIALOG_PRINT::TransferDataFromWindow()
     // clang-format on
 
     if( letterSizes.count( paperId ) )
-        paperType = PAGE_INFO::USLetter;
+    {
+        paperType = PAGE_SIZE_TYPE::USLetter;
+        havePaperType = true;
+    }
     else if( legalSizes.count( paperId ) )
-        paperType = PAGE_INFO::USLegal;
+    {
+        paperType = PAGE_SIZE_TYPE::USLegal;
+        havePaperType = true;
+    }
     else if( a4Sizes.count( paperId ) )
-        paperType = PAGE_INFO::A4;
+    {
+        paperType = PAGE_SIZE_TYPE::A4;
+        havePaperType = true;
+    }
 
-    if( paperType )
+    if( havePaperType )
     {
         PAGE_INFO pageInfo( paperType, data.GetOrientation() == wxPORTRAIT );
 
