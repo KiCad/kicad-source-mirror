@@ -261,14 +261,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         }
     }
 
-    // The Y axis for components in lib is from bottom to top while the screen axis is top
-    // to bottom: we must change the y coord sign for editing
-    for( size_t i = 0; i < m_fields->size(); ++i )
-    {
-        VECTOR2I pos = m_fields->at( i ).GetPosition();
-        pos.y = -pos.y;
-        m_fields->at( i ).SetPosition( pos );
-    }
+    // The Y axis for components in library file is from bottom to top while the screen axis is top
+    // to bottom.However it is nowhandled by the lib file parser/writer.
 
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
@@ -569,10 +563,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     for( size_t ii = 0; ii < m_fields->size(); ++ii )
     {
         SCH_FIELD& field = m_fields->at( ii );
-
-        VECTOR2I pos = field.GetPosition();
-        pos.y = -pos.y;
-        field.SetPosition( pos );
 
         if( !field.IsMandatory() )
             field.SetOrdinal( ordinal++ );
