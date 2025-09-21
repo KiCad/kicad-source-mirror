@@ -53,10 +53,63 @@
 #include <wx/checkbox.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/process.h>
 #include <wx/regex.h>
 #include <wx/txtstrm.h>
+#include <wx/utils.h>
 
 #include <thread>
+#include <vector>
+
+
+namespace
+{
+std::vector<wxString> SplitCommandLine( const wxString& aCommand )
+{
+    std::vector<wxString> args;
+    wxString              current;
+    bool                  inSingle = false;
+    bool                  inDouble = false;
+    bool                  argStarted = false;
+
+    for( wxUniChar c : aCommand )
+    {
+        if( c == '"' && !inSingle )
+        {
+            inDouble = !inDouble;
+            argStarted = true;
+            continue;
+        }
+
+        if( c == '\'' && !inDouble )
+        {
+            inSingle = !inSingle;
+            argStarted = true;
+            continue;
+        }
+
+        if( ( c == ' ' || c == '\t' || c == '\n' || c == '\r' ) && !inSingle && !inDouble )
+        {
+            if( argStarted || !current.IsEmpty() )
+            {
+                args.emplace_back( current );
+                current.clear();
+                argStarted = false;
+            }
+
+            continue;
+        }
+
+        current.Append( c );
+        argStarted = true;
+    }
+
+    if( argStarted || !current.IsEmpty() )
+        args.emplace_back( current );
+
+    return args;
+}
+} // namespace
 
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
@@ -616,68 +669,119 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 
         if( !commandLine.IsEmpty() )
         {
-            wxProcess* process = new wxProcess( GetEventHandler(), wxID_ANY );
-            process->Redirect();
-            wxExecute( commandLine, wxEXEC_ASYNC, process );
+            std::vector<wxString> argsStrings = SplitCommandLine( commandLine );
 
-            reporter.ReportHead( commandLine, RPT_SEVERITY_ACTION );
-            process->Activate();
-
-            std::this_thread::sleep_for( std::chrono::seconds( 1 ) ); // give the process time to start and output any data or errors
-
-            if( process->IsInputAvailable() )
+            if( !argsStrings.empty() )
             {
-                wxInputStream* in = process->GetInputStream();
-                wxTextInputStream textstream( *in );
+                std::vector<const wxChar*> argv;
+                argv.reserve( argsStrings.size() + 1 );
 
-                while( in->CanRead() )
+                for( wxString& arg : argsStrings )
+                    argv.emplace_back( arg.wc_str() );
+
+                argv.emplace_back( nullptr );
+
+                wxExecuteEnv env;
+                wxGetEnvMap( &env.env );
+
+                const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+
+                for( const auto& [key, value] : envVars )
                 {
-                    wxString line = textstream.ReadLine();
-
-                    if( !line.IsEmpty() )
-                        reporter.Report( line, RPT_SEVERITY_INFO );
+                    if( !value.GetValue().IsEmpty() )
+                        env.env[key] = value.GetValue();
                 }
-            }
 
-            if( process->IsErrorAvailable() )
-            {
-                wxInputStream* err = process->GetErrorStream();
-                wxTextInputStream textstream( *err );
+                wxFileName netlistFile( fullpath );
 
-                while( err->CanRead() )
+                if( !netlistFile.IsAbsolute() )
+                    netlistFile.MakeAbsolute( Prj().GetProjectPath() );
+                else
+                    netlistFile.MakeAbsolute();
+
+                wxString cwd = netlistFile.GetPath();
+
+                if( cwd.IsEmpty() )
+                    cwd = Prj().GetProjectPath();
+
+                env.cwd = cwd;
+
+                wxProcess* process = new wxProcess( GetEventHandler(), wxID_ANY );
+                process->Redirect();
+
+                long pid = wxExecute( argv.data(), wxEXEC_ASYNC, process, &env );
+
+                reporter.ReportHead( commandLine, RPT_SEVERITY_ACTION );
+
+                if( pid <= 0 )
                 {
-                    wxString line = textstream.ReadLine();
+                    reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
+                    reporter.Report( _( "Note: command line is usually: "
+                                        "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
+                                     RPT_SEVERITY_INFO );
+                    delete process;
+                }
+                else
+                {
+                    process->Activate();
 
-                    if( !line.IsEmpty() )
+                    std::this_thread::sleep_for( std::chrono::seconds( 1 ) ); // give the process time to start and output any data or errors
+
+                    if( process->IsInputAvailable() )
                     {
-                        if( line.EndsWith( wxS( "failed with error 2!" ) ) )      // ENOENT
+                        wxInputStream* in = process->GetInputStream();
+                        wxTextInputStream textstream( *in );
+
+                        while( in->CanRead() )
                         {
-                            reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
-                            reporter.Report( _( "Note: command line is usually: "
-                                                "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
-                                             RPT_SEVERITY_INFO );
-                        }
-                        else if( line.EndsWith( wxS( "failed with error 8!" ) ) ) // ENOEXEC
-                        {
-                            reporter.Report( _( "external simulator has the wrong format or "
-                                                "architecture" ), RPT_SEVERITY_ERROR );
-                        }
-                        else if( line.EndsWith( "failed with error 13!" ) ) // EACCES
-                        {
-                            reporter.Report( _( "permission denied" ), RPT_SEVERITY_ERROR );
-                        }
-                        else
-                        {
-                            reporter.Report( line, RPT_SEVERITY_ERROR );
+                            wxString line = textstream.ReadLine();
+
+                            if( !line.IsEmpty() )
+                                reporter.Report( line, RPT_SEVERITY_INFO );
                         }
                     }
+
+                    if( process->IsErrorAvailable() )
+                    {
+                        wxInputStream* err = process->GetErrorStream();
+                        wxTextInputStream textstream( *err );
+
+                        while( err->CanRead() )
+                        {
+                            wxString line = textstream.ReadLine();
+
+                            if( !line.IsEmpty() )
+                            {
+                                if( line.EndsWith( wxS( "failed with error 2!" ) ) )      // ENOENT
+                                {
+                                    reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
+                                    reporter.Report( _( "Note: command line is usually: "
+                                                        "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
+                                                     RPT_SEVERITY_INFO );
+                                }
+                                else if( line.EndsWith( wxS( "failed with error 8!" ) ) ) // ENOEXEC
+                                {
+                                    reporter.Report( _( "external simulator has the wrong format or "
+                                                        "architecture" ), RPT_SEVERITY_ERROR );
+                                }
+                                else if( line.EndsWith( "failed with error 13!" ) ) // EACCES
+                                {
+                                    reporter.Report( _( "permission denied" ), RPT_SEVERITY_ERROR );
+                                }
+                                else
+                                {
+                                    reporter.Report( line, RPT_SEVERITY_ERROR );
+                                }
+                            }
+                        }
+                    }
+
+                    process->CloseOutput();
+                    process->Detach();
+
+                    // Do not delete process, it will delete itself when it terminates
                 }
             }
-
-            process->CloseOutput();
-            process->Detach();
-
-            // Do not delete process, it will delete itself when it terminates
         }
     }
 
