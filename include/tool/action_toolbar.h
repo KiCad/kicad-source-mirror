@@ -287,6 +287,12 @@ public:
     void SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
 
     /**
+     * Select the given action in whatever group contains it and update that group's icon.
+     * If the action is not part of any group on this toolbar, this is a no-op.
+     */
+    void SelectAction( const TOOL_ACTION& aAction );
+
+    /**
      * Replace the contents of this toolbar with the configuration given in
      * @c aConfig.
      *

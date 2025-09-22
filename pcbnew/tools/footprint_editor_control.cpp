@@ -26,12 +26,15 @@
 #include <advanced_config.h>
 #include <string_utils.h>
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/library_editor_control.h>
 #include <tools/pcb_actions.h>
+#include <footprint_editor_settings.h>
 #include <eda_doc.h>
 #include <footprint_edit_frame.h>
 #include <generate_footprint_info.h>
+#include <pcbnew_settings.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <kidialog.h>
@@ -157,6 +160,10 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 // clang-format on
 
     libraryTreeTool->AddContextMenuItems( &ctxMenu );
+
+    // Ensure the left toolbar's Line modes group reflects the current setting at startup
+    if( m_toolMgr )
+        m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
 
     return true;
 }
@@ -948,4 +955,54 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleLayersManager,  PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleProperties,     ACTIONS::showProperties.MakeEvent() );
     // clang-format on
+
+    // Line modes for the footprint editor: explicit modes, next-mode, and toolbar sync
+    Go( &FOOTPRINT_EDITOR_CONTROL::ChangeLineMode,       PCB_ACTIONS::lineModeFree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ChangeLineMode,       PCB_ACTIONS::lineMode90.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ChangeLineMode,       PCB_ACTIONS::lineMode45.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::NextLineMode,         PCB_ACTIONS::lineModeNext.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::OnAngleSnapModeChanged,
+                                                   PCB_ACTIONS::angleSnapModeChanged.MakeEvent() );
+}
+
+int FOOTPRINT_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
+{
+    LEADER_MODE mode = aEvent.Parameter<LEADER_MODE>();
+    GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode = mode;
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+    m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
+    return 0;
+}
+
+int FOOTPRINT_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
+{
+    OPT_TOOL_EVENT evt = PCB_ACTIONS::toggleHV45Mode.MakeEvent();
+    m_toolMgr->ProcessEvent( *evt );
+    return 0;
+}
+
+int FOOTPRINT_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT_EDIT_FRAME* f = getEditFrame<FOOTPRINT_EDIT_FRAME>();
+
+    if( !f )
+        return 0;
+
+    LEADER_MODE mode = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
+
+    switch( mode )
+    {
+    case LEADER_MODE::DIRECT:
+        f->SelectLeftToolbarAction( PCB_ACTIONS::lineModeFree );
+        break;
+    case LEADER_MODE::DEG90:
+        f->SelectLeftToolbarAction( PCB_ACTIONS::lineMode90 );
+        break;
+    case LEADER_MODE::DEG45:
+    default:
+        f->SelectLeftToolbarAction( PCB_ACTIONS::lineMode45 );
+        break;
+    }
+
+    return 0;
 }

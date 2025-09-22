@@ -59,9 +59,10 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
               .AppendAction( ACTIONS::toggleGridOverrides )
-              .AppendAction( ACTIONS::inchesUnits )
-              .AppendAction( ACTIONS::milsUnits )
-              .AppendAction( ACTIONS::millimetersUnits )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
+                            .AddAction( ACTIONS::millimetersUnits )
+                            .AddAction( ACTIONS::inchesUnits )
+                            .AddAction( ACTIONS::milsUnits ) )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Crosshair modes" ) )
                             .AddAction( ACTIONS::cursorSmallCrosshairs )
                             .AddAction( ACTIONS::cursorFullCrosshairs )

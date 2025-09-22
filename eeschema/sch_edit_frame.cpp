@@ -193,6 +193,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     configureToolbars();
     RecreateToolbars();
 
+    // Ensure the "Line modes" toolbar group shows the current angle mode on startup
+    if( GetToolManager() )
+        GetToolManager()->RunAction( SCH_ACTIONS::angleSnapModeChanged );
+
 #ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
@@ -735,16 +739,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::showDesignBlockPanel, CHECK( designBlockCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,               CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides,      CHECK( cond.GridOverrides() ) );
-    mgr->SetConditions( ACTIONS::cursorSmallCrosshairs,        CHECK( cond.CursorSmallCrosshairs() ) );
-    mgr->SetConditions( ACTIONS::cursorFullCrosshairs,         CHECK( cond.CursorFullCrosshairs() ) );
-    mgr->SetConditions( ACTIONS::cursor45Crosshairs,           CHECK( cond.Cursor45Crosshairs() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,         CHECK( cond.Units( EDA_UNITS::MM ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,              CHECK( cond.Units( EDA_UNITS::INCH ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,                CHECK( cond.Units( EDA_UNITS::MILS ) ) );
-
-    mgr->SetConditions( SCH_ACTIONS::lineModeFree,    CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
-    mgr->SetConditions( SCH_ACTIONS::lineMode90,      CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
-    mgr->SetConditions( SCH_ACTIONS::lineMode45,      CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );

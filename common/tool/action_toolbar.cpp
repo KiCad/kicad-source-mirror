@@ -484,6 +484,28 @@ void ACTION_TOOLBAR::SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAct
 }
 
 
+void ACTION_TOOLBAR::SelectAction( const TOOL_ACTION& aAction )
+{
+    // Find the group that contains this action and select it
+    for( auto& [id, groupPtr] : m_actionGroups )
+    {
+        ACTION_GROUP* group = groupPtr.get();
+
+        bool inGroup = std::any_of( group->m_actions.begin(), group->m_actions.end(),
+                                     [&]( const TOOL_ACTION* action2 )
+                                     {
+                                         return aAction.GetId() == action2->GetId();
+                                     } );
+
+        if( inGroup )
+        {
+            doSelectAction( group, aAction );
+            break;
+        }
+    }
+}
+
+
 void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction )
 {
     wxASSERT( GetParent() );

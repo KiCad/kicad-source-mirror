@@ -222,6 +222,13 @@ public:
     static TOOL_ACTION placeImportedGraphics;
     static TOOL_ACTION setAnchor;
     static TOOL_ACTION deleteLastPoint;
+
+    // Line mode grouping and events
+    static TOOL_ACTION lineModeFree;         ///< Unconstrained angle mode (icon lines_any)
+    static TOOL_ACTION lineMode90;           ///< 90-degree-only mode (icon lines90)
+    static TOOL_ACTION lineMode45;           ///< 45-degree-or-orthogonal mode (icon hv45mode)
+    static TOOL_ACTION lineModeNext;         ///< Cycle through angle modes
+    static TOOL_ACTION angleSnapModeChanged; ///< Notification event when angle mode changes
     static TOOL_ACTION closeOutline;
 
     /// Increase width of currently drawn line

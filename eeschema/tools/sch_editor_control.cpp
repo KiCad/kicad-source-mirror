@@ -2751,6 +2751,8 @@ int SCH_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
 {
     m_frame->eeconfig()->m_Drawing.line_mode = aEvent.Parameter<LINE_MODE>();
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
+    // Notify toolbar to update selection
+    m_toolMgr->RunAction( SCH_ACTIONS::angleSnapModeChanged );
     return 0;
 }
 
@@ -2760,6 +2762,8 @@ int SCH_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
     m_frame->eeconfig()->m_Drawing.line_mode++;
     m_frame->eeconfig()->m_Drawing.line_mode %= LINE_MODE::LINE_MODE_COUNT;
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
+    // Notify toolbar to update selection
+    m_toolMgr->RunAction( SCH_ACTIONS::angleSnapModeChanged );
     return 0;
 }
 
@@ -2786,6 +2790,26 @@ int SCH_EDITOR_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
     if( Pgm().GetCommonSettings()->m_Api.enable_server )
         Pgm().GetPluginManager().ReloadPlugins();
 #endif
+    return 0;
+}
+
+int SCH_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
+{
+    // Update the left toolbar Line modes group icon to match current mode
+    switch( static_cast<LINE_MODE>( m_frame->eeconfig()->m_Drawing.line_mode ) )
+    {
+    case LINE_MODE::LINE_MODE_FREE:
+        m_frame->SelectLeftToolbarAction( SCH_ACTIONS::lineModeFree );
+        break;
+    case LINE_MODE::LINE_MODE_90:
+        m_frame->SelectLeftToolbarAction( SCH_ACTIONS::lineMode90 );
+        break;
+    case LINE_MODE::LINE_MODE_45:
+    default:
+        m_frame->SelectLeftToolbarAction( SCH_ACTIONS::lineMode45 );
+        break;
+    }
+
     return 0;
 }
 
@@ -3079,6 +3103,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,          SCH_ACTIONS::lineMode90.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,          SCH_ACTIONS::lineMode45.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::NextLineMode,            SCH_ACTIONS::lineModeNext.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::OnAngleSnapModeChanged,  SCH_ACTIONS::angleSnapModeChanged.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleAnnotateAuto,      SCH_ACTIONS::toggleAnnotateAuto.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ReloadPlugins,           ACTIONS::pluginsReload.MakeEvent() );

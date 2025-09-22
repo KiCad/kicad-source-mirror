@@ -1315,6 +1315,11 @@ TOOL_ACTION SCH_ACTIONS::lineModeNext( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Line Mode for Wires and Buses" ) )
         .Tooltip( _( "Switch to next line mode" ) ) );
 
+TOOL_ACTION SCH_ACTIONS::angleSnapModeChanged( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.angleSnapModeChanged" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_NOTIFY ) );
+
 TOOL_ACTION SCH_ACTIONS::toggleAnnotateAuto( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.annotateAutomatically" )
         .Scope( AS_GLOBAL )

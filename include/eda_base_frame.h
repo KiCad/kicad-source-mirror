@@ -198,6 +198,16 @@ public:
 
     virtual void OnSize( wxSizeEvent& aEvent );
 
+    /**
+     * Select the given action in the left toolbar group which contains it, if any.
+     * This updates the displayed icon/tooltip and UI conditions for that group.
+     */
+    void SelectLeftToolbarAction( const TOOL_ACTION& aAction )
+    {
+        if( m_tbLeft )
+            m_tbLeft->SelectAction( aAction );
+    }
+
     void OnMaximize( wxMaximizeEvent& aEvent );
 
     int GetAutoSaveInterval() const;

@@ -490,12 +490,6 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
-    mgr->SetConditions( ACTIONS::cursorSmallCrosshairs,   CHECK( cond.CursorSmallCrosshairs() ) );
-    mgr->SetConditions( ACTIONS::cursorFullCrosshairs,    CHECK( cond.CursorFullCrosshairs() ) );
-    mgr->SetConditions( ACTIONS::cursor45Crosshairs,      CHECK( cond.Cursor45Crosshairs() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MM ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCH ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond ) );

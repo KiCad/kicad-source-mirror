@@ -267,6 +267,8 @@ public:
     static TOOL_ACTION lineMode90;
     static TOOL_ACTION lineMode45;
     static TOOL_ACTION lineModeNext;
+    // Notify listeners when angle snap/line mode changes
+    static TOOL_ACTION angleSnapModeChanged;
 
     // Annotation
     static TOOL_ACTION toggleAnnotateAuto;

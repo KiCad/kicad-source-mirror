@@ -37,6 +37,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
+#include <geometry/geometry_utils.h>
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
@@ -1443,6 +1444,48 @@ TOOL_ACTION PCB_ACTIONS::toggleHV45Mode( TOOL_ACTION_ARGS()
         .Tooltip( _( "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::hv45mode ) );
+
+// Line mode grouping and events (for PCB and Footprint editors)
+TOOL_ACTION PCB_ACTIONS::lineModeFree( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.lineModeFree" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Line Modes" ) )
+        .Tooltip( _( "Draw and drag at any angle" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::lines_any )
+        .Flags( AF_NONE )
+        .Parameter( LEADER_MODE::DIRECT ) );
+
+TOOL_ACTION PCB_ACTIONS::lineMode90( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.lineModeOrthonal" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Line Modes" ) )
+        .Tooltip( _( "Constrain drawing and dragging to horizontal or vertical motions" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::lines90 )
+        .Flags( AF_NONE )
+        .Parameter( LEADER_MODE::DEG90 ) );
+
+TOOL_ACTION PCB_ACTIONS::lineMode45( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.lineMode45" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Line Modes" ) )
+        .Tooltip( _( "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle motions" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::hv45mode )
+        .Flags( AF_NONE )
+        .Parameter( LEADER_MODE::DEG45 ) );
+
+TOOL_ACTION PCB_ACTIONS::lineModeNext( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.lineModeNext" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Line Modes" ) )
+        .Tooltip( _( "Switch to next line mode" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::angleSnapModeChanged( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.angleSnapModeChanged" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_NOTIFY ) );
 
 TOOL_ACTION PCB_ACTIONS::lock( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.lock" )

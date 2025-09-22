@@ -57,6 +57,8 @@
 #include <pcbnew_id.h>
 #include <project.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_event.h>
 #include <tools/drawing_tool.h>
@@ -167,6 +169,50 @@ void BOARD_EDITOR_CONTROL::Reset( RESET_REASON aReason )
     }
 }
 
+// Update left-toolbar Line modes group icon based on current settings
+int BOARD_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* f = getEditFrame<PCB_EDIT_FRAME>();
+
+    if( !f )
+        return 0;
+
+    LEADER_MODE mode = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode;
+
+    switch( mode )
+    {
+    case LEADER_MODE::DIRECT:
+        f->SelectLeftToolbarAction( PCB_ACTIONS::lineModeFree );
+        break;
+    case LEADER_MODE::DEG90:
+        f->SelectLeftToolbarAction( PCB_ACTIONS::lineMode90 );
+        break;
+    case LEADER_MODE::DEG45:
+    default:
+        f->SelectLeftToolbarAction( PCB_ACTIONS::lineMode45 );
+        break;
+    }
+
+    return 0;
+}
+
+int BOARD_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
+{
+    LEADER_MODE mode = aEvent.Parameter<LEADER_MODE>();
+    GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode = mode;
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+    m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
+    return 0;
+}
+
+int BOARD_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
+{
+    // Reuse existing toggle behavior
+    OPT_TOOL_EVENT evt = PCB_ACTIONS::toggleHV45Mode.MakeEvent();
+    m_toolMgr->ProcessEvent( *evt );
+    return 0;
+}
+
 
 bool BOARD_EDITOR_CONTROL::Init()
 {
@@ -249,6 +295,10 @@ bool BOARD_EDITOR_CONTROL::Init()
 
         menu.AddMenu( zoneMenu.get(), toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 300 );
     }
+
+    // Ensure the left toolbar's Line modes group reflects the current setting at startup
+    if( m_toolMgr )
+        m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
 
     return true;
 }
@@ -1857,4 +1907,10 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ToggleSearch,           PCB_ACTIONS::showSearch.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::RepairBoard,            PCB_ACTIONS::repairBoard.MakeEvent() );
+    // Line modes: explicit, next, and notification
+    Go( &BOARD_EDITOR_CONTROL::ChangeLineMode,        PCB_ACTIONS::lineModeFree.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ChangeLineMode,        PCB_ACTIONS::lineMode90.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ChangeLineMode,        PCB_ACTIONS::lineMode45.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::NextLineMode,          PCB_ACTIONS::lineModeNext.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::OnAngleSnapModeChanged,PCB_ACTIONS::angleSnapModeChanged.MakeEvent() );
 }

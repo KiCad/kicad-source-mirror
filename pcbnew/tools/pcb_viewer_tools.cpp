@@ -35,6 +35,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <tool/actions.h>
+#include <tool/tool_manager.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_actions.h>
 
@@ -143,6 +144,9 @@ int PCB_VIEWER_TOOLS::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
     }
 
     frame()->UpdateStatusBar();
+
+    // Notify other tools/UI (toolbars) that the angle snap mode has changed
+    m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
 
     return 0;
 }
