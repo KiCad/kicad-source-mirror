@@ -20,6 +20,7 @@
 #ifndef KICAD_SINGLETON_H
 #define KICAD_SINGLETON_H
 
+#include <cstdint>
 #include <advanced_config.h>
 
 class GL_CONTEXT_MANAGER;
