@@ -108,8 +108,8 @@ bool DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG::TransferDataFromWindow()
         // Create the config path if it doesn't already exist.
         wxFileName designBlockTableFileName = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
 
-        if( !designBlockTableFileName.DirExists()
-            && !designBlockTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
+        if( !wxFileName::DirExists( designBlockTableFileName.GetPath() )
+            && !wxFileName::Mkdir( designBlockTableFileName.GetPath(), 0x777, wxPATH_MKDIR_FULL ) )
         {
             DisplayError( this, wxString::Format( _( "Cannot create global library table '%s'." ),
                                                   designBlockTableFileName.GetPath() ) );
