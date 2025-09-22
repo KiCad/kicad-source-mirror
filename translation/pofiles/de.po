@@ -16,7 +16,7 @@
 # magical-obama <maschwaerzler@a1.net>, 2022.
 # Luc <some_physics@live.com>, 2023, 2024.
 # Ken Ovo <Elektroniker@aon.at>, 2023.
-# Karl SCHUH <k.schuh@schuh-tv.at>, 2023, 2024.
+# Karl SCHUH <k.schuh@schuh-tv.at>, 2023, 2024, 2025.
 # Julian Daube <julian@daube.xyz>, 2023.
 # Johannes Maibaum <jmaibaum@gmail.com>, 2024.
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024, 2025.
@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-23 09:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -25813,9 +25813,8 @@ msgid "Failed to flatten symbol"
 msgstr "Symbol konnte nicht verflacht werden"
 
 #: eeschema/tools/symbol_editor_control.cpp:848
-#, fuzzy
 msgid "Failed to update library with flattened symbol"
-msgstr "Aktualisierung der Bibliothek mit verflachten Symbol fehlgeschlagen"
+msgstr "Aktualisierung der Bibliothek mit verflachtem Symbol fehlgeschlagen"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 msgid "Place Pin"
@@ -54148,9 +54147,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Footprint- und Textursprung als Kreuz anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show explicit snap points as crosses"
-msgstr "Explizit Fangpunkte als Kreuze anzeigen"
+msgstr "Explizite Fangpunkte als Kreuze anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Locked Item Shadow"
