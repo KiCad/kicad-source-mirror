@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-22 08:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-23 09:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -18480,7 +18480,6 @@ msgid "Ground pin not connected to ground net"
 msgstr "Ground-Pin nicht mit Ground-Netz verbunden"
 
 #: eeschema/erc/erc_item.cpp:165
-#, fuzzy
 msgid "Pin name resembles stacked pin"
 msgstr "Pinname gleicht einem gestapelten Pin"
 
