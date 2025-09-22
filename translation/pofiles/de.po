@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
 "PO-Revision-Date: 2025-09-22 08:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -24553,7 +24553,6 @@ msgid "Convert Stacked Pins"
 msgstr "In gestapelte Pins umwandeln"
 
 #: eeschema/tools/sch_actions.cpp:942
-#, fuzzy
 msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
@@ -40557,9 +40556,8 @@ msgid "Type VI-a (filled and tented bottom)"
 msgstr "Typ VI a (gefüllt und unterseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:199
-#, fuzzy
 msgid "Type VII (filled and capped)"
-msgstr "Typ VII (gefüllt und gedeckelt)"
+msgstr "Typ VII (gefüllt und überkontaktiert)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -49933,12 +49931,10 @@ msgid "Failed to create IPC-D-356 file\n"
 msgstr "Konnte IPC-D-356-Datei nicht erstellen.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2544
-#, fuzzy
 msgid "Successfully saved board file using the latest format\n"
 msgstr "Platinendatei erfolgreich im neuesten Format gespeichert\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2548
-#, fuzzy
 msgid "Board file was not updated\n"
 msgstr "Platinendatei wurde nicht aktualisiert\n"
 
@@ -49958,7 +49954,7 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:166
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
 msgstr "Plugin-Verzeichnis \"%s\" konnte nicht geöffnet werden."
 
@@ -49966,12 +49962,11 @@ msgstr "Plugin-Verzeichnis \"%s\" konnte nicht geöffnet werden."
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:175
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:184
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:190
-#, fuzzy
 msgid "Plugin Directory"
 msgstr "Plugin-Verzeichnis"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Plugin-Verzeichnis \"%s\" existiert nicht.  Soll es erstellt werden?"
 
@@ -51246,7 +51241,6 @@ msgid "Draw Bezier"
 msgstr "Bézierkurve zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:910
-#, fuzzy
 msgid "Place point"
 msgstr "Punkt platzieren"
 
@@ -51761,12 +51755,10 @@ msgstr ""
 "Auf einer Grafiklage eine Tabelle mit dem Lagenaufbau der Platine hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Place Point"
 msgstr "Punkt platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:184
-#, fuzzy
 msgid "Add reference/snap points"
 msgstr "Referenz-/Fangpunkte hinzufügen"
 
@@ -54159,7 +54151,7 @@ msgstr "Footprint- und Textursprung als Kreuz anzeigen"
 #: pcbnew/widgets/appearance_controls.cpp:351
 #, fuzzy
 msgid "Show explicit snap points as crosses"
-msgstr "Explizite Fangpunkte als Kreuze anzeigen"
+msgstr "Explizit Fangpunkte als Kreuze anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Locked Item Shadow"
