@@ -77,9 +77,9 @@ static bool PromptConnectedPadDecision( PCB_BASE_EDIT_FRAME* aFrame,
 
     wxString details;
     details << _( "Connected tracks, vias, and other non-zone copper items will still swap nets"
-                  " even if you ignore the additional pads." )
+                  " even if you ignore the unselected pads." )
             << "\n \n" // Add space so GTK doesn't eat the newlines
-            << _( "Affected pads:" ) << '\n';
+            << _( "Unselected pads:" ) << '\n';
 
     for( PAD* pad : uniquePads )
     {
@@ -90,7 +90,7 @@ static bool PromptConnectedPadDecision( PCB_BASE_EDIT_FRAME* aFrame,
 
 
     wxRichMessageDialog dlg( aFrame, msg, aDialogTitle, wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING );
-    dlg.SetYesNoLabels( _( "Ignore Connected Pins" ), _( "Swap Connected Pins" ) );
+    dlg.SetYesNoLabels( _( "Ignore Unselected Pads" ), _( "Swap All Connected Pads" ) );
     dlg.SetExtendedMessage( details );
 
     int ret = dlg.ShowModal();
