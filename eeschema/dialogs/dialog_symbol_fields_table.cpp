@@ -399,8 +399,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     cfg.page = m_nbPages->GetSelection();
     cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
 
-    cfg.sidebar_collapsed = ( m_splitterMainWindow->GetSashPosition() == 0 );
-
     if( !cfg.sidebar_collapsed )
         cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
 

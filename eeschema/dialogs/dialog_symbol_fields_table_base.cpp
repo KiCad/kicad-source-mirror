@@ -63,7 +63,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_viewControlsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_viewControlsGrid->SetMinSize( wxSize( -1,250 ) );
 
-	bMargins->Add( m_viewControlsGrid, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bMargins->Add( m_viewControlsGrid, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bFieldsButtons;
 	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -97,7 +97,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("View presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bomPresetsLabel->Wrap( -1 );
-	bPresets->Add( m_bomPresetsLabel, 0, 0, 5 );
+	bPresets->Add( m_bomPresetsLabel, 0, wxLEFT, 5 );
 
 
 	bPresets->Add( 0, 2, 0, 0, 5 );
@@ -106,13 +106,16 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	int m_cbBomPresetsNChoices = sizeof( m_cbBomPresetsChoices ) / sizeof( wxString );
 	m_cbBomPresets = new wxChoice( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
 	m_cbBomPresets->SetSelection( 0 );
-	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxBOTTOM, 2 );
+	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( bPresets, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bPresets->Add( 0, 2, 0, wxEXPAND, 5 );
 
 
-	bLeftSizer->Add( bMargins, 1, wxEXPAND|wxALL, 5 );
+	bMargins->Add( bPresets, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	bLeftSizer->Add( bMargins, 1, wxEXPAND, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -121,6 +124,9 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_rightPanel = new wxPanel( m_splitterMainWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bMargins1;
+	bMargins1 = new wxBoxSizer( wxVERTICAL );
 
 	m_nbPages = new wxNotebook( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panelEdit = new wxPanel( m_nbPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -327,12 +333,17 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	gbExport->Fit( m_panelExport );
 	m_nbPages->AddPage( m_panelExport, _("Export"), false );
 
-	bRightSizer->Add( m_nbPages, 1, wxEXPAND|wxALL, 5 );
+	bMargins1->Add( m_nbPages, 1, wxEXPAND|wxALL, 5 );
+
+
+	bRightSizer->Add( bMargins1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_sidebarButton = new STD_BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_sidebarButton->SetToolTip( _("Add a new field") );
+
 	bButtonsSizer->Add( m_sidebarButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
