@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,8 +32,8 @@ class PCB_LAYER_BOX_SELECTOR;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SPECIFIED_NET_TO_SPECIFIED_VALUES 1000
-#define ID_SPECIFIED_NET_TO_NETCLASS_VALUES 1001
+#define ID_SPECIFIED_NET_TO_SPECIFIED_VALUES 17000
+#define ID_SPECIFIED_NET_TO_NETCLASS_VALUES 17001
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
@@ -45,6 +45,9 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 	protected:
 		wxCheckBox* m_tracks;
 		wxCheckBox* m_vias;
+		wxCheckBox* m_throughVias;
+		wxCheckBox* m_microVias;
+		wxCheckBox* m_blindVias;
 		wxCheckBox* m_netFilterOpt;
 		NET_SELECTOR* m_netFilter;
 		wxCheckBox* m_netclassFilterOpt;
@@ -67,6 +70,8 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxChoice* m_viaSizesCtrl;
 		wxStaticText* m_annularRingsLabel;
 		wxChoice* m_annularRingsCtrl;
+		wxStaticText* m_protectionFeaturesLabel;
+		wxChoice* m_protectionFeatures;
 		wxRadioButton* m_setToDesignRuleValues;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -74,6 +79,8 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onVias( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onViaType( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetclassFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLayerFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTrackWidthText( wxCommandEvent& event ) { event.Skip(); }

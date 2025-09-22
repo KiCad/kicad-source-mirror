@@ -26,8 +26,10 @@
 
 #include <widgets/unit_binder.h>
 #include <tools/pcb_selection.h>
+#include <via_protection_ui_mixin.h>
 
-class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
+class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE,
+                                           public VIA_PROTECTION_UI_MIXIN
 {
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
@@ -57,6 +59,10 @@ protected:
         m_filterByViaSize->SetValue( true );
     }
 
+    void updateViasCheckbox();
+
+    void onVias( wxCommandEvent& aEvent ) override;
+    void onViaType( wxCommandEvent& aEvent ) override;
     void onUnitsChanged( wxCommandEvent& aEvent );
 
 private:

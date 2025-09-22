@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,9 +28,30 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_tracks->SetValue(true);
 	sbScope->Add( m_tracks, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_vias = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	sbScope->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	m_vias = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_vias->SetValue(true);
 	sbScope->Add( m_vias, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_throughVias = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Through vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_throughVias->SetValue(true);
+	sbScope->Add( m_throughVias, 0, wxLEFT, 20 );
+
+
+	sbScope->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_microVias = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Microvias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_microVias->SetValue(true);
+	sbScope->Add( m_microVias, 0, wxLEFT, 20 );
+
+
+	sbScope->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	m_blindVias = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Blind/buried vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_blindVias->SetValue(true);
+	sbScope->Add( m_blindVias, 0, wxLEFT, 20 );
 
 
 	bSizerTop->Add( sbScope, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -135,11 +156,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	sbAction->Add( m_setToSpecifiedValues, 0, 0, 5 );
 
 	wxFlexGridSizer* fgSizerTrackViaPopups;
-	fgSizerTrackViaPopups = new wxFlexGridSizer( 4, 2, 0, 0 );
-	fgSizerTrackViaPopups->AddGrowableCol( 0 );
+	fgSizerTrackViaPopups = new wxFlexGridSizer( 5, 2, 0, 10 );
 	fgSizerTrackViaPopups->AddGrowableCol( 1 );
-	fgSizerTrackViaPopups->AddGrowableRow( 0 );
-	fgSizerTrackViaPopups->AddGrowableRow( 1 );
 	fgSizerTrackViaPopups->SetFlexibleDirection( wxBOTH );
 	fgSizerTrackViaPopups->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
@@ -168,15 +186,26 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_viaSizesCtrl->SetSelection( 0 );
 	fgSizerTrackViaPopups->Add( m_viaSizesCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_annularRingsLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_annularRingsLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Via annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_annularRingsLabel->Wrap( -1 );
 	fgSizerTrackViaPopups->Add( m_annularRingsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
-        wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only"), _("Start and end layers only") };
+	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only"), _("Start and end layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
 	m_annularRingsCtrl->SetSelection( 1 );
 	fgSizerTrackViaPopups->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_protectionFeaturesLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Via protection features:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_protectionFeaturesLabel->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_protectionFeaturesLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+
+	wxArrayString m_protectionFeaturesChoices;
+	m_protectionFeatures = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_protectionFeaturesChoices, 0 );
+	m_protectionFeatures->SetSelection( 0 );
+	m_protectionFeatures->SetToolTip( _("Select which protection feature according to IPC-4761 the via should have.") );
+
+	fgSizerTrackViaPopups->Add( m_protectionFeatures, 0, wxALL|wxEXPAND, 5 );
 
 
 	sbAction->Add( fgSizerTrackViaPopups, 0, wxBOTTOM|wxEXPAND|wxLEFT, 25 );
@@ -204,6 +233,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	bMainSizer->Fit( this );
 
 	// Connect Events
+	m_vias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onVias ), NULL, this );
+	m_throughVias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onViaType ), NULL, this );
+	m_microVias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onViaType ), NULL, this );
+	m_blindVias->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onViaType ), NULL, this );
 	m_netclassFilter->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnNetclassFilterSelect ), NULL, this );
 	m_layerFilter->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnLayerFilterSelect ), NULL, this );
 	m_trackWidthFilterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnTrackWidthText ), NULL, this );
@@ -215,6 +248,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE()
 {
 	// Disconnect Events
+	m_vias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onVias ), NULL, this );
+	m_throughVias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onViaType ), NULL, this );
+	m_microVias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onViaType ), NULL, this );
+	m_blindVias->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onViaType ), NULL, this );
 	m_netclassFilter->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnNetclassFilterSelect ), NULL, this );
 	m_layerFilter->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnLayerFilterSelect ), NULL, this );
 	m_trackWidthFilterCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnTrackWidthText ), NULL, this );

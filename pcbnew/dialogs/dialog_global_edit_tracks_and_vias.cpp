@@ -36,6 +36,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/global_edit_tool.h>
 #include "dialog_global_edit_tracks_and_vias.h"
+#include "magic_enum.hpp"
 
 
 // Columns of netclasses grid
@@ -79,6 +80,23 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_layerCtrl->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerCtrl->Resync();
 
+    for( auto& preset : magic_enum::enum_values<IPC4761_PRESET>() )
+    {
+        if( preset >= IPC4761_PRESET::CUSTOM )
+            continue;
+
+        const auto& name_it = m_IPC4761Names.find( preset );
+
+        wxString name = _( "Unknown choice" );
+
+        if( name_it != m_IPC4761Names.end() )
+            name = name_it->second;
+
+        m_protectionFeatures->AppendString( name );
+    }
+
+    m_protectionFeatures->Append( INDETERMINATE_ACTION );
+
     SetupStandardButtons( { { wxID_OK, _( "Apply and Close" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
 
@@ -102,6 +120,45 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
                              nullptr, this );
 
     m_parent->Unbind( EDA_EVT_UNITS_CHANGED, &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged, this );
+}
+
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onVias( wxCommandEvent& aEvent )
+{
+    m_throughVias->SetValue( aEvent.IsChecked() );
+    m_microVias->SetValue( aEvent.IsChecked() );
+    m_blindVias->SetValue( aEvent.IsChecked() );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::updateViasCheckbox()
+{
+    int checked = 0;
+
+    for( const wxCheckBox* cb : { m_throughVias, m_microVias, m_blindVias } )
+    {
+        if( cb->GetValue() )
+            checked++;
+    }
+
+    if( checked == 0 )
+        m_vias->SetValue( false );
+    else if( checked == 3 )
+        m_vias->SetValue( true );
+    else
+        m_vias->Set3StateValue( wxCHK_UNDETERMINED );
+}
+
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onViaType( wxCommandEvent& aEvent )
+{
+    CallAfter(
+            [this]()
+            {
+                updateViasCheckbox();
+            } );
 }
 
 
@@ -162,9 +219,12 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     m_viaSizesCtrl->SetSelection( (int) m_viaSizesCtrl->GetCount() - 1 );
     m_annularRingsCtrl->SetSelection( (int) m_annularRingsCtrl->GetCount() - 1 );
     m_layerCtrl->SetStringSelection( INDETERMINATE_ACTION );
+    m_protectionFeatures->SetStringSelection( INDETERMINATE_ACTION );
 
     wxCommandEvent dummy;
     onActionButtonChange( dummy );
+
+    updateViasCheckbox();
 
     return true;
 }
@@ -242,6 +302,13 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             default:
                 break;
             }
+        }
+
+        if( isVia && m_protectionFeatures->GetStringSelection() != INDETERMINATE_ACTION )
+        {
+            PCB_VIA* v = static_cast<PCB_VIA*>( aItem );
+
+            setViaConfiguration( v, static_cast<IPC4761_PRESET>( m_protectionFeatures->GetSelection() ) );
         }
 
         if( ( isArc || isTrack ) && m_layerCtrl->GetLayerSelection() != UNDEFINED_LAYER )
@@ -326,12 +393,25 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     // Examine segments
     for( PCB_TRACK* track : m_brd->Tracks() )
     {
-        if( m_tracks->GetValue() && track->Type() == PCB_TRACE_T )
+        if( track->Type() == PCB_TRACE_T && m_tracks->GetValue() )
+        {
             visitItem( &itemsListPicker, track );
-        else if ( m_tracks->GetValue() && track->Type() == PCB_ARC_T )
+        }
+        else if ( track->Type() == PCB_ARC_T && m_tracks->GetValue() )
+        {
             visitItem( &itemsListPicker, track );
-        else if ( m_vias->GetValue() && track->Type() == PCB_VIA_T )
-            visitItem( &itemsListPicker, track );
+        }
+        else if( track->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+            if( via->GetViaType() == VIATYPE::THROUGH && m_throughVias->GetValue() )
+                visitItem( &itemsListPicker, via );
+            else if( via->GetViaType() == VIATYPE::MICROVIA && m_microVias->GetValue() )
+                visitItem( &itemsListPicker, via );
+            else if( via->GetViaType() == VIATYPE::BLIND_BURIED && m_blindVias->GetValue() )
+                visitItem( &itemsListPicker, via );
+        }
     }
 
     if( itemsListPicker.GetCount() > 0 )

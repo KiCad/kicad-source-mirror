@@ -39,8 +39,7 @@
 #include <macros.h>
 
 
-bool DIALOG_TRACK_VIA_PROPERTIES::IPC4761_CONFIGURATION::operator==(
-        const IPC4761_CONFIGURATION& aOther ) const
+bool DIALOG_TRACK_VIA_PROPERTIES::IPC4761_CONFIGURATION::operator==( const IPC4761_CONFIGURATION& aOther ) const
 {
     return ( tent == aOther.tent ) && ( plug == aOther.plug ) && ( cover == aOther.cover )
            && ( cap == aOther.cap ) && ( fill == aOther.fill );
@@ -115,6 +114,21 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
     m_netSelector->Bind( FILTERED_ITEM_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
 
+    for( auto& preset : magic_enum::enum_values<IPC4761_PRESET>() )
+    {
+        if( preset >= IPC4761_PRESET::CUSTOM )
+            continue;
+
+        const auto& name_it = m_IPC4761Names.find( preset );
+
+        wxString name = _( "Unknown choice" );
+
+        if( name_it != m_IPC4761Names.end() )
+            name = name_it->second;
+
+        m_protectionFeatures->AppendString( name );
+    }
+
     SetupStandardButtons();
 }
 
@@ -145,102 +159,18 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
     // The selection layer for tracks
     int track_selection_layer = -1;
 
-    auto getAnnularRingSelection = []( const PCB_VIA* via ) -> int
-    {
-        switch( via->Padstack().UnconnectedLayerMode() )
-        {
-        default:
-        case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL: return 0;
-        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
-        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL: return 2;
-        case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY: return 3;
-        }
-    };
-
-    for( auto& preset : magic_enum::enum_values<IPC4761_PRESET>() )
-    {
-        if( preset >= IPC4761_PRESET::CUSTOM )
-            continue;
-
-        const auto& name_it = m_IPC4761Names.find( preset );
-
-        wxString name = _( "Unknown choice" );
-
-        if( name_it != m_IPC4761Names.end() )
-            name = name_it->second;
-
-        m_protectionFeatures->AppendString( name );
-    }
-
-    auto getProtectionSurface = []( const std::optional<bool>& front,
-                                    const std::optional<bool>& back ) -> IPC4761_SURFACE
-    {
-        IPC4761_SURFACE value = IPC4761_SURFACE::CUSTOM;
-
-        if( !front.has_value() )
-            value = IPC4761_SURFACE::FROM_RULES;
-        else if( front.value() )
-            value = IPC4761_SURFACE::FRONT;
-        else
-            value = IPC4761_SURFACE::NONE;
-
-        if( !back.has_value() )
-        {
-            if( value == IPC4761_SURFACE::FROM_RULES )
-                return IPC4761_SURFACE::FROM_RULES;
-        }
-        else if( back.value() )
-        {
-            if( value == IPC4761_SURFACE::FRONT )
-                return IPC4761_SURFACE::BOTH;
-            else if( value == IPC4761_SURFACE::NONE )
-                return IPC4761_SURFACE::BACK;
-        }
-        else
-        {
-            if( value == IPC4761_SURFACE::FRONT )
-                return IPC4761_SURFACE::FRONT;
-            else if( value == IPC4761_SURFACE::NONE )
-                return IPC4761_SURFACE::NONE;
-        }
-
-        return IPC4761_SURFACE::CUSTOM;
-    };
-
-    auto getProtectionDrill = []( const std::optional<bool>& drill ) -> IPC4761_DRILL
-    {
-        if( !drill.has_value() )
-            return IPC4761_DRILL::FROM_RULES;
-        if( drill.value() )
-            return IPC4761_DRILL::SET;
-
-        return IPC4761_DRILL::NOT_SET;
-    };
-
-    auto getViaConfiguration = [&]( const PCB_VIA* via ) -> IPC4761_PRESET
-    {
-        IPC4761_CONFIGURATION config;
-        config.tent = getProtectionSurface( via->Padstack().FrontOuterLayers().has_solder_mask,
-                                            via->Padstack().BackOuterLayers().has_solder_mask );
-
-        config.cover = getProtectionSurface( via->Padstack().FrontOuterLayers().has_covering,
-                                             via->Padstack().BackOuterLayers().has_covering );
-
-        config.plug = getProtectionSurface( via->Padstack().FrontOuterLayers().has_plugging,
-                                            via->Padstack().BackOuterLayers().has_plugging );
-
-        config.cap = getProtectionDrill( via->Padstack().Drill().is_capped );
-
-        config.fill = getProtectionDrill( via->Padstack().Drill().is_filled );
-
-        for( const auto& [preset, configuration] : m_IPC4761Presets )
-        {
-            if( configuration == config )
-                return preset;
-        }
-
-        return IPC4761_PRESET::CUSTOM;
-    };
+    auto getAnnularRingSelection =
+            []( const PCB_VIA* via ) -> int
+            {
+                switch( via->Padstack().UnconnectedLayerMode() )
+                {
+                default:
+                case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL: return 0;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL: return 2;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY: return 3;
+                }
+            };
 
     // Look for values that are common for every item that is selected
     for( EDA_ITEM* item : m_items )
@@ -345,14 +275,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     IPC4761_PRESET preset = getViaConfiguration( v );
 
                     if( preset >= IPC4761_PRESET::CUSTOM )
-                    {
-                        m_protectionFeatures->SetSelection(
-                                m_protectionFeatures->Append( INDETERMINATE_ACTION ) );
-                    }
+                        m_protectionFeatures->SetSelection( m_protectionFeatures->Append( INDETERMINATE_ACTION ) );
                     else
-                    {
                         m_protectionFeatures->SetSelection( static_cast<int>( preset ) );
-                    }
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -409,13 +334,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     if( m_teardropHDPercent.GetDoubleValue() != v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 )
                         m_teardropHDPercent.SetValue( INDETERMINATE_STATE );
 
-
-                    if( static_cast<int>( getViaConfiguration( v ) )
-                        != m_protectionFeatures->GetSelection() )
-                    {
-                        m_protectionFeatures->SetSelection(
-                                m_protectionFeatures->Append( INDETERMINATE_STATE ) );
-                    }
+                    if( static_cast<int>( getViaConfiguration( v ) ) != m_protectionFeatures->GetSelection() )
+                        m_protectionFeatures->SetSelection( m_protectionFeatures->Append( INDETERMINATE_STATE ) );
                 }
 
                 if( v->IsLocked() )
@@ -897,8 +817,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     targetParams->m_BestLengthRatio = m_teardropLenPercent.GetDoubleValue() / 100.0;
 
                 if( !m_teardropWidthPercent.IsIndeterminate() )
-                    targetParams->m_BestWidthRatio =
-                            m_teardropWidthPercent.GetDoubleValue() / 100.0;
+                    targetParams->m_BestWidthRatio = m_teardropWidthPercent.GetDoubleValue() / 100.0;
 
                 if( !m_teardropHDPercent.IsIndeterminate() )
                     targetParams->m_WidthtoSizeFilterRatio = m_teardropHDPercent.GetDoubleValue() / 100.0;
@@ -909,69 +828,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( changeLock )
                     via->SetLocked( setLock );
 
-                auto setSurfaceProtection =
-                        [&]( std::optional<bool>& aFront, std::optional<bool>& aBack, IPC4761_SURFACE aProtection )
-                        {
-                            switch( aProtection )
-                            {
-                            case IPC4761_SURFACE::FROM_RULES:
-                                aFront.reset();
-                                aBack.reset();
-                                break;
-                            case IPC4761_SURFACE::NONE:
-                                aFront = false;
-                                aBack = false;
-                                break;
-                            case IPC4761_SURFACE::FRONT:
-                                aFront = true;
-                                aBack = false;
-                                break;
-                            case IPC4761_SURFACE::BACK:
-                                aFront = false;
-                                aBack = true;
-                                break;
-                            case IPC4761_SURFACE::BOTH:
-                                aFront = true;
-                                aBack = true;
-                                break;
-                            case IPC4761_SURFACE::CUSTOM: return;
-                            }
-                        };
-
-                auto setDrillProtection =
-                        [&]( std::optional<bool>& aDrill, IPC4761_DRILL aProtection )
-                        {
-                            switch( aProtection )
-                            {
-                            case IPC4761_DRILL::FROM_RULES: aDrill.reset(); break;
-                            case IPC4761_DRILL::NOT_SET:    aDrill = false; break;
-                            case IPC4761_DRILL::SET:        aDrill = true;  break;
-                            }
-                        };
-
-                IPC4761_PRESET selectedPreset = static_cast<IPC4761_PRESET>( m_protectionFeatures->GetSelection() );
-
-                if( selectedPreset < IPC4761_PRESET::CUSTOM ) // Do not change custom feaure list.
-                {
-                    const IPC4761_CONFIGURATION config = m_IPC4761Presets.at( selectedPreset );
-
-                    setSurfaceProtection( via->Padstack().FrontOuterLayers().has_solder_mask,
-                                          via->Padstack().BackOuterLayers().has_solder_mask,
-                                          config.tent );
-
-                    setSurfaceProtection( via->Padstack().FrontOuterLayers().has_plugging,
-                                          via->Padstack().BackOuterLayers().has_plugging,
-                                          config.plug );
-
-                    setSurfaceProtection( via->Padstack().FrontOuterLayers().has_covering,
-                                          via->Padstack().BackOuterLayers().has_covering,
-                                          config.cover );
-
-                    setDrillProtection( via->Padstack().Drill().is_filled, config.fill );
-
-                    setDrillProtection( via->Padstack().Drill().is_capped, config.cap );
-                }
-
+                setViaConfiguration( via, static_cast<IPC4761_PRESET>( m_protectionFeatures->GetSelection() ) );
                 break;
             }
 
