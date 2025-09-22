@@ -47,6 +47,7 @@ namespace KI_EVAL
 #include <wx/log.h>
 #include <algorithm>
 #include <regex>
+#include <span>
 
 // // Token type enum matching the generated parser
 enum class TextEvalToken : int
@@ -469,18 +470,18 @@ private:
     using CLASSIFIER = utf8_utils::CHARACTER_CLASSIFIER;
     using SI_HANDLER = utf8_utils::SI_PREFIX_HANDLER;
 
-    [[nodiscard]] constexpr char32_t current_char() const noexcept
+    [[nodiscard]] char32_t current_char() const noexcept
     {
         return m_pos < m_text.size() ? m_text[m_pos] : U'\0';
     }
 
-    [[nodiscard]] constexpr char32_t peek_char( size_t offset = 1 ) const noexcept
+    [[nodiscard]] char32_t peek_char( size_t offset = 1 ) const noexcept
     {
         size_t peek_pos = m_pos + offset;
         return peek_pos < m_text.size() ? m_text[peek_pos] : U'\0';
     }
 
-    constexpr void advance_position( size_t count = 1 ) noexcept
+    void advance_position( size_t count = 1 ) noexcept
     {
         for( size_t i = 0; i < count && m_pos < m_text.size(); ++i )
         {
@@ -996,7 +997,7 @@ public:
         return token_value.text[0] == U'\0' ? TextEvalToken::ENDS : TextEvalToken::TEXT;
     }
 
-    [[nodiscard]] constexpr bool has_more_tokens() const noexcept { return m_pos < m_text.size(); }
+    [[nodiscard]] bool has_more_tokens() const noexcept { return m_pos < m_text.size(); }
     [[nodiscard]] constexpr size_t get_line() const noexcept { return m_line; }
     [[nodiscard]] constexpr size_t get_column() const noexcept { return m_column; }
 };
