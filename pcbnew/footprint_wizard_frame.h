@@ -33,6 +33,7 @@
 #include <wx/gdicmn.h>
 #include <footprint_wizard.h>
 #include <pcb_base_edit_frame.h>
+#include <nlohmann/json_fwd.hpp>
 
 class wxSashLayoutWindow;
 class wxSashEvent;
@@ -191,6 +192,7 @@ private:
     wxTextCtrl*     m_buildMessageBox;
 
     wxString        m_auiPerspective;       ///< Encoded string describing the AUI layout
+    nlohmann::json  m_viewerAuiState;
 
     bool            m_wizardListShown;      ///< A show-once flag for the wizard list
 };

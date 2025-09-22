@@ -37,6 +37,8 @@
 #include <optional>
 #include <vector>
 
+#include <nlohmann/json_fwd.hpp>
+
 #include <wx/aui/aui.h>
 #include <layer_ids.h>
 #include <frame_type.h>
@@ -237,6 +239,8 @@ public:
     void PrintMsg( const wxString& text );
 
     void CreateInfoBar();
+
+    void RestoreAuiLayout();
 
     void FinishAUIInitialization();
 
@@ -802,6 +806,7 @@ private:
 
     wxAuiManager            m_auimgr;
     wxString                m_perspective;       // wxAuiManager perspective.
+    nlohmann::json          m_auiLayoutState;
     WX_INFOBAR*             m_infoBar;           // Infobar for the frame
     APPEARANCE_CONTROLS_3D* m_appearancePanel;
     wxString                m_configName;        // Prefix used to identify some params (frame

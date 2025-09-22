@@ -136,6 +136,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxS( "MsgPanel" ) )
                       .Bottom().Layer( 6 ) );
 
+    RestoreAuiLayout();
     FinishAUIInitialization();
 
     auto& galOpts = GetGalDisplayOptions();

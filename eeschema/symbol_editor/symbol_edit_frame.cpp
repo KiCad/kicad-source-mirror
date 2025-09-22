@@ -218,11 +218,12 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .MinSize( FromDIP( 250 ), -1 ).BestSize( FromDIP( 250 ), -1 ) );
 
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
-    // Show or hide m_propertiesPanel depending on current settings:
-    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
-
     m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
 
+    RestoreAuiLayout();
+
+    // Show or hide m_propertiesPanel depending on current settings:
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
     wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
     // The selection filter doesn't need to grow in the vertical direction when docked
     selectionFilterPane.dock_proportion = 0;

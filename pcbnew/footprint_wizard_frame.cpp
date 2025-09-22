@@ -36,8 +36,11 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <pcbnew_id.h>
+#include <widgets/aui_json_serializer.h>
 #include <wx/listbox.h>
 #include <wx/statline.h>
+
+#include <nlohmann/json.hpp>
 #include <wx/tokenzr.h>
 #include <wx/numformatter.h>
 #include <wx/wupdlock.h>
@@ -509,6 +512,7 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::LoadSettings( cfg );
 
     m_auiPerspective = cfg->m_FootprintViewer.perspective;
+    m_viewerAuiState = cfg->m_FootprintViewer.aui_state;
 }
 
 
@@ -519,7 +523,22 @@ void FOOTPRINT_WIZARD_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     PCB_BASE_FRAME::SaveSettings( cfg );
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    {
+        WX_AUI_JSON_SERIALIZER serializer( m_auimgr );
+        nlohmann::json state = serializer.Serialize();
+
+        if( state.is_null() || state.empty() )
+            cfg->m_FootprintViewer.aui_state = nlohmann::json();
+        else
+            cfg->m_FootprintViewer.aui_state = state;
+
+        cfg->m_FootprintViewer.perspective.clear();
+    }
+#else
     cfg->m_FootprintViewer.perspective = m_auimgr.SavePerspective().ToStdString();
+    cfg->m_FootprintViewer.aui_state = nlohmann::json();
+#endif
 }
 
 

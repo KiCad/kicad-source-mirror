@@ -30,6 +30,8 @@
 #include <settings/common_settings.h>
 #include <settings/grid_settings.h>
 #include <settings/parameters.h>
+
+#include <nlohmann/json.hpp>
 #include <zoom_defines.h>
 
 
@@ -424,6 +426,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".perspective",
             &aWindow->perspective, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM<nlohmann::json>( aJsonPath + ".aui_state",
+            &aWindow->aui_state, nlohmann::json() ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x", &aWindow->state.pos_x, 0 ) );
 

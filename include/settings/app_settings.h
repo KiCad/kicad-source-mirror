@@ -22,6 +22,7 @@
 #define _APP_SETTINGS_H
 
 #include <gal/color4d.h>
+#include <nlohmann/json_fwd.hpp>
 #include <settings/json_settings.h>
 #include <settings/grid_settings.h>
 
@@ -97,6 +98,7 @@ struct KICOMMON_API WINDOW_SETTINGS
     WINDOW_STATE state;
     wxString mru_path;
     wxString perspective;
+    nlohmann::json aui_state;
     std::vector<double> zoom_factors;
 
     CURSOR_SETTINGS cursor;

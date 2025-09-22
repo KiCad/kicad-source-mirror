@@ -217,6 +217,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
+    RestoreAuiLayout();
     m_auimgr.Update();
 
     if( m_libListWidth > 0 )

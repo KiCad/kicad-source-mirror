@@ -64,6 +64,7 @@
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_busy_indicator.h>
 #include <widgets/wx_infobar.h>
+#include <widgets/aui_json_serializer.h>
 #include <widgets/wx_aui_art_providers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/wx_treebook.h>
@@ -77,6 +78,8 @@
 #include <kiplatform/app.h>
 #include <kiplatform/io.h>
 #include <kiplatform/ui.h>
+
+#include <nlohmann/json.hpp>
 
 #include <functional>
 #include <kiface_ids.h>
@@ -938,6 +941,7 @@ void EDA_BASE_FRAME::LoadWindowSettings( const WINDOW_SETTINGS* aCfg )
     LoadWindowState( aCfg->state );
 
     m_perspective = aCfg->perspective;
+    m_auiLayoutState = aCfg->aui_state;
     m_mruPath = aCfg->mru_path;
 
     TOOLS_HOLDER::CommonSettingsChanged();
@@ -976,7 +980,22 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     // Once this is fully implemented, wxAuiManager will be used to maintain
     // the persistence of the main frame and all it's managed windows and
     // all of the legacy frame persistence position code can be removed.
+#if wxCHECK_VERSION( 3, 3, 0 )
+    {
+        WX_AUI_JSON_SERIALIZER serializer( m_auimgr );
+        nlohmann::json state = serializer.Serialize();
+
+        if( state.is_null() || state.empty() )
+            aCfg->aui_state = nlohmann::json();
+        else
+            aCfg->aui_state = state;
+
+        aCfg->perspective.clear();
+    }
+#else
     aCfg->perspective = m_auimgr.SavePerspective().ToStdString();
+    aCfg->aui_state = nlohmann::json();
+#endif
 
     aCfg->mru_path = m_mruPath;
 }
@@ -1080,6 +1099,28 @@ void EDA_BASE_FRAME::FinishAUIInitialization()
     // We don't want the infobar displayed right away
     m_auimgr.GetPane( wxS( "InfoBar" ) ).Hide();
     m_auimgr.Update();
+#endif
+}
+
+
+void EDA_BASE_FRAME::RestoreAuiLayout()
+{
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool restored = false;
+
+    if( !m_auiLayoutState.is_null() && !m_auiLayoutState.empty() )
+    {
+        WX_AUI_JSON_SERIALIZER serializer( m_auimgr );
+
+        if( serializer.Deserialize( m_auiLayoutState ) )
+            restored = true;
+    }
+
+    if( !restored && !m_perspective.IsEmpty() )
+        m_auimgr.LoadPerspective( m_perspective );
+#else
+    if( !m_perspective.IsEmpty() )
+        m_auimgr.LoadPerspective( m_perspective );
 #endif
 }
 

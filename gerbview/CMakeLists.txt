@@ -156,6 +156,7 @@ target_link_libraries( gerbview_kiface
     PRIVATE
         nlohmann_json
         gal
+        kicommon
         common
         core
         gerbview_kiface_objects

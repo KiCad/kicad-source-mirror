@@ -166,6 +166,7 @@ set( KICOMMON_SRCS
     dialogs/dialog_rc_job_base.cpp
 
     widgets/bitmap_button.cpp
+    widgets/aui_json_serializer.cpp
     widgets/html_window.cpp
     widgets/kistatusbar.cpp
     widgets/number_badge.cpp
