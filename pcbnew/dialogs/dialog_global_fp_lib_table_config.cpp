@@ -102,7 +102,8 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
         // Create the config path if it doesn't already exist.
         wxFileName fpTableFileName = FP_LIB_TABLE::GetGlobalTableFileName();
 
-        if( !fpTableFileName.DirExists() && !fpTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
+        if( !wxFileName::DirExists( fpTableFileName.GetPath() )
+            && !wxFileName::Mkdir( fpTableFileName.GetPath(), 0x777, wxPATH_MKDIR_FULL ) )
         {
             DisplayError( this, wxString::Format( _( "Cannot create library table path '%s'." ),
                                                   fpTableFileName.GetPath() ) );

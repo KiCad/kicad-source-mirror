@@ -102,7 +102,8 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
         // Create the config path if it doesn't already exist.
         wxFileName symTableFileName = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 
-        if( !symTableFileName.DirExists() && !symTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
+        if( !wxFileName::DirExists( symTableFileName.GetPath() )
+            && !wxFileName::Mkdir( symTableFileName.GetPath(), 0x777, wxPATH_MKDIR_FULL ) )
         {
             DisplayError( this, wxString::Format( _( "Cannot create global library table '%s'." ),
                                                   symTableFileName.GetPath() ) );
