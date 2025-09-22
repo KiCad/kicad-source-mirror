@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <unordered_set>
+#include <utility>
 #include <wx/datetime.h>
 #include <wx/log.h>
 
@@ -29,6 +30,7 @@
 #include <database/database_lib_settings.h>
 #include <fmt.h>
 #include <lib_symbol.h>
+#include <lib_id.h>
 #include <symbol_lib_table.h>
 
 #include "sch_io_database.h"
@@ -96,6 +98,8 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
+    cacheLib();
+
     /*
      * Table names are tricky, in order to allow maximum flexibility to the user.
      * The slash character is used as a separator between a table name and symbol name, but symbol
@@ -105,13 +109,25 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
      * name is blank if our config has an entry for the null table.
      */
 
-    std::string tableName = "";
+    std::string tableName;
     std::string symbolName( aAliasName.ToUTF8() );
 
-    if( aAliasName.Contains( '/' ) )
+    auto sanitizedIt = m_sanitizedNameMap.find( aAliasName );
+
+    if( sanitizedIt != m_sanitizedNameMap.end() )
     {
-        tableName = std::string( aAliasName.BeforeFirst( '/' ).ToUTF8() );
-        symbolName = std::string( aAliasName.AfterFirst( '/' ).ToUTF8() );
+        tableName = sanitizedIt->second.first;
+        symbolName = sanitizedIt->second.second;
+    }
+    else
+    {
+        tableName.clear();
+
+        if( aAliasName.Contains( '/' ) )
+        {
+            tableName = std::string( aAliasName.BeforeFirst( '/' ).ToUTF8() );
+            symbolName = std::string( aAliasName.AfterFirst( '/' ).ToUTF8() );
+        }
     }
 
     std::vector<const DATABASE_LIB_TABLE*> tablesToTry;
@@ -209,6 +225,9 @@ void SCH_IO_DATABASE::cacheLib()
         return;
     }
 
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
+    std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
+
     for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
     {
         std::vector<DATABASE_CONNECTION::ROW> results;
@@ -230,16 +249,24 @@ void SCH_IO_DATABASE::cacheLib()
             if( !result.count( table.key_col ) )
                 continue;
 
+            std::string rawName = std::any_cast<std::string>( result[table.key_col] );
+            UTF8        sanitizedName = LIB_ID::FixIllegalChars( rawName, false );
+            std::string sanitizedKey = sanitizedName.c_str();
             std::string prefix = table.name.empty() ? "" : fmt::format( "{}/", table.name );
-            wxString    name( fmt::format( "{}{}", prefix,
-                                           std::any_cast<std::string>( result[table.key_col] ) ) );
+            std::string sanitizedDisplayName = fmt::format( "{}{}", prefix, sanitizedKey );
+            wxString    name( sanitizedDisplayName );
+
+            newSanitizedNameMap[name] = std::make_pair( table.name, rawName );
 
             std::unique_ptr<LIB_SYMBOL> symbol = loadSymbolFromRow( name, table, result );
 
             if( symbol )
-                m_nameToSymbolcache[symbol->GetName()] = std::move( symbol );
+                newSymbolCache[symbol->GetName()] = std::move( symbol );
         }
     }
+
+    m_nameToSymbolcache = std::move( newSymbolCache );
+    m_sanitizedNameMap = std::move( newSanitizedNameMap );
 
     m_cacheTimestamp = currentTimestampSeconds;
     m_cacheModifyHash = m_libTable->GetModifyHash();

@@ -31,6 +31,7 @@
 #include <curl/curl.h>
 
 #include <http_lib/http_lib_connection.h>
+#include <lib_id.h>
 
 const char* const traceHTTPLib = "KICAD_HTTP_LIB";
 
@@ -201,6 +202,9 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         else
             aFetchedPart.name = aFetchedPart.id;
 
+        UTF8 sanitizedFetchedName = LIB_ID::FixIllegalChars( aFetchedPart.name, false );
+        aFetchedPart.name = sanitizedFetchedName.c_str();
+
         aFetchedPart.symbolIdStr = response.at( "symbolIdStr" );
 
         // initially assume no exclusion
@@ -334,6 +338,13 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::ve
                 part.name = item.at( "name" );
             else
                 part.name = part.id;
+
+            std::string originalName = part.name;
+            UTF8        sanitizedPartName = LIB_ID::FixIllegalChars( part.name, false );
+            part.name = sanitizedPartName.c_str();
+
+            if( part.name != originalName )
+                m_cache.erase( originalName );
 
             // add to cache
             m_cache[part.name] = std::make_tuple( part.id, aCategory.id );

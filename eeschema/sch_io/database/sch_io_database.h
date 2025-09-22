@@ -112,6 +112,7 @@ private:
     std::set<wxString> m_defaultShownFields;
 
     std::map<wxString, std::unique_ptr<LIB_SYMBOL>> m_nameToSymbolcache;
+    std::map<wxString, std::pair<std::string, std::string>> m_sanitizedNameMap;
 
     long long m_cacheTimestamp;
 
