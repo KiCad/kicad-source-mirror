@@ -26,6 +26,7 @@
 #include <stddef.h>           // for NULL
 #include <type_traits>        // for swap
 #include <vector>
+#include <mutex>
 
 #include <eda_item.h>
 #include <base_units.h>
@@ -141,7 +142,10 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
             m_render_cache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
-    m_bbox_cache = aText.m_bbox_cache;
+    {
+        std::lock_guard<std::mutex> bboxLock( aText.m_bbox_cacheMutex );
+        m_bbox_cache = aText.m_bbox_cache;
+    }
 
     m_unresolvedFontName = aText.m_unresolvedFontName;
 }
@@ -154,6 +158,9 @@ EDA_TEXT::~EDA_TEXT()
 
 EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 {
+    if( this == &aText )
+        return *this;
+
     m_text = aText.m_text;
     m_shown_text = aText.m_shown_text;
     m_shown_text_has_text_var_refs = aText.m_shown_text_has_text_var_refs;
@@ -177,7 +184,10 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
             m_render_cache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
-    m_bbox_cache = aText.m_bbox_cache;
+    {
+        std::scoped_lock<std::mutex, std::mutex> bboxLock( m_bbox_cacheMutex, aText.m_bbox_cacheMutex );
+        m_bbox_cache = aText.m_bbox_cache;
+    }
 
     m_unresolvedFontName = aText.m_unresolvedFontName;
 
@@ -677,6 +687,7 @@ void EDA_TEXT::ClearRenderCache()
 
 void EDA_TEXT::ClearBoundingBoxCache()
 {
+    std::lock_guard<std::mutex> bboxLock( m_bbox_cacheMutex );
     m_bbox_cache.clear();
 }
 
@@ -745,10 +756,13 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 {
     VECTOR2I drawPos = GetDrawPos();
 
-    auto cache_it = m_bbox_cache.find( aLine );
+    {
+        std::lock_guard<std::mutex> bboxLock( m_bbox_cacheMutex );
+        auto cache_it = m_bbox_cache.find( aLine );
 
-    if( cache_it != m_bbox_cache.end() && cache_it->second.m_pos == drawPos )
-        return cache_it->second.m_bbox;
+        if( cache_it != m_bbox_cache.end() && cache_it->second.m_pos == drawPos )
+            return cache_it->second.m_bbox;
+    }
 
     BOX2I          bbox;
     wxArrayString  strings;
@@ -862,7 +876,10 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
     bbox.Normalize();       // Make h and v sizes always >= 0
 
-    m_bbox_cache[ aLine ] = { drawPos, bbox };
+    {
+        std::lock_guard<std::mutex> bboxLock( m_bbox_cacheMutex );
+        m_bbox_cache[ aLine ] = { drawPos, bbox };
+    }
 
     return bbox;
 }
