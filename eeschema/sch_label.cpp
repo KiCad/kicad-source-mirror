@@ -939,7 +939,8 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     }
     else
     {
-        if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+        // aPath->Last() can be null when loading schematic, i.e. when all sheets are not yet loaded
+        if( aPath->Last() && aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 
