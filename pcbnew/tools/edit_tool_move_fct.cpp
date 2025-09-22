@@ -56,7 +56,51 @@
 #include <wx/choicdlg.h>
 #include <unordered_set>
 #include <unordered_map>
-#include <optional>
+
+
+static bool PromptConnectedPadDecision( PCB_BASE_EDIT_FRAME* aFrame,
+                                        const std::vector<PAD*>& aPads,
+                                        const wxString& aDialogTitle,
+                                        bool& aIncludeConnectedPads )
+{
+    if( aPads.empty() )
+    {
+        aIncludeConnectedPads = true;
+        return true;
+    }
+
+    std::unordered_set<PAD*> uniquePads( aPads.begin(), aPads.end() );
+
+    wxString msg;
+    msg.Printf( _( "%zu unselected pad(s) are connected to these nets. How do you want to proceed?" ),
+                uniquePads.size() );
+
+    wxString details;
+    details << _( "Connected tracks, vias, and other non-zone copper items will still swap nets"
+                  " even if you ignore the additional pads." )
+            << "\n \n" // Add space so GTK doesn't eat the newlines
+            << _( "Affected pads:" ) << '\n';
+
+    for( PAD* pad : uniquePads )
+    {
+        const FOOTPRINT* fp = pad->GetParentFootprint();
+        details << wxS( "  • " ) << ( fp ? fp->GetReference() : _( "<no reference designator>" ) ) << wxS( ":" )
+                << pad->GetNumber() << '\n';
+    }
+
+
+    wxRichMessageDialog dlg( aFrame, msg, aDialogTitle, wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING );
+    dlg.SetYesNoLabels( _( "Ignore Connected Pins" ), _( "Swap Connected Pins" ) );
+    dlg.SetExtendedMessage( details );
+
+    int ret = dlg.ShowModal();
+
+    if( ret == wxID_CANCEL )
+        return false;
+
+    aIncludeConnectedPads = ( ret == wxID_NO );
+    return true;
+}
 
 
 int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
@@ -266,43 +310,11 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
         }
     }
 
-    // Prompt if we would modify non-selected pads:
-    //  - Ignore Connected Pins (Yes/Enter - default)
-    //  - Swap Connected Pins (No)
-    //  - Cancel (Esc)
     bool includeConnectedPads = true;
 
-    if( !nonSelectedPadsToChange.empty() )
+    if( !PromptConnectedPadDecision( frame(), nonSelectedPadsToChange, _( "Swap Pad Nets" ), includeConnectedPads ) )
     {
-        // Deduplicate and format a list of affected pads (reference + pad number)
-        std::unordered_set<PAD*> uniquePads( nonSelectedPadsToChange.begin(),
-                                             nonSelectedPadsToChange.end() );
-
-        wxString msg;
-        msg.Printf( _( "%zu other connected pad(s) will also change nets. How do you want to proceed?" ),
-                    uniquePads.size() );
-
-        wxString details;
-        details << _( "Affected pads:" ) << '\n';
-        for( PAD* p : uniquePads )
-        {
-            const FOOTPRINT* fp = p->GetParentFootprint();
-            details << wxS( "  • " ) << ( fp ? fp->GetReference() : _( "<no reference designator>" ) )
-                    << wxS( ":" ) << p->GetNumber() << '\n';
-        }
-
-        wxRichMessageDialog dlg( frame(), msg, _( "Swap Pad Nets" ),
-                                 wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING );
-        dlg.SetYesNoLabels( _( "Ignore Connected Pins" ), _( "Swap Connected Pins" ) );
-        dlg.SetExtendedMessage( details );
-
-        int ret = dlg.ShowModal();
-
-        if( ret == wxID_CANCEL )
-            return 0;
-
-        // Yes = Ignore, No = Swap
-        includeConnectedPads = ( ret == wxID_NO );
+        return 0;
     }
 
     // Apply changes
@@ -599,35 +611,9 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
 
     bool includeConnectedPads = true;
 
-    if( !nonSelectedPadsToChange.empty() )
+    if( !PromptConnectedPadDecision( frame(), nonSelectedPadsToChange, _( "Swap Gate Nets" ), includeConnectedPads ) )
     {
-        std::unordered_set<PAD*> uniquePads( nonSelectedPadsToChange.begin(), nonSelectedPadsToChange.end() );
-
-        wxString msg;
-        msg.Printf( _( "%zu other connected pad(s) will also change nets. How do you want to proceed?" ),
-                    uniquePads.size() );
-
-        wxString details;
-        details << _( "Affected pads:" ) << '\n';
-
-        for( PAD* p : uniquePads )
-        {
-            const FOOTPRINT* fp = p->GetParentFootprint();
-            details << wxS( "  • " ) << ( fp ? fp->GetReference() : _( "<no reference designator>" ) )
-                    << wxS( ":" ) << p->GetNumber() << '\n';
-        }
-
-        wxRichMessageDialog dlg( frame(), msg, _( "Swap Gate Nets" ),
-                                 wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING );
-        dlg.SetYesNoLabels( _( "Ignore Connected Pins" ), _( "Swap Connected Pins" ) );
-        dlg.SetExtendedMessage( details );
-
-        int ret = dlg.ShowModal();
-
-        if( ret == wxID_CANCEL )
-            return 0;
-
-        includeConnectedPads = ( ret == wxID_NO );
+        return 0;
     }
 
     // Apply pad net swaps: rotate per position
