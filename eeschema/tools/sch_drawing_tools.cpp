@@ -1784,11 +1784,13 @@ bool SCH_DRAWING_TOOLS::createNewLabel( const VECTOR2I& aPosition, int aType,
         break;
 
     default:
-        wxFAIL_MSG( "SCH_EDIT_FRAME::CreateNewText() unknown layer type" );
+        wxFAIL_MSG( "SCH_DRAWING_TOOLS::createNewLabel() unknown label type" );
         return false;
     }
 
-    labelItem->SetParent( schematic );
+    // The normal parent is the current screen for these labels, set by SCH_SCREEN::Append()
+    // but it is also used during placement for SCH_HIERLABEL before beeing appended
+    labelItem->SetParent( m_frame->GetScreen() );
 
     labelItem->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
 

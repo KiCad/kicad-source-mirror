@@ -412,6 +412,7 @@ static struct EDA_ITEM_DESC
             .Undefined( TYPE_NOT_INIT )
             .Map( NOT_USED,                wxT( "<not used>" ) )
             .Map( SCREEN_T,                _HKI( "Screen" ) )
+            .Map( SCHEMATIC_T,             _HKI( "Schematic" ) )
 
             .Map( PCB_FOOTPRINT_T,         _HKI( "Footprint" ) )
             .Map( PCB_PAD_T,               _HKI( "Pad" ) )

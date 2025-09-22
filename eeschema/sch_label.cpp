@@ -331,7 +331,7 @@ void SCH_LABEL_BASE::SetLabelShape( LABEL_SHAPE aShape )
     if( Type() == SCH_HIER_LABEL_T )
     {
         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( this );
-        SCH_SCREEN*    screen = static_cast<SCH_SCREEN*>( label->GetParent() );
+        SCH_SCREEN*    screen = dynamic_cast<SCH_SCREEN*>( label->GetParent() );
 
         if( screen )
         {
