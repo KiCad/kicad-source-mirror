@@ -100,17 +100,17 @@ namespace SHADING_ATTRIBUTES
 namespace LIT_TEXTURE_SHADER_ATTRIBUTES
 {
     constexpr uint32_t LIGHTING_ENABLED = 0x00000001;
-    constexpr uint32_t ALPHA_TEST_ENABLED = 0x00000002;
-    constexpr uint32_t USE_VERTEX_COLOR = 0x00000004;
+    [[maybe_unused]] constexpr uint32_t ALPHA_TEST_ENABLED = 0x00000002;
+    [[maybe_unused]] constexpr uint32_t USE_VERTEX_COLOR = 0x00000004;
 }
 
 
 namespace MATERIAL_ATTRIBUTES
 {
-    constexpr uint32_t AMBIENT = 0x00000001;
+    [[maybe_unused]] constexpr uint32_t AMBIENT = 0x00000001;
     constexpr uint32_t DIFFUSE = 0x00000002;
     constexpr uint32_t SPECULAR = 0x00000004;
-    constexpr uint32_t EMISSIVE = 0x00000008;
+    [[maybe_unused]] constexpr uint32_t EMISSIVE = 0x00000008;
     constexpr uint32_t REFLECTIVITY = 0x00000010;
     constexpr uint32_t OPACITY = 0x00000020;
 }
@@ -223,8 +223,8 @@ static void printLabel( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool
  * @param aColorTool Handle to color tool being used
  * @param aDepth Indentation level to offset labels (used recursively by dumpLabels)
  */
-static void dumpLabels( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool,
-                        Handle( XCAFDoc_ColorTool ) aColorTool, int aDepth = 0 )
+[[maybe_unused]] static void dumpLabels( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool,
+                                         Handle( XCAFDoc_ColorTool ) aColorTool, int aDepth = 0 )
 {
     std::string indent( aDepth * 2, ' ' );
     printLabel( aLabel, aShapeTool, aColorTool, indent.c_str() );
@@ -234,7 +234,7 @@ static void dumpLabels( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool
 }
 
 
-static bool isLabelABoardMesh( const TDF_Label& aLabel )
+[[maybe_unused]] static bool isLabelABoardMesh( const TDF_Label& aLabel )
 {
     Handle( KICAD3D_INFO ) c;
     if( aLabel.FindAttribute( KICAD3D_INFO::GetID(), c ) )
@@ -995,8 +995,8 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
     uint32_t contSize = 0;
 
     std::vector<GROUP_NODE> baseGroupNodes;
-    baseGroupNodes.push_back( { _( MODEL_PARENT_BOARD_NAME ).ToStdString() } );
-    baseGroupNodes.push_back( { _( MODEL_PARENT_COMPONENTS_NAME ).ToStdString() } );
+    baseGroupNodes.push_back( { _( MODEL_PARENT_BOARD_NAME ).ToStdString(), {} } );
+    baseGroupNodes.push_back( { _( MODEL_PARENT_COMPONENTS_NAME ).ToStdString(), {} } );
 
     // include dynamic top-level component/group names
     std::vector<GROUP_NODE> allGroups = baseGroupNodes;
