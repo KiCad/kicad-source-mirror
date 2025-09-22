@@ -349,13 +349,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     CallAfter( [this, cfg]()
                {
                    if( cfg.sidebar_collapsed )
-                   {
                        m_splitterMainWindow->Unsplit( m_leftPanel );
-                   }
                    else
-                   {
                        m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
-                   }
 
                    setSideBarButtonLook( cfg.sidebar_collapsed );
                } );

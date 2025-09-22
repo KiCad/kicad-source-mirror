@@ -333,13 +333,9 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* parent, DIA
     CallAfter( [this, cfg]()
                {
                    if( cfg.sidebar_collapsed )
-                   {
                        m_splitterMainWindow->Unsplit( m_leftPanel );
-                   }
                    else
-                   {
                        m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
-                   }
 
                    setSideBarButtonLook( cfg.sidebar_collapsed );
                } );
@@ -359,8 +355,6 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
     SYMBOL_EDITOR_SETTINGS::PANEL_LIB_FIELDS_TABLE& cfg = m_parent->libeditconfig()->m_LibFieldEditor;
 
     cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
-
-    cfg.sidebar_collapsed = ( m_splitterMainWindow->GetSashPosition() == 0 );
 
     if( !cfg.sidebar_collapsed )
         cfg.sash_pos = m_splitterMainWindow->GetSashPosition();

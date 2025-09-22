@@ -63,7 +63,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_viewControlsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_viewControlsGrid->SetMinSize( wxSize( -1,250 ) );
 
-	bLeftSizer->Add( m_viewControlsGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( m_viewControlsGrid, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bFieldsButtons;
 	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -81,7 +81,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	bFieldsButtons->Add( m_removeFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -102,7 +102,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_filter->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_filter->SetMinSize( wxSize( 140,-1 ) );
 
-	bControls->Add( m_filter, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bControls->Add( m_filter, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline31 = new wxStaticLine( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bControls->Add( m_staticline31, 0, wxEXPAND | wxALL, 3 );
@@ -122,7 +122,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	bControls->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	bRightSizer->Add( bControls, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bRightSizer->Add( bControls, 0, wxEXPAND|wxALL, 5 );
 
 	m_grid = new WX_GRID( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -150,13 +150,13 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_grid->SetMinSize( wxSize( 400,200 ) );
 
-	bRightSizer->Add( m_grid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bRightSizer->Add( m_grid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_sidebarButton = new STD_BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonsSizer->Add( m_sidebarButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( m_sidebarButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 
 	bButtonsSizer->Add( 0, 0, 9, wxEXPAND, 5 );
@@ -180,7 +180,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_rightPanel->Layout();
 	bRightSizer->Fit( m_rightPanel );
 	m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, -1 );
-	bEditSizer->Add( m_splitterMainWindow, 1, wxEXPAND|wxALL, 5 );
+	bEditSizer->Add( m_splitterMainWindow, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bEditSizer, 1, wxEXPAND, 5 );
