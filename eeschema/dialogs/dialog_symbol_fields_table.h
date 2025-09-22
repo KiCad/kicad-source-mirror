@@ -55,6 +55,8 @@ private:
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
                    bool groupBy, bool addedByUser = false );
     void setScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
+    // Set bitmap and tooltip according to left panel visibility
+    void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all

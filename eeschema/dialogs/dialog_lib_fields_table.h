@@ -57,6 +57,8 @@ private:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
     void setScope( SCOPE aScope );
+    // Set bitmap and tooltip according to left panel visibility
+    void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
 
     void loadSymbols( const wxArrayString& aSymbolNames );
 

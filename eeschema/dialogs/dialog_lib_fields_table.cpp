@@ -335,12 +335,13 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* parent, DIA
                    if( cfg.sidebar_collapsed )
                    {
                        m_splitterMainWindow->Unsplit( m_leftPanel );
-                       m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
                    }
                    else
                    {
                        m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
                    }
+
+                   setSideBarButtonLook( cfg.sidebar_collapsed );
                } );
 
     Center();
@@ -384,6 +385,23 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
     m_grid->PopEventHandler( true );
 
     // we gave ownership of m_viewControlsDataModel & m_dataModel to the wxGrids...
+}
+
+
+void DIALOG_LIB_FIELDS_TABLE::setSideBarButtonLook( bool aIsLeftPanelCollapsed )
+{
+    // Set bitmap and tooltip according to left panel visibility
+
+    if( aIsLeftPanelCollapsed )
+    {
+        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+        m_sidebarButton->SetToolTip( _( "Expand left panel" ) );
+    }
+    else
+    {
+        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+        m_sidebarButton->SetToolTip( _( "Collapse left panel" ) );
+    }
 }
 
 
@@ -944,16 +962,15 @@ void DIALOG_LIB_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
     {
         cfg.sidebar_collapsed = false;
         m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, cfg.sash_pos );
-        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
     }
     else
     {
         cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
-
         cfg.sidebar_collapsed = true;
         m_splitterMainWindow->Unsplit( m_leftPanel );
-        m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
     }
+
+    setSideBarButtonLook( cfg.sidebar_collapsed );
 }
 
 
