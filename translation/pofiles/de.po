@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"PO-Revision-Date: 2025-09-24 17:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -7577,9 +7577,9 @@ msgstr "API-Antwort:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API-Antwort:  %s"
+msgstr "API-Antwort: %s"
 
 #: common/http_lib/http_lib_connection.cpp:364
 #, c-format
@@ -13453,9 +13453,9 @@ msgid "Edit Symbol Properties"
 msgstr "Symboleigenschaften bearbeiten"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Diese Datei ist bereits geöffnet."
+msgstr "Dieses Feld ist von \"%s\" geerbt."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -46640,9 +46640,11 @@ msgid "Generating BOM section"
 msgstr "Erzeuge Stücklisten(BOM)-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
+msgstr ""
+"Footprint %s nicht in Wörterbuch gefunden; Stückliste (BOM) könnte "
+"unvollständig sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
@@ -46677,12 +46679,16 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Pad verwendet nicht unterstützten Padstack; Bohrung wird in den Bohrdaten "
+"weggelassen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Teardrops werden in der IPC-2581 Rev.B nicht unterstützt; sie wurden als "
+"Zonen exportiert."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
 msgid "Generating logistic section"
@@ -46693,9 +46699,8 @@ msgid "Saving file"
 msgstr "Datei wird gespeichert"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Konnte Datei nicht im Puffer speichern"
+msgstr "Konnte IPC-2581-Daten nicht im Puffer speichern."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
