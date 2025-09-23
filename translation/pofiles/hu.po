@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-09 01:19+0300\n"
-"PO-Revision-Date: 2025-09-23 09:02+0000\n"
+"PO-Revision-Date: 2025-09-23 10:52+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -48280,9 +48280,9 @@ msgid "Updated %s symbol association from %s to %s."
 msgstr "%s frissítve (\"%s\" -> \"%s\")"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s fields."
-msgstr "Frisitendő mezők"
+msgstr "%s mezők frissítése."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:529
 #, fuzzy, c-format
@@ -48290,9 +48290,9 @@ msgid "Remove %s footprint fields not in symbol."
 msgstr "A szimbólumban nem megtalálható mezők eltávolítása"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s fields."
-msgstr "Frisitendő mezők"
+msgstr "%s mezők frissítve."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:592
 #, fuzzy, c-format
@@ -48400,24 +48400,24 @@ msgid "Update %s jumper pad groups"
 msgstr "Rajzjel tulajdonságok"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "Elem eltávolítása a csoportból"
+msgstr "%s eltávolítása a(z) \"%s\" csoportból."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "Elem eltávolítása a csoportból"
+msgstr "%s eltávolítva a(z) \"%s\" csoportból."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "Egyéni csoport hozzáadása"
+msgstr "%s hozzáadása a(z) \"%s\" csoporthoz."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group '%s'."
-msgstr "%s hozzáadása (\"%s\" alkatrészrajzolattal)."
+msgstr "%s hozzáadva a(z) \"%s\" csoporthoz."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1018
 #, fuzzy, c-format
@@ -48480,9 +48480,9 @@ msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "Rézkitöltés átcsatlakoztatása (%s -> %s)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr "Rézkitöltés átcsatlakoztatása (%s -> %s)"
+msgstr "Rézkitöltés átcsatlakoztatása (%s --> %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1324
 #, fuzzy, c-format
@@ -48490,12 +48490,12 @@ msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "Rézkitöltés átcsatlakoztatása (%s -> %s)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1331
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Rézkitöltés átcsatlakoztatása (%s -> %s)"
+msgstr "Rézkitöltés átcsatlakoztatva (%s --> %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1344
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "Rézkitöltés (%s) nem csatlakozik forrszemhez."
 
