@@ -1586,6 +1586,7 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWind
     wxCHECK( dialog, /* void */ );
 
     dialog->DeleteAllPages();
+    dialog->SetUserItemID( aFootprint->m_Uuid );
 
     LIB_ID              fpID = aFootprint->GetFPID();
     wxString            libName = fpID.GetLibNickname();

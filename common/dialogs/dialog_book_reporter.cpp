@@ -37,6 +37,7 @@ DIALOG_BOOK_REPORTER::DIALOG_BOOK_REPORTER( KIWAY_PLAYER* aParent, const wxStrin
 {
     SetName( aName );
     SetupStandardButtons();
+    m_sdbSizerApply->Hide();
     finishDialogSettings();
 }
 
@@ -98,7 +99,7 @@ void DIALOG_BOOK_REPORTER::OnClose( wxCloseEvent& aEvent )
     // Dialog is mode-less so let the parent know that it needs to be destroyed.
     if( !IsModal() && !IsQuasiModal() )
     {
-        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, wxID_ANY );
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, aEvent.GetId() );
 
         evt->SetEventObject( this );
         evt->SetString( GetName() );
@@ -109,4 +110,20 @@ void DIALOG_BOOK_REPORTER::OnClose( wxCloseEvent& aEvent )
     }
 
     aEvent.Skip();
+}
+
+
+void DIALOG_BOOK_REPORTER::OnApply( wxCommandEvent& event )
+{
+    wxCloseEvent closeEvent;
+    closeEvent.SetId( m_sdbSizerApply->GetId() );
+    OnClose( closeEvent );
+}
+
+
+void DIALOG_BOOK_REPORTER::OnOK( wxCommandEvent& event )
+{
+    wxCloseEvent closeEvent;
+    closeEvent.SetId( m_sdbSizerOK->GetId() );
+    OnClose( closeEvent );
 }

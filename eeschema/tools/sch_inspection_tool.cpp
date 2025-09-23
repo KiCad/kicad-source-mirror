@@ -349,6 +349,7 @@ void SCH_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
     wxCHECK( dialog, /* void */ );
 
     dialog->DeleteAllPages();
+    dialog->SetUserItemID( symbol->m_Uuid );
 
     wxString symbolDesc = wxString::Format( _( "Symbol %s" ),
                                             symbol->GetField( FIELD_T::REFERENCE )->GetText() );

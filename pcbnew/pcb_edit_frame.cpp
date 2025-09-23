@@ -3060,6 +3060,9 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetFootprintDiffDialog()
     {
         m_footprintDiffDlg = new DIALOG_BOOK_REPORTER( this, FOOTPRINT_DIFF_DIALOG_NAME,
                                                        _( "Compare Footprint with Library" ) );
+
+        m_footprintDiffDlg->m_sdbSizerApply->SetLabel( _( "Update Footprint from Library..." ) );
+        m_footprintDiffDlg->m_sdbSizerApply->Show();
     }
 
     return m_footprintDiffDlg;
@@ -3083,8 +3086,27 @@ void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent 
         m_inspectConstraintsDlg->Destroy();
         m_inspectConstraintsDlg = nullptr;
     }
-    else if( m_footprintDiffDlg && aEvent.GetString() == INSPECT_CONSTRAINTS_DIALOG_NAME )
+    else if( m_footprintDiffDlg && aEvent.GetString() == FOOTPRINT_DIFF_DIALOG_NAME )
     {
+        if( aEvent.GetId() == wxID_APPLY )
+        {
+            KIID fpUUID = m_footprintDiffDlg->GetUserItemID();
+
+            CallAfter(
+                    [this, fpUUID]()
+                    {
+                        BOARD_ITEM* item = m_pcb->ResolveItem( fpUUID );
+
+                        if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
+                        {
+                            m_toolManager->RunAction<EDA_ITEM*>( ACTIONS::selectItem, footprint );
+
+                            DIALOG_EXCHANGE_FOOTPRINTS dialog( this, footprint, true, true );
+                            dialog.ShowQuasiModal();
+                        }
+                    } );
+        }
+
         m_footprintDiffDlg->Destroy();
         m_footprintDiffDlg = nullptr;
     }

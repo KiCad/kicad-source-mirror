@@ -21,9 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_BOOK_REPORTER_H
-#define DIALOG_BOOK_REPORTER_H
+#pragma once
 
+#include <kiid.h>
 #include <dialogs/dialog_book_reporter_base.h>
 
 class KIWAY_PLAYER;
@@ -42,6 +42,8 @@ public:
                           const wxString& aDialogTitle );
 
     void OnClose( wxCloseEvent& aEvent ) override;
+    void OnApply( wxCommandEvent& event ) override;
+  	void OnOK( wxCommandEvent& event ) override;
 
     void OnErrorLinkClicked( wxHtmlLinkEvent& aEvent );
 
@@ -53,8 +55,10 @@ public:
 
     int GetPageCount() const;
 
+    KIID GetUserItemID() const { return m_userItemID; }
+    void SetUserItemID( const KIID& aID ) { m_userItemID = aID; }
+
 protected:
     KIWAY_PLAYER* m_frame;
+    KIID          m_userItemID;
 };
-
-#endif // DIALOG_BOOK_REPORTER_H

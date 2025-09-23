@@ -109,6 +109,8 @@
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
 #include <api/api_utils.h>
+#include <dialog_change_symbols.h>
+
 #endif
 
 
@@ -2265,6 +2267,9 @@ DIALOG_BOOK_REPORTER* SCH_EDIT_FRAME::GetSymbolDiffDialog()
     {
         m_diffSymbolDialog = new DIALOG_BOOK_REPORTER( this, DIFF_SYMBOLS_DIALOG_NAME,
                                                        _( "Compare Symbol with Library" ) );
+
+        m_diffSymbolDialog->m_sdbSizerApply->SetLabel( _( "Update Symbol from Library..." ) );
+        m_diffSymbolDialog->m_sdbSizerApply->Show();
     }
 
     return m_diffSymbolDialog;
@@ -2275,6 +2280,25 @@ void SCH_EDIT_FRAME::onCloseSymbolDiffDialog( wxCommandEvent& aEvent )
 {
     if( m_diffSymbolDialog && aEvent.GetString() == DIFF_SYMBOLS_DIALOG_NAME )
     {
+        if( aEvent.GetId() == wxID_APPLY )
+        {
+            KIID symbolUUID = m_diffSymbolDialog->GetUserItemID();
+
+            CallAfter(
+                    [this, symbolUUID]()
+                    {
+                        EDA_ITEM* item = ResolveItem( symbolUUID );
+
+                        if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+                        {
+                            m_toolManager->RunAction<EDA_ITEM*>( ACTIONS::selectItem, symbol );
+
+                            DIALOG_CHANGE_SYMBOLS dlg( this, symbol, DIALOG_CHANGE_SYMBOLS::MODE::UPDATE );
+                            dlg.ShowQuasiModal();
+                        }
+                    } );
+        }
+
         m_diffSymbolDialog->Destroy();
         m_diffSymbolDialog = nullptr;
     }
