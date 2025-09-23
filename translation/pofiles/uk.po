@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-09 12:03+0000\n"
+"PO-Revision-Date: 2025-09-23 15:55+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7818,24 +7818,20 @@ msgid "Could not lookup commit '%s'"
 msgstr "Не вдалося знайти коміт '%s'"
 
 #: common/git/libgit_backend.cpp:1054
-#, fuzzy
 msgid "Merge failed"
-msgstr "Завдання не вдалося"
+msgstr "Не вдалося об'єднати"
 
 #: common/git/libgit_backend.cpp:1072
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Не вдалося завантажити Eeschema."
+msgstr "Не вдалося запустити перебазування"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "Помилка підключення до бази даних: %s"
+msgstr "Не вдалося виконати перебазування (commit)"
 
 #: common/git/libgit_backend.cpp:1093
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "Останній запуск не вдався"
+msgstr "Не вдалося завершити перебазування"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -7978,9 +7974,9 @@ msgstr "Відповідь API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Відповідь API:  %s"
+msgstr "Відповідь API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -8797,9 +8793,8 @@ msgid "DRC errors"
 msgstr "Помилки DRC"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC shapes"
-msgstr "DRC фігура 1"
+msgstr "Форми DRC"
 
 #: common/layer_id.cpp:141
 msgid "DRC exclusions"
@@ -8984,78 +8979,64 @@ msgid "There are no notifications available"
 msgstr "Наразі немає жодних повідомлень"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148х210мм"
+msgstr "A5 148 x 210мм"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210х297мм"
+msgstr "A4 210 x 297мм"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297х420мм"
+msgstr "A3 297 x 420мм"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420х594мм"
+msgstr "A2 420 x 594мм"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841мм"
+msgstr "A1 594 x 841мм"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841х1189мм"
+msgstr "A0 841 x 1189мм"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "A 8.5х11дюйм"
+msgstr "А 8,5 x 11 дюйм"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11х17дюйм"
+msgstr "B 11 x 17 дюймів"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17х22дюйм"
+msgstr "C 17 x 22 дюйми"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22х34дюйм"
+msgstr "D 22 x 34 дюйми"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34х44дюйм"
+msgstr "E 34 x 44 дюйми"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "Заданий користувачем (Власний)"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8.5x11дюйм"
+msgstr "Лист США 8,5 x 11 дюймів"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8.5x14дюйм"
+msgstr "US Legal 8,5 x 14 дюймів"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11х17дюйм"
+msgstr "Грошова книга США 11 x 17 дюймів"
 
 #: common/pgm_base.cpp:224
 msgid "No default editor found, you must choose one."
@@ -12621,23 +12602,23 @@ msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr "Схема не повністю анотована. Результати ERC будуть неповними."
 
 #: eeschema/dialogs/dialog_erc.cpp:221 pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Вибрані елементи"
+msgstr "Перехресне зондування вибраних елементів"
 
 #: eeschema/dialogs/dialog_erc.cpp:222
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Підсвітити символи, що відповідають вибраним посадковим місцям"
+msgstr ""
+"Підсвічувати відповідні елементи на полотні, якщо їх вибрати у списку ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:226 pcbnew/dialogs/dialog_drc.cpp:281
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "Центрувати за курсором"
+msgstr "Центр на крос-зонді"
 
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:282
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
+"Під час перехресного зондування прокрутіть полотно так, щоб елемент був "
+"видимим"
 
 #: eeschema/dialogs/dialog_erc.cpp:397 pcbnew/dialogs/dialog_drc.cpp:1299
 msgid "Delete exclusions too?"
@@ -12663,9 +12644,8 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d символ(и) потрібно анотувати.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:522
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- Користувач скасував ERC.<br><br>"
+msgstr "-------- ERC скасовано користувачем.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:417
 msgid "Done.<br><br>"
@@ -13981,15 +13961,13 @@ msgstr "Показати документацію в браузері"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:432
-#, fuzzy
 msgid "Expand left panel"
-msgstr "Розгорнути все"
+msgstr "Розгорнути ліву панель"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:397
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:437
-#, fuzzy
 msgid "Collapse left panel"
-msgstr "Згорнути все"
+msgstr "Згорнути ліву панель"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:559
 #, c-format
@@ -16183,6 +16161,8 @@ msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
+"Показувати в таблиці символи, позначені як «DNP». Цей параметр також "
+"контролює, чи включатимуться символи «DNP» під час експорту."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
 msgid "Include 'Exclude from BOM' Symbols"
@@ -16193,26 +16173,25 @@ msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
+"Відображати в таблиці символи з позначкою «Виключити зі специфікації». "
+"Символи з позначкою «Виключити зі специфікації» ніколи не включаються до "
+"експорту."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
-#, fuzzy
 msgid "Highlight on Cross-probe"
 msgstr "Виділіть на перехресному зонді"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:951
-#, fuzzy
 msgid "Highlight corresponding item on canvas when it is selected in the table"
-msgstr "Підсвітити символи, що відповідають вибраним посадковим місцям"
+msgstr "Виділяти відповідний елемент на полотні, коли його вибрано в таблиці"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
-#, fuzzy
 msgid "Select on Cross-probe"
 msgstr "Виберіть на перехресному зонді"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
-#, fuzzy
 msgid "Select corresponding item on canvas when it is selected in the table"
-msgstr "Обрати відповідні елементи в редакторі схеми"
+msgstr "Вибрати відповідний елемент на полотні, коли він вибрано в таблиці"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1142
 msgid "The Quantity column cannot be grouped by."
@@ -16785,13 +16764,15 @@ msgstr "Імена звʼязків"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "Надавати перевагу замінам символьних одиниць над замінами міток"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
+"Коли можливо, виявляйте заміни вентилів слідів та застосовуйте відповідні "
+"заміни символьних одиниць замість зміни міток мережі."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -18963,44 +18944,43 @@ msgid "Graphic item count differs."
 msgstr "Кількість графічних елементів відрізняється."
 
 #: eeschema/lib_symbol.cpp:1693
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "Кількість графічних елементів відрізняється."
+msgstr "Графічний елемент відрізняється: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1710
-#, fuzzy, c-format
+#, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "Редагувати символи схеми"
+msgstr "Зайвий контакт у схемі символу: %s."
 
 #: eeschema/lib_symbol.cpp:1718
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "PIN-код %s відрізняється."
+msgstr "PIN-код %s відрізняється: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "Редагувати символи схеми"
+msgstr "Відсутній контакт у символі схеми: %s."
 
 #: eeschema/lib_symbol.cpp:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "Редагувати символи схеми"
+msgstr "Додаткове поле у схематичному символі: %s."
 
 #: eeschema/lib_symbol.cpp:1780
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "Кількість полів відрізняється."
+msgstr "Поле '%s' відрізняється: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1803
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "Редагувати символи схеми"
+msgstr "Відсутнє поле в символі схеми: %s."
 
 #: eeschema/lib_symbol.cpp:1813
-#, fuzzy
 msgid "Footprint filter count differs."
-msgstr "Фільтри слідів відрізняються."
+msgstr "Кількість фільтрів слідів відрізняється."
 
 #: eeschema/lib_symbol.cpp:1825
 msgid "Footprint filters differ."
@@ -19676,9 +19656,9 @@ msgid "Compare Symbol with Library"
 msgstr "Порівняння символу з бібліотекою"
 
 #: eeschema/sch_field.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "Поле %s (%s)"
+msgstr "Поле %s (порожнє)"
 
 #: eeschema/sch_field.cpp:986
 #, c-format
@@ -20238,33 +20218,33 @@ msgid "httplib plugin missing library table handle!"
 msgstr "Плагін httplib не може знайти обробника таблиці бібліотеки!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "Файл налаштувань бібліотеки HTTP %s відсутній або недійсний"
+msgstr "Файл налаштувань бібліотеки HTTP %s відсутній або недійсний."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr "У Файлі налаштувань HTTP бібілотеки %s відстутній номер версії API!"
+msgstr "У файлі налаштувань бібліотеки HTTP %s відсутній номер версії API."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
-"Файл налаштувань HTTP бібліотеки %s використовує версію API %s, але KiCad "
-"вимагає версію %s"
+"Файл налаштувань бібліотеки HTTP %s використовує API версії %s, але KiCad "
+"вимагає версії %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "У файлі налаштувань HTTP бібліотеки %s відсутній основний URL!"
+msgstr "У файлі налаштувань бібліотеки HTTP %s відсутня коренева URL-адреса."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr "Файл налаштувань HTTP бібліотеки %s має неправильний тип бібліотеки"
+msgstr "Файл налаштувань бібліотеки HTTP %s має недійсний тип бібліотеки."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:281
 #, c-format
@@ -20272,9 +20252,9 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "Неможливо під'єднатися до %s. Помилка: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving data from HTTP library %s: %s"
-msgstr "Помилка отримання даних з бібліотеки HTTP %s: %s"
+msgstr "Помилка отримання даних з HTTP-бібліотеки %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:45
 msgid "KiCad HTTP library files"
@@ -20705,9 +20685,9 @@ msgid "Label '%s'"
 msgstr "Мітка '%s'"
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Директивна мітка [%s %s]"
+msgstr "Мітка директиви [%s (порожня)]"
 
 #: eeschema/sch_label.cpp:1951
 #, c-format
@@ -21006,9 +20986,9 @@ msgid "Exclude from"
 msgstr "Виключити з"
 
 #: eeschema/sch_sheet.cpp:1174
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet '%s'"
-msgstr "Ієрархічний лист %s"
+msgstr "Ієрархічний аркуш '%s'"
 
 #: eeschema/sch_sheet.cpp:1678 eeschema/sch_table.cpp:534
 #: pcbnew/pcb_table.cpp:682 pcbnew/pcb_tablecell.cpp:234
@@ -21041,9 +21021,9 @@ msgid "(Deleted Item)"
 msgstr "(Видалений елемент)"
 
 #: eeschema/sch_sheet_pin.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "Ієрархічна вивід листа %s"
+msgstr "Ієрархічний закріплений аркуш '%s'"
 
 #: eeschema/sch_symbol.cpp:1942
 msgid "Power symbol"
@@ -23567,9 +23547,8 @@ msgstr "Зв'язок(и) між закріпленими елементами �
 
 #: eeschema/toolbars_sch_editor.cpp:74 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
-#, fuzzy
 msgid "Line modes"
-msgstr "Модель лінії:"
+msgstr "Лінійні режими"
 
 #: eeschema/toolbars_sch_editor.cpp:98 pcbnew/toolbars_footprint_editor.cpp:93
 #: pcbnew/toolbars_pcb_editor.cpp:196
@@ -23660,9 +23639,9 @@ msgid "Footprint re-linking canceled by user."
 msgstr "Повторне зв'язування сліду скасовано користувачем."
 
 #: eeschema/tools/backannotate.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "Додати поле %s '%s' зі значенням '%s'."
+msgstr "Поміняйте одиниці %s %s на одиниці %s."
 
 #: eeschema/tools/backannotate.cpp:810
 msgid "true"
@@ -24263,24 +24242,20 @@ msgid "Swap positions of selected items"
 msgstr "Поміняти місцями вибрані елементи"
 
 #: eeschema/tools/sch_actions.cpp:776 eeschema/tools/sch_edit_tool.cpp:1620
-#, fuzzy
 msgid "Swap Pin Labels"
-msgstr "Поміняти шари між собою"
+msgstr "Поміняти місцями мітки пінів"
 
 #: eeschema/tools/sch_actions.cpp:777
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "Показати лінію зʼєднання для виділеного звʼязку"
+msgstr "Поміняти місцями мітки, прикріплені до вибраних контактів"
 
 #: eeschema/tools/sch_actions.cpp:783 eeschema/tools/sch_edit_tool.cpp:1701
-#, fuzzy
 msgid "Swap Unit Labels"
-msgstr "Поміняти місцями одиниці"
+msgstr "Поміняти місцями мітки одиниць"
 
 #: eeschema/tools/sch_actions.cpp:784
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "Обріжте кути між вибраними лініями"
+msgstr "Змінити місцями мітки між вибраними одиницями"
 
 #: eeschema/tools/sch_actions.cpp:800
 msgid "Edit Reference Designator..."
@@ -25115,9 +25090,8 @@ msgid "All units of this symbol are already placed."
 msgstr "Усі одиниці цього символу вже розміщені."
 
 #: eeschema/tools/sch_drawing_tools.cpp:666
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "Блок вже розміщено"
+msgstr "Запитаний блок вже розміщено."
 
 #: eeschema/tools/sch_drawing_tools.cpp:870
 msgid "Add Design Block"
@@ -25255,9 +25229,9 @@ msgid " (already placed)"
 msgstr " (вже розміщено)"
 
 #: eeschema/tools/sch_edit_tool.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "Розмістити всі частини"
+msgstr "Розмістити одиницю %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:199
 msgid "Pin Function"
@@ -25296,12 +25270,16 @@ msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
 msgstr ""
+"Кожен вибраний контакт повинен мати рівно одну приєднану мітку мережі та "
+"жодних інших з'єднань контактів."
 
 #: eeschema/tools/sch_edit_tool.cpp:1652
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
 msgstr ""
+"Кожен контакт вибраних пристроїв повинен мати рівно одну прикріплену мітку "
+"мережі та жодних інших з'єднань контактів."
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid "Label value cannot go below zero"
@@ -25974,20 +25952,18 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider.cpp:140
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Single Run"
-msgstr "Єдиний документ"
+msgstr "Одинарний пробіг"
 
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
 msgid "Multi Run"
-msgstr ""
+msgstr "Багаторазовий запуск"
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
-#, fuzzy
 msgid "Steps"
-msgstr "Крок X:"
+msgstr "Кроки"
 
 #: eeschema/widgets/tuner_slider_base.cpp:62
 msgid "Limit to E24 series values."
@@ -29067,9 +29043,8 @@ msgid "Export STEPZ"
 msgstr "Експорт STEPZ"
 
 #: kicad/kicad_cli.cpp:133
-#, fuzzy
 msgid "Export U3D"
-msgstr "Експорт DXF"
+msgstr "Експорт U3D"
 
 #: kicad/kicad_cli.cpp:158
 msgid "Export PS"
@@ -35669,21 +35644,18 @@ msgid "Run DRC"
 msgstr "Запуск DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:269
-#, fuzzy
 msgid "Report All Errors for Each Track"
-msgstr "Повідомляти про всі помилки для кожної доріжки"
+msgstr "Повідомити про всі помилки для кожної доріжки"
 
 #: pcbnew/dialogs/dialog_drc.cpp:270
-#, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
 msgstr ""
-"Якщо позначено, зони заповнюватимуться повторно після кожної операції "
-"редагування"
+"Якщо не позначено, для кожної доріжки буде повідомлено лише про першу помилку"
 
 #: pcbnew/dialogs/dialog_drc.cpp:277
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "Підсвітити символи, що відповідають вибраним посадковим місцям"
+msgstr ""
+"Підсвічувати відповідні елементи на полотні, коли вони вибрані у списку DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:360
 msgid "DRC incomplete: could not compile custom design rules."
@@ -36245,12 +36217,11 @@ msgstr "STL-файли"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:294
 msgid "Universal 3D files"
-msgstr ""
+msgstr "Універсальні 3D-файли"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:296
-#, fuzzy
 msgid "PDF files"
-msgstr "PLY-файли"
+msgstr "PDF-файли"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:304
 msgid "3D Model Output File"
@@ -36303,7 +36274,7 @@ msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "U3D"
-msgstr ""
+msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -37304,14 +37275,12 @@ msgstr "Скошений прямокутник"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:47
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:98
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:263
-#, fuzzy
 msgid "Custom shape"
-msgstr "Користувацька форма"
+msgstr "Власна форма"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:52
-#, fuzzy
 msgid "Pad Table"
-msgstr "Додати мітку"
+msgstr "Таблиця килимків"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:67 pcbnew/pad.cpp:2858
 msgid "Size X"
@@ -37322,24 +37291,20 @@ msgid "Size Y"
 msgstr "Розмір Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:69
-#, fuzzy
 msgid "Drill X"
-msgstr "Дрилі"
+msgstr "Дриль X"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:70
-#, fuzzy
 msgid "Drill Y"
-msgstr "Дрилі"
+msgstr "Дриль Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:71
-#, fuzzy
 msgid "Pad->Die Length"
-msgstr "Довжина від конт. площадки до чіпу"
+msgstr "Довжина контактної площадки->матриці"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad->Die Delay"
-msgstr "Затримка від Pad до Die"
+msgstr "Затримка Pad->Die"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:81
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:199
@@ -37354,15 +37319,13 @@ msgstr "Наскрізний отвір"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:201
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:379
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:546
-#, fuzzy
 msgid "Connector"
-msgstr "Роз'єм:"
+msgstr "З'єднувач"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:85
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:209
-#, fuzzy
 msgid "Aperture"
-msgstr "SMD апертура"
+msgstr "Діафрагма"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:192
 msgid "Use a relative path?"
@@ -38099,14 +38062,12 @@ msgid "Unknown choice"
 msgstr "Невідомий вибір"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
-msgstr "Перехідні мікроотвори"
+msgstr "Мікрохвильові печі"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind/buried vias"
-msgstr "Сліпі/Сховані перехідні отвори"
+msgstr "Сліпі/закопані перехідні отвори"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
 msgid "Filter tracks by width:"
@@ -38125,9 +38086,8 @@ msgid "Via size:"
 msgstr "Розмір перехідних отворів:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:189
-#, fuzzy
 msgid "Via annular rings:"
-msgstr "Кільцеві пояси:"
+msgstr "Через кільцеподібні кільця:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1146
@@ -38152,9 +38112,8 @@ msgid "Start and end layers only"
 msgstr "Тільки початковий та кінцевий шари"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:199
-#, fuzzy
 msgid "Via protection features:"
-msgstr "Функції захисту:"
+msgstr "За допомогою функцій захисту:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:206
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
@@ -42011,7 +41970,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -42236,16 +42194,17 @@ msgstr ""
 "| "
 "Опис                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
-"| Перевіряє ширину кільцевих кілець на переходних отворах."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"| Перевіряє ширину кільцевих кілець на переходних "
+"отворах.<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| Перевіряє заданий вираз."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                     "
+"| Перевіряє заданий "
+"вираз.<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
@@ -42253,77 +42212,78 @@ msgstr ""
 "`physical_clearance`, якщо ви хочете вказати зазор між об'єктами незалежно "
 "від мережі.)<br><br>Щоб дозволити перекриття (зіткнення) мідних об'єктів, "
 "створити обмеження `clearance` зі значенням `min` менше нуля (наприклад, "
-"`-1`)."
-"<br>                                                                                                                      "
+"`-1`)"
+".<br>                                                                                                                      "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
 "| Перевіряє зазор між внутрішніми дворами, що охоплюють контури, та генерує "
-"помилку, якщо будь-які два внутрішні двори ближчі за відстань «мінімум».  "
+"помилку, якщо будь-які два внутрішні двори ближчі за відстань «мінімум».  \n"
 "Якщо контур не має форми внутрішнього двору, це обмеження не генеруватиме "
 "помилок. "
 "<br>                                                                                                                                                                                                               "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                   "
-"| Визначає довжину шляху витоку між мідними об'єктами різних мереж."
-"<br>                                                                                                                                                                                                                                                                                                                                                                           "
+"| Визначає довжину шляху витоку між мідними об'єктами різних "
+"мереж.<br>                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
 "| Перевіряє зазор між зв'язаними коліями в диференціальній парі. Зв'язані "
 "колії – це сегменти, паралельні один одному.  \n"
 "Зазор диференціальної пари не перевіряється на незв'язаних частинах "
-"диференціальної пари (наприклад, розгалуження від компонента)."
-"<br>                                                                                                                                                                                           "
+"диференціальної пари (наприклад, розгалуження від компонента)"
+".<br>                                                                                                                                                                                           "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
 "| Перевіряє відстань, на яку доріжка диференціальної пари прокладена окремо "
 "від доріжки іншої полярності в парі (наприклад, де пара розходиться від "
 "компонента або роз'єднується, щоб обійти інший об'єкт, наприклад, перехідний "
-"отвір)."
-"<br>                                                                                                                                                                                                         "
+"отвір)"
+".<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Вкажіть один або декілька типів об'єктів, які потрібно заборонити, "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Вкажіть один або декілька типів об'єктів, які потрібно заборонити, "
 "розділивши їх пробілами. Наприклад, `(обмеження заборонити відстеження)` або "
 "`(обмеження забороняє відстеження через контактну площадку)`.  Якщо об'єкт "
 "цього типу відповідає умові правила, буде створено помилку DRC.<br><br>Це "
 "обмеження по суті те саме, що й область правила заборони, але його можна "
-"використовувати для створення більш конкретних обмежень заборони."
-"<br>                                                                   |\n"
+"використовувати для створення більш конкретних обмежень "
+"заборони.<br>                                                                   "
+"|\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Перевіряє зазор між об'єктами та краєм плати.<br><br>Це також можна "
 "розглядати як «допуск фрезерування», оскільки край плати включатиме всі "
 "графічні елементи на `Edge.Cuts` шар, а також будь-які *овальні* отвори для "
 "контактних майданчиків. (Див. `physical_hole_clearance` для допуску "
-"свердління.)<br>                                                                                                                                                    "
+"свердління.)"
+"<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
 "| Перевіряє загальну маршрутизовану довжину для мереж, що відповідають умові "
 "правила, та генерує помилку для кожної мережі, яка знаходиться нижче `min` "
 "значення (якщо вказано) або вище за `максимальне` значення (якщо вказано) "
-"обмеження."
-"<br>                                                                                                                                                                                                                               "
+"обмеження.<br>                                                                                                                                                                                                                               "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
 "| Перевіряє розмір (діаметр) просвердленого отвору в контактній площадкі або "
 "переходному отворі. Для овальних отворів перевіряється менший (незначний) "
 "діаметр Значення «мін» (якщо вказано) та більший (основний) діаметр будуть "
-"перевірені на відповідність значенню «макс» (якщо вказано)."
-"<br>                                                                                                                                                                                            "
+"перевірені на відповідність значенню «макс» (якщо вказано)"
+".<br>                                                                                                                                                                                            "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
 "| Перевіряє зазор між просвердленим отвором у контактній площадкі або "
 "переходному отворі та мідними об'єктами на іншій мережі. Зазор вимірюється "
-"від діаметра отвору, а не від його центру."
-"<br>                                                                                                                                                                                                                                                                        "
+"від діаметра отвору, а не від його "
+"центру.<br>                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
@@ -42339,8 +42299,8 @@ msgstr ""
 "| Перевіряє зазор між двома об'єктами на заданому шарі (включаючи шари, що "
 "не містять міді).<br><br>Хоча це може виконувати більше універсальних "
 "перевірок, ніж `clearance`, це набагато повільніше. Використовуйте "
-"`clearance`, де це можливо."
-"<br>                                                                                                                                                                                                                            "
+"`clearance`, де це "
+"можливо.<br>                                                                                                                                                                                                                            "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
@@ -42348,13 +42308,13 @@ msgstr ""
 "переходному отворі та іншим об'єктом, незалежно від мережі. Зазор "
 "вимірюється від діаметра отвору, а не від його центру.<br><br>Це також можна "
 "розглядати як «допуск на свердління», оскільки він включає лише **круглі** "
-"отвори (див. `edge_clearance` для допуску фрезерування)."
-"<br>                                                                                                                    "
+"отвори (див. `edge_clearance` для допуску фрезерування)"
+".<br>                                                                                                                    "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
-"| Перевіряє зазор між об'єктами на шарах шовкографії та іншими об'єктами."
-"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"| Перевіряє зазор між об'єктами на шарах шовкографії та іншими "
+"об'єктами.<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
@@ -42362,8 +42322,8 @@ msgstr ""
 "тобто різниця між довжиною кожної сітки та середнім значенням усіх довжин "
 "кожної сітки, що відповідає правилу.  Якщо абсолютне значення різниці між "
 "цим середнім значенням та довжиною будь-якої мережі перевищує значення "
-"обмеження `max`, буде згенеровано помилку."
-"<br>                                                                                   "
+"обмеження `max`, буде згенеровано "
+"помилку.<br>                                                                                   "
 "|\n"
 "| `solder_mask_expansion`   | "
 "opt                                                                                                                   "
@@ -42387,48 +42347,45 @@ msgstr ""
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
 "| Визначає ширину зазору між майданчиком та зоною з термоізоляційним "
-"з'єднанням."
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"з'єднанням.<br>                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                   "
 "| Визначає ширину спиць, що з'єднують колодку із зоною з термоізоляційним "
-"з'єднанням."
-"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"з'єднанням.<br>                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
 "| Перевіряє ширину сегментів колії та дуги.  Помилка буде згенерована для "
 "кожного сегмента, ширина якого менша за значення `min` (якщо вказано) або "
-"більша за значення `max` (якщо вказано)."
-"<br>                                                                                                                                                                                                                                                             "
+"більша за значення `max` (якщо вказано)"
+".<br>                                                                                                                                                                                                                                                             "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                           "
 "| Перевіряє кут між двома з'єднаними сегментами колії.  Помилка буде "
 "згенерована для кожної з'єднаної пари з кутом нижче значення `min` (якщо "
-"вказано) або вище значення `max` (якщо вказано)."
-"<br>                                                                                                                                                                                                                                              "
+"вказано) або вище значення `max` (якщо вказано)"
+".<br>                                                                                                                                                                                                                                              "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                               "
 "| Перевіряє довжину сегментів колії та дуги.  Помилка буде згенерована для "
 "кожного сегмента, довжина якого менша за значення `min` (якщо вказано) або "
-"більша за значення `max` (якщо вказано))."
-"<br>                                                                                                                                                                                                                                                           "
+"більша за значення `max` (якщо вказано))"
+".<br>                                                                                                                                                                                                                                                           "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
 "| Рахує кількість переходних отворів у кожній мережі, що відповідає умові "
 "правила.  Якщо це число перевищує значення обмеження `max` для будь-якої "
-"збігаючоїся мережі, для цієї мережі буде згенеровано помилку."
-"<br>                                                                                                                                                                                                                                                               "
+"збігаючоїся мережі, для цієї мережі буде згенеровано "
+"помилку.<br>                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                "
 "| Визначає з'єднання, яке потрібно встановити між зоною та контактною "
-"площадкою."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"площадкою.<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -42860,7 +42817,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -43043,13 +42999,13 @@ msgstr ""
 "\n"
 "    (правило \"Відстань між переходними отворами різних мереж\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (правило \"Зазор між прокладками різних сіток\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (правило \"Від отвору до колії\"\n"
@@ -43161,8 +43117,8 @@ msgstr ""
 "свердлінням \n"
 "    # micro-vias.\n"
 "    (правило hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -43173,11 +43129,19 @@ msgstr ""
 "        (condition \"A.type == via\"))\n"
 "\n"
 "\n"
+"\n"
 "    # Вилучить паяльну пасту з контактних майданчиків DNP.\n"
 "    (правило remove_solder_paste_from_DNP\n"
 "        (constraint solder_paste_abs_margin (opt -50mm))\n"
+"\n"
 "        (condition \"A.Do_not_Populate\"))\n"
 "\n"
+"\n"
+"\n"
+"    (правило guard_ring_bridging\n"
+"        (обмеження bridged_mask)\n"
+"        (умова \"A.intersectsArea('guard_ring')\")\n"
+"        (ігнорування ступеня серйозності))"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default Properties for Round Shapes"
@@ -45325,11 +45289,11 @@ msgstr "Не вдалося перенести дані моделі з файл
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3436
 #: pcbnew/exporters/step/step_pcb_model.cpp:3483
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
 msgstr ""
 "Немає коректної збірки друкованої плати; неможливо створити вихідний файл "
-"'%s'."
+"'%s'.\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -46664,14 +46628,14 @@ msgid "Connected %s pin %s to %s."
 msgstr "Під'єднано %s вивід %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1204
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s unit metadata."
-msgstr "Оновити %s полів."
+msgstr "Оновити метадані одиниці %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s unit metadata."
-msgstr "Оновлено %s полів."
+msgstr "Оновлено метадані одиниці %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1280
 #, c-format
@@ -51023,14 +50987,13 @@ msgid "Shape Modification"
 msgstr "Модифікація форми"
 
 #: pcbnew/tools/edit_tool.cpp:221
-#, fuzzy
 msgid "Swap Gate Nets..."
-msgstr "Замінити шари..."
+msgstr "Заміна сіток для воріт..."
 
 #: pcbnew/tools/edit_tool.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid "Swap with %s"
-msgstr "Поміняти місцями одиниці"
+msgstr "Обміняти з %s"
 
 #: pcbnew/tools/edit_tool.cpp:957
 #, c-format
@@ -51165,55 +51128,64 @@ msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
 msgstr ""
+"%zu невибраних контактних майданчиків підключено до цих мереж. Як ви хочете "
+"продовжити?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
 msgstr ""
+"Підключені доріжки, переходні отвори та інші мідні елементи, що не входять "
+"до зони, все одно мінятимуть місцями мережі, навіть якщо ви ігноруєте "
+"невибрані контактні площадки."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "Металеві контактні площадки:"
+msgstr "Невибрані колодки:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "Вилучить невикористані електроди"
+msgstr "Ігнорувати невибрані педи"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
 msgid "Swap All Connected Pads"
-msgstr ""
+msgstr "Поміняти місцями всі підключені колодки"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:315
 #: pcbnew/tools/edit_tool_move_fct.cpp:350 pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Swap Pad Nets"
-msgstr "Показати сітки з нульовою прокладкою"
+msgstr "Змінні сітки для килимків"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
 msgstr ""
+"Перестановка вентилів повинна виконуватися на контактних майданчиках в межах "
+"одного багатовентильового розташування вентилів."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
 msgid "Gate swapping must be performed on gates with equal pin counts."
 msgstr ""
+"Заміна місць воріт повинна виконуватися на воротах з однаковою кількістю "
+"контактів."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
 msgid "Gate swapping failed: pad in unit missing from footprint."
 msgstr ""
+"Не вдалося замінити затвор: контактна площадка в блоці відсутня на "
+"посадковому місці."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
 msgid "Gate swapping has no effect: all selected gates have identical nets."
 msgstr ""
+"Заміна вентилів не має жодного ефекту: усі вибрані вентилі мають ідентичні "
+"мережі."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:614
 #: pcbnew/tools/edit_tool_move_fct.cpp:656 pcbnew/tools/pcb_actions.cpp:700
-#, fuzzy
 msgid "Swap Gate Nets"
-msgstr "Оновити список звʼязків"
+msgstr "Сміняйте сітки для воріт"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:713
 msgid "Pack Footprints"
@@ -51827,10 +51799,13 @@ msgstr "Дзеркально відображати вибрані елемен�
 #: pcbnew/tools/pcb_actions.cpp:694
 msgid "Swap nets between two selected pads and their connected copper"
 msgstr ""
+"Обмінювати місцями мережі між двома вибраними контактними площадками та "
+"підключеними до них мідними проводами"
 
 #: pcbnew/tools/pcb_actions.cpp:701
 msgid "Swap nets between gates of a footprint and their connected copper"
 msgstr ""
+"Обмін мережами між воротами контуру та підключеними до них мідними проводами"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Pack and Move Footprints"
@@ -52000,14 +51975,12 @@ msgid "Footprint Properties..."
 msgstr "Властивості посадкового місця..."
 
 #: pcbnew/tools/pcb_actions.cpp:921
-#, fuzzy
 msgid "Pad Table..."
-msgstr "Таблиця виводів..."
+msgstr "Настільний килимок..."
 
 #: pcbnew/tools/pcb_actions.cpp:922
-#, fuzzy
 msgid "Displays pad table for bulk editing of pads"
-msgstr "Показати таблицю виводів для масового редагування виводів"
+msgstr "Відображає таблицю педів для масового редагування педів"
 
 #: pcbnew/tools/pcb_actions.cpp:929
 msgid "Show the footprint checker window"
@@ -52516,9 +52489,8 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1452 pcbnew/tools/pcb_actions.cpp:1462
 #: pcbnew/tools/pcb_actions.cpp:1472 pcbnew/tools/pcb_actions.cpp:1482
-#, fuzzy
 msgid "Line Modes"
-msgstr "Режим друку"
+msgstr "Лінійні Режими"
 
 #: pcbnew/tools/pcb_actions.cpp:1494
 msgid "Prevent items from being moved and/or resized on the canvas"
