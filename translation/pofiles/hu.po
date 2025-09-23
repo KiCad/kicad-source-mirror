@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"PO-Revision-Date: 2025-09-24 06:10+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -41348,9 +41348,8 @@ msgstr ""
 "tartománya [%s; %s] (%s) a jelenlegi tervezési szabályok alapján."
 
 #: pcbnew/dialogs/dialog_plot.cpp:1174
-#, fuzzy
 msgid "No layer selected, Nothing to plot"
-msgstr "Nincs réteg kiválasztva plottoláshoz"
+msgstr "Nincs réteg kiválasztva az ábrázoláshoz"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1237
 #, fuzzy
@@ -41363,9 +41362,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "Figyelmeztetés: A skála értéke nagyon nagy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1307
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "Az adott elérési útvonal nem létezik"
+msgstr "A(z) \"%s\" mappa nem létezik."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:25
 #, fuzzy
@@ -42135,9 +42134,8 @@ msgid "Appearance preset:"
 msgstr "Megjelenés"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
-#, fuzzy
 msgid "Background style:"
-msgstr "Háttér kezdete"
+msgstr "Háttér stílus:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:100
 #, fuzzy
@@ -42330,9 +42328,8 @@ msgstr "Végpont"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:909
 #: pcbnew/dialogs/dialog_shape_properties.cpp:927
-#, fuzzy
 msgid "Mid Point"
-msgstr "Végpont"
+msgstr "Középpont"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:924
 #, fuzzy
