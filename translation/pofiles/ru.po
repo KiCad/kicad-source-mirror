@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-08-21 23:02+0000\n"
+"PO-Revision-Date: 2025-09-23 15:55+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5083,12 +5083,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Некоторые посад. места содержат ссылки на удаленные встроенные файлы.\n"
+"Удалить их из посад. мест?"
 
 #: common/dialogs/panel_embedded_files.cpp:209
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Некоторые символы содержат ссылки на удаленные встроенные файлы.\n"
+"Удалить их из символов?"
 
 #: common/dialogs/panel_embedded_files.cpp:326
 #: common/dialogs/panel_embedded_files.cpp:434
@@ -8090,9 +8094,9 @@ msgstr "Ответ API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Ответ API:  %s"
+msgstr "Ответ API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -12481,9 +12485,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Символов, соответствующих критериям не найдено ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:586
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** символ не найден ***"
+msgstr "*** идентификатор библиотеки символов не найден ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:597
 msgid "*** symbol not found ***"
@@ -14444,9 +14447,9 @@ msgid "Edit Symbol Properties"
 msgstr "Править свойства символа"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:732
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Этот файл уже открыт."
+msgstr "Это поле унаследовано от '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:762
 #, c-format
@@ -18964,9 +18967,9 @@ msgstr "Отменить сохранение проекта"
 
 #: eeschema/files-io.cpp:1271 eeschema/files-io.cpp:1297 pcbnew/files.cpp:1212
 #: pcbnew/files.cpp:1228
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Не удалось записать файлы чертежа в каталог '%s'."
+msgstr "Не удалось авто-сохранить файлы в каталог только для чтения:  '%s'"
 
 #: eeschema/files-io.cpp:1444
 #, c-format
@@ -20844,15 +20847,13 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Неизвестное SCH_FILE_T значение: %d"
 
 #: eeschema/sch_item.cpp:171 eeschema/sch_item.cpp:715
-#, fuzzy
 msgid "All units"
-msgstr "Все элементы"
+msgstr "Все части"
 
 #: eeschema/sch_item.cpp:182 eeschema/sch_item.cpp:191
 #: eeschema/sch_item.cpp:737
-#, fuzzy
 msgid "All body styles"
-msgstr "Общий для всех начертаний"
+msgstr "Все стили корпуса"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -27558,9 +27559,8 @@ msgid "Delete Column"
 msgstr "Удалить столбец"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
-#, fuzzy
 msgid "Embed file"
-msgstr "Вставить файл"
+msgstr "Встроить файл"
 
 #: include/widgets/filedlg_hook_new_library.h:42
 #, fuzzy
@@ -28369,16 +28369,15 @@ msgstr "Пресет внешнего вида. Опции: %s, %s, или им�
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
-msgstr ""
+msgstr "Цвета, определенные в стеке платы, заменяют цвета из пресета"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"Включает подложку, тени и постобработку, даже если они отключены в "
-"предустановке качества"
+"Включает подложку, тени и постобработку, даже если они отключены в настройке "
+"качества"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -36292,7 +36291,6 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Недостаточно прав для записи файла '%s'."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:259
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "Сформировать файл IPC-2581"
 
@@ -36307,9 +36305,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Файл успешно сформирован."
+msgstr "Файл IPC-2581 успешно сформирован."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -38977,7 +38974,7 @@ msgstr "Ширина линии должна быть больше нуля."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
-msgstr "Выход:"
+msgstr "Смещение наружу:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -38986,16 +38983,15 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
-"Закругляйте наружу, чтобы получить кратность сетки (когда это возможно)"
+msgstr "Округлять наружу до значений, кратных сетке (когда возможно)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr "Это возможно только в случае прямоугольных выступов."
+msgstr "Это возможно только для прямоугольных элементов."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr "Скругленные углы (когда это возможно)"
+msgstr "Скруглять углы (когда возможно)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 msgid "Grid size:"
@@ -39029,12 +39025,12 @@ msgstr "Слой по умолчанию"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
-msgstr "Удалить исходные элементы после начала работы"
+msgstr "Удалить исходные элементы после смещения"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
 #: pcbnew/tools/item_modification_routine.cpp:743
 msgid "Outset Items"
-msgstr "Предметы на выходе"
+msgstr "Сместить контур наружу"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:176
 #: pcbnew/dialogs/dialog_pad_properties_base.h:293 pcbnew/pad.cpp:2829
@@ -49093,7 +49089,7 @@ msgstr "Создание секции содержимого"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Конт. пл. имеет неподдерживаемый тип; она была пропущена."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1176
 msgid "Generating history section"
@@ -49105,30 +49101,30 @@ msgid "Generating BOM section"
 msgstr "Создание секции BOM"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Посад. место '%s' не найдено в библиотеке '%s'."
+msgstr "Посад. место %s не найдено в словаре; данные BOM могут быть неполными."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "Компонент \"%s\" не имеет ссылки OEM; запись в BOM будет пропущена."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1369
 msgid "Generating CAD data"
 msgstr "Создание данных CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2258
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Контур платы отсутствует или деформирован. Выполните проверку правил DRC для "
-"получения полной информации."
+"Контур платы отсутствует или деформирован. Выполните проверку правил DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2640
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Обнаружены дубликаты указателей на посад. места; вывод IPC-2581 может быть "
+"неверным."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2805
 #, c-format
@@ -49138,16 +49134,22 @@ msgstr "Экспорт слоя %s, цепь %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2841
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Перех. отв. использует неподдерживаемый стек конт. пл.; опущено из данных "
+"сверловки."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2867
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Конт. пл. использует неподдерживаемый стек конт. пл.; отверстие опущено из "
+"данных сверловки."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3009
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Каплевидные переходы не поддерживаются в IPC-2581 редакции B; они были "
+"экспортированы как зоны."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3455
 msgid "Generating logistic section"
@@ -49158,9 +49160,8 @@ msgid "Saving file"
 msgstr "Сохранение файла"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3499
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Не удалось сохранить файл в буфер"
+msgstr "Не удалось сохранить данные IPC-2581 в буфер."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -51792,16 +51793,15 @@ msgstr "Некоторые полигоны не удалось пересечь
 
 #: pcbnew/tools/item_modification_routine.cpp:749
 msgid "Unable to outset the selected items."
-msgstr "Невозможно запустить выбранные элементы."
+msgstr "Не удалось сместить наружу контур выбранных элементов."
 
 #: pcbnew/tools/item_modification_routine.cpp:751
 msgid "Some of the items could not be outset."
-msgstr "Некоторые предметы не удалось достать."
+msgstr "Некоторые элементы не удалось сместить наружу."
 
 #: pcbnew/tools/item_modification_routine.cpp:1005
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Не удалось создать файл \"%s\""
+msgstr "Не удалось сместить контур прямоугольника наружу"
 
 #: pcbnew/tools/multichannel_tool.cpp:511
 msgid "Select a reference Rule Area to copy from..."
@@ -51831,7 +51831,7 @@ msgstr ""
 #: pcbnew/tools/multichannel_tool.cpp:632
 #: pcbnew/tools/multichannel_tool.cpp:691
 msgid "Repeat layout"
-msgstr "Повтор макета"
+msgstr "Повтор разводки"
 
 #: pcbnew/tools/multichannel_tool.cpp:694
 #, c-format
@@ -51962,7 +51962,7 @@ msgstr "Создание аутсетов на основе выбора"
 
 #: pcbnew/tools/pcb_actions.cpp:99
 msgid "Create outset lines from the selected item"
-msgstr "Создание начальных линий из выбранного элемента"
+msgstr "Создать линии смещенного наружу контура из выделенного элемента"
 
 #: pcbnew/tools/pcb_actions.cpp:167
 msgid "Add Board Characteristics"
