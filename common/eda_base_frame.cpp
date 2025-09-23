@@ -661,6 +661,34 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 }
 
 
+
+wxString EDA_BASE_FRAME::GetRunMenuCommandDescription( const TOOL_ACTION& aAction )
+{
+   wxString   menuItemLabel = aAction.GetMenuLabel();
+   wxMenuBar* menuBar = GetMenuBar();
+
+   for( size_t ii = 0; ii < menuBar->GetMenuCount(); ++ii )
+   {
+       for( wxMenuItem* menuItem : menuBar->GetMenu( ii )->GetMenuItems() )
+       {
+           if( menuItem->GetItemLabelText() == menuItemLabel )
+           {
+               wxString menuTitleLabel = menuBar->GetMenuLabelText( ii );
+
+               menuTitleLabel.Replace( wxS( "&" ), wxS( "&&" ) );
+               menuItemLabel.Replace( wxS( "&" ), wxS( "&&" ) );
+
+               return wxString::Format( _( "Run: %s > %s" ),
+                                        menuTitleLabel,
+                                        menuItemLabel );
+           }
+       }
+   }
+
+   return wxString::Format( _( "Run %s" ), aAction.GetFriendlyName() );
+};
+
+
 void EDA_BASE_FRAME::ShowChangedLanguage()
 {
     TOOLS_HOLDER::ShowChangedLanguage();

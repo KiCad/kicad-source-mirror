@@ -484,6 +484,8 @@ public:
      */
     void AddStandardHelpMenu( wxMenuBar* aMenuBar );
 
+    wxString GetRunMenuCommandDescription( const TOOL_ACTION& aAction );
+
     /**
      * Check if \a aFileName can be written.
      *

@@ -709,6 +709,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 {
     TOOL_MANAGER*          toolMgr = m_frame->GetToolManager();
     BOARD_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
+    DRC_TOOL*              drcTool = toolMgr->GetTool<DRC_TOOL>();
     RC_TREE_NODE*          node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
     if( !node )
@@ -736,6 +737,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         ID_ADD_EXCLUSION_WITH_COMMENT,
         ID_ADD_EXCLUSION_ALL,
         ID_INSPECT_VIOLATION,
+        ID_FIX_VIOLATION,
         ID_SET_SEVERITY_TO_ERROR,
         ID_SET_SEVERITY_TO_WARNING,
         ID_SET_SEVERITY_TO_IGNORE,
@@ -778,12 +780,21 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
     }
 
-    wxString inspectDRCErrorMenuText = inspectionTool->InspectDRCErrorMenuText( rcItem );
-
-    if( !inspectDRCErrorMenuText.IsEmpty() )
-        menu.Append( ID_INSPECT_VIOLATION, inspectDRCErrorMenuText );
-
     menu.AppendSeparator();
+
+    wxString inspectDRCErrorMenuText = inspectionTool->InspectDRCErrorMenuText( rcItem );
+    wxString fixDRCErrorMenuText = drcTool->FixDRCErrorMenuText( rcItem );
+
+    if( !inspectDRCErrorMenuText.IsEmpty() || !fixDRCErrorMenuText.IsEmpty() )
+    {
+        if( !inspectDRCErrorMenuText.IsEmpty() )
+            menu.Append( ID_INSPECT_VIOLATION, inspectDRCErrorMenuText );
+
+        if( !fixDRCErrorMenuText.IsEmpty() )
+            menu.Append( ID_FIX_VIOLATION, fixDRCErrorMenuText );
+
+        menu.AppendSeparator();
+    }
 
     if( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
     {
@@ -946,6 +957,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     case ID_INSPECT_VIOLATION:
         inspectionTool->InspectDRCError( node->m_RcItem );
+        break;
+
+    case ID_FIX_VIOLATION:
+        drcTool->FixDRCError( node->m_RcItem );
         break;
 
     case ID_SET_SEVERITY_TO_ERROR:

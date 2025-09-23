@@ -274,40 +274,13 @@ wxString reportMax( PCB_BASE_FRAME* aFrame, DRC_CONSTRAINT& aConstraint )
 
 wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem )
 {
-    auto menuDescription =
-            [&]( const TOOL_ACTION& aAction )
-            {
-                wxString   menuItemLabel = aAction.GetMenuLabel();
-                wxMenuBar* menuBar = m_frame->GetMenuBar();
-
-                for( size_t ii = 0; ii < menuBar->GetMenuCount(); ++ii )
-                {
-                    for( wxMenuItem* menuItem : menuBar->GetMenu( ii )->GetMenuItems() )
-                    {
-                        if( menuItem->GetItemLabelText() == menuItemLabel )
-                        {
-                            wxString menuTitleLabel = menuBar->GetMenuLabelText( ii );
-
-                            menuTitleLabel.Replace( wxS( "&" ), wxS( "&&" ) );
-                            menuItemLabel.Replace( wxS( "&" ), wxS( "&&" ) );
-
-                            return wxString::Format( _( "Run %s > %s" ),
-                                                     menuTitleLabel,
-                                                     menuItemLabel );
-                        }
-                    }
-                }
-
-                return wxString::Format( _( "Run %s" ), aAction.GetFriendlyName() );
-            };
-
     if( aDRCItem->GetErrorCode() == DRCE_CLEARANCE
             || aDRCItem->GetErrorCode() == DRCE_EDGE_CLEARANCE
             || aDRCItem->GetErrorCode() == DRCE_HOLE_CLEARANCE
             || aDRCItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE
             || aDRCItem->GetErrorCode() == DRCE_STARVED_THERMAL )
     {
-        return menuDescription( PCB_ACTIONS::inspectClearance );
+        return m_frame->GetRunMenuCommandDescription( PCB_ACTIONS::inspectClearance );
     }
     else if( aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
             || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
@@ -322,16 +295,11 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
             || aDRCItem->GetErrorCode() == DRCE_CONNECTION_WIDTH
             || aDRCItem->GetErrorCode() == DRCE_ASSERTION_FAILURE )
     {
-        return menuDescription( PCB_ACTIONS::inspectConstraints );
+        return m_frame->GetRunMenuCommandDescription( PCB_ACTIONS::inspectConstraints );
     }
     else if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
     {
-        return menuDescription( PCB_ACTIONS::diffFootprint );
-    }
-    else if( aDRCItem->GetErrorCode() == DRCE_DANGLING_TRACK
-             || aDRCItem->GetErrorCode() == DRCE_DANGLING_VIA )
-    {
-        return menuDescription( PCB_ACTIONS::cleanupTracksAndVias );
+        return m_frame->GetRunMenuCommandDescription( PCB_ACTIONS::diffFootprint );
     }
 
     return wxEmptyString;
@@ -355,12 +323,6 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( a ) )
             DiffFootprint( footprint, drcTool->GetDRCDialog() );
 
-        return;
-    }
-    else if( aDRCItem->GetErrorCode() == DRCE_DANGLING_TRACK
-             || aDRCItem->GetErrorCode() == DRCE_DANGLING_VIA )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::cleanupTracksAndVias );
         return;
     }
 

@@ -37,6 +37,7 @@
 #include <drc/drc_item.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <macros.h>
+#include <dialog_exchange_footprints.h>
 
 DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -281,6 +282,108 @@ int DRC_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
         m_drcDialog->ExcludeMarker();
 
     return 0;
+}
+
+
+wxString DRC_TOOL::FixDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem )
+{
+    if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_ISSUES )
+    {
+        return frame()->GetRunMenuCommandDescription( PCB_ACTIONS::showFootprintLibTable );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
+    {
+        return frame()->GetRunMenuCommandDescription( PCB_ACTIONS::updateFootprint );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_FOOTPRINT_FILTERS )
+    {
+        return frame()->GetRunMenuCommandDescription( PCB_ACTIONS::changeFootprint );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY
+                || aDRCItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
+                || aDRCItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
+                || aDRCItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT )
+    {
+        return frame()->GetRunMenuCommandDescription( PCB_ACTIONS::updatePcbFromSchematic );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_FOOTPRINT_TYPE_MISMATCH
+                || aDRCItem->GetErrorCode() == DRCE_FOOTPRINT )
+    {
+        return _( "Edit Footprint Properties..." );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_PADSTACK
+                || aDRCItem->GetErrorCode() == DRCE_PADSTACK_INVALID )
+    {
+        return _( "Edit Pad Properties..." );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
+                || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
+                || aDRCItem->GetErrorCode() == DRCE_MIRRORED_TEXT_ON_FRONT_LAYER
+                || aDRCItem->GetErrorCode() == DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER )
+    {
+        BOARD_ITEM* item = m_pcb->ResolveItem( aDRCItem->GetMainItemID() );
+
+        if( item && BaseType( item->Type() ) == PCB_DIMENSION_T )
+            return _( "Edit Dimension Properties..." );
+        else if( item && item->Type() == PCB_FIELD_T )
+            return _( "Edit Field Properties..." );
+        else
+            return _( "Edit Text Properties..." );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_DANGLING_TRACK
+                || aDRCItem->GetErrorCode() == DRCE_DANGLING_VIA )
+    {
+        return frame()->GetRunMenuCommandDescription( PCB_ACTIONS::cleanupTracksAndVias );
+    }
+
+    return wxEmptyString;
+}
+
+
+void DRC_TOOL::FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
+{
+    if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_ISSUES )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::showFootprintLibTable );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH
+            || aDRCItem->GetErrorCode() == DRCE_FOOTPRINT_FILTERS )
+    {
+        bool        updateMode = aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH;
+        BOARD_ITEM* item = m_pcb->ResolveItem( aDRCItem->GetMainItemID() );
+
+        if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
+        {
+            DIALOG_EXCHANGE_FOOTPRINTS dialog( m_editFrame, footprint, updateMode, true );
+            dialog.ShowQuasiModal();
+        }
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY
+                || aDRCItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
+                || aDRCItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
+                || aDRCItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::updatePcbFromSchematic );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_FOOTPRINT_TYPE_MISMATCH
+                || aDRCItem->GetErrorCode() == DRCE_FOOTPRINT
+                || aDRCItem->GetErrorCode() == DRCE_PADSTACK
+                || aDRCItem->GetErrorCode() == DRCE_PADSTACK_INVALID
+                || aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
+                || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
+                || aDRCItem->GetErrorCode() == DRCE_MIRRORED_TEXT_ON_FRONT_LAYER
+                || aDRCItem->GetErrorCode() == DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER)
+
+    {
+        BOARD_ITEM* item = m_pcb->ResolveItem( aDRCItem->GetMainItemID() );
+
+        m_editFrame->OnEditItemRequest( item );
+    }
+    else if( aDRCItem->GetErrorCode() == DRCE_DANGLING_TRACK
+                || aDRCItem->GetErrorCode() == DRCE_DANGLING_VIA )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::cleanupTracksAndVias );
+    }
 }
 
 

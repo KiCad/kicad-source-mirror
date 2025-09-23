@@ -97,6 +97,9 @@ public:
 
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
+    wxString FixDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem );
+    void FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;
