@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"PO-Revision-Date: 2025-09-24 06:10+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -7930,9 +7930,8 @@ msgid "Merge failed"
 msgstr "Auftrag fehlgeschlagen"
 
 #: common/git/libgit_backend.cpp:1072
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eeschema konnte nicht geladen werden."
+msgstr "Start des Rebase fehlgeschlagen"
 
 #: common/git/libgit_backend.cpp:1086
 #, fuzzy
@@ -8087,9 +8086,9 @@ msgstr "API-Antwort:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API-Antwort:  %s"
+msgstr "API-Antwort: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -12778,6 +12777,8 @@ msgstr "Auf Zeiger zentrieren"
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:282
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
+"Bei Kreuzreferenzierung, Zeichenfläche so verschieben, dass das Element "
+"sichtbar ist"
 
 #: eeschema/dialogs/dialog_erc.cpp:397 pcbnew/dialogs/dialog_drc.cpp:1299
 msgid "Delete exclusions too?"
@@ -16346,6 +16347,9 @@ msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
+"Symbole mit \"nicht-bestücken\"-Markierung in Tabelle anzeigen.  Diese "
+"Einstellung steuert ebenfalls, ob \"nicht-bestücken\"-Symbole exportiert "
+"werden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
 msgid "Include 'Exclude from BOM' Symbols"
@@ -16356,6 +16360,8 @@ msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
+"Symbole mit \"von Stückliste ausschließen\"-Markierung in Tabelle anzeigen.  "
+"Symbole mit dieser Markierung werden niemals exportiert."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
 #, fuzzy
@@ -16955,7 +16961,7 @@ msgstr "Netznamen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "Symboleinheits- gegenüber Bezeichner-Tausch vorziehen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
@@ -19161,39 +19167,39 @@ msgid "Graphic item count differs."
 msgstr "Anzahl der Grafikelemente weicht ab."
 
 #: eeschema/lib_symbol.cpp:1693
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "Anzahl der Grafikelemente weicht ab."
+msgstr "Grafikelement weicht ab: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1710
-#, fuzzy, c-format
+#, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "Schaltplansymbole bearbeiten"
+msgstr "Zusätzlicher Pin in Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1718
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "Pin %s weicht ab."
+msgstr "Pin %s weicht ab: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "Schaltplansymbole bearbeiten"
+msgstr "Fehlender Pin in Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "Schaltplansymbole bearbeiten"
+msgstr "Zusätzliches Feld in Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1780
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "Feldanzahl weicht ab."
+msgstr "Feld \"%s\" weicht ab: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1803
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "Schaltplansymbole bearbeiten"
+msgstr "Fehlendes Feld in Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1813
 #, fuzzy
@@ -19888,9 +19894,9 @@ msgid "Compare Symbol with Library"
 msgstr "Symbol mit Bibliothek vergleichen"
 
 #: eeschema/sch_field.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "Feld von %s (%s)"
+msgstr "Feld %s (leer)"
 
 #: eeschema/sch_field.cpp:986
 #, c-format
@@ -20459,36 +20465,34 @@ msgid "httplib plugin missing library table handle!"
 msgstr "Dem Plugin HTTP-Bibliothek fehlt das Bibliothekstabellen Handle!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "Einstellungsdatei %s der HTTP Bibliothek fehlt oder ist ungültig"
+msgstr "HTTP-Bibliothek-Einstellungsdatei %s fehlt oder ist ungültig."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr ""
-"Einstellungsdatei %s der HTTP-Bibliothek gibt keine API-Versionsnummer an!"
+msgstr "HTTP-Bibliothek-Einstellungsdatei %s gibt keine API-Versionsnummer an."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
-"Einstellungsdatei %s der HTTP-Bibliothek verwendet API-Version %s, KiCad "
-"benötigt jedoch Version %s"
+"HTTP-Bibliothek-Einstellungsdatei %s verwendet API-Version %s, KiCad "
+"benötigt jedoch Version %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "Einstellungsdatei %s der HTTP-Bibliothek gibt keine Wurzel-URL an!"
+msgstr "HTTP-Bibliothek-Einstellungsdatei %s gibt keine Wurzel-URL an."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
 msgstr ""
-"Einstellungsdatei %s der HTTP-Bibliothek enthält einen ungültigen "
-"Bibliothekstyp"
+"HTTP-Bibliothek-Einstellungsdatei %s hat einen ungültigen Bibliothekstyp."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:281
 #, c-format
@@ -20932,9 +20936,9 @@ msgid "Label '%s'"
 msgstr "Bezeichner \"%s\""
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Anweisungsbezeichner [%s %s]"
+msgstr "Anweisungsbezeichner [%s (leer)]"
 
 #: eeschema/sch_label.cpp:1951
 #, c-format
@@ -23830,9 +23834,8 @@ msgstr "Verbindung von Schaltplanpin und hierarchischem Bezeichner auflösen"
 
 #: eeschema/toolbars_sch_editor.cpp:74 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
-#, fuzzy
 msgid "Line modes"
-msgstr "Pin-Modell:"
+msgstr "Linienmodi"
 
 #: eeschema/toolbars_sch_editor.cpp:98 pcbnew/toolbars_footprint_editor.cpp:93
 #: pcbnew/toolbars_pcb_editor.cpp:196
@@ -37733,9 +37736,8 @@ msgstr "Durchgehende Bohrung"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:201
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:379
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:546
-#, fuzzy
 msgid "Connector"
-msgstr "Anschluss:"
+msgstr "Anschluss"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:85
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:209
@@ -45738,10 +45740,10 @@ msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3436
 #: pcbnew/exporters/step/step_pcb_model.cpp:3483
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
 msgstr ""
-"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen."
+"Keine gültige Platinenbestückung; kann Ausgabedatei \"%s\" nicht erstellen.\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -51526,9 +51528,9 @@ msgid "Swap Gate Nets..."
 msgstr "Lagen tauschen..."
 
 #: pcbnew/tools/edit_tool.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid "Swap with %s"
-msgstr "Einheiten tauschen"
+msgstr "Mit %s tauschen"
 
 #: pcbnew/tools/edit_tool.cpp:957
 #, c-format
