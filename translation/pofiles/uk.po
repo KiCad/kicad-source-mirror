@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-10 01:02+0000\n"
+"PO-Revision-Date: 2025-09-23 15:55+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -7471,9 +7471,9 @@ msgstr "Відповідь API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Відповідь API:  %s"
+msgstr "Відповідь API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:364
 #, c-format
@@ -13299,9 +13299,9 @@ msgid "Edit Symbol Properties"
 msgstr "Редагувати властивості символу"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Цей файл вже відкритий."
+msgstr "Це поле успадковано від '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -17734,9 +17734,9 @@ msgstr "Скасувати збереження проекту"
 
 #: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1206
 #: pcbnew/files.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Не вдалося записати файли діаграм до теки '%s'."
+msgstr "Не вдалося автоматично зберегти файли в папку лише для читання: '%s'"
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -19516,15 +19516,13 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Невідоме значення SCH_FILE_T: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:607
-#, fuzzy
 msgid "All units"
-msgstr "Всі елементи"
+msgstr "Усі одиниці"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:629
-#, fuzzy
 msgid "All body styles"
-msgstr "Спільне для всіх стилів"
+msgstr "Усі типи кузова"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
 #: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
@@ -34054,9 +34052,8 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Недостатньо прав для запису у файл '%s'."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Згенерувати файл IPC-2581"
+msgstr "Згенерувати Файл IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
@@ -34069,9 +34066,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Файл сформовано."
+msgstr "Файл IPC-2581 успішно згенеровано."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -46193,7 +46189,7 @@ msgstr "Генерування розділу контенту"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Тип блокнота непідтримуваний; його було пропущено."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -46205,29 +46201,28 @@ msgid "Generating BOM section"
 msgstr "Генерування розділу BOM"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Посадкове місце '%s' не знайдено в бібліотеці '%s'."
+msgstr "Слід %s не знайдено у словнику; дані BOM можуть бути неповними."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "Компоненту \"%s\" бракує посилання на OEM; запис BOM буде пропущено."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
 msgstr "Створення даних CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2117
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"Контур плати відсутній або спотворений. Запустіть DRC для повного аналізу."
+msgstr "Структура дошки недійсна або відсутня. Будь ласка, запустіть DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Виявлено дублікати вказівників слідів; вивід IPC-2581 може бути неправильним."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
 #, c-format
@@ -46237,16 +46232,22 @@ msgstr "Експорт шару %s, мережа %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Via використовує непідтримуваний стек контактних площадок; пропущено в даних "
+"свердління."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Площадка використовує непідтримуваний стек контактних площадок; отвір було "
+"пропущено з даних свердління."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Краплеподібні форми не підтримуються в IPC-2581 версії B; вони були "
+"експортовані як зони."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
 msgid "Generating logistic section"
@@ -46257,9 +46258,8 @@ msgid "Saving file"
 msgstr "Збереження файлу"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Не вдалося зберегти файл у буфер"
+msgstr "Не вдалося зберегти дані IPC-2581 до буфера."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
