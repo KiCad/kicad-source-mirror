@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-23 09:02+0000\n"
-"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12803,7 +12803,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d Symbol(e) benötigen Annotation.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:522
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC durch Benutzer abgebrochen.<br><br>"
 
@@ -24349,7 +24348,7 @@ msgstr "Gewählten Designblock auf aktueller Schaltplanseite einfügen"
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:471
 msgid "Place Linked Design Block"
-msgstr "Verknüpften Designblock hinzufügen"
+msgstr "Verknüpften Designblock einfügen"
 
 #: eeschema/tools/sch_actions.cpp:469 pcbnew/tools/pcb_actions.cpp:472
 msgid "Place design block linked to selected group"
@@ -25396,9 +25395,8 @@ msgid "All units of this symbol are already placed."
 msgstr "Alle Einheiten des Symbols sind bereits eingefügt."
 
 #: eeschema/tools/sch_drawing_tools.cpp:666
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "Einheit bereits eingefügt"
+msgstr "Angeforderte Einheit bereits eingefügt."
 
 #: eeschema/tools/sch_drawing_tools.cpp:870
 msgid "Add Design Block"
@@ -25538,9 +25536,9 @@ msgid " (already placed)"
 msgstr " (bereits platziert)"
 
 #: eeschema/tools/sch_edit_tool.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "Alle Einheiten platzieren"
+msgstr "Einheit %s einfügen"
 
 #: eeschema/tools/sch_edit_tool.cpp:199
 msgid "Pin Function"
@@ -29396,9 +29394,8 @@ msgid "Export STEPZ"
 msgstr "STEPZ exportieren"
 
 #: kicad/kicad_cli.cpp:133
-#, fuzzy
 msgid "Export U3D"
-msgstr "DXF exportieren"
+msgstr "U3D exportieren"
 
 #: kicad/kicad_cli.cpp:158
 msgid "Export PS"
