@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 01:19+0300\n"
+"POT-Creation-Date: 2025-09-23 13:55+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4476,6 +4476,10 @@ msgid "API Response:  %s"
 msgstr "API Response:  %s"
 
 #, c-format
+msgid "API Response: %s"
+msgstr "API Response: %s"
+
+#, c-format
 msgid "API responded with error code: %s"
 msgstr "API responded with error code: %s"
 
@@ -5090,9 +5094,6 @@ msgstr "Unset visible flag"
 #, c-format
 msgid "Library settings for %s..."
 msgstr "Library settings for %s..."
-
-msgid "Unit"
-msgstr "Unit"
 
 msgid "Item"
 msgstr "Item"
@@ -6079,6 +6080,12 @@ msgstr "Signal names cannot contain CR or LF characters"
 
 msgid "Signal names cannot contain spaces"
 msgstr "Signal names cannot contain spaces"
+
+msgid "A sheet must have a name."
+msgstr "A sheet must have a name."
+
+msgid "A sheet must have a file specified."
+msgstr "A sheet must have a file specified."
 
 msgid "The value of the field cannot be empty."
 msgstr "The value of the field cannot be empty."
@@ -7815,11 +7822,11 @@ msgstr "Export netlist in OrcadPCB2 format"
 msgid "Export netlist in Allegro format"
 msgstr "Export netlist in Allegro format"
 
-msgid "Export netlist in PADS format"
-msgstr "Export netlist in PADS format"
-
 msgid "Export netlist in CadStar format"
 msgstr "Export netlist in CadStar format"
+
+msgid "Export netlist in PADS format"
+msgstr "Export netlist in PADS format"
 
 msgid "Export Netlist"
 msgstr "Export Netlist"
@@ -8309,6 +8316,9 @@ msgstr "Number Text Size"
 msgid "Name Text Size"
 msgstr "Name Text Size"
 
+msgid "Unit"
+msgstr "Unit"
+
 msgid "De Morgan"
 msgstr "De Morgan"
 
@@ -8419,6 +8429,10 @@ msgstr "Symbol name '%s' already in use in library '%s'."
 
 msgid "Edit Symbol Properties"
 msgstr "Edit Symbol Properties"
+
+#, c-format
+msgid "This field is inherited from '%s'."
+msgstr "This field is inherited from '%s'."
 
 #, c-format
 msgid "The name '%s' is already in use."
@@ -9216,12 +9230,6 @@ msgstr "Error occurred saving schematic file '%s'."
 #, c-format
 msgid "Failed to save schematic '%s'"
 msgstr "Failed to save schematic '%s'"
-
-msgid "A sheet must have a name."
-msgstr "A sheet must have a name."
-
-msgid "A sheet must have a file specified."
-msgstr "A sheet must have a file specified."
 
 msgid "Page number:"
 msgstr "Page number:"
@@ -11520,6 +11528,10 @@ msgstr "Overwrite Files"
 msgid "Abort Project Save"
 msgstr "Abort Project Save"
 
+#, c-format
+msgid "Could not autosave files to read-only folder:  '%s'"
+msgstr "Could not autosave files to read-only folder:  '%s'"
+
 msgid "Importing Schematic"
 msgstr "Importing Schematic"
 
@@ -12795,6 +12807,12 @@ msgstr "Plugin type “%s” is not found."
 #, c-format
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unknown SCH_FILE_T value: %d"
+
+msgid "All units"
+msgstr "All units"
+
+msgid "All body styles"
+msgstr "All body styles"
 
 msgid "Body Style"
 msgstr "Body Style"
@@ -23387,6 +23405,27 @@ msgstr "manufacturer"
 msgid "mfg"
 msgstr "mfg"
 
+msgid "The board must be saved before generating IPC-2581 file."
+msgstr "The board must be saved before generating IPC-2581 file."
+
+#, c-format
+msgid "Insufficient permissions to write file '%s'."
+msgstr "Insufficient permissions to write file '%s'."
+
+msgid "Generate IPC-2581 File"
+msgstr "Generate IPC-2581 File"
+
+#, c-format
+msgid ""
+"Error generating IPC-2581 file '%s'.\n"
+"%s"
+msgstr ""
+"Error generating IPC-2581 file '%s'.\n"
+"%s"
+
+msgid "IPC-2581 file generated successfully."
+msgstr "IPC-2581 file generated successfully."
+
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
@@ -24980,11 +25019,11 @@ msgstr "Move Item"
 msgid "Sheet Path"
 msgstr "Sheet Path"
 
-msgid "Sheets"
-msgstr "Sheets"
-
 msgid "Component Class"
 msgstr "Component Class"
+
+msgid "Sheets"
+msgstr "Sheets"
 
 msgid "Component Classes"
 msgstr "Component Classes"
@@ -29975,9 +30014,6 @@ msgstr ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 
-msgid "Wire self-interference check failed. Allow retry"
-msgstr "Wire self-interference check failed. Allow retry"
-
 #, c-format
 msgid ""
 "Wire self-interference check failed\n"
@@ -30115,10 +30151,6 @@ msgid "Error saving project specific footprint library table."
 msgstr "Error saving project specific footprint library table."
 
 #, c-format
-msgid "Insufficient permissions to write file '%s'."
-msgstr "Insufficient permissions to write file '%s'."
-
-#, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Error saving custom rules file '%s'."
 
@@ -30137,36 +30169,6 @@ msgid ""
 msgstr ""
 "Board copied to:\n"
 "%s"
-
-msgid "The board must be saved before generating IPC-2581 file."
-msgstr "The board must be saved before generating IPC-2581 file."
-
-msgid "Generating IPC-2581 file"
-msgstr "Generating IPC-2581 file"
-
-#, c-format
-msgid ""
-"Error generating IPC-2581 file '%s'.\n"
-"%s"
-msgstr ""
-"Error generating IPC-2581 file '%s'.\n"
-"%s"
-
-#, c-format
-msgid "Failed to create temporary file '%s'."
-msgstr "Failed to create temporary file '%s'."
-
-#, c-format
-msgid ""
-"Error generating IPC-2581 file '%s'.\n"
-"Failed to rename temporary file '%s."
-msgstr ""
-"Error generating IPC-2581 file '%s'.\n"
-"Failed to rename temporary file '%s."
-
-#, c-format
-msgid "Failed to rename temporary file '%s'."
-msgstr "Failed to rename temporary file '%s'."
 
 msgid "Generating ODB++ output files"
 msgstr "Generating ODB++ output files"
@@ -32641,18 +32643,50 @@ msgstr "gEDA PCB footprint library directory"
 msgid "Generating content section"
 msgstr "Generating content section"
 
+msgid "Pad has unsupported type; it was skipped."
+msgstr "Pad has unsupported type; it was skipped."
+
 msgid "Generating history section"
 msgstr "Generating history section"
 
 msgid "Generating BOM section"
 msgstr "Generating BOM section"
 
+#, c-format
+msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
+msgstr "Footprint %s not found in dictionary; BOM data may be incomplete."
+
+#, c-format
+msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
+msgstr "Component \"%s\" missing OEM reference; BOM entry will be skipped."
+
 msgid "Generating CAD data"
 msgstr "Generating CAD data"
+
+msgid "Board outline is invalid or missing.  Please run DRC."
+msgstr "Board outline is invalid or missing.  Please run DRC."
+
+msgid ""
+"Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
+msgstr ""
+"Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "Exporting Layer %s, Net %s"
+
+msgid "Via uses unsupported padstack; omitted from drill data."
+msgstr "Via uses unsupported padstack; omitted from drill data."
+
+msgid "Pad uses unsupported padstack; hole was omitted from drill data."
+msgstr "Pad uses unsupported padstack; hole was omitted from drill data."
+
+msgid ""
+"Teardrops are not supported in IPC-2581 revision B; they were exported as "
+"zones."
+msgstr ""
+"Teardrops are not supported in IPC-2581 revision B; they were exported as "
+"zones."
 
 msgid "Generating logistic section"
 msgstr "Generating logistic section"
@@ -32660,8 +32694,8 @@ msgstr "Generating logistic section"
 msgid "Saving file"
 msgstr "Saving file"
 
-msgid "Failed to save file to buffer"
-msgstr "Failed to save file to buffer"
+msgid "Failed to save IPC-2581 data to buffer."
+msgstr "Failed to save IPC-2581 data to buffer."
 
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
@@ -33311,6 +33345,14 @@ msgstr "Unable to save DRC report to %s\n"
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Saved DRC Report to %s\n"
+
+#, c-format
+msgid ""
+"Error generating IPC-2581 file '%s'.\n"
+"Failed to rename temporary file '%s."
+msgstr ""
+"Error generating IPC-2581 file '%s'.\n"
+"Failed to rename temporary file '%s."
 
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Successfully created IPC-D-356 file\n"
@@ -37147,6 +37189,23 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Wire self-interference check failed. Allow retry"
+#~ msgstr "Wire self-interference check failed. Allow retry"
+
+#~ msgid "Generating IPC-2581 file"
+#~ msgstr "Generating IPC-2581 file"
+
+#, c-format
+#~ msgid "Failed to create temporary file '%s'."
+#~ msgstr "Failed to create temporary file '%s'."
+
+#, c-format
+#~ msgid "Failed to rename temporary file '%s'."
+#~ msgstr "Failed to rename temporary file '%s'."
+
+#~ msgid "Failed to save file to buffer"
+#~ msgstr "Failed to save file to buffer"
 
 #~ msgid "Embed File"
 #~ msgstr "Embed File"
