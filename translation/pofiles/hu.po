@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-23 10:52+0000\n"
+"PO-Revision-Date: 2025-09-23 15:55+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -38768,9 +38768,8 @@ msgid "Front solder mask"
 msgstr "Felső forrasztásgátló réteg"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
-#, fuzzy
 msgid "Back solder mask"
-msgstr "Alsó forrasztásgátló"
+msgstr "Alsó forrasztásgátló réteg"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:566
 #, fuzzy
@@ -38816,7 +38815,6 @@ msgstr ""
 "These properties are specified in Gerber X2  files."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2699
-#, fuzzy
 msgid "BGA pad"
 msgstr "BGA Forrszem"
 
@@ -46075,12 +46073,12 @@ msgstr "%s:%s láb csatlakoztatása (-> %s)"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1028
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Via átcsatlakoztatása (%s -> %s)."
+msgstr "Via átcsatlakoztatása (%s --> %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1048
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Via átcsatlakoztatása (%s -> %s)"
+msgstr "Via átcsatlakoztatva (%s --> %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
 #, c-format
@@ -46130,9 +46128,9 @@ msgid "%s pad %s not found in %s."
 msgstr "%s láb (%s) nem található %s-ban"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1275
-#, fuzzy, c-format
+#, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "\"%s:%s:%s\" alkatrész feldolgozása."
+msgstr "\"%s:%s\" alkatrész feldolgozása."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1349
 #, fuzzy, c-format
@@ -46152,14 +46150,14 @@ msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "A nem használt %s alkatrészrajzolat nem távolítható el (zárolt)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1399
-#, fuzzy, c-format
+#, c-format
 msgid "Remove unused footprint %s."
 msgstr "Nem használt %s alkatrészrajzolat eltávolítása."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1408
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "Nem használt %s alkatrészrajzolat eltávolítása."
+msgstr "Nem használt %s alkatrészrajzolat eltávolítva."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
 #, fuzzy, c-format
@@ -48084,9 +48082,8 @@ msgid "Invalid shape type %d in zone outline"
 msgstr "Érvénytelen jel név"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
-#, fuzzy
 msgid "Could not read file "
-msgstr "Nem lehet létrehozni a(z) \"%s\" fájlt."
+msgstr "Nem sikerült olvasni a fájlt. "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 #, fuzzy
@@ -48114,7 +48111,7 @@ msgstr "A(z) \"%s\" könyvtárnak nincs \"%s\" alkatrészrajzolatja a törléshe
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:343
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:874
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1128
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown token '%s'"
 msgstr "Ismeretlen token: \"%s\""
 
@@ -48221,9 +48218,8 @@ msgid "Generating logistic section"
 msgstr "Alkatrész pozíció fájl létrehozása"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3214
-#, fuzzy
 msgid "Saving file"
-msgstr "Gerber fájlok betöltése..."
+msgstr "Fájl mentése"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
 #, fuzzy
@@ -48311,9 +48307,9 @@ msgstr ""
 "%d. sor, %d. betű"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3049
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is empty."
-msgstr "A(z) \"%s\" fájl beillesztve"
+msgstr "A(z) \"%s\" fájl üres."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3052
 #, fuzzy, c-format
@@ -48353,19 +48349,19 @@ msgid "Save Anyway"
 msgstr "Mentés mindenképpen"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1467
-#, fuzzy, c-format
+#, c-format
 msgid "unknown pad type: %d"
-msgstr "ismeretlen forrszem típus (%d)"
+msgstr "ismeretlen forrszem típus: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2313
-#, fuzzy, c-format
+#, c-format
 msgid "unknown via type %d"
-msgstr "ismeretlen via típus (%d)"
+msgstr "ismeretlen via típus: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2605
-#, fuzzy, c-format
+#, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "ismeretlen zóna sarok simítás típus (%d)"
+msgstr "ismeretlen zóna sarok simítás típus: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2754
 #, fuzzy
