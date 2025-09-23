@@ -23,6 +23,7 @@
  */
 
 #include "tools/sch_inspection_tool.h"
+#include "dialog_change_symbols.h"
 
 #include <sch_symbol.h>
 #include <id.h>
@@ -204,40 +205,13 @@ void SCH_INSPECTION_TOOL::CrossProbe( const SCH_MARKER* aMarker )
 
 wxString SCH_INSPECTION_TOOL::InspectERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem )
 {
-    auto menuDescription =
-            [&]( const TOOL_ACTION& aAction )
-            {
-                wxString   menuItemLabel = aAction.GetMenuLabel();
-                wxMenuBar* menuBar = m_frame->GetMenuBar();
-
-                for( size_t ii = 0; ii < menuBar->GetMenuCount(); ++ii )
-                {
-                    for( wxMenuItem* menuItem : menuBar->GetMenu( ii )->GetMenuItems() )
-                    {
-                        if( menuItem->GetItemLabelText() == menuItemLabel )
-                        {
-                            wxString menuTitleLabel = menuBar->GetMenuLabelText( ii );
-
-                            menuTitleLabel.Replace( wxS( "&" ), wxS( "&&" ) );
-                            menuItemLabel.Replace( wxS( "&" ), wxS( "&&" ) );
-
-                            return wxString::Format( _( "Run %s > %s" ),
-                                                     menuTitleLabel,
-                                                     menuItemLabel );
-                        }
-                    }
-                }
-
-                return wxString::Format( _( "Run %s" ), aAction.GetFriendlyName() );
-            };
-
     if( aERCItem->GetErrorCode() == ERCE_BUS_TO_NET_CONFLICT )
     {
-        return menuDescription( SCH_ACTIONS::showBusSyntaxHelp );
+        return m_frame->GetRunMenuCommandDescription( SCH_ACTIONS::showBusSyntaxHelp );
     }
     else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
     {
-        return menuDescription( SCH_ACTIONS::diffSymbol );
+        return m_frame->GetRunMenuCommandDescription( SCH_ACTIONS::diffSymbol );
     }
 
     return wxEmptyString;

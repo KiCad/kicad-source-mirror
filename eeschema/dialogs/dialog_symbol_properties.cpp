@@ -542,7 +542,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     Layout();
     m_fieldsGrid->Layout();
+
+#ifdef __WXGTK__
     wxSafeYield();
+#endif
 
     return true;
 }

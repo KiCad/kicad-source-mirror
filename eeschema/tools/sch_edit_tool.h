@@ -84,6 +84,11 @@ public:
     /// set to true unless all symbols already have the attribute set to true.
     int SetAttribute( const TOOL_EVENT& aEvent );
 
+    void EditProperties( EDA_ITEM* aItem );
+
+    wxString FixERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem );
+    void FixERCError( const std::shared_ptr<RC_ITEM>& aERCItem );
+
 private:
     void editFieldText( SCH_FIELD* aField );
 

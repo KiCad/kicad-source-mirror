@@ -2218,22 +2218,104 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
     case SCH_JUNCTION_T:
+        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_GRAPHIC_LINE_T } )( selection ) )
+        {
+            std::deque<SCH_LINE*> lines;
+
+            for( EDA_ITEM* selItem : selection.Items() )
+                lines.push_back( static_cast<SCH_LINE*>( selItem ) );
+
+            DIALOG_LINE_PROPERTIES dlg( m_frame, lines );
+
+            dlg.ShowModal();
+        }
+        else if( SELECTION_CONDITIONS::OnlyTypes( { SCH_JUNCTION_T } )( selection ) )
+        {
+            std::deque<SCH_JUNCTION*> junctions;
+
+            for( EDA_ITEM* selItem : selection.Items() )
+                junctions.push_back( static_cast<SCH_JUNCTION*>( selItem ) );
+
+            DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
+
+            dlg.ShowModal();
+        }
+        else if( SELECTION_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T,
+                                                    SCH_ITEM_LOCATE_BUS_T,
+                                                    SCH_BUS_WIRE_ENTRY_T,
+                                                    SCH_JUNCTION_T } )( selection ) )
+        {
+            std::deque<SCH_ITEM*> items;
+
+            for( EDA_ITEM* selItem : selection.Items() )
+                items.push_back( static_cast<SCH_ITEM*>( selItem ) );
+
+            DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, items );
+
+            dlg.ShowModal();
+        }
+        else
+        {
+            return 0;
+        }
+
+        break;
+
+    case SCH_MARKER_T:
+        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_MARKER_T } )( selection ) )
+        {
+            SCH_INSPECTION_TOOL* inspectionTool = m_toolMgr->GetTool<SCH_INSPECTION_TOOL>();
+
+            if( inspectionTool )
+                inspectionTool->CrossProbe( static_cast<SCH_MARKER*> ( selection.Front() ) );
+        }
+        break;
+
     case SCH_TABLECELL_T:
+        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_TABLECELL_T } )( selection ) )
+        {
+            std::vector<SCH_TABLECELL*> cells;
+
+            for( EDA_ITEM* item : selection.Items() )
+                cells.push_back( static_cast<SCH_TABLECELL*>( item ) );
+
+            DIALOG_TABLECELL_PROPERTIES dlg( m_frame, cells );
+
+            dlg.ShowModal();
+
+            if( dlg.GetReturnValue() == DIALOG_TABLECELL_PROPERTIES::TABLECELL_PROPS_EDIT_TABLE )
+            {
+                SCH_TABLE*              table = static_cast<SCH_TABLE*>( cells[0]->GetParent() );
+                DIALOG_TABLE_PROPERTIES tableDlg( m_frame, table );
+
+                tableDlg.ShowModal();
+            }
+        }
+
         break;
 
     default:
         if( selection.Size() > 1 )
             return 0;
 
-        break;
+        EditProperties( curr_item );
     }
 
-    switch( curr_item->Type() )
+    if( clearSelection )
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    return 0;
+}
+
+
+void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
+{
+    switch( aItem->Type() )
     {
     case SCH_SYMBOL_T:
     {
         int         retval;
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( curr_item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
         // This needs to be scoped so the dialog destructor removes blocking status
         // before we launch the next dialog.
@@ -2270,7 +2352,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
                 // The broken library symbol link indicator cannot be edited.
                 if( symbol->IsMissingLibSymbol() )
-                    return 0;
+                    return;
 
                 editor->LoadSymbolFromSchematic( symbol );
                 editor->Show( true );
@@ -2307,7 +2389,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_T:
     {
-        SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( curr_item );
+        SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( aItem );
         bool           isUndoable = false;
         bool           doClearAnnotation = false;
         bool           okPressed = false;
@@ -2376,7 +2458,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_PIN_T:
     {
-        SCH_SHEET_PIN*              pin = static_cast<SCH_SHEET_PIN*>( curr_item );
+        SCH_SHEET_PIN*              pin = static_cast<SCH_SHEET_PIN*>( aItem );
         DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, pin );
 
         // QuasiModal required for help dialog
@@ -2387,39 +2469,16 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_TEXT_T:
     case SCH_TEXTBOX_T:
     {
-        DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( curr_item ) );
+        DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( aItem ) );
 
         // QuasiModal required for syntax help and Scintilla auto-complete
         dlg.ShowQuasiModal();
         break;
     }
 
-    case SCH_TABLECELL_T:
-        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_TABLECELL_T } )( selection ) )
-        {
-            std::vector<SCH_TABLECELL*> cells;
-
-            for( EDA_ITEM* item : selection.Items() )
-                cells.push_back( static_cast<SCH_TABLECELL*>( item ) );
-
-            DIALOG_TABLECELL_PROPERTIES dlg( m_frame, cells );
-
-            dlg.ShowModal();
-
-            if( dlg.GetReturnValue() == DIALOG_TABLECELL_PROPERTIES::TABLECELL_PROPS_EDIT_TABLE )
-            {
-                SCH_TABLE*              table = static_cast<SCH_TABLE*>( cells[0]->GetParent() );
-                DIALOG_TABLE_PROPERTIES tableDlg( m_frame, table );
-
-                tableDlg.ShowModal();
-            }
-        }
-
-        break;
-
     case SCH_TABLE_T:
     {
-        DIALOG_TABLE_PROPERTIES dlg( m_frame, static_cast<SCH_TABLE*>( curr_item ) );
+        DIALOG_TABLE_PROPERTIES dlg( m_frame, static_cast<SCH_TABLE*>( aItem ) );
 
         // QuasiModal required for Scintilla auto-complete
         dlg.ShowQuasiModal();
@@ -2431,7 +2490,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_HIER_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     {
-        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( curr_item ), false );
+        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( aItem ), false );
 
         // QuasiModal for syntax help and Scintilla auto-complete
         dlg.ShowQuasiModal();
@@ -2440,19 +2499,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_FIELD_T:
     {
-        SCH_FIELD* field = static_cast<SCH_FIELD*>( curr_item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( aItem );
 
         editFieldText( field );
 
         if( !field->IsVisible() )
-            clearSelection = true;
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         break;
     }
 
     case SCH_SHAPE_T:
     {
-        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( curr_item ) );
+        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( aItem ) );
 
         dlg.ShowModal();
         break;
@@ -2460,7 +2519,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP&             bitmap = static_cast<SCH_BITMAP&>( *curr_item );
+        SCH_BITMAP&             bitmap = static_cast<SCH_BITMAP&>( *aItem );
         DIALOG_IMAGE_PROPERTIES dlg( m_frame, bitmap );
 
         if( dlg.ShowModal() == wxID_OK )
@@ -2474,68 +2533,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_RULE_AREA_T:
     {
-        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( curr_item ) );
+        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( aItem ) );
         dlg.SetTitle( _( "Rule Area Properties" ) );
 
         dlg.ShowModal();
         break;
     }
-
-    case SCH_LINE_T:
-    case SCH_BUS_WIRE_ENTRY_T:
-    case SCH_JUNCTION_T:
-        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_GRAPHIC_LINE_T } )( selection ) )
-        {
-            std::deque<SCH_LINE*> lines;
-
-            for( EDA_ITEM* selItem : selection.Items() )
-                lines.push_back( static_cast<SCH_LINE*>( selItem ) );
-
-            DIALOG_LINE_PROPERTIES dlg( m_frame, lines );
-
-            dlg.ShowModal();
-        }
-        else if( SELECTION_CONDITIONS::OnlyTypes( { SCH_JUNCTION_T } )( selection ) )
-        {
-            std::deque<SCH_JUNCTION*> junctions;
-
-            for( EDA_ITEM* selItem : selection.Items() )
-                junctions.push_back( static_cast<SCH_JUNCTION*>( selItem ) );
-
-            DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
-
-            dlg.ShowModal();
-        }
-        else if( SELECTION_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T,
-                                                    SCH_ITEM_LOCATE_BUS_T,
-                                                    SCH_BUS_WIRE_ENTRY_T,
-                                                    SCH_JUNCTION_T } )( selection ) )
-        {
-            std::deque<SCH_ITEM*> items;
-
-            for( EDA_ITEM* selItem : selection.Items() )
-                items.push_back( static_cast<SCH_ITEM*>( selItem ) );
-
-            DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, items );
-
-            dlg.ShowModal();
-        }
-        else
-        {
-            return 0;
-        }
-
-        break;
-
-    case SCH_MARKER_T:
-        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_MARKER_T } )( selection ) )
-        {
-            SCH_INSPECTION_TOOL* inspectionTool = m_toolMgr->GetTool<SCH_INSPECTION_TOOL>();
-
-            if( inspectionTool )
-                inspectionTool->CrossProbe( static_cast<SCH_MARKER*> ( selection.Front() ) );
-        }
-        break;
 
     case SCH_NO_CONNECT_T:
     case SCH_PIN_T:
@@ -2543,20 +2546,15 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_GROUP_T:
         m_toolMgr->RunAction( ACTIONS::groupProperties,
-                              static_cast<EDA_GROUP*>( static_cast<SCH_GROUP*>( curr_item ) ) );
+                              static_cast<EDA_GROUP*>( static_cast<SCH_GROUP*>( aItem ) ) );
 
         break;
 
     default:                // Unexpected item
-        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + curr_item->GetClass() );
+        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + aItem->GetClass() );
     }
 
-    updateItem( curr_item, true );
-
-    if( clearSelection )
-        m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-    return 0;
+    updateItem( aItem, true );
 }
 
 
@@ -3338,6 +3336,75 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
+}
+
+
+wxString SCH_EDIT_TOOL::FixERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem )
+{
+    if( aERCItem->GetErrorCode() == ERCE_SIMULATION_MODEL
+            || aERCItem->GetErrorCode() == ERCE_FOOTPRINT_FILTERS
+            || aERCItem->GetErrorCode() == ERCE_FOOTPRINT_LINK_ISSUES )
+    {
+        return _( "Edit Symbol Properties..." );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_ISSUES )
+    {
+        return m_frame->GetRunMenuCommandDescription( SCH_ACTIONS::showSymbolLibTable );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
+    {
+        return m_frame->GetRunMenuCommandDescription( SCH_ACTIONS::updateSymbol );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_UNANNOTATED
+                || aERCItem->GetErrorCode() == ERCE_DUPLICATE_REFERENCE )
+    {
+        return m_frame->GetRunMenuCommandDescription( SCH_ACTIONS::annotate );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_UNDEFINED_NETCLASS )
+    {
+        return _( "Edit Netclasses..." );
+    }
+
+    return wxEmptyString;
+}
+
+
+void SCH_EDIT_TOOL::FixERCError( const std::shared_ptr<RC_ITEM>& aERCItem )
+{
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, /* void */ );
+
+    if( aERCItem->GetErrorCode() == ERCE_SIMULATION_MODEL
+            || aERCItem->GetErrorCode() == ERCE_FOOTPRINT_FILTERS
+            || aERCItem->GetErrorCode() == ERCE_FOOTPRINT_LINK_ISSUES )
+    {
+        if( EDA_ITEM* item = frame->ResolveItem( aERCItem->GetMainItemID() ) )
+            EditProperties( item );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_ISSUES )
+    {
+        m_toolMgr->RunAction( SCH_ACTIONS::showSymbolLibTable );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
+    {
+        EDA_ITEM* item = frame->ResolveItem( aERCItem->GetMainItemID() );
+
+        if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+        {
+            DIALOG_CHANGE_SYMBOLS dlg( frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
+            dlg.ShowQuasiModal();
+        }
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_UNANNOTATED
+                || aERCItem->GetErrorCode() == ERCE_DUPLICATE_REFERENCE )
+    {
+        m_toolMgr->RunAction( SCH_ACTIONS::annotate );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_UNDEFINED_NETCLASS )
+    {
+        frame->ShowSchematicSetupDialog( _( "Net Classes" ) );
+    }
 }
 
 

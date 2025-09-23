@@ -52,6 +52,7 @@
 #include <wx/hyperlink.h>
 #include <wx/msgdlg.h>
 #include <wx/wupdlock.h>
+#include <sch_edit_tool.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
@@ -672,6 +673,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 {
     TOOL_MANAGER*        toolMgr = m_parent->GetToolManager();
     SCH_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<SCH_INSPECTION_TOOL>();
+    SCH_EDIT_TOOL*       editTool = toolMgr->GetTool<SCH_EDIT_TOOL>();
     RC_TREE_NODE*        node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
     if( !node )
@@ -699,6 +701,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         ID_ADD_EXCLUSION_WITH_COMMENT,
         ID_ADD_EXCLUSION_ALL,
         ID_INSPECT_VIOLATION,
+        ID_FIX_VIOLATION,
         ID_EDIT_PIN_CONFLICT_MAP,
         ID_EDIT_CONNECTION_GRID,
         ID_SET_SEVERITY_TO_ERROR,
@@ -727,12 +730,21 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
     }
 
-    wxString inspectERCErrorMenuText = inspectionTool->InspectERCErrorMenuText( rcItem );
-
-    if( !inspectERCErrorMenuText.IsEmpty() )
-        menu.Append( ID_INSPECT_VIOLATION, inspectERCErrorMenuText );
-
     menu.AppendSeparator();
+
+    wxString inspectERCErrorMenuText = inspectionTool->InspectERCErrorMenuText( rcItem );
+    wxString fixERCErrorMenuText = editTool->FixERCErrorMenuText( rcItem );
+
+    if( !inspectERCErrorMenuText.IsEmpty() || !fixERCErrorMenuText.IsEmpty() )
+    {
+        if( !inspectERCErrorMenuText.IsEmpty() )
+            menu.Append( ID_INSPECT_VIOLATION, inspectERCErrorMenuText );
+
+        if( !fixERCErrorMenuText.IsEmpty() )
+            menu.Append( ID_FIX_VIOLATION, fixERCErrorMenuText );
+
+        menu.AppendSeparator();
+    }
 
     if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_WARNING
       || rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
@@ -852,6 +864,10 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     case ID_INSPECT_VIOLATION:
         inspectionTool->InspectERCError( node->m_RcItem );
+        break;
+
+    case ID_FIX_VIOLATION:
+        editTool->FixERCError( node->m_RcItem );
         break;
 
     case ID_SET_SEVERITY_TO_ERROR:
