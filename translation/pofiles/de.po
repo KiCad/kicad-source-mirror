@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
 "PO-Revision-Date: 2025-09-24 17:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -46643,7 +46643,7 @@ msgstr "Erzeuge Stücklisten(BOM)-Abschnitt"
 #, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
 msgstr ""
-"Footprint %s nicht in Wörterbuch gefunden; Stückliste (BOM) könnte "
+"Footprint %s nicht im Wörterbuch gefunden; Stückliste (BOM) könnte "
 "unvollständig sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
