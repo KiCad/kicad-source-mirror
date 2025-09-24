@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"PO-Revision-Date: 2025-09-24 17:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -18835,9 +18835,8 @@ msgstr "Rajzjel Új Könyvtárba..."
 #: eeschema/menubar.cpp:181
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
-#, fuzzy
 msgid "Panels"
-msgstr "Nyákterv tisztázása"
+msgstr "Panelok"
 
 #: eeschema/menubar.cpp:350
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
@@ -39089,9 +39088,8 @@ msgstr ""
 "tartománya [%s; %s] (%s) a jelenlegi tervezési szabályok alapján."
 
 #: pcbnew/dialogs/dialog_plot.cpp:1242
-#, fuzzy
 msgid "No layer selected, Nothing to plot"
-msgstr "Nincs réteg kiválasztva plottoláshoz"
+msgstr "Nincs réteg kiválasztva az ábrázoláshoz"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1305
 #, fuzzy
@@ -39104,9 +39102,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "Figyelmeztetés: A skála értéke nagyon nagy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1377
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "Az adott elérési útvonal nem létezik"
+msgstr "A(z) \"%s\" mappa nem létezik."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:24
 #, fuzzy
@@ -39905,9 +39903,8 @@ msgid "Appearance preset:"
 msgstr "Megjelenés"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
-#, fuzzy
 msgid "Background style:"
-msgstr "Háttér kezdete"
+msgstr "Háttér stílus:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:123
 msgid "View"
@@ -40080,9 +40077,8 @@ msgstr "Végpont"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:906
 #: pcbnew/dialogs/dialog_shape_properties.cpp:921
-#, fuzzy
 msgid "Mid Point"
-msgstr "Végpont"
+msgstr "Középpont"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:918
 #, fuzzy
