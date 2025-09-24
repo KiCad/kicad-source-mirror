@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-08-25 11:45+0200\n"
+"POT-Creation-Date: 2025-09-24 08:35+0200\n"
+"PO-Revision-Date: 2025-09-24 08:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -840,7 +840,7 @@ msgstr "Modèles CMS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:116
 msgid "Virtual Models"
-msgstr "Modèles Virtuels"
+msgstr "Modèles Vrtuels"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:117
 msgid "Models not in POS File"
@@ -7551,7 +7551,7 @@ msgstr "Réponse de l'API :  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "Réponse de l'API :  %s"
 
@@ -8496,12 +8496,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -10568,7 +10566,6 @@ msgid "DXF Files"
 msgstr "Fichiers DXF"
 
 #: common/wildcards_and_files_ext.cpp:522
-#: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "Fichier Gerber job"
 
@@ -13453,9 +13450,9 @@ msgid "Edit Symbol Properties"
 msgstr "Editer Propriétés du Symbole"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Ce fichier est déjà ouvert."
+msgstr "Ce champ est hérité de '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -15316,6 +15313,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -17955,9 +17953,11 @@ msgstr "Abandon Sauvegarde du Projet"
 
 #: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1206
 #: pcbnew/files.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
+msgstr ""
+"Impossible d'enregistrer automatiquement les fichiers dans le dossier en "
+"lecture seule : '%s'"
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -19762,15 +19762,13 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valeur inconnue pour SCH_FILE_T : %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:607
-#, fuzzy
 msgid "All units"
-msgstr "Tous les éléments"
+msgstr "Toutes les unités"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:629
-#, fuzzy
 msgid "All body styles"
-msgstr "Commun à tous les styles de corps"
+msgstr "Tous les styles de corps"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
 #: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
@@ -34475,9 +34473,8 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Autorisations insuffisantes pour enregistrer le fichier '%s'."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Générer fichier IPC-2581"
+msgstr "Génére Fichier IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
@@ -34491,7 +34488,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
 msgid "IPC-2581 file generated successfully."
-msgstr ""
+msgstr "Fichier IPC-2581 généré avec succès."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -46680,7 +46677,7 @@ msgstr "Génération section contenu"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Le type du pad n'est pas pris en charge ; il a été ignoré."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -46692,30 +46689,33 @@ msgid "Generating BOM section"
 msgstr "Génération de la section nomenclature"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Empreinte '%s' introuvable dans la librairie '%s'."
+msgstr ""
+"L'empreinte %s n'a pas été trouvée dans le dictionnaire ; les données de la "
+"nomenclature peuvent être incomplètes."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Référence OEM manquante pour le composant \"%s\" ; l'entrée de la "
+"nomenclature sera ignorée."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
 msgstr "Génération des données CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2117
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"Le contour du PCB est absent ou mal formé. Exécuter DRC pour une analyse "
-"complète."
+msgstr "Le contour du PCB est absent ou mal formé. Exécuter DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Des pointeurs d'empreinte en double ont été rencontrés ; la sortie IPC-2581 "
+"peut être incorrecte."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
 #, c-format
@@ -46725,16 +46725,21 @@ msgstr "Exportation de la couche %s, net %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Via utilise un \"Stackup\" non supporté ; omise dans les données de perçage."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Pad utilise un \"Stackup\" non supporté ; trou omis dans les données de "
+"perçage."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Les \"teardrops\" ne sont pas pris en charge dans la révision B de "
+"l'IPC-2581 ; ils ont été exportés en tant que zones."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
 msgid "Generating logistic section"
@@ -46745,9 +46750,8 @@ msgid "Saving file"
 msgstr "Enregistrement fichier"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Échec de l'enregistrement du fichier en mémoire tampon"
+msgstr "Échec de l'enregistrement des données IPC-2581 en mémoire tampon."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
@@ -49250,9 +49254,8 @@ msgid "Some of the items could not be outset."
 msgstr "Certains éléments n'ont pas pu être mis en enveloppe."
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Impossible de créer le chemin de la table des librairie '%s'."
+msgstr "Impossible de créer enveloppe du rectangle"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
@@ -52774,43 +52777,13 @@ msgstr "Editeur de PCB KiCad"
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-msgid "Gerber file"
-msgstr "Fichier Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:27
-msgid "Excellon drill file"
-msgstr "Fichier de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-msgid "KiCad Project"
-msgstr "Projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:12
-msgid "KiCad Schematic"
-msgstr "Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:27
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichier Circuit Imprimé KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:41
-msgid "KiCad Footprint"
-msgstr "Empreintes KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:55
-msgid "KiCad Schematic Symbol"
-msgstr "Symbole Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:69
-msgid "KiCad Drawing Sheet"
-msgstr "Feuille de Dessin KiCad"
-
-#, fuzzy
-#~ msgid "Wire self-interference check failed. Allow retry"
+#~ msgid "Roundrect radius is larger than the rectangle's major dimension"
 #~ msgstr ""
-#~ "Échec de la vérification de l'auto-interférence du fil\n"
-#~ "z : %g ; boîte englobante : %s"
+#~ "Le rayon de l'arrondi est plus grand que la dimension principale du "
+#~ "rectangle"
+
+#~ msgid "Roundrect radius must be non-negative"
+#~ msgstr "Le rayon de courbure doit être non négatif"
 
 #~ msgid "Generating IPC-2581 file"
 #~ msgstr "Génération fichier IPC-2581"
@@ -52823,13 +52796,29 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgid "Failed to rename temporary file '%s'."
 #~ msgstr "Impossible de créer le fichier temporaire '%s'."
 
-#~ msgid "Roundrect radius is larger than the rectangle's major dimension"
-#~ msgstr ""
-#~ "Le rayon de l'arrondi est plus grand que la dimension principale du "
-#~ "rectangle"
-
-#~ msgid "Roundrect radius must be non-negative"
-#~ msgstr "Le rayon de courbure doit être non négatif"
-
 #~ msgid "Drilled hole too close to other hole - deprecated"
 #~ msgstr "Trou trop proche d'un autre trou - obsolète"
+
+#~ msgid "Gerber file"
+#~ msgstr "Fichier Gerber"
+
+#~ msgid "Excellon drill file"
+#~ msgstr "Fichier de perçage Excellon"
+
+#~ msgid "KiCad Project"
+#~ msgstr "Projet KiCad"
+
+#~ msgid "KiCad Schematic"
+#~ msgstr "Schématique KiCad"
+
+#~ msgid "KiCad Printed Circuit Board"
+#~ msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "KiCad Footprint"
+#~ msgstr "Empreintes KiCad"
+
+#~ msgid "KiCad Schematic Symbol"
+#~ msgstr "Symbole Schématique KiCad"
+
+#~ msgid "KiCad Drawing Sheet"
+#~ msgstr "Feuille de Dessin KiCad"
