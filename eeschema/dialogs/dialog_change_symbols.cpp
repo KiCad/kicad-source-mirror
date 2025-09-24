@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "settings/settings_manager.h"
 #include <algorithm>
 
 #include <bitmaps.h>
@@ -37,9 +38,6 @@
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <sch_commit.h>
-
-bool g_selectRefDes = false;
-bool g_selectValue  = false;
 
 
 DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol, MODE aMode ) :
@@ -88,6 +86,15 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_matchSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_matchSizer->Layout();
 
+    bool selectReference = false;
+    bool selectValue = false;
+
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        selectReference = cfg->m_ChangeSymbols.updateReferences;
+        selectValue = cfg->m_ChangeSymbols.updateValues;
+    }
+
     for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
         int listIdx = (int) m_fieldsBox->GetCount();
@@ -96,9 +103,9 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
 
         // List boxes aren't currently handled in DIALOG_SHIM's control-state-save/restore
         if( fieldId == FIELD_T::REFERENCE )
-            m_fieldsBox->Check( listIdx, g_selectRefDes );
+            m_fieldsBox->Check( listIdx, selectReference );
         else if( fieldId == FIELD_T::VALUE )
-            m_fieldsBox->Check( listIdx, g_selectValue );
+            m_fieldsBox->Check( listIdx, selectValue );
         else
             m_fieldsBox->Check( listIdx, true );
 
@@ -215,8 +222,13 @@ void DIALOG_CHANGE_SYMBOLS::onNewLibIDKillFocus( wxFocusEvent& event )
 DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
 {
     // List boxes aren't currently handled in DIALOG_SHIM's control-state-save/restore
-    g_selectRefDes = m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[FIELD_T::REFERENCE] );
-    g_selectValue = m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[FIELD_T::VALUE] );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        EESCHEMA_SETTINGS::DIALOG_CHANGE_SYMBOLS& dlg_cfg = cfg->m_ChangeSymbols;
+
+        dlg_cfg.updateReferences = m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[FIELD_T::REFERENCE] );
+        dlg_cfg.updateValues = m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[FIELD_T::VALUE] );
+    }
 }
 
 

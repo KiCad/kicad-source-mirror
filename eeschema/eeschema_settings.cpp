@@ -616,6 +616,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "import_graphics.dxf_units",
             &m_ImportGraphics.dxf_units, 0 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "change_symbols.update_references",
+            &m_ChangeSymbols.updateReferences, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "change_symbols.update_values",
+            &m_ChangeSymbols.updateValues, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "system.never_show_rescue_dialog",
             &m_RescueNeverShow, false ) );
 

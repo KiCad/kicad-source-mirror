@@ -270,6 +270,12 @@ public:
         bool scroll_on_crossprobe;
     };
 
+    struct DIALOG_CHANGE_SYMBOLS
+    {
+        bool updateReferences;
+        bool updateValues;
+    };
+
     struct DIALOG_IMPORT_GRAPHICS
     {
         bool     interactive_placement;
@@ -353,6 +359,7 @@ public:
     FIND_REPLACE_EXTRA        m_FindReplaceExtra;
     DIALOG_ERC                m_ERCDialog;
     DIALOG_IMPORT_GRAPHICS    m_ImportGraphics;
+    DIALOG_CHANGE_SYMBOLS     m_ChangeSymbols;
 
     SIMULATOR                 m_Simulator;
 
