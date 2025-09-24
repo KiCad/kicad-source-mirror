@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-10 01:02+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-09-24 17:02+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -7469,9 +7469,9 @@ msgstr "APIのレスポンス:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "APIのレスポンス:  %s"
+msgstr "APIのレスポンス: %s"
 
 #: common/http_lib/http_lib_connection.cpp:364
 #, c-format
@@ -13297,9 +13297,9 @@ msgid "Edit Symbol Properties"
 msgstr "シンボル プロパティを編集"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "このファイルはすでに開かれています。"
+msgstr "このフィールドは '%s' から継承されます。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -17726,9 +17726,9 @@ msgstr "プロジェクト保存の中止"
 
 #: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1206
 #: pcbnew/files.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
+msgstr "自動保存が次の理由でできませんでした :  読み取り専用フォルダ '%s'"
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -19505,15 +19505,13 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "未知の SCH_FILE_T 値: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:607
-#, fuzzy
 msgid "All units"
-msgstr "すべてのアイテム"
+msgstr "すべてのユニット"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:629
-#, fuzzy
 msgid "All body styles"
-msgstr "すべてのボディスタイルで統一化"
+msgstr "すべてのボディスタイル"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
 #: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
@@ -33963,7 +33961,6 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "ファイル '%s' を書き込むための権限がありません。"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "IPC-2581ファイルを生成"
 
@@ -33978,9 +33975,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "ファイルの生成に成功しました。"
+msgstr "IPC-2581 ファイルの生成に成功しました。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -45990,7 +45986,7 @@ msgstr "contextセクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "パッドのタイプはサポートされていないため、スキップされました。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -46002,30 +45998,30 @@ msgid "Generating BOM section"
 msgstr "BOMセクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "フットプリント '%s' がライブラリ'%s'にありません。"
+msgstr "フットプリント %s "
+"が見つかりません。BOM(部品表)データが不完全な可能性があります。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "コンポーネント \"%s\" に OEM "
+"リファレンスがありません。BOM(部品表)エントリーはスキップされます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
 msgstr "CADデータを生成中"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2117
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"基板のアウトラインが欠落しているか、不正な形式です。完全な分析のためにDRCを実"
-"行します。"
+msgstr "基板外形が存在しないか、不正な形です。DRCを実行してください。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr ""
+msgstr "重複したフットプリント ポインタが検出されました。IPC-2581 "
+"出力が正しくない可能性があります。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
 #, c-format
@@ -46034,17 +46030,20 @@ msgstr "レイヤー %s, ネット %s をエクスポート"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "ビアがサポートされていないパッドスタックを使用しているため、ドリル "
+"データでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr ""
+msgstr "パッドがサポートされていないパッドスタックを使用しているため、穴はドリル "
+"データでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
-msgstr ""
+msgstr "ティアドロップは IPC-2581 リビジョン B "
+"ではサポートされていないため、ゾーンとしてエクスポートされました。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
 msgid "Generating logistic section"
@@ -46055,9 +46054,8 @@ msgid "Saving file"
 msgstr "ファイルを保存中"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "ファイルをバッファに保存できませんでした"
+msgstr "IPC-2581 データをバッファに保存できませんでした。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
