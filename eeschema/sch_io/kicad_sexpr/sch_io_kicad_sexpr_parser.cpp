@@ -2320,6 +2320,8 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     }
     else if( aParent->Type() == SCH_SHEET_T )
     {
+        fieldId = FIELD_T::SHEET_USER;  // This is the default id for user fields
+
         for( FIELD_T id : SHEET_MANDATORY_FIELDS )
         {
             if( name.CmpNoCase( GetCanonicalFieldName( id ) ) == 0 )
