@@ -100,7 +100,8 @@
 
 // list of files extensions listed in the tree project window
 // Add extensions in a compatible regex format to see others files types
-static const wxChar* s_allowedExtensionsToList[] = {
+static const wxChar* s_allowedExtensionsToList[] =
+{
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.kicad_pro$" ),
     wxT( "^.*\\.pdf$" ),
@@ -138,7 +139,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.svg$" ),           // SVG print/plot files
     wxT( "^.*\\.ps$" ),            // PostScript plot files
     wxT( "^.*\\.zip$" ),           // Zip archive files
-    wxT( "^.*\\.kicad_jobset" ),     // KiCad jobs file
+    wxT( "^.*\\.kicad_jobset" ),   // KiCad jobs file
     nullptr                        // end of list
 };
 
@@ -150,8 +151,9 @@ static const wxChar* s_allowedExtensionsToList[] = {
  */
 
 
-enum project_tree_ids {
-    ID_PROJECT_TXTEDIT,
+enum project_tree_ids
+{
+    ID_PROJECT_TXTEDIT = 8700,  // Start well above wxIDs
     ID_PROJECT_SWITCH_TO_OTHER,
     ID_PROJECT_NEWDIR,
     ID_PROJECT_OPEN_DIR,
@@ -220,8 +222,7 @@ END_EVENT_TABLE()
 wxDECLARE_EVENT( UPDATE_ICONS, wxCommandEvent );
 
 PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
-        wxSashLayoutWindow( parent, ID_LEFT_FRAME, wxDefaultPosition, wxDefaultSize,
-                            wxNO_BORDER | wxTAB_TRAVERSAL )
+        wxSashLayoutWindow( parent, ID_LEFT_FRAME, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxTAB_TRAVERSAL )
 {
     m_Parent = parent;
     m_TreeProject = nullptr;
@@ -264,10 +265,8 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 
     m_gitSyncTimer.Stop();
     m_gitStatusTimer.Stop();
-    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this,
-            m_gitSyncTimer.GetId() );
-    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this,
-            m_gitStatusTimer.GetId() );
+    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
+    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
     shutdownFileWatcher();
 }
 
@@ -386,7 +385,7 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return FILEEXT::KiCadSymbolLibFileExtension;
     case TREE_FILE_TYPE::DESIGN_RULES:          return FILEEXT::DesignRulesFileExtension;
     case TREE_FILE_TYPE::ZIP_ARCHIVE:           return FILEEXT::ArchiveFileExtension;
-    case TREE_FILE_TYPE::JOBSET_FILE:          return FILEEXT::KiCadJobSetFileExtension;
+    case TREE_FILE_TYPE::JOBSET_FILE:           return FILEEXT::KiCadJobSetFileExtension;
 
     case TREE_FILE_TYPE::ROOT:
     case TREE_FILE_TYPE::UNKNOWN:
@@ -466,8 +465,8 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
             if( ext == wxT( "" ) )
                 continue;
 
-            if( reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ),
-                             wxRE_ICASE ) && reg.Matches( aName ) )
+            if( reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ), wxRE_ICASE )
+                    && reg.Matches( aName ) )
             {
                 type = (TREE_FILE_TYPE) i;
                 break;
@@ -487,9 +486,8 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         return wxTreeItemId();
     }
 
-    if( !showAllSchematics
-            && ( currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::LEGACY_SCHEMATIC )
-                 || currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::SEXPR_SCHEMATIC ) ) )
+    if( !showAllSchematics && ( currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::LEGACY_SCHEMATIC )
+                                || currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::SEXPR_SCHEMATIC ) ) )
     {
         if( aProjectNames )
         {
@@ -522,8 +520,10 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     }
 
     // Only show current files if both legacy and current files are present
-    if( type == TREE_FILE_TYPE::LEGACY_PROJECT || type == TREE_FILE_TYPE::JSON_PROJECT
-        || type == TREE_FILE_TYPE::LEGACY_SCHEMATIC || type == TREE_FILE_TYPE::SEXPR_SCHEMATIC )
+    if( type == TREE_FILE_TYPE::LEGACY_PROJECT
+            || type == TREE_FILE_TYPE::JSON_PROJECT
+            || type == TREE_FILE_TYPE::LEGACY_SCHEMATIC
+            || type == TREE_FILE_TYPE::SEXPR_SCHEMATIC )
     {
         kid = m_TreeProject->GetFirstChild( aParent, cookie );
 
