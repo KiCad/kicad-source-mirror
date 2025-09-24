@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-15 10:02+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-09-24 11:53+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7818,24 +7818,20 @@ msgid "Could not lookup commit '%s'"
 msgstr "コミット '%s' を参照できません"
 
 #: common/git/libgit_backend.cpp:1054
-#, fuzzy
 msgid "Merge failed"
-msgstr "ジョブが失敗しました"
+msgstr "マージが失敗しました"
 
 #: common/git/libgit_backend.cpp:1072
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eeschema のロードに失敗しました。"
+msgstr "リベースに失敗しました"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "データベースへの接続に失敗: %s"
+msgstr "リベースコミットに失敗しました"
 
 #: common/git/libgit_backend.cpp:1093
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "ジョブが失敗しました"
+msgstr "リベースに失敗しました"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -7977,9 +7973,9 @@ msgstr "APIのレスポンス:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "APIのレスポンス:  %s"
+msgstr "APIのレスポンス: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -8797,9 +8793,8 @@ msgid "DRC errors"
 msgstr "DRC エラー"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC shapes"
-msgstr "DRC 形状 1"
+msgstr "DRC 形状"
 
 #: common/layer_id.cpp:141
 msgid "DRC exclusions"
@@ -8984,73 +8979,60 @@ msgid "There are no notifications available"
 msgstr "通知はありません"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "A 8.5x11in"
+msgstr "A 8.5 x 11in"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17in"
+msgstr "B 11 x 17in"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22in"
+msgstr "C 17 x 22in"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34in"
+msgstr "D 22 x 34in"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44in"
+msgstr "E 34 x 44in"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "ユーザー (カスタム)"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8.5x11in"
+msgstr "US レター 8.5 x 11in"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8.5x14in"
+msgstr "US リーガル 8.5 x 14in"
 
 #: common/page_info.cpp:66
 #, fuzzy
@@ -18931,9 +18913,9 @@ msgid "Graphic item count differs."
 msgstr "図形の数が異なります。"
 
 #: eeschema/lib_symbol.cpp:1693
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "図形の数が異なります。"
+msgstr "図形の数が異なります: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1710
 #, fuzzy, c-format
@@ -18941,9 +18923,9 @@ msgid "Extra pin in schematic symbol: %s."
 msgstr "回路図シンボルを編集"
 
 #: eeschema/lib_symbol.cpp:1718
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "ピン %s が異なります。"
+msgstr "ピン %s が異なります: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1735
 #, fuzzy, c-format
@@ -18956,9 +18938,9 @@ msgid "Extra field in schematic symbol: %s."
 msgstr "回路図シンボルを編集"
 
 #: eeschema/lib_symbol.cpp:1780
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "フィールド %s (%s の)"
+msgstr "フィールド '%s' が異なります: %s; %s ."
 
 #: eeschema/lib_symbol.cpp:1803
 #, fuzzy, c-format
@@ -19645,9 +19627,9 @@ msgid "Compare Symbol with Library"
 msgstr "ライブラリとシンボルを比較"
 
 #: eeschema/sch_field.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "%s のフィールド ( %s )"
+msgstr "%s のフィールド ( 空 )"
 
 #: eeschema/sch_field.cpp:986
 #, c-format
@@ -20205,33 +20187,32 @@ msgid "httplib plugin missing library table handle!"
 msgstr "httplibプラグインにライブラリ テーブルのハンドルがありません!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "HTTPライブラリ設定ファイル %s が見つからないか、無効です"
+msgstr "HTTPライブラリ設定ファイル %s が見つからないか、無効です。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr "HTTP ライブラリ設定ファイル %s に API バージョン番号がありません!"
+msgstr "HTTP ライブラリ設定ファイル %s に API バージョン番号がありません。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
-msgstr ""
-"HTTP ライブラリ設定ファイル %s は API バージョン %s を使用しますが、KiCad に"
-"はバージョン %s が必要です"
+msgstr "HTTP ライブラリ設定ファイル %s は API バージョン %s を使用しますが、KiCad "
+"にはバージョン %s が必要です。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "HTTP ライブラリ設定ファイル %s にルート URL がありません!"
+msgstr "HTTP ライブラリ設定ファイル %s にルート URL がありません。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr "HTTP ライブラリ設定ファイル %s に不正なライブラリ タイプがあります"
+msgstr "HTTP ライブラリ設定ファイル %s に不正なライブラリ タイプがあります。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:281
 #, c-format
@@ -20239,7 +20220,7 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "%s に接続できませんでした。 エラー: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "HTTP ライブラリ %s からのデータ取得時にエラー: %s"
 
@@ -20671,9 +20652,9 @@ msgid "Label '%s'"
 msgstr "ラベル '%s'"
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "指示ラベル [%s %s]"
+msgstr "指示ラベル [%s (空)]"
 
 #: eeschema/sch_label.cpp:1951
 #, c-format
@@ -20976,9 +20957,9 @@ msgid "Exclude from"
 msgstr "除外する対象"
 
 #: eeschema/sch_sheet.cpp:1174
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet '%s'"
-msgstr "階層シート　%s"
+msgstr "階層シート '%s'"
 
 #: eeschema/sch_sheet.cpp:1678 eeschema/sch_table.cpp:534
 #: pcbnew/pcb_table.cpp:682 pcbnew/pcb_tablecell.cpp:234
@@ -21011,9 +20992,9 @@ msgid "(Deleted Item)"
 msgstr "(削除されたアイテム)"
 
 #: eeschema/sch_sheet_pin.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "階層シートピン %s"
+msgstr "階層シートピン '%s'"
 
 #: eeschema/sch_symbol.cpp:1942
 msgid "Power symbol"
@@ -25200,9 +25181,9 @@ msgid " (already placed)"
 msgstr " (配置済み)"
 
 #: eeschema/tools/sch_edit_tool.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "すべてのユニットを配置"
+msgstr "ユニット %s を配置"
 
 #: eeschema/tools/sch_edit_tool.cpp:199
 msgid "Pin Function"
@@ -28982,9 +28963,8 @@ msgid "Export STEPZ"
 msgstr "STEPZ をエクスポート"
 
 #: kicad/kicad_cli.cpp:133
-#, fuzzy
 msgid "Export U3D"
-msgstr "DXFとしてエクスポート"
+msgstr "U3Dとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:158
 msgid "Export PS"
@@ -35550,7 +35530,6 @@ msgid "Run DRC"
 msgstr "DRC を実行"
 
 #: pcbnew/dialogs/dialog_drc.cpp:269
-#, fuzzy
 msgid "Report All Errors for Each Track"
 msgstr "配線のエラーをすべてレポート"
 
@@ -36126,9 +36105,8 @@ msgid "Universal 3D files"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:296
-#, fuzzy
 msgid "PDF files"
-msgstr "PLY ファイル"
+msgstr "PDF ファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:304
 msgid "3D Model Output File"
@@ -36181,7 +36159,7 @@ msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "U3D"
-msgstr ""
+msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -37170,7 +37148,6 @@ msgstr "面取りされた長方形"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:47
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:98
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:263
-#, fuzzy
 msgid "Custom shape"
 msgstr "カスタム形状"
 
@@ -37188,22 +37165,18 @@ msgid "Size Y"
 msgstr "サイズ Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:69
-#, fuzzy
 msgid "Drill X"
-msgstr "ドリル"
+msgstr "ドリル X"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:70
-#, fuzzy
 msgid "Drill Y"
-msgstr "ドリル"
+msgstr "ドリル Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:71
-#, fuzzy
 msgid "Pad->Die Length"
 msgstr "パッドからダイまでの長さ"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad->Die Delay"
 msgstr "パッドからダイまでの遅延"
 
@@ -37953,12 +37926,10 @@ msgid "Unknown choice"
 msgstr "不明な選択肢"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
 msgstr "マイクロビア"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind/buried vias"
 msgstr "ブラインド/ベリード ビア"
 
@@ -45104,9 +45075,9 @@ msgstr "ファイル '%s' からモデルを推論できませんでした。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3436
 #: pcbnew/exporters/step/step_pcb_model.cpp:3483
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。"
+msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -48537,9 +48508,8 @@ msgstr ""
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2867
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr ""
-"ビアがサポートされていないパッドスタックを使用しているため、穴はドリル データ"
-"では省きます。"
+msgstr "パッドがサポートされていないパッドスタックを使用しているため、穴はドリル "
+"データでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3009
 msgid ""
