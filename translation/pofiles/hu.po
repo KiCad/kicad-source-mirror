@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-24 06:10+0000\n"
+"PO-Revision-Date: 2025-09-25 05:55+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -19314,7 +19314,6 @@ msgstr ""
 
 #: eeschema/fields_data_model.cpp:38 eeschema/sch_label.cpp:1403
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
-#, fuzzy
 msgid "Label"
 msgstr "Címke"
 
@@ -19634,9 +19633,8 @@ msgid "Manual removal will be required for the file(s) above."
 msgstr "A fentebbi fájl(oka)t manuálisan kell eltávolítani."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1972
-#, fuzzy
 msgid "Derived from"
-msgstr "Származtatva ebből:"
+msgstr "Származtatva ebből"
 
 #: eeschema/generate_alias_info.cpp:76 eeschema/sch_base_frame.cpp:96
 #: eeschema/symbol_editor/symbol_editor.cpp:169
@@ -19721,6 +19719,7 @@ msgid "DXF origin on PCB Grid, Y Coordinate"
 msgstr "DXF origó a nyákterv rácson, Y koordináta"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
+#, fuzzy
 msgid "Import Parameters"
 msgstr "Paraméterek importálása"
 
@@ -19898,9 +19897,8 @@ msgid "Errors occurred creating symbol library %s."
 msgstr "Hiba történt a(z) \"%s\" könyvtár létrehozásakor."
 
 #: eeschema/menubar.cpp:103
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Nem KiCad kapcsolási rajz importálása..."
+msgstr "Nem KiCad kapcsolási rajz..."
 
 #: eeschema/menubar.cpp:104
 #, fuzzy
@@ -19939,9 +19937,8 @@ msgstr "Rajzjel..."
 #: eeschema/menubar.cpp:180
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124
 #: pcbnew/menubar_footprint_editor.cpp:133 pcbnew/menubar_pcb_editor.cpp:218
-#, fuzzy
 msgid "Panels"
-msgstr "Nyákterv tisztázása"
+msgstr "Panelok"
 
 #: eeschema/menubar.cpp:346
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:187
@@ -19961,7 +19958,6 @@ msgstr "Ellenőrzés"
 
 #: eeschema/menubar.cpp:348 gerbview/menubar.cpp:233 kicad/menubar.cpp:228
 #: pcbnew/menubar_footprint_editor.cpp:251 pcbnew/menubar_pcb_editor.cpp:477
-#, fuzzy
 msgid "&Tools"
 msgstr "Eszközök"
 
@@ -19969,7 +19965,6 @@ msgstr "Eszközök"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:189
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:252
 #: pcbnew/menubar_pcb_editor.cpp:478
-#, fuzzy
 msgid "P&references"
 msgstr "Beállítások"
 
