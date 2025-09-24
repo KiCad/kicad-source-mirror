@@ -20,6 +20,7 @@
  */
 
 #include "context_manager.h"
+#include <cstddef>
 
 using namespace U3D;
 
