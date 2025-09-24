@@ -183,6 +183,7 @@ public:
     {
         bool drag_is_move;
         bool esc_clears_net_highlight;
+        bool allow_unconstrained_pin_swaps;
     };
 
     struct SELECTION

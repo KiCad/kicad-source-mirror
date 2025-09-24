@@ -29,8 +29,10 @@
 #include <sch_item.h>
 #include <tool/selection.h>
 
+class SCHEMATIC;
 class SCH_REFERENCE;
 class SCH_SYMBOL;
+class SCH_PIN;
 class SCHEMATIC;
 class LIB_ID;
 
@@ -60,3 +62,35 @@ std::optional<SCH_REFERENCE> FindSymbolByRefAndUnit( const SCHEMATIC& aSheet, co
  * @return a SELECTION of SCH_SYMBOL* if valid, or an empty vector if not valid.
  */
 std::vector<SCH_SYMBOL*> GetSameSymbolMultiUnitSelection( const SELECTION& aSel );
+
+/**
+ * Swap the positions/lengths/etc. between two pins in a symbol in such a way that connectivity is maintained.
+ *
+ * The swap operates on the owning library pins when available so that callers may refresh symbol
+ * instances afterwards via SCH_SYMBOL::UpdatePins().
+ *
+ * @return true if the swap touched a shared library pin.
+ */
+bool SwapPinGeometry( SCH_PIN* aFirst, SCH_PIN* aSecond );
+
+/**
+ * Returns true when the given symbol has instances, e.g. is used by more than one sheet instance in this project
+ * or by more than one project.
+ *
+ * @param aSheetNames if not nullptr, will be filled with the sheet paths that have instances of aSymbol.
+ * @param aProjectNames if not nullptr, will be filled with the names of other projects that have instances of aSymbol.
+ *
+ * @return true if the symbol has shared instances.
+ */
+bool SymbolHasSheetInstances( const SCH_SYMBOL& aSymbol, const wxString& aCurrentProject,
+                              std::set<wxString>* aSheetPaths = nullptr, std::set<wxString>* aProjectNames = nullptr );
+
+/**
+ * Get human-readable sheet names from a set of sheet paths, e.g. the SHEETNAME field
+ *
+ * @param aSheetPaths set of sheet paths to convert
+ * @param aSchematic the schematic to search for sheet names
+ *
+ * @return a set of human-readable sheet names, or the original sheet path if no name can be resolved in this schmatic (this happens when sheets are shared across projects)
+ */
+std::set<wxString> GetSheetNamesFromPaths( const std::set<wxString>& aSheetPaths, const SCHEMATIC& aSchematic );

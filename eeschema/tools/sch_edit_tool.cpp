@@ -36,6 +36,7 @@
 #include <sch_tool_utils.h>
 #include <increment.h>
 #include <algorithm>
+#include <set>
 #include <string_utils.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -1396,6 +1397,9 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     SCH_SELECTION&         selection = m_selectionTool->RequestSelection( swappableItems );
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
+    if( selection.Size() < 2 )
+        return 0;
+
     // Sheet pins are special, we need to make sure if we have any sheet pins,
     // that we only have sheet pins, and that they have the same parent
     if( selection.CountType( SCH_SHEET_PIN_T ) > 0 )
@@ -1403,36 +1407,37 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         if( !selection.OnlyContains( { SCH_SHEET_PIN_T } ) )
             return 0;
 
-        SCH_SHEET_PIN* firstPin = static_cast<SCH_SHEET_PIN*>( selection.Front() );
-        SCH_SHEET*     parent = firstPin->GetParent();
+        EDA_ITEM* parent = selection.Front()->GetParent();
 
         for( EDA_ITEM* item : selection )
         {
-            SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
-
-            if( pin->GetParent() != parent )
+            if( item->GetParent() != parent )
                 return 0;
         }
     }
 
-    if( selection.Size() < 2 )
-        return 0;
-
-    bool isMoving    = selection.Front()->IsMoving();
-    bool appendUndo  = isMoving;
+    bool moving = selection.Front()->IsMoving();
     bool connections = false;
+
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
 
     for( size_t i = 0; i < sorted.size() - 1; i++ )
     {
         SCH_ITEM* a = static_cast<SCH_ITEM*>( sorted[i] );
         SCH_ITEM* b = static_cast<SCH_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
 
+        if( !moving )
+        {
+            commit->Modify( a, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+            commit->Modify( b, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+        }
+
         VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
         std::swap( aPos, bPos );
-
-        saveCopyInUndoList( a, UNDO_REDO::CHANGED, appendUndo );
-        appendUndo = true;
-        saveCopyInUndoList( b, UNDO_REDO::CHANGED, appendUndo );
 
         // Sheet pins need to have their sides swapped before we change their
         // positions
@@ -1497,11 +1502,7 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         m_frame->UpdateItem( b, false, true );
     }
 
-    // Update R-Tree for modified items
-    for( EDA_ITEM* selected : selection )
-        updateItem( selected, true );
-
-    if( isMoving )
+    if( moving )
     {
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
@@ -1512,9 +1513,156 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
         if( connections )
             m_frame->TestDanglingEnds();
-
         m_frame->OnModify();
+
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Swap" ) );
     }
+
+    return 0;
+}
+
+
+/*
+ * This command always works on the instance owned by the schematic, never directly on the
+ * external library file. Pins that still reference their library definition are swapped by
+ * touching that shared lib pin first; afterwards we call UpdatePins() so the schematic now owns a
+ * cached copy with the new geometry. Pins that already have an instance-local copy simply swap in
+ * place. In both cases the undo stack captures the modified pins (and the parent symbol) so the
+ * user can revert the change. Saving the schematic writes the updated pin order into the sheet,
+ * while the global symbol library remains untouched unless the user explicitly pushes it later.
+ */
+int SCH_EDIT_TOOL::SwapPins( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_frame, 0 );
+
+    if( !m_frame->eeconfig()->m_Input.allow_unconstrained_pin_swaps )
+        return 0;
+
+    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( { SCH_PIN_T } );
+    std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
+
+    if( selection.Size() < 2 )
+        return 0;
+
+    EDA_ITEM* parent = selection.Front()->GetParent();
+
+    if( !parent || parent->Type() != SCH_SYMBOL_T )
+        return 0;
+
+    SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( parent );
+
+    // All pins need to be on the same symbol
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->GetParent() != parent )
+            return 0;
+    }
+
+    std::set<wxString> sharedSheetPaths;
+    std::set<wxString> sharedProjectNames;
+
+    if( SymbolHasSheetInstances( *parentSymbol, m_frame->Prj().GetProjectName(), &sharedSheetPaths,
+                                 &sharedProjectNames ) )
+    {
+        // This will give us nice names for our project, but not when the sheet is shared across
+        // multiple projects. But, in that case we bail early and just list the project names so it isn't an issue.
+        std::set<wxString> friendlySheets;
+
+        if( !sharedSheetPaths.empty() )
+            friendlySheets = GetSheetNamesFromPaths( sharedSheetPaths, m_frame->Schematic() );
+
+        if( !sharedProjectNames.empty() )
+        {
+            wxString projects = AccumulateDescriptions( sharedProjectNames );
+
+            if( projects.IsEmpty() )
+            {
+                m_frame->ShowInfoBarError(
+                        _( "Pin swaps are disabled for symbols shared across other projects. Duplicate the sheet to edit pins independently." ) );
+            }
+            else
+            {
+                m_frame->ShowInfoBarError(
+                        wxString::Format( _( "Pin swaps are disabled for symbols shared across other projects (%s). Duplicate the sheet to edit pins independently." ), projects ) );
+            }
+        }
+        else if( !friendlySheets.empty() )
+        {
+            wxString sheets = AccumulateDescriptions( friendlySheets );
+
+            m_frame->ShowInfoBarError(
+                    wxString::Format( _( "Pin swaps are disabled for symbols used by multiple sheet instances (%s). Duplicate the sheet to edit pins independently." ), sheets ) );
+        }
+        else
+        {
+            m_frame->ShowInfoBarError(
+                    _( "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins independently." ) );
+        }
+
+        return 0;
+    }
+
+    bool connections = false;
+
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    // Stage the parent symbol so undo/redo captures the cache copy that UpdatePins() may rebuild
+    // after we touch any shared library pins.
+    commit->Modify( parentSymbol, m_frame->GetScreen(), RECURSE_MODE::RECURSE ); // RECURSE is harmless here
+
+    bool swappedLibPins = false;
+
+    for( size_t i = 0; i < sorted.size() - 1; i++ )
+    {
+        SCH_PIN* aPin = static_cast<SCH_PIN*>( sorted[i] );
+        SCH_PIN* bPin = static_cast<SCH_PIN*>( sorted[( i + 1 ) % sorted.size()] );
+
+        // Record both pins in the commit and swap their geometry.  SwapPinGeometry returns true if
+        // it had to operate on the shared library pins (meaning the schematic instance still
+        // referenced them), in which case UpdatePins() below promotes the symbol to an instance
+        // copy that reflects the new pin order.
+        commit->Modify( aPin, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+        commit->Modify( bPin, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+
+        swappedLibPins |= SwapPinGeometry( aPin, bPin );
+
+        connections |= aPin->IsConnectable();
+        connections |= bPin->IsConnectable();
+        m_frame->UpdateItem( aPin, false, true );
+        m_frame->UpdateItem( bPin, false, true );
+    }
+
+    if( swappedLibPins )
+        parentSymbol->UpdatePins(); // clone the library data into the schematic cache with new geometry
+
+    // Refresh changed symbol in screen R-Tree / lib caches
+    m_frame->UpdateItem( parentSymbol, false, true );
+
+    SCH_SELECTION selectionCopy = selection;
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    // Reconcile any wiring that was connected to the swapped pins so the schematic stays tidy and
+    // the undo stack captures the resulting edits to wires and junctions.
+    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+    lwbTool->TrimOverLappingWires( commit, &selectionCopy );
+    lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
+
+    m_frame->Schematic().CleanUp( commit );
+
+    if( connections )
+        m_frame->TestDanglingEnds();
+
+    m_frame->OnModify();
+
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Swap Pins" ) );
 
     return 0;
 }
@@ -3419,6 +3567,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Swap,               SCH_ACTIONS::swap.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SwapPinLabels,      SCH_ACTIONS::swapPinLabels.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SwapUnitLabels,     SCH_ACTIONS::swapUnitLabels.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SwapPins,           SCH_ACTIONS::swapPins.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 

@@ -28,6 +28,7 @@
 
 #include <deque>
 #include <map>
+#include <set>
 #include <memory>
 #include <sch_reference_list.h>
 #include <template_fieldnames.h>
@@ -90,7 +91,7 @@ public:
     BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                    bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
                    bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
-                   bool aPreferUnitSwaps, bool aDryRun );
+                   bool aPreferUnitSwaps, bool aPreferPinSwaps, bool aDryRun );
     ~BACK_ANNOTATE();
 
     /**
@@ -135,9 +136,16 @@ private:
      */
     void applyChangelist();
 
+    /**
+     * Handle footprint pad net swaps with symbol pin swaps where possible.
+     */
+    std::set<wxString> applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_REFERENCE& aReference, const PCB_FP_DATA& aFpData,
+                                      SCH_COMMIT* aCommit );
+
     void processNetNameChange( SCH_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
                                const SCH_CONNECTION* aConnection, const wxString& aOldName,
                                const wxString& aNewName );
+
 
     REPORTER&                    m_reporter;
 
@@ -149,6 +157,7 @@ private:
     bool                         m_processAttributes;
     bool                         m_processOtherFields;
     bool                         m_preferUnitSwaps;
+    bool                         m_preferPinSwaps;
     bool                         m_dryRun;
 
     PCB_FOOTPRINTS_MAP           m_pcbFootprints;

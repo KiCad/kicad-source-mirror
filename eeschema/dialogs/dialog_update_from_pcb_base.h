@@ -43,6 +43,7 @@ class DIALOG_UPDATE_FROM_PCB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbUpdateAttributes;
 		wxCheckBox* m_cbPreferUnitSwaps;
 		wxCheckBox* m_cbUpdateOtherFields;
+		wxCheckBox* m_cbPreferPinSwaps;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

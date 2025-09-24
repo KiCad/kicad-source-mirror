@@ -39,6 +39,12 @@
 #include <kiface_base.h>
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
+#include <limits>
+#include <set>
+#include <tool/tool_manager.h>
+#include <tools/sch_line_wire_bus_tool.h>
+#include <tools/sch_selection.h>
+#include <tools/sch_tool_utils.h>
 #include <wx/log.h>
 #include <fmt.h>
 #include <fmt/ranges.h>
@@ -49,7 +55,7 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool 
                               bool aProcessFootprints, bool aProcessValues,
                               bool aProcessReferences, bool aProcessNetNames,
                               bool aProcessAttributes, bool aProcessOtherFields,
-                              bool aPreferUnitSwaps, bool aDryRun ) :
+                              bool aPreferUnitSwaps, bool aPreferPinSwaps, bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
@@ -59,6 +65,7 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool 
         m_processAttributes( aProcessAttributes ),
         m_processOtherFields( aProcessOtherFields ),
         m_preferUnitSwaps( aPreferUnitSwaps ),
+        m_preferPinSwaps( aPreferPinSwaps ),
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
         m_changesCount( 0 )
@@ -887,6 +894,12 @@ void BACK_ANNOTATE::applyChangelist()
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
+        std::set<wxString> swappedPins;
+
+        // Try to satisfy footprint pad net swaps by moving symbol pins before falling back to labels.
+        if( m_preferPinSwaps && m_processNetNames && !skip )
+            swappedPins = applyPinSwaps( symbol, ref, fpData, &commit );
+
         if( m_processNetNames && !skip )
         {
             for( const std::pair<const wxString, wxString>& entry : fpData.m_pinMap )
@@ -894,6 +907,10 @@ void BACK_ANNOTATE::applyChangelist()
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;
                 SCH_PIN*        pin = symbol->GetPin( pinNumber );
+
+                // Skip pins that the user preferred to handle with pin swaps in applyPreferredPinSwaps()
+                if( swappedPins.count( pinNumber ) > 0 )
+                    continue;
 
                 if( !pin )
                 {
@@ -1092,6 +1109,262 @@ void addConnections( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath,
         for( SCH_ITEM* connectedItem : aItem->ConnectedItems( aSheetPath ) )
             addConnections( connectedItem, aSheetPath, connectedItems );
     }
+}
+
+
+std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_REFERENCE& aReference,
+                                                 const PCB_FP_DATA& aFpData, SCH_COMMIT* aCommit )
+{
+    // Tracks pin numbers that we end up swapping so that the caller can skip any
+    // duplicate label-only handling for those pins.
+    std::set<wxString> swappedPins;
+
+    if( !aSymbol )
+        return swappedPins;
+
+    SCH_SCREEN* screen = aReference.GetSheetPath().LastScreen();
+
+    if( !screen )
+        return swappedPins;
+
+    wxCHECK( m_frame, swappedPins );
+
+    // Used to build the list of schematic pins whose current net assignment does not match the PCB.
+    struct PIN_CHANGE
+    {
+        SCH_PIN* pin;
+        wxString pinNumber;
+        wxString currentNet;
+        wxString targetNet;
+    };
+
+    std::vector<PIN_CHANGE> mismatches;
+
+    // Helper map that lets us find all pins currently on a given net.
+    std::map<wxString, std::vector<size_t>> pinsByCurrentNet;
+
+    // Build the mismatch list by inspecting each footprint pin that differs from the schematic.
+    for( const std::pair<const wxString, wxString>& entry : aFpData.m_pinMap )
+    {
+        const wxString& pinNumber = entry.first;
+        const wxString& desiredNet = entry.second;
+
+        SCH_PIN* pin = aSymbol->GetPin( pinNumber );
+
+        // Ignore power pins and anything marked as non-connectable. Power pins can map to
+        // hidden/global references, e.g. implicit power connections on logic symbols.
+        // KiCad pins are currently always connectable, but the extra guard keeps the
+        // logic robust if alternate pin types (e.g. explicit mechanical/NC pins)
+        // ever start reporting false.
+        if( !pin || pin->IsPower() || !pin->IsConnectable() )
+            continue;
+
+        SCH_CONNECTION* connection = pin->Connection( &aReference.GetSheetPath() );
+        wxString        currentNet = connection ? connection->Name( true ) : wxString();
+
+        if( desiredNet.IsEmpty() || currentNet.IsEmpty() )
+            continue;
+
+        if( desiredNet == currentNet )
+            continue;
+
+        size_t idx = mismatches.size();
+        mismatches.push_back( { pin, pinNumber, currentNet, desiredNet } );
+        pinsByCurrentNet[currentNet].push_back( idx );
+    }
+
+    if( mismatches.size() < 2 )
+        return swappedPins;
+
+    // Track which mismatch entries we have already consumed, and the underlying pin objects
+    // we still need to clean up wiring around once the geometry swap is done.
+    std::vector<bool>     handled( mismatches.size(), false );
+    std::vector<SCH_PIN*> swappedPinObjects;
+    bool                  swappedLibPins = false;
+    wxString              msg;
+
+    bool allowPinSwaps = false;
+    wxString currentProjectName = m_frame->Prj().GetProjectName();
+
+    if( m_frame->eeconfig() )
+        allowPinSwaps = m_frame->eeconfig()->m_Input.allow_unconstrained_pin_swaps;
+
+    std::set<wxString> sharedSheetPaths;
+    std::set<wxString> sharedProjectNames;
+    bool               sharedSheetSymbol =
+            SymbolHasSheetInstances( *aSymbol, currentProjectName, &sharedSheetPaths, &sharedProjectNames );
+
+    std::set<wxString> friendlySheetNames;
+
+    if( sharedSheetSymbol && !sharedSheetPaths.empty() )
+        friendlySheetNames = GetSheetNames( sharedSheetPaths, m_frame->Schematic() );
+
+    // Check each mismatch and try to find a partner whose desired net matches our current net
+    // (i.e. the two pins have been swapped on the PCB).
+    for( size_t i = 0; i < mismatches.size(); ++i )
+    {
+        // Skip entries already handled by a previous successful swap.
+        if( handled[i] )
+            continue;
+
+        PIN_CHANGE& change = mismatches[i];
+
+        // Find candidate pins whose current net equals the net we want to move this pin to.
+        auto range = pinsByCurrentNet.find( change.targetNet );
+
+        // Nobody currently on the desired net, so there’s no reciprocal swap to apply.
+        if( range == pinsByCurrentNet.end() )
+            continue;
+
+        // Track the best partner index in case we discover a reciprocal mismatch below.
+        size_t partnerIdx = std::numeric_limits<size_t>::max();
+
+        // Examine every pin that presently lives on the net we want to move to.
+        for( size_t candidateIdx : range->second )
+        {
+            if( candidateIdx == i || handled[candidateIdx] )
+                continue;
+
+            PIN_CHANGE& candidate = mismatches[candidateIdx];
+
+            // Potential swap partner must want to move to our current net, i.e. the PCB swapped the
+            // two nets between these pins.
+            if( candidate.targetNet == change.currentNet )
+            {
+                partnerIdx = candidateIdx;
+                break;
+            }
+        }
+
+        // No viable partner found; either there was no reciprocal net mismatch or it was already
+        // consumed. Leave this entry for label-based handling.
+        if( partnerIdx == std::numeric_limits<size_t>::max() )
+            continue;
+
+        PIN_CHANGE& partner = mismatches[partnerIdx];
+
+        // Sanity check: both pins must belong to the same schematic symbol before we swap geometry;
+        // this prevents us from moving pin outlines between different units of a multi-unit symbol.
+        if( change.pin->GetParentSymbol() != partner.pin->GetParentSymbol() )
+            continue;
+
+        if( !allowPinSwaps || sharedSheetSymbol )
+        {
+            if( !sharedProjectNames.empty() )
+            {
+                std::vector<wxString> otherProjects;
+
+                for( const wxString& name : sharedProjectNames )
+                {
+                    if( !currentProjectName.IsEmpty() && name.IsSameAs( currentProjectName ) )
+                        continue;
+
+                    otherProjects.push_back( name );
+                }
+
+                wxString projects = AccumulateDescriptions( otherProjects );
+
+                if( projects.IsEmpty() )
+                {
+                    msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared across other projects." ),
+                                aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                                EscapeHTML( partner.pin->GetShownNumber() ) );
+                }
+                else
+                {
+                    msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared across other "
+                                   "projects (%s)." ),
+                                aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                                EscapeHTML( partner.pin->GetShownNumber() ), projects );
+                }
+            }
+            else if( !friendlySheetNames.empty() )
+            {
+                wxString sheets = AccumulateDescriptions( friendlySheetNames );
+
+                msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is used by multiple sheet "
+                               "instances (%s)." ),
+                            aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                            EscapeHTML( partner.pin->GetShownNumber() ), sheets );
+            }
+            else if( sharedSheetSymbol )
+            {
+                msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared." ),
+                            aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                            EscapeHTML( partner.pin->GetShownNumber() ) );
+            }
+            else
+            {
+                msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are disabled in "
+                               "the schematic preferences." ),
+                            aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                            EscapeHTML( partner.pin->GetShownNumber() ) );
+            }
+            m_reporter.ReportHead( msg, RPT_SEVERITY_INFO );
+
+            handled[i] = true;
+            handled[partnerIdx] = true;
+            continue;
+        }
+
+        if( !m_dryRun )
+        {
+            wxCHECK2( aCommit, continue );
+
+            // Record the two pins in the commit and physically swap their local geometry.
+            aCommit->Modify( change.pin, screen, RECURSE_MODE::RECURSE );
+            aCommit->Modify( partner.pin, screen, RECURSE_MODE::RECURSE );
+
+            swappedLibPins |= SwapPinGeometry( change.pin, partner.pin );
+        }
+
+        // Don’t pick either entry again for another pairing.
+        handled[i] = true;
+        handled[partnerIdx] = true;
+
+        // Remember which pin numbers we touched so the caller can suppress duplicate work.
+        swappedPins.insert( change.pinNumber );
+        swappedPins.insert( partner.pinNumber );
+        swappedPinObjects.push_back( change.pin );
+        swappedPinObjects.push_back( partner.pin );
+
+        ++m_changesCount;
+
+        msg.Printf( _( "Swap %s pins %s and %s to match PCB." ), aReference.GetRef(),
+                    EscapeHTML( change.pin->GetShownNumber() ), EscapeHTML( partner.pin->GetShownNumber() ) );
+        m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+    }
+
+    // Nothing left to do if we didn't find a valid swap pair when we were in dry-run mode.
+    if( swappedPinObjects.empty() )
+        return swappedPins;
+
+    if( !m_dryRun )
+    {
+        if( swappedLibPins )
+            aSymbol->UpdatePins();
+
+        m_frame->UpdateItem( aSymbol, false, true );
+
+        if( TOOL_MANAGER* toolMgr = m_frame->GetToolManager() )
+        {
+            if( SCH_LINE_WIRE_BUS_TOOL* lwbTool = toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>() )
+            {
+                SCH_SELECTION cleanupSelection( screen );
+
+                // Make sure we tidy up any wires connected to the pins whose geometry just moved.
+                for( SCH_PIN* swappedPin : swappedPinObjects )
+                    cleanupSelection.Add( swappedPin );
+
+                lwbTool->TrimOverLappingWires( aCommit, &cleanupSelection );
+                lwbTool->AddJunctionsIfNeeded( aCommit, &cleanupSelection );
+            }
+        }
+
+        m_frame->Schematic().CleanUp( aCommit );
+    }
+
+    return swappedPins;
 }
 
 

@@ -87,6 +87,12 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 
 	fgSizer2->Add( m_cbUpdateOtherFields, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
+	m_cbPreferPinSwaps = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Prefer symbol pin swaps over label swaps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPreferPinSwaps->SetValue(true);
+	m_cbPreferPinSwaps->SetToolTip( _("When possible, swap symbol pins to match footprint pad net swaps instead of changing net labels.") );
+
+	fgSizer2->Add( m_cbPreferPinSwaps, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
 
 	sbSizer2->Add( fgSizer2, 1, wxEXPAND, 5 );
 
@@ -129,6 +135,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	m_cbUpdateAttributes->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbPreferUnitSwaps->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateOtherFields->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbPreferPinSwaps->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnUpdateClick ), NULL, this );
 }
 
@@ -143,6 +150,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::~DIALOG_UPDATE_FROM_PCB_BASE()
 	m_cbUpdateAttributes->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbPreferUnitSwaps->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateOtherFields->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbPreferPinSwaps->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnUpdateClick ), NULL, this );
 
 }

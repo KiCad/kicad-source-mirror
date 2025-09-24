@@ -308,6 +308,13 @@ bool SCH_SELECTION_TOOL::Init()
             return !GetSameSymbolMultiUnitSelection( aSel ).empty();
         };
 
+    auto allowPinSwaps =
+        [this]( const SELECTION& )
+        {
+            return m_frame->eeconfig() &&
+                   m_frame->eeconfig()->m_Input.allow_unconstrained_pin_swaps;
+        };
+
 
     auto& menu = m_menu->GetMenu();
 
@@ -345,9 +352,10 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddItem( SCH_ACTIONS::placeSheetPin,         sheetSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::autoplaceAllSheetPins, sheetSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::syncSheetPins,         sheetSelection && SCH_CONDITIONS::Idle, 250 );
-    menu.AddItem( SCH_ACTIONS::assignNetclass,        connectedSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::swapPinLabels,         multiplePinsSelection && schEditCondition && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::swapUnitLabels,        multipleUnitsSelection && schEditCondition && SCH_CONDITIONS::Idle, 250 );
+    menu.AddItem( SCH_ACTIONS::swapPins,              multiplePinsSelection && schEditCondition && SCH_CONDITIONS::Idle && allowPinSwaps, 250 );
+    menu.AddItem( SCH_ACTIONS::assignNetclass,        connectedSelection && SCH_CONDITIONS::Idle, 250 );
     menu.AddItem( SCH_ACTIONS::editPageNumber,        schEditSheetPageNumberCondition, 250 );
 
     menu.AddSeparator( 400 );

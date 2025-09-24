@@ -69,6 +69,7 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
                             m_cbUpdateAttributes->GetValue(),
                             m_cbUpdateOtherFields->GetValue(),
                             m_cbPreferUnitSwaps->GetValue(),
+                            m_cbPreferPinSwaps->GetValue(),
                             true );
     std::string   netlist;
 
@@ -120,6 +121,7 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
                             m_cbUpdateAttributes->GetValue(),
                             m_cbUpdateOtherFields->GetValue(),
                             m_cbPreferUnitSwaps->GetValue(),
+                            m_cbPreferPinSwaps->GetValue(),
                             false );
 
     if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )

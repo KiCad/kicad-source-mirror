@@ -188,7 +188,8 @@
   },
   "input": {
     "drag_is_move": false,
-    "esc_clears_net_highlight": true
+    "esc_clears_net_highlight": true,
+    "allow_unconstrained_pin_swaps": false
   },
   "lib_tree": {
     "column_widths": null,

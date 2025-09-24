@@ -1196,7 +1196,7 @@ void SCH_PIN::ChangeLength( int aLength )
     int offsetX = 0;
     int offsetY = 0;
 
-    switch( m_orientation )
+    switch( GetOrientation() )
     {
     default:
     case PIN_ORIENTATION::PIN_RIGHT:

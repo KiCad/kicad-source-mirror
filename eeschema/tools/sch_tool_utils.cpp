@@ -32,6 +32,8 @@
 #include <sch_tablecell.h>
 #include <sch_textbox.h>
 #include <schematic.h>
+#include <sch_sheet_path.h>
+#include <kiid.h>
 
 #include <wx/arrstr.h>
 
@@ -242,4 +244,151 @@ std::vector<SCH_SYMBOL*> GetSameSymbolMultiUnitSelection( const SELECTION& aSel 
         return {};
 
     return result;
+}
+
+
+bool SwapPinGeometry( SCH_PIN* aFirst, SCH_PIN* aSecond )
+{
+    wxCHECK_MSG( aFirst && aSecond, false, "Invalid pins supplied to SwapPinGeometry" );
+
+    // If the schematic pin is still backed by a library definition, swap that library pin; once the
+    // caller sees the true return value it can decide to clone the updated library data into the
+    // schematic cache.  Otherwise the schematic already owns a local copy, so swap in place.
+    SCH_PIN* firstPin = aFirst->GetLibPin() ? aFirst->GetLibPin() : aFirst;
+    SCH_PIN* secondPin = aSecond->GetLibPin() ? aSecond->GetLibPin() : aSecond;
+
+    VECTOR2I firstLocal = firstPin->GetLocalPosition();
+    VECTOR2I secondLocal = secondPin->GetLocalPosition();
+    firstPin->SetPosition( secondLocal );
+    secondPin->SetPosition( firstLocal );
+
+    PIN_ORIENTATION firstOrientation = firstPin->GetOrientation();
+    PIN_ORIENTATION secondOrientation = secondPin->GetOrientation();
+    firstPin->SetOrientation( secondOrientation );
+    secondPin->SetOrientation( firstOrientation );
+
+    int firstLength = firstPin->GetLength();
+    int secondLength = secondPin->GetLength();
+    firstPin->SetLength( secondLength );
+    secondPin->SetLength( firstLength );
+
+    auto firstOp = firstPin->GetOperatingPoint();
+    auto secondOp = secondPin->GetOperatingPoint();
+    firstPin->SetOperatingPoint( secondOp );
+    secondPin->SetOperatingPoint( firstOp );
+
+    // Return true if we touched the library-backed copy so callers can refresh the schematic symbol
+    // cache once the swap completes.
+    return ( firstPin != aFirst ) || ( secondPin != aSecond );
+}
+
+
+bool SymbolHasSheetInstances( const SCH_SYMBOL& aSymbol, const wxString& aCurrentProject,
+                              std::set<wxString>* aSheetPaths, std::set<wxString>* aProjectNames )
+{
+    std::set<KIID_PATH> uniquePaths;
+    std::set<wxString>  sheetPaths;
+    std::set<wxString>  otherProjects;
+
+    for( const SCH_SYMBOL_INSTANCE& instance : aSymbol.GetInstances() )
+    {
+        uniquePaths.insert( instance.m_Path );
+
+        if( !instance.m_Path.empty() )
+            sheetPaths.insert( instance.m_Path.AsString() );
+
+        if( !instance.m_ProjectName.IsEmpty() )
+        {
+            if( aCurrentProject.IsEmpty() || !instance.m_ProjectName.IsSameAs( aCurrentProject ) )
+                otherProjects.insert( instance.m_ProjectName );
+        }
+    }
+
+    bool sharedWithinProject = uniquePaths.size() > 1;
+    bool sharedWithOtherProjects = !otherProjects.empty();
+
+    if( aSheetPaths )
+    {
+        if( sharedWithinProject )
+            *aSheetPaths = sheetPaths;
+        else
+            aSheetPaths->clear();
+    }
+
+    if( aProjectNames )
+    {
+        if( sharedWithOtherProjects )
+            *aProjectNames = otherProjects;
+        else
+            aProjectNames->clear();
+    }
+
+    return sharedWithinProject || sharedWithOtherProjects;
+}
+
+
+std::set<wxString> GetSheetNamesFromPaths( const std::set<wxString>& aSheetPaths, const SCHEMATIC& aSchematic )
+{
+    std::set<wxString> friendlyNames;
+
+    if( aSheetPaths.empty() )
+        return friendlyNames;
+
+    SCH_SHEET_LIST hierarchy = aSchematic.Hierarchy();
+
+    for( const wxString& pathStr : aSheetPaths )
+    {
+        wxString display = pathStr;
+
+        try
+        {
+            KIID_PATH kiidPath( pathStr );
+
+            for( const SCH_SHEET_PATH& sheetPath : hierarchy )
+            {
+                if( sheetPath.Path() == kiidPath )
+                {
+                    wxString sheetNames;
+
+                    for( size_t ii = 0; ii < sheetPath.size(); ++ii )
+                    {
+                        SCH_SHEET* sheet = sheetPath.at( ii );
+
+                        if( !sheet )
+                            continue;
+
+                        const SCH_FIELD* nameField = sheet->GetField( FIELD_T::SHEET_NAME );
+
+                        if( !nameField )
+                            continue;
+
+                        wxString name = nameField->GetShownText( false );
+
+                        if( name.IsEmpty() )
+                            continue;
+
+                        if( !sheetNames.IsEmpty() )
+                            sheetNames << wxS( "/" );
+
+                        sheetNames << name;
+                    }
+
+                    if( sheetNames.IsEmpty() )
+                        display = sheetPath.PathHumanReadable( false, true );
+                    else
+                        display = sheetNames;
+
+                    break;
+                }
+            }
+        }
+        catch( ... )
+        {
+            // If the path cannot be parsed, fall back to the raw string.
+        }
+
+        friendlyNames.insert( display );
+    }
+
+    return friendlyNames;
 }
