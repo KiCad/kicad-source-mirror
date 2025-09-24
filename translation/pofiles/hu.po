@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-24 17:02+0000\n"
+"PO-Revision-Date: 2025-09-25 08:04+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -18530,9 +18530,8 @@ msgid "Manual removal will be required for the file(s) above."
 msgstr "A fentebbi fájl(oka)t manuálisan kell eltávolítani."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2037
-#, fuzzy
 msgid "Derived from"
-msgstr "Származtatva ebből:"
+msgstr "Származtatva ebből"
 
 #: eeschema/generate_alias_info.cpp:76 eeschema/sch_base_frame.cpp:84
 #: eeschema/symbol_editor/symbol_editor.cpp:170
@@ -18617,6 +18616,7 @@ msgid "DXF origin on PCB Grid, Y Coordinate"
 msgstr "DXF origó a nyákterv rácson, Y koordináta"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
+#, fuzzy
 msgid "Import Parameters"
 msgstr "Paraméterek importálása"
 
@@ -18789,9 +18789,8 @@ msgid "Import"
 msgstr "Importálás"
 
 #: eeschema/menubar.cpp:103
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Nem KiCad kapcsolási rajz importálása..."
+msgstr "Nem KiCad kapcsolási rajz..."
 
 #: eeschema/menubar.cpp:104
 #, fuzzy
@@ -18856,7 +18855,6 @@ msgstr "Ellenőrzés"
 
 #: eeschema/menubar.cpp:352 gerbview/menubar.cpp:233 kicad/menubar.cpp:234
 #: pcbnew/menubar_footprint_editor.cpp:248 pcbnew/menubar_pcb_editor.cpp:482
-#, fuzzy
 msgid "&Tools"
 msgstr "Eszközök"
 
@@ -18864,7 +18862,6 @@ msgstr "Eszközök"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:186
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:249
 #: pcbnew/menubar_pcb_editor.cpp:483
-#, fuzzy
 msgid "P&references"
 msgstr "Beállítások"
 
@@ -20388,7 +20385,6 @@ msgstr "Háromállapotú"
 
 #: eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
-#, fuzzy
 msgid "Label"
 msgstr "Címke"
 
