@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-24 17:02+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-09-25 21:02+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1376,7 +1376,7 @@ msgstr "3Dプレビューのオプション"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:410
 msgid "Board thickness:"
-msgstr "基板厚:"
+msgstr "基板の厚さ:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:198
@@ -3107,35 +3107,35 @@ msgstr "A0 841x1189mm"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "A 8.5x11in"
-msgstr "A 8.5x11in"
+msgstr "ANSI A 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "B 11x17in"
-msgstr "B 11x17in"
+msgstr "ANSI B 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "C 17x22in"
-msgstr "C 17x22in"
+msgstr "ANSI C 17x22in"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "D 22x34in"
-msgstr "D 22x34in"
+msgstr "ANSI D 22x34in"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "E 34x44in"
-msgstr "E 34x44in"
+msgstr "ANSI E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:74
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8.5x11in"
+msgstr "US レター 8.5 x 11in"
 
 #: common/dialogs/dialog_page_settings.cpp:75
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8.5x14in"
+msgstr "US リーガル 8.5x14in"
 
 #: common/dialogs/dialog_page_settings.cpp:76
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "US リーガル 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:77
 msgid "User (Custom)"
@@ -29819,7 +29819,7 @@ msgstr "配線幅:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:77
 msgid "Track thickness:"
-msgstr "配線の銅箔厚:"
+msgstr "配線の厚さ:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
 msgid "Time to fuse:"
@@ -29868,7 +29868,7 @@ msgstr "ニッケル"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 msgid "Copper"
-msgstr "銅または導体"
+msgstr "銅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
 msgid "Copper-Aluminium"
@@ -30305,7 +30305,7 @@ msgstr "配線の幅 (W):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
 msgid "Track thickness (H):"
-msgstr "配線の銅箔厚 (H):"
+msgstr "配線の厚さ (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
@@ -31048,7 +31048,7 @@ msgstr "ボックスの高さ"
 #: pcb_calculator/transline_ident.cpp:322
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Strip thickness"
-msgstr "銅箔厚"
+msgstr "ストリップの厚さ"
 
 #: pcb_calculator/transline_ident.cpp:133
 #: pcb_calculator/transline_ident.cpp:324
