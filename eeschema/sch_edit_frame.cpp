@@ -109,9 +109,9 @@
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
 #include <api/api_utils.h>
-#include <dialog_change_symbols.h>
-
 #endif
+
+#include <dialog_change_symbols.h>
 
 
 #define DIFF_SYMBOLS_DIALOG_NAME wxT( "DiffSymbolsDialog" )
