@@ -205,6 +205,23 @@ FONT_CHOICE::~FONT_CHOICE()
 }
 
 
+void FONT_CHOICE::clearList()
+{
+    // Do the same as wxOwnerDrawnComboBox::Clear().
+    // But, on MSW, Clear() has 2 issues:
+    // - it generate wxWidgets alerts
+    // - it generate a OnTextCtrl event, creating also recursions, not so easy to fix.
+    // We use wxOwnerDrawnComboBox::Delete that do not have these issues and can do the same job
+
+#if defined( __WXMSW__ )
+    while( GetCount() )
+        Delete( GetCount() - 1 );
+#else
+    Clear();
+#endif
+}
+
+
 void FONT_CHOICE::RefreshFonts()
 {
     wxArrayString menuList = FONT_LIST_MANAGER::Get().GetFonts();
@@ -223,7 +240,7 @@ void FONT_CHOICE::RefreshFonts()
         m_fullFontList.Add( font );
 
     Freeze();
-    Clear();
+    clearList();
 
     if( m_systemFontCount > 1 )
         Append( _( "Default Font" ) );
@@ -732,7 +749,7 @@ void FONT_CHOICE::FilterFontList( const wxString& aFilter )
 
     // Update the combo box with filtered list (even if empty)
     Freeze();
-    Clear();
+    clearList();
 
     if( haveItemsNow )
     {
@@ -789,7 +806,7 @@ void FONT_CHOICE::RestoreFullFontList()
     wxString selection = GetValue();
 
     Freeze();
-    Clear();
+    clearList();
     Append( m_fullFontList );
     m_isFiltered = false;
 

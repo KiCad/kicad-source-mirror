@@ -61,6 +61,9 @@ protected:
     void OnKillFocus( wxFocusEvent& aEvent );
 
 private:
+    // Clear the wxOwnerDrawnComboBox list.
+    // Same as wxOwnerDrawnComboBox::Clear(), but without issues related to Clear() (see code)
+    void clearList();
     void DoAutoComplete( const wxString& aText );
     void FilterFontList( const wxString& aFilter );
     void RestoreFullFontList();
