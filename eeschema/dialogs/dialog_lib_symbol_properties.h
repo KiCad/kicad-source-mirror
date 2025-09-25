@@ -73,7 +73,6 @@ private:
     void OnSymbolNameText( wxCommandEvent& event ) override;
     void OnAddFootprintFilter( wxCommandEvent& event ) override;
     void OnEditFootprintFilter( wxCommandEvent& event ) override;
-    void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnGridCellChanged( wxGridEvent& event );
     void OnGridMotion( wxMouseEvent& event );
@@ -88,7 +87,6 @@ private:
     void OnAvailablePinsClick( wxCommandEvent& event ) override;
 
     bool updateUnitCount();
-    void adjustGridColumns();
     void syncControlStates( bool aIsAlias );
 
 public:
@@ -108,7 +106,6 @@ public:
     wxString           m_delayedErrorMessage;
 
     std::bitset<64>    m_shownColumns;
-    wxSize             m_size;
 
     PANEL_EMBEDDED_FILES* m_embeddedFiles;
 

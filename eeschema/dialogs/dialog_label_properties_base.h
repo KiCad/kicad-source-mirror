@@ -112,7 +112,6 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnCBValueCharHook( wxKeyEvent& event ) { event.Skip(); }
 		virtual void onMultiLabelCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
-		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }

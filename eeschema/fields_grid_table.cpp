@@ -420,6 +420,8 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
 
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
+    aGrid->SetupColumnAutosizer( FDC_VALUE );
+
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 

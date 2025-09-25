@@ -57,7 +57,6 @@ class DIALOG_DESIGN_BLOCK_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_stdButtonsCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveFieldUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveFieldDown( wxCommandEvent& event ) { event.Skip(); }

@@ -35,8 +35,8 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 	m_fieldsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_fieldsGrid->SetColSize( 0, 150 );
-	m_fieldsGrid->SetColSize( 1, 300 );
+	m_fieldsGrid->SetColSize( 0, 84 );
+	m_fieldsGrid->SetColSize( 1, 120 );
 	m_fieldsGrid->EnableDragColMove( false );
 	m_fieldsGrid->EnableDragColSize( true );
 	m_fieldsGrid->SetColLabelValue( 0, _("Name") );
@@ -135,7 +135,6 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_fieldsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnMoveFieldUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnMoveFieldDown ), NULL, this );
@@ -146,7 +145,6 @@ DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWind
 DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::~DIALOG_DESIGN_BLOCK_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_fieldsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnMoveFieldUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_BLOCK_PROPERTIES_BASE::OnMoveFieldDown ), NULL, this );

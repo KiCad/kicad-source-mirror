@@ -48,11 +48,7 @@ public:
     void OnMoveFieldUp( wxCommandEvent& aEvent ) override;
     void OnMoveFieldDown( wxCommandEvent& aEvent ) override;
 
-    void OnSizeGrid( wxSizeEvent& event ) override;
-
 private:
-    void AdjustGridColumns( int aWidth );
-
     DESIGN_BLOCK*                             m_designBlock;
     nlohmann::ordered_map<wxString, wxString> m_fields;
 };

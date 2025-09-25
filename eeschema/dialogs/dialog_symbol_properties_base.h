@@ -86,7 +86,6 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnPageChanging( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnGridEditorHidden( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnGridEditorShown( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnSizeFieldsGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }

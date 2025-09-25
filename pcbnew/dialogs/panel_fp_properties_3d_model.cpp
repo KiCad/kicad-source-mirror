@@ -65,11 +65,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
                                                             FOOTPRINT* aFootprint,
                                                             DIALOG_SHIM* aDialogParent,
                                                             PANEL_EMBEDDED_FILES* aFilesPanel,
-                                                            wxWindow* aParent, wxWindowID aId,
-                                                            const wxPoint& aPos,
-                                                            const wxSize& aSize, long aStyle,
-                                                            const wxString& aName ) :
-        PANEL_FP_PROPERTIES_3D_MODEL_BASE( aParent, aId, aPos, aSize, aStyle, aName ),
+                                                            wxWindow* aParent ) :
+        PANEL_FP_PROPERTIES_3D_MODEL_BASE( aParent ),
         m_parentDialog( aDialogParent ),
         m_frame( aFrame ),
         m_footprint( aFootprint ),
@@ -84,8 +81,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
                                                             OnAdd3DRow( aEvent );
                                                         } );
     trick->SetTooltipEnable( COL_PROBLEM );
-
     m_modelsGrid->PushEventHandler( trick );
+    m_modelsGrid->SetupColumnAutosizer( COL_FILENAME );
 
     // Get the last 3D directory
     PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
@@ -215,7 +212,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
     select3DModel( 0 );
 
     m_previewPane->UpdateDummyFootprint();
-    m_modelsGrid->SetColSize( COL_SHOWN, m_modelsGrid->GetVisibleWidth( COL_SHOWN, true, false ) );
+    m_modelsGrid->SetGridWidthsDirty();
 
     Layout();
 }
@@ -564,26 +561,6 @@ void PANEL_FP_PROPERTIES_3D_MODEL::Cfg3DPath( wxCommandEvent& event )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
         m_previewPane->UpdateDummyFootprint();
-}
-
-
-void PANEL_FP_PROPERTIES_3D_MODEL::AdjustGridColumnWidths()
-{
-    // Account for scroll bars
-    int modelsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_modelsGrid ).x;
-
-    int width = modelsWidth - m_modelsGrid->GetColSize( COL_SHOWN ) - m_modelsGrid->GetColSize( COL_PROBLEM );
-
-    if( width > 0 )
-        m_modelsGrid->SetColSize( COL_FILENAME, width );
-}
-
-
-void PANEL_FP_PROPERTIES_3D_MODEL::OnGridSize( wxSizeEvent& event )
-{
-    AdjustGridColumnWidths();
-
-    event.Skip();
 }
 
 

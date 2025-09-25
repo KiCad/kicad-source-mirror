@@ -34,9 +34,9 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	m_grid->SetMargins( 0, 0 );
 
 	// Columns
-	m_grid->SetColSize( 0, 300 );
-	m_grid->SetColSize( 1, 60 );
-	m_grid->SetColSize( 2, 60 );
+	m_grid->SetColSize( 0, 180 );
+	m_grid->SetColSize( 1, 48 );
+	m_grid->SetColSize( 2, 48 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelValue( 0, _("Name") );
@@ -89,7 +89,6 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	bPanelSizer->Fit( this );
 
 	// Connect Events
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
 	m_addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveDown ), NULL, this );
@@ -99,7 +98,6 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 PANEL_TEMPLATE_FIELDNAMES_BASE::~PANEL_TEMPLATE_FIELDNAMES_BASE()
 {
 	// Disconnect Events
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
 	m_addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveDown ), NULL, this );

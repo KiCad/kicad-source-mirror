@@ -56,6 +56,7 @@ DIALOG_DESIGN_BLOCK_PROPERTIES::DIALOG_DESIGN_BLOCK_PROPERTIES( wxWindow*     aP
                                                      {
                                                          OnAddField( aEvent );
                                                      } ) );
+    m_fieldsGrid->SetupColumnAutosizer( 1 );
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 }
 
@@ -215,21 +216,3 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromGrid()
 }
 
 
-void DIALOG_DESIGN_BLOCK_PROPERTIES::AdjustGridColumns( int aWidth )
-{
-    if( aWidth <= 0 )
-        return;
-
-    // Account for scroll bars
-    aWidth -= ( m_fieldsGrid->GetSize().x - m_fieldsGrid->GetClientSize().x );
-
-    m_fieldsGrid->SetColSize( 1, aWidth - m_fieldsGrid->GetColSize( 0 ) );
-}
-
-
-void DIALOG_DESIGN_BLOCK_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
-{
-    AdjustGridColumns( event.GetSize().GetX() );
-
-    event.Skip();
-}

@@ -267,7 +267,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_grid->ProcessTableMessage( msg );
-    adjustGridColumns();
 
     m_SymbolNameCtrl->ChangeValue( UnescapeString( m_libEntry->GetName() ) );
 
@@ -1070,23 +1069,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event 
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns()
-{
-    // Account for scroll bars
-    int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
-
-    m_grid->AutoSizeColumn( FDC_NAME );
-    m_grid->SetColSize( FDC_NAME, std::max( 72, m_grid->GetColSize( FDC_NAME ) ) );
-
-    int fixedColsWidth = m_grid->GetColSize( FDC_NAME );
-
-    for( int i = 2; i < m_grid->GetNumberCols(); i++ )
-        fixedColsWidth += m_grid->GetColSize( i );
-
-    m_grid->SetColSize( FDC_VALUE, std::max( 120, width - fixedColsWidth ) );
-}
-
-
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_OptionPartsInterchangeable->Enable( m_unitSpinCtrl->GetValue() > 1 );
@@ -1113,7 +1095,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_grid->IsCellEditControlShown() )
-            adjustGridColumns();
+            m_grid->SetGridWidthsDirty();
     }
 
     // Handle a delayed focus.  The delay allows us to:
@@ -1160,22 +1142,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }
-}
-
-
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
-{
-    auto new_size = event.GetSize();
-
-    if( new_size != m_size )
-    {
-        m_size = new_size;
-
-        adjustGridColumns();
-    }
-
-    // Always propagate a wxSizeEvent:
-    event.Skip();
 }
 
 

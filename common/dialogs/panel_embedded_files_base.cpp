@@ -29,7 +29,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_files_grid->SetMargins( 0, 0 );
 
 	// Columns
-	m_files_grid->SetColSize( 0, 440 );
+	m_files_grid->SetColSize( 0, 100 );
 	m_files_grid->SetColSize( 1, 180 );
 	m_files_grid->EnableDragColMove( false );
 	m_files_grid->EnableDragColSize( true );
@@ -74,7 +74,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_cbEmbedFonts = new wxCheckBox( this, wxID_ANY, _("Embed fonts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbEmbedFonts->SetToolTip( _("Store a copy of all fonts used") );
 
-	m_buttonsSizer->Add( m_cbEmbedFonts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_buttonsSizer->Add( m_cbEmbedFonts, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 40 );
 
 
 	m_buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );

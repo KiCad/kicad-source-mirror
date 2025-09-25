@@ -69,7 +69,6 @@ private:
     void EditLibraryFootprint( wxCommandEvent&  ) override;
     void UpdateFootprint( wxCommandEvent&  ) override;
     void ChangeFootprint( wxCommandEvent&  ) override;
-    void OnGridSize( wxSizeEvent& aEvent ) override;
     void OnAddField( wxCommandEvent&  ) override;
     void OnDeleteField( wxCommandEvent&  ) override;
     void OnUpdateUI( wxUpdateUIEvent&  ) override;
@@ -78,8 +77,6 @@ private:
     void OnText( wxCommandEvent& event ) override;
     void OnChoice( wxCommandEvent& event ) override;
     void OnCheckBox( wxCommandEvent& event ) override;
-
-    void adjustGridColumns();
 
 private:
     PCB_EDIT_FRAME*                  m_frame;
@@ -109,8 +106,6 @@ private:
 
     bool                             m_initialized;
 
-    wxSize                           m_gridSize;
-    wxSize                           m_lastRequestedSize;
     PANEL_EMBEDDED_FILES*            m_embeddedFiles;
 };
 

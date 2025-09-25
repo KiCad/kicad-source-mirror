@@ -229,7 +229,7 @@
                           <property name="col_label_values">&quot;Text Items&quot; &quot;Show&quot; &quot;Width&quot; &quot;Height&quot; &quot;Thickness&quot; &quot;Italic&quot; &quot;Layer&quot; &quot;Orientation&quot; &quot;Keep Upright&quot; &quot;X Offset&quot; &quot;Y Offset&quot;</property>
                           <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                           <property name="cols">11</property>
-                          <property name="column_sizes">124,60,110,110,110,60,140,110,110,110,110</property>
+                          <property name="column_sizes">84,48,84,84,84,48,84,84,48,84,84</property>
                           <property name="context_help"></property>
                           <property name="context_menu">1</property>
                           <property name="default_pane">0</property>
@@ -285,7 +285,6 @@
                           <property name="window_extra_style"></property>
                           <property name="window_name"></property>
                           <property name="window_style"></property>
-                          <event name="OnSize">OnGridSize</event>
                         </object>
                       </object>
                       <object class="sizeritem" expanded="true">

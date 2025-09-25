@@ -40,7 +40,6 @@
 #include <widgets/grid_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
-#include <widgets/wx_grid_autosizer.h>
 
 #include <wx/dirdlg.h>
 
@@ -98,12 +97,7 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent ) :
                         wxGridEventHandler( DIALOG_CONFIGURE_PATHS::OnGridCellChanging ),
                         nullptr, this );
 
-    m_gridAutosizer = std::make_unique<WX_GRID_AUTOSIZER>( *m_EnvVars,
-                                                           WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{
-                                                                   { TV_NAME_COL, 72 },
-                                                                   { TV_VALUE_COL, 120 },
-                                                           },
-                                                           TV_VALUE_COL );
+    m_EnvVars->SetupColumnAutosizer( TV_VALUE_COL );
 
     GetSizer()->SetSizeHints( this );
     Centre();

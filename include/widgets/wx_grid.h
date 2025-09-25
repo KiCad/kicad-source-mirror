@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_WX_GRID_H
-#define KICAD_WX_GRID_H
+#pragma once
 
 #include <bitset>
 #include <memory>
@@ -280,6 +279,14 @@ public:
             return wxGrid::DoGetBestSize();
     }
 
+    /**
+     * Set autosize behaviour using wxFormBuilder column widths as minimums, with a single specified
+     * growable column.
+     */
+    void SetupColumnAutosizer( int aFlexibleCol );
+
+    void SetGridWidthsDirty() { m_gridWidthsDirty = true; }
+
 protected:
     /**
      * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column and draws
@@ -317,8 +324,13 @@ protected:
      */
     std::pair<EDA_UNITS, EDA_DATA_TYPE> getColumnUnits( int aCol ) const;
 
+private:
+    void recomputeGridWidths();
+
+    void onSizeEvent( wxSizeEvent& aEvent );
+
 protected:
-    bool                               m_weOwnTable;
+    bool                       m_weOwnTable;
 
     std::map<int, UNITS_PROVIDER*>                                 m_unitsProviders;
     std::unique_ptr<NUMERIC_EVALUATOR>                             m_eval;
@@ -326,7 +338,11 @@ protected:
     std::unordered_map<int, std::pair<EDA_UNITS, EDA_DATA_TYPE>>   m_autoEvalColsUnits;
     std::map< std::pair<int, int>, std::pair<wxString, wxString> > m_evalBeforeAfter;
 
-    std::optional<wxSize>              m_minSizeOverride;
-};
+    std::optional<wxSize>      m_minSizeOverride;
 
-#endif //KICAD_WX_GRID_H
+    std::map<int, int>         m_autosizedCols;     // map of col : min_width
+    int                        m_flexibleCol;
+
+    bool                       m_gridWidthsDirty = true;
+    int                        m_gridWidth = 0;
+};

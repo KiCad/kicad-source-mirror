@@ -133,12 +133,12 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_leftGridLayers->EnableEditing( false );
 	m_leftGridLayers->EnableGridLines( false );
 	m_leftGridLayers->EnableDragGridSize( false );
-    m_leftGridLayers->SetMargins( FromDIP( 3 ), FromDIP( 3 ) );
+	m_leftGridLayers->SetMargins( 3, 3 );
 
 	// Columns
-	m_leftGridLayers->SetColSize( 0, FromDIP( 24 ) );
-    m_leftGridLayers->SetColSize( 1, FromDIP( 20 ) );
-	m_leftGridLayers->SetColSize( 2, FromDIP( 72 ) );
+	m_leftGridLayers->SetColSize( 0, 24 );
+	m_leftGridLayers->SetColSize( 1, 20 );
+	m_leftGridLayers->SetColSize( 2, 72 );
 	m_leftGridLayers->EnableDragColMove( false );
 	m_leftGridLayers->EnableDragColSize( false );
 	m_leftGridLayers->SetColLabelSize( 0 );
@@ -172,12 +172,12 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_rightGridLayers->EnableEditing( false );
 	m_rightGridLayers->EnableGridLines( false );
 	m_rightGridLayers->EnableDragGridSize( false );
-    m_rightGridLayers->SetMargins( FromDIP( 3 ), FromDIP( 3 ) );
+	m_rightGridLayers->SetMargins( 3, 3 );
 
 	// Columns
-    m_rightGridLayers->SetColSize( 0, FromDIP( 24 ) );
-	m_rightGridLayers->SetColSize( 1, FromDIP( 20 ) );
-    m_rightGridLayers->SetColSize( 2, FromDIP( 72 ) );
+	m_rightGridLayers->SetColSize( 0, 24 );
+	m_rightGridLayers->SetColSize( 1, 20 );
+	m_rightGridLayers->SetColSize( 2, 72 );
 	m_rightGridLayers->EnableDragColMove( false );
 	m_rightGridLayers->EnableDragColSize( false );
 	m_rightGridLayers->SetColLabelSize( 0 );
@@ -215,15 +215,14 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_presetsGrid->CreateGrid( 0, 4 );
 	m_presetsGrid->EnableEditing( true );
 	m_presetsGrid->EnableGridLines( true );
-    m_presetsGrid->EnableDragGridSize( false );
-    m_presetsGrid->SetMinSize( wxSize( -1, FromDIP( 100 ) ) );
-    m_presetsGrid->SetMargins( FromDIP( 5 ), FromDIP( 3 ) );
+	m_presetsGrid->EnableDragGridSize( false );
+	m_presetsGrid->SetMargins( 5, 3 );
 
 	// Columns
-    m_presetsGrid->SetColSize( 0, FromDIP( 60 ) );
-	m_presetsGrid->SetColSize( 1, FromDIP( 24 ) );
-    m_presetsGrid->SetColSize( 2, FromDIP( 100 ) );
-	m_presetsGrid->SetColSize( 3, FromDIP( 200 ) );
+	m_presetsGrid->SetColSize( 0, 48 );
+	m_presetsGrid->SetColSize( 1, 24 );
+	m_presetsGrid->SetColSize( 2, 80 );
+	m_presetsGrid->SetColSize( 3, 120 );
 	m_presetsGrid->EnableDragColMove( false );
 	m_presetsGrid->EnableDragColSize( false );
 	m_presetsGrid->SetColLabelValue( 0, _("Enabled") );

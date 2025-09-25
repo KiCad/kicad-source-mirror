@@ -23,14 +23,14 @@
 #include <wx/grid.h>
 #include <wx/filename.h>
 
+class WX_GRID;
+
 class DIALOG_EDIT_CFG : public wxDialog
 {
 public:
     DIALOG_EDIT_CFG( wxWindow* aParent );
 
 private:
-    void adjustColumnWidths();
-    void OnSize( wxSizeEvent& aEvent );
     void loadSettings();
     void saveSettings();
     void OnCellChange( wxGridEvent& aEvent );
@@ -38,7 +38,8 @@ private:
     void OnResetDefault( wxCommandEvent& aEvent );
     void updateRowAppearance( int aRow );
 
-    wxGrid*    m_grid;
+private:
+    WX_GRID*   m_grid;
     wxFileName m_cfgFile;
     int        m_contextRow;
 };

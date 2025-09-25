@@ -60,7 +60,6 @@ public:
 
 private:
     // virtual event functions
-    void OnGridSize( wxSizeEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnAddPrivateLayer( wxCommandEvent& event ) override;
@@ -83,8 +82,6 @@ private:
 
     void onAddGroup( WX_GRID* aGrid );
     void onRemoveGroup( WX_GRID* aGrid );
-
-    void adjustGridColumns();
 
     // Layer grid helper callbacks
     void                onLayerGridRowDelete( WX_GRID& aGrid, LAYERS_GRID_TABLE& aLayerTable, int aRow );
@@ -121,8 +118,6 @@ private:
 
     PANEL_FP_PROPERTIES_3D_MODEL* m_3dPanel;
 
-    wxSize                     m_gridSize;
-    wxSize                     m_lastRequestedSize;
     PANEL_EMBEDDED_FILES*      m_embeddedFiles;
 };
 

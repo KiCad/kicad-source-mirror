@@ -24,14 +24,13 @@
 #include <paths.h>
 #include <wx/button.h>
 #include <wx/display.h>
-#include <wx/fileconf.h>
 #include <wx/log.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/settings.h>
+#include <widgets/wx_grid.h>
 #include <functional>
 #include <memory>
-#include <set>
 
 
 static wxString paramValueString( const PARAM_CFG& aParam )
@@ -42,11 +41,15 @@ static wxString paramValueString( const PARAM_CFG& aParam )
     {
         switch( aParam.m_Type )
         {
-        case paramcfg_id::PARAM_INT: s << *static_cast<const PARAM_CFG_INT&>( aParam ).m_Pt_param; break;
+        case paramcfg_id::PARAM_INT:
+            s << *static_cast<const PARAM_CFG_INT&>( aParam ).m_Pt_param;
+            break;
         case paramcfg_id::PARAM_DOUBLE:
             s = wxString::FromCDouble( *static_cast<const PARAM_CFG_DOUBLE&>( aParam ).m_Pt_param );
             break;
-        case paramcfg_id::PARAM_WXSTRING: s = *static_cast<const PARAM_CFG_WXSTRING&>( aParam ).m_Pt_param; break;
+        case paramcfg_id::PARAM_WXSTRING:
+            s = *static_cast<const PARAM_CFG_WXSTRING&>( aParam ).m_Pt_param;
+            break;
         case paramcfg_id::PARAM_BOOL:
             s << ( *static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Pt_param ? wxS( "true" ) : wxS( "false" ) );
             break;
@@ -61,6 +64,7 @@ static wxString paramValueString( const PARAM_CFG& aParam )
     return s;
 }
 
+
 static wxString paramDefaultString( const PARAM_CFG& aParam )
 {
     wxString s;
@@ -69,15 +73,20 @@ static wxString paramDefaultString( const PARAM_CFG& aParam )
     {
         switch( aParam.m_Type )
         {
-        case paramcfg_id::PARAM_INT: s << static_cast<const PARAM_CFG_INT&>( aParam ).m_Default; break;
+        case paramcfg_id::PARAM_INT:
+            s << static_cast<const PARAM_CFG_INT&>( aParam ).m_Default;
+            break;
         case paramcfg_id::PARAM_DOUBLE:
             s = wxString::FromCDouble( static_cast<const PARAM_CFG_DOUBLE&>( aParam ).m_Default );
             break;
-        case paramcfg_id::PARAM_WXSTRING: s << static_cast<const PARAM_CFG_WXSTRING&>( aParam ).m_default; break;
+        case paramcfg_id::PARAM_WXSTRING:
+            s << static_cast<const PARAM_CFG_WXSTRING&>( aParam ).m_default;
+            break;
         case paramcfg_id::PARAM_BOOL:
             s << ( static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Default ? wxS( "true" ) : wxS( "false" ) );
             break;
-        default: break;
+        default:
+            break;
         }
     }
     catch( ... )
@@ -87,6 +96,7 @@ static wxString paramDefaultString( const PARAM_CFG& aParam )
 
     return s;
 }
+
 
 static void writeParam( PARAM_CFG& aParam, const wxString& aValue )
 {
@@ -126,8 +136,8 @@ static void writeParam( PARAM_CFG& aParam, const wxString& aValue )
         break;
     }
     default:
-        wxASSERT_MSG( false,
-                      wxS( "Unsupported PARAM_CFG variant: " ) + wxString::Format( wxS( "%d" ), aParam.m_Type ) );
+        wxASSERT_MSG( false, wxS( "Unsupported PARAM_CFG variant: " )
+                                + wxString::Format( wxS( "%d" ), aParam.m_Type ) );
     }
 }
 
@@ -137,13 +147,16 @@ DIALOG_EDIT_CFG::DIALOG_EDIT_CFG( wxWindow* aParent ) :
 {
     m_cfgFile = wxFileName( PATHS::GetUserSettingsPath(), wxS( "kicad_advanced" ) );
 
-    m_grid = new wxGrid( this, wxID_ANY );
+    m_grid = new WX_GRID( this, wxID_ANY );
     m_grid->CreateGrid( 0, 3 );
+    m_grid->SetColSize( 0, 100 );   // SetColumnAutosizer() will use these for minimum size
+    m_grid->SetColSize( 1, 80 );
     m_grid->SetColLabelValue( 0, _( "Key" ) );
     m_grid->SetColLabelValue( 1, _( "Value" ) );
     m_grid->SetColLabelValue( 2, _( "Extant" ) );
     m_grid->HideCol( 2 );
     m_grid->SetRowLabelSize( 0 );
+    m_grid->SetupColumnAutosizer( 1 );
 
     loadSettings();
 
@@ -173,58 +186,8 @@ DIALOG_EDIT_CFG::DIALOG_EDIT_CFG( wxWindow* aParent ) :
 
     Layout();
     Centre();
-
-    // CallAfter ensures layout is complete before column adjustment
-    CallAfter(
-            [this]()
-            {
-                adjustColumnWidths();
-            } );
 }
 
-void DIALOG_EDIT_CFG::adjustColumnWidths()
-{
-    if( !m_grid || m_grid->GetNumberRows() == 0 )
-        return;
-
-    m_grid->Layout();
-
-    wxSize clientSize = m_grid->GetClientSize();
-    int    availableWidth = clientSize.GetWidth();
-
-    // Reserve space for vertical scrollbar when we have many rows
-    availableWidth -= wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
-
-    if( availableWidth < 200 )
-        availableWidth = 200;
-
-    int keyWidth = ( availableWidth * 6 ) / 10;
-    int valueWidth = availableWidth - keyWidth;
-
-    keyWidth = std::max( keyWidth, 100 );
-    valueWidth = std::max( valueWidth, 80 );
-
-    m_grid->SetColSize( 0, keyWidth );
-    m_grid->SetColSize( 1, valueWidth );
-
-    // Prevent wxWidgets auto-sizing from interfering
-    m_grid->SetColMinimalAcceptableWidth( 50 );
-}
-
-void DIALOG_EDIT_CFG::OnSize( wxSizeEvent& aEvent )
-{
-    aEvent.Skip();
-
-    if( m_grid && m_grid->GetNumberRows() > 0 )
-    {
-        // Defer column adjustment until resize is complete
-        CallAfter(
-                [this]()
-                {
-                    adjustColumnWidths();
-                } );
-    }
-}
 
 void DIALOG_EDIT_CFG::loadSettings()
 {
@@ -244,6 +207,7 @@ void DIALOG_EDIT_CFG::loadSettings()
         updateRowAppearance( row );
     }
 }
+
 
 void DIALOG_EDIT_CFG::saveSettings()
 {
@@ -273,6 +237,7 @@ void DIALOG_EDIT_CFG::saveSettings()
     adv.Save();
 }
 
+
 void DIALOG_EDIT_CFG::OnCellChange( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
@@ -298,6 +263,7 @@ void DIALOG_EDIT_CFG::OnCellChange( wxGridEvent& aEvent )
     aEvent.Skip();
 }
 
+
 void DIALOG_EDIT_CFG::OnCellRightClick( wxGridEvent& aEvent )
 {
     m_contextRow = aEvent.GetRow();
@@ -307,6 +273,7 @@ void DIALOG_EDIT_CFG::OnCellRightClick( wxGridEvent& aEvent )
     PopupMenu( &menu );
     menu.Unbind( wxEVT_MENU, &DIALOG_EDIT_CFG::OnResetDefault, this );
 }
+
 
 void DIALOG_EDIT_CFG::OnResetDefault( wxCommandEvent& aEvent )
 {
@@ -333,6 +300,7 @@ void DIALOG_EDIT_CFG::OnResetDefault( wxCommandEvent& aEvent )
     updateRowAppearance( m_contextRow );
     saveSettings();
 }
+
 
 void DIALOG_EDIT_CFG::updateRowAppearance( int aRow )
 {

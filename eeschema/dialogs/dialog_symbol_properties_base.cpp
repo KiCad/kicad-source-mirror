@@ -349,7 +349,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_notebook1->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnPageChanging ), NULL, this );
 	m_fieldsGrid->Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnGridEditorHidden ), NULL, this );
 	m_fieldsGrid->Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnGridEditorShown ), NULL, this );
-	m_fieldsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnSizeFieldsGrid ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveDown ), NULL, this );
@@ -382,7 +381,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::~DIALOG_SYMBOL_PROPERTIES_BASE()
 	m_notebook1->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnPageChanging ), NULL, this );
 	m_fieldsGrid->Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnGridEditorHidden ), NULL, this );
 	m_fieldsGrid->Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnGridEditorShown ), NULL, this );
-	m_fieldsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnSizeFieldsGrid ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveDown ), NULL, this );

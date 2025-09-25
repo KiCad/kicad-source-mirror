@@ -74,7 +74,6 @@ private:
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnPinTableColSort( wxGridEvent& aEvent );
     void OnPinTableCellEdited( wxGridEvent& event ) override;
-    void OnSizeFieldsGrid( wxSizeEvent& event ) override;
     void OnSizePinsGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
@@ -91,7 +90,6 @@ private:
     void OnUpdateSymbol( wxCommandEvent&  ) override;
     void OnExchangeSymbol( wxCommandEvent&  ) override;
 
-    void AdjustFieldsGridColumns();
     void AdjustPinsGridColumns();
     void HandleDelayedFocus( wxCommandEvent& event );
     void HandleDelayedSelection( wxCommandEvent& event );
@@ -103,8 +101,6 @@ private:
     SCH_SYMBOL*               m_symbol;
     LIB_SYMBOL*               m_part;
 
-    wxSize                    m_fieldsSize;
-    wxSize                    m_lastRequestedFieldsSize;
     wxSize                    m_pinsSize;
     wxSize                    m_lastRequestedPinsSize;
     bool                      m_editorShown;

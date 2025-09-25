@@ -912,4 +912,6 @@ void GRID_TRICKS::onUpdateUI( wxUpdateUIEvent& event )
         if( !cursorInSelectedRow && cursorRow >= 0 )
             m_grid->SelectRow( cursorRow );
     }
+
+    event.Skip();
 }

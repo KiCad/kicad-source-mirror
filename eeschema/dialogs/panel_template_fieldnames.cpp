@@ -64,14 +64,13 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
     m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
-    m_checkboxColWidth = m_grid->GetColSize( 1 );
-
     m_grid->SetUseNativeColLabels();
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid, [this]( wxCommandEvent& aEvent )
                                                        {
                                                            OnAddButtonClick( aEvent );
                                                        } ) );
+    m_grid->SetupColumnAutosizer( 0 );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 }
 
@@ -249,28 +248,6 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
     }
 
     return true;
-}
-
-
-void PANEL_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
-{
-    if( aWidth <= 0 )
-        return;
-
-    // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
-
-    m_grid->SetColSize( 0, std::max( 72, aWidth - 2 * m_checkboxColWidth ) );
-    m_grid->SetColSize( 1, m_checkboxColWidth );
-    m_grid->SetColSize( 2, m_checkboxColWidth );
-}
-
-
-void PANEL_TEMPLATE_FIELDNAMES::OnSizeGrid( wxSizeEvent& event )
-{
-    AdjustGridColumns( event.GetSize().GetX() );
-
-    event.Skip();
 }
 
 

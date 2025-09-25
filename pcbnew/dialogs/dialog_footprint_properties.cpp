@@ -65,9 +65,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
         m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl, m_PasteMarginRatioUnits ),
         m_returnValue( FP_PROPS_CANCEL ),
-        m_initialized( false ),
-        m_gridSize( 0, 0 ),
-        m_lastRequestedSize( 0, 0 )
+        m_initialized( false )
 {
     // Create the extra panels.  Embedded files is referenced by the 3D model panel.
     m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_footprint );
@@ -99,6 +97,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
     m_itemsGrid->SetTable( m_fields );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
+    m_itemsGrid->SetupColumnAutosizer( PFC_VALUE );
 
     // Show/hide text item columns according to the user's preference
     if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
@@ -390,7 +389,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_itemsGrid->SetRowLabelSize( 0 );
 
     Layout();
-    adjustGridColumns();
     m_initialized = true;
 
     return true;
@@ -729,28 +727,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns()
-{
-    // Account for scroll bars
-    int itemsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_itemsGrid ).x;
-
-    itemsWidth -= m_itemsGrid->GetRowLabelSize();
-
-    for( int i = 0; i < m_itemsGrid->GetNumberCols(); i++ )
-    {
-        if( i == 1 )
-            continue;
-
-        itemsWidth -= m_itemsGrid->GetColSize( i );
-    }
-
-    m_itemsGrid->SetColSize( 1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
-
-    // Update the width of the 3D panel
-    m_3dPanel->AdjustGridColumnWidths();
-}
-
-
 void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 {
     if( !m_initialized )
@@ -807,40 +783,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 
         m_initialFocus = false;
     }
-}
-
-
-void DIALOG_FOOTPRINT_PROPERTIES::OnGridSize( wxSizeEvent& aEvent )
-{
-    wxSize new_size = aEvent.GetSize();
-
-    if( ( !m_itemsGrid->IsCellEditControlShown() || m_lastRequestedSize != new_size )
-            && m_gridSize != new_size )
-    {
-        m_gridSize = new_size;
-
-        // A trick to fix a cosmetic issue: when, in m_itemsGrid, a layer selector widget has
-        // the focus (is activated in column 6) when resizing the grid, the widget is not moved.
-        // So just change the widget having the focus in this case
-        if( m_NoteBook->GetSelection() == 0 && !m_itemsGrid->HasFocus() )
-        {
-            int col = m_itemsGrid->GetGridCursorCol();
-
-            if( col == 6 )  // a layer selector widget can be activated
-                 m_itemsGrid->SetFocus();
-        }
-
-        adjustGridColumns();
-    }
-
-    // We store this value to check whether the dialog is changing size.  This might indicate
-    // that the user is scaling the dialog with an editor shown.  Some editors do not close
-    // (at least on GTK) when the user drags a dialog corner
-    m_lastRequestedSize = new_size;
-
-    // Always propagate for a grid repaint (needed if the height changes, as well as width)
-    aEvent.Skip();
-
 }
 
 

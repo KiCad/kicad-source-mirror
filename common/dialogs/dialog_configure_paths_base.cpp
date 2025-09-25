@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,8 +32,8 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	m_EnvVars->SetMargins( 0, 0 );
 
 	// Columns
-	m_EnvVars->SetColSize( 0, 150 );
-	m_EnvVars->SetColSize( 1, 454 );
+	m_EnvVars->SetColSize( 0, 100 );
+	m_EnvVars->SetColSize( 1, 180 );
 	m_EnvVars->EnableDragColMove( false );
 	m_EnvVars->EnableDragColSize( true );
 	m_EnvVars->SetColLabelValue( 0, _("Name") );

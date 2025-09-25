@@ -754,7 +754,7 @@
                     <property name="col_label_values">&quot;Enabled&quot; &quot;&quot; &quot;Layers&quot; &quot;Label&quot;</property>
                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                     <property name="cols">4</property>
-                    <property name="column_sizes">60,24,100,200</property>
+                    <property name="column_sizes">48,24,80,120</property>
                     <property name="context_help"></property>
                     <property name="context_menu">1</property>
                     <property name="default_pane">0</property>

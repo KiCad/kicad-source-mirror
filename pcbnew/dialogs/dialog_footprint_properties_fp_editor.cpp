@@ -161,9 +161,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
         m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
         m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
-        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl, m_PasteMarginRatioUnits ),
-        m_gridSize( 0, 0 ),
-        m_lastRequestedSize( 0, 0 )
+        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl, m_PasteMarginRatioUnits )
 {
     SetEvtHandlerEnabled( false );
 
@@ -226,6 +224,12 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
                                                                {
                                                                    OnAddCustomLayer( aEvent );
                                                                } ) );
+
+    m_itemsGrid->SetupColumnAutosizer( PFC_VALUE );
+    m_privateLayersGrid->SetupColumnAutosizer( 0 );
+    m_nettieGroupsGrid->SetupColumnAutosizer( 0 );
+    m_jumperGroupsGrid->SetupColumnAutosizer( 0 );
+    m_customUserLayersGrid->SetupColumnAutosizer( 0 );
 
     m_itemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_privateLayersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -479,7 +483,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_itemsGrid->SetRowLabelSize( 0 );
 
     Layout();
-    adjustGridColumns();
     m_initialized = true;
 
     return true;
@@ -1075,39 +1078,6 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onRemoveGroup( WX_GRID* aGrid )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns()
-{
-    // Account for scroll bars
-    int itemsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_itemsGrid ).x;
-
-    itemsWidth -= m_itemsGrid->GetRowLabelSize();
-
-    for( int i = 0; i < m_itemsGrid->GetNumberCols(); i++ )
-    {
-        if( i == 1 )
-            continue;
-
-        itemsWidth -= m_itemsGrid->GetColSize( i );
-    }
-
-    m_itemsGrid->SetColSize( 1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
-
-    auto updateSingleColumnGrid =
-            []( WX_GRID* aGrid )
-            {
-                aGrid->SetColSize( 0, std::max( aGrid->GetClientSize().x, aGrid->GetVisibleWidth( 0 ) ) );
-            };
-
-    updateSingleColumnGrid( m_privateLayersGrid );
-    updateSingleColumnGrid( m_nettieGroupsGrid );
-    updateSingleColumnGrid( m_jumperGroupsGrid );
-    updateSingleColumnGrid( m_customUserLayersGrid );
-
-    // Update the width of the 3D panel
-    m_3dPanel->AdjustGridColumnWidths();
-}
-
-
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     // Handle a delayed focus.  The delay allows us to:
@@ -1158,39 +1128,6 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }
-}
-
-
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridSize( wxSizeEvent& aEvent )
-{
-    wxSize new_size = aEvent.GetSize();
-
-    if( ( !m_itemsGrid->IsCellEditControlShown() || m_lastRequestedSize != new_size )
-            && m_gridSize != new_size )
-    {
-        m_gridSize = new_size;
-
-        // A trick to fix a cosmetic issue: when, in m_itemsGrid, a layer selector widget has
-        // the focus (is activated in column 6) when resizing the grid, the widget is not moved.
-        // So just change the widget having the focus in this case
-        if( m_NoteBook->GetSelection() == 0 && !m_itemsGrid->HasFocus() )
-        {
-            int col = m_itemsGrid->GetGridCursorCol();
-
-            if( col == 6 )  // a layer selector widget can be activated
-                 m_itemsGrid->SetFocus();
-        }
-
-        adjustGridColumns();
-    }
-
-    // We store this value to check whether the dialog is changing size.  This might indicate
-    // that the user is scaling the dialog with an editor shown.  Some editors do not close
-    // (at least on GTK) when the user drags a dialog corner
-    m_lastRequestedSize = new_size;
-
-    // Always propagate for a grid repaint (needed if the height changes, as well as width)
-    aEvent.Skip();
 }
 
 

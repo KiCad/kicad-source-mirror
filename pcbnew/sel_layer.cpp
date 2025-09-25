@@ -44,7 +44,6 @@
 #include <widgets/grid_text_helpers.h>
 #include <widgets/layer_box_selector.h>
 #include <widgets/wx_grid.h>
-#include <widgets/wx_grid_autosizer.h>
 #include <widgets/std_bitmap_button.h>
 
 
@@ -336,7 +335,8 @@ class COPPER_LAYERS_PAIR_PRESETS_UI
 public:
     COPPER_LAYERS_PAIR_PRESETS_UI( WX_GRID& aGrid, PCB_LAYER_PRESENTATION& aPresentation,
                                    LAYER_PAIR_SETTINGS& aLayerPairSettings ) :
-            m_layerPresentation( aPresentation ), m_grid( aGrid ),
+            m_layerPresentation( aPresentation ),
+            m_grid( aGrid ),
             m_layerPairSettings( aLayerPairSettings )
     {
         wxASSERT_MSG( m_grid.GetNumberRows() == 0, "Grid should be empty at controller start" );
@@ -370,14 +370,6 @@ public:
                              onPairActivated( row );
                          }
                      } );
-
-        m_autosizer =
-                std::make_unique<WX_GRID_AUTOSIZER>( m_grid,
-                                                     WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{
-                                                             { (int) COLNUMS::LAYERNAMES, 72 },
-                                                             { (int) COLNUMS::USERNAME, 72 },
-                                                     },
-                                                     (int) COLNUMS::USERNAME );
     }
 
     void OnLayerPairAdded( const LAYER_PAIR& aLayerPair )
@@ -412,10 +404,9 @@ private:
 
         m_grid.SetCellHighlightPenWidth( 0 );
         m_grid.SetColFormatBool( (int) COLNUMS::ENABLED );
+        m_grid.SetupColumnAutosizer( (int) COLNUMS::USERNAME );
 
         m_grid.SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
-
-        m_grid.AutoSizeColumn( (int) COLNUMS::USERNAME );
     }
 
     void fillGridFromStore()
@@ -489,8 +480,6 @@ private:
 
     // Lifetime managment of the swatches
     std::vector<std::unique_ptr<wxBitmap>> m_swatches;
-
-    std::unique_ptr<WX_GRID_AUTOSIZER> m_autosizer;
 };
 
 

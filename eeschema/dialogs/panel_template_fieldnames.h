@@ -56,11 +56,8 @@ protected:
     void OnDeleteButtonClick( wxCommandEvent& event ) override;
 
 private:
-    void AdjustGridColumns( int aWidth );
-
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
-    void OnSizeGrid( wxSizeEvent& event ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -73,7 +70,6 @@ protected:
     std::vector<TEMPLATE_FIELDNAME> m_fields;
     bool                            m_global;        // Editing global (vs. project) fieldname templates
 
-    int                             m_checkboxColWidth;
     TEMPLATES                       m_templateMgrInstance;
 };
 

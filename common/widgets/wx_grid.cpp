@@ -979,3 +979,89 @@ std::pair<EDA_UNITS, EDA_DATA_TYPE> WX_GRID::getColumnUnits( const int aCol ) co
     // Legacy - default always DISTANCE
     return { getUnitsProvider( aCol )->GetUserUnits(), EDA_DATA_TYPE::DISTANCE };
 }
+
+
+void WX_GRID::SetupColumnAutosizer( int aFlexibleCol )
+{
+    const int colCount = GetNumberCols();
+
+    for( int ii = 0; ii < GetNumberCols(); ++ii )
+        m_autosizedCols[ii] = GetColSize( ii );
+
+    m_flexibleCol = aFlexibleCol;
+
+    wxASSERT_MSG( m_flexibleCol < colCount, "Flexible column index does not exist in grid" );
+
+    Bind( wxEVT_UPDATE_UI,
+          [this]( wxUpdateUIEvent& aEvent )
+          {
+              recomputeGridWidths();
+              aEvent.Skip();
+          } );
+
+    Bind( wxEVT_SIZE,
+          [this]( wxSizeEvent& aEvent )
+          {
+              onSizeEvent( aEvent );
+              aEvent.Skip();
+          } );
+
+    // Handles the case when the user changes the cell content to be longer than the current column size
+    Bind( wxEVT_GRID_CELL_CHANGED,
+          [this]( wxGridEvent& aEvent )
+          {
+              m_gridWidthsDirty = true;
+              aEvent.Skip();
+          } );
+}
+
+
+void WX_GRID::recomputeGridWidths()
+{
+    if( m_gridWidthsDirty )
+    {
+        const int width = GetSize().GetX() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+
+        std::optional<int> flexibleMinWidth;
+
+        for( const auto& [colIndex, minWidth] : m_autosizedCols )
+        {
+            if( GetColSize( colIndex ) != 0 )
+            {
+                AutoSizeColumn( colIndex );
+                const int colSize = GetColSize( colIndex );
+
+                int minWidthScaled = FromDIP( minWidth );
+                SetColSize( colIndex, std::max( minWidthScaled, colSize ) );
+
+                if( colIndex == m_flexibleCol )
+                    flexibleMinWidth = minWidthScaled;
+            }
+        }
+
+        // Gather all the widths except the flexi one
+        int nonFlexibleWidth = 0;
+
+        for( int i = 0; i < GetNumberCols(); ++i )
+        {
+            if( i != m_flexibleCol )
+                nonFlexibleWidth += GetColSize( i );
+        }
+
+        if( GetColSize( m_flexibleCol ) != 0 )
+            SetColSize( m_flexibleCol, std::max( flexibleMinWidth.value_or( 0 ), width - nonFlexibleWidth ) );
+
+        // Store the state for next time
+        m_gridWidth = GetSize().GetX();
+        m_gridWidthsDirty = false;
+    }
+}
+
+
+void WX_GRID::onSizeEvent( wxSizeEvent& aEvent )
+{
+    const int width = aEvent.GetSize().GetX();
+
+    if( width != m_gridWidth )
+        m_gridWidthsDirty = true;
+}

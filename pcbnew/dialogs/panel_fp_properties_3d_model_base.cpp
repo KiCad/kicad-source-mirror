@@ -36,8 +36,8 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 
 	// Columns
 	m_modelsGrid->SetColSize( 0, 20 );
-	m_modelsGrid->SetColSize( 1, 650 );
-	m_modelsGrid->SetColSize( 2, 65 );
+	m_modelsGrid->SetColSize( 1, 120 );
+	m_modelsGrid->SetColSize( 2, 48 );
 	m_modelsGrid->EnableDragColMove( false );
 	m_modelsGrid->EnableDragColSize( false );
 	m_modelsGrid->SetColLabelValue( 0, wxEmptyString );
@@ -100,7 +100,6 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	this->Layout();
 
 	// Connect Events
-	this->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnGridSize ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnUpdateUI ) );
 	m_modelsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelSelected ), NULL, this );
@@ -113,7 +112,6 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 PANEL_FP_PROPERTIES_3D_MODEL_BASE::~PANEL_FP_PROPERTIES_3D_MODEL_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnGridSize ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnUpdateUI ) );
 	m_modelsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelSelected ), NULL, this );

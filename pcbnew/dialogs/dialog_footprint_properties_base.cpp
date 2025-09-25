@@ -36,17 +36,17 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_itemsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_itemsGrid->SetColSize( 0, 124 );
-	m_itemsGrid->SetColSize( 1, 60 );
-	m_itemsGrid->SetColSize( 2, 110 );
-	m_itemsGrid->SetColSize( 3, 110 );
-	m_itemsGrid->SetColSize( 4, 110 );
-	m_itemsGrid->SetColSize( 5, 60 );
-	m_itemsGrid->SetColSize( 6, 140 );
-	m_itemsGrid->SetColSize( 7, 110 );
-	m_itemsGrid->SetColSize( 8, 110 );
-	m_itemsGrid->SetColSize( 9, 110 );
-	m_itemsGrid->SetColSize( 10, 110 );
+	m_itemsGrid->SetColSize( 0, 84 );
+	m_itemsGrid->SetColSize( 1, 48 );
+	m_itemsGrid->SetColSize( 2, 84 );
+	m_itemsGrid->SetColSize( 3, 84 );
+	m_itemsGrid->SetColSize( 4, 84 );
+	m_itemsGrid->SetColSize( 5, 48 );
+	m_itemsGrid->SetColSize( 6, 84 );
+	m_itemsGrid->SetColSize( 7, 84 );
+	m_itemsGrid->SetColSize( 8, 48 );
+	m_itemsGrid->SetColSize( 9, 84 );
+	m_itemsGrid->SetColSize( 10, 84 );
 	m_itemsGrid->EnableDragColMove( false );
 	m_itemsGrid->EnableDragColSize( true );
 	m_itemsGrid->SetColLabelValue( 0, _("Text Items") );
@@ -425,7 +425,6 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnInitDlg ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnUpdateUI ) );
 	m_NoteBook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnPageChanging ), NULL, this );
-	m_itemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnGridSize ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnDeleteField ), NULL, this );
 	m_ModPositionX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnText ), NULL, this );
@@ -457,7 +456,6 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::~DIALOG_FOOTPRINT_PROPERTIES_BASE()
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnInitDlg ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnUpdateUI ) );
 	m_NoteBook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnPageChanging ), NULL, this );
-	m_itemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnGridSize ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnDeleteField ), NULL, this );
 	m_ModPositionX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnText ), NULL, this );

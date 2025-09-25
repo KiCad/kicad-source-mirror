@@ -63,7 +63,6 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     m_cbMultiLine->SetValue( multiLine );
 
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_currentLabel );
-    m_width = 100;  // Will be later set to a better value
     m_delayedFocusRow = -1;
     m_delayedFocusColumn = FDC_VALUE;
 
@@ -374,7 +373,6 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, (int) m_fields->size() );
     m_grid->ProcessTableMessage( msg );
-    AdjustGridColumns( m_grid->GetRect().GetWidth() );
 
     if( m_shapeSizer->AreAnyItemsShown() )
     {
@@ -833,24 +831,6 @@ void DIALOG_LABEL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_LABEL_PROPERTIES::AdjustGridColumns( int aWidth )
-{
-    m_width = aWidth;
-    // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
-
-    m_grid->AutoSizeColumn( 0 );
-    m_grid->SetColSize( 0, std::max( 72, m_grid->GetColSize( 0 ) ) );
-
-    int fixedColsWidth = m_grid->GetColSize( 0 );
-
-    for( int i = 2; i < m_grid->GetNumberCols(); i++ )
-        fixedColsWidth += m_grid->GetColSize( i );
-
-    m_grid->SetColSize( 1, std::max( 120, aWidth - fixedColsWidth ) );
-}
-
-
 void DIALOG_LABEL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     std::bitset<64> shownColumns = m_grid->GetShownColumns();
@@ -860,7 +840,7 @@ void DIALOG_LABEL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_grid->IsCellEditControlShown() )
-            AdjustGridColumns( m_grid->GetRect().GetWidth() );
+            m_grid->SetGridWidthsDirty();
     }
 
     // Handle a delayed focus
@@ -873,18 +853,6 @@ void DIALOG_LABEL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     m_delayedFocusRow = -1;
     m_delayedFocusColumn = -1;
-}
-
-
-void DIALOG_LABEL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
-{
-    int new_size = event.GetSize().GetX();
-
-    if( m_width != new_size )
-        AdjustGridColumns( new_size );
-
-    // Always propagate for a grid repaint (needed if the height changes, as well as width)
-    event.Skip();
 }
 
 

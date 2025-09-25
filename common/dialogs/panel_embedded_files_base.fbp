@@ -100,7 +100,7 @@
                 <property name="col_label_values">&quot;Filename&quot; &quot;Embedded Reference&quot;</property>
                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="cols">2</property>
-                <property name="column_sizes">440,180</property>
+                <property name="column_sizes">100,180</property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
                 <property name="default_pane">0</property>
@@ -341,8 +341,8 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+              <property name="border">40</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxCheckBox" expanded="true">
                 <property name="BottomDockable">1</property>

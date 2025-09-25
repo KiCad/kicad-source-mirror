@@ -546,7 +546,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_dataviewctrl.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp
-    widgets/wx_grid_autosizer.cpp
     widgets/wx_html_report_box.cpp
     widgets/wx_listbox.cpp
     widgets/wx_panel.cpp

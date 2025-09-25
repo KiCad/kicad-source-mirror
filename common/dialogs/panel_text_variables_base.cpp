@@ -30,8 +30,8 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->SetMargins( 0, 0 );
 
 	// Columns
-	m_TextVars->SetColSize( 0, 150 );
-	m_TextVars->SetColSize( 1, 454 );
+	m_TextVars->SetColSize( 0, 100 );
+	m_TextVars->SetColSize( 1, 180 );
 	m_TextVars->EnableDragColMove( false );
 	m_TextVars->EnableDragColSize( true );
 	m_TextVars->SetColLabelValue( 0, _("Variable Name") );

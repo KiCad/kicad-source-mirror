@@ -55,7 +55,6 @@
       <property name="window_extra_style"></property>
       <property name="window_name"></property>
       <property name="window_style">wxTAB_TRAVERSAL</property>
-      <event name="OnSize">OnGridSize</event>
       <event name="OnUpdateUI">OnUpdateUI</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
@@ -213,7 +212,7 @@
                       <property name="col_label_values">&quot;&quot; &quot;3D Model(s)&quot; &quot;Show&quot;</property>
                       <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                       <property name="cols">3</property>
-                      <property name="column_sizes">20,650,65</property>
+                      <property name="column_sizes">20,120,48</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
                       <property name="default_pane">0</property>

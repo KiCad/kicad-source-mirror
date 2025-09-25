@@ -46,7 +46,6 @@ class PANEL_TEMPLATE_FIELDNAMES_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_deleteFieldButton;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }

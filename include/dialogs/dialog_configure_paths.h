@@ -34,7 +34,6 @@
 
 
 class HTML_WINDOW;
-class WX_GRID_AUTOSIZER;
 
 
 class DIALOG_CONFIGURE_PATHS: public DIALOG_CONFIGURE_PATHS_BASE
@@ -65,8 +64,6 @@ private:
 
     wxString            m_curdir;
     wxTextValidator     m_aliasValidator;
-
-    std::unique_ptr<WX_GRID_AUTOSIZER> m_gridAutosizer;
 
     HTML_WINDOW*        m_helpBox;
     int                 m_heightBeforeHelp;

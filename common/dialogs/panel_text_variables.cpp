@@ -32,7 +32,6 @@
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/grid_text_helpers.h>
-#include <widgets/wx_grid_autosizer.h>
 
 
 enum TEXT_VAR_GRID_COLUMNS
@@ -84,12 +83,7 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
               }
           } );
 
-    m_autoSizer = std::make_unique<WX_GRID_AUTOSIZER>( *m_TextVars,
-                                                       WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{
-                                                               { TV_NAME_COL, 100 },
-                                                               { TV_VALUE_COL, 120 },
-                                                       },
-                                                       TV_VALUE_COL );
+    m_TextVars->SetupColumnAutosizer( TV_VALUE_COL );
 }
 
 
@@ -246,6 +240,8 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         m_TextVars->EnableCellEditControl( true );
         m_TextVars->ShowCellEditControl();
     }
+
+    event.Skip();
 }
 
 

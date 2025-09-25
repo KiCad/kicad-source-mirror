@@ -334,7 +334,6 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_cbMultiLine->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::onMultiLabelCheck ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnMoveDown ), NULL, this );
@@ -352,7 +351,6 @@ DIALOG_LABEL_PROPERTIES_BASE::~DIALOG_LABEL_PROPERTIES_BASE()
 	m_valueMultiLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_cbMultiLine->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::onMultiLabelCheck ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnAddField ), NULL, this );
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnMoveDown ), NULL, this );

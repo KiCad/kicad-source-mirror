@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_FP_PROPERTIES_3D_MODEL_H_
-#define PANEL_FP_PROPERTIES_3D_MODEL_H_
+#pragma once
 
 #include <footprint.h>
 #include <panel_fp_properties_3d_model_base.h>
@@ -48,13 +47,8 @@ class PANEL_FP_PROPERTIES_3D_MODEL : public PANEL_FP_PROPERTIES_3D_MODEL_BASE
 
 public:
     PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint,
-                                  DIALOG_SHIM* aDialogParent,
-                                  PANEL_EMBEDDED_FILES* aFilesPanel,
-                                  wxWindow* aParent, wxWindowID aId = wxID_ANY,
-                                  const wxPoint& aPos = wxDefaultPosition,
-                                  const wxSize& aSize = wxDefaultSize,
-                                  long aStyle = wxTAB_TRAVERSAL,
-                                  const wxString& aName = wxEmptyString );
+                                  DIALOG_SHIM* aDialogParent, PANEL_EMBEDDED_FILES* aFilesPanel,
+                                  wxWindow* aParent );
 
     ~PANEL_FP_PROPERTIES_3D_MODEL() override;
 
@@ -63,12 +57,7 @@ public:
 
     void ReloadModelsFromFootprint();
 
-    void AdjustGridColumnWidths();
-
-    std::vector<FP_3DMODEL>& GetModelList()
-    {
-        return m_shapes3D_list;
-    }
+    std::vector<FP_3DMODEL>& GetModelList() { return m_shapes3D_list; }
 
 private:
     // virtual event functions
@@ -79,7 +68,6 @@ private:
     void OnAdd3DRow( wxCommandEvent& event ) override;
     void Cfg3DPath( wxCommandEvent& event ) override;
 
-    void OnGridSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void updateValidateStatus( int aRow );
@@ -107,5 +95,3 @@ private:
 
     bool                    m_inSelect;
 };
-
-#endif // PANEL_FP_PROPERTIES_3D_MODEL_H_

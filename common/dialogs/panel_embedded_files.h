@@ -28,8 +28,6 @@
 
 #include "grid_tricks.h"
 
-class WX_GRID_AUTOSIZER;
-
 #define NO_MARGINS 0x0001
 
 
@@ -80,6 +78,4 @@ protected:
 private:
     EMBEDDED_FILES* m_files;
     EMBEDDED_FILES* m_localFiles;
-
-    std::unique_ptr<WX_GRID_AUTOSIZER> m_autoSizer;
 };

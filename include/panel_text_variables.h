@@ -30,7 +30,6 @@
 #include <memory>
 
 class PROJECT;
-class WX_GRID_AUTOSIZER;
 
 
 class PANEL_TEXT_VARIABLES: public PANEL_TEXT_VARIABLES_BASE
@@ -66,6 +65,4 @@ private:
     int                          m_errorCol;
 
     wxTextValidator              m_nameValidator;
-
-    std::unique_ptr<WX_GRID_AUTOSIZER> m_autoSizer;
 };

@@ -39,7 +39,6 @@
 #include <wx/menu.h>
 #include <wx/wfstream.h>
 #include <wx/wupdlock.h>
-#include <widgets/wx_grid_autosizer.h>
 
 /* ---------- GRID_TRICKS for embedded files grid ---------- */
 
@@ -124,11 +123,7 @@ PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* a
     m_files_grid->EnableAlternateRowColors();
 
     m_files_grid->PushEventHandler( new EMBEDDED_FILES_GRID_TRICKS( m_files_grid ) );
-
-    m_autoSizer = std::make_unique<WX_GRID_AUTOSIZER>( *m_files_grid,
-                                                       WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{ { 0, 100 },
-                                                                                          { 1, 200 } },
-                                                       1 );
+    m_files_grid->SetupColumnAutosizer( 1 );
 
     m_localFiles->SetFileAddedCallback(
             [this](EMBEDDED_FILES::EMBEDDED_FILE* file)

@@ -309,8 +309,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
         m_symbol( nullptr ),
         m_part( nullptr ),
-        m_fieldsSize( 0, 0 ),
-        m_lastRequestedFieldsSize( 0, 0 ),
         m_lastRequestedPinsSize( 0, 0 ),
         m_editorShown( false ),
         m_fields( nullptr ),
@@ -470,7 +468,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_fieldsGrid->ProcessTableMessage( msg );
-    AdjustFieldsGridColumns();
 
     // If a multi-unit symbol, set up the unit selector and interchangeable checkbox.
     if( m_symbol->IsMultiUnit() )
@@ -991,25 +988,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_PROPERTIES::AdjustFieldsGridColumns()
-{
-    wxGridUpdateLocker deferRepaintsTillLeavingScope( m_fieldsGrid );
-
-    // Account for scroll bars
-    int fieldsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsGrid ).x;
-
-    m_fieldsGrid->AutoSizeColumn( 0 );
-    m_fieldsGrid->SetColSize( 0, std::max( 72, m_fieldsGrid->GetColSize( 0 ) ) );
-
-    int fixedColsWidth = m_fieldsGrid->GetColSize( 0 );
-
-    for( int i = 2; i < m_fieldsGrid->GetNumberCols(); i++ )
-        fixedColsWidth += m_fieldsGrid->GetColSize( i );
-
-    m_fieldsGrid->SetColSize( 1, std::max( 120, fieldsWidth - fixedColsWidth ) );
-}
-
-
 void DIALOG_SYMBOL_PROPERTIES::AdjustPinsGridColumns()
 {
     wxGridUpdateLocker deferRepaintsTillLeavingScope( m_pinGrid );
@@ -1041,7 +1019,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_fieldsGrid->IsCellEditControlShown() )
-            AdjustFieldsGridColumns();
+            m_fieldsGrid->SetGridWidthsDirty();
     }
 }
 
@@ -1078,26 +1056,6 @@ void DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection( wxCommandEvent& event )
         KIUI::SelectReferenceNumber( txt );
 
     cellEditor->DecRef();   // we're done; must release
-}
-
-void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
-{
-    wxSize new_size = event.GetSize();
-
-    if( ( !m_editorShown || m_lastRequestedFieldsSize != new_size ) && m_fieldsSize != new_size )
-    {
-        m_fieldsSize = new_size;
-
-        AdjustFieldsGridColumns();
-    }
-
-    // We store this value to check whether the dialog is changing size.  This might indicate
-    // that the user is scaling the dialog with a grid-cell-editor shown.  Some editors do not
-    // close (at least on GTK) when the user drags a dialog corner
-    m_lastRequestedFieldsSize = new_size;
-
-    // Always propagate for a grid repaint (needed if the height changes, as well as width)
-    event.Skip();
 }
 
 
