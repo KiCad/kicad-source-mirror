@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 05:55+0000\n"
+"PO-Revision-Date: 2025-09-25 08:04+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1662,7 +1662,7 @@ msgstr "3Dプレビューのオプション"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:415
 msgid "Board thickness:"
-msgstr "基板厚:"
+msgstr "基板の厚さ:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:67 eeschema/sch_bitmap.cpp:195
@@ -7221,7 +7221,7 @@ msgstr "フォント"
 
 #: common/eda_text.cpp:1392
 msgid "Auto Thickness"
-msgstr "自動厚さ"
+msgstr "自動太さ"
 
 #: common/eda_text.cpp:1395 eeschema/sch_field.cpp:1656
 #: eeschema/sch_label.cpp:2486 eeschema/sch_tablecell.cpp:231
@@ -28823,7 +28823,7 @@ msgstr ""
 
 #: kicad/dialogs/template_default_html.h:143
 msgid "You can copy styling from the default pages for consistency."
-msgstr ""
+msgstr "一貫性を保つためにデフォルトのページからスタイルをコピーすることが出来ます。"
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -31430,7 +31430,7 @@ msgstr "配線幅:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:77
 msgid "Track thickness:"
-msgstr "配線の銅箔厚:"
+msgstr "配線の厚さ:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
 msgid "Time to fuse:"
@@ -31511,7 +31511,7 @@ msgstr "黒鉛状炭素"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:31
 msgid "Copper"
-msgstr "銅または導体"
+msgstr "銅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:149
 msgid "Copper-Aluminium"
@@ -31981,7 +31981,7 @@ msgstr "配線の幅 (W):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
 msgid "Track thickness (H):"
-msgstr "配線の銅箔厚 (H):"
+msgstr "配線の厚さ (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
@@ -32732,7 +32732,7 @@ msgstr "ボックスの高さ"
 #: pcb_calculator/transline_ident.cpp:362
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Strip thickness"
-msgstr "銅箔厚"
+msgstr "ストリップの厚さ"
 
 #: pcb_calculator/transline_ident.cpp:134
 #: pcb_calculator/transline_ident.cpp:325
@@ -44365,8 +44365,7 @@ msgstr "フットプリントには基板上にない %lu 個のレイヤーが�
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #, c-format
 msgid "Board has %lu copper layers not in footprint: %s"
-msgstr ""
-"基板にはフットプリント上に存在しない %lu 層の銅または導体層があります: %s"
+msgstr "基板にはフットプリント上に存在しない %lu 個の銅層があります: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:701
 msgid "Footprint types differ."
