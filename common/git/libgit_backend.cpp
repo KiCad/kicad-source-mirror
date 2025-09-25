@@ -39,7 +39,7 @@
 #include "kicad_git_memory.h"
 #include "trace_helpers.h"
 
-#include <git2.h>
+#include "kicad_git_compat.h"
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <gestfich.h>
