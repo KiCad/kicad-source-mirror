@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 08:04+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-26 07:10+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -16943,7 +16943,6 @@ msgid "Prefer symbol unit swaps over label swaps"
 msgstr "Symboleinheits- gegenüber Bezeichner-Tausch vorziehen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
-#, fuzzy
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
@@ -20664,7 +20663,7 @@ msgid "Invalid symbol unit number %s"
 msgstr "Ungültige Symboleinheitnummer %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol body style number %s"
 msgstr "Ungültige Symbolform-Nummer %s"
 
@@ -21254,7 +21253,7 @@ msgid "(Deleted Item)"
 msgstr "(Gelöschtes Element)"
 
 #: eeschema/sch_sheet_pin.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Hierarchischer Schaltplanpin \"%s\""
 
@@ -36019,7 +36018,6 @@ msgid "Run DRC"
 msgstr "DRC starten"
 
 #: pcbnew/dialogs/dialog_drc.cpp:269
-#, fuzzy
 msgid "Report All Errors for Each Track"
 msgstr "Alle Fehler je Leiterbahn melden"
 
@@ -36601,9 +36599,8 @@ msgid "STL files"
 msgstr "STL-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:294
-#, fuzzy
 msgid "Universal 3D files"
-msgstr "Universelle 3D-Dateien"
+msgstr "Universal 3D-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:296
 msgid "PDF files"
@@ -37664,12 +37661,10 @@ msgstr "Abgeschrägtes Rechteck"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:47
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:98
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:263
-#, fuzzy
 msgid "Custom shape"
-msgstr "Individualform"
+msgstr "Benutzerdef. Form"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:52
-#, fuzzy
 msgid "Pad Table"
 msgstr "Pad-Tabelle"
 
@@ -37682,17 +37677,14 @@ msgid "Size Y"
 msgstr "Größe Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:69
-#, fuzzy
 msgid "Drill X"
 msgstr "Bohrung X"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:70
-#, fuzzy
 msgid "Drill Y"
 msgstr "Bohrung Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:71
-#, fuzzy
 msgid "Pad->Die Length"
 msgstr "Pad->Die Länge"
 
@@ -47398,7 +47390,7 @@ msgstr "Abgeschr. Rechteck"
 
 #: pcbnew/pad.cpp:1630
 msgid "CustomShape"
-msgstr "Individualform"
+msgstr "Benutzerdef. Form"
 
 #: pcbnew/pad.cpp:1642
 msgid "Conn"
