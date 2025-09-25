@@ -43,6 +43,7 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS::PANEL_SETUP_TIME_DOMAIN_PARAMETERS(
         m_board( aFrame->GetBoard() )
 {
     m_timeDomainParametersPane->SetBorders( true, false, false, false );
+    m_viaDelayOverridesPane->SetBorders( true, false, false, false );
 
     // Set up units
     m_unitsProvider = std::make_unique<UNITS_PROVIDER>( pcbIUScale, m_frame->GetUserUnits() );

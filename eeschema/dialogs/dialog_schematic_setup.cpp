@@ -138,7 +138,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_EMBEDDED_FILES( aParent, &m_frame->Schematic() );
+                return new PANEL_EMBEDDED_FILES( aParent, &m_frame->Schematic(), NO_MARGINS );
             }, _( "Embedded Files" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )

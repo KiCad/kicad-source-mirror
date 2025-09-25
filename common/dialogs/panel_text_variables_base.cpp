@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,7 +50,7 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	m_TextVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_TextVars->SetMinSize( wxSize( 604,170 ) );
 
-	bSizer3->Add( m_TextVars, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer3->Add( m_TextVars, 1, wxEXPAND|wxBOTTOM, 3 );
 
 	wxBoxSizer* bSizerEnvVarBtns;
 	bSizerEnvVarBtns = new wxBoxSizer( wxHORIZONTAL );
@@ -65,7 +65,7 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	bSizerEnvVarBtns->Add( m_btnDeleteTextVar, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer3->Add( bSizerEnvVarBtns, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer3->Add( bSizerEnvVarBtns, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bPanelSizer->Add( bSizer3, 1, wxEXPAND, 5 );

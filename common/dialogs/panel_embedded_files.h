@@ -21,13 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_EMBEDDED_FILES_H
-#define PANEL_EMBEDDED_FILES_H
+#pragma once
 
 #include <embedded_files.h>
 #include "panel_embedded_files_base.h"
 
 #include "grid_tricks.h"
+
+class WX_GRID_AUTOSIZER;
+
+#define NO_MARGINS 0x0001
+
 
 class EMBEDDED_FILES_GRID_TRICKS : public GRID_TRICKS
 {
@@ -52,10 +56,11 @@ protected:
     int m_curRow;
 };
 
+
 class PANEL_EMBEDDED_FILES : public PANEL_EMBEDDED_FILES_BASE
 {
 public:
-    PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles );
+    PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags = 0 );
     ~PANEL_EMBEDDED_FILES() override;
 
     bool TransferDataFromWindow() override;
@@ -71,15 +76,10 @@ protected:
     void onAddEmbeddedFiles( wxCommandEvent& event ) override;
     void onDeleteEmbeddedFile( wxCommandEvent& event ) override;
     void onExportFiles( wxCommandEvent& event ) override;
-    void onSize( wxSizeEvent& event ) override;
 
 private:
-
-    void resizeGrid();
-
     EMBEDDED_FILES* m_files;
     EMBEDDED_FILES* m_localFiles;
+
+    std::unique_ptr<WX_GRID_AUTOSIZER> m_autoSizer;
 };
-
-
-#endif  // PANEL_EMBEDDED_FILES_H

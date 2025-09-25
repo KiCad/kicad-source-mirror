@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,7 +86,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer4->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bLeftColumn->Add( sbSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bLeftColumn->Add( sbSizer4, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbols") ), wxVERTICAL );
@@ -173,7 +173,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bLeftColumn->Add( sbSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	bPanelSizer->Add( bLeftColumn, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
@@ -317,7 +317,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bRightColumn->Add( sbSizer7, 1, wxEXPAND|wxALL, 5 );
 
 
-	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

@@ -66,8 +66,7 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_TextVars->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
 
     // wxFormBuilder doesn't include this event...
-    m_TextVars->Connect( wxEVT_GRID_CELL_CHANGING,
-                         wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ),
+    m_TextVars->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ),
                          nullptr, this );
 
     Bind( wxEVT_IDLE,
@@ -87,7 +86,7 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
 
     m_autoSizer = std::make_unique<WX_GRID_AUTOSIZER>( *m_TextVars,
                                                        WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{
-                                                               { TV_NAME_COL, 72 },
+                                                               { TV_NAME_COL, 100 },
                                                                { TV_VALUE_COL, 120 },
                                                        },
                                                        TV_VALUE_COL );

@@ -55,24 +55,23 @@
       <property name="window_extra_style"></property>
       <property name="window_name"></property>
       <property name="window_style">wxTAB_TRAVERSAL</property>
-      <event name="OnSize">onSize</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
         <property name="name">bMainSizer</property>
         <property name="orient">wxVERTICAL</property>
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
-          <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="border">3</property>
+          <property name="flag">wxEXPAND|wxBOTTOM</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
-            <property name="name">m_global_sizer</property>
+            <property name="name">m_filesGridSizer</property>
             <property name="orient">wxVERTICAL</property>
-            <property name="permission">none</property>
+            <property name="permission">protected</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
               <property name="proportion">5</property>
               <object class="wxGrid" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -163,14 +162,14 @@
           </object>
         </object>
         <object class="sizeritem" expanded="true">
-          <property name="border">3</property>
+          <property name="border">5</property>
           <property name="flag">wxEXPAND|wxBOTTOM</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
-            <property name="name">bButtonsSizer</property>
+            <property name="name">m_buttonsSizer</property>
             <property name="orient">wxHORIZONTAL</property>
-            <property name="permission">none</property>
+            <property name="permission">protected</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
@@ -492,17 +491,6 @@
                 <event name="OnButtonClick">onExportFiles</event>
               </object>
             </object>
-          </object>
-        </object>
-        <object class="sizeritem" expanded="true">
-          <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
-          <property name="proportion">0</property>
-          <object class="wxBoxSizer" expanded="true">
-            <property name="minimum_size"></property>
-            <property name="name">bSizer4</property>
-            <property name="orient">wxVERTICAL</property>
-            <property name="permission">none</property>
           </object>
         </object>
       </object>

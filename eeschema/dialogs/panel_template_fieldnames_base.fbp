@@ -223,8 +223,8 @@
           </object>
         </object>
         <object class="sizeritem" expanded="true">
-          <property name="border">10</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="border">3</property>
+          <property name="flag">wxEXPAND|wxTOP</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -233,7 +233,7 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
+              <property name="flag">wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -308,7 +308,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
+              <property name="flag">wxBOTTOM|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -383,7 +383,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
+              <property name="flag">wxBOTTOM|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -468,7 +468,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>

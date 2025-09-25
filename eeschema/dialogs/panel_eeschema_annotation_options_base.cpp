@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,6 +21,9 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	m_orderLabel1->Wrap( -1 );
 	bLeftColumn->Add( m_orderLabel1, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
+	m_staticline21 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bLeftColumn->Add( m_staticline21, 0, wxEXPAND|wxTOP, 2 );
+
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
@@ -35,10 +38,10 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	int m_choiceSeparatorRefIdNChoices = sizeof( m_choiceSeparatorRefIdChoices ) / sizeof( wxString );
 	m_choiceSeparatorRefId = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceSeparatorRefIdNChoices, m_choiceSeparatorRefIdChoices, 0 );
 	m_choiceSeparatorRefId->SetSelection( 0 );
-	bSizer5->Add( m_choiceSeparatorRefId, 1, wxLEFT|wxRIGHT, 5 );
+	bSizer5->Add( m_choiceSeparatorRefId, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bLeftColumn->Add( bSizer5, 0, wxEXPAND, 0 );
+	bLeftColumn->Add( bSizer5, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	bLeftColumn->Add( 0, 15, 0, wxEXPAND, 5 );
@@ -48,7 +51,7 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	bLeftColumn->Add( m_orderLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	bLeftColumn->Add( m_staticline2, 0, wxEXPAND|wxTOP, 2 );
 
 
 	bLeftColumn->Add( 0, 5, 0, wxEXPAND, 5 );
@@ -85,7 +88,7 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	bLeftColumn->Add( m_numberingLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	bLeftColumn->Add( m_staticline3, 0, wxEXPAND|wxTOP, 2 );
 
 
 	bLeftColumn->Add( 0, 5, 0, wxEXPAND, 5 );

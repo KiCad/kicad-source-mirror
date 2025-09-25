@@ -39,6 +39,7 @@
 #include <wx/menu.h>
 #include <wx/wfstream.h>
 #include <wx/wupdlock.h>
+#include <widgets/wx_grid_autosizer.h>
 
 /* ---------- GRID_TRICKS for embedded files grid ---------- */
 
@@ -91,15 +92,29 @@ void EMBEDDED_FILES_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 /* ---------- End of GRID_TRICKS for embedded files grid ---------- */
 
 
-PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles ) :
-        PANEL_EMBEDDED_FILES_BASE( parent ),
+PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags ) :
+        PANEL_EMBEDDED_FILES_BASE( aParent ),
         m_files( aFiles ),
         m_localFiles( new EMBEDDED_FILES() )
 {
+    m_files_grid->SetUseNativeColLabels();
+
     for( auto& [name, file] : m_files->EmbeddedFileMap() )
     {
         EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
         m_localFiles->AddFile( newFile );
+    }
+
+    if( aFlags & NO_MARGINS )
+    {
+        m_filesGridSizer->Detach( m_files_grid );
+        m_filesGridSizer->Add( m_files_grid, 5, wxEXPAND, 5 );
+
+        m_buttonsSizer->Detach( m_browse_button );
+        m_buttonsSizer->Prepend( m_browse_button, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+        m_buttonsSizer->Detach( m_export );
+        m_buttonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
     }
 
     // Set up the standard buttons
@@ -109,6 +124,11 @@ PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aF
     m_files_grid->EnableAlternateRowColors();
 
     m_files_grid->PushEventHandler( new EMBEDDED_FILES_GRID_TRICKS( m_files_grid ) );
+
+    m_autoSizer = std::make_unique<WX_GRID_AUTOSIZER>( *m_files_grid,
+                                                       WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{ { 0, 100 },
+                                                                                          { 1, 200 } },
+                                                       1 );
 
     m_localFiles->SetFileAddedCallback(
             [this](EMBEDDED_FILES::EMBEDDED_FILE* file)
@@ -138,32 +158,6 @@ PANEL_EMBEDDED_FILES::~PANEL_EMBEDDED_FILES()
 }
 
 
-void PANEL_EMBEDDED_FILES::onSize( wxSizeEvent& event )
-{
-    resizeGrid();
-}
-
-
-void PANEL_EMBEDDED_FILES::resizeGrid()
-{
-    int panel_width = GetClientRect().GetWidth();
-    int first_width = m_files_grid->GetColSize( 0 );
-    int second_width = m_files_grid->GetColSize( 1 );
-
-    double ratio;
-
-    if( first_width + second_width > 0 )
-        ratio = (double)first_width / (double)( first_width + second_width );
-    else
-        ratio = 0.3;
-
-
-    m_files_grid->SetColSize( 0, panel_width * ratio );
-    m_files_grid->SetColSize( 1, panel_width * ( 1 - ratio ) );
-    Layout();
-}
-
-
 bool PANEL_EMBEDDED_FILES::TransferDataToWindow()
 {
     m_files_grid->ClearGrid();
@@ -183,9 +177,6 @@ bool PANEL_EMBEDDED_FILES::TransferDataToWindow()
     }
 
     m_cbEmbedFonts->SetValue( m_files->GetAreFontsEmbedded() );
-
-    resizeGrid();
-
     return true;
 }
 

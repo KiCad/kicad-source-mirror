@@ -38,14 +38,15 @@ class PANEL_EMBEDDED_FILES_BASE : public wxPanel
 	private:
 
 	protected:
+		wxBoxSizer* m_filesGridSizer;
 		WX_GRID* m_files_grid;
+		wxBoxSizer* m_buttonsSizer;
 		STD_BITMAP_BUTTON* m_browse_button;
 		STD_BITMAP_BUTTON* m_delete_button;
 		wxCheckBox* m_cbEmbedFonts;
 		wxButton* m_export;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onGridRightClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void onAddEmbeddedFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeleteEmbeddedFile( wxCommandEvent& event ) { event.Skip(); }

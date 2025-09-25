@@ -30,7 +30,8 @@
 
 WX_GRID_AUTOSIZER::WX_GRID_AUTOSIZER( wxGrid& aGrid, COL_MIN_WIDTHS aAutosizedCols,
                                       unsigned aFlexibleCol ) :
-        m_grid( aGrid ), m_autosizedCols( std::move( aAutosizedCols ) ),
+        m_grid( aGrid ),
+        m_autosizedCols( std::move( aAutosizedCols ) ),
         m_flexibleCol( aFlexibleCol )
 {
     const int colCount = m_grid.GetNumberCols();
@@ -46,12 +47,14 @@ WX_GRID_AUTOSIZER::WX_GRID_AUTOSIZER( wxGrid& aGrid, COL_MIN_WIDTHS aAutosizedCo
                  [this]( wxUpdateUIEvent& aEvent )
                  {
                      recomputeGridWidths();
+                     aEvent.Skip();
                  } );
 
     m_grid.Bind( wxEVT_SIZE,
                  [this]( wxSizeEvent& aEvent )
                  {
                      onSizeEvent( aEvent );
+                     aEvent.Skip();
                  } );
 
     // Handles the case when the user changes the cell content to be longer than the
@@ -69,8 +72,7 @@ void WX_GRID_AUTOSIZER::recomputeGridWidths()
 {
     if( m_gridWidthsDirty )
     {
-        const int width =
-                m_grid.GetClientRect().GetWidth() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+        const int width = m_grid.GetClientRect().GetWidth() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
 
         std::optional<int> flexibleMinWidth;
 
@@ -114,9 +116,5 @@ void WX_GRID_AUTOSIZER::onSizeEvent( wxSizeEvent& aEvent )
     const int width = aEvent.GetSize().GetX();
 
     if( width != m_gridWidth )
-    {
         m_gridWidthsDirty = true;
-    }
-
-    aEvent.Skip();
 }

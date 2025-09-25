@@ -2731,7 +2731,7 @@
                       </object>
                       <object class="sizeritem" expanded="false">
                         <property name="border">2</property>
-                        <property name="flag">wxEXPAND|wxTOP</property>
+                        <property name="flag">wxEXPAND</property>
                         <property name="proportion">0</property>
                         <object class="wxStaticLine" expanded="false">
                           <property name="BottomDockable">1</property>

@@ -236,7 +236,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_treebook->AddLazySubPage(
                 [this]( wxWindow* aParent ) -> wxWindow*
                 {
-                    return new PANEL_EMBEDDED_FILES( aParent, m_frame->GetBoard() );
+                    return new PANEL_EMBEDDED_FILES( aParent, m_frame->GetBoard(), NO_MARGINS );
                 },
                 _( "Embedded Files" ) );
 

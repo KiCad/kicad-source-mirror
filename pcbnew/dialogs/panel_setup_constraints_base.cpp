@@ -206,7 +206,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	fgFeatureConstraints->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	m_staticline6 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgFeatureConstraints->Add( m_staticline6, 0, wxEXPAND|wxTOP, 2 );
+	fgFeatureConstraints->Add( m_staticline6, 0, wxEXPAND, 2 );
 
 	m_bitmapMinViaDrill = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaDrill, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );

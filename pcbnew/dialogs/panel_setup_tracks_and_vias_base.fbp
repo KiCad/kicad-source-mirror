@@ -62,7 +62,7 @@
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxRIGHT</property>
+          <property name="flag">wxEXPAND</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -133,7 +133,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
+              <property name="flag">wxEXPAND|wxRIGHT</property>
               <property name="proportion">1</property>
               <object class="wxGrid" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -162,7 +162,7 @@
                 <property name="col_label_values">&quot;Width&quot;</property>
                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="cols">1</property>
-                <property name="column_sizes"></property>
+                <property name="column_sizes">120</property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
                 <property name="default_pane">0</property>
@@ -206,7 +206,7 @@
                 <property name="resize">Resizable</property>
                 <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
                 <property name="row_label_size">0</property>
-                <property name="row_label_values">&quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;6&quot; &quot;7&quot; &quot;8&quot;</property>
+                <property name="row_label_values"></property>
                 <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="row_sizes"></property>
                 <property name="rows">8</property>
@@ -221,7 +221,7 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">2</property>
+              <property name="border">3</property>
               <property name="flag">wxEXPAND|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxBoxSizer" expanded="true">
@@ -231,7 +231,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
+                  <property name="flag">wxBOTTOM|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxBitmapButton" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -380,17 +380,7 @@
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
-                  <property name="border">5</property>
-                  <property name="flag">wxEXPAND</property>
-                  <property name="proportion">0</property>
-                  <object class="spacer" expanded="true">
-                    <property name="height">0</property>
-                    <property name="permission">protected</property>
-                    <property name="width">20</property>
-                  </object>
-                </object>
-                <object class="sizeritem" expanded="true">
-                  <property name="border">5</property>
+                  <property name="border">25</property>
                   <property name="flag">wxLEFT|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxBitmapButton" expanded="true">
@@ -470,7 +460,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxRIGHT</property>
+          <property name="flag">wxEXPAND</property>
           <property name="proportion">2</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -541,7 +531,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
+              <property name="flag">wxEXPAND|wxRIGHT</property>
               <property name="proportion">1</property>
               <object class="wxGrid" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -570,7 +560,7 @@
                 <property name="col_label_values">&quot;Diameter&quot; &quot;Hole&quot;</property>
                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="cols">2</property>
-                <property name="column_sizes"></property>
+                <property name="column_sizes">120,120</property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
                 <property name="default_pane">0</property>
@@ -614,7 +604,7 @@
                 <property name="resize">Resizable</property>
                 <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
                 <property name="row_label_size">0</property>
-                <property name="row_label_values">&quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;6&quot; &quot;7&quot; &quot;8&quot;</property>
+                <property name="row_label_values"></property>
                 <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="row_sizes"></property>
                 <property name="rows">8</property>
@@ -629,7 +619,7 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">2</property>
+              <property name="border">3</property>
               <property name="flag">wxEXPAND|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxBoxSizer" expanded="true">
@@ -639,7 +629,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
+                  <property name="flag">wxBOTTOM|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxBitmapButton" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -949,7 +939,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
+              <property name="flag">wxEXPAND</property>
               <property name="proportion">1</property>
               <object class="wxGrid" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -978,7 +968,7 @@
                 <property name="col_label_values">&quot;Width&quot; &quot;Gap&quot; &quot;Via Gap&quot;</property>
                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="cols">3</property>
-                <property name="column_sizes"></property>
+                <property name="column_sizes">120,120,120</property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
                 <property name="default_pane">0</property>
@@ -1022,7 +1012,7 @@
                 <property name="resize">Resizable</property>
                 <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
                 <property name="row_label_size">0</property>
-                <property name="row_label_values">&quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;6&quot; &quot;7&quot; &quot;8&quot;</property>
+                <property name="row_label_values"></property>
                 <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                 <property name="row_sizes"></property>
                 <property name="rows">8</property>
@@ -1037,7 +1027,7 @@
               </object>
             </object>
             <object class="sizeritem" expanded="true">
-              <property name="border">2</property>
+              <property name="border">3</property>
               <property name="flag">wxEXPAND|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxBoxSizer" expanded="true">
@@ -1047,7 +1037,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
+                  <property name="flag">wxBOTTOM|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxBitmapButton" expanded="true">
                     <property name="BottomDockable">1</property>

@@ -35,6 +35,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_trackWidthsGrid->SetMargins( 0, 0 );
 
 	// Columns
+	m_trackWidthsGrid->SetColSize( 0, 120 );
 	m_trackWidthsGrid->EnableDragColMove( false );
 	m_trackWidthsGrid->EnableDragColSize( false );
 	m_trackWidthsGrid->SetColLabelValue( 0, _("Width") );
@@ -43,14 +44,6 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Rows
 	m_trackWidthsGrid->EnableDragRowSize( false );
-	m_trackWidthsGrid->SetRowLabelValue( 0, _("1") );
-	m_trackWidthsGrid->SetRowLabelValue( 1, _("2") );
-	m_trackWidthsGrid->SetRowLabelValue( 2, _("3") );
-	m_trackWidthsGrid->SetRowLabelValue( 3, _("4") );
-	m_trackWidthsGrid->SetRowLabelValue( 4, _("5") );
-	m_trackWidthsGrid->SetRowLabelValue( 5, _("6") );
-	m_trackWidthsGrid->SetRowLabelValue( 6, _("7") );
-	m_trackWidthsGrid->SetRowLabelValue( 7, _("8") );
 	m_trackWidthsGrid->SetRowLabelSize( 0 );
 	m_trackWidthsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -58,28 +51,25 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_trackWidthsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bSizerTracks->Add( m_trackWidthsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerTracks->Add( m_trackWidthsGrid, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_trackWidthsAddButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3->Add( m_trackWidthsAddButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizer3->Add( m_trackWidthsAddButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_trackWidthsSortButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer3->Add( m_trackWidthsSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
-
-	bSizer3->Add( 20, 0, 0, wxEXPAND, 5 );
-
 	m_trackWidthsRemoveButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3->Add( m_trackWidthsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
+	bSizer3->Add( m_trackWidthsRemoveButton, 0, wxLEFT|wxRIGHT, 25 );
 
 
-	bSizerTracks->Add( bSizer3, 0, wxEXPAND|wxTOP, 2 );
+	bSizerTracks->Add( bSizer3, 0, wxEXPAND|wxTOP, 3 );
 
 
-	bMainSizer->Add( bSizerTracks, 1, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( bSizerTracks, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerVias;
 	bSizerVias = new wxBoxSizer( wxVERTICAL );
@@ -99,6 +89,8 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_viaSizesGrid->SetMargins( 0, 0 );
 
 	// Columns
+	m_viaSizesGrid->SetColSize( 0, 120 );
+	m_viaSizesGrid->SetColSize( 1, 120 );
 	m_viaSizesGrid->EnableDragColMove( false );
 	m_viaSizesGrid->EnableDragColSize( false );
 	m_viaSizesGrid->SetColLabelValue( 0, _("Diameter") );
@@ -108,14 +100,6 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Rows
 	m_viaSizesGrid->EnableDragRowSize( false );
-	m_viaSizesGrid->SetRowLabelValue( 0, _("1") );
-	m_viaSizesGrid->SetRowLabelValue( 1, _("2") );
-	m_viaSizesGrid->SetRowLabelValue( 2, _("3") );
-	m_viaSizesGrid->SetRowLabelValue( 3, _("4") );
-	m_viaSizesGrid->SetRowLabelValue( 4, _("5") );
-	m_viaSizesGrid->SetRowLabelValue( 5, _("6") );
-	m_viaSizesGrid->SetRowLabelValue( 6, _("7") );
-	m_viaSizesGrid->SetRowLabelValue( 7, _("8") );
 	m_viaSizesGrid->SetRowLabelSize( 0 );
 	m_viaSizesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -123,13 +107,13 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_viaSizesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bSizerVias->Add( m_viaSizesGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerVias->Add( m_viaSizesGrid, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_viaSizesAddButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer4->Add( m_viaSizesAddButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizer4->Add( m_viaSizesAddButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_viaSizesSortButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer4->Add( m_viaSizesSortButton, 0, wxRIGHT|wxLEFT, 5 );
@@ -141,10 +125,10 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer4->Add( m_viaSizesRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerVias->Add( bSizer4, 0, wxEXPAND|wxTOP, 2 );
+	bSizerVias->Add( bSizer4, 0, wxEXPAND|wxTOP, 3 );
 
 
-	bMainSizer->Add( bSizerVias, 2, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( bSizerVias, 2, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerDiffPairs;
 	bSizerDiffPairs = new wxBoxSizer( wxVERTICAL );
@@ -164,6 +148,9 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_diffPairsGrid->SetMargins( 0, 0 );
 
 	// Columns
+	m_diffPairsGrid->SetColSize( 0, 120 );
+	m_diffPairsGrid->SetColSize( 1, 120 );
+	m_diffPairsGrid->SetColSize( 2, 120 );
 	m_diffPairsGrid->EnableDragColMove( false );
 	m_diffPairsGrid->EnableDragColSize( false );
 	m_diffPairsGrid->SetColLabelValue( 0, _("Width") );
@@ -174,14 +161,6 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Rows
 	m_diffPairsGrid->EnableDragRowSize( false );
-	m_diffPairsGrid->SetRowLabelValue( 0, _("1") );
-	m_diffPairsGrid->SetRowLabelValue( 1, _("2") );
-	m_diffPairsGrid->SetRowLabelValue( 2, _("3") );
-	m_diffPairsGrid->SetRowLabelValue( 3, _("4") );
-	m_diffPairsGrid->SetRowLabelValue( 4, _("5") );
-	m_diffPairsGrid->SetRowLabelValue( 5, _("6") );
-	m_diffPairsGrid->SetRowLabelValue( 6, _("7") );
-	m_diffPairsGrid->SetRowLabelValue( 7, _("8") );
 	m_diffPairsGrid->SetRowLabelSize( 0 );
 	m_diffPairsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -190,13 +169,13 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	// Cell Defaults
 	m_diffPairsGrid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_diffPairsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bSizerDiffPairs->Add( m_diffPairsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerDiffPairs->Add( m_diffPairsGrid, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_diffPairsAddButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer5->Add( m_diffPairsAddButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizer5->Add( m_diffPairsAddButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_diffPairsSortButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_diffPairsSortButton, 0, wxRIGHT|wxLEFT, 5 );
@@ -208,7 +187,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer5->Add( m_diffPairsRemoveButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerDiffPairs->Add( bSizer5, 0, wxEXPAND|wxTOP, 2 );
+	bSizerDiffPairs->Add( bSizer5, 0, wxEXPAND|wxTOP, 3 );
 
 
 	bMainSizer->Add( bSizerDiffPairs, 3, wxEXPAND, 5 );

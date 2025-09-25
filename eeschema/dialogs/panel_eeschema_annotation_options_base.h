@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,9 +17,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -47,6 +47,7 @@ class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxStaticText* m_orderLabel1;
+		wxStaticLine* m_staticline21;
 		wxStaticText* m_staticText6;
 		wxChoice* m_choiceSeparatorRefId;
 		wxStaticText* m_orderLabel;

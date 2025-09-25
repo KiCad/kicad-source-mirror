@@ -82,7 +82,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer->Add( m_addButton, 0, wxBOTTOM|wxLEFT, 2 );
+	buttonBoxSizer->Add( m_addButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_moveUpButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_moveUpButton, 0, wxBOTTOM|wxLEFT, 5 );
@@ -101,13 +101,16 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
-	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
+	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
+
+	buttonBoxSizer->Add( 10, 0, 0, wxEXPAND, 5 );
 
 	m_importColorsButton = new wxButton( m_netclassesPane, wxID_ANY, _("Import colors from schematic"), wxDefaultPosition, wxDefaultSize, 0 );
-	buttonBoxSizer->Add( m_importColorsButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	buttonBoxSizer->Add( m_importColorsButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 
 	m_netclassesPane->SetSizer( bUpperSizer );
@@ -116,9 +119,6 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_membershipPane = new WX_PANEL( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
-
-
-	bLowerSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_staticText5 = new wxStaticText( m_membershipPane, wxID_ANY, _("Netclass Assignments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
@@ -173,7 +173,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addAssignmentButton = new STD_BITMAP_BUTTON( m_membershipPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer1->Add( m_addAssignmentButton, 0, wxLEFT, 2 );
+	buttonBoxSizer1->Add( m_addAssignmentButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	buttonBoxSizer1->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -182,7 +182,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer1->Add( m_removeAssignmentButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bLowerSizer->Add( buttonBoxSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bLowerSizer->Add( buttonBoxSizer1, 0, wxEXPAND|wxTOP, 3 );
 
 
 	m_membershipPane->SetSizer( bLowerSizer );

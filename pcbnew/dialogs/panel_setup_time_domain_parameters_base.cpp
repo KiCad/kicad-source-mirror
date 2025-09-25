@@ -67,7 +67,7 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE::PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addDelayProfileButton = new STD_BITMAP_BUTTON( m_timeDomainParametersPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer->Add( m_addDelayProfileButton, 0, wxLEFT, 2 );
+	buttonBoxSizer->Add( m_addDelayProfileButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	buttonBoxSizer->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -79,24 +79,24 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE::PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE
 	buttonBoxSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
 
-	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP, 3 );
 
 
 	m_timeDomainParametersPane->SetSizer( bUpperSizer );
 	m_timeDomainParametersPane->Layout();
 	bUpperSizer->Fit( m_timeDomainParametersPane );
-	m_timeDomainParametersPane1 = new WX_PANEL( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_viaDelayOverridesPane = new WX_PANEL( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bUpperSizer1;
 	bUpperSizer1 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText31 = new wxStaticText( m_timeDomainParametersPane1, wxID_ANY, _("Via Delay Overrides"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31 = new wxStaticText( m_viaDelayOverridesPane, wxID_ANY, _("Via Delay Overrides"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText31->Wrap( -1 );
 	bUpperSizer1->Add( m_staticText31, 0, wxTOP|wxLEFT|wxEXPAND, 8 );
 
 
 	bUpperSizer1->Add( 0, 3, 0, wxEXPAND, 5 );
 
-	m_viaPropagationGrid = new WX_GRID( m_timeDomainParametersPane1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
+	m_viaPropagationGrid = new WX_GRID( m_viaDelayOverridesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
 	m_viaPropagationGrid->CreateGrid( 0, 6 );
@@ -131,26 +131,26 @@ PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE::PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE
 	wxBoxSizer* buttonBoxSizer1;
 	buttonBoxSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addViaOverrideButton = new STD_BITMAP_BUTTON( m_timeDomainParametersPane1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer1->Add( m_addViaOverrideButton, 0, wxLEFT, 2 );
+	m_addViaOverrideButton = new STD_BITMAP_BUTTON( m_viaDelayOverridesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	buttonBoxSizer1->Add( m_addViaOverrideButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	buttonBoxSizer1->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_removeViaOverrideButton = new STD_BITMAP_BUTTON( m_timeDomainParametersPane1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_removeViaOverrideButton = new STD_BITMAP_BUTTON( m_viaDelayOverridesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer1->Add( m_removeViaOverrideButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	buttonBoxSizer1->Add( 20, 0, 0, wxEXPAND, 5 );
 
 
-	bUpperSizer1->Add( buttonBoxSizer1, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bUpperSizer1->Add( buttonBoxSizer1, 0, wxEXPAND|wxTOP, 3 );
 
 
-	m_timeDomainParametersPane1->SetSizer( bUpperSizer1 );
-	m_timeDomainParametersPane1->Layout();
-	bUpperSizer1->Fit( m_timeDomainParametersPane1 );
-	m_splitter->SplitHorizontally( m_timeDomainParametersPane, m_timeDomainParametersPane1, -1 );
+	m_viaDelayOverridesPane->SetSizer( bUpperSizer1 );
+	m_viaDelayOverridesPane->Layout();
+	bUpperSizer1->Fit( m_viaDelayOverridesPane );
+	m_splitter->SplitHorizontally( m_timeDomainParametersPane, m_viaDelayOverridesPane, -1 );
 	bMargins->Add( m_splitter, 1, wxEXPAND, 10 );
 
 

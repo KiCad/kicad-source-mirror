@@ -62,26 +62,26 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer10->Add( m_addFieldButton, 0, wxBOTTOM, 5 );
 
 	m_bpMoveUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveUp->SetToolTip( _("Move up") );
 
-	bSizer10->Add( m_bpMoveUp, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer10->Add( m_bpMoveUp, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_bpMoveDown = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveDown->SetToolTip( _("Move down") );
 
-	bSizer10->Add( m_bpMoveDown, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer10->Add( m_bpMoveDown, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_deleteFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer10->Add( m_deleteFieldButton, 0, wxALL, 5 );
+	bSizer10->Add( m_deleteFieldButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( bSizer10, 0, wxEXPAND, 10 );
+	bPanelSizer->Add( bSizer10, 0, wxEXPAND|wxTOP, 3 );
 
 
 	this->SetSizer( bPanelSizer );

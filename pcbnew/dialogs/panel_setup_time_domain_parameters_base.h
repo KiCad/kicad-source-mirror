@@ -46,7 +46,7 @@ class PANEL_SETUP_TIME_DOMAIN_PARAMETERS_BASE : public wxPanel
 		WX_GRID* m_tracePropagationGrid;
 		STD_BITMAP_BUTTON* m_addDelayProfileButton;
 		STD_BITMAP_BUTTON* m_removeDelayProfileButton;
-		WX_PANEL* m_timeDomainParametersPane1;
+		WX_PANEL* m_viaDelayOverridesPane;
 		wxStaticText* m_staticText31;
 		WX_GRID* m_viaPropagationGrid;
 		STD_BITMAP_BUTTON* m_addViaOverrideButton;
