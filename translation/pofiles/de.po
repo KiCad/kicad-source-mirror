@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-24 11:53+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-25 05:55+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7925,7 +7925,6 @@ msgid "Could not lookup commit '%s'"
 msgstr "Konnte Commit \"%s\" nicht finden"
 
 #: common/git/libgit_backend.cpp:1054
-#, fuzzy
 msgid "Merge failed"
 msgstr "Merge fehlgeschlagen"
 
@@ -7934,14 +7933,12 @@ msgid "Rebase failed to start"
 msgstr "Start des Rebase fehlgeschlagen"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase commit failed"
 msgstr "Rebase-Commit fehlgeschlagen"
 
 #: common/git/libgit_backend.cpp:1093
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "Rebase-Abschluß fehlgeschlagen"
+msgstr "Rebase-Abschluss fehlgeschlagen"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -8906,7 +8903,6 @@ msgid "DRC errors"
 msgstr "DRC-Fehler"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC shapes"
 msgstr "DRC-Formen"
 
@@ -9093,77 +9089,64 @@ msgid "There are no notifications available"
 msgstr "Es sind keine Benachrichtigungen verfügbar"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:49
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "A 8.5x11in"
+msgstr "A 8.5 x 11in"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17in"
+msgstr "B 11 x 17in"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22in"
+msgstr "C 17 x 22in"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34in"
+msgstr "D 22 x 34in"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44in"
+msgstr "E 34 x 44in"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "Benutzerdefiniert"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8.5x11in"
+msgstr "USLetter 8.5 x 11in"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8.5x14in"
+msgstr "USLegal 8.5 x 14in"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11x17in"
+msgstr "USLedger 11 x 17in"
 
 #: common/pgm_base.cpp:224
 msgid "No default editor found, you must choose one."
@@ -12759,19 +12742,16 @@ msgstr ""
 "unvollständig sein."
 
 #: eeschema/dialogs/dialog_erc.cpp:221 pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Ausgewählte Elemente"
+msgstr "Ausgewählte Elemente kreuzreferenzieren"
 
 #: eeschema/dialogs/dialog_erc.cpp:222
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
 msgstr ""
-"Elemente entsprechend der Auswahl in der ERC-Liste auf der Zeichenfläche "
-"hervorheben"
+"Entsprechende Elemente auf Zeichenfläche hervorheben, wenn in ERC-Liste "
+"ausgewählt"
 
 #: eeschema/dialogs/dialog_erc.cpp:226 pcbnew/dialogs/dialog_drc.cpp:281
-#, fuzzy
 msgid "Center on Cross-probe"
 msgstr "Auf Kreuzreferenzierung zentrieren"
 
@@ -14127,13 +14107,11 @@ msgstr "Datenblatt im Browser anzeigen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:432
-#, fuzzy
 msgid "Expand left panel"
 msgstr "Linkes Panel erweitern"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:397
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:437
-#, fuzzy
 msgid "Collapse left panel"
 msgstr "Linkes Panel einklappen"
 
@@ -16365,28 +16343,24 @@ msgstr ""
 "Symbole mit dieser Markierung werden niemals exportiert."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
-#, fuzzy
 msgid "Highlight on Cross-probe"
 msgstr "Bei Kreuzreferenzierung hervorheben"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:951
-#, fuzzy
 msgid "Highlight corresponding item on canvas when it is selected in the table"
 msgstr ""
-"Elemente entsprechend der Auswahl in der Tabelle auf der Zeichenfläche "
-"hervorheben"
+"Entsprechende Elemente auf Zeichenfläche hervorheben, wenn in Tabelle "
+"ausgewählt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
-#, fuzzy
 msgid "Select on Cross-probe"
 msgstr "Bei Kreuzreferenzierung auswählen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
-#, fuzzy
 msgid "Select corresponding item on canvas when it is selected in the table"
 msgstr ""
-"Element entsprechend der Auswahl in der Tabelle auf der Zeichenfläche "
-"auswählen"
+"Entsprechendes Element auf Zeichenfläche auswählen, wenn in Tabelle "
+"ausgewählt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1142
 msgid "The Quantity column cannot be grouped by."
@@ -16974,8 +16948,8 @@ msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
-"Wenn möglich, Gatter-Tausch von Footprints erkennen und entsprechenden "
-"Einheiten-Tausch von Symbolen anwenden, anstatt Netzbezeichnungen zu ändern."
+"Wenn möglich, Gatter-Tausch von Footprints erkennen und entsprechende "
+"Symboleinheiten tauschen, anstatt Netzbezeichnungen zu ändern."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -19210,7 +19184,6 @@ msgid "Missing field in schematic symbol: %s."
 msgstr "Fehlendes Feld in Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1813
-#, fuzzy
 msgid "Footprint filter count differs."
 msgstr "Anzahl der Footprint-Filter weicht ab."
 
@@ -19728,12 +19701,10 @@ msgid "Transform Offset Y"
 msgstr "Offset Y transformieren"
 
 #: eeschema/sch_bus_entry.cpp:420
-#, fuzzy
 msgid "Bus to wire entry"
 msgstr "\"Bus zu Verbindung\"-Zugang"
 
 #: eeschema/sch_bus_entry.cpp:426
-#, fuzzy
 msgid "Bus to bus entry"
 msgstr "\"Bus zu Bus\"-Zugang"
 
@@ -20508,11 +20479,9 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "Kann nicht mit %s verbinden. Fehler: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving data from HTTP library %s: %s"
-msgstr ""
-"Fehler aufgetreten beim Herunterladen von Daten aus der HTTP Bibliothek %s: "
-"%s"
+msgstr "Fehler beim Herunterladen von Daten aus der HTTP-Bibliothek %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:45
 msgid "KiCad HTTP library files"
@@ -21250,9 +21219,9 @@ msgid "Exclude from"
 msgstr "Ausschließen von"
 
 #: eeschema/sch_sheet.cpp:1174
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet '%s'"
-msgstr "Hierarchisches Schaltplanblatt\" %s\""
+msgstr "Hierarchisches Schaltplanblatt \"%s\""
 
 #: eeschema/sch_sheet.cpp:1678 eeschema/sch_table.cpp:534
 #: pcbnew/pcb_table.cpp:682 pcbnew/pcb_tablecell.cpp:234
@@ -24540,24 +24509,21 @@ msgid "Swap positions of selected items"
 msgstr "Positionen ausgewählter Elemente tauschen"
 
 #: eeschema/tools/sch_actions.cpp:776 eeschema/tools/sch_edit_tool.cpp:1620
-#, fuzzy
 msgid "Swap Pin Labels"
 msgstr "Pin-Bezeichner tauschen"
 
 #: eeschema/tools/sch_actions.cpp:777
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "Tausche die Bezeichner, welche an selektierten Pins hängen"
+msgstr "Tausche die zu den ausgewählten Pins gehörigen Bezeichner"
 
 #: eeschema/tools/sch_actions.cpp:783 eeschema/tools/sch_edit_tool.cpp:1701
 #, fuzzy
 msgid "Swap Unit Labels"
-msgstr "Bezeichner von Einheiten tauschen"
+msgstr "Einheiten-Bezeichner tauschen"
 
 #: eeschema/tools/sch_actions.cpp:784
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "Tausche Bezeichner zwischen ausgewählten Einheiten"
+msgstr "Tausche Bezeichner ausgewählter Einheiten"
 
 #: eeschema/tools/sch_actions.cpp:800
 msgid "Edit Reference Designator..."
@@ -25584,22 +25550,20 @@ msgid "Mirror"
 msgstr "Spiegeln"
 
 #: eeschema/tools/sch_edit_tool.cpp:1596
-#, fuzzy
 msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
 msgstr ""
-"Jeder selektierte Pin muß genau einen verbundenen Netzbezeichner und keine "
-"anderen Pinverbindungen haben."
+"Jeder selektierte Pin muss genau einen verbundenen Netzbezeichner und keine "
+"anderen Verbindungen haben."
 
 #: eeschema/tools/sch_edit_tool.cpp:1652
-#, fuzzy
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
 msgstr ""
-"Jeder Pin von selektierten Einheiten muß genau einen verbundenen "
-"Netzbezeichner und keine anderen Pinverbindungen haben."
+"Jeder Pin von selektierten Einheiten muss genau einen verbundenen "
+"Netzbezeichner und keine anderen Verbindungen haben."
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid "Label value cannot go below zero"
@@ -26286,19 +26250,16 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider.cpp:140
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Single Run"
 msgstr "Einzelner Durchlauf"
 
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Multi Run"
 msgstr "Mehrere Durchläufe"
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
-#, fuzzy
 msgid "Steps"
 msgstr "Schritte"
 
@@ -36063,7 +36024,6 @@ msgid "Report All Errors for Each Track"
 msgstr "Alle Fehler je Leiterbahn melden"
 
 #: pcbnew/dialogs/dialog_drc.cpp:270
-#, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
 msgstr ""
 "Falls nicht aktiviert, wird für jede Leiterbahn nur der erste Fehler "
@@ -53080,7 +53040,6 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1452 pcbnew/tools/pcb_actions.cpp:1462
 #: pcbnew/tools/pcb_actions.cpp:1472 pcbnew/tools/pcb_actions.cpp:1482
-#, fuzzy
 msgid "Line Modes"
 msgstr "Linienmodi"
 
