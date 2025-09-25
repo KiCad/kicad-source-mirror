@@ -977,12 +977,12 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
         {
             field.ClearRenderCache();
             field.Plot( aPlotter, false, aPlotOpts, sym->GetUnit(), sym->GetBodyStyle(), { 0, 0 },
-                        sym->GetDNP() );
+                        static_cast<const SYMBOL*>( sym )->GetDNP() );
         }
 
         sym->PlotPins( aPlotter );
 
-        if( sym->GetDNP() )
+        if( static_cast<const SYMBOL*>( sym )->GetDNP() )
             sym->PlotDNP( aPlotter );
     }
 
@@ -1755,6 +1755,80 @@ bool SCH_SCREEN::InProjectPath() const
 }
 
 
+std::set<wxString> SCH_SCREEN::GetVariantNames() const
+{
+    std::set<wxString> variantNames;
+
+    for( const SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        const std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = symbol->GetInstances();
+
+        for( const SCH_SYMBOL_INSTANCE& instance : symbolInstances )
+        {
+            for( const auto& [name, variant] : instance.m_Variants )
+                variantNames.emplace( name );
+        }
+    }
+
+    for( const SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    {
+        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( item );
+
+        wxCHECK2( sheet, continue );
+
+        const std::vector<SCH_SHEET_INSTANCE> sheetInstances = sheet->GetInstances();
+
+        for( const SCH_SHEET_INSTANCE& instance : sheetInstances )
+        {
+            for( const auto& [name, variant] : instance.m_Variants )
+                variantNames.emplace( name );
+        }
+    }
+
+    return variantNames;
+}
+
+
+void SCH_SCREEN::DeleteVariant( const wxString& aVariantName )
+{
+    wxCHECK( !aVariantName.IsEmpty(), /* void */ );
+
+    for( const SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = symbol->GetInstances();
+
+        for( SCH_SYMBOL_INSTANCE& instance : symbolInstances )
+        {
+            if( instance.m_Variants.contains( aVariantName ) )
+                instance.m_Variants.erase( aVariantName );
+        }
+    }
+
+    for( const SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    {
+        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( item );
+
+        wxCHECK2( sheet, continue );
+
+        std::vector<SCH_SHEET_INSTANCE> sheetInstances = sheet->GetInstances();
+
+        for( SCH_SHEET_INSTANCE& instance : sheetInstances )
+        {
+            if( instance.m_Variants.contains( aVariantName ) )
+                instance.m_Variants.erase( aVariantName );
+        }
+    }
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -1841,7 +1915,8 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
     {
         SCH_SCREEN* screen = aSheet->GetScreen();
 
-        wxCHECK_RET( screen, "No screen for aSheet" );
+        if( !screen )
+            return;
 
         addScreenToList( screen, aSheet );
 
@@ -2184,4 +2259,27 @@ bool SCH_SCREENS::HasSymbolFieldNamesWithWhiteSpace() const
     }
 
     return false;
+}
+
+
+std::set<wxString> SCH_SCREENS::GetVariantNames() const
+{
+    std::set<wxString> variantNames;
+
+    for( const SCH_SCREEN* screen : m_screens )
+    {
+        for( const wxString& variantName : screen->GetVariantNames() )
+            variantNames.emplace( variantName );
+    }
+
+    return variantNames;
+}
+
+
+void SCH_SCREENS::DeleteVariant( const wxString& aVariantName )
+{
+    wxCHECK( !aVariantName.IsEmpty(), /* void */ );
+
+    for( SCH_SCREEN* screen : m_screens )
+        screen->DeleteVariant( aVariantName );
 }

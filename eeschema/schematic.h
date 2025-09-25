@@ -422,6 +422,32 @@ public:
     void CreateDefaultScreens();
 
     /**
+     * Return an array of variant names for using in wxWidgets UI controls.
+     *
+     * Most wxWidgets UI controls that support multiple entries take a wxArrayString as an argument.  This
+     * is a convenience method so it's not necessary to convert a std::set<wxString> to a wxArrayString at
+     * the point of use.
+     *
+     * @note This also adds the pseudo "<default>" entry  to the beginning of the array followed by all other
+     *       variant names sorted using the #StrNumCmp function.
+     */
+    wxArrayString GetVariantNamesForUI() const;
+
+    /**
+     * Return the current variant being edited.
+     *
+     * @return the name of the current variant being edited.  An empty string is the default variant.
+     */
+    wxString GetCurrentVariant() const;
+
+    /**
+     * Delete all information for @a aVariantName.
+     *
+     * @param aVariantName is the name of the variant to remove.
+     */
+    void DeleteVariant( const wxString& aVariantName );
+
+    /**
      * True if a SCHEMATIC exists, false if not
      */
     static bool m_IsSchematicExists;
@@ -496,6 +522,10 @@ private:
     void updateProjectBusAliases();
 
     std::vector<std::shared_ptr<BUS_ALIAS>> m_busAliases;
+
+    wxString m_currentVariant;
+
+    std::set<wxString> m_variantNames;
 };
 
 #endif

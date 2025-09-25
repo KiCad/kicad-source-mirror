@@ -49,6 +49,8 @@
  */
 static const char illegalFileNameChars[] = "\\/:\"<>|*?";
 
+static const wxChar defaultVariantName[] = wxT( "< Default >" );
+
 
 // Checks if a full filename is valid, i.e. does not contains illegal chars
 bool IsFullFileNameValid( const wxString& aFullFilename )
@@ -1625,3 +1627,22 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
 
     return expanded;
 }
+
+
+wxString GetDefaultVariantName()
+{
+    return wxString( defaultVariantName );
+}
+
+
+int SortVariantNames( const wxString& aLhs, const wxString& aRhs )
+{
+    if( ( aLhs == defaultVariantName ) && ( aRhs != defaultVariantName ) )
+        return -1;
+
+    if( ( aLhs != defaultVariantName ) && ( aRhs == defaultVariantName ) )
+        return 1;
+
+    return StrNumCmp( aLhs, aRhs );
+}
+

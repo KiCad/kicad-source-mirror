@@ -172,18 +172,32 @@ public:
     /**
      * Set or clear the exclude from simulation flag.
      */
-    void SetExcludedFromSim( bool aExcludeFromSim ) override
+    virtual void SetExcludedFromSim( bool aExcludeFromSim, const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) override
     {
         m_excludedFromSim = aExcludeFromSim;
     }
 
-    bool GetExcludedFromSim() const override { return m_excludedFromSim; }
+    virtual bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromSim;
+    }
 
     /**
      * Set or clear the exclude from schematic bill of materials flag.
      */
-    void SetExcludedFromBOM( bool aExcludeFromBOM ) override { m_excludedFromBOM = aExcludeFromBOM; }
-    bool GetExcludedFromBOM() const override { return m_excludedFromBOM; }
+    virtual void SetExcludedFromBOM( bool aExcludeFromBOM, const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) override
+    {
+        m_excludedFromBOM = aExcludeFromBOM;
+    }
+
+    virtual bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromBOM;
+    }
 
     /**
      * Set or clear exclude from board netlist flag.
@@ -194,8 +208,10 @@ public:
     /**
      * Set or clear the 'Do Not Populate' flag.
      */
-    bool GetDNP() const override { return m_DNP; }
-    void SetDNP( bool aDNP ) override { m_DNP = aDNP; }
+    virtual bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
+                         const wxString& aVariantName = wxEmptyString ) const override { return m_DNP; }
+    virtual void SetDNP( bool aDNP, const SCH_SHEET_PATH* aInstance = nullptr,
+                         const wxString& aVariantName = wxEmptyString ) override { m_DNP = aDNP; }
 
     virtual int GetOrientation() const { return SYM_NORMAL; }
 

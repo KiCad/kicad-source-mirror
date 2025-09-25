@@ -96,6 +96,14 @@ public:
 };
 
 
+void SCH_SYMBOL_VARIANT::InitializeAttributes( const SCH_SYMBOL& aSymbol )
+{
+    m_DNP = aSymbol.GetDNP();
+    m_ExcludedFromBOM = aSymbol.GetExcludedFromBOM();
+    m_ExcludedFromSim = aSymbol.GetExcludedFromSim();
+}
+
+
 namespace std
 {
     size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const
@@ -399,6 +407,12 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
                         || aItem->Type() == SCH_GLOBAL_LABEL_T
                         || aItem->Type() == SCH_SHAPE_T );
             } );
+
+    std::optional<wxString> variantName;
+    const SCHEMATIC* schematic = LastScreen()->Schematic();
+
+    if( schematic )
+        variantName = schematic->GetCurrentVariant();
 
     for( SCH_ITEM* item : items )
     {

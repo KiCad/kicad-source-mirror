@@ -413,7 +413,11 @@ public:
     const SCH_FIELD* GetField( FIELD_T aFieldNdx ) const;
 
     /**
-     * Return a field in this symbol.  Both versions return nullptr if the field is not found.
+     * Return a field in this symbol.
+     *
+     * @param aFieldName is the canonical name of the field.
+     *
+     * @return Both non-const and const versions return nullptr if the field is not found.
      */
     SCH_FIELD* GetField( const wxString& aFieldName );
     const SCH_FIELD* GetField( const wxString& aFieldName ) const;
@@ -667,6 +671,50 @@ public:
     /// Set the selected unit of this symbol for all sheets.
     void SetUnitSelection( int aUnitSelection );
 
+    virtual void SetDNP( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
+                         const wxString& aVariantName = wxEmptyString ) override;
+    virtual bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
+                         const wxString& aVariantName = wxEmptyString ) const override;
+    void SetDNP( bool aEnable, const SCH_SHEET_PATH& aInstance, const std::vector<wxString>& aVariantNames );
+
+    bool GetDNPProp() const { return GetDNP( nullptr, Schematic()->GetCurrentVariant() ); }
+
+    void SetDNPProp( bool aEnable ) { SetDNP( aEnable, nullptr, Schematic()->GetCurrentVariant() ); }
+
+    void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) override;
+    bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) const override;
+    void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH& aInstance,
+                             const std::vector<wxString>& aVariantNames );
+
+    bool GetExcludedFromBOMProp() const
+    {
+        return GetExcludedFromBOM( nullptr, Schematic()->GetCurrentVariant() );
+    }
+
+    void SetExcludedFromBOMProp( bool aEnable )
+    {
+        SetExcludedFromBOM( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+    }
+
+    void SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) override;
+    bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) const override;
+    void SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH& aInstance,
+                             const std::vector<wxString>& aVariantNames );
+
+    bool GetExcludedFromSimProp() const
+    {
+        return GetExcludedFromSim( nullptr, Schematic()->GetCurrentVariant() );
+    }
+
+    void SetExcludedFromSimProp( bool aEnable )
+    {
+        SetExcludedFromSim( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+    }
+
     /**
      * SCH_SYMBOLs don't currently support embedded files, but their LIB_SYMBOL counterparts
      * do.
@@ -825,6 +873,10 @@ public:
 
     /// Return the component classes this symbol belongs in.
     std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const;
+
+    std::optional<SCH_SYMBOL_VARIANT> GetVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName ) const;
+    void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_VARIANT& aVariant );
+    void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName );
 
     bool operator==( const SCH_ITEM& aOther ) const override;
 

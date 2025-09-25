@@ -249,21 +249,30 @@ public:
     void SetPrivate( bool aPrivate ) { m_private = aPrivate; }
     bool IsPrivate() const { return m_private; }
 
-    virtual void SetExcludedFromSim( bool aExclude ) { }
-    virtual bool GetExcludedFromSim() const { return false; }
-    bool ResolveExcludedFromSim() const;
+    virtual void SetExcludedFromSim( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) { }
+    virtual bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) const { return false; }
+    bool ResolveExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
+                                 const wxString& aVariantName = wxEmptyString ) const;
 
-    virtual void SetExcludedFromBOM( bool aExcludeFromBOM ) { }
-    virtual bool GetExcludedFromBOM() const { return false; }
-    bool ResolveExcludedFromBOM() const;
+    virtual void SetExcludedFromBOM( bool aExcludeFromBOM, const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) { }
+    virtual bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
+                                     const wxString& aVariantName = wxEmptyString ) const { return false; }
+    bool ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
+                                 const wxString& aVariantName = wxEmptyString ) const;
 
     virtual void SetExcludedFromBoard( bool aExcludeFromBoard ) { }
     virtual bool GetExcludedFromBoard() const { return false; }
     bool ResolveExcludedFromBoard() const;
 
-    virtual void SetDNP( bool aDNP ) { }
-    virtual bool GetDNP() const { return false; }
-    bool ResolveDNP() const;
+    virtual void SetDNP( bool aDNP, const SCH_SHEET_PATH* aInstance = nullptr,
+                         const wxString& aVariantName = wxEmptyString ) { }
+    virtual bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
+                         const wxString& aVariantName = wxEmptyString ) const { return false; }
+    bool ResolveDNP( const SCH_SHEET_PATH* aInstance = nullptr,
+                     const wxString& aVariantName = wxEmptyString ) const;
 
     /**
      * Check if object is movable from the anchor point.

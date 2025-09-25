@@ -88,8 +88,17 @@ public:
     bool IsHypertext() const override;
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
 
-    void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }
-    bool GetExcludedFromSim() const override { return m_excludedFromSim; }
+    void SetExcludedFromSim( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) override
+    {
+        m_excludedFromSim = aExclude;
+    }
+
+    bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
+                             const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromSim;
+    }
 
     bool operator<( const SCH_ITEM& aItem ) const override;
 

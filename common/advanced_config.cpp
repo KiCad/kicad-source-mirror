@@ -138,6 +138,7 @@ static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
 static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
 static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
+static const wxChar EnableVariantsUI[] = wxT( "EnableVariantsUI" );
 
 } // namespace KEYS
 
@@ -334,6 +335,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ImportSkipComponentBodies = false;
 
     m_ScreenDPI = 91;
+
+    m_EnableVariantsUI = false;
 
     loadFromConfigFile();
 }
@@ -671,6 +674,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ScreenDPI,
                                                &m_ScreenDPI, m_ScreenDPI,
                                                50, 500 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableVariantsUI, &m_EnableVariantsUI,
+                                                           m_EnableVariantsUI ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

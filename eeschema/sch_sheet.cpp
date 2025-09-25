@@ -1631,6 +1631,42 @@ double SCH_SHEET::Similarity( const SCH_ITEM& aOther ) const
 }
 
 
+bool SCH_SHEET::GetDNPProp() const
+{
+    return GetDNP( nullptr, Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SHEET::SetDNPProp( bool aEnable )
+{
+    SetDNP( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+}
+
+
+bool SCH_SHEET::GetExcludedFromSimProp() const
+{
+    return GetExcludedFromSim( nullptr, Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SHEET::SetExcludedFromSimProp( bool aEnable )
+{
+    SetExcludedFromSim( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+}
+
+
+bool SCH_SHEET::GetExcludedFromBOMProp() const
+{
+    return GetExcludedFromBOM( nullptr, Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SHEET::SetExcludedFromBOMProp( bool aEnable )
+{
+    SetExcludedFromBOM( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
@@ -1691,15 +1727,15 @@ static struct SCH_SHEET_DESC
                     &SCH_SHEET::SetExcludedFromBoard, &SCH_SHEET::GetExcludedFromBoard ),
                     groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Simulation" ),
-                    &SCH_SHEET::SetExcludedFromSim, &SCH_SHEET::GetExcludedFromSim ),
+                    &SCH_SHEET::SetExcludedFromSimProp, &SCH_SHEET::GetExcludedFromSimProp ),
                     groupAttributes );
         propMgr.AddProperty(
                 new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
-                                               &SCH_SHEET::SetExcludedFromBOM,
-                                               &SCH_SHEET::GetExcludedFromBOM ),
+                                               &SCH_SHEET::SetExcludedFromBOMProp,
+                                               &SCH_SHEET::GetExcludedFromBOMProp ),
                 groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Do not Populate" ),
-                    &SCH_SHEET::SetDNP, &SCH_SHEET::GetDNP ),
+                    &SCH_SHEET::SetDNPProp, &SCH_SHEET::GetDNPProp ),
                     groupAttributes );
     }
 } _SCH_SHEET_DESC;

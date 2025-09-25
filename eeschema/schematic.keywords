@@ -51,6 +51,7 @@ extends
 external
 exclude_from_sim
 face
+field
 fields_autoplaced
 file
 fill
@@ -171,6 +172,7 @@ unit_name
 unspecified
 uuid
 value
+variant
 version
 width
 wire

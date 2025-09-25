@@ -249,6 +249,15 @@ public:
     void UpdateDesignBlockOptions();
 
     /**
+     * Update the variant name control on the main toolbar.
+     *
+     * Updating will attempt to maintain the current selection if it's available.  If the current
+     * selection is no longer available, the default (no variant) will be selected.
+     *
+     */
+    void UpdateVariantSelectionCtrl( const wxArrayString& aVariantNames );
+
+    /**
      * Test all of the connectable objects in the schematic for unused connection points.
      *
      * @return True if any connection state changes were made.
@@ -1030,6 +1039,8 @@ private:
 
     std::vector<LIB_ID>         m_designBlockHistoryList;
     SCH_DESIGN_BLOCK_PANE*      m_designBlocksPane;
+
+    wxChoice*                   m_currentVariantCtrl;
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_SCH> m_apiHandler;

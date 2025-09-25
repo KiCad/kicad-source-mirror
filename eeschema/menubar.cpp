@@ -320,6 +320,13 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::updateSchematicFromPcb )->Enable( !Kiface().IsSingle() );
 
+    toolsMenu->AppendSeparator();
+    ACTION_MENU* submenuVariants = new ACTION_MENU( false, selTool );
+    submenuVariants->SetTitle( _( "Variants" ) );
+    submenuVariants->Add( SCH_ACTIONS::addVariant );
+    submenuVariants->Add( SCH_ACTIONS::removeVariant );
+    toolsMenu->Add( submenuVariants );
+
 #ifdef KICAD_IPC_API
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::pluginsReload );

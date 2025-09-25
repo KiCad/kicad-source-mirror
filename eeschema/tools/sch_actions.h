@@ -182,6 +182,10 @@ public:
     static TOOL_ACTION addSymbolToSchematic;
     static TOOL_ACTION exportSymbolsToLibrary;
 
+    // Variant operations
+    static TOOL_ACTION addVariant;
+    static TOOL_ACTION removeVariant;
+
     // Attribute Toggles
     static TOOL_ACTION setExcludeFromBOM;
     static TOOL_ACTION setExcludeFromSimulation;

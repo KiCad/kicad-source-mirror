@@ -530,7 +530,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
         dataModel.AddColumn( GetCanonicalFieldName( fieldId ),
-                             GetDefaultFieldName( fieldId, DO_TRANSLATE ), false );
+                             GetDefaultFieldName( fieldId, DO_TRANSLATE ), false, {} );
     }
 
     // User field names in symbols second
@@ -548,7 +548,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     for( const wxString& fieldName : userFieldNames )
-        dataModel.AddColumn( fieldName, GetGeneratedFieldDisplayName( fieldName ), true );
+        dataModel.AddColumn( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, {} );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
@@ -557,7 +557,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
         {
             dataModel.AddColumn( templateFieldname.m_Name, GetGeneratedFieldDisplayName( templateFieldname.m_Name ),
-                                 false );
+                                 false, {} );
         }
     }
 
@@ -670,7 +670,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         preset.excludeDNP = aBomJob->m_excludeDNP;
     }
 
-    dataModel.ApplyBomPreset( preset );
+    dataModel.ApplyBomPreset( preset, {} );
 
     if( aBomJob->GetConfiguredOutputPath().IsEmpty() )
     {

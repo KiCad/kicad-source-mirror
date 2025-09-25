@@ -28,6 +28,7 @@ class WX_GRID;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/listbox.h>
 #include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
@@ -50,10 +51,18 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 	protected:
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
+		wxBoxSizer* bLeftSizer;
 		WX_GRID* m_viewControlsGrid;
 		STD_BITMAP_BUTTON* m_addFieldButton;
 		STD_BITMAP_BUTTON* m_renameFieldButton;
 		STD_BITMAP_BUTTON* m_removeFieldButton;
+		wxBoxSizer* variantSizer;
+		wxStaticLine* m_staticline6;
+		wxStaticText* m_staticText9;
+		wxListBox* m_variantListBox;
+		wxBitmapButton* m_addVariantButton;
+		wxBitmapButton* m_renameVariantButton;
+		wxBitmapButton* m_deleteVariantButton;
 		wxStaticLine* m_staticline11;
 		wxStaticText* m_bomPresetsLabel;
 		wxChoice* m_cbBomPresets;
@@ -103,6 +112,9 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRenameField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAddVariant( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRenameVariant( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeleteVariant( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }

@@ -244,14 +244,15 @@ SYMBOL* SCH_ITEM::GetParentSymbol()
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromSim() const
+bool SCH_ITEM::ResolveExcludedFromSim( const SCH_SHEET_PATH* aInstance,
+                                       const wxString& aVariantName ) const
 {
-    if( GetExcludedFromSim() )
+    if( GetExcludedFromSim( aInstance, aVariantName ) )
         return true;
 
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
-        if( area->GetExcludedFromSim() )
+        if( area->GetExcludedFromSim( aInstance, aVariantName ) )
             return true;
     }
 
@@ -259,14 +260,15 @@ bool SCH_ITEM::ResolveExcludedFromSim() const
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromBOM() const
+bool SCH_ITEM::ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance,
+                                       const wxString& aVariantName ) const
 {
-    if( GetExcludedFromBOM() )
+    if( GetExcludedFromBOM( aInstance, aVariantName ) )
         return true;
 
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
-        if( area->GetExcludedFromBOM() )
+        if( area->GetExcludedFromBOM( aInstance, aVariantName ) )
             return true;
     }
 
@@ -289,14 +291,14 @@ bool SCH_ITEM::ResolveExcludedFromBoard() const
 }
 
 
-bool SCH_ITEM::ResolveDNP() const
+bool SCH_ITEM::ResolveDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
-    if( GetDNP() )
+    if( GetDNP( aInstance, aVariantName ) )
         return true;
 
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
-        if( area->GetDNP() )
+        if( area->GetDNP( aInstance, aVariantName ) )
             return true;
     }
 

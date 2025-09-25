@@ -30,6 +30,9 @@
 #include "fields_data_model.h"
 
 
+static wxString multipleValues = wxS( "<...>" );
+
+
 wxString VIEW_CONTROLS_GRID_DATA_MODEL::GetColLabelValue( int aCol )
 {
     switch( aCol )
@@ -182,7 +185,7 @@ const wxString FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "${ITE
 
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
-                                               bool aAddedByUser )
+                                               bool aAddedByUser, const std::set<wxString>& aVariantNames )
 {
     // Don't add a field twice
     if( GetFieldNameCol( aFieldName ) != -1 )
@@ -191,40 +194,61 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
     m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
-    {
-        if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
-            updateDataStoreSymbolField( *symbol, aFieldName );
-    }
+        updateDataStoreSymbolField( m_symbolsList[i], aFieldName, aVariantNames );
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol,
-                                                                const wxString&   aFieldName )
+void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef,
+                                                                const wxString&   aFieldName,
+                                                                const std::set<wxString>& aVariantNames )
 {
+    const SCH_SYMBOL* symbol = aSymbolRef.GetSymbol();
+
+    if( !symbol )
+        return;
+
     if( isAttribute( aFieldName ) )
     {
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
+        m_dataStore[symbol->m_Uuid][aFieldName] = getAttributeValue( *symbol, aFieldName, aVariantNames );
     }
-    else if( const SCH_FIELD* field = aSymbol.GetField( aFieldName ) )
+    else if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
     {
         if( field->IsPrivate() )
         {
-            m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
+            m_dataStore[symbol->m_Uuid][aFieldName] = wxEmptyString;
             return;
         }
 
-        wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( field->GetText() );
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = value;
+        wxString value = symbol->Schematic()->ConvertKIIDsToRefs( field->GetText() );
+
+        for( const wxString& variantName : aVariantNames )
+        {
+            std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( aSymbolRef.GetSheetPath(), variantName );
+
+            if( !variant || !variant->m_Fields.contains( aFieldName ) )
+                continue;
+
+            if( value.IsEmpty() )
+            {
+                value = variant->m_Fields[aFieldName];
+                continue;
+            }
+
+            if( value != variant->m_Fields[aFieldName] )
+                value = multipleValues;
+        }
+
+        m_dataStore[symbol->m_Uuid][aFieldName] = value;
     }
     else if( IsGeneratedField( aFieldName ) )
     {
         // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in
         // the symbol by giving them the correct value
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = aFieldName;
+        m_dataStore[symbol->m_Uuid][aFieldName] = aFieldName;
     }
     else
     {
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
+        m_dataStore[symbol->m_Uuid][aFieldName] = wxEmptyString;
     }
 }
 
@@ -703,35 +727,66 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_SYMBOL& aSymbol, const wxString& aAttributeName )
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_SYMBOL& aSymbol, const wxString& aAttributeName,
+                                                           const std::set<wxString>& aVariantNames )
 {
-    if( aAttributeName == wxS( "${DNP}" ) )
-        return aSymbol.GetDNP() ? wxS( "1" ) : wxS( "0" );
+    wxString retv;
 
-    if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        return aSymbol.GetExcludedFromBoard() ? wxS( "1" ) : wxS( "0" );
+    auto getAttrString = [&]( const wxString aVariantName = wxEmptyString )->wxString
+    {
+        if( aAttributeName == wxS( "${DNP}" ) )
+            return aSymbol.GetDNP( nullptr, aVariantName ) ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        return aSymbol.GetExcludedFromBOM() ? wxS( "1" ) : wxS( "0" );
+        if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
+            return aSymbol.GetExcludedFromBoard() ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return aSymbol.GetExcludedFromSim() ? wxS( "1" ) : wxS( "0" );
+        if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
+            return aSymbol.GetExcludedFromBOM( nullptr, aVariantName ) ? wxS( "1" ) : wxS( "0" );
 
-    return wxS( "0" );
+        if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
+            return aSymbol.GetExcludedFromSim( nullptr, aVariantName ) ? wxS( "1" ) : wxS( "0" );
+
+        return wxS( "0" );
+    };
+
+    if( aVariantNames.empty() )
+    {
+        retv = getAttrString();
+    }
+    else
+    {
+        for( const wxString& variantName : aVariantNames )
+        {
+            if( retv.IsEmpty() )
+            {
+                retv = getAttrString( variantName );
+                continue;
+            }
+
+            if( retv != getAttrString( variantName ) )
+                retv = multipleValues;
+        }
+    }
+
+    return retv;
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_SYMBOL&     aSymbol,
                                                        const wxString& aAttributeName,
-                                                       const wxString& aValue )
+                                                       const wxString& aValue,
+                                                       const wxString& aVariantName )
 {
+    if( aValue == multipleValues )
+        return false;
+
     bool attrChanged = false;
     bool newValue = aValue == wxS( "1" );
 
     if( aAttributeName == wxS( "${DNP}" ) )
     {
-        attrChanged = aSymbol.GetDNP() != newValue;
-        aSymbol.SetDNP( newValue );
+        attrChanged = aSymbol.GetDNP( nullptr, aVariantName ) != newValue;
+        aSymbol.SetDNP( newValue, nullptr, aVariantName );
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
     {
@@ -740,13 +795,13 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_SYMBOL&     aSymbol,
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
     {
-        attrChanged = aSymbol.GetExcludedFromBOM() != newValue;
-        aSymbol.SetExcludedFromBOM( newValue );
+        attrChanged = aSymbol.GetExcludedFromBOM( nullptr, aVariantName ) != newValue;
+        aSymbol.SetExcludedFromBOM( newValue, nullptr, aVariantName );
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
     {
-        attrChanged = aSymbol.GetExcludedFromSim() != newValue;
-        aSymbol.SetExcludedFromSim( newValue );
+        attrChanged = aSymbol.GetExcludedFromSim( nullptr, aVariantName ) != newValue;
+        aSymbol.SetExcludedFromSim( newValue, nullptr, aVariantName );
     }
 
     return attrChanged;
@@ -791,7 +846,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         if( !m_filter.IsEmpty() && !matcher.Find( ref.GetFullRef().Lower() ) )
             continue;
 
-        if( m_excludeDNP && ( ref.GetSymbol()->GetDNP()
+        if( m_excludeDNP && ( ref.GetSymbol()->GetDNP( &ref.GetSheetPath() )
                               || ref.GetSheetPath().GetDNP() ) )
         {
             continue;
@@ -952,7 +1007,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames )
+void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
+                                               std::set<wxString>& aVariantNames )
 {
     bool symbolModified = false;
     std::unique_ptr<SCH_SYMBOL> symbolCopy;
@@ -975,13 +1031,26 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             // Attributes bypass the field logic, so handle them first
             if( isAttribute( srcName ) )
             {
-                symbolModified |= setAttributeValue( *symbol, srcName, srcValue );
+                if( aVariantNames.empty() )
+                {
+                    symbolModified |= setAttributeValue( *symbol, srcName, srcValue );
+                }
+                else
+                {
+                    for( const wxString& name : aVariantNames )
+                        symbolModified |= setAttributeValue( *symbol, srcName, srcValue, name );
+                }
+
                 continue;
             }
 
             // Skip generated fields with variables as names (e.g. ${QUANTITY});
             // they can't be edited
             if( IsGeneratedField( srcName ) )
+                continue;
+
+            // Don't change values in the case of multiple variants selected.
+            if( srcValue == multipleValues )
                 continue;
 
             SCH_FIELD* destField = symbol->GetField( srcName );
@@ -1017,15 +1086,40 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             if( !destField )
                 continue;
 
+            // Reference is not editable from this dialog
             if( destField->GetId() == FIELD_T::REFERENCE )
-            {
-                // Reference is not editable from this dialog
                 continue;
-            }
 
             wxString previousValue = destField->GetText();
 
-            destField->SetText( symbol->Schematic()->ConvertRefsToKIIDs( srcValue ) );
+            if( aVariantNames.empty() )
+            {
+                destField->SetText( symbol->Schematic()->ConvertRefsToKIIDs( srcValue ) );
+            }
+            else
+            {
+                for( const wxString& variantName : aVariantNames )
+                {
+                    std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( m_symbolsList[i].GetSheetPath(),
+                                                                                    variantName );
+
+                    if( !variant )
+                    {
+                        SCH_SYMBOL_VARIANT newVariant( variantName );
+
+                        newVariant.m_Fields[srcName] = srcValue;
+                        symbol->AddVariant( m_symbolsList[i].GetSheetPath(), newVariant );
+                        symbolModified |= true;
+                    }
+                    else if( !variant->m_Fields.contains( srcName )
+                           || ( variant->m_Fields[srcName] != srcValue ) )
+                    {
+                        variant->m_Fields[srcName] = srcValue;
+                        symbol->AddVariant( m_symbolsList[i].GetSheetPath(), *variant );
+                        symbolModified |= true;
+                    }
+                }
+            }
 
             if( !createField && ( previousValue != srcValue ) )
                 symbolModified = true;
@@ -1088,7 +1182,8 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
+void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset,
+                                                    const std::set<wxString>& aVariantNames )
 {
     // Hide and un-group everything by default
     for( size_t i = 0; i < m_cols.size(); i++ )
@@ -1116,7 +1211,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
         // they won't be saved to the symbols anyway
         if( col == -1 )
         {
-            AddColumn( field.name, field.label, true );
+            AddColumn( field.name, field.label, true, aVariantNames );
             col = GetFieldNameCol( field.name );
         }
         else
@@ -1312,7 +1407,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& 
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs )
+void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs,
+                                                      const std::set<wxString>& aVariantNames )
 {
     bool refListChanged = false;
 
@@ -1322,7 +1418,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
         // columns; we must have all fields in the symbol added to the data model at this point,
         // and some of the data model columns may be variables that are not present in the symbol
         for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreSymbolField( *ref.GetSymbol(), col.m_fieldName );
+            updateDataStoreSymbolField( ref, col.m_fieldName, aVariantNames );
 
         if( !m_symbolsList.Contains( ref ) )
         {

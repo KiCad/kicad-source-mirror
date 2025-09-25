@@ -767,6 +767,222 @@ void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelect
 }
 
 
+void SCH_SYMBOL::SetDNP(bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+    {
+        m_DNP = aEnable;
+        return;
+    }
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    wxCHECK_MSG( GetInstance( instance, aInstance->Path() ), /* void */,
+                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        instance.m_DNP = aEnable;
+    }
+    else
+    {
+        if( instance.m_Variants.contains( aVariantName ) )
+        {
+            instance.m_Variants[aVariantName].m_DNP = aEnable;
+        }
+        else
+        {
+            SCH_SYMBOL_VARIANT variant( aVariantName );
+
+            variant.InitializeAttributes( *this );
+            variant.m_DNP = aEnable;
+            AddVariant( *aInstance, variant );
+        }
+    }
+}
+
+
+bool SCH_SYMBOL::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+        return m_DNP;
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    wxCHECK_MSG( GetInstance( instance, aInstance->Path() ), m_DNP,
+                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        return instance.m_DNP;
+    }
+    else
+    {
+        wxCHECK_MSG( instance.m_Variants.contains( aVariantName ), false,
+                     wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s' for variant '%s'." ),
+                                       aInstance->PathHumanReadable(), aVariantName ) );
+
+        return instance.m_Variants[aVariantName].m_DNP;
+    }
+
+    return m_DNP;
+}
+
+
+void SCH_SYMBOL::SetDNP( bool aEnable, const SCH_SHEET_PATH& aInstance, const std::vector<wxString>& aVariantNames )
+{
+    for( const wxString& variantName : aVariantNames )
+        SetDNP( aEnable, &aInstance, variantName );
+}
+
+
+void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance,
+                                     const wxString& aVariantName )
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+    {
+        m_excludedFromBOM = aEnable;
+        return;
+    }
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    wxCHECK_MSG( GetInstance( instance, aInstance->Path() ), /* void */,
+                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        instance.m_ExcludedFromBOM = aEnable;
+    }
+    else
+    {
+        if( instance.m_Variants.contains( aVariantName ) )
+        {
+            instance.m_Variants[aVariantName].m_ExcludedFromBOM = aEnable;
+        }
+        else
+        {
+            SCH_SYMBOL_VARIANT variant( aVariantName );
+
+            variant.InitializeAttributes( *this );
+            variant.m_ExcludedFromBOM = aEnable;
+            AddVariant( *aInstance, variant );
+        }
+    }
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+        return m_excludedFromBOM;
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    wxCHECK_MSG( GetInstance( instance, aInstance->Path() ), m_excludedFromBOM,
+                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        return instance.m_ExcludedFromBOM;
+    }
+    else
+    {
+        wxCHECK_MSG( instance.m_Variants.contains( aVariantName ), false,
+                     wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s' variant '%s'." ),
+                                       aInstance->PathHumanReadable(), aVariantName ) );
+
+        return instance.m_Variants[aVariantName].m_ExcludedFromBOM;
+    }
+
+    return m_excludedFromBOM;
+}
+
+
+void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH& aInstance,
+                                     const std::vector<wxString>& aVariantNames )
+{
+    for( const wxString& variantName : aVariantNames )
+        SetExcludedFromBOM( aEnable, &aInstance, variantName );
+}
+
+
+void SCH_SYMBOL::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+    {
+        m_excludedFromSim = aEnable;
+        return;
+    }
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    wxCHECK_MSG( GetInstance( instance, aInstance->Path() ), /* void */,
+                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        instance.m_ExcludedFromSim = aEnable;
+    }
+    else
+    {
+        if( instance.m_Variants.contains( aVariantName ) )
+        {
+            instance.m_Variants[aVariantName].m_ExcludedFromSim = aEnable;
+        }
+        else
+        {
+            SCH_SYMBOL_VARIANT variant( aVariantName );
+
+            variant.InitializeAttributes( *this );
+            variant.m_ExcludedFromSim = aEnable;
+            AddVariant( *aInstance, variant );
+        }
+    }
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+        return m_excludedFromSim;
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    wxCHECK_MSG( GetInstance( instance, aInstance->Path() ), m_excludedFromSim,
+                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        return instance.m_ExcludedFromSim;
+    }
+    else
+    {
+        wxCHECK_MSG( instance.m_Variants.contains( aVariantName ), false,
+                     wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s' variant '%s'." ),
+                                       aInstance->PathHumanReadable(), aVariantName ) );
+
+        return instance.m_Variants[aVariantName].m_ExcludedFromSim;
+    }
+
+    return m_excludedFromSim;
+}
+
+
+void SCH_SYMBOL::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH& aInstance,
+                                     const std::vector<wxString>& aVariantNames )
+{
+    for( const wxString& variantName : aVariantNames )
+        SetExcludedFromSim( aEnable, &aInstance, variantName );
+}
+
+
 void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 {
     for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
@@ -1062,7 +1278,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                     otherUnit->SetExcludedFromBoard( m_excludedFromBoard );
 
                 if( updateDNP )
-                    otherUnit->SetDNP( m_DNP );
+                    otherUnit->SetDNP( GetDNP( &aSourceSheet ), &sheet );
 
                 if( updatePins )
                 {
@@ -1921,7 +2137,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
                 if( GetExcludedFromBoard() )
                     msgs.Add( _( "Board" ) );
 
-                if( GetDNP() )
+                if( GetDNP( currentSheet ) )
                     msgs.Add( _( "DNP" ) );
 
                 msg = wxJoin( msgs, '|' );
@@ -2850,6 +3066,42 @@ std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET
 }
 
 
+std::optional<SCH_SYMBOL_VARIANT> SCH_SYMBOL::GetVariant( const SCH_SHEET_PATH& aInstance,
+                                                          const wxString& aVariantName ) const
+{
+    SCH_SYMBOL_INSTANCE instance;
+
+    if( !GetInstance( instance, aInstance.Path() ) || !instance.m_Variants.contains( aVariantName ) )
+        return std::nullopt;
+
+    return instance.m_Variants.find( aVariantName )->second;
+}
+
+
+void SCH_SYMBOL::AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_VARIANT& aVariant )
+{
+    SCH_SYMBOL_INSTANCE instance;
+
+    // The instance path must already exist.
+    if( !GetInstance( instance, aInstance.Path() ) )
+        return;
+
+    instance.m_Variants.emplace( std::make_pair( aVariant.m_Name, aVariant ) );
+}
+
+
+void SCH_SYMBOL::DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
+{
+    SCH_SYMBOL_INSTANCE instance;
+
+    // The instance path must already exist.
+    if( !GetInstance( instance, aInstance.Path() ) || !instance.m_Variants.contains( aVariantName ) )
+        return;
+
+    instance.m_Variants.erase( aVariantName );
+}
+
+
 bool SCH_SYMBOL::operator==( const SCH_ITEM& aOther ) const
 {
     if( Type() != aOther.Type() )
@@ -3023,14 +3275,14 @@ static struct SCH_SYMBOL_DESC
         propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Board" ),
                     &SYMBOL::SetExcludedFromBoard, &SYMBOL::GetExcludedFromBoard ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
-                    &SYMBOL::SetExcludedFromSim, &SYMBOL::GetExcludedFromSim ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
+                    &SCH_SYMBOL::SetExcludedFromSimProp, &SCH_SYMBOL::GetExcludedFromSimProp ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
-                    &SYMBOL::SetExcludedFromBOM, &SYMBOL::GetExcludedFromBOM ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
+                    &SCH_SYMBOL::SetExcludedFromBOMProp, &SCH_SYMBOL::GetExcludedFromBOMProp ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Do not Populate" ),
-                    &SYMBOL::SetDNP, &SYMBOL::GetDNP ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not Populate" ),
+                    &SCH_SYMBOL::SetDNPProp, &SCH_SYMBOL::GetDNPProp ),
                     groupAttributes );
     }
 } _SCH_SYMBOL_DESC;

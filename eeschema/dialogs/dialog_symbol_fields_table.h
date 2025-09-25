@@ -139,6 +139,12 @@ private:
 
     void savePresetsToSchematic();
 
+    void onAddVariant( wxCommandEvent& aEvent ) override;
+    void onDeleteVariant( wxCommandEvent& aEvent ) override;
+    void onRenameVariant( wxCommandEvent& aEvent ) override;
+
+    std::set<wxString> getSelectedVariants() const;
+
 private:
     std::map<wxString, BOM_PRESET>     m_bomPresets;
     BOM_PRESET*                        m_currentBomPreset;

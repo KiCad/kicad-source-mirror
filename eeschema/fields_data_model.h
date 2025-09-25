@@ -162,7 +162,8 @@ public:
     static const wxString QUANTITY_VARIABLE;
     static const wxString ITEM_NUMBER_VARIABLE;
 
-    void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser );
+    void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser,
+                    const std::set<wxString>& aVariantNames );
     void RemoveColumn( int aCol );
     void RenameColumn( int aCol, const wxString& newName );
 
@@ -270,7 +271,7 @@ public:
     void CollapseForSort();
     void ExpandAfterSort();
 
-    void ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames );
+    void ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames, std::set<wxString>& aVariantNames );
 
     bool IsEdited() { return m_edited; }
 
@@ -322,14 +323,14 @@ public:
         return m_cols[aCol].m_show;
     }
 
-    void     ApplyBomPreset( const BOM_PRESET& preset );
+    void     ApplyBomPreset( const BOM_PRESET& preset, const std::set<wxString>& aVariantNames );
     BOM_PRESET GetBomSettings();
     wxString Export( const BOM_FMT_PRESET& settings );
 
     void AddReferences( const SCH_REFERENCE_LIST& aRefs );
     void RemoveReferences( const SCH_REFERENCE_LIST& aRefs );
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
-    void UpdateReferences( const SCH_REFERENCE_LIST& aRefs );
+    void UpdateReferences( const SCH_REFERENCE_LIST& aRefs, const std::set<wxString>& aVariantNames );
 
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
@@ -341,7 +342,8 @@ private:
     // Helper functions to deal with translating wxGrid values to and from
     // named field values like ${DNP}
     bool     isAttribute( const wxString& aFieldName );
-    wxString getAttributeValue( const SCH_SYMBOL&, const wxString& aAttributeName );
+    wxString getAttributeValue( const SCH_SYMBOL&, const wxString& aAttributeName,
+                                const std::set<wxString>& aVariantNames );
 
     /**
      * Set the attribute value.
@@ -349,10 +351,12 @@ private:
      * @param aSymbol is the symbol to set the attribute.
      * @param aAttributeName is the name of the symbol attribute.
      * @param aValue is the value to set the attribute.
+     * @param aVariantName is an optional variant name to set the variant attribute.
      * @retval true if the symbol attribute value has changed.
      * @retval false if the symbol attribute has **not** changed.
      */
-    bool setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName, const wxString& aValue );
+    bool setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName, const wxString& aValue,
+                            const wxString& aVariantName = wxEmptyString );
 
     /* Helper function to get the resolved field value.
      * Handles symbols that are missing fields that would have a variable
@@ -362,7 +366,8 @@ private:
 
     void Sort();
 
-    void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
+    void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName,
+                                     const std::set<wxString>& aVariantNames );
 
 protected:
     /**

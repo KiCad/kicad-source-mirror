@@ -48,6 +48,7 @@
 #include <sch_selection_tool.h>
 #include <sim/spice_settings.h>
 #include <sim/spice_value.h>
+#include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <undo_redo_container.h>
 
@@ -240,6 +241,9 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
     m_hierarchy = BuildSheetListSortedByPageNumbers();
     m_connectionGraph->Reset();
 
+    SCH_SCREENS screens( aRootSheet );
+
+    m_variantNames = screens.GetVariantNames();
 }
 
 
@@ -1607,22 +1611,54 @@ void SCHEMATIC::CreateDefaultScreens()
     Reset();
 
     SCH_SHEET* rootSheet = new SCH_SHEET( this );
-    SetRoot( rootSheet );
-
     SCH_SCREEN* rootScreen = new SCH_SCREEN( this );
+
     const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
-    Root().SetScreen( rootScreen );
-
-
-    RootScreen()->SetFileName( wxEmptyString );
+    rootSheet->SetScreen( rootScreen );
+    rootScreen->SetFileName( wxEmptyString );
+    rootScreen->SetPageNumber( wxT( "1" ) );
 
     // Don't leave root page number empty
     SCH_SHEET_PATH rootSheetPath;
 
     rootSheetPath.push_back( rootSheet );
-    RootScreen()->SetPageNumber( wxT( "1" ) );
     rootSheetPath.SetPageNumber( wxT( "1" ) );
+
+    SetRoot( rootSheet );
 
     // Rehash sheetpaths in hierarchy since we changed the uuid.
     RefreshHierarchy();
+}
+
+
+wxArrayString SCHEMATIC::GetVariantNamesForUI() const
+{
+    wxArrayString variantNames;
+
+    // There is no default variant name.  This is just a place holder for UI controls.
+    variantNames.Add( GetDefaultVariantName() );
+
+    for( const wxString& name : m_variantNames )
+        variantNames.Add( name );
+
+    return variantNames;
+}
+
+
+wxString SCHEMATIC::GetCurrentVariant() const
+{
+    if( m_currentVariant.IsEmpty() || ( m_currentVariant == GetDefaultVariantName() ) )
+        return wxEmptyString;
+
+    return m_currentVariant;
+}
+
+
+void SCHEMATIC::DeleteVariant( const wxString& aVariantName )
+{
+    wxCHECK( m_rootSheet, /* void */ );
+
+    SCH_SCREENS allScreens( m_rootSheet );
+
+    allScreens.DeleteVariant( aVariantName );
 }

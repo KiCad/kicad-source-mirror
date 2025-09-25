@@ -20,7 +20,18 @@
 #ifndef TOOLBARS_SCH_EDITOR_H_
 #define TOOLBARS_SCH_EDITOR_H_
 
+#include <tool/action_toolbar.h>
 #include <tool/ui/toolbar_configuration.h>
+
+/**
+ * Custom toolbar controls for the schematic editor frame.
+ */
+class SCH_ACTION_TOOLBAR_CONTROLS : public ACTION_TOOLBAR_CONTROLS
+{
+public:
+    static ACTION_TOOLBAR_CONTROL currentVariant;
+};
+
 
 /**
  * Toolbar configuration for the schematic editor frame.

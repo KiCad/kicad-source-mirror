@@ -735,7 +735,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", aSymbol->GetExcludedFromSim() );
     KICAD_FORMAT::FormatBool( m_out, "in_bom", !aSymbol->GetExcludedFromBOM() );
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aSymbol->GetExcludedFromBoard() );
-    KICAD_FORMAT::FormatBool( m_out, "dnp", aSymbol->GetDNP() );
+    KICAD_FORMAT::FormatBool( m_out, "dnp", ordinalInstance.m_DNP );
 
     AUTOPLACE_ALGO fieldsAutoplaced = aSymbol->GetFieldsAutoplaced();
 
@@ -861,10 +861,37 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
                 path = tmp.AsString();
 
-                m_out->Print( "(path %s (reference %s) (unit %d))",
+                m_out->Print( "(path %s (reference %s) (unit %d)",
                               m_out->Quotew( path ).c_str(),
                               m_out->Quotew( instance.m_Reference ).c_str(),
                               instance.m_Unit );
+
+                if( !instance.m_Variants.empty() )
+                {
+                    for( const auto&[name, variant] : instance.m_Variants )
+                    {
+                        m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
+
+                        if( variant.m_DNP != aSymbol->GetDNP() )
+                            KICAD_FORMAT::FormatBool( m_out, "dnp", variant.m_DNP );
+
+                        if( variant.m_ExcludedFromSim != aSymbol->GetExcludedFromSim() )
+                            KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", variant.m_ExcludedFromSim );
+
+                        if( variant.m_ExcludedFromBOM != aSymbol->GetExcludedFromBOM() )
+                            KICAD_FORMAT::FormatBool( m_out, "in_bom", variant.m_ExcludedFromBOM );
+
+                        for( const auto&[fname, fvalue] : variant.m_Fields )
+                        {
+                            m_out->Print( "(field (name %s) (value %s))",
+                                          m_out->Quotew( fname ).c_str(), m_out->Quotew( fvalue ).c_str() );
+                        }
+
+                        m_out->Print( ")" );  // Closes `variant` token.
+                    }
+                }
+
+                m_out->Print( ")" );  // Closes `path` token.
             }
 
             m_out->Print( ")" );  // Closes `project`.
@@ -873,7 +900,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         m_out->Print( ")" );  // Closes `instances`.
     }
 
-    m_out->Print( ")" );      // Closes `symbol`.
+    m_out->Print( ")" );  // Closes `symbol`.
 }
 
 
@@ -1070,9 +1097,36 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
 
             wxString path = sheetInstances[i].m_Path.AsString();
 
-            m_out->Print( "(path %s (page %s))",
+            m_out->Print( "(path %s (page %s)",
                           m_out->Quotew( path ).c_str(),
                           m_out->Quotew( sheetInstances[i].m_PageNumber ).c_str() );
+
+            if( !sheetInstances[i].m_Variants.empty() )
+            {
+                for( const auto&[name, variant] : sheetInstances[i].m_Variants )
+                {
+                    m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
+
+                    if( variant.m_DNP != aSheet->GetDNP() )
+                        KICAD_FORMAT::FormatBool( m_out, "dnp", variant.m_DNP );
+
+                    if( variant.m_ExcludedFromSim != aSheet->GetExcludedFromSim() )
+                        KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", variant.m_ExcludedFromSim );
+
+                    if( variant.m_ExcludedFromBOM != aSheet->GetExcludedFromBOM() )
+                        KICAD_FORMAT::FormatBool( m_out, "in_bom", variant.m_ExcludedFromBOM );
+
+                    for( const auto&[fname, fvalue] : variant.m_Fields )
+                    {
+                        m_out->Print( "(field (name %s) (value %s))",
+                                      m_out->Quotew( fname ).c_str(), m_out->Quotew( fvalue ).c_str() );
+                    }
+
+                    m_out->Print( ")" );  // Closes `variant` token.
+                }
+            }
+
+            m_out->Print( ")" );     // Closes `path` token.
 
             if( inProjectClause && ( ( i + 1 == sheetInstances.size() )
                     || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )
@@ -1082,10 +1136,10 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
             }
         }
 
-        m_out->Print( ")" );        // Closes `instances` token.
+        m_out->Print( ")" );          // Closes `instances` token.
     }
 
-    m_out->Print( ")" );          // Closes sheet token.
+    m_out->Print( ")" );              // Closes sheet token.
 }
 
 

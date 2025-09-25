@@ -131,8 +131,7 @@ public:
      * with the ${} stripped.
      */
     wxString GetShownName() const;
-    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                           int aDepth = 0 ) const;
+    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth = 0 ) const;
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
@@ -324,6 +323,9 @@ protected:
     int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
     void setId( FIELD_T aId );
+
+    wxString getUnescapedText( const SCH_SHEET_PATH* aPath = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) const;
 
 private:
     FIELD_T  m_id;               ///< Field id, @see enum FIELD_T

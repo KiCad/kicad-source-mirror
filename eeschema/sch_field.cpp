@@ -189,8 +189,7 @@ wxString SCH_FIELD::GetShownName() const
 }
 
 
-wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                                  int aDepth ) const
+wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
 {
     std::function<bool( wxString* )> libSymbolResolver =
             [&]( wxString* token ) -> bool
@@ -248,7 +247,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 return label->ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+    wxString text = getUnescapedText( aPath );
 
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
@@ -271,16 +270,6 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &schematicResolver );
             }
         }
-    }
-
-    if( m_id == FIELD_T::REFERENCE && aPath )
-    {
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-
-        // For more than one part per package, we must add the part selection
-        // A, B, ... or 1, 2, .. to the reference.
-        if( parentSymbol && parentSymbol->GetUnitCount() > 1 )
-            text << parentSymbol->SubReference( parentSymbol->GetUnitSelection( aPath ) );
     }
 
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
@@ -1595,6 +1584,37 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     }
 
     return 0;
+}
+
+
+wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxString& aVariantName ) const
+{
+    wxString retv = EDA_TEXT::GetShownText( false );
+
+    // Special handling for parent object field instance and variant information.
+    if( m_parent && aPath )
+    {
+        switch( m_parent->Type() )
+        {
+        case SCH_SYMBOL_T:
+        {
+            const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_parent );
+
+            if( m_id == FIELD_T::REFERENCE )
+                retv = symbol->GetRef( aPath, true );
+
+            break;
+        }
+
+        case SCH_SHEET_T:
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return retv;
 }
 
 

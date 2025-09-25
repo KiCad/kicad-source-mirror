@@ -619,6 +619,10 @@ public:
      */
     wxString GroupsSanityCheckInternal( bool repair );
 
+    std::set<wxString> GetVariantNames() const;
+
+    void DeleteVariant( const wxString& aVariantName );
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
@@ -853,6 +857,10 @@ public:
                                       const SCH_SHEET_LIST& aValidSheetPaths );
 
     bool HasSymbolFieldNamesWithWhiteSpace() const;
+
+    std::set<wxString> GetVariantNames() const;
+
+    void DeleteVariant( const wxString& aVariantName );
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

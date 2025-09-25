@@ -168,4 +168,22 @@ BOOST_AUTO_TEST_CASE( HTMLEscape )
     }
 }
 
+
+/**
+ * Test #SortVariantNames().
+ */
+BOOST_AUTO_TEST_CASE( VariantNameSort )
+{
+    std::vector<wxString> variantNames;
+
+    // Verify default variant name is always sorted to the beginning of the list.
+    variantNames.emplace_back( wxS( "Variant1" ) );
+    variantNames.emplace_back( GetDefaultVariantName() );
+    std::sort( variantNames.begin(), variantNames.end(), SortVariantNames );
+
+    BOOST_CHECK_EQUAL( variantNames[0], GetDefaultVariantName() );
+    BOOST_CHECK_EQUAL( variantNames[1], wxS( "Variant1" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

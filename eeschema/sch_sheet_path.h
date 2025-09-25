@@ -32,10 +32,61 @@
 #define CLASS_DRAWSHEET_PATH_H
 
 #include <map>
+#include <memory>
 #include <optional>
 
 #include <kiid.h>
 #include <wx/string.h>
+
+class SCH_SYMBOL;
+class SCH_SHEET;
+
+/**
+ * Object to store and handle common variant information.
+ */
+class VARIANT
+{
+public:
+    VARIANT( const wxString& aName = wxEmptyString ) :
+        m_Name( aName ),
+        m_ExcludedFromSim( false ),
+        m_ExcludedFromBOM( false ),
+        m_DNP( false )
+    {
+    }
+
+    virtual ~VARIANT() = default;
+
+    wxString                     m_Name;
+    bool                         m_ExcludedFromSim;
+    bool                         m_ExcludedFromBOM;
+    bool                         m_DNP;
+    std::map<wxString, wxString> m_Fields;
+};
+
+
+/**
+ * Variant information for a schematic symbol.
+ *
+ * Schematic symbol variants are a set of field and/or properties differentials against the default symbol
+ * values.  Each symbol instance may contain 0 or more variants.
+ *
+ * @note The two exceptions to this are the #REFERENCE field and the #SYMBOL::m_excludeFromBoard property.
+ *       Changing either of these would effectively be a new board.  They are immutable and will always
+ *       be the symbol default value.
+ */
+class SCH_SYMBOL_VARIANT : public VARIANT
+{
+public:
+    SCH_SYMBOL_VARIANT( const wxString& aName = wxEmptyString ) :
+        VARIANT( aName )
+    {}
+
+    void InitializeAttributes( const SCH_SYMBOL& aSymbol );
+
+    virtual ~SCH_SYMBOL_VARIANT() = default;
+};
+
 
 /**
  * A simple container for schematic symbol instance information.
@@ -49,12 +100,42 @@ struct SCH_SYMBOL_INSTANCE
     int       m_Unit = 1;
 
     // Do not use.  This is left over from the dubious decision to instantiate symbol value
-    // and footprint fields.
+    // and footprint fields.  This is now handle by variants.
     wxString  m_Value;
     wxString  m_Footprint;
 
     // The project name associated with this instance.
     wxString  m_ProjectName;
+
+    bool m_DNP = false;
+    bool m_ExcludedFromBOM = false;
+    bool m_ExcludedFromSim = false;
+
+    /// A list of symbol variants.
+    std::map<wxString, SCH_SYMBOL_VARIANT> m_Variants;
+};
+
+
+/**
+ * Variant information for a schematic sheet.
+ *
+ * Schematic sheet variants are a set of field and/or properties differentials against the default sheet
+ * values.  Each sheet instance may contain 0 or more variants.
+ *
+ * @note The exceptions to this are the #SHEET_NAME and #SHEET_FILENAME fields and the #SCH_SHEET::m_excludeFromBoard
+ *       property.  Changing any of these would effectively be a new board.  They are immutable and will always be
+ *       the sheet default value.
+ */
+class SCH_SHEET_VARIANT : public VARIANT
+{
+public:
+    SCH_SHEET_VARIANT() :
+        VARIANT()
+    {}
+
+    virtual ~SCH_SHEET_VARIANT() = default;
+
+    void InitializeAttributes( const SCH_SHEET& aSymbol );
 };
 
 
@@ -69,6 +150,13 @@ struct SCH_SHEET_INSTANCE
 
     // The project name associated with this instance.
     wxString  m_ProjectName;
+
+    bool m_DNP = false;
+    bool m_ExcludedFromBOM = false;
+    bool m_ExcludedFromSim = false;
+
+    /// A list of sheet variants.
+    std::map<wxString, SCH_SHEET_VARIANT> m_Variants;
 };
 
 

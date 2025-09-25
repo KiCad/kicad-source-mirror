@@ -495,4 +495,8 @@ KICOMMON_API std::vector<wxString> ExpandStackedPinNotation( const wxString& aPi
                                                             bool* aValid = nullptr );
 
 
+KICOMMON_API wxString GetDefaultVariantName();
+
+KICOMMON_API int SortVariantNames( const wxString& aLhs, const wxString& aRhs );
+
 #endif  // STRING_UTILS_H

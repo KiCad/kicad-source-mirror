@@ -872,6 +872,15 @@ public:
      */
     int m_ScreenDPI;
 
+    /**
+     * Enable access to the variants user interface.
+     *
+     * Setting name: "EnableVariantsUI"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_EnableVariantsUI;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 

@@ -3349,12 +3349,70 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                             NeedRIGHT();
                             break;
 
-                        default:
-                            Expecting( "reference, unit, value or footprint" );
+
+                        case T_variant:
+                        {
+                            SCH_SYMBOL_VARIANT variant;
+
+                            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                            {
+                                if( token != T_LEFT )
+                                    Expecting( T_LEFT );
+
+                                token = NextTok();
+
+                                switch( token )
+                                {
+                                case T_name:
+                                    NeedSYMBOL();
+                                    variant.m_Name = FromUTF8();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_dnp:
+                                    variant.m_DNP = parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_exclude_from_sim:
+                                    variant.m_ExcludedFromSim = parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_in_bom:
+                                    variant.m_ExcludedFromBOM = parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_field:
+                                {
+                                    NeedSYMBOL();
+                                    wxString fieldName = FromUTF8();
+                                    NeedRIGHT();
+                                    NeedSYMBOL();
+                                    wxString fieldValue = FromUTF8();
+                                    NeedRIGHT();
+                                    variant.m_Fields[fieldName] = fieldValue;
+                                    break;
+                                }
+
+                                default:
+                                    Expecting( "dnp, exclude_from_sim, field, in_bom, or name" );
+                                }
+
+                                instance.m_Variants[variant.m_Name] = variant;
+                            }
+
+                            NeedRIGHT();
+                            break;
                         }
 
-                        symbol->AddHierarchicalReference( instance );
+                        default:
+                            Expecting( "reference, unit, value, footprint, or variant" );
+                        }
                     }
+
+                    symbol->AddHierarchicalReference( instance );
                 }
             }
 
@@ -3721,8 +3779,65 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                             break;
                         }
 
+                        case T_variant:
+                        {
+                            SCH_SHEET_VARIANT variant;
+
+                            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                            {
+                                if( token != T_LEFT )
+                                    Expecting( T_LEFT );
+
+                                token = NextTok();
+
+                                switch( token )
+                                {
+                                case T_name:
+                                    NeedSYMBOL();
+                                    variant.m_Name = FromUTF8();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_dnp:
+                                    variant.m_DNP = parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_exclude_from_sim:
+                                    variant.m_ExcludedFromSim = parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_in_bom:
+                                    variant.m_ExcludedFromBOM = parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_field:
+                                {
+                                    NeedSYMBOL();
+                                    wxString fieldName = FromUTF8();
+                                    NeedRIGHT();
+                                    NeedSYMBOL();
+                                    wxString fieldValue = FromUTF8();
+                                    NeedRIGHT();
+                                    variant.m_Fields[fieldName] = fieldValue;
+                                    break;
+                                }
+
+                                default:
+                                    Expecting( "dnp, exclude_from_sim, field, in_bom, or name" );
+                                }
+
+                                instance.m_Variants[variant.m_Name] = variant;
+                            }
+
+                            NeedRIGHT();
+                            break;
+                        }
+
                         default:
-                            Expecting( "page" );
+                            Expecting( "page or variant" );
                         }
                     }
 

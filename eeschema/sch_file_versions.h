@@ -129,4 +129,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250610  // DNP, etc. flags for rule areas
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250827  // Custom body styles
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250829  // Rounded Rectangles
-#define SEXPR_SCHEMATIC_FILE_VERSION 20250901  // Stacked Pin notation
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20250901  // Stacked Pin notation
+#define SEXPR_SCHEMATIC_FILE_VERSION 20250922    // Schematic variants.

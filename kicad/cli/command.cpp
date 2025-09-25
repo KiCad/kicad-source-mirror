@@ -34,7 +34,8 @@ CLI::COMMAND::COMMAND( const std::string& aName ) :
         m_hasOutputArg( false ),
         m_hasDrawingSheetArg( false ),
         m_hasDefineArg( false ),
-        m_outputArgExpectsDir( false )
+        m_outputArgExpectsDir( false ),
+        m_hasVariantsArg( false )
 
 {
     m_argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
@@ -77,7 +78,6 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
         m_argDrawingSheet = From_UTF8( m_argParser.get<std::string>( ARG_DRAWING_SHEET ).c_str() );
     }
 
-
     if( m_hasDefineArg )
     {
         auto defines = m_argParser.get<std::vector<std::string>>( ARG_DEFINE_VAR_LONG );
@@ -97,6 +97,17 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
                 return EXIT_CODES::ERR_ARGS;
             }
         }
+    }
+
+    if( m_hasVariantsArg )
+    {
+        auto variantNames = m_argParser.get<std::vector<std::string>>( ARG_VARIANTS );
+
+        for( const std::string& variantName : variantNames )
+            m_argVariantNames.emplace( variantName );
+
+        if( m_argVariantNames.empty() )
+            return EXIT_CODES::ERR_ARGS;
     }
 
     return doPerform( aKiway );
@@ -177,4 +188,18 @@ void CLI::COMMAND::addDefineArg()
                        "declare multiple variables."
                        "\nUse in the format of '--define-var key=value' or '-D key=value'" ) ) )
             .metavar( "KEY=VALUE" );
+}
+
+
+void CLI::COMMAND::addVariantsArg()
+{
+    m_hasVariantsArg = true;
+
+    m_argParser.add_argument( ARG_VARIANTS )
+            .default_value( std::set<std::string>() )
+            .append()
+            .help( UTF8STDSTR(
+                    _( "List of variant names to output.\n"
+                       "When no --variants arguement is provided the default variant is output.\n"
+                       "To output all variants use '--variants=all'" ) ) );
 }

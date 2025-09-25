@@ -2670,9 +2670,14 @@ wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
 void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool DNP = aSymbol->GetDNP();
-    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
-                                && aSymbol->GetExcludedFromSim();
+
+    std::optional<SCH_SHEET_PATH> optSheetPath;
+
+    if( m_schematic )
+        optSheetPath = m_schematic->CurrentSheet();
+
+    bool DNP = aSymbol->GetDNP( nullptr );
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions && aSymbol->GetExcludedFromSim( nullptr );
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
