@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-24 11:53+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-09-25 05:55+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -7823,15 +7823,15 @@ msgstr "マージが失敗しました"
 
 #: common/git/libgit_backend.cpp:1072
 msgid "Rebase failed to start"
-msgstr "リベースに失敗しました"
+msgstr "リベースの開始に失敗しました"
 
 #: common/git/libgit_backend.cpp:1086
 msgid "Rebase commit failed"
-msgstr "リベースコミットに失敗しました"
+msgstr "リベースのコミットに失敗しました"
 
 #: common/git/libgit_backend.cpp:1093
 msgid "Rebase finish failed"
-msgstr "リベースに失敗しました"
+msgstr "リベースの完了に失敗しました"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -9004,23 +9004,23 @@ msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
 msgid "A 8.5 x 11in"
-msgstr "A 8.5 x 11in"
+msgstr "ANSI A 8.5 x 11in"
 
 #: common/page_info.cpp:55
 msgid "B 11 x 17in"
-msgstr "B 11 x 17in"
+msgstr "ANSI B 11 x 17in"
 
 #: common/page_info.cpp:56
 msgid "C 17 x 22in"
-msgstr "C 17 x 22in"
+msgstr "ANSI C 17 x 22in"
 
 #: common/page_info.cpp:57
 msgid "D 22 x 34in"
-msgstr "D 22 x 34in"
+msgstr "ANSI D 22 x 34in"
 
 #: common/page_info.cpp:58
 msgid "E 34 x 44in"
-msgstr "E 34 x 44in"
+msgstr "ANSI E 34 x 44in"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
@@ -9035,9 +9035,8 @@ msgid "US Legal 8.5 x 14in"
 msgstr "US リーガル 8.5 x 14in"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11x17in"
+msgstr "US リーガル 11x17in"
 
 #: common/pgm_base.cpp:224
 msgid "No default editor found, you must choose one."
@@ -12597,23 +12596,20 @@ msgstr ""
 "す。"
 
 #: eeschema/dialogs/dialog_erc.cpp:221 pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "選択アイテム"
+msgstr "選択したアイテムをクロス プローブする"
 
 #: eeschema/dialogs/dialog_erc.cpp:222
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "選択したフットプリントに対応するシンボルをハイライト表示"
+msgstr "ERCリストで選択されたときにキャンバス上の対応するアイテムをハイライト表示"
 
 #: eeschema/dialogs/dialog_erc.cpp:226 pcbnew/dialogs/dialog_drc.cpp:281
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "カーソルを中心に"
+msgstr "クロスプローブを中心に"
 
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:282
 msgid "When cross-probing, scroll the canvas so that the item is visible"
-msgstr ""
+msgstr "クロスプローブを行うとき、アイテムが表示されるようにキャンバスをスクロール"
 
 #: eeschema/dialogs/dialog_erc.cpp:397 pcbnew/dialogs/dialog_drc.cpp:1299
 msgid "Delete exclusions too?"
@@ -12639,7 +12635,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d個のシンボルにアノテーションが必要です。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:522
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC はユーザーによってキャンセルされました。<br><br>"
 
@@ -13949,15 +13944,13 @@ msgstr "ブラウザーでデータシートを表示"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:432
-#, fuzzy
 msgid "Expand left panel"
-msgstr "すべて展開"
+msgstr "左パネルを展開"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:397
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:437
-#, fuzzy
 msgid "Collapse left panel"
-msgstr "すべて折りたたむ"
+msgstr "左パネルを折りたたむ"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:559
 #, c-format
@@ -16143,36 +16136,36 @@ msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
+"テーブルに 'DNP' とマークされたシンボルを表示します。  この設定は、"
+"エクスポート時に 'DNP' シンボルを含めるかどうかも制御します。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "「BOM(部品表)から除外」のシンボルを含める"
+msgstr "'BOM(部品表)から除外' のシンボルを含める"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:943
 msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
+"テーブルに 'BOM(部品表)から除外' とマークされたシンボルを表示します。   "
+"'BOM(部品表)から除外' とマークされたシンボルはエクスポートには含まれません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
-#, fuzzy
 msgid "Highlight on Cross-probe"
 msgstr "クロスプローブをハイライト"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:951
-#, fuzzy
 msgid "Highlight corresponding item on canvas when it is selected in the table"
-msgstr "選択したフットプリントに対応するシンボルをハイライト表示"
+msgstr "テーブルで選択されたときにキャンバス上の対応する項目をハイライト表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
-#, fuzzy
 msgid "Select on Cross-probe"
 msgstr "クロスプローブを選択"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
-#, fuzzy
 msgid "Select corresponding item on canvas when it is selected in the table"
-msgstr "回路図エディターで対応するアイテムを選択"
+msgstr "テーブルで選択されたときにキャンバス上の対応する項目を選択"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1142
 msgid "The Quantity column cannot be grouped by."
@@ -16744,13 +16737,14 @@ msgstr "ネット名"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "ラベルよりもシンボルユニットの交換を優先する"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
-msgstr ""
+msgstr "可能な場合、ネット ラベルを変更する代わりに、フットプリント "
+"ゲートのスワップを検出し、対応するシンボル ユニットの交換をします。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -18915,12 +18909,12 @@ msgstr "図形の数が異なります。"
 #: eeschema/lib_symbol.cpp:1693
 #, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "図形の数が異なります: %s; %s."
+msgstr "図形のアイテムが異なります: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1710
-#, fuzzy, c-format
+#, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "回路図シンボルを編集"
+msgstr "回路図シンボルの追加ピン: %s."
 
 #: eeschema/lib_symbol.cpp:1718
 #, c-format
@@ -18928,14 +18922,14 @@ msgid "Pin %s differs: %s; %s"
 msgstr "ピン %s が異なります: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "回路図シンボルを編集"
+msgstr "回路図シンボルにピンがない: %s."
 
 #: eeschema/lib_symbol.cpp:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "回路図シンボルを編集"
+msgstr "回路図シンボルの追加フィールド: %s."
 
 #: eeschema/lib_symbol.cpp:1780
 #, c-format
@@ -18943,14 +18937,13 @@ msgid "Field '%s' differs: %s; %s."
 msgstr "フィールド '%s' が異なります: %s; %s ."
 
 #: eeschema/lib_symbol.cpp:1803
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "回路図シンボルを編集"
+msgstr "回路図シンボルにフィールドがない: %s."
 
 #: eeschema/lib_symbol.cpp:1813
-#, fuzzy
 msgid "Footprint filter count differs."
-msgstr "フットプリント フィルターが異なります。"
+msgstr "フットプリント フィルター数が異なります。"
 
 #: eeschema/lib_symbol.cpp:1825
 msgid "Footprint filters differ."
@@ -23512,9 +23505,8 @@ msgstr "ブレークシートピンと階層ラベルの関連付け"
 
 #: eeschema/toolbars_sch_editor.cpp:74 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
-#, fuzzy
 msgid "Line modes"
-msgstr "ピンのモデル:"
+msgstr "ライン モード"
 
 #: eeschema/toolbars_sch_editor.cpp:98 pcbnew/toolbars_footprint_editor.cpp:93
 #: pcbnew/toolbars_pcb_editor.cpp:196
@@ -24198,24 +24190,20 @@ msgid "Swap positions of selected items"
 msgstr "選択した項目の位置を入れ替え"
 
 #: eeschema/tools/sch_actions.cpp:776 eeschema/tools/sch_edit_tool.cpp:1620
-#, fuzzy
 msgid "Swap Pin Labels"
-msgstr "レイヤーを入れ替え"
+msgstr "ピンラベルを交換"
 
 #: eeschema/tools/sch_actions.cpp:777
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "選択されたネットのラッツネストを表示"
+msgstr "選択されたピンにつけられたラベルを交換"
 
 #: eeschema/tools/sch_actions.cpp:783 eeschema/tools/sch_edit_tool.cpp:1701
-#, fuzzy
 msgid "Swap Unit Labels"
-msgstr "単位を切替"
+msgstr "ユニットラベルを交換"
 
 #: eeschema/tools/sch_actions.cpp:784
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "選択した線の間の角を切り取る"
+msgstr "選択したユニット間のラベルを交換"
 
 #: eeschema/tools/sch_actions.cpp:800
 msgid "Edit Reference Designator..."
@@ -25041,9 +25029,8 @@ msgid "All units of this symbol are already placed."
 msgstr "このシンボルのユニットはすべて配置済です。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:666
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "配置済みのユニット"
+msgstr "要求されたユニットは配置済みです。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:870
 msgid "Add Design Block"
@@ -25221,13 +25208,15 @@ msgstr "反転"
 msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
-msgstr ""
+msgstr "選択した各ピンには、ネット ラベルが 1 "
+"つだけ添付され、他のピンとの接続はされていません。"
 
 #: eeschema/tools/sch_edit_tool.cpp:1652
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
-msgstr ""
+msgstr "選択した各ユニットの各ピンには、ネット ラベルが 1 "
+"つだけ添付され、他のピンとの接続はされていません。"
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid "Label value cannot go below zero"
@@ -25901,20 +25890,18 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider.cpp:140
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Single Run"
-msgstr "単一のドキュメント"
+msgstr "単一実行"
 
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
 msgid "Multi Run"
-msgstr ""
+msgstr "複数実行"
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
-#, fuzzy
 msgid "Steps"
-msgstr "ステップ X:"
+msgstr "ステップ"
 
 #: eeschema/widgets/tuner_slider_base.cpp:62
 msgid "Limit to E24 series values."
@@ -35534,14 +35521,12 @@ msgid "Report All Errors for Each Track"
 msgstr "配線のエラーをすべてレポート"
 
 #: pcbnew/dialogs/dialog_drc.cpp:270
-#, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
-msgstr "チェックすると、編集を行った後にゾーンを塗り直します"
+msgstr "チェックを外すと、各配線の最初のエラーのみレポートする"
 
 #: pcbnew/dialogs/dialog_drc.cpp:277
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "選択したフットプリントに対応するシンボルをハイライト表示"
+msgstr "DRC リストの選択に対応するキャンバス上のアイテムをハイライト表示"
 
 #: pcbnew/dialogs/dialog_drc.cpp:360
 msgid "DRC incomplete: could not compile custom design rules."
@@ -36102,7 +36087,7 @@ msgstr "STL ファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:294
 msgid "Universal 3D files"
-msgstr ""
+msgstr "ユニバーサル3D (U3D) ファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:296
 msgid "PDF files"
@@ -37152,9 +37137,8 @@ msgid "Custom shape"
 msgstr "カスタム形状"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:52
-#, fuzzy
 msgid "Pad Table"
-msgstr "表を追加"
+msgstr "パッド テーブル"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:67 pcbnew/pad.cpp:2858
 msgid "Size X"
@@ -37950,9 +37934,8 @@ msgid "Via size:"
 msgstr "ビア サイズ:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:189
-#, fuzzy
 msgid "Via annular rings:"
-msgstr "アニュラーリング:"
+msgstr "ビア アニュラーリング:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1146
@@ -37977,9 +37960,8 @@ msgid "Start and end layers only"
 msgstr "始点レイヤーと終点レイヤーのみ"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:199
-#, fuzzy
 msgid "Via protection features:"
-msgstr "保護機能:"
+msgstr "ビア保護機能:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:206
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
@@ -41775,7 +41757,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -42000,31 +41981,41 @@ msgstr ""
 "| "
 "Description                                                                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
 "| ビア上のアニュラーリングの幅をチェックします。"
 "<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| 指定された式をチェックしま"
-"す。                                                                                                                                                                                                                                                                                                                                                                                                           "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                     "
+"| 指定された式をチェックします。"
+"                                                                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `bridged_mask`            |"
+"                                                                                                                       "
+"| "
+"導体間のソルダーマスクブリッジをチェックします。この制約は、最小値/最適値/最"
+"大値を取りません。この制約を違反の深刻度と組み合わせることで、様々な条件にお"
+"いて、ソルダーマスクブリッジを許可または禁止できます。"
+"<br>                                                                                                                                                                                                                       "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
-"| 異なるネットの導体オブジェクト間の **電気的** クリアランスを指定します。"
-"(ネットに関係なくオブジェクト間のクリアランスを指定する場合は、"
-"`physical_clearance` を参照してください。)<br><br>導体オブジェクトの重なり "
-"(衝突) を許可するには、`min` 値が 0 未満 (たとえば、`-1`) の `clearance` 制約"
-"を作成します。"
+"| 異なるネットの導体オブジェクト間の **電気的** "
+"クリアランスを指定します。(ネットに関係なくオブジェクト間のクリアランスを指定"
+"する場合は、`physical_clearance` を参照してください。)"
+"<br><br>導体オブジェクトの重なり (衝突) を許可するには、`min` 値が 0 未満 "
+"(たとえば、`-1`) の `clearance` 制約を作成します。"
 "<br>                                                                                                                        "
 "|\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
-"| フットプリントのコートヤード間のクリアランスをチェックし、2つのコートヤード"
-"が `min`距離よりも近い場合はエラーを生成します。フットプリントにコートヤード"
-"の形状がない場合、この制約によってエラーは生成されません。"
+"| フットプリントのコートヤード間のクリアランスをチェックし、"
+"2つのコートヤードが "
+"`min`距離よりも近い場合はエラーを生成します。フットプリントにコートヤードの形"
+"状がない場合、この制約によってエラーは生成されません。"
 "<br>                                                                                                                                                                                                                    "
 "|\n"
 "| `creepage`                | "
@@ -42034,112 +42025,126 @@ msgstr ""
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
-"| 差動ペア内の結合された配線間のギャップをチェックします。結合配線とは互いに"
-"平行な配線セグメントのことです。差動ペアのギャップは、差動ペアの非結合部分 "
+"| "
+"差動ペア内の結合された配線間のギャップをチェックします。結合配線とは互いに平"
+"行な配線セグメントのことです。差動ペアのギャップは、差動ペアの非結合部分 "
 "(たとえば、コンポーネントからのファンアウト) ではテストされません。"
 "<br>                                                                                                                                                                                                             "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
-"| 差動ペア配線がペア内の他の極性配線から分離されて配線される距離をチェックし"
-"ます (たとえば、ペアがコンポーネントからファンアウトする場合や、ビアなどの別"
-"のオブジェクトの周りを通過するために分離される場合など)。"
+"| "
+"差動ペア配線がペア内の他の極性配線から分離されて配線される距離をチェックしま"
+"す "
+"(たとえば、ペアがコンポーネントからファンアウトする場合や、ビアなどの別のオブ"
+"ジェクトの周りを通過するために分離される場合など)。"
 "<br>                                                                                                                                                                                                                      "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| 禁止するオブジェクトタイプを1つ以上、スペースで区切って指定します。たとえ"
-"ば、`(constraint disallow track)` や `(constraint disallow track via pad)`。"
-"このタイプのオブジェクトがルール条件に一致する場合DRCエラーが生成されます。"
-"<br><br>この制約は、基本的にキープアウト ルールエリアと同じですが、より具体的"
-"なキープアウト制限を作成するために使用できます。"
-"<br>                                                                       "
-"|\n"
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | "
+"禁止するオブジェクトタイプを1つ以上、スペースで区切って指定します。たとえば、"
+"`(constraint disallow track)` や `(constraint disallow track via "
+"pad)`。このタイプのオブジェクトがルール条件に一致する場合DRCエラーが生成され"
+"ます。<br><br>この制約は、基本的にキープアウト "
+"ルールエリアと同じですが、より具体的なキープアウト制限を作成するために使用で"
+"きます。"
+"<br>                                                                       |"
+"\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
-"| オブジェクトと基板外形間のクリアランスをチェックします。<br><br>基板外形に"
-"は、`Edge.Cuts` レイヤー上のすべてのグラフィカル アイテムと、 *楕円形* パッド"
-"の穴が含まれるため、これは「フライス加工公差」と考えることもできます。（ドリ"
-"ル公差については `physical_hole_clearance` を参照してください。）"
+"| "
+"オブジェクトと基板外形間のクリアランスをチェックします。<br><br>基板外形には"
+"、`Edge.Cuts` レイヤー上のすべてのグラフィカル アイテムと、 *楕円形* "
+"パッドの穴が含まれるため、これは「フライス加工公差」と考えることもできます。"
+"（ドリル公差については `physical_hole_clearance` を参照してください。）"
 "<br>                                                                                                                                 "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
-"| ルール条件に一致するネットの合計配線長をチェックし、制約の `min` 値（指定さ"
-"れている場合）を下回る、または `max` 値（指定されている場合）を上回るネットご"
-"とにエラーを生成します。"
+"| ルール条件に一致するネットの合計配線長をチェックし、制約の `min` "
+"値（指定されている場合）を下回る、または `max` "
+"値（指定されている場合）を上回るネットごとにエラーを生成します。"
 "<br>                                                                                                                                                                                                                                                     "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
-"| パッドまたはビアのドリル穴のサイズ (直径) をチェックします。楕円形の穴の場"
-"合、小さい方の (マイナー) 直径は `min` 値 (指定されている場合) に対してテスト"
-"され、大きい方の (メジャー) 直径は `max` 値 (指定されている場合) に対してテス"
-"トされます。"
+"| パッドまたはビアのドリル穴のサイズ (直径) "
+"をチェックします。楕円形の穴の場合、小さい方の (マイナー) 直径は `min` 値 "
+"(指定されている場合) に対してテストされ、大きい方の (メジャー) 直径は `max` "
+"値 (指定されている場合) に対してテストされます。"
 "<br>                                                                                                                                                                                     "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
-"| パッドまたはビアのドリル穴と別のネット上の導体オブジェクト間のクリアランス"
-"をチェックします。クリアランスは穴の中心ではなく直径から測定されます。"
+"| "
+"パッドまたはビアのドリル穴と別のネット上の導体オブジェクト間のクリアランスを"
+"チェックします。クリアランスは穴の中心ではなく直径から測定されます。"
 "<br>                                                                                                                                                                                                                                                                                     "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
-"| パッドとビアの機械的にドリルされた穴間のクリアランスをチェックします。クリ"
-"アランスは穴の中心間ではなく、穴の直径間で測定されます。<br><br>この制約はド"
-"リルビットの保護のみを目的としています。 ** レーザードリル **  (マイクロビ"
-"ア) とその他の非機械的にドリル加工された穴との間のクリアランスはチェックされ"
-"ません。また、 ** ミル加工 **  (楕円形) とその他の非機械的にドリル加工された"
-"穴との間のクリアランスもチェックされません。<br> |\n"
+"| "
+"パッドとビアの機械的にドリルされた穴間のクリアランスをチェックします。クリア"
+"ランスは穴の中心間ではなく、穴の直径間で測定されます。<br><br>この制約はドリ"
+"ルビットの保護のみを目的としています。 ** レーザードリル **  (マイクロビア) "
+"とその他の非機械的にドリル加工された穴との間のクリアランスはチェックされませ"
+"ん。また、 ** ミル加工 **  (楕円形) "
+"とその他の非機械的にドリル加工された穴との間のクリアランスもチェックされませ"
+"ん。<br> |\n"
 "| `physical_clearance`      | "
 "min                                                                                                                   "
-"| 特定のレイヤー (導体以外のレイヤーを含む) 上の 2つのオブジェクト間のクリア"
-"ランスをチェックします。<br><br>これは `clearance` よりも汎用的なチェックを実"
-"行できますが、はるかに遅くなります。可能な場合は  `clearance` を使用してくだ"
-"さい。"
+"| 特定のレイヤー (導体以外のレイヤーを含む) 上の "
+"2つのオブジェクト間のクリアランスをチェックします。<br><br>これは `clearance`"
+" よりも汎用的なチェックを実行できますが、はるかに遅くなります。可能な場合は  "
+"`clearance` を使用してください。"
 "<br>                                                                                                                                                                                            "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
-"| ネットに関係なく、パッドまたはビアのドリル穴と他のオブジェクト間のクリアラ"
-"ンスをチェックします。クリアランスは穴の中心ではなく直径から測定されます。"
-"<br><br>これは、**丸い** 穴のみを含むため、「ドリル公差」と考えることもできま"
-"す (フライス加工公差については `edge_clearance` を参照してください)。"
+"| "
+"ネットに関係なく、パッドまたはビアのドリル穴と他のオブジェクト間のクリアラン"
+"スをチェックします。クリアランスは穴の中心ではなく直径から測定されます。<br><"
+"br>これは、**丸い** 穴のみを含むため、「ドリル公差」と考えることもできます ("
+"フライス加工公差については `edge_clearance` を参照してください)。"
 "<br>                                                                                                                               "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
-"| シルクスクリーンレイヤー上のオブジェクトと他のオブジェクト間のクリアランス"
-"をチェックします。"
+"| "
+"シルクスクリーンレイヤー上のオブジェクトと他のオブジェクト間のクリアランスを"
+"チェックします。"
 "<br>                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
-"| ルール条件に一致するネットの合計スキュー、つまり、各ネットの長さと、ルール"
-"に一致する各ネットのすべての長さの平均との差をチェックします。その平均値とい"
-"ずれかのネットの長さの差の絶対値が制約の `max`  値を超える場合、エラーが生成"
-"されます。"
+"| "
+"ルール条件に一致するネットの合計スキュー、つまり、各ネットの長さと、ルールに"
+"一致する各ネットのすべての長さの平均との差をチェックします。"
+"その平均値といずれかのネットの長さの差の絶対値が制約の `max`  "
+"値を超える場合、エラーが生成されます。"
 "<br>                                                                                                                                                                                         "
 "|\n"
 "| `solder_mask_expansion`   | "
 "opt                                                                                                                   "
-"| パッド、形状、配線のハンダマスクの拡張を指定しま"
-"す。                                                                                                                                                                                                                                                                                                                                                                                     "
+"| パッド、形状、配線のハンダマスクの拡張を指定します。"
+"                                                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "| `solder_paste_abs_margin` | "
 "opt                                                                                                                   "
-"| パッドの絶対的なハンダペーストのクリアランスを指定します。ペーストを挿入す"
-"るにはマイナスにします。<br><br>最終的なはんだペーストのクリアランスは、絶対"
-"クリアランスと相対クリアランスの合計になりま"
-"す。                                                                                                                                                                                                                                   "
+"| "
+"パッドの絶対的なハンダペーストのクリアランスを指定します。ペーストを挿入する"
+"にはマイナスにします。<br><br>最終的なはんだペーストのクリアランスは、絶対ク"
+"リアランスと相対クリアランスの合計になります。"
+"                                                                                                                                                                                                                                   "
 "|\n"
 "| `solder_paste_rel_margin` | "
 "opt                                                                                                                   "
-"| パッドの相対的なハンダペーストのクリアランスを指定します。ペーストを挿入す"
-"るにはマイナスにします。<br><br>最終的なはんだペーストのクリアランスは、絶対"
-"クリアランスと相対クリアランスの合計になりま"
-"す。                                                                                                                                                                                                                                   "
+"| "
+"パッドの相対的なハンダペーストのクリアランスを指定します。ペーストを挿入する"
+"にはマイナスにします。<br><br>最終的なはんだペーストのクリアランスは、絶対ク"
+"リアランスと相対クリアランスの合計になります。"
+"                                                                                                                                                                                                                                   "
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
@@ -42153,41 +42158,42 @@ msgstr ""
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
-"| 配線と円弧セグメントの幅をチェックします。幅が `min` 値 (指定されている場"
-"合) より小さい、または `max` 値 (指定されている場合) より大きいセグメントごと"
-"にエラーが生成されます。"
+"| 配線と円弧セグメントの幅をチェックします。幅が `min` 値 "
+"(指定されている場合) より小さい、または `max` 値 (指定されている場合) "
+"より大きいセグメントごとにエラーが生成されます。"
 "<br>                                                                                                                                                                                                                                                       "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                           "
-"| 接続された2つの配線セグメント間の角度をチェックします。角度が `min` 値 (指"
-"定されている場合) より下、または `max` 値 (指定されている場合) より大きい接続"
-"ペアごとにエラーが生成されます。"
+"| 接続された2つの配線セグメント間の角度をチェックします。角度が `min` 値 "
+"(指定されている場合) より下、または `max` 値 (指定されている場合) "
+"より大きい接続ペアごとにエラーが生成されます。"
 "<br>                                                                                                                                                                                                                                              "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                               "
-"| 配線と円弧セグメントの長さをチェックします。長さが `min` 値 (指定されている"
-"場合) 未満、または `max` 値 (指定されている場合) を超えるセグメントごとにエ"
-"ラーが生成されます。"
+"| 配線と円弧セグメントの長さをチェックします。長さが `min` 値 "
+"(指定されている場合) 未満、または `max` 値 (指定されている場合) "
+"を超えるセグメントごとにエラーが生成されます。"
 "<br>                                                                                                                                                                                                                                                           "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
-"| ルール条件に一致するすべてのネット上のビアの数をカウントします。その数が一"
-"致したネット上の制約 `max` 値を超える場合、そのネットに対してエラーが生成され"
-"ます。"
+"| ルール条件に一致するすべてのネット上のビアの数をカウントします。"
+"その数が一致したネット上の制約 `max` "
+"値を超える場合、そのネットに対してエラーが生成されます。"
 "<br>                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `via_dangling`            "
-"|                                                                                                                       "
+"| `via_dangling`            |"
+"                                                                                                                       "
 "|接続されていない、または1つのレイヤーでのみ接続されているビア。この制約は "
-"min/opt/max 値を取りません。この制約を違反の深刻度と組み合わせることで、様々"
-"な条件において、ダンリングビアを許可または禁止することができます。"
+"min/opt/max "
+"値を取りません。この制約を違反の深刻度と組み合わせることで、様々な条件におい"
+"て、ダンリングビアを許可または禁止することができます。"
 "<br>                                                                                                                                                                                                              "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                "
 "| ゾーンとパッド間の接続を指定します。"
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
@@ -42623,7 +42629,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -42806,13 +42811,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -42863,8 +42868,9 @@ msgstr ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅をオーバラ"
-"イドする\n"
+"    # "
+"GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅をオーバライドす"
+"る\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
@@ -42908,8 +42914,8 @@ msgstr ""
 "        (condition \"A.hasNetclass('Power')\"))\n"
 "\n"
 "\n"
-"    # メッキスルーホールと被せスロット（穴の縦横が違う）のサイズ制約を別々に"
-"規定する\n"
+"    # メッキスルーホールと被せスロット（穴の縦横が違う）"
+"のサイズ制約を別々に規定する\n"
 "    (rule \"Plated through-hole size\"\n"
 "        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
 "        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
@@ -42918,14 +42924,14 @@ msgstr ""
 "        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
 "\n"
 "\n"
-"    # ブラインド/ベリードビアからマイクロビアへの穴間違反を、次の条件が満たさ"
-"れている場合に許可する\n"
-"    # 製造工場で、マイクロビアをレーザーで穴あけする前に、ブラインド/埋め込み"
-"ビアホールを機械的に穴あけ\n"
+"    # ブラインド/ベリードビアからマイクロビアへの穴間違反を、"
+"次の条件が満たされている場合に許可する\n"
+"    # 製造工場で、マイクロビアをレーザーで穴あけする前に、ブラインド/"
+"埋め込みビアホールを機械的に穴あけ\n"
 "    # する場合\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -42941,6 +42947,11 @@ msgstr ""
 "        (constraint solder_paste_abs_margin (opt -50mm))\n"
 "        (condition \"A.Do_not_Populate\"))\n"
 "\n"
+"\n"
+"    (rule guard_ring_bridging\n"
+"        (constraint bridged_mask)\n"
+"        (condition \"A.intersectsArea('guard_ring')\")\n"
+"        (severity ignore))"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default Properties for Round Shapes"
@@ -45077,7 +45088,8 @@ msgstr "ファイル '%s' からモデルを推論できませんでした。"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3483
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "有効な基板アセンブリがありません。出力ファイル '%s' を作成できません。\n"
+msgstr "有効なプリント基板アセンブリがありません。出力ファイル '%s' "
+"を作成できません。\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -46402,14 +46414,14 @@ msgid "Connected %s pin %s to %s."
 msgstr "%s ピン %s を %s に接続しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1204
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s unit metadata."
-msgstr "フィールド %s を更新."
+msgstr "ユニット %s のメタデータを更新します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s unit metadata."
-msgstr "フィールド %s を更新."
+msgstr "ユニット %s のメタデータを更新しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1280
 #, c-format
@@ -50767,14 +50779,13 @@ msgid "Shape Modification"
 msgstr "形状の変更"
 
 #: pcbnew/tools/edit_tool.cpp:221
-#, fuzzy
 msgid "Swap Gate Nets..."
-msgstr "レイヤーを入れ替え..."
+msgstr "ゲート ネットを入れ替え..."
 
 #: pcbnew/tools/edit_tool.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid "Swap with %s"
-msgstr "単位を切替"
+msgstr "%sと交換"
 
 #: pcbnew/tools/edit_tool.cpp:957
 #, c-format
@@ -50906,57 +50917,57 @@ msgstr "コピーはキャンセルされました"
 msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
-msgstr ""
+msgstr "選択されていない %zu "
+"個のパッドがこれらのネットに接続されています。どのように進めますか?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
-msgstr ""
+msgstr "選択されていないパッドを無視した場合でも、接続された配線、ビア、"
+"その他の非ゾーン 導体アイテムはネットを交換します。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "メッキありパッド:"
+msgstr "選択されていないパッド:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "未使用のパッドを削除"
+msgstr "選択されていないパッドを無視"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Swap All Connected Pads"
-msgstr "接続されたトラックを選択"
+msgstr "すべての接続されているパッドを交換"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:315
 #: pcbnew/tools/edit_tool_move_fct.cpp:350 pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Swap Pad Nets"
-msgstr "パッドがないネットも表示"
+msgstr "パッド ネットを交換"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
-msgstr ""
+msgstr "ゲートの交換はひとつのマルチゲート "
+"フットプリント内のパッド上でする必要があります。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
 msgid "Gate swapping must be performed on gates with equal pin counts."
-msgstr ""
+msgstr "ゲートの交換はピン数が等しいゲートでする必要があります。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
 msgid "Gate swapping failed: pad in unit missing from footprint."
-msgstr ""
+msgstr "ゲートの交換に失敗しました: "
+"ユニット内のパッドがフットプリントから見つかりません。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
 msgid "Gate swapping has no effect: all selected gates have identical nets."
-msgstr ""
+msgstr "ゲートのスワッピングは効果がありません: "
+"選択されたすべてのゲートには同一のネットがあります。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:614
 #: pcbnew/tools/edit_tool_move_fct.cpp:656 pcbnew/tools/pcb_actions.cpp:700
-#, fuzzy
 msgid "Swap Gate Nets"
-msgstr "ネットの更新"
+msgstr "ゲート ネットを交換"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:713
 msgid "Pack Footprints"
@@ -51565,11 +51576,11 @@ msgstr "選択したアイテムをX軸対称に複製"
 
 #: pcbnew/tools/pcb_actions.cpp:694
 msgid "Swap nets between two selected pads and their connected copper"
-msgstr ""
+msgstr "選択した2つのパッドとそれらに接続された導体間のネットを交換する"
 
 #: pcbnew/tools/pcb_actions.cpp:701
 msgid "Swap nets between gates of a footprint and their connected copper"
-msgstr ""
+msgstr "フットプリントのゲートとそれらに接続された導体間のネットを交換する"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Pack and Move Footprints"
@@ -51735,14 +51746,12 @@ msgid "Footprint Properties..."
 msgstr "フットプリントのプロパティ..."
 
 #: pcbnew/tools/pcb_actions.cpp:921
-#, fuzzy
 msgid "Pad Table..."
-msgstr "ピン テーブル..."
+msgstr "パッド テーブル..."
 
 #: pcbnew/tools/pcb_actions.cpp:922
-#, fuzzy
 msgid "Displays pad table for bulk editing of pads"
-msgstr "ピンの一括編集用にピン テーブルを表示"
+msgstr "パッドを一括編集するためパッド テーブルを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:929
 msgid "Show the footprint checker window"
@@ -52228,9 +52237,8 @@ msgstr "回転制限なし/45度、水平/垂直を切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1452 pcbnew/tools/pcb_actions.cpp:1462
 #: pcbnew/tools/pcb_actions.cpp:1472 pcbnew/tools/pcb_actions.cpp:1482
-#, fuzzy
 msgid "Line Modes"
-msgstr "印刷モード"
+msgstr "ライン モード"
 
 #: pcbnew/tools/pcb_actions.cpp:1494
 msgid "Prevent items from being moved and/or resized on the canvas"
