@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 08:04+0000\n"
+"PO-Revision-Date: 2025-09-26 07:10+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -23594,9 +23594,9 @@ msgid "Footprint re-linking canceled by user."
 msgstr "フットプリントの再リンクはユーザーによってキャンセルされました。"
 
 #: eeschema/tools/backannotate.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "フィールド '%s' に '%s' を値 '%s' として追加しました。"
+msgstr "リファレンス指定子'%s' のユニット '%s' と ユニット '%s' を交換しました。"
 
 #: eeschema/tools/backannotate.cpp:810
 msgid "true"
