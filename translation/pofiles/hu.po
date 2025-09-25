@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 08:04+0000\n"
+"PO-Revision-Date: 2025-09-25 21:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -31454,19 +31454,16 @@ msgid "Threshold voltage:"
 msgstr "Vég feszültség:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "Anyag"
+msgstr "Anyag nevek:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
-#, fuzzy
 msgid "Chemical symbols"
-msgstr "Válasszon rajzjelet"
+msgstr "Vegyjelek"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:95
-#, fuzzy
 msgid "Names"
-msgstr "Név"
+msgstr "Nevek"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:64
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:148
@@ -31483,7 +31480,6 @@ msgid "Not worth using"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:21
-#, fuzzy
 msgid "Inputs"
 msgstr "Bemenetek"
 
