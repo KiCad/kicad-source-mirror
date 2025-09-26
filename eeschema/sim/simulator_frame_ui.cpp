@@ -1045,6 +1045,25 @@ wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
                                                        const wxString& aSignalName,
                                                        int* aTraceType )
 {
+    auto looksLikePower = []( const wxString& aExpression ) -> bool
+    {
+        wxString exprUpper = aExpression.Upper();
+
+        if( exprUpper.Contains( wxS( ":POWER" ) ) )
+            return true;
+
+        if( exprUpper.Find( '*' ) == wxNOT_FOUND )
+            return false;
+
+        if( !exprUpper.Contains( wxS( "V(" ) ) )
+            return false;
+
+        if( !exprUpper.Contains( wxS( "I(" ) ) )
+            return false;
+
+        return true;
+    };
+
     std::map<wxString, int> suffixes;
     suffixes[ _( " (amplitude)" ) ] = SPT_SP_AMP;
     suffixes[ _( " (gain)" ) ] = SPT_AC_GAIN;
@@ -1091,7 +1110,15 @@ wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
     for( const auto& [ id, signal ] : m_userDefinedSignals )
     {
         if( name == signal )
+        {
+            if( aTraceType && looksLikePower( signal ) )
+            {
+                int suffixBits = *aTraceType & ( SPT_AC_GAIN | SPT_AC_PHASE | SPT_SP_AMP );
+                *aTraceType = suffixBits | SPT_POWER;
+            }
+
             return vectorNameFromSignalId( id );
+        }
     }
 
     return name;

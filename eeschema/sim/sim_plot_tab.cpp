@@ -659,15 +659,8 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
             m_axis_y1->SetName( _( "Voltage" ) );
             m_axis_y2->SetName( _( "Current" ) );
 
-            if( ( aNewTraceType & SPT_POWER ) && !m_axis_y3 )
-            {
-                m_plotWin->SetMargins( 30, 140, 45, 70 );
-
-                m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_FAR_RIGHT );
-                m_axis_y3->SetNameAlign( mpALIGN_FAR_RIGHT );
-                m_axis_y3->SetMasterScale( m_axis_y1 );
-                m_plotWin->AddLayer( m_axis_y3 );
-            }
+            if( aNewTraceType & SPT_POWER )
+                EnsureThirdYAxisExists();
 
             if( m_axis_y3 )
                 m_axis_y3->SetName( _( "Power" ) );
@@ -677,6 +670,27 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
         default:
             // suppress warnings
             break;
+    }
+
+    if( GetSimType() == ST_TRAN || GetSimType() == ST_DC )
+    {
+        if( m_axis_y3 )
+        {
+            m_plotWin->SetMargins( 30, 160, 45, 70 );
+
+            if( m_axis_y2 )
+                m_axis_y2->SetNameAlign( mpALIGN_BORDER_RIGHT );
+
+            m_axis_y3->SetAlign( mpALIGN_BORDER_RIGHT );
+            m_axis_y3->SetNameAlign( mpALIGN_BORDER_RIGHT );
+        }
+        else
+        {
+            m_plotWin->SetMargins( 30, 70, 45, 70 );
+
+            if( m_axis_y2 )
+                m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+        }
     }
 
     if( m_axis_x )
@@ -792,12 +806,21 @@ void SIM_PLOT_TAB::EnsureThirdYAxisExists()
 {
     if( !m_axis_y3 )
     {
-        m_plotWin->SetMargins( 30, 140, 45, 70 );
-        m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_FAR_RIGHT );
-        m_axis_y3->SetNameAlign( mpALIGN_FAR_RIGHT );
+        m_plotWin->SetMargins( 30, 160, 45, 70 );
+        m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_BORDER_RIGHT );
+        m_axis_y3->SetNameAlign( mpALIGN_BORDER_RIGHT );
         m_axis_y3->SetMasterScale( m_axis_y1 );
         m_plotWin->AddLayer( m_axis_y3 );
     }
+
+    if( m_axis_y3 )
+    {
+        m_axis_y3->SetAlign( mpALIGN_BORDER_RIGHT );
+        m_axis_y3->SetNameAlign( mpALIGN_BORDER_RIGHT );
+    }
+
+    if( m_axis_y2 )
+        m_axis_y2->SetNameAlign( mpALIGN_BORDER_RIGHT );
 }
 
 
