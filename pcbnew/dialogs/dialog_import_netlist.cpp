@@ -229,6 +229,7 @@ void DIALOG_IMPORT_NETLIST::loadNetlist( bool aDryRun )
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetTransferGroups( m_cbTransferGroups->GetValue() );
     updater.SetOverrideLocks( m_cbOverrideLocks->GetValue() );
+    updater.SetUpdateFields( true );
     updater.UpdateNetlist( netlist );
 
     // The creation of the report was made without window update: the full page must be displayed
