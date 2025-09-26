@@ -210,6 +210,9 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter 
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
+        wxCommandEvent e( EDA_EVT_BOARD_CHANGING );
+        ProcessEventLocally( e );
+
         GetCanvas()->GetView()->Clear();
         GetCanvas()->GetView()->InitPreview();
     }

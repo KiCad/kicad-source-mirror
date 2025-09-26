@@ -83,6 +83,7 @@ class SPNAV_2D_PLUGIN;
 class wxFileSystemWatcher;
 class wxFileSystemWatcherEvent;
 
+wxDECLARE_EVENT( EDA_EVT_BOARD_CHANGING, wxCommandEvent );
 wxDECLARE_EVENT( EDA_EVT_BOARD_CHANGED, wxCommandEvent );
 
 /**
@@ -447,8 +448,6 @@ private:
     wxDateTime                           m_watcherLastModified;
     wxTimer                              m_watcherDebounceTimer;
     bool                                 m_inFpChangeTimerEvent;
-
-    std::vector<wxEvtHandler*> m_boardChangeListeners;
 };
 
 #endif  // PCB_BASE_FRAME_H

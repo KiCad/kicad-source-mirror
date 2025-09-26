@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCH_SEARCH_PANE_H
-#define SCH_SEARCH_PANE_H
+#pragma once
 
 #include <schematic.h>
 #include <widgets/search_pane.h>
@@ -29,20 +28,13 @@ class SCH_SEARCH_PANE : public SEARCH_PANE, public SCHEMATIC_LISTENER
 {
 public:
     SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame );
-    virtual ~SCH_SEARCH_PANE();
+    virtual ~SCH_SEARCH_PANE() = default;
 
     virtual void OnSchItemsAdded( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems ) override;
-    virtual void OnSchItemsRemoved( SCHEMATIC&              aBoard,
-                                    std::vector<SCH_ITEM*>& aBoardItems ) override;
-    virtual void OnSchItemsChanged( SCHEMATIC&              aBoard,
-                                    std::vector<SCH_ITEM*>& aBoardItems ) override;
+    virtual void OnSchItemsRemoved( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems ) override;
+    virtual void OnSchItemsChanged( SCHEMATIC&  aBoard, std::vector<SCH_ITEM*>& aBoardItems ) override;
 
 private:
-    void onUnitsChanged( wxCommandEvent& event );
-    void onSchChanged( wxCommandEvent& event );
-
     SCH_EDIT_FRAME* m_schFrame;
     SCHEMATIC*      m_sch;
 };
-
-#endif

@@ -26,20 +26,34 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
         SEARCH_PANE( aFrame ),
         m_schFrame( aFrame )
 {
-    m_sch = &(m_schFrame->Schematic());
+    m_sch = &m_schFrame->Schematic();
 
     if( m_sch != nullptr )
         m_sch->AddListener( this );
 
-    m_schFrame->Connect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onUnitsChanged ),
-                         nullptr, this );
+    m_schFrame->Bind( EDA_EVT_UNITS_CHANGED, [&]( wxCommandEvent& aEvent )
+                                             {
+                                                 ClearAllResults();
+                                                 RefreshSearch();
+                                                 aEvent.Skip();
+                                             } );
 
-    m_schFrame->Connect( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ),
-                         nullptr, this );
+    m_schFrame->Bind( EDA_EVT_SCHEMATIC_CHANGED, [&]( wxCommandEvent& aEvent )
+                                                 {
+                                                     m_sch = &m_schFrame->Schematic();
 
-    m_schFrame->Bind( EDA_EVT_SCHEMATIC_CHANGING, [&]( wxCommandEvent& )
+                                                     if( m_sch != nullptr )
+                                                         m_sch->AddListener( this );
+
+                                                     ClearAllResults();
+                                                     RefreshSearch();
+                                                     aEvent.Skip();
+                                                 } );
+
+    m_schFrame->Bind( EDA_EVT_SCHEMATIC_CHANGING, [&]( wxCommandEvent& aEvent )
                                                   {
                                                       ClearAllResults();
+                                                      aEvent.Skip();
                                                   } );
 
     wxFont infoFont = KIUI::GetDockedPaneFont( this );
@@ -51,33 +65,6 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
     AddSearcher( std::make_shared<TEXT_SEARCH_HANDLER>( aFrame ) );
     AddSearcher( std::make_shared<LABEL_SEARCH_HANDLER>( aFrame ) );
     AddSearcher( std::make_shared<GROUP_SEARCH_HANDLER>( aFrame ) );
-}
-
-
-SCH_SEARCH_PANE::~SCH_SEARCH_PANE()
-{
-    m_schFrame->Disconnect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onUnitsChanged ),
-                            nullptr, this );
-    m_schFrame->Disconnect( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ),
-                            nullptr, this );
-}
-
-
-void SCH_SEARCH_PANE::onUnitsChanged( wxCommandEvent& event )
-{
-    ClearAllResults();
-    RefreshSearch();
-
-    event.Skip();
-}
-
-
-void SCH_SEARCH_PANE::onSchChanged( wxCommandEvent& event )
-{
-    ClearAllResults();
-    RefreshSearch();
-
-    event.Skip();
 }
 
 

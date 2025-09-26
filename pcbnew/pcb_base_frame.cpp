@@ -76,13 +76,13 @@
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::PCB_RENDER_SETTINGS;
 
+wxDEFINE_EVENT( EDA_EVT_BOARD_CHANGING, wxCommandEvent );
 wxDEFINE_EVENT( EDA_EVT_BOARD_CHANGED, wxCommandEvent );
 
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString& aFrameName ) :
-        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName,
-                        pcbIUScale ),
+        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, pcbIUScale ),
         m_pcb( nullptr ),
         m_originTransforms( *this ),
         m_inFpChangeTimerEvent( false )
@@ -185,41 +185,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
         wxCommandEvent e( EDA_EVT_BOARD_CHANGED );
         ProcessEventLocally( e );
-
-        for( wxEvtHandler* listener : m_boardChangeListeners )
-        {
-            wxCHECK2( listener, continue );
-
-            // Use the windows variant when handling event messages in case there is any special
-            // event handler pre and/or post processing specific to windows.
-            wxWindow* win = dynamic_cast<wxWindow*>( listener );
-
-            if( win )
-                win->HandleWindowEvent( e );
-            else
-                listener->SafelyProcessEvent( e );
-        }
     }
-}
-
-
-void PCB_BASE_FRAME::AddBoardChangeListener( wxEvtHandler* aListener )
-{
-    auto it = std::find( m_boardChangeListeners.begin(), m_boardChangeListeners.end(), aListener );
-
-    // Don't add duplicate listeners.
-    if( it == m_boardChangeListeners.end() )
-        m_boardChangeListeners.push_back( aListener );
-}
-
-
-void PCB_BASE_FRAME::RemoveBoardChangeListener( wxEvtHandler* aListener )
-{
-    auto it = std::find( m_boardChangeListeners.begin(), m_boardChangeListeners.end(), aListener );
-
-    // Don't add duplicate listeners.
-    if( it != m_boardChangeListeners.end() )
-        m_boardChangeListeners.erase( it );
 }
 
 
