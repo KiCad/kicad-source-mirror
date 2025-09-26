@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-26 08:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-09-27 08:00+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -24516,7 +24516,6 @@ msgid "Swap the labels attached to selected pins"
 msgstr "Tausche die zu den ausgewählten Pins gehörigen Bezeichner"
 
 #: eeschema/tools/sch_actions.cpp:783 eeschema/tools/sch_edit_tool.cpp:1701
-#, fuzzy
 msgid "Swap Unit Labels"
 msgstr "Einheitenbezeichner tauschen"
 
@@ -37711,7 +37710,6 @@ msgstr "Anschluss"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:85
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:209
-#, fuzzy
 msgid "Aperture"
 msgstr "Lötpasten-Öffnung"
 
@@ -47082,7 +47080,7 @@ msgid "Update %s unit metadata."
 msgstr "Metadaten der Einheit %s aktualisieren."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s unit metadata."
 msgstr "Metadaten der Einheit %s aktualisiert."
 
@@ -50738,7 +50736,6 @@ msgid "Track tuning tools"
 msgstr "Leiterbahnabstimmungswerkzeuge"
 
 #: pcbnew/toolbars_pcb_editor.cpp:234
-#, fuzzy
 msgid "PCB origins and points"
 msgstr "Leiterplattenursprünge und -punkte"
 
@@ -51504,7 +51501,6 @@ msgid "Shape Modification"
 msgstr "Formänderungen"
 
 #: pcbnew/tools/edit_tool.cpp:221
-#, fuzzy
 msgid "Swap Gate Nets..."
 msgstr "Gatter-Netze tauschen ..."
 
@@ -51640,66 +51636,57 @@ msgid "Copy canceled"
 msgstr "Kopieren abgebrochen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:75
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
 msgstr ""
 "%zu nicht ausgewählte(s) Pad(s) sind mit diesen Netzen verbunden. Wie "
-"möchten Sie weitermachen?"
+"möchten Sie fortfahren?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
-#, fuzzy
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
 msgstr ""
 "Verbundene Leiterbahnen, Vias und andere nicht zu Zonen gehörende "
-"Kupferelemente tauschen weiterhin Netze, auch wenn Sie die nicht "
+"Kupferelemente tauschen selbst dann noch Netze, wenn Sie die nicht "
 "ausgewählten Pads ignorieren."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
 msgstr "Nicht ausgewählte Pads:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
 msgstr "Nicht ausgewählte Pads ignorieren"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Swap All Connected Pads"
 msgstr "Alle verbundenen Pads tauschen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:315
 #: pcbnew/tools/edit_tool_move_fct.cpp:350 pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Swap Pad Nets"
 msgstr "Pad-Netze tauschen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
-#, fuzzy
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
 msgstr ""
-"Gatter-Tausch muß auf Pads innerhalb eines Footprints mit mehreren Gattern "
+"Gatter-Tausch muss auf Pads innerhalb eines Footprints mit mehreren Gattern "
 "durchgeführt werden."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
-#, fuzzy
 msgid "Gate swapping must be performed on gates with equal pin counts."
 msgstr ""
-"Gatter-Tausch muß an Gattern mit gleicher Pinanzahl durchgeführt werden."
+"Gatter-Tausch muss an Gattern mit gleicher Pinanzahl durchgeführt werden."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
-#, fuzzy
 msgid "Gate swapping failed: pad in unit missing from footprint."
 msgstr "Gatter-Tausch fehlgeschlagen: Pad im Element fehlt im Footprint."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
-#, fuzzy
 msgid "Gate swapping has no effect: all selected gates have identical nets."
 msgstr ""
 "Gatter-Tausch hat keine Auswirkung: alle ausgewählten Gatter haben "
@@ -51911,7 +51898,6 @@ msgstr ""
 "fehlgeschlagen."
 
 #: pcbnew/tools/multichannel_tool.cpp:615
-#, fuzzy
 msgid "Target group does not have a group."
 msgstr "Die Zielgruppe hat keine Gruppe."
 
@@ -52337,18 +52323,16 @@ msgid "Mirrors selected item(s) across the X axis"
 msgstr "Ausgewählte(s) Element(e) an X-Achse spiegeln"
 
 #: pcbnew/tools/pcb_actions.cpp:694
-#, fuzzy
 msgid "Swap nets between two selected pads and their connected copper"
 msgstr ""
-"Tausche Netze zwischen zwei ausgewählten Pads und dem damit verbundenen "
-"Kupfer"
+"Netze zwischen zwei ausgewählten Pads und dem damit verbundenen Kupfer "
+"tauschen"
 
 #: pcbnew/tools/pcb_actions.cpp:701
-#, fuzzy
 msgid "Swap nets between gates of a footprint and their connected copper"
 msgstr ""
-"Tausche Netze zwischen Gattern eines Footprints und dem damit verbundenen "
-"Kupfer"
+"Netze zwischen Gattern eines Footprints und dem damit verbundenen Kupfer "
+"tauschen"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Pack and Move Footprints"
@@ -52519,12 +52503,10 @@ msgid "Footprint Properties..."
 msgstr "Footprint-Eigenschaften..."
 
 #: pcbnew/tools/pcb_actions.cpp:921
-#, fuzzy
 msgid "Pad Table..."
 msgstr "Pad-Tabelle ..."
 
 #: pcbnew/tools/pcb_actions.cpp:922
-#, fuzzy
 msgid "Displays pad table for bulk editing of pads"
 msgstr "Zeigt die Pad-Tabelle für Sammelbearbeitung von Pads an"
 
