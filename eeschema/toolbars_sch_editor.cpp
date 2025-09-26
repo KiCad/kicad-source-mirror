@@ -43,6 +43,7 @@
 #include <widgets/sch_properties_panel.h>
 #include <widgets/sch_search_pane.h>
 #include <toolbars_sch_editor.h>
+#include <wx/choice.h>
 
 
 ACTION_TOOLBAR_CONTROL SCH_ACTION_TOOLBAR_CONTROLS::currentVariant(
