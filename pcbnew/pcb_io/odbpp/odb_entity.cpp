@@ -910,6 +910,9 @@ void ODB_STEP_ENTITY::InitEdaData()
         const EDA_DATA::PACKAGE& eda_pkg =
                 m_edaData.GetPackage( hash_fp_item( fp_pkg.get(), HASH_POS | REL_COORD ) );
 
+        if( fp->Pads().empty() )
+            continue;
+
         ODB_COMPONENT& comp = iter->second->InitComponentData( fp, eda_pkg );
 
         for( int i = 0; i < fp->Pads().size(); ++i )

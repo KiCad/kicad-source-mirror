@@ -61,6 +61,21 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         comp.m_comp_name = wxString::Format( "UNNAMED%zu", m_compList.size() );
     }
 
+    wxString base_comp_name = comp.m_comp_name;
+
+    if( !m_usedCompNames.insert( comp.m_comp_name ).second )
+    {
+        size_t suffix = 1;
+        wxString candidate;
+
+        do
+        {
+            candidate = wxString::Format( "%s_%zu", base_comp_name, suffix++ );
+        } while( !m_usedCompNames.insert( candidate ).second );
+
+        comp.m_comp_name = candidate;
+    }
+
     for( PCB_FIELD* field : aFp->GetFields() )
     {
         if( field->GetId() == FIELD_T::REFERENCE )
