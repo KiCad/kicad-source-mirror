@@ -892,6 +892,8 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
     {
     case FRAME_PCB_EDITOR:
     case FRAME_PCB_DISPLAY3D:
+    case FRAME_FOOTPRINT_CHOOSER:
+    case FRAME_FOOTPRINT_VIEWER:
     default:
         return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
@@ -899,8 +901,6 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
     case FRAME_FOOTPRINT_WIZARD:
         return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
-    case FRAME_FOOTPRINT_VIEWER:
-    case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:
