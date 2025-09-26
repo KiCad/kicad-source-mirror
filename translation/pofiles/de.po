@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-26 07:10+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-09-26 08:01+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -23898,9 +23898,9 @@ msgid "Footprint re-linking canceled by user."
 msgstr "Footprint-Neuverknüpfung durch Benutzer abgebrochen."
 
 #: eeschema/tools/backannotate.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "Tausche %s Einheit %s mit Einheit %s."
+msgstr "Tausche %s Einheit %s gegen Einheit %s."
 
 #: eeschema/tools/backannotate.cpp:810
 msgid "true"
@@ -24509,7 +24509,7 @@ msgstr "Positionen ausgewählter Elemente tauschen"
 
 #: eeschema/tools/sch_actions.cpp:776 eeschema/tools/sch_edit_tool.cpp:1620
 msgid "Swap Pin Labels"
-msgstr "Pin-Bezeichner tauschen"
+msgstr "Pinbezeichner tauschen"
 
 #: eeschema/tools/sch_actions.cpp:777
 msgid "Swap the labels attached to selected pins"
@@ -24518,7 +24518,7 @@ msgstr "Tausche die zu den ausgewählten Pins gehörigen Bezeichner"
 #: eeschema/tools/sch_actions.cpp:783 eeschema/tools/sch_edit_tool.cpp:1701
 #, fuzzy
 msgid "Swap Unit Labels"
-msgstr "Einheiten-Bezeichner tauschen"
+msgstr "Einheitenbezeichner tauschen"
 
 #: eeschema/tools/sch_actions.cpp:784
 msgid "Swap labels between selected units"
