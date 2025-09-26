@@ -66,6 +66,16 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTransl
     if( aParent->IsType( FRAME_PCB_EDITOR ) )
         m_menuIDs.push_back( ROTATE_AROUND_AUX_ORIGIN );
 
+    // DIALOG_SHIM needs a title- and anchor-options-specific hash_key so we don't save/restore state
+    // between usage cases.
+    m_hash_key = GetTitle().ToStdString();
+
+    if( aAnchor == ROTATE_AROUND_SEL_CENTER )
+        m_hash_key += "|with_selection";
+
+    if( aParent->IsType( FRAME_PCB_EDITOR ) )
+        m_hash_key += "|pcb_editor";
+
     buildRotationAnchorMenu();
     m_rotate.SetUnits( EDA_UNITS::DEGREES );
 
