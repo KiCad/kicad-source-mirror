@@ -27,7 +27,6 @@
 #include <bus_alias.h>
 
 class SCH_EDIT_FRAME;
-class SCH_SCREEN;
 class BUS_ALIAS;
 
 class PANEL_SETUP_BUSES : public PANEL_SETUP_BUSES_BASE
@@ -40,7 +39,7 @@ public:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
-    void ImportSettingsFrom( const SCHEMATIC& aOtherSchematic );
+    void ImportSettingsFrom( const std::map<wxString, std::vector<wxString>>& aAliases );
 
 protected:
     void OnAddAlias( wxCommandEvent& aEvent ) override;
@@ -52,7 +51,7 @@ protected:
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    void loadAliases( const SCHEMATIC& aSchematic );
+    void loadAliases();
 
     void reloadMembersGridOnIdle( wxIdleEvent& aEvent );
 

@@ -27,15 +27,10 @@
 #include <wx/string.h>
 
 
-class SCH_SCREEN;
-
-
 class BUS_ALIAS
 {
 public:
-    BUS_ALIAS( SCH_SCREEN* aParent = nullptr ) :
-        m_parent( aParent )
-    { }
+    BUS_ALIAS() = default;
 
     ~BUS_ALIAS()
     { }
@@ -51,18 +46,9 @@ public:
     const std::vector<wxString>& Members() const { return m_members; }
     std::vector<wxString>& Members() { return m_members; }
 
-    SCH_SCREEN* GetParent() { return m_parent; }
-    void SetParent( SCH_SCREEN* aParent ) { m_parent = aParent; }
-
 protected:
     wxString              m_name;
     std::vector<wxString> m_members;
-
-    /**
-     * Schematic Setup can edit aliases from all sheets, so we have to store a reference back
-     * to our parent so that the dialog can update the parent if aliases are changed or removed.
-     */
-    SCH_SCREEN* m_parent;
 };
 
 #endif

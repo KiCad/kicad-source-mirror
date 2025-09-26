@@ -72,7 +72,6 @@ BOOST_FIXTURE_TEST_CASE( ERCNoConnect, ERC_REGRESSION_TEST_FIXTURE )
         m_schematic->ConnectionGraph()->RunERC();
 
         ERC_TESTER tester( m_schematic.get() );
-        tester.TestConflictingBusAliases();
         tester.TestMultUnitPinConflicts();
         tester.TestMultiunitFootprints();
         tester.TestNoConnectPins();

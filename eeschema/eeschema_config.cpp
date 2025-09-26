@@ -116,14 +116,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         return;
     }
 
-    SCH_SCREENS screens( Schematic().Root() );
-    std::vector<std::shared_ptr<BUS_ALIAS>> oldAliases;
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
-    {
-        for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
-            oldAliases.push_back( alias );
-    }
+    std::map<wxString, std::vector<wxString>> oldAliases = Prj().GetProjectFile().m_BusAliases;
 
     DIALOG_SCHEMATIC_SETUP dlg( this );
 
@@ -158,13 +151,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         GetCanvas()->GetView()->MarkDirty();
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
 
-        std::vector<std::shared_ptr<BUS_ALIAS>> newAliases;
-
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
-        {
-            for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
-                newAliases.push_back( alias );
-        }
+        std::map<wxString, std::vector<wxString>> newAliases = Prj().GetProjectFile().m_BusAliases;
 
         if( oldAliases != newAliases )
             RecalculateConnections( nullptr, GLOBAL_CLEANUP );

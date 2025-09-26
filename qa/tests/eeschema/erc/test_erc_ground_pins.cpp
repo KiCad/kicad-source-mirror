@@ -407,7 +407,6 @@ BOOST_FIXTURE_TEST_CASE( ERCGroundPinComprehensive, ERC_GROUND_PIN_TEST_FIXTURE 
         ERC_TESTER tester( m_schematic.get() );
 
         // Run all ERC tests to ensure ground pin test integrates properly
-        tester.TestConflictingBusAliases();
         tester.TestMultUnitPinConflicts();
         tester.TestMultiunitFootprints();
         tester.TestMissingUnits();

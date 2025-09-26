@@ -1433,7 +1433,8 @@ void SCH_SCREEN::FixupEmbeddedData()
 
 void SCH_SCREEN::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 {
-    m_aliases.insert( aAlias );
+    if( SCHEMATIC* schematic = Schematic() )
+        schematic->AddBusAlias( aAlias );
 }
 
 

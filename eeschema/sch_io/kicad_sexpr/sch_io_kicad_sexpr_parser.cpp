@@ -4840,7 +4840,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
     wxCHECK( aScreen, /* void */ );
 
     T token;
-    std::shared_ptr<BUS_ALIAS> busAlias = std::make_shared<BUS_ALIAS>( aScreen );
+    std::shared_ptr<BUS_ALIAS> busAlias = std::make_shared<BUS_ALIAS>();
     wxString alias;
     wxString member;
 

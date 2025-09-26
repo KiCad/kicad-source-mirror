@@ -160,7 +160,6 @@ private:
     void saveTextBox( SCH_TEXTBOX* aText );
     void saveTable( SCH_TABLE* aTable );
     void saveGroup( SCH_GROUP* aGroup );
-    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
     void saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheets );
 
     void cacheLib( const wxString& aLibraryFileName, const std::map<std::string, UTF8>* aProperties );

@@ -506,25 +506,9 @@ public:
     void FixupEmbeddedData();
 
     /**
-     * Add a bus alias definition (and transfers ownership of the pointer).
+     * Add a bus alias definition.
      */
     void AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
-
-    /**
-     * Remove all bus alias definitions.
-     */
-    void ClearBusAliases()
-    {
-        m_aliases.clear();
-    }
-
-    /**
-     * Return a set of bus aliases defined in this screen.
-     */
-    auto& GetBusAliases() const
-    {
-        return m_aliases;
-    }
 
     const std::vector<SCH_SYMBOL_INSTANCE>& GetSymbolInstances() const
     {
@@ -662,18 +646,6 @@ private:
      */
     size_t getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol, std::vector<wxString>& aMatches );
 
-    /**
-     * Compare two #BUS_ALIAS objects by name.  For sorting in the set.
-     */
-    struct BusAliasCmp
-    {
-        bool operator()( const std::shared_ptr<BUS_ALIAS>& a,
-                         const std::shared_ptr<BUS_ALIAS>& b ) const
-        {
-            return a->GetName() < b->GetName();
-        }
-    };
-
 public:
     /**
      * last value for the zoom level, useful in Eeschema when changing the current displayed
@@ -711,9 +683,6 @@ private:
 
     /// Flag to indicate the file associated with this screen has been created.
     bool        m_fileExists;
-
-    /// List of bus aliases stored in this screen.
-    std::set< std::shared_ptr< BUS_ALIAS >, BusAliasCmp > m_aliases;
 
     /// Library symbols required for this schematic.
     std::map<wxString, LIB_SYMBOL*> m_libSymbols;

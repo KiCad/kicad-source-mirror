@@ -403,9 +403,6 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
     m_out->Print( ")" );
 
-    for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
-        saveBusAlias( alias );
-
     // Enforce item ordering
     auto cmp =
             []( const SCH_ITEM* a, const SCH_ITEM* b )
@@ -1491,26 +1488,6 @@ void SCH_IO_KICAD_SEXPR::saveGroup( SCH_GROUP* aGroup )
 
     m_out->Print( ")" ); // Close `members` token.
     m_out->Print( ")" ); // Close `group` token.
-}
-
-
-void SCH_IO_KICAD_SEXPR::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
-{
-    wxCHECK_RET( aAlias != nullptr, "BUS_ALIAS* is NULL" );
-
-    wxString members;
-
-    for( const wxString& member : aAlias->Members() )
-    {
-        if( !members.IsEmpty() )
-            members += wxS( " " );
-
-        members += m_out->Quotew( member );
-    }
-
-    m_out->Print( "(bus_alias %s (members %s))",
-                  m_out->Quotew( aAlias->GetName() ).c_str(),
-                  TO_UTF8( members ) );
 }
 
 

@@ -108,6 +108,49 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                     m_LegacyLibNames.push_back( entry.get<wxString>() );
             }, {} ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "schematic.bus_aliases",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::object();
+
+                for( const auto& alias : m_BusAliases )
+                {
+                    nlohmann::json members = nlohmann::json::array();
+
+                    for( const wxString& member : alias.second )
+                        members.push_back( member );
+
+                    ret[ alias.first.ToStdString() ] = members;
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( aJson.empty() || !aJson.is_object() )
+                    return;
+
+                m_BusAliases.clear();
+
+                for( auto it = aJson.begin(); it != aJson.end(); ++it )
+                {
+                    const nlohmann::json& membersJson = it.value();
+
+                    if( !membersJson.is_array() )
+                        continue;
+
+                    std::vector<wxString> members;
+
+                    for( const nlohmann::json& entry : membersJson )
+                    {
+                        if( entry.is_string() )
+                            members.push_back( entry.get<wxString>() );
+                    }
+
+                    m_BusAliases.emplace( wxString::FromUTF8( it.key().c_str() ), std::move( members ) );
+                }
+            }, {} ) );
+
     m_NetSettings = std::make_shared<NET_SETTINGS>( this, "net_settings" );
 
     m_ComponentClassSettings =

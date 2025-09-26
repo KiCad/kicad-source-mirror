@@ -17,6 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <set>
 #include <bus_alias.h>
 #include <commit.h>
 #include <connection_graph.h>
@@ -149,6 +151,10 @@ void SCHEMATIC::Reset()
 
     m_connectionGraph->Reset();
     m_currentSheet->clear();
+
+    m_busAliases.clear();
+
+    updateProjectBusAliases();
 }
 
 
@@ -178,6 +184,8 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
         project.m_SchematicSettings->LoadFromFile();
         project.m_SchematicSettings->m_NgspiceSettings->LoadFromFile();
         project.m_ErcSettings->LoadFromFile();
+
+        loadBusAliasesFromProject();
     }
 }
 
@@ -231,6 +239,7 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 
     m_hierarchy = BuildSheetListSortedByPageNumbers();
     m_connectionGraph->Reset();
+
 }
 
 
@@ -436,16 +445,107 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
-    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
+    for( const std::shared_ptr<BUS_ALIAS>& alias : m_busAliases )
     {
-        for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
-        {
-            if( alias->GetName() == aLabel )
-                return alias;
-        }
+        if( alias && alias->GetName() == aLabel )
+            return alias;
     }
 
     return nullptr;
+}
+
+
+void SCHEMATIC::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
+{
+    if( !aAlias )
+        return;
+
+    auto sameDefinition = [&]( const std::shared_ptr<BUS_ALIAS>& candidate ) -> bool
+    {
+        return candidate && candidate->GetName() == aAlias->GetName()
+               && candidate->Members() == aAlias->Members();
+    };
+
+    auto it = std::find_if( m_busAliases.begin(), m_busAliases.end(), sameDefinition );
+
+    if( it != m_busAliases.end() )
+        return;
+
+    m_busAliases.push_back( aAlias );
+
+    updateProjectBusAliases();
+}
+
+
+void SCHEMATIC::SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aAliases )
+{
+    m_busAliases.clear();
+
+    for( const std::shared_ptr<BUS_ALIAS>& alias : aAliases )
+    {
+        if( !alias )
+            continue;
+
+        std::shared_ptr<BUS_ALIAS> clone = alias->Clone();
+
+        auto sameDefinition = [&]( const std::shared_ptr<BUS_ALIAS>& candidate ) -> bool
+        {
+            return candidate && candidate->GetName() == clone->GetName()
+                   && candidate->Members() == clone->Members();
+        };
+
+        if( std::find_if( m_busAliases.begin(), m_busAliases.end(), sameDefinition ) != m_busAliases.end() )
+            continue;
+
+        m_busAliases.push_back( clone );
+    }
+
+    updateProjectBusAliases();
+}
+
+
+void SCHEMATIC::loadBusAliasesFromProject()
+{
+    m_busAliases.clear();
+
+    if( !m_project )
+        return;
+
+    const auto& projectAliases = m_project->GetProjectFile().m_BusAliases;
+
+    for( const auto& alias : projectAliases )
+    {
+        std::shared_ptr<BUS_ALIAS> busAlias = std::make_shared<BUS_ALIAS>();
+
+        busAlias->SetName( alias.first );
+        busAlias->Members() = alias.second;
+
+        m_busAliases.push_back( busAlias );
+    }
+}
+
+
+void SCHEMATIC::updateProjectBusAliases()
+{
+    if( !m_project )
+        return;
+
+    auto& projectAliases = m_project->GetProjectFile().m_BusAliases;
+
+    projectAliases.clear();
+
+    std::set<wxString> seen;
+
+    for( const std::shared_ptr<BUS_ALIAS>& alias : m_busAliases )
+    {
+        if( !alias )
+            continue;
+
+        if( !seen.insert( alias->GetName() ).second )
+            continue;
+
+        projectAliases.emplace( alias->GetName(), alias->Members() );
+    }
 }
 
 

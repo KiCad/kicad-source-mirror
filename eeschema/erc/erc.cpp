@@ -436,51 +436,6 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 }
 
 
-int ERC_TESTER::TestConflictingBusAliases()
-{
-    wxString                                msg;
-    int                                     err_count = 0;
-    std::vector<std::shared_ptr<BUS_ALIAS>> aliases;
-
-    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
-    {
-        const auto& screen_aliases = screen->GetBusAliases();
-
-        for( const std::shared_ptr<BUS_ALIAS>& alias : screen_aliases )
-        {
-            std::vector<wxString> aliasMembers = alias->Members();
-            std::sort( aliasMembers.begin(), aliasMembers.end() );
-
-            for( const std::shared_ptr<BUS_ALIAS>& test : aliases )
-            {
-                std::vector<wxString> testMembers = test->Members();
-                std::sort( testMembers.begin(), testMembers.end() );
-
-                if( alias->GetName() == test->GetName() && aliasMembers != testMembers )
-                {
-                    msg.Printf( _( "Bus alias %s has conflicting definitions on %s and %s" ),
-                                alias->GetName(),
-                                alias->GetParent()->GetFileName(),
-                                test->GetParent()->GetFileName() );
-
-                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ALIAS_CONFLICT );
-                    ercItem->SetErrorMessage( msg );
-
-                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), VECTOR2I() );
-                    test->GetParent()->Append( marker );
-
-                    ++err_count;
-                }
-            }
-        }
-
-        aliases.insert( aliases.end(), screen_aliases.begin(), screen_aliases.end() );
-    }
-
-    return err_count;
-}
-
-
 int ERC_TESTER::TestMultiunitFootprints()
 {
     int errors = 0;
@@ -1937,14 +1892,6 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking sheet names..." ) );
 
         TestDuplicateSheetNames( true );
-    }
-
-    if( m_settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
-    {
-        if( aProgressReporter )
-            aProgressReporter->AdvancePhase( _( "Checking bus conflicts..." ) );
-
-        TestConflictingBusAliases();
     }
 
     // The connection graph has a whole set of ERC checks it can run

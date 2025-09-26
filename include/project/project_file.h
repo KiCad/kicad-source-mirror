@@ -155,6 +155,9 @@ public:
 
     wxArrayString m_LegacyLibNames;
 
+    /// Bus alias definitions for the schematic project
+    std::map<wxString, std::vector<wxString>> m_BusAliases;
+
     /**
      * CvPcb params
      */

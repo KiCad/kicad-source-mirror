@@ -78,16 +78,6 @@ public:
     void TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
     /**
-     * Check that there are no conflicting bus alias definitions in the schematic.
-     *
-     * (for example, two hierarchical sub-sheets contain different definitions for
-     * the same bus alias)
-     *
-     * @return the error count
-     */
-    int TestConflictingBusAliases();
-
-    /**
      * Test if all units of each multiunit symbol have the same footprint assigned.
      * @return The error count.
      */

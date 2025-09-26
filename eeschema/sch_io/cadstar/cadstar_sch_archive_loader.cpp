@@ -1030,7 +1030,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
             std::shared_ptr<BUS_ALIAS> kiBusAlias = std::make_shared<BUS_ALIAS>();
 
             kiBusAlias->SetName( bus.Name );
-            kiBusAlias->SetParent( screen );
             screen->AddBusAlias( kiBusAlias );
             m_busesMap.insert( { bus.ID, kiBusAlias } );
 

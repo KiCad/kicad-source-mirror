@@ -200,6 +200,15 @@ public:
      */
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel ) const;
 
+    void AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
+
+    void SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aAliases );
+
+    const std::vector<std::shared_ptr<BUS_ALIAS>>& GetAllBusAliases() const
+    {
+        return m_busAliases;
+    }
+
     /**
      * Return the set of netname candidates for netclass assignment.
      *
@@ -481,6 +490,12 @@ private:
      * What currently "Holds" the schematic, i.e. a edit frame if available
      */
     SCHEMATIC_HOLDER* m_schematicHolder;
+
+    void loadBusAliasesFromProject();
+
+    void updateProjectBusAliases();
+
+    std::vector<std::shared_ptr<BUS_ALIAS>> m_busAliases;
 };
 
 #endif

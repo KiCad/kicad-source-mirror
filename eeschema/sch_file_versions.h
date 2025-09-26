@@ -56,7 +56,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250318  // ~ no longer means empty text
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250324  // Jumper pin groups
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250829  // Rounded Rectangles
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250901  // Stacked Pin notation
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250901  // Stacked Pin notation
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250925  // Bus alias in Project File
 
 /**
  * Schematic file version.
