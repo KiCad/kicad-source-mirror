@@ -42,6 +42,8 @@
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 #include <properties/property.h>
+#include <origin_transforms.h>
+#include <math/util.h>
 
 
 SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
@@ -247,6 +249,32 @@ const BOX2I SCH_LINE::GetBoundingBox() const
 double SCH_LINE::GetLength() const
 {
     return m_start.Distance( m_end );
+}
+
+
+void SCH_LINE::SetLength( double aLength )
+{
+    if( aLength < 0.0 )
+        aLength = 0.0;
+
+    double    currentLength = GetLength();
+    VECTOR2I  start = GetStartPoint();
+    VECTOR2I  end;
+
+    if( currentLength <= 0.0 )
+    {
+        end = VECTOR2I( start.x + KiROUND( aLength ), start.y );
+    }
+    else
+    {
+        VECTOR2I delta = GetEndPoint() - start;
+        double   scale = aLength / currentLength;
+
+        end = VECTOR2I( start.x + KiROUND( delta.x * scale ),
+                        start.y + KiROUND( delta.y * scale ) );
+    }
+
+    SetEndPoint( end );
 }
 
 
@@ -1244,6 +1272,25 @@ static struct SCH_LINE_DESC
 
                     return false;
                 };
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start X" ),
+                    &SCH_LINE::SetStartX, &SCH_LINE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Y" ),
+                    &SCH_LINE::SetStartY, &SCH_LINE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End X" ),
+                    &SCH_LINE::SetEndX, &SCH_LINE::GetEndX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Y" ),
+                    &SCH_LINE::SetEndY, &SCH_LINE::GetEndY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, double>( _HKI( "Length" ),
+                    &SCH_LINE::SetLength, &SCH_LINE::GetLength, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_STYLE>( _HKI( "Line Style" ),
                     &SCH_LINE::SetLineStyle, &SCH_LINE::GetLineStyle ) )

@@ -138,11 +138,19 @@ public:
 
     VECTOR2I GetStartPoint() const { return m_start; }
     void     SetStartPoint( const VECTOR2I& aPosition ) { m_start = aPosition; }
+    int      GetStartX() const { return m_start.x; }
+    void     SetStartX( int aX ) { SetStartPoint( VECTOR2I( aX, m_start.y ) ); }
+    int      GetStartY() const { return m_start.y; }
+    void     SetStartY( int aY ) { SetStartPoint( VECTOR2I( m_start.x, aY ) ); }
 
     VECTOR2I GetMidPoint() const { return ( m_start + m_end ) / 2; }
 
     VECTOR2I GetEndPoint() const { return m_end; }
     void     SetEndPoint( const VECTOR2I& aPosition ) { m_end = aPosition; }
+    int      GetEndX() const { return m_end.x; }
+    void     SetEndX( int aX ) { SetEndPoint( VECTOR2I( aX, m_end.y ) ); }
+    int      GetEndY() const { return m_end.y; }
+    void     SetEndY( int aY ) { SetEndPoint( VECTOR2I( m_end.x, aY ) ); }
 
     /**
      * Get the geometric aspect of the wire as a SEG
@@ -219,6 +227,7 @@ public:
      * @return The length of the line segment.
      */
     double GetLength() const;
+    void   SetLength( double aLength );
 
     int GetPenWidth() const override;
 

@@ -348,6 +348,14 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant,
 wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aFlags ) const
 #endif
 {
+    if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
+    {
+        double distanceIU = aVariant.GetDouble();
+        ORIGIN_TRANSFORMS& transforms = m_parentFrame->GetOriginTransforms();
+        distanceIU = transforms.ToDisplay( distanceIU, m_coordType );
+        return m_parentFrame->StringFromValue( distanceIU, true, EDA_DATA_TYPE::DISTANCE );
+    }
+
     long distanceIU;
 
     if( aVariant.GetType() == wxT( "std::optional<int>" ) )
