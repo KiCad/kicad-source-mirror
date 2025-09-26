@@ -24,6 +24,7 @@
 
 #include "odb_util.h"
 #include <list>
+#include <set>
 #include <wx/string.h>
 #include "odb_attribute.h"
 #include "odb_eda_data.h"
@@ -42,6 +43,7 @@ public:
 
 private:
     std::list<ODB_COMPONENT> m_compList;
+    std::set<wxString>       m_usedCompNames;
 };
 
 
