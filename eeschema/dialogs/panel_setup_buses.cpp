@@ -74,6 +74,9 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
     m_membersGrid->Connect( wxEVT_GRID_CELL_CHANGING,
                             wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanging ),
                             nullptr, this );
+    m_membersGrid->Connect( wxEVT_GRID_CELL_CHANGED,
+                            wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanged ),
+                            nullptr, this );
 
     Layout();
 }
@@ -90,6 +93,9 @@ PANEL_SETUP_BUSES::~PANEL_SETUP_BUSES()
                                nullptr, this );
     m_membersGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                                wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanging ),
+                               nullptr, this );
+    m_membersGrid->Disconnect( wxEVT_GRID_CELL_CHANGED,
+                               wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanged ),
                                nullptr, this );
 }
 
@@ -331,6 +337,18 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
             }
         }
     }
+}
+
+
+void PANEL_SETUP_BUSES::OnMemberGridCellChanged( wxGridEvent& event )
+{
+    if( event.GetRow() >= 0 && m_lastAlias >= 0
+            && m_lastAlias < (int) m_aliases.size() )
+    {
+        updateAliasMembers( m_lastAlias );
+    }
+
+    event.Skip();
 }
 
 

@@ -48,6 +48,7 @@ protected:
     void OnRemoveMember( wxCommandEvent& aEvent ) override;
     void OnAliasesGridCellChanging( wxGridEvent& event );
     void OnMemberGridCellChanging( wxGridEvent& event );
+    void OnMemberGridCellChanged( wxGridEvent& event );
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
@@ -58,12 +59,10 @@ protected:
     void doReloadMembersGrid();
 
     /**
-     * When rows are created programmatically by pasting values from the clipboard,
-     * the cell change event may not be triggered.
+     * Keep the BUS_ALIAS member list synchronized with the values displayed in the grid.
      *
-     * This can prevent members from being automatically added to the corresponding alias.  To
-     * ensure that members are correctly associated with the alias, manually update the members
-     * for the needed alias.
+     * This is primarily needed when rows are added programmatically (for example via
+     * clipboard paste) because the BUS_ALIAS objects are not owned by the grid model.
      */
     void updateAliasMembers( int aAliasIndex );
 
