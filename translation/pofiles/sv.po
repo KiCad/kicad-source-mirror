@@ -16,10 +16,11 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-14 08:45+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2025-09-26 07:10+0000\n"
+"Last-Translator: Stefan Bjornelund the Gnome "
+"<stefan.bjornelund.gnome@gmail.com>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2474,7 +2475,7 @@ msgstr "Paketutvecklare"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr "GDI objekt som används %u"
+msgstr "GDI-objekt i bruk %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -12663,8 +12664,10 @@ msgid "Center on Cross-probe"
 msgstr "Centrera på markören"
 
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:282
+#, fuzzy
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
+"När du utför korsundersökningar, skrolla på arbetsytan så att objektet syns"
 
 #: eeschema/dialogs/dialog_erc.cpp:397 pcbnew/dialogs/dialog_drc.cpp:1299
 msgid "Delete exclusions too?"
@@ -16210,6 +16213,8 @@ msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
+"Visa symboler markerade med 'DNP' i tabellen.  Den här inställningen styr "
+"också om 'DNP'-symboler inkluderas vid export eller inte."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
 msgid "Include 'Exclude from BOM' Symbols"
@@ -16220,6 +16225,9 @@ msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
+"Visa symboler markerade med \"Uteslut från stycklista\" i tabellen.  "
+"Symboler markerade med \"Uteslut från stycklista\" inkluderas aldrig vid "
+"export."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
 #, fuzzy
@@ -16816,13 +16824,15 @@ msgstr "Nätnamn"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "Föredra byte av symbolenheter framför byte av etiketter"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
+"När det är möjligt, upptäck byten av fotavtrycksgrindar och tillämpa "
+"motsvarande byten av symbolenheter istället för att ändra nätetiketter."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -25331,16 +25341,22 @@ msgid "Mirror"
 msgstr "Spegelvänd"
 
 #: eeschema/tools/sch_edit_tool.cpp:1596
+#, fuzzy
 msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
 msgstr ""
+"Varje vald stift måste ha exakt en fäst nätetikett och inga andra "
+"stiftanslutningar."
 
 #: eeschema/tools/sch_edit_tool.cpp:1652
+#, fuzzy
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
 msgstr ""
+"Varje stift på valda enheter måste ha exakt en fäst nätetikett och inga "
+"andra stiftanslutningar."
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid "Label value cannot go below zero"
@@ -26022,8 +26038,9 @@ msgstr "En och samma fil"
 
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
+#, fuzzy
 msgid "Multi Run"
-msgstr ""
+msgstr "Flerkörning"
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
@@ -34385,6 +34402,7 @@ msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:622 pcbnew/pad.cpp:1640
 #: pcbnew/widgets/search_handlers.cpp:848
+#, fuzzy
 msgid "PTH"
 msgstr "PTH"
 
@@ -36310,7 +36328,7 @@ msgstr "STL-filer"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:294
 msgid "Universal 3D files"
-msgstr ""
+msgstr "Universella 3D-filer"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:296
 #, fuzzy
@@ -36368,7 +36386,7 @@ msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "U3D"
-msgstr ""
+msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -48712,6 +48730,7 @@ msgstr ""
 "Lödyta avnäder kragstapel som inte stöds; hålet utelämnades från borrdata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3009
+#, fuzzy
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
@@ -51117,13 +51136,15 @@ msgstr "Kopiering avbröts"
 msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
-msgstr ""
+msgstr "%zu ovalda lödytor är anslutna till dessa nät. Hur vill du fortsätta?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
 msgstr ""
+"Anslutna ledare, vior och andra kopparobjekt som inte är zoner kommer "
+"fortfarande att byta nät även om du ignorerar de ovalda lödytor."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
 #, fuzzy
@@ -51147,21 +51168,23 @@ msgid "Swap Pad Nets"
 msgstr "Visa nät utan lödytor"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
+#, fuzzy
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
-msgstr ""
+msgstr "Gatebyte måste utföras på lödytor inom ett flergate-fotavtryck."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
+#, fuzzy
 msgid "Gate swapping must be performed on gates with equal pin counts."
-msgstr ""
+msgstr "Grindombyte måste utföras på grindar med lika många stift."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
 msgid "Gate swapping failed: pad in unit missing from footprint."
-msgstr ""
+msgstr "Gatebyte misslyckades: lödyta i enheten saknas från fotavtryck."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
 msgid "Gate swapping has no effect: all selected gates have identical nets."
-msgstr ""
+msgstr "Grindbyte har ingen effekt: alla valda grindar har identiska nät."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:614
 #: pcbnew/tools/edit_tool_move_fct.cpp:656 pcbnew/tools/pcb_actions.cpp:700
@@ -51785,11 +51808,11 @@ msgstr "Spegelvänder valt(valda) objekt över X-axeln"
 
 #: pcbnew/tools/pcb_actions.cpp:694
 msgid "Swap nets between two selected pads and their connected copper"
-msgstr ""
+msgstr "Byt nät mellan två valda lödytor och deras anslutna koppar"
 
 #: pcbnew/tools/pcb_actions.cpp:701
 msgid "Swap nets between gates of a footprint and their connected copper"
-msgstr ""
+msgstr "Byt nät mellan grindarna på ett fotavtryck och deras anslutna koppar"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Pack and Move Footprints"
