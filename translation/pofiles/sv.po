@@ -13,8 +13,9 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-14 08:45+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2025-09-26 07:10+0000\n"
+"Last-Translator: Stefan Bjornelund the Gnome "
+"<stefan.bjornelund.gnome@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -2342,7 +2343,7 @@ msgstr "Paketutvecklare"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI-objekt i bruk %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -4900,12 +4901,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Raderade inbäddade filer används även i vissa fotavtryck. \n"
+"Radera från fotavtrycken också?"
 
 #: common/dialogs/panel_embedded_files.cpp:204
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Raderade inbäddade filer används även i vissa symboler. \n"
+"Radera från symbolerna också?"
 
 #: common/dialogs/panel_embedded_files.cpp:323
 #: common/dialogs/panel_embedded_files.cpp:438
@@ -26699,6 +26704,8 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Färger definierade i mönserkortets lageruppbyggnad åsidosätter förinställda "
+"färger"
 
 #: kicad/cli/command_pcb_render.cpp:270
 #, fuzzy
@@ -32581,6 +32588,7 @@ msgid "N/A"
 msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1595
+#, fuzzy
 msgid "PTH"
 msgstr "PTH"
 
@@ -46166,7 +46174,7 @@ msgstr "Genererar innehållssektion"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Lödytan har en typ som inte stöds; den hoppades över."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -46186,6 +46194,8 @@ msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Komponent \"%s\" saknar OEM-referens; komponentlisteposition kommer att "
+"hoppas över."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
@@ -46202,6 +46212,8 @@ msgstr ""
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Duplikat av fotavtryckspekare påträffades; IPC-2581-utmatning kan vara "
+"felaktig."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
 #, c-format
@@ -46210,17 +46222,21 @@ msgstr "Exporterar lager %s, nät %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "Via använder kragstack som inte stöds; utelämnad från borrdata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Lödyta avnäder kragstapel som inte stöds; hålet utelämnades från borrdata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
+#, fuzzy
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Kragförstärkningar stöds inte i IPC-2581 revision B; de exporterades som "
+"kopparzoner."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
 msgid "Generating logistic section"
