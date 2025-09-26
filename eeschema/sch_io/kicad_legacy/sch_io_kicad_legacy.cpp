@@ -1472,7 +1472,8 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 std::shared_ptr<BUS_ALIAS> SCH_IO_KICAD_LEGACY::loadBusAlias( LINE_READER& aReader,
                                                               SCH_SCREEN* aScreen )
 {
-    auto busAlias = std::make_shared<BUS_ALIAS>( aScreen );
+    // BUS_ALIAS does not take a SCH_SCREEN* in its constructor; create a default instance
+    auto busAlias = std::make_shared<BUS_ALIAS>();
     const char* line = aReader.Line();
 
     wxCHECK( strCompare( "BusAlias", line, &line ), nullptr );
