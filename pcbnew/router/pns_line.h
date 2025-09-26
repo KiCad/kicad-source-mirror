@@ -116,7 +116,11 @@ public:
     /// @copydoc ITEM::Clone()
     virtual LINE* Clone() const override;
 
+    // Copy operator
     LINE& operator=( const LINE& aOther );
+
+    // Move assignment operator
+    LINE& operator=( LINE&& aOther ) noexcept;
 
     bool IsLinkedChecked() const
     {

@@ -261,8 +261,8 @@ public:
         m_hasVias( false )
     {
         // Initialize some members, to avoid uninitialized variables.
-        m_net_p = 0;
-        m_net_n = 0;;
+        m_net_p = nullptr;
+        m_net_n = nullptr;
         m_width = 0;
         m_gap = 0;
         m_viaGap = 0;
@@ -277,8 +277,8 @@ public:
         m_gapConstraint = aGap;
 
         // Initialize other members, to avoid uninitialized variables.
-        m_net_p = 0;
-        m_net_n = 0;;
+        m_net_p = nullptr;
+        m_net_n = nullptr;
         m_width = 0;
         m_gap = 0;
         m_viaGap = 0;
@@ -295,8 +295,8 @@ public:
         m_gapConstraint = aGap;
 
         // Initialize other members, to avoid uninitialized variables.
-        m_net_p = 0;
-        m_net_n = 0;;
+        m_net_p = nullptr;
+        m_net_n = nullptr;
         m_width = 0;
         m_gap = 0;
         m_viaGap = 0;
@@ -324,6 +324,12 @@ public:
         m_chamferLimit  = 0;
     }
 
+    DIFF_PAIR( const DIFF_PAIR& aOther ) :
+        LINK_HOLDER( ITEM::DIFF_PAIR_T )
+    {
+        *this = aOther;
+    }
+
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && ITEM::DIFF_PAIR_T == aItem->Kind();
@@ -335,14 +341,60 @@ public:
         return nullptr;
     }
 
+    // Copy operator
+    DIFF_PAIR& operator=( const DIFF_PAIR& aOther )
+    {
+        m_n = aOther.m_n;
+        m_p = aOther.m_p;
+        m_line_n = aOther.m_line_n;
+        m_line_p = aOther.m_line_p;
+        m_via_n = aOther.m_via_n;
+        m_via_p = aOther.m_via_p;
+
+        m_hasVias = aOther.m_hasVias;
+        m_net_n = aOther.m_net_n;
+        m_net_p = aOther.m_net_p;
+        m_width = aOther.m_width;
+        m_gap = aOther.m_gap;
+        m_viaGap = aOther.m_viaGap;
+        m_maxUncoupledLength = aOther.m_maxUncoupledLength;
+        m_chamferLimit = aOther.m_chamferLimit;
+        m_gapConstraint = aOther.m_gapConstraint;
+        return *this;
+    }
+
+    // Move assignment operator
+    DIFF_PAIR& operator=( DIFF_PAIR&& aOther ) noexcept
+    {
+        if (this != &aOther)
+        {
+            m_n = std::move( aOther.m_n );
+            m_p = std::move( aOther.m_p );
+            m_line_n = std::move( aOther.m_line_n );
+            m_line_p = std::move( aOther.m_line_p );
+            m_via_n = aOther.m_via_n;
+            m_via_p = aOther.m_via_p;
+
+            m_hasVias = aOther.m_hasVias;
+            m_net_n = aOther.m_net_n;
+            m_net_p = aOther.m_net_p;
+            m_width = aOther.m_width;
+            m_gap = aOther.m_gap;
+            m_viaGap = aOther.m_viaGap;
+            m_maxUncoupledLength = aOther.m_maxUncoupledLength;
+            m_chamferLimit = aOther.m_chamferLimit;
+            m_gapConstraint = aOther.m_gapConstraint;
+        }
+
+        return *this;
+    }
+
     virtual void ClearLinks() override
     {
         m_links.clear();
         m_line_p.ClearLinks();
         m_line_n.ClearLinks();
     }
-
-    static DIFF_PAIR* AssembleDp( LINE *aLine );
 
     void SetShape( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, bool aSwapLanes = false )
     {

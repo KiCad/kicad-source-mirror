@@ -281,7 +281,7 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
 
     constexpr int clipLengthThreshold = 100;
 
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    //DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
     LINE l( aClipped );
     SHAPE_LINE_CHAIN tightest;
@@ -301,20 +301,25 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
 
         //PNS_DBG( dbg, 3int, pclip, WHITE, 500000, wxT(""));
 
-
         if( l.Collide( &aRef, aNode, l.Layer(), &ctx ) )
         {
             didClip = true;
             curL -= step;
             step /= 2;
-        } else {
-            tightest = sl_tmp;
-            if ( didClip )
+        }
+        else
+        {
+            tightest = std::move( sl_tmp );
+
+            if( didClip )
             {
                 curL += step;
                 step /= 2;
-            } else
+            }
+            else
+            {
                 break;
+            }
         }
     }
 

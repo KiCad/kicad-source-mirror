@@ -61,6 +61,35 @@ public:
 
     struct STAGE
     {
+        STAGE() :
+            commit( nullptr )
+        {}
+
+        STAGE( const STAGE& aOther )
+        {
+            *this = aOther;
+        }
+
+        // Copy operator
+        STAGE& operator=( const STAGE& aOther )
+        {
+            commit = aOther.commit;
+            pts = aOther.pts;
+            return *this;
+        }
+
+        // Move assignment operator
+        STAGE& operator=( STAGE&& aOther ) noexcept
+        {
+            if (this != &aOther)
+            {
+                commit = aOther.commit;
+                pts = std::move( aOther.pts );
+            }
+
+            return *this;
+        }
+
         NODE*                  commit;
         std::vector<FIX_POINT> pts;
     };

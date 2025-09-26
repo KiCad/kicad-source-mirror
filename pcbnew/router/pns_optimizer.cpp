@@ -478,7 +478,7 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
 
     SHAPE_LINE_CHAIN current_path( line );
 
-    while( 1 )
+    while( true )
     {
         iter++;
         int n_segs = current_path.SegmentCount();
@@ -489,8 +489,8 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
 
         if( step < 2 )
         {
-            line = current_path;
-            return current_path.SegmentCount() < segs_pre;
+            line = std::move( current_path );
+            return line.SegmentCount() < segs_pre;
         }
 
         bool found_anything = false;
@@ -534,15 +534,13 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
         {
             if( step <= 2 )
             {
-                line = current_path;
+                line = std::move( current_path );
                 return line.SegmentCount() < segs_pre;
             }
 
             step--;
         }
     }
-
-    return line.SegmentCount() < segs_pre;
 }
 
 
@@ -560,7 +558,7 @@ bool OPTIMIZER::mergeFull( LINE* aLine )
 
     SHAPE_LINE_CHAIN current_path( line );
 
-    while( 1 )
+    while( true )
     {
         int n_segs = current_path.SegmentCount();
         int max_step = n_segs - 2;

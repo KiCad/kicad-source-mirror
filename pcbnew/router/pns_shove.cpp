@@ -1094,7 +1094,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             lp.second.ClearLinks();
             lp.second.DragCorner( p0_pushed, lp.second.CLine().Find( p0 ) );
             lp.second.Line().Simplify2();
-            draggedLines.push_back( lp );
+            draggedLines.push_back( std::move( lp ) );
         }
     }
 
@@ -2255,7 +2255,7 @@ void SHOVE::AddHeads( VIA_HANDLE aHead, VECTOR2I aNewPos, int aPolicy )
     ent.viaNewPos = aNewPos;
     ent.prevVia = aHead;
     ent.theVia = aHead;
-    m_headLines.push_back( ent );
+    m_headLines.push_back( std::move( ent ) );
 }
 
 void removeHead( NODE *aNode, LINE& head )

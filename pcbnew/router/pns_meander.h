@@ -566,6 +566,24 @@ public:
      */
     const MEANDER_SETTINGS& Settings() const;
 
+    // Move assignment operator
+    MEANDERED_LINE& operator=( MEANDERED_LINE&& aOther ) noexcept
+    {
+        if (this != &aOther)
+        {
+            m_last = aOther.m_last;
+
+            m_placer = aOther.m_placer;
+            m_meanders = std::move( aOther.m_meanders );
+
+            m_dual = aOther.m_dual;
+            m_width = aOther.m_width;
+            m_baselineOffset = aOther.m_baselineOffset;
+        }
+
+        return *this;
+    }
+
 private:
     VECTOR2I m_last;
 

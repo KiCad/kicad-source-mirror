@@ -2148,7 +2148,7 @@ void FIXED_TAIL::AddStage( const VECTOR2I& aStart, int aLayer, bool placingVias,
     st.pts.push_back(pt);
     st.commit = aNode;
 
-    m_stages.push_back( st );
+    m_stages.push_back( std::move( st ) );
 }
 
 

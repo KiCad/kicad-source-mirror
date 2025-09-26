@@ -116,6 +116,35 @@ LINE& LINE::operator=( const LINE& aOther )
 }
 
 
+LINE& LINE::operator=( LINE&& aOther ) noexcept
+{
+   if (this != &aOther)
+   {
+       m_parent = aOther.m_parent;
+       m_sourceItem = aOther.m_sourceItem;
+
+       m_line = std::move( aOther.m_line );
+       m_width = aOther.m_width;
+       m_net = aOther.m_net;
+       m_movable = aOther.m_movable;
+       m_layers = aOther.m_layers;
+
+       m_via = aOther.m_via;
+
+       m_marker = aOther.m_marker;
+       m_rank = aOther.m_rank;
+       m_routable = aOther.m_routable;
+       m_owner = aOther.m_owner;
+       m_snapThreshhold = aOther.m_snapThreshhold;
+       m_blockingObstacle = aOther.m_blockingObstacle;
+
+       m_links = std::move( aOther.m_links );
+   }
+
+    return *this;
+}
+
+
 LINE* LINE::Clone() const
 {
     LINE* l = new LINE( *this );

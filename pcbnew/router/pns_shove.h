@@ -117,7 +117,8 @@ private:
     {
         ROOT_LINE_ENTRY( LINE* aLine = nullptr, int aPolicy = SHP_DEFAULT ) :
             rootLine( aLine ),
-            policy( aPolicy ) {}
+            policy( aPolicy )
+        {}
 
         LINE *rootLine = nullptr;
         VIA* oldVia = nullptr;
@@ -140,6 +141,43 @@ private:
             theVia( aVia ),
             policy( aPolicy )
         {};
+
+        HEAD_LINE_ENTRY( const HEAD_LINE_ENTRY& aOther )
+        {
+            *this = aOther;
+        }
+
+        // Copy operator
+        HEAD_LINE_ENTRY& operator=( const HEAD_LINE_ENTRY& aOther ) noexcept
+        {
+            geometryModified = aOther.geometryModified;
+            prevVia = aOther.prevVia;
+            theVia = aOther.theVia;
+            draggedVia = aOther.draggedVia;
+            viaNewPos = aOther.viaNewPos;
+            origHead = aOther.origHead;
+            newHead = aOther.newHead;
+            policy = aOther.policy;
+            return *this;
+        }
+
+        // Move assignment operator
+        HEAD_LINE_ENTRY& operator=( HEAD_LINE_ENTRY&& aOther ) noexcept
+        {
+            if (this != &aOther)
+            {
+                geometryModified = aOther.geometryModified;
+                prevVia = aOther.prevVia;
+                theVia = aOther.theVia;
+                draggedVia = aOther.draggedVia;
+                viaNewPos = aOther.viaNewPos;
+                origHead = std::move( aOther.origHead );
+                newHead = std::move( aOther.newHead );
+                policy = aOther.policy;
+            }
+
+            return *this;
+        }
 
         bool geometryModified = false;
         std::optional<VIA_HANDLE> prevVia;
