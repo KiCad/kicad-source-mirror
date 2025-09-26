@@ -1755,7 +1755,8 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
 
                     // Vias on a restricted layer set must be redrawn when the active layer
                     // is changed
-                    if( via->GetViaType() == VIATYPE::BLIND_BURIED
+                    if( via->GetViaType() == VIATYPE::BLIND
+                            || via->GetViaType() == VIATYPE::BURIED
                             || via->GetViaType() == VIATYPE::MICROVIA )
                     {
                         return KIGFX::REPAINT;

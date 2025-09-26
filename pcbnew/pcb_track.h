@@ -27,7 +27,7 @@
  * for curved tracks (PCB_ARC) and vias (PCB_VIA).  All told there are three KICAD_Ts:
  * PCB_TRACK_T, PCB_ARC_T, and PCB_VIA_T.
  *
- * For vias there is a further VIATYPE which indicates THROUGH, BLIND_BURIED, or MICROVIA,
+ * For vias there is a further VIATYPE which indicates THROUGH, BLIND, BURIED, or MICROVIA,
  * which are supported by the synthetic KICAD_Ts PCB_LOCATE_STDVIA_T, PCB_LOCATE_BLINDVIA_T,
  * PCB_LOCATE_BURIEDVIA_T and PCB_LOCATE_UVIA_T.
  */
@@ -487,7 +487,7 @@ public:
 
     bool HasDrilledHole() const override
     {
-        return m_viaType == VIATYPE::THROUGH || m_viaType == VIATYPE::BLIND_BURIED;
+        return m_viaType == VIATYPE::THROUGH || m_viaType == VIATYPE::BLIND || m_viaType == VIATYPE::BURIED;
     }
 
     std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;

@@ -439,7 +439,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         {
         case VIATYPE::THROUGH:      m_ViaTypeChoice->SetSelection( 0 );           break;
         case VIATYPE::MICROVIA:     m_ViaTypeChoice->SetSelection( 1 );           break;
-        case VIATYPE::BLIND_BURIED: m_ViaTypeChoice->SetSelection( 2 );           break;
+        case VIATYPE::BLIND:        m_ViaTypeChoice->SetSelection( 2 );           break;
+        case VIATYPE::BURIED:       m_ViaTypeChoice->SetSelection( 3 );           break;
         case VIATYPE::NOT_DEFINED:  m_ViaTypeChoice->SetSelection( wxNOT_FOUND ); break;
         }
 
@@ -752,7 +753,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 {
                 case 0: via->SetViaType( VIATYPE::THROUGH );      break;
                 case 1: via->SetViaType( VIATYPE::MICROVIA );     break;
-                case 2: via->SetViaType( VIATYPE::BLIND_BURIED ); break;
+                case 2: via->SetViaType( VIATYPE::BLIND );        break;
+                case 3: via->SetViaType( VIATYPE::BURIED );       break;
                 default:                                          break;
                 }
 

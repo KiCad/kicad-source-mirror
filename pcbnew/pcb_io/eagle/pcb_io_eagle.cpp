@@ -2858,16 +2858,13 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                     {
                         via->SetViaType( VIATYPE::THROUGH );
                     }
-                    /// This is, at best, a guess.  Eagle doesn't seem to differentiate
-                    /// between blind/buried vias that only go one layer and micro vias
-                    /// so the user will need to clean up a bit
-                    else if( v.layer_back_most - v.layer_front_most == 1 )
+                    else if( layer_front_most == F_Cu || layer_back_most == B_Cu )
                     {
-                        via->SetViaType( VIATYPE::MICROVIA );
+                        via->SetViaType( VIATYPE::BLIND );
                     }
                     else
                     {
-                        via->SetViaType( VIATYPE::BLIND_BURIED );
+                        via->SetViaType( VIATYPE::BURIED );
                     }
 
                     VECTOR2I pos( kicad_x( v.x ), kicad_y( v.y ) );

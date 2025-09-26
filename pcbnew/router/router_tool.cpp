@@ -92,10 +92,11 @@ using namespace KIGFX;
 enum VIA_ACTION_FLAGS
 {
     // Via type
-    VIA_MASK     = 0x03,
+    VIA_MASK     = 0x07,
     VIA          = 0x00,     ///< Normal via
-    BLIND_VIA    = 0x01,     ///< blind/buried via
-    MICROVIA     = 0x02,     ///< Microvia
+    BLIND_VIA    = 0x01,     ///< blind via
+    BURIED_VIA   = 0x02,     ///< buried via
+    MICROVIA     = 0x04,     ///< Microvia
 
     // Select layer
     SELECT_LAYER = VIA_MASK + 1,    ///< Ask user to select layer before adding via
@@ -840,7 +841,9 @@ static VIATYPE getViaTypeFromFlags( int aFlags )
     case VIA_ACTION_FLAGS::VIA:
         return VIATYPE::THROUGH;
     case VIA_ACTION_FLAGS::BLIND_VIA:
-        return VIATYPE::BLIND_BURIED;
+        return VIATYPE::BLIND;
+    case VIA_ACTION_FLAGS::BURIED_VIA:
+        return VIATYPE::BURIED;
     case VIA_ACTION_FLAGS::MICROVIA:
         return VIATYPE::MICROVIA;
     default:
@@ -1064,7 +1067,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     sizes.ClearLayerPairs();
 
     // Convert blind/buried via to a through hole one, if it goes through all layers
-    if( viaType == VIATYPE::BLIND_BURIED
+    if( viaType != VIATYPE::THROUGH
             && ( ( targetLayer == B_Cu && currentLayer == F_Cu )
                        || ( targetLayer == F_Cu && currentLayer == B_Cu ) ) )
     {

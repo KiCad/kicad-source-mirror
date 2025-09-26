@@ -2619,11 +2619,11 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
     }
     else if( ( !start_layer_outside ) && ( !end_layer_outside ) )
     {
-        via->SetViaType( VIATYPE::BLIND_BURIED );
+        via->SetViaType( VIATYPE::BURIED );
     }
     else
     {
-        via->SetViaType( VIATYPE::MICROVIA );
+        via->SetViaType( VIATYPE::BLIND );
     }
 
     via->SetLayerPair( getKiCadCopperLayerID( csLayerPair.PhysicalLayerStart ),

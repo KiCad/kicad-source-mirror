@@ -171,9 +171,10 @@ wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND_BURIED: formatStr = _( "Blind/buried via %s on %s" ); break;
-    case VIATYPE::MICROVIA:     formatStr = _( "Micro via %s on %s" );        break;
-    default:                    formatStr = _( "Via %s on %s" );              break;
+    case VIATYPE::BLIND:    formatStr = _( "Blind via %s on %s" ); break;
+    case VIATYPE::BURIED:   formatStr = _( "Buried via %s on %s" ); break;
+    case VIATYPE::MICROVIA: formatStr = _( "Micro via %s on %s" ); break;
+    default:                formatStr = _( "Via %s on %s" ); break;
     }
 
     return wxString::Format( formatStr, GetNetnameMsg(), layerMaskDescribe() );
@@ -1672,7 +1673,8 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
     LayerPair( &layerTop, &layerBottom );
 
     bool isBlindBuried =
-            m_viaType == VIATYPE::BLIND_BURIED
+            m_viaType == VIATYPE::BLIND
+            || m_viaType == VIATYPE::BURIED
             || ( m_viaType == VIATYPE::MICROVIA && ( layerTop != F_Cu || layerBottom != B_Cu ) );
 #endif
     LSET cuMask = LSET::AllCuMask();
@@ -1926,7 +1928,8 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     switch( GetViaType() )
     {
     case VIATYPE::MICROVIA:     msg = _( "Micro Via" );        break;
-    case VIATYPE::BLIND_BURIED: msg = _( "Blind/Buried Via" ); break;
+    case VIATYPE::BLIND:        msg = _( "Blind Via" ); break;
+    case VIATYPE::BURIED:       msg = _( "Buried Via" ); break;
     case VIATYPE::THROUGH:      msg = _( "Through Via" );      break;
     default:                    msg = _( "Via" );              break;
     }
@@ -2342,7 +2345,8 @@ static struct TRACK_VIA_DESC
         ENUM_MAP<VIATYPE>::Instance()
                 .Undefined( VIATYPE::NOT_DEFINED )
                 .Map( VIATYPE::THROUGH,      _HKI( "Through" ) )
-                .Map( VIATYPE::BLIND_BURIED, _HKI( "Blind/buried" ) )
+                .Map( VIATYPE::BLIND,        _HKI( "Blind" ) )
+                .Map( VIATYPE::BURIED,       _HKI( "Buried" ) )
                 .Map( VIATYPE::MICROVIA,     _HKI( "Micro" ) );
 
         ENUM_MAP<TENTING_MODE>::Instance()

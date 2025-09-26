@@ -370,7 +370,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         auto type = via->GetViaType();
 
         if( ( m_Guide->IgnoreThroughVias() && type == VIATYPE::THROUGH )
-                || ( m_Guide->IgnoreBlindBuriedVias() && type == VIATYPE::BLIND_BURIED )
+                || ( m_Guide->IgnoreBlindBuriedVias() && ( type == VIATYPE::BLIND || type == VIATYPE::BURIED ) )
                 || ( m_Guide->IgnoreMicroVias() && type == VIATYPE::MICROVIA ) )
         {
             return INSPECT_RESULT::CONTINUE;

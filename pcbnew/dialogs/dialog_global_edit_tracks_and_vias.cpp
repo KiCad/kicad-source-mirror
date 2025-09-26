@@ -128,6 +128,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onVias( wxCommandEvent& aEvent )
     m_throughVias->SetValue( aEvent.IsChecked() );
     m_microVias->SetValue( aEvent.IsChecked() );
     m_blindVias->SetValue( aEvent.IsChecked() );
+    m_buriedVias->SetValue( aEvent.IsChecked() );
 
     aEvent.Skip();
 }
@@ -137,7 +138,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::updateViasCheckbox()
 {
     int checked = 0;
 
-    for( const wxCheckBox* cb : { m_throughVias, m_microVias, m_blindVias } )
+    for( const wxCheckBox* cb : { m_throughVias, m_microVias, m_blindVias, m_buriedVias } )
     {
         if( cb->GetValue() )
             checked++;
@@ -145,7 +146,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::updateViasCheckbox()
 
     if( checked == 0 )
         m_vias->SetValue( false );
-    else if( checked == 3 )
+    else if( checked == 4 )
         m_vias->SetValue( true );
     else
         m_vias->Set3StateValue( wxCHK_UNDETERMINED );
@@ -409,7 +410,9 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
                 visitItem( &itemsListPicker, via );
             else if( via->GetViaType() == VIATYPE::MICROVIA && m_microVias->GetValue() )
                 visitItem( &itemsListPicker, via );
-            else if( via->GetViaType() == VIATYPE::BLIND_BURIED && m_blindVias->GetValue() )
+            else if( via->GetViaType() == VIATYPE::BLIND && m_blindVias->GetValue() )
+                visitItem( &itemsListPicker, via );
+            else if( via->GetViaType() == VIATYPE::BURIED && m_buriedVias->GetValue() )
                 visitItem( &itemsListPicker, via );
         }
     }

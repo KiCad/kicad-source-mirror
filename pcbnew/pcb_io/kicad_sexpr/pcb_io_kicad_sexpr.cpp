@@ -2468,8 +2468,12 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
         case VIATYPE::THROUGH: //  Default shape not saved.
             break;
 
-        case VIATYPE::BLIND_BURIED:
+        case VIATYPE::BLIND:
             m_out->Print( " blind " );
+            break;
+
+        case VIATYPE::BURIED:
+            m_out->Print( " buried " );
             break;
 
         case VIATYPE::MICROVIA:

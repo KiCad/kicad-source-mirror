@@ -1341,7 +1341,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
         break;
 
     case PADSTACK::MODE::FRONT_INNER_BACK:
-        if( aVia->GetViaType() == VIATYPE::BLIND_BURIED )
+        if( aVia->GetViaType() == VIATYPE::BLIND || aVia->GetViaType() == VIATYPE::BURIED )
         {
             via->SetDiameter( 0, aVia->GetWidth( PADSTACK::INNER_LAYERS ) );
         }

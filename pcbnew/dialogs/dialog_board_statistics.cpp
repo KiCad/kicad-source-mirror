@@ -191,7 +191,8 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     m_viaTypes.clear();
     m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::THROUGH,      _( "Through vias:" ) ) );
-    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::BLIND_BURIED, _( "Blind/buried:" ) ) );
+    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::BLIND,        _( "Blind vias:" ) ) );
+    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::BURIED,       _( "Buried vias:" ) ) );
     m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
 
     // If there not enough rows in grids, append some

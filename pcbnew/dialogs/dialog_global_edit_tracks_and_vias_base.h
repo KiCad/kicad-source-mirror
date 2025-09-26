@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,7 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_throughVias;
 		wxCheckBox* m_microVias;
 		wxCheckBox* m_blindVias;
+		wxCheckBox* m_buriedVias;
 		wxCheckBox* m_netFilterOpt;
 		NET_SELECTOR* m_netFilter;
 		wxCheckBox* m_netclassFilterOpt;

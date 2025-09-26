@@ -6903,7 +6903,11 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
         switch( token )
         {
         case T_blind:
-            via->SetViaType( VIATYPE::BLIND_BURIED );
+            via->SetViaType( VIATYPE::BLIND );
+            break;
+
+        case T_buried:
+            via->SetViaType( VIATYPE::BURIED );
             break;
 
         case T_micro:

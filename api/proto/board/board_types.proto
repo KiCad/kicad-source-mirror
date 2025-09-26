@@ -430,6 +430,12 @@ enum ViaType
   // Microvias, blind/buried vias, can have arbitrary start and end layers, but also have different
   // size defaults and design rules
   VT_MICRO = 3;
+
+  // Blind vias start on an outer layer and end in the middle
+  VT_BLIND = 4;  // Since V10
+
+  // Buried vias start and end on inner layers
+  VT_BURIED = 5;  // Since V10
 }
 
 // Represents a via

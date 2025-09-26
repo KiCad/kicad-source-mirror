@@ -3908,9 +3908,13 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         {
             via->SetViaType( VIATYPE::THROUGH );
         }
-        else if( ( !start_layer_outside ) || ( !end_layer_outside ) )
+        else if( ( !start_layer_outside ) && ( !end_layer_outside ) )
         {
-            via->SetViaType( VIATYPE::BLIND_BURIED );
+            via->SetViaType( VIATYPE::BURIED );
+        }
+        else
+        {
+            via->SetViaType( VIATYPE::BLIND );
         }
 
         // TODO: Altium has a specific flag for microvias, independent of start/end layer

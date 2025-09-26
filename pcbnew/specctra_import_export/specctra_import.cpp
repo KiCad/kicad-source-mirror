@@ -335,9 +335,13 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
         {
             via->SetViaType( VIATYPE::MICROVIA );
         }
+        else if( topLayerNdx > 0 && botLayerNdx < copperLayerCount - 1 )
+        {
+            via->SetViaType( VIATYPE::BURIED );
+        }
         else
         {
-            via->SetViaType( VIATYPE::BLIND_BURIED );
+            via->SetViaType( VIATYPE::BLIND );
         }
 
         wxCHECK2( topLayerNdx >= 0, topLayerNdx = 0 );

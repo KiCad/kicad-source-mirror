@@ -1042,7 +1042,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     aVia->LayerPair( &layerTop, &layerBottom );
 
     // Blind/buried vias (and microvias) will use different hole and label rendering
-    bool isBlindBuried = aVia->GetViaType() == VIATYPE::BLIND_BURIED
+    bool isBlindBuried = aVia->GetViaType() == VIATYPE::BLIND
+            || aVia->GetViaType() == VIATYPE::BURIED
             || ( aVia->GetViaType() == VIATYPE::MICROVIA
                  && ( layerTop != F_Cu || layerBottom != B_Cu ) );
 

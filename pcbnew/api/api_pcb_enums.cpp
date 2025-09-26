@@ -179,7 +179,8 @@ types::ViaType ToProtoEnum( VIATYPE aValue )
     switch( aValue )
     {
     case VIATYPE::THROUGH:      return types::ViaType::VT_THROUGH;
-    case VIATYPE::BLIND_BURIED: return types::ViaType::VT_BLIND_BURIED;
+    case VIATYPE::BLIND:        return types::ViaType::VT_BLIND; // Since V10
+    case VIATYPE::BURIED:       return types::ViaType::VT_BURIED;
     case VIATYPE::MICROVIA:     return types::ViaType::VT_MICRO;
 
     default:
@@ -196,7 +197,9 @@ VIATYPE FromProtoEnum( types::ViaType aValue )
     {
     case types::ViaType::VT_UNKNOWN:
     case types::ViaType::VT_THROUGH:      return VIATYPE::THROUGH;
-    case types::ViaType::VT_BLIND_BURIED: return VIATYPE::BLIND_BURIED;
+    case types::ViaType::VT_BLIND_BURIED: return VIATYPE::BLIND;
+    case types::ViaType::VT_BLIND:        return VIATYPE::BLIND;    // Since V10
+    case types::ViaType::VT_BURIED:       return VIATYPE::BURIED;
     case types::ViaType::VT_MICRO:        return VIATYPE::MICROVIA;
 
     default:
