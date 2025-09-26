@@ -754,6 +754,24 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
     wxASSERT( aSymbol != nullptr );
 
     m_rootSymbol = aSymbol;
+
+    // Ensure the symbol has instance data for the current sheet path so that the unit selection
+    // remains consistent even when loading a sheet without symbol instance records (for example
+    // when editing a subsheet directly).
+    SCH_SYMBOL_INSTANCE instance;
+
+    if( !aSymbol->GetInstance( instance, aSheetPath.Path(), false ) )
+    {
+        instance.m_Path = aSheetPath.Path();
+        instance.m_Reference = aSymbol->GetRef( &aSheetPath, false );
+
+        if( instance.m_Reference.IsEmpty() )
+            instance.m_Reference = aSymbol->GetField( FIELD_T::REFERENCE )->GetText();
+
+        instance.m_Unit = aSymbol->GetUnit();
+        aSymbol->AddHierarchicalReference( instance );
+    }
+
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
     m_footprint  = aSymbol->GetFootprintFieldText( true, &aSheetPath, false );
     m_sheetPath  = aSheetPath;
