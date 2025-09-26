@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
             bool overlaps = boxIntersectsLine( textBbox, pinStart, pinEnd );
 
             // Log detailed info for debugging
-            wxLogDebug( wxT("Rotation %s, Pin %s: pos=(%d,%d) textPos=(%d,%d) pinLine=(%d,%d)-(%d,%d) textBox=(%d,%d,%dx%d) overlap=%s"),
+            wxLogTrace( "KICAD_PINS", wxT("Rotation %s, Pin %s: pos=(%d,%d) textPos=(%d,%d) pinLine=(%d,%d)-(%d,%d) textBox=(%d,%d,%dx%d) overlap=%s"),
                           rotName, pin->GetNumber(),
                           pinStart.x, pinStart.y,
                           numberInfo.m_TextPosition.x, numberInfo.m_TextPosition.y,
@@ -351,7 +351,7 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
 
             pinInfos.push_back( info );
 
-            wxLogDebug( "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s",
+            wxLogTrace( "KICAD_PINS", "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s",
                         rotName, info.pinNumber,
                         info.pinPos.x, info.pinPos.y,
                         info.numberPos.x, info.numberPos.y,
@@ -515,7 +515,7 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
 
             pinData.push_back( data );
 
-            wxLogDebug( "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s numberBottomDist=%d nameBottomDist=%d",
+            wxLogTrace( "KICAD_PINS", "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s numberBottomDist=%d nameBottomDist=%d",
                         rotName, data.pinNumber,
                         data.pinPos.x, data.pinPos.y,
                         data.numberPos.x, data.numberPos.y,
