@@ -125,7 +125,8 @@ enum KICAD_T
     // N.B. If you add a type here, be sure to add it below to the BaseType()
     PCB_LOCATE_STDVIA_T,
     PCB_LOCATE_UVIA_T,
-    PCB_LOCATE_BBVIA_T,
+    PCB_LOCATE_BLINDVIA_T,
+    PCB_LOCATE_BURIEDVIA_T,
     PCB_LOCATE_TEXT_T,
     PCB_LOCATE_HOLE_T,
     PCB_LOCATE_PTH_T,
@@ -340,7 +341,8 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
 
     case PCB_LOCATE_STDVIA_T:
     case PCB_LOCATE_UVIA_T:
-    case PCB_LOCATE_BBVIA_T:
+    case PCB_LOCATE_BLINDVIA_T:
+    case PCB_LOCATE_BURIEDVIA_T:
     case PCB_LOCATE_TEXT_T:
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:
@@ -462,7 +464,8 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_FIELD_LOCATE_DATASHEET_T:
     case PCB_LOCATE_STDVIA_T:
     case PCB_LOCATE_UVIA_T:
-    case PCB_LOCATE_BBVIA_T:
+    case PCB_LOCATE_BLINDVIA_T:
+    case PCB_LOCATE_BURIEDVIA_T:
     case PCB_LOCATE_TEXT_T:
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:
