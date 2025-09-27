@@ -133,6 +133,16 @@ namespace calc_parser
             return fmt::format( "{}", num );
         }
 
+        static auto ToChar( const Value& aVal ) -> char
+        {
+            std::string str = ToString( aVal );
+
+            if( str.empty() )
+                return ' ';
+            else
+                return str[0];
+        }
+
         // Check if Value represents a "truthy" value for conditionals
         static auto IsTruthy( const Value& aVal ) -> bool
         {

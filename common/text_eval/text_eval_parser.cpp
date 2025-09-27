@@ -525,28 +525,28 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         {
             wxString result = VALUE_UTILS::ToString( argValues[0] );
 
-            result = result.BeforeFirst( VALUE_UTILS::ToString( argValues[1] )[0] );
+            result = result.BeforeFirst( VALUE_UTILS::ToChar( argValues[1] ) );
             return MakeValue<Value>( result.ToStdString() );
         }
         else if( name == "beforelast" && argc == 2 )
         {
             wxString result = VALUE_UTILS::ToString( argValues[0] );
 
-            result = result.BeforeLast( VALUE_UTILS::ToString( argValues[1] )[0] );
+            result = result.BeforeLast( VALUE_UTILS::ToChar( argValues[1] ) );
             return MakeValue<Value>( result.ToStdString() );
         }
         else if( name == "afterfirst" && argc == 2 )
         {
             wxString result = VALUE_UTILS::ToString( argValues[0] );
 
-            result = result.AfterFirst( VALUE_UTILS::ToString( argValues[1] )[0] );
+            result = result.AfterFirst( VALUE_UTILS::ToChar( argValues[1] ) );
             return MakeValue<Value>( result.ToStdString() );
         }
         else if( name == "afterlast" && argc == 2 )
         {
             wxString result = VALUE_UTILS::ToString( argValues[0] );
 
-            result = result.AfterLast( VALUE_UTILS::ToString( argValues[1] )[0] );
+            result = result.AfterLast( VALUE_UTILS::ToChar( argValues[1] ) );
             return MakeValue<Value>( result.ToStdString() );
         }
 
