@@ -1344,7 +1344,7 @@ const SCH_PIN* SCH_SYMBOL::GetPin( const VECTOR2I& aPos ) const
 std::vector<SCH_PIN*> SCH_SYMBOL::GetLibPins() const
 {
     if( m_part )
-    return m_part->GetGraphicalPins( m_unit, m_bodyStyle );
+        return m_part->GetGraphicalPins( m_unit, m_bodyStyle );
 
     return std::vector<SCH_PIN*>();
 }

@@ -1176,22 +1176,22 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
 }
 
 
-void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet,
-                                                 SCH_SYMBOL* aSymbol,
+void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet, SCH_SYMBOL* aSymbol,
                                                  std::map<VECTOR2I, std::vector<SCH_ITEM*>>& aConnectionMap )
 {
-    auto updatePin = [&]( SCH_PIN* aPin, SCH_CONNECTION* aConn )
-    {
-        aConn->SetType( CONNECTION_TYPE::NET );
-        wxString name = aPin->GetDefaultNetName( aSheet );
-        aPin->ClearConnectedItems( aSheet );
+    auto updatePin =
+            [&]( SCH_PIN* aPin, SCH_CONNECTION* aConn )
+            {
+                aConn->SetType( CONNECTION_TYPE::NET );
+                wxString name = aPin->GetDefaultNetName( aSheet );
+                aPin->ClearConnectedItems( aSheet );
 
-        if( aPin->IsGlobalPower() )
-        {
-            aConn->SetName( name );
-            m_global_power_pins.emplace_back( std::make_pair( aSheet, aPin ) );
-        }
-    };
+                if( aPin->IsGlobalPower() )
+                {
+                    aConn->SetName( name );
+                    m_global_power_pins.emplace_back( std::make_pair( aSheet, aPin ) );
+                }
+            };
 
     std::map<wxString, std::vector<SCH_PIN*>> pinNumberMap;
 
@@ -1204,17 +1204,18 @@ void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet,
         pinNumberMap[pin->GetNumber()].emplace_back( pin );
     }
 
-    auto linkPinsInVec = [&]( const std::vector<SCH_PIN*>& aVec )
-    {
-        for( size_t i = 0; i < aVec.size(); ++i )
-        {
-            for( size_t j = i + 1; j < aVec.size(); ++j )
+    auto linkPinsInVec =
+            [&]( const std::vector<SCH_PIN*>& aVec )
             {
-                aVec[i]->AddConnectionTo( aSheet, aVec[j] );
-                aVec[j]->AddConnectionTo( aSheet, aVec[i] );
-            }
-        }
-    };
+                for( size_t i = 0; i < aVec.size(); ++i )
+                {
+                    for( size_t j = i + 1; j < aVec.size(); ++j )
+                    {
+                        aVec[i]->AddConnectionTo( aSheet, aVec[j] );
+                        aVec[j]->AddConnectionTo( aSheet, aVec[i] );
+                    }
+                }
+            };
 
     if( aSymbol->GetLibSymbolRef() )
     {
@@ -1353,14 +1354,13 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         }
     }
 
-    for( const auto& it : connection_map )
+    for( auto& [point, connection_vec] : connection_map )
     {
-        std::vector<SCH_ITEM*> connection_vec = it.second;
         std::sort( connection_vec.begin(), connection_vec.end() );
         alg::remove_duplicates( connection_vec );
 
         // Pre-scan to see if we have a bus at this location
-        SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
+        SCH_LINE* busLine = aSheet.LastScreen()->GetBus( point );
 
         for( SCH_ITEM* connected_item : connection_vec )
         {
@@ -1385,7 +1385,6 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     }
                 }
             }
-
             // Bus-to-bus entries are treated just like bus wires
             else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
             {
@@ -1393,7 +1392,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 {
                     auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
 
-                    if( it.first == bus_entry->GetPosition() )
+                    if( point == bus_entry->GetPosition() )
                         bus_entry->m_connected_bus_items[0] = busLine;
                     else
                         bus_entry->m_connected_bus_items[1] = busLine;
@@ -1403,7 +1402,6 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     continue;
                 }
             }
-
             // Change junctions to be on bus junction layer if they are touching a bus
             else if( connected_item->Type() == SCH_JUNCTION_T )
             {
@@ -1439,9 +1437,9 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
                 }
 
-                if( connected_item->ConnectionPropagatesTo( test_item ) &&
-                    test_item->ConnectionPropagatesTo( connected_item ) &&
-                    bus_connection_ok )
+                if( connected_item->ConnectionPropagatesTo( test_item )
+                        && test_item->ConnectionPropagatesTo( connected_item )
+                        && bus_connection_ok )
                 {
                     connected_item->AddConnectionTo( aSheet, test_item );
                 }
@@ -1457,7 +1455,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 if( !bus_entry->m_connected_bus_item )
                 {
                     SCH_SCREEN* screen = aSheet.LastScreen();
-                    SCH_LINE*   bus = screen->GetBus( it.first );
+                    SCH_LINE*   bus = screen->GetBus( point );
 
                     if( bus )
                         bus_entry->m_connected_bus_item = bus;
@@ -1484,11 +1482,8 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
     // Build subgraphs from items (on a per-sheet basis)
     for( SCH_ITEM* item : m_items )
     {
-        for( const auto& it : item->m_connection_map )
+        for( const auto& [sheet, connection] : item->m_connection_map )
         {
-            const SCH_SHEET_PATH& sheet = it.first;
-            SCH_CONNECTION*       connection = it.second;
-
             if( connection->SubgraphCode() == 0 )
             {
                 CONNECTION_SUBGRAPH* subgraph = new CONNECTION_SUBGRAPH( this );
@@ -1554,7 +1549,6 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
             }
         }
     }
-
 }
 
 
@@ -1573,52 +1567,53 @@ void CONNECTION_GRAPH::resolveAllDrivers()
 
     std::vector<std::future<size_t>> returns( dirty_graphs.size() );
 
-    auto update_lambda = []( CONNECTION_SUBGRAPH* subgraph ) -> size_t
-    {
-        if( !subgraph->m_dirty )
-            return 0;
-
-        // Special processing for some items
-        for( SCH_ITEM* item : subgraph->m_items )
-        {
-            switch( item->Type() )
+    auto update_lambda =
+            []( CONNECTION_SUBGRAPH* subgraph ) -> size_t
             {
-            case SCH_NO_CONNECT_T:
-                subgraph->m_no_connect = item;
-                break;
+                if( !subgraph->m_dirty )
+                    return 0;
 
-            case SCH_BUS_WIRE_ENTRY_T:
-                subgraph->m_bus_entry = item;
-                break;
+                // Special processing for some items
+                for( SCH_ITEM* item : subgraph->m_items )
+                {
+                    switch( item->Type() )
+                    {
+                    case SCH_NO_CONNECT_T:
+                        subgraph->m_no_connect = item;
+                        break;
 
-            case SCH_PIN_T:
-            {
-                auto pin = static_cast<SCH_PIN*>( item );
+                    case SCH_BUS_WIRE_ENTRY_T:
+                        subgraph->m_bus_entry = item;
+                        break;
 
-                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
-                    subgraph->m_no_connect = item;
+                    case SCH_PIN_T:
+                    {
+                        auto pin = static_cast<SCH_PIN*>( item );
 
-                break;
-            }
+                        if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                            subgraph->m_no_connect = item;
 
-            default:
-                break;
-            }
-        }
+                        break;
+                    }
 
-        subgraph->ResolveDrivers( true );
-        subgraph->m_dirty = false;
+                    default:
+                        break;
+                    }
+                }
 
-        return 1;
-    };
+                subgraph->ResolveDrivers( true );
+                subgraph->m_dirty = false;
+
+                return 1;
+            };
 
     thread_pool& tp = GetKiCadThreadPool();
 
     auto results = tp.submit_loop( 0, dirty_graphs.size(),
-                        [&]( const int ii )
-                        {
-                            update_lambda( dirty_graphs[ii] );
-                        });
+                                   [&]( const int ii )
+                                   {
+                                       update_lambda( dirty_graphs[ii] );
+                                   } );
     results.wait();
 
     // Now discard any non-driven subgraphs from further consideration
@@ -2409,8 +2404,9 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
             [&]( CONNECTION_SUBGRAPH* subgraph ) -> size_t
             {
                 // Make sure weakly-driven single-pin nets get the unconnected_ prefix
-                if( !subgraph->m_strong_driver && subgraph->m_drivers.size() == 1 &&
-                    subgraph->m_driver->Type() == SCH_PIN_T )
+                if( !subgraph->m_strong_driver
+                        && subgraph->m_drivers.size() == 1
+                        && subgraph->m_driver->Type() == SCH_PIN_T )
                 {
                     SCH_PIN* pin = static_cast<SCH_PIN*>( subgraph->m_driver );
                     wxString name = pin->GetDefaultNetName( subgraph->m_sheet, true );
