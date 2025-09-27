@@ -112,28 +112,28 @@ const wxString CommentERC_V[] =
 // i.e. pin type = ELECTRICAL_PINTYPE::PT_INPUT, but not PT_POWER_IN
 // that need only a PT_POWER_OUT pin type to be driven
 const std::set<ELECTRICAL_PINTYPE> DrivingPinTypes =
-        {
-            ELECTRICAL_PINTYPE::PT_OUTPUT,
-            ELECTRICAL_PINTYPE::PT_POWER_OUT,
-            ELECTRICAL_PINTYPE::PT_PASSIVE,
-            ELECTRICAL_PINTYPE::PT_TRISTATE,
-            ELECTRICAL_PINTYPE::PT_BIDI
-        };
+{
+    ELECTRICAL_PINTYPE::PT_OUTPUT,
+    ELECTRICAL_PINTYPE::PT_POWER_OUT,
+    ELECTRICAL_PINTYPE::PT_PASSIVE,
+    ELECTRICAL_PINTYPE::PT_TRISTATE,
+    ELECTRICAL_PINTYPE::PT_BIDI
+};
 
 // List of pin types that are considered drivers for power pins
 // In fact only a ELECTRICAL_PINTYPE::PT_POWER_OUT pin type can drive
 // power input pins
 const std::set<ELECTRICAL_PINTYPE> DrivingPowerPinTypes =
-        {
-            ELECTRICAL_PINTYPE::PT_POWER_OUT
-        };
+{
+    ELECTRICAL_PINTYPE::PT_POWER_OUT
+};
 
 // List of pin types that require a driver elsewhere on the net
 const std::set<ELECTRICAL_PINTYPE> DrivenPinTypes =
-        {
-            ELECTRICAL_PINTYPE::PT_INPUT,
-            ELECTRICAL_PINTYPE::PT_POWER_IN
-        };
+{
+    ELECTRICAL_PINTYPE::PT_INPUT,
+    ELECTRICAL_PINTYPE::PT_POWER_IN
+};
 
 extern void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 UNITS_PROVIDER* aUnitsProvider );
@@ -692,8 +692,7 @@ int ERC_TESTER::TestMissingNetclasses()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNDEFINED_NETCLASS );
 
                 ercItem->SetItems( item );
-                ercItem->SetErrorMessage( wxString::Format( _( "Netclass %s is not defined" ),
-                                                            netclass ) );
+                ercItem->SetErrorMessage( wxString::Format( _( "Netclass %s is not defined" ), netclass ) );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
                 sheet.LastScreen()->Append( marker );
@@ -1042,16 +1041,12 @@ int ERC_TESTER::TestPinToPin()
 
                 if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
                 {
-                    pin_mismatches.emplace_back(
-                            std::tuple<iterator_t, iterator_t, PIN_ERROR>{ refIt, testIt, erc } );
+                    pin_mismatches.emplace_back( std::tuple<iterator_t, iterator_t, PIN_ERROR>{ refIt, testIt, erc } );
 
                     if( m_settings.GetERCSortingMetric() == ERC_PIN_SORTING_METRIC::SM_HEURISTICS )
                     {
-                        pin_mismatch_counts[refIt] =
-                                m_settings.GetPinTypeWeight( ( *refIt ).Pin()->GetType() );
-
-                        pin_mismatch_counts[testIt] =
-                                m_settings.GetPinTypeWeight( ( *testIt ).Pin()->GetType() );
+                        pin_mismatch_counts[refIt] = m_settings.GetPinTypeWeight( ( *refIt ).Pin()->GetType() );
+                        pin_mismatch_counts[testIt] = m_settings.GetPinTypeWeight( ( *testIt ).Pin()->GetType() );
                     }
                     else
                     {
@@ -1132,17 +1127,15 @@ int ERC_TESTER::TestPinToPin()
             {
                 SCH_PIN* other_pin = ( *nearest_pin ).Pin();
 
-                std::shared_ptr<ERC_ITEM> ercItem =
-                        ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING
-                                                                    : ERCE_PIN_TO_PIN_ERROR );
+                auto ercItem = ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING
+                                                                           : ERCE_PIN_TO_PIN_ERROR );
                 ercItem->SetItems( pin, other_pin );
                 ercItem->SetSheetSpecificPath( ( *pinIt ).Sheet() );
                 ercItem->SetItemsSheetPaths( ( *pinIt ).Sheet(), ( *nearest_pin ).Sheet() );
 
-                ercItem->SetErrorMessage(
-                        wxString::Format( _( "Pins of type %s and %s are connected" ),
-                                          ElectricalPinTypeGetText( pin->GetType() ),
-                                          ElectricalPinTypeGetText( other_pin->GetType() ) ) );
+                ercItem->SetErrorMessage( wxString::Format( _( "Pins of type %s and %s are connected" ),
+                                                            ElectricalPinTypeGetText( pin->GetType() ),
+                                                            ElectricalPinTypeGetText( other_pin->GetType() ) ) );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
                 pinToScreenMap[pin]->Append( marker );
@@ -1162,7 +1155,7 @@ int ERC_TESTER::TestPinToPin()
                 ercItem->SetSheetSpecificPath( needsDriver.Sheet() );
                 ercItem->SetItemsSheetPaths( needsDriver.Sheet() );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, needsDriver.Pin()->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), needsDriver.Pin()->GetPosition() );
                 pinToScreenMap[needsDriver.Pin()]->Append( marker );
                 errors++;
             }
@@ -1195,8 +1188,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                     if( !pin->GetLibPin()->GetParentSymbol()->IsMulti() )
                         continue;
 
-                    wxString name = pin->GetParentSymbol()->GetRef( &sheet ) +
-                                      + ":" + pin->GetShownNumber();
+                    wxString name = pin->GetParentSymbol()->GetRef( &sheet ) + ":" + pin->GetShownNumber();
 
                     if( !pinToNetMap.count( name ) )
                     {
@@ -1273,7 +1265,7 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
                 ercItem->SetSheetSpecificPath( globalItem.second );
                 ercItem->SetItemsSheetPaths( globalItem.second, localItem.second );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, globalItem.first->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), globalItem.first->GetPosition() );
                 globalItem.second.LastScreen()->Append( marker );
 
                 errCount++;
@@ -1670,7 +1662,7 @@ int ERC_TESTER::TestFootprintFilters()
                             wxJoin( filters, ' ' ) );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( sch_symbol );
-                markers.emplace_back( new SCH_MARKER( ercItem, sch_symbol->GetPosition() ) );
+                markers.emplace_back( new SCH_MARKER( std::move( ercItem ), sch_symbol->GetPosition() ) );
             }
         }
 

@@ -82,42 +82,37 @@ void InitTables()
 {
     // clang-format off
     g_pinElectricalTypes = {
-        { ELECTRICAL_PINTYPE::PT_INPUT, { _( "Input" ), BITMAPS::pintype_input } },
-        { ELECTRICAL_PINTYPE::PT_OUTPUT, { _( "Output" ), BITMAPS::pintype_output } },
-        { ELECTRICAL_PINTYPE::PT_BIDI, { _( "Bidirectional" ), BITMAPS::pintype_bidi } },
-        { ELECTRICAL_PINTYPE::PT_TRISTATE, { _( "Tri-state" ), BITMAPS::pintype_3states } },
-        { ELECTRICAL_PINTYPE::PT_PASSIVE, { _( "Passive" ), BITMAPS::pintype_passive } },
-        { ELECTRICAL_PINTYPE::PT_NIC, { _( "Free" ), BITMAPS::pintype_nic } },
-        { ELECTRICAL_PINTYPE::PT_UNSPECIFIED, { _( "Unspecified" ), BITMAPS::pintype_notspecif } },
-        { ELECTRICAL_PINTYPE::PT_POWER_IN, { _( "Power input" ), BITMAPS::pintype_powerinput } },
-        { ELECTRICAL_PINTYPE::PT_POWER_OUT, { _( "Power output" ), BITMAPS::pintype_poweroutput } },
-        { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR, { _( "Open collector" ),
-              BITMAPS::pintype_opencoll } },
-        { ELECTRICAL_PINTYPE::PT_OPENEMITTER, { _( "Open emitter" ), BITMAPS::pintype_openemit } },
-        { ELECTRICAL_PINTYPE::PT_NC, { _( "Unconnected" ), BITMAPS::pintype_noconnect } },
+        { ELECTRICAL_PINTYPE::PT_INPUT,         { _( "Input" ),          BITMAPS::pintype_input } },
+        { ELECTRICAL_PINTYPE::PT_OUTPUT,        { _( "Output" ),         BITMAPS::pintype_output } },
+        { ELECTRICAL_PINTYPE::PT_BIDI,          { _( "Bidirectional" ),  BITMAPS::pintype_bidi } },
+        { ELECTRICAL_PINTYPE::PT_TRISTATE,      { _( "Tri-state" ),      BITMAPS::pintype_3states } },
+        { ELECTRICAL_PINTYPE::PT_PASSIVE,       { _( "Passive" ),        BITMAPS::pintype_passive } },
+        { ELECTRICAL_PINTYPE::PT_NIC,           { _( "Free" ),           BITMAPS::pintype_nic } },
+        { ELECTRICAL_PINTYPE::PT_UNSPECIFIED,   { _( "Unspecified" ),    BITMAPS::pintype_notspecif } },
+        { ELECTRICAL_PINTYPE::PT_POWER_IN,      { _( "Power input" ),    BITMAPS::pintype_powerinput } },
+        { ELECTRICAL_PINTYPE::PT_POWER_OUT,     { _( "Power output" ),   BITMAPS::pintype_poweroutput } },
+        { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR, { _( "Open collector" ), BITMAPS::pintype_opencoll } },
+        { ELECTRICAL_PINTYPE::PT_OPENEMITTER,   { _( "Open emitter" ),   BITMAPS::pintype_openemit } },
+        { ELECTRICAL_PINTYPE::PT_NC,            { _( "Unconnected" ),    BITMAPS::pintype_noconnect } },
     };
 
     g_pinShapes = {
-        { GRAPHIC_PINSHAPE::LINE, { _( "Line" ), BITMAPS::pinshape_normal } },
-        { GRAPHIC_PINSHAPE::INVERTED, { _( "Inverted" ), BITMAPS::pinshape_invert } },
-        { GRAPHIC_PINSHAPE::CLOCK, { _( "Clock" ), BITMAPS::pinshape_clock_normal } },
-        { GRAPHIC_PINSHAPE::INVERTED_CLOCK, { _( "Inverted clock" ),
-              BITMAPS::pinshape_clock_invert } },
-        { GRAPHIC_PINSHAPE::INPUT_LOW, { _( "Input low" ), BITMAPS::pinshape_active_low_input } },
-        { GRAPHIC_PINSHAPE::CLOCK_LOW, { _( "Clock low" ), BITMAPS::pinshape_clock_active_low } },
-        { GRAPHIC_PINSHAPE::OUTPUT_LOW, { _( "Output low" ),
-              BITMAPS::pinshape_active_low_output } },
-        { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ),
-              BITMAPS::pinshape_clock_fall } },
-        { GRAPHIC_PINSHAPE::NONLOGIC, { _( "NonLogic" ),
-              BITMAPS::pinshape_nonlogic } },
+        { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               BITMAPS::pinshape_normal } },
+        { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ),           BITMAPS::pinshape_invert } },
+        { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ),              BITMAPS::pinshape_clock_normal } },
+        { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ),     BITMAPS::pinshape_clock_invert } },
+        { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ),          BITMAPS::pinshape_active_low_input } },
+        { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ),          BITMAPS::pinshape_clock_active_low } },
+        { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         BITMAPS::pinshape_active_low_output } },
+        { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), BITMAPS::pinshape_clock_fall } },
+        { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           BITMAPS::pinshape_nonlogic } },
     };
 
     g_pinOrientations = {
-        { PIN_ORIENTATION::PIN_RIGHT,       { _( "Right" ),          BITMAPS::pinorient_right } },
-        { PIN_ORIENTATION::PIN_LEFT,        { _( "Left" ),           BITMAPS::pinorient_left } },
-        { PIN_ORIENTATION::PIN_UP,          { _( "Up" ),             BITMAPS::pinorient_up } },
-        { PIN_ORIENTATION::PIN_DOWN,        { _( "Down" ),           BITMAPS::pinorient_down } },
+        { PIN_ORIENTATION::PIN_RIGHT, { _( "Right" ), BITMAPS::pinorient_right } },
+        { PIN_ORIENTATION::PIN_LEFT,  { _( "Left" ),  BITMAPS::pinorient_left } },
+        { PIN_ORIENTATION::PIN_UP,    { _( "Up" ),    BITMAPS::pinorient_up } },
+        { PIN_ORIENTATION::PIN_DOWN,  { _( "Down" ),  BITMAPS::pinorient_down } },
     };
     // clang-format on
 
