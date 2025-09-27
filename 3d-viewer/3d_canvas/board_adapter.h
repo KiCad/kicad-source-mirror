@@ -53,6 +53,7 @@
 
 class COLOR_SETTINGS;
 class PCB_TEXTBOX;
+class PCB_BARCODE;
 
 /// A type that stores a container of 2d objects for each layer id
 typedef std::map<PCB_LAYER_ID, BVH_CONTAINER_2D*> MAP_CONTAINER_2D_BASE;
@@ -384,6 +385,9 @@ private:
 
     void addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
                   const BOARD_ITEM* aOwner );
+
+    void addBarCode( const PCB_BARCODE* aBarCode, CONTAINER_2D_BASE* aDstContainer,
+                     const BOARD_ITEM* aOwner );
 
     void addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aContainer,
                    const BOARD_ITEM* aOwner, PCB_LAYER_ID aLayer );

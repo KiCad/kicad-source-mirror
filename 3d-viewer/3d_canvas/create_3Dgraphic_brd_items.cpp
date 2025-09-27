@@ -55,6 +55,7 @@
 #include <wx/log.h>
 #include <macros.h>
 #include <callback_gal.h>
+#include <pcb_barcode.h>
 
 
 #define TO_3DU( x ) ( ( x ) * m_biuTo3Dunits )
@@ -144,6 +145,17 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
                         aOwner->GetFontMetrics() );
         }
     }
+}
+
+
+void BOARD_ADAPTER::addBarCode( const PCB_BARCODE* aBarCode, CONTAINER_2D_BASE* aDstContainer,
+                                const BOARD_ITEM* aOwner )
+{
+    SHAPE_POLY_SET shape;
+    aBarCode->TransformShapeToPolySet( shape, aBarCode->GetLayer(), 0, 0, ERROR_INSIDE );
+    shape.Simplify();
+
+    ConvertPolygonToTriangles( shape, *aDstContainer, m_biuTo3Dunits, *aOwner );
 }
 
 

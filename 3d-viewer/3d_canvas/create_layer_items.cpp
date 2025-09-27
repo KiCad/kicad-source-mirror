@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <atomic>
 #include <wx/log.h>
+#include <pcb_barcode.h>
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
 #include <core/profile.h>
@@ -635,6 +636,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 addTable( static_cast<PCB_TABLE*>( item ), layerContainer, item );
                 break;
 
+            case PCB_BARCODE_T:
+                addBarCode( static_cast<PCB_BARCODE*>( item ), layerContainer, item );
+                break;
+
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
@@ -729,6 +734,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                             } );
                     break;
                 }
+
+                case PCB_BARCODE_T:
+                {
+                    PCB_BARCODE* bar_code = static_cast<PCB_BARCODE*>( item );
+                    bar_code->TransformShapeToPolySet( *layerPoly, layer, 0, 0, ERROR_INSIDE );
+                }
+                    break;
 
                 case PCB_DIM_ALIGNED_T:
                 case PCB_DIM_CENTER_T:
@@ -954,6 +966,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     addTable( static_cast<PCB_TABLE*>( item ), layerContainer, item );
                     break;
 
+                case PCB_BARCODE_T:
+                    addBarCode( static_cast<PCB_BARCODE*>( item ), layerContainer, item );
+                    break;
+
                 case PCB_DIM_ALIGNED_T:
                 case PCB_DIM_CENTER_T:
                 case PCB_DIM_RADIAL_T:
@@ -1081,6 +1097,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     break;
                 }
+
+                case PCB_BARCODE_T:
+                {
+                    PCB_BARCODE* bar_code = static_cast<PCB_BARCODE*>( item );
+                    bar_code->TransformShapeToPolySet( *layerPoly, layer, 0, 0, ERROR_INSIDE );
+                }
+                    break;
 
                 default:
                     break;
