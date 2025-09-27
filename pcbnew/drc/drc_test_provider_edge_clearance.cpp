@@ -171,29 +171,43 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
                 if( shape->GetShape() == SHAPE_T::RECTANGLE && !shape->IsSolidFill() )
                 {
-                    // A single rectangle for the board would make the RTree useless, so convert
-                    // to 4 edges
+                    // A single rectangle for the board would defeat the RTree, so convert to edges
+                    if( shape->GetCornerRadius() > 0 )
+                    {
+                        for( SHAPE* seg : shape->MakeEffectiveShapes( true ) )
+                        {
+                            wxCHECK2( dynamic_cast<SHAPE_SEGMENT*>( seg ), continue );
+
+                            edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                            edges.back()->SetShape( SHAPE_T::SEGMENT );
+                            edges.back()->SetStart( seg->GetStart() );
+                            edges.back()->SetEnd( seg->GetEnd() );
+                            edges.back()->SetStroke( stroke );
+                        }
+                    }
+                    else
+                    {
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
-                    edges.back()->SetShape( SHAPE_T::SEGMENT );
-                    edges.back()->SetEndX( shape->GetStartX() );
-                    edges.back()->SetStroke( stroke );
-                    edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
-                    edges.back()->SetShape( SHAPE_T::SEGMENT );
-                    edges.back()->SetEndY( shape->GetStartY() );
-                    edges.back()->SetStroke( stroke );
-                    edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
-                    edges.back()->SetShape( SHAPE_T::SEGMENT );
-                    edges.back()->SetStartX( shape->GetEndX() );
-                    edges.back()->SetStroke( stroke );
-                    edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
-                    edges.back()->SetShape( SHAPE_T::SEGMENT );
-                    edges.back()->SetStartY( shape->GetEndY() );
-                    edges.back()->SetStroke( stroke );
+                        edges.back()->SetShape( SHAPE_T::SEGMENT );
+                        edges.back()->SetEndX( shape->GetStartX() );
+                        edges.back()->SetStroke( stroke );
+                        edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                        edges.back()->SetShape( SHAPE_T::SEGMENT );
+                        edges.back()->SetEndY( shape->GetStartY() );
+                        edges.back()->SetStroke( stroke );
+                        edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                        edges.back()->SetShape( SHAPE_T::SEGMENT );
+                        edges.back()->SetStartX( shape->GetEndX() );
+                        edges.back()->SetStroke( stroke );
+                        edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                        edges.back()->SetShape( SHAPE_T::SEGMENT );
+                        edges.back()->SetStartY( shape->GetEndY() );
+                        edges.back()->SetStroke( stroke );
+                    }
                 }
                 else if( shape->GetShape() == SHAPE_T::POLY && !shape->IsSolidFill() )
                 {
-                    // A single polygon for the board would make the RTree useless, so convert
-                    // to n edges.
+                    // A single polygon for the board would defeat the RTree, so convert to edges.
                     SHAPE_LINE_CHAIN poly = shape->GetPolyShape().Outline( 0 );
 
                     for( size_t ii = 0; ii < poly.GetSegmentCount(); ++ii )
