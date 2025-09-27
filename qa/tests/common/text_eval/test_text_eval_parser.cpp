@@ -288,6 +288,12 @@ BOOST_AUTO_TEST_CASE( StringFunctions )
         // String concatenation function
         { "@{concat(\"Hello\", \" \", \"World\")}", "Hello World", false },
         { "@{concat(\"Count: \", 42, \" items\")}", "Count: 42 items", false },
+
+        { "@{beforefirst(\"hello.world.txt\", \".\")}", "hello", false },
+        { "@{beforelast(\"hello.world.txt\", \".\")}", "hello.world", false },
+        { "@{afterfirst(\"hello.world.txt\", \".\")}", "world.txt", false },
+        { "@{afterlast(\"hello.world.txt\", \".\")}", "txt", false },
+        { "@{beforefirst(${text}, \" \")}", "hello", false },
     };
 
     for( const auto& testCase : cases )

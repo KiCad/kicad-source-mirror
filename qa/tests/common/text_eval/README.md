@@ -11,7 +11,7 @@ High-level integration tests using the `EXPRESSION_EVALUATOR` wrapper class.
 - **Variable Substitution**: Testing variable storage and retrieval in expressions
 - **String Operations**: String concatenation, mixed string/number operations
 - **Mathematical Functions**: `abs`, `sqrt`, `pow`, `floor`, `ceil`, `round`, `min`, `max`, `sum`, `avg`
-- **String Functions**: `upper`, `lower`, `concat`
+- **String Functions**: `upper`, `lower`, `concat`, `beforefirst`, `beforelast`, `afterfirst`, `afterlast`
 - **Formatting Functions**: `format`, `fixed`, `currency`
 - **Date/Time Functions**: `today`, `now`, `dateformat`, `weekdayname`
 - **Conditional Functions**: `if` statements with boolean logic
@@ -69,6 +69,10 @@ Integration tests simulating real-world KiCad usage scenarios:
 - `upper(str)` - Convert to uppercase
 - `lower(str)` - Convert to lowercase
 - `concat(...)` - Concatenate multiple values
+- `beforefirst(str, c)` - Substring
+- `beforelast(str, c)` - Substring
+- `afterfirst(str, c)` - Substring
+- `afterlast(str, c)` - Substring
 - `format(num, [decimals])` - Format number with specified precision
 - `fixed(num, [decimals])` - Fixed decimal formatting
 - `currency(amount, [symbol])` - Currency formatting

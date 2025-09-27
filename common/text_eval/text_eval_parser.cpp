@@ -521,6 +521,34 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
             return MakeValue<Value>( result );
         }
+        else if( name == "beforefirst" && argc == 2 )
+        {
+            wxString result = VALUE_UTILS::ToString( argValues[0] );
+
+            result = result.BeforeFirst( VALUE_UTILS::ToString( argValues[1] )[0] );
+            return MakeValue<Value>( result.ToStdString() );
+        }
+        else if( name == "beforelast" && argc == 2 )
+        {
+            wxString result = VALUE_UTILS::ToString( argValues[0] );
+
+            result = result.BeforeLast( VALUE_UTILS::ToString( argValues[1] )[0] );
+            return MakeValue<Value>( result.ToStdString() );
+        }
+        else if( name == "afterfirst" && argc == 2 )
+        {
+            wxString result = VALUE_UTILS::ToString( argValues[0] );
+
+            result = result.AfterFirst( VALUE_UTILS::ToString( argValues[1] )[0] );
+            return MakeValue<Value>( result.ToStdString() );
+        }
+        else if( name == "afterlast" && argc == 2 )
+        {
+            wxString result = VALUE_UTILS::ToString( argValues[0] );
+
+            result = result.AfterLast( VALUE_UTILS::ToString( argValues[1] )[0] );
+            return MakeValue<Value>( result.ToStdString() );
+        }
 
         // Conditional functions (handle mixed types)
         if( name == "if" && argc == 3 )
