@@ -32,11 +32,11 @@
 
 
 #include <board_item.h>
+#include <geometry/shape_poly_set.h>
+#include <pcb_text.h>
 
 class LINE_READER;
 class MSG_PANEL_ITEM;
-class SHAPE_POLY_SET;
-class PCB_TEXT;
 
 
 enum class BARCODE_T : int

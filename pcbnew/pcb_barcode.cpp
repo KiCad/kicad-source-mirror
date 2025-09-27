@@ -72,8 +72,7 @@ PCB_BARCODE::~PCB_BARCODE()
 void PCB_BARCODE::SetPosition( const VECTOR2I& aPos )
 {
     VECTOR2I delta = aPos - m_pos;
-    m_text.Offset( delta );
-    m_pos = aPos;
+    Move( delta );
 }
 
 
@@ -188,6 +187,9 @@ void PCB_BARCODE::SetBarcodeTextHeight( int aHeight )
 void PCB_BARCODE::Move( const VECTOR2I& offset )
 {
     m_pos += offset;
+    m_symbolPoly.Move( offset );
+    m_poly.Move( offset );
+    m_textPoly.Move( offset );
     m_text.Move( offset );
 }
 
@@ -213,10 +215,15 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipLeftRight )
 
 void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
 {
-    if( aRebuildBarcode )
+    // if( aRebuildBarcode )
         ComputeBarcode();
 
-    if( aRebuildText )
+    // Scale the symbol polygon to the desired barcode width/height (property values) and center it at m_pos
+    // Note: SetRect will rescale the symbol-only polygon and then rebuild m_poly
+    SetRect( m_pos - VECTOR2I( m_width / 2, m_height / 2 ),
+             m_pos + VECTOR2I( m_width / 2, m_height / 2 ) );
+
+    // if( aRebuildText )
         ComputeTextPoly();
 
    // Build full m_poly from symbol + optional text, then apply knockout if requested
@@ -268,7 +275,7 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
     // m_poly.BBox().Centre() == GetPosition() holds for tests and downstream logic.
     if( !m_poly.IsEmpty() )
     {
-        VECTOR2I center = m_poly.BBox().GetCenter();
+        VECTOR2I center = m_symbolPoly.BBox().GetCenter();
         VECTOR2I delta = m_pos - center;
         if( delta != VECTOR2I( 0, 0 ) )
             m_poly.Move( delta );
@@ -415,11 +422,6 @@ void PCB_BARCODE::ComputeBarcode()
     }
 
     m_symbolPoly.CacheTriangulation();
-
-    // Scale the symbol polygon to the desired barcode width/height (property values) and center it at m_pos
-    // Note: SetRect will rescale the symbol-only polygon and then rebuild m_poly
-    SetRect( m_pos - VECTOR2I( m_width / 2, m_height / 2 ),
-             m_pos + VECTOR2I( m_width / 2, m_height / 2 ) );
 }
 
 
@@ -476,7 +478,8 @@ void PCB_BARCODE::SetRect( const VECTOR2I& aTopLeft, const VECTOR2I& aBotRight )
     int oldW = bbox.GetWidth();
     int oldH = bbox.GetHeight();
 
-    SetPosition( ( aTopLeft + aBotRight ) / 2 );
+    VECTOR2I newPosition = ( aTopLeft + aBotRight ) / 2;
+    SetPosition( newPosition );
     int newW = aBotRight.x - aTopLeft.x;
     int newH = aBotRight.y - aTopLeft.y;
     // Guard against zero/negative sizes from interactive edits; enforce a tiny minimum
@@ -487,7 +490,15 @@ void PCB_BARCODE::SetRect( const VECTOR2I& aTopLeft, const VECTOR2I& aBotRight )
     double scaleX = oldW ? static_cast<double>( newW ) / oldW : 1.0;
     double scaleY = oldH ? static_cast<double>( newH ) / oldH : 1.0;
 
-    m_symbolPoly.Scale( scaleX, scaleY, bbox.GetCenter() );
+    VECTOR2I oldCenter = bbox.GetCenter();
+    m_symbolPoly.Scale( scaleX, scaleY, oldCenter );
+
+    // After scaling, move the symbol polygon to be centered at the new position
+    VECTOR2I newCenter = m_symbolPoly.BBox().GetCenter();
+    VECTOR2I delta = newPosition - newCenter;
+
+    if( delta != VECTOR2I( 0, 0 ) )
+        m_symbolPoly.Move( delta );
 
     // Update intended barcode symbol size (without text/margins)
     m_width = newW;

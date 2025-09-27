@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 /**
  * @brief A type that is always false.
  *

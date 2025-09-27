@@ -124,4 +124,88 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
     BOOST_CHECK_EQUAL( loaded->GetWidth(), barcode->GetWidth() );
     BOOST_CHECK_EQUAL( loaded->GetHeight(), barcode->GetHeight() );
     BOOST_CHECK_EQUAL( loaded->GetTextHeight(), barcode->GetTextHeight() );
+
+    BOX2I bbox = loaded->GetPolyShape().BBox();
+    BOOST_CHECK_EQUAL( bbox.Centre(), loaded->GetPosition() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
+{
+    SETTINGS_MANAGER settingsManager( true );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    // Test multiple barcode types and positions to ensure consistent alignment
+    struct TestCase
+    {
+        BARCODE_T kind;
+        VECTOR2I position;
+        int width;
+        int height;
+        bool withText;
+        bool knockout;
+        double angle;
+        wxString text;
+    };
+
+    std::vector<TestCase> testCases = {
+        // Basic QR codes at different positions
+        { BARCODE_T::QR_CODE, VECTOR2I( 0, 0 ), 2000000, 2000000, false, false, 0.0, "TEST1" },
+        { BARCODE_T::QR_CODE, VECTOR2I( 5000000, 3000000 ), 3000000, 3000000, false, false, 0.0, "TEST2" },
+        { BARCODE_T::QR_CODE, VECTOR2I( -2000000, -1000000 ), 1500000, 1500000, false, false, 0.0, "TEST3" },
+
+        // With text
+        { BARCODE_T::QR_CODE, VECTOR2I( 1000000, 2000000 ), 2500000, 2500000, true, false, 0.0, "WITHTEXT" },
+
+        // With knockout
+        { BARCODE_T::QR_CODE, VECTOR2I( 2000000, 1000000 ), 2000000, 2000000, false, true, 0.0, "KNOCKOUT" },
+
+        // With rotation
+        { BARCODE_T::QR_CODE, VECTOR2I( 3000000, 2000000 ), 2000000, 2000000, false, false, 45.0, "ROTATED" },
+
+        // Different barcode types
+        { BARCODE_T::CODE_39, VECTOR2I( 4000000, 1000000 ), 3000000, 800000, false, false, 0.0, "CODE39TEST" },
+        { BARCODE_T::CODE_128, VECTOR2I( 1000000, 4000000 ), 3500000, 1000000, false, false, 0.0, "CODE128" },
+        { BARCODE_T::DATA_MATRIX, VECTOR2I( 3000000, 3000000 ), 1800000, 1800000, false, false, 0.0, "DATAMATRIX" },
+        { BARCODE_T::MICRO_QR_CODE, VECTOR2I( 2000000, 4000000 ), 1200000, 1200000, false, false, 0.0, "µQR" },
+
+        // Combined scenarios
+        { BARCODE_T::QR_CODE, VECTOR2I( 1500000, 1500000 ), 2200000, 2200000, true, true, 90.0, "COMPLEX" },
+    };
+
+    for( size_t i = 0; i < testCases.size(); ++i )
+    {
+        const auto& tc = testCases[i];
+
+        PCB_BARCODE* barcode = new PCB_BARCODE( board.get() );
+        barcode->SetText( tc.text );
+        barcode->SetLayer( F_SilkS );
+        barcode->SetPosition( tc.position );
+        barcode->SetWidth( tc.width );
+        barcode->SetHeight( tc.height );
+        barcode->SetKind( tc.kind );
+        barcode->SetErrorCorrection( BARCODE_ECC_T::M );
+        barcode->Text().SetVisible( tc.withText );
+        barcode->SetIsKnockout( tc.knockout );
+
+        if( tc.angle != 0.0 )
+        {
+            barcode->Rotate( tc.position, EDA_ANGLE( tc.angle, DEGREES_T ) );
+        }
+
+        barcode->AssembleBarcode( true, true );
+
+        // Check that the polygon center matches the position
+        BOX2I bbox = barcode->GetPolyShape().BBox();
+        VECTOR2I actualCenter = bbox.GetCenter();
+        VECTOR2I expectedCenter = barcode->GetPosition();
+
+        BOOST_CHECK_MESSAGE( actualCenter == expectedCenter,
+            "Test case " << i << " (" << tc.text.ToStdString() << "): "
+            << "Expected center (" << expectedCenter.x << ", " << expectedCenter.y << ") "
+            << "but got (" << actualCenter.x << ", " << actualCenter.y << ")" );
+
+        board->Add( barcode, ADD_MODE::APPEND, true );
+    }
 }

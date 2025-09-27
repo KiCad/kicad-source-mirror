@@ -816,24 +816,11 @@ public:
         maxX = std::numeric_limits<int>::min();
         maxY = std::numeric_limits<int>::min();
 
-
-        for( auto it = poly.CIterateWithHoles(); it; ++it )
-        {
-            const auto idx = it.GetIndex();
-            VECTOR2I   wp = poly.CVertex( idx );
-            // Geometry is origin-centered; unrotate around origin, then translate to center-based frame
-            VECTOR2I   lp = center + GetRotated( wp, -angle );
-            minX = std::min( minX, lp.x );
-            maxX = std::max( maxX, lp.x );
-            minY = std::min( minY, lp.y );
-            maxY = std::max( maxY, lp.y );
-        }
-
-    BOX2I fullLocalBBox = BOX2I( VECTOR2I( minX, minY ), VECTOR2I( maxX - minX, maxY - minY ) );
-    // Symbol bbox derived from current symbol width/height centered on 'center'
-    int symW = m_barcode.GetWidth();
-    int symH = m_barcode.GetHeight();
-    BOX2I symLocalBBox( VECTOR2I( center.x - symW / 2, center.y - symH / 2 ), VECTOR2I( symW, symH ) );
+        BOX2I fullLocalBBox = poly.BBox();
+        // Symbol bbox derived from current symbol width/height centered on 'center'
+        int symW = m_barcode.GetWidth();
+        int symH = m_barcode.GetHeight();
+        BOX2I symLocalBBox( VECTOR2I( center.x - symW / 2, center.y - symH / 2 ), VECTOR2I( symW, symH ) );
 
         wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
                     "UpdateItem: fullLocalBBox LRTB=(%d,%d,%d,%d) symLocalBBox LRTB=(%d,%d,%d,%d)",
@@ -922,10 +909,10 @@ private:
     wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
             "  local bbox LRTB=(%d,%d,%d,%d)", minX, maxX, minY, maxY );
 
-        aTL = center + GetRotated( tlL, angle );
-        aTR = center + GetRotated( trL, angle );
-        aBR = center + GetRotated( brL, angle );
-        aBL = center + GetRotated( blL, angle );
+        aTL = GetRotated( tlL, angle );
+        aTR = GetRotated( trL, angle );
+        aBR = GetRotated( brL, angle );
+        aBL = GetRotated( blL, angle );
     }
 
     PCB_BARCODE& m_barcode;

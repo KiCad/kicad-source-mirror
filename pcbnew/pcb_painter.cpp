@@ -2921,7 +2921,6 @@ void PCB_PAINTER::draw( const PCB_BARCODE* aBarcode, int aLayer )
     if( shape.OutlineCount() != 0 )
     {
         m_gal->Save();
-        m_gal->Translate( aBarcode->GetPosition() );
 
         m_gal->SetLineWidth( 0 );
         m_gal->SetIsFill( true );
