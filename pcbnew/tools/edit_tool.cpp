@@ -3234,6 +3234,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_FOOTPRINT_T:
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
+            case PCB_BARCODE_T:
             case PCB_REFERENCE_IMAGE_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:

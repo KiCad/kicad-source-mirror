@@ -375,6 +375,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_REFERENCE_IMAGE_T:
             case PCB_GENERATOR_T:
             case PCB_TEXTBOX_T:
+            case PCB_BARCODE_T:
             case PCB_TABLE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:
