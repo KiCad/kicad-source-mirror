@@ -346,6 +346,8 @@ void SCH_SYMBOL::UpdatePins()
         pin->GetAlternates() = libPin->GetAlternates();
         pin->SetLibPin( libPin );
         pin->SetPosition( libPin->GetPosition() );
+        pin->SetUnit( libPin->GetUnit() );
+        pin->SetBodyStyle( libPin->GetBodyStyle() );
 
         unassignedSchPins.erase( pin );
 
@@ -400,6 +402,8 @@ void SCH_SYMBOL::UpdatePins()
         pin->GetAlternates() = libPin->GetAlternates();
         pin->SetLibPin( libPin );
         pin->SetPosition( libPin->GetPosition() );
+        pin->SetUnit( libPin->GetUnit() );
+        pin->SetBodyStyle( libPin->GetBodyStyle() );
         pin->SetNumber( libPin->GetNumber() );
 
         auto iii = altPinMap.find( libPin->GetNumber() );
