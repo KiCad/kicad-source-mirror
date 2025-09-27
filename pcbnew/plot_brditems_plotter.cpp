@@ -60,6 +60,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_table.h>
 #include <zone.h>
+#include <pcb_barcode.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
 
@@ -505,6 +506,14 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
             PlotShape( textbox );
 
         m_plotter->SetTextMode( GetTextMode() );
+        break;
+    }
+
+    case PCB_BARCODE_T:
+    {
+        const PCB_BARCODE* barCode = static_cast<const PCB_BARCODE*>( item );
+        PlotBarCode( barCode );
+
         break;
     }
 
@@ -1167,6 +1176,25 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             }
         }
     }
+}
+
+
+void BRDITEMS_PLOTTER::PlotBarCode( const PCB_BARCODE* aBarCode )
+{
+    if( !m_layerMask[aBarCode->GetLayer()] )
+        return;
+
+    // To avoid duplicate code, build a PCB_SHAPE to plot the polygon shape
+    PCB_SHAPE dummy( aBarCode->GetParent(), SHAPE_T::POLY );
+    dummy.SetLayer( aBarCode->GetLayer() );
+    dummy.SetFillMode( FILL_T::FILLED_SHAPE );
+    dummy.SetWidth( 0 );
+
+    SHAPE_POLY_SET shape;
+    aBarCode->TransformShapeToPolySet( shape, aBarCode->GetLayer(), 0, 0, ERROR_INSIDE );
+    dummy.SetPolyShape( shape );
+
+    PlotShape( &dummy );
 }
 
 

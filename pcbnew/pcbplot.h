@@ -36,6 +36,7 @@
 class EDA_TEXT;
 class PLOTTER;
 class PCB_TEXT;
+class PCB_BARCODE;
 class PAD;
 class PCB_SHAPE;
 class PCB_TABLE;
@@ -94,6 +95,7 @@ public:
                    const KIFONT::METRICS& aFontMetrics, bool aStrikeout = false );
     void PlotShape( const PCB_SHAPE* aShape );
     void PlotTableBorders( const PCB_TABLE* aTable );
+    void PlotBarCode( const PCB_BARCODE* aBarCode );
 
     /**
      * Plot a pad.
