@@ -370,6 +370,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_24.png" ), 24, wxT( "light" ) );
@@ -810,6 +811,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1250,6 +1252,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_16.png" ), 16, wxT( "light" ) );
@@ -1690,6 +1693,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2130,6 +2134,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_32.png" ), 32, wxT( "light" ) );
@@ -2570,6 +2575,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_dark_32.png" ), 32, wxT( "dark" ) );
@@ -3010,6 +3016,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_48.png" ), 48, wxT( "light" ) );
@@ -3450,6 +3457,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3890,6 +3898,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_64.png" ), 64, wxT( "light" ) );
@@ -4330,6 +4339,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::about].emplace_back( BITMAPS::about, wxT( "about_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_aligned_dimension].emplace_back( BITMAPS::add_aligned_dimension, wxT( "add_aligned_dimension_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_arc].emplace_back( BITMAPS::add_arc, wxT( "add_arc_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_barcode].emplace_back( BITMAPS::add_barcode, wxT( "add_barcode_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bezier].emplace_back( BITMAPS::add_bezier, wxT( "add_bezier_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_board].emplace_back( BITMAPS::add_board, wxT( "add_board_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_bus2bus].emplace_back( BITMAPS::add_bus2bus, wxT( "add_bus2bus_dark_64.png" ), 64, wxT( "dark" ) );
