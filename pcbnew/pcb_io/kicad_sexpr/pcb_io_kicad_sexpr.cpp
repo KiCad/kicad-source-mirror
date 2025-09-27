@@ -3182,11 +3182,11 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
     }
 
     // The map key used by the cache and the on-disk filename base.
-    wxString footprintName = saveSingleFile ? wxString( singleFileBaseName )
-                                            : wxString( aFootprint->GetFPID().GetLibItemName() );
+    wxString footprintName = saveSingleFile ? singleFileBaseName
+                                            : aFootprint->GetFPID().GetUniStringLibItemName();
 
-    wxString fpName = saveSingleFile ? wxString( singleFileBaseName )
-                                     : wxString( aFootprint->GetFPID().GetLibItemName() );
+    wxString fpName = saveSingleFile ? singleFileBaseName
+                                     : aFootprint->GetFPID().GetUniStringLibItemName();
     ReplaceIllegalFileNameChars( fpName, '_' );
 
     // Quietly overwrite footprint and delete footprint file from path for any by same name.
