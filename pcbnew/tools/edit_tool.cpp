@@ -3309,7 +3309,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 break;
 
             default:
-                UNIMPLEMENTED_FOR( orig_item->Type() );
+                UNIMPLEMENTED_FOR( orig_item->GetClass() );
                 break;
             }
         }
