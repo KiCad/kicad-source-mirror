@@ -2112,7 +2112,7 @@ void SHOVE::runOptimizer( NODE* aNode )
                   //  PNS_DBG( Dbg(), AddItem, rootLine, RED, 0, wxT( "shove-root-opt" ) );
 
                 replaceLine( lineToOpt, optimized, false, aNode );
-                m_optimizerQueue[i] = optimized; // keep links in the lines in the queue up to date
+                m_optimizerQueue[i] = std::move( optimized ); // keep links in the lines in the queue up to date
 
                 //PNS_DBG( Dbg(), AddShape, &optimized.CLine(), GREEN, 0, wxT( "shove-post-opt" ) );
             }

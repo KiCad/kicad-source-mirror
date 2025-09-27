@@ -1025,7 +1025,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
                     std::get<1>( vp ) = breakout.Length();
                     std::get<2>( vp ) = aEnd ? v.Reverse() : v;
                     std::get<2>( vp ).Simplify2();
-                    variants.push_back( vp );
+                    variants.push_back( std::move( vp ) );
                 }
             }
         }

@@ -58,7 +58,8 @@ PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
         m_pos( 0, 0 ),
         m_text( this ),
         m_kind( BARCODE_T::QR_CODE ),
-        m_angle( 0 )
+        m_angle( 0 ),
+        m_errorCorrection( BARCODE_ECC_T::L )
 {
     m_layer = Dwgs_User;
 }
@@ -265,7 +266,7 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
         ko.AddOutline( rect );
         ko.BooleanSubtract( m_poly );
         ko.Fracture();
-        m_poly = ko;
+        m_poly = std::move( ko );
     }
 
     if( !m_angle.IsZero() )

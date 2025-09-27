@@ -614,9 +614,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         auto preShoveNode = m_shove->CurrentNode();
 
         if( preShoveNode )
-        {
             preShoveNode->Remove( draggedPreShove );
-        }
 
         m_shove->ClearHeads();
         m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS );
@@ -627,20 +625,17 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         if( ok )
         {
             if( m_shove->HeadsModified() )
-            {
                 draggedPostShove = m_shove->GetModifiedHead( 0 );
-            }
         }
 
         m_lastNode = m_shove->CurrentNode()->Branch();
 
         if( ok )
         {
-            VECTOR2D lockV;
             draggedPostShove.ClearLinks();
             draggedPostShove.Unmark();
             optimizeAndUpdateDraggedLine( draggedPostShove, m_draggedLine, aP );
-            m_lastDragSolution = draggedPostShove;
+            m_lastDragSolution = std::move( draggedPostShove );
         }
 
         m_dragStatus = ok;

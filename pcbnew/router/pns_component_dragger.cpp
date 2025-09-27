@@ -109,7 +109,7 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                     }
                 }
 
-                m_conns.push_back( cn );
+                m_conns.push_back( std::move( cn ) );
             };
 
     for( ITEM* item : aPrimitives.Items() )

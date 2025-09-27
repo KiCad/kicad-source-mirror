@@ -826,8 +826,6 @@ bool SCH_SYMBOL::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVaria
 
         return instance.m_Variants[aVariantName].m_DNP;
     }
-
-    return m_DNP;
 }
 
 
@@ -898,8 +896,6 @@ bool SCH_SYMBOL::GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance, const wxSt
 
         return instance.m_Variants[aVariantName].m_ExcludedFromBOM;
     }
-
-    return m_excludedFromBOM;
 }
 
 

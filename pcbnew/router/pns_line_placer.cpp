@@ -914,13 +914,13 @@ bool LINE_PLACER::splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LIN
     else
     {
         newTail.Clear();
-        newHead = l2;
+        newHead = std::move( l2 );
     }
 
     PNS_DBG( Dbg(), AddItem, &newHead, BLUE, 500000, wxT( "head-post-split" ) );
 
-    aNewHead = newHead;
-    aNewTail = newTail;
+    aNewHead = std::move( newHead );
+    aNewTail = std::move( newTail );
 
     return true;
 }
@@ -1145,8 +1145,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
         if( !routeHead( aP, newHead, newTail ) )
         {
-            m_tail = prevTail;
-            m_head = prevHead;
+            m_tail = std::move( prevTail );
+            m_head = std::move( prevHead );
 
             // If we fail to walk out of the initial point (no tail), instead of returning an empty
             // line, return a zero-length line so that the user gets some feedback that routing is
@@ -1169,8 +1169,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
         PNS_DBG( Dbg(), Message, wxString::Format( "N VIA H %d T %d\n", m_head.EndsWithVia() ? 1 : 0, m_tail.EndsWithVia() ? 1 : 0 ) );
 
-        m_head = newHead;
-        m_tail = newTail;
+        m_head = std::move( newHead );
+        m_tail = std::move( newTail );
 
         if( handleSelfIntersections() )
         {

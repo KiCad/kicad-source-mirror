@@ -490,7 +490,7 @@ bool MULTI_DRAGGER::multidragWalkaround( std::vector<MDRAG_LINE>& aCompletedLine
             {
                 node->Add( walk );
                 totalLength[attempt] += walk.CLine().Length() - l.draggedLine.CLine().Length();
-                l.draggedLine = walk;
+                l.draggedLine = std::move( walk );
             }
             else
             {

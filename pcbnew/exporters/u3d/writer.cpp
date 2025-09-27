@@ -1004,7 +1004,7 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
 
     decSize += writeDataBlock( getGroupNodeModifierChain( "groups", allGroups ), decStream );
 
-    for( auto& mesh : m_meshes )
+    for( const std::unique_ptr<MESH>& mesh : m_meshes )
     {
         if( mesh->IsEmpty() )
             continue;
@@ -1016,21 +1016,19 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
         std::string shaderName = "s_" + mesh->name;
         std::string modelModifierChainName = "n_" + mesh->name;
 
-        std::shared_ptr<DATA_BLOCK> block =
-                getNodeModifierChain( meshName, mesh->name, mesh->parentName, modelResourceName, shaderName, matrix );
+        decSize += writeDataBlock( getNodeModifierChain( meshName, mesh->name, mesh->parentName,
+                                                         modelResourceName, shaderName, matrix ),
+                                   decStream );
 
-        decSize += writeDataBlock( block, decStream );
-
-        block = getModelResourceModifierChain( modelModifierChainName, mesh.get(), meshName );
-        decSize += writeDataBlock( block, decStream );
+        decSize += writeDataBlock( getModelResourceModifierChain( modelModifierChainName, mesh.get(), meshName ),
+                                   decStream );
 
         decSize += writeDataBlock( getLitTextureShaderBlock( shaderName, matName ), decStream );
 
-        decSize +=
-                writeDataBlock( getMaterialResourceBlock( matName, mesh->diffuse_color, mesh->specular_color ), decStream );
+        decSize += writeDataBlock( getMaterialResourceBlock( matName, mesh->diffuse_color, mesh->specular_color ),
+                                   decStream );
 
-        block = getMeshContinuationBlock( mesh.get(), meshName );
-        contSize += writeDataBlock( block, contStream );
+        contSize += writeDataBlock( getMeshContinuationBlock( mesh.get(), meshName ), contStream );
     }
 
     // finish it, we need the size totals above to generate the header
@@ -1039,6 +1037,7 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
     wxStreamBuffer* buffer = outStream.GetOutputStreamBuffer();
 
     std::ofstream u3dFile( m_filename, std::ios::binary );
+
     if( !u3dFile.is_open() )
     {
         wxLogTrace( TRACE_MASK, wxString::Format( "Error opening file:%s", m_filename ) );
@@ -1048,12 +1047,10 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
     u3dFile.write( static_cast<const char*>( buffer->GetBufferStart() ), buffer->GetBufferSize() );
 
     wxStreamBuffer* decBuffer = decStream.GetOutputStreamBuffer();
-    u3dFile.write( static_cast<const char*>( decBuffer->GetBufferStart() ),
-                   decBuffer->GetBufferSize() );
+    u3dFile.write( static_cast<const char*>( decBuffer->GetBufferStart() ), decBuffer->GetBufferSize() );
 
     wxStreamBuffer* contBuffer = contStream.GetOutputStreamBuffer();
-    u3dFile.write( static_cast<const char*>( contBuffer->GetBufferStart() ),
-                   contBuffer->GetBufferSize() );
+    u3dFile.write( static_cast<const char*>( contBuffer->GetBufferStart() ), contBuffer->GetBufferSize() );
 
     u3dFile.close();
 
