@@ -1779,11 +1779,7 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
 
 bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
-    if( !m_libPin )
-        return false;
-
-    // Reciprocal checking is done in CONNECTION_GRAPH anyway
-    return m_libPin->GetType() != ELECTRICAL_PINTYPE::PT_NC;
+    return GetType() != ELECTRICAL_PINTYPE::PT_NC;
 }
 
 

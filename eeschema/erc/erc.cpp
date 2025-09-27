@@ -885,7 +885,7 @@ int ERC_TESTER::TestNoConnectPins()
 
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
-                if( pin->GetLibPin()->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                     pinMap[pin->GetPosition()].emplace_back( pin );
             }
         }
@@ -898,7 +898,7 @@ int ERC_TESTER::TestNoConnectPins()
 
                 for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
                 {
-                    if( pin->GetLibPin()->GetType() != ELECTRICAL_PINTYPE::PT_NC )
+                    if( pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
                         addOther( pin->GetPosition(), pin );
                 }
             }
