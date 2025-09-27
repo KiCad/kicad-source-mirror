@@ -1388,15 +1388,12 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
     if( aSheet )
         unit = GetUnitSelection( aSheet );
 
-    for( const std::unique_ptr<SCH_PIN>& p : m_pins )
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        if( unit && p->GetLibPin() && p->GetLibPin()->GetUnit()
-            && ( p->GetLibPin()->GetUnit() != unit ) )
-        {
+        if( unit && pin->GetUnit() && pin->GetUnit() != unit )
             continue;
-        }
 
-        pins.push_back( p.get() );
+        pins.push_back( pin.get() );
     }
 
     return pins;
@@ -2713,15 +2710,10 @@ bool SCH_SYMBOL::doIsConnected( const VECTOR2I& aPosition ) const
 
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this symbol instance
-        int pin_unit      = pin->GetLibPin() ? pin->GetLibPin()->GetUnit()
-                                             : GetUnit();
-        int pin_bodyStyle = pin->GetLibPin() ? pin->GetLibPin()->GetBodyStyle()
-                                             : GetBodyStyle();
-
-        if( pin_unit > 0 && pin_unit != GetUnit() )
+        if( pin->GetUnit() > 0 && pin->GetUnit() != GetUnit() )
             continue;
 
-        if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
+        if( pin->GetBodyStyle() > 0 && pin->GetBodyStyle() != GetBodyStyle() )
             continue;
 
         if( pin->GetLocalPosition() == new_pos )

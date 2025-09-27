@@ -839,7 +839,7 @@ int ERC_TESTER::TestNoConnectPins()
 
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
-                if( pin->GetLibPin()->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                     pinMap[pin->GetPosition()].emplace_back( pin );
             }
         }
@@ -852,7 +852,7 @@ int ERC_TESTER::TestNoConnectPins()
 
                 for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
                 {
-                    if( pin->GetLibPin()->GetType() != ELECTRICAL_PINTYPE::PT_NC )
+                    if( pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
                         addOther( pin->GetPosition(), pin );
                 }
             }
@@ -1139,7 +1139,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                     SCH_PIN* pin = static_cast<SCH_PIN*>( item );
                     const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
 
-                    if( !pin->GetLibPin()->GetParentSymbol()->IsMultiUnit() )
+                    if( !pin->GetParentSymbol()->IsMultiUnit() )
                         continue;
 
                     wxString name = pin->GetParentSymbol()->GetRef( &sheet ) + ":" + pin->GetShownNumber();
