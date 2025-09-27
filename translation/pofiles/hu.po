@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 21:02+0000\n"
+"PO-Revision-Date: 2025-09-28 04:02+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -2856,9 +2856,8 @@ msgid "Select a file"
 msgstr "Fájl kiválasztása"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
-#, fuzzy
 msgid "Configure Global Library Table"
-msgstr "Globális könyvtártáblázat szerkesztése"
+msgstr "Globális könyvtártáblázat beállítása"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
 #, fuzzy
@@ -2960,7 +2959,6 @@ msgstr "(opcionális)"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:306
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:320
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:336
-#, fuzzy
 msgid "unit"
 msgstr "mértékegység"
 
@@ -3001,9 +2999,8 @@ msgstr ""
 "Válassza ki, hogy melyiket importáljuk."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Project bezárása"
+msgstr "Importálandó projekt kiválasztása"
 
 #: common/dialogs/dialog_locked_items_query.cpp:38
 msgid "Skip Locked Items"
@@ -3087,9 +3084,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "Hogyan szeretné beállítani a KiCad-et?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Beállítások importálása egy másik projektből..."
+msgstr "Beállítások importálása egy előző verzióból:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
@@ -3943,9 +3939,8 @@ msgstr "%s nem lehet üres."
 
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
-msgstr "Csatlakozás kijelölése"
+msgstr "Teszt kapcsolat"
 
 #: common/dialogs/git/dialog_git_repository.cpp:166
 #: common/dialogs/git/dialog_git_repository.cpp:361
