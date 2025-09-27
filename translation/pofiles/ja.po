@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 21:02+0000\n"
+"PO-Revision-Date: 2025-09-28 04:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -47,7 +47,7 @@ msgstr "レイヤーを作成"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:982
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "フットプリントがロードされていません。"
+msgstr "フットプリントが読み込まれていません。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:997
 msgid ""
@@ -156,13 +156,13 @@ msgstr "OpenGL レイヤー%s を読み込み"
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2019
 msgid "Loading 3D models..."
-msgstr "3D モデルをロードしています..."
+msgstr "3D モデルを読み込み中..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:663
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:976
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "リロード時間 %.3f s"
+msgstr "再読み込み時間 %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:959
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:364
@@ -177,13 +177,13 @@ msgstr "リロード時間 %.3f s"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2705
 #, c-format
 msgid "Loading %s..."
-msgstr "%s をロードしています..."
+msgstr "%s を読み込み中..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:511
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
-msgstr "ロードしています..."
+msgstr "読み込み中..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
 msgid "Load Raytracing: board"
@@ -278,7 +278,7 @@ msgstr "設定 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
-msgstr "基板をリロード"
+msgstr "基板を再読み込み"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
@@ -1466,7 +1466,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
 msgid "Reload board and 3D models"
-msgstr "基板と 3D モデルをリロード"
+msgstr "基板と 3D モデルを再読み込み"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:150
 #: bitmap2component/bitmap2cmp_frame.cpp:293
@@ -1727,11 +1727,11 @@ msgstr "エラー"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
 msgid "Replace Loaded File?"
-msgstr "ロードしたファイルを置換しますか?"
+msgstr "読み込んだファイルを置換しますか?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "既にロード済みのファイルがあります。置換しますか？"
+msgstr "既にファイルが読み込まれています。置換しますか？"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -1786,7 +1786,7 @@ msgstr "ビット"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 msgid "Load Source Image"
-msgstr "元の画像をロード"
+msgstr "元の画像を読み込み"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
@@ -2085,7 +2085,7 @@ msgstr "いいえ(&N)"
 
 #: common/design_block_info_impl.cpp:132
 msgid "Loading design_blocks..."
-msgstr "design_blocks を読み込んでいます..."
+msgstr "design_blocks を読み込み中..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -3175,7 +3175,7 @@ msgstr "タイトル ブロック"
 #: pcbnew/pcbnew_jobs_handler.cpp:2313
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "図面シート '%s' をロード中にエラーしました。"
+msgstr "図面シート '%s' の読み込み中にエラー。"
 
 #: common/dialogs/dialog_page_settings.cpp:713
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -3197,7 +3197,7 @@ msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
 msgstr ""
-"図面シート '%s' をロード中にエラーが発生しました。\n"
+"図面シート '%s' の読み込み中にエラー。\n"
 "%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
@@ -6986,7 +6986,7 @@ msgstr "デフォルトのフォント"
 #: common/font/fontconfig.cpp:360
 #, c-format
 msgid "Error loading font '%s'."
-msgstr "フォント '%s' のロード中のエラー。"
+msgstr "フォント '%s' の読み込み中にエラー。"
 
 #: common/font/fontconfig.cpp:372
 #, c-format
@@ -6999,12 +6999,12 @@ msgstr "フォント '%s' が見つかりません; '%s' で置き換えます�
 #: eeschema/symbol_viewer_frame.cpp:305
 #: eeschema/widgets/panel_design_block_chooser.cpp:428
 msgid "Load Error"
-msgstr "ロード エラー"
+msgstr "読み込み エラー"
 
 #: common/footprint_info.cpp:124
 #: eeschema/widgets/panel_design_block_chooser.cpp:430
 msgid "Errors were encountered loading footprints:"
-msgstr "フットプリントのロード中にエラーが発生しました:"
+msgstr "フットプリントの読み込み中にエラーが発生しました:"
 
 #: common/fp_lib_table.cpp:232
 #, c-format
@@ -7929,7 +7929,7 @@ msgstr "スキーマ ファイル '%s' が見つかりません"
 #: common/json_schema_validator.cpp:53
 #, c-format
 msgid "Error loading schema: %s"
-msgstr "スキーマの読み込みでエラー: %s"
+msgstr "スキーマの読み込み中にエラー: %s"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -7951,7 +7951,7 @@ msgstr "kiface ライブラリ '%s' の署名の検証に失敗しました。"
 #: common/kiway.cpp:282
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "kiface ライブラリ '%s' のロードに失敗しました。"
+msgstr "kiface ライブラリ '%s' の読み込みに失敗しました。"
 
 #: common/kiway.cpp:290
 #, c-format
@@ -7962,7 +7962,7 @@ msgstr ""
 
 #: common/kiway.cpp:463
 msgid "Error loading editor."
-msgstr "エディターをロード中にエラーしました。"
+msgstr "エディターの読み込み中にエラー。"
 
 #: common/kiway.cpp:575
 #, c-format
@@ -8532,14 +8532,11 @@ msgstr "%s を開く"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
-msgstr ""
-"プロジェクトのフットプリント ライブラリ テーブルをロード中にエラーしました。"
+msgstr "プロジェクトのフットプリント ライブラリ テーブルを読み込み中にエラー。"
 
 #: common/project.cpp:451 common/project.cpp:457
 msgid "Error loading project design block library table."
-msgstr ""
-"プロジェクト設計ブロック ライブラリ テーブルの読み込み中にエラーが発生しまし"
-"た。"
+msgstr "プロジェクト設計ブロック ライブラリ テーブルの読み込み中にエラー。"
 
 #: common/project/net_settings.cpp:66 pcbnew/board.cpp:132
 msgid "This is the default net class."
@@ -9647,7 +9644,7 @@ msgstr "プラグインを更新"
 
 #: common/tool/actions.cpp:1241
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr "すべての python プラグインをリロードしてプラグイン メニューを更新"
+msgstr "すべての python プラグインを再読み込みしてプラグイン メニューを更新"
 
 #: common/tool/actions.cpp:1249
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
@@ -10504,7 +10501,7 @@ msgstr "等価ファイル '%s' の読み込みエラー。"
 
 #: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
-msgstr "等価ファイルのロード エラー"
+msgstr "等価ファイルの読み込み エラー"
 
 #: cvpcb/auto_associate.cpp:187
 #, c-format
@@ -10547,9 +10544,8 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:206
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr ""
-"グローバル フットプリント ライブラリ テーブルをロードしようとしたところ、エ"
-"ラーが発生しました。"
+msgstr "グローバル フットプリント ライブラリ "
+"テーブルを読み込みしようとしたところ、エラーが発生しました。"
 
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
@@ -10650,7 +10646,7 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
-"回路図ロード中のエラー。\n"
+"回路図の読み込み中にエラー。\n"
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:46
@@ -10748,7 +10744,7 @@ msgstr "フットプリント '%s' が見つかりません。"
 
 #: cvpcb/display_footprints_frame.cpp:451
 msgid "Error loading footprint"
-msgstr "フットプリントの読み込みエラー"
+msgstr "フットプリントの読み込み中にエラー"
 
 #: cvpcb/display_footprints_frame.cpp:514 pcbnew/footprint.cpp:1786
 #, c-format
@@ -11060,8 +11056,7 @@ msgstr "選択されたネット:"
 #: eeschema/design_block_utils.cpp:622
 #, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr ""
-"デザイン ブロック%s をライブラリ ' %s ' からロード中にエラーが発生しました。"
+msgstr "デザイン ブロック%s をライブラリ ' %s ' から読み込み中にエラー。"
 
 #: eeschema/design_block_utils.cpp:47
 #, c-format
@@ -11780,7 +11775,7 @@ msgstr "データベースへの接続がない"
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 #, c-format
 msgid "Loaded %zu libraries"
-msgstr "%zu 個のライブラリーをロード"
+msgstr "%zu 個のライブラリーを読み込んだ"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
@@ -11905,8 +11900,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"シンボル %s をライブラリ %s からロードしようとしたところ、エラーが発生しまし"
-"た。\n"
+"シンボル %s をライブラリ %s から読み込み中にエラー。\n"
 "\n"
 "%s"
 
@@ -11929,7 +11923,7 @@ msgid ""
 "libraries."
 msgstr ""
 "シンボルが孤立 (接続されたシンボルが見つからない) している場合、\n"
-"ロードされたシンボル ライブラリ内から同じ名前の候補を探してみます。"
+"読み込んだシンボル ライブラリ内から同じ名前の候補を探してみます。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -12765,7 +12759,7 @@ msgid ""
 "symbol value when loaded in the schematic."
 msgstr ""
 "これはライブラリにおけるシンボル名で、\n"
-"また、回路図にロードされる時のデフォルトのシンボルの値です。"
+"また、回路図に読み込まれる時のデフォルトのシンボルの値です。"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
 msgid "Increment by:"
@@ -14249,7 +14243,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "プロジェクトから設定をインポート中にエラーしました:\n"
-"プロジェクト ファイル %s をロードできませんでした。"
+"プロジェクト ファイル %s を読み込みできませんでした。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:258
 msgid "Loading Bus Aliases"
@@ -15168,7 +15162,7 @@ msgstr "電源シンボルを選択"
 #: eeschema/symbol_chooser_frame.cpp:116 pcbnew/footprint_chooser_frame.cpp:187
 #, c-format
 msgid " (%d items loaded)"
-msgstr " (%d個のアイテムがロードされています)"
+msgstr " (%d個のアイテムが読み込まれています)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:77
 #: eeschema/widgets/design_block_pane.cpp:39
@@ -16716,11 +16710,11 @@ msgstr "不正な文字 '%c' のあるニックネーム: '%s'"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:582 eeschema/symbol_library.cpp:583
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "シンボル ライブラリ '%s' のロードに失敗しました。"
+msgstr "シンボル ライブラリ '%s' の読み込みに失敗しました。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:587
 msgid "Error Loading Library"
-msgstr "ライブラリ ロード中のエラー"
+msgstr "ライブラリの読み込み中にエラー"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:630 eeschema/files-io.cpp:660
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
@@ -16849,8 +16843,8 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"グローバル シンボル ライブラリ テーブルをロードしようとしたところ、エラーが発"
-"生しました。\n"
+"グローバル シンボル ライブラリ "
+"テーブルを読み込もうとしたところ、エラーが発生しました。\n"
 "設定メニューで、このグローバル シンボル ライブラリ テーブルを編集して下さい。"
 
 #: eeschema/eeschema.cpp:514
@@ -16858,8 +16852,8 @@ msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"グローバルデザインブロックライブラリテーブルをロードしようとしたところ、エ"
-"ラーが発生しました。\n"
+"グローバルデザインブロックライブラリテーブルを読み込もうとしたところ、エラー"
+"が発生しました。\n"
 "設定メニューで、このグローバルデザインブロックライブラリテーブルを編集して下"
 "さい。"
 
@@ -16873,7 +16867,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:193
 msgid "Failed to load schematic\n"
-msgstr "回路図のロードに失敗しました\n"
+msgstr "回路図の読み込みに失敗しました\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:346
 #: eeschema/eeschema_jobs_handler.cpp:491
@@ -16940,7 +16934,7 @@ msgstr "シンボル '%s' の ユニット%d を '%s' にプロット\n"
 #: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1702
 #: pcbnew/pcbnew_jobs_handler.cpp:1775
 msgid "Unable to load library\n"
-msgstr "ライブラリをロードできません\n"
+msgstr "ライブラリを読み込めません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:996
 #: eeschema/symbol_editor/symbol_editor.cpp:1099
@@ -17525,26 +17519,25 @@ msgstr ""
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr ""
-"回路図全体を読み込めませんでした。  階層シートをロードしようとしたところ、エ"
-"ラーが発生しました。"
+msgstr "回路図全体を読み込めませんでした。  "
+"階層シートを読み込もうとしたところ、エラーが発生しました。"
 
 #: eeschema/files-io.cpp:293 eeschema/files-io.cpp:301
 #: eeschema/files-io.cpp:1391 eeschema/sheet.cpp:231
 #, c-format
 msgid "Error loading schematic '%s'."
-msgstr "回路図 '%s' のロード中のエラー。"
+msgstr "回路図 '%s' の読み込み中にエラー。"
 
 #: eeschema/files-io.cpp:309
 #, c-format
 msgid "Memory exhausted loading schematic '%s'."
-msgstr "回路図ファイル '%s' のロード中にメモリー不足が発生しました。"
+msgstr "回路図ファイル '%s' の読み込み中にメモリー不足が発生しました。"
 
 #: eeschema/files-io.cpp:328 eeschema/files-io.cpp:1394
 #: eeschema/files-io.cpp:1406 eeschema/sheet.cpp:234
 #, c-format
 msgid "Failed to load '%s'."
-msgstr "'%s' のロードに失敗しました。"
+msgstr "'%s' の読み込みに失敗しました。"
 
 #: eeschema/files-io.cpp:341
 msgid ""
@@ -17552,9 +17545,9 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
-"自動修復した回路図をロードしている時にエラーが見つかりました。破損したファイ"
-"ルを修復するには回路図を保存して下さい。さもないと KiCad の別バージョンで使用"
-"できなくなる恐れがあります。"
+"自動修復した回路図を読み込み中にエラーが見つかりました。破損したファイルを修"
+"復するには回路図を保存して下さい。さもないと KiCad "
+"の別バージョンで使用できなくなる恐れがあります。"
 
 #: eeschema/files-io.cpp:405
 msgid "Illegal entry found in project file symbol library list."
@@ -17564,7 +17557,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:406
 msgid "Project Load Warning"
-msgstr "プロジェクト ロード警告"
+msgstr "プロジェクト読み込み警告"
 
 #: eeschema/files-io.cpp:409
 msgid ""
@@ -17603,7 +17596,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:455
 msgid "Load Without Cache File"
-msgstr "キャッシュ ファイルなしでロード"
+msgstr "キャッシュ ファイルなしで読み込み"
 
 #: eeschema/files-io.cpp:456
 msgid "Abort"
@@ -17737,7 +17730,7 @@ msgstr "回路図をインポート"
 #: eeschema/files-io.cpp:1402
 #, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "回路図ファイル '%s' のロード中に未処理の例外が発生しました。"
+msgstr "回路図ファイル '%s' の読み込み中に Unhandled exception が発生しました。"
 
 #: eeschema/files-io.cpp:1464
 msgid "The current schematic has been modified.  Save changes?"
@@ -17802,7 +17795,7 @@ msgstr "派生元"
 #: eeschema/widgets/symbol_preview_widget.cpp:207
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "シンボル '%s' をライブラリ '%s' からロード中にエラーしました。"
+msgstr "シンボル '%s' をライブラリ '%s' から読み込み中にエラー。"
 
 #: eeschema/generate_alias_info.cpp:115 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:863
@@ -18416,7 +18409,7 @@ msgstr "ライブラリは見つかりませんでした:"
 #: eeschema/project_sch.cpp:169 eeschema/sheet.cpp:407
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "シンボル ライブラリ テーブル '%s' のロード中にエラーが発生しました。"
+msgstr "シンボル ライブラリ テーブル '%s' の読み込み中にエラー。"
 
 #: eeschema/sch_base_frame.cpp:252
 #, c-format
@@ -18450,7 +18443,7 @@ msgid ""
 "Do you want to reload the library?"
 msgstr ""
 "使用中のシンボルを含むライブラリが変更されました。\n"
-"ライブラリをリロードしますか?"
+"ライブラリを再読み込みしますか?"
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2148
 #: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2929
@@ -18585,7 +18578,7 @@ msgstr "[未保存]"
 
 #: eeschema/sch_edit_frame.cpp:1753
 msgid "[no schematic loaded]"
-msgstr "[回路図がロードされていません]"
+msgstr "[回路図が読み込まれていません]"
 
 #: eeschema/sch_edit_frame.cpp:1983
 #, c-format
@@ -18779,27 +18772,24 @@ msgstr "CADSTARの部品ライブラリファイルではないようです"
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
-msgstr ""
-"部品 %s によって参照されるシンボル %s が見つかりません。 部品はロードされませ"
-"んでした。"
+msgstr "部品 %s によって参照されるシンボル %s が見つかりません。 "
+"部品は読み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:147
 #, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
-msgstr ""
-"シンボル %s のピン番号が、パーツ %s で定義されたピン番号と一致しません。 部品"
-"はロードされませんでした。"
+msgstr "シンボル %s のピン番号が、パーツ %s で定義されたピン番号と一致しません。 "
+"部品は読み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:384
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr ""
-"CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。"
-"マスターバリアント( '%s' )のみロードしました。"
+msgstr "CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。"
+"マスターバリアント( '%s' )のみ読み込みました。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:393
 msgid ""
@@ -18873,26 +18863,26 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"パーツ定義 '%s'は、シンボル ライブラリに見つからなかったシンボル '%s'（代替"
-"は '%s'）を参照しています。パーツはKiCadライブラリにロードされていません。"
+"パーツ定義 '%s'は、シンボル ライブラリに見つからなかったシンボル '%s'（"
+"代替は "
+"'%s'）を参照しています。パーツはKiCadライブラリに読み込まれていません。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:703
 #, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
-msgstr ""
-"パーツ定義 '%s'が不完全です（シンボル定義が関連付けされていません）。このパー"
-"ツがKiCadライブラリにロードされていません。"
+msgstr "パーツ定義 "
+"'%s'が不完全です（シンボル定義が関連付けされていません）。このパーツがKiCadラ"
+"イブラリに読み込まれていません。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:736
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
-msgstr ""
-"シンボル '%s' は、ライブラリで見つからなかったパーツ '%s' を参照しています。"
-"シンボルがロードされませんでした"
+msgstr "シンボル '%s' は、ライブラリで見つからなかったパーツ '%s' "
+"を参照しています。シンボルは読み込まれませんでした"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:842
 #, c-format
@@ -18939,7 +18929,7 @@ msgid ""
 "exist in the library. The symbol was not loaded."
 msgstr ""
 "ドキュメンテーション シンボル '%s' は、ライブラリに存在しないシンボル定義 ID "
-"'%s' を指します。シンボルは読み込まれませんでした。"
+"'%s' を参照しています。シンボルは読み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1586
 msgid "Text Variables could not be set as there is no project attached."
@@ -18971,9 +18961,9 @@ msgstr ""
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
-msgstr ""
-"ネット %s は未知のネット要素 %s を参照します。ネットが正しくロードされておら"
-"ず、手動で修正する必要がある場合があります。"
+msgstr "ネット %s は不明のネット要素 %s "
+"を参照しています。ネットが正しく読み込まれておらず、手動で修正する必要がある"
+"場合があります。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2538
 #, c-format
@@ -18982,9 +18972,10 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"ブロック ID %s (ブロック名: '%s') はシート '%s' に描画されますが、デザイン内"
-"の別のシートにはリンクされていません。KiCad では、すべてのシートシンボルを"
-"シートに関連付ける必要があるため、ブロックはロードされませんでした。"
+"ブロック ID %s (ブロック名: '%s') はシート '%s' "
+"に描画されますが、デザイン内の別のシートにはリンクされていません。KiCad "
+"では、すべてのシートシンボルをシートに関連付ける必要があるため、ブロックは読"
+"み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2563
 #, c-format
@@ -19107,7 +19098,7 @@ msgstr "'%s' の中に有効な回路図が見つかりません"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:500
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "シンボル '%s' をライブラリ '%s' からロード中にエラー: %s"
+msgstr "シンボル '%s' をライブラリ '%s' から読み込み中にエラー: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:421
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:426
@@ -19121,7 +19112,7 @@ msgstr "シンボル ライブラリ '%s' の列挙中にエラーしました: 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:607
 #, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "回路図 '%s' のロード中のエラー: %s"
+msgstr "回路図 '%s' の読み込み中にエラー: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
@@ -19290,9 +19281,9 @@ msgstr "ライブラリ %s は %s と言う名前のシンボルを含んでい�
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr ""
-"シート '%s' をロードできませんでした。これは回路図の階層で直接の先祖としてす"
-"でに表示されているためです。"
+msgstr "シート '%s' "
+"を読み込みできませんでした。これは回路図の階層で直接の先祖としてすでに表示さ"
+"れているためです。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:291
 #, c-format
@@ -20422,13 +20413,12 @@ msgstr ""
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
-msgstr ""
-"回路図全体を読み込めませんでした。  階層シート回路図をロードしようとしたとこ"
-"ろ、エラーが発生しました。"
+msgstr "回路図全体を読み込めませんでした。  "
+"階層シート回路図の読み込み中にエラーが発生しました。"
 
 #: eeschema/sheet.cpp:219
 msgid "Schematic Load Error"
-msgstr "回路図ロード エラー"
+msgstr "回路図読み込みエラー"
 
 #: eeschema/sheet.cpp:222
 msgid "Use partial schematic"
@@ -20436,11 +20426,11 @@ msgstr "部分的に回路図を使用"
 
 #: eeschema/sheet.cpp:305
 msgid "Continue Load"
-msgstr "ロードを続行"
+msgstr "読み込みを続行"
 
 #: eeschema/sheet.cpp:306
 msgid "Cancel Load"
-msgstr "ロードをキャンセル"
+msgstr "読み込みをキャンセル"
 
 #: eeschema/sheet.cpp:315
 msgid ""
@@ -20453,19 +20443,19 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"古いバージョンのファイルからロードされた回路図ファイルに階層シートがあり、  "
-"シンボル インスタンス データが欠落しています。  これにより、ロードされた回路"
-"図内のすべてのシンボルがデフォルトのインスタンス設定を使用するか、ライブラリ"
-"のシンボルの設定にフォールバックします。  この回路図ファイルを使用するプロ"
-"ジェクトをロードし、最新のファイル バージョンに保存すると、この問題は解決しま"
-"す。\n"
+"読み込まれた回路図ファイルには古いバージョンの階層シートが含まれているため、 "
+"シンボル インスタンス データが欠落しています。  "
+"このため、回路図内の読み込まれたすべてのシンボルにデフォルトのインスタンス設"
+"定を使用するか、ライブラリのシンボルの設定にフォールバックします。  "
+"この回路図ファイルを使用するプロジェクトを読み込み、最新のファイル "
+"バージョンに保存すると、この問題は解決します。\n"
 "\n"
 "続けますか?"
 
 #: eeschema/sheet.cpp:322 eeschema/sheet.cpp:350 eeschema/sheet.cpp:391
 #: eeschema/sheet.cpp:440 eeschema/sheet.cpp:501
 msgid "Continue Load Schematic"
-msgstr "回路図のロードを続行"
+msgstr "回路図の読み込みを続行"
 
 #: eeschema/sheet.cpp:346
 msgid ""
@@ -20475,9 +20465,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選択した回路図にプロジェクト ライブラリ テーブルから失われたライブラリ名があ"
-"ります。  これはロードされた回路図でシンボル ライブラリのリンクを壊す原因とな"
-"ります。\n"
+"選択した回路図に現在のプロジェクト ライブラリ "
+"テーブルに存在しないライブラリ名があります。  "
+"これは読み込まれた回路図のシンボル ライブラリの参照を壊す可能性があります。\n"
 "\n"
 "続行しますか？"
 
@@ -21084,7 +21074,7 @@ msgstr ""
 #: eeschema/sim/legacy_workbook.cpp:117
 #, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr "ワークブックの読み込みエラー: 行: %d: %s."
+msgstr "ワークブックの読み込み中にエラー: 行: %d: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:132
 msgid "expecting version"
@@ -21128,9 +21118,8 @@ msgstr "計測のフォーマット定義を予期しています"
 
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
-"ngspice 共有ライブラリのロードに失敗しました。インストールを確認してくださ"
-"い。"
+msgstr "ngspice の "
+"共有ライブラリの読み込みに失敗しました。インストールを確認してください。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -21145,7 +21134,7 @@ msgstr "'%s' もしくは '%s' にシミュレーションモデル ライブラ
 #: eeschema/sim/sim_lib_mgr.cpp:306
 #, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "シミュレーションモデルの読み込みエラー: '%s' フィールドがありません"
+msgstr "シミュレーションモデルの読み込み中にエラー: '%s' フィールドがありません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:311
 #: pcbnew/dialogs/dialog_board_statistics.cpp:462
@@ -21163,9 +21152,8 @@ msgstr "不明"
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr ""
-"シミュレーションモデルの読み込み中にエラーが発生しました: ベース モデル '%s' "
-"がライブラリ '%s' 内に見つかりませんでした"
+msgstr "シミュレーションモデルの読み込み中にエラー: ベース モデル '%s' がライブラリ "
+"'%s' 内に見つかりませんでした"
 
 #: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:81
 #, c-format
@@ -21381,7 +21369,7 @@ msgstr "別のシミュレーションがすでに実行中です。"
 #: eeschema/sim/simulator_frame.cpp:550
 #, c-format
 msgid "Unable to load or parse file %s"
-msgstr "ファイル %s のロードもしくは解析ができません"
+msgstr "ファイル %s の読み込みもしくは解析ができません"
 
 #: eeschema/sim/simulator_frame.cpp:621
 msgid "Save changes to workbook?"
@@ -21692,7 +21680,7 @@ msgstr ""
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
 msgid "Loading library %s..."
-msgstr "ライブラリ %s をロードしています..."
+msgstr "ライブラリ %s を読み込み中..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
 #, c-format
@@ -21701,7 +21689,7 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"シンボル ライブラリ %s をロード中にエラー。\n"
+"シンボル ライブラリ %s の読み込み中にエラー。\n"
 "\n"
 "%s\n"
 
@@ -21873,9 +21861,9 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"すべてのシンボル ライブラリをロードできませんでした。 パスを修正してライブラ"
-"リの\n"
-"追加または削除を行うにはシンボル ライブラリ管理ダイアログを使用して下さい。"
+"すべてのシンボル ライブラリを読み込みできませんでした。 シンボル "
+"ライブラリ管理ダイアログを使用して\n"
+"パスを修正たり、ライブラリの追加または削除をして下さい。"
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
@@ -21904,7 +21892,7 @@ msgstr "KiCad シンボル エディター"
 #: eeschema/symbol_library.cpp:523 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:275
 msgid "Loading Symbol Libraries"
-msgstr "シンボル ライブラリをロード中"
+msgstr "シンボル ライブラリを読み込み中"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:269
 msgid "Library changes are unsaved"
@@ -21993,7 +21981,7 @@ msgstr "ライブラリ ファイルを開くことができません。"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1221
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "ライブラリ '%s' をロードしています..."
+msgstr "ライブラリ '%s' を読み込み中..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1304
 #, c-format
@@ -22043,7 +22031,7 @@ msgstr "[読み取り専用ライブラリ]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:81
 msgid "[no symbol loaded]"
-msgstr "[シンボルがロードされていません]"
+msgstr "[シンボルが読み込まれていません]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:113
 #: eeschema/tools/symbol_editor_control.cpp:863
@@ -22158,9 +22146,8 @@ msgstr "ライブラリ '%s' は読み込み専用です。"
 #: eeschema/symbol_editor/symbol_editor.cpp:1174
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr ""
-"シンボル ライブラリ ファイル '%s' をロードしようとしたところ、エラーが発生し"
-"ました。"
+msgstr "シンボル ライブラリ ファイル '%s' "
+"を読み込もうとしたところ、エラーが発生しました。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1182
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
@@ -22306,13 +22293,13 @@ msgstr ""
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:222
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "シンボル ライブラリ %s のロード中にエラーしました。"
+msgstr "シンボル ライブラリ %s の読み込み中にエラー。"
 
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:109
 #: eeschema/symbol_viewer_frame.cpp:307
 msgid "Errors loading symbols:"
-msgstr "シンボル ロード中のエラー:"
+msgstr "シンボルの読み込み中のエラー:"
 
 #: eeschema/symbol_library_manager.cpp:164
 #, c-format
@@ -22326,7 +22313,7 @@ msgstr "シンボルが見つかりません。"
 #: eeschema/symbol_library_manager.cpp:640
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "シンボル '%s' を ライブラリ '%s' からロードできません。"
+msgstr "シンボル '%s' を ライブラリ '%s' から読み込みできません。"
 
 #: eeschema/symbol_library_manager.cpp:797
 #, c-format
@@ -22351,7 +22338,7 @@ msgstr "シンボル '%s' をライブラリ '%s' へ保存中にエラーが発
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:273
 msgid "(failed to load)"
-msgstr "(ロードに失敗しました)"
+msgstr "(読み込みに失敗しました)"
 
 #: eeschema/symbol_viewer_frame.cpp:111
 msgid "KiCad Symbol Library Browser"
@@ -22426,7 +22413,7 @@ msgstr "シンボル ビューアー"
 
 #: eeschema/tools/assign_footprints.cpp:207
 msgid "Load Symbol Footprint Link File"
-msgstr "シンボル フットプリント リンク ファイルをロード"
+msgstr "シンボル フットプリント リンク ファイルを読み込み"
 
 #: eeschema/tools/assign_footprints.cpp:218
 msgid "Keep existing footprint field visibility"
@@ -23889,7 +23876,7 @@ msgstr "<ESC>を押すと、イメージの作成をキャンセルします。"
 #: pagelayout_editor/pl_editor_frame.cpp:881 pcbnew/tools/drawing_tool.cpp:780
 #, c-format
 msgid "Could not load image from '%s'."
-msgstr "'%s' から画像をロードできません。"
+msgstr "'%s' から画像を読み込みできません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1119 pcbnew/tools/drawing_tool.cpp:801
 msgid "Place Image"
@@ -24330,7 +24317,7 @@ msgstr "SPICE ネットリスト"
 #: eeschema/tools/symbol_editor_control.cpp:261
 #, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr "シンボル %s をライブラリ %s からロード中に失敗しました。"
+msgstr "シンボル %s をライブラリ %s から読み込みに失敗しました。"
 
 #: eeschema/tools/symbol_editor_control.cpp:281
 msgid "No symbol library selected."
@@ -25140,14 +25127,13 @@ msgstr "不明な Excellon G Code です : &lt;%s&gt;"
 
 #: gerbview/files.cpp:44
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr ""
-"GerbViewにファイルをロードするための <b>有効なレイヤーはこれ以上ありません</"
-"b>"
+msgstr "GerbViewにファイルを読み込みするための "
+"<b>有効なレイヤーはこれ以上ありません</b>"
 
 #: gerbview/files.cpp:45
 #, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr "<b>未ロード:</b> <i>%s</i>"
+msgstr "<b>未読み込み:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:46
 #, c-format
@@ -25233,9 +25219,8 @@ msgstr "ファイルが見つかりません:"
 #: gerbview/files.cpp:290
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr ""
-"<b>ガーバー ジョブ ファイルをプロット ファイルとしてロードすることはできませ"
-"ん</b> <i>%s</i>"
+msgstr "<b>ガーバー ジョブ ファイルをプロット "
+"ファイルとして読み込むことができません</b> <i>%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
@@ -25244,7 +25229,7 @@ msgstr "ファイルをロードしています..."
 #: gerbview/files.cpp:306 gerbview/files.cpp:313
 #, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "読込み中 %u/%zu %s..."
+msgstr "読み込み中 %u/%zu %s..."
 
 #: gerbview/files.cpp:443
 #, c-format
@@ -25604,7 +25589,7 @@ msgstr "すべてのレイヤーをクリア"
 
 #: gerbview/tools/gerbview_actions.cpp:115
 msgid "Reload All Layers"
-msgstr "すべてのレイヤーをリロード"
+msgstr "すべてのレイヤーを再読み込み"
 
 #: gerbview/tools/gerbview_actions.cpp:126
 msgid "Clear Highlight"
@@ -25722,7 +25707,7 @@ msgstr "ソース ファイル '%s' が見つかりません。"
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
 #, c-format
 msgid "No file loaded on the active layer %d."
-msgstr "アクティブ レイヤー%d上にファイルがロードされていません。"
+msgstr "アクティブ レイヤー%d上にファイルが読み込まれていません。"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:68
 #, c-format
@@ -27351,7 +27336,7 @@ msgstr "ファイルをテキスト エディターで編集"
 
 #: kicad/kicad_manager_frame.cpp:1073
 msgid "[no project loaded]"
-msgstr "[プロジェクトがロードされていません]"
+msgstr "[プロジェクトが読み込まれていません]"
 
 #: kicad/kicad_manager_frame.cpp:1116
 #, c-format
@@ -27745,7 +27730,7 @@ msgstr "ダウンロード"
 #: kicad/pcm/pcm.cpp:114
 #, c-format
 msgid "Error loading installed packages list: %s"
-msgstr "インストール済みパッケージリストのロード中のエラー: %s"
+msgstr "インストール済みパッケージリストの読み込み中にエラー: %s"
 
 #: kicad/pcm/pcm.cpp:213 kicad/update_manager.cpp:123
 #, c-format
@@ -27779,7 +27764,7 @@ msgstr "リポジトリ パッケージの取得"
 
 #: kicad/pcm/pcm.cpp:308
 msgid "Unable to load repository packages url."
-msgstr "リポジトリ パッケージのURLをロードできません。"
+msgstr "リポジトリ パッケージのURLを読み込みできません。"
 
 #: kicad/pcm/pcm.cpp:318
 msgid "Packages hash doesn't match. Repository may be corrupted."
@@ -28502,7 +28487,7 @@ msgstr "プロジェクトを作成して(または開いて)、基板(PCB) を�
 
 #: kicad/tools/kicad_manager_control.cpp:807
 msgid "Application failed to load:\n"
-msgstr "アプリケーションのロードに失敗:\n"
+msgstr "アプリケーションの読み込みに失敗:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:813
 msgid "Application cannot start."
@@ -28787,7 +28772,7 @@ msgstr "既存の図面シートを追加"
 #: pagelayout_editor/files.cpp:142 pagelayout_editor/files.cpp:167
 #, c-format
 msgid "Unable to load %s file"
-msgstr "ファイル %s をロードできません"
+msgstr "ファイル %s を読み込みできません"
 
 #: pagelayout_editor/files.cpp:149
 #, c-format
@@ -28830,7 +28815,7 @@ msgstr "プリンター情報の初期化エラー"
 
 #: pagelayout_editor/pl_editor_frame.cpp:564
 msgid "[no drawing sheet loaded]"
-msgstr "[図面シートがロードされていません]"
+msgstr "[図面シートが読み込まれていません]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:778
 #, c-format
@@ -32343,7 +32328,7 @@ msgid ""
 "Associated project file %s could not be loaded"
 msgstr ""
 "基板から設定をインポート中のエラー:\n"
-"関連したプロジェクト ファイル %s をロードできませんでした"
+"関連したプロジェクト ファイル %s を読み込みできませんでした"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:581
 #: pcbnew/tools/pcb_control.cpp:1529
@@ -32356,7 +32341,7 @@ msgid ""
 "Error loading board file:\n"
 "%s"
 msgstr ""
-"基板ファイルのロード エラー:\n"
+"基板ファイルの読み込み中にエラー:\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:96
@@ -35146,7 +35131,7 @@ msgstr "異なるネットを接続しても問題ないパッドのグループ
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:146
 msgid "All footprint generator scripts were loaded"
-msgstr "すべてのフットプリント生成スクリプトをロードしました"
+msgstr "すべてのフットプリント生成スクリプトを読み込みました"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available Footprint Generators"
@@ -35158,7 +35143,7 @@ msgstr "パス検索:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:77
 msgid "Not loadable python scripts:"
-msgstr "ロードできない python スクリプト:"
+msgstr "python スクリプトを読み込めない:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
@@ -35979,7 +35964,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:135
 msgid "Error loading footprint library table."
-msgstr "プロジェクトのフットプリント ライブラリ テーブルをロード中にエラー。"
+msgstr "プロジェクトのフットプリント ライブラリ テーブルの読み込み中にエラー。"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
 msgid "Edit Group Properties"
@@ -36003,7 +35988,7 @@ msgstr "グループのプロパティ"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 msgid "Load and Test Netlist"
-msgstr "ネットリストをロードしてテスト"
+msgstr "ネットリストを読み込みテスト"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:137
 #: pcbnew/dialogs/dialog_import_netlist_base.h:71
@@ -38824,7 +38809,7 @@ msgstr "プラグイン ディレクトリを開く"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:83
 msgid "Reload Plugins"
-msgstr "プラグインをリロード"
+msgstr "プラグインを再読み込み"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:88
 msgid "Show Plugin Errors"
@@ -42073,13 +42058,12 @@ msgstr "ルールエリアの数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:834
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
-"プロジェクトがロードされておらず、ライブラリの等価性テストをスキップしていま"
-"す。"
+msgstr "プロジェクトが読み込まれていないため、ライブラリの等価性テストをスキップして"
+"います。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:838
 msgid "Loading footprint library table..."
-msgstr "フットプリント ライブラリ テーブルをロード中…"
+msgstr "フットプリント ライブラリ テーブルを読み込み中…"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:848
 msgid "Checking board footprints against library..."
@@ -42714,7 +42698,7 @@ msgstr "リカバリー ファイル '%s' が見つかりません。"
 #: pcbnew/files.cpp:318
 #, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "リカバリー ファイル '%s' をロードしますか?"
+msgstr "リカバリー ファイル '%s' を読み込みますか?"
 
 #: pcbnew/files.cpp:361
 #, c-format
@@ -42762,12 +42746,12 @@ msgstr "ファイルフォーマットはサポートされていません"
 #: pcbnew/files.cpp:724 pcbnew/files.cpp:734
 #, c-format
 msgid "Error loading PCB '%s'."
-msgstr "プリント基板'%s' のロード中のエラー。"
+msgstr "プリント基板'%s' の読み込み中にエラー。"
 
 #: pcbnew/files.cpp:743
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr "基板 '%s' のロード中にメモリー不足が発生しました"
+msgstr "基板 '%s' の読み込み中メモリー不足が発生しました"
 
 #: pcbnew/files.cpp:865
 #, c-format
@@ -42994,7 +42978,7 @@ msgstr "[%s から]"
 
 #: pcbnew/footprint_edit_frame.cpp:1109
 msgid "[no footprint loaded]"
-msgstr "[フットプリントがロードされていません]"
+msgstr "[フットプリントが読み込まれていません]"
 
 #: pcbnew/footprint_edit_frame.cpp:1165
 msgid "Updating Footprint Libraries"
@@ -43022,7 +43006,7 @@ msgstr "フットプリント ライブラリが有効になっていません�
 
 #: pcbnew/footprint_info_impl.cpp:149
 msgid "Loading footprints..."
-msgstr "フットプリントをロードしています..."
+msgstr "フットプリントを読み込み中..."
 
 #: pcbnew/footprint_libraries_utils.cpp:64
 msgid ""
@@ -43060,7 +43044,7 @@ msgstr "フットプリント ファイルではありません。"
 #: pcbnew/footprint_libraries_utils.cpp:184
 #, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr "フットプリント '%s' を '%s' からロードできません"
+msgstr "フットプリント '%s' を '%s' から読み込めません"
 
 #: pcbnew/footprint_libraries_utils.cpp:240
 msgid "Export Footprint"
@@ -43190,7 +43174,7 @@ msgstr "ウィザードが未選択です"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:139
 msgid "Couldn't reload footprint wizard"
-msgstr "フットプリント ウィザードのリロードに失敗しました"
+msgstr "フットプリント ウィザードの再読み込みに失敗しました"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -43199,7 +43183,7 @@ msgstr "ドキュメント"
 #: pcbnew/generate_footprint_info.cpp:129
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr "フットプリント %s をライブラリ %s からのロード中にエラーしました。"
+msgstr "フットプリント %s をライブラリ %s から読み込み中にエラー。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:261
 #: pcbnew/generators/pcb_tuning_pattern.cpp:266
@@ -44120,7 +44104,7 @@ msgid ""
 "Error loading netlist.\n"
 "%s"
 msgstr ""
-"ネットリストをロード中のエラーです。\n"
+"ネットリストの読み込み中にエラー。\n"
 "%s"
 
 #: pcbnew/netlist_reader/netlist.cpp:179
@@ -44495,7 +44479,7 @@ msgid ""
 "Do you want to reload the footprint?"
 msgstr ""
 "使用中のフットプリントを含むライブラリが変更されました。\n"
-"フットプリントをリロードしますか?"
+"フットプリントを再読み込みしますか?"
 
 #: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1840
 msgid "Prefix"
@@ -44611,7 +44595,7 @@ msgstr "回路図ファイル '%s' が見つかりません。"
 
 #: pcbnew/pcb_edit_frame.cpp:2105
 msgid "Eeschema failed to load."
-msgstr "Eeschema のロードに失敗しました。"
+msgstr "Eeschema の読み込みに失敗しました。"
 
 #: pcbnew/pcb_edit_frame.cpp:2616
 msgid "Edit design rules"
@@ -44782,11 +44766,11 @@ msgstr "拡張プリミティブ情報データの読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:981
 msgid "Loading board data..."
-msgstr "基板データをロードしています..."
+msgstr "基板データを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1251
 msgid "Loading netclasses..."
-msgstr "ネットクラスをロードしています..."
+msgstr "ネットクラスを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1277
 #, c-format
@@ -44799,12 +44783,12 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1300
 msgid "Loading components..."
-msgstr "コンポーネントをロードしています..."
+msgstr "コンポーネントを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1379
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1481
 msgid "Loading component 3D models..."
-msgstr "コンポーネントの3Dモデルをロードしています..."
+msgstr "コンポーネントの3Dモデルを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1595
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1702
@@ -44821,7 +44805,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1939
 msgid "Loading dimension drawings..."
-msgstr "寸法図をロードしています..."
+msgstr "寸法図を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1956
 msgid "Ignored Angular dimension (not yet supported)."
@@ -44855,12 +44839,12 @@ msgstr "ファイルが見つかりません: '%s' 3Dモデルは実装されて
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2111
 msgid "Loading nets..."
-msgstr "ネットをロードしています..."
+msgstr "ネットを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2137
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2392
 msgid "Loading polygons..."
-msgstr "ポリゴンをロードしています..."
+msgstr "ポリゴンを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2177
 #, c-format
@@ -44869,11 +44853,11 @@ msgstr "ポリゴンのアウトライン数は%dですが、1 である必要�
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2304
 msgid "Loading rules..."
-msgstr "ルールをロードしています..."
+msgstr "ルールを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2372
 msgid "Loading board regions..."
-msgstr "基板の領域をロード中..."
+msgstr "基板の領域を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2476
 #, c-format
@@ -44896,9 +44880,9 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"ライブラリ '%s' の読み込みエラー:\n"
-"フットプリント %s が含むAltium レイヤー (%d) にある破線の外形線は KiCad と等"
-"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"ライブラリ '%s' の読み込み中にエラー:\n"
+"フットプリント %s が含むAltium レイヤー (%d) にある破線の外形線は KiCad "
+"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2613
 #, c-format
@@ -44915,9 +44899,9 @@ msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr ""
-"ライブラリ '%s' の読み込みエラー:\n"
-"フットプリント %s に含まれる種別 %d のポリゴン形状は無視されました。(まだサ"
-"ポートされていません)."
+"ライブラリ '%s' の読み込み中にエラー:\n"
+"フットプリント %s に含まれる種別 %d "
+"のポリゴン形状は無視されました。(まだサポートされていません)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2669
 #, c-format
@@ -44928,15 +44912,15 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2826
 msgid "Loading zone fills..."
-msgstr "ゾーンの塗りつぶしをロード中..."
+msgstr "ゾーンの塗りつぶしを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2901
 msgid "Loading arcs..."
-msgstr "円弧をロードしています..."
+msgstr "円弧を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3153
 msgid "Loading pads..."
-msgstr "パッドをロードしています..."
+msgstr "パッドを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3313
 #, c-format
@@ -44944,9 +44928,9 @@ msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"ライブラリ '%s' の読み込みエラー:\n"
-"フットプリント %s のパッド%s はマルチレイヤーとしてマークされていませんが、TH"
-"パッドです。"
+"ライブラリ '%s' の読み込み中にエラー:\n"
+"フットプリント %s のパッド%s "
+"はマルチレイヤーとしてマークされていませんが、THパッドです。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3326
 #, c-format
@@ -44961,7 +44945,7 @@ msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"ライブラリ '%s' の読み込みエラー:\n"
+"ライブラリ '%s' の読み込み中にエラー:\n"
 "フットプリント %s の パッド '%s' は角穴を持っています(未サポートです)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3368
@@ -44996,7 +44980,7 @@ msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
-"ライブラリ '%s' の読み込みエラー:\n"
+"ライブラリ '%s' の読み込み中にエラー:\n"
 "フットプリント %s のパッド %s は未知の穴の種別 %dを使用しています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3452
@@ -45034,9 +45018,9 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"ライブラリ '%s' の読み込みエラー:\n"
-"フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等"
-"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"ライブラリ '%s' の読み込み中にエラー:\n"
+"フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad "
+"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3672
 #, c-format
@@ -45071,7 +45055,7 @@ msgstr "非導体のパッド %s は、不明なパッド形状を使用して�
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3881
 msgid "Loading vias..."
-msgstr "ビアをロードしています..."
+msgstr "ビアを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3925
 #, c-format
@@ -45083,15 +45067,15 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3988
 msgid "Loading tracks..."
-msgstr "配線をロードしています..."
+msgstr "配線を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4205
 msgid "Loading unicode strings..."
-msgstr "Unicode文字列をロードしています..."
+msgstr "Unicode文字列を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4219
 msgid "Loading text..."
-msgstr "テキストをロードしています..."
+msgstr "テキストを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4251
 #, c-format
@@ -45104,9 +45088,9 @@ msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"ライブラリ '%s' ロード中のエラー:\n"
-"フットプリント '%s' はAltium レイヤー %d にバーコードを含んでいます。(未サ"
-"ポートです)."
+"ライブラリ '%s' 読み込み中にエラー:\n"
+"フットプリント '%s' はAltium レイヤー %d "
+"にバーコードを含んでいます。(未サポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4286
 #, c-format
@@ -45122,7 +45106,7 @@ msgstr "不明なテキストボックスの位置合わせ%d 、テキストは
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4642
 msgid "Loading rectangles..."
-msgstr "矩形をロードしています..."
+msgstr "矩形を読み込み中..."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
@@ -45321,9 +45305,8 @@ msgstr ""
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr ""
-"寸法 ID %s は角度付きの寸法線で、KiCad に相当するものはありません。代わりに寸"
-"法線がロードされました。"
+msgstr "寸法 ID %s は角度付きの寸法線で、KiCad "
+"に相当するものはありません。代わりに寸法線が読み込まれました。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1492
 #, c-format
@@ -45463,9 +45446,10 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"CADSTARのレイヤー '%s' は、電源プレーンのレイヤーとして定義されます。ただし、"
-"そのような名前のネットは存在しません。レイヤーはロードされましたが、導体ゾー"
-"ンは作成されませんでした。"
+"CADSTARのレイヤー '%s' "
+"は、電源プレーンのレイヤーとして定義されます。ただし、そのような名前のネット"
+"は存在しません。レイヤーは読み込まれましたが、導体ゾーンは作成されませんでし"
+"た。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2206
 msgid ""
@@ -45699,7 +45683,7 @@ msgstr "'%s' の中に有効なボードが見つかりません"
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:273
 #, c-format
 msgid "Error loading board '%s': %s"
-msgstr "基板読み込み中のエラー '%s': %s"
+msgstr "基板 '%s' の読み込み中にエラー: %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:298
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:398
@@ -45723,7 +45707,7 @@ msgstr "フットプリント '%s' をライブラリ %s から読み込み中�
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:468
 #, c-format
 msgid "Cannot load footprint '%s' from '%s'"
-msgstr "フットプリント '%s' を '%s' からロードできません"
+msgstr "フットプリント '%s' を '%s' から読み込めません"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:450
 #, c-format
@@ -46754,10 +46738,10 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"グローバル フットプリント ライブラリ テーブルをロードしようとしたところ、エ"
-"ラーが発生しました。\n"
-"設定メニューで、このグローバル フットプリント ライブラリ テーブルを編集して下"
-"さい。"
+"グローバル フットプリント ライブラリ "
+"テーブルを読み込もうとしたところ、エラーが発生しました。\n"
+"設定メニューで、このグローバル フットプリント ライブラリ "
+"テーブルを編集して下さい。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:324
 msgid "Failed to load board\n"
@@ -46903,7 +46887,7 @@ msgstr "複数のレイヤー"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
-msgstr "プロジェクトのフットプリント ライブラリをロード中にエラーしました。"
+msgstr "プロジェクトのフットプリント ライブラリの読み込み中にエラー。"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -46931,7 +46915,7 @@ msgstr "python フットプリント ウィザード コードの例外"
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:220
 #, c-format
 msgid "Error loading drawing sheet '%s': %s"
-msgstr "図面シート '%s' をロード中にエラーが発生しました:%s"
+msgstr "図面シート '%s' の読み込み中にエラー:%s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:523
 msgid ""
@@ -47395,7 +47379,7 @@ msgstr "wire_via が失われたパッドスタック '%s' を参照していま
 
 #: pcbnew/toolbars_footprint_editor.cpp:94
 msgid "Load footprint from current board"
-msgstr "現在の基板からフットプリントをロード"
+msgstr "現在の基板からフットプリントを読み込み"
 
 #: pcbnew/toolbars_footprint_editor.cpp:98
 msgid "Insert footprint into current board"
@@ -50445,7 +50429,7 @@ msgstr "不正なクリップボードのデータ"
 
 #: pcbnew/tools/pcb_control.cpp:1537
 msgid "Error loading board."
-msgstr "基板ロード中のエラー。"
+msgstr "基板の読み込み中にエラー。"
 
 #: pcbnew/tools/pcb_control.cpp:1572
 msgid "Append Board"
@@ -51834,7 +51818,7 @@ msgstr "PTH用のサーマルリリーフ"
 #: plugins/3d/vrml/vrml.cpp:239
 #, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] ロードに失敗しました: %s"
+msgstr "[INFO] 読み込みに失敗しました: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
