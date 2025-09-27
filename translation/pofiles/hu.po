@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-26 07:10+0000\n"
+"PO-Revision-Date: 2025-09-28 10:44+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -2948,24 +2948,20 @@ msgstr "Élcsatlakozó"
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
-msgstr "Csatlakozás kijelölése"
+msgstr "Teszt kapcsolat"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Táblázat"
+msgstr "Táblázatok"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Forrszem csatlakozása zónához:"
+msgstr "Nem sikerült kapcsolódni az adatbázishoz"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Adatfájl hiba."
+msgstr "Adatbázis hiba"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 #, fuzzy
@@ -3146,9 +3142,8 @@ msgid "Select a file"
 msgstr "Fájl kiválasztása"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
-#, fuzzy
 msgid "Configure Global Library Table"
-msgstr "Globális könyvtártáblázat szerkesztése"
+msgstr "Globális könyvtártáblázat beállítása"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 #, fuzzy
@@ -3242,7 +3237,6 @@ msgstr "(opcionális)"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:306
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:320
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:336
-#, fuzzy
 msgid "unit"
 msgstr "mértékegység"
 
@@ -3256,9 +3250,9 @@ msgid "Grid Settings"
 msgstr "Rács beállítások"
 
 #: common/dialogs/dialog_group_properties.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen könyvtár link: \"%s\""
 
 #: common/dialogs/dialog_group_properties.cpp:138
 msgid "Edit Group Properties"
@@ -3338,9 +3332,8 @@ msgstr ""
 "Válassza ki, hogy melyiket importáljuk."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Project bezárása"
+msgstr "Importálandó projekt kiválasztása"
 
 #: common/dialogs/dialog_migrate_settings.cpp:34
 msgid "Quit KiCad"
@@ -3366,9 +3359,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "Hogyan szeretné beállítani a KiCad-et?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Beállítások importálása egy másik projektből..."
+msgstr "Beállítások importálása egy előző verzióból:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
