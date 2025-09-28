@@ -45,6 +45,7 @@
 #include <stdexcept>
 #include <utility>
 #include <algorithm>
+#include <footprint.h>
 
 #include <backend/zint.h>
 #include <board_design_settings.h>
