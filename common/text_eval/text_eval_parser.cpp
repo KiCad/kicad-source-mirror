@@ -21,6 +21,7 @@
 #include <fmt/format.h>
 #include <array>
 #include <cctype>
+#include <wx/string.h>
 
 namespace calc_parser
 {
