@@ -438,6 +438,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
+    case PCB_BARCODE_T:
     case PCB_TABLE_T:
     case PCB_TABLECELL_T:
     case PCB_TRACE_T:
