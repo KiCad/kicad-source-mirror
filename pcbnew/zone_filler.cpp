@@ -52,6 +52,7 @@
 #include "zone_filler.h"
 #include "project.h"
 #include "project/project_local_settings.h"
+#include "pcb_barcode.h"
 
 // Helper classes for connect_nearby_polys
 class RESULTS
@@ -1044,6 +1045,13 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
                                         aIgnoreLineWidth );
         break;
+
+    case PCB_BARCODE_T:
+    {
+        PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( aItem );
+        barcode->GetBoundingHull( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
+        break;
+    }
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_LEADER_T:

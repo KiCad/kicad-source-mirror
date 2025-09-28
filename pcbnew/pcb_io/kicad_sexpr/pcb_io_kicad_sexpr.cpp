@@ -2096,11 +2096,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_BARCODE* aBarcode ) const
 
     switch( aBarcode->GetKind() )
     {
-    case BARCODE_T::CODE_39:      typeStr = "code39"; break;
-    case BARCODE_T::CODE_128:     typeStr = "code128"; break;
-    case BARCODE_T::DATA_MATRIX:  typeStr = "datamatrix"; break;
-    case BARCODE_T::QR_CODE:      typeStr = "qr"; break;
-    case BARCODE_T::MICRO_QR_CODE: typeStr = "microqr"; break;
+    case BARCODE_T::CODE_39:       typeStr = "code39";     break;
+    case BARCODE_T::CODE_128:      typeStr = "code128";    break;
+    case BARCODE_T::DATA_MATRIX:   typeStr = "datamatrix"; break;
+    case BARCODE_T::QR_CODE:       typeStr = "qr";         break;
+    case BARCODE_T::MICRO_QR_CODE: typeStr = "microqr";    break;
     }
 
     m_out->Print( "(type %s)", typeStr );

@@ -172,9 +172,15 @@ public:
 
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE>
-            GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                                      FLASHING aFlash = FLASHING::DEFAULT ) const override;
+
+    /*
+     * Add two rectangular polygons separately bounding the barcode's symbol and the barcode's text.
+     */
+    void GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                          int aMaxError, ERROR_LOC aErrorLoc = ERROR_INSIDE );
+
    /**
      * Generate the internal polygon representation for the current barcode text, kind and error correction.
      *
@@ -411,7 +417,6 @@ public:
         BOARD_ITEM::SetIsKnockout( aEnable );
         AssembleBarcode();
     }
-
 
 private:
     int            m_width;      ///< Barcode width

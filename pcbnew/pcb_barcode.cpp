@@ -337,10 +337,15 @@ void PCB_BARCODE::ComputeBarcode()
 
     symbol->input_mode = UNICODE_MODE;
     symbol->show_hrt = 0; // do not show HRT
+
     switch( m_kind )
     {
-    case BARCODE_T::CODE_39: symbol->symbology = BARCODE_CODE39; break;
-    case BARCODE_T::CODE_128: symbol->symbology = BARCODE_CODE128; break;
+    case BARCODE_T::CODE_39:
+        symbol->symbology = BARCODE_CODE39;
+        break;
+    case BARCODE_T::CODE_128:
+        symbol->symbology = BARCODE_CODE128;
+        break;
     case BARCODE_T::QR_CODE:
         symbol->symbology = BARCODE_QRCODE;
         symbol->option_1 = to_underlying( m_errorCorrection );
@@ -349,8 +354,12 @@ void PCB_BARCODE::ComputeBarcode()
         symbol->symbology = BARCODE_MICROQR;
         symbol->option_1 = to_underlying( m_errorCorrection );
         break;
-    case BARCODE_T::DATA_MATRIX: symbol->symbology = BARCODE_DATAMATRIX; break;
-    default: wxLogError( wxT( "Zint: invalid barcode type" ) ); return;
+    case BARCODE_T::DATA_MATRIX:
+        symbol->symbology = BARCODE_DATAMATRIX;
+        break;
+    default:
+        wxLogError( wxT( "Zint: invalid barcode type" ) );
+        return;
     }
 
     wxString text = GetText();
@@ -426,11 +435,26 @@ void PCB_BARCODE::ComputeBarcode()
 }
 
 
-// see class_cotation.h
 void PCB_BARCODE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    // for now, display only the text within the BARCODE using class TEXTE_PCB.
-    m_text.GetMsgPanelInfo( aFrame, aList );
+    FOOTPRINT* parentFP = GetParentFootprint();
+
+    if( parentFP && aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+        aList.emplace_back( _( "Footprint" ), parentFP->GetReference() );
+
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.emplace_back( _( "Barcode" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+
+    aList.emplace_back( _( "Type" ), ENUM_MAP<BARCODE_T>::Instance().ToString( m_kind ) );
+
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
+
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
+
+    aList.emplace_back( _( "Angle" ), wxString::Format( wxT( "%g" ), m_angle.AsDegrees() ) );
+
+    aList.emplace_back( _( "Text Height" ), aFrame->MessageTextFromValue( m_text.GetTextHeight() ) );
 }
 
 
@@ -563,6 +587,42 @@ std::shared_ptr<SHAPE> PCB_BARCODE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
     TransformShapeToPolygon( poly, aLayer, 0, 0, ERROR_INSIDE, true );
 
     return std::make_shared<SHAPE_POLY_SET>( std::move( poly ) );
+}
+
+
+void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                   int aMaxError, ERROR_LOC aErrorLoc )
+{
+    auto getBoundingHull =
+            [&]( const SHAPE_POLY_SET& aSource )
+            {
+                SHAPE_POLY_SET poly( aSource );
+
+                poly.Rotate( -m_angle, m_poly.BBox().GetCenter() );
+
+                BOX2I    rect = poly.BBox( aClearance );
+                VECTOR2I corners[4];
+
+                corners[0].x = rect.GetOrigin().x;
+                corners[0].y = rect.GetOrigin().y;
+                corners[1].y = corners[0].y;
+                corners[1].x = rect.GetRight();
+                corners[2].x = corners[1].x;
+                corners[2].y = rect.GetBottom();
+                corners[3].y = corners[2].y;
+                corners[3].x = corners[0].x;
+
+                aBuffer.NewOutline();
+
+                for( VECTOR2I& corner : corners )
+                {
+                    RotatePoint( corner, m_poly.BBox().GetCenter(), m_angle );
+                    aBuffer.Append( corner.x, corner.y );
+                }
+            };
+
+    getBoundingHull( m_symbolPoly );
+    getBoundingHull( m_textPoly );
 }
 
 
