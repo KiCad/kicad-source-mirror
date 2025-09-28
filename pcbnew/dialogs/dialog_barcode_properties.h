@@ -69,6 +69,7 @@ private:
 private:
     void prepareCanvas(); // Initialize the canvases (legacy or gal) to display the barcode
     void initValues();
+    void refreshPreview();
 
     /// Copy values from dialog field to aBarcode's members
     bool transferDataToBarcode( PCB_BARCODE* aBarcode );

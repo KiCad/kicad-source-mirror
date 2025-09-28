@@ -221,6 +221,8 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     // Now all widgets have the size fixed, call finishDialogSettings
     finishDialogSettings();
 
+    refreshPreview();
+
     wxUpdateUIEvent dummy;
     OnUpdateUI( dummy );
 
@@ -300,29 +302,35 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
 }
 
 
+void DIALOG_BARCODE_PROPERTIES::refreshPreview()
+{
+    KIGFX::VIEW* view = m_panelShowBarcodeGal->GetView();
+
+    // Compute the polygon bbox for the current dummy barcode (symbol + text/knockout as applicable)
+    const SHAPE_POLY_SET& poly = m_dummyBarcode->GetPolyShape();
+
+    if( poly.OutlineCount() > 0 )
+    {
+        BOX2I bbI = poly.BBox();
+
+        // Autozoom
+        view->SetViewport( BOX2D( bbI.GetOrigin(), bbI.GetSize() ) );
+
+        // Add a margin
+        view->SetScale( view->GetScale() * 0.7 );
+    }
+
+    view->SetCenter( VECTOR2D( m_dummyBarcode->GetPosition() ) );
+    view->Update( m_dummyBarcode );
+    m_panelShowBarcodeGal->Refresh();
+}
+
+
 void DIALOG_BARCODE_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 {
     if( transferDataToBarcode( m_dummyBarcode ) )
     {
-        KIGFX::VIEW* view = m_panelShowBarcodeGal->GetView();
-
-        // Compute the polygon bbox for the current dummy barcode (symbol + text/knockout as applicable)
-        const SHAPE_POLY_SET& poly = m_dummyBarcode->GetPolyShape();
-
-        if( poly.OutlineCount() > 0 )
-        {
-            BOX2I bbI = poly.BBox();
-
-            // Autozoom
-            view->SetViewport( BOX2D( bbI.GetOrigin(), bbI.GetSize() ) );
-
-            // Add a margin
-            view->SetScale( view->GetScale() * 0.7 );
-        }
-
-        view->SetCenter( VECTOR2D( m_dummyBarcode->GetPosition() ) );
-        view->Update( m_dummyBarcode );
-        m_panelShowBarcodeGal->Refresh();
+        refreshPreview();
         OnModify();
     }
 }
