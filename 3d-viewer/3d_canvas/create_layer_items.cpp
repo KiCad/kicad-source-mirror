@@ -75,7 +75,9 @@ void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLaye
 {
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        if( item->Type() == PCB_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
+        if( item->Type() == PCB_SHAPE_T
+                || item->Type() == PCB_BARCODE_T
+                || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
             if( item->GetLayer() == aLayer )
                 item->TransformShapeToPolySet( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
@@ -738,9 +740,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 case PCB_BARCODE_T:
                 {
                     PCB_BARCODE* bar_code = static_cast<PCB_BARCODE*>( item );
+
                     bar_code->TransformShapeToPolySet( *layerPoly, layer, 0, 0, ERROR_INSIDE );
-                }
                     break;
+                }
 
                 case PCB_DIM_ALIGNED_T:
                 case PCB_DIM_CENTER_T:
@@ -1101,9 +1104,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 case PCB_BARCODE_T:
                 {
                     PCB_BARCODE* bar_code = static_cast<PCB_BARCODE*>( item );
+
                     bar_code->TransformShapeToPolySet( *layerPoly, layer, 0, 0, ERROR_INSIDE );
-                }
                     break;
+                }
 
                 default:
                     break;

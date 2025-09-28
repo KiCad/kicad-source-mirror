@@ -285,6 +285,16 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             break;
         }
 
+        case PCB_BARCODE_T:
+        {
+            PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( item );
+
+            if( barcode->GetLayer() == aLayerId )
+                addBarCode( barcode, aContainer, aFootprint );
+
+            break;
+        }
+
         default:
             break;
         }
