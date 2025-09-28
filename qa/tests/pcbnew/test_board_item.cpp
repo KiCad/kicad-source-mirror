@@ -32,6 +32,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_shape.h>
+#include <pcb_barcode.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -81,9 +82,11 @@ public:
         case PCB_PAD_T:               return new PAD( &m_footprint );
         case PCB_FIELD_T:             return new PCB_FIELD( &m_footprint, FIELD_T::USER );
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
+        case PCB_BARCODE_T:           return new PCB_BARCODE( &m_board );
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
         case PCB_TABLECELL_T:         return new PCB_TABLECELL( &m_board );
+
         case PCB_TABLE_T:
         {
             PCB_TABLE* table = new PCB_TABLE( &m_board, pcbIUScale.mmToIU( 0.1 ) );
@@ -144,10 +147,9 @@ public:
             return nullptr;
 
         default:
-            BOOST_FAIL( wxString::Format(
-                    "Unhandled type: %d "
-                    "(if you created a new type you need to handle it in this switch statement)",
-                    aType ) );
+            BOOST_FAIL( wxString::Format( "Unhandled type: %d (if you created a new type you need to handle it in "
+                                          "this switch statement)",
+                                          aType ) );
             return nullptr;
         }
     }
@@ -155,14 +157,10 @@ public:
     static void CompareItems( BOARD_ITEM* aItem, BOARD_ITEM* aOriginalItem )
     {
         BOOST_CHECK_EQUAL( aItem->GetPosition(), aOriginalItem->GetPosition() );
-        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetTop(),
-                           aOriginalItem->GetBoundingBox().GetTop() );
-        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetLeft(),
-                           aOriginalItem->GetBoundingBox().GetLeft() );
-        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetBottom(),
-                           aOriginalItem->GetBoundingBox().GetBottom() );
-        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetRight(),
-                           aOriginalItem->GetBoundingBox().GetRight() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetTop(), aOriginalItem->GetBoundingBox().GetTop() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetLeft(), aOriginalItem->GetBoundingBox().GetLeft() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetBottom(), aOriginalItem->GetBoundingBox().GetBottom() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetRight(), aOriginalItem->GetBoundingBox().GetRight() );
     }
 };
 
@@ -189,8 +187,7 @@ BOOST_AUTO_TEST_CASE( Move )
                     {
                         // FIXME: Update() has to be called after SetPosition() to update dimension
                         // shapes.
-                        PCB_DIMENSION_BASE* originalDimension =
-                                dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem );
+                        PCB_DIMENSION_BASE* originalDimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem );
 
                         if( originalDimension != nullptr )
                             originalDimension->Update();
