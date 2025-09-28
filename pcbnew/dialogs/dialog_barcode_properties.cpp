@@ -188,7 +188,7 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     m_textHeight.ChangeValue( m_dummyBarcode->GetTextHeight() );
 
     // Orientation
-    m_orientation.SetAngleValue( m_dummyBarcode->GetAngle() );
+    m_orientation.ChangeAngleValue( m_dummyBarcode->GetAngle() );
 
     // Show text option
     m_cbShowText->SetValue( m_dummyBarcode->Text().IsVisible() );
