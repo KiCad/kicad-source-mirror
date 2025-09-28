@@ -637,25 +637,26 @@ private:
 class BARCODE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    BARCODE_POINT_EDIT_BEHAVIOR( PCB_BARCODE& aBarcode ) : m_barcode( aBarcode ) {
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "Created Edit Points for Barcode with points at: %d, %d - %d, %d",
+    BARCODE_POINT_EDIT_BEHAVIOR( PCB_BARCODE& aBarcode ) :
+            m_barcode( aBarcode )
+    {
+        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "Created Edit Points for Barcode with points at: %d, %d - %d, %d",
                     aBarcode.GetTopLeft().x, aBarcode.GetTopLeft().y,
                     aBarcode.GetBotRight().x, aBarcode.GetBotRight().y );
     }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
-     wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-              "MakePoints called for Barcode at: %d, %d - %d, %d",
-              m_barcode.GetTopLeft().x, m_barcode.GetTopLeft().y,
-              m_barcode.GetBotRight().x, m_barcode.GetBotRight().y );
+         wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "MakePoints called for Barcode at: %d, %d - %d, %d",
+                     m_barcode.GetTopLeft().x, m_barcode.GetTopLeft().y,
+                     m_barcode.GetBotRight().x, m_barcode.GetBotRight().y );
+
         VECTOR2I tl, tr, br, bl;
         computeOrientedCorners( tl, tr, br, bl );
 
-     wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-              " Oriented corners are: TL(%d, %d) TR(%d, %d) BR(%d, %d) BL(%d, %d)",
-              tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y );
+         wxLogTrace( "KICAD_PCB_BARCODE_EDIT", " Oriented corners are: TL(%d, %d) TR(%d, %d) BR(%d, %d) BL(%d, %d)",
+                     tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y );
+
         aPoints.AddPoint( tl );
         aPoints.AddPoint( tr );
         aPoints.AddPoint( br );
@@ -700,15 +701,13 @@ public:
         const EDA_ANGLE angle( m_barcode.GetOrientation(), DEGREES_T );
         // Use the barcode's position (true rotation pivot) as the center for all transforms.
         VECTOR2I  center = m_barcode.GetCenter();
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: center=(%d,%d) angle=%.3f deg",
+        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: center=(%d,%d) angle=%.3f deg",
                     center.x, center.y, angle.AsDegrees() );
 
         if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
         {
             const VECTOR2I moveVector = aPoints.Point( RECT_CENTER ).GetPosition() - center;
-            wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                        "UpdateItem: moving center by (%d,%d)", moveVector.x, moveVector.y );
+            wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: moving center by (%d,%d)", moveVector.x, moveVector.y );
             m_barcode.Move( moveVector );
             return;
         }
@@ -760,11 +759,9 @@ public:
 
         BOX2I oldFullLocalBBox = BOX2I( VECTOR2I( minX, minY ), VECTOR2I( maxX - minX, maxY - minY ) );
 
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: old fullLocalBBox LRTB=(%d,%d,%d,%d)",
+        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: old fullLocalBBox LRTB=(%d,%d,%d,%d)",
                     oldFullLocalBBox.GetLeft(), oldFullLocalBBox.GetRight(),
                     oldFullLocalBBox.GetTop(), oldFullLocalBBox.GetBottom() );
-
 
         if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
         {
@@ -799,15 +796,13 @@ public:
             wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: editing RIGHT edge" );
         }
 
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: after edge lock local LRTB=(%d,%d,%d,%d)", left, right, top, bottom );
+        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: after edge lock local LRTB=(%d,%d,%d,%d)",
+                    left, right, top, bottom );
 
         for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
-            {
                 aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
-            }
         }
 
         // Map the edited full-geometry rectangle back to a symbol-only rectangle
@@ -838,11 +833,12 @@ public:
         VECTOR2I newBR( right - dxR, bottom - dyB );
 
         wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: offsets dxL=%d dxR=%d dyT=%d dyB=%d => newTL=(%d,%d) newBR=(%d,%d)", dxL, dxR, dyT,
-                    dyB, newTL.x, newTL.y, newBR.x, newBR.y );
+                    "UpdateItem: offsets dxL=%d dxR=%d dyT=%d dyB=%d => newTL=(%d,%d) newBR=(%d,%d)",
+                    dxL, dxR, dyT, dyB, newTL.x, newTL.y, newBR.x, newBR.y );
 
         wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: calling SetRect TL=(%d,%d) BR=(%d,%d) in unrotated frame",
                     newTL.x, newTL.y, newBR.x, newBR.y );
+
         m_barcode.SetRect( newTL, newBR );
 
         m_barcode.AssembleBarcode( false, true );
@@ -863,8 +859,7 @@ private:
         const VECTOR2I        center = m_barcode.GetCenter();
         const EDA_ANGLE       angle( m_barcode.GetOrientation(), DEGREES_T );
 
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "computeOrientedCorners: center=(%d,%d) angle=%.3f deg outlines=%d",
+        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "computeOrientedCorners: center=(%d,%d) angle=%.3f deg outlines=%d",
                     center.x, center.y, angle.AsDegrees(), poly.OutlineCount() );
 
         if( poly.OutlineCount() == 0 )
@@ -889,8 +884,7 @@ private:
 
             if( !firstLogged )
             {
-                wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                            "  first vertex wp=(%d,%d) lp(unrot)=(%d,%d)",
+                wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "  first vertex wp=(%d,%d) lp(unrot)=(%d,%d)",
                             wp.x, wp.y, lp.x, lp.y );
                 firstLogged = true;
             }
@@ -906,8 +900,7 @@ private:
         VECTOR2I brL( maxX, maxY );
         VECTOR2I blL( minX, maxY );
 
-    wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-            "  local bbox LRTB=(%d,%d,%d,%d)", minX, maxX, minY, maxY );
+        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "  local bbox LRTB=(%d,%d,%d,%d)", minX, maxX, minY, maxY );
 
         aTL = GetRotated( tlL, angle );
         aTR = GetRotated( trL, angle );
