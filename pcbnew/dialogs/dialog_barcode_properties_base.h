@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,8 +64,8 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText17;
 		wxTextCtrl* m_textCtrl8;
 		wxStaticText* m_staticText18;
-		wxStaticText* m_PadOrientText;
-		wxComboBox* m_orientation;
+		wxStaticText* m_orientationLabel;
+		wxComboBox* m_orientationCtrl;
 		wxStaticText* m_staticText491;
 		wxStaticText* m_offsetXLabel;
 		wxTextCtrl* m_marginXCtrl;

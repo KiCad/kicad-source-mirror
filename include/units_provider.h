@@ -101,10 +101,14 @@ public:
                                       EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
     {
         if( !aValue )
+        {
             return NullUiString;
+        }
         else
+        {
             return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUnitsFromType( aType ),
                                                         aValue.value(), aAddUnitLabel, aType );
+        }
     }
 
     wxString StringFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = false ) const
@@ -149,11 +153,10 @@ public:
      * @param aTextValue A reference to a wxString object containing the string to convert.
      * @return internal units value
      */
-    int ValueFromString( const wxString& aTextValue,
-                         EDA_DATA_TYPE   aType = EDA_DATA_TYPE::DISTANCE ) const
+    int ValueFromString( const wxString& aTextValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
     {
-        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                GetIuScale(), GetUnitsFromType( aType ), aTextValue, aType );
+        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUnitsFromType( aType ),
+                                                                  aTextValue, aType );
 
 
         return KiROUND<double, int>( value );
@@ -169,16 +172,15 @@ public:
      * @param aTextValue A reference to a wxString object containing the string to convert.
      * @return internal units value
      */
-    std::optional<int>
-    OptionalValueFromString( const wxString& aTextValue,
-                             EDA_DATA_TYPE   aType = EDA_DATA_TYPE::DISTANCE ) const
+    std::optional<int> OptionalValueFromString( const wxString& aTextValue,
+                                                EDA_DATA_TYPE   aType = EDA_DATA_TYPE::DISTANCE ) const
     {
         // Handle null (empty) values
         if( aTextValue == NullUiString )
             return {};
 
-        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                GetIuScale(), GetUnitsFromType( aType ), aTextValue, aType );
+        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUnitsFromType( aType ),
+                                                                  aTextValue, aType );
 
         return KiROUND<double, int>( value );
     }

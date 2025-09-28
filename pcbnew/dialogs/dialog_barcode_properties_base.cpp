@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -112,16 +112,16 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	m_staticText18->Wrap( -1 );
 	fgSizerShapeType->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 3 );
 
-	m_PadOrientText = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PadOrientText->Wrap( -1 );
-	fgSizerShapeType->Add( m_PadOrientText, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
+	m_orientationLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_orientationLabel->Wrap( -1 );
+	fgSizerShapeType->Add( m_orientationLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
 
-	m_orientation = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_orientation->Append( _("0") );
-	m_orientation->Append( _("90") );
-	m_orientation->Append( _("-90") );
-	m_orientation->Append( _("180") );
-	fgSizerShapeType->Add( m_orientation, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
+	m_orientationCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_orientationCtrl->Append( _("0") );
+	m_orientationCtrl->Append( _("90") );
+	m_orientationCtrl->Append( _("-90") );
+	m_orientationCtrl->Append( _("180") );
+	fgSizerShapeType->Add( m_orientationCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_staticText491 = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText491->Wrap( -1 );
@@ -231,8 +231,8 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	m_Layer->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_orientation->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_orientation->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_orientationCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_orientationCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbShowText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
@@ -251,8 +251,8 @@ DIALOG_BARCODE_PROPERTIES_BASE::~DIALOG_BARCODE_PROPERTIES_BASE()
 	m_Layer->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_orientation->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_orientation->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_orientationCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_orientationCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbShowText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );

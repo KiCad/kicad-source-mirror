@@ -3659,7 +3659,7 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
             token = NextTok();
 
             if( CurTok() == T_NUMBER )
-                barcode->Text().SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
+                barcode->SetOrientation( parseDouble() );
 
             NeedRIGHT();
             break;

@@ -188,14 +188,7 @@ public:
      */
     virtual EDA_ANGLE GetRotationAngle() const;
 
-    /**
-     * Set the angle used for rotate operations.
-     */
-    //void SetRotationAngle( EDA_ANGLE aRotationAngle );
-    void InstallTextOptionsFrame( BOARD_ITEM* aText );
     void ShowBarcodePropertiesDialog( PCB_BARCODE* aText );
-    void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
-
     void ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitmap );
     void ShowTextPropertiesDialog( PCB_TEXT* aText );
     int ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox );

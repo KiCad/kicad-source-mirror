@@ -2079,7 +2079,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_BARCODE* aBarcode ) const
 
     m_out->Print( "(at %s %s)",
                   formatInternalUnits( aBarcode->GetPosition() ).c_str(),
-                  EDA_UNIT_UTILS::FormatAngle( aBarcode->Text().GetTextAngle() ).c_str() );
+                  EDA_UNIT_UTILS::FormatAngle( aBarcode->GetAngle() ).c_str() );
 
     formatLayer( aBarcode->GetLayer() );
 

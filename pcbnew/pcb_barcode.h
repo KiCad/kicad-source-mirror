@@ -382,6 +382,7 @@ public:
     void SetBarcodeWidth( int aWidth ) { m_width = aWidth; AssembleBarcode( false, true ); }
     void SetBarcodeHeight( int aHeight ) { m_height = aHeight; AssembleBarcode( false, true ); }
 
+    EDA_ANGLE GetAngle() const { return m_angle; }
     double GetOrientation() const { return m_angle.AsDegrees(); }
     void   SetOrientation( double aDegrees )
     {

@@ -32,7 +32,6 @@
 #include <pcb_text.h>
 #include <layer_ids.h>
 #include <math/util.h>
-#include <confirm.h>
 #include <dialog_barcode_properties.h>
 #include <pcb_base_frame.h>
 #include <pcb_base_edit_frame.h>
@@ -48,7 +47,8 @@
 
 DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_BARCODE* aBarcode ) :
         DIALOG_BARCODE_PROPERTIES_BASE( aParent ),
-        m_parent( aParent )
+        m_parent( aParent ),
+        m_orientation( aParent, m_orientationLabel, m_orientationCtrl, nullptr )
 {
     m_currentBarcode = aBarcode; // aBarcode can not be NULL (no FOOTPRINT editor?)
 
@@ -60,7 +60,6 @@ DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, P
     prepareCanvas();
 
     m_sdbSizerOK->SetDefault();
-
 }
 
 
@@ -68,14 +67,6 @@ DIALOG_BARCODE_PROPERTIES::~DIALOG_BARCODE_PROPERTIES()
 {
     delete m_dummyBarcode;
     delete m_axisOrigin;
-}
-
-
-void DIALOG_BARCODE_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
-{
-    // Needed on some WM to be sure the barcode is redrawn according to the final size
-    // of the canvas, with the right zoom factor
-    event.Skip();
 }
 
 
@@ -141,6 +132,8 @@ void DIALOG_BARCODE_PROPERTIES::initValues()
     m_offsetXUnits->SetLabel( unitsLabel );
     m_offsetYUnits->SetLabel( unitsLabel );
 
+    m_orientation.SetUnits( EDA_UNITS::DEGREES );
+
     // Populate layer list
     m_Layer->Clear();
 
@@ -203,46 +196,41 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     // Set layer selection
     wxString layerName = m_board->GetLayerName( m_dummyBarcode->GetLayer() );
     int      idx = m_Layer->FindString( layerName );
+
     if( idx != wxNOT_FOUND )
         m_Layer->SetSelection( idx );
 
     // Position
     VECTOR2I pos = m_dummyBarcode->GetPosition();
-    m_posXCtrl->ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), pos.x ) );
-    m_posYCtrl->ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), pos.y ) );
+    m_posXCtrl->ChangeValue( m_parent->StringFromValue( pos.x ) );
+    m_posYCtrl->ChangeValue( m_parent->StringFromValue( pos.y ) );
 
     // Size
-    m_sizeXCtrl->ChangeValue(
-            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetWidth() ) );
-    m_sizeYCtrl->ChangeValue(
-            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetHeight() ) );
+    m_sizeXCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetWidth() ) );
+    m_sizeYCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetHeight() ) );
 
-    m_textCtrl8->ChangeValue(
-            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(),
-                                                 m_dummyBarcode->GetTextHeight() ) );
+    m_textCtrl8->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetTextHeight() ) );
 
     // Orientation
-    m_orientation->ChangeValue( wxString::Format( wxT( "%g" ), m_dummyBarcode->Text().GetTextAngle().AsDegrees() ) );
+    m_orientation.SetAngleValue( m_dummyBarcode->GetAngle() );
 
     // Show text option
     m_cbShowText->SetValue( m_dummyBarcode->Text().IsVisible() );
 
     m_inverted->SetValue( m_dummyBarcode->IsKnockout() );
 
-    m_marginXCtrl->ChangeValue(
-            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetMargin().x ) );
-    m_marginYCtrl->ChangeValue(
-            EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_dummyBarcode->GetMargin().y ) );
+    m_marginXCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetMargin().x ) );
+    m_marginYCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetMargin().y ) );
 
     // Barcode type
     switch( m_dummyBarcode->GetKind() )
     {
-    case BARCODE_T::CODE_39: m_barcode->SetSelection( 0 ); break;
-    case BARCODE_T::CODE_128: m_barcode->SetSelection( 1 ); break;
-    case BARCODE_T::DATA_MATRIX: m_barcode->SetSelection( 2 ); break;
-    case BARCODE_T::QR_CODE: m_barcode->SetSelection( 3 ); break;
+    case BARCODE_T::CODE_39:       m_barcode->SetSelection( 0 ); break;
+    case BARCODE_T::CODE_128:      m_barcode->SetSelection( 1 ); break;
+    case BARCODE_T::DATA_MATRIX:   m_barcode->SetSelection( 2 ); break;
+    case BARCODE_T::QR_CODE:       m_barcode->SetSelection( 3 ); break;
     case BARCODE_T::MICRO_QR_CODE: m_barcode->SetSelection( 4 ); break;
-    default: m_barcode->SetSelection( 0 ); break;
+    default:                       m_barcode->SetSelection( 0 ); break;
     }
 
     // Error correction level
@@ -252,7 +240,7 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     case BARCODE_ECC_T::M: m_errorCorrection->SetSelection( 1 ); break;
     case BARCODE_ECC_T::Q: m_errorCorrection->SetSelection( 2 ); break;
     case BARCODE_ECC_T::H: m_errorCorrection->SetSelection( 3 ); break;
-    default: m_errorCorrection->SetSelection( 0 ); break;
+    default:               m_errorCorrection->SetSelection( 0 ); break;
     }
 
     // Now all widgets have the size fixed, call finishDialogSettings
@@ -294,29 +282,22 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     aBarcode->SetLayer( layer );
 
     // Position
-    int posX = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, GetUserUnits(), m_posXCtrl->GetValue(),
-                                                                   EDA_DATA_TYPE::DISTANCE ) );
-    int posY = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, GetUserUnits(), m_posYCtrl->GetValue(),
-                                                                   EDA_DATA_TYPE::DISTANCE ) );
+    int posX = m_parent->ValueFromString( m_posXCtrl->GetValue() );
+    int posY = m_parent->ValueFromString( m_posYCtrl->GetValue() );
     aBarcode->SetPosition( VECTOR2I( posX, posY ) );
 
     // Size
-    int width = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, GetUserUnits(), m_sizeXCtrl->GetValue(),
-                                                                    EDA_DATA_TYPE::DISTANCE ) );
-    int height = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
-            pcbIUScale, GetUserUnits(), m_sizeYCtrl->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    int width = m_parent->ValueFromString( m_sizeXCtrl->GetValue() );
+    int height = m_parent->ValueFromString( m_sizeYCtrl->GetValue() );
     aBarcode->SetWidth( width );
     aBarcode->SetHeight( height );
 
-    int textHeight = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
-        pcbIUScale, GetUserUnits(), m_textCtrl8->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    int textHeight = m_parent->ValueFromString( m_textCtrl8->GetValue() );
     aBarcode->SetTextHeight( textHeight );
 
     // Orientation
-    double angleDeg = 0.0;
-    m_orientation->GetValue().ToDouble( &angleDeg );
-    EDA_ANGLE newAngle( angleDeg, DEGREES_T );
-    EDA_ANGLE oldAngle = aBarcode->Text().GetTextAngle();
+    EDA_ANGLE oldAngle = aBarcode->GetAngle();
+    EDA_ANGLE newAngle = m_orientation.GetAngleValue();
 
     if( newAngle != oldAngle )
         aBarcode->Rotate( aBarcode->GetPosition(), newAngle - oldAngle );
@@ -324,10 +305,8 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     aBarcode->SetIsKnockout( m_inverted->GetValue() );
 
     // Margins
-    int marginX = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
-            pcbIUScale, GetUserUnits(), m_marginXCtrl->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
-    int marginY = KiROUND( EDA_UNIT_UTILS::UI::DoubleValueFromString(
-            pcbIUScale, GetUserUnits(), m_marginYCtrl->GetValue(), EDA_DATA_TYPE::DISTANCE ) );
+    int marginX = m_parent->ValueFromString( m_marginXCtrl->GetValue() );
+    int marginY = m_parent->ValueFromString( m_marginYCtrl->GetValue() );
     aBarcode->SetMargin( VECTOR2I( marginX, marginY ) );
 
     // Show text
@@ -336,20 +315,20 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     // Barcode kind
     switch( m_barcode->GetSelection() )
     {
-    case 0: aBarcode->SetKind( BARCODE_T::CODE_39 ); break;
-    case 1: aBarcode->SetKind( BARCODE_T::CODE_128 ); break;
-    case 2: aBarcode->SetKind( BARCODE_T::DATA_MATRIX ); break;
-    case 3: aBarcode->SetKind( BARCODE_T::QR_CODE ); break;
-    case 4: aBarcode->SetKind( BARCODE_T::MICRO_QR_CODE ); break;
-    default: aBarcode->SetKind( BARCODE_T::QR_CODE ); break;
+    case 0:  aBarcode->SetKind( BARCODE_T::CODE_39 );       break;
+    case 1:  aBarcode->SetKind( BARCODE_T::CODE_128 );      break;
+    case 2:  aBarcode->SetKind( BARCODE_T::DATA_MATRIX );   break;
+    case 3:  aBarcode->SetKind( BARCODE_T::QR_CODE );       break;
+    case 4:  aBarcode->SetKind( BARCODE_T::MICRO_QR_CODE ); break;
+    default: aBarcode->SetKind( BARCODE_T::QR_CODE );       break;
     }
 
     switch( m_errorCorrection->GetSelection() )
     {
-    case 0: aBarcode->SetErrorCorrection( BARCODE_ECC_T::L ); break;
-    case 1: aBarcode->SetErrorCorrection( BARCODE_ECC_T::M ); break;
-    case 2: aBarcode->SetErrorCorrection( BARCODE_ECC_T::Q ); break;
-    case 3: aBarcode->SetErrorCorrection( BARCODE_ECC_T::H ); break;
+    case 0:  aBarcode->SetErrorCorrection( BARCODE_ECC_T::L ); break;
+    case 1:  aBarcode->SetErrorCorrection( BARCODE_ECC_T::M ); break;
+    case 2:  aBarcode->SetErrorCorrection( BARCODE_ECC_T::Q ); break;
+    case 3:  aBarcode->SetErrorCorrection( BARCODE_ECC_T::H ); break;
     default: aBarcode->SetErrorCorrection( BARCODE_ECC_T::L ); break;
     }
 

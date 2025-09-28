@@ -190,16 +190,20 @@ void PCB_BARCODE::Move( const VECTOR2I& offset )
 {
     m_pos += offset;
     m_symbolPoly.Move( offset );
-    m_poly.Move( offset );
     m_textPoly.Move( offset );
+    m_poly.Move( offset );
     m_text.Move( offset );
 }
 
 
 void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    m_poly.Rotate( aAngle, m_poly.BBox().GetCenter() );
-    RotatePoint( m_pos, aRotCentre, aAngle );
+    VECTOR2I pos = m_pos;
+    RotatePoint( pos, aRotCentre, aAngle );
+
+    Move( pos - m_pos );
+
+    m_poly.Rotate( aAngle, m_pos );
     BOX2I bbox = m_poly.BBox();
     m_poly_width = bbox.GetWidth();
     m_poly_height = bbox.GetHeight();
@@ -595,13 +599,9 @@ void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                    int aMaxError, ERROR_LOC aErrorLoc )
 {
     auto getBoundingHull =
-            [&]( const SHAPE_POLY_SET& aSource )
+            [this]( SHAPE_POLY_SET& aBuffer, const SHAPE_POLY_SET& aSource, int aClearance )
             {
-                SHAPE_POLY_SET poly( aSource );
-
-                poly.Rotate( -m_angle, m_poly.BBox().GetCenter() );
-
-                BOX2I    rect = poly.BBox( aClearance );
+                BOX2I    rect = aSource.BBox( aClearance );
                 VECTOR2I corners[4];
 
                 corners[0].x = rect.GetOrigin().x;
@@ -617,13 +617,16 @@ void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 
                 for( VECTOR2I& corner : corners )
                 {
-                    RotatePoint( corner, m_poly.BBox().GetCenter(), m_angle );
+                    RotatePoint( corner, m_pos, m_angle );
                     aBuffer.Append( corner.x, corner.y );
                 }
             };
 
-    getBoundingHull( m_symbolPoly );
-    getBoundingHull( m_textPoly );
+    if( aLayer == m_layer || aLayer == UNDEFINED_LAYER )
+    {
+        getBoundingHull( aBuffer, m_symbolPoly, aClearance );
+        getBoundingHull( aBuffer, m_textPoly, aClearance );
+    }
 }
 
 

@@ -24,8 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_BARCODE_PROPERTIES_H_
-#define _DIALOG_BARCODE_PROPERTIES_H_
+#pragma once
 
 #include <base_units.h>
 #include <board.h>
@@ -49,13 +48,17 @@ public:
     DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_BARCODE* aBarcode );
     ~DIALOG_BARCODE_PROPERTIES();
 
-private:
-    PCB_BASE_FRAME* m_parent;
-    PCB_BARCODE*    m_currentBarcode; // barcode currently being edited
-    PCB_BARCODE*    m_dummyBarcode;   // a working copy used to show changes
-    BOARD*          m_board;          // the main board: this is the board handled by the PCB
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 
-    KIGFX::ORIGIN_VIEWITEM* m_axisOrigin; // origin of the preview canvas
+private:
+    PCB_BASE_FRAME*         m_parent;
+    PCB_BARCODE*            m_currentBarcode; // barcode currently being edited
+    PCB_BARCODE*            m_dummyBarcode;   // a working copy used to show changes
+    BOARD*                  m_board;          // the main board: this is the board handled by the PCB
+    UNIT_BINDER             m_orientation;
+
+    KIGFX::ORIGIN_VIEWITEM* m_axisOrigin;     // origin of the preview canvas
 
 private:
     void prepareCanvas(); // Initialize the canvases (legacy or gal) to display the barcode
@@ -65,17 +68,10 @@ private:
     bool transferDataToBarcode( PCB_BARCODE* aBarcode );
 
     // event handlers:
-    void OnInitDialog( wxInitDialogEvent& event ) override;
     void OnResize( wxSizeEvent& event );
     void OnCancel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     /// Update the graphical barcode shown in the panel.
     void OnValuesChanged( wxCommandEvent& event ) override;
-
-
-    bool TransferDataFromWindow() override;
-    bool TransferDataToWindow() override;
 };
-
-#endif // #ifndef _DIALOG_BARCODE_PROPERTIES_H_
