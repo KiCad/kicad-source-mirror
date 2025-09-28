@@ -232,7 +232,7 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
     // if( aRebuildText )
         ComputeTextPoly();
 
-   // Build full m_poly from symbol + optional text, then apply knockout if requested
+    // Build full m_poly from symbol + optional text, then apply knockout if requested
     m_poly.RemoveAllContours();
     m_poly.Append( m_symbolPoly );
 
@@ -275,17 +275,7 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
     }
 
     if( !m_angle.IsZero() )
-        m_poly.Rotate( m_angle, m_poly.BBox().GetCenter() );
-
-    // Ensure the combined polygon is centered at the barcode position so that
-    // m_poly.BBox().Centre() == GetPosition() holds for tests and downstream logic.
-    if( !m_poly.IsEmpty() )
-    {
-        VECTOR2I center = m_symbolPoly.BBox().GetCenter();
-        VECTOR2I delta = m_pos - center;
-        if( delta != VECTOR2I( 0, 0 ) )
-            m_poly.Move( delta );
-    }
+        m_poly.Rotate( m_angle, m_pos );
 
     m_poly.CacheTriangulation( false );
 
