@@ -52,13 +52,19 @@ public:
     bool TransferDataToWindow() override;
 
 private:
-    PCB_BASE_FRAME*         m_parent;
-    PCB_BARCODE*            m_currentBarcode; // barcode currently being edited
-    PCB_BARCODE*            m_dummyBarcode;   // a working copy used to show changes
-    BOARD*                  m_board;          // the main board: this is the board handled by the PCB
-    UNIT_BINDER             m_orientation;
+    PCB_BASE_FRAME*    m_parent;
+    PCB_BARCODE*       m_currentBarcode;    // barcode currently being edited
+    PCB_BARCODE*       m_dummyBarcode;      // a working copy used to show changes
+    BOARD*             m_board;             // the main board: this is the board handled by the PCB
 
-    KIGFX::ORIGIN_VIEWITEM* m_axisOrigin;     // origin of the preview canvas
+    UNIT_BINDER        m_posX;
+    UNIT_BINDER        m_posY;
+    UNIT_BINDER        m_sizeX;
+    UNIT_BINDER        m_sizeY;
+    UNIT_BINDER        m_textHeight;
+    UNIT_BINDER        m_orientation;
+    UNIT_BINDER        m_knockoutMarginX;
+    UNIT_BINDER        m_knockoutMarginY;
 
 private:
     void prepareCanvas(); // Initialize the canvases (legacy or gal) to display the barcode

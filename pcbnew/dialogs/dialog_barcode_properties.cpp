@@ -41,6 +41,7 @@
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pcb_layer_box_selector.h>
 // For BOX2D viewport checks
 #include <math/box2.h>
 
@@ -48,7 +49,14 @@
 DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_BARCODE* aBarcode ) :
         DIALOG_BARCODE_PROPERTIES_BASE( aParent ),
         m_parent( aParent ),
-        m_orientation( aParent, m_orientationLabel, m_orientationCtrl, nullptr )
+        m_posX( aParent, m_posXLabel, m_posXCtrl, m_posXUnits ),
+        m_posY( aParent, m_posYLabel, m_posYCtrl, m_posYUnits ),
+        m_sizeX( aParent, m_sizeXLabel, m_sizeXCtrl, m_sizeXUnits ),
+        m_sizeY( aParent, m_sizeYLabel, m_sizeYCtrl, m_sizeYUnits ),
+        m_textHeight( aParent, m_textHeightLabel, m_textHeightCtrl, m_textHeightUnits ),
+        m_orientation( aParent, m_orientationLabel, m_orientationCtrl, m_orientationUnits ),
+        m_knockoutMarginX( aParent, m_marginXLabel, m_marginXCtrl, m_marginXUnits ),
+        m_knockoutMarginY( aParent, m_marginYLabel, m_marginYCtrl, m_marginYUnits )
 {
     m_currentBarcode = aBarcode; // aBarcode can not be NULL (no FOOTPRINT editor?)
 
@@ -66,7 +74,6 @@ DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, P
 DIALOG_BARCODE_PROPERTIES::~DIALOG_BARCODE_PROPERTIES()
 {
     delete m_dummyBarcode;
-    delete m_axisOrigin;
 }
 
 
@@ -83,15 +90,7 @@ void DIALOG_BARCODE_PROPERTIES::OnCancel( wxCommandEvent& event )
 
 void DIALOG_BARCODE_PROPERTIES::prepareCanvas()
 {
-    // Initialize the canvas to display the pad
-
-    // Show the X and Y axis. It is usefull because pad shape can have an offset
-    // or be a complex shape.
-    KIGFX::COLOR4D axis_color = LIGHTBLUE;
-
-    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( axis_color, KIGFX::ORIGIN_VIEWITEM::CROSS, pcbIUScale.mmToIU( 0.2 ),
-                                               VECTOR2D( m_dummyBarcode->GetPosition() ) );
-    m_axisOrigin->SetDrawAtZero( true );
+    // Initialize the canvas to display the barcode
 
     m_panelShowBarcodeGal->UpdateColors();
     m_panelShowBarcodeGal->SwitchBackend( m_parent->GetCanvas()->GetBackend() );
@@ -107,7 +106,6 @@ void DIALOG_BARCODE_PROPERTIES::prepareCanvas()
     // And do not show the grid:
     view->GetGAL()->SetGridVisibility( false );
     view->Add( m_dummyBarcode );
-    view->Add( m_axisOrigin );
 
     m_panelShowBarcodeGal->StartDrawing();
     Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_BARCODE_PROPERTIES::OnResize ) );
@@ -122,29 +120,16 @@ void DIALOG_BARCODE_PROPERTIES::initValues()
 
     m_dummyBarcode->AssembleBarcode( true, true );
 
-    // Set units labels to current user units
-    wxString unitsLabel = EDA_UNIT_UTILS::GetText( GetUserUnits(), EDA_DATA_TYPE::DISTANCE );
-    m_posXUnits->SetLabel( unitsLabel );
-    m_posYUnits->SetLabel( unitsLabel );
-    m_sizeXUnits->SetLabel( unitsLabel );
-    m_sizeYUnits->SetLabel( unitsLabel );
-    m_staticText18->SetLabel( unitsLabel );
-    m_offsetXUnits->SetLabel( unitsLabel );
-    m_offsetYUnits->SetLabel( unitsLabel );
-
     m_orientation.SetUnits( EDA_UNITS::DEGREES );
 
-    // Populate layer list
-    m_Layer->Clear();
+    // Configure the layers list selector.  Note that footprints are built outside the current
+    // board and so we may need to show all layers if the barcode is on an unactivated layer.
+    if( !m_parent->GetBoard()->IsLayerEnabled( m_dummyBarcode->GetLayer() ) )
+        m_cbLayer->ShowNonActivatedLayers( true );
 
-    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
-    {
-        wxString name = m_board->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
-        if( name.IsEmpty() )
-            continue;
-
-        m_Layer->Append( name );
-    }
+    m_cbLayer->SetLayersHotkeys( false );
+    m_cbLayer->SetBoardFrame( m_parent );
+    m_cbLayer->Resync();
 }
 
 
@@ -161,10 +146,10 @@ void DIALOG_BARCODE_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     bool enableEC = m_barcode->GetSelection() >= to_underlying( BARCODE_T::QR_CODE );
     m_errorCorrection->Enable( enableEC );
 
-    bool showText = m_cbShowText->GetValue();
-    m_staticText17->Enable( showText );
-    m_textCtrl8->Enable( showText );
-    m_staticText18->Enable( showText );
+    m_textHeight.Show( m_cbShowText->GetValue() );
+
+    m_knockoutMarginX.Enable( m_cbKnockout->GetValue() );
+    m_knockoutMarginY.Enable( m_cbKnockout->GetValue() );
 
     if( enableEC )
     {
@@ -190,26 +175,17 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     if( m_currentBarcode )
         *m_dummyBarcode = *m_currentBarcode;
 
-    // Set text
     m_textInput->ChangeValue( m_dummyBarcode->GetText() );
-
-    // Set layer selection
-    wxString layerName = m_board->GetLayerName( m_dummyBarcode->GetLayer() );
-    int      idx = m_Layer->FindString( layerName );
-
-    if( idx != wxNOT_FOUND )
-        m_Layer->SetSelection( idx );
+    m_cbLayer->SetLayerSelection( m_dummyBarcode->GetLayer() );
 
     // Position
-    VECTOR2I pos = m_dummyBarcode->GetPosition();
-    m_posXCtrl->ChangeValue( m_parent->StringFromValue( pos.x ) );
-    m_posYCtrl->ChangeValue( m_parent->StringFromValue( pos.y ) );
+    m_posX.ChangeValue( m_dummyBarcode->GetPosition().x );
+    m_posY.ChangeValue( m_dummyBarcode->GetPosition().y );
 
     // Size
-    m_sizeXCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetWidth() ) );
-    m_sizeYCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetHeight() ) );
-
-    m_textCtrl8->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetTextHeight() ) );
+    m_sizeX.ChangeValue( m_dummyBarcode->GetWidth() );
+    m_sizeY.ChangeValue( m_dummyBarcode->GetHeight() );
+    m_textHeight.ChangeValue( m_dummyBarcode->GetTextHeight() );
 
     // Orientation
     m_orientation.SetAngleValue( m_dummyBarcode->GetAngle() );
@@ -217,10 +193,9 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     // Show text option
     m_cbShowText->SetValue( m_dummyBarcode->Text().IsVisible() );
 
-    m_inverted->SetValue( m_dummyBarcode->IsKnockout() );
-
-    m_marginXCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetMargin().x ) );
-    m_marginYCtrl->ChangeValue( m_parent->StringFromValue( m_dummyBarcode->GetMargin().y ) );
+    m_cbKnockout->SetValue( m_dummyBarcode->IsKnockout() );
+    m_knockoutMarginX.ChangeValue( m_dummyBarcode->GetMargin().x );
+    m_knockoutMarginY.ChangeValue( m_dummyBarcode->GetMargin().y );
 
     // Barcode type
     switch( m_dummyBarcode->GetKind() )
@@ -275,25 +250,15 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
         return false;
 
     aBarcode->SetText( m_textInput->GetValue() );
-
-    // Layer
-    wxString     layerName = m_Layer->GetStringSelection();
-    PCB_LAYER_ID layer = m_board->GetLayerID( layerName );
-    aBarcode->SetLayer( layer );
+    aBarcode->SetLayer( ToLAYER_ID( m_cbLayer->GetLayerSelection() ) );
 
     // Position
-    int posX = m_parent->ValueFromString( m_posXCtrl->GetValue() );
-    int posY = m_parent->ValueFromString( m_posYCtrl->GetValue() );
-    aBarcode->SetPosition( VECTOR2I( posX, posY ) );
+    aBarcode->SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
 
     // Size
-    int width = m_parent->ValueFromString( m_sizeXCtrl->GetValue() );
-    int height = m_parent->ValueFromString( m_sizeYCtrl->GetValue() );
-    aBarcode->SetWidth( width );
-    aBarcode->SetHeight( height );
-
-    int textHeight = m_parent->ValueFromString( m_textCtrl8->GetValue() );
-    aBarcode->SetTextHeight( textHeight );
+    aBarcode->SetWidth( m_sizeX.GetIntValue() );
+    aBarcode->SetHeight( m_sizeY.GetIntValue() );
+    aBarcode->SetTextHeight( m_textHeight.GetIntValue() );
 
     // Orientation
     EDA_ANGLE oldAngle = aBarcode->GetAngle();
@@ -302,12 +267,9 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     if( newAngle != oldAngle )
         aBarcode->Rotate( aBarcode->GetPosition(), newAngle - oldAngle );
 
-    aBarcode->SetIsKnockout( m_inverted->GetValue() );
-
-    // Margins
-    int marginX = m_parent->ValueFromString( m_marginXCtrl->GetValue() );
-    int marginY = m_parent->ValueFromString( m_marginYCtrl->GetValue() );
-    aBarcode->SetMargin( VECTOR2I( marginX, marginY ) );
+    // Knockout
+    aBarcode->SetIsKnockout( m_cbKnockout->GetValue() );
+    aBarcode->SetMargin( VECTOR2I( m_knockoutMarginX.GetIntValue(), m_knockoutMarginY.GetIntValue() ) );
 
     // Show text
     aBarcode->Text().SetVisible( m_cbShowText->GetValue() );

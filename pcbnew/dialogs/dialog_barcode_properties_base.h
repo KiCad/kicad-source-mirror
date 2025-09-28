@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class PCB_LAYER_BOX_SELECTOR;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -18,11 +20,11 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/statline.h>
-#include <wx/choice.h>
+#include <wx/bmpcbox.h>
 #include <wx/combobox.h>
-#include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
@@ -46,9 +48,8 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 
 		wxStaticText* m_staticText28;
 		wxTextCtrl* m_textInput;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticText44;
-		wxChoice* m_Layer;
+		wxStaticText* m_layerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_cbLayer;
 		wxStaticText* m_posXLabel;
 		wxTextCtrl* m_posXCtrl;
 		wxStaticText* m_posXUnits;
@@ -61,26 +62,25 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_sizeYLabel;
 		wxTextCtrl* m_sizeYCtrl;
 		wxStaticText* m_sizeYUnits;
-		wxStaticText* m_staticText17;
-		wxTextCtrl* m_textCtrl8;
-		wxStaticText* m_staticText18;
 		wxStaticText* m_orientationLabel;
 		wxComboBox* m_orientationCtrl;
-		wxStaticText* m_staticText491;
-		wxStaticText* m_offsetXLabel;
-		wxTextCtrl* m_marginXCtrl;
-		wxStaticText* m_offsetXUnits;
-		wxStaticText* m_offsetYLabel;
-		wxTextCtrl* m_marginYCtrl;
-		wxStaticText* m_offsetYUnits;
-		wxBoxSizer* m_middleBoxSizer;
+		wxStaticText* m_orientationUnits;
 		wxCheckBox* m_cbShowText;
-		wxCheckBox* m_inverted;
+		wxStaticText* m_textHeightLabel;
+		wxTextCtrl* m_textHeightCtrl;
+		wxStaticText* m_textHeightUnits;
+		wxCheckBox* m_cbKnockout;
+		wxStaticText* m_marginXLabel;
+		wxTextCtrl* m_marginXCtrl;
+		wxStaticText* m_marginXUnits;
+		wxStaticText* m_marginYLabel;
+		wxTextCtrl* m_marginYCtrl;
+		wxStaticText* m_marginYUnits;
+		wxBoxSizer* m_middleBoxSizer;
 		wxRadioBox* m_barcode;
 		wxRadioBox* m_errorCorrection;
 		PCB_DRAW_PANEL_GAL* m_panelShowBarcodeGal;
 		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
-		wxStaticLine* m_staticline13;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -94,7 +94,7 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Barcode Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 764,581 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Barcode Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_BARCODE_PROPERTIES_BASE();
 

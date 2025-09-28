@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "pcb_layer_box_selector.h"
+
 #include "dialog_barcode_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -24,13 +26,16 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 
 	m_staticText28 = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28->Wrap( -1 );
-	bGeneralSizer->Add( m_staticText28, 0, wxALL, 5 );
+	bGeneralSizer->Add( m_staticText28, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bGeneralSizer->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_textInput = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bGeneralSizer->Add( m_textInput, 0, wxALL|wxEXPAND, 5 );
+	bGeneralSizer->Add( m_textInput, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bGeneralSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
@@ -38,153 +43,151 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	wxBoxSizer* m_LeftBoxSizer;
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgSizerShapeType;
-	fgSizerShapeType = new wxFlexGridSizer( 0, 3, 2, 0 );
-	fgSizerShapeType->AddGrowableCol( 1 );
-	fgSizerShapeType->SetFlexibleDirection( wxBOTH );
-	fgSizerShapeType->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 3 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
 
-	m_staticText44 = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText44->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
+	m_layerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_layerLabel->Wrap( -1 );
+	gbSizer1->Add( m_layerLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxString m_LayerChoices[] = { _("dummy") };
-	int m_LayerNChoices = sizeof( m_LayerChoices ) / sizeof( wxString );
-	m_Layer = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_LayerNChoices, m_LayerChoices, 0 );
-	m_Layer->SetSelection( 0 );
-	fgSizerShapeType->Add( m_Layer, 0, wxEXPAND|wxALL, 3 );
-
-
-	fgSizerShapeType->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_cbLayer = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	gbSizer1->Add( m_cbLayer, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 15 );
 
 	m_posXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posXLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_posXLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
+	gbSizer1->Add( m_posXLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_posXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_posXCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	m_posXCtrl->SetMinSize( wxSize( 155,-1 ) );
 
-	m_posXUnits = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_posXCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_posXUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posXUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_posXUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	gbSizer1->Add( m_posXUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
 	m_posYLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posYLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_posYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 3 );
+	gbSizer1->Add( m_posYLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_posYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_posYCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	gbSizer1->Add( m_posYCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_posYUnits = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_posYUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posYUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_posYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	gbSizer1->Add( m_posYUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
 	m_sizeXLabel = new wxStaticText( this, wxID_ANY, _("Size X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeXLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_sizeXLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 3 );
+	gbSizer1->Add( m_sizeXLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_sizeXCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	gbSizer1->Add( m_sizeXCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_sizeXUnits = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizeXUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeXUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_sizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	gbSizer1->Add( m_sizeXUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
 	m_sizeYLabel = new wxStaticText( this, wxID_ANY, _("Size Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeYLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_sizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
+	gbSizer1->Add( m_sizeYLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_sizeYCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
+	gbSizer1->Add( m_sizeYCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_sizeYUnits = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizeYUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeYUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_sizeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
-
-	m_staticText17 = new wxStaticText( this, wxID_ANY, _("Text Height:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText17->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 3 );
-
-	m_textCtrl8 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_textCtrl8, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 3 );
-
-	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 3 );
+	gbSizer1->Add( m_sizeYUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
 	m_orientationLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_orientationLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_orientationLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
+	gbSizer1->Add( m_orientationLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_orientationCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_orientationCtrl->Append( _("0") );
 	m_orientationCtrl->Append( _("90") );
 	m_orientationCtrl->Append( _("-90") );
 	m_orientationCtrl->Append( _("180") );
-	fgSizerShapeType->Add( m_orientationCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
+	gbSizer1->Add( m_orientationCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticText491 = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText491->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticText491, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	m_orientationUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_orientationUnits->Wrap( -1 );
+	gbSizer1->Add( m_orientationUnits, wxGBPosition( 6, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
-	m_offsetXLabel = new wxStaticText( this, wxID_ANY, _("Margin X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_offsetXLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+	m_cbShowText = new wxCheckBox( this, wxID_ANY, _("Show text"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_cbShowText, wxGBPosition( 8, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_marginXCtrl = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_marginXCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 3 );
+	m_textHeightLabel = new wxStaticText( this, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textHeightLabel->Wrap( -1 );
+	gbSizer1->Add( m_textHeightLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_offsetXUnits = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_offsetXUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	m_textHeightCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_textHeightCtrl, wxGBPosition( 9, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_offsetYLabel = new wxStaticText( this, wxID_ANY, _("Margin Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_offsetYLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_offsetYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 3 );
+	m_textHeightUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textHeightUnits->Wrap( -1 );
+	gbSizer1->Add( m_textHeightUnits, wxGBPosition( 9, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_marginYCtrl = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_marginYCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	m_cbKnockout = new wxCheckBox( this, wxID_ANY, _("Knockout"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbKnockout->SetToolTip( _("If checked, the barcode will be inverted with a margin around it") );
 
-	m_offsetYUnits = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_offsetYUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_offsetYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	gbSizer1->Add( m_cbKnockout, wxGBPosition( 11, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_marginXLabel = new wxStaticText( this, wxID_ANY, _("Margin X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginXLabel->Wrap( -1 );
+	gbSizer1->Add( m_marginXLabel, wxGBPosition( 12, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_marginXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_marginXCtrl, wxGBPosition( 12, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_marginXUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginXUnits->Wrap( -1 );
+	gbSizer1->Add( m_marginXUnits, wxGBPosition( 12, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_marginYLabel = new wxStaticText( this, wxID_ANY, _("Margin Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginYLabel->Wrap( -1 );
+	gbSizer1->Add( m_marginYLabel, wxGBPosition( 13, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_marginYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_marginYCtrl, wxGBPosition( 13, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_marginYUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginYUnits->Wrap( -1 );
+	gbSizer1->Add( m_marginYUnits, wxGBPosition( 13, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	m_LeftBoxSizer->Add( fgSizerShapeType, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	gbSizer1->AddGrowableCol( 1 );
+
+	m_LeftBoxSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer9->Add( m_LeftBoxSizer, 0, wxALL|wxEXPAND, 5 );
+	bSizer9->Add( m_LeftBoxSizer, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	m_middleBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_cbShowText = new wxCheckBox( this, wxID_ANY, _("Show Text"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_middleBoxSizer->Add( m_cbShowText, 0, wxLEFT, 5 );
-
-	m_inverted = new wxCheckBox( this, wxID_ANY, _("Knockout"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_inverted->SetToolTip( _("If checked, the barcode will be inverted with a margin around it") );
-
-	m_middleBoxSizer->Add( m_inverted, 0, wxLEFT, 5 );
 
 	wxString m_barcodeChoices[] = { _("Code 39 (ISO 16388)"), _("Code 128 (ISO 15417)"), _("Data Matrix (ECC 200)"), _("QR Code (ISO 18004)"), _("Micro QR Code") };
 	int m_barcodeNChoices = sizeof( m_barcodeChoices ) / sizeof( wxString );
 	m_barcode = new wxRadioBox( this, wxID_ANY, _("Code"), wxDefaultPosition, wxDefaultSize, m_barcodeNChoices, m_barcodeChoices, 1, wxRA_SPECIFY_COLS );
-	m_barcode->SetSelection( 3 );
-	m_middleBoxSizer->Add( m_barcode, 0, wxALL|wxEXPAND, 5 );
+	m_barcode->SetSelection( 1 );
+	m_middleBoxSizer->Add( m_barcode, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_errorCorrectionChoices[] = { _("~20% (Level L)"), _("~37% (Level M)"), _("~55% (Level Q)"), _("~65% (Level H)") };
 	int m_errorCorrectionNChoices = sizeof( m_errorCorrectionChoices ) / sizeof( wxString );
 	m_errorCorrection = new wxRadioBox( this, wxID_ANY, _("Error Correction"), wxDefaultPosition, wxDefaultSize, m_errorCorrectionNChoices, m_errorCorrectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_errorCorrection->SetSelection( 0 );
-	m_middleBoxSizer->Add( m_errorCorrection, 0, wxALL|wxEXPAND, 5 );
+	m_middleBoxSizer->Add( m_errorCorrection, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer9->Add( m_middleBoxSizer, 0, wxEXPAND|wxALL, 3 );
+	bSizer9->Add( m_middleBoxSizer, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer8->Add( bSizer9, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
-
-
-	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_panelShowBarcodeGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO);
 	m_panelShowBarcodeGal->SetMinSize( wxSize( 280,-1 ) );
@@ -192,22 +195,16 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	bSizerDisplayPad->Add( m_panelShowBarcodeGal, 12, wxEXPAND|wxALL, 5 );
 
 
-	bSizerDisplayPad->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer8->Add( bSizerDisplayPad, 1, wxEXPAND|wxLEFT, 10 );
 
 
-	bSizer9->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
+	bGeneralSizer->Add( bSizer8, 1, wxEXPAND, 5 );
 
 
-	bGeneralSizer->Add( bSizer9, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( bGeneralSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerUpper->Add( bGeneralSizer, 1, wxEXPAND, 5 );
-
-
-	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
-
-	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_MainSizer->Add( m_staticline13, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -221,6 +218,7 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -228,15 +226,14 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnInitDialog ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnUpdateUI ) );
 	m_textInput->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_Layer->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_orientationCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_orientationCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_cbShowText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_cbKnockout->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_cbShowText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_inverted->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_barcode->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_errorCorrection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnCancel ), NULL, this );
@@ -248,15 +245,14 @@ DIALOG_BARCODE_PROPERTIES_BASE::~DIALOG_BARCODE_PROPERTIES_BASE()
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnInitDialog ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnUpdateUI ) );
 	m_textInput->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_Layer->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_orientationCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_orientationCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_cbShowText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_cbKnockout->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_marginYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_cbShowText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_inverted->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_barcode->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_errorCorrection->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnCancel ), NULL, this );
