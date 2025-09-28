@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-18 01:02+0000\n"
+"PO-Revision-Date: 2025-09-28 10:44+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -8896,78 +8896,64 @@ msgid "There are no notifications available"
 msgstr "没有通知"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "A 8.5x11in"
+msgstr "A 8.5 x 11in"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17in"
+msgstr "B 11 x 17in"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22in"
+msgstr "C 17 x 22in"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34in"
+msgstr "D 22 x 34in"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44in"
+msgstr "E 34 x 44in"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "用户设置 (自定义)"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "美式信封 8.5x11in"
+msgstr "US Letter 8.5 x 11in"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "美式法律专用纸 8.5x14in"
+msgstr "US Legal 8.5 x 14in"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "美式法律专用纸 11x17in"
+msgstr "US Ledger 11 x 17in"
 
 #: common/pgm_base.cpp:224
 msgid "No default editor found, you must choose one."
