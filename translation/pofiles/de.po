@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-25 21:02+0000\n"
+"PO-Revision-Date: 2025-09-29 09:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -17933,9 +17933,11 @@ msgstr "Speichern des Projekts abbrechen"
 
 #: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1206
 #: pcbnew/files.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Konnte die Plotdateien nicht im Ordner \"%s\" anlegen."
+msgstr ""
+"Konnte Dateien nicht automatisch in schreibgeschütztem Ordner speichern:   "
+"\"%s\""
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -19747,15 +19749,13 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unbekannter SCH_FILE_T-Wert: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:607
-#, fuzzy
 msgid "All units"
-msgstr "Alle Elemente"
+msgstr "Alle Einheiten"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:629
-#, fuzzy
 msgid "All body styles"
-msgstr "Von allen Symbolformen gemeinsam genutzt"
+msgstr "Alle Symbolformen"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
 #: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
@@ -34415,9 +34415,8 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Unzureichende Berechtigungen zum Schreiben der Datei \"%s\"."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Eine IPC-2581-Datei erstellen"
+msgstr "IPC-2581-Datei erstellen"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
@@ -34430,9 +34429,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Datei erfolgreich erstellt."
+msgstr "IPC-2581-Datei erfolgreich erstellt."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -46628,7 +46626,7 @@ msgstr "Erzeuge Inhalts-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Pad hat nicht unterstützen Typ; es wurde übersprungen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -46650,22 +46648,23 @@ msgstr ""
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Dem Bauteil \"%s\" fehlt die OEM-Referenz; BOM-Eintrag wird übersprungen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
 msgstr "Erzeuge CAD-Daten"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2117
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Platinenumriss fehlt oder ist fehlerhaft. Bitte den Design-Rule-Check (DRC) "
-"für eine vollständige Analyse ausführen."
+"Platinenumriss fehlt oder ist fehlerhaft.  Bitte Design-Rule-Check (DRC) "
+"ausführen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Doppelte Footprint-Zeiger gefunden; IPC-2581-Ausgabe könnte fehlerhaft sein."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
 #, c-format
@@ -46675,6 +46674,8 @@ msgstr "Exportieren der Lage %s und der Netzliste %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Via verwendet nicht unterstützten Padstack; wird in den Bohrdaten "
+"weggelassen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
