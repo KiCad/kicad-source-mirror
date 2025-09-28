@@ -970,8 +970,6 @@ bool SCH_SYMBOL::GetExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxSt
 
         return instance.m_Variants[aVariantName].m_ExcludedFromSim;
     }
-
-    return m_excludedFromSim;
 }
 
 
