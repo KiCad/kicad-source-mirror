@@ -268,13 +268,11 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
 bool DIALOG_BARCODE_PROPERTIES::TransferDataFromWindow()
 {
     BOARD_COMMIT commit( m_parent );
+    commit.Modify( m_currentBarcode );
 
     if( !transferDataToBarcode( m_currentBarcode ) )
         return false;
 
-    commit.Modify( m_currentBarcode );
-
-    // redraw the area where the pad was
     m_parent->GetCanvas()->Refresh();
 
     commit.Push( _( "Modify barcode" ) );
@@ -319,11 +317,9 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     m_orientation->GetValue().ToDouble( &angleDeg );
     EDA_ANGLE newAngle( angleDeg, DEGREES_T );
     EDA_ANGLE oldAngle = aBarcode->Text().GetTextAngle();
+
     if( newAngle != oldAngle )
-    {
         aBarcode->Rotate( aBarcode->GetPosition(), newAngle - oldAngle );
-        aBarcode->Text().SetTextAngle( newAngle );
-    }
 
     aBarcode->SetIsKnockout( m_inverted->GetValue() );
 
