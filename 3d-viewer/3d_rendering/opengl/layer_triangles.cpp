@@ -30,12 +30,11 @@
 
 TRIANGLE_LIST::TRIANGLE_LIST( unsigned int aNrReservedTriangles, bool aReserveNormals )
 {
-    wxASSERT( aNrReservedTriangles > 0 );
-
     m_vertexs.clear();
     m_normals.clear();
 
-    m_vertexs.reserve( aNrReservedTriangles * 3 );
+    if( aNrReservedTriangles > 0 )
+        m_vertexs.reserve( aNrReservedTriangles * 3 );
 
     if( aReserveNormals )
         m_normals.reserve( aNrReservedTriangles * 3 );
@@ -94,8 +93,6 @@ void TRIANGLE_LIST::AddNormal( const SFVEC3F& aN1, const SFVEC3F& aN2, const SFV
 
 TRIANGLE_DISPLAY_LIST::TRIANGLE_DISPLAY_LIST( unsigned int aNrReservedTriangles )
 {
-    wxASSERT( aNrReservedTriangles > 0 );
-
     m_layer_top_segment_ends        = new TRIANGLE_LIST( aNrReservedTriangles, false );
     m_layer_top_triangles           = new TRIANGLE_LIST( aNrReservedTriangles, false );
     m_layer_middle_contourns_quads  = new TRIANGLE_LIST( aNrReservedTriangles, true  );
