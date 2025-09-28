@@ -170,7 +170,12 @@ public:
                                   int aMaxError, ERROR_LOC aErrorLoc = ERROR_INSIDE,
                                   bool ignoreLineWidth = false ) const override;
 
-    /**
+
+    // @copydoc BOARD_ITEM::GetEffectiveShape
+    virtual std::shared_ptr<SHAPE>
+            GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
+   /**
      * Generate the internal polygon representation for the current barcode text, kind and error correction.
      *
      * This uses the Zint backend to encode the text and populate @c m_poly. After calling this the

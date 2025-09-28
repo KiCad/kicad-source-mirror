@@ -537,10 +537,11 @@ const BOX2I PCB_BARCODE::ViewBBox() const
 }
 
 
-void PCB_BARCODE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance, int aMaxError,
+void PCB_BARCODE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                           int aClearance, int aMaxError,
                                            ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
-    if( aLayer != m_layer )
+    if( aLayer != m_layer && aLayer != UNDEFINED_LAYER )
         return;
 
     if( aClearance == 0 )
@@ -553,8 +554,17 @@ void PCB_BARCODE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
         poly.Inflate( aClearance, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, aMaxError, aErrorLoc );
         aBuffer.Append( poly );
     }
-
 }
+
+
+std::shared_ptr<SHAPE> PCB_BARCODE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+{
+    SHAPE_POLY_SET poly;
+    TransformShapeToPolygon( poly, aLayer, 0, 0, ERROR_INSIDE, true );
+
+    return std::make_shared<SHAPE_POLY_SET>( std::move( poly ) );
+}
+
 
 void PCB_BARCODE::SetErrorCorrection( BARCODE_ECC_T aErrorCorrection )
 {
