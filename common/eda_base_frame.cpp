@@ -688,7 +688,7 @@ wxString EDA_BASE_FRAME::GetRunMenuCommandDescription( const TOOL_ACTION& aActio
        }
    }
 
-   return wxString::Format( _( "Run %s" ), aAction.GetFriendlyName() );
+   return wxString::Format( _( "Run: %s" ), aAction.GetFriendlyName() );
 };
 
 
