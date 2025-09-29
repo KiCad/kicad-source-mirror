@@ -1197,7 +1197,7 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
     std::set<wxString> friendlySheetNames;
 
     if( sharedSheetSymbol && !sharedSheetPaths.empty() )
-        friendlySheetNames = GetSheetNames( sharedSheetPaths, m_frame->Schematic() );
+        friendlySheetNames = GetSheetNamesFromPaths( sharedSheetPaths, m_frame->Schematic() );
 
     // Check each mismatch and try to find a partner whose desired net matches our current net
     // (i.e. the two pins have been swapped on the PCB).
