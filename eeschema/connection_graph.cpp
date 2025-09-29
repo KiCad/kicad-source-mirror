@@ -563,12 +563,22 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
     if( !aDriver )
         return PRIORITY::NONE;
 
+    auto libSymbolRef =
+            []( const SCH_SYMBOL* symbol ) -> wxString
+            {
+                if( const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef() )
+                    return part->GetReferenceField().GetText();
+
+                return wxEmptyString;
+            };
+
     switch( aDriver->Type() )
     {
     case SCH_SHEET_PIN_T:     return PRIORITY::SHEET_PIN;
     case SCH_HIER_LABEL_T:    return PRIORITY::HIER_LABEL;
     case SCH_LABEL_T:         return PRIORITY::LOCAL_LABEL;
     case SCH_GLOBAL_LABEL_T:  return PRIORITY::GLOBAL;
+
     case SCH_PIN_T:
     {
         SCH_PIN* sch_pin = static_cast<SCH_PIN*>( aDriver );
@@ -576,14 +586,14 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
 
         if( sch_pin->IsGlobalPower() )
             return PRIORITY::POWER_PIN;
-        else if( !sym || sym->GetExcludedFromBoard()
-               || sym->GetLibSymbolRef()->GetReferenceField().GetText().StartsWith( '#' ) )
+        else if( !sym || sym->GetExcludedFromBoard() || libSymbolRef( sym ).StartsWith( '#' ) )
             return PRIORITY::NONE;
         else
             return PRIORITY::PIN;
     }
 
-    default: return PRIORITY::NONE;
+    default:
+        return PRIORITY::NONE;
     }
 }
 
@@ -591,13 +601,13 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
 void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
 {
     std::copy( aGraph.m_items.begin(), aGraph.m_items.end(),
-            std::back_inserter( m_items ) );
+               std::back_inserter( m_items ) );
 
     for( SCH_ITEM* item : aGraph.m_items )
         item->SetConnectionGraph( this );
 
     std::copy( aGraph.m_subgraphs.begin(), aGraph.m_subgraphs.end(),
-            std::back_inserter( m_subgraphs ) );
+               std::back_inserter( m_subgraphs ) );
 
     for( CONNECTION_SUBGRAPH* sg : aGraph.m_subgraphs )
     {
@@ -607,13 +617,11 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
         sg->m_graph = this;
     }
 
-    std::copy( aGraph.m_driver_subgraphs.begin(),
-            aGraph.m_driver_subgraphs.end(),
-            std::back_inserter( m_driver_subgraphs ) );
+    std::copy( aGraph.m_driver_subgraphs.begin(), aGraph.m_driver_subgraphs.end(),
+               std::back_inserter( m_driver_subgraphs ) );
 
-    std::copy( aGraph.m_global_power_pins.begin(),
-            aGraph.m_global_power_pins.end(),
-            std::back_inserter( m_global_power_pins ) );
+    std::copy( aGraph.m_global_power_pins.begin(), aGraph.m_global_power_pins.end(),
+               std::back_inserter( m_global_power_pins ) );
 
     for( auto& [key, value] : aGraph.m_net_name_to_subgraphs_map )
         m_net_name_to_subgraphs_map.insert_or_assign( key, value );
