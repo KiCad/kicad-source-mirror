@@ -28,11 +28,16 @@ class SCH_SEARCH_PANE : public SEARCH_PANE, public SCHEMATIC_LISTENER
 {
 public:
     SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame );
-    virtual ~SCH_SEARCH_PANE() = default;
+    virtual ~SCH_SEARCH_PANE();
 
     virtual void OnSchItemsAdded( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems ) override;
     virtual void OnSchItemsRemoved( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems ) override;
     virtual void OnSchItemsChanged( SCHEMATIC&  aBoard, std::vector<SCH_ITEM*>& aBoardItems ) override;
+
+private:
+    void onUnitsChanged( wxCommandEvent& event );
+    void onSchChanging( wxCommandEvent& event );
+    void onSchChanged( wxCommandEvent& event );
 
 private:
     SCH_EDIT_FRAME* m_schFrame;

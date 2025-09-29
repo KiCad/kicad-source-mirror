@@ -31,30 +31,9 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     if( m_brd != nullptr )
         m_brd->AddListener( this );
 
-    m_pcbFrame->Bind( EDA_EVT_UNITS_CHANGED, [&]( wxCommandEvent& aEvent )
-                                             {
-                                                 ClearAllResults();
-                                                 RefreshSearch();
-                                                 aEvent.Skip();
-                                             } );
-
-    m_pcbFrame->Bind( EDA_EVT_BOARD_CHANGED, [&]( wxCommandEvent& aEvent )
-                                             {
-                                                 m_brd = m_pcbFrame->GetBoard();
-
-                                                 if( m_brd != nullptr )
-                                                     m_brd->AddListener( this );
-
-                                                 ClearAllResults();
-                                                 RefreshSearch();
-                                                 aEvent.Skip();
-                                             } );
-
-    m_pcbFrame->Bind( EDA_EVT_BOARD_CHANGING, [&]( wxCommandEvent& aEvent )
-                                              {
-                                                  ClearAllResults();
-                                                  aEvent.Skip();
-                                              } );
+    m_pcbFrame->Bind( EDA_EVT_UNITS_CHANGED, &PCB_SEARCH_PANE::onUnitsChanged, this );
+    m_pcbFrame->Bind( EDA_EVT_BOARD_CHANGING, &PCB_SEARCH_PANE::onBoardChanging, this );
+    m_pcbFrame->Bind( EDA_EVT_BOARD_CHANGED, &PCB_SEARCH_PANE::onBoardChanged, this );
 
     wxFont infoFont = KIUI::GetDockedPaneFont( this );
     SetFont( infoFont );
@@ -67,6 +46,42 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     AddSearcher( std::make_shared<TEXT_SEARCH_HANDLER>( aFrame ) );
     AddSearcher( std::make_shared<GROUP_SEARCH_HANDLER>( aFrame ) );
     AddSearcher( std::make_shared<DRILL_SEARCH_HANDLER>( aFrame ) );
+}
+
+
+PCB_SEARCH_PANE::~PCB_SEARCH_PANE()
+{
+    m_pcbFrame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_SEARCH_PANE::onUnitsChanged, this );
+    m_pcbFrame->Unbind( EDA_EVT_BOARD_CHANGING, &PCB_SEARCH_PANE::onBoardChanging, this );
+    m_pcbFrame->Unbind( EDA_EVT_BOARD_CHANGED, &PCB_SEARCH_PANE::onBoardChanged, this );
+}
+
+
+void PCB_SEARCH_PANE::onUnitsChanged( wxCommandEvent& event )
+{
+    ClearAllResults();
+    RefreshSearch();
+    event.Skip();
+}
+
+
+void PCB_SEARCH_PANE::onBoardChanging( wxCommandEvent& event )
+{
+    ClearAllResults();
+    event.Skip();
+}
+
+
+void PCB_SEARCH_PANE::onBoardChanged( wxCommandEvent& event )
+{
+    m_brd = m_pcbFrame->GetBoard();
+
+    if( m_brd != nullptr )
+        m_brd->AddListener( this );
+
+    ClearAllResults();
+    RefreshSearch();
+    event.Skip();
 }
 
 

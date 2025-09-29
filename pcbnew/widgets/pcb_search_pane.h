@@ -28,7 +28,7 @@ class PCB_SEARCH_PANE : public SEARCH_PANE, public BOARD_LISTENER
 {
 public:
     PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame );
-    virtual ~PCB_SEARCH_PANE() = default;
+    virtual ~PCB_SEARCH_PANE();
 
     virtual void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
     virtual void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
@@ -42,6 +42,11 @@ public:
     virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
                                          std::vector<BOARD_ITEM*>& aRemovedItems,
                                          std::vector<BOARD_ITEM*>& aChangedItems ) override;
+
+private:
+    void onUnitsChanged( wxCommandEvent& event );
+    void onBoardChanging( wxCommandEvent& event );
+    void onBoardChanged( wxCommandEvent& event );
 
 private:
     PCB_EDIT_FRAME* m_pcbFrame;
