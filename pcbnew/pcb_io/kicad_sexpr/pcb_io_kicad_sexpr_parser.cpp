@@ -3737,8 +3737,7 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
 
 
         case T_locked:
-            barcode->SetLocked( true );
-            NeedRIGHT();
+            barcode->SetLocked( parseMaybeAbsentBool( true ) );
             break;
 
         case T_tstamp:

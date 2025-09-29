@@ -2911,25 +2911,17 @@ void PCB_PAINTER::draw( const PCB_BARCODE* aBarcode, int aLayer )
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
     m_gal->SetFillColor( color );
-    m_gal->SetStrokeColor( color );
 
     // Draw the barcode
     SHAPE_POLY_SET shape;
 
-    aBarcode->TransformShapeToPolySet( shape, ToLAYER_ID( aLayer ), 0, 0, ERROR_INSIDE );
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+        aBarcode->GetBoundingHull( shape, aBarcode->GetLayer(), m_lockedShadowMargin, m_maxError, ERROR_INSIDE );
+    else
+        aBarcode->TransformShapeToPolySet( shape, aBarcode->GetLayer(), 0, m_maxError, ERROR_INSIDE );
 
     if( shape.OutlineCount() != 0 )
-    {
-        m_gal->Save();
-
-        m_gal->SetLineWidth( 0 );
-        m_gal->SetIsFill( true );
-
-        m_gal->SetIsStroke( false );
         m_gal->DrawPolygon( shape );
-
-        m_gal->Restore();
-    }
 }
 
 
