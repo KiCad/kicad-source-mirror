@@ -1156,8 +1156,15 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
                                   _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
                                   wxFD_OPEN );
+                bool         cancelled;
 
-                if( dlg.ShowModal() != wxID_OK )
+                RunMainStack(
+                        [&]()
+                        {
+                            cancelled = dlg.ShowModal() != wxID_OK;
+                        } );
+
+                if( cancelled )
                     continue;
 
                 // If we started with a hotkey which has a position then warp back to that.
@@ -1659,7 +1666,13 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     strokeItems.push_back( previewItem );
 
                     DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
-                    dlg.ShowModal();
+
+                    RunMainStack(
+                            [&]()
+                            {
+                                dlg.ShowModal();
+                            } );
+
                     break;
                 }
 
@@ -1669,7 +1682,13 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     junctions.push_back( static_cast<SCH_JUNCTION*>( previewItem ) );
 
                     DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
-                    dlg.ShowModal();
+
+                    RunMainStack(
+                            [&]()
+                            {
+                                dlg.ShowModal();
+                            } );
+
                     break;
                 }
 

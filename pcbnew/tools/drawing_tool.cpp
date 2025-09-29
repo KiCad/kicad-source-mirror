@@ -752,8 +752,15 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                                   _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
                                   wxFD_OPEN );
+                bool         cancelled = false;
 
-                if( dlg.ShowModal() != wxID_OK )
+                RunMainStack(
+                        [&]()
+                        {
+                            cancelled = dlg.ShowModal() != wxID_OK;
+                        } );
+
+                if( cancelled )
                     continue;
 
                 // If we started with a hotkey which has a position then warp back to that.
@@ -1065,7 +1072,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                         [&]()
                         {
                             // QuasiModal required for Scintilla auto-complete
-                            cancelled = !textDialog.ShowQuasiModal();
+                            cancelled = textDialog.ShowQuasiModal() != wxID_OK;
                         } );
 
                 if( cancelled || NoPrintableChars( text->GetText() ) )
@@ -1302,19 +1309,26 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                 table->Normalize();
 
                 DIALOG_TABLE_PROPERTIES dlg( m_frame, table );
+                bool                    cancelled;
 
-                // QuasiModal required for Scintilla auto-complete
-                if( dlg.ShowQuasiModal() == wxID_OK )
+                RunMainStack(
+                        [&]()
+                        {
+                            // QuasiModal required for Scintilla auto-complete
+                            cancelled = dlg.ShowQuasiModal() != wxID_OK;
+                        } );
+
+                if( cancelled )
+                {
+                    delete table;
+                }
+                else
                 {
                     commit.Add( table, m_frame->GetScreen() );
                     commit.Push( _( "Draw Table" ) );
 
                     m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, table );
                     m_toolMgr->PostAction( ACTIONS::activatePointEditor );
-                }
-                else
-                {
-                    delete table;
                 }
 
                 table = nullptr;
@@ -1504,10 +1518,11 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
             DIALOG_BARCODE_PROPERTIES dlg( m_frame, barcode );
             bool                      cancelled;
 
-            RunMainStack( [&]()
-                          {
-                              cancelled = dlg.ShowModal() != wxID_OK;
-                          } );
+            RunMainStack(
+                    [&]()
+                    {
+                        cancelled = dlg.ShowModal() != wxID_OK;
+                    } );
 
             if( cancelled )
             {
