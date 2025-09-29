@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-03 21:02+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2025-09-30 11:41+0000\n"
+"Last-Translator: Julio Dias <jcesardias@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13.1-rc\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -51303,22 +51303,24 @@ msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
 msgstr ""
+"%zu pad(s) não selecionados estão conectados a esses nós. Como deseja "
+"proceder?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
 msgstr ""
+"Trilhas, vias, e outros itens fora da zona de cobre conectados ainda "
+"alternarão nós, mesmo se ignorar os pads não-selecionados"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "Ilhas revestidas:"
+msgstr "Pads não selecionados:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "Remove as camadas não utilizadas"
+msgstr "Ignorar pads não selecionados"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
 #, fuzzy
