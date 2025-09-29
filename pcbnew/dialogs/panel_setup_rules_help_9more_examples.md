@@ -148,6 +148,7 @@
         (condition "A.Do_not_Populate"))
 
 
+    # Allow solder mask bridging under guard ring mask apertures
     (rule guard_ring_bridging
         (constraint bridged_mask)
         (condition "A.intersectsArea('guard_ring')")
