@@ -47,9 +47,10 @@ public:
                                          std::vector<BOARD_ITEM*>& aChangedItems ) override;
 
 private:
-    void            onUnitsChanged( wxCommandEvent& event );
-    void            onBoardChanged( wxCommandEvent& event );
+    void onUnitsChanged( wxCommandEvent& event );
+    void onBoardChanged( wxCommandEvent& event );
 
+private:
     PCB_EDIT_FRAME* m_pcbFrame;
     BOARD* m_brd;
 };

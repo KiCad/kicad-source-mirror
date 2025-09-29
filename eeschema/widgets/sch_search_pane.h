@@ -39,8 +39,10 @@ public:
 
 private:
     void onUnitsChanged( wxCommandEvent& event );
+    void onSchChanging( wxCommandEvent& event );
     void onSchChanged( wxCommandEvent& event );
 
+private:
     SCH_EDIT_FRAME* m_schFrame;
     SCHEMATIC*      m_sch;
 };
