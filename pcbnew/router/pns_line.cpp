@@ -129,7 +129,21 @@ LINE& LINE::operator=( LINE&& aOther ) noexcept
        m_movable = aOther.m_movable;
        m_layers = aOther.m_layers;
 
-       m_via = aOther.m_via;
+       m_via = nullptr;
+
+       if( aOther.m_via )
+       {
+           if( aOther.m_via->BelongsTo( &aOther ) )
+           {
+               m_via = aOther.m_via->Clone();
+               m_via->SetOwner( this );
+               m_via->SetNet( m_net );
+           }
+           else
+           {
+               m_via = aOther.m_via;
+           }
+       }
 
        m_marker = aOther.m_marker;
        m_rank = aOther.m_rank;
