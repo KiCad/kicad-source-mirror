@@ -398,6 +398,8 @@ bool SCH_EDIT_TOOL::Init()
                 return SELECTION_CONDITIONS::HasTypes( SCH_EDIT_TOOL::RotatableItems )( aSel );
             };
 
+    const auto swapSelectionCondition = S_C::OnlyTypes( SwappableItems ) && SELECTION_CONDITIONS::MoreThan( 1 );
+
     auto propertiesCondition =
             [this]( const SELECTION& aSel )
             {
@@ -684,7 +686,7 @@ bool SCH_EDIT_TOOL::Init()
 
     moveMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
     moveMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
-    moveMenu.AddItem( SCH_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ), 200);
+    moveMenu.AddItem( SCH_ACTIONS::swap,              swapSelectionCondition, 200 );
     moveMenu.AddItem( SCH_ACTIONS::properties,        propertiesCondition, 200 );
     moveMenu.AddMenu( makeEditFieldsMenu(),           S_C::SingleSymbol, 200 );
 
@@ -735,7 +737,7 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddMenu( makeTransformMenu(),          orientCondition, 200 );
     selToolMenu.AddMenu( makeAttributesMenu(),         S_C::HasType( SCH_SYMBOL_T ), 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::swap,            SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::swap,            swapSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
     selToolMenu.AddMenu( makeEditFieldsMenu(),         S_C::SingleSymbol, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, autoplaceCondition, 200 );
@@ -794,6 +796,25 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
+    SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T
+};
+
+
+const std::vector<KICAD_T> SCH_EDIT_TOOL::SwappableItems = {
+    SCH_SHAPE_T,
+    SCH_RULE_AREA_T,
+    SCH_TEXT_T,
+    SCH_TEXTBOX_T,
+    SCH_LABEL_T,
+    SCH_SHEET_PIN_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_DIRECTIVE_LABEL_T,
+    SCH_FIELD_T,
+    SCH_SYMBOL_T,
+    SCH_SHEET_T,
+    SCH_BITMAP_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T
 };
@@ -1287,27 +1308,6 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
-
-const std::vector<KICAD_T> swappableItems = {
-    SCH_SHAPE_T,
-    SCH_RULE_AREA_T,
-    SCH_TEXT_T,
-    SCH_TEXTBOX_T,
-    SCH_LABEL_T,
-    SCH_SHEET_PIN_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_DIRECTIVE_LABEL_T,
-    SCH_FIELD_T,
-    SCH_SYMBOL_T,
-    SCH_SHEET_T,
-    SCH_BITMAP_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T
-};
-
-
 /**
  * Swap the positions of the fields in the two lists, aAFields and aBFields,
  * relative to their parent positions.
@@ -1394,7 +1394,7 @@ static void swapFieldPositionsWithMatching( std::vector<SCH_FIELD>& aAFields,
 
 int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( swappableItems );
+    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( SwappableItems );
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
     if( selection.Size() < 2 )

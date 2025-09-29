@@ -57,6 +57,16 @@ SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
 }
 
 
+const std::vector<KICAD_T> SYMBOL_EDITOR_EDIT_TOOL::SwappableItems = {
+    LIB_SYMBOL_T, // Allows swapping the anchor
+    SCH_PIN_T,
+    SCH_SHAPE_T,
+    SCH_TEXT_T,
+    SCH_TEXTBOX_T,
+    SCH_FIELD_T,
+};
+
+
 bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 {
     SCH_TOOL_BASE::Init();
@@ -89,6 +99,9 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
                 return true;
             };
+
+    auto swapSelectionCondition =
+            canEdit && SCH_CONDITIONS::OnlyTypes( SwappableItems ) && SELECTION_CONDITIONS::MoreThan( 1 );
 
     const auto canCopyText = SCH_CONDITIONS::OnlyTypes( {
             SCH_TEXT_T,
@@ -175,7 +188,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
         moveMenu.AddItem( SCH_ACTIONS::mirrorV,     canEdit && SCH_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( SCH_ACTIONS::mirrorH,     canEdit && SCH_CONDITIONS::NotEmpty, 200 );
 
-        moveMenu.AddItem( SCH_ACTIONS::swap,        canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200);
+        moveMenu.AddItem( SCH_ACTIONS::swap,        swapSelectionCondition, 200 );
         moveMenu.AddItem( SCH_ACTIONS::properties,  canEdit && SCH_CONDITIONS::Count( 1 ), 200 );
 
         moveMenu.AddSeparator( 300 );
@@ -209,7 +222,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::mirrorV,      canEdit && SCH_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::mirrorH,      canEdit && SCH_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::swap,         canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::swap,         swapSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::properties,   canEdit && SCH_CONDITIONS::Count( 1 ), 200 );
 
     selToolMenu.AddSeparator( 250 );
@@ -356,21 +369,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
-
-const std::vector<KICAD_T> swappableItems = {
-    LIB_SYMBOL_T, // Allows swapping the anchor
-    SCH_PIN_T,
-    SCH_SHAPE_T,
-    SCH_TEXT_T,
-    SCH_TEXTBOX_T,
-    SCH_FIELD_T,
-};
-
-
 int SYMBOL_EDITOR_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( swappableItems );
+    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( SwappableItems );
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
     if( selection.Size() < 2 )

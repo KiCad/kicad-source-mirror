@@ -35,6 +35,7 @@ public:
     ~SCH_EDIT_TOOL() = default;
 
     static const std::vector<KICAD_T> RotatableItems;
+    static const std::vector<KICAD_T> SwappableItems;
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
