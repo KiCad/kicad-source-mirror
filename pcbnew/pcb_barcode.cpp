@@ -106,83 +106,19 @@ void PCB_BARCODE::SetLayer( PCB_LAYER_ID aLayer )
 {
     m_layer = aLayer;
     m_text.SetLayer( aLayer );
-
-    if( !m_textHeightIsCustom )
-    {
-        if( BOARD* board = GetBoard() )
-        {
-            const BOARD_DESIGN_SETTINGS& settings = board->GetDesignSettings();
-            VECTOR2I size = settings.GetTextSize( aLayer );
-            if( size.y <= 0 )
-                size.y = pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE );
-            if( size.x <= 0 )
-                size.x = size.y;
-
-            m_text.SetTextSize( size );
-        }
-        else
-        {
-            int defaultSize = pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE );
-            m_text.SetTextSize( VECTOR2I( defaultSize, defaultSize ) );
-        }
-    }
-
-    int thickness = GetPenSizeForNormal( m_text.GetTextHeight() );
-
-    if( thickness > 0 )
-        m_text.SetTextThickness( thickness );
 }
 
 
-void PCB_BARCODE::SetTextSize( const VECTOR2I& aTextSize )
+void PCB_BARCODE::SetTextSize( int aTextSize )
 {
-    VECTOR2I size = aTextSize;
-    size.x = std::max( 1, size.x );
-    size.y = std::max( 1, size.y );
-
-    m_text.SetTextSize( size );
+    m_text.SetTextSize( VECTOR2I( std::max( 1, aTextSize ), std::max( 1, aTextSize ) ) );
+    m_text.SetTextThickness( std::max( 1, GetPenSizeForNormal( m_text.GetTextHeight() ) ) );
 }
 
 
-void PCB_BARCODE::SetTextHeight( int aHeight )
-{
-    int height = std::max( 1, aHeight );
-    VECTOR2I current = m_text.GetTextSize();
-
-    int currentHeight = std::max( 1, current.y );
-    int referenceWidth = current.x;
-
-    if( referenceWidth <= 0 )
-        referenceWidth = currentHeight;
-
-    // Maintain the existing aspect ratio when scaling the height.
-    double ratio = static_cast<double>( referenceWidth ) / static_cast<double>( currentHeight );
-    int newWidth = KiROUND( ratio * height );
-
-    if( newWidth <= 0 )
-        newWidth = height;
-
-    if( height == currentHeight && newWidth == current.x )
-        return;
-
-    m_text.SetTextSize( VECTOR2I( newWidth, height ) );
-    m_textHeightIsCustom = true;
-}
-
-
-int PCB_BARCODE::GetTextHeight() const
+int PCB_BARCODE::GetTextSize() const
 {
     return m_text.GetTextHeight();
-}
-
-
-void PCB_BARCODE::SetBarcodeTextHeight( int aHeight )
-{
-    int before = GetTextHeight();
-    SetTextHeight( aHeight );
-
-    if( GetTextHeight() != before )
-        AssembleBarcode( false, true );
 }
 
 
@@ -696,7 +632,7 @@ double PCB_BARCODE::Similarity( const BOARD_ITEM& aItem ) const
         similarity += weight;
     if( m_height == other->m_height )
         similarity += weight;
-    if( GetTextHeight() == other->GetTextHeight() )
+    if( GetTextSize() == other->GetTextSize() )
         similarity += weight;
     if( GetPosition() == other->GetPosition() )
         similarity += weight;
@@ -714,9 +650,12 @@ bool PCB_BARCODE::operator==( const BOARD_ITEM& aItem ) const
     const PCB_BARCODE* other = static_cast<const PCB_BARCODE*>( &aItem );
 
     // Compare text, width, height, text height, position, and kind
-    return ( GetText() == other->GetText() ) && ( m_width == other->m_width ) && ( m_height == other->m_height )
-           && ( GetTextHeight() == other->GetTextHeight() )
-           && ( GetPosition() == other->GetPosition() ) && ( m_kind == other->m_kind );
+    return ( GetText() == other->GetText()
+            && m_width == other->m_width
+            && m_height == other->m_height
+            && GetTextSize() == other->GetTextSize()
+            && GetPosition() == other->GetPosition()
+            && m_kind == other->m_kind );
 }
 
 // ---- Property registration ----
@@ -764,8 +703,8 @@ static struct PCB_BARCODE_DESC
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, bool>( _HKI( "Show Text" ),
                                     &PCB_BARCODE::SetShowText, &PCB_BARCODE::GetShowText ), groupBarcode );
 
-        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Text Height" ),
-                                    &PCB_BARCODE::SetBarcodeTextHeight, &PCB_BARCODE::GetTextHeight,
+        propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Text Size" ),
+                                    &PCB_BARCODE::SetTextSize, &PCB_BARCODE::GetTextSize,
                                     PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Width" ),

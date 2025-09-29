@@ -20,12 +20,12 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
+#include <wx/sizer.h>
 #include <wx/bmpcbox.h>
 #include <wx/combobox.h>
-#include <wx/checkbox.h>
-#include <wx/gbsizer.h>
-#include <wx/sizer.h>
 #include <wx/radiobox.h>
+#include <wx/gbsizer.h>
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
 #include <wx/button.h>
@@ -48,6 +48,10 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 
 		wxStaticText* m_staticText28;
 		wxTextCtrl* m_textInput;
+		wxCheckBox* m_cbLocked;
+		wxCheckBox* m_cbKnockout;
+		wxCheckBox* m_cbShowText;
+		wxBoxSizer* m_middleBoxSizer;
 		wxStaticText* m_layerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_cbLayer;
 		wxStaticText* m_posXLabel;
@@ -65,18 +69,15 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_orientationLabel;
 		wxComboBox* m_orientationCtrl;
 		wxStaticText* m_orientationUnits;
-		wxCheckBox* m_cbShowText;
-		wxStaticText* m_textHeightLabel;
-		wxTextCtrl* m_textHeightCtrl;
-		wxStaticText* m_textHeightUnits;
-		wxCheckBox* m_cbKnockout;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
 		wxStaticText* m_marginXLabel;
 		wxTextCtrl* m_marginXCtrl;
 		wxStaticText* m_marginXUnits;
 		wxStaticText* m_marginYLabel;
 		wxTextCtrl* m_marginYCtrl;
 		wxStaticText* m_marginYUnits;
-		wxBoxSizer* m_middleBoxSizer;
 		wxRadioBox* m_barcode;
 		wxRadioBox* m_errorCorrection;
 		PCB_DRAW_PANEL_GAL* m_panelShowBarcodeGal;
@@ -86,7 +87,6 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }

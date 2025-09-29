@@ -3692,7 +3692,7 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
         case T_text_height:
         {
             int h = parseBoardUnits( "barcode text height" );
-            barcode->SetTextHeight( h );
+            barcode->SetTextSize( h );
             NeedRIGHT();
             break;
         }

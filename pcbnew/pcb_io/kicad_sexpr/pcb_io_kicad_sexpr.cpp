@@ -2089,8 +2089,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_BARCODE* aBarcode ) const
 
     m_out->Print( "(text %s)", m_out->Quotew( aBarcode->GetText() ).c_str() );
 
-    m_out->Print( "(text_height %s)",
-                  formatInternalUnits( aBarcode->GetTextHeight() ).c_str() );
+    m_out->Print( "(text_height %s)", formatInternalUnits( aBarcode->GetTextSize() ).c_str() );
 
     const char* typeStr = "code39";
 

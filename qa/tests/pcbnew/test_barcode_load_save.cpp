@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
     barcode->SetPosition( VECTOR2I( 1000000, 2000000 ) );
     barcode->SetWidth( 3000000 );
     barcode->SetHeight( 3000000 );
-    barcode->SetTextHeight( pcbIUScale.mmToIU( 1.5 ) );
+    barcode->SetTextSize( pcbIUScale.mmToIU( 1.5 ) );
     barcode->SetKind( BARCODE_T::QR_CODE );
     barcode->SetErrorCorrection( BARCODE_ECC_T::M );
     barcode->AssembleBarcode( true, true );
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
                        static_cast<int>( barcode->GetErrorCorrection() ) );
     BOOST_CHECK_EQUAL( loaded.GetWidth(), barcode->GetWidth() );
     BOOST_CHECK_EQUAL( loaded.GetHeight(), barcode->GetHeight() );
-    BOOST_CHECK_EQUAL( loaded.GetTextHeight(), barcode->GetTextHeight() );
+    BOOST_CHECK_EQUAL( loaded.GetTextSize(), barcode->GetTextSize() );
 
     BOX2I bbox = loaded.GetPolyShape().BBox();
     BOOST_CHECK_EQUAL( bbox.Centre(), loaded.GetPosition() );
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
     barcode->SetPosition( VECTOR2I( 1000000, 2000000 ) );
     barcode->SetWidth( 3000000 );
     barcode->SetHeight( 3000000 );
-    barcode->SetTextHeight( pcbIUScale.mmToIU( 1.5 ) );
+    barcode->SetTextSize( pcbIUScale.mmToIU( 1.5 ) );
     barcode->SetKind( BARCODE_T::QR_CODE );
     barcode->SetErrorCorrection( BARCODE_ECC_T::M );
     barcode->AssembleBarcode( true, true );
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
                        static_cast<int>( barcode->GetErrorCorrection() ) );
     BOOST_CHECK_EQUAL( loaded->GetWidth(), barcode->GetWidth() );
     BOOST_CHECK_EQUAL( loaded->GetHeight(), barcode->GetHeight() );
-    BOOST_CHECK_EQUAL( loaded->GetTextHeight(), barcode->GetTextHeight() );
+    BOOST_CHECK_EQUAL( loaded->GetTextSize(), barcode->GetTextSize() );
 
     BOX2I bbox = loaded->GetPolyShape().BBox();
     BOOST_CHECK_EQUAL( bbox.Centre(), loaded->GetPosition() );

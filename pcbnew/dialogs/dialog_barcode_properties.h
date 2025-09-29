@@ -61,7 +61,7 @@ private:
     UNIT_BINDER        m_posY;
     UNIT_BINDER        m_sizeX;
     UNIT_BINDER        m_sizeY;
-    UNIT_BINDER        m_textHeight;
+    UNIT_BINDER        m_textSize;
     UNIT_BINDER        m_orientation;
     UNIT_BINDER        m_knockoutMarginX;
     UNIT_BINDER        m_knockoutMarginY;

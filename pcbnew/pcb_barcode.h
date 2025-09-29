@@ -95,21 +95,13 @@ public:
     void SetPosition( const VECTOR2I& aPos ) override;
 
     /**
-     * Set the displayed text size used by the internal PCB_TEXT object.
-     *
-     * @param aTextSize text size vector (width, height) in internal units.
-     */
-    void SetTextSize( const VECTOR2I& aTextSize );
-
-    /**
      * Change the height of the human-readable text displayed below the barcode.
      *
-     * @param aHeight text height in internal units.
+     * @param aTextSize text size in internal units.  Will be used for both x and y.
      */
-    void SetTextHeight( int aHeight );
-    int  GetTextHeight() const;
+    void SetTextSize( int aTextSize );
 
-    void SetBarcodeTextHeight( int aHeight ); // Includes re-compute
+    int  GetTextSize() const;
 
     /**
      * Set the drawing layer for the barcode and its text.
@@ -427,7 +419,6 @@ private:
     VECTOR2I       m_pos;        ///< Position of the barcode
     VECTOR2I       m_margin;     ///< Margin around the barcode (only valid for knockout)
     PCB_TEXT       m_text;
-    bool           m_textHeightIsCustom = false;
     BARCODE_T      m_kind;
     EDA_ANGLE      m_angle;
     BARCODE_ECC_T  m_errorCorrection; ///< Error correction level for QR codes

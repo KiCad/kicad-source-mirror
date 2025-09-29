@@ -53,7 +53,7 @@ DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, P
         m_posY( aParent, m_posYLabel, m_posYCtrl, m_posYUnits ),
         m_sizeX( aParent, m_sizeXLabel, m_sizeXCtrl, m_sizeXUnits ),
         m_sizeY( aParent, m_sizeYLabel, m_sizeYCtrl, m_sizeYUnits ),
-        m_textHeight( aParent, m_textHeightLabel, m_textHeightCtrl, m_textHeightUnits ),
+        m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_orientation( aParent, m_orientationLabel, m_orientationCtrl, m_orientationUnits ),
         m_knockoutMarginX( aParent, m_marginXLabel, m_marginXCtrl, m_marginXUnits ),
         m_knockoutMarginY( aParent, m_marginYLabel, m_marginYCtrl, m_marginYUnits )
@@ -146,7 +146,7 @@ void DIALOG_BARCODE_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     bool enableEC = m_barcode->GetSelection() >= to_underlying( BARCODE_T::QR_CODE );
     m_errorCorrection->Enable( enableEC );
 
-    m_textHeight.Show( m_cbShowText->GetValue() );
+    m_textSize.Enable( m_cbShowText->GetValue() );
 
     m_knockoutMarginX.Enable( m_cbKnockout->GetValue() );
     m_knockoutMarginY.Enable( m_cbKnockout->GetValue() );
@@ -176,6 +176,7 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
         *m_dummyBarcode = *m_currentBarcode;
 
     m_textInput->ChangeValue( m_dummyBarcode->GetText() );
+    m_cbLocked->SetValue( m_dummyBarcode->IsLocked() );
     m_cbLayer->SetLayerSelection( m_dummyBarcode->GetLayer() );
 
     // Position
@@ -185,7 +186,7 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     // Size
     m_sizeX.ChangeValue( m_dummyBarcode->GetWidth() );
     m_sizeY.ChangeValue( m_dummyBarcode->GetHeight() );
-    m_textHeight.ChangeValue( m_dummyBarcode->GetTextHeight() );
+    m_textSize.ChangeValue( m_dummyBarcode->GetTextSize() );
 
     // Orientation
     m_orientation.ChangeAngleValue( m_dummyBarcode->GetAngle() );
@@ -252,6 +253,7 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
         return false;
 
     aBarcode->SetText( m_textInput->GetValue() );
+    aBarcode->SetLocked( m_cbLocked->GetValue() );
     aBarcode->SetLayer( ToLAYER_ID( m_cbLayer->GetLayerSelection() ) );
 
     // Position
@@ -260,7 +262,7 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     // Size
     aBarcode->SetWidth( m_sizeX.GetIntValue() );
     aBarcode->SetHeight( m_sizeY.GetIntValue() );
-    aBarcode->SetTextHeight( m_textHeight.GetIntValue() );
+    aBarcode->SetTextSize( m_textSize.GetIntValue() );
 
     // Orientation
     EDA_ANGLE oldAngle = aBarcode->GetAngle();
