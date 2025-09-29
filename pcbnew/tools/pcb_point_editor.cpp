@@ -640,17 +640,10 @@ public:
     BARCODE_POINT_EDIT_BEHAVIOR( PCB_BARCODE& aBarcode ) :
             m_barcode( aBarcode )
     {
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "Created Edit Points for Barcode with points at: %d, %d - %d, %d",
-                    aBarcode.GetTopLeft().x, aBarcode.GetTopLeft().y,
-                    aBarcode.GetBotRight().x, aBarcode.GetBotRight().y );
     }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
-         wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "MakePoints called for Barcode at: %d, %d - %d, %d",
-                     m_barcode.GetTopLeft().x, m_barcode.GetTopLeft().y,
-                     m_barcode.GetBotRight().x, m_barcode.GetBotRight().y );
-
         VECTOR2I tl, tr, br, bl;
         computeOrientedCorners( tl, tr, br, bl );
 
@@ -680,9 +673,6 @@ public:
 
         VECTOR2I tl, tr, br, bl;
         computeOrientedCorners( tl, tr, br, bl );
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", " UpdatePoints called for Barcode at: %d, %d - %d, %d",
-                    m_barcode.GetTopLeft().x, m_barcode.GetTopLeft().y, m_barcode.GetBotRight().x,
-                    m_barcode.GetBotRight().y );
         wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "  Oriented corners are: TL(%d, %d) TR(%d, %d) BR(%d, %d) BL(%d, %d)",
                     tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y );
 
@@ -842,14 +832,6 @@ public:
         m_barcode.SetRect( newTL, newBR );
 
         m_barcode.AssembleBarcode( false, true );
-
-        BOX2I bbAfter = m_barcode.GetBoundingBox();
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: after apply bbox TL=(%d,%d) BR=(%d,%d) pos=(%d,%d) polyW=%d polyH=%d",
-                    bbAfter.GetLeft(), bbAfter.GetTop(), bbAfter.GetRight(), bbAfter.GetBottom(),
-                    m_barcode.GetCenter().x, m_barcode.GetCenter().y,
-                    m_barcode.GetBotRight().x - m_barcode.GetTopLeft().x,
-                    m_barcode.GetBotRight().y - m_barcode.GetTopLeft().y );
     }
 
 private:

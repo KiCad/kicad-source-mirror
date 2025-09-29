@@ -171,7 +171,7 @@ public:
      * Add two rectangular polygons separately bounding the barcode's symbol and the barcode's text.
      */
     void GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                          int aMaxError, ERROR_LOC aErrorLoc = ERROR_INSIDE );
+                          int aMaxError, ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
    /**
      * Generate the internal polygon representation for the current barcode text, kind and error correction.
@@ -238,20 +238,6 @@ public:
      * @param aFlipLeftRight flip direction enum.
      */
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipLeftRight ) override;
-
-    /**
-     * Get the top-left corner of the barcode bounding rectangle.
-     *
-     * @return top-left point in internal units.
-     */
-    VECTOR2I GetTopLeft() const;
-
-    /**
-     * Get the bottom-right corner of the barcode bounding rectangle.
-     *
-     * @return bottom-right point in internal units.
-     */
-    VECTOR2I GetBotRight() const;
 
     /**
      * Get the centre of the barcode (alias for GetPosition).
@@ -414,17 +400,17 @@ public:
 private:
     int            m_width;      ///< Barcode width
     int            m_height;     ///< Barcode height
-    int            m_poly_width; ///< Current width of full polygon (barcode + extras)
-    int            m_poly_height;///< Current height of full polygon (barcode + extras)
     VECTOR2I       m_pos;        ///< Position of the barcode
     VECTOR2I       m_margin;     ///< Margin around the barcode (only valid for knockout)
     PCB_TEXT       m_text;
     BARCODE_T      m_kind;
     EDA_ANGLE      m_angle;
     BARCODE_ECC_T  m_errorCorrection; ///< Error correction level for QR codes
+
     SHAPE_POLY_SET m_poly;            ///< Full geometry (barcode + optional text or knockout)
     SHAPE_POLY_SET m_symbolPoly;      ///< Barcode symbol only (cached, centered at origin)
     SHAPE_POLY_SET m_textPoly;        ///< Human-readable text only (cached, centered/positioned)
+    BOX2I          m_bbox;            ///< BBox of m_poly (ie: barcode + text)
 };
 
 #endif // DIMENSION_H_

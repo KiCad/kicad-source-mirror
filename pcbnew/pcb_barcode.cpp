@@ -54,8 +54,6 @@ PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_BARCODE_T ),
         m_width( pcbIUScale.mmToIU( 40 ) ),
         m_height( pcbIUScale.mmToIU( 40 ) ),
-        m_poly_width( pcbIUScale.mmToIU( 40 ) ),
-        m_poly_height( pcbIUScale.mmToIU( 40 ) ),
         m_pos( 0, 0 ),
         m_text( this ),
         m_kind( BARCODE_T::QR_CODE ),
@@ -129,6 +127,7 @@ void PCB_BARCODE::Move( const VECTOR2I& offset )
     m_textPoly.Move( offset );
     m_poly.Move( offset );
     m_text.Move( offset );
+    m_bbox.Move( offset );
 }
 
 
@@ -139,12 +138,9 @@ void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     Move( pos - m_pos );
 
-    m_poly.Rotate( aAngle, m_pos );
-    BOX2I bbox = m_poly.BBox();
-    m_poly_width = bbox.GetWidth();
-    m_poly_height = bbox.GetHeight();
-
     m_angle += aAngle;
+    m_poly.Rotate( aAngle, m_pos );
+    m_bbox = m_poly.BBox();
 }
 
 
@@ -214,13 +210,7 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
         m_poly.Rotate( m_angle, m_pos );
 
     m_poly.CacheTriangulation( false );
-
-    // Update full polygon extents after all geometry operations (in world position)
-    {
-        BOX2I bbox = m_poly.BBox();
-        m_poly_width = bbox.GetWidth();
-        m_poly_height = bbox.GetHeight();
-    }
+    m_bbox = m_poly.BBox();
 }
 
 
@@ -343,6 +333,7 @@ void PCB_BARCODE::ComputeBarcode()
         double rot = static_cast<double>( hex->rotation );
 
         SHAPE_LINE_CHAIN poly;
+
         for( int k = 0; k < 6; ++k )
         {
             double ang = ( baseAngles[k] + rot ) * M_PI / 180.0;
@@ -391,10 +382,14 @@ void PCB_BARCODE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 
 bool PCB_BARCODE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    if( m_text.TextHitTest( aPosition ) )
-        return true;
+    if( !GetBoundingBox().Contains( aPosition ) )
+        return false;
 
-    return GetBoundingBox().Contains( aPosition );
+    SHAPE_POLY_SET hulls;
+
+    GetBoundingHull( hulls, UNDEFINED_LAYER, aAccuracy, ARC_LOW_DEF, ERROR_OUTSIDE );
+
+    return hulls.Collide( aPosition );
 }
 
 
@@ -412,18 +407,6 @@ bool PCB_BARCODE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
         return arect.Contains( rect );
 
     return arect.Intersects( rect );
-}
-
-
-VECTOR2I PCB_BARCODE::GetTopLeft() const
-{
-    return GetPosition() - VECTOR2I( m_poly_width / 2, m_poly_height / 2 );
-}
-
-
-VECTOR2I PCB_BARCODE::GetBotRight() const
-{
-    return GetPosition() + VECTOR2I( m_poly_width / 2, m_poly_height / 2 );
 }
 
 
@@ -464,10 +447,7 @@ void PCB_BARCODE::SetRect( const VECTOR2I& aTopLeft, const VECTOR2I& aBotRight )
 
 const BOX2I PCB_BARCODE::GetBoundingBox() const
 {
-    BOX2I bBox = m_text.GetBoundingBox();
-    bBox.Merge( BOX2I::ByCenter( GetPosition(), VECTOR2I( m_poly_width, m_poly_height ) ) );
-
-    return bBox;
+    return m_bbox;
 }
 
 
@@ -485,10 +465,7 @@ BITMAPS PCB_BARCODE::GetMenuImage() const
 
 const BOX2I PCB_BARCODE::ViewBBox() const
 {
-    BOX2I dimBBox = BOX2I::ByCenter( GetPosition(), VECTOR2I( m_poly_width, m_poly_height ) );
-    dimBBox.Merge( m_text.ViewBBox() );
-
-    return dimBBox;
+    return m_bbox;
 }
 
 
@@ -522,7 +499,7 @@ std::shared_ptr<SHAPE> PCB_BARCODE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
 
 
 void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                   int aMaxError, ERROR_LOC aErrorLoc )
+                                   int aMaxError, ERROR_LOC aErrorLoc ) const
 {
     auto getBoundingHull =
             [this]( SHAPE_POLY_SET& aBuffer, const SHAPE_POLY_SET& aSource, int aClearance )
