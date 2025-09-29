@@ -937,12 +937,12 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         return;
 
     const bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-
-    if( m_schSettings.IsPrinting() && drawingShadows )
-        return;
-
     const bool drawingDangling = aLayer == LAYER_DANGLING;
     const bool drawingOP = aLayer == LAYER_OP_CURRENTS;
+
+    if( m_schSettings.IsPrinting() && ( drawingShadows || drawingDangling ) )
+        return;
+
     const bool isDangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
 
     if( drawingShadows && !( aPin->IsBrightened() || aPin->IsSelected() ) )
