@@ -32,6 +32,7 @@
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
 #include <richio.h>
+#include <wx/strconv.h>
 
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
@@ -65,8 +66,10 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
 {
     try
     {
-        tao::pegtl::string_input<> in( SafeReadFile( aFilePath, wxS( "r" ) ).ToStdString(),
-                                       aFilePath.ToStdString() );
+        std::string fileContents = SafeReadFile( aFilePath, wxS( "r" ) ).ToStdString( wxConvUTF8 );
+        std::string filePath = aFilePath.ToStdString( wxConvUTF8 );
+
+        tao::pegtl::string_input<> in( fileContents, filePath );
         auto root = tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
                                                   SIM_LIBRARY_SPICE_PARSER::librarySelector,
                                                   tao::pegtl::nothing,

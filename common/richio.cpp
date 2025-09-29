@@ -114,12 +114,14 @@ wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
 
     ff.Seek( 0 );
 
-    if( utf16le )
-        ff.ReadAll( &contents, wxMBConvUTF16LE() );
-    else
-        ff.ReadAll( &contents, wxMBConvUTF8() );
+    bool readOk = false;
 
-    if( contents.empty() )
+    if( utf16le )
+        readOk = ff.ReadAll( &contents, wxMBConvUTF16LE() );
+    else
+        readOk = ff.ReadAll( &contents, wxMBConvUTF8() );
+
+    if( !readOk || contents.empty() )
     {
         ff.Seek( 0 );
         ff.ReadAll( &contents, wxConvAuto( wxFONTENCODING_CP1252 ) );
