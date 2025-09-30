@@ -300,6 +300,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         wxPGChoices choices;
 
         extractValueAndWritability( aSelection, property, commonVal, writeable, choices );
+
+        if( choices.GetCount() > 0 )
+            pgProp->SetChoices( choices );
+
         pgProp->SetValue( commonVal );
         pgProp->Enable( writeable );
 

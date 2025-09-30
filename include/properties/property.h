@@ -46,6 +46,7 @@
 #include <memory>
 #include <typeindex>
 #include <type_traits>
+#include <wx/translation.h>
 #include "std_optional_variants.h"
 
 class wxPGProperty;
@@ -225,6 +226,8 @@ public:
         static wxPGChoices empty;
         return empty;
     }
+
+    virtual void TranslateChoices() {}
 
     /**
      * Set the possible values for for the property.
@@ -571,11 +574,13 @@ public:
           PROPERTY<Owner, T, Base>( aName,
                                     METHOD<Owner, T, Base>::Wrap( aSetter ),
                                     METHOD<Owner, T, Base>::Wrap( aGetter ),
-                                    aDisplay )
+                                    aDisplay ),
+          m_choicesFromENUM_MAP( false )
     {
         if ( std::is_enum<T>::value )
         {
             m_choices = ENUM_MAP<T>::Instance().Choices();
+            m_choicesFromENUM_MAP = true;
             wxASSERT_MSG( m_choices.GetCount() > 0, wxT( "No enum choices defined" ) );
         }
     }
@@ -589,11 +594,13 @@ public:
             PROPERTY<Owner, T, Base>( aName,
                                       METHOD<Owner, T, Base>::Wrap( aSetter ),
                                       METHOD<Owner, T, Base>::Wrap( aGetter ),
-                                      aDisplay, aCoordType )
+                                      aDisplay, aCoordType ),
+           m_choicesFromENUM_MAP( false )
     {
         if ( std::is_enum<T>::value )
         {
             m_choices = ENUM_MAP<T>::Instance().Choices();
+            m_choicesFromENUM_MAP = true;
             wxASSERT_MSG( m_choices.GetCount() > 0, wxT( "No enum choices defined" ) );
         }
     }
@@ -631,9 +638,23 @@ public:
         return m_choices.GetCount() > 0 ? m_choices : ENUM_MAP<T>::Instance().Choices();
     }
 
+    void TranslateChoices() override
+    {
+        if( m_choicesFromENUM_MAP && std::is_enum<T>::value )
+        {
+            m_choices.Clear();
+
+            wxPGChoices& choices = ENUM_MAP<T>::Instance().Choices();
+
+            for( unsigned ii = 0; ii < choices.GetCount(); ++ii )
+                m_choices.Add( wxGetTranslation( choices.GetLabel( ii ) ), choices.GetValue( ii ) );
+        }
+    }
+
     void SetChoices( const wxPGChoices& aChoices ) override
     {
         m_choices = aChoices;
+        m_choicesFromENUM_MAP = false;
     }
 
     bool HasChoices() const override
@@ -642,6 +663,7 @@ public:
     }
 
 protected:
+    bool        m_choicesFromENUM_MAP;
     wxPGChoices m_choices;
 };
 

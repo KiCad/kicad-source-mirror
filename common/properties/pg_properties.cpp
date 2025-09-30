@@ -254,9 +254,11 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
         // Enum property
         if( aProperty->HasChoices() )
         {
+            const_cast<PROPERTY_BASE*>( aProperty )->TranslateChoices();
+
             // I do not know why enum property takes a non-const reference to wxPGChoices..
             ret = new wxEnumProperty( wxPG_LABEL, wxPG_LABEL,
-                    const_cast<wxPGChoices&>( aProperty->Choices() ) );
+                                      const_cast<wxPGChoices&>( aProperty->Choices() ) );
         }
         else if( typeId == TYPE_HASH( int ) || typeId == TYPE_HASH( long ) )
         {
