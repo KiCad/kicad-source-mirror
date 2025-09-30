@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
 "PO-Revision-Date: 2025-09-30 19:57+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -8886,9 +8886,8 @@ msgstr "Blinde Vias"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Vergrabene Vias:"
+msgstr "Vergrabene Vias"
 
 #: common/layer_id.cpp:132
 msgid "Micro-vias"
@@ -16485,9 +16484,8 @@ msgid "Remove selected field"
 msgstr "Gewähltes Feld entfernen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:96
-#, fuzzy
 msgid "Variants:"
-msgstr "Bibliothekare"
+msgstr "Varianten:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "View presets:"
@@ -17080,14 +17078,12 @@ msgid "Wire & Bus Properties"
 msgstr "Verbindungs- & Buseigenschaften"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "Stückliste-Voreinstellungen:"
+msgstr "Stücklisten-Voreinstellungen"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
-#, fuzzy
 msgid "Bill of Materials Formatting Presets"
-msgstr "Stückliste-Formatvoreinstellungen:"
+msgstr "Stücklisten-Formatvoreinstellungen"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -17518,9 +17514,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Netz-/Aliasname des Mitglieds darf nicht leer sein."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "Bus-Definitionen..."
+msgstr "Bus-Definitionen"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -17531,9 +17526,9 @@ msgid "(source)"
 msgstr "(Quelle)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s'"
-msgstr "Mitglieder von \"%s\":"
+msgstr "Mitglieder von \"%s\""
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 #, fuzzy
@@ -23906,9 +23901,8 @@ msgid "Selection modes"
 msgstr "Auswahlmodi"
 
 #: eeschema/toolbars_sch_editor.cpp:238
-#, fuzzy
 msgid "Select the current variant to display and edit."
-msgstr "Seite wählen, um Elementdarstellung zu simulieren"
+msgstr "Aktuelle Variante wählen, um diese anzuzeigen und zu bearbeiten."
 
 #: eeschema/toolbars_symbol_viewer.cpp:135
 msgid "Symbol Viewer"
@@ -25506,9 +25500,8 @@ msgid "Add Variant..."
 msgstr "Variante hinzufügen ..."
 
 #: eeschema/tools/sch_actions.cpp:1692
-#, fuzzy
 msgid "Add new variant to the schematic."
-msgstr "Aktuelles Symbol zum Schaltplan hinzufügen"
+msgstr "Neue Variante zum Schaltplan hinzufügen."
 
 #: eeschema/tools/sch_actions.cpp:1697
 #, fuzzy
@@ -25516,10 +25509,8 @@ msgid "Remove Variant..."
 msgstr "Variante entfernen ..."
 
 #: eeschema/tools/sch_actions.cpp:1698
-#, fuzzy
 msgid "Remove an existing variant from the schematic."
-msgstr ""
-"Soll die bestehende Annotation auf dem gesamten Schaltplan entfernt werden?"
+msgstr "Eine bestehende Variante aus dem Schaltplan entfernen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:322
 msgid "Press <ESC> to cancel symbol creation."
@@ -25834,9 +25825,8 @@ msgid "Toggle Attribute"
 msgstr "Attribut umschalten"
 
 #: eeschema/tools/sch_edit_tool.cpp:3496
-#, fuzzy
 msgid "Edit Symbol Properties..."
-msgstr "Symboleigenschaften bearbeiten"
+msgstr "Symboleigenschaften bearbeiten ..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3513
 #, fuzzy
@@ -34362,9 +34352,8 @@ msgid "Knockout"
 msgstr "Aussparen"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:53
-#, fuzzy
 msgid "If checked, the barcode will be inverted with a margin around it"
-msgstr "Wenn aktiviert, ist der Pin in allen Einheiten vorhanden."
+msgstr "Wenn aktiviert, wird der Barcode inkl. einer Umrandung invertiert"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:57
 #, fuzzy
@@ -41114,9 +41103,8 @@ msgstr "Blind"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2349
-#, fuzzy
 msgid "Buried"
-msgstr "Vergrabene Vias:"
+msgstr "Vergraben"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:363
 msgid "Start layer:"
@@ -47953,9 +47941,9 @@ msgid "Barcode"
 msgstr "Barcode"
 
 #: pcbnew/pcb_barcode.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "BARCODE \"%s\" on %s"
-msgstr "%s %s auf %s"
+msgstr "Barcode %s auf %s"
 
 #: pcbnew/pcb_barcode.cpp:653
 msgid "CODE_39"
@@ -50167,9 +50155,8 @@ msgid "Blind Via"
 msgstr "Blindes Via"
 
 #: pcbnew/pcb_track.cpp:1932
-#, fuzzy
 msgid "Buried Via"
-msgstr "Vergrabene Vias:"
+msgstr "Vergrabenes Vias"
 
 #: pcbnew/pcb_track.cpp:1933
 msgid "Through Via"
@@ -51854,29 +51841,24 @@ msgid "Place via"
 msgstr "Via hinzufügen"
 
 #: pcbnew/tools/drc_tool.cpp:312
-#, fuzzy
 msgid "Edit Footprint Properties..."
-msgstr "Footprinteigenschaften bearbeiten"
+msgstr "Footprint-Eigenschaften bearbeiten ..."
 
 #: pcbnew/tools/drc_tool.cpp:317
-#, fuzzy
 msgid "Edit Pad Properties..."
-msgstr "Pad-Eigenschaften bearbeiten"
+msgstr "Pad-Eigenschaften bearbeiten ..."
 
 #: pcbnew/tools/drc_tool.cpp:327
-#, fuzzy
 msgid "Edit Dimension Properties..."
-msgstr "Bemaßungseinstellungen"
+msgstr "Bemaßungseinstellungen ..."
 
 #: pcbnew/tools/drc_tool.cpp:329
-#, fuzzy
 msgid "Edit Field Properties..."
-msgstr "Bezeichnereigenschaften bearbeiten"
+msgstr "Bezeichner-Eigenschaften bearbeiten ..."
 
 #: pcbnew/tools/drc_tool.cpp:331
-#, fuzzy
 msgid "Edit Text Properties..."
-msgstr "Texteigenschaften bearbeiten"
+msgstr "Texteigenschaften bearbeiten ..."
 
 #: pcbnew/tools/edit_tool.cpp:130
 msgid "Positioning Tools"
