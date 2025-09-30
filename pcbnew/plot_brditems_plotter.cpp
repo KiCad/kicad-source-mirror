@@ -297,7 +297,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
 
         case PAD_SHAPE::RECTANGLE:
         {
-            VECTOR2I size = aPad->GetSize( aLayer );
+            const VECTOR2I& size = aPad->GetSize( aLayer );
 
             m_plotter->ThickRect( VECTOR2I( shape_pos.x - ( size.x / 2 ), shape_pos.y - (size.y / 2 ) ),
                                   VECTOR2I( shape_pos.x + ( size.x / 2 ), shape_pos.y + (size.y / 2 ) ),
@@ -764,7 +764,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
     COLOR4D color = getColor( aLayer );
     m_plotter->SetColor( color );
 
-    VECTOR2I pos = aText->GetTextPos();
+    const VECTOR2I& pos = aText->GetTextPos();
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
@@ -1307,7 +1307,24 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
                 continue;
 
             if( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED )
-                m_plotter->SetColor( ( pad->GetLayerSet() & m_layerMask ).any() ? WHITE : BLACK );
+            {
+                // Drill mark is in black unless we can find something to knock it out of
+                m_plotter->SetColor( BLACK );
+
+                for( PCB_LAYER_ID layer : m_layerMask )
+                {
+                    if( !pad->IsOnLayer( layer ) )
+                        continue;
+
+                    VECTOR2I padSize = pad->GetSize( layer );
+
+                    if( padSize.x > pad->GetDrillSizeX() || padSize.y > pad->GetDrillSizeY() )
+                    {
+                        m_plotter->SetColor( WHITE );
+                        break;
+                    }
+                }
+            }
 
             plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
                               pad->GetSize( PADSTACK::ALL_LAYERS ), pad->GetOrientation(), smallDrill );
