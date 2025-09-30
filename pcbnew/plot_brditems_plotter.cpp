@@ -198,8 +198,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
             // Currently, Pcbnew does not handle embedded component, so we disable the .P
             // attribute on internal layers
             // Note the Gerber doc is not really clear about through holes pads about the .P
-            metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET |
-                                           GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
+            metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET
+                                            | GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
 
         }
 
@@ -332,13 +332,11 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         break;
 
     case PAD_SHAPE::OVAL:
-        m_plotter->FlashPadOval( shape_pos, aPad->GetSize( aLayer ),
-                                 aPad->GetOrientation(), &metadata );
+        m_plotter->FlashPadOval( shape_pos, aPad->GetSize( aLayer ), aPad->GetOrientation(), &metadata );
         break;
 
     case PAD_SHAPE::RECTANGLE:
-        m_plotter->FlashPadRect( shape_pos, aPad->GetSize( aLayer ),
-                                 aPad->GetOrientation(), &metadata );
+        m_plotter->FlashPadRect( shape_pos, aPad->GetSize( aLayer ), aPad->GetOrientation(), &metadata );
         break;
 
     case PAD_SHAPE::ROUNDRECT:
@@ -364,8 +362,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         coord[3] = VECTOR2I( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
         m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), &metadata );
-    }
         break;
+    }
 
     case PAD_SHAPE::CHAMFERED_RECT:
         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
@@ -385,8 +383,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
     default:
     case PAD_SHAPE::CUSTOM:
     {
-        const std::shared_ptr<SHAPE_POLY_SET>& polygons =
-            aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
+        const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
 
         if( polygons->OutlineCount() )
         {
@@ -425,8 +422,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
             && value->IsVisible()
             && !( aFootprint->IsDNP() && hideDNPItems( valueLayer ) ) )
     {
-        PlotText( value, valueLayer, value->IsKnockout(), value->GetFontMetrics(),
-                  false );
+        PlotText( value, valueLayer, value->IsKnockout(), value->GetFontMetrics(), false );
     }
 
     std::vector<PCB_TEXT*> texts;
@@ -856,8 +852,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 }
 
 
-void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                 const SHAPE_POLY_SET& aPolysList )
+void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList )
 {
     if( aPolysList.IsEmpty() )
         return;
