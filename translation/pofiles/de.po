@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-29 14:29+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-09-30 11:41+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -15547,7 +15547,7 @@ msgid ""
 msgstr ""
 "Neuer Dateipfad für Schaltplanblatt:\n"
 "\"%s\"\n"
-"kann nicht normiert werden gegen den Dateipfad des übergeordneten "
+"kann nicht normalisiert werden anhand des Dateipfads des übergeordneten "
 "Schaltplanblatts:\n"
 "\"%s\"."
 
@@ -19155,7 +19155,7 @@ msgstr "Grafikelement weicht ab: %s; %s."
 #: eeschema/lib_symbol.cpp:1710
 #, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "Zusätzlicher Pin in Schaltplansymbol: %s."
+msgstr "Zusätzlicher Pin im Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1718
 #, c-format
@@ -19165,12 +19165,12 @@ msgstr "Pin %s weicht ab: %s; %s"
 #: eeschema/lib_symbol.cpp:1735
 #, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "Fehlender Pin in Schaltplansymbol: %s."
+msgstr "Fehlender Pin im Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1754
 #, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "Zusätzliches Feld in Schaltplansymbol: %s."
+msgstr "Zusätzliches Feld im Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1780
 #, c-format
@@ -19180,7 +19180,7 @@ msgstr "Feld \"%s\" weicht ab: %s; %s."
 #: eeschema/lib_symbol.cpp:1803
 #, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "Fehlendes Feld in Schaltplansymbol: %s."
+msgstr "Fehlendes Feld im Schaltplansymbol: %s."
 
 #: eeschema/lib_symbol.cpp:1813
 msgid "Footprint filter count differs."
@@ -19365,7 +19365,7 @@ msgstr "Bus-an-Bus-Zugang von %s, %s nach %s, %s"
 #: eeschema/net_navigator.cpp:183
 #, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Netzklassen-Bezeichner %s‘ bei %s, %s"
+msgstr "Netzklassen-Bezeichner \"%s\" bei %s, %s"
 
 #: eeschema/net_navigator.cpp:190
 #, c-format
@@ -20081,7 +20081,7 @@ msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
 msgstr ""
-"Inkonsistente Pin-Nummern in Symbol %s im Vergleich zu dem in Teil %s "
+"Inkonsistente Pin-Nummern im Symbol %s, im Vergleich zu dem im Teil %s "
 "definierten. Das Teil wurde nicht geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:384
@@ -30930,7 +30930,7 @@ msgstr "Seitenauswahl"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:164
 msgid "Select the page to simulate item displays"
-msgstr "Seite wählen um Elementdarstellung zu simulieren"
+msgstr "Seite wählen, um Elementdarstellung zu simulieren"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -38183,7 +38183,7 @@ msgstr ""
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
 msgstr ""
-"Leiterbahnen, die eine ähnliche Breite wie Pads oder Vias haben benötigen "
+"Leiterbahnen, die eine ähnliche Breite wie Pads oder Vias haben, benötigen "
 "keine Teardrops."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:189
@@ -39403,7 +39403,7 @@ msgstr "Platine enthält veraltete Teardrops."
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:424
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr ""
-"Nutze Bearbeiten > Teardrops bearbeiten um automatische Teardrops zu "
+"Nutze Bearbeiten > Teardrops bearbeiten, um automatische Teardrops zu "
 "erzeugen."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:668
@@ -40608,9 +40608,9 @@ msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Dies ist der lokale Freiraum zwischen der Form und der "
-"Lötstoppmaskenöffnung.\n"
-"Frei lassen um den Wert der Platinenkonfiguration zu verwenden."
+"Dies ist der lokale Freiraum zwischen der Form und der Lötstoppmaskenöffnung."
+"\n"
+"Frei lassen, um den Wert der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -40790,7 +40790,7 @@ msgid ""
 msgstr ""
 "Dies ist der lokale Freiraum zwischen der Leiterbahn und der "
 "Lötstoppmaskenöffnung.\n"
-"Frei lassen um den Wert der Platinenkonfiguration zu verwenden."
+"Frei lassen, um den Wert der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292
 msgid "Front/Inner/Back"
@@ -49860,11 +49860,11 @@ msgstr "Unbedeckt"
 
 #: pcbnew/pcb_track.cpp:2339
 msgid "Plugged"
-msgstr "Geplugged"
+msgstr "Versiegelt"
 
 #: pcbnew/pcb_track.cpp:2340
 msgid "Not plugged"
-msgstr "Nicht geplugged"
+msgstr "Nicht versiegelt"
 
 #: pcbnew/pcb_track.cpp:2345
 msgid "Capped"
@@ -54423,27 +54423,27 @@ msgstr "Typ II a (unterseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/via_protection_ui_mixin.h:125
 msgid "Type III-a (plugged top)"
-msgstr "Typ III a (oberseitig geplugged)"
+msgstr "Typ III a (oberseitig versiegelt)"
 
 #: pcbnew/via_protection_ui_mixin.h:126
 msgid "Type III-b (plugged both sides)"
-msgstr "Typ III b (beidseitig geplugged)"
+msgstr "Typ III b (beidseitig versiegelt)"
 
 #: pcbnew/via_protection_ui_mixin.h:127
 msgid "Type III-a (plugged bottom)"
-msgstr "Typ III a (unterseitig geplugged)"
+msgstr "Typ III a (unterseitig versiegelt)"
 
 #: pcbnew/via_protection_ui_mixin.h:128
 msgid "Type IV-a (plugged and tented top)"
-msgstr "Typ IV a (oberseitig geplugged und abgedeckt)"
+msgstr "Typ IV a (oberseitig versiegelt und abgedeckt)"
 
 #: pcbnew/via_protection_ui_mixin.h:129
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr "Typ IV b (beidseitig geplugged und abgedeckt)"
+msgstr "Typ IV b (beidseitig versiegelt und abgedeckt)"
 
 #: pcbnew/via_protection_ui_mixin.h:130
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr "Typ IV a (unterseitig geplugged und abgedeckt)"
+msgstr "Typ IV a (unterseitig versiegelt und abgedeckt)"
 
 #: pcbnew/via_protection_ui_mixin.h:131
 msgid "Type V (filled )"
