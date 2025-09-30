@@ -288,7 +288,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             availableProps.insert( name );
     }
 
-    bool             writeable = true;
+    bool               writeable = true;
     std::set<wxString> existingProps;
 
     for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
@@ -307,6 +307,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         wxPGChoices choices;
 
         extractValueAndWritability( aSelection, name, commonVal, writeable, choices );
+
+        if( choices.GetCount() > 0 )
+            pgProp->SetChoices( choices );
+
         pgProp->SetValue( commonVal );
         pgProp->Enable( writeable );
     }
@@ -317,7 +321,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     // Some difference exists:  start from scratch
     reset();
 
-    std::map<wxPGProperty*, int>                        pgPropOrders;
+    std::map<wxPGProperty*, int>                   pgPropOrders;
     std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
 
     for( const wxString& name : availableProps )

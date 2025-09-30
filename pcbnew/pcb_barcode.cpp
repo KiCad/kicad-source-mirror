@@ -667,12 +667,13 @@ static struct PCB_BARCODE_DESC
                   .Map( BARCODE_ECC_T::H, _HKI( "H (High)" ) );
         }
 
-        auto hasKnockout = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
-                return bc->IsKnockout();
-            return false;
-        };
+        auto hasKnockout =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                        return bc->IsKnockout();
+                    return false;
+                };
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, wxString>( _HKI( "Text" ),
                                     &PCB_BARCODE::SetBarcodeText, &PCB_BARCODE::GetText ), groupBarcode );
@@ -698,42 +699,34 @@ static struct PCB_BARCODE_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_T>( _HKI( "Kind" ),
                                     &PCB_BARCODE::SetBarcodeKind, &PCB_BARCODE::GetKind ), groupBarcode );
 
-        auto isQRCode = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
-                return bc->GetKind() == BARCODE_T::QR_CODE;
-            return false;
-        };
+        auto isQRCode =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                        return bc->GetKind() == BARCODE_T::QR_CODE || bc->GetKind() == BARCODE_T::MICRO_QR_CODE;
 
-        auto isMicroQR = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
-                return bc->GetKind() == BARCODE_T::MICRO_QR_CODE;
-            return false;
-        };
+                    return false;
+                };
 
-        // QR Code Error Correction (all levels including High)
-        auto qrEccProp = new PROPERTY_ENUM<PCB_BARCODE, BARCODE_ECC_T>( _HKI( "Error Correction" ),
-                                    &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection );
-        qrEccProp->SetAvailableFunc( isQRCode );
-        propMgr.AddProperty( qrEccProp, groupBarcode );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_ECC_T>( _HKI( "Error Correction" ),
+                                    &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection ),
+                             groupBarcode )
+                .SetAvailableFunc( isQRCode )
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( aItem );
+                                     wxPGChoices  choices;
 
-        // Micro QR Code Error Correction (limited levels - no High)
-        // We need a unique name for the properties panel so that we can conditionally display the dropdown
-        // I've been unable to figure out how to conditionally limit which drop down choices are available
-        // So I'll just create a separate property for Micro QR
-        auto microQrEccProp = new PROPERTY_ENUM<PCB_BARCODE, BARCODE_ECC_T>( _HKI( "MicroQR Error Correction" ),
-                                    &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection );
-        microQrEccProp->SetAvailableFunc( isMicroQR );
+                                     choices.Add( _( "L (Low)" ), static_cast<int>( BARCODE_ECC_T::L ) );
+                                     choices.Add( _( "M (Medium)" ), static_cast<int>( BARCODE_ECC_T::M ) );
+                                     choices.Add( _( "Q (Quartile)" ), static_cast<int>( BARCODE_ECC_T::Q ) );
 
-        // Create custom choices for Micro QR (excluding High)
-        wxPGChoices microQrChoices;
-        microQrChoices.Add( _( "L (Low)" ), static_cast<int>( BARCODE_ECC_T::L ) );
-        microQrChoices.Add( _( "M (Medium)" ), static_cast<int>( BARCODE_ECC_T::M ) );
-        microQrChoices.Add( _( "Q (Quartile)" ), static_cast<int>( BARCODE_ECC_T::Q ) );
-        microQrEccProp->SetChoices( microQrChoices );
+                                     // Only QR_CODE has High
+                                     if( barcode->GetKind() == BARCODE_T::QR_CODE )
+                                         choices.Add( _( "H (High)" ), static_cast<int>( BARCODE_ECC_T::H ) );
 
-        propMgr.AddProperty( microQrEccProp, groupBarcode );
+                                     return choices;
+                                 } );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, bool>( _HKI( "Knockout" ),
                                     &PCB_BARCODE::SetIsKnockout, &PCB_BARCODE::IsKnockout ), groupBarcode );

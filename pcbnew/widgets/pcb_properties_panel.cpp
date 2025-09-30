@@ -395,8 +395,7 @@ PROPERTY_BASE* PCB_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
     wxCHECK_MSG( firstItem, nullptr,
                  wxT( "getPropertyFromEvent for a property with nothing selected!") );
 
-    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
-                                                     aEvent.GetPropertyName() );
+    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ), aEvent.GetPropertyName() );
     wxCHECK_MSG( property, nullptr,
                  wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
 
@@ -544,10 +543,11 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     for( const auto& [ netCode, netInfo ] : aBoard->GetNetInfo().NetsByNetcode() )
         netNames.emplace_back( UnescapeString( netInfo->GetNetname() ), netCode );
 
-    std::sort( netNames.begin(), netNames.end(), []( const auto& a, const auto& b )
-    {
-        return a.first.CmpNoCase( b.first ) < 0;
-    } );
+    std::sort( netNames.begin(), netNames.end(),
+               []( const auto& a, const auto& b )
+               {
+                   return a.first.CmpNoCase( b.first ) < 0;
+               } );
 
     for( const auto& [ netName, netCode ] : netNames )
         nets.Add( netName, netCode );
