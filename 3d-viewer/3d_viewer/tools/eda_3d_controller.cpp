@@ -39,7 +39,7 @@
 bool EDA_3D_CONTROLLER::Init()
 {
     std::shared_ptr<ACTION_MENU> rotateSubmenu = std::make_shared<ACTION_MENU>( true, this );
-    rotateSubmenu->SetTitle( _( "Rotate Board" ) );
+    rotateSubmenu->SetUntranslatedTitle( _HKI( "Rotate Board" ) );
     rotateSubmenu->SetIcon( BITMAPS::rotate_cw );
     m_menu->RegisterSubMenu( rotateSubmenu );
 
@@ -53,7 +53,7 @@ bool EDA_3D_CONTROLLER::Init()
     rotateSubmenu->Add( EDA_3D_ACTIONS::rotateZCCW );
 
     std::shared_ptr<ACTION_MENU> moveSubmenu = std::make_shared<ACTION_MENU>( true, this );
-    moveSubmenu->SetTitle( _( "Move Board" ) );
+    moveSubmenu->SetUntranslatedTitle( _HKI( "Move Board" ) );
     moveSubmenu->SetIcon( BITMAPS::move );
     m_menu->RegisterSubMenu( moveSubmenu );
 

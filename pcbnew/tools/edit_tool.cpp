@@ -127,7 +127,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
     auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
     menu->SetIcon( BITMAPS::special_tools );
-    menu->SetTitle( _( "Positioning Tools" ) );
+    menu->SetUntranslatedTitle( _HKI( "Positioning Tools" ) );
 
     auto notMovingCondition = []( const SELECTION& aSelection )
     {
@@ -149,7 +149,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
 {
     auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
-    menu->SetTitle( _( "Shape Modification" ) );
+    menu->SetUntranslatedTitle( _HKI( "Shape Modification" ) );
 
     static const std::vector<KICAD_T> filletChamferTypes = { PCB_SHAPE_LOCATE_POLY_T,
                                                              PCB_SHAPE_LOCATE_RECT_T,

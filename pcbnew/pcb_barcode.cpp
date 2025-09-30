@@ -662,9 +662,9 @@ static struct PCB_BARCODE_DESC
         {
             eccMap.Undefined( BARCODE_ECC_T::L );
             eccMap.Map( BARCODE_ECC_T::L, _HKI( "L (Low)" ) )
-                 .Map( BARCODE_ECC_T::M, _HKI( "M (Medium)" ) )
-                 .Map( BARCODE_ECC_T::Q, _HKI( "Q (Quartile)" ) )
-                 .Map( BARCODE_ECC_T::H, _HKI( "H (High)" ) );
+                  .Map( BARCODE_ECC_T::M, _HKI( "M (Medium)" ) )
+                  .Map( BARCODE_ECC_T::Q, _HKI( "Q (Quartile)" ) )
+                  .Map( BARCODE_ECC_T::H, _HKI( "H (High)" ) );
         }
 
         auto hasKnockout = []( INSPECTABLE* aItem ) -> bool

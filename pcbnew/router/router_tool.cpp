@@ -504,7 +504,7 @@ bool ROUTER_TOOL::Init()
     wxASSERT( frame );
 
     auto& menu = m_menu->GetMenu();
-    menu.SetTitle( _( "Interactive Router" ) );
+    menu.SetUntranslatedTitle( _HKI( "Interactive Router" ) );
 
     m_trackViaMenu = std::make_shared<TRACK_WIDTH_MENU>( *frame );
     m_trackViaMenu->SetTool( this );
