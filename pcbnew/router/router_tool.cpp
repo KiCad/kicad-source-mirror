@@ -193,6 +193,7 @@ static const TOOL_ACTION ACT_SwitchPosture( TOOL_ACTION_ARGS()
         .Tooltip( _( "Switches posture of the currently routed track." ) )
         .Icon( BITMAPS::change_entry_orient ) );
 
+#if 0   // Old track corner command replaced by a submenu
 static const TOOL_ACTION ACT_SwitchCornerMode( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SwitchRounding" )
         .Scope( AS_CONTEXT )
@@ -200,6 +201,35 @@ static const TOOL_ACTION ACT_SwitchCornerMode( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Track Corner Mode" ) )
         .Tooltip( _( "Switches between sharp/rounded and 45°/90° corners when routing tracks." ) )
         .Icon( BITMAPS::switch_corner_rounding_shape ) );
+#endif
+
+static const TOOL_ACTION ACT_SwitchCornerMode45( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchRounding45" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( 'W' )
+        .FriendlyName( _( "Track Corner Mode 45" ) )
+        .Tooltip( _( "Switch to 45° corner when routing tracks." ) ) );
+
+static const TOOL_ACTION ACT_SwitchCornerMode90( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchRounding90" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_SHIFT + 'W' )
+        .FriendlyName( _( "Track Corner Mode 90" ) )
+        .Tooltip( _( "Switch to 90° corner when routing tracks." ) ) );
+
+static const TOOL_ACTION ACT_SwitchCornerModeArc45( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchRoundingArc45" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_CTRL + 'W' )
+        .FriendlyName( _( "Track Corner Mode Arc 45" ) )
+        .Tooltip( _( "Switch to arc 45° corner when routing tracks." ) ) );
+
+static const TOOL_ACTION ACT_SwitchCornerModeArc90( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchRoundingArc90" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_ALT + 'W' )
+        .FriendlyName( _( "Track Corner Mode Arc 90" ) )
+        .Tooltip( _( "Switch to arc 90° corner when routing tracks." ) ) );
 
 #undef _
 #define _(s) wxGetTranslation((s))
@@ -484,6 +514,8 @@ bool ROUTER_TOOL::Init()
     m_diffPairMenu->SetTool( this );
     m_menu->RegisterSubMenu( m_diffPairMenu );
 
+    ACTION_MANAGER* mgr = frame->GetToolManager()->GetActionManager();
+
     auto haveHighlight =
             [this]( const SELECTION& sel )
             {
@@ -541,15 +573,57 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( ACT_SelLayerAndPlaceBlindVia,       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceMicroVia,       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SwitchPosture,                  SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SwitchCornerMode,               SELECTION_CONDITIONS::ShowAlways );
 
-    menu.AddSeparator();
+    // Add submenu for track corner mode handling
+    CONDITIONAL_MENU* submenuCornerMode = new CONDITIONAL_MENU( this );
+    submenuCornerMode->SetTitle( _( "Track Corner Mode" ) );
+    submenuCornerMode->SetIcon( BITMAPS::switch_corner_rounding_shape );
+
+    submenuCornerMode->AddCheckItem( ACT_SwitchCornerMode45, SELECTION_CONDITIONS::ShowAlways );
+    submenuCornerMode->AddCheckItem( ACT_SwitchCornerModeArc45, SELECTION_CONDITIONS::ShowAlways );
+    submenuCornerMode->AddCheckItem( ACT_SwitchCornerMode90, SELECTION_CONDITIONS::ShowAlways );
+    submenuCornerMode->AddCheckItem( ACT_SwitchCornerModeArc90, SELECTION_CONDITIONS::ShowAlways );
+
+    menu.AddMenu( submenuCornerMode );
+
+    // Manage check/uncheck marks in this submenu items
+    auto cornerMode45Cond =
+        [this]( const SELECTION& )
+        {
+            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::MITERED_45;
+        };
+
+    auto cornerMode90Cond =
+        [this]( const SELECTION& )
+        {
+            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::MITERED_90;
+        };
+
+    auto cornerModeArc45Cond =
+        [this]( const SELECTION& )
+        {
+            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::ROUNDED_45;
+        };
+
+    auto cornerModeArc90Cond =
+        [this]( const SELECTION& )
+        {
+            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::ROUNDED_90;
+        };
+
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
+    mgr->SetConditions( ACT_SwitchCornerMode45,       CHECK( cornerMode45Cond ) );
+    mgr->SetConditions( ACT_SwitchCornerMode90,       CHECK( cornerMode90Cond ) );
+    mgr->SetConditions( ACT_SwitchCornerModeArc45,    CHECK( cornerModeArc45Cond ) );
+    mgr->SetConditions( ACT_SwitchCornerModeArc90,    CHECK( cornerModeArc90Cond ) );
 
     auto diffPairCond =
         [this]( const SELECTION& )
         {
             return m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR;
         };
+
+    menu.AddSeparator();
 
     menu.AddMenu( m_trackViaMenu.get(),               SELECTION_CONDITIONS::ShowAlways );
     menu.AddMenu( m_diffPairMenu.get(),               diffPairCond );
@@ -679,6 +753,41 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
     default:
         break;
     }
+}
+
+int ROUTER_TOOL::handlePnSCornerModeChange( const TOOL_EVENT& aEvent )
+{
+    bool asChanged = false;
+
+    if( aEvent.IsAction( &ACT_SwitchCornerMode45 ) )
+    {
+        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_45 );
+        asChanged = true;
+    }
+    else if( aEvent.IsAction( &ACT_SwitchCornerModeArc45 ) )
+    {
+        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_45 );
+        asChanged = true;
+    }
+    else if( aEvent.IsAction( &ACT_SwitchCornerMode90 ) )
+    {
+        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_90 );
+        asChanged = true;
+    }
+    else if( aEvent.IsAction( &ACT_SwitchCornerModeArc90 ) )
+    {
+        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_90 );
+        asChanged = true;
+    }
+
+    if( asChanged )
+    {
+        UpdateMessagePanel();
+        updateEndItem( aEvent );
+        m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+    }
+
+    return 0;
 }
 
 
@@ -1417,13 +1526,6 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = nullptr;
-        }
-        else if( evt->IsAction( &ACT_SwitchCornerMode ) )
-        {
-            m_router->ToggleCornerMode();
-            UpdateMessagePanel();
-            updateEndItem( *evt );
-            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
@@ -2900,4 +3002,9 @@ void ROUTER_TOOL::setTransitions()
 
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
     Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
+
+    Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerMode45.MakeEvent() );
+    Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerMode90.MakeEvent() );
+    Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerModeArc45.MakeEvent() );
+    Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerModeArc90.MakeEvent() );
 }

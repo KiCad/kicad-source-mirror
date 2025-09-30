@@ -77,6 +77,7 @@ private:
 
     void handleCommonEvents( TOOL_EVENT& evt );
     int handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia );
+    int handlePnSCornerModeChange( const TOOL_EVENT& aEvent );
 
     // Returns the board layer ID for the start layer of the router
     PCB_LAYER_ID getStartLayer( const PNS::ITEM* aItem );
