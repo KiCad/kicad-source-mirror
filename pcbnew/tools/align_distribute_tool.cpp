@@ -61,7 +61,7 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_placementMenu = new CONDITIONAL_MENU( this );
     m_placementMenu->SetIcon( BITMAPS::align_items );
-    m_placementMenu->SetTitle( _( "Align/Distribute" ) );
+    m_placementMenu->SetUntranslatedTitle( _HKI( "Align/Distribute" ) );
 
     const auto canAlign = SELECTION_CONDITIONS::MoreThan( 1 );
     const auto canDistribute = SELECTION_CONDITIONS::MoreThan( 2 );

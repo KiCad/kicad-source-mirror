@@ -4153,10 +4153,10 @@ static struct FOOTPRINT_DESC
         if( zcMap.Choices().GetCount() == 0 )
         {
             zcMap.Undefined( ZONE_CONNECTION::INHERITED );
-            zcMap.Map( ZONE_CONNECTION::INHERITED, _HKI( "Inherited" ) )
-                 .Map( ZONE_CONNECTION::NONE, _HKI( "None" ) )
-                 .Map( ZONE_CONNECTION::THERMAL, _HKI( "Thermal reliefs" ) )
-                 .Map( ZONE_CONNECTION::FULL, _HKI( "Solid" ) )
+            zcMap.Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
+                 .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
+                 .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
+                 .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
                  .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
         }
 

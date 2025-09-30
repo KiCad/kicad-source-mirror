@@ -1047,10 +1047,10 @@ static struct SCH_LINE_DESC
 
         if( lineStyleEnum.Choices().GetCount() == 0 )
         {
-            lineStyleEnum.Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
-                         .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
-                         .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
-                         .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+            lineStyleEnum.Map( LINE_STYLE::SOLID,      _HKI( "Solid" ) )
+                         .Map( LINE_STYLE::DASH,       _HKI( "Dashed" ) )
+                         .Map( LINE_STYLE::DOT,        _HKI( "Dotted" ) )
+                         .Map( LINE_STYLE::DASHDOT,    _HKI( "Dash-Dot" ) )
                          .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
@@ -1058,11 +1058,11 @@ static struct SCH_LINE_DESC
 
         if( wireLineStyleEnum.Choices().GetCount() == 0 )
         {
-            wireLineStyleEnum.Map( WIRE_STYLE::DEFAULT, _HKI( "Default" ) )
-                             .Map( WIRE_STYLE::SOLID, _HKI( "Solid" ) )
-                             .Map( WIRE_STYLE::DASH, _HKI( "Dashed" ) )
-                             .Map( WIRE_STYLE::DOT, _HKI( "Dotted" ) )
-                             .Map( WIRE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+            wireLineStyleEnum.Map( WIRE_STYLE::DEFAULT,    _HKI( "Default" ) )
+                             .Map( WIRE_STYLE::SOLID,      _HKI( "Solid" ) )
+                             .Map( WIRE_STYLE::DASH,       _HKI( "Dashed" ) )
+                             .Map( WIRE_STYLE::DOT,        _HKI( "Dotted" ) )
+                             .Map( WIRE_STYLE::DASHDOT,    _HKI( "Dash-Dot" ) )
                              .Map( WIRE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 

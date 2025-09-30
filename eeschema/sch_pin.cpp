@@ -2103,10 +2103,10 @@ static struct SCH_PIN_DESC
 
         if( orientationEnum.Choices().GetCount() == 0 )
         {
-            orientationEnum.Map( PIN_ORIENTATION::PIN_RIGHT, _( "Right" ) )
-                           .Map( PIN_ORIENTATION::PIN_LEFT,  _( "Left" ) )
-                           .Map( PIN_ORIENTATION::PIN_UP,    _( "Up" ) )
-                           .Map( PIN_ORIENTATION::PIN_DOWN,  _( "Down" ) );
+            orientationEnum.Map( PIN_ORIENTATION::PIN_RIGHT, _HKI( "Right" ) )
+                           .Map( PIN_ORIENTATION::PIN_LEFT,  _HKI( "Left" ) )
+                           .Map( PIN_ORIENTATION::PIN_UP,    _HKI( "Up" ) )
+                           .Map( PIN_ORIENTATION::PIN_DOWN,  _HKI( "Down" ) );
         }
 
         auto isSymbolEditor =

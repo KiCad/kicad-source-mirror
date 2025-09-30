@@ -259,7 +259,7 @@ bool CONVERT_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_menu = new CONDITIONAL_MENU( this );
     m_menu->SetIcon( BITMAPS::convert );
-    m_menu->SetTitle( _( "Create from Selection" ) );
+    m_menu->SetUntranslatedTitle( _HKI( "Create from Selection" ) );
 
     static const std::vector<KICAD_T> padTypes =     { PCB_PAD_T };
     static const std::vector<KICAD_T> toArcTypes =   { PCB_ARC_T,

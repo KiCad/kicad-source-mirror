@@ -63,6 +63,7 @@ public:
      * @param aTitle is the new title.
      */
     void SetTitle( const wxString& aTitle ) override;
+    void SetUntranslatedTitle( const wxString& aTitle ) { m_untranslatedTitle = aTitle; }
 
     // Yes, it hides a non-virtual method in the parent class.
     wxString GetTitle() const { return m_title; }
@@ -172,7 +173,11 @@ public:
     /**
      * Used by some menus to just-in-time translate their titles.
      */
-    virtual void UpdateTitle() {}
+    virtual void UpdateTitle()
+    {
+        if( !m_untranslatedTitle.IsEmpty() )
+            m_title = wxGetTranslation( m_untranslatedTitle );
+    }
 
     /**
      * Clear the dirty flag on the menu and all descendants.
@@ -267,6 +272,7 @@ protected:
 
     /// Menu title.
     wxString m_title;
+    wxString m_untranslatedTitle;
 
     /// Optional icon.
     BITMAPS m_icon;

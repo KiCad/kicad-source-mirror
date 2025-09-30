@@ -59,7 +59,8 @@ BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :
 class NET_CONTEXT_MENU : public ACTION_MENU
 {
 public:
-    NET_CONTEXT_MENU() : ACTION_MENU( true )
+    NET_CONTEXT_MENU() :
+            ACTION_MENU( true )
     {
         SetIcon( BITMAPS::show_ratsnest );
         SetTitle( _( "Net Inspection Tools" ) );

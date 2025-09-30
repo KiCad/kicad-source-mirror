@@ -2241,11 +2241,11 @@ static struct SCH_LABEL_DESC
 
         if( labelShapeEnum.Choices().GetCount() == 0 )
         {
-            labelShapeEnum.Map( LABEL_SHAPE::LABEL_INPUT, _HKI( "Input" ) )
-                          .Map( LABEL_SHAPE::LABEL_OUTPUT, _HKI( "Output" ) )
-                          .Map( LABEL_SHAPE::LABEL_BIDI, _HKI( "Bidirectional" ) )
+            labelShapeEnum.Map( LABEL_SHAPE::LABEL_INPUT,    _HKI( "Input" ) )
+                          .Map( LABEL_SHAPE::LABEL_OUTPUT,   _HKI( "Output" ) )
+                          .Map( LABEL_SHAPE::LABEL_BIDI,     _HKI( "Bidirectional" ) )
                           .Map( LABEL_SHAPE::LABEL_TRISTATE, _HKI( "Tri-state" ) )
-                          .Map( LABEL_SHAPE::LABEL_PASSIVE, _HKI( "Passive" ) );
+                          .Map( LABEL_SHAPE::LABEL_PASSIVE,  _HKI( "Passive" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -2296,9 +2296,9 @@ static struct SCH_DIRECTIVE_LABEL_DESC
 
         if( flagShapeEnum.Choices().GetCount() == 0 )
         {
-            flagShapeEnum.Map( FLAG_SHAPE::FLAG_DOT, _HKI( "Dot" ) )
-                         .Map( FLAG_SHAPE::FLAG_CIRCLE, _HKI( "Circle" ) )
-                         .Map( FLAG_SHAPE::FLAG_DIAMOND, _HKI( "Diamond" ) )
+            flagShapeEnum.Map( FLAG_SHAPE::FLAG_DOT,       _HKI( "Dot" ) )
+                         .Map( FLAG_SHAPE::FLAG_CIRCLE,    _HKI( "Circle" ) )
+                         .Map( FLAG_SHAPE::FLAG_DIAMOND,   _HKI( "Diamond" ) )
                          .Map( FLAG_SHAPE::FLAG_RECTANGLE, _HKI( "Rectangle" ) );
         }
 
