@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-09-30 19:57+0000\n"
+"PO-Revision-Date: 2025-09-30 20:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -37971,12 +37971,11 @@ msgstr "Bohrung Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:71
 msgid "Pad->Die Length"
-msgstr "Pad->Die Länge"
+msgstr "Pad→Die Länge"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad->Die Delay"
-msgstr "Pad->Die Verzögerung"
+msgstr "Pad→Die Verzögerung"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:81
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:199
