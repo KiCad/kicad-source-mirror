@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-09-30 11:41+0000\n"
+"PO-Revision-Date: 2025-10-01 10:15+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6405,14 +6405,14 @@ msgid "Redo"
 msgstr "Upprepa"
 
 #: common/eda_base_frame.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "Utför %s > %s"
+msgstr "Utför: %s > %s"
 
 #: common/eda_base_frame.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "Regel: %s"
+msgstr "Utför: %s"
 
 #: common/eda_base_frame.cpp:1219
 #, c-format
@@ -8018,9 +8018,9 @@ msgstr "API-svar:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API-svar:  %s"
+msgstr "API-svar: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -8792,15 +8792,13 @@ msgstr "Genomgående vior"
 
 #: common/layer_id.cpp:130
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
 msgstr "Dolda vior"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Begravda vior:"
+msgstr "Begravda vior"
 
 #: common/layer_id.cpp:132
 msgid "Micro-vias"
@@ -16325,15 +16323,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
-#, fuzzy
 msgid "Add new variant name:"
-msgstr "Ange fotavtrycksnamn:"
+msgstr "Ange namn för ny variant:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
-#, fuzzy
 msgid "New Variant"
-msgstr "Nytt fotavtryck"
+msgstr "Ny variant"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:71
 msgid "Add a new field"
@@ -16348,9 +16344,8 @@ msgid "Remove selected field"
 msgstr "Ta bort valt fält"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:96
-#, fuzzy
 msgid "Variants:"
-msgstr "Bibliotekarier"
+msgstr "Varianter:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "View presets:"
@@ -16865,18 +16860,16 @@ msgid "Update all other fields in the symbol from the footprint"
 msgstr "Uppdatera alla andra fält i symbolen från fotavtrycket"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:90
-#, fuzzy
 msgid "Prefer symbol pin swaps over label swaps"
-msgstr "Föredra byte av symbolenheter framför byte av etiketter"
+msgstr "Föredra byte av symbolstift framför byte av etiketter"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:92
-#, fuzzy
 msgid ""
 "When possible, swap symbol pins to match footprint pad net swaps instead of "
 "changing net labels."
 msgstr ""
-"När det är möjligt, upptäck byten av fotavtrycksgrindar och tillämpa "
-"motsvarande byten av symbolenheter istället för att ändra nätetiketter."
+"När det är möjligt, byt symbolstift till att matcha nät knutna till "
+"fotavtryckets lödytor, istället för att byta nätetiketter."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1030
@@ -16941,14 +16934,12 @@ msgid "Wire & Bus Properties"
 msgstr "Lednings- & bussegenskaper"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "Förinställningar för komponentlista:"
+msgstr "Förinställningar för komponentlista"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
-#, fuzzy
 msgid "Bill of Materials Formatting Presets"
-msgstr "Förinställningar för komponentlistans formatering:"
+msgstr "Förinställningar för komponentlistans formatering"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -17212,13 +17203,15 @@ msgstr "Numrera symboler automatiskt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid "Allow unconstrained pin swaps"
-msgstr ""
+msgstr "Tillåt obegränsade stiftbyten"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
 msgid ""
 "Allows swapping symbol pins' positions. May cause invalid design changes; "
 "use with caution."
 msgstr ""
+"Tillåt byte av symbolstifts positioner. Kan orsaka ogiltiga designändringar; "
+"använd med försiktighet."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:85
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -17372,9 +17365,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Medlemsnät / täcknamn (alias) kan inte lämnas tomt."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "Bussdefinitioner ..."
+msgstr "Bussdefinitioner"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -17385,14 +17377,13 @@ msgid "(source)"
 msgstr "(källa)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s'"
-msgstr "Medlemmar för '%s':"
+msgstr "Medlemmar för '%s'"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
-#, fuzzy
 msgid "Net or Nested Bus Name"
-msgstr "Namn för nät / nästlad buss"
+msgstr "Namn på nät eller nästlad buss"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:33
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
@@ -19184,9 +19175,8 @@ msgid "Panels"
 msgstr "Paneler"
 
 #: eeschema/menubar.cpp:325
-#, fuzzy
 msgid "Variants"
-msgstr "Bibliotekarier"
+msgstr "Varianter"
 
 #: eeschema/menubar.cpp:353
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:187
@@ -23656,14 +23646,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Bryt association(er) för arkstift och hierarkisk(a) etikett(er)"
 
 #: eeschema/toolbars_sch_editor.cpp:51
-#, fuzzy
 msgid "Current Variant"
-msgstr "Nuvarande rutnät"
+msgstr "Nuvarande variant"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic varaint"
-msgstr "Kontrollobjekt för val av ledarbredd"
+msgstr "Kontroll för att välja den variant som är aktuell i kretsschemat"
 
 #: eeschema/toolbars_sch_editor.cpp:81 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
@@ -23676,9 +23664,8 @@ msgid "Selection modes"
 msgstr "Urvalslägen"
 
 #: eeschema/toolbars_sch_editor.cpp:238
-#, fuzzy
 msgid "Select the current variant to display and edit."
-msgstr "Välj sida för att simulera objektvisning"
+msgstr "Välj den nuvarande varianten för att visa och redigera."
 
 #: eeschema/toolbars_symbol_viewer.cpp:135
 msgid "Symbol Viewer"
@@ -23823,6 +23810,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects."
 msgstr ""
+"Önskar byta %s stift %s och %s för att matcha mönsterkortet, men symbolen "
+"delas till andra projekt."
 
 #: eeschema/tools/backannotate.cpp:1275
 #, c-format
@@ -23830,6 +23819,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects (%s)."
 msgstr ""
+"Önskar byta %s stift %s och %s för att matcha mönsterkortet, men symbolen "
+"delas till andra projekt (%s)."
 
 #: eeschema/tools/backannotate.cpp:1285
 #, c-format
@@ -23837,11 +23828,15 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
+"Önskar byta %s stift %s och %s för att matcha mönsterkortet, men symbolen "
+"används av flera arkinstanser (%s)."
 
 #: eeschema/tools/backannotate.cpp:1292
 #, c-format
 msgid "Would swap %s pins %s and %s to match PCB, but the symbol is shared."
 msgstr ""
+"Önskar byta %s stift %s och %s för att matcha mönsterkortet, men symbolen "
+"delas."
 
 #: eeschema/tools/backannotate.cpp:1298
 #, c-format
@@ -23849,11 +23844,13 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are "
 "disabled in the schematic preferences."
 msgstr ""
+"Önskar byta %s stift %s och %s för att matcha mönsterkortet, men obegränsade "
+"stiftbyten är avstängda i kretsschemainställningarna."
 
 #: eeschema/tools/backannotate.cpp:1333
 #, c-format
 msgid "Swap %s pins %s and %s to match PCB."
-msgstr ""
+msgstr "Byt %s stift %s och %s för att matcha mönsterkortet."
 
 #: eeschema/tools/backannotate.cpp:1406
 #, c-format
@@ -24407,14 +24404,12 @@ msgid "Swap positions of selected items"
 msgstr "Byt plats på valda objekt"
 
 #: eeschema/tools/sch_actions.cpp:777 eeschema/tools/sch_edit_tool.cpp:1665
-#, fuzzy
 msgid "Swap Pins"
-msgstr "Byt plats på stiftetiketter"
+msgstr "Byt plats på stift"
 
 #: eeschema/tools/sch_actions.cpp:778
-#, fuzzy
 msgid "Swap the selected symbol pins' positions"
-msgstr "Byter plats på de valda objektens positioner"
+msgstr "Byter plats på de valda symbolstiftens positioner"
 
 #: eeschema/tools/sch_actions.cpp:784 eeschema/tools/sch_edit_tool.cpp:1768
 msgid "Swap Pin Labels"
@@ -25250,24 +25245,20 @@ msgid "Show SPICE Netlist"
 msgstr "Visa SPICE-nätlista"
 
 #: eeschema/tools/sch_actions.cpp:1691
-#, fuzzy
 msgid "Add Variant..."
-msgstr "Lägg till linje"
+msgstr "Lägg till variant..."
 
 #: eeschema/tools/sch_actions.cpp:1692
-#, fuzzy
 msgid "Add new variant to the schematic."
-msgstr "Lägg till den aktuella symbolen i kretsschemat"
+msgstr "Lägg till ny variant till kretsschemat."
 
 #: eeschema/tools/sch_actions.cpp:1697
-#, fuzzy
 msgid "Remove Variant..."
-msgstr "Ta bort fält..."
+msgstr "Ta bort variant..."
 
 #: eeschema/tools/sch_actions.cpp:1698
-#, fuzzy
 msgid "Remove an existing variant from the schematic."
-msgstr "Ett fel inträffade vid försök att skriva ut kretsschemat."
+msgstr "Ta bort en befintlig variant från kretsschemat."
 
 #: eeschema/tools/sch_drawing_tools.cpp:322
 msgid "Press <ESC> to cancel symbol creation."
@@ -25471,6 +25462,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
+"Stiftbyten är avstängda för symboler som delas till andra projekt. Duplicera "
+"arket för att redigera stift oberoende från andra projekt."
 
 #: eeschema/tools/sch_edit_tool.cpp:1587
 #, c-format
@@ -25478,6 +25471,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Stiftbyten är avstängda för symboler som delas till andra projekt (%s). "
+"Duplicera arket för att redigera stift oberoende från andra projekt."
 
 #: eeschema/tools/sch_edit_tool.cpp:1595
 #, c-format
@@ -25485,12 +25480,16 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Stiftbyten är avstängda för symboler som används av flera arkinstanser (%s). "
+"Duplicera arket för att redigera stift oberoende från andra instanser."
 
 #: eeschema/tools/sch_edit_tool.cpp:1600
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
+"Stiftbyten är avstängda för symboler som delas. Duplicera arket för att "
+"redigera stift oberoende."
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid ""
@@ -25568,14 +25567,12 @@ msgid "Toggle Attribute"
 msgstr "Växla attribut"
 
 #: eeschema/tools/sch_edit_tool.cpp:3496
-#, fuzzy
 msgid "Edit Symbol Properties..."
-msgstr "Redigera symbolegenskaper"
+msgstr "Redigera symbolegenskaper..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3513
-#, fuzzy
 msgid "Edit Netclasses..."
-msgstr "Läser in nätklasser..."
+msgstr "Redigera nätklasser..."
 
 #: eeschema/tools/sch_editor_control.cpp:159
 #, c-format
@@ -27545,6 +27542,10 @@ msgid ""
 "When no --variants arguement is provided the default variant is output.\n"
 "To output all variants use '--variants=all'"
 msgstr ""
+"Lista av variantnamn att mata ut. \n"
+"När inget --variant argument tillhandahålls matas den förinställda varianten "
+"ut. \n"
+"För att mata ut alla varianter använd '--variants=all'"
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -34026,9 +34027,8 @@ msgid "Custom Rules"
 msgstr "Användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:244
-#, fuzzy
 msgid "Modify barcode"
-msgstr "Ändra pad"
+msgstr "Ändra streckkod"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:738
@@ -34040,14 +34040,13 @@ msgid "Knockout"
 msgstr "Urtag"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:53
-#, fuzzy
 msgid "If checked, the barcode will be inverted with a margin around it"
-msgstr "Om vald kommer detta stift att finnas i alla enheter."
+msgstr ""
+"Om vald kommer streckkoden att vara inverterad, omgiven av ett fritt utrymme"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:57
-#, fuzzy
 msgid "Show text"
-msgstr "Visa nätlinjer"
+msgstr "Visa text"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:105
 msgid "Size X:"
@@ -34065,63 +34064,58 @@ msgid "90"
 msgstr "90"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:153
-#, fuzzy
 msgid "Min margin X:"
-msgstr "Marginaler:"
+msgstr "Min X-marginal:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:164
-#, fuzzy
 msgid "Min margin Y:"
-msgstr "Marginaler:"
+msgstr "Min Y-marginal:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 39 (ISO 16388)"
-msgstr ""
+msgstr "Code 39 (ISO 16388)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 128 (ISO 15417)"
-msgstr ""
+msgstr "Code 128 (ISO 15417)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Data Matrix (ECC 200)"
-msgstr ""
+msgstr "Data Matrix (ECC 200)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "QR Code (ISO 18004)"
-msgstr ""
+msgstr "QR Code (ISO 18004)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
-#, fuzzy
 msgid "Micro QR Code"
-msgstr "Makro %d inspelat"
+msgstr "Micro QR Code"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~20% (Level L)"
-msgstr ""
+msgstr "~20% (Level L)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~37% (Level M)"
-msgstr ""
+msgstr "~37% (Level M)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~55% (Level Q)"
-msgstr ""
+msgstr "~55% (Level Q)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~65% (Level H)"
-msgstr ""
+msgstr "~65% (Level H)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
 #: pcbnew/pcb_barcode.cpp:716
-#, fuzzy
 msgid "Error Correction"
-msgstr "Pilens riktning"
+msgstr "Felkorrektion"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
 #: pcbnew/pcb_barcode.cpp:647
-#, fuzzy
 msgid "Barcode Properties"
-msgstr "Ramens egenskaper"
+msgstr "Streckkodsegenskaper"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 msgid "Empty"
@@ -34589,9 +34583,8 @@ msgid "Through vias:"
 msgstr "Genomgående vior:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:194
-#, fuzzy
 msgid "Blind vias:"
-msgstr "Begravda vior:"
+msgstr "Blinda vior:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:195
 msgid "Buried vias:"
@@ -37609,9 +37602,8 @@ msgstr "Fasad rektangel"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:47
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:98
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:263
-#, fuzzy
 msgid "Custom shape"
-msgstr "Anpassad form"
+msgstr "Användardefinierad form"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:52
 msgid "Pad Table"
@@ -40718,13 +40710,12 @@ msgstr "Mikro"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2348
 msgid "Blind"
-msgstr ""
+msgstr "Blind"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2349
-#, fuzzy
 msgid "Buried"
-msgstr "Begravda vior:"
+msgstr "Begravd"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:363
 msgid "Start layer:"
@@ -47421,73 +47412,68 @@ msgstr "Gap i termisk avlastning"
 
 #: pcbnew/pcb_barcode.cpp:368
 msgid "Barcode"
-msgstr ""
+msgstr "Streckkod"
 
 #: pcbnew/pcb_barcode.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "BARCODE \"%s\" on %s"
-msgstr "%s %s på %s"
+msgstr "Streckkod \"%s\" på %s"
 
 #: pcbnew/pcb_barcode.cpp:653
 msgid "CODE_39"
-msgstr ""
+msgstr "CODE_39"
 
 #: pcbnew/pcb_barcode.cpp:654
 msgid "CODE_128"
-msgstr ""
+msgstr "CODE_128"
 
 #: pcbnew/pcb_barcode.cpp:655
 msgid "DATA_MATRIX"
-msgstr ""
+msgstr "DATA_MATRIX"
 
 #: pcbnew/pcb_barcode.cpp:656
 msgid "QR_CODE"
-msgstr ""
+msgstr "QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:657
 msgid "MICRO_QR_CODE"
-msgstr ""
+msgstr "MICRO_QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:664 pcbnew/pcb_barcode.cpp:731
 msgid "L (Low)"
-msgstr ""
+msgstr "L (Låg)"
 
 #: pcbnew/pcb_barcode.cpp:665 pcbnew/pcb_barcode.cpp:732
-#, fuzzy
 msgid "M (Medium)"
-msgstr "Mellan"
+msgstr "M (Mellan)"
 
 #: pcbnew/pcb_barcode.cpp:666 pcbnew/pcb_barcode.cpp:733
 msgid "Q (Quartile)"
-msgstr ""
+msgstr "Q (Kvartil)"
 
 #: pcbnew/pcb_barcode.cpp:667
-#, fuzzy
 msgid "H (High)"
-msgstr "Hög"
+msgstr "H (Hög)"
 
 #: pcbnew/pcb_barcode.cpp:680
-#, fuzzy
 msgid "Show Text"
-msgstr "Visa ledare"
+msgstr "Visa text"
 
 #: pcbnew/pcb_barcode.cpp:698
 msgid "Kind"
-msgstr ""
+msgstr "Typ"
 
 #: pcbnew/pcb_barcode.cpp:725
 msgid "MicroQR Error Correction"
-msgstr ""
+msgstr "MicroQR felkorrektion"
 
 #: pcbnew/pcb_barcode.cpp:741
-#, fuzzy
 msgid "Margin X"
-msgstr "Marginal"
+msgstr "X-marginal"
 
 #: pcbnew/pcb_barcode.cpp:745
-#, fuzzy
 msgid "Margin Y"
-msgstr "Marginal"
+msgstr "Y-marginal"
 
 #: pcbnew/pcb_base_edit_frame.cpp:382 pcbnew/toolbars_footprint_editor.cpp:203
 #: pcbnew/toolbars_pcb_editor.cpp:583
@@ -49538,14 +49524,14 @@ msgid "Border Properties"
 msgstr "Ramens egenskaper"
 
 #: pcbnew/pcb_track.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Blind via %s on %s"
-msgstr "Blind/begravd via %s på %s"
+msgstr "Blind via %s på %s"
 
 #: pcbnew/pcb_track.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Buried via %s on %s"
-msgstr "Blind/begravd via %s på %s"
+msgstr "Begravd via %s på %s"
 
 #: pcbnew/pcb_track.cpp:176
 #, c-format
@@ -49587,14 +49573,12 @@ msgid "Micro Via"
 msgstr "Mikrovia"
 
 #: pcbnew/pcb_track.cpp:1931
-#, fuzzy
 msgid "Blind Via"
-msgstr "Blind / begravd via"
+msgstr "Blind via"
 
 #: pcbnew/pcb_track.cpp:1932
-#, fuzzy
 msgid "Buried Via"
-msgstr "Begravda vior:"
+msgstr "Begravd via"
 
 #: pcbnew/pcb_track.cpp:1933
 msgid "Through Via"
@@ -51238,9 +51222,8 @@ msgid "Place point"
 msgstr "Placera punkt"
 
 #: pcbnew/tools/drawing_tool.cpp:1540
-#, fuzzy
 msgid "Draw Barcode"
-msgstr "Rita en cirkel"
+msgstr "Rita streckkod"
 
 #: pcbnew/tools/drawing_tool.cpp:1821
 msgid "Draw Dimension"
@@ -51263,29 +51246,24 @@ msgid "Place via"
 msgstr "Placera via"
 
 #: pcbnew/tools/drc_tool.cpp:312
-#, fuzzy
 msgid "Edit Footprint Properties..."
-msgstr "Redigera egenskaper för fotavtryck"
+msgstr "Redigera egenskaper för fotavtryck..."
 
 #: pcbnew/tools/drc_tool.cpp:317
-#, fuzzy
 msgid "Edit Pad Properties..."
-msgstr "Redigera egenskaper för lödytor"
+msgstr "Redigera egenskaper för lödytor..."
 
 #: pcbnew/tools/drc_tool.cpp:327
-#, fuzzy
 msgid "Edit Dimension Properties..."
-msgstr "Redigera måttsättningens egenskaper"
+msgstr "Redigera måttsättningens egenskaper..."
 
 #: pcbnew/tools/drc_tool.cpp:329
-#, fuzzy
 msgid "Edit Field Properties..."
-msgstr "Redigera egenskaper för etiketter"
+msgstr "Redigera egenskaper för fält..."
 
 #: pcbnew/tools/drc_tool.cpp:331
-#, fuzzy
 msgid "Edit Text Properties..."
-msgstr "Redigera textegenskaper"
+msgstr "Redigera textegenskaper..."
 
 #: pcbnew/tools/edit_tool.cpp:130
 msgid "Positioning Tools"
@@ -51821,14 +51799,12 @@ msgid "Create outset lines from the selected item"
 msgstr "Skapa konturlinjer runt det valda objektet"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add Barcode"
-msgstr "Lägg till bågar"
+msgstr "Lägg till streckkod"
 
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Add a barcode"
-msgstr "Lägg till en båge"
+msgstr "Lägg till en streckkod"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Add Board Characteristics"
