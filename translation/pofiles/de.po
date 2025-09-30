@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-23 13:55+0300\n"
-"PO-Revision-Date: 2025-09-29 09:02+0000\n"
+"PO-Revision-Date: 2025-09-30 12:05+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -14573,7 +14573,7 @@ msgid ""
 msgstr ""
 "Neuer Dateipfad für Schaltplanblatt:\n"
 "\"%s\"\n"
-"kann nicht normiert werden gegen den Dateipfad des übergeordneten "
+"kann nicht normalisiert werden anhand des Dateipfads des übergeordneten "
 "Schaltplanblatts:\n"
 "\"%s\"."
 
@@ -18373,7 +18373,7 @@ msgstr "Bus-an-Bus-Zugang von %s, %s nach %s, %s"
 #: eeschema/net_navigator.cpp:183
 #, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Netzklassen-Bezeichner %s‘ bei %s, %s"
+msgstr "Netzklassen-Bezeichner \"%s\" bei %s, %s"
 
 #: eeschema/net_navigator.cpp:190
 #, c-format
@@ -19015,7 +19015,7 @@ msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
 msgstr ""
-"Inkonsistente Pin-Nummern in Symbol %s im Vergleich zu dem in Teil %s "
+"Inkonsistente Pin-Nummern im Symbol %s, im Vergleich zu dem im Teil %s "
 "definierten. Das Teil wurde nicht geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:384
@@ -36105,7 +36105,7 @@ msgstr ""
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
 msgstr ""
-"Leiterbahnen, die eine ähnliche Breite wie Pads oder Vias haben benötigen "
+"Leiterbahnen, die eine ähnliche Breite wie Pads oder Vias haben, benötigen "
 "keine Teardrops."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:188
@@ -37285,7 +37285,7 @@ msgstr "Platine enthält veraltete Teardrops."
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:451
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr ""
-"Nutze Bearbeiten > Teardrops bearbeiten um automatische Teardrops zu "
+"Nutze Bearbeiten > Teardrops bearbeiten, um automatische Teardrops zu "
 "erzeugen."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:639
@@ -38509,9 +38509,9 @@ msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Dies ist der lokale Freiraum zwischen der Form und der "
-"Lötstoppmaskenöffnung.\n"
-"Frei lassen um den Wert der Platinenkonfiguration zu verwenden."
+"Dies ist der lokale Freiraum zwischen der Form und der Lötstoppmaskenöffnung."
+"\n"
+"Frei lassen, um den Wert der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -38698,7 +38698,7 @@ msgid ""
 msgstr ""
 "Dies ist der lokale Freiraum zwischen der Leiterbahn und der "
 "Lötstoppmaskenöffnung.\n"
-"Frei lassen um den Wert der Platinenkonfiguration zu verwenden."
+"Frei lassen, um den Wert der Platinenkonfiguration zu verwenden."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
