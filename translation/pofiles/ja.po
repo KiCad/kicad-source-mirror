@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 13:55+0300\n"
+"POT-Creation-Date: 2025-09-30 15:10+0300\n"
 "PO-Revision-Date: 2025-09-28 04:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
@@ -2221,7 +2221,7 @@ msgstr "グローバル ライブラリ テーブルのパス '%s' が生成で�
 #: common/widgets/widget_hotkey_list.cpp:530
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2058 eeschema/symbol_editor/symbol_editor.cpp:828
+#: eeschema/sch_symbol.cpp:2059 eeschema/symbol_editor/symbol_editor.cpp:828
 #: eeschema/symbol_editor/symbol_editor.cpp:1771
 #: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2310,7 +2310,7 @@ msgstr "3D モデル"
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2658
+#: eeschema/sch_symbol.cpp:2654
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2621,7 +2621,7 @@ msgstr "環境変数"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:490 eeschema/sch_pin.cpp:1571
-#: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2072
+#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2073
 #: eeschema/symbol_editor/symbol_editor.cpp:1741
 #: eeschema/symbol_viewer_frame.cpp:457
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
@@ -3437,9 +3437,9 @@ msgstr "オプション"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1046
-#: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2068
-#: eeschema/sch_symbol.cpp:2966 eeschema/sim/simulator_frame_ui.cpp:617
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
+#: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
+#: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
 #: eeschema/sim/simulator_frame_ui.cpp:2724
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
@@ -4791,7 +4791,7 @@ msgstr "アクティブ"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/sch_field.cpp:1232 eeschema/sch_pin.cpp:1576
-#: eeschema/sch_pin.cpp:2175 eeschema/sch_tablecell.cpp:241
+#: eeschema/sch_pin.cpp:2171 eeschema/sch_tablecell.cpp:241
 #: include/lib_table_grid.h:218 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Visible"
@@ -5819,7 +5819,7 @@ msgstr "テキスト"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:416
-#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2095
+#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:100 eeschema/sch_pin.cpp:2091
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -6273,7 +6273,7 @@ msgstr "ネット インスペクター"
 msgid "Screen"
 msgstr "スクリーン"
 
-#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2055
+#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2056
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1324
@@ -6521,7 +6521,7 @@ msgstr "半径"
 #: common/eda_shape.cpp:1009 common/eda_shape.cpp:1018
 #: common/eda_shape.cpp:1036 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/sch_pin.cpp:1579 eeschema/sch_pin.cpp:2160
+#: eeschema/sch_pin.cpp:1579 eeschema/sch_pin.cpp:2156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:902
 msgid "Length"
 msgstr "長さ"
@@ -6690,9 +6690,9 @@ msgstr "斜太字"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
-#: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:118
+#: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1242 eeschema/sch_field.cpp:1851
-#: eeschema/sch_pin.cpp:2111 pcbnew/dialogs/dialog_render_job.cpp:40
+#: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617
 msgid "Left"
 msgstr "左"
@@ -6718,9 +6718,9 @@ msgstr "中央"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
-#: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:117
+#: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1244 eeschema/sch_field.cpp:1853
-#: eeschema/sch_pin.cpp:2110 pcbnew/dialogs/dialog_render_job.cpp:41
+#: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2618
 msgid "Right"
 msgstr "右"
@@ -6751,8 +6751,8 @@ msgstr "下"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1905
-#: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2156
-#: eeschema/sch_symbol.cpp:2937 eeschema/sch_tablecell.cpp:239
+#: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2152
+#: eeschema/sch_symbol.cpp:2933 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7352,7 +7352,7 @@ msgstr "選択したセルをクリップボードへコピー"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2327
+#: eeschema/tools/sch_editor_control.cpp:2329
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1262
 msgid "Paste"
@@ -8015,11 +8015,11 @@ msgstr "グローバル ラベル"
 msgid "Hierarchical labels"
 msgstr "階層ラベル"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2953
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2949
 msgid "Pin numbers"
 msgstr "ピン番号"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2957
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2953
 msgid "Pin names"
 msgstr "ピン名"
 
@@ -8136,7 +8136,7 @@ msgid "Helper items"
 msgstr "ヘルパー アイテム"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2929
+#: eeschema/tools/sch_editor_control.cpp:2931
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:352
@@ -8661,8 +8661,8 @@ msgstr "デフォルトの編集"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2011
-#: eeschema/sch_symbol.cpp:2065 eeschema/sch_symbol.cpp:2963
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2012
+#: eeschema/sch_symbol.cpp:2066 eeschema/sch_symbol.cpp:2959
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4195
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -8682,7 +8682,7 @@ msgstr "値とフットプリントによるグループ化"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
-#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3029
+#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3025
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
@@ -9858,13 +9858,13 @@ msgid "<not found>"
 msgstr "<見つかりませんでした>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
-#: eeschema/sch_symbol.cpp:1985 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: eeschema/sch_symbol.cpp:1986 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
 msgstr "基板"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2041
-#: eeschema/sch_symbol.cpp:2045 eeschema/sch_symbol.cpp:2082
+#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2042
+#: eeschema/sch_symbol.cpp:2046 eeschema/sch_symbol.cpp:2083
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1726
 msgid "Library"
 msgstr "ライブラリ"
@@ -10187,7 +10187,7 @@ msgstr "ホットキー"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
-#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:459
+#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:463
 #: eeschema/symbol_editor/symbol_editor.cpp:1757
 #: eeschema/tools/sch_edit_tool.cpp:162
 msgid "Alternate"
@@ -10544,8 +10544,9 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:206
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr "グローバル フットプリント ライブラリ "
-"テーブルを読み込みしようとしたところ、エラーが発生しました。"
+msgstr ""
+"グローバル フットプリント ライブラリ テーブルを読み込みしようとしたところ、エ"
+"ラーが発生しました。"
 
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
@@ -10585,8 +10586,8 @@ msgstr "'%s' は有効なフットプリントではありません。"
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2060
-#: eeschema/sch_symbol.cpp:2647 eeschema/sch_symbol.cpp:2975
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
+#: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
 #: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4208
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
@@ -10984,7 +10985,7 @@ msgstr ""
 "%s\n"
 "見つかりません。スクリプトは無効です。"
 
-#: eeschema/connection_graph.cpp:3316
+#: eeschema/connection_graph.cpp:3312
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -10992,7 +10993,7 @@ msgstr ""
 "%s と %s は、ともに同じ配線に接続されています; %s をネットリスト用ラベルとし"
 "て選択しました"
 
-#: eeschema/connection_graph.cpp:3554
+#: eeschema/connection_graph.cpp:3550
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -11000,27 +11001,27 @@ msgstr ""
 "表示上はネット %s はバス %s に接続されていますが、バスのメンバーではありませ"
 "ん"
 
-#: eeschema/connection_graph.cpp:3859 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3855 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "未接続の配線終端"
 
-#: eeschema/connection_graph.cpp:3884
+#: eeschema/connection_graph.cpp:3880
 msgid "Unconnected wire to bus entry"
 msgstr "バス エントリーまでの未接続の配線"
 
-#: eeschema/connection_graph.cpp:4217
+#: eeschema/connection_graph.cpp:4213
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "ルートシートの階層ラベル \"%s\" を存在しない親シートに接続できません"
 
-#: eeschema/connection_graph.cpp:4282
+#: eeschema/connection_graph.cpp:4278
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "シートピン %s に対応する階層ラベルがシート内にありません"
 
-#: eeschema/connection_graph.cpp:4299
+#: eeschema/connection_graph.cpp:4295
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "階層ラベル %s と対応するシートピンが親シートにありません"
@@ -11115,7 +11116,7 @@ msgstr "ライブラリ %s はすでに存在します。"
 msgid "Enter a description for the library:"
 msgstr "ライブラリの説明を入力してください:"
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2972
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2968
 #: pcbnew/footprint.cpp:4205 pcbnew/plot_board_layers.cpp:189
 msgid "Library Description"
 msgstr "ライブラリの説明"
@@ -12623,12 +12624,12 @@ msgid "Text color:"
 msgstr "文字の色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:119 eeschema/sch_pin.cpp:2112
+#: eeschema/pin_type.cpp:114 eeschema/sch_pin.cpp:2108
 msgid "Up"
 msgstr "上"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:120 eeschema/sch_pin.cpp:2113
+#: eeschema/pin_type.cpp:115 eeschema/sch_pin.cpp:2109
 msgid "Down"
 msgstr "下"
 
@@ -12881,7 +12882,7 @@ msgstr "文法のヘルプ ウィンドウを表示"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2961
+#: eeschema/sch_symbol.cpp:2957
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4193
@@ -12977,35 +12978,35 @@ msgstr "フィールドを削除"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
-#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2077
+#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2073
 msgid "Input"
 msgstr "入力"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2078
+#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2074
 msgid "Output"
 msgstr "出力"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2079
+#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2075
 msgid "Bidirectional"
 msgstr "双方向"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2247
-#: eeschema/sch_pin.cpp:2080
+#: eeschema/sch_pin.cpp:2076
 msgid "Tri-state"
 msgstr "トライステート"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
-#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2081
+#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2077
 msgid "Passive"
 msgstr "パッシブ"
 
@@ -13033,7 +13034,7 @@ msgid "ALL"
 msgstr "ALL"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:461
+#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:465
 #: eeschema/symbol_editor/symbol_editor.cpp:1759
 #: eeschema/tools/sch_edit_tool.cpp:159
 msgid "Standard"
@@ -13058,7 +13059,7 @@ msgstr "ピン番号"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
-#: eeschema/sch_pin.cpp:2139
+#: eeschema/sch_pin.cpp:2135
 msgid "Electrical Type"
 msgstr "エレクトリカル タイプ"
 
@@ -13068,26 +13069,26 @@ msgstr "エレクトリカル タイプ"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
-#: eeschema/sch_pin.cpp:2144
+#: eeschema/sch_pin.cpp:2140
 msgid "Graphic Style"
 msgstr "グラフィック スタイル"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
-#: eeschema/sch_pin.cpp:2170
+#: eeschema/sch_pin.cpp:2166
 msgid "Number Text Size"
 msgstr "番号のテキスト サイズ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
-#: eeschema/sch_pin.cpp:2165
+#: eeschema/sch_pin.cpp:2161
 msgid "Name Text Size"
 msgstr "名前のテキスト サイズ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:552
-#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2997
+#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "単位"
@@ -15540,7 +15541,7 @@ msgid "Edit Library Symbol..."
 msgstr "ライブラリ シンボルを編集..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/sch_pin.cpp:2134
+#: eeschema/sch_pin.cpp:2130
 msgid "Pin Number"
 msgstr "ピン番号"
 
@@ -16843,8 +16844,8 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"グローバル シンボル ライブラリ "
-"テーブルを読み込もうとしたところ、エラーが発生しました。\n"
+"グローバル シンボル ライブラリ テーブルを読み込もうとしたところ、エラーが発生"
+"しました。\n"
 "設定メニューで、このグローバル シンボル ライブラリ テーブルを編集して下さい。"
 
 #: eeschema/eeschema.cpp:514
@@ -17092,162 +17093,162 @@ msgstr ""
 msgid "Netclass %s is not defined"
 msgstr "ネットクラス %s は定義されていません"
 
-#: eeschema/erc/erc.cpp:772
+#: eeschema/erc/erc.cpp:771
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
 msgstr "ラベルは%d 、 %dで複数の配線を接続します"
 
-#: eeschema/erc/erc.cpp:852
+#: eeschema/erc/erc.cpp:851
 #, c-format
 msgid "Four items connected at %d, %d"
 msgstr "4 つのアイテムが%d 、 %dに接続されています"
 
-#: eeschema/erc/erc.cpp:924
+#: eeschema/erc/erc.cpp:923
 msgid "Pin with 'no connection' type is connected"
 msgstr "'未接続' タイプのピンが接続されています"
 
-#: eeschema/erc/erc.cpp:1143
+#: eeschema/erc/erc.cpp:1136
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "ピンのタイプ %s と %s が接続されています"
 
-#: eeschema/erc/erc.cpp:1211
+#: eeschema/erc/erc.cpp:1203
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "ピン %s が %s と %s の両方に接続されています"
 
-#: eeschema/erc/erc.cpp:1432
+#: eeschema/erc/erc.cpp:1424
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
 msgstr "現在の構成にはシンボル ライブラリ '%s' が含まれていません"
 
-#: eeschema/erc/erc.cpp:1447
+#: eeschema/erc/erc.cpp:1439
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "シンボルライブラリ '%s' は現在の設定では有効化されていません"
 
-#: eeschema/erc/erc.cpp:1462
+#: eeschema/erc/erc.cpp:1454
 #, c-format
 msgid "The symbol library '%s' was not found at '%s'."
 msgstr "シンボルライブラリ '%s' が '%s' 内に見つかりません。"
 
-#: eeschema/erc/erc.cpp:1482
+#: eeschema/erc/erc.cpp:1474
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "シンボル '%s' がシンボル ライブラリ '%s' 内に見つかりません"
 
-#: eeschema/erc/erc.cpp:1507
+#: eeschema/erc/erc.cpp:1499
 #, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
 msgstr "シンボル ' %s ' には同じピン番号のピンが複数あります"
 
-#: eeschema/erc/erc.cpp:1517
+#: eeschema/erc/erc.cpp:1509
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "シンボル '%s' が、ライブラリ '%s' のコピーと一致しません"
 
-#: eeschema/erc/erc.cpp:1566
+#: eeschema/erc/erc.cpp:1558
 #, c-format
 msgid "'%s' is not a valid footprint identifier."
 msgstr "'%s' は有効なフットプリント識別子ではありません。"
 
-#: eeschema/erc/erc.cpp:1580
+#: eeschema/erc/erc.cpp:1572
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:886
 #: pcbnew/footprint_editor_utils.cpp:363
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "現在の構成にはフットプリント ライブラリ '%s' が含まれていません。"
 
-#: eeschema/erc/erc.cpp:1589
+#: eeschema/erc/erc.cpp:1581
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:900
 #: pcbnew/footprint_editor_utils.cpp:375
 #, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "フットプリントライブラリ '%s' は現在の設定では有効化されていません。"
 
-#: eeschema/erc/erc.cpp:1598
+#: eeschema/erc/erc.cpp:1590
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:951
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "フットプリント '%s' がライブラリ'%s'にありません。"
 
-#: eeschema/erc/erc.cpp:1668
+#: eeschema/erc/erc.cpp:1660
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr ""
 "割り当てられたフットプリント ( %s ) はフットプリント フィルター ( %s ) と一致"
 "しません。"
 
-#: eeschema/erc/erc.cpp:1830
+#: eeschema/erc/erc.cpp:1822
 msgid "Checking sheet names..."
 msgstr "シート名をチェック中..."
 
-#: eeschema/erc/erc.cpp:1838
+#: eeschema/erc/erc.cpp:1830
 msgid "Checking bus conflicts..."
 msgstr "バスの競合をチェック中..."
 
-#: eeschema/erc/erc.cpp:1845
+#: eeschema/erc/erc.cpp:1837
 msgid "Checking conflicts..."
 msgstr "競合をチェック中..."
 
-#: eeschema/erc/erc.cpp:1859
+#: eeschema/erc/erc.cpp:1851
 msgid "Checking units..."
 msgstr "単位をチェック中..."
 
-#: eeschema/erc/erc.cpp:1865
+#: eeschema/erc/erc.cpp:1857
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
 msgstr "フットプリントをチェック中..."
 
-#: eeschema/erc/erc.cpp:1879
+#: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
 msgstr "ピンをチェック中..."
 
-#: eeschema/erc/erc.cpp:1899
+#: eeschema/erc/erc.cpp:1891
 msgid "Checking similar labels..."
 msgstr "同様のラベルをチェック中..."
 
-#: eeschema/erc/erc.cpp:1907
+#: eeschema/erc/erc.cpp:1899
 msgid "Checking local and global labels..."
 msgstr "ローカルラベルとグローバルラベルをチェック中..."
 
-#: eeschema/erc/erc.cpp:1915
+#: eeschema/erc/erc.cpp:1907
 msgid "Checking for unresolved variables..."
 msgstr "未解決の変数をチェック中..."
 
-#: eeschema/erc/erc.cpp:1923
+#: eeschema/erc/erc.cpp:1915
 msgid "Checking SPICE models..."
 msgstr "SPICEモデルをチェック中..."
 
-#: eeschema/erc/erc.cpp:1931
+#: eeschema/erc/erc.cpp:1923
 msgid "Checking no connect pins for connections..."
 msgstr "未接続ピンへの接続をチェック中..."
 
-#: eeschema/erc/erc.cpp:1940
+#: eeschema/erc/erc.cpp:1932
 msgid "Checking for library symbol issues..."
 msgstr "ライブラリ シンボルの問題をチェック中..."
 
-#: eeschema/erc/erc.cpp:1948
+#: eeschema/erc/erc.cpp:1940
 msgid "Checking for footprint link issues..."
 msgstr "フットプリントの接続の問題をチェック中..."
 
-#: eeschema/erc/erc.cpp:1956
+#: eeschema/erc/erc.cpp:1948
 msgid "Checking footprint assignments against footprint filters..."
 msgstr "フットプリントフィルターに対応するフットプリントをチェック中..."
 
-#: eeschema/erc/erc.cpp:1964
+#: eeschema/erc/erc.cpp:1956
 msgid "Checking for off grid pins and wires..."
 msgstr "グリッドから外れているピンと配線をチェック中..."
 
-#: eeschema/erc/erc.cpp:1972
+#: eeschema/erc/erc.cpp:1964
 msgid "Checking for four way junctions..."
 msgstr "4方向のジャンクション(接続点)をチェック中..."
 
-#: eeschema/erc/erc.cpp:1980
+#: eeschema/erc/erc.cpp:1972
 msgid "Checking for labels on more than one wire..."
 msgstr "1つ以上の配線にあるラベルをチェック中..."
 
-#: eeschema/erc/erc.cpp:1988
+#: eeschema/erc/erc.cpp:1980
 msgid "Checking for undefined netclasses..."
 msgstr "未定義のネットクラスをチェック中..."
 
@@ -17519,8 +17520,9 @@ msgstr ""
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr "回路図全体を読み込めませんでした。  "
-"階層シートを読み込もうとしたところ、エラーが発生しました。"
+msgstr ""
+"回路図全体を読み込めませんでした。  階層シートを読み込もうとしたところ、エ"
+"ラーが発生しました。"
 
 #: eeschema/files-io.cpp:293 eeschema/files-io.cpp:301
 #: eeschema/files-io.cpp:1391 eeschema/sheet.cpp:231
@@ -17546,8 +17548,8 @@ msgid ""
 "usable with other versions of KiCad."
 msgstr ""
 "自動修復した回路図を読み込み中にエラーが見つかりました。破損したファイルを修"
-"復するには回路図を保存して下さい。さもないと KiCad "
-"の別バージョンで使用できなくなる恐れがあります。"
+"復するには回路図を保存して下さい。さもないと KiCad の別バージョンで使用できな"
+"くなる恐れがあります。"
 
 #: eeschema/files-io.cpp:405
 msgid "Illegal entry found in project file symbol library list."
@@ -17730,7 +17732,8 @@ msgstr "回路図をインポート"
 #: eeschema/files-io.cpp:1402
 #, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
-msgstr "回路図ファイル '%s' の読み込み中に Unhandled exception が発生しました。"
+msgstr ""
+"回路図ファイル '%s' の読み込み中に Unhandled exception が発生しました。"
 
 #: eeschema/files-io.cpp:1464
 msgid "The current schematic has been modified.  Save changes?"
@@ -17782,7 +17785,7 @@ msgstr "以下の自動保存ファイルは削除できませんでした\n"
 msgid "Manual removal will be required for the file(s) above."
 msgstr "上記のファイルは手動で削除する必要があります。"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2037
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2038
 msgid "Derived from"
 msgstr "派生元"
 
@@ -17885,29 +17888,29 @@ msgstr "デフォルトの単位:"
 msgid "Import Vector Graphics File"
 msgstr "ベクター画像ファイルをインポート"
 
-#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:448
+#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:452
 #, c-format
 msgid "Unit %s"
 msgstr "ユニット %s"
 
 #: eeschema/lib_symbol.cpp:587 eeschema/sch_sheet.cpp:312
-#: eeschema/sch_symbol.cpp:1545
+#: eeschema/sch_symbol.cpp:1546
 msgid "Excluded from BOM"
 msgstr "BOM(部品表)から除外"
 
 #: eeschema/lib_symbol.cpp:592 eeschema/sch_sheet.cpp:321
-#: eeschema/sch_symbol.cpp:1554
+#: eeschema/sch_symbol.cpp:1555
 msgid "Excluded from board"
 msgstr "基板から除外"
 
 #: eeschema/lib_symbol.cpp:597 eeschema/sch_sheet.cpp:330
-#: eeschema/sch_symbol.cpp:1563
+#: eeschema/sch_symbol.cpp:1564
 msgid "Excluded from simulation"
 msgstr "シミュレーションから除外"
 
 #: eeschema/lib_symbol.cpp:602 eeschema/sch_sheet.cpp:339
-#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1572
-#: eeschema/sch_symbol.cpp:1988 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1573
+#: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 msgid "DNP"
 msgstr "DNP"
@@ -18261,65 +18264,65 @@ msgstr "ピン機能を設定"
 msgid "none"
 msgstr "なし"
 
-#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2082
+#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2078
 msgid "Free"
 msgstr "フリー"
 
-#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2083
+#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2079
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 msgid "Unspecified"
 msgstr "未指定"
 
-#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2084
+#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2080
 msgid "Power input"
 msgstr "電源入力"
 
-#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2085
+#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2081
 msgid "Power output"
 msgstr "電源出力"
 
-#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2086
+#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2082
 msgid "Open collector"
 msgstr "オープン コレクター"
 
-#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2087
+#: eeschema/pin_type.cpp:95 eeschema/sch_pin.cpp:2083
 msgid "Open emitter"
 msgstr "オープン エミッター"
 
-#: eeschema/pin_type.cpp:97 eeschema/sch_pin.cpp:2088
+#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2084
 msgid "Unconnected"
 msgstr "未配線"
 
-#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2096
+#: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2092
 msgid "Inverted"
 msgstr "反転"
 
-#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2097
+#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2093
 msgid "Clock"
 msgstr "クロック"
 
-#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2098
+#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2094
 msgid "Inverted clock"
 msgstr "反転クロック"
 
-#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2099
+#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2095
 msgid "Input low"
 msgstr "負論理入力"
 
-#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2100
+#: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2096
 msgid "Clock low"
 msgstr "負論理クロック"
 
-#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2101
+#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2097
 msgid "Output low"
 msgstr "負論理出力"
 
-#: eeschema/pin_type.cpp:110 eeschema/sch_pin.cpp:2102
+#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2098
 msgid "Falling edge clock"
 msgstr "ネガティブ エッジ クロック"
 
-#: eeschema/pin_type.cpp:112 eeschema/sch_pin.cpp:2103
+#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2099
 msgid "NonLogic"
 msgstr "非ロジック"
 
@@ -18445,8 +18448,8 @@ msgstr ""
 "使用中のシンボルを含むライブラリが変更されました。\n"
 "ライブラリを再読み込みしますか?"
 
-#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2148
-#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2929
+#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2144
+#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
 #: pcbnew/widgets/pcb_properties_panel.cpp:247
@@ -18455,8 +18458,8 @@ msgstr ""
 msgid "Position X"
 msgstr "位置 X"
 
-#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2152
-#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2932
+#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2148
+#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
 #: pcbnew/widgets/pcb_properties_panel.cpp:248 pcbnew/zone.cpp:1923
@@ -18772,23 +18775,26 @@ msgstr "CADSTARの部品ライブラリファイルではないようです"
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
-msgstr "部品 %s によって参照されるシンボル %s が見つかりません。 "
-"部品は読み込まれませんでした。"
+msgstr ""
+"部品 %s によって参照されるシンボル %s が見つかりません。 部品は読み込まれませ"
+"んでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:147
 #, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
-msgstr "シンボル %s のピン番号が、パーツ %s で定義されたピン番号と一致しません。 "
-"部品は読み込まれませんでした。"
+msgstr ""
+"シンボル %s のピン番号が、パーツ %s で定義されたピン番号と一致しません。 部品"
+"は読み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:384
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr "CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。"
+msgstr ""
+"CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。"
 "マスターバリアント( '%s' )のみ読み込みました。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:393
@@ -18863,26 +18869,26 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"パーツ定義 '%s'は、シンボル ライブラリに見つからなかったシンボル '%s'（"
-"代替は "
-"'%s'）を参照しています。パーツはKiCadライブラリに読み込まれていません。"
+"パーツ定義 '%s'は、シンボル ライブラリに見つからなかったシンボル '%s'（代替"
+"は '%s'）を参照しています。パーツはKiCadライブラリに読み込まれていません。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:703
 #, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
-msgstr "パーツ定義 "
-"'%s'が不完全です（シンボル定義が関連付けされていません）。このパーツがKiCadラ"
-"イブラリに読み込まれていません。"
+msgstr ""
+"パーツ定義 '%s'が不完全です（シンボル定義が関連付けされていません）。このパー"
+"ツがKiCadライブラリに読み込まれていません。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:736
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
-msgstr "シンボル '%s' は、ライブラリで見つからなかったパーツ '%s' "
-"を参照しています。シンボルは読み込まれませんでした"
+msgstr ""
+"シンボル '%s' は、ライブラリで見つからなかったパーツ '%s' を参照しています。"
+"シンボルは読み込まれませんでした"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:842
 #, c-format
@@ -18961,9 +18967,9 @@ msgstr ""
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
-msgstr "ネット %s は不明のネット要素 %s "
-"を参照しています。ネットが正しく読み込まれておらず、手動で修正する必要がある"
-"場合があります。"
+msgstr ""
+"ネット %s は不明のネット要素 %s を参照しています。ネットが正しく読み込まれて"
+"おらず、手動で修正する必要がある場合があります。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2538
 #, c-format
@@ -18972,10 +18978,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"ブロック ID %s (ブロック名: '%s') はシート '%s' "
-"に描画されますが、デザイン内の別のシートにはリンクされていません。KiCad "
-"では、すべてのシートシンボルをシートに関連付ける必要があるため、ブロックは読"
-"み込まれませんでした。"
+"ブロック ID %s (ブロック名: '%s') はシート '%s' に描画されますが、デザイン内"
+"の別のシートにはリンクされていません。KiCad では、すべてのシートシンボルを"
+"シートに関連付ける必要があるため、ブロックは読み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2563
 #, c-format
@@ -19281,9 +19286,9 @@ msgstr "ライブラリ %s は %s と言う名前のシンボルを含んでい�
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr "シート '%s' "
-"を読み込みできませんでした。これは回路図の階層で直接の先祖としてすでに表示さ"
-"れているためです。"
+msgstr ""
+"シート '%s' を読み込みできませんでした。これは回路図の階層で直接の先祖として"
+"すでに表示されているためです。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:291
 #, c-format
@@ -19505,7 +19510,7 @@ msgid "All body styles"
 msgstr "すべてのボディスタイル"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
-#: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
+#: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 msgid "Body Style"
 msgstr "ボディスタイル"
 
@@ -19705,27 +19710,27 @@ msgstr "座標 X"
 msgid "Pos Y"
 msgstr "座標 Y"
 
-#: eeschema/sch_pin.cpp:1847
+#: eeschema/sch_pin.cpp:1843
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "ピン %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1855
+#: eeschema/sch_pin.cpp:1851
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "ピン %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:1865
+#: eeschema/sch_pin.cpp:1861
 #, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr "非表示ピン %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1873
+#: eeschema/sch_pin.cpp:1869
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "非表示ピン %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2130 pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2791
+#: eeschema/sch_pin.cpp:2126 pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2791
 msgid "Pin Name"
 msgstr "ピン名"
 
@@ -19872,16 +19877,16 @@ msgstr "階層パス"
 msgid "File Name"
 msgstr "ファイル名"
 
-#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1979
+#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1980
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 msgid "Simulation"
 msgstr "シミュレーション"
 
-#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1982
+#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
 msgid "BOM"
 msgstr "部品表"
 
-#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1994
+#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 msgid "Exclude from"
 msgstr "除外する対象"
@@ -19906,22 +19911,22 @@ msgstr "境界の色"
 msgid "Background Color"
 msgstr "背景色"
 
-#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1047
-#: eeschema/sch_symbol.cpp:3031
+#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1051
+#: eeschema/sch_symbol.cpp:3027
 msgid "Exclude From Board"
 msgstr "基板から除外"
 
-#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3034
+#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3030
 msgid "Exclude From Simulation"
 msgstr "シミュレーションから除外"
 
-#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1048
-#: eeschema/sch_symbol.cpp:3037 pcbnew/footprint.cpp:4225
+#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
+#: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
 msgid "Exclude From Bill of Materials"
 msgstr "BOM(部品表)から除外"
 
-#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1049
-#: eeschema/sch_symbol.cpp:3040 eeschema/tools/sch_actions.cpp:993
+#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1053
+#: eeschema/sch_symbol.cpp:3036 eeschema/tools/sch_actions.cpp:993
 #: pcbnew/footprint.cpp:4228
 msgid "Do not Populate"
 msgstr "未実装"
@@ -19935,49 +19940,49 @@ msgstr "(削除されたアイテム)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "階層シートピン %s"
 
-#: eeschema/sch_symbol.cpp:2005
+#: eeschema/sch_symbol.cpp:2006
 msgid "Power symbol"
 msgstr "電源シンボル"
 
-#: eeschema/sch_symbol.cpp:2025
+#: eeschema/sch_symbol.cpp:2026
 msgid "flags"
 msgstr "フラグ"
 
-#: eeschema/sch_symbol.cpp:2030
+#: eeschema/sch_symbol.cpp:2031
 msgid "Missing parent"
 msgstr "親なし"
 
-#: eeschema/sch_symbol.cpp:2045
+#: eeschema/sch_symbol.cpp:2046
 msgid "Undefined!!!"
 msgstr "未定義!!!"
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2054
 msgid "<Unknown>"
 msgstr "<不明>"
 
-#: eeschema/sch_symbol.cpp:2078
+#: eeschema/sch_symbol.cpp:2079
 msgid "No library defined!"
 msgstr "ライブラリが定義されていません!"
 
-#: eeschema/sch_symbol.cpp:2080
+#: eeschema/sch_symbol.cpp:2081
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "%s にシンボルが見つかりません!"
 
-#: eeschema/sch_symbol.cpp:2344
+#: eeschema/sch_symbol.cpp:2345
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "シンボル %s [%s]"
 
-#: eeschema/sch_symbol.cpp:2939
+#: eeschema/sch_symbol.cpp:2935
 msgid "Mirror X"
 msgstr "X軸でミラー"
 
-#: eeschema/sch_symbol.cpp:2941
+#: eeschema/sch_symbol.cpp:2937
 msgid "Mirror Y"
 msgstr "Y軸でミラー"
 
-#: eeschema/sch_symbol.cpp:2969 pcbnew/footprint.cpp:4202
+#: eeschema/sch_symbol.cpp:2965 pcbnew/footprint.cpp:4202
 msgid "Library Link"
 msgstr "ライブラリへのリンク"
 
@@ -20413,8 +20418,9 @@ msgstr ""
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
-msgstr "回路図全体を読み込めませんでした。  "
-"階層シート回路図の読み込み中にエラーが発生しました。"
+msgstr ""
+"回路図全体を読み込めませんでした。  階層シート回路図の読み込み中にエラーが発"
+"生しました。"
 
 #: eeschema/sheet.cpp:219
 msgid "Schematic Load Error"
@@ -20444,11 +20450,11 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "読み込まれた回路図ファイルには古いバージョンの階層シートが含まれているため、 "
-"シンボル インスタンス データが欠落しています。  "
-"このため、回路図内の読み込まれたすべてのシンボルにデフォルトのインスタンス設"
-"定を使用するか、ライブラリのシンボルの設定にフォールバックします。  "
-"この回路図ファイルを使用するプロジェクトを読み込み、最新のファイル "
-"バージョンに保存すると、この問題は解決します。\n"
+"シンボル インスタンス データが欠落しています。  このため、回路図内の読み込ま"
+"れたすべてのシンボルにデフォルトのインスタンス設定を使用するか、ライブラリの"
+"シンボルの設定にフォールバックします。  この回路図ファイルを使用するプロジェ"
+"クトを読み込み、最新のファイル バージョンに保存すると、この問題は解決しま"
+"す。\n"
 "\n"
 "続けますか?"
 
@@ -20465,9 +20471,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選択した回路図に現在のプロジェクト ライブラリ "
-"テーブルに存在しないライブラリ名があります。  "
-"これは読み込まれた回路図のシンボル ライブラリの参照を壊す可能性があります。\n"
+"選択した回路図に現在のプロジェクト ライブラリ テーブルに存在しないライブラリ"
+"名があります。  これは読み込まれた回路図のシンボル ライブラリの参照を壊す可能"
+"性があります。\n"
 "\n"
 "続行しますか？"
 
@@ -21118,8 +21124,9 @@ msgstr "計測のフォーマット定義を予期しています"
 
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr "ngspice の "
-"共有ライブラリの読み込みに失敗しました。インストールを確認してください。"
+msgstr ""
+"ngspice の 共有ライブラリの読み込みに失敗しました。インストールを確認してくだ"
+"さい。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -21134,7 +21141,8 @@ msgstr "'%s' もしくは '%s' にシミュレーションモデル ライブラ
 #: eeschema/sim/sim_lib_mgr.cpp:306
 #, c-format
 msgid "Error loading simulation model: no '%s' field"
-msgstr "シミュレーションモデルの読み込み中にエラー: '%s' フィールドがありません"
+msgstr ""
+"シミュレーションモデルの読み込み中にエラー: '%s' フィールドがありません"
 
 #: eeschema/sim/sim_lib_mgr.cpp:311
 #: pcbnew/dialogs/dialog_board_statistics.cpp:462
@@ -21152,7 +21160,8 @@ msgstr "不明"
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "シミュレーションモデルの読み込み中にエラー: ベース モデル '%s' がライブラリ "
+msgstr ""
+"シミュレーションモデルの読み込み中にエラー: ベース モデル '%s' がライブラリ "
 "'%s' 内に見つかりませんでした"
 
 #: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:81
@@ -21861,8 +21870,8 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"すべてのシンボル ライブラリを読み込みできませんでした。 シンボル "
-"ライブラリ管理ダイアログを使用して\n"
+"すべてのシンボル ライブラリを読み込みできませんでした。 シンボル ライブラリ管"
+"理ダイアログを使用して\n"
 "パスを修正たり、ライブラリの追加または削除をして下さい。"
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
@@ -22146,8 +22155,9 @@ msgstr "ライブラリ '%s' は読み込み専用です。"
 #: eeschema/symbol_editor/symbol_editor.cpp:1174
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "シンボル ライブラリ ファイル '%s' "
-"を読み込もうとしたところ、エラーが発生しました。"
+msgstr ""
+"シンボル ライブラリ ファイル '%s' を読み込もうとしたところ、エラーが発生しま"
+"した。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1182
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
@@ -24096,26 +24106,26 @@ msgstr "ライブラリ '%s' を追加できませんでした。"
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "基板上のシンボルが 新しいライブラリを参照するように更新しますか?"
 
-#: eeschema/tools/sch_editor_control.cpp:844
+#: eeschema/tools/sch_editor_control.cpp:846
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "エラー: 現在のシートにサブシート名の重複が見つかりました。"
 
-#: eeschema/tools/sch_editor_control.cpp:951
+#: eeschema/tools/sch_editor_control.cpp:953
 msgid "No net selected."
 msgstr "ネットが未選択です。"
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:979
 msgid "Net must be labeled to assign a netclass."
 msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
 
-#: eeschema/tools/sch_editor_control.cpp:1725 pcbnew/tools/pcb_control.cpp:1067
+#: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1067
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
 "長いテキスト文字列を貼り付けると、非常に時間がかかる場合があります。  続けま"
 "すか?"
 
-#: eeschema/tools/sch_editor_control.cpp:1847
+#: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -24126,29 +24136,29 @@ msgstr ""
 "は貼り付け先にすでにそのシートがあるか、親としてサブシートの一つになっている"
 "ため削除されました。"
 
-#: eeschema/tools/sch_editor_control.cpp:2377
+#: eeschema/tools/sch_editor_control.cpp:2379
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "ライブラリのシンボルへのリンクが壊れているシンボルは編集できません。"
 
-#: eeschema/tools/sch_editor_control.cpp:2466
+#: eeschema/tools/sch_editor_control.cpp:2468
 msgid "Increment Annotations"
 msgstr "アノテーションをインクリメントする"
 
-#: eeschema/tools/sch_editor_control.cpp:2886
+#: eeschema/tools/sch_editor_control.cpp:2888
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d 重複したタイムスタンプが見つかり、置き換えられました。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2896
+#: eeschema/tools/sch_editor_control.cpp:2898
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d 個の潜在的な問題を修復しました。"
 
-#: eeschema/tools/sch_editor_control.cpp:2903
+#: eeschema/tools/sch_editor_control.cpp:2905
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "エラーは見つかりませんでした。"
@@ -25127,8 +25137,9 @@ msgstr "不明な Excellon G Code です : &lt;%s&gt;"
 
 #: gerbview/files.cpp:44
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr "GerbViewにファイルを読み込みするための "
-"<b>有効なレイヤーはこれ以上ありません</b>"
+msgstr ""
+"GerbViewにファイルを読み込みするための <b>有効なレイヤーはこれ以上ありません"
+"</b>"
 
 #: gerbview/files.cpp:45
 #, c-format
@@ -25219,8 +25230,9 @@ msgstr "ファイルが見つかりません:"
 #: gerbview/files.cpp:290
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>ガーバー ジョブ ファイルをプロット "
-"ファイルとして読み込むことができません</b> <i>%s</i>"
+msgstr ""
+"<b>ガーバー ジョブ ファイルをプロット ファイルとして読み込むことができません"
+"</b> <i>%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
@@ -42058,7 +42070,8 @@ msgstr "ルールエリアの数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:834
 msgid "No project loaded, skipping library parity tests."
-msgstr "プロジェクトが読み込まれていないため、ライブラリの等価性テストをスキップして"
+msgstr ""
+"プロジェクトが読み込まれていないため、ライブラリの等価性テストをスキップして"
 "います。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:838
@@ -44881,8 +44894,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "ライブラリ '%s' の読み込み中にエラー:\n"
-"フットプリント %s が含むAltium レイヤー (%d) にある破線の外形線は KiCad "
-"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"フットプリント %s が含むAltium レイヤー (%d) にある破線の外形線は KiCad と等"
+"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2613
 #, c-format
@@ -44900,8 +44913,8 @@ msgid ""
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr ""
 "ライブラリ '%s' の読み込み中にエラー:\n"
-"フットプリント %s に含まれる種別 %d "
-"のポリゴン形状は無視されました。(まだサポートされていません)."
+"フットプリント %s に含まれる種別 %d のポリゴン形状は無視されました。(まだサ"
+"ポートされていません)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2669
 #, c-format
@@ -44929,8 +44942,8 @@ msgid ""
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "ライブラリ '%s' の読み込み中にエラー:\n"
-"フットプリント %s のパッド%s "
-"はマルチレイヤーとしてマークされていませんが、THパッドです。"
+"フットプリント %s のパッド%s はマルチレイヤーとしてマークされていませんが、TH"
+"パッドです。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3326
 #, c-format
@@ -45019,8 +45032,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "ライブラリ '%s' の読み込み中にエラー:\n"
-"フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad "
-"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等"
+"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3672
 #, c-format
@@ -45089,8 +45102,8 @@ msgid ""
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "ライブラリ '%s' 読み込み中にエラー:\n"
-"フットプリント '%s' はAltium レイヤー %d "
-"にバーコードを含んでいます。(未サポートです)."
+"フットプリント '%s' はAltium レイヤー %d にバーコードを含んでいます。(未サ"
+"ポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4286
 #, c-format
@@ -45305,8 +45318,9 @@ msgstr ""
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr "寸法 ID %s は角度付きの寸法線で、KiCad "
-"に相当するものはありません。代わりに寸法線が読み込まれました。"
+msgstr ""
+"寸法 ID %s は角度付きの寸法線で、KiCad に相当するものはありません。代わりに寸"
+"法線が読み込まれました。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1492
 #, c-format
@@ -45446,10 +45460,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"CADSTARのレイヤー '%s' "
-"は、電源プレーンのレイヤーとして定義されます。ただし、そのような名前のネット"
-"は存在しません。レイヤーは読み込まれましたが、導体ゾーンは作成されませんでし"
-"た。"
+"CADSTARのレイヤー '%s' は、電源プレーンのレイヤーとして定義されます。ただし、"
+"そのような名前のネットは存在しません。レイヤーは読み込まれましたが、導体ゾー"
+"ンは作成されませんでした。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2206
 msgid ""
@@ -45984,14 +45997,16 @@ msgstr "BOMセクションを生成"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
 #, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "フットプリント %s "
-"が見つかりません。BOM(部品表)データが不完全な可能性があります。"
+msgstr ""
+"フットプリント %s が見つかりません。BOM(部品表)データが不完全な可能性がありま"
+"す。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr "コンポーネント \"%s\" に OEM "
-"リファレンスがありません。BOM(部品表)エントリーはスキップされます。"
+msgstr ""
+"コンポーネント \"%s\" に OEM リファレンスがありません。BOM(部品表)エントリー"
+"はスキップされます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
@@ -46004,8 +46019,9 @@ msgstr "基板外形が存在しないか、不正な形です。DRCを実行し
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr "重複したフットプリント ポインタが検出されました。IPC-2581 "
-"出力が正しくない可能性があります。"
+msgstr ""
+"重複したフットプリント ポインタが検出されました。IPC-2581 出力が正しくない可"
+"能性があります。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
 #, c-format
@@ -46014,20 +46030,23 @@ msgstr "レイヤー %s, ネット %s をエクスポート"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr "ビアがサポートされていないパッドスタックを使用しているため、ドリル "
-"データでは省きます。"
+msgstr ""
+"ビアがサポートされていないパッドスタックを使用しているため、ドリル データでは"
+"省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr "パッドがサポートされていないパッドスタックを使用しているため、穴はドリル "
-"データでは省きます。"
+msgstr ""
+"パッドがサポートされていないパッドスタックを使用しているため、穴はドリル デー"
+"タでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
-msgstr "ティアドロップは IPC-2581 リビジョン B "
-"ではサポートされていないため、ゾーンとしてエクスポートされました。"
+msgstr ""
+"ティアドロップは IPC-2581 リビジョン B ではサポートされていないため、ゾーンと"
+"してエクスポートされました。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
 msgid "Generating logistic section"
@@ -46738,10 +46757,10 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"グローバル フットプリント ライブラリ "
-"テーブルを読み込もうとしたところ、エラーが発生しました。\n"
-"設定メニューで、このグローバル フットプリント ライブラリ "
-"テーブルを編集して下さい。"
+"グローバル フットプリント ライブラリ テーブルを読み込もうとしたところ、エラー"
+"が発生しました。\n"
+"設定メニューで、このグローバル フットプリント ライブラリ テーブルを編集して下"
+"さい。"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:324
 msgid "Failed to load board\n"

@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 13:55+0300\n"
+"POT-Creation-Date: 2025-09-30 15:10+0300\n"
 "PO-Revision-Date: 2025-09-17 02:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -2225,7 +2225,7 @@ msgstr "无法创建全局库表路径 '%s'。"
 #: common/widgets/widget_hotkey_list.cpp:530
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2058 eeschema/symbol_editor/symbol_editor.cpp:828
+#: eeschema/sch_symbol.cpp:2059 eeschema/symbol_editor/symbol_editor.cpp:828
 #: eeschema/symbol_editor/symbol_editor.cpp:1771
 #: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2311,7 +2311,7 @@ msgstr "3D 模型"
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2658
+#: eeschema/sch_symbol.cpp:2654
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2617,7 +2617,7 @@ msgstr "环境变量"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:490 eeschema/sch_pin.cpp:1571
-#: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2072
+#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2073
 #: eeschema/symbol_editor/symbol_editor.cpp:1741
 #: eeschema/symbol_viewer_frame.cpp:457
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
@@ -3411,9 +3411,9 @@ msgstr "选项"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1046
-#: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2068
-#: eeschema/sch_symbol.cpp:2966 eeschema/sim/simulator_frame_ui.cpp:617
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
+#: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
+#: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
 #: eeschema/sim/simulator_frame_ui.cpp:2724
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
@@ -4734,7 +4734,7 @@ msgstr "活动的"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/sch_field.cpp:1232 eeschema/sch_pin.cpp:1576
-#: eeschema/sch_pin.cpp:2175 eeschema/sch_tablecell.cpp:241
+#: eeschema/sch_pin.cpp:2171 eeschema/sch_tablecell.cpp:241
 #: include/lib_table_grid.h:218 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Visible"
@@ -5745,7 +5745,7 @@ msgstr "文本"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:416
-#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2095
+#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:100 eeschema/sch_pin.cpp:2091
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -6199,7 +6199,7 @@ msgstr "网络检查"
 msgid "Screen"
 msgstr "屏幕"
 
-#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2055
+#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2056
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1324
@@ -6447,7 +6447,7 @@ msgstr "半径"
 #: common/eda_shape.cpp:1009 common/eda_shape.cpp:1018
 #: common/eda_shape.cpp:1036 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/sch_pin.cpp:1579 eeschema/sch_pin.cpp:2160
+#: eeschema/sch_pin.cpp:1579 eeschema/sch_pin.cpp:2156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:902
 msgid "Length"
 msgstr "长度"
@@ -6616,9 +6616,9 @@ msgstr "粗体+斜体"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
-#: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:118
+#: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1242 eeschema/sch_field.cpp:1851
-#: eeschema/sch_pin.cpp:2111 pcbnew/dialogs/dialog_render_job.cpp:40
+#: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617
 msgid "Left"
 msgstr "向左"
@@ -6644,9 +6644,9 @@ msgstr "居中"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
-#: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:117
+#: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1244 eeschema/sch_field.cpp:1853
-#: eeschema/sch_pin.cpp:2110 pcbnew/dialogs/dialog_render_job.cpp:41
+#: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2618
 msgid "Right"
 msgstr "向右"
@@ -6677,8 +6677,8 @@ msgstr "向下"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1905
-#: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2156
-#: eeschema/sch_symbol.cpp:2937 eeschema/sch_tablecell.cpp:239
+#: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2152
+#: eeschema/sch_symbol.cpp:2933 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7266,7 +7266,7 @@ msgstr "复制所选单元格内容到剪贴板"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2327
+#: eeschema/tools/sch_editor_control.cpp:2329
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1262
 msgid "Paste"
@@ -7922,11 +7922,11 @@ msgstr "全局标签"
 msgid "Hierarchical labels"
 msgstr "层次标签"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2953
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2949
 msgid "Pin numbers"
 msgstr "引脚编号"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2957
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2953
 msgid "Pin names"
 msgstr "引脚名"
 
@@ -8043,7 +8043,7 @@ msgid "Helper items"
 msgstr "辅助项"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2929
+#: eeschema/tools/sch_editor_control.cpp:2931
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:352
@@ -8567,8 +8567,8 @@ msgstr "编辑默认值"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2011
-#: eeschema/sch_symbol.cpp:2065 eeschema/sch_symbol.cpp:2963
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2012
+#: eeschema/sch_symbol.cpp:2066 eeschema/sch_symbol.cpp:2959
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4195
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -8588,7 +8588,7 @@ msgstr "按值和封装分组"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
-#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3029
+#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3025
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
@@ -9764,13 +9764,13 @@ msgid "<not found>"
 msgstr "<未找到>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
-#: eeschema/sch_symbol.cpp:1985 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: eeschema/sch_symbol.cpp:1986 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
 msgstr "电路板"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2041
-#: eeschema/sch_symbol.cpp:2045 eeschema/sch_symbol.cpp:2082
+#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2042
+#: eeschema/sch_symbol.cpp:2046 eeschema/sch_symbol.cpp:2083
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1726
 msgid "Library"
 msgstr "库"
@@ -10091,7 +10091,7 @@ msgstr "快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
-#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:459
+#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:463
 #: eeschema/symbol_editor/symbol_editor.cpp:1757
 #: eeschema/tools/sch_edit_tool.cpp:162
 msgid "Alternate"
@@ -10481,8 +10481,8 @@ msgstr "'%s' 不是有效封装。"
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2060
-#: eeschema/sch_symbol.cpp:2647 eeschema/sch_symbol.cpp:2975
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
+#: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
 #: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4208
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
@@ -10859,39 +10859,39 @@ msgstr ""
 "%s\n"
 "找不到。脚本不可用。"
 
-#: eeschema/connection_graph.cpp:3316
+#: eeschema/connection_graph.cpp:3312
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都连接到同一项上; 将使用 %s 作为网表中的网络名称"
 
-#: eeschema/connection_graph.cpp:3554
+#: eeschema/connection_graph.cpp:3550
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s, 但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3859 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3855 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "未连接的连线端点"
 
-#: eeschema/connection_graph.cpp:3884
+#: eeschema/connection_graph.cpp:3880
 msgid "Unconnected wire to bus entry"
 msgstr "导线没有连到总线入口"
 
-#: eeschema/connection_graph.cpp:4217
+#: eeschema/connection_graph.cpp:4213
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "根图纸中的层次标签 \"%s\" 无法连接到不存在的父图纸"
 
-#: eeschema/connection_graph.cpp:4282
+#: eeschema/connection_graph.cpp:4278
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图纸引脚 %s 在子图纸内没有匹配的层次标签"
 
-#: eeschema/connection_graph.cpp:4299
+#: eeschema/connection_graph.cpp:4295
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父图纸内没有匹配的图纸引脚"
@@ -10986,7 +10986,7 @@ msgstr "库 %s 已存在。"
 msgid "Enter a description for the library:"
 msgstr "输入库描述:"
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2972
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2968
 #: pcbnew/footprint.cpp:4205 pcbnew/plot_board_layers.cpp:189
 msgid "Library Description"
 msgstr "库描述"
@@ -12469,12 +12469,12 @@ msgid "Text color:"
 msgstr "文本颜色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:119 eeschema/sch_pin.cpp:2112
+#: eeschema/pin_type.cpp:114 eeschema/sch_pin.cpp:2108
 msgid "Up"
 msgstr "向上"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:120 eeschema/sch_pin.cpp:2113
+#: eeschema/pin_type.cpp:115 eeschema/sch_pin.cpp:2109
 msgid "Down"
 msgstr "向下"
 
@@ -12726,7 +12726,7 @@ msgstr "显示语法帮助窗口"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2961
+#: eeschema/sch_symbol.cpp:2957
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4193
@@ -12822,35 +12822,35 @@ msgstr "删除字段"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
-#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2077
+#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2073
 msgid "Input"
 msgstr "输入"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2078
+#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2074
 msgid "Output"
 msgstr "输出"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2079
+#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2075
 msgid "Bidirectional"
 msgstr "双向"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2247
-#: eeschema/sch_pin.cpp:2080
+#: eeschema/sch_pin.cpp:2076
 msgid "Tri-state"
 msgstr "三态"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
-#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2081
+#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2077
 msgid "Passive"
 msgstr "无源"
 
@@ -12878,7 +12878,7 @@ msgid "ALL"
 msgstr "全部"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:461
+#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:465
 #: eeschema/symbol_editor/symbol_editor.cpp:1759
 #: eeschema/tools/sch_edit_tool.cpp:159
 msgid "Standard"
@@ -12903,7 +12903,7 @@ msgstr "编号"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
-#: eeschema/sch_pin.cpp:2139
+#: eeschema/sch_pin.cpp:2135
 msgid "Electrical Type"
 msgstr "电气类型"
 
@@ -12913,26 +12913,26 @@ msgstr "电气类型"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
-#: eeschema/sch_pin.cpp:2144
+#: eeschema/sch_pin.cpp:2140
 msgid "Graphic Style"
 msgstr "图形样式"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
-#: eeschema/sch_pin.cpp:2170
+#: eeschema/sch_pin.cpp:2166
 msgid "Number Text Size"
 msgstr "引脚编号文本高度"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
-#: eeschema/sch_pin.cpp:2165
+#: eeschema/sch_pin.cpp:2161
 msgid "Name Text Size"
 msgstr "名称文字大小"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:552
-#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2997
+#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "单位"
@@ -15355,7 +15355,7 @@ msgid "Edit Library Symbol..."
 msgstr "编辑库符号..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/sch_pin.cpp:2134
+#: eeschema/sch_pin.cpp:2130
 msgid "Pin Number"
 msgstr "引脚编号"
 
@@ -16866,160 +16866,160 @@ msgstr "符号 %s 在未放置的单元 %s 中有双向引脚。"
 msgid "Netclass %s is not defined"
 msgstr "网络类 %s 未定义"
 
-#: eeschema/erc/erc.cpp:772
+#: eeschema/erc/erc.cpp:771
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
 msgstr "位于 %d, %d 处的标签连接了不止一条连线"
 
-#: eeschema/erc/erc.cpp:852
+#: eeschema/erc/erc.cpp:851
 #, c-format
 msgid "Four items connected at %d, %d"
 msgstr "%d, %d 处连接了四个项目"
 
-#: eeschema/erc/erc.cpp:924
+#: eeschema/erc/erc.cpp:923
 msgid "Pin with 'no connection' type is connected"
 msgstr "带有 '无连接' 标志的引脚具有外部连接"
 
-#: eeschema/erc/erc.cpp:1143
+#: eeschema/erc/erc.cpp:1136
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "类型为 %s 和 %s 的引脚已连接"
 
-#: eeschema/erc/erc.cpp:1211
+#: eeschema/erc/erc.cpp:1203
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "引脚 %s 同时连接到 %s 和 %s"
 
-#: eeschema/erc/erc.cpp:1432
+#: eeschema/erc/erc.cpp:1424
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
 msgstr "当前配置不包含符号库 '%s'"
 
-#: eeschema/erc/erc.cpp:1447
+#: eeschema/erc/erc.cpp:1439
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "当前配置中未启用符号库 '%s'"
 
-#: eeschema/erc/erc.cpp:1462
+#: eeschema/erc/erc.cpp:1454
 #, c-format
 msgid "The symbol library '%s' was not found at '%s'."
 msgstr "在 '%2$s' 中找不到符号库 '%1$s'。"
 
-#: eeschema/erc/erc.cpp:1482
+#: eeschema/erc/erc.cpp:1474
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "在符号库中 '%s' 找不到符号 '%s'"
 
-#: eeschema/erc/erc.cpp:1507
+#: eeschema/erc/erc.cpp:1499
 #, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
 msgstr "符号 '%s' 有多个引脚具有相同的引脚编号"
 
-#: eeschema/erc/erc.cpp:1517
+#: eeschema/erc/erc.cpp:1509
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "符号 '%s' 与来源库 '%s' 中的符号存在差异"
 
-#: eeschema/erc/erc.cpp:1566
+#: eeschema/erc/erc.cpp:1558
 #, c-format
 msgid "'%s' is not a valid footprint identifier."
 msgstr "'%s' 不是有效封装标识。"
 
-#: eeschema/erc/erc.cpp:1580
+#: eeschema/erc/erc.cpp:1572
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:886
 #: pcbnew/footprint_editor_utils.cpp:363
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "当前配置不包含封装库 '%s'。"
 
-#: eeschema/erc/erc.cpp:1589
+#: eeschema/erc/erc.cpp:1581
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:900
 #: pcbnew/footprint_editor_utils.cpp:375
 #, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "当前配置中未启用封装库 '%s'。"
 
-#: eeschema/erc/erc.cpp:1598
+#: eeschema/erc/erc.cpp:1590
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:951
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
 
-#: eeschema/erc/erc.cpp:1668
+#: eeschema/erc/erc.cpp:1660
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr "分配的封装 (%s) 与封装筛选规则 (%s) 不匹配。"
 
-#: eeschema/erc/erc.cpp:1830
+#: eeschema/erc/erc.cpp:1822
 msgid "Checking sheet names..."
 msgstr "正在检查图纸名称..."
 
-#: eeschema/erc/erc.cpp:1838
+#: eeschema/erc/erc.cpp:1830
 msgid "Checking bus conflicts..."
 msgstr "正在检查总线冲突..."
 
-#: eeschema/erc/erc.cpp:1845
+#: eeschema/erc/erc.cpp:1837
 msgid "Checking conflicts..."
 msgstr "正在检查冲突..."
 
-#: eeschema/erc/erc.cpp:1859
+#: eeschema/erc/erc.cpp:1851
 msgid "Checking units..."
 msgstr "正在检查单元..."
 
-#: eeschema/erc/erc.cpp:1865
+#: eeschema/erc/erc.cpp:1857
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
 msgstr "正在检查封装..."
 
-#: eeschema/erc/erc.cpp:1879
+#: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
 msgstr "正在检查引脚..."
 
-#: eeschema/erc/erc.cpp:1899
+#: eeschema/erc/erc.cpp:1891
 msgid "Checking similar labels..."
 msgstr "正在检查相似标签..."
 
-#: eeschema/erc/erc.cpp:1907
+#: eeschema/erc/erc.cpp:1899
 msgid "Checking local and global labels..."
 msgstr "正在检查局部标签和全局标签..."
 
-#: eeschema/erc/erc.cpp:1915
+#: eeschema/erc/erc.cpp:1907
 msgid "Checking for unresolved variables..."
 msgstr "正在检查未解析的变量..."
 
-#: eeschema/erc/erc.cpp:1923
+#: eeschema/erc/erc.cpp:1915
 msgid "Checking SPICE models..."
 msgstr "正在检查 SPICE 模型..."
 
-#: eeschema/erc/erc.cpp:1931
+#: eeschema/erc/erc.cpp:1923
 msgid "Checking no connect pins for connections..."
 msgstr "正在检查无连接引脚的连接..."
 
-#: eeschema/erc/erc.cpp:1940
+#: eeschema/erc/erc.cpp:1932
 msgid "Checking for library symbol issues..."
 msgstr "正在检查库符号问题..."
 
-#: eeschema/erc/erc.cpp:1948
+#: eeschema/erc/erc.cpp:1940
 msgid "Checking for footprint link issues..."
 msgstr "正在检查封装链接问题..."
 
-#: eeschema/erc/erc.cpp:1956
+#: eeschema/erc/erc.cpp:1948
 msgid "Checking footprint assignments against footprint filters..."
 msgstr "正在根据封装筛选规则检查封装分配..."
 
-#: eeschema/erc/erc.cpp:1964
+#: eeschema/erc/erc.cpp:1956
 msgid "Checking for off grid pins and wires..."
 msgstr "正在检查偏离栅格的引脚和走线..."
 
-#: eeschema/erc/erc.cpp:1972
+#: eeschema/erc/erc.cpp:1964
 msgid "Checking for four way junctions..."
 msgstr "正在检查四通路结点..."
 
-#: eeschema/erc/erc.cpp:1980
+#: eeschema/erc/erc.cpp:1972
 msgid "Checking for labels on more than one wire..."
 msgstr "正在检查标签是否连接了不止一条的连线..."
 
-#: eeschema/erc/erc.cpp:1988
+#: eeschema/erc/erc.cpp:1980
 msgid "Checking for undefined netclasses..."
 msgstr "正在检查未定义的网络类..."
 
@@ -17540,7 +17540,7 @@ msgstr "无法移除以下自动保存的文件\n"
 msgid "Manual removal will be required for the file(s) above."
 msgstr "上述文件需要手动移除。"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2037
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2038
 msgid "Derived from"
 msgstr "派生自"
 
@@ -17642,29 +17642,29 @@ msgstr "默认单位:"
 msgid "Import Vector Graphics File"
 msgstr "导入矢量图形文件"
 
-#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:448
+#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:452
 #, c-format
 msgid "Unit %s"
 msgstr "单元 %s"
 
 #: eeschema/lib_symbol.cpp:587 eeschema/sch_sheet.cpp:312
-#: eeschema/sch_symbol.cpp:1545
+#: eeschema/sch_symbol.cpp:1546
 msgid "Excluded from BOM"
 msgstr "从 BOM 中移除"
 
 #: eeschema/lib_symbol.cpp:592 eeschema/sch_sheet.cpp:321
-#: eeschema/sch_symbol.cpp:1554
+#: eeschema/sch_symbol.cpp:1555
 msgid "Excluded from board"
 msgstr "不在 PCB 中进行绘制"
 
 #: eeschema/lib_symbol.cpp:597 eeschema/sch_sheet.cpp:330
-#: eeschema/sch_symbol.cpp:1563
+#: eeschema/sch_symbol.cpp:1564
 msgid "Excluded from simulation"
 msgstr "不参与电路仿真"
 
 #: eeschema/lib_symbol.cpp:602 eeschema/sch_sheet.cpp:339
-#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1572
-#: eeschema/sch_symbol.cpp:1988 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1573
+#: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 msgid "DNP"
 msgstr "DNP (不作装配)"
@@ -18017,65 +18017,65 @@ msgstr "设置引脚功能"
 msgid "none"
 msgstr "无"
 
-#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2082
+#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2078
 msgid "Free"
 msgstr "自由"
 
-#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2083
+#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2079
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 msgid "Unspecified"
 msgstr "未指定"
 
-#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2084
+#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2080
 msgid "Power input"
 msgstr "电源输入"
 
-#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2085
+#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2081
 msgid "Power output"
 msgstr "电源输出"
 
-#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2086
+#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2082
 msgid "Open collector"
 msgstr "集电极开路"
 
-#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2087
+#: eeschema/pin_type.cpp:95 eeschema/sch_pin.cpp:2083
 msgid "Open emitter"
 msgstr "发射极开路"
 
-#: eeschema/pin_type.cpp:97 eeschema/sch_pin.cpp:2088
+#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2084
 msgid "Unconnected"
 msgstr "未连接"
 
-#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2096
+#: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2092
 msgid "Inverted"
 msgstr "反相"
 
-#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2097
+#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2093
 msgid "Clock"
 msgstr "时钟"
 
-#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2098
+#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2094
 msgid "Inverted clock"
 msgstr "反相时钟"
 
-#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2099
+#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2095
 msgid "Input low"
 msgstr "输入低"
 
-#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2100
+#: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2096
 msgid "Clock low"
 msgstr "时钟低"
 
-#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2101
+#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2097
 msgid "Output low"
 msgstr "输出低"
 
-#: eeschema/pin_type.cpp:110 eeschema/sch_pin.cpp:2102
+#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2098
 msgid "Falling edge clock"
 msgstr "下降沿时钟"
 
-#: eeschema/pin_type.cpp:112 eeschema/sch_pin.cpp:2103
+#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2099
 msgid "NonLogic"
 msgstr "非逻辑"
 
@@ -18197,8 +18197,8 @@ msgstr ""
 "包含当前符号的库已修改。\n"
 "是否重新加载该库?"
 
-#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2148
-#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2929
+#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2144
+#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
 #: pcbnew/widgets/pcb_properties_panel.cpp:247
@@ -18207,8 +18207,8 @@ msgstr ""
 msgid "Position X"
 msgstr "位置 X"
 
-#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2152
-#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2932
+#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2148
+#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
 #: pcbnew/widgets/pcb_properties_panel.cpp:248 pcbnew/zone.cpp:1923
@@ -19214,7 +19214,7 @@ msgid "All body styles"
 msgstr "作用于符号的所有图形样式"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
-#: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
+#: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 msgid "Body Style"
 msgstr "图形样式"
 
@@ -19415,27 +19415,27 @@ msgstr "X 位置"
 msgid "Pos Y"
 msgstr "Y 位置"
 
-#: eeschema/sch_pin.cpp:1847
+#: eeschema/sch_pin.cpp:1843
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "引脚 %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1855
+#: eeschema/sch_pin.cpp:1851
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "引脚 %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:1865
+#: eeschema/sch_pin.cpp:1861
 #, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr "隐藏的引脚 %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1873
+#: eeschema/sch_pin.cpp:1869
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "隐藏的引脚 %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2130 pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2791
+#: eeschema/sch_pin.cpp:2126 pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2791
 msgid "Pin Name"
 msgstr "引脚名称"
 
@@ -19574,16 +19574,16 @@ msgstr "层次路径"
 msgid "File Name"
 msgstr "文件名称"
 
-#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1979
+#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1980
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 msgid "Simulation"
 msgstr "仿真"
 
-#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1982
+#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
 msgid "BOM"
 msgstr "BOM"
 
-#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1994
+#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 msgid "Exclude from"
 msgstr "排除自"
@@ -19608,22 +19608,22 @@ msgstr "边框颜色"
 msgid "Background Color"
 msgstr "背景颜色"
 
-#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1047
-#: eeschema/sch_symbol.cpp:3031
+#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1051
+#: eeschema/sch_symbol.cpp:3027
 msgid "Exclude From Board"
 msgstr "不在 PCB 中进行绘制"
 
-#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3034
+#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3030
 msgid "Exclude From Simulation"
 msgstr "不参与电路仿真"
 
-#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1048
-#: eeschema/sch_symbol.cpp:3037 pcbnew/footprint.cpp:4225
+#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
+#: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清单中显示"
 
-#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1049
-#: eeschema/sch_symbol.cpp:3040 eeschema/tools/sch_actions.cpp:993
+#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1053
+#: eeschema/sch_symbol.cpp:3036 eeschema/tools/sch_actions.cpp:993
 #: pcbnew/footprint.cpp:4228
 msgid "Do not Populate"
 msgstr "不作装配"
@@ -19637,49 +19637,49 @@ msgstr "(删除项目)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "层次图纸引脚 %s"
 
-#: eeschema/sch_symbol.cpp:2005
+#: eeschema/sch_symbol.cpp:2006
 msgid "Power symbol"
 msgstr "电源符号"
 
-#: eeschema/sch_symbol.cpp:2025
+#: eeschema/sch_symbol.cpp:2026
 msgid "flags"
 msgstr "标志"
 
-#: eeschema/sch_symbol.cpp:2030
+#: eeschema/sch_symbol.cpp:2031
 msgid "Missing parent"
 msgstr "缺少父级"
 
-#: eeschema/sch_symbol.cpp:2045
+#: eeschema/sch_symbol.cpp:2046
 msgid "Undefined!!!"
 msgstr "未定义!!!"
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2054
 msgid "<Unknown>"
 msgstr "<未知>"
 
-#: eeschema/sch_symbol.cpp:2078
+#: eeschema/sch_symbol.cpp:2079
 msgid "No library defined!"
 msgstr "未定义库!"
 
-#: eeschema/sch_symbol.cpp:2080
+#: eeschema/sch_symbol.cpp:2081
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "在 %s 中找不到符号!"
 
-#: eeschema/sch_symbol.cpp:2344
+#: eeschema/sch_symbol.cpp:2345
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "符号 %s [%s]"
 
-#: eeschema/sch_symbol.cpp:2939
+#: eeschema/sch_symbol.cpp:2935
 msgid "Mirror X"
 msgstr "X 轴镜像"
 
-#: eeschema/sch_symbol.cpp:2941
+#: eeschema/sch_symbol.cpp:2937
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
-#: eeschema/sch_symbol.cpp:2969 pcbnew/footprint.cpp:4202
+#: eeschema/sch_symbol.cpp:2965 pcbnew/footprint.cpp:4202
 msgid "Library Link"
 msgstr "库链接"
 
@@ -23727,24 +23727,24 @@ msgstr "无法添加库 '%s'。"
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "更新原理图中的符号以指向新库?"
 
-#: eeschema/tools/sch_editor_control.cpp:844
+#: eeschema/tools/sch_editor_control.cpp:846
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "错误: 在当前图纸中找到重复的子图纸名称。"
 
-#: eeschema/tools/sch_editor_control.cpp:951
+#: eeschema/tools/sch_editor_control.cpp:953
 msgid "No net selected."
 msgstr "没有选择网络。"
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:979
 msgid "Net must be labeled to assign a netclass."
 msgstr "网络必须标记才能分配网络类。"
 
-#: eeschema/tools/sch_editor_control.cpp:1725 pcbnew/tools/pcb_control.cpp:1067
+#: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1067
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr "粘贴长文本字符串可能会引起卡顿。是否继续?"
 
-#: eeschema/tools/sch_editor_control.cpp:1847
+#: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -23754,29 +23754,29 @@ msgstr ""
 "已放弃粘贴图纸 '%s'\n"
 "因为目标位置已将该图纸或其子图纸作为父图纸。"
 
-#: eeschema/tools/sch_editor_control.cpp:2377
+#: eeschema/tools/sch_editor_control.cpp:2379
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "无法编辑包含损坏的库符号链接的符号。"
 
-#: eeschema/tools/sch_editor_control.cpp:2466
+#: eeschema/tools/sch_editor_control.cpp:2468
 msgid "Increment Annotations"
 msgstr "递增位号"
 
-#: eeschema/tools/sch_editor_control.cpp:2886
+#: eeschema/tools/sch_editor_control.cpp:2888
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替换 %d 个重复标识。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2896
+#: eeschema/tools/sch_editor_control.cpp:2898
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修复 %d 个潜在问题。"
 
-#: eeschema/tools/sch_editor_control.cpp:2903
+#: eeschema/tools/sch_editor_control.cpp:2905
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "未发现错误。"

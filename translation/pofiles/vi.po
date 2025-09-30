@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 13:55+0300\n"
+"POT-Creation-Date: 2025-09-30 15:10+0300\n"
 "PO-Revision-Date: 2025-09-04 10:01+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v9/vi/"
@@ -2263,7 +2263,7 @@ msgstr "Không thể tạo đường dẫn bảng thư viện chung '%s'."
 #: common/widgets/widget_hotkey_list.cpp:530
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2058 eeschema/symbol_editor/symbol_editor.cpp:828
+#: eeschema/sch_symbol.cpp:2059 eeschema/symbol_editor/symbol_editor.cpp:828
 #: eeschema/symbol_editor/symbol_editor.cpp:1771
 #: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2352,7 +2352,7 @@ msgstr "Mô hình 3D"
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2658
+#: eeschema/sch_symbol.cpp:2654
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2662,7 +2662,7 @@ msgstr "Biến môi trường"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:490 eeschema/sch_pin.cpp:1571
-#: eeschema/sch_symbol.cpp:2019 eeschema/sch_symbol.cpp:2072
+#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2073
 #: eeschema/symbol_editor/symbol_editor.cpp:1741
 #: eeschema/symbol_viewer_frame.cpp:457
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
@@ -3469,9 +3469,9 @@ msgstr "Tùy chọn"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1046
-#: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2068
-#: eeschema/sch_symbol.cpp:2966 eeschema/sim/simulator_frame_ui.cpp:617
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
+#: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
+#: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
 #: eeschema/sim/simulator_frame_ui.cpp:2724
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
@@ -4834,7 +4834,7 @@ msgstr "Thực thi"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/sch_field.cpp:1232 eeschema/sch_pin.cpp:1576
-#: eeschema/sch_pin.cpp:2175 eeschema/sch_tablecell.cpp:241
+#: eeschema/sch_pin.cpp:2171 eeschema/sch_tablecell.cpp:241
 #: include/lib_table_grid.h:218 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Visible"
@@ -5873,7 +5873,7 @@ msgstr "Văn bản"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:416
-#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2095
+#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:100 eeschema/sch_pin.cpp:2091
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -6329,7 +6329,7 @@ msgstr "Khám phá tín hiệu"
 msgid "Screen"
 msgstr "Màn hình"
 
-#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2055
+#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2056
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1324
@@ -6577,7 +6577,7 @@ msgstr "Bán kính"
 #: common/eda_shape.cpp:1009 common/eda_shape.cpp:1018
 #: common/eda_shape.cpp:1036 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/sch_pin.cpp:1579 eeschema/sch_pin.cpp:2160
+#: eeschema/sch_pin.cpp:1579 eeschema/sch_pin.cpp:2156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:902
 msgid "Length"
 msgstr "Độ dài"
@@ -6746,9 +6746,9 @@ msgstr "Đậm + Nghiêng"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
-#: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:118
+#: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1242 eeschema/sch_field.cpp:1851
-#: eeschema/sch_pin.cpp:2111 pcbnew/dialogs/dialog_render_job.cpp:40
+#: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617
 msgid "Left"
 msgstr "Trái"
@@ -6774,9 +6774,9 @@ msgstr "Giữa"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
-#: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:117
+#: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1244 eeschema/sch_field.cpp:1853
-#: eeschema/sch_pin.cpp:2110 pcbnew/dialogs/dialog_render_job.cpp:41
+#: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2618
 msgid "Right"
 msgstr "Phải"
@@ -6807,8 +6807,8 @@ msgstr "Dưới"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1905
-#: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2156
-#: eeschema/sch_symbol.cpp:2937 eeschema/sch_tablecell.cpp:239
+#: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2152
+#: eeschema/sch_symbol.cpp:2933 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7421,7 +7421,7 @@ msgstr "Sao chép các ô đã chọn vào bộ nhớ tạm"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2327
+#: eeschema/tools/sch_editor_control.cpp:2329
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1022
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1262
 #, fuzzy
@@ -8153,12 +8153,12 @@ msgstr "Nhãn toàn cục"
 msgid "Hierarchical labels"
 msgstr "Nhãn phân cấp"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2953
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2949
 #, fuzzy
 msgid "Pin numbers"
 msgstr "Số Pin"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2957
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2953
 #, fuzzy
 msgid "Pin names"
 msgstr "Tên Pin"
@@ -8300,7 +8300,7 @@ msgid "Helper items"
 msgstr "Khoản mục trợ giúp"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2929
+#: eeschema/tools/sch_editor_control.cpp:2931
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:352
@@ -8876,8 +8876,8 @@ msgstr "Mặc định"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2011
-#: eeschema/sch_symbol.cpp:2065 eeschema/sch_symbol.cpp:2963
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2012
+#: eeschema/sch_symbol.cpp:2066 eeschema/sch_symbol.cpp:2959
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4195
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -8899,7 +8899,7 @@ msgstr "Footprint: %s"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
-#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3029
+#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3025
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
@@ -10196,14 +10196,14 @@ msgid "<not found>"
 msgstr "%s không tìm thấy"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
-#: eeschema/sch_symbol.cpp:1985 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: eeschema/sch_symbol.cpp:1986 pcbnew/dialogs/dialog_board_statistics.cpp:681
 #, fuzzy
 msgid "Board"
 msgstr "Lật bo mạch"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2041
-#: eeschema/sch_symbol.cpp:2045 eeschema/sch_symbol.cpp:2082
+#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2042
+#: eeschema/sch_symbol.cpp:2046 eeschema/sch_symbol.cpp:2083
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1726
 msgid "Library"
 msgstr "Thư Viện"
@@ -10555,7 +10555,7 @@ msgstr "Phím tắt"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
-#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:459
+#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:463
 #: eeschema/symbol_editor/symbol_editor.cpp:1757
 #: eeschema/tools/sch_edit_tool.cpp:162
 #, fuzzy
@@ -10970,8 +10970,8 @@ msgstr "\"%s\" không phải là footprint hợp lệ."
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2060
-#: eeschema/sch_symbol.cpp:2647 eeschema/sch_symbol.cpp:2975
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
+#: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
 #: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4208
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
@@ -11392,7 +11392,7 @@ msgstr ""
 "%s\n"
 "không tìm thấy. Tập lệnh không có sẵn."
 
-#: eeschema/connection_graph.cpp:3316
+#: eeschema/connection_graph.cpp:3312
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11400,7 +11400,7 @@ msgstr ""
 "Cả %s và %s đều được gắn vào các mục giống nhau; %s sẽ được sử dụng trong "
 "netlist"
 
-#: eeschema/connection_graph.cpp:3554
+#: eeschema/connection_graph.cpp:3550
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -11408,17 +11408,17 @@ msgstr ""
 "Net %s được kết nối bằng đồ thị với bus %s nhưng không phải là thành viên "
 "của bus đó"
 
-#: eeschema/connection_graph.cpp:3859 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3855 eeschema/erc/erc_item.cpp:229
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "Không được kết nối"
 
-#: eeschema/connection_graph.cpp:3884
+#: eeschema/connection_graph.cpp:3880
 #, fuzzy
 msgid "Unconnected wire to bus entry"
 msgstr "Không được kết nối"
 
-#: eeschema/connection_graph.cpp:4217
+#: eeschema/connection_graph.cpp:4213
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11426,13 +11426,13 @@ msgid ""
 msgstr ""
 "chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
-#: eeschema/connection_graph.cpp:4282
+#: eeschema/connection_graph.cpp:4278
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
-#: eeschema/connection_graph.cpp:4299
+#: eeschema/connection_graph.cpp:4295
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11532,7 +11532,7 @@ msgstr "Thư viện %s đã tồn tại."
 msgid "Enter a description for the library:"
 msgstr "Đang tải thư viện symbol"
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2972
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2968
 #: pcbnew/footprint.cpp:4205 pcbnew/plot_board_layers.cpp:189
 #, fuzzy
 msgid "Library Description"
@@ -13056,12 +13056,12 @@ msgid "Text color:"
 msgstr "Màu sắc đường kẻ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:119 eeschema/sch_pin.cpp:2112
+#: eeschema/pin_type.cpp:114 eeschema/sch_pin.cpp:2108
 msgid "Up"
 msgstr "Lên"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:120 eeschema/sch_pin.cpp:2113
+#: eeschema/pin_type.cpp:115 eeschema/sch_pin.cpp:2109
 msgid "Down"
 msgstr "Xuống"
 
@@ -13336,7 +13336,7 @@ msgstr "Hiển thị cửa sổ trình xem 3D"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2961
+#: eeschema/sch_symbol.cpp:2957
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4193
@@ -13434,35 +13434,35 @@ msgstr "Xóa trường"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
-#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2077
+#: eeschema/sch_label.cpp:2244 eeschema/sch_pin.cpp:2073
 msgid "Input"
 msgstr "Đầu vào"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2078
+#: eeschema/sch_label.cpp:2245 eeschema/sch_pin.cpp:2074
 msgid "Output"
 msgstr "Đầu ra"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2079
+#: eeschema/sch_label.cpp:2246 eeschema/sch_pin.cpp:2075
 msgid "Bidirectional"
 msgstr "Hai chiều"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2247
-#: eeschema/sch_pin.cpp:2080
+#: eeschema/sch_pin.cpp:2076
 msgid "Tri-state"
 msgstr "Ba trạng thái"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
-#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2081
+#: eeschema/sch_label.cpp:2248 eeschema/sch_pin.cpp:2077
 msgid "Passive"
 msgstr "Thụ động"
 
@@ -13492,7 +13492,7 @@ msgid "ALL"
 msgstr "TẤT CẢ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:461
+#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:465
 #: eeschema/symbol_editor/symbol_editor.cpp:1759
 #: eeschema/tools/sch_edit_tool.cpp:159
 #, fuzzy
@@ -13518,7 +13518,7 @@ msgstr "Số"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
-#: eeschema/sch_pin.cpp:2139
+#: eeschema/sch_pin.cpp:2135
 msgid "Electrical Type"
 msgstr "Loại điện"
 
@@ -13528,19 +13528,19 @@ msgstr "Loại điện"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
-#: eeschema/sch_pin.cpp:2144
+#: eeschema/sch_pin.cpp:2140
 msgid "Graphic Style"
 msgstr "Phong cách Đồ họa"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
-#: eeschema/sch_pin.cpp:2170
+#: eeschema/sch_pin.cpp:2166
 msgid "Number Text Size"
 msgstr "Kích thước chữ số"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
-#: eeschema/sch_pin.cpp:2165
+#: eeschema/sch_pin.cpp:2161
 #, fuzzy
 msgid "Name Text Size"
 msgstr "Tên kích thước văn bản"
@@ -13548,7 +13548,7 @@ msgstr "Tên kích thước văn bản"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:552
-#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2997
+#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "Đơn vị"
@@ -16167,7 +16167,7 @@ msgid "Edit Library Symbol..."
 msgstr "Chỉnh sửa Thư viện biểu tượng..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/sch_pin.cpp:2134
+#: eeschema/sch_pin.cpp:2130
 #, fuzzy
 msgid "Pin Number"
 msgstr "Số Pin"
@@ -17834,169 +17834,169 @@ msgstr "Biểu tượng %s có chân hai chiều trong đơn vị %s chưa đư�
 msgid "Netclass %s is not defined"
 msgstr "Netclass %s chưa được xác định"
 
-#: eeschema/erc/erc.cpp:772
+#: eeschema/erc/erc.cpp:771
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
 msgstr ""
 
-#: eeschema/erc/erc.cpp:852
+#: eeschema/erc/erc.cpp:851
 #, c-format
 msgid "Four items connected at %d, %d"
 msgstr "Bốn mục được kết nối tại %d, %d"
 
-#: eeschema/erc/erc.cpp:924
+#: eeschema/erc/erc.cpp:923
 msgid "Pin with 'no connection' type is connected"
 msgstr ""
 
-#: eeschema/erc/erc.cpp:1143
+#: eeschema/erc/erc.cpp:1136
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr ""
 
-#: eeschema/erc/erc.cpp:1211
+#: eeschema/erc/erc.cpp:1203
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Chân %s được kết nối với cả %s và %s"
 
-#: eeschema/erc/erc.cpp:1432
+#: eeschema/erc/erc.cpp:1424
 #, fuzzy, c-format
 msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Cấu hình hiện tại không bao gồm thư viện '%s'"
 
-#: eeschema/erc/erc.cpp:1447
+#: eeschema/erc/erc.cpp:1439
 #, fuzzy, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
-#: eeschema/erc/erc.cpp:1462
+#: eeschema/erc/erc.cpp:1454
 #, fuzzy, c-format
 msgid "The symbol library '%s' was not found at '%s'."
 msgstr "Footprint \"%s\" không tìm thấy."
 
-#: eeschema/erc/erc.cpp:1482
+#: eeschema/erc/erc.cpp:1474
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Không tìm thấy biểu tượng '%s' trong thư viện biểu tượng '%s'"
 
-#: eeschema/erc/erc.cpp:1507
+#: eeschema/erc/erc.cpp:1499
 #, fuzzy, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
 msgstr "Biểu tượng %s có các chân nguồn đầu vào theo đơn vị %s chưa được đặt."
 
-#: eeschema/erc/erc.cpp:1517
+#: eeschema/erc/erc.cpp:1509
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Ký hiệu '%s' không khớp với bản sao trong thư viện '%s'"
 
-#: eeschema/erc/erc.cpp:1566
+#: eeschema/erc/erc.cpp:1558
 #, fuzzy, c-format
 msgid "'%s' is not a valid footprint identifier."
 msgstr "\"%s\" không phải là footprint hợp lệ."
 
-#: eeschema/erc/erc.cpp:1580
+#: eeschema/erc/erc.cpp:1572
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:886
 #: pcbnew/footprint_editor_utils.cpp:363
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr "Cấu hình hiện tại không bao gồm thư viện dấu chân '%s'."
 
-#: eeschema/erc/erc.cpp:1589
+#: eeschema/erc/erc.cpp:1581
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:900
 #: pcbnew/footprint_editor_utils.cpp:375
 #, fuzzy, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
-#: eeschema/erc/erc.cpp:1598
+#: eeschema/erc/erc.cpp:1590
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:951
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Không tìm thấy dấu chân '%s' trong thư viện '%s'."
 
-#: eeschema/erc/erc.cpp:1668
+#: eeschema/erc/erc.cpp:1660
 #, fuzzy, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr "Thư viện Footprint"
 
-#: eeschema/erc/erc.cpp:1830
+#: eeschema/erc/erc.cpp:1822
 msgid "Checking sheet names..."
 msgstr "Đang kiểm tra tên trang tính ..."
 
-#: eeschema/erc/erc.cpp:1838
+#: eeschema/erc/erc.cpp:1830
 msgid "Checking bus conflicts..."
 msgstr "Đang kiểm tra xung đột bus ..."
 
-#: eeschema/erc/erc.cpp:1845
+#: eeschema/erc/erc.cpp:1837
 msgid "Checking conflicts..."
 msgstr "Đang kiểm tra xung đột ..."
 
-#: eeschema/erc/erc.cpp:1859
+#: eeschema/erc/erc.cpp:1851
 #, fuzzy
 msgid "Checking units..."
 msgstr "Đang kiểm tra các pin..."
 
-#: eeschema/erc/erc.cpp:1865
+#: eeschema/erc/erc.cpp:1857
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
 msgstr "Đang kiểm tra footprint ..."
 
-#: eeschema/erc/erc.cpp:1879
+#: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
 msgstr "Đang kiểm tra các pin..."
 
-#: eeschema/erc/erc.cpp:1899
+#: eeschema/erc/erc.cpp:1891
 #, fuzzy
 msgid "Checking similar labels..."
 msgstr "Đang kiểm tra nhãn..."
 
-#: eeschema/erc/erc.cpp:1907
+#: eeschema/erc/erc.cpp:1899
 #, fuzzy
 msgid "Checking local and global labels..."
 msgstr "Đang kiểm tra nhãn..."
 
-#: eeschema/erc/erc.cpp:1915
+#: eeschema/erc/erc.cpp:1907
 msgid "Checking for unresolved variables..."
 msgstr "Đang kiểm tra các biến chưa được giải quyết..."
 
-#: eeschema/erc/erc.cpp:1923
+#: eeschema/erc/erc.cpp:1915
 #, fuzzy
 msgid "Checking SPICE models..."
 msgstr "Đang kiểm tra nhãn..."
 
-#: eeschema/erc/erc.cpp:1931
+#: eeschema/erc/erc.cpp:1923
 msgid "Checking no connect pins for connections..."
 msgstr "Đang kiểm tra không có chân kết nối cho kết nối..."
 
-#: eeschema/erc/erc.cpp:1940
+#: eeschema/erc/erc.cpp:1932
 msgid "Checking for library symbol issues..."
 msgstr "Đang kiểm tra các vấn đề về biểu tượng trong thư viện..."
 
-#: eeschema/erc/erc.cpp:1948
+#: eeschema/erc/erc.cpp:1940
 #, fuzzy
 msgid "Checking for footprint link issues..."
 msgstr "Đang kiểm tra footprint ..."
 
-#: eeschema/erc/erc.cpp:1956
+#: eeschema/erc/erc.cpp:1948
 #, fuzzy
 msgid "Checking footprint assignments against footprint filters..."
 msgstr "Đang kiểm tra footprint ..."
 
-#: eeschema/erc/erc.cpp:1964
+#: eeschema/erc/erc.cpp:1956
 #, fuzzy
 msgid "Checking for off grid pins and wires..."
 msgstr "Đang kiểm tra footprint ..."
 
-#: eeschema/erc/erc.cpp:1972
+#: eeschema/erc/erc.cpp:1964
 #, fuzzy
 msgid "Checking for four way junctions..."
 msgstr "Quản lý Thư viện Footprint ..."
 
-#: eeschema/erc/erc.cpp:1980
+#: eeschema/erc/erc.cpp:1972
 #, fuzzy
 msgid "Checking for labels on more than one wire..."
 msgstr "Đang kiểm tra footprint ..."
 
-#: eeschema/erc/erc.cpp:1988
+#: eeschema/erc/erc.cpp:1980
 #, fuzzy
 msgid "Checking for undefined netclasses..."
 msgstr "Đang kiểm tra các biến chưa được giải quyết..."
@@ -18543,7 +18543,7 @@ msgstr "Không thể xóa (các) tệp được lưu tự động sau đây\n"
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2037
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2038
 #, fuzzy
 msgid "Derived from"
 msgstr "Xuất phát từ biểu tượng:"
@@ -18656,32 +18656,32 @@ msgstr "Mặc định"
 msgid "Import Vector Graphics File"
 msgstr "Nhập tệp Đồ họa Vector"
 
-#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:448
+#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:452
 #, c-format
 msgid "Unit %s"
 msgstr "Đơn vị %s"
 
 #: eeschema/lib_symbol.cpp:587 eeschema/sch_sheet.cpp:312
-#: eeschema/sch_symbol.cpp:1545
+#: eeschema/sch_symbol.cpp:1546
 #, fuzzy
 msgid "Excluded from BOM"
 msgstr "Loại trừ khỏi bo mạch"
 
 #: eeschema/lib_symbol.cpp:592 eeschema/sch_sheet.cpp:321
-#: eeschema/sch_symbol.cpp:1554
+#: eeschema/sch_symbol.cpp:1555
 #, fuzzy
 msgid "Excluded from board"
 msgstr "Loại trừ khỏi bo mạch"
 
 #: eeschema/lib_symbol.cpp:597 eeschema/sch_sheet.cpp:330
-#: eeschema/sch_symbol.cpp:1563
+#: eeschema/sch_symbol.cpp:1564
 #, fuzzy
 msgid "Excluded from simulation"
 msgstr "Loại trừ vi phạm này"
 
 #: eeschema/lib_symbol.cpp:602 eeschema/sch_sheet.cpp:339
-#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1572
-#: eeschema/sch_symbol.cpp:1988 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1573
+#: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 #, fuzzy
 msgid "DNP"
@@ -19057,66 +19057,66 @@ msgstr "Đặt chức năng chân"
 msgid "none"
 msgstr "không"
 
-#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2082
+#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2078
 msgid "Free"
 msgstr "Tự do"
 
-#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2083
+#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2079
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #, fuzzy
 msgid "Unspecified"
 msgstr "Không có footprint nào được chỉ định"
 
-#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2084
+#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2080
 msgid "Power input"
 msgstr "Nguồn vào"
 
-#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2085
+#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2081
 msgid "Power output"
 msgstr "Nguồn ra"
 
-#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2086
+#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2082
 msgid "Open collector"
 msgstr "Hở collector"
 
-#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2087
+#: eeschema/pin_type.cpp:95 eeschema/sch_pin.cpp:2083
 msgid "Open emitter"
 msgstr "Hở emitter"
 
-#: eeschema/pin_type.cpp:97 eeschema/sch_pin.cpp:2088
+#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2084
 msgid "Unconnected"
 msgstr "Không được kết nối"
 
-#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2096
+#: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2092
 msgid "Inverted"
 msgstr "Đảo ngược"
 
-#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2097
+#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2093
 msgid "Clock"
 msgstr "Xung nhịp"
 
-#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2098
+#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2094
 msgid "Inverted clock"
 msgstr "Đảo xung nhịp"
 
-#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2099
+#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2095
 msgid "Input low"
 msgstr "Đầu vào thấp"
 
-#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2100
+#: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2096
 msgid "Clock low"
 msgstr "Xung nhịp thấp"
 
-#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2101
+#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2097
 msgid "Output low"
 msgstr "Đầu ra thấp"
 
-#: eeschema/pin_type.cpp:110 eeschema/sch_pin.cpp:2102
+#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2098
 msgid "Falling edge clock"
 msgstr "Xung nhịp cạnh xuống"
 
-#: eeschema/pin_type.cpp:112 eeschema/sch_pin.cpp:2103
+#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2099
 msgid "NonLogic"
 msgstr "Phi logic"
 
@@ -19240,8 +19240,8 @@ msgstr ""
 "Thư viện chứa Ký hiệu hiện tại đã thay đổi.\n"
 "Bạn có muốn tải lại thư viện không?"
 
-#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2148
-#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2929
+#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2144
+#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
 #: pcbnew/widgets/pcb_properties_panel.cpp:247
@@ -19251,8 +19251,8 @@ msgstr ""
 msgid "Position X"
 msgstr "Vị trí X:"
 
-#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2152
-#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2932
+#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2148
+#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
 #: pcbnew/widgets/pcb_properties_panel.cpp:248 pcbnew/zone.cpp:1923
@@ -20268,7 +20268,7 @@ msgid "All body styles"
 msgstr "Phổ biến cho tất cả các kiểu thân"
 
 #: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
-#: eeschema/sch_symbol.cpp:3013 eeschema/tools/sch_edit_tool.cpp:138
+#: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "Kiểu cách Đường thẳng"
@@ -20487,27 +20487,27 @@ msgstr ""
 msgid "Pos Y"
 msgstr ""
 
-#: eeschema/sch_pin.cpp:1847
+#: eeschema/sch_pin.cpp:1843
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Chân %s [%s, %s, %s]"
 
-#: eeschema/sch_pin.cpp:1855
+#: eeschema/sch_pin.cpp:1851
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr ""
 
-#: eeschema/sch_pin.cpp:1865
+#: eeschema/sch_pin.cpp:1861
 #, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr ""
 
-#: eeschema/sch_pin.cpp:1873
+#: eeschema/sch_pin.cpp:1869
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr ""
 
-#: eeschema/sch_pin.cpp:2130 pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2791
+#: eeschema/sch_pin.cpp:2126 pcbnew/pad.cpp:1330 pcbnew/pad.cpp:2791
 #, fuzzy
 msgid "Pin Name"
 msgstr "Tên Pin"
@@ -20655,17 +20655,17 @@ msgstr "Hierarchical Label"
 msgid "File Name"
 msgstr "Tên biến"
 
-#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1979
+#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1980
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 #, fuzzy
 msgid "Simulation"
 msgstr "Chỉnh sửa Mô hình Spice..."
 
-#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1982
+#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
 msgid "BOM"
 msgstr "Liệt kê linh kiện"
 
-#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1994
+#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 #, fuzzy
 msgid "Exclude from"
@@ -20694,25 +20694,25 @@ msgstr "Màu sắc thân Bo mạch"
 msgid "Background Color"
 msgstr "Màu sắc nền, ở trên cùng"
 
-#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1047
-#: eeschema/sch_symbol.cpp:3031
+#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1051
+#: eeschema/sch_symbol.cpp:3027
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3034
+#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3030
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Loại trừ vi phạm này"
 
-#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1048
-#: eeschema/sch_symbol.cpp:3037 pcbnew/footprint.cpp:4225
+#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
+#: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Loại trừ khỏi BOM sơ đồ mạch"
 
-#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1049
-#: eeschema/sch_symbol.cpp:3040 eeschema/tools/sch_actions.cpp:993
+#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1053
+#: eeschema/sch_symbol.cpp:3036 eeschema/tools/sch_actions.cpp:993
 #: pcbnew/footprint.cpp:4228
 #, fuzzy
 msgid "Do not Populate"
@@ -20728,54 +20728,54 @@ msgstr "Xóa các mục đã nhấp"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Ghim bảng phân cấp %s"
 
-#: eeschema/sch_symbol.cpp:2005
+#: eeschema/sch_symbol.cpp:2006
 #, fuzzy
 msgid "Power symbol"
 msgstr "Biểu tượng nguồn điện"
 
-#: eeschema/sch_symbol.cpp:2025
+#: eeschema/sch_symbol.cpp:2026
 msgid "flags"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:2030
+#: eeschema/sch_symbol.cpp:2031
 #, fuzzy
 msgid "Missing parent"
 msgstr "Đang kiểm tra tên trang tính ..."
 
-#: eeschema/sch_symbol.cpp:2045
+#: eeschema/sch_symbol.cpp:2046
 msgid "Undefined!!!"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2054
 #, fuzzy
 msgid "<Unknown>"
 msgstr "Không xác định parent của thuộc tính"
 
-#: eeschema/sch_symbol.cpp:2078
+#: eeschema/sch_symbol.cpp:2079
 msgid "No library defined!"
 msgstr "Không có thư viện được xác định!"
 
-#: eeschema/sch_symbol.cpp:2080
+#: eeschema/sch_symbol.cpp:2081
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Không tìm thấy biểu tượng trong %s!"
 
-#: eeschema/sch_symbol.cpp:2344
+#: eeschema/sch_symbol.cpp:2345
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Biểu tượng %s [%s]"
 
-#: eeschema/sch_symbol.cpp:2939
+#: eeschema/sch_symbol.cpp:2935
 #, fuzzy
 msgid "Mirror X"
 msgstr "Mirrored"
 
-#: eeschema/sch_symbol.cpp:2941
+#: eeschema/sch_symbol.cpp:2937
 #, fuzzy
 msgid "Mirror Y"
 msgstr "Mirrored"
 
-#: eeschema/sch_symbol.cpp:2969 pcbnew/footprint.cpp:4202
+#: eeschema/sch_symbol.cpp:2965 pcbnew/footprint.cpp:4202
 #, fuzzy
 msgid "Library Link"
 msgstr "Thư Viện"
@@ -25069,25 +25069,25 @@ msgstr "Không thể thêm thư viện '%s'."
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Cập nhật các ký hiệu trong sơ đồ để tham khảo thư viện mới?"
 
-#: eeschema/tools/sch_editor_control.cpp:844
+#: eeschema/tools/sch_editor_control.cpp:846
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:951
+#: eeschema/tools/sch_editor_control.cpp:953
 #, fuzzy
 msgid "No net selected."
 msgstr "Không có symbol nào được chọn"
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:979
 msgid "Net must be labeled to assign a netclass."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1725 pcbnew/tools/pcb_control.cpp:1067
+#: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1067
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1847
+#: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -25095,31 +25095,31 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2377
+#: eeschema/tools/sch_editor_control.cpp:2379
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "Không có symbol nào được chọn"
 
-#: eeschema/tools/sch_editor_control.cpp:2466
+#: eeschema/tools/sch_editor_control.cpp:2468
 #, fuzzy
 msgid "Increment Annotations"
 msgstr "Xóa chú thích"
 
-#: eeschema/tools/sch_editor_control.cpp:2886
+#: eeschema/tools/sch_editor_control.cpp:2888
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d ID trùng lặp được thay thế.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2896
+#: eeschema/tools/sch_editor_control.cpp:2898
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2903
+#: eeschema/tools/sch_editor_control.cpp:2905
 #: pcbnew/drc/drc_rule_parser.cpp:179
 #, fuzzy
 msgid "No errors found."
