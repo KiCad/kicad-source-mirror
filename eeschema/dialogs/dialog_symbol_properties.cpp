@@ -103,7 +103,7 @@ public:
             SCH_PIN*        lib_pin = pin.GetLibPin();
             wxGridCellAttr* attr = nullptr;
 
-            if( lib_pin->GetAlternates().empty() )
+            if( !lib_pin || lib_pin->GetAlternates().empty() )
             {
                 attr = new wxGridCellAttr;
                 attr->SetReadOnly( true );
@@ -175,7 +175,7 @@ public:
     {
         if( aCol == COL_ALT_NAME )
         {
-            if( aPin.GetLibPin()->GetAlternates().empty() )
+            if( !aPin.GetLibPin() || aPin.GetLibPin()->GetAlternates().empty() )
                 return wxEmptyString;
             else if( aPin.GetAlt().IsEmpty() )
                 return aPin.GetName();
@@ -186,7 +186,7 @@ public:
         switch( aCol )
         {
         case COL_NUMBER:    return aPin.GetNumber();
-        case COL_BASE_NAME: return aPin.GetLibPin()->GetName();
+        case COL_BASE_NAME: return aPin.GetBaseName();
         case COL_TYPE:      return PinTypeNames()[static_cast<int>( aPin.GetType() )];
         case COL_SHAPE:     return PinShapeNames()[static_cast<int>( aPin.GetShape() )];
         default:   wxFAIL;  return wxEmptyString;
@@ -222,13 +222,15 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
+        SCH_PIN& pin = at( aRow );
+
         switch( aCol )
         {
         case COL_ALT_NAME:
-            if( aValue == at( aRow ).GetLibPin()->GetName() )
-                at( aRow ).SetAlt( wxEmptyString );
+            if( pin.GetLibPin() && aValue == pin.GetLibPin()->GetName() )
+                pin.SetAlt( wxEmptyString );
             else
-                at( aRow ).SetAlt( aValue );
+                pin.SetAlt( aValue );
             break;
 
         case COL_NUMBER:
