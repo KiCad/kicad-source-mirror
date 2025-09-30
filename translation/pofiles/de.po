@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-09-30 11:41+0000\n"
+"PO-Revision-Date: 2025-09-30 19:57+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6493,7 +6493,7 @@ msgstr "%s > %s ausführen"
 #: common/eda_base_frame.cpp:691
 #, fuzzy, c-format
 msgid "Run: %s"
-msgstr "Regel: %s"
+msgstr "Durchlauf: %s"
 
 #: common/eda_base_frame.cpp:1219
 #, c-format
@@ -8882,7 +8882,7 @@ msgstr "Durchkontaktierungen"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
 #, fuzzy
 msgid "Blind vias"
-msgstr "Blinde/vergrabene Vias"
+msgstr "Blinde Vias"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
@@ -16464,13 +16464,13 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
 #, fuzzy
 msgid "Add new variant name:"
-msgstr "Footprintname:"
+msgstr "Neuen Variantennamen hinzufügen:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
 #, fuzzy
 msgid "New Variant"
-msgstr "Neuer Footprint"
+msgstr "Neue Variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:71
 msgid "Add a new field"
@@ -17006,7 +17006,7 @@ msgstr "Alle weiteren Felder des Symbols aus dem Footprint aktualisieren"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:90
 #, fuzzy
 msgid "Prefer symbol pin swaps over label swaps"
-msgstr "Symboleinheits- gegenüber Bezeichner-Tausch vorziehen"
+msgstr "Symbolpin- gegenüber Bezeichner-Tausch vorziehen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:92
 #, fuzzy
@@ -17014,8 +17014,8 @@ msgid ""
 "When possible, swap symbol pins to match footprint pad net swaps instead of "
 "changing net labels."
 msgstr ""
-"Wenn möglich, Gatter-Tausch von Footprints erkennen und entsprechende "
-"Symboleinheiten tauschen, anstatt Netzbezeichnungen zu ändern."
+"Wenn möglich, Symbolpins tauschen, damit sie mit dem Netztausch am Footprint "
+"übereinstimmen, anstatt Netzbezeichnungen zu ändern."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1030
@@ -17354,14 +17354,18 @@ msgid "Automatically annotate symbols"
 msgstr "Symbole automatisch annotieren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
+#, fuzzy
 msgid "Allow unconstrained pin swaps"
-msgstr ""
+msgstr "Uneingeschränkten Pin-Tausch erlauben"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
+#, fuzzy
 msgid ""
 "Allows swapping symbol pins' positions. May cause invalid design changes; "
 "use with caution."
 msgstr ""
+"Positionstausch von Symbolpins erlauben. Kann zu ungültigen Designänderungen "
+"führen; mit Vorsicht verwenden."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:85
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -17534,7 +17538,7 @@ msgstr "Mitglieder von \"%s\":"
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 #, fuzzy
 msgid "Net or Nested Bus Name"
-msgstr "Netz / Verschachtelter Bus"
+msgstr "Netz / Verschachtelter Busname"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:33
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
@@ -19348,7 +19352,7 @@ msgstr "Panels"
 #: eeschema/menubar.cpp:325
 #, fuzzy
 msgid "Variants"
-msgstr "Bibliothekare"
+msgstr "Varianten"
 
 #: eeschema/menubar.cpp:353
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:187
@@ -19423,7 +19427,7 @@ msgstr "Knotenpunkt bei (%s, %s)"
 #: eeschema/net_navigator.cpp:152
 #, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Kann zu %s, %s nicht verbinden"
+msgstr "Keine Verbindung bei %s, %s"
 
 #: eeschema/net_navigator.cpp:161
 #, c-format
@@ -19443,7 +19447,7 @@ msgstr "Netzklassen-Bezeichner \"%s\" bei %s, %s"
 #: eeschema/net_navigator.cpp:190
 #, c-format
 msgid "Unhandled item type %d"
-msgstr "Kann den Footprint-Text-Typ %d nicht verarbeiten"
+msgstr "Elementtyp %d nicht verarbeitet"
 
 #: eeschema/net_navigator.cpp:316 pcbnew/board.cpp:2117
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1977
@@ -23884,12 +23888,12 @@ msgstr "Verbindung von Schaltplanpin und hierarchischem Bezeichner auflösen"
 #: eeschema/toolbars_sch_editor.cpp:51
 #, fuzzy
 msgid "Current Variant"
-msgstr "Aktuelles Raster"
+msgstr "Aktuelle Variante"
 
 #: eeschema/toolbars_sch_editor.cpp:52
 #, fuzzy
 msgid "Control to select the current schematic varaint"
-msgstr "Steuerelement zum Wählen der Leiterbahnbreite"
+msgstr "Steuerelement zum Wählen der aktuellen Schaltplanvariante"
 
 #: eeschema/toolbars_sch_editor.cpp:81 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
@@ -24044,42 +24048,53 @@ msgid "Delete %s field '%s.'"
 msgstr "Lösche %s Feld \"%s.\""
 
 #: eeschema/tools/backannotate.cpp:1269
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects."
 msgstr ""
+"Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
+"aber das Symbol wird in anderen Projekten gemeinsam genutzt."
 
 #: eeschema/tools/backannotate.cpp:1275
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects (%s)."
 msgstr ""
+"Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
+"aber das Symbol wird in anderen Projekten gemeinsam genutzt (%s)."
 
 #: eeschema/tools/backannotate.cpp:1285
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
+"Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
+"aber das Symbol wird in mehreren Schaltplanblattinstanzen verwendet (%s)."
 
 #: eeschema/tools/backannotate.cpp:1292
-#, c-format
+#, c-format, fuzzy
 msgid "Would swap %s pins %s and %s to match PCB, but the symbol is shared."
 msgstr ""
+"Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
+"aber das Symbol wird gemeinsam genutzt."
 
 #: eeschema/tools/backannotate.cpp:1298
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are "
 "disabled in the schematic preferences."
 msgstr ""
+"Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
+"aber der uneingeschränkte Pin-Tausch ist in den Schaltplaneinstellungen "
+"deaktiviert."
 
 #: eeschema/tools/backannotate.cpp:1333
-#, c-format
+#, c-format, fuzzy
 msgid "Swap %s pins %s and %s to match PCB."
-msgstr ""
+msgstr "Tausche %s Pins %s und %s, um sie an die Leiterplatte anzupassen."
 
 #: eeschema/tools/backannotate.cpp:1406
 #, c-format
@@ -24636,7 +24651,7 @@ msgstr "Positionen ausgewählter Elemente tauschen"
 #: eeschema/tools/sch_actions.cpp:777 eeschema/tools/sch_edit_tool.cpp:1665
 #, fuzzy
 msgid "Swap Pins"
-msgstr "Pinbezeichner tauschen"
+msgstr "Pins tauschen"
 
 #: eeschema/tools/sch_actions.cpp:778
 #, fuzzy
@@ -25488,7 +25503,7 @@ msgstr "SPICE-Netzliste anzeigen"
 #: eeschema/tools/sch_actions.cpp:1691
 #, fuzzy
 msgid "Add Variant..."
-msgstr "Netz hinzufügen..."
+msgstr "Variante hinzufügen ..."
 
 #: eeschema/tools/sch_actions.cpp:1692
 #, fuzzy
@@ -25498,7 +25513,7 @@ msgstr "Aktuelles Symbol zum Schaltplan hinzufügen"
 #: eeschema/tools/sch_actions.cpp:1697
 #, fuzzy
 msgid "Remove Variant..."
-msgstr "Plugin entfernen..."
+msgstr "Variante entfernen ..."
 
 #: eeschema/tools/sch_actions.cpp:1698
 #, fuzzy
@@ -25705,30 +25720,43 @@ msgid "Mirror"
 msgstr "Spiegeln"
 
 #: eeschema/tools/sch_edit_tool.cpp:1582
+#, fuzzy
 msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
+"Pin-Tausch ist für Symbole, die in anderen Projekten gemeinsam genutzt "
+"werden, deaktiviert. Duplizieren Sie das Schaltplanblatt, um die Pins "
+"unabhängig zu editieren."
 
 #: eeschema/tools/sch_edit_tool.cpp:1587
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Pin-Tausch ist für Symbole, die in anderen Projekten (%s) gemeinsam genutzt "
+"werden, deaktiviert. Duplizieren Sie das Schaltplanblatt, um die Pins "
+"unabhängig zu editieren."
 
 #: eeschema/tools/sch_edit_tool.cpp:1595
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Pin-Tausch ist für Symbole, die in mehreren Schaltplanblattinstanzen (%s) "
+"verwendet werden, deaktiviert. Duplizieren Sie das Schaltplanblatt, um die "
+"Pins unabhängig zu editieren."
 
 #: eeschema/tools/sch_edit_tool.cpp:1600
+#, fuzzy
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
+"Pin-Tausch ist für gemeinsam genutzte Symbole deaktiviert. Duplizieren Sie "
+"das Schaltplanblatt, um die Pins unabhängig zu editieren."
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid ""
@@ -25813,7 +25841,7 @@ msgstr "Symboleigenschaften bearbeiten"
 #: eeschema/tools/sch_edit_tool.cpp:3513
 #, fuzzy
 msgid "Edit Netclasses..."
-msgstr "Lade Netzklassen ..."
+msgstr "Netzklassen editieren ..."
 
 #: eeschema/tools/sch_editor_control.cpp:159
 #, c-format
@@ -27797,11 +27825,16 @@ msgstr ""
 "Im Format \"--define-var key=value\" oder \"-D key=value\" verwenden"
 
 #: kicad/cli/command.cpp:202
+#, fuzzy
 msgid ""
 "List of variant names to output.\n"
 "When no --variants arguement is provided the default variant is output.\n"
 "To output all variants use '--variants=all'"
 msgstr ""
+"Liste der auszugebenden Variantennamen.\n"
+"Wenn kein --variants-Argument angegeben wird, wird die Standardvariante "
+"ausgegeben.\n"
+"Um alle Varianten auszugeben, verwenden Sie „--variants=all“."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -34317,7 +34350,7 @@ msgstr "Benutzerdefinierte Regeln"
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:244
 #, fuzzy
 msgid "Modify barcode"
-msgstr "Pad verändern"
+msgstr "Barcode verändern"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:738
@@ -34336,7 +34369,7 @@ msgstr "Wenn aktiviert, ist der Pin in allen Einheiten vorhanden."
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:57
 #, fuzzy
 msgid "Show text"
-msgstr "Netzlinien anzeigen"
+msgstr "Text anzeigen"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:105
 msgid "Size X:"
@@ -34356,60 +34389,60 @@ msgstr "90"
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:153
 #, fuzzy
 msgid "Min margin X:"
-msgstr "Ränder:"
+msgstr "Min. Rand X:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:164
 #, fuzzy
 msgid "Min margin Y:"
-msgstr "Ränder:"
+msgstr "Min. Rand Y:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 39 (ISO 16388)"
-msgstr ""
+msgstr "Code 39 (ISO 16388)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 128 (ISO 15417)"
-msgstr ""
+msgstr "Code 128 (ISO 15417)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Data Matrix (ECC 200)"
-msgstr ""
+msgstr "Data Matrix (ECC 200)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "QR Code (ISO 18004)"
-msgstr ""
+msgstr "QR Code (ISO 18004)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Micro QR Code"
-msgstr ""
+msgstr "Micro QR Code"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~20% (Level L)"
-msgstr ""
+msgstr "~20% (Level L)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~37% (Level M)"
-msgstr ""
+msgstr "~37% (Level M)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~55% (Level Q)"
-msgstr ""
+msgstr "~55% (Level Q)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~65% (Level H)"
-msgstr ""
+msgstr "~65% (Level H)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
 #: pcbnew/pcb_barcode.cpp:716
 #, fuzzy
 msgid "Error Correction"
-msgstr "Pfeilrichtung"
+msgstr "Fehlerkorrektur"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
 #: pcbnew/pcb_barcode.cpp:647
 #, fuzzy
 msgid "Barcode Properties"
-msgstr "Randeigenschaften"
+msgstr "Barcode-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 msgid "Empty"
@@ -34880,7 +34913,7 @@ msgstr "Durchkontaktierungen:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:194
 #, fuzzy
 msgid "Blind vias:"
-msgstr "Vergrabene Vias:"
+msgstr "Blinde Vias:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:195
 msgid "Buried vias:"
@@ -41075,8 +41108,9 @@ msgstr "Mikro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2348
+#, fuzzy
 msgid "Blind"
-msgstr ""
+msgstr "Blind"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2349
@@ -43238,7 +43272,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -43400,8 +43433,8 @@ msgstr ""
 "\n"
 "\n"
 "    A.fromTo('x', 'y')\n"
-"        Wahr, wenn Objekt auf Kupferpfad zwischen angegebenen Pads "
-"existiert.\n"
+"        Wahr, wenn Objekt auf Kupferpfad zwischen angegebenen Pads existiert."
+"\n"
 "        `x` und `y` sind die vollständigen Padnamen innerhalb des Designs,\n"
 "        wie z.B. `R1-Pad1`.\n"
 "\n"
@@ -43429,8 +43462,8 @@ msgstr ""
 "Differentialpaares ist.\n"
 "        `<Netzname>` ist der Basisname des Differentialpaares.  Zum Beispiel "
 "passt\n"
-"        `inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und `/"
-"CLK_N`.\n"
+"        `inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und "
+"`/CLK_N`.\n"
 "\n"
 "\n"
 "    A.intersectsArea('<Zonenname>')\n"
@@ -43452,7 +43485,7 @@ msgstr ""
 "Abstandsfläche des Footprints liegt.\n"
 "\n"
 "\n"
-"Der oben aufgeführte Footprintreferenz kann folgendes sein:\n"
+"Die oben aufgeführte Footprintreferenz kann folgendes sein:\n"
 "\n"
 "1. Ein Referenzbezeichner, möglicherweise mit den Platzhaltern `*` und `?`\n"
 "2. Ein Footprint-Bibliotheksbezeichner wie z.B. `LibName:FootprintName`. In "
@@ -43466,17 +43499,20 @@ msgstr ""
 "Bauteilklassennamen jedoch sehr wohl.\n"
 "\n"
 "\n"
-"\n"
-"    A.isBlindBuriedVia()\n"
-"        Wahr, wenn `A` ein blindes/vergrabenes Via ist.\n"
-"\n"
-"\n"
 "    AB.isCoupledDiffPair()\n"
 "        Wahr, wenn `A` und `B` Teil des selben Differentialpaares sind.\n"
 "\n"
 "\n"
 "    A.isMicroVia()\n"
 "        Wahr, wenn `A` ein Microvia ist.\n"
+"\n"
+"\n"
+"    A.isBlindVia()\n"
+"        Wahr, wenn `A` ein blindes Via ist.\n"
+"\n"
+"\n"
+"    A.isBuriedVia()\n"
+"        Wahr, wenn `A` ein vergrabenes Via ist.\n"
 "\n"
 "\n"
 "    A.isPlated()\n"
@@ -43504,8 +43540,8 @@ msgstr ""
 "\n"
 "    A.memberOfSheetOrChildren('<Schaltplanblatt-Pfad>')\n"
 "        Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts oder eines "
-"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards "
-"enthalten.\n"
+"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards enthalten."
+"\n"
 "\n"
 "\n"
 
@@ -43694,13 +43730,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -43791,8 +43827,8 @@ msgstr ""
 "    (rule silk_board_edge_clearance\n"
 "        (constraint silk_clearance)\n"
 "        (severity ignore)\n"
-"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge."
-"Cuts'\"))\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge.Cuts'\"))"
+"\n"
 "\n"
 "\n"
 "    # Prüfung der Strombelastbarkeit \n"
@@ -43817,8 +43853,8 @@ msgstr ""
 "    # sofern es bekannt ist, dass in der Herstellung erstere mechanisch "
 "gebohrt -bevor- letztere gelasert werden.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -43835,6 +43871,8 @@ msgstr ""
 "        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 "\n"
+"    # Lötstoppmaskenüberbrückung unter Schutzring von Maskenöffnungen "
+"erlauben\n"
 "    (rule guard_ring_bridging\n"
 "        (constraint bridged_mask)\n"
 "        (condition \"A.intersectsArea('guard_ring')\")\n"
@@ -47912,7 +47950,7 @@ msgstr "Thermische Entlastung Spalt"
 
 #: pcbnew/pcb_barcode.cpp:368
 msgid "Barcode"
-msgstr ""
+msgstr "Barcode"
 
 #: pcbnew/pcb_barcode.cpp:456
 #, fuzzy, c-format
@@ -47921,64 +47959,65 @@ msgstr "%s %s auf %s"
 
 #: pcbnew/pcb_barcode.cpp:653
 msgid "CODE_39"
-msgstr ""
+msgstr "CODE_39"
 
 #: pcbnew/pcb_barcode.cpp:654
 msgid "CODE_128"
-msgstr ""
+msgstr "CODE_128"
 
 #: pcbnew/pcb_barcode.cpp:655
 msgid "DATA_MATRIX"
-msgstr ""
+msgstr "DATA_MATRIX"
 
 #: pcbnew/pcb_barcode.cpp:656
 msgid "QR_CODE"
-msgstr ""
+msgstr "QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:657
 msgid "MICRO_QR_CODE"
-msgstr ""
+msgstr "MICRO_QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:664 pcbnew/pcb_barcode.cpp:731
+#, fuzzy
 msgid "L (Low)"
-msgstr ""
+msgstr "L (Niedrig)"
 
 #: pcbnew/pcb_barcode.cpp:665 pcbnew/pcb_barcode.cpp:732
-#, fuzzy
 msgid "M (Medium)"
-msgstr "Mittel"
+msgstr "M (Mittel)"
 
 #: pcbnew/pcb_barcode.cpp:666 pcbnew/pcb_barcode.cpp:733
 msgid "Q (Quartile)"
-msgstr ""
+msgstr "Q (Quartil)"
 
 #: pcbnew/pcb_barcode.cpp:667
-#, fuzzy
 msgid "H (High)"
-msgstr "Hoch"
+msgstr "H (Hoch)"
 
 #: pcbnew/pcb_barcode.cpp:680
 #, fuzzy
 msgid "Show Text"
-msgstr "Zeige Leiterbahn"
+msgstr "Zeige Text"
 
 #: pcbnew/pcb_barcode.cpp:698
+#, fuzzy
 msgid "Kind"
-msgstr ""
+msgstr "Art"
 
 #: pcbnew/pcb_barcode.cpp:725
+#, fuzzy
 msgid "MicroQR Error Correction"
-msgstr ""
+msgstr "MicroQR-Fehlerkorrektur"
 
 #: pcbnew/pcb_barcode.cpp:741
 #, fuzzy
 msgid "Margin X"
-msgstr "Rand"
+msgstr "Rand X"
 
 #: pcbnew/pcb_barcode.cpp:745
 #, fuzzy
 msgid "Margin Y"
-msgstr "Rand"
+msgstr "Rand Y"
 
 #: pcbnew/pcb_base_edit_frame.cpp:382 pcbnew/toolbars_footprint_editor.cpp:203
 #: pcbnew/toolbars_pcb_editor.cpp:583
@@ -50081,7 +50120,7 @@ msgstr "Blindes/vergrabenes Via %s auf %s"
 #: pcbnew/pcb_track.cpp:175
 #, fuzzy, c-format
 msgid "Buried via %s on %s"
-msgstr "Blindes/vergrabenes Via %s auf %s"
+msgstr "Vergrabenes Via %s auf %s"
 
 #: pcbnew/pcb_track.cpp:176
 #, c-format
@@ -50125,7 +50164,7 @@ msgstr "Mikro-Via"
 #: pcbnew/pcb_track.cpp:1931
 #, fuzzy
 msgid "Blind Via"
-msgstr "Blinde/Vergrabene Vias"
+msgstr "Blindes Via"
 
 #: pcbnew/pcb_track.cpp:1932
 #, fuzzy
@@ -51792,7 +51831,7 @@ msgstr "Punkt platzieren"
 #: pcbnew/tools/drawing_tool.cpp:1540
 #, fuzzy
 msgid "Draw Barcode"
-msgstr "Einen Kreis zeichnen"
+msgstr "Barcode zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:1821
 msgid "Draw Dimension"
@@ -52385,12 +52424,12 @@ msgstr "Außenlinien um gewähltes Element erzeugen"
 #: pcbnew/tools/pcb_actions.cpp:168
 #, fuzzy
 msgid "Add Barcode"
-msgstr "Kreisbogen hinzufügen"
+msgstr "Barcode hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:169
 #, fuzzy
 msgid "Add a barcode"
-msgstr "Einen Kreisbogen hinzufügen"
+msgstr "Einen Barcode hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Add Board Characteristics"
