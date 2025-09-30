@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-09-30 12:05+0000\n"
+"PO-Revision-Date: 2025-10-01 15:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -18358,7 +18358,7 @@ msgstr "Knotenpunkt bei (%s, %s)"
 #: eeschema/net_navigator.cpp:152
 #, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Kann zu %s, %s nicht verbinden"
+msgstr "Keine Verbindung bei %s, %s"
 
 #: eeschema/net_navigator.cpp:161
 #, c-format
@@ -18378,7 +18378,7 @@ msgstr "Netzklassen-Bezeichner \"%s\" bei %s, %s"
 #: eeschema/net_navigator.cpp:190
 #, c-format
 msgid "Unhandled item type %d"
-msgstr "Kann den Footprint-Text-Typ %d nicht verarbeiten"
+msgstr "Elementtyp %d nicht verarbeitet"
 
 #: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2064
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2136
