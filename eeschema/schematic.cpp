@@ -154,8 +154,6 @@ void SCHEMATIC::Reset()
     m_currentSheet->clear();
 
     m_busAliases.clear();
-
-    updateProjectBusAliases();
 }
 
 
