@@ -33,6 +33,7 @@
 #include <sch_textbox.h>
 #include <schematic.h>
 #include <sch_sheet_path.h>
+#include <sch_sheet.h>
 #include <kiid.h>
 
 #include <wx/arrstr.h>
