@@ -2201,7 +2201,9 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
 
         assert( TESTLINE( "Po" ) );
 
-        VIATYPE viatype = static_cast<VIATYPE>( intParse( line + SZ( "Po" ), &data ) );
+        // legacy via type is 3 (through via) 2 (BLIND/BURIED) or 1 (MICROVIA)
+        int legacy_viatype = intParse( line + SZ( "Po" ), &data );
+
         BIU start_x = biuParse( data, &data );
         BIU start_y = biuParse( data, &data );
         BIU end_x   = biuParse( data, &data );
@@ -2261,33 +2263,40 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
             continue;
         }
 
-        PCB_TRACK* newTrack;
+        PCB_TRACK* newTrack = nullptr;
+        PCB_VIA* newVia = nullptr;
 
         switch( makeType )
         {
         default:
         case PCB_TRACE_T: newTrack = new PCB_TRACK( m_board ); break;
-        case PCB_VIA_T:   newTrack = new PCB_VIA( m_board );   break;
+        case PCB_VIA_T:   newVia = new PCB_VIA( m_board );   break;
         }
-
-        const_cast<KIID&>( newTrack->m_Uuid ) = KIID( uuid );
-        newTrack->SetPosition( VECTOR2I( start_x, start_y ) );
-        newTrack->SetEnd( VECTOR2I( end_x, end_y ) );
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
-            PCB_VIA *via = static_cast<PCB_VIA*>( newTrack );
-            via->SetViaType( viatype );
-            via->SetWidth( PADSTACK::ALL_LAYERS, width );
+            VIATYPE viatype = VIATYPE::THROUGH;
+
+            if( legacy_viatype == 1 )
+                viatype = VIATYPE::MICROVIA;
+            else if( legacy_viatype == 2 )
+                viatype = VIATYPE::BLIND;
+
+            newVia->SetViaType( viatype );
+            newVia->SetWidth( PADSTACK::ALL_LAYERS, width );
+
+            const_cast<KIID&>( newVia->m_Uuid ) = KIID( uuid );
+            newVia->SetPosition( VECTOR2I( start_x, start_y ) );
+            newVia->SetEnd( VECTOR2I( end_x, end_y ) );
 
             if( drill < 0 )
-                via->SetDrillDefault();
+                newVia->SetDrillDefault();
             else
-                via->SetDrill( drill );
+                newVia->SetDrill( drill );
 
-            if( via->GetViaType() == VIATYPE::THROUGH )
+            if( newVia->GetViaType() == VIATYPE::THROUGH )
             {
-                via->SetLayerPair( F_Cu, B_Cu );
+                newVia->SetLayerPair( F_Cu, B_Cu );
             }
             else
             {
@@ -2297,18 +2306,22 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
                 if( is_leg_copperlayer_valid( m_cu_count, back ) &&
                     is_leg_copperlayer_valid( m_cu_count, front ) )
                 {
-                    via->SetLayerPair( front, back );
+                    newVia->SetLayerPair( front, back );
                 }
                 else
                 {
-                    delete via;
-                    newTrack = nullptr;
+                    delete newVia;
+                    newVia = nullptr;
                 }
             }
         }
         else
         {
             newTrack->SetWidth( width );
+
+            const_cast<KIID&>( newTrack->m_Uuid ) = KIID( uuid );
+            newTrack->SetPosition( VECTOR2I( start_x, start_y ) );
+            newTrack->SetEnd( VECTOR2I( end_x, end_y ) );
 
             // A few legacy boards can have tracks on non existent layers, because
             // reducing the number of layers does not remove tracks on removed layers
@@ -2327,8 +2340,13 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
         if( newTrack )
         {
             newTrack->SetNetCode( getNetCode( net_code ) );
-
             m_board->Add( newTrack );
+        }
+
+        if( newVia )
+        {
+            newVia->SetNetCode( getNetCode( net_code ) );
+            m_board->Add( newVia );
         }
     }
 
