@@ -133,14 +133,10 @@ void PCB_BARCODE::Move( const VECTOR2I& offset )
 
 void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    VECTOR2I pos = m_pos;
-    RotatePoint( pos, aRotCentre, aAngle );
-
-    Move( pos - m_pos );
-
+    RotatePoint( m_pos, aRotCentre, aAngle );
     m_angle += aAngle;
-    m_poly.Rotate( aAngle, m_pos );
-    m_bbox = m_poly.BBox();
+
+    AssembleBarcode( true, true );
 }
 
 
@@ -175,9 +171,6 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
 
     if( IsKnockout() )
     {
-        // Build inversion rectangle based on the local bbox of the current combined geometry
-        BOX2I bbox = m_poly.BBox();
-
         // Enforce minimum margin: at least 10% of the smallest side of the barcode, rounded up
         // to the nearest 0.1 mm. Use this as a lower bound for both axes.
         int minSide = std::min( m_width, m_height );
@@ -185,18 +178,15 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
         int step01mm = std::max( 1, pcbIUScale.mmToIU( 0.1 ) );
         int tenPercentRounded = ( ( tenPercent + step01mm - 1 ) / step01mm ) * step01mm;
 
-        m_margin.x = std::max( m_margin.x, tenPercentRounded );
-        m_margin.y = std::max( m_margin.y, tenPercentRounded );
+        // Build inversion rectangle based on the local bbox of the current combined geometry
+        BOX2I bbox = m_poly.BBox();
+        bbox.Inflate( std::max( m_margin.x, tenPercentRounded ), std::max( m_margin.y, tenPercentRounded ) );
 
-        VECTOR2I tl( bbox.GetLeft() - m_margin.x, bbox.GetTop() - m_margin.y );
-        VECTOR2I br( bbox.GetRight() + m_margin.x, bbox.GetBottom() + m_margin.y );
-
-        // Base knockout rectangle for full geometry
         SHAPE_LINE_CHAIN rect;
-        rect.Append( tl );
-        rect.Append( VECTOR2I( br.x, tl.y ) );
-        rect.Append( br );
-        rect.Append( VECTOR2I( tl.x, br.y ) );
+        rect.Append( bbox.GetLeft(),  bbox.GetTop() );
+        rect.Append( bbox.GetRight(), bbox.GetTop() );
+        rect.Append( bbox.GetRight(), bbox.GetBottom() );
+        rect.Append( bbox.GetLeft(),  bbox.GetBottom() );
         rect.SetClosed( true );
 
         SHAPE_POLY_SET ko;

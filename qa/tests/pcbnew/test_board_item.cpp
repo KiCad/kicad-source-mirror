@@ -191,12 +191,9 @@ BOOST_AUTO_TEST_CASE( Move )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        // FIXME: Update() has to be called after SetPosition() to update dimension
-                        // shapes.
-                        PCB_DIMENSION_BASE* originalDimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem );
-
-                        if( originalDimension != nullptr )
-                            originalDimension->Update();
+                        // FIXME: Update() has to be called after SetPosition() to update dimension shapes.
+                        if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem ) )
+                            dimension->Update();
 
                         auto     item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
                         VECTOR2I originalPos = item->GetPosition();
@@ -234,13 +231,11 @@ BOOST_AUTO_TEST_CASE( Rotate )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        // FIXME: Update() has to be called after SetPosition() to update dimension
-                        // shapes.
-                        PCB_DIMENSION_BASE* originalDimension =
-                                dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem );
-
-                        if( originalDimension != nullptr )
-                            originalDimension->Update();
+                        // FIXME: Update() has to be called after SetPosition() to update dimension shapes.
+                        if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem ) )
+                            dimension->Update();
+                        else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( aOriginalItem ) )
+                            barcode->AssembleBarcode( true, true );
 
                         auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 
@@ -275,13 +270,9 @@ BOOST_AUTO_TEST_CASE( FlipLeftRight )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        // FIXME: Update() has to be called after SetPosition() to update dimension
-                        // shapes.
-                        PCB_DIMENSION_BASE* originalDimension =
-                                dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem );
-
-                        if( originalDimension != nullptr )
-                            originalDimension->Update();
+                        // FIXME: Update() has to be called after SetPosition() to update dimension shapes.
+                        if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem ) )
+                            dimension->Update();
 
                         auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 
@@ -314,13 +305,9 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
                     item.get(),
                     []( BOARD_ITEM* aOriginalItem, VECTOR2I aRef )
                     {
-                        // FIXME: Update() has to be called after SetPosition() to update dimension
-                        // shapes.
-                        PCB_DIMENSION_BASE* originalDimension =
-                                dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem );
-
-                        if( originalDimension != nullptr )
-                            originalDimension->Update();
+                        // FIXME: Update() has to be called after SetPosition() to update dimension shapes.
+                        if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem ) )
+                            dimension->Update();
 
                         auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 
