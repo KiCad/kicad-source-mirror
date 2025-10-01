@@ -49,7 +49,7 @@
 ACTION_TOOLBAR_CONTROL SCH_ACTION_TOOLBAR_CONTROLS::currentVariant(
         "control.currentVariant",
         _( "Current Variant" ),
-        _( "Control to select the current schematic varaint" ) );
+        _( "Control to select the current schematic variant" ) );
 
 
 std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )

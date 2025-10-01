@@ -696,7 +696,7 @@ static struct PCB_BARCODE_DESC
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, double>( _HKI( "Orientation" ),
                                     &PCB_BARCODE::SetOrientation, &PCB_BARCODE::GetOrientation ), groupBarcode );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_T>( _HKI( "Kind" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_T>( _HKI( "Barcode Type" ),
                                     &PCB_BARCODE::SetBarcodeKind, &PCB_BARCODE::GetKind ), groupBarcode );
 
         auto isQRCode =
