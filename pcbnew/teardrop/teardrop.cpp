@@ -289,7 +289,11 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
             tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track, pad, pad->GetPosition() );
 
-            if( !startHitsPad && !endHitsPad )
+            // A track can be connected to pad when just crossing it. So we can create 2 teardrops,
+            // one from pad to track start point and the other to track end point.
+            // However this is acceptable only if the pad position is inside the track.
+            // Otherwise the 2 teardrop shapes can be strange (and of course incorrect
+            if( !startHitsPad && !endHitsPad && track->HitTest( pad->GetPosition() ) )
             {
                 PCB_TRACK reversed( *track );
                 reversed.SetStart( track->GetEnd() );
