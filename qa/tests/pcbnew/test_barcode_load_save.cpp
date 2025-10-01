@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         { BARCODE_T::QR_CODE, VECTOR2I( 1000000, 2000000 ), 2500000, 2500000, true, false, 0.0, "WITHTEXT" },
 
         // With knockout
-//        { BARCODE_T::QR_CODE, VECTOR2I( 2000000, 1000000 ), 2000000, 2000000, false, true, 0.0, "KNOCKOUT" },
+        { BARCODE_T::QR_CODE, VECTOR2I( 2000000, 1000000 ), 2000000, 2000000, false, true, 0.0, "KNOCKOUT" },
 
         // With rotation
         { BARCODE_T::QR_CODE, VECTOR2I( 3000000, 2000000 ), 2000000, 2000000, false, false, 45.0, "ROTATED" },
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         { BARCODE_T::MICRO_QR_CODE, VECTOR2I( 2000000, 4000000 ), 1200000, 1200000, false, false, 0.0, "µQR" },
 
         // Combined scenarios
-//        { BARCODE_T::QR_CODE, VECTOR2I( 1500000, 1500000 ), 2200000, 2200000, true, true, 90.0, "COMPLEX" },
+        { BARCODE_T::QR_CODE, VECTOR2I( 1500000, 1500000 ), 2200000, 2200000, true, true, 90.0, "COMPLEX" },
     };
 
     for( size_t i = 0; i < testCases.size(); ++i )
@@ -197,9 +197,14 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         canonicalPoly.Move( barcode->GetPosition() );
 
         SHAPE_POLY_SET noHolesPoly;
+        barcodePoly.Unfracture();
 
         for( int ii = 0; ii < barcodePoly.OutlineCount(); ++ii )
             noHolesPoly.AddOutline( barcodePoly.Outline( ii ) );
+
+        // Handle rounding errors
+        if( tc.angle != 0.0 )
+            noHolesPoly.Inflate( 1, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF );
 
         canonicalPoly.BooleanSubtract( noHolesPoly );
         BOOST_CHECK_MESSAGE( canonicalPoly.IsEmpty(),
