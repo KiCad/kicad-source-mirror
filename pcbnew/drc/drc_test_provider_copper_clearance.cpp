@@ -1097,56 +1097,57 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     std::mutex                                            checkedPairsMutex;
 
     auto testCopperGraphic =
-            [this, &checkedPairs, &checkedPairsMutex]( PCB_SHAPE* aShape )
+            [this, &checkedPairs, &checkedPairsMutex]( BOARD_ITEM* graphic )
             {
-                PCB_LAYER_ID layer = aShape->GetLayer();
+                BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( graphic );
+                PCB_LAYER_ID          layer = graphic->GetLayer();
 
-                m_board->m_CopperItemRTreeCache->QueryColliding( aShape, layer, layer,
-                            // Filter:
-                            [&]( BOARD_ITEM* other ) -> bool
+                m_board->m_CopperItemRTreeCache->QueryColliding( graphic, layer, layer,
+                        // Filter:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+
+                            if( cItem && otherCItem && cItem->GetNetCode() == otherCItem->GetNetCode() )
+                                return false;
+
+                            // Pads and tracks handled separately
+                            if( other->Type() == PCB_PAD_T || other->Type() == PCB_ARC_T ||
+                                other->Type() == PCB_TRACE_T || other->Type() == PCB_VIA_T )
                             {
-                                auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+                                return false;
+                            }
 
-                                if( otherCItem && otherCItem->GetNetCode() == aShape->GetNetCode() )
-                                    return false;
+                            BOARD_ITEM* a = graphic;
+                            BOARD_ITEM* b = other;
 
-                                // Pads and tracks handled separately
-                                if( other->Type() == PCB_PAD_T || other->Type() == PCB_ARC_T ||
-                                    other->Type() == PCB_TRACE_T || other->Type() == PCB_VIA_T )
-                                {
-                                    return false;
-                                }
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
 
-                                BOARD_ITEM* a = aShape;
-                                BOARD_ITEM* b = other;
+                            std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                            auto it = checkedPairs.find( { a, b } );
 
-                                // store canonical order so we don't collide in both directions
-                                // (a:b and b:a)
-                                if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                                    std::swap( a, b );
-
-                                std::lock_guard<std::mutex> lock( checkedPairsMutex );
-                                auto it = checkedPairs.find( { a, b } );
-
-                                if( it != checkedPairs.end() && it->second.layers.test( layer ) )
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    checkedPairs[ { a, b } ].layers.set( layer );
-                                    return true;
-                                }
-                            },
-                            // Visitor:
-                            [&]( BOARD_ITEM* other ) -> bool
+                            if( it != checkedPairs.end() && it->second.layers.test( layer ) )
                             {
-                                testSingleLayerItemAgainstItem( aShape, aShape->GetEffectiveShape().get(),
-                                                                layer, other );
+                                return false;
+                            }
+                            else
+                            {
+                                checkedPairs[ { a, b } ].layers.set( layer );
+                                return true;
+                            }
+                        },
+                        // Visitor:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            testSingleLayerItemAgainstItem( graphic, graphic->GetEffectiveShape().get(),
+                                                            layer, other );
 
-                                return !m_drcEngine->IsCancelled();
-                            },
-                            m_board->m_DRCMaxClearance );
+                            return !m_drcEngine->IsCancelled();
+                        },
+                        m_board->m_DRCMaxClearance );
             };
 
     for( BOARD_ITEM* item : m_board->Drawings() )
@@ -1158,8 +1159,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                     {
                         testGraphicAgainstZone( item );
 
-                        if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
+                        if( ( item->Type() == PCB_SHAPE_T || item->Type() == PCB_BARCODE_T )
+                                && item->IsOnCopperLayer() )
+                        {
                             testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
+                        }
 
                         done.fetch_add( 1 );
                     }
