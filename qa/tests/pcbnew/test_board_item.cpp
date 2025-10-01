@@ -82,7 +82,13 @@ public:
         case PCB_PAD_T:               return new PAD( &m_footprint );
         case PCB_FIELD_T:             return new PCB_FIELD( &m_footprint, FIELD_T::USER );
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
-        case PCB_BARCODE_T:           return new PCB_BARCODE( &m_board );
+        case PCB_BARCODE_T:
+        {
+            PCB_BARCODE* barcode = new PCB_BARCODE( &m_board );
+            barcode->SetText( "XXXX" );
+            barcode->AssembleBarcode( true, true );
+            return barcode;
+        }
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
         case PCB_TABLECELL_T:         return new PCB_TABLECELL( &m_board );

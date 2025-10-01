@@ -43,9 +43,9 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
     PCB_BARCODE* barcode = new PCB_BARCODE( board.get() );
     barcode->SetText( wxT( "12345" ) );
     barcode->SetLayer( F_SilkS );
-    barcode->SetPosition( VECTOR2I( 1000000, 2000000 ) );
-    barcode->SetWidth( 3000000 );
-    barcode->SetHeight( 3000000 );
+    barcode->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 2.0 ) ) );
+    barcode->SetWidth( pcbIUScale.mmToIU( 3.0 ) );
+    barcode->SetHeight( pcbIUScale.mmToIU( 3.0 ) );
     barcode->SetTextSize( pcbIUScale.mmToIU( 1.5 ) );
     barcode->SetKind( BARCODE_T::QR_CODE );
     barcode->SetErrorCorrection( BARCODE_ECC_T::M );
@@ -71,8 +71,9 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
     BOOST_CHECK_EQUAL( loaded.GetWidth(), barcode->GetWidth() );
     BOOST_CHECK_EQUAL( loaded.GetHeight(), barcode->GetHeight() );
     BOOST_CHECK_EQUAL( loaded.GetTextSize(), barcode->GetTextSize() );
+    BOOST_CHECK_EQUAL( loaded.GetPosition(), barcode->GetPosition() );
 
-    BOX2I bbox = loaded.GetPolyShape().BBox();
+    BOX2I bbox = loaded.GetSymbolPoly().BBox();
     BOOST_CHECK_EQUAL( bbox.Centre(), loaded.GetPosition() );
 }
 
@@ -124,8 +125,9 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
     BOOST_CHECK_EQUAL( loaded->GetWidth(), barcode->GetWidth() );
     BOOST_CHECK_EQUAL( loaded->GetHeight(), barcode->GetHeight() );
     BOOST_CHECK_EQUAL( loaded->GetTextSize(), barcode->GetTextSize() );
+    BOOST_CHECK_EQUAL( loaded->GetPosition(), barcode->GetPosition() );
 
-    BOX2I bbox = loaded->GetPolyShape().BBox();
+    BOX2I bbox = loaded->GetSymbolPoly().BBox();
     BOOST_CHECK_EQUAL( bbox.Centre(), loaded->GetPosition() );
 }
 
@@ -188,6 +190,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         barcode->SetErrorCorrection( BARCODE_ECC_T::M );
         barcode->Text().SetVisible( tc.withText );
         barcode->SetIsKnockout( tc.knockout );
+        barcode->AssembleBarcode( true, true );
 
         if( tc.angle != 0.0 )
         {
@@ -196,8 +199,8 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
 
         barcode->AssembleBarcode( true, true );
 
-        // Check that the polygon center matches the position
-        BOX2I bbox = barcode->GetPolyShape().BBox();
+        // Check that the bar code polygon center matches the position
+        BOX2I bbox = barcode->GetSymbolPoly().BBox();
         VECTOR2I actualCenter = bbox.GetCenter();
         VECTOR2I expectedCenter = barcode->GetPosition();
 
