@@ -199,6 +199,13 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
                     }
                 }
             }
+            else if( typeMask[ PCB_BARCODE_T ] && item->Type() == PCB_BARCODE_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
         }
     }
 

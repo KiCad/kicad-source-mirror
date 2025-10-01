@@ -221,7 +221,7 @@ void DRC_ENGINE::loadImplicitRules()
     holeToHoleConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
-    // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
+    // 2a) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
     std::shared_ptr<DRC_RULE> uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
 
@@ -234,6 +234,14 @@ void DRC_ENGINE::loadImplicitRules()
     DRC_CONSTRAINT uViaDiameterConstraint( VIA_DIAMETER_CONSTRAINT );
     uViaDiameterConstraint.Value().SetMin( bds.m_MicroViasMinSize );
     uViaRule->AddConstraint( uViaDiameterConstraint );
+
+    // 2b) barcode-specific defaults
+
+    std::shared_ptr<DRC_RULE> barcodeRule = createImplicitRule( _( "barcode visual separation default" ) );
+    DRC_CONSTRAINT barcodeSeparationConstraint( PHYSICAL_CLEARANCE_CONSTRAINT );
+    barcodeSeparationConstraint.Value().SetMin( GetIuScale().mmToIU( 1.0 ) );
+    barcodeRule->AddConstraint( barcodeSeparationConstraint );
+    barcodeRule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.Type == 'Barcode'" ) );
 
     // 3) per-netclass rules
 

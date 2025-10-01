@@ -32,6 +32,7 @@
 #include <pcb_shape.h>
 #include <pcb_generator.h>
 #include <pcb_text.h>
+#include <pcb_barcode.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <board_commit.h>
@@ -1529,6 +1530,41 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 }
 
 
+bool PNS_KICAD_IFACE_BASE::syncBarcode( PNS::NODE* aWorld, PCB_BARCODE* aBarcode )
+{
+    if( IsKicadCopperLayer( aBarcode->GetLayer() ) )
+    {
+        SHAPE_POLY_SET cornerBuffer;
+
+        aBarcode->GetBoundingHull( cornerBuffer, aBarcode->GetLayer(), 0, aBarcode->GetMaxError(), ERROR_OUTSIDE );
+
+        if( !cornerBuffer.OutlineCount() )
+            return false;
+
+        for( int ii = 0; ii < cornerBuffer.OutlineCount(); ++ii )
+        {
+            std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
+            SHAPE_SIMPLE* shape = new SHAPE_SIMPLE;
+
+            solid->SetLayer( GetPNSLayerFromBoardLayer( aBarcode->GetLayer() ) );
+            solid->SetNet( nullptr );
+            solid->SetParent( aBarcode );
+            solid->SetShape( shape );   // takes ownership
+            solid->SetRoutable( false );
+
+            for( const VECTOR2I& pt : cornerBuffer.Outline( ii ).CPoints() )
+                shape->Append( pt );
+
+            aWorld->Add( std::move( solid ) );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
 void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
@@ -1702,17 +1738,38 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
     for( BOARD_ITEM* gitem : m_board->Drawings() )
     {
-        if ( gitem->Type() == PCB_SHAPE_T || gitem->Type() == PCB_TEXTBOX_T )
+        switch( gitem->Type() )
         {
+        case PCB_SHAPE_T:
+        case PCB_TEXTBOX_T:
             syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( gitem ) );
-        }
-        else if( gitem->Type() == PCB_TEXT_T )
-        {
+            break;
+
+        case PCB_TEXT_T:
             syncTextItem( aWorld, static_cast<PCB_TEXT*>( gitem ), gitem->GetLayer() );
-        }
-        else if( gitem->Type() == PCB_TABLE_T )
-        {
+            break;
+
+        case PCB_TABLE_T:
             syncTextItem( aWorld, static_cast<PCB_TABLE*>( gitem ), gitem->GetLayer() );
+            break;
+
+        case PCB_BARCODE_T:
+            syncBarcode( aWorld, static_cast<PCB_BARCODE*>( gitem ) );
+            break;
+
+        case PCB_DIM_ALIGNED_T:         // ignore
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
+            break;
+
+        case PCB_REFERENCE_IMAGE_T:     // ignore
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( gitem->Type() );
+            break;
         }
     }
 
@@ -1760,17 +1817,34 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
-            if( item->Type() == PCB_SHAPE_T || item->Type() == PCB_TEXTBOX_T )
+            switch( item->Type() )
             {
+            case PCB_SHAPE_T:
+            case PCB_TEXTBOX_T:
                 syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( item ) );
-            }
-            else if( item->Type() == PCB_TEXT_T )
-            {
+                break;
+
+            case PCB_TEXT_T:
                 syncTextItem( aWorld, static_cast<PCB_TEXT*>( item ), item->GetLayer() );
-            }
-            else if( item->Type() == PCB_TABLE_T )
-            {
+                break;
+
+            case PCB_TABLE_T:
                 syncTextItem( aWorld, static_cast<PCB_TABLE*>( item ), item->GetLayer() );
+                break;
+
+            case PCB_BARCODE_T:
+                syncBarcode( aWorld, static_cast<PCB_BARCODE*>( item ) );
+                break;
+
+            case PCB_DIM_ALIGNED_T:         // not allowed in footprints
+            case PCB_DIM_CENTER_T:
+            case PCB_DIM_RADIAL_T:
+            case PCB_DIM_ORTHOGONAL_T:
+            case PCB_DIM_LEADER_T:
+            case PCB_REFERENCE_IMAGE_T:
+            default:
+                UNIMPLEMENTED_FOR( item->Type() );
+                break;
             }
         }
     }

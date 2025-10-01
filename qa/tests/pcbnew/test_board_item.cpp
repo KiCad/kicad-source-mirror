@@ -174,6 +174,25 @@ public:
 BOOST_FIXTURE_TEST_SUITE( PcbItem, TEST_BOARD_ITEM_FIXTURE )
 
 
+BOOST_AUTO_TEST_CASE( Type )
+{
+   for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
+   {
+       KICAD_T type = static_cast<KICAD_T>( i );
+
+       auto item = std::unique_ptr<BOARD_ITEM>( Instantiate( type ) );
+
+       if( item == nullptr )
+           continue;
+
+       BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
+       {
+           BOOST_CHECK( !ENUM_MAP<KICAD_T>::Instance().ToString( type ).IsEmpty() );
+       }
+   }
+}
+
+
 BOOST_AUTO_TEST_CASE( Move )
 {
     for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )

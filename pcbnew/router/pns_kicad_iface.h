@@ -37,6 +37,7 @@ class PCB_TEXT;
 class PCB_DISPLAY_OPTIONS;
 class PCB_TOOL_BASE;
 class FOOTPRINT;
+class PCB_BARCODE;
 class PAD;
 class EDA_TEXT;
 class LENGTH_DELAY_CALCULATION_ITEM;
@@ -126,6 +127,7 @@ protected:
     bool syncTextItem( PNS::NODE* aWorld, BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
+    bool syncBarcode( PNS::NODE* aWorld, PCB_BARCODE* aBarcode );
     bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
     std::vector<LENGTH_DELAY_CALCULATION_ITEM> getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine,
                                                                                const NETCLASS*      aNetClass ) const;
