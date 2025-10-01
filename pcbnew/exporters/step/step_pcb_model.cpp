@@ -2326,6 +2326,13 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
             board_color.SetValues( col.r, col.g, col.b, col.a );
     }
 
+    // Paint board body in soldermask colors if soldermask is not exported as a layer
+    if( !m_enabledLayers.Contains( F_Mask ) && !m_enabledLayers.Contains( B_Mask ) )
+    {
+        board_color = front_mask_color;
+        board_color.SetAlpha( 1.0 );
+    }
+
     TDF_Label front_mask_mat = makeMaterial( "soldermask", front_mask_color, 0.0, 0.6 );
     TDF_Label back_mask_mat = makeMaterial( "soldermask", back_mask_color, 0.0, 0.6 );
     TDF_Label front_silk_mat = makeMaterial( "silkscreen", front_silk_color, 0.0, 0.9 );
