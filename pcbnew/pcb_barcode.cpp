@@ -104,6 +104,8 @@ void PCB_BARCODE::SetLayer( PCB_LAYER_ID aLayer )
 {
     m_layer = aLayer;
     m_text.SetLayer( aLayer );
+
+    AssembleBarcode( true, true );
 }
 
 
@@ -140,10 +142,16 @@ void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipLeftRight )
+void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    BOARD* board = GetBoard();
-    SetLayer( FlipLayer( GetLayer(), board ? board->GetCopperLayerCount() : 0 ) );
+    MIRROR( m_pos, aCentre, aFlipDirection );
+
+    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
+        m_angle += ANGLE_180;
+
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+
+    AssembleBarcode( true, true );
 }
 
 
@@ -195,6 +203,9 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
         ko.Fracture();
         m_poly = std::move( ko );
     }
+
+    if( IsSideSpecific() && GetBoard() && GetBoard()->IsBackLayer( m_layer ) )
+        m_poly.Mirror( m_pos, FLIP_DIRECTION::LEFT_RIGHT );
 
     if( !m_angle.IsZero() )
         m_poly.Rotate( m_angle, m_pos );
