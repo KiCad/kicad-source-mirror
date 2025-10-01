@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         { BARCODE_T::CODE_39, VECTOR2I( 4000000, 1000000 ), 3000000, 800000, false, false, 0.0, "CODE39TEST" },
         { BARCODE_T::CODE_128, VECTOR2I( 1000000, 4000000 ), 3500000, 1000000, false, false, 0.0, "CODE128" },
         { BARCODE_T::DATA_MATRIX, VECTOR2I( 3000000, 3000000 ), 1800000, 1800000, false, false, 0.0, "DATAMATRIX" },
-        { BARCODE_T::MICRO_QR_CODE, VECTOR2I( 2000000, 4000000 ), 1200000, 1200000, false, false, 0.0, "µQR" },
+        { BARCODE_T::MICRO_QR_CODE, VECTOR2I( 2000000, 4000000 ), 1200000, 1200000, false, false, 0.0, "microQR" },
 
         // Combined scenarios
         { BARCODE_T::QR_CODE, VECTOR2I( 1500000, 1500000 ), 2200000, 2200000, true, true, 90.0, "COMPLEX" },
