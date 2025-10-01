@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-10-01 10:15+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-02 14:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -25815,9 +25815,8 @@ msgid "Edit Symbol Properties..."
 msgstr "Symboleigenschaften bearbeiten ..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3513
-#, fuzzy
 msgid "Edit Netclasses..."
-msgstr "Netzklassen editieren ..."
+msgstr "Netzklassen bearbeiten ..."
 
 #: eeschema/tools/sch_editor_control.cpp:159
 #, c-format
@@ -34324,7 +34323,6 @@ msgid "Custom Rules"
 msgstr "Benutzerdefinierte Regeln"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:244
-#, fuzzy
 msgid "Modify barcode"
 msgstr "Barcode verändern"
 
@@ -34342,7 +34340,6 @@ msgid "If checked, the barcode will be inverted with a margin around it"
 msgstr "Wenn aktiviert, wird der Barcode inkl. einer Umrandung invertiert"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:57
-#, fuzzy
 msgid "Show text"
 msgstr "Text anzeigen"
 
@@ -34362,12 +34359,10 @@ msgid "90"
 msgstr "90"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:153
-#, fuzzy
 msgid "Min margin X:"
 msgstr "Min. Rand X:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:164
-#, fuzzy
 msgid "Min margin Y:"
 msgstr "Min. Rand Y:"
 
@@ -34409,13 +34404,11 @@ msgstr "~65% (Level H)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
 #: pcbnew/pcb_barcode.cpp:716
-#, fuzzy
 msgid "Error Correction"
 msgstr "Fehlerkorrektur"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
 #: pcbnew/pcb_barcode.cpp:647
-#, fuzzy
 msgid "Barcode Properties"
 msgstr "Barcode-Eigenschaften"
 
@@ -34886,7 +34879,6 @@ msgid "Through vias:"
 msgstr "Durchkontaktierungen:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:194
-#, fuzzy
 msgid "Blind vias:"
 msgstr "Blinde Vias:"
 
@@ -41082,7 +41074,6 @@ msgstr "Mikro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2348
-#, fuzzy
 msgid "Blind"
 msgstr "Blind"
 
@@ -47967,27 +47958,22 @@ msgid "H (High)"
 msgstr "H (Hoch)"
 
 #: pcbnew/pcb_barcode.cpp:680
-#, fuzzy
 msgid "Show Text"
 msgstr "Zeige Text"
 
 #: pcbnew/pcb_barcode.cpp:698
-#, fuzzy
 msgid "Kind"
 msgstr "Art"
 
 #: pcbnew/pcb_barcode.cpp:725
-#, fuzzy
 msgid "MicroQR Error Correction"
 msgstr "MicroQR-Fehlerkorrektur"
 
 #: pcbnew/pcb_barcode.cpp:741
-#, fuzzy
 msgid "Margin X"
 msgstr "Rand X"
 
 #: pcbnew/pcb_barcode.cpp:745
-#, fuzzy
 msgid "Margin Y"
 msgstr "Rand Y"
 
@@ -50085,12 +50071,12 @@ msgid "Border Properties"
 msgstr "Randeigenschaften"
 
 #: pcbnew/pcb_track.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Blind via %s on %s"
 msgstr "Blindes Via %s auf %s"
 
 #: pcbnew/pcb_track.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Buried via %s on %s"
 msgstr "Vergrabenes Via %s auf %s"
 
@@ -50134,7 +50120,6 @@ msgid "Micro Via"
 msgstr "Mikro-Via"
 
 #: pcbnew/pcb_track.cpp:1931
-#, fuzzy
 msgid "Blind Via"
 msgstr "Blindes Via"
 
@@ -51800,7 +51785,6 @@ msgid "Place point"
 msgstr "Punkt platzieren"
 
 #: pcbnew/tools/drawing_tool.cpp:1540
-#, fuzzy
 msgid "Draw Barcode"
 msgstr "Barcode zeichnen"
 
@@ -52388,12 +52372,10 @@ msgid "Create outset lines from the selected item"
 msgstr "Außenlinien um gewähltes Element erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add Barcode"
 msgstr "Barcode hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Add a barcode"
 msgstr "Einen Barcode hinzufügen"
 
