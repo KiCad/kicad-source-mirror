@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-09-30 21:53+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-01 10:15+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6486,14 +6486,14 @@ msgid "Redo"
 msgstr "Wiederherstellen"
 
 #: common/eda_base_frame.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "%s > %s ausführen"
+msgstr "Ausführen: %s > %s"
 
 #: common/eda_base_frame.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "Durchlauf: %s"
+msgstr "Ausführen: %s"
 
 #: common/eda_base_frame.cpp:1219
 #, c-format
@@ -8880,7 +8880,6 @@ msgstr "Durchkontaktierungen"
 
 #: common/layer_id.cpp:130
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
 msgstr "Blinde Vias"
 
@@ -16461,13 +16460,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
-#, fuzzy
 msgid "Add new variant name:"
 msgstr "Neuen Variantennamen hinzufügen:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
-#, fuzzy
 msgid "New Variant"
 msgstr "Neue Variante"
 
@@ -17002,12 +16999,10 @@ msgid "Update all other fields in the symbol from the footprint"
 msgstr "Alle weiteren Felder des Symbols aus dem Footprint aktualisieren"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:90
-#, fuzzy
 msgid "Prefer symbol pin swaps over label swaps"
 msgstr "Symbolpin- gegenüber Bezeichner-Tausch vorziehen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:92
-#, fuzzy
 msgid ""
 "When possible, swap symbol pins to match footprint pad net swaps instead of "
 "changing net labels."
@@ -17350,12 +17345,10 @@ msgid "Automatically annotate symbols"
 msgstr "Symbole automatisch annotieren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
-#, fuzzy
 msgid "Allow unconstrained pin swaps"
 msgstr "Uneingeschränkten Pin-Tausch erlauben"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
-#, fuzzy
 msgid ""
 "Allows swapping symbol pins' positions. May cause invalid design changes; "
 "use with caution."
@@ -19345,7 +19338,6 @@ msgid "Panels"
 msgstr "Panels"
 
 #: eeschema/menubar.cpp:325
-#, fuzzy
 msgid "Variants"
 msgstr "Varianten"
 
@@ -23881,12 +23873,10 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Verbindung von Schaltplanpin und hierarchischem Bezeichner auflösen"
 
 #: eeschema/toolbars_sch_editor.cpp:51
-#, fuzzy
 msgid "Current Variant"
 msgstr "Aktuelle Variante"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic varaint"
 msgstr "Steuerelement zum Wählen der aktuellen Schaltplanvariante"
 
@@ -24042,25 +24032,25 @@ msgid "Delete %s field '%s.'"
 msgstr "Lösche %s Feld \"%s.\""
 
 #: eeschema/tools/backannotate.cpp:1269
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects."
 msgstr ""
 "Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
-"aber das Symbol wird in anderen Projekten gemeinsam genutzt."
+"aber das Symbol wird gemeinsam mit anderen Projekten genutzt."
 
 #: eeschema/tools/backannotate.cpp:1275
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects (%s)."
 msgstr ""
 "Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
-"aber das Symbol wird in anderen Projekten gemeinsam genutzt (%s)."
+"aber das Symbol wird gemeinsam mit anderen Projekten genutzt (%s)."
 
 #: eeschema/tools/backannotate.cpp:1285
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
@@ -24069,14 +24059,14 @@ msgstr ""
 "aber das Symbol wird in mehreren Schaltplanblattinstanzen verwendet (%s)."
 
 #: eeschema/tools/backannotate.cpp:1292
-#, c-format, fuzzy
+#, c-format
 msgid "Would swap %s pins %s and %s to match PCB, but the symbol is shared."
 msgstr ""
 "Würde %s Pins %s und %s tauschen, um sie an die Leiterplatte anzupassen, "
-"aber das Symbol wird gemeinsam genutzt."
+"aber das Symbol wird mehrmals genutzt."
 
 #: eeschema/tools/backannotate.cpp:1298
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are "
 "disabled in the schematic preferences."
@@ -24086,7 +24076,7 @@ msgstr ""
 "deaktiviert."
 
 #: eeschema/tools/backannotate.cpp:1333
-#, c-format, fuzzy
+#, c-format
 msgid "Swap %s pins %s and %s to match PCB."
 msgstr "Tausche %s Pins %s und %s, um sie an die Leiterplatte anzupassen."
 
@@ -24643,14 +24633,12 @@ msgid "Swap positions of selected items"
 msgstr "Positionen ausgewählter Elemente tauschen"
 
 #: eeschema/tools/sch_actions.cpp:777 eeschema/tools/sch_edit_tool.cpp:1665
-#, fuzzy
 msgid "Swap Pins"
 msgstr "Pins tauschen"
 
 #: eeschema/tools/sch_actions.cpp:778
-#, fuzzy
 msgid "Swap the selected symbol pins' positions"
-msgstr "Tauscht die Positionen ausgewählter Elemente"
+msgstr "Tauscht die Positionen ausgewählter Symbolpins"
 
 #: eeschema/tools/sch_actions.cpp:784 eeschema/tools/sch_edit_tool.cpp:1768
 msgid "Swap Pin Labels"
@@ -25495,7 +25483,6 @@ msgid "Show SPICE Netlist"
 msgstr "SPICE-Netzliste anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1691
-#, fuzzy
 msgid "Add Variant..."
 msgstr "Variante hinzufügen ..."
 
@@ -25504,7 +25491,6 @@ msgid "Add new variant to the schematic."
 msgstr "Neue Variante zum Schaltplan hinzufügen."
 
 #: eeschema/tools/sch_actions.cpp:1697
-#, fuzzy
 msgid "Remove Variant..."
 msgstr "Variante entfernen ..."
 
@@ -47965,7 +47951,6 @@ msgid "MICRO_QR_CODE"
 msgstr "MICRO_QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:664 pcbnew/pcb_barcode.cpp:731
-#, fuzzy
 msgid "L (Low)"
 msgstr "L (Niedrig)"
 
