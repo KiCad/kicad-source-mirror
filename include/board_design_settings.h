@@ -779,6 +779,8 @@ public:
     bool              m_StyleFPFields;
     bool              m_StyleFPText;
     bool              m_StyleFPShapes;
+    bool              m_StyleFPDimensions;
+    bool              m_StyleFPBarcodes;
 
     // Miscellaneous
     std::unique_ptr<PAD> m_Pad_Master; // A dummy pad to store all default parameters

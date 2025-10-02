@@ -35,8 +35,8 @@ public:
      */
     struct OPTIONS
     {
-        bool includeModules           = true;
-        bool includeLockedModules     = true;
+        bool includeFootprints        = true;
+        bool includeLockedFootprints  = true;
         bool includeTracks            = true;
         bool includeVias              = true;
         bool includeZones             = true;

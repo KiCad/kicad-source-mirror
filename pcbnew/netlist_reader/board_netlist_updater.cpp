@@ -567,7 +567,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                         newField->Rotate( aPcbFootprint->GetPosition(), aPcbFootprint->GetOrientation() );
 
                         if( m_frame )
-                            newField->StyleFromSettings( m_frame->GetDesignSettings() );
+                            newField->StyleFromSettings( m_frame->GetDesignSettings(), true );
                     }
                 }
             }

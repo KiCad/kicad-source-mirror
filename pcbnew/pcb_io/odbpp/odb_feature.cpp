@@ -787,7 +787,12 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             //TODO: Add support for dimensions
             break;
 
-        default: break;
+        case PCB_BARCODE_T:
+            //TODO: Add support for barcodes
+            break;
+
+        default:
+            break;
         }
     }
 }

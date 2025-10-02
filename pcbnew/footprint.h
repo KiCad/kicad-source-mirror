@@ -748,7 +748,7 @@ public:
      * the correct default text properties.
      */
     void ApplyDefaultSettings( const BOARD& board, bool aStyleFields, bool aStyleText,
-                               bool aStyleShapes );
+                               bool aStyleShapes, bool aStyleDimensions, bool aStyleBarcodes );
 
     struct FP_UNIT_INFO
     {

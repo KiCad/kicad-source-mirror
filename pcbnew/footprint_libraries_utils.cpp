@@ -924,7 +924,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
     newFootprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
-                                        bds.m_StyleFPShapes );
+                                        bds.m_StyleFPShapes, bds.m_StyleFPDimensions,
+                                        bds.m_StyleFPBarcodes );
 
     if( sourceFootprint )         // this is an update command
     {

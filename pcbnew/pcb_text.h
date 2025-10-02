@@ -70,7 +70,7 @@ public:
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
-    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
 
     /**
      * Called when rotating the parent footprint.

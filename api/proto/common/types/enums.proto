@@ -86,6 +86,7 @@ enum KiCadObjectType
   KOT_WSG_PAGE = 50;
 
   KOT_SCH_GROUP = 51;
+  KOT_PCB_BARCODE = 52;
 }
 
 // Mapped to GR_TEXT_H_ALIGN_T

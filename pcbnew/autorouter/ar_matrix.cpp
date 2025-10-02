@@ -758,8 +758,7 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const 
 }
 
 
-void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* aShape, int aColor, int aMargin,
-                                 AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::TracePcbShape( PCB_SHAPE* aShape, int aColor, int aMargin, AR_MATRIX::CELL_OP op_logic )
 {
     int half_width = ( aShape->GetWidth() / 2 ) + aMargin;
 

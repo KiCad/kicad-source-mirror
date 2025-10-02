@@ -831,7 +831,7 @@ public:
 
         m_barcode.SetRect( newTL, newBR );
 
-        m_barcode.AssembleBarcode( false, true );
+        m_barcode.AssembleBarcode( true, true );
     }
 
 private:

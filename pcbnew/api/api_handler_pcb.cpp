@@ -519,8 +519,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
 }
 
 
-HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems(
-        const HANDLER_CONTEXT<GetItems>& aCtx )
+HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_CONTEXT<GetItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
@@ -592,6 +591,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems(
         case PCB_SHAPE_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
+        case PCB_BARCODE_T:
         {
             handledAnything = true;
             bool inserted = false;
@@ -606,7 +606,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems(
             }
 
             if( inserted )
-                typesInserted.insert( PCB_SHAPE_T );
+                typesInserted.insert( type );
 
             break;
         }

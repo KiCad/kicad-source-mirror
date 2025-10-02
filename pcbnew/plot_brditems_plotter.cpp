@@ -506,12 +506,8 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
     }
 
     case PCB_BARCODE_T:
-    {
-        const PCB_BARCODE* barCode = static_cast<const PCB_BARCODE*>( item );
-        PlotBarCode( barCode );
-
+        PlotBarCode( static_cast<const PCB_BARCODE*>( item ) );
         break;
-    }
 
     case PCB_TABLE_T:
     {
@@ -695,6 +691,10 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             m_plotter->SetTextMode( GetTextMode() );
             break;
         }
+
+        case PCB_BARCODE_T:
+            PlotBarCode( static_cast<const PCB_BARCODE*>( item ) );
+            break;
 
         case PCB_TABLE_T:
         {

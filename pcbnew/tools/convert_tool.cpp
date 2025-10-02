@@ -47,6 +47,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
+#include <pcb_barcode.h>
 #include <pad.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -275,7 +276,8 @@ bool CONVERT_TOOL::Init()
                                                        PCB_SHAPE_LOCATE_ARC_T,
                                                        PCB_SHAPE_LOCATE_BEZIER_T,
                                                        PCB_FIELD_T,
-                                                       PCB_TEXT_T };
+                                                       PCB_TEXT_T,
+                                                       PCB_BARCODE_T };
     static const std::vector<KICAD_T> trackTypes =   { PCB_TRACE_T,
                                                        PCB_ARC_T,
                                                        PCB_VIA_T };
@@ -897,6 +899,19 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
             text->TransformTextToPolySet( poly, 0, text->GetMaxError(), ERROR_INSIDE );
             text->SetFlags( SKIP_STRUCT );
+            break;
+        }
+
+        case PCB_BARCODE_T:
+        {
+            PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( item );
+
+            if( aStrategy == BOUNDING_HULL )
+                barcode->GetBoundingHull( poly, UNDEFINED_LAYER, 0, barcode->GetMaxError(), ERROR_INSIDE );
+            else
+                barcode->TransformShapeToPolySet( poly, UNDEFINED_LAYER, 0, barcode->GetMaxError(), ERROR_INSIDE );
+
+            barcode->SetFlags( SKIP_STRUCT );
             break;
         }
 

@@ -33,6 +33,7 @@
 #include <board.h>
 #include <pcb_dimension.h>
 #include <pcb_text.h>
+#include <board_design_settings.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_segment.h>
@@ -596,6 +597,23 @@ void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipD
         SetMirrored( !IsMirrored() );
 
     Update();
+}
+
+
+void PCB_DIMENSION_BASE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide )
+{
+    PCB_TEXT::StyleFromSettings( settings, aCheckSide );
+
+    SetLineThickness( settings.GetLineThickness( m_layer ) );
+    SetUnitsMode( settings.m_DimensionUnitsMode );
+    SetUnitsFormat( settings.m_DimensionUnitsFormat );
+    SetPrecision( settings.m_DimensionPrecision );
+    SetSuppressZeroes( settings.m_DimensionSuppressZeroes );
+    SetTextPositionMode( settings.m_DimensionTextPosition );
+    SetKeepTextAligned( settings.m_DimensionKeepTextAligned );
+
+    Update();    // refresh text & geometry
+
 }
 
 

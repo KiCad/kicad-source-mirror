@@ -33,6 +33,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
+#include <pcb_barcode.h>
 #include <pcb_painter.h>
 #include <pad.h>
 #include <zone.h>
@@ -518,6 +519,7 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOrigin )
 {
     PCB_LAYER_ID pcblayer = aItem->GetLayer();
+    int          maxError = aItem->GetMaxError();
 
     if( !m_layersToExport.Contains( pcblayer ) )
         return false;
@@ -544,8 +546,8 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
 
         if( lineStyle == LINE_STYLE::SOLID )
         {
-            graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer][graphic->GetNetname()],
-                                              pcblayer, 0, graphic->GetMaxError(), ERROR_INSIDE );
+            graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer][graphic->GetNetname()], pcblayer, 0,
+                                              maxError, ERROR_INSIDE );
         }
         else
         {
@@ -563,7 +565,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
                         {
                             SHAPE_SEGMENT seg( a, b, graphic->GetWidth() );
                             seg.TransformToPolygon( m_poly_shapes[pcblayer][graphic->GetNetname()],
-                                                    graphic->GetMaxError(), ERROR_INSIDE );
+                                                    maxError, ERROR_INSIDE );
                         } );
             }
 
@@ -577,15 +579,13 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
         if( m_params.m_ExportSoldermask && graphic->IsOnLayer( F_Mask ) )
         {
             graphic->TransformShapeToPolygon( m_poly_shapes[F_Mask][wxEmptyString], F_Mask,
-                                              graphic->GetSolderMaskExpansion(), graphic->GetMaxError(),
-                                              ERROR_INSIDE );
+                                              graphic->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
         }
 
         if( m_params.m_ExportSoldermask && graphic->IsOnLayer( B_Mask ) )
         {
             graphic->TransformShapeToPolygon( m_poly_shapes[B_Mask][wxEmptyString], B_Mask,
-                                              graphic->GetSolderMaskExpansion(), graphic->GetMaxError(),
-                                              ERROR_INSIDE );
+                                              graphic->GetSolderMaskExpansion(), maxError, ERROR_INSIDE );
         }
 
         break;
@@ -595,8 +595,16 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
 
-        text->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, text->GetMaxError(),
-                                      ERROR_INSIDE );
+        text->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError, ERROR_INSIDE );
+        break;
+    }
+
+    case PCB_BARCODE_T:
+    {
+        PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( aItem );
+
+        barcode->TransformShapeToPolySet( m_poly_shapes[pcblayer][wxEmptyString], pcblayer, 0, maxError,
+                                          ERROR_INSIDE );
         break;
     }
 
@@ -607,13 +615,12 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
         // border
         if( textbox->IsBorderEnabled() )
         {
-            textbox->PCB_SHAPE::TransformShapeToPolygon( m_poly_shapes[pcblayer][wxEmptyString],
-                                                         pcblayer, 0, textbox->GetMaxError(), ERROR_INSIDE );
+            textbox->PCB_SHAPE::TransformShapeToPolygon( m_poly_shapes[pcblayer][wxEmptyString], pcblayer, 0,
+                                                         maxError, ERROR_INSIDE );
         }
 
         // text
-        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, textbox->GetMaxError(),
-                                         ERROR_INSIDE );
+        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError, ERROR_INSIDE );
         break;
     }
 
@@ -623,16 +630,14 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
 
         for( PCB_TABLECELL* cell : table->GetCells() )
         {
-            cell->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, cell->GetMaxError(),
-                                          ERROR_INSIDE );
+            cell->TransformTextToPolySet( m_poly_shapes[pcblayer][wxEmptyString], 0, maxError, ERROR_INSIDE );
         }
 
         table->DrawBorders(
                 [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
                 {
                     SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth() );
-                    seg.TransformToPolygon( m_poly_shapes[pcblayer][wxEmptyString], table->GetMaxError(),
-                                            ERROR_INSIDE );
+                    seg.TransformToPolygon( m_poly_shapes[pcblayer][wxEmptyString], maxError, ERROR_INSIDE );
                 } );
 
         break;

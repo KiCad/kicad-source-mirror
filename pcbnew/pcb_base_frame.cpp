@@ -335,6 +335,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             case PCB_FIELD_T:
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
+            case PCB_BARCODE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:
             case PCB_DIM_ALIGNED_T:

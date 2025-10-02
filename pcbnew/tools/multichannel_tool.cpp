@@ -244,7 +244,7 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
         group->RunOnChildren(
                 [&]( BOARD_ITEM* aItem )
                 {
-                    if( aItem->IsType( { PCB_ZONE_T, PCB_SHAPE_T, PCB_DIMENSION_T } ) )
+                    if( aItem->IsType( { PCB_ZONE_T, PCB_SHAPE_T, PCB_BARCODE_T, PCB_DIMENSION_T } ) )
                     {
                         ctx.SetItems( aItem, aItem );
                         LIBEVAL::VALUE* val = ucode.Run( &ctx );

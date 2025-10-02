@@ -145,7 +145,7 @@ DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIO
         m_options( aOptions )
 {
     // silence another compiler warning about m_options not being used
-    if( m_options.includeModules )
+    if( m_options.includeFootprints )
     {
     }
 }

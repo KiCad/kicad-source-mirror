@@ -32,6 +32,7 @@
 #include <pcb_shape.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_barcode.h>
 
 #include <macros.h>
 #include <functional>
@@ -214,8 +215,25 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( aFlags & HASH_ROT )
             hash_combine( ret, text->GetTextAngle().AsDegrees() );
-    }
+
         break;
+    }
+
+    case PCB_BARCODE_T:
+    {
+        const PCB_BARCODE* barcode = static_cast<const PCB_BARCODE*>( aItem );
+
+        ret = hash_board_item( barcode, aFlags );
+        hash_combine( ret, barcode->GetWidth(), barcode->GetHeight() );
+        hash_combine( ret, barcode->GetPosition().x, barcode->GetPosition().y );
+        hash_combine( ret, barcode->GetMargin().x, barcode->GetMargin().y );
+        hash_combine( ret, barcode->Text().GetText().ToStdString() );
+        hash_combine( ret, barcode->Text().GetTextHeight() );
+        hash_combine( ret, barcode->GetKind() );
+        hash_combine( ret, barcode->GetAngle().AsDegrees() );
+        hash_combine( ret, barcode->GetErrorCorrection() );
+        break;
+    }
 
     case PCB_SHAPE_T:
     {

@@ -31,6 +31,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_group.h>
+#include <pcb_barcode.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
@@ -311,6 +312,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     PCB_TEXT*           text = dynamic_cast<PCB_TEXT*>( aItem );
     PCB_SHAPE*          shape = dynamic_cast<PCB_SHAPE*>( aItem );
     PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
+    PCB_BARCODE*        barcode = dynamic_cast<PCB_BARCODE*>( aItem );
     FOOTPRINT*          parentFP = aItem->GetParentFootprint();
 
     if( m_setToSpecifiedValues->GetValue() )
@@ -362,6 +364,14 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             }
         }
 
+        if( barcode )
+        {
+            if( !m_textHeight.IsIndeterminate() )
+                barcode->SetTextSize( m_textHeight.GetIntValue() );
+            else if( !m_textWidth.IsIndeterminate() )
+                barcode->SetTextSize( m_textWidth.GetIntValue() );
+        }
+
         if( field )
         {
             if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
@@ -384,35 +394,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     else
     {
         PCB_LAYER_ID layer = aItem->GetLayer();
-
-        if( text )
-        {
-            text->SetTextSize( m_brdSettings->GetTextSize( layer ) );
-            text->SetTextThickness( m_brdSettings->GetTextThickness( layer ) );
-            text->SetItalic( m_brdSettings->GetTextItalic( layer ) );
-
-            if( parentFP )
-                text->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
-        }
-
-        if( shape )
-        {
-            STROKE_PARAMS stroke = shape->GetStroke();
-            stroke.SetWidth( m_brdSettings->GetLineThickness( layer ) );
-            shape->SetStroke( stroke );
-        }
-
-        if( dimension )
-        {
-            dimension->SetLineThickness( m_brdSettings->GetLineThickness( layer ) );
-            dimension->SetUnitsMode( m_brdSettings->m_DimensionUnitsMode );
-            dimension->SetUnitsFormat( m_brdSettings->m_DimensionUnitsFormat );
-            dimension->SetPrecision( m_brdSettings->m_DimensionPrecision );
-            dimension->SetSuppressZeroes( m_brdSettings->m_DimensionSuppressZeroes );
-            dimension->SetTextPositionMode( m_brdSettings->m_DimensionTextPosition );
-            dimension->SetKeepTextAligned( m_brdSettings->m_DimensionKeepTextAligned );
-            dimension->Update();    // refresh text & geometry
-        }
+        aItem->StyleFromSettings( *m_brdSettings, false );
     }
 }
 
@@ -531,7 +513,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 if( m_footprintDimensions->GetValue() )
                     visitItem( commit, boardItem );
             }
-            else if( itemType == PCB_SHAPE_T )
+            else if( itemType == PCB_SHAPE_T || itemType == PCB_BARCODE_T )
             {
                 if( m_footprintGraphics->GetValue() )
                     visitItem( commit, boardItem );
@@ -556,7 +538,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 if( m_boardDimensions->GetValue() )
                     visitItem( commit, boardItem );
             }
-            else if( itemType == PCB_SHAPE_T )
+            else if( itemType == PCB_SHAPE_T || itemType == PCB_BARCODE_T )
             {
                 if( m_boardGraphics->GetValue() )
                     visitItem( commit, boardItem );

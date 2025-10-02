@@ -124,6 +124,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_StyleFPFields = false;
     m_StyleFPText = false;
     m_StyleFPShapes = false;
+    m_StyleFPDimensions = false;
+    m_StyleFPBarcodes = false;
 
     m_DimensionPrecision       = DIM_PRECISION::X_XXXX;
     m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
@@ -856,6 +858,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_StyleFPText, false ) );
     m_params.emplace_back( new PARAM<bool>( "defaults.apply_defaults_to_fp_shapes",
             &m_StyleFPShapes, false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.apply_defaults_to_fp_dimensions",
+            &m_StyleFPDimensions, false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.apply_defaults_to_fp_barcodes",
+            &m_StyleFPBarcodes, false ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.zones.min_clearance",
             &m_defaultZoneSettings.m_ZoneClearance, pcbIUScale.mmToIU( ZONE_CLEARANCE_MM ),
@@ -1059,6 +1065,8 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_StyleFPFields       = aOther.m_StyleFPFields;
     m_StyleFPText         = aOther.m_StyleFPText;
     m_StyleFPShapes       = aOther.m_StyleFPShapes;
+    m_StyleFPDimensions   = aOther.m_StyleFPDimensions;
+    m_StyleFPBarcodes     = aOther.m_StyleFPBarcodes;
 }
 
 
@@ -1158,9 +1166,11 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( *m_Pad_Master              != *aOther.m_Pad_Master ) return false;
     if( m_defaultZoneSettings      != aOther.m_defaultZoneSettings ) return false;
 
-    if( m_StyleFPFields != aOther.m_StyleFPFields ) return false;
-    if( m_StyleFPText   != aOther.m_StyleFPText ) return false;
-    if( m_StyleFPShapes != aOther.m_StyleFPShapes ) return false;
+    if( m_StyleFPFields     != aOther.m_StyleFPFields ) return false;
+    if( m_StyleFPText       != aOther.m_StyleFPText ) return false;
+    if( m_StyleFPShapes     != aOther.m_StyleFPShapes ) return false;
+    if( m_StyleFPDimensions != aOther.m_StyleFPDimensions ) return false;
+    if( m_StyleFPBarcodes   != aOther.m_StyleFPBarcodes ) return false;
 
     return true;
 }

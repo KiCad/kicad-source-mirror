@@ -324,7 +324,7 @@ public:
 
     int GetMaxError() const;
 
-    virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) { }
+    virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) { }
 
     /**
      * Delete this object after removing from its parent if it has one.

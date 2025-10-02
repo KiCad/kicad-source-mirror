@@ -2686,8 +2686,8 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     {
         const FOOTPRINT& footprint = static_cast<const FOOTPRINT&>( aItem );
 
-        return aFilterOptions.includeModules && ( aFilterOptions.includeLockedModules
-                                                  || !footprint.IsLocked() );
+        return aFilterOptions.includeFootprints && ( aFilterOptions.includeLockedFootprints
+                                                     || !footprint.IsLocked() );
     }
 
     case PCB_TRACE_T:
@@ -2820,6 +2820,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
             {
                 if( aRejected )
                     aRejected->otherItems = true;
+
                 return false;
             }
         }
@@ -2836,6 +2837,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->footprints = true;
+
             return false;
         }
 
@@ -2846,6 +2848,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->pads = true;
+
             return false;
         }
 
@@ -2857,6 +2860,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->tracks = true;
+
             return false;
         }
 
@@ -2867,6 +2871,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->vias = true;
+
             return false;
         }
 
@@ -2886,6 +2891,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
                 else
                     aRejected->zones = true;
             }
+
             return false;
         }
 
@@ -2904,6 +2910,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->graphics = true;
+
             return false;
         }
 
@@ -2914,6 +2921,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->graphics = true;
+
             return false;
         }
 
@@ -2922,6 +2930,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->text = true;
+
             return false;
         }
 
@@ -2946,6 +2955,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->dimensions = true;
+
             return false;
         }
 
@@ -2956,16 +2966,19 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         {
             if( aRejected )
                 aRejected->points = true;
+
             return false;
         }
 
         break;
 
+    case PCB_BARCODE_T:
     default:
         if( !m_filter.otherItems )
         {
             if( aRejected )
                 aRejected->otherItems = true;
+
             return false;
         }
     }
@@ -3279,6 +3292,12 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         if( options.m_FilledShapeOpacity == 0.0 && static_cast<const PCB_SHAPE*>( aItem )->IsAnyFill() )
             return false;
 
+        if( !layerVisible( aItem->GetLayer() ) )
+            return false;
+
+        break;
+
+    case PCB_BARCODE_T:
         if( !layerVisible( aItem->GetLayer() ) )
             return false;
 
@@ -3799,7 +3818,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     static std::vector<KICAD_T> singleLayerSilkTypes = { PCB_FIELD_T,
                                                          PCB_TEXT_T,   PCB_TEXTBOX_T,
                                                          PCB_TABLE_T,  PCB_TABLECELL_T,
-                                                         PCB_SHAPE_T };
+                                                         PCB_SHAPE_T,
+                                                         PCB_BARCODE_T };
 
     if( ADVANCED_CFG::GetCfg().m_PcbSelectionVisibilityRatio != 1.0 )
         pruneObscuredSelectionCandidates( aCollector );

@@ -4857,7 +4857,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
 
                 if( m_board )   // can be null when reading a lib
-                    field->StyleFromSettings( m_board->GetDesignSettings() );
+                    field->StyleFromSettings( m_board->GetDesignSettings(), true );
             }
 
             // Hide the field by default if it is a legacy field that did not have

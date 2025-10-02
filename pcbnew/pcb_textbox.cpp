@@ -170,19 +170,24 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any &aContainer )
 }
 
 
-void PCB_TEXTBOX::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
+void PCB_TEXTBOX::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide )
 {
-    PCB_SHAPE::StyleFromSettings( settings );
+    PCB_SHAPE::StyleFromSettings( settings, aCheckSide );
 
     SetTextSize( settings.GetTextSize( GetLayer() ) );
     SetTextThickness( settings.GetTextThickness( GetLayer() ) );
     SetItalic( settings.GetTextItalic( GetLayer() ) );
-    SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
 
-    if( BOARD* board = GetBoard() )
-        SetMirrored( board->IsBackLayer( GetLayer() ) );
-    else
-        SetMirrored( IsBackLayer( GetLayer() ) );
+    if( GetParentFootprint() )
+        SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
+
+    if( aCheckSide )
+    {
+        if( BOARD* board = GetBoard() )
+            SetMirrored( board->IsBackLayer( GetLayer() ) );
+        else
+            SetMirrored( IsBackLayer( GetLayer() ) );
+    }
 }
 
 

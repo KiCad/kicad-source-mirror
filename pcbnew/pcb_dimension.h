@@ -270,6 +270,8 @@ public:
     int GetLineThickness() const        { return m_lineThickness; }
     void SetLineThickness( int aWidth ) { m_lineThickness = aWidth; }
 
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
+
     /**
      * @return a list of line segments that make up this dimension (for drawing, plotting, etc).
      */

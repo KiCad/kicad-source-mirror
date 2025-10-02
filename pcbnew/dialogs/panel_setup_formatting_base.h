@@ -44,6 +44,8 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxCheckBox* m_styleFields;
 		wxCheckBox* m_styleText;
 		wxCheckBox* m_styleShapes;
+		wxCheckBox* m_styleDimensions;
+		wxCheckBox* m_styleBarcodes;
 
 	public:
 

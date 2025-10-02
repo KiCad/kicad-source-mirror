@@ -2881,6 +2881,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_TEXT_T:
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
+        case PCB_BARCODE_T:
         case PCB_TABLE_T:
         case PCB_REFERENCE_IMAGE_T:
         case PCB_DIMENSION_T:

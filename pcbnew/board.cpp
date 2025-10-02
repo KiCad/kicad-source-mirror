@@ -50,6 +50,7 @@
 #include <pcb_point.h>
 #include <pcb_target.h>
 #include <pcb_shape.h>
+#include <pcb_barcode.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -1204,7 +1205,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
         break;
 
-
     case PCB_TRACE_T:
     case PCB_ARC_T:
         if( !IsCopperLayer( aBoardItem->GetLayer() ) )
@@ -1513,6 +1513,7 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         case PCB_TEXTBOX_T:
         case PCB_TABLE_T:
         case PCB_TARGET_T:
+        case PCB_BARCODE_T:
             wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) );
             break;
 
@@ -2161,6 +2162,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
+        case PCB_BARCODE_T:
             if( !footprintsScanned )
             {
                 if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
@@ -3181,6 +3183,13 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 
         return PCB_TABLE::Compare( table, other );
     }
+    else if( aFirst->Type() == PCB_BARCODE_T )
+    {
+        const PCB_BARCODE* barcode = static_cast<const PCB_BARCODE*>( aFirst );
+        const PCB_BARCODE* other = static_cast<const PCB_BARCODE*>( aSecond );
+
+        return PCB_BARCODE::Compare( barcode, other );
+    }
 
     return aFirst->m_Uuid < aSecond->m_Uuid;
 }
@@ -3239,6 +3248,13 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
             break;
         }
 
+        case PCB_BARCODE_T:
+        {
+            const PCB_BARCODE* barcode = static_cast<const PCB_BARCODE*>( item );
+            barcode->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
+            break;
+        }
+
         case PCB_FIELD_T:
         case PCB_TEXT_T:
         {
@@ -3250,10 +3266,8 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_TEXTBOX_T:
         {
             const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
-
             // border
-            textbox->PCB_SHAPE::TransformShapeToPolygon( aOutlines, aLayer, 0, maxError,
-                                                         ERROR_INSIDE );
+            textbox->PCB_SHAPE::TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             // text
             textbox->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
             break;
@@ -3262,7 +3276,6 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_TABLE_T:
         {
             const PCB_TABLE* table = static_cast<const PCB_TABLE*>( item );
-
             table->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             break;
         }
@@ -3274,7 +3287,6 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_DIM_LEADER_T:
         {
             const PCB_DIMENSION_BASE* dim = static_cast<const PCB_DIMENSION_BASE*>( item );
-
             dim->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             dim->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
             break;

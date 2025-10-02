@@ -29,6 +29,7 @@
 #include <fp_lib_table.h>
 #include <board.h>
 #include <pcb_shape.h>
+#include <pcb_barcode.h>
 #include <zone.h>
 #include <footprint.h>
 #include <pad.h>
@@ -427,6 +428,34 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             return true;
         }
     }
+
+    return diff;
+}
+
+
+bool barcodeNeedsUpdate( const PCB_BARCODE& curr_barcode, const PCB_BARCODE& ref_barcode )
+{
+    REPORTER* aReporter = nullptr;
+    bool      diff = false;
+
+    TEST( curr_barcode.GetText(), ref_barcode.GetText(),
+          wxString::Format( _( "%s text differs." ), ITEM_DESC( &curr_barcode ) ) );
+
+    TEST_PT( curr_barcode.GetPosition(), ref_barcode.GetPosition(),
+             wxString::Format( _( "%s position differs." ), ITEM_DESC( &curr_barcode ) ) );
+
+    TEST( curr_barcode.GetWidth(), ref_barcode.GetWidth(),
+          wxString::Format( _( "%s width differs." ), ITEM_DESC( &curr_barcode ) ) );
+    TEST( curr_barcode.GetHeight(), ref_barcode.GetHeight(),
+          wxString::Format( _( "%s height differs." ), ITEM_DESC( &curr_barcode ) ) );
+
+    TEST( curr_barcode.GetTextSize(), ref_barcode.GetTextSize(),
+          wxString::Format( _( "%s text size differs." ), ITEM_DESC( &curr_barcode ) ) );
+
+    TEST( (int) curr_barcode.GetKind(), (int) ref_barcode.GetKind(),
+          wxString::Format( _( "%s code differs." ), ITEM_DESC( &curr_barcode ) ) );
+    TEST( (int) curr_barcode.GetErrorCorrection(), (int) ref_barcode.GetErrorCorrection(),
+          wxString::Format( _( "%s error correction level differs." ), ITEM_DESC( &curr_barcode ) ) );
 
     return diff;
 }
@@ -846,6 +875,46 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
             PCB_SHAPE* test_shape = static_cast<PCB_SHAPE*>( *bIt );
 
             if( shapeNeedsUpdate( *curr_shape, *test_shape ) )
+            {
+                diff = true;
+                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
+            }
+        }
+    }
+
+    CHECKPOINT;
+
+    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> aBarcodes;
+    std::copy_if( dummy.GraphicalItems().begin(), dummy.GraphicalItems().end(),
+                  std::inserter( aBarcodes, aBarcodes.begin() ),
+                  []( BOARD_ITEM* item )
+                  {
+                      return item->Type() == PCB_BARCODE_T;
+                  } );
+
+    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> bBarcodes;
+    std::copy_if( aLibFP->GraphicalItems().begin(), aLibFP->GraphicalItems().end(),
+                  std::inserter( bBarcodes, bBarcodes.begin() ),
+                  []( BOARD_ITEM* item )
+                  {
+                      return item->Type() == PCB_BARCODE_T;
+                  } );
+
+    if( aBarcodes.size() != bBarcodes.size() )
+    {
+        diff = true;
+        REPORT( _( "Barcode count differs." ) );
+    }
+    else
+    {
+        for( auto aIt = aBarcodes.begin(), bIt = bBarcodes.begin(); aIt != aBarcodes.end(); aIt++, bIt++ )
+        {
+            // aBarcodes and bBarcodes are the tested footprint PCB_BARCODE and the model PCB_BARCODE.
+            // These shapes are already normalized.
+            PCB_BARCODE* curr_barcode = static_cast<PCB_BARCODE*>( *aIt );
+            PCB_BARCODE* test_barcode = static_cast<PCB_BARCODE*>( *bIt );
+
+            if( barcodeNeedsUpdate( *curr_barcode, *test_barcode ) )
             {
                 diff = true;
                 REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );

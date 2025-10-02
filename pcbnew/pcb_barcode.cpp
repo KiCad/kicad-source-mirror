@@ -113,6 +113,8 @@ void PCB_BARCODE::SetTextSize( int aTextSize )
 {
     m_text.SetTextSize( VECTOR2I( std::max( 1, aTextSize ), std::max( 1, aTextSize ) ) );
     m_text.SetTextThickness( std::max( 1, GetPenSizeForNormal( m_text.GetTextHeight() ) ) );
+
+    AssembleBarcode( false, true );
 }
 
 
@@ -155,9 +157,15 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 }
 
 
+void PCB_BARCODE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide )
+{
+    SetTextSize( settings.GetTextSize( GetLayer() ).y );
+}
+
+
 void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
 {
-    // if( aRebuildBarcode )
+    if( aRebuildBarcode )
         ComputeBarcode();
 
     // Scale the symbol polygon to the desired barcode width/height (property values) and center it at m_pos
@@ -165,7 +173,7 @@ void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
     SetRect( m_pos - VECTOR2I( m_width / 2, m_height / 2 ),
              m_pos + VECTOR2I( m_width / 2, m_height / 2 ) );
 
-    // if( aRebuildText )
+    if( aRebuildText )
         ComputeTextPoly();
 
     // Build full m_poly from symbol + optional text, then apply knockout if requested
@@ -365,10 +373,10 @@ void PCB_BARCODE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     if( parentFP && aFrame->GetName() == PCB_EDIT_FRAME_NAME )
         aList.emplace_back( _( "Footprint" ), parentFP->GetReference() );
 
-    // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Barcode" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+    aList.emplace_back( _( "Barcode" ), ENUM_MAP<BARCODE_T>::Instance().ToString( m_kind ) );
 
-    aList.emplace_back( _( "Type" ), ENUM_MAP<BARCODE_T>::Instance().ToString( m_kind ) );
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
@@ -454,7 +462,7 @@ const BOX2I PCB_BARCODE::GetBoundingBox() const
 
 wxString PCB_BARCODE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "BARCODE \"%s\" on %s" ), GetText(), GetLayerName() );
+    return wxString::Format( _( "Barcode '%s' on %s" ), GetText(), GetLayerName() );
 }
 
 
@@ -560,14 +568,14 @@ void PCB_BARCODE::SetKind( BARCODE_T aKind )
 void PCB_BARCODE::SetBarcodeErrorCorrection( BARCODE_ECC_T aErrorCorrection )
 {
     SetErrorCorrection( aErrorCorrection );
-    AssembleBarcode( true, true );
+    AssembleBarcode( true, false );
 }
 
 
 void PCB_BARCODE::SetBarcodeKind( BARCODE_T aKind )
 {
     SetKind( aKind );
-    AssembleBarcode( true, true );
+    AssembleBarcode( true, false );
 }
 
 
@@ -619,6 +627,38 @@ double PCB_BARCODE::Similarity( const BOARD_ITEM& aItem ) const
 
     return similarity;
 }
+
+int PCB_BARCODE::Compare( const PCB_BARCODE* aBarcode, const PCB_BARCODE* aOther )
+{
+    int diff;
+
+    if( ( diff = aBarcode->GetPosition().x - aOther->GetPosition().x ) != 0 )
+        return diff;
+
+    if( ( diff = aBarcode->GetPosition().y - aOther->GetPosition().y ) != 0 )
+        return diff;
+
+    if( ( diff = aBarcode->GetText().Cmp( aOther->GetText() ) != 0 ) )
+        return diff;
+
+    if( ( diff = aBarcode->GetWidth() - aOther->GetWidth() ) != 0 )
+        return diff;
+
+    if( ( diff = aBarcode->GetHeight() - aOther->GetHeight() ) != 0 )
+        return diff;
+
+    if( ( diff = aBarcode->GetTextSize() - aOther->GetTextSize() ) != 0 )
+        return diff;
+
+    if( ( diff = (int) aBarcode->GetKind() - (int) aOther->GetKind() ) != 0 )
+        return diff;
+
+    if( ( diff = (int) aBarcode->GetErrorCorrection() - (int) aOther->GetErrorCorrection() ) != 0 )
+        return diff;
+
+    return 0;
+}
+
 
 bool PCB_BARCODE::operator==( const BOARD_ITEM& aItem ) const
 {

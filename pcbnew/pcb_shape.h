@@ -93,7 +93,7 @@ public:
 
     int GetWidth() const override;
 
-    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
 
     /**
      * Return 4 corners for a rectangle or rotated rectangle (stored as a poly).  Unimplemented

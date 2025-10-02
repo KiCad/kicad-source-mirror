@@ -72,6 +72,12 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_styleShapes = new wxCheckBox( this, wxID_ANY, _("Apply board defaults to non-copper footprint shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_styleShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_styleDimensions = new wxCheckBox( this, wxID_ANY, _("Apply board defaults to footprint dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_styleDimensions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_styleBarcodes = new wxCheckBox( this, wxID_ANY, _("Apply board defaults to footprint barcodes"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_styleBarcodes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	bMargins->Add( bSizer3, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 

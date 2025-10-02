@@ -60,6 +60,7 @@
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
+#include <pcb_barcode.h>
 #include <refdes_utils.h>
 #include <string_utils.h>
 #include <view/view.h>
@@ -691,12 +692,12 @@ int FOOTPRINT::GetNextFieldOrdinal() const
 
 
 void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields, bool aStyleText,
-                                      bool aStyleShapes )
+                                      bool aStyleShapes, bool aStyleDimensions, bool aStyleBarcodes )
 {
     if( aStyleFields )
     {
         for( PCB_FIELD* field : m_fields )
-            field->StyleFromSettings( board.GetDesignSettings() );
+            field->StyleFromSettings( board.GetDesignSettings(), true );
     }
 
     for( BOARD_ITEM* item : m_drawings )
@@ -706,14 +707,29 @@ void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields, boo
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
             if( aStyleText )
-                item->StyleFromSettings( board.GetDesignSettings() );
+                item->StyleFromSettings( board.GetDesignSettings(), true );
 
             break;
 
         case PCB_SHAPE_T:
             if( aStyleShapes && !item->IsOnCopperLayer() )
-                item->StyleFromSettings( board.GetDesignSettings() );
+                item->StyleFromSettings( board.GetDesignSettings(), true );
 
+            break;
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+            if( aStyleDimensions )
+                item->StyleFromSettings( board.GetDesignSettings(), true );
+
+            break;
+
+        case PCB_BARCODE_T:
+            if( aStyleBarcodes )
+                item->StyleFromSettings( board.GetDesignSettings(), true );
             break;
 
         default:
@@ -2284,6 +2300,7 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_SHAPE_T:
+        case PCB_BARCODE_T:
         case PCB_TEXTBOX_T:
         case PCB_TABLE_T:
         case PCB_TABLECELL_T:
@@ -2823,6 +2840,18 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
         break;
     }
 
+    case PCB_BARCODE_T:
+    {
+        PCB_BARCODE* new_barcode = new PCB_BARCODE( *static_cast<const PCB_BARCODE*>( aItem ) );
+        const_cast<KIID&>( new_barcode->m_Uuid ) = KIID();
+
+        if( addToFootprint )
+            Add( new_barcode );
+
+        new_item = new_barcode;
+        break;
+    }
+
     case PCB_REFERENCE_IMAGE_T:
     {
         PCB_REFERENCE_IMAGE* new_image = new PCB_REFERENCE_IMAGE( *static_cast<const PCB_REFERENCE_IMAGE*>( aItem ) );
@@ -3102,6 +3131,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_SHAPE_T:
+        case PCB_BARCODE_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
@@ -3174,6 +3204,8 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
         for( BOARD_ITEM* item : GraphicalItems() )
         {
             if( item->Type() == PCB_SHAPE_T )
+                shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+            else if( item->Type() == PCB_BARCODE_T )
                 shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
         }
     }
@@ -4229,6 +4261,14 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
 
             if( aLayer != UNDEFINED_LAYER && shape->GetLayer() == aLayer )
                 shape->TransformShapeToPolySet( aBuffer, aLayer, 0, aError, aErrorLoc );
+        }
+
+        if( item->Type() == PCB_BARCODE_T && aIncludeShapes )
+        {
+            const PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( item );
+
+            if( aLayer != UNDEFINED_LAYER && barcode->GetLayer() == aLayer )
+                barcode->TransformShapeToPolySet( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
     }
 

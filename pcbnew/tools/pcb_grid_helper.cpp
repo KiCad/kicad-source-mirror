@@ -103,7 +103,8 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
         return refImage.GetBoundingBox();
     }
 
-    default: break;
+    default:
+        break;
     }
 
     return std::nullopt;
@@ -799,6 +800,7 @@ GRID_HELPER_GRIDS PCB_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
     case PCB_DIMENSION_T:
     case PCB_REFERENCE_IMAGE_T:
     case PCB_TEXTBOX_T:
+    case PCB_BARCODE_T:
         return GRID_GRAPHICS;
 
     case PCB_TRACE_T:

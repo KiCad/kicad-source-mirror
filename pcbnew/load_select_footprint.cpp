@@ -269,7 +269,8 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
             BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
             footprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
-                                             bds.m_StyleFPShapes );
+                                             bds.m_StyleFPShapes, bds.m_StyleFPDimensions,
+                                             bds.m_StyleFPBarcodes );
         }
     }
 

@@ -51,8 +51,8 @@ void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
 
 bool DIALOG_FILTER_SELECTION::TransferDataToWindow()
 {
-    m_Include_Modules->SetValue( m_options.includeModules );
-    m_IncludeLockedModules->SetValue( m_options.includeLockedModules );
+    m_Include_Modules->SetValue( m_options.includeFootprints );
+    m_IncludeLockedModules->SetValue( m_options.includeLockedFootprints );
 
     if( m_Include_Modules->GetValue() )
         m_IncludeLockedModules->Enable();
@@ -164,8 +164,8 @@ bool DIALOG_FILTER_SELECTION::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    m_options.includeModules           = m_Include_Modules->GetValue();
-    m_options.includeLockedModules     = m_IncludeLockedModules->GetValue();
+    m_options.includeFootprints        = m_Include_Modules->GetValue();
+    m_options.includeLockedFootprints  = m_IncludeLockedModules->GetValue();
     m_options.includeTracks            = m_Include_Tracks->GetValue();
     m_options.includeVias              = m_Include_Vias->GetValue();
     m_options.includeZones             = m_Include_Zones->GetValue();

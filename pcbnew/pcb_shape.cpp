@@ -392,7 +392,7 @@ int PCB_SHAPE::GetWidth() const
 }
 
 
-void PCB_SHAPE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
+void PCB_SHAPE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide )
 {
     m_stroke.SetWidth( settings.GetLineThickness( GetLayer() ) );
 }

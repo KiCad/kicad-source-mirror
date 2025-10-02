@@ -57,6 +57,8 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_styleFields->SetValue( bds.m_StyleFPFields );
     m_styleText->SetValue( bds.m_StyleFPText );
     m_styleShapes->SetValue( bds.m_StyleFPShapes );
+    m_styleDimensions->SetValue( bds.m_StyleFPDimensions );
+    m_styleBarcodes->SetValue( bds.m_StyleFPBarcodes );
 
     return true;
 }
@@ -76,6 +78,8 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     bds.m_StyleFPFields = m_styleFields->GetValue();
     bds.m_StyleFPText = m_styleText->GetValue();
     bds.m_StyleFPShapes = m_styleShapes->GetValue();
+    bds.m_StyleFPDimensions = m_styleDimensions->GetValue();
+    bds.m_StyleFPBarcodes = m_styleBarcodes->GetValue();
 
     KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
 
@@ -107,4 +111,6 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( BOARD* aBoard )
     m_styleFields->SetValue( aBoard->GetDesignSettings().m_StyleFPFields );
     m_styleText->SetValue( aBoard->GetDesignSettings().m_StyleFPText );
     m_styleShapes->SetValue( aBoard->GetDesignSettings().m_StyleFPShapes );
+    m_styleDimensions->SetValue( aBoard->GetDesignSettings().m_StyleFPDimensions );
+    m_styleBarcodes->SetValue( aBoard->GetDesignSettings().m_StyleFPBarcodes );
 }

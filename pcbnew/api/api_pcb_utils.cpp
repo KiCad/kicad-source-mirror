@@ -26,6 +26,7 @@
 #include <lset.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_barcode.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
@@ -44,6 +45,7 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
     case PCB_TEXT_T:    return std::make_unique<PCB_TEXT>( aContainer );
     case PCB_TEXTBOX_T: return std::make_unique<PCB_TEXTBOX>( aContainer );
     case PCB_SHAPE_T:   return std::make_unique<PCB_SHAPE>( aContainer );
+    case PCB_BARCODE_T: return std::make_unique<PCB_BARCODE>( aContainer );
     case PCB_ZONE_T:    return std::make_unique<ZONE>( aContainer );
     case PCB_GROUP_T:   return std::make_unique<PCB_GROUP>( aContainer );
     case PCB_REFERENCE_IMAGE_T: return std::make_unique<PCB_REFERENCE_IMAGE>( aContainer );

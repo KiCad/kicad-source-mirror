@@ -1203,6 +1203,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     case PCB_TEXTBOX_T:
                     case PCB_TABLE_T:
                     case PCB_SHAPE_T:
+                    case PCB_BARCODE_T:
                     case PCB_DIM_ALIGNED_T:
                     case PCB_DIM_CENTER_T:
                     case PCB_DIM_LEADER_T:
@@ -1223,7 +1224,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 }
 
                 // NB: PCB_SHAPE_T actually removes everything in Drawings() (including PCB_TEXTs,
-                // PCB_TABLES, dimensions, etc.), not just PCB_SHAPEs.)
+                // PCB_TABLEs, PCB_BARCODEs, dimensions, etc.), not just PCB_SHAPEs.)
                 clipBoard->RemoveAll( { PCB_SHAPE_T } );
 
                 clipBoard->Visit(

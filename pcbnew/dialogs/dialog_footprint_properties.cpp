@@ -686,7 +686,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
                 newField.SetVisible( false );
                 newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
                 newField.SetFPRelativePosition( { 0, 0 } );
-                newField.StyleFromSettings( m_frame->GetDesignSettings() );
+                newField.StyleFromSettings( m_frame->GetDesignSettings(), true );
 
                 m_fields->push_back( newField );
 

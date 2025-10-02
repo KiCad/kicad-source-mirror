@@ -34,16 +34,25 @@ std::optional<int> GetBoardItemWidth( const BOARD_ITEM& aItem )
     case PCB_SHAPE_T:
     {
         const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
-        return shape.GetWidth();
+
+        if( shape.GetShape() == SHAPE_T::SEGMENT )
+            return shape.GetWidth();
+
+        if( shape.GetWidth() && !shape.IsSolidFill() )
+            return shape.GetWidth();
+
+        break;
     }
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
     {
         const PCB_TRACK& track = static_cast<const PCB_TRACK&>( aItem );
         return track.GetWidth();
     }
 
-    default: break;
+    default:
+        break;
     }
 
     return std::nullopt;
