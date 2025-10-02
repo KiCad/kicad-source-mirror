@@ -53,6 +53,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_drc_job_config.cpp
+    dialogs/dialog_board_stats_job.cpp
+    dialogs/dialog_board_stats_job_base.cpp
     dialogs/dialog_footprint_associations.cpp
     dialogs/dialog_footprint_associations_base.cpp
     dialogs/dialog_footprint_checker.cpp
@@ -338,6 +340,7 @@ set( PCBNEW_CLASS_SRCS
     action_plugin.cpp
     array_pad_number_provider.cpp
     board_statistics.cpp
+    board_statistics_report.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
     convert_shape_list_to_polygon.cpp

@@ -22,6 +22,7 @@
 #include "pcbnew_jobs_handler.h"
 #include <board_commit.h>
 #include <board_design_settings.h>
+#include <board_statistics_report.h>
 #include <drc/drc_item.h>
 #include <drc/drc_report.h>
 #include <drawing_sheet/ds_data_model.h>
@@ -40,11 +41,13 @@
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_ps.h>
+#include <jobs/job_export_pcb_stats.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_render.h>
 #include <jobs/job_pcb_drc.h>
 #include <jobs/job_pcb_upgrade.h>
+#include <eda_units.h>
 #include <lset.h>
 #include <cli/exit_codes.h>
 #include <exporters/place_file_exporter.h>
@@ -54,6 +57,7 @@
 #include <plotters/plotters_pslike.h>
 #include <tool/tool_manager.h>
 #include <tools/drc_tool.h>
+#include <wx/crt.h>
 #include <filename_resolver.h>
 #include <gerber_jobfile_writer.h>
 #include "gerber_placefile_writer.h"
@@ -72,6 +76,7 @@
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <pcb_plotter.h>
+#include <pcb_edit_frame.h>
 #include <pgm_base.h>
 #include <3d_rendering/raytracing/render_3d_raytrace_ram.h>
 #include <3d_rendering/track_ball.h>
@@ -83,6 +88,7 @@
 #include <export_vrml.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
+#include <wx/filename.h>
 #include <settings/settings_manager.h>
 #include <dialogs/dialog_gendrill.h>
 #include <dialogs/dialog_gen_footprint_position.h>
@@ -93,6 +99,7 @@
 #include <dialogs/dialog_drc_job_config.h>
 #include <dialogs/dialog_render_job.h>
 #include <dialogs/dialog_gencad_export_options.h>
+#include <dialogs/dialog_board_stats_job.h>
 #include <paths.h>
 #include <tools/zone_filler_tool.h>
 
@@ -206,6 +213,29 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   wxCHECK( psJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, psJob );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "stats",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportStats, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_STATS* statsJob = dynamic_cast<JOB_EXPORT_PCB_STATS*>( job );
+
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( statsJob && editFrame, false );
+
+                  if( statsJob->m_filename.IsEmpty() && editFrame->GetBoard() )
+                  {
+                      wxFileName boardName = editFrame->GetBoard()->GetFileName();
+                      statsJob->m_filename = boardName.GetFullPath();
+                  }
+
+                  wxWindow* parent = aParent ? aParent : static_cast<wxWindow*>( editFrame );
+
+                  DIALOG_BOARD_STATS_JOB dlg( parent, statsJob );
+
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "gerber",
@@ -1461,6 +1491,84 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
     }
 
     m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportStats( JOB* aJob )
+{
+    JOB_EXPORT_PCB_STATS* statsJob = dynamic_cast<JOB_EXPORT_PCB_STATS*>( aJob );
+
+    if( statsJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( statsJob->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    BOARD_STATISTICS_DATA data;
+    InitializeBoardStatisticsData( data );
+
+    BOARD_STATISTICS_OPTIONS options;
+    options.excludeFootprintsWithoutPads = statsJob->m_excludeFootprintsWithoutPads;
+    options.subtractHolesFromBoardArea = statsJob->m_subtractHolesFromBoardArea;
+    options.subtractHolesFromCopperAreas = statsJob->m_subtractHolesFromCopperAreas;
+
+    ComputeBoardStatistics( brd, options, data );
+
+    wxString projectName;
+
+    if( brd->GetProject() )
+        projectName = brd->GetProject()->GetProjectName();
+
+    wxFileName boardFile = brd->GetFileName();
+
+    if( boardFile.GetName().IsEmpty() )
+        boardFile = wxFileName( statsJob->m_filename );
+
+    EDA_UNITS unitsForReport = statsJob->m_units == JOB_EXPORT_PCB_STATS::UNITS::MM ? EDA_UNITS::MM : EDA_UNITS::INCH;
+    UNITS_PROVIDER unitsProvider( pcbIUScale, unitsForReport );
+
+    wxString report;
+
+    if( statsJob->m_format == JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::JSON )
+        report = FormatBoardStatisticsJson( data, brd, unitsProvider, projectName, boardFile.GetName() );
+    else
+        report = FormatBoardStatisticsReport( data, brd, unitsProvider, projectName, boardFile.GetName() );
+
+    if( statsJob->GetConfiguredOutputPath().IsEmpty() && statsJob->GetWorkingOutputPath().IsEmpty() )
+        statsJob->SetDefaultOutputPath( boardFile.GetFullPath() );
+
+    wxString outPath = statsJob->GetFullOutputPath( brd->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    FILE* outFile = wxFopen( outPath, wxS( "wt" ) );
+
+    if( !outFile )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to create file '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    if( fprintf( outFile, "%s", TO_UTF8( report ) ) < 0 )
+    {
+        fclose( outFile );
+        m_reporter->Report( wxString::Format( _( "Error writing file '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    fclose( outFile );
+
+    m_reporter->Report( wxString::Format( _( "Wrote board statistics to '%s'.\n" ), outPath ), RPT_SEVERITY_ACTION );
+
+    statsJob->AddOutput( outPath );
 
     return CLI::EXIT_CODES::OK;
 }

@@ -32,6 +32,7 @@
 #include <pcb_track.h>
 #include <dialog_board_statistics_base.h>
 #include <board_statistics.h>
+#include <board_statistics_report.h>
 #include <pcb_base_frame.h>
 #include <pcb_edit_frame.h>
 #include <project.h>
@@ -43,47 +44,6 @@
 class DIALOG_BOARD_STATISTICS : public DIALOG_BOARD_STATISTICS_BASE
 {
 public:
-    /**
-     * Type information, which will be shown in dialog.
-     */
-    template <typename T>
-    struct INFO_LINE_ITEM
-    {
-        INFO_LINE_ITEM( T aAttribute, const wxString& aTitle ) :
-                m_Attribute( aAttribute ),
-                m_Title( aTitle ),
-                m_Qty( 0 )
-        {
-        }
-
-        T          m_Attribute;
-        wxString   m_Title;
-        int        m_Qty;
-    };
-
-    /**
-     * Footprint attributes (such as SMD, THT, Virtual and so on), which will be shown in the
-     * dialog. Holds both front and back footprint quantities.
-     */
-    struct FP_LINE_ITEM
-    {
-        FP_LINE_ITEM( int aAttributeMask, int aAttributeValue, wxString aTitle ) :
-                m_Attribute_mask( aAttributeMask ),
-                m_Attribute_value( aAttributeValue ),
-                m_Title( aTitle ),
-                m_FrontSideQty( 0 ),
-                m_BackSideQty( 0 )
-        {
-        }
-
-        int      m_Attribute_mask;
-        int      m_Attribute_value;
-        wxString m_Title;
-        int      m_FrontSideQty;
-        int      m_BackSideQty;
-    };
-
-
     DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame );
     ~DIALOG_BOARD_STATISTICS();
 
@@ -91,7 +51,6 @@ public:
     bool TransferDataToWindow() override;
 
 private:
-
     ///< Function to fill up all items types to be shown in the dialog.
     void refreshItemsTypes();
 
@@ -103,10 +62,6 @@ private:
 
     ///< Update drills grid.
     void updateDrillGrid();
-
-    ///< Print grid to string in tabular format.
-    void printGridToStringAsTable( wxGrid* aGrid, wxString& aStr, bool aUseColLabels,
-                                   bool aUseFirstColAsLabel );
 
     void adjustDrillGridColumns();
 
@@ -121,23 +76,7 @@ private:
 
     PCB_EDIT_FRAME* m_frame;
 
-    int             m_boardWidth;
-    int             m_boardHeight;
-    double          m_boardArea;
-    double          m_frontCopperArea;
-    double          m_backCopperArea;
-    int             m_minClearanceTrackToTrack;
-    int             m_minTrackWidth;
-    int             m_minDrillSize;
-    int             m_boardThickness;
-
-    bool            m_hasOutline;          ///< Show if board outline properly defined.
-
-    std::deque<FP_LINE_ITEM>                m_fpTypes;
-    std::deque<INFO_LINE_ITEM<PAD_ATTRIB>>  m_padTypes;
-    std::deque<INFO_LINE_ITEM<PAD_PROP>>    m_padFabProps;
-    std::deque<INFO_LINE_ITEM<VIATYPE>>     m_viaTypes;
-    std::deque<DRILL_LINE_ITEM>             m_drillTypes;
+    BOARD_STATISTICS_DATA m_statsData;
 
     int m_startLayerColInitialSize;        ///< Width of the start layer column as calculated by
                                            ///<    the wxWidgets autosizing algorithm.

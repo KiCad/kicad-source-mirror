@@ -36,6 +36,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_grid.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <algorithm>
 
 
 #define COL_LABEL 0
@@ -90,16 +91,6 @@ static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_BOARD_STATISTICS_BASE( aParentFrame ),
         m_frame( aParentFrame ),
-        m_boardWidth( 0 ),
-        m_boardHeight( 0 ),
-        m_boardArea( 0.0 ),
-        m_frontCopperArea( 0.0 ),
-        m_backCopperArea( 0.0 ),
-        m_minClearanceTrackToTrack( std::numeric_limits<int>::max() ),
-        m_minTrackWidth( std::numeric_limits<int>::max() ),
-        m_minDrillSize( std::numeric_limits<int>::max() ),
-        m_boardThickness( 0 ),
-        m_hasOutline( false ),
         m_startLayerColInitialSize( 1 ),
         m_stopLayerColInitialSize( 1 )
 {
@@ -172,43 +163,22 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
 
 void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 {
-    m_fpTypes.clear();
+    InitializeBoardStatisticsData( m_statsData );
 
-    // If you need some more types to be shown, simply add them to the corresponding list
-    m_fpTypes.push_back( FP_LINE_ITEM( FP_THROUGH_HOLE,        FP_THROUGH_HOLE, _( "THT:" ) ) );
-    m_fpTypes.push_back( FP_LINE_ITEM( FP_SMD,                 FP_SMD,          _( "SMD:" ) ) );
-    m_fpTypes.push_back( FP_LINE_ITEM( FP_THROUGH_HOLE|FP_SMD, 0,               _( "Unspecified:" ) ) );
-
-    m_padTypes.clear();
-    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::PTH,  _( "Through hole:" ) ) );
-    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::SMD,  _( "SMD:" ) ) );
-    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ) ) );
-    m_padTypes.push_back( INFO_LINE_ITEM<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ) ) );
-
-    m_padFabProps.clear();
-    m_padFabProps.push_back( INFO_LINE_ITEM<PAD_PROP>( PAD_PROP::CASTELLATED, _( "Castellated pad:" ) ) );
-    m_padFabProps.push_back( INFO_LINE_ITEM<PAD_PROP>( PAD_PROP::PRESSFIT,    _( "Press-fit pad:" ) ) );
-
-    m_viaTypes.clear();
-    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::THROUGH,      _( "Through vias:" ) ) );
-    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::BLIND,        _( "Blind vias:" ) ) );
-    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::BURIED,       _( "Buried vias:" ) ) );
-    m_viaTypes.push_back( INFO_LINE_ITEM<VIATYPE>( VIATYPE::MICROVIA,     _( "Micro vias:" ) ) );
-
-    // If there not enough rows in grids, append some
-    int appendRows = (int) m_fpTypes.size() + 2 - m_gridComponents->GetNumberRows();
+    int appendRows = static_cast<int>( m_statsData.footprintEntries.size() ) + 2 - m_gridComponents->GetNumberRows();
 
     if( appendRows > 0 )
         m_gridComponents->AppendRows( appendRows );
 
-    appendRows = (int) m_padTypes.size() + 1 + (int)m_padFabProps.size() - m_gridPads->GetNumberRows();
+    appendRows = static_cast<int>( m_statsData.padEntries.size() ) + 1
+                 + static_cast<int>( m_statsData.padPropertyEntries.size() ) - m_gridPads->GetNumberRows();
 
     if( appendRows > 0 )
         m_gridPads->AppendRows( appendRows );
 
-    appendRows = (int) m_viaTypes.size() + 1 - m_gridVias->GetNumberRows();
+    appendRows = static_cast<int>( m_statsData.viaEntries.size() ) + 1 - m_gridVias->GetNumberRows();
 
-    if( appendRows )
+    if( appendRows > 0 )
         m_gridVias->AppendRows( appendRows );
 }
 
@@ -240,238 +210,17 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
 
 void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 {
-    BOARD* board = m_frame->GetBoard();
-    SHAPE_POLY_SET frontCopper;
-    SHAPE_POLY_SET backCopper;
-    SHAPE_POLY_SET frontHoles;
-    SHAPE_POLY_SET backHoles;
+    BOARD_STATISTICS_OPTIONS options;
+    options.excludeFootprintsWithoutPads = m_checkBoxExcludeComponentsNoPins->GetValue();
+    options.subtractHolesFromBoardArea = m_checkBoxSubtractHoles->GetValue();
+    options.subtractHolesFromCopperAreas = m_checkBoxSubtractHolesFromCopper->GetValue();
 
-    // Type list for track-related statistics gathering
-    static const std::vector<KICAD_T> trackTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T };
+    ComputeBoardStatistics( m_frame->GetBoard(), options, m_statsData );
 
-    // Get footprints and pads count
-    for( FOOTPRINT* footprint : board->Footprints() )
-    {
-        // Do not proceed footprints with no pads if checkbox checked
-        if( m_checkBoxExcludeComponentsNoPins->GetValue() && ! footprint->Pads().size() )
-            continue;
-
-        // Go through components types list
-        for( FP_LINE_ITEM& line : m_fpTypes )
-        {
-            if( ( footprint->GetAttributes() & line.m_Attribute_mask ) == line.m_Attribute_value )
-            {
-                switch( footprint->GetSide() )
-                {
-                case F_Cu: line.m_FrontSideQty++;                  break;
-                case B_Cu: line.m_BackSideQty++;                   break;
-                default:   /* unsided: user-layers only, etc. */ break;
-                }
-
-                break;
-            }
-        }
-
-        for( PAD* pad : footprint->Pads() )
-        {
-            // Go through pads types list
-            for( INFO_LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
-            {
-                if( pad->GetAttribute() == line.m_Attribute )
-                {
-                    line.m_Qty++;
-                    break;
-                }
-            }
-
-            // Go through pads prop list
-            for( INFO_LINE_ITEM<PAD_PROP>& line : m_padFabProps )
-            {
-                if( pad->GetProperty() == line.m_Attribute )
-                {
-                    line.m_Qty++;
-                    break;
-                }
-            }
-        }
-    }
-
-    // Get via counts
-    for( PCB_TRACK* track : board->Tracks() )
-    {
-        // Get min track width
-        if( track->Type() == PCB_TRACE_T )
-            m_minTrackWidth = std::min( m_minTrackWidth, track->GetWidth() );
-
-        if( !track->IsType( trackTypes ) )
-            continue;
-
-        // Get min clearance between tracks
-        auto layer = track->GetLayer();
-        auto trackShapeA = track->GetEffectiveShape( layer );
-
-        for( PCB_TRACK* otherTrack : board->Tracks() )
-        {
-            if( layer != otherTrack->GetLayer() )
-                continue;
-
-            if( track->GetNetCode() == otherTrack->GetNetCode() )
-                continue;
-
-            if( !otherTrack->IsType( trackTypes ) )
-                continue;
-
-            int  actual = 0;
-            auto trackShapeB = otherTrack->GetEffectiveShape( layer );
-            bool collide = trackShapeA->Collide( trackShapeB.get(), m_minClearanceTrackToTrack, &actual );
-
-            if( collide )
-                m_minClearanceTrackToTrack = std::min( m_minClearanceTrackToTrack, actual );
-        }
-
-        if( track->Type() == PCB_VIA_T )
-        {
-            PCB_VIA* via = static_cast<PCB_VIA*>( track );
-
-            for( INFO_LINE_ITEM<VIATYPE>& line : m_viaTypes )
-            {
-                if( via->GetViaType() == line.m_Attribute )
-                {
-                    line.m_Qty++;
-                    break;
-                }
-            }
-        }
-    }
-
-    // Collect drill information
-    m_drillTypes.clear();
     m_gridDrills->ClearRows();
 
-    std::vector<DRILL_LINE_ITEM> drills;
-    CollectDrillLineItems( board, drills );
-
-    for( const auto& d : drills )
-    {
-        m_drillTypes.push_back( d );
-        m_gridDrills->InsertRows();
-    }
-
-    sort( m_drillTypes.begin(), m_drillTypes.end(),
-          DRILL_LINE_ITEM::COMPARE( DRILL_LINE_ITEM::COL_COUNT, false ) );
-
-    SHAPE_POLY_SET polySet;
-    m_hasOutline = board->GetBoardPolygonOutlines( polySet );
-
-    if( m_hasOutline )
-    {
-        m_boardArea = 0.0;
-
-        for( int i = 0; i < polySet.OutlineCount(); i++ )
-        {
-            SHAPE_LINE_CHAIN& outline = polySet.Outline( i );
-            m_boardArea += outline.Area();
-
-            // If checkbox "subtract holes" is checked
-            if( m_checkBoxSubtractHoles->GetValue() )
-            {
-                for( int j = 0; j < polySet.HoleCount( i ); j++ )
-                    m_boardArea -= polySet.Hole( i, j ).Area();
-
-                for( FOOTPRINT* fp : board->Footprints() )
-                {
-                    for( PAD* pad : fp->Pads() )
-                    {
-                        if( !pad->HasHole() )
-                            continue;
-
-                        auto hole = pad->GetEffectiveHoleShape();
-                        const SEG& seg = hole->GetSeg();
-                        double width = hole->GetWidth();
-                        double area = seg.Length() * width;
-
-                        // Each end of the hole is a half-circle, so together, we have one
-                        // full circle.  The area of a circle is pi * r^2, so the area of the
-                        // hole is pi * (d/2)^2 = pi * 1/4 * d^2.
-                        area += M_PI * 0.25 * width * width;
-                        m_boardArea -= area;
-                    }
-                }
-
-                for( PCB_TRACK* track : board->Tracks() )
-                {
-                    if( track->Type() == PCB_VIA_T )
-                    {
-                        PCB_VIA* via = static_cast<PCB_VIA*>( track );
-                        double drill = via->GetDrillValue();
-                        m_boardArea -= M_PI * 0.25 * drill * drill;
-                    }
-                }
-            }
-        }
-
-        // Compute the bounding box to get a rectangular size
-        // We use the polySet bounding box, not the board bounding box, because
-        // we do not want the thickness of graphic items defining the board outlines
-        // to be taken in account to calculate the physical board bbox
-        BOX2I bbox = polySet.BBox();
-
-        m_boardWidth = (int) bbox.GetWidth();
-        m_boardHeight = (int) bbox.GetHeight();
-    }
-
-    board->RunOnChildren(
-            [&]( BOARD_ITEM* child )
-            {
-                if( child->Type() == PCB_FOOTPRINT_T
-                    || child->Type() == PCB_GROUP_T
-                    || child->Type() == PCB_GENERATOR_T )
-                {
-                    // Wait for recursion into children
-                    return;
-                }
-
-                if( child->IsOnLayer( F_Cu ) )
-                    child->TransformShapeToPolySet( frontCopper, F_Cu, 0, ARC_LOW_DEF, ERROR_INSIDE );
-
-                if( child->IsOnLayer( B_Cu ) )
-                    child->TransformShapeToPolySet( backCopper, B_Cu, 0, ARC_LOW_DEF, ERROR_INSIDE );
-
-                if( child->Type() == PCB_PAD_T )
-                {
-                    PAD* pad = static_cast<PAD*>( child );
-
-                    if( pad->HasHole() )
-                    {
-                        pad->TransformHoleToPolygon( frontHoles, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
-                        pad->TransformHoleToPolygon( backHoles, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
-                    }
-                }
-                else if( child->Type() == PCB_VIA_T )
-                {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( child );
-                    VECTOR2I center = via->GetPosition();
-                    int      R = via->GetDrillValue() / 2;
-
-                    if( via->IsOnLayer( F_Cu ) )
-                        TransformCircleToPolygon( frontHoles, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
-
-                    if( via->IsOnLayer( B_Cu ) )
-                        TransformCircleToPolygon( backHoles, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
-                }
-            },
-            RECURSE_MODE::RECURSE );
-
-    if( m_checkBoxSubtractHolesFromCopper->GetValue() )
-    {
-        frontCopper.BooleanSubtract( frontHoles );
-        backCopper.BooleanSubtract( backHoles );
-    }
-
-    m_frontCopperArea = frontCopper.Area();
-    m_backCopperArea = backCopper.Area();
-
-    m_boardThickness = board->GetStackupOrDefault().BuildBoardThicknessFromStackup();
+    if( !m_statsData.drillEntries.empty() )
+        m_gridDrills->AppendRows( static_cast<int>( m_statsData.drillEntries.size() ) );
 }
 
 
@@ -486,11 +235,11 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
     int totalPads  = 0;
     int row = 0;
 
-    for( const INFO_LINE_ITEM<PAD_ATTRIB>& line : m_padTypes )
+    for( const BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>& line : m_statsData.padEntries )
     {
-        m_gridPads->SetCellValue( row, COL_LABEL, line.m_Title );
-        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.m_Qty ) );
-        totalPads += line.m_Qty;
+        m_gridPads->SetCellValue( row, COL_LABEL, line.title );
+        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.quantity ) );
+        totalPads += line.quantity;
         row++;
     }
 
@@ -498,21 +247,21 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
     m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( totalPads ) );
     row++;
 
-    for( const INFO_LINE_ITEM<PAD_PROP>& line : m_padFabProps )
+    for( const BOARD_STATISTICS_INFO_ENTRY<PAD_PROP>& line : m_statsData.padPropertyEntries )
     {
-        m_gridPads->SetCellValue( row, COL_LABEL, line.m_Title );
-        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.m_Qty ) );
+        m_gridPads->SetCellValue( row, COL_LABEL, line.title );
+        m_gridPads->SetCellValue( row, COL_AMOUNT, formatCount( line.quantity ) );
         row++;
     }
 
     int totalVias = 0;
     row = 0;
 
-    for( const INFO_LINE_ITEM<VIATYPE>& line : m_viaTypes )
+    for( const BOARD_STATISTICS_INFO_ENTRY<VIATYPE>& line : m_statsData.viaEntries )
     {
-        m_gridVias->SetCellValue( row, COL_LABEL, line.m_Title );
-        m_gridVias->SetCellValue( row, COL_AMOUNT, formatCount( line.m_Qty ) );
-        totalVias += line.m_Qty;
+        m_gridVias->SetCellValue( row, COL_LABEL, line.title );
+        m_gridVias->SetCellValue( row, COL_AMOUNT, formatCount( line.quantity ) );
+        totalVias += line.quantity;
         row++;
     }
 
@@ -526,14 +275,14 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
     // We don't use row 0, as there labels are
     row = 1;
 
-    for( const FP_LINE_ITEM& line : m_fpTypes )
+    for( const BOARD_STATISTICS_FP_ENTRY& line : m_statsData.footprintEntries )
     {
-        m_gridComponents->SetCellValue( row, COL_LABEL, line.m_Title );
-        m_gridComponents->SetCellValue( row, COL_FRONT_SIDE, formatCount( line.m_FrontSideQty ) );
-        m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( line.m_BackSideQty ) );
-        m_gridComponents->SetCellValue( row, 3, formatCount( line.m_FrontSideQty + line.m_BackSideQty ) );
-        totalFront += line.m_FrontSideQty;
-        totalBack  += line.m_BackSideQty;
+        m_gridComponents->SetCellValue( row, COL_LABEL, line.title );
+        m_gridComponents->SetCellValue( row, COL_FRONT_SIDE, formatCount( line.frontCount ) );
+        m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( line.backCount ) );
+        m_gridComponents->SetCellValue( row, 3, formatCount( line.frontCount + line.backCount ) );
+        totalFront += line.frontCount;
+        totalBack += line.backCount;
         row++;
     }
 
@@ -542,14 +291,14 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
     m_gridComponents->SetCellValue( row, COL_BOTTOM_SIDE, formatCount( totalBack ) );
     m_gridComponents->SetCellValue( row, COL_TOTAL, formatCount( totalFront + totalBack ) );
 
-    if( m_hasOutline )
+    if( m_statsData.hasOutline )
     {
         m_gridBoard->SetCellValue( ROW_BOARD_DIMS, COL_AMOUNT,
                                    wxString::Format( wxT( "%s x %s" ),
-                                                     m_frame->MessageTextFromValue( m_boardWidth, false ),
-                                                     m_frame->MessageTextFromValue( m_boardHeight, true ) ) );
+                                                     m_frame->MessageTextFromValue( m_statsData.boardWidth, false ),
+                                                     m_frame->MessageTextFromValue( m_statsData.boardHeight, true ) ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                                   m_frame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA ) );
+                                   m_frame->MessageTextFromValue( m_statsData.boardArea, true, EDA_DATA_TYPE::AREA ) );
     }
     else
     {
@@ -557,24 +306,29 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT, _( "unknown" ) );
     }
 
-    m_gridBoard->SetCellValue( ROW_FRONT_COPPER_AREA, COL_AMOUNT,
-                               m_frame->MessageTextFromValue( m_frontCopperArea, true, EDA_DATA_TYPE::AREA ) );
+    m_gridBoard->SetCellValue(
+            ROW_FRONT_COPPER_AREA, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.frontCopperArea, true, EDA_DATA_TYPE::AREA ) );
     m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA, COL_AMOUNT,
-                               m_frame->MessageTextFromValue( m_backCopperArea, true, EDA_DATA_TYPE::AREA ) );
+                               m_frame->MessageTextFromValue( m_statsData.backCopperArea, true, EDA_DATA_TYPE::AREA ) );
 
-    m_gridBoard->SetCellValue( ROW_MIN_CLEARANCE, COL_AMOUNT,
-                               m_frame->MessageTextFromValue( m_minClearanceTrackToTrack, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue(
+            ROW_MIN_CLEARANCE, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.minClearanceTrackToTrack, true, EDA_DATA_TYPE::DISTANCE ) );
 
-    m_gridBoard->SetCellValue( ROW_MIN_TRACK_WIDTH, COL_AMOUNT,
-                               m_frame->MessageTextFromValue( m_minTrackWidth, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue(
+            ROW_MIN_TRACK_WIDTH, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.minTrackWidth, true, EDA_DATA_TYPE::DISTANCE ) );
 
-    m_gridBoard->SetCellValue( ROW_BOARD_THICKNESS, COL_AMOUNT,
-                               m_frame->MessageTextFromValue( m_boardThickness, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue(
+            ROW_BOARD_THICKNESS, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.boardThickness, true, EDA_DATA_TYPE::DISTANCE ) );
 
     updateDrillGrid();
 
-    m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER, COL_AMOUNT,
-                               m_frame->MessageTextFromValue( m_minDrillSize, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue(
+            ROW_MIN_DRILL_DIAMETER, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.minDrillSize, true, EDA_DATA_TYPE::DISTANCE ) );
 
     m_gridComponents->AutoSize();
     m_gridPads->AutoSize();
@@ -590,7 +344,7 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
     BOARD* board = m_frame->GetBoard();
     int    row = 0;
 
-    for( const DRILL_LINE_ITEM& line : m_drillTypes )
+    for( const DRILL_LINE_ITEM& line : m_statsData.drillEntries )
     {
         wxString shapeStr;
         wxString startLayerStr;
@@ -602,9 +356,6 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
         case PAD_DRILL_SHAPE::OBLONG: shapeStr = _( "Slot" );  break;
         default:                      shapeStr = _( "???" );   break;
         }
-
-        if( line.shape == PAD_DRILL_SHAPE::CIRCLE )
-            m_minDrillSize = std::min( m_minDrillSize, line.xSize );
 
         if( line.startLayer == UNDEFINED_LAYER )
             startLayerStr = _( "N/A" );
@@ -626,92 +377,6 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
         m_gridDrills->SetCellValue( row, DRILL_LINE_ITEM::COL_STOP_LAYER, stopLayerStr );
 
         row++;
-    }
-}
-
-
-void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString& aStr,
-                                                        bool aUseColLabels,
-                                                        bool aUseFirstColAsLabel )
-{
-    std::vector<int> widths( aGrid->GetNumberCols(), 0 );
-    int              rowLabelsWidth = 0;
-
-    // Determine column widths.
-
-    if( aUseColLabels )
-    {
-        for( int col = 0; col < aGrid->GetNumberCols(); col++ )
-            widths[col] = (int) aGrid->GetColLabelValue( col ).length();
-    }
-
-    for( int row = 0; row < aGrid->GetNumberRows(); row++ )
-    {
-        rowLabelsWidth = std::max( rowLabelsWidth, (int) aGrid->GetRowLabelValue( row ).length() );
-
-        for( int col = 0; col < aGrid->GetNumberCols(); col++ )
-            widths[col] = std::max( widths[col], (int) aGrid->GetCellValue( row, col ).length() );
-    }
-
-    // Print the cells.
-
-    wxString tmp;
-
-    // Print column labels.
-
-    aStr << wxT( "|" );
-
-    for( int col = 0; col < aGrid->GetNumberCols(); col++ )
-    {
-        if( aUseColLabels )
-            tmp.Printf( wxT( " %*s |" ), widths[col], aGrid->GetColLabelValue( col ) );
-        else
-            tmp.Printf( wxT( " %*s |" ), widths[col], aGrid->GetCellValue( 0, col ) );
-
-        aStr << tmp;
-    }
-
-    aStr << wxT( "\n" );
-
-    // Print column label horizontal separators.
-
-    aStr << wxT( "|" );
-
-    for( int col = 0; col < aGrid->GetNumberCols(); col++ )
-    {
-        aStr << wxT( "-" );
-        aStr.Append( '-', widths[col] );
-        aStr << wxT( "-|" );
-    }
-
-    aStr << wxT( "\n" );
-
-    // Print regular cells.
-
-    int firstRow = 0, firstCol = 0;
-
-    if( !aUseColLabels )
-        firstRow = 1;
-
-    if( aUseFirstColAsLabel )
-        firstCol = 1;
-
-    for( int row = firstRow; row < aGrid->GetNumberRows(); row++ )
-    {
-        if( aUseFirstColAsLabel )
-            tmp.Printf( wxT( "|%-*s  |" ), widths[0], aGrid->GetCellValue( row, 0 ) );
-        else
-            tmp.Printf( wxT( "|" ) );
-
-        aStr << tmp;
-
-        for( int col = firstCol; col < aGrid->GetNumberCols(); col++ )
-        {
-            tmp.Printf( wxT( " %*s |" ), widths[col], aGrid->GetCellValue( row, col ) );
-            aStr << tmp;
-        }
-
-        aStr << wxT( "\n" );
     }
 }
 
@@ -781,102 +446,11 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
         return;
     }
 
-    msg << _( "PCB statistics report\n=====================" ) << wxT( "\n" );
-    msg << wxS( "- " ) << _( "Date" ) << wxS( ": " ) << wxDateTime::Now().Format() << wxT( "\n" );
-    msg << wxS( "- " ) << _( "Project" ) << wxS( ": " )<< Prj().GetProjectName() << wxT( "\n" );
-    msg << wxS( "- " ) << _( "Board name" ) << wxS( ": " )<< boardName << wxT( "\n" );
+    const UNITS_PROVIDER& unitsProvider = *m_frame;
+    wxString              report = FormatBoardStatisticsReport( m_statsData, m_frame->GetBoard(), unitsProvider,
+                                                                Prj().GetProjectName(), boardName );
 
-    msg << wxT( "\n" );
-    msg << _( "Board" ) << wxT( "\n-----\n" );
-
-    if( m_hasOutline )
-    {
-        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " )
-                << m_frame->MessageTextFromValue( m_boardWidth ) << wxT( "\n" );
-        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " )
-                << m_frame->MessageTextFromValue( m_boardHeight ) << wxT( "\n" );
-        msg << wxS( "- " ) << _( "Area" ) + wxS( ": " )
-                << m_frame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
-    }
-    else
-    {
-        msg << wxS( "- " ) << _( "Dimensions" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
-        msg << wxS( "- " ) << _( "Area" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
-    }
-
-    msg << wxS( "- " ) << _( "Front copper area" ) + wxS( ": " )
-            << m_frame->MessageTextFromValue( m_frontCopperArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
-    msg << wxS( "- " ) << _( "Back copper area" ) + wxS( ": " )
-            << m_frame->MessageTextFromValue( m_backCopperArea, true, EDA_DATA_TYPE::AREA ) << wxT( "\n" );
-
-    msg << wxS( "- " ) << _( "Min track clearance" ) + wxS( ": " )
-        << m_frame->MessageTextFromValue( m_minClearanceTrackToTrack, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
-
-    msg << wxS( "- " ) << _( "Min track width" ) + wxS( ": " )
-        << m_frame->MessageTextFromValue( m_minTrackWidth, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
-
-    msg << wxS( "- " ) << _( "Min drill diameter" ) + wxS( ": " )
-        << m_frame->MessageTextFromValue( m_minDrillSize, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
-
-    msg << wxS( "- " ) << _( "Board stackup thickness" ) + wxS( ": " )
-        << m_frame->MessageTextFromValue( m_boardThickness, true, EDA_DATA_TYPE::DISTANCE ) << wxT( "\n" );
-
-    msg << wxT( "\n" );
-    msg << _( "Pads" ) << wxT( "\n----\n" );
-
-    for( auto& type : m_padTypes )
-        msg << wxT( "- " ) << type.m_Title << wxS( " " ) << type.m_Qty << wxT( "\n" );
-
-    msg << wxT( "\n" );
-    msg << _( "Vias" ) << wxT( "\n----\n" );
-
-    for( auto& type : m_viaTypes )
-        msg << wxT( "- " ) << type.m_Title << wxS( " " ) << type.m_Qty << wxT( "\n" );
-
-    // We will save data about components in the table.
-    // We have to calculate column widths
-    std::vector<int>      widths;
-    std::vector<wxString> labels{ wxT( "" ), _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
-    wxString tmp;
-
-    widths.reserve( labels.size() );
-
-    for( const wxString& label : labels )
-        widths.push_back( (int) label.size() );
-
-    int frontTotal = 0;
-    int backTotal = 0;
-
-    for( const FP_LINE_ITEM& line : m_fpTypes )
-    {
-        // Get maximum width for left label column
-        widths[0] = std::max( (int) line.m_Title.size(), widths[0] );
-        frontTotal += line.m_FrontSideQty;
-        backTotal += line.m_BackSideQty;
-    }
-
-    // Get maximum width for other columns
-    tmp.Printf( wxT( "%i" ), frontTotal );
-    widths[1] = std::max( (int) tmp.size(), widths[1] );
-    tmp.Printf( wxT( "%i" ), backTotal );
-    widths[2] = std::max( (int) tmp.size(), widths[2] );
-    tmp.Printf( wxT( "%i" ), frontTotal + backTotal );
-    widths[3] = std::max( (int) tmp.size(), widths[3] );
-
-    //Write components amount to file
-    msg << wxT( "\n" );
-    msg << _( "Components" ) << wxT( "\n----------\n" );
-    msg << wxT( "\n" );
-
-    printGridToStringAsTable( m_gridComponents, msg, false, true );
-
-    msg << wxT( "\n" );
-    msg << _( "Drill holes" ) << wxT( "\n-----------\n" );
-    msg << wxT( "\n" );
-
-    printGridToStringAsTable( m_gridDrills, msg, true, false );
-
-    if( fprintf( outFile, "%s", TO_UTF8( msg ) ) < 0 )
+    if( fprintf( outFile, "%s", TO_UTF8( report ) ) < 0 )
     {
         msg.Printf( _( "Error writing file '%s'." ), dlg.GetPath() );
         DisplayErrorMessage( this, msg );
@@ -898,7 +472,8 @@ void DIALOG_BOARD_STATISTICS::drillGridSort( wxGridEvent& aEvent )
     bool                    ascending = !( m_gridDrills->IsSortingBy( colId )
                                               && m_gridDrills->IsSortOrderAscending() );
 
-    sort( m_drillTypes.begin(), m_drillTypes.end(), DRILL_LINE_ITEM::COMPARE( colId, ascending ) );
+    sort( m_statsData.drillEntries.begin(), m_statsData.drillEntries.end(),
+          DRILL_LINE_ITEM::COMPARE( colId, ascending ) );
 
     updateDrillGrid();
 }
