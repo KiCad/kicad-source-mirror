@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-10-02 14:02+0000\n"
+"PO-Revision-Date: 2025-10-03 15:54+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -575,11 +575,11 @@ msgstr ".posファイルに3Dモデルがない場合でも表示する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:351
 msgid "Show 3D Models marked DNP"
-msgstr "未実装に指定されている部品の3Dモデルを表示"
+msgstr "DNP(未実装)に指定されている部品の3Dモデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "'未実装'に設定されている場合でも 3D モデルを表示する"
+msgstr "'DNP(未実装)' に設定されている場合でも 3D モデルを表示する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show Model Bounding Boxes"
@@ -873,7 +873,7 @@ msgstr "POSファイルにないモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:119
 msgid "Models marked DNP"
-msgstr "未実装が指定されたモデル"
+msgstr "DNP(未実装)が指定されたモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:120
 msgid "Model Bounding Boxes"
@@ -8655,7 +8655,7 @@ msgstr "未接続シンボル"
 
 #: common/layer_id.cpp:100
 msgid "DNP markers"
-msgstr "DNP マーカー"
+msgstr "DNP(未実装) マーカー"
 
 #: common/layer_id.cpp:101
 msgid "Excluded-from-simulation markers"
@@ -16149,15 +16149,15 @@ msgstr "フィールド名 %s は既に存在します。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:947
 msgid "Include 'DNP' Symbols"
-msgstr "'DNP' シンボルを含める"
+msgstr "'DNP(未実装)' シンボルを含める"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:948
 msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
-"テーブルに 'DNP' とマークされたシンボルを表示します。  この設定は、エクスポー"
-"ト時に 'DNP' シンボルを含めるかどうかも制御します。"
+"テーブルに 'DNP(未実装)' とマークされたシンボルを表示します。  この設定は、"
+"エクスポート時に 'DNP(未実装)' シンボルを含めるかどうかも制御します。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:953
 msgid "Include 'Exclude from BOM' Symbols"
@@ -18947,7 +18947,7 @@ msgstr "シミュレーションから除外"
 #: eeschema/sch_symbol.cpp:1719 eeschema/sch_symbol.cpp:2136
 #: eeschema/widgets/search_handlers.cpp:169 pcbnew/footprint.cpp:1829
 msgid "DNP"
-msgstr "DNP"
+msgstr "DNP(未実装)"
 
 #: eeschema/lib_symbol.cpp:1633
 msgid "Power flag differs."
@@ -23699,7 +23699,7 @@ msgstr "%s の値を '%s' から '%s' に変更します。"
 #: eeschema/tools/backannotate.cpp:872
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "%s の[未実装]の設定を '%s' から '%s' に変更します。"
+msgstr "%s の'DNP(未実装)'の設定を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:886
 #, c-format
@@ -24567,7 +24567,7 @@ msgstr "[部品表から除外]の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1059
 msgid "Set the do not populate attribute"
-msgstr "未実装の属性を設定"
+msgstr "DNP(未実装)の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1066
 msgid "Open the library symbol in the Symbol Editor"
@@ -27591,7 +27591,7 @@ msgstr "フットプリント タイプが’未指定'のコンポーネント�
 
 #: kicad/cli/command_pcb_export_3d.cpp:93
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "'未実装'が指定されたコンポーネントの 3D モデルを除く"
+msgstr "'DNP(未実装)'が指定されたコンポーネントの 3D モデルを除く"
 
 #: kicad/cli/command_pcb_export_3d.cpp:101
 msgid "Use Grid Origin for output origin"
@@ -28054,7 +28054,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_pos.cpp:83
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:99
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "'未実装'が指定されたすべてのフットプリントを除外"
+msgstr "DNP(未実装)が指定されたすべてのフットプリントを除外"
 
 #: kicad/cli/command_pcb_export_pos.cpp:87
 msgid "Include board edge layer (Gerber only)"
@@ -36190,7 +36190,7 @@ msgstr "出力単位:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:241
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:120
 msgid "Ignore 'Do not populate' components"
-msgstr "[未実装]の部品を無視"
+msgstr "'DNP(未実装)'の部品を無視"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:87
 #: pcbnew/dialogs/dialog_export_step_base.cpp:246
@@ -36542,7 +36542,7 @@ msgstr "ユーザー定義の原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:242
 msgid "Do not show components marked 'Do not populate'"
-msgstr "[未実装]と指定された部品を表示しない"
+msgstr "'DNP(未実装)'と指定された部品を表示しない"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:247
 msgid "Do not show components with Footprint Type 'Unspecified'"
@@ -39318,12 +39318,12 @@ msgstr "ハンダマスクが作られないエリアのシルクスクリーン
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Indicate DNP on fabrication layers"
-msgstr "基板製造用レイヤーにDNPを表示する"
+msgstr "基板製造用レイヤーにDNP(未実装)を表示する"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Hide or cross-out DNP footprints on fabrication layers"
-msgstr ""
-"基板製造用レイヤーにあるDNPフットプリントを非表示または取り消し線で消す"
+msgstr "基板製造用レイヤーにあるDNP(未実装)フットプリントを非表示または取り消し線で消"
+"す"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:96
 #: pcbnew/widgets/appearance_controls.cpp:662
@@ -43197,7 +43197,7 @@ msgstr ""
 "        (condition \"A.type == via\"))\n"
 "\n"
 "\n"
-"    # DNPフットプリントからハンダペーストを除去\n"
+"    # DNP(未実装)のフットプリントからハンダペーストを除去\n"
 "    (rule remove_solder_paste_from_DNP\n"
 "        (constraint solder_paste_abs_margin (opt -50mm))\n"
 "        (condition \"A.Do_not_Populate\"))\n"
@@ -46554,22 +46554,22 @@ msgstr "%s の製造属性 'BOM(部品表)から除外' を削除しました。
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:730
 #, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "%s に '部品表から除外' の製造属性を設定します。"
+msgstr "%s に 'DNP(未実装)' の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:735
 #, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "%s の '部品表から除外' の製造属性を削除します。"
+msgstr "%s の 'DNP(未実装)' の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:746
 #, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr "%s に製造属性 '部品表から除外' を追加しました。"
+msgstr "%s に製造属性 'DNP(未実装)' を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:752
 #, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr "%s の製造属性 '部品表から除外' を削除しました。"
+msgstr "%s の製造属性 'DNP(未実装)' を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:775
 #, c-format
