@@ -161,6 +161,8 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
         // TODO(JE) Shapes
 
         // TODO(JE) Text
+
+        // TODO Barcodes
     }
 }
 

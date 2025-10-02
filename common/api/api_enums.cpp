@@ -39,6 +39,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
     case types::KiCadObjectType::KOT_PCB_FOOTPRINT:         return PCB_FOOTPRINT_T;
     case types::KiCadObjectType::KOT_PCB_PAD:               return PCB_PAD_T;
     case types::KiCadObjectType::KOT_PCB_SHAPE:             return PCB_SHAPE_T;
+    case types::KiCadObjectType::KOT_PCB_BARCODE:           return PCB_BARCODE_T;
     case types::KiCadObjectType::KOT_PCB_REFERENCE_IMAGE:   return PCB_REFERENCE_IMAGE_T;
     case types::KiCadObjectType::KOT_PCB_FIELD:             return PCB_FIELD_T;
     case types::KiCadObjectType::KOT_PCB_GENERATOR:         return PCB_GENERATOR_T;
