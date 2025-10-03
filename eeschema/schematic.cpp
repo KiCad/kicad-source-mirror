@@ -333,7 +333,8 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
         return true;
     }
 
-    if( aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
+    // aSheetPath->LastScreen() can be null during schematic loading
+    if( aSheetPath->LastScreen() && aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
         return true;
 
     if( m_project->TextVarResolver( token ) )
