@@ -543,7 +543,7 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxBitmapButton" expanded="true">
                       <property name="BottomDockable">1</property>
@@ -617,7 +617,7 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxBitmapButton" expanded="true">
                       <property name="BottomDockable">1</property>
@@ -692,17 +692,7 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
-                    <property name="proportion">1</property>
-                    <object class="spacer" expanded="true">
-                      <property name="height">0</property>
-                      <property name="permission">protected</property>
-                      <property name="width">0</property>
-                    </object>
-                  </object>
-                  <object class="sizeritem" expanded="true">
-                    <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxBitmapButton" expanded="true">
                       <property name="BottomDockable">1</property>
@@ -777,17 +767,7 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
-                    <property name="proportion">1</property>
-                    <object class="spacer" expanded="true">
-                      <property name="height">0</property>
-                      <property name="permission">protected</property>
-                      <property name="width">0</property>
-                    </object>
-                  </object>
-                  <object class="sizeritem" expanded="true">
-                    <property name="border">5</property>
-                    <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
+                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxBitmapButton" expanded="true">
                       <property name="BottomDockable">1</property>

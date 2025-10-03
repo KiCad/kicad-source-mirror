@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-75-g9786507b-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,28 +66,22 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_separator = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator->SetToolTip( _("Bold") );
 
-	bSizer7->Add( m_separator, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer7->Add( m_separator, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_e48 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_e48->SetToolTip( _("Limit to E48 series values.") );
 
-	bSizer7->Add( m_e48, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer7->Add( m_e48, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_e96 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_e96->SetToolTip( _("Limit to E96 series values") );
 
-	bSizer7->Add( m_e96, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer7->Add( m_e96, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_e192 = new BITMAP_BUTTON( m_panel1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_e192->SetToolTip( _("Limit to E192 series values") );
 
-	bSizer7->Add( m_e192, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer7->Add( m_e192, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizer6->Add( bSizer7, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
