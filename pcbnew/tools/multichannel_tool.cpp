@@ -938,14 +938,12 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
-            BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Clone() );
+            BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Duplicate( false ) );
 
             fixupNet( item, copied, aCompatData.m_matchingComponents );
 
             copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
-            copied->SetParentGroup( nullptr );
-            const_cast<KIID&>( copied->m_Uuid ) = KIID();
             aCompatData.m_groupableItems.insert( copied );
             aCommit->Add( copied );
         }
@@ -1044,7 +1042,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 if( layerMismatch )
                     continue;
 
-                ZONE* targetZone = static_cast<ZONE*>( item->Clone() );
+                ZONE* targetZone = static_cast<ZONE*>( item->Duplicate( false ) );
                 fixupNet( zone, targetZone, aCompatData.m_matchingComponents );
 
                 copied = targetZone;
@@ -1053,8 +1051,6 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( copied )
             {
                 copied->ClearFlags();
-                copied->SetParentGroup( nullptr );
-                const_cast<KIID&>( copied->m_Uuid ) = KIID();
                 copied->Rotate( VECTOR2( 0, 0 ), rot );
                 copied->Move( disp );
                 aCompatData.m_groupableItems.insert( copied );
