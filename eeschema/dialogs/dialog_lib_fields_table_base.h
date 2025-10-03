@@ -30,6 +30,7 @@ class WX_GRID;
 #include <wx/srchctrl.h>
 #include <wx/statline.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/splitter.h>
 #include <wx/dialog.h>
 
@@ -54,6 +55,7 @@ class DIALOG_LIB_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline31;
 		wxChoice* m_choiceScope;
 		wxStaticLine* m_staticline311;
+		wxCheckBox* m_groupSymbolsBox;
 		STD_BITMAP_BUTTON* m_bRefresh;
 		WX_GRID* m_grid;
 		STD_BITMAP_BUTTON* m_sidebarButton;
@@ -72,6 +74,7 @@ class DIALOG_LIB_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnScope( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }

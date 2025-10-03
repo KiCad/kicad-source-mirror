@@ -469,13 +469,13 @@ void DIALOG_LIB_FIELDS_TABLE::SetupAllColumnProperties()
     int  sortCol = 0;
     bool sortAscending = true;
 
-    // Find the VALUE column for initial sorting
-    int valueCol = m_dataModel->GetFieldNameCol( GetCanonicalFieldName( FIELD_T::VALUE ) );
+    // Find the symbol name column for initial sorting
+    int nameCol = m_dataModel->GetFieldNameCol( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME );
 
     // Set initial sort to VALUE field (ascending) if no previous sort preference exists
-    if( m_dataModel->GetSortCol() == 0 && valueCol != -1 )
+    if( m_dataModel->GetSortCol() == 0 && nameCol != -1 )
     {
-        sortCol = valueCol;
+        sortCol = nameCol;
         sortAscending = true;
         m_dataModel->SetSorting( sortCol, sortAscending );
     }
@@ -534,6 +534,8 @@ void DIALOG_LIB_FIELDS_TABLE::SetupAllColumnProperties()
 
 bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
 {
+    m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
+
     switch( m_scope )
     {
     case SCOPE::SCOPE_LIBRARY:         m_choiceScope->SetSelection( 0 ); break;
@@ -909,6 +911,14 @@ void DIALOG_LIB_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 }
 
 
+void DIALOG_LIB_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
+{
+    m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
+    m_dataModel->RebuildRows();
+    m_grid->ForceRefresh();
+}
+
+
 void DIALOG_LIB_FIELDS_TABLE::OnTableColSize(wxGridSizeEvent& aEvent)
 {
     aEvent.Skip();
@@ -1026,6 +1036,8 @@ void DIALOG_LIB_FIELDS_TABLE::UpdateFieldList()
                 AddField( GetCanonicalFieldName( fieldId ),
                             GetDefaultFieldName( fieldId, DO_TRANSLATE ), show, groupBy );
             };
+
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, _( "Symbol Name" ), true, false );
 
     // Add mandatory fields first            show   groupBy
     addMandatoryField( FIELD_T::REFERENCE,   false,  false   );

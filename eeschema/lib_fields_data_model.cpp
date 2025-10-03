@@ -33,6 +33,7 @@
 
 
 const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "${ITEM_NUMBER}" );
+const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME = wxS( "Symbol Name" );
 
 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
@@ -79,6 +80,14 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const LIB_SY
         dataElement.m_currentlyEmpty = false;
         dataElement.m_isModified = false;
     }
+    else if( ColIsSymbolName( col ) )
+    {
+        dataElement.m_originalData = aSymbol->GetName();
+        dataElement.m_currentData = aSymbol->GetName();
+        dataElement.m_originallyEmpty = false;
+        dataElement.m_currentlyEmpty = false;
+        dataElement.m_isModified = false;
+    }
     else
     {
         m_dataStore[aSymbol->m_Uuid][aFieldName].m_originalData = wxEmptyString;
@@ -98,6 +107,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
     {
         std::map<wxString, LIB_DATA_ELEMENT>& fieldStore = m_dataStore[symbol->m_Uuid];
         auto it = fieldStore.find( fieldName );
+
         if( it != fieldStore.end() )
         {
             it->second.m_currentData = wxEmptyString;
@@ -194,6 +204,7 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 
     if( IsExpanderColumn( aCol ) )
     {
+        // Poor-man's tree controls
         if( m_rows[aRow].m_Flag == GROUP_COLLAPSED )
         {
             GetView()->SetReadOnly( aRow, aCol, true );
@@ -210,17 +221,23 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         }
         else
         {
+#ifdef __WXMAC__
+            return wxT( "     " ) + GetValue( m_rows[aRow], aCol );
+#else
             return wxT( "    " ) + GetValue( m_rows[aRow], aCol );
+#endif
         }
     }
 
-    return GetValue(m_rows[aRow], aCol);
+    return GetValue( m_rows[aRow], aCol );
 }
 
 
 wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const LIB_DATA_MODEL_ROW& group, int aCol )
 {
-    wxString fieldValue = INDETERMINATE_STATE;
+    std::set<wxString> mixedValues;
+    bool               listMixedValues = ColIsSymbolName( aCol );
+    wxString           fieldValue = INDETERMINATE_STATE;
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), fieldValue );
 
     LIB_DATA_MODEL_COL& col = m_cols[aCol];
@@ -229,18 +246,32 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const LIB_DATA_MODEL_ROW& 
     {
         const KIID& symbolID = ref->m_Uuid;
 
-        if( !m_dataStore.contains( symbolID )
-            || !m_dataStore[symbolID].contains( col.m_fieldName ) )
-        {
+        if( !m_dataStore.contains( symbolID ) || !m_dataStore[symbolID].contains( col.m_fieldName ) )
             return INDETERMINATE_STATE;
-        }
 
         wxString refFieldValue = m_dataStore[symbolID][col.m_fieldName].m_currentData;
 
-        if( ref == group.m_Refs.front() )
+        if( listMixedValues )
+            mixedValues.insert( refFieldValue );
+        else if( ref == group.m_Refs.front() )
             fieldValue = refFieldValue;
         else if( fieldValue != refFieldValue )
             return INDETERMINATE_STATE;
+    }
+
+    if( listMixedValues )
+    {
+        fieldValue = wxEmptyString;
+
+        for( const wxString& value : mixedValues )
+        {
+            if( value.IsEmpty() )
+                continue;
+            else if( fieldValue.IsEmpty() )
+                fieldValue = value;
+            else
+                fieldValue += "," + value;
+        }
     }
 
     return fieldValue;
@@ -250,6 +281,9 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const LIB_DATA_MODEL_ROW& 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
     wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
+
+    if( ColIsSymbolName( aCol ) )
+        return;
 
     LIB_DATA_MODEL_ROW& rowGroup = m_rows[aRow];
 
@@ -263,6 +297,21 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
 
     m_edited = true;
 }
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsSymbolName( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+    return m_cols[aCol].m_fieldName == LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
+}
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsCheck( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+    return m_cols[aCol].m_isCheckbox;
+}
+
 
 wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
@@ -408,17 +457,11 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
         wxFont font;
 
         if( attr->HasFont() )
-        {
             font = attr->GetFont();
-        }
         else if( GetView() )
-        {
             font = GetView()->GetDefaultCellFont();
-        }
         else
-        {
             font = wxFont();
-        }
 
         if( font.IsOk() )
         {
@@ -591,20 +634,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
 }
 
 
-bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
-}
-
-
-bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsCheck( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_isCheckbox;
-}
-
-
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const LIB_DATA_MODEL_ROW&          lhGroup,
                                              const LIB_DATA_MODEL_ROW&          rhGroup,
                                              LIB_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol,
@@ -627,14 +656,14 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const LIB_DATA_MODEL_ROW&          
                     return a > b;
             };
 
-    // Primary sort key is sortCol; secondary is always VALUE (column 1)
+    // Primary sort key is sortCol; secondary is always the symbol name (column 0)
     wxString lhs = dataModel->GetValue( lhGroup, sortCol ).Trim( true ).Trim( false );
     wxString rhs = dataModel->GetValue( rhGroup, sortCol ).Trim( true ).Trim( false );
 
     if( lhs == rhs && lhGroup.m_Refs.size() > 1 && rhGroup.m_Refs.size() > 1 )
     {
-        wxString lhRef = lhGroup.m_Refs[1]->GetRef( nullptr );
-        wxString rhRef = rhGroup.m_Refs[1]->GetRef( nullptr );
+        wxString lhRef = lhGroup.m_Refs[1]->GetName();
+        wxString rhRef = rhGroup.m_Refs[1]->GetName();
         return local_cmp( lhRef, rhRef );
     }
     else

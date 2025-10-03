@@ -71,6 +71,7 @@ private:
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnFilterText( wxCommandEvent& event ) override;
     void OnScope( wxCommandEvent& event ) override;
+    void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
     void OnRegroupSymbols( wxCommandEvent& event ) override;
 
     void OnTableValueChanged( wxGridEvent& event ) override;

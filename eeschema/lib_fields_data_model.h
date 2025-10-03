@@ -98,8 +98,8 @@ public:
         m_stripedRenderers.clear();
     }
 
-    static const wxString QUANTITY_VARIABLE;
     static const wxString ITEM_NUMBER_VARIABLE;
+    static const wxString SYMBOL_NAME;
 
     void CreateDerivedSymbol( int aRow, int aCol, wxString& aNewSymbolName );
     void CreateDerivedSymbolImmediate( int aRow, int aCol, wxString& aNewSymbolName );
@@ -158,8 +158,6 @@ public:
         return false; // don't allow adjacent cell overflow, even if we are actually empty
     }
 
-    bool IsExpanderColumn( int aCol ) const;
-
     wxString GetValue( int aRow, int aCol ) override;
     wxString GetTypeName( int row, int col ) override;
     wxString GetValue( const LIB_DATA_MODEL_ROW& group, int aCol );
@@ -169,8 +167,10 @@ public:
     void            RevertRow( int aRow );
     void            ClearCell( int aRow, int aCol );
 
-    bool ColIsValue( int aCol );
+    bool ColIsSymbolName( int aCol );
     bool ColIsCheck( int aCol );
+
+    bool IsExpanderColumn( int aCol ) const;
 
     void SetSorting( int aCol, bool ascending )
     {
@@ -181,6 +181,7 @@ public:
 
     int  GetSortCol() { return m_sortColumn; }
     bool GetSortAsc() { return m_sortAscending; }
+
     const LIB_SYMBOL* GetSymbolForRow( int aRow )
     {
         wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), nullptr );

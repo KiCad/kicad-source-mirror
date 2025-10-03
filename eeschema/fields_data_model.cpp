@@ -365,7 +365,11 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         }
         else
         {
+#ifdef __WXMAC__
+            return wxT( "     " ) + GetValue( m_rows[aRow], aCol );
+#else
             return wxT( "    " ) + GetValue( m_rows[aRow], aCol );
+#endif
         }
     }
     else

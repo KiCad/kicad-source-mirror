@@ -116,6 +116,12 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_staticline311 = new wxStaticLine( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bControls->Add( m_staticline311, 0, wxEXPAND | wxALL, 5 );
 
+	m_groupSymbolsBox = new wxCheckBox( m_rightPanel, wxID_ANY, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_groupSymbolsBox->SetValue(true);
+	m_groupSymbolsBox->SetToolTip( _("Group symbols together based on common properties") );
+
+	bControls->Add( m_groupSymbolsBox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_bRefresh = new STD_BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
 
@@ -202,6 +208,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnFilterMouseMoved ), NULL, this );
 	m_filter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnFilterText ), NULL, this );
 	m_choiceScope->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnScope ), NULL, this );
+	m_groupSymbolsBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnGroupSymbolsToggled ), NULL, this );
 	m_bRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
@@ -230,6 +237,7 @@ DIALOG_LIB_FIELDS_TABLE_BASE::~DIALOG_LIB_FIELDS_TABLE_BASE()
 	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnFilterMouseMoved ), NULL, this );
 	m_filter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnFilterText ), NULL, this );
 	m_choiceScope->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnScope ), NULL, this );
+	m_groupSymbolsBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnGroupSymbolsToggled ), NULL, this );
 	m_bRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LIB_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
