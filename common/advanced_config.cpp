@@ -132,6 +132,7 @@ static const wxChar MaximumThreads[] = wxT( "MaximumThreads" );
 static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
         wxT( "NetInspectorBulkUpdateOptimisationThreshold" );
 static const wxChar ExcludeFromSimulationLineWidth[] = wxT( "ExcludeFromSimulationLineWidth" );
+static const wxChar SimulatorMultiRunCombinationLimit[] = wxT( "SimulatorMultiRunCombinationLimit" );
 static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
 static const wxChar ConfigurableToolbars[] = wxT( "ConfigurableToolbars" );
 static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
@@ -323,6 +324,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_NetInspectorBulkUpdateOptimisationThreshold = 100;
 
     m_ExcludeFromSimulationLineWidth = 25;
+    m_SimulatorMultiRunCombinationLimit = 12;
 
     m_GitIconRefreshInterval = 10000;
 
@@ -651,6 +653,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ExcludeFromSimulationLineWidth,
                                                &m_ExcludeFromSimulationLineWidth,
                                                m_ExcludeFromSimulationLineWidth, 1, 100 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true,
+                                                AC_KEYS::SimulatorMultiRunCombinationLimit,
+                                                &m_SimulatorMultiRunCombinationLimit,
+                                                m_SimulatorMultiRunCombinationLimit, 1, 100 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::GitIconRefreshInterval,
                                                &m_GitIconRefreshInterval,

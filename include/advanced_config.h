@@ -814,6 +814,15 @@ public:
     int m_ExcludeFromSimulationLineWidth;
 
     /**
+     * Maximum number of tuner combinations simulated when using multi-run mode.
+     *
+     * Setting name: "SimulatorMultiRunCombinationLimit"
+     * Valid values: 1 to 100
+     * Default value: 12
+     */
+    int m_SimulatorMultiRunCombinationLimit;
+
+    /**
      * The interval in milliseconds to refresh the git icons in the project tree.
      *
      * Setting name: "GitIconRefreshInterval"

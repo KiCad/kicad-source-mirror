@@ -54,6 +54,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
+#include <advanced_config.h>
 #include <magic_enum.hpp>
 
 
@@ -1723,7 +1724,8 @@ void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
 {
     m_tuners.remove( aTuner );
 
-    if( m_multiRunState.tuner == aTuner )
+    if( std::find( m_multiRunState.tuners.begin(), m_multiRunState.tuners.end(), aTuner )
+            != m_multiRunState.tuners.end() )
         clearMultiRunState( true );
 
     m_tunerOverrides.erase( aTuner );
@@ -3294,7 +3296,7 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 
     if( aFinal && m_multiRunState.active )
     {
-        if( m_multiRunState.currentStep < m_multiRunState.stepValues.size() )
+        if( m_multiRunState.currentStep < m_multiRunState.steps.size() )
         {
             storeMultiRun = true;
             m_multiRunState.storePending = true;
@@ -3493,7 +3495,7 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 
     if( aFinal && m_multiRunState.active )
     {
-        if( m_multiRunState.currentStep + 1 < m_multiRunState.stepValues.size() )
+        if( m_multiRunState.currentStep + 1 < m_multiRunState.steps.size() )
         {
             m_multiRunState.currentStep++;
 
@@ -3502,7 +3504,7 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         else
         {
             m_multiRunState.active = false;
-            m_multiRunState.stepValues.clear();
+            m_multiRunState.steps.clear();
             m_multiRunState.currentStep = 0;
             m_multiRunState.storePending = false;
             m_tunerOverrides.clear();
@@ -3522,8 +3524,8 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 void SIMULATOR_FRAME_UI::clearMultiRunState( bool aClearTraces )
 {
     m_multiRunState.active = false;
-    m_multiRunState.tuner = nullptr;
-    m_multiRunState.stepValues.clear();
+    m_multiRunState.tuners.clear();
+    m_multiRunState.steps.clear();
     m_multiRunState.currentStep = 0;
     m_multiRunState.storePending = false;
 
@@ -3541,76 +3543,131 @@ void SIMULATOR_FRAME_UI::prepareMultiRunState()
 {
     m_tunerOverrides.clear();
 
-    TUNER_SLIDER* multiTuner = nullptr;
+    std::vector<TUNER_SLIDER*> multiTuners;
 
     for( TUNER_SLIDER* tuner : m_tuners )
     {
         if( tuner->GetRunMode() == TUNER_SLIDER::RUN_MODE::MULTI )
-        {
-            multiTuner = tuner;
-            break;
-        }
+            multiTuners.push_back( tuner );
     }
 
-    if( !multiTuner )
+    if( multiTuners.empty() )
     {
         clearMultiRunState( true );
         return;
     }
 
-    if( m_multiRunState.active && m_multiRunState.tuner != multiTuner )
+    bool tunersChanged = multiTuners != m_multiRunState.tuners;
+
+    if( m_multiRunState.active && tunersChanged )
         clearMultiRunState( true );
 
     if( !m_multiRunState.active )
     {
-        if( m_multiRunState.tuner != multiTuner || m_multiRunState.storedSteps > 0
-                || !m_multiRunState.traces.empty() )
+        if( tunersChanged || m_multiRunState.storedSteps > 0 || !m_multiRunState.traces.empty() )
         {
             clearMultiRunState( true );
         }
 
-        m_multiRunState.tuner = multiTuner;
-        m_multiRunState.stepValues = calculateMultiRunSteps( multiTuner );
+        m_multiRunState.tuners = multiTuners;
+        m_multiRunState.steps = calculateMultiRunSteps( multiTuners );
         m_multiRunState.currentStep = 0;
         m_multiRunState.storePending = false;
 
-        if( m_multiRunState.stepValues.size() >= 2 )
+        if( m_multiRunState.steps.size() >= 2 )
         {
             m_multiRunState.active = true;
             m_multiRunState.storedSteps = 0;
         }
         else
         {
-            m_multiRunState.stepValues.clear();
+            m_multiRunState.steps.clear();
             return;
         }
     }
+    else if( tunersChanged )
+    {
+        m_multiRunState.tuners = multiTuners;
+    }
 
-    if( m_multiRunState.active && m_multiRunState.currentStep < m_multiRunState.stepValues.size() )
-        m_tunerOverrides[multiTuner] = m_multiRunState.stepValues[m_multiRunState.currentStep];
+    if( m_multiRunState.active && m_multiRunState.currentStep < m_multiRunState.steps.size() )
+    {
+        const MULTI_RUN_STEP& step = m_multiRunState.steps[m_multiRunState.currentStep];
+
+        for( const auto& entry : step.overrides )
+            m_tunerOverrides[entry.first] = entry.second;
+    }
 }
 
 
-std::vector<double> SIMULATOR_FRAME_UI::calculateMultiRunSteps( TUNER_SLIDER* aTuner ) const
+std::vector<SIMULATOR_FRAME_UI::MULTI_RUN_STEP> SIMULATOR_FRAME_UI::calculateMultiRunSteps(
+        const std::vector<TUNER_SLIDER*>& aTuners ) const
 {
-    std::vector<double> steps;
+    std::vector<MULTI_RUN_STEP> steps;
 
-    if( !aTuner )
+    if( aTuners.empty() )
         return steps;
 
-    double startValue = aTuner->GetMin().ToDouble();
-    double endValue = aTuner->GetMax().ToDouble();
-    int    stepCount = std::max( 2, aTuner->GetStepCount() );
+    std::vector<std::vector<double>> tunerValues;
+    tunerValues.reserve( aTuners.size() );
 
-    if( stepCount < 2 )
-        stepCount = 2;
+    for( TUNER_SLIDER* tuner : aTuners )
+    {
+        if( !tuner )
+            return steps;
 
-    double increment = ( endValue - startValue ) / static_cast<double>( stepCount - 1 );
+        double startValue = tuner->GetMin().ToDouble();
+        double endValue = tuner->GetMax().ToDouble();
+        int    stepCount = std::max( 2, tuner->GetStepCount() );
 
-    steps.reserve( stepCount );
+        if( stepCount < 2 )
+            stepCount = 2;
 
-    for( int ii = 0; ii < stepCount; ++ii )
-        steps.push_back( startValue + increment * ii );
+        double increment = ( endValue - startValue ) / static_cast<double>( stepCount - 1 );
+
+        std::vector<double> values;
+        values.reserve( stepCount );
+
+        for( int ii = 0; ii < stepCount; ++ii )
+            values.push_back( startValue + increment * ii );
+
+        tunerValues.push_back( std::move( values ) );
+    }
+
+    int limit = ADVANCED_CFG::GetCfg().m_SimulatorMultiRunCombinationLimit;
+
+    if( limit < 1 )
+        limit = 1;
+
+    std::vector<double> currentValues( aTuners.size(), 0.0 );
+
+    auto generate = [&]( auto&& self, size_t depth ) -> void
+    {
+        if( steps.size() >= static_cast<size_t>( limit ) )
+            return;
+
+        if( depth == aTuners.size() )
+        {
+            MULTI_RUN_STEP step;
+
+            for( size_t ii = 0; ii < aTuners.size(); ++ii )
+                step.overrides.emplace( aTuners[ii], currentValues[ii] );
+
+            steps.push_back( std::move( step ) );
+            return;
+        }
+
+        for( double value : tunerValues[depth] )
+        {
+            currentValues[depth] = value;
+            self( self, depth + 1 );
+
+            if( steps.size() >= static_cast<size_t>( limit ) )
+                return;
+        }
+    };
+
+    generate( generate, 0 );
 
     return steps;
 }

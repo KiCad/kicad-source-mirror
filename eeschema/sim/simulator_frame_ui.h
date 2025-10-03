@@ -337,9 +337,11 @@ private:
      */
     SIM_TRACE_TYPE getXAxisType( SIM_TYPE aType ) const;
 
+    struct MULTI_RUN_STEP;
+
     void clearMultiRunState( bool aClearTraces );
     void prepareMultiRunState();
-    std::vector<double> calculateMultiRunSteps( TUNER_SLIDER* aTuner ) const;
+    std::vector<MULTI_RUN_STEP> calculateMultiRunSteps( const std::vector<TUNER_SLIDER*>& aTuners ) const;
     std::string multiRunTraceKey( const wxString& aVectorName, int aTraceType ) const;
     void recordMultiRunData( const wxString& aVectorName, int aTraceType,
                              const std::vector<double>& aX, const std::vector<double>& aY );
@@ -395,11 +397,16 @@ private:
         std::vector<std::vector<double>> yValues;
     };
 
+    struct MULTI_RUN_STEP
+    {
+        std::map<const TUNER_SLIDER*, double> overrides;
+    };
+
     struct MULTI_RUN_STATE
     {
         bool active = false;
-        TUNER_SLIDER* tuner = nullptr;
-        std::vector<double> stepValues;
+        std::vector<TUNER_SLIDER*> tuners;
+        std::vector<MULTI_RUN_STEP> steps;
         size_t currentStep = 0;
         size_t storedSteps = 0;
         bool storePending = false;
