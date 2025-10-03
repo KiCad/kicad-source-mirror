@@ -255,12 +255,12 @@ void TUNER_SLIDER::updateModeControls()
     m_stepsLabel->Enable( enableSteps );
 
     // In Multi Run mode, the middle value text and slider are not directly editable,
-    // and save/trash actions are disabled. Re-enable for Single Run.
+    // and save actions are disabled. Re-enable for Single Run.
     bool enableDirectControls = ( m_runMode == RUN_MODE::SINGLE );
     m_valueText->Enable( enableDirectControls );
     m_slider->Enable( enableDirectControls );
     m_saveBtn->Enable( enableDirectControls );
-    m_closeBtn->Enable( enableDirectControls );
+    m_closeBtn->Enable( true );
 }
 
 
