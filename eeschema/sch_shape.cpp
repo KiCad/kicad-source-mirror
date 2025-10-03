@@ -229,6 +229,10 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
                 return;
 
             color = GetFillColor();
+
+            if( color == COLOR4D::UNSPECIFIED )
+                color = renderSettings->GetLayerColor( m_layer );
+
             break;
 
         case FILL_T::FILLED_WITH_BG_BODYCOLOR:
