@@ -818,10 +818,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
     if( aOpts.m_anchorFp )
     {
-        for( auto& fpPair : aCompatData.m_matchingComponents )
+        for( const auto& [refFP, targetFP] : aCompatData.m_matchingComponents )
         {
-            if( fpPair.first->GetReference() == aOpts.m_anchorFp->GetReference() )
-                targetAnchorFp = fpPair.second;
+            if( refFP->GetReference() == aOpts.m_anchorFp->GetReference() )
+                targetAnchorFp = targetFP;
         }
 
         if( targetAnchorFp )
@@ -885,12 +885,12 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         std::set<int> refc;
         std::set<int> targc;
 
-        for( auto& fpPair : aCompatData.m_matchingComponents )
+        for( const auto& [refFP, targetFP] : aCompatData.m_matchingComponents )
         {
-            for( PAD* pad : fpPair.first->Pads() )
+            for( PAD* pad : refFP->Pads() )
                 refc.insert( pad->GetNetCode() );
 
-            for( PAD* pad : fpPair.second->Pads() )
+            for( PAD* pad : targetFP->Pads() )
                 targc.insert( pad->GetNetCode() );
         }
 
@@ -902,10 +902,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             // Never remove pads as part of routing copy.
             if( item->Type() == PCB_PAD_T )
                 continue;
+
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
+
             if( aOpts.m_connectedRoutingOnly && !targc.contains( item->GetNetCode() ) )
                 continue;
+
             // item already removed
             if( aCommit->GetStatus( item ) != 0 )
                 continue;
@@ -922,10 +925,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             // Never copy pads as part of routing copy.
             if( item->Type() == PCB_PAD_T )
                 continue;
+
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
+
             if( aOpts.m_connectedRoutingOnly && !refc.contains( item->GetNetCode() ) )
                 continue;
+
             if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 continue;
 
@@ -1009,6 +1015,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             {
                 if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
+
                 if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
 
@@ -1058,11 +1065,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
     if( aOpts.m_copyPlacement )
     {
-        for( auto& fpPair : aCompatData.m_matchingComponents )
+        for( const auto& [refFP, targetFP] : aCompatData.m_matchingComponents )
         {
-            FOOTPRINT* refFP = fpPair.first;
-            FOOTPRINT* targetFP = fpPair.second;
-
             if( !aRefArea->m_zone->GetLayerSet().Contains( refFP->GetLayer() ) )
             {
                 wxLogTrace( traceMultichannelTool, wxT( "discard ref:%s (ref layer)\n" ),
