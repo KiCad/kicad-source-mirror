@@ -1218,6 +1218,7 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             break;
 
         case T_signals:
+        case T_net_chains:
             parseSIGNALS_SECTION();
             break;
 
@@ -3160,7 +3161,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
         else if( token == T_LEFT )
             token = NextTok();
 
-        if( token != T_signal )
+        if( token != T_signal && token != T_net_chain )
         {
             skipCurrent();
             continue;
@@ -3168,6 +3169,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
 
         wxString name;
         std::vector<int> netCodes;
+        std::vector<wxString> netNames;
         KIID padUuids[2];
         int padCount = 0;
 
@@ -3194,8 +3196,16 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
                         mt = NextTok();
                     if( mt == T_net )
                     {
-                        int code = parseInt( "net number" );
-                        netCodes.push_back( code );
+                        // Accept either a net code (legacy) or a net name (current).
+                        T tok = NextTok();
+                        if( tok == T_NUMBER )
+                        {
+                            netCodes.push_back( (int) strtol( CurText(), nullptr, 10 ) );
+                        }
+                        else
+                        {
+                            netNames.push_back( FromUTF8() );
+                        }
                         NeedRIGHT();
                     }
                     else if( mt == T_member )
@@ -3206,8 +3216,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
                             inner = NextTok();
                         if( inner == T_net )
                         {
-                            int code = parseInt( "net number" );
-                            netCodes.push_back( code );
+                            T tok2 = NextTok();
+                            if( tok2 == T_NUMBER )
+                                netCodes.push_back( (int) strtol( CurText(), nullptr, 10 ) );
+                            else
+                                netNames.push_back( FromUTF8() );
                             NeedRIGHT();
                         }
                         NeedRIGHT();
@@ -3237,6 +3250,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
             }
         }
 
+        std::vector<NETINFO_ITEM*> resolvedNets;
+
         for( int code : netCodes )
         {
             int internalCode = code;
@@ -3244,44 +3259,28 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
             if( code >= 0 && code < (int) m_netCodes.size() && m_netCodes[code] != 0 )
                 internalCode = m_netCodes[code];
 
-            NETINFO_ITEM* net = m_board->FindNet( internalCode );
+            if( NETINFO_ITEM* net = m_board->FindNet( internalCode ) )
+                resolvedNets.push_back( net );
+        }
 
-            if( !net )
-                continue;
+        for( const wxString& netName : netNames )
+        {
+            if( NETINFO_ITEM* net = m_board->FindNet( netName ) )
+                resolvedNets.push_back( net );
+        }
 
+        for( NETINFO_ITEM* net : resolvedNets )
+        {
             net->SetSignal( name );
 
             for( int i = 0; i < padCount && i < 2; ++i )
             {
-                // Store the UUID for later resolution
                 net->SetTerminalPadUuid( i, padUuids[i] );
 
-                // Try to resolve immediately (the writer places the (signals ...) section
-                // after footprints so pads should usually be available).  This makes
-                // unit tests independent of any later second-pass resolution.
                 if( PAD* pad = m_board->FindPadByUuid( padUuids[i] ) )
-                {
                     net->SetTerminalPad( i, pad );
-                    wxLogTrace( wxT( "KICAD_SIGNAL_PARSER" ),
-                                wxT( "Resolved terminal_pad[%d] %s for net %d (signal %s)" ), i, padUuids[i].AsString(),
-                                code, name );
-                }
-                else
-                {
-                    wxLogTrace( wxT( "KICAD_SIGNAL_PARSER" ),
-                                wxT( "Failed immediate resolve terminal_pad[%d] %s for net %d (signal %s)" ), i,
-                                padUuids[i].AsString(), code, name );
-                }
-            }
-            if( padCount == 0 )
-            {
-                wxLogTrace( wxT( "KICAD_SIGNAL_PARSER" ), wxT( "Signal %s had no terminal_pad entries (net %d)" ), name,
-                            code );
             }
         }
-        wxLogTrace( wxT( "KICAD_SIGNAL_PARSER" ),
-                    wxT( "Parsed signal %s with %zu member nets and %d terminal pads" ),
-                    name, netCodes.size(), padCount );
     }
 }
 

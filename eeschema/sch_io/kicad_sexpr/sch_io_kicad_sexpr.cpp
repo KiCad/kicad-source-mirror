@@ -527,10 +527,13 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         }
     }
 
-    for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetNetChains() )
+    for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetSignals() )
     {
+        if( !sigPtr )
+            continue;
+
         const SCH_NETCHAIN& sig = *sigPtr;
-        m_out->Print( "(signal %s ", m_out->Quotew( sig.GetName() ).c_str() );
+        m_out->Print( "(net_chain %s ", m_out->Quotew( sig.GetName() ).c_str() );
         KICAD_FORMAT::FormatUuid( m_out, sig.GetTerminalPinA() );
         KICAD_FORMAT::FormatUuid( m_out, sig.GetTerminalPinB() );
         m_out->Print( ")" );

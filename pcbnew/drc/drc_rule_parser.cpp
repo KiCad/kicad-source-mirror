@@ -538,7 +538,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_solder_paste_rel_margin:   c.m_Type = SOLDER_PASTE_REL_MARGIN_CONSTRAINT;   break;
     case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
     case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
-    case T_signal_length:             c.m_Type = SIGNAL_LENGTH_CONSTRAINT;             break;
+    case T_signal_length:
+    case T_net_chain_length:          c.m_Type = SIGNAL_LENGTH_CONSTRAINT;             break;
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
     case T_via_count:                 c.m_Type = VIA_COUNT_CONSTRAINT;                 break;
     case T_diff_pair_gap:             c.m_Type = DIFF_PAIR_GAP_CONSTRAINT;             break;

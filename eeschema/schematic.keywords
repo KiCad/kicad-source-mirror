@@ -161,6 +161,7 @@ sheet
 sheet_instances
 show_name
 size
+net_chain
 signal
 span
 start

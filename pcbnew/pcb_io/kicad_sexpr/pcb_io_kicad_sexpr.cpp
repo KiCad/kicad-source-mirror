@@ -896,20 +896,20 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
 
     if( count )
     {
-        m_out->Print( "(signals" );
+        m_out->Print( "(net_chains" );
         for( const auto& kv : signals )
         {
             const wxString& name = kv.first;
             const SIG_INFO& si = kv.second;
-            // Skip only if truly empty (no pads, single net, and empty name)
+
             if( si.nets.size() == 1 && !si.pads[0] && !si.pads[1] && name.IsEmpty() )
                 continue;
 
-            m_out->Print( " (signal (name %s)", m_out->Quotew( name ).c_str() );
+            m_out->Print( " (net_chain (name %s)", m_out->Quotew( name ).c_str() );
             m_out->Print( " (members" );
             for( NETINFO_ITEM* n : si.nets )
             {
-                m_out->Print( " (net %d)", m_mapping->Translate( n->GetNetCode() ) );
+                m_out->Print( " (net %s)", m_out->Quotew( n->GetNetname() ).c_str() );
             }
             m_out->Print( ")" );
 

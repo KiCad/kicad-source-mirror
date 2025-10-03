@@ -34,7 +34,7 @@
 
 struct SIGNALS_BRANCH_TEST_FIXTURE
 {
-    SIGNALS_BRANCH_TEST_FIXTURE() : m_settingsManager( true ) {}
+    SIGNALS_BRANCH_TEST_FIXTURE() : m_settingsManager() {}
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
@@ -85,7 +85,7 @@ BOOST_FIXTURE_TEST_CASE( SignalBuilder_BranchingVariants, SIGNALS_BRANCH_TEST_FI
             size_t maxNets = 0;
 
             // Use potential signals (auto-inferred, not yet user-created).
-            for( const auto& sig : m_schematic->ConnectionGraph()->GetPotentialSignals() )
+            for( const auto& sig : m_schematic->ConnectionGraph()->GetPotentialNetChains() )
             {
                 if( !sig )
                     continue;

@@ -405,7 +405,7 @@ static bool addCreateSignalBetweenPinsIfApplicable( KILINKS_MENU* aMenu, SCH_EDI
 
     CONNECTION_GRAPH* graph = aFrame->Schematic().ConnectionGraph();
 
-    if( graph->FindPotentialSignalBetweenPins( pa, pb ) )
+    if( graph->FindPotentialNetChainBetweenPins( pa, pb ) )
     {
         wxString label = wxString::Format( _( "Create Signal between %s:%s and %s:%s" ),
                                            pa->GetParentSymbol()->GetRef( &aFrame->GetCurrentSheet() ), pa->GetNumber(),

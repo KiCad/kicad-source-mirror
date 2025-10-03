@@ -31,6 +31,8 @@ name
 names
 net
 nets
+net_chain
+net_chains
 signal
 signals
 node

@@ -142,7 +142,7 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJE
     SCH_SCREEN* screen = new SCH_SCREEN( schematic.get() );
     rootSheet->SetScreen( screen );
     screen->SetParent( schematic.get() );
-    schematic->SetRoot( rootSheet );
+    schematic->SetTopLevelSheets( { rootSheet } );
 
     // Parse from provided stream using existing parser infra
     STDISTREAM_LINE_READER reader;

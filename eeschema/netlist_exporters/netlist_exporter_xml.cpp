@@ -1306,12 +1306,15 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
 XNODE* NETLIST_EXPORTER_XML::makeSignals()
 {
-    XNODE* xsignals = node( wxT( "signals" ) );
+    XNODE* xsignals = node( wxT( "net_chains" ) );
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& signal : m_schematic->ConnectionGraph()->GetNetChains() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& signal : m_schematic->ConnectionGraph()->GetSignals() )
     {
+        if( !signal )
+            continue;
+
         XNODE* xsignal;
-        xsignals->AddChild( xsignal = node( wxT( "signal" ) ) );
+        xsignals->AddChild( xsignal = node( wxT( "net_chain" ) ) );
         xsignal->AddAttribute( wxT( "name" ), signal->GetName() );
 
         XNODE* xmembers;

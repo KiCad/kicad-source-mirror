@@ -165,7 +165,8 @@ void KICAD_NETLIST_PARSER::Parse()
 
             break;
 
-        case T_signals:    // The section signals starts here.
+        case T_signals:
+        case T_net_chains:
             while( ( token = NextTok() ) != T_EOF )
             {
                 if( token == T_RIGHT )
@@ -173,7 +174,7 @@ void KICAD_NETLIST_PARSER::Parse()
                 else if( token == T_LEFT )
                     token = NextTok();
 
-                if( token == T_signal )
+                if( token == T_signal || token == T_net_chain )
                     parseSignal();
             }
 

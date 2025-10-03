@@ -3064,6 +3064,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             break;
 
         case T_signal:
+        case T_net_chain:
             parseSchSignal();
             break;
 

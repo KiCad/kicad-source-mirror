@@ -1875,7 +1875,7 @@ int SCH_EDITOR_CONTROL::CreateSignalBetweenPins( const TOOL_EVENT& aEvent )
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
     CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
 
-    SCH_NETCHAIN* potential = graph->FindPotentialSignalBetweenPins( pinA, pinB );
+    SCH_NETCHAIN* potential = graph->FindPotentialNetChainBetweenPins( pinA, pinB );
     if( !potential )
     {
         DisplayError( editFrame, _( "No potential signal connects the selected pins." ) );
@@ -1998,9 +1998,9 @@ int SCH_EDITOR_CONTROL::LinkComponents( const TOOL_EVENT& aEvent )
     for( const KILINK_ROW& row : rows )
     {
         if( row.selected )
-            graph->AddKiLink( row.source->m_Uuid, row.target->m_Uuid, row.name );
+            graph->AddNetChain( row.source->m_Uuid, row.target->m_Uuid, row.name );
         else if( row.existing )
-            graph->RemoveKiLink( row.source->m_Uuid, row.target->m_Uuid );
+            graph->RemoveNetChain( row.source->m_Uuid, row.target->m_Uuid );
     }
 
     return 0;

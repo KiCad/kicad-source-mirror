@@ -446,5 +446,7 @@ zone_type
 zone_defaults
 zones
 depth
+net_chain
+net_chains
 signal
 terminal_pad

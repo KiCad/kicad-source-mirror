@@ -9,7 +9,7 @@
 
 struct ERC_SIGNAL_TEST_FIXTURE
 {
-    ERC_SIGNAL_TEST_FIXTURE() : m_settingsManager( true ) {}
+    ERC_SIGNAL_TEST_FIXTURE() : m_settingsManager() {}
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
@@ -34,11 +34,11 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
     {
         CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
         int idx = 1;
-        for( const auto& pot : graph->GetPotentialSignals() )
+        for( const auto& pot : graph->GetPotentialNetChains() )
         {
             if( !pot ) continue;
             wxString name = wxString::Format( wxS("ERC_SIG_%d"), idx++ );
-            graph->CreateSignalFromPotential( pot.get(), name );
+            graph->CreateNetChainFromPotential( pot.get(), name );
         }
     }
     m_schematic->ConnectionGraph()->RunERC();
@@ -70,7 +70,7 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
         auto* graph = m_schematic->ConnectionGraph();
         // Ensure signals are rebuilt explicitly in case RunERC did not force it
         graph->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
-        const auto& signals = graph->GetNetChains();
+        const auto& signals = graph->GetSignals();
         std::ostringstream oss;
         oss << "DEBUG Pin-to-Pin mismatch failure: expected=" << expectedMismatches
             << " got=" << mismatchCount << " totalItems=" << provider.GetCount()
@@ -133,11 +133,11 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPowerInputDrivenAcrossSignal, ERC_SIGNAL_TEST_
     {
         CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
         int idx = 1;
-        for( const auto& pot : graph->GetPotentialSignals() )
+        for( const auto& pot : graph->GetPotentialNetChains() )
         {
             if( !pot ) continue;
             wxString name = wxString::Format( wxS("ERC_SIG_%d"), idx++ );
-            graph->CreateSignalFromPotential( pot.get(), name );
+            graph->CreateNetChainFromPotential( pot.get(), name );
         }
     }
     m_schematic->ConnectionGraph()->RunERC();

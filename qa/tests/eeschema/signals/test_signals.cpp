@@ -31,7 +31,7 @@
 
 struct SIGNALS_TEST_FIXTURE
 {
-    SIGNALS_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    SIGNALS_TEST_FIXTURE() : m_settingsManager() {}
 
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
@@ -45,7 +45,7 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_GroupsFourNetsIntoOneSignal, SIGNALS_TES
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialSignals();
+    const auto& signals = graph->GetPotentialNetChains();
     bool foundFourNetSignal = false;
     for( const auto& sig : signals )
     {
@@ -68,7 +68,7 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_RespectsSignalLabelAndKeepsGrouping, SIG
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialSignals();
+    const auto& signals = graph->GetPotentialNetChains();
     bool foundLabeled = false;
     for( const auto& sig : signals )
     {
@@ -98,7 +98,7 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithPullupBranch_ExcludesPowerBranch, SI
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialSignals();
+    const auto& signals = graph->GetPotentialNetChains();
     bool mainSignalExcludesVCC = false;
     for( const auto& sig : signals )
     {
@@ -138,7 +138,7 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithBypassCap_ExcludesPowerBranch, SIGNA
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialSignals();
+    const auto& signals = graph->GetPotentialNetChains();
     bool mainSignalExcludesGND = false;
     for( const auto& sig : signals )
     {

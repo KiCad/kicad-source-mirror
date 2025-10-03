@@ -26,6 +26,7 @@
 #include <footprint.h>
 #include <router/pns_kicad_iface.h>
 #include <filesystem>
+#include <fstream>
 
 static const long long MM = 1000000LL; // internal units
 

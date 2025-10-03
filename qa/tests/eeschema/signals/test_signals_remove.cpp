@@ -33,7 +33,7 @@
 
 struct SIGNALS_REMOVE_TEST_FIXTURE
 {
-    SIGNALS_REMOVE_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
+    SIGNALS_REMOVE_TEST_FIXTURE() : m_settingsManager() {}
 
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE( RemoveFromSignal_DisablesPropagationAndSplitsGroup, SIG
 
     size_t fourCount = 0;
     SCH_NETCHAIN* four = nullptr;
-    for( const auto& sig : graph->GetPotentialSignals() )
+    for( const auto& sig : graph->GetPotentialNetChains() )
     {
         if( sig && sig->GetNets().size() == 4 )
         {
@@ -97,7 +97,7 @@ BOOST_FIXTURE_TEST_CASE( RemoveFromSignal_DisablesPropagationAndSplitsGroup, SIG
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
     bool stillHasFour = false;
-    for( const auto& sig : graph->GetPotentialSignals() )
+    for( const auto& sig : graph->GetPotentialNetChains() )
     {
         if( sig && sig->GetNets().size() == 4 )
         {

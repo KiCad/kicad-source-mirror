@@ -1215,7 +1215,7 @@ int ERC_TESTER::TestPinToPin()
             if( ispowerNet && m_schematic && m_schematic->ConnectionGraph() )
             {
                 const wxString& thisNetName = net.first.Name;
-                const auto& signals = m_schematic->ConnectionGraph()->GetNetChains();
+                const auto& signals = m_schematic->ConnectionGraph()->GetSignals();
 
                 auto netHasPowerDriver = [&]( const wxString& aNetName ) -> bool
                 {
@@ -1315,7 +1315,7 @@ int ERC_TESTER::TestPinToPin()
     // mismatches already reported above.
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
-        auto& signals = m_schematic->ConnectionGraph()->GetNetChains();
+        auto& signals = m_schematic->ConnectionGraph()->GetSignals();
     wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: cross-signal phase start signals=%zu", signals.size() );
 
         for( const auto& sig : signals )

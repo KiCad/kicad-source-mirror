@@ -79,7 +79,7 @@ bool DIALOG_LINK_COMPONENTS::TransferDataToWindow()
     m_allNets.clear();
 
     SCH_REFERENCE_LIST refs;
-    m_frame->Schematic().Hierarchy().GetSymbols( refs );
+    m_frame->Schematic().Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
     for( const SCH_REFERENCE& ref : refs )
     {
         SCH_SYMBOL* sym = ref.GetSymbol();
@@ -376,7 +376,7 @@ void DIALOG_LINK_COMPONENTS::updateGrid()
             CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
             if( graph )
             {
-                if( auto name = graph->GetKiLinkName( src->m_Uuid, dst->m_Uuid ) )
+                if( auto name = graph->GetNetChainName( src->m_Uuid, dst->m_Uuid ) )
                 {
                     row.name = *name;
                     row.selected = true;
@@ -436,7 +436,7 @@ bool DIALOG_LINK_COMPONENTS::connected( SCH_SYMBOL* aSrc, SCH_SYMBOL* aDst ) con
         {
             for( SCH_PIN* pb : aDst->GetPins() )
             {
-                if( graph->FindPotentialSignalBetweenPins( pa, pb ) )
+                if( graph->FindPotentialNetChainBetweenPins( pa, pb ) )
                     return true;
             }
         }
@@ -496,7 +496,7 @@ int DIALOG_LINK_COMPONENTS::connectionCount( SCH_SYMBOL* aSrc, SCH_SYMBOL* aDst 
                 continue;
             }
 
-            SCH_NETCHAIN* sig = graph->FindPotentialSignalBetweenPins( pa, pb );
+            SCH_NETCHAIN* sig = graph->FindPotentialNetChainBetweenPins( pa, pb );
             if( sig && sig->GetNets().contains( srcNet ) )
             {
                 int count = sig->GetNets().size();
