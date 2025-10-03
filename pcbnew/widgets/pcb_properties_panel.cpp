@@ -23,6 +23,7 @@
 
 #include <font/fontconfig.h>
 #include <font/kicad_font_name.h>
+#include <frame_type.h>
 #include <pgm_base.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
@@ -282,10 +283,41 @@ PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
 }
 
 
-void PCB_PROPERTIES_PANEL::UpdateData()
+const SELECTION& PCB_PROPERTIES_PANEL::getSelection( SELECTION& aFallbackSelection )
 {
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
+
+    if( selection.Empty() && m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+    {
+        if( BOARD* board = m_frame->GetBoard() )
+        {
+            if( FOOTPRINT* footprint = board->GetFirstFootprint() )
+            {
+                aFallbackSelection.Clear();
+                aFallbackSelection.Add( footprint );
+                return aFallbackSelection;
+            }
+        }
+    }
+
+    return selection;
+}
+
+
+EDA_ITEM* PCB_PROPERTIES_PANEL::getFrontItem()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    return selection.Empty() ? nullptr : selection.Front();
+}
+
+
+void PCB_PROPERTIES_PANEL::UpdateData()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
 
     // TODO perhaps it could be called less often? use PROPERTIES_TOOL and catch MODEL_RELOAD?
     updateLists( static_cast<PCB_EDIT_FRAME*>( m_frame )->GetBoard() );
@@ -297,8 +329,8 @@ void PCB_PROPERTIES_PANEL::UpdateData()
 
 void PCB_PROPERTIES_PANEL::AfterCommit()
 {
-    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
 
     rebuildProperties( selection );
 }
@@ -384,13 +416,12 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 
 PROPERTY_BASE* PCB_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const
 {
-    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    const SELECTION&    selection = selectionTool->GetSelection();
+    EDA_ITEM* item = const_cast<PCB_PROPERTIES_PANEL*>( this )->getFrontItem();
 
-    if( !selection.Front()->IsBOARD_ITEM() )
+    if( !item || !item->IsBOARD_ITEM() )
         return nullptr;
 
-    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( selection.Front() );
+    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( item );
 
     wxCHECK_MSG( firstItem, nullptr,
                  wxT( "getPropertyFromEvent for a property with nothing selected!") );
@@ -408,9 +439,7 @@ void PCB_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
     if( m_SuppressGridChangeEvents > 0 )
         return;
 
-    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
-    EDA_ITEM* item = selection.Front();
+    EDA_ITEM* item = getFrontItem();
 
     PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
     wxCHECK( property, /* void */ );
@@ -436,8 +465,8 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     if( m_SuppressGridChangeEvents > 0 )
         return;
 
-    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
 
     wxCHECK( getPropertyFromEvent( aEvent ), /* void */ );
 

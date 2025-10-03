@@ -924,6 +924,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     GetCanvas()->Refresh();
+    m_propertiesPanel->UpdateData();
 
     WX_INFOBAR& infobar = *GetInfoBar();
     infobar.RemoveAllButtons();

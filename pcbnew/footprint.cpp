@@ -4433,14 +4433,27 @@ static struct FOOTPRINT_DESC
         propMgr.InheritsAfter( TYPE_HASH( FOOTPRINT ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( FOOTPRINT ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
 
+        auto isNotFootprintHolder =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aItem ) )
+                    {
+                        if( BOARD* board = footprint->GetBoard() )
+                            return !board->IsFootprintHolder();
+                    }
+                    return true;
+                };
+
         auto layer = new PROPERTY_ENUM<FOOTPRINT, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &FOOTPRINT::SetLayerAndFlip, &FOOTPRINT::GetLayer );
         layer->SetChoices( fpLayers );
+        layer->SetAvailableFunc( isNotFootprintHolder );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
-                    PROPERTY_DISPLAY::PT_DEGREE ) );
+                    PROPERTY_DISPLAY::PT_DEGREE ) )
+               .SetAvailableFunc( isNotFootprintHolder );
 
         const wxString groupFields = _HKI( "Fields" );
 

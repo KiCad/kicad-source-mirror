@@ -188,10 +188,40 @@ SCH_PROPERTIES_PANEL::~SCH_PROPERTIES_PANEL()
 }
 
 
-void SCH_PROPERTIES_PANEL::UpdateData()
+const SELECTION& SCH_PROPERTIES_PANEL::getSelection( SELECTION& aFallbackSelection )
 {
     SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selectionTool->GetSelection();
+    const SELECTION& selection = selectionTool->GetSelection();
+
+    if( selection.Empty() && m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+    {
+        SYMBOL_EDIT_FRAME* symbolFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+        if( symbolFrame->GetCurSymbol() )
+        {
+            aFallbackSelection.Clear();
+            aFallbackSelection.Add( symbolFrame->GetCurSymbol() );
+            return aFallbackSelection;
+        }
+    }
+
+    return selection;
+}
+
+
+EDA_ITEM* SCH_PROPERTIES_PANEL::getFrontItem()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    return selection.Empty() ? nullptr : selection.Front();
+}
+
+
+void SCH_PROPERTIES_PANEL::UpdateData()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
 
     // Will actually just be updatePropertyValues() if selection hasn't changed
     rebuildProperties( selection );
@@ -200,8 +230,8 @@ void SCH_PROPERTIES_PANEL::UpdateData()
 
 void SCH_PROPERTIES_PANEL::AfterCommit()
 {
-    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selectionTool->GetSelection();
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
 
     rebuildProperties( selection );
 }
@@ -266,9 +296,12 @@ wxPGProperty* SCH_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 
 PROPERTY_BASE* SCH_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const
 {
-    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selectionTool->GetSelection();
-    SCH_ITEM*           firstItem = static_cast<SCH_ITEM*>( selection.Front() );
+    EDA_ITEM* item = const_cast<SCH_PROPERTIES_PANEL*>( this )->getFrontItem();
+
+    if( !item || !item->IsSCH_ITEM() )
+        return nullptr;
+
+    SCH_ITEM* firstItem = static_cast<SCH_ITEM*>( item );
 
     wxCHECK_MSG( firstItem, nullptr,
                  wxT( "getPropertyFromEvent for a property with nothing selected!") );
@@ -287,9 +320,7 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
     if( m_SuppressGridChangeEvents )
         return;
 
-    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selectionTool->GetSelection();
-    EDA_ITEM*           frontItem = selection.Front();
+    EDA_ITEM* frontItem = getFrontItem();
 
     if( !frontItem )
         return;
@@ -317,8 +348,8 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     if( m_SuppressGridChangeEvents )
         return;
 
-    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selectionTool->GetSelection();
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
 
     wxCHECK( getPropertyFromEvent( aEvent ), /* void */ );
 

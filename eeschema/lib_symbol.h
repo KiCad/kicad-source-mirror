@@ -27,6 +27,7 @@
 #ifndef LIB_SYMBOL_H
 #define LIB_SYMBOL_H
 
+#include <base_units.h>
 #include <embedded_files.h>
 #include <symbol.h>
 #include <sch_field.h>
@@ -34,6 +35,7 @@
 #include <lib_tree_item.h>
 #include <vector>
 #include <core/multivector.h>
+#include <default_values.h>
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -363,6 +365,151 @@ public:
                              bool aAllowExtraText ) const override
     {
         return GetValueField().GetText();
+    }
+
+    /*
+     * Field access for property manager
+     */
+    wxString GetRefProp() const
+    {
+        return GetReferenceField().GetText();
+    }
+
+    void SetRefProp( const wxString& aRef )
+    {
+        GetReferenceField().SetText( aRef );
+    }
+
+    wxString GetValueProp() const
+    {
+        return GetValueField().GetText();
+    }
+
+    void SetValueProp( const wxString& aValue )
+    {
+        GetValueField().SetText( aValue );
+    }
+
+    wxString GetFootprintProp() const
+    {
+        return GetFootprintField().GetText();
+    }
+
+    void SetFootprintProp( const wxString& aFootprint )
+    {
+        GetFootprintField().SetText( aFootprint );
+    }
+
+    wxString GetDatasheetProp() const
+    {
+        return GetDatasheetField().GetText();
+    }
+
+    void SetDatasheetProp( const wxString& aDatasheet )
+    {
+        GetDatasheetField().SetText( aDatasheet );
+    }
+
+    wxString GetKeywordsProp() const
+    {
+        return GetKeyWords();
+    }
+
+    void SetKeywordsProp( const wxString& aKeywords )
+    {
+        SetKeyWords( aKeywords );
+    }
+
+    bool GetPowerSymbolProp() const
+    {
+        return IsPower();
+    }
+
+    void SetPowerSymbolProp( bool aIsPower )
+    {
+        if( aIsPower )
+            SetGlobalPower();
+        else
+            SetNormal();
+    }
+
+    bool GetLocalPowerSymbolProp() const
+    {
+        return IsLocalPower();
+    }
+
+    void SetLocalPowerSymbolProp( bool aIsLocalPower )
+    {
+        if( aIsLocalPower )
+            SetLocalPower();
+        else if( IsPower() )
+            SetGlobalPower();
+        else
+            SetNormal();
+    }
+
+    bool GetPinNamesInsideProp() const
+    {
+        return GetPinNameOffset() != 0;
+    }
+
+    void SetPinNamesInsideProp( bool aInside )
+    {
+        if( aInside && GetPinNameOffset() == 0 )
+            SetPinNameOffset( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
+        else if( !aInside )
+            SetPinNameOffset( 0 );
+    }
+
+    int GetUnitProp() const
+    {
+        return GetUnitCount();
+    }
+
+    void SetUnitProp( int aUnits )
+    {
+        SetUnitCount( aUnits, true );
+    }
+
+    bool GetUnitsInterchangeableProp() const
+    {
+        return !UnitsLocked();
+    }
+
+    void SetUnitsInterchangeableProp( bool aInterchangeable )
+    {
+        LockUnits( !aInterchangeable );
+    }
+
+    wxString GetBodyStyleProp() const override
+    {
+        return GetBodyStyleDescription( 1, false );
+    }
+
+    void SetBodyStyleProp( const wxString& aBodyStyle ) override
+    {
+        // Body style setting is more complex for LIB_SYMBOL
+        // For now, this is primarily for display purposes
+    }
+
+    bool GetExcludedFromSimProp() const
+    {
+        return GetExcludedFromSim();
+    }
+
+    void SetExcludedFromSimProp( bool aExclude )
+    {
+        SetExcludedFromSim( aExclude );
+    }
+
+    bool GetExcludedFromBOMProp() const
+    {
+        return GetExcludedFromBOM();
+    }
+
+    void SetExcludedFromBOMProp( bool aExclude )
+    {
+        SetExcludedFromBOM( aExclude );
     }
 
     std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;

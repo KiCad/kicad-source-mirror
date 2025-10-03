@@ -2076,3 +2076,104 @@ std::optional<const std::set<wxString>> LIB_SYMBOL::GetJumperPinGroup( const wxS
 
     return std::nullopt;
 }
+
+static struct LIB_SYMBOL_DESC
+{
+    LIB_SYMBOL_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_SYMBOL );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_SYMBOL ), TYPE_HASH( SYMBOL ) );
+
+        const wxString groupFields = _HKI( "Fields" );
+
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, wxString>( _HKI( "Reference" ),
+                    &LIB_SYMBOL::SetRefProp, &LIB_SYMBOL::GetRefProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, wxString>( _HKI( "Value" ),
+                    &LIB_SYMBOL::SetValueProp, &LIB_SYMBOL::GetValueProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, wxString>( _HKI( "Footprint" ),
+                    &LIB_SYMBOL::SetFootprintProp, &LIB_SYMBOL::GetFootprintProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, wxString>( _HKI( "Datasheet" ),
+                    &LIB_SYMBOL::SetDatasheetProp, &LIB_SYMBOL::GetDatasheetProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, wxString>( _HKI( "Keywords" ),
+                    &LIB_SYMBOL::SetKeywordsProp, &LIB_SYMBOL::GetKeywordsProp ),
+                    groupFields );
+
+        const wxString groupSymbolDef = _HKI( "Symbol Definition" );
+
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Define as Power Symbol" ),
+                    &LIB_SYMBOL::SetPowerSymbolProp, &LIB_SYMBOL::GetPowerSymbolProp ),
+                    groupSymbolDef );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Define as Local Power Symbol" ),
+                    &LIB_SYMBOL::SetLocalPowerSymbolProp, &LIB_SYMBOL::GetLocalPowerSymbolProp ),
+                    groupSymbolDef );
+
+        const wxString groupPinDisplay = _HKI( "Pin Display" );
+
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Show Pin Number" ),
+                    &SYMBOL::SetShowPinNumbers, &SYMBOL::GetShowPinNumbers ),
+                    groupPinDisplay );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Show Pin Name" ),
+                    &SYMBOL::SetShowPinNames, &SYMBOL::GetShowPinNames ),
+                    groupPinDisplay );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Place Pin Names Inside" ),
+                    &LIB_SYMBOL::SetPinNamesInsideProp, &LIB_SYMBOL::GetPinNamesInsideProp ),
+                    groupPinDisplay );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, int>( _HKI( "Pin Name Position Offset" ),
+                    &SYMBOL::SetPinNameOffset, &SYMBOL::GetPinNameOffset,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPinDisplay );
+
+        const wxString groupAttributes = _HKI( "Attributes" );
+
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Exclude from Simulation" ),
+                    &LIB_SYMBOL::SetExcludedFromSimProp, &LIB_SYMBOL::GetExcludedFromSimProp ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude from Board" ),
+                    &SYMBOL::SetExcludedFromBoard, &SYMBOL::GetExcludedFromBoard ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Exclude from Bill of Materials" ),
+                    &LIB_SYMBOL::SetExcludedFromBOMProp, &LIB_SYMBOL::GetExcludedFromBOMProp ),
+                    groupAttributes );
+
+        const wxString groupUnits = _HKI( "Units and Body Styles" );
+
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, int>( _HKI( "Number of Symbol Units" ),
+                    &LIB_SYMBOL::SetUnitProp, &LIB_SYMBOL::GetUnitProp ),
+                    groupUnits );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Units are Interchangeable" ),
+                    &LIB_SYMBOL::SetUnitsInterchangeableProp, &LIB_SYMBOL::GetUnitsInterchangeableProp ),
+                    groupUnits );
+
+        auto multiBodyStyle =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( LIB_SYMBOL* symbol = dynamic_cast<LIB_SYMBOL*>( aItem ) )
+                        return symbol->IsMultiBodyStyle();
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, wxString>( _HKI( "Body Styles" ),
+                    &LIB_SYMBOL::SetBodyStyleProp, &LIB_SYMBOL::GetBodyStyleProp ),
+                    groupUnits )
+                .SetAvailableFunc( multiBodyStyle )
+                .SetChoicesFunc( []( INSPECTABLE* aItem )
+                                 {
+                                     wxPGChoices choices;
+
+                                     if( LIB_SYMBOL* symbol = dynamic_cast<LIB_SYMBOL*>( aItem ) )
+                                     {
+                                         for( int ii = 1; ii <= symbol->GetBodyStyleCount(); ii++ )
+                                             choices.Add( symbol->GetBodyStyleDescription( ii, false ) );
+                                     }
+
+                                     return choices;
+                                 } );
+    }
+} _LIB_SYMBOL_DESC;
+

@@ -60,6 +60,24 @@ protected:
     ///< Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
+    /**
+     * Get the current selection from the selection tool.
+     * If the selection is empty and we're in the footprint editor, returns the footprint instead.
+     *
+     * @param aSelection [out] reference to a SELECTION pointer that will be set to the selection
+     * @param aFallbackSelection [out] local SELECTION object for fallback footprint selection
+     * @return const SELECTION& reference to the selection (either real selection or fallback)
+     */
+    const SELECTION& getSelection( SELECTION& aFallbackSelection );
+
+    /**
+     * Get the front item of the current selection.
+     * If the selection is empty and we're in the footprint editor, returns the footprint instead.
+     *
+     * @return EDA_ITEM* pointer to the front item, or nullptr if no selection
+     */
+    EDA_ITEM* getFrontItem();
+
 protected:
     PCB_BASE_EDIT_FRAME* m_frame;
     PROPERTY_MANAGER&    m_propMgr;

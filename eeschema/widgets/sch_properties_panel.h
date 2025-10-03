@@ -57,6 +57,23 @@ protected:
 
     void OnLanguageChanged( wxCommandEvent& aEvent ) override;
 
+    /**
+     * Get the current selection from the selection tool.
+     * If the selection is empty and we're in the symbol editor, returns the current symbol instead.
+     *
+     * @param aFallbackSelection [out] local SELECTION object for fallback symbol selection
+     * @return const SELECTION& reference to the selection (either real selection or fallback)
+     */
+    const SELECTION& getSelection( SELECTION& aFallbackSelection );
+
+    /**
+     * Get the front item of the current selection.
+     * If the selection is empty and we're in the symbol editor, returns the current symbol instead.
+     *
+     * @return EDA_ITEM* pointer to the front item, or nullptr if no selection
+     */
+    EDA_ITEM* getFrontItem();
+
     SCH_BASE_FRAME* m_frame;
     PROPERTY_MANAGER& m_propMgr;
     PG_UNIT_EDITOR* m_unitEditorInstance;

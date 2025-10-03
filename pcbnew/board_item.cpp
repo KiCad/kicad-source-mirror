@@ -431,22 +431,27 @@ static struct BOARD_ITEM_DESC
                 .SetIsHiddenFromLibraryEditors()
                 .SetIsHiddenFromPropertiesManager();
 
+        auto isNotFootprintHolder =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+                    return item && item->GetBoard() && !item->GetBoard()->IsFootprintHolder();
+                };
+
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _HKI( "Position X" ),
                     &BOARD_ITEM::SetX, &BOARD_ITEM::GetX, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) )
+               .SetAvailableFunc( isNotFootprintHolder );
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _HKI( "Position Y" ),
                     &BOARD_ITEM::SetY, &BOARD_ITEM::GetY, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
+               .SetAvailableFunc( isNotFootprintHolder );
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
-                    &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
+                    &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) )
+               .SetAvailableFunc( isNotFootprintHolder );
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _HKI( "Locked" ),
                     &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) )
-               .SetAvailableFunc(
-                    [=]( INSPECTABLE* aItem ) -> bool
-                    {
-                        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
-                        return item && item->GetBoard() && !item->GetBoard()->IsFootprintHolder();
-                    } );
+               .SetAvailableFunc( isNotFootprintHolder );
     }
 } _BOARD_ITEM_DESC;
 

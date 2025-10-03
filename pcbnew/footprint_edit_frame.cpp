@@ -1113,6 +1113,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateView()
     GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_propertiesPanel->UpdateData();
     UpdateTitle();
 }
 
