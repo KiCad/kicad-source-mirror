@@ -196,12 +196,12 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         if( m_rows[aRow].m_Flag == GROUP_COLLAPSED )
         {
             GetView()->SetReadOnly( aRow, aCol, true );
-            return wxT( ">  " ) + GetValue( m_rows[aRow], aCol );
+            return wxT( "►  " ) + GetValue( m_rows[aRow], aCol );
         }
         else if( m_rows[aRow].m_Flag == GROUP_EXPANDED )
         {
             GetView()->SetReadOnly( aRow, aCol, true );
-            return wxT( "v  " ) + GetValue( m_rows[aRow], aCol );
+            return wxT( "▿  " ) + GetValue( m_rows[aRow], aCol );
         }
         else if( m_rows[aRow].m_Flag == CHILD_ITEM )
         {
