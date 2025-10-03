@@ -71,7 +71,8 @@ def test_sch_export_svg( kitest,
     compare_png_converted_from_svg_path = output_svg_path.with_suffix( '.png' ).with_stem(compare_stem)
     cairosvg.svg2png( url=str( compare_file_path ), write_to=str( compare_png_converted_from_svg_path ), dpi=1200 )
 
-    assert utils.images_are_equal( png_converted_from_svg_path, compare_png_converted_from_svg_path  )
+    assert utils.images_are_equal( png_converted_from_svg_path, compare_png_converted_from_svg_path,
+                                   diff_handler=kitest.add_attachment )
 
 
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,skip_compare,cli_args",

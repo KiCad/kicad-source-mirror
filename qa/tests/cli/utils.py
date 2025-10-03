@@ -28,7 +28,7 @@ import json
 import cairosvg
 import logging
 import subprocess
-from typing import Tuple
+from typing import Tuple, Optional, Callable
 from pathlib import Path
 from PIL import Image, ImageChops, ImageFilter, ImageEnhance
 import numpy as np
@@ -113,7 +113,7 @@ def image_is_blank( image_path: str ) -> bool:
     return sum == 0
 
 
-def images_are_equal( image1_path: str, image2_path: str ) -> bool:
+def images_are_equal( image1_path: str, image2_path: str, diff_handler: Optional[Callable[[str], None]] = None ) -> bool:
     # Note: if modifying this function - please add new tests for it in test_utils.py
 
     image1 = Image.open( image1_path )
@@ -160,6 +160,10 @@ def images_are_equal( image1_path: str, image2_path: str ) -> bool:
             imageEnhanced.paste( red,mask=eroded_result)
             imageEnhanced.save(diff_name)
             logger.error( "Images not equal. Diff stored at '%s'", diff_name )
+            if diff_handler is not None:
+                diff_handler( diff_name )
+                diff_handler( image1.filename )
+                diff_handler( image2.filename )
             imageEnhanced.close()
 
         # Cleanup
@@ -189,7 +193,8 @@ def get_png_paths( generated_path: str, source_path : str, suffix : str = "" ) -
     return str( generated_png_path ), str( source_png_path )
 
 
-def svgs_are_equivalent( svg_generated_path: str, svg_source_path: str, comparison_dpi: int ) -> bool:
+def svgs_are_equivalent( svg_generated_path: str, svg_source_path: str, comparison_dpi: int,
+                         diff_handler: Optional[Callable[[str], None]] = None ) -> bool:
     png_generated, png_source = get_png_paths( svg_generated_path, svg_source_path )
 
     cairosvg.svg2png( url=svg_generated_path,
@@ -200,12 +205,13 @@ def svgs_are_equivalent( svg_generated_path: str, svg_source_path: str, comparis
                       write_to=png_source,
                       dpi=comparison_dpi )
 
-    return images_are_equal( png_generated , png_source )
+    return images_are_equal( png_generated , png_source, diff_handler )
 
 
 def gerbers_are_equivalent( gerber_generated_path : str, gerber_source_path : str, comparison_dpi : int,
                             originInches :  Tuple[float, float],
-                            windowsizeInches :  Tuple[float, float] ) -> bool:
+                            windowsizeInches :  Tuple[float, float],
+                            diff_handler: Optional[Callable[[str], None]] = None ) -> bool:
 
     # Calculate tiles required
     noTilesRowsCols = np.array( [1,1] )
@@ -238,7 +244,7 @@ def gerbers_are_equivalent( gerber_generated_path : str, gerber_source_path : st
             gerberGeneratedIsBlank = gerberGeneratedIsBlank and image_is_blank( png_generated )
             gerberSourceIsBlank = gerberSourceIsBlank and image_is_blank( png_source )
 
-            if( not images_are_equal( png_generated, png_source ) ):
+            if( not images_are_equal( png_generated, png_source, diff_handler ) ):
                 gerbersAreEqual = False
 
     assert( not gerberGeneratedIsBlank )

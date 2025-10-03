@@ -95,7 +95,8 @@ def test_pcb_export_svg( kitest: KiTestFixture,
         # in 3.9 and newer. So skip it for previous versions
         if sys.hexversion >= 0x03090000 :
             # Comparison DPI = 1270 => 1px == 20um. I.e. allowable error of 60 um after eroding
-            assert utils.svgs_are_equivalent( str( generated_svg_path ), svg_source_path, 1270 )
+            assert utils.svgs_are_equivalent( str( generated_svg_path ), svg_source_path, 1270,
+                                              diff_handler=kitest.add_attachment )
 
 
 @pytest.mark.skipif(not utils.is_gerbv_installed(), reason="Requires gerbv to be installed")
@@ -138,4 +139,5 @@ def test_pcb_export_gerber( kitest: KiTestFixture,
 
         # Comparison DPI = 5080 => 1px == 5um. I.e. allowable error of 15 um after eroding
         assert utils.gerbers_are_equivalent( str( generated_gerber_path ), gbr_source_path, 5080,
-                                             originInches, windowsizeInches )
+                                             originInches, windowsizeInches,
+                                             diff_handler=kitest.add_attachment )
