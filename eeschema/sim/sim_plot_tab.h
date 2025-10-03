@@ -30,6 +30,7 @@
 
 #include "sim_types.h"
 #include <map>
+#include <limits>
 #include <widgets/mathplot.h>
 #include <wx/colour.h>
 #include <wx/sizer.h>
@@ -69,7 +70,10 @@ public:
             m_updateRequired( true ),
             m_updateRef( false ),
             m_coords( 0.0, 0.0 ),
-            m_window( nullptr )
+            m_window( nullptr ),
+            m_sweepIndex( 0 ),
+            m_snapToNearest( false ),
+            m_snapTargetY( 0.0 )
     {
     }
 
@@ -89,13 +93,11 @@ public:
 
     bool Inside( const wxPoint& aPoint ) const override;
 
-    void Move( wxPoint aDelta ) override
-    {
-        Update();
-        mpInfoLayer::Move( aDelta );
-    }
+    void Move( wxPoint aDelta ) override;
 
     void UpdateReference() override;
+
+    bool OnDoubleClick( const wxPoint& aPoint, mpWindow& aWindow ) override;
 
     const wxRealPoint& GetCoords() const
     {
@@ -115,6 +117,9 @@ private:
     bool         m_updateRef;
     wxRealPoint  m_coords;
     mpWindow*    m_window;
+    int          m_sweepIndex;
+    bool         m_snapToNearest;
+    double       m_snapTargetY;
 
     static constexpr int DRAG_MARGIN = 10;
 };
@@ -125,7 +130,8 @@ class TRACE : public mpFXYVector
 public:
     TRACE( const wxString& aName, SIM_TRACE_TYPE aType ) :
            mpFXYVector( aName ),
-           m_type( aType )
+           m_type( aType ),
+           m_isMultiRun( false )
     {
         SetContinuity( true );
         ShowName( false );
@@ -181,10 +187,18 @@ public:
     void SetTraceColour( const wxColour& aColour ) { m_traceColour = aColour; }
     wxColour GetTraceColour() const { return m_traceColour; }
 
+    void SetIsMultiRun( bool aIsMultiRun ) { m_isMultiRun = aIsMultiRun; }
+    bool IsMultiRun() const { return m_isMultiRun; }
+
+    void SetMultiRunLabels( const std::vector<wxString>& aLabels ) { m_multiRunLabels = aLabels; }
+    const std::vector<wxString>& GetMultiRunLabels() const { return m_multiRunLabels; }
+
 protected:
     std::map<int, CURSOR*> m_cursors;       // No ownership; the mpWindow owns the CURSORs
     SIM_TRACE_TYPE         m_type;
     wxColour               m_traceColour;
+    bool                   m_isMultiRun;
+    std::vector<wxString>  m_multiRunLabels;
 };
 
 
@@ -352,7 +366,8 @@ public:
     TRACE* GetOrAddTrace( const wxString& aVectorName, int aType );
 
     void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY,
-                       int aSweepCount, size_t aSweepSize );
+                       int aSweepCount, size_t aSweepSize, bool aIsMultiRun = false,
+                       const std::vector<wxString>& aMultiRunLabels = {} );
 
     bool DeleteTrace( const wxString& aVectorName, int aTraceType );
     void DeleteTrace( TRACE* aTrace );

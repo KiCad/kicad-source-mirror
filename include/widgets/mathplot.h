@@ -360,6 +360,8 @@ public:
      *  @return \a true if the point is inside the bounding box */
     virtual bool Inside( const wxPoint& point ) const;
 
+    virtual bool OnDoubleClick( const wxPoint& point, mpWindow& w );
+
     /** Moves the layer rectangle of given pixel deltas.
      *  @param delta The wxPoint container for delta coordinates along x and y. Units are in pixels. */
     virtual void Move( wxPoint delta );
@@ -1294,6 +1296,7 @@ protected:
     void onMagnify( wxMouseEvent& event );           // !< Pinch zoom handler
     void onMouseMove( wxMouseEvent& event );         // !< Mouse handler for mouse motion (for pan)
     void onMouseLeftDown( wxMouseEvent& event );     // !< Mouse left click (for rect zoom)
+    void onMouseLeftDClick( wxMouseEvent& event );
     void onMouseLeftRelease( wxMouseEvent& event );  // !< Mouse left click (for rect zoom)
 
     void DoZoom( const wxPoint& centerPoint, double zoomFactor, wxOrientation directions );
@@ -1423,11 +1426,31 @@ public:
 
     void SetSweepCount( int aSweepCount ) { m_sweepCount = aSweepCount; }
     void SetSweepSize( size_t aSweepSize ) { m_sweepSize = aSweepSize; }
+    size_t GetSweepSize() const { return m_sweepSize; }
 
     /** Clears all the data, leaving the layer empty.
      * @sa SetData
      */
     void Clear();
+
+    /** Returns the actual minimum X data (loaded in SetData).
+     */
+    double GetMinX() const override { return m_minX; }
+
+    /** Returns the actual minimum Y data (loaded in SetData).
+     */
+    double GetMinY() const override { return m_minY; }
+
+    /** Returns the actual maximum X data (loaded in SetData).
+     */
+    double GetMaxX() const override { return m_maxX; }
+
+    /** Returns the actual maximum Y data (loaded in SetData).
+     */
+    double GetMaxY() const override { return m_maxY; }
+
+    size_t GetCount() const override { return m_xs.size(); }
+    int GetSweepCount() const override { return m_sweepCount; }
 
 protected:
     /** The internal copy of the set of data to draw.
@@ -1455,26 +1478,6 @@ protected:
      *  @param y Returns Y value
      */
     bool GetNextXY( double& x, double& y ) override;
-
-    size_t GetCount() const override { return m_xs.size(); }
-    int GetSweepCount() const override { return m_sweepCount; }
-
-public:
-    /** Returns the actual minimum X data (loaded in SetData).
-     */
-    double GetMinX() const override { return m_minX; }
-
-    /** Returns the actual minimum Y data (loaded in SetData).
-     */
-    double GetMinY() const override { return m_minY; }
-
-    /** Returns the actual maximum X data (loaded in SetData).
-     */
-    double GetMaxX() const override { return m_maxX; }
-
-    /** Returns the actual maximum Y data (loaded in SetData).
-     */
-    double GetMaxY() const override { return m_maxY; }
 
 protected:
 

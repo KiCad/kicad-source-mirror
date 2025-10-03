@@ -2051,7 +2051,34 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
                             int sweepCountCombined = combinedX.empty() ? 0 : static_cast<int>( combinedY.size() / sweepSizeMulti );
 
                             if( sweepCountCombined > 0 )
-                                aPlotTab->SetTraceData( trace, combinedX, combinedY, sweepCountCombined, sweepSizeMulti );
+                            {
+                                // Generate labels for each run based on tuner values
+                                std::vector<wxString> labels;
+                                labels.reserve( sweepCountCombined );
+                                
+                                for( int i = 0; i < sweepCountCombined && i < (int)m_multiRunState.steps.size(); ++i )
+                                {
+                                    const MULTI_RUN_STEP& step = m_multiRunState.steps[i];
+                                    wxString label;
+                                    
+                                    for( auto it = step.overrides.begin(); it != step.overrides.end(); ++it )
+                                    {
+                                        if( it != step.overrides.begin() )
+                                            label += wxS( ", " );
+                                        
+                                        const TUNER_SLIDER* tuner = it->first;
+                                        double value = it->second;
+                                        
+                                        SPICE_VALUE spiceVal( value );
+                                        label += tuner->GetSymbolRef() + wxS( "=" ) + spiceVal.ToSpiceString();
+                                    }
+                                    
+                                    labels.push_back( label );
+                                }
+                                
+                                aPlotTab->SetTraceData( trace, combinedX, combinedY, sweepCountCombined, 
+                                                       sweepSizeMulti, true, labels );
+                            }
                         }
                     }
 

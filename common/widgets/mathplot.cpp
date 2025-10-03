@@ -109,6 +109,12 @@ bool mpInfoLayer::Inside( const wxPoint& point ) const
 }
 
 
+bool mpInfoLayer::OnDoubleClick( const wxPoint& point, mpWindow& w )
+{
+    return false;
+}
+
+
 void mpInfoLayer::Move( wxPoint delta )
 {
     m_dim.SetX( m_reference.x + delta.x );
@@ -1373,6 +1379,7 @@ EVT_MOUSEWHEEL( mpWindow::onMouseWheel )        // JLB
 EVT_MAGNIFY( mpWindow::onMagnify )
 EVT_MOTION( mpWindow::onMouseMove )             // JLB
 EVT_LEFT_DOWN( mpWindow::onMouseLeftDown )
+EVT_LEFT_DCLICK( mpWindow::onMouseLeftDClick )
 EVT_LEFT_UP( mpWindow::onMouseLeftRelease )
 
 EVT_MENU( mpID_CENTER, mpWindow::OnCenter )
@@ -1605,6 +1612,23 @@ void mpWindow::onMouseLeftDown( wxMouseEvent& event )
     m_zooming = true;
     wxPoint pointClicked = event.GetPosition();
     m_movingInfoLayer = IsInsideInfoLayer( pointClicked );
+
+    event.Skip();
+}
+
+
+void mpWindow::onMouseLeftDClick( wxMouseEvent& event )
+{
+    wxPoint pointClicked = event.GetPosition();
+
+    if( mpInfoLayer* infoLayer = IsInsideInfoLayer( pointClicked ) )
+    {
+        if( infoLayer->OnDoubleClick( pointClicked, *this ) )
+        {
+            UpdateAll();
+            return;
+        }
+    }
 
     event.Skip();
 }
