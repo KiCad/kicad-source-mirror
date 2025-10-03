@@ -175,23 +175,24 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetFieldsOrder( const std::vector<wxStri
 }
 
 
-wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsExpanderColumn( int aCol ) const
 {
     // Check if aCol is the first visible column
-    bool isFirstVisible = true;
-
     for( int col = 0; col < aCol; ++col )
     {
         if( m_cols[col].m_show )
-        {
-            isFirstVisible = false;
-            break;
-        }
+            return false;
     }
 
+    return true;
+}
+
+
+wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
+{
     GetView()->SetReadOnly( aRow, aCol, false );
 
-    if( isFirstVisible )
+    if( IsExpanderColumn( aCol ) )
     {
         if( m_rows[aRow].m_Flag == GROUP_COLLAPSED )
         {

@@ -876,9 +876,7 @@ void DIALOG_LIB_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& event )
 
 void DIALOG_LIB_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
-    wxString cellValue = m_grid->GetCellValue( event.GetRow(), event.GetCol() );
-
-    if( cellValue.StartsWith( wxS( ">  " ) ) || cellValue.StartsWith( wxS( "v  " ) ) )
+    if( m_dataModel->IsExpanderColumn( event.GetCol() ) )
     {
         m_grid->ClearSelection();
         m_dataModel->ExpandCollapseRow( event.GetRow() );

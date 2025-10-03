@@ -249,6 +249,8 @@ public:
     bool ColIsItemNumber( int aCol );
     bool ColIsAttribute( int aCol );
 
+    bool IsExpanderColumn( int aCol ) const;
+
     void SetSorting( int aCol, bool ascending )
     {
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );

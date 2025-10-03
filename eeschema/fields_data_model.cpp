@@ -329,19 +329,44 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetFieldsOrder( const std::vector<wxString>&
 }
 
 
+bool FIELDS_EDITOR_GRID_DATA_MODEL::IsExpanderColumn( int aCol ) const
+{
+    // Check if aCol is the first visible column
+    for( int col = 0; col < aCol; ++col )
+    {
+        if( m_cols[col].m_show )
+            return false;
+    }
+
+    return true;
+}
+
+
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 {
-    if( ColIsReference( aCol ) )
+    GetView()->SetReadOnly( aRow, aCol, false );
+
+    if( IsExpanderColumn( aCol ) )
     {
         // Poor-man's tree controls
         if( m_rows[aRow].m_Flag == GROUP_COLLAPSED )
+        {
+            GetView()->SetReadOnly( aRow, aCol, true );
             return wxT( "►  " ) + GetValue( m_rows[aRow], aCol );
+        }
         else if( m_rows[aRow].m_Flag == GROUP_EXPANDED )
+        {
+            GetView()->SetReadOnly( aRow, aCol, true );
             return wxT( "▿  " ) + GetValue( m_rows[aRow], aCol );
+        }
         else if( m_rows[aRow].m_Flag == CHILD_ITEM )
+        {
             return wxT( "        " ) + GetValue( m_rows[aRow], aCol );
+        }
         else
+        {
             return wxT( "    " ) + GetValue( m_rows[aRow], aCol );
+        }
     }
     else
     {

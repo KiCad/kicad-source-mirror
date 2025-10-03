@@ -1208,7 +1208,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
-    if( m_dataModel->ColIsReference( event.GetCol() ) )
+    if( m_dataModel->IsExpanderColumn( event.GetCol() ) )
     {
         m_grid->ClearSelection();
 

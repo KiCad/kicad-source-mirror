@@ -158,6 +158,8 @@ public:
         return false; // don't allow adjacent cell overflow, even if we are actually empty
     }
 
+    bool IsExpanderColumn( int aCol ) const;
+
     wxString GetValue( int aRow, int aCol ) override;
     wxString GetTypeName( int row, int col ) override;
     wxString GetValue( const LIB_DATA_MODEL_ROW& group, int aCol );
