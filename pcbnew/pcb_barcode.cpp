@@ -511,9 +511,9 @@ void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                    int aMaxError, ERROR_LOC aErrorLoc ) const
 {
     auto getBoundingHull =
-            [this]( SHAPE_POLY_SET& aBuffer, const SHAPE_POLY_SET& aSource, int aClearance )
+            [this]( SHAPE_POLY_SET& aLocBuffer, const SHAPE_POLY_SET& aSource, int aLocClearance )
             {
-                BOX2I    rect = aSource.BBox( aClearance );
+                BOX2I    rect = aSource.BBox( aLocClearance );
                 VECTOR2I corners[4];
 
                 corners[0].x = rect.GetOrigin().x;
@@ -525,12 +525,12 @@ void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                 corners[3].y = corners[2].y;
                 corners[3].x = corners[0].x;
 
-                aBuffer.NewOutline();
+                aLocBuffer.NewOutline();
 
                 for( VECTOR2I& corner : corners )
                 {
                     RotatePoint( corner, m_pos, m_angle );
-                    aBuffer.Append( corner.x, corner.y );
+                    aLocBuffer.Append( corner.x, corner.y );
                 }
             };
 
@@ -638,7 +638,7 @@ int PCB_BARCODE::Compare( const PCB_BARCODE* aBarcode, const PCB_BARCODE* aOther
     if( ( diff = aBarcode->GetPosition().y - aOther->GetPosition().y ) != 0 )
         return diff;
 
-    if( ( diff = aBarcode->GetText().Cmp( aOther->GetText() ) != 0 ) )
+    if( ( diff = aBarcode->GetText().Cmp( aOther->GetText() ) ) != 0 )
         return diff;
 
     if( ( diff = aBarcode->GetWidth() - aOther->GetWidth() ) != 0 )
