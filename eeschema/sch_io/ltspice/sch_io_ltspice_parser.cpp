@@ -925,7 +925,7 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
     }
     else
     {
-        UNIMPLEMENTED_FOR( aType );
+        UNIMPLEMENTED_FOR( wxString::Format( wxT( "Type not supported %d" ), (int)aType ) );
     }
 
     if( label )

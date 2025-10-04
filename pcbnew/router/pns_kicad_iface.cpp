@@ -1757,18 +1757,20 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             syncBarcode( aWorld, static_cast<PCB_BARCODE*>( gitem ) );
             break;
 
-        case PCB_DIM_ALIGNED_T:         // ignore
+        case PCB_DIM_ALIGNED_T:         // ignore only if not on a copper layer
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
+            if( gitem->IsOnCopperLayer() )
+                UNIMPLEMENTED_FOR( wxString::Format( wxT( "%s on copper layer" ), gitem->GetClass() ) );
             break;
 
         case PCB_REFERENCE_IMAGE_T:     // ignore
             break;
 
         default:
-            UNIMPLEMENTED_FOR( gitem->Type() );
+            UNIMPLEMENTED_FOR( gitem->GetClass() );
             break;
         }
     }
@@ -1836,14 +1838,19 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
                 syncBarcode( aWorld, static_cast<PCB_BARCODE*>( item ) );
                 break;
 
-            case PCB_DIM_ALIGNED_T:         // not allowed in footprints
+            case PCB_DIM_ALIGNED_T:         // ignore only if not on a copper layer
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
             case PCB_REFERENCE_IMAGE_T:
+                if( item->IsOnCopperLayer() )
+                    UNIMPLEMENTED_FOR( wxString::Format( wxT( "%s on copper layer" ), item->GetClass() ) );
+
+                break;
+
             default:
-                UNIMPLEMENTED_FOR( item->Type() );
+                UNIMPLEMENTED_FOR( item->GetClass() );
                 break;
             }
         }
