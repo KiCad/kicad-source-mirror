@@ -186,6 +186,33 @@ wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
     return wxEmptyString;
 }
 
+void SCH_ITEM::SetUnitString( const wxString& aUnit )
+{
+    if( aUnit == _HKI( "All units" ) )
+    {
+        m_unit = 0;
+        return;
+    }
+
+    if( SYMBOL* symbol = GetParentSymbol() )
+    {
+        for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
+        {
+            if( symbol->GetUnitDisplayName( ii, false ) == aUnit )
+            {
+                m_unit = ii;
+                return;
+            }
+        }
+    }
+}
+
+
+wxString SCH_ITEM::GetUnitString() const
+{
+    return GetUnitDisplayName( m_unit, false );
+}
+
 void SCH_ITEM::SetBodyStyleProp( const wxString& aBodyStyle )
 {
     if( aBodyStyle == _HKI( "All body styles" ) )
@@ -707,8 +734,8 @@ static struct SCH_ITEM_DESC
                     return false;
                 };
 
-        propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Unit" ),
-                    &SCH_ITEM::SetUnit, &SCH_ITEM::GetUnit ) )
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, wxString>( _HKI( "Unit" ),
+                    &SCH_ITEM::SetUnitString, &SCH_ITEM::GetUnitString ) )
                 .SetAvailableFunc( multiUnit )
                 .SetIsHiddenFromDesignEditors()
                 .SetChoicesFunc( []( INSPECTABLE* aItem )

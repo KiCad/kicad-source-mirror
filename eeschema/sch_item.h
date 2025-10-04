@@ -237,6 +237,9 @@ public:
     virtual void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
 
+    virtual void SetUnitString( const wxString& aUnit );
+    virtual wxString GetUnitString() const;
+
     virtual wxString GetUnitDisplayName( int aUnit, bool aLabel ) const;
     virtual wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const;
 
