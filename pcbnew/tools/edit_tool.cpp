@@ -41,6 +41,7 @@
 #include <pcb_textbox.h>
 #include <pcb_table.h>
 #include <pcb_generator.h>
+#include <zone.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
@@ -77,6 +78,39 @@ using namespace std::placeholders;
 #include <pcb_reference_image.h>
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
+
+static bool itemHasEditableVertices( BOARD_ITEM* aItem )
+{
+    if( !aItem )
+        return false;
+
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+        return shape->GetShape() == SHAPE_T::POLY;
+    }
+
+    if( aItem->Type() == PCB_ZONE_T )
+    {
+        ZONE* zone = static_cast<ZONE*>( aItem );
+
+        if( zone->IsTeardropArea() )
+            return false;
+
+        return true;
+    }
+
+    return false;
+}
+
+static bool selectionHasEditableVertices( const SELECTION& aSelection )
+{
+    if( aSelection.GetSize() != 1 )
+        return false;
+
+    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aSelection.Front() );
+    return itemHasEditableVertices( item );
+}
 
 static const std::vector<KICAD_T> padTypes = { PCB_PAD_T };
 
@@ -670,6 +704,7 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
+    menu.AddItem( PCB_ACTIONS::editVertices,      selectionHasEditableVertices );
 
     menu.AddItem( PCB_ACTIONS::assignNetClass,    SELECTION_CONDITIONS::OnlyTypes( connectedTypes )
                                                       && !inFootprintEditor );
@@ -2360,6 +2395,33 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::EditVertices( const TOOL_EVENT& aEvent )
+{
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForTableCells( aCollector );
+                sTool->FilterCollectorForLockedItems( aCollector );
+            } );
+
+    if( !selectionHasEditableVertices( selection ) )
+    {
+        wxBell();
+        return 0;
+    }
+
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD_ITEM*          item = dynamic_cast<BOARD_ITEM*>( selection.Front() );
+
+    if( editFrame && item )
+        editFrame->OpenVertexEditor( item );
+
+    return 0;
+}
+
+
 int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -3830,6 +3892,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::dogboneCorners.MakeEvent() );
     Go( &EDIT_TOOL::SimplifyPolygons,      PCB_ACTIONS::simplifyPolygons.MakeEvent() );
+    Go( &EDIT_TOOL::EditVertices,          PCB_ACTIONS::editVertices.MakeEvent() );
     Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
 

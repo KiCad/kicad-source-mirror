@@ -781,6 +781,13 @@ TOOL_ACTION PCB_ACTIONS::simplifyPolygons( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Simplify Polygons" ) )
         .Tooltip( _( "Simplify polygon outlines, removing superfluous points" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::editVertices( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.editVertices" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Edit Vertices..." ) )
+        .Tooltip( _( "Edit polygon vertices using a table" ) )
+        .Icon( BITMAPS::edit ) );
+
 TOOL_ACTION PCB_ACTIONS::healShapes( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.healShapes" )
         .Scope( AS_GLOBAL )

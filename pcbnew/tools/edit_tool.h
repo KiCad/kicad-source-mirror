@@ -211,6 +211,8 @@ private:
      */
     int copyToClipboardAsText( const TOOL_EVENT& aEvent );
 
+    int EditVertices( const TOOL_EVENT& aEvent );
+
     /**
      * Cut the current selection to the clipboard by formatting it as a fake pcb
      * see #AppendBoardFromClipboard for importing.

@@ -40,6 +40,7 @@ class PCB_SHAPE;
 class FILEDLG_HOOK_NEW_LIBRARY;
 struct PCB_SELECTION_FILTER_OPTIONS;
 class PCB_BARCODE;
+class PCB_VERTEX_EDITOR_PANE;
 
 /**
  * Common, abstract interface for edit frames.
@@ -194,6 +195,14 @@ public:
     int ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox );
     void ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape );
 
+    void OpenVertexEditor( BOARD_ITEM* aItem );
+    void CloseVertexEditor();
+    void UpdateVertexEditorSelection( BOARD_ITEM* aItem );
+    void OnVertexEditorPaneClosed( PCB_VERTEX_EDITOR_PANE* aPane );
+    static wxString VertexEditorPaneName();
+
+    wxAuiManager& GetAuiManager() { return m_auimgr; }
+
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 
@@ -269,6 +278,8 @@ protected:
     PANEL_SELECTION_FILTER*              m_selectionFilterPanel;
     APPEARANCE_CONTROLS*                 m_appearancePanel;
     std::unique_ptr<LAYER_PAIR_SETTINGS> m_layerPairSettings;
+
+    PCB_VERTEX_EDITOR_PANE* m_vertexEditorPane;
 
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
 

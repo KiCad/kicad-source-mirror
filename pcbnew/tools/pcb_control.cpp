@@ -2471,6 +2471,15 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     m_frame->SetMsgPanel( msgItems );
 
+    // Update vertex editor if it exists
+    PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
+    if( editFrame )
+    {
+        BOARD_ITEM* selectedItem = ( selection.GetSize() == 1 ) ?
+                                    dynamic_cast<BOARD_ITEM*>( selection.Front() ) : nullptr;
+        editFrame->UpdateVertexEditorSelection( selectedItem );
+    }
+
     return 0;
 }
 

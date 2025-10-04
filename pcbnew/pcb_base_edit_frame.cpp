@@ -45,6 +45,7 @@
 #include <settings/settings_manager.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_properties_panel.h>
+#include <widgets/vertex_editor_pane.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_aui_utils.h>
@@ -58,6 +59,7 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_undoRedoBlocked( false ),
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr ),
+        m_vertexEditorPane( nullptr ),
         m_tabbedPanel( nullptr )
 {
     m_SelLayerBox = nullptr;
@@ -91,6 +93,7 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 {
+    CloseVertexEditor();
     GetCanvas()->GetView()->Clear();
 }
 
@@ -416,4 +419,52 @@ void PCB_BASE_EDIT_FRAME::HighlightSelectionFilter( const PCB_SELECTION_FILTER_O
 {
     PCB_SELECTION_FILTER_EVENT evt( aOptions );
     wxPostEvent( this, evt );
+}
+
+wxString PCB_BASE_EDIT_FRAME::VertexEditorPaneName()
+{
+    return wxS( "VertexEditor" );
+}
+
+void PCB_BASE_EDIT_FRAME::OpenVertexEditor( BOARD_ITEM* aItem )
+{
+    if( !m_vertexEditorPane )
+    {
+        m_vertexEditorPane = new PCB_VERTEX_EDITOR_PANE( this );
+
+        wxAuiPaneInfo paneInfo = EDA_PANE().Name( VertexEditorPaneName() )
+                                       .Float()
+                                       .Caption( _( "Edit Vertices" ) )
+                                       .PaneBorder( true )
+                                       .CloseButton( true )
+                                       .DestroyOnClose( true )
+                                       .Resizable( true )
+                                       .MinSize( FromDIP( wxSize( 260, 200 ) ) )
+                                       .BestSize( FromDIP( wxSize( 260, 320 ) ) )
+                                       .FloatingSize( FromDIP( wxSize( 320, 360 ) ) );
+
+        m_auimgr.AddPane( m_vertexEditorPane, paneInfo );
+        m_auimgr.Update();
+    }
+
+    m_vertexEditorPane->SetItem( aItem );
+    m_vertexEditorPane->SetFocus();
+}
+
+void PCB_BASE_EDIT_FRAME::CloseVertexEditor()
+{
+    if( m_vertexEditorPane )
+        m_vertexEditorPane->ClearItem();
+}
+
+void PCB_BASE_EDIT_FRAME::UpdateVertexEditorSelection( BOARD_ITEM* aItem )
+{
+    if( m_vertexEditorPane )
+        m_vertexEditorPane->OnSelectionChanged( aItem );
+}
+
+void PCB_BASE_EDIT_FRAME::OnVertexEditorPaneClosed( PCB_VERTEX_EDITOR_PANE* aPane )
+{
+    if( m_vertexEditorPane == aPane )
+        m_vertexEditorPane = nullptr;
 }

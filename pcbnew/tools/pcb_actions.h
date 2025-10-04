@@ -158,6 +158,8 @@ public:
     static TOOL_ACTION extendLines;
     /// Simplify polygon outlines
     static TOOL_ACTION simplifyPolygons;
+    /// Edit polygon vertices in a table
+    static TOOL_ACTION editVertices;
     /// Create outset items from selection
     static TOOL_ACTION outsetItems;
 
