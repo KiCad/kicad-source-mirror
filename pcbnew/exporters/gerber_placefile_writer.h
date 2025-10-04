@@ -67,7 +67,7 @@ public:
      * @return component count, or -1 if the file cannot be created.
      */
     int CreatePlaceFile( const wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges,
-                         bool aExcludeDNP );
+                         bool aExcludeDNP, bool aExcludeBOM );
 
     /**
      * @param aFullBaseFilename = a full filename. it will be modified

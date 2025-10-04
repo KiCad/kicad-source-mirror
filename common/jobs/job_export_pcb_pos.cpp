@@ -50,6 +50,7 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
         m_smdOnly( false ),
         m_excludeFootprintsWithTh( false ),
         m_excludeDNP( false ),
+        m_excludeBOM( false ),
         m_negateBottomX( false ),
         m_singleFile( false ),
         m_nakedFilename( false ),
@@ -73,6 +74,10 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
     m_params.emplace_back( new JOB_PARAM<bool>( "exclude_dnp",
                                                 &m_excludeDNP,
                                                 m_excludeDNP ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "exclude_bom",
+                                                &m_excludeBOM,
+                                                m_excludeBOM ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "negate_bottom_x",
                                                 &m_negateBottomX,

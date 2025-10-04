@@ -1741,6 +1741,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                                                   aPosJob->m_smdOnly,
                                                   aPosJob->m_excludeFootprintsWithTh,
                                                   aPosJob->m_excludeDNP,
+                                                  aPosJob->m_excludeBOM,
                                                   frontSide,
                                                   backSide,
                                                   aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
@@ -1834,7 +1835,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge, aPosJob->m_excludeDNP ) >= 0 )
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge,
+                                          aPosJob->m_excludeDNP, aPosJob->m_excludeBOM ) >= 0 )
             {
                 m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ), outPath ),
                                     RPT_SEVERITY_ACTION );
@@ -1857,7 +1859,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge, aPosJob->m_excludeDNP ) >= 0 )
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge,
+                                          aPosJob->m_excludeDNP, aPosJob->m_excludeBOM ) >= 0 )
             {
                 m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ), outPath ),
                                     RPT_SEVERITY_ACTION );

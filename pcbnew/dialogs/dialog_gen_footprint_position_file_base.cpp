@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-75-g9786507b-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,6 +99,9 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_excludeDNP = new wxCheckBox( this, wxID_ANY, _("Exclude all footprints with the Do Not Populate flag set"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_excludeDNP, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_excludeBOM = new wxCheckBox( this, wxID_ANY, _("Exclude all footprints with the Exclude from BOM flag set"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_excludeBOM, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_cbIncludeBoardEdge = new wxCheckBox( this, wxID_ANY, _("Include board edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_cbIncludeBoardEdge, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -147,6 +150,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_onlySMD->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_excludeDNP->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
+	m_excludeBOM->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_cbIncludeBoardEdge->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_negateXcb->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUInegXcoord ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onGenerate ), NULL, this );
@@ -161,6 +165,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::~DIALOG_GEN_FOOTPRINT_POSITION_BASE()
 	m_onlySMD->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_excludeDNP->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
+	m_excludeBOM->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_cbIncludeBoardEdge->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_negateXcb->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUInegXcoord ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onGenerate ), NULL, this );

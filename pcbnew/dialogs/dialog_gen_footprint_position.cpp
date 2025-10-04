@@ -110,6 +110,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::TransferDataToWindow()
         m_negateXcb->SetValue( m_job->m_negateBottomX );
         m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
         m_excludeDNP->SetValue( m_job->m_excludeDNP );
+        m_excludeBOM->SetValue( m_job->m_excludeBOM );
     }
 
     return true;
@@ -160,12 +161,18 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIExcludeTH( wxUpdateUIEvent& event 
 {
     if( m_formatCtrl->GetSelection() == 2 )
     {
-        m_excludeTH->SetValue( false );
-        m_excludeTH->Enable( false );
+        if( event.GetEventObject() == m_excludeTH )
+            m_excludeTH->SetValue( false );
+        else if( event.GetEventObject() == m_excludeDNP )
+            m_excludeDNP->SetValue( false );
+        else if( event.GetEventObject() == m_excludeBOM )
+            m_excludeBOM->SetValue( false );
+
+        event.Enable( false );
     }
     else
     {
-        m_excludeTH->Enable( true );
+        event.Enable( true );
     }
 }
 
@@ -233,6 +240,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_job->m_useDrillPlaceFileOrigin = m_useDrillPlaceOrigin->GetValue();
         m_job->m_negateBottomX = m_negateXcb->GetValue();
         m_job->m_excludeDNP = m_excludeDNP->GetValue();
+        m_job->m_excludeBOM = m_excludeBOM->GetValue();
 
         event.Skip();   // Allow normal close action
     }
@@ -279,7 +287,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     wxString                filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
     int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue(),
-                                            m_excludeDNP->GetValue() );
+                                            m_excludeDNP->GetValue(), ExcludeBOM() );
 
     if( fpcount < 0 )
     {
@@ -301,7 +309,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     filename = exporter.GetPlaceFileName( fn.GetFullPath(), B_Cu );
 
     fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_cbIncludeBoardEdge->GetValue(),
-                                        m_excludeDNP->GetValue() );
+                                        m_excludeDNP->GetValue(), ExcludeBOM() );
 
     if( fpcount < 0 )
     {
@@ -343,7 +351,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     // Test for any footprint candidate in list.
     {
         PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), OnlySMD(), ExcludeAllTH(), ExcludeDNP(),
-                                      topSide, bottomSide, useCSVfmt, useAuxOrigin, negateBottomX );
+                                      ExcludeBOM(), topSide, bottomSide, useCSVfmt, useAuxOrigin,
+                                      negateBottomX );
         exporter.GenPositionData();
 
         if( exporter.GetFootprintCount() == 0 )
@@ -395,8 +404,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     int fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                            ExcludeAllTH(), ExcludeDNP(), topSide, bottomSide,
-                                                            useCSVfmt, useAuxOrigin, negateBottomX );
+                                                            ExcludeAllTH(), ExcludeDNP(), ExcludeBOM(), topSide,
+                                                            bottomSide, useCSVfmt, useAuxOrigin, negateBottomX );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
@@ -437,8 +446,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                        ExcludeAllTH(), ExcludeDNP(), topSide, bottomSide,
-                                                        useCSVfmt, useAuxOrigin, negateBottomX );
+                                                        ExcludeAllTH(), ExcludeDNP(), ExcludeBOM(), topSide,
+                                                        bottomSide, useCSVfmt, useAuxOrigin, negateBottomX );
 
     if( fpcount < 0 )
     {
@@ -480,8 +489,8 @@ int BOARD_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
                                                  bool aOnlySMD, bool aNoTHItems, bool aExcludeDNP,
-                                                 bool aTopSide, bool aBottomSide, bool aFormatCSV,
-                                                 bool aUseAuxOrigin, bool aNegateBottomX )
+                                                 bool aExcludeBOM, bool aTopSide, bool aBottomSide,
+                                                 bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX )
 {
     FILE * file = nullptr;
 
@@ -494,8 +503,9 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
     }
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aOnlySMD, aNoTHItems, aExcludeDNP, aTopSide,
-                                  aBottomSide, aFormatCSV, aUseAuxOrigin, aNegateBottomX );
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aOnlySMD, aNoTHItems, aExcludeDNP,
+                                  aExcludeBOM, aTopSide, aBottomSide, aFormatCSV, aUseAuxOrigin,
+                                  aNegateBottomX );
     data = exporter.GenPositionData();
 
     // if aFullFileName is empty, the file is not created, only the
@@ -544,6 +554,7 @@ int BOARD_EDITOR_CONTROL::GenFootprintsReport( const TOOL_EVENT& aEvent )
                                   false,        // aOnlySMD
                                   false,        // aNoTHItems
                                   false,        // aExcludeDNP
+                                  false,        // aExcludeBOM
                                   true, true,   // aTopSide, aBottomSide
                                   false,        // aFormatCSV
                                   true,         // aUseAuxOrigin

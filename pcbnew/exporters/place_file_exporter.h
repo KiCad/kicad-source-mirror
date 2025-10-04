@@ -59,6 +59,7 @@ public:
      * @param aExcludeAllTH true to include only footprints with no TH pads no matter
      *                      the footprint flag
      * @param aExcludeDNP true to exclude footprints flagged DNP
+     * @param aExcludeBOM true to exclude footprints flagged exclude from BOM
      * @param aTopSide true to generate top side info
      * @param aBottomSide true to generate bottom side info
      * @param aFormatCSV true to generate a csv format info, false to generate a ascii info
@@ -66,8 +67,8 @@ public:
      * @param aUseAuxOrigin true to use auxiliary axis as an origin for the position data
      */
     PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOnlySMD, bool aExcludeAllTH,
-                         bool aExcludeDNP, bool aTopSide, bool aBottomSide, bool aFormatCSV,
-                         bool aUseAuxOrigin, bool aNegateBottomX );
+                         bool aExcludeDNP, bool aExcludeBOM, bool aTopSide, bool aBottomSide,
+                         bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX );
 
     /**
      * build a string filled with the position data
@@ -99,6 +100,7 @@ private:
     bool     m_unitsMM;         // true for mm, false for inches
     bool     m_onlySMD;         // Include only SMD components
     bool     m_excludeDNP;      // Exclude DNP components
+    bool     m_excludeBOM;      // Exclude components flagged exclude from BOM
     bool     m_excludeAllTH;    // Exclude any footprints with through-hole pads
     int      m_side;            // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
     bool     m_formatCSV;       // true for csv format, false for ascii (utf8) format

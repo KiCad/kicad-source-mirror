@@ -68,6 +68,7 @@ private:
     bool OnlySMD()      { return m_onlySMD->GetValue(); }
     bool ExcludeAllTH() { return m_excludeTH->GetValue(); }
     bool ExcludeDNP()   { return m_excludeDNP->GetValue(); }
+    bool ExcludeBOM()   { return m_excludeBOM->GetValue(); }
 
 private:
     PCB_EDIT_FRAME*     m_editFrame;

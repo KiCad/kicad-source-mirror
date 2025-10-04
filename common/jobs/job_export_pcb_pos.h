@@ -61,6 +61,7 @@ public:
     bool     m_smdOnly;
     bool     m_excludeFootprintsWithTh;
     bool     m_excludeDNP;
+    bool     m_excludeBOM;
     bool     m_negateBottomX;
     bool     m_singleFile;
     bool     m_nakedFilename;
