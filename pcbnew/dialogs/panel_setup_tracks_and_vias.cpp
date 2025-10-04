@@ -24,9 +24,11 @@
 
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
+#include <pcb_track.h>
 #include <bitmaps.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
+#include <optional>
 #include <grid_tricks.h>
 
 #include <panel_setup_tracks_and_vias.h>
@@ -379,10 +381,27 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
         wxString viaDia = m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL );
         wxString viaDrill = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
-        if( !viaDia.IsEmpty() && viaDrill.IsEmpty() )
+        std::optional<int> viaDiameter;
+
+        if( !viaDia.IsEmpty() )
+            viaDiameter = m_viaSizesGrid->GetUnitValue( row, VIA_SIZE_COL );
+
+        std::optional<int> viaDrillSize;
+
+        if( !viaDrill.IsEmpty() )
+            viaDrillSize = m_viaSizesGrid->GetUnitValue( row, VIA_DRILL_COL );
+
+        if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                    PCB_VIA::ValidateViaParameters( viaDiameter, viaDrillSize ) )
         {
-            msg = _( "No via hole size defined." );
-            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
+            msg = error->m_Message;
+
+            int errorCol = VIA_SIZE_COL;
+
+            if( error->m_Field == PCB_VIA::VIA_PARAMETER_ERROR::FIELD::DRILL )
+                errorCol = VIA_DRILL_COL;
+
+            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_viaSizesGrid, row, errorCol );
             return false;
         }
     }

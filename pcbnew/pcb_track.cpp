@@ -49,6 +49,7 @@
 #include <drc/drc_engine.h>
 #include <pcb_painter.h>
 #include <trigo.h>
+#include <properties/property_validators.h>
 
 #include <google/protobuf/any.pb.h>
 #include <api/api_enums.h>
@@ -1412,6 +1413,62 @@ void PCB_VIA::SanitizeLayers()
         std::swap( Padstack().Drill().end, Padstack().Drill().start );
 }
 
+
+std::optional<PCB_VIA::VIA_PARAMETER_ERROR>
+PCB_VIA::ValidateViaParameters( std::optional<int> aDiameter,
+                                std::optional<int> aDrill,
+                                std::optional<PCB_LAYER_ID> aStartLayer,
+                                std::optional<PCB_LAYER_ID> aEndLayer )
+{
+    VIA_PARAMETER_ERROR error;
+
+    if( aDiameter.has_value() && aDiameter.value() < GEOMETRY_MIN_SIZE )
+    {
+        error.m_Message = _( "Via diameter is too small." );
+        error.m_Field = VIA_PARAMETER_ERROR::FIELD::DIAMETER;
+        return error;
+    }
+
+    if( aDrill.has_value() && aDrill.value() < GEOMETRY_MIN_SIZE )
+    {
+        error.m_Message = _( "Via drill is too small." );
+        error.m_Field = VIA_PARAMETER_ERROR::FIELD::DRILL;
+        return error;
+    }
+
+    if( aDiameter.has_value() && !aDrill.has_value() )
+    {
+        error.m_Message = _( "No via hole size defined." );
+        error.m_Field = VIA_PARAMETER_ERROR::FIELD::DRILL;
+        return error;
+    }
+
+    if( aDrill.has_value() && !aDiameter.has_value() )
+    {
+        error.m_Message = _( "No via diameter defined." );
+        error.m_Field = VIA_PARAMETER_ERROR::FIELD::DIAMETER;
+        return error;
+    }
+
+    if( aDiameter.has_value() && aDrill.has_value()
+            && aDiameter.value() <= aDrill.value() )
+    {
+        error.m_Message = _( "Via hole size must be smaller than via diameter" );
+        error.m_Field = VIA_PARAMETER_ERROR::FIELD::DRILL;
+        return error;
+    }
+
+    if( aStartLayer.has_value() && aEndLayer.has_value()
+            && aStartLayer.value() == aEndLayer.value() )
+    {
+        error.m_Message = _( "Via start layer and end layer cannot be the same" );
+        error.m_Field = VIA_PARAMETER_ERROR::FIELD::START_LAYER;
+        return error;
+    }
+
+    return std::nullopt;
+}
+
 bool PCB_VIA::IsMicroVia() const
 {
     return std::abs( static_cast<int>( Padstack().Drill().start )
@@ -2390,6 +2447,106 @@ static struct TRACK_VIA_DESC
                 layerEnum.Map( layer, LSET::Name( layer ) );
         }
 
+        auto viaDiameterPropertyValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                {
+                    if( !aItem || aItem->Type() != PCB_VIA_T )
+                        return std::nullopt;
+
+                    if( !aValue.CheckType<int>() )
+                        return std::nullopt;
+
+                    PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+
+                    std::optional<int> diameter = aValue.As<int>();
+                    std::optional<int> drill = via->GetDrillValue();
+
+                    if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                                PCB_VIA::ValidateViaParameters( diameter, drill ) )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
+                    }
+
+                    return std::nullopt;
+                };
+
+        auto viaDrillPropertyValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                {
+                    if( !aItem || aItem->Type() != PCB_VIA_T )
+                        return std::nullopt;
+
+                    if( !aValue.CheckType<int>() )
+                        return std::nullopt;
+
+                    PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+
+                    std::optional<int> diameter = via->GetFrontWidth();
+                    std::optional<int> drill = aValue.As<int>();
+
+                    if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                                PCB_VIA::ValidateViaParameters( diameter, drill ) )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
+                    }
+
+                    return std::nullopt;
+                };
+
+        auto viaStartLayerPropertyValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                {
+                    if( !aItem || aItem->Type() != PCB_VIA_T )
+                        return std::nullopt;
+
+                    PCB_LAYER_ID layer;
+
+                    if( aValue.CheckType<PCB_LAYER_ID>() )
+                        layer = aValue.As<PCB_LAYER_ID>();
+                    else if( aValue.CheckType<int>() )
+                        layer = static_cast<PCB_LAYER_ID>( aValue.As<int>() );
+                    else
+                        return std::nullopt;
+
+                    PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+
+                    if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                                PCB_VIA::ValidateViaParameters( std::nullopt, std::nullopt,
+                                                                layer, via->BottomLayer() ) )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
+                    }
+
+                    return std::nullopt;
+                };
+
+        auto viaEndLayerPropertyValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                {
+                    if( !aItem || aItem->Type() != PCB_VIA_T )
+                        return std::nullopt;
+
+                    PCB_LAYER_ID layer;
+
+                    if( aValue.CheckType<PCB_LAYER_ID>() )
+                        layer = aValue.As<PCB_LAYER_ID>();
+                    else if( aValue.CheckType<int>() )
+                        layer = static_cast<PCB_LAYER_ID>( aValue.As<int>() );
+                    else
+                        return std::nullopt;
+
+                    PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+
+                    if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                                PCB_VIA::ValidateViaParameters( std::nullopt, std::nullopt,
+                                                                via->TopLayer(), layer ) )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
+                    }
+
+                    return std::nullopt;
+                };
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
 
         // Track
@@ -2447,13 +2604,17 @@ static struct TRACK_VIA_DESC
 
         // clang-format off: the suggestion is less readable
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
-            &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
+            &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia )
+                .SetValidator( viaDiameterPropertyValidator );
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
-            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
+            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ), groupVia )
+                .SetValidator( viaDrillPropertyValidator );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Top" ),
-            &PCB_VIA::SetTopLayer, &PCB_VIA::GetLayer ), groupVia );
+            &PCB_VIA::SetTopLayer, &PCB_VIA::GetLayer ), groupVia )
+                .SetValidator( viaStartLayerPropertyValidator );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Bottom" ),
-            &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ), groupVia );
+            &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ), groupVia )
+                .SetValidator( viaEndLayerPropertyValidator );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
             &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Front tenting" ),

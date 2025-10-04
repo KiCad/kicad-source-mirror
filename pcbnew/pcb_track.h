@@ -45,6 +45,7 @@
 #include <core/arraydim.h>
 #include <lset.h>
 #include <padstack.h>
+#include <optional>
 
 class PCB_TRACK;
 class PCB_VIA;
@@ -466,6 +467,27 @@ public:
     bool IsMicroVia() const;
     bool IsBlindVia() const;
     bool IsBuriedVia() const;
+
+    struct VIA_PARAMETER_ERROR
+    {
+        enum class FIELD
+        {
+            NONE,
+            DIAMETER,
+            DRILL,
+            START_LAYER,
+            END_LAYER
+        };
+
+        wxString m_Message;
+        FIELD m_Field = FIELD::NONE;
+    };
+
+    static std::optional<VIA_PARAMETER_ERROR>
+            ValidateViaParameters( std::optional<int> aDiameter,
+                                    std::optional<int> aDrill,
+                                    std::optional<PCB_LAYER_ID> aStartLayer = std::nullopt,
+                                    std::optional<PCB_LAYER_ID> aEndLayer = std::nullopt );
 
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( PCB_LAYER_ID aLayer ) const;

@@ -37,6 +37,7 @@
 #include <board_commit.h>
 #include <magic_enum.hpp>
 #include <macros.h>
+#include <optional>
 
 
 bool DIALOG_TRACK_VIA_PROPERTIES::IPC4761_CONFIGURATION::operator==( const IPC4761_CONFIGURATION& aOther ) const
@@ -639,32 +640,48 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     {
         // TODO: This needs to move into the via class, not the dialog
 
-        if( !m_viaDiameter.Validate( GEOMETRY_MIN_SIZE, INT_MAX )
-            || !m_viaDrill.Validate( GEOMETRY_MIN_SIZE, INT_MAX ) )
+        std::optional<int> viaDiameter;
+
+        if( m_ViaDiameterCtrl->IsEnabled() && !m_viaDiameter.IsIndeterminate() )
+            viaDiameter = m_viaDiameter.GetValue();
+
+        std::optional<int> viaDrill;
+
+        if( m_ViaDrillCtrl->IsEnabled() && !m_viaDrill.IsIndeterminate() )
+            viaDrill = m_viaDrill.GetValue();
+
+        std::optional<PCB_LAYER_ID> startLayer;
+
+        if( m_ViaStartLayer->GetLayerSelection() != UNDEFINED_LAYER )
+            startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
+
+        std::optional<PCB_LAYER_ID> endLayer;
+
+        if( m_ViaEndLayer->GetLayerSelection() != UNDEFINED_LAYER )
+            endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
+
+        if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                    PCB_VIA::ValidateViaParameters( viaDiameter, viaDrill, startLayer, endLayer ) )
         {
+            DisplayError( GetParent(), error->m_Message );
+
+            if( error->m_Field == PCB_VIA::VIA_PARAMETER_ERROR::FIELD::DRILL )
+            {
+                m_ViaDrillCtrl->SelectAll();
+                m_ViaDrillCtrl->SetFocus();
+            }
+            else if( error->m_Field == PCB_VIA::VIA_PARAMETER_ERROR::FIELD::DIAMETER )
+            {
+                m_ViaDiameterCtrl->SelectAll();
+                m_ViaDiameterCtrl->SetFocus();
+            }
+
             return false;
         }
 
-        if( m_ViaDiameterCtrl->IsEnabled() && !m_viaDiameter.IsIndeterminate()
-            && m_ViaDrillCtrl->IsEnabled() && !m_viaDrill.IsIndeterminate()
-            && m_viaDiameter.GetValue() <= m_viaDrill.GetValue() )
+        if( viaDiameter.has_value() )
         {
-            DisplayError( GetParent(), _( "Via hole size must be smaller than via diameter" ) );
-            m_ViaDrillCtrl->SelectAll();
-            m_ViaDrillCtrl->SetFocus();
-            return false;
-        }
-
-        if( m_ViaStartLayer->GetLayerSelection() != UNDEFINED_LAYER &&
-            m_ViaStartLayer->GetLayerSelection() == m_ViaEndLayer->GetLayerSelection() )
-        {
-            DisplayError( GetParent(), _( "Via start layer and end layer cannot be the same" ) );
-            return false;
-        }
-
-        if( !m_viaDiameter.IsIndeterminate() )
-        {
-            int diameter = m_viaDiameter.GetValue();
+            int diameter = viaDiameter.value();
             m_viaStack->SetSize( { diameter, diameter }, m_editLayer );
         }
     }

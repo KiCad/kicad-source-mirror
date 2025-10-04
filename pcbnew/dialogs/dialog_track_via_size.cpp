@@ -29,6 +29,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <optional>
 #include <eda_draw_frame.h>
+#include <pcb_track.h>
 
 #include "board_design_settings.h"
 
@@ -54,10 +55,19 @@ bool DIALOG_TRACK_VIA_SIZE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    if( m_viaDrill.GetValue() >= m_viaDiameter.GetValue() )
+    std::optional<int> viaDiameter = m_viaDiameter.GetIntValue();
+    std::optional<int> viaDrill = m_viaDrill.GetIntValue();
+
+    if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
+                PCB_VIA::ValidateViaParameters( viaDiameter, viaDrill ) )
     {
-        DisplayError( GetParent(), _( "Via hole size must be smaller than via diameter" ) );
-        m_viaDrillText->SetFocus();
+        DisplayError( GetParent(), error->m_Message );
+
+        if( error->m_Field == PCB_VIA::VIA_PARAMETER_ERROR::FIELD::DRILL )
+            m_viaDrillText->SetFocus();
+        else if( error->m_Field == PCB_VIA::VIA_PARAMETER_ERROR::FIELD::DIAMETER )
+            m_viaDiameterText->SetFocus();
+
         return false;
     }
 
