@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-10-02 14:02+0000\n"
+"PO-Revision-Date: 2025-10-04 18:49+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -17524,9 +17524,8 @@ msgid "Members of '%s'"
 msgstr "Mitglieder von \"%s\""
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
-#, fuzzy
 msgid "Net or Nested Bus Name"
-msgstr "Netz / Verschachtelter Busname"
+msgstr "Netz/Verschachtelter Busname"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:33
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
@@ -25697,43 +25696,41 @@ msgid "Mirror"
 msgstr "Spiegeln"
 
 #: eeschema/tools/sch_edit_tool.cpp:1582
-#, fuzzy
 msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
-"Pin-Tausch ist für Symbole, die gemeinsam in anderen Projekten genutzt "
+"Pin-Tausch ist für Symbole, die mit anderen Projekten gemeinsam genutzt "
 "werden, deaktiviert. Duplizieren Sie das Schaltplanblatt, um die Pins "
-"unabhängig zu editieren."
+"unabhängig zu bearbeiten."
 
 #: eeschema/tools/sch_edit_tool.cpp:1587
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"Pin-Tausch ist für Symbole, die gemeinsam in anderen Projekten (%s) genutzt "
+"Pin-Tausch ist für Symbole, die mit anderen Projekten (%s) gemeinsam genutzt "
 "werden, deaktiviert. Duplizieren Sie das Schaltplanblatt, um die Pins "
-"unabhängig zu editieren."
+"unabhängig zu bearbeiten."
 
 #: eeschema/tools/sch_edit_tool.cpp:1595
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
 "Pin-Tausch ist für Symbole, die in mehreren Schaltplanblattinstanzen (%s) "
 "verwendet werden, deaktiviert. Duplizieren Sie das Schaltplanblatt, um die "
-"Pins unabhängig zu editieren."
+"Pins unabhängig zu bearbeiten."
 
 #: eeschema/tools/sch_edit_tool.cpp:1600
-#, fuzzy
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
 "Pin-Tausch ist für gemeinsam genutzte Symbole deaktiviert. Duplizieren Sie "
-"das Schaltplanblatt, um die Pins unabhängig zu editieren."
+"das Schaltplanblatt, um die Pins unabhängig zu bearbeiten."
 
 #: eeschema/tools/sch_edit_tool.cpp:1744
 msgid ""
@@ -27800,16 +27797,15 @@ msgstr ""
 "Im Format \"--define-var key=value\" oder \"-D key=value\" verwenden"
 
 #: kicad/cli/command.cpp:202
-#, fuzzy
 msgid ""
 "List of variant names to output.\n"
 "When no --variants arguement is provided the default variant is output.\n"
 "To output all variants use '--variants=all'"
 msgstr ""
 "Liste der auszugebenden Variantennamen.\n"
-"Wenn kein --variants-Argument angegeben wird, wird die Standardvariante "
-"ausgegeben.\n"
-"Um alle Varianten auszugeben, verwenden Sie „--variants=all“."
+"Ist kein --variants-Argument angegeben, wird die Standardvariante ausgegeben."
+"\n"
+"Um alle Varianten auszugeben, verwenden Sie \"--variants=all\"."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -38713,9 +38709,8 @@ msgid "Unknown choice"
 msgstr "Unbekannte Auswahl"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
-msgstr "Mikro-Vias"
+msgstr "Mikrovias"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:111
 msgid "Filter tracks by width:"
