@@ -47,7 +47,7 @@ static const wxString DocFormat = wxT(
 
 std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprint )
 {
-    // Footprints have now a field (FIELD_T::DATASHEET) containing the url datasheet
+    // Footprints have now a field (DATASHEET)_FIELDcontaining the url datasheet
     // But old footprints did not have this field, so this fiels can be empty.
     // So we use this field is not empty, and if empty see if the documentation has an URL
     const PCB_FIELD* data_field = aFootprint.GetField( DATASHEET_FIELD );

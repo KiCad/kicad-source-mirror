@@ -27,6 +27,7 @@
 
 #include <memory>
 
+#include <search_stack.h>
 #include <wx/combo.h>
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>

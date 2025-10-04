@@ -64,7 +64,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const LIB_SY
         dataElement.m_currentlyEmpty = false;
         dataElement.m_isModified = false;
     }
-    else if( const SCH_FIELD* field = aSymbol->GetField( aFieldName ) )
+    else if( const SCH_FIELD* field = aSymbol->FindField( aFieldName ) )
     {
         dataElement.m_originalData = field->GetText();
         dataElement.m_currentData = field->GetText();
@@ -575,7 +575,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( VALUE_FIELD);
 }
 
 
@@ -703,10 +703,6 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const LIB_SYMBOL*
     if( aAttributeName == wxS( "Power" ) )
         return aSymbol->IsPower() ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "LocalPower" ) )
-        return aSymbol->IsLocalPower() ? wxS( "1" ) : wxS( "0" );
-
-
     return wxS( "0" );
 }
 
@@ -722,20 +718,12 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( LIB_SYMBOL* aSymbol,
         aSymbol->SetExcludedFromBOM( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
         aSymbol->SetExcludedFromSim( aValue == wxS( "1" ) );
-    else if( aAttributeName == wxS( "LocalPower" ) )
-    {
-        // Turning off local power still leaves the global flag set
-        if( aValue == wxS( "0" ) )
-            aSymbol->SetGlobalPower();
-        else
-            aSymbol->SetLocalPower();
-    }
     else if( aAttributeName == wxS( "Power" ) )
     {
         if( aValue == wxS( "0" ) )
             aSymbol->SetNormal();
         else
-            aSymbol->SetGlobalPower();
+            aSymbol->SetPower();
     }
     else
         wxLogDebug( "Unknown attribute name: %s", aAttributeName );
@@ -923,7 +911,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             if( srcName.StartsWith( "__DERIVED_SYMBOL_" ) && srcName.EndsWith( "__" ) )
                 continue;
 
-            SCH_FIELD*      destField = symbol->GetField( srcName );
+            SCH_FIELD*      destField = symbol->FindField( srcName );
             bool            userAdded = ( col != -1 && m_cols[col].m_userAdded );
 
             // Add a not existing field if it has a value for this symbol
@@ -932,7 +920,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             if( createField )
             {
                 const VECTOR2I symbolPos = symbol->GetPosition();
-                destField = new SCH_FIELD( symbol, FIELD_T::USER, srcName );
+                destField = new SCH_FIELD( symbol, -1, srcName );
                 destField->SetPosition( symbolPos );
                 symbol->AddField( destField );
             }
@@ -940,19 +928,19 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             if( !destField )
                 continue;
 
-            if( destField->GetId() == FIELD_T::REFERENCE )
+            if( destField->GetId() == REFERENCE_FIELD )
             {
                 // Reference is not editable from this dialog
             }
-            else if( destField->GetId() == FIELD_T::VALUE )
+            else if( destField->GetId() == VALUE_FIELD )
             {
                 // Value field cannot be empty
                 if( !srcValue.IsEmpty() )
-                    symbol->GetField( FIELD_T::VALUE )->SetText( srcValue );
+                    symbol->GetFieldById( VALUE_FIELD )->SetText( srcValue );
             }
-            else if( destField->GetId() == FIELD_T::FOOTPRINT )
+            else if( destField->GetId() == FOOTPRINT_FIELD )
             {
-                symbol->GetField(FIELD_T::FOOTPRINT)->SetText( srcValue );
+                symbol->GetFieldById( FOOTPRINT_FIELD )->SetText( srcValue );
             }
             else
             {

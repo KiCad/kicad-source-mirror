@@ -516,6 +516,15 @@ public:
     bool m_EnableLibDir;
 
     /**
+     * Enable library table editor in the context menu.
+     *
+     * Setting name: "LibraryTableEditor"
+     * Valid values: true or false
+     * Default value: false
+     */
+    bool m_LibraryTableEditor;
+
+    /**
      * Enable Eeschema printing using Cairo.
      *
      * Setting name: "EnableEeschemaPrintCairo"

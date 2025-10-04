@@ -102,6 +102,7 @@ static const wxChar EnableDesignBlocks[] = wxT( "EnableDesignBlocks" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
 static const wxChar EnableLibDir[] = wxT( "EnableLibDir" );
+static const wxChar LibraryTableEditor[] = wxT( "LibraryTableEditor" );
 static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
 static const wxChar EnableEeschemaExportClipboardCairo[] = wxT( "EnableEeschemaExportClipboardCairo" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
@@ -262,6 +263,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableGenerators          = false;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
+    m_LibraryTableEditor        = false;
 
     m_EnableEeschemaPrintCairo  = true;
     m_EnableEeschemaExportClipboardCairo = true;
@@ -511,6 +513,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibDir,
                                                 &m_EnableLibDir, m_EnableLibDir ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::LibraryTableEditor,
+                                                &m_LibraryTableEditor, m_LibraryTableEditor ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
                                                 &m_EnableEeschemaPrintCairo,

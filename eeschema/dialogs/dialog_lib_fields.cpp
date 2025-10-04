@@ -104,13 +104,13 @@ protected:
         clearMenu->Enable( !m_dataModel->IsCellClear( row, col ) );
         createDerivedSymbolMenu->Enable( m_dataModel->IsRowSingleSymbol( row ) );
 
-        if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+        if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FOOTPRINT_FIELD) )
         {
             menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
                          _( "Browse for footprint" ) );
             menu.AppendSeparator();
         }
-        else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+        else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( DATASHEET_FIELD) )
         {
             menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
                          _( "Show datasheet in browser" ) );
@@ -414,7 +414,7 @@ void DIALOG_LIB_FIELDS::loadSymbols( const wxArrayString& aSymbolNames )
 
             try
             {
-                symbol = m_parent->GetLibManager().GetSymbol( symbolName, m_libId );
+                symbol = m_parent->GetLibManager().GetAlias( symbolName, m_libId );
 
                 if( symbol )
                     m_symbolsList.push_back( symbol );
@@ -621,10 +621,10 @@ void DIALOG_LIB_FIELDS::OnFieldsCtrlSelectionChanged(wxDataViewEvent& event)
     if( enable )
     {
         wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-        if( fieldName == GetCanonicalFieldName( FIELD_T::REFERENCE ) ||
-            fieldName == GetCanonicalFieldName( FIELD_T::VALUE ) ||
-            fieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) ||
-            fieldName == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+        if( fieldName == GetCanonicalFieldName( REFERENCE_FIELD) ||
+            fieldName == GetCanonicalFieldName( VALUE_FIELD) ||
+            fieldName == GetCanonicalFieldName( FOOTPRINT_FIELD) ||
+            fieldName == GetCanonicalFieldName( DATASHEET_FIELD) )
         {
             enable = false;
         }
@@ -886,18 +886,18 @@ void DIALOG_LIB_FIELDS::OnApply(wxCommandEvent& event)
 void DIALOG_LIB_FIELDS::UpdateFieldList()
 {
     auto addMandatoryField =
-        [&]( FIELD_T fieldId, bool show, bool groupBy )
+        [&]( int fieldId, bool show, bool groupBy )
         {
             AddField( GetCanonicalFieldName( fieldId ),
                         GetDefaultFieldName( fieldId, DO_TRANSLATE ), show, groupBy );
         };
 
     // Add mandatory fields first            show   groupBy
-    addMandatoryField( FIELD_T::REFERENCE,   false,  false   );
-    addMandatoryField( FIELD_T::VALUE,       true,   false   );
-    addMandatoryField( FIELD_T::FOOTPRINT,   true,   false   );
-    addMandatoryField( FIELD_T::DATASHEET,   true,   false  );
-    addMandatoryField( FIELD_T::DESCRIPTION, false,  false  );
+    addMandatoryField( REFERENCE_FIELD,   false,  false   );
+    addMandatoryField( VALUE_FIELD,       true,   false   );
+    addMandatoryField( FOOTPRINT_FIELD,   true,   false   );
+    addMandatoryField( DATASHEET_FIELD,   true,   false  );
+    addMandatoryField( DESCRIPTION_FIELD, false,  false  );
 
     AddField( wxS( "Keywords" ), _( "Keywords" ), true, false );
 
@@ -1063,7 +1063,7 @@ void DIALOG_LIB_FIELDS::SetupColumnProperties( int aCol )
     attr->SetReadOnly( false );
 
     // Set some column types to specific editors
-    if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+    if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FOOTPRINT_FIELD) )
     {
         // Create symbol netlist for footprint picker
         wxString symbolNetlist;
@@ -1091,7 +1091,7 @@ void DIALOG_LIB_FIELDS::SetupColumnProperties( int aCol )
         attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, symbolNetlist ) );
         m_dataModel->SetColAttr( attr, aCol );
     }
-    else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+    else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( DATASHEET_FIELD) )
     {
         // set datasheet column viewer button
         attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) ) );
@@ -1127,7 +1127,7 @@ void DIALOG_LIB_FIELDS::SetupAllColumnProperties()
     bool sortAscending = true;
 
     // Find the VALUE column for initial sorting
-    int valueCol = m_dataModel->GetFieldNameCol( GetCanonicalFieldName( FIELD_T::VALUE ) );
+    int valueCol = m_dataModel->GetFieldNameCol( GetCanonicalFieldName( VALUE_FIELD) );
 
     // Set initial sort to VALUE field (ascending) if no previous sort preference exists
     if( m_dataModel->GetSortCol() == 0 && valueCol != -1 )

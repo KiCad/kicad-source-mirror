@@ -217,7 +217,10 @@ bool SYMBOL_EDITOR_CONTROL::Init()
             ctxMenu.AddItem( ACTIONS::openDirectory,      canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
         }
 
-        ctxMenu.AddItem( ACTIONS::showLibraryTable,  librarySelectedCondition, 300 );
+        if( ADVANCED_CFG::GetCfg().m_LibraryTableEditor )
+        {
+            ctxMenu.AddItem( ACTIONS::showLibraryTable,  librarySelectedCondition, 300 );
+        }
 
         libraryTreeTool->AddContextMenuItems( &ctxMenu );
     }
