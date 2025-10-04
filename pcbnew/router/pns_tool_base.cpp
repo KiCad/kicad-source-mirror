@@ -421,9 +421,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     controls()->ForceCursorPosition( true, m_endSnapPoint );
 
-    if( GetAngleSnapMode() != LEADER_MODE::DIRECT
-            && ( m_router->GetState() == ROUTER::DRAG_SEGMENT
-                || m_router->GetState() == ROUTER::DRAG_COMPONENT ) )
+    if( GetAngleSnapMode() != LEADER_MODE::DIRECT && m_router->GetState() == ROUTER::ROUTE_TRACK )
     {
         VECTOR2I moveVector = m_endSnapPoint - m_startSnapPoint;
 
