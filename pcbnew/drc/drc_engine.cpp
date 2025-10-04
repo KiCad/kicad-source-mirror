@@ -272,7 +272,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetTrackWidthParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassClearanceRules.push_back( netclassRule );
 
@@ -289,7 +289,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetDiffPairWidthParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.inDiffPair('*')" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.inDiffPair('*')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -306,7 +306,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetDiffPairGapParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -323,8 +323,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                                  nc->GetDiffPairGapParent()->GetHumanReadableName() );
                         netclassRule->m_Implicit = true;
 
-                        expr = wxString::Format( wxT( "A.NetClass == '%s' && AB.isCoupledDiffPair()" ),
-                                                 ncName );
+                        expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && AB.isCoupledDiffPair()" ), ncName );
                         netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                         netclassItemSpecificRules.push_back( netclassRule );
 
@@ -341,7 +340,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetViaDiameterParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type != 'Micro'" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type != 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -358,7 +357,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetViaDrillParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type != 'Micro'" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type != 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -375,7 +374,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetuViaDiameterParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type == 'Micro'" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type == 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -392,7 +391,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              nc->GetuViaDrillParent()->GetHumanReadableName() );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type == 'Micro'" ), ncName );
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type == 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
