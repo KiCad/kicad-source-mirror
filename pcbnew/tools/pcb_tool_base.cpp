@@ -51,6 +51,35 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
     BOARD_COMMIT commit( frame() );
 
+    LEADER_MODE* angleSnapMode = nullptr;
+    LEADER_MODE  savedAngleSnapMode = LEADER_MODE::DIRECT;
+    bool         restoreAngleSnapMode = false;
+
+    if( frame()->IsType( FRAME_PCB_EDITOR ) )
+    {
+        angleSnapMode = &GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode;
+    }
+    else if( frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
+    {
+        angleSnapMode = &GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
+    }
+
+    if( !angleSnapMode )
+    {
+        PCB_VIEWERS_SETTINGS_BASE* viewerSettings = frame()->GetViewerSettingsBase();
+
+        if( viewerSettings )
+            angleSnapMode = &viewerSettings->m_ViewersDisplay.m_AngleSnapMode;
+    }
+
+    if( angleSnapMode && *angleSnapMode != LEADER_MODE::DIRECT )
+    {
+        savedAngleSnapMode = *angleSnapMode;
+        *angleSnapMode = LEADER_MODE::DIRECT;
+        restoreAngleSnapMode = true;
+        m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
+    }
+
     GetManager()->RunAction( ACTIONS::selectionClear );
 
     Activate();
@@ -272,6 +301,12 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
     controls()->SetAutoPan( false );
     controls()->CaptureCursor( false );
     controls()->ForceCursorPosition( false );
+
+    if( restoreAngleSnapMode )
+    {
+        *angleSnapMode = savedAngleSnapMode;
+        m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
+    }
 }
 
 
