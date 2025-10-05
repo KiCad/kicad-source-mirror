@@ -26,6 +26,7 @@
 
 #include <panel_fp_properties_3d_model.h>
 
+#include <algorithm>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <env_vars.h>
@@ -309,22 +310,69 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnRemove3DModel( wxCommandEvent&  )
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
 
-    int idx = m_modelsGrid->GetGridCursorRow();
+    if( !m_modelsGrid->GetNumberRows() || m_shapes3D_list.empty() )
+        return;
 
-    if( idx >= 0 && m_modelsGrid->GetNumberRows() && !m_shapes3D_list.empty() )
+    wxArrayInt selectedRows = m_modelsGrid->GetSelectedRows();
+    wxGridCellCoordsArray selectedCells = m_modelsGrid->GetSelectedCells();
+    wxGridCellCoordsArray blockTopLeft = m_modelsGrid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray blockBottomRight = m_modelsGrid->GetSelectionBlockBottomRight();
+
+    for( unsigned ii = 0; ii < selectedCells.GetCount(); ++ii )
+        selectedRows.Add( selectedCells[ii].GetRow() );
+
+    if( !blockTopLeft.IsEmpty() && !blockBottomRight.IsEmpty() )
     {
-        // Don't allow selection until we call select3DModel(), below.  Otherwise wxWidgets
-        // has a tendency to get its knickers in a knot....
-        m_inSelect = true;
+        for( int row = blockTopLeft[0].GetRow(); row <= blockBottomRight[0].GetRow(); ++row )
+            selectedRows.Add( row );
+    }
+
+    if( selectedRows.empty() && m_modelsGrid->GetGridCursorRow() >= 0 )
+        selectedRows.Add( m_modelsGrid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
+    {
+        wxBell();
+        return;
+    }
+
+    std::sort( selectedRows.begin(), selectedRows.end() );
+
+    int nextSelection = selectedRows.front();
+    int lastRow = -1;
+
+    // Don't allow selection until we call select3DModel(), below.  Otherwise wxWidgets
+    // has a tendency to get its knickers in a knot....
+    m_inSelect = true;
+
+    m_modelsGrid->ClearSelection();
+
+    for( int ii = selectedRows.size() - 1; ii >= 0; --ii )
+    {
+        int row = selectedRows[ii];
+
+        if( row == lastRow )
+            continue;
+
+        lastRow = row;
+
+        if( row < 0 || row >= (int) m_shapes3D_list.size() )
+            continue;
 
         // Not all files are embedded but this will ignore the ones that are not
-        m_filesPanel->RemoveEmbeddedFile( m_shapes3D_list[ idx ].m_Filename );
-        m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
-        m_modelsGrid->DeleteRows( idx );
-
-        select3DModel( idx );       // will clamp idx within bounds
-        m_previewPane->UpdateDummyFootprint();
+        m_filesPanel->RemoveEmbeddedFile( m_shapes3D_list[row].m_Filename );
+        m_shapes3D_list.erase( m_shapes3D_list.begin() + row );
+        m_modelsGrid->DeleteRows( row );
     }
+
+    if( m_modelsGrid->GetNumberRows() > 0 )
+        nextSelection = std::min( nextSelection, m_modelsGrid->GetNumberRows() - 1 );
+    else
+        nextSelection = 0;
+
+    select3DModel( nextSelection );       // will clamp index within bounds
+    m_previewPane->UpdateDummyFootprint();
+    m_inSelect = false;
 
     onModify();
 }
