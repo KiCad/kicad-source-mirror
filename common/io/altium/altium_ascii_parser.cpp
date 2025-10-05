@@ -119,7 +119,10 @@ std::map<wxString, wxString> ALTIUM_ASCII_PARSER::ReadProperties()
             if( canonicalKey == wxT( "DESIGNATOR" ) || canonicalKey == wxT( "NAME" )
                 || canonicalKey == wxT( "TEXT" ) )
             {
-                if( kv[ wxT( "RECORD" ) ] != wxT( "4" ) )
+                wxString recordType = kv[ wxT( "RECORD" ) ];
+
+                // RECORD=33 (FILE_NAME) stores Windows-formatted paths; keep the backslashes intact.
+                if( recordType != wxT( "4" ) && recordType != wxT( "33" ) )
                     value = AltiumPropertyToKiCadString( value );
             }
         }
