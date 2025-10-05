@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
     barcode->SetTextSize( pcbIUScale.mmToIU( 1.5 ) );
     barcode->SetKind( BARCODE_T::QR_CODE );
     barcode->SetErrorCorrection( BARCODE_ECC_T::M );
-    barcode->AssembleBarcode( true, true );
+    barcode->AssembleBarcode();
 
     const KIID id = barcode->m_Uuid;
 
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
     barcode->SetTextSize( pcbIUScale.mmToIU( 1.5 ) );
     barcode->SetKind( BARCODE_T::QR_CODE );
     barcode->SetErrorCorrection( BARCODE_ECC_T::M );
-    barcode->AssembleBarcode( true, true );
+    barcode->AssembleBarcode();
 
     const KIID id = barcode->m_Uuid;
 
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         barcode->SetKind( tc.kind );
         barcode->SetErrorCorrection( BARCODE_ECC_T::M );
 
-        barcode->AssembleBarcode( true, true );
+        barcode->AssembleBarcode();
         SHAPE_POLY_SET canonicalPoly = barcode->GetPolyShape();
 
         barcode->SetPosition( tc.position );
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         barcode->Text().SetVisible( tc.withText );
         barcode->SetIsKnockout( tc.knockout );
 
-        barcode->AssembleBarcode( true, true );
+        barcode->AssembleBarcode();
         SHAPE_POLY_SET barcodePoly = barcode->GetPolyShape();
 
         // Barcode poly should completely cover canonical poly

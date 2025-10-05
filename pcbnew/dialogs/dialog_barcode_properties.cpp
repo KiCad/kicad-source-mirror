@@ -118,7 +118,7 @@ void DIALOG_BARCODE_PROPERTIES::initValues()
     if( m_currentBarcode )
         *m_dummyBarcode = *m_currentBarcode;
 
-    m_dummyBarcode->AssembleBarcode( true, true );
+    m_dummyBarcode->AssembleBarcode();
 
     m_orientation.SetUnits( EDA_UNITS::DEGREES );
 
@@ -298,7 +298,7 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     default: aBarcode->SetErrorCorrection( BARCODE_ECC_T::L ); break;
     }
 
-    aBarcode->AssembleBarcode( true, true );
+    aBarcode->AssembleBarcode();
 
     return true;
 }

@@ -105,7 +105,7 @@ void PCB_BARCODE::SetLayer( PCB_LAYER_ID aLayer )
     m_layer = aLayer;
     m_text.SetLayer( aLayer );
 
-    AssembleBarcode( true, true );
+    AssembleBarcode();
 }
 
 
@@ -114,7 +114,7 @@ void PCB_BARCODE::SetTextSize( int aTextSize )
     m_text.SetTextSize( VECTOR2I( std::max( 1, aTextSize ), std::max( 1, aTextSize ) ) );
     m_text.SetTextThickness( std::max( 1, GetPenSizeForNormal( m_text.GetTextHeight() ) ) );
 
-    AssembleBarcode( false, true );
+    AssembleBarcode();
 }
 
 
@@ -140,7 +140,7 @@ void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     RotatePoint( m_pos, aRotCentre, aAngle );
     m_angle += aAngle;
 
-    AssembleBarcode( true, true );
+    AssembleBarcode();
 }
 
 
@@ -153,7 +153,7 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 
-    AssembleBarcode( true, true );
+    AssembleBarcode();
 }
 
 
@@ -163,18 +163,16 @@ void PCB_BARCODE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool
 }
 
 
-void PCB_BARCODE::AssembleBarcode( bool aRebuildBarcode, bool aRebuildText )
+void PCB_BARCODE::AssembleBarcode()
 {
-    if( aRebuildBarcode )
-        ComputeBarcode();
+    ComputeBarcode();
 
     // Scale the symbol polygon to the desired barcode width/height (property values) and center it at m_pos
     // Note: SetRect will rescale the symbol-only polygon and then rebuild m_poly
     SetRect( m_pos - VECTOR2I( m_width / 2, m_height / 2 ),
              m_pos + VECTOR2I( m_width / 2, m_height / 2 ) );
 
-    if( aRebuildText )
-        ComputeTextPoly();
+    ComputeTextPoly();
 
     // Build full m_poly from symbol + optional text, then apply knockout if requested
     m_poly.RemoveAllContours();
@@ -568,14 +566,14 @@ void PCB_BARCODE::SetKind( BARCODE_T aKind )
 void PCB_BARCODE::SetBarcodeErrorCorrection( BARCODE_ECC_T aErrorCorrection )
 {
     SetErrorCorrection( aErrorCorrection );
-    AssembleBarcode( true, false );
+    AssembleBarcode();
 }
 
 
 void PCB_BARCODE::SetBarcodeKind( BARCODE_T aKind )
 {
     SetKind( aKind );
-    AssembleBarcode( true, false );
+    AssembleBarcode();
 }
 
 

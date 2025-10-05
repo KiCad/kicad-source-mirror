@@ -274,8 +274,7 @@ public:
         }
         else if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
         {
-            const VECTOR2I moveVector =
-                    aPoints.Point( RECT_CENTER ).GetPosition() - aRectangle.GetCenter();
+            const VECTOR2I moveVector = aPoints.Point( RECT_CENTER ).GetPosition() - aRectangle.GetCenter();
             aRectangle.Move( moveVector );
         }
         else if( isModified( aEditedPoint, aPoints.Point( RECT_RADIUS ) ) )
@@ -312,13 +311,11 @@ public:
         for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
-            {
                 aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
-            }
         }
     }
 
-    static void UpdatePoints( PCB_SHAPE& aRectangle, EDIT_POINTS& aPoints )
+    static void UpdatePoints( const PCB_SHAPE& aRectangle, EDIT_POINTS& aPoints )
     {
         wxCHECK( aPoints.PointsSize() >= RECT_MAX_POINTS, /* void */ );
 
@@ -373,9 +370,8 @@ public:
      * @param aHoleSize the pad's hole size (or {0,0} if it has no hole)
      */
     static void PinEditedCorner( const EDIT_POINT& aEditedPoint, const EDIT_POINTS& aEditPoints,
-                                VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft,
-                                VECTOR2I& aBotRight, const VECTOR2I& aHole = { 0, 0 },
-                                const VECTOR2I& aHoleSize = { 0, 0 } )
+                                VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft, VECTOR2I& aBotRight,
+                                const VECTOR2I& aHole = { 0, 0 }, const VECTOR2I& aHoleSize = { 0, 0 } )
     {
         int minWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
         int minHeight = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
@@ -485,8 +481,7 @@ public:
     ZONE_POINT_EDIT_BEHAVIOR( ZONE& aZone ) :
             POLYGON_POINT_EDIT_BEHAVIOR( *aZone.Outline() ),
             m_zone( aZone )
-    {
-    }
+    {}
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
@@ -516,8 +511,7 @@ class REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR( PCB_REFERENCE_IMAGE& aRefImage ) :
             m_refImage( aRefImage )
-    {
-    }
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -639,257 +633,68 @@ class BARCODE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     BARCODE_POINT_EDIT_BEHAVIOR( PCB_BARCODE& aBarcode ) :
             m_barcode( aBarcode )
+    {}
+
+    PCB_SHAPE makeDummyRect()
     {
+        PCB_SHAPE dummy( nullptr, SHAPE_T::RECTANGLE );
+        dummy.SetStart( m_barcode.GetCenter() - VECTOR2I( m_barcode.GetWidth() / 2, m_barcode.GetHeight() / 2 ) );
+        dummy.SetEnd( dummy.GetStart() + VECTOR2I( m_barcode.GetWidth(), m_barcode.GetHeight() ) );
+        dummy.Rotate( m_barcode.GetPosition(), m_barcode.GetAngle() );
+        return dummy;
     }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
-        VECTOR2I tl, tr, br, bl;
-        computeOrientedCorners( tl, tr, br, bl );
-
-         wxLogTrace( "KICAD_PCB_BARCODE_EDIT", " Oriented corners are: TL(%d, %d) TR(%d, %d) BR(%d, %d) BL(%d, %d)",
-                     tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y );
-
-        aPoints.AddPoint( tl );
-        aPoints.AddPoint( tr );
-        aPoints.AddPoint( br );
-        aPoints.AddPoint( bl );
-        aPoints.AddPoint( m_barcode.GetCenter() );
-
-        // Perpendicular edge constraints to keep rectangle right-angled when dragging edges
-        aPoints.AddLine( aPoints.Point( RECT_TOP_LEFT ), aPoints.Point( RECT_TOP_RIGHT ) );
-        aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
-        aPoints.AddLine( aPoints.Point( RECT_TOP_RIGHT ), aPoints.Point( RECT_BOT_RIGHT ) );
-        aPoints.Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_RIGHT ) ) );
-        aPoints.AddLine( aPoints.Point( RECT_BOT_RIGHT ), aPoints.Point( RECT_BOT_LEFT ) );
-        aPoints.Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_BOT ) ) );
-        aPoints.AddLine( aPoints.Point( RECT_BOT_LEFT ), aPoints.Point( RECT_TOP_LEFT ) );
-        aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
+        if( m_barcode.GetAngle().IsCardinal() )
+        {
+            RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( makeDummyRect(), aPoints );
+        }
+        else
+        {
+            // Non-cardinal barcode point-editing isn't useful enough to support.
+        }
     }
 
     void UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        wxCHECK( aPoints.PointsSize() >= 5, /* void */ );
+        const unsigned target = m_barcode.GetAngle().IsCardinal() ? RECT_MAX_POINTS : 0;
 
-        VECTOR2I tl, tr, br, bl;
-        computeOrientedCorners( tl, tr, br, bl );
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "  Oriented corners are: TL(%d, %d) TR(%d, %d) BR(%d, %d) BL(%d, %d)",
-                    tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y );
+        if( aPoints.PointsSize() != target )
+        {
+            aPoints.Clear();
+            MakePoints( aPoints );
+            return;
+        }
 
-        aPoints.Point( RECT_TOP_LEFT ).SetPosition( tl );
-        aPoints.Point( RECT_TOP_RIGHT ).SetPosition( tr );
-        aPoints.Point( RECT_BOT_RIGHT ).SetPosition( br );
-        aPoints.Point( RECT_BOT_LEFT ).SetPosition( bl );
-        aPoints.Point( RECT_CENTER ).SetPosition( m_barcode.GetCenter() );
+        if( m_barcode.GetAngle().IsCardinal() )
+        {
+            // Dispatch to the rectangle behavior
+            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( makeDummyRect(), aPoints );
+        }
+        else
+        {
+            // Not currently editable while non-cardinally rotated.
+        }
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
-        CHECK_POINT_COUNT_GE( aPoints, 5 );
-
-        const EDA_ANGLE angle( m_barcode.GetOrientation(), DEGREES_T );
-        // Use the barcode's position (true rotation pivot) as the center for all transforms.
-        VECTOR2I  center = m_barcode.GetCenter();
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: center=(%d,%d) angle=%.3f deg",
-                    center.x, center.y, angle.AsDegrees() );
-
-        if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
+        if( m_barcode.GetAngle().IsCardinal() )
         {
-            const VECTOR2I moveVector = aPoints.Point( RECT_CENTER ).GetPosition() - center;
-            wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: moving center by (%d,%d)", moveVector.x, moveVector.y );
-            m_barcode.Move( moveVector );
-            return;
+            PCB_SHAPE dummy = makeDummyRect();
+            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( dummy, aEditedPoint, aPoints );
+            dummy.Rotate( dummy.GetCenter(), -m_barcode.GetAngle() );
+
+            m_barcode.SetPosition( dummy.GetCenter() );
+            m_barcode.SetWidth( dummy.GetRectangleWidth() );
+            m_barcode.SetHeight( dummy.GetRectangleHeight() );
+            m_barcode.AssembleBarcode();
         }
-
-        auto toLocal = [&]( const VECTOR2I& wp )
-        {
-            VECTOR2I rel = wp - center;
-            VECTOR2I lr = GetRotated( rel, -angle );
-            return center + lr;
-        };
-
-        VECTOR2I topLeftL = toLocal( aPoints.Point( RECT_TOP_LEFT ).GetPosition() );
-        VECTOR2I topRightL = toLocal( aPoints.Point( RECT_TOP_RIGHT ).GetPosition() );
-        VECTOR2I botLeftL = toLocal( aPoints.Point( RECT_BOT_LEFT ).GetPosition() );
-        VECTOR2I botRightL = toLocal( aPoints.Point( RECT_BOT_RIGHT ).GetPosition() );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: local grips TL(%d,%d) TR(%d,%d) BR(%d,%d) BL(%d,%d)",
-                    topLeftL.x, topLeftL.y, topRightL.x, topRightL.y, botRightL.x, botRightL.y, botLeftL.x,
-                    botLeftL.y );
-
-        RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( aEditedPoint, aPoints,
-                                                        topLeftL, topRightL, botLeftL, botRightL );
-
-        int left   = std::min( topLeftL.x, botLeftL.x );
-        int right  = std::max( topRightL.x, botRightL.x );
-        int top    = std::min( topLeftL.y, topRightL.y );
-        int bottom = std::max( botLeftL.y, botRightL.y );
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: computed local rect LRTB=(%d,%d,%d,%d)", left, right, top, bottom );
-
-        // Capture the previous full geometry bbox in local (unrotated, center-based) coordinates
-        int minX = std::numeric_limits<int>::max();
-        int minY = std::numeric_limits<int>::max();
-        int maxX = std::numeric_limits<int>::min();
-        int maxY = std::numeric_limits<int>::min();
-        const SHAPE_POLY_SET& poly = m_barcode.GetPolyShape();
-
-        for( auto it = poly.CIterateWithHoles(); it; ++it )
-        {
-            const auto idx = it.GetIndex();
-            VECTOR2I   wp = poly.CVertex( idx );
-            // Geometry is origin-centered; unrotate around origin, then translate to center-based frame
-            VECTOR2I   lp = center + GetRotated( wp, -angle );
-            minX = std::min( minX, lp.x );
-            maxX = std::max( maxX, lp.x );
-            minY = std::min( minY, lp.y );
-            maxY = std::max( maxY, lp.y );
-        }
-
-        BOX2I oldFullLocalBBox = BOX2I( VECTOR2I( minX, minY ), VECTOR2I( maxX - minX, maxY - minY ) );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: old fullLocalBBox LRTB=(%d,%d,%d,%d)",
-                    oldFullLocalBBox.GetLeft(), oldFullLocalBBox.GetRight(),
-                    oldFullLocalBBox.GetTop(), oldFullLocalBBox.GetBottom() );
-
-        if( isModified( aEditedPoint, aPoints.Line( RECT_TOP ) ) )
-        {
-            // Only top changes; keep others from previous full-local bbox
-            left   = oldFullLocalBBox.GetLeft();
-            right  = oldFullLocalBBox.GetRight();
-            bottom = oldFullLocalBBox.GetBottom();
-            wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: editing TOP edge" );
-        }
-        else if( isModified( aEditedPoint, aPoints.Line( RECT_LEFT ) ) )
-        {
-            // Only left changes; keep others from previous full-local bbox
-            top    = oldFullLocalBBox.GetTop();
-            right  = oldFullLocalBBox.GetRight();
-            bottom = oldFullLocalBBox.GetBottom();
-            wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: editing LEFT edge" );
-        }
-        else if( isModified( aEditedPoint, aPoints.Line( RECT_BOT ) ) )
-        {
-            // Only bottom changes; keep others from previous full-local bbox
-            left   = oldFullLocalBBox.GetLeft();
-            right  = oldFullLocalBBox.GetRight();
-            top    = oldFullLocalBBox.GetTop();
-            wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: editing BOTTOM edge" );
-        }
-        else if( isModified( aEditedPoint, aPoints.Line( RECT_RIGHT ) ) )
-        {
-            // Only right changes; keep others from previous full-local bbox
-            left   = oldFullLocalBBox.GetLeft();
-            top    = oldFullLocalBBox.GetTop();
-            bottom = oldFullLocalBBox.GetBottom();
-            wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: editing RIGHT edge" );
-        }
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: after edge lock local LRTB=(%d,%d,%d,%d)",
-                    left, right, top, bottom );
-
-        for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
-        {
-            if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
-                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
-        }
-
-        // Map the edited full-geometry rectangle back to a symbol-only rectangle
-        minX = std::numeric_limits<int>::max();
-        minY = std::numeric_limits<int>::max();
-        maxX = std::numeric_limits<int>::min();
-        maxY = std::numeric_limits<int>::min();
-
-        BOX2I fullLocalBBox = poly.BBox();
-        // Symbol bbox derived from current symbol width/height centered on 'center'
-        int symW = m_barcode.GetWidth();
-        int symH = m_barcode.GetHeight();
-        BOX2I symLocalBBox( VECTOR2I( center.x - symW / 2, center.y - symH / 2 ), VECTOR2I( symW, symH ) );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: fullLocalBBox LRTB=(%d,%d,%d,%d) symLocalBBox LRTB=(%d,%d,%d,%d)",
-                    fullLocalBBox.GetLeft(), fullLocalBBox.GetRight(),
-                    fullLocalBBox.GetTop(), fullLocalBBox.GetBottom(),
-                    symLocalBBox.GetLeft(), symLocalBBox.GetRight(),
-                    symLocalBBox.GetTop(), symLocalBBox.GetBottom() );
-
-        int dxL = symLocalBBox.GetLeft()   - fullLocalBBox.GetLeft();
-        int dxR = fullLocalBBox.GetRight() - symLocalBBox.GetRight();
-        int dyT = symLocalBBox.GetTop()    - fullLocalBBox.GetTop();
-        int dyB = fullLocalBBox.GetBottom()- symLocalBBox.GetBottom();
-
-        VECTOR2I newTL( left + dxL,  top + dyT );
-        VECTOR2I newBR( right - dxR, bottom - dyB );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT",
-                    "UpdateItem: offsets dxL=%d dxR=%d dyT=%d dyB=%d => newTL=(%d,%d) newBR=(%d,%d)",
-                    dxL, dxR, dyT, dyB, newTL.x, newTL.y, newBR.x, newBR.y );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "UpdateItem: calling SetRect TL=(%d,%d) BR=(%d,%d) in unrotated frame",
-                    newTL.x, newTL.y, newBR.x, newBR.y );
-
-        m_barcode.SetRect( newTL, newBR );
-
-        m_barcode.AssembleBarcode( true, true );
     }
 
 private:
-    void computeOrientedCorners( VECTOR2I& aTL, VECTOR2I& aTR, VECTOR2I& aBR, VECTOR2I& aBL ) const
-    {
-        const SHAPE_POLY_SET& poly = m_barcode.GetPolyShape();
-        const VECTOR2I        center = m_barcode.GetCenter();
-        const EDA_ANGLE       angle( m_barcode.GetOrientation(), DEGREES_T );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "computeOrientedCorners: center=(%d,%d) angle=%.3f deg outlines=%d",
-                    center.x, center.y, angle.AsDegrees(), poly.OutlineCount() );
-
-        if( poly.OutlineCount() == 0 )
-        {
-            aTL = aTR = aBR = aBL = center;
-            return;
-        }
-
-        int minX = std::numeric_limits<int>::max();
-        int minY = std::numeric_limits<int>::max();
-        int maxX = std::numeric_limits<int>::min();
-        int maxY = std::numeric_limits<int>::min();
-
-        bool firstLogged = false;
-        for( auto it = poly.CIterateWithHoles(); it; ++it )
-        {
-            const auto idx = it.GetIndex();
-            VECTOR2I   wp = poly.CVertex( idx );
-            // m_poly geometry is maintained in the item's local frame (centered near origin).
-            // Unrotate around the origin to compute axis-aligned local bounds.
-            VECTOR2I   lp = GetRotated( wp, -angle );
-
-            if( !firstLogged )
-            {
-                wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "  first vertex wp=(%d,%d) lp(unrot)=(%d,%d)",
-                            wp.x, wp.y, lp.x, lp.y );
-                firstLogged = true;
-            }
-
-            minX = std::min( minX, lp.x );
-            maxX = std::max( maxX, lp.x );
-            minY = std::min( minY, lp.y );
-            maxY = std::max( maxY, lp.y );
-        }
-
-        VECTOR2I tlL( minX, minY );
-        VECTOR2I trL( maxX, minY );
-        VECTOR2I brL( maxX, maxY );
-        VECTOR2I blL( minX, maxY );
-
-        wxLogTrace( "KICAD_PCB_BARCODE_EDIT", "  local bbox LRTB=(%d,%d,%d,%d)", minX, maxX, minY, maxY );
-
-        aTL = GetRotated( tlL, angle );
-        aTR = GetRotated( trL, angle );
-        aBR = GetRotated( brL, angle );
-        aBL = GetRotated( blL, angle );
-    }
-
     PCB_BARCODE& m_barcode;
 };
 
@@ -900,8 +705,7 @@ public:
     PCB_TABLECELL_POINT_EDIT_BEHAVIOR( PCB_TABLECELL& aCell ) :
             EDA_TABLECELL_POINT_EDIT_BEHAVIOR( aCell ),
             m_cell( aCell )
-    {
-    }
+    {}
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
@@ -1002,7 +806,7 @@ public:
             if( !m_pad.GetOrientation().IsCardinal() )
                 break;
 
-            if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+            if( m_pad.GetOrientation().IsVertical() )
                 std::swap( halfSize.x, halfSize.y );
 
             // It's important to fill these according to the RECT indices
@@ -1060,7 +864,7 @@ public:
             }
             else if( target == 4 )
             {
-                if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                if( m_pad.GetOrientation().IsVertical() )
                     std::swap( halfSize.x, halfSize.y );
 
                 aPoints.Point( RECT_TOP_LEFT ).SetPosition( shapePos - halfSize );
@@ -1136,7 +940,7 @@ public:
                 VECTOR2I padSize( dist[0] + dist[2], dist[1] + dist[3] );
                 VECTOR2I deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
 
-                if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                if( m_pad.GetOrientation().IsVertical() )
                     std::swap( padSize.x, padSize.y );
 
                 RotatePoint( deltaOffset, -m_pad.GetOrientation() );
@@ -1168,7 +972,7 @@ public:
 
                 VECTOR2I padSize( abs( right - left ), abs( bottom - top ) );
 
-                if( m_pad.GetOrientation() == ANGLE_90 || m_pad.GetOrientation() == ANGLE_270 )
+                if( m_pad.GetOrientation().IsVertical() )
                     std::swap( padSize.x, padSize.y );
 
                 m_pad.SetSize( m_layer, padSize );
@@ -1235,8 +1039,7 @@ public:
             m_dimension( aDimension ),
             m_originalTextPos( aDimension.GetTextPos() ),
             m_oldCrossBar( SEG{ aDimension.GetCrossbarStart(), aDimension.GetCrossbarEnd() } )
-    {
-    }
+    {}
 
     void UpdateTextAfterChange()
     {
@@ -1340,8 +1143,7 @@ class ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     ALIGNED_DIMENSION_POINT_EDIT_BEHAVIOR( PCB_DIM_ALIGNED& aDimension ) :
             m_dimension( aDimension )
-    {
-    }
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -1763,16 +1565,13 @@ public:
         }
         else
         {
-            // Rotated textboxes are implemented as polygons and these
-            // aren't currently editable.
+            // Rotated textboxes are implemented as polygons and these aren't currently editable.
         }
     }
 
     void UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        // When textboxes are rotated, they act as polygons, not rectangles
-        const unsigned target = m_textbox.GetShape() == SHAPE_T::RECTANGLE ? TEXTBOX_POINT_COUNT::WHEN_RECTANGLE
-                                                                           : TEXTBOX_POINT_COUNT::WHEN_POLYGON;
+        const unsigned target = m_textbox.GetShape() == SHAPE_T::RECTANGLE ? RECT_MAX_POINTS : 0;
 
         // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
         if( aPoints.PointsSize() != target )
@@ -1797,9 +1596,7 @@ public:
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
-        {
             RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints );
-        }
     }
 
 private:
@@ -1918,6 +1715,7 @@ private:
     std::unordered_map<PCB_SHAPE*, double> m_originalWidths;
 };
 
+
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         PCB_TOOL_BASE( "pcbnew.PointEditor" ),
         m_frame( nullptr ),
@@ -1931,8 +1729,7 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         m_angleSnapPos( VECTOR2I( 0, 0 ) ),
         m_stickyDisplacement( VECTOR2I( 0, 0 ) ),
         m_angleSnapActive( false )
-{
-}
+{}
 
 
 void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
@@ -1966,9 +1763,9 @@ static bool canAddCorner( const EDA_ITEM& aItem )
     return false;
 }
 
+
 /**
- * Condition to check if a point editor can add a chamfer to a corner
- * of the given item
+ * Condition to check if a point editor can add a chamfer to a corner of the given item
  */
 static bool canChamferCorner( const EDA_ITEM& aItem )
 {
@@ -1987,6 +1784,7 @@ static bool canChamferCorner( const EDA_ITEM& aItem )
 
     return false;
 }
+
 
 static VECTOR2I snapCorner( const VECTOR2I& aPrev, const VECTOR2I& aNext, const VECTOR2I& aGuess,
                             double aAngleDeg )
@@ -2011,17 +1809,18 @@ static VECTOR2I snapCorner( const VECTOR2I& aPrev, const VECTOR2I& aNext, const 
     VECTOR2D center1 = mid + normal * h;
     VECTOR2D center2 = mid - normal * h;
 
-    auto project = [&]( const VECTOR2D& center )
-    {
-        VECTOR2D v = VECTOR2D( aGuess ) - center;
+    auto project =
+            [&]( const VECTOR2D& center )
+            {
+                VECTOR2D v = VECTOR2D( aGuess ) - center;
 
-        if( v.EuclideanNorm() == 0.0 )
-            v = prev - center;
+                if( v.EuclideanNorm() == 0.0 )
+                    v = prev - center;
 
-        v = v.Resize( 1 );
-        VECTOR2D p = center + v * radius;
-        return VECTOR2I( KiROUND( p.x ), KiROUND( p.y ) );
-    };
+                v = v.Resize( 1 );
+                VECTOR2D p = center + v * radius;
+                return VECTOR2I( KiROUND( p.x ), KiROUND( p.y ) );
+            };
 
     VECTOR2I p1 = project( center1 );
     VECTOR2I p2 = project( center2 );
@@ -2128,8 +1927,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::ARC:
-            m_editorBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>(
-                    *shape, m_arcEditMode, *getViewControls() );
+            m_editorBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>( *shape, m_arcEditMode,
+                                                                              *getViewControls() );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -2141,8 +1940,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::BEZIER:
-            m_editorBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>(
-                    *shape, board()->GetDesignSettings().m_MaxError );
+            m_editorBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape,
+                                                                                 shape->GetMaxError() );
             break;
 
         default:        // suppress warnings
@@ -2820,9 +2619,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
 
     // Update the item and any affected items
     for( EDA_ITEM* updatedItem : updatedItems )
-    {
         getView()->Update( updatedItem );
-    }
 
     frame()->SetMsgPanel( item );
 }
@@ -2857,13 +2654,10 @@ void PCB_POINT_EDITOR::updatePoints()
 
     m_editorBehavior->UpdatePoints( *m_editPoints );
 
-    if( editedIndex >= 0 )
-    {
-        if( editedIndex < (int) m_editPoints->PointsSize() )
-            m_editedPoint = &m_editPoints->Point( editedIndex );
-        else
-            m_editedPoint = nullptr;
-    }
+    if( editedIndex >= 0 && editedIndex < (int) m_editPoints->PointsSize())
+        m_editedPoint = &m_editPoints->Point( editedIndex );
+    else
+        m_editedPoint = nullptr;
 
     getView()->Update( m_editPoints.get() );
 
@@ -2957,8 +2751,7 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
 
 
 // Finds a corresponding vertex in a polygon set
-static std::pair<bool, SHAPE_POLY_SET::VERTEX_INDEX>
-findVertex( SHAPE_POLY_SET& aPolySet, const EDIT_POINT& aPoint )
+static std::pair<bool, SHAPE_POLY_SET::VERTEX_INDEX> findVertex( SHAPE_POLY_SET& aPolySet, const EDIT_POINT& aPoint )
 {
     for( auto it = aPolySet.IterateWithHoles(); it; ++it )
     {

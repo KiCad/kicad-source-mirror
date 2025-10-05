@@ -193,7 +193,7 @@ public:
      * Assemble the barcode polygon and text polygons into a single polygonal representation.
      * Optionally apply a knockout and margins.
      */
-    void AssembleBarcode( bool aRebuildBarcode, bool aRebuildText );
+    void AssembleBarcode();
 
     /**
      * Set the barcode content text to encode.
@@ -357,12 +357,12 @@ public:
     BARCODE_ECC_T GetErrorCorrection() const { return m_errorCorrection; }
     void SetBarcodeErrorCorrection( BARCODE_ECC_T aErrorCorrection );  // Includes re-compute
 
-    void SetBarcodeText( const wxString& aText ) { SetText( aText ); AssembleBarcode( false, true ); }
-    void SetShowText( bool aShow ) { m_text.SetVisible( aShow ); AssembleBarcode( false, true ); }
+    void SetBarcodeText( const wxString& aText ) { SetText( aText ); AssembleBarcode(); }
+    void SetShowText( bool aShow ) { m_text.SetVisible( aShow ); AssembleBarcode(); }
     bool GetShowText() const { return m_text.IsVisible(); }
 
-    void SetBarcodeWidth( int aWidth ) { m_width = aWidth; AssembleBarcode( true, true ); }
-    void SetBarcodeHeight( int aHeight ) { m_height = aHeight; AssembleBarcode( true, true ); }
+    void SetBarcodeWidth( int aWidth ) { m_width = aWidth; AssembleBarcode(); }
+    void SetBarcodeHeight( int aHeight ) { m_height = aHeight; AssembleBarcode(); }
 
     EDA_ANGLE GetAngle() const { return m_angle; }
     double GetOrientation() const { return m_angle.AsDegrees(); }
@@ -384,21 +384,21 @@ public:
     {
         aX = std::max( pcbIUScale.mmToIU( 1 ), aX );
         m_margin.x = aX;
-        AssembleBarcode( false, false );
+        AssembleBarcode();
     }
 
     void SetMarginY( int aY )
     {
         aY = std::max( pcbIUScale.mmToIU( 1 ), aY );
         m_margin.y = aY;
-        AssembleBarcode( false, false );
+        AssembleBarcode();
     }
 
     bool IsKnockout() const override { return BOARD_ITEM::IsKnockout(); }
     void SetIsKnockout( bool aEnable ) override
     {
         BOARD_ITEM::SetIsKnockout( aEnable );
-        AssembleBarcode( false, false );
+        AssembleBarcode();
     }
 
 private:

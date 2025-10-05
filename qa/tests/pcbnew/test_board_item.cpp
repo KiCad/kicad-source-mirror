@@ -87,7 +87,7 @@ public:
         {
             PCB_BARCODE* barcode = new PCB_BARCODE( &m_board );
             barcode->SetText( "XXXX" );
-            barcode->AssembleBarcode( true, true );
+            barcode->AssembleBarcode();
             return barcode;
         }
 
@@ -256,7 +256,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
                         if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aOriginalItem ) )
                             dimension->Update();
                         else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( aOriginalItem ) )
-                            barcode->AssembleBarcode( true, true );
+                            barcode->AssembleBarcode();
 
                         auto item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate( IGNORE_PARENT_GROUP ) );
 

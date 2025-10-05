@@ -4410,7 +4410,7 @@ void ALTIUM_PCB::ConvertBarcodes6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LA
     }
 
     pcbBarcode->SetIsKnockout( aElem.barcode_inverted );
-    pcbBarcode->AssembleBarcode( true, true );
+    pcbBarcode->AssembleBarcode();
 
     m_board->Add( pcbBarcode.release(), ADD_MODE::APPEND );
 }
@@ -4436,7 +4436,7 @@ void ALTIUM_PCB::ConvertBarcodes6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, 
     }
 
     fpBarcode->SetIsKnockout( aElem.barcode_inverted );
-    fpBarcode->AssembleBarcode( true, true );
+    fpBarcode->AssembleBarcode();
 
     aFootprint->Add( fpBarcode.release(), ADD_MODE::APPEND );
 }

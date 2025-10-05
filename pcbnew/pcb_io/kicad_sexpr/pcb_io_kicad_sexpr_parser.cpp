@@ -3752,7 +3752,7 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
         }
     }
 
-    barcode->AssembleBarcode( true, true );
+    barcode->AssembleBarcode();
 
     return barcode.release();
 }
