@@ -22,16 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"PO-Revision-Date: 2025-10-06 01:31+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
@@ -14151,34 +14152,28 @@ msgid "Pin Table"
 msgstr "Таблица выводов"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Преобразовать символ"
+msgstr "Откатить символ"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Вернуть '%s' к последней сохранённой версии?"
+msgstr "Откатить символ к последнему сохранённому состоянию"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear cell"
-msgstr "Зазор"
+msgstr "Очистить ячейку"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Очистить список недавних файлов сверловки"
+msgstr "Очистить значение в ячейке"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Создать новый символ"
+msgstr "Создать производный символ"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Создать новый символ, производный от существующего символа"
+msgstr "Создать новый символ, производный от выбранного символа"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:128
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
@@ -14231,9 +14226,8 @@ msgid "No related symbols could be loaded from the library."
 msgstr "Обновить символы, чтобы получить последние изменения из библиотеки"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:597
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Обновить символы, чтобы получить последние изменения из библиотеки"
+msgstr "Не удалось загрузить символы из библиотеки."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:699
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:766
@@ -14271,9 +14265,9 @@ msgid "Rename Field"
 msgstr "Переименовать поле"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:778
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Имя поля %s уже существует."
+msgstr "Имя поля '%s' уже существует."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:823
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
@@ -14287,9 +14281,8 @@ msgid "Symbol Name"
 msgstr "Имя символа"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1052
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Исключен из перечня элементов"
+msgstr "Исключить из BOM"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
 #: eeschema/sch_sheet.cpp:1729 eeschema/sch_symbol.cpp:3268
@@ -14308,9 +14301,8 @@ msgid "Power Symbol"
 msgstr "Символ питания"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1057
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Символ питания"
+msgstr "Локальный символ питания"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
