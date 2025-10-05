@@ -273,8 +273,8 @@ bool SwapPinGeometry( SCH_PIN* aFirst, SCH_PIN* aSecond )
     firstPin->SetLength( secondLength );
     secondPin->SetLength( firstLength );
 
-    auto firstOp = firstPin->GetOperatingPoint();
-    auto secondOp = secondPin->GetOperatingPoint();
+    const wxString& firstOp = firstPin->GetOperatingPoint();
+    const wxString& secondOp = secondPin->GetOperatingPoint();
     firstPin->SetOperatingPoint( secondOp );
     secondPin->SetOperatingPoint( firstOp );
 
