@@ -402,8 +402,8 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
 
         kicad_fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
         kicad_fn.SetPath( aSchematic->Prj().GetProjectPath() );
-        sheet->SetFileName( fn.GetFullPath() );
-        screen->SetFileName( sheet->GetFileName() );
+        sheet->SetFileName( kicad_fn.GetFullName() );
+        screen->SetFileName( kicad_fn.GetFullPath() );
 
         wxCHECK2( sheet && screen, continue );
 
