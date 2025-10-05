@@ -11,15 +11,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-09-24 17:02+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2025-10-06 01:31+0000\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -9320,9 +9321,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Більше не тримати бібліотеку у верхній частині списку"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Помилка таблиці бібліотеки"
+msgstr "Бібліотечний стіл"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -13190,34 +13190,28 @@ msgid "Pin Table"
 msgstr "Таблиця виводів"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Символ живлення"
+msgstr "Символ повернення"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Відновити '%s' до останньої збереженої версії?"
+msgstr "Повернути символ до останнього збереженого стану"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Зазор"
+msgstr "Очистити клітинку"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Очистити останні файли Drill"
+msgstr "Очистити значення клітинки"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Створити новий символ"
+msgstr "Створити похідний символ"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Створити новий символ, похідний від наявного символу"
+msgstr "Створити новий символ, похідний від вибраного"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13238,9 +13232,9 @@ msgid "Show datasheet in browser"
 msgstr "Показати документацію в браузері"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Бібліотеки символів"
+msgstr "Поля бібліотеки символів: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13253,30 +13247,29 @@ msgid "Group By"
 msgstr "Групувати за"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "Символ %s не знайдено в бібліотеці '%s'."
+msgstr "У бібліотеці %s не знайдено жодних символів."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s: %s"
-msgstr "Помилка завантаження символів:"
+msgstr "Помилка завантаження символу %s: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error accessing library %s.\n"
 "\n"
 "%s"
 msgstr ""
-"Помилка завантаження бібліотеки символів %s.\n"
+"Помилка доступу до бібліотеки %s.\n"
 "\n"
-"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Оновити символи, щоб отримати будь-які зміни з бібліотеки"
+msgstr "Не вдалося завантажити жодних символів з бібліотеки."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13308,9 +13301,9 @@ msgid "Rename Field"
 msgstr "Перейменувати поле"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Поле з назвою %s вже існує."
+msgstr "Назва поля '%s' вже існує."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13319,9 +13312,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Ви впевнені, що хочете видалити поле '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Виключено з BOM"
+msgstr "Виключити зі специфікації"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
@@ -13339,14 +13331,12 @@ msgid "Power Symbol"
 msgstr "Символ живлення"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Символ живлення"
+msgstr "Символ місцевої влади"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "Редактор бібліотеки"
+msgstr "Редактор полів бібліотеки"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -24523,9 +24513,8 @@ msgid "SVG File Name"
 msgstr "Назва SVG файлу"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "Бібліотеки"
+msgstr "Бібліотечні поля"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
