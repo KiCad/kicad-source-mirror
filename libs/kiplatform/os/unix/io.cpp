@@ -67,6 +67,21 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
     }
 }
 
+bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
+{
+    struct stat fileStat;
+    if( stat( aFilePath.fn_str(), &fileStat ) == 0 )
+    {
+        // Add user write permission to existing permissions
+        mode_t newPermissions = fileStat.st_mode | S_IWUSR;
+        if( chmod( aFilePath.fn_str(), newPermissions ) == 0 )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 {
     wxFileName fn( aFileName );

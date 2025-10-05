@@ -27,6 +27,8 @@
 
 #include "design_block_lib_table.h"
 
+#include <kiplatform/io.h>
+
 
 DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG::DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG(
         wxWindow* aParent ) :
@@ -124,6 +126,9 @@ bool DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG::TransferDataFromWindow()
                                       fn.GetFullPath(), designBlockTableFileName.GetFullPath() ) );
             return false;
         }
+
+        // Ensure the copied file is writable
+        KIPLATFORM::IO::MakeWriteable( designBlockTableFileName.GetFullPath() );
     }
 
     // Load the successfully copied design block library table file.  This should not fail since the
