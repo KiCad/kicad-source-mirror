@@ -244,6 +244,7 @@ void IMPORT_PROJ_HELPER::AltiumProjectHandler()
         return;
 
     wxFileConfig config( stream );
+    config.SetStyle( config.GetStyle() | wxCONFIG_USE_NO_ESCAPE_CHARACTERS );
     wxString groupname;
     long groupid;
 
