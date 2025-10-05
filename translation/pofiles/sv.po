@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-01 10:15+0000\n"
+"PO-Revision-Date: 2025-10-06 01:31+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19134,44 +19134,36 @@ msgid "Datasheet"
 msgstr "Datablad"
 
 #: eeschema/lib_symbol.cpp:2106
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "Symbolenhet"
+msgstr "Symboldefinition"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Define as Power Symbol"
 msgstr "Definiera som strömförsörjningssymbol"
 
 #: eeschema/lib_symbol.cpp:2111
-#, fuzzy
 msgid "Define as Local Power Symbol"
 msgstr "Definiera som lokal strömförsörjningssymbol"
 
 #: eeschema/lib_symbol.cpp:2115
-#, fuzzy
 msgid "Pin Display"
-msgstr "Rutnätsvisning"
+msgstr "Stiftvisning"
 
 #: eeschema/lib_symbol.cpp:2117
-#, fuzzy
 msgid "Show Pin Number"
 msgstr "Visa stiftnummer"
 
 #: eeschema/lib_symbol.cpp:2120
-#, fuzzy
 msgid "Show Pin Name"
 msgstr "Visa stiftnamn"
 
 #: eeschema/lib_symbol.cpp:2123
-#, fuzzy
 msgid "Place Pin Names Inside"
 msgstr "Placera stiftnamn inuti"
 
 #: eeschema/lib_symbol.cpp:2126
-#, fuzzy
 msgid "Pin Name Position Offset"
-msgstr "Förskjutning av stiftnamnets position:"
+msgstr "Förskjutning av stiftnamnets position"
 
 #: eeschema/lib_symbol.cpp:2133 eeschema/tools/sch_actions.cpp:1046
 msgid "Exclude from Simulation"
@@ -19186,19 +19178,16 @@ msgid "Exclude from Bill of Materials"
 msgstr "Utelämna från komponentlistan"
 
 #: eeschema/lib_symbol.cpp:2143
-#, fuzzy
 msgid "Units and Body Styles"
-msgstr "Enheter && Varianter"
+msgstr "Enheter och varianter"
 
 #: eeschema/lib_symbol.cpp:2145
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "Antal bitar"
+msgstr "Antal symbolenheter"
 
 #: eeschema/lib_symbol.cpp:2148
-#, fuzzy
 msgid "Units are Interchangeable"
-msgstr "Enheterna är inte utbytbara"
+msgstr "Enheterna är sinsemellan utbytbara"
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -22547,9 +22536,9 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "Utför %s"
+msgstr "Utför %d"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -26252,13 +26241,11 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider.cpp:140
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Single Run"
 msgstr "En körning"
 
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Multi Run"
 msgstr "Flera körningar"
 
@@ -37815,9 +37802,9 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "Uteslut alla fotavtryck med hålmonterings-lödytor"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Uteslut alla fotavtryck med alternativ \"monteras ej\" aktivt"
+msgstr ""
+"Uteslut alla fotavtryck med alternativ \"uteslut från komponentlista\" aktivt"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 msgid "Include board edge layer"
@@ -41873,14 +41860,12 @@ msgstr ""
 "Tillämpa mönsterkortsförinställningar på icke-koppar-former i fotavtryck"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:75
-#, fuzzy
 msgid "Apply board defaults to footprint dimensions"
-msgstr "Tillämpa mönsterkortsförinställningar på fotavtrycksfält"
+msgstr "Tillämpa mönsterkortsförinställningar på fotavtrycks måttsättning"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:78
-#, fuzzy
 msgid "Apply board defaults to footprint barcodes"
-msgstr "Tillämpa mönsterkortsförinställningar på fotavtrycks grafik"
+msgstr "Tillämpa mönsterkortsförinställningar på fotavtrycks streckkoder"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
 msgid "This layer is required and cannot be disabled"
@@ -43619,7 +43604,7 @@ msgstr "mönsterkortsinställningarnas begränsningar för mikrovior"
 
 #: pcbnew/drc/drc_engine.cpp:240
 msgid "barcode visual separation default"
-msgstr ""
+msgstr "förinställd visuell separation för streckkod"
 
 #: pcbnew/drc/drc_engine.cpp:262 pcbnew/drc/drc_engine.cpp:278
 #: pcbnew/drc/drc_engine.cpp:346 pcbnew/drc/drc_engine.cpp:363
@@ -44716,34 +44701,34 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "%s formens primitiver är olika på lager %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
-msgstr "%s är olika."
+msgstr "%s text är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
-msgstr "%s rutmönsterbredd är olika."
+msgstr "%s bredd är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
-msgstr "%s namn är olika."
+msgstr "%s höjd är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
-msgstr "%s borrstorlek är olika."
+msgstr "%s textstorlek är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
-msgstr "%s hörn är olika."
+msgstr "%s kod är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
-msgstr "%s nivå för avrundning av rutmönster skiljer sig."
+msgstr "%s nivå för felrättning skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #, c-format
@@ -44942,9 +44927,8 @@ msgid "%s differs."
 msgstr "%s är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
-#, fuzzy
 msgid "Barcode count differs."
-msgstr "Antal lödytor är olika."
+msgstr "Antal streckkoder är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:933
 msgid "Pad count differs."
@@ -47529,9 +47513,9 @@ msgid "Thermal Relief Gap"
 msgstr "Gap i termisk avlastning"
 
 #: pcbnew/pcb_barcode.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
-msgstr "Lödyta %s på %s"
+msgstr "Streckkod '%s' på %s"
 
 #: pcbnew/pcb_barcode.cpp:694
 msgid "CODE_39"
@@ -47574,9 +47558,8 @@ msgid "Show Text"
 msgstr "Visa text"
 
 #: pcbnew/pcb_barcode.cpp:740
-#, fuzzy
 msgid "Barcode Type"
-msgstr "Streckkod"
+msgstr "Streckkodstyp"
 
 #: pcbnew/pcb_barcode.cpp:775
 msgid "Margin X"
@@ -47592,9 +47575,8 @@ msgid "+/- to switch"
 msgstr "+/- för att växla"
 
 #: pcbnew/pcb_base_edit_frame.cpp:437
-#, fuzzy
 msgid "Edit Vertices"
-msgstr "Redigera egenskaper"
+msgstr "Redigera hörn"
 
 #: pcbnew/pcb_base_frame.cpp:1195
 msgid ""
@@ -49664,21 +49646,18 @@ msgid "removed annular ring"
 msgstr "borttagen ringring"
 
 #: pcbnew/pcb_track.cpp:1427
-#, fuzzy
 msgid "Via diameter is too small."
-msgstr "Väljare för viadiameter"
+msgstr "Viadiameter är för liten."
 
 #: pcbnew/pcb_track.cpp:1434
-#, fuzzy
 msgid "Via drill is too small."
-msgstr "Text bredd:"
+msgstr "Viaborr är för liten."
 
 #: pcbnew/pcb_track.cpp:1441
 msgid "No via hole size defined."
 msgstr "Via-diameter ej definierad."
 
 #: pcbnew/pcb_track.cpp:1448
-#, fuzzy
 msgid "No via diameter defined."
 msgstr "Via-diameter ej definierad."
 
@@ -50348,44 +50327,36 @@ msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks.
 msgstr "Växlar mellan skarpa/avrundade och 45°/90° hörn under ledardragning."
 
 #: pcbnew/router/router_tool.cpp:210
-#, fuzzy
 msgid "Track Corner Mode 45"
-msgstr "Ledarhörnsläge"
+msgstr "Ledarhörnsläge 45"
 
 #: pcbnew/router/router_tool.cpp:211
-#, fuzzy
 msgid "Switch to 45° corner when routing tracks."
-msgstr "Växlar mellan skarpa/avrundade och 45°/90° hörn under ledardragning."
+msgstr "Växla till 45° hörn vid ledardragning."
 
 #: pcbnew/router/router_tool.cpp:217
-#, fuzzy
 msgid "Track Corner Mode 90"
-msgstr "Ledarhörnsläge"
+msgstr "Ledarhörnsläge 90"
 
 #: pcbnew/router/router_tool.cpp:218
-#, fuzzy
 msgid "Switch to 90° corner when routing tracks."
-msgstr "Växlar mellan skarpa/avrundade och 45°/90° hörn under ledardragning."
+msgstr "Växla till 90° hörn vid ledardragning."
 
 #: pcbnew/router/router_tool.cpp:224
-#, fuzzy
 msgid "Track Corner Mode Arc 45"
-msgstr "Ledarhörnsläge"
+msgstr "Ledarhörnsläge båge 45"
 
 #: pcbnew/router/router_tool.cpp:225
-#, fuzzy
 msgid "Switch to arc 45° corner when routing tracks."
-msgstr "Växlar mellan skarpa/avrundade och 45°/90° hörn under ledardragning."
+msgstr "Växla till avrundade 45° hörn vid ledardragning."
 
 #: pcbnew/router/router_tool.cpp:231
-#, fuzzy
 msgid "Track Corner Mode Arc 90"
-msgstr "Ledarhörnsläge"
+msgstr "Ledarhörnsläge båge 90"
 
 #: pcbnew/router/router_tool.cpp:232
-#, fuzzy
 msgid "Switch to arc 90° corner when routing tracks."
-msgstr "Växlar mellan skarpa/avrundade och 45°/90° hörn under ledardragning."
+msgstr "Växla till avrundade 90° hörn vid ledardragning."
 
 #: pcbnew/router/router_tool.cpp:255
 msgid "Select Track/Via Width"
@@ -52339,13 +52310,12 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Förenkla polygonkonturer genom att ta bort onödiga punkter"
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit Vertices..."
-msgstr "Redigera nätklasser..."
+msgstr "Redigera hörn..."
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Edit polygon vertices using a table"
-msgstr ""
+msgstr "Redigera polygonhörn med hjälp av tabell"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid ""
@@ -55287,16 +55257,15 @@ msgstr "Borrar"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
-msgstr ""
+msgstr "X-koordinat"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:57
 msgid "Y coord"
-msgstr ""
+msgstr "Y-koordinat"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "Redigera text"
+msgstr "Redigera hörn"
 
 #: pcbnew/zone.cpp:870
 msgid "No vias"
