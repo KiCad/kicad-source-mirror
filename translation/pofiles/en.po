@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-30 15:10+0300\n"
+"POT-Creation-Date: 2025-10-05 16:04+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4021,6 +4021,9 @@ msgstr "ItemList"
 
 msgid "NetInfo"
 msgstr "NetInfo"
+
+msgid "Barcode"
+msgstr "Barcode"
 
 msgid "Junction"
 msgstr "Junction"
@@ -8882,6 +8885,9 @@ msgstr "Field name '%s' already exists."
 msgid "Library Fields Table (%s)"
 msgstr "Library Fields Table (%s)"
 
+msgid "Symbol Name"
+msgstr "Symbol Name"
+
 msgid "Exclude From BOM"
 msgstr "Exclude From BOM"
 
@@ -8911,6 +8917,12 @@ msgstr "Whole Library"
 
 msgid "Related Symbols Only"
 msgstr "Related Symbols Only"
+
+msgid "Group symbols"
+msgstr "Group symbols"
+
+msgid "Group symbols together based on common properties"
+msgstr "Group symbols together based on common properties"
 
 #, c-format
 msgid "Deriving from symbol '%s'."
@@ -9490,9 +9502,6 @@ msgstr ""
 
 msgid "Accept"
 msgstr "Accept"
-
-msgid "Symbol Name"
-msgstr "Symbol Name"
 
 msgid "Action Taken"
 msgstr "Action Taken"
@@ -10409,12 +10418,6 @@ msgstr "Current Sheet Only"
 
 msgid "Current Sheet and Down"
 msgstr "Current Sheet and Down"
-
-msgid "Group symbols"
-msgstr "Group symbols"
-
-msgid "Group symbols together based on common properties"
-msgstr "Group symbols together based on common properties"
 
 msgid "Edit"
 msgstr "Edit"
@@ -12363,6 +12366,51 @@ msgstr "Exclude from bill of materials settings differ."
 
 msgid "Exclude from board settings differ."
 msgstr "Exclude from board settings differ."
+
+msgid "Datasheet"
+msgstr "Datasheet"
+
+msgid "Symbol Definition"
+msgstr "Symbol Definition"
+
+msgid "Define as Power Symbol"
+msgstr "Define as Power Symbol"
+
+msgid "Define as Local Power Symbol"
+msgstr "Define as Local Power Symbol"
+
+msgid "Pin Display"
+msgstr "Pin Display"
+
+msgid "Show Pin Number"
+msgstr "Show Pin Number"
+
+msgid "Show Pin Name"
+msgstr "Show Pin Name"
+
+msgid "Place Pin Names Inside"
+msgstr "Place Pin Names Inside"
+
+msgid "Pin Name Position Offset"
+msgstr "Pin Name Position Offset"
+
+msgid "Exclude from Simulation"
+msgstr "Exclude from Simulation"
+
+msgid "Exclude from Board"
+msgstr "Exclude from Board"
+
+msgid "Exclude from Bill of Materials"
+msgstr "Exclude from Bill of Materials"
+
+msgid "Units and Body Styles"
+msgstr "Units and Body Styles"
+
+msgid "Number of Symbol Units"
+msgstr "Number of Symbol Units"
+
+msgid "Units are Interchangeable"
+msgstr "Units are Interchangeable"
 
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
@@ -14899,6 +14947,10 @@ msgstr "Number of bits"
 msgid "%d"
 msgstr "%d"
 
+#, c-format
+msgid "Run %d"
+msgstr "Run %d"
+
 msgid "Amplitude"
 msgstr "Amplitude"
 
@@ -15673,9 +15725,6 @@ msgstr "Parent"
 msgid "Power Symbol (Local)"
 msgstr "Power Symbol (Local)"
 
-msgid "Datasheet"
-msgstr "Datasheet"
-
 msgid "Import Symbol"
 msgstr "Import Symbol"
 
@@ -15793,8 +15842,8 @@ msgstr "Break sheet pin and hierarchical label association(s)"
 msgid "Current Variant"
 msgstr "Current Variant"
 
-msgid "Control to select the current schematic varaint"
-msgstr "Control to select the current schematic varaint"
+msgid "Control to select the current schematic variant"
+msgstr "Control to select the current schematic variant"
 
 msgid "Line modes"
 msgstr "Line modes"
@@ -16529,20 +16578,11 @@ msgstr "Edit with Symbol Editor"
 msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Open the selected symbol in the Symbol Editor"
 
-msgid "Exclude from Bill of Materials"
-msgstr "Exclude from Bill of Materials"
-
 msgid "Set the exclude from bill of materials attribute"
 msgstr "Set the exclude from bill of materials attribute"
 
-msgid "Exclude from Simulation"
-msgstr "Exclude from Simulation"
-
 msgid "Set the exclude from simulation attribute"
 msgstr "Set the exclude from simulation attribute"
-
-msgid "Exclude from Board"
-msgstr "Exclude from Board"
 
 msgid "Set the exclude from board attribute"
 msgstr "Set the exclude from board attribute"
@@ -25876,6 +25916,9 @@ msgstr "Include only SMD footprints"
 msgid "Exclude all footprints with through hole pads"
 msgstr "Exclude all footprints with through hole pads"
 
+msgid "Exclude all footprints with the Exclude from BOM flag set"
+msgstr "Exclude all footprints with the Exclude from BOM flag set"
+
 msgid "Include board edge layer"
 msgstr "Include board edge layer"
 
@@ -27923,12 +27966,6 @@ msgstr "Change Nets"
 msgid "Leave Nets Unchanged"
 msgstr "Leave Nets Unchanged"
 
-msgid "Via hole size must be smaller than via diameter"
-msgstr "Via hole size must be smaller than via diameter"
-
-msgid "Via start layer and end layer cannot be the same"
-msgstr "Via start layer and end layer cannot be the same"
-
 msgid "Edit Track/Via Properties"
 msgstr "Edit Track/Via Properties"
 
@@ -28770,6 +28807,12 @@ msgstr "Apply board defaults to footprint text"
 
 msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "Apply board defaults to non-copper footprint shapes"
+
+msgid "Apply board defaults to footprint dimensions"
+msgstr "Apply board defaults to footprint dimensions"
+
+msgid "Apply board defaults to footprint barcodes"
+msgstr "Apply board defaults to footprint barcodes"
 
 msgid "This layer is required and cannot be disabled"
 msgstr "This layer is required and cannot be disabled"
@@ -30358,9 +30401,6 @@ msgstr "Via Layer From"
 msgid "Via Layer To"
 msgstr "Via Layer To"
 
-msgid "No via hole size defined."
-msgstr "No via hole size defined."
-
 msgid "No differential pair gap defined."
 msgstr "No differential pair gap defined."
 
@@ -30414,6 +30454,9 @@ msgstr "board setup constraints courtyard"
 
 msgid "board setup micro-via constraints"
 msgstr "board setup micro-via constraints"
+
+msgid "barcode visual separation default"
+msgstr "barcode visual separation default"
 
 #, c-format
 msgid "netclass '%s'"
@@ -31223,6 +31266,30 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "%s shape primitives differ on layer %s."
 
 #, c-format
+msgid "%s text differs."
+msgstr "%s text differs."
+
+#, c-format
+msgid "%s width differs."
+msgstr "%s width differs."
+
+#, c-format
+msgid "%s height differs."
+msgstr "%s height differs."
+
+#, c-format
+msgid "%s text size differs."
+msgstr "%s text size differs."
+
+#, c-format
+msgid "%s code differs."
+msgstr "%s code differs."
+
+#, c-format
+msgid "%s error correction level differs."
+msgstr "%s error correction level differs."
+
+#, c-format
 msgid "%s corner smoothing setting differs."
 msgstr "%s corner smoothing setting differs."
 
@@ -31371,6 +31438,9 @@ msgstr "Net tie pad groups differ."
 #, c-format
 msgid "%s differs."
 msgstr "%s differs."
+
+msgid "Barcode count differs."
+msgstr "Barcode count differs."
 
 msgid "Pad count differs."
 msgstr "Pad count differs."
@@ -33326,12 +33396,9 @@ msgstr "Thermal Relief Spoke Angle"
 msgid "Thermal Relief Gap"
 msgstr "Thermal Relief Gap"
 
-msgid "Barcode"
-msgstr "Barcode"
-
 #, c-format
-msgid "BARCODE \"%s\" on %s"
-msgstr "BARCODE \"%s\" on %s"
+msgid "Barcode '%s' on %s"
+msgstr "Barcode '%s' on %s"
 
 msgid "CODE_39"
 msgstr "CODE_39"
@@ -33363,11 +33430,8 @@ msgstr "H (High)"
 msgid "Show Text"
 msgstr "Show Text"
 
-msgid "Kind"
-msgstr "Kind"
-
-msgid "MicroQR Error Correction"
-msgstr "MicroQR Error Correction"
+msgid "Barcode Type"
+msgstr "Barcode Type"
 
 msgid "Margin X"
 msgstr "Margin X"
@@ -33377,6 +33441,9 @@ msgstr "Margin Y"
 
 msgid "+/- to switch"
 msgstr "+/- to switch"
+
+msgid "Edit Vertices"
+msgstr "Edit Vertices"
 
 msgid ""
 "The library containing the current footprint has changed.\n"
@@ -35033,6 +35100,24 @@ msgstr "Via %s on %s"
 msgid "removed annular ring"
 msgstr "removed annular ring"
 
+msgid "Via diameter is too small."
+msgstr "Via diameter is too small."
+
+msgid "Via drill is too small."
+msgstr "Via drill is too small."
+
+msgid "No via hole size defined."
+msgstr "No via hole size defined."
+
+msgid "No via diameter defined."
+msgstr "No via diameter defined."
+
+msgid "Via hole size must be smaller than via diameter"
+msgstr "Via hole size must be smaller than via diameter"
+
+msgid "Via start layer and end layer cannot be the same"
+msgstr "Via start layer and end layer cannot be the same"
+
 msgid "Track (arc)"
 msgstr "Track (arc)"
 
@@ -35522,6 +35607,30 @@ msgstr "Track Corner Mode"
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
 "Switches between sharp/rounded and 45°/90° corners when routing tracks."
+
+msgid "Track Corner Mode 45"
+msgstr "Track Corner Mode 45"
+
+msgid "Switch to 45° corner when routing tracks."
+msgstr "Switch to 45° corner when routing tracks."
+
+msgid "Track Corner Mode 90"
+msgstr "Track Corner Mode 90"
+
+msgid "Switch to 90° corner when routing tracks."
+msgstr "Switch to 90° corner when routing tracks."
+
+msgid "Track Corner Mode Arc 45"
+msgstr "Track Corner Mode Arc 45"
+
+msgid "Switch to arc 45° corner when routing tracks."
+msgstr "Switch to arc 45° corner when routing tracks."
+
+msgid "Track Corner Mode Arc 90"
+msgstr "Track Corner Mode Arc 90"
+
+msgid "Switch to arc 90° corner when routing tracks."
+msgstr "Switch to arc 90° corner when routing tracks."
 
 msgid "Select Track/Via Width"
 msgstr "Select Track/Via Width"
@@ -36969,6 +37078,12 @@ msgstr "Add dogbone corners to selected lines"
 
 msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Simplify polygon outlines, removing superfluous points"
+
+msgid "Edit Vertices..."
+msgstr "Edit Vertices..."
+
+msgid "Edit polygon vertices using a table"
+msgstr "Edit polygon vertices using a table"
 
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
@@ -39160,6 +39275,15 @@ msgstr "No Net"
 msgid "Drills"
 msgstr "Drills"
 
+msgid "X coord"
+msgstr "X coord"
+
+msgid "Y coord"
+msgstr "Y coord"
+
+msgid "Edit Vertex"
+msgstr "Edit Vertex"
+
 msgid "No vias"
 msgstr "No vias"
 
@@ -39467,6 +39591,19 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Control to select the current schematic varaint"
+#~ msgstr "Control to select the current schematic varaint"
+
+#, c-format
+#~ msgid "BARCODE \"%s\" on %s"
+#~ msgstr "BARCODE \"%s\" on %s"
+
+#~ msgid "Kind"
+#~ msgstr "Kind"
+
+#~ msgid "MicroQR Error Correction"
+#~ msgstr "MicroQR Error Correction"
 
 #~ msgid "Blind/Buried vias"
 #~ msgstr "Blind/Buried vias"
