@@ -22,15 +22,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-09-23 15:55+0000\n"
+"PO-Revision-Date: 2025-10-06 01:31+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
@@ -9366,9 +9367,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Не держать библиотеку вверху списка"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Ошибка таблицы библиотек"
+msgstr "Таблица библиотеки"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -13239,34 +13239,28 @@ msgid "Pin Table"
 msgstr "Таблица выводов"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Преобразовать символ"
+msgstr "Откатить символ"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Вернуть '%s' к последней сохранённой версии?"
+msgstr "Откатить символ к последнему сохранённому состоянию"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Зазор"
+msgstr "Очистить ячейку"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Очистить список недавних файлов сверловки"
+msgstr "Очистить значение в ячейке"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Создать новый символ"
+msgstr "Создать производный символ"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Создать новый символ, производный от существующего символа"
+msgstr "Создать новый символ, производный от выбранного символа"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13287,9 +13281,9 @@ msgid "Show datasheet in browser"
 msgstr "Показать информацию о компоненте в вэб-браузере"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Библиотеки символов"
+msgstr "Поля библиотеки символов: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13302,30 +13296,29 @@ msgid "Group By"
 msgstr "Группировать по"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "Символ %s не найден в библиотеке '%s'."
+msgstr "Символы не найдены в библиотеке %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s: %s"
-msgstr "Ошибки загрузки символов:"
+msgstr "Ошибки загрузки символа %s: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error accessing library %s.\n"
 "\n"
 "%s"
 msgstr ""
-"Ошибка загрузки библиотеки символов %s.\n"
+"Ошибка доступа к библиотеке %s.\n"
 "\n"
-"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Обновить символы, чтобы получить последние изменения из библиотеки"
+msgstr "Не удалось загрузить символы из библиотеки."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13357,9 +13350,9 @@ msgid "Rename Field"
 msgstr "Переименовать поле"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Имя поля %s уже существует."
+msgstr "Имя поля '%s' уже существует."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13368,9 +13361,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Вы уверены что хотите удалить поле '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Исключен из перечня элементов"
+msgstr "Исключить из BOM"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
@@ -13388,14 +13380,12 @@ msgid "Power Symbol"
 msgstr "Символ питания"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Символ питания"
+msgstr "Локальный символ питания"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "Редактор библиотек"
+msgstr "Редактор полей библиотеки"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -24558,9 +24548,8 @@ msgid "SVG File Name"
 msgstr "Имя файла SVG"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "Библиотеки"
+msgstr "Поля библиотеки"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
