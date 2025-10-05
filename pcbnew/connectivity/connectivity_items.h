@@ -298,6 +298,8 @@ public:
         if( m_zone->IsTeardropArea() )
             return;
 
+        m_rTree.RemoveAll();
+
         for( unsigned int ii = 0; ii < m_fillPoly->TriangulatedPolyCount(); ++ii )
         {
             const auto* triangleSet = m_fillPoly->TriangulatedPolygon( ii );
