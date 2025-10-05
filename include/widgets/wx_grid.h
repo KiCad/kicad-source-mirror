@@ -36,6 +36,17 @@
 #include <units_provider.h>
 
 class wxTextEntryBase;
+class ROW_ICON_PROVIDER;
+
+
+enum GROUP_TYPE
+{
+    GROUP_SINGLETON,
+    GROUP_COLLAPSED,
+    GROUP_COLLAPSED_DURING_SORT,
+    GROUP_EXPANDED,
+    CHILD_ITEM
+};
 
 
 class WX_GRID_TABLE_BASE : public wxGridTableBase
@@ -63,6 +74,9 @@ public:
 
         return nullptr;
     }
+
+    virtual bool IsExpanderColumn( int aCol ) const { return false; }
+    virtual GROUP_TYPE GetGroupType( int aRow ) const { return GROUP_SINGLETON; }
 
 protected:
     wxGridCellAttr* enhanceAttr( wxGridCellAttr* aInputAttr, int aRow, int aCol,
@@ -287,6 +301,8 @@ public:
 
     void SetGridWidthsDirty() { m_gridWidthsDirty = true; }
 
+    ROW_ICON_PROVIDER* GetRowIconProvider() const { return m_rowIconProvider; }
+
 protected:
     /**
      * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column and draws
@@ -345,4 +361,6 @@ protected:
 
     bool                       m_gridWidthsDirty = true;
     int                        m_gridWidth = 0;
+
+    ROW_ICON_PROVIDER*         m_rowIconProvider;
 };

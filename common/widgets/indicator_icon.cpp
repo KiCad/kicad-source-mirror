@@ -65,12 +65,6 @@ void INDICATOR_ICON::SetIndicatorState( ICON_ID aIconId )
 }
 
 
-INDICATOR_ICON::ICON_ID INDICATOR_ICON::GetIndicatorState() const
-{
-    return m_currentId;
-}
-
-
 wxImage createBlankImage( int size )
 {
     wxImage image( size, size );
@@ -96,7 +90,7 @@ wxImage createBlankImage( int size )
 
 // Create an arrow icon of a particular size, colour and direction.  0 points up, 1 points
 // right, and so forth.
-wxBitmap createArrow( int size, double aScaleFactor, int aDirection, wxColour aColour )
+wxBitmap createArrow( int size, double aScaleFactor, int aDirection, const wxColour& aColour )
 {
     wxImage image = createBlankImage( size );
 
@@ -116,6 +110,42 @@ wxBitmap createArrow( int size, double aScaleFactor, int aDirection, wxColour aC
         // Next row will start one pixel back and be two pixels longer
         startX -= 1;
         len += 2;
+    }
+
+    for( int i = 0; i < aDirection; ++i )
+        image = image.Rotate90();
+
+    wxBitmap bmp( image );
+    bmp.SetScaleFactor( aScaleFactor );
+    return bmp;
+}
+
+
+// Create a turndown icon of a particular size, colour and direction.  0 points up,
+// 1 points right, and so forth.
+wxBitmap createTurndown( int size, double aScaleFactor, int aDirection, const wxColour& aColour )
+{
+    wxImage image = createBlankImage( size );
+
+    int startX = size / 2 - 1;
+    int len = 1;
+
+    int startY = 1 + ( aDirection % 2 );
+
+    for( int y = startY; y < startY + size - 3; ++y )
+    {
+        for( int x = startX; x < startX + len; ++x )
+        {
+            image.SetRGB( x, y, aColour.Red(), aColour.Green(), aColour.Blue() );
+            image.SetAlpha( x, y, ( y % 2 ) ? wxIMAGE_ALPHA_OPAQUE : wxIMAGE_ALPHA_OPAQUE / 2 );
+        }
+
+        // Next row will start one pixel back and be two pixels longer
+        if( y % 2 )
+        {
+            startX -= 1;
+            len += 2;
+        }
     }
 
     for( int i = 0; i < aDirection; ++i )
@@ -173,7 +203,8 @@ ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow )
             };
 
     double   scale = aWindow->GetDPIScaleFactor();
-    wxColour shadowColor = wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW );
+    wxColour shadowColor = wxSystemSettings::GetColour( wxSYS_COLOUR_3DDKSHADOW );
+    wxColour textColor = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXTEXT );
 
     m_blankBitmap = wxBitmap( createBlankImage( toPhys( aSizeDIP ) ) );
     m_blankBitmap.SetScaleFactor( scale );
@@ -182,6 +213,8 @@ ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow )
     m_upArrowBitmap = createArrow( toPhys( aSizeDIP - 2 ), scale, 0, shadowColor );
     m_downArrowBitmap = createArrow( toPhys( aSizeDIP - 2 ), scale, 2, shadowColor );
     m_dotBitmap = createDiamond( toPhys( aSizeDIP ), scale, wxColour( 128, 144, 255 ) );
+    m_closedBitmap = createTurndown( toPhys( aSizeDIP ), scale, 1, textColor );
+    m_openBitmap = createTurndown( toPhys( aSizeDIP ), scale, 2, textColor );
 }
 
 
@@ -194,6 +227,8 @@ const wxBitmap& ROW_ICON_PROVIDER::GetIndicatorIcon( INDICATOR_ICON::ICON_ID aId
     case STATE::ON:     return m_rightArrowBitmap;
     case STATE::DIMMED: return m_dotBitmap;
     case STATE::OFF:    return m_blankBitmap;
+    case STATE::OPEN:   return m_openBitmap;
+    case STATE::CLOSED: return m_closedBitmap;
     default:            return m_blankBitmap;
     }
 }

@@ -94,16 +94,6 @@ protected:
 };
 
 
-enum GROUP_TYPE
-{
-    GROUP_SINGLETON,
-    GROUP_COLLAPSED,
-    GROUP_COLLAPSED_DURING_SORT,
-    GROUP_EXPANDED,
-    CHILD_ITEM
-};
-
-
 struct DATA_MODEL_ROW
 {
     DATA_MODEL_ROW( const SCH_REFERENCE& aFirstReference, GROUP_TYPE aType )
@@ -249,7 +239,11 @@ public:
     bool ColIsItemNumber( int aCol );
     bool ColIsAttribute( int aCol );
 
-    bool IsExpanderColumn( int aCol ) const;
+    bool IsExpanderColumn( int aCol ) const override;
+    GROUP_TYPE GetGroupType( int aRow ) const override
+    {
+        return m_rows[aRow].m_Flag;
+    }
 
     void SetSorting( int aCol, bool ascending )
     {

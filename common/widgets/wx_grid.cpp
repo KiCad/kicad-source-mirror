@@ -28,6 +28,7 @@
 #include <wx/event.h> // Needed for textentry.h on MSW
 #include <wx/textentry.h>
 
+#include <widgets/indicator_icon.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
@@ -215,6 +216,8 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetDefaultCellFont( KIUI::GetControlFont( this ) );
     SetLabelFont( KIUI::GetControlFont( this ) );
 
+    m_rowIconProvider = new ROW_ICON_PROVIDER( KIUI::c_IndicatorSizeDIP, this );
+
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
     Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
     Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
@@ -225,6 +228,8 @@ WX_GRID::~WX_GRID()
 {
     if( m_weOwnTable )
         DestroyTable( GetTable() );
+
+    delete m_rowIconProvider;
 
     Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
     Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );

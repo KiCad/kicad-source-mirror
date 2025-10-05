@@ -36,6 +36,7 @@
 #include <widgets/grid_checkbox.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <tools/sch_actions.h>
 #include <tool/tool_manager.h>
@@ -453,6 +454,7 @@ void DIALOG_LIB_FIELDS_TABLE::SetupColumnProperties( int aCol )
     }
     else
     {
+        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
         attr->SetEditor( m_grid->GetDefaultEditor() );
         m_dataModel->SetColAttr( attr, aCol );
     }

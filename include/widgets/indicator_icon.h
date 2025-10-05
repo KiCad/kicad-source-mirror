@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef ROW_INDICATOR__H_
-#define ROW_INDICATOR__H_
+#pragma once
 
 #include <wx/statbmp.h>
 #include <wx/panel.h>
@@ -35,12 +34,10 @@ class wxStaticBitmap;
 class INDICATOR_ICON : public wxPanel
 {
 public:
-
     /**
      * An id that refers to a certain icon state.
      *
-     * Exactly what that state might mean in terms of icons is up
-     * to the icon provider.
+     * Exactly what that state might mean in terms of icons is up to the icon provider.
      */
     using ICON_ID = int;
 
@@ -50,7 +47,6 @@ public:
     class ICON_PROVIDER
     {
     public:
-
         virtual ~ICON_PROVIDER() {};
 
         /**
@@ -62,23 +58,12 @@ public:
     };
 
     /**
-     * Accessor for the default icon providers, which take
-     * true and false for IDs, meaning on/off.
-     *
-     * @param aAlternative false for blue arrow/blank, true for the green diamond.
-     */
-    static ICON_PROVIDER& GetDefaultRowIconProvider( bool aAlternative );
-
-    /**
      * @param aParent the owning window.
      * @param aIconProvider the icon provider to get icons from.
-     * @param aInitialIcon is the initial state of the icon (the meaning
-     * depends on what is the purpose of the icon).
-     * @param aID the ID to use for the widgets - events will have
-     * this ID.
+     * @param aInitialIcon is the initial state of the icon.
+     * @param aID the ID to use for the widgets - events will have this ID.
      */
-    INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
-                    ICON_ID aInitialIcon, int aID );
+    INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider, ICON_ID aInitialIcon, int aID );
 
     /**
      * Set the row indicator to the given state.
@@ -86,12 +71,6 @@ public:
      * @param aIconId the icon ID to pass to the provider.
      */
     void SetIndicatorState( ICON_ID aIconId );
-
-
-    /**
-     * @return the current state of the indicator.
-     */
-    ICON_ID GetIndicatorState() const;
 
     /**
      * Update the window ID of this control and its children.
@@ -105,15 +84,9 @@ public:
     }
 
 private:
-
-    /// Object that delivers icons for the indicator (currently uses a default implementation).
-    ICON_PROVIDER& m_iconProvider;
-
-    /// Handle on the bitmap widget.
-    wxStaticBitmap* m_bitmap;
-
-    /// Is the icon currently "on".
-    ICON_ID m_currentId;
+    ICON_PROVIDER&   m_iconProvider;   /// Object that delivers icons for the indicator
+    wxStaticBitmap*  m_bitmap;         /// Handle on the bitmap widget.
+    ICON_ID          m_currentId;      /// Is the icon currently "on".
 };
 
 
@@ -132,12 +105,10 @@ public:
         ON,     ///< Row "on" or "selected"
         UP,     ///< Row above design alpha
         DOWN,   ///< Row below design alpha
+        OPEN,   ///< Tree control open
+        CLOSED  ///< Tree control closed
     };
 
-    /**
-     * @param aAlt false: normal icons (blue arrow/blank), true:
-     * alternative icons (blue arrow/green diamond).
-     */
     ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow );
 
     /// @copydoc INDICATOR_ICON::ICON_PROVIDER::GetIndicatorIcon()
@@ -149,7 +120,6 @@ private:
     wxBitmap m_upArrowBitmap;
     wxBitmap m_downArrowBitmap;
     wxBitmap m_dotBitmap;
+    wxBitmap m_openBitmap;
+    wxBitmap m_closedBitmap;
 };
-
-
-#endif // ROW_INDICATOR__H_

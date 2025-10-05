@@ -40,6 +40,7 @@
 #include <tools/sch_editor_control.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
@@ -456,6 +457,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     if( m_dataModel->ColIsReference( aCol ) )
     {
         attr->SetReadOnly();
+        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
         m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
@@ -491,6 +493,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     }
     else
     {
+        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
         attr->SetEditor( m_grid->GetDefaultEditor() );
         m_dataModel->SetColAttr( attr, aCol );
     }

@@ -170,7 +170,11 @@ public:
     bool ColIsSymbolName( int aCol );
     bool ColIsCheck( int aCol );
 
-    bool IsExpanderColumn( int aCol ) const;
+    bool IsExpanderColumn( int aCol ) const override;
+    GROUP_TYPE GetGroupType( int aRow ) const override
+    {
+        return m_rows[aRow].m_Flag;
+    }
 
     void SetSorting( int aCol, bool ascending )
     {
