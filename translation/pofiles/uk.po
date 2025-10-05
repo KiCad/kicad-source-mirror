@@ -12,16 +12,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-09-30 19:57+0000\n"
+"PO-Revision-Date: 2025-10-06 01:31+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -19094,44 +19095,36 @@ msgid "Datasheet"
 msgstr "Документація"
 
 #: eeschema/lib_symbol.cpp:2106
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "Одиниці символу"
+msgstr "Визначення символу"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Define as Power Symbol"
-msgstr "Визначити як символ живлення"
+msgstr "Визначити як символ влади"
 
 #: eeschema/lib_symbol.cpp:2111
-#, fuzzy
 msgid "Define as Local Power Symbol"
-msgstr "Визначити як символ місцевої влади"
+msgstr "Визначити як символ локальної потужності"
 
 #: eeschema/lib_symbol.cpp:2115
-#, fuzzy
 msgid "Pin Display"
-msgstr "Вигляд сітки"
+msgstr "Відображення закріплених елементів"
 
 #: eeschema/lib_symbol.cpp:2117
-#, fuzzy
 msgid "Show Pin Number"
-msgstr "Показати номери виводів"
+msgstr "Показати PIN-код"
 
 #: eeschema/lib_symbol.cpp:2120
-#, fuzzy
 msgid "Show Pin Name"
-msgstr "Показувати ім'я виводу"
+msgstr "Показати назву PIN-коду"
 
 #: eeschema/lib_symbol.cpp:2123
-#, fuzzy
 msgid "Place Pin Names Inside"
-msgstr "Розмістити імена виводів всередині"
+msgstr "Розмістіть назви пінів всередині"
 
 #: eeschema/lib_symbol.cpp:2126
-#, fuzzy
 msgid "Pin Name Position Offset"
-msgstr "Зсув позиції імені виводу:"
+msgstr "Зсув позиції назви штифта"
 
 #: eeschema/lib_symbol.cpp:2133 eeschema/tools/sch_actions.cpp:1046
 msgid "Exclude from Simulation"
@@ -19146,19 +19139,16 @@ msgid "Exclude from Bill of Materials"
 msgstr "Виключити з переліку матеріали"
 
 #: eeschema/lib_symbol.cpp:2143
-#, fuzzy
 msgid "Units and Body Styles"
-msgstr "Агрегати та типи кузова"
+msgstr "Агрегати та Типи кузова"
 
 #: eeschema/lib_symbol.cpp:2145
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "Кількість біт"
+msgstr "Кількість символьних одиниць"
 
 #: eeschema/lib_symbol.cpp:2148
-#, fuzzy
 msgid "Units are Interchangeable"
-msgstr "Всі частини взаємозамінні"
+msgstr "Одиниці є взаємозамінними"
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -22509,9 +22499,9 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "Запускати %s"
+msgstr "Запустити %d"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -23702,7 +23692,6 @@ msgid "Current Variant"
 msgstr "Поточний варіант"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic variant"
 msgstr "Елемент керування для вибору поточного варіанту схеми"
 
@@ -37749,9 +37738,10 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "Виключати всі посадкові місця зі наскрізними отворами"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Виключити всі сліди з прапорцем «Не заселяти»"
+msgstr ""
+"Виключити всі контури за допомогою встановленого прапорця «Виключити зі "
+"специфікації»"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 msgid "Include board edge layer"
@@ -41852,15 +41842,15 @@ msgstr ""
 "не містять міді"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:75
-#, fuzzy
 msgid "Apply board defaults to footprint dimensions"
 msgstr ""
-"Застосування налаштувань плати за замовчуванням до полів посадкового місця"
+"Застосування значень плати за замовчуванням до розмірів посадкового місця"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:78
-#, fuzzy
 msgid "Apply board defaults to footprint barcodes"
-msgstr "Немає типового посадкового місця"
+msgstr ""
+"Застосування налаштувань плати за замовчуванням до штрих-кодів посадкового "
+"місця"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
 msgid "This layer is required and cannot be disabled"
@@ -43661,7 +43651,7 @@ msgstr "налаштування обмежень для мікро перехі
 
 #: pcbnew/drc/drc_engine.cpp:240
 msgid "barcode visual separation default"
-msgstr ""
+msgstr "Візуальне розділення штрих-кодів за замовчуванням"
 
 #: pcbnew/drc/drc_engine.cpp:262 pcbnew/drc/drc_engine.cpp:278
 #: pcbnew/drc/drc_engine.cpp:346 pcbnew/drc/drc_engine.cpp:363
@@ -44760,34 +44750,34 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "%s примітивів форми відрізняються на шарі %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
-msgstr "%s відмінностей."
+msgstr "%s текст відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
-msgstr "Ширина штрихування %s відрізняється."
+msgstr "%s ширина відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
-msgstr "Ім'я %s відрізняється."
+msgstr "%s висота відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
-msgstr "Розмір свердла %s відрізняється."
+msgstr "Розмір тексту %s відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
-msgstr "%s кутів відрізняється."
+msgstr "%s код відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
-msgstr "Рівень згладжування штрихування %s відрізняється."
+msgstr "Рівень корекції помилок %s відрізняється."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #, c-format
@@ -44986,9 +44976,8 @@ msgid "%s differs."
 msgstr "%s відмінностей."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
-#, fuzzy
 msgid "Barcode count differs."
-msgstr "Кількість контактних площадок відрізняється."
+msgstr "Кількість штрих-кодів різна."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:933
 msgid "Pad count differs."
@@ -47578,9 +47567,9 @@ msgid "Thermal Relief Gap"
 msgstr "Зазор для термічного мостику"
 
 #: pcbnew/pcb_barcode.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
-msgstr "Колодка %s на %s"
+msgstr "Штрих-код '%s' на %s"
 
 #: pcbnew/pcb_barcode.cpp:694
 msgid "CODE_39"
@@ -47623,9 +47612,8 @@ msgid "Show Text"
 msgstr "Показати Текст"
 
 #: pcbnew/pcb_barcode.cpp:740
-#, fuzzy
 msgid "Barcode Type"
-msgstr "Штрих-код"
+msgstr "Тип штрих-коду"
 
 #: pcbnew/pcb_barcode.cpp:775
 msgid "Margin X"
@@ -47641,9 +47629,8 @@ msgid "+/- to switch"
 msgstr "+/- для переключення"
 
 #: pcbnew/pcb_base_edit_frame.cpp:437
-#, fuzzy
 msgid "Edit Vertices"
-msgstr "Редагувати властивості"
+msgstr "Редагувати вершини"
 
 #: pcbnew/pcb_base_frame.cpp:1195
 msgid ""
@@ -49732,22 +49719,20 @@ msgid "removed annular ring"
 msgstr "видалення пояска кільця"
 
 #: pcbnew/pcb_track.cpp:1427
-#, fuzzy
 msgid "Via diameter is too small."
-msgstr "За допомогою селектора діаметра"
+msgstr "Діаметр переходного отвору занадто малий."
 
 #: pcbnew/pcb_track.cpp:1434
 msgid "Via drill is too small."
-msgstr ""
+msgstr "Через свердло занадто мале."
 
 #: pcbnew/pcb_track.cpp:1441
 msgid "No via hole size defined."
 msgstr "Розмір наскрізного отвору не визначено."
 
 #: pcbnew/pcb_track.cpp:1448
-#, fuzzy
 msgid "No via diameter defined."
-msgstr "Розмір наскрізного отвору не визначено."
+msgstr "Діаметр переходного отвору не визначено."
 
 #: pcbnew/pcb_track.cpp:1456
 msgid "Via hole size must be smaller than via diameter"
@@ -50406,52 +50391,36 @@ msgstr ""
 "маршрутизації доріжок."
 
 #: pcbnew/router/router_tool.cpp:210
-#, fuzzy
 msgid "Track Corner Mode 45"
-msgstr "Режим заокруглення доріжки"
+msgstr "Режим відстеження кутів 45"
 
 #: pcbnew/router/router_tool.cpp:211
-#, fuzzy
 msgid "Switch to 45° corner when routing tracks."
-msgstr ""
-"Перемикати між гострими/закругленими кутами та кутами 45°/90° під час "
-"маршрутизації доріжок."
+msgstr "Перемикайтеся на кут 45° під час фрезерування напрямних."
 
 #: pcbnew/router/router_tool.cpp:217
-#, fuzzy
 msgid "Track Corner Mode 90"
-msgstr "Режим заокруглення доріжки"
+msgstr "Режим відстеження кутів 90"
 
 #: pcbnew/router/router_tool.cpp:218
-#, fuzzy
 msgid "Switch to 90° corner when routing tracks."
-msgstr ""
-"Перемикати між гострими/закругленими кутами та кутами 45°/90° під час "
-"маршрутизації доріжок."
+msgstr "Перемикайтеся на кут 90° під час фрезерування напрямних."
 
 #: pcbnew/router/router_tool.cpp:224
-#, fuzzy
 msgid "Track Corner Mode Arc 45"
-msgstr "Режим заокруглення доріжки"
+msgstr "Режим відстеження кутів Дуга 45"
 
 #: pcbnew/router/router_tool.cpp:225
-#, fuzzy
 msgid "Switch to arc 45° corner when routing tracks."
-msgstr ""
-"Перемикати між гострими/закругленими кутами та кутами 45°/90° під час "
-"маршрутизації доріжок."
+msgstr "Перемикайтеся на дугу з кутом 45° під час трасування доріжок."
 
 #: pcbnew/router/router_tool.cpp:231
-#, fuzzy
 msgid "Track Corner Mode Arc 90"
-msgstr "Режим заокруглення доріжки"
+msgstr "Режим відстеження кутів Дуга 90"
 
 #: pcbnew/router/router_tool.cpp:232
-#, fuzzy
 msgid "Switch to arc 90° corner when routing tracks."
-msgstr ""
-"Перемикати між гострими/закругленими кутами та кутами 45°/90° під час "
-"маршрутизації доріжок."
+msgstr "Перемикайтеся на дугу з кутом 90° під час трасування доріжок."
 
 #: pcbnew/router/router_tool.cpp:255
 msgid "Select Track/Via Width"
@@ -52416,13 +52385,12 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Спростіть контури полігонів, видаливши зайві точки"
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit Vertices..."
-msgstr "Редагувати мережеві класи..."
+msgstr "Редагувати вершини..."
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Edit polygon vertices using a table"
-msgstr ""
+msgstr "Редагування вершин полігону за допомогою таблиці"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid ""
@@ -55384,16 +55352,15 @@ msgstr "Дрилі"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
-msgstr ""
+msgstr "X координат"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:57
 msgid "Y coord"
-msgstr ""
+msgstr "Y координат"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "Додати текст"
+msgstr "Редагувати вершину"
 
 #: pcbnew/zone.cpp:870
 msgid "No vias"
