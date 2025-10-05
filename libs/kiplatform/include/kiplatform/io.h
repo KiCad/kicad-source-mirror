@@ -47,6 +47,14 @@ namespace IO
     bool DuplicatePermissions( const wxString& aSrc, const wxString& aDest );
 
     /**
+     * Ensures that a file has write permissions.
+     * This is useful after copying files that may have been read-only.
+     * @param aFilePath path to the file to make writeable
+     * @return true if the process was successful
+     */
+    bool MakeWriteable( const wxString& aFilePath );
+
+    /**
     * Helper function to determine the status of the 'Hidden' file attribute.
     * @return true if the file attribut is set.
     */

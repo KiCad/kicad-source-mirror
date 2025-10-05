@@ -115,6 +115,23 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
     return retval;
 }
 
+bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
+{
+    DWORD attrs = GetFileAttributesW( aFilePath.wc_str() );
+    
+    if( attrs == INVALID_FILE_ATTRIBUTES )
+        return false;
+    
+    // Remove read-only attribute if present
+    if( attrs & FILE_ATTRIBUTE_READONLY )
+    {
+        attrs &= ~FILE_ATTRIBUTE_READONLY;
+        return SetFileAttributesW( aFilePath.wc_str(), attrs ) != 0;
+    }
+    
+    return true; // Already writeable
+}
+
 bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 {
     bool result = false;

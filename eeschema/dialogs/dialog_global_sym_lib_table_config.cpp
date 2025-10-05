@@ -25,6 +25,7 @@
 #include <kiway.h>
 #include <macros.h>
 
+#include <kiplatform/io.h>
 #include "symbol_lib_table.h"
 
 
@@ -119,6 +120,9 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
                                             fn.GetFullPath(), symTableFileName.GetFullPath() ) );
             return false;
         }
+
+        // Ensure the copied file is writable
+        KIPLATFORM::IO::MakeWriteable( symTableFileName.GetFullPath() );
     }
 
     // Load the successfully copied symbol library table file.  This should not fail since the
