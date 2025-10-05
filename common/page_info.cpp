@@ -95,6 +95,7 @@ PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, const PAGE_SIZE_TYPE& aType, wx
 
 PAGE_INFO::PAGE_INFO( PAGE_SIZE_TYPE aType, bool aIsPortrait ) :
         m_size( s_user_width, s_user_height ),
+        m_portrait( false ),
         m_paper_id( wxPAPER_NONE )
 {
     SetType( aType, aIsPortrait );
