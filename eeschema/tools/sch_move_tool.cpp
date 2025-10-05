@@ -56,6 +56,23 @@
 #define QUIET_MODE true
 
 
+static bool isGraphicItemForDrop( const SCH_ITEM* aItem )
+{
+    switch( aItem->Type() )
+    {
+    case SCH_SHAPE_T:
+    case SCH_BITMAP_T:
+    case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
+        return true;
+    case SCH_LINE_T:
+        return static_cast<const SCH_LINE*>( aItem )->IsGraphicLine();
+    default:
+        return false;
+    }
+}
+
+
 SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
         m_inMoveTool( false ),
@@ -483,6 +500,37 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     // Keep an original copy of the starting points for cleanup after the move
     std::vector<DANGLING_END_ITEM> internalPoints;
 
+    bool selectionHasSheetPins = false;
+    bool selectionHasGraphicItems = false;
+    bool selectionHasNonGraphicItems = false;
+    bool selectionIsGraphicsOnly = false;
+
+    auto refreshSelectionTraits = [&]()
+    {
+        selectionHasSheetPins = false;
+        selectionHasGraphicItems = false;
+        selectionHasNonGraphicItems = false;
+
+        for( EDA_ITEM* edaItem : selection )
+        {
+            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( edaItem );
+
+            if( schItem->Type() == SCH_SHEET_PIN_T )
+                selectionHasSheetPins = true;
+
+            if( isGraphicItemForDrop( schItem ) )
+                selectionHasGraphicItems = true;
+            else if( schItem->Type() != SCH_SHEET_T )
+                selectionHasNonGraphicItems = true;
+        }
+
+        selectionIsGraphicsOnly = selectionHasGraphicItems && !selectionHasNonGraphicItems;
+    };
+
+    refreshSelectionTraits();
+
+    bool lastCtrlDown = false;
+
     Activate();
 
     // Must be done after Activate() so that it gets set into the correct context
@@ -514,6 +562,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
+        bool ctrlDown = evt->Modifier( MD_CTRL );
+        lastCtrlDown = ctrlDown;
+
         if( evt->IsAction( &SCH_ACTIONS::restartMove )
                 || evt->IsAction( &SCH_ACTIONS::move )
                 || evt->IsAction( &SCH_ACTIONS::drag )
@@ -521,6 +572,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
+            refreshSelectionTraits();
+
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
@@ -766,6 +819,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 prevPos = m_cursor;
                 controls->SetAutoPan( true );
                 m_moveInProgress = true;
+
+                refreshSelectionTraits();
             }
 
             //------------------------------------------------------------------------
@@ -815,14 +870,14 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 }
             }
 
+            bool dropAllowedBySelection = !selectionHasSheetPins;
+            bool dropAllowedByModifiers = !selectionIsGraphicsOnly || ctrlDown;
+
+            if( sheet && !( dropAllowedBySelection && dropAllowedByModifiers ) )
+                sheet = nullptr;
+
             if( sheet != hoverSheet )
             {
-                if( hoverSheet )
-                {
-                    hoverSheet->ClearFlags( BRIGHTENED );
-                    m_frame->UpdateItem( hoverSheet, false );
-                }
-
                 hoverSheet = sheet;
 
                 if( hoverSheet )
@@ -1095,6 +1150,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
     SCH_SHEET* targetSheet = hoverSheet;
+
+    if( selectionHasSheetPins || ( selectionIsGraphicsOnly && !lastCtrlDown ) )
+        targetSheet = nullptr;
 
     if( hoverSheet )
     {
