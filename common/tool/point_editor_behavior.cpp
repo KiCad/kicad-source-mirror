@@ -33,6 +33,9 @@ void POLYGON_POINT_EDIT_BEHAVIOR::BuildForPolyOutline( EDIT_POINTS&          aPo
 {
     const int cornersCount = aOutline.TotalVertices();
 
+    if( cornersCount == 0 )
+        return;
+
     for( auto iterator = aOutline.CIterateWithHoles(); iterator; iterator++ )
     {
         aPoints.AddPoint( *iterator );
