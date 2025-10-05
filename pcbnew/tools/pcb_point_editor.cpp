@@ -2264,7 +2264,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 if( m_editedPoint->GetGridConstraint() != SNAP_BY_GRID )
                     grid.SetAuxAxes( true, m_original.GetPosition() );
 
-                setAltConstraint( true );
                 m_editedPoint->SetActive();
 
                 for( size_t ii = 0; ii < m_editPoints->PointsSize(); ++ii )
@@ -2319,6 +2318,17 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                         pos.y = last.y;
                 }
             }
+
+            // Update constraint based on modifier keys and settings
+            bool constraintEnabled = false;
+
+            if( editFrame->IsType( FRAME_PCB_EDITOR ) )
+                constraintEnabled = editFrame->GetPcbNewSettings()->m_Use45DegreeLimit;
+            else
+                constraintEnabled = editFrame->GetFootprintEditorSettings()->m_Use45Limit;
+
+            constraintEnabled = constraintEnabled && !evt->Modifier( MD_CTRL );
+            setAltConstraint( constraintEnabled );
 
             // Apply 45 degree or other constraints
             if( m_altConstraint )
@@ -2630,9 +2640,10 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
             EC_CONVERGING* altConstraint = new EC_CONVERGING( *line, *m_editPoints );
             m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*) altConstraint );
         }
-        else
+        else if( !isPoly )
         {
             // Find a proper constraining point for 45 degrees mode
+            // Don't constrain polygon points
             m_altConstrainer = get45DegConstrainer();
             m_altConstraint.reset( new EC_45DEGREE( *m_editedPoint, m_altConstrainer ) );
         }
