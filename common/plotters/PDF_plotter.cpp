@@ -2283,7 +2283,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             double adj_c = ctm_c;
             double adj_d = ctm_d;
 
-            if( aItalic && ( !aFont || !aFont->IsOutline() ) )
+            if( aItalic )
             {
                 double tilt = -ITALIC_TILT;
 
