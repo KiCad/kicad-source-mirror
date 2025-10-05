@@ -886,6 +886,11 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         if( loadedScreen )
         {
             sheet->SetScreen( loadedScreen );
+
+            wxFileName projectFileName = loadAltiumFileName;
+            projectFileName.SetPath( m_schematic->Prj().GetProjectPath() );
+            projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
+            sheet->SetFileName( projectFileName.GetFullName() );
             // Do not need to load the sub-sheets - this has already been done.
         }
         else
