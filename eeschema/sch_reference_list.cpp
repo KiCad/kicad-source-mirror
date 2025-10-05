@@ -815,7 +815,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
         instance.m_Reference = aSymbol->GetRef( &aSheetPath, false );
 
         if( instance.m_Reference.IsEmpty() )
-            instance.m_Reference = aSymbol->GetField( FIELD_T::REFERENCE )->GetText();
+            instance.m_Reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
 
         instance.m_Unit = aSymbol->GetUnit();
         aSymbol->AddHierarchicalReference( instance );
