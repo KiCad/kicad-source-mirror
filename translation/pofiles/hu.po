@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-30 15:10+0300\n"
-"PO-Revision-Date: 2025-09-28 04:02+0000\n"
+"PO-Revision-Date: 2025-10-05 13:03+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -1107,9 +1107,8 @@ msgid "Render Options"
 msgstr "Megjelenítési beállítások"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Vágja le a szitanyomást a Via körül"
+msgstr "Szitanyomat levágása a viák körül"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 #, fuzzy
@@ -1323,9 +1322,8 @@ msgstr ""
 "találhat el."
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
-#, fuzzy
 msgid "Lights Configuration"
-msgstr "Gyorsbillentyű konfigurációs fájl betöltése"
+msgstr "Fények konfigurálása"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
@@ -1504,9 +1502,8 @@ msgstr "Legutóbbi megnyitása"
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:73
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Legutóbbi Excellon fúrófájl megnyitása"
+msgstr "Legutóbbi fájlok törlése"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
 #: eeschema/tools/sch_drawing_tools.cpp:1067
@@ -2220,7 +2217,7 @@ msgstr "Plugin és tartalomkezelő által hozzáadott"
 
 #: common/design_block_lib_table.cpp:636 common/fp_lib_table.cpp:633
 #: eeschema/symbol_lib_table.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "A(z) \"%s\" globális könyvtártáblázat útvonal nem hozható létre."
 
@@ -2275,7 +2272,6 @@ msgid "Bug tracker"
 msgstr "Hibabejelentő"
 
 #: common/dialog_about/AboutDialog_main.cpp:152
-#, fuzzy
 msgid "Report or examine bugs - "
 msgstr "Hibák bejelentése vagy megtekintése - "
 
@@ -2393,9 +2389,8 @@ msgid "Translators"
 msgstr "Szövegfordítók"
 
 #: common/dialog_about/dialog_about.cpp:164
-#, fuzzy
 msgid "Packagers"
-msgstr "Forráskód"
+msgstr "Csomagfejlesztők"
 
 #: common/dialog_about/dialog_about.cpp:167
 msgid "License"
@@ -2419,12 +2414,10 @@ msgid "App Title"
 msgstr "Program címe"
 
 #: common/dialog_about/dialog_about_base.cpp:37
-#, fuzzy
 msgid "Build Version Info"
 msgstr "Program verzió információ"
 
 #: common/dialog_about/dialog_about_base.cpp:41
-#, fuzzy
 msgid "Lib Version Info"
 msgstr "Könyvtár verzió információ"
 
@@ -2479,9 +2472,8 @@ msgid "Pattern:"
 msgstr "Vonalkázott"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Vezetékosztályok"
+msgstr "Vezetékosztályok:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -2789,7 +2781,7 @@ msgstr ""
 "specifikus könyvtártáblázatokban"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Select global %s library table file:"
 msgstr "Válassza ki a globális %s könyvtártáblázat fájlt:"
 
@@ -3827,9 +3819,8 @@ msgstr ""
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:18
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Csatlakozások"
+msgstr "Csatlakozás"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
@@ -16169,9 +16160,8 @@ msgstr "Csomópontok"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:383
-#, fuzzy
 msgid "Library link:"
-msgstr "Könyvtár:"
+msgstr "Könyvtár link:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:328
 #, fuzzy
