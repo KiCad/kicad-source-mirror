@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-30 15:10+0300\n"
+"POT-Creation-Date: 2025-10-05 16:04+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5760,6 +5760,9 @@ msgstr "Unpin Library"
 msgid "No longer keep the library at the top of the list"
 msgstr "No longer keep the library at the top of the list"
 
+msgid "Library Table"
+msgstr "Library Table"
+
 msgid "Library Tree"
 msgstr "Library Tree"
 
@@ -8352,6 +8355,106 @@ msgstr "Filter by unit:"
 msgid "Pin Table"
 msgstr "Pin Table"
 
+msgid "Revert symbol"
+msgstr "Revert symbol"
+
+msgid "Revert the symbol to its last saved state"
+msgstr "Revert the symbol to its last saved state"
+
+msgid "Clear cell"
+msgstr "Clear cell"
+
+msgid "Clear the cell value"
+msgstr "Clear the cell value"
+
+msgid "Create Derived Symbol"
+msgstr "Create Derived Symbol"
+
+msgid "Create a new symbol derived from the selected one"
+msgstr "Create a new symbol derived from the selected one"
+
+msgid "Select Footprint..."
+msgstr "Select Footprint…"
+
+msgid "Browse for footprint"
+msgstr "Browse for footprint"
+
+msgid "Show datasheet in browser"
+msgstr "Show datasheet in browser"
+
+#, c-format
+msgid "Symbol Library Fields: %s"
+msgstr "Symbol Library Fields: %s"
+
+msgid "Label"
+msgstr "Label"
+
+msgid "Group By"
+msgstr "Group By"
+
+#, c-format
+msgid "No symbols found in library %s."
+msgstr "No symbols found in library %s."
+
+#, c-format
+msgid "Error loading symbol %s: %s"
+msgstr "Error loading symbol %s: %s"
+
+#, c-format
+msgid ""
+"Error accessing library %s.\n"
+"\n"
+"%s"
+msgstr ""
+"Error accessing library %s.\n"
+"\n"
+"%s"
+
+msgid "No symbols could be loaded from the library."
+msgstr "No symbols could be loaded from the library."
+
+msgid "New field name:"
+msgstr "New field name:"
+
+msgid "Add Field"
+msgstr "Add Field"
+
+msgid "Field must have a name."
+msgstr "Field must have a name."
+
+#, c-format
+msgid "Field name '%s' already in use."
+msgstr "Field name '%s' already in use."
+
+msgid "Rename Field"
+msgstr "Rename Field"
+
+#, c-format
+msgid "Field name '%s' already exists."
+msgstr "Field name '%s' already exists."
+
+#, c-format
+msgid "Are you sure you want to remove the field '%s'?"
+msgstr "Are you sure you want to remove the field '%s'?"
+
+msgid "Exclude From BOM"
+msgstr "Exclude From BOM"
+
+msgid "Exclude From Simulation"
+msgstr "Exclude From Simulation"
+
+msgid "Exclude From Board"
+msgstr "Exclude From Board"
+
+msgid "Power Symbol"
+msgstr "Power Symbol"
+
+msgid "Local Power Symbol"
+msgstr "Local Power Symbol"
+
+msgid "Library Fields Editor"
+msgstr "Library Fields Editor"
+
 #, c-format
 msgid "Deriving from symbol '%s'."
 msgstr "Deriving from symbol '%s'."
@@ -9709,23 +9812,11 @@ msgstr "Place all units"
 msgid "Sequentially place all units of the symbol."
 msgstr "Sequentially place all units of the symbol."
 
-msgid "Select Footprint..."
-msgstr "Select Footprint…"
-
-msgid "Browse for footprint"
-msgstr "Browse for footprint"
-
-msgid "Show datasheet in browser"
-msgstr "Show datasheet in browser"
-
 msgid "Column Label"
 msgstr "Column Label"
 
 msgid "Show Column"
 msgstr "Show Column"
-
-msgid "Group By"
-msgstr "Group By"
 
 msgid ""
 "Show\n"
@@ -9746,26 +9837,6 @@ msgstr "Qty"
 
 msgid "#"
 msgstr "#"
-
-msgid "New field name:"
-msgstr "New field name:"
-
-msgid "Add Field"
-msgstr "Add Field"
-
-msgid "Field must have a name."
-msgstr "Field must have a name."
-
-#, c-format
-msgid "Field name '%s' already in use."
-msgstr "Field name '%s' already in use."
-
-#, c-format
-msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Are you sure you want to remove the field '%s'?"
-
-msgid "Rename Field"
-msgstr "Rename Field"
 
 #, c-format
 msgid "Field name %s already exists."
@@ -12829,9 +12900,6 @@ msgstr "Diameter"
 msgid "Tri-State"
 msgstr "Tri-State"
 
-msgid "Label"
-msgstr "Label"
-
 msgid "Hierarchical Sheet Pin"
 msgstr "Hierarchical Sheet Pin"
 
@@ -13086,12 +13154,6 @@ msgstr "Border Color"
 
 msgid "Background Color"
 msgstr "Background Color"
-
-msgid "Exclude From Board"
-msgstr "Exclude From Board"
-
-msgid "Exclude From Simulation"
-msgstr "Exclude From Simulation"
 
 msgid "Exclude From Bill of Materials"
 msgstr "Exclude From Bill of Materials"
@@ -14941,9 +15003,6 @@ msgstr "Parent"
 msgid "Body"
 msgstr "Body"
 
-msgid "Power Symbol"
-msgstr "Power Symbol"
-
 msgid "Datasheet"
 msgstr "Datasheet"
 
@@ -16495,6 +16554,9 @@ msgstr "Can't save file '%s'."
 
 msgid "SVG File Name"
 msgstr "SVG File Name"
+
+msgid "Library Fields"
+msgstr "Library Fields"
 
 msgid "Place Pin"
 msgstr "Place Pin"

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-30 15:10+0300\n"
+"POT-Creation-Date: 2025-10-05 16:04+0300\n"
 "PO-Revision-Date: 2025-10-01 15:02+0000\n"
 "Last-Translator: William Lin <unrealin01@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -181,7 +181,7 @@ msgstr "重新載入時間 %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:116
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2705
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2709
 #, c-format
 msgid "Loading %s..."
 msgstr "正在載入 %s..."
@@ -225,7 +225,7 @@ msgstr "將目前視圖匯出為 JPEG..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: common/eda_base_frame.cpp:1189 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:322
+#: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:322
 #: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:678
 msgid "3D Viewer"
 msgstr "3D 查看器"
@@ -2098,7 +2098,7 @@ msgstr "資訊"
 #: eeschema/symbol_editor/symbol_editor.cpp:1144
 #: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
-#: eeschema/tools/symbol_editor_control.cpp:534
+#: eeschema/tools/symbol_editor_control.cpp:566
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
 #: kicad/tools/kicad_manager_control.cpp:370
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
@@ -2144,7 +2144,7 @@ msgid "KiCad Design Block folders"
 msgstr "KiCad 符號資料夾"
 
 #: common/design_block_io.cpp:174
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3030
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3034
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "無法覆蓋庫路徑 '%s'。"
@@ -2161,7 +2161,7 @@ msgstr ""
 "請確保你有寫入權限並再次嘗試。"
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:964
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3055
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3059
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "刪除資料夾 '%s' 的權限不足。"
@@ -2237,8 +2237,8 @@ msgstr "design-block-lib-table 檔案不包含名為「%s」的庫。"
 msgid "Added by Plugin and Content Manager"
 msgstr "由擴展內容管理員添加"
 
-#: common/design_block_lib_table.cpp:636 common/fp_lib_table.cpp:633
-#: eeschema/symbol_lib_table.cpp:634
+#: common/design_block_lib_table.cpp:637 common/fp_lib_table.cpp:634
+#: eeschema/symbol_lib_table.cpp:635
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "無法建立全域庫表路徑 '%s'。"
@@ -2446,11 +2446,11 @@ msgstr "複製 KiCad 版本資訊到剪貼簿"
 msgid "&Report Bug"
 msgstr "報告 Bug (&R)"
 
-#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1228
+#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1234
 msgid "Report a problem with KiCad"
 msgstr "報告 KiCad 的問題"
 
-#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1221
+#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1227
 msgid "Donate"
 msgstr "捐贈"
 
@@ -2634,6 +2634,7 @@ msgstr "環境變數"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
+#: eeschema/dialogs/dialog_lib_fields.cpp:266
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:214
@@ -2670,11 +2671,11 @@ msgstr "名稱"
 msgid "Path"
 msgstr "路徑"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:35
 msgid "design block"
 msgstr "符號"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:65
 #, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
@@ -2683,19 +2684,19 @@ msgstr ""
 "建立符號庫表時出錯 '%s'.\n"
 "%s"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:78
 msgid "Please select a design block library table file."
 msgstr "請選擇一個符號庫表檔案。"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:87
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:84
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:84
 #: pcbnew/footprint_libraries_utils.cpp:141
 #, c-format
 msgid "File '%s' not found."
 msgstr "找不到檔案 '%s'。"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:102
 #, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
@@ -2704,13 +2705,13 @@ msgstr ""
 "讀取符號庫表 '%s'出錯。\n"
 "%s"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:114
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
 #, c-format
 msgid "Cannot create global library table '%s'."
 msgstr "無法建立全域庫表 '%s'。"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:124
 #, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
 msgstr "將全域符號庫表 '%s' 複製到 '%s' 時出錯。"
@@ -3319,7 +3320,7 @@ msgid "Revision:"
 msgstr "修訂:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:252
-#: eeschema/dialogs/dialog_export_netlist.cpp:403
+#: eeschema/dialogs/dialog_export_netlist.cpp:456
 msgid "Title:"
 msgstr "標題:"
 
@@ -3442,7 +3443,7 @@ msgstr "選項"
 #: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
 #: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
 #: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
-#: eeschema/sim/simulator_frame_ui.cpp:2724
+#: eeschema/sim/simulator_frame_ui.cpp:2804
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:161
@@ -3492,7 +3493,7 @@ msgstr "列印預覽"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
 #: eeschema/dialogs/dialog_erc.cpp:116 eeschema/dialogs/dialog_erc.cpp:464
-#: eeschema/dialogs/dialog_export_netlist.cpp:257
+#: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:137
@@ -3713,6 +3714,7 @@ msgstr "移動遊標到指定位置"
 
 #: common/dialogs/eda_list_dialog.cpp:49 common/dialogs/eda_list_dialog.cpp:77
 #: common/widgets/lib_tree.cpp:220 common/widgets/lib_tree.cpp:304
+#: eeschema/dialogs/dialog_lib_fields.cpp:282
 #: eeschema/dialogs/dialog_sim_command.cpp:100
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:524
@@ -4886,7 +4888,7 @@ msgstr "檔案 \"%s\" 已存在。"
 #: eeschema/symbol_editor/symbol_editor.cpp:1145
 #: eeschema/symbol_editor/symbol_editor.cpp:1187
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
-#: eeschema/tools/symbol_editor_control.cpp:536
+#: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:362
@@ -5005,7 +5007,7 @@ msgstr "(快捷鍵)"
 msgid "Grid 2:"
 msgstr "網格 2:"
 
-#: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:919
+#: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:925
 msgid "Grid Overrides"
 msgstr "網格覆蓋"
 
@@ -5968,7 +5970,7 @@ msgstr "鼠標和觸摸板"
 msgid "Hotkeys"
 msgstr "快捷鍵"
 
-#: common/eda_base_frame.cpp:1100 kicad/project_tree_pane.cpp:1050
+#: common/eda_base_frame.cpp:1100 kicad/project_tree_pane.cpp:1052
 msgid "Version Control"
 msgstr "版本控制"
 
@@ -5976,7 +5978,7 @@ msgstr "版本控制"
 msgid "Data Collection"
 msgstr "數據收集"
 
-#: common/eda_base_frame.cpp:1130 common/tool/actions.cpp:1089
+#: common/eda_base_frame.cpp:1130 common/tool/actions.cpp:1095
 #: common/tool/common_tools.cpp:612 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
@@ -6023,7 +6025,7 @@ msgstr "欄位名稱模板"
 msgid "Simulator"
 msgstr "模擬工具"
 
-#: common/eda_base_frame.cpp:1165 common/tool/actions.cpp:1106
+#: common/eda_base_frame.cpp:1165 common/tool/actions.cpp:1112
 #: common/tool/common_tools.cpp:614 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1112 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
@@ -6126,7 +6128,7 @@ msgstr "找不到文件檔案 '%s'。"
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "文件檔案 '%s' 的 MIME 類型未知"
 
-#: common/eda_draw_frame.cpp:382 common/tool/actions.cpp:926
+#: common/eda_draw_frame.cpp:382 common/tool/actions.cpp:932
 msgid "Edit Grids..."
 msgstr "編輯網格..."
 
@@ -6173,7 +6175,7 @@ msgstr "mils"
 msgid "Units"
 msgstr "單位"
 
-#: common/eda_draw_frame.cpp:709 common/tool/actions.cpp:940
+#: common/eda_draw_frame.cpp:709 common/tool/actions.cpp:946
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:167
@@ -6209,7 +6211,7 @@ msgstr "新建庫"
 msgid "Search"
 msgstr "搜索"
 
-#: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1115
+#: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1121
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1959
 #: pagelayout_editor/pl_editor_frame.cpp:194
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:349
@@ -6361,8 +6363,9 @@ msgstr "全域標籤"
 msgid "Hierarchical Label"
 msgstr "層次標籤"
 
-#: common/eda_item.cpp:428 eeschema/dialogs/dialog_symbol_fields_table.cpp:199
-#: eeschema/sch_field.h:104 eeschema/sch_label.cpp:221
+#: common/eda_item.cpp:428 eeschema/dialogs/dialog_lib_fields.cpp:257
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:199 eeschema/sch_field.h:104
+#: eeschema/sch_label.cpp:221
 msgid "Field"
 msgstr "欄位"
 
@@ -7149,37 +7152,37 @@ msgstr "無法連接到遠端: '%s'"
 msgid "Could not push to remote: %s"
 msgstr "無法推送到遠端：%s"
 
-#: common/git/kicad_git_common.cpp:844
+#: common/git/kicad_git_common.cpp:867
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "接收到 %u 個 %u 物件"
 
-#: common/git/kicad_git_common.cpp:873
+#: common/git/kicad_git_common.cpp:896
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [更新] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:877
+#: common/git/kicad_git_common.cpp:900
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [新增] %s %s"
 
-#: common/git/kicad_git_common.cpp:897
+#: common/git/kicad_git_common.cpp:920
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "正在寫入物件: %lld%% (%u/%u), %zu 位元組"
 
-#: common/git/kicad_git_common.cpp:912
+#: common/git/kicad_git_common.cpp:935
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [已拒絕] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:917
+#: common/git/kicad_git_common.cpp:940
 #, c-format
 msgid "[updated] %s"
 msgstr "[已更新] %s"
 
-#: common/git/kicad_git_common.cpp:981
+#: common/git/kicad_git_common.cpp:1004
 msgid "Unable to authenticate"
 msgstr "無法驗證身份"
 
@@ -7306,7 +7309,7 @@ msgstr "將剪貼簿內容貼上到目前單元格位置"
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1714
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:983
+#: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:985
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2718
 msgid "Delete"
 msgstr "刪除"
@@ -7903,8 +7906,8 @@ msgstr "載入編輯器時出錯。"
 msgid "Unable to switch language to %s"
 msgstr "無法將語言切換到 %s"
 
-#: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1022
-#: pcbnew/drc/drc_engine.cpp:1023 pcbnew/drc/drc_engine.cpp:1024
+#: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1021
+#: pcbnew/drc/drc_engine.cpp:1022 pcbnew/drc/drc_engine.cpp:1023
 #: pcbnew/tools/board_inspection_tool.cpp:251
 #: pcbnew/tools/board_inspection_tool.cpp:260
 #: pcbnew/tools/board_inspection_tool.cpp:269
@@ -9247,90 +9250,95 @@ msgid "No longer keep the library at the top of the list"
 msgstr "不再將庫保持在列表頂部"
 
 #: common/tool/actions.cpp:805
+#, fuzzy
+msgid "Library Table"
+msgstr "庫名稱錯誤"
+
+#: common/tool/actions.cpp:811
 msgid "Library Tree"
 msgstr "新的庫參考"
 
-#: common/tool/actions.cpp:811
+#: common/tool/actions.cpp:817
 msgid "Hide Library Tree"
 msgstr "新的庫參考"
 
-#: common/tool/actions.cpp:817
+#: common/tool/actions.cpp:823
 msgid "Focus Library Tree Search Field"
 msgstr "旋轉封裝欄位"
 
-#: common/tool/actions.cpp:824
+#: common/tool/actions.cpp:830
 msgid "Pan Up"
 msgstr "向上平移"
 
-#: common/tool/actions.cpp:832
+#: common/tool/actions.cpp:838
 msgid "Pan Down"
 msgstr "向下平移"
 
-#: common/tool/actions.cpp:840
+#: common/tool/actions.cpp:846
 msgid "Pan Left"
 msgstr "向左平移"
 
-#: common/tool/actions.cpp:848
+#: common/tool/actions.cpp:854
 msgid "Pan Right"
 msgstr "向右平移"
 
-#: common/tool/actions.cpp:858
+#: common/tool/actions.cpp:864
 msgid "Switch to Fast Grid 1"
 msgstr "切換到快速網格 1"
 
-#: common/tool/actions.cpp:865
+#: common/tool/actions.cpp:871
 msgid "Switch to Fast Grid 2"
 msgstr "切換到快速網格 2"
 
-#: common/tool/actions.cpp:872
+#: common/tool/actions.cpp:878
 msgid "Cycle Fast Grid"
 msgstr "循環快速切換網格"
 
-#: common/tool/actions.cpp:879
+#: common/tool/actions.cpp:885
 msgid "Switch to Next Grid"
 msgstr "切換到下一網格"
 
-#: common/tool/actions.cpp:886
+#: common/tool/actions.cpp:892
 msgid "Switch to Previous Grid"
 msgstr "切換到上一網格"
 
-#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:627
+#: common/tool/actions.cpp:898 common/tool/common_tools.cpp:627
 msgid "Grid Origin"
 msgstr "網格原點"
 
-#: common/tool/actions.cpp:893
+#: common/tool/actions.cpp:899
 msgid "Place the grid origin point"
 msgstr "設定網格原點"
 
-#: common/tool/actions.cpp:901
+#: common/tool/actions.cpp:907
 msgid "Reset Grid Origin"
 msgstr "重置網格原點"
 
-#: common/tool/actions.cpp:911
+#: common/tool/actions.cpp:917
 msgid "Show Grid"
 msgstr "顯示網格"
 
-#: common/tool/actions.cpp:912
+#: common/tool/actions.cpp:918
 msgid "Display background grid in the edit window"
 msgstr "在編輯視窗中顯示背景網格"
 
-#: common/tool/actions.cpp:920
+#: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
 msgstr "啟用項目特定的網格, 覆蓋目前的網格設定"
 
-#: common/tool/actions.cpp:927
+#: common/tool/actions.cpp:933
 msgid "Edit grid definitions"
 msgstr "編輯設定網格尺寸定義"
 
-#: common/tool/actions.cpp:933
+#: common/tool/actions.cpp:939
 msgid "Grid Origin..."
 msgstr "網格原點..."
 
-#: common/tool/actions.cpp:934
+#: common/tool/actions.cpp:940
 msgid "Set the grid origin point"
 msgstr "設定網格原點"
 
-#: common/tool/actions.cpp:948 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
+#: common/tool/actions.cpp:954 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
@@ -9339,7 +9347,7 @@ msgstr "設定網格原點"
 msgid "Mils"
 msgstr "密爾 (mil)"
 
-#: common/tool/actions.cpp:956 eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
+#: common/tool/actions.cpp:962 eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:62
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
@@ -9353,189 +9361,189 @@ msgstr "密爾 (mil)"
 msgid "Millimeters"
 msgstr "毫米 (mm)"
 
-#: common/tool/actions.cpp:972
+#: common/tool/actions.cpp:978
 msgid "Select Columns..."
 msgstr "選擇行..."
 
-#: common/tool/actions.cpp:979
+#: common/tool/actions.cpp:985
 msgid "Switch units"
 msgstr "切換單位"
 
-#: common/tool/actions.cpp:980
+#: common/tool/actions.cpp:986
 msgid "Switch between imperial and metric units"
 msgstr "在英制單位和公制單位之間切換"
 
-#: common/tool/actions.cpp:986
+#: common/tool/actions.cpp:992
 msgid "Polar Coordinates"
 msgstr "極座標"
 
-#: common/tool/actions.cpp:987
+#: common/tool/actions.cpp:993
 msgid "Switch between polar and cartesian coordinate systems"
 msgstr "在極座標系和笛卡爾座標系之間切換"
 
-#: common/tool/actions.cpp:995
+#: common/tool/actions.cpp:1001
 msgid "Reset Local Coordinates"
 msgstr "重置局部座標"
 
-#: common/tool/actions.cpp:1002
+#: common/tool/actions.cpp:1008
 msgid "Always Show Crosshairs"
 msgstr "始終顯示十字線"
 
-#: common/tool/actions.cpp:1003
+#: common/tool/actions.cpp:1009
 msgid "Display crosshairs even when not drawing objects"
 msgstr "即使不在繪製物件時也顯示十字線"
 
-#: common/tool/actions.cpp:1009
+#: common/tool/actions.cpp:1015
 msgid "Full-Window Crosshairs"
 msgstr "全屏十字遊標"
 
-#: common/tool/actions.cpp:1010
+#: common/tool/actions.cpp:1016
 msgid "Switch display of full-window crosshairs"
 msgstr "切換顯示全屏十字遊標"
 
-#: common/tool/actions.cpp:1017
+#: common/tool/actions.cpp:1023
 msgid "Inactive Layer View Mode"
 msgstr "非活動層視圖模式"
 
-#: common/tool/actions.cpp:1018
+#: common/tool/actions.cpp:1024
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "在正常和暗顯之間切換非活動層"
 
-#: common/tool/actions.cpp:1025
+#: common/tool/actions.cpp:1031
 msgid "Inactive Layer View Mode (3-state)"
 msgstr "非活動層視圖模式 (三態)"
 
-#: common/tool/actions.cpp:1026
+#: common/tool/actions.cpp:1032
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "在正常、暗顯和隱藏三種狀態之間循環顯示非活動層"
 
-#: common/tool/actions.cpp:1032
+#: common/tool/actions.cpp:1038
 msgid "Draw Bounding Boxes"
 msgstr "繪製邊界框"
 
-#: common/tool/actions.cpp:1038 pcbnew/dialogs/panel_edit_options_base.cpp:140
+#: common/tool/actions.cpp:1044 pcbnew/dialogs/panel_edit_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
 msgid "Select item(s)"
 msgstr "選擇項目"
 
-#: common/tool/actions.cpp:1048
+#: common/tool/actions.cpp:1054
 msgid "Measure Tool"
 msgstr "測量工具"
 
-#: common/tool/actions.cpp:1049
+#: common/tool/actions.cpp:1055
 msgid "Interactively measure distance between points"
 msgstr "交互式測量點之間的距離"
 
-#: common/tool/actions.cpp:1065
+#: common/tool/actions.cpp:1071
 msgid "Switch to Project Manager"
 msgstr "切換到專案管理員"
 
-#: common/tool/actions.cpp:1066
+#: common/tool/actions.cpp:1072
 msgid "Show project window"
 msgstr "顯示專案視窗"
 
-#: common/tool/actions.cpp:1075
+#: common/tool/actions.cpp:1081
 msgid "Show 3D viewer window"
 msgstr "顯示 3D 查看器視窗"
 
-#: common/tool/actions.cpp:1081 eeschema/symbol_diff_frame.cpp:57
+#: common/tool/actions.cpp:1087 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1114
 msgid "Symbol Library Browser"
 msgstr "符號庫瀏覽器"
 
-#: common/tool/actions.cpp:1090 kicad/tools/kicad_manager_actions.cpp:126
+#: common/tool/actions.cpp:1096 kicad/tools/kicad_manager_actions.cpp:126
 msgid "Create, delete and edit schematic symbols"
 msgstr "建立, 刪除和編輯符號"
 
-#: common/tool/actions.cpp:1098 pcbnew/footprint_viewer_frame.cpp:111
+#: common/tool/actions.cpp:1104 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1041
 msgid "Footprint Library Browser"
 msgstr "封裝庫瀏覽器"
 
-#: common/tool/actions.cpp:1107
+#: common/tool/actions.cpp:1113
 msgid "Create, delete and edit board footprints"
 msgstr "建立, 刪除和編輯封裝"
 
-#: common/tool/actions.cpp:1116
+#: common/tool/actions.cpp:1122
 msgid "Show/hide the properties manager"
 msgstr "顯示/隱藏 屬性管理員"
 
-#: common/tool/actions.cpp:1124
+#: common/tool/actions.cpp:1130 eeschema/dialogs/dialog_lib_fields.cpp:115
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:101
 #: eeschema/fields_grid_table.cpp:1184
 msgid "Show Datasheet"
 msgstr "顯示數據手冊"
 
-#: common/tool/actions.cpp:1125
+#: common/tool/actions.cpp:1131
 msgid "Open the datasheet in a browser"
 msgstr "在瀏覽器中打開數據手冊"
 
-#: common/tool/actions.cpp:1133
+#: common/tool/actions.cpp:1139
 msgid "Update PCB from Schematic..."
 msgstr "從原理圖更新 PCB..."
 
-#: common/tool/actions.cpp:1134
+#: common/tool/actions.cpp:1140
 msgid "Update PCB with changes made to schematic"
 msgstr "根據原理圖的變化更新 PCB"
 
-#: common/tool/actions.cpp:1140
+#: common/tool/actions.cpp:1146
 msgid "Update Schematic from PCB..."
 msgstr "從 PCB 更新原理圖..."
 
-#: common/tool/actions.cpp:1141
+#: common/tool/actions.cpp:1147
 msgid "Update schematic with changes made to PCB"
 msgstr "根據 PCB 的變化更新原理圖"
 
-#: common/tool/actions.cpp:1148
+#: common/tool/actions.cpp:1154
 msgid "Preferences..."
 msgstr "偏好設定..."
 
-#: common/tool/actions.cpp:1149
+#: common/tool/actions.cpp:1155
 msgid "Show preferences for all open tools"
 msgstr "顯示所有打開工具的偏好設定"
 
-#: common/tool/actions.cpp:1156
+#: common/tool/actions.cpp:1162
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
 msgstr "配置路徑..."
 
-#: common/tool/actions.cpp:1157
+#: common/tool/actions.cpp:1163
 msgid "Edit path configuration environment variables"
 msgstr "編輯路徑配置環境變數"
 
-#: common/tool/actions.cpp:1163
+#: common/tool/actions.cpp:1169
 msgid "Manage Symbol Libraries..."
 msgstr "管理符號庫..."
 
-#: common/tool/actions.cpp:1164
+#: common/tool/actions.cpp:1170
 msgid "Edit the global and project symbol library lists"
 msgstr "編輯全域和專案符號庫列表"
 
-#: common/tool/actions.cpp:1170
+#: common/tool/actions.cpp:1176
 msgid "Manage Footprint Libraries..."
 msgstr "管理封裝庫..."
 
-#: common/tool/actions.cpp:1171
+#: common/tool/actions.cpp:1177
 msgid "Edit the global and project footprint library lists"
 msgstr "編輯全域和專案封裝庫列表"
 
-#: common/tool/actions.cpp:1177
+#: common/tool/actions.cpp:1183
 msgid "Manage Design Block Libraries..."
 msgstr "管理符號庫..."
 
-#: common/tool/actions.cpp:1178
+#: common/tool/actions.cpp:1184
 msgid "Edit the global and project design block library lists"
 msgstr "編輯全域和專案符號庫列表"
 
-#: common/tool/actions.cpp:1184
+#: common/tool/actions.cpp:1190
 msgid "Getting Started with KiCad"
 msgstr "KiCad 入門指南"
 
-#: common/tool/actions.cpp:1185
+#: common/tool/actions.cpp:1191
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "打開 \"KiCad 入門指南\""
 
-#: common/tool/actions.cpp:1191
+#: common/tool/actions.cpp:1197
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:330
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
@@ -9543,47 +9551,47 @@ msgstr "打開 \"KiCad 入門指南\""
 msgid "Help"
 msgstr "幫助"
 
-#: common/tool/actions.cpp:1192
+#: common/tool/actions.cpp:1198
 msgid "Open product documentation in a web browser"
 msgstr "在 Web 瀏覽器中打開產品文件"
 
-#: common/tool/actions.cpp:1198
+#: common/tool/actions.cpp:1204
 msgid "About KiCad"
 msgstr "關於 KiCad"
 
-#: common/tool/actions.cpp:1207
+#: common/tool/actions.cpp:1213
 msgid "List Hotkeys..."
 msgstr "快捷鍵列表..."
 
-#: common/tool/actions.cpp:1208
+#: common/tool/actions.cpp:1214
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr "顯示目前快捷鍵列表和相應命令"
 
-#: common/tool/actions.cpp:1214
+#: common/tool/actions.cpp:1220
 msgid "Get Involved"
 msgstr "參與貢獻"
 
-#: common/tool/actions.cpp:1215
+#: common/tool/actions.cpp:1221
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "在 Web 瀏覽器中打開\"參與 KiCad\""
 
-#: common/tool/actions.cpp:1222
+#: common/tool/actions.cpp:1228
 msgid "Open \"Donate to KiCad\" in a web browser"
 msgstr "在 Web 瀏覽器中打開\"向 KiCad 捐贈\""
 
-#: common/tool/actions.cpp:1227
+#: common/tool/actions.cpp:1233
 msgid "Report Bug"
 msgstr "報告 Bug"
 
-#: common/tool/actions.cpp:1240
+#: common/tool/actions.cpp:1246
 msgid "Refresh Plugins"
 msgstr "刷新插件"
 
-#: common/tool/actions.cpp:1241
+#: common/tool/actions.cpp:1247
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr "重新載入所有的 Python 插件並刷新插件選單"
 
-#: common/tool/actions.cpp:1249
+#: common/tool/actions.cpp:1255
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
@@ -9592,23 +9600,23 @@ msgstr "重新載入所有的 Python 插件並刷新插件選單"
 msgid "Embedded Files"
 msgstr "圖片檔案"
 
-#: common/tool/actions.cpp:1250
+#: common/tool/actions.cpp:1256
 msgid "Manage embedded files"
 msgstr "重新命名檔案"
 
-#: common/tool/actions.cpp:1255
+#: common/tool/actions.cpp:1261
 msgid "Remove File"
 msgstr "重新命名檔案"
 
-#: common/tool/actions.cpp:1256
+#: common/tool/actions.cpp:1262
 msgid "Remove an embedded file"
 msgstr "刪除嵌入檔案"
 
-#: common/tool/actions.cpp:1261
+#: common/tool/actions.cpp:1267
 msgid "Extract File"
 msgstr "匯出到檔案"
 
-#: common/tool/actions.cpp:1262
+#: common/tool/actions.cpp:1268
 msgid "Extract an embedded file"
 msgstr "可執行檔案"
 
@@ -10512,6 +10520,7 @@ msgstr "'%s' 不是有效封裝。"
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
+#: eeschema/dialogs/dialog_lib_fields.cpp:902
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
 #: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
@@ -10582,7 +10591,7 @@ msgstr "專案檔案: '%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1064
+#: kicad/project_tree_pane.cpp:1066
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "在 KiCad 中未選擇任何文字編輯器, 請選擇一個。"
 
@@ -10942,8 +10951,8 @@ msgstr "找到了 %s, 但未找到接腳 %s"
 msgid "%s found"
 msgstr "找到 %s"
 
-#: eeschema/cross-probing.cpp:171 eeschema/sim/simulator_frame_ui.cpp:1479
-#: eeschema/sim/simulator_frame_ui.cpp:1956
+#: eeschema/cross-probing.cpp:171 eeschema/sim/simulator_frame_ui.cpp:1506
+#: eeschema/sim/simulator_frame_ui.cpp:2036
 #: eeschema/widgets/tuner_slider.cpp:65
 #, c-format
 msgid "%s not found"
@@ -11045,8 +11054,8 @@ msgstr "請選擇一個符號庫表檔案。"
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:556
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:945
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2933
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3011
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2937
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3015
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "'%s' 庫為唯讀。"
@@ -11214,7 +11223,7 @@ msgid "Nickname '%s' already in use."
 msgstr "名稱 '%s' 已被佔用。"
 
 #: eeschema/dialogs/dialog_bom.cpp:375
-#: eeschema/dialogs/dialog_export_netlist.cpp:880
+#: eeschema/dialogs/dialog_export_netlist.cpp:984
 msgid "Generator File"
 msgstr "生成器檔案"
 
@@ -12069,89 +12078,89 @@ msgstr "電氣規則檢查 (ERC)"
 msgid "ERC Job Settings"
 msgstr "ERC 作業設定"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:221
+#: eeschema/dialogs/dialog_export_netlist.cpp:274
 msgid "Export netlist in KiCad format"
 msgstr "將網表匯出為 CadStar 格式"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:226
+#: eeschema/dialogs/dialog_export_netlist.cpp:279
 msgid "Export netlist in OrcadPCB2 format"
 msgstr "將網表匯出為 OrcadPCB2 格式"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:231
+#: eeschema/dialogs/dialog_export_netlist.cpp:284
 msgid "Export netlist in Allegro format"
 msgstr "將網表匯出為 Allegro 格式"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:236
+#: eeschema/dialogs/dialog_export_netlist.cpp:289
 msgid "Export netlist in CadStar format"
 msgstr "將網表匯出為 CadStar 格式"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:241
+#: eeschema/dialogs/dialog_export_netlist.cpp:294
 msgid "Export netlist in PADS format"
 msgstr "將網表匯出為 PADS 格式"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:256
+#: eeschema/dialogs/dialog_export_netlist.cpp:309
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
 msgid "Export Netlist"
 msgstr "匯出網表"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:307
+#: eeschema/dialogs/dialog_export_netlist.cpp:360
 msgid "Export netlist in SPICE format"
 msgstr "將網表匯出為 SPICE 格式"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:311
-#: eeschema/dialogs/dialog_export_netlist.cpp:372
+#: eeschema/dialogs/dialog_export_netlist.cpp:364
+#: eeschema/dialogs/dialog_export_netlist.cpp:425
 msgid "Use current sheet as root"
 msgstr "將目前圖紙用作根"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:312
-#: eeschema/dialogs/dialog_export_netlist.cpp:373
+#: eeschema/dialogs/dialog_export_netlist.cpp:365
+#: eeschema/dialogs/dialog_export_netlist.cpp:426
 msgid "Export netlist only for the current sheet"
 msgstr "僅匯出目前圖紙的網表"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:316
+#: eeschema/dialogs/dialog_export_netlist.cpp:369
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
 msgid "Save all voltages"
 msgstr "儲存所有電壓"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:317
+#: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Write a directive to save all voltages (.save all)"
 msgstr "要儲存所有電壓, 請使用以下指令: .save all"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:321
+#: eeschema/dialogs/dialog_export_netlist.cpp:374
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
 msgid "Save all currents"
 msgstr "儲存所有電流"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:322
+#: eeschema/dialogs/dialog_export_netlist.cpp:375
 msgid "Write a directive to save all currents (.probe alli)"
 msgstr "要儲存所有電流, 請使用以下指令: .probe alli"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:327
+#: eeschema/dialogs/dialog_export_netlist.cpp:380
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
 msgid "Save all power dissipations"
 msgstr "儲存所有消耗功率"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:328
+#: eeschema/dialogs/dialog_export_netlist.cpp:381
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr "要儲存所有元件的消耗功率, 請使用以下指令: (.probe p(<item>))"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:334
+#: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
 msgstr "儲存所有數位事件資料"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:335
+#: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr "如果未設定，編寫指示以防止保存數位事件數據 (esave none)"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:342
+#: eeschema/dialogs/dialog_export_netlist.cpp:395
 msgid "Run external simulator command:"
 msgstr "運行外部模擬工具命令:"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: eeschema/dialogs/dialog_export_netlist.cpp:397
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
@@ -12161,54 +12170,56 @@ msgstr ""
 "命令一般是 'SPICE 可執行檔案完整路徑 \"%I\"'\n"
 "使用實際網表檔案路徑取代命令中的 %I"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:368
+#: eeschema/dialogs/dialog_export_netlist.cpp:421
 msgid "Export netlist as a SPICE .subckt model"
 msgstr "將網表匯出為 SPICE .subckt 模型"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:415
+#: eeschema/dialogs/dialog_export_netlist.cpp:468
 msgid "Netlist command:"
 msgstr "網表命令:"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:496
+#: eeschema/dialogs/dialog_export_netlist.cpp:549
 msgid "Save Netlist File"
 msgstr "儲存網表檔案"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:566
+#: eeschema/dialogs/dialog_export_netlist.cpp:619
 #, c-format
 msgid "%s Export"
 msgstr "匯出 %s"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:605
+#: eeschema/dialogs/dialog_export_netlist.cpp:658
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "請先將原理圖批註完整, 然後才能匯出網表。"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:655
+#: eeschema/dialogs/dialog_export_netlist.cpp:718
+#: eeschema/dialogs/dialog_export_netlist.cpp:757
 msgid "external simulator not found"
 msgstr "找不到外部模擬工具"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:656
+#: eeschema/dialogs/dialog_export_netlist.cpp:719
+#: eeschema/dialogs/dialog_export_netlist.cpp:758
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr "注意: 命令一般是: <tt>&lt;SPICE 可執行檔案完整路徑&gt; \"%I\"</tt>"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:662
+#: eeschema/dialogs/dialog_export_netlist.cpp:764
 msgid "external simulator has the wrong format or architecture"
 msgstr "外部模擬工具格式或構架錯誤"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:667
+#: eeschema/dialogs/dialog_export_netlist.cpp:769
 msgid "permission denied"
 msgstr "權限不足"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:810
+#: eeschema/dialogs/dialog_export_netlist.cpp:914
 msgid "This plugin already exists."
 msgstr "此插件已存在。"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:824
+#: eeschema/dialogs/dialog_export_netlist.cpp:928
 msgid "Maximum number of plugins already added to dialog."
 msgstr "對話框中已經添加了最大數量的插件。"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:862
+#: eeschema/dialogs/dialog_export_netlist.cpp:966
 msgid "You must provide a netlist generator title"
 msgstr "必須提供網表生成器的標題內容"
 
@@ -12575,11 +12586,11 @@ msgstr "結點顏色:"
 msgid "Edit Text and Graphic Properties"
 msgstr "編輯文字和圖形屬性"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:32
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:33
 msgid "symbol"
 msgstr "符號"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:61
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:62
 #, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
@@ -12588,11 +12599,11 @@ msgstr ""
 "建立符號庫表 '%s' 時出錯。\n"
 "%s"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:75
 msgid "Please select a symbol library table file."
 msgstr "請選擇一個符號庫表檔案。"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:97
 #, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
@@ -12601,7 +12612,7 @@ msgstr ""
 "讀取符號庫表 '%s'出錯。\n"
 "%s"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:118
 #, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr "將全域符號庫表 '%s' 複製到 '%s' 時出錯。"
@@ -12769,6 +12780,7 @@ msgid "Fields"
 msgstr "欄位"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
+#: eeschema/dialogs/dialog_lib_fields.cpp:259
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
@@ -12966,8 +12978,8 @@ msgstr "名稱文字大小"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:552
-#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2993
+#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:579
+#: eeschema/sch_item.cpp:627 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "單位"
@@ -12984,6 +12996,8 @@ msgid "Read Only"
 msgstr "唯讀"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
+#: eeschema/dialogs/dialog_lib_fields.cpp:450
+#: eeschema/dialogs/dialog_lib_fields.cpp:862
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1510
 msgid "Save changes?"
 msgstr "儲存變更嗎?"
@@ -13046,6 +13060,165 @@ msgstr "按單元篩選:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
 msgstr "接腳屬性表"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:84
+#, fuzzy
+msgid "Revert symbol"
+msgstr "轉換符號"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:84
+#, fuzzy
+msgid "Revert the symbol to its last saved state"
+msgstr "是否放棄變更, 並將 '%s' 重置為上一儲存版本?"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:85
+#, fuzzy
+msgid "Clear cell"
+msgstr "銅皮間隙"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:85
+#, fuzzy
+msgid "Clear the cell value"
+msgstr "清除最近的鑽孔檔案"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:87
+#, fuzzy
+msgid "Create Derived Symbol"
+msgstr "建立新符號"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:87
+#, fuzzy
+msgid "Create a new symbol derived from the selected one"
+msgstr "從現有符號衍生, 建立一個新符號"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:109
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
+#: eeschema/fields_grid_table.cpp:1177
+msgid "Select Footprint..."
+msgstr "選擇封裝..."
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:110
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
+#: eeschema/fields_grid_table.cpp:1178
+msgid "Browse for footprint"
+msgstr "瀏覽封裝"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:116
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
+#: eeschema/fields_grid_table.cpp:1185
+msgid "Show datasheet in browser"
+msgstr "在瀏覽器中顯示產品規格手冊"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:241
+#, fuzzy, c-format
+msgid "Symbol Library Fields: %s"
+msgstr "符號庫"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
+msgid "Label"
+msgstr "標籤"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:261
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
+msgid "Group By"
+msgstr "分組"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:406
+#, fuzzy, c-format
+msgid "No symbols found in library %s."
+msgstr "'%s' 在庫中'%s'找到了"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:425
+#, fuzzy, c-format
+msgid "Error loading symbol %s: %s"
+msgstr "庫載入出錯:"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:431
+#, fuzzy, c-format
+msgid ""
+"Error accessing library %s.\n"
+"\n"
+"%s"
+msgstr ""
+"載入符號庫 %s 時出現錯誤。\n"
+"\n"
+"%s\n"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:438
+#, fuzzy
+msgid "No symbols could be loaded from the library."
+msgstr "更新符號以使原理圖符號與庫中的符號同步"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
+msgid "New field name:"
+msgstr "新欄位名稱:"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
+msgid "Add Field"
+msgstr "添加欄位"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:678
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
+msgid "Field must have a name."
+msgstr "欄位必須要有一個名稱。"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:686
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
+#: eeschema/dialogs/dialog_symbol_properties.cpp:809
+#, c-format
+msgid "Field name '%s' already in use."
+msgstr "欄位名稱 '%s' 已經被佔用。"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
+msgid "Rename Field"
+msgstr "重新命名欄位"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
+#, fuzzy, c-format
+msgid "Field name '%s' already exists."
+msgstr "欄位名稱 %s 已存在。"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:753
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
+#, c-format
+msgid "Are you sure you want to remove the field '%s'?"
+msgstr "確定要移除欄位 '%s'嗎?"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:905
+#, fuzzy
+msgid "Exclude From BOM"
+msgstr "從 BOM 中移除"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
+#: eeschema/sch_symbol.cpp:3030
+msgid "Exclude From Simulation"
+msgstr "不參與電路模擬"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:907 eeschema/sch_sheet.cpp:1762
+#: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
+msgid "Exclude From Board"
+msgstr "不在 PCB 中進行繪製"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:909
+#: eeschema/symbol_editor/symbol_editor.cpp:1766
+msgid "Power Symbol"
+msgstr "電源符號"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:910
+#, fuzzy
+msgid "Local Power Symbol"
+msgstr "電源符號"
+
+#: eeschema/dialogs/dialog_lib_fields_base.h:87
+#, fuzzy
+msgid "Library Fields Editor"
+msgstr "庫編輯器"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -13155,7 +13328,7 @@ msgstr "是否刪除符號的替代主體圖形樣式 (迪摩根等效樣式) ?"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:362
 #: eeschema/symbol_editor/symbol_editor.cpp:952
-#: eeschema/tools/symbol_editor_control.cpp:524
+#: eeschema/tools/symbol_editor_control.cpp:556
 msgid "Symbol must have a name."
 msgstr "符號必須要有一個名稱。"
 
@@ -14776,7 +14949,7 @@ msgid "Voltage"
 msgstr "電壓"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:41
-#: eeschema/sim/sim_plot_tab.cpp:660 eeschema/sim/sim_plot_tab.cpp:780
+#: eeschema/sim/sim_plot_tab.cpp:660 eeschema/sim/sim_plot_tab.cpp:794
 msgid "Current"
 msgstr "電流"
 
@@ -15046,21 +15219,6 @@ msgstr "放置所有單元"
 msgid "Sequentially place all units of the symbol."
 msgstr "依次放置符號的所有單元。"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
-#: eeschema/fields_grid_table.cpp:1177
-msgid "Select Footprint..."
-msgstr "選擇封裝..."
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
-#: eeschema/fields_grid_table.cpp:1178
-msgid "Browse for footprint"
-msgstr "瀏覽封裝"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
-#: eeschema/fields_grid_table.cpp:1185
-msgid "Show datasheet in browser"
-msgstr "在瀏覽器中顯示產品規格手冊"
-
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
 #, fuzzy
 msgid "Column Label"
@@ -15070,10 +15228,6 @@ msgstr "%d 行表格"
 #, fuzzy
 msgid "Show Column"
 msgstr "顯示 / 隱藏 行"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
-msgid "Group By"
-msgstr "分組"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
 #, fuzzy
@@ -15096,34 +15250,6 @@ msgstr "數量"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:711
 msgid "#"
 msgstr "#"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
-msgid "New field name:"
-msgstr "新欄位名稱:"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
-msgid "Add Field"
-msgstr "添加欄位"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
-msgid "Field must have a name."
-msgstr "欄位必須要有一個名稱。"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
-#: eeschema/dialogs/dialog_symbol_properties.cpp:809
-#, c-format
-msgid "Field name '%s' already in use."
-msgstr "欄位名稱 '%s' 已經被佔用。"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
-#, c-format
-msgid "Are you sure you want to remove the field '%s'?"
-msgstr "確定要移除欄位 '%s'嗎?"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
-msgid "Rename Field"
-msgstr "重新命名欄位"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
 #, c-format
@@ -17303,7 +17429,7 @@ msgid "Allow Autoplacement"
 msgstr "允許自動放置"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
-#: eeschema/sch_item.cpp:558 eeschema/sch_item.cpp:643
+#: eeschema/sch_item.cpp:585 eeschema/sch_item.cpp:670
 msgid "Private"
 msgstr "專有"
 
@@ -17419,7 +17545,7 @@ msgid "Abort"
 msgstr "終止"
 
 #: eeschema/files-io.cpp:471 eeschema/files-io.cpp:491
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:825
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:827
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -17470,7 +17596,7 @@ msgstr ""
 "%s"
 
 #: eeschema/files-io.cpp:829 pagelayout_editor/files.cpp:187
-#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1081
+#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1092
 #, c-format
 msgid "File '%s' saved."
 msgstr "檔案 '%s' 已儲存。"
@@ -17529,8 +17655,8 @@ msgstr "覆蓋檔案"
 msgid "Abort Project Save"
 msgstr "中止專案儲存"
 
-#: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1206
-#: pcbnew/files.cpp:1222
+#: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1217
+#: pcbnew/files.cpp:1233
 #, fuzzy, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
 msgstr "無法將繪製檔案寫入資料夾 '%s'。"
@@ -18952,7 +19078,7 @@ msgstr "KiCad HTTP 庫檔案"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:220
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2708
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2712
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
 msgid "Open cancelled by user."
 msgstr "使用者取消了打開操作。"
@@ -19255,23 +19381,24 @@ msgstr "\"%s\" 類型插件找不到。"
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "未知 SCH_FILE_T 值: %d"
 
-#: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:607
+#: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
+#: eeschema/sch_item.cpp:634
 #, fuzzy
 msgid "All units"
 msgstr "所有項目"
 
-#: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:629
+#: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
+#: eeschema/sch_item.cpp:656
 #, fuzzy
 msgid "All body styles"
 msgstr "作用於符號的所有圖形符號樣式"
 
-#: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
+#: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 msgid "Body Style"
 msgstr "主體樣式"
 
-#: eeschema/sch_item.cpp:572 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:599 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -19309,11 +19436,6 @@ msgstr "直徑"
 #: eeschema/sch_label.cpp:100
 msgid "Tri-State"
 msgstr "三態"
-
-#: eeschema/sch_label.cpp:1230
-#: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
-msgid "Label"
-msgstr "標籤"
 
 #: eeschema/sch_label.cpp:1234
 msgid "Hierarchical Sheet Pin"
@@ -19659,15 +19781,6 @@ msgstr "邊框顏色"
 #: eeschema/sch_sheet.cpp:1757
 msgid "Background Color"
 msgstr "背景顏色"
-
-#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1051
-#: eeschema/sch_symbol.cpp:3027
-msgid "Exclude From Board"
-msgstr "不在 PCB 中進行繪製"
-
-#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3030
-msgid "Exclude From Simulation"
-msgstr "不參與電路模擬"
 
 #: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
 #: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
@@ -21012,37 +21125,37 @@ msgstr "雜訊 (A/√Hz)"
 msgid "Intensity"
 msgstr "強度"
 
-#: eeschema/sim/sim_plot_tab.cpp:673 eeschema/sim/sim_plot_tab.cpp:786
+#: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:800
 #: eeschema/widgets/search_handlers.cpp:247
 msgid "Power"
 msgstr "電源"
 
-#: eeschema/sim/sim_plot_tab.cpp:728
+#: eeschema/sim/sim_plot_tab.cpp:742
 msgid "Voltage (swept)"
 msgstr "電壓 (掃描)"
 
-#: eeschema/sim/sim_plot_tab.cpp:739
+#: eeschema/sim/sim_plot_tab.cpp:753
 msgid "Current (swept)"
 msgstr "電流 (掃描)"
 
-#: eeschema/sim/sim_plot_tab.cpp:750
+#: eeschema/sim/sim_plot_tab.cpp:764
 msgid "Resistance (swept)"
 msgstr "電阻 (掃描)"
 
-#: eeschema/sim/sim_plot_tab.cpp:761
+#: eeschema/sim/sim_plot_tab.cpp:775
 msgid "Temperature (swept)"
 msgstr "溫度 (掃描)"
 
-#: eeschema/sim/sim_plot_tab.cpp:779
+#: eeschema/sim/sim_plot_tab.cpp:793
 msgid "Voltage (measured)"
 msgstr "電壓 (測量)"
 
 #: eeschema/sim/sim_plot_tab.h:146 eeschema/sim/simulator_frame_ui.cpp:218
 #: eeschema/sim/simulator_frame_ui.cpp:766
 #: eeschema/sim/simulator_frame_ui.cpp:872
-#: eeschema/sim/simulator_frame_ui.cpp:1050
-#: eeschema/sim/simulator_frame_ui.cpp:2281
-#: eeschema/sim/simulator_frame_ui.cpp:2282
+#: eeschema/sim/simulator_frame_ui.cpp:1069
+#: eeschema/sim/simulator_frame_ui.cpp:2361
+#: eeschema/sim/simulator_frame_ui.cpp:2362
 msgid " (gain)"
 msgstr " (增益)"
 
@@ -21051,9 +21164,9 @@ msgstr " (增益)"
 #: eeschema/sim/simulator_frame_ui.cpp:772
 #: eeschema/sim/simulator_frame_ui.cpp:873
 #: eeschema/sim/simulator_frame_ui.cpp:878
-#: eeschema/sim/simulator_frame_ui.cpp:1051
-#: eeschema/sim/simulator_frame_ui.cpp:2279
-#: eeschema/sim/simulator_frame_ui.cpp:2280
+#: eeschema/sim/simulator_frame_ui.cpp:1070
+#: eeschema/sim/simulator_frame_ui.cpp:2359
+#: eeschema/sim/simulator_frame_ui.cpp:2360
 msgid " (phase)"
 msgstr " (相位)"
 
@@ -21154,7 +21267,7 @@ msgstr "複製信號名稱"
 #: eeschema/sim/simulator_frame_ui.cpp:218
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui.cpp:877
-#: eeschema/sim/simulator_frame_ui.cpp:1049
+#: eeschema/sim/simulator_frame_ui.cpp:1068
 msgid " (amplitude)"
 msgstr " (振幅)"
 
@@ -21213,38 +21326,38 @@ msgstr "遊標 1"
 msgid "Cursor 2"
 msgstr "遊標 2"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1213
-#: eeschema/sim/simulator_frame_ui.cpp:2715
+#: eeschema/sim/simulator_frame_ui.cpp:1240
+#: eeschema/sim/simulator_frame_ui.cpp:2795
 msgid "Diff"
 msgstr "差值"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1478
-#: eeschema/sim/simulator_frame_ui.cpp:1500
-#: eeschema/sim/simulator_frame_ui.cpp:1974
+#: eeschema/sim/simulator_frame_ui.cpp:1505
+#: eeschema/sim/simulator_frame_ui.cpp:1527
+#: eeschema/sim/simulator_frame_ui.cpp:2054
 msgid "Could not apply tuned value(s):"
 msgstr "無法套用調整後的值:"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1501
-#: eeschema/sim/simulator_frame_ui.cpp:1964
+#: eeschema/sim/simulator_frame_ui.cpp:1528
+#: eeschema/sim/simulator_frame_ui.cpp:2044
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s 不可調"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1585
+#: eeschema/sim/simulator_frame_ui.cpp:1612
 msgid "Error: no current simulation.\n"
 msgstr "錯誤: 沒有目前進行中的模擬。\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1594
+#: eeschema/sim/simulator_frame_ui.cpp:1621
 msgid "Error: simulation type not defined.\n"
 msgstr "錯誤: 未定義模擬類型。\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1600
+#: eeschema/sim/simulator_frame_ui.cpp:1627
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "錯誤: 模擬類型不支援繪製。\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2821
-#: eeschema/sim/simulator_frame_ui.cpp:2937
-#: eeschema/sim/simulator_frame_ui.cpp:2980
+#: eeschema/sim/simulator_frame_ui.cpp:2901
+#: eeschema/sim/simulator_frame_ui.cpp:3017
+#: eeschema/sim/simulator_frame_ui.cpp:3060
 msgid ""
 "\n"
 "\n"
@@ -21750,16 +21863,16 @@ msgid "[no symbol loaded]"
 msgstr "[未載入符號]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:113
-#: eeschema/tools/symbol_editor_control.cpp:863
+#: eeschema/tools/symbol_editor_control.cpp:895
 msgid "No schematic currently open."
 msgstr "目前沒有打開原理圖。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:499
 #: eeschema/symbol_editor/symbol_editor.cpp:1692
-#: eeschema/tools/symbol_editor_control.cpp:295
-#: eeschema/tools/symbol_editor_control.cpp:440
-#: eeschema/tools/symbol_editor_control.cpp:489
+#: eeschema/tools/symbol_editor_control.cpp:327
+#: eeschema/tools/symbol_editor_control.cpp:472
+#: eeschema/tools/symbol_editor_control.cpp:521
 #, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "符號庫 '%s' 不可寫入。"
@@ -21777,7 +21890,7 @@ msgstr "目前符號已被修改。是否儲存變更?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1141
-#: eeschema/tools/symbol_editor_control.cpp:531
+#: eeschema/tools/symbol_editor_control.cpp:563
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "符號 '%s' 已存在於庫 '%s' 中。"
@@ -21960,10 +22073,6 @@ msgstr "父級"
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
 msgid "Body"
 msgstr "主體"
-
-#: eeschema/symbol_editor/symbol_editor.cpp:1766
-msgid "Power Symbol"
-msgstr "電源符號"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1773
 msgid "Datasheet"
@@ -24010,60 +24119,65 @@ msgstr "儲存繪製數據"
 msgid "SPICE Netlist"
 msgstr "SPICE 網表"
 
-#: eeschema/tools/symbol_editor_control.cpp:261
+#: eeschema/tools/symbol_editor_control.cpp:293
 #, c-format
 msgid "Failed to load symbol %s from library %s."
 msgstr "未能將符號 %s 添加到庫檔案 '%s'。"
 
-#: eeschema/tools/symbol_editor_control.cpp:281
+#: eeschema/tools/symbol_editor_control.cpp:313
 msgid "No symbol library selected."
 msgstr "未選中符號庫。"
 
-#: eeschema/tools/symbol_editor_control.cpp:288
-#: eeschema/tools/symbol_editor_control.cpp:438
-#: eeschema/tools/symbol_editor_control.cpp:482
+#: eeschema/tools/symbol_editor_control.cpp:320
+#: eeschema/tools/symbol_editor_control.cpp:470
+#: eeschema/tools/symbol_editor_control.cpp:514
 #, fuzzy, c-format
 msgid "Symbol library '%s' not found."
 msgstr "找不到符號庫."
 
-#: eeschema/tools/symbol_editor_control.cpp:374
+#: eeschema/tools/symbol_editor_control.cpp:406
 #: pcbnew/tools/footprint_editor_control.cpp:650
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr "通用設定中缺少/格式錯誤的檔案總管參數 '%F'。"
 
-#: eeschema/tools/symbol_editor_control.cpp:403
+#: eeschema/tools/symbol_editor_control.cpp:435
 #: pcbnew/tools/footprint_editor_control.cpp:675
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "未在 KiCad 中配置任何文字編輯器, 請選擇一個。"
 
-#: eeschema/tools/symbol_editor_control.cpp:473
+#: eeschema/tools/symbol_editor_control.cpp:505
 #: eeschema/widgets/panel_symbol_chooser.cpp:705
 msgid "No symbol selected"
 msgstr "沒有選擇符號"
 
-#: eeschema/tools/symbol_editor_control.cpp:517
+#: eeschema/tools/symbol_editor_control.cpp:549
 msgid "Change Symbol Name"
 msgstr "更改符號名"
 
-#: eeschema/tools/symbol_editor_control.cpp:741
-#: eeschema/tools/symbol_editor_control.cpp:788
+#: eeschema/tools/symbol_editor_control.cpp:773
+#: eeschema/tools/symbol_editor_control.cpp:820
 msgid "No symbol to export"
 msgstr "沒有要匯出的符號"
 
-#: eeschema/tools/symbol_editor_control.cpp:750
+#: eeschema/tools/symbol_editor_control.cpp:782
 #: pcbnew/footprint_edit_frame.cpp:1515
 msgid "Export View as PNG"
 msgstr "匯出視圖為 PNG"
 
-#: eeschema/tools/symbol_editor_control.cpp:761
+#: eeschema/tools/symbol_editor_control.cpp:793
 #, c-format
 msgid "Can't save file '%s'."
 msgstr "無法儲存檔案 '%s'。"
 
-#: eeschema/tools/symbol_editor_control.cpp:797
+#: eeschema/tools/symbol_editor_control.cpp:829
 msgid "SVG File Name"
 msgstr "SVG 檔案名稱"
+
+#: eeschema/tools/symbol_editor_control.cpp:955
+#, fuzzy
+msgid "Library Fields"
+msgstr "庫"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -27598,291 +27712,291 @@ msgstr "目錄名:"
 msgid "Create New Directory"
 msgstr "建立新目錄"
 
-#: kicad/project_tree_pane.cpp:758
+#: kicad/project_tree_pane.cpp:760
 #, c-format
 msgid "Failed to get status list: %s"
 msgstr "無法獲取提交: %s"
 
-#: kicad/project_tree_pane.cpp:893
+#: kicad/project_tree_pane.cpp:895
 msgid "Switch to this Project"
 msgstr "切換到此專案"
 
-#: kicad/project_tree_pane.cpp:894
+#: kicad/project_tree_pane.cpp:896
 msgid "Close all editors, and switch to the selected project"
 msgstr "關閉所有編輯器, 然後切換到所選專案"
 
-#: kicad/project_tree_pane.cpp:901
+#: kicad/project_tree_pane.cpp:903
 msgid "New Directory..."
 msgstr "新目錄..."
 
-#: kicad/project_tree_pane.cpp:902
+#: kicad/project_tree_pane.cpp:904
 msgid "Create a New Directory"
 msgstr "建立一個新目錄"
 
-#: kicad/project_tree_pane.cpp:910 kicad/project_tree_pane.cpp:920
+#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
 msgid "Reveal in Finder"
 msgstr "在 Finder 中顯示"
 
-#: kicad/project_tree_pane.cpp:911
+#: kicad/project_tree_pane.cpp:913
 msgid "Reveals the directory in a Finder window"
 msgstr "在 Finder 視窗中顯示目錄"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:915
 msgid "Open Directory in File Explorer"
 msgstr "在檔案資源管理員中打開目錄"
 
-#: kicad/project_tree_pane.cpp:914 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "在預設系統檔案管理員中打開目錄"
 
-#: kicad/project_tree_pane.cpp:921
+#: kicad/project_tree_pane.cpp:923
 msgid "Reveals the directories in a Finder window"
 msgstr "在 Finder 視窗中顯示目錄"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:925
 msgid "Open Directories in File Explorer"
 msgstr "在檔案資源管理員中打開目錄"
 
-#: kicad/project_tree_pane.cpp:924
+#: kicad/project_tree_pane.cpp:926
 msgid "Opens the directories in the default system file manager"
 msgstr "在預設系統檔案管理員中打開目錄"
 
-#: kicad/project_tree_pane.cpp:935
+#: kicad/project_tree_pane.cpp:937
 msgid "Open the file in a Text Editor"
 msgstr "在文字編輯器打開檔案"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:939
 msgid "Open files in a Text Editor"
 msgstr "在文字編輯器中打開檔案"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:941
 msgid "Edit in a Text Editor"
 msgstr "在文字編輯器中編輯"
 
-#: kicad/project_tree_pane.cpp:945
+#: kicad/project_tree_pane.cpp:947
 msgid "Run Jobs"
 msgstr "運行作業"
 
-#: kicad/project_tree_pane.cpp:953
+#: kicad/project_tree_pane.cpp:955
 msgid "Rename File..."
 msgstr "重新命名檔案..."
 
-#: kicad/project_tree_pane.cpp:954
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename file"
 msgstr "重新命名"
 
-#: kicad/project_tree_pane.cpp:958
+#: kicad/project_tree_pane.cpp:960
 msgid "Rename Files..."
 msgstr "重新命名檔案..."
 
-#: kicad/project_tree_pane.cpp:959
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename files"
 msgstr "重新命名檔案"
 
-#: kicad/project_tree_pane.cpp:969
+#: kicad/project_tree_pane.cpp:971
 msgid "Delete the file and its content"
 msgstr "移除檔案及其內容"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:973
 msgid "Delete the files and their contents"
 msgstr "移除檔案及其內容"
 
-#: kicad/project_tree_pane.cpp:986
+#: kicad/project_tree_pane.cpp:988
 msgid "Move to Trash"
 msgstr "移動到垃圾箱"
 
-#: kicad/project_tree_pane.cpp:998
+#: kicad/project_tree_pane.cpp:1000
 msgid "Add Project to Version Control..."
 msgstr "將專案添加到版本控制..."
 
-#: kicad/project_tree_pane.cpp:999
+#: kicad/project_tree_pane.cpp:1001
 msgid "Initialize a new repository"
 msgstr "初始化新倉庫"
 
-#: kicad/project_tree_pane.cpp:1003
+#: kicad/project_tree_pane.cpp:1005
 msgid "Commit Project..."
 msgstr "提交專案..."
 
-#: kicad/project_tree_pane.cpp:1004 kicad/project_tree_pane.cpp:1018
+#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
 msgid "Commit changes to the local repository"
 msgstr "將更改提交到本地倉庫"
 
-#: kicad/project_tree_pane.cpp:1007
+#: kicad/project_tree_pane.cpp:1009
 msgid "Push"
 msgstr "推送"
 
-#: kicad/project_tree_pane.cpp:1008
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push committed local changes to remote repository"
 msgstr "將提交的本地更改推送到遠程倉庫"
 
-#: kicad/project_tree_pane.cpp:1011
+#: kicad/project_tree_pane.cpp:1013
 msgid "Pull"
 msgstr "拉取"
 
-#: kicad/project_tree_pane.cpp:1012
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull changes from remote repository into local"
 msgstr "將遠程倉庫中的更改拉取到本地"
 
-#: kicad/project_tree_pane.cpp:1017
+#: kicad/project_tree_pane.cpp:1019
 msgid "Commit File..."
 msgstr "提交檔案..."
 
-#: kicad/project_tree_pane.cpp:1032
+#: kicad/project_tree_pane.cpp:1034
 msgid "Switch to branch "
 msgstr "切換到分支 "
 
-#: kicad/project_tree_pane.cpp:1037
+#: kicad/project_tree_pane.cpp:1039
 msgid "Other..."
 msgstr "其它..."
 
-#: kicad/project_tree_pane.cpp:1038
+#: kicad/project_tree_pane.cpp:1040
 msgid "Switch to a different branch"
 msgstr "切換到另一分支"
 
-#: kicad/project_tree_pane.cpp:1041
+#: kicad/project_tree_pane.cpp:1043
 msgid "Switch to Branch"
 msgstr "切換到分支"
 
-#: kicad/project_tree_pane.cpp:1045
+#: kicad/project_tree_pane.cpp:1047
 msgid "Remove Version Control"
 msgstr "移除版本控制"
 
-#: kicad/project_tree_pane.cpp:1046
+#: kicad/project_tree_pane.cpp:1048
 msgid "Delete all version control files from the project directory."
 msgstr "從專案目錄中刪除所有版本控制檔案。"
 
-#: kicad/project_tree_pane.cpp:1101
+#: kicad/project_tree_pane.cpp:1103
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "修改檔案名稱: \"%s\""
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1105
 msgid "Change filename"
 msgstr "修改檔案名稱"
 
-#: kicad/project_tree_pane.cpp:1458
+#: kicad/project_tree_pane.cpp:1460
 msgid "Network path: not monitoring folder changes"
 msgstr "網路路徑: 不監視資料夾變更"
 
-#: kicad/project_tree_pane.cpp:1464
+#: kicad/project_tree_pane.cpp:1466
 msgid "Local path: monitoring folder changes"
 msgstr "本地路徑: 監視資料夾變更"
 
-#: kicad/project_tree_pane.cpp:1651
+#: kicad/project_tree_pane.cpp:1653
 msgid "The selected directory is already a Git project."
 msgstr "所選目錄已存在 git 專案。"
 
-#: kicad/project_tree_pane.cpp:1659
+#: kicad/project_tree_pane.cpp:1661
 msgid "Set default remote"
 msgstr "設定預設遠程"
 
-#: kicad/project_tree_pane.cpp:1670
+#: kicad/project_tree_pane.cpp:1672
 msgid "Failed to initialize Git project."
 msgstr "git 專案初始化失敗。"
 
-#: kicad/project_tree_pane.cpp:1728
+#: kicad/project_tree_pane.cpp:1730
 msgid "Failed to set default remote."
 msgstr "預設遠程設定失敗。"
 
-#: kicad/project_tree_pane.cpp:1740 kicad/project_tree_pane.cpp:1774
-#: kicad/project_tree_pane.cpp:1798
+#: kicad/project_tree_pane.cpp:1742 kicad/project_tree_pane.cpp:1776
+#: kicad/project_tree_pane.cpp:1800
 msgid "Fetching Remote"
 msgstr "獲取遠程數據"
 
-#: kicad/project_tree_pane.cpp:1781
+#: kicad/project_tree_pane.cpp:1783
 msgid "Failed to pull project"
 msgstr "推送專案失敗"
 
-#: kicad/project_tree_pane.cpp:1805
+#: kicad/project_tree_pane.cpp:1807
 msgid "Failed to push project"
 msgstr "推送專案失敗"
 
-#: kicad/project_tree_pane.cpp:1884
+#: kicad/project_tree_pane.cpp:1886
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "找不到分支 '%s': %s"
 
-#: kicad/project_tree_pane.cpp:1897
+#: kicad/project_tree_pane.cpp:1899
 #, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "找不到 '%s' 的分支 head"
 
-#: kicad/project_tree_pane.cpp:1908
+#: kicad/project_tree_pane.cpp:1910
 #, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "切換到分支 '%s' 失敗"
 
-#: kicad/project_tree_pane.cpp:1917
+#: kicad/project_tree_pane.cpp:1919
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "更新分支 '%s' 的 HEAD 引用失敗"
 
-#: kicad/project_tree_pane.cpp:1930
+#: kicad/project_tree_pane.cpp:1932
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "確定要從專案中移除 git 版本控制?"
 
-#: kicad/project_tree_pane.cpp:1947
+#: kicad/project_tree_pane.cpp:1949
 msgid "Failed to remove Git directory"
 msgstr "移除 git 目錄失敗"
 
-#: kicad/project_tree_pane.cpp:2314
+#: kicad/project_tree_pane.cpp:2316
 msgid "The selected directory is not a Git project."
 msgstr "所選目錄已存在 git 專案。"
 
-#: kicad/project_tree_pane.cpp:2460
+#: kicad/project_tree_pane.cpp:2462
 msgid "Discarding commit due to empty commit message."
 msgstr "由於提交消息為空而放棄提交。"
 
-#: kicad/project_tree_pane.cpp:2466
+#: kicad/project_tree_pane.cpp:2468
 msgid "Discarding commit due to empty file selection."
 msgstr "由於檔案選擇為空而放棄提交。"
 
-#: kicad/project_tree_pane.cpp:2472
+#: kicad/project_tree_pane.cpp:2474
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "無法取得倉庫索引: %s"
 
-#: kicad/project_tree_pane.cpp:2483
+#: kicad/project_tree_pane.cpp:2485
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "無法將檔案添加到索引中: %s"
 
-#: kicad/project_tree_pane.cpp:2491
+#: kicad/project_tree_pane.cpp:2493
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "無法寫入索引: %s"
 
-#: kicad/project_tree_pane.cpp:2498
+#: kicad/project_tree_pane.cpp:2500
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "無法寫入樹: %s"
 
-#: kicad/project_tree_pane.cpp:2505
+#: kicad/project_tree_pane.cpp:2507
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "無法搜索樹: %s"
 
-#: kicad/project_tree_pane.cpp:2517
+#: kicad/project_tree_pane.cpp:2519
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "無法獲取 HEAD 引用: %s"
 
-#: kicad/project_tree_pane.cpp:2526
+#: kicad/project_tree_pane.cpp:2528
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "無法獲取提交: %s"
 
-#: kicad/project_tree_pane.cpp:2541
+#: kicad/project_tree_pane.cpp:2543
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "無法建立作者簽名: %s"
 
-#: kicad/project_tree_pane.cpp:2578
+#: kicad/project_tree_pane.cpp:2580
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "無法建立提交: %s"
 
-#: kicad/project_tree_pane.cpp:2583
+#: kicad/project_tree_pane.cpp:2585
 #, c-format
 msgid "Created commit with id: %s"
 msgstr "無法寫入索引: %s"
@@ -31929,7 +32043,7 @@ msgstr ""
 "從電路板匯入設定錯誤: \n"
 "無法載入關聯項目檔案 %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:581
+#: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
 #: pcbnew/tools/pcb_control.cpp:1529
 msgid "Loading PCB"
 msgstr "載入 PCB 中"
@@ -33523,8 +33637,8 @@ msgstr "mfg"
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "生成 IPC2581 檔案前必須儲存電路板。"
 
-#: pcbnew/dialogs/dialog_export_2581.cpp:275 pcbnew/files.cpp:990
-#: pcbnew/files.cpp:1107 pcbnew/footprint_libraries_utils.cpp:269
+#: pcbnew/dialogs/dialog_export_2581.cpp:275 pcbnew/files.cpp:1001
+#: pcbnew/files.cpp:1118 pcbnew/footprint_libraries_utils.cpp:269
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "寫入檔案 '%s' 的權限不足。"
@@ -35479,31 +35593,31 @@ msgstr "設定為 網路類/自定義規則 的值"
 msgid "Set Track and Via Properties"
 msgstr "設定走線與貫孔屬性"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#: pcbnew/drc/drc_engine.cpp:1492
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:33
+#: pcbnew/drc/drc_engine.cpp:1491
 msgid "footprint"
 msgstr "封裝"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:62
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
 msgstr "寫入空封裝庫表檔案 '%s' 時出錯。"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:75
 msgid "Please select a footprint library table file."
 msgstr "請選擇一個封裝庫表檔案。"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:96
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:98
 #, c-format
 msgid "'%s' is not a valid footprint library table."
 msgstr "檔案 \"%s\" 不是一個有效的封裝庫表檔案。"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:107
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:110
 #, c-format
 msgid "Cannot create library table path '%s'."
 msgstr "無法建立庫表路徑 '%s'。"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:116
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:119
 #, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
@@ -35516,7 +35630,7 @@ msgstr ""
 "複製到:\n"
 "%s。"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:135
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:141
 msgid "Error loading footprint library table."
 msgstr "載入封裝庫表時出錯。"
 
@@ -40270,7 +40384,7 @@ msgid "board setup micro-via constraints"
 msgstr "電路板設定中 \"微孔\" 約束"
 
 #: pcbnew/drc/drc_engine.cpp:255 pcbnew/drc/drc_engine.cpp:271
-#: pcbnew/drc/drc_engine.cpp:340 pcbnew/drc/drc_engine.cpp:357
+#: pcbnew/drc/drc_engine.cpp:339 pcbnew/drc/drc_engine.cpp:356
 #, c-format
 msgid "netclass '%s'"
 msgstr "網路類 '%s'"
@@ -40281,316 +40395,316 @@ msgstr "網路類 '%s'"
 msgid "netclass '%s' (diff pair)"
 msgstr "網路類 '%s' (差分對)"
 
-#: pcbnew/drc/drc_engine.cpp:374 pcbnew/drc/drc_engine.cpp:391
+#: pcbnew/drc/drc_engine.cpp:373 pcbnew/drc/drc_engine.cpp:390
 #, c-format
 msgid "netclass '%s' (uvia)"
 msgstr "網路類 '%s' (微孔)"
 
-#: pcbnew/drc/drc_engine.cpp:457
+#: pcbnew/drc/drc_engine.cpp:456
 msgid "keepout area"
 msgstr "keepout 區域"
 
-#: pcbnew/drc/drc_engine.cpp:459
+#: pcbnew/drc/drc_engine.cpp:458
 #, c-format
 msgid "keepout area '%s'"
 msgstr "keepout 區域 '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:659
+#: pcbnew/drc/drc_engine.cpp:658
 #, c-format
 msgid "Resolved zone connection type: %s."
 msgstr "解析完成的覆銅連接類型: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:677
+#: pcbnew/drc/drc_engine.cpp:676
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "焊盤不是通孔焊盤; 連接將是: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:787
+#: pcbnew/drc/drc_engine.cpp:786
 #, c-format
 msgid "Net tie on %s; clearance: 0."
 msgstr "網路連線 %s；間隙：0。"
 
-#: pcbnew/drc/drc_engine.cpp:790
+#: pcbnew/drc/drc_engine.cpp:789
 msgid "net tie"
 msgstr "網結"
 
-#: pcbnew/drc/drc_engine.cpp:817 pcbnew/drc/drc_engine.cpp:827
+#: pcbnew/drc/drc_engine.cpp:816 pcbnew/drc/drc_engine.cpp:826
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "%s 上的局部覆蓋; 間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:842 pcbnew/drc/drc_engine.cpp:1456
-#: pcbnew/drc/drc_engine.cpp:1472
+#: pcbnew/drc/drc_engine.cpp:841 pcbnew/drc/drc_engine.cpp:1455
+#: pcbnew/drc/drc_engine.cpp:1471
 msgid "board minimum"
 msgstr "最小電路板"
 
-#: pcbnew/drc/drc_engine.cpp:845 pcbnew/drc/drc_engine.cpp:1450
-#: pcbnew/drc/drc_engine.cpp:1466
+#: pcbnew/drc/drc_engine.cpp:844 pcbnew/drc/drc_engine.cpp:1449
+#: pcbnew/drc/drc_engine.cpp:1465
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "電路板最小間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:854
+#: pcbnew/drc/drc_engine.cpp:853
 msgid "board minimum hole"
 msgstr "電路板最小孔"
 
-#: pcbnew/drc/drc_engine.cpp:857
+#: pcbnew/drc/drc_engine.cpp:856
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "電路板最小孔間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:876
+#: pcbnew/drc/drc_engine.cpp:875
 #, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "覆蓋局部 %s; 區域連接: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:893
+#: pcbnew/drc/drc_engine.cpp:892
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "覆蓋局部 %s; 散熱間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:910
+#: pcbnew/drc/drc_engine.cpp:909
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "覆蓋局部 %s; 散熱引線寬度: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:919
+#: pcbnew/drc/drc_engine.cpp:918
 #, c-format
 msgid "%s min thickness: %s."
 msgstr "%s 最小線寬: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:933
+#: pcbnew/drc/drc_engine.cpp:932
 #, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "檢查斷言 \"%s\"。"
 
-#: pcbnew/drc/drc_engine.cpp:939 pcbnew/drc/drc_engine.cpp:1576
+#: pcbnew/drc/drc_engine.cpp:938 pcbnew/drc/drc_engine.cpp:1575
 msgid "Assertion passed."
 msgstr "斷言通過。"
 
-#: pcbnew/drc/drc_engine.cpp:943 pcbnew/drc/drc_engine.cpp:1580
+#: pcbnew/drc/drc_engine.cpp:942 pcbnew/drc/drc_engine.cpp:1579
 msgid "--> Assertion failed. <--"
 msgstr "---> 斷言失敗。<--"
 
-#: pcbnew/drc/drc_engine.cpp:963
+#: pcbnew/drc/drc_engine.cpp:962
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "檢查 %s 間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:968
+#: pcbnew/drc/drc_engine.cpp:967
 #, c-format
 msgid "Checking %s creepage: %s."
 msgstr "檢查 %s 間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:973
+#: pcbnew/drc/drc_engine.cpp:972
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "檢查 %s 最大未耦合長度: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:979
+#: pcbnew/drc/drc_engine.cpp:978
 #, c-format
 msgid "Checking %s max skew: %s."
 msgstr "檢查 %s 最大偏移: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:985
+#: pcbnew/drc/drc_engine.cpp:984
 #, c-format
 msgid "Checking %s gap: %s."
 msgstr "檢查 %s 間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:991
+#: pcbnew/drc/drc_engine.cpp:990
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "檢查 %s 散熱引線寬度: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:997
+#: pcbnew/drc/drc_engine.cpp:996
 #, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "檢查 %s 最小引線數: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1004
+#: pcbnew/drc/drc_engine.cpp:1003
 #, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "檢查 %s 覆銅連接: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1036
+#: pcbnew/drc/drc_engine.cpp:1035
 #, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "正檢查 %s 走線寬度: 最優 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1042
+#: pcbnew/drc/drc_engine.cpp:1041
 #, c-format
 msgid "Checking %s track width: min %s."
 msgstr "正檢查 %s 走線寬度: 最小%s。"
 
-#: pcbnew/drc/drc_engine.cpp:1050
+#: pcbnew/drc/drc_engine.cpp:1049
 #, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "正檢查 %s 環形寬度: 最小 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1058
+#: pcbnew/drc/drc_engine.cpp:1057
 #, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "正檢查 %s 貫孔直徑: 最優 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1064
+#: pcbnew/drc/drc_engine.cpp:1063
 #, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "正檢查 %s 貫孔直徑: 最小 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1073
+#: pcbnew/drc/drc_engine.cpp:1072
 #, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "正檢查 %s 孔尺寸: 最優 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1079
+#: pcbnew/drc/drc_engine.cpp:1078
 #, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "正檢查 %s 孔尺寸: 最小 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1089
+#: pcbnew/drc/drc_engine.cpp:1088
 #, c-format
 msgid "Checking %s: min %s."
 msgstr "正檢查 %s: 最小 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1097
+#: pcbnew/drc/drc_engine.cpp:1096
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "正檢查 %s 差分對間隙: 最優 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1103
+#: pcbnew/drc/drc_engine.cpp:1102
 #, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "正檢查 %s 間隙: 最小 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1111
+#: pcbnew/drc/drc_engine.cpp:1110
 #, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "正檢查 %s 孔到孔: 最小 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1117 pcbnew/drc/drc_engine.cpp:1143
-#: pcbnew/drc/drc_engine.cpp:1589
+#: pcbnew/drc/drc_engine.cpp:1116 pcbnew/drc/drc_engine.cpp:1142
+#: pcbnew/drc/drc_engine.cpp:1588
 #, c-format
 msgid "Checking %s."
 msgstr "檢查 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1132
+#: pcbnew/drc/drc_engine.cpp:1131
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "正檢查 %s: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1153
+#: pcbnew/drc/drc_engine.cpp:1152
 msgid "Netclass clearances apply only between copper items."
 msgstr "網類間隙僅適用於銅箔項目之間。"
 
-#: pcbnew/drc/drc_engine.cpp:1157 pcbnew/drc/drc_engine.cpp:1162
+#: pcbnew/drc/drc_engine.cpp:1156 pcbnew/drc/drc_engine.cpp:1161
 #, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr "%s 不含銅箔。忽略規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1219
+#: pcbnew/drc/drc_engine.cpp:1218
 msgid "Keepout constraint not met."
 msgstr "不滿足 Keepout 約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1221
+#: pcbnew/drc/drc_engine.cpp:1220
 msgid "Disallow constraint not met."
 msgstr "未滿足不允許約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1243
+#: pcbnew/drc/drc_engine.cpp:1242
 msgid "Keepout layer(s) not matched."
 msgstr "Keepout 層不匹配。"
 
-#: pcbnew/drc/drc_engine.cpp:1247 pcbnew/drc/drc_engine.cpp:1268
-#: pcbnew/drc/drc_engine.cpp:1593
+#: pcbnew/drc/drc_engine.cpp:1246 pcbnew/drc/drc_engine.cpp:1267
+#: pcbnew/drc/drc_engine.cpp:1592
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "規則層 '%s' 不匹配; 已忽略規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1252 pcbnew/drc/drc_engine.cpp:1273
+#: pcbnew/drc/drc_engine.cpp:1251 pcbnew/drc/drc_engine.cpp:1272
 msgid "Rule layer not matched; rule ignored."
 msgstr "規則層不匹配; 已忽略規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1264
+#: pcbnew/drc/drc_engine.cpp:1263
 msgid "Constraint layer not matched."
 msgstr "約束層不匹配。"
 
-#: pcbnew/drc/drc_engine.cpp:1280
+#: pcbnew/drc/drc_engine.cpp:1279
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "%s 不是鑽孔; 已忽略規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1289
+#: pcbnew/drc/drc_engine.cpp:1288
 msgid "Unconditional constraint applied."
 msgstr "無條件應用的約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1293 pcbnew/drc/drc_engine.cpp:1599
+#: pcbnew/drc/drc_engine.cpp:1292 pcbnew/drc/drc_engine.cpp:1598
 msgid "Unconditional rule applied."
 msgstr "無條件應用的規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1298
+#: pcbnew/drc/drc_engine.cpp:1297
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "無條件應用的規則; 覆蓋之前的約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1312 pcbnew/drc/drc_engine.cpp:1604
+#: pcbnew/drc/drc_engine.cpp:1311 pcbnew/drc/drc_engine.cpp:1603
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "檢查規則條件 \"%s\"。"
 
-#: pcbnew/drc/drc_engine.cpp:1322
+#: pcbnew/drc/drc_engine.cpp:1321
 msgid "Constraint applied."
 msgstr "應用的約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1326 pcbnew/drc/drc_engine.cpp:1610
+#: pcbnew/drc/drc_engine.cpp:1325 pcbnew/drc/drc_engine.cpp:1609
 msgid "Rule applied."
 msgstr "應用的規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1331
+#: pcbnew/drc/drc_engine.cpp:1330
 msgid "Rule applied; overrides previous constraints."
 msgstr "應用的規則; 覆蓋之前的約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1339
+#: pcbnew/drc/drc_engine.cpp:1338
 msgid "Membership not satisfied; constraint ignored."
 msgstr "不滿足成員資格; 忽略約束。"
 
-#: pcbnew/drc/drc_engine.cpp:1340 pcbnew/drc/drc_engine.cpp:1615
+#: pcbnew/drc/drc_engine.cpp:1339 pcbnew/drc/drc_engine.cpp:1614
 msgid "Condition not satisfied; rule ignored."
 msgstr "條件不滿足; 忽略規則。"
 
-#: pcbnew/drc/drc_engine.cpp:1365
+#: pcbnew/drc/drc_engine.cpp:1364
 #, c-format
 msgid "Inheriting from parent: %s."
 msgstr "衍生自符號 '%s'。"
 
-#: pcbnew/drc/drc_engine.cpp:1404 pcbnew/drc/drc_engine.cpp:1428
+#: pcbnew/drc/drc_engine.cpp:1403 pcbnew/drc/drc_engine.cpp:1427
 #, c-format
 msgid "Local clearance on %s: %s."
 msgstr "%s 上的局部間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1487
+#: pcbnew/drc/drc_engine.cpp:1486
 #, c-format
 msgid "%s zone connection: %s."
 msgstr "%s 區域連接: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1503
+#: pcbnew/drc/drc_engine.cpp:1502
 #, c-format
 msgid "%s pad connection: %s."
 msgstr "%s 焊盤連接: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1508 pcbnew/drc/drc_engine.cpp:1525
-#: pcbnew/drc/drc_engine.cpp:1542 pcbnew/zone.cpp:616 pcbnew/zone.h:193
+#: pcbnew/drc/drc_engine.cpp:1507 pcbnew/drc/drc_engine.cpp:1524
+#: pcbnew/drc/drc_engine.cpp:1541 pcbnew/zone.cpp:616 pcbnew/zone.h:193
 msgid "zone"
 msgstr "覆銅"
 
-#: pcbnew/drc/drc_engine.cpp:1520
+#: pcbnew/drc/drc_engine.cpp:1519
 #, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "%s熱焊盤間隙: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1537
+#: pcbnew/drc/drc_engine.cpp:1536
 #, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "%s 散熱引線寬度: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:1570
+#: pcbnew/drc/drc_engine.cpp:1569
 #, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "檢查規則斷言 \"%s\"。"
@@ -42069,37 +42183,37 @@ msgstr "焊盤"
 msgid "vias"
 msgstr "無貫孔"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2356
-#: pcbnew/exporters/step/step_pcb_model.cpp:2388
-#: pcbnew/exporters/step/step_pcb_model.cpp:2476
-#: pcbnew/exporters/step/step_pcb_model.cpp:3263
-#: pcbnew/exporters/step/step_pcb_model.cpp:3332
+#: pcbnew/exporters/step/step_pcb_model.cpp:2363
+#: pcbnew/exporters/step/step_pcb_model.cpp:2395
+#: pcbnew/exporters/step/step_pcb_model.cpp:2483
+#: pcbnew/exporters/step/step_pcb_model.cpp:3270
+#: pcbnew/exporters/step/step_pcb_model.cpp:3339
 #, fuzzy, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr "無法建立輸出目錄 '%s'。"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2409
+#: pcbnew/exporters/step/step_pcb_model.cpp:2416
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2417
+#: pcbnew/exporters/step/step_pcb_model.cpp:2424
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2458
-#: pcbnew/exporters/step/step_pcb_model.cpp:3240
-#: pcbnew/exporters/step/step_pcb_model.cpp:3313
-#: pcbnew/exporters/step/step_pcb_model.cpp:3362
+#: pcbnew/exporters/step/step_pcb_model.cpp:2465
+#: pcbnew/exporters/step/step_pcb_model.cpp:3247
+#: pcbnew/exporters/step/step_pcb_model.cpp:3320
+#: pcbnew/exporters/step/step_pcb_model.cpp:3369
 #, fuzzy, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
 msgstr "無法重新命名臨時檔案 '%s' 到 \"%s\""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2909
+#: pcbnew/exporters/step/step_pcb_model.cpp:2916
 #, fuzzy, c-format
 msgid "Cannot identify actual file type for '%s'."
 msgstr "無法打開網表檔案 '%s'。"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2919
+#: pcbnew/exporters/step/step_pcb_model.cpp:2926
 #, fuzzy, c-format
 msgid "Could not transfer model data from file '%s'."
 msgstr "建立檔案 \"%s\" 失敗。"
@@ -42164,44 +42278,44 @@ msgstr "PCB '%s' 已由 '%s' 在 '%s' 中打開。"
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "目前 PCB 已被修改。是否儲存變更?"
 
-#: pcbnew/files.cpp:571
+#: pcbnew/files.cpp:573
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' 不存在, 要建立它嗎?"
 
-#: pcbnew/files.cpp:580
+#: pcbnew/files.cpp:582
 msgid "Creating PCB"
 msgstr "PCB 建立中"
 
-#: pcbnew/files.cpp:594 pcbnew/files.cpp:680
+#: pcbnew/files.cpp:596 pcbnew/files.cpp:682
 msgid "File format is not supported"
 msgstr "檔案格式不支援"
 
-#: pcbnew/files.cpp:724 pcbnew/files.cpp:734
+#: pcbnew/files.cpp:726 pcbnew/files.cpp:736
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "載入 PCB '%s' 時出錯。"
 
-#: pcbnew/files.cpp:743
+#: pcbnew/files.cpp:745
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "載入電路板 '%s' 時記憶體耗盡"
 
-#: pcbnew/files.cpp:865
+#: pcbnew/files.cpp:867
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr "將封裝 %s 儲存到專案專用封裝庫時出錯。"
 
-#: pcbnew/files.cpp:896
+#: pcbnew/files.cpp:898
 msgid "Error saving project specific footprint library table."
 msgstr "儲存專案專用封裝庫表時出錯。"
 
-#: pcbnew/files.cpp:1022 pcbnew/files.cpp:1156
+#: pcbnew/files.cpp:1033 pcbnew/files.cpp:1167
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "儲存自定義規則檔案 '%s' 出錯。"
 
-#: pcbnew/files.cpp:1047 pcbnew/files.cpp:1131
+#: pcbnew/files.cpp:1058 pcbnew/files.cpp:1142
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -42210,7 +42324,7 @@ msgstr ""
 "儲存電路板檔案 '%s' 出錯。\n"
 "%s"
 
-#: pcbnew/files.cpp:1162
+#: pcbnew/files.cpp:1173
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -42219,7 +42333,7 @@ msgstr ""
 "已將板複製到: \n"
 "%s"
 
-#: pcbnew/files.cpp:1312
+#: pcbnew/files.cpp:1323
 msgid "Generating ODB++ output files"
 msgstr "生成 IPC2581 檔案"
 
@@ -45254,7 +45368,7 @@ msgid "Element token contains %d parameters."
 msgstr "元素標記包含 %d 個參數。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:972
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3063
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3067
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "庫資料夾 '%s' 有意料外的子目錄。"
@@ -45266,7 +45380,7 @@ msgstr "在庫 '%s' 中找到了意想不到的檔案 '%s'。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1010
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3270
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3100
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3104
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "無法刪除封裝庫 '%s'。"
@@ -45292,7 +45406,7 @@ msgid "Generating history section"
 msgstr "生成 history section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1203
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3047
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3079
 msgid "Generating BOM section"
 msgstr "生成 BOM section"
 
@@ -45317,39 +45431,39 @@ msgstr ""
 "電路板缺少板框或板框形狀異常 (如板框線條沒有閉合)。可用設計規則檢查 (DRC) 分"
 "析原因。"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2499
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2664
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "匯出層 %s, 網路 %s"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2700
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2726
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2868
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3234
 msgid "Generating logistic section"
 msgstr "生成 logistic section"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3214
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
 msgid "Saving file"
 msgstr "儲存檔案"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3278
 #, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
 msgstr "無法將檔案儲存到快取"
@@ -45472,26 +45586,26 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "仍要儲存"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1467
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1471
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "未知焊盤類型: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2313
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2317
 #, c-format
 msgid "unknown via type %d"
 msgstr "未知貫孔類型 %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2605
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2609
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "未知覆銅角平滑類型 %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2754
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2758
 msgid "This file does not contain a PCB."
 msgstr "此檔案不包含 PCB。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2921
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2925
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -45500,21 +45614,21 @@ msgstr ""
 "庫 '%s' 不存在。\n"
 "是否要建立它?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2925
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2929
 msgid "Library Not Found"
 msgstr "找不到庫"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2951
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2955
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "封裝檔案名 '%s' 無效。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2957
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2961
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "刪除 '%s' 的權限不足。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3082
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3086
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "在庫路徑 '%s' 中找到了意料外的檔案 '%s'。"
@@ -53739,9 +53853,6 @@ msgstr "KiCad 專案圖編輯器"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "從原理圖 BOM 表中排除"
-
-#~ msgid "Convert Symbol"
-#~ msgstr "轉換符號"
 
 #~ msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 #~ msgstr "<b>A 電源符號應該沒有轉換選項</b><br><br>"
@@ -62313,9 +62424,6 @@ msgstr "KiCad 專案圖編輯器"
 #~ msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 #~ msgstr "開啟“KiCad的入門”初學者指南"
 
-#~ msgid "Create new symbol"
-#~ msgstr "建立新符號"
-
 #~ msgid "Show associated datasheet or document"
 #~ msgstr "顯示關聯的規格書或檔案"
 
@@ -64705,9 +64813,6 @@ msgstr "KiCad 專案圖編輯器"
 #~ "別名是使用其根元件的主體上的元件。 \n"
 #~ "它有自己的文件和關鍵字。 \n"
 #~ "一種快速的方法來擴展類似符號庫。"
-
-#~ msgid "Symbol \"%s\" found in library \"%s\""
-#~ msgstr "'%s' 在庫中'%s'找到了"
 
 #~ msgid "Symbol \"%s\" not found in library \"%s\"!"
 #~ msgstr "在庫 \"%s\" 中找不到符號 \"%s\"!"

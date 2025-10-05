@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-30 15:10+0300\n"
+"POT-Creation-Date: 2025-10-05 16:04+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -158,7 +158,7 @@ msgstr "เวลาอ่านอีกครั้ง %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:116
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2705
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2709
 #, c-format
 msgid "Loading %s..."
 msgstr "กำลังอ่าน %s…"
@@ -202,7 +202,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: common/eda_base_frame.cpp:1189 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:1074 pcbnew/footprint_chooser_frame.cpp:322
+#: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:322
 #: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:678
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
@@ -2142,7 +2142,7 @@ msgstr "ข้อมูล"
 #: eeschema/symbol_editor/symbol_editor.cpp:1144
 #: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
-#: eeschema/tools/symbol_editor_control.cpp:534
+#: eeschema/tools/symbol_editor_control.cpp:566
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
 #: kicad/tools/kicad_manager_control.cpp:370
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
@@ -2190,7 +2190,7 @@ msgid "KiCad Design Block folders"
 msgstr "ไฟล์โครงการ KiCad รุ่นเก่า"
 
 #: common/design_block_io.cpp:174
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3030
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3034
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "ไม่สามารถเขียนทับเส้นทางไลบรารี '%s'"
@@ -2207,7 +2207,7 @@ msgstr ""
 "ตรวจสอบให้แน่ใจว่าคุณมีสิทธิ์ในการเขียนแล้วลองอีกครั้ง"
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:964
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3055
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3059
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "มีสิทธิ์ไม่เพียงพอที่จะลบโฟลเดอร์ '%s'"
@@ -2283,8 +2283,8 @@ msgstr "ไฟล์ fp-lib-table ไม่มีไลบรารีชื่�
 msgid "Added by Plugin and Content Manager"
 msgstr "เพิ่มโดยปลั๊กอินและระบบจัดการเนื้อหา"
 
-#: common/design_block_lib_table.cpp:636 common/fp_lib_table.cpp:633
-#: eeschema/symbol_lib_table.cpp:634
+#: common/design_block_lib_table.cpp:637 common/fp_lib_table.cpp:634
+#: eeschema/symbol_lib_table.cpp:635
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "ไม่สามารถสร้างเส้นทาง ตารางไลบรารีส่วนกลาง '%s'"
@@ -2497,11 +2497,11 @@ msgstr "สำเนาเลขรุ่น KiCad เข้าคลิปบ�
 msgid "&Report Bug"
 msgstr "รายงานข้อผิดพลาด(&R)"
 
-#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1228
+#: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1234
 msgid "Report a problem with KiCad"
 msgstr "รายงานปัญหากับ KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1221
+#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1227
 msgid "Donate"
 msgstr "บริจาค"
 
@@ -2689,6 +2689,7 @@ msgstr "ตัวแปรสภาพแวดล้อม"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
+#: eeschema/dialogs/dialog_lib_fields.cpp:266
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:214
@@ -2725,12 +2726,12 @@ msgstr "ชื่อ"
 msgid "Path"
 msgstr "เส้นทาง"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:35
 #, fuzzy
 msgid "design block"
 msgstr "เพิ่มสัญญาณในการพล็อต"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:65
 #, fuzzy, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
@@ -2739,20 +2740,20 @@ msgstr ""
 "เกิดข้อผิดพลาดในการสร้างตารางไลบรารีสัญลักษณ์ '%s'\n"
 "%s"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:78
 #, fuzzy
 msgid "Please select a design block library table file."
 msgstr "กรุณาเลือกไฟล์ตารางไลบรารีสัญลักษณ์"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:87
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:84
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:84
 #: pcbnew/footprint_libraries_utils.cpp:141
 #, c-format
 msgid "File '%s' not found."
 msgstr "ไฟล์ '%s' หาไม่พบ"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:102
 #, fuzzy, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
@@ -2761,13 +2762,13 @@ msgstr ""
 "เกิดผิดพลาดอ่านตารางไลบรารีสัญลักษณ์ '%s'\n"
 "%s"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:114
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
 #, c-format
 msgid "Cannot create global library table '%s'."
 msgstr "ไม่สามารถสร้าง ตารางไลบรารีส่วนกลาง '%s'"
 
-#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:122
+#: common/dialogs/dialog_global_design_block_lib_table_config.cpp:124
 #, fuzzy, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
 msgstr "เกิดข้อผิดพลาด สำเนาตารางไลบรารีสัญลักษณ์จากส่วนกลาง '%s' ไปที่ '%s'"
@@ -3377,7 +3378,7 @@ msgid "Revision:"
 msgstr "รุ่นแก้ไขที่:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:252
-#: eeschema/dialogs/dialog_export_netlist.cpp:403
+#: eeschema/dialogs/dialog_export_netlist.cpp:456
 msgid "Title:"
 msgstr "ไตเติ้ล:"
 
@@ -3500,7 +3501,7 @@ msgstr "ทางเลือก"
 #: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
 #: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
 #: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
-#: eeschema/sim/simulator_frame_ui.cpp:2724
+#: eeschema/sim/simulator_frame_ui.cpp:2804
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:161
@@ -3550,7 +3551,7 @@ msgstr "พริวิวก่อนพิมพ์"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
 #: eeschema/dialogs/dialog_erc.cpp:116 eeschema/dialogs/dialog_erc.cpp:464
-#: eeschema/dialogs/dialog_export_netlist.cpp:257
+#: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:137
@@ -3779,6 +3780,7 @@ msgstr "ที่ตั้งฟุ้ทพรินท์"
 
 #: common/dialogs/eda_list_dialog.cpp:49 common/dialogs/eda_list_dialog.cpp:77
 #: common/widgets/lib_tree.cpp:220 common/widgets/lib_tree.cpp:304
+#: eeschema/dialogs/dialog_lib_fields.cpp:282
 #: eeschema/dialogs/dialog_sim_command.cpp:100
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:524
@@ -4988,7 +4990,7 @@ msgstr "ไฟล์ %s มีอยู่แล้ว"
 #: eeschema/symbol_editor/symbol_editor.cpp:1145
 #: eeschema/symbol_editor/symbol_editor.cpp:1187
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
-#: eeschema/tools/symbol_editor_control.cpp:536
+#: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:362
@@ -5116,7 +5118,7 @@ msgstr "(คีย์ร้อน)"
 msgid "Grid 2:"
 msgstr "กริด 2:"
 
-#: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:919
+#: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:925
 #, fuzzy
 msgid "Grid Overrides"
 msgstr "เขียนทับ"
@@ -6097,7 +6099,7 @@ msgstr "เมาส์และทัชแพ็ด"
 msgid "Hotkeys"
 msgstr "คีย์ร้อน"
 
-#: common/eda_base_frame.cpp:1100 kicad/project_tree_pane.cpp:1050
+#: common/eda_base_frame.cpp:1100 kicad/project_tree_pane.cpp:1052
 #, fuzzy
 msgid "Version Control"
 msgstr "เลือกเท่านั้น"
@@ -6106,7 +6108,7 @@ msgstr "เลือกเท่านั้น"
 msgid "Data Collection"
 msgstr "การเก็บข้อมูล"
 
-#: common/eda_base_frame.cpp:1130 common/tool/actions.cpp:1089
+#: common/eda_base_frame.cpp:1130 common/tool/actions.cpp:1095
 #: common/tool/common_tools.cpp:612 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
@@ -6154,7 +6156,7 @@ msgstr "แม่แบบชื่อช่อง"
 msgid "Simulator"
 msgstr "เครื่องจำลอง..."
 
-#: common/eda_base_frame.cpp:1165 common/tool/actions.cpp:1106
+#: common/eda_base_frame.cpp:1165 common/tool/actions.cpp:1112
 #: common/tool/common_tools.cpp:614 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1112 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
@@ -6261,7 +6263,7 @@ msgstr "ไม่พบไฟล์เอกสาร '%s'"
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "ไม่รู้จักชนิด MIME ของไฟล์เอกสาร '%s'"
 
-#: common/eda_draw_frame.cpp:382 common/tool/actions.cpp:926
+#: common/eda_draw_frame.cpp:382 common/tool/actions.cpp:932
 #, fuzzy
 msgid "Edit Grids..."
 msgstr "แก้ไขกริดผู้ใช้กำหนด…"
@@ -6309,7 +6311,7 @@ msgstr "มิล"
 msgid "Units"
 msgstr "หน่วย"
 
-#: common/eda_draw_frame.cpp:709 common/tool/actions.cpp:940
+#: common/eda_draw_frame.cpp:709 common/tool/actions.cpp:946
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:58
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:167
@@ -6346,7 +6348,7 @@ msgstr "ไลบรารีใหม่"
 msgid "Search"
 msgstr "ค้นหาข้อความ"
 
-#: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1115
+#: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1121
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1959
 #: pagelayout_editor/pl_editor_frame.cpp:194
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:349
@@ -6502,8 +6504,9 @@ msgstr "ป้ายชื่อส่วนกลาง"
 msgid "Hierarchical Label"
 msgstr "ป้ายชื่อลำดับขั้น"
 
-#: common/eda_item.cpp:428 eeschema/dialogs/dialog_symbol_fields_table.cpp:199
-#: eeschema/sch_field.h:104 eeschema/sch_label.cpp:221
+#: common/eda_item.cpp:428 eeschema/dialogs/dialog_lib_fields.cpp:257
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:199 eeschema/sch_field.h:104
+#: eeschema/sch_label.cpp:221
 msgid "Field"
 msgstr "ช่อง"
 
@@ -7310,37 +7313,37 @@ msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
 msgid "Could not push to remote: %s"
 msgstr "ไม่สามารถใช้ OpenGL"
 
-#: common/git/kicad_git_common.cpp:844
+#: common/git/kicad_git_common.cpp:867
 #, c-format
 msgid "Received %u of %u objects"
 msgstr ""
 
-#: common/git/kicad_git_common.cpp:873
+#: common/git/kicad_git_common.cpp:896
 #, fuzzy, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "ปรับปรุง %s จาก %s เป็น %s"
 
-#: common/git/kicad_git_common.cpp:877
+#: common/git/kicad_git_common.cpp:900
 #, fuzzy, c-format
 msgid "* [new] %s %s"
 msgstr "โซน %s บน %s"
 
-#: common/git/kicad_git_common.cpp:897
+#: common/git/kicad_git_common.cpp:920
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr ""
 
-#: common/git/kicad_git_common.cpp:912
+#: common/git/kicad_git_common.cpp:935
 #, fuzzy, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "กริด:%s (%s)"
 
-#: common/git/kicad_git_common.cpp:917
+#: common/git/kicad_git_common.cpp:940
 #, fuzzy, c-format
 msgid "[updated] %s"
 msgstr "ปรับปรุง"
 
-#: common/git/kicad_git_common.cpp:981
+#: common/git/kicad_git_common.cpp:1004
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "ไม่สามารถเปิดไฟล์"
@@ -7485,7 +7488,7 @@ msgstr "วางสำเนาจากเซลส์คลิปบอร์
 #: common/grid_tricks.cpp:370 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1714
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:983
+#: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:985
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2718
 msgid "Delete"
 msgstr "ลบ"
@@ -8150,8 +8153,8 @@ msgstr "ผิดพลาดอ่านเครื่องมือแก้
 msgid "Unable to switch language to %s"
 msgstr "ไม่สามารถเปลี่ยนภาษาเป็น %s"
 
-#: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1022
-#: pcbnew/drc/drc_engine.cpp:1023 pcbnew/drc/drc_engine.cpp:1024
+#: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1021
+#: pcbnew/drc/drc_engine.cpp:1022 pcbnew/drc/drc_engine.cpp:1023
 #: pcbnew/tools/board_inspection_tool.cpp:251
 #: pcbnew/tools/board_inspection_tool.cpp:260
 #: pcbnew/tools/board_inspection_tool.cpp:269
@@ -9573,96 +9576,101 @@ msgstr "ไม่ต้องวางไลบรารีบนสุดขอ
 
 #: common/tool/actions.cpp:805
 #, fuzzy
-msgid "Library Tree"
-msgstr "ไลบรารีอ้างอิงใหม่"
+msgid "Library Table"
+msgstr "ชื่อเล่นไลบรารีผิดพลาด"
 
 #: common/tool/actions.cpp:811
 #, fuzzy
-msgid "Hide Library Tree"
+msgid "Library Tree"
 msgstr "ไลบรารีอ้างอิงใหม่"
 
 #: common/tool/actions.cpp:817
 #, fuzzy
+msgid "Hide Library Tree"
+msgstr "ไลบรารีอ้างอิงใหม่"
+
+#: common/tool/actions.cpp:823
+#, fuzzy
 msgid "Focus Library Tree Search Field"
 msgstr "ย้ายจุดยึดชื่ออ้างอิงฟุ้ทพรินท์"
 
-#: common/tool/actions.cpp:824
+#: common/tool/actions.cpp:830
 msgid "Pan Up"
 msgstr "เลื่อนขึ้น"
 
-#: common/tool/actions.cpp:832
+#: common/tool/actions.cpp:838
 msgid "Pan Down"
 msgstr "เลื่อนลง"
 
-#: common/tool/actions.cpp:840
+#: common/tool/actions.cpp:846
 msgid "Pan Left"
 msgstr "เลื่อนซ้าย"
 
-#: common/tool/actions.cpp:848
+#: common/tool/actions.cpp:854
 msgid "Pan Right"
 msgstr "เลื่อนขวา"
 
-#: common/tool/actions.cpp:858
+#: common/tool/actions.cpp:864
 msgid "Switch to Fast Grid 1"
 msgstr "เปลี่ยนไปที่กริดเร็ว 1"
 
-#: common/tool/actions.cpp:865
+#: common/tool/actions.cpp:871
 msgid "Switch to Fast Grid 2"
 msgstr "เปลี่ยนไปที่กริดเร็ว 2"
 
-#: common/tool/actions.cpp:872
+#: common/tool/actions.cpp:878
 #, fuzzy
 msgid "Cycle Fast Grid"
 msgstr "เปลี่ยนไปที่กริดเร็ว 1"
 
-#: common/tool/actions.cpp:879
+#: common/tool/actions.cpp:885
 msgid "Switch to Next Grid"
 msgstr "เปลี่ยนไปกริดถัดไป"
 
-#: common/tool/actions.cpp:886
+#: common/tool/actions.cpp:892
 msgid "Switch to Previous Grid"
 msgstr "เปลี่ยนกลับไปกริดก่อนหน้า"
 
-#: common/tool/actions.cpp:892 common/tool/common_tools.cpp:627
+#: common/tool/actions.cpp:898 common/tool/common_tools.cpp:627
 msgid "Grid Origin"
 msgstr "จุดกำเนิดกริด"
 
-#: common/tool/actions.cpp:893
+#: common/tool/actions.cpp:899
 #, fuzzy
 msgid "Place the grid origin point"
 msgstr "ตั้งจุดกำเนิดของกริด"
 
-#: common/tool/actions.cpp:901
+#: common/tool/actions.cpp:907
 msgid "Reset Grid Origin"
 msgstr "ล้างจุดกำเนิดกริด"
 
-#: common/tool/actions.cpp:911
+#: common/tool/actions.cpp:917
 msgid "Show Grid"
 msgstr "แสดงกริด"
 
-#: common/tool/actions.cpp:912
+#: common/tool/actions.cpp:918
 msgid "Display background grid in the edit window"
 msgstr "แสดงจุดกริดบนพื้นหลังในหน้าต่างแก้ไข"
 
-#: common/tool/actions.cpp:920
+#: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
-#: common/tool/actions.cpp:927
+#: common/tool/actions.cpp:933
 #, fuzzy
 msgid "Edit grid definitions"
 msgstr "กำหนดวัดขนาดของกริด"
 
-#: common/tool/actions.cpp:933
+#: common/tool/actions.cpp:939
 #, fuzzy
 msgid "Grid Origin..."
 msgstr "จุดกำเนิดกริด"
 
-#: common/tool/actions.cpp:934
+#: common/tool/actions.cpp:940
 msgid "Set the grid origin point"
 msgstr "ตั้งจุดกำเนิดของกริด"
 
-#: common/tool/actions.cpp:948 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
+#: common/tool/actions.cpp:954 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
@@ -9671,7 +9679,7 @@ msgstr "ตั้งจุดกำเนิดของกริด"
 msgid "Mils"
 msgstr "มิล"
 
-#: common/tool/actions.cpp:956 eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
+#: common/tool/actions.cpp:962 eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:62
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
@@ -9685,200 +9693,200 @@ msgstr "มิล"
 msgid "Millimeters"
 msgstr "มิลลิเมตร"
 
-#: common/tool/actions.cpp:972
+#: common/tool/actions.cpp:978
 #, fuzzy
 msgid "Select Columns..."
 msgstr "เลือกคอลัมน์"
 
-#: common/tool/actions.cpp:979
+#: common/tool/actions.cpp:985
 msgid "Switch units"
 msgstr "สลับหน่วย"
 
-#: common/tool/actions.cpp:980
+#: common/tool/actions.cpp:986
 msgid "Switch between imperial and metric units"
 msgstr "สลับหน่วยระหว่างอิมพีเรียลและเมตริก"
 
-#: common/tool/actions.cpp:986
+#: common/tool/actions.cpp:992
 msgid "Polar Coordinates"
 msgstr "พิกัดเชิงมุม"
 
-#: common/tool/actions.cpp:987
+#: common/tool/actions.cpp:993
 msgid "Switch between polar and cartesian coordinate systems"
 msgstr "สลับระหว่างพิกัดเชิงมุมและพิกัดเชิงเส้น"
 
-#: common/tool/actions.cpp:995
+#: common/tool/actions.cpp:1001
 msgid "Reset Local Coordinates"
 msgstr "ล้างพิกัดเฉพาะที่"
 
-#: common/tool/actions.cpp:1002
+#: common/tool/actions.cpp:1008
 #, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "แสดงกากบาทเสมอ"
 
-#: common/tool/actions.cpp:1003
+#: common/tool/actions.cpp:1009
 #, fuzzy
 msgid "Display crosshairs even when not drawing objects"
 msgstr "แสดงเส้นกากบาทแม้อยู่ในเครื่องมือเลือก"
 
-#: common/tool/actions.cpp:1009
+#: common/tool/actions.cpp:1015
 msgid "Full-Window Crosshairs"
 msgstr "กากบาทเต็มหน้าต่าง"
 
-#: common/tool/actions.cpp:1010
+#: common/tool/actions.cpp:1016
 msgid "Switch display of full-window crosshairs"
 msgstr "สลับการแสดงกากบาทเต็มหน้าต่าง"
 
-#: common/tool/actions.cpp:1017
+#: common/tool/actions.cpp:1023
 msgid "Inactive Layer View Mode"
 msgstr "โหมดเลเยอร์ไม่แอ็คทีฟ"
 
-#: common/tool/actions.cpp:1018
+#: common/tool/actions.cpp:1024
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "สลับเปิดปิดเลเยอร์ไม่ใช้ระหว่างสีปกติและสีจาง"
 
-#: common/tool/actions.cpp:1025
+#: common/tool/actions.cpp:1031
 msgid "Inactive Layer View Mode (3-state)"
 msgstr "โหมดเลเยอร์ไม่แอ็คทีฟ (3 สถานะ)"
 
-#: common/tool/actions.cpp:1026
+#: common/tool/actions.cpp:1032
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "วนวงกลมเลเยอร์ไม่ทำงานระหว่าง ปกติ,จางและซ่อน"
 
-#: common/tool/actions.cpp:1032
+#: common/tool/actions.cpp:1038
 msgid "Draw Bounding Boxes"
 msgstr "วาดกรอบล้อมรอบ"
 
-#: common/tool/actions.cpp:1038 pcbnew/dialogs/panel_edit_options_base.cpp:140
+#: common/tool/actions.cpp:1044 pcbnew/dialogs/panel_edit_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
 msgid "Select item(s)"
 msgstr "เลือกชิ้นส่วน"
 
-#: common/tool/actions.cpp:1048
+#: common/tool/actions.cpp:1054
 msgid "Measure Tool"
 msgstr "เครื่องมือวัด"
 
-#: common/tool/actions.cpp:1049
+#: common/tool/actions.cpp:1055
 msgid "Interactively measure distance between points"
 msgstr "วัดระยะระหว่างจุดแบบโต้ตอบ"
 
-#: common/tool/actions.cpp:1065
+#: common/tool/actions.cpp:1071
 #, fuzzy
 msgid "Switch to Project Manager"
 msgstr "ผู้จัดการโครงการ"
 
-#: common/tool/actions.cpp:1066
+#: common/tool/actions.cpp:1072
 #, fuzzy
 msgid "Show project window"
 msgstr "แสดงหน้าต่างคอนโซล"
 
-#: common/tool/actions.cpp:1075
+#: common/tool/actions.cpp:1081
 msgid "Show 3D viewer window"
 msgstr "แสดงหน้าต่าง3มิติ"
 
-#: common/tool/actions.cpp:1081 eeschema/symbol_diff_frame.cpp:57
+#: common/tool/actions.cpp:1087 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1114
 msgid "Symbol Library Browser"
 msgstr "แสดงไลบรารีสัญลักษณ์"
 
-#: common/tool/actions.cpp:1090 kicad/tools/kicad_manager_actions.cpp:126
+#: common/tool/actions.cpp:1096 kicad/tools/kicad_manager_actions.cpp:126
 #, fuzzy
 msgid "Create, delete and edit schematic symbols"
 msgstr "สร้าง,ลบและแก้ไขสัญลักษณ์"
 
-#: common/tool/actions.cpp:1098 pcbnew/footprint_viewer_frame.cpp:111
+#: common/tool/actions.cpp:1104 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1041
 msgid "Footprint Library Browser"
 msgstr "เลือกไลบรารีฟุ้ทพรินท์"
 
-#: common/tool/actions.cpp:1107
+#: common/tool/actions.cpp:1113
 #, fuzzy
 msgid "Create, delete and edit board footprints"
 msgstr "สร้าง,ลบ และแก้ไข ฟุ้ทพรินท์"
 
-#: common/tool/actions.cpp:1116
+#: common/tool/actions.cpp:1122
 #, fuzzy
 msgid "Show/hide the properties manager"
 msgstr "แสดง/ซ่อนตัวจัดการลักษณะที่ปรากฏ"
 
-#: common/tool/actions.cpp:1124
+#: common/tool/actions.cpp:1130 eeschema/dialogs/dialog_lib_fields.cpp:115
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:101
 #: eeschema/fields_grid_table.cpp:1184
 msgid "Show Datasheet"
 msgstr "แสดงดาต้าชีต"
 
-#: common/tool/actions.cpp:1125
+#: common/tool/actions.cpp:1131
 #, fuzzy
 msgid "Open the datasheet in a browser"
 msgstr "เปิดแผ่นข้อมูลในเบราว์เซอร์"
 
-#: common/tool/actions.cpp:1133
+#: common/tool/actions.cpp:1139
 msgid "Update PCB from Schematic..."
 msgstr "ปรับปรุงพีซีบีจากวงจร…"
 
-#: common/tool/actions.cpp:1134
+#: common/tool/actions.cpp:1140
 msgid "Update PCB with changes made to schematic"
 msgstr "ปรับปรุงพีซีบีด้วยการเปลี่ยนแปลงจากวงจร"
 
-#: common/tool/actions.cpp:1140
+#: common/tool/actions.cpp:1146
 msgid "Update Schematic from PCB..."
 msgstr "ปรับปรุงวงจรจากพีซีบี…"
 
-#: common/tool/actions.cpp:1141
+#: common/tool/actions.cpp:1147
 msgid "Update schematic with changes made to PCB"
 msgstr "ปรับปรุงวงจรด้วยการเปลี่ยนแปลงที่พีซีบี"
 
-#: common/tool/actions.cpp:1148
+#: common/tool/actions.cpp:1154
 msgid "Preferences..."
 msgstr "ตั้งความชอบ…"
 
-#: common/tool/actions.cpp:1149
+#: common/tool/actions.cpp:1155
 msgid "Show preferences for all open tools"
 msgstr "แสดงตั้งความชอบเครื่องมือทั้งหมด"
 
-#: common/tool/actions.cpp:1156
+#: common/tool/actions.cpp:1162
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
 msgid "Configure Paths..."
 msgstr "ปรับแต่งเส้นทาง…"
 
-#: common/tool/actions.cpp:1157
+#: common/tool/actions.cpp:1163
 msgid "Edit path configuration environment variables"
 msgstr "แก้ไขเส้นทางปรับแต่งตัวแปรสภาพแวดล้อม"
 
-#: common/tool/actions.cpp:1163
+#: common/tool/actions.cpp:1169
 msgid "Manage Symbol Libraries..."
 msgstr "จัดการไลบรารีสัญลักษณ์…"
 
-#: common/tool/actions.cpp:1164
+#: common/tool/actions.cpp:1170
 msgid "Edit the global and project symbol library lists"
 msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งส่วนกลางและของโครงการ"
 
-#: common/tool/actions.cpp:1170
+#: common/tool/actions.cpp:1176
 msgid "Manage Footprint Libraries..."
 msgstr "จัดการไลบรารีฟุ้ทพรินท์…"
 
-#: common/tool/actions.cpp:1171
+#: common/tool/actions.cpp:1177
 msgid "Edit the global and project footprint library lists"
 msgstr "แก้ไขรายการไลบรารีฟุ้ทพรินท์ทั้งระดับส่วนกลางและระดับโครงการ"
 
-#: common/tool/actions.cpp:1177
+#: common/tool/actions.cpp:1183
 #, fuzzy
 msgid "Manage Design Block Libraries..."
 msgstr "จัดการไลบรารีสัญลักษณ์…"
 
-#: common/tool/actions.cpp:1178
+#: common/tool/actions.cpp:1184
 #, fuzzy
 msgid "Edit the global and project design block library lists"
 msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งส่วนกลางและของโครงการ"
 
-#: common/tool/actions.cpp:1184
+#: common/tool/actions.cpp:1190
 msgid "Getting Started with KiCad"
 msgstr "เริ่มต้นกับ KiCad"
 
-#: common/tool/actions.cpp:1185
+#: common/tool/actions.cpp:1191
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "เปิดคู่มือสำหรับผู้เริ่มต้น \"เริ่มต้นกับ KiCad\""
 
-#: common/tool/actions.cpp:1191
+#: common/tool/actions.cpp:1197
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:330
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
@@ -9886,48 +9894,48 @@ msgstr "เปิดคู่มือสำหรับผู้เริ่ม
 msgid "Help"
 msgstr "ช่วยเหลือ"
 
-#: common/tool/actions.cpp:1192
+#: common/tool/actions.cpp:1198
 msgid "Open product documentation in a web browser"
 msgstr "เปิดเอกสารผลิตภัณฑ์ในเว็บบราวซ์เซอร์"
 
-#: common/tool/actions.cpp:1198
+#: common/tool/actions.cpp:1204
 #, fuzzy
 msgid "About KiCad"
 msgstr "เกี่ยวกับ KiCad(&A)"
 
-#: common/tool/actions.cpp:1207
+#: common/tool/actions.cpp:1213
 msgid "List Hotkeys..."
 msgstr "รายการคีย์ร้อน…"
 
-#: common/tool/actions.cpp:1208
+#: common/tool/actions.cpp:1214
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr "แสดงตารางคีย์ร้อนปัจจุบันและคําสั่งที่สอดคล้องกัน"
 
-#: common/tool/actions.cpp:1214
+#: common/tool/actions.cpp:1220
 msgid "Get Involved"
 msgstr "ต้องการมีส่วนร่วม"
 
-#: common/tool/actions.cpp:1215
+#: common/tool/actions.cpp:1221
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "เปิดหน้า \"Contribute to KiCad\" ในเว็บบราวส์เซอร์"
 
-#: common/tool/actions.cpp:1222
+#: common/tool/actions.cpp:1228
 msgid "Open \"Donate to KiCad\" in a web browser"
 msgstr "เปิดหน้า \"Donate to KiCad\" ให้เว็บบราวส์เซอร์"
 
-#: common/tool/actions.cpp:1227
+#: common/tool/actions.cpp:1233
 msgid "Report Bug"
 msgstr "รายงานซอฟต์แวร์ผิดพลาด"
 
-#: common/tool/actions.cpp:1240
+#: common/tool/actions.cpp:1246
 msgid "Refresh Plugins"
 msgstr "รีเฟรชปลั๊กอิน"
 
-#: common/tool/actions.cpp:1241
+#: common/tool/actions.cpp:1247
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr "อ่านใหม่ปลั๊กอินไพธอนและรีเฟรชเมนูปลั๊กอิน"
 
-#: common/tool/actions.cpp:1249
+#: common/tool/actions.cpp:1255
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:73
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
@@ -9937,27 +9945,27 @@ msgstr "อ่านใหม่ปลั๊กอินไพธอนและ
 msgid "Embedded Files"
 msgstr "เลือกไฟล์"
 
-#: common/tool/actions.cpp:1250
+#: common/tool/actions.cpp:1256
 #, fuzzy
 msgid "Manage embedded files"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: common/tool/actions.cpp:1255
+#: common/tool/actions.cpp:1261
 #, fuzzy
 msgid "Remove File"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: common/tool/actions.cpp:1256
+#: common/tool/actions.cpp:1262
 #, fuzzy
 msgid "Remove an embedded file"
 msgstr "ลบเลเยอร์ที่ตรงกันทั้งหมด"
 
-#: common/tool/actions.cpp:1261
+#: common/tool/actions.cpp:1267
 #, fuzzy
 msgid "Extract File"
 msgstr "ส่งออกเป็นไฟล์"
 
-#: common/tool/actions.cpp:1262
+#: common/tool/actions.cpp:1268
 #, fuzzy
 msgid "Extract an embedded file"
 msgstr "ไฟล์ทำงานได้"
@@ -10886,6 +10894,7 @@ msgstr "ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
+#: eeschema/dialogs/dialog_lib_fields.cpp:902
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
 #: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
@@ -10956,7 +10965,7 @@ msgstr "ไฟล์โครงการ:'%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1064
+#: kicad/project_tree_pane.cpp:1066
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "ไม่มีเครื่องมือแก้ไขข้อความเลือกไว้ กรุณาเลือก"
 
@@ -11342,8 +11351,8 @@ msgstr "พบ %s แต่ขา %s ไม่พบ"
 msgid "%s found"
 msgstr "%s พบ"
 
-#: eeschema/cross-probing.cpp:171 eeschema/sim/simulator_frame_ui.cpp:1479
-#: eeschema/sim/simulator_frame_ui.cpp:1956
+#: eeschema/cross-probing.cpp:171 eeschema/sim/simulator_frame_ui.cpp:1506
+#: eeschema/sim/simulator_frame_ui.cpp:2036
 #: eeschema/widgets/tuner_slider.cpp:65
 #, c-format
 msgid "%s not found"
@@ -11453,8 +11462,8 @@ msgstr "กรุณาเลือกไฟล์ตารางไลบรา
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:556
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:945
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2933
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3011
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2937
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3015
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "ไลบรารี '%s' อ่านได้อย่างเดียวเท่านั้น"
@@ -11623,7 +11632,7 @@ msgid "Nickname '%s' already in use."
 msgstr "ชื่อเล่น '%s' ถูกใช้แล้ว"
 
 #: eeschema/dialogs/dialog_bom.cpp:375
-#: eeschema/dialogs/dialog_export_netlist.cpp:880
+#: eeschema/dialogs/dialog_export_netlist.cpp:984
 msgid "Generator File"
 msgstr "ไฟล์ผู้สร้าง"
 
@@ -12518,95 +12527,95 @@ msgstr "ผู้ตรวจสอบกฏทางไฟฟ้า"
 msgid "ERC Job Settings"
 msgstr "แก้ไขตัวเลือก"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:221
+#: eeschema/dialogs/dialog_export_netlist.cpp:274
 #, fuzzy
 msgid "Export netlist in KiCad format"
 msgstr "ส่งออกรายชื่อเน็ตที่เคยใช้ปรับปรุงวงจร"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:226
+#: eeschema/dialogs/dialog_export_netlist.cpp:279
 #, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
 msgstr "ส่งออกไฟล์ที่มีรายชื่อเน็ตในรูปแบบใดรูปแบบหนึ่ง"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:231
+#: eeschema/dialogs/dialog_export_netlist.cpp:284
 #, fuzzy
 msgid "Export netlist in Allegro format"
 msgstr "ส่งออกไฟล์ที่มีรายชื่อเน็ตในรูปแบบใดรูปแบบหนึ่ง"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:236
+#: eeschema/dialogs/dialog_export_netlist.cpp:289
 #, fuzzy
 msgid "Export netlist in CadStar format"
 msgstr "ส่งออกรายชื่อเน็ตที่เคยใช้ปรับปรุงวงจร"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:241
+#: eeschema/dialogs/dialog_export_netlist.cpp:294
 #, fuzzy
 msgid "Export netlist in PADS format"
 msgstr "ส่งออกรายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:256
+#: eeschema/dialogs/dialog_export_netlist.cpp:309
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
 msgid "Export Netlist"
 msgstr "ส่งออกรายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:307
+#: eeschema/dialogs/dialog_export_netlist.cpp:360
 #, fuzzy
 msgid "Export netlist in SPICE format"
 msgstr "ส่งออกรายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:311
-#: eeschema/dialogs/dialog_export_netlist.cpp:372
+#: eeschema/dialogs/dialog_export_netlist.cpp:364
+#: eeschema/dialogs/dialog_export_netlist.cpp:425
 msgid "Use current sheet as root"
 msgstr "ใช้ชีตปัจจุบันเป็นรากตั้งต้น"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:312
-#: eeschema/dialogs/dialog_export_netlist.cpp:373
+#: eeschema/dialogs/dialog_export_netlist.cpp:365
+#: eeschema/dialogs/dialog_export_netlist.cpp:426
 msgid "Export netlist only for the current sheet"
 msgstr "ส่งออกรายการเน็ตสำหรับชีตปัจจุบันเท่านั้น"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:316
+#: eeschema/dialogs/dialog_export_netlist.cpp:369
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
 msgid "Save all voltages"
 msgstr "บันทึกค่าโวลท์ทั้งหมด"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:317
+#: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Write a directive to save all voltages (.save all)"
 msgstr "เขียนคำสั่งเพื่อบันทึกค่าโวลท์ทั้งหมด (.save all)"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:321
+#: eeschema/dialogs/dialog_export_netlist.cpp:374
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
 msgid "Save all currents"
 msgstr "บันทึกค่าปัจจุบันทั้งหมด"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:322
+#: eeschema/dialogs/dialog_export_netlist.cpp:375
 msgid "Write a directive to save all currents (.probe alli)"
 msgstr "เขียนคำสั่งเพื่อบันทึกค่ากระแสทั้งหมด (.probe alli)"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:327
+#: eeschema/dialogs/dialog_export_netlist.cpp:380
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
 msgid "Save all power dissipations"
 msgstr "บันทึกการกระจายพลังงานทั้งหมด"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:328
+#: eeschema/dialogs/dialog_export_netlist.cpp:381
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr "เขียนคำสั่งเพื่อบันทึกการสิ้นเปลืองพลังงานของรายการทั้งหมด (.probe p(<item>))"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:334
+#: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
 msgstr ""
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:335
+#: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:342
+#: eeschema/dialogs/dialog_export_netlist.cpp:395
 msgid "Run external simulator command:"
 msgstr "เรียกใช้คําสั่งจําลองภายนอก:"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: eeschema/dialogs/dialog_export_netlist.cpp:397
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
@@ -12616,55 +12625,57 @@ msgstr ""
 "โดยปกติแล้ว <path to SPICE binary> \"%I\"\n"
 "%l จะถูกแทนที่ด้วยเส้นทางชื่อไฟล์รายการเน็ต"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:368
+#: eeschema/dialogs/dialog_export_netlist.cpp:421
 msgid "Export netlist as a SPICE .subckt model"
 msgstr ""
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:415
+#: eeschema/dialogs/dialog_export_netlist.cpp:468
 msgid "Netlist command:"
 msgstr "คำสั่งสร้างรายชื่อเน็ต:"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:496
+#: eeschema/dialogs/dialog_export_netlist.cpp:549
 msgid "Save Netlist File"
 msgstr "บันทึกไฟล์รายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:566
+#: eeschema/dialogs/dialog_export_netlist.cpp:619
 #, c-format
 msgid "%s Export"
 msgstr "ส่งออก %s"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:605
+#: eeschema/dialogs/dialog_export_netlist.cpp:658
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "การส่งออกรายชื่อเน็ตต้องการวงจรที่ทำอธิบายประกอบสมบูรณ์"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:655
+#: eeschema/dialogs/dialog_export_netlist.cpp:718
+#: eeschema/dialogs/dialog_export_netlist.cpp:757
 msgid "external simulator not found"
 msgstr "ไม่พบตัวจำลองภายนอก"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:656
+#: eeschema/dialogs/dialog_export_netlist.cpp:719
+#: eeschema/dialogs/dialog_export_netlist.cpp:758
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
 "หมายเหตุ: บรรทัดคำสั่งมักจะเป็น: <tt>&lt;เส้นทางไปยัง SPICE binary&gt; \"%I\"</tt>"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:662
+#: eeschema/dialogs/dialog_export_netlist.cpp:764
 msgid "external simulator has the wrong format or architecture"
 msgstr "โปรแกรมจำลองภายนอกมีรูปแบบหรือสถาปัตยกรรมที่ไม่ถูกต้อง"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:667
+#: eeschema/dialogs/dialog_export_netlist.cpp:769
 msgid "permission denied"
 msgstr "ปฏิเสธการอนุญาต"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:810
+#: eeschema/dialogs/dialog_export_netlist.cpp:914
 msgid "This plugin already exists."
 msgstr "ปลั๊กอินนี้มีอยู่แล้ว"
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:824
+#: eeschema/dialogs/dialog_export_netlist.cpp:928
 msgid "Maximum number of plugins already added to dialog."
 msgstr ""
 
-#: eeschema/dialogs/dialog_export_netlist.cpp:862
+#: eeschema/dialogs/dialog_export_netlist.cpp:966
 msgid "You must provide a netlist generator title"
 msgstr "คุณต้องระบุไตเติ้ลของผู้สร้างรายชื่อเน็ต"
 
@@ -13042,11 +13053,11 @@ msgstr "สีของจุดเชื่อมต่อ:"
 msgid "Edit Text and Graphic Properties"
 msgstr "แก้ไขคุณสมบัติข้อความและกราฟิก"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:32
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:33
 msgid "symbol"
 msgstr "สัญลักษณ์"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:61
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:62
 #, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
@@ -13055,11 +13066,11 @@ msgstr ""
 "เกิดข้อผิดพลาดในการสร้างตารางไลบรารีสัญลักษณ์ '%s'\n"
 "%s"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:75
 msgid "Please select a symbol library table file."
 msgstr "กรุณาเลือกไฟล์ตารางไลบรารีสัญลักษณ์"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:97
 #, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
@@ -13068,7 +13079,7 @@ msgstr ""
 "เกิดผิดพลาดอ่านตารางไลบรารีสัญลักษณ์ '%s'\n"
 "%s"
 
-#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:116
+#: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:118
 #, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr "เกิดข้อผิดพลาด สำเนาตารางไลบรารีสัญลักษณ์จากส่วนกลาง '%s' ไปที่ '%s'"
@@ -13244,6 +13255,7 @@ msgid "Fields"
 msgstr "ช่อง"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
+#: eeschema/dialogs/dialog_lib_fields.cpp:259
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
@@ -13441,8 +13453,8 @@ msgstr "ขนาดชื่อ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:552
-#: eeschema/sch_item.cpp:600 eeschema/sch_symbol.cpp:2993
+#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:579
+#: eeschema/sch_item.cpp:627 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "หน่วย"
@@ -13459,6 +13471,8 @@ msgid "Read Only"
 msgstr "อ่านเท่านั้น"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
+#: eeschema/dialogs/dialog_lib_fields.cpp:450
+#: eeschema/dialogs/dialog_lib_fields.cpp:862
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1510
 msgid "Save changes?"
 msgstr "บันทึการเปลี่ยนแปลง?"
@@ -13521,6 +13535,168 @@ msgstr "กรองโดยหน่วย:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
 msgstr "ตารางขา"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:84
+#, fuzzy
+msgid "Revert symbol"
+msgstr "สัญลักษณ์เพาเวอร์"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:84
+#, fuzzy
+msgid "Revert the symbol to its last saved state"
+msgstr "แปลงกลับ '%s' ไปเป็นบันทึกครั้งล่าสุดหรือไม่?"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:85
+#, fuzzy
+msgid "Clear cell"
+msgstr "ระยะห่าง"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:85
+#, fuzzy
+msgid "Clear the cell value"
+msgstr "ล้างไฟล์เจาะล่าสุด"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:87
+#, fuzzy
+msgid "Create Derived Symbol"
+msgstr "สร้างสัญลักษณ์ใหม่"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:87
+#, fuzzy
+msgid "Create a new symbol derived from the selected one"
+msgstr "ผันมาจากสัญลักษณ์ที่มีอยู๋:"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:109
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
+#: eeschema/fields_grid_table.cpp:1177
+msgid "Select Footprint..."
+msgstr "เลือกฟุ้ทพรินท์…"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:110
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
+#: eeschema/fields_grid_table.cpp:1178
+msgid "Browse for footprint"
+msgstr "บราวซ์ฟุ้ทพรินท์"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:116
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
+#: eeschema/fields_grid_table.cpp:1185
+msgid "Show datasheet in browser"
+msgstr "แสดงดาต้าชีตในบราวเซอร์"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:241
+#, fuzzy, c-format
+msgid "Symbol Library Fields: %s"
+msgstr "ไลบรารีสัญลักษณ์"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
+msgid "Label"
+msgstr "ป้ายชื่อ"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:261
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
+msgid "Group By"
+msgstr "จับกลุ่มโดย"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:406
+#, fuzzy, c-format
+msgid "No symbols found in library %s."
+msgstr "ไม่พบสัญลักษณ์ %s ในไลบรารี '%s'"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:425
+#, fuzzy, c-format
+msgid "Error loading symbol %s: %s"
+msgstr "เกิดข้อผิดพลาดในการโหลดสัญลักษณ์:"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:431
+#, fuzzy, c-format
+msgid ""
+"Error accessing library %s.\n"
+"\n"
+"%s"
+msgstr ""
+"เกิดข้อผิดพลาดในการโหลดไลบรารีสัญลักษณ์ %s\n"
+"\n"
+"%s\n"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:438
+#, fuzzy
+msgid "No symbols could be loaded from the library."
+msgstr "ปรับปรุงสัญลักษณ์เพื่อรวมการเปลี่ยนแปลงใดๆ จากไลบรารี"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
+msgid "New field name:"
+msgstr "ชื่อช่องใหม่:"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
+msgid "Add Field"
+msgstr "เพิ่มช่อง"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:678
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
+msgid "Field must have a name."
+msgstr "ช่องต้องมีชื่อ"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:686
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
+#: eeschema/dialogs/dialog_symbol_properties.cpp:809
+#, c-format
+msgid "Field name '%s' already in use."
+msgstr "ช่องชื่อ '%s' ถูกใช้แล้ว"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
+#, fuzzy
+msgid "Rename Field"
+msgstr "เปลี่ยนชื่อไฟล์"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
+#, fuzzy, c-format
+msgid "Field name '%s' already exists."
+msgstr "ไฟล์ %s มีอยู่แล้ว"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:753
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
+#, c-format
+msgid "Are you sure you want to remove the field '%s'?"
+msgstr "คุณแน่ใจว่าต้องการลบช่อง '%s'?"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:905
+#, fuzzy
+msgid "Exclude From BOM"
+msgstr "แยกออกจาก BOM"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
+#: eeschema/sch_symbol.cpp:3030
+#, fuzzy
+msgid "Exclude From Simulation"
+msgstr "ยกเว้นจากการจำลอง"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:907 eeschema/sch_sheet.cpp:1762
+#: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
+#, fuzzy
+msgid "Exclude From Board"
+msgstr "ละเว้นจากบอร์ด"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:909
+#: eeschema/symbol_editor/symbol_editor.cpp:1766
+msgid "Power Symbol"
+msgstr "สัญลักษณ์เพาเวอร์"
+
+#: eeschema/dialogs/dialog_lib_fields.cpp:910
+#, fuzzy
+msgid "Local Power Symbol"
+msgstr "สัญลักษณ์เพาเวอร์"
+
+#: eeschema/dialogs/dialog_lib_fields_base.h:87
+#, fuzzy
+msgid "Library Fields Editor"
+msgstr "เครื่องมือแก้ไขไลบรารี"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, fuzzy, c-format
@@ -13630,7 +13806,7 @@ msgstr "ลบรูปร่างชนิดทางเลือก(เด�
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:362
 #: eeschema/symbol_editor/symbol_editor.cpp:952
-#: eeschema/tools/symbol_editor_control.cpp:524
+#: eeschema/tools/symbol_editor_control.cpp:556
 #, fuzzy
 msgid "Symbol must have a name."
 msgstr "ช่องต้องมีชื่อ"
@@ -15298,7 +15474,7 @@ msgid "Voltage"
 msgstr "โวลท์"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:41
-#: eeschema/sim/sim_plot_tab.cpp:660 eeschema/sim/sim_plot_tab.cpp:780
+#: eeschema/sim/sim_plot_tab.cpp:660 eeschema/sim/sim_plot_tab.cpp:794
 msgid "Current"
 msgstr "กระแส"
 
@@ -15574,21 +15750,6 @@ msgstr "วางทุกหน่วย"
 msgid "Sequentially place all units of the symbol."
 msgstr "วางทุกหน่วยสัญลักษณ์ไปตามลำดับ"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
-#: eeschema/fields_grid_table.cpp:1177
-msgid "Select Footprint..."
-msgstr "เลือกฟุ้ทพรินท์…"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
-#: eeschema/fields_grid_table.cpp:1178
-msgid "Browse for footprint"
-msgstr "บราวซ์ฟุ้ทพรินท์"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
-#: eeschema/fields_grid_table.cpp:1185
-msgid "Show datasheet in browser"
-msgstr "แสดงดาต้าชีตในบราวเซอร์"
-
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
 #, fuzzy
 msgid "Column Label"
@@ -15598,10 +15759,6 @@ msgstr "คอลัมน์"
 #, fuzzy
 msgid "Show Column"
 msgstr "แสดงขาที่ซ่อน"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
-msgid "Group By"
-msgstr "จับกลุ่มโดย"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
 #, fuzzy
@@ -15624,35 +15781,6 @@ msgstr "จำนวน"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:711
 msgid "#"
 msgstr ""
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
-msgid "New field name:"
-msgstr "ชื่อช่องใหม่:"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
-msgid "Add Field"
-msgstr "เพิ่มช่อง"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
-msgid "Field must have a name."
-msgstr "ช่องต้องมีชื่อ"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
-#: eeschema/dialogs/dialog_symbol_properties.cpp:809
-#, c-format
-msgid "Field name '%s' already in use."
-msgstr "ช่องชื่อ '%s' ถูกใช้แล้ว"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
-#, c-format
-msgid "Are you sure you want to remove the field '%s'?"
-msgstr "คุณแน่ใจว่าต้องการลบช่อง '%s'?"
-
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
-#, fuzzy
-msgid "Rename Field"
-msgstr "เปลี่ยนชื่อไฟล์"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
 #, fuzzy, c-format
@@ -17969,7 +18097,7 @@ msgid "Allow Autoplacement"
 msgstr "ยอมให้วางตำแหน่งอัตโนมัติ"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
-#: eeschema/sch_item.cpp:558 eeschema/sch_item.cpp:643
+#: eeschema/sch_item.cpp:585 eeschema/sch_item.cpp:670
 msgid "Private"
 msgstr "ส่วนตัว"
 
@@ -18084,7 +18212,7 @@ msgid "Abort"
 msgstr "ยกเลิก"
 
 #: eeschema/files-io.cpp:471 eeschema/files-io.cpp:491
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:825
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:827
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -18136,7 +18264,7 @@ msgstr ""
 "%s"
 
 #: eeschema/files-io.cpp:829 pagelayout_editor/files.cpp:187
-#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1081
+#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1092
 #, c-format
 msgid "File '%s' saved."
 msgstr "บันทึกไฟล์ '%s' เรียบร้อย"
@@ -18194,8 +18322,8 @@ msgstr "เขียนทับไฟล์"
 msgid "Abort Project Save"
 msgstr "ยกเลิกการบันทึกโครงการ"
 
-#: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1206
-#: pcbnew/files.cpp:1222
+#: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1217
+#: pcbnew/files.cpp:1233
 #, fuzzy, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
 msgstr "ไม่สามารถเขียนไฟล์พล็อตไปยังโฟลเดอร์ '%s'"
@@ -19651,7 +19779,7 @@ msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:220
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2708
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2712
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
 msgid "Open cancelled by user."
 msgstr "การเปิดถูกยกเลิกโดยผู้ใช้"
@@ -19953,24 +20081,25 @@ msgstr "ไม่พบประเภทปลั๊กอิน \"%s\""
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "ไม่ทราบSCH_FILE_T: %d"
 
-#: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:607
+#: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
+#: eeschema/sch_item.cpp:634
 #, fuzzy
 msgid "All units"
 msgstr "ชิ้นส่วนทั้งหมด"
 
-#: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:629
+#: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
+#: eeschema/sch_item.cpp:656
 #, fuzzy
 msgid "All body styles"
 msgstr "ร่วมกันในสไตล์ตัวตนทั้งหมด"
 
-#: eeschema/sch_item.cpp:555 eeschema/sch_item.cpp:622
+#: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "สไตล์ไมเตอร์:"
 
-#: eeschema/sch_item.cpp:572 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:599 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -20008,11 +20137,6 @@ msgstr "เส้นผ่าศูนย์กลาง"
 #: eeschema/sch_label.cpp:100
 msgid "Tri-State"
 msgstr "สามสถานะ"
-
-#: eeschema/sch_label.cpp:1230
-#: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
-msgid "Label"
-msgstr "ป้ายชื่อ"
 
 #: eeschema/sch_label.cpp:1234
 msgid "Hierarchical Sheet Pin"
@@ -20374,17 +20498,6 @@ msgstr "สีขอบนอก:"
 #, fuzzy
 msgid "Background Color"
 msgstr "เติมเต็มพื้นหลัง"
-
-#: eeschema/sch_sheet.cpp:1762 eeschema/sch_symbol.cpp:1051
-#: eeschema/sch_symbol.cpp:3027
-#, fuzzy
-msgid "Exclude From Board"
-msgstr "ละเว้นจากบอร์ด"
-
-#: eeschema/sch_sheet.cpp:1765 eeschema/sch_symbol.cpp:3030
-#, fuzzy
-msgid "Exclude From Simulation"
-msgstr "ยกเว้นจากการจำลอง"
 
 #: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
 #: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
@@ -21845,38 +21958,38 @@ msgstr ""
 msgid "Intensity"
 msgstr "คีย์ขณะนี้:"
 
-#: eeschema/sim/sim_plot_tab.cpp:673 eeschema/sim/sim_plot_tab.cpp:786
+#: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:800
 #: eeschema/widgets/search_handlers.cpp:247
 #, fuzzy
 msgid "Power"
 msgstr "เพิ่มเพาว์เวอร์"
 
-#: eeschema/sim/sim_plot_tab.cpp:728
+#: eeschema/sim/sim_plot_tab.cpp:742
 msgid "Voltage (swept)"
 msgstr "แรงดันไฟฟ้า (กวาด)"
 
-#: eeschema/sim/sim_plot_tab.cpp:739
+#: eeschema/sim/sim_plot_tab.cpp:753
 msgid "Current (swept)"
 msgstr "ปัจจุบัน (กวาด)"
 
-#: eeschema/sim/sim_plot_tab.cpp:750
+#: eeschema/sim/sim_plot_tab.cpp:764
 msgid "Resistance (swept)"
 msgstr "ความต้านทาน (กวาด)"
 
-#: eeschema/sim/sim_plot_tab.cpp:761
+#: eeschema/sim/sim_plot_tab.cpp:775
 msgid "Temperature (swept)"
 msgstr "อุณหภูมิ (กวาด)"
 
-#: eeschema/sim/sim_plot_tab.cpp:779
+#: eeschema/sim/sim_plot_tab.cpp:793
 msgid "Voltage (measured)"
 msgstr "แรงดันไฟฟ้า (วัดได้)"
 
 #: eeschema/sim/sim_plot_tab.h:146 eeschema/sim/simulator_frame_ui.cpp:218
 #: eeschema/sim/simulator_frame_ui.cpp:766
 #: eeschema/sim/simulator_frame_ui.cpp:872
-#: eeschema/sim/simulator_frame_ui.cpp:1050
-#: eeschema/sim/simulator_frame_ui.cpp:2281
-#: eeschema/sim/simulator_frame_ui.cpp:2282
+#: eeschema/sim/simulator_frame_ui.cpp:1069
+#: eeschema/sim/simulator_frame_ui.cpp:2361
+#: eeschema/sim/simulator_frame_ui.cpp:2362
 msgid " (gain)"
 msgstr ""
 
@@ -21885,9 +21998,9 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:772
 #: eeschema/sim/simulator_frame_ui.cpp:873
 #: eeschema/sim/simulator_frame_ui.cpp:878
-#: eeschema/sim/simulator_frame_ui.cpp:1051
-#: eeschema/sim/simulator_frame_ui.cpp:2279
-#: eeschema/sim/simulator_frame_ui.cpp:2280
+#: eeschema/sim/simulator_frame_ui.cpp:1070
+#: eeschema/sim/simulator_frame_ui.cpp:2359
+#: eeschema/sim/simulator_frame_ui.cpp:2360
 msgid " (phase)"
 msgstr " (เฟส)"
 
@@ -22008,7 +22121,7 @@ msgstr "เฟสของสัญญาณ:"
 #: eeschema/sim/simulator_frame_ui.cpp:218
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui.cpp:877
-#: eeschema/sim/simulator_frame_ui.cpp:1049
+#: eeschema/sim/simulator_frame_ui.cpp:1068
 #, fuzzy
 msgid " (amplitude)"
 msgstr "แอมปลิจูด:"
@@ -22073,41 +22186,41 @@ msgstr "เคอร์เซอร์"
 msgid "Cursor 2"
 msgstr "เคอร์เซอร์"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1213
-#: eeschema/sim/simulator_frame_ui.cpp:2715
+#: eeschema/sim/simulator_frame_ui.cpp:1240
+#: eeschema/sim/simulator_frame_ui.cpp:2795
 #, fuzzy
 msgid "Diff"
 msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1478
-#: eeschema/sim/simulator_frame_ui.cpp:1500
-#: eeschema/sim/simulator_frame_ui.cpp:1974
+#: eeschema/sim/simulator_frame_ui.cpp:1505
+#: eeschema/sim/simulator_frame_ui.cpp:1527
+#: eeschema/sim/simulator_frame_ui.cpp:2054
 msgid "Could not apply tuned value(s):"
 msgstr ""
 
-#: eeschema/sim/simulator_frame_ui.cpp:1501
-#: eeschema/sim/simulator_frame_ui.cpp:1964
+#: eeschema/sim/simulator_frame_ui.cpp:1528
+#: eeschema/sim/simulator_frame_ui.cpp:2044
 #, fuzzy, c-format
 msgid "%s is not tunable"
 msgstr "%s ไม่พบ"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1585
+#: eeschema/sim/simulator_frame_ui.cpp:1612
 msgid "Error: no current simulation.\n"
 msgstr "ข้อผิดพลาด: ไม่มีการจำลองกระแสไฟฟ้า\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1594
+#: eeschema/sim/simulator_frame_ui.cpp:1621
 #, fuzzy
 msgid "Error: simulation type not defined.\n"
 msgstr "ข้อผิดพลาด: ไม่ได้กำหนดประเภทการจำลอง!\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1600
+#: eeschema/sim/simulator_frame_ui.cpp:1627
 #, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "ข้อผิดพลาด: ประเภทการจำลองไม่รองรับการพล็อต!\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2821
-#: eeschema/sim/simulator_frame_ui.cpp:2937
-#: eeschema/sim/simulator_frame_ui.cpp:2980
+#: eeschema/sim/simulator_frame_ui.cpp:2901
+#: eeschema/sim/simulator_frame_ui.cpp:3017
+#: eeschema/sim/simulator_frame_ui.cpp:3060
 msgid ""
 "\n"
 "\n"
@@ -22595,16 +22708,16 @@ msgid "[no symbol loaded]"
 msgstr "[ไม่มีสัญลักษณ์โหลด]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:113
-#: eeschema/tools/symbol_editor_control.cpp:863
+#: eeschema/tools/symbol_editor_control.cpp:895
 msgid "No schematic currently open."
 msgstr "ไม่มีวงจรเปิดอยู่ในขณะนี้"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:499
 #: eeschema/symbol_editor/symbol_editor.cpp:1692
-#: eeschema/tools/symbol_editor_control.cpp:295
-#: eeschema/tools/symbol_editor_control.cpp:440
-#: eeschema/tools/symbol_editor_control.cpp:489
+#: eeschema/tools/symbol_editor_control.cpp:327
+#: eeschema/tools/symbol_editor_control.cpp:472
+#: eeschema/tools/symbol_editor_control.cpp:521
 #, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "ไลบรารีสัญลักษณ์ '%s' ไม่สามารถบันทึก"
@@ -22622,7 +22735,7 @@ msgstr "สัญลักษณ์ปัจจุบันถูกปรับ
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1141
-#: eeschema/tools/symbol_editor_control.cpp:531
+#: eeschema/tools/symbol_editor_control.cpp:563
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "สัญลักษณ์ '%s' มีอยู่แล้วในไลบรารี '%s'"
@@ -22806,10 +22919,6 @@ msgstr "ต้นกำเนิด"
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
 msgid "Body"
 msgstr "ตัวร่าง"
-
-#: eeschema/symbol_editor/symbol_editor.cpp:1766
-msgid "Power Symbol"
-msgstr "สัญลักษณ์เพาเวอร์"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1773
 msgid "Datasheet"
@@ -25040,63 +25149,68 @@ msgstr "บันทึกข้อมูลพล็อต"
 msgid "SPICE Netlist"
 msgstr "ไฟล์รายชื่อเน็ต SPICE"
 
-#: eeschema/tools/symbol_editor_control.cpp:261
+#: eeschema/tools/symbol_editor_control.cpp:293
 #, fuzzy, c-format
 msgid "Failed to load symbol %s from library %s."
 msgstr "ล้มเหลวที่จะเพิ่มสัญลักษณ์ %s ลงในไฟล์ไลบรารี '%s'"
 
-#: eeschema/tools/symbol_editor_control.cpp:281
+#: eeschema/tools/symbol_editor_control.cpp:313
 msgid "No symbol library selected."
 msgstr "ไม่ได้เลือกไลบรารีสัญลักษณ์"
 
-#: eeschema/tools/symbol_editor_control.cpp:288
-#: eeschema/tools/symbol_editor_control.cpp:438
-#: eeschema/tools/symbol_editor_control.cpp:482
+#: eeschema/tools/symbol_editor_control.cpp:320
+#: eeschema/tools/symbol_editor_control.cpp:470
+#: eeschema/tools/symbol_editor_control.cpp:514
 #, fuzzy, c-format
 msgid "Symbol library '%s' not found."
 msgstr "ไลบรารี '%s' ไม่พบ"
 
-#: eeschema/tools/symbol_editor_control.cpp:374
+#: eeschema/tools/symbol_editor_control.cpp:406
 #: pcbnew/tools/footprint_editor_control.cpp:650
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr ""
 
-#: eeschema/tools/symbol_editor_control.cpp:403
+#: eeschema/tools/symbol_editor_control.cpp:435
 #: pcbnew/tools/footprint_editor_control.cpp:675
 #, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "ไม่มีเครื่องมือแก้ไขข้อความเลือกไว้ กรุณาเลือก"
 
-#: eeschema/tools/symbol_editor_control.cpp:473
+#: eeschema/tools/symbol_editor_control.cpp:505
 #: eeschema/widgets/panel_symbol_chooser.cpp:705
 msgid "No symbol selected"
 msgstr "ไม่ได้เลือกสัญลักษณ์"
 
-#: eeschema/tools/symbol_editor_control.cpp:517
+#: eeschema/tools/symbol_editor_control.cpp:549
 #, fuzzy
 msgid "Change Symbol Name"
 msgstr "เปลี่ยนสัญลักษณ์"
 
-#: eeschema/tools/symbol_editor_control.cpp:741
-#: eeschema/tools/symbol_editor_control.cpp:788
+#: eeschema/tools/symbol_editor_control.cpp:773
+#: eeschema/tools/symbol_editor_control.cpp:820
 msgid "No symbol to export"
 msgstr "ไม่มีสัญลักษณ์ที่จะส่งออก"
 
-#: eeschema/tools/symbol_editor_control.cpp:750
+#: eeschema/tools/symbol_editor_control.cpp:782
 #: pcbnew/footprint_edit_frame.cpp:1515
 #, fuzzy
 msgid "Export View as PNG"
 msgstr "ส่งออกมุมมองเป็น PNG..."
 
-#: eeschema/tools/symbol_editor_control.cpp:761
+#: eeschema/tools/symbol_editor_control.cpp:793
 #, c-format
 msgid "Can't save file '%s'."
 msgstr "ไม่สามารถบันทึกไฟล์ '%s'"
 
-#: eeschema/tools/symbol_editor_control.cpp:797
+#: eeschema/tools/symbol_editor_control.cpp:829
 msgid "SVG File Name"
 msgstr "ชื่อไฟล์ SVG"
+
+#: eeschema/tools/symbol_editor_control.cpp:955
+#, fuzzy
+msgid "Library Fields"
+msgstr "ไลบรารี"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 #, fuzzy
@@ -28816,310 +28930,310 @@ msgstr "ชื่อไดเรกทอรี:"
 msgid "Create New Directory"
 msgstr "สร้างไดเรกทอรีใหม่"
 
-#: kicad/project_tree_pane.cpp:758
+#: kicad/project_tree_pane.cpp:760
 #, fuzzy, c-format
 msgid "Failed to get status list: %s"
 msgstr "บันทึกวงจร '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:893
+#: kicad/project_tree_pane.cpp:895
 msgid "Switch to this Project"
 msgstr "สลับไปยังโครงการนี้"
 
-#: kicad/project_tree_pane.cpp:894
+#: kicad/project_tree_pane.cpp:896
 msgid "Close all editors, and switch to the selected project"
 msgstr "ปิดตัวแก้ไขทั้งหมด แล้วสลับไปยังโครงการที่เลือก"
 
-#: kicad/project_tree_pane.cpp:901
+#: kicad/project_tree_pane.cpp:903
 msgid "New Directory..."
 msgstr "ไดเรกทอรีใหม่..."
 
-#: kicad/project_tree_pane.cpp:902
+#: kicad/project_tree_pane.cpp:904
 msgid "Create a New Directory"
 msgstr "สร้างไดเรกทอรีใหม่"
 
-#: kicad/project_tree_pane.cpp:910 kicad/project_tree_pane.cpp:920
+#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
 msgid "Reveal in Finder"
 msgstr "เปิดเผยในไฟน์เดอร์"
 
-#: kicad/project_tree_pane.cpp:911
+#: kicad/project_tree_pane.cpp:913
 msgid "Reveals the directory in a Finder window"
 msgstr "เปิดเผยไดเรกทอรีในหน้าต่างไฟน์เดอร์"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:915
 msgid "Open Directory in File Explorer"
 msgstr "เปิดไดเรกทอรีในไฟล์เอ็กพลอเรอร์"
 
-#: kicad/project_tree_pane.cpp:914 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "เปิดไดเร็กทอรี ในตัวจัดการไฟล์ระบบโดยปริยาย"
 
-#: kicad/project_tree_pane.cpp:921
+#: kicad/project_tree_pane.cpp:923
 msgid "Reveals the directories in a Finder window"
 msgstr "เปิดเผยไดเรกทอรีในหน้าต่างไฟน์เดอร์"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:925
 msgid "Open Directories in File Explorer"
 msgstr "เปิดไดเรกทอรีในไฟล์เอ็กซ์พลอเรอร์"
 
-#: kicad/project_tree_pane.cpp:924
+#: kicad/project_tree_pane.cpp:926
 msgid "Opens the directories in the default system file manager"
 msgstr "เปิดไดเร็กทอรี ในตัวจัดการไฟล์ระบบโดยปริยาย"
 
-#: kicad/project_tree_pane.cpp:935
+#: kicad/project_tree_pane.cpp:937
 msgid "Open the file in a Text Editor"
 msgstr "เปิดไฟล์ในตัวแก้ไขข้อความ"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:939
 msgid "Open files in a Text Editor"
 msgstr "เปิดไฟล์ในตัวแก้ไขข้อความ"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:941
 msgid "Edit in a Text Editor"
 msgstr "แก้ไขในตัวแก้ไขข้อความ"
 
-#: kicad/project_tree_pane.cpp:945
+#: kicad/project_tree_pane.cpp:947
 #, fuzzy
 msgid "Run Jobs"
 msgstr "%s บน %s"
 
-#: kicad/project_tree_pane.cpp:953
+#: kicad/project_tree_pane.cpp:955
 msgid "Rename File..."
 msgstr "เปลี่ยนชื่อไฟล์..."
 
-#: kicad/project_tree_pane.cpp:954
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename file"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: kicad/project_tree_pane.cpp:958
+#: kicad/project_tree_pane.cpp:960
 msgid "Rename Files..."
 msgstr "เปลี่ยนชื่อไฟล์..."
 
-#: kicad/project_tree_pane.cpp:959
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename files"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: kicad/project_tree_pane.cpp:969
+#: kicad/project_tree_pane.cpp:971
 msgid "Delete the file and its content"
 msgstr "ลบไฟล์และเนื้อหา"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:973
 msgid "Delete the files and their contents"
 msgstr "ลบไฟล์และเนื้อหา"
 
-#: kicad/project_tree_pane.cpp:986
+#: kicad/project_tree_pane.cpp:988
 msgid "Move to Trash"
 msgstr "ย้ายไปที่ถังขยะ"
 
-#: kicad/project_tree_pane.cpp:998
+#: kicad/project_tree_pane.cpp:1000
 msgid "Add Project to Version Control..."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:999
+#: kicad/project_tree_pane.cpp:1001
 #, fuzzy
 msgid "Initialize a new repository"
 msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
 
-#: kicad/project_tree_pane.cpp:1003
+#: kicad/project_tree_pane.cpp:1005
 #, fuzzy
 msgid "Commit Project..."
 msgstr "โครงการใหม่..."
 
-#: kicad/project_tree_pane.cpp:1004 kicad/project_tree_pane.cpp:1018
+#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
 msgid "Commit changes to the local repository"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1007
+#: kicad/project_tree_pane.cpp:1009
 msgid "Push"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1008
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push committed local changes to remote repository"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1011
+#: kicad/project_tree_pane.cpp:1013
 msgid "Pull"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1012
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull changes from remote repository into local"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1017
+#: kicad/project_tree_pane.cpp:1019
 #, fuzzy
 msgid "Commit File..."
 msgstr "เปลี่ยนชื่อไฟล์..."
 
-#: kicad/project_tree_pane.cpp:1032
+#: kicad/project_tree_pane.cpp:1034
 #, fuzzy
 msgid "Switch to branch "
 msgstr "สลับไปยังเลเยอร์ภายใน 1"
 
-#: kicad/project_tree_pane.cpp:1037
+#: kicad/project_tree_pane.cpp:1039
 #, fuzzy
 msgid "Other..."
 msgstr "อื่น"
 
-#: kicad/project_tree_pane.cpp:1038
+#: kicad/project_tree_pane.cpp:1040
 #, fuzzy
 msgid "Switch to a different branch"
 msgstr "สลับไปยังวิธีอื่นในการแก้ไขส่วนโค้ง"
 
-#: kicad/project_tree_pane.cpp:1041
+#: kicad/project_tree_pane.cpp:1043
 #, fuzzy
 msgid "Switch to Branch"
 msgstr "เปลี่ยนไปใช้ตัวแก้ไขพีซีบี"
 
-#: kicad/project_tree_pane.cpp:1045
+#: kicad/project_tree_pane.cpp:1047
 #, fuzzy
 msgid "Remove Version Control"
 msgstr "ลบมุม"
 
-#: kicad/project_tree_pane.cpp:1046
+#: kicad/project_tree_pane.cpp:1048
 msgid "Delete all version control files from the project directory."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1101
+#: kicad/project_tree_pane.cpp:1103
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "เปลี่ยนชื่อไฟล์: '%s'"
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1105
 msgid "Change filename"
 msgstr "เปลี่ยนชื่อไฟล์"
 
-#: kicad/project_tree_pane.cpp:1458
+#: kicad/project_tree_pane.cpp:1460
 msgid "Network path: not monitoring folder changes"
 msgstr "เส้นทางเครือข่าย: ไม่ตรวจสอบการเปลี่ยนแปลงโฟลเดอร์"
 
-#: kicad/project_tree_pane.cpp:1464
+#: kicad/project_tree_pane.cpp:1466
 msgid "Local path: monitoring folder changes"
 msgstr "เส้นทางเฉพาะที่: ตรวจสอบการเปลี่ยนแปลงโฟลเดอร์"
 
-#: kicad/project_tree_pane.cpp:1651
+#: kicad/project_tree_pane.cpp:1653
 #, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "ไฟล์ที่เลือกไม่สมบูรณ์หรืออาจจะมีข้อมูลเสีย!"
 
-#: kicad/project_tree_pane.cpp:1659
+#: kicad/project_tree_pane.cpp:1661
 #, fuzzy
 msgid "Set default remote"
 msgstr "ตั้งเป็นค่าปริยาย"
 
-#: kicad/project_tree_pane.cpp:1670
+#: kicad/project_tree_pane.cpp:1672
 #, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "ข้อมูลส่งออกล้มเหลว"
 
-#: kicad/project_tree_pane.cpp:1728
+#: kicad/project_tree_pane.cpp:1730
 #, fuzzy
 msgid "Failed to set default remote."
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:1740 kicad/project_tree_pane.cpp:1774
-#: kicad/project_tree_pane.cpp:1798
+#: kicad/project_tree_pane.cpp:1742 kicad/project_tree_pane.cpp:1776
+#: kicad/project_tree_pane.cpp:1800
 #, fuzzy
 msgid "Fetching Remote"
 msgstr "กําลังดึงข้อมูลจากคลังเก็บ"
 
-#: kicad/project_tree_pane.cpp:1781
+#: kicad/project_tree_pane.cpp:1783
 #, fuzzy
 msgid "Failed to pull project"
 msgstr "ข้อมูลส่งออกล้มเหลว"
 
-#: kicad/project_tree_pane.cpp:1805
+#: kicad/project_tree_pane.cpp:1807
 #, fuzzy
 msgid "Failed to push project"
 msgstr "ข้อมูลส่งออกล้มเหลว"
 
-#: kicad/project_tree_pane.cpp:1884
+#: kicad/project_tree_pane.cpp:1886
 #, fuzzy, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "โหลด '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:1897
+#: kicad/project_tree_pane.cpp:1899
 #, fuzzy, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "ไม่สามารถหาโปรแกรมดูสำหรับ PDF '%s'"
 
-#: kicad/project_tree_pane.cpp:1908
+#: kicad/project_tree_pane.cpp:1910
 #, fuzzy, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "โหลด '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:1917
+#: kicad/project_tree_pane.cpp:1919
 #, fuzzy, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "ต้องการตัวเลขสำหรับ '%s'"
 
-#: kicad/project_tree_pane.cpp:1930
+#: kicad/project_tree_pane.cpp:1932
 #, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "คุณแน่ใจว่าต้องการลบช่อง '%s'?"
 
-#: kicad/project_tree_pane.cpp:1947
+#: kicad/project_tree_pane.cpp:1949
 #, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "ล้มเหลวที่จะนำไดเร็กตอรีออก %s"
 
-#: kicad/project_tree_pane.cpp:2314
+#: kicad/project_tree_pane.cpp:2316
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "ไฟล์ที่เลือกไม่สมบูรณ์หรืออาจจะมีข้อมูลเสีย!"
 
-#: kicad/project_tree_pane.cpp:2460
+#: kicad/project_tree_pane.cpp:2462
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2466
+#: kicad/project_tree_pane.cpp:2468
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2472
+#: kicad/project_tree_pane.cpp:2474
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
 
-#: kicad/project_tree_pane.cpp:2483
+#: kicad/project_tree_pane.cpp:2485
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "ไม่สามารถเขียนพล็อตไฟล์ที่ไดเร็คตอรี ‘%s’"
 
-#: kicad/project_tree_pane.cpp:2491
+#: kicad/project_tree_pane.cpp:2493
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:2498
+#: kicad/project_tree_pane.cpp:2500
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:2505
+#: kicad/project_tree_pane.cpp:2507
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "โหลด '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:2517
+#: kicad/project_tree_pane.cpp:2519
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "ล้มเหลวที่จะนำไดเร็กตอรีออก %s"
 
-#: kicad/project_tree_pane.cpp:2526
+#: kicad/project_tree_pane.cpp:2528
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "บันทึกวงจร '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:2541
+#: kicad/project_tree_pane.cpp:2543
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "ล้มเหลวในการสร้างไฟล์ชั่วคราว '%s'"
 
-#: kicad/project_tree_pane.cpp:2578
+#: kicad/project_tree_pane.cpp:2580
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:2583
+#: kicad/project_tree_pane.cpp:2585
 #, fuzzy, c-format
 msgid "Created commit with id: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
@@ -33212,7 +33326,7 @@ msgstr ""
 "เกิดความผิดพลาดนำเข้าการตั้งค่าจากบอร์ด:\n"
 "ไฟล์โปรเจ็คที่เกี่ยวข้อง %s อ่านไม่ได้"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:581
+#: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
 #: pcbnew/tools/pcb_control.cpp:1529
 msgid "Loading PCB"
 msgstr "กำลังโหลดพีซีบี"
@@ -34855,8 +34969,8 @@ msgstr ""
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_2581.cpp:275 pcbnew/files.cpp:990
-#: pcbnew/files.cpp:1107 pcbnew/footprint_libraries_utils.cpp:269
+#: pcbnew/dialogs/dialog_export_2581.cpp:275 pcbnew/files.cpp:1001
+#: pcbnew/files.cpp:1118 pcbnew/footprint_libraries_utils.cpp:269
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "สิทธิ์ไม่เพียงพอในการเขียนไฟล์ '%s'"
@@ -36933,31 +37047,31 @@ msgstr "ตั้งค่าตามเน็ตคลาส:"
 msgid "Set Track and Via Properties"
 msgstr "ตั้งคุณสมบัติแทร็กและเวีย"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#: pcbnew/drc/drc_engine.cpp:1492
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:33
+#: pcbnew/drc/drc_engine.cpp:1491
 msgid "footprint"
 msgstr "ฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:62
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
 msgstr "เกิดข้อผิดพลาดในการเขียนตารางฟุ้ทพรินท์ไลบรารี '%s'"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:75
 msgid "Please select a footprint library table file."
 msgstr "โปรดเลือกไฟล์ตารางฟุ้ทพรินท์ไลบรารี"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:96
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:98
 #, c-format
 msgid "'%s' is not a valid footprint library table."
 msgstr "'%s' ไม่ใช่ตารางฟุ้ทพรินท์ไลบรารีที่ถูกต้อง"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:107
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:110
 #, c-format
 msgid "Cannot create library table path '%s'."
 msgstr "ไม่สามารถสร้างเส้นทางตารางไลบรารี '%s'"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:116
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:119
 #, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
@@ -36970,7 +37084,7 @@ msgstr ""
 "ไปยัง:\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:135
+#: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:141
 msgid "Error loading footprint library table."
 msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
 
@@ -41433,7 +41547,7 @@ msgid "board setup micro-via constraints"
 msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัดไมโครเวีย"
 
 #: pcbnew/drc/drc_engine.cpp:255 pcbnew/drc/drc_engine.cpp:271
-#: pcbnew/drc/drc_engine.cpp:340 pcbnew/drc/drc_engine.cpp:357
+#: pcbnew/drc/drc_engine.cpp:339 pcbnew/drc/drc_engine.cpp:356
 #, c-format
 msgid "netclass '%s'"
 msgstr "เน็ตคลาส '%s'"
@@ -41444,323 +41558,323 @@ msgstr "เน็ตคลาส '%s'"
 msgid "netclass '%s' (diff pair)"
 msgstr "เน็ตคลาส '%s' (ดิฟแพร์)"
 
-#: pcbnew/drc/drc_engine.cpp:374 pcbnew/drc/drc_engine.cpp:391
+#: pcbnew/drc/drc_engine.cpp:373 pcbnew/drc/drc_engine.cpp:390
 #, fuzzy, c-format
 msgid "netclass '%s' (uvia)"
 msgstr "เน็ตคลาส '%s' (ดิฟแพร์)"
 
-#: pcbnew/drc/drc_engine.cpp:457
+#: pcbnew/drc/drc_engine.cpp:456
 msgid "keepout area"
 msgstr "พื้นที่ปิดกั้น"
 
-#: pcbnew/drc/drc_engine.cpp:459
+#: pcbnew/drc/drc_engine.cpp:458
 #, c-format
 msgid "keepout area '%s'"
 msgstr "พื้นที่ปิดกั้น '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:659
+#: pcbnew/drc/drc_engine.cpp:658
 #, fuzzy, c-format
 msgid "Resolved zone connection type: %s."
 msgstr "ประเภทการเชื่อมต่อโซน: %s"
 
-#: pcbnew/drc/drc_engine.cpp:677
+#: pcbnew/drc/drc_engine.cpp:676
 #, fuzzy, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "แพ็ดไม่ใช่ PTH การเชื่อมต่อจะเป็น: %s"
 
-#: pcbnew/drc/drc_engine.cpp:787
+#: pcbnew/drc/drc_engine.cpp:786
 #, fuzzy, c-format
 msgid "Net tie on %s; clearance: 0."
 msgstr "ทับค่าเฉพาะที่บน %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:790
+#: pcbnew/drc/drc_engine.cpp:789
 #, fuzzy
 msgid "net tie"
 msgstr "ไตเติ้ลบนชีต"
 
-#: pcbnew/drc/drc_engine.cpp:817 pcbnew/drc/drc_engine.cpp:827
+#: pcbnew/drc/drc_engine.cpp:816 pcbnew/drc/drc_engine.cpp:826
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "ทับค่าเฉพาะที่บน %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:842 pcbnew/drc/drc_engine.cpp:1456
-#: pcbnew/drc/drc_engine.cpp:1472
+#: pcbnew/drc/drc_engine.cpp:841 pcbnew/drc/drc_engine.cpp:1455
+#: pcbnew/drc/drc_engine.cpp:1471
 msgid "board minimum"
 msgstr "บอร์ดขั้นต่ำ"
 
-#: pcbnew/drc/drc_engine.cpp:845 pcbnew/drc/drc_engine.cpp:1450
-#: pcbnew/drc/drc_engine.cpp:1466
+#: pcbnew/drc/drc_engine.cpp:844 pcbnew/drc/drc_engine.cpp:1449
+#: pcbnew/drc/drc_engine.cpp:1465
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "ระยะห่างขั้นต่ำของบอร์ด: %s"
 
-#: pcbnew/drc/drc_engine.cpp:854
+#: pcbnew/drc/drc_engine.cpp:853
 msgid "board minimum hole"
 msgstr "จำนวนรูเจาะบนบอร์ดขั้นต่ำ"
 
-#: pcbnew/drc/drc_engine.cpp:857
+#: pcbnew/drc/drc_engine.cpp:856
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "ระยะห่างขั้นต่ำของรูเจาะบนบอร์ด: %s"
 
-#: pcbnew/drc/drc_engine.cpp:876
+#: pcbnew/drc/drc_engine.cpp:875
 #, fuzzy, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "ทับค่าเฉพาะที่บน %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:893
+#: pcbnew/drc/drc_engine.cpp:892
 #, fuzzy, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "แทนที่โดย %s; บรรเทาความร้อน: %s"
 
-#: pcbnew/drc/drc_engine.cpp:910
+#: pcbnew/drc/drc_engine.cpp:909
 #, fuzzy, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "ทับค่าเฉพาะที่บน %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:919
+#: pcbnew/drc/drc_engine.cpp:918
 #, c-format
 msgid "%s min thickness: %s."
 msgstr "%s ความหนาขั้นต่ำ: %s"
 
-#: pcbnew/drc/drc_engine.cpp:933
+#: pcbnew/drc/drc_engine.cpp:932
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
 msgstr "กําลังตรวจสอบเงื่อนไขของกฎ \"%s\""
 
-#: pcbnew/drc/drc_engine.cpp:939 pcbnew/drc/drc_engine.cpp:1576
+#: pcbnew/drc/drc_engine.cpp:938 pcbnew/drc/drc_engine.cpp:1575
 #, fuzzy
 msgid "Assertion passed."
 msgstr "การกระทำ"
 
-#: pcbnew/drc/drc_engine.cpp:943 pcbnew/drc/drc_engine.cpp:1580
+#: pcbnew/drc/drc_engine.cpp:942 pcbnew/drc/drc_engine.cpp:1579
 #, fuzzy
 msgid "--> Assertion failed. <--"
 msgstr "การยืนยันล้มเหลว"
 
-#: pcbnew/drc/drc_engine.cpp:963
+#: pcbnew/drc/drc_engine.cpp:962
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:968
+#: pcbnew/drc/drc_engine.cpp:967
 #, fuzzy, c-format
 msgid "Checking %s creepage: %s."
 msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:973
+#: pcbnew/drc/drc_engine.cpp:972
 #, fuzzy, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
-#: pcbnew/drc/drc_engine.cpp:979
+#: pcbnew/drc/drc_engine.cpp:978
 #, c-format
 msgid "Checking %s max skew: %s."
 msgstr "กำลังตรวจสอบ %s ค่าบิดเบี้ยวสูงสุด:%s"
 
-#: pcbnew/drc/drc_engine.cpp:985
+#: pcbnew/drc/drc_engine.cpp:984
 #, c-format
 msgid "Checking %s gap: %s."
 msgstr "กำลังตรวจสอบ %s ช่องห่าง:%s"
 
-#: pcbnew/drc/drc_engine.cpp:991
+#: pcbnew/drc/drc_engine.cpp:990
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "กำลังตรวจสอบ %s ความกว้างของซี่ล้อบรรเทาความร้อน: %s"
 
-#: pcbnew/drc/drc_engine.cpp:997
+#: pcbnew/drc/drc_engine.cpp:996
 #, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "กำลังตรวจสอบ %s จำนวนซี่น้อยที่สุด:%s"
 
-#: pcbnew/drc/drc_engine.cpp:1004
+#: pcbnew/drc/drc_engine.cpp:1003
 #, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "กําลังตรวจสอบ %s การเชื่อมต่อโซน:%s"
 
-#: pcbnew/drc/drc_engine.cpp:1036
+#: pcbnew/drc/drc_engine.cpp:1035
 #, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "กำลังตรวจสอบ %s ความกว้างแทร็ก: เลือก %s"
 
-#: pcbnew/drc/drc_engine.cpp:1042
+#: pcbnew/drc/drc_engine.cpp:1041
 #, fuzzy, c-format
 msgid "Checking %s track width: min %s."
 msgstr "กำลังตรวจสอบ %s ความกว้างแทร็ก: เลือก %s"
 
-#: pcbnew/drc/drc_engine.cpp:1050
+#: pcbnew/drc/drc_engine.cpp:1049
 #, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "กำลังตรวจสอบ %s ขนาดวงแหวน: อย่างต่ำ %s"
 
-#: pcbnew/drc/drc_engine.cpp:1058
+#: pcbnew/drc/drc_engine.cpp:1057
 #, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "กำลังตรวจสอบ %s เส้นผ่าศูนย์กลางเวีย: เลือก %s"
 
-#: pcbnew/drc/drc_engine.cpp:1064
+#: pcbnew/drc/drc_engine.cpp:1063
 #, fuzzy, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "กำลังตรวจสอบ %s เส้นผ่าศูนย์กลางเวีย: เลือก %s"
 
-#: pcbnew/drc/drc_engine.cpp:1073
+#: pcbnew/drc/drc_engine.cpp:1072
 #, fuzzy, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1079
+#: pcbnew/drc/drc_engine.cpp:1078
 #, fuzzy, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1089
+#: pcbnew/drc/drc_engine.cpp:1088
 #, c-format
 msgid "Checking %s: min %s."
 msgstr "กำลังตรวจสอบ %s : อย่างต่ำ %s"
 
-#: pcbnew/drc/drc_engine.cpp:1097
+#: pcbnew/drc/drc_engine.cpp:1096
 #, fuzzy, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1103
+#: pcbnew/drc/drc_engine.cpp:1102
 #, fuzzy, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1111
+#: pcbnew/drc/drc_engine.cpp:1110
 #, fuzzy, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1117 pcbnew/drc/drc_engine.cpp:1143
-#: pcbnew/drc/drc_engine.cpp:1589
+#: pcbnew/drc/drc_engine.cpp:1116 pcbnew/drc/drc_engine.cpp:1142
+#: pcbnew/drc/drc_engine.cpp:1588
 #, c-format
 msgid "Checking %s."
 msgstr "กำลังตรวจสอบ %s"
 
-#: pcbnew/drc/drc_engine.cpp:1132
+#: pcbnew/drc/drc_engine.cpp:1131
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "ตรวจสอบ %s: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
-#: pcbnew/drc/drc_engine.cpp:1153
+#: pcbnew/drc/drc_engine.cpp:1152
 #, fuzzy
 msgid "Netclass clearances apply only between copper items."
 msgstr "ช่องว่างระหว่างบอร์ดและเน็ตคลาสใช้เฉพาะระหว่างชิ้นส่วนประเภททองแดงเท่านั้น"
 
-#: pcbnew/drc/drc_engine.cpp:1157 pcbnew/drc/drc_engine.cpp:1162
+#: pcbnew/drc/drc_engine.cpp:1156 pcbnew/drc/drc_engine.cpp:1161
 #, fuzzy, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr "%s ไม่ใช่รูเจาะ; กฎจะละเว้น"
 
-#: pcbnew/drc/drc_engine.cpp:1219
+#: pcbnew/drc/drc_engine.cpp:1218
 msgid "Keepout constraint not met."
 msgstr "ไม่พบข้อจำกัดพื้นที่ปิดกั้น"
 
-#: pcbnew/drc/drc_engine.cpp:1221
+#: pcbnew/drc/drc_engine.cpp:1220
 msgid "Disallow constraint not met."
 msgstr "ไม่พบข้อจำกัดที่ต้องห้าม"
 
-#: pcbnew/drc/drc_engine.cpp:1243
+#: pcbnew/drc/drc_engine.cpp:1242
 msgid "Keepout layer(s) not matched."
 msgstr "เลเยอร์ปิดกั้นไม่ตรงกัน"
 
-#: pcbnew/drc/drc_engine.cpp:1247 pcbnew/drc/drc_engine.cpp:1268
-#: pcbnew/drc/drc_engine.cpp:1593
+#: pcbnew/drc/drc_engine.cpp:1246 pcbnew/drc/drc_engine.cpp:1267
+#: pcbnew/drc/drc_engine.cpp:1592
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
 
-#: pcbnew/drc/drc_engine.cpp:1252 pcbnew/drc/drc_engine.cpp:1273
+#: pcbnew/drc/drc_engine.cpp:1251 pcbnew/drc/drc_engine.cpp:1272
 msgid "Rule layer not matched; rule ignored."
 msgstr "เลเยอร์กฎไม่ตรงกัน กฎถูกละเว้น"
 
-#: pcbnew/drc/drc_engine.cpp:1264
+#: pcbnew/drc/drc_engine.cpp:1263
 #, fuzzy
 msgid "Constraint layer not matched."
 msgstr "เลเยอร์ปิดกั้นไม่ตรงกัน"
 
-#: pcbnew/drc/drc_engine.cpp:1280
+#: pcbnew/drc/drc_engine.cpp:1279
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "%s ไม่ใช่รูเจาะ; กฎจะละเว้น"
 
-#: pcbnew/drc/drc_engine.cpp:1289
+#: pcbnew/drc/drc_engine.cpp:1288
 msgid "Unconditional constraint applied."
 msgstr "ใช้ข้อจำกัดที่ไม่มีเงื่อนไข"
 
-#: pcbnew/drc/drc_engine.cpp:1293 pcbnew/drc/drc_engine.cpp:1599
+#: pcbnew/drc/drc_engine.cpp:1292 pcbnew/drc/drc_engine.cpp:1598
 msgid "Unconditional rule applied."
 msgstr "ใช้กฎที่ไม่มีเงื่อนไข"
 
-#: pcbnew/drc/drc_engine.cpp:1298
+#: pcbnew/drc/drc_engine.cpp:1297
 #, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "ใช้กฎ; ทับค่าข้อจำกัดก่อนหน้า"
 
-#: pcbnew/drc/drc_engine.cpp:1312 pcbnew/drc/drc_engine.cpp:1604
+#: pcbnew/drc/drc_engine.cpp:1311 pcbnew/drc/drc_engine.cpp:1603
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "กําลังตรวจสอบเงื่อนไขของกฎ \"%s\""
 
-#: pcbnew/drc/drc_engine.cpp:1322
+#: pcbnew/drc/drc_engine.cpp:1321
 msgid "Constraint applied."
 msgstr "ใช้ข้อจำกัดแล้ว"
 
-#: pcbnew/drc/drc_engine.cpp:1326 pcbnew/drc/drc_engine.cpp:1610
+#: pcbnew/drc/drc_engine.cpp:1325 pcbnew/drc/drc_engine.cpp:1609
 #, fuzzy
 msgid "Rule applied."
 msgstr "ใช้กฎที่ไม่มีเงื่อนไข"
 
-#: pcbnew/drc/drc_engine.cpp:1331
+#: pcbnew/drc/drc_engine.cpp:1330
 msgid "Rule applied; overrides previous constraints."
 msgstr "ใช้กฎ; ทับค่าข้อจำกัดก่อนหน้า"
 
-#: pcbnew/drc/drc_engine.cpp:1339
+#: pcbnew/drc/drc_engine.cpp:1338
 msgid "Membership not satisfied; constraint ignored."
 msgstr "สมาชิกไม่พอใจ; ละเว้นข้อจำกัด"
 
-#: pcbnew/drc/drc_engine.cpp:1340 pcbnew/drc/drc_engine.cpp:1615
+#: pcbnew/drc/drc_engine.cpp:1339 pcbnew/drc/drc_engine.cpp:1614
 msgid "Condition not satisfied; rule ignored."
 msgstr "เงื่อนไขไม่พอใจ กฎถูกละเว้น"
 
-#: pcbnew/drc/drc_engine.cpp:1365
+#: pcbnew/drc/drc_engine.cpp:1364
 #, fuzzy, c-format
 msgid "Inheriting from parent: %s."
 msgstr "แตกจากสัญลักษณ์:"
 
-#: pcbnew/drc/drc_engine.cpp:1404 pcbnew/drc/drc_engine.cpp:1428
+#: pcbnew/drc/drc_engine.cpp:1403 pcbnew/drc/drc_engine.cpp:1427
 #, fuzzy, c-format
 msgid "Local clearance on %s: %s."
 msgstr "ระยะห่างเฉพาะที่บน %s; ระยะห่าง: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1487
+#: pcbnew/drc/drc_engine.cpp:1486
 #, c-format
 msgid "%s zone connection: %s."
 msgstr "%s การเชื่อมต่อโซน: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1503
+#: pcbnew/drc/drc_engine.cpp:1502
 #, c-format
 msgid "%s pad connection: %s."
 msgstr "%s การเชื่อมต่อแพ็ด: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1508 pcbnew/drc/drc_engine.cpp:1525
-#: pcbnew/drc/drc_engine.cpp:1542 pcbnew/zone.cpp:616 pcbnew/zone.h:193
+#: pcbnew/drc/drc_engine.cpp:1507 pcbnew/drc/drc_engine.cpp:1524
+#: pcbnew/drc/drc_engine.cpp:1541 pcbnew/zone.cpp:616 pcbnew/zone.h:193
 msgid "zone"
 msgstr "โซน"
 
-#: pcbnew/drc/drc_engine.cpp:1520
+#: pcbnew/drc/drc_engine.cpp:1519
 #, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "%s ระยะบรรเทาความร้อน: %s"
 
-#: pcbnew/drc/drc_engine.cpp:1537
+#: pcbnew/drc/drc_engine.cpp:1536
 #, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "%s ความกว้างซี่ล้อบรรเทาความร้อน:%s"
 
-#: pcbnew/drc/drc_engine.cpp:1570
+#: pcbnew/drc/drc_engine.cpp:1569
 #, fuzzy, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "กําลังตรวจสอบเงื่อนไขของกฎ \"%s\""
@@ -43293,37 +43407,37 @@ msgstr "ไม่มีแพ็ด"
 msgid "vias"
 msgstr "ไม่มีเวีย"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2356
-#: pcbnew/exporters/step/step_pcb_model.cpp:2388
-#: pcbnew/exporters/step/step_pcb_model.cpp:2476
-#: pcbnew/exporters/step/step_pcb_model.cpp:3263
-#: pcbnew/exporters/step/step_pcb_model.cpp:3332
+#: pcbnew/exporters/step/step_pcb_model.cpp:2363
+#: pcbnew/exporters/step/step_pcb_model.cpp:2395
+#: pcbnew/exporters/step/step_pcb_model.cpp:2483
+#: pcbnew/exporters/step/step_pcb_model.cpp:3270
+#: pcbnew/exporters/step/step_pcb_model.cpp:3339
 #, fuzzy, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
 msgstr "ไม่สามารถสร้างไดเร็คตอรีทางออก '%s'"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2409
+#: pcbnew/exporters/step/step_pcb_model.cpp:2416
 msgid "Failed to set STEP product name, but will attempt to continue."
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2417
+#: pcbnew/exporters/step/step_pcb_model.cpp:2424
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2458
-#: pcbnew/exporters/step/step_pcb_model.cpp:3240
-#: pcbnew/exporters/step/step_pcb_model.cpp:3313
-#: pcbnew/exporters/step/step_pcb_model.cpp:3362
+#: pcbnew/exporters/step/step_pcb_model.cpp:2465
+#: pcbnew/exporters/step/step_pcb_model.cpp:3247
+#: pcbnew/exporters/step/step_pcb_model.cpp:3320
+#: pcbnew/exporters/step/step_pcb_model.cpp:3369
 #, fuzzy, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
 msgstr "ไม่สามารถเปลี่ยนชื่อไฟล์ชั่วคราว '%s' เป็น '%s'"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2909
+#: pcbnew/exporters/step/step_pcb_model.cpp:2916
 #, fuzzy, c-format
 msgid "Cannot identify actual file type for '%s'."
 msgstr "ไม่สามารถเปิดไฟล์รายชื่อเน็ต '%s'"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:2919
+#: pcbnew/exporters/step/step_pcb_model.cpp:2926
 #, fuzzy, c-format
 msgid "Could not transfer model data from file '%s'."
 msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"
@@ -43389,45 +43503,45 @@ msgstr "พีซีบี '%s' เปิดอยู่แล้ว"
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "พีซีบีปัจจุบันได้รับการแก้ไข บันทึกการเปลี่ยนแปลง?"
 
-#: pcbnew/files.cpp:571
+#: pcbnew/files.cpp:573
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "พีซีบี '%s' ไม่มีอยู่ คุณต้องการสร้างหรือไม่?"
 
-#: pcbnew/files.cpp:580
+#: pcbnew/files.cpp:582
 msgid "Creating PCB"
 msgstr "การสร้างพีซีบอร์ด"
 
-#: pcbnew/files.cpp:594 pcbnew/files.cpp:680
+#: pcbnew/files.cpp:596 pcbnew/files.cpp:682
 #, fuzzy
 msgid "File format is not supported"
 msgstr "กลับกระจกบนแกน Y ไม่สนับสนุน"
 
-#: pcbnew/files.cpp:724 pcbnew/files.cpp:734
+#: pcbnew/files.cpp:726 pcbnew/files.cpp:736
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "เกิดข้อผิดพลาดในการโหลดพีซีบี '%s'"
 
-#: pcbnew/files.cpp:743
+#: pcbnew/files.cpp:745
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "หน่วยความจำหมด ระหว่างอ่านพีซีบี ' %s'"
 
-#: pcbnew/files.cpp:865
+#: pcbnew/files.cpp:867
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr "เกิดข้อผิดพลาดในการบันทึกฟุ้ทพรินท์ %s ไปยังไลบรารีเฉพาะของโปรเจ็กต์"
 
-#: pcbnew/files.cpp:896
+#: pcbnew/files.cpp:898
 msgid "Error saving project specific footprint library table."
 msgstr "เกิดข้อผิดพลาดในการบันทึกตารางไลบรารีฟุ้ทพรินท์เฉพาะโปรเจ็กต์"
 
-#: pcbnew/files.cpp:1022 pcbnew/files.cpp:1156
+#: pcbnew/files.cpp:1033 pcbnew/files.cpp:1167
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "ข้อผิดพลาดในการบันทึกไฟล์กฎแบบกําหนดเอง '%s'"
 
-#: pcbnew/files.cpp:1047 pcbnew/files.cpp:1131
+#: pcbnew/files.cpp:1058 pcbnew/files.cpp:1142
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -43436,7 +43550,7 @@ msgstr ""
 "ข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "%s"
 
-#: pcbnew/files.cpp:1162
+#: pcbnew/files.cpp:1173
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -43445,7 +43559,7 @@ msgstr ""
 "สำเนาบอร์ดไปที่:\n"
 "%s"
 
-#: pcbnew/files.cpp:1312
+#: pcbnew/files.cpp:1323
 #, fuzzy
 msgid "Generating ODB++ output files"
 msgstr "สร้างไฟล์รายชื่อเน็ต IPC-D-356"
@@ -46575,7 +46689,7 @@ msgid "Element token contains %d parameters."
 msgstr "โทเค็นองค์ประกอบมีพารามิเตอร์ %d"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:972
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3063
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3067
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "โฟลเดอร์ไลบรารี '%s' มีโฟลเดอร์ย่อยที่ไม่คาดคิด"
@@ -46587,7 +46701,7 @@ msgstr "พบไฟล์ที่ไม่คาดคิด '%s' ในไล
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1010
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3270
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3100
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3104
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "ไม่สามารถลบไลบรารีฟุ้ทพรินท์ '%s'"
@@ -46617,7 +46731,7 @@ msgid "Generating history section"
 msgstr "ทิศทางลําดับเลข"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1203
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3047
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3079
 #, fuzzy
 msgid "Generating BOM section"
 msgstr "ทางเลือกการเรนเดอร์"
@@ -46641,41 +46755,41 @@ msgstr ""
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr "ขาดเค้าโครงบอร์ดหรือบิดเบี้ยว. สั่งทำงาน DRC เพื่อวิเคราะห์ละเอียด."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2478
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2499
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2643
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2664
 #, fuzzy, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "ส่งออกรายชื่อเน็ต"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2679
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2700
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2705
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2726
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2847
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2868
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3202
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3234
 #, fuzzy
 msgid "Generating logistic section"
 msgstr "สร้างไฟล์ตําแหน่ง"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3214
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
 #, fuzzy
 msgid "Saving file"
 msgstr "กำลังอ่านไฟล์ "
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3246
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3278
 #, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
 msgstr "ไม่สามารถเขียนพล็อตไฟล์ที่ไดเร็คตอรี ‘%s’"
@@ -46800,26 +46914,26 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "บันทึกต่อไป"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1467
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1471
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "แพ็ดที่ไม่รู้จัก: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2313
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2317
 #, c-format
 msgid "unknown via type %d"
 msgstr "เวียที่ไม่รู้จัก %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2605
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2609
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "ประเภทการปรับมุมโซนที่ไม่รู้จัก %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2754
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2758
 msgid "This file does not contain a PCB."
 msgstr "ไฟล์นี้ไม่มีพีซีบอร์ด"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2921
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2925
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -46828,21 +46942,21 @@ msgstr ""
 "ไลบรารี '%s' ไม่มีอยู่\n"
 "คุณต้องการสร้างหรือไม่?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2925
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2929
 msgid "Library Not Found"
 msgstr "ไม่พบไลบรารี"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2951
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2955
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "ชื่อไฟล์ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2957
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2961
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "ไม่มีสิทธิเพียงพอสำหรับการลบ '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3082
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3086
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "ไฟล์ที่ไม่คาดคิด '%s' พบในเส้นทางไลบรารี '%s'"
@@ -54528,9 +54642,6 @@ msgstr "ตัวแก้ไขแผ่นเขียนแบบของ Ki
 #~ msgid "Perform electrical rules check"
 #~ msgstr "ดำเนินการตรวจสอบกฎไฟฟ้า"
 
-#~ msgid "Create a new symbol"
-#~ msgstr "สร้างสัญลักษณ์ใหม่"
-
 #~ msgid "Make a copy of the selected symbol"
 #~ msgstr "ทําสําเนาสัญลักษณ์ที่เลือก"
 
@@ -55484,10 +55595,6 @@ msgstr "ตัวแก้ไขแผ่นเขียนแบบของ Ki
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "ละเว้นจากวงจรในการสร้างรายการวัสดุ"
-
-#, fuzzy
-#~ msgid "Convert Symbol"
-#~ msgstr "สัญลักษณ์เพาเวอร์"
 
 #~ msgid "Export Settings to Other Similar Zones"
 #~ msgstr "ส่งออกการตั้งค่าไปยังโซนที่คล้ายคลึงอื่นๆ"
