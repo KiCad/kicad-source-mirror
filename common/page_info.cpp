@@ -94,6 +94,7 @@ PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, const PAGE_SIZE_TYPE& aType, wx
 
 
 PAGE_INFO::PAGE_INFO( PAGE_SIZE_TYPE aType, bool aIsPortrait ) :
+        m_type( PAGE_SIZE_TYPE::A4 ),
         m_size( s_user_width, s_user_height ),
         m_portrait( false ),
         m_paper_id( wxPAPER_NONE )
@@ -124,13 +125,9 @@ bool PAGE_INFO::SetType( PAGE_SIZE_TYPE aType, bool aIsPortrait )
                   } );
 
     if( result != standardPageSizes.end() )
-    {
         *this = *result;
-    }
     else
-    {
         rc = false;
-    }
 
     if( aType == PAGE_SIZE_TYPE::User )
     {
@@ -182,13 +179,6 @@ void PAGE_INFO::SetPortrait( bool aIsPortrait )
 
 static double clampWidth( double aWidthInMils )
 {
-/*  was giving EESCHEMA single component SVG plotter grief
-    However a minimal test is made to avoid values that crashes KiCad
-    if( aWidthInMils < 4000 )       // 4" is about a baseball card
-        aWidthInMils = 4000;
-    else if( aWidthInMils > 44000 ) //44" is plotter size
-        aWidthInMils = 44000;
-*/
     if( aWidthInMils < 10 )
         aWidthInMils = 10;
 
@@ -198,14 +188,6 @@ static double clampWidth( double aWidthInMils )
 
 static double clampHeight( double aHeightInMils )
 {
-/*  was giving EESCHEMA single component SVG plotter grief
-    clamping is best done at the UI, i.e. dialog, levels
-    However a minimal test is made to avoid values that crashes KiCad
-    if( aHeightInMils < 4000 )
-        aHeightInMils = 4000;
-    else if( aHeightInMils > 44000 )
-        aHeightInMils = 44000;
-*/
     if( aHeightInMils < 10.0 )
         aHeightInMils = 10.0;
 
