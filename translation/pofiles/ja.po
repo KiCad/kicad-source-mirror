@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-03 15:54+0000\n"
+"PO-Revision-Date: 2025-10-06 07:05+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19053,37 +19053,30 @@ msgid "Datasheet"
 msgstr "データシート"
 
 #: eeschema/lib_symbol.cpp:2106
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "シンボル ユニット"
+msgstr "シンボルの定義"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Define as Power Symbol"
 msgstr "電源シンボルとして定義"
 
 #: eeschema/lib_symbol.cpp:2111
-#, fuzzy
 msgid "Define as Local Power Symbol"
 msgstr "ローカル電源シンボルとして定義"
 
 #: eeschema/lib_symbol.cpp:2115
-#, fuzzy
 msgid "Pin Display"
-msgstr "グリッドの表示"
+msgstr "ピンの表示"
 
 #: eeschema/lib_symbol.cpp:2117
-#, fuzzy
 msgid "Show Pin Number"
 msgstr "ピン番号を表示"
 
 #: eeschema/lib_symbol.cpp:2120
-#, fuzzy
 msgid "Show Pin Name"
 msgstr "ピン名を表示"
 
 #: eeschema/lib_symbol.cpp:2123
-#, fuzzy
 msgid "Place Pin Names Inside"
 msgstr "ピン名を内側に配置"
 
@@ -19104,19 +19097,16 @@ msgid "Exclude from Bill of Materials"
 msgstr "BOM(部品表)から除外"
 
 #: eeschema/lib_symbol.cpp:2143
-#, fuzzy
 msgid "Units and Body Styles"
 msgstr "ユニットとボディのスタイル"
 
 #: eeschema/lib_symbol.cpp:2145
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "ビット数"
+msgstr "シンボルユニット数"
 
 #: eeschema/lib_symbol.cpp:2148
-#, fuzzy
 msgid "Units are Interchangeable"
-msgstr "ユニットは交換不可"
+msgstr "ユニットは交換可能"
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -22477,9 +22467,9 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "%s を実行"
+msgstr "%d個 実行"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -23657,7 +23647,6 @@ msgid "Current Variant"
 msgstr "現在のバリアント"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic variant"
 msgstr "現在の回路図バリアントを選択するためのコントロール"
 
@@ -37606,9 +37595,8 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "スルーホールのあるフットプリントをすべて除外する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "DNP(未実装)が指定されたすべてのフットプリントを除外"
+msgstr "BOM(部品表)に指定されたすべてのフットプリントを除外"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 msgid "Include board edge layer"
@@ -41649,14 +41637,12 @@ msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "基板のデフォルトを非導体のフットプリント形状に適用"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:75
-#, fuzzy
 msgid "Apply board defaults to footprint dimensions"
-msgstr "基板のデフォルトをフットプリント フィールドに適用"
+msgstr "基板のデフォルトをフットプリント 寸法に適用"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:78
-#, fuzzy
 msgid "Apply board defaults to footprint barcodes"
-msgstr "デフォルトのフットプリントがありません"
+msgstr "基板のデフォルトをフットプリント バーコードに適用"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
 msgid "This layer is required and cannot be disabled"
@@ -43440,7 +43426,7 @@ msgstr "基板の設定のマイクロビアの制約"
 
 #: pcbnew/drc/drc_engine.cpp:240
 msgid "barcode visual separation default"
-msgstr ""
+msgstr "バーコードの視覚的分離のデフォルト値"
 
 #: pcbnew/drc/drc_engine.cpp:262 pcbnew/drc/drc_engine.cpp:278
 #: pcbnew/drc/drc_engine.cpp:346 pcbnew/drc/drc_engine.cpp:363
@@ -44539,34 +44525,34 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "%s の形状プリミティブはレイヤー%sで異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
-msgstr "%s は異なります。"
+msgstr "%s はテキストが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
-msgstr "%s は「ハッチング幅」が異なります。"
+msgstr "%s は幅が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
-msgstr "%s は名前が異なります。"
+msgstr "%s は高さが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
-msgstr "%s はドリルサイズが異なります。"
+msgstr "%s はテキストサイズが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
-msgstr "%s は角が異なります。"
+msgstr "%s はコード種類が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
-msgstr "%s のハッチングのスムージング レベルが異なります。"
+msgstr "%s はerror correction levelが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #, c-format
@@ -44765,9 +44751,8 @@ msgid "%s differs."
 msgstr "%s は異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
-#, fuzzy
 msgid "Barcode count differs."
-msgstr "パッドの数が異なります。"
+msgstr "バーコード数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:933
 msgid "Pad count differs."
@@ -47123,7 +47108,7 @@ msgstr "パッド %s %s - %s ( %s 上)"
 #: pcbnew/pad.cpp:1709
 #, c-format
 msgid "Pad %s on %s"
-msgstr "パッド %s、%s 上"
+msgstr "パッド %s、%s レイヤー上"
 
 #: pcbnew/pad.cpp:1718
 #, c-format
@@ -47341,9 +47326,9 @@ msgid "Thermal Relief Gap"
 msgstr "サーマルリリーフ ギャップ"
 
 #: pcbnew/pcb_barcode.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
-msgstr "パッド %s、%s 上"
+msgstr "バーコード %s、%s レイヤー上"
 
 #: pcbnew/pcb_barcode.cpp:694
 msgid "CODE_39"
@@ -47386,9 +47371,8 @@ msgid "Show Text"
 msgstr "Show Text"
 
 #: pcbnew/pcb_barcode.cpp:740
-#, fuzzy
 msgid "Barcode Type"
-msgstr "バーコード"
+msgstr "バーコード タイプ"
 
 #: pcbnew/pcb_barcode.cpp:775
 msgid "Margin X"
@@ -47404,9 +47388,8 @@ msgid "+/- to switch"
 msgstr "+/- でスイッチ"
 
 #: pcbnew/pcb_base_edit_frame.cpp:437
-#, fuzzy
 msgid "Edit Vertices"
-msgstr "プロパティを編集"
+msgstr "頂点を編集"
 
 #: pcbnew/pcb_base_frame.cpp:1195
 msgid ""
@@ -49498,23 +49481,20 @@ msgid "removed annular ring"
 msgstr "削除されたアニュラーリング"
 
 #: pcbnew/pcb_track.cpp:1427
-#, fuzzy
 msgid "Via diameter is too small."
-msgstr "ビアのドリルが小さすぎます"
+msgstr "ビアの直径が小さすぎます。"
 
 #: pcbnew/pcb_track.cpp:1434
-#, fuzzy
 msgid "Via drill is too small."
-msgstr "ビアのドリルが小さすぎます"
+msgstr "ビアのドリルが小さすぎます。"
 
 #: pcbnew/pcb_track.cpp:1441
 msgid "No via hole size defined."
 msgstr "ビア穴のサイズが未定義です。"
 
 #: pcbnew/pcb_track.cpp:1448
-#, fuzzy
 msgid "No via diameter defined."
-msgstr "ビア穴のサイズが未定義です。"
+msgstr "ビアの直径が未定義です。"
 
 #: pcbnew/pcb_track.cpp:1456
 msgid "Via hole size must be smaller than via diameter"
@@ -52155,13 +52135,12 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "ポリゴンのアウトラインを簡素化し、余分なポイントを削除します"
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit Vertices..."
-msgstr "ネットクラスを編集..."
+msgstr "頂点を編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Edit polygon vertices using a table"
-msgstr ""
+msgstr "テーブルを使用してポリゴンの頂点を編集"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid ""
@@ -55071,16 +55050,15 @@ msgstr "ドリル"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
-msgstr ""
+msgstr "X 座標"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:57
 msgid "Y coord"
-msgstr ""
+msgstr "Y 座標"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "テキストを編集"
+msgstr "頂点を編集"
 
 #: pcbnew/zone.cpp:870
 msgid "No vias"
