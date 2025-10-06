@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-05 13:03+0000\n"
+"PO-Revision-Date: 2025-10-06 01:31+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ka/>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1053,7 +1053,7 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1037
 #: pcbnew/widgets/appearance_controls.cpp:3069
 msgid "Viewports"
-msgstr ""
+msgstr "ხედის წერტილები"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1046
 #: pcbnew/widgets/appearance_controls.cpp:3078
@@ -1106,7 +1106,7 @@ msgstr "გამოსახულების ზომა"
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:174
 msgid "Width:"
-msgstr ""
+msgstr "სიგანე:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:72
 #: bitmap2component/bitmap2cmp_panel_base.cpp:57
@@ -1115,7 +1115,7 @@ msgstr ""
 #: common/widgets/gal_options_panel_base.cpp:57
 #: common/widgets/gal_options_panel_base.cpp:68
 msgid "pixels"
-msgstr ""
+msgstr "პიქსელი"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:73
 #: common/dialogs/panel_common_settings_base.cpp:283
@@ -1454,7 +1454,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "მოგლუვება:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
@@ -1541,7 +1541,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
-msgstr ""
+msgstr "ანარეკლები:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -1555,7 +1555,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:101
 msgid "Refractions:"
-msgstr ""
+msgstr "რეფრაქციები:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:106
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -1654,7 +1654,7 @@ msgstr "გადიდება"
 #: pcbnew/microwave/microwave_polygon.cpp:144
 #: pcbnew/tools/pcb_point_editor.cpp:2744
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:41
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
@@ -1678,7 +1678,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:153
 #: pcbnew/tools/pcb_point_editor.cpp:2744
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:51
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:96
@@ -1686,7 +1686,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:337
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:349
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1849
@@ -1700,14 +1700,14 @@ msgstr "წანაცვლება"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:158
 msgid "Opacity"
-msgstr ""
+msgstr "გაუმჭვირვალობა"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:178
 #: common/dialogs/dialog_page_settings_base.cpp:123
 #: eeschema/printing/dialog_print.cpp:269
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:253
 msgid "Preview"
-msgstr ""
+msgstr "მინიატურა"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:207
 msgid ""
@@ -1858,7 +1858,7 @@ msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:77
 msgid "BPP:"
-msgstr ""
+msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:85
 msgid "bits"
@@ -1877,7 +1877,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "ზომა:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:114
 #: bitmap2component/bitmap2cmp_panel_base.cpp:119
@@ -1904,7 +1904,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr ""
+msgstr "მორგება"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
@@ -2075,7 +2075,7 @@ msgstr "თუ არ შეინახავთ, ცვლილებებ�
 
 #: common/confirm.cpp:73 common/confirm.cpp:110 common/dialog_shim.cpp:1580
 msgid "&Save"
-msgstr ""
+msgstr "შენა&ხვა"
 
 #: common/confirm.cpp:73 common/confirm.cpp:110
 msgid "&Discard Changes"
@@ -2096,7 +2096,7 @@ msgstr "დაბ&რუნება"
 #: common/confirm.cpp:149 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:1575
 msgid "&OK"
-msgstr ""
+msgstr "&დიახ"
 
 #: common/confirm.cpp:239
 msgid "Information"
@@ -2140,7 +2140,7 @@ msgstr "&დიახ"
 
 #: common/confirm.cpp:275 common/dialog_shim.cpp:1578
 msgid "&No"
-msgstr ""
+msgstr "ა&რა"
 
 #: common/design_block_info_impl.cpp:130
 msgid "Loading design_blocks..."
@@ -2309,7 +2309,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:42
 #: pcbnew/footprint_libraries_utils.cpp:1287
 msgid "Description"
-msgstr ""
+msgstr "აღწერა"
 
 #: common/dialog_about/AboutDialog_main.cpp:116
 msgid ""
@@ -2439,7 +2439,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:161
 msgid "Librarians"
-msgstr ""
+msgstr "ბიბლიოთეკარები"
 
 #: common/dialog_about/dialog_about.cpp:164
 msgid "Artists"
@@ -2451,11 +2451,11 @@ msgstr "მთარგმნელები"
 
 #: common/dialog_about/dialog_about.cpp:168
 msgid "Packagers"
-msgstr ""
+msgstr "შემფუთავები"
 
 #: common/dialog_about/dialog_about.cpp:171
 msgid "License"
-msgstr ""
+msgstr "ლიცენზია"
 
 #: common/dialog_about/dialog_about.cpp:272
 msgid "Could not open clipboard to write version information."
@@ -2467,7 +2467,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:282
 msgid "Copied..."
-msgstr ""
+msgstr "დაკოპირდა...."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
@@ -2513,7 +2513,7 @@ msgstr "გამოყენება"
 #: common/dialog_shim.cpp:1581 common/dialog_shim.cpp:1582
 #: common/eda_base_frame.cpp:663
 msgid "&Help"
-msgstr ""
+msgstr "და&ხმარება"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 #: common/dialogs/dialog_book_reporter_base.h:47
@@ -2579,7 +2579,7 @@ msgstr "ჯერადობა:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:117
 msgid "Value:"
-msgstr ""
+msgstr "მნიშვნელობა:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:95
@@ -2701,11 +2701,11 @@ msgstr "გარემოს ცვლადები"
 #: pcbnew/zone.cpp:1917 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
 #: pcbnew/zone_manager/model_zones_overview.h:69
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 msgid "Path"
-msgstr ""
+msgstr "ბილიკი"
 
 #: common/dialogs/dialog_design_block_properties.cpp:101
 #, c-format
@@ -3367,7 +3367,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:25
 msgid "File:"
-msgstr ""
+msgstr "ფაილი:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:183
 msgid "Title Block Parameters"
@@ -3389,7 +3389,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "<<<"
-msgstr ""
+msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 msgid "Revision:"
@@ -3398,7 +3398,7 @@ msgstr "რევიზია:"
 #: common/dialogs/dialog_page_settings_base.cpp:252
 #: eeschema/dialogs/dialog_export_netlist.cpp:426
 msgid "Title:"
-msgstr ""
+msgstr "სათაური:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:264
 msgid "Company:"
@@ -3406,27 +3406,27 @@ msgstr "კომპანია:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
 msgid "Comment1:"
-msgstr ""
+msgstr "კომენტარი1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
 msgid "Comment2:"
-msgstr ""
+msgstr "კომენტარი2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
 msgid "Comment3:"
-msgstr ""
+msgstr "კომენტარი3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
 msgid "Comment4:"
-msgstr ""
+msgstr "კომენტარი4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
 msgid "Comment5:"
-msgstr ""
+msgstr "კომენტარი5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
 msgid "Comment6:"
-msgstr ""
+msgstr "კომენტარი6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Comment7:"
@@ -3851,7 +3851,7 @@ msgstr "შემოწმება"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:84
 #: pcbnew/tools/multichannel_tool.cpp:1171
 msgid "OK"
-msgstr ""
+msgstr "დიახ"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
@@ -3866,7 +3866,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:403
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
-msgstr ""
+msgstr "გაუქმება"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
@@ -4887,14 +4887,12 @@ msgid "Failed to add file '%s'."
 msgstr "ვერ დავამატე ფაილი '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:348
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "აირჩიეთ ფაილი"
+msgstr "აირჩიეთ ფაილი ჩასაშენებლად"
 
 #: common/dialogs/panel_embedded_files.cpp:407
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "ანგარიშის ფაილში ჩაწერა"
+msgstr "აირჩიეთ საქაღალდე ფაილების გასატანად"
 
 #: common/dialogs/panel_embedded_files.cpp:437
 #, c-format
@@ -5089,7 +5087,7 @@ msgstr ""
 #: common/dialogs/panel_grid_settings_base.cpp:89
 #: common/dialogs/panel_grid_settings_base.cpp:102
 msgid "(hotkey)"
-msgstr ""
+msgstr "(კლავიატურის მალსახმობი)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:93
 msgid "Grid 2:"
@@ -5212,23 +5210,20 @@ msgid "days"
 msgstr ""
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "ბოლო ფაილების გასუფთავება"
+msgstr "\"ახლახან გახსნილების\" ისტორიის გასუფთავება"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
 msgstr ""
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "ნაგულისხმები პარამეტრების დაყენება"
+msgstr "დიალოგების ჩამოყრა ნაგულისხმევებზე"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "ნაგულისხმებ მნიშვნელობაზე დაბრუნება"
+msgstr "ყველა პროგრამის პარამეტრის ჩამოყრა ნაგულისხმევზე"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5844,7 +5839,7 @@ msgstr ""
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:241
 #: pcbnew/pcb_marker.cpp:233
 msgid "Warning"
-msgstr ""
+msgstr "გაფრთხილება"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
@@ -5996,9 +5991,8 @@ msgid "File not found."
 msgstr "ფაილი ნაპოვნი არაა."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:996
-#, fuzzy
 msgid "File could not be opened."
-msgstr "ფაილი ნაპოვნი არაა."
+msgstr "ფაილის გახსნა შეუძლებელია."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1010
 msgid "Drawing sheet was not fully read."
@@ -6144,9 +6138,9 @@ msgid "Expecting '%s'"
 msgstr ""
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "მიმდინარეობს გატანა. ფენა %s, ქსელი %s"
+msgstr "მოველოდი მნიშვნელობას %s. მივიღე '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -7280,9 +7274,9 @@ msgid "Error removing directory '%s': %s"
 msgstr ""
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "წყარო საქაღალდე ვერ გავხსენი: %s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:511
 #, c-format
@@ -7305,9 +7299,9 @@ msgid "Source directory does not exist: %s"
 msgstr ""
 
 #: common/gestfich.cpp:584
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ფაილის წაკითხვის შეცდომა: %s"
 
 #: common/git/kicad_git_common.cpp:873
 #, c-format
@@ -7495,32 +7489,32 @@ msgid "Could not lookup remote"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ დავუკავშირდი დაშორებულს: %s"
 
 #: common/git/libgit_backend.cpp:317 common/git/libgit_backend.cpp:904
 msgid "Could not get repository head"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "დაშორებულზე გადაცემა შეუძლებელია: %s"
 
 #: common/git/libgit_backend.cpp:581
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "ნაგულისხმევი დაშორებულის დაყენება ჩავარდა."
+msgstr "Git-ის რეპოზიტორიის ინიციალიზაცია ჩავარდა: %s"
 
 #: common/git/libgit_backend.cpp:601
 msgid "No repository available to set up remote"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "კომიტის შექმნა ჩავარდა: %s"
+msgstr "ვერ შევქმენი დაშორებული: %s"
 
 #: common/git/libgit_backend.cpp:681
 msgid "No repository available"
@@ -7532,19 +7526,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "ხის ჩაწერა ჩავარდა: %s"
+msgstr "ვერ ვიპოვე ბრენჩის თავი '%s'-სთვის: %s"
 
 #: common/git/libgit_backend.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "ხის ჩაწერა ჩავარდა: %s"
+msgstr "ვერ გადავერთე ბრენჩზე '%s': %s"
 
 #: common/git/libgit_backend.cpp:716
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "მიმართვის '%s' განახლება, რომელიც მიუთითებს '%s'-ზე, შეუძლებელია"
+msgstr "ვერ განვაახლე HEAD-ზე მიმართვა ბრენჩისთვის '%s': %s"
 
 #: common/git/libgit_backend.cpp:764
 #, c-format
@@ -7591,9 +7585,8 @@ msgid "Could not look up target commit"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:938
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ მივიღე ხე სამიზნე გადაცემიდან"
 
 #: common/git/libgit_backend.cpp:987
 #, c-format
@@ -7601,32 +7594,29 @@ msgid "Failed to update reference '%s' to point to '%s'"
 msgstr "მიმართვის '%s' განახლება, რომელიც მიუთითებს '%s'-ზე, შეუძლებელია"
 
 #: common/git/libgit_backend.cpp:996
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "რეპოზიტორიის დაკლონვა ჩავარდა."
+msgstr "სწრაფად გადახვევის შემდეგ საცავის მდგომარეობის გასუფთავება ჩავარდა."
 
 #: common/git/libgit_backend.cpp:1004
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "ნაგულისხმევი დაშორებულის დაყენება ჩავარდა."
+msgstr "რევიზიის გამვლელის ინიციალიზაცია ჩავარდა."
 
 #: common/git/libgit_backend.cpp:1013
 msgid "Failed to push reference to revision walker."
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1029
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვრე ვიპოვე გადაცემა '%s'"
 
 #: common/git/libgit_backend.cpp:1054
 msgid "Merge failed"
 msgstr "შერწყმა ჩავარდა"
 
 #: common/git/libgit_backend.cpp:1072
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "აირჩიეთ ფაილი"
+msgstr "ბაზის შეცვლის დაწყება ჩავარდა"
 
 #: common/git/libgit_backend.cpp:1086
 msgid "Rebase commit failed"
@@ -7746,7 +7736,7 @@ msgstr ""
 #: common/hotkey_store.cpp:61 common/tool/action_menu.cpp:242
 #: common/tool/action_menu.cpp:258 common/tool/actions.cpp:152
 msgid "Quit"
-msgstr ""
+msgstr "გასვლა"
 
 #: common/hotkey_store.cpp:76
 msgid "Project Manager"
@@ -7976,9 +7966,8 @@ msgid "3D model export"
 msgstr "3D მოდელის გატანა"
 
 #: common/jobs/job_export_pcb_3d.cpp:160
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "ფაილში გატანა"
+msgstr "3D მოდელის დავალების პარამეტრების გატანა"
 
 #: common/jobs/job_export_pcb_3d.cpp:182
 msgid "PCB: Export 3D Model"
@@ -7989,9 +7978,8 @@ msgid "Export drill data"
 msgstr "ბურთის მონაცემების გატანა"
 
 #: common/jobs/job_export_pcb_drill.cpp:134
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "ფილტრის მორგება"
+msgstr "ბურღვის მონაცემების ამოცანის პარამეტრების გატანა"
 
 #: common/jobs/job_export_pcb_drill.cpp:137
 msgid "PCB: Export Drill Data"
@@ -8111,9 +8099,8 @@ msgid "Export position data"
 msgstr "მდებარეობის მონაცემების გატანა"
 
 #: common/jobs/job_export_pcb_pos.cpp:108
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "ფილტრის მორგება"
+msgstr "მდებარეობის მონაცემების დავალების პარამეტრების გატანა"
 
 #: common/jobs/job_export_pcb_pos.cpp:126
 msgid "PCB: Export Position Data"
@@ -8154,9 +8141,8 @@ msgid "Generate Bill of Materials Job Settings"
 msgstr ""
 
 #: common/jobs/job_export_sch_bom.cpp:96
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "გამორიცხული"
+msgstr "სქემა: ზედნადების გენერაცია"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
@@ -8264,7 +8250,7 @@ msgstr "აღარ მაჩვენო"
 
 #: common/kidialog.cpp:121
 msgid "Message"
-msgstr ""
+msgstr "შეტყობინება"
 
 #: common/kidialog.cpp:122
 msgid "Question"
@@ -8641,9 +8627,9 @@ msgid "Illegal character found in library nickname"
 msgstr ""
 
 #: common/lib_table_base.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "ხის ჩაწერა ჩავარდა: %s"
+msgstr "ვერ მივიღე ჩამწერის %s-სთვის"
 
 #: common/lib_table_grid_tricks.cpp:45
 msgid "Edit options..."
@@ -8911,9 +8897,9 @@ msgid "Open %s"
 msgstr "%s-ის გახსნა"
 
 #: common/plotters/PDF_plotter.cpp:2626
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ვერ გავხსენი 3D მოდელის ფაილი: %s"
 
 #: common/project.cpp:432 common/project.cpp:437 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -9155,14 +9141,12 @@ msgid "Displays the current unit"
 msgstr ""
 
 #: common/tool/action_toolbar.cpp:1065
-#, fuzzy
 msgid "Symbol body style selector"
-msgstr "სიმბოლოს ნახვა"
+msgstr "სიმბოლოს სხეულის სტილის ამრჩევი"
 
 #: common/tool/action_toolbar.cpp:1066
-#, fuzzy
 msgid "Displays the current body style"
-msgstr "ფილტრის მორგება"
+msgstr "აჩვენებს მიმდინარე სხეულის სტილს"
 
 #: common/tool/action_toolbar.cpp:1069
 msgid "Allow moving of locked items with the mouse"
@@ -9197,7 +9181,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:70
 msgid "Open..."
-msgstr ""
+msgstr "გახსნა..."
 
 #: common/tool/actions.cpp:71
 msgid "Open existing document"
@@ -9223,7 +9207,7 @@ msgstr ""
 #: eeschema/widgets/tuner_slider_base.cpp:130
 #: pcbnew/footprint_libraries_utils.cpp:979
 msgid "Save"
-msgstr ""
+msgstr "შენახვა"
 
 #: common/tool/actions.cpp:94
 msgid "Save changes"
@@ -9303,9 +9287,8 @@ msgid "Add Items"
 msgstr "ელემენტების დამატება"
 
 #: common/tool/actions.cpp:217
-#, fuzzy
 msgid "Add items to group"
-msgstr "ხელით მითითებული წესები"
+msgstr "ელემენტების ჩამატება ჯგუფში"
 
 #: common/tool/actions.cpp:223
 msgid "Remove Items"
@@ -9692,14 +9675,12 @@ msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
 
 #: common/tool/actions.cpp:721
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "მონიშნულამდე გადიდება"
+msgstr "ყველა ობიექტის მასშტაბი"
 
 #: common/tool/actions.cpp:722
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "მონიშნულამდე გადიდება"
+msgstr "ყველა ობიექტის მასშტაბი ეკრანზე"
 
 #: common/tool/actions.cpp:728
 msgid "Zoom to items currently selected"
@@ -9732,45 +9713,40 @@ msgid "Zoom In Horizontally"
 msgstr "ჰორიზონტალურად გადიდება"
 
 #: common/tool/actions.cpp:772
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "ჰორიზონტალური ანარეკლი"
+msgstr "ხაზვის ადგილის ჰორიზონტალური გადიდება"
 
 #: common/tool/actions.cpp:778
 msgid "Zoom Out Horizontally"
 msgstr "ჰორიზონტალურად დაპატარავება"
 
 #: common/tool/actions.cpp:779
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "ჰორიზონტალური ანარეკლი"
+msgstr "ხაზვის ადგილის ჰორიზონტალური დაპატარავება"
 
 #: common/tool/actions.cpp:785
 msgid "Zoom In Vertically"
 msgstr "ვერტიკალური გადიდება"
 
 #: common/tool/actions.cpp:786
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "ვერტიკალურ ანარეკლი"
+msgstr "ხაზვის ადგილის ვერტიკალური გადიდება"
 
 #: common/tool/actions.cpp:792
 msgid "Zoom Out Vertically"
 msgstr "ვერტიკალური დაპატარავება"
 
 #: common/tool/actions.cpp:793
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "ვერტიკალურ ანარეკლი"
+msgstr "ხაზვის ადგილის ვერტიკალური დაპატარავება"
 
 #: common/tool/actions.cpp:801 common/widgets/mathplot.cpp:1411
 msgid "Center on Cursor"
 msgstr ""
 
 #: common/tool/actions.cpp:809
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "მონიშნულამდე გადიდება"
+msgstr "მონიშნული ადგილის გადიდება"
 
 #: common/tool/actions.cpp:810
 msgid "Zoom to an area selection created by a mouse drag"
@@ -9793,9 +9769,8 @@ msgid "Return zoom to level prior to last zoom undo"
 msgstr ""
 
 #: common/tool/actions.cpp:841
-#, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "პარამეტრის წაშლა"
+msgstr "პანინგი მონიშნული ობიექტების ცენტრისკენ"
 
 #: common/tool/actions.cpp:848
 msgid "Cursor Up"
@@ -10143,7 +10118,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:1360
 msgid "Preferences..."
-msgstr ""
+msgstr "მორგება..."
 
 #: common/tool/actions.cpp:1361
 msgid "Show preferences for all open tools"
@@ -10308,18 +10283,16 @@ msgid ""
 msgstr ""
 
 #: common/tool/design_block_control.cpp:121
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "ბიბლიოთეკები"
+msgstr "ახალი დიზაინის ბლოკის ბიბლიოთეკა"
 
 #: common/tool/group_tool.cpp:44
 msgid "Grouping"
 msgstr "დაჯგუფება"
 
 #: common/tool/group_tool.cpp:239
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "ხელით მითითებული წესები"
+msgstr "ელემენტების ჩამატება ჯგუფში"
 
 #: common/tool/group_tool.cpp:266
 msgid "Remove Group Items"
@@ -10633,14 +10606,12 @@ msgid "Reset %s to Defaults"
 msgstr ""
 
 #: common/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Load Design Block Libraries"
-msgstr "ბიბლიოთეკები"
+msgstr "დიზაინის ბლოკის ბიბლიოთეკების ჩატვირთვა"
 
 #: common/widgets/panel_design_block_chooser.cpp:274
-#, fuzzy
 msgid "Update Design Block Libraries"
-msgstr "ბიბლიოთეკები"
+msgstr "დიზაინის ბლოკის ბიბლიოთეკების განახლება"
 
 #: common/widgets/panel_design_block_chooser.cpp:433
 msgid "Errors were encountered loading design blocks:"
@@ -11538,9 +11509,8 @@ msgid "Unconnected wire endpoint"
 msgstr "დაუკავშირებელი მავთულის ბოლო წერტილი"
 
 #: eeschema/connection_graph.cpp:3935
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "მენიუებში ხატულების ჩვენება"
+msgstr "დაუკავშირებელი მავთულიდან სალტის ჩანაწერამდე"
 
 #: eeschema/connection_graph.cpp:4250
 #, c-format
@@ -11915,9 +11885,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:73
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
-#, fuzzy
 msgid "Reset alternate pin functions"
-msgstr "ნაგულისხმებ მნიშვნელობაზე დაბრუნება"
+msgstr "ალტერნატიული საკონტაქტო ღეროს ფუნქციების ჩამოყრა"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
@@ -12059,9 +12028,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "პარამეტრების განახლება"
+msgstr "ყველა განახლების ვარიანტის ჩართვა"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -12081,9 +12049,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:148
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "პარამეტრების განახლება"
+msgstr "ყველა განახლების პარამეტრის გამორთვა"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -12487,9 +12454,8 @@ msgid "ERC Job Settings"
 msgstr "ERC დავალების პარამეტრები"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:269
-#, fuzzy
 msgid "Export netlist in KiCad format"
-msgstr "ფაილში გატანა"
+msgstr "ქსელების სიის გატანა KiCad-ის ფორმატში"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:274
 msgid "Export netlist in OrcadPCB2 format"
@@ -12504,9 +12470,8 @@ msgid "Export netlist in CadStar format"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:289
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "ფაილში გატანა"
+msgstr "ქსელების სიის გატანა PADS ფორმატში"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:302
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
@@ -12514,9 +12479,8 @@ msgid "Export Netlist"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:346
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "ფაილში გატანა"
+msgstr "ქსელების სიის გატანა SPICE ფორმატში"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 #: eeschema/dialogs/dialog_export_netlist.cpp:394
@@ -12887,11 +12851,8 @@ msgid "By parent reference designator:"
 msgstr "მშობლის მიმართვის დამდგენით:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "მშობელი სიმბოლოს ბიბლიოთეკის ID-ით:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "By parent symbol type:"
@@ -13477,9 +13438,8 @@ msgid "Filter by unit:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:149
-#, fuzzy
 msgid "Filter by body style:"
-msgstr "ფილტრის მორგება"
+msgstr "გაფილტვრა სხეულის სტილით:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:157
 msgid "Filter by selection"
@@ -13518,9 +13478,8 @@ msgid "Import"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:208
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "ყველა დამთხვევის ჩანაცვლება"
+msgstr "ყველა არსებული საკონტაქტო ღეროს ჩანაცვლება"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:211
 msgid "Append to existing pins"
@@ -13559,9 +13518,8 @@ msgid "Clear cell"
 msgstr "უჯრედის გასუფთავება"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "ბოლო ფაილების გასუფთავება"
+msgstr "უჯრედის მნიშვნელობის გასუფთავება"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
 msgid "Create Derived Symbol"
@@ -13600,23 +13558,19 @@ msgid "Collapse left panel"
 msgstr "მარცხენა პანელის აკეცვა"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "ბიბლიოთეკაში '%s' შესაბამისი სიმბოლოები აღმოჩენილი არაა."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "ბიბლიოთეკაში '%s' სიმბოლოები აღმოჩენილი არაა."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:587
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "სიმბოლოს '%s' ჩატვირთვის შეცდომა: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:595
 msgid "No related symbols could be loaded from the library."
@@ -13662,15 +13616,15 @@ msgid "Rename Field"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:778
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "გამოტანის საქაღალდე"
+msgstr "ველის სახელი '%s' უკვე არსებობს."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:823
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Library Fields Table (%s)"
-msgstr "ახალი ბიბლიოთეკა"
+msgstr "ბიბლიოთეკის ველების ცხრილი (%s)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1040
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -14070,9 +14024,8 @@ msgid "Custom body styles:"
 msgstr "მომხმარებლის სხეულის სტილები:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
-#, fuzzy
 msgid "Units && Body Styles"
-msgstr "საზღვრის სტილი"
+msgstr "ერთეულები && სხეულის სტილები"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:441
 msgid "Footprint filters:"
@@ -14309,9 +14262,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
-#, fuzzy
 msgid "Common to all body &styles"
-msgstr "ფილტრის მორგება"
+msgstr "საერთო ყველა სხეულის &სტილისთვის"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -14362,9 +14314,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:398
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ბილიკის '%s' ნორმალიზაცია შეუძლებელია."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:404
 msgid "No project or path defined for the current schematic."
@@ -14961,9 +14913,9 @@ msgid "Link '%s' to this file?"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ვერ დავაკოპირე სქემის ფაილი '%s' სამიზნეზე '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:557
 #, c-format
@@ -15720,9 +15672,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:953
-#, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "გამორიცხული"
+msgstr "'BOM-დან ამოღებული' სიმბოლოების ჩასმა"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:954
 msgid ""
@@ -15825,9 +15776,8 @@ msgid "New Variant"
 msgstr "ახალი ვარიანტი"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:71
-#, fuzzy
 msgid "Add a new field"
-msgstr "ველის დამატება"
+msgstr "ახალი ველის დამატება"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:76
 msgid "Rename selected field"
@@ -16387,9 +16337,8 @@ msgid "Wire & Bus Properties"
 msgstr ""
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "გამორიცხული"
+msgstr "ზედნადების ნიმუშები"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 msgid "Bill of Materials Formatting Presets"
@@ -16524,9 +16473,8 @@ msgid "Show ERC exclusions"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:131
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "სიმულაციის გაშვება"
+msgstr "სიმულაციიდან ამოღებული ელემენტების დანიშვნა"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:135
 msgid "Show OP voltages"
@@ -17197,9 +17145,8 @@ msgid "Nickname cannot be empty."
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:472
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "ქმედების დაბრუნება შეუძლებელია."
+msgstr "ბილიკი ცარიელი ვერ იქნება."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:485
 msgid "Library Table Error"
@@ -17389,9 +17336,9 @@ msgid "Unknown netlist format.\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:592
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "'%s' არ არსებობს"
+msgstr "BOM-ის პრესეტი '%s' აღმოჩენილი არაა"
 
 #: eeschema/eeschema_jobs_handler.cpp:696
 #: eeschema/eeschema_jobs_handler.cpp:910
@@ -17400,15 +17347,15 @@ msgid "Unable to open destination '%s'"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:730
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "'%s' არ არსებობს"
+msgstr "BOM-ის ფორმატი '%s' აღმოჩენილი არაა"
 
 #: eeschema/eeschema_jobs_handler.cpp:754
 #: eeschema/eeschema_jobs_handler.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "გამორიცხული"
+msgstr "ზედნადებია ჩაწერილია ფაილში '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:882
 #, c-format
@@ -17630,9 +17577,9 @@ msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "სიმბოლოების ბიბლიოთეკა '%s' აღმოჩენილი არაა მისამართზე '%s'"
 
 #: eeschema/erc/erc.cpp:1525
 #, c-format
@@ -17650,9 +17597,9 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:1609
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "'%s' საქაღალდე არაა"
+msgstr "'%s' სწორი ნაკვალევის იდენტიფიკატორი არაა"
 
 #: eeschema/erc/erc.cpp:1623
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1025
@@ -17662,15 +17609,15 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:1632
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1039
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "ნაკვალევების ბიბლიოთეკა '%s' მიმდინარე კონფიგურაციაში ჩართული არაა"
 
 #: eeschema/erc/erc.cpp:1641
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "ნაკვალევი '%s' აღმოჩენილი არაა ბიბლიოთეკაში '%s'"
 
 #: eeschema/erc/erc.cpp:1711
 #, c-format
@@ -17860,9 +17807,8 @@ msgid "Invalid connection between bus and net items"
 msgstr ""
 
 #: eeschema/erc/erc_item.cpp:161
-#, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "დამიწების საკონტაქტო ღერო დამიწების ქსელზე მიერთებული არაა"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
@@ -18190,9 +18136,9 @@ msgstr ""
 
 #: eeschema/files-io.cpp:1271 eeschema/files-io.cpp:1297 pcbnew/files.cpp:1212
 #: pcbnew/files.cpp:1228
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ფაილების ავტოშენახვა შეუძლებელია მხოლოდ-წაკითხვად საქაღალდეში:  '%s'"
 
 #: eeschema/files-io.cpp:1444
 #, c-format
@@ -18425,9 +18371,8 @@ msgid "Missing field in schematic symbol: %s."
 msgstr ""
 
 #: eeschema/lib_symbol.cpp:1813
-#, fuzzy
 msgid "Footprint filter count differs."
-msgstr "სხვა ველები"
+msgstr "ნაკვალევის ფილტრების რაოდენობა განსხვავდება."
 
 #: eeschema/lib_symbol.cpp:1825
 msgid "Footprint filters differ."
@@ -18466,43 +18411,36 @@ msgid "Datasheet"
 msgstr ""
 
 #: eeschema/lib_symbol.cpp:2106
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "სიმბოლოს ერთეულები"
+msgstr "სიმბოლოს აღწერა"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Define as Power Symbol"
-msgstr "ლოკალური კვების სიმბოლო"
+msgstr "აღწერა კვების სიმბოლოს სახით"
 
 #: eeschema/lib_symbol.cpp:2111
-#, fuzzy
 msgid "Define as Local Power Symbol"
-msgstr "ლოკალური კვების სიმბოლო"
+msgstr "აღწერა ლოკალური კვების სიმბოლოს სახით"
 
 #: eeschema/lib_symbol.cpp:2115
 msgid "Pin Display"
 msgstr ""
 
 #: eeschema/lib_symbol.cpp:2117
-#, fuzzy
 msgid "Show Pin Number"
-msgstr "dcode-ის რიცხვების ჩვენება"
+msgstr "საკონტაქტო ღეროs ნომრის ჩვენება"
 
 #: eeschema/lib_symbol.cpp:2120
-#, fuzzy
 msgid "Show Pin Name"
-msgstr "მენიუებში ხატულების ჩვენება"
+msgstr "საკონტაქტო ღეროს სახელის ჩვენება"
 
 #: eeschema/lib_symbol.cpp:2123
-#, fuzzy
 msgid "Place Pin Names Inside"
-msgstr "მოთავსება ელცხრილის სახით"
+msgstr "საკონტაქტო ღერო სახელების შიგნით მოთავსება"
 
 #: eeschema/lib_symbol.cpp:2126
-#, fuzzy
 msgid "Pin Name Position Offset"
-msgstr "მდებარეობის წანაცვლება:"
+msgstr "საკონტაქტო ღეროს სახელის მდებარეობის წანაცვლება"
 
 #: eeschema/lib_symbol.cpp:2133 eeschema/tools/sch_actions.cpp:1046
 msgid "Exclude from Simulation"
@@ -18513,19 +18451,16 @@ msgid "Exclude from Board"
 msgstr "დაფიდან ამოღება"
 
 #: eeschema/lib_symbol.cpp:2139 eeschema/tools/sch_actions.cpp:1040
-#, fuzzy
 msgid "Exclude from Bill of Materials"
-msgstr "გამორიცხული"
+msgstr "ზედნადებიდან ამოღება"
 
 #: eeschema/lib_symbol.cpp:2143
-#, fuzzy
 msgid "Units and Body Styles"
-msgstr "საზღვრის სტილი"
+msgstr "ერთეულები და სხეულის სტილები"
 
 #: eeschema/lib_symbol.cpp:2145
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "შემდეგი სიმბოლოს ერთეული"
+msgstr "სიმბოლოს ერთეულების რიცხვი"
 
 #: eeschema/lib_symbol.cpp:2148
 msgid "Units are Interchangeable"
@@ -19072,9 +19007,8 @@ msgstr ""
 
 #: eeschema/sch_design_block_utils.cpp:157
 #: eeschema/sch_design_block_utils.cpp:392
-#, fuzzy
 msgid "Please select a design block to save the schematic to."
-msgstr "აირჩიეთ დიზაინის ბლოკის ბიბლიოთეკის ცხრილის ფაილი."
+msgstr "აირჩიეთ დიზაინის ბლოკი, რომელშიც სქემის შენახვა მოხდება."
 
 #: eeschema/sch_design_block_utils.cpp:242
 #: eeschema/sch_design_block_utils.cpp:385
@@ -19183,7 +19117,7 @@ msgstr ""
 #: pcbnew/tools/pcb_control.cpp:2585 pcbnew/tools/pcb_control.cpp:2589
 #: pcbnew/tools/pcb_control.cpp:2592 pcbnew/tools/pcb_control.cpp:2599
 msgid "Yes"
-msgstr ""
+msgstr "კი"
 
 #: eeschema/sch_field.cpp:991 eeschema/sch_pin.cpp:1340
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
@@ -19192,7 +19126,7 @@ msgstr ""
 #: pcbnew/tools/pcb_control.cpp:2585 pcbnew/tools/pcb_control.cpp:2589
 #: pcbnew/tools/pcb_control.cpp:2592 pcbnew/tools/pcb_control.cpp:2598
 msgid "No"
-msgstr ""
+msgstr "არა"
 
 #: eeschema/sch_field.cpp:1007 eeschema/sch_text.cpp:581
 msgid "H Justification"
@@ -19679,11 +19613,9 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr ""
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving data from HTTP library %s: %s"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "ვერ მივიღე მონაცემები HTTP ბიბლიოთეკიდან %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:45
 msgid "KiCad HTTP library files"
@@ -20017,9 +19949,9 @@ msgid "Plugin '%s' does not implement the '%s' function."
 msgstr ""
 
 #: eeschema/sch_io/sch_io_mgr.cpp:45 pcbnew/pcb_io/pcb_io_mgr.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "'%s' არ არსებობს"
+msgstr "დამატების ტიპი '%s' აღმოჩენილი არაა."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:101
 #, c-format
@@ -20101,9 +20033,9 @@ msgid "Label '%s'"
 msgstr ""
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "დირექტივის ჭდეების მოთავსება"
+msgstr "დირექტივის ჭდე [%s(ცარიელი)]"
 
 #: eeschema/sch_label.cpp:1951
 #, c-format
@@ -20433,9 +20365,9 @@ msgid "(Deleted Item)"
 msgstr ""
 
 #: eeschema/sch_sheet_pin.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "გრაფიკული"
+msgstr "იერარქიული ფურცლის საკონტაქტო ღერო '%s'"
 
 #: eeschema/sch_symbol.cpp:2153
 msgid "Power symbol"
@@ -21577,9 +21509,9 @@ msgid "%d"
 msgstr ""
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "%s-ის გახსნა"
+msgstr "%d-ის გაშვება"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -21680,9 +21612,9 @@ msgid "Another simulation is already running."
 msgstr ""
 
 #: eeschema/sim/simulator_frame.cpp:557
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ფაილის %s ჩატვირთვა ან დამუშავება შეუძლებელია"
 
 #: eeschema/sim/simulator_frame.cpp:640
 msgid "Save changes to workbook?"
@@ -22191,9 +22123,8 @@ msgid "Create an editable copy of the symbol or the entire library (%s)?"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
-#, fuzzy
 msgid "Select type of item to save"
-msgstr "აირჩიეთ ფაილი"
+msgstr "აირჩიეთ შესანახი ელემენტის ტიპი"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1014
 msgid "Copy symbol"
@@ -22323,11 +22254,8 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:347
-#, fuzzy
 msgid "Create symbol in library:"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "სიმბოლოს შექმნა ბიბლიოთეკაში:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:366
 #: eeschema/symbol_editor/symbol_editor.cpp:1109
@@ -22405,11 +22333,9 @@ msgid "Library '%s' is read-only."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1142
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "ჩატვირთვის შეცდომა სიმბოლოების ბიბლიოთეკის ფაილისთვის '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1150
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
@@ -22423,16 +22349,14 @@ msgid "Insufficient permissions to save library '%s'."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1184
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "შექმნის შეცდომა სიმბოლოების ბიბლიოთეკისთვის '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1191
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "სიმბოლო %s შენახულია ბიბლიოთეკაში '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1209
 #, c-format
@@ -22517,11 +22441,8 @@ msgid "Import Symbol"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:46
-#, fuzzy
 msgid "Import symbol to library:"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "სიმბოლოს შემოტანა ბიბლიოთეკაში:"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:93
 #: pcbnew/load_select_footprint.cpp:353
@@ -22679,9 +22600,8 @@ msgid "Selection modes"
 msgstr "მონიშვნის რეჟიმები"
 
 #: eeschema/toolbars_sch_editor.cpp:238
-#, fuzzy
 msgid "Select the current variant to display and edit."
-msgstr "აირჩიეთ ფაილი"
+msgstr "აირჩიეთ მიმდინარე ვარიანტი საჩვენებლად და ჩასასწორებლად."
 
 #: eeschema/toolbars_symbol_viewer.cpp:135
 msgid "Symbol Viewer"
@@ -22771,9 +22691,9 @@ msgid "false"
 msgstr "მცდარი"
 
 #: eeschema/tools/backannotate.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s reference designator to '%s'."
-msgstr "მიმართვის გამყოფი:"
+msgstr "%s მითითების შეცვლა '%s'-ზე."
 
 #: eeschema/tools/backannotate.cpp:843
 #, c-format
@@ -23209,14 +23129,12 @@ msgid "Add selected design block to current sheet"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:468 pcbnew/tools/pcb_actions.cpp:482
-#, fuzzy
 msgid "Place Linked Design Block"
-msgstr "აირჩიეთ დიზაინის ბლოკის ბიბლიოთეკის ცხრილის ფაილი."
+msgstr "მიბმული დიზაინის ბლოკის მოთავსება"
 
 #: eeschema/tools/sch_actions.cpp:469 pcbnew/tools/pcb_actions.cpp:483
-#, fuzzy
 msgid "Place design block linked to selected group"
-msgstr "აირჩიეთ დიზაინის ბლოკის ბიბლიოთეკის ცხრილის ფაილი."
+msgstr "მონიშნულ ჯგუფთან მიბმული დიზაინის ბლოკის მოთავსება"
 
 #: eeschema/tools/sch_actions.cpp:476 pcbnew/tools/pcb_actions.cpp:499
 msgid "Save to Linked Design Block"
@@ -23271,9 +23189,8 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "ადგილი X-ზე:"
+msgstr "საკონტაქტო ღეროების მოთავსება ფურცლიდან"
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
@@ -23410,9 +23327,8 @@ msgid "Swap Unit Labels"
 msgstr "ერთეულის ჭდეების მიმოცვლა"
 
 #: eeschema/tools/sch_actions.cpp:792
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "პარამეტრის წაშლა"
+msgstr "მონიშნული ერთეულების ჭდეების მიმოცვლა"
 
 #: eeschema/tools/sch_actions.cpp:808
 msgid "Edit Reference Designator..."
@@ -23850,9 +23766,8 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1264
-#, fuzzy
 msgid "Mark items excluded from simulation"
-msgstr "სიმულაციის გაშვება"
+msgstr "სიმულაციიდან ამოღებული ელემენტების დანიშვნა"
 
 #: eeschema/tools/sch_actions.cpp:1265
 msgid "Draw 'X's over items which have been excluded from simulation"
@@ -24124,14 +24039,12 @@ msgid "Export Current Plot to Schematic"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1614
-#, fuzzy
 msgid "Show Simulation Side Panel"
-msgstr "მენიუებში ხატულების ჩვენება"
+msgstr "სიმულაციის გვერდითი პანელის ჩვენება"
 
 #: eeschema/tools/sch_actions.cpp:1619
-#, fuzzy
 msgid "Show Simulation Console Panel"
-msgstr "მენიუებში ხატულების ჩვენება"
+msgstr "სიმულაციის კონსოლის პანელის ჩვენება"
 
 #: eeschema/tools/sch_actions.cpp:1624
 msgid "Show Legend"
@@ -24320,9 +24233,8 @@ msgstr ""
 #: eeschema/tools/sch_drawing_tools.cpp:2199
 #: eeschema/tools/sch_drawing_tools.cpp:2295
 #: eeschema/tools/sch_drawing_tools.cpp:3545
-#, fuzzy
 msgid "No new hierarchical labels found."
-msgstr "გრაფიკული"
+msgstr "ახალი იერარქიული ჭდეები აღმოჩენილი არაა."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2212
 #: eeschema/tools/sch_drawing_tools.cpp:3623
@@ -24525,11 +24437,8 @@ msgid "Export Symbols"
 msgstr "სიმბოლოების გატანა"
 
 #: eeschema/tools/sch_editor_control.cpp:350
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "სიმბოლოების გატანა ბიბლიოთეკაში:"
 
 #: eeschema/tools/sch_editor_control.cpp:351
 msgid "Include power symbols in export"
@@ -24594,9 +24503,9 @@ msgstr "შეცდომების გარეშე."
 #: eeschema/tools/sch_editor_control.cpp:2966
 #: eeschema/tools/sch_editor_control.cpp:3013 pcbnew/tools/pcb_control.cpp:1574
 #: pcbnew/tools/pcb_control.cpp:1630
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find design block %s."
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ ვიპოვე დიზაინის ბლოკი %s."
 
 #: eeschema/tools/sch_editor_control.cpp:2974
 #, c-format
@@ -24761,9 +24670,9 @@ msgid "SPICE Netlist"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_control.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "სიმბოლოს %s წაკითხვა ჩავარდა ბიბლიოთეკიდან %s."
 
 #: eeschema/tools/symbol_editor_control.cpp:303
 msgid "No symbol library selected."
@@ -24772,9 +24681,9 @@ msgstr ""
 #: eeschema/tools/symbol_editor_control.cpp:310
 #: eeschema/tools/symbol_editor_control.cpp:461
 #: eeschema/tools/symbol_editor_control.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "სიმბოლოების ბიბლიოთეკა '%s' აღმოჩენილი არაა."
 
 #: eeschema/tools/symbol_editor_control.cpp:397
 #: pcbnew/tools/footprint_editor_control.cpp:657
@@ -24816,16 +24725,12 @@ msgid "SVG File Name"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_control.cpp:838
-#, fuzzy
 msgid "No symbol to flatten"
-msgstr ""
-"დიზაინის ბლოკების ბიბლიოთეკის ცხრილის '%s' შექმნის შეცდომა\n"
-"%s"
+msgstr "გასაბრტყელებელი სიმბოლოს გარეშე"
 
 #: eeschema/tools/symbol_editor_control.cpp:844
-#, fuzzy
 msgid "Failed to flatten symbol"
-msgstr "%s-ის შენახვა ჩავარდა."
+msgstr "სიმბოლოს გაბრტყელება ჩავარდა"
 
 #: eeschema/tools/symbol_editor_control.cpp:848
 msgid "Failed to update library with flattened symbol"
@@ -24904,9 +24809,8 @@ msgid "Create a new project for this schematic"
 msgstr ""
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "აღარ მაჩვენო"
+msgstr "არ დააკოპირო ქვეფურცლები"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
 msgid "Copy internal subsheets only"
@@ -25031,9 +24935,8 @@ msgstr ""
 
 #: eeschema/widgets/sch_design_block_pane.cpp:113
 #: pcbnew/widgets/pcb_design_block_pane.cpp:107
-#, fuzzy
 msgid "Place the design block as a group."
-msgstr "აირჩიეთ დიზაინის ბლოკის ბიბლიოთეკის ცხრილის ფაილი."
+msgstr "დიზაინის ბლოკის მოთავსება ჯგუფის სახით."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:119
 msgid "Place the design block as a new sheet."
@@ -26204,9 +26107,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr ""
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "ფაილში გატანა"
+msgstr "KiCad-ის დაფის ფაილად გატანა"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:145
 msgid "D Codes"
@@ -26508,9 +26410,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_jobset_run.cpp:53
-#, fuzzy
 msgid "Jobset file to be run"
-msgstr "აირჩიეთ ფაილი"
+msgstr "გასაშვები დავალებების ნაკრები"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
@@ -26894,9 +26795,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_gencad.cpp:32
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "ფაილში გატანა"
+msgstr "PCB-ის გატანა Gencad-ის ფორმატში"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:38
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:213
@@ -27209,24 +27109,20 @@ msgid "Invalid pivot format\n"
 msgstr "არასწორი ლილვის ფორმატი\n"
 
 #: kicad/cli/command_pcb_render.cpp:383
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "მითითებული ფორმატი არასწორია\n"
+msgstr "არასწორი ზემო სინათლის ინტენსივობის ფორმატი\n"
 
 #: kicad/cli/command_pcb_render.cpp:390
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "მითითებული ფორმატი არასწორია\n"
+msgstr "არასწორი ქვემო სინათლის ინტენსივობის ფორმატი\n"
 
 #: kicad/cli/command_pcb_render.cpp:397
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "მითითებული ფორმატი არასწორია\n"
+msgstr "არასწორი გვერდითი სინათლის ინტენსივობის ფორმატი\n"
 
 #: kicad/cli/command_pcb_render.cpp:404
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "მითითებული ფორმატი არასწორია\n"
+msgstr "არასწორი კამერის სინათლის ინტენსივობის ფორმატი\n"
 
 #: kicad/cli/command_pcb_render.cpp:419
 msgid "Invalid image format\n"
@@ -27911,9 +27807,8 @@ msgid "Add an info page later:"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:142
-#, fuzzy
 msgid "Create a file at"
-msgstr "ახალი საქაღალდის შექმნა"
+msgstr "ფაილის შექმნა მისამართზე"
 
 #: kicad/dialogs/template_default_html.h:142
 msgid ""
@@ -27988,9 +27883,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr ""
 
 #: kicad/jobs_runner.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "დეტალური მორგების რეჟიმი"
+msgstr "გაშვებულია დავალება %d: %s"
 
 #: kicad/jobs_runner.cpp:280
 msgid "Job successful"
@@ -28168,9 +28063,8 @@ msgid "Add Default Repository"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
-#, fuzzy
 msgid "Fully qualified repository url:"
-msgstr "არასწორი რეპოზიტორია."
+msgstr "სრულად შედგენილი რეპოზიტორიის ბმული:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add Repository"
@@ -28636,14 +28530,14 @@ msgid "%d out of %d operations were initialized but not successful."
 msgstr ""
 
 #: kicad/project_template.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "პირადი გასაღების ფაილის '%s' გახსნის შეცდომა"
+msgstr "ვერ გავხსენი ნიმუშების ბილიკი '%s'"
 
 #: kicad/project_template.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected 'meta' directory at '%s'"
-msgstr "ვერ შევქმენი სამიზნე საქაღალდე: %s"
+msgstr "ვერ ვიპოვე მოსალოდნელი საქაღალდე 'meta' მისამართზე '%s'"
 
 #: kicad/project_template.cpp:64
 #, c-format
@@ -28824,9 +28718,8 @@ msgid "Other..."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1040
-#, fuzzy
 msgid "Switch to a different branch"
-msgstr "პროექტის მმართველი"
+msgstr "გადართვა სხვა ბრენჩზე"
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Switch to Branch"
@@ -28870,9 +28763,8 @@ msgid "The selected directory is already a Git project."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1680
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "ნაგულისხმევი დაშორებულის დაყენება ჩავარდა."
+msgstr "Git-ის პროექტის ინიციალიზაცია ჩავარდა."
 
 #: kicad/project_tree_pane.cpp:1688
 msgid "Set default remote"
@@ -28900,9 +28792,8 @@ msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1836
-#, fuzzy
 msgid "Failed to remove VCS"
-msgstr "%s-ის შენახვა ჩავარდა."
+msgstr "VCS-ის წაშლა ჩავარდა"
 
 #: kicad/project_tree_pane.cpp:2077
 msgid "The selected directory is not a Git project."
@@ -28921,9 +28812,8 @@ msgid "New Project..."
 msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "არსებული პროექტის გახსნა"
+msgstr "ახალი პროექტის შექმნა არსებულ პროექტის გამოყენებით"
 
 #: kicad/tools/kicad_manager_actions.cpp:51
 msgid "Clone Project from Repository..."
@@ -29129,9 +29019,9 @@ msgid "Requesting update info"
 msgstr ""
 
 #: kicad/update_manager.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse update response: %s"
-msgstr "ხის ჩაწერა ჩავარდა: %s"
+msgstr "ვერ დავამუშავე განახლების პასუხი: %s"
 
 #: kicad/widgets/filedlg_new_project.h:36
 msgid "Create a new folder for the project"
@@ -29153,9 +29043,8 @@ msgid "File not found"
 msgstr "ფაილი ვერ მოიძებნა"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "რეპოზიტორიის დაკლონვა ჩავარდა."
+msgstr "PDF-ის ჩატვირთვა ჩავარდა"
 
 #: libs/kiplatform/include/printing.h:50
 msgid "Failed to print"
@@ -29548,9 +29437,8 @@ msgid "Page Selector"
 msgstr "გვერდის ამრჩევი"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:164
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "აირჩიეთ ფაილი"
+msgstr "აირჩიეთ გვერდი ელემენტის ჩვენების სიმულაციისთვის"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -34511,9 +34399,8 @@ msgid "Update text layers and visibilities"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update text sizes and styles"
-msgstr "პარამეტრების განახლება"
+msgstr "ტექსტის ზომების და სტილების განახლება"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Update text positions"
@@ -34602,9 +34489,8 @@ msgid "Update/reset text layers and visibilities"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
-msgstr "პარამეტრების განახლება"
+msgstr "ტექსტის ზომების და სტილების განახლება/ჩამოყრა"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
 msgid "Update/reset text positions"
@@ -34781,9 +34667,8 @@ msgid "*.emn"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "სვეტების მონიშვნა..."
+msgstr "დააყენეთ დაფის მიმართვის წერტილი:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:194
@@ -34845,9 +34730,9 @@ msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ წავშალე არსებული გამოტანის ფაილი '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:335
 #, c-format
@@ -34871,9 +34756,9 @@ msgid "Cannot remove existing output directory '%s'."
 msgstr "არსებული გამოტანს საქაღალდის '%s' წაშლა ჩავარდა."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' already exists."
-msgstr "გამოტანის საქაღალდე"
+msgstr "გამოტანის საქაღალდე '%s' უკვე არსებობს."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:416
 #, c-format
@@ -35021,9 +34906,8 @@ msgid "Export board body"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "გამორიცხული"
+msgstr "გამტარი ნახვრეტების ამოჭრა დაფის სხეულზე"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
 msgid "Export silkscreen"
@@ -35850,9 +35734,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:518
-#, fuzzy
 msgid "Explicit jumper pad groups:"
-msgstr "წევრები"
+msgstr "აშკარა გადამრთველის პადინგის ჯგუფები:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:120
 msgid "All footprint generator scripts were loaded"
@@ -36282,9 +36165,9 @@ msgid "Unlocked vias"
 msgstr "განბლოკილი განავალი არხები"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "ფენების შექმნა"
+msgstr "მხოლოდ მიმდინარე ფენა (%s)"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -37072,9 +36955,8 @@ msgid "Replace existing placement rule areas"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:45
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "განლაგება"
+msgstr "ნაკვალევების დაჯგუფება მათი წესის ადგილების მოთავსების მიხედვით"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:56
 msgid "Generate Multichannel Rule Areas"
@@ -39055,14 +38937,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:67
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "სხვა ველები"
+msgstr "ნაკვალევის ველების განახლება სიმბოლოებიდან"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:71
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "სიმბოლოებში არ აღმოჩენილი ნაკვალევის ველების წაშლა"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:57
 msgid "Update PCB from Schematic"
@@ -39115,9 +38995,8 @@ msgid "Import references from selection"
 msgstr "მიმართვების შემოტანა მონიშნულიდან"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
-#, fuzzy
 msgid "Assign component class per sheet"
-msgstr "კომპონენტები"
+msgstr "კომპონენტის კლასის მინიჭება თითოეული ფურცლისთვის"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
 msgid "Custom Assignments:"
@@ -39378,9 +39257,8 @@ msgid "When routing tracks"
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "ფაილში გატანა"
+msgstr "მიმაგრება ბილიკებზე და გამტარ ნახვრეტებზე:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:352
 #: pcbnew/dialogs/panel_edit_options_base.cpp:360
@@ -39632,9 +39510,8 @@ msgid "Place items matching component class:"
 msgstr ""
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
-#, fuzzy
 msgid "Place items in group:"
-msgstr "გავლის ადგილის მოთავსება"
+msgstr "ელემენტების მოთავსება ჯგუფში:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -40077,9 +39954,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1069
-#, fuzzy
 msgid "Inner Layers to Be Deleted"
-msgstr "ფენები"
+msgstr "შიდა ფენები წასაშლელად"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1104
 msgid "All user-defined layers have already been added."
@@ -40213,14 +40089,14 @@ msgid "Rules '%s' and '%s' share the same condition."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "მიმართვის გამყოფი:"
+msgstr "წესი '%s' მიმართავს აღუწერელ ქსელის კლასს '%s'."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:810
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
-msgstr "მიმართვის გამყოფი:"
+msgstr "წესი '%s' მიმართავს აღუწერელ ფენას: %s."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:873
 msgid "Design rules cannot be added without a project"
@@ -40984,14 +40860,12 @@ msgid "Default Properties for Single Track Tuning"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "განსხვავება"
+msgstr "ნაგულისხმევი თვისებები დიფერენციალური წყვილებისთვის"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default Properties for Differential Pair Skews"
-msgstr "განსხვავება"
+msgstr "ნაგულისხმევი თვისებები დიფერენციალური წყვილის დახრებისთვის"
 
 #: pcbnew/drc/drc_cache_generator.cpp:147
 msgid "Gathering copper items..."
@@ -41765,9 +41639,9 @@ msgid "Missing component class name."
 msgstr "ნაკლული კომპონენტის კლასის სახელი."
 
 #: pcbnew/drc/drc_rule_parser.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ დავამუშავე გამოსახულება '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:448
 msgid "Time based units not allowed for constraint type."
@@ -42296,18 +42170,17 @@ msgid "%s corners differ."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:630
-#, fuzzy
 msgid "Footprint stackup mode differs."
-msgstr "სხვა ველები"
+msgstr "ნაკვალევის ჯგუფის რეჟიმი განსხვავდება."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:636
 msgid "Footprint layers differ."
 msgstr "ნაკვალევის ფენები განსხვავდება."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:668
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "ნაკვალევს აქვს %lu ფენა, რომელიც დაფაზე არაა: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:679
 #, c-format
@@ -42363,9 +42236,8 @@ msgid "%s differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
-#, fuzzy
 msgid "Barcode count differs."
-msgstr "ბარკოდის თვისებები"
+msgstr "ბარკოდების რაოდენობა განსხვავდება."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:933
 msgid "Pad count differs."
@@ -42388,14 +42260,14 @@ msgid "Checking board footprints against library..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "ნაკვალევების ბიბლიოთეკა '%s' აღმოჩენილი არაა მისამარტზე '%s'"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "ნაკვალევი '%s' არ ემთხვევა ასლს ბიბლიოთეკაში '%s'"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:121
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:129
@@ -42436,9 +42308,8 @@ msgid "(%s min count %d; actual %d)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:321
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "კავშირი"
+msgstr "მეტისმეტად ცოტა გამტარი ნახვრეტი კავშირზე"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:350
 msgid "Gathering length-constrained connections..."
@@ -42510,9 +42381,9 @@ msgid "Value (%s) doesn't match symbol value (%s)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)"
-msgstr "სხვა ველები"
+msgstr "%s არ ემთხვევა ნაკვალევს, რომელიც აქვს სიმბოლოს (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:167
 #, c-format
@@ -42845,19 +42716,19 @@ msgid "No model defined for %s."
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1240
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "სარჩილავი პასტა"
+msgstr "არ არსებობს მოდელი ფაილის სახელისთვის '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1251
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "სარჩილავი პასტა"
+msgstr "მდებარეობის მონაცემების გარეშე ფაილის სახელისთვის '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ დავამატე კომპონენტი ფაილის სახელით '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
 #, c-format
@@ -42871,9 +42742,8 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1459
 #: pcbnew/exporters/step/step_pcb_model.cpp:1853
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "ბრენჩის შექმნა ჩავარდა."
+msgstr "პრიზმული მოხაზულობის შექმნა ჩავარდა"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1531
 #, c-format
@@ -42975,9 +42845,9 @@ msgid "Cannot create input stream '%s'.\n"
 msgstr "ვერ შევქმენი შეყვანის ნაკადი '%s'\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2410
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "გამოტანს საქაღალდის შექმნა ჩავარდა\n"
+msgstr "ვერ შევქმენი გამოტანის ნაკადი '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2418
 msgid "Impossible create compress stream"
@@ -43009,15 +42879,15 @@ msgid "Cannot identify actual file type for '%s'."
 msgstr "ვერ დავადგინე ტიპი ფაილისთვის '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2982
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "ფაილის გახსნის შეცდომა: %s"
+msgstr "ვერ გადმოვიტანე მოდელის მონაცემები ფაილიდან '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3443
 #: pcbnew/exporters/step/step_pcb_model.cpp:3490
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "გამოტანს საქაღალდის შექმნა ჩავარდა\n"
+msgstr "არასწორი PCB ანაწყობი. ვერ შევქმენი გამოტანის ფაილი '%s'.\n"
 
 #: pcbnew/files.cpp:153
 msgid "All KiCad Board Files"
@@ -43279,9 +43149,8 @@ msgid "Show/hide 3D view panel"
 msgstr ""
 
 #: pcbnew/footprint_chooser_frame.cpp:168
-#, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "სხვა ველები"
+msgstr "ნაკვალევის ხედის პანელის ჩვენება/დამალვა"
 
 #: pcbnew/footprint_chooser_frame.cpp:176
 msgid "Show 3D viewer in own window"
@@ -43432,9 +43301,8 @@ msgid "Export Footprints"
 msgstr "ნაფეხურების გატანა"
 
 #: pcbnew/footprint_libraries_utils.cpp:641
-#, fuzzy
 msgid "Export footprints to library:"
-msgstr "სარჩილავი პასტა"
+msgstr "ნაკვალევების გატანა ბიბლიოთეკაში:"
 
 #: pcbnew/footprint_libraries_utils.cpp:642
 msgid "Update board footprints to link to exported footprints"
@@ -43806,9 +43674,8 @@ msgid "Footprints [%u items]"
 msgstr ""
 
 #: pcbnew/load_select_footprint.cpp:331
-#, fuzzy
 msgid "Save Footprint Library As"
-msgstr "კვლების მოთავსება"
+msgstr "ნაკვალევების ბიბლიოთეკის შენახვა, როგორც"
 
 #: pcbnew/load_select_footprint.cpp:360
 #, c-format
@@ -44251,24 +44118,24 @@ msgid "Update %s jumper pad groups"
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "ხელით მითითებული წესები"
+msgstr "%s-ის წაშლა ჯგუფიდან '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "ხელით მითითებული წესები"
+msgstr "%s წაიშალა ჯგუფიდან '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "ხელით მითითებული წესები"
+msgstr "%s-ის ჩამატება ჯგუფში '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group '%s'."
-msgstr "ხელით მითითებული წესები"
+msgstr "%s დაემატა ჯგუფს '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1018
 #, c-format
@@ -44376,9 +44243,9 @@ msgid "Changed group name to '%s' to '%s'."
 msgstr "ჯგუფის სახელი შეიცვალა '%s'-დან '%s'-ზე."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1476
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link to '%s'."
-msgstr "მიმართვის გამყოფი:"
+msgstr "ჯგუფის ბიბლიოთეკის ბმულის შეცვლა '%s'-ზე."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
 #, c-format
@@ -44403,9 +44270,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1665
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for %s."
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "%s-სთვის აღმოჩენილია ერთზე მეტი ნაკვალევი."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1698
 #, c-format
@@ -44846,9 +44713,9 @@ msgid "Thermal Relief Gap"
 msgstr ""
 
 #: pcbnew/pcb_barcode.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
-msgstr "წესები"
+msgstr "ბარკოდი '%s' %s-ზე"
 
 #: pcbnew/pcb_barcode.cpp:694
 msgid "CODE_39"
@@ -44891,9 +44758,8 @@ msgid "Show Text"
 msgstr "ტექსტის ჩვენება"
 
 #: pcbnew/pcb_barcode.cpp:740
-#, fuzzy
 msgid "Barcode Type"
-msgstr "წყაროს ტიპი"
+msgstr "ბარკოდის ტიპი"
 
 #: pcbnew/pcb_barcode.cpp:775
 msgid "Margin X"
@@ -44909,9 +44775,8 @@ msgid "+/- to switch"
 msgstr ""
 
 #: pcbnew/pcb_base_edit_frame.cpp:437
-#, fuzzy
 msgid "Edit Vertices"
-msgstr "თვისებების ჩასწორება"
+msgstr "წვეროების ჩასწორება"
 
 #: pcbnew/pcb_base_frame.cpp:1195
 msgid ""
@@ -45467,9 +45332,9 @@ msgid "No footprints in library '%s'"
 msgstr ""
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "ნაკვალევი '%s' '%s'-შუ აღმოჩენილი არაა."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:44
 msgid "Altium Designer PCB files"
@@ -46242,9 +46107,8 @@ msgid "Saving file"
 msgstr "ფაილის შენახვა"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3499
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
+msgstr "IPC-2581 მონაცემების ბუფერში შენახვა ჩავარდა."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -46545,9 +46409,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:901
-#, fuzzy
 msgid "Failed to add component data"
-msgstr "ჭდის შექმნა ჩავარდა."
+msgstr "კომპონენტის მონაცემების დამატება ჩავარდა"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
 msgid "Creating ODB++ Structure"
@@ -46629,9 +46492,8 @@ msgid "Marker (%s)"
 msgstr ""
 
 #: pcbnew/pcb_plotter.cpp:78
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "მიმდინარე პროექტის დახურვა"
+msgstr "დასახაზად ფენები არჩეული არაა."
 
 #: pcbnew/pcb_plotter.cpp:481
 #, c-format
@@ -46740,9 +46602,8 @@ msgid "removed annular ring"
 msgstr ""
 
 #: pcbnew/pcb_track.cpp:1427
-#, fuzzy
 msgid "Via diameter is too small."
-msgstr "გამტარი ნახვრეტის დიამეტრის ამრჩევი"
+msgstr "გამტარი ნახვრეტის დიამეტრი ძალიან პატარაა."
 
 #: pcbnew/pcb_track.cpp:1434
 msgid "Via drill is too small."
@@ -46753,9 +46614,8 @@ msgid "No via hole size defined."
 msgstr ""
 
 #: pcbnew/pcb_track.cpp:1448
-#, fuzzy
 msgid "No via diameter defined."
-msgstr "სამიზნეები აღწერილი არაა"
+msgstr "გამტარი ნახვრეტის დიამეტრი აღწერილი არაა."
 
 #: pcbnew/pcb_track.cpp:1456
 msgid "Via hole size must be smaller than via diameter"
@@ -46995,9 +46855,9 @@ msgid "Failed to load board\n"
 msgstr "დაფის ჩატვირთვა ჩავარდა\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "მითითებული ფორმატი არასწორია\n"
+msgstr "არასწორი ფენის სახელი '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:515 pcbnew/pcbnew_jobs_handler.cpp:595
 #: pcbnew/pcbnew_jobs_handler.cpp:643
@@ -47108,9 +46968,9 @@ msgid "Unable to save DRC report to %s\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2312
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "ERC ანგარიში ჩაიწერა %s-ში\n"
+msgstr "DRC-ის ანგარიშები შენახულია %s-ში\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2319
 msgid "Saved board\n"
@@ -47709,9 +47569,8 @@ msgid "Track tuning tools"
 msgstr "ბილიკის მორგების ხელსაწყოები"
 
 #: pcbnew/toolbars_pcb_editor.cpp:235
-#, fuzzy
 msgid "PCB origins and points"
-msgstr "საზღვრის ფერი"
+msgstr "PCB-ის წყაროები და წერტილები"
 
 #: pcbnew/toolbars_pcb_editor.cpp:389
 msgid ""
@@ -48275,18 +48134,18 @@ msgid "Solder paste absolute clearance resolution for:"
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1425
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste absolute clearance: %s."
-msgstr "დაშვება:"
+msgstr "ამოხსნილი სარჩილავი პასტის აბსოლუტური დაშორება: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1428
 msgid "Solder paste relative clearance resolution for:"
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder paste relative clearance: %s."
-msgstr "დაშვება:"
+msgstr "ამოხსნილი სარჩილავი პასტის ფარდობითი დაშორება: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1455
 #, c-format
@@ -48386,9 +48245,8 @@ msgid "Select Via Size"
 msgstr ""
 
 #: pcbnew/tools/drawing_tool.cpp:345
-#, fuzzy
 msgid "Constrain to H, V"
-msgstr "შეზღუდვები"
+msgstr "H, V შეზღუდვები"
 
 #: pcbnew/tools/drawing_tool.cpp:386 pcbnew/tools/drawing_tool.cpp:2575
 msgid "Draw Line"
@@ -48813,23 +48671,20 @@ msgid "Some of the polygons could not be intersected."
 msgstr ""
 
 #: pcbnew/tools/item_modification_routine.cpp:749
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "პარამეტრის წაშლა"
+msgstr "მონიშნული ელემენტების გარეთ გატანა შეუძლებელია."
 
 #: pcbnew/tools/item_modification_routine.cpp:751
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "ფაილი ნაპოვნი არაა."
+msgstr "ზოგიერთი ელემენტის გარეთ გატანა შეუძლებელია."
 
 #: pcbnew/tools/item_modification_routine.cpp:1005
 msgid "Cannot create rectangle outset"
 msgstr "ვერ შევქმენი ოთხკუთხედის კონტური"
 
 #: pcbnew/tools/multichannel_tool.cpp:511
-#, fuzzy
 msgid "Select a reference Rule Area to copy from..."
-msgstr "სვეტების მონიშვნა..."
+msgstr "აირჩიეთ მიმართვის წესის ადგილი დასაკოპირებლად..."
 
 #: pcbnew/tools/multichannel_tool.cpp:530
 msgid "No Rule Areas to repeat layout to have been found."
@@ -49130,9 +48985,8 @@ msgid "Enables snapping to objects on the active layer only"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:434
-#, fuzzy
 msgid "Snap to Objects on All Layers"
-msgstr "ფენის მონიშვნა"
+msgstr "ყველა ფენის ობიექტებზე მიბმა"
 
 #: pcbnew/tools/pcb_actions.cpp:435
 msgid "Enables snapping to objects on all visible layers"
@@ -49159,14 +49013,12 @@ msgid "Add selected design block to current board"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:491
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "ბიბლიოთეკები"
+msgstr "დიზაინის ბლოკის განლაგების გადატარება"
 
 #: pcbnew/tools/pcb_actions.cpp:492
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "აირჩიეთ დიზაინის ბლოკის ბიბლიოთეკის ცხრილის ფაილი."
+msgstr "მიბმული დიზაინის ბლოკის განლაგების გადატარება მონიშნულ ჯგუფზე"
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Save Current Board as Design Block..."
@@ -49293,9 +49145,8 @@ msgid "Updates selected track & via sizes"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Switch track to next enabled copper layer"
-msgstr "გადართვა შიდა ფენაზე 21"
+msgstr "ბილიკის გადართვა შემდეგ ჩართულ სპილენძის ფენაზე"
 
 #: pcbnew/tools/pcb_actions.cpp:750
 msgid "Switch track to previous enabled copper layer"
@@ -49334,9 +49185,8 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit Vertices..."
-msgstr "ქსელის კლასების ჩასწორება..."
+msgstr "წვეროების ჩასწორება...."
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Edit polygon vertices using a table"
@@ -50254,9 +50104,8 @@ msgid "Switch to Inner Layer 30"
 msgstr "გადართვა შიდა ფენაზე 30"
 
 #: pcbnew/tools/pcb_actions.cpp:2091
-#, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
-msgstr "ფენის მონიშვნა"
+msgstr "სპილენძის (B.Cu) ფენაზე გადართვა"
 
 #: pcbnew/tools/pcb_actions.cpp:2100
 msgid "Switch to Next Layer"
@@ -50611,9 +50460,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "მოთავსების წესის ადგილების გენერაცია..."
 
 #: pcbnew/tools/pcb_actions.cpp:2494
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "მიმართვის გამყოფი:"
+msgstr "შექმნის საუკეთესოდ ჩატევადი მოთავსების წესის ადგილებს"
 
 #: pcbnew/tools/pcb_actions.cpp:2501
 msgid "Repeat Layout..."
@@ -50700,9 +50548,8 @@ msgid "Tune Length of a Single Track"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2605
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "განსხვავება"
+msgstr "დიფერენციალური წყვილის სიგრძის მორგება"
 
 #: pcbnew/tools/pcb_actions.cpp:2617
 msgid "Tune Skew of a Differential Pair"
@@ -50812,9 +50659,8 @@ msgid "Length Tuning Settings..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2768
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "ტექსტის თვისებები"
+msgstr "მორგების ნიმუშის თვისებების დიალოგის ჩვენება"
 
 #: pcbnew/tools/pcb_actions.cpp:2788
 msgid "Show wizards selector"
@@ -50829,9 +50675,8 @@ msgid "Reset wizard parameters"
 msgstr "ოსტატის პარამეტრების ჩამოყრა"
 
 #: pcbnew/tools/pcb_actions.cpp:2796
-#, fuzzy
 msgid "Reset wizard parameters to default"
-msgstr "ნაგულისხმებ მნიშვნელობაზე დაბრუნება"
+msgstr "ოსტატის პარამეტრების ნაგულისხმევზე ჩამყორა"
 
 #: pcbnew/tools/pcb_actions.cpp:2802
 msgid "Select previous wizard page"
@@ -52148,9 +51993,8 @@ msgid "Show / Hide Columns"
 msgstr "სვეტების ჩვენება / დამალვა"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1398
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "ანგარიშის ფაილში ჩაწერა"
+msgstr "ქსელის ინპექტორის შენახვა ანგარიშის ფაილში"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1399
 msgid "Report file"
@@ -52221,9 +52065,8 @@ msgid "Y coord"
 msgstr ""
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "თვისებების ჩასწორება"
+msgstr "წვეროს ჩასწორება"
 
 #: pcbnew/zone.cpp:870
 msgid "No vias"
@@ -52304,9 +52147,9 @@ msgid "Rule Area %s"
 msgstr ""
 
 #: pcbnew/zone.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
-msgstr "წესები"
+msgstr "წესის ადგილი '%s' %s"
 
 #: pcbnew/zone.cpp:1200
 #, c-format
