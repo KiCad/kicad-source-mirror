@@ -486,19 +486,21 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             {
                 bool redraw3D = false;
 
-                VECTOR2I mousePos( controls->GetMousePosition() );
-
-                m_cursor = grid.BestSnapAnchor( mousePos, layers,
-                                                grid.GetSelectionGrid( selection ), sel_items );
+                GRID_HELPER_GRIDS selectionGrid = grid.GetSelectionGrid( selection );
 
                 if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
                 {
-                    grid.SetSnap( false );
-                    grid.SetUseGrid( false );
-                }
+                    VECTOR2I keyboardPos( controls->GetSettings().m_lastKeyboardCursorPosition );
 
-                m_cursor = grid.BestSnapAnchor( mousePos, layers,
-                                                grid.GetSelectionGrid( selection ), sel_items );
+                    grid.SetSnap( false );
+                    m_cursor = grid.Align( keyboardPos, selectionGrid );
+                }
+                else
+                {
+                    VECTOR2I mousePos( controls->GetMousePosition() );
+
+                    m_cursor = grid.BestSnapAnchor( mousePos, layers, selectionGrid, sel_items );
+                }
 
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
