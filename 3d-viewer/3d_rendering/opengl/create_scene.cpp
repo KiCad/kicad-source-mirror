@@ -1027,6 +1027,8 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     }
 #endif
 
+    S3D_CACHE* cacheMgr = m_boardAdapter.Get3dCacheManager();
+
     // Go for all footprints
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
@@ -1073,9 +1075,8 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                     embeddedFilesStack.push_back( footprint->GetEmbeddedFiles() );
                     embeddedFilesStack.push_back( m_boardAdapter.GetBoard()->GetEmbeddedFiles() );
 
-                    const S3DMODEL* modelPtr = m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename,
-                                                                                             footprintBasePath,
-                                                                                             embeddedFilesStack );
+                    const S3DMODEL* modelPtr = cacheMgr->GetModel( fp_model.m_Filename, footprintBasePath,
+                                                                   std::move( embeddedFilesStack ) );
 
                     // only add it if the return is not NULL
                     if( modelPtr )

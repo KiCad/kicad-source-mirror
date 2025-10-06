@@ -408,16 +408,10 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
     {
         const git_status_entry* entry = git_status_byindex( status_list, ii );
         std::string path( entry->head_to_index ? entry->head_to_index->old_file.path
-                        : entry->index_to_workdir->old_file.path );
+                                               : entry->index_to_workdir->old_file.path );
 
         wxString absPath = repoWorkDir + path;
-
-        FileStatus fileStatus;
-        fileStatus.filePath = absPath;
-        fileStatus.gitStatus = entry->status;
-        fileStatus.status = aHandler->ConvertStatus( entry->status );
-
-        fileStatusMap[absPath] = fileStatus;
+        fileStatusMap[absPath] = FileStatus{ absPath, aHandler->ConvertStatus( entry->status ), entry->status };
     }
 
     return fileStatusMap;
@@ -1014,8 +1008,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
         return PullResult::Error;
     }
 
-    std::pair<std::string, std::vector<CommitDetails>>& branchCommits =
-            aHandler->m_fetchResults.emplace_back();
+    std::pair<std::string, std::vector<CommitDetails>>& branchCommits = aHandler->m_fetchResults.emplace_back();
     branchCommits.first = currentBranchName;
 
     git_oid commitOid;

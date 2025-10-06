@@ -1049,7 +1049,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
         embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
         embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
-        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename, footprintBasePath, embeddedFilesStack );
+        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename, footprintBasePath,
+                                                         std::move( embeddedFilesStack ) );
 
         /* Calculate 3D shape rotation:
          * this is the rotation parameters, with an additional 180 deg rotation
@@ -1113,7 +1114,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
             wxFileName srcFile = m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename, footprintBasePath,
-                                                                              embeddedFilesStack );
+                                                                              std::move( embeddedFilesStack ) );
             if( !srcFile.FileExists() ) {
 		// skip model where the file cannot be resolved
                 ++sM;

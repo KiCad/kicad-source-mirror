@@ -360,7 +360,8 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
         embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
         embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
-        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath, embeddedFilesStack );
+        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath,
+                                                  std::move( embeddedFilesStack ) );
 
         if( mname.empty() || !wxFileName::FileExists( mname ) )
         {

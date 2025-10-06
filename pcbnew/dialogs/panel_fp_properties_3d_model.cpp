@@ -441,7 +441,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
         embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
         embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
 
-        wxString   fullPath = res->ResolvePath( model.m_Filename, footprintBasePath, embeddedFilesStack );
+        wxString   fullPath = res->ResolvePath( model.m_Filename, footprintBasePath, std::move( embeddedFilesStack ) );
         wxFileName fname( fullPath );
 
         EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesPanel->AddEmbeddedFile( fname.GetFullPath() );                                                                               ;
@@ -591,7 +591,7 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
     embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
     embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
 
-    wxString fullPath = resolv->ResolvePath( aFilename, footprintBasePath, embeddedFilesStack );
+    wxString fullPath = resolv->ResolvePath( aFilename, footprintBasePath, std::move( embeddedFilesStack ) );
 
     if( fullPath.IsEmpty() )
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;

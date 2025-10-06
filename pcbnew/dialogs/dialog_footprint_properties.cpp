@@ -82,7 +82,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     embeddedFilesStack.push_back( m_embeddedFiles->GetLocalFiles() );
     embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
 
-    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, embeddedFilesStack );
+    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, std::move( embeddedFilesStack ) );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;
