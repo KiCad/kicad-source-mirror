@@ -148,21 +148,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_libMgr = new LIB_SYMBOL_LIBRARY_MANAGER( *this );
 
-    bool loadingCancelled = false;
-
-    {
-        // Preload libraries before using SyncLibraries the first time, as the preload is
-        // multi-threaded
-        WX_PROGRESS_REPORTER reporter( this, _( "Load Symbol Libraries" ), m_libMgr->GetLibraryCount(),
-                                       PR_CAN_ABORT );
-        m_libMgr->Preload( reporter );
-
-        loadingCancelled = reporter.IsCancelled();
-        wxSafeYield();
-    }
-
-    SyncLibraries( false, loadingCancelled );
-
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
     m_treePane->GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) m_settings->m_LibrarySortMode );
 
@@ -293,6 +278,24 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Ensure the window is on top
     Raise();
+
+    // Load libraries
+    bool loadingCancelled = false;
+
+    {
+        // Preload libraries before using SyncLibraries the first time, as the preload is
+        // multi-threaded
+        WX_PROGRESS_REPORTER reporter( this, _( "Load Symbol Libraries" ), m_libMgr->GetLibraryCount(),
+                                       PR_CAN_ABORT );
+        m_libMgr->Preload( reporter );
+
+        loadingCancelled = reporter.IsCancelled();
+        wxSafeYield();
+    }
+
+    // run SyncLibraries with progress reporter enabled. The progress reporter is useful
+    // in debug mode because the loading time of ecah library can be really noticeable
+    SyncLibraries( true, loadingCancelled );
 
     if( loadingCancelled )
         ShowInfoBarWarning( _( "Symbol library loading canceled by user." ) );
