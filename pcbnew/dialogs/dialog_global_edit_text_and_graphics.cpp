@@ -309,7 +309,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     aCommit.Modify( aItem );
 
     PCB_FIELD*          field = dynamic_cast<PCB_FIELD*>( aItem );
-    PCB_TEXT*           text = dynamic_cast<PCB_TEXT*>( aItem );
+    EDA_TEXT*           text = dynamic_cast<EDA_TEXT*>( aItem );
     PCB_SHAPE*          shape = dynamic_cast<PCB_SHAPE*>( aItem );
     PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
     PCB_BARCODE*        barcode = dynamic_cast<PCB_BARCODE*>( aItem );
@@ -360,7 +360,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
                     text->SetKeepUpright( m_keepUpright->GetValue() );
 
                 if( m_centerOnFP->GetValue() == wxCHK_CHECKED )
-                    text->SetTextPos( text->GetParent()->GetCenter() );
+                    text->SetTextPos( aItem->GetParent()->GetCenter() );
             }
         }
 
@@ -393,7 +393,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     }
     else
     {
-        PCB_LAYER_ID layer = aItem->GetLayer();
         aItem->StyleFromSettings( *m_brdSettings, false );
     }
 }
@@ -508,6 +507,16 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 else if( m_values->GetValue() && textItem->GetText() == wxT( "${VALUE}" ) )
                     visitItem( commit, boardItem );
             }
+            else if( itemType == PCB_TABLE_T )
+            {
+                boardItem->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            if( child->Type() == PCB_TABLECELL_T && m_footprintTexts->GetValue() )
+                                visitItem( commit, child );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
+            }
             else if( BaseType( itemType ) == PCB_DIMENSION_T )
             {
                 if( m_footprintDimensions->GetValue() )
@@ -532,6 +541,16 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
             {
                 if( m_boardText->GetValue() )
                     visitItem( commit, boardItem );
+            }
+            else if( itemType == PCB_TABLE_T )
+            {
+                boardItem->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            if( child->Type() == PCB_TABLECELL_T && m_boardText->GetValue() )
+                                visitItem( commit, child );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
             }
             else if( BaseType( itemType ) == PCB_DIMENSION_T )
             {
