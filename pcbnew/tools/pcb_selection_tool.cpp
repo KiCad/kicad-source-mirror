@@ -3545,7 +3545,6 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     }
 
     case PCB_TEXTBOX_T:
-    case PCB_TABLECELL_T:
     {
         PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
 
@@ -3556,17 +3555,26 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
         break;
     }
 
+    case PCB_TABLECELL_T:
+    {
+        PCB_TABLECELL* tablecell = static_cast<PCB_TABLECELL*>( aItem );
+        auto           shape = std::make_shared<SHAPE_COMPOUND>( tablecell->MakeEffectiveShapesForHitTesting() );
+
+        shape->Collide( loc, aMaxDistance, &distance );
+
+        break;
+    }
+
     case PCB_TABLE_T:
     {
         PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
+        distance = aMaxDistance;
 
         for( PCB_TABLECELL* cell : table->GetCells() )
-        {
-            // Add a bit of slop to text-shapes
-            if( cell->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance ) )
-                distance = std::clamp( distance - ( aMaxDistance / 2 ), 0, distance );
-        }
+            distance = std::min( distance, hitTestDistance( aWhere, cell, aMaxDistance ) );
 
+        // Tables should defer to their table cells.  Never consider them exact.
+        distance = std::clamp( distance + ( aMaxDistance / 4 ), 0, aMaxDistance );
         break;
     }
 

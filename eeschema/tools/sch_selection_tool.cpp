@@ -1828,8 +1828,7 @@ void SCH_SELECTION_TOOL::GuessSelectionCandidates( SCH_COLLECTOR& collector, con
                     }
                 }
 
-                field->GetEffectiveTextShape( false, box, orient )
-                        ->Collide( poss, INT_MAX / 4, &dist );
+                field->GetEffectiveTextShape( false, box, orient )->Collide( poss, INT_MAX / 4, &dist );
             }
             else if( text )
             {
@@ -1837,18 +1836,9 @@ void SCH_SELECTION_TOOL::GuessSelectionCandidates( SCH_COLLECTOR& collector, con
             }
             else if( shape )
             {
-                std::vector<SHAPE*> shapes = shape->MakeEffectiveShapes();
+                auto shapes = std::make_shared<SHAPE_COMPOUND>( shape->MakeEffectiveShapesForHitTesting() );
 
-                for( SHAPE* s : shapes )
-                {
-                    int shapeDist = dist;
-                    s->Collide( poss, INT_MAX / 4, &shapeDist );
-
-                    if( shapeDist < dist )
-                        dist = shapeDist;
-
-                    delete s;
-                }
+                shapes->Collide( poss, INT_MAX / 4, &dist );
 
                 // Filled shapes win hit tests anywhere inside them
                 dominating = shape->IsFilledForHitTesting();

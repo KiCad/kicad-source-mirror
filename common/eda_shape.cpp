@@ -58,7 +58,6 @@ EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_rectangleHeight( 0 ),
         m_rectangleWidth( 0 ),
         m_cornerRadius( 0 ),
-        m_segmentLength( 0 ),
         m_editState( 0 ),
         m_proxyItem( false )
 {
@@ -78,7 +77,6 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
         m_rectangleHeight( 0 ),
         m_rectangleWidth( 0 ),
         m_cornerRadius( 0 ),
-        m_segmentLength( 0 ),
         m_editState( 0 ),
         m_proxyItem( false )
 {
@@ -463,20 +461,6 @@ void EDA_SHAPE::SetCornerRadius( int aRadius )
 }
 
 
-void EDA_SHAPE::SetLength( const double& aLength )
-{
-    switch( m_shape )
-    {
-    case SHAPE_T::SEGMENT:
-        m_segmentLength = aLength;
-        break;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-    }
-}
-
-
 void EDA_SHAPE::SetRectangleHeight( const int& aHeight )
 {
     switch ( m_shape )
@@ -514,20 +498,6 @@ void EDA_SHAPE::SetRectangle( const long long int& aHeight, const long long int&
     case SHAPE_T::RECTANGLE:
         m_rectangleHeight = aHeight;
         m_rectangleWidth = aWidth;
-        break;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-    }
-}
-
-
-void EDA_SHAPE::SetSegmentAngle( const EDA_ANGLE& aAngle )
-{
-    switch( m_shape )
-    {
-    case SHAPE_T::SEGMENT:
-        m_segmentAngle = aAngle;
         break;
 
     default:
@@ -1836,11 +1806,17 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 }
 
 
-std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly ) const
+std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly, bool aHittesting ) const
 {
     std::vector<SHAPE*> effectiveShapes;
     int                 width = GetEffectiveWidth();
-    bool                solidFill = ( IsSolidFill() || IsHatchedFill() || IsProxyItem() ) && !aEdgeOnly;
+    bool                solidFill =   IsSolidFill()
+                                   || IsHatchedFill()
+                                   || IsProxyItem()
+                                   || ( aHittesting && IsFilledForHitTesting() );
+
+    if( aEdgeOnly )
+        solidFill = false;
 
     switch( m_shape )
     {

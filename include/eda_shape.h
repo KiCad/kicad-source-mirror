@@ -381,9 +381,12 @@ public:
         return makeEffectiveShapes( aEdgeOnly );
     }
 
-    void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
+    virtual std::vector<SHAPE*> MakeEffectiveShapesForHitTesting() const
+    {
+        return makeEffectiveShapes( false, false, true );
+    }
 
-    void SetLength( const double& aLength );
+    void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
     void SetRectangleHeight( const int& aHeight );
 
@@ -393,8 +396,6 @@ public:
 
     void SetCornerRadius( int aRadius );
     int GetCornerRadius() const;
-
-    void SetSegmentAngle( const EDA_ANGLE& aAngle );
 
     bool IsClockwiseArc() const;
 
@@ -483,7 +484,8 @@ protected:
      *                       lineChain rather than a closed polygon.
      */
     // fixme: move to shape_compound
-    std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false ) const;
+    std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false,
+                                             bool aHittesting = false ) const;
 
     virtual int getMaxError() const { return 100; }
 
@@ -500,9 +502,6 @@ protected:
     long long int          m_rectangleHeight;
     long long int          m_rectangleWidth;
     int                    m_cornerRadius;
-
-    double                 m_segmentLength;
-    EDA_ANGLE              m_segmentAngle;
 
     VECTOR2I               m_start;             // Line start point or Circle center
     VECTOR2I               m_end;               // Line end point or Circle 3 o'clock point

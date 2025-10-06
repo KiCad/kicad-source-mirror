@@ -393,7 +393,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         {
             if( zone->HitTestForCorner( m_refPos, accuracy * 2 ) || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
-                Append( aTestItem );
+                Append( zone );
                 return INSPECT_RESULT::CONTINUE;
             }
             else if( !m_Guide->IgnoreZoneFills() )
@@ -402,7 +402,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
                 {
                     if( m_Guide->IsLayerVisible( layer ) && zone->HitTestFilledArea( layer, m_refPos ) )
                     {
-                        Append( aTestItem );
+                        Append( zone );
                         return INSPECT_RESULT::CONTINUE;
                     }
                 }
@@ -412,15 +412,15 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         {
             if( footprint->HitTest( m_refPos, accuracy ) && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {
-                Append( aTestItem );
+                Append( footprint );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
         else if( pad || via )
         {
-            if( aTestItem->HitTest( m_refPos, accuracy ) )
+            if( boardItem->HitTest( m_refPos, accuracy ) )
             {
-                Append( aTestItem );
+                Append( boardItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
@@ -437,9 +437,9 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
                     accuracy = KiROUND( accuracy * 1.5 );
                 }
 
-                if( aTestItem->HitTest( m_refPos, accuracy ) )
+                if( boardItem->HitTest( m_refPos, accuracy ) )
                 {
-                    Append( aTestItem );
+                    Append( boardItem );
                     return INSPECT_RESULT::CONTINUE;
                 }
             }
@@ -464,7 +464,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         {
             if( zone->HitTestForCorner( m_refPos, accuracy * 2 ) || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
-                Append2nd( aTestItem );
+                Append2nd( zone );
                 return INSPECT_RESULT::CONTINUE;
             }
             else if( !m_Guide->IgnoreZoneFills() )
@@ -473,7 +473,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
                 {
                     if( m_Guide->IsLayerVisible( layer ) && zone->HitTestFilledArea( layer, m_refPos ) )
                     {
-                        Append2nd( aTestItem );
+                        Append2nd( zone );
                         return INSPECT_RESULT::CONTINUE;
                     }
                 }
@@ -486,15 +486,15 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
 
             if( footprint->HitTest( m_refPos, accuracy ) && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {
-                Append2nd( aTestItem );
+                Append2nd( footprint );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
         else if( pad || via )
         {
-            if( aTestItem->HitTest( m_refPos, accuracy ) )
+            if( boardItem->HitTest( m_refPos, accuracy ) )
             {
-                Append2nd( aTestItem );
+                Append2nd( boardItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
@@ -507,9 +507,9 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
                 accuracy = KiROUND( accuracy * 1.5 );
             }
 
-            if( aTestItem->HitTest( m_refPos, accuracy ) )
+            if( boardItem->HitTest( m_refPos, accuracy ) )
             {
-                Append2nd( aTestItem );
+                Append2nd( boardItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
