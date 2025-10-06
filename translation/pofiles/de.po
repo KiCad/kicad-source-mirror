@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-06 07:05+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-07 08:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -9492,7 +9492,7 @@ msgstr "Lagenauswahl"
 
 #: common/tool/action_toolbar.cpp:1059
 msgid "Control to select the layer"
-msgstr "Steuerelement um die Lage auszuwählen"
+msgstr "Steuerelement zum Wählen der Lage"
 
 #: common/tool/action_toolbar.cpp:1061
 msgid "Symbol unit selector"
@@ -14176,7 +14176,6 @@ msgstr ""
 "Es konnten keine zugehörigen Symbole aus der Bibliothek geladen werden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:597
-#, fuzzy
 msgid "No symbols could be loaded from the library."
 msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
 
@@ -14232,7 +14231,6 @@ msgid "Symbol Name"
 msgstr "Symbolname"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1052
-#, fuzzy
 msgid "Exclude From BOM"
 msgstr "Von Stückliste ausschließen"
 
@@ -14253,7 +14251,6 @@ msgid "Power Symbol"
 msgstr "Spannungssymbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1057
-#, fuzzy
 msgid "Local Power Symbol"
 msgstr "Lokales Spannungssymbol"
 
@@ -19298,17 +19295,14 @@ msgid "Datasheet"
 msgstr "Datenblatt"
 
 #: eeschema/lib_symbol.cpp:2106
-#, fuzzy
 msgid "Symbol Definition"
 msgstr "Symboldefinition"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Define as Power Symbol"
 msgstr "Als Spannungssymbol definieren"
 
 #: eeschema/lib_symbol.cpp:2111
-#, fuzzy
 msgid "Define as Local Power Symbol"
 msgstr "Als lokales Spannungssymbol definieren"
 
@@ -19323,22 +19317,18 @@ msgid "Pin Display"
 msgstr "Pin-Darstellung"
 
 #: eeschema/lib_symbol.cpp:2117
-#, fuzzy
 msgid "Show Pin Number"
 msgstr "Pinnummer anzeigen"
 
 #: eeschema/lib_symbol.cpp:2120
-#, fuzzy
 msgid "Show Pin Name"
 msgstr "Pinname anzeigen"
 
 #: eeschema/lib_symbol.cpp:2123
-#, fuzzy
 msgid "Place Pin Names Inside"
 msgstr "Pinnamen innen platzieren"
 
 #: eeschema/lib_symbol.cpp:2126
-#, fuzzy
 msgid "Pin Name Position Offset"
 msgstr "Versatz der Pinnamen-Position"
 
@@ -19355,17 +19345,14 @@ msgid "Exclude from Bill of Materials"
 msgstr "Von Stückliste ausschließen"
 
 #: eeschema/lib_symbol.cpp:2143
-#, fuzzy
 msgid "Units and Body Styles"
 msgstr "Einheiten und Symbolformen"
 
 #: eeschema/lib_symbol.cpp:2145
-#, fuzzy
 msgid "Number of Symbol Units"
 msgstr "Anzahl der Symboleinheiten"
 
 #: eeschema/lib_symbol.cpp:2148
-#, fuzzy
 msgid "Units are Interchangeable"
 msgstr "Einheiten sind untereinander austauschbar"
 
@@ -22759,7 +22746,7 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
 msgstr "%d ausführen"
 
@@ -38141,7 +38128,6 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "Alle Footprints mit Durchlochpads ausschließen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
 msgstr "Alle Footprints mit \"nicht bestücken\"-Kennzeichnung ausschließen"
 
@@ -42259,12 +42245,10 @@ msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "Platinenstandards auf kupferfreie Footprint-Formen anwenden"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:75
-#, fuzzy
 msgid "Apply board defaults to footprint dimensions"
 msgstr "Platinenstandards auf Footprintabmessungen anwenden"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:78
-#, fuzzy
 msgid "Apply board defaults to footprint barcodes"
 msgstr "Platinenstandards auf Footprint-Barcodes anwenden"
 
@@ -44088,9 +44072,8 @@ msgid "board setup micro-via constraints"
 msgstr "Einschränkungen aus Platinenkonfiguration zu Mikro-Vias"
 
 #: pcbnew/drc/drc_engine.cpp:240
-#, fuzzy
 msgid "barcode visual separation default"
-msgstr "Standardmäßige visuelle Trennung von Barcodes"
+msgstr "Standard für visuelle Trennung von Barcodes"
 
 #: pcbnew/drc/drc_engine.cpp:262 pcbnew/drc/drc_engine.cpp:278
 #: pcbnew/drc/drc_engine.cpp:346 pcbnew/drc/drc_engine.cpp:363
@@ -45191,32 +45174,32 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "Formprimitiven %s unterscheiden sich auf Ebene %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
 msgstr "%s Text weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
 msgstr "%s Breite weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
 msgstr "%s Höhe weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
 msgstr "%s Textgröße weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
 msgstr "%s Code weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
 msgstr "%s Fehlerkorrekturstufe weicht ab."
 
@@ -45417,7 +45400,6 @@ msgid "%s differs."
 msgstr "%s weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
-#, fuzzy
 msgid "Barcode count differs."
 msgstr "Barcodeanzahl weicht ab."
 
@@ -48034,7 +48016,7 @@ msgid "Thermal Relief Gap"
 msgstr "Thermische Entlastung Spalt"
 
 #: pcbnew/pcb_barcode.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
 msgstr "Barcode \"%s\" auf %s"
 
@@ -48079,7 +48061,6 @@ msgid "Show Text"
 msgstr "Zeige Text"
 
 #: pcbnew/pcb_barcode.cpp:740
-#, fuzzy
 msgid "Barcode Type"
 msgstr "Barcodetyp"
 
@@ -48097,7 +48078,6 @@ msgid "+/- to switch"
 msgstr "+/- zum Umschalten"
 
 #: pcbnew/pcb_base_edit_frame.cpp:437
-#, fuzzy
 msgid "Edit Vertices"
 msgstr "Eckpunkte bearbeiten"
 
@@ -50214,12 +50194,10 @@ msgid "removed annular ring"
 msgstr "Restring entfernt"
 
 #: pcbnew/pcb_track.cpp:1427
-#, fuzzy
 msgid "Via diameter is too small."
 msgstr "Via-Durchmesser ist zu klein."
 
 #: pcbnew/pcb_track.cpp:1434
-#, fuzzy
 msgid "Via drill is too small."
 msgstr "Via-Bohrdurchmesser ist zu klein."
 
@@ -50228,7 +50206,6 @@ msgid "No via hole size defined."
 msgstr "Keine Via-Lochgröße definiert."
 
 #: pcbnew/pcb_track.cpp:1448
-#, fuzzy
 msgid "No via diameter defined."
 msgstr "Kein Via-Durchmesser definiert."
 
@@ -50901,17 +50878,14 @@ msgstr ""
 "45°/90°-Ecken."
 
 #: pcbnew/router/router_tool.cpp:210
-#, fuzzy
 msgid "Track Corner Mode 45"
 msgstr "Leiterbahn-Ecken-Modus 45"
 
 #: pcbnew/router/router_tool.cpp:211
-#, fuzzy
 msgid "Switch to 45° corner when routing tracks."
 msgstr "Wechselt beim Verlegen von Leiterbahnen zu 45° Ecken."
 
 #: pcbnew/router/router_tool.cpp:217
-#, fuzzy
 msgid "Track Corner Mode 90"
 msgstr "Leiterbahn-Ecken-Modus 90"
 
@@ -50936,7 +50910,6 @@ msgid "Track Corner Mode Arc 90"
 msgstr "Leiterbahn-Ecken-Modus Bogen 90"
 
 #: pcbnew/router/router_tool.cpp:232
-#, fuzzy
 msgid "Switch to arc 90° corner when routing tracks."
 msgstr "Wechselt beim Verlegen von Leiterbahnen zu abgerundeten 90° Ecken."
 
@@ -52929,14 +52902,12 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Vereinfachen von Polygonumrissen, Entfernen überflüssiger Punkte"
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit Vertices..."
 msgstr "Eckpunkte bearbeiten ..."
 
 #: pcbnew/tools/pcb_actions.cpp:788
-#, fuzzy
 msgid "Edit polygon vertices using a table"
-msgstr "Polygoneckpunkte unter Verwendung einer Tabelle bearbeiten"
+msgstr "Polygoneckpunkte in Tabelle bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid ""
@@ -55921,17 +55892,14 @@ msgid "Drills"
 msgstr "Bohrungen"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
-#, fuzzy
 msgid "X coord"
 msgstr "X Koord."
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:57
-#, fuzzy
 msgid "Y coord"
 msgstr "Y Koord."
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
 msgstr "Eckpunkt bearbeiten"
 
