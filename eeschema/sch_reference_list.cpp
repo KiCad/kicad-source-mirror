@@ -794,7 +794,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
     if( value.IsEmpty() )
         value = wxT( "~" );
 
-    m_value = value;
+    m_value = std::move( value );
 }
 
 
