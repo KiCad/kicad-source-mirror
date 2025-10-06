@@ -127,17 +127,21 @@ wxBitmap createTurndown( int size, double aScaleFactor, int aDirection, const wx
 {
     wxImage image = createBlankImage( size );
 
+    const unsigned char opacity = 0.70 * wxIMAGE_ALPHA_OPAQUE;
+    const int padding_start = 0 * aScaleFactor + 0.5;
+    const int padding_end = 2 * aScaleFactor + 0.5;
+
     int startX = ( size - 1 ) / 2;
     int len = 1;
 
-    int startY = 1 + ( aDirection % 2 );
+    int startY = padding_start;
 
-    for( int y = startY; y < startY + size - 3; ++y )
+    for( int y = 0; y < size - padding_end; ++y )
     {
-        for( int x = startX; x < startX + len; ++x )
+        for( int x = 0; x < len; ++x )
         {
-            image.SetRGB( x, y, aColour.Red(), aColour.Green(), aColour.Blue() );
-            image.SetAlpha( x, y, ( y % 2 ) ? wxIMAGE_ALPHA_OPAQUE : wxIMAGE_ALPHA_OPAQUE / 2 );
+            image.SetRGB( x + startX, y + startY, aColour.Red(), aColour.Green(), aColour.Blue() );
+            image.SetAlpha( x + startX, y + startY, ( y % 2 ) || ( ( x > 0 ) && ( x < len - 1 ) ) ? opacity : opacity / 2);
         }
 
         // Next row will start one pixel back and be two pixels longer
