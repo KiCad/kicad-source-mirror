@@ -565,7 +565,10 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     PCB_SHAPE::Flip( aCentre, aFlipDirection );
 
-    EDA_TEXT::SetTextAngle( -GetTextAngle() );
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        EDA_TEXT::SetTextAngle( -GetTextAngle() );
+    else
+        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
 
     if( IsSideSpecific() )
         SetMirrored( !IsMirrored() );
