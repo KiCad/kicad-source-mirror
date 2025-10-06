@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-03 15:54+0000\n"
+"PO-Revision-Date: 2025-10-07 02:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -555,7 +555,7 @@ msgstr ".posファイルに3Dモデルがない場合でも表示する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
 msgid "Show 3D Models marked DNP"
-msgstr "DNP(未実装)に指定されている部品の3Dモデルを表示"
+msgstr "未実装(DNP)に指定されている部品の3Dモデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 msgid "Show 3D models even if marked 'Do Not Place'"
@@ -604,47 +604,47 @@ msgstr "接着剤"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
-msgstr "接着剤 (Adhesive) レイヤーを表示"
+msgstr "接着剤 (Adhesive) を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr "ハンダペースト レイヤー"
+msgstr "ハンダペースト"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
-msgstr "ハンダペースト レイヤーを表示"
+msgstr "ハンダペーストを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
-msgstr "表面シルクスクリーン レイヤーを表示"
+msgstr "表面シルクスクリーンを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
-msgstr "裏面シルクスクリーン レイヤーを表示"
+msgstr "裏面シルクスクリーンを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
-msgstr "表面ハンダマスク レイヤーを表示"
+msgstr "表面ハンダマスクを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
-msgstr "裏面ハンダマスク レイヤーを表示"
+msgstr "裏面ハンダマスクを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user drawings layer"
-msgstr "ユーザー描画レイヤーを表示"
+msgstr "ユーザー説明用の図を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user comments layer"
-msgstr "ユーザーコメント レイヤーを表示"
+msgstr "ユーザー説明用のコメントを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO1 layer"
-msgstr "ユーザー ECO1 レイヤーを表示"
+msgstr "ユーザー設計変更指示用のレイヤー1を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user ECO2 layer"
-msgstr "ユーザー ECO2 レイヤーを表示"
+msgstr "ユーザー設計変更指示用のレイヤー2を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "Show user defined layer 1"
@@ -844,7 +844,7 @@ msgstr "POSファイルにないモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 msgid "Models marked DNP"
-msgstr "DNP(未実装)が指定されたモデル"
+msgstr "未実装(DNP)が指定されたモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:119
 msgid "Model Bounding Boxes"
@@ -5410,7 +5410,7 @@ msgstr ""
 #: common/dialogs/panel_plugin_settings.cpp:146
 #, c-format
 msgid "Found %s"
-msgstr "発見 '%s'"
+msgstr "発見 %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:151
 msgid "Not a valid Python 3 interpreter"
@@ -8111,7 +8111,7 @@ msgstr "未接続シンボル"
 
 #: common/layer_id.cpp:100
 msgid "DNP markers"
-msgstr "DNP(未実装) マーカー"
+msgstr "未実装(DNP)マーカー"
 
 #: common/layer_id.cpp:101
 msgid "Excluded-from-simulation markers"
@@ -9313,9 +9313,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "一覧の一番上にライブラリを固定しない"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "PCBライブラリー テーブル"
+msgstr "ライブラリー テーブル"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -11289,7 +11288,7 @@ msgstr "(ファイルがありません)"
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "選択されたBOMジェネレーター スクリプト %s が見つかりません。"
+msgstr "選択された部品表(BOM)ジェネレーター スクリプト %s が見つかりません。"
 
 #: eeschema/dialogs/dialog_bom.cpp:249
 #, c-format
@@ -11342,11 +11341,11 @@ msgstr "部品表 (BOM) 生成ヘルプ"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr "BOM ジェネレーター スクリプト:"
+msgstr "部品表(BOM)ジェネレーター スクリプト:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "新しい BOM ジェネレーターとコマンドラインをリストに追加"
+msgstr "新しい部品表(BOM)ジェネレーターとコマンドラインをリストに追加"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -11376,11 +11375,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "BOM ジェネレーター スクリプトのリストをデフォルト値にリセットします"
+msgstr "部品表(BOM)ジェネレーター スクリプトのリストをデフォルト値にリセットします"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
-msgstr "BOM(部品表)"
+msgstr "部品表(BOM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -11466,56 +11465,57 @@ msgid ""
 msgstr ""
 "# 1. 概要\n"
 "\n"
-"部品表ツールは、設計内のすべての部品を一覧にしたBOMを作成します。\n"
+"部品表ツールは、設計内のすべての部品を一覧にした部品表(BOM)を作成します。\n"
 "\n"
-"このツールは外部スクリプトを使用して、目的の出力形式でBOMを生成します。別のス"
-"クリプトを選択すると、BOMの書式が変わります。\n"
+"このツールは外部スクリプトを使用して、目的の出力形式でを部品表(BOM)生成します"
+"。別のスクリプトを選択すると、部品表(BOM)の書式が変わります。\n"
 "\n"
 "部品表の生成の生成の詳細については、回路図エディターのマニュアルに記載されて"
 "います。\n"
 "\n"
 "# 2. 使用方法\n"
 "\n"
-"**BOM ジェネレーター スクリプト**のリストからジェネレーター スクリプトを選択"
-"します。選択したジェネレーターの詳細がダイアログの右側に表示されます。\n"
+"**部品表(BOM)ジェネレーター スクリプト**のリストからジェネレーター スクリプト"
+"を選択します。選択したジェネレーターの詳細がダイアログの右側に表示されます。"
 "\n"
-"**生成** ボタンをクリックすると、選択したジェネレーターでBOMファイルを作成し"
-"ます。\n"
+"\n"
+"**生成** ボタンをクリックすると、選択したジェネレーターで部品表(BOM)ファイル"
+"を作成します。\n"
 "\n"
 "デフォルト設定ではいくつかのジェネレータースクリプトが表示されますが、KiCadと"
-"共にインストールされた追加のスクリプトは、**+** ボタンでリストに追加できま"
-"す。\n"
+"共にインストールされた追加のスクリプトは、**+** ボタンでリストに追加できます"
+"。\n"
 "\n"
 "**注:** Windowsでは、追加のオプション **コンソール ウィンドウを表示する**があ"
-"ります。このオプションをオフにすると、BOM ジェネレータは非表示のコンソール "
-"ウィンドウで実行され、出力はリダイレクトされてダイアログに出力されます。この"
-"オプションをオンにすると、BOM ジェネレータは独立したコンソール ウィンドウで実"
-"行されます。\n"
+"ります。このオプションをオフにすると、部品表(BOM)ジェネレータは非表示のコンソ"
+"ール ウィンドウで実行され、出力はリダイレクトされてダイアログに出力されます。"
+"このオプションをオンにすると、部品表(BOM)ジェネレータは独立したコンソール ウ"
+"ィンドウで実行されます。\n"
 "\n"
 "# 3.カスタムジェネレーターとコマンドライン\n"
 "\n"
-"内部的には、KiCadはデザイン内のすべてのコンポーネントに関する情報を含む中間"
-"ネットリスト ファイルをXMLフォーマットで作成します。BOMジェネレーター スクリ"
-"プトは、中間ネットリスト ファイルを目的の出力形式に変換します。KiCadはBOMダイ"
-"アログの一番下に入力されたコマンドラインに従ってBOMジェネレーター スクリプト"
-"を実行します。\n"
+"内部的には、KiCadはデザイン内のすべてのコンポーネントに関する情報を含む中間ネ"
+"ットリスト ファイルをXMLフォーマットで作成します。部品表(BOM)ジェネレーター "
+"スクリプトは、中間ネットリスト ファイルを目的の出力形式に変換します。KiCadは"
+"部品表(BOM)ダイアログの一番下に入力されたコマンドラインに従って部品表(BOM)ジ"
+"ェネレーター スクリプトを実行します。\n"
 "\n"
 "コマンドラインでファイル名のパラメータを受け付けます。各書式設定パラメーター"
 "は、プロジェクト固有のパスまたはファイル名に置き換えられます。サポートされて"
 "いるパラメーターは次のとおりです。\n"
 "\n"
-" * `%I`: BOMジェネレーターへの入力である中間ネットリスト ファイルの絶対パスと"
-"ファイル名\n"
-" * `%O`: 出力BOMファイルの絶対パスとファイル名 (ファイル拡張子なし)\n"
-" * `%B`: 出力BOMファイルの基本ファイル名 (ファイル拡張子なし)\n"
+" * `%I`: B部品表(BOM)ジェネレーターへの入力である中間ネットリスト ファイルの"
+"絶対パスとファイル名\n"
+" * `%O`: 出力部品表(BOM)ファイルの絶対パスとファイル名 (ファイル拡張子なし)\n"
+" * `%B`: 出力部品表(BOM)ファイルの基本ファイル名 (ファイル拡張子なし)\n"
 " * `%P`: 末尾のスラッシュなしのプロジェクトディレクトリの絶対パス\n"
 "\n"
 "**注:** `%O` 出力ファイル パラメーターにはファイル拡張子は含まれていません。"
 "KiCad はコマンドラインに適切な拡張子を自動的に追加しようとしますが、 拡張子は"
 "手動で追加する必要があるかもしれません。\n"
 "\n"
-"PythonはBOM ジェネレータ スクリプトに推奨されるツールですが、他のツールも使用"
-"できます。\n"
+"Pythonは部品表(BOM)ジェネレータ スクリプトに推奨されるツールですが、他のツー"
+"ルも使用できます。\n"
 "\n"
 "## Pythonスクリプトのコマンドラインの例\n"
 "\n"
@@ -11525,17 +11525,17 @@ msgstr ""
 "python <スクリプトファイル名> <入力ファイル名> <出力ファイル名>\n"
 "```\n"
 "\n"
-"Windowsでは、CSV BOMに使うジェネレーター スクリプトが `C:"
-"\\Users\\username\\kicad\\my_python_script.py` の場合、コマンドラインは以下の"
-"ようになります。\n"
+"Windowsでは、CSV 部品表(BOM)に使うジェネレーター スクリプトが `C:\\Users"
+"\\username\\kicad\\my_python_script.py` の場合、コマンドラインは以下のように"
+"なります。\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
 "```\n"
 "\n"
-"Linuxでは、CSV BOMに使うジェネレーター スクリプトが `/home/username/kicad/"
-"my_python_script.py` の場合、コマンドラインは以下のようになります。\n"
+"Linuxでは、CSV 部品表(BOM)に使うジェネレーター スクリプトが `/home/username/"
+"kicad/my_python_script.py` の場合、コマンドラインは以下のようになります。\n"
 "\n"
 "```\n"
 "python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
@@ -13183,34 +13183,28 @@ msgid "Pin Table"
 msgstr "ピン テーブル"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "シンボルを削除"
+msgstr "シンボルの変更を破棄"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "'%s' を最後に保存したバージョンへ戻しますか?"
+msgstr "シンボルを最後に保存した状態に戻す"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "全てクリア (&A)"
+msgstr "セルのクリア"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "最近開いたドリル ファイルをクリア"
+msgstr "セルの値をクリア"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "新しいシンボルを作成"
+msgstr "派生シンボルを作成"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "既存のシンボルから派生して新しいシンボルを作成"
+msgstr "選択したシンボルから派生した新しいシンボルを作成"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13231,9 +13225,9 @@ msgid "Show datasheet in browser"
 msgstr "ブラウザーでデータシートを表示"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "シンボル ライブラリ"
+msgstr "シンボル ライブラリ フィールド: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13246,30 +13240,29 @@ msgid "Group By"
 msgstr "グループ化"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "シンボル \"%s\" がライブラリー \"%s\" 内に見つかりました"
+msgstr "ライブラリー %s にシンボルが見つかりません。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s: %s"
-msgstr "シンボルの読み込み中のエラー:"
+msgstr "シンボル %s 読み込み中にエラー: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error accessing library %s.\n"
 "\n"
 "%s"
 msgstr ""
-"シンボル ライブラリ %s の読み込み中にエラー。\n"
+"ライブラリ %s のアクセス中にエラー。\n"
 "\n"
-"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "すべての変更を適用するためにライブラリからシンボルを更新"
+msgstr "ライブラリからシンボルが読み込まれていません。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13301,9 +13294,9 @@ msgid "Rename Field"
 msgstr "フィールド名を変更"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "フィールド名 %s は既に存在します。"
+msgstr "フィールド名 '%s' は既に存在します。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13312,9 +13305,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "本当に '%s' を削除してもよろしいですか？"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
@@ -13332,14 +13324,12 @@ msgid "Power Symbol"
 msgstr "電源シンボル"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "電源シンボル"
+msgstr "ローカル電源シンボル"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "ライブラリ エディター"
+msgstr "ライブラリ フィールド エディター"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -14271,11 +14261,11 @@ msgstr "フィールド名テンプレート"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "BOM presets"
-msgstr "BOMプリセット"
+msgstr "部品表(BOM)プリセット"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 msgid "BOM format presets"
-msgstr "BOMフォーマットのプリセット"
+msgstr "部品表(BOM)フォーマットのプリセット"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
@@ -14377,7 +14367,7 @@ msgstr "別のプロジェクトから設定をインポート..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 msgid "BOM Presets"
-msgstr "BOMプリセット"
+msgstr "部品表(BOM)プリセット"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:82
 msgid "Electrical Rules"
@@ -15437,27 +15427,27 @@ msgstr "パス '%s' を作成もしくは開くことができません。"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1408
 #, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "BOM出力 '%s' を作成できませんでした。"
+msgstr "部品表(BOM)出力 '%s' を作成できませんでした。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1417
 #, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "BOM出力 '%s' に書き込めませんでした。"
+msgstr "部品表(BOM)出力 '%s' に書き込めませんでした。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1424
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "'%s' にBOMを出力しました"
+msgstr "'%s' に部品表(BOM)を出力しました"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1803
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2210
 msgid "BOM preset name:"
-msgstr "BOMプリセット名:"
+msgstr "部品表(BOM)プリセット名:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1803
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2210
 msgid "Save BOM Preset"
-msgstr "BOMプリセットを保存"
+msgstr "部品表(BOM)プリセットを保存"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1829
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2236
@@ -17033,7 +17023,7 @@ msgstr "未知のフォーマットのネットリストです。\n"
 #: eeschema/eeschema_jobs_handler.cpp:613
 #, c-format
 msgid "BOM preset '%s' not found"
-msgstr "BOMプリセット '%s' が見つかりません"
+msgstr "部品表(BOM)プリセット '%s' が見つかりません"
 
 #: eeschema/eeschema_jobs_handler.cpp:718
 #: eeschema/eeschema_jobs_handler.cpp:926
@@ -17044,7 +17034,7 @@ msgstr "出力先 '%s' を開けませんでした"
 #: eeschema/eeschema_jobs_handler.cpp:752
 #, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "BOMフォーマットプリセット '%s' が見つかりません"
+msgstr "部品表(BOM)フォーマットプリセット '%s' が見つかりません"
 
 #: eeschema/eeschema_jobs_handler.cpp:777
 #: eeschema/eeschema_jobs_handler.cpp:848
@@ -18022,7 +18012,7 @@ msgstr "ユニット %s"
 #: eeschema/lib_symbol.cpp:587 eeschema/sch_sheet.cpp:312
 #: eeschema/sch_symbol.cpp:1546
 msgid "Excluded from BOM"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/lib_symbol.cpp:592 eeschema/sch_sheet.cpp:321
 #: eeschema/sch_symbol.cpp:1555
@@ -18039,7 +18029,7 @@ msgstr "シミュレーションから除外"
 #: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 msgid "DNP"
-msgstr "DNP(未実装)"
+msgstr "未実装(DNP)"
 
 #: eeschema/lib_symbol.cpp:1617
 msgid "Power flag differs."
@@ -20006,7 +19996,7 @@ msgstr "シミュレーション"
 
 #: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
 msgid "BOM"
-msgstr "部品表"
+msgstr "部品表(BOM)"
 
 #: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
@@ -24493,9 +24483,8 @@ msgid "SVG File Name"
 msgstr "SVGファイル名"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "ライブラリ"
+msgstr "ライブラリ フィールド"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -24689,7 +24678,7 @@ msgstr "シミュレーションから除外"
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. board"
@@ -26867,7 +26856,7 @@ msgstr "ERC違反があった場合、0以外の値を返します"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr "エクスポート ユーティリティ (netlist, pdf, bom, その他)"
+msgstr "エクスポート ユーティリティ (netlist, pdf, 部品表(BOM), その他)"
 
 #: kicad/cli/command_sch_export_bom.cpp:36
 msgid "Generate a Bill of Materials (BOM)"
@@ -26940,9 +26929,8 @@ msgstr "HPGLの原点のオプションは0, 1, 2, 3である必要がありま�
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
-msgstr ""
-"Python スクリプトを使用して、回路図エディターで使用されるXML 形式の従来のBOM"
-"をエクスポートします"
+msgstr "Python スクリプトを使用して、回路図エディターで使用されるXML 形式の従来の部品"
+"表(BOM)をエクスポートします"
 
 #: kicad/cli/command_sym.h:31
 msgid "Symbol and Symbol Libraries"
@@ -31704,7 +31692,7 @@ msgstr "レイヤー '%s' (サブレイヤー %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:327
 msgid "Add Dielectric Layer"
-msgstr "絶縁体レイヤーを追加"
+msgstr "誘電体レイヤーを追加"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:330
 #: pcbnew/dialogs/panel_setup_layers.cpp:1059
@@ -31718,7 +31706,7 @@ msgstr "レイヤー '%s' (サブレイヤー %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:385
 msgid "Remove Dielectric Layer"
-msgstr "絶縁体レイヤーを削除"
+msgstr "誘電体レイヤーを削除"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:388
 msgid "Select layer to remove:"
@@ -31820,11 +31808,11 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:47
 msgid "Add Dielectric Layer..."
-msgstr "絶縁体レイヤーを追加..."
+msgstr "誘電体レイヤーを追加..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:50
 msgid "Remove Dielectric Layer..."
-msgstr "絶縁体レイヤーを削除..."
+msgstr "誘電体レイヤーを削除..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:109
@@ -34121,7 +34109,7 @@ msgstr "出力を'zip'ファイルに圧縮"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:108
 msgid "BOM Columns"
-msgstr "BOM列"
+msgstr "部品表(BOM)列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 msgid "Internal ID:"
@@ -35862,7 +35850,7 @@ msgstr "寸法線アイテム"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:63
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Silk Layers"
-msgstr "シルク レイヤー"
+msgstr "シルクスクリーン(Silkscreen)レイヤー"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:275
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
@@ -35874,7 +35862,7 @@ msgstr "導体レイヤー"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:65
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:61
 msgid "Edge Cuts"
-msgstr "基板外形"
+msgstr "基板外形(Edge.Cuts)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:277
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
@@ -35886,7 +35874,7 @@ msgstr "コートヤード"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:63
 msgid "Fab Layers"
-msgstr "Fab レイヤー"
+msgstr "フットプリントのアセンブリ製造情報(Fab/Fabrication) レイヤー"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:279
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:68
@@ -36814,7 +36802,7 @@ msgstr "表面シルクスクリーン"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:557
 msgid "Back silk screen"
-msgstr "裏面のシルクスクリーン層"
+msgstr "裏面のシルクスクリーン"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Front solder mask"
@@ -37134,12 +37122,11 @@ msgstr "ハンダマスクが作られないエリアのシルクスクリーン
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
 msgid "Indicate DNP on fabrication layers"
-msgstr "基板製造用レイヤーにDNP(未実装)を表示する"
+msgstr "基板製造用レイヤーに未実装(DNP)を表示する"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Hide or cross-out DNP footprints on fabrication layers"
-msgstr ""
-"基板製造用レイヤーにあるDNP(未実装)フットプリントを非表示または取り消し線で消"
+msgstr "基板製造用レイヤーにある未実装(DNP)フットプリントを非表示または取り消し線で消"
 "す"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
@@ -39365,7 +39352,7 @@ msgstr "基板のデフォルトを非導体のフットプリント形状に適
 #: pcbnew/dialogs/panel_setup_layers.cpp:87
 #: pcbnew/dialogs/panel_setup_layers.cpp:293
 msgid "Off-board, testing"
-msgstr "Off-board、部品の安全な実装に必要な余白"
+msgstr "基板外、部品の配置スペース"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:97
 msgid "If you want a fabrication layer for the front side of the board"
@@ -39374,11 +39361,11 @@ msgstr "基板表面に基板製造用レイヤーを使用したい場合"
 #: pcbnew/dialogs/panel_setup_layers.cpp:107
 #: pcbnew/dialogs/panel_setup_layers.cpp:275
 msgid "Off-board, manufacturing"
-msgstr "Off-board、製造用"
+msgstr "基板外、製造用"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:115
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "基板表面に実装用ボンドのテンプレートを使用したい場合"
+msgstr "基板表面に実装用接着剤のテンプレートを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:125
 #: pcbnew/dialogs/panel_setup_layers.cpp:143
@@ -39389,7 +39376,7 @@ msgstr "基板表面に実装用ボンドのテンプレートを使用したい
 #: pcbnew/dialogs/panel_setup_layers.cpp:239
 #: pcbnew/dialogs/panel_setup_layers.cpp:257
 msgid "On-board, non-copper"
-msgstr "On-board、非導体層"
+msgstr "基板上、非導体層"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:133
 msgid "If you want a solder paste layer for front side of the board"
@@ -41926,7 +41913,7 @@ msgstr "%s は位置が異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:288
 #, c-format
 msgid "%s has different numbers."
-msgstr "%s 数が異なります。"
+msgstr "%s は数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:306
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:535
@@ -41952,37 +41939,37 @@ msgstr "%s は向きが異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:330
 #, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s はパッドの形状がレイヤー%sで異なります。"
+msgstr "%s はパッドの形状がレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:335
 #, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s はサイズがレイヤー%sで異なります。"
+msgstr "%s はサイズがレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:340
 #, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s は台形のデルタがレイヤー%sで異なります。"
+msgstr "%s は台形のデルタがレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:348
 #, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s は丸めた角がレイヤー%sで異なります。"
+msgstr "%s は丸めた角がレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:357
 #, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s は面取りした角のサイズがレイヤー%sで異なります。"
+msgstr "%s は面取りした角のサイズがレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:363
 #, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s は面取りした角がレイヤー%sで異なります。"
+msgstr "%s は面取りした角がレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:369
 #, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s は穴からのオフセットがレイヤー%sで異なります。"
+msgstr "%s は穴からのオフセットがレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:375
 #, c-format
@@ -41997,7 +41984,7 @@ msgstr "%s はドリルサイズが異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s の形状プリミティブはレイヤー%sで異なります。"
+msgstr "%s は形状プリミティブはレイヤー%s上で異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:513
 #, c-format
@@ -42032,27 +42019,27 @@ msgstr "%s は導体塗りつぶしの設定が異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:526
 #, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "%s は「フットプリントの配置を禁止」の設定が異なります。"
+msgstr "%s はフットプリントの配置を禁止の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:528
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr "%s は「パッドの配置を禁止」の設定が異なります。"
+msgstr "%s はパッドの配置を禁止の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:530
 #, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "%s は「配線を禁止」の設定が異なります。"
+msgstr "%s は配線を禁止の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:532
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr "%s は「ビアの配置を禁止」の設定が異なります。"
+msgstr "%s はビアの配置を禁止の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:538
 #, c-format
 msgid "%s pad connection property differs."
-msgstr "%s のパッド接続が異なります。"
+msgstr "%s はパッド接続が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:540
 #, c-format
@@ -42077,27 +42064,27 @@ msgstr "%s は最小幅が異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr "%s は「孤立した導体部分を削除」の設定が異なります。"
+msgstr "%s は孤立した導体部分を削除の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:552
 #, c-format
 msgid "%s minimum island size setting differs."
-msgstr "%s は「孤立した導体部分の最小サイズ」の設定が異なります。"
+msgstr "%s は孤立した導体部分の最小サイズの設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:555
 #, c-format
 msgid "%s fill type differs."
-msgstr "%s は「塗りつぶしタイプ」が異なります。"
+msgstr "%s は塗りつぶしタイプが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:557
 #, c-format
 msgid "%s hatch width differs."
-msgstr "%s は「ハッチング幅」が異なります。"
+msgstr "%s はハッチング幅が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:559
 #, c-format
 msgid "%s hatch gap differs."
-msgstr "%s は「ハッチングの間隔」が異なります。"
+msgstr "%s はハッチングの間隔が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:561
 #, c-format
@@ -42107,12 +42094,12 @@ msgstr "%s ハッチングの向きが異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:563
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s のハッチングのスムージング レベルが異なります。"
+msgstr "%s はハッチングのスムージング レベルが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:565
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr "%s はハッチングの「スムージング量」が異なります。"
+msgstr "%s はハッチングのスムージング量が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:567
 #, c-format
@@ -42961,7 +42948,7 @@ msgstr "部品配置ファイルから除外"
 
 #: pcbnew/footprint.cpp:1771
 msgid "exclude from BOM"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: pcbnew/footprint.cpp:1776
 msgid "Status: "
@@ -43988,22 +43975,22 @@ msgstr "%s のフットプリント フィルター を '%s' に更新します�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:680
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に 'BOM(部品表)から除外 'の製造属性を設定します。"
+msgstr "%s に '部品表(BOM)から除外 'の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:685
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の 'BOM(部品表)から除外 'の製造属性を削除します。"
+msgstr "%s の '部品表(BOM)から除外 'の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:696
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に製造属性 'BOM(部品表)から除外' を追加しました。"
+msgstr "%s に製造属性 '部品表(BOM)から除外' を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の製造属性 'BOM(部品表)から除外' を削除しました。"
+msgstr "%s の製造属性 '部品表(BOM)から除外' を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:720
 #, c-format
@@ -44375,7 +44362,7 @@ msgstr "パッド %s %s - %s ( %s 上)"
 #: pcbnew/pad.cpp:1664
 #, c-format
 msgid "Pad %s on %s"
-msgstr "パッド %s、%s 上"
+msgstr "パッド %s、%s レイヤー上"
 
 #: pcbnew/pad.cpp:1673
 #, c-format
@@ -44844,8 +44831,8 @@ msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Altium レイヤー (%s) は KiCad に同等のものがありません。KiCadの Eco1_User レ"
-"イヤーに移動しました。"
+"Altium レイヤー (%s) は KiCad に同等のものがありません。KiCadのユーザー設計変"
+"更指示用のレイヤー1(User.ECO1)に移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:484
 #, c-format
@@ -44928,8 +44915,8 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium レイヤー (%d) にある寸法は KiCad と等価ではありません。KiCadの "
-"Eco1_User レイヤーに移動しました。"
+"Altium レイヤー (%d) にある寸法は KiCad と等価ではありません。KiCadのユーザー"
+"設計変更指示用のレイヤー1(User.ECO1)に移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1939
 msgid "Loading dimension drawings..."
@@ -44993,8 +44980,8 @@ msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium レイヤー (%d) にある破線の外形線は KiCad と等価ではありません。KiCad"
-"の Eco1_User レイヤーに移動しました。"
+"Altium レイヤー (%d) にある破線の外形線は KiCad と等価ではありません。KiCadの"
+"ユーザー設計変更指示用のレイヤー1(User.ECO1)レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2522
 #, c-format
@@ -45010,7 +44997,8 @@ msgid ""
 msgstr ""
 "ライブラリ '%s' の読み込み中にエラー:\n"
 "フットプリント %s が含むAltium レイヤー (%d) にある破線の外形線は KiCad と等"
-"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"価ではありません。KiCadのユーザー設計変更指示用のレイヤー1(User.ECO1)に移動し"
+"ました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2613
 #, c-format
@@ -45019,7 +45007,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "フットプリント %s が含む、Altium レイヤー (%d) にある破線の外形線は KiCad と"
-"等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"等価ではありません。KiCadのユーザー設計変更指示用のレイヤー1(User.ECO1)に移動"
+"しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2656
 #, c-format
@@ -45136,8 +45125,8 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等価ではありません。"
-"KiCadの Eco1_User レイヤーに移動しました。"
+"非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等価ではありません。K"
+"iCadのユーザー設計変更指示用のレイヤー1(User.ECO1)に移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3657
 #, c-format
@@ -45148,7 +45137,8 @@ msgid ""
 msgstr ""
 "ライブラリ '%s' の読み込み中にエラー:\n"
 "フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等"
-"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"価ではありません。KiCadのユーザー設計変更指示用のレイヤー1(User.ECO1)に移動し"
+"ました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3672
 #, c-format
@@ -45157,7 +45147,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等"
-"価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
+"価ではありません。KiCadのユーザー設計変更指示用のレイヤー1(User.ECO1)に移動し"
+"ました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3700
 #, c-format
@@ -46107,20 +46098,18 @@ msgstr "historyセクションを生成"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1203
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3079
 msgid "Generating BOM section"
-msgstr "BOMセクションを生成"
+msgstr "部品表(BOM)セクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
 #, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr ""
-"フットプリント %s が見つかりません。BOM(部品表)データが不完全な可能性がありま"
+msgstr "フットプリント %s が見つかりません。部品表(BOM)データが不完全な可能性がありま"
 "す。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
-"コンポーネント \"%s\" に OEM リファレンスがありません。BOM(部品表)エントリー"
+msgstr "コンポーネント \"%s\" に OEM リファレンスがありません。部品表(BOM)エントリー"
 "はスキップされます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
@@ -47240,7 +47229,7 @@ msgstr "現在の配線パターンの姿勢を変更します。"
 
 #: pcbnew/router/router_tool.cpp:199
 msgid "Track Corner Mode"
-msgstr "直線/曲線を切り替え"
+msgstr "配線のコーナー モード切り替え"
 
 #: pcbnew/router/router_tool.cpp:200
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -51138,19 +51127,19 @@ msgstr "このレイヤーの表示/非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1673
 msgid "Adhesive on board's front"
-msgstr "基板表面の部品実装用ボンド位置"
+msgstr "基板表面の部品実装用接着剤位置"
 
 #: pcbnew/widgets/appearance_controls.cpp:1674
 msgid "Adhesive on board's back"
-msgstr "基板裏面の部品実装用ボンド位置"
+msgstr "基板裏面の部品実装用接着剤位置"
 
 #: pcbnew/widgets/appearance_controls.cpp:1675
 msgid "Solder paste on board's front"
-msgstr "基板表面のハンダペースト (メタルマスク)"
+msgstr "基板表面のハンダペースト (表面実装部品で使用するステンシル)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1676
 msgid "Solder paste on board's back"
-msgstr "基板裏面のハンダペースト (メタルマスク)"
+msgstr "基板裏面のハンダペースト (表面実装部品で使用するステンシル)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1677
 msgid "Silkscreen on board's front"
@@ -51179,7 +51168,7 @@ msgstr "説明用のコメント"
 #: pcbnew/widgets/appearance_controls.cpp:1683
 #: pcbnew/widgets/appearance_controls.cpp:1684
 msgid "User defined meaning"
-msgstr "ユーザー定義"
+msgstr "ユーザー設計変更指示の意図"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
 msgid "Board's perimeter definition"
@@ -51199,11 +51188,11 @@ msgstr "基板裏面のフットプリントのコートヤード"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
 msgid "Footprint assembly on board's front"
-msgstr "基板表面のフットプリントの実装"
+msgstr "基板表面のフットプリントのアセンブリ製造情報"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
 msgid "Footprint assembly on board's back"
-msgstr "基板裏面のフットプリントの実装"
+msgstr "基板裏面のフットプリントのアセンブリ製造情報"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
 msgid "User defined layer 1"
