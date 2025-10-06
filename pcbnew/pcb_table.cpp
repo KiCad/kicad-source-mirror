@@ -248,6 +248,13 @@ void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
+    {
+        Flip( aCentre, FLIP_DIRECTION::LEFT_RIGHT );
+        Rotate( aCentre, EDA_ANGLE( 180, DEGREES_T ) );
+        return;
+    }
+
     EDA_ANGLE originalAngle = m_cells[0]->GetTextAngle();
 
     Rotate( aCentre, -originalAngle );

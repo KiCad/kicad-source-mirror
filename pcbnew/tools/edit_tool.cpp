@@ -2495,6 +2495,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             usePcbShapeCenter = true;
     }
 
+    if( selection.Size() == 1 && dynamic_cast<PCB_TABLE*>( selection.Front() ) )
+        usePcbShapeCenter = true;
+
     if( selection.Size() == 1 && dynamic_cast<PCB_TEXTBOX*>( selection.Front() ) )
     {
         selection.SetReferencePoint( static_cast<PCB_TEXTBOX*>( selection.Front() )->GetCenter() );
@@ -2845,11 +2848,13 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // but only if the item is not a PCB_SHAPE with SHAPE_T::RECTANGLE shape, because
     // for this shape the flip transform swap start and end coordinates and move the shape.
     // So using the center of the shape is better (the shape does not move)
+    // (Tables are a bunch of rectangles, so exclude them too)
     if( selection.GetSize() == 1 )
     {
-        PCB_SHAPE* item = dynamic_cast<PCB_SHAPE*>( selection.GetItem( 0 ) );
+        PCB_SHAPE* rect = dynamic_cast<PCB_SHAPE*>( selection.GetItem( 0 ) );
+        PCB_TABLE* table = dynamic_cast<PCB_TABLE*>( selection.GetItem( 0 ) );
 
-        if( !item || item->GetShape() != SHAPE_T::RECTANGLE )
+        if( !table && ( !rect || rect->GetShape() != SHAPE_T::RECTANGLE ) )
             refPt = selection.GetReferencePoint();
     }
 
