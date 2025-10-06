@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-01 15:02+0000\n"
+"PO-Revision-Date: 2025-10-07 02:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -13428,9 +13428,8 @@ msgstr ""
 "%s\n"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen."
+msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13473,9 +13472,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Sind Sie sicher, dass Sie das Feld \"%s\" entfernen möchten?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Von Bauteilliste ausgeschlossen"
+msgstr "Von Stückliste ausschließen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
@@ -13493,9 +13491,8 @@ msgid "Power Symbol"
 msgstr "Spannungssymbol"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Spannungssymbol"
+msgstr "Lokales Spannungssymbol"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 #, fuzzy
