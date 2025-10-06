@@ -94,7 +94,7 @@ wxBitmap createArrow( int size, double aScaleFactor, int aDirection, const wxCol
 {
     wxImage image = createBlankImage( size );
 
-    int startX = size / 2 - 1;
+    int startX = ( size - 1 ) / 2;
     int len = 1;
 
     int startY = aDirection % 2;
@@ -127,7 +127,7 @@ wxBitmap createTurndown( int size, double aScaleFactor, int aDirection, const wx
 {
     wxImage image = createBlankImage( size );
 
-    int startX = size / 2 - 1;
+    int startX = ( size - 1 ) / 2;
     int len = 1;
 
     int startY = 1 + ( aDirection % 2 );
