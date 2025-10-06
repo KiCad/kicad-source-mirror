@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-06 01:31+0000\n"
+"PO-Revision-Date: 2025-10-07 02:02+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -102,7 +102,7 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:766
 #, c-format
 msgid "Pad %s\t"
-msgstr ""
+msgstr "საკონტაქტო ბალიში %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:797
 #, c-format
@@ -112,7 +112,7 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "ზონა %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
@@ -200,7 +200,7 @@ msgstr ""
 #: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:322
 #: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:678
 msgid "3D Viewer"
-msgstr ""
+msgstr "3D ხედი"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
 msgid "Copy 3D Image"
@@ -212,7 +212,7 @@ msgstr "3D ბადე"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
 msgid "Raytracing"
-msgstr ""
+msgstr "სხივების ტრასირება"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
@@ -257,7 +257,7 @@ msgstr "&გამართვა"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 msgid "Reload board"
-msgstr ""
+msgstr "დაფის თავიდან ჩატვირთვა"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
@@ -416,7 +416,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
-msgstr ""
+msgstr "დაფის გადაბრუნება"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Flip the board view"
@@ -433,27 +433,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "View Front"
-msgstr ""
+msgstr "წინა ხედი"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:175
 msgid "View Back"
-msgstr ""
+msgstr "ხედი უკან"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
 msgid "View Left"
-msgstr ""
+msgstr "ხედი მარცხნივ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "View Right"
-msgstr ""
+msgstr "ხედი მარჯვნივ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "View Top"
-msgstr ""
+msgstr "ხედი ზემოთ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:211
 msgid "View Bottom"
-msgstr ""
+msgstr "ხედი ქვემოთ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "No 3D Grid"
@@ -578,7 +578,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr ""
+msgstr "წებოვანი"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
@@ -999,27 +999,27 @@ msgstr "აირჩიეთ პრესეტი:"
 #: pcbnew/widgets/appearance_controls.cpp:2934
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr ""
+msgstr "ხედები (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2943
 msgid "Save viewport..."
-msgstr ""
+msgstr "ხედის შენახვა..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2944
 msgid "Delete viewport..."
-msgstr ""
+msgstr "ხედის წაშლა..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:989
 #: pcbnew/widgets/appearance_controls.cpp:2995
 msgid "Viewport name:"
-msgstr ""
+msgstr "ხედის სახელი:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:990
 #: pcbnew/widgets/appearance_controls.cpp:2995
 msgid "Save Viewport"
-msgstr ""
+msgstr "ხედის შენახვა"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1032
 #: pcbnew/widgets/appearance_controls.cpp:3036
@@ -1029,12 +1029,12 @@ msgstr "ხედის წერტილები"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1041
 #: pcbnew/widgets/appearance_controls.cpp:3045
 msgid "Delete Viewport"
-msgstr ""
+msgstr "ხედის წაშლა"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1042
 #: pcbnew/widgets/appearance_controls.cpp:3046
 msgid "Select viewport:"
-msgstr ""
+msgstr "აირჩიეთ ხედი:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
@@ -1052,7 +1052,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "(unsaved)"
-msgstr ""
+msgstr "(შეუნახავი)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1061,12 +1061,12 @@ msgstr ""
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:64
 msgid "Available paths:"
-msgstr ""
+msgstr "ხელმისაწვდომი ბილიკები:"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:73
 #: common/dialogs/dialog_configure_paths_base.h:60
 msgid "Configure Paths"
-msgstr ""
+msgstr "ბილიკების მორგება"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
 msgid "Embed model"
@@ -1078,7 +1078,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
-msgstr ""
+msgstr "რენდერის მორგება"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 msgid "Clip silkscreen at via annuli"
@@ -1102,7 +1102,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
-msgstr ""
+msgstr "მასალის თვისებები:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Realistic"
@@ -1110,19 +1110,19 @@ msgstr "რეალისტური"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
-msgstr ""
+msgstr "სრული ფერები"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "CAD colors"
-msgstr ""
+msgstr "CAD-ის ფერები"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
-msgstr ""
+msgstr "კამერის მორგება"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
 msgid "Rotation increment:"
-msgstr ""
+msgstr "ტრიალის გაზრდა:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:92
 #: pcb_calculator/widgets/unit_selector.cpp:130
@@ -1147,7 +1147,7 @@ msgstr ""
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
 msgid "Rendering Options"
-msgstr ""
+msgstr "რენდერის პარამეტრები"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
@@ -1187,19 +1187,19 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
-msgstr ""
+msgstr "მონიშნულის ფერი:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr ""
+msgstr "გადაადგილებისას"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "მოგლუვების გამორთვა"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr ""
+msgstr "სისქის გამორთვა"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
@@ -1222,7 +1222,7 @@ msgstr ""
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 #: pcbnew/dialogs/dialog_render_job_base.cpp:108
 msgid "Anti-aliasing (slow)"
-msgstr ""
+msgstr "მოგლუვება (ნელი)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 #: pcbnew/dialogs/dialog_render_job_base.cpp:112
@@ -1240,7 +1240,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr ""
+msgstr "რეკურსიის დონე"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
@@ -1280,7 +1280,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 msgid "Lights Configuration"
-msgstr ""
+msgstr "სინათლეების მორგება"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
@@ -1288,53 +1288,53 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
-msgstr ""
+msgstr "ზედა სინათლე:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:158
 msgid "Bottom light:"
-msgstr ""
+msgstr "ქვედა სინათლე:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:184
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:201
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "ზენიტი (გრად)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:188
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:205
 msgid "Azimuth (deg)"
-msgstr ""
+msgstr "აზიმუტი (გრად)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
-msgstr ""
+msgstr "სინათლე 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
 msgid "Light 5:"
-msgstr ""
+msgstr "სინათლე 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
 msgid "Light 2:"
-msgstr ""
+msgstr "სინათლე 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
 msgid "Light 6:"
-msgstr ""
+msgstr "სინათლე 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
 msgid "Light 3:"
-msgstr ""
+msgstr "სინათლე 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 7:"
-msgstr ""
+msgstr "სინათლე 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
 msgid "Light 4:"
-msgstr ""
+msgstr "სინათლე 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
 msgid "Light 8:"
-msgstr ""
+msgstr "სინათლე 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:410
 msgid "3D Preview Options"
@@ -1437,7 +1437,7 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_frame.cpp:356
 #: kicad/tools/kicad_manager_actions.cpp:168
 msgid "Image Converter"
-msgstr ""
+msgstr "გამოსახულების გადამყვანი"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
@@ -1464,7 +1464,7 @@ msgstr "ბოლო ფაილების გასუფთავება"
 #: eeschema/tools/sch_drawing_tools.cpp:1067
 #: pagelayout_editor/pl_editor_frame.cpp:861 pcbnew/tools/drawing_tool.cpp:750
 msgid "Choose Image"
-msgstr ""
+msgstr "აირჩიეთ გამოსახულება"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:397
 #: eeschema/tools/sch_drawing_tools.cpp:1068
@@ -1699,11 +1699,11 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
-msgstr ""
+msgstr "ორიგინალი სურათი"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:25
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "ნაცრისფერი სურათი"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 msgid "Black && White Picture"
@@ -1733,7 +1733,7 @@ msgstr "პიქსელი"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
-msgstr ""
+msgstr "გამოსახულების PPI:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:196
 #: pcbnew/pcb_reference_image.cpp:217
@@ -1754,7 +1754,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
-msgstr ""
+msgstr "გამოტანის ზომა"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:110
 #: common/dialogs/dialog_page_settings_base.cpp:37
@@ -1839,7 +1839,7 @@ msgstr "ფენა:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
@@ -1847,7 +1847,7 @@ msgstr "F.Silkscreen"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Drawings"
@@ -1867,7 +1867,7 @@ msgstr "User.Eco2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:188
 msgid "Postscript (.ps file)"
@@ -2002,7 +2002,7 @@ msgstr "&დიახ"
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
-msgstr "გაფრთხილება"
+msgstr "გაფრთხილე ბა"
 
 #: common/confirm.cpp:239
 msgid "Information"
@@ -2052,7 +2052,7 @@ msgstr "იტვირთება design_block-ები..."
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
-msgstr ""
+msgstr "KiCad"
 
 #: common/design_block_io.cpp:48 pcbnew/pcb_io/pcb_io_mgr.cpp:90
 #, c-format
@@ -2272,7 +2272,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:929
 msgid "Icons"
-msgstr ""
+msgstr "ხატულები"
 
 #: common/dialog_about/AboutDialog_main.cpp:936
 msgid "Package Developers"
@@ -2305,7 +2305,7 @@ msgstr "პროგრამისტები"
 
 #: common/dialog_about/dialog_about.cpp:154
 msgid "Doc Writers"
-msgstr ""
+msgstr "დოკუმენტაციის ავტორები"
 
 #: common/dialog_about/dialog_about.cpp:157
 msgid "Librarians"
@@ -2333,7 +2333,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:269
 msgid "Clipboard Error"
-msgstr ""
+msgstr "ბუფერის შეცდომა"
 
 #: common/dialog_about/dialog_about.cpp:278
 msgid "Copied..."
@@ -2341,7 +2341,7 @@ msgstr "დაკოპირდა...."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "აპის სათაური"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Build Version Info"
@@ -2361,7 +2361,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "&Report Bug"
-msgstr ""
+msgstr "შეტყობინება შეცდომა&ზე"
 
 #: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1234
 msgid "Report a problem with KiCad"
@@ -2397,7 +2397,7 @@ msgstr ""
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
 msgid "Pattern:"
-msgstr ""
+msgstr "შაბლონი:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 msgid "Net class:"
@@ -2415,7 +2415,7 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
-msgstr ""
+msgstr "ფერის გასუფთავება"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2458,7 +2458,7 @@ msgstr "ფერის ამრჩევი"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr ""
+msgstr "აღწერილი ფერები"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
@@ -2466,7 +2466,7 @@ msgstr "გაუმჭირვალობა:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:179
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "მინიატურა (ძველი/ახალი):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:201
 msgid "Reset to Default"
@@ -2760,7 +2760,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1056
 msgid "Name:"
-msgstr ""
+msgstr "სახელი:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
@@ -2853,7 +2853,7 @@ msgstr "ბადის მორგება"
 
 #: common/dialogs/dialog_hotkey_list.cpp:36
 msgid "Hotkey List"
-msgstr ""
+msgstr "მალსახმობი ღილაკების სია"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
 msgid "Project Name"
@@ -2862,13 +2862,13 @@ msgstr "პროექტის სახელი"
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1621
 msgid "PCB"
-msgstr ""
+msgstr "ნაბეჭდი დაფა"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
-msgstr ""
+msgstr "სქემა"
 
 #: common/dialogs/dialog_import_choose_project_base.cpp:18
 msgid ""
@@ -2931,7 +2931,7 @@ msgstr ""
 
 #: common/dialogs/dialog_migrate_settings.cpp:33
 msgid "Quit KiCad"
-msgstr ""
+msgstr "KiCad-დან გასვლა"
 
 #: common/dialogs/dialog_migrate_settings.cpp:59
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
@@ -3039,15 +3039,15 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings.cpp:77
 msgid "User (Custom)"
-msgstr ""
+msgstr "მომხმარებელი (მორგებული)"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Preview Settings"
-msgstr ""
+msgstr "მინიატურის მორგება"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Preview Paper"
-msgstr ""
+msgstr "მინიატურის ქაღალდი"
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Preview Title Block Data"
@@ -3058,7 +3058,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:198
 #: pcbnew/tools/board_editor_control.cpp:304
 msgid "Page Settings"
-msgstr ""
+msgstr "გვერდის მორგება"
 
 #: common/dialogs/dialog_page_settings.cpp:118
 #: common/dialogs/dialog_page_settings_base.cpp:27
@@ -3067,7 +3067,7 @@ msgstr "ქაღალდი"
 
 #: common/dialogs/dialog_page_settings.cpp:119
 msgid "Title Block"
-msgstr ""
+msgstr "სათაურის ბლოკი"
 
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
@@ -3100,7 +3100,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
-msgstr ""
+msgstr "სულელური ტექსტი"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -3174,7 +3174,7 @@ msgstr ""
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:241
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Drawing Sheet"
-msgstr ""
+msgstr "სახაზავი ფურცელი"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
@@ -3246,15 +3246,15 @@ msgstr "კომენტარი6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Comment7:"
-msgstr ""
+msgstr "კომენტარი7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:360
 msgid "Comment8:"
-msgstr ""
+msgstr "კომენტარი8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:372
 msgid "Comment9:"
-msgstr ""
+msgstr "კომენტარი9:"
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
@@ -3351,7 +3351,7 @@ msgstr "პარამეტრი"
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:119
 msgid "Value"
-msgstr ""
+msgstr "მნიშვნელობა"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
 msgid "Option Choices"
@@ -3371,7 +3371,7 @@ msgstr ""
 #: eeschema/printing/dialog_print.cpp:94
 #: eeschema/printing/dialog_print_base.h:61
 msgid "Print"
-msgstr ""
+msgstr "ბეჭდვა"
 
 #: common/dialogs/dialog_print_generic.cpp:97
 #: common/dialogs/dialog_print_generic.cpp:249
@@ -3410,7 +3410,7 @@ msgstr "დასაბეჭდის გადახედვა"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:84
 #: pcbnew/dialogs/dialog_plot.cpp:227 pcbnew/dialogs/dialog_update_pcb.cpp:61
 msgid "Close"
-msgstr ""
+msgstr "დახურვა"
 
 #: common/dialogs/dialog_print_generic.cpp:156
 msgid "Warning: scale is not a number."
@@ -3474,7 +3474,7 @@ msgstr "გამოტანის რეჟიმი:"
 #: pcbnew/pcb_tablecell.cpp:243 pcbnew/pcb_text.cpp:664
 #: pcbnew/pcb_textbox.cpp:813 pcbnew/tools/drawing_stackup_table_tool.cpp:271
 msgid "Color"
-msgstr ""
+msgstr "ფერი"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
@@ -3519,7 +3519,7 @@ msgstr ""
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:277
@@ -3568,7 +3568,7 @@ msgstr ""
 #: common/dialogs/dialog_unit_entry_base.cpp:21
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:65
 msgid "MyLabel"
-msgstr ""
+msgstr "ჩემიჭდე"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
 msgid "X label:"
@@ -3593,7 +3593,7 @@ msgstr "ჩამოყრა"
 
 #: common/dialogs/dialog_unit_entry_base.h:48
 msgid "Title"
-msgstr ""
+msgstr "სათაური"
 
 #: common/dialogs/dialog_unit_entry_base.h:80
 msgid "Move Point to Location"
@@ -3613,7 +3613,7 @@ msgstr ""
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:95
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
@@ -3630,12 +3630,12 @@ msgstr "ჩართულია:"
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:54
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:64
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:75
 #: common/dialogs/panel_design_block_lib_table_base.cpp:136
@@ -3682,7 +3682,7 @@ msgstr "საწყისი"
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
@@ -3715,7 +3715,7 @@ msgstr "გაუქმება"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -3728,7 +3728,7 @@ msgstr "მომხმარებლის სახელი"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 msgid "Password"
-msgstr ""
+msgstr "პაროლი"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 msgid "Commit Changes"
@@ -3748,15 +3748,15 @@ msgstr "ფაილის სახელი"
 #: pcbnew/pcb_text.cpp:286 pcbnew/pcb_textbox.cpp:474 pcbnew/pcb_track.cpp:1739
 #: pcbnew/zone.cpp:823
 msgid "Status"
-msgstr ""
+msgstr "სტატუსი"
 
 #: common/dialogs/git/dialog_git_commit.cpp:99
 msgid "New"
-msgstr ""
+msgstr "ახალი"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Modified"
-msgstr ""
+msgstr "შეიცვალა"
 
 #: common/dialogs/git/dialog_git_commit.cpp:117
 msgid "Deleted"
@@ -3768,11 +3768,11 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:140
 msgid "Author:"
-msgstr ""
+msgstr "ავტორი:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:161
 msgid "C&ommit"
-msgstr ""
+msgstr "&გადაცემა"
 
 #: common/dialogs/git/dialog_git_commit.cpp:178
 msgid "Commit message cannot be empty"
@@ -3831,7 +3831,7 @@ msgstr ""
 #: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "პაროლი:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
 msgid "Location:"
@@ -3843,7 +3843,7 @@ msgstr "კავშირის ტიპი:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:464
@@ -3860,7 +3860,7 @@ msgstr "აირჩიეთ SSH-ის პირადი გასაღე�
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
 msgid "User name:"
@@ -3880,7 +3880,7 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
-msgstr ""
+msgstr "ბრენჩი"
 
 #: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
@@ -3894,13 +3894,13 @@ msgstr "ბოლო განახლება"
 #: common/dialogs/git/dialog_git_switch.cpp:151
 #: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
-msgstr ""
+msgstr "გადართვა"
 
 #: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:307
 #: pcbnew/footprint_libraries_utils.cpp:434
 msgid "Add"
-msgstr ""
+msgstr "დამატება"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
 msgid "Enable Git tracking"
@@ -3924,7 +3924,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:347
 #: common/dialogs/panel_common_settings_base.cpp:434
 msgid "minutes"
-msgstr ""
+msgstr "წუთი"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
@@ -3978,7 +3978,7 @@ msgstr ""
 #: common/dialogs/panel_color_settings.cpp:398
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:275
 msgid "(read-only)"
-msgstr ""
+msgstr "(მხოლოდ-წაკითხვადი)"
 
 #: common/dialogs/panel_color_settings_base.cpp:21
 msgid "Theme:"
@@ -4092,7 +4092,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:124
 msgid "Other:"
-msgstr ""
+msgstr "სხვა:"
 
 #: common/dialogs/panel_common_settings_base.cpp:142
 msgid "User Interface"
@@ -4253,7 +4253,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:255
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:384
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4276,7 +4276,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:312
 msgid "Session"
-msgstr ""
+msgstr "სესია"
 
 #: common/dialogs/panel_common_settings_base.cpp:322
 msgid "Remember open files for next project launch"
@@ -4314,7 +4314,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:367
 msgid "days"
-msgstr ""
+msgstr "დღე"
 
 #: common/dialogs/panel_common_settings_base.cpp:382
 msgid "Project Backup"
@@ -4598,7 +4598,7 @@ msgstr ""
 #: include/lib_table_grid.h:217 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
 msgid "Active"
-msgstr ""
+msgstr "აქტიური"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
@@ -4774,7 +4774,7 @@ msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:465
 msgid "Retry"
-msgstr ""
+msgstr "თავიდან ცდა"
 
 #: common/dialogs/panel_embedded_files.cpp:493
 #, c-format
@@ -4844,7 +4844,7 @@ msgstr "სწრაფი ბადის გადართვა"
 
 #: common/dialogs/panel_grid_settings_base.cpp:80
 msgid "Grid 1:"
-msgstr ""
+msgstr "ბადე 1:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:89
 #: common/dialogs/panel_grid_settings_base.cpp:102
@@ -4853,7 +4853,7 @@ msgstr "(კლავიატურის მალსახმობი)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:93
 msgid "Grid 2:"
-msgstr ""
+msgstr "ბადე 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:925
 msgid "Grid Overrides"
@@ -4865,11 +4865,11 @@ msgstr "დაკავშირებული ელემენტები:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:130
 msgid "Wires:"
-msgstr ""
+msgstr "მავთულები:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
 msgid "Vias:"
-msgstr ""
+msgstr "გამტარი ნახვრეტები:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:146
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -4938,7 +4938,7 @@ msgstr "მასშტაბი:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
 msgid "Convert to Greyscale"
@@ -5038,7 +5038,7 @@ msgstr "პანორამა"
 #: common/tool/zoom_menu.cpp:56
 #: eeschema/dialogs/panel_simulator_preferences.cpp:45
 msgid "Zoom"
-msgstr ""
+msgstr "მასშტაბი"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -5068,7 +5068,7 @@ msgstr ""
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:148
 msgid "Right button drag:"
@@ -5089,12 +5089,12 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:208
 msgid "--"
-msgstr ""
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:212
 #: pcbnew/dialogs/panel_edit_options_base.cpp:175
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:216
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:133
@@ -5111,7 +5111,7 @@ msgstr "Alt"
 #: common/dialogs/panel_mouse_settings_base.cpp:228
 #: pcbnew/dialogs/dialog_render_job_base.cpp:139
 msgid "Zoom:"
-msgstr ""
+msgstr "მასშტაბი:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 #: common/dialogs/panel_mouse_settings_base.cpp:283
@@ -5161,7 +5161,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:74
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:21
 msgid "General"
-msgstr ""
+msgstr "ზოგადი"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
 msgid "Check for KiCad updates on startup"
@@ -5256,7 +5256,7 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
 msgid "Detect Automatically"
@@ -5413,7 +5413,7 @@ msgstr "ქსელის კლასები"
 #: pcbnew/tools/board_inspection_tool.cpp:642
 #: pcbnew/tools/board_inspection_tool.cpp:1193 pcbnew/zone.cpp:2120
 msgid "Clearance"
-msgstr ""
+msgstr "ღრეჩო"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
@@ -5486,7 +5486,7 @@ msgstr "ხაზის სტილი"
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480
 msgid "Default"
-msgstr ""
+msgstr "ნაგულისხმევი"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:107
 msgid "Set color to transparent to use KiCad default color."
@@ -5502,7 +5502,7 @@ msgstr "ქსელის კლასის მინიჭებები"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
-msgstr ""
+msgstr "ნიმუში"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1387 eeschema/sch_label.cpp:219
@@ -5611,7 +5611,7 @@ msgstr ""
 #: pcbnew/widgets/search_handlers.cpp:254
 #: pcbnew/widgets/search_handlers.cpp:296
 msgid "Text"
-msgstr ""
+msgstr "ტექსტი"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:416
@@ -5646,7 +5646,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_image_properties.cpp:40 eeschema/sch_bitmap.h:93
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:46
 msgid "Image"
-msgstr ""
+msgstr "გამოსახულება"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:102
 #: common/drawing_sheet/ds_data_model_io.cpp:133
@@ -5684,7 +5684,7 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:168
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 msgid "Comment"
-msgstr ""
+msgstr "კომენტარი"
 
 #: common/drawing_sheet/ds_draw_item.cpp:242
 #, c-format
@@ -5709,7 +5709,7 @@ msgstr ""
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
-msgstr ""
+msgstr "ბუფერი"
 
 #: common/dsnlexer.cpp:345
 #, c-format
@@ -5788,7 +5788,7 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:1058
 msgid "Preferences"
-msgstr ""
+msgstr "მორგება"
 
 #: common/eda_base_frame.cpp:1086 common/hotkey_store.cpp:75
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
@@ -5856,7 +5856,7 @@ msgstr ""
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/sch_actions.cpp:74
 msgid "Simulator"
-msgstr ""
+msgstr "სიმულატორი"
 
 #: common/eda_base_frame.cpp:1165 common/tool/actions.cpp:1112
 #: common/tool/common_tools.cpp:614 kicad/tools/kicad_manager_actions.cpp:147
@@ -5994,7 +5994,7 @@ msgstr "დუიმი"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:117
 #: pagelayout_editor/pl_editor_frame.cpp:752
 msgid "mils"
-msgstr ""
+msgstr "mils"
 
 #: common/eda_draw_frame.cpp:667 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/footprint_wizard_frame.cpp:325 pcbnew/pcb_dimension.cpp:640
@@ -6036,7 +6036,7 @@ msgstr "ახალი ბიბლიოთეკა"
 #: common/widgets/search_pane.cpp:143 eeschema/sch_edit_frame.cpp:266
 #: pcbnew/pcb_edit_frame.cpp:371
 msgid "Search"
-msgstr ""
+msgstr "ძებნა"
 
 #: common/eda_draw_frame.cpp:1241 common/tool/actions.cpp:1121
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1959
@@ -6044,7 +6044,7 @@ msgstr ""
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:349
 #: pcbnew/pcb_edit_frame.cpp:1717
 msgid "Properties"
-msgstr ""
+msgstr "თვისებები"
 
 #: common/eda_draw_frame.cpp:1247 pcbnew/pcb_edit_frame.cpp:362
 #: pcbnew/pcb_edit_frame.cpp:1718 pcbnew/tools/pcb_actions.cpp:1339
@@ -6107,7 +6107,7 @@ msgstr "ბილიკი"
 #: common/eda_item.cpp:398 pcbnew/dialogs/dialog_board_statistics.cpp:515
 #: pcbnew/pcb_track.cpp:1612 pcbnew/pcb_track.cpp:1688
 msgid "Via"
-msgstr ""
+msgstr "გამტარი ნახვრეტი"
 
 #: common/eda_item.cpp:399 common/eda_item.cpp:411 eeschema/sch_marker.cpp:367
 #: pcbnew/pcb_marker.cpp:223
@@ -6127,7 +6127,7 @@ msgstr "ლიდერი"
 
 #: common/eda_item.cpp:405 pcbnew/pcb_target.cpp:125
 msgid "Target"
-msgstr ""
+msgstr "სამიზნე"
 
 #: common/eda_item.cpp:406 pcbnew/tools/board_inspection_tool.cpp:824
 msgid "Zone"
@@ -6135,15 +6135,15 @@ msgstr "ზონა"
 
 #: common/eda_item.cpp:407
 msgid "ItemList"
-msgstr ""
+msgstr "ელემენტების ჩამონათვალი"
 
 #: common/eda_item.cpp:408
 msgid "NetInfo"
-msgstr ""
+msgstr "ქსელის ინფორმაცია"
 
 #: common/eda_item.cpp:409 pcbnew/pcb_group.cpp:387
 msgid "Group"
-msgstr ""
+msgstr "ჯგუფი"
 
 #: common/eda_item.cpp:412 eeschema/sch_junction.cpp:304
 #: eeschema/sch_junction.h:102
@@ -6269,7 +6269,7 @@ msgstr ""
 
 #: common/eda_shape.cpp:976 common/eda_shape.cpp:989
 msgid "Unrecognized"
-msgstr "უცნობი"
+msgstr "არაღიარებული"
 
 #: common/eda_shape.cpp:985
 msgid "Curve"
@@ -6336,7 +6336,7 @@ msgstr "წერტილები"
 #: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:808
 #: pcbnew/pcb_track.cpp:1630 pcbnew/pcb_track.cpp:2124
 msgid "Width"
-msgstr ""
+msgstr "სიგანე"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
@@ -6467,7 +6467,7 @@ msgstr "გასქელება"
 
 #: common/eda_text.cpp:979
 msgid "Bold+Italic"
-msgstr ""
+msgstr "სქელი+კურსივი"
 
 #: common/eda_text.cpp:1326
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
@@ -6478,7 +6478,7 @@ msgstr ""
 #: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2617
 msgid "Left"
-msgstr ""
+msgstr "მარცხენა"
 
 #: common/eda_text.cpp:1327 common/eda_text.cpp:1336
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
@@ -6506,7 +6506,7 @@ msgstr "ცენტრი"
 #: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2618
 msgid "Right"
-msgstr ""
+msgstr "მარჯვენა"
 
 #: common/eda_text.cpp:1335
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
@@ -6515,7 +6515,7 @@ msgstr ""
 #: eeschema/sch_field.cpp:1860 eeschema/sch_text.cpp:666
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
-msgstr ""
+msgstr "ზედა"
 
 #: common/eda_text.cpp:1337
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
@@ -6524,7 +6524,7 @@ msgstr ""
 #: eeschema/sch_field.cpp:1862 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
-msgstr ""
+msgstr "ქვედა"
 
 #: common/eda_text.cpp:1343
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
@@ -6585,7 +6585,7 @@ msgstr "სისქე"
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
-msgstr ""
+msgstr "სარკისებური"
 
 #: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1875
 #: eeschema/sch_field.cpp:1878 eeschema/sch_label.cpp:2326
@@ -6624,7 +6624,7 @@ msgstr "ზემოთ"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
 #: pcbnew/generators/pcb_tuning_pattern.cpp:214
 msgid "max"
-msgstr ""
+msgstr "მაქს"
 
 #: common/env_vars.cpp:102
 msgid ""
@@ -6716,7 +6716,7 @@ msgstr ""
 
 #: common/filename_resolver.cpp:522
 msgid "Alias: "
-msgstr ""
+msgstr "ფსევდონიმი: "
 
 #: common/filename_resolver.cpp:525
 msgid "This path:"
@@ -6945,7 +6945,7 @@ msgstr "შეცვლილია"
 
 #: common/git/git_pull_handler.cpp:448 common/git/git_pull_handler.cpp:449
 msgid "Added"
-msgstr ""
+msgstr "დამატებულია"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
@@ -7101,7 +7101,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
 #: kicad/dialogs/panel_jobset.cpp:383 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
-msgstr ""
+msgstr "კოპირება"
 
 #: common/grid_tricks.cpp:364 kicad/dialogs/panel_jobset.cpp:384
 msgid "Copy selected cells to clipboard"
@@ -7125,7 +7125,7 @@ msgstr ""
 #: kicad/dialogs/panel_jobset.cpp:385 kicad/project_tree_pane.cpp:985
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2718
 msgid "Delete"
-msgstr ""
+msgstr "წაშლა"
 
 #: common/grid_tricks.cpp:371
 msgid "Clear contents of selected cells"
@@ -7665,11 +7665,11 @@ msgstr ""
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:45
 msgid "Archive"
-msgstr ""
+msgstr "არქივი"
 
 #: common/jobs/jobs_output_folder.cpp:80 common/jobs/jobset.cpp:43
 msgid "Folder"
-msgstr ""
+msgstr "საქაღალდე"
 
 #: common/json_schema_validator.cpp:48
 #, c-format
@@ -7745,7 +7745,7 @@ msgstr ""
 
 #: common/layer_id.cpp:74
 msgid "Junctions"
-msgstr ""
+msgstr "შეერთებები"
 
 #: common/layer_id.cpp:75 eeschema/widgets/panel_sch_selection_filter.cpp:205
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:41
@@ -7823,7 +7823,7 @@ msgstr ""
 #: common/layer_id.cpp:92 eeschema/widgets/panel_sch_selection_filter.cpp:206
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 msgid "Pins"
-msgstr ""
+msgstr "საკონტაქტო ღეროeები"
 
 #: common/layer_id.cpp:93
 msgid "Sheet borders"
@@ -7877,7 +7877,7 @@ msgstr ""
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Anchors"
-msgstr ""
+msgstr "ანკერები"
 
 #: common/layer_id.cpp:106 common/layer_id.cpp:148
 msgid "Helper items"
@@ -7889,7 +7889,7 @@ msgstr ""
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Grid"
-msgstr ""
+msgstr "ბადე"
 
 #: common/layer_id.cpp:108
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:104
@@ -7984,7 +7984,7 @@ msgstr ""
 
 #: common/layer_id.cpp:131
 msgid "Micro-vias"
-msgstr ""
+msgstr "გამტარი მიკრონახვრეტები"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
@@ -8012,7 +8012,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:2591
 #: pcbnew/widgets/search_handlers.cpp:405
 msgid "Ratsnest"
-msgstr ""
+msgstr "კავშირები"
 
 #: common/layer_id.cpp:138
 msgid "DRC warnings"
@@ -8194,11 +8194,11 @@ msgstr ""
 
 #: common/notifications_manager.cpp:97
 msgid "Dismiss"
-msgstr ""
+msgstr "მოცილება"
 
 #: common/notifications_manager.cpp:155
 msgid "Notifications"
-msgstr ""
+msgstr "ცნობები"
 
 #: common/notifications_manager.cpp:180
 msgid "There are no notifications available"
@@ -8369,7 +8369,7 @@ msgstr "გაფრთხილება: "
 #: common/rc_item.cpp:438 eeschema/erc/erc_item.cpp:415
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Error: "
-msgstr ""
+msgstr "შეცდომა: "
 
 #: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:2977
 #, c-format
@@ -8430,7 +8430,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
 #: pcbnew/footprint.cpp:4218
 msgid "Attributes"
-msgstr ""
+msgstr "ატრიბუტები"
 
 #: common/settings/bom_settings.cpp:260
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
@@ -8443,7 +8443,7 @@ msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:273
 msgid "Semicolons"
-msgstr ""
+msgstr "წერტილმძიმეები"
 
 #: common/settings/color_settings.cpp:389
 msgid "(Footprints)"
@@ -8470,7 +8470,7 @@ msgstr "%s-დან გასვლა"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
-msgstr ""
+msgstr "ახალი..."
 
 #: common/tool/actions.cpp:46
 msgid "Create a new document in the editor"
@@ -8569,11 +8569,11 @@ msgstr ""
 
 #: common/tool/actions.cpp:138
 msgid "Print..."
-msgstr ""
+msgstr "დაბეჭდვა..."
 
 #: common/tool/actions.cpp:144
 msgid "Plot..."
-msgstr ""
+msgstr "დახაზვა..."
 
 #: common/tool/actions.cpp:151
 msgid "Close the current editor"
@@ -8585,7 +8585,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:168
 msgid "Finish"
-msgstr ""
+msgstr "დასრულება"
 
 #: common/tool/actions.cpp:169
 msgid "Finish current tool"
@@ -8849,7 +8849,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_schematic_find_base.h:82
 #: pcbnew/dialogs/dialog_find.cpp:55
 msgid "Find"
-msgstr ""
+msgstr "ძებნა"
 
 #: common/tool/actions.cpp:490 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
@@ -9105,7 +9105,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:898 common/tool/common_tools.cpp:627
 msgid "Grid Origin"
-msgstr ""
+msgstr "ბადის საწყისი"
 
 #: common/tool/actions.cpp:899
 msgid "Place the grid origin point"
@@ -9146,7 +9146,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:55
 #: pcbnew/pcb_dimension.cpp:1801
 msgid "Mils"
-msgstr ""
+msgstr "მილები"
 
 #: common/tool/actions.cpp:962 eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -9350,7 +9350,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:187
 msgid "Help"
-msgstr ""
+msgstr "დახმარება"
 
 #: common/tool/actions.cpp:1198
 msgid "Open product documentation in a web browser"
@@ -9526,7 +9526,7 @@ msgstr "ადგილი"
 
 #: common/validators.cpp:411
 msgid " or "
-msgstr ""
+msgstr " ან "
 
 #: common/validators.cpp:416
 msgid ", or "
@@ -9588,7 +9588,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:893
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:920
 msgid "Filter:"
-msgstr ""
+msgstr "ფილტრი:"
 
 #: common/widgets/font_choice.cpp:64
 msgid "<not found>"
@@ -9852,7 +9852,7 @@ msgstr ""
 #: common/widgets/widget_hotkey_list.cpp:117
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:28
 msgid "Command:"
-msgstr ""
+msgstr "ბრძანება:"
 
 #: common/widgets/widget_hotkey_list.cpp:126
 msgid "Current key:"
@@ -9873,7 +9873,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:451
 msgid "Edit..."
-msgstr ""
+msgstr "ჩასწორება..."
 
 #: common/widgets/widget_hotkey_list.cpp:452
 msgid "Edit Alternate..."
@@ -9908,7 +9908,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:522
 msgid "Command"
-msgstr ""
+msgstr "ბრძანება"
 
 #: common/widgets/widget_hotkey_list.cpp:525
 msgid "(double-click to edit)"
@@ -9930,7 +9930,7 @@ msgstr "ალტერნატული"
 #: common/widgets/wx_html_report_panel.cpp:214
 #: common/widgets/wx_html_report_panel.cpp:244
 msgid "Error:"
-msgstr ""
+msgstr "შეცდომა:"
 
 #: common/widgets/wx_html_report_panel.cpp:196
 #: common/widgets/wx_html_report_panel.cpp:218
@@ -9967,7 +9967,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:174
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Show:"
-msgstr ""
+msgstr "ჩვენება:"
 
 #: common/widgets/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_erc_base.cpp:129
@@ -9980,7 +9980,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:2588
 #: pcbnew/widgets/appearance_controls.cpp:2607
 msgid "All"
-msgstr ""
+msgstr "ყველა"
 
 #: common/widgets/wx_html_report_panel_base.cpp:63
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
@@ -9989,13 +9989,13 @@ msgstr "მოქმედებები"
 
 #: common/widgets/wx_html_report_panel_base.cpp:69
 msgid "Infos"
-msgstr ""
+msgstr "ინფორმაციები"
 
 #: common/widgets/wx_html_report_panel_base.cpp:75
 #: eeschema/dialogs/dialog_erc_base.cpp:156
 #: pcbnew/dialogs/dialog_drc_base.cpp:205
 msgid "Save..."
-msgstr ""
+msgstr "შენახვა..."
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "All files"
@@ -10885,7 +10885,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_annotate_base.cpp:48
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:187
 msgid "Selection"
-msgstr ""
+msgstr "მონიშნული"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Recurse into subsheets"
@@ -11185,7 +11185,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_change_symbols.cpp:162
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
 msgid "Change"
-msgstr ""
+msgstr "შეცვლა"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:162
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
@@ -11197,7 +11197,7 @@ msgstr ""
 #: kicad/pcm/dialogs/panel_packages_view.cpp:720
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
 msgid "Update"
-msgstr ""
+msgstr "განახლება"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:456
 msgid "Update Symbols"
@@ -11369,11 +11369,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
 msgid "Username:"
-msgstr ""
+msgstr "მომხმარებლის სახელი:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 msgid "Connection String:"
@@ -11448,7 +11448,7 @@ msgstr "საკვანძო სიტყვები:"
 #: kicad/dialogs/dialog_destination_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:114
 msgid "Description:"
-msgstr ""
+msgstr "აღწერა:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
 msgid "Design Block Properties"
@@ -11565,19 +11565,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:458 pcbnew/dialogs/dialog_drc.cpp:362
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "მზადაა.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:623 pcbnew/dialogs/dialog_drc.cpp:671
 msgid "errors"
-msgstr ""
+msgstr "შეცდომა"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:672
 msgid "warnings"
-msgstr ""
+msgstr "გაფრთხილება"
 
 #: eeschema/dialogs/dialog_erc.cpp:625 pcbnew/dialogs/dialog_drc.cpp:673
 msgid "appropriate"
-msgstr ""
+msgstr "შესაფერისი"
 
 #: eeschema/dialogs/dialog_erc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:694
 msgid "Remove exclusion for this violation"
@@ -11726,7 +11726,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:167
 msgid "a page"
-msgstr ""
+msgstr "გვერდი"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:89
 #: pcbnew/dialogs/dialog_drc_base.cpp:108
@@ -11947,12 +11947,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:22
 msgid "Unit:"
-msgstr ""
+msgstr "ერთეული:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:320
@@ -12080,7 +12080,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_text_properties_base.cpp:234
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:45
 msgid "Color:"
-msgstr ""
+msgstr "ფერი:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:286
@@ -12418,7 +12418,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_label_properties_base.cpp:41
 #: eeschema/dialogs/dialog_label_properties_base.cpp:48
 msgid "Label:"
-msgstr ""
+msgstr "ჭდე:"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:34
 #: eeschema/dialogs/dialog_label_properties_base.cpp:50
@@ -12470,7 +12470,7 @@ msgstr "ველები"
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 #: pcbnew/pcb_fields_grid_table.cpp:149
 msgid "Show"
-msgstr ""
+msgstr "ჩვენება"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:112
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
@@ -12569,7 +12569,7 @@ msgstr "ორმხრივი"
 #: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2247
 #: eeschema/sch_pin.cpp:2076
 msgid "Tri-state"
-msgstr ""
+msgstr "სამსტაბილური"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
@@ -12619,7 +12619,7 @@ msgstr "რაოდენობა"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
 #: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/sch_pin.cpp:1572
 msgid "Number"
-msgstr ""
+msgstr "ნომერი"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:122
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:90
@@ -12712,7 +12712,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1783
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
 msgid "Pin count:"
@@ -12788,7 +12788,7 @@ msgstr "სიმბოლოს ბიბლიოთეკის ველე�
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
 msgid "Label"
-msgstr ""
+msgstr "ჭდე"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:261
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
@@ -13042,7 +13042,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
 #: eeschema/sch_rule_area.cpp:390
 msgid "<None>"
-msgstr ""
+msgstr "<არცერთი>"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
 msgid ""
@@ -13210,7 +13210,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:221
 msgid "Combo!"
-msgstr ""
+msgstr "კომბო!"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -13364,13 +13364,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
-msgstr ""
+msgstr "&ხილული"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:295
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:192
 msgid "Preview:"
-msgstr ""
+msgstr "მინიატურა:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
 msgid "Alternate pin function definitions"
@@ -13456,17 +13456,17 @@ msgstr "A0"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:286
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:328
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:329
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:330
 msgid "D"
@@ -13474,7 +13474,7 @@ msgstr "მ"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:331
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #, c-format
@@ -13530,7 +13530,7 @@ msgstr "DXF"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:57
 msgid "Page size:"
@@ -13732,7 +13732,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:24
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:24
 msgid "Import from:"
-msgstr "შემოტანა:"
+msgstr "შემოტანა საიდან:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:29
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:32
@@ -13746,7 +13746,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
 msgid "Import:"
-msgstr ""
+msgstr "შემოტანა:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
@@ -13852,7 +13852,7 @@ msgstr "ქსელის სახელების ძებ&ნა"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:127
 msgid "Replace"
-msgstr ""
+msgstr "ჩანაცვლება"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:44
 msgid "Schematic Setup"
@@ -14127,7 +14127,7 @@ msgstr "სტილი"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:203
 msgid "Fill"
-msgstr ""
+msgstr "შევსება"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:253
 msgid "Hierarchical path:"
@@ -14135,7 +14135,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:257
 msgid "path"
-msgstr ""
+msgstr "ბილიკი"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:91
 msgid "Sheet Properties"
@@ -14171,11 +14171,11 @@ msgstr "DC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "OP"
-msgstr ""
+msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
@@ -14183,24 +14183,24 @@ msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "SP"
-msgstr ""
+msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2695
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
 msgid "Custom"
-msgstr "სხვა"
+msgstr "მომხმარებლის"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
 #: eeschema/dialogs/dialog_sim_command_base.cpp:472
 msgid "Decade"
-msgstr ""
+msgstr "დეკადა"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
@@ -14286,12 +14286,12 @@ msgstr "მარჯ"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:116
 #: eeschema/dialogs/dialog_sim_command_base.cpp:122
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:128
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:24
 msgid "Source:"
-msgstr ""
+msgstr "წყარო:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:132
 msgid "Sweep type:"
@@ -14326,7 +14326,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_command_base.cpp:282
 #: eeschema/dialogs/dialog_sim_command_base.cpp:297
 msgid "seconds"
-msgstr ""
+msgstr "წამი"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:264
 msgid "Final time:"
@@ -14419,7 +14419,7 @@ msgstr "გამოტანა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
 msgid "Find:"
-msgstr ""
+msgstr "ძებნა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles and Zeros"
@@ -14427,7 +14427,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles"
-msgstr ""
+msgstr "ბოძები"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Zeros"
@@ -14451,11 +14451,11 @@ msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice and LTSpice"
@@ -14463,7 +14463,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:682
 msgid "SPICE Command"
@@ -14486,7 +14486,7 @@ msgstr "მინ:"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:746
 #: eeschema/dialogs/dialog_sim_command_base.cpp:783
 msgid "Max:"
-msgstr ""
+msgstr "მაქს:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:805
 msgid "Show grid"
@@ -14518,7 +14518,7 @@ msgstr "70"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:574
 #: pcbnew/dialogs/dialog_render_job_base.cpp:265
 msgid "Top:"
-msgstr ""
+msgstr "ზედა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:853
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
@@ -14529,16 +14529,16 @@ msgstr "30"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:588
 #: pcbnew/dialogs/dialog_render_job_base.cpp:273
 msgid "Bottom:"
-msgstr ""
+msgstr "ქვედა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:862
 msgid "45"
-msgstr ""
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:873
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
 msgid "Right:"
-msgstr ""
+msgstr "მარჯვენა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:892
 msgid "Plot Setup"
@@ -14591,15 +14591,15 @@ msgstr "დიაპაზონი:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "p"
-msgstr ""
+msgstr "p"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
@@ -14612,7 +14612,7 @@ msgstr "u"
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:232
 #: pcb_calculator/widgets/unit_selector.cpp:211
 msgid "m"
-msgstr ""
+msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "K"
@@ -14632,7 +14632,7 @@ msgstr "ტერა"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "P"
-msgstr ""
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
 #, c-format
@@ -14641,7 +14641,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model.cpp:234
 msgid "<unknown>"
-msgstr ""
+msgstr "<უცნობი>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:244
 #, c-format
@@ -14688,7 +14688,7 @@ msgstr "პარამეტრი"
 #: pcbnew/pcb_track.cpp:1691 pcbnew/tools/drawing_stackup_table_tool.cpp:251
 #: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:775
 msgid "Type"
-msgstr ""
+msgstr "ტიპი"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:755
 #: eeschema/dialogs/dialog_sim_model.cpp:792
@@ -14719,7 +14719,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:85
 msgid "Pin:"
-msgstr ""
+msgstr "საკონტაქტო ღერო:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:92
 msgid "Differential"
@@ -14731,7 +14731,7 @@ msgstr "საკონტაქტო ღეროს მოდელი:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:102
 msgid "Waveform:"
-msgstr ""
+msgstr "სიგნალის ფორმა:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:120
 msgid "Built-in SPICE model"
@@ -14739,7 +14739,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:129
 msgid "Device:"
-msgstr ""
+msgstr "მოწყობილობა:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:138
 msgid "Device type:"
@@ -14751,7 +14751,7 @@ msgstr "მოწყობილობის ტიპი:"
 #: eeschema/widgets/search_handlers.cpp:325
 #: eeschema/widgets/search_handlers.cpp:412
 msgid "Page"
-msgstr ""
+msgstr "გვერდი"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:43
@@ -14763,7 +14763,7 @@ msgstr "პარამეტრები"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:219
 msgid "Code"
-msgstr ""
+msgstr "კოდი"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
 msgid "Save {} in Value field as \"{}\""
@@ -14846,11 +14846,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
-msgstr ""
+msgstr "რა-ბა"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:711
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
 #, c-format
@@ -14960,7 +14960,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
 msgid "Recursive"
-msgstr ""
+msgstr "რეკურსიული"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
 msgid "Cross-probe action:"
@@ -14974,11 +14974,11 @@ msgstr "მოუნიშნავის გაბუნდოვნება"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:183
 #: pcbnew/tools/pcb_selection_tool.cpp:93
 msgid "Select"
-msgstr ""
+msgstr "მონიშვნა"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:203
 msgid "Edit"
-msgstr ""
+msgstr "ჩასწორება"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 msgid "Field delimiter:"
@@ -14987,7 +14987,7 @@ msgstr "ველის გამყოფი:"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:219
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:237
 msgid ","
-msgstr ""
+msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "String delimiter:"
@@ -14995,7 +14995,7 @@ msgstr "სტრიქონის გამყოფი:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:228
 msgid "\""
-msgstr ""
+msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
 msgid "Reference delimiter:"
@@ -15008,7 +15008,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:246
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
 msgid "Leave blank to disable ranges."
@@ -15033,7 +15033,7 @@ msgstr "ფორმატის პრესეტები:"
 #: pcbnew/dialogs/dialog_export_step.cpp:110
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
-msgstr ""
+msgstr "გატანა"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:141
 msgid "Symbol Fields Table"
@@ -15069,7 +15069,7 @@ msgstr "კუთხე:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 msgid "+90"
-msgstr ""
+msgstr "+90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:143
@@ -15484,11 +15484,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
 msgid "Wire/Bus"
-msgstr ""
+msgstr "მავთული/სალტე"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
 msgid "Wires/Buses"
-msgstr ""
+msgstr "მავთულები/სალტეები"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -15532,12 +15532,12 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:449
 msgid "/path/to/sheet"
-msgstr ""
+msgstr "/ბილიკი/ფურცლამდე"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
 msgid "Cross-probing"
-msgstr ""
+msgstr "ჯვარედინი ზონდირება"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
@@ -15768,7 +15768,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:199
 #: pcbnew/dialogs/panel_edit_options_base.cpp:233
 msgid "Shift+Cmd"
-msgstr ""
+msgstr "Shift+Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:235
 msgid "Symbol Field Automatic Placement"
@@ -15835,7 +15835,7 @@ msgstr "მეტსახელი"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
 msgid "(source)"
-msgstr ""
+msgstr "(წყარო)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
 #, c-format
@@ -15858,27 +15858,27 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
-msgstr ""
+msgstr ".A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-A"
-msgstr ""
+msgstr "-A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_A"
-msgstr ""
+msgstr "_A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".1"
-msgstr ""
+msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:48
@@ -15967,7 +15967,7 @@ msgstr "პრეფიქსი:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:223
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:228
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
@@ -15976,7 +15976,7 @@ msgstr "სუფიქსი:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:232
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:247
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:20
@@ -16024,7 +16024,7 @@ msgstr "ნვ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 msgid "uV"
-msgstr ""
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:73
@@ -16034,7 +16034,7 @@ msgstr "მვ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 msgid "KV"
-msgstr ""
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 msgid "MV"
@@ -16076,7 +16076,7 @@ msgstr "ნა"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:271
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:92
 msgid "uA"
-msgstr ""
+msgstr "µა"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 msgid "mA"
@@ -16084,7 +16084,7 @@ msgstr "მა"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 msgid "KA"
-msgstr ""
+msgstr "KA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 msgid "MA"
@@ -16148,7 +16148,7 @@ msgstr ""
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
 msgid "Modifier"
-msgstr ""
+msgstr "მოდიფიკატორი"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -16158,15 +16158,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:131
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Action"
-msgstr ""
+msgstr "ქმედება"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
 msgid "None:"
-msgstr ""
+msgstr "არცერთი:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
 msgid "Ctrl:"
-msgstr ""
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
 msgid "Shift:"
@@ -16174,7 +16174,7 @@ msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
 msgid "Horizontal Touchpad Movement"
@@ -16182,7 +16182,7 @@ msgstr "ჰორიზონტალური თაჩპედის მო�
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "ნებისმიერი:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -16370,7 +16370,7 @@ msgstr ""
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: eeschema/eeschema.cpp:478
 msgid ""
@@ -16977,13 +16977,13 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:971
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Horizontal"
-msgstr ""
+msgstr "ჰორიზონტალური"
 
 #: eeschema/fields_grid_table.cpp:328 eeschema/fields_grid_table.cpp:805
 #: eeschema/fields_grid_table.cpp:973
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Vertical"
-msgstr ""
+msgstr "ვერტიკალური"
 
 #: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1891
 msgid "Allow Autoplacement"
@@ -17270,7 +17270,7 @@ msgstr ""
 #: eeschema/generate_alias_info.cpp:115 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:766 pcbnew/zone.cpp:863
 msgid "Unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:61
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:56
@@ -17312,7 +17312,7 @@ msgstr ""
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:130 pcbnew/zone.cpp:2021
 msgid "Placement"
-msgstr "განლაგება"
+msgstr "მოთავსება"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:48
 msgid "Interactive placement"
@@ -17320,7 +17320,7 @@ msgstr ""
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:55
 msgid "At"
-msgstr ""
+msgstr "სად"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
@@ -17379,7 +17379,7 @@ msgstr ""
 #: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 msgid "DNP"
-msgstr ""
+msgstr "DNP"
 
 #: eeschema/lib_symbol.cpp:1617
 msgid "Power flag differs."
@@ -17481,7 +17481,7 @@ msgstr ""
 #: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
 #: pcbnew/menubar_footprint_editor.cpp:65 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Import"
-msgstr ""
+msgstr "შემოტანა"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
@@ -17499,7 +17499,7 @@ msgstr ""
 #: eeschema/menubar.cpp:109 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
-msgstr ""
+msgstr "გრაფიკა..."
 
 #: eeschema/menubar.cpp:118
 msgid "Drawing to Clipboard"
@@ -17508,7 +17508,7 @@ msgstr ""
 #: eeschema/menubar.cpp:119 pcbnew/menubar_pcb_editor.cpp:114
 #: pcbnew/pcb_edit_frame.cpp:235
 msgid "Netlist..."
-msgstr ""
+msgstr "ქსელების სია..."
 
 #: eeschema/menubar.cpp:120
 msgid "Symbols to Library..."
@@ -17522,21 +17522,21 @@ msgstr ""
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
 msgid "Panels"
-msgstr ""
+msgstr "პანელები"
 
 #: eeschema/menubar.cpp:350
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:153 pcbnew/menubar_footprint_editor.cpp:246
 #: pcbnew/menubar_pcb_editor.cpp:479
 msgid "&Place"
-msgstr ""
+msgstr "მო&თავსება"
 
 #: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:481
 msgid "&Inspect"
-msgstr ""
+msgstr "&შემოწმება"
 
 #: eeschema/menubar.cpp:352 gerbview/menubar.cpp:233 kicad/menubar.cpp:234
 #: pcbnew/menubar_footprint_editor.cpp:248 pcbnew/menubar_pcb_editor.cpp:482
@@ -17548,7 +17548,7 @@ msgstr "&ხელსაწყოები"
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:249
 #: pcbnew/menubar_pcb_editor.cpp:483
 msgid "P&references"
-msgstr ""
+msgstr "მორგ&ება"
 
 #: eeschema/net_navigator.cpp:57
 #, c-format
@@ -17628,7 +17628,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls_base.cpp:151
 #: pcbnew/widgets/search_handlers.cpp:323
 msgid "Nets"
-msgstr ""
+msgstr "ქსელები"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:54
 msgid "Failed to create directory 'devices' ."
@@ -17677,7 +17677,7 @@ msgstr ""
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:129 pcbnew/pcb_plotter.cpp:277
 msgid "Done."
-msgstr ""
+msgstr "მზადაა."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:213
 msgid "Error: duplicate sheet names. Continue?"
@@ -17725,7 +17725,7 @@ msgstr ""
 
 #: eeschema/pin_numbers.cpp:129 pcbnew/zones.h:62
 msgid "none"
-msgstr ""
+msgstr "არცერთი"
 
 #: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2078
 msgid "Free"
@@ -17755,7 +17755,7 @@ msgstr ""
 
 #: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2084
 msgid "Unconnected"
-msgstr ""
+msgstr "დაკავშირებული არაა"
 
 #: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2092
 msgid "Inverted"
@@ -17787,7 +17787,7 @@ msgstr ""
 
 #: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2099
 msgid "NonLogic"
-msgstr ""
+msgstr "არალოგიკური"
 
 #: eeschema/printing/dialog_print.cpp:356
 msgid "Print Schematic"
@@ -17939,7 +17939,7 @@ msgstr ""
 #: eeschema/sch_bus_entry.cpp:527 eeschema/sch_line.cpp:143
 #: eeschema/sch_line.cpp:929 eeschema/tools/sch_edit_tool.cpp:249
 msgid "Wire"
-msgstr ""
+msgstr "მავთული"
 
 #: eeschema/sch_bus_entry.cpp:528 eeschema/sch_line.cpp:144
 #: eeschema/sch_line.cpp:930
@@ -18027,7 +18027,7 @@ msgstr ""
 #: eeschema/sch_edit_frame.cpp:1749 eeschema/sim/simulator_frame.cpp:330
 #: pcbnew/footprint_edit_frame.cpp:1105 pcbnew/pcb_edit_frame.cpp:1809
 msgid "[Unsaved]"
-msgstr ""
+msgstr "[შეუნახავი]"
 
 #: eeschema/sch_edit_frame.cpp:1753
 msgid "[no schematic loaded]"
@@ -18905,7 +18905,7 @@ msgstr "დაბლოკილია"
 #: pcbnew/microwave/microwave_polygon.cpp:135 pcbnew/pcb_target.cpp:155
 #: pcbnew/pcb_target.cpp:247
 msgid "Size"
-msgstr ""
+msgstr "ზომა"
 
 #: eeschema/sch_junction.cpp:379
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1388
@@ -18915,7 +18915,7 @@ msgstr "დიამეტრი"
 
 #: eeschema/sch_label.cpp:100
 msgid "Tri-State"
-msgstr ""
+msgstr "სამსტაბილური"
 
 #: eeschema/sch_label.cpp:1234
 msgid "Hierarchical Sheet Pin"
@@ -18942,7 +18942,7 @@ msgstr "გასწორება"
 #: pcbnew/zone.cpp:1977 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
 #: pcbnew/zone_manager/model_zones_overview_table.h:76
 msgid "Net"
-msgstr ""
+msgstr "ქსელი"
 
 #: eeschema/sch_label.cpp:1389 eeschema/sch_line.cpp:897
 #: eeschema/sch_rule_area.cpp:395
@@ -19235,7 +19235,7 @@ msgstr "სიმულაცია"
 
 #: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
 msgid "BOM"
-msgstr ""
+msgstr "BOM"
 
 #: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
@@ -19296,11 +19296,11 @@ msgstr ""
 
 #: eeschema/sch_symbol.cpp:2046
 msgid "Undefined!!!"
-msgstr ""
+msgstr "აღწერილი არაა!!!"
 
 #: eeschema/sch_symbol.cpp:2054
 msgid "<Unknown>"
-msgstr ""
+msgstr "<უცნობი>"
 
 #: eeschema/sch_symbol.cpp:2079
 msgid "No library defined!"
@@ -20001,7 +20001,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1363
 msgid " context: "
-msgstr ""
+msgstr " კონტექსტი: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1427
 msgid "Invalid ramp data"
@@ -20298,7 +20298,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1479
 msgid "unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: eeschema/sim/sim_lib_mgr.cpp:320
 #, c-format
@@ -20410,11 +20410,11 @@ msgstr ""
 #: eeschema/sim/sim_plot_tab.cpp:324
 #, c-format
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:586
 msgid "Amplitude"
-msgstr ""
+msgstr "ამპლიტუდა"
 
 #: eeschema/sim/sim_plot_tab.cpp:618
 msgid "Noise (V/√Hz)"
@@ -20460,7 +20460,7 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:2361
 #: eeschema/sim/simulator_frame_ui.cpp:2362
 msgid " (gain)"
-msgstr ""
+msgstr " (გაძლიერება)"
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:215
 #: eeschema/sim/simulator_frame_ui.cpp:767
@@ -20471,7 +20471,7 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:2359
 #: eeschema/sim/simulator_frame_ui.cpp:2360
 msgid " (phase)"
-msgstr ""
+msgstr " (ფაზა)"
 
 #: eeschema/sim/sim_tab.cpp:91 eeschema/sim/sim_tab.cpp:108
 msgid ""
@@ -20572,7 +20572,7 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:877
 #: eeschema/sim/simulator_frame_ui.cpp:1068
 msgid " (amplitude)"
-msgstr ""
+msgstr " (ამპლიტუდა)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
 #, c-format
@@ -20676,7 +20676,7 @@ msgstr "საზომი ერთეული"
 #: gerbview/gerber_file_image.cpp:354
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Format"
-msgstr ""
+msgstr "ფორმატი"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
@@ -20942,7 +20942,7 @@ msgstr ""
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 msgid "Symbol..."
-msgstr ""
+msgstr "სიმბოლო..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:80
 msgid "View as PNG..."
@@ -21294,7 +21294,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1747
 msgid "Undefined!"
-msgstr ""
+msgstr "აღწერილი არაა!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1748
 #: eeschema/symbol_viewer_frame.cpp:458 pcbnew/board_item.cpp:407
@@ -21307,7 +21307,7 @@ msgstr "სხეული"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1773
 msgid "Datasheet"
-msgstr ""
+msgstr "დოკუმენტაცია"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:81
 msgid "Import Symbol"
@@ -22720,7 +22720,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/tools/edit_tool_move_fct.cpp:244 pcbnew/tools/pcb_actions.cpp:457
 msgid "Move"
-msgstr ""
+msgstr "გადატანა"
 
 #: eeschema/tools/sch_actions.cpp:1437 eeschema/tools/sch_move_tool.cpp:396
 msgid "Drag"
@@ -23025,7 +23025,7 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:623 eeschema/tools/sch_edit_tool.cpp:2795
 msgid "Change To"
-msgstr "შეცვლა"
+msgstr "შეცვლა რაზე"
 
 #: eeschema/tools/sch_edit_tool.cpp:1047
 #: eeschema/tools/symbol_editor_edit_tool.cpp:210
@@ -23070,7 +23070,7 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:2472 eeschema/tools/sch_edit_tool.cpp:2563
 msgid "<empty>"
-msgstr ""
+msgstr "<ცარიელი>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2955
 msgid "Slice Wire"
@@ -23222,7 +23222,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #: pcbnew/tools/board_inspection_tool.cpp:1588
 msgid "Library: "
-msgstr ""
+msgstr "ბიბლიოთეკა: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1589
@@ -23268,7 +23268,7 @@ msgstr ""
 #: pagelayout_editor/tools/pl_editor_control.cpp:161
 #: pcbnew/tools/pcb_control.cpp:1693
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:106
 msgid "No bus selected"
@@ -23544,7 +23544,7 @@ msgstr "გრაფიკა"
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:51
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Images"
-msgstr ""
+msgstr "გამოსახულებები"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:209
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:59
@@ -23872,7 +23872,7 @@ msgstr "ფენა"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:101
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 msgid "DCodes"
-msgstr ""
+msgstr "D-კოდები"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:102
 #: gerbview/widgets/gerbview_layer_widget.cpp:132
@@ -24020,7 +24020,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:178
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24056,7 +24056,7 @@ msgstr "4"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:115
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:181
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:81
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:91
@@ -24074,7 +24074,7 @@ msgstr "6"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:389
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:490
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:100
 msgid "Format for inches"
@@ -24263,7 +24263,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:183
 msgid "Messages"
-msgstr ""
+msgstr "შეტყობინებები"
 
 #: gerbview/gerber_draw_item.cpp:673
 msgid "Attribute"
@@ -24284,11 +24284,11 @@ msgstr ""
 
 #: gerbview/gerber_draw_item.cpp:711
 msgid "Start"
-msgstr ""
+msgstr "დასაწყისი"
 
 #: gerbview/gerber_draw_item.cpp:714
 msgid "End"
-msgstr ""
+msgstr "დასასრული"
 
 #: gerbview/gerber_draw_item.cpp:725 pcbnew/dialogs/dialog_set_offset.cpp:62
 msgid "Clear"
@@ -24296,7 +24296,7 @@ msgstr "გასუფთავება"
 
 #: gerbview/gerber_draw_item.cpp:726 gerbview/gerber_file_image.cpp:372
 msgid "Polarity"
-msgstr ""
+msgstr "პოლარობა"
 
 #: gerbview/gerber_draw_item.cpp:735
 msgid "AB axis"
@@ -24307,7 +24307,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:273
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:28
 msgid "Net:"
-msgstr ""
+msgstr "ქსელი:"
 
 #: gerbview/gerber_draw_item.cpp:760
 #, c-format
@@ -24322,7 +24322,7 @@ msgstr ""
 #: gerbview/gerber_draw_item.cpp:775 gerbview/toolbars_gerber.cpp:129
 #: gerbview/toolbars_gerber.cpp:132
 msgid "Cmp:"
-msgstr ""
+msgstr "კმპნტ:"
 
 #: gerbview/gerber_draw_item.cpp:1036
 #, c-format
@@ -24488,7 +24488,7 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
 msgid "Attr:"
-msgstr ""
+msgstr "ატრ:"
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
@@ -24496,7 +24496,7 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
-msgstr ""
+msgstr "D-კოდი:"
 
 #: gerbview/toolbars_gerber.cpp:292
 msgid "<No selection>"
@@ -24736,7 +24736,7 @@ msgstr "ფენები"
 #: gerbview/widgets/gerbview_layer_widget.cpp:80
 #: gerbview/widgets/layer_widget.cpp:559
 msgid "Items"
-msgstr ""
+msgstr "ელემენტები"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:131
 msgid "Show DCodes identification"
@@ -24956,7 +24956,7 @@ msgstr ""
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "დავალებების ნაკრები"
 
 #: kicad/cli/command_jobset_run.cpp:45
 msgid "Runs a jobset file"
@@ -25640,7 +25640,7 @@ msgstr "არასწორი გამოსახულების ფო�
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
-msgstr ""
+msgstr "სქემები"
 
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
@@ -25832,7 +25832,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_destination.cpp:207
 msgid "Zip"
-msgstr ""
+msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
 msgid "Destination path:"
@@ -25877,7 +25877,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:24
 msgid "Folder:"
-msgstr ""
+msgstr "საქაღალდე:"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
 msgid "Would you like to automatically check for updates on startup?"
@@ -25944,7 +25944,7 @@ msgstr "სამიზნე: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:67
 msgid "No."
-msgstr ""
+msgstr "ნომ."
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "Job Description"
@@ -26405,7 +26405,7 @@ msgstr ""
 #: kicad/pcm/dialogs/panel_packages_view.cpp:718
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
 msgid "Install"
-msgstr ""
+msgstr "დაყენება"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:122 kicad/pcm/dialogs/panel_package.cpp:78
 #: kicad/pcm/dialogs/panel_package.cpp:124
@@ -26457,7 +26457,7 @@ msgstr "მართვა…"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:86
 msgid "Package"
-msgstr ""
+msgstr "პაკეტი"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
@@ -26502,7 +26502,7 @@ msgstr "სრული მიდინარეობა"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "დეტალები"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
@@ -26548,7 +26548,7 @@ msgstr "ტეგები: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:277
 msgid "Author"
-msgstr ""
+msgstr "ავტორი"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:280
 msgid "Maintainer"
@@ -26614,7 +26614,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:93
 msgid "Compatible"
-msgstr ""
+msgstr "თავსებადი"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:112
 msgid "Show all versions"
@@ -26622,7 +26622,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:118
 msgid "Download"
-msgstr ""
+msgstr "გადმოწერა"
 
 #: kicad/pcm/pcm.cpp:114
 #, c-format
@@ -26981,7 +26981,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:1009
 msgid "Push"
-msgstr ""
+msgstr "გაგზავნა (push)"
 
 #: kicad/project_tree_pane.cpp:1010
 msgid "Push committed local changes to remote repository"
@@ -26989,7 +26989,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:1013
 msgid "Pull"
-msgstr ""
+msgstr "მიღება (pull)"
 
 #: kicad/project_tree_pane.cpp:1014
 msgid "Pull changes from remote repository into local"
@@ -27005,7 +27005,7 @@ msgstr "გადართვა ბრენჩზე "
 
 #: kicad/project_tree_pane.cpp:1039
 msgid "Other..."
-msgstr ""
+msgstr "სხვა..."
 
 #: kicad/project_tree_pane.cpp:1040
 msgid "Switch to a different branch"
@@ -27336,7 +27336,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:731
 msgid "Error!"
-msgstr ""
+msgstr "შეცდომა!"
 
 #: kicad/tools/kicad_manager_control.cpp:787
 msgid "Create (or open) a project to edit a schematic."
@@ -27378,7 +27378,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
 msgid "Layout"
-msgstr ""
+msgstr "განლაგება"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:233
 #, c-format
@@ -27531,12 +27531,12 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:233
 msgid "Comment:"
-msgstr ""
+msgstr "კომენტარი:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:323
 msgid "From:"
-msgstr ""
+msgstr "საიდან:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:293
 msgid "End Position"
@@ -27887,139 +27887,139 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:94
 msgid "AWG0000"
-msgstr ""
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:95
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:96
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:97
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:98
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:99
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:100
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:101
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:102
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:103
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:104
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:105
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:106
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:107
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:108
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:109
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:110
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:111
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:112
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:113
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:114
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:115
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:116
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:117
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:118
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:119
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:120
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:121
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:122
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:123
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:124
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:125
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:126
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:127
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:244
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
@@ -28044,7 +28044,7 @@ msgstr "ფართობი:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "მმ²"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 msgid "Conductor resistivity:"
@@ -28064,14 +28064,14 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:879
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:75
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:106
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:142
 msgid "ohm-meter"
-msgstr ""
+msgstr "ომმეტრი"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Temperature Coefficient:"
@@ -28092,7 +28092,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
-msgstr ""
+msgstr "დენის დატვირთვა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 msgid "Current density"
@@ -28100,7 +28100,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
 msgid "A/mm^2"
-msgstr ""
+msgstr "ა/მმ²"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:167
 msgid "Application"
@@ -28149,7 +28149,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:234
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:344
 msgid "ohm"
-msgstr ""
+msgstr "ომი"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:228
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:160
@@ -28331,11 +28331,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Functional"
-msgstr ""
+msgstr "ფუნქციონალური"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
-msgstr ""
+msgstr "გაძლიერებული"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
 msgid "Pollution Degree:"
@@ -28355,19 +28355,19 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
 msgid "PD1"
-msgstr ""
+msgstr "PD1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
 msgid "PD2"
-msgstr ""
+msgstr "PD2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
 msgid "PD3"
-msgstr ""
+msgstr "PD3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
 msgid "PD4"
-msgstr ""
+msgstr "PD4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:194
 msgid "Material group:"
@@ -28390,11 +28390,11 @@ msgstr "II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
 msgid "PCB material:"
@@ -28423,11 +28423,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:122
 msgid "Clearance:"
-msgstr ""
+msgstr "ღრეჩო:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 msgid "Creepage:"
-msgstr ""
+msgstr "მუხტის გადინება:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
 msgid "Min groove width:"
@@ -28536,11 +28536,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
-msgstr ""
+msgstr "E24,E48,E96"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:52
 msgid "E1,E3,E6,E12"
-msgstr ""
+msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -28571,7 +28571,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:113
 msgid "s"
-msgstr ""
+msgstr "წმ"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:123
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:168
@@ -28616,7 +28616,7 @@ msgstr "სპილენძი"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
 msgid "Copper-Aluminium"
-msgstr ""
+msgstr "სპილენძ-ალუმინის"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:55
 msgid "Brass"
@@ -28624,7 +28624,7 @@ msgstr "სასულე საკრავები"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:56
 msgid "Bronze"
-msgstr ""
+msgstr "ბრინჯაო"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:57
 msgid "Tin"
@@ -28636,7 +28636,7 @@ msgstr "ტყვია"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:59
 msgid "Aluminium-Copper"
-msgstr ""
+msgstr "ალუმინი-სპილენძი"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:60
 msgid "Cast iron"
@@ -28721,7 +28721,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:47
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:58
 msgid "kOhm"
-msgstr ""
+msgstr "კომი"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
 msgid "Exclude value 1:"
@@ -28733,23 +28733,23 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:71
 msgid "E1"
-msgstr ""
+msgstr "E1"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:74
 msgid "E3"
-msgstr ""
+msgstr "E3"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:77
 msgid "E6"
-msgstr ""
+msgstr "E6"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:81
 msgid "E12"
-msgstr ""
+msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:84
 msgid "E24"
-msgstr ""
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:94
 msgid "Solutions"
@@ -28763,7 +28763,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
 msgid "Approximation:"
-msgstr ""
+msgstr "მიახლოებითი სიზუსტე:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
@@ -28822,7 +28822,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
 msgid "Type:"
-msgstr ""
+msgstr "ტიპი:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -28849,7 +28849,7 @@ msgstr "ფორმულა"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:79
 msgid "Regulator"
-msgstr ""
+msgstr "სტაბილიზატორი"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:86
 msgid "Regulators data file:"
@@ -28861,7 +28861,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:98
 msgid "Browse"
-msgstr ""
+msgstr "დათვალიერება"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:107
 msgid "Edit Regulator"
@@ -28885,30 +28885,30 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
 msgid "typ"
-msgstr ""
+msgstr "ტიპ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
 msgid "R1:"
-msgstr ""
+msgstr "R1:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:178
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:203
 msgid "kΩ"
-msgstr ""
+msgstr "kΩ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:186
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:130
 msgid "R2:"
-msgstr ""
+msgstr "R2:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:210
 msgid "Vout:"
-msgstr ""
+msgstr "Vout:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:234
 msgid "Vref:"
-msgstr ""
+msgstr "Vref:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:236
 msgid ""
@@ -28918,7 +28918,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:256
 msgid "Iadj:"
-msgstr ""
+msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:258
 msgid "For 3 terminal regulators only, the  Adjust pin current."
@@ -28945,7 +28945,7 @@ msgstr "რეზისტორის გადახრა:"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:177
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
 msgid "Power Comment:"
@@ -28966,7 +28966,7 @@ msgstr "პი"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Tee"
-msgstr ""
+msgstr "სამკაპა"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Bridged tee"
@@ -28978,7 +28978,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:26
 msgid "Attenuators"
-msgstr ""
+msgstr "ატენიუატორები"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:51
 msgid "Attenuation (a):"
@@ -28990,7 +28990,7 @@ msgstr "დბ"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:64
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:73
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:86
@@ -28998,15 +28998,15 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:137
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:148
 msgid "Ohms"
-msgstr ""
+msgstr "ომები"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:77
 msgid "Zout:"
-msgstr ""
+msgstr "Zout:"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:141
 msgid "R3:"
-msgstr ""
+msgstr "R3:"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
@@ -29058,7 +29058,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:246
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:226
 msgid "Resistance:"
-msgstr ""
+msgstr "წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:270
@@ -29119,7 +29119,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Er:"
-msgstr ""
+msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:69
 msgid "Tan delta:"
@@ -29127,7 +29127,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:88
 msgid "Rho:"
-msgstr ""
+msgstr "რო:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:90
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
@@ -29140,15 +29140,15 @@ msgstr "H:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:122
 msgid "H_t:"
-msgstr ""
+msgstr "H_t:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:134
 msgid "T:"
-msgstr ""
+msgstr "T:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:146
 msgid "Rough:"
-msgstr ""
+msgstr "სიუხეშე:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:158
 msgid "Insulator mu:"
@@ -29177,7 +29177,7 @@ msgstr "ანალიზი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:308
 msgid "Synthesize"
-msgstr ""
+msgstr "სინთეზი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:321
 msgid "Electrical Parameters"
@@ -29232,7 +29232,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
-msgstr ""
+msgstr "Z0:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:101
 msgid "Characteristic impedance of conductor"
@@ -29304,15 +29304,15 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:290
 msgid "Capacitance:"
-msgstr ""
+msgstr "ტევადობა:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:298
 msgid "pF"
-msgstr ""
+msgstr "პფ"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:300
 msgid "pico-Farad"
-msgstr ""
+msgstr "პიკოფარადი"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation:"
@@ -29333,19 +29333,19 @@ msgstr "პიკოწამი"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:320
 msgid "Inductance:"
-msgstr ""
+msgstr "ინდუქციურობა:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:328
 msgid "nH"
-msgstr ""
+msgstr "ნჰ"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:330
 msgid "nano-Henry"
-msgstr ""
+msgstr "ნანოჰენრი"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:334
 msgid "Reactance:"
-msgstr ""
+msgstr "რეაქტიული წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:336
 msgid "Inductive reactance for given rise time and calculated inductance"
@@ -29373,7 +29373,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
 msgid "er:"
-msgstr ""
+msgstr "er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 msgid "relative permittivity (dielectric constant)"
@@ -29381,7 +29381,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
-msgstr ""
+msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
@@ -29397,7 +29397,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
-msgstr ""
+msgstr "ვოლტი"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
@@ -29487,7 +29487,7 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:170
 msgid "Regulators"
-msgstr ""
+msgstr "სტაბილიზატორები"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:171
 msgid "Resistor Calculator"
@@ -29531,7 +29531,7 @@ msgstr "მემორანდუმი"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:189
 msgid "E-Series"
-msgstr ""
+msgstr "E-სერიები"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:190
 msgid "Color Code"
@@ -29703,7 +29703,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:133
 #: pcb_calculator/transline_ident.cpp:324
 msgid "Roughness"
-msgstr ""
+msgstr "სიუხეშე"
 
 #: pcb_calculator/transline_ident.cpp:134
 #: pcb_calculator/transline_ident.cpp:325
@@ -29712,7 +29712,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "substrate"
-msgstr ""
+msgstr "საფენი"
 
 #: pcb_calculator/transline_ident.cpp:138
 msgid "Relative permeability (mu) of substrate"
@@ -29791,17 +29791,17 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:237
 #: pcb_calculator/transline_ident.cpp:272
 msgid "TE-modes:"
-msgstr ""
+msgstr "TE-რეჟიმები:"
 
 #: pcb_calculator/transline_ident.cpp:238
 #: pcb_calculator/transline_ident.cpp:273
 msgid "TM-modes:"
-msgstr ""
+msgstr "TM-რეჟიმები:"
 
 #: pcb_calculator/transline_ident.cpp:242
 #: pcb_calculator/transline_ident.cpp:277
 msgid "insulator"
-msgstr ""
+msgstr "იზოლატორი"
 
 #: pcb_calculator/transline_ident.cpp:243
 #: pcb_calculator/transline_ident.cpp:278
@@ -29823,7 +29823,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:410
 msgid "Din"
-msgstr ""
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:287
 #: pcb_calculator/transline_ident.cpp:411
@@ -29833,7 +29833,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:289
 #: pcb_calculator/transline_ident.cpp:413
 msgid "Dout"
-msgstr ""
+msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:290
 #: pcb_calculator/transline_ident.cpp:414
@@ -29880,7 +29880,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:340
 msgid "Zeven"
-msgstr ""
+msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:341
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -29888,7 +29888,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:344
 msgid "Zodd"
-msgstr ""
+msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:345
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -29900,7 +29900,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:397
 msgid "Twists"
-msgstr ""
+msgstr "მოხვეულები"
 
 #: pcb_calculator/transline_ident.cpp:398
 msgid "Number of twists per length"
@@ -29920,7 +29920,7 @@ msgstr ""
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
-msgstr ""
+msgstr "µმ"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
 #: pcb_calculator/widgets/unit_selector.cpp:210
@@ -29929,7 +29929,7 @@ msgstr "სმ"
 
 #: pcb_calculator/widgets/unit_selector.cpp:37
 msgid "mil"
-msgstr ""
+msgstr "mil"
 
 #: pcb_calculator/widgets/unit_selector.cpp:38
 #: pcb_calculator/widgets/unit_selector.cpp:213
@@ -29981,7 +29981,7 @@ msgstr "კმ/სთ"
 
 #: pcb_calculator/widgets/unit_selector.cpp:291
 msgid "mi/h"
-msgstr ""
+msgstr "მილ/სთ"
 
 #: pcbnew/api/api_handler_pcb.cpp:511
 msgid "Modified items via API"
@@ -30022,7 +30022,7 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:200
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
-msgstr ""
+msgstr "საკონტაქტო ზედაპირები"
 
 #: pcbnew/board.cpp:2062 pcbnew/dialogs/dialog_board_statistics.cpp:707
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:155
@@ -30037,7 +30037,7 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr ""
+msgstr "გამტარი ნახვრეტები"
 
 #: pcbnew/board.cpp:2063 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
@@ -30045,15 +30045,15 @@ msgstr ""
 
 #: pcbnew/board.cpp:2065 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
-msgstr ""
+msgstr "არაგაყვანილი"
 
 #: pcbnew/board_connected_item.cpp:235
 msgid "NetClass"
-msgstr ""
+msgstr "ქსელის კლასი"
 
 #: pcbnew/board_connected_item.cpp:242
 msgid "NetName"
-msgstr ""
+msgstr "ქსელის სახელი"
 
 #: pcbnew/board_connected_item.cpp:276
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
@@ -30061,7 +30061,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:609
 msgid "Teardrops"
-msgstr ""
+msgstr "ცრემლისებური"
 
 #: pcbnew/board_connected_item.cpp:278
 msgid "Enable Teardrops"
@@ -30211,7 +30211,7 @@ msgstr "ძირითადი ბირთვული მოდულებ�
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:122
 msgid "PrePreg"
-msgstr ""
+msgstr "წინასწარ გაჟღენთილი კომპოზიტური მასალა"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:218
 #, c-format
@@ -30280,7 +30280,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1687
 msgid "Custom..."
-msgstr ""
+msgstr "მომხმარებლის..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:529
@@ -30364,7 +30364,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:109
 msgid "Id"
-msgstr ""
+msgstr "ID"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
@@ -30376,11 +30376,11 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:38
 msgid "ENIG"
-msgstr ""
+msgstr "ENIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:39
 msgid "ENEPIG"
-msgstr ""
+msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
@@ -30412,11 +30412,11 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HT_OSP"
-msgstr ""
+msgstr "HT_OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "OSP"
-msgstr ""
+msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
@@ -30433,12 +30433,12 @@ msgstr "მწვანე"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
 #: pcbnew/exporters/step/step_pcb_model.cpp:1866
 msgid "Red"
-msgstr ""
+msgstr "წითელი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
 #: pcbnew/exporters/step/step_pcb_model.cpp:1867
 msgid "Blue"
-msgstr ""
+msgstr "ლურჯი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
 #: pcbnew/exporters/step/step_pcb_model.cpp:1868
@@ -30470,7 +30470,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
-msgstr ""
+msgstr "პოლიიმიდი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
@@ -30496,7 +30496,7 @@ msgstr ""
 
 #: pcbnew/build_BOM_from_board.cpp:110
 msgid "Designator"
-msgstr ""
+msgstr "დამდგენი"
 
 #: pcbnew/build_BOM_from_board.cpp:112
 msgid "Quantity"
@@ -30504,7 +30504,7 @@ msgstr "რაოდენობა"
 
 #: pcbnew/build_BOM_from_board.cpp:113
 msgid "Designation"
-msgstr ""
+msgstr "დადგენა"
 
 #: pcbnew/build_BOM_from_board.cpp:114
 msgid "Supplier and ref"
@@ -30575,7 +30575,7 @@ msgstr ""
 #: pcbnew/convert_shape_list_to_polygon.cpp:658
 #: pcbnew/convert_shape_list_to_polygon.cpp:670
 msgid "(self-intersecting)"
-msgstr ""
+msgstr "(თვითმკვეთი)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:510
 msgid "(not a closed shape)"
@@ -30625,7 +30625,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
 msgid "Empty"
-msgstr ""
+msgstr "ცარიელი"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:98
 msgid "Invalid"
@@ -30994,16 +30994,16 @@ msgstr "ჯამში"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:145
 msgid "THT:"
-msgstr ""
+msgstr "THT:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:146
 #: pcbnew/dialogs/dialog_board_statistics.cpp:151
 msgid "SMD:"
-msgstr ""
+msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
 msgid "Unspecified:"
-msgstr ""
+msgstr "მიუთითებელია:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -31011,11 +31011,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:152
 msgid "Connector:"
-msgstr ""
+msgstr "მაერთებელი:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:153
 msgid "NPTH:"
-msgstr ""
+msgstr "NPTH:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
 msgid "Through vias:"
@@ -31023,7 +31023,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 msgid "Blind/buried:"
-msgstr ""
+msgstr "ბრმა/ჩამარხული:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:158
 msgid "Micro vias:"
@@ -31046,7 +31046,7 @@ msgstr "სლოტი"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:493
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:497
 #: pcbnew/dialogs/dialog_board_statistics.cpp:502
@@ -31057,15 +31057,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:177
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1595
 msgid "PTH"
-msgstr ""
+msgstr "PTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1598
 msgid "NPTH"
-msgstr ""
+msgstr "NPTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:675
 msgid ""
@@ -31075,7 +31075,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
 msgid "Date"
-msgstr ""
+msgstr "თარიღი"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:678
 msgid "Board name"
@@ -31122,11 +31122,11 @@ msgstr "Y ზომა"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 msgid "Plated"
-msgstr ""
+msgstr "მეტალიზაცია"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 msgid "Via/Pad"
-msgstr ""
+msgstr "გამტარი ნახვრეტი/საკონტაქტო ბალიში"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "Start Layer"
@@ -31336,7 +31336,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:154
 #: pcbnew/tools/convert_tool.cpp:100
 msgid "Gap:"
-msgstr ""
+msgstr "ღრეჩო:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:250
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
@@ -31426,7 +31426,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:862
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
 msgid "Hatched"
-msgstr ""
+msgstr "დაშტრიხული"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -31680,7 +31680,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array.cpp:425
 msgid "stagger"
-msgstr ""
+msgstr "ჭადრაკისებრი"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:481
 msgid "point count"
@@ -31753,7 +31753,7 @@ msgstr "საფეხურეობრიობის მორგება"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:152
 msgid "Stagger:"
-msgstr ""
+msgstr "ჭადრაკისებრი:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:154
 msgid "Value -1,  0 or 1 disable this option."
@@ -32081,13 +32081,13 @@ msgstr "0.000"
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1787
 msgid "0.0000"
-msgstr ""
+msgstr "0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1788
 msgid "0.00000"
-msgstr ""
+msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1789
@@ -32173,19 +32173,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:247
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:201
 msgid "90.0"
-msgstr ""
+msgstr "90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:202
 msgid "-90.0"
-msgstr ""
+msgstr "-90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:348
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:249
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
 msgid "180.0"
-msgstr ""
+msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
 msgid "Position mode:"
@@ -32252,12 +32252,12 @@ msgstr "ისრის მიმართულება:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1806
 msgid "Inward"
-msgstr ""
+msgstr "შიგნითკენ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1807
 msgid "Outward"
-msgstr ""
+msgstr "გარეთკენ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:446
 msgid ""
@@ -32517,11 +32517,11 @@ msgstr "IPC-2581 ფაილში გატანა"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:166
 msgid "manufacturer"
-msgstr ""
+msgstr "მწარმოებელი"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:174
 msgid "mfg"
-msgstr ""
+msgstr "მწარმ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:268
 msgid "The board must be saved before generating IPC-2581 file."
@@ -32607,11 +32607,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:165
 msgid "Omit"
-msgstr ""
+msgstr "ამოღება"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Manufacturer:"
-msgstr ""
+msgstr "მწარმოებელი:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:161
 msgid "Distributor P/N:"
@@ -32642,7 +32642,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
@@ -32763,11 +32763,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:286
 msgid "Non-unity scaled models:"
@@ -32831,7 +32831,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STEP"
-msgstr ""
+msgstr "STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "GLB (Binary glTF)"
@@ -32839,7 +32839,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
@@ -32851,7 +32851,7 @@ msgstr "PLY (ASCII)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -33083,7 +33083,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -33200,7 +33200,7 @@ msgstr "ვაი&ლდკარდები"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "გადა&ტანა"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference &designators"
@@ -33232,7 +33232,7 @@ msgstr "სიმბოლო:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:99
 msgid "Sheet: "
-msgstr ""
+msgstr "ფურცელი: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 msgid "Library Association"
@@ -33338,7 +33338,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 #: pcbnew/dialogs/dialog_render_job_base.cpp:281
 msgid "Side:"
-msgstr ""
+msgstr "მხარე:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:184
 msgid "Footprint type:"
@@ -33355,7 +33355,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1383
 #: pcbnew/pad.cpp:1596 pcbnew/pad.cpp:2684
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:200
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:201
@@ -33396,7 +33396,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:234
 msgid "Clearances"
-msgstr ""
+msgstr "ღრეჩოები"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 msgid "Leave values blank to use Board Setup values."
@@ -33564,7 +33564,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
-msgstr ""
+msgstr "შეუზღუდავი"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:106
 msgid "Footprint name:"
@@ -33782,7 +33782,7 @@ msgstr "გამოტანის საქაღალდე:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Excellon"
-msgstr ""
+msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -34129,7 +34129,7 @@ msgstr "საუკეთესო სიგრძე (ლ):"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:441
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:487
 msgid "%("
-msgstr ""
+msgstr "%("
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:245
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:292
@@ -34164,7 +34164,7 @@ msgstr "დ"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:453
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:499
 msgid " )"
-msgstr ""
+msgstr " )"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:258
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
@@ -34240,7 +34240,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:62
 msgid "Courtyards"
-msgstr ""
+msgstr "დაყენების ადგილები"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:278
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
@@ -34605,7 +34605,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:69
 msgid "<<"
-msgstr ""
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:70
 msgid "Remove all matched layers."
@@ -34803,7 +34803,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
 msgid "degree"
-msgstr ""
+msgstr "გრადუსი"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zone Properties"
@@ -34836,7 +34836,7 @@ msgstr "ბადის ზომა:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 msgid "Copy item layers"
@@ -34936,7 +34936,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:446
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -34944,7 +34944,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2683
 msgid "Through-hole"
-msgstr ""
+msgstr "გამჭოლი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "Edge Connector"
@@ -34975,7 +34975,7 @@ msgstr "პადების დაჯგუფების რეჟიმი:
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "წინა/შიდა/ქვედა"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
@@ -34993,7 +34993,7 @@ msgstr "წრიული"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1580
 #: pcbnew/pad.cpp:2691
 msgid "Oval"
-msgstr ""
+msgstr "ოვალური"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Rectangular"
@@ -35001,7 +35001,7 @@ msgstr "მართკუთხედი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Trapezoidal"
-msgstr ""
+msgstr "ტრაპეციისებრი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2693
 msgid "Rounded rectangle"
@@ -35110,7 +35110,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2709
 msgid "Oblong"
-msgstr ""
+msgstr "მოგრძო"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
@@ -35164,11 +35164,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:569
 msgid "E.C.O.1"
-msgstr ""
+msgstr "E.C.O.1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:572
 msgid "E.C.O.2"
-msgstr ""
+msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:578
 msgid "Fabrication property:"
@@ -35422,7 +35422,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "Gerber"
-msgstr ""
+msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:47
 msgid "Open output directory"
@@ -35452,7 +35452,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:100
 msgid "Cross-out"
-msgstr ""
+msgstr "ჯვარედინი"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Sketch pads on fabrication layers"
@@ -35489,11 +35489,11 @@ msgstr "3:2"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:128
 msgid "2:1"
-msgstr ""
+msgstr "2:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:128
 msgid "3:1"
-msgstr ""
+msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
 msgid "Plot mode:"
@@ -35736,7 +35736,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
 #: pcbnew/router/router_tool.cpp:2784
 msgid "Mode"
-msgstr ""
+msgstr "რეჟიმი"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
 #: pcbnew/router/router_tool.cpp:2778
@@ -35760,7 +35760,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
 #: pcbnew/router/router_tool.cpp:2780
 msgid "Shove"
-msgstr ""
+msgstr "ბიძგი"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:51
 msgid "Shove vias"
@@ -36048,7 +36048,7 @@ msgstr "მიმართვის გამოსახულების თ�
 
 #: pcbnew/dialogs/dialog_render_job.cpp:32
 msgid "Opaque"
-msgstr ""
+msgstr "გაუმჭვირვალე"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:33
 msgid "Transparent"
@@ -36085,7 +36085,7 @@ msgstr "პერსპექტივა"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:153
 msgid "Orthogonal"
-msgstr ""
+msgstr "ორთოგონალური"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:155
 msgid "Projection"
@@ -36099,29 +36099,29 @@ msgstr "მდებარეობა"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:772
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:177
 #: pcbnew/dialogs/dialog_shape_properties.cpp:772
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:181
 msgid "Z"
-msgstr ""
+msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:188
 msgid "Pivot:"
-msgstr ""
+msgstr "ლილვი:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:208
 msgid "Pan:"
-msgstr ""
+msgstr "პანინგი:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:244
 #: pcbnew/dialogs/dialog_render_job_base.cpp:322
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:258
 msgid "Lights Intensity"
@@ -36129,7 +36129,7 @@ msgstr "სინათლეების ინტენსივობა"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:289
 msgid "Camera:"
-msgstr ""
+msgstr "კამერა:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:307
 msgid "Lights Position"
@@ -36146,7 +36146,7 @@ msgstr "PCB-ის რენდერის დავალების პა�
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:127
 #: pcbnew/tools/board_inspection_tool.cpp:1466
 msgid "Keepouts"
-msgstr ""
+msgstr "განთავსების აკრძალვები"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:178
 msgid "Convert to Rule Area"
@@ -36370,7 +36370,7 @@ msgstr "ფორმა:"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:51
 msgid "Target Properties"
@@ -36407,7 +36407,7 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:2091 pcbnew/pcb_fields_grid_table.cpp:159
 #: pcbnew/pcb_text.cpp:666
 msgid "Knockout"
-msgstr ""
+msgstr "ნეგატიური"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep text upright"
@@ -36525,7 +36525,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
-msgstr ""
+msgstr "წინა/შიდა/უკან"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -36544,7 +36544,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
 #: pcbnew/pcb_track.cpp:2098
 msgid "Through"
-msgstr ""
+msgstr "გამავალი"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
 #: pcbnew/pcb_track.cpp:2100
@@ -36554,7 +36554,7 @@ msgstr "მიკრო"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:350
 #: pcbnew/pcb_track.cpp:2099
 msgid "Blind/buried"
-msgstr ""
+msgstr "ბრმა/ჩამარხული"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:364
 msgid "Start layer:"
@@ -36578,7 +36578,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2105
 msgid "Tented"
-msgstr "ნიღბით დაფარული"
+msgstr "დაფარული"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
@@ -36706,7 +36706,7 @@ msgstr "რადიუსი (r):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:391
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2720
 msgid "Single-sided"
-msgstr ""
+msgstr "ცალმხრივი"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
 msgid "Tuning Pattern Properties"
@@ -36823,7 +36823,7 @@ msgstr "მარცხენა/მარჯვენა"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 msgid "Top/bottom"
-msgstr ""
+msgstr "ზედა/ქვედა"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:103
 msgid "Allow free pads"
@@ -37342,7 +37342,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
-msgstr ""
+msgstr "ნახვრეტები"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Minimum through hole:"
@@ -37367,7 +37367,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:242
 msgid "uVias"
-msgstr ""
+msgstr "გამტარი მიკრონახვრეტები"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia diameter:"
@@ -37391,7 +37391,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
 msgid "Silkscreen"
-msgstr ""
+msgstr "ტრაფარეტი"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum item clearance:"
@@ -37614,7 +37614,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:430
 msgid "signal"
-msgstr ""
+msgstr "სასიგნალო"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "power plane"
@@ -37626,7 +37626,7 @@ msgstr "შერეული"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:433
 msgid "jumper"
-msgstr ""
+msgstr "მაერთებელი სადენი"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:436
 msgid ""
@@ -37816,7 +37816,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_rules.cpp:712
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
-msgstr ""
+msgstr "შეცდომა:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:779
 msgid "Design rules cannot be added without a project"
@@ -38878,7 +38878,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:47
 msgid "Readability"
-msgstr ""
+msgstr "წაკითხვადობა"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Missing connection between items"
@@ -39822,7 +39822,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:421
 msgid "<unconstrained>"
-msgstr ""
+msgstr "<შეუზღუდავი>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:431
 msgid "Checking length constraints..."
@@ -40302,11 +40302,11 @@ msgstr "მოხაზულობები"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2118
 msgid "pads"
-msgstr ""
+msgstr "საკონტაქტო ბალიშები"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2119
 msgid "vias"
-msgstr ""
+msgstr "გამტარი ნახვრეტები"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2363
 #: pcbnew/exporters/step/step_pcb_model.cpp:2395
@@ -40457,7 +40457,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:1388
 msgid "Other"
-msgstr ""
+msgstr "სხვა"
 
 #: pcbnew/footprint.cpp:1728
 msgid "Footprint Name"
@@ -40483,7 +40483,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:1762
 msgid "autoplaced"
-msgstr ""
+msgstr "ავტომოთავსებულია"
 
 #: pcbnew/footprint.cpp:1765
 msgid "not in schematic"
@@ -40499,7 +40499,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:1776
 msgid "Status: "
-msgstr ""
+msgstr "სტატუსი: "
 
 #: pcbnew/footprint.cpp:1776
 msgid "Attributes:"
@@ -40512,7 +40512,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:1787
 msgid "<none>"
-msgstr ""
+msgstr "<არცერთი>"
 
 #: pcbnew/footprint.cpp:2202
 msgid "<no reference designator>"
@@ -40561,7 +40561,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:4232 pcbnew/pad.cpp:2892
 msgid "Overrides"
-msgstr ""
+msgstr "გადაფარვები"
 
 #: pcbnew/footprint.cpp:4239 pcbnew/pad.cpp:2895
 msgid "Clearance Override"
@@ -40845,7 +40845,7 @@ msgstr ""
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:491
 msgid "Tuning"
-msgstr ""
+msgstr "დაწვრილებითი მორგება"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1476
 msgid "too long"
@@ -40857,7 +40857,7 @@ msgstr "მეტისმეტად მოკლეა"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1478
 msgid "tuned"
-msgstr ""
+msgstr "მორგებულია"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1558
 msgid "Edit Tuning Pattern"
@@ -40923,7 +40923,7 @@ msgstr ""
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2500
 msgid "Tune"
-msgstr ""
+msgstr "დაწვრილებით მორგება"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2526
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2544
@@ -41117,7 +41117,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:104
 msgid "Resc&ue"
-msgstr ""
+msgstr "გა&დარჩენა"
 
 #: pcbnew/menubar_pcb_editor.cpp:105
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
@@ -41141,7 +41141,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "GenCAD..."
-msgstr ""
+msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
@@ -41149,7 +41149,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
-msgstr ""
+msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
@@ -41157,7 +41157,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
-msgstr ""
+msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
@@ -41181,7 +41181,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Hyperlynx..."
-msgstr ""
+msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:149
 msgid "Footprints to Library..."
@@ -41221,7 +41221,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Multi-Channel"
-msgstr ""
+msgstr "მრავალარხიანობა"
 
 #: pcbnew/menubar_pcb_editor.cpp:448
 msgid "External Plugins"
@@ -41229,7 +41229,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:480
 msgid "Ro&ute"
-msgstr ""
+msgstr "&ტრასირება"
 
 #: pcbnew/microwave/microwave_footprint.cpp:57
 msgid "Gap Size:"
@@ -41290,7 +41290,7 @@ msgstr ""
 
 #: pcbnew/microwave/microwave_polygon.cpp:127
 msgid "Symmetrical"
-msgstr ""
+msgstr "სიმეტრიული"
 
 #: pcbnew/microwave/microwave_polygon.cpp:167
 msgid "Read Shape Description File..."
@@ -41755,7 +41755,7 @@ msgstr ""
 #: pcbnew/pad.cpp:1125 pcbnew/pad.cpp:1285 pcbnew/pad.cpp:1301
 #: pcbnew/pad.cpp:1310
 msgid "pad"
-msgstr ""
+msgstr "საკონტაქტო ბალიში"
 
 #: pcbnew/pad.cpp:1333 pcbnew/pad.cpp:2794
 msgid "Pin Type"
@@ -41763,7 +41763,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:1370
 msgid "BGA"
-msgstr ""
+msgstr "BGA"
 
 #: pcbnew/pad.cpp:1371
 msgid "Fiducial global"
@@ -41783,7 +41783,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:1375
 msgid "Castellated"
-msgstr ""
+msgstr "დაკბილული"
 
 #: pcbnew/pad.cpp:1409
 msgid "Length in Package"
@@ -41802,23 +41802,23 @@ msgstr ""
 
 #: pcbnew/pad.cpp:1582
 msgid "Trap"
-msgstr ""
+msgstr "ტრაპეცია"
 
 #: pcbnew/pad.cpp:1583
 msgid "Roundrect"
-msgstr ""
+msgstr "მომრგვალებული მართკუთხედი"
 
 #: pcbnew/pad.cpp:1584
 msgid "Chamferedrect"
-msgstr ""
+msgstr "ნაზოლიანი მართკუთხედი"
 
 #: pcbnew/pad.cpp:1585
 msgid "CustomShape"
-msgstr ""
+msgstr "მომხმარებლის მოხაზულობა"
 
 #: pcbnew/pad.cpp:1597
 msgid "Conn"
-msgstr ""
+msgstr "კავშ"
 
 #: pcbnew/pad.cpp:1615
 #, c-format
@@ -42098,7 +42098,7 @@ msgstr ""
 
 #: pcbnew/pcb_dimension.cpp:1795
 msgid "1234.0"
-msgstr ""
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1796
 msgid "1234.0 mm"
@@ -43958,7 +43958,7 @@ msgstr ""
 
 #: pcbnew/pcb_track.cpp:1726
 msgid "NetCode"
-msgstr ""
+msgstr "ქსელის კოდი"
 
 #: pcbnew/pcb_track.cpp:1878
 #, c-format
@@ -44305,7 +44305,7 @@ msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:2237
 msgid "Routing"
-msgstr ""
+msgstr "ტრასირება"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
 msgid "Please select a differential pair track you want to tune."
@@ -44570,11 +44570,11 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:2760
 msgid "Free-angle"
-msgstr ""
+msgstr "თავისუფალი კუთხე"
 
 #: pcbnew/router/router_tool.cpp:2766
 msgid "45-degree"
-msgstr ""
+msgstr "45 გრადუსი"
 
 #: pcbnew/router/router_tool.cpp:2767
 msgid "45-degree rounded"
@@ -44582,7 +44582,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:2768
 msgid "90-degree"
-msgstr ""
+msgstr "90 გრადუსი"
 
 #: pcbnew/router/router_tool.cpp:2769
 msgid "90-degree rounded"
@@ -44748,7 +44748,7 @@ msgstr ""
 
 #: pcbnew/tools/align_distribute_tool.cpp:64
 msgid "Align/Distribute"
-msgstr ""
+msgstr "სწორება/განაწილება"
 
 #: pcbnew/tools/align_distribute_tool.cpp:256 pcbnew/tools/pcb_actions.cpp:1897
 msgid "Align to Top"
@@ -45104,7 +45104,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:686
 #: pcbnew/tools/board_inspection_tool.cpp:1492
 msgid "Assertions"
-msgstr ""
+msgstr "მტკიცებები"
 
 #: pcbnew/tools/board_inspection_tool.cpp:687
 #: pcbnew/tools/board_inspection_tool.cpp:1493
@@ -45372,7 +45372,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:302
 msgid "Dielectric"
-msgstr ""
+msgstr "დიელექტრიკი"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:355
 msgid "Insert Board Stackup Table"
@@ -45638,7 +45638,7 @@ msgstr ""
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "_copy"
-msgstr ""
+msgstr "_ასლი"
 
 #: pcbnew/tools/footprint_editor_control.cpp:454
 msgid "Change Footprint Name"
@@ -47656,7 +47656,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:350
 msgid "Dimmed"
-msgstr ""
+msgstr "მკრთალი"
 
 #: pcbnew/tools/pcb_control.cpp:351
 msgid "Hidden"
@@ -48102,7 +48102,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:653
 #: pcbnew/widgets/appearance_controls.cpp:1859
 msgid "Dim"
-msgstr ""
+msgstr "გამკრთალება"
 
 #: pcbnew/widgets/appearance_controls.cpp:655
 #: pcbnew/widgets/appearance_controls.cpp:1860
@@ -48787,12 +48787,12 @@ msgstr "პრიორიტეტი"
 
 #: pcbnew/widgets/search_handlers.cpp:298
 msgid "Textbox"
-msgstr ""
+msgstr "ტექსტური ველი"
 
 #: pcbnew/widgets/search_handlers.cpp:326
 #: pcbnew/widgets/search_handlers.cpp:408
 msgid "Class"
-msgstr ""
+msgstr "კლასი"
 
 #: pcbnew/widgets/search_handlers.cpp:362
 #: pcbnew/widgets/search_handlers.cpp:449
@@ -48801,7 +48801,7 @@ msgstr ""
 
 #: pcbnew/zone.cpp:773
 msgid "Cutout"
-msgstr ""
+msgstr "ამოჭრილი"
 
 #: pcbnew/zone.cpp:782
 msgid "No vias"
@@ -48834,7 +48834,7 @@ msgstr "განლაგების წყარო"
 #: pcbnew/zone.cpp:831
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: pcbnew/zone.cpp:866 pcbnew/zone.cpp:2044
 msgid "Fill Mode"
@@ -49013,7 +49013,7 @@ msgstr ""
 
 #: pcbnew/zone_filler.cpp:891
 msgid "Refill"
-msgstr ""
+msgstr "თავიდან შევსება"
 
 #: pcbnew/zone_filler.cpp:891
 msgid "Continue without Refill"
@@ -49045,7 +49045,7 @@ msgstr ""
 
 #: pcbnew/zones.h:61
 msgid "inherited"
-msgstr ""
+msgstr "მემკვიდრეობით"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
@@ -49053,7 +49053,7 @@ msgstr ""
 
 #: pcbnew/zones.h:64
 msgid "solid"
-msgstr ""
+msgstr "მყარი"
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs for PTH"
@@ -49066,7 +49066,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr ""
+msgstr "bitmap2component;Bitmap;Converter;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -49090,7 +49090,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr ""
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -49102,11 +49102,11 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
-msgstr ""
+msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
-msgstr ""
+msgstr "პროექტის მენეჯერი;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -49122,7 +49122,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
-msgstr ""
+msgstr "PCB;კალკულატორი;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
@@ -49134,7 +49134,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr ""
+msgstr "pcbnew;PCB;Circuit;განლაგება;დიზაინი;რედაქტორი;Footprint;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
