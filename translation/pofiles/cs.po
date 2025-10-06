@@ -22,15 +22,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-08-10 13:20+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2025-10-07 02:02+0000\n"
+"Last-Translator: Michal Kundrát <DreitTheDragon@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -3320,39 +3320,39 @@ msgstr "Společnost:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
 msgid "Comment1:"
-msgstr "Komentář1:"
+msgstr "Komentář 1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
 msgid "Comment2:"
-msgstr "Komentář2:"
+msgstr "Komentář 2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
 msgid "Comment3:"
-msgstr "Komentář3:"
+msgstr "Komentář 3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
 msgid "Comment4:"
-msgstr "Komentář4:"
+msgstr "Komentář 4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
 msgid "Comment5:"
-msgstr "Komentář5:"
+msgstr "Komentář 5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
 msgid "Comment6:"
-msgstr "Komentář6:"
+msgstr "Komentář 6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Comment7:"
-msgstr "Komentář7:"
+msgstr "Komentář 7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:360
 msgid "Comment8:"
-msgstr "Komentář9:"
+msgstr "Komentář 8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:372
 msgid "Comment9:"
-msgstr "Komentář9:"
+msgstr "Komentář 9:"
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
@@ -4275,7 +4275,7 @@ msgstr "Motiv ikon:"
 
 #: common/dialogs/panel_common_settings_base.cpp:189
 msgid "Light"
-msgstr "Světlo"
+msgstr "Světlý"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Use icons designed for light window backgrounds"
@@ -5188,7 +5188,7 @@ msgstr "Jak rychle se pohybovat při pohybu objektu od okraje obrazovky"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag Gestures"
-msgstr "Přetáhnout gesta"
+msgstr "Gesta tahem"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
 msgid "Left button drag:"
@@ -8820,7 +8820,7 @@ msgstr "Tisk..."
 
 #: common/tool/actions.cpp:144
 msgid "Plot..."
-msgstr "Kreslit..."
+msgstr "Vykreslit..."
 
 #: common/tool/actions.cpp:151
 msgid "Close the current editor"
@@ -9618,7 +9618,7 @@ msgstr "O aplikaci KiCad"
 
 #: common/tool/actions.cpp:1213
 msgid "List Hotkeys..."
-msgstr "Seznam horkých kláves..."
+msgstr "Seznam klávesových zkratek..."
 
 #: common/tool/actions.cpp:1214
 msgid "Displays current hotkeys table and corresponding commands"
@@ -13873,11 +13873,11 @@ msgstr "Vlastnosti vývodu"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:80
 msgid "Plot All Pages"
-msgstr "Kreslit všechny stránky"
+msgstr "Vykreslit všechny stránky"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:81
 msgid "Plot Current Page"
-msgstr "Kreslit aktuální stránku"
+msgstr "Vykreslit aktuální stránku"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:253
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:237
@@ -14143,7 +14143,7 @@ msgstr "Otevřít výstupní soubor přiřazenou aplikací po úspěšném vyti�
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
 msgid "Plot Schematic"
-msgstr "Kreslit schéma"
+msgstr "Vykreslit schéma"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -16534,7 +16534,7 @@ msgstr "Odkazy mezi listy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:196
 msgid "Show inter-sheet references"
-msgstr "Připojit reference mezi listy"
+msgstr "Zobrazit reference mezi listy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:202
 msgid "Show own page reference"
@@ -16805,8 +16805,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
 msgstr ""
-"Nastavit na 0, aby symboly zdědily vlastnosti šířky čáry\n"
-"od schématu"
+"Nastavte na 0, aby symboly zdědily vlastnosti šířky čáry\n"
+"ze schématu"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:59
 msgid "D&efault pin length:"
@@ -21595,7 +21595,7 @@ msgstr "Signál"
 #: eeschema/sim/simulator_frame_ui_base.cpp:112
 #: pcbnew/dialogs/dialog_plot.cpp:225 pcbnew/dialogs/dialog_plot_base.h:154
 msgid "Plot"
-msgstr "Kreslit"
+msgstr "Vykreslit"
 
 #: eeschema/sim/simulator_frame_ui.cpp:611
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
