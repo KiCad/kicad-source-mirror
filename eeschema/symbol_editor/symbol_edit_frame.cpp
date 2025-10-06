@@ -147,6 +147,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( m_settings );
 
     m_libMgr = new LIB_SYMBOL_LIBRARY_MANAGER( *this );
+
     bool loadingCancelled = false;
 
     {
@@ -161,6 +162,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     SyncLibraries( false, loadingCancelled );
+
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
     m_treePane->GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) m_settings->m_LibrarySortMode );
 
@@ -210,6 +212,16 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
                       .Bottom().Layer( 6 ) );
 
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" )
+                      .Left().Layer( 2 ) );
+
+    m_auimgr.AddPane( m_tbRight, EDA_PANE().VToolbar().Name( "RightToolbar" )
+                      .Right().Layer( 2 ) );
+
+    // Center
+    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" )
+                      .CentrePane() );
+
     // Columns; layers 1 - 3
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "LibraryTree" )
                       .Left().Layer( 3 )
@@ -220,7 +232,15 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
     m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
 
+    // Can be called only when all panes are created, because (at least on Windows) when items
+    // managed by m_auimgr are not the same as those existing when saved by Perspective()
+    // in config, broken settings can happen.
     RestoreAuiLayout();
+
+    // Protect against broken saved Perspective() due to bugs in previous version
+    // This is currently a workaround.
+    m_auimgr.GetPane( "TopMainToolbar" ).Top().Layer( 6 ).Position(0);
+    m_auimgr.GetPane( "LeftToolbar" ).Position(0);
 
     // Show or hide m_propertiesPanel depending on current settings:
     wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
@@ -230,16 +250,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     propertiesPaneInfo.Show( m_settings->m_AuiPanels.show_properties );
     updateSelectionFilterVisbility();
-
-    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" )
-                      .Left().Layer( 2 ) );
-
-    m_auimgr.AddPane( m_tbRight, EDA_PANE().VToolbar().Name( "RightToolbar" )
-                      .Right().Layer( 2 ) );
-
-    // Center
-    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" )
-                      .CentrePane() );
 
     FinishAUIInitialization();
 
