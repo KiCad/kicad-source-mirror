@@ -933,6 +933,16 @@ protected:
             if( res != 0 )
                 return res;
         }
+        else if( aCol == COLUMN_NETCLASS )
+        {
+            const wxString& s1 = i1.GetNetclassName();
+            const wxString& s2 = i2.GetNetclassName();
+
+            int res = aAsc ? ValueStringCompare( s1, s2 ) : ValueStringCompare( s2, s1 );
+
+            if( res != 0 )
+                return res;
+        }
         else if( aCol == COLUMN_PAD_COUNT && i1.GetPadCount() != i2.GetPadCount() )
         {
             return compareUInt( i1.GetPadCount(), i2.GetPadCount(), aAsc );
