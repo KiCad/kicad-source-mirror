@@ -1250,22 +1250,20 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
             continue;
         }
 
-        if( m_libMgr->HasDerivedSymbols( libId.GetLibItemName(), libId.GetLibNickname() ) )
+        wxArrayString derived;
+
+        if( m_libMgr->GetDerivedSymbolNames( libId.GetLibItemName(), libId.GetLibNickname(), derived ) > 0 )
         {
-            wxString msg;
+            wxString msg = _( "Deleting a base symbol will delete all symbols derived from it.\n\n" );
 
-            msg.Printf(
-                    _( "The symbol %s is used to derive other symbols.\n"
-                       "Deleting this symbol will delete all of the symbols derived from it.\n\n"
-                       "Do you wish to delete this symbol and all of its derivatives?" ),
-                    libId.GetLibItemName().wx_str() );
+            msg += libId.GetLibItemName().wx_str() + _( " (base)\n" );
 
-            wxMessageDialog::ButtonLabel yesButtonLabel( _( "Delete Symbol" ) );
-            wxMessageDialog::ButtonLabel noButtonLabel( _( "Keep Symbol" ) );
+            for( const wxString& name : derived )
+                msg += name + wxT( "\n" );
 
-            wxMessageDialog dlg( this, msg, _( "Warning" ),
-                                 wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
-            dlg.SetYesNoLabels( yesButtonLabel, noButtonLabel );
+            KICAD_MESSAGE_DIALOG_BASE dlg( this, msg, _( "Warning" ), wxYES_NO | wxICON_WARNING | wxCENTER );
+            dlg.SetExtendedMessage( wxT( " " ) );
+            dlg.SetYesNoLabels( _( "Cancel" ), _( "Delete All Listed Symbols" ) );
 
             if( dlg.ShowModal() == wxID_NO )
                 continue;
