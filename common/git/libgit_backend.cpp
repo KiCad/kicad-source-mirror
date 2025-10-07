@@ -411,7 +411,7 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
                                                : entry->index_to_workdir->old_file.path );
 
         wxString absPath = repoWorkDir + path;
-        fileStatusMap[absPath] = FileStatus{ absPath, aHandler->ConvertStatus( entry->status ), entry->status };
+        fileStatusMap[absPath] = FileStatus{ absPath, aHandler->ConvertStatus( entry->status ), static_cast<unsigned int>( entry->status ) };
     }
 
     return fileStatusMap;
