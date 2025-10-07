@@ -37,13 +37,13 @@ const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "$
 
 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
-                                               bool aAddedByUser, bool aIsCheckbox )
+                                                   bool aAddedByUser, bool aIsCheckbox )
 {
     // Don't add a field twice
     if( GetFieldNameCol( aFieldName ) != -1 )
         return;
 
-    m_cols.emplace_back( aFieldName, aLabel, aAddedByUser, false, false, aIsCheckbox );
+    m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false, aIsCheckbox } );
 
     for( LIB_SYMBOL* symbol : m_symbolsList )
         updateDataStoreSymbolField( symbol, aFieldName );
