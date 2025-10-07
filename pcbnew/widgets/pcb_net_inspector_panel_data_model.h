@@ -58,7 +58,10 @@ public:
         m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 );
     }
 
-    LIST_ITEM() { m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 ); }
+    LIST_ITEM()
+    {
+        m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 );
+    }
 
     LIST_ITEM& operator=( const LIST_ITEM& ) = delete;
 
@@ -535,7 +538,9 @@ struct PCB_NET_INSPECTOR_PANEL::LIST_ITEM_GROUP_NUMBER_CMP_LESS
 class PCB_NET_INSPECTOR_PANEL::DATA_MODEL : public wxDataViewModel
 {
 public:
-    DATA_MODEL( PCB_NET_INSPECTOR_PANEL& parent ) : m_parent( parent ) {}
+    DATA_MODEL( PCB_NET_INSPECTOR_PANEL& parent ) :
+            m_parent( parent )
+    {}
 
     unsigned int columnCount() const { return m_parent.m_columns.size(); }
 
@@ -557,15 +562,11 @@ public:
         for( std::unique_ptr<LIST_ITEM>& item : m_items )
         {
             if( item->GetIsGroup() )
-            {
-                ret.push_back( std::make_pair( item->GetGroupName(),
-                                               wxDataViewItem( item.get() ) ) );
-            }
+                ret.push_back( std::make_pair( item->GetGroupName(), wxDataViewItem( item.get() ) ) );
         }
 
         return ret;
     }
-
 
     std::optional<LIST_ITEM_ITER> findItem( int aNetCode )
     {
@@ -578,7 +579,6 @@ public:
         return { i };
     }
 
-
     std::optional<LIST_ITEM_ITER> findItem( NETINFO_ITEM* aNet )
     {
         if( aNet != nullptr )
@@ -586,7 +586,6 @@ public:
         else
             return std::nullopt;
     }
-
 
     std::optional<LIST_ITEM_ITER> findGroupItem( int aGroupNumber )
     {
@@ -598,7 +597,6 @@ public:
 
         return { i };
     }
-
 
     LIST_ITEM* addGroup( LIST_ITEM_ITER groupsBegin, LIST_ITEM_ITER groupsEnd,
                          wxString groupName, LIST_ITEM::GROUP_TYPE groupType )
@@ -621,7 +619,6 @@ public:
 
         return ( *group ).get();
     }
-
 
     std::optional<LIST_ITEM_ITER> addItem( std::unique_ptr<LIST_ITEM> aItem )
     {
@@ -657,8 +654,7 @@ public:
                                                           } );
 
             wxString match_str = aItem->GetNetclassName();
-            LIST_ITEM* group = addGroup( groups_begin, groups_end, match_str,
-                                         LIST_ITEM::GROUP_TYPE::NETCLASS );
+            LIST_ITEM* group = addGroup( groups_begin, groups_end, match_str, LIST_ITEM::GROUP_TYPE::NETCLASS );
             aItem->SetParent( group );
         }
 
@@ -721,12 +717,11 @@ public:
         return i;
     }
 
-
     /**
      * Adds all custom group-by entries to the items table
      *
      * Note this assumes that m_items is empty prior to adding these groups
-    */
+     */
     void addCustomGroups()
     {
         m_custom_group_map.clear();
@@ -742,7 +737,6 @@ public:
             ++groupId;
         }
     }
-
 
     void deleteAllItems()
     {
@@ -855,16 +849,18 @@ protected:
                     aOutValue = i->GetNetName();
                 }
             }
-
             else if( aCol == COLUMN_NETCLASS )
+            {
                 aOutValue = i->GetNetclassName();
-
+            }
             else if( aCol == COLUMN_PAD_COUNT )
+            {
                 aOutValue = m_parent.formatCount( i->GetPadCount() );
-
+            }
             else if( aCol == COLUMN_VIA_COUNT )
+            {
                 aOutValue = m_parent.formatCount( i->GetViaCount() );
-
+            }
             else if( aCol == COLUMN_VIA_LENGTH )
             {
                 if( m_show_time_domain_details )
@@ -872,7 +868,6 @@ protected:
                 else
                     aOutValue = m_parent.formatLength( i->GetViaLength() );
             }
-
             else if( aCol == COLUMN_BOARD_LENGTH )
             {
                 if( m_show_time_domain_details )
@@ -880,7 +875,6 @@ protected:
                 else
                     aOutValue = m_parent.formatLength( i->GetBoardWireLength() );
             }
-
             else if( aCol == COLUMN_PAD_DIE_LENGTH )
             {
                 if( m_show_time_domain_details )
@@ -888,7 +882,6 @@ protected:
                 else
                     aOutValue = m_parent.formatLength( i->GetPadDieLength() );
             }
-
             else if( aCol == COLUMN_TOTAL_LENGTH )
             {
                 if( m_show_time_domain_details )
@@ -896,7 +889,6 @@ protected:
                 else
                     aOutValue = m_parent.formatLength( i->GetTotalLength() );
             }
-
             else if( aCol > COLUMN_LAST_STATIC_COL && aCol <= m_parent.m_columns.size() )
             {
                 if( m_show_time_domain_details )
@@ -904,9 +896,10 @@ protected:
                 else
                     aOutValue = m_parent.formatLength( i->GetLayerWireLength( m_parent.m_columns[aCol].layer ) );
             }
-
             else
+            {
                 aOutValue = "";
+            }
         }
     }
 
@@ -940,13 +933,14 @@ protected:
             if( res != 0 )
                 return res;
         }
-
         else if( aCol == COLUMN_PAD_COUNT && i1.GetPadCount() != i2.GetPadCount() )
+        {
             return compareUInt( i1.GetPadCount(), i2.GetPadCount(), aAsc );
-
+        }
         else if( aCol == COLUMN_VIA_COUNT && i1.GetViaCount() != i2.GetViaCount() )
+        {
             return compareUInt( i1.GetViaCount(), i2.GetViaCount(), aAsc );
-
+        }
         else if( aCol == COLUMN_VIA_LENGTH )
         {
             if( m_show_time_domain_details && i1.GetViaDelay() != i2.GetViaDelay() )
@@ -955,7 +949,6 @@ protected:
             if( !m_show_time_domain_details && i1.GetViaLength() != i2.GetViaLength() )
                 return compareUInt( i1.GetViaLength(), i2.GetViaLength(), aAsc );
         }
-
         else if( aCol == COLUMN_BOARD_LENGTH )
         {
             if( m_show_time_domain_details && i1.GetBoardWireDelay() != i2.GetBoardWireDelay() )
@@ -964,7 +957,6 @@ protected:
             if( !m_show_time_domain_details && i1.GetBoardWireLength() != i2.GetBoardWireLength() )
                 return compareUInt( i1.GetBoardWireLength(), i2.GetBoardWireLength(), aAsc );
         }
-
         else if( aCol == COLUMN_PAD_DIE_LENGTH )
         {
             if( m_show_time_domain_details && i1.GetPadDieDelay() != i2.GetPadDieDelay() )
@@ -973,7 +965,6 @@ protected:
             if( !m_show_time_domain_details && i1.GetPadDieLength() != i2.GetPadDieLength() )
                 return compareUInt( i1.GetPadDieLength(), i2.GetPadDieLength(), aAsc );
         }
-
         else if( aCol == COLUMN_TOTAL_LENGTH )
         {
             if( m_show_time_domain_details && i1.GetTotalDelay() != i2.GetTotalDelay() )
@@ -982,7 +973,6 @@ protected:
             if( !m_show_time_domain_details && i1.GetTotalLength() != i2.GetTotalLength() )
                 return compareUInt( i1.GetTotalLength(), i2.GetTotalLength(), aAsc );
         }
-
         else if( aCol > COLUMN_LAST_STATIC_COL && aCol < m_parent.m_columns.size() )
         {
             if( m_show_time_domain_details

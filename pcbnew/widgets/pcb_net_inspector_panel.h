@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCB_NET_INSPECTOR_H
-#define PCB_NET_INSPECTOR_H
+#pragma once
 
 #include <board.h>
 #include <id.h>
@@ -86,13 +85,13 @@ protected:
     /*
      * UI events
      */
-    void         OnSearchTextChanged( wxCommandEvent& event ) override;
-    void         OnConfigButton( wxCommandEvent& event ) override;
-    void         OnExpandCollapseRow( wxCommandEvent& event );
-    void         OnHeaderContextMenu( wxCommandEvent& event );
-    void         OnNetsListContextMenu( wxDataViewEvent& event );
-    void         OnNetsListItemActivated( wxDataViewEvent& event );
-    void         OnColumnSorted( wxDataViewEvent& event );
+    void OnSearchTextChanged( wxCommandEvent& event ) override;
+    void OnConfigButton( wxCommandEvent& event ) override;
+    void OnExpandCollapseRow( wxCommandEvent& event );
+    void OnHeaderContextMenu( wxCommandEvent& event );
+    void OnNetsListContextMenu( wxDataViewEvent& event );
+    void OnNetsListItemActivated( wxDataViewEvent& event );
+    void OnColumnSorted( wxDataViewEvent& event );
 
 private:
     /// Updates displayed statistics for the given nets
@@ -108,7 +107,7 @@ private:
     static wxString formatNetName( const NETINFO_ITEM* aNet );
     static wxString formatCount( unsigned int aValue );
     wxString formatLength( int64_t aValue ) const;
-    wxString        formatDelay( int64_t aValue ) const;
+    wxString formatDelay( int64_t aValue ) const;
 
     /// Generates a sub-menu for the show / hide columns submenu
     void generateShowHideColumnMenu( wxMenu* target );
@@ -124,9 +123,6 @@ private:
 
     /// Build the required columns in the net inspector grid
     void buildColumns();
-
-    /// Set sensible default column widths
-    void setColumnWidths();
 
     /**
      * Adjust the sizing of list columns
@@ -164,9 +160,6 @@ private:
     /// Handle a net row(s) context menu selection
     void onContextMenuSelection( wxCommandEvent& event );
 
-    /// Display a new row(s) context menu
-    void onItemContextMenu( wxCommandEvent& event );
-
     /// Adds a new user-specified net to the board
     void onAddNet();
 
@@ -189,12 +182,13 @@ private:
     class LIST_ITEM;
 
     /**
- * Calculates the length statistics for each given netcode
- *
- * @param aNetCodes is the list of netcodes to calculate statistics for. This must be sorted in ascending netcode order
- * @param aIncludeZeroPadNets determines whether the results should include nets with no pads
- * @returns a map of net code to net length detail objects
-*/
+     * Calculates the length statistics for each given netcode
+     *
+     * @param aNetCodes is the list of netcodes to calculate statistics for. This must be sorted in ascending
+     *                  netcode order
+     * @param aIncludeZeroPadNets determines whether the results should include nets with no pads
+     * @returns a map of net code to net length detail objects
+    */
     std::vector<std::unique_ptr<LIST_ITEM>> calculateNets( const std::vector<NETINFO_ITEM*>& aNetCodes,
                                                            bool aIncludeZeroPadNets ) const;
 
@@ -331,5 +325,3 @@ private:
         ID_HIDE_COLUMN,
     };
 };
-
-#endif

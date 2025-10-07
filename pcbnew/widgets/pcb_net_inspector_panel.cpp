@@ -227,6 +227,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
 
     // Check that all rows are unique to protect against corrupted settings data
     std::set<int> col_order_set( cfg->col_order.begin(), cfg->col_order.end() );
+
     if( col_order_set.size() != cfg->col_order.size() )
     {
         for( std::size_t i = 0; i < cfg->col_order.size(); ++i )
@@ -399,8 +400,7 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
         cfg->expanded_rows.clear();
         DATA_MODEL* model = static_cast<DATA_MODEL*>( m_netsList->GetModel() );
 
-        for( const auto& groupItems = model->getGroupDataViewItems();
-             auto& [groupName, groupItem] : groupItems )
+        for( const auto& [groupName, groupItem] : model->getGroupDataViewItems() )
         {
             if( m_netsList->IsExpanded( groupItem ) )
                 cfg->expanded_rows.push_back( groupName );
@@ -655,45 +655,45 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
     thread_pool& tp = GetKiCadThreadPool();
 
     auto resultsFuture = tp.submit_loop(
-        0, foundNets.size(),
-        [&, this, calc]( const int i )
-        {
-            int netCode = foundNets[i]->GetNetCode();
-
-            constexpr PATH_OPTIMISATIONS opts = { .OptimiseViaLayers = true,
-                                                    .MergeTracks = true,
-                                                    .OptimiseTracesInPads = true,
-                                                    .InferViaInPad = false };
-
-            LENGTH_DELAY_STATS lengthDetails = calc->CalculateLengthDetails(
-                                    netItemsMap[netCode],
-                                    opts,
-                                    nullptr,
-                                    nullptr,
-                                    LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
-                                    m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
-                                                            : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
-
-            if( aIncludeZeroPadNets || lengthDetails.NumPads > 0 )
+            0, foundNets.size(),
+            [&, this, calc]( const int i )
             {
-                std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( foundNets[i] );
+                int netCode = foundNets[i]->GetNetCode();
 
-                new_item->SetPadCount( lengthDetails.NumPads );
-                new_item->SetLayerCount( m_board->GetCopperLayerCount() );
-                new_item->SetPadDieLength( lengthDetails.PadToDieLength );
-                new_item->SetPadDieDelay( lengthDetails.PadToDieDelay );
-                new_item->SetViaCount( lengthDetails.NumVias );
-                new_item->SetViaLength( lengthDetails.ViaLength );
-                new_item->SetViaDelay( lengthDetails.ViaDelay );
-                new_item->SetLayerWireLengths( *lengthDetails.LayerLengths );
+                constexpr PATH_OPTIMISATIONS opts = { .OptimiseViaLayers = true,
+                                                      .MergeTracks = true,
+                                                      .OptimiseTracesInPads = true,
+                                                      .InferViaInPad = false };
 
-                if( m_showTimeDomainDetails )
-                    new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
+                LENGTH_DELAY_STATS lengthDetails = calc->CalculateLengthDetails(
+                                        netItemsMap[netCode],
+                                        opts,
+                                        nullptr,
+                                        nullptr,
+                                        LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
+                                        m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
+                                                                : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
 
-                std::scoped_lock lock( resultsMutex );
-                results.emplace_back( std::move( new_item ) );
-            }
-        } );
+                if( aIncludeZeroPadNets || lengthDetails.NumPads > 0 )
+                {
+                    std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( foundNets[i] );
+
+                    new_item->SetPadCount( lengthDetails.NumPads );
+                    new_item->SetLayerCount( m_board->GetCopperLayerCount() );
+                    new_item->SetPadDieLength( lengthDetails.PadToDieLength );
+                    new_item->SetPadDieDelay( lengthDetails.PadToDieDelay );
+                    new_item->SetViaCount( lengthDetails.NumVias );
+                    new_item->SetViaLength( lengthDetails.ViaLength );
+                    new_item->SetViaDelay( lengthDetails.ViaDelay );
+                    new_item->SetLayerWireLengths( *lengthDetails.LayerLengths );
+
+                    if( m_showTimeDomainDetails )
+                        new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
+
+                    std::scoped_lock lock( resultsMutex );
+                    results.emplace_back( std::move( new_item ) );
+                }
+            } );
 
     resultsFuture.get();
 
@@ -1175,14 +1175,12 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     wxMenu menu;
 
     // Filtering menu items
-    wxMenuItem* filterByNetName = new wxMenuItem( &menu, ID_FILTER_BY_NET_NAME,
-                                                  _( "Filter by Net Name" ),
+    wxMenuItem* filterByNetName = new wxMenuItem( &menu, ID_FILTER_BY_NET_NAME, _( "Filter by Net Name" ),
                                                   wxEmptyString, wxITEM_CHECK );
     menu.Append( filterByNetName );
     filterByNetName->Check( cfg.filter_by_net_name );
 
-    wxMenuItem* filterByNetclass = new wxMenuItem( &menu, ID_FILTER_BY_NETCLASS,
-                                                   _( "Filter by Netclass" ),
+    wxMenuItem* filterByNetclass = new wxMenuItem( &menu, ID_FILTER_BY_NETCLASS, _( "Filter by Netclass" ),
                                                    wxEmptyString, wxITEM_CHECK );
     menu.Append( filterByNetclass );
     filterByNetclass->Check( cfg.filter_by_netclass );
@@ -1196,8 +1194,7 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     //groupConstraint->Check( m_group_by_constraint );
     //menu.Append( groupConstraint );
 
-    wxMenuItem* groupNetclass = new wxMenuItem( &menu, ID_GROUP_BY_NETCLASS,
-                                                _( "Group by Netclass" ),
+    wxMenuItem* groupNetclass = new wxMenuItem( &menu, ID_GROUP_BY_NETCLASS, _( "Group by Netclass" ),
                                                 wxEmptyString, wxITEM_CHECK );
     menu.Append( groupNetclass );
     groupNetclass->Check( m_groupByNetclass );
@@ -1216,22 +1213,19 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     if( !selItem || !selItem->GetIsGroup() )
         removeSelectedGroup->Enable( false );
 
-    wxMenuItem* removeCustomGroups = new wxMenuItem( &menu, ID_REMOVE_GROUPS,
-                                                     _( "Remove All Custom Groups" ),
+    wxMenuItem* removeCustomGroups = new wxMenuItem( &menu, ID_REMOVE_GROUPS, _( "Remove All Custom Groups" ),
                                                      wxEmptyString, wxITEM_NORMAL );
     menu.Append( removeCustomGroups );
     removeCustomGroups->Enable( m_custom_group_rules.size() != 0 );
 
     menu.AppendSeparator();
 
-    wxMenuItem* showZeroNetPads = new wxMenuItem( &menu, ID_SHOW_ZERO_NET_PADS,
-                                                  _( "Show Zero Pad Nets" ),
+    wxMenuItem* showZeroNetPads = new wxMenuItem( &menu, ID_SHOW_ZERO_NET_PADS, _( "Show Zero Pad Nets" ),
                                                   wxEmptyString, wxITEM_CHECK );
     menu.Append( showZeroNetPads );
     showZeroNetPads->Check( m_showZeroPadNets );
 
-    wxMenuItem* showUnconnectedNets = new wxMenuItem( &menu, ID_SHOW_UNCONNECTED_NETS,
-                                                      _( "Show Unconnected Nets" ),
+    wxMenuItem* showUnconnectedNets = new wxMenuItem( &menu, ID_SHOW_UNCONNECTED_NETS, _( "Show Unconnected Nets" ),
                                                       wxEmptyString, wxITEM_CHECK );
     menu.Append( showUnconnectedNets );
     showUnconnectedNets->Check( m_showUnconnectedNets );
@@ -1239,15 +1233,15 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     menu.AppendSeparator();
 
     wxMenuItem* showTimeDomainDetails = new wxMenuItem( &menu, ID_SHOW_TIME_DOMAIN_DETAILS,
-                                                        _( "Show Time Domain Details" ), wxEmptyString, wxITEM_CHECK );
+                                                        _( "Show Time Domain Details" ),
+                                                        wxEmptyString, wxITEM_CHECK );
     menu.Append( showTimeDomainDetails );
     showTimeDomainDetails->Check( m_showTimeDomainDetails );
 
     menu.AppendSeparator();
 
     // Report generation
-    wxMenuItem* generateReport = new wxMenuItem( &menu, ID_GENERATE_REPORT,
-                                                 _( "Save Net Inspector Report..." ),
+    wxMenuItem* generateReport = new wxMenuItem( &menu, ID_GENERATE_REPORT, _( "Save Net Inspector Report..." ),
                                                  wxEmptyString, wxITEM_NORMAL );
     menu.Append( generateReport );
 
@@ -1310,13 +1304,21 @@ void PCB_NET_INSPECTOR_PANEL::onContextMenuSelection( wxCommandEvent& event )
         onAddGroup();
         break;
 
-    case ID_GROUP_BY_CONSTRAINT: m_groupByConstraint = !m_groupByConstraint; break;
+    case ID_GROUP_BY_CONSTRAINT:
+        m_groupByConstraint = !m_groupByConstraint;
+        break;
 
-    case ID_GROUP_BY_NETCLASS: m_groupByNetclass = !m_groupByNetclass; break;
+    case ID_GROUP_BY_NETCLASS:
+        m_groupByNetclass = !m_groupByNetclass;
+        break;
 
-    case ID_FILTER_BY_NET_NAME: m_filterByNetName = !m_filterByNetName; break;
+    case ID_FILTER_BY_NET_NAME:
+        m_filterByNetName = !m_filterByNetName;
+        break;
 
-    case ID_FILTER_BY_NETCLASS: m_filterByNetclass = !m_filterByNetclass; break;
+    case ID_FILTER_BY_NETCLASS:
+        m_filterByNetclass = !m_filterByNetclass;
+        break;
 
     case ID_REMOVE_SELECTED_GROUP:
         onRemoveSelectedGroup();
@@ -1326,11 +1328,17 @@ void PCB_NET_INSPECTOR_PANEL::onContextMenuSelection( wxCommandEvent& event )
         m_custom_group_rules.clear();
         break;
 
-    case ID_SHOW_ZERO_NET_PADS: m_showZeroPadNets = !m_showZeroPadNets; break;
+    case ID_SHOW_ZERO_NET_PADS:
+        m_showZeroPadNets = !m_showZeroPadNets;
+        break;
 
-    case ID_SHOW_UNCONNECTED_NETS: m_showUnconnectedNets = !m_showUnconnectedNets; break;
+    case ID_SHOW_UNCONNECTED_NETS:
+        m_showUnconnectedNets = !m_showUnconnectedNets;
+        break;
 
-    case ID_SHOW_TIME_DOMAIN_DETAILS: m_showTimeDomainDetails = !m_showTimeDomainDetails; break;
+    case ID_SHOW_TIME_DOMAIN_DETAILS:
+        m_showTimeDomainDetails = !m_showTimeDomainDetails;
+        break;
 
     case ID_GENERATE_REPORT:
         generateReport();
@@ -1379,8 +1387,8 @@ void PCB_NET_INSPECTOR_PANEL::onRemoveSelectedGroup()
             const auto     groupIter = std::ranges::find_if( m_custom_group_rules,
                                                              [&]( std::unique_ptr<EDA_COMBINED_MATCHER>& rule )
                                                              {
-                                                             return rule->GetPattern() == groupName;
-                                                         } );
+                                                                 return rule->GetPattern() == groupName;
+                                                             } );
 
             if( groupIter != m_custom_group_rules.end() )
             {
@@ -1542,8 +1550,7 @@ void PCB_NET_INSPECTOR_PANEL::onAddNet()
 
         if( m_board->FindNet( newNetName ) )
         {
-            DisplayError( this,
-                          wxString::Format( _( "Net name '%s' is already in use." ), newNetName ) );
+            DisplayError( this, wxString::Format( _( "Net name '%s' is already in use." ), newNetName ) );
             newNetName = wxEmptyString;
         }
         else
@@ -1600,8 +1607,7 @@ void PCB_NET_INSPECTOR_PANEL::onRenameSelectedNet()
 
             if( unescapedShortName.IsEmpty() )
             {
-                DisplayError( this, wxString::Format( _( "Net name cannot be empty." ),
-                                                      unescapedShortName ) );
+                DisplayError( this, _( "Net name cannot be empty." ) );
                 continue;
             }
 
@@ -1610,8 +1616,7 @@ void PCB_NET_INSPECTOR_PANEL::onRenameSelectedNet()
 
             if( m_board->FindNet( shortNetName ) || m_board->FindNet( fullNetName ) )
             {
-                DisplayError( this, wxString::Format( _( "Net name '%s' is already in use." ),
-                                                      unescapedShortName ) );
+                DisplayError( this, wxString::Format( _( "Net name '%s' is already in use." ), unescapedShortName ) );
                 unescapedShortName = wxEmptyString;
             }
             else
@@ -1668,8 +1673,7 @@ void PCB_NET_INSPECTOR_PANEL::onDeleteSelectedNet()
     auto delete_one = [this]( const LIST_ITEM* i )
     {
         if( i->GetPadCount() == 0
-            || IsOK( this, wxString::Format( _( "Net '%s' is in use.  Delete anyway?" ),
-                                             i->GetNetName() ) ) )
+            || IsOK( this, wxString::Format( _( "Net '%s' is in use.  Delete anyway?" ), i->GetNetName() ) ) )
         {
             // This is a bit hacky, but it will do for now, since this is the only path
             // outside the netlist updater where you can remove a net from a BOARD.
@@ -1709,8 +1713,7 @@ void PCB_NET_INSPECTOR_PANEL::onDeleteSelectedNet()
         if( ii->GetIsGroup() )
         {
             if( ii->ChildrenCount() != 0
-                && IsOK( this, wxString::Format( _( "Delete all nets in group '%s'?" ),
-                                                 ii->GetGroupName() ) ) )
+                && IsOK( this, wxString::Format( _( "Delete all nets in group '%s'?" ), ii->GetGroupName() ) ) )
             {
                 // we can't be iterating the children container and deleting items from
                 // it at the same time.  thus take a copy of it first.

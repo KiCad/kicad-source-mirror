@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NET_INSPECTOR_PANEL_BASE_H
-#define NET_INSPECTOR_PANEL_BASE_H
+#pragma once
 
 #include <bitmaps.h>
 #include <widgets/bitmap_button.h>
@@ -53,12 +52,12 @@ public:
      * Called by the parent EDA_EDIT_FRAME on change of settings (e.g. stackup, netclass
      * definitions)
      */
-    virtual void OnParentSetupChanged(){};
+    virtual void OnParentSetupChanged() {};
 
     /**
      * Save the net inspector settings - called from EDA_EDIT_FRAME when hiding the panel
      */
-    virtual void SaveSettings(){};
+    virtual void SaveSettings() {};
 
     /**
      * Prepare the panel when (re-)shown in the editor
@@ -81,7 +80,7 @@ protected:
     /**
      * Implementation-specific implementation of language update handling
      */
-    virtual void OnLanguageChangedImpl(){};
+    virtual void OnLanguageChangedImpl() {};
 
 protected:
     EDA_BASE_FRAME* m_frame;
@@ -91,5 +90,3 @@ protected:
     BITMAP_BUTTON*  m_configureBtn;
     wxDataViewCtrl* m_netsList;
 };
-
-#endif

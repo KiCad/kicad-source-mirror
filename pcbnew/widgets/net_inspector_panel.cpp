@@ -71,8 +71,7 @@ NET_INSPECTOR_PANEL::NET_INSPECTOR_PANEL( wxWindow* parent, EDA_BASE_FRAME* aFra
     Bind( wxEVT_SET_FOCUS, &NET_INSPECTOR_PANEL::OnSetFocus, this );
     Bind( wxEVT_SIZE, &NET_INSPECTOR_PANEL::OnSize, this );
 
-    m_searchCtrl->Bind( wxEVT_COMMAND_TEXT_UPDATED, &NET_INSPECTOR_PANEL::OnSearchTextChanged,
-                        this );
+    m_searchCtrl->Bind( wxEVT_COMMAND_TEXT_UPDATED, &NET_INSPECTOR_PANEL::OnSearchTextChanged, this );
     m_netsList->Bind( wxEVT_SET_FOCUS, &NET_INSPECTOR_PANEL::OnSetFocus, this );
     m_configureBtn->Bind( wxEVT_BUTTON, &NET_INSPECTOR_PANEL::OnConfigButton, this );
 }
@@ -86,8 +85,7 @@ NET_INSPECTOR_PANEL::~NET_INSPECTOR_PANEL()
     Unbind( wxEVT_SET_FOCUS, &NET_INSPECTOR_PANEL::OnSetFocus, this );
     Unbind( wxEVT_SIZE, &NET_INSPECTOR_PANEL::OnSize, this );
 
-    m_searchCtrl->Unbind( wxEVT_COMMAND_TEXT_UPDATED, &NET_INSPECTOR_PANEL::OnSearchTextChanged,
-                          this );
+    m_searchCtrl->Unbind( wxEVT_COMMAND_TEXT_UPDATED, &NET_INSPECTOR_PANEL::OnSearchTextChanged, this );
     m_netsList->Unbind( wxEVT_SET_FOCUS, &NET_INSPECTOR_PANEL::OnSetFocus, this );
     m_configureBtn->Unbind( wxEVT_BUTTON, &NET_INSPECTOR_PANEL::OnConfigButton, this );
 }
