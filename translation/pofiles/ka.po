@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-07 08:02+0000\n"
+"PO-Revision-Date: 2025-10-08 10:07+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ka/>\n"
@@ -6307,7 +6307,7 @@ msgstr "გრაფიკის ნაგულისხმევები"
 #: pcbnew/menubar_pcb_editor.cpp:165 pcbnew/pcb_edit_frame.cpp:187
 #: pcbnew/pcb_edit_frame.cpp:1995 pcbnew/tools/zone_filler_tool.cpp:291
 msgid "PCB Editor"
-msgstr ""
+msgstr "PCB-ის რედაქტორი"
 
 #: common/eda_base_frame.cpp:1403 common/eda_base_frame.cpp:1475
 msgid "Plugins"
