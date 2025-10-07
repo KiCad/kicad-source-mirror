@@ -665,27 +665,8 @@ bool EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, co
     }
     else if( unit == wxT( "ra" ) ) // Radians
     {
+        units = EDA_UNITS::DEGREES;
         dtmp *= 180.0f / M_PI;
-    }
-    else if( unit == wxT( "fs" ) )
-    {
-        units = EDA_UNITS::FS;
-    }
-    else if( unit == wxT( "ps" ) )
-    {
-        units = EDA_UNITS::PS;
-    }
-    else if( unit == wxT( "ps/in" ) )
-    {
-        units = EDA_UNITS::PS_PER_INCH;
-    }
-    else if( unit == wxT( "ps/cm" ) )
-    {
-        units = EDA_UNITS::PS_PER_CM;
-    }
-    else if( unit == wxT( "ps/mm" ) )
-    {
-        units = EDA_UNITS::PS_PER_MM;
     }
     else
     {
