@@ -23,6 +23,7 @@
 
 #include <local_history.h>
 #include <history_lock.h>
+#include <lockfile.h>
 #include <settings/common_settings.h>
 #include <pgm_base.h>
 #include <trace_helpers.h>
@@ -234,7 +235,7 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
             parents = 1;
     }
 
-    wxString          msg = aTitle.IsEmpty() ? wxS( "Autosave" ) : aTitle;
+    wxString          msg = aTitle.IsEmpty() ? wxString( "Autosave" ) : aTitle;
     git_oid           commit_id;
     const git_commit* constParent = parent;
 
@@ -1046,63 +1047,11 @@ wxString LOCAL_HISTORY::GetHeadHash( const wxString& aProjectPath )
 
 bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString& aHash )
 {
-    HISTORY_LOCK_MANAGER lock( aProjectPath );
+    // STEP 1: Verify no files are open by checking for LOCKFILEs
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Checking for open files in %s" ), aProjectPath );
 
-    if( !lock.IsLocked() )
-    {
-        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to acquire lock for %s" ), aProjectPath );
-        return false;
-    }
-
-    git_repository* repo = lock.GetRepository();
-
-    if( !repo )
-        return false;
-
-    git_oid oid;
-    if( git_oid_fromstr( &oid, aHash.mb_str().data() ) != 0 )
-        return false;
-
-    git_commit* commit = nullptr;
-    git_commit_lookup( &commit, repo, &oid );
-
-    git_tree* tree = nullptr;
-    git_commit_tree( &tree, commit );
-
-    // Step 1: Collect all files in the git tree (recursively)
-    std::set<wxString> filesInTree;
-
-    std::function<void( git_tree*, const wxString& )> walkTree = [&]( git_tree* t, const wxString& prefix )
-    {
-        size_t cnt = git_tree_entrycount( t );
-        for( size_t i = 0; i < cnt; ++i )
-        {
-            const git_tree_entry* entry = git_tree_entry_byindex( t, i );
-            wxString name = wxString::FromUTF8( git_tree_entry_name( entry ) );
-            wxString fullPath = prefix.IsEmpty() ? name : prefix + wxS("/") + name;
-
-            if( git_tree_entry_type( entry ) == GIT_OBJECT_TREE )
-            {
-                // Recurse into subdirectory
-                git_tree* sub = nullptr;
-                if( git_tree_lookup( &sub, repo, git_tree_entry_id( entry ) ) == 0 )
-                {
-                    walkTree( sub, fullPath );
-                    git_tree_free( sub );
-                }
-            }
-            else if( git_tree_entry_type( entry ) == GIT_OBJECT_BLOB )
-            {
-                filesInTree.insert( fullPath );
-            }
-        }
-    };
-
-    walkTree( tree, wxEmptyString );
-
-    // Step 2: Delete files in project directory that are NOT in the git tree
-    // (but skip .history directory and other excluded patterns)
-    std::function<void( const wxString& )> deleteExtraFiles = [&]( const wxString& dirPath )
+    std::vector<wxString> lockedFiles;
+    std::function<void( const wxString& )> findLocks = [&]( const wxString& dirPath )
     {
         wxDir dir( dirPath );
         if( !dir.IsOpened() )
@@ -1114,19 +1063,9 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
         while( cont )
         {
             wxFileName fullPath( dirPath, filename );
-            wxString relativePath = fullPath.GetFullPath();
 
-            // Make relative to project path
-            if( relativePath.StartsWith( aProjectPath ) )
-            {
-                relativePath = relativePath.Mid( aProjectPath.Length() );
-                if( relativePath.StartsWith( wxFileName::GetPathSeparator() ) )
-                    relativePath = relativePath.Mid( 1 );
-            }
-
-            // Skip .history directory and other excluded patterns
-            if( filename == wxS(".history") || filename == wxS(".git") ||
-                filename.EndsWith( wxS(".kicad_prl") ) || filename == wxS("fp-info-cache") )
+            // Skip .history directory
+            if( filename == wxS(".history") || filename == wxS(".git") )
             {
                 cont = dir.GetNext( &filename );
                 continue;
@@ -1134,26 +1073,15 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
 
             if( fullPath.DirExists() )
             {
-                // Recurse into subdirectory
-                deleteExtraFiles( fullPath.GetFullPath() );
-
-                // Check if directory is now empty and not in tree, delete it
-                wxDir subdir( fullPath.GetFullPath() );
-                if( subdir.IsOpened() && !subdir.HasFiles() && !subdir.HasSubDirs() )
-                {
-                    wxFileName::Rmdir( fullPath.GetFullPath() );
-                    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Deleted empty directory '%s'" ),
-                               fullPath.GetFullPath() );
-                }
+                findLocks( fullPath.GetFullPath() );
             }
-            else if( fullPath.FileExists() )
+            else if( fullPath.FileExists() && filename.EndsWith( wxS(".lock") ) )
             {
-                // Check if this file exists in the git tree
-                if( filesInTree.find( relativePath ) == filesInTree.end() )
+                // Check if this is a valid LOCKFILE (not stale and not ours)
+                LOCKFILE testLock( fullPath.GetFullPath().BeforeLast( '.' ) );
+                if( testLock.Valid() && !testLock.IsLockedByMe() )
                 {
-                    wxRemoveFile( fullPath.GetFullPath() );
-                    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Deleted extra file '%s'" ),
-                               fullPath.GetFullPath() );
+                    lockedFiles.push_back( fullPath.GetFullPath() );
                 }
             }
 
@@ -1161,11 +1089,84 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
         }
     };
 
-    deleteExtraFiles( aProjectPath );
+    findLocks( aProjectPath );
 
-    // Step 3: Restore all files from the git tree (recursively)
-    std::function<void( git_tree*, const wxString& )> restoreTree = [&]( git_tree* t, const wxString& prefix )
+    if( !lockedFiles.empty() )
     {
+        wxString lockList;
+        for( const auto& f : lockedFiles )
+            lockList += wxS("\n  - ") + f;
+
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Cannot restore - files are open:%s" ), lockList );
+        return false;
+    }
+
+    // STEP 2: Acquire history lock and create backup snapshot
+    HISTORY_LOCK_MANAGER lock( aProjectPath );
+
+    if( !lock.IsLocked() )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to acquire lock for %s" ), aProjectPath );
+        return false;
+    }
+
+    git_repository* repo = lock.GetRepository();
+    if( !repo )
+        return false;
+
+    // Verify the target commit exists
+    git_oid oid;
+    if( git_oid_fromstr( &oid, aHash.mb_str().data() ) != 0 )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Invalid hash %s" ), aHash );
+        return false;
+    }
+
+    git_commit* commit = nullptr;
+    if( git_commit_lookup( &commit, repo, &oid ) != 0 )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Commit not found %s" ), aHash );
+        return false;
+    }
+
+    git_tree* tree = nullptr;
+    git_commit_tree( &tree, commit );
+
+    // Create pre-restore backup snapshot
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Creating pre-restore backup" ) );
+    wxString backupHash = GetHeadHash( aProjectPath );
+
+    if( !CommitFullProjectSnapshot( aProjectPath, wxS("Pre-restore backup") ) )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to create pre-restore backup" ) );
+        git_tree_free( tree );
+        git_commit_free( commit );
+        return false;
+    }
+
+    // STEP 3: Extract to temporary location
+    wxString tempRestorePath = aProjectPath + wxS("_restore_temp");
+
+    if( wxDirExists( tempRestorePath ) )
+        wxFileName::Rmdir( tempRestorePath, wxPATH_RMDIR_RECURSIVE );
+
+    if( !wxFileName::Mkdir( tempRestorePath, 0777, wxPATH_MKDIR_FULL ) )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to create temp directory" ) );
+        git_tree_free( tree );
+        git_commit_free( commit );
+        return false;
+    }
+
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Extracting to temp location" ) );
+
+    // Recursively extract git tree to temp location
+    bool extractSuccess = true;
+    std::function<void( git_tree*, const wxString& )> extractTree = [&]( git_tree* t, const wxString& prefix )
+    {
+        if( !extractSuccess )
+            return;
+
         size_t cnt = git_tree_entrycount( t );
         for( size_t i = 0; i < cnt; ++i )
         {
@@ -1175,20 +1176,19 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
 
             if( git_tree_entry_type( entry ) == GIT_OBJECT_TREE )
             {
-                // Create subdirectory
-                wxFileName dirPath( aProjectPath + wxFileName::GetPathSeparator() + fullPath, wxEmptyString );
-                if( !wxFileName::Mkdir( dirPath.GetPath(), 0777, wxPATH_MKDIR_FULL ) && !wxDirExists( dirPath.GetPath() ) )
+                wxFileName dirPath( tempRestorePath + wxFileName::GetPathSeparator() + fullPath, wxEmptyString );
+                if( !wxFileName::Mkdir( dirPath.GetPath(), 0777, wxPATH_MKDIR_FULL ) )
                 {
                     wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to create directory '%s'" ),
                                dirPath.GetPath() );
-                    continue;
+                    extractSuccess = false;
+                    return;
                 }
 
-                // Recurse into subdirectory
                 git_tree* sub = nullptr;
                 if( git_tree_lookup( &sub, repo, git_tree_entry_id( entry ) ) == 0 )
                 {
-                    restoreTree( sub, fullPath );
+                    extractTree( sub, fullPath );
                     git_tree_free( sub );
                 }
             }
@@ -1197,31 +1197,25 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
                 git_blob* blob = nullptr;
                 if( git_blob_lookup( &blob, repo, git_tree_entry_id( entry ) ) == 0 )
                 {
-                    wxFileName dst( aProjectPath + wxFileName::GetPathSeparator() + fullPath );
+                    wxFileName dst( tempRestorePath + wxFileName::GetPathSeparator() + fullPath );
 
-                    // Ensure parent directory exists
                     wxFileName dstDir( dst );
                     dstDir.SetFullName( wxEmptyString );
-                    if( !wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL ) && !wxDirExists( dstDir.GetPath() ) )
-                    {
-                        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to create directory '%s'" ),
-                                   dstDir.GetPath() );
-                        git_blob_free( blob );
-                        continue;
-                    }
+                    wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
 
                     wxFFile f( dst.GetFullPath(), wxT( "wb" ) );
                     if( f.IsOpened() )
                     {
                         f.Write( git_blob_rawcontent( blob ), git_blob_rawsize( blob ) );
                         f.Close();
-                        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Restored '%s'" ),
-                                   dst.GetFullPath() );
                     }
                     else
                     {
-                        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Could not open '%s' for writing" ),
+                        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to write '%s'" ),
                                    dst.GetFullPath() );
+                        extractSuccess = false;
+                        git_blob_free( blob );
+                        return;
                     }
 
                     git_blob_free( blob );
@@ -1230,8 +1224,149 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
         }
     };
 
-    restoreTree( tree, wxEmptyString );
+    extractTree( tree, wxEmptyString );
 
+    if( !extractSuccess )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Extraction failed, cleaning up" ) );
+        wxFileName::Rmdir( tempRestorePath, wxPATH_RMDIR_RECURSIVE );
+        git_tree_free( tree );
+        git_commit_free( commit );
+        return false;
+    }
+
+    // STEP 4: Atomic move - backup current, move temp to current
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Performing atomic swap" ) );
+
+    wxString backupPath = aProjectPath + wxS("_restore_backup");
+
+    // Remove old backup if exists
+    if( wxDirExists( backupPath ) )
+        wxFileName::Rmdir( backupPath, wxPATH_RMDIR_RECURSIVE );
+
+    // Track which files we moved to backup (for safe rollback)
+    std::set<wxString> backedUpFiles;
+
+    // Move current project to backup (except .history)
+    bool moveSuccess = true;
+    wxDir currentDir( aProjectPath );
+    if( currentDir.IsOpened() )
+    {
+        wxString filename;
+        bool cont = currentDir.GetFirst( &filename );
+
+        while( cont )
+        {
+            if( filename != wxS(".history") && filename != wxS(".git") )
+            {
+                wxFileName source( aProjectPath, filename );
+                wxFileName dest( backupPath, filename );
+
+                // Create backup directory if needed
+                if( !wxDirExists( backupPath ) )
+                    wxFileName::Mkdir( backupPath, 0777, wxPATH_MKDIR_FULL );
+
+                if( !wxRenameFile( source.GetFullPath(), dest.GetFullPath() ) )
+                {
+                    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to backup '%s'" ),
+                               source.GetFullPath() );
+                    moveSuccess = false;
+                    break;
+                }
+
+                backedUpFiles.insert( filename );
+            }
+            cont = currentDir.GetNext( &filename );
+        }
+    }
+
+    // Track which files we successfully moved from temp (for rollback)
+    std::set<wxString> restoredFiles;
+
+    // STEP 5: If backup succeeded, move temp files to project directory
+    if( moveSuccess )
+    {
+        wxDir tempDir( tempRestorePath );
+        if( tempDir.IsOpened() )
+        {
+            wxString filename;
+            bool cont = tempDir.GetFirst( &filename );
+
+            while( cont )
+            {
+                wxFileName source( tempRestorePath, filename );
+                wxFileName dest( aProjectPath, filename );
+
+                if( !wxRenameFile( source.GetFullPath(), dest.GetFullPath() ) )
+                {
+                    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to move '%s', rolling back" ),
+                               source.GetFullPath() );
+                    moveSuccess = false;
+                    break;
+                }
+
+                restoredFiles.insert( filename );
+                cont = tempDir.GetNext( &filename );
+            }
+        }
+    }
+
+    // ROLLBACK if anything failed
+    if( !moveSuccess )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: ROLLING BACK due to failure" ) );
+
+        // Remove ONLY the files we successfully moved from temp directory
+        // This preserves any files that were NOT in the backup (never tracked in history)
+        for( const wxString& filename : restoredFiles )
+        {
+            wxFileName toRemove( aProjectPath, filename );
+            if( toRemove.DirExists() )
+            {
+                wxFileName::Rmdir( toRemove.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+                wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Rollback removed directory '%s'" ),
+                           toRemove.GetFullPath() );
+            }
+            else if( toRemove.FileExists() )
+            {
+                wxRemoveFile( toRemove.GetFullPath() );
+                wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Rollback removed file '%s'" ),
+                           toRemove.GetFullPath() );
+            }
+        }
+
+        // Restore from backup - put back only what we moved
+        if( wxDirExists( backupPath ) )
+        {
+            for( const wxString& filename : backedUpFiles )
+            {
+                wxFileName source( backupPath, filename );
+                wxFileName dest( aProjectPath, filename );
+
+                if( source.Exists() )
+                {
+                    wxRenameFile( source.GetFullPath(), dest.GetFullPath() );
+                    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Rollback restored '%s'" ),
+                               dest.GetFullPath() );
+                }
+            }
+        }
+
+        // Clean up
+        wxFileName::Rmdir( tempRestorePath, wxPATH_RMDIR_RECURSIVE );
+        wxFileName::Rmdir( backupPath, wxPATH_RMDIR_RECURSIVE );
+
+        git_tree_free( tree );
+        git_commit_free( commit );
+        return false;
+    }
+
+    // SUCCESS - Clean up temp and backup directories
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Restore successful, cleaning up" ) );
+    wxFileName::Rmdir( tempRestorePath, wxPATH_RMDIR_RECURSIVE );
+    wxFileName::Rmdir( backupPath, wxPATH_RMDIR_RECURSIVE );
+
+    // Record the restore in history
     git_time_t t = git_commit_time( commit );
     wxDateTime dt( (time_t) t );
     git_signature* sig = nullptr;
@@ -1243,8 +1378,7 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
         git_commit_lookup( &parent, repo, &parent_id );
 
     wxString msg;
-    msg.Printf( wxS( "Restored from %s %s" ), aHash,
-                dt.FormatISOCombined().c_str() );
+    msg.Printf( wxS( "Restored from %s %s" ), aHash, dt.FormatISOCombined().c_str() );
 
     git_oid new_id;
     const git_commit* constParent = parent;
@@ -1258,6 +1392,7 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
     git_tree_free( tree );
     git_commit_free( commit );
 
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Complete" ) );
     return true;
 }
 

@@ -182,7 +182,7 @@ bool HISTORY_LOCK_MANAGER::openRepository()
         const git_error* err = git_error_last();
         m_lockError = wxString::Format(
             _( "Failed to open git repository: %s" ),
-            err ? wxString::FromUTF8( err->message ) : wxS( "Unknown error" ) );
+            err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
         return false;
     }
 
@@ -207,7 +207,7 @@ bool HISTORY_LOCK_MANAGER::acquireIndexLock()
         const git_error* err = git_error_last();
         m_lockError = wxString::Format(
             _( "Failed to acquire git index lock (another operation in progress?): %s" ),
-            err ? wxString::FromUTF8( err->message ) : wxS( "Unknown error" ) );
+            err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
         return false;
     }
 

@@ -2958,7 +2958,7 @@ void PCB_EDIT_FRAME::ProjectChanged()
     {
         // Saver exports the in-memory BOARD into the history mirror preserving the original
         // relative path and file name (reparented under .history) without touching dirty flags.
-        LOCAL_HISTORY::RegisterSaver( [this]( std::vector<wxString>& files )
+        LOCAL_HISTORY::RegisterSaver( [this]( const wxString& aProjectPath, std::vector<wxString>& files )
         {
             if( !GetBoard() )
                 return;
@@ -2967,13 +2967,25 @@ void PCB_EDIT_FRAME::ProjectChanged()
             if( projPath.IsEmpty() )
                 return;
 
+            // Verify we're saving for the correct project
+            if( !projPath.IsSameAs( aProjectPath ) )
+            {
+                wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - project path mismatch: %s vs %s"),
+                           projPath, aProjectPath );
+                return;
+            }
+
             wxString boardPath = GetBoard()->GetFileName();
             if( boardPath.IsEmpty() )
                 return; // unsaved board
 
             // Derive relative path from project root.
             if( !boardPath.StartsWith( projPath ) )
+            {
+                wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - board not under project: %s"),
+                           boardPath );
                 return; // not under project
+            }
 
             wxString rel = boardPath.Mid( projPath.length() );
 

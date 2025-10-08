@@ -2109,11 +2109,19 @@ static void ensureSchSaverRegistered( SCH_EDIT_FRAME* frame )
 {
     if( s_schSaverRegistered )
         return;
-    LOCAL_HISTORY::RegisterSaver( [frame]( std::vector<wxString>& files )
+    LOCAL_HISTORY::RegisterSaver( [frame]( const wxString& aProjectPath, std::vector<wxString>& files )
     {
         wxString projPath = frame->Prj().GetProjectPath();
         if( projPath.IsEmpty() )
             return; // no project yet
+
+        // Verify we're saving for the correct project
+        if( !projPath.IsSameAs( aProjectPath ) )
+        {
+            wxLogTrace( traceAutoSave, wxS("[history] sch saver skipping - project path mismatch: %s vs %s"),
+                       projPath, aProjectPath );
+            return;
+        }
 
         // Ensure project path has trailing separator for StartsWith tests & Mid calculations.
         if( !projPath.EndsWith( wxFILE_SEP_PATH ) )
