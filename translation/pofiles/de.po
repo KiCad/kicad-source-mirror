@@ -31,8 +31,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 16:32+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-09 07:44+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -14107,7 +14107,7 @@ msgstr "Symbol zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 msgid "Revert the symbol to its last saved state"
-msgstr "Symbol auf zuletzt gespeicherten Stand zurücksetzen"
+msgstr "Symbol auf letzte gespeicherte Version zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 msgid "Clear cell"
