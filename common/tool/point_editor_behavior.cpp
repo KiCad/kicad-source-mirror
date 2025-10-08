@@ -77,9 +77,7 @@ void POLYGON_POINT_EDIT_BEHAVIOR::UpdatePointsFromOutline( const SHAPE_POLY_SET&
     else
     {
         for( int i = 0; i < aOutline.TotalVertices(); ++i )
-        {
             aPoints.Point( i ).SetPosition( aOutline.CVertex( i ) );
-        }
     }
 }
 
@@ -91,16 +89,12 @@ void POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints( SHAPE_POLY_SET&   aOu
     CHECK_POINT_COUNT_GE( aPoints, (unsigned) aOutline.TotalVertices() );
 
     for( int i = 0; i < aOutline.TotalVertices(); ++i )
-    {
         aOutline.SetVertex( i, aPoints.Point( i ).GetPosition() );
-    }
 
     for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
     {
         if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
-        {
             aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
-        }
     }
 }
 
@@ -110,6 +104,7 @@ void POLYGON_POINT_EDIT_BEHAVIOR::FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aC
     m_polygon.RemoveNullSegments();
 }
 
+
 void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 {
     aPoints.AddPoint( m_segment.GetStart() );
@@ -117,12 +112,13 @@ void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 }
 
 
-void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+bool EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
-    CHECK_POINT_COUNT( aPoints, SEGMENT_MAX_POINTS );
+    wxCHECK( aPoints.PointsSize() == SEGMENT_MAX_POINTS, false );
 
     aPoints.Point( SEGMENT_START ) = m_segment.GetStart();
     aPoints.Point( SEGMENT_END ) = m_segment.GetEnd();
+    return true;
 }
 
 
@@ -139,9 +135,9 @@ void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint
         m_segment.SetEnd( aPoints.Point( SEGMENT_END ).GetPosition() );
 }
 
-OPT_VECTOR2I
-EDA_SEGMENT_POINT_EDIT_BEHAVIOR::Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                                         EDIT_POINTS&      aPoints ) const
+
+OPT_VECTOR2I EDA_SEGMENT_POINT_EDIT_BEHAVIOR::Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                                                      EDIT_POINTS&      aPoints ) const
 {
     // Select the other end of line
     return aPoints.Next( aEditedPoint )->GetPosition();
@@ -155,12 +151,13 @@ void EDA_CIRCLE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 }
 
 
-void EDA_CIRCLE_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+bool EDA_CIRCLE_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
-    CHECK_POINT_COUNT( aPoints, CIRC_MAX_POINTS );
+    wxCHECK( aPoints.PointsSize() == CIRC_MAX_POINTS, false );
 
     aPoints.Point( CIRC_CENTER ).SetPosition( m_circle.getCenter() );
     aPoints.Point( CIRC_END ).SetPosition( m_circle.GetEnd() );
+    return true;
 }
 
 
@@ -174,19 +171,14 @@ void EDA_CIRCLE_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint,
     const VECTOR2I& end = aPoints.Point( CIRC_END ).GetPosition();
 
     if( isModified( aEditedPoint, aPoints.Point( CIRC_CENTER ) ) )
-    {
         m_circle.SetCenter( center );
-    }
     else
-    {
         m_circle.SetEnd( VECTOR2I( end.x, end.y ) );
-    }
 }
 
 
-OPT_VECTOR2I
-EDA_CIRCLE_POINT_EDIT_BEHAVIOR::Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
-                                                        EDIT_POINTS&      aPoints ) const
+OPT_VECTOR2I EDA_CIRCLE_POINT_EDIT_BEHAVIOR::Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
+                                                                     EDIT_POINTS&      aPoints ) const
 {
     return aPoints.Point( CIRC_CENTER ).GetPosition();
 }
@@ -204,20 +196,20 @@ void EDA_BEZIER_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 }
 
 
-void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+bool EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
-    CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
+    wxCHECK( aPoints.PointsSize() == BEZIER_MAX_POINTS, false );
 
     aPoints.Point( BEZIER_START ).SetPosition( m_bezier.GetStart() );
     aPoints.Point( BEZIER_CTRL_PT1 ).SetPosition( m_bezier.GetBezierC1() );
     aPoints.Point( BEZIER_CTRL_PT2 ).SetPosition( m_bezier.GetBezierC2() );
     aPoints.Point( BEZIER_END ).SetPosition( m_bezier.GetEnd() );
+    return true;
 }
 
 
-void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint,
-                                                 EDIT_POINTS& aPoints, COMMIT& aCommit,
-                                                 std::vector<EDA_ITEM*>& aUpdatedItems )
+void EDA_BEZIER_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints,
+                                                 COMMIT& aCommit, std::vector<EDA_ITEM*>& aUpdatedItems )
 {
     CHECK_POINT_COUNT( aPoints, BEZIER_MAX_POINTS );
 
@@ -591,7 +583,9 @@ static void editArcMidKeepEndpoints( EDA_SHAPE& aArc, const VECTOR2I& aStart, co
 
 EDA_ARC_POINT_EDIT_BEHAVIOR::EDA_ARC_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aArc, const ARC_EDIT_MODE& aArcEditMode,
                                                           KIGFX::VIEW_CONTROLS& aViewContols ) :
-        m_arc( aArc ), m_arcEditMode( aArcEditMode ), m_viewControls( aViewContols )
+        m_arc( aArc ),
+        m_arcEditMode( aArcEditMode ),
+        m_viewControls( aViewContols )
 {
     wxASSERT( m_arc.GetShape() == SHAPE_T::ARC );
 }
@@ -609,14 +603,15 @@ void EDA_ARC_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 }
 
 
-void EDA_ARC_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+bool EDA_ARC_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
-    CHECK_POINT_COUNT( aPoints, 4 );
+    wxCHECK( aPoints.PointsSize() == 4, false );
 
     aPoints.Point( ARC_START ).SetPosition( m_arc.GetStart() );
     aPoints.Point( ARC_MID ).SetPosition( m_arc.GetArcMid() );
     aPoints.Point( ARC_END ).SetPosition( m_arc.GetEnd() );
     aPoints.Point( ARC_CENTER ).SetPosition( m_arc.getCenter() );
+    return true;
 }
 
 
@@ -699,12 +694,11 @@ void EDA_TABLECELL_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 }
 
 
-void EDA_TABLECELL_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+bool EDA_TABLECELL_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
-    aPoints.Point( COL_WIDTH )
-            .SetPosition( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
-    aPoints.Point( ROW_HEIGHT )
-            .SetPosition( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
+    aPoints.Point( COL_WIDTH ).SetPosition( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
+    aPoints.Point( ROW_HEIGHT ).SetPosition( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
+    return true;
 }
 
 

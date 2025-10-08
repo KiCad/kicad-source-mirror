@@ -136,10 +136,11 @@ public:
         aPoints.AddPoint( m_line.GetEndPoint(), connectedEnd );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         aPoints.Point( LINE_START ).SetPosition( m_line.GetStartPoint() );
         aPoints.Point( LINE_END ).SetPosition( m_line.GetEndPoint() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoints, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -201,7 +202,7 @@ public:
         aPoints.AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         const REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
         const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
@@ -212,8 +213,8 @@ public:
         aPoints.Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
         aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
 
-        aPoints.Point( REFIMG_ORIGIN )
-                .SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+        aPoints.Point( REFIMG_ORIGIN ).SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -545,10 +546,11 @@ public:
         MakePoints( m_rect, aPoints );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         m_rect.Normalize();
         UpdatePoints( m_rect, aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -714,13 +716,14 @@ public:
         RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( m_textbox, aPoints );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         // point editor works only with rectangles having width and height > 0
         // Some symbols can have rectangles with width or height < 0
         // So normalize the size:
         m_textbox.Normalize();
         RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( m_textbox, aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -762,7 +765,7 @@ public:
         aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         VECTOR2I topLeft = m_sheet.GetPosition();
         VECTOR2I botRight = m_sheet.GetPosition() + m_sheet.GetSize();
@@ -771,6 +774,7 @@ public:
         aPoints.Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
         aPoints.Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
         aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,

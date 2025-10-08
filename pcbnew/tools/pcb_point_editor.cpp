@@ -345,9 +345,14 @@ public:
         MakePoints( m_rectangle, aPoints );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
+        // Careful; rectangle shape is mutable between cardinal and non-cardinal rotations...
+        if( m_rectangle.GetShape() != SHAPE_T::RECTANGLE )
+            return false;
+
         UpdatePoints( m_rectangle, aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -528,9 +533,9 @@ public:
         aPoints.AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        CHECK_POINT_COUNT( aPoints, REFIMG_MAX_POINTS );
+        wxCHECK( aPoints.PointsSize() == REFIMG_MAX_POINTS, false );
 
         REFERENCE_IMAGE& refImage = m_refImage.GetReferenceImage();
 
@@ -542,6 +547,7 @@ public:
         aPoints.Point( RECT_BOT_RIGHT ).SetPosition( botRight );
         aPoints.Point( RECT_BOT_LEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
         aPoints.Point( REFIMG_ORIGIN ).SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -647,35 +653,20 @@ public:
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
         if( m_barcode.GetAngle().IsCardinal() )
-        {
             RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( makeDummyRect(), aPoints );
-        }
-        else
-        {
-            // Non-cardinal barcode point-editing isn't useful enough to support.
-        }
+
+        // Non-cardinal barcode point-editing isn't useful enough to support.
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         const unsigned target = m_barcode.GetAngle().IsCardinal() ? RECT_MAX_POINTS : 0;
 
         if( aPoints.PointsSize() != target )
-        {
-            aPoints.Clear();
-            MakePoints( aPoints );
-            return;
-        }
+            return false;
 
-        if( m_barcode.GetAngle().IsCardinal() )
-        {
-            // Dispatch to the rectangle behavior
-            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( makeDummyRect(), aPoints );
-        }
-        else
-        {
-            // Not currently editable while non-cardinally rotated.
-        }
+        RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( makeDummyRect(), aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -822,7 +813,7 @@ public:
         }
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         bool     locked = m_pad.GetParent() && m_pad.IsLocked();
         VECTOR2I shapePos = m_pad.ShapePos( m_layer );
@@ -881,6 +872,8 @@ public:
         default: // suppress warnings
             break;
         }
+
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1008,9 +1001,10 @@ public:
         m_generator.MakeEditPoints( aPoints );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         m_generator.UpdateEditPoints( aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1166,15 +1160,16 @@ public:
         }
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        CHECK_POINT_COUNT( aPoints, DIM_ALIGNED_MAX );
+        wxCHECK( aPoints.PointsSize() == DIM_ALIGNED_MAX, false );
 
         aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
         aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
         aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
         aPoints.Point( DIM_CROSSBARSTART ).SetPosition( m_dimension.GetCrossbarStart() );
         aPoints.Point( DIM_CROSSBAREND ).SetPosition( m_dimension.GetCrossbarEnd() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1358,12 +1353,13 @@ public:
         aPoints.Point( DIM_END ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        CHECK_POINT_COUNT( aPoints, DIM_CENTER_MAX );
+        wxCHECK( aPoints.PointsSize() == DIM_CENTER_MAX, false );
 
         aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
         aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1418,14 +1414,15 @@ public:
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        CHECK_POINT_COUNT( aPoints, DIM_RADIAL_MAX );
+        wxCHECK( aPoints.PointsSize() == DIM_RADIAL_MAX, false );
 
         aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
         aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
         aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
         aPoints.Point( DIM_KNEE ).SetPosition( m_dimension.GetKnee() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1508,13 +1505,14 @@ public:
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        CHECK_POINT_COUNT( aPoints, DIM_LEADER_MAX );
+        wxCHECK( aPoints.PointsSize() == DIM_LEADER_MAX, false );
 
         aPoints.Point( DIM_START ).SetPosition( m_dimension.GetStart() );
         aPoints.Point( DIM_END ).SetPosition( m_dimension.GetEnd() );
         aPoints.Point( DIM_TEXT ).SetPosition( m_dimension.GetTextPos() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1560,36 +1558,21 @@ public:
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
         if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
-        {
             RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( m_textbox, aPoints );
-        }
-        else
-        {
-            // Rotated textboxes are implemented as polygons and these aren't currently editable.
-        }
+
+        // Rotated textboxes are implemented as polygons and these aren't currently editable.
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
+        // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
         const unsigned target = m_textbox.GetShape() == SHAPE_T::RECTANGLE ? RECT_MAX_POINTS : 0;
 
-        // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
         if( aPoints.PointsSize() != target )
-        {
-            aPoints.Clear();
-            MakePoints( aPoints );
-            return;
-        }
+            return false;
 
-        if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
-        {
-            // Dispatch to the rectangle behavior
-            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( m_textbox, aPoints );
-        }
-        else if( m_textbox.GetShape() == SHAPE_T::POLY )
-        {
-            // Not currently editable while rotated.
-        }
+        RECTANGLE_POINT_EDIT_BEHAVIOR::UpdatePoints( m_textbox, aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -1638,7 +1621,7 @@ public:
         aPoints.AddIndicatorLine( aPoints.Point( RECT_BOT_LEFT ), aPoints.Point( RECT_TOP_LEFT ) );
     }
 
-    void UpdatePoints( EDIT_POINTS& aPoints ) override
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         BOX2I bbox = m_group.GetBoundingBox();
         VECTOR2I tl = bbox.GetOrigin();
@@ -1649,6 +1632,7 @@ public:
         aPoints.Point( RECT_BOT_RIGHT ).SetPosition( br );
         aPoints.Point( RECT_BOT_LEFT ).SetPosition( tl.x, br.y );
         aPoints.Point( RECT_CENTER ).SetPosition( bbox.Centre() );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
@@ -2652,7 +2636,12 @@ void PCB_POINT_EDITOR::updatePoints()
         }
     }
 
-    m_editorBehavior->UpdatePoints( *m_editPoints );
+    if( !m_editorBehavior->UpdatePoints( *m_editPoints ) )
+    {
+        getView()->Remove( m_editPoints.get() );
+        m_editPoints = makePoints( item );
+        getView()->Add( m_editPoints.get() );
+    }
 
     if( editedIndex >= 0 && editedIndex < (int) m_editPoints->PointsSize())
         m_editedPoint = &m_editPoints->Point( editedIndex );

@@ -812,19 +812,17 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         {
             RotatePoint( m_start, aRotCentre, aAngle );
             RotatePoint( m_end, aRotCentre, aAngle );
-            break;
+        }
+        else
+        {
+            // Convert non-cardinally-rotated rect to a diamond
+            ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
+            m_shape = SHAPE_T::POLY;
+            rr.TransformToPolygon( m_poly );
+            m_poly.Rotate( aAngle, aRotCentre );
         }
 
-        // Convert non-cardinally-rotated rect to a diamond
-        m_shape = SHAPE_T::POLY;
-        m_poly.RemoveAllContours();
-        m_poly.NewOutline();
-        m_poly.Append( m_start );
-        m_poly.Append( m_end.x, m_start.y );
-        m_poly.Append( m_end );
-        m_poly.Append( m_start.x, m_end.y );
-
-        KI_FALLTHROUGH;
+        break;
 
     case SHAPE_T::POLY:
         m_poly.Rotate( aAngle, aRotCentre );
