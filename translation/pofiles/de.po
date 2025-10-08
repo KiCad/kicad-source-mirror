@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2025-10-08 16:32+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -13622,7 +13622,7 @@ msgstr "Knotenpunkt bearbeiten"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junctions"
-msgstr "Knotenpunkte bearbeiten"
+msgstr "Verbindungspunkte bearbeiten"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
