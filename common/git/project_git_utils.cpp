@@ -61,8 +61,8 @@ wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool a
 
             if( oid )
             {
-                char buf[41];
-                size_t len = aShort ? 8 : 41;
+                char buf[GIT_OID_HEXSZ + 1];
+                size_t len = aShort ? 9 : GIT_OID_HEXSZ + 1; // 8 chars + null terminator
                 git_oid_tostr( buf, len, oid );
                 result = wxString::FromUTF8( buf );
             }
