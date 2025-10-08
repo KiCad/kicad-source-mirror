@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-09-28 10:44+0000\n"
+"PO-Revision-Date: 2025-10-08 10:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -25209,9 +25209,8 @@ msgid "Toggle Attribute"
 msgstr "切换特性"
 
 #: eeschema/tools/sch_edit_tool.cpp:3496
-#, fuzzy
 msgid "Edit Symbol Properties..."
-msgstr "编辑符号属性"
+msgstr "编辑符号属性..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3513
 #, fuzzy
