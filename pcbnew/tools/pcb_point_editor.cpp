@@ -362,7 +362,7 @@ public:
     }
 
     /**
-     * Update the coordinates of 4 corners of a rectangle, according to pad constraints and the
+     * Update the coordinates of 4 corners of a rectangle, according to constraints and the
      * moved corner
      *
      * @param aPoints the points list
@@ -652,10 +652,27 @@ public:
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
-        if( m_barcode.GetAngle().IsCardinal() )
-            RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( makeDummyRect(), aPoints );
+        if( !m_barcode.GetAngle().IsCardinal() )
+        {
+            // Non-cardinal barcode point-editing isn't useful enough to support.
+            return;
+        }
 
-        // Non-cardinal barcode point-editing isn't useful enough to support.
+        auto set45Constraint =
+                [&]( int a, int b )
+                {
+                    aPoints.Point( a ).SetConstraint( new EC_45DEGREE( aPoints.Point( a ), aPoints.Point( b ) ) );
+                };
+
+        RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( makeDummyRect(), aPoints );
+
+        if( m_barcode.KeepSquare() )
+        {
+            set45Constraint( RECT_TOP_LEFT, RECT_BOT_RIGHT );
+            set45Constraint( RECT_TOP_RIGHT, RECT_BOT_LEFT );
+            set45Constraint( RECT_BOT_RIGHT, RECT_TOP_LEFT );
+            set45Constraint( RECT_BOT_LEFT, RECT_TOP_RIGHT );
+        }
     }
 
     bool UpdatePoints( EDIT_POINTS& aPoints ) override

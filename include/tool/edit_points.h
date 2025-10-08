@@ -125,7 +125,7 @@ public:
     bool WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const;
 
     /**
-     * Set a constraint for and EDIT_POINT.
+     * Set a constraint for an EDIT_POINT.
      *
      * @param aConstraint is the constraint to be set.
      */

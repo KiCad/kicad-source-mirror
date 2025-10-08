@@ -62,7 +62,6 @@ DECLARE_ENUM_TO_WXANY( BARCODE_ECC_T );
 
 class PCB_BARCODE : public BOARD_ITEM
 {
-
 public:
     /**
      * Construct a PCB_BARCODE.
@@ -347,6 +346,13 @@ public:
     BARCODE_T GetKind() const { return m_kind; }
     void SetKind( BARCODE_T aKind );
     void SetBarcodeKind( BARCODE_T aKind ); // Includes re-compute
+
+    bool KeepSquare() const
+    {
+        return m_kind == BARCODE_T::QR_CODE
+                || m_kind == BARCODE_T::MICRO_QR_CODE
+                || m_kind == BARCODE_T::DATA_MATRIX;
+    }
 
     /**
      * Set the error correction level used for QR codes.
