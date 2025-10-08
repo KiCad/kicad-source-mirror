@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-09-05 07:01+0000\n"
+"PO-Revision-Date: 2025-10-08 10:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13.1-rc\n"
+"Plural-Forms: nplurals=3; plural="
+"(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1879,7 +1879,7 @@ msgstr "Zastąpić wczytany plik?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Istnieje już wczytany plik. Czy chcesz go zamienić?"
+msgstr "Plik jest już załadowany. Czy chcesz go zastąpić?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2498,7 +2498,7 @@ msgstr "Twórcy pakietów oprogramowania"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "Użyto %u obiektów GDI"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -4187,7 +4187,7 @@ msgstr "Dodaj"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
 msgid "Enable Git tracking"
-msgstr "Włącz śledzenie przez Git"
+msgstr "Aktywuj śledzenie przez Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -5075,12 +5075,18 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Osadzone pliki podlegające usunięciu są również osadzone w niektórych "
+"footprintach.\n"
+"Czy usunąć je również z tych footprintów?"
 
 #: common/dialogs/panel_embedded_files.cpp:195
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Osadzone pliki podlegające usunięciu są również osadzone w niektórych "
+"symbolach.\n"
+"Czy usunąć je również z tych symboli?"
 
 #: common/dialogs/panel_embedded_files.cpp:312
 #: common/dialogs/panel_embedded_files.cpp:420
@@ -8084,9 +8090,9 @@ msgstr "Odpowiedź API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Odpowiedź API:  %s"
+msgstr "Odpowiedź API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -11238,7 +11244,7 @@ msgstr "Pliki schematów S-expression programu KiCad"
 
 #: common/wildcards_and_files_ext.cpp:292
 msgid "Altium Project files"
-msgstr "Pliki projektów Altium"
+msgstr "Pliki projektów programu Altium"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "CADSTAR Archive files"
@@ -12462,9 +12468,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Nie odnaleziono symbolu pasującego do kryterium wyszukiwania ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** symbolu nie odnaleziono ***"
+msgstr "*** biblioteka symboli nie jest prawidłowa ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -14087,32 +14092,26 @@ msgid "Pin Table"
 msgstr "Tabela pinów"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Konwertuj symbol"
+msgstr "Przywróć symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:103
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Przywrócić '%s' do ostatnio zapisanej wersji?"
+msgstr "Przywraca symbol do ostatnio zapisanej wersji"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear cell"
-msgstr "Prześwit"
+msgstr "Wyczyść komórkę"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Wyczyść ostatnie pliki wierceń"
+msgstr "Wyczyść zawartość komórki"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Utwórz nowy symbol"
+msgstr "Utwórz symbol potomny"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:106
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
 msgstr "Tworzy nowy symbol na podstawie już istniejącego symbolu"
 
@@ -14167,9 +14166,8 @@ msgid "No related symbols could be loaded from the library."
 msgstr "Uaktualnia symbole by zawierały wszystkie zmiany w bibliotece"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:597
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Uaktualnia symbole by zawierały wszystkie zmiany w bibliotece"
+msgstr "Nie udało się załadować żadnego symbolu z biblioteki."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:699
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:766
@@ -14207,9 +14205,9 @@ msgid "Rename Field"
 msgstr "Zmień nazwę pola"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:778
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Nazwa pola %s już istnieje."
+msgstr "Nazwa pola '%s' już istnieje."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:823
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
@@ -14223,7 +14221,6 @@ msgid "Symbol Name"
 msgstr "Nazwa symbolu"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1052
-#, fuzzy
 msgid "Exclude From BOM"
 msgstr "Wyklucz z BOM"
 
@@ -14244,9 +14241,8 @@ msgid "Power Symbol"
 msgstr "Symbol Zasilania"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1057
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Symbol Zasilania"
+msgstr "Lokalny symbol zasilania"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
@@ -14438,7 +14434,7 @@ msgstr "Edycja właściwości symbolu"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:731
 #, c-format
 msgid "This field is inherited from '%s'."
-msgstr "To pole zostało odziedziczone z '%s'."
+msgstr "To pole jest dziedziczone z '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:761
 #, c-format
@@ -17921,7 +17917,7 @@ msgstr "Zachowaj piny na pozycjach w czasie przeciągania krawędzi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Nickname and path cannot be empty."
-msgstr "Nazwa skrótowa oraz ścieżka nie może być pusta."
+msgstr "Nazwa skrótowa i ścieżka nie może być pusta."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
 msgid "Nickname cannot be empty."
@@ -19012,8 +19008,8 @@ msgstr "Przerwij zapis projektu"
 #, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
 msgstr ""
-"Nie mogę automatycznie zapisać plików w folderze '%s', oznaczonym jako tylko "
-"do odczytu"
+"Nie można zapisać plików automatycznej kopii w folderze tylko do odczytu:  "
+"'%s'"
 
 #: eeschema/files-io.cpp:1444
 #, c-format
@@ -20984,15 +20980,13 @@ msgstr "Nieznana wartość SCH_FILE_T: %d"
 
 #: eeschema/sch_item.cpp:171 eeschema/sch_item.cpp:191
 #: eeschema/sch_item.cpp:744
-#, fuzzy
 msgid "All units"
-msgstr "Wszystkie elementy"
+msgstr "Wszystkie jednostki"
 
 #: eeschema/sch_item.cpp:182 eeschema/sch_item.cpp:218
 #: eeschema/sch_item.cpp:766
-#, fuzzy
 msgid "All body styles"
-msgstr "Wspólny dla wszystkich stylów"
+msgstr "Wszystkie style prezentacji"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -21511,7 +21505,7 @@ msgstr "Szerokość kolumny"
 
 #: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_tablecell.cpp:261
 msgid "Row Height"
-msgstr "Wysokość wiersza"
+msgstr "Wysokość rzędu"
 
 #: eeschema/sch_tablecell.cpp:249
 msgid "Cell Properties"
@@ -23244,7 +23238,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:230
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Ostrzeżenie: odnośnik jest pusty</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:239
 #, c-format
@@ -25054,7 +25048,7 @@ msgstr "Następny element sieci"
 
 #: eeschema/tools/sch_actions.cpp:1144
 msgid "Select next item on the current net"
-msgstr "Wybiera następny element znajdujący się w bieżącej sieci"
+msgstr "Wybiera następny element połączony z bieżącą siecią"
 
 #: eeschema/tools/sch_actions.cpp:1150
 msgid "Previous Net Item"
@@ -27773,7 +27767,6 @@ msgid "Delete Column"
 msgstr "Usuń kolumnę"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
-#, fuzzy
 msgid "Embed file"
 msgstr "Osadzony plik"
 
@@ -28590,9 +28583,10 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Kolory zdefiniowane w stosie warstw pokryją te znajdujące się w predefinicji "
+"kolorów"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
@@ -28654,7 +28648,7 @@ msgstr "Kąt padania bocznego światła w stopniach, liczba z zakresu: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:340
 msgid "Invalid preset\n"
-msgstr "Nieprawidłowe ustawienie wstępne\n"
+msgstr "Nieprawidłowe ustawienia wstępne\n"
 
 #: kicad/cli/command_pcb_render.cpp:358
 msgid "Invalid background\n"
@@ -28949,7 +28943,7 @@ msgstr "Resetuj do domyślnych"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:153
 msgid "<value set at runtime>"
-msgstr "<wartość ustawiana podczas pracy>"
+msgstr "<wartość ustalana podczas pracy>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -29506,7 +29500,7 @@ msgstr "Import projektów z programu EasyEDA Pro"
 #: kicad/jobs_runner.cpp:232
 #, c-format
 msgid "Running job %d: %s"
-msgstr "Uruchomione zadanie %d: %s"
+msgstr "Uruchomione zadania %d: %s"
 
 #: kicad/jobs_runner.cpp:280
 msgid "Job successful"
@@ -29632,7 +29626,7 @@ msgstr "Projekt programu Altium..."
 
 #: kicad/menubar.cpp:112
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Importuj schemat i PCB programu Altium (*.PrjPcb)"
+msgstr "Importuj schemat oraz obwód drukowany programu Altium (*.PrjPcb)"
 
 #: kicad/menubar.cpp:115
 msgid "CADSTAR Project..."
@@ -34470,16 +34464,16 @@ msgstr "<br/>Bez footprintów"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr "<br/>*********** Sortowanie wg pozycji footprintu ***********"
+msgstr "<br/>*********** Sortowanie wg pozycji footprintów ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:354
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
-msgstr "<br/>*********** Sortowanie wg pozycji oznaczenia ***********"
+msgstr "<br/>*********** Sortowanie wg pozycji odnośników ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
 #, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr "<br/>%d %s X, Y: %s; zaokrąglenie X, Y: %s"
+msgstr "<br/>%d %s X, Y: %s, zaokrąglenie X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:380
 msgid "Selected options resulted in errors! Change them and try again."
@@ -36580,9 +36574,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Plik został prawidłowo utworzony."
+msgstr "Plik IPC-2581 został utworzony prawidłowo."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -40583,7 +40576,7 @@ msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
 msgid "Appearance preset:"
-msgstr "Ustawienia wyglądu:"
+msgstr "Predefiniowany wygląd:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -45725,7 +45718,7 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Nie można dodać modelu 3D dla %s.\n"
+"Nie można dodać modelu 3D dla %s. \n"
 "Błąd OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:817
@@ -45960,8 +45953,8 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:2469
 msgid "Failed to set surface curve mode, but will attempt to continue."
 msgstr ""
-"Niepowodzenie podczas ustawienia trybu krzywizny powierzchni, nastąpi próba "
-"kontynuacji mimo to."
+"Nie udało się ustawić trybu krzywej powierzchni, choć próba będzie "
+"kontynuowana."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2521
 #: pcbnew/exporters/step/step_pcb_model.cpp:3302
@@ -49458,7 +49451,7 @@ msgstr "Generowanie sekcji treści"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Pole lut. ma niewspierany kształt; zostało pominięte."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1176
 msgid "Generating history section"
@@ -49473,29 +49466,30 @@ msgstr "Generowania sekcji BOM"
 #, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
 msgstr ""
-"Footprint %s nie został znaleziony w bibliotece; dane BOM mogą być "
+"Footprint %s nie został znaleziony w słowniku; dane BOM mogą być "
 "niekompletne."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1275
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "Brak odnośnika OEM w komponencie \"%s\"; Wpis w BOM zostanie pominięty."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1369
 msgid "Generating CAD data"
 msgstr "Tworzenie danych CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2258
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Brak obrysu płytki lub jest zniekształcony. Uruchom DRC, by przeprowadzić "
-"pełną analizę."
+"Brak obrysu płytki lub jest zniekształcony.  Proszę uruchomić sprawdzenie "
+"DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2640
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Napotkano zduplikowane wskaźniki footprintów; dane wyjściowe IPC-2581 mogą "
+"być nieprawidłowe."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2805
 #, c-format
@@ -49505,16 +49499,19 @@ msgstr "Eksportuję warstwę %s, sieć %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2841
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Przelotka używa niewspieranego stosu warstw; pominięto w danych wiercenia."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2867
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr ""
+msgstr "Pole używa niewspieranego stosu warstw; pominięto w danych wiercenia."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3009
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Łezki nie są wspierane w formacie IPC-2581 rev B; zostaną wyeksportowane "
+"jako strefy."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3455
 msgid "Generating logistic section"
@@ -49526,7 +49523,7 @@ msgstr "Zapis pliku"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3499
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Nie udało się zapisać w buforze danych IPC-2581."
+msgstr "Nie udało się zapisać danych IPC-2581 do bufora."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -52273,9 +52270,8 @@ msgid "Some of the items could not be outset."
 msgstr "Niektóre z elementów nie mogły zostać zaokrąglone."
 
 #: pcbnew/tools/item_modification_routine.cpp:1005
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "Nie mogę utworzyć pliku \"%s\""
+msgstr "Nie można utworzyć zalążka prostokąta"
 
 #: pcbnew/tools/multichannel_tool.cpp:511
 msgid "Select a reference Rule Area to copy from..."
@@ -54500,7 +54496,7 @@ msgstr "Ograniczenia prześwitu pary różnicowej: min %s"
 
 #: pcbnew/tools/pcb_control.cpp:2198
 msgid "Resolved Clearance"
-msgstr "Przeanalizowany prześwit"
+msgstr "Rozpoznany prześwit"
 
 #: pcbnew/tools/pcb_control.cpp:2209
 msgid "Actual Clearance"
@@ -54520,7 +54516,7 @@ msgstr "Przeanalizowany prześwit względem krawędzi"
 
 #: pcbnew/tools/pcb_control.cpp:2297
 msgid "Resolved Margin Clearance"
-msgstr "Przeanalizowany prześwit względem marginesu"
+msgstr "Rozpoznany prześwit względem marginesu"
 
 #: pcbnew/tools/pcb_control.cpp:2309
 msgid "Selected Items"
