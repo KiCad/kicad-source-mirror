@@ -28,15 +28,16 @@
 # Ertuğrul Reisoğlu <reisoglusoftware@gmail.com>, 2025.
 # Niyazi <tanyildizn@gmail.com>, 2025.
 # Tevfik Bagcivan <tevfik.bagcivan@gmail.com>, 2025.
+# metin kiruc <metinkiruc@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-03 15:54+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-10-08 16:32+0000\n"
+"Last-Translator: metin kiruc <metinkiruc@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5425,7 +5426,7 @@ msgstr "Son Kullanılan Dosyaları Temizle"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "\"Bir Daha Gösterme\" Diyaloğunu Sıfırla"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
 #, fuzzy
@@ -5576,7 +5577,7 @@ msgstr "Sağ düğme ile sürükleme:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Fare hareketiyle kaydırma tuşu:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -6112,11 +6113,11 @@ msgstr "Otomatik kaydırma hızı:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Ters dikey kaydırma yönü"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Ters yatay kaydırma yönü"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
 #, fuzzy
@@ -6454,7 +6455,7 @@ msgstr "Fare ve Dokunmatik Yüzey"
 
 #: common/eda_base_frame.cpp:1304
 msgid "SpaceMouse"
-msgstr ""
+msgstr "Uzay Faresi"
 
 #: common/eda_base_frame.cpp:1306
 msgid "Hotkeys"
@@ -6827,7 +6828,7 @@ msgstr "Ağ Bilgisi"
 
 #: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:374
 msgid "Barcode"
-msgstr ""
+msgstr "Barkot"
 
 #: common/eda_item.cpp:445 eeschema/sch_junction.cpp:297
 #: eeschema/sch_junction.h:102
@@ -9661,11 +9662,12 @@ msgstr "Seçim dikdörtgeni çiz"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "Kement"
 
 #: common/tool/actions.cpp:361
+#, fuzzy
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Seçim modunu çokgen kement kullanacak şekilde ayarlayın"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10152,11 +10154,11 @@ msgstr "Sembol Alanlarını Güncelle"
 
 #: common/tool/actions.cpp:965
 msgid "Library Fields Table of Related Symbols"
-msgstr ""
+msgstr "Kütüphane Alanları İlgili Semboller Tablosu"
 
 #: common/tool/actions.cpp:966
 msgid "Edit a table of fields of all symbols related to the selected symbol"
-msgstr ""
+msgstr "Seçili sembolle ilgili tüm sembollerin alanlarının tablosunu düzenleyin"
 
 #: common/tool/actions.cpp:972
 msgid "Library Tree"
@@ -10302,7 +10304,7 @@ msgstr "Nesne çizilmediğinde bile hedefleme artılarını görüntüle"
 
 #: common/tool/actions.cpp:1189
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "0 ve 90 derece hizalanmış küçük artı işaretlerini kullanın"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
@@ -10310,15 +10312,15 @@ msgstr "Tam Pencere Artı İmleci"
 
 #: common/tool/actions.cpp:1197
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Tam pencere nişangahını 0 ve 90 derece hizalanmış şekilde görüntüle"
 
 #: common/tool/actions.cpp:1204
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "45 Derece Nişangah"
 
 #: common/tool/actions.cpp:1205
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "Tam pencere nişangahını 45 ve 135 derece hizalanmış şekilde görüntüle"
 
 #: common/tool/actions.cpp:1213
 msgid "Inactive Layer View Mode"
@@ -12703,7 +12705,7 @@ msgstr "İmleci Ortala"
 
 #: eeschema/dialogs/dialog_erc.cpp:228 pcbnew/dialogs/dialog_drc.cpp:282
 msgid "When cross-probing, scroll the canvas so that the item is visible"
-msgstr ""
+msgstr "Çapraz tarama yaparken, öğenin görünür olması için tuvali kaydırın"
 
 #: eeschema/dialogs/dialog_erc.cpp:398 pcbnew/dialogs/dialog_drc.cpp:1314
 msgid "Delete exclusions too?"
@@ -14563,7 +14565,7 @@ msgstr "Tüm gövde stilleri"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "'Standart' ve 'Alternatif' De Morgan gövde stilleri"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 #, fuzzy
