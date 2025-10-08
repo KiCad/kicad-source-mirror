@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 16:04+0300\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2025-09-05 07:01+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
@@ -166,7 +166,7 @@ msgstr "Đang tải các mẫu 3D..."
 msgid "Reload time %.3f s"
 msgstr "Thời gian tải lại: %.3f giây"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1063
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1065
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:361
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:561
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:285
@@ -285,7 +285,7 @@ msgstr "Trình xem 3D KiCad"
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:1015
 #: pcbnew/pcb_edit_frame.cpp:319 pcbnew/pcb_edit_frame.cpp:1899
-#: pcbnew/tools/pcb_actions.cpp:1623
+#: pcbnew/tools/pcb_actions.cpp:1620
 msgid "Appearance"
 msgstr "Giao diện"
 
@@ -331,8 +331,8 @@ msgstr "Không đủ quyền để lưu file '%s'."
 #: common/dialogs/panel_embedded_files.cpp:484
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:124
 #: eeschema/dialogs/dialog_erc.cpp:960
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1862
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2264
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1865
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2267
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:987
 #: eeschema/files-io.cpp:1015 eeschema/sch_marker.cpp:372
 #: kicad/import_project.cpp:123 kicad/tools/kicad_manager_control.cpp:244
@@ -348,8 +348,8 @@ msgstr "Không đủ quyền để lưu file '%s'."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:1051
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:115
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:405
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:116
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:453
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:236
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Error"
@@ -599,7 +599,7 @@ msgid "Show Appearance Manager"
 msgstr "Hiện Trình quản lý giao diện"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
-#: pcbnew/tools/pcb_actions.cpp:1624
+#: pcbnew/tools/pcb_actions.cpp:1621
 msgid "Show/hide the appearance manager"
 msgstr "Ẩn/hiện trình quản lý giao diện"
 
@@ -1056,15 +1056,15 @@ msgid "Presets (%s+Tab):"
 msgstr "Giá trị đặt trước (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:730
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1701
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2132
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1704
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2135
 #: pcbnew/widgets/appearance_controls.cpp:2681
 msgid "Save preset..."
 msgstr "Lưu giá trị đặt trước..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:731
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1702
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2133
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1705
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2136
 #: pcbnew/widgets/appearance_controls.cpp:2682
 msgid "Delete preset..."
 msgstr "Xóa giá trị đặt trước ..."
@@ -1080,29 +1080,29 @@ msgid "Save Layer Preset"
 msgstr "Lưu các lớp đặt trước"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:839
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1869
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2271
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1872
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2274
 #: pcbnew/widgets/appearance_controls.cpp:2818
 msgid "Overwrite existing preset?"
 msgstr "Ghi đè giá trị đặt sẵn hiện có?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1896
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2298
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2301
 #: pcbnew/widgets/appearance_controls.cpp:2846
 msgid "Presets"
 msgstr "Cài đặt trước"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:875
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1908
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2310
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1911
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2313
 #: pcbnew/widgets/appearance_controls.cpp:2858
 msgid "Delete Preset"
 msgstr "Xóa cài đặt trước"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:876
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1909
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2311
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1912
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2314
 #: pcbnew/widgets/appearance_controls.cpp:2859
 msgid "Select preset:"
 msgstr "Lựa chọn cài đặt trước sẵn có:"
@@ -1752,7 +1752,7 @@ msgstr "Tỉ lệ"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:778
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2744
+#: pcbnew/tools/pcb_point_editor.cpp:2543
 msgid "X:"
 msgstr "‪X:"
 
@@ -1776,7 +1776,7 @@ msgstr "‪X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:253
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2744
+#: pcbnew/tools/pcb_point_editor.cpp:2543
 msgid "Y:"
 msgstr "Y:"
 
@@ -2393,10 +2393,10 @@ msgid "Cannot create global library table path '%s'."
 msgstr "Không thể tạo đường dẫn bảng thư viện chung '%s'."
 
 #: common/design_block_tree_model_adapter.cpp:128 cvpcb/cvpcb_mainframe.cpp:789
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
 #: eeschema/generate_alias_info.cpp:40 eeschema/lib_symbol.cpp:2102
 #: eeschema/sch_symbol.cpp:2206 eeschema/sch_symbol.cpp:2812
-#: eeschema/sch_symbol.cpp:3209 eeschema/symbol_editor/symbol_editor.cpp:1726
+#: eeschema/sch_symbol.cpp:3209 eeschema/symbol_editor/symbol_editor.cpp:1724
 #: eeschema/symbol_viewer_frame.cpp:445 pcbnew/footprint.cpp:4473
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
@@ -2418,7 +2418,7 @@ msgstr "Lỗi khi tải biểu tượng %s từ thư viện '%s'."
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
 #: eeschema/sch_base_frame.cpp:694 eeschema/sch_symbol.cpp:2204
-#: eeschema/symbol_editor/symbol_editor.cpp:1725
+#: eeschema/symbol_editor/symbol_editor.cpp:1723
 #: eeschema/symbol_viewer_frame.cpp:444 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
@@ -2815,7 +2815,7 @@ msgstr "Biến môi trường"
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:526 eeschema/sch_group.cpp:436
 #: eeschema/sch_pin.cpp:1335 eeschema/sch_symbol.cpp:2165
-#: eeschema/sch_symbol.cpp:2217 eeschema/symbol_editor/symbol_editor.cpp:1707
+#: eeschema/sch_symbol.cpp:2217 eeschema/symbol_editor/symbol_editor.cpp:1705
 #: eeschema/symbol_viewer_frame.cpp:442
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
 #: eeschema/widgets/search_handlers.cpp:420
@@ -2941,7 +2941,7 @@ msgstr "Chọn Dấu chân ..."
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292 pcbnew/pad.cpp:2749
 #: pcbnew/via_protection_ui_mixin.h:136
-#: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:846
+#: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:840
 #, fuzzy
 msgid "Custom"
 msgstr "Tùy chỉnh:"
@@ -3305,7 +3305,7 @@ msgstr "Thư Viện"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/footprint.cpp:1830 pcbnew/pad.cpp:1369 pcbnew/pad.cpp:2791
-#: pcbnew/pcb_barcode.cpp:382 pcbnew/pcb_dimension.cpp:693
+#: pcbnew/pcb_barcode.cpp:380 pcbnew/pcb_dimension.cpp:693
 #: pcbnew/pcb_group.cpp:396 pcbnew/pcb_marker.cpp:400 pcbnew/pcb_shape.cpp:696
 #: pcbnew/pcb_tablecell.cpp:142 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:486 pcbnew/pcb_track.cpp:2038
@@ -3799,8 +3799,8 @@ msgstr "Chế độ xuất:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_plot_base.cpp:353
 #: pcbnew/dialogs/dialog_plot_base.cpp:379 pcbnew/pcb_field.cpp:298
-#: pcbnew/pcb_tablecell.cpp:252 pcbnew/pcb_text.cpp:687
-#: pcbnew/pcb_textbox.cpp:851 pcbnew/tools/pcb_control.cpp:2689
+#: pcbnew/pcb_tablecell.cpp:249 pcbnew/pcb_text.cpp:687
+#: pcbnew/pcb_textbox.cpp:854 pcbnew/tools/pcb_control.cpp:2689
 msgid "Color"
 msgstr "Màu sắc"
 
@@ -3933,9 +3933,9 @@ msgstr "Di chuyển điểm tới vị trí"
 
 #: common/dialogs/eda_list_dialog.cpp:50 common/dialogs/eda_list_dialog.cpp:78
 #: common/widgets/lib_tree.cpp:223 common/widgets/lib_tree.cpp:307
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:297
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:298
 #: eeschema/dialogs/dialog_sim_command.cpp:100
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:246
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:247
 #: eeschema/sim/simulator_frame_ui.cpp:559
 #: eeschema/sim/simulator_frame_ui.cpp:738 eeschema/symbol_viewer_frame.cpp:161
 #: eeschema/symbol_viewer_frame.cpp:176
@@ -3943,7 +3943,7 @@ msgstr "Di chuyển điểm tới vị trí"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:272
 #: pcbnew/footprint_viewer_frame.cpp:131 pcbnew/footprint_viewer_frame.cpp:146
 #: pcbnew/widgets/net_inspector_panel.cpp:42
-#: pcbnew/widgets/net_inspector_panel.cpp:98
+#: pcbnew/widgets/net_inspector_panel.cpp:96
 msgid "Filter"
 msgstr "Bộ lọc"
 
@@ -4027,7 +4027,7 @@ msgstr "Kiểm tra"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:151
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1440
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1443
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:164
 #: kicad/dialogs/template_default_html.h:79
@@ -4041,9 +4041,10 @@ msgstr "Đồng ý"
 #: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:443 common/tool/actions.cpp:255
 #: eeschema/dialogs/dialog_erc.cpp:492
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1440 eeschema/sheet.cpp:776
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1014
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1443 eeschema/sheet.cpp:776
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1027
 #: eeschema/symbol_editor/symbol_editor.cpp:984
+#: eeschema/symbol_editor/symbol_editor.cpp:1266
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:403
@@ -4077,7 +4078,7 @@ msgstr "Tên tệp tin"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:113
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:138 pcbnew/pad.cpp:1369
-#: pcbnew/pcb_barcode.cpp:382 pcbnew/pcb_dimension.cpp:693
+#: pcbnew/pcb_barcode.cpp:380 pcbnew/pcb_dimension.cpp:693
 #: pcbnew/pcb_group.cpp:396 pcbnew/pcb_shape.cpp:696
 #: pcbnew/pcb_tablecell.cpp:142 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:486 pcbnew/pcb_track.cpp:2038 pcbnew/zone.cpp:907
@@ -4965,8 +4966,8 @@ msgstr ""
 #: common/dialogs/panel_design_block_lib_table.cpp:1115
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1182
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1195
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1938
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1990
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1951
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2003
 #: eeschema/tools/sch_editor_control.cpp:447
 #: eeschema/tools/sch_editor_control.cpp:461
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1159
@@ -5624,7 +5625,7 @@ msgstr "Thu phóng"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
-#: common/dialogs/panel_mouse_settings_base.cpp:165 common/eda_shape.cpp:2669
+#: common/dialogs/panel_mouse_settings_base.cpp:165 common/eda_shape.cpp:2645
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:140
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:150
@@ -5889,8 +5890,8 @@ msgstr "Thông tin:"
 msgid "<Not defined>"
 msgstr "<Không xác định>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2658
-#: common/eda_shape.cpp:2670 common/stroke_params.cpp:40
+#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2634
+#: common/eda_shape.cpp:2646 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: eeschema/sch_bus_entry.cpp:639 eeschema/sch_line.cpp:1235
@@ -5900,45 +5901,45 @@ msgstr "<Không xác định>"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#: pcbnew/footprint.cpp:4411 pcbnew/pad.cpp:2774 pcbnew/pcb_table.cpp:650
-#: pcbnew/pcb_textbox.cpp:825 pcbnew/zone.cpp:945 pcbnew/zone.cpp:1811
+#: pcbnew/footprint.cpp:4411 pcbnew/pad.cpp:2774 pcbnew/pcb_table.cpp:657
+#: pcbnew/pcb_textbox.cpp:828 pcbnew/zone.cpp:945 pcbnew/zone.cpp:1811
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "Khối"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2659
+#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2635
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:640 eeschema/sch_line.cpp:1236
-#: eeschema/sch_line.cpp:1248 pcbnew/pcb_table.cpp:651
-#: pcbnew/pcb_textbox.cpp:826
+#: eeschema/sch_line.cpp:1248 pcbnew/pcb_table.cpp:658
+#: pcbnew/pcb_textbox.cpp:829
 msgid "Dashed"
 msgstr "Dấu gạch ngang"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2660
+#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2636
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:641 eeschema/sch_line.cpp:1237
-#: eeschema/sch_line.cpp:1249 pcbnew/pcb_table.cpp:652
-#: pcbnew/pcb_textbox.cpp:827
+#: eeschema/sch_line.cpp:1249 pcbnew/pcb_table.cpp:659
+#: pcbnew/pcb_textbox.cpp:830
 msgid "Dotted"
 msgstr "Dấu chấm"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2661
+#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2637
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:642 eeschema/sch_line.cpp:1238
-#: eeschema/sch_line.cpp:1250 pcbnew/pcb_table.cpp:653
-#: pcbnew/pcb_textbox.cpp:828
+#: eeschema/sch_line.cpp:1250 pcbnew/pcb_table.cpp:660
+#: pcbnew/pcb_textbox.cpp:831
 msgid "Dash-Dot"
 msgstr "Dấu ngang-Dấu chấm"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2662
+#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2638
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:643 eeschema/sch_line.cpp:1239
-#: eeschema/sch_line.cpp:1251 pcbnew/pcb_table.cpp:654
-#: pcbnew/pcb_textbox.cpp:829
+#: eeschema/sch_line.cpp:1251 pcbnew/pcb_table.cpp:661
+#: pcbnew/pcb_textbox.cpp:832
 msgid "Dash-Dot-Dot"
 msgstr "Dấu ngang-Dấu chấm-Dấu chấm"
 
@@ -6088,11 +6089,11 @@ msgstr "Độ dày dây dẫn"
 msgid "Bus Thickness"
 msgstr "Độ dày Bus"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2803
+#: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2779
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:646
 #: eeschema/sch_line.cpp:961 eeschema/sch_line.cpp:1295
 #: eeschema/sch_line.cpp:1299 eeschema/sch_tablecell.cpp:225
-#: pcbnew/pcb_tablecell.cpp:244 pcbnew/pcb_textbox.cpp:847
+#: pcbnew/pcb_tablecell.cpp:244 pcbnew/pcb_textbox.cpp:850
 msgid "Line Style"
 msgstr "Kiểu cách Đường thẳng"
 
@@ -6150,8 +6151,8 @@ msgstr "Lớp tín hiệu"
 #: eeschema/sch_marker.cpp:369 eeschema/sheet.cpp:772
 #: eeschema/symbol_editor/symbol_editor.cpp:132
 #: eeschema/symbol_editor/symbol_editor.cpp:434
-#: eeschema/symbol_editor/symbol_editor.cpp:1266
-#: eeschema/symbol_editor/symbol_editor.cpp:1663
+#: eeschema/symbol_editor/symbol_editor.cpp:1264
+#: eeschema/symbol_editor/symbol_editor.cpp:1661
 #: pcbnew/dialogs/dialog_drc.cpp:1052 pcbnew/dialogs/dialog_export_vrml.cpp:61
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:241
 #: pcbnew/pcb_marker.cpp:233
@@ -6347,8 +6348,8 @@ msgstr "Quá tải bộ nhớ."
 #: eeschema/widgets/search_handlers.cpp:382
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:142
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/pcb_barcode.cpp:379
-#: pcbnew/pcb_barcode.cpp:719 pcbnew/pcb_dimension.cpp:1899
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/pcb_barcode.cpp:377
+#: pcbnew/pcb_barcode.cpp:717 pcbnew/pcb_dimension.cpp:1899
 #: pcbnew/pcb_dimension.cpp:1981 pcbnew/pcb_dimension.cpp:2014
 #: pcbnew/pcb_dimension.cpp:2052 pcbnew/pcb_dimension.cpp:2094
 #: pcbnew/pcb_dimension.cpp:2128 pcbnew/pcb_tablecell.cpp:139
@@ -6363,7 +6364,7 @@ msgstr "Văn bản"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:449
-#: common/eda_shape.cpp:338 eeschema/pin_type.cpp:100 eeschema/sch_pin.cpp:1871
+#: common/eda_shape.cpp:336 eeschema/pin_type.cpp:100 eeschema/sch_pin.cpp:1871
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
@@ -6373,8 +6374,8 @@ msgid "Line"
 msgstr "Dòng"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:1166
-#: common/eda_shape.cpp:2648 common/tool/actions.cpp:353
+#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:1136
+#: common/eda_shape.cpp:2624 common/tool/actions.cpp:353
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2467
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
@@ -6825,7 +6826,7 @@ msgid "Properties"
 msgstr "Thuộc tính"
 
 #: common/eda_draw_frame.cpp:1247 pcbnew/pcb_edit_frame.cpp:366
-#: pcbnew/pcb_edit_frame.cpp:1902 pcbnew/tools/pcb_actions.cpp:1631
+#: pcbnew/pcb_edit_frame.cpp:1902 pcbnew/tools/pcb_actions.cpp:1628
 msgid "Net Inspector"
 msgstr "Khám phá tín hiệu"
 
@@ -6838,7 +6839,7 @@ msgstr "Màn hình"
 #: pcbnew/build_BOM_from_board.cpp:109
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/load_select_footprint.cpp:296 pcbnew/pad.cpp:1350
-#: pcbnew/pcb_barcode.cpp:374 pcbnew/pcb_shape.cpp:690 pcbnew/pcb_text.cpp:276
+#: pcbnew/pcb_barcode.cpp:372 pcbnew/pcb_shape.cpp:690 pcbnew/pcb_text.cpp:276
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Footprint"
@@ -6869,8 +6870,8 @@ msgid "Text Box"
 msgstr "Hộp Văn bản chữ"
 
 #: common/eda_item.cpp:425 common/eda_item.cpp:455 eeschema/sch_table.cpp:456
-#: eeschema/sch_tablecell.cpp:237 pcbnew/pcb_table.cpp:504
-#: pcbnew/pcb_tablecell.cpp:254
+#: eeschema/sch_tablecell.cpp:237 pcbnew/pcb_table.cpp:511
+#: pcbnew/pcb_tablecell.cpp:251
 msgid "Table"
 msgstr "Bảng"
 
@@ -6927,7 +6928,7 @@ msgstr "Danh sách phần tử"
 msgid "NetInfo"
 msgstr "Thông tin tín hiệu"
 
-#: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:376
+#: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:374
 msgid "Barcode"
 msgstr ""
 
@@ -6984,7 +6985,7 @@ msgid "Field"
 msgstr "Trường"
 
 #: common/eda_item.cpp:462 common/eda_item.cpp:475
-#: eeschema/symbol_editor/symbol_editor.cpp:1722
+#: eeschema/symbol_editor/symbol_editor.cpp:1720
 msgid "Symbol"
 msgstr "Biểu tượng"
 
@@ -6997,7 +6998,7 @@ msgid "Sheet Pin"
 msgstr "Chân của tờ trang"
 
 #: common/eda_item.cpp:465 eeschema/dialogs/dialog_migrate_buses.cpp:110
-#: pcbnew/tools/pcb_actions.cpp:2410
+#: pcbnew/tools/pcb_actions.cpp:2407
 msgid "Sheet"
 msgstr "Tờ trang"
 
@@ -7013,24 +7014,24 @@ msgstr "Trình vẽ Gerber"
 msgid "Draw Item"
 msgstr "Vẽ phần tử"
 
-#: common/eda_shape.cpp:329
+#: common/eda_shape.cpp:327
 msgid "Thermal Spoke"
 msgstr "Nan hoa nhiệt"
 
-#: common/eda_shape.cpp:330 pcbnew/pcb_shape.cpp:1083
+#: common/eda_shape.cpp:328 pcbnew/pcb_shape.cpp:1083
 msgid "Number Box"
 msgstr "Hộp Số học"
 
-#: common/eda_shape.cpp:339 pcbnew/pad.cpp:1626
+#: common/eda_shape.cpp:337 pcbnew/pad.cpp:1626
 msgid "Rect"
 msgstr "Tứ giác"
 
-#: common/eda_shape.cpp:340 common/eda_shape.cpp:1163 common/eda_shape.cpp:2649
+#: common/eda_shape.cpp:338 common/eda_shape.cpp:1133 common/eda_shape.cpp:2625
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "Vòng cung"
 
-#: common/eda_shape.cpp:341 common/eda_shape.cpp:1162 common/eda_shape.cpp:2650
+#: common/eda_shape.cpp:339 common/eda_shape.cpp:1132 common/eda_shape.cpp:2626
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2465 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
@@ -7040,35 +7041,35 @@ msgstr "Vòng cung"
 msgid "Circle"
 msgstr "Tròn"
 
-#: common/eda_shape.cpp:342
+#: common/eda_shape.cpp:340
 msgid "Bezier Curve"
 msgstr "Đường cong Bezier"
 
-#: common/eda_shape.cpp:343 common/eda_shape.cpp:1165 common/eda_shape.cpp:2651
+#: common/eda_shape.cpp:341 common/eda_shape.cpp:1135 common/eda_shape.cpp:2627
 msgid "Polygon"
 msgstr "Đa giác"
 
-#: common/eda_shape.cpp:1153
+#: common/eda_shape.cpp:1123
 msgid "Pad Number Box"
 msgstr "Hộp đánh số chân đồng"
 
-#: common/eda_shape.cpp:1154 pcbnew/pcb_shape.cpp:1090
+#: common/eda_shape.cpp:1124 pcbnew/pcb_shape.cpp:1090
 msgid "Thermal Spoke Template"
 msgstr "Biểu Mẫu Ngăn tản nhiệt"
 
-#: common/eda_shape.cpp:1155 common/eda_shape.cpp:1168
+#: common/eda_shape.cpp:1125 common/eda_shape.cpp:1138
 msgid "Unrecognized"
 msgstr "Không được công nhận"
 
-#: common/eda_shape.cpp:1164
+#: common/eda_shape.cpp:1134
 msgid "Curve"
 msgstr "Đường cong"
 
-#: common/eda_shape.cpp:1167 common/eda_shape.cpp:2647
+#: common/eda_shape.cpp:1137 common/eda_shape.cpp:2623
 msgid "Segment"
 msgstr "Phân đoạn"
 
-#: common/eda_shape.cpp:1178 common/eda_shape.cpp:2711
+#: common/eda_shape.cpp:1148 common/eda_shape.cpp:2687
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2447 eeschema/sch_label.cpp:2478
@@ -7080,40 +7081,40 @@ msgstr "Phân đoạn"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:47
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_tablecell.cpp:240
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:253
-#: pcbnew/pcb_textbox.cpp:839 pcbnew/widgets/search_handlers.cpp:583
+#: pcbnew/pcb_textbox.cpp:842 pcbnew/widgets/search_handlers.cpp:583
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:45
 msgid "Shape"
 msgstr "Hình dạng"
 
-#: common/eda_shape.cpp:1184 common/eda_shape.cpp:1193
-#: common/eda_shape.cpp:2738 pcbnew/dialogs/dialog_shape_properties.cpp:941
+#: common/eda_shape.cpp:1154 common/eda_shape.cpp:1163
+#: common/eda_shape.cpp:2714 pcbnew/dialogs/dialog_shape_properties.cpp:941
 #: pcbnew/pcb_shape.cpp:1025 pcbnew/pcb_track.cpp:1902
 msgid "Radius"
 msgstr "Bán kính"
 
-#: common/eda_shape.cpp:1188 common/eda_shape.cpp:1197
-#: common/eda_shape.cpp:1212 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:77
+#: common/eda_shape.cpp:1158 common/eda_shape.cpp:1167
+#: common/eda_shape.cpp:1182 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:77
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:102
 #: eeschema/sch_line.cpp:1292 eeschema/sch_pin.cpp:1343
 #: eeschema/sch_pin.cpp:1934 pcbnew/dialogs/dialog_shape_properties.cpp:905
 msgid "Length"
 msgstr "Độ dài"
 
-#: common/eda_shape.cpp:1191 common/eda_shape.cpp:1217
-#: common/eda_shape.cpp:2812 pcbnew/dialogs/dialog_shape_properties.cpp:906
-#: pcbnew/pcb_barcode.cpp:386 pcbnew/pcb_text.cpp:294
+#: common/eda_shape.cpp:1161 common/eda_shape.cpp:1187
+#: common/eda_shape.cpp:2788 pcbnew/dialogs/dialog_shape_properties.cpp:906
+#: pcbnew/pcb_barcode.cpp:384 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:490
 msgid "Angle"
 msgstr "Góc"
 
-#: common/eda_shape.cpp:1202 common/layer_id.cpp:145
+#: common/eda_shape.cpp:1172 common/layer_id.cpp:145
 #: eeschema/sch_rule_area.cpp:372 pcbnew/widgets/appearance_controls.cpp:351
 #: pcbnew/widgets/panel_selection_filter.cpp:230
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Points"
 msgstr "Điểm"
 
-#: common/eda_shape.cpp:1206 common/eda_shape.cpp:2756 common/eda_text.cpp:1424
+#: common/eda_shape.cpp:1176 common/eda_shape.cpp:2732 common/eda_text.cpp:1424
 #: eeschema/sch_bitmap.cpp:198 eeschema/sch_bitmap.cpp:333
 #: eeschema/sch_field.cpp:1678 eeschema/sch_tablecell.cpp:220
 #: eeschema/sch_tablecell.cpp:229 eeschema/sch_text.cpp:702
@@ -7124,117 +7125,115 @@ msgstr "Điểm"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1993
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2532 pcbnew/pad.cpp:1419
-#: pcbnew/pcb_barcode.cpp:729 pcbnew/pcb_fields_grid_table.cpp:150
+#: pcbnew/pcb_barcode.cpp:727 pcbnew/pcb_fields_grid_table.cpp:150
 #: pcbnew/pcb_reference_image.cpp:228 pcbnew/pcb_reference_image.cpp:378
-#: pcbnew/pcb_tablecell.cpp:241 pcbnew/pcb_tablecell.cpp:247
-#: pcbnew/pcb_target.cpp:157 pcbnew/pcb_target.cpp:250 pcbnew/pcb_text.cpp:303
-#: pcbnew/pcb_textbox.cpp:844 pcbnew/pcb_track.cpp:1897
-#: pcbnew/pcb_track.cpp:2556
+#: pcbnew/pcb_tablecell.cpp:241 pcbnew/pcb_target.cpp:157
+#: pcbnew/pcb_target.cpp:250 pcbnew/pcb_text.cpp:303 pcbnew/pcb_textbox.cpp:847
+#: pcbnew/pcb_track.cpp:1897 pcbnew/pcb_track.cpp:2556
 msgid "Width"
 msgstr "Chiều rộng"
 
-#: common/eda_shape.cpp:1207 common/eda_shape.cpp:2762 common/eda_text.cpp:1429
+#: common/eda_shape.cpp:1177 common/eda_shape.cpp:2738 common/eda_text.cpp:1429
 #: eeschema/sch_bitmap.cpp:200 eeschema/sch_bitmap.cpp:338
 #: eeschema/sch_field.cpp:1679 eeschema/sch_tablecell.cpp:221
 #: eeschema/sch_tablecell.cpp:230 eeschema/sch_text.cpp:703
 #: eeschema/sch_textbox.cpp:619 pcbnew/dialogs/dialog_board_statistics.cpp:796
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
-#: pcbnew/pad.cpp:1420 pcbnew/pcb_barcode.cpp:733 pcbnew/pcb_dimension.cpp:1069
+#: pcbnew/pad.cpp:1420 pcbnew/pcb_barcode.cpp:731 pcbnew/pcb_dimension.cpp:1069
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:230
 #: pcbnew/pcb_reference_image.cpp:383 pcbnew/pcb_tablecell.cpp:242
-#: pcbnew/pcb_tablecell.cpp:248 pcbnew/pcb_text.cpp:304
-#: pcbnew/pcb_textbox.cpp:845
+#: pcbnew/pcb_text.cpp:304 pcbnew/pcb_textbox.cpp:848
 msgid "Height"
 msgstr "Chiều cao"
 
-#: common/eda_shape.cpp:2652
+#: common/eda_shape.cpp:2628
 msgid "Bezier"
 msgstr "Đường cong Bezier"
 
-#: common/eda_shape.cpp:2671
+#: common/eda_shape.cpp:2647
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 #, fuzzy
 msgid "Hatch"
 msgstr "Mẫu"
 
-#: common/eda_shape.cpp:2672
+#: common/eda_shape.cpp:2648
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 #, fuzzy
 msgid "Reverse Hatch"
 msgstr "Trở lại"
 
-#: common/eda_shape.cpp:2673
+#: common/eda_shape.cpp:2649
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 #, fuzzy
 msgid "Cross-hatch"
 msgstr "Thu phóng đến Vùng chọn"
 
-#: common/eda_shape.cpp:2709 eeschema/sch_shape.cpp:593
+#: common/eda_shape.cpp:2685 eeschema/sch_shape.cpp:593
 msgid "Shape Properties"
 msgstr "Thuộc tính hình dạng"
 
-#: common/eda_shape.cpp:2715 eeschema/sch_line.cpp:1276
+#: common/eda_shape.cpp:2691 eeschema/sch_line.cpp:1276
 #: eeschema/sch_table.cpp:517 eeschema/sch_tablecell.cpp:214
-#: pcbnew/pcb_shape.cpp:1013 pcbnew/pcb_table.cpp:665
-#: pcbnew/pcb_tablecell.cpp:236 pcbnew/pcb_textbox.cpp:840
+#: pcbnew/pcb_shape.cpp:1013 pcbnew/pcb_table.cpp:672
+#: pcbnew/pcb_tablecell.cpp:236 pcbnew/pcb_textbox.cpp:843
 #: pcbnew/pcb_track.cpp:2559
 msgid "Start X"
 msgstr "Bắt đầu X"
 
-#: common/eda_shape.cpp:2720 eeschema/sch_line.cpp:1280
+#: common/eda_shape.cpp:2696 eeschema/sch_line.cpp:1280
 #: eeschema/sch_table.cpp:520 eeschema/sch_tablecell.cpp:215
-#: pcbnew/pcb_shape.cpp:1015 pcbnew/pcb_table.cpp:668
-#: pcbnew/pcb_tablecell.cpp:237 pcbnew/pcb_textbox.cpp:841
+#: pcbnew/pcb_shape.cpp:1015 pcbnew/pcb_table.cpp:675
+#: pcbnew/pcb_tablecell.cpp:237 pcbnew/pcb_textbox.cpp:844
 #: pcbnew/pcb_track.cpp:2563
 msgid "Start Y"
 msgstr "Bắt đầu Y"
 
-#: common/eda_shape.cpp:2726 pcbnew/pcb_shape.cpp:1021
+#: common/eda_shape.cpp:2702 pcbnew/pcb_shape.cpp:1021
 msgid "Center X"
 msgstr "Căn giữa X"
 
-#: common/eda_shape.cpp:2732 pcbnew/pcb_shape.cpp:1023
+#: common/eda_shape.cpp:2708 pcbnew/pcb_shape.cpp:1023
 msgid "Center Y"
 msgstr "Căn giữa Y"
 
-#: common/eda_shape.cpp:2744 eeschema/sch_line.cpp:1284
+#: common/eda_shape.cpp:2720 eeschema/sch_line.cpp:1284
 #: eeschema/sch_tablecell.cpp:216 pcbnew/generators/pcb_tuning_pattern.cpp:2553
 #: pcbnew/pcb_shape.cpp:1017 pcbnew/pcb_tablecell.cpp:238
-#: pcbnew/pcb_textbox.cpp:842 pcbnew/pcb_track.cpp:2566
+#: pcbnew/pcb_textbox.cpp:845 pcbnew/pcb_track.cpp:2566
 msgid "End X"
 msgstr "Kết thúc X"
 
-#: common/eda_shape.cpp:2750 eeschema/sch_line.cpp:1288
+#: common/eda_shape.cpp:2726 eeschema/sch_line.cpp:1288
 #: eeschema/sch_tablecell.cpp:217 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_shape.cpp:1019 pcbnew/pcb_tablecell.cpp:239
-#: pcbnew/pcb_textbox.cpp:843 pcbnew/pcb_track.cpp:2569
+#: pcbnew/pcb_textbox.cpp:846 pcbnew/pcb_track.cpp:2569
 msgid "End Y"
 msgstr "Kết thúc Y"
 
-#: common/eda_shape.cpp:2768 eeschema/sch_tablecell.cpp:227
+#: common/eda_shape.cpp:2744 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
-#: pcbnew/pcb_textbox.cpp:849
+#: pcbnew/pcb_textbox.cpp:852
 #, fuzzy
 msgid "Corner Radius"
 msgstr "Kiểu cách Đường thẳng"
 
-#: common/eda_shape.cpp:2799 common/stroke_params.cpp:276
+#: common/eda_shape.cpp:2775 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:649 eeschema/sch_line.cpp:1303
 #: eeschema/sch_tablecell.cpp:224 pcbnew/pcb_tablecell.cpp:243
-#: pcbnew/pcb_textbox.cpp:846
+#: pcbnew/pcb_textbox.cpp:849
 msgid "Line Width"
 msgstr "Chiều rộng đường nét"
 
-#: common/eda_shape.cpp:2807 eeschema/sch_tablecell.cpp:226
+#: common/eda_shape.cpp:2783 eeschema/sch_tablecell.cpp:226
 #: pcbnew/pcb_shape.cpp:976 pcbnew/pcb_tablecell.cpp:245
 msgid "Line Color"
 msgstr "Màu sắc đường kẻ"
 
-#: common/eda_shape.cpp:2854
+#: common/eda_shape.cpp:2830
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
 #: eeschema/sch_tablecell.cpp:222
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:278
@@ -7244,7 +7243,7 @@ msgstr "Màu sắc đường kẻ"
 msgid "Fill"
 msgstr ""
 
-#: common/eda_shape.cpp:2859 eeschema/sch_shape.cpp:586
+#: common/eda_shape.cpp:2835 eeschema/sch_shape.cpp:586
 #: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_shape.cpp:977
 msgid "Fill Color"
 msgstr "Màu sắc đổ màu"
@@ -7359,9 +7358,9 @@ msgstr "Dưới"
 #: eeschema/sch_text.cpp:711 eeschema/sch_textbox.cpp:646
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:4453 pcbnew/pad.cpp:2793 pcbnew/pcb_barcode.cpp:737
+#: pcbnew/footprint.cpp:4453 pcbnew/pad.cpp:2793 pcbnew/pcb_barcode.cpp:735
 #: pcbnew/pcb_dimension.cpp:1864 pcbnew/pcb_dimension.cpp:1939
-#: pcbnew/pcb_fields_grid_table.cpp:155 pcbnew/pcb_tablecell.cpp:250
+#: pcbnew/pcb_fields_grid_table.cpp:155 pcbnew/pcb_tablecell.cpp:247
 msgid "Orientation"
 msgstr "Sự định hướng"
 
@@ -7371,7 +7370,7 @@ msgstr "Sự định hướng"
 #: pcbnew/dialogs/dialog_text_properties.cpp:156
 #: pcbnew/dialogs/dialog_text_properties_base.h:113
 #: pcbnew/pcb_dimension.cpp:1926 pcbnew/pcb_text.cpp:691
-#: pcbnew/pcb_text.cpp:695 pcbnew/pcb_textbox.cpp:858
+#: pcbnew/pcb_text.cpp:695 pcbnew/pcb_textbox.cpp:861
 msgid "Text Properties"
 msgstr "Thuộc tính Văn bản"
 
@@ -7399,8 +7398,7 @@ msgstr "Độ dày Bus"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pcb_fields_grid_table.cpp:152 pcbnew/pcb_tablecell.cpp:249
-#: pcbnew/tools/pcb_control.cpp:2688
+#: pcbnew/pcb_fields_grid_table.cpp:152 pcbnew/tools/pcb_control.cpp:2688
 msgid "Thickness"
 msgstr "Độ dày"
 
@@ -7429,8 +7427,8 @@ msgstr "Cân bằng dọc"
 #: pcbnew/pcb_dimension.cpp:1987 pcbnew/pcb_dimension.cpp:2020
 #: pcbnew/pcb_dimension.cpp:2058 pcbnew/pcb_dimension.cpp:2100
 #: pcbnew/pcb_dimension.cpp:2134 pcbnew/pcb_field.cpp:297
-#: pcbnew/pcb_tablecell.cpp:251 pcbnew/pcb_text.cpp:709
-#: pcbnew/pcb_textbox.cpp:897
+#: pcbnew/pcb_tablecell.cpp:248 pcbnew/pcb_text.cpp:709
+#: pcbnew/pcb_textbox.cpp:900
 msgid "Hyperlink"
 msgstr "Dẫn liên kết"
 
@@ -7753,7 +7751,7 @@ msgstr "Không thể tạo nhánh dữ liệu."
 msgid "Failed to delete branch."
 msgstr "Không thể xóa nhánh dữ liệu."
 
-#: common/git/kicad_git_errors.cpp:55 common/git/libgit_backend.cpp:979
+#: common/git/kicad_git_errors.cpp:55 common/git/libgit_backend.cpp:973
 msgid "Failed to perform checkout operation."
 msgstr "Khổng thể thực hiện tiến trình tra xét khi xuất."
 
@@ -7877,7 +7875,7 @@ msgstr "Không thể tra cứu từ xa"
 msgid "Could not connect to remote: %s"
 msgstr "Không thể kết nối với điều khiển từ xa '%s'"
 
-#: common/git/libgit_backend.cpp:317 common/git/libgit_backend.cpp:904
+#: common/git/libgit_backend.cpp:317 common/git/libgit_backend.cpp:898
 msgid "Could not get repository head"
 msgstr "Không thể có đầu nguồn vùng lưu trữ"
 
@@ -7886,143 +7884,143 @@ msgstr "Không thể có đầu nguồn vùng lưu trữ"
 msgid "Could not push to remote: %s"
 msgstr "Không thể đẩy vô điều khiển từ xa"
 
-#: common/git/libgit_backend.cpp:581
+#: common/git/libgit_backend.cpp:575
 #, fuzzy, c-format
 msgid "Failed to initialize Git repository: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: common/git/libgit_backend.cpp:601
+#: common/git/libgit_backend.cpp:595
 msgid "No repository available to set up remote"
 msgstr ""
 
-#: common/git/libgit_backend.cpp:654
+#: common/git/libgit_backend.cpp:648
 #, fuzzy, c-format
 msgid "Failed to create remote: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: common/git/libgit_backend.cpp:681
+#: common/git/libgit_backend.cpp:675
 #, fuzzy
 msgid "No repository available"
 msgstr "<Không xác định>"
 
-#: common/git/libgit_backend.cpp:689
+#: common/git/libgit_backend.cpp:683
 #, fuzzy, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Không tra cứu được nhánh '%s': %s"
 
-#: common/git/libgit_backend.cpp:700
+#: common/git/libgit_backend.cpp:694
 #, fuzzy, c-format
 msgid "Failed to find branch head for '%s': %s"
 msgstr "Không thể tìm thấy trình xem PDF cho \"%s\""
 
-#: common/git/libgit_backend.cpp:709
+#: common/git/libgit_backend.cpp:703
 #, fuzzy, c-format
 msgid "Failed to switch to branch '%s': %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: common/git/libgit_backend.cpp:716
+#: common/git/libgit_backend.cpp:710
 #, fuzzy, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
 msgstr "cần một số cho '%s'"
 
-#: common/git/libgit_backend.cpp:764
+#: common/git/libgit_backend.cpp:758
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Không thể tra cứu từ xa '%s'"
 
-#: common/git/libgit_backend.cpp:785
+#: common/git/libgit_backend.cpp:779
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Không thể kết nối với điều khiển từ xa '%s'"
 
-#: common/git/libgit_backend.cpp:797
+#: common/git/libgit_backend.cpp:791
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Không thể tìm nạp dữ liệu từ xa '%s'"
 
-#: common/git/libgit_backend.cpp:824
+#: common/git/libgit_backend.cpp:818
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Không thể đọc 'FETCH_HEAD'"
 
-#: common/git/libgit_backend.cpp:832
+#: common/git/libgit_backend.cpp:826
 msgid "Could not lookup commit"
 msgstr "Không thể tra cứu cam kết"
 
-#: common/git/libgit_backend.cpp:843
+#: common/git/libgit_backend.cpp:837
 msgid "Could not analyze merge"
 msgstr "Không thể phân tích hợp nhất"
 
-#: common/git/libgit_backend.cpp:849
+#: common/git/libgit_backend.cpp:843
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Đầu nguồn vô giá trị.  Không thể hợp lại."
 
-#: common/git/libgit_backend.cpp:875
+#: common/git/libgit_backend.cpp:869
 #, fuzzy
 msgid "Could not access repository configuration"
 msgstr "Không thể lấy ra mục lục vùng lưu trữ"
 
-#: common/git/libgit_backend.cpp:918
+#: common/git/libgit_backend.cpp:912
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Không thể có OID tham chiếu cho tham chiếu '%s'"
 
-#: common/git/libgit_backend.cpp:927
+#: common/git/libgit_backend.cpp:921
 #, fuzzy
 msgid "Could not look up target commit"
 msgstr "Không thể tra cứu cam kết"
 
-#: common/git/libgit_backend.cpp:938
+#: common/git/libgit_backend.cpp:932
 #, fuzzy
 msgid "Could not get tree from target commit"
 msgstr "Không thể hợp nhất các cam kết"
 
-#: common/git/libgit_backend.cpp:987
+#: common/git/libgit_backend.cpp:981
 #, fuzzy, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
 msgstr "cần một số cho '%s'"
 
-#: common/git/libgit_backend.cpp:996
+#: common/git/libgit_backend.cpp:990
 #, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
 msgstr "Không sao chép được kho lưu trữ."
 
-#: common/git/libgit_backend.cpp:1004
+#: common/git/libgit_backend.cpp:998
 #, fuzzy
 msgid "Failed to initialize revision walker."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: common/git/libgit_backend.cpp:1013
+#: common/git/libgit_backend.cpp:1007
 #, fuzzy
 msgid "Failed to push reference to revision walker."
 msgstr "Không thể đẩy các thay đổi tới kho lưu trữ từ xa."
 
-#: common/git/libgit_backend.cpp:1029
+#: common/git/libgit_backend.cpp:1022
 #, fuzzy, c-format
 msgid "Could not lookup commit '%s'"
 msgstr "Không thể tìm kiếm ủy thác '{}'"
 
-#: common/git/libgit_backend.cpp:1054
+#: common/git/libgit_backend.cpp:1047
 #, fuzzy
 msgid "Merge failed"
 msgstr "Không có tệp"
 
-#: common/git/libgit_backend.cpp:1072
+#: common/git/libgit_backend.cpp:1065
 #, fuzzy
 msgid "Rebase failed to start"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: common/git/libgit_backend.cpp:1086
+#: common/git/libgit_backend.cpp:1079
 #, fuzzy
 msgid "Rebase commit failed"
 msgstr "Kết nối cơ sở dữ liệu thất bại: %s"
 
-#: common/git/libgit_backend.cpp:1093
+#: common/git/libgit_backend.cpp:1086
 msgid "Rebase finish failed"
 msgstr ""
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
-#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:3059
+#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:3064
 msgid "Cut"
 msgstr "Cắt"
 
@@ -8061,8 +8059,8 @@ msgstr "Dán các ô bảng tạm vào ma trận tại ô hiện tại"
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:2083
 #: eeschema/tools/symbol_editor_edit_tool.cpp:546
 #: kicad/dialogs/panel_jobset.cpp:397 kicad/project_tree_pane.cpp:985
-#: pcbnew/dialogs/panel_setup_rules.cpp:136 pcbnew/tools/edit_tool.cpp:3029
-#: pcbnew/tools/edit_tool.cpp:3072
+#: pcbnew/dialogs/panel_setup_rules.cpp:136 pcbnew/tools/edit_tool.cpp:3034
+#: pcbnew/tools/edit_tool.cpp:3077
 msgid "Delete"
 msgstr "Xóa bỏ"
 
@@ -8122,8 +8120,8 @@ msgid "Add to Selection"
 msgstr "Thêm vào Lựa chọn"
 
 #: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:998
-#: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1528
-#: pcbnew/tools/pcb_actions.cpp:1558
+#: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1525
+#: pcbnew/tools/pcb_actions.cpp:1555
 msgid "Highlight Net"
 msgstr "Tô sáng Net"
 
@@ -9462,7 +9460,7 @@ msgid "Show Page %s"
 msgstr "Hiện Trang %s"
 
 #: common/plotters/PDF_plotter.cpp:1729
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:980
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #: eeschema/tools/sch_navigate_tool.cpp:105
 #, c-format
 msgid "Open %s"
@@ -10015,7 +10013,7 @@ msgstr "Dán (các) phần tử từ bộ nhớ tạm bằng các tùy chọn"
 
 #: common/tool/actions.cpp:391 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1381
-#: pcbnew/tools/edit_tool.cpp:3396
+#: pcbnew/tools/edit_tool.cpp:3401
 msgid "Duplicate"
 msgstr "Nhân bản"
 
@@ -10039,7 +10037,7 @@ msgid "Delete clicked items"
 msgstr "Xóa các mục đã nhấp"
 
 #: common/tool/actions.cpp:421 eeschema/tools/sch_edit_tool.cpp:3166
-#: pcbnew/tools/edit_tool.cpp:2784
+#: pcbnew/tools/edit_tool.cpp:2787
 msgid "Left Justify"
 msgstr ""
 
@@ -10048,7 +10046,7 @@ msgid "Left-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:428 eeschema/tools/sch_edit_tool.cpp:3168
-#: pcbnew/tools/edit_tool.cpp:2786
+#: pcbnew/tools/edit_tool.cpp:2789
 #, fuzzy
 msgid "Center Justify"
 msgstr "Giữa"
@@ -10058,7 +10056,7 @@ msgid "Center-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:435 eeschema/tools/sch_edit_tool.cpp:3170
-#: pcbnew/tools/edit_tool.cpp:2788
+#: pcbnew/tools/edit_tool.cpp:2791
 msgid "Right Justify"
 msgstr ""
 
@@ -10077,7 +10075,7 @@ msgid "Collapse All"
 msgstr "Thay thế Tất cả"
 
 #: common/tool/actions.cpp:456 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3496
+#: pcbnew/tools/edit_tool.cpp:3501
 #, fuzzy
 msgid "Increment"
 msgstr "Lặp lại Nhãn tăng dần"
@@ -10798,8 +10796,8 @@ msgid "Show/hide the properties manager"
 msgstr "Thuộc tính Văn bản"
 
 #: common/tool/actions.cpp:1336
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:133
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:120
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:134
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:121
 #: eeschema/fields_grid_table.cpp:1213
 msgid "Show Datasheet"
 msgstr "Hiển thị Datasheet"
@@ -11039,15 +11037,15 @@ msgstr "Đối tượng Bị khóa"
 msgid "New name:"
 msgstr "Tên net"
 
-#: common/tool/selection_tool.cpp:307
+#: common/tool/selection_tool.cpp:313
 #, fuzzy
 msgid "Select &All\tA"
 msgstr "Chọn tất cả"
 
-#: common/tool/selection_tool.cpp:310
+#: common/tool/selection_tool.cpp:316
 #, fuzzy
-msgid "&Expand Selection\tE"
-msgstr "&Mở rộng lựa chọn E"
+msgid "Show &More Choices...\tM"
+msgstr "Hiện hoặc ẩn%s"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -13002,8 +13000,8 @@ msgid "Connection String:"
 msgstr "Không kết nối"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:217
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1451
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:214
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1464
 #: pcbnew/footprint_edit_frame.cpp:229 pcbnew/footprint_edit_frame.cpp:1011
 #, fuzzy
 msgid "Libraries"
@@ -13790,7 +13788,7 @@ msgid "Text Item Properties"
 msgstr "Thuộc tính mục văn bản"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:524
-#: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:549
+#: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:568
 #, fuzzy
 msgid "Edit Text and Graphics"
 msgstr "Chỉnh sửa thuộc tính văn bản và đồ họa"
@@ -14215,7 +14213,7 @@ msgstr "Căn chỉnh V"
 #: eeschema/sch_field.cpp:1682 eeschema/sch_label.cpp:1424
 #: eeschema/sch_tablecell.cpp:155 eeschema/sch_text.cpp:569
 #: eeschema/sch_text.cpp:706 eeschema/sch_textbox.cpp:479
-#: eeschema/sch_textbox.cpp:641 pcbnew/pcb_barcode.cpp:725
+#: eeschema/sch_textbox.cpp:641 pcbnew/pcb_barcode.cpp:723
 #: pcbnew/tools/board_inspection_tool.cpp:1446
 msgid "Text Size"
 msgstr "Cỡ chữ"
@@ -14412,9 +14410,9 @@ msgid "Read Only"
 msgstr "Chỉ đọc"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1658
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:991
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1016
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1586
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:993
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1018
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1589
 msgid "Save changes?"
 msgstr "Lưu thay đổi?"
 
@@ -14555,167 +14553,167 @@ msgstr "Nhóm đã chọn"
 msgid "Pin Table"
 msgstr "Bảng pin"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:103
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 #, fuzzy
 msgid "Revert symbol"
 msgstr "Biểu tượng nguồn điện"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:103
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 msgid "Revert the symbol to its last saved state"
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:104
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 #, fuzzy
 msgid "Clear cell"
 msgstr "Khoảng rộng ngăn cách"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:104
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 #, fuzzy
 msgid "Clear the cell value"
 msgstr "Xóa các tệp gần đây"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:106
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:107
 #, fuzzy
 msgid "Create Derived Symbol"
 msgstr "Tạo biểu tượng làm biểu tượng nguồn"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:106
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:107
 #, fuzzy
 msgid "Create a new symbol derived from the selected one"
 msgstr "Bắt nguồn từ biểu tượng hiện tại:"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:128
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:129
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
 #: eeschema/fields_grid_table.cpp:1205
 msgid "Select Footprint..."
 msgstr "Chọn Dấu chân ..."
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:128
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:129
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
 #: eeschema/fields_grid_table.cpp:1206
 msgid "Browse for footprint"
 msgstr "Duyệt tìm dấu chân"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:133
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:120
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:134
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:121
 #: eeschema/fields_grid_table.cpp:1214
 msgid "Show datasheet in browser"
 msgstr "Hiển thị Datasheet trong trình duyệt"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:392
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:440
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:393
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:441
 #, fuzzy
 msgid "Expand left panel"
 msgstr "Cập Nhật"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:397
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:445
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:398
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:446
 #, fuzzy
 msgid "Collapse left panel"
 msgstr "Thay thế Tất cả"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:561
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:563
 #, fuzzy, c-format
 msgid "No related symbols found in library '%s'."
 msgstr "Không tìm thấy biểu tượng %s trong thư viện '%s'."
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:563
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:565
 #, fuzzy, c-format
 msgid "No symbols found in library '%s'."
 msgstr "Không tìm thấy biểu tượng %s trong thư viện '%s'."
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:587
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:589
 #, fuzzy, c-format
 msgid "Error loading symbol '%s': %s"
 msgstr "Lỗi khi tải trình chỉnh sửa"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:595
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:597
 #, fuzzy
 msgid "No related symbols could be loaded from the library."
 msgstr "Cập nhật các Symbol từ Thư viện"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:597
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:599
 #, fuzzy
 msgid "No symbols could be loaded from the library."
 msgstr "Cập nhật các Symbol từ Thư viện"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:699
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:766
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:758
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:850
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:701
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:768
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:761
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
 msgid "New field name:"
 msgstr "Tên trường mới:"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:699
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:758
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:701
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:761
 msgid "Add Field"
 msgstr "Thêm Trường"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:708
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:767
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:710
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:770
 msgid "Field must have a name."
 msgstr "Trường phải có tên."
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:716
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:775
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:718
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:778
 #: eeschema/dialogs/dialog_symbol_properties.cpp:816
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
 msgstr "Tên trường \"%s\" đã được sử dụng."
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:734
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:804
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:736
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:807
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:766
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:850
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:768
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
 #, fuzzy
 msgid "Rename Field"
 msgstr "Đổi tên"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:778
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:780
 #, fuzzy, c-format
 msgid "Field name '%s' already exists."
 msgstr "Tệp %s đã tồn tại."
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:823
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:825
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
 #, fuzzy, c-format
 msgid "Library Fields Table (%s)"
 msgstr "Thư viện (%d)"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1040
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1042
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
 #, fuzzy
 msgid "Symbol Name"
 msgstr "Tên ký hiệu:"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1052
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
 #, fuzzy
 msgid "Exclude From BOM"
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1055
 #: eeschema/sch_sheet.cpp:1729 eeschema/sch_symbol.cpp:3268
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Loại trừ vi phạm này"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1056
 #: eeschema/sch_sheet.cpp:1726 eeschema/sch_symbol.cpp:1192
 #: eeschema/sch_symbol.cpp:3265
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1056
-#: eeschema/symbol_editor/symbol_editor.cpp:1718
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1058
+#: eeschema/symbol_editor/symbol_editor.cpp:1716
 msgid "Power Symbol"
 msgstr "Ký hiệu Nguồn điện"
 
-#: eeschema/dialogs/dialog_lib_fields_table.cpp:1057
+#: eeschema/dialogs/dialog_lib_fields_table.cpp:1059
 #, fuzzy
 msgid "Local Power Symbol"
 msgstr "Ký hiệu Nguồn điện"
@@ -14933,7 +14931,7 @@ msgstr "Tên '%s' đã được sử dụng."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:841
 #: eeschema/dialogs/dialog_sheet_properties.cpp:734
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:798
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:801
 #: eeschema/dialogs/dialog_symbol_properties.cpp:879
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:710
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:934
@@ -15452,7 +15450,7 @@ msgid "Select Output Directory"
 msgstr "Chọn thư mục để lưu"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:197
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1400
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1403
 #: pcbnew/dialogs/dialog_gendrill.cpp:282 pcbnew/dialogs/dialog_plot.cpp:788
 #, c-format
 msgid ""
@@ -16018,7 +16016,7 @@ msgstr "Không điền đầy"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
 #: eeschema/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:164
-#: pcbnew/pcb_tablecell.cpp:232 pcbnew/pcb_textbox.cpp:865
+#: pcbnew/pcb_tablecell.cpp:232 pcbnew/pcb_textbox.cpp:868
 #, fuzzy
 msgid "Border"
 msgstr "Thứ tự"
@@ -16785,7 +16783,7 @@ msgstr "Tham số Đầu ra"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:616 eeschema/sch_label.cpp:1416
 #: eeschema/sch_marker.cpp:360 eeschema/sch_pin.cpp:1331
-#: eeschema/sch_pin.cpp:1337 eeschema/symbol_editor/symbol_editor.cpp:1724
+#: eeschema/sch_pin.cpp:1337 eeschema/symbol_editor/symbol_editor.cpp:1722
 #: eeschema/widgets/search_handlers.cpp:331
 #: eeschema/widgets/search_handlers.cpp:419 gerbview/gerber_draw_item.cpp:668
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -16947,147 +16945,147 @@ msgstr "Đặt tất cả các đơn vị"
 msgid "Sequentially place all units of the symbol."
 msgstr "Đặt tuần tự tất cả các đơn vị của Symbol."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:727
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:730
 #, fuzzy
 msgid "Qty"
 msgstr "SL"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:728
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:731
 msgid "#"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
 #, fuzzy, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
 msgstr "Các trường %d đầu tiên là bắt buộc."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:864
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:867
 #, fuzzy, c-format
 msgid "Field name %s already exists."
 msgstr "Tệp %s đã tồn tại."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:947
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
 #, fuzzy
 msgid "Include 'DNP' Symbols"
 msgstr "Biểu tượng"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:948
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:951
 msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:953
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
 #, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:954
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:957
 msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:961
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:964
 #, fuzzy
 msgid "Highlight on Cross-probe"
 msgstr "Tô sáng Net"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:965
 #, fuzzy
 msgid "Highlight corresponding item on canvas when it is selected in the table"
 msgstr "Nhân đôi (các) khoản phần tử đã chọn"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:966
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
 #, fuzzy
 msgid "Select on Cross-probe"
 msgstr "Màu sắc lựa chọn"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:967
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:970
 msgid "Select corresponding item on canvas when it is selected in the table"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1153
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1156
 #, fuzzy
 msgid "The Quantity column cannot be grouped by."
 msgstr "cột giá trị Tham chiếu không thể bị ẩn."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1162
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1165
 #, fuzzy
 msgid "The Item Number column cannot be grouped by."
 msgstr "cột giá trị Tham chiếu không thể bị ẩn."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1390
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1393
 #, fuzzy
 msgid "Bill of Materials Output File"
 msgstr "Hóa đơn vật liệu"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1404
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1407
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1438
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1441
 msgid "Unsaved data"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1439
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1442
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1463
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1466
 msgid "No output file specified in Export tab."
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1477
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1480
 #, c-format
 msgid "Could not open/create path '%s'."
 msgstr "Không thể mở/tạo đường dẫn '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1486
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1489
 #, fuzzy, c-format
 msgid "Could not create BOM output '%s'."
 msgstr "Không thể ghi báo cáo vào tệp \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1495
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1498
 #, fuzzy, c-format
 msgid "Could not write BOM output '%s'."
 msgstr "Không thể ghi báo cáo vào tệp \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1502
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1505
 #, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "Đã ghi đầu ra BOM vào '%s'"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1835
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1838
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2240
 #, fuzzy
 msgid "BOM preset name:"
 msgstr "Tên thành viên"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1835
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1838
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2240
 #, fuzzy
 msgid "Save BOM Preset"
 msgstr "Di chuyển bo mạch lên trên"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1861
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2263
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1864
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2266
 #: pcbnew/widgets/appearance_controls.cpp:2810
 msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2624
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2683
 #, fuzzy
 msgid "Add new variant name:"
 msgstr "Footprint: %s"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2621
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2680
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2624
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2683
 #, fuzzy
 msgid "New Variant"
 msgstr "Footprint"
@@ -17463,7 +17461,7 @@ msgstr "Chọn Không có"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:524 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:672
+#: pcbnew/pcb_table.cpp:679
 #, fuzzy
 msgid "Table Properties"
 msgstr "Thuộc tính nhãn"
@@ -20032,7 +20030,7 @@ msgstr "Loại trừ khỏi BOM sơ đồ mạch"
 msgid "Exclude from board settings differ."
 msgstr "Loại trừ khỏi bo mạch"
 
-#: eeschema/lib_symbol.cpp:2099 eeschema/symbol_editor/symbol_editor.cpp:1727
+#: eeschema/lib_symbol.cpp:2099 eeschema/symbol_editor/symbol_editor.cpp:1725
 msgid "Datasheet"
 msgstr "Bảng dữ liệu"
 
@@ -20549,8 +20547,8 @@ msgid "Create New Library"
 msgstr "Tạo Thư viện Biểu Tượng"
 
 #: eeschema/sch_base_frame.cpp:794
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1145
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1192
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1158
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1205
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "Thư viện '%s' đã tồn tại."
@@ -20708,8 +20706,8 @@ msgid "New schematic file is unsaved"
 msgstr "Tệp sơ đồ mới chưa được lưu"
 
 #: eeschema/sch_edit_frame.cpp:1114
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:619
-#: eeschema/symbol_editor/symbol_editor.cpp:1641
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:632
+#: eeschema/symbol_editor/symbol_editor.cpp:1639
 #: kicad/dialogs/panel_jobset.cpp:816 pagelayout_editor/pl_editor_frame.cpp:423
 #: pcbnew/footprint_edit_frame.cpp:898 pcbnew/footprint_edit_frame.cpp:938
 #: pcbnew/pcb_edit_frame.cpp:1338
@@ -20869,100 +20867,100 @@ msgid ""
 "harness that got converted to a sheet."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:944
+#: eeschema/sch_io/altium/sch_io_altium.cpp:949
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1024
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1119
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1029
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1124
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "Mong đợi tệp sơ đồ Altium phiên bản 5.0"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1227
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1232
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1346
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1351
 msgid "Parameter Set not currently supported."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1371
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1376
 msgid "Compile mask not currently supported."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1396
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1401
 msgid "Blanket not currently supported."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1401
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4679
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1406
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4684
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr ""
 "Đã tìm thấy id bản ghi không xác định hoặc không mong muốn %d trong %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1459
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1464
 #, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1629
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3690
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1634
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3695
 msgid "Pin has unexpected orientation."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1677
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1682
 msgid "Pin has unexpected electrical type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1682
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1687
 msgid "Pin has unexpected outer edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1685
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1690
 msgid "Pin has unexpected inner edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2091
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2096
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3575
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3580
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3624
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3629
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:702
 #, fuzzy, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3784
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3789
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Cổng %s không có kết nối."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3974
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3979
 #, fuzzy, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3991
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4010
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3996
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4015
 #, c-format
 msgid "Error reading image %s."
 msgstr "Lỗi khi đọc hình ảnh %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4003
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4008
 #, fuzzy, c-format
 msgid "File not found %s."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4811
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4816
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -22043,7 +22041,7 @@ msgstr "Màu sắc nền, ở trên cùng"
 msgid "Fill color"
 msgstr "Màu sắc đường kẻ:"
 
-#: eeschema/sch_shape.cpp:583 pcbnew/pcb_textbox.cpp:848
+#: eeschema/sch_shape.cpp:583 pcbnew/pcb_textbox.cpp:851
 #: pcbnew/pcb_track.cpp:2436
 msgid "Filled"
 msgstr "Đã tô"
@@ -22091,14 +22089,14 @@ msgid "Hierarchical Sheet '%s'"
 msgstr "Trang phân cấp %s"
 
 #: eeschema/sch_sheet.cpp:1714 eeschema/sch_table.cpp:534
-#: pcbnew/pcb_table.cpp:682 pcbnew/pcb_tablecell.cpp:234
-#: pcbnew/pcb_textbox.cpp:873
+#: pcbnew/pcb_table.cpp:689 pcbnew/pcb_tablecell.cpp:234
+#: pcbnew/pcb_textbox.cpp:876
 #, fuzzy
 msgid "Border Width"
 msgstr "Chiều rộng viền:"
 
 #: eeschema/sch_sheet.cpp:1718 eeschema/sch_table.cpp:543
-#: pcbnew/pcb_table.cpp:691
+#: pcbnew/pcb_table.cpp:698
 #, fuzzy
 msgid "Border Color"
 msgstr "Màu sắc thân Bo mạch"
@@ -22189,47 +22187,47 @@ msgstr "Thư Viện"
 msgid "%d Column Table"
 msgstr ""
 
-#: eeschema/sch_table.cpp:456 pcbnew/pcb_table.cpp:504
+#: eeschema/sch_table.cpp:456 pcbnew/pcb_table.cpp:511
 #, c-format
 msgid "%d Columns"
 msgstr "%d Cột"
 
-#: eeschema/sch_table.cpp:526 pcbnew/pcb_table.cpp:674
+#: eeschema/sch_table.cpp:526 pcbnew/pcb_table.cpp:681
 #, fuzzy
 msgid "External Border"
 msgstr "Tạo các lớp"
 
-#: eeschema/sch_table.cpp:530 pcbnew/pcb_table.cpp:678
+#: eeschema/sch_table.cpp:530 pcbnew/pcb_table.cpp:685
 #, fuzzy
 msgid "Header Border"
 msgstr "Tải lại bo mạch"
 
-#: eeschema/sch_table.cpp:539 pcbnew/pcb_table.cpp:687
-#: pcbnew/pcb_tablecell.cpp:233 pcbnew/pcb_textbox.cpp:869
+#: eeschema/sch_table.cpp:539 pcbnew/pcb_table.cpp:694
+#: pcbnew/pcb_tablecell.cpp:233 pcbnew/pcb_textbox.cpp:872
 #, fuzzy
 msgid "Border Style"
 msgstr "Kiểu cách Đường thẳng"
 
-#: eeschema/sch_table.cpp:547 pcbnew/pcb_table.cpp:695
+#: eeschema/sch_table.cpp:547 pcbnew/pcb_table.cpp:702
 #, fuzzy
 msgid "Row Separators"
 msgstr "Xóa Trình tạo"
 
-#: eeschema/sch_table.cpp:551 pcbnew/pcb_table.cpp:699
+#: eeschema/sch_table.cpp:551 pcbnew/pcb_table.cpp:706
 msgid "Cell Separators"
 msgstr ""
 
-#: eeschema/sch_table.cpp:555 pcbnew/pcb_table.cpp:703
+#: eeschema/sch_table.cpp:555 pcbnew/pcb_table.cpp:710
 #, fuzzy
 msgid "Separators Width"
 msgstr "Chiều rộng:"
 
-#: eeschema/sch_table.cpp:560 pcbnew/pcb_table.cpp:708
+#: eeschema/sch_table.cpp:560 pcbnew/pcb_table.cpp:715
 #, fuzzy
 msgid "Separators Style"
 msgstr "Trình tạo tệp tin:"
 
-#: eeschema/sch_table.cpp:564 pcbnew/pcb_table.cpp:712
+#: eeschema/sch_table.cpp:564 pcbnew/pcb_table.cpp:719
 #, fuzzy
 msgid "Separators Color"
 msgstr "Xóa Màu sắc"
@@ -22249,12 +22247,12 @@ msgstr "Chiều rộng đường nét"
 msgid "Cell Height"
 msgstr "Chiều cao"
 
-#: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:256
+#: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:253
 #, fuzzy
 msgid "Column Width"
 msgstr "Chiều rộng đường nét"
 
-#: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_tablecell.cpp:261
+#: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_tablecell.cpp:258
 #, fuzzy
 msgid "Row Height"
 msgstr "Chiều cao"
@@ -22442,27 +22440,27 @@ msgstr "Chiều rộng"
 msgid "Box Height"
 msgstr "Chiều cao"
 
-#: eeschema/sch_textbox.cpp:622 pcbnew/pcb_textbox.cpp:878
+#: eeschema/sch_textbox.cpp:622 pcbnew/pcb_textbox.cpp:881
 #, fuzzy
 msgid "Margins"
 msgstr "Margin"
 
-#: eeschema/sch_textbox.cpp:624 pcbnew/pcb_textbox.cpp:880
+#: eeschema/sch_textbox.cpp:624 pcbnew/pcb_textbox.cpp:883
 #, fuzzy
 msgid "Margin Left"
 msgstr "Xoay trái"
 
-#: eeschema/sch_textbox.cpp:628 pcbnew/pcb_textbox.cpp:884
+#: eeschema/sch_textbox.cpp:628 pcbnew/pcb_textbox.cpp:887
 #, fuzzy
 msgid "Margin Top"
 msgstr "Lề"
 
-#: eeschema/sch_textbox.cpp:632 pcbnew/pcb_textbox.cpp:888
+#: eeschema/sch_textbox.cpp:632 pcbnew/pcb_textbox.cpp:891
 #, fuzzy
 msgid "Margin Right"
 msgstr "Xoay phải"
 
-#: eeschema/sch_textbox.cpp:636 pcbnew/pcb_textbox.cpp:892
+#: eeschema/sch_textbox.cpp:636 pcbnew/pcb_textbox.cpp:895
 #, fuzzy
 msgid "Margin Bottom"
 msgstr "Góc nhìn bên dưới"
@@ -24012,92 +24010,92 @@ msgstr "Thư Viện"
 msgid "KiCad Symbol Editor"
 msgstr "Trình soạn thảo Symbol"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:155
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:272
+#, fuzzy
+msgid "Library changes are unsaved"
+msgstr "Thay đổi Symbol với footprint chưa được lưu"
+
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:288
 #: eeschema/symbol_tree_model_adapter.cpp:78
 #: eeschema/symbol_viewer_frame.cpp:282
 #, fuzzy
 msgid "Load Symbol Libraries"
 msgstr "Đang tải thư viện symbol"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:277
-#, fuzzy
-msgid "Library changes are unsaved"
-msgstr "Thay đổi Symbol với footprint chưa được lưu"
-
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:288
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:301
 #, fuzzy
 msgid "Symbol library loading canceled by user."
 msgstr "Việc tải thư viện biểu tượng đã bị người dùng hủy."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:937
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:950
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:941
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:954
 #, fuzzy, c-format
 msgid "Open symbol from library %s"
 msgstr "Cập nhật các Symbol từ Thư viện"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:954
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:967
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:957
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:970
 #, fuzzy
 msgid "Manage symbol libraries"
 msgstr "Quản lý Thư viện Symbol ..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:970
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:983
 #, fuzzy, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr ""
 "Biểu tượng %s là biểu tượng dẫn xuất. Đồ họa biểu tượng sẽ không thể chỉnh "
 "sửa được."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:999
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1012
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1001
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1014
 #, fuzzy
 msgid "Create an editable copy"
 msgstr "Tạo thư mục thư viện mới"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1020
 #, fuzzy, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
 msgstr "Lưu bản sao của tài liệu hiện tại vào một vị trí khác"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1024
 #, fuzzy
 msgid "Select type of item to save"
 msgstr "Chọn tất cả các phần tử trên màn hình"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1014
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1027
 #, fuzzy
 msgid "Copy symbol"
 msgstr "Ký hiệu nhóm"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1015
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1028
 #, fuzzy
 msgid "Copy library"
 msgstr "Xuất ra Bộ nhớ tạm"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1129
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1142
 #, fuzzy
 msgid "New Symbol Library"
 msgstr "Tạo Thư viện Biểu Tượng"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1129
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1142
 #, fuzzy
 msgid "Add Symbol Library"
 msgstr "Tạo Thư viện Biểu Tượng"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1156
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1169
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -24106,61 +24104,61 @@ msgstr ""
 "Không thể tạo tệp thư viện '%s'.\n"
 "Hãy đảm bảo bạn có quyền ghi và thử lại."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1167
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1198
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1180
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1211
 #, fuzzy
 msgid "Could not open the library file."
 msgstr "Không thể mở tệp cấu hình"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1278
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1291
 #: eeschema/symbol_library.cpp:523
 msgid "Loading Symbol Libraries"
 msgstr "Đang tải thư viện symbol"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1284
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1297
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "Đang tải thư viện '%s'..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1367
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1609
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1622
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'."
 msgstr "Cấu hình hiện tại không bao gồm thư viện ký hiệu '%s'."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1611
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1622
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1624
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1635
 #, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr "Sử dụng Quản lý thư viện biểu tượng để chỉnh sửa cấu hình."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1612
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1625
 #, fuzzy
 msgid "Library not found in symbol library table."
 msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1620
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1633
 #, fuzzy, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
 msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1623
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1636
 #, fuzzy
 msgid "Symbol library not enabled."
 msgstr "Không có symbol nào được chọn"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1935
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1987
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1948
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2000
 #, fuzzy
 msgid "Error saving global library table."
 msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1936
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1988
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1949
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2001
 #, fuzzy
 msgid "Error saving project library table."
 msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
@@ -24202,7 +24200,7 @@ msgstr "Sơ đồ mạch đã được lưu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:128
 #: eeschema/symbol_editor/symbol_editor.cpp:430
-#: eeschema/symbol_editor/symbol_editor.cpp:1658
+#: eeschema/symbol_editor/symbol_editor.cpp:1656
 #: eeschema/tools/symbol_editor_control.cpp:317
 #: eeschema/tools/symbol_editor_control.cpp:463
 #: eeschema/tools/symbol_editor_control.cpp:512
@@ -24212,12 +24210,12 @@ msgstr "Thư viện biểu tượng '%s' không thể ghi được."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:130
 #: eeschema/symbol_editor/symbol_editor.cpp:432
-#: eeschema/symbol_editor/symbol_editor.cpp:1659
+#: eeschema/symbol_editor/symbol_editor.cpp:1657
 msgid "You must save to a different location."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:187
-#: eeschema/symbol_editor/symbol_editor.cpp:1465
+#: eeschema/symbol_editor/symbol_editor.cpp:1463
 #, fuzzy
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "Các liên kết Symbol đến Footprint đã được sửa đổi. Lưu thay đổi?"
@@ -24348,72 +24346,67 @@ msgstr ""
 "Ký hiệu '%s' đã được sửa đổi.\n"
 "Bạn có muốn xóa nó khỏi thư viện không?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1258
-#, c-format
+#: eeschema/symbol_editor/symbol_editor.cpp:1257
 msgid ""
-"The symbol %s is used to derive other symbols.\n"
-"Deleting this symbol will delete all of the symbols derived from it.\n"
+"Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
-"Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1263
-#: eeschema/tools/sch_actions.cpp:230
+#: eeschema/symbol_editor/symbol_editor.cpp:1259
+msgid " (base)\n"
+msgstr ""
+
+#: eeschema/symbol_editor/symbol_editor.cpp:1266
 #, fuzzy
-msgid "Delete Symbol"
+msgid "Delete All Listed Symbols"
 msgstr "Nhân bản"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1264
-#, fuzzy
-msgid "Keep Symbol"
-msgstr "Biểu tượng Mới"
-
-#: eeschema/symbol_editor/symbol_editor.cpp:1401 pcbnew/files.cpp:332
+#: eeschema/symbol_editor/symbol_editor.cpp:1399 pcbnew/files.cpp:332
 #: pcbnew/footprint_libraries_utils.cpp:1150
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1479
+#: eeschema/symbol_editor/symbol_editor.cpp:1477
 #, c-format
 msgid "Symbol %s not found in library '%s'."
 msgstr "Không tìm thấy biểu tượng %s trong thư viện '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1508
+#: eeschema/symbol_editor/symbol_editor.cpp:1506
 #, fuzzy
 msgid "No library specified."
 msgstr "Không có symbol nào được chọn"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1527
+#: eeschema/symbol_editor/symbol_editor.cpp:1525
 #, c-format
 msgid "Save Library '%s' As..."
 msgstr "Lưu Thư viện '%s' dưới dạng..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1566
+#: eeschema/symbol_editor/symbol_editor.cpp:1564
 #, fuzzy, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1568
+#: eeschema/symbol_editor/symbol_editor.cpp:1566
 #, fuzzy
 msgid "Error Saving Library"
 msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1614
+#: eeschema/symbol_editor/symbol_editor.cpp:1612
 #, fuzzy, c-format
 msgid "Symbol library file '%s' saved."
 msgstr "Mã định danh thư viện symbol \"%s\" không hợp lệ."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1713
+#: eeschema/symbol_editor/symbol_editor.cpp:1711
 msgid "Undefined!"
 msgstr "Không xác định!"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1714
+#: eeschema/symbol_editor/symbol_editor.cpp:1712
 #: eeschema/symbol_viewer_frame.cpp:443 pcbnew/board_item.cpp:429
 msgid "Parent"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1720
+#: eeschema/symbol_editor/symbol_editor.cpp:1718
 #, fuzzy
 msgid "Power Symbol (Local)"
 msgstr "Ký hiệu Nguồn điện"
@@ -24836,13 +24829,13 @@ msgstr "Trợ giúp về cú pháp"
 msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2298
+#: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2295
 #, fuzzy
 msgid "Create Corner"
 msgstr "Tạo các vùng bao phủ đồng"
 
 #: eeschema/tools/sch_actions.cpp:93 eeschema/tools/sch_point_editor.cpp:1400
-#: pcbnew/tools/pcb_actions.cpp:2305
+#: pcbnew/tools/pcb_actions.cpp:2302
 #, fuzzy
 msgid "Remove Corner"
 msgstr "Xóa Trình tạo"
@@ -24995,6 +24988,11 @@ msgstr "Lưu bản sao dưới dạng ..."
 msgid "Save a copy of the current symbol to a different library or name"
 msgstr "Lưu bản sao của tài liệu hiện tại vào một vị trí khác"
 
+#: eeschema/tools/sch_actions.cpp:230
+#, fuzzy
+msgid "Delete Symbol"
+msgstr "Nhân bản"
+
 #: eeschema/tools/sch_actions.cpp:231
 #, fuzzy
 msgid "Remove the selected symbol from its library"
@@ -25134,7 +25132,7 @@ msgstr "Văn bản"
 msgid "Draw Text Boxes"
 msgstr "Văn bản"
 
-#: eeschema/tools/sch_actions.cpp:374 eeschema/tools/sch_actions.cpp:1478
+#: eeschema/tools/sch_actions.cpp:374 eeschema/tools/sch_actions.cpp:1475
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:110
 #, fuzzy
 msgid "Draw Lines"
@@ -25666,12 +25664,12 @@ msgstr ""
 msgid "Divide into unconnected segments"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:999 pcbnew/tools/pcb_actions.cpp:1529
+#: eeschema/tools/sch_actions.cpp:999 pcbnew/tools/pcb_actions.cpp:1526
 #, fuzzy
 msgid "Highlight net under cursor"
 msgstr "Phần tử được tô sáng"
 
-#: eeschema/tools/sch_actions.cpp:1006 pcbnew/tools/pcb_actions.cpp:1544
+#: eeschema/tools/sch_actions.cpp:1006 pcbnew/tools/pcb_actions.cpp:1541
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1036
 #, fuzzy
 msgid "Clear Net Highlighting"
@@ -26007,8 +26005,8 @@ msgstr "Hiển thị tên pin"
 msgid "Show indicator icons for pins with alternate modes"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1292 eeschema/tools/sch_actions.cpp:1302
-#: eeschema/tools/sch_actions.cpp:1312 eeschema/tools/sch_actions.cpp:1323
+#: eeschema/tools/sch_actions.cpp:1292 eeschema/tools/sch_actions.cpp:1301
+#: eeschema/tools/sch_actions.cpp:1310 eeschema/tools/sch_actions.cpp:1320
 msgid "Line Mode for Wires and Buses"
 msgstr ""
 
@@ -26016,146 +26014,146 @@ msgstr ""
 msgid "Draw and drag at any angle"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1303 pcbnew/tools/pcb_actions.cpp:1481
+#: eeschema/tools/sch_actions.cpp:1302 pcbnew/tools/pcb_actions.cpp:1480
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1313 pcbnew/tools/pcb_actions.cpp:1491
+#: eeschema/tools/sch_actions.cpp:1311 pcbnew/tools/pcb_actions.cpp:1489
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1324 pcbnew/tools/pcb_actions.cpp:1501
+#: eeschema/tools/sch_actions.cpp:1321 pcbnew/tools/pcb_actions.cpp:1498
 #, fuzzy
 msgid "Switch to next line mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: eeschema/tools/sch_actions.cpp:1334
+#: eeschema/tools/sch_actions.cpp:1331
 #, fuzzy
 msgid "Annotate Automatically"
 msgstr "Chú thích Sơ đồ mạch"
 
-#: eeschema/tools/sch_actions.cpp:1335
+#: eeschema/tools/sch_actions.cpp:1332
 #, fuzzy
 msgid "Toggle automatic annotation of new symbols"
 msgstr "Tự động sao lưu dự án"
 
-#: eeschema/tools/sch_actions.cpp:1342
+#: eeschema/tools/sch_actions.cpp:1339
 #, fuzzy
 msgid "Repair Schematic"
 msgstr "Lưu vào Sơ đồ mạch"
 
-#: eeschema/tools/sch_actions.cpp:1343
+#: eeschema/tools/sch_actions.cpp:1340
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1349
+#: eeschema/tools/sch_actions.cpp:1346
 #, fuzzy
 msgid "Previous Symbol Unit"
 msgstr "Biểu tượng"
 
-#: eeschema/tools/sch_actions.cpp:1350
+#: eeschema/tools/sch_actions.cpp:1347
 #, fuzzy
 msgid "Open the previous unit of the symbol"
 msgstr "Đặt tuần tự tất cả các đơn vị của Symbol."
 
-#: eeschema/tools/sch_actions.cpp:1356
+#: eeschema/tools/sch_actions.cpp:1353
 #, fuzzy
 msgid "Next Symbol Unit"
 msgstr "Biểu tượng"
 
-#: eeschema/tools/sch_actions.cpp:1357
+#: eeschema/tools/sch_actions.cpp:1354
 #, fuzzy
 msgid "Open the next unit of the symbol"
 msgstr "Xóa các đơn vị bổ sung khỏi biểu tượng không ?"
 
-#: eeschema/tools/sch_actions.cpp:1365
+#: eeschema/tools/sch_actions.cpp:1362
 #, fuzzy
 msgid "Change Sheet"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
-#: eeschema/tools/sch_actions.cpp:1366
+#: eeschema/tools/sch_actions.cpp:1363
 #, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Chỉnh sửa tệp tập lệnh trong trình soạn thảo văn bản"
 
-#: eeschema/tools/sch_actions.cpp:1372
+#: eeschema/tools/sch_actions.cpp:1369
 #, fuzzy
 msgid "Enter Sheet"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
-#: eeschema/tools/sch_actions.cpp:1373
+#: eeschema/tools/sch_actions.cpp:1370
 #, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Chỉnh sửa tệp tập lệnh trong trình soạn thảo văn bản"
 
-#: eeschema/tools/sch_actions.cpp:1381
+#: eeschema/tools/sch_actions.cpp:1378
 #, fuzzy
 msgid "Leave Sheet"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
-#: eeschema/tools/sch_actions.cpp:1382
+#: eeschema/tools/sch_actions.cpp:1379
 #, fuzzy
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Chỉnh sửa tệp tập lệnh trong trình soạn thảo văn bản"
 
-#: eeschema/tools/sch_actions.cpp:1389
+#: eeschema/tools/sch_actions.cpp:1386
 #, fuzzy
 msgid "Navigate Up"
 msgstr "Góc nhìn mặt sau"
 
-#: eeschema/tools/sch_actions.cpp:1390
+#: eeschema/tools/sch_actions.cpp:1387
 msgid "Navigate up one sheet in the hierarchy"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1397
+#: eeschema/tools/sch_actions.cpp:1394
 #, fuzzy
 msgid "Navigate Back"
 msgstr "Góc nhìn mặt sau"
 
-#: eeschema/tools/sch_actions.cpp:1398
+#: eeschema/tools/sch_actions.cpp:1395
 msgid "Move backward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1405
+#: eeschema/tools/sch_actions.cpp:1402
 #, fuzzy
 msgid "Navigate Forward"
 msgstr "Góc nhìn mặt sau"
 
-#: eeschema/tools/sch_actions.cpp:1406
+#: eeschema/tools/sch_actions.cpp:1403
 msgid "Move forward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1413
+#: eeschema/tools/sch_actions.cpp:1410
 #, fuzzy
 msgid "Previous Sheet"
 msgstr "Xem trước trang giấy"
 
-#: eeschema/tools/sch_actions.cpp:1414
+#: eeschema/tools/sch_actions.cpp:1411
 msgid "Move to previous sheet by number"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1421
+#: eeschema/tools/sch_actions.cpp:1418
 #, fuzzy
 msgid "Next Sheet"
 msgstr "Sheet"
 
-#: eeschema/tools/sch_actions.cpp:1422
+#: eeschema/tools/sch_actions.cpp:1419
 msgid "Move to next sheet by number"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1429
+#: eeschema/tools/sch_actions.cpp:1426
 #, fuzzy
 msgid "Hierarchy Navigator"
 msgstr "Hiển thị văn bản tên pin"
 
-#: eeschema/tools/sch_actions.cpp:1430
+#: eeschema/tools/sch_actions.cpp:1427
 #, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
 msgstr "Hiển thị Datasheet trong trình duyệt"
 
-#: eeschema/tools/sch_actions.cpp:1443
+#: eeschema/tools/sch_actions.cpp:1440
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:789
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:830
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:874
@@ -26163,39 +26161,39 @@ msgstr "Hiển thị Datasheet trong trình duyệt"
 msgid "Draw Wires"
 msgstr "Circle"
 
-#: eeschema/tools/sch_actions.cpp:1455
+#: eeschema/tools/sch_actions.cpp:1452
 #, fuzzy
 msgid "Draw Buses"
 msgstr "Vẽ %s"
 
-#: eeschema/tools/sch_actions.cpp:1466
+#: eeschema/tools/sch_actions.cpp:1463
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:83
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:127
 msgid "Unfold from Bus"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1467
+#: eeschema/tools/sch_actions.cpp:1464
 msgid "Break a wire out of a bus"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1488 pcbnew/tools/pcb_actions.cpp:2632
+#: eeschema/tools/sch_actions.cpp:1485 pcbnew/tools/pcb_actions.cpp:2629
 #, fuzzy
 msgid "Undo Last Segment"
 msgstr "Hoàn tác chỉnh sửa cuối cùng"
 
-#: eeschema/tools/sch_actions.cpp:1489
+#: eeschema/tools/sch_actions.cpp:1486
 msgid "Walks the current line back one segment."
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1496
+#: eeschema/tools/sch_actions.cpp:1493
 msgid "Switch Segment Posture"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1497
+#: eeschema/tools/sch_actions.cpp:1494
 msgid "Switches posture of the current segment."
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1508 eeschema/tools/sch_move_tool.cpp:401
+#: eeschema/tools/sch_actions.cpp:1505 eeschema/tools/sch_move_tool.cpp:418
 #: eeschema/tools/symbol_editor_move_tool.cpp:110
 #: pagelayout_editor/tools/pl_actions.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
@@ -26204,186 +26202,186 @@ msgstr ""
 msgid "Move"
 msgstr "Di chuyển Lên"
 
-#: eeschema/tools/sch_actions.cpp:1517 eeschema/tools/sch_move_tool.cpp:401
+#: eeschema/tools/sch_actions.cpp:1514 eeschema/tools/sch_move_tool.cpp:418
 msgid "Drag"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1518
+#: eeschema/tools/sch_actions.cpp:1515
 msgid "Move items while keeping their connections"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1525 eeschema/tools/sch_move_tool.cpp:2060
+#: eeschema/tools/sch_actions.cpp:1522 eeschema/tools/sch_move_tool.cpp:2118
 #: eeschema/tools/symbol_editor_move_tool.cpp:435
 #, fuzzy
 msgid "Align Items to Grid"
 msgstr "Xoay phải"
 
-#: eeschema/tools/sch_actions.cpp:1533
+#: eeschema/tools/sch_actions.cpp:1530
 #, fuzzy
 msgid "Save Current Sheet Copy As..."
 msgstr "Lưu bản sao dưới dạng ..."
 
-#: eeschema/tools/sch_actions.cpp:1534
+#: eeschema/tools/sch_actions.cpp:1531
 #, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Lưu bản sao của tài liệu hiện tại vào một vị trí khác"
 
-#: eeschema/tools/sch_actions.cpp:1556
+#: eeschema/tools/sch_actions.cpp:1553
 msgid "New Analysis Tab..."
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1557
+#: eeschema/tools/sch_actions.cpp:1554
 msgid "Create a new tab containing a simulation analysis"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1565
+#: eeschema/tools/sch_actions.cpp:1562
 #, fuzzy
 msgid "Open Workbook..."
 msgstr "Mở..."
 
-#: eeschema/tools/sch_actions.cpp:1566
+#: eeschema/tools/sch_actions.cpp:1563
 msgid "Open a saved set of analysis tabs and settings"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1574
+#: eeschema/tools/sch_actions.cpp:1571
 #, fuzzy
 msgid "Save Workbook"
 msgstr "Tệp sổ làm việc"
 
-#: eeschema/tools/sch_actions.cpp:1575
+#: eeschema/tools/sch_actions.cpp:1572
 msgid "Save the current set of analysis tabs and settings"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1583
+#: eeschema/tools/sch_actions.cpp:1580
 #, fuzzy
 msgid "Save Workbook As..."
 msgstr "Lưu với tên..."
 
-#: eeschema/tools/sch_actions.cpp:1584
+#: eeschema/tools/sch_actions.cpp:1581
 #, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
 msgstr "Lưu tài liệu hiện tại vào vị trí khác"
 
-#: eeschema/tools/sch_actions.cpp:1590
+#: eeschema/tools/sch_actions.cpp:1587
 #, fuzzy
 msgid "Export Current Plot as PNG..."
 msgstr "Xuất góc nhìn hiện tại ra ảnh PNG ..."
 
-#: eeschema/tools/sch_actions.cpp:1596
+#: eeschema/tools/sch_actions.cpp:1593
 #, fuzzy
 msgid "Export Current Plot as CSV..."
 msgstr "Xuất góc nhìn hiện tại ra ảnh PNG ..."
 
-#: eeschema/tools/sch_actions.cpp:1602
+#: eeschema/tools/sch_actions.cpp:1599
 #, fuzzy
 msgid "Export Current Plot to Clipboard"
 msgstr "Xuất ra Bộ nhớ tạm"
 
-#: eeschema/tools/sch_actions.cpp:1608
+#: eeschema/tools/sch_actions.cpp:1605
 #, fuzzy
 msgid "Export Current Plot to Schematic"
 msgstr "Xuất góc nhìn hiện tại ra ảnh PNG ..."
 
-#: eeschema/tools/sch_actions.cpp:1614
+#: eeschema/tools/sch_actions.cpp:1611
 #, fuzzy
 msgid "Show Simulation Side Panel"
 msgstr "Ẩn phần tử"
 
-#: eeschema/tools/sch_actions.cpp:1619
+#: eeschema/tools/sch_actions.cpp:1616
 #, fuzzy
 msgid "Show Simulation Console Panel"
 msgstr "Hiển thị cửa sổ dòng lệnh"
 
-#: eeschema/tools/sch_actions.cpp:1624
+#: eeschema/tools/sch_actions.cpp:1621
 #, fuzzy
 msgid "Show Legend"
 msgstr "Hiển thị các lớp solder mask"
 
-#: eeschema/tools/sch_actions.cpp:1630
+#: eeschema/tools/sch_actions.cpp:1627
 msgid "Dotted Current/Phase"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1631
+#: eeschema/tools/sch_actions.cpp:1628
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1636
+#: eeschema/tools/sch_actions.cpp:1633
 #, fuzzy
 msgid "Dark Mode Plots"
 msgstr "Mô hình 3D bởi"
 
-#: eeschema/tools/sch_actions.cpp:1637
+#: eeschema/tools/sch_actions.cpp:1634
 msgid "Draw plots with a black background"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1642
+#: eeschema/tools/sch_actions.cpp:1639
 #, fuzzy
 msgid "Edit Analysis Tab..."
 msgstr "Chỉnh sửa..."
 
-#: eeschema/tools/sch_actions.cpp:1643
+#: eeschema/tools/sch_actions.cpp:1640
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1650
+#: eeschema/tools/sch_actions.cpp:1647
 #, fuzzy
 msgid "Run Simulation"
 msgstr "Chỉnh sửa Mô hình Spice..."
 
-#: eeschema/tools/sch_actions.cpp:1656
+#: eeschema/tools/sch_actions.cpp:1653
 #, fuzzy
 msgid "Stop Simulation"
 msgstr "Chỉnh sửa Mô hình Spice..."
 
-#: eeschema/tools/sch_actions.cpp:1663
+#: eeschema/tools/sch_actions.cpp:1660
 #, fuzzy
 msgid "Probe Schematic..."
 msgstr "Chú thích Sơ đồ mạch"
 
-#: eeschema/tools/sch_actions.cpp:1664
+#: eeschema/tools/sch_actions.cpp:1661
 msgid "Add a simulator probe"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1671
+#: eeschema/tools/sch_actions.cpp:1668
 #, fuzzy
 msgid "Add Tuned Value..."
 msgstr "Chỉnh sửa..."
 
-#: eeschema/tools/sch_actions.cpp:1672
+#: eeschema/tools/sch_actions.cpp:1669
 #, fuzzy
 msgid "Select a value to be tuned"
 msgstr "Chọn tất cả các phần tử trên màn hình"
 
-#: eeschema/tools/sch_actions.cpp:1678
+#: eeschema/tools/sch_actions.cpp:1675
 #, fuzzy
 msgid "User-defined Signals..."
 msgstr "Lưới do Người dùng định nghĩa"
 
-#: eeschema/tools/sch_actions.cpp:1679
+#: eeschema/tools/sch_actions.cpp:1676
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
 
-#: eeschema/tools/sch_actions.cpp:1685
+#: eeschema/tools/sch_actions.cpp:1682
 #, fuzzy
 msgid "Show SPICE Netlist"
 msgstr "Tệp danh sách netlist SPICE"
 
-#: eeschema/tools/sch_actions.cpp:1691
+#: eeschema/tools/sch_actions.cpp:1688
 #, fuzzy
 msgid "Add Variant..."
 msgstr "Văn bản Ẩn"
 
-#: eeschema/tools/sch_actions.cpp:1692
+#: eeschema/tools/sch_actions.cpp:1689
 #, fuzzy
 msgid "Add new variant to the schematic."
 msgstr "Lưu vào Sơ đồ mạch"
 
-#: eeschema/tools/sch_actions.cpp:1697
+#: eeschema/tools/sch_actions.cpp:1694
 #, fuzzy
 msgid "Remove Variant..."
 msgstr "Thêm Trường..."
 
-#: eeschema/tools/sch_actions.cpp:1698
+#: eeschema/tools/sch_actions.cpp:1695
 #, fuzzy
 msgid "Remove an existing variant from the schematic."
 msgstr "Lỗi đã xảy ra khi in sơ đồ mạch."
@@ -26601,14 +26599,14 @@ msgstr "Thay đổi"
 
 #: eeschema/tools/sch_edit_tool.cpp:1108
 #: eeschema/tools/symbol_editor_edit_tool.cpp:290
-#: pcbnew/tools/edit_tool.cpp:2557
+#: pcbnew/tools/edit_tool.cpp:2560
 #, fuzzy
 msgid "Rotate"
 msgstr "Xoay"
 
 #: eeschema/tools/sch_edit_tool.cpp:1306 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:145 pcbnew/pcb_text.cpp:292
-#: pcbnew/pcb_textbox.cpp:489 pcbnew/tools/edit_tool.cpp:2715
+#: pcbnew/pcb_textbox.cpp:489 pcbnew/tools/edit_tool.cpp:2718
 #, fuzzy
 msgid "Mirror"
 msgstr "Mirrored"
@@ -26942,11 +26940,11 @@ msgstr ""
 msgid "Press <ESC> to cancel drawing."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:958
+#: eeschema/tools/sch_move_tool.cpp:1013
 msgid "Press <ESC> to cancel drag."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:960
+#: eeschema/tools/sch_move_tool.cpp:1015
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
 msgid "Press <ESC> to cancel move."
 msgstr ""
@@ -26957,7 +26955,7 @@ msgid "Page '%s' not found."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: eeschema/tools/sch_point_editor.cpp:1131
-#: pcbnew/tools/pcb_point_editor.cpp:2620
+#: pcbnew/tools/pcb_point_editor.cpp:2419
 #, fuzzy
 msgid "Move Point"
 msgstr "Di chuyển xuống"
@@ -27079,13 +27077,13 @@ msgid "Place Pin"
 msgstr "Đặt tất cả các đơn vị"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:538
-#: pcbnew/tools/edit_tool.cpp:3064
+#: pcbnew/tools/edit_tool.cpp:3069
 #, fuzzy
 msgid "Hide Field"
 msgstr "Thêm Trường"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:540
-#: pcbnew/tools/edit_tool.cpp:3066
+#: pcbnew/tools/edit_tool.cpp:3071
 #, fuzzy
 msgid "Hide Fields"
 msgstr "Ẩn phần tử"
@@ -27666,7 +27664,7 @@ msgstr "Chọn Lớp: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1990
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2528
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2530 pcbnew/pad.cpp:1373
-#: pcbnew/pad.cpp:2790 pcbnew/pcb_barcode.cpp:384 pcbnew/pcb_dimension.cpp:695
+#: pcbnew/pad.cpp:2790 pcbnew/pcb_barcode.cpp:382 pcbnew/pcb_dimension.cpp:695
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:494 pcbnew/pcb_marker.cpp:399 pcbnew/pcb_point.cpp:171
 #: pcbnew/pcb_reference_image.cpp:232 pcbnew/pcb_reference_image.cpp:355
@@ -31884,7 +31882,7 @@ msgid "Cancelled"
 msgstr "Hủy bỏ"
 
 #: libs/kiplatform/include/printing.h:48
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:492
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:540
 #: pcbnew/microwave/microwave_polygon.cpp:223
 #, fuzzy
 msgid "File not found"
@@ -31906,7 +31904,7 @@ msgid "Unsupported"
 msgstr "%s không được hỗ trợ."
 
 #: libs/kiplatform/include/printing.h:52
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:502
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:550
 #, fuzzy
 msgid "Unknown error"
 msgstr "Không xác định parent của thuộc tính"
@@ -35656,11 +35654,11 @@ msgid "Modify barcode"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:52
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:772
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:770
 #: pcbnew/pcb_dimension.cpp:1990 pcbnew/pcb_dimension.cpp:2023
 #: pcbnew/pcb_dimension.cpp:2061 pcbnew/pcb_dimension.cpp:2103
 #: pcbnew/pcb_dimension.cpp:2137 pcbnew/pcb_fields_grid_table.cpp:159
-#: pcbnew/pcb_text.cpp:689 pcbnew/pcb_textbox.cpp:856
+#: pcbnew/pcb_text.cpp:689 pcbnew/pcb_textbox.cpp:859
 msgid "Knockout"
 msgstr ""
 
@@ -35736,13 +35734,13 @@ msgid "~65% (Level H)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
-#: pcbnew/pcb_barcode.cpp:752
+#: pcbnew/pcb_barcode.cpp:750
 #, fuzzy
 msgid "Error Correction"
 msgstr "Miêu tả:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
-#: pcbnew/pcb_barcode.cpp:688
+#: pcbnew/pcb_barcode.cpp:686
 #, fuzzy
 msgid "Barcode Properties"
 msgstr "Thuộc tính nhãn"
@@ -40212,7 +40210,7 @@ msgstr "Chiều rộng:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:237
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:55
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
-#: pcbnew/pcb_barcode.cpp:388 pcbnew/pcb_dimension.cpp:665
+#: pcbnew/pcb_barcode.cpp:386 pcbnew/pcb_dimension.cpp:665
 #: pcbnew/pcb_tablecell.cpp:160 pcbnew/pcb_textbox.cpp:500
 #: pcbnew/tools/board_inspection_tool.cpp:371
 #, fuzzy
@@ -41045,8 +41043,8 @@ msgid "Pad number:"
 msgstr "Số pin:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:52
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1533
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1590
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1541
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1597
 #, fuzzy
 msgid "Net name:"
 msgstr "Tên net"
@@ -43403,7 +43401,7 @@ msgid "Always show selected ratsnest"
 msgstr "Luôn hiển thị dấu chéo"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
-#: pcbnew/tools/pcb_actions.cpp:1667
+#: pcbnew/tools/pcb_actions.cpp:1664
 msgid "Show ratsnest with curved lines"
 msgstr ""
 
@@ -43509,22 +43507,22 @@ msgstr ""
 msgid "Failed to save footprint library file '%s'."
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:114
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:404
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:115
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:452
 #, fuzzy
 msgid "Error adding 3D model"
 msgstr "Đang tải các mẫu 3D..."
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:482
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:530
 msgid "No filename entered"
 msgstr ""
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:487
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:535
 #, fuzzy
 msgid "Illegal filename"
 msgstr "Tên tệp Sheet"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:497
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:545
 #, fuzzy
 msgid "Unable to open file"
 msgstr "không thể mở tập tin"
@@ -46951,7 +46949,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:296
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:713
+#: pcbnew/exporters/step/exporter_step.cpp:714
 #: pcbnew/specctra_import_export/specctra_export.cpp:122
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Đường viền bo mạch không đúng định dạng. Chạy DRC để phân tích đầy đủ."
@@ -46969,11 +46967,11 @@ msgstr "Xuất IDP thất bại:\n"
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
 
-#: pcbnew/exporters/exporter_vrml.cpp:1266
+#: pcbnew/exporters/exporter_vrml.cpp:1267
 msgid "No project when exporting the VRML file"
 msgstr ""
 
-#: pcbnew/exporters/exporter_vrml.cpp:1332
+#: pcbnew/exporters/exporter_vrml.cpp:1333
 msgid "VRML Export Failed:\n"
 msgstr "Xuất VRML thất bại:\n"
 
@@ -46998,26 +46996,26 @@ msgstr "Tệp làm việc Gerber"
 msgid "Board stackup settings not up to date."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:371
+#: pcbnew/exporters/step/exporter_step.cpp:372
 #, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:401
+#: pcbnew/exporters/step/exporter_step.cpp:402
 #, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:817
+#: pcbnew/exporters/step/exporter_step.cpp:818
 #, fuzzy
 msgid "Could not create PCB solid model.\n"
 msgstr "Không thể ghi báo cáo vào tệp \"%s\"."
 
-#: pcbnew/exporters/step/exporter_step.cpp:883
+#: pcbnew/exporters/step/exporter_step.cpp:884
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -47025,7 +47023,7 @@ msgstr ""
 "\n"
 "** Lỗi xây dựng mô hình bảng STEP. Quá trình xuất bị hủy bỏ. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:914
+#: pcbnew/exporters/step/exporter_step.cpp:915
 #, c-format
 msgid ""
 "\n"
@@ -47034,8 +47032,8 @@ msgstr ""
 "\n"
 "** Lỗi ghi tệp %s. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:931
-#: pcbnew/exporters/step/exporter_step.cpp:940
+#: pcbnew/exporters/step/exporter_step.cpp:932
+#: pcbnew/exporters/step/exporter_step.cpp:941
 #, c-format
 msgid ""
 "\n"
@@ -47044,7 +47042,7 @@ msgstr ""
 "\n"
 "** Lỗi xuất tập tin %s. Quá trình xuất bị hủy bỏ. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:950
+#: pcbnew/exporters/step/exporter_step.cpp:951
 #, c-format
 msgid ""
 "\n"
@@ -47971,7 +47969,7 @@ msgid "Diff pair skew"
 msgstr "Khoảng cách cặp vi sai"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2541 pcbnew/pcb_shape.cpp:1107
-#: pcbnew/pcb_tablecell.cpp:226 pcbnew/pcb_textbox.cpp:853
+#: pcbnew/pcb_tablecell.cpp:226 pcbnew/pcb_textbox.cpp:856
 #: pcbnew/pcb_track.cpp:2584
 #, fuzzy
 msgid "Soldermask"
@@ -47979,7 +47977,7 @@ msgstr "Kem hàn"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2545 pcbnew/pad.cpp:2943
 #: pcbnew/pcb_shape.cpp:1112 pcbnew/pcb_tablecell.cpp:227
-#: pcbnew/pcb_textbox.cpp:854 pcbnew/pcb_track.cpp:2587
+#: pcbnew/pcb_textbox.cpp:857 pcbnew/pcb_track.cpp:2587
 #, fuzzy
 msgid "Soldermask Margin Override"
 msgstr "Clearance"
@@ -49270,64 +49268,64 @@ msgstr "Clearance"
 msgid "Thermal Relief Gap"
 msgstr "Khác"
 
-#: pcbnew/pcb_barcode.cpp:465
+#: pcbnew/pcb_barcode.cpp:463
 #, fuzzy, c-format
 msgid "Barcode '%s' on %s"
 msgstr "Via Holes"
 
-#: pcbnew/pcb_barcode.cpp:694
+#: pcbnew/pcb_barcode.cpp:692
 msgid "CODE_39"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:695
+#: pcbnew/pcb_barcode.cpp:693
 msgid "CODE_128"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:696
+#: pcbnew/pcb_barcode.cpp:694
 msgid "DATA_MATRIX"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:697
+#: pcbnew/pcb_barcode.cpp:695
 msgid "QR_CODE"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:698
+#: pcbnew/pcb_barcode.cpp:696
 msgid "MICRO_QR_CODE"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:705 pcbnew/pcb_barcode.cpp:761
+#: pcbnew/pcb_barcode.cpp:703 pcbnew/pcb_barcode.cpp:759
 msgid "L (Low)"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:706 pcbnew/pcb_barcode.cpp:762
+#: pcbnew/pcb_barcode.cpp:704 pcbnew/pcb_barcode.cpp:760
 msgid "M (Medium)"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:707 pcbnew/pcb_barcode.cpp:763
+#: pcbnew/pcb_barcode.cpp:705 pcbnew/pcb_barcode.cpp:761
 msgid "Q (Quartile)"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:708 pcbnew/pcb_barcode.cpp:767
+#: pcbnew/pcb_barcode.cpp:706 pcbnew/pcb_barcode.cpp:765
 #, fuzzy
 msgid "H (High)"
 msgstr "Tô sáng Net"
 
-#: pcbnew/pcb_barcode.cpp:722
+#: pcbnew/pcb_barcode.cpp:720
 #, fuzzy
 msgid "Show Text"
 msgstr "Hiển thị tên pin"
 
-#: pcbnew/pcb_barcode.cpp:740
+#: pcbnew/pcb_barcode.cpp:738
 #, fuzzy
 msgid "Barcode Type"
 msgstr "Kiểu Đường dẫn"
 
-#: pcbnew/pcb_barcode.cpp:775
+#: pcbnew/pcb_barcode.cpp:773
 #, fuzzy
 msgid "Margin X"
 msgstr "Lề"
 
-#: pcbnew/pcb_barcode.cpp:779
+#: pcbnew/pcb_barcode.cpp:777
 #, fuzzy
 msgid "Margin Y"
 msgstr "Lề"
@@ -49509,7 +49507,7 @@ msgstr "Clearance"
 msgid "Constraints Report"
 msgstr "Mức độ nghiêm trọng của vi phạm"
 
-#: pcbnew/pcb_edit_frame.cpp:3064 pcbnew/tools/pcb_actions.cpp:2177
+#: pcbnew/pcb_edit_frame.cpp:3064 pcbnew/tools/pcb_actions.cpp:2174
 #, fuzzy
 msgid "Compare Footprint with Library"
 msgstr "Thư viện Footprint"
@@ -51219,7 +51217,7 @@ msgstr "%s pin %s tìm thấy"
 msgid "Pad Primitives"
 msgstr "Không xác định parent của thuộc tính"
 
-#: pcbnew/pcb_table.cpp:462
+#: pcbnew/pcb_table.cpp:469
 #, fuzzy, c-format
 msgid "%d column table"
 msgstr "Chọn Không có"
@@ -51249,12 +51247,12 @@ msgstr "Văn bản trên Footprint"
 msgid "PCB text '%s' on %s"
 msgstr "Văn bản '%s'"
 
-#: pcbnew/pcb_textbox.cpp:606
+#: pcbnew/pcb_textbox.cpp:609
 #, fuzzy, c-format
 msgid "PCB text box '%s' on %s"
 msgstr "Văn bản '%s'"
 
-#: pcbnew/pcb_textbox.cpp:860
+#: pcbnew/pcb_textbox.cpp:863
 #, fuzzy
 msgid "Border Properties"
 msgstr "Thuộc tính nhãn"
@@ -52162,7 +52160,7 @@ msgstr ""
 msgid "Track violates DRC."
 msgstr "Tạo các đường mạch và vias"
 
-#: pcbnew/router/router_tool.cpp:2740 pcbnew/tools/pcb_actions.cpp:2680
+#: pcbnew/router/router_tool.cpp:2740 pcbnew/tools/pcb_actions.cpp:2677
 #, fuzzy
 msgid "Break Track"
 msgstr "Track"
@@ -52385,22 +52383,22 @@ msgstr "Lưới: %s (%s)"
 msgid "Align/Distribute"
 msgstr ""
 
-#: pcbnew/tools/align_distribute_tool.cpp:256 pcbnew/tools/pcb_actions.cpp:2217
+#: pcbnew/tools/align_distribute_tool.cpp:256 pcbnew/tools/pcb_actions.cpp:2214
 #, fuzzy
 msgid "Align to Top"
 msgstr "Căn trên cùng"
 
-#: pcbnew/tools/align_distribute_tool.cpp:295 pcbnew/tools/pcb_actions.cpp:2224
+#: pcbnew/tools/align_distribute_tool.cpp:295 pcbnew/tools/pcb_actions.cpp:2221
 #, fuzzy
 msgid "Align to Bottom"
 msgstr "Xem mặt Dưới cùng"
 
-#: pcbnew/tools/align_distribute_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:2231
+#: pcbnew/tools/align_distribute_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:2228
 #, fuzzy
 msgid "Align to Left"
 msgstr "Căn trái"
 
-#: pcbnew/tools/align_distribute_tool.cpp:395 pcbnew/tools/pcb_actions.cpp:2238
+#: pcbnew/tools/align_distribute_tool.cpp:395 pcbnew/tools/pcb_actions.cpp:2235
 #, fuzzy
 msgid "Align to Right"
 msgstr "Xoay phải"
@@ -52491,11 +52489,11 @@ msgstr "kích thước Via"
 msgid "Place Footprint"
 msgstr "Footprint"
 
-#: pcbnew/tools/board_editor_control.cpp:1440 pcbnew/tools/pcb_actions.cpp:1511
+#: pcbnew/tools/board_editor_control.cpp:1440 pcbnew/tools/pcb_actions.cpp:1508
 msgid "Lock"
 msgstr ""
 
-#: pcbnew/tools/board_editor_control.cpp:1440 pcbnew/tools/pcb_actions.cpp:1518
+#: pcbnew/tools/board_editor_control.cpp:1440 pcbnew/tools/pcb_actions.cpp:1515
 msgid "Unlock"
 msgstr ""
 
@@ -53327,36 +53325,36 @@ msgstr "Làm giảm góc nhọn của lớp phủ đồng"
 msgid "Heal Shapes"
 msgstr "Cài đặt Lưới"
 
-#: pcbnew/tools/edit_tool.cpp:2875 pcbnew/tools/pcb_actions.cpp:675
+#: pcbnew/tools/edit_tool.cpp:2880 pcbnew/tools/pcb_actions.cpp:675
 #, fuzzy
 msgid "Change Side / Flip"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
-#: pcbnew/tools/edit_tool.cpp:3068
+#: pcbnew/tools/edit_tool.cpp:3073
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:3220
+#: pcbnew/tools/edit_tool.cpp:3225
 #, fuzzy
 msgid "Move Exactly"
 msgstr "Di chuyển xuống"
 
-#: pcbnew/tools/edit_tool.cpp:3392
+#: pcbnew/tools/edit_tool.cpp:3397
 #, fuzzy, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Nhân đôi (các) khoản phần tử đã chọn"
 
-#: pcbnew/tools/edit_tool.cpp:3717
+#: pcbnew/tools/edit_tool.cpp:3722
 #, fuzzy
 msgid "Select reference point for the copy..."
 msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
 
-#: pcbnew/tools/edit_tool.cpp:3718 pcbnew/tools/edit_tool.cpp:3733
+#: pcbnew/tools/edit_tool.cpp:3723 pcbnew/tools/edit_tool.cpp:3738
 #, fuzzy
 msgid "Selection copied"
 msgstr "Màu sắc lựa chọn"
 
-#: pcbnew/tools/edit_tool.cpp:3718
+#: pcbnew/tools/edit_tool.cpp:3723
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Hủy bỏ"
@@ -54882,1091 +54880,1091 @@ msgid ""
 "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1470 pcbnew/tools/pcb_actions.cpp:1480
-#: pcbnew/tools/pcb_actions.cpp:1490 pcbnew/tools/pcb_actions.cpp:1500
+#: pcbnew/tools/pcb_actions.cpp:1470 pcbnew/tools/pcb_actions.cpp:1479
+#: pcbnew/tools/pcb_actions.cpp:1488 pcbnew/tools/pcb_actions.cpp:1497
 #, fuzzy
 msgid "Line Modes"
 msgstr "In"
 
-#: pcbnew/tools/pcb_actions.cpp:1512
+#: pcbnew/tools/pcb_actions.cpp:1509
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1519
+#: pcbnew/tools/pcb_actions.cpp:1516
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1536
+#: pcbnew/tools/pcb_actions.cpp:1533
 #, fuzzy
 msgid "Toggle Last Net Highlight"
 msgstr "Tô sáng phần lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:1537
+#: pcbnew/tools/pcb_actions.cpp:1534
 #, fuzzy
 msgid "Toggle between last two highlighted nets"
 msgstr "Tô sáng phần lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:1550
+#: pcbnew/tools/pcb_actions.cpp:1547
 #, fuzzy
 msgid "Toggle Net Highlight"
 msgstr "Tô sáng phần lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:1559
+#: pcbnew/tools/pcb_actions.cpp:1556
 #, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
 msgstr "Nhân đôi (các) khoản phần tử đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:1570
+#: pcbnew/tools/pcb_actions.cpp:1567
 #, fuzzy
 msgid "Hide Net in Ratsnest"
 msgstr "Bộc Lọc Nets"
 
-#: pcbnew/tools/pcb_actions.cpp:1571
+#: pcbnew/tools/pcb_actions.cpp:1568
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1578
+#: pcbnew/tools/pcb_actions.cpp:1575
 #, fuzzy
 msgid "Show Net in Ratsnest"
 msgstr "Hiển thị văn bản tên pin"
 
-#: pcbnew/tools/pcb_actions.cpp:1579
+#: pcbnew/tools/pcb_actions.cpp:1576
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1586
+#: pcbnew/tools/pcb_actions.cpp:1583
 #, fuzzy
 msgid "Switch to Schematic Editor"
 msgstr "Đánh dấu Schematic"
 
-#: pcbnew/tools/pcb_actions.cpp:1587
+#: pcbnew/tools/pcb_actions.cpp:1584
 #, fuzzy
 msgid "Open schematic in schematic editor"
 msgstr "Đánh dấu Schematic"
 
-#: pcbnew/tools/pcb_actions.cpp:1597
+#: pcbnew/tools/pcb_actions.cpp:1594
 #, fuzzy
 msgid "Local Ratsnest"
 msgstr "Ratsnest"
 
-#: pcbnew/tools/pcb_actions.cpp:1598
+#: pcbnew/tools/pcb_actions.cpp:1595
 #, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:1615
+#: pcbnew/tools/pcb_actions.cpp:1612
 msgid "Scripting Console"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1616
+#: pcbnew/tools/pcb_actions.cpp:1613
 msgid "Show the Python scripting console"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1632
+#: pcbnew/tools/pcb_actions.cpp:1629
 #, fuzzy
 msgid "Show/hide the net inspector"
 msgstr "Hiển thị Datasheet trong trình duyệt"
 
-#: pcbnew/tools/pcb_actions.cpp:1638
+#: pcbnew/tools/pcb_actions.cpp:1635
 #, fuzzy
 msgid "Zone Manager..."
 msgstr "Quản lý dự án"
 
-#: pcbnew/tools/pcb_actions.cpp:1639
+#: pcbnew/tools/pcb_actions.cpp:1636
 #, fuzzy
 msgid "Show the zone manager dialog"
 msgstr "Ẩn/hiện trình quản lý giao diện"
 
-#: pcbnew/tools/pcb_actions.cpp:1645
+#: pcbnew/tools/pcb_actions.cpp:1642
 #, fuzzy
 msgid "Flip Board View"
 msgstr "Lật bo mạch"
 
-#: pcbnew/tools/pcb_actions.cpp:1646
+#: pcbnew/tools/pcb_actions.cpp:1643
 msgid "View board from the opposite side"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1658
+#: pcbnew/tools/pcb_actions.cpp:1655
 #, fuzzy
 msgid "Show Ratsnest"
 msgstr "Hiển thị văn bản tên pin"
 
-#: pcbnew/tools/pcb_actions.cpp:1659
+#: pcbnew/tools/pcb_actions.cpp:1656
 msgid "Show lines/arcs representing missing connections on the board"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1666
+#: pcbnew/tools/pcb_actions.cpp:1663
 #, fuzzy
 msgid "Curved Ratsnest Lines"
 msgstr "Bộc Lọc Nets"
 
-#: pcbnew/tools/pcb_actions.cpp:1674
+#: pcbnew/tools/pcb_actions.cpp:1671
 #, fuzzy
 msgid "Ratsnest Mode (3-state)"
 msgstr "Chế độ xem một lớp (3 trạng thái)"
 
-#: pcbnew/tools/pcb_actions.cpp:1675
+#: pcbnew/tools/pcb_actions.cpp:1672
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1680
+#: pcbnew/tools/pcb_actions.cpp:1677
 #, fuzzy
 msgid "Net Color Mode (3-state)"
 msgstr "Chế độ xem một lớp (3 trạng thái)"
 
-#: pcbnew/tools/pcb_actions.cpp:1681
+#: pcbnew/tools/pcb_actions.cpp:1678
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1688
+#: pcbnew/tools/pcb_actions.cpp:1685
 #, fuzzy
 msgid "Sketch Tracks"
 msgstr "Tracks"
 
-#: pcbnew/tools/pcb_actions.cpp:1689
+#: pcbnew/tools/pcb_actions.cpp:1686
 #, fuzzy
 msgid "Show tracks in outline mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1696
+#: pcbnew/tools/pcb_actions.cpp:1693
 #, fuzzy
 msgid "Sketch Pads"
 msgstr "Đường dẫn tìm kiếm 3D"
 
-#: pcbnew/tools/pcb_actions.cpp:1697
+#: pcbnew/tools/pcb_actions.cpp:1694
 #, fuzzy
 msgid "Show pads in outline mode"
 msgstr "Hiển thị tên pin"
 
-#: pcbnew/tools/pcb_actions.cpp:1704
+#: pcbnew/tools/pcb_actions.cpp:1701
 #, fuzzy
 msgid "Sketch Vias"
 msgstr "Chuyển đổi đơn vị"
 
-#: pcbnew/tools/pcb_actions.cpp:1705
+#: pcbnew/tools/pcb_actions.cpp:1702
 #, fuzzy
 msgid "Show vias in outline mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1712
+#: pcbnew/tools/pcb_actions.cpp:1709
 #, fuzzy
 msgid "Sketch Graphic Items"
 msgstr "Phong cách Đồ họa"
 
-#: pcbnew/tools/pcb_actions.cpp:1713
+#: pcbnew/tools/pcb_actions.cpp:1710
 #, fuzzy
 msgid "Show graphic items in outline mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1720
+#: pcbnew/tools/pcb_actions.cpp:1717
 #, fuzzy
 msgid "Sketch Text Items"
 msgstr "Khác"
 
-#: pcbnew/tools/pcb_actions.cpp:1721
+#: pcbnew/tools/pcb_actions.cpp:1718
 #, fuzzy
 msgid "Show footprint texts in line mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1728
+#: pcbnew/tools/pcb_actions.cpp:1725
 #, fuzzy
 msgid "Show Pad Numbers"
 msgstr "Hiển thị số pin"
 
-#: pcbnew/tools/pcb_actions.cpp:1735
+#: pcbnew/tools/pcb_actions.cpp:1732
 #, fuzzy
 msgid "Draw Zone Fills"
 msgstr "Worksheet"
 
-#: pcbnew/tools/pcb_actions.cpp:1736
+#: pcbnew/tools/pcb_actions.cpp:1733
 #, fuzzy
 msgid "Show filled areas of zones"
 msgstr "Hiển thị các khu vực đã lấp đầy trong các khu vực"
 
-#: pcbnew/tools/pcb_actions.cpp:1743
+#: pcbnew/tools/pcb_actions.cpp:1740
 #, fuzzy
 msgid "Draw Zone Outlines"
 msgstr "Worksheet"
 
-#: pcbnew/tools/pcb_actions.cpp:1744
+#: pcbnew/tools/pcb_actions.cpp:1741
 #, fuzzy
 msgid "Show only zone boundaries"
 msgstr "Hiển thị các hộp giới hạn mô hình"
 
-#: pcbnew/tools/pcb_actions.cpp:1751
+#: pcbnew/tools/pcb_actions.cpp:1748
 #, fuzzy
 msgid "Draw Zone Fill Fracture Borders"
 msgstr "Worksheet"
 
-#: pcbnew/tools/pcb_actions.cpp:1758
+#: pcbnew/tools/pcb_actions.cpp:1755
 #, fuzzy
 msgid "Draw Zone Fill Triangulation"
 msgstr "Worksheet"
 
-#: pcbnew/tools/pcb_actions.cpp:1765
+#: pcbnew/tools/pcb_actions.cpp:1762
 #, fuzzy
 msgid "Toggle Zone Display"
 msgstr "Mở hay tắt vùng bao phủ"
 
-#: pcbnew/tools/pcb_actions.cpp:1766
+#: pcbnew/tools/pcb_actions.cpp:1763
 msgid "Cycle between showing zone fills and just their outlines"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1773
+#: pcbnew/tools/pcb_actions.cpp:1770
 #, fuzzy
 msgid "Automatic zoom"
 msgstr "Tự động"
 
-#: pcbnew/tools/pcb_actions.cpp:1774
+#: pcbnew/tools/pcb_actions.cpp:1771
 #, fuzzy
 msgid "Automatic Zoom on footprint change"
 msgstr "Tự động sao lưu dự án"
 
-#: pcbnew/tools/pcb_actions.cpp:1835
+#: pcbnew/tools/pcb_actions.cpp:1832
 #, fuzzy
 msgid "Switch to Component (F.Cu) layer"
 msgstr "Bộ chuyển đổi Bitmap thành linh kiện"
 
-#: pcbnew/tools/pcb_actions.cpp:1844
+#: pcbnew/tools/pcb_actions.cpp:1841
 #, fuzzy
 msgid "Switch to Inner Layer 1"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1853
+#: pcbnew/tools/pcb_actions.cpp:1850
 #, fuzzy
 msgid "Switch to Inner Layer 2"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1862
+#: pcbnew/tools/pcb_actions.cpp:1859
 #, fuzzy
 msgid "Switch to Inner Layer 3"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1871
+#: pcbnew/tools/pcb_actions.cpp:1868
 #, fuzzy
 msgid "Switch to Inner Layer 4"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1880
+#: pcbnew/tools/pcb_actions.cpp:1877
 #, fuzzy
 msgid "Switch to Inner Layer 5"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1889
+#: pcbnew/tools/pcb_actions.cpp:1886
 #, fuzzy
 msgid "Switch to Inner Layer 6"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1897
+#: pcbnew/tools/pcb_actions.cpp:1894
 #, fuzzy
 msgid "Switch to Inner Layer 7"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1905
+#: pcbnew/tools/pcb_actions.cpp:1902
 #, fuzzy
 msgid "Switch to Inner Layer 8"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1913
+#: pcbnew/tools/pcb_actions.cpp:1910
 #, fuzzy
 msgid "Switch to Inner Layer 9"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1921
+#: pcbnew/tools/pcb_actions.cpp:1918
 #, fuzzy
 msgid "Switch to Inner Layer 10"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1929
+#: pcbnew/tools/pcb_actions.cpp:1926
 #, fuzzy
 msgid "Switch to Inner Layer 11"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1937
+#: pcbnew/tools/pcb_actions.cpp:1934
 #, fuzzy
 msgid "Switch to Inner Layer 12"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1945
+#: pcbnew/tools/pcb_actions.cpp:1942
 #, fuzzy
 msgid "Switch to Inner Layer 13"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1953
+#: pcbnew/tools/pcb_actions.cpp:1950
 #, fuzzy
 msgid "Switch to Inner Layer 14"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1961
+#: pcbnew/tools/pcb_actions.cpp:1958
 #, fuzzy
 msgid "Switch to Inner Layer 15"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1969
+#: pcbnew/tools/pcb_actions.cpp:1966
 #, fuzzy
 msgid "Switch to Inner Layer 16"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1977
+#: pcbnew/tools/pcb_actions.cpp:1974
 #, fuzzy
 msgid "Switch to Inner Layer 17"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1985
+#: pcbnew/tools/pcb_actions.cpp:1982
 #, fuzzy
 msgid "Switch to Inner Layer 18"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:1993
+#: pcbnew/tools/pcb_actions.cpp:1990
 #, fuzzy
 msgid "Switch to Inner Layer 19"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2001
+#: pcbnew/tools/pcb_actions.cpp:1998
 #, fuzzy
 msgid "Switch to Inner Layer 20"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2009
+#: pcbnew/tools/pcb_actions.cpp:2006
 #, fuzzy
 msgid "Switch to Inner Layer 21"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2017
+#: pcbnew/tools/pcb_actions.cpp:2014
 #, fuzzy
 msgid "Switch to Inner Layer 22"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2025
+#: pcbnew/tools/pcb_actions.cpp:2022
 #, fuzzy
 msgid "Switch to Inner Layer 23"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2033
+#: pcbnew/tools/pcb_actions.cpp:2030
 #, fuzzy
 msgid "Switch to Inner Layer 24"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2041
+#: pcbnew/tools/pcb_actions.cpp:2038
 #, fuzzy
 msgid "Switch to Inner Layer 25"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2049
+#: pcbnew/tools/pcb_actions.cpp:2046
 #, fuzzy
 msgid "Switch to Inner Layer 26"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2057
+#: pcbnew/tools/pcb_actions.cpp:2054
 #, fuzzy
 msgid "Switch to Inner Layer 27"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2065
+#: pcbnew/tools/pcb_actions.cpp:2062
 #, fuzzy
 msgid "Switch to Inner Layer 28"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2073
+#: pcbnew/tools/pcb_actions.cpp:2070
 #, fuzzy
 msgid "Switch to Inner Layer 29"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2081
+#: pcbnew/tools/pcb_actions.cpp:2078
 #, fuzzy
 msgid "Switch to Inner Layer 30"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2091
+#: pcbnew/tools/pcb_actions.cpp:2088
 #, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
 msgstr "Bộ chuyển đổi Bitmap thành linh kiện"
 
-#: pcbnew/tools/pcb_actions.cpp:2100
+#: pcbnew/tools/pcb_actions.cpp:2097
 #, fuzzy
 msgid "Switch to Next Layer"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2108
+#: pcbnew/tools/pcb_actions.cpp:2105
 #, fuzzy
 msgid "Switch to Previous Layer"
 msgstr "Chuyển sang Lưới Trước"
 
-#: pcbnew/tools/pcb_actions.cpp:2116
+#: pcbnew/tools/pcb_actions.cpp:2113
 #, fuzzy
 msgid "Toggle Layer"
 msgstr "Di chuyển bo mạch lên trên"
 
-#: pcbnew/tools/pcb_actions.cpp:2117
+#: pcbnew/tools/pcb_actions.cpp:2114
 #, fuzzy
 msgid "Switch between layers in active layer pair"
 msgstr "Chuyển đổi giữa đơn vị đo lường Anh và hệ mét"
 
-#: pcbnew/tools/pcb_actions.cpp:2126
+#: pcbnew/tools/pcb_actions.cpp:2123
 msgid "Increase Layer Opacity"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2127
+#: pcbnew/tools/pcb_actions.cpp:2124
 msgid "Make the current layer less transparent"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2136
+#: pcbnew/tools/pcb_actions.cpp:2133
 msgid "Decrease Layer Opacity"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2137
+#: pcbnew/tools/pcb_actions.cpp:2134
 msgid "Make the current layer more transparent"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2144
+#: pcbnew/tools/pcb_actions.cpp:2141
 #, fuzzy
 msgid "Cycle Layer Pair Presets"
 msgstr "Di chuyển bo mạch lên trên"
 
-#: pcbnew/tools/pcb_actions.cpp:2145
+#: pcbnew/tools/pcb_actions.cpp:2142
 #, fuzzy
 msgid "Cycle between preset layer pairs"
 msgstr "Chuyển đổi giữa đơn vị đo lường Anh và hệ mét"
 
-#: pcbnew/tools/pcb_actions.cpp:2156
+#: pcbnew/tools/pcb_actions.cpp:2153
 msgid "Show Board Statistics"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2157
+#: pcbnew/tools/pcb_actions.cpp:2154
 msgid "Shows board statistics"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2163
+#: pcbnew/tools/pcb_actions.cpp:2160
 #, fuzzy
 msgid "Clearance Resolution"
 msgstr "Nhãn phân cấp"
 
-#: pcbnew/tools/pcb_actions.cpp:2164
+#: pcbnew/tools/pcb_actions.cpp:2161
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2170
+#: pcbnew/tools/pcb_actions.cpp:2167
 #, fuzzy
 msgid "Constraints Resolution"
 msgstr "Nhãn phân cấp"
 
-#: pcbnew/tools/pcb_actions.cpp:2171
+#: pcbnew/tools/pcb_actions.cpp:2168
 msgid "Show constraints resolution for the selected object"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2178
+#: pcbnew/tools/pcb_actions.cpp:2175
 #, fuzzy
 msgid "Show differences between board footprint and its library equivalent"
 msgstr "Đang kiểm tra footprint ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2184
+#: pcbnew/tools/pcb_actions.cpp:2181
 #, fuzzy
 msgid "Show Footprint Associations"
 msgstr "Tệp Liên kết footprint"
 
-#: pcbnew/tools/pcb_actions.cpp:2185
+#: pcbnew/tools/pcb_actions.cpp:2182
 #, fuzzy
 msgid "Show footprint library and schematic symbol associations"
 msgstr ""
 "Lưu các liên kết footprint trong các trường symbol và footprint trong sơ đồ "
 "mạch"
 
-#: pcbnew/tools/pcb_actions.cpp:2192
+#: pcbnew/tools/pcb_actions.cpp:2189
 msgid "Geographical Reannotate..."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2193
+#: pcbnew/tools/pcb_actions.cpp:2190
 msgid "Reannotate PCB in geographical order"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2199
+#: pcbnew/tools/pcb_actions.cpp:2196
 #, fuzzy
 msgid "Repair Board"
 msgstr "Tải lại bo mạch"
 
-#: pcbnew/tools/pcb_actions.cpp:2200
+#: pcbnew/tools/pcb_actions.cpp:2197
 msgid "Run various diagnostics and attempt to repair board"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2207
+#: pcbnew/tools/pcb_actions.cpp:2204
 #, fuzzy
 msgid "Repair Footprint"
 msgstr "Footprint"
 
-#: pcbnew/tools/pcb_actions.cpp:2208
+#: pcbnew/tools/pcb_actions.cpp:2205
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2218
+#: pcbnew/tools/pcb_actions.cpp:2215
 #, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2225
+#: pcbnew/tools/pcb_actions.cpp:2222
 #, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2232
+#: pcbnew/tools/pcb_actions.cpp:2229
 #, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2239
+#: pcbnew/tools/pcb_actions.cpp:2236
 #, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2245
+#: pcbnew/tools/pcb_actions.cpp:2242
 #, fuzzy
 msgid "Align to Vertical Center"
 msgstr "Căn giữa theo chiều dọc"
 
-#: pcbnew/tools/pcb_actions.cpp:2246
+#: pcbnew/tools/pcb_actions.cpp:2243
 #, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2252
+#: pcbnew/tools/pcb_actions.cpp:2249
 #, fuzzy
 msgid "Align to Horizontal Center"
 msgstr "Căn giữa theo chiều ngang"
 
-#: pcbnew/tools/pcb_actions.cpp:2253
+#: pcbnew/tools/pcb_actions.cpp:2250
 #, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
 msgstr "Căn giữa theo chiều ngang"
 
-#: pcbnew/tools/pcb_actions.cpp:2259
+#: pcbnew/tools/pcb_actions.cpp:2256
 #, fuzzy
 msgid "Distribute Horizontally by Centers"
 msgstr "Căn giữa theo chiều ngang"
 
-#: pcbnew/tools/pcb_actions.cpp:2260
+#: pcbnew/tools/pcb_actions.cpp:2257
 #, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
 msgstr "ửSao chép (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2267
+#: pcbnew/tools/pcb_actions.cpp:2264
 msgid "Distribute Horizontally with Even Gaps"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2268
+#: pcbnew/tools/pcb_actions.cpp:2265
 #, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
 msgstr "ửSao chép (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2275
+#: pcbnew/tools/pcb_actions.cpp:2272
 msgid "Distribute Vertically with Even Gaps"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2276
+#: pcbnew/tools/pcb_actions.cpp:2273
 #, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
 msgstr "ửSao chép (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2283
+#: pcbnew/tools/pcb_actions.cpp:2280
 #, fuzzy
 msgid "Distribute Vertically by Centers"
 msgstr "Căn giữa theo chiều dọc"
 
-#: pcbnew/tools/pcb_actions.cpp:2284
+#: pcbnew/tools/pcb_actions.cpp:2281
 #, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
 msgstr "ửSao chép (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2299
+#: pcbnew/tools/pcb_actions.cpp:2296
 #, fuzzy
 msgid "Create a corner"
 msgstr "Tạo các vùng bao phủ đồng"
 
-#: pcbnew/tools/pcb_actions.cpp:2306
+#: pcbnew/tools/pcb_actions.cpp:2303
 #, fuzzy
 msgid "Remove corner"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_actions.cpp:2312
+#: pcbnew/tools/pcb_actions.cpp:2309
 #, fuzzy
 msgid "Chamfer Corner"
 msgstr "Các file Ảnh"
 
-#: pcbnew/tools/pcb_actions.cpp:2313
+#: pcbnew/tools/pcb_actions.cpp:2310
 #, fuzzy
 msgid "Chamfer corner"
 msgstr "Các file Ảnh"
 
-#: pcbnew/tools/pcb_actions.cpp:2323
+#: pcbnew/tools/pcb_actions.cpp:2320
 #, fuzzy
 msgid "Position Relative To..."
 msgstr "Vị trí offset:"
 
-#: pcbnew/tools/pcb_actions.cpp:2324
+#: pcbnew/tools/pcb_actions.cpp:2321
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2330
+#: pcbnew/tools/pcb_actions.cpp:2327
 #, fuzzy
 msgid "Position Interactively..."
 msgstr "Vị trí offset:"
 
-#: pcbnew/tools/pcb_actions.cpp:2331
+#: pcbnew/tools/pcb_actions.cpp:2328
 #, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
 msgstr "Nhân đôi (các) khoản phần tử đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2352
+#: pcbnew/tools/pcb_actions.cpp:2349
 #, fuzzy
 msgid "Select/Expand Connection"
 msgstr "Chọn Dấu chân ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2353
+#: pcbnew/tools/pcb_actions.cpp:2350
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2359
+#: pcbnew/tools/pcb_actions.cpp:2356
 #, fuzzy
 msgid "Unroute Selected"
 msgstr "Nhóm đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2360
+#: pcbnew/tools/pcb_actions.cpp:2357
 #, fuzzy
 msgid "Unroutes selected items to the nearest pad."
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2367
+#: pcbnew/tools/pcb_actions.cpp:2364
 #, fuzzy
 msgid "Unroute Segment"
 msgstr "Nhóm đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2368
+#: pcbnew/tools/pcb_actions.cpp:2365
 #, fuzzy
 msgid "Unroutes segment to the nearest segment."
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2382
+#: pcbnew/tools/pcb_actions.cpp:2379
 #, fuzzy
 msgid "Select All Tracks in Net"
 msgstr "Tạo các đường mạch và vias"
 
-#: pcbnew/tools/pcb_actions.cpp:2383
+#: pcbnew/tools/pcb_actions.cpp:2380
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2389
+#: pcbnew/tools/pcb_actions.cpp:2386
 #, fuzzy
 msgid "Deselect All Tracks in Net"
 msgstr "Tạo các đường mạch và vias"
 
-#: pcbnew/tools/pcb_actions.cpp:2390
+#: pcbnew/tools/pcb_actions.cpp:2387
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2397
+#: pcbnew/tools/pcb_actions.cpp:2394
 #, fuzzy
 msgid "Select All Unconnected Footprints"
 msgstr "Chọn Dấu chân ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2398
+#: pcbnew/tools/pcb_actions.cpp:2395
 #, fuzzy
 msgid "Selects all unconnected footprints belonging to each selected net."
 msgstr "Chọn Dấu chân ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2404
+#: pcbnew/tools/pcb_actions.cpp:2401
 #, fuzzy
 msgid "Grab Nearest Unconnected Footprints"
 msgstr "Chọn Dấu chân ..."
 
-#: pcbnew/tools/pcb_actions.cpp:2405
+#: pcbnew/tools/pcb_actions.cpp:2402
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2411
+#: pcbnew/tools/pcb_actions.cpp:2408
 #, fuzzy
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "Xóa các liên kết footprint đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2417
+#: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Items in Same Hierarchical Sheet"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2418
+#: pcbnew/tools/pcb_actions.cpp:2415
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2424
+#: pcbnew/tools/pcb_actions.cpp:2421
 #, fuzzy
 msgid "Select on Schematic"
 msgstr "Lưu vào Sơ đồ mạch"
 
-#: pcbnew/tools/pcb_actions.cpp:2425
+#: pcbnew/tools/pcb_actions.cpp:2422
 msgid "Selects corresponding items in Schematic editor"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2431
+#: pcbnew/tools/pcb_actions.cpp:2428
 #, fuzzy
 msgid "Filter Selected Items..."
 msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2432
+#: pcbnew/tools/pcb_actions.cpp:2429
 #, fuzzy
 msgid "Remove items from the selection by type"
 msgstr "Loại bỏ khỏi lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2441
+#: pcbnew/tools/pcb_actions.cpp:2438
 #, fuzzy
 msgid "Draft Fill Selected Zone(s)"
 msgstr "Hiện footprint được chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2442
+#: pcbnew/tools/pcb_actions.cpp:2439
 #, fuzzy
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
 msgstr "Hiện footprint được chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2451 pcbnew/tools/zone_filler_tool.cpp:168
+#: pcbnew/tools/pcb_actions.cpp:2448 pcbnew/tools/zone_filler_tool.cpp:168
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:383
 msgid "Fill All Zones"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2452
+#: pcbnew/tools/pcb_actions.cpp:2449
 #, fuzzy
 msgid "Update copper fill of all zones"
 msgstr "Loại bỏ khỏi lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2462
+#: pcbnew/tools/pcb_actions.cpp:2459
 #, fuzzy
 msgid "Unfill Selected Zone(s)"
 msgstr "Hiện footprint được chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2463
+#: pcbnew/tools/pcb_actions.cpp:2460
 #, fuzzy
 msgid "Remove copper fill from selected zone(s)"
 msgstr "Loại bỏ khỏi lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2471 pcbnew/tools/zone_filler_tool.cpp:436
+#: pcbnew/tools/pcb_actions.cpp:2468 pcbnew/tools/zone_filler_tool.cpp:436
 #, fuzzy
 msgid "Unfill All Zones"
 msgstr "Hiện footprint được chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2472
+#: pcbnew/tools/pcb_actions.cpp:2469
 #, fuzzy
 msgid "Remove copper fill from all zones"
 msgstr "Loại bỏ khỏi lựa chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2481
+#: pcbnew/tools/pcb_actions.cpp:2478
 #, fuzzy
 msgid "Place Selected Footprints"
 msgstr "Hiện footprint được chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2482
+#: pcbnew/tools/pcb_actions.cpp:2479
 #, fuzzy
 msgid "Performs automatic placement of selected components"
 msgstr "Thực hiện gán footprint tự động"
 
-#: pcbnew/tools/pcb_actions.cpp:2487
+#: pcbnew/tools/pcb_actions.cpp:2484
 #, fuzzy
 msgid "Place Off-Board Footprints"
 msgstr "Footprint"
 
-#: pcbnew/tools/pcb_actions.cpp:2488
+#: pcbnew/tools/pcb_actions.cpp:2485
 msgid "Performs automatic placement of components outside board area"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2493
+#: pcbnew/tools/pcb_actions.cpp:2490
 #, fuzzy
 msgid "Generate Placement Rule Areas..."
 msgstr "Trình tạo tệp tin:"
 
-#: pcbnew/tools/pcb_actions.cpp:2494
+#: pcbnew/tools/pcb_actions.cpp:2491
 #, fuzzy
 msgid "Creates best-fit placement rule areas"
 msgstr "Trình tạo tệp tin:"
 
-#: pcbnew/tools/pcb_actions.cpp:2501
+#: pcbnew/tools/pcb_actions.cpp:2498
 #, fuzzy
 msgid "Repeat Layout..."
 msgstr "Đếm Lặp lại"
 
-#: pcbnew/tools/pcb_actions.cpp:2502
+#: pcbnew/tools/pcb_actions.cpp:2499
 msgid "Clones placement & routing across multiple identical channels"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2513
+#: pcbnew/tools/pcb_actions.cpp:2510
 #, fuzzy
 msgid "Route Single Track"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/tools/pcb_actions.cpp:2514
+#: pcbnew/tools/pcb_actions.cpp:2511
 #, fuzzy
 msgid "Route tracks"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/tools/pcb_actions.cpp:2526
+#: pcbnew/tools/pcb_actions.cpp:2523
 #, fuzzy
 msgid "Route Differential Pair"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/tools/pcb_actions.cpp:2527
+#: pcbnew/tools/pcb_actions.cpp:2524
 #, fuzzy
 msgid "Route differential pairs"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/tools/pcb_actions.cpp:2538
+#: pcbnew/tools/pcb_actions.cpp:2535
 #, fuzzy
 msgid "Interactive Router Settings..."
 msgstr "Cài đặt trang..."
 
-#: pcbnew/tools/pcb_actions.cpp:2539
+#: pcbnew/tools/pcb_actions.cpp:2536
 msgid "Open Interactive Router settings"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2545
+#: pcbnew/tools/pcb_actions.cpp:2542
 #, fuzzy
 msgid "Differential Pair Dimensions..."
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/tools/pcb_actions.cpp:2546
+#: pcbnew/tools/pcb_actions.cpp:2543
 msgid "Open Differential Pair Dimension settings"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2552
+#: pcbnew/tools/pcb_actions.cpp:2549
 #, fuzzy
 msgid "Router Highlight Mode"
 msgstr "Phần tử được tô sáng"
 
-#: pcbnew/tools/pcb_actions.cpp:2553
+#: pcbnew/tools/pcb_actions.cpp:2550
 #, fuzzy
 msgid "Switch router to highlight mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2560
+#: pcbnew/tools/pcb_actions.cpp:2557
 msgid "Router Shove Mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2561
+#: pcbnew/tools/pcb_actions.cpp:2558
 #, fuzzy
 msgid "Switch router to shove mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2568
+#: pcbnew/tools/pcb_actions.cpp:2565
 msgid "Router Walkaround Mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2569
+#: pcbnew/tools/pcb_actions.cpp:2566
 #, fuzzy
 msgid "Switch router to walkaround mode"
 msgstr "Chuyển sang Lưới tiếp theo"
 
-#: pcbnew/tools/pcb_actions.cpp:2576
+#: pcbnew/tools/pcb_actions.cpp:2573
 msgid "Cycle Router Mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2577
+#: pcbnew/tools/pcb_actions.cpp:2574
 msgid "Cycle router to the next mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2582
+#: pcbnew/tools/pcb_actions.cpp:2579
 msgid "Set Layer Pair..."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2583
+#: pcbnew/tools/pcb_actions.cpp:2580
 msgid "Change active layer pair for routing"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2593
+#: pcbnew/tools/pcb_actions.cpp:2590
 #, fuzzy
 msgid "Tune Length of a Single Track"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/tools/pcb_actions.cpp:2605
+#: pcbnew/tools/pcb_actions.cpp:2602
 #, fuzzy
 msgid "Tune Length of a Differential Pair"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/tools/pcb_actions.cpp:2617
+#: pcbnew/tools/pcb_actions.cpp:2614
 #, fuzzy
 msgid "Tune Skew of a Differential Pair"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/tools/pcb_actions.cpp:2633
+#: pcbnew/tools/pcb_actions.cpp:2630
 msgid "Walks the current track back one segment."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2639
+#: pcbnew/tools/pcb_actions.cpp:2636
 msgid "Route From Other End"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2640
+#: pcbnew/tools/pcb_actions.cpp:2637
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2646
+#: pcbnew/tools/pcb_actions.cpp:2643
 msgid "Attempt Finish"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2647
+#: pcbnew/tools/pcb_actions.cpp:2644
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2654
+#: pcbnew/tools/pcb_actions.cpp:2651
 #, fuzzy
 msgid "Route Selected"
 msgstr "Nhóm đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2655
+#: pcbnew/tools/pcb_actions.cpp:2652
 #, fuzzy
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2663
+#: pcbnew/tools/pcb_actions.cpp:2660
 #, fuzzy
 msgid "Route Selected From Other End"
 msgstr "Nhóm đã chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2664
+#: pcbnew/tools/pcb_actions.cpp:2661
 #, fuzzy
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
-#: pcbnew/tools/pcb_actions.cpp:2672
+#: pcbnew/tools/pcb_actions.cpp:2669
 msgid "Attempt Finish Selected (Autoroute)"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2673
+#: pcbnew/tools/pcb_actions.cpp:2670
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2681
+#: pcbnew/tools/pcb_actions.cpp:2678
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2689
+#: pcbnew/tools/pcb_actions.cpp:2686
 msgid "Drag 45 Degree Mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2690
+#: pcbnew/tools/pcb_actions.cpp:2687
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2698
+#: pcbnew/tools/pcb_actions.cpp:2695
 #, fuzzy
 msgid "Drag Free Angle"
 msgstr "Hình chữ nhật"
 
-#: pcbnew/tools/pcb_actions.cpp:2699
+#: pcbnew/tools/pcb_actions.cpp:2696
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2709
+#: pcbnew/tools/pcb_actions.cpp:2706
 msgid "Update All Tuning Patterns"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2710
+#: pcbnew/tools/pcb_actions.cpp:2707
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2717
+#: pcbnew/tools/pcb_actions.cpp:2714
 #, fuzzy
 msgid "Rebuild All Generators"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_actions.cpp:2718
+#: pcbnew/tools/pcb_actions.cpp:2715
 msgid "Rebuilds geometry of all generators"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2725
+#: pcbnew/tools/pcb_actions.cpp:2722
 #, fuzzy
 msgid "Rebuild Selected Generators"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_actions.cpp:2726
+#: pcbnew/tools/pcb_actions.cpp:2723
 msgid "Rebuilds geometry of selected generator(s)"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2754
+#: pcbnew/tools/pcb_actions.cpp:2751
 #, fuzzy
 msgid "Generators Manager"
 msgstr "Tạo Biệt danh:"
 
-#: pcbnew/tools/pcb_actions.cpp:2755
+#: pcbnew/tools/pcb_actions.cpp:2752
 msgid "Show a manager dialog for Generator objects"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2767
+#: pcbnew/tools/pcb_actions.cpp:2764
 #, fuzzy
 msgid "Length Tuning Settings..."
 msgstr "Cài đặt trang..."
 
-#: pcbnew/tools/pcb_actions.cpp:2768
+#: pcbnew/tools/pcb_actions.cpp:2765
 #, fuzzy
 msgid "Displays tuning pattern properties dialog"
 msgstr "Thuộc tính Ký hiệu Thư viện"
 
-#: pcbnew/tools/pcb_actions.cpp:2788
+#: pcbnew/tools/pcb_actions.cpp:2785
 #, fuzzy
 msgid "Show wizards selector"
 msgstr "Không có symbol nào được chọn"
 
-#: pcbnew/tools/pcb_actions.cpp:2789
+#: pcbnew/tools/pcb_actions.cpp:2786
 #, fuzzy
 msgid "Select wizard script to run"
 msgstr "Chọn tất cả các phần tử trên màn hình"
 
-#: pcbnew/tools/pcb_actions.cpp:2795
+#: pcbnew/tools/pcb_actions.cpp:2792
 #, fuzzy
 msgid "Reset wizard parameters"
 msgstr "Đặt lại về Mặc định"
 
-#: pcbnew/tools/pcb_actions.cpp:2796
+#: pcbnew/tools/pcb_actions.cpp:2793
 #, fuzzy
 msgid "Reset wizard parameters to default"
 msgstr "Đặt lại về Mặc định"
 
-#: pcbnew/tools/pcb_actions.cpp:2802
+#: pcbnew/tools/pcb_actions.cpp:2799
 #, fuzzy
 msgid "Select previous wizard page"
 msgstr "Chọn symbol chưa được gán trước đó"
 
-#: pcbnew/tools/pcb_actions.cpp:2803
+#: pcbnew/tools/pcb_actions.cpp:2800
 #, fuzzy
 msgid "Select previous parameters page"
 msgstr "Chọn symbol chưa được gán trước đó"
 
-#: pcbnew/tools/pcb_actions.cpp:2809
+#: pcbnew/tools/pcb_actions.cpp:2806
 #, fuzzy
 msgid "Select next wizard page"
 msgstr "Tham số Đầu ra"
 
-#: pcbnew/tools/pcb_actions.cpp:2810
+#: pcbnew/tools/pcb_actions.cpp:2807
 #, fuzzy
 msgid "Select next parameters page"
 msgstr "Tham số Đầu ra"
 
-#: pcbnew/tools/pcb_actions.cpp:2816 pcbnew/tools/pcb_actions.cpp:2817
+#: pcbnew/tools/pcb_actions.cpp:2813 pcbnew/tools/pcb_actions.cpp:2814
 #, fuzzy
 msgid "Export footprint to editor"
 msgstr "Xuất ra Tệp"
@@ -56202,61 +56200,61 @@ msgstr "Phần được nhúng"
 msgid "%d 3D model(s) successfully embedded."
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2616
+#: pcbnew/tools/pcb_point_editor.cpp:2415
 #, fuzzy
 msgid "Resize Table Cells"
 msgstr "Xóa các ô không hợp lệ"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2735
+#: pcbnew/tools/pcb_point_editor.cpp:2534
 #, fuzzy
 msgid "Move Midpoint to Location"
 msgstr "Không tìm thấy Footprint"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2736
+#: pcbnew/tools/pcb_point_editor.cpp:2535
 #, fuzzy
 msgid "Move Midpoint"
 msgstr "Di chuyển xuống"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2740
+#: pcbnew/tools/pcb_point_editor.cpp:2539
 #, fuzzy
 msgid "Move Corner to Location"
 msgstr "Không tìm thấy Footprint"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2741
+#: pcbnew/tools/pcb_point_editor.cpp:2540
 #, fuzzy
 msgid "Move Corner"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3113
+#: pcbnew/tools/pcb_point_editor.cpp:2906
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Circle"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3136
+#: pcbnew/tools/pcb_point_editor.cpp:2929
 #, fuzzy
 msgid "Split Segment"
 msgstr "Phân đoạn"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3157
+#: pcbnew/tools/pcb_point_editor.cpp:2950
 msgid "Split Arc"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:3234
+#: pcbnew/tools/pcb_point_editor.cpp:3027
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3236
+#: pcbnew/tools/pcb_point_editor.cpp:3029
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3332
+#: pcbnew/tools/pcb_point_editor.cpp:3125
 #, fuzzy
 msgid "Break Zone Corner"
 msgstr "Circle"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3334
+#: pcbnew/tools/pcb_point_editor.cpp:3127
 #, fuzzy
 msgid "Break Polygon Corner"
 msgstr "Xóa Trình tạo"
@@ -57325,7 +57323,7 @@ msgid "Do not prefix path with footprint UUID."
 msgstr "Không bắt đầu đường dẫn với UUID của footprint"
 
 #: pcbnew/widgets/net_inspector_panel.cpp:50
-#: pcbnew/widgets/net_inspector_panel.cpp:99
+#: pcbnew/widgets/net_inspector_panel.cpp:97
 #, fuzzy
 msgid "Configure netlist inspector"
 msgstr "Cấu hình các Đường dẫn"
@@ -57341,7 +57339,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:110
-#: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:843
+#: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:837
 #, fuzzy
 msgid "Netclass"
 msgstr "Lớp Net"
@@ -57426,7 +57424,7 @@ msgid "Delete Selected Nets"
 msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1080
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1209
 #, fuzzy
 msgid "Remove Selected Custom Group"
 msgstr "Loại bỏ khỏi lựa chọn"
@@ -57445,98 +57443,98 @@ msgstr "Nhóm"
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1179
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1178
 #, fuzzy
 msgid "Filter by Net Name"
 msgstr "Lọc theo số lượng chân pin"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1185
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1183
 #, fuzzy
 msgid "Filter by Netclass"
 msgstr "Lọc các mục theo net:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1200
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1197
 #, fuzzy
 msgid "Group by Netclass"
 msgstr "Nhóm theo tên"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1207
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1204
 #, fuzzy
 msgid "Add Custom Group..."
 msgstr "Tùy chỉnh:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1216
 #, fuzzy
 msgid "Remove All Custom Groups"
 msgstr "Loại bỏ khỏi lựa chọn"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1228
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1223
 #, fuzzy
 msgid "Show Zero Pad Nets"
 msgstr "Hiển thị các lớp solder mask"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1234
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1228
 #, fuzzy
 msgid "Show Unconnected Nets"
 msgstr "Không kết nối"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1242
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1236
 #, fuzzy
 msgid "Show Time Domain Details"
 msgstr "Ẩn phần tử"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1250
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1244
 #, fuzzy
 msgid "Save Net Inspector Report..."
 msgstr "Hiển thị Datasheet trong trình duyệt"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1259
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 #, fuzzy
 msgid "Show / Hide Columns"
 msgstr "Ẩn phần tử"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1398
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1406
 #, fuzzy
 msgid "Save Net Inspector Report File"
 msgstr "Lưu Báo cáo vào Tệp tin"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1399
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1407
 #, fuzzy
 msgid "Report file"
 msgstr "Tệp báo cáo"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1420
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1428
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "Lưới: %s (%s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1533
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1541
 #, fuzzy
 msgid "New Net"
 msgstr "Nhãn mới"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1546
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1613
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1553
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1619
 #, fuzzy, c-format
 msgid "Net name '%s' is already in use."
 msgstr "Tên '%s' đã được sử dụng."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1590
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1597
 #, fuzzy
 msgid "Rename Net"
 msgstr "Đổi tên"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1603
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1610
 #, fuzzy
 msgid "Net name cannot be empty."
 msgstr "Tên biến không được để trống."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1671
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1676
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1712
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
 #, c-format
 msgid "Delete all nets in group '%s'?"
 msgstr ""
@@ -58024,6 +58022,14 @@ msgstr "Tệp sơ đồ mạch Altium"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Worksheet"
+
+#, fuzzy
+#~ msgid "&Expand Selection\tE"
+#~ msgstr "&Mở rộng lựa chọn E"
+
+#, fuzzy
+#~ msgid "Keep Symbol"
+#~ msgstr "Biểu tượng Mới"
 
 #, fuzzy, c-format
 #~ msgid "BARCODE \"%s\" on %s"

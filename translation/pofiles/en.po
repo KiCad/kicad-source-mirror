@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 16:04+0300\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6556,8 +6556,8 @@ msgstr "New name:"
 msgid "Select &All\tA"
 msgstr "Select &All\tA"
 
-msgid "&Expand Selection\tE"
-msgstr "&Expand Selection\tE"
+msgid "Show &More Choices...\tM"
+msgstr "Show &More Choices...\tM"
 
 #, c-format
 msgid "Zoom: %.2f"
@@ -15438,11 +15438,11 @@ msgstr "Library Editor"
 msgid "KiCad Symbol Editor"
 msgstr "KiCad Symbol Editor"
 
-msgid "Load Symbol Libraries"
-msgstr "Load Symbol Libraries"
-
 msgid "Library changes are unsaved"
 msgstr "Library changes are unsaved"
+
+msgid "Load Symbol Libraries"
+msgstr "Load Symbol Libraries"
 
 msgid "Symbol library loading canceled by user."
 msgstr "Symbol library loading canceled by user."
@@ -15672,23 +15672,18 @@ msgstr ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 
-#, c-format
 msgid ""
-"The symbol %s is used to derive other symbols.\n"
-"Deleting this symbol will delete all of the symbols derived from it.\n"
+"Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
-"Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
-"The symbol %s is used to derive other symbols.\n"
-"Deleting this symbol will delete all of the symbols derived from it.\n"
+"Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
-"Do you wish to delete this symbol and all of its derivatives?"
 
-msgid "Delete Symbol"
-msgstr "Delete Symbol"
+msgid " (base)\n"
+msgstr " (base)\n"
 
-msgid "Keep Symbol"
-msgstr "Keep Symbol"
+msgid "Delete All Listed Symbols"
+msgstr "Delete All Listed Symbols"
 
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -16131,6 +16126,9 @@ msgstr "Save Copy As..."
 
 msgid "Save a copy of the current symbol to a different library or name"
 msgstr "Save a copy of the current symbol to a different library or name"
+
+msgid "Delete Symbol"
+msgstr "Delete Symbol"
 
 msgid "Remove the selected symbol from its library"
 msgstr "Remove the selected symbol from its library"
@@ -39591,6 +39589,24 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "&Expand Selection\tE"
+#~ msgstr "&Expand Selection\tE"
+
+#, c-format
+#~ msgid ""
+#~ "The symbol %s is used to derive other symbols.\n"
+#~ "Deleting this symbol will delete all of the symbols derived from it.\n"
+#~ "\n"
+#~ "Do you wish to delete this symbol and all of its derivatives?"
+#~ msgstr ""
+#~ "The symbol %s is used to derive other symbols.\n"
+#~ "Deleting this symbol will delete all of the symbols derived from it.\n"
+#~ "\n"
+#~ "Do you wish to delete this symbol and all of its derivatives?"
+
+#~ msgid "Keep Symbol"
+#~ msgstr "Keep Symbol"
 
 #~ msgid "Control to select the current schematic varaint"
 #~ msgstr "Control to select the current schematic varaint"
