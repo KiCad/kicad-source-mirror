@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-01 15:02+0000\n"
+"PO-Revision-Date: 2025-10-08 13:26+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -13298,9 +13298,8 @@ msgstr ""
 "%s\n"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Uppdatera symboler för att inkludera alla ändringar från biblioteket"
+msgstr "Inga symboler kunde läsas in från biblioteket."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13343,9 +13342,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Är du säker på att du vill ta bort fältet '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Utesluten från komponentlistan"
+msgstr "Uteslut från komponentlistan"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
@@ -13363,9 +13361,8 @@ msgid "Power Symbol"
 msgstr "Power-symbol"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Power-symbol"
+msgstr "Lokal strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 #, fuzzy
@@ -13496,9 +13493,9 @@ msgid "Edit Symbol Properties"
 msgstr "Redigera symbolegenskaper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Den här filen är redan öppen."
+msgstr "Det här fältet är ärvt från '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -19681,9 +19678,8 @@ msgstr "Alla objekt"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
 #: eeschema/sch_item.cpp:656
-#, fuzzy
 msgid "All body styles"
-msgstr "Gemensamt för alla symbolformer"
+msgstr "Alla symbolformer"
 
 #: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
@@ -26821,13 +26817,12 @@ msgstr ""
 "färger"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
 "Aktiverar golv, skuggor och efterbehandling, även om dessa är deaktiverade i "
-"kvalitetsförinställning"
+"kvalitetsinställning"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -46299,9 +46294,11 @@ msgid "Generating BOM section"
 msgstr "Genererar komponentlistesektion"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
+msgstr ""
+"Fotavtryck %s hittades inte i bibliotek; komponentlistans data kan vara "
+"ofullständigt."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
@@ -46359,9 +46356,8 @@ msgid "Saving file"
 msgstr "Sparar fil"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3278
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Lyckades inte spara fil till buffert"
+msgstr "Lyckades inte spara IPC-2581-data till buffert."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
