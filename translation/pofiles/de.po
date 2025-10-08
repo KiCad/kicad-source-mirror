@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 14:23+0000\n"
+"PO-Revision-Date: 2025-10-08 16:32+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -9435,7 +9435,7 @@ msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:273
 msgid "Semicolons"
-msgstr "Strichpunkte"
+msgstr "Semikolons"
 
 #: common/settings/color_settings.cpp:391
 msgid "(Footprints)"
@@ -15636,7 +15636,7 @@ msgstr "Konnte Schaltplan \"%s\" nicht speichern"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:133
 msgid "Page number:"
-msgstr "Seitenzahl:"
+msgstr "Seite:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
 #: eeschema/sch_field.cpp:995 eeschema/sch_label.cpp:1422
@@ -16361,7 +16361,7 @@ msgstr "Feldname %s ist bereits vorhanden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
 msgid "Include 'DNP' Symbols"
-msgstr "\"Nicht bestücken\"-Symbole einschliessen"
+msgstr "\"Nicht bestücken\"-Symbole einschließen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:951
 msgid ""
@@ -28681,7 +28681,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:324
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr "Seitenlichthöhen-Winkel in Grad, Bereich: 0-90"
+msgstr "Seitenlicht-Elevationswinkel in Grad, Bereich: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:340
 msgid "Invalid preset\n"
@@ -50887,18 +50887,16 @@ msgid "Switch to 90° corner when routing tracks."
 msgstr "Wechselt beim Verlegen von Leiterbahnen zu 90° Ecken."
 
 #: pcbnew/router/router_tool.cpp:224
-#, fuzzy
 msgid "Track Corner Mode Arc 45"
-msgstr "Leiterbahn-Ecken-Modus Bogen 45"
+msgstr "Leiterbahnecken-Modus Bogen 45"
 
 #: pcbnew/router/router_tool.cpp:225
 msgid "Switch to arc 45° corner when routing tracks."
 msgstr "Wechselt beim Verlegen von Leiterbahnen zu abgerundeten 45° Ecken."
 
 #: pcbnew/router/router_tool.cpp:231
-#, fuzzy
 msgid "Track Corner Mode Arc 90"
-msgstr "Leiterbahn-Ecken-Modus Bogen 90"
+msgstr "Leiterbahnecken-Modus Bogen 90"
 
 #: pcbnew/router/router_tool.cpp:232
 msgid "Switch to arc 90° corner when routing tracks."
