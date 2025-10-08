@@ -197,11 +197,21 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
     static bool s_projectSaverRegistered = false;
     if( !s_projectSaverRegistered )
     {
-        LOCAL_HISTORY::RegisterSaver( [this]( std::vector<wxString>& files )
+        LOCAL_HISTORY::RegisterSaver( [this]( const wxString& aProjectPath, std::vector<wxString>& files )
         {
             wxString projectPath = Prj().GetProjectFullName(); // path to *.kicad_pro
             if( projectPath.IsEmpty() )
                 return;
+
+            // Verify project file is within the specified project directory
+            wxFileName projFnCheck( projectPath );
+            wxString projDirCheck = projFnCheck.GetPath();
+            if( !projDirCheck.StartsWith( aProjectPath ) )
+            {
+                wxLogTrace( traceAutoSave, wxS("[history] project saver skipping - project not in specified path: %s vs %s"),
+                           projDirCheck, aProjectPath );
+                return;
+            }
 
             wxFileName projFn( projectPath );
             wxString projDir = projFn.GetPath();

@@ -49,8 +49,9 @@ public:
     static bool CommitFullProjectSnapshot( const wxString& aProjectPath, const wxString& aTitle );
 
     /** Register a saver callback invoked during autosave history commits.
-     *  The callback should append absolute file paths to aFiles for inclusion. */
-    static void RegisterSaver( const std::function<void( std::vector<wxString>& )>& aSaver );
+     *  The callback receives the project path and should append absolute file paths
+     *  (within that project) to aFiles for inclusion. */
+    static void RegisterSaver( const std::function<void( const wxString&, std::vector<wxString>& )>& aSaver );
 
     /** Run all registered savers and, if any staged changes differ from HEAD, create a commit. */
     static bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle );

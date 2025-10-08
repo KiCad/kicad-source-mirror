@@ -688,6 +688,7 @@ set( COMMON_SRCS
     executable_names.cpp
     filename_resolver.cpp
     file_history.cpp
+    history_lock.cpp
     local_history.cpp
     filter_reader.cpp
     footprint_filter.cpp

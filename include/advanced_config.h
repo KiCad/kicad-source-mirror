@@ -903,6 +903,19 @@ public:
      */
     bool m_EnableUseAuiPerspective;
 
+    /**
+     * Stale lock timeout for local history repository locks, in seconds.
+     *
+     * When a KiCad process crashes while holding a lock on the .history repository,
+     * the lock file remains. This setting controls how old a lock file must be
+     * before it is considered "stale" and can be automatically removed.
+     *
+     * Setting name: "HistoryLockStaleTimeout"
+     * Valid values: 10 to 86400 (10 seconds to 24 hours)
+     * Default value: 300 (5 minutes)
+     */
+    int m_HistoryLockStaleTimeout;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 

@@ -142,6 +142,7 @@ static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodie
 static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 static const wxChar EnableVariantsUI[] = wxT( "EnableVariantsUI" );
 static const wxChar EnableUseAuiPerspective[] = wxT( "EnableUseAuiPerspective" );
+static const wxChar HistoryLockStaleTimeout[] = wxT( "HistoryLockStaleTimeout" );
 
 } // namespace KEYS
 
@@ -342,6 +343,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableVariantsUI = false;
 
     m_EnableUseAuiPerspective = false;
+    m_HistoryLockStaleTimeout = 300; // 5 minutes default
 
     loadFromConfigFile();
 }
@@ -696,6 +698,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                            &m_EnableUseAuiPerspective,
                                                            m_EnableUseAuiPerspective ) );
 
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::HistoryLockStaleTimeout,
+                                               &m_HistoryLockStaleTimeout, m_HistoryLockStaleTimeout,
+                                               10, 86400 ) ); // 10 seconds to 24 hours
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
