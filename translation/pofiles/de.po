@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-07 02:02+0000\n"
+"PO-Revision-Date: 2025-10-09 15:07+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -8815,7 +8815,7 @@ msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:273
 msgid "Semicolons"
-msgstr "Strichpunkte"
+msgstr "Semikolons"
 
 #: common/settings/color_settings.cpp:389
 msgid "(Footprints)"
@@ -9427,9 +9427,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Die Bibliothek in der Liste nicht mehr oben halten"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Bibliothekstabellen-Fehler"
+msgstr "Bibliothekstabelle"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -13344,34 +13343,28 @@ msgid "Pin Table"
 msgstr "Pin-Tabelle"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Symbol umwandeln"
+msgstr "Symbol zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "\"%s\" auf letzte gespeicherte Version zurücksetzen?"
+msgstr "Symbol auf letzte gespeicherte Version zurücksetzen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Freiraum"
+msgstr "Zelle leeren"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Liste der zuletzt verwendeten Bohrdateien leeren"
+msgstr "Zellenwert löschen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Neues Bauteil erstellen"
+msgstr "Abgeleitetes Symbol erstellen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Neues Symbol erstellen, abgeleitet von einem existierenden Symbol"
+msgstr "Neues Symbol erstellen, abgeleitet vom ausgewählten Symbol"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13392,9 +13385,9 @@ msgid "Show datasheet in browser"
 msgstr "Datenblatt im Browser anzeigen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Symbolbibliotheken"
+msgstr "Symbolbibliothek-Felder: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13407,17 +13400,17 @@ msgid "Group By"
 msgstr "Gruppieren nach"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "Symbol %s nicht in Bibliothek \"%s\" gefunden."
+msgstr "In Bibliothek %s wurden keine Symbole gefunden."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s: %s"
-msgstr "Fehler beim Einlesen der Symbole:"
+msgstr "Fehler beim Einlesen des Symbols %s: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error accessing library %s.\n"
 "\n"
@@ -13425,7 +13418,7 @@ msgid ""
 msgstr ""
 "Fehler beim Laden der Symbolbibliothek %s.\n"
 "\n"
-"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
 msgid "No symbols could be loaded from the library."
@@ -13461,9 +13454,9 @@ msgid "Rename Field"
 msgstr "Feld umbenennen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Feldname %s ist bereits vorhanden."
+msgstr "Feldname \"%s\" ist bereits vorhanden."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13495,9 +13488,8 @@ msgid "Local Power Symbol"
 msgstr "Lokales Spannungssymbol"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "Bibliothekseditor"
+msgstr "Bibliotheksfelder-Editor"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -14791,7 +14783,7 @@ msgstr "Konnte Schaltplan \"%s\" nicht speichern"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:133
 msgid "Page number:"
-msgstr "Seitenzahl:"
+msgstr "Seite:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:153
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:208
@@ -24812,9 +24804,8 @@ msgid "SVG File Name"
 msgstr "SVG-Dateiname"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "Bibliotheken"
+msgstr "Bibliotheks-Felder"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -27139,7 +27130,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:324
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr "Seitenlichthöhen-Winkel in Grad, Bereich: 0-90"
+msgstr "Seitenlicht-Elevationswinkel in Grad, Bereich: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:340
 msgid "Invalid preset\n"
