@@ -633,6 +633,9 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
         lc.Mirror( axis );
     }
 
+    // Clear the current target pointer to avoid dangling pointer after lc goes out of scope
+    m_currentTarget = nullptr;
+
     return lc;
 }
 
