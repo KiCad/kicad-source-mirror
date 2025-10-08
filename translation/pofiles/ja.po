@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-05 16:04+0300\n"
-"PO-Revision-Date: 2025-10-07 08:02+0000\n"
+"PO-Revision-Date: 2025-10-08 10:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -579,7 +579,7 @@ msgstr "未実装(DNP)に指定されている部品の3Dモデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "'DNP(未実装)' に設定されている場合でも 3D モデルを表示する"
+msgstr "'未実装(DNP)' に設定されている場合でも 3D モデルを表示する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show Model Bounding Boxes"
