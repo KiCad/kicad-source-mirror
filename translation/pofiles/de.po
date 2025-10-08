@@ -31,10 +31,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-07 08:02+0000\n"
+"PO-Revision-Date: 2025-10-08 14:23+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10701,9 +10701,8 @@ msgid "Select &All\tA"
 msgstr "&Alles auswählen\tA"
 
 #: common/tool/selection_tool.cpp:316
-#, fuzzy
 msgid "Show &More Choices...\tM"
-msgstr "Quellcode anzeigen..."
+msgstr "&Mehr Auswahlmöglichkeiten zeigen ...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -23729,16 +23728,16 @@ msgid ""
 "Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
 msgstr ""
+"Das Löschen eines Basissymbols löscht alle davon abgeleiteten Symbole.\n"
+"\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1259
-#, fuzzy
 msgid " (base)\n"
-msgstr " (Phase)"
+msgstr " (basis)\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
-#, fuzzy
 msgid "Delete All Listed Symbols"
-msgstr "Symbol löschen"
+msgstr "Alle aufgelisteten Symbole löschen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1399 pcbnew/files.cpp:332
 #: pcbnew/footprint_libraries_utils.cpp:1150
@@ -23949,7 +23948,6 @@ msgid "Current Variant"
 msgstr "Aktuelle Variante"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic variant"
 msgstr "Steuerelement zum Wählen der aktuellen Schaltplanvariante"
 
@@ -43573,7 +43571,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -43757,13 +43754,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -43854,8 +43851,8 @@ msgstr ""
 "    (rule silk_board_edge_clearance\n"
 "        (constraint silk_clearance)\n"
 "        (severity ignore)\n"
-"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge."
-"Cuts'\"))\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer == 'Edge.Cuts'\"))"
+"\n"
 "\n"
 "\n"
 "    # Prüfung der Strombelastbarkeit \n"
@@ -43880,8 +43877,8 @@ msgstr ""
 "    # sofern es bekannt ist, dass in der Herstellung erstere mechanisch "
 "gebohrt -bevor- letztere gelasert werden.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -43898,7 +43895,7 @@ msgstr ""
 "        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 "\n"
-"    # Lötstoppmaskenüberbrückung unter Schutzring von Maskenöffnungen "
+"    # Lötstoppmaskenüberbrückung innerhalb von Schutzring-Maskenöffnungen "
 "erlauben\n"
 "    (rule guard_ring_bridging\n"
 "        (constraint bridged_mask)\n"
@@ -50886,7 +50883,6 @@ msgid "Track Corner Mode 90"
 msgstr "Leiterbahn-Ecken-Modus 90"
 
 #: pcbnew/router/router_tool.cpp:218
-#, fuzzy
 msgid "Switch to 90° corner when routing tracks."
 msgstr "Wechselt beim Verlegen von Leiterbahnen zu 90° Ecken."
 
@@ -50896,7 +50892,6 @@ msgid "Track Corner Mode Arc 45"
 msgstr "Leiterbahn-Ecken-Modus Bogen 45"
 
 #: pcbnew/router/router_tool.cpp:225
-#, fuzzy
 msgid "Switch to arc 45° corner when routing tracks."
 msgstr "Wechselt beim Verlegen von Leiterbahnen zu abgerundeten 45° Ecken."
 
